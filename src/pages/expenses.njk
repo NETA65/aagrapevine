@@ -883,6 +883,15 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
                           <option value=",">{{ "expenses.imp.dec_comma" | t(lang) }}</option>
                         </select>
                       </div>
+                      {#- somebody else's sheet: are its amounts with no minus spending (a card statement) or money in (a bank account)? -#}
+                      <div class="xp-f" x-show="imp.signs">
+                        <label class="xp-label" for="xp-imp-sign">{{ "expenses.imp.positive" | t(lang) }}</label>
+                        <select id="xp-imp-sign" class="input xp-select" x-model="imp.opts.positive" @change="impPlan()" aria-describedby="xp-imp-sign-hint">
+                          <option value="spent">{{ "expenses.imp.pos_spent" | t(lang) }}</option>
+                          <option value="received">{{ "expenses.imp.pos_received" | t(lang) }}</option>
+                        </select>
+                        <p class="xp-hint" id="xp-imp-sign-hint">{{ "expenses.imp.positive_hint" | t(lang) }}</p>
+                      </div>
                     </div>
                     <label class="xp-check-line" x-show="imp.counts.dup"><input type="checkbox" x-model="imp.opts.includeDuplicates" @change="impPlan()"><span>{{ "expenses.imp.include_dups" | t(lang) }}</span></label>
                     <p class="mt-3 text-sm text-ink" x-show="imp.newCats.length"><strong>{{ "expenses.imp.new_cats" | t(lang) }}</strong> <span x-text="imp.newCats.join(', ')"></span></p>

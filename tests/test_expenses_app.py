@@ -11,7 +11,9 @@ Node.js — the rules that live in the app itself, not in the core (tests/test_e
   * requests — "Download CSV" is the request's own lines, without people's names unless the request
     includes them
   * import — a full backup bigger than a CSV may be is still restored; a mileage log with no amount
-    column can be mapped; a problem names the visitor's own column
+    column can be mapped; a problem names the visitor's own column; a card statement's charges are
+    spending, and the preview can flip what a positive amount means
+  * the tab bar — on a phone the open tab is scrolled into sight (a reopened view, a link, a tap)
   * the rest — the examples are added once; a CSV export is not a backup; the Summary's badge counts
     what its Reminders card lists
 
@@ -31,12 +33,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from nodejs import run_js  # noqa: E402
 
-# The browser stand-in and the app: `app(lang)` → a fresh component (its own storage), `tick()` lets
-# promises settle, `downloads` are the files the app saved ({name, text}).
+# The browser stand-in and the app: `make(lang, seed, moreEls)` → a fresh component (its own storage,
+# seeded from `seed`; `moreEls` are extra elements getElementById finds), `tick()` lets promises
+# settle, `downloads` are the files the app saved ({name, text}).
 LOAD = r"""
 import vm from "node:vm";
 const data = (await imp("src/_data/expenses.js")).default();
-const make = (lang, seed) => {
+const make = (lang, seed, moreEls) => {
   const store = new Map(Object.entries(seed || {}));
   let full = false;
   const listeners = {}, docListeners = {}, blobs = new Map(), downloads = [];
@@ -45,11 +48,13 @@ const make = (lang, seed) => {
     "xp-config": { textContent: JSON.stringify(data.config) },
     "xp-ui": { textContent: JSON.stringify(data.ui[lang]) },
     "xp-events": { textContent: "[]" },
+    ...(moreEls || {}),
   };
   const ctx = {
     console, TextDecoder, Blob, Promise, JSON, Math, Date, Intl, Object, Array, String, Number, isFinite, isNaN, Uint8Array,
     setTimeout: (fn, ms) => { const t = setTimeout(fn, ms); t.unref?.(); return t; },
     clearTimeout, requestAnimationFrame: (fn) => setTimeout(fn, 0),
+    getComputedStyle: (el) => (el && el.style) || {},      // an element's "computed" style is its own style
     localStorage: {
       getItem: (k) => (store.has(k) ? store.get(k) : null),
       setItem: (k, v) => { if (full) { const e = new Error("full"); e.name = "QuotaExceededError"; throw e; } store.set(k, String(v)); },
@@ -324,6 +329,72 @@ class Import(unittest.TestCase):
         self.assertTrue(r["ready"])                                           # a date and miles: no amount needed
         self.assertEqual(r["plan"], ["preview", 1])
         self.assertIn("Fila 2 · Importe: El monto no es un número como 12.50.", r["problems"])   # the visitor's own column
+
+    def test_a_card_statement_and_the_sign_choice(self):
+        r = app(self, r"""
+          const w = make("en");
+          const file = (name, t) => ({ name, size: t.length, arrayBuffer: async () => new TextEncoder().encode(t).buffer });
+          const rows = () => w.a.imp.sampleRows.map((x) => [x.desc, x.cat, x.amount]);
+          w.a.impFile(file("amex.csv", "Date,Description,Amount\n09/02/2026,Office Depot,45.00\n09/03/2026,Kinko's copies,12.00\n09/04/2026,Refund Office Depot,-10.00\n")); await tick();
+          w.a.imp.map.date = "0"; w.a.imp.map.description = "1"; w.a.imp.map.amount = "2"; w.a.impUseMap();
+          const guessed = [w.a.imp.step, w.a.imp.opts.positive, JSON.parse(JSON.stringify(w.a.imp.signs)), rows()];
+          w.a.imp.opts.positive = "received"; w.a.impPlan();          // the select's change
+          const flipped = [w.a.imp.opts.positive, rows()];
+          w.a.impApply();
+          const stored = state(w).entries.map((e) => [e.description, e.type]).sort();
+          // positive amounts only: still asked (a sheet of checks received), spending until told otherwise
+          w.a.impFile(file("books.csv", "Date,Description,Amount\n09/02/2026,Books,20\n")); await tick();
+          w.a.imp.map.date = "0"; w.a.imp.map.description = "1"; w.a.imp.map.amount = "2"; w.a.impUseMap();
+          const oneSign = [w.a.imp.signs && w.a.imp.signs.negative, w.a.imp.opts.positive];
+          // every amount with a minus: spending, nothing to ask
+          const neg = make("en");
+          neg.a.impFile(file("bank.csv", "Date,Description,Amount\n09/02/2026,Books,-20\n")); await tick();
+          neg.a.imp.map.date = "0"; neg.a.imp.map.description = "1"; neg.a.imp.map.amount = "2"; neg.a.impUseMap();
+          out({ guessed, flipped, stored, oneSign, allMinus: neg.a.imp.signs });""")
+        self.assertEqual(r["guessed"], ["preview", "spent", {"positive": 2, "negative": 1}, [
+            ["Office Depot", "Books & literature", "$45.00"], ["Kinko's copies", "Books & literature", "$12.00"],
+            ["Refund Office Depot", "Reimbursement", "+$10.00"]]])
+        self.assertEqual(r["flipped"], ["received", [
+            ["Office Depot", "Reimbursement", "+$45.00"], ["Kinko's copies", "Reimbursement", "+$12.00"],
+            ["Refund Office Depot", "Books & literature", "$10.00"]]])
+        self.assertEqual(r["stored"], [["Kinko's copies", "received"], ["Office Depot", "received"], ["Refund Office Depot", "expense"]])
+        self.assertEqual(r["oneSign"], [0, "spent"])                     # all positive: asked (they may be money in), spending by default
+        self.assertIsNone(r["allMinus"])                                 # all with a minus: spending, nothing to ask
+
+
+class TabBar(unittest.TestCase):
+    def test_the_open_tab_is_scrolled_into_sight(self):
+        # A phone's tab row as main.css draws it: 288px wide from x=25, 0.25rem of room before the tabs and
+        # 2rem after them, where it fades (and as much at the start once scrolled); five 125px tabs 8px
+        # apart; each tab snaps 2rem in from the left (expenses.css scroll-padding). The row is 693px
+        # wide in all, so it scrolls 405px at most. A tab is "clear" between x = 57 (25 when not
+        # scrolled) and x = 281.
+        r = app(self, r"""
+          const views = ["entries", "summary", "giveaways", "requests", "settings"];
+          const row = { scrollLeft: 0, scrollWidth: 693, clientWidth: 288, style: { paddingRight: "32px", scrollPaddingLeft: "32px" },
+                        getBoundingClientRect: () => ({ left: 25, right: 313 }) };
+          const els = {};
+          views.forEach((v, i) => { els["xp-tab-" + v] = { parentElement: row, focus() {},
+            getBoundingClientRect: () => ({ left: 29 + i * 133 - row.scrollLeft, right: 29 + i * 133 + 125 - row.scrollLeft }) }; });
+          const seen = (v) => { const b = els["xp-tab-" + v].getBoundingClientRect(); return [v, row.scrollLeft, b.left >= (row.scrollLeft > 4 ? 57 : 25) && b.right <= 281]; };
+          // the next visit reopens Settings, the last tab
+          const w = make("en", { [KEY + ":ui"]: JSON.stringify({ view: "settings" }) }, els);
+          const reopened = seen(w.a.view);
+          w.a.go("summary"); const tapped = seen("summary");
+          w.a.go("summary"); const again = seen("summary");
+          w.ctx.location.hash = "#requests"; w.listeners.hashchange.forEach((f) => f()); const linked = seen(w.a.view);
+          w.a.tabKey({ key: "Home", preventDefault() {} }); const home = seen(w.a.view);
+          w.a.tabKey({ key: "ArrowRight", preventDefault() {} }); const next = seen(w.a.view);
+          // a wide screen: the row does not scroll, nothing moves
+          row.clientWidth = 693; row.scrollLeft = 0; w.a.go("settings"); const wide = [w.a.view, row.scrollLeft];
+          out({ reopened, tapped, again, linked, home, next, wide });""")
+        self.assertEqual(r["reopened"], ["settings", 405, True])            # the row's end
+        self.assertEqual(r["tapped"], ["summary", 105, True])               # its start at 57: 405 + (162 − 405) − 57
+        self.assertEqual(r["again"], ["summary", 105, True])                # already clear: nothing moves
+        self.assertEqual(r["linked"], ["requests", 371, True])
+        self.assertEqual(r["home"], ["entries", 0, True])
+        self.assertEqual(r["next"], ["summary", 105, True])                 # 162–287 ran into the end fade
+        self.assertEqual(r["wide"], ["settings", 0])
 
 
 class TheRest(unittest.TestCase):

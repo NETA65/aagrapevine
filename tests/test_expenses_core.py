@@ -648,6 +648,61 @@ class ImportValues(unittest.TestCase):
         self.assertEqual(r["cats"], [["c_custom1", "Retiro de servicio", "expense"]])
         self.assertEqual(r["funders"], [["f_d22", "District 22", "other"]])
 
+    def test_which_sign_is_spending(self):
+        """A card statement lists charges as positive and a refund with a minus; a bank account puts the
+        minus on spending. Mapped sheets with no type column: the header or the sign most rows carry
+        decides, and the visitor's answer (opts.positive) always wins."""
+        r = core(self, r"""
+          const card = "Date,Description,Amount\n09/02/2026,Office Depot,45.00\n09/03/2026,Kinko's copies,12.00\n09/04/2026,Refund Office Depot,-10.00\n";
+          const bank = "Date,Description,Amount\n09/02/2026,Office Depot,-45.00\n09/03/2026,Copies,-12.00\n09/04/2026,District check,40.00\n";
+          const map = { date: 0, description: 1, amount: 2 };
+          const plan = (text, o) => G.planImport(text, [], S, Object.assign({ mapping: map }, o || {}));
+          const read = (p) => ({ signs: p.signs, positive: p.positive, rows: p.add.map((e) => [e.description, e.type, e.amount_cents, e.category]) });
+          const guess = (head, rows) => plan("Date,Description," + head + "\n" + rows.map((v, i) => "09/0" + (i + 1) + "/2026,Row " + i + "," + v).join("\n") + "\n").positive;
+          out({
+            card: read(plan(card)), cardFlipped: read(plan(card, { positive: "received" })),
+            bank: read(plan(bank)), bankFlipped: read(plan(bank, { positive: "spent" })),
+            // one sign only: every row is spending — unless the visitor says they are money received
+            allPositive: read(plan("Date,Description,Amount\n09/02/2026,Books,20\n09/03/2026,Hotel,90\n")),
+            allPositiveReceived: read(plan("Date,Description,Amount\n09/02/2026,Area check,20\n", { positive: "received" })),
+            allNegative: read(plan("Date,Description,Amount\n09/02/2026,Books,-20\n")),
+            heads: {
+              debit: guess("Debit", ["1234.50", "(12.00)", "-40.00"]), cargo: guess("Cargo", ["-5", "-6", "7"]),
+              deposit: guess("Deposits", ["5", "6", "-7"]), abono: guess("Abono", ["5", "6", "-7"]),
+              creditCard: guess("Credit card amount", ["5", "6", "-7"]), both: guess("Debit/Credit", ["-5", "-6", "7"]),
+              tie: guess("Amount", ["5", "-6"]),
+            },
+            // our own file never asks: signed_amount above zero is money received
+            ours: G.planImport("date,type,amount,signed_amount,description\n2026-09-01,,12.00,12.00,Check\n2026-09-02,,12.00,-12.00,Books\n", [], S, { positive: "spent" })
+              .add.map((e) => e.type),
+            oursSigns: G.planImport("date,type,amount\n2026-09-01,expense,12.00\n", [], S, {}).signs,
+          });""")
+        # the card: most rows are positive, so positive is spending and the refund is money back
+        self.assertEqual(r["card"], {"signs": {"positive": 2, "negative": 1}, "positive": "spent", "rows": [
+            ["Office Depot", "expense", 4500, "books"], ["Kinko's copies", "expense", 1200, "books"],
+            ["Refund Office Depot", "received", 1000, "reimbursement"]]})
+        self.assertEqual(r["cardFlipped"]["rows"], [
+            ["Office Depot", "received", 4500, "reimbursement"], ["Kinko's copies", "received", 1200, "reimbursement"],
+            ["Refund Office Depot", "expense", 1000, "books"]])
+        self.assertEqual(r["cardFlipped"]["positive"], "received")
+        # the bank: most rows carry the minus, so the minus is spending and the check is money received
+        self.assertEqual(r["bank"], {"signs": {"positive": 1, "negative": 2}, "positive": "received", "rows": [
+            ["Office Depot", "expense", 4500, "books"], ["Copies", "expense", 1200, "books"],
+            ["District check", "received", 4000, "reimbursement"]]})
+        self.assertEqual([x[1] for x in r["bankFlipped"]["rows"]], ["received", "received", "expense"])
+        self.assertEqual((r["allPositive"]["positive"], [x[1] for x in r["allPositive"]["rows"]]), ("spent", ["expense", "expense"]))
+        self.assertEqual([x[1] for x in r["allPositiveReceived"]["rows"]], ["received"])
+        self.assertEqual((r["allNegative"]["positive"], [x[1] for x in r["allNegative"]["rows"]]), ("received", ["expense"]))
+        self.assertEqual(r["heads"], {
+            "debit": "spent", "cargo": "spent",            # the header says spending, whatever most rows carry
+            "deposit": "received", "abono": "received",    # … or money in
+            "creditCard": "spent",                         # "credit card" says nothing: most rows are positive
+            "both": "received",                            # "Debit/Credit" says both: most rows carry the minus
+            "tie": "received",                             # a tie keeps the minus as spending
+        })
+        self.assertEqual(r["ours"], ["received", "expense"])
+        self.assertIsNone(r["oursSigns"])
+
 
 class ImportShapes(unittest.TestCase):
     """Which files are the tracker's own, and what a spreadsheet may change in one."""

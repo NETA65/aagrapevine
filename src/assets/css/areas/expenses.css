@@ -56,7 +56,11 @@
 .xp-bar { display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0.75rem; border-bottom: 1px solid var(--c-line);
   background: color-mix(in srgb, var(--c-surface-2) 55%, var(--c-surface)); }
 @media (width >= 40rem) { .xp-bar { padding: 0.75rem 1.25rem; } }
-.xp-tabs { flex: 1 1 auto; }
+/* On a phone the tabs scroll sideways (chip-row-nowrap). A tab snaps as far in from the left as the row
+   fades once it is scrolled (2rem; 1rem at 150 % text below 360px, as main.css draws it), and
+   expenses.js (revealTab) brings the open tab to that same spot. */
+.xp-tabs { flex: 1 1 auto; scroll-padding-left: 2rem; }
+@media (width < 22.5rem) { :root[data-text="150"] .xp-tabs { scroll-padding-left: 1rem; } }
 .xp-tab { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2.75rem; padding: 0 1rem; border: 1px solid transparent; border-radius: 9999px;
   font-size: 0.9375rem; font-weight: 600; color: var(--c-muted); white-space: nowrap; transition: background-color 0.15s, color 0.15s; }
 .xp-tab:hover { background: var(--c-surface); color: var(--c-ink); border-color: var(--c-line); }
@@ -69,6 +73,15 @@
 .xp-bar-add { flex-shrink: 0; }
 /* below 1024px the Add button is its icon (its words stay for screen readers), so the five tabs fit */
 @media (width < 64rem) { .xp-bar-add > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .xp-bar-add { padding-inline: 0.75rem; } }
+/* …but at 130–150 % text on a phone a tab beside it would be capped at a row too narrow for its word
+   (the word ran past its pill, and the open tab could never be shown whole): the tabs get the bar's
+   full width, and the Add button goes under them, full width, with its word back */
+@media (width < 30rem) {
+  :root:is([data-text="130"], [data-text="150"]) .xp-bar { flex-wrap: wrap; }
+  :root:is([data-text="130"], [data-text="150"]) .xp-tabs { flex-basis: 100%; }
+  :root:is([data-text="130"], [data-text="150"]) .xp-bar-add { flex: 1 1 100%; justify-content: center; }
+  :root:is([data-text="130"], [data-text="150"]) .xp-bar-add > span { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+}
 .xp-panel:focus-visible { outline-offset: -3px; }
 /* the facts of the hero's aside, where the aside is not shown */
 .xp-device { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.75rem; margin: 0; padding: 0.75rem 1.25rem; border-top: 1px solid var(--c-line);

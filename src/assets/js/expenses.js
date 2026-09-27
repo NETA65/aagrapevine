@@ -286,6 +286,7 @@
           this.fitList();
           this.checkStorage();
           this.ready = true;
+          this.revealTab();     // the view reopened from the last visit, or asked for by the address
           // the address and the back button
           var onHash = function () { var v = self.hashView(); if (v && v !== self.view) self.go(v, false); };
           window.addEventListener("hashchange", onHash);
@@ -293,9 +294,9 @@
           // table ↔ cards: the width and the text size (the "Aa" panel)
           if (window.matchMedia) {
             var mq = window.matchMedia("(min-width: 48rem)");
-            if (mq.addEventListener) mq.addEventListener("change", function () { self.fitList(); });
+            if (mq.addEventListener) mq.addEventListener("change", function () { self.fitList(); self.revealTab(); });
           }
-          window.addEventListener("gvlv:prefs", function () { self.fitList(); });
+          window.addEventListener("gvlv:prefs", function () { self.fitList(); self.revealTab(); });
           // an edit in another tab on this device (the page's toast is behind an open dialog: the
           // dialog says it; an entry being edited there that the other tab deleted is saved as a new one)
           window.addEventListener("storage", function (e) {
@@ -465,6 +466,26 @@
             try { history.pushState(null, "", "#" + v); } catch (e) { /* file:// or sandboxed */ }
           }
           this.saveUi();
+          this.revealTab();
+        },
+        /* On a phone the tab row scrolls sideways, and the open tab can sit off its edge: after "Build a
+           request", an /expenses/#requests link, or the last view reopened on a new visit. A tab that is
+           not wholly clear of the row's fades (its padding-right wide at the end, as wide at the start
+           once scrolled — main.css chip-row-nowrap) goes to its own snap point: its start at the row's
+           scroll-padding (expenses.css), so the row's snapping leaves it there. Only the row's own
+           scrollLeft changes: scrollIntoView would also move the page. */
+        revealTab: function () {
+          var self = this;
+          this.$nextTick(function () {
+            var b = document.getElementById("xp-tab-" + self.view), row = b && b.parentElement;
+            if (!row || row.scrollWidth <= row.clientWidth + 1) return;
+            var cs = window.getComputedStyle ? window.getComputedStyle(row) : {};
+            var fade = parseFloat(cs.paddingRight) || 0, lead = parseFloat(cs.scrollPaddingLeft) || 0;
+            var r = b.getBoundingClientRect(), box = row.getBoundingClientRect();
+            if (r.left >= box.left + (row.scrollLeft > 4 ? fade : 0) - 1 && r.right <= box.right - fade + 1) return;
+            var x = row.scrollLeft + r.left - box.left - lead;
+            row.scrollLeft = Math.max(0, Math.min(x, row.scrollWidth - row.clientWidth));
+          });
         },
         // Arrow keys move between the tabs (and open them), Home / End jump to the ends.
         tabKey: function (e) {
@@ -475,9 +496,9 @@
           else if (e.key === "End") j = n - 1;
           if (j < 0) return;
           e.preventDefault();
-          this.go(VIEWS[j]);
+          this.go(VIEWS[j]);     // (go brings the tab into view in the row)
           var b = document.getElementById("xp-tab-" + VIEWS[j]);
-          if (b) { b.focus(); if (b.scrollIntoView) b.scrollIntoView({ block: "nearest", inline: "nearest" }); }
+          if (b) b.focus();
         },
 
         /* ================= periods and filters ================= */
@@ -1591,7 +1612,7 @@
           if (rows && rows.error) { this.imp.err = this.msgKey(rows.error); return; }
           S.impRows = rows;
           this.imp.kind = "csv";
-          this.imp.opts = { dateOrder: this.L === "es" ? "dmy" : "mdy", decimal: "auto", includeDuplicates: false };
+          this.imp.opts = { dateOrder: this.L === "es" ? "dmy" : "mdy", decimal: "auto", includeDuplicates: false, positive: "" };
           this.imp.map = { date: "", description: "", amount: "", category: "", miles: "", notes: "" };
           this.imp.mapped = false;
           this.imp.forceMap = false;
@@ -1599,10 +1620,11 @@
           this.impPlan();
         },
         // "Map the columns myself": a file that looked like the tracker's own goes through the mapping step
-        impMapMyself: function () { this.imp.forceMap = true; this.imp.mapped = false; this.impPlan(); },
+        impMapMyself: function () { this.imp.forceMap = true; this.imp.mapped = false; this.imp.opts.positive = ""; this.impPlan(); },
         impPlan: function () {
           var X = S.X, im = this.imp, o = { dateOrder: im.opts.dateOrder, allowDuplicates: !!im.opts.includeDuplicates, lang: this.L, forceMapping: !!im.forceMap };
           if (im.opts.decimal !== "auto") o.decimal = im.opts.decimal;
+          if (im.opts.positive) o.positive = im.opts.positive;
           if (im.mapped) {
             var m = {};
             Object.keys(im.map).forEach(function (k) { if (im.map[k] !== "") m[k] = Number(im.map[k]); });
@@ -1639,7 +1661,8 @@
         // a date, and an amount or miles (a mileage log has no amount: the default rate gives it; the
         // description is optional — the core writes one for a trip)
         impMapReady: function () { var m = this.imp && this.imp.map; return !!m && m.date !== "" && (m.amount !== "" || m.miles !== ""); },
-        impUseMap: function () { this.imp.mapped = true; this.impPlan(); },
+        // (a new mapping: the core guesses again which sign is spending — the amount column may have changed)
+        impUseMap: function () { this.imp.mapped = true; this.imp.opts.positive = ""; this.impPlan(); },
         // a problem's field, as the visitor knows it: their own column's name (a mapped sheet), else the
         // field's name on this page
         impField: function (field) {
@@ -1655,6 +1678,10 @@
           this.imp.counts = { add: (plan.add || []).length, update: (plan.update || []).length, skip: (plan.skip || []).length, errors: (plan.errors || []).length,
                               dup: (reasons.duplicate || 0) + (reasons.duplicate_id || 0), older: reasons.older || 0, same: reasons.same || 0, all: (plan.all || []).length };
           this.imp.ours = plan.format === "ours";
+          // somebody else's sheet with positive amounts: the preview asks what they are (the core's guess
+          // is the starting answer, so the select shows what the rows below were read as)
+          this.imp.signs = plan.format === "mapped" && plan.signs && plan.signs.positive ? plan.signs : null;
+          if (plan.positive) this.imp.opts.positive = plan.positive;
           this.imp.newCats = (plan.newCategories || []).map(function (c) { return self.lbl(c.label || c.name || c); });
           this.imp.newFunders = (plan.newFunders || []).map(function (c) { return self.lbl(c.name || c.label || c); });
           this.imp.sampleRows = (plan.add || []).concat(plan.update || []).slice(0, 8).map(function (e, i) {

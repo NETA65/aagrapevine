@@ -1306,19 +1306,40 @@
   function problem(plan, rowNo, field, key, fatal) {
     (fatal ? plan.errors : plan.warnings).push({ row: rowNo, field: field, message_key: key });
   }
+  /* Somebody else's sheet with no type column: is a positive amount money spent or money received?
+     The signs run both ways out there. A card statement lists charges as positive and a refund with a
+     minus; a bank account lists spending with a minus and a deposit as positive. When the amount
+     column has both signs, its header decides if it says (Debit, Charge, Withdrawal … → positive is
+     spending; Credit, Deposit … → positive is money received); otherwise the sign most rows carry is
+     spending (an expense sheet is mostly spending), and a tie keeps the minus as spending. With one
+     sign only, every row is spending. The import preview shows the answer and lets the visitor flip it. */
+  var SPENT_HEAD = /debit|debito|charge|cargo|withdraw|retiro|spent|gasto|expense|egreso|purchase|compra|paid|pagado/;
+  var RECEIVED_HEAD = /credit|credito|deposit|abono|received|recibido|income|ingreso/;
+  function positiveMeans(header, pos, neg) {
+    if (!pos || !neg) return pos ? "spent" : "received";
+    // ("Credit card amount" says nothing; "Debit/Credit" says both, so nothing either)
+    var h = norm(header), spent = SPENT_HEAD.test(h), got = RECEIVED_HEAD.test(h) && !/card|tarjeta/.test(h);
+    if (spent !== got) return spent ? "spent" : "received";
+    return pos > neg ? "spent" : "received";
+  }
 
   /* rows (parseCSV) + the ledger → what an import would do; nothing is changed yet.
      opts: {decimal: "." | ",", dateOrder: "mdy" | "dmy", mapping (the answer to needsMapping:
      {date, description, amount, category, miles, notes, type, funder, vendor, event, place, person,
-     item, tags, end_date, quantity} → a column number or header), allowDuplicates}.
+     item, tags, end_date, quantity} → a column number or header), allowDuplicates,
+     positive: "spent" | "received" (a mapped sheet with no type column: what a positive amount is;
+     guessed by positiveMeans when left out)}.
      → {add, update, skip: [{row, reason, message_key, entry}], errors / warnings: [{row, field,
        message_key}], newCategories, newFunders, newCustomFields, needsMapping, headers, sample,
        all (every good row: what "replace" keeps), duplicates, format ("ours" | "mapped"),
-       delimiter, decimal, dateOrder, rows}. `row` is the spreadsheet's row number (the header is 1).
+       delimiter, decimal, dateOrder, rows, signs ({positive, negative}: how many amounts of each
+       sign a mapped sheet with no type column has; null otherwise), positive (what was used then)}.
+       `row` is the spreadsheet's row number (the header is 1).
      It never throws: an unreadable file is an error with a message key. */
   function planImport(rows, existing, settings, opts) {
     var plan = { add: [], update: [], skip: [], errors: [], warnings: [], newCategories: [], newFunders: [], newCustomFields: [],
-      needsMapping: false, headers: [], sample: [], all: [], duplicates: [], format: "", delimiter: "", decimal: "", dateOrder: "", rows: 0 };
+      needsMapping: false, headers: [], sample: [], all: [], duplicates: [], format: "", delimiter: "", decimal: "", dateOrder: "", rows: 0,
+      signs: null, positive: "" };
     try { planInner(plan, rows, existing, settings, opts || {}); }
     catch (err) {
       plan.add = []; plan.update = []; plan.all = []; plan.duplicates = [];
@@ -1441,9 +1462,18 @@
       col = mapping;
     }
     plan.format = ours ? "ours" : "mapped";
-    var anyNegative = false;
-    if (!ours && has(col, "amount") && !has(col, "type")) {
-      for (var t = 1; t < data.length && !anyNegative; t++) { var pm = parseMoney(data[t][col.amount], num); if (pm !== null && pm < 0) anyNegative = true; }
+    // a mapped sheet with no type column: the signs of its amounts, and what a positive one means
+    var positive = "";
+    var moneyCol = has(col, "amount") ? col.amount : has(col, "signed_amount") ? col.signed_amount : -1;
+    if (!ours && !has(col, "type") && moneyCol >= 0) {
+      var signs = { positive: 0, negative: 0 };
+      for (var t = 1; t < data.length; t++) {
+        var pm = parseMoney(data[t][moneyCol], num);
+        if (pm > 0) signs.positive += 1; else if (pm < 0) signs.negative += 1;
+      }
+      plan.signs = signs;
+      positive = opts.positive === "spent" || opts.positive === "received" ? opts.positive : positiveMeans(header[moneyCol], signs.positive, signs.negative);
+      plan.positive = positive;
     }
     var rateOf = function (id) { var r = findById(S.rates, id); return r ? str(r.rate) : ""; };
     var seenIds = {};
@@ -1474,10 +1504,13 @@
         if (!type) bad("type", "expenses.err.type");
       }
       if (!type) {
+        // our file: signed_amount above zero is money received. Somebody else's: `positive` says which
+        // sign is money back (see positiveMeans). No sign (or zero) is spending.
         var sign = signed !== null ? signed : amount;
         if (miles > 0 && (amount === null || amount === 0 || !has(col, "amount"))) type = "mileage";
-        else if (sign !== null && sign < 0) type = "expense";
-        else if (sign !== null && sign > 0 && (ours ? signed !== null : anyNegative)) type = "received";
+        else if (ours) type = signed > 0 ? "received" : "expense";
+        else if (sign > 0) type = positive === "received" ? "received" : "expense";
+        else if (sign < 0) type = positive === "spent" ? "received" : "expense";
         else type = "expense";
       }
       raw.type = type;
