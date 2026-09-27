@@ -23,11 +23,42 @@ eleventyComputed:
 {%- set L = site.links -%}
 {%- set pageAbs = m.url | siteUrl(site) -%}
 
-{#- Eyebrow: "Monthly toolkit", or "Monthly toolkit · This month" for the current month -#}
-{% call ui.pageHero(lang, m.title, "monthly.month_sub" | t(lang), "calendar-heart", ("monthly.month_eyebrow_now" if m.isCurrent else "monthly.month_eyebrow") | t(lang)) %}
+{#- Eyebrow: "Monthly toolkit", or "Monthly toolkit · This month" for the current month.
+    The hero's right-hand card (the shared hero aside, from 1024px): the covers of that month's issues when
+    the magazines have published them (db.articles issues — the toolkit below names the themes, never the
+    covers), each linking to its issue on the official site; the card's link goes to /read/. A month
+    without a published cover yet (most months ahead) shows the months around it instead — the toolkits
+    just before and after, each with its magazine theme — linking to them (the hero's own button already
+    goes to "All months", and the pager with the month names is at the very end of the page).
+    "hide": the poster stays the first thing on smaller screens. -#}
+{%- set covers = [] -%}
+{%- for p in (["lv", "gv"] if lang == "es" else ["gv", "lv"]) %}{% set iss = m[p] %}{% if iss and iss.cover and iss.url %}
+  {%- set _n = covers.push({ src: iss.cover, href: iss.url, title: ("La Viña" if p == "lv" else "Grapevine"), text: iss.label, alt: "" }) -%}
+{%- endif %}{% endfor -%}
+{%- set around = [] -%}
+{%- if not covers.length -%}
+  {#- the month before and the month after (at either end of the window: the two nearest on one side) -#}
+  {%- for j in [m.index - 1, m.index + 1, m.index - 2, m.index + 2] %}{% if around.length < 2 and j >= 0 and j < all.length %}{% set _n = around.push(all[j]) %}{% endif %}{% endfor -%}
+{%- endif -%}
+{% call(slot) ui.pageHero(lang, m.title, "monthly.month_sub" | t(lang), "calendar-heart", ("monthly.month_eyebrow_now" if m.isCurrent else "monthly.month_eyebrow") | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if covers.length %}
+  {{ ui.heroAsideMedia("monthly.hero_covers" | t(lang), covers, lang, { id: "mp-aside-title", icon: "book-open", ratio: "portrait", href: "/read/" | lurl(lang), linkLabel: "nav.read" | t(lang), class: "mp-hero-covers" }) }}
+  {%- elif around.length %}
+  {%- set links = [] -%}
+  {%- set pubs = ["lv", "gv"] if lang == "es" else ["gv", "lv"] -%}
+  {%- for x in around | sort(false, false, "index") -%}
+    {#- its magazine theme (the page language's magazine first); the icon tile takes that magazine's colour -#}
+    {%- set thm = [] -%}{%- for p in pubs %}{% if not thm.length and x[p] and x[p].theme %}{% set _n = thm.push({ pub: p, text: ("La Viña" if p == "lv" else "Grapevine") ~ ": " ~ x[p].theme }) %}{% endif %}{% endfor -%}
+    {%- set _n = links.push({ href: ("/monthly/" + x.key + "/") | lurl(lang), label: x.title, text: (thm[0].text if thm.length else ("monthly.month_eyebrow" | t(lang))), icon: "calendar-heart", tone: (thm[0].pub if thm.length else "grape") }) -%}
+  {%- endfor -%}
+  {{ ui.heroAsideLinks("monthly.hero_around" | t(lang), links, lang, { id: "mp-aside-title", icon: "calendar-range", class: "mp-hero-around" }) }}
+  {%- endif %}
+{%- else %}
 <div class="hero-actions">
   <a class="btn-light" href="{{ '/monthly/' | lurl(lang) }}">{% icon "layout-grid", "size-4" %} {{ "monthly.back_hub" | t(lang) }}</a>
 </div>
+{%- endif %}
 {% endcall %}
 
 <section class="container-page page-start mp-print-root" aria-labelledby="mp-toolkit-title">

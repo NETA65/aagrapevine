@@ -16,6 +16,7 @@
      (fetched on first filter/search/"Load more", or when the list end nears).
      /listen/?show=wo (&season=2) opens pre-filtered; the address follows the show /
      season chips (history.replaceState), so a filtered view can be shared.
+     /watch/?type=short (weekly, podcast) opens the video list on that type.
    • miniPlayer, igPage  small helpers.
    • Instagram embeds: resize official embed iframes from their postMessage.
 
@@ -280,10 +281,10 @@
       featuredId: null,
       featuredVisible: false,
       curEp: null, // the full list object of what is loaded (the featured card shows it as "Now playing")
-      /* true from 1440px — exactly when media.css makes the featured card (with the Short under it)
-         the right-hand column, sticky or not. Then that card is the ONE player: it shows whatever
-         is loaded, and the mini-player stays hidden while the card is on screen (in windows under
-         56.25rem, where only the Short sticks, it takes over once the card has scrolled away). */
+      /* true from 1440px — exactly when media.css makes the featured card the right-hand column,
+         sticky or not. Then that card is the ONE player: it shows whatever is loaded, and the
+         mini-player stays hidden while the card is on screen (in windows under 36rem, where the
+         card doesn't stick, it takes over once the card has scrolled away). */
       wide: false,
       saved: {}, // id → seconds (-1 = finished); reactive copy of positions()
 
@@ -431,8 +432,8 @@
       /* The featured player's controls report whether they're on screen: while
          at least half visible, the mini-player stays hidden for that episode. "On screen" = below
          the fixed site header (rootMargin), so controls scrolled up under the header count as
-         gone and the mini-player takes over (e.g. from 1440px in windows under 56.25rem, where the
-         player scrolls away and the Short alone sticks). */
+         gone and the mini-player takes over (e.g. from 1440px in windows under 36rem, where the
+         player scrolls away). */
       watchFeatured: function (el, ep) {
         var self = this;
         this.featuredId = ep && ep.id;
@@ -718,7 +719,16 @@
         cur: null,
         opener: null,
 
-        init: function () { this.skipId = this.$el.dataset.skip || ""; this.setupList(["q", "vlang", "coll"]); },
+        init: function () {
+          this.skipId = this.$el.dataset.skip || "";
+          /* A type in the address opens the list filtered: /watch/?type=short#videos (the hero
+             card's "All Shorts" link), also ?type=weekly / ?type=podcast. */
+          var k = "";
+          try { k = new URLSearchParams(window.location.search).get("type") || ""; } catch (e) { /* old browser */ }
+          if (/^(short|weekly|podcast)$/.test(k)) this.coll = k;
+          this.setupList(["q", "vlang", "coll"]);
+          if (this.filtering) this.fetchIndex(); // the watchers only see later changes
+        },
         vidAt: function (i) { return this.initial[i] || { id: "" }; },
         get filtering() { return !!(this.q.trim() || this.vlang || this.coll); },
         get filtered() {

@@ -1,7 +1,9 @@
-"""Book of the Month / subscriptions (scripts/sync/shop.py → build_data → data/site/shop.json) and
-La Viña's weekly open meeting (scripts/sync/weekly_open.py, second item).
+"""Book of the Month / subscriptions / specialty items (scripts/sync/shop.py → build_data →
+data/site/shop.json) and La Viña's weekly open meeting (scripts/sync/weekly_open.py, second item).
 
-Fixtures in tests/fixtures/shop/ are trimmed copies of the official store pages (September 2026).
+Fixtures in tests/fixtures/shop/ are trimmed copies of the official store pages (September 2026; the
+specialty pages — gv_greeting_cards, gv_pocket_planner, gv_wall_calendar, lv_articulos_especiales —
+from September 27, 2026).
 Run:  python -m unittest tests.test_shop -v   (CI: python -m unittest discover -s tests)
 """
 from __future__ import annotations
@@ -14,6 +16,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+sys.path.insert(0, str(ROOT / "tests"))
+
+from nodejs import run_js  # noqa: E402
 from scripts.sync import build_data as B  # noqa: E402
 from scripts.sync import shop as S  # noqa: E402
 from scripts.sync import weekly_open as W  # noqa: E402
@@ -37,7 +42,11 @@ PAGES = {
     f"{LV}/tienda/suscripciones": "lv_subscriptions.html",
     f"{GV}/store/us-subscriptions": "gv_us_listing.html", f"{LV}/US-suscripciones": "lv_us_listing.html",
     f"{GV}/store/grapevine-complete-subscription-1-year": "gv_complete_product.html",
+    f"{GV}/store/greeting-cards": "gv_greeting_cards.html", f"{GV}/store/annual-pocket-planner": "gv_pocket_planner.html",
+    f"{GV}/store/annual-wall-calendar": "gv_wall_calendar.html",
+    f"{LV}/tienda/articulos-especiales": "lv_articulos_especiales.html",
 }
+NOW = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def fixture_fetch(url: str) -> str | None:
@@ -181,11 +190,87 @@ class Collect(unittest.TestCase):
                           {"id": "sub:lv:us:LVUS1", "kind": "subscription", "title": "T", "url": f"{LV}/x",
                            "extra": {"pub": "lv", "region": "us"}}],
                 "bulk_discounts": {"source_url": GV_PRODUCT, "tiers": [{"min": 1, "max": None, "off": 0}]},
-                "types_checked": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
+                "types_checked": NOW, "specialty_checked": NOW}
         res = S.collect(lambda url: None, lambda url: None, prev, TODAY, cfg={})
         self.assertEqual({i["id"] for i in res["items"]}, {"botm:gv", "sub:lv:us:LVUS1"})
         self.assertEqual(len(res["errors"]), 4)
         self.assertEqual(res["bulk_discounts"]["source_url"], GV_PRODUCT)
+
+
+class SpecialtyItems(unittest.TestCase):
+    def test_grapevine_product_pages(self):
+        cards = S.parse_specialty(fx("gv_greeting_cards.html"), f"{GV}/store/greeting-cards")
+        self.assertEqual(len(cards), 1)
+        c = cards[0]
+        self.assertEqual((c["title"], c["kind"], c["price"], c["currency"], c["sku"]), ("Greeting cards", "cards", 36.0, "USD", "GVGC01"))
+        self.assertEqual(c["url"], f"{GV}/store/greeting-cards")
+        self.assertIn("/styles/product_feature_image/", c["image_src"])
+        self.assertTrue(c["text"].startswith("Each card is beautifully illustrated"))
+        self.assertLessEqual(len(c["text"]), 230)
+        self.assertEqual((c["pack"], c["volume"]), (24, [{"min": 5, "max": None, "price": 34.8}]))
+        self.assertFalse(c["trilingual"])
+        planner = S.parse_specialty(fx("gv_pocket_planner.html"), f"{GV}/store/annual-pocket-planner")[0]
+        self.assertEqual((planner["title"], planner["kind"], planner["price"], planner["sku"]), ("Annual Pocket Planner", "planner", 6.0, "MS09"))
+        self.assertIn("month-at-a-glance", planner["text"], "the store's typing slip is evened out")
+        self.assertTrue(planner["trilingual"])
+        cal = S.parse_specialty(fx("gv_wall_calendar.html"), f"{GV}/store/annual-wall-calendar")[0]
+        self.assertEqual((cal["kind"], cal["price"], cal["sku"], cal["trilingual"]), ("calendar", 10.5, "MS08", True))
+        self.assertTrue(cal["text"].startswith("Full of beautiful color photographs"))
+
+    def test_la_vina_listing_keeps_only_the_three_kinds(self):
+        got = S.parse_specialty(fx("lv_articulos_especiales.html"), f"{LV}/tienda/articulos-especiales")
+        self.assertEqual([(g["kind"], g["sku"], g["price"]) for g in got],
+                         [("cards", "LVGC01", 36.0), ("planner", "MS09LV", 6.0), ("calendar", "MS08LV", 10.5)])
+        self.assertEqual(got[0]["title"], "Tarjetas de Ocasión")
+        self.assertEqual(got[1]["url"], f"{LV}/tienda/agenda-de-bolsillo")
+        self.assertEqual(got[1]["volume"], [{"min": 10, "max": None, "price": 5.5}])
+        self.assertTrue(all(g["image_src"].startswith(f"{LV}/sites/default/files/") for g in got))
+
+    def test_kinds(self):
+        self.assertEqual(S.specialty_kind("Agenda de Bolsillo"), "planner")
+        self.assertIsNone(S.specialty_kind("Agenda de grupo La Viña", f"{LV}/agenda-de-grupo"))
+        self.assertIsNone(S.specialty_kind("Paquetes de 30 Números Anteriores"))
+        self.assertEqual(S.specialty_kind("Calendario Anual de Pared"), "calendar")
+        self.assertEqual(S.specialty_kind("Tarjetas de Ocasión"), "cards")
+
+    def test_a_page_without_products_is_an_error(self):
+        with self.assertRaises(S.ShopParseError):
+            S.parse_specialty("<html><body><main><div id='block-neatosub-content'><p>Soon</p></div></main></body></html>",
+                              f"{GV}/store/greeting-cards")
+
+    def test_collect_reads_them_weekly_and_keeps_old_items_on_failure(self):
+        old = {"id": "special:gv:MS08", "kind": "specialty", "title": "Annual Wall Calendar", "url": f"{GV}/store/annual-wall-calendar",
+               "image": "/assets/cache/shop/old.webp",
+               "extra": {"pub": "gv", "type": "calendar", "price": 9.5, "page_url": f"{GV}/store/annual-wall-calendar"}}
+        base = {"types_checked": NOW}
+
+        def fetch(url):   # the wall calendar page is down today
+            return None if url.endswith("annual-wall-calendar") else fixture_fetch(url)
+        res = S.collect(fetch, lambda url: None, {**base, "items": [old]}, TODAY, cfg={})
+        sp = {i["id"]: i for i in res["items"] if i["kind"] == "specialty"}
+        self.assertEqual(set(sp), {"special:gv:GVGC01", "special:gv:MS09", "special:gv:MS08",
+                                   "special:lv:LVGC01", "special:lv:MS09LV", "special:lv:MS08LV"})
+        self.assertEqual(sp["special:gv:MS08"]["extra"]["price"], 9.5, "the page that failed keeps its previous item")
+        self.assertEqual(sp["special:gv:GVGC01"]["extra"]["pack"], 24)
+        self.assertEqual(sp["special:lv:MS09LV"]["extra"]["page_url"], f"{LV}/tienda/articulos-especiales")
+        self.assertTrue(any("specialty" in e for e in res["errors"]))
+        self.assertIsNone(res["specialty_checked"], "not stamped while a page failed: the next run tries again")
+        # All pages read → stamped; within the week nothing is fetched and the items are kept as they are.
+        res2 = S.collect(fixture_fetch, lambda url: None, {**base, "items": []}, TODAY, cfg={})
+        self.assertFalse([e for e in res2["errors"] if "specialty" in e])
+        self.assertTrue(res2["specialty_checked"])
+        asked = []
+
+        def spy(url):
+            asked.append(url)
+            return fixture_fetch(url)
+        res3 = S.collect(spy, lambda url: "/assets/cache/shop/new.webp",
+                         {**base, "items": [{**old, "image": None, "extra": {**old["extra"], "image_src": f"{GV}/x.png"}}],
+                          "specialty_checked": NOW}, TODAY, cfg={})
+        self.assertFalse([u for u in asked if "greeting" in u or "planner" in u or "articulos" in u])
+        kept = next(i for i in res3["items"] if i["id"] == "special:gv:MS08")
+        self.assertEqual(kept["image"], "/assets/cache/shop/new.webp", "a missing picture is tried again in between")
+        self.assertEqual(res3["specialty_checked"], NOW)
 
 
 class SiteShopJson(unittest.TestCase):
@@ -230,11 +315,75 @@ class SiteShopJson(unittest.TestCase):
         self.assertEqual(set(doc["bulk_discounts"]["note"]), {"en", "es"})
         self.assertEqual(B.shop_count(doc), 1 + 4)
 
+    def test_specialty_rows(self):
+        items = [{"id": "special:lv:MS08LV", "kind": "specialty", "title": "Calendario Anual de Pared", "lang": "es",
+                  "url": f"{LV}/tienda/calendario-anual-de-pared", "image": "/assets/cache/shop/c.webp",
+                  "extra": {"pub": "lv", "type": "calendar", "price": 10.5, "sku": "MS08LV", "position": 0,
+                            "volume": [{"min": 5, "max": None, "price": 10.0}], "page_url": f"{LV}/tienda/articulos-especiales"}},
+                 {"id": "special:gv:MS08", "kind": "specialty", "title": "Annual Wall Calendar", "lang": "en",
+                  "summary": "Full of beautiful color photographs.", "url": f"{GV}/store/annual-wall-calendar",
+                  "extra": {"pub": "gv", "type": "calendar", "price": 10.5, "sku": "MS08", "trilingual": True, "position": 2}},
+                 {"id": "special:gv:X", "kind": "specialty", "title": "No price", "url": f"{GV}/store/x", "extra": {"pub": "gv"}}]
+        i18n = B.I18n(None)
+        doc, wanted = B.build_shop(self._ctx(items), i18n)
+        B.finish_shop(doc, wanted, i18n)
+        self.assertEqual([r["id"] for r in doc["specialty"]], ["special:gv:MS08", "special:lv:MS08LV"], "Grapevine first; no price: left out")
+        gv, lv = doc["specialty"]
+        for key in ("id", "pub", "lang", "type", "title", "url", "image", "price", "currency", "sku", "volume",
+                    "trilingual", "pack", "text", "page_url"):
+            self.assertIn(key, gv)
+        self.assertEqual((gv["type"], gv["trilingual"], gv["image"]), ("calendar", True, None))
+        self.assertEqual(gv["text"], "Full of beautiful color photographs.")
+        self.assertNotIn("Full of beautiful color photographs.", [w[2] for w in wanted], "never machine-translated")
+        self.assertEqual((lv["lang"], lv["text"], lv["volume"]), ("es", "", [{"min": 5, "max": None, "price": 10.0}]))
+        self.assertEqual(B.shop_count(doc), 2)
+
     def test_no_raw_file_gives_an_empty_document(self):
         ctx = self._ctx([])
         doc, wanted = B.build_shop(ctx, B.I18n(None))
-        self.assertEqual((doc["botm"], doc["subscriptions"], doc["types"]), ([], [], {}))
+        self.assertEqual((doc["botm"], doc["subscriptions"], doc["types"], doc["specialty"]), ([], [], {}, []))
         self.assertEqual(doc["bulk_discounts"]["tiers"], [])
+
+
+class SpecialtyView(unittest.TestCase):
+    """eleventy/filters/shop.js shopSpecialty — the /shop/#specialty cards and the hero teaser."""
+    SHOP = {"specialty": [
+        {"id": "special:gv:GVGC01", "pub": "gv", "lang": "en", "type": "cards", "title": "Greeting cards", "url": f"{GV}/store/greeting-cards",
+         "image": "/assets/cache/shop/a.webp", "price": 36.0, "currency": "USD", "sku": "GVGC01", "pack": 24, "trilingual": False,
+         "volume": [{"min": 5, "max": None, "price": 34.8}], "text": "Each card is beautifully illustrated."},
+        {"id": "special:gv:MS08", "pub": "gv", "lang": "en", "type": "calendar", "title": "Annual Wall Calendar", "url": f"{GV}/store/annual-wall-calendar",
+         "image": "/assets/cache/shop/c.webp", "price": 10.5, "currency": "USD", "sku": "MS08", "trilingual": True, "volume": [], "text": "Full of photographs."},
+        {"id": "special:lv:LVGC01", "pub": "lv", "lang": "es", "type": "cards", "title": "Tarjetas de Ocasión", "url": f"{LV}/tarjetas-de-ocasion",
+         "image": None, "price": 36.0, "currency": "USD", "sku": "LVGC01", "volume": [], "text": ""},
+        {"id": "special:lv:MS08LV", "pub": "lv", "lang": "es", "type": "calendar", "title": "Calendario Anual de Pared", "url": f"{LV}/tienda/calendario-anual-de-pared",
+         "image": None, "price": 10.5, "currency": "USD", "sku": "MS08LV", "volume": [{"min": 5, "max": None, "price": 10.0}], "text": ""},
+        {"id": "special:lv:X", "pub": "lv", "lang": "es", "type": "other", "title": "Otro", "url": f"{LV}/x", "price": 5.0},
+    ]}
+
+    def views(self, lang):
+        return run_js(self, "out(filters.shopSpecialty(input.shop, input.lang))", data={"shop": self.SHOP, "lang": lang})
+
+    def test_english_page(self):
+        v = self.views("en")
+        self.assertEqual([(x["type"], x["pub"]) for x in v], [("cards", "gv"), ("calendar", "gv")], "one card per kind, Grapevine first; 'other' left out")
+        cards, cal = v
+        self.assertEqual((cards["price"], cards["pack"], cards["volume"]), ("$36.00", "Box of 24", "5 or more: $34.80 each"))
+        self.assertEqual((cards["text"], cards["textLang"]), ("Each card is beautifully illustrated.", "en"))
+        self.assertEqual(cards["also"]["title"], "Tarjetas de Ocasión")
+        self.assertFalse(cards["also"]["same"], "different cards (GVGC01 / LVGC01): an edition link, not 'also at'")
+        self.assertTrue(cal["also"]["same"], "MS08 / MS08LV: the same calendar")
+        self.assertEqual(cal["anchor"], "special-calendar")
+
+    def test_spanish_page_uses_la_vina_and_never_a_machine_translation(self):
+        v = self.views("es")
+        cards, cal = v
+        self.assertEqual((cards["pub"], cards["title"], cards["store"]), ("lv", "Tarjetas de Ocasión", "aalavina.org"))
+        self.assertEqual(cards["image"], "", "different product: no borrowed picture")
+        self.assertTrue(cards["text"].startswith("Tarjetas ilustradas"), "no Spanish store text: our own line")
+        self.assertEqual(cal["image"], "/assets/cache/shop/c.webp", "the same calendar: Grapevine's picture")
+        self.assertTrue(cal["trilingual"])
+        self.assertEqual(cal["volume"], "5 o más: $10.00 c/u")
+        self.assertNotIn("photographs", cal["text"])
 
 
 class LaVinaWeeklyOpen(unittest.TestCase):

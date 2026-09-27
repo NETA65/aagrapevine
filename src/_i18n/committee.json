@@ -1223,10 +1223,6 @@
     "en": "Coming up",
     "es": "Lo que viene"
   },
-  "committee.ann.meanwhile_sub": {
-    "en": "No news right now — here is what's next.",
-    "es": "Por ahora no hay noticias; esto es lo que viene."
-  },
   "committee.ann.all_events": {
     "en": "All events",
     "es": "Todos los eventos"
@@ -1538,5 +1534,69 @@
   "committee.gvm.search_kw": {
     "en": "grapevine meeting meetings group gr type in person near me local aa meeting where to find",
     "es": "reunión reuniones de grapevine grupo tipo gr en persona cerca de mí reunión local de aa dónde encontrar"
+  },
+  "committee.meetings.aside_title": {
+    "en": "This week",
+    "es": "Esta semana"
+  },
+  "committee.meetings.aside_gv_week": {
+    "en": "{n} a week in and near our Area",
+    "es": "{n} por semana en nuestra Área y cerca"
+  },
+  "committee.meetings.aside_gv_today": {
+    "en": "Today: {n} meetings",
+    "es": "Hoy: {n} reuniones"
+  },
+  "committee.meetings.aside_gv_today_one": {
+    "en": "Today: 1 meeting",
+    "es": "Hoy: 1 reunión"
+  },
+  "committee.meetings.aside_gv_none": {
+    "en": "None today · {n} this week",
+    "es": "Ninguna hoy · {n} esta semana"
+  },
+  "committee.meetings.aside_wo_gv": {
+    "en": "Grapevine Weekly Open",
+    "es": "Grapevine Weekly Open (en inglés)"
+  },
+  "committee.meetings.aside_wo_lv": {
+    "en": "La Viña open meeting (in Spanish)",
+    "es": "Reunión abierta de La Viña"
+  },
+  "committee.meetings.aside_next": {
+    "en": "Next:",
+    "es": "Próxima:"
+  },
+  "committee.events.aside_title": {
+    "en": "Save the date",
+    "es": "Reserva la fecha"
+  },
+  "committee.events.aside_link": {
+    "en": "See details",
+    "es": "Ver detalles"
+  },
+  "committee.docs.aside_title": {
+    "en": "Latest upload",
+    "es": "Lo más reciente"
+  },
+  "committee.docs.aside_more": {
+    "en": "All in {cat}",
+    "es": "Todo en {cat}"
+  },
+  "committee.docs.aside_flyers": {
+    "en": "Flyers to share",
+    "es": "Volantes para compartir"
+  },
+  "committee.photos.aside_title": {
+    "en": "Next chance for photos",
+    "es": "Próxima ocasión para fotos"
+  },
+  "committee.photos.aside_lead": {
+    "en": "Coming up in NETA 65 — a chance to add photos to the albums.",
+    "es": "Lo que viene en NETA 65: una ocasión para sumar fotos a los álbumes."
+  },
+  "committee.photos.aside_none": {
+    "en": "No booths or workshops on the calendar right now.",
+    "es": "Por ahora no hay mesas ni talleres en el calendario."
   }
 }

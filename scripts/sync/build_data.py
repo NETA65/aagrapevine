@@ -73,7 +73,7 @@ SOURCES: list[tuple[str, str, str]] = [
     ("instagram", "Instagram posts", "Publicaciones de Instagram"),
     ("weekly_open", "Grapevine Weekly Open meeting", "Reunión Grapevine Weekly Open"),
     ("events_external", "GV/LV event calendars", "Calendarios de eventos de GV/LV"),
-    ("shop", "Book of the Month & subscription prices", "Libro del mes y precios de suscripción"),
+    ("shop", "Book of the Month, prices & specialty items", "Libro del mes, precios y artículos especiales"),
     ("audio_project", "Record your story by phone (Grapevine & La Viña)",
      "Graba tu historia por teléfono (La Viña y Grapevine)"),
     ("meetings", "Grapevine meetings (our Area and nearby)", "Reuniones de Grapevine (nuestra Área y cercanas)"),
@@ -2015,12 +2015,14 @@ def build_spotlight(ctx: Ctx, items: list[dict], counts: dict, now: str) -> dict
 
 # =========================================================================== shop (official store data)
 # data/raw/shop.json (scripts/sync/shop.py) → data/site/shop.json: the Book of the Month offers, the
-# bulk-book discount tiers, the subscription prices per publication × region and short descriptions of
-# the subscription types. Contract: docs/DATA_SCHEMA.md → "shop.json". Prices and dates always come
-# from the synced data (never written into a template); purchases link to the official stores.
+# bulk-book discount tiers, the subscription prices per publication × region, short descriptions of
+# the subscription types and the specialty items (greeting cards, pocket planner, wall calendar).
+# Contract: docs/DATA_SCHEMA.md → "shop.json". Prices and dates always come from the synced data
+# (never written into a template); purchases link to the official stores.
 SHOP_PUBS = ("gv", "lv")
 SHOP_REGIONS = ("us", "ca", "intl")
 SHOP_TYPES = ("print", "digital", "complete")
+SHOP_SPECIALTY = ("cards", "planner", "calendar")
 
 
 def _num(v: Any) -> float | None:
@@ -2039,7 +2041,7 @@ def _int_or_none(v: Any) -> int | None:
 
 def empty_shop(updated: str | None = None) -> dict:
     return {"updated": updated, "fixture": False, "botm": [],
-            "bulk_discounts": {"source_url": None, "tiers": []}, "subscriptions": [], "types": {}}
+            "bulk_discounts": {"source_url": None, "tiers": []}, "subscriptions": [], "types": {}, "specialty": []}
 
 
 def build_shop(ctx: Ctx, i18n: I18n) -> tuple[dict, list[tuple[dict, str, str, str]]]:
@@ -2131,6 +2133,26 @@ def build_shop(ctx: Ctx, i18n: I18n) -> tuple[dict, list[tuple[dict, str, str, s
                 cell = doc["types"].setdefault(pub, {}).setdefault(typ, {src: text})
                 wanted.append((cell, "", text, src))
 
+    # Specialty items: each store's own product (title, price, picture, its short description in the store's
+    # language — never machine-translated: the other-language page uses the site's own line instead).
+    specials = [i for i in items if i.get("kind") == "specialty" and (i.get("extra") or {}).get("pub") in SHOP_PUBS]
+    specials.sort(key=lambda i: (SHOP_PUBS.index(i["extra"]["pub"]), _int_or_none(i["extra"].get("position")) or 0, i["id"]))
+    for it in specials:
+        ex = it["extra"]
+        pub = ex["pub"]
+        lang = it.get("lang") if it.get("lang") in LANGS else ("es" if pub == "lv" else "en")
+        title = clean_text(it.get("title"))
+        if not title or not it.get("url") or _num(ex.get("price")) is None:
+            continue
+        row = {"id": it["id"], "pub": pub, "lang": lang, "type": ex.get("type") if ex.get("type") in SHOP_SPECIALTY else "other",
+               "title": title, "url": it["url"], "image": it.get("image") or None, "price": _num(ex.get("price")),
+               "currency": ex.get("currency") or "USD", "sku": ex.get("sku"),
+               "volume": [{"min": _int_or_none(v.get("min")), "max": _int_or_none(v.get("max")), "price": _num(v.get("price"))}
+                          for v in (ex.get("volume") or []) if isinstance(v, dict) and _num(v.get("price")) is not None],
+               "trilingual": bool(ex.get("trilingual")), "pack": _int_or_none(ex.get("pack")),
+               "text": clean_text(it.get("summary")), "page_url": ex.get("page_url")}
+        doc["specialty"].append(row)
+
     for _t, _f, text, src in wanted:
         i18n.want(text, src, (0, 0.0))
     return doc, wanted
@@ -2153,7 +2175,8 @@ def finish_shop(doc: dict, wanted: list[tuple[dict, str, str, str]], i18n: I18n)
 
 
 def shop_count(doc: dict) -> int:
-    return len(doc.get("botm") or []) + sum(len(s.get("plans") or []) for s in doc.get("subscriptions") or [])
+    return (len(doc.get("botm") or []) + sum(len(s.get("plans") or []) for s in doc.get("subscriptions") or [])
+            + len(doc.get("specialty") or []))
 
 
 # =========================================================================== audio project (stories by phone)

@@ -716,9 +716,57 @@ export function ricon(name, cls = "size-5") {
   return `<svg class="icon ${cls}" aria-hidden="true" focusable="false"><use href="#ri-${name}"/></svg>`;
 }
 
+/* ------------------------------------------------------------------ About: the two videos
+   /about/#videos — the videos that introduce the magazines (config/site.yml about_videos: the ids,
+   the magazine, a title in place of one the channel writes in capitals, and our own translation of
+   the title and summary into the other language). Title, summary, length and address come from
+   data/site/videos.json; the summary is the video's own, in its own language, without the channel's
+   sign-off ("Thank you for watching! … Visit us at https://…"). The page language's magazine first.
+   → [{ id, pub, isLv, lang, title, summary, url, seconds, tr: { title, summary, machine } | null }]
+   tr (the other-language page only): our translation, else the item's translation (machine: true). */
+const VIDEO_SIGNOFF = /\s*(?:thank you for watching|gracias por ver|please share|por favor,? compart|visit us (?:at|on)|vis[ií]t[ae]nos en|view us in|click here|haga clic|haz clic|https?:\/\/)/i;
+export function cleanVideoSummary(s) {
+  let t = String(s || "").replace(/\s+/g, " ").trim();
+  const cut = t.search(VIDEO_SIGNOFF);
+  if (cut > 40) t = t.slice(0, cut);
+  return t.replace(/[\s…]+$/u, "").trim();
+}
+export function aboutVideos(cfg, videos, lang = "en") {
+  const items = itemsOf(videos);
+  const out = [];
+  for (const c of Array.isArray(cfg) ? cfg : []) {
+    const id = String((c && c.id) || "").trim();
+    if (!/^[\w-]{6,20}$/.test(id)) continue;
+    const it = items.find((i) => i.id === "yt:" + id || (i.extra && i.extra.video_id === id)) || null;
+    const isLv = c.pub === "lv" || (!c.pub && it && it.category === "lv");
+    const vLang = (it && (it.lang === "en" || it.lang === "es") && it.lang) || (isLv ? "es" : "en");
+    const title = String(c.title || (it && it.title) || "").trim();
+    if (!title) continue;
+    let tr = null;
+    if (vLang !== lang) {
+      const own = c.tr || {};
+      if (own.title || own.summary) tr = { title: String(own.title || "").trim(), summary: String(own.summary || "").trim(), machine: false };
+      else if (it && it.i18n) {
+        const tt = it.i18n.title && it.i18n.title[lang], ts = it.i18n.summary && it.i18n.summary[lang];
+        if (tt || ts) tr = { title: String(tt || "").trim(), summary: cleanVideoSummary(ts), machine: hasMachine(it, lang) };
+      }
+    }
+    out.push({
+      id, pub: isLv ? "lv" : "gv", isLv, lang: vLang, title,
+      summary: cleanVideoSummary(it && it.summary),
+      url: `https://www.youtube.com/watch?v=${id}`,
+      seconds: Number(it && it.extra && it.extra.duration_sec) || 0,
+      tr,
+    });
+  }
+  const rank = (v) => ((v.isLv ? "es" : "en") === lang ? 0 : 1);
+  return out.map((v, i) => ({ v, i })).sort((a, b) => rank(a.v) - rank(b.v) || a.i - b.i).map((o) => o.v);
+}
+
 /* ------------------------------------------------------------------ */
 export default function (eleventyConfig, helpers) {
   const h = helpers || {};
+  eleventyConfig.addFilter("readAboutVideos", (cfg, videos, lang) => aboutVideos(cfg, videos, lang));
   eleventyConfig.addShortcode("readSprite", () => readSprite());
   eleventyConfig.addShortcode("ricon", (name, cls) => ricon(name, cls || "size-5"));
   eleventyConfig.on("eleventy.before", () => { spotlightDisk = undefined; }); // re-read on every (watch) build

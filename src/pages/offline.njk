@@ -22,7 +22,24 @@ eleventyExcludeFromCollections: true
   { icon: "gauge", tone: "bg-lv-soft text-lv", h: "pwa.offline.how4_h", t: "pwa.offline.how4_t" }
 ] -%}
 
-{% call ui.pageHero(lang, "pwa.offline.title" | t(lang), "pwa.offline.sub" | t(lang), "", "pwa.offline.eyebrow" | t(lang), { eyebrowIcon: "wifi-off", titleId: "offline-title" }) %}
+{#- The hero's right-hand card (the shared hero aside, "Join by phone"): no data needed to reach a
+    meeting — a one-tap call (the number, then the meeting ID) to the committee meeting and to the
+    weekly open meetings (site.phone_access + the meeting IDs, eleventy/filters/access.js axPhone, the
+    same as /accessibility/#phone, which it links to). The first card under the hero on smaller
+    screens and at larger text ("below"): a phone with no signal is where it helps most. -#}
+{%- set phone = site | axPhone(db.weekly_open.items | cmWeeklyAll(lang), lang) -%}
+{% call(slot) ui.pageHero(lang, "pwa.offline.title" | t(lang), "pwa.offline.sub" | t(lang), "", "pwa.offline.eyebrow" | t(lang), { eyebrowIcon: "wifi-off", titleId: "offline-title", side: "below" }) %}
+{%- if slot == "side" %}
+  {%- if phone.ok %}
+  {% call ui.heroAside("pwa.offline.phone_title" | t(lang), lang, { id: "pwa-phone-title", icon: "phone", lead: "pwa.offline.phone_lead" | t(lang), href: ("/accessibility/" | lurl(lang)) + "#phone", linkLabel: "pwa.offline.phone_link" | t(lang) }) %}
+  <ul class="hero-aside-links" role="list">
+    {%- for mt in phone.meetings %}{% if mt.call and loop.index <= 3 %}
+    <li>{{ ui.heroAsideLink({ href: mt.call, label: ("nav.meeting" if mt.key == "committee" else "access.aud_weekly_t") | t(lang), text: "pwa.offline.phone_call" | t(lang, { city: mt.callCity, id: (mt.id | replace(" ", " ")) }), icon: "phone-call", tone: ("vine" if mt.key == "committee" else "grape") }, lang) }}</li>
+    {%- endif %}{% endfor %}
+  </ul>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
 <div class="hero-actions" data-pwa-offline-copy
      data-title-online="{{ 'pwa.offline.title_online' | t(lang) }}" data-sub-online="{{ 'pwa.offline.sub_online' | t(lang) }}"
      data-title-direct="{{ 'pwa.offline.title' | t(lang) }}" data-sub-direct="{{ 'pwa.offline.sub_direct' | t(lang) }}"
@@ -31,6 +48,7 @@ eleventyExcludeFromCollections: true
       JavaScript, standing in for a page that isn't saved: reload that address. -#}
   <a class="btn-light" href="{{ '/' | lurl(lang) }}" data-pwa-retry>{% icon "refresh-cw", "size-4" %} <span>{{ "pwa.offline.retry" | t(lang) }}</span></a>
 </div>
+{%- endif %}
 {% endcall %}
 
 {#- ============ The pages saved on this device (read from the service worker's caches) ============ -#}

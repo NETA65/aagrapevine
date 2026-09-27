@@ -50,12 +50,25 @@ pageScripts: ["/assets/js/community.js"]
 {#- One Alpine scope for the hero and the page: the hero's "Copy for WhatsApp" copies the
     language the visitor picked in the tool card (bi = both languages). -#}
 <div x-data="digestPage()">
-{% call ui.pageHero(lang, "nav.digest" | t(lang), "community.digest.hero_sub" | t(lang), "newspaper", "community.digest.eyebrow" | t(lang)) %}
+{#- The hero's right-hand card (the shared hero aside): two more ways to pass the digest on — the monthly
+    e-mail (write to the chair) and the district report (/monthly/#report). They MOVE there from the end
+    of the previews card: while the card is in the hero (≥1024px at 100 % text) community.css hides those
+    two rows (.cm-dg-moved); elsewhere the aside is hidden ("hide") and the rows stay. The edition itself
+    (month, highlights) is the newsletter right below — not repeated. -#}
+{%- set chairMail = (site.meeting.chair_email or site.contact_email) | cmMailto('community.sub.email_subject' | t(lang)) -%}
+{% call(slot) ui.pageHero(lang, "nav.digest" | t(lang), "community.digest.hero_sub" | t(lang), "newspaper", "community.digest.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {{ ui.heroAsideLinks("community.digest.aside_title" | t(lang), [
+       { href: chairMail, label: "community.digest.aside_email" | t(lang), text: "community.digest.aside_email_text" | t(lang), icon: "mail", tone: "gv" },
+       { href: ("/monthly/" | lurl(lang)) + "#report", label: "community.digest.report_link" | t(lang), text: "community.digest.report_hint" | t(lang), icon: "clipboard-list", tone: "vine" }
+     ], lang, { id: "dg-aside-title", icon: "share-2" }) }}
+{%- else %}
 <div class="hero-actions cm-hero-tight" data-js-only>
   <button type="button" class="btn-light" data-copy-from="#digest-wa-one" :data-copy-from="src('wa')">{% icon "message-circle", "size-4" %} {{ "community.digest.copy_wa" | t(lang) }}</button>
   <button type="button" class="btn-on-dark" onclick="window.print()">{% icon "printer", "size-4" %} {{ "community.digest.print_short" | t(lang) }}</button>
 </div>
 {% if md.total %}{{ ui.heroStats([{ value: md.total | cmNum(lang), label: "community.digest.stat_items" | t(lang, { prev: prevW }) }]) }}{% endif %}
+{%- endif %}
 {% endcall %}
 
 {#- Layout (areas/community.css .cm-dg-layout). DOM order = phone order = Tab order: the compact
@@ -531,15 +544,16 @@ pageScripts: ["/assets/js/community.js"]
         <pre id="digest-email-one" class="cm-pre" x-show="!bi" role="region" tabindex="0" aria-label="{{ 'community.digest.email_label' | t(lang) }} ({{ 'community.digest.lang_only' | t(lang) }})">{{ md | cmDigestText([lang], "email", site) }}</pre>
         <pre id="digest-email-bi" class="cm-pre" x-show="bi" x-cloak role="region" tabindex="0" aria-label="{{ 'community.digest.email_label' | t(lang) }} ({{ 'community.digest.lang_bi' | t(lang) }})">{{ md | cmDigestText(biLangs, "email", site) }}</pre>
       </details>
-      {#- How to receive it: the monthly e-mail goes to the committee's list — ask the chair -#}
-      <div class="px-4 py-3.5">
+      {#- How to receive it: the monthly e-mail goes to the committee's list — ask the chair. These two rows
+          (.cm-dg-moved) are in the hero's right-hand card instead while it is shown there (see the hero). -#}
+      <div class="cm-dg-moved px-4 py-3.5">
         <h2 class="text-sm font-semibold text-ink">{{ "community.sub.email_title" | t(lang) }}</h2>
         <p class="mt-0.5 text-xs leading-relaxed text-muted">{{ "community.sub.email_text" | t(lang) }}</p>
-        <a class="link tap-link mt-1 inline-flex items-center gap-1.5 text-sm font-semibold" href="{{ (site.meeting.chair_email or site.contact_email) | cmMailto('community.sub.email_subject' | t(lang)) }}">{% icon "mail", "size-4 shrink-0" %} {{ "community.sub.email_btn" | t(lang) }}</a>
+        <a class="link tap-link mt-1 inline-flex items-center gap-1.5 text-sm font-semibold" href="{{ chairMail }}">{% icon "mail", "size-4 shrink-0" %} {{ "community.sub.email_btn" | t(lang) }}</a>
       </div>
       {#- One job each: this digest is for a group chat or e-mail; the district meeting has its own
           report (/monthly/#report, which points back here) -#}
-      <div class="px-4 py-3.5">
+      <div class="cm-dg-moved px-4 py-3.5">
         <p class="text-xs leading-relaxed text-muted">{{ "community.digest.report_hint" | t(lang) }}</p>
         <a class="link tap-link mt-1 inline-flex items-center gap-1.5 text-sm font-semibold" href="{{ '/monthly/' | lurl(lang) }}#report">{% icon "clipboard-list", "size-4 shrink-0" %} {{ "community.digest.report_link" | t(lang) }}<span aria-hidden="true"> →</span></a>
       </div>

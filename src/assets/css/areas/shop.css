@@ -222,3 +222,25 @@
 @media (width < 40rem) { .shop-teaser .shop-sticker { display: none; } }
 .shop-teaser .shop-sticker-n { font-size: 1.15rem; }
 .shop-teaser .shop-sticker-w { font-size: 0.5rem; }
+
+/* ---------- Specialty items (#specialty: greeting cards, pocket planner, wall calendar) ----------
+   Phones: stacked cards (a picture band on top, the text and a full-width button under it). 640–1023px:
+   horizontal cards (picture on the left). From 1024px: three cards side by side (picture on top; the price
+   and buttons line up at the bottom). The product shot sits contained (never cropped) on a soft tile;
+   without a picture — or with Data saver, which hides it — the tile keeps a quiet icon. */
+.shop-special-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--cards-gap, 1.25rem); }
+.shop-special { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; overflow: hidden; }
+.shop-special-img { position: relative; display: block; height: 9rem; border-bottom: 1px solid var(--c-line); background: var(--c-surface-2); }
+.shop-special-img > img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; padding: 0.625rem; object-fit: contain; }
+.shop-special-ph { position: absolute; inset: 0; display: grid; place-items: center; color: var(--c-faint); }
+.shop-special-body { display: flex; flex-direction: column; min-width: 0; padding: 1rem 1.125rem 1.25rem; }
+@media (width >= 40rem) {
+  .shop-special { grid-template-columns: 11rem minmax(0, 1fr); grid-template-rows: none; }
+  .shop-special-img { height: auto; min-height: 9rem; border-bottom: 0; border-right: 1px solid var(--c-line); }
+  .shop-special-body { padding: 1.25rem 1.5rem 1.5rem; }
+}
+@media (width >= 64rem) {
+  .shop-special-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .shop-special { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; }
+  .shop-special-img { aspect-ratio: 16 / 10; min-height: 0; border-right: 0; border-bottom: 1px solid var(--c-line); }
+}

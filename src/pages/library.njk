@@ -83,16 +83,46 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js", "/assets/j
 
 {#- ---------- hero (the shared ui.pageHero: same height as every page) ----------
     Only two compact numbers go in the hero (shown from 768px): the total and new this month —
-    the per-source counts are on the Source filter chips. The search box, how fresh the library
-    is (ui.freshness) and the quick collections sit in the block right below it (page-overlap). -#}
+    the per-source counts are on the Source filter chips. On its right (the shared hero aside; the
+    first card under the hero on smaller screens and at larger text): the current magazine catalog
+    (db.pdfs, the same pick as the Shop's catalogs — readCatalogs: the copy in the page language, so
+    La Viña's on /es/) with its cover, "Open the catalog" and a link to the Shop, where catalogs live.
+    The search box, how fresh the library is (ui.freshness) and the quick collections sit in the
+    block right below it (page-overlap). -#}
+{%- set catalogs = db.pdfs | readCatalogs(lang) -%}
+{%- set cat = catalogs[0] if catalogs.length else null -%}
 <div id="library" class="lib-page">
-{% call ui.pageHero(lang, "nav.library" | t(lang), "library.subtitle" | t(lang), "library", "library.eyebrow" | t(lang)) %}
+{% call(slot) ui.pageHero(lang, "nav.library" | t(lang), "library.subtitle" | t(lang), "library", "library.eyebrow" | t(lang), { side: "below" }) %}
+{%- if slot == "side" %}
+  {%- if cat %}
+  {%- set ci = cat | readPdfTitleInfo(lang) -%}
+  {%- set cx = cat.extra or {} -%}
+  {%- set cYear = (cx.upload_month or cat.date or "") | string | truncate(4, true, "") -%}
+  {%- set cMeta = [
+    cYear if (cYear and not (cYear in ci.title)) else "",
+    (("library.page_one" | t(lang)) if cx.pages == 1 else ("common.pages" | t(lang, { n: cx.pages }))) if cx.pages else "",
+    (cx.size_bytes | fileSize) if cx.size_bytes else ""
+  ] | select -%}
+  {% call ui.heroAside("library.aside_title" | t(lang), lang, { icon: "book-open", id: "lib-aside-title", class: "lib-aside",
+       href: ("/shop/" | lurl(lang)) + "#catalogs", linkLabel: "library.aside_shop" | t(lang) }) %}
+  <div class="lib-aside-cat">
+    <span class="hero-aside-thumb is-portrait lib-aside-cover">{% if cx.thumb %}<img src="{{ cx.thumb }}" alt="" loading="lazy" decoding="async" onerror="this.remove()">{% endif %}</span>
+    <div class="lib-aside-info">
+      <p class="hero-aside-title"{% if (ci.lang or cat.lang) and (ci.lang or cat.lang) != lang %} lang="{{ ci.lang or cat.lang }}"{% endif %}>{{ ci.title }}</p>
+      {% if cMeta.length %}<p class="hero-aside-note">{{ cMeta | join(" · ") }}</p>{% endif %}
+      <a class="hero-aside-cta" href="{{ cat.url }}" target="_blank" rel="noopener">{% icon "file-down", "size-4 shrink-0" %}{{ "library.aside_open" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+    </div>
+  </div>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
   {%- if stats.total %}
   {{ ui.heroStats([
     { value: stats.total | libNum(lang), label: "library.stat_total" | t(lang) },
     { value: stats.recent | libNum(lang), label: "library.stat_new" | t(lang) }
   ]) }}
   {%- endif %}
+{%- endif %}
 {% endcall %}
 
 {#- ---------- page start: search box + quick collections (tucked into the hero's fade) ---------- -#}

@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-26T19:17:37Z",
- "updated": "2026-09-26T19:17:37Z",
+ "generated": "2026-09-27T05:35:41Z",
+ "updated": "2026-09-27T05:35:41Z",
  "fixture": false,
  "sources": [
   {
@@ -356,20 +356,22 @@
   },
   {
    "source": "shop",
-   "label": "Book of the Month & subscription prices",
-   "label_es": "Libro del mes y precios de suscripción",
+   "label": "Book of the Month, prices & specialty items",
+   "label_es": "Libro del mes, precios y artículos especiales",
    "ok": true,
-   "updated": "2026-09-26T14:37:44Z",
-   "attempted": "2026-09-26T14:37:44Z",
-   "count": 54,
-   "new_7d": 54,
+   "updated": "2026-09-27T05:34:48Z",
+   "attempted": "2026-09-27T05:34:48Z",
+   "count": 60,
+   "new_7d": 60,
    "error": null,
    "stats": {
     "botm": 2,
     "plans": 52,
+    "specialty": 6,
     "types_refreshed": false,
-    "requests": 14,
-    "images_downloaded": 2
+    "specialty_refreshed": true,
+    "requests": 20,
+    "images_downloaded": 4
    }
   },
   {
@@ -453,7 +455,7 @@
   "updated": "2026-09-26T14:41:44Z"
  },
  "translations": {
-  "cached": 1881,
+  "cached": 1884,
   "engine": "argos1.0-ct2/v5",
   "model_enabled": true,
   "translated_this_run": 0,
@@ -477,7 +479,7 @@
   "announcements": 0,
   "events": 30,
   "whatsnew": 150,
-  "shop": 54,
+  "shop": 60,
   "meetings": 23,
   "audio_project": 2,
   "quote": 2
@@ -505,7 +507,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-09-26",
+  "today": "2026-09-27",
   "home_days": 60,
   "list_days": [
    60,

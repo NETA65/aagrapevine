@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-26T14:37:44Z",
+ "updated": "2026-09-27T05:34:48Z",
  "fixture": false,
  "botm": [
   {
@@ -940,5 +940,145 @@
     "en": "It combines the printed journal with full access to the website, the file and the application."
    }
   }
- }
+ },
+ "specialty": [
+  {
+   "id": "special:gv:GVGC01",
+   "pub": "gv",
+   "lang": "en",
+   "type": "cards",
+   "title": "Greeting cards",
+   "url": "https://www.aagrapevine.org/store/greeting-cards",
+   "image": "/assets/cache/shop/e4310a0bbdaaba1e.webp",
+   "price": 36.0,
+   "currency": "USD",
+   "sku": "GVGC01",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 34.8
+    }
+   ],
+   "trilingual": false,
+   "pack": 24,
+   "text": "Each card is beautifully illustrated with a cartoon about humorous moments in sobriety. All cartoons are conceived and drawn by AA members and were previously published in AA Grapevine.",
+   "page_url": "https://www.aagrapevine.org/store/greeting-cards"
+  },
+  {
+   "id": "special:gv:MS09",
+   "pub": "gv",
+   "lang": "en",
+   "type": "planner",
+   "title": "Annual Pocket Planner",
+   "url": "https://www.aagrapevine.org/store/annual-pocket-planner",
+   "image": "/assets/cache/shop/d10238ef27517935.webp",
+   "price": 6.0,
+   "currency": "USD",
+   "sku": "MS09",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 5.5
+    }
+   ],
+   "trilingual": true,
+   "pack": null,
+   "text": "A companion to the Wall Calendar, the Planner (annual) features a month-at-a-glance spread and quotations from the Calendar.",
+   "page_url": "https://www.aagrapevine.org/store/annual-pocket-planner"
+  },
+  {
+   "id": "special:gv:MS08",
+   "pub": "gv",
+   "lang": "en",
+   "type": "calendar",
+   "title": "Annual Wall Calendar",
+   "url": "https://www.aagrapevine.org/store/annual-wall-calendar",
+   "image": "/assets/cache/shop/f764e515dcc666ae.webp",
+   "price": 10.5,
+   "currency": "USD",
+   "sku": "MS08",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 10.0
+    }
+   ],
+   "trilingual": true,
+   "pack": null,
+   "text": "Full of beautiful color photographs shot by AA members, accompanied by brief inspiring quotes selected from published Grapevine articles.",
+   "page_url": "https://www.aagrapevine.org/store/annual-wall-calendar"
+  },
+  {
+   "id": "special:lv:LVGC01",
+   "pub": "lv",
+   "lang": "es",
+   "type": "cards",
+   "title": "Tarjetas de Ocasión",
+   "url": "https://www.aalavina.org/tarjetas-de-ocasion",
+   "image": "/assets/cache/shop/d79f539ca26cfa33.webp",
+   "price": 36.0,
+   "currency": "USD",
+   "sku": "LVGC01",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 34.8
+    }
+   ],
+   "trilingual": false,
+   "pack": null,
+   "text": "",
+   "page_url": "https://www.aalavina.org/tienda/articulos-especiales"
+  },
+  {
+   "id": "special:lv:MS09LV",
+   "pub": "lv",
+   "lang": "es",
+   "type": "planner",
+   "title": "Agenda de Bolsillo",
+   "url": "https://www.aalavina.org/tienda/agenda-de-bolsillo",
+   "image": null,
+   "price": 6.0,
+   "currency": "USD",
+   "sku": "MS09LV",
+   "volume": [
+    {
+     "min": 10,
+     "max": null,
+     "price": 5.5
+    }
+   ],
+   "trilingual": false,
+   "pack": null,
+   "text": "",
+   "page_url": "https://www.aalavina.org/tienda/articulos-especiales"
+  },
+  {
+   "id": "special:lv:MS08LV",
+   "pub": "lv",
+   "lang": "es",
+   "type": "calendar",
+   "title": "Calendario Anual de Pared",
+   "url": "https://www.aalavina.org/tienda/calendario-anual-de-pared",
+   "image": null,
+   "price": 10.5,
+   "currency": "USD",
+   "sku": "MS08LV",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 10.0
+    }
+   ],
+   "trilingual": false,
+   "pack": null,
+   "text": "",
+   "page_url": "https://www.aalavina.org/tienda/articulos-especiales"
+  }
+ ]
 }

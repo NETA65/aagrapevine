@@ -89,7 +89,8 @@
       } else if (next) {
         label.textContent = resume.getAttribute("data-t-continue").replace("{n}", next.getAttribute("data-n"));
         // the card's own link (the build gave it the site's path prefix; a data-* value would not have it)
-        var link = next.querySelector("a[href]");
+        // (the hero card's numbered dots come first in the page: each dot is itself the link)
+        var link = next.matches("a[href]") ? next : next.querySelector("a[href]");
         if (link) resume.setAttribute("href", link.getAttribute("href"));
       } else {
         label.textContent = resume.getAttribute("data-t-review");

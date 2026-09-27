@@ -67,12 +67,31 @@ pageScripts: ["/assets/js/published.js"]
   <span>{{ label }}</span><span class="pw-n" data-n>{{ n }}</span></label>
 {%- endmacro %}
 
-{#- ---------- hero ---------- -#}
-{% call ui.pageHero(lang, "nav.published" | t(lang), "published.hero_sub" | t(lang), "award", "published.eyebrow" | t(lang)) %}
+{#- ---------- hero ----------
+    Its right-hand card (the shared hero aside, from 1024px): "Your story could be next" — the next
+    Grapevine story deadline (db.editorial, the same row /contribute/ shows — its date and theme only, no
+    countdown here) with "How to send" → /contribute/#deadlines, its one home. The writers' counts and newest stories are right below (filters + list), so the card does not
+    repeat them. No dated deadline → no card. "hide": smaller screens keep the filters first. -#}
+{%- set pwNext = ((db.editorial.items | readEditorial("gv", lang)).upcoming | selectattr("isNext") | first) -%}
+{% call(slot) ui.pageHero(lang, "nav.published" | t(lang), "published.hero_sub" | t(lang), "award", "published.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if pwNext %}
+  {% call ui.heroAside("published.aside_title" | t(lang), lang, { id: "pw-aside-title", icon: "pen-line", href: ('/contribute/' | lurl(lang)) + "#deadlines", linkLabel: "published.aside_link" | t(lang) }) %}
+    <p class="hero-aside-note">{{ "read.contrib.next_deadline" | t(lang) }}</p>
+    <p class="hero-aside-stat">
+      <span class="hero-aside-value"><time datetime="{{ pwNext.deadline }}">{% if lang == "es" %}{{ pwNext.deadline | fmtDate(lang, "day") }} {{ pwNext.deadline | fmtDate(lang, "monthShort") }}{% else %}{{ pwNext.deadline | fmtDate(lang, "monthShort") }} {{ pwNext.deadline | fmtDate(lang, "day") }}{% endif %}</time></span>
+    </p>
+    <p class="hero-aside-title mt-2"><span lang="{{ pwNext.themeLang }}">{{ pwNext.theme }}</span>{% if pwNext.machine %} <span title="{{ 'common.auto_translated' | t(lang) }}">{% icon "languages", "inline size-3.5 align-[-0.1em] opacity-80" %}<span class="sr-only">({{ "common.auto_translated" | t(lang) }})</span></span>{% endif %}</p>
+    <p class="hero-aside-note">{% if pwNext.issueLabel %}{{ "read.contrib.for_issue" | t(lang, { issue: pwNext.issueLabel }) }} · {% endif %}{{ "read.contrib.aside_gv" | t(lang) }}</p>
+    {% if lang == "es" %}<p class="hero-aside-note">{{ "read.contrib.aside_lv" | t(lang) }}</p>{% endif %}
+  {% endcall %}
+  {%- endif %}
+{%- else %}
   <div class="hero-actions">
     <a class="btn-light" href="{{ '/contribute/' | lurl(lang) }}">{% icon "pen-line", "size-4" %} {{ "nav.contribute" | t(lang) }}</a>
     <a class="btn-on-dark max-sm:hidden" href="#pw-how">{% icon "info", "size-4" %} {{ "published.cta_how" | t(lang) }}</a>
   </div>
+{%- endif %}
 {% endcall %}
 
 {#- ---------- filters (tucked into the hero's faded edge) ---------- -#}

@@ -1,17 +1,224 @@
 {
  "source": "shop",
- "updated": "2026-09-26T14:37:44Z",
- "attempted": "2026-09-26T14:37:44Z",
+ "updated": "2026-09-27T05:34:48Z",
+ "attempted": "2026-09-27T05:34:48Z",
  "ok": true,
  "error": null,
  "stats": {
   "botm": 2,
   "plans": 52,
+  "specialty": 6,
   "types_refreshed": false,
-  "requests": 14,
-  "images_downloaded": 2
+  "specialty_refreshed": true,
+  "requests": 20,
+  "images_downloaded": 4
  },
  "items": [
+  {
+   "id": "special:gv:GVGC01",
+   "source": "grapevine",
+   "kind": "specialty",
+   "url": "https://www.aagrapevine.org/store/greeting-cards",
+   "title": "Greeting cards",
+   "summary": "Each card is beautifully illustrated with a cartoon about humorous moments in sobriety. All cartoons are conceived and drawn by AA members and were previously published in AA Grapevine.",
+   "lang": "en",
+   "date": null,
+   "first_seen": "2026-09-27T05:34:48Z",
+   "last_seen": "2026-09-27T05:34:48Z",
+   "image": "/assets/cache/shop/e4310a0bbdaaba1e.webp",
+   "tags": [],
+   "category": "specialty",
+   "status": "ok",
+   "extra": {
+    "pub": "gv",
+    "type": "cards",
+    "price": 36.0,
+    "currency": "USD",
+    "sku": "GVGC01",
+    "volume": [
+     {
+      "min": 5,
+      "max": null,
+      "price": 34.8
+     }
+    ],
+    "trilingual": false,
+    "pack": 24,
+    "page_url": "https://www.aagrapevine.org/store/greeting-cards",
+    "position": 0,
+    "image_src": "https://www.aagrapevine.org/sites/default/files/styles/product_feature_image/public/product-images/2025-07/GV-GCards-2025.png?itok=kmAiidDj"
+   }
+  },
+  {
+   "id": "special:gv:MS09",
+   "source": "grapevine",
+   "kind": "specialty",
+   "url": "https://www.aagrapevine.org/store/annual-pocket-planner",
+   "title": "Annual Pocket Planner",
+   "summary": "A companion to the Wall Calendar, the Planner (annual) features a month-at-a-glance spread and quotations from the Calendar.",
+   "lang": "en",
+   "date": null,
+   "first_seen": "2026-09-27T05:34:48Z",
+   "last_seen": "2026-09-27T05:34:48Z",
+   "image": "/assets/cache/shop/d10238ef27517935.webp",
+   "tags": [],
+   "category": "specialty",
+   "status": "ok",
+   "extra": {
+    "pub": "gv",
+    "type": "planner",
+    "price": 6.0,
+    "currency": "USD",
+    "sku": "MS09",
+    "volume": [
+     {
+      "min": 5,
+      "max": null,
+      "price": 5.5
+     }
+    ],
+    "trilingual": true,
+    "page_url": "https://www.aagrapevine.org/store/annual-pocket-planner",
+    "position": 1,
+    "image_src": "https://www.aagrapevine.org/sites/default/files/styles/product_feature_image/public/product-images/2026-04/PocketPlanner-2027.png?itok=Qc4HiD0j"
+   }
+  },
+  {
+   "id": "special:gv:MS08",
+   "source": "grapevine",
+   "kind": "specialty",
+   "url": "https://www.aagrapevine.org/store/annual-wall-calendar",
+   "title": "Annual Wall Calendar",
+   "summary": "Full of beautiful color photographs shot by AA members, accompanied by brief inspiring quotes selected from published Grapevine articles.",
+   "lang": "en",
+   "date": null,
+   "first_seen": "2026-09-27T05:34:48Z",
+   "last_seen": "2026-09-27T05:34:48Z",
+   "image": "/assets/cache/shop/f764e515dcc666ae.webp",
+   "tags": [],
+   "category": "specialty",
+   "status": "ok",
+   "extra": {
+    "pub": "gv",
+    "type": "calendar",
+    "price": 10.5,
+    "currency": "USD",
+    "sku": "MS08",
+    "volume": [
+     {
+      "min": 5,
+      "max": null,
+      "price": 10.0
+     }
+    ],
+    "trilingual": true,
+    "page_url": "https://www.aagrapevine.org/store/annual-wall-calendar",
+    "position": 2,
+    "image_src": "https://www.aagrapevine.org/sites/default/files/styles/product_feature_image/public/product-images/2026-04/Calendar-2027.png?itok=6JxY5ZZj"
+   }
+  },
+  {
+   "id": "special:lv:LVGC01",
+   "source": "lavina",
+   "kind": "specialty",
+   "url": "https://www.aalavina.org/tarjetas-de-ocasion",
+   "title": "Tarjetas de Ocasión",
+   "summary": "",
+   "lang": "es",
+   "date": null,
+   "first_seen": "2026-09-27T05:34:48Z",
+   "last_seen": "2026-09-27T05:34:48Z",
+   "image": "/assets/cache/shop/d79f539ca26cfa33.webp",
+   "tags": [],
+   "category": "specialty",
+   "status": "ok",
+   "extra": {
+    "pub": "lv",
+    "type": "cards",
+    "price": 36.0,
+    "currency": "USD",
+    "sku": "LVGC01",
+    "volume": [
+     {
+      "min": 5,
+      "max": null,
+      "price": 34.8
+     }
+    ],
+    "trilingual": false,
+    "page_url": "https://www.aalavina.org/tienda/articulos-especiales",
+    "position": 0,
+    "image_src": "https://www.aalavina.org/sites/default/files/styles/product_card/public/product-images/2025-07/LV-GCards-2025_0.png?itok=SGTCwexQ"
+   }
+  },
+  {
+   "id": "special:lv:MS09LV",
+   "source": "lavina",
+   "kind": "specialty",
+   "url": "https://www.aalavina.org/tienda/agenda-de-bolsillo",
+   "title": "Agenda de Bolsillo",
+   "summary": "",
+   "lang": "es",
+   "date": null,
+   "first_seen": "2026-09-27T05:34:48Z",
+   "last_seen": "2026-09-27T05:34:48Z",
+   "image": null,
+   "tags": [],
+   "category": "specialty",
+   "status": "ok",
+   "extra": {
+    "pub": "lv",
+    "type": "planner",
+    "price": 6.0,
+    "currency": "USD",
+    "sku": "MS09LV",
+    "volume": [
+     {
+      "min": 10,
+      "max": null,
+      "price": 5.5
+     }
+    ],
+    "trilingual": false,
+    "page_url": "https://www.aalavina.org/tienda/articulos-especiales",
+    "position": 1,
+    "image_src": "https://www.aalavina.org/sites/default/files/styles/product_card/public/product-images/2026-04/PocketPlanner-2027.png?itok=yFQyBZk5"
+   }
+  },
+  {
+   "id": "special:lv:MS08LV",
+   "source": "lavina",
+   "kind": "specialty",
+   "url": "https://www.aalavina.org/tienda/calendario-anual-de-pared",
+   "title": "Calendario Anual de Pared",
+   "summary": "",
+   "lang": "es",
+   "date": null,
+   "first_seen": "2026-09-27T05:34:48Z",
+   "last_seen": "2026-09-27T05:34:48Z",
+   "image": null,
+   "tags": [],
+   "category": "specialty",
+   "status": "ok",
+   "extra": {
+    "pub": "lv",
+    "type": "calendar",
+    "price": 10.5,
+    "currency": "USD",
+    "sku": "MS08LV",
+    "volume": [
+     {
+      "min": 5,
+      "max": null,
+      "price": 10.0
+     }
+    ],
+    "trilingual": false,
+    "page_url": "https://www.aalavina.org/tienda/articulos-especiales",
+    "position": 2,
+    "image_src": "https://www.aalavina.org/sites/default/files/styles/product_card/public/product-images/2026-04/Calendar-2027.png?itok=5e5y3e-E"
+   }
+  },
   {
    "id": "sub:gv:us:GVUS1",
    "source": "grapevine",
@@ -1880,5 +2087,6 @@
    "url": "https://www.aalavina.org/tienda/internacional-suscripciones"
   }
  ],
- "types_checked": "2026-09-24T15:44:02Z"
+ "types_checked": "2026-09-24T15:44:02Z",
+ "specialty_checked": "2026-09-27T05:34:48Z"
 }

@@ -20,7 +20,8 @@
       no jump buttons when the page has a ui.pageNav · stats are hidden below 768px.
       An empty call body or aside slot renders nothing (no empty div, no empty right column).
       Anything bigger — search boxes, filters, long stat rows, countdown cards — goes in the
-      first block BELOW the hero (see "Page start").
+      first block BELOW the hero (see "Page start"). One small teaser card may sit on the hero's
+      right: see "HERO ASIDE" below (opts.side).
 
       Plain:
         {{ ui.pageHero(lang, "nav.events" | t(lang), "committee.events.hero_sub" | t(lang), "calendar-days", "committee.events.eyebrow" | t(lang)) }}
@@ -37,17 +38,101 @@
         titleId      id of the <h1>; the section is then labelled by it (a named region)
         eyebrowIcon  icon name shown in the eyebrow pill (e.g. "grapes")
         class        extra classes for the <section>
-        aside        true → two columns from 1024px: the call body's "aside" slot goes on the
-                     right (the home page's meeting card). Use a call block with a slot argument:
-          {% call(slot) ui.pageHero(L, title, lead, "", eyebrow, { id: "homeHero", titleId: "home-title", aside: true }) %}
-            {%- if slot == "aside" %}<aside class="…">…</aside>
-            {%- else %}<div class="hero-actions">…</div>{% endif %}
-          {% endcall %}
-                     Below 1024px the aside stacks under the copy and makes the hero taller —
-                     hide or shorten it there (e.g. class="max-lg:hidden").
+        side         "below" (or true) / "hide" → the shared RIGHT-HAND HERO ASIDE (next block).
+        aside        LEGACY, home page only (its meeting card, top-aligned in a grid column inside
+                     the hero; home.css hides it below 1024px). New pages use `side`.
       title may be trusted HTML marked | safe ("home.hero_title" | t(L) | mdInline | safe);
       *emphasis* in it shows in warm gold italics. subtitle is printed with | safe, so pass
       i18n strings only — never synced third-party text.
+
+    ── HERO ASIDE — "something on the right side of the hero" (opts.side + the ui.heroAside* helpers) ──
+      A small card, ONE per page, that TEASES something and LINKS to its canonical place. Never the
+      same thing the page shows again right below (move it into the aside, or pick something else).
+        {% call(slot) ui.pageHero(lang, title, sub, "headphones", eyebrow, { side: "below" }) %}
+          {%- if slot == "side" %}
+            {{ ui.heroAsideLinks("About the magazines" , [ … ], lang) }}      ← one helper (below)
+          {%- else %}
+            <div class="hero-actions">…</div>                                   ← the usual body
+          {%- endif %}
+        {% endcall %}
+      You MUST use call(slot) and branch on slot == "side" (a call block without (slot) would hand
+      its whole body to the aside too — the macro detects that and shows no aside).
+      Where it shows:
+        ≥ 1024px (at 100 % text)  inside the hero, a right column vertically centred between the
+                header and the bottom fade: 20rem wide (1024–1279px) · 24rem (1280–1535) · 26rem
+                (1536+). The title / subtitle / actions column gets narrower by that much (≈ 600px at
+                1024px, ≈ 760 at 1280) — keep ≤ 2 hero buttons if they would wrap. Dark glass card in
+                both themes (solid navy with high contrast). The hero keeps its 30rem (480px) cap as
+                long as the aside is ≤ ≈ 330px tall: the helpers are sized for it (titles from outside
+                content clamp to 2 lines). A taller aside is never cut off — the hero grows instead,
+                which the QA sweep (heroH) flags, so trim it.
+        < 1024px, and at 115 / 130 / 150 % text or relaxed spacing (the "Aa" panel — the hero keeps
+                its 480px there while the card's text grows, so it would not fit), opts.side decides:
+                "below" (default) → the FIRST card right under the hero, tucked into its fade
+                            (the page-overlap pattern). The page's own page-overlap block after the
+                            hero then starts 1.25rem below it automatically (main.css) — nothing to do.
+                "hide"    → not shown (use it when the same link is elsewhere on the page / in the menu).
+      Rendered ONCE (DOM order: hero → aside → page), so ids are unique and the reading order is the
+      same at every width. The card is a <section aria-labelledby> region whose heading is an h2
+      (small eyebrow style); the page keeps its one h1. Hidden when printed.
+      Helpers — each renders the whole card. Common opts: id (the h2 id, default "hero-aside-title"
+      — pass another only if the page already uses that id), icon (lucide name before the heading),
+      lead (one short line under the heading), class, and href + linkLabel = the card's ONE link to
+      the canonical place, shown at the right of the heading (like ui.sectionHead's "all" link:
+      "See all posts →"; it wraps under the heading when there is no room). Links starting with
+      "http" open a new tab (↗ arrow) and get "(opens a new tab)" for screen readers. A call body,
+      where allowed, goes at the bottom of the card (.hero-aside-foot).
+        ui.heroAsideStat(title, value, label, lang, opts)       big number or date + label (+ link)
+            {{ ui.heroAsideStat("At a glance", "15/16", "sources up to date", lang, { icon: "radio-tower",
+                 state: "ok", sr: "15 of 16 sources up to date", note: "1 optional calendar unavailable",
+                 href: "#src-title", linkLabel: "See all sources" }) }}
+            opts: state "ok" | "alert" | "wait" (an icon + colour before the value — never colour
+            alone), sr (replaces value + label for screen readers, e.g. "15 of 16" for "15/16"),
+            datetime (value is a date: printed in <time datetime>), note (one short muted line).
+        ui.heroAsideLinks(title, links, lang, opts)             2–4 links with icons
+            {{ ui.heroAsideLinks("About the magazines", [
+                 { href: "/about/" | lurl(lang), label: "Who we are", text: "Grapevine & La Viña since 1944", icon: "info", tone: "gv" },
+                 { href: "https://www.aagrapevine.org", label: "aagrapevine.org", icon: "globe", tone: "lv" } ], lang,
+                 { lead: "One optional short line under the heading." }) }}
+            each link: href, label, text (optional one line), icon, tone "gv" | "lv" | "grape" | "vine",
+            lang (hreflang when the page it opens is in the other language). One row alone, e.g.
+            in a call body: {{ ui.heroAsideLink({ href, label, icon, tone }, lang) }}.
+        ui.heroAsideMedia(title, items, lang, opts)             picture(s) + title + link
+            {{ ui.heroAsideMedia("From Instagram", [
+                 { src: post.image, href: post.url, title: "Grapevine", alt: "" },
+                 { src: post2.image, href: post2.url, title: "La Viña", alt: "" } ], lang,
+                 { icon: "instagram", href: "/instagram/" | lurl(lang), linkLabel: "See all posts" }) }}
+            items: src (as stored: "/assets/cache/ig/….webp" or an https address — NOT | url, the
+            build adds the site prefix itself), href, title, text (optional), alt (default "" — the
+            title names the link), titleLang (e.g. "en" on a Spanish page). 1 item → a row (picture
+            left, title + text right) · 2 → two tiles side by side · 3–4 → compact rows (a small
+            picture, the title and one line each). opts.ratio "square" (default) |
+            "portrait" (3:4, covers and documents) | "video" (16:9). Pictures are loading="lazy"
+            (Data saver never fetches them); a picture that fails to load leaves a quiet tile.
+        ui.heroAsideVideo(title, videoId, lang, opts)           a lite-youtube player (+ call body)
+            {{ ui.heroAsideVideo("Watch", "_mjB6hXYHn4", lang, { caption: "Video title", href:
+                 "https://www.youtube.com/watch?v=_mjB6hXYHn4", linkLabel: "Watch on YouTube" }) }}
+            {% call ui.heroAsideVideo("Get the app", shortId, lang, { vertical: true, caption: t }) %}
+              {{ ui.heroAsideLink({ href: site.links.gv_apps, label: "Grapevine app", icon: "smartphone" }, lang) }}
+            {% endcall %}                                        ← app links, beside the 9:16 video
+            opts: caption (the video's title, shown under the player, 2 lines max; also the play
+            button's name), captionLang, text (one short line), vertical (9:16 Short: the player on
+            the left, the text beside it), playLabel, params (added to "rel=0&playsinline=1&hl=…").
+            Privacy-enhanced (youtube-nocookie): only the thumbnail loads until it is played; with Data
+            saver not even that ("Load video (uses data)"). THE PAGE MUST LOAD lite-youtube — front matter:
+              pageScripts: ["/assets/vendor/lite-yt-embed.js", …]   pageStyles: ["/assets/vendor/lite-yt-embed.css"]
+            A Short at 1024–1279px leaves its text column ≈ 140px: keep `text` to one short sentence.
+        {% call ui.heroAside(title, lang, opts) %}…{% endcall %}  anything else, built from these
+            classes (they follow the card's colours in the hero AND below it): hero-aside-title
+            (display title) · hero-aside-text (muted line) · hero-aside-note (small muted line) ·
+            ul.hero-aside-links > li > ui.heroAsideLink(…) · hero-aside-cta (an outline pill link) ·
+            hero-aside-foot (a row of pills). opts: the common ones.
+      Use strings from the i18n files for titles, labels and link texts (EN + ES; on /es/ La Viña first).
+      Measured card heights in the hero at 1280px (room ≈ 330px): stat ≈ 170 · 3 links with a line
+      each ≈ 220 (4 ≈ 270) · 2 tiles ≈ 265 · 3 rows ≈ 245 · 1 picture row ≈ 215 · 16:9 player + a
+      2-line caption ≈ 320 (the tightest: no lead, no text) · Short + 2 app links ≈ 280–320.
+      Worked example: src/pages/status.njk (heroAsideStat). tests/test_hero_aside.py checks the
+      call(slot) form and the lite-youtube front matter.
 
     ── Page start — the first block after the hero, use exactly ONE of: ──
       page-overlap  a card, search box or sub-nav that tucks into the hero's faded bottom edge:
@@ -122,8 +207,13 @@
     checks below test | length (0 for an empty body / aside) instead of truthiness. -#}
 {%- set heroBody = (caller() | trim) if caller else "" -%}
 {%- set heroAside = (caller("aside") | trim) if (caller and o.aside) else "" -%}
+{#- opts.side: the shared hero aside (the call body's "side" slot). A call block written without
+    (slot) returns its whole body for every slot: that is the page body, never an aside. -#}
+{%- set heroSide = (caller("side") | trim) if (caller and o.side and not o.aside) else "" -%}
 {%- set hasBody = (heroBody | length) > 0 -%}
 {%- set hasAside = (heroAside | length) > 0 -%}
+{%- set hasSide = ((heroSide | length) > 0) and ((heroSide + "") != (heroBody + "")) -%}
+{%- if hasSide %}<div class="gv-hero-shell side-{{ 'hide' if o.side == 'hide' else 'below' }}">{% endif %}
 <section class="gv-hero page-hero{{ ' gv-hero--split' if hasAside }}{{ (' ' ~ o.class) if o.class }}" data-gv-hero{% if o.id %} id="{{ o.id }}"{% endif %}{% if o.titleId %} aria-labelledby="{{ o.titleId }}"{% endif %}>
   <canvas class="gv-hero-canvas" aria-hidden="true"></canvas>
   <div class="gv-hero-inner container-page">
@@ -139,7 +229,148 @@
     {% if hasAside %}<div class="gv-hero-aside">{{ heroAside }}</div>{% endif %}
   </div>
 </section>
+{%- if hasSide %}
+<div class="hero-side container-page">{{ heroSide }}</div>
+</div>
+{%- endif %}
 {% endmacro %}
+
+{#- ── Hero aside helpers (see "HERO ASIDE" in the doc block at the top) ──
+    Every helper renders the whole card: <section class="hero-aside" aria-labelledby> with its head
+    (the small h2 + the card's one link on its right + an optional lead line), then — all optional —
+    .hero-aside-main (the number / list / pictures / player), .hero-aside-body (text) and
+    .hero-aside-foot (the call body). main.css places the parts (grid areas). -#}
+{% macro _heroAsideHead(title, o, lang) %}
+{%- set ext = o.href and o.href.startsWith("http") -%}
+{%- set go = "arrow-up-right" if ext else "arrow-right" -%}
+<div class="hero-aside-head">
+  <h2 id="{{ o.id or 'hero-aside-title' }}" class="hero-aside-h">{% if o.icon %}{% icon o.icon, "size-4 shrink-0" %}{% endif %}<span>{{ title }}</span></h2>
+  {%- if o.href and o.linkLabel %}
+  <a class="hero-aside-more" href="{{ o.href }}"{% if ext %} target="_blank" rel="noopener"{% endif %}>{{ o.linkLabel }}{% icon go, "size-4 shrink-0" %}{% if ext %}<span class="sr-only"> ({{ 'common.external' | t(lang) }})</span>{% endif %}</a>
+  {%- endif %}
+  {%- if o.lead %}
+  <p class="hero-aside-lead">{{ o.lead }}</p>
+  {%- endif %}
+</div>
+{%- endmacro %}
+
+{#- Custom content: {% call ui.heroAside(title, lang, { icon, lead, href, linkLabel, id, class }) %}…{% endcall %} -#}
+{% macro heroAside(title, lang, opts=null) %}
+{%- set o = opts or {} -%}
+<section class="hero-aside{{ (' ' ~ o.class) if o.class }}" aria-labelledby="{{ o.id or 'hero-aside-title' }}">
+  {{ _heroAsideHead(title, o, lang) }}
+  {%- if caller %}
+  <div class="hero-aside-body">{{ caller() }}</div>
+  {%- endif %}
+</section>
+{%- endmacro %}
+
+{#- A big number or date + label (+ state icon, note, link, call body). -#}
+{% macro heroAsideStat(title, value, label, lang, opts=null) %}
+{%- set o = opts or {} -%}
+{%- set extra = (caller() | trim) if caller else "" -%}
+{%- set stIcons = { ok: "circle-check", alert: "circle-alert", wait: "circle-dashed" } -%}
+{%- set stIcon = stIcons[o.state] if o.state else "" -%}
+<section class="hero-aside hero-aside--stat{{ (' ' ~ o.class) if o.class }}" aria-labelledby="{{ o.id or 'hero-aside-title' }}">
+  {{ _heroAsideHead(title, o, lang) }}
+  <p class="hero-aside-main hero-aside-stat">
+    {%- if stIcon %}<span class="hero-aside-state is-{{ o.state }}">{% icon stIcon, "size-5" %}</span>{% endif -%}
+    <span class="hero-aside-value"{% if o.sr %} aria-hidden="true"{% endif %}>{% if o.datetime %}<time datetime="{{ o.datetime }}">{{ value }}</time>{% else %}{{ value }}{% endif %}</span>
+    {%- if label %} <span class="hero-aside-label"{% if o.sr %} aria-hidden="true"{% endif %}>{{ label }}</span>{% endif -%}
+    {%- if o.sr %}<span class="sr-only">{{ o.sr }}</span>{% endif -%}
+  </p>
+  {%- if o.note %}
+  <p class="hero-aside-body hero-aside-note">{{ o.note }}</p>
+  {%- endif %}
+  {%- if extra | length %}
+  <div class="hero-aside-foot">{{ extra }}</div>
+  {%- endif %}
+</section>
+{%- endmacro %}
+
+{#- 2–4 links with icons. links = [{ href, label, text, icon, tone, lang }] -#}
+{% macro heroAsideLinks(title, links, lang, opts=null) %}
+{%- set o = opts or {} -%}
+{%- set extra = (caller() | trim) if caller else "" -%}
+<section class="hero-aside hero-aside--links{{ (' ' ~ o.class) if o.class }}" aria-labelledby="{{ o.id or 'hero-aside-title' }}">
+  {{ _heroAsideHead(title, o, lang) }}
+  <ul class="hero-aside-main hero-aside-links" role="list">
+    {%- for it in links %}{% if it.href and loop.index <= 4 %}
+    <li>{{ heroAsideLink(it, lang) }}</li>
+    {%- endif %}{% endfor %}
+  </ul>
+  {%- if extra | length %}
+  <div class="hero-aside-foot">{{ extra }}</div>
+  {%- endif %}
+</section>
+{%- endmacro %}
+
+{#- One link row (icon tile · label + optional line · arrow) — also for call bodies (the app links
+    beside a Short): {{ ui.heroAsideLink({ href, label, text, icon, tone, lang }, lang) }} -#}
+{% macro heroAsideLink(it, lang) %}
+{%- set ext = it.href.startsWith("http") -%}
+{%- set go = "arrow-up-right" if ext else "arrow-right" -%}
+{%- set ic = it.icon or "arrow-right" -%}
+<a class="hero-aside-link" href="{{ it.href }}"{% if ext %} target="_blank" rel="noopener"{% endif %}{% if it.lang and it.lang != lang %} hreflang="{{ it.lang }}"{% endif %}>
+  <span class="hero-aside-link-icon is-{{ it.tone or 'gv' }}">{% icon ic, "size-4" %}</span>
+  <span class="hero-aside-link-body"><span class="hero-aside-link-label">{{ it.label }}</span>{% if it.text %}<span class="hero-aside-link-text">{{ it.text }}</span>{% endif %}</span>
+  {% icon go, "hero-aside-link-go size-4 shrink-0" %}{% if ext %}<span class="sr-only"> ({{ 'common.external' | t(lang) }})</span>{% endif %}
+</a>
+{%- endmacro %}
+
+{#- Picture(s) + title + link. items = [{ src, href, title, text, alt, titleLang }] (1–4).
+    1 → a row (picture left) · 2 → two tiles · 3–4 → compact rows. opts.ratio: square | portrait | video. -#}
+{% macro heroAsideMedia(title, items, lang, opts=null) %}
+{%- set o = opts or {} -%}
+{%- set extra = (caller() | trim) if caller else "" -%}
+{%- set list = [] -%}{%- for it in items %}{% if it.href and list.length < 4 %}{% set _n = list.push(it) %}{% endif %}{% endfor -%}
+{%- set layout = o.layout or ("feature" if list.length == 1 else ("tiles" if list.length == 2 else "rows")) -%}
+<section class="hero-aside hero-aside--media is-{{ layout }}{{ (' ' ~ o.class) if o.class }}" aria-labelledby="{{ o.id or 'hero-aside-title' }}">
+  {{ _heroAsideHead(title, o, lang) }}
+  <ul class="hero-aside-main hero-aside-{{ layout }}" role="list">
+    {%- for it in list %}{%- set ext = it.href.startsWith("http") -%}
+    <li><a class="hero-aside-item" href="{{ it.href }}"{% if ext %} target="_blank" rel="noopener"{% endif %}>
+      <span class="hero-aside-thumb is-{{ o.ratio or 'square' }}">{% if it.src %}<img src="{{ it.src }}" alt="{{ it.alt or '' }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}</span>
+      <span class="hero-aside-item-body">
+        <span class="hero-aside-item-title"{% if it.titleLang and it.titleLang != lang %} lang="{{ it.titleLang }}"{% endif %}>{{ it.title }}</span>
+        {%- if it.text and layout != "tiles" %}<span class="hero-aside-item-text">{{ it.text }}</span>{% endif -%}
+        {%- if ext %}<span class="sr-only"> ({{ 'common.external' | t(lang) }})</span>{% endif -%}
+      </span>
+    </a></li>
+    {%- endfor %}
+  </ul>
+  {%- if extra | length %}
+  <div class="hero-aside-foot">{{ extra }}</div>
+  {%- endif %}
+</section>
+{%- endmacro %}
+
+{#- A lite-youtube player (16:9, or 9:16 with opts.vertical) + caption (+ call body, + link).
+    The page must load /assets/vendor/lite-yt-embed.js + .css (pageScripts / pageStyles). -#}
+{% macro heroAsideVideo(title, videoId, lang, opts=null) %}
+{%- set o = opts or {} -%}
+{%- set extra = (caller() | trim) if caller else "" -%}
+{%- set play = o.playLabel or (("common.play" | t(lang)) ~ ": " ~ (o.caption or title)) -%}
+{%- set ytUrl = ("https://www.youtube.com/shorts/" if o.vertical else "https://www.youtube.com/watch?v=") ~ videoId -%}
+<section class="hero-aside hero-aside--video{{ ' is-vertical' if o.vertical }}{{ (' ' ~ o.class) if o.class }}" aria-labelledby="{{ o.id or 'hero-aside-title' }}">
+  {{ _heroAsideHead(title, o, lang) }}
+  <div class="hero-aside-main">
+    <lite-youtube videoid="{{ videoId }}" class="hero-aside-lyt{{ ' is-vertical' if o.vertical }}" params="rel=0&amp;playsinline=1&amp;hl={{ lang }}{{ ('&' ~ o.params) if o.params }}"
+                  style="background-image: url('{{ videoId | ytThumb }}');" playlabel="{{ play }}">
+      <a href="{{ ytUrl }}" class="lyt-playbtn" title="{{ play }}" target="_blank" rel="noopener"><span class="lyt-visually-hidden">{{ play }}</span></a>
+    </lite-youtube>
+  </div>
+  {%- if o.caption or o.text %}
+  <div class="hero-aside-body">
+    {%- if o.caption %}<p class="hero-aside-title"{% if o.captionLang and o.captionLang != lang %} lang="{{ o.captionLang }}"{% endif %}>{{ o.caption }}</p>{% endif %}
+    {%- if o.text %}<p class="hero-aside-text">{{ o.text }}</p>{% endif %}
+  </div>
+  {%- endif %}
+  {%- if extra | length %}
+  <div class="hero-aside-foot">{{ extra }}</div>
+  {%- endif %}
+</section>
+{%- endmacro %}
 
 {#- Compact stat row for inside pageHero's call body: display-serif number over a short label —
     the one hero-stat design for every page. stats = [{ value: 56, label: "stories" }, …]

@@ -240,10 +240,11 @@ Settings: `config/site.yml` → `spotlight:` (`home_days`, `list_days`, `default
   `extra.pub_date >= today − N days`; for "Texas": scope `neta65` or `texas`.
 * With no Area 65 writer in the window, `counts[..].neta65` is 0 and the page must say so gracefully.
 
-### shop.json — Book of the Month, bulk discounts, subscription prices
+### shop.json — Book of the Month, bulk discounts, subscription prices, specialty items
 Read daily from the official stores by `scripts/sync/shop.py` (URLs: `config/site.yml` → `sources.grapevine` /
-`sources.lavina` → `botm`, `subscriptions`, `subscription_regions`; ~12 page requests a day through the shared
-polite session, + a product page per subscription type once a month, + each product image once), then
+`sources.lavina` → `botm`, `subscriptions`, `subscription_regions`, `specialty`; ~12 page requests a day through
+the shared polite session, + a product page per subscription type once a month, + the 4 specialty pages once a
+week, + each product image once), then
 `build_data.py`. Grapevine and La Viña are published by AA Grapevine, Inc.: every `url` is an official store
 page — purchases always happen there. **ONE canonical home** for these prices and dates: templates never
 hard-code a price, percent or date; other pages show at most a compact teaser that links to the shop page.
@@ -276,7 +277,17 @@ hard-code a price, percent or date; other pages show at most a compact teaser th
           "image": "/assets/cache/shop/b863047b363d0518.webp",
           "volume": [ {"min":2,"max":19,"price":35.5}, {"min":20,"max":39,"price":35.0}, {"min":40,"max":null,"price":34.0} ] } ] } ],
   "types": {                                  // short official descriptions (first feature of a product page); may be {}
-    "gv": { "print": {"en","es"}, "digital": {"en","es"}, "complete": {"en","es"} }, "lv": { … } }
+    "gv": { "print": {"en","es"}, "digital": {"en","es"}, "complete": {"en","es"} }, "lv": { … } },
+  "specialty": [                              // /shop/#specialty — Grapevine's first, each store's own order; may be []
+    { "id": "special:gv:MS08", "pub": "gv", "lang": "en", "type": "calendar",   // cards | planner | calendar | other
+      "title": "Annual Wall Calendar", "url": "https://www.aagrapevine.org/store/annual-wall-calendar",   // buy here
+      "image": "/assets/cache/shop/3f0c….webp",                // ≤480 px WebP, or null
+      "price": 10.5, "currency": "USD", "sku": "MS08",
+      "volume": [ {"min":5,"max":null,"price":10.0} ],         // the store's "Volume Discount Pricing" (price each), or []
+      "trilingual": true,                                      // the store says English / Spanish / French
+      "pack": null,                                            // "box of 24" → 24 (cards), else null
+      "text": "Full of beautiful color photographs shot by AA members, …",   // short official description in `lang`, or ""
+      "page_url": "https://www.aagrapevine.org/store/annual-wall-calendar" } ]  // the page it was read from
 }
 ```
 * `type` is `print` | `digital` | `complete` | `other`, from the title (English or Spanish: "Print",
@@ -302,8 +313,20 @@ hard-code a price, percent or date; other pages show at most a compact teaser th
 * A part that cannot be fetched or parsed (GV offer, LV offer, GV subscriptions, LV subscriptions — or one
   region) keeps its previous data; the raw envelope gets `ok: false` with the reason, so /status/ shows
   "Book of the Month & subscription prices" as failing and the 7-day "not updating" report catches it.
+* Specialty items (`sources.<pub>.specialty`, a list): a product page gives one item (title, price, SKU, picture,
+  `text` = whole sentences of its first real paragraph, 90–230 characters, the "5+" volume price, `trilingual`,
+  `pack`); a category listing (La Viña's `/tienda/articulos-especiales`) gives its first ≤ 4 cards of the three
+  kinds (`type` from the title: "Greeting cards"/"Tarjetas" → cards, "Planner"/"Agenda de Bolsillo" → planner —
+  never "Agenda de grupo" —, "Calendar"/"Calendario" → calendar), without a `text`. The pages are read at most
+  once a week (`specialty_checked` in the raw envelope, stamped only when every page was read; `--refresh-specialty`
+  forces it); in between, and for a page that cannot be read, the previous items are kept. /shop/ shows ONE card
+  per type — the page language's store first, with a link to the other store's item of the same type. `text`
+  is never machine-translated (the store's words, in its language): a card without its own text in the page
+  language shows the site's own line (`shop.special_desc_*`). The same product sold by both stores (the SKU
+  without its "LV" suffix: MS08LV = MS08) shares its picture and `trilingual` when one store lacks them.
 * Without data (never synced) the file is `{updated: null, botm: [], bulk_discounts: {source_url: null,
-  tiers: []}, subscriptions: [], types: {}}` — pages must show a graceful "see the official store" state.
+  tiers: []}, subscriptions: [], types: {}, specialty: []}` — pages must show a graceful "see the official store"
+  state (the specialty section and its hero teaser are simply left out).
 
 ### meetings.json — Grapevine meetings in our Area and nearby (the Meetings page)
 Read once a day by `scripts/sync/meetings.py` from the public "12 Step Meeting List" lists of the offices in
@@ -581,7 +604,7 @@ field also gets `i18n.<name> = {en, es}` in the site file.
 | `events_external.json` | `cache`, `sitemap` (module bookkeeping — not used by the site) |
 | `meetings.json` | `feeds` [{`id`, `name`, `url`, `lang`, `ok`, `count`, `method` (feed/page), `key_from` (secret/config/key_source — never the key), `error`, `note`, `updated`, `attempted`}], `type_labels` {code: {en, es}}. Items: `mtg:<hash>` (kind `meeting`, `title` = name, `url` = the meeting's page; `extra` = `day`, `time`, `end_time`, `location`, `address`, `street`, `zip`, `city`, `county`, `state`, `lat`, `lng`, `approximate`, `region`, `district`, `types`, `attendance`, `in_area`, `sources`) |
 | `quote.json` | `history` {gv/lv: [{`pub`, `lang`, `date`, `heading`, `text`, `attribution`, `source`, `source_lang`, `url`, `signup_url`}]} — the last 14 days, newest first, one per day (raw only: the guard against a page going back to an older quote; never shown). Items: `quote:<pub>:<date>` (kind `quote`, `title` = the official heading, `url` = the page anchor; `extra` = `pub`, `text`, `attribution`, `source`, `source_lang`, `signup_url`, `date_label`, `date_from_heading`, `block` (teaser/embed/anchor), `node`) |
-| `shop.json` | `bulk_discounts` {`source_url`, `tiers`, `note` {en?, es?}}, `types` {gv/lv: {print/digital/complete: {`text`, `lang`, `url`}}}, `listings` [{`pub`, `region`, `url`}], `types_checked` (ISO; type descriptions are re-read every 30 days). Items: `botm:gv` / `botm:lv` (kind `botm`; `extra` = `pub`, `page_url`, `price`, `sale_price`, `discount_pct`, `currency`, `sku`, `starts`, `ends`, `month`, `month_label`, `offer_text`, `product_name`, `image_src`) and `sub:<pub>:<region>:<sku>` (kind `subscription`; `extra` = `pub`, `region`, `listing_url`, `type`, `term_months`, `price`, `currency`, `sku`, `volume`, `position`, `image_src`) |
+| `shop.json` | `bulk_discounts` {`source_url`, `tiers`, `note` {en?, es?}}, `types` {gv/lv: {print/digital/complete: {`text`, `lang`, `url`}}}, `listings` [{`pub`, `region`, `url`}], `types_checked` (ISO; type descriptions are re-read every 30 days), `specialty_checked` (ISO; specialty pages are re-read every 7 days). Items: `botm:gv` / `botm:lv` (kind `botm`; `extra` = `pub`, `page_url`, `price`, `sale_price`, `discount_pct`, `currency`, `sku`, `starts`, `ends`, `month`, `month_label`, `offer_text`, `product_name`, `image_src`), `sub:<pub>:<region>:<sku>` (kind `subscription`; `extra` = `pub`, `region`, `listing_url`, `type`, `term_months`, `price`, `currency`, `sku`, `volume`, `position`, `image_src`) and `special:<pub>:<sku>` (kind `specialty`, `summary` = the short description; `extra` = `pub`, `type`, `price`, `currency`, `sku`, `volume`, `trilingual`, `pack`, `page_url`, `position`, `image_src`) |
 
 `articles.json` → `archive_state` — the archive listings (aagrapevine.org/archive, aalavina.org/archivo):
 ```json

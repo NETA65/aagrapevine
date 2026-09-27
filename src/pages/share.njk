@@ -72,12 +72,23 @@ pageScripts: ["/assets/js/community.js"]
 </div>
 {% endmacro %}
 
-{#- Hero: print a poster (the page's main task) + copy the site's address -#}
-{% call ui.pageHero(lang, "nav.share" | t(lang), "community.share.hero_sub" | t(lang), "qr-code", "community.share.eyebrow" | t(lang)) %}
+{#- Hero: print a poster (the page's main task) + copy the site's address.
+    Its right-hand card (the shared hero aside, from 1024px): a miniature of the printable poster in the
+    page's language (the same markup the print uses, scaled — decorative) with "All versions" → #posters,
+    where the language switch, the table tent and the print buttons are. The site's QR code card right
+    below is not repeated as a card of its own. "hide": the hero button leads there on smaller screens. -#}
+{% call(slot) ui.pageHero(lang, "nav.share" | t(lang), "community.share.hero_sub" | t(lang), "qr-code", "community.share.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("community.share.aside_title" | t(lang), lang, { id: "share-aside-title", icon: "printer", href: "#posters", linkLabel: "community.share.aside_link" | t(lang), class: "cm-share-aside" }) %}
+    <a class="cm-share-mini" href="#posters" tabindex="-1" aria-hidden="true"><div class="cm-frame cm-frame-poster" inert><div class="cm-sheet cm-poster" lang="{{ lang }}">{{ posterBody(lang, urls) }}</div></div></a>
+    <p class="hero-aside-note">{{ "community.share.aside_caption" | t(lang) }}</p>
+  {% endcall %}
+{%- else %}
 <div class="hero-actions cm-hero-tight">
   <a class="btn-light" href="#posters">{% icon "printer", "size-4" %} {{ "community.share.btn_poster" | t(lang) }}</a>
   <button type="button" class="btn-on-dark" data-js-only data-copy="{{ pageUrl }}">{% icon "link", "size-4" %} {{ "community.share.copy_site" | t(lang) }}</button>
 </div>
+{%- endif %}
 {% endcall %}
 
 {#- Reusable QR symbols for the poster / tent previews -#}

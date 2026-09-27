@@ -12,18 +12,39 @@ pageScripts: ["/assets/js/committee.js"]
     each with a deep-link anchor (#ann-…) and share buttons.
     Below the shared page hero and the committee sub-nav: the announcements (two per row from
     1280px when there are several — each keeps a readable line length); with none, one solid card
-    written for visitors next to "Coming up" (the next committee meeting + the next event). Then,
-    collapsed, "For committee members · Post an announcement" (ui.memberHelp, #how-to-post). The
-    ways to keep up (digest, RSS, calendar) are in the footer. -#}
+    written for visitors. Then, collapsed, "For committee members · Post an announcement"
+    (ui.memberHelp, #how-to-post). The ways to keep up (digest, RSS, calendar) are in the footer.
+    The hero's right-hand card (the shared hero aside, "Coming up"): the next committee meeting and the
+    next event, linking to them. With no announcements it is the page's first card on smaller screens
+    and at larger text too ("below"); with announcements it is hidden there (they come first). -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set anns = db.announcements.items | cmAnnouncements -%}
 {%- set pageAbs = page.url | siteUrl(site) -%}
 {%- set di = db.status | cmDriveInfo(site) -%}
 
-{% call ui.pageHero(lang, "nav.announcements" | t(lang), "committee.ann.hero_sub" | t(lang), "megaphone", "committee.ann.eyebrow" | t(lang)) %}
+{%- set nm = site | cmNextMeeting(lang) -%}
+{%- set ne = (db.events.items | cmEvents(site, lang)) | where("past", false) | whereNot("committee", true) | first -%}
+{%- set neKind = (ne | eventTone) if ne else "" -%}
+{%- set toneOf = { gv: "gv", lv: "lv", committee: "grape", booth: "lv" } -%}
+{% call(slot) ui.pageHero(lang, "nav.announcements" | t(lang), "committee.ann.hero_sub" | t(lang), "megaphone", "committee.ann.eyebrow" | t(lang), { side: ("hide" if anns | length else "below") }) %}
+{%- if slot == "side" %}
+  {%- if nm or ne %}
+  {% call ui.heroAside("committee.ann.meanwhile" | t(lang), lang, { id: "ann-aside-title", icon: "calendar-days", href: "/events/" | lurl(lang), linkLabel: "committee.ann.all_events" | t(lang) }) %}
+  <ul class="hero-aside-links" role="list">
+    {%- if nm %}
+    <li>{{ ui.heroAsideLink({ href: ("/meetings/" | lurl(lang)) + "#committee-meeting", label: "committee.events.stat_next_meeting" | t(lang), text: (nm.startIso | fmtDate(lang, "short")) + (" · " + nm.timeLabel if nm.timeLabel else ""), icon: "users", tone: "grape" }, lang) }}</li>
+    {%- endif %}
+    {%- if ne %}
+    <li>{{ ui.heroAsideLink({ href: ("/events/" | lurl(lang)) + "#" + ne.anchor, label: ne.title, text: ("committee.ann.next_event" | t(lang)) + " · " + (ne.rangeLabel if ne.multiDay else ((ne.startIso | fmtDate(lang, "short")) + (" · " + ne.timeLabel if ne.timeLabel else ""))), icon: "calendar-days", tone: toneOf[neKind] or "vine" }, lang) }}</li>
+    {%- endif %}
+  </ul>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
   <div class="hero-actions">
     <a class="btn-light" href="{{ '/digest/' | lurl(lang) }}">{% icon "mail-plus", "size-4" %} {{ "committee.ann.get_digest" | t(lang) }}</a>
   </div>
+{%- endif %}
 {% endcall %}
 
 {% committeeNav lang, "announcements", db %}
@@ -78,40 +99,10 @@ pageScripts: ["/assets/js/committee.js"]
     {% endfor %}
   </ol>
   {% else %}
-  {#- Nothing posted: one solid card for visitors | "Coming up" (so the page is still useful), side by side from 1280px -#}
-  {%- set nm = site | cmNextMeeting(lang) -%}
-  {%- set ne = (db.events.items | cmEvents(site, lang)) | where("past", false) | whereNot("committee", true) | first -%}
-  <div class="cm-ann-empty{{ ' is-solo' if not (nm or ne) }}">
+  {#- Nothing posted: one solid card for visitors ("Coming up" — the next meeting and event — is the
+      hero's right-hand card, the first card under the hero on smaller screens) -#}
+  <div class="cm-ann-empty is-solo">
     {{ ui.pageEmpty("megaphone", "committee.ann.empty_title" | t(lang), "committee.ann.empty_text" | t(lang), { id: "ann-empty-h" }) }}
-
-    {% if nm or ne %}
-    <section class="min-w-0" aria-labelledby="ann-soon-h">
-      {{ ui.sectionHead("committee.ann.meanwhile" | t(lang), "committee.ann.meanwhile_sub" | t(lang), '/events/' | lurl(lang), "committee.ann.all_events" | t(lang), "calendar-days", { eyebrow: "nav.events" | t(lang), tone: "text-vine", id: "ann-soon-h", lang: lang }) }}
-      <div class="grid gap-4">
-        {% if nm %}
-        <a href="{{ '/meetings/' | lurl(lang) }}" class="card card-link cm-mini-card ev-accent ev-tone-committee group">
-          <span class="cm-date-tile" aria-hidden="true"><span class="cm-tile-mon">{{ nm.tile.mon }}</span><span class="cm-tile-day">{{ nm.tile.day }}</span><span class="cm-tile-wd">{{ nm.tile.wd }}</span></span>
-          <span class="min-w-0">
-            <span class="eyebrow block">{{ "committee.events.stat_next_meeting" | t(lang) }}</span>
-            <span class="mt-1 block font-display text-lg font-semibold leading-snug text-ink group-hover:text-gv">{{ nm.title }}</span>
-            <span class="mt-1 block text-sm text-muted">{{ nm.dateLabel }} · {{ nm.timeLabel }}</span>
-          </span>
-        </a>
-        {% endif %}
-        {% if ne %}
-        <a href="{{ '/events/' | lurl(lang) }}#{{ ne.anchor }}" class="card card-link cm-mini-card ev-accent ev-tone-{{ ne | eventTone }} group">
-          <span class="cm-date-tile{{ ' cm-tile-range' if ne.tile.range }}" aria-hidden="true"><span class="cm-tile-mon">{{ ne.tile.mon }}</span><span class="cm-tile-day">{{ ne.tile.day }}</span><span class="cm-tile-wd">{{ ne.tile.wd }}</span></span>
-          <span class="min-w-0">
-            <span class="eyebrow block">{{ "committee.ann.next_event" | t(lang) }}</span>
-            <span class="mt-1 block font-display text-lg font-semibold leading-snug text-ink group-hover:text-gv">{{ ne.title }}</span>
-            <span class="mt-1 block text-sm text-muted">{{ ne.shareWhen }}</span>
-            {% if ne.tentative %}<span class="mt-1.5 block">{{ ui.tentativeBadge(lang) }}</span>{% endif %}
-          </span>
-        </a>
-        {% endif %}
-      </div>
-    </section>
-    {% endif %}
   </div>
   {% endif %}
 </section>

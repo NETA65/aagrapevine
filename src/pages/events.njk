@@ -15,7 +15,11 @@ pageScripts: ["/assets/js/committee.js"]
     visitors' words) and, from 1024px, a sticky sidebar with the .ics subscription card (#subscribe);
     below 1024px the card follows the agenda. Last, collapsed, "For committee members · Add an event"
     (ui.memberHelp, #how-events): the Drive folder, the flyer naming rule + examples, and the Portfolio's
-    two Drive actions. With no NETA 65 events, the agenda's empty slot (#ev-empty-neta) points there. -#}
+    two Drive actions. With no NETA 65 events, the agenda's empty slot (#ev-empty-neta) points there.
+    The hero's right-hand card (the shared hero aside, "Save the date"): the next Area assembly — else
+    the next event from Grapevine's or La Viña's own calendars — never the first event of the list
+    right below; its link goes to that event in the list. Hidden on smaller screens and at larger text
+    (the committee sub-nav stays right under the hero, and the event is in the list). -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set all = db.events.items | cmEvents(site, lang) | cmCollapseRecurring -%}
 {%- set upcoming = all | where("past", false) -%}
@@ -58,13 +62,36 @@ pageScripts: ["/assets/js/committee.js"]
 </details>
 {% endmacro %}
 
-{% call ui.pageHero(lang, "nav.events" | t(lang), "committee.events.hero_sub" | t(lang), "calendar-days", "committee.events.eyebrow" | t(lang)) %}
+{#- "Save the date": what the default view lists (no committee meetings, no later dates of a monthly
+    series), skipping its first event — that one is right below the hero anyway -#}
+{%- set ahead = upcoming | whereNot("committee", true) | whereNot("later", true) -%}
+{%- set sdPick = [] -%}
+{%- for ev in ahead %}{% if loop.index0 > 0 and not sdPick.length and (ev | eventTone) == "assembly" and sdPick.push(ev) %}{% endif %}{% endfor -%}
+{%- for ev in ahead %}{% if loop.index0 > 0 and not sdPick.length and (ev.category == "gv-calendar" or ev.category == "lv-calendar") and sdPick.push(ev) %}{% endif %}{% endfor -%}
+{%- set sd = sdPick[0] -%}
+{% call(slot) ui.pageHero(lang, "nav.events" | t(lang), "committee.events.hero_sub" | t(lang), "calendar-days", "committee.events.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if sd %}
+  {%- set sdKind = sd | eventTone %}
+  {% call ui.heroAside("committee.events.aside_title" | t(lang), lang, { id: "ev-aside-title", icon: "calendar-heart", href: "#" + sd.anchor, linkLabel: "committee.events.aside_link" | t(lang) }) %}
+  <div class="cm-ha-ev ev-tone-{{ sdKind }}">
+    <span class="cm-ha-ev-tile{{ ' is-range' if sd.tile.range }}" aria-hidden="true"><span class="cm-tile-mon">{{ sd.tile.mon }}</span><span class="cm-ha-ev-day">{{ sd.tile.day }}</span><span class="cm-ha-ev-wd">{{ sd.tile.wd }}</span></span>
+    <div class="min-w-0">
+      <p>{{ kindBadge(sd, sdKind) }}</p>
+      <p class="hero-aside-title mt-1.5">{{ sd.title }}</p>
+      <p class="hero-aside-text mt-0.5">{{ sd.rangeLabel if sd.multiDay else sd.shareWhen }}</p>
+    </div>
+  </div>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
   <div class="hero-actions">
     <a class="btn-light" href="#subscribe">{% icon "calendar-sync", "size-4" %} {{ "committee.events.subscribe_btn" | t(lang) }}</a>
     <a class="btn-on-dark" href="{{ '/meetings/' | lurl(lang) }}#committee-meeting">{% icon "video", "size-4" %} {{ "nav.meeting" | t(lang) }}</a>
   </div>
   {#- No hero stat: the number of upcoming events is on the committee sub-nav's Events tab (one
       place), and the filter chips say how many of each kind -#}
+{%- endif %}
 {% endcall %}
 
 {% committeeNav lang, "events", db %}

@@ -12,17 +12,15 @@
 
   /* ------------------------------------------------ LISTEN: page layout
      One container below the hero, three blocks (DOM order = phone order = Tab order):
-     .listen-side (page-overlap: the latest-episode player .listen-feature and, right under it, the
-     official YouTube Short .listen-short — one element, never duplicated), .listen-shows,
-     .listen-episodes.
-     < 1440px: stacked, full width — player, Short (a slim band), shows, episodes.
+     .listen-side (page-overlap: the latest-episode player .listen-feature), .listen-shows,
+     .listen-episodes. (The official "Get the app" Short is the hero's right-hand card — the shared
+     hero aside, macros/ui.njk — so it is not in this layout.)
+     < 1440px: stacked, full width — player, shows, episodes.
      ≥ 1440px: the shows and the episodes in the growing left column; .listen-side is the
-     fixed-width right column ("side" spans both rows), the player on top and the Short under it.
-     In windows at least 56.25rem (900px) tall the whole column fits under the header, and it stays
-     in view as ONE sticky stack all the way down the episode list; in shorter windows the player
-     scrolls away with the page (the mini-player takes over) and the Short ALONE sticks at the top
-     of the column (the unlayered rules at the end of this file). Either way the Short never moves
-     up into the player, so it can never slide under it. No JS involved. */
+     fixed-width right column ("side" spans both rows): the compact player alone. In windows at
+     least 36rem (576px) tall it stays in view (sticky) all the way down the episode list; in shorter
+     windows it scrolls away with the page and the mini-player takes over (the unlayered rules at
+     the end of this file). No JS involved. */
   .listen-layout { display: grid; grid-template-columns: minmax(0, 1fr); padding-bottom: 3rem; }
   .listen-side { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; row-gap: 1rem; }
   .listen-shows { padding-top: 2.5rem; }
@@ -39,54 +37,16 @@
       grid-template-areas: "shows side" "episodes side";
       column-gap: 3rem;
     }
-    /* A flex column (the containing block of a sticky Short, and what lets only the player give way
-       in the tall-window safety net). align-self: start keeps the stack its own height, so (when
-       sticky) it can travel down the column while the episodes scroll by. */
-    .listen-side { grid-area: side; align-self: start; display: flex; flex-direction: column; row-gap: 1rem; }
+    /* A flex column (what lets the player give way — scroll inside — in the safety net for a
+       window shorter than the card). align-self: start keeps it its own height, so (when sticky)
+       it can travel down the column while the episodes scroll by. */
+    .listen-side { grid-area: side; align-self: start; display: flex; flex-direction: column; }
     .listen-shows { grid-area: shows; }
     .listen-episodes { grid-area: episodes; }
   }
   @media (width >= 112.5rem) {
     .listen-layout { grid-template-columns: minmax(0, 1fr) 31rem; column-gap: 4rem; }
   }
-
-  /* LISTEN: an official YouTube Short. The narrow vertical video sits beside its text, the app
-     links under the text (phones < 480px: under the video and the text, side by side). 768–1439px
-     it is a band: video · text (up to 36rem) · the app links right after the text (not pushed to the
-     far edge, so no empty middle on wide screens) — and the card is as wide as that content
-     (justify-self: start), so where the column is wider there is no empty tail inside the card.
-     From 1440px it is the lower card of the right-hand column, same card and padding as the player:
-     a 152px wide 9:16 video (~270px tall, so the card is a fixed ~312px) beside the caption, the two
-     app links stacked under the caption, level with the video's foot. There the eyebrow drops its
-     YouTube icon (the video carries YouTube's own play button), like the player's plain eyebrow
-     above it — and so the Spanish one stays on one line in the 222px caption at 1440–1799px. */
-  .listen-short { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); column-gap: 1rem; row-gap: 0.75rem; padding: 0.875rem; }
-  .listen-short-video { grid-row: span 2; align-self: center; overflow: hidden; border-radius: 0.875rem; background: #000;
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.1), 0 8px 20px -10px rgb(0 0 0 / 0.45); }
-  .listen-short-body { align-self: end; }
-  .listen-short-links { display: flex; flex-wrap: wrap; align-self: start; gap: 0.5rem; }
-  .listen-short-links .media-plat { white-space: nowrap; }
-  @media (width < 30rem) {
-    .listen-short-video { grid-row: auto; }
-    .listen-short-body { align-self: center; }
-    .listen-short-links { grid-column: 1 / -1; }
-  }
-  /* the narrowest phones (< 368px): a slimmer video leaves the caption room to breathe */
-  @media (width < 23rem) { .listen-short { grid-template-columns: 5.5rem minmax(0, 1fr); column-gap: 0.875rem; } }
-  @media (width >= 30rem) { .listen-short { grid-template-columns: 7.5rem minmax(0, 1fr); column-gap: 1.25rem; padding: 1rem; } }
-  @media (width >= 48rem) and (width < 90rem) {
-    .listen-short { grid-template-columns: 6.5rem fit-content(36rem) auto; justify-content: start; justify-self: start; max-width: 100%; align-items: center; column-gap: 1.5rem; padding: 1rem 1.5rem 1rem 1rem; }
-    .listen-short-video { grid-row: auto; }
-    .listen-short-body { align-self: center; }
-    .listen-short-links { flex-direction: column; align-items: stretch; align-self: center; }
-  }
-  @media (width >= 90rem) {
-    .listen-short { grid-template-columns: 9.5rem minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 1rem; row-gap: 1rem; padding: 1.25rem; }
-    .listen-short-video { grid-row: 1 / span 2; align-self: start; }
-    .listen-short-body { align-self: start; }
-    .listen-short-links { flex-direction: column; align-items: stretch; align-self: end; }
-  }
-  @media (width >= 112.5rem) { .listen-short { column-gap: 1.25rem; } }
 
   /* "Tell your group" card (macros/media.njk shareBlock — Listen, Watch, Instagram): icon · text,
      the announcement under the text; from 1280px three columns (icon · text · announcement) so
@@ -182,8 +142,8 @@
     -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   }
   /* From 1440px the mini-player sits under the left column (same grid as .listen-layout), so it
-     never covers the right-hand column (the player and the Short). The language banner does the
-     same on this page (the unlayered rule at the end of this file). */
+     never covers the right-hand column (the player). The language banner does the same on this
+     page (the unlayered rule at the end of this file). */
   @media (width >= 90rem) {
     .media-mini {
       display: grid; grid-template-columns: minmax(0, 1fr) 27rem; column-gap: 3rem;
@@ -382,45 +342,83 @@ lite-youtube.media-lyt { width: 100%; max-width: none; border-radius: inherit; }
 lite-youtube.media-lyt::before { display: none; } /* title overlay: the title is shown next to the player */
 lite-youtube.media-lyt > .lyt-playbtn { filter: none; }
 lite-youtube.media-lyt > .lyt-playbtn:focus-visible { outline: 3px solid #fff; outline-offset: -6px; }
-/* LISTEN, from 1440px: what of the right-hand column .listen-side (the compact player card, the
-   Short right under it) stays in view is decided by the window's height alone (a media query — site
-   rule: JS never switches sticky on and off), so nothing shifts while you scroll.
-   1. Windows at least 56.25rem (900px) tall: the whole column is ONE sticky stack. It needs
-      --sticky-top (header + 1.5rem = 88px) + the stack + 1rem. The stack is 724px (EN) / 747px (ES)
-      with today's latest episode; the tallest of all 295 real episodes shown as "Now playing" is
-      794px (ES at 1440–1799px: a Weekly Open meeting — three-line title, and the show name wraps
-      the date line; 750px from 1800px, where the column is wider): 88 + 794 + 16 = 898px.
-      Safety net for anything taller (a longer title, an error line): max-height caps the stack at
-      the window and only the PLAYER gives way (it scrolls inside, fading at its foot); the Short
-      never shrinks (flex: none), so it is always entirely in view.
-   2. Shorter windows, down to 26rem (416px = 88 + the Short's fixed 312px + 16): the player scrolls
-      away with the page (the mini-player takes over — media.js) and the Short ALONE is sticky: the
-      column stretches to the full height of the shows + episodes, and the Short sticks under the
-      header all the way down the episode list. It sits below the player in the flow, so the player
-      only ever moves up and away from it — nothing can slide over the Short.
-   3. Below 26rem nothing in the column is sticky (it scrolls with the page).
-   No --sticky-bottom here: on this page from 1440px the mini-player and the language banner sit
-   under the LEFT column (below), so nothing at the bottom of the window reaches this column.
+/* LISTEN, from 1440px: the right-hand column .listen-side (the compact player card alone) stays in
+   view while you scroll the episodes when the window is tall enough for it — a media query on the
+   window's height (site rule: JS never switches sticky on and off), so nothing shifts.
+   Windows at least 36rem (576px) tall: sticky under the header. It needs --sticky-top (header +
+   1.5rem = 88px) + the card + 1rem: the card is about 400px with today's latest episode, and the
+   tallest real episode shown as "Now playing" (a three-line title, the show name wrapping the date
+   line) about 470px: 88 + 470 + 16 = 574px. Safety net for anything taller (a longer title, an
+   error line): max-height caps the column at the window and the player scrolls inside, fading at
+   its foot. Shorter windows: nothing sticks — the player scrolls away and the mini-player takes
+   over (media.js). No --sticky-bottom here: on this page from 1440px the mini-player and the
+   language banner sit under the LEFT column (below), so nothing at the bottom of the window
+   reaches this column.
    Unlayered: .listen-side is also .page-overlap, whose position: relative is a utility (a later
    layer than components). The player's 0.25rem/0.5rem padding (cancelled by its negative margins)
-   leaves room for the card's shadow; its 1rem bottom padding is the gap to the Short. */
-@media (width >= 90rem) and (height >= 56.25rem) {
+   leaves room for the card's shadow. */
+@media (width >= 90rem) and (height >= 36rem) {
   .listen-side {
-    position: sticky; top: var(--sticky-top); row-gap: 0;
+    position: sticky; top: var(--sticky-top);
     max-height: calc(100dvh - var(--sticky-top) - 1rem);
   }
   .listen-side > .listen-feature {
-    min-height: 0; overflow-y: auto; scrollbar-width: thin;
+    min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
     padding: 0.25rem 0.5rem 1rem; margin: -0.25rem -0.5rem 0;
     -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 1rem), transparent);
             mask-image: linear-gradient(to bottom, #000 calc(100% - 1rem), transparent);
   }
-  .listen-side > .listen-short { flex: none; }
 }
-@media (width >= 90rem) and (26rem <= height < 56.25rem) {
-  .listen-side { align-self: stretch; }
-  .listen-side > .listen-short { position: sticky; top: var(--sticky-top); }
+/* LISTEN / WATCH: the first block of the page is page-overlap (tucked into the hero's fade), but it
+   is not the hero's next sibling (the page's JSON <script>s and its Alpine wrapper come first), so
+   main.css's "hero aside below: the page-overlap block starts 1.25rem under it" rule doesn't reach
+   it. Same rule here: where the hero aside is the first card under the hero (below 1024px, and at
+   115 %+ text or relaxed spacing), the player / the latest video start 1.25rem below that card
+   instead of sliding up under it. Unlayered: beats the page-overlap utility's negative margin. */
+@media (width < 64rem) { .gv-hero-shell.side-below ~ * :is(.listen-side, .watch-top).page-overlap { margin-top: 1.25rem; } }
+:root:is([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell.side-below ~ * :is(.listen-side, .watch-top).page-overlap { margin-top: 1.25rem; }
+/* LISTEN / WATCH from 1440px: the hero's card is exactly as wide as the page's right-hand column
+   right below it — the Listen player (27rem, 31rem from 1800px) / Watch's two path cards (24rem,
+   28rem) — so the two line up. --hero-side-w is main.css's in-hero card width (only used there). */
+@media (width >= 90rem) {
+  .gv-hero-shell:has(.listen-aside) { --hero-side-w: 27rem; }
+  .gv-hero-shell:has(.watch-aside) { --hero-side-w: 24rem; }
 }
+@media (width >= 112.5rem) {
+  .gv-hero-shell:has(.listen-aside) { --hero-side-w: 31rem; }
+  .gv-hero-shell:has(.watch-aside) { --hero-side-w: 28rem; }
+}
+/* LISTEN: the hero aside's Short (listen.njk). At 1024–1279px, in the hero, its text column is only
+   about 140px: the two app links take two lines each there, so the one-line text under the caption
+   ("Every issue, the audio and the archive on your phone") is left out — the caption says "Get the
+   app" — and the card stays within the hero's 480px. Same guard as main.css's in-hero rules. */
+@media (64rem <= width < 80rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .listen-aside .hero-aside-text { display: none; }
+}
+/* LISTEN / WATCH: the hero aside's Short on the narrowest phones — a card 17.5–20rem wide (a 320px
+   phone at normal text), where the shared card stacks a 10rem-wide 9:16 player (about 550px tall,
+   ahead of the page's own player). Here: the heading across the top, a 5.5rem player beside the
+   caption and its line, the app links (Listen) / the translation note (Watch) across the bottom —
+   the card is about 330px. Narrower cards (larger text on a phone) keep the shared stacked layout. */
+@container (17.5rem <= width < 20rem) {
+  :is(.listen-aside, .watch-aside).hero-aside--video.is-vertical {
+    grid-template-columns: 5.5rem minmax(0, 1fr); grid-template-areas: "head head" "main body" "foot foot";
+    grid-template-rows: none; column-gap: 0.875rem;
+  }
+  :is(.listen-aside, .watch-aside).is-vertical > .hero-aside-main { width: auto; margin-top: 0.875rem; }
+  :is(.listen-aside, .watch-aside).is-vertical > .hero-aside-body { align-self: center; margin-top: 0.875rem; }
+}
+/* …and narrower still (a phone at 130–150 % text), where the card stacks: an 8rem-wide player (not
+   10rem), so the page's own player isn't pushed a whole screen down. */
+@container (width < 17.5rem) {
+  :is(.listen-aside, .watch-aside).is-vertical > .hero-aside-main { width: min(100%, 8rem); }
+}
+/* WATCH: the hero aside's Short — its summary comes from the channel, so it is capped at three lines
+   (the text column beside the 9:16 player is about 140–190px wide in the hero). */
+.watch-aside .hero-aside-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+/* …and its "Auto-translated" note (the call body) takes the card's muted colour, which follows the card
+   in the hero (white on the dark glass / navy) and below it (the theme's muted text). */
+.watch-aside .auto-note { color: var(--ha-muted); }
 /* LISTEN, from 1440px: the language banner (partials/lang-banner.njk, fixed at the bottom, centred)
    is laid out like the mini-player — centred under the LEFT column — so it never covers the
    right-hand column. Unlayered: the banner's own px-3 / sm:px-4 are utilities. */
@@ -431,9 +429,6 @@ lite-youtube.media-lyt > .lyt-playbtn:focus-visible { outline: 3px solid #fff; o
   }
 }
 @media (width >= 112.5rem) { body:has(.listen-layout) > .cm-lang-banner { grid-template-columns: minmax(0, 1fr) 31rem; column-gap: 4rem; } }
-/* LISTEN: the YouTube Short is vertical (9:16). */
-lite-youtube.listen-lyt::after { padding-bottom: calc(100% * 16 / 9); }
-lite-youtube.listen-lyt > .lyt-playbtn { background-size: 52px 37px; }
 
 @keyframes media-eq { 0%, 100% { height: 30%; } 50% { height: 100%; } }
 @keyframes media-pop { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }

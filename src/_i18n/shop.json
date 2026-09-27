@@ -88,5 +88,23 @@
   "shop.all_plans": { "en": "All {mag} subscriptions ({region}) on the store", "es": "Todas las suscripciones de {mag} ({region}) en la tienda" },
   "shop.empty_title": { "en": "Prices are on the official stores", "es": "Los precios están en las tiendas oficiales" },
   "shop.empty_text": { "en": "We couldn't load the current prices here. Subscribe directly on the official Grapevine and La Viña stores.", "es": "No pudimos cargar los precios actuales aquí. Suscríbete directamente en las tiendas oficiales de La Viña y Grapevine." },
-  "shop.subs_from": { "en": "Subscriptions from {amount} a month", "es": "Suscripciones desde {amount} al mes" }
+  "shop.subs_from": { "en": "Subscriptions from {amount} a month", "es": "Suscripciones desde {amount} al mes" },
+
+  "shop.nav_special": { "en": "Specialty items", "es": "Artículos especiales" },
+  "shop.special_eyebrow": { "en": "Specialty items", "es": "Artículos especiales" },
+  "shop.special_title": { "en": "Calendars, planners & cards", "es": "Calendarios, agendas y tarjetas" },
+  "shop.special_sub": { "en": "From the official stores — for your home group, a sponsor, a sponsee or a friend.", "es": "De las tiendas oficiales: para tu grupo base, tu padrino o madrina, tu ahijado o un amigo." },
+  "shop.special_lead": { "en": "For your group, a sponsor or a friend.", "es": "Para tu grupo, tu padrino o madrina, o un amigo." },
+  "shop.special_see": { "en": "See prices", "es": "Ver precios" },
+  "shop.special_desc_cards": { "en": "Illustrated cards for a sponsor, a sponsee or a friend — for a sobriety anniversary or any occasion.", "es": "Tarjetas ilustradas para tu padrino o madrina, tu ahijado o un amigo: para un aniversario de sobriedad o cualquier ocasión." },
+  "shop.special_desc_planner": { "en": "A pocket planner for the year, with each month at a glance.", "es": "Una agenda de bolsillo para el año, con cada mes de un vistazo." },
+  "shop.special_desc_calendar": { "en": "A wall calendar for the year, with photos and short quotes.", "es": "Un calendario de pared para el año, con fotos y frases breves." },
+  "shop.special_trilingual": { "en": "English · Spanish · French", "es": "Inglés · español · francés" },
+  "shop.special_pack": { "en": "Box of {n}", "es": "Caja de {n}" },
+  "shop.special_vol": { "en": "{a} or more: {price} each", "es": "{a} o más: {price} c/u" },
+  "shop.special_vol_range": { "en": "{a}–{b}: {price} each", "es": "{a} a {b}: {price} c/u" },
+  "shop.special_buy": { "en": "Buy on {store}", "es": "Comprar en {store}" },
+  "shop.special_also_same": { "en": "Also at {store}", "es": "También en {store}" },
+  "shop.special_also_other": { "en": "{mag} edition:", "es": "Edición de {mag}:" },
+  "shop.special_note": { "en": "Prices in US dollars, as listed on the official stores. The store has the final price.", "es": "Precios en dólares estadounidenses, según las tiendas oficiales. La tienda tiene el precio final." }
 }

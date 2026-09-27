@@ -26,10 +26,40 @@ descKey: access.meta_desc
 {%- set asl = db.videos | axAslPlaylist(site, lang) -%}
 {%- set chairMail = site.meeting.chair_email or site.contact_email -%}
 
-{% call ui.pageHero(lang, "nav.accessibility" | t(lang), "access.hero_sub" | t(lang), "accessibility", "access.eyebrow" | t(lang)) %}
+{#- The hero's right-hand card (the shared hero aside, "Quick settings"): text size, high contrast and
+    read aloud, one tap each — the "Aa" panel's own settings (GV.prefs / GV.tts in app.js: the same
+    saved choices, nothing duplicated), and the panel itself stays the hero's button. At 115 % text and
+    up the card is the first one under the hero ("below"), so choosing a size never hides it. Without
+    JavaScript: one line about the browser's own zoom. -#}
+{% call(slot) ui.pageHero(lang, "nav.accessibility" | t(lang), "access.hero_sub" | t(lang), "accessibility", "access.eyebrow" | t(lang), { side: "below" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("access.quick_title" | t(lang), lang, { id: "ax-quick-title", icon: "sliders-horizontal", href: "#settings", linkLabel: "access.quick_link" | t(lang) }) %}
+  <div class="ax-quick" data-js-only data-tts-skip
+       x-data="{ p: GV.prefs.get(), tts: GV.tts.state() }"
+       x-init="window.addEventListener('gvlv:prefs', (e) => { p = Object.assign({}, e.detail) }); GV.tts.on((s) => { tts = s })">
+    <fieldset class="ax-quick-group">
+      <legend class="ax-quick-legend">{{ "comfort.text" | t(lang) }}</legend>
+      <div class="ax-quick-seg">
+        {%- for o in [["100", "gvlv-a1"], ["115", "gvlv-a2"], ["130", "gvlv-a3"], ["150", "gvlv-a4"]] %}
+        <label class="ax-quick-opt"><input type="radio" class="sr-only" name="ax-quick-text" value="{{ o[0] }}" :checked="String(p.text) === '{{ o[0] }}'" @change="GV.prefs.set({ text: $event.target.value })"><span><span class="gvlv-a {{ o[1] }}" aria-hidden="true">A</span><span>{{ o[0] }}%</span></span></label>
+        {%- endfor %}
+      </div>
+    </fieldset>
+    <div class="ax-quick-btns">
+      <button type="button" class="hero-aside-cta ax-quick-cta" aria-pressed="false" :aria-pressed="String(p.contrast === 'high')" @click="GV.prefs.set({ contrast: p.contrast === 'high' ? 'normal' : 'high' })">{% icon "contrast", "size-4 shrink-0" %}<span>{{ "access.quick_contrast" | t(lang) }}</span></button>
+      <button type="button" class="hero-aside-cta ax-quick-cta" x-show="tts.supported" x-cloak @click="GV.tts.toggle()">
+        <span x-show="tts.state !== 'playing'">{% icon "play", "size-4 shrink-0" %}</span><span x-show="tts.state === 'playing'" x-cloak>{% icon "pause", "size-4 shrink-0" %}</span>
+        <span x-show="tts.state === 'idle'">{{ "comfort.read_play" | t(lang) }}</span><span x-show="tts.state === 'playing'" x-cloak>{{ "comfort.read_pause" | t(lang) }}</span><span x-show="tts.state === 'paused'" x-cloak>{{ "comfort.read_resume" | t(lang) }}</span>
+      </button>
+    </div>
+  </div>
+  <p class="hero-aside-text" data-nojs-only>{{ "access.quick_nojs" | t(lang) }}</p>
+  {% endcall %}
+{%- else %}
   <div class="hero-actions" x-data>
     <button type="button" class="btn-light" data-js-only @click="$store.gvlv.show($el)" :aria-expanded="$store.gvlv.open.toString()" aria-expanded="false" aria-controls="gvlv-panel" aria-haspopup="dialog">{% icon "a-large-small", "size-4" %} {{ "access.open_settings" | t(lang) }}</button>
   </div>
+{%- endif %}
 {% endcall %}
 
 <div class="container-page page-overlap">{{ ui.pageNav([

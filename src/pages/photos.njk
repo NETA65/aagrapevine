@@ -14,14 +14,36 @@ pageStyles: ["/assets/vendor/glightbox.min.css"]
     grid per album (2 → 3 → 4 → 5 → 6 columns) — or, with no photos yet, the shared page-level empty
     card (ui.pageEmpty; the one visitor action is the hero's). Then "Protecting anonymity" (what is great to share
     | what never is), and, collapsed, "For committee members · Share photos" (ui.memberHelp,
-    #share-photos): the steps, where photos go, Open Drive folder · Ask for upload access. -#}
+    #share-photos): the steps, where photos go, Open Drive folder · Ask for upload access.
+    The hero's right-hand card (the shared hero aside, "Next chance for photos"): the next two in-person
+    NETA 65 events — a booth, a workshop, an assembly (db.events through cmEvents: no committee meetings,
+    no online events, no later dates of a monthly series, not the magazines' own calendars) — each
+    linking to its card on /events/. Nothing the page shows (no pictures: the albums follow right below;
+    no anonymity rules: "Protecting anonymity" has them). Hidden on smaller screens and at larger text. -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set albums = db.drive.items | cmAlbums(lang) -%}
 {%- set nPhotos = albums | pluck("photos") | sum -%}
 {%- set nVideos = albums | pluck("videos") | sum -%}
 {%- set di = db.status | cmDriveInfo(site) -%}
+{%- set photoEvs = [] -%}
+{%- for ev in db.events.items | cmEvents(site, lang) | cmCollapseRecurring %}{% if photoEvs.length < 2 and not ev.past and not ev.committee and not ev.later and not ev.isOnline and ev.category != "gv-calendar" and ev.category != "lv-calendar" %}{% set _n = photoEvs.push(ev) %}{% endif %}{% endfor -%}
+{%- set toneOf = { gv: "gv", lv: "lv", booth: "lv", assembly: "grape" } -%}
 
-{% call ui.pageHero(lang, "nav.photos" | t(lang), "committee.photos.hero_sub" | t(lang), "images", "committee.photos.eyebrow" | t(lang)) %}
+{% call(slot) ui.pageHero(lang, "nav.photos" | t(lang), "committee.photos.hero_sub" | t(lang), "images", "committee.photos.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("committee.photos.aside_title" | t(lang), lang, { id: "photos-aside-title", icon: "camera", lead: "committee.photos.aside_lead" | t(lang) }) %}
+  {%- if photoEvs.length %}
+  <ul class="hero-aside-links" role="list">
+    {%- for ev in photoEvs %}{% set evTone = ev | eventTone %}
+    <li>{{ ui.heroAsideLink({ href: ("/events/" | lurl(lang)) + "#" + ev.anchor, label: ev.title, text: (ev.rangeLabel if ev.multiDay else ((ev.startIso | fmtDate(lang, "short")) + (" · " + ev.timeLabel if ev.timeLabel else ""))), icon: "calendar-days", tone: toneOf[evTone] or "vine" }, lang) }}</li>
+    {%- endfor %}
+  </ul>
+  {%- else %}
+  <p class="hero-aside-text">{{ "committee.photos.aside_none" | t(lang) }}</p>
+  <p class="mt-3"><a class="hero-aside-cta" href="{{ '/events/' | lurl(lang) }}">{% icon "calendar-days", "size-4 shrink-0" %}{{ "committee.ann.all_events" | t(lang) }}</a></p>
+  {%- endif %}
+  {% endcall %}
+{%- else %}
   <div class="hero-actions">
     {#- one visitor action (the committee how-to is ui.memberHelp, below) -#}
     {% if albums | length %}
@@ -37,6 +59,7 @@ pageStyles: ["/assets/vendor/glightbox.min.css"]
     { value: (nVideos if nVideos else null), label: "committee.photos.stat_videos" | t(lang) }
   ]) }}
   {% endif %}
+{%- endif %}
 {% endcall %}
 
 {% committeeNav lang, "photos", db %}

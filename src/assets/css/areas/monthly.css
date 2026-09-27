@@ -418,3 +418,21 @@
    transition-duration on everything, which made each font-size change a transition, so the fit read
    stale sizes and posters overflowed with "Reduce motion" on. */
 .mp-measure .mp-poster, .mp-measure .mp-poster * { transition-property: none !important; }
+
+/* ---------- Hub hero aside (monthly.njk): this month's poster in the hero's right-hand card ----------
+   The poster MOVES from the "This month" card into the hero while the aside is shown there — the same
+   condition as main.css "HERO ASIDE" (≥1024px, 100 % text, normal spacing): the card then drops its
+   poster column. Anywhere else the aside is hidden (side: "hide") and the card keeps its poster. */
+.mp-hero-poster { display: block; width: min(100%, 11.5rem); margin: 0.25rem auto 0; border-radius: 0.75rem; text-decoration: none; }
+.mp-hero-poster .mp-fit { box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.7); transition: transform 0.2s; }
+.mp-hero-poster:hover .mp-fit { transform: translateY(-3px); }
+@media (width >= 80rem) { .mp-hero-poster { width: min(100%, 12.5rem); } }
+@media (width >= 64rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .mp-now { grid-template-columns: minmax(0, 1fr); }
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .mp-now-poster { display: none; }
+}
+/* Month pages' hero aside (monthly-month.njk): two portrait covers grow with the 26rem column from
+   1536px — keep that card at 23rem there so it stays within the hero's 480px. */
+@media (width >= 96rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside.mp-hero-covers { width: min(var(--hero-side-w), 23rem); }
+}
