@@ -3,10 +3,10 @@
 //
 // Link safety: every URL field is passed through safeUrl() (eleventy.config.js) here, once, so
 // no page, filter or JSON index can print a "javascript:" link or a broken "www.example.org"
-// one. Hand-edited content is the realistic source (content/events/*.md `url` / `online_url` / `flyer`, announcements `url` / `image`).
+// one. Hand-edited content is the realistic source (content/events/*.md `url` / `online_url` / `flyer`, content/bulletin/*.md `url` / `image`).
 // "www.x.org" and "zoom.us/j/1" are repaired to https://…; unusable values become "" (the
 // templates hide empty links). An item whose own `url` is unusable points to its anchor on our
-// page (committee event / announcement) or is left out. Every repaired or dropped value is
+// page (committee event / bulletin post) or is left out. Every repaired or dropped value is
 // written to the build log and listed in db.status.link_problems [{where, field, value, fixed}].
 import fs from "node:fs";
 import path from "node:path";
@@ -78,14 +78,17 @@ export default function () {
     if (!Array.isArray(data.items)) data.items = [];
     const hadUrl = new Set(data.items.filter((it) => it && typeof it.url === "string" && it.url.trim()));
     cleanLinks(data, "", `${name}.json`, `${name}.json`, problems);
-    // An item whose own link was unusable: a committee event / announcement falls back to its
+    // An item whose own link was unusable: a committee event / bulletin post falls back to its
     // anchor on our page (as if no url had been given); anything else would be a card that goes
     // nowhere, so it is left out (it is listed in the log and in link_problems).
+    // The bulletin was /announcements/ until 2026-09 (announcements-redirect.njk keeps that address
+    // working): a link to it written before then goes straight to /bulletin/ instead.
     data.items = data.items.filter((it) => {
+      if (it && typeof it.url === "string" && /^\/announcements\/(?=#|$)/.test(it.url)) it.url = "/bulletin/" + it.url.slice(15);
       if (!hadUrl.has(it) || it.url) return true;
       const slug = it.extra && typeof it.extra.slug === "string" ? encodeURIComponent(it.extra.slug) : "";
       if (slug && it.kind === "event") { it.url = `/events/#${slug}`; return true; }
-      if (slug && it.kind === "announcement") { it.url = `/announcements/#${slug}`; return true; }
+      if (slug && it.kind === "announcement") { it.url = `/bulletin/#${slug}`; return true; }
       problems.push({ where: `${name}.json ${it.id || ""}`.trim(), field: "item", value: "(left out: no usable link)", fixed: "" });
       return false;
     });

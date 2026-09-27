@@ -15,7 +15,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     the right) and is left out when it has no data — Home never shows an empty section.
     Section order: hero (the shared ui.pageHero, with the next-meeting card on the
     right from 1024px) · meeting card (below 1024px) + site counters · the Grapevine / La Viña
-    daily quote (a second card in the same page-overlap block) · announcements · magazines (+ write
+    daily quote (a second card in the same page-overlap block) · the bulletin · magazines (+ write
     for the magazines, + this month in the Shop: Book of the Month · subscriptions · monthly
     toolkit) · listen & watch · PUBLISHED WRITERS · events · library · instagram · committee uploads
     · the service band. (No mixed "newest" strip: every kind has its own section, and the hero's
@@ -252,7 +252,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     magazine named for screen readers). No other page repeats it; left out when there is no quote from
     the last 2 days (two runs a day keep it current). -#}
 {%- set quotes = D.quote | homeDailyQuotes(L, 2) -%}
-{#- the announcements (section 4) are the first section after this block; without them the magazines
+{#- the bulletin's posts (section 4) are the first section after this block; without them the magazines
     band follows it, so the block keeps the band's outside gap itself (mb-10 / sm:mb-12) -#}
 {%- set anns = (D.announcements.items | homeAnnouncements) | limit(2) -%}
 {%- set stats = [
@@ -338,12 +338,13 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {% set driveItems = D.drive.items | homeDrive(6) %}
 
 {#- =====================================================================
-    4. ANNOUNCEMENTS — pinned first; left out when there are none. The first section after the
-       page-overlap block (pt-10 / sm:pt-12); without it the magazines band follows that block.
+    4. THE BULLETIN — its latest posts, pinned first; left out when there are none. The first
+       section after the page-overlap block (pt-10 / sm:pt-12); without it the magazines band
+       follows that block.
     ===================================================================== -#}
 {% if anns.length %}
 <section class="container-page pt-10 pb-12 sm:pt-12 sm:pb-16" aria-labelledby="ann-title">
-  {{ ui.sectionHead("home.ann_title" | t(L), "home.ann_sub" | t(L), "/announcements/" | lurl(L), "home.ann_all" | t(L), "megaphone", { eyebrow: "nav.announcements" | t(L), tone: "text-vine", id: "ann-title", lang: L }) }}
+  {{ ui.sectionHead("home.ann_title" | t(L), "home.ann_sub" | t(L), "/bulletin/" | lurl(L), "home.ann_all" | t(L), "megaphone", { eyebrow: "nav.bulletin" | t(L), tone: "text-vine", id: "ann-title", lang: L }) }}
   <div class="grid items-start gap-5 {{ 'lg:grid-cols-2' if anns.length > 1 }}">
     {% for a in anns %}
     {%- set body = a | tx("body_md", L) -%}
@@ -357,10 +358,11 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
       </p>
       <h3 class="card-h mt-2">{{ a | tx("title", L) }}</h3>
       {% if body and body.length <= 700 %}
-      <div class="prose-site mt-2 text-muted">{{ body | md | safe }}</div>
+      {#- the card's title is an h3: the post's own headings start at h4 (cm-md: committee.css) -#}
+      <div class="prose-site cm-md mt-2 text-muted">{{ body | md({ h: 4, lang: L }) | safe }}</div>
       {% else %}
       <p class="mt-2 leading-relaxed text-muted">{{ (a | tx("summary", L)) | excerpt(320) }}</p>
-      <a class="link tap-link mt-3 text-sm" href="{{ (a.url if (a.url and a.url.startsWith('/announcements/')) else '/announcements/') | lurl(L) }}">{{ "common.read_more" | t(L) }}</a>
+      <a class="link tap-link mt-3 text-sm" href="{{ (a.url if (a.url and a.url.startsWith('/bulletin/')) else '/bulletin/') | lurl(L) }}">{{ "common.read_more" | t(L) }}</a>
       {% endif %}
     </article>
     {% endfor %}
@@ -934,8 +936,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     ===================================================================== -#}
 {#- Four service tools for a group's GVR / RLV, the course for new representatives first. The feeds
     (RSS, calendar) are not repeated here: they live in the footer's "Stay updated" column, right
-    below; the digest is the one "get updates" tile. The QR codes & posters page (/share/) is in the
-    footer and in the GVR corner's checklist. -#}
+    below; the digest is the one "get updates" tile. The QR Post page (/share/) is in that column
+    too and in the GVR corner's checklist. -#}
 {%- set svcLinks = [
   { url: "/orientation/", icon: "sprout", key: "nav.orientation", desc: "nav.orientation_desc" },
   { url: "/gvr/", icon: "badge-check", key: "nav.gvr", desc: "home.svc_corner_desc" },

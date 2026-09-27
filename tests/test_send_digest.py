@@ -166,7 +166,7 @@ class DigestCase(unittest.TestCase):
             item("yt:undated", "video", "youtube", None, "No date"),
         ]})
         self.write("announcements", {"items": [
-            item("ann:1", "announcement", "committee", "2026-09-05", "New GVR orientation", url="/announcements/#new",
+            item("ann:1", "announcement", "committee", "2026-09-05", "New GVR orientation", url="/bulletin/#new",
                  extra={"body_md": "Join us **Saturday**."}),
             item("ann:gone", "announcement", "committee", "2026-09-06", "Expired", extra={"expires": "2026-09-30"}),
         ]})
@@ -299,9 +299,9 @@ class Sections(DigestCase):
         self.assertEqual(self.data["instagram"], ["alcoholicsanonymous_gv", "alcoholicosanonimos_lv"])
         self.assertEqual(D.total_count(self.data), 6 + 2)                     # 6 news + 2 writers
         self.assertEqual(D.count_list(self.data, "en"),
-                         "1 magazine story, 1 podcast episode, 1 video, 1 document, 1 committee file and 1 announcement")
+                         "1 magazine story, 1 podcast episode, 1 video, 1 document, 1 committee file and 1 bulletin post")
         self.assertEqual(D.count_list(self.data, "es"),
-                         "1 historia de las revistas, 1 episodio de podcast, 1 video, 1 documento, 1 archivo del comité y 1 anuncio")
+                         "1 historia de las revistas, 1 episodio de podcast, 1 video, 1 documento, 1 archivo del comité y 1 aviso del boletín")
 
     def test_this_months_issues_highlights_and_tips(self):
         gv, lv = self.data["issues"]
@@ -506,6 +506,56 @@ class Wording(unittest.TestCase):
         self.assertEqual(D.item_label(wo, "en")[0], "Weekly Open")
         self.assertEqual(D.item_label(wo, "es")[0], "Reunión Abierta Semanal")
         self.assertEqual(D.item_label(dict(wo, category="gv"), "es")[0], "Podcast")
+
+
+class PostMarkdown(unittest.TestCase):
+    """A bulletin post in the e-mail: whatever Markdown the chair wrote (content/bulletin/README.md) is
+    drawn as HTML with inline styles, and as plain lines in the text part — never the raw marks."""
+
+    POST = ("Join us for the **Fall Assembly**.\n\n"
+            "| Time | What | Where |\n|------|------|-------|\n| 9:00 AM | Registration | [Lobby](/events/) |\n\n"
+            "> A quotation, a share or a reading.\n\n---\n\n"
+            "### What to bring\n- Your subscription\n- A friend\n    - Nested one\n    - Nested two\n1. First\n2. Second\n\n"
+            "![Flyer](<https://x.org/f.jpg>) and <https://neta65.org> ~~old~~\nLine two.")
+
+    def site(self, u: str) -> str:
+        return "https://example.org/site" + u
+
+    def test_html(self):
+        h = D.md_to_html(self.POST, "#00f", self.site)
+        for raw in ("| Time", "|---", "> A", "---", "**", "###", "- Your", "~~", "<https"):
+            self.assertNotIn(raw, h)
+        self.assertIn("<strong>Fall Assembly</strong>", h)
+        self.assertRegex(h, r"<table [^>]*><tr><th [^>]*>Time</th><th [^>]*>What</th><th [^>]*>Where</th></tr><tr><td [^>]*>9:00 AM</td>")
+        self.assertIn('<a href="https://example.org/site/events/" style="color:#00f;">Lobby</a>', h)
+        self.assertRegex(h, r"<blockquote [^>]*>A quotation, a share or a reading\.</blockquote><hr [^>]*>")
+        self.assertIn("font-weight:bold;\">What to bring</p>", h)
+        # a list inside a list; a numbered list after it is a list of its own
+        self.assertRegex(h, r"<ul [^>]*><li [^>]*>Your subscription</li><li [^>]*>A friend<ul [^>]*><li [^>]*>Nested one</li>"
+                            r"<li [^>]*>Nested two</li></ul></li></ul><ol [^>]*><li [^>]*>First</li><li [^>]*>Second</li></ol>")
+        self.assertIn('<a href="https://x.org/f.jpg" style="color:#00f;">Flyer</a> and <a href="https://neta65.org"', h)
+        self.assertIn("<s>old</s><br>Line two.", h)
+        self.assertNotIn("<script", D.md_to_html("<script>alert(1)</script> [x](javascript:alert(1))", "#00f"))
+
+    def test_text(self):
+        t = D.md_to_text(self.POST, self.site)
+        self.assertEqual(t.split("\n\n"), [
+            "Join us for the Fall Assembly.",
+            "Time · What · Where\n9:00 AM · Registration · Lobby (https://example.org/site/events/)",
+            "“A quotation, a share or a reading.”",
+            "What to bring",
+            "• Your subscription\n• A friend\n  – Nested one\n  – Nested two",
+            "• First\n• Second",
+            "Flyer (https://x.org/f.jpg) and https://neta65.org old\nLine two.",
+        ])
+
+    def test_a_long_post_is_cut_between_blocks(self):
+        short, cut = D.md_excerpt(self.POST, 150)
+        self.assertTrue(cut)
+        self.assertTrue(short.startswith("Join us") and short.endswith("| 9:00 AM | Registration | [Lobby](/events/) |"))  # the table whole
+        self.assertEqual(D.md_excerpt("Short.", 150), ("Short.", False))
+        long_para, cut = D.md_excerpt("word " * 300, 150)
+        self.assertTrue(cut and len(long_para) <= 150 and long_para.endswith("…"))
 
 
 class FakeSMTP:

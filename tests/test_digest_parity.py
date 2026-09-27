@@ -122,7 +122,7 @@ class FixtureParity(SD.DigestCase, Parity):
         # an announcement that expired on the last day of the month: gone on the 1st in the small hours
         # too (Central time), like everywhere else on the site
         self.write("announcements", {"items": [
-            SD.item("ann:1", "announcement", "committee", "2026-09-05", "New GVR orientation", url="/announcements/#new",
+            SD.item("ann:1", "announcement", "committee", "2026-09-05", "New GVR orientation", url="/bulletin/#new",
                     extra={"body_md": "Join us **Saturday**."}),
             SD.item("ann:sep30", "announcement", "committee", "2026-09-06", "Until the 30th", extra={"expires": "2026-09-30"}),
             SD.item("ann:oct1", "announcement", "committee", "2026-09-07", "Until the 1st", extra={"expires": "2026-10-01"}),

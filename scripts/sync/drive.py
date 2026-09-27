@@ -5,20 +5,21 @@ How the committee uses it (see config/site.yml → drive):
     A65_GV/                              ← drive.root_folder_id ("Anyone with the link")
       2027-2028_Panel77_GVLV/            ← a PANEL folder (name matches "Panel 77")
         reports/   notes/   slides/      ← category folders (English or Spanish names)
-        flyers/    workshops/   announcements/   forms/
+        flyers/    workshops/   bulletin/   forms/
         photos/Spring Assembly/          ← each sub-folder of photos = an album
       2029-2030_Panel79_GVLV/            ← picked up automatically (panel >= min_panel)
       flyers/ notes/ …                   ← "loose" folders outside a panel: ignored unless
                                            drive.include_loose_folders is true
 
 Every file becomes one Item (docs/DATA_SCHEMA.md, source "drive"):
-  kind  photo | video_file | form | slides | document | announcement
-  category  reports notes slides flyers photos workshops announcements forms other
+  kind  photo | video_file | form | slides | document | announcement (a bulletin post)
+  category  reports notes slides flyers photos workshops announcements (the bulletin) forms other
 
 Naming conventions the committee can use (all optional):
   * A date anywhere in the name sets the item date: "2027-03-14 Spring Assembly.pdf".
   * flyers/: a dated flyer becomes an event ("2027-03-14 Spring Assembly GV booth 9am @ Tyler TX.pdf").
-  * announcements/: a Google Doc, .txt, .md or .docx; the file name is the headline and the
+  * bulletin/ (boletín; the older "announcements" / "anuncios" folder names work too): a Google Doc,
+    .txt, .md or .docx becomes a post on /bulletin/; the file name is the headline and the
     text is the body. Add "(pinned)" / "(fijado)" to pin it, "(until 2027-02-01)" /
     "(hasta 2027-02-01)" to hide it after that date.
 
@@ -72,14 +73,16 @@ CATEGORY_SYNONYMS: dict[str, list[str]] = {
     "photos": ["photo", "photos", "foto", "fotos", "picture", "pictures", "pics", "image", "images",
                "imagen", "imagenes", "gallery", "galeria"],
     "workshops": ["workshop", "workshops", "taller", "talleres"],
-    "announcements": ["announcement", "announcements", "anuncio", "anuncios", "aviso", "avisos", "news", "noticias"],
+    # the bulletin (/bulletin/; called "announcements" until 2026-09, so those names still work)
+    "announcements": ["bulletin", "bulletins", "bulletin board", "boletin", "boletines", "announcement",
+                      "announcements", "anuncio", "anuncios", "aviso", "avisos", "news", "noticias"],
     "forms": ["form", "forms", "formulario", "formularios", "sign up", "sign ups", "signup", "signups",
               "inscripcion", "inscripciones"],
 }
 _SPANISH_HINTS = {"informe", "informes", "reporte", "reportes", "nota", "notas", "minuta", "minutas", "acta",
                   "actas", "presentacion", "presentaciones", "diapositiva", "diapositivas", "volante", "volantes",
                   "folleto", "folletos", "foto", "fotos", "imagen", "imagenes", "galeria", "taller", "talleres",
-                  "anuncio", "anuncios", "aviso", "avisos", "noticias", "formulario", "formularios",
+                  "boletin", "boletines", "anuncio", "anuncios", "aviso", "avisos", "noticias", "formulario", "formularios",
                   "inscripcion", "inscripciones", "la vina", "lavina", "espanol"}
 
 # Never published, whatever the config says: spreadsheets (form responses = personal

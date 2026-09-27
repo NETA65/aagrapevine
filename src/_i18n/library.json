@@ -672,8 +672,8 @@
     "es": "Quiénes somos, la historia de las revistas y cómo se mantiene al día este sitio."
   },
   "search.page_desc.share": {
-    "en": "QR codes, links and ready-to-print material to share this site.",
-    "es": "Códigos QR, enlaces y material para imprimir y compartir este sitio."
+    "en": "QR codes, printable posters and links to share this site.",
+    "es": "Códigos QR, carteles para imprimir y enlaces para compartir este sitio."
   },
   "search.page_desc.search": {
     "en": "Search everything on this site.",
@@ -720,9 +720,9 @@
     "en": "photos pictures albums gallery booth",
     "es": "fotos imágenes álbumes galería mesa"
   },
-  "search.kw.announcements": {
-    "en": "announcements news committee updates",
-    "es": "anuncios noticias comité avisos"
+  "search.kw.bulletin": {
+    "en": "bulletin board announcements notices news committee updates",
+    "es": "boletín tablero avisos anuncios noticias comité"
   },
   "search.kw.gvr": {
     "en": "gvr rlv grapevine representative group rep kit handbook workbook register become",

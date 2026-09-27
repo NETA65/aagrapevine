@@ -62,8 +62,8 @@
   },
   "pwa.offline.how2_h": { "en": "Save key pages before you go", "es": "Guarda las páginas clave antes de salir" },
   "pwa.offline.how2_t": {
-    "en": "One tap in the Aa menu saves Meetings, this month's toolkit and district report, the GVR / RLV 101 sessions, Share your story and the Shop, in your language.",
-    "es": "Un toque en el menú Aa guarda Reuniones, el kit y el informe del mes, las sesiones de RLV / GVR 101, Comparte tu historia y la Tienda, en tu idioma."
+    "en": "One tap in the Aa menu saves Meetings, this month's toolkit and district report, the GVR / RLV 101 sessions, Share your story, the Shop and the expense tracker, in your language.",
+    "es": "Un toque en el menú Aa guarda Reuniones, el kit y el informe del mes, las sesiones de RLV / GVR 101, Comparte tu historia, la Tienda y el registro de gastos, en tu idioma."
   },
   "pwa.offline.how3_h": { "en": "Install it like an app", "es": "Instálalo como una app" },
   "pwa.offline.how3_t": {

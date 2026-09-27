@@ -9,10 +9,11 @@ bodyClass: "cm-page-share cm-print-light"
 pageScripts: ["/assets/js/community.js"]
 ---
 {% import "macros/ui.njk" as ui with context %}
-{#- QR codes & posters (the "Share the site" page, /share/): QR codes (generated at build from site.url — they update
+{#- QR Post (the "Share the site" page, /share/): QR codes (generated at build from site.url — they update
     themselves if the site ever moves), a letter-size poster and a table tent
     (screen previews double as the print layout), and ready-made messages. The app icon sits above
-    every QR code (the site installs as an app) and the posters carry the committee's e-mail. -#}
+    every QR code (the site installs as an app) and the posters carry the committee's e-mail; the
+    poster also has the committee meeting, to the left of its code. -#}
 {%- set other = lang | otherLang -%}
 {%- set urls = { en: '/' | siteUrl(site), es: '/es/' | siteUrl(site), bi: '/' | siteUrl(site) } -%}
 {%- set pageUrl = '/' | lurl(lang) | siteUrl(site) -%}
@@ -21,6 +22,33 @@ pageScripts: ["/assets/js/community.js"]
 {% macro pv(key, v) -%}
 {%- if v == "bi" -%}{{ key | t("en") }}{%- else -%}{{ key | t(v) }}{%- endif -%}
 {%- endmacro %}
+{#- One line of the poster's meeting block: the variant's language, or for "bi" the English with the
+    Spanish right under it -#}
+{% macro meetLine(v, en, es) -%}
+{%- if v == "bi" %}<span>{{ en }}</span><span class="cm-p-es" lang="es">{{ es }}</span>{% else %}<span>{{ es if v == "es" else en }}</span>{% endif -%}
+{%- endmacro %}
+{#- The committee meeting, to the LEFT of the poster's code: config/site.yml `meeting:` in the words of
+    /meetings/ — the monthly rule and the time (never a date: the poster stays on a wall for months),
+    the platform with the meeting ID and passcode, and who is welcome. -#}
+{% macro meetBlock(v) %}
+{%- set m = site.meeting -%}
+{%- set tKey = "community.share.p_meet_time" -%}
+<div class="cm-p-meet">
+  <p class="cm-p-meet-h">{{ meetLine(v, "committee.meetings.committee_title" | t("en"), "committee.meetings.committee_title" | t("es")) }}</p>
+  <ul class="cm-p-meet-list">
+    <li class="cm-p-meet-when">{% icon "calendar-days", "cm-p-ico" %}<span>{{ meetLine(v, m | cmRule("en"), m | cmRule("es")) }}</span></li>
+    <li>{% icon "clock-3", "cm-p-ico" %}<span>{{ meetLine(v, tKey | t("en", { time: m | cmTimeRange("en") }), tKey | t("es", { time: m | cmTimeRange("es") })) }}</span></li>
+    {% if m.platform %}<li>{% icon "video", "cm-p-ico" %}<span>{{ meetLine(v, "committee.events.online_on" | t("en", { platform: m.platform }), "committee.events.online_on" | t("es", { platform: m.platform })) }}</span></li>{% endif %}
+  </ul>
+  {% if m.meeting_id or m.passcode %}
+  <dl class="cm-p-meet-ids">
+    {% if m.meeting_id %}<div><dt>{{ meetLine(v, "committee.meeting.id" | t("en"), "committee.meeting.id" | t("es")) }}</dt><dd>{{ m.meeting_id }}</dd></div>{% endif %}
+    {% if m.passcode %}<div><dt>{{ meetLine(v, "committee.meeting.passcode" | t("en"), "committee.meeting.passcode" | t("es")) }}</dt><dd>{{ m.passcode }}</dd></div>{% endif %}
+  </dl>
+  {% endif %}
+  <p class="cm-p-meet-all">{% icon "heart-handshake", "cm-p-ico" %}<span>{{ meetLine(v, "committee.meeting.who_title" | t("en"), "committee.meeting.who_title" | t("es")) }}</span></p>
+</div>
+{% endmacro %}
 {% macro posterBody(v, urls) %}
 {%- set u = urls[v] -%}
 <div class="cm-p-band">
@@ -28,19 +56,25 @@ pageScripts: ["/assets/js/community.js"]
   <span class="cm-p-kicker">{{ pv("community.share.p_kicker", v) }}{% if v == "bi" %}<br><span lang="es">{{ "community.share.p_kicker" | t("es") }}</span>{% endif %}</span>
   <span class="cm-p-title">Grapevine <em>&amp;</em> La Viña</span>
 </div>
-<div class="cm-p-main">
+<div class="cm-p-main{{ ' is-bi' if v == 'bi' }}">
   <p class="cm-p-head"{% if v != "bi" %} lang="{{ v }}"{% endif %}>{{ pv("community.share.p_head", v) }}</p>
   {% if v == "bi" %}<p class="cm-p-head cm-p-alt" lang="es">{{ "community.share.p_head" | t("es") }}</p>
   {% else %}<p class="cm-p-sub" lang="{{ v }}">{{ "community.share.p_sub" | t(v) }}</p>{% endif %}
+  {#- the committee meeting on the left, the code on the right -#}
+  <div class="cm-p-row">
+  {{ meetBlock(v) }}
   <div class="cm-p-qrwrap">
     {#- The app icon above the code says "this opens our site — which also installs as an app"; it is an
-        <img> (printed; a CSS background may be dropped by the print dialog) -#}
+        <img> (printed; a CSS background may be dropped by the print dialog). "bi": the Spanish under
+        the English. -#}
     <p class="cm-p-app"><img src="/assets/img/app-icon-192.png" alt="" width="192" height="192"><span>
-      <span class="cm-p-scan">{{ pv("community.share.p_scan", v) }}{% if v == "bi" %} · <span lang="es">{{ "community.share.p_scan" | t("es") }}</span>{% endif %}</span>
-      <span class="cm-p-appnote">{{ pv("community.share.p_app", v) }}{% if v == "bi" %} · <span lang="es">{{ "community.share.p_app" | t("es") }}</span>{% endif %}</span>
+      <span class="cm-p-scan">{{ pv("community.share.p_scan", v) }}{% if v == "bi" %}<span class="block" lang="es">{{ "community.share.p_scan" | t("es") }}</span>{% endif %}</span>
+      <span class="cm-p-appnote">{{ pv("community.share.p_app", v) }}{% if v == "bi" %}<span class="block" lang="es">{{ "community.share.p_app" | t("es") }}</span>{% endif %}</span>
     </span></p>
     <svg class="cm-p-qr" role="img" lang="{{ lang }}" aria-label="{{ 'community.share.qr_alt' | t(lang, { url: u }) }}"><use href="#qr-sym-{{ 'es' if v == 'es' else 'en' }}"></use></svg>
-    <p class="cm-p-url">{{ u | cmShortUrl }}</p>
+    {#- a long address may break after a "/" (the column is as wide as the code) -#}
+    <p class="cm-p-url">{{ u | cmShortUrl | replace("/", "/<wbr>") | safe }}</p>
+  </div>
   </div>
 </div>
 {#- Foot: what the site is and who runs it on the left, the committee's e-mail on the right -#}

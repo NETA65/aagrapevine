@@ -1,22 +1,27 @@
 ---
 pagination: { data: languages, size: 1, alias: lang }
-permalink: "{{ '/' if lang == 'en' else '/es/' }}announcements/index.html"
+permalink: "{{ '/' if lang == 'en' else '/es/' }}bulletin/index.html"
 layout: layouts/base.njk
-pageKey: announcements
-titleKey: nav.announcements
+pageKey: bulletin
+titleKey: nav.bulletin
 descKey: committee.ann.meta_desc
 pageScripts: ["/assets/js/committee.js"]
 ---
-{#- Committee announcements (Google Docs in the Drive "announcements" folder or
-    content/announcements/*.md). Pinned first, full body, auto-translated,
-    each with a deep-link anchor (#ann-…) and share buttons.
-    Below the shared page hero and the committee sub-nav: the announcements (two per row from
-    1280px when there are several — each keeps a readable line length); with none, one solid card
-    written for visitors. Then, collapsed, "For committee members · Post an announcement"
-    (ui.memberHelp, #how-to-post). The ways to keep up (digest, RSS, calendar) are in the footer.
+{#- The committee's bulletin (/bulletin/; it was /announcements/ — announcements-redirect.njk keeps that
+    address working): Google Docs in the Drive "bulletin" folder or content/bulletin/*.md (the data
+    keeps its old name: db.announcements, kind "announcement"). Pinned first, full body,
+    auto-translated, each with a deep-link anchor (#ann-… or the file's name) and share buttons.
+    Below the shared page hero and the committee sub-nav: the posts (two per row from 1280px when
+    there are several — each keeps a readable line length); with none, one solid card written for
+    visitors. Then, collapsed, "For committee members · Post to the bulletin" (ui.memberHelp,
+    #how-to-post). The ways to keep up (digest, RSS, calendar) are in the footer.
+    A post's text is whatever Markdown the chair wrote (scripts/sync/announcements.py tidies it):
+    `md({ h: 3 })` makes its "# …" headings h3 and down, under the post's own h2 title, and .cm-md
+    (committee.css) styles all of it — tables in their own sideways-scrolling box, quotes, code,
+    pictures, long addresses that wrap.
     The hero's right-hand card (the shared hero aside, "Coming up"): the next committee meeting and the
-    next event, linking to them. With no announcements it is the page's first card on smaller screens
-    and at larger text too ("below"); with announcements it is hidden there (they come first). -#}
+    next event, linking to them. With no posts it is the page's first card on smaller screens and at
+    larger text too ("below"); with posts it is hidden there (they come first). -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set anns = db.announcements.items | cmAnnouncements -%}
 {%- set pageAbs = page.url | siteUrl(site) -%}
@@ -26,7 +31,7 @@ pageScripts: ["/assets/js/committee.js"]
 {%- set ne = (db.events.items | cmEvents(site, lang)) | where("past", false) | whereNot("committee", true) | first -%}
 {%- set neKind = (ne | eventTone) if ne else "" -%}
 {%- set toneOf = { gv: "gv", lv: "lv", committee: "grape", booth: "lv" } -%}
-{% call(slot) ui.pageHero(lang, "nav.announcements" | t(lang), "committee.ann.hero_sub" | t(lang), "megaphone", "committee.ann.eyebrow" | t(lang), { side: ("hide" if anns | length else "below") }) %}
+{% call(slot) ui.pageHero(lang, "nav.bulletin" | t(lang), "committee.ann.hero_sub" | t(lang), "megaphone", "committee.ann.eyebrow" | t(lang), { side: ("hide" if anns | length else "below") }) %}
 {%- if slot == "side" %}
   {%- if nm or ne %}
   {% call ui.heroAside("committee.ann.meanwhile" | t(lang), lang, { id: "ann-aside-title", icon: "calendar-days", href: "/events/" | lurl(lang), linkLabel: "committee.ann.all_events" | t(lang) }) %}
@@ -47,9 +52,9 @@ pageScripts: ["/assets/js/committee.js"]
 {%- endif %}
 {% endcall %}
 
-{% committeeNav lang, "announcements", db %}
+{% committeeNav lang, "bulletin", db %}
 
-<section class="container-page section pt-10 sm:pt-12" aria-label="{{ 'nav.announcements' | t(lang) }}">
+<section class="container-page section pt-10 sm:pt-12" aria-label="{{ 'nav.bulletin' | t(lang) }}">
   {% if anns | length %}
   <ol class="cm-ann-list{{ ' is-multi' if anns | length > 1 }}">
     {% for a in anns %}
@@ -57,29 +62,31 @@ pageScripts: ["/assets/js/committee.js"]
     {%- set body = a | tx("body_md", lang) or (a | tx("summary", lang)) -%}
     {%- set when = a.date or a.first_seen -%}
     <li class="min-w-0">
-      <article id="{{ a._anchor }}" class="card cm-ann flex h-full flex-col{{ ' is-pinned' if a._pinned }}" aria-labelledby="{{ a._anchor }}-h">
+      <article id="{{ a._anchor }}" class="card cm-ann flex flex-col{{ ' is-pinned' if a._pinned }}" aria-labelledby="{{ a._anchor }}-h">
         <div class="flex-1 p-5 sm:p-7">
           <div class="flex flex-wrap items-center gap-2 text-sm">
             {% if a._pinned %}<span class="badge-lv">{% icon "pin", "size-3" %} {{ "committee.ann.pinned" | t(lang) }}</span>{% endif %}
             {% if a.is_new %}<span class="badge-new">{{ "common.new" | t(lang) }}</span>{% endif %}
             <p class="meta-row text-muted">
               {%- if when %}<time datetime="{{ when | isoDate }}">{{ when | fmtDate(lang, "long") }}</time>{% endif %}
-              {%- if a.extra and a.extra.expires %}<span class="text-xs text-faint">{{ "committee.ann.until" | t(lang, { date: (a.extra.expires | fmtDate(lang, "medium")) }) }}</span>{% endif %}
+              {#- a meta-row item keeps the row's size (its "·" and hanging indent are 1.1em of it): the smaller words go inside -#}
+              {%- if a.extra and a.extra.expires %}<span><span class="text-xs text-faint">{{ "committee.ann.until" | t(lang, { date: (a.extra.expires | fmtDate(lang, "medium")) }) }}</span></span>{% endif %}
             </p>
           </div>
-          <h2 id="{{ a._anchor }}-h" class="mt-3 font-display text-2xl font-semibold leading-tight text-ink sm:text-[1.75rem]">
+          {#- a title the translation left as it was (rejected, or the same words) is in the post's own language -#}
+          <h2 id="{{ a._anchor }}-h" class="mt-3 font-display text-2xl font-semibold leading-tight text-ink sm:text-[1.75rem]"{% if a.lang and a.lang != lang and title == a.title %} lang="{{ a.lang }}"{% endif %}>
             <a href="#{{ a._anchor }}" class="cm-anchor-link hover:text-gv">{{ title }}<span class="cm-hash" aria-hidden="true">#</span></a>
           </h2>
           {#- lang="…" only when the text shown IS the original: not machine-translated, not the committee's own summary_es -#}
-          <div class="prose-site mt-4 max-w-none"{% if a.lang and a.lang != lang and not (a | machineFor(lang)) and body == ((a.extra.body_md if a.extra) or a.summary) %} lang="{{ a.lang }}"{% endif %}>
-            {{ body | md | safe }}
+          <div class="prose-site cm-md mt-4 max-w-none"{% if a.lang and a.lang != lang and not (a | machineFor(lang)) and body == ((a.extra.body_md if a.extra) or a.summary) %} lang="{{ a.lang }}"{% endif %}>
+            {{ body | md({ h: 3, lang: lang, name: title }) | safe }}
           </div>
           {% if a | machineFor(lang) %}
           <details class="cm-original mt-5">
             <summary>{% icon "languages", "size-4" %} {{ "committee.ann.show_original" | t(lang) }} <span class="text-faint">· {{ ("lang." + a.lang) | t(lang) }}</span></summary>
-            <div class="prose-site mt-3 text-[0.95rem]" lang="{{ a.lang }}">
+            <div class="prose-site cm-md mt-3 text-[0.95rem]" lang="{{ a.lang }}">
               <p class="font-semibold">{{ a.title }}</p>
-              {{ ((a.extra.body_md if a.extra) or a.summary) | md | safe }}
+              {{ ((a.extra.body_md if a.extra) or a.summary) | md({ h: 3, lang: lang, name: a.title + " (" + (("lang." + a.lang) | t(lang)) + ")" }) | safe }}
             </div>
           </details>
           {% endif %}
@@ -88,7 +95,8 @@ pageScripts: ["/assets/js/committee.js"]
           {%- set more = a.extra.link if (a.extra and a.extra.link) else (a.url if (a.source == "drive" and a.url) else "") -%}
           {%- set isDoc = a.source == "drive" and not (a.extra and a.extra.link) -%}
           {%- set moreIcon = "file-text" if isDoc else "arrow-up-right" -%}
-          {% if more %}<a class="btn-primary btn-sm" href="{{ more | lurl(lang) }}"{% if more.startsWith("http") %} target="_blank" rel="noopener"{% endif %}>{% icon moreIcon, "size-4" %} {{ ("committee.ann.open_doc" if isDoc else "committee.ann.more_info") | t(lang) }}</a>{% endif %}
+          {#- `url:` may name a file saved next to the post (/bulletin/files/…, the same in both languages) -#}
+          {% if more %}<a class="btn-primary btn-sm" href="{{ more if more.startsWith('/bulletin/files/') else (more | lurl(lang)) }}"{% if more.startsWith("http") %} target="_blank" rel="noopener"{% endif %}>{% icon moreIcon, "size-4" %} {{ ("committee.ann.open_doc" if isDoc else "committee.ann.more_info") | t(lang) }}</a>{% endif %}
           {{ ui.autoNote(a, lang) }}
           <span class="flex-1"></span>
           <button type="button" class="btn-ghost btn-sm" data-copy="{{ pageAbs }}#{{ a._anchor }}">{% icon "link", "size-4" %} {{ "common.copy_link" | t(lang) }}</button>
@@ -107,7 +115,7 @@ pageScripts: ["/assets/js/committee.js"]
   {% endif %}
 </section>
 
-{#- ---------- For committee members (collapsed): how to post an announcement ---------- -#}
+{#- ---------- For committee members (collapsed): how to post to the bulletin ---------- -#}
 <div class="container-page">
   {% call ui.memberHelp(lang, "committee.ann.how_title" | t(lang), { id: "how-to-post" }) %}
   <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
@@ -127,7 +135,7 @@ pageScripts: ["/assets/js/committee.js"]
     </div>
     <div class="panel-muted">
       <p class="eyebrow">{{ "committee.ann.where" | t(lang) }}</p>
-      {% cmDrivePath lang, di, "announcements", ("committee.ann.example_name" | t(lang)) %}
+      {% cmDrivePath lang, di, "bulletin", ("committee.ann.example_name" | t(lang)) %}
       {% if not (anns | length) %}{% cmDriveChecked lang, di %}{% endif %}
     </div>
   </div>

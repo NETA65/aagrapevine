@@ -337,20 +337,55 @@
 .cm-p-title { grid-column: 1 / -1; font-family: var(--font-display); font-size: 8.6cqw; font-weight: 600; line-height: 1; letter-spacing: -0.01em; white-space: nowrap; }
 .cm-p-title em, .cm-t-title em { font-style: italic; font-weight: 500; }
 .cm-p-title em { color: #f7b27c; }
-.cm-p-main { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; gap: 1.8cqw; padding: 3.5cqw 8cqw 2.5cqw; text-align: center; }
-.cm-p-head { max-width: 80cqw; font-family: var(--font-display); font-size: 4.9cqw; font-weight: 600; line-height: 1.15; color: var(--pk-ink); text-wrap: balance; }
+.cm-p-main { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; gap: 1.6cqw; padding: 3cqw 5.5cqw 2.5cqw; text-align: center; }
+.cm-p-head { max-width: 88cqw; font-family: var(--font-display); font-size: 4.6cqw; font-weight: 600; line-height: 1.12; color: var(--pk-ink); text-wrap: balance; }
 .cm-p-alt { color: var(--pk-amber); font-style: italic; }
-.cm-p-main .cm-p-alt { font-size: 4cqw; }
-.cm-p-sub { max-width: 72cqw; font-size: 2.7cqw; line-height: 1.45; color: var(--pk-muted); text-wrap: balance; }
-.cm-p-qrwrap { display: flex; flex-direction: column; align-items: center; gap: 1.3cqw; }
+.cm-p-main .cm-p-alt { font-size: 3.7cqw; }
+.cm-p-sub { max-width: 82cqw; font-size: 2.6cqw; line-height: 1.4; color: var(--pk-muted); text-wrap: balance; }
+/* The committee meeting (left) beside the code (right, as wide as the code): the two share the row's
+   height, each centred in it */
+.cm-p-row { align-self: stretch; display: grid; grid-template-columns: minmax(0, 1fr) min-content; align-items: center; gap: 4cqw; text-align: left; }
+.cm-p-qrwrap { display: flex; flex-direction: column; align-items: center; gap: 1.2cqw; }
 /* above the code: the app icon beside "Scan to visit" and "Also works as an app" (an <img>, so it prints) */
-.cm-p-app { display: flex; align-items: center; gap: 2cqw; text-align: left; }
-.cm-p-app > img { flex-shrink: 0; width: 7.5cqw; height: 7.5cqw; }
+.cm-p-app { display: flex; align-items: center; gap: 1.6cqw; text-align: left; }
+.cm-p-app > img { flex-shrink: 0; width: 6.5cqw; height: 6.5cqw; }
 .cm-p-app > span { display: flex; flex-direction: column; gap: 0.3cqw; }
-.cm-p-qr { display: block; width: 31.5cqw; height: 31.5cqw; padding: 1.7cqw; border: 0.5cqw solid var(--pk-line); border-radius: 3cqw; background: #fff; }
-.cm-p-scan { font-size: 2.7cqw; font-weight: 700; line-height: 1.3; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pk-blue); }
-.cm-p-appnote { font-size: 2.4cqw; font-weight: 600; line-height: 1.3; color: var(--pk-muted); }
-.cm-p-url { font-size: 3.5cqw; font-weight: 700; color: var(--pk-ink); }
+.cm-p-qr { display: block; width: 29cqw; height: 29cqw; padding: 1.5cqw; border: 0.5cqw solid var(--pk-line); border-radius: 2.8cqw; background: #fff; }
+.cm-p-scan { font-size: 2.4cqw; font-weight: 700; line-height: 1.2; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pk-blue); text-wrap: balance; }
+.cm-p-appnote { font-size: 2.1cqw; font-weight: 600; line-height: 1.25; color: var(--pk-muted); text-wrap: balance; }
+.cm-p-url { font-size: 2.9cqw; font-weight: 700; line-height: 1.25; color: var(--pk-ink); text-align: center; text-wrap: balance; }
+/* the meeting: a soft panel with a blue edge — its heading; when, what time and where (an icon each);
+   the meeting ID and passcode (label · value rows); who is welcome */
+.cm-p-meet { display: flex; flex-direction: column; gap: 1.9cqw; padding: 3.2cqw 3cqw 3.2cqw 3.4cqw; border-radius: 3cqw; border-left: 1cqw solid var(--pk-blue); background: #eff4fa; color: var(--pk-ink); text-wrap: balance; }
+.cm-p-meet-h { display: flex; flex-direction: column; font-family: var(--font-display); font-size: 3.6cqw; font-weight: 600; line-height: 1.1; color: var(--pk-navy); text-wrap: balance; }
+.cm-p-meet-list { display: flex; flex-direction: column; gap: 1.2cqw; font-size: 2.65cqw; line-height: 1.28; }
+.cm-p-meet-list > li, .cm-p-meet-all { display: flex; align-items: flex-start; gap: 1.4cqw; }
+.cm-p-meet :is(li, .cm-p-meet-all) > span, .cm-p-meet dt { display: flex; min-width: 0; flex-direction: column; }
+.cm-p-meet .cm-p-ico { flex-shrink: 0; width: 3cqw; height: 3cqw; margin: 0.05em 0 0; vertical-align: 0; color: var(--pk-blue); }
+.cm-p-meet-when { font-weight: 700; }
+.cm-p-meet-ids { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: baseline; gap: 0.9cqw 2.4cqw; padding-top: 1.7cqw; border-top: 0.3cqw solid #cfd9e6; }
+.cm-p-meet-ids > div { display: contents; }
+.cm-p-meet-ids dt { font-size: 1.8cqw; font-weight: 700; line-height: 1.25; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pk-muted); }
+.cm-p-meet-ids dd { font-family: var(--font-mono); font-size: 2.9cqw; font-weight: 700; line-height: 1.2; white-space: nowrap; color: var(--pk-ink); }
+.cm-p-meet-all { font-size: 2.4cqw; font-weight: 600; line-height: 1.28; color: var(--pk-grape); }
+.cm-p-meet-all .cm-p-ico { color: var(--pk-grape); }
+/* "bi": the Spanish (.cm-p-es) under each English line, smaller and amber like the poster's other
+   Spanish lines; everything a little tighter, as it carries twice the words */
+.cm-p-es { font-size: 0.86em; font-style: italic; font-weight: 500; color: var(--pk-amber); }
+.cm-p-meet-h .cm-p-es { margin-top: 0.3cqw; }
+.cm-p-meet-ids dt .cm-p-es { letter-spacing: 0.02em; text-transform: none; font-size: 1.05em; }
+.cm-p-main.is-bi { gap: 1.2cqw; padding-top: 2.4cqw; }
+.cm-p-main.is-bi .cm-p-head { font-size: 4.2cqw; }
+.cm-p-main.is-bi .cm-p-alt { font-size: 3.3cqw; }
+.cm-p-main.is-bi .cm-p-qr { width: 27cqw; height: 27cqw; }
+.cm-p-main.is-bi .cm-p-meet { gap: 1.4cqw; padding-block: 2.6cqw; }
+.cm-p-main.is-bi .cm-p-meet-h { font-size: 3.3cqw; }
+.cm-p-main.is-bi .cm-p-meet-list { gap: 0.9cqw; font-size: 2.45cqw; }
+/* the icon over its two languages (beside them, the column would squeeze them into six short lines) */
+.cm-p-main.is-bi .cm-p-app { flex-direction: column; gap: 0.9cqw; text-align: center; }
+.cm-p-main.is-bi .cm-p-app > img { width: 5.5cqw; height: 5.5cqw; }
+.cm-p-main.is-bi .cm-p-scan { font-size: 2.05cqw; letter-spacing: 0.03em; }
+.cm-p-main.is-bi .cm-p-appnote { font-size: 1.9cqw; }
 /* foot: what and who on the left, "Questions?" + the committee's e-mail on the right */
 .cm-p-foot { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1cqw 4cqw; padding: 3cqw 7cqw; border-top: 0.4cqw solid var(--pk-line); font-size: 2.2cqw; line-height: 1.4; color: var(--pk-muted); }
 .cm-p-who, .cm-p-ask { display: flex; flex-direction: column; gap: 0.4cqw; }
@@ -396,6 +431,9 @@
 
 @page cm-letter { size: letter portrait; margin: 0.35in; }
 @media print {
+  /* the hero's wrapper (hidden with the hero, but an empty box in the flow) would be alone on a blank
+     first page: the sheet starts a page of its own (page: cm-letter) */
+  .cm-page-share .gv-hero-shell { display: none !important; }
   .cm-page-share .cm-print-root { padding: 0 !important; background: none !important; border: 0 !important; }
   .cm-page-share .cm-print-flat { display: block !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
   .cm-page-share .cm-frame { page: cm-letter; width: 7.8in; max-width: none; height: 10.25in; aspect-ratio: auto; margin: 0; border-radius: 0; box-shadow: none; }

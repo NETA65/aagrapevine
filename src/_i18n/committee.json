@@ -55,9 +55,9 @@
     "en": "Photos",
     "es": "Fotos"
   },
-  "committee.subnav.announcements": {
-    "en": "Announcements",
-    "es": "Anuncios"
+  "committee.subnav.bulletin": {
+    "en": "Bulletin",
+    "es": "Boletín"
   },
   "committee.drive.open_folder": {
     "en": "Open Drive folder",
@@ -923,13 +923,13 @@
     "en": "Photos",
     "es": "Fotos"
   },
-  "committee.docs.goes_announcements": {
-    "en": "Announcements",
-    "es": "Anuncios"
+  "committee.docs.goes_bulletin": {
+    "en": "Bulletin",
+    "es": "Boletín"
   },
   "committee.docs.folders_note": {
-    "en": "These are the folder names on our Drive; Spanish names (informes, notas, presentaciones, talleres, volantes, formularios, fotos, anuncios) work too. Sub-folders are included, and any other folder shows up under its own name. Response spreadsheets and anything marked PRIVATE are left off this site — but anyone with the link can open the Drive folders, so keep private files out of them.",
-    "es": "Estos son los nombres de las carpetas en nuestro Drive; también funcionan en español (informes, notas, presentaciones, talleres, volantes, formularios, fotos, anuncios). Se incluyen las subcarpetas, y cualquier otra carpeta aparece con su propio nombre. Las hojas de respuestas y todo lo marcado como PRIVADO no aparecen en este sitio, pero cualquiera con el enlace puede abrir las carpetas de Drive: no guardes allí archivos privados."
+    "en": "These are the folder names on our Drive; Spanish names (informes, notas, presentaciones, talleres, volantes, formularios, fotos, boletín) work too. Sub-folders are included, and any other folder shows up under its own name. Response spreadsheets and anything marked PRIVATE are left off this site — but anyone with the link can open the Drive folders, so keep private files out of them.",
+    "es": "Estos son los nombres de las carpetas en nuestro Drive; también funcionan en español (informes, notas, presentaciones, talleres, volantes, formularios, fotos, boletín). Se incluyen las subcarpetas, y cualquier otra carpeta aparece con su propio nombre. Las hojas de respuestas y todo lo marcado como PRIVADO no aparecen en este sitio, pero cualquiera con el enlace puede abrir las carpetas de Drive: no guardes allí archivos privados."
   },
   "committee.docs.cat.reports": {
     "en": "Reports",
@@ -1176,8 +1176,8 @@
     "es": "Fotos para el sitio web"
   },
   "committee.ann.meta_desc": {
-    "en": "News and announcements from the NETA 65 Grapevine / La Viña Committee, in English and Spanish.",
-    "es": "Noticias y anuncios del Comité de Grapevine / La Viña de NETA 65, en español y en inglés."
+    "en": "The NETA 65 Grapevine / La Viña Committee's bulletin: news and notices for groups, districts, GVRs and RLVs, in English and Spanish.",
+    "es": "El boletín del Comité de Grapevine / La Viña de NETA 65: noticias y avisos para grupos, distritos, RLV y GVR, en español y en inglés."
   },
   "committee.ann.eyebrow": {
     "en": "Committee · News",
@@ -1212,12 +1212,12 @@
     "es": "Abrir el documento"
   },
   "committee.ann.empty_title": {
-    "en": "No announcements right now",
-    "es": "No hay anuncios por ahora"
+    "en": "Nothing on the bulletin right now",
+    "es": "Por ahora no hay nada en el boletín"
   },
   "committee.ann.empty_text": {
-    "en": "When the committee has news — an orientation for new GVRs and RLVs, a workshop, a service opportunity — it will appear here, in English and Spanish.",
-    "es": "Cuando el comité tenga noticias — una orientación para nuevos RLV y GVR, un taller, una oportunidad de servicio — aparecerán aquí, en español y en inglés."
+    "en": "When the committee has news — an orientation for new GVRs and RLVs, a workshop, a service opportunity — it will be posted here, in English and Spanish.",
+    "es": "Cuando el comité tenga noticias — una orientación para nuevos RLV y GVR, un taller, una oportunidad de servicio — se publicarán aquí, en español y en inglés."
   },
   "committee.ann.meanwhile": {
     "en": "Coming up",
@@ -1232,28 +1232,32 @@
     "es": "Próximo evento"
   },
   "committee.ann.how_title": {
-    "en": "Post an announcement",
-    "es": "Publicar un anuncio"
+    "en": "Post to the bulletin",
+    "es": "Publicar en el boletín"
   },
   "committee.ann.where": {
     "en": "Where it goes",
     "es": "Dónde va"
   },
   "committee.ann.how_1": {
-    "en": "Write the announcement as a Google Doc. Its name is the headline: start it with a date, like “2027-01-10”, to set the date.",
-    "es": "Escribe el anuncio en un documento de Google. Su nombre es el titular: empiézalo con una fecha, como “2027-01-10”, para fijar la fecha."
+    "en": "Write your notice as a Google Doc. Its name is the headline: start it with a date, like “2027-01-10”, to set the date.",
+    "es": "Escribe tu aviso en un documento de Google. Su nombre es el titular: empiézalo con una fecha, como “2027-01-10”, para fijar la fecha."
   },
   "committee.ann.how_2": {
-    "en": "Put it in the “announcements” folder of the current Panel — right now that's {panel}.",
-    "es": "Ponlo en la carpeta “announcements” (anuncios) del Panel actual — ahora es el {panel}."
+    "en": "Put it in the “bulletin” folder of the current Panel — right now that's {panel}.",
+    "es": "Ponlo en la carpeta “bulletin” (boletín) del Panel actual — ahora es el {panel}."
   },
   "committee.ann.how_3": {
-    "en": "Write in English or Spanish: it shows up here after the next update, in both languages.",
-    "es": "Escribe en español o en inglés: aparecerá aquí después de la próxima actualización, en los dos idiomas."
+    "en": "Write in English or Spanish: it shows up on the bulletin after the next update, in both languages.",
+    "es": "Escribe en español o en inglés: aparecerá en el boletín después de la próxima actualización, en los dos idiomas."
   },
   "committee.ann.example_name": {
     "en": "2027-01-10 Welcome new GVRs",
     "es": "2027-01-10 Bienvenidos nuevos RLV"
+  },
+  "committee.ann.moved_text": {
+    "en": "The committee's announcements are now on our Bulletin:",
+    "es": "Los anuncios del comité ahora están en nuestro Boletín:"
   },
   "committee.meetings.meta_desc": {
     "en": "Our committee's monthly Zoom meeting, AA groups in and near NETA 65 that read Grapevine or La Viña, and the weekly open meetings of both magazines.",

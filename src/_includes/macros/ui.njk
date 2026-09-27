@@ -477,7 +477,7 @@
 {% endmacro %}
 
 {#- Empty state box -#}
-{#- Page-level "nothing yet" (Documents, Photos, Announcements): see the header comment. -#}
+{#- Page-level "nothing yet" (Documents, Photos, Bulletin): see the header comment. -#}
 {% macro pageEmpty(icon, title, text="", opts=null) %}
 {%- set o = opts or {} -%}
 <section class="card page-empty{{ (' is-' ~ o.tone) if o.tone }}{{ (' ' ~ o.class) if o.class }}"{% if o.id %} aria-labelledby="{{ o.id }}"{% endif %}>

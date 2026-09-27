@@ -1,0 +1,529 @@
+/* =====================================================================
+   The service expense tracker — /expenses/ (src/pages/expenses.njk, src/assets/js/expenses.js,
+   expenses-core.js). Owner: the expenses area. Every class is prefixed "xp-".
+   1. Tones: the 8 category colours (light, dark, high contrast) — colour is never the only signal
+   2. The app card: tab bar, panels, the device line
+   3. Entries: toolbar, filters, bulk bar, the table (wide screens) and the cards (phones, big text)
+   4. Summary: stat tiles, CSS bars, tables, reminders
+   5. Giveaways and Requests (the request "sheet") and the year summary
+   6. Settings: lists, editors, swatches, the icon picker, import
+   7. The dialogs (add / edit, "Are you sure?") and the toast
+   8. Larger text / relaxed spacing
+   9. Print: only the request (or the year summary), on US Letter
+   ===================================================================== */
+
+/* ---------- 1. Tones ---------- */
+.xp-root {
+  --xp-rose: #a4244f; --xp-rose-soft: #fbe9ef;
+  --xp-teal: #0b6b69; --xp-teal-soft: #dff3f1;
+  --xp-gold: #7a5600; --xp-gold-soft: #faf0d2;
+  --xp-slate: #4a5163; --xp-slate-soft: #eceef3;
+}
+[data-theme="dark"] .xp-root {
+  --xp-rose: #f4a2bd; --xp-rose-soft: #3a1624;
+  --xp-teal: #7cd6cf; --xp-teal-soft: #0f2b2a;
+  --xp-gold: #efc766; --xp-gold-soft: #2f2508;
+  --xp-slate: #c2c8d6; --xp-slate-soft: #252a35;
+}
+:root[data-contrast="high"] .xp-root {
+  --xp-rose: #6e0f30; --xp-teal: #054240; --xp-gold: #4a3400; --xp-slate: #262b38;
+}
+:root[data-contrast="high"][data-theme="dark"] .xp-root {
+  --xp-rose: #ffc6d8; --xp-teal: #a9eee8; --xp-gold: #ffe29c; --xp-slate: #e4e8f1;
+  --xp-rose-soft: #2a0f19; --xp-teal-soft: #0a1f1e; --xp-gold-soft: #221a05; --xp-slate-soft: #1a1e26;
+}
+/* small text on a soft tone uses the strong colour (≥ 4.5:1 at 12px) */
+.xp-tone-gv { --xt: var(--c-gv-strong); --xt-soft: var(--c-gv-soft); --xt-fill: var(--c-gv); }
+.xp-tone-lv { --xt: var(--c-lv-strong); --xt-soft: var(--c-lv-soft); --xt-fill: var(--c-lv); }
+.xp-tone-grape { --xt: var(--c-grape); --xt-soft: var(--c-grape-soft); --xt-fill: var(--c-grape); }
+.xp-tone-vine { --xt: var(--c-vine); --xt-soft: var(--c-vine-soft); --xt-fill: var(--c-vine); }
+.xp-tone-rose { --xt: var(--xp-rose); --xt-soft: var(--xp-rose-soft); --xt-fill: var(--xp-rose); }
+.xp-tone-teal { --xt: var(--xp-teal); --xt-soft: var(--xp-teal-soft); --xt-fill: var(--xp-teal); }
+.xp-tone-gold { --xt: var(--xp-gold); --xt-soft: var(--xp-gold-soft); --xt-fill: var(--xp-gold); }
+.xp-tone-slate { --xt: var(--xp-slate); --xt-soft: var(--xp-slate-soft); --xt-fill: var(--xp-slate); }
+
+/* ---------- 2. The app card ---------- */
+/* positioned: a visually hidden label inside a table must not escape its scrolling box (its containing block).
+   The card clips what spills, so nothing inside may be wider than it: every one-column grid below says
+   minmax(0, 1fr) — an implicit "auto" column grows to its widest child (a select sized by its longest
+   option, a long word at 150 % text) and that would be cut off at the card's edge, controls included. */
+.xp-app { position: relative; overflow: clip; }
+.xp-pad { padding: 1.25rem 1rem; }
+@media (width >= 40rem) { .xp-pad { padding: 1.5rem; } }
+@media (width >= 80rem) { .xp-pad { padding: 1.75rem 2rem; } }
+.xp-alert { display: flex; align-items: flex-start; gap: 0.625rem; margin: 0; padding: 0.875rem 1.25rem; font-weight: 600; color: var(--c-danger);
+  background: color-mix(in srgb, var(--c-danger) 9%, var(--c-surface)); border-bottom: 1px solid var(--c-line); }
+.xp-bar { display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0.75rem; border-bottom: 1px solid var(--c-line);
+  background: color-mix(in srgb, var(--c-surface-2) 55%, var(--c-surface)); }
+@media (width >= 40rem) { .xp-bar { padding: 0.75rem 1.25rem; } }
+/* On a phone the tabs scroll sideways (chip-row-nowrap). A tab snaps as far in from the left as the row
+   fades once it is scrolled (2rem; 1rem at 150 % text below 360px, as main.css draws it), and
+   expenses.js (revealTab) brings the open tab to that same spot. */
+.xp-tabs { flex: 1 1 auto; scroll-padding-left: 2rem; }
+@media (width < 22.5rem) { :root[data-text="150"] .xp-tabs { scroll-padding-left: 1rem; } }
+.xp-tab { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2.75rem; padding: 0 1rem; border: 1px solid transparent; border-radius: 9999px;
+  font-size: 0.9375rem; font-weight: 600; color: var(--c-muted); white-space: nowrap; transition: background-color 0.15s, color 0.15s; }
+.xp-tab:hover { background: var(--c-surface); color: var(--c-ink); border-color: var(--c-line); }
+.xp-tab[aria-selected="true"] { background: var(--c-gv); color: #fff; border-color: var(--c-gv); }
+[data-theme="dark"] .xp-tab[aria-selected="true"] { color: var(--c-paper); }
+/* a tablet (768–1023px): the five tabs fit on one line without their icons (their words stay) */
+@media (48rem <= width < 64rem) { .xp-tab { padding-inline: 0.75rem; } .xp-tab > svg { display: none; } }
+.xp-tab-n { display: inline-grid; place-items: center; min-width: 1.35rem; height: 1.35rem; padding: 0 0.3rem; border-radius: 9999px;
+  font-size: 0.72rem; font-variant-numeric: tabular-nums; background: var(--c-lv-soft); color: var(--c-lv-strong); }
+.xp-bar-add { flex-shrink: 0; }
+/* below 1024px the Add button is its icon (its words stay for screen readers), so the five tabs fit */
+@media (width < 64rem) { .xp-bar-add > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .xp-bar-add { padding-inline: 0.75rem; } }
+/* …but at 130–150 % text on a phone a tab beside it would be capped at a row too narrow for its word
+   (the word ran past its pill, and the open tab could never be shown whole): the tabs get the bar's
+   full width, and the Add button goes under them, full width, with its word back */
+@media (width < 30rem) {
+  :root:is([data-text="130"], [data-text="150"]) .xp-bar { flex-wrap: wrap; }
+  :root:is([data-text="130"], [data-text="150"]) .xp-tabs { flex-basis: 100%; }
+  :root:is([data-text="130"], [data-text="150"]) .xp-bar-add { flex: 1 1 100%; justify-content: center; }
+  :root:is([data-text="130"], [data-text="150"]) .xp-bar-add > span { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+}
+.xp-panel:focus-visible { outline-offset: -3px; }
+/* the facts of the hero's aside, where the aside is not shown */
+.xp-device { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.75rem; margin: 0; padding: 0.75rem 1.25rem; border-top: 1px solid var(--c-line);
+  background: var(--c-surface-2); font-size: 0.8125rem; color: var(--c-muted); }
+.xp-device .link { min-height: 2.75rem; display: inline-flex; align-items: center; }
+@media (width >= 64rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .xp-device { display: none; }
+}
+.xp-aside-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.625rem 1rem; margin: 0.25rem 0 0; }
+.xp-aside-facts dd { margin: 0.125rem 0 0; }
+.xp-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; margin: 0 0 1rem; padding: 0.625rem 0.875rem; border-radius: 0.75rem;
+  background: var(--c-grape-soft); color: var(--c-ink); font-size: 0.9rem; }
+.xp-banner > svg { color: var(--c-grape); }
+.xp-banner > span { flex: 1 1 12rem; }
+.xp-banner-sm { font-size: 0.8125rem; }
+.xp-empty { padding: 2rem 0.5rem 1rem; text-align: center; }
+.xp-empty .page-empty-icon { --pe: var(--c-gv); --pe-soft: var(--c-gv-soft); }
+.xp-empty-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.625rem; margin-top: 1.5rem; }
+
+/* ---------- 3. Entries ---------- */
+.xp-label { display: flex; align-items: center; gap: 0.375rem; margin-bottom: 0.375rem; font-size: 0.8125rem; font-weight: 600; color: var(--c-ink); }
+.xp-label > .step-num { display: inline-grid; margin-right: 0.25rem; }
+.xp-f { min-width: 0; }
+.xp-select { padding-right: 2.25rem; text-overflow: ellipsis; }
+.xp-select-sm { width: auto; min-height: 2.25rem; padding: 0.25rem 2rem 0.25rem 0.75rem; font-size: 0.875rem; }
+@media (width < 40rem), (pointer: coarse) { .xp-select-sm { min-height: 2.75rem; } }
+.xp-toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.75rem; }
+.xp-toolbar > .xp-f { flex: 1 1 12rem; }
+.xp-toolbar > .xp-f-q { flex: 2 1 100%; }
+@media (width >= 48rem) { .xp-toolbar > .xp-f-q { flex: 2 1 16rem; } }
+.xp-search { position: relative; display: block; }
+.xp-search > svg { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--c-faint); pointer-events: none; }
+.xp-search > .input { padding-left: 2.5rem; }
+.xp-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; margin-top: 1rem; }
+.xp-chips > .chip-row { flex: 1 1 auto; }
+/* phones and large text: the type chips get the whole row, "More filters" goes under them */
+@media (width < 48rem) { .xp-chips > .chip-row { flex-basis: 100%; } }
+:root:is([data-text="130"], [data-text="150"]) .xp-chips > .chip-row { flex-basis: 100%; }
+.xp-more-btn { flex-shrink: 0; }
+.xp-pill { display: inline-grid; place-items: center; min-width: 1.25rem; height: 1.25rem; padding: 0 0.3rem; border-radius: 9999px; background: var(--c-gv); color: #fff; font-size: 0.7rem; }
+[data-theme="dark"] .xp-pill { color: var(--c-paper); }
+.xp-more { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr)); gap: 0.75rem; margin-top: 0.75rem; padding: 1rem; border-radius: 0.875rem; background: var(--c-surface-2); }
+.xp-more-foot { display: flex; align-items: flex-end; }
+.xp-count { margin: 1rem 0 0; font-size: 0.875rem; color: var(--c-muted); font-variant-numeric: tabular-nums; }
+.xp-bulk { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; margin-top: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.875rem; background: var(--c-gv-soft); }
+.xp-bulk-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.xp-bulk-sel { flex: 1 1 11rem; width: auto; min-width: 0; max-width: min(20rem, 100%); min-height: 2.25rem; font-size: 0.875rem; }
+@media (width < 40rem), (pointer: coarse) { .xp-bulk-sel { min-height: 2.75rem; } }
+.xp-danger { color: var(--c-danger); }
+.btn-secondary.xp-danger:hover, .btn-ghost.xp-danger:hover { border-color: var(--c-danger); color: var(--c-danger); }
+
+/* tables: their own sideways-scrolling region (with edge shadows as the hint) */
+.xp-table-wrap { position: relative; overflow-x: auto; margin-top: 0.75rem; border: 1px solid var(--c-line); border-radius: 0.875rem; background:
+    linear-gradient(to right, var(--c-surface) 30%, transparent) left / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--c-surface) 30%, transparent) right / 2rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgb(0 0 0 / 0.16), transparent) left / 0.75rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgb(0 0 0 / 0.16), transparent) right / 0.75rem 100% no-repeat scroll,
+    var(--c-surface);
+  scrollbar-width: thin; }
+.xp-table-wrap:focus-visible { outline: 3px solid var(--c-gv); outline-offset: 2px; }
+.xp-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.xp-table th, .xp-table td { padding: 0.625rem 0.75rem; text-align: left; vertical-align: top; }
+.xp-table thead th { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em; color: var(--c-muted); white-space: nowrap; background: var(--c-surface-2); border-bottom: 1px solid var(--c-line); }
+.xp-table tbody tr + tr > * { border-top: 1px solid var(--c-line); }
+.xp-table tbody th { font-weight: 600; }
+.xp-table-sm th, .xp-table-sm td { padding: 0.375rem 0.5rem; font-size: 0.8125rem; }
+.xp-caption { caption-side: top; padding: 0.5rem 0.75rem; text-align: left; font-size: 0.8125rem; font-weight: 600; color: var(--c-ink); }
+.xp-num { text-align: right !important; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.xp-list tbody tr:hover > * { background: color-mix(in srgb, var(--c-surface-2) 55%, transparent); }
+.xp-list .xp-c-sel { width: 2.75rem; padding-inline: 0.25rem 0; }
+.xp-list .xp-c-date { width: 1%; white-space: nowrap; color: var(--c-muted); font-variant-numeric: tabular-nums; }
+.xp-list .xp-c-amt { width: 1%; text-align: right; white-space: nowrap; }
+.xp-list .xp-c-st, .xp-list .xp-c-act { width: 1%; white-space: nowrap; }
+.xp-list .xp-c-fun { color: var(--c-muted); min-width: 8.5rem; }
+.xp-list .xp-c-cat { min-width: 11.5rem; }
+.xp-list td { vertical-align: middle; }
+.xp-list .xp-c-desc { min-width: 12rem; }
+.xp-list :is(.xp-c-cat, .xp-c-fun) { display: none; }
+@media (width >= 64rem) {
+  .xp-list :is(.xp-c-cat, .xp-c-fun) { display: table-cell; }
+  .xp-list .xp-sub :is(.xp-sub-cat, .xp-sub-fun) { display: none; }
+}
+@media (width < 80rem) { .xp-list .xp-c-fun { display: none; } .xp-list .xp-sub .xp-sub-fun { display: inline; } }
+.xp-desc { display: block; font-weight: 600; color: var(--c-ink); overflow-wrap: anywhere; }
+.xp-sub { margin-top: 0.125rem; font-size: 0.8125rem; color: var(--c-muted); }
+.xp-sub.meta-row > * { white-space: normal; }
+.xp-flags { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.25rem; margin-left: 0.4rem; vertical-align: 0.05em; font-weight: 400; }
+.xp-flags:not(:has(> :not([style*="display: none"]))) { display: none; }
+.xp-rc { display: inline-flex; align-items: center; color: var(--c-muted); }
+.xp-cat { display: inline-flex; align-items: center; gap: 0.375rem; max-width: 100%; padding: 0.125rem 0.625rem 0.125rem 0.4rem; border-radius: 9999px;
+  background: var(--xt-soft, var(--c-surface-2)); color: var(--xt, var(--c-muted)); font-size: 0.75rem; font-weight: 600; line-height: 1.25rem; }
+.xp-cat > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.xp-cat-i { display: inline-grid; place-items: center; flex-shrink: 0; color: var(--xt, currentColor); }
+.xp-cat-i svg { width: 1rem; height: 1rem; }
+.xp-cat-lg { display: grid; place-items: center; flex-shrink: 0; width: 2.5rem; height: 2.5rem; padding: 0; border-radius: 0.75rem; }
+.xp-cat-lg svg { width: 1.25rem; height: 1.25rem; }
+.xp-status { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.125rem 0.55rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; line-height: 1.25rem; white-space: nowrap; }
+.xp-status svg { width: 0.875rem; height: 0.875rem; }
+.xp-status.is-none { background: var(--c-surface-2); color: var(--c-muted); }
+.xp-status.is-to_request { background: var(--c-lv-soft); color: var(--c-lv-strong); }
+.xp-status.is-submitted { background: var(--c-gv-soft); color: var(--c-gv-strong); }
+.xp-status.is-paid { background: var(--c-vine-soft); color: var(--c-vine); }
+.xp-status.is-denied { background: color-mix(in srgb, var(--c-danger) 10%, var(--c-surface)); color: var(--c-danger); }
+.xp-amt { display: inline-flex; align-items: center; gap: 0.25rem; font-weight: 700; color: var(--c-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.xp-amt.is-in { color: var(--c-vine); }
+.xp-amt.is-items { font-weight: 500; color: var(--c-muted); }
+.xp-acts { display: flex; justify-content: flex-end; gap: 0.125rem; }
+.xp-icon-btn { display: inline-grid; place-items: center; flex-shrink: 0; width: 2.25rem; height: 2.25rem; border-radius: 0.625rem; color: var(--c-muted); transition: background-color 0.15s, color 0.15s; }
+.xp-icon-btn:hover { background: var(--c-surface-2); color: var(--c-ink); }
+.xp-icon-btn.xp-danger:hover { color: var(--c-danger); }
+.xp-icon-btn[aria-disabled="true"] { opacity: 0.45; cursor: default; }
+@media (width < 40rem), (pointer: coarse) { .xp-icon-btn { width: 2.75rem; height: 2.75rem; } }
+.xp-check { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-width: 2.25rem; min-height: 2.25rem; cursor: pointer; }
+.xp-check input, .xp-check-line input { width: 1.125rem; height: 1.125rem; flex-shrink: 0; accent-color: var(--c-gv); cursor: pointer; }
+@media (width < 40rem), (pointer: coarse) { .xp-check { min-width: 2.75rem; min-height: 2.75rem; } }
+.xp-check-all { justify-content: flex-start; margin-top: 0.5rem; font-size: 0.875rem; color: var(--c-muted); }
+.xp-list tr.is-sel > *, .xp-card.is-sel { background: color-mix(in srgb, var(--c-gv-soft) 70%, transparent); }
+.xp-list tr.is-flash > *, .xp-card.is-flash { animation: xp-flash 2.4s ease-out; }
+@keyframes xp-flash { from { background: color-mix(in srgb, var(--c-vine) 28%, var(--c-surface)); } to { background: transparent; } }
+.xp-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; margin: 0.5rem 0 0; }
+.xp-card { padding: 0.875rem 1rem 0.5rem; border: 1px solid var(--c-line); border-radius: 0.875rem; background: var(--c-surface); }
+.xp-card-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.375rem 0.75rem; }
+.xp-card-date { font-size: 0.8125rem; color: var(--c-muted); font-variant-numeric: tabular-nums; }
+.xp-card > .xp-desc { margin-top: 0.5rem; }
+.xp-card-mid { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; margin-top: 0.5rem; }
+.xp-card-mid > .xp-amt { margin-left: auto; font-size: 1.0625rem; }
+.xp-card-acts { display: flex; align-items: center; gap: 0.125rem; margin-top: 0.5rem; padding-top: 0.25rem; border-top: 1px solid var(--c-line); }
+.xp-card-acts > .xp-check { margin-right: auto; }
+
+/* ---------- 4. Summary ---------- */
+.xp-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 1.5rem; margin-bottom: 1.25rem; }
+.xp-f-inline { flex: 0 1 15rem; }
+.xp-custom-dates { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
+.xp-custom-dates > .xp-f { flex: 1 1 10rem; }
+.xp-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr)); gap: 0.75rem; }
+:root:is([data-text="130"], [data-text="150"]) .xp-stats { grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); }
+.xp-stat { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 0.125rem; min-width: 0; padding: 0.875rem 1rem; border-radius: 0.875rem; background: var(--c-surface-2); }
+.xp-stat-i { color: var(--xt-fill); }
+.xp-stat-i svg { width: 1.25rem; height: 1.25rem; }
+.xp-stat-label { margin-top: 0.25rem; font-size: 0.8125rem; font-weight: 600; color: var(--c-muted); }
+.xp-stat-value { font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; line-height: 1.2; color: var(--c-ink); font-variant-numeric: tabular-nums; overflow-wrap: break-word; hyphens: none; }
+.xp-stat-note { font-size: 0.75rem; line-height: 1.35; color: var(--c-muted); }
+.xp-sum-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1.25rem; margin-top: 1.25rem; align-items: start; }
+.xp-box { min-width: 0; padding: 1rem 1.125rem 1.125rem; border-radius: 0.875rem; background: var(--c-surface-2); }
+@media (width >= 40rem) { .xp-box { padding: 1.25rem 1.5rem 1.375rem; } }
+.xp-box .xp-table-wrap { border-color: color-mix(in srgb, var(--c-line) 80%, transparent); }
+.xp-box-danger { box-shadow: inset 4px 0 0 var(--c-danger); }
+.xp-h4 { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; line-height: 1.3; color: var(--c-ink); text-wrap: balance; }
+.xp-none { margin-top: 0.5rem; font-size: 0.875rem; color: var(--c-muted); }
+.xp-bars { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; margin: 0.875rem 0 0; }
+/* label · value on one line when both fit, else the value on the next line (right-aligned); the bar
+   under both. A word breaks inside only when it is longer than the whole line. */
+.xp-bar-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 0.75rem; }
+.xp-bar-label { display: inline-flex; flex: 1 1 10rem; align-items: center; gap: 0.375rem; min-width: 0; font-size: 0.875rem; font-weight: 600; color: var(--c-ink); }
+.xp-bar-label > span:last-child { min-width: 0; overflow-wrap: break-word; }
+.xp-bar-val { margin-left: auto; font-size: 0.8125rem; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--c-ink); }
+.xp-bar-track { flex: 1 0 100%; display: block; height: 0.5rem; overflow: hidden; border-radius: 9999px; background: color-mix(in srgb, var(--c-line) 75%, transparent); }
+.xp-bar-fill { display: block; height: 100%; border-radius: inherit; background: var(--xt-fill, var(--c-gv)); }
+.xp-bar-track.is-over .xp-bar-fill { background: var(--c-danger); }
+.xp-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; margin-top: 0.375rem; font-size: 0.75rem; color: var(--c-muted); }
+.xp-key { display: inline-block; width: 0.75rem; height: 0.5rem; border-radius: 2px; }
+.xp-key + .xp-key, .xp-legend .xp-key:not(:first-child) { margin-left: 0.5rem; }
+.xp-key.is-spent, .xp-mbar.is-spent { background: var(--c-gv); }
+.xp-key.is-received, .xp-mbar.is-received { background: var(--c-vine); }
+.xp-months { display: grid; gap: 0.625rem; margin: 0.75rem 0 0; }
+.xp-month { display: grid; grid-template-columns: 5.25rem minmax(0, 1fr); align-items: center; gap: 0.125rem 0.75rem; }
+.xp-month-label { font-size: 0.8125rem; font-weight: 600; color: var(--c-ink); }
+.xp-month-bars { display: grid; gap: 2px; }
+.xp-mbar { display: block; height: 0.375rem; border-radius: 9999px; }
+.xp-month-val { grid-column: 2; font-size: 0.75rem; color: var(--c-muted); font-variant-numeric: tabular-nums; }
+.xp-bal { font-weight: 700; }
+.xp-bal.is-owed { color: var(--c-lv-strong); }
+.xp-bal.is-held { color: var(--c-gv-strong); }
+.xp-bal.is-even { color: var(--c-muted); font-weight: 500; }
+.xp-lines { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.875rem; margin: 0.75rem 0 0; }
+.xp-lines .link { min-height: 2.75rem; display: inline-flex; align-items: center; }
+@media (width >= 40rem) and (pointer: fine) { .xp-lines .link { min-height: 0; } }
+
+/* ---------- 5. Giveaways, Requests, the year summary ---------- */
+.xp-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.xp-head + .xp-actions { margin-top: -0.25rem; }
+.xp-fmt { display: inline-flex; padding: 0 0.5rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 600; line-height: 1.25rem; background: var(--c-surface-2); color: var(--c-muted); vertical-align: 0.1em; }
+.xp-fmt.is-gv { background: var(--c-gv-soft); color: var(--c-gv-strong); }
+.xp-fmt.is-lv { background: var(--c-lv-soft); color: var(--c-lv-strong); }
+.xp-neg { display: inline-flex; align-items: center; gap: 0.25rem; font-weight: 700; color: var(--c-danger); }
+.xp-rows { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+.xp-row-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 0.75rem; }
+.xp-row { padding: 0.75rem 1rem; border-radius: 0.75rem; background: var(--c-surface-2); }
+.xp-events { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: 0.75rem; margin: 0.75rem 0 0; }
+.xp-event { padding: 1rem 1.125rem; border-radius: 0.875rem; background: var(--c-surface-2); }
+
+.xp-rq { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+@media (width >= 64rem) { .xp-rq { grid-template-columns: minmax(0, 19rem) minmax(0, 1fr); gap: 2rem; } }
+@media (width >= 96rem) { .xp-rq { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); } }
+.xp-rq-setup { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.125rem; }
+.xp-rq-setup .xp-custom-dates { margin: 0; }
+.xp-checks { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
+.xp-check-line { display: inline-flex; align-items: center; gap: 0.625rem; min-height: 2.25rem; font-size: 0.9375rem; color: var(--c-ink); cursor: pointer; }
+@media (width < 40rem), (pointer: coarse) { .xp-check-line { min-height: 2.75rem; } }
+.xp-hint { margin-top: 0.375rem; font-size: 0.8125rem; line-height: 1.45; color: var(--c-muted); }
+.xp-hint:empty { display: none; }
+.xp-mark { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.75rem 1rem; margin-top: 1rem; padding: 0.875rem 1rem; border-radius: 0.875rem; background: var(--c-vine-soft); }
+.xp-mark > .xp-f { flex: 1 1 14rem; }
+.xp-mark .xp-hint { margin-bottom: -0.25rem; }
+/* the request / the year summary: a sheet of paper on screen, the page itself on paper */
+.xp-doc { margin-top: 1.25rem; padding: 1.25rem 1rem; border: 1px solid var(--c-line); border-radius: 0.5rem; background: var(--c-surface); color: var(--c-ink); }
+@media (width >= 40rem) { .xp-doc { padding: 1.75rem 2rem; } }
+.xp-doc-head { padding-bottom: 0.875rem; margin-bottom: 1rem; border-bottom: 2px solid var(--c-ink); }
+.xp-doc-site { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-muted); }
+.xp-doc-title { margin-top: 0.25rem; font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 1.2; color: var(--c-ink); }
+.xp-doc-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 0.625rem 1.5rem; margin: 0.875rem 0 0; }
+.xp-doc-meta dt { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--c-muted); }
+.xp-doc-meta dd { margin: 0.125rem 0 0; font-weight: 600; color: var(--c-ink); overflow-wrap: anywhere; }
+.xp-doc-sec { margin-top: 1.25rem; }
+.xp-doc-h { margin-bottom: 0.5rem; font-family: var(--font-sans); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-ink); }
+.xp-doc .xp-table-wrap { margin-top: 0; }
+.xp-doc-table { font-size: 0.875rem; }
+.xp-totals { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin: 0; }
+.xp-totals > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; padding: 0.3rem 0; border-bottom: 1px dotted var(--c-line); }
+.xp-totals dt { min-width: 0; color: var(--c-ink); }
+.xp-totals dd { margin: 0 0 0 auto; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; color: var(--c-ink); }
+.xp-totals > .is-total { margin-top: 0.25rem; padding-top: 0.5rem; border-top: 2px solid var(--c-ink); border-bottom: 0; font-size: 1.0625rem; font-weight: 700; }
+.xp-doc-sign { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: 1.5rem 2rem; margin-top: 2.25rem; }
+.xp-doc-sign p { margin: 0; font-size: 0.8125rem; color: var(--c-muted); }
+.xp-sign-line { display: block; height: 2rem; margin-bottom: 0.25rem; border-bottom: 1px solid var(--c-ink); }
+.xp-receipt { margin: 1rem 0 0; break-inside: avoid; }
+.xp-receipt img { display: block; max-width: 100%; max-height: 28rem; border: 1px solid var(--c-line); border-radius: 0.375rem; object-fit: contain; }
+.xp-receipt figcaption { margin-top: 0.375rem; font-size: 0.8125rem; color: var(--c-muted); }
+.xp-year-top { grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); column-gap: 2rem; }
+/* the request's lines on a phone (and at larger text below 1024px): Description | Amount, with the date,
+   the category and the receipt under the description — nothing hides off to the right. Paper always
+   gets every column (screen only). */
+.xp-doc-sub { display: none; margin-top: 0.125rem; font-size: 0.8125rem; color: var(--c-muted); }
+@media screen and (width < 40rem) {
+  .xp-doc-table .xp-wide-col { display: none; }
+  .xp-doc-table .xp-doc-sub { display: block; }
+}
+@media screen and (width < 64rem) {
+  :root:is([data-text="130"], [data-text="150"]) .xp-doc-table .xp-wide-col { display: none; }
+  :root:is([data-text="130"], [data-text="150"]) .xp-doc-table .xp-doc-sub { display: block; }
+}
+/* the year summary sits in a box of its own: on a phone and at larger text the sheet drops its own
+   frame there (a box in a box in a card leaves too little room for a line) */
+@media screen and (width < 40rem) { .xp-box > .xp-doc { margin-inline: 0; padding: 1rem 0 0; border: 0; background: none; } }
+@media screen { :root:is([data-text="130"], [data-text="150"]) .xp-box > .xp-doc { padding-inline: 0; border: 0; background: none; } }
+@media screen and (width < 40rem) {
+  :root:is([data-text="130"], [data-text="150"]) .xp-doc { padding-inline: 0; border: 0; background: none; }
+  :root:is([data-text="130"], [data-text="150"]) .xp-doc-title { font-size: 1.25rem; }
+  /* the views' headings: a long word ("Reimbursement") keeps to its line */
+  :root:is([data-text="130"], [data-text="150"]) .xp-pad .card-h { font-size: 1.0625rem; }
+}
+.xp-year-cols { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 2rem; }
+@media (width >= 48rem) { .xp-year-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- 6. Settings ---------- */
+.xp-set-nav { margin-bottom: 1.5rem; }
+.xp-set-intro { max-width: 48rem; margin-top: 0.375rem; font-size: 0.9375rem; line-height: 1.55; color: var(--c-muted); }
+.xp-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 0.75rem; margin: 1rem 0 0; }
+.xp-facts > div { padding: 0.75rem 1rem; border-radius: 0.75rem; background: var(--c-surface-2); }
+.xp-facts dt { font-size: 0.75rem; font-weight: 600; color: var(--c-muted); }
+.xp-facts dd { margin: 0.125rem 0 0; font-weight: 600; color: var(--c-ink); }
+.xp-set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: 1.25rem; margin-top: 1.25rem; align-items: start; }
+.xp-drop { position: relative; display: grid; justify-items: center; gap: 0.25rem; margin-top: 0.875rem; padding: 1.5rem 1rem; border: 2px dashed var(--c-line);
+  border-radius: 0.875rem; background: var(--c-surface); color: var(--c-muted); text-align: center; cursor: pointer; transition: border-color 0.15s, background-color 0.15s; }
+.xp-drop:hover, .xp-drop.is-over { border-color: var(--c-gv); background: var(--c-gv-soft); }
+.xp-drop:focus-within { outline: 3px solid var(--c-gv); outline-offset: 2px; }
+.xp-err { margin-top: 0.375rem; font-size: 0.8125rem; font-weight: 600; color: var(--c-danger); }
+.xp-imp { margin-top: 1rem; }
+.xp-imp-map, .xp-imp-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 0.75rem; margin-top: 0.875rem; }
+.xp-imp-counts { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin: 0.75rem 0 0; font-size: 0.875rem; color: var(--c-muted); }
+.xp-imp-counts strong { color: var(--c-ink); font-variant-numeric: tabular-nums; }
+.xp-form-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+@media (width >= 40rem) { .xp-form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.xp-span { grid-column: 1 / -1; }
+.xp-items { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.625rem; margin: 0.75rem 0 0; }
+.xp-item { padding: 0.75rem 1rem; border-radius: 0.875rem; background: var(--c-surface-2); }
+.xp-item.is-hidden .xp-item-name > span:first-child { text-decoration: line-through; text-decoration-color: var(--c-faint); }
+.xp-item-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
+.xp-item-row-edit { align-items: flex-end; }
+.xp-item-name { flex: 1 1 12rem; min-width: 0; font-weight: 600; color: var(--c-ink); overflow-wrap: anywhere; }
+.xp-item-meta { display: flex; flex-wrap: wrap; gap: 0 0.875rem; margin-top: 0.125rem; font-size: 0.75rem; font-weight: 500; color: var(--c-muted); }
+.xp-grow { flex: 1 1 14rem; min-width: 0; }
+.xp-f-rate { flex: 0 1 9rem; min-width: 0; }
+.xp-move { display: inline-flex; gap: 0.125rem; }
+.xp-item-ed { margin-top: 0.875rem; padding-top: 0.875rem; border-top: 1px solid var(--c-line); }
+.xp-item-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1.25rem; margin-top: 0.625rem; }
+/* "Move its entries to [select] [Move]": the label is visible (it says what the select is for) */
+.xp-merge { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.375rem 0.5rem; max-width: 100%; }
+.xp-merge-l { font-size: 0.875rem; font-weight: 600; color: var(--c-ink); }
+.xp-merge > select { flex: 1 1 8rem; width: auto; min-width: 0; max-width: 100%; }
+.xp-swatches { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.xp-swatch { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 9999px; cursor: pointer; }
+.xp-swatch-dot { display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 9999px; background: var(--xt-fill); box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12); }
+.xp-swatch:has(input:checked) .xp-swatch-dot { outline: 3px solid var(--c-ink); outline-offset: 2px; }
+.xp-swatch:has(input:checked) .xp-swatch-dot::after { content: "✓"; color: var(--xt-soft); font-size: 0.9rem; font-weight: 800; }
+.xp-swatch:has(input:focus-visible) { outline: 3px solid var(--c-gv); outline-offset: 1px; }
+.xp-icons-pick { display: grid; grid-template-columns: repeat(auto-fill, 2.75rem); gap: 0.375rem; }
+.xp-icon-opt { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 1px solid var(--c-line); border-radius: 0.625rem; background: var(--c-surface); color: var(--c-muted); cursor: pointer; }
+.xp-icon-opt:hover { border-color: var(--c-gv); color: var(--c-ink); }
+.xp-icon-opt:has(input:checked) { border-color: var(--c-gv); background: var(--c-gv); color: #fff; }
+[data-theme="dark"] .xp-icon-opt:has(input:checked) { color: var(--c-paper); }
+.xp-icon-opt:has(input:focus-visible) { outline: 3px solid var(--c-gv); outline-offset: 2px; }
+.xp-add-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.5rem 0.75rem; margin-top: 1.25rem; }
+.xp-add-row > .xp-label { flex-basis: 100%; margin-bottom: -0.125rem; }
+.xp-add-row > .input { flex: 1 1 12rem; width: auto; min-width: 0; }
+.xp-money { position: relative; display: block; }
+.xp-money > span:first-child { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--c-muted); pointer-events: none; }
+.xp-money > .input { padding-left: 1.75rem; font-variant-numeric: tabular-nums; }
+
+/* ---------- 7. The dialogs and the toast ----------
+   Add / edit: a modal <dialog>, centred (up to 44rem), full screen on phones and at 130 %+ text. Its
+   head and foot stay put; the body scrolls. */
+.xp-dialog { width: min(44rem, calc(100vw - 2rem)); max-width: none; max-height: min(92dvh, 60rem); margin: auto; padding: 0; border: 0;
+  border-radius: 1.25rem; background: var(--c-surface); color: var(--c-ink); box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.45); overflow: hidden; }
+.xp-dialog::backdrop, .xp-ask::backdrop { background: rgb(10 8 20 / 0.55); }
+.xp-dlg { display: flex; flex-direction: column; max-height: min(92dvh, 60rem); }
+@media (width < 40rem) {
+  .xp-dialog { width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; }
+  .xp-dlg { height: 100dvh; max-height: 100dvh; }
+}
+:root:is([data-text="130"], [data-text="150"]) .xp-dialog { width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg { height: 100dvh; max-height: 100dvh; }
+.xp-dlg-head { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 0.75rem 0.625rem 1.25rem; border-bottom: 1px solid var(--c-line);
+  padding-top: max(0.625rem, env(safe-area-inset-top)); }
+.xp-dlg-title { flex: 1 1 auto; min-width: 0; font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; line-height: 1.25; text-wrap: balance; }
+.xp-dlg-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 1.25rem; }
+@media (width >= 40rem) { .xp-dlg-body { padding: 1.5rem; } }
+.xp-dlg-foot { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.75rem 1.25rem; border-top: 1px solid var(--c-line); background: var(--c-surface-2);
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+/* phones and larger text: one short row, so the form keeps the height — Save, then "Save and add
+   another" as its + icon (its words stay for screen readers and as a tooltip); the header's close
+   button is the way out, so the footer's Cancel goes */
+@media (width < 40rem) {
+  .xp-dlg-foot { flex-wrap: nowrap; }
+  .xp-dlg-foot > .btn-primary { flex: 1 1 auto; }
+  .xp-dlg-foot > .btn-ghost { display: none; }
+  .xp-dlg-foot > .xp-save-next > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .xp-dlg-foot > .xp-save-next { flex: 0 0 auto; padding-inline: 0.875rem; }
+}
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-foot { flex-wrap: nowrap; padding-block: 0.5rem; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-foot > .btn-primary { flex: 1 1 auto; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-foot > .btn-ghost { display: none; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-foot > .xp-save-next > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-foot > .xp-save-next { flex: 0 0 auto; padding-inline: 0.875rem; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-head { padding-bottom: 0.375rem; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-title { font-size: 1.0625rem; }
+.xp-dlg-msg { margin: 0; padding: 0.5rem 1.25rem; font-size: 0.875rem; font-weight: 600; color: var(--c-vine); background: var(--c-vine-soft); }
+.xp-dlg-msg:empty { display: none; }
+.xp-lead { margin-bottom: 1rem; font-size: 0.9375rem; color: var(--c-muted); }
+.xp-types { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.625rem; }
+.xp-type { display: flex; align-items: center; gap: 1rem; width: 100%; min-height: 4.5rem; padding: 0.75rem 1rem; border: 1px solid var(--c-line); border-radius: 1rem;
+  background: var(--c-surface); text-align: left; cursor: pointer; transition: border-color 0.15s, background-color 0.15s; }
+.xp-type:hover { border-color: var(--c-gv); background: color-mix(in srgb, var(--c-gv-soft) 55%, var(--c-surface)); }
+.xp-type-i { display: grid; place-items: center; flex-shrink: 0; width: 3rem; height: 3rem; border-radius: 0.875rem; background: var(--xt-soft); color: var(--xt); }
+.xp-type-t { display: block; font-size: 1.0625rem; font-weight: 700; color: var(--c-ink); }
+.xp-type-h { display: block; margin-top: 0.125rem; font-size: 0.8125rem; line-height: 1.4; color: var(--c-muted); }
+.xp-errsum { margin-bottom: 1rem; padding: 0.875rem 1rem; border-radius: 0.75rem; border-left: 4px solid var(--c-danger);
+  background: color-mix(in srgb, var(--c-danger) 8%, var(--c-surface)); color: var(--c-danger); }
+.xp-errsum ul { display: grid; gap: 0.125rem; margin-top: 0.375rem; }
+.xp-errsum .link { color: var(--c-danger); text-align: left; min-height: 2.25rem; }
+@media (width < 40rem), (pointer: coarse) { .xp-errsum .link { min-height: 2.75rem; } }
+.xp-errsum:focus-visible { outline: 3px solid var(--c-danger); outline-offset: 2px; }
+.xp-req { color: var(--c-danger); }
+.xp-f-end { display: flex; align-items: flex-end; }
+.xp-odo > summary { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: 0.875rem; font-weight: 600; color: var(--c-gv); cursor: pointer; }
+.xp-preview { align-self: end; margin: 0; padding: 0.625rem 0.875rem; border-radius: 0.625rem; background: var(--c-gv-soft); font-weight: 600; color: var(--c-ink); font-variant-numeric: tabular-nums; }
+.xp-preview:empty { display: none; }
+.xp-seg { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr)); gap: 0.375rem; }
+.xp-seg-opt { position: relative; display: flex; }
+.xp-seg-opt > input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.xp-seg-opt > span { display: flex; flex: 1 1 auto; align-items: center; justify-content: center; gap: 0.3rem; min-height: 2.75rem; padding: 0.375rem 0.75rem;
+  border: 1px solid var(--c-line); border-radius: 0.75rem; background: var(--c-surface); font-size: 0.875rem; font-weight: 600; color: var(--c-muted); text-align: center; line-height: 1.25; }
+.xp-seg-opt > input:hover + span { border-color: var(--c-gv); color: var(--c-ink); }
+.xp-seg-opt > input:checked + span { border-color: var(--c-gv); background: var(--c-gv); color: #fff; }
+.xp-seg-opt > input:checked + span::before { content: "✓"; }
+[data-theme="dark"] .xp-seg-opt > input:checked + span { color: var(--c-paper); }
+.xp-seg-opt > input:focus-visible + span { outline: 3px solid var(--c-gv); outline-offset: 2px; }
+.xp-receipt-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.xp-receipt-row > select { flex: 1 1 12rem; width: auto; }
+.xp-photo-btn { cursor: pointer; }
+.xp-photo-btn:focus-within { outline: 3px solid var(--c-gv); outline-offset: 2px; }
+.xp-photo { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.75rem; margin-top: 0.75rem; }
+.xp-photo img { max-width: 100%; max-height: 10rem; border: 1px solid var(--c-line); border-radius: 0.5rem; }
+.xp-moredet { margin-top: 1.25rem; border-top: 1px solid var(--c-line); padding-top: 0.25rem; }
+.xp-moredet > summary { display: flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; font-weight: 600; color: var(--c-gv); cursor: pointer; list-style: none; }
+.xp-moredet > summary::-webkit-details-marker { display: none; }
+.xp-chev { transition: transform 0.2s; }
+.xp-moredet[open] .xp-chev { transform: rotate(180deg); }
+.xp-textarea { min-height: 5.5rem; padding-block: 0.625rem; resize: vertical; }
+.xp-mt-label { margin-top: 1.5rem; }
+.xp-ask { width: min(28rem, calc(100vw - 2rem)); padding: 1.25rem 1.25rem 1rem; border: 0; border-radius: 1rem; background: var(--c-surface); color: var(--c-ink);
+  box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.45); }
+.xp-ask > p { font-size: 1rem; line-height: 1.55; }
+.xp-ask-acts { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; margin-top: 1.25rem; }
+.xp-btn-danger { background: var(--c-danger); }
+.xp-btn-danger:hover { background: color-mix(in srgb, var(--c-danger) 82%, #000); }
+/* the toast: above the language banner and the player, below the header (z 45) */
+.xp-toast { position: fixed; left: 50%; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); z-index: 45; width: max-content; max-width: calc(100vw - 2rem);
+  transform: translateX(-50%); pointer-events: none; }
+:root.has-lang-banner .xp-toast { bottom: calc(var(--banner-h, 4.5rem) + var(--player-h, 0px) + 1rem + env(safe-area-inset-bottom, 0px)); }
+.xp-toast-in { display: flex; align-items: center; gap: 0.25rem 0.75rem; padding: 0.375rem 0.375rem 0.375rem 1rem; border-radius: 0.875rem; background: var(--c-ink); color: var(--c-paper);
+  box-shadow: 0 16px 40px -12px rgb(0 0 0 / 0.45); font-size: 0.9375rem; font-weight: 500; pointer-events: auto; }
+.xp-toast-btn { min-height: 2.75rem; padding: 0 0.75rem; border-radius: 0.625rem; font-weight: 700; color: inherit; text-decoration: underline; text-underline-offset: 0.2em; }
+.xp-toast-btn:hover, .xp-toast-x:hover { background: color-mix(in srgb, var(--c-paper) 16%, transparent); }
+.xp-toast-x { color: inherit; }
+.xp-toast :focus-visible { outline-color: var(--c-paper); }
+
+/* ---------- 8. Larger text / relaxed spacing ----------
+   At 130 %+ the list is cards (expenses.js); the request's two columns and the form's pairs stack. */
+:root:is([data-text="130"], [data-text="150"]) .xp-rq { grid-template-columns: minmax(0, 1fr); }
+@media (width < 80rem) { :root:is([data-text="130"], [data-text="150"]) .xp-form-grid { grid-template-columns: minmax(0, 1fr); } }
+:root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .xp-month { grid-template-columns: minmax(0, 1fr); }
+:root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .xp-month-val { grid-column: 1; }
+:root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .xp-aside-facts { grid-template-columns: minmax(0, 1fr); }
+:root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .xp-aside-facts > .col-span-2 { grid-column: auto; }
+:root[data-spacing="relaxed"] .xp-root :is(.xp-desc, .xp-cat, .xp-status, .xp-amt, .xp-tab) { letter-spacing: 0.06em !important; }
+
+/* ---------- 9. Print: only the request, or only the year summary ----------
+   expenses.js sets html[data-xp-print="request" | "year"] just before window.print() and removes it
+   afterwards. Everything that is not the sheet or one of its ancestors is hidden; the ancestors lose
+   their boxes; the sheet prints on US Letter in black on white. */
+@page xp-letter { size: letter; margin: 1.5cm 1.6cm; }
+@media print {
+  html[data-xp-print="request"] body :not(:has(#xp-request)):not(#xp-request, #xp-request *),
+  html[data-xp-print="year"] body :not(:has(#xp-year-doc)):not(#xp-year-doc, #xp-year-doc *) { display: none !important; }
+  html[data-xp-print="request"] body :has(#xp-request),
+  html[data-xp-print="year"] body :has(#xp-year-doc) {
+    margin: 0 !important; padding: 0 !important; border: 0 !important; box-shadow: none !important; background: none !important;
+    max-width: none !important; overflow: visible !important; position: static !important; display: block !important; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) { page: xp-letter; margin: 0 !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important;
+    background: #fff !important; color: #000 !important; font-size: 10.5pt; line-height: 1.4; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) :is(.xp-doc-title) { font-size: 18pt; color: #000; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) :is(.xp-doc-site, .xp-doc-meta dt, .xp-doc-sign p, .xp-receipt figcaption) { color: #333 !important; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) :is(.xp-doc-head, .xp-totals > .is-total) { border-color: #000 !important; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) .xp-table-wrap { overflow: visible !important; border: 0 !important; border-radius: 0 !important; background: none !important; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) .xp-table { font-size: 9.5pt; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) .xp-table :is(th, td) { padding: 4pt 6pt; border: 0.5pt solid #999 !important; background: none !important; color: #000; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) .xp-table thead th { background: #eee !important; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) :is(tr, .xp-totals > div, .xp-doc-sign) { break-inside: avoid; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) .xp-doc-h { break-after: avoid; }
+  html[data-xp-print] :is(#xp-request, #xp-year-doc) .xp-sign-line { border-color: #000 !important; }
+  html[data-xp-print] #xp-request .xp-receipts { break-before: page; }
+  html[data-xp-print] #xp-request .xp-receipt img { max-height: 11.5cm; border: 0.5pt solid #999; }
+  html[data-xp-print] .xp-toast { display: none !important; }
+}

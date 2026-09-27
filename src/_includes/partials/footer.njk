@@ -3,10 +3,10 @@
 <footer class="mt-16 border-t border-line bg-surface text-sm text-muted" style="padding-bottom: env(safe-area-inset-bottom)">
   {#- The footer mirrors the header: "Explore" (the top-level pages), one list per dropdown group
       (Get involved, Committee — nav.primary items with children) and "Stay updated" (the official
-      aagrapevine.org / aalavina.org sites, the nav.footer entries of group "stay", the RSS and
-      calendar feeds). Under the about blurb: About us · neta65.org · e-mail. The other site pages
-      of group "site" (Accessibility, Saved pages & app, QR codes & posters, Search, Update status)
-      sit on the right of the bottom bar with "Last updated"; the disclaimer takes its left side.
+      aagrapevine.org / aalavina.org sites, the nav.footer entries of group "stay" — Instagram and
+      QR Post —, the RSS and calendar feeds). Under the about blurb: About us · neta65.org ·
+      e-mail. The other site pages of group "site" (Accessibility, Saved pages & app, Search, Update
+      status) sit on the right of the bottom bar with "Last updated"; the disclaimer takes its left side.
       Phones: the groups sit two per row and every link is a 44px touch target; sm: four across;
       lg+: the about blurb joins the row (the wrapper becomes display:contents so the groups are
       items of the outer grid). -#}
@@ -66,12 +66,12 @@
       </div>
     </div>
   </div>
-  {#- Bottom bar. Right: the site pages (Accessibility, Saved pages & app, QR codes & posters, Search,
-      Update status) over "Last updated … · ©". Left: the disclaimer. The right block comes first in
-      the source (phones: links, time, then the disclaimer, as before); from 768px the grid puts it
+  {#- Bottom bar. Right: the site pages (Accessibility, Saved pages & app, Search, Update status) over
+      "Last updated … · ©". Left: the disclaimer. The right block comes first in the source (phones:
+      the four links as two rows of two, the time, then the disclaimer); from 768px the grid puts it
       in the right column: as wide as its one-row width, or half the bar when that is less
       (fit-content), right-aligned. There the links and the time are inline runs with balanced lines
-      (text-wrap: balance), so a wrapped row splits 2 + 3 instead of leaving "Update status" or the
+      (text-wrap: balance), so a wrapped row splits 2 + 2 instead of leaving "Update status" or the
       last word alone on a line. "Update status" is the link to /status/ (its dot is the live
       status), so the time next to it is text. -#}
   <div class="border-t border-line">

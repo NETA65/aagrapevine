@@ -63,7 +63,7 @@ RECURRING_KEY_MAX = 32        # "ev-recurring-<key>-<date>" anchors stay within 
 # raw source → labels on the /status/ page (order = order shown)
 SOURCES: list[tuple[str, str, str]] = [
     ("drive", "Google Drive (committee uploads)", "Google Drive (archivos del comité)"),
-    ("announcements", "Announcements (content/announcements)", "Anuncios (content/announcements)"),
+    ("announcements", "Bulletin (content/bulletin)", "Boletín (content/bulletin)"),
     ("manual_events", "Events (content/events)", "Eventos (content/events)"),
     ("articles", "Grapevine & La Viña articles", "Artículos de Grapevine y La Viña"),
     ("editorial", "Editorial themes (upcoming issues)", "Temas editoriales (próximos números)"),
@@ -1417,7 +1417,7 @@ def text_fields(it: dict) -> list[tuple[str, str, bool, str | None]]:
 
 
 def own_words(it: dict) -> dict[str, dict[str, str]]:
-    """The author's own translations of a hand-written item (content/events, content/announcements:
+    """The author's own translations of a hand-written item (content/events, content/bulletin:
     `title_es`, `summary_es` … → announcements.py → `extra.own_i18n`): {field: {lang: text}}. They are
     used instead of a machine translation, and only a language left out is machine-translated."""
     own = (it.get("extra") or {}).get("own_i18n")

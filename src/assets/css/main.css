@@ -1088,6 +1088,7 @@ main > :not(script, template, dialog, style):not(:has(~ :not(script, template, d
 @import "./areas/shop.css";
 @import "./areas/monthly.css";
 @import "./areas/report.css";
+@import "./areas/expenses.css";
 @import "./areas/orientation.css";
 @import "./areas/access.css";
 @import "./areas/pwa.css";

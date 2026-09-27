@@ -1,4 +1,4 @@
-/* Committee pages (Meetings, Events, Documents, Photos, Announcements).
+/* Committee pages (Meetings, Events, Documents, Photos, Bulletin).
    Loaded with `defer` after app.js and BEFORE Alpine, so the Alpine
    components below are registered in time (alpine:init).
    No build step, no dependencies besides window.GV (app.js), Alpine and —
@@ -736,7 +736,7 @@
   }
 
   /* ---------------- committee sub-nav: show "you are here" ----------------
-     On phones the pill bar (Meeting · Events · Documents · Photos · Announcements)
+     On phones the pill bar (Meeting · Events · Documents · Photos · Bulletin)
      scrolls sideways and the current tab can start off-screen. Center it inside the
      bar. Only the bar's own scrollLeft changes (scrollIntoView would also move the page). */
   function centerSubnav() {

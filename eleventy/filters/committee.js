@@ -1,13 +1,13 @@
-// Committee area filters — Meeting, Events (+ .ics feeds), Portfolio (Drive documents), Photos, Announcements.
+// Committee area filters — Meeting, Events (+ .ics feeds), Portfolio (Drive documents), Photos, Bulletin.
 //
 // Everything here is PURE data shaping: it turns the synced data files
-// (data/site/events.json, drive.json, announcements.json, weekly_open.json)
+// (data/site/events.json, drive.json, announcements.json — the Bulletin's posts —, weekly_open.json)
 // into ready-to-render objects so the Nunjucks templates stay simple.
 // The same functions also feed src/pages/events-ics.11ty.js, so the web
 // page and the calendar feed can never disagree.
 //
 // Dev helper: COMMITTEE_EMPTY=1 npx @11ty/eleventy …  renders every committee
-// page as if the Drive / events / announcements data were empty (launch state).
+// page as if the Drive / events / bulletin data were empty (launch state).
 
 import fs from "node:fs";
 import path from "node:path";
@@ -304,7 +304,7 @@ export function recurrenceText(rule, lang = "en") {
 }
 
 // The languages the committee wrote an item in BY HAND besides its original one: a monthly event from
-// config/site.yml `recurring_events:` (title_es …) or a content/events · content/announcements file with
+// config/site.yml `recurring_events:` (title_es …) or a content/events · content/bulletin file with
 // title_es / summary_es (build_data puts them in i18n and never lists them in `machine`). Text in such a
 // language is not a foreign-language original: no "EN" pill and no lang="en" on it.
 export function ownLangs(it) {
@@ -360,7 +360,7 @@ function localPath(url, lang) {
   return lang && lang !== "en" ? `/${lang}${u}` : u;
 }
 
-// Element ids already used on the committee pages / layout. An announcement or
+// Element ids already used on the committee pages / layout. A bulletin post or
 // manual event whose file name slug equals one of these gets a prefixed anchor
 // instead, so a deep link never jumps to the wrong place.
 const RESERVED_IDS = new Set([
@@ -368,7 +368,7 @@ const RESERVED_IDS = new Set([
   "ev-upcoming-title", "ev-next-title", "cm-preview", "cm-preview-title", "cm-lb-i18n", "item",
 ]);
 // Anchor for a hand-written item: its file-name slug (the data links to
-// "/events/#<slug>" and "/announcements/#<slug>"), else a stable fallback.
+// "/events/#<slug>" and "/bulletin/#<slug>"), else a stable fallback.
 function itemAnchor(slug, fallback) {
   const s = String(slug || "");
   if (/^[a-z0-9][a-z0-9-]{0,99}$/.test(s) && !RESERVED_IDS.has(s) && !/^(month-|docs-|cm-)/.test(s)) return s;
@@ -379,7 +379,7 @@ function itemAnchor(slug, fallback) {
 const WORKSHOP_RE = /(writing|recording) workshop|taller de (escritura|grabaci)/i;
 
 // The id of an event's card on /events/ ("ev-recurring-citywide-dallas-2026-10-10"), so other
-// pages (home, search, announcements) can link straight to it.
+// pages (home, search, the bulletin) can link straight to it.
 export function eventAnchor(it) {
   return itemAnchor(it?.extra?.slug, "ev-" + slugify(String(it?.id || "").replace(/^ev:/, "")));
 }
@@ -912,7 +912,7 @@ export function photoAlbums(items, lang = "en") {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Announcements                                                      */
+/*  Bulletin (/bulletin/ — the data and these names say "announcement") */
 /* ------------------------------------------------------------------ */
 export function announcementList(items) {
   const today = chicagoYmd(new Date());
@@ -924,7 +924,7 @@ export function announcementList(items) {
     })
     .map((it) => ({
       ...it,
-      // Data links point to "/announcements/#<slug>" (content/announcements/<slug>.md)
+      // Data links point to "/bulletin/#<slug>" (content/bulletin/<slug>.md)
       _anchor: itemAnchor(it.extra?.slug, "ann-" + slugify(String(it.id).replace(/^ann:/, ""), 70)),
       _pinned: !!it.extra?.pinned,
     }))
@@ -1659,14 +1659,14 @@ export default function (eleventyConfig, helpers) {
       })(),
       portfolio: documentTabs(EMPTY ? [] : db?.drive?.items, L).total,
       photos: photoAlbums(EMPTY ? [] : db?.drive?.items, L).reduce((s, a) => s + a.count, 0),
-      announcements: announcementList(EMPTY ? [] : db?.announcements?.items).length,
+      bulletin: announcementList(EMPTY ? [] : db?.announcements?.items).length,
     };
     const pages = [
       { key: "meetings", url: "/meetings/", icon: "calendar-clock" },
       { key: "events", url: "/events/", icon: "calendar-days" },
       { key: "portfolio", url: "/portfolio/", icon: "folder-open" },
       { key: "photos", url: "/photos/", icon: "images" },
-      { key: "announcements", url: "/announcements/", icon: "megaphone" },
+      { key: "bulletin", url: "/bulletin/", icon: "megaphone" },
     ];
     const links = pages.map((p) => {
       const on = p.key === current;

@@ -554,7 +554,7 @@ function snippet(s, n = 170) {
   return s.slice(0, n).replace(/\s+\S*$/, "").replace(/[,;:.\-–—\s]+$/, "") + "…";
 }
 
-// Anchors on the committee pages (#album-…, announcement / event cards) are made by
+// Anchors on the committee pages (#album-…, bulletin post / event cards) are made by
 // eleventy/filters/committee.js. Reuse its helpers so search results land on the
 // exact card; if that file ever changes or goes away, fall back to the same rules.
 let committee = {};
@@ -633,7 +633,7 @@ export function spotlightTile(view, db) {
 
 // Language-neutral internal path → path in the page language ("/events/#x" → "/es/events/#x").
 const lurl = (u, lang) => (!u || /^(https?:|mailto:|tel:|#)/.test(u) ? u : (lang && lang !== "en" ? `/${lang}` : "") + (u.startsWith("/") ? u : "/" + u));
-// Data items link to our own pages with language-neutral paths ("/announcements/#slug").
+// Data items link to our own pages with language-neutral paths ("/bulletin/#slug").
 const isInternal = (u) => typeof u === "string" && /^\/(?!\/)/.test(u);
 
 export function searchIndex(db, nav, lang, helpers, site) {
@@ -902,7 +902,7 @@ export function searchIndex(db, nav, lang, helpers, site) {
     }
   });
 
-  /* ---- Committee: announcements (expired ones are hidden on the page, so skip them) ---- */
+  /* ---- Committee: the bulletin's posts (expired ones are hidden on the page, so skip them) ---- */
   safely("announcements", () => {
     const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Chicago" }).format(new Date()); // YYYY-MM-DD in Central time
     const list = typeof committee.announcementList === "function"
@@ -910,9 +910,10 @@ export function searchIndex(db, nav, lang, helpers, site) {
       : (db.announcements?.items || []).filter((it) => ok(it) && !(it.extra?.expires && String(it.extra.expires).slice(0, 10) < today));
     for (const it of list) {
       if (!ok(it)) continue;
-      // The data gives "/announcements/#<slug>" (the card's id); older records: the committee page's own anchor.
+      // The data gives "/bulletin/#<slug>" (the card's id; db.js turns an older "/announcements/#…" into
+      // it); older records: the bulletin page's own anchor.
       const u = isInternal(it.url) && it.url.includes("#") ? it.url
-        : "/announcements/#" + (it._anchor || "ann-" + slug(String(it.id).replace(/^ann:/, ""), 70));
+        : "/bulletin/#" + (it._anchor || "ann-" + slug(String(it.id).replace(/^ann:/, ""), 70));
       push({
         id: it.id, k: "announcement", t: P(it, "title"), o: it.title,
         s: snippet(P(it, "summary") || P(it, "body_md")),
