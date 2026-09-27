@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-26T14:34:32Z",
+ "updated": "2026-09-27T15:12:26Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16875,
-   "posts": 3901,
+   "followers": 16878,
+   "posts": 3903,
    "owner_id": "48108439509",
-   "checked": "2026-09-26T14:34:29Z",
+   "checked": "2026-09-27T15:12:22Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,186 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2419,
-   "posts": 2941,
+   "followers": 2420,
+   "posts": 2943,
    "owner_id": "48275839129",
-   "checked": "2026-09-26T14:34:32Z",
+   "checked": "2026-09-27T15:12:25Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:Ddy4Z34lx33",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Ddy4Z34lx33/",
+   "title": "Experience, Strength, and Hope",
+   "summary": "Experience, Strength, and Hope AA Grapevine is pleased to announce our Fall Book Sale—20% off 20 best-selling books! Use coupon code 20BOOKS at checkout to apply your discount. Since 1944, AA Grapevine, has been the publisher of the International Journal of Alcoholics Anonymous. Its primary purpose is to carry the AA message to everyone interested in alcoholism through its publications, which…",
+   "lang": "en",
+   "date": "2026-09-27T15:00:16Z",
+   "first_seen": "2026-09-27T15:12:26Z",
+   "image": "/assets/cache/ig/Ddy4Z34lx33.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Ddy4Z34lx33",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Ddy4Z34lx33.webp",
+    "embed_url": "https://www.instagram.com/p/Ddy4Z34lx33/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Ddy4Z34lx33/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Experience, Strength, and Hope",
+     "es": "Experiencia, fortaleza y esperanza"
+    },
+    "summary": {
+     "en": "Experience, Strength, and Hope AA Grapevine is pleased to announce our Fall Book Sale—20% off 20 best-selling books! Use coupon code 20BOOKS at checkout to apply your discount. Since 1944, AA Grapevine, has been the publisher of the International Journal of Alcoholics Anonymous. Its primary purpose is to carry the AA message to everyone interested in alcoholism through its publications, which…",
+     "es": "¡Experiencia, fortaleza y esperanza AA Grapevine se complace en anunciar nuestra venta de libros de otoño—20% de descuento de 20 libros más vendidos! Utilice el código de cupón 20BOOKS en el checkout para aplicar su descuento. Desde 1944, AA Grapevine, ha sido el editor de la revista internacional de Alcohólicos Anónimos. Su objetivo principal es llevar el mensaje AA a todos los interesados en el alcoholismo a través de sus publicaciones, que …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Ddy4Z87jW7P",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Ddy4Z87jW7P/",
+   "title": "¡Sé el primero en leerlo!",
+   "summary": "¡Sé el primero en leerlo! Despertares espirituales reúne historias de recuperación escritas por miembros de AA de la comunidad hispana. A través de experiencias de distintas épocas, lugares y circunstancias, estos relatos muestran cómo el programa de Alcohólicos Anónimos ha ayudado a miles de personas a encontrar esperanza, propósito y una nueva manera de vivir. Tomadas de las páginas de La Viña…",
+   "lang": "es",
+   "date": "2026-09-27T15:00:15Z",
+   "first_seen": "2026-09-27T15:12:26Z",
+   "image": "/assets/cache/ig/Ddy4Z87jW7P.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Ddy4Z87jW7P",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Ddy4Z87jW7P.webp",
+    "embed_url": "https://www.instagram.com/p/Ddy4Z87jW7P/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Ddy4Z87jW7P/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Be the first to read it!",
+     "es": "¡Sé el primero en leerlo!"
+    },
+    "summary": {
+     "en": "Be the first to read it! Spiritual Awakenings gathers recovery stories written by members of AA of the Hispanic community. Through experiences of different times, places and circumstances, these stories show how the Alcoholics Anonymous program has helped thousands of people find hope, purpose and a new way of living. La Viña … pages taken",
+     "es": "¡Sé el primero en leerlo! Despertares espirituales reúne historias de recuperación escritas por miembros de AA de la comunidad hispana. A través de experiencias de distintas épocas, lugares y circunstancias, estos relatos muestran cómo el programa de Alcohólicos Anónimos ha ayudado a miles de personas a encontrar esperanza, propósito y una nueva manera de vivir. Tomadas de las páginas de La Viña…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DdygX2jF-xX",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DdygX2jF-xX/",
+   "title": "“Voy temprano, me comprometo y extiendo la mano a quien entre por la puerta. Es…",
+   "summary": "“Voy temprano, me comprometo y extiendo la mano a quien entre por la puerta. Es increíble ver con qué facilidad se puede hacer la diferencia para los demás y para uno mismo con tan sólo aceptar la responsabilidad de transmitir el mensaje”. \"“La fuente de la juventud” NELSON, NUEVO HAMPSHIRE, AGOSTO DE 1998 De Young & Sober\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-09-27T11:30:16Z",
+   "first_seen": "2026-09-27T15:12:26Z",
+   "image": "/assets/cache/ig/DdygX2jF-xX.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DdygX2jF-xX",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DdygX2jF-xX.webp",
+    "embed_url": "https://www.instagram.com/p/DdygX2jF-xX/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DdygX2jF-xX/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I’m going early, I’m committing myself and handing out to whoever comes through the door. It's …",
+     "es": "“Voy temprano, me comprometo y extiendo la mano a quien entre por la puerta. Es…"
+    },
+    "summary": {
+     "en": "“I’m going early, I’m committing myself and handing out who I’m going through the door. It is amazing to see how easily the difference can be made for others and for oneself with just accepting the responsibility of transmitting the message.” \"The Fountain of Youth\" nelson, new hampshire, August 1998 De Young and Sovereign Daily Quote in www.aalavina.org",
+     "es": "“Voy temprano, me comprometo y extiendo la mano a quien entre por la puerta. Es increíble ver con qué facilidad se puede hacer la diferencia para los demás y para uno mismo con tan sólo aceptar la responsabilidad de transmitir el mensaje”. \"“La fuente de la juventud” NELSON, NUEVO HAMPSHIRE, AGOSTO DE 1998 De Young & Sober\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DdygXv4F2OS",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DdygXv4F2OS/",
+   "title": "“I have discovered a new way to learn – by shutting my mouth and listening ... It’s not…",
+   "summary": "“I have discovered a new way to learn – by shutting my mouth and listening ... It’s not so much what I’m doing as what I’m not doing. I’m not talking. So I’m open; I’m teachable.” Houston, Texas, June 1976, From: “Growth”, Emotional Sobriety: The Next Frontier Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-09-27T11:30:13Z",
+   "first_seen": "2026-09-27T15:12:26Z",
+   "image": "/assets/cache/ig/DdygXv4F2OS.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DdygXv4F2OS",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DdygXv4F2OS.webp",
+    "embed_url": "https://www.instagram.com/p/DdygXv4F2OS/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DdygXv4F2OS/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I have discovered a new way to learn – by shutting my mouth and listening ... It’s not…",
+     "es": "“He descubierto una nueva manera de aprender – cerrando mi boca y escuchando... No es …"
+    },
+    "summary": {
+     "en": "“I have discovered a new way to learn – by shutting my mouth and listening ... It’s not so much what I’m doing as what I’m not doing. I’m not talking. So I’m open; I’m teachable.” Houston, Texas, June 1976, From: “Growth”, Emotional Sobriety: The Next Frontier Daily Quote at www.aagrapevine.org",
+     "es": "“He descubierto una nueva manera de aprender – cerrando mi boca y escuchando ... No es tanto lo que estoy haciendo como lo que no estoy haciendo. No estoy hablando. Así que estoy abierto; soy enseñable.” Houston, Texas, junio de 1976, de: “Crecimiento”, Sobriedad emocional: la próxima frontera Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:Ddv7k9OF7rC",
    "source": "instagram",

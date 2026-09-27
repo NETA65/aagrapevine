@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-27T05:34:48Z",
+ "updated": "2026-09-27T15:15:35Z",
  "fixture": false,
  "botm": [
   {
@@ -1041,7 +1041,7 @@
    "type": "planner",
    "title": "Agenda de Bolsillo",
    "url": "https://www.aalavina.org/tienda/agenda-de-bolsillo",
-   "image": null,
+   "image": "/assets/cache/shop/bbd9ebbeaac136fc.webp",
    "price": 6.0,
    "currency": "USD",
    "sku": "MS09LV",
@@ -1064,7 +1064,7 @@
    "type": "calendar",
    "title": "Calendario Anual de Pared",
    "url": "https://www.aalavina.org/tienda/calendario-anual-de-pared",
-   "image": null,
+   "image": "/assets/cache/shop/b3647bebf38db744.webp",
    "price": 10.5,
    "currency": "USD",
    "sku": "MS08LV",

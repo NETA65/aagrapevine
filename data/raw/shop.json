@@ -1,7 +1,7 @@
 {
  "source": "shop",
- "updated": "2026-09-27T05:34:48Z",
- "attempted": "2026-09-27T05:34:48Z",
+ "updated": "2026-09-27T15:15:35Z",
+ "attempted": "2026-09-27T15:15:35Z",
  "ok": true,
  "error": null,
  "stats": {
@@ -9,9 +9,9 @@
   "plans": 52,
   "specialty": 6,
   "types_refreshed": false,
-  "specialty_refreshed": true,
-  "requests": 20,
-  "images_downloaded": 4
+  "specialty_refreshed": false,
+  "requests": 14,
+  "images_downloaded": 2
  },
  "items": [
   {
@@ -162,7 +162,7 @@
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
    "last_seen": "2026-09-27T05:34:48Z",
-   "image": null,
+   "image": "/assets/cache/shop/bbd9ebbeaac136fc.webp",
    "tags": [],
    "category": "specialty",
    "status": "ok",
@@ -196,7 +196,7 @@
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
    "last_seen": "2026-09-27T05:34:48Z",
-   "image": null,
+   "image": "/assets/cache/shop/b3647bebf38db744.webp",
    "tags": [],
    "category": "specialty",
    "status": "ok",
