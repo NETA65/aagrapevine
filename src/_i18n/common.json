@@ -164,6 +164,14 @@
     "en": "What's new each month — by e-mail or WhatsApp",
     "es": "Las novedades de cada mes, por correo o WhatsApp"
   },
+  "nav.expenses": {
+    "en": "Expense tracker",
+    "es": "Registro de gastos"
+  },
+  "nav.expenses_desc": {
+    "en": "Miles, purchases, gifts and reimbursements — kept on your device",
+    "es": "Millas, compras, regalos y reembolsos, guardados en tu dispositivo"
+  },
   "nav.share": {
     "en": "QR codes & posters",
     "es": "Códigos QR y carteles"

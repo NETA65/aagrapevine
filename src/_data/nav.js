@@ -24,6 +24,9 @@ const nav = {
         // Monthly digest: last month's news and this month's dates, to paste into a WhatsApp group or
         // send by e-mail (it was in the footer's "Stay updated" column).
         { key: "nav.digest", url: "/digest/", icon: "newspaper", page: "digest", descKey: "nav.digest_desc" },
+        // Expense tracker: a service member's miles, purchases, gift subscriptions, giveaways and
+        // reimbursements, kept only in the browser (src/pages/expenses.njk, CSV import / export).
+        { key: "nav.expenses", url: "/expenses/", icon: "receipt", page: "expenses", descKey: "nav.expenses_desc" },
         { key: "nav.contribute", url: "/contribute/", icon: "pen-line", page: "contribute", descKey: "nav.contribute_desc" },
         { key: "nav.published", url: "/published/", icon: "award", page: "published", descKey: "nav.published_desc" },
       ],
