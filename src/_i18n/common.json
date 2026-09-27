@@ -324,6 +324,10 @@
     "en": "Table",
     "es": "Tabla"
   },
+  "common.md_table_of": {
+    "en": "Table {n} · {name}",
+    "es": "Tabla {n} · {name}"
+  },
   "common.copied": {
     "en": "Copied!",
     "es": "¡Copiado!"

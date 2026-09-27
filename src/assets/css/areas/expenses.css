@@ -43,7 +43,10 @@
 .xp-tone-slate { --xt: var(--xp-slate); --xt-soft: var(--xp-slate-soft); --xt-fill: var(--xp-slate); }
 
 /* ---------- 2. The app card ---------- */
-/* positioned: a visually hidden label inside a table must not escape its scrolling box (its containing block) */
+/* positioned: a visually hidden label inside a table must not escape its scrolling box (its containing block).
+   The card clips what spills, so nothing inside may be wider than it: every one-column grid below says
+   minmax(0, 1fr) — an implicit "auto" column grows to its widest child (a select sized by its longest
+   option, a long word at 150 % text) and that would be cut off at the card's edge, controls included. */
 .xp-app { position: relative; overflow: clip; }
 .xp-pad { padding: 1.25rem 1rem; }
 @media (width >= 40rem) { .xp-pad { padding: 1.5rem; } }
@@ -59,10 +62,13 @@
 .xp-tab:hover { background: var(--c-surface); color: var(--c-ink); border-color: var(--c-line); }
 .xp-tab[aria-selected="true"] { background: var(--c-gv); color: #fff; border-color: var(--c-gv); }
 [data-theme="dark"] .xp-tab[aria-selected="true"] { color: var(--c-paper); }
+/* a tablet (768–1023px): the five tabs fit on one line without their icons (their words stay) */
+@media (48rem <= width < 64rem) { .xp-tab { padding-inline: 0.75rem; } .xp-tab > svg { display: none; } }
 .xp-tab-n { display: inline-grid; place-items: center; min-width: 1.35rem; height: 1.35rem; padding: 0 0.3rem; border-radius: 9999px;
   font-size: 0.72rem; font-variant-numeric: tabular-nums; background: var(--c-lv-soft); color: var(--c-lv-strong); }
 .xp-bar-add { flex-shrink: 0; }
-@media (width < 30rem) { .xp-bar-add > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .xp-bar-add { padding-inline: 0.75rem; } }
+/* below 1024px the Add button is its icon (its words stay for screen readers), so the five tabs fit */
+@media (width < 64rem) { .xp-bar-add > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .xp-bar-add { padding-inline: 0.75rem; } }
 .xp-panel:focus-visible { outline-offset: -3px; }
 /* the facts of the hero's aside, where the aside is not shown */
 .xp-device { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.75rem; margin: 0; padding: 0.75rem 1.25rem; border-top: 1px solid var(--c-line);
@@ -90,7 +96,7 @@
 .xp-select-sm { width: auto; min-height: 2.25rem; padding: 0.25rem 2rem 0.25rem 0.75rem; font-size: 0.875rem; }
 @media (width < 40rem), (pointer: coarse) { .xp-select-sm { min-height: 2.75rem; } }
 .xp-toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.75rem; }
-.xp-toolbar > .xp-f { flex: 1 1 9rem; }
+.xp-toolbar > .xp-f { flex: 1 1 12rem; }
 .xp-toolbar > .xp-f-q { flex: 2 1 100%; }
 @media (width >= 48rem) { .xp-toolbar > .xp-f-q { flex: 2 1 16rem; } }
 .xp-search { position: relative; display: block; }
@@ -107,9 +113,9 @@
 .xp-more { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr)); gap: 0.75rem; margin-top: 0.75rem; padding: 1rem; border-radius: 0.875rem; background: var(--c-surface-2); }
 .xp-more-foot { display: flex; align-items: flex-end; }
 .xp-count { margin: 1rem 0 0; font-size: 0.875rem; color: var(--c-muted); font-variant-numeric: tabular-nums; }
-.xp-bulk { display: grid; gap: 0.5rem; margin-top: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.875rem; background: var(--c-gv-soft); }
+.xp-bulk { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; margin-top: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.875rem; background: var(--c-gv-soft); }
 .xp-bulk-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
-.xp-bulk-sel { flex: 1 1 11rem; width: auto; max-width: 20rem; min-height: 2.25rem; font-size: 0.875rem; }
+.xp-bulk-sel { flex: 1 1 11rem; width: auto; min-width: 0; max-width: min(20rem, 100%); min-height: 2.25rem; font-size: 0.875rem; }
 @media (width < 40rem), (pointer: coarse) { .xp-bulk-sel { min-height: 2.75rem; } }
 .xp-danger { color: var(--c-danger); }
 .btn-secondary.xp-danger:hover, .btn-ghost.xp-danger:hover { border-color: var(--c-danger); color: var(--c-danger); }
@@ -182,7 +188,7 @@
 .xp-list tr.is-sel > *, .xp-card.is-sel { background: color-mix(in srgb, var(--c-gv-soft) 70%, transparent); }
 .xp-list tr.is-flash > *, .xp-card.is-flash { animation: xp-flash 2.4s ease-out; }
 @keyframes xp-flash { from { background: color-mix(in srgb, var(--c-vine) 28%, var(--c-surface)); } to { background: transparent; } }
-.xp-cards { display: grid; gap: 0.75rem; margin: 0.5rem 0 0; }
+.xp-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; margin: 0.5rem 0 0; }
 .xp-card { padding: 0.875rem 1rem 0.5rem; border: 1px solid var(--c-line); border-radius: 0.875rem; background: var(--c-surface); }
 .xp-card-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.375rem 0.75rem; }
 .xp-card-date { font-size: 0.8125rem; color: var(--c-muted); font-variant-numeric: tabular-nums; }
@@ -198,11 +204,12 @@
 .xp-custom-dates { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
 .xp-custom-dates > .xp-f { flex: 1 1 10rem; }
 .xp-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr)); gap: 0.75rem; }
-.xp-stat { display: grid; align-content: start; gap: 0.125rem; min-width: 0; padding: 0.875rem 1rem; border-radius: 0.875rem; background: var(--c-surface-2); }
+:root:is([data-text="130"], [data-text="150"]) .xp-stats { grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); }
+.xp-stat { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 0.125rem; min-width: 0; padding: 0.875rem 1rem; border-radius: 0.875rem; background: var(--c-surface-2); }
 .xp-stat-i { color: var(--xt-fill); }
 .xp-stat-i svg { width: 1.25rem; height: 1.25rem; }
 .xp-stat-label { margin-top: 0.25rem; font-size: 0.8125rem; font-weight: 600; color: var(--c-muted); }
-.xp-stat-value { font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; line-height: 1.2; color: var(--c-ink); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.xp-stat-value { font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; line-height: 1.2; color: var(--c-ink); font-variant-numeric: tabular-nums; overflow-wrap: break-word; hyphens: none; }
 .xp-stat-note { font-size: 0.75rem; line-height: 1.35; color: var(--c-muted); }
 .xp-sum-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1.25rem; margin-top: 1.25rem; align-items: start; }
 .xp-box { min-width: 0; padding: 1rem 1.125rem 1.125rem; border-radius: 0.875rem; background: var(--c-surface-2); }
@@ -211,12 +218,14 @@
 .xp-box-danger { box-shadow: inset 4px 0 0 var(--c-danger); }
 .xp-h4 { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; line-height: 1.3; color: var(--c-ink); text-wrap: balance; }
 .xp-none { margin-top: 0.5rem; font-size: 0.875rem; color: var(--c-muted); }
-.xp-bars { display: grid; gap: 0.75rem; margin: 0.875rem 0 0; }
-.xp-bar-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0.25rem 0.75rem; }
-.xp-bar-label { display: inline-flex; align-items: center; gap: 0.375rem; min-width: 0; font-size: 0.875rem; font-weight: 600; color: var(--c-ink); }
-.xp-bar-label > span:last-child { min-width: 0; overflow-wrap: anywhere; }
-.xp-bar-val { font-size: 0.8125rem; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--c-ink); }
-.xp-bar-track { grid-column: 1 / -1; display: block; height: 0.5rem; overflow: hidden; border-radius: 9999px; background: color-mix(in srgb, var(--c-line) 75%, transparent); }
+.xp-bars { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; margin: 0.875rem 0 0; }
+/* label · value on one line when both fit, else the value on the next line (right-aligned); the bar
+   under both. A word breaks inside only when it is longer than the whole line. */
+.xp-bar-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 0.75rem; }
+.xp-bar-label { display: inline-flex; flex: 1 1 10rem; align-items: center; gap: 0.375rem; min-width: 0; font-size: 0.875rem; font-weight: 600; color: var(--c-ink); }
+.xp-bar-label > span:last-child { min-width: 0; overflow-wrap: break-word; }
+.xp-bar-val { margin-left: auto; font-size: 0.8125rem; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--c-ink); }
+.xp-bar-track { flex: 1 0 100%; display: block; height: 0.5rem; overflow: hidden; border-radius: 9999px; background: color-mix(in srgb, var(--c-line) 75%, transparent); }
 .xp-bar-fill { display: block; height: 100%; border-radius: inherit; background: var(--xt-fill, var(--c-gv)); }
 .xp-bar-track.is-over .xp-bar-fill { background: var(--c-danger); }
 .xp-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; margin-top: 0.375rem; font-size: 0.75rem; color: var(--c-muted); }
@@ -230,11 +239,11 @@
 .xp-month-bars { display: grid; gap: 2px; }
 .xp-mbar { display: block; height: 0.375rem; border-radius: 9999px; }
 .xp-month-val { grid-column: 2; font-size: 0.75rem; color: var(--c-muted); font-variant-numeric: tabular-nums; }
-.xp-bal { font-weight: 700; white-space: nowrap; }
+.xp-bal { font-weight: 700; }
 .xp-bal.is-owed { color: var(--c-lv-strong); }
 .xp-bal.is-held { color: var(--c-gv-strong); }
 .xp-bal.is-even { color: var(--c-muted); font-weight: 500; }
-.xp-lines { display: grid; gap: 0.875rem; margin: 0.75rem 0 0; }
+.xp-lines { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.875rem; margin: 0.75rem 0 0; }
 .xp-lines .link { min-height: 2.75rem; display: inline-flex; align-items: center; }
 @media (width >= 40rem) and (pointer: fine) { .xp-lines .link { min-height: 0; } }
 
@@ -245,7 +254,7 @@
 .xp-fmt.is-gv { background: var(--c-gv-soft); color: var(--c-gv-strong); }
 .xp-fmt.is-lv { background: var(--c-lv-soft); color: var(--c-lv-strong); }
 .xp-neg { display: inline-flex; align-items: center; gap: 0.25rem; font-weight: 700; color: var(--c-danger); }
-.xp-rows { display: grid; gap: 0.5rem; }
+.xp-rows { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
 .xp-row-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 0.75rem; }
 .xp-row { padding: 0.75rem 1rem; border-radius: 0.75rem; background: var(--c-surface-2); }
 .xp-events { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: 0.75rem; margin: 0.75rem 0 0; }
@@ -254,7 +263,7 @@
 .xp-rq { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-items: start; }
 @media (width >= 64rem) { .xp-rq { grid-template-columns: minmax(0, 19rem) minmax(0, 1fr); gap: 2rem; } }
 @media (width >= 96rem) { .xp-rq { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); } }
-.xp-rq-setup { display: grid; gap: 1.125rem; }
+.xp-rq-setup { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.125rem; }
 .xp-rq-setup .xp-custom-dates { margin: 0; }
 .xp-checks { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
 .xp-check-line { display: inline-flex; align-items: center; gap: 0.625rem; min-height: 2.25rem; font-size: 0.9375rem; color: var(--c-ink); cursor: pointer; }
@@ -277,10 +286,10 @@
 .xp-doc-h { margin-bottom: 0.5rem; font-family: var(--font-sans); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-ink); }
 .xp-doc .xp-table-wrap { margin-top: 0; }
 .xp-doc-table { font-size: 0.875rem; }
-.xp-totals { display: grid; gap: 0; margin: 0; }
+.xp-totals { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin: 0; }
 .xp-totals > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; padding: 0.3rem 0; border-bottom: 1px dotted var(--c-line); }
 .xp-totals dt { min-width: 0; color: var(--c-ink); }
-.xp-totals dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--c-ink); }
+.xp-totals dd { margin: 0 0 0 auto; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; color: var(--c-ink); }
 .xp-totals > .is-total { margin-top: 0.25rem; padding-top: 0.5rem; border-top: 2px solid var(--c-ink); border-bottom: 0; font-size: 1.0625rem; font-weight: 700; }
 .xp-doc-sign { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: 1.5rem 2rem; margin-top: 2.25rem; }
 .xp-doc-sign p { margin: 0; font-size: 0.8125rem; color: var(--c-muted); }
@@ -289,6 +298,28 @@
 .xp-receipt img { display: block; max-width: 100%; max-height: 28rem; border: 1px solid var(--c-line); border-radius: 0.375rem; object-fit: contain; }
 .xp-receipt figcaption { margin-top: 0.375rem; font-size: 0.8125rem; color: var(--c-muted); }
 .xp-year-top { grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); column-gap: 2rem; }
+/* the request's lines on a phone (and at larger text below 1024px): Description | Amount, with the date,
+   the category and the receipt under the description — nothing hides off to the right. Paper always
+   gets every column (screen only). */
+.xp-doc-sub { display: none; margin-top: 0.125rem; font-size: 0.8125rem; color: var(--c-muted); }
+@media screen and (width < 40rem) {
+  .xp-doc-table .xp-wide-col { display: none; }
+  .xp-doc-table .xp-doc-sub { display: block; }
+}
+@media screen and (width < 64rem) {
+  :root:is([data-text="130"], [data-text="150"]) .xp-doc-table .xp-wide-col { display: none; }
+  :root:is([data-text="130"], [data-text="150"]) .xp-doc-table .xp-doc-sub { display: block; }
+}
+/* the year summary sits in a box of its own: on a phone and at larger text the sheet drops its own
+   frame there (a box in a box in a card leaves too little room for a line) */
+@media screen and (width < 40rem) { .xp-box > .xp-doc { margin-inline: 0; padding: 1rem 0 0; border: 0; background: none; } }
+@media screen { :root:is([data-text="130"], [data-text="150"]) .xp-box > .xp-doc { padding-inline: 0; border: 0; background: none; } }
+@media screen and (width < 40rem) {
+  :root:is([data-text="130"], [data-text="150"]) .xp-doc { padding-inline: 0; border: 0; background: none; }
+  :root:is([data-text="130"], [data-text="150"]) .xp-doc-title { font-size: 1.25rem; }
+  /* the views' headings: a long word ("Reimbursement") keeps to its line */
+  :root:is([data-text="130"], [data-text="150"]) .xp-pad .card-h { font-size: 1.0625rem; }
+}
 .xp-year-cols { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 2rem; }
 @media (width >= 48rem) { .xp-year-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
@@ -312,7 +343,7 @@
 .xp-form-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
 @media (width >= 40rem) { .xp-form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .xp-span { grid-column: 1 / -1; }
-.xp-items { display: grid; gap: 0.625rem; margin: 0.75rem 0 0; }
+.xp-items { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.625rem; margin: 0.75rem 0 0; }
 .xp-item { padding: 0.75rem 1rem; border-radius: 0.875rem; background: var(--c-surface-2); }
 .xp-item.is-hidden .xp-item-name > span:first-child { text-decoration: line-through; text-decoration-color: var(--c-faint); }
 .xp-item-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
@@ -320,11 +351,14 @@
 .xp-item-name { flex: 1 1 12rem; min-width: 0; font-weight: 600; color: var(--c-ink); overflow-wrap: anywhere; }
 .xp-item-meta { display: flex; flex-wrap: wrap; gap: 0 0.875rem; margin-top: 0.125rem; font-size: 0.75rem; font-weight: 500; color: var(--c-muted); }
 .xp-grow { flex: 1 1 14rem; min-width: 0; }
-.xp-f-rate { flex: 0 1 9rem; }
+.xp-f-rate { flex: 0 1 9rem; min-width: 0; }
 .xp-move { display: inline-flex; gap: 0.125rem; }
 .xp-item-ed { margin-top: 0.875rem; padding-top: 0.875rem; border-top: 1px solid var(--c-line); }
 .xp-item-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1.25rem; margin-top: 0.625rem; }
-.xp-merge { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+/* "Move its entries to [select] [Move]": the label is visible (it says what the select is for) */
+.xp-merge { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.375rem 0.5rem; max-width: 100%; }
+.xp-merge-l { font-size: 0.875rem; font-weight: 600; color: var(--c-ink); }
+.xp-merge > select { flex: 1 1 8rem; width: auto; min-width: 0; max-width: 100%; }
 .xp-swatches { display: flex; flex-wrap: wrap; gap: 0.25rem; }
 .xp-swatch { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 9999px; cursor: pointer; }
 .xp-swatch-dot { display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 9999px; background: var(--xt-fill); box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12); }
@@ -339,7 +373,7 @@
 .xp-icon-opt:has(input:focus-visible) { outline: 3px solid var(--c-gv); outline-offset: 2px; }
 .xp-add-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.5rem 0.75rem; margin-top: 1.25rem; }
 .xp-add-row > .xp-label { flex-basis: 100%; margin-bottom: -0.125rem; }
-.xp-add-row > .input { flex: 1 1 12rem; width: auto; }
+.xp-add-row > .input { flex: 1 1 12rem; width: auto; min-width: 0; }
 .xp-money { position: relative; display: block; }
 .xp-money > span:first-child { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--c-muted); pointer-events: none; }
 .xp-money > .input { padding-left: 1.75rem; font-variant-numeric: tabular-nums; }
@@ -364,12 +398,27 @@
 @media (width >= 40rem) { .xp-dlg-body { padding: 1.5rem; } }
 .xp-dlg-foot { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.75rem 1.25rem; border-top: 1px solid var(--c-line); background: var(--c-surface-2);
   padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
-/* phones: one row (the header's close button is the way out, so the footer's Cancel goes) */
-@media (width < 40rem) { .xp-dlg-foot > .btn-primary, .xp-dlg-foot > .btn-secondary { flex: 1 1 auto; } .xp-dlg-foot > .btn-ghost { display: none; } }
+/* phones and larger text: one short row, so the form keeps the height — Save, then "Save and add
+   another" as its + icon (its words stay for screen readers and as a tooltip); the header's close
+   button is the way out, so the footer's Cancel goes */
+@media (width < 40rem) {
+  .xp-dlg-foot { flex-wrap: nowrap; }
+  .xp-dlg-foot > .btn-primary { flex: 1 1 auto; }
+  .xp-dlg-foot > .btn-ghost { display: none; }
+  .xp-dlg-foot > .xp-save-next > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .xp-dlg-foot > .xp-save-next { flex: 0 0 auto; padding-inline: 0.875rem; }
+}
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-foot { flex-wrap: nowrap; padding-block: 0.5rem; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-foot > .btn-primary { flex: 1 1 auto; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-foot > .btn-ghost { display: none; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-foot > .xp-save-next > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-foot > .xp-save-next { flex: 0 0 auto; padding-inline: 0.875rem; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-head { padding-bottom: 0.375rem; }
+:root:is([data-text="130"], [data-text="150"]) .xp-dlg-title { font-size: 1.0625rem; }
 .xp-dlg-msg { margin: 0; padding: 0.5rem 1.25rem; font-size: 0.875rem; font-weight: 600; color: var(--c-vine); background: var(--c-vine-soft); }
 .xp-dlg-msg:empty { display: none; }
 .xp-lead { margin-bottom: 1rem; font-size: 0.9375rem; color: var(--c-muted); }
-.xp-types { display: grid; gap: 0.625rem; }
+.xp-types { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.625rem; }
 .xp-type { display: flex; align-items: center; gap: 1rem; width: 100%; min-height: 4.5rem; padding: 0.75rem 1rem; border: 1px solid var(--c-line); border-radius: 1rem;
   background: var(--c-surface); text-align: left; cursor: pointer; transition: border-color 0.15s, background-color 0.15s; }
 .xp-type:hover { border-color: var(--c-gv); background: color-mix(in srgb, var(--c-gv-soft) 55%, var(--c-surface)); }

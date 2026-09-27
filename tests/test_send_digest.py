@@ -508,6 +508,56 @@ class Wording(unittest.TestCase):
         self.assertEqual(D.item_label(dict(wo, category="gv"), "es")[0], "Podcast")
 
 
+class PostMarkdown(unittest.TestCase):
+    """A bulletin post in the e-mail: whatever Markdown the chair wrote (content/bulletin/README.md) is
+    drawn as HTML with inline styles, and as plain lines in the text part — never the raw marks."""
+
+    POST = ("Join us for the **Fall Assembly**.\n\n"
+            "| Time | What | Where |\n|------|------|-------|\n| 9:00 AM | Registration | [Lobby](/events/) |\n\n"
+            "> A quotation, a share or a reading.\n\n---\n\n"
+            "### What to bring\n- Your subscription\n- A friend\n    - Nested one\n    - Nested two\n1. First\n2. Second\n\n"
+            "![Flyer](<https://x.org/f.jpg>) and <https://neta65.org> ~~old~~\nLine two.")
+
+    def site(self, u: str) -> str:
+        return "https://example.org/site" + u
+
+    def test_html(self):
+        h = D.md_to_html(self.POST, "#00f", self.site)
+        for raw in ("| Time", "|---", "> A", "---", "**", "###", "- Your", "~~", "<https"):
+            self.assertNotIn(raw, h)
+        self.assertIn("<strong>Fall Assembly</strong>", h)
+        self.assertRegex(h, r"<table [^>]*><tr><th [^>]*>Time</th><th [^>]*>What</th><th [^>]*>Where</th></tr><tr><td [^>]*>9:00 AM</td>")
+        self.assertIn('<a href="https://example.org/site/events/" style="color:#00f;">Lobby</a>', h)
+        self.assertRegex(h, r"<blockquote [^>]*>A quotation, a share or a reading\.</blockquote><hr [^>]*>")
+        self.assertIn("font-weight:bold;\">What to bring</p>", h)
+        # a list inside a list; a numbered list after it is a list of its own
+        self.assertRegex(h, r"<ul [^>]*><li [^>]*>Your subscription</li><li [^>]*>A friend<ul [^>]*><li [^>]*>Nested one</li>"
+                            r"<li [^>]*>Nested two</li></ul></li></ul><ol [^>]*><li [^>]*>First</li><li [^>]*>Second</li></ol>")
+        self.assertIn('<a href="https://x.org/f.jpg" style="color:#00f;">Flyer</a> and <a href="https://neta65.org"', h)
+        self.assertIn("<s>old</s><br>Line two.", h)
+        self.assertNotIn("<script", D.md_to_html("<script>alert(1)</script> [x](javascript:alert(1))", "#00f"))
+
+    def test_text(self):
+        t = D.md_to_text(self.POST, self.site)
+        self.assertEqual(t.split("\n\n"), [
+            "Join us for the Fall Assembly.",
+            "Time · What · Where\n9:00 AM · Registration · Lobby (https://example.org/site/events/)",
+            "“A quotation, a share or a reading.”",
+            "What to bring",
+            "• Your subscription\n• A friend\n  – Nested one\n  – Nested two",
+            "• First\n• Second",
+            "Flyer (https://x.org/f.jpg) and https://neta65.org old\nLine two.",
+        ])
+
+    def test_a_long_post_is_cut_between_blocks(self):
+        short, cut = D.md_excerpt(self.POST, 150)
+        self.assertTrue(cut)
+        self.assertTrue(short.startswith("Join us") and short.endswith("| 9:00 AM | Registration | [Lobby](/events/) |"))  # the table whole
+        self.assertEqual(D.md_excerpt("Short.", 150), ("Short.", False))
+        long_para, cut = D.md_excerpt("word " * 300, 150)
+        self.assertTrue(cut and len(long_para) <= 150 and long_para.endswith("…"))
+
+
 class FakeSMTP:
     """Stands in for smtplib.SMTP / SMTP_SSL and records what the digest asks of the mail server.
     Each test makes its own subclass (Sending.make_server), so the settings and the log are its own."""

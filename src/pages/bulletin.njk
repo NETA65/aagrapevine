@@ -62,29 +62,31 @@ pageScripts: ["/assets/js/committee.js"]
     {%- set body = a | tx("body_md", lang) or (a | tx("summary", lang)) -%}
     {%- set when = a.date or a.first_seen -%}
     <li class="min-w-0">
-      <article id="{{ a._anchor }}" class="card cm-ann flex h-full flex-col{{ ' is-pinned' if a._pinned }}" aria-labelledby="{{ a._anchor }}-h">
+      <article id="{{ a._anchor }}" class="card cm-ann flex flex-col{{ ' is-pinned' if a._pinned }}" aria-labelledby="{{ a._anchor }}-h">
         <div class="flex-1 p-5 sm:p-7">
           <div class="flex flex-wrap items-center gap-2 text-sm">
             {% if a._pinned %}<span class="badge-lv">{% icon "pin", "size-3" %} {{ "committee.ann.pinned" | t(lang) }}</span>{% endif %}
             {% if a.is_new %}<span class="badge-new">{{ "common.new" | t(lang) }}</span>{% endif %}
             <p class="meta-row text-muted">
               {%- if when %}<time datetime="{{ when | isoDate }}">{{ when | fmtDate(lang, "long") }}</time>{% endif %}
-              {%- if a.extra and a.extra.expires %}<span class="text-xs text-faint">{{ "committee.ann.until" | t(lang, { date: (a.extra.expires | fmtDate(lang, "medium")) }) }}</span>{% endif %}
+              {#- a meta-row item keeps the row's size (its "·" and hanging indent are 1.1em of it): the smaller words go inside -#}
+              {%- if a.extra and a.extra.expires %}<span><span class="text-xs text-faint">{{ "committee.ann.until" | t(lang, { date: (a.extra.expires | fmtDate(lang, "medium")) }) }}</span></span>{% endif %}
             </p>
           </div>
-          <h2 id="{{ a._anchor }}-h" class="mt-3 font-display text-2xl font-semibold leading-tight text-ink sm:text-[1.75rem]">
+          {#- a title the translation left as it was (rejected, or the same words) is in the post's own language -#}
+          <h2 id="{{ a._anchor }}-h" class="mt-3 font-display text-2xl font-semibold leading-tight text-ink sm:text-[1.75rem]"{% if a.lang and a.lang != lang and title == a.title %} lang="{{ a.lang }}"{% endif %}>
             <a href="#{{ a._anchor }}" class="cm-anchor-link hover:text-gv">{{ title }}<span class="cm-hash" aria-hidden="true">#</span></a>
           </h2>
           {#- lang="…" only when the text shown IS the original: not machine-translated, not the committee's own summary_es -#}
           <div class="prose-site cm-md mt-4 max-w-none"{% if a.lang and a.lang != lang and not (a | machineFor(lang)) and body == ((a.extra.body_md if a.extra) or a.summary) %} lang="{{ a.lang }}"{% endif %}>
-            {{ body | md({ h: 3, lang: lang }) | safe }}
+            {{ body | md({ h: 3, lang: lang, name: title }) | safe }}
           </div>
           {% if a | machineFor(lang) %}
           <details class="cm-original mt-5">
             <summary>{% icon "languages", "size-4" %} {{ "committee.ann.show_original" | t(lang) }} <span class="text-faint">· {{ ("lang." + a.lang) | t(lang) }}</span></summary>
             <div class="prose-site cm-md mt-3 text-[0.95rem]" lang="{{ a.lang }}">
               <p class="font-semibold">{{ a.title }}</p>
-              {{ ((a.extra.body_md if a.extra) or a.summary) | md({ h: 3, lang: lang }) | safe }}
+              {{ ((a.extra.body_md if a.extra) or a.summary) | md({ h: 3, lang: lang, name: a.title + " (" + (("lang." + a.lang) | t(lang)) + ")" }) | safe }}
             </div>
           </details>
           {% endif %}

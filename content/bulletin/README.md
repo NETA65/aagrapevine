@@ -66,7 +66,10 @@ on a phone) and lines of `---`. A long web address wraps on a phone.
 **HTML** pasted from an e-mail or a web page is turned into the same Markdown
 (`<b>`, `<i>`, `<a href>`, `<br>`, `<img>`, headings, lists); other tags are
 taken out and their text stays, and scripts, styles and embedded frames are
-removed completely. Nothing in a post can run on the site.
+removed completely. Nothing in a post can run on the site. A picture that only
+lived inside the e-mail (a signature logo, for one) shows as its description,
+and the update's report names it; a link that is not a web, e-mail or phone
+address keeps only its words.
 
 ## Pictures and documents
 
@@ -88,3 +91,7 @@ web can be linked by its address instead.
 
 Files whose name starts with `_` or `README` are ignored; any other file that is
 not a post, a picture or a document is left out and reported.
+
+This folder was called `content/announcements/` until September 2026. A post
+saved there by habit still shows on the Bulletin, and the update's report asks
+for it to be moved here.

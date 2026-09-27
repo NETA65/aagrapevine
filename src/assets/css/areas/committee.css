@@ -466,9 +466,10 @@
 
   /* ---------- the bulletin (/bulletin/) ----------
      Two per row from 1280px when there are several: each card is then ~600px wide, so the text
-     keeps a readable line length. With none: the visitors' card alone ("Coming up" — the next
-     meeting and event — is the hero's right-hand card). */
-  .cm-ann-list { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); }
+     keeps a readable line length. Each card is as tall as its own post (top-aligned: a short post
+     beside a long one is not stretched into a big blank card). With none: the visitors' card alone
+     ("Coming up" — the next meeting and event — is the hero's right-hand card). */
+  .cm-ann-list { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); align-items: start; }
   @media (width >= 80rem) { .cm-ann-list.is-multi { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .cm-ann-empty { display: grid; gap: 3rem 2.5rem; grid-template-columns: minmax(0, 1fr); }
   .cm-anchor-link { text-decoration: none; }

@@ -17,7 +17,8 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
     src/_i18n/expenses.json (handed to the app as #xp-ui); the look: areas/expenses.css.
     One Alpine component wraps the hero AND the app (the hero's buttons and aside use its data).
     Without JavaScript the page says what the tracker is and that it needs JavaScript.
-    Only link here from the GVR corner (one card); nothing else on the site repeats this page. -#}
+    Its home is the Get involved menu (nav.js); the GVR corner has one card linking here. Nothing else
+    on the site repeats this page. -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set bulk = (db.shop or {}) | shopBulk(lang) -%}
 {%- set carryHref = ('/shop/' | lurl(lang)) + ('#bulk' if bulk.rows.length else '#carry') -%}
@@ -60,7 +61,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
 {%- else %}
   <div class="hero-actions">
     <button type="button" class="btn-light" data-js-only data-xp-add @click="ready && openAdd()">{% icon "plus", "size-4" %} {{ "expenses.add" | t(lang) }}</button>
-    <button type="button" class="btn-on-dark" data-js-only @click="ready && exportAll()">{% icon "download", "size-4" %} {{ "expenses.backup_csv" | t(lang) }}</button>
+    <button type="button" class="btn-on-dark" data-js-only @click="ready && exportAll()">{% icon "download", "size-4" %} {{ "expenses.export_csv" | t(lang) }}</button>
   </div>
 {%- endif %}
 {% endcall %}
@@ -478,7 +479,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
                 <template x-for="r in renewalRows()" :key="r.id">
                   <li><span class="font-semibold text-ink" x-text="r.what"></span><span class="text-muted" x-show="r.who" x-text="' · ' + r.who"></span>
                     <span class="block text-sm" :class="r.past ? 'text-danger' : 'text-muted'" x-text="t(r.past ? 'sum.renew_ended' : 'sum.renew_due', { date: r.end })"></span>
-                    <button type="button" class="link text-sm" @click="duplicate(r.id)">{{ "expenses.sum.renew_now" | t(lang) }}</button></li>
+                    <button type="button" class="link text-sm" @click="renew(r.id)">{{ "expenses.sum.renew_now" | t(lang) }}</button></li>
                 </template>
               </ul>
               <p class="mt-3 text-sm text-muted" x-show="peopleOwed().length">
@@ -558,7 +559,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
               <template x-for="x in inv()" :key="x.key">
                 <li class="xp-row">
                   <p><span class="font-semibold text-ink" x-text="x.item"></span> <span class="xp-fmt" :class="'is-' + x.format" x-show="x.format" x-text="x.formatText"></span></p>
-                  <p class="text-sm text-muted" x-text="t('give.row_line', { bought: x.bought, received: x.received, given: x.given, each: x.avg })"></p>
+                  <p class="text-sm text-muted" x-text="t(x.hasAvg ? 'give.row_line' : 'give.row_line_free', { bought: x.bought, received: x.received, given: x.given, each: x.avg })"></p>
                   <p class="text-sm" :class="x.onHand < 0 ? 'xp-neg' : 'font-semibold text-ink'" x-text="t(x.onHand < 0 ? 'give.row_negative' : 'give.row_on_hand', { n: x.onHandText })"></p>
                 </li>
               </template>
@@ -668,8 +669,10 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
                       <h5 class="xp-doc-h">{{ "expenses.req.lines" | t(lang) }}</h5>
                       <div class="xp-table-wrap" role="region" tabindex="0" aria-label="{{ 'expenses.req.lines' | t(lang) }}">
                         <table class="xp-table xp-doc-table">
-                          <thead><tr><th scope="col">{{ "expenses.field.date" | t(lang) }}</th><th scope="col">{{ "expenses.field.description" | t(lang) }}</th><th scope="col">{{ "expenses.field.category" | t(lang) }}</th><th scope="col">{{ "expenses.field.receipt" | t(lang) }}</th><th scope="col" class="xp-num">{{ "expenses.field.amount" | t(lang) }}</th></tr></thead>
-                          <tbody><template x-for="l in rqLines()" :key="l.i"><tr><td class="whitespace-nowrap" x-text="l.date"></td><td x-text="l.desc"></td><td x-text="l.cat"></td><td><span x-show="l.hasReceipt" aria-hidden="true">✓ </span><span x-text="l.receipt"></span></td><td class="xp-num" x-text="l.amount"></td></tr></template></tbody>
+                          {#- on a phone the date, the category and the receipt go under the description (.xp-doc-sub) and their
+                              columns step aside (.xp-wide-col): Description | Amount, the amount always in sight -#}
+                          <thead><tr><th scope="col" class="xp-wide-col">{{ "expenses.field.date" | t(lang) }}</th><th scope="col">{{ "expenses.field.description" | t(lang) }}</th><th scope="col" class="xp-wide-col">{{ "expenses.field.category" | t(lang) }}</th><th scope="col" class="xp-wide-col">{{ "expenses.field.receipt" | t(lang) }}</th><th scope="col" class="xp-num">{{ "expenses.field.amount" | t(lang) }}</th></tr></thead>
+                          <tbody><template x-for="l in rqLines()" :key="l.i"><tr><td class="whitespace-nowrap xp-wide-col" x-text="l.date"></td><td><span x-text="l.desc"></span><span class="xp-doc-sub" x-text="[l.date, l.cat, l.hasReceipt ? t('req.receipt_line', { receipt: l.receipt }) : ''].filter(Boolean).join(' · ')"></span></td><td class="xp-wide-col" x-text="l.cat"></td><td class="xp-wide-col"><span x-show="l.hasReceipt" aria-hidden="true">✓ </span><span x-text="l.receipt"></span></td><td class="xp-num" x-text="l.amount"></td></tr></template></tbody>
                         </table>
                       </div>
                     </div>
@@ -679,8 +682,8 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
                       <h5 class="xp-doc-h">{{ "expenses.req.mileage" | t(lang) }}</h5>
                       <div class="xp-table-wrap" role="region" tabindex="0" aria-label="{{ 'expenses.req.mileage' | t(lang) }}">
                         <table class="xp-table xp-doc-table">
-                          <thead><tr><th scope="col">{{ "expenses.field.date" | t(lang) }}</th><th scope="col">{{ "expenses.req.route" | t(lang) }}</th><th scope="col">{{ "expenses.req.purpose" | t(lang) }}</th><th scope="col" class="xp-num">{{ "expenses.field.miles" | t(lang) }}</th><th scope="col" class="xp-num">{{ "expenses.field.rate" | t(lang) }}</th><th scope="col" class="xp-num">{{ "expenses.field.amount" | t(lang) }}</th></tr></thead>
-                          <tbody><template x-for="l in rqMileage()" :key="l.i"><tr><td class="whitespace-nowrap" x-text="l.date"></td><td x-text="l.route"></td><td x-text="l.purpose"></td><td class="xp-num" x-text="l.miles"></td><td class="xp-num" x-text="l.rate"></td><td class="xp-num" x-text="l.amount"></td></tr></template></tbody>
+                          <thead><tr><th scope="col" class="xp-wide-col">{{ "expenses.field.date" | t(lang) }}</th><th scope="col">{{ "expenses.req.route" | t(lang) }}</th><th scope="col" class="xp-wide-col">{{ "expenses.req.purpose" | t(lang) }}</th><th scope="col" class="xp-num xp-wide-col">{{ "expenses.field.miles" | t(lang) }}</th><th scope="col" class="xp-num xp-wide-col">{{ "expenses.field.rate" | t(lang) }}</th><th scope="col" class="xp-num">{{ "expenses.field.amount" | t(lang) }}</th></tr></thead>
+                          <tbody><template x-for="l in rqMileage()" :key="l.i"><tr><td class="whitespace-nowrap xp-wide-col" x-text="l.date"></td><td><span x-text="l.route"></span><span class="xp-doc-sub" x-text="[l.date, l.purpose !== l.route ? l.purpose : '', t('req.miles_at', { miles: l.miles, rate: l.rate })].filter(Boolean).join(' · ')"></span></td><td class="xp-wide-col" x-text="l.purpose"></td><td class="xp-num xp-wide-col" x-text="l.miles"></td><td class="xp-num xp-wide-col" x-text="l.rate"></td><td class="xp-num" x-text="l.amount"></td></tr></template></tbody>
                         </table>
                       </div>
                     </div>
@@ -831,14 +834,15 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
                     <div class="xp-imp-map">
                       {%- for m in ["date", "description", "amount", "category", "miles", "notes"] %}
                       <div class="xp-f">
-                        <label class="xp-label" for="xp-map-{{ m }}">{{ ("expenses.imp.map_" + m) | t(lang) }}{% if m in ["date", "description", "amount"] %} <span class="text-danger" aria-hidden="true">*</span>{% endif %}</label>
-                        <select id="xp-map-{{ m }}" class="input xp-select" x-model="imp.map.{{ m }}"{% if m in ["date", "description", "amount"] %} aria-required="true"{% endif %}>
+                        <label class="xp-label" for="xp-map-{{ m }}">{{ ("expenses.imp.map_" + m) | t(lang) }}{% if m == "date" %} <span class="text-danger" aria-hidden="true">*</span>{% elif m in ["amount", "miles"] %} <span class="text-danger" aria-hidden="true">†</span>{% endif %}</label>
+                        <select id="xp-map-{{ m }}" class="input xp-select" x-model="imp.map.{{ m }}"{% if m == "date" %} aria-required="true"{% elif m in ["amount", "miles"] %} aria-describedby="xp-map-needs"{% endif %}>
                           <option value="">{{ "expenses.imp.map_none" | t(lang) }}</option>
                           <template x-for="h in imp.headers" :key="h.i"><option :value="String(h.i)" :selected="String(h.i) === imp.map.{{ m }}" x-text="h.name"></option></template>
                         </select>
                       </div>
                       {%- endfor %}
                     </div>
+                    <p class="xp-hint" id="xp-map-needs">{{ "expenses.imp.map_needs" | t(lang) }}</p>
                     <p class="xp-hint">{{ "expenses.imp.map_rest" | t(lang) }}</p>
                     <div class="xp-table-wrap mt-3" role="region" tabindex="0" aria-label="{{ 'expenses.imp.sample' | t(lang) }}">
                       <table class="xp-table xp-table-sm">
@@ -905,7 +909,8 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
                       <label class="xp-check-line"><input type="radio" name="xp-imp-mode" value="replace" x-model="imp.mode"><span>{{ "expenses.imp.replace" | t(lang) }}</span></label>
                     </fieldset>
                     <div class="xp-actions mt-4">
-                      <button type="button" class="btn-primary btn-sm" :disabled="!imp.counts.add && !imp.counts.update" @click="impApply()">{% icon "upload", "size-4" %} <span x-text="t('imp.apply', { n: count(imp.counts.add + imp.counts.update) })"></span></button>
+                      <button type="button" class="btn-primary btn-sm" :disabled="imp.mode === 'replace' ? !imp.counts.all : !imp.counts.add && !imp.counts.update" @click="impApply()">{% icon "upload", "size-4" %} <span x-text="t('imp.apply', { n: count(imp.mode === 'replace' ? imp.counts.all : imp.counts.add + imp.counts.update) })"></span></button>
+                      <button type="button" class="btn-ghost btn-sm" x-show="imp.ours" @click="impMapMyself()">{% icon "columns-3", "size-4" %} {{ "expenses.imp.map_myself" | t(lang) }}</button>
                       <button type="button" class="btn-ghost btn-sm" @click="impReset()">{{ "expenses.imp.cancel" | t(lang) }}</button>
                     </div>
                   </div>
@@ -940,7 +945,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
                 <h4 class="xp-h4">{{ "expenses.data.examples_title" | t(lang) }}</h4>
                 <p class="mt-1 text-sm text-muted">{{ "expenses.data.examples_text" | t(lang) }}</p>
                 <div class="xp-actions mt-3">
-                  <button type="button" class="btn-secondary btn-sm" @click="addExamples()">{% icon "sparkles", "size-4" %} {{ "expenses.list.try_examples" | t(lang) }}</button>
+                  <button type="button" class="btn-secondary btn-sm" x-show="!hasExamples()" @click="addExamples()">{% icon "sparkles", "size-4" %} {{ "expenses.list.try_examples" | t(lang) }}</button>
                   <button type="button" class="btn-secondary btn-sm" x-show="hasExamples()" @click="removeExamples()">{% icon "eraser", "size-4" %} {{ "expenses.list.remove_examples" | t(lang) }}</button>
                 </div>
               </div>
@@ -963,7 +968,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
           <div class="xp-set">
             <h3 class="card-h"><span>{% icon "user-round", "size-5" %}</span>{{ "expenses.set.profile" | t(lang) }}</h3>
             <p class="xp-set-intro">{{ "expenses.prof.intro" | t(lang) }}</p>
-            <div class="xp-form-grid">
+            <div class="xp-form-grid mt-4">
               {%- for p in ["name", "position", "district", "email"] %}
               <div class="xp-f">
                 <label class="xp-label" for="xp-p-{{ p }}">{{ ("expenses.prof." + p) | t(lang) }}</label>
@@ -1045,7 +1050,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
                       <button type="button" class="btn-ghost btn-sm xp-danger" x-show="canDelete('categories', c.id)" @click="del('categories', c.id)">{% icon "trash-2", "size-4" %} {{ "expenses.set.delete" | t(lang) }}</button>
                       <template x-if="usedCount('category', c.id) && mergeTargets('categories', c.id).length">
                         <span class="xp-merge">
-                          <label class="sr-only" :for="'xp-mg-' + c.id">{{ "expenses.set.merge_into" | t(lang) }}</label>
+                          <label class="xp-merge-l" :for="'xp-mg-' + c.id">{{ "expenses.set.merge_into" | t(lang) }}</label>
                           <select class="input xp-select xp-select-sm" :id="'xp-mg-' + c.id">
                             <template x-for="x in mergeTargets('categories', c.id)" :key="x.id"><option :value="x.id" x-text="lbl(x.label)"></option></template>
                           </select>
@@ -1102,7 +1107,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
                     <button type="button" class="btn-ghost btn-sm xp-danger" x-show="canDelete('funders', x.id)" @click="del('funders', x.id)">{% icon "trash-2", "size-4" %} {{ "expenses.set.delete" | t(lang) }}</button>
                     <template x-if="usedCount('funder', x.id) && mergeTargets('funders', x.id).length">
                       <span class="xp-merge">
-                        <label class="sr-only" :for="'xp-mgf-' + x.id">{{ "expenses.set.merge_into" | t(lang) }}</label>
+                        <label class="xp-merge-l" :for="'xp-mgf-' + x.id">{{ "expenses.set.merge_into" | t(lang) }}</label>
                         <select class="input xp-select xp-select-sm" :id="'xp-mgf-' + x.id"><template x-for="y in mergeTargets('funders', x.id)" :key="y.id"><option :value="y.id" x-text="lbl(y.name)"></option></template></select>
                         <button type="button" class="btn-secondary btn-sm" @click="merge('funders', x.id, document.getElementById('xp-mgf-' + x.id).value)">{% icon "merge", "size-4" %} {{ "expenses.set.merge" | t(lang) }}</button>
                       </span>
@@ -1143,7 +1148,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
                     <button type="button" class="btn-ghost btn-sm xp-danger" x-show="canDelete('methods', x.id)" @click="del('methods', x.id)">{% icon "trash-2", "size-4" %} {{ "expenses.set.delete" | t(lang) }}</button>
                     <template x-if="usedCount('method', x.id) && mergeTargets('methods', x.id).length">
                       <span class="xp-merge">
-                        <label class="sr-only" :for="'xp-mgm-' + x.id">{{ "expenses.set.merge_into" | t(lang) }}</label>
+                        <label class="xp-merge-l" :for="'xp-mgm-' + x.id">{{ "expenses.set.merge_into" | t(lang) }}</label>
                         <select class="input xp-select xp-select-sm" :id="'xp-mgm-' + x.id"><template x-for="y in mergeTargets('methods', x.id)" :key="y.id"><option :value="y.id" x-text="lbl(y.name)"></option></template></select>
                         <button type="button" class="btn-secondary btn-sm" @click="merge('methods', x.id, document.getElementById('xp-mgm-' + x.id).value)">{% icon "merge", "size-4" %} {{ "expenses.set.merge" | t(lang) }}</button>
                       </span>
@@ -1295,7 +1300,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
           <div class="xp-set">
             <h3 class="card-h"><span>{% icon "bell", "size-5" %}</span>{{ "expenses.set.reminders" | t(lang) }}</h3>
             <p class="xp-set-intro">{{ "expenses.set.reminders_intro" | t(lang) }}</p>
-            <div class="xp-form-grid">
+            <div class="xp-form-grid mt-4">
               {%- for k in ["renewal_days", "backup_reminder_days"] %}
               <div class="xp-f">
                 <label class="xp-label" for="xp-s-{{ k }}">{{ ("expenses.set." + k) | t(lang) }}</label>
@@ -1412,7 +1417,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
             </div>
             <p class="xp-hint">{{ "expenses.form.odometer_hint" | t(lang) }}</p>
           </details>
-          <div class="xp-f">
+          <div class="xp-f xp-span">
             <label class="xp-label" for="xp-f-rate_id">{{ "expenses.field.rate" | t(lang) }}</label>
             <select id="xp-f-rate_id" class="input xp-select" @change="form.rate_id = $event.target.value; onRate()" aria-describedby="xp-h-rate">
               <template x-for="r in rateOptions()" :key="r.id"><option :value="r.id" :selected="r.id === form.rate_id" x-text="lbl(r.name) + ' · ' + rateText(r.rate)"></option></template>
@@ -1539,11 +1544,11 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
               {%- for r in ["none", "paper", "photo", "file"] %}<option value="{{ r }}">{{ ("expenses.receipt." + r) | t(lang) }}</option>{% endfor %}
             </select>
             <label class="btn-secondary btn-sm xp-photo-btn" x-show="form.receipt === 'photo' && !photoUrl">
-              <input type="file" class="sr-only" accept="image/*" capture="environment" @change="onPhoto($event)">
+              <input type="file" class="sr-only" accept="image/*" @change="onPhoto($event)">
               {% icon "camera", "size-4" %} <span x-text="photoBusy ? t('form.photo_busy') : t('form.photo_take')"></span>
             </label>
           </div>
-          <div class="xp-photo" x-show="photoUrl">
+          <div class="xp-photo" x-show="photoUrl && form.receipt === 'photo'">
             <img :src="photoUrl || null" alt="{{ 'expenses.form.photo_alt' | t(lang) }}">
             <button type="button" class="btn-ghost btn-sm xp-danger" @click="removePhoto()">{% icon "trash-2", "size-4" %} {{ "expenses.form.photo_remove" | t(lang) }}</button>
           </div>
@@ -1628,7 +1633,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
 
     <footer class="xp-dlg-foot" x-show="formStep === 2">
       <button type="submit" form="xp-form" class="btn-primary">{% icon "check", "size-4" %} {{ "expenses.form.save" | t(lang) }}</button>
-      <button type="button" class="btn-secondary" x-show="formMode === 'add'" @click="saveForm(true)">{% icon "plus", "size-4" %} {{ "expenses.form.save_another" | t(lang) }}</button>
+      <button type="button" class="btn-secondary xp-save-next" x-show="formMode === 'add'" title="{{ 'expenses.form.save_another' | t(lang) }}" @click="saveForm(true)">{% icon "plus", "size-4" %} <span>{{ "expenses.form.save_another" | t(lang) }}</span></button>
       <button type="button" class="btn-ghost" @click="tryClose()">{{ "expenses.form.cancel" | t(lang) }}</button>
     </footer>
   </div>
@@ -1647,9 +1652,9 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
 {#- short messages ("Saved", "Deleted — Undo"): role=status, 10 s with Undo -#}
 <div class="xp-toast" :class="{ 'is-on': toastMsg }" role="status" aria-live="polite" aria-atomic="true">
   <template x-if="toastMsg">
-    <div class="xp-toast-in">
+    <div class="xp-toast-in" @focusin="toastHold(true)" @focusout="$el.contains($event.relatedTarget) || toastHold(false)" @mouseenter="toastHold(true)" @mouseleave="$el.contains(document.activeElement) || toastHold(false)">
       <span x-text="toastMsg"></span>
-      <button type="button" class="xp-toast-btn" x-show="toastUndo" @click="undoToast()">{{ "expenses.toast.undo" | t(lang) }}</button>
+      <button type="button" class="xp-toast-btn" data-xp-undo x-show="toastUndo" @click="undoToast()">{{ "expenses.toast.undo" | t(lang) }}</button>
       <button type="button" class="xp-icon-btn xp-toast-x" @click="closeToast()" aria-label="{{ 'common.close' | t(lang) }}">{% icon "x", "size-4" %}</button>
     </div>
   </template>

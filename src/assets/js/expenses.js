@@ -9,9 +9,13 @@
      · receipt photos.
    Storage — only in this browser, as the page promises:
      localStorage "gv-expenses:v1"         {v, entries, settings, meta} (GVX owns the shape; migrate on load)
-     IndexedDB "gv-expenses" / "receipts"  one photo per entry (key = the entry id), a downscaled JPEG
-   Every storage call is wrapped: in a private window (or with storage blocked) the app still works in
-   memory and warns to export before closing. A change made in another tab reloads the data here.
+     localStorage "gv-expenses:v1:ui"      {view, period, sort, from, to}: the screen's own conveniences,
+                                           apart, so a tab click never looks like new data to another tab
+     IndexedDB "gv-expenses" / "receipts"  one photo per entry (key = the entry id), a downscaled JPEG;
+                                           a photo no entry points to any more is deleted on load
+   Every storage call is wrapped: in a private window (or with storage blocked, or full) the app still
+   works in memory, warns to export before closing, and never says "Saved" for something it could not
+   keep. A change made in another tab reloads the data here.
    The entries live OUTSIDE Alpine's reactive proxies, so 5,000 of them stay fast: `rev` goes up on every
    change and each view is computed once per change (memo()), never once per row.
    Never x-html: every text goes through x-text; icons come from the build (#xp-icons → x-xp-icon).
@@ -21,12 +25,12 @@
   "use strict";
   var GV = window.GV || {};
   var KEY = "gv-expenses:v1";
+  var UI_KEY = KEY + ":ui";
   var DB_NAME = "gv-expenses";
   var DB_STORE = "receipts";
   var PAGE = 100;              // rows per "Show more"
-  var UNDO_MS = 10000;         // how long "Undo" stays after a delete
+  var UNDO_MS = 10000;         // how long "Undo" stays after a delete (paused while the toast has the focus or the mouse)
   var MAX_PHOTO = 1600;        // longest side of a stored receipt photo (px)
-  var MAX_IMPORT = 10 * 1024 * 1024;
   var VIEWS = ["entries", "summary", "giveaways", "requests", "settings"];
   var TYPES = ["expense", "mileage", "received", "giveaway", "stock"];
   var CLAIMS = ["to_request", "submitted", "paid", "denied"];
@@ -270,7 +274,8 @@
           if (!S.cfg || !S.X || typeof S.X.emptyState !== "function") { this.broken = true; return; }
           this.storageOk = storageWorks();
           try { this.loadState(); } catch (e) { if (window.console) console.error("[expenses]", e); this.broken = true; return; }
-          var u = this.st().ui || {};
+          var u = {};
+          try { u = JSON.parse(lsGet(UI_KEY) || "null") || this.st().ui || {}; } catch (e) { u = {}; }
           if (u.period) this.f.period = u.period;
           if (u.sort && SORTS[u.sort]) this.sort = u.sort;
           if (u.from) this.f.from = u.from;
@@ -291,13 +296,21 @@
             if (mq.addEventListener) mq.addEventListener("change", function () { self.fitList(); });
           }
           window.addEventListener("gvlv:prefs", function () { self.fitList(); });
-          // an edit in another tab on this device
+          // an edit in another tab on this device (the page's toast is behind an open dialog: the
+          // dialog says it; an entry being edited there that the other tab deleted is saved as a new one)
           window.addEventListener("storage", function (e) {
             if (e.key !== KEY) return;
             self.loadState();
-            self.say(self.t("toast.other_tab"));
+            if (!self.form) { self.say(self.t("toast.other_tab")); return; }
+            var id = self.form.id, gone = self.formMode === "edit" && id && !S.state.entries.some(function (x) { return x.id === id; });
+            if (gone) { self.formMode = "add"; self.form.id = ""; self.form.created = ""; }
+            self.dlgMsg = "";
+            self.$nextTick(function () { self.dlgMsg = self.t(gone ? "form.deleted_elsewhere" : "toast.other_tab"); });
           });
           this.$watch("f", function () { self.shown = PAGE; });
+          // receipt photos no entry points to (a delete whose undo time never ran out, a CSV "replace") —
+          // only when the ledger was read from this browser (never on an empty or unreadable one)
+          setTimeout(function () { if (self.storageOk && S.readOk) self.cleanPhotos(); }, 1500);
         },
         hashView: function () {
           var h = (location.hash || "").replace(/^#/, "");
@@ -317,6 +330,7 @@
             // never overwrite what we could not read: keep a copy beside it
             if (!st) lsSet(KEY + ":unreadable-" + today(), raw);
           }
+          S.readOk = !!(raw && st);    // the ledger really came from this browser (cleanPhotos trusts only that)
           if (!st || typeof st !== "object") st = X.emptyState(S.cfg);
           st.entries = Array.isArray(st.entries) ? st.entries : [];
           st.settings = X.mergeDefaults(S.cfg, st.settings || {});
@@ -325,17 +339,20 @@
           S.memo = {};
           this.rev++;
         },
+        // Writes the data; false when the browser would not keep it (the warning shows, and stays until
+        // a save works again — space freed, for one).
         save: function () {
           var ok = lsSet(KEY, JSON.stringify(S.state));
-          if (!ok) this.storageOk = false;
+          this.storageOk = ok;
+          S.saveOk = ok;
           S.memo = {};
           this.rev++;
           return ok;
         },
+        // the message after a change: never "Saved" (or "Deleted" …) when the last save failed
+        saySaved: function (msg, withUndo) { this.say(S.saveOk === false ? this.t("storage_off") : msg, withUndo); },
         saveUi: function () {
-          var s = this.st();
-          s.ui = { period: this.f.period, sort: this.sort, view: this.view, from: this.f.from, to: this.f.to };
-          lsSet(KEY, JSON.stringify(S.state));
+          lsSet(UI_KEY, JSON.stringify({ period: this.f.period, sort: this.sort, view: this.view, from: this.f.from, to: this.f.to }));
         },
         // Ask the browser not to clear our data on its own (once a session, after an entry is saved).
         askPersist: function () {
@@ -588,8 +605,10 @@
             e.claim_status = to;
             if (to === "submitted" && !e.claim_date) e.claim_date = d;
             if (to === "paid" && !e.paid_date) e.paid_date = d;
+            // a purchase made for someone who pays it back: paid means repaid (the two never disagree)
+            if (to === "paid" && e.repaid === "owed") e.repaid = "repaid";
           });
-          this.say(this.plural(n, "toast.updated_one", "toast.updated"));
+          this.saySaved(this.plural(n, "toast.updated_one", "toast.updated"));
         },
         bulkSetFunder: function () {
           var self = this, to = this.bulkFunder;
@@ -603,14 +622,14 @@
             }
           });
           this.bulkFunder = "";
-          this.say(this.plural(n, "toast.updated_one", "toast.updated"));
+          this.saySaved(this.plural(n, "toast.updated_one", "toast.updated"));
         },
         bulkSetCat: function () {
           var to = this.cat(this.bulkCat);
           if (!to) return;
           var n = this.patch(this.selIds(), function (e) { if (e.type !== to.type) return false; e.category = to.id; });
           this.bulkCat = "";
-          this.say(this.plural(n, "toast.updated_one", "toast.updated"));
+          this.saySaved(this.plural(n, "toast.updated_one", "toast.updated"));
         },
         bulkCats: function () {
           // the categories the selection can move to (entries of other types keep theirs)
@@ -638,8 +657,16 @@
             self.finishUndo();
             // the photos stay until the undo time is over
             S.undo = { entries: gone, photoIds: gone.filter(function (e) { return e.receipt === "photo"; }).map(function (e) { return e.id; }) };
-            self.say(self.plural(n, "toast.deleted_one", "toast.deleted"), true);
+            self.saySaved(self.plural(n, "toast.deleted_one", "toast.deleted"), true);
+            // the row (and its button) is gone: the focus goes to "Undo" — a keyboard or screen reader
+            // user can take it back at once (its time stands still while it has the focus)
+            self.$nextTick(function () { var b = document.querySelector("[data-xp-undo]"); if (b && S.saveOk !== false) b.focus(); else self.focusView(); });
           });
+        },
+        // the focus when what had it is gone (a deleted row, a closed toast): the open view's panel
+        focusView: function () {
+          var p = document.getElementById("xp-panel-" + this.view);
+          if (p) p.focus({ preventScroll: true });
         },
         entryName: function (id) {
           var e = S.state.entries.filter(function (x) { return x.id === id; })[0];
@@ -651,7 +678,7 @@
           S.undo = null;
           S.state.entries = S.state.entries.concat(u.entries);
           this.save();
-          this.say(this.t("toast.restored"));
+          this.saySaved(this.t("toast.restored"));
         },
         // the undo window is over (or a new delete starts one): the photos of deleted entries go
         finishUndo: function () {
@@ -661,23 +688,39 @@
         },
 
         /* ================= messages ================= */
-        // A short message at the bottom of the screen (role=status); with undo it stays 10 seconds.
+        // A short message at the bottom of the screen (role=status); with undo it stays 10 seconds —
+        // and longer while it has the keyboard focus or the mouse (toastHold), so there is time to use it.
         say: function (msg, withUndo) {
-          var self = this;
           this.toastMsg = msg;
           this.toastUndo = !!withUndo;
-          clearTimeout(S.toastT);
-          S.toastT = setTimeout(function () {
-            self.toastMsg = "";
-            if (self.toastUndo) { self.toastUndo = false; self.finishUndo(); }
-          }, withUndo ? UNDO_MS : 5000);
+          S.toastHeld = false;
+          this.toastTimer(withUndo ? UNDO_MS : 5000);
         },
-        closeToast: function () {
+        toastTimer: function (ms) {
+          var self = this;
           clearTimeout(S.toastT);
-          if (this.toastUndo) this.finishUndo();
+          S.toastEnd = Date.now() + ms;
+          S.toastT = setTimeout(function () { self.toastGone(false); }, ms);
+        },
+        // focus / mouse in the toast: the time stands still; out again: at least 3 more seconds
+        toastHold: function (on) {
+          if (!this.toastMsg || S.toastHeld === on) return;
+          S.toastHeld = on;
+          if (on) { clearTimeout(S.toastT); S.toastLeft = Math.max(0, S.toastEnd - Date.now()); }
+          else this.toastTimer(Math.max(3000, S.toastLeft || 0));
+        },
+        // the toast closes (time over, ×, Undo): its focus goes back to the view
+        toastGone: function (undo) {
+          var el = document.querySelector(".xp-toast"), had = !!(el && el.contains(document.activeElement));
+          clearTimeout(S.toastT);
+          S.toastHeld = false;
+          if (this.toastUndo && !undo) this.finishUndo();
           this.toastMsg = ""; this.toastUndo = false;
+          if (undo) this.undo();
+          if (had) this.focusView();
         },
-        undoToast: function () { clearTimeout(S.toastT); this.toastMsg = ""; this.toastUndo = false; this.undo(); },
+        closeToast: function () { this.toastGone(false); },
+        undoToast: function () { this.toastGone(true); },
         flash: function (id) {
           var self = this;
           this.flashId = id;
@@ -733,6 +776,7 @@
         // into an entry, GVX normalizes and checks it.
         openAdd: function (type, catId) {
           S.opener = document.activeElement;
+          S.formOrig = null;
           this.formMode = "add";
           this.clearPhoto();
           if (type) { this.form = this.blankForm(type, catId); this.formStep = 2; }
@@ -753,27 +797,38 @@
           this.formMode = "edit";
           this.clearPhoto();
           this.form = this.entryToForm(e);
+          // what the entry said when the form opened (buildEntry keeps a request status the form
+          // does not show; saveForm deletes a photo the receipt no longer points to)
+          S.formOrig = { repaid: e.repaid || "", receipt: e.receipt || "none" };
           this.formStep = 2;
           this.formMore = !!(e.method && e.method !== (this.st().defaults || {}).method) || !!(e.vendor || e.place || e.notes || (e.tags && e.tags.length) || e.claim_ref || e.claim_date);
           if (e.receipt === "photo") this.loadPhoto(e.id);
           this.showForm();
         },
-        duplicate: function (id) {
+        // "Duplicate": a new entry like this one, dated today. A subscription's start follows the new
+        // date; the odometer readings are left out (a new trip). renew: "Record the renewal" — the new
+        // term starts where the old one ends (or today, when it has already ended), so the reminder goes.
+        duplicate: function (id, renew) {
           var e = S.state.entries.filter(function (x) { return x.id === id; })[0];
           if (!e) return;
           S.opener = document.activeElement;
+          S.formOrig = null;
           this.formMode = "add";
           this.clearPhoto();
-          var f = this.entryToForm(e);
-          f.id = ""; f.date = today(); f.end_date = ""; f.claim_date = ""; f.claim_ref = ""; f.paid_date = ""; f.example = false; f.created = "";
+          var f = this.entryToForm(e), d = today();
+          f.id = ""; f.date = d; f.end_date = ""; f.claim_date = ""; f.claim_ref = ""; f.paid_date = ""; f.example = false; f.created = "";
+          f.odometer_start = ""; f.odometer_end = "";
+          var end = renew ? S.X.subEnd(e) : "";
+          f.sub_start = end && end > d ? end : "";
           if (f.receipt === "photo") f.receipt = "none";
           f.claim_status = this.defaultClaim(f, this.cat(f.category));
-          if (f.sub_kind === "helped") f.repaid = "owed";
+          if (f.sub_kind === "helped") { f.repaid = "owed"; f.claim_status = "to_request"; }
           this.form = f;
           this.formStep = 2;
           this.showForm();
-          this.say(this.t("toast.duplicated"));
+          this.say(this.t(renew ? "toast.renewing" : "toast.duplicated"));
         },
+        renew: function (id) { this.duplicate(id, true); },
         showForm: function () {
           var self = this;
           this.formErr = {}; this.formErrs = []; this.dlgMsg = "";
@@ -940,6 +995,7 @@
           try { c = S.X.parseMoney(String(s)); } catch (e) { c = null; }
           return c == null || isNaN(c) ? null : Math.abs(Math.round(c));
         },
+        negative: function (s) { var c = null; try { c = S.X.parseMoney(String(s)); } catch (e) { c = null; } return c != null && c < 0; },
         booksAuto: function () {
           var f = this.form;
           if (!f || !this.has("unit_cost")) return false;
@@ -967,6 +1023,21 @@
           s.funders.push({ id: id, kind: "person", name: clean(name), hidden: false, order: max + 1, builtin: false });
           return id;
         },
+        // Money received from a person: the purchases made for them that it covers (GVX.settleRepayments,
+        // oldest first) are marked repaid — paid on that day — so they leave the requests. → how many.
+        settle: function (funder, date) {
+          var X = S.X, st = this.st(), ids = X.settleRepayments(S.state.entries, st, funder) || [], set = {}, now = nowIso();
+          if (!ids.length) return 0;
+          ids.forEach(function (id) { set[id] = 1; });
+          S.state.entries = S.state.entries.map(function (e) {
+            if (!set[e.id]) return e;
+            var c = clone(e);
+            c.repaid = "repaid"; c.claim_status = "paid"; c.paid_date = c.paid_date || date || today(); c.updated = now;
+            var r = X.normalizeEntry(c, st);
+            return r && r.entry ? r.entry : c;
+          });
+          return ids.length;
+        },
         buildEntry: function () {
           var f = this.form, t = f.type, tp = this.tpl(), errs = [];
           var e = {
@@ -985,8 +1056,12 @@
             example: !!f.example, created: f.created || "", amount_cents: 0,
           };
           if (this.has("money")) {
-            var c = this.booksAuto() ? Math.round(num(f.quantity) * this.moneyOf(f.unit_cost)) : this.moneyOf(f.amount);
-            if (c === null) errs.push({ field: "amount", text: this.t("form.err_money") });
+            var auto = this.booksAuto(), c = auto ? Math.round(num(f.quantity) * this.moneyOf(f.unit_cost)) : this.moneyOf(f.amount);
+            // the amount is required: left empty it is an error (a typed 0 is fine); a minus sign is
+            // not a way to record money coming in (that is "Money received")
+            if (!auto && clean(f.amount) === "") errs.push({ field: "amount", text: this.t("form.err_amount_required") });
+            else if (c === null) errs.push({ field: "amount", text: this.t("form.err_money") });
+            else if (!auto && this.negative(f.amount)) errs.push({ field: "amount", text: this.t("form.err_amount_negative") });
             e.amount_cents = c === null || c === "" ? "" : c;
           }
           if (this.has("unit_cost")) {
@@ -1007,9 +1082,14 @@
               if (!clean(f.person_name)) errs.push({ field: "person_name", text: this.t("form.err_person") });
               else { e.funder = this.ensurePerson(f.person_name); e.person = clean(f.person_name); }
               e.repaid = f.repaid || "owed";
-              // the request status follows the pay-back: still owed → to ask for; paid back → paid
-              // (so it leaves the requests and the list says so); forgiven → nothing to ask (a gift)
-              e.claim_status = e.repaid === "repaid" ? "paid" : e.repaid === "forgiven" ? "none" : "to_request";
+              // the request status follows the pay-back when the pay-back is chosen here: still owed →
+              // to ask for; paid back → paid (it leaves the requests and the list says so); forgiven →
+              // nothing to ask (a gift). An edit that leaves the pay-back alone keeps the status the
+              // entry has (a request marked submitted stays submitted: the form does not show it).
+              var o = S.formOrig, kept = this.formMode === "edit" && !!o && o.repaid === e.repaid;
+              if (!kept) e.claim_status = e.repaid === "repaid" ? "paid" : e.repaid === "forgiven" ? "none" : "to_request";
+              else if (e.repaid === "owed" && f.claim_status === "paid") e.repaid = "repaid";          // marked paid earlier: paid back
+              else if (e.repaid === "owed" && f.claim_status === "none") e.claim_status = "to_request";
               if (e.repaid === "repaid" && !e.paid_date) e.paid_date = today();
             }
           }
@@ -1017,8 +1097,7 @@
           if (t === "received" || t === "stock") e.claim_status = "none";
           if (t === "stock") e.amount_cents = 0;
           if (this.isSelf(e.funder) && e.sub_kind !== "helped") e.claim_status = "none";
-          if (S.photo && S.photo !== "remove") e.receipt = "photo";
-          else if (S.photo === "remove" && e.receipt === "photo") e.receipt = "none";
+          if (S.photo === "remove" && e.receipt === "photo") e.receipt = "none";
           return { entry: e, errs: errs };
         },
         saveForm: function (again) {
@@ -1045,17 +1124,22 @@
           if (isNew) S.state.entries.push(e);
           else S.state.entries = S.state.entries.map(function (x) { return x.id === e.id ? e : x; });
           var first = S.state.entries.length === 1;
-          // the photo: stored on this device under the entry's id (or removed)
-          if (S.photo && S.photo !== "remove") {
+          // the photo: stored on this device under the entry's id (or removed — also when the receipt
+          // is now kept some other way: a photo nothing points to never stays behind)
+          if (S.photo && S.photo !== "remove" && e.receipt === "photo") {
             var p = S.photo;
             photos.put({ id: e.id, type: "image/jpeg", blob: p.blob, w: p.w, h: p.h, name: p.name || "", added: now })
               .catch(function () { self.say(self.t("toast.photo_failed")); });
-          } else if (S.photo === "remove") photos.del(e.id);
+          } else if (S.photo === "remove" || (S.formOrig && S.formOrig.receipt === "photo" && e.receipt !== "photo")) photos.del(e.id);
           S.photo = null;
-          this.save();
-          this.askPersist();
+          // money a person paid back settles what was bought for them (oldest first)
+          var settled = e.type === "received" ? this.settle(e.funder, e.date) : 0;
+          var stored = this.save();
+          if (stored) this.askPersist();
           this.flash(e.id);
-          this.say(first ? this.t("toast.saved_first") : this.t("toast.saved"));
+          var msg = first ? this.t("toast.saved_first") : this.t("toast.saved");
+          if (settled) msg += " · " + this.plural(settled, "toast.settled_one", "toast.settled");
+          this.saySaved(msg);
           if (again) {
             var keep = this.form, nf = this.blankForm(keep.type, keep.category);
             ["date", "funder", "claim_status", "method", "event", "place", "rate_id", "rate", "round_trip", "from", "sub_kind", "format"].forEach(function (k) { nf[k] = keep[k]; });
@@ -1214,7 +1298,9 @@
           var d = daysSince(m.lastBackup);
           return d === null || d > days;
         },
-        reminderCount: function () { return this.staleRows().length + this.renewalRows().length + (this.backupDue() ? 1 : 0); },
+        // what the Reminders card lists (and the Summary tab's badge counts): requests waiting too long and
+        // the backup — renewals have their own card (Subscriptions)
+        reminderCount: function () { return this.staleRows().length + (this.backupDue() ? 1 : 0); },
 
         /* ================= Giveaways ================= */
         inv: function () {
@@ -1225,7 +1311,8 @@
             return list.map(function (x) {
               return { key: norm(x.item) + "|" + (x.format || ""), item: x.item || self.t("give.no_item"), format: x.format || "", formatText: x.format ? self.t("format." + x.format) : "",
                        bought: self.count(x.bought_qty || 0), received: self.count(x.received_qty || 0), given: self.count(x.given_qty || 0),
-                       onHand: x.on_hand || 0, onHandText: self.count(x.on_hand || 0), avg: x.avg_unit_cents ? self.money(x.avg_unit_cents) : "—", cost: self.money(x.cost_cents || 0) };
+                       onHand: x.on_hand || 0, onHandText: self.count(x.on_hand || 0), avg: x.avg_unit_cents ? self.money(x.avg_unit_cents) : "—",
+                       hasAvg: !!x.avg_unit_cents, cost: self.money(x.cost_cents || 0) };
             }).sort(function (a, b) { return a.item.localeCompare(b.item); });
           }) || [];
         },
@@ -1336,7 +1423,15 @@
           }
           this.rqCopy();
         },
-        rqCsv: function () { this.downloadCsv(this.rqEntries(), "request-" + (safeName(this.funderName(this.rq.funder)) || "funder")); },
+        // "Download CSV": the request's own lines (GVX.claimCSV) — what the printed request says, names
+        // left out unless the request includes them; never the full record (that is Settings → Data)
+        rqCsv: function () {
+          var c = this.rqClaim();
+          if (!c || !(c.lines || []).length) { this.say(this.t("toast.nothing_to_export")); return; }
+          var name = this.t("data.file_base") + "-request-" + (safeName(this.funderName(this.rq.funder)) || "funder") + "-" + today() + ".csv";
+          saveBlob(new Blob([S.X.claimCSV(c, S.ui, this.L)], { type: "text/csv;charset=utf-8" }), name);
+          this.say(this.t("toast.downloaded", { file: name }));
+        },
         rqMark: function () {
           var self = this, ids = this.rqEntries().filter(function (e) { return e.claim_status === "to_request" || e.claim_status === "denied"; }).map(function (e) { return e.id; });
           if (!ids.length) return;
@@ -1345,7 +1440,7 @@
             if (!yes) return;
             var n = self.patch(ids, function (e) { e.claim_status = "submitted"; e.claim_date = d; e.claim_ref = ref; });
             self.rq.st.submitted = true;
-            self.say(self.plural(n, "toast.submitted_one", "toast.submitted"));
+            self.saySaved(self.plural(n, "toast.submitted_one", "toast.submitted"));
           });
         },
         rqToMark: function () { return this.rqEntries().filter(function (e) { return e.claim_status === "to_request" || e.claim_status === "denied"; }).length; },
@@ -1356,12 +1451,15 @@
           S.rqUrls = [];
           this.rqPhotos = [];
           if (!this.rq.photos) return Promise.resolve();
-          var list = this.rqEntries().filter(function (e) { return e.receipt === "photo"; });
+          // each caption says what the request's line says (no name, unless the request includes names)
+          var lines = {};
+          ((this.rqClaim() || {}).lines || []).forEach(function (l) { lines[l.id] = l; });
+          var list = this.rqEntries().filter(function (e) { return e.receipt === "photo" && lines[e.id]; });
           return Promise.all(list.map(function (e) { return photos.get(e.id).then(function (rec) { return { e: e, rec: rec }; }); })).then(function (all) {
             self.rqPhotos = all.filter(function (x) { return x.rec && x.rec.blob; }).map(function (x) {
-              var u = URL.createObjectURL(x.rec.blob);
+              var u = URL.createObjectURL(x.rec.blob), l = lines[x.e.id];
               S.rqUrls.push(u);
-              return { id: x.e.id, url: u, label: self.day(x.e.date, true) + " · " + (x.e.description || self.catLabel(x.e.category)) + " · " + self.money(x.e.amount_cents) };
+              return { id: x.e.id, url: u, label: self.day(l.date, true) + " · " + l.description + " · " + self.money(l.amount_cents) };
             });
           });
         },
@@ -1416,19 +1514,21 @@
           if (csv.charCodeAt(0) !== 0xfeff) csv = "﻿" + csv;
           var name = this.t("data.file_base") + "-" + (what && what !== "all" ? what + "-" : "") + today() + ".csv";
           saveBlob(new Blob([csv], { type: "text/csv;charset=utf-8" }), name);
+          // a CSV is an export, not a backup: it has no photos and no settings ("Last backup" and its
+          // reminder wait for the full backup)
           this.stamp("lastExport");
-          if (what === "all") this.stamp("lastBackup");
           this.save();
           this.say(this.t("toast.downloaded", { file: name }));
         },
         exportAll: function () { this.downloadCsv(S.state.entries.slice(), "all"); },
-        // The full backup: entries, settings and the receipt photos, in one .json file.
+        // The full backup: entries, settings and the receipt photos of the entries, in one .json file.
         exportBackup: function () {
           var self = this;
           if (!S.state.entries.length) { this.say(this.t("toast.nothing_to_export")); return; }
           this.say(this.t("toast.preparing"));
+          var mine = this.photoIds();
           photos.all().then(function (recs) {
-            return Promise.all((recs || []).map(function (r) {
+            return Promise.all((recs || []).filter(function (r) { return r && mine[r.id]; }).map(function (r) {
               return r && r.blob ? blobToDataUrl(r.blob).then(function (u) { return { id: r.id, type: r.type || "image/jpeg", dataUrl: u }; }) : null;
             }));
           }).then(function (receipts) {
@@ -1440,6 +1540,22 @@
             self.save();
             self.say(self.t("toast.downloaded", { file: name }));
           }).catch(function (e) { if (window.console) console.error("[expenses]", e); self.say(self.t("toast.backup_failed")); });
+        },
+        // the entries that have a photo (and the ones a pending "Undo" would bring back)
+        photoIds: function () {
+          var ids = {};
+          S.state.entries.forEach(function (e) { if (e.receipt === "photo") ids[e.id] = 1; });
+          if (S.undo) S.undo.photoIds.forEach(function (id) { ids[id] = 1; });
+          return ids;
+        },
+        // Photos no entry points to any more are deleted: a delete whose undo time never ran out (the
+        // page was closed), a CSV import that replaced everything. A deleted receipt never travels on
+        // in a backup.
+        cleanPhotos: function () {
+          var mine = this.photoIds();
+          return photos.keys().then(function (keys) {
+            return Promise.all((keys || []).filter(function (k) { return !mine[k]; }).map(function (k) { return photos.del(k); }));
+          }).catch(function () {});
         },
         lastBackupText: function () { this.rev; return this.ago(S.state && S.state.meta ? S.state.meta.lastBackup : null); },
         storageKb: function () { this.rev; var raw = lsGet(KEY); return raw ? Math.max(1, Math.round(raw.length * 2 / 1024)) : 0; },
@@ -1453,14 +1569,18 @@
           if (file) this.impFile(file);
         },
         impPick: function (ev) { var file = ev.target.files && ev.target.files[0]; ev.target.value = ""; if (file) this.impFile(file); },
+        // A CSV may weigh up to 10 MB; a full backup (every receipt photo inside) much more — its limit
+        // is the core's (GVX.importKind / importLimit), checked once the file says what it is.
         impFile: function (file) {
-          var self = this;
+          var self = this, X = S.X, most = X.importLimit("backup");
           this.impReset();
           this.imp.name = file.name;
-          if (file.size > MAX_IMPORT) { this.imp.err = this.t("imp.too_big"); return; }
+          var tooBig = function (limit) { self.imp.err = self.t("imp.too_big", { mb: self.count(Math.round(limit / 1048576)) }); };
+          if (file.size > most) { tooBig(most); return; }
           readText(file).then(function (text) {
-            var t = String(text || "").replace(/^﻿/, "");
-            if (/\.json$/i.test(file.name) || /^\s*\{/.test(t)) self.impBackupText(t);
+            var t = String(text || "").replace(/^﻿/, ""), kind = X.importKind(file.name, t.slice(0, 64)), limit = X.importLimit(kind);
+            if (file.size > limit) { tooBig(limit); return; }
+            if (kind === "backup") self.impBackupText(t);
             else self.impCsvText(t);
           }, function () { self.imp.err = self.t("imp.unreadable"); });
         },
@@ -1474,11 +1594,14 @@
           this.imp.opts = { dateOrder: this.L === "es" ? "dmy" : "mdy", decimal: "auto", includeDuplicates: false };
           this.imp.map = { date: "", description: "", amount: "", category: "", miles: "", notes: "" };
           this.imp.mapped = false;
+          this.imp.forceMap = false;
           this.imp.mode = "merge";
           this.impPlan();
         },
+        // "Map the columns myself": a file that looked like the tracker's own goes through the mapping step
+        impMapMyself: function () { this.imp.forceMap = true; this.imp.mapped = false; this.impPlan(); },
         impPlan: function () {
-          var X = S.X, im = this.imp, o = { dateOrder: im.opts.dateOrder, allowDuplicates: !!im.opts.includeDuplicates, lang: this.L };
+          var X = S.X, im = this.imp, o = { dateOrder: im.opts.dateOrder, allowDuplicates: !!im.opts.includeDuplicates, lang: this.L, forceMapping: !!im.forceMap };
           if (im.opts.decimal !== "auto") o.decimal = im.opts.decimal;
           if (im.mapped) {
             var m = {};
@@ -1513,13 +1636,25 @@
             if (hit) im.map[k] = String(hit.i);
           });
         },
-        impMapReady: function () { var m = this.imp && this.imp.map; return !!m && m.date !== "" && m.amount !== "" && m.description !== ""; },
+        // a date, and an amount or miles (a mileage log has no amount: the default rate gives it; the
+        // description is optional — the core writes one for a trip)
+        impMapReady: function () { var m = this.imp && this.imp.map; return !!m && m.date !== "" && (m.amount !== "" || m.miles !== ""); },
         impUseMap: function () { this.imp.mapped = true; this.impPlan(); },
+        // a problem's field, as the visitor knows it: their own column's name (a mapped sheet), else the
+        // field's name on this page
+        impField: function (field) {
+          var im = this.imp, m = im && im.map, i = m && im.mapped && m[field] !== undefined && m[field] !== "" ? Number(m[field]) : -1;
+          var h = i >= 0 && im.headers ? im.headers.filter(function (x) { return x.i === i; })[0] : null;
+          if (h) return h.name;
+          var k = field === "amount_cents" ? "amount" : field;
+          return k && S.ui["field." + k] ? this.t("field." + k) : (k || "—");
+        },
         impSummary: function (plan) {
           var self = this, reasons = {};
           (plan.skip || []).forEach(function (s) { reasons[s.reason] = (reasons[s.reason] || 0) + 1; });
           this.imp.counts = { add: (plan.add || []).length, update: (plan.update || []).length, skip: (plan.skip || []).length, errors: (plan.errors || []).length,
-                              dup: (reasons.duplicate || 0) + (reasons.duplicate_id || 0), older: reasons.older || 0, same: reasons.same || 0 };
+                              dup: (reasons.duplicate || 0) + (reasons.duplicate_id || 0), older: reasons.older || 0, same: reasons.same || 0, all: (plan.all || []).length };
+          this.imp.ours = plan.format === "ours";
           this.imp.newCats = (plan.newCategories || []).map(function (c) { return self.lbl(c.label || c.name || c); });
           this.imp.newFunders = (plan.newFunders || []).map(function (c) { return self.lbl(c.name || c.label || c); });
           this.imp.sampleRows = (plan.add || []).concat(plan.update || []).slice(0, 8).map(function (e, i) {
@@ -1528,7 +1663,7 @@
           });
           var probs = (plan.errors || []).concat(plan.warnings || []);
           this.imp.errorList = probs.slice(0, 20).map(function (x, i) {
-            return { i: i, text: x.row ? self.t("imp.error_row", { row: x.row, field: x.field || "—", message: self.msgKey(x.message_key || x.key) }) : self.msgKey(x.message_key || x.key) };
+            return { i: i, text: x.row ? self.t("imp.error_row", { row: x.row, field: self.impField(x.field), message: self.msgKey(x.message_key || x.key) }) : self.msgKey(x.message_key || x.key) };
           });
           this.imp.moreErrors = Math.max(0, probs.length - 20);
         },
@@ -1558,9 +1693,10 @@
           next.meta = next.meta || S.state.meta;
           S.state = next;
           this.save();
+          if (this.imp.mode === "replace") this.cleanPhotos();   // the replaced entries' receipt photos go too
           var added = this.imp.mode === "replace" ? next.entries.length : Math.max(0, next.entries.length - before);
           this.imp = { step: "done", added: added, updated: (plan.update || []).length, err: "" };
-          this.say(this.t("toast.imported", { n: this.count(added) }));
+          this.saySaved(this.t("toast.imported", { n: this.count(added) }));
           if (next.entries.length) this.askPersist();
         },
         // A full backup: replace, or merge by id (the newer copy of an entry wins; new list items are added).
@@ -1599,16 +1735,18 @@
           S.state = { v: st.v || 1, entries: entries, settings: settings, meta: Object.assign({}, st.meta || {}, { lastBackup: (b.meta && b.meta.lastBackup) || st.meta.lastBackup }) };
           this.save();
           this.imp = { step: "done", added: added, updated: 0, err: "" };
-          this.say(this.t("toast.imported", { n: this.count(added) }));
+          this.saySaved(this.t("toast.imported", { n: this.count(added) }));
           if (entries.length) this.askPersist();
         },
 
         /* ================= examples, erase ================= */
+        // once: with the examples already there (a second click) nothing is added twice
         addExamples: function () {
+          if (this.hasExamples()) return;
           var ex = S.X.exampleEntries(today(), this.st(), this.L) || [];
           S.state.entries = S.state.entries.concat(ex);
           this.save();
-          this.say(this.t("toast.examples_added", { n: this.count(ex.length) }));
+          this.saySaved(this.t("toast.examples_added", { n: this.count(ex.length) }));
         },
         removeExamples: function () {
           var self = this, n = S.state.entries.filter(function (e) { return e.example; }).length;
@@ -1619,7 +1757,7 @@
             S.state.entries = S.state.entries.filter(function (e) { if (e.example) { ids.push(e.id); return false; } return true; });
             ids.forEach(function (id) { delete self.sel[id]; photos.del(id); });
             self.save();
-            self.say(self.t("toast.examples_removed"));
+            self.saySaved(self.t("toast.examples_removed"));
           });
         },
         eraseReady: function () { return clean(this.eraseText).toUpperCase() === this.t("data.erase_word").toUpperCase(); },
@@ -1729,7 +1867,7 @@
             if (!yes) return;
             self.st()[kind] = self.st()[kind].filter(function (x) { return x.id !== id; });
             self.save();
-            self.say(self.t("toast.item_deleted"));
+            self.saySaved(self.t("toast.item_deleted"));
           });
         },
         mergeTargets: function (kind, id) {
@@ -1747,7 +1885,7 @@
             if (it.builtin) it.hidden = true;
             else self.st()[kind] = self.st()[kind].filter(function (x) { return x.id !== id; });
             self.save();
-            self.say(self.t("toast.merged", { n: self.count(ids.length) }));
+            self.saySaved(self.t("toast.merged", { n: self.count(ids.length) }));
           });
         },
         /* ---- rates and places ---- */

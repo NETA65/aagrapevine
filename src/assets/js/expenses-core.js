@@ -42,10 +42,13 @@
      line too), quoted fields with line breaks, blank lines skipped, ragged rows padded.
      Money "$1,234.50", "1.234,50", "12,50", "(12.00)", "-12.00"; dates ISO, M/D/YYYY or D/M/YYYY
      (opts.dateOrder), YYYY/MM/DD, "27 Sep 2026", Excel serial numbers in date columns.
-   * Our own file (a header with id, or type + date + amount): columns by name, any order. Anything
-     else: needsMapping → the page asks which column is the date, description, amount … and calls
-     planImport again with opts.mapping.
-   * Rows with an id: update when newer, skip when the same or older. Without an id: a fingerprint
+   * Our own file (a header with type + date + amount — or miles — and type cells that are ours:
+     expense, mileage …): columns by name, any order. Anything else (a bank's "Type: Debit", a sheet
+     with only an "ID" column in common): needsMapping → the page asks which column is the date,
+     description, amount … and calls planImport again with opts.mapping (opts.forceMapping asks even
+     for a file that looks like ours).
+   * Rows with an id: update when newer, skip when the same or older; a row whose words were changed
+     in a spreadsheet (same stamp, or none) is an update too. Without an id: a fingerprint
      (type | date | cents | description) already in the ledger is a duplicate (skipped unless asked).
    * Round-trip law (tested): planImport(parseCSV(toCSV(E))) into an empty ledger gives back E.
    * planImport never throws: problems come back as message keys ("expenses.err.*" stop a row or the
@@ -821,6 +824,31 @@
   }
   function byDate(a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.created < b.created ? -1 : a.created > b.created ? 1 : 0); }
 
+  /* Money a person paid back (a "received" entry from a funder of kind person) settles what you bought
+     for them: the ids of their open purchases (not yet repaid or paid) that the money not matched yet
+     covers, oldest first — stopping at the first one it does not cover. The page marks those repaid,
+     so a helped subscription stops saying "To request" once the repayment is recorded. */
+  function settleRepayments(entries, settings, funder) {
+    var S = isObj(settings) ? settings : {};
+    if (!funder || !isPerson(S, funder)) return [];
+    var all = list(entries).filter(function (e) { return e.funder === funder; });
+    var credit = 0;
+    all.forEach(function (e) {
+      var a = Number(e.amount_cents) || 0;
+      if (e.type === "received") credit += a;
+      else if (isClaimed(e) && (e.claim_status === "paid" || e.repaid === "repaid")) credit -= a;
+    });
+    var out = [];
+    all.filter(function (e) { return isClaimed(e) && e.repaid !== "repaid" && e.claim_status !== "paid"; }).sort(byDate).some(function (e) {
+      var a = Number(e.amount_cents) || 0;
+      if (a > credit) return true;
+      credit -= a;
+      out.push(e.id);
+      return false;
+    });
+    return out;
+  }
+
   /* Literature to carry the message: per item (title + format; case and spaces don't matter)
      bought (purchases marked "to give away"), received at no cost (stock), given away, on hand
      (can go below 0: flagged `negative`), what the purchases cost, and where it was given.
@@ -1094,6 +1122,28 @@
     return out.join("\n");
   }
 
+  /* A request's lines as a CSV for the treasurer: what the printed request shows, one row per line
+     (the miles with their from / to and rate), headers in the page's language. People's names are out
+     unless the request includes them (claimLines already chose each line's words) — never the ids,
+     notes or the other columns of the full export. */
+  function claimCSV(claim, strings, lang) {
+    if (!isObj(claim)) return "";
+    var w = function (k, f) { return word(strings, k, f); };
+    var head = [w("field.date", "Date"), w("field.description", "Description"), w("field.category", "Category"), w("field.from", "From"),
+      w("field.to", "To"), w("field.miles", "Miles"), w("field.rate", "Rate"), w("field.amount", "Amount"), w("field.receipt", "Receipt")];
+    var miles = {};
+    arr(claim.mileage).forEach(function (m) { if (isObj(m)) miles[m.id] = m; });
+    var lines = [head.map(function (h) { return cell(guard(h)); }).join(",")];
+    arr(claim.lines).forEach(function (l) {
+      if (!isObj(l)) return;
+      var m = miles[l.id] || {}, k = RECEIPT.indexOf(l.receipt_kind) > 0 ? l.receipt_kind : "none";
+      var rc = k === "none" ? "" : w("req.receipt_" + k, k);
+      var text = [oneLine(l.description), oneLine(l.category), oneLine(m.from), oneLine(m.to)].map(function (v) { return cell(guard(v)); });
+      lines.push([cell(str(l.date))].concat(text, [numText(l.miles), cell(str(l.rate)), centsText(Number(l.amount_cents) || 0), cell(guard(rc))]).join(","));
+    });
+    return "﻿" + lines.join("\r\n") + "\r\n";
+  }
+
   /* ------------------------------------------------------------------ CSV: writing */
   // a text cell that a spreadsheet would run as a formula gets a leading ' (see the top of the file)
   function guard(v) { return /^'*[=+\-@\t\r]/.test(v) ? "'" + v : v; }
@@ -1188,6 +1238,10 @@
     };
     while (i < n) {
       var val, k;
+      // a quote after spaces still opens a quoted field (hand-made files: "Date, Description")
+      var sp = i;
+      while (sp < n && (text.charCodeAt(sp) === 32 || (D !== 9 && text.charCodeAt(sp) === 9))) sp++;
+      if (sp > i && text.charCodeAt(sp) === 34) i = sp;
       if (text.charCodeAt(i) === 34) {
         var j = i + 1, buf = "";
         for (;;) {
@@ -1224,11 +1278,12 @@
 
   /* ------------------------------------------------------------------ CSV: the import plan */
   function fingerprint(e) { return [e.type, e.date, e.amount_cents, norm(e.description)].join("|"); }
-  // an entry as comparable text: every field in one order (custom keys sorted); `example` left out
+  // an entry as comparable text: every field in one order (custom keys sorted); `example` and the
+  // created / updated stamps left out (what the entry says, not when it was written)
   function canon(e) {
     var o = [];
     Object.keys(FIELDS).forEach(function (k) {
-      if (k === "example") return;
+      if (k === "example" || k === "created" || k === "updated") return;
       var v = e[k];
       if (k === "custom" && isObj(v)) { var c = {}; Object.keys(v).sort().forEach(function (x) { c[x] = v[x]; }); v = c; }
       o.push(v === undefined ? null : v);
@@ -1293,7 +1348,19 @@
     plan.dateOrder = opts.dateOrder === "dmy" ? "dmy" : "mdy";
     var hk = header.map(function (h) { return norm(h); });
     var hasCol = function (h) { return hk.indexOf(h) >= 0; };
-    var ours = hasCol("date") && (hasCol("id") || (hasCol("type") && hasCol("amount")));
+    // our own file: type + date + amount (or miles), and type cells that are ours. A bank's
+    // "Type" (Debit / Credit) or a sheet that only shares an "ID" column goes to the mapping step.
+    var ours = !opts.forceMapping && hasCol("date") && hasCol("type") && (hasCol("amount") || hasCol("signed_amount") || hasCol("miles"));
+    if (ours) {
+      var ti = hk.indexOf("type"), typed = 0, foreign = 0;
+      for (var tr = 1; tr < data.length; tr++) {
+        var tc = unguard(str(data[tr][ti])).trim();
+        if (!tc) continue;
+        typed += 1;
+        if (!enumOr(tc, TYPES)) foreign += 1;
+      }
+      if (foreign * 2 > typed) ours = false;
+    }
     if (!ours && !isObj(opts.mapping)) { plan.needsMapping = true; plan.sample = data.slice(1, 6); return; }
 
     // a copy of the settings: the plan adds its new categories / funders / fields here only
@@ -1441,13 +1508,14 @@
       if (rt !== undefined && rt.trim()) {
         var rp = decParts(rt, num), mills = rp && !rp.neg ? scaled(rp, 3) : null;
         if (mills === null || mills > 99999) soft("rate", "expenses.warn.rate"); else raw.rate = String(mills / 1000);
-      } else if (type === "mileage" && !ours) raw.rate = rateOf(S.defaults && S.defaults.rate) || rateOf(S.default_rate);
+      } else if (type === "mileage" && (!ours || !has(col, "rate"))) raw.rate = rateOf(S.defaults && S.defaults.rate) || rateOf(S.default_rate);
       ["giveaway", "round_trip"].forEach(function (k) { var v = get(k); if (v !== undefined) raw[k] = yes(v); });
       ["description", "claim_ref", "method", "vendor", "event", "place", "person", "item", "from", "to", "receipt_ref", "notes",
         "claim_status", "format", "sub_product", "sub_kind", "repaid", "receipt"].forEach(function (k) { var v = text(k); if (v !== undefined) raw[k] = v; });
       var tags = text("tags");
       if (tags !== undefined) raw.tags = tags;
       ["created", "updated"].forEach(function (k) { var v = get(k); if (v !== undefined && validStamp(v.trim())) raw[k] = v.trim(); });
+      var stamped = has(raw, "updated");
 
       var idCell = get("id");
       var hadId = false;
@@ -1485,9 +1553,16 @@
       var prev = hadId ? byId[entry.id] : null;
       if (prev) {
         var p = normalizeEntry(prev, S).entry;
+        var tNew = Date.parse(entry.updated) || 0, tOld = Date.parse(prev.updated) || 0;
         if (canon(p) === canon(entry)) plan.skip.push({ row: rowNo, reason: "same", message_key: "expenses.warn.skip_same", entry: entry });
-        else if ((Date.parse(entry.updated) || 0) > (Date.parse(prev.updated) || 0)) plan.update.push(entry);
-        else plan.skip.push({ row: rowNo, reason: "older", message_key: "expenses.warn.skip_older", entry: entry });
+        else if (stamped && tNew > tOld) plan.update.push(entry);
+        else if (!stamped || tNew === tOld) {
+          // changed in a spreadsheet (the stamp is the exported one, or gone): the file's words win,
+          // stamped now — so the older copy of the file is "older" next time
+          if (!has(raw, "created") && validStamp(prev.created)) entry.created = prev.created;
+          entry.updated = nowISO();
+          plan.update.push(entry);
+        } else plan.skip.push({ row: rowNo, reason: "older", message_key: "expenses.warn.skip_older", entry: entry });
       } else if (!hadId) {
         if (!fps) { fps = {}; old.forEach(function (e) { fps[fingerprint(e)] = 1; }); }
         if (fps[fingerprint(entry)] && !opts.allowDuplicates) {
@@ -1528,6 +1603,15 @@
     }
     return { v: SCHEMA, entries: entries, settings: settings, meta: Object.assign({ lastBackup: null, lastExport: null, created: nowISO() }, isObj(st.meta) ? st.meta : {}, { lastImport: nowISO() }) };
   }
+
+  /* ------------------------------------------------------------------ what a picked file is */
+  /* A file the visitor picked to import: "backup" (a .json, or text that starts with { or [) or "csv",
+     and the most it may weigh. A full backup carries every receipt photo, so it may be much bigger
+     than a CSV (readBackup takes up to 8 × the CSV limit). head: the file's first characters. */
+  function importKind(name, head) {
+    return /\.json$/i.test(str(name)) || /^﻿?\s*[{[]/.test(str(head)) ? "backup" : "csv";
+  }
+  function importLimit(kind) { return kind === "backup" ? LIMITS.bytes * 8 : LIMITS.bytes; }
 
   /* ------------------------------------------------------------------ full backup */
   function cleanReceipts(list) {
@@ -1702,11 +1786,11 @@
     // computations
     summary: summary, funderBalances: funderBalances, peopleOwed: peopleOwed, inventory: inventory, eventGiveaways: eventGiveaways,
     renewals: renewals, budgets: budgets, staleClaims: staleClaims, filterEntries: filterEntries, sortEntries: sortEntries,
-    claimLines: claimLines, claimText: claimText,
+    claimLines: claimLines, claimText: claimText, claimCSV: claimCSV, settleRepayments: settleRepayments,
     // CSV
     toCSV: toCSV, parseCSV: parseCSV, planImport: planImport, applyImport: applyImport, decodeText: decodeText, fingerprint: fingerprint,
     // backup and settings
-    toBackup: toBackup, readBackup: readBackup, migrate: migrate, mergeDefaults: mergeDefaults,
+    toBackup: toBackup, readBackup: readBackup, migrate: migrate, mergeDefaults: mergeDefaults, importKind: importKind, importLimit: importLimit,
     // examples
     exampleEntries: exampleEntries,
   };

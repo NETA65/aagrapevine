@@ -4,7 +4,8 @@
   content/events/*.md         → data/raw/manual_events.json   (kind "event")
 
 (The bulletin was called "Announcements" until 2026-09: the data file, the kind and the item ids
-"ann:…" kept that name, so nothing already on the site changes identity.)
+"ann:…" kept that name, so nothing already on the site changes identity. A post saved in the old
+content/announcements/ folder still shows; /status/ asks for it to be moved to content/bulletin/.)
 
 Each file is Markdown with a small YAML header ("front matter"), e.g.
 
@@ -63,6 +64,9 @@ from .translate import detect_language
 log = get_logger("announcements")
 
 ANN_DIR = CONTENT_DIR / "bulletin"
+# the folder's name until 2026-09: a post saved there by habit still shows, and /status/ asks for it
+# to be moved (its pictures are published too: eleventy.config.js)
+LEGACY_ANN_DIR = CONTENT_DIR / "announcements"
 EVENTS_DIR = CONTENT_DIR / "events"
 # The bulletin's own page, and where the pictures and documents saved next to its posts are
 # published (eleventy.config.js copies content/bulletin/*.<ATTACH_EXT> there).
@@ -337,15 +341,39 @@ def _attr(tag: str, name: str) -> str:
     return html.unescape(next((g for g in m.groups() if g is not None), "")).strip() if m else ""
 
 
-def _html_chunk(t: str) -> str:
+def _web_or_site(url: str) -> bool:
+    """A web address (https://…, //…) or a page / file of the site (/events/)."""
+    return bool(re.match(r"(?i)^(?:https?:)?//|^/(?![/\\])", url))
+
+
+def _html_img(tag: str, dropped: list[str] | None) -> str:
+    """<img> → ![alt](src) when the picture can show: a web address, a site path, or a picture or
+    document saved next to the post (link_attachments points it there, or reports it missing).
+    Anything else — an e-mail's inline picture (cid:…), data:, a bare "x" — never becomes a broken
+    picture: its description stays in italics, and the update's report names it (status.json)."""
+    src, alt = _attr(tag, "src"), clean_text(_attr(tag, "alt"))
+    if not src:
+        return ""
+    if _web_or_site(src) or (not re.match(r"(?i)^[a-z][a-z0-9+.-]*:", src) and unquote(src.split("?")[0]).lower().endswith(ATTACH_EXT)):
+        return f"![{alt}]({src})"
+    if dropped is not None:
+        name = re.sub(r"(?i)^cid:", "", src).split("@")[0].strip()
+        dropped.append((name or src)[:80])
+    return f"*{alt}*" if alt else ""
+
+
+def _html_chunk(t: str, dropped: list[str] | None = None) -> str:
     """One stretch of a post outside code blocks (see tidy_html)."""
     t = re.sub(r"<!--.*?-->", "", t, flags=re.S)
     t = _HTML_DROP.sub("", t)
-    t = re.sub(r"<img\b[^>]*>", lambda m: f"![{_attr(m.group(0), 'alt')}]({_attr(m.group(0), 'src')})"
-               if _attr(m.group(0), "src") else "", t, flags=re.I)
+    t = re.sub(r"<img\b[^>]*>", lambda m: _html_img(m.group(0), dropped), t, flags=re.I)
 
     def link(m: re.Match) -> str:
+        # a link keeps its address only when it is one a reader can follow (web, mail, phone, a page of
+        # the site, an anchor, a file saved next to the post); "javascript:" and the like: the words only
         href, label = _attr(m.group(1), "href"), clean_text(m.group(2))
+        if href and re.match(r"(?i)^[a-z][a-z0-9+.-]*:", href) and not re.match(r"(?i)^(?:https?|mailto|tel):", href):
+            href = ""
         return f"[{label or href}]({href})" if href else label
     t = re.sub(r"(<a\b[^>]*>)(.*?)</a\s*>", link, t, flags=re.I | re.S)
     for tags, mark in (("b|strong", "**"), ("i|em", "*"), ("s|strike|del", "~~"), ("code|tt|kbd", "`")):
@@ -364,9 +392,10 @@ def _html_chunk(t: str) -> str:
     return _HTML_TAG.sub("", t)
 
 
-def tidy_html(md: str) -> str:
+def tidy_html(md: str, dropped: list[str] | None = None) -> str:
     """A post's HTML → Markdown (see above). Fenced code blocks and `code` are left alone; a post
-    with no HTML comes back exactly as it was."""
+    with no HTML comes back exactly as it was. `dropped` collects the pictures that could not be kept
+    (an e-mail's inline picture …: _html_img)."""
     if not _HTML_HINT.search(md or ""):
         return md or ""
     out, chunk, in_code = [], [], False
@@ -375,7 +404,7 @@ def tidy_html(md: str) -> str:
         if chunk:
             keep: list[str] = []
             text = re.sub(r"`[^`\n]+`", lambda m: f"\x00{keep.append(m.group(0)) or len(keep) - 1}\x00", "\n".join(chunk))
-            text = re.sub("\x00(\\d+)\x00", lambda m: keep[int(m.group(1))], _html_chunk(text))
+            text = re.sub("\x00(\\d+)\x00", lambda m: keep[int(m.group(1))], _html_chunk(text, dropped))
             out.append(text)
             chunk.clear()
     for line in md.split("\n"):
@@ -456,10 +485,14 @@ def link_attachments(body: str, folder: Path) -> tuple[str, list[str]]:
 def parse_announcement(path: Path) -> dict:
     """A bulletin post (content/bulletin/<name>.md). The header is optional: see the module notes."""
     meta, body = read_front_matter(path)
-    body = tidy_html(body)
+    dropped: list[str] = []
+    body = tidy_html(body, dropped)
     stem = path.stem
     file_date, rest = date_from_text(stem)
     title = clean_text(meta.get("title"))
+    if _HTML_HINT.search(title):
+        # a title pasted with its tags ("<b>Assembly</b>"): the page shows it as text, so the words only
+        title = clean_text(markdown_to_text(tidy_html(title)))
     if title:
         # the text repeats the header's title as its first heading: shown once
         head, without = title_from_body(body)
@@ -477,6 +510,7 @@ def parse_announcement(path: Path) -> dict:
     if meta.get("expires") and not expires:
         raise ValueError(f"the expires date '{meta.get('expires')}' is not a date (use YYYY-MM-DD)")
     body, missing = link_attachments(body, path.parent)
+    missing += dropped
     slug = slugify(stem)
     text = markdown_to_text(body)
     summary = clean_text(meta.get("summary")) or text
@@ -612,6 +646,17 @@ def main(argv: list[str] | None = None) -> None:
     tz = ZoneInfo(load_config().get("site", {}).get("timezone", "America/Chicago"))
 
     anns, ann_err, ann_failed = collect(ANN_DIR, parse_announcement, "bulletin", keep=ATTACH_EXT)
+    old, old_err, old_failed = collect(LEGACY_ANN_DIR, parse_announcement, "bulletin (old folder)", keep=ATTACH_EXT)
+    have = {i["id"] for i in anns}
+    for it in old:
+        name = it["extra"]["file"].rsplit("/", 1)[-1]
+        if it["id"] in have:
+            ann_err.append(f"{LEGACY_ANN_DIR.name}/{name}: a post of the same name is in content/bulletin/ — this copy is left out")
+            continue
+        anns.append(it)
+        ann_err.append(f"{LEGACY_ANN_DIR.name}/{name}: the folder is now content/bulletin/ — the post shows, but move it there")
+    ann_err += old_err
+    ann_failed |= old_failed
     events, ev_err, ev_failed = collect(EVENTS_DIR, lambda p: parse_event(p, tz), "events")
 
     if a.dry_run:

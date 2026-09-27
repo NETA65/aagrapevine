@@ -816,34 +816,221 @@ def _link_url(url: str, resolve=None) -> str:
     return resolve(url) if resolve and url.startswith("/") and not url.startswith("//") else ""
 
 
+# ---- a bulletin post's Markdown in the e-mail
+# A post is whatever the chair wrote (content/bulletin/README.md: headings, lists inside lists,
+# quotations, tables, lines of ---, code, pictures, links). md_blocks reads it into blocks; md_to_html
+# draws them with inline styles (what e-mail programs keep) and md_to_text writes them as plain lines —
+# never the raw marks ("| Time | What |", "> …", "---").
+_MD_FENCE = re.compile(r"^\s{0,3}(```|~~~)")
+_MD_HEAD = re.compile(r"^\s{0,3}(#{1,6})\s+(.*?)(?:\s+#+)?\s*$")
+_MD_RULE = re.compile(r"^\s{0,3}(?:(?:-\s*){3,}|(?:\*\s*){3,}|(?:_\s*){3,})$")
+_MD_ITEM = re.compile(r"^(\s*)([-*+]|\d{1,9}[.)])\s+(.*)$")
+_MD_TABLE_SEP = re.compile(r"^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$")
+
+
+def _md_cells(line: str) -> list[str]:
+    t = line.strip()
+    t = t[1:] if t.startswith("|") else t
+    t = t[:-1] if t.endswith("|") and not t.endswith("\\|") else t
+    return [c.strip().replace("\\|", "|") for c in re.split(r"(?<!\\)\|", t)]
+
+
+def md_blocks(s: str) -> list[tuple[str, Any]]:
+    """A post's Markdown → [(kind, data)]: ("p", [lines]) · ("h", text) · ("list", [(depth, ordered,
+    text)]) · ("quote", [lines]) · ("table", {"head": [cells] | None, "rows": [[cells]]}) · ("hr", None)
+    · ("code", [lines])."""
+    blocks: list[tuple[str, Any]] = []
+    lines = (s or "").replace("\r\n", "\n").replace("\r", "\n").split("\n")
+    i, n = 0, len(lines)
+    while i < n:
+        line = lines[i]
+        if not line.strip():
+            i += 1
+            continue
+        if _MD_FENCE.match(line):
+            fence, body = _MD_FENCE.match(line).group(1), []
+            i += 1
+            while i < n and not lines[i].lstrip().startswith(fence):
+                body.append(lines[i])
+                i += 1
+            blocks.append(("code", body))
+            i += 1
+            continue
+        if m := _MD_HEAD.match(line):
+            blocks.append(("h", m.group(2)))
+            i += 1
+            continue
+        if _MD_RULE.match(line):
+            blocks.append(("hr", None))
+            i += 1
+            continue
+        if line.lstrip().startswith(">"):
+            quote = []
+            while i < n and lines[i].strip() and lines[i].lstrip().startswith(">"):
+                quote.append(re.sub(r"^\s*>\s?", "", lines[i]).lstrip(">").strip())
+                i += 1
+            blocks.append(("quote", [q for q in quote if q]))
+            continue
+        if line.lstrip().startswith("|"):
+            rows = []
+            while i < n and lines[i].lstrip().startswith("|"):
+                rows.append(lines[i])
+                i += 1
+            head = None
+            if len(rows) > 1 and _MD_TABLE_SEP.match(rows[1]):
+                head, rows = _md_cells(rows[0]), rows[2:]
+            blocks.append(("table", {"head": head, "rows": [_md_cells(r) for r in rows if not _MD_TABLE_SEP.match(r)]}))
+            continue
+        if _MD_ITEM.match(line):
+            items: list[list] = []
+            indents: list[int] = []
+            while i < n and lines[i].strip():
+                m = _MD_ITEM.match(lines[i])
+                if m:
+                    ind = len(m.group(1).expandtabs(4))
+                    if items and ind <= indents[0] and (m.group(2)[-1] in ".)") != items[0][1]:
+                        break                                  # "- a" then "1. b": a new list
+                    while indents and indents[-1] > ind:
+                        indents.pop()
+                    if not indents or indents[-1] < ind:
+                        indents.append(ind)
+                    items.append([len(indents) - 1, m.group(2)[-1] in ".)", m.group(3).strip()])
+                elif items:
+                    items[-1][2] += "\n" + lines[i].strip()      # a line that goes on the item above
+                i += 1
+            blocks.append(("list", [tuple(x) for x in items]))
+            continue
+        para = []
+        while i < n and lines[i].strip() and not (_MD_FENCE.match(lines[i]) or _MD_HEAD.match(lines[i]) or _MD_ITEM.match(lines[i])
+                                                  or lines[i].lstrip().startswith((">", "|"))):
+            if para and re.match(r"^\s{0,3}(=+|-+)\s*$", lines[i]):   # "Title" underlined: a heading
+                blocks.append(("h", " ".join(para)))
+                para = []
+                i += 1
+                break
+            if _MD_RULE.match(lines[i]):
+                break
+            para.append(lines[i].strip())
+            i += 1
+        if para:
+            blocks.append(("p", para))
+    return blocks
+
+
+def _md_inline_text(t: str, resolve=None) -> str:
+    t = re.sub(r"!\[([^\]]*)\]\(<?([^\s)>]+)>?\)", lambda m: f"[{m.group(1).strip() or m.group(2).rsplit('/', 1)[-1]}]({m.group(2)})", t)
+    t = re.sub(r"\[([^\]]+)\]\(<?([^\s)>]+)>?\)", lambda m: f"{m.group(1)} ({u})" if (u := _link_url(m.group(2), resolve)) else m.group(1), t)
+    t = re.sub(r"<(https?://[^>\s]+)>", r"\1", t)
+    t = re.sub(r"(\*\*|__|~~)(?=\S)(.+?)(?<=\S)\1", r"\2", t)
+    t = re.sub(r"(?<![\w*])([*_])(?=\S)(.+?)(?<=\S)\1(?![\w*])", r"\2", t)
+    t = re.sub(r"`([^`]+)`", r"\1", t)
+    return re.sub(r"[ \t]+", " ", t).strip()
+
+
+def _md_inline_html(t: str, link_color: str, resolve=None) -> str:
+    t = html.escape(t.strip(), quote=False)
+    # a picture: a link to it (its words, else its file name); "<…>" around an address was escaped above
+    t = re.sub(r"!\[([^\]]*)\]\((?:&lt;(.+?)&gt;|([^\s)]+))\)",
+               lambda m: f"[{m.group(1).strip() or (m.group(2) or m.group(3)).rsplit('/', 1)[-1]}]({m.group(2) or m.group(3)})", t)
+
+    def link(m: re.Match) -> str:
+        url = _link_url(html.unescape(m.group(2) or m.group(3)), resolve)
+        return f'<a href="{html.escape(url)}" style="color:{link_color};">{m.group(1)}</a>' if url else m.group(1)
+    t = re.sub(r"\[([^\]]+)\]\((?:&lt;(.+?)&gt;|([^\s)]+))\)", link, t)
+    t = re.sub(r"&lt;(https?://[^\s&]+)&gt;", lambda m: f'<a href="{m.group(1)}" style="color:{link_color};">{m.group(1)}</a>', t)
+    t = re.sub(r"`([^`]+)`", r'<code style="font-family:Consolas,Menlo,monospace;font-size:13px;">\1</code>', t)
+    t = re.sub(r"(\*\*|__)(?=\S)(.+?)(?<=\S)\1", r"<strong>\2</strong>", t)
+    t = re.sub(r"~~(?=\S)(.+?)(?<=\S)~~", r"<s>\1</s>", t)
+    t = re.sub(r"(?<![\w*])([*_])(?=\S)(.+?)(?<=\S)\1(?![\w*])", r"<em>\2</em>", t)
+    return t
+
+
 def md_to_text(s: str, resolve=None) -> str:
-    s = re.sub(r"!\[([^\]]*)\]\((\S+?)\)", lambda m: f"[{m.group(1).strip() or m.group(2).rsplit('/', 1)[-1]}]({m.group(2)})", s)
-    s = re.sub(r"\[([^\]]+)\]\((\S+?)\)",
-               lambda m: f"{m.group(1)} ({u})" if (u := _link_url(m.group(2), resolve)) else m.group(1), s)
-    s = re.sub(r"(\*\*|__|\*|_|`)", "", s)
-    s = re.sub(r"^#+\s*", "", s, flags=re.M)
-    return re.sub(r"[ \t]+", " ", s).strip()
+    """A post as plain text lines (the e-mail's text part): headings and paragraphs on lines of their
+    own, list items as "• item" (indented under their parent), a table's rows as "cell · cell", quotes
+    without their ">", links as "words (address)"."""
+    out = []
+    for kind, data in md_blocks(s):
+        if kind == "p":
+            out.append("\n".join(_md_inline_text(x, resolve) for x in data))
+        elif kind == "h":
+            out.append(_md_inline_text(data, resolve))
+        elif kind == "list":
+            out.append("\n".join("  " * d + ("– " if d else "• ") + _md_inline_text(t, resolve).replace("\n", " ") for d, _o, t in data))
+        elif kind == "quote":
+            out.append("\n".join("“" + _md_inline_text(x, resolve) + "”" if len(data) == 1 else _md_inline_text(x, resolve) for x in data))
+        elif kind == "table":
+            rows = ([data["head"]] if data["head"] else []) + data["rows"]
+            out.append("\n".join(" · ".join(_md_inline_text(c, resolve) for c in r if c.strip()) for r in rows))
+        elif kind == "code":
+            out.append("\n".join(data))
+    return "\n\n".join(b for b in out if b.strip()).strip()
 
 
 def md_to_html(s: str, link_color: str, resolve=None) -> str:
-    """Tiny, safe Markdown subset for bulletin post bodies: paragraphs, line breaks,
-    **bold**, *italic*, [links](https://…) — a link to the site too, when `resolve` makes it a full
+    """A post's Markdown for the e-mail (md_blocks), with inline styles: paragraphs and line breaks,
+    headings as bold lines, lists (inside lists too), quotations, tables, lines of ---, code, **bold**,
+    *italic*, ~~crossed out~~, [links](https://…) — a link to the site too, when `resolve` makes it a full
     address (_link_url); a picture becomes a link to it. Everything else is escaped."""
+    inl = lambda t: _md_inline_html(t, link_color, resolve)   # noqa: E731
     out = []
-    for para in re.split(r"\n\s*\n", s.strip()):
-        t = html.escape(para.strip())
-        t = re.sub(r"!\[([^\]]*)\]\(([^\s)]+)\)",
-                   lambda m: f"[{m.group(1).strip() or m.group(2).rsplit('/', 1)[-1]}]({m.group(2)})", t)
+    for kind, data in md_blocks(s):
+        if kind == "p":
+            out.append(f'<p style="margin:0 0 10px;">{"<br>".join(inl(x) for x in data)}</p>')
+        elif kind == "h":
+            out.append(f'<p style="margin:14px 0 6px;font-weight:bold;">{inl(data)}</p>')
+        elif kind == "list":
+            html_list, depth_open = [], []
+            for d, ordered, t in data:
+                while len(depth_open) > d + 1:
+                    html_list.append(f"</li></{depth_open.pop()}>")
+                if len(depth_open) == d + 1:
+                    html_list.append("</li>")
+                while len(depth_open) < d + 1:
+                    tag = "ol" if ordered else "ul"
+                    depth_open.append(tag)
+                    html_list.append(f'<{tag} style="margin:{"0 0 10px" if len(depth_open) == 1 else "4px 0 0"};padding-left:22px;">')
+                html_list.append(f'<li style="margin:0 0 4px;">{inl(t).replace(chr(10), "<br>")}')
+            while depth_open:
+                html_list.append(f"</li></{depth_open.pop()}>")
+            out.append("".join(html_list))
+        elif kind == "quote":
+            out.append(f'<blockquote style="margin:0 0 10px;padding:2px 0 2px 12px;border-left:3px solid {C["line"]};color:{C["muted"]};">'
+                       f'{"<br>".join(inl(x) for x in data)}</blockquote>')
+        elif kind == "table":
+            cell = f'padding:5px 8px;border:1px solid {C["line"]};vertical-align:top;text-align:left;'
+            rows = []
+            if data["head"]:
+                rows.append("<tr>" + "".join(f'<th style="{cell}background:{C["surface2"]};">{inl(c)}</th>' for c in data["head"]) + "</tr>")
+            rows += ["<tr>" + "".join(f'<td style="{cell}">{inl(c)}</td>' for c in r) + "</tr>" for r in data["rows"]]
+            out.append(f'<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin:0 0 10px;font-size:13px;line-height:1.45;">'
+                       f'{"".join(rows)}</table>')
+        elif kind == "hr":
+            out.append(f'<hr style="border:0;border-top:1px solid {C["line"]};margin:12px 0;">')
+        elif kind == "code":
+            out.append(f'<pre style="margin:0 0 10px;padding:8px 10px;background:{C["surface2"]};font-family:Consolas,Menlo,monospace;'
+                       f'font-size:12px;white-space:pre-wrap;">{html.escape(chr(10).join(data), quote=False)}</pre>')
+    return "".join(out)
 
-        def link(m: re.Match) -> str:
-            url = _link_url(html.unescape(m.group(2)), resolve)
-            return f'<a href="{html.escape(url)}" style="color:{link_color};">{m.group(1)}</a>' if url else m.group(1)
-        t = re.sub(r"\[([^\]]+)\]\(([^\s)]+)\)", link, t)
-        t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
-        t = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", r"<em>\1</em>", t)
-        t = re.sub(r"^#+\s*", "", t)
-        out.append(t.replace("\n", "<br>"))
-    return "".join(f'<p style="margin:0 0 10px;">{p}</p>' for p in out if p)
+
+def md_excerpt(s: str, limit: int) -> tuple[str, bool]:
+    """The first whole blocks of a post that fit in `limit` characters (tables, lists and quotes are
+    never cut in half) → (Markdown, cut?). A first block longer than that becomes its plain words,
+    shortened."""
+    s = (s or "").strip()
+    if len(s) <= limit:
+        return s, False
+    parts, size = [], 0
+    for chunk in re.split(r"\n\s*\n", s):
+        if parts and size + len(chunk) > limit:
+            break
+        if not parts and len(chunk) > limit:
+            return shorten(md_to_text(chunk), limit - 100), True
+        parts.append(chunk)
+        size += len(chunk) + 2
+    while len(parts) > 1 and _MD_RULE.match(parts[-1].strip()):
+        parts.pop()                                            # a line of --- that led to what was cut
+    return "\n\n".join(parts), True
 
 
 def shorten(s: str, n: int) -> str:
@@ -1543,10 +1730,13 @@ def render_lang_html(lang: str, data: dict, cfg: dict, links: Links, max_per: in
         for a in ann[:max_per]:
             text = tx(a, "body_md", lang) or tx(a, "summary", lang)
             site = lambda u, lang=lang: links.site_path(u, lang)  # noqa: E731 — a post's links to the site
-            short = text if len(text) <= 700 else shorten(md_to_text(text, site), 600)
+            # a long post: its first whole blocks, then "Details →" to the post on the site
+            short, cut = md_excerpt(text, 700)
+            href = _esc(links.item(a, lang, '/bulletin/'))
+            more = f'<p style="margin:0 0 10px;"><a href="{href}" style="color:{C["gv"]};">{_esc(t["details"])} →</a></p>' if cut else ""
             body.append(f"""<div style="margin:0 0 14px;">
-  <div style="font-size:16px;font-weight:bold;margin:0 0 4px;"><a href="{_esc(links.item(a, lang, '/bulletin/'))}" style="{link_style}">{_esc(tx(a, 'title', lang))}</a></div>
-  <div style="font-size:14px;line-height:1.6;color:{C['ink']};">{md_to_html(short, C['gv'], site)}</div>
+  <div style="font-size:16px;font-weight:bold;margin:0 0 4px;"><a href="{href}" style="{link_style}">{_esc(tx(a, 'title', lang))}</a></div>
+  <div style="font-size:14px;line-height:1.6;color:{C['ink']};">{md_to_html(short, C['gv'], site)}{more}</div>
 </div>""")
         parts.append(section(t["announcement"], C["vine"], "".join(body), "/bulletin/", max(0, len(ann) - max_per), len(ann)))
 
@@ -1751,9 +1941,13 @@ def render_text(data: dict, cfg: dict, links: Links, max_per: int) -> str:
             out += head(f"{t['announcement']} ({len(ann)})")
             for a in ann[:max_per]:
                 out.append(f"* {tx(a, 'title', lang)}")
-                body = md_to_text(tx(a, "body_md", lang) or tx(a, "summary", lang), lambda u: links.site_path(u, lang))
+                # its lines as they are (a list stays a list), about 600 characters, indented under the title
+                short, cut = md_excerpt(tx(a, "body_md", lang) or tx(a, "summary", lang), 600)
+                body = md_to_text(short, lambda u: links.site_path(u, lang))
                 if body:
-                    out.append("  " + shorten(body, 600))
+                    out += ["  " + x if x else "" for x in body.split("\n")]
+                    if cut:
+                        out.append(f"  {t['details']}: {links.item(a, lang, '/bulletin/')}")
             out += [f"  → {links.page('/bulletin/', lang)}", ""]
         # this month in the magazines
         bm = botm_block(data, lang, links)

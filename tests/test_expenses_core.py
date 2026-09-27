@@ -649,6 +649,78 @@ class ImportValues(unittest.TestCase):
         self.assertEqual(r["funders"], [["f_d22", "District 22", "other"]])
 
 
+class ImportShapes(unittest.TestCase):
+    """Which files are the tracker's own, and what a spreadsheet may change in one."""
+
+    def test_other_peoples_sheets_go_to_the_mapping_step(self):
+        r = core(self, r"""
+          const ask = (text, o) => { const p = G.planImport(text, [], S, o || {}); return [p.needsMapping, p.format, p.add.length, p.errors.map((e) => e.message_key)]; };
+          out({
+            idItemCost: ask("ID,Date,Item,Cost\n1,2026-03-01,Parking,5.00\n"),
+            idAmount: ask("ID,Date,Amount,Description\n1,2026-03-01,5.00,Parking\n"),
+            bank: ask("Date,Description,Type,Amount\n2026-03-01,Coffee,Debit,-3.50\n2026-03-02,Refund,Credit,3.50\n"),
+            ours: ask("date,type,category,description,amount\n2026-03-01,expense,books,Big Book,12\n"),
+            oursNoCategory: ask("type,date,amount\nexpense,2026-03-01,12\n"),
+            forced: ask("date,type,category,description,amount\n2026-03-01,expense,books,Big Book,12\n", { forceMapping: true }),
+            forcedMapped: ask("date,type,category,description,amount\n2026-03-01,expense,books,Big Book,12\n", { forceMapping: true, mapping: { date: 0, description: 3, amount: 4 } }),
+          });""")
+        self.assertEqual(r["idItemCost"], [True, "", 0, []])      # only an "ID" in common: ask, never overwrite by id
+        self.assertEqual(r["idAmount"], [True, "", 0, []])
+        self.assertEqual(r["bank"], [True, "", 0, []])            # Type = Debit / Credit is not ours
+        self.assertEqual(r["ours"], [False, "ours", 1, []])
+        self.assertEqual(r["oursNoCategory"], [False, "ours", 1, []])
+        self.assertEqual(r["forced"], [True, "", 0, []])          # "Map the columns myself"
+        self.assertEqual(r["forcedMapped"], [False, "mapped", 1, []])
+
+    def test_an_export_edited_in_a_spreadsheet(self):
+        r = core(self, r"""
+          const A = N({ id: "xa", type: "expense", date: "2026-09-01", description: "Big Book", amount_cents: 2400, created: "2026-09-01T00:00:00.000Z", updated: "2026-09-02T00:00:00.000Z" });
+          const B = N({ id: "xb", type: "expense", date: "2026-09-02", description: "Hotel", amount_cents: 9000, created: "2026-09-02T00:00:00.000Z", updated: "2026-09-02T00:00:00.000Z" });
+          const csv = G.toCSV([A, B], S, { lang: "en" });
+          const edited = csv.replace(",24.00,-24.00,", ",29.00,-29.00,");
+          const plan = G.planImport(edited, [A, B], S, {});
+          const upd = plan.update[0] || {};
+          // a spreadsheet that re-saved the stamps its own way (not ISO any more): an edit still counts
+          const excel = edited.replace(/2026-09-0\dT00:00:00\.000Z/g, "9/2/2026 0:00");
+          const plan2 = G.planImport(excel, [A, B], S, {});
+          // the old file again after the import: older now, skipped
+          const after = G.applyImport({ v: 1, entries: [A, B], settings: S, meta: {} }, plan, {}).entries;
+          const plan3 = G.planImport(csv, after, S, {});
+          out({ update: plan.update.map((e) => [e.id, e.amount_cents]), same: plan.skip.map((s) => s.reason), newer: upd.updated > "2026-09-02T00:00:00.000Z",
+                created: upd.created, excel: [plan2.update.map((e) => e.id), plan2.skip.map((s) => s.reason), (plan2.update[0] || {}).created],
+                old: plan3.skip.map((s) => [s.row, s.reason]), all: plan.all.length });""")
+        self.assertEqual(r["update"], [["xa", 2900]])
+        self.assertEqual(r["same"], ["same"])
+        self.assertTrue(r["newer"])                               # stamped now: the file's words win
+        self.assertEqual(r["created"], "2026-09-01T00:00:00.000Z")
+        self.assertEqual(r["excel"], [["xa"], ["same"], "2026-09-01T00:00:00.000Z"])
+        self.assertEqual(r["old"], [[2, "older"], [3, "same"]])
+        self.assertEqual(r["all"], 2)                             # "replace" has every row of the file
+
+    def test_our_mileage_without_a_rate_column_and_quotes_after_spaces(self):
+        r = core(self, r"""
+          const plan = G.planImport("date;type;category;description;amount;funder;miles\n14/02/2026;mileage;mileage;Casa → Tyler;;district;45,5\n", [], S, { dateOrder: "dmy" });
+          const withRate = G.planImport("date,type,miles,rate\n2026-02-14,mileage,10,\n", [], S, {});
+          out({ miles: plan.add.map((e) => [e.miles, e.rate, e.amount_cents]), warn: plan.warnings.map((w) => w.message_key),
+                blankRate: withRate.add.map((e) => [e.rate, e.amount_cents]),
+                spaced: G.parseCSV('Date, "Description, long", Amount\n2026-03-01, "Coffee, tea",3\n').map((r) => r.slice()),
+                tab: G.parseCSV('a\t "b\tc"\td\n').map((r) => r.slice()) });""")
+        self.assertEqual(r["miles"], [[45.5, "0.14", 637]])       # 45.5 × $0.14 = $6.37 (the default rate)
+        self.assertEqual(r["warn"], [])
+        self.assertEqual(r["blankRate"], [["", 0]])               # a rate column left blank: the visitor's choice
+        self.assertEqual(r["spaced"], [["Date", "Description, long", " Amount"], ["2026-03-01", "Coffee, tea", "3"]])
+        self.assertEqual(r["tab"], [["a", "b\tc", "d"]])
+
+    def test_what_a_picked_file_is(self):
+        r = core(self, r"""out({ kinds: [G.importKind("backup.json", ""), G.importKind("Backup.JSON", "x"), G.importKind("x.txt", "﻿  {\"format\""),
+                   G.importKind("x.txt", "[{"), G.importKind("x.csv", "date,amount"), G.importKind(null, null)],
+                   limits: [G.importLimit("csv"), G.importLimit("backup"), G.importLimit("?")],
+                   bigBackup: G.readBackup(G.toBackup(G.emptyState(CONFIG), [{ id: "p1", type: "image/jpeg", dataUrl: "data:image/jpeg;base64," + "A".repeat(12 * 1048576) }]), CONFIG).ok });""")
+        self.assertEqual(r["kinds"], ["backup", "backup", "backup", "backup", "csv", "csv"])
+        self.assertEqual(r["limits"], [10485760, 83886080, 10485760])
+        self.assertTrue(r["bigBackup"])                            # a backup over 10 MB (photos) is read
+
+
 class DedupeMerge(unittest.TestCase):
     def test_plan_and_apply(self):
         r = core(self, r"""
@@ -869,6 +941,52 @@ class Requests(unittest.TestCase):
         self.assertEqual(r["hidden"], ["Magazine subscriptions · Gift · Grapevine print · 12 months", "Meals"])
         self.assertEqual(r["shown"], ["Gift subscription for Rosa T.", "Lunch with Pedro S."])
         self.assertFalse(r["leak"])
+
+    def test_the_request_csv(self):
+        # what the printed request shows, one row per line: names only when the request includes them,
+        # never the notes, ids or stamps of the full export; a formula-looking cell is guarded
+        r = core(self, LEDGER + r"""
+          const E = L.concat([N({ id: "g1", type: "expense", date: "2026-09-12", category: "subscriptions", description: "=Gift for Rosa T.",
+                                  person: "Rosa T.", sub_kind: "gift", sub_product: "gv_print", sub_term: 12, amount_cents: 3600, funder: "district",
+                                  notes: "Rosa's birthday" }, SP)]);
+          const strings = { "field.date": "Fecha", "field.amount": "Monto", "req.receipt_paper": "En papel", "sub_kind.gift": "Regalo" };
+          const hidden = G.claimCSV(G.claimLines(E, SP, { funder: "district", ...SEPT, lang: "es", strings }), strings, "es");
+          const shown = G.claimCSV(G.claimLines(E, SP, { funder: "district", ...SEPT, lang: "es", strings, includeNames: true }), strings, "es");
+          out({ hidden, shown, junk: [G.claimCSV(null), G.claimCSV({})] });""")
+        rows = r["hidden"].lstrip("﻿").split("\r\n")
+        self.assertTrue(r["hidden"].startswith("﻿") and r["hidden"].endswith("\r\n"))
+        self.assertEqual(rows[0], "Fecha,Description,Category,From,To,Miles,Rate,Monto,Receipt")   # the page's words, else English
+        self.assertEqual(rows[1:4], [
+            "2026-09-02,Big Book,Libros y literatura,,,,,24.00,En papel",
+            "2026-09-05,Home → Tyler,Millas recorridas,Home,Tyler,184.6,0.14,25.84,",
+            "2026-09-12,Suscripciones a revistas · Regalo · 12 months,Suscripciones a revistas,,,,,36.00,",
+        ])
+        self.assertNotIn("Rosa", r["hidden"])
+        self.assertIn(",'=Gift for Rosa T.,", r["shown"])                        # names asked for; the guard '
+        self.assertNotIn("birthday", r["shown"])
+        self.assertEqual(r["junk"], ["", "﻿Date,Description,Category,From,To,Miles,Rate,Amount,Receipt\r\n"])
+
+    def test_money_back_from_a_person_settles_their_purchases(self):
+        r = core(self, LEDGER + r"""
+          const E = [
+            N({ id: "h1", type: "expense", date: "2026-08-01", category: "subscriptions", sub_kind: "helped", person: "José R.", description: "A", amount_cents: 1500, funder: "p_jose", claim_status: "to_request" }, SP),
+            N({ id: "h2", type: "expense", date: "2026-08-05", category: "subscriptions", sub_kind: "helped", person: "José R.", description: "B", amount_cents: 3600, funder: "p_jose", claim_status: "submitted" }, SP),
+            N({ id: "h3", type: "expense", date: "2026-08-09", category: "subscriptions", sub_kind: "helped", person: "José R.", description: "C", amount_cents: 1000, funder: "p_jose", claim_status: "to_request" }, SP),
+            N({ id: "x", type: "expense", date: "2026-08-02", category: "books", description: "Mine", amount_cents: 999, funder: "district", claim_status: "to_request" }, SP),
+          ];
+          const got = (cents) => G.settleRepayments(E.concat(cents ? [N({ id: "r", type: "received", date: "2026-09-01", category: "repayment", amount_cents: cents, funder: "p_jose" }, SP)] : []), SP, "p_jose");
+          const settledBefore = E.map((e) => e.id === "h1" ? { ...e, repaid: "repaid", claim_status: "paid" } : e)
+            .concat([N({ id: "r1", type: "received", date: "2026-09-01", category: "repayment", amount_cents: 1500, funder: "p_jose" }, SP),
+                     N({ id: "r2", type: "received", date: "2026-09-02", category: "repayment", amount_cents: 3600, funder: "p_jose" }, SP)]);
+          out({ none: got(0), part: got(1400), one: got(2000), two: got(5100), all: got(9999),
+                again: G.settleRepayments(settledBefore, SP, "p_jose"), notAPerson: G.settleRepayments(E, SP, "district"), junk: G.settleRepayments(null, null, "") });""")
+        self.assertEqual(r["none"], [])
+        self.assertEqual(r["part"], [])                     # $14 does not cover the first ($15): nothing marked
+        self.assertEqual(r["one"], ["h1"])                  # oldest first, stopping at the first it does not cover
+        self.assertEqual(r["two"], ["h1", "h2"])
+        self.assertEqual(r["all"], ["h1", "h2", "h3"])
+        self.assertEqual(r["again"], ["h2"])                # a repayment already matched is not counted twice
+        self.assertEqual((r["notAPerson"], r["junk"]), ([], []))
 
 
 class Backup(unittest.TestCase):

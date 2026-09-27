@@ -44,7 +44,7 @@ class Folder(unittest.TestCase):
         (self.tmp / "events").mkdir()
         (self.tmp / "raw").mkdir()
         for obj, name, val in ((A, "ANN_DIR", self.dir), (A, "EVENTS_DIR", self.tmp / "events"),
-                               (common, "RAW_DIR", self.tmp / "raw")):
+                               (A, "LEGACY_ANN_DIR", self.tmp / "announcements"), (common, "RAW_DIR", self.tmp / "raw")):
             p = mock.patch.object(obj, name, val)
             p.start()
             self.addCleanup(p.stop)
@@ -115,6 +115,16 @@ class PastedHtml(unittest.TestCase):
         for gone in ("alert", "note", "evil", "onclick", "onerror"):
             self.assertNotIn(gone, md)
 
+    def test_pictures_and_links_that_cannot_work(self):
+        # an e-mail's inline signature picture, a bare "x", a javascript: link: never a broken picture or
+        # a literal "[click me](javascript:…)" — the words stay, and the pictures are reported
+        dropped: list[str] = []
+        md = A.tidy_html('Hi <img src="cid:image001.png@01DA0000" alt="Signature logo"> <img src=x onerror=alert(1)> '
+                         '<a href="javascript:alert(1)">click me</a> <a href="mailto:gv@x.org">mail</a> '
+                         '<a href="/events/">events</a> <img src="//cdn.x.org/a.png" alt="web"> <img src="Flyer.JPG" alt="f">', dropped)
+        self.assertEqual(md, "Hi *Signature logo*  click me [mail](mailto:gv@x.org) [events](/events/) ![web](//cdn.x.org/a.png) ![f](Flyer.JPG)")
+        self.assertEqual(dropped, ["image001.png", "x"])
+
     def test_what_is_not_html_stays(self):
         text = "The <Panel 77> folder, <https://x.org> and `<b>code</b>`.\n```\n<div>kept</div>\n```"
         self.assertEqual(A.tidy_html(text), text)
@@ -124,6 +134,25 @@ class PastedHtml(unittest.TestCase):
     def test_a_teaser_is_prose(self):
         self.assertEqual(A.markdown_to_text("Intro.\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n- one\n    - two\n\n---\nEnd."),
                          "Intro. one two End.")
+
+
+class TitlesAndOldFolder(Folder):
+    def test_a_title_pasted_with_tags_is_text(self):
+        it = self.parse("t.md", "---\ntitle: 'Pasted from an e-mail: <b>bold</b> & \"quotes\"'\n---\nText")
+        self.assertEqual(it["title"], 'Pasted from an e-mail: bold & "quotes"')
+
+    def test_a_post_in_the_old_folder_still_shows(self):
+        old = self.tmp / "announcements"
+        old.mkdir()
+        (old / "2026-09-26-old-folder.md").write_text("# Old folder post\n\nHello.", encoding="utf-8")
+        (old / "same.md").write_text("# The old copy", encoding="utf-8")
+        self.write("same.md", "# The new copy")
+        env = self.run_sync()
+        titles = sorted(i["title"] for i in env["items"])
+        self.assertEqual(titles, ["Old folder post", "The new copy"])     # the one in bulletin/ wins
+        errors = " ".join(env["stats"]["errors"])
+        self.assertIn("announcements/2026-09-26-old-folder.md: the folder is now content/bulletin/", errors)
+        self.assertIn("announcements/same.md: a post of the same name is in content/bulletin/", errors)
 
 
 class Attachments(Folder):
@@ -204,20 +233,25 @@ class Rendering(unittest.TestCase):
           out({
             h: md("# One\\n\\n## Two\\n\\n#### Four", { h: 3 }),
             top2: md("## Two\\n\\n### Three", { h: 3 }),
-            deep: md("# a\\n\\n###### f", { h: 4 }),
+            deep: md("# a\\n\\n## b\\n\\n### c\\n\\n###### f", { h: 5 }),
+            jumps: md("## Starts at two\\n\\n#### Jumps to four\\n\\n###### Six\\n\\n# Back to one\\n\\n### Three", { h: 3 }),
             plain: md("# One"),
             es: md("[e](/events/#x) [f](/bulletin/files/a.pdf) [w](https://x.org/) [s](/es/gvr/)", { lang: "es" }),
             en: md("[e](/events/)", { lang: "en" }),
             table: md("| a | b |\\n|---|---|\\n| 1 | 2 |", { lang: "es" }),
+            named: md("| a |\\n|---|\\n| 1 |\\n\\ntext\\n\\n| b |\\n|---|\\n| 2 |", { lang: "en", name: "Reminder: Assembly" }),
             html: md('<script>alert(1)</script> <img src=x onerror=alert(1)> [j](javascript:alert(1))'),
           });
         """)
         self.assertIn("<h3>One</h3>", out["h"])
         self.assertIn("<h4>Two</h4>", out["h"])
-        self.assertIn("<h6>Four</h6>", out["h"])
+        self.assertIn("<h5>Four</h5>", out["h"])                     # one level under "Two", never two
         self.assertIn("<h3>Two</h3>", out["top2"])                   # no level skipped under the title
         self.assertIn("<h4>Three</h4>", out["top2"])
-        self.assertIn("<h6>f</h6>", out["deep"])                      # never past h6
+        self.assertIn("<h6>c</h6>", out["deep"])                      # never past h6
+        self.assertIn("<h6>f</h6>", out["deep"])
+        # a text that jumps between levels: each heading at most one level under the one before it
+        self.assertEqual(re.findall(r"<(h\d)>", out["jumps"]), ["h3", "h4", "h5", "h3", "h4"])
         self.assertIn("<h1>One</h1>", out["plain"])                   # without the option: as written
         self.assertIn('href="/es/events/#x"', out["es"])
         self.assertIn('href="/bulletin/files/a.pdf"', out["es"])      # a file is the same in both languages
@@ -225,6 +259,8 @@ class Rendering(unittest.TestCase):
         self.assertIn('href="/es/gvr/"', out["es"])
         self.assertIn('href="/events/"', out["en"])
         self.assertRegex(out["table"], r'<div class="md-table" role="region" tabindex="0" aria-label="Tabla"><table>')
+        # a post's tables are named after it, one by one (never two regions of the same name on a page)
+        self.assertEqual(re.findall(r'aria-label="([^"]+)"', out["named"]), ["Table 1 · Reminder: Assembly", "Table 2 · Reminder: Assembly"])
         self.assertNotIn("<script", out["html"])
         self.assertNotIn("<img", out["html"])
         self.assertNotIn('href="javascript:', out["html"])
