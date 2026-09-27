@@ -1,4 +1,4 @@
-"""The service expense tracker's page (/expenses/): src/pages/expenses.njk, src/assets/js/expenses.js,
+"""The Tracker page (/tracker/, the service expense tracker): src/pages/tracker.njk, src/assets/js/expenses.js,
 src/_i18n/expenses.json, config/expenses.yml (src/_data/expenses.js). The tracker's logic has its own
 tests (tests/test_expenses_core.py).
 
@@ -30,7 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from nodejs import run_js  # noqa: E402
 
 STRINGS = ROOT / "src" / "_i18n" / "expenses.json"
-PAGE = ROOT / "src" / "pages" / "expenses.njk"
+PAGE = ROOT / "src" / "pages" / "tracker.njk"
 APP = ROOT / "src" / "assets" / "js" / "expenses.js"
 CORE = ROOT / "src" / "assets" / "js" / "expenses-core.js"
 CONFIG = ROOT / "config" / "expenses.yml"
@@ -212,8 +212,8 @@ class Config(unittest.TestCase):
         self.assertEqual(cfg["default_rate"], "irs_charity")
         self.assertIn("book-open", out["icons"])
         self.assertEqual(out["ui"]["es"]["data.erase_word"], "BORRAR")
-        self.assertNotIn("expenses.title", out["ui"]["en"])  # the prefix is taken off
-        self.assertEqual(out["ui"]["en"]["title"], "Service expense tracker")
+        self.assertNotIn("expenses.eyebrow", out["ui"]["en"])  # the prefix is taken off
+        self.assertEqual(out["ui"]["en"]["eyebrow"], "Committee · Service expenses")
 
 
 class Page(unittest.TestCase):
@@ -225,7 +225,8 @@ class Page(unittest.TestCase):
         self.assertIn("pageKey: expenses", head)
         self.assertIn("titleKey: nav.expenses", head)
         self.assertIn("descKey: expenses.meta_desc", head)
-        self.assertIn('pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]', head)  # the core first
+        # the core first; committee.js runs the committee sub-nav
+        self.assertIn('pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/js/committee.js"]', head)
 
     def test_no_html_from_data(self):
         self.assertNotIn("x-html", self.page)
@@ -246,17 +247,27 @@ class Page(unittest.TestCase):
         out = run_js(self, """
           const SW = await imp("src/pages/sw.11ty.js");
           const code = SW.render({ build: { version: "t" }, orientation: { lessons: [] },
-            collections: { all: ["/", "/expenses/", "/es/expenses/"].map((url) => ({ url })) } });
+            collections: { all: ["/", "/tracker/", "/es/tracker/"].map((url) => ({ url })) } });
           out(JSON.parse(code.slice(code.indexOf("{"), code.indexOf("};") + 1)).save);
         """)
-        self.assertIn("expenses/", out)
+        self.assertIn("tracker/", out)
 
     def test_wired_into_the_site(self):
         css = read(ROOT / "src" / "assets" / "css" / "main.css")
         self.assertIn('@import "./areas/expenses.css";', css)
-        self.assertIn('url: "/expenses/"', read(ROOT / "src" / "_data" / "nav.js"))
+        nav = read(ROOT / "src" / "_data" / "nav.js")
+        # under Committee, after the Bulletin (it was under Get involved at /expenses/)
+        self.assertLess(nav.index('key: "nav.committee"'), nav.index('url: "/tracker/"'))
+        self.assertLess(nav.index('url: "/bulletin/"'), nav.index('url: "/tracker/"'))
+        self.assertNotIn('url: "/expenses/"', nav)
+        self.assertIn('{ key: "tracker", url: "/tracker/"', read(ROOT / "eleventy" / "filters" / "committee.js"))
+        self.assertIn('{% committeeNav lang, "tracker", db %}', read(PAGE))
         gvr = read(ROOT / "src" / "pages" / "gvr.njk")
-        self.assertEqual(gvr.count("'/expenses/' | lurl(lang)"), 1, "one link from the GVR corner")
+        self.assertEqual(gvr.count("'/tracker/' | lurl(lang)"), 1, "one link from the GVR corner")
+        # the old address still leads here
+        stub = read(ROOT / "src" / "pages" / "expenses-redirect.njk")
+        self.assertIn("expenses/index.html", stub)
+        self.assertIn('"/tracker/" | lurl(lang)', stub)
 
 
 if __name__ == "__main__":

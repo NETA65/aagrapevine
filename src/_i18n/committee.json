@@ -59,6 +59,10 @@
     "en": "Bulletin",
     "es": "Boletín"
   },
+  "committee.subnav.tracker": {
+    "en": "Tracker",
+    "es": "Registro"
+  },
   "committee.drive.open_folder": {
     "en": "Open Drive folder",
     "es": "Abrir carpeta de Drive"

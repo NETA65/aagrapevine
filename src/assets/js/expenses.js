@@ -1,4 +1,4 @@
-/* The service expense tracker on /expenses/ (src/pages/expenses.njk): the page's Alpine app, "xpApp".
+/* The service expense tracker on /tracker/ (src/pages/tracker.njk): the page's Alpine app, "xpApp".
    The data model, the money math, the summaries, CSV and backups live in expenses-core.js (window.GVX,
    loaded just before this file; tests/test_expenses_core.py). This file is the screen:
      · five views in a tab bar — Entries · Summary · Giveaways · Requests · Settings — remembered in the
@@ -469,7 +469,7 @@
           this.revealTab();
         },
         /* On a phone the tab row scrolls sideways, and the open tab can sit off its edge: after "Build a
-           request", an /expenses/#requests link, or the last view reopened on a new visit. A tab that is
+           request", a /tracker/#requests link, or the last view reopened on a new visit. A tab that is
            not wholly clear of the row's fades (its padding-right wide at the end, as wide at the start
            once scrolled — main.css chip-row-nowrap) goes to its own snap point: its start at the row's
            scroll-padding (expenses.css), so the row's snapping leaves it there. Only the row's own

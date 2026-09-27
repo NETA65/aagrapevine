@@ -1,24 +1,27 @@
 ---
 pagination: { data: languages, size: 1, alias: lang }
-permalink: "{{ '/' if lang == 'en' else '/es/' }}expenses/index.html"
+permalink: "{{ '/' if lang == 'en' else '/es/' }}tracker/index.html"
 layout: layouts/base.njk
 pageKey: expenses
 titleKey: nav.expenses
 descKey: expenses.meta_desc
 bodyClass: xp-page
-pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
+pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/js/committee.js"]
 ---
-{#- /expenses/ — the SERVICE EXPENSE TRACKER: a GVR / RLV's (or any service member's) miles, purchases,
+{#- /tracker/ — the TRACKER (the service expense tracker; it was /expenses/, and expenses-redirect.njk
+    keeps that address working): a GVR / RLV's (or any service member's) miles, purchases,
     gift subscriptions, giveaways and reimbursements, kept ONLY in this browser (nothing is uploaded).
-    Flow (docs: ui.njk): hero (+ the "On this device" aside) → the app (page-overlap card: Entries ·
-    Summary · Giveaways · Requests · Settings, in the address as #entries …) → privacy, in plain words.
+    Flow (docs: ui.njk): hero (+ the "On this device" aside) → the committee sub-nav (page-overlap, as on
+    every Committee page) → the app (card: Entries · Summary · Giveaways · Requests · Settings, in the
+    address as #entries …) → privacy, in plain words.
     The logic: src/assets/js/expenses-core.js (window.GVX); the screen: src/assets/js/expenses.js
     ("xpApp"); the defaults: config/expenses.yml (src/_data/expenses.js); the words:
     src/_i18n/expenses.json (handed to the app as #xp-ui); the look: areas/expenses.css.
     One Alpine component wraps the hero AND the app (the hero's buttons and aside use its data).
     Without JavaScript the page says what the tracker is and that it needs JavaScript.
-    Its home is the Get involved menu (nav.js); the GVR corner has one card linking here. Nothing else
-    on the site repeats this page. -#}
+    Its home is the Committee menu (nav.js) and the committee sub-nav; the GVR corner has one card
+    linking here. Nothing else on the site repeats this page. Internal names (files, the expenses.* keys,
+    pageKey "expenses", the storage keys) keep the old word: renaming them would only churn. -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set bulk = (db.shop or {}) | shopBulk(lang) -%}
 {%- set carryHref = ('/shop/' | lurl(lang)) + ('#bulk' if bulk.rows.length else '#carry') -%}
@@ -42,7 +45,7 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
     protects it from automatic clean-up) + "Back up now" (the full backup, photos included). It is in
     the hero only from 1024px at 100 % text ("hide"); anywhere else the same facts sit at the foot of
     the app card (.xp-device) — never two copies at once (areas/expenses.css). -#}
-{% call(slot) ui.pageHero(lang, "expenses.title" | t(lang), "expenses.hero_sub" | t(lang), "receipt", "expenses.eyebrow" | t(lang), { side: "hide" }) %}
+{% call(slot) ui.pageHero(lang, "nav.expenses" | t(lang), "expenses.hero_sub" | t(lang), "receipt", "expenses.eyebrow" | t(lang), { side: "hide" }) %}
 {%- if slot == "side" %}
   {% call ui.heroAside("expenses.aside.title" | t(lang), lang, { id: "xp-aside-title", icon: "hard-drive" }) %}
     <p class="hero-aside-text" data-nojs-only>{{ "expenses.aside.nojs" | t(lang) }}</p>
@@ -66,8 +69,10 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js"]
 {%- endif %}
 {% endcall %}
 
-{#- ============ The app: a card tucked into the hero's fade ============ -#}
-<section id="app" class="container-page page-overlap" aria-labelledby="xp-app-title">
+{% committeeNav lang, "tracker", db %}
+
+{#- ============ The app: a card under the committee sub-nav ============ -#}
+<section id="app" class="container-page pt-10 sm:pt-12" aria-labelledby="xp-app-title">
   <div class="card xp-app">
     <h2 id="xp-app-title" class="sr-only">{{ "expenses.app_title" | t(lang) }}</h2>
 

@@ -91,13 +91,13 @@ pageScripts: ["/assets/js/read.js"]
         </div>
         {% icon "arrow-right", "mt-1 size-5 shrink-0 text-gv transition group-hover:translate-x-0.5" %}
       </div>
-      {#- The service expense tracker (/expenses/): miles, literature, gifts and reimbursements, kept on the
-          device — the one link to it from the corner (its home is the Get involved menu) -#}
+      {#- The Tracker (/tracker/): miles, literature, gifts and reimbursements, kept on the device — the one
+          link to it from the corner (its home is the Committee menu) -#}
       <div class="card card-link group relative mt-3 flex items-start gap-4 p-5">
         <span class="grid size-12 shrink-0 place-items-center rounded-xl bg-vine-soft text-vine">{% icon "receipt", "size-6" %}</span>
         <div class="min-w-0 flex-1">
           <p class="eyebrow text-vine">{{ "expenses.gvr_eyebrow" | t(lang) }}</p>
-          <h3 class="h-card mt-1"><a class="no-underline after:absolute after:inset-0 after:rounded-[var(--radius-card)] group-hover:text-gv" href="{{ '/expenses/' | lurl(lang) }}">{{ "expenses.gvr_title" | t(lang) }}</a></h3>
+          <h3 class="h-card mt-1"><a class="no-underline after:absolute after:inset-0 after:rounded-[var(--radius-card)] group-hover:text-gv" href="{{ '/tracker/' | lurl(lang) }}">{{ "nav.expenses" | t(lang) }}</a></h3>
           <p class="mt-1 text-sm leading-relaxed text-muted">{{ "expenses.gvr_text" | t(lang) }}</p>
         </div>
         {% icon "arrow-right", "mt-1 size-5 shrink-0 text-gv transition group-hover:translate-x-0.5" %}

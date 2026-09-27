@@ -1,4 +1,4 @@
-// Loads config/expenses.yml — the service expense tracker's defaults (/expenses/, src/pages/expenses.njk)
+// Loads config/expenses.yml — the service expense tracker's defaults (/tracker/, src/pages/tracker.njk)
 // — and exposes it as `expenses` in every template:
 //   expenses.config   the defaults as the tracker reads them (the page embeds it as <script id="xp-config">;
 //                     expenses-core.js mergeDefaults adds it to each visitor's own settings):

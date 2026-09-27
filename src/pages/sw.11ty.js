@@ -27,7 +27,7 @@ const OPTIONAL = [
   ["gvr-101/", "gvr101/", "orientation/", "gvr/101/"],
   // the expense tracker: a GVR adds miles and receipts on the road, with no signal
   // (its entries live in the browser; the page and its two scripts are what is saved)
-  ["expenses/"],
+  ["tracker/"],
 ];
 
 export function render(data) {
