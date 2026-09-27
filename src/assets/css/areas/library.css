@@ -27,6 +27,12 @@
 .lib-aside-cover > img { object-position: top; }
 .lib-aside-info { display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem; min-width: 0; }
 .lib-aside-info > .hero-aside-cta { margin-top: 0.5rem; }
+/* a card narrower than 20rem (a 320px phone; 390px from 115 % text): the cover above the title, so the
+   title and "Open the catalog" get the card's whole width (container: .hero-side, main.css) */
+@container (width < 20rem) {
+  .lib-aside-cat { grid-template-columns: minmax(0, 1fr); gap: 0.75rem; }
+  .lib-aside-cover { width: 5.5rem; }
+}
 /* Search: the hero aside "Just added" (search.njk, ui.heroAsideLinks) — its titles come from outside
    content, so each is capped at two lines (the full title is on the page it opens). */
 .ss-aside .hero-aside-link-label { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }

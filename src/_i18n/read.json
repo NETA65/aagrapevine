@@ -521,6 +521,7 @@
   "read.about.vid_sub": { "en": "Two short videos from AA Grapevine: what each magazine is, where it came from and how members use it to carry the message.", "es": "Dos videos cortos de AA Grapevine: qué es cada revista, de dónde viene y cómo la usan los miembros para llevar el mensaje." },
   "read.about.vid_tr": { "en": "In English", "es": "En español" },
   "read.about.vid_length": { "en": "Length", "es": "Duración" },
+  "read.about.aside_title": { "en": "History at a glance", "es": "Nuestra historia de un vistazo" },
   "read.about.aside_label": { "en": "years carrying the message in print", "es": "años llevando el mensaje impreso" },
   "read.about.aside_sr": { "en": "More than {years} years carrying the message in print", "es": "Más de {years} años llevando el mensaje impreso" },
   "read.about.aside_note": { "en": "{n} milestones of Grapevine and La Viña, decade by decade.", "es": "{n} hitos de La Viña y Grapevine, década por década." },

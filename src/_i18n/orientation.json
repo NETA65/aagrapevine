@@ -239,5 +239,9 @@
   "orientation.hero_link": { "en": "All sessions", "es": "Todas las sesiones" },
   "orientation.hero_dots": { "en": "The six sessions", "es": "Las seis sesiones" },
   "orientation.hero_dot": { "en": "Session {n}: {title}", "es": "Sesión {n}: {title}" },
-  "orientation.hero_saved": { "en": "Saved only in this browser — nothing is sent anywhere.", "es": "Se guarda solo en este navegador; no se envía nada." }
+  "orientation.hero_saved": { "en": "Saved only in this browser — nothing is sent anywhere.", "es": "Se guarda solo en este navegador; no se envía nada." },
+  "orientation.aside_q_label": { "en": "questions at the end of this session", "es": "preguntas al final de esta sesión" },
+  "orientation.aside_q_label_one": { "en": "question at the end of this session", "es": "pregunta al final de esta sesión" },
+  "orientation.aside_q_note": { "en": "Get all {n} right and this session is marked done on this device.", "es": "Si aciertas las {n}, esta sesión queda marcada como terminada en este dispositivo." },
+  "orientation.aside_q_link": { "en": "Go to the review", "es": "Ir al repaso" }
 }

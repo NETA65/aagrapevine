@@ -761,8 +761,11 @@
   .hero-aside-note { font-size: 0.8125rem; line-height: 1.45; color: var(--ha-muted); }
   .hero-aside--video .hero-aside-title, .hero-aside-item-title, .hero-aside-item-text {
     display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+  /* (max-width + normal white-space: in a narrow card — a 320px phone at 150 % text — the label wraps
+     inside the pill instead of running out of it) */
   .hero-aside-cta {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 2.5rem; padding: 0.4rem 1rem;
+    max-width: 100%; white-space: normal; text-align: start;
     border: 1px solid var(--ha-cta-line); border-radius: 9999px; background: var(--ha-cta-bg); color: var(--ha-ink);
     font-size: 0.875rem; font-weight: 600; line-height: 1.2; text-decoration: none; transition: background-color 0.15s, border-color 0.15s, color 0.15s;
   }
@@ -823,6 +826,11 @@
   @container (width < 20rem) {
     .hero-aside--video.is-vertical { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "main" "body" "foot"; grid-template-rows: none; }
     .hero-aside--video.is-vertical > .hero-aside-main { margin-top: 0.875rem; width: min(100%, 10rem); }
+  }
+  /* a card narrower than 15rem (a 320px phone at 130–150 % text, 390px at 150 %): the link rows drop
+     their icon tile, so a label keeps whole words ("dispositivo") instead of breaking inside them */
+  @container (width < 15rem) {
+    .hero-aside-link-icon { display: none; }
   }
   @container (width >= 36rem) {
     .hero-aside--video:not(.is-vertical) { grid-template-columns: minmax(0, min(55%, 28rem)) minmax(0, 1fr); grid-template-areas: "main head" "main body" "main foot"; grid-template-rows: auto auto 1fr; column-gap: 1.5rem; }

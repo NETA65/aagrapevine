@@ -1588,19 +1588,15 @@
     "es": "Volantes para compartir"
   },
   "committee.photos.aside_title": {
-    "en": "Anonymity first",
-    "es": "Primero, el anonimato"
+    "en": "Next chance for photos",
+    "es": "Próxima ocasión para fotos"
   },
   "committee.photos.aside_lead": {
-    "en": "We share places and literature — never faces or names.",
-    "es": "Compartimos lugares y literatura, nunca rostros ni nombres."
+    "en": "Coming up in NETA 65 — a chance to add photos to the albums.",
+    "es": "Lo que viene en NETA 65: una ocasión para sumar fotos a los álbumes."
   },
-  "committee.photos.aside_ok": {
-    "en": "Booths, literature and venues",
-    "es": "Mesas, literatura y lugares"
-  },
-  "committee.photos.aside_link": {
-    "en": "Photo guidelines",
-    "es": "Guía para fotos"
+  "committee.photos.aside_none": {
+    "en": "No booths or workshops on the calendar right now.",
+    "es": "Por ahora no hay mesas ni talleres en el calendario."
   }
 }

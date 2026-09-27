@@ -16,7 +16,12 @@ eleventyComputed:
     Flow: hero (session n of 6) → the session (goal, key points, try this + the live example from the
     site's data, learn more) with the session list beside it (sticky-aside) → quick review (band; instant
     feedback, nothing sent — a session whose 3 answers are right is saved as "done on this device" by
-    orientation.js) → previous / next session. -#}
+    orientation.js) → previous / next session.
+    The hero's right-hand card (the shared hero aside, from 1024px at 100 % text; "hide" elsewhere): the
+    quick review at the end of the session (how many questions, what getting them right does) with
+    "Go to the review" → #check, and the sessions done on this device ([data-o101-progress], filled by
+    orientation.js). That progress line MOVES there from the session list while the card is in the hero
+    (orientation.css hides the list's own line), so it is never shown twice. -#}
 {% import "macros/ui.njk" as ui with context %}
 {% import "macros/orientation.njk" as o with context %}
 {%- set O = orientation -%}
@@ -27,11 +32,22 @@ eleventyComputed:
 {%- set nextL = O.lessons | o101Lesson(l.next) -%}
 {%- set hub = '/orientation/' | lurl(lang) -%}
 
-{% call ui.pageHero(lang, l.title | o101Text(lang), l.summary | o101Text(lang) | escape, l.icon, "orientation.lesson_eyebrow" | t(lang, { n: l.n, total: total })) %}
+{%- set nQ = l.check | length -%}
+{% call(slot) ui.pageHero(lang, l.title | o101Text(lang), l.summary | o101Text(lang) | escape, l.icon, "orientation.lesson_eyebrow" | t(lang, { n: l.n, total: total }), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if nQ %}
+  {% call ui.heroAsideStat("orientation.check_eyebrow" | t(lang), nQ, ("orientation.aside_q_label_one" if nQ == 1 else "orientation.aside_q_label") | t(lang), lang, {
+       id: "o101-aside-title", icon: "circle-help", note: "orientation.aside_q_note" | t(lang, { n: nQ }),
+       href: "#check", linkLabel: "orientation.aside_q_link" | t(lang), class: "o101-lesson-aside" }) %}
+    <p class="hero-aside-note flex items-center gap-1.5" data-js-only data-o101-progress data-total="{{ total }}" data-t="{{ 'orientation.progress' | t(lang) }}" data-t-all="{{ 'orientation.progress_all' | t(lang) }}">{% icon "sprout", "size-3.5 shrink-0" %}<span data-o101-count>{{ "orientation.progress" | t(lang, { n: 0, total: total }) }}</span></p>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
 <div class="hero-actions">
   <a class="btn-light" href="{{ hub }}#sessions">{% icon "layout-grid", "size-4" %} {{ "orientation.all_lessons" | t(lang) }}</a>
   <a class="btn-on-dark max-md:hidden" href="{{ hub }}?slides#session-{{ l.id }}" data-js-only>{% icon "presentation", "size-4" %} {{ "orientation.present_lesson" | t(lang) }}</a>
 </div>
+{%- endif %}
 {% endcall %}
 
 <div class="container-page page-start">
@@ -95,7 +111,7 @@ eleventyComputed:
     <div class="sticky-aside">
       <nav class="card card-pad" aria-labelledby="toc-title" data-o101-toc>
         <h2 id="toc-title" class="card-h"><span>{% icon "sprout", "size-5" %}</span>{{ "orientation.aside_title" | t(lang) }}</h2>
-        <p class="mt-1 text-sm text-muted" data-js-only data-o101-progress data-total="{{ total }}" data-t="{{ 'orientation.progress' | t(lang) }}" data-t-all="{{ 'orientation.progress_all' | t(lang) }}"><span data-o101-count>{{ "orientation.progress" | t(lang, { n: 0, total: total }) }}</span></p>
+        <p class="o101-toc-progress mt-1 text-sm text-muted" data-js-only data-o101-progress data-total="{{ total }}" data-t="{{ 'orientation.progress' | t(lang) }}" data-t-all="{{ 'orientation.progress_all' | t(lang) }}"><span data-o101-count>{{ "orientation.progress" | t(lang, { n: 0, total: total }) }}</span></p>
         <button type="button" class="btn-secondary btn-sm mt-3 w-full lg:hidden" data-js-only data-o101-toc-btn aria-expanded="false" aria-controls="o101-toc-list">{{ "orientation.toc_all" | t(lang, { n: total }) }} {% icon "chevron-down", "size-4 transition" %}</button>
         <ol id="o101-toc-list" class="o101-toc mt-4" role="list">
           {% for x in O.lessons %}

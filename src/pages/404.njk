@@ -36,8 +36,8 @@ pageScripts: ["/assets/js/community.js"]
   {% call ui.heroAside("community.nf.search_label" | t(lang), lang, { id: "nf-search-title", icon: "search" }) %}
   <form action="{{ '/search/' | lurl(lang) }}" method="get" role="search" aria-labelledby="nf-search-title">
     <p class="hero-aside-text" lang="{{ other }}">{{ "community.nf.search_label" | t(other) }}</p>
-    <div class="mt-2.5 flex flex-nowrap gap-2">
-      <input id="nf-q" name="q" type="search" class="input min-w-0 flex-1" aria-labelledby="nf-search-title" placeholder="{{ 'community.nf.search_ph' | t(lang) }}" data-nf-query autocomplete="off" enterkeyhint="search">
+    <div class="nf-search-row mt-2.5 flex flex-nowrap gap-2">
+      <input id="nf-q" name="q" type="search" class="input nf-q" aria-labelledby="nf-search-title" placeholder="{{ 'community.nf.search_ph' | t(lang) }}" data-nf-query autocomplete="off" enterkeyhint="search">
       <button type="submit" class="btn-primary size-11 shrink-0 p-0" aria-label="{{ 'community.nf.search_btn' | t(lang) }}">{% icon "search", "size-5" %}</button>
     </div>
     <p class="hero-aside-note mt-2 break-all font-mono empty:hidden" data-nf-path></p>

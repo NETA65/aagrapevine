@@ -60,18 +60,30 @@ pageScripts: ["/assets/js/community.js"]
     How fresh the list is ("Updated 2 hours ago") is said once, by the feed (ui.freshness).
     On its right (the shared hero aside; the first card under the hero on smaller screens and at
     larger text): one photo from each official Instagram account (La Viña first on /es/), picked at
-    random on every page view from its 12 newest posts that have a picture. The build renders the
-    newest of each (the no-JS and Data saver choice); the small script right after the card swaps in
+    random on every page view from its 12 newest posts that have a picture — leaving out the posts
+    among the feed's first IG_NEAR entries on screen, which sit right below the card (a photo never
+    shows twice within a screen or two). The build renders the newest of what is left (the no-JS and
+    Data saver choice); the small script right after the card swaps in
     a random one from wn-ig-pool before the (lazy) pictures load — never with Data saver on, which
     keeps the build's choice so no extra picture is fetched. Each tile opens its post (new tab);
     its alt text is the start of the caption. "All posts" → /instagram/, their canonical place. -#}
 {%- set igCfg = (site.sources.instagram and site.sources.instagram.accounts) or [] -%}
 {%- set igAccs = (igCfg | reverse) if lang == "es" else igCfg -%}
 {%- set igPosts = db.instagram | mediaItems("instagram") -%}
+{#- the feed's first IG_NEAR entries as the page opens (each day shows its first CAP): about two
+    screens on a phone, more on a wide one -#}
+{%- set IG_NEAR = 24 -%}
+{%- set igNear = [] -%}{%- set igSeen = [] -%}
+{%- for day in days | limit(DAYS_INITIAL) %}{% for it in day.items %}{% if igSeen.length < IG_NEAR and it._rankAll < CAP %}
+  {%- set _n = igSeen.push(1) -%}{% if it.source == "instagram" and it.url %}{% set _n = igNear.push(it.url) %}{% endif -%}
+{%- endif %}{% endfor %}{% endfor -%}
 {%- set igTiles = [] -%}{%- set igPool = [] -%}{%- set igMore = [] -%}
 {%- for acc in igAccs -%}
   {%- set igList = [] -%}{%- set igSrc = [] -%}
-  {%- for p in igPosts | mediaIgFor(acc) -%}
+  {%- set igAll = igPosts | mediaIgFor(acc) -%}
+  {#- an account whose every post is among those first entries keeps them all (a photo rather than none) -#}
+  {%- set igFar = [] -%}{%- for p in igAll %}{% if not (p.url in igNear) %}{% set _n = igFar.push(p) %}{% endif %}{% endfor -%}
+  {%- for p in (igFar if igFar.length else igAll) -%}
     {%- set igImg = p | mediaIgImage -%}
     {%- if igImg and igList.length < 12 -%}
       {%- set igAlt = (p | mediaIgCaption(lang) | excerpt(110)) or ("community.wn.ig_post" | t(lang, { name: acc.name })) -%}

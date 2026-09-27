@@ -395,10 +395,10 @@ data-deadline="{{ r.deadline }}" data-t-days="{{ 'read.contrib.due_in' | t(lang)
     nav below, so the hero has no jump buttons. "read-hero" (read.css) keeps both buttons on one
     row on a 390px phone. -#}
 {#- The hero's right-hand card (the shared hero aside): the next story deadline (the date, the live "N days
-    left" — read.js — the theme and its issue) with "All deadlines" → #deadlines, and the phone story lines
-    (#record) at its foot. Both sections are far below, so nothing right under the hero is repeated.
-    "below": on smaller screens and at larger text it is the first card under the hero (time-sensitive).
-    Without a dated deadline: the phone line alone. -#}
+    left" — read.js — the theme and its issue) with "All deadlines" → #deadlines (far below; the page nav
+    right under the hero names the sections, never the date). No "Record by phone" row: that chip is in the
+    page nav right below. "below": on smaller screens and at larger text it is the first card under the
+    hero (time-sensitive). Without a dated deadline: the phone line alone. -#}
 {%- set nextDl = (gvEd.upcoming | selectattr("isNext") | first) -%}
 {% call(slot) ui.pageHero(lang, "read.contrib.title" | t(lang), "read.contrib.subtitle" | t(lang), "pen-line", "read.contrib.eyebrow" | t(lang), { class: "read-hero", side: "below" }) %}
 {%- if slot == "side" %}
@@ -413,7 +413,6 @@ data-deadline="{{ r.deadline }}" data-t-days="{{ 'read.contrib.due_in' | t(lang)
       <p class="hero-aside-note">{% if nextDl.issueLabel %}{{ "read.contrib.for_issue" | t(lang, { issue: nextDl.issueLabel }) }} · {% endif %}{{ "read.contrib.aside_gv" | t(lang) }}</p>
       {% if lang == "es" %}<p class="hero-aside-note">{{ "read.contrib.aside_lv" | t(lang) }}</p>{% endif %}
     </div>
-    <div class="hero-aside-foot">{{ ui.heroAsideLink({ href: "#record", label: "read.contrib.nav_record" | t(lang), icon: "mic", tone: "vine" }, lang) }}</div>
     {%- else %}
     <p class="hero-aside-text">{{ "read.contrib.aside_record_text" | t(lang) }}</p>
     {%- endif %}

@@ -313,6 +313,16 @@
 .cm-share-mini .cm-frame { border-radius: 0.375rem; box-shadow: 0 16px 34px -16px rgb(0 0 0 / 0.7); transition: transform 0.2s; }
 .cm-share-mini:hover .cm-frame { transform: translateY(-3px); }
 @media (width >= 80rem) { .cm-share-aside .hero-aside-body { grid-template-columns: 9rem minmax(0, 1fr); } }
+/* 404 (404.njk): the hero card's search row — the box takes the room the button leaves (its own class,
+   not flex-1: at 130–150 % text main.css gives every flex-1 a 7em minimum, which pushed the button out
+   of the card); in a card narrower than 17rem (a 320px phone from 115 % text, 390px at 150 %) the box
+   gets the whole width and the button goes under it, full width (container: .hero-side, main.css) */
+.nf-q { flex: 1 1 0%; min-width: 0; }
+@container (width < 17rem) {
+  .nf-search-row { flex-wrap: wrap; }
+  .nf-search-row > .nf-q { flex-basis: 100%; }
+  .nf-search-row > button { width: 100%; }
+}
 .cm-sheet { position: absolute; inset: 0; display: flex; flex-direction: column; }
 
 /* Poster */

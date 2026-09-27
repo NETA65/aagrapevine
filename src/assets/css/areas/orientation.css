@@ -26,6 +26,12 @@
   :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-welcome { grid-template-columns: minmax(0, 1fr); }
   :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-welcome > .o101-progress { display: none; }
 }
+/* A session page (orientation-lesson.njk): its hero card (the quick review) carries the "n of 6 sessions
+   done on this device" line while it is in the hero — the same condition — so the session list beside
+   the session drops its own copy of that line there (it keeps its check marks). */
+@media (width >= 64rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-toc-progress { display: none; }
+}
 /* 1024–1279px: the hero's text column is ≈ 600px beside that card — two buttons only (printing the
    handout is also in the "Present or print" band below) */
 @media (width >= 64rem) and (width < 80rem) {

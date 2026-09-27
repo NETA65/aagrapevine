@@ -631,8 +631,8 @@
      from the card's --ha-* variables, so the same markup reads in the hero (dark glass) and below it
      (a light card). /events/ "Save the date": a date tile (the event's kind as its top edge) beside
      the kind badge, the title and the date · /portfolio/ "Latest upload": the file's kind icon under
-     its picture (a picture that fails leaves the icon) · /photos/ "Anonymity first": two rules, each
-     with its icon (the words say it too — never colour alone). */
+     its picture (a picture that fails leaves the icon). (/photos/ "Next chance for photos" and
+     /announcements/ "Coming up" are plain ui.heroAsideLink rows.) */
   .cm-ha-ev { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0.875rem; }
   .cm-ha-ev-tile {
     display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;
@@ -644,12 +644,6 @@
   .cm-ha-ev-tile.is-range .cm-ha-ev-day { font-size: 1.125rem; letter-spacing: -0.01em; }
   .cm-ha-ev-wd { margin-top: 0.125rem; font-size: 0.68rem; font-weight: 500; white-space: nowrap; color: var(--ha-muted); }
   .cm-ha-doc { display: grid; place-items: center; color: var(--ha-muted); }
-  .cm-ha-rules { display: grid; gap: 0.75rem; }
-  .cm-ha-rules > li { display: flex; align-items: flex-start; gap: 0.75rem; }
-  .cm-ha-rule { display: grid; flex-shrink: 0; margin-top: 0.0625rem; }
-  .cm-ha-rule.is-ok { color: var(--ha-ok); }
-  .cm-ha-rule.is-no { color: var(--ha-alert); }
-  .cm-ha-rule-h { display: block; font-size: 0.9375rem; font-weight: 600; line-height: 1.3; color: var(--ha-ink); }
 }
 
 /* ---------- (unlayered) rules that must beat utilities ---------- */

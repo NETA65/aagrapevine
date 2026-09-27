@@ -95,5 +95,6 @@
   "monthly.hero_poster": { "en": "Poster · {month}", "es": "Cartel · {month}" },
   "monthly.hero_open": { "en": "Open", "es": "Abrir" },
   "monthly.hero_poster_sr": { "en": "The {month} toolkit and its poster", "es": "El kit y el cartel de {month}" },
-  "monthly.hero_covers": { "en": "The issues", "es": "Las revistas" }
+  "monthly.hero_covers": { "en": "The issues", "es": "Las revistas" },
+  "monthly.hero_around": { "en": "Other months", "es": "Otros meses" }
 }

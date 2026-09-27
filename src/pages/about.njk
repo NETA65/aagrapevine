@@ -26,11 +26,12 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {#- The shared hero (same height on every page); "read-hero" (read.css) keeps phone heroes within
     24–28rem. No jump buttons (the page has an "On this page" nav): "Contact us" writes to the committee.
     Right-hand card (ui.heroAsideStat): how long the magazines have carried the message, linking to the
-    timeline (#history) — a teaser, never the magazines' facts shown right below. -#}
+    timeline (#history) — a teaser, never the magazines' facts shown right below. Its heading has its own
+    name ("History at a glance"): a region named like the #history section would be a duplicate landmark. -#}
 {% call(slot) ui.pageHero(lang, "read.about.title" | t(lang), "read.about.subtitle" | t(lang), "info", "read.about.eyebrow" | t(lang), { class: "read-hero", side: "hide" }) %}
 {%- if slot == "side" %}
   {%- if H.items.length and H.years %}
-  {{ ui.heroAsideStat("read.about.hist_title" | t(lang), H.years ~ "+", "read.about.aside_label" | t(lang), lang, {
+  {{ ui.heroAsideStat("read.about.aside_title" | t(lang), H.years ~ "+", "read.about.aside_label" | t(lang), lang, {
        id: "about-aside-title", icon: "history", sr: "read.about.aside_sr" | t(lang, { years: H.years }),
        note: "read.about.aside_note" | t(lang, { n: H.count.all }), href: "#history", linkLabel: "read.about.aside_link" | t(lang) }) }}
   {%- endif %}
