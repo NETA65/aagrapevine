@@ -1079,8 +1079,11 @@
           if (this.has("money")) {
             var auto = this.booksAuto(), c = auto ? Math.round(num(f.quantity) * this.moneyOf(f.unit_cost)) : this.moneyOf(f.amount);
             // the amount is required: left empty it is an error (a typed 0 is fine); a minus sign is
-            // not a way to record money coming in (that is "Money received")
-            if (!auto && clean(f.amount) === "") errs.push({ field: "amount", text: this.t("form.err_amount_required") });
+            // not a way to record money coming in (that is "Money received"). A unit cost that isn't a
+            // number has its own message below, and is why the amount could not be worked out: one
+            // message, not two.
+            var badUnit = this.has("unit_cost") && clean(f.unit_cost) !== "" && this.moneyOf(f.unit_cost) === null;
+            if (!auto && clean(f.amount) === "") { if (!badUnit) errs.push({ field: "amount", text: this.t("form.err_amount_required") }); }
             else if (c === null) errs.push({ field: "amount", text: this.t("form.err_money") });
             else if (!auto && this.negative(f.amount)) errs.push({ field: "amount", text: this.t("form.err_amount_negative") });
             e.amount_cents = c === null || c === "" ? "" : c;
