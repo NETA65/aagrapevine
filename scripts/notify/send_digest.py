@@ -5,10 +5,10 @@ Edition "2026-10" (sent October 1) holds — the same rules as the website's /di
 (eleventy/filters/community.js → buildMonthlyDigest; keep the two in step):
 
   * the next committee meeting (Zoom link, ID, passcode, the chair's note)
-  * what was new LAST month (September, Central time): announcements, podcast episodes (a YouTube
+  * what was new LAST month (September, Central time): bulletin posts, podcast episodes (a YouTube
     upload of the same episode is folded into it), other videos, new documents, committee files —
     data/site/whatsnew.json entries whose news date (wn_date) falls in the month, completed from the
-    full episodes / videos / pdfs / announcements files (whatsnew.json keeps only its newest 150)
+    full episodes / videos / pdfs / announcements (the bulletin's) files (whatsnew.json keeps only its newest 150)
   * this month's magazine issues (theme, number of stories, a few highlights — free to read first,
     members' stories, Area 65 and Texas writers first) + "put it to work" tips (config/carry.yml)
     + the link to this month's toolkit (/monthly/YYYY-MM/)
@@ -110,13 +110,13 @@ T = {
         "and": "and",
         "n": {"article": ("{n} magazine stories", "1 magazine story"), "episode": ("{n} podcast episodes", "1 podcast episode"),
               "video": ("{n} videos", "1 video"), "pdf": ("{n} documents", "1 document"),
-              "drive": ("{n} committee files", "1 committee file"), "announcement": ("{n} announcements", "1 announcement")},
+              "drive": ("{n} committee files", "1 committee file"), "announcement": ("{n} bulletin posts", "1 bulletin post")},
         "next_meeting": "Next committee meeting",
         "join_zoom": "Join on Zoom",
         "meeting_id": "Meeting ID",
         "passcode": "Passcode",
         "meeting_note": "All AA members are welcome. No registration required.",
-        "announcement": "Announcements",
+        "announcement": "Bulletin",
         "issues": "This month in the magazines",
         "stories": ("{n} stories", "1 story"),
         "free_n": "{n} free to read",
@@ -195,13 +195,13 @@ T = {
         "n": {"article": ("{n} historias de las revistas", "1 historia de las revistas"),
               "episode": ("{n} episodios de podcast", "1 episodio de podcast"),
               "video": ("{n} videos", "1 video"), "pdf": ("{n} documentos", "1 documento"),
-              "drive": ("{n} archivos del comité", "1 archivo del comité"), "announcement": ("{n} anuncios", "1 anuncio")},
+              "drive": ("{n} archivos del comité", "1 archivo del comité"), "announcement": ("{n} avisos del boletín", "1 aviso del boletín")},
         "next_meeting": "Próxima reunión del comité",
         "join_zoom": "Entrar por Zoom",
         "meeting_id": "ID de reunión",
         "passcode": "Código de acceso",
         "meeting_note": "Todos los miembros de AA son bienvenidos. No hace falta inscribirse.",
-        "announcement": "Anuncios",
+        "announcement": "Boletín",
         "issues": "Este mes en las revistas",
         "stories": ("{n} historias", "1 historia"),
         "free_n": "{n} gratis para leer",
@@ -288,7 +288,7 @@ DAYS_SHORT = {
 DRIVE_CATEGORIES = {
     "reports": ("Reports", "Informes"), "notes": ("Notes", "Notas"), "slides": ("Slides", "Presentaciones"),
     "flyers": ("Flyers", "Volantes"), "photos": ("Photos", "Fotos"), "workshops": ("Workshops", "Talleres"),
-    "announcements": ("Announcements", "Anuncios"), "forms": ("Forms", "Formularios"), "other": ("Files", "Archivos"),
+    "announcements": ("Bulletin", "Boletín"), "forms": ("Forms", "Formularios"), "other": ("Files", "Archivos"),
 }
 
 # The news lists of the edition, in order, with the site page "See all" points to.
@@ -684,6 +684,14 @@ class Links:
         """A site file (never language-prefixed): '/assets/cache/…' → the full address."""
         return path if path.startswith(("http://", "https://")) else self.base + ("" if path.startswith("/") else "/") + path
 
+    def site_path(self, path: str, lang: str) -> str:
+        """A site path written in a bulletin post: a file ("/bulletin/files/flyer.pdf") or a path that
+        names its language as it is; a page in the e-mail's language ("/events/" → …/es/events/)."""
+        bare = path.split("#")[0].split("?")[0]
+        if re.search(r"(?i)[.][a-z0-9]{2,5}$", bare) or re.match(r"/(en|es)(/|$)", bare):
+            return self.asset(path)
+        return self.page(path, lang)
+
     def item(self, item: dict, lang: str, fallback_page: str) -> str:
         ex = item.get("extra") or {}
         url = item.get("url") or ex.get("view_url") or ""
@@ -712,7 +720,7 @@ def item_label(item: dict, lang: str) -> tuple[str, str, str]:
         doc = "Documento" if lang == "es" else "Document"
         return (f"{doc} · La Viña", C["lv"], C["lv_soft"]) if "lavina" in host else (f"{doc} · Grapevine", C["gv"], C["gv_soft"])
     if kind == "announcement":
-        return ("Anuncio" if lang == "es" else "Announcement"), C["vine"], C["vine_soft"]
+        return ("Boletín" if lang == "es" else "Bulletin"), C["vine"], C["vine_soft"]
     if src == "drive":
         en, es = DRIVE_CATEGORIES.get(item.get("category") or "other", DRIVE_CATEGORIES["other"])
         return (es if lang == "es" else en), C["vine"], C["vine_soft"]
@@ -800,21 +808,37 @@ def item_meta(item: dict, lang: str) -> str:
     return " · ".join(p for p in parts if p)
 
 
-def md_to_text(s: str) -> str:
-    s = re.sub(r"\[([^\]]+)\]\((\S+?)\)", r"\1 (\2)", s)
+def _link_url(url: str, resolve=None) -> str:
+    """A post's link as a full address: a web or mail address as it is; a site path ("/events/", a
+    file saved next to the post: "/bulletin/files/…") through `resolve` (Links.site_path); else ""."""
+    if re.match(r"https?://|mailto:", url):
+        return url
+    return resolve(url) if resolve and url.startswith("/") and not url.startswith("//") else ""
+
+
+def md_to_text(s: str, resolve=None) -> str:
+    s = re.sub(r"!\[([^\]]*)\]\((\S+?)\)", lambda m: f"[{m.group(1).strip() or m.group(2).rsplit('/', 1)[-1]}]({m.group(2)})", s)
+    s = re.sub(r"\[([^\]]+)\]\((\S+?)\)",
+               lambda m: f"{m.group(1)} ({u})" if (u := _link_url(m.group(2), resolve)) else m.group(1), s)
     s = re.sub(r"(\*\*|__|\*|_|`)", "", s)
     s = re.sub(r"^#+\s*", "", s, flags=re.M)
     return re.sub(r"[ \t]+", " ", s).strip()
 
 
-def md_to_html(s: str, link_color: str) -> str:
-    """Tiny, safe Markdown subset for announcement bodies: paragraphs, line breaks,
-    **bold**, *italic*, [links](https://…). Everything else is escaped."""
+def md_to_html(s: str, link_color: str, resolve=None) -> str:
+    """Tiny, safe Markdown subset for bulletin post bodies: paragraphs, line breaks,
+    **bold**, *italic*, [links](https://…) — a link to the site too, when `resolve` makes it a full
+    address (_link_url); a picture becomes a link to it. Everything else is escaped."""
     out = []
     for para in re.split(r"\n\s*\n", s.strip()):
         t = html.escape(para.strip())
-        t = re.sub(r"\[([^\]]+)\]\((https?://[^\s)]+|mailto:[^\s)]+)\)",
-                   lambda m: f'<a href="{m.group(2)}" style="color:{link_color};">{m.group(1)}</a>', t)
+        t = re.sub(r"!\[([^\]]*)\]\(([^\s)]+)\)",
+                   lambda m: f"[{m.group(1).strip() or m.group(2).rsplit('/', 1)[-1]}]({m.group(2)})", t)
+
+        def link(m: re.Match) -> str:
+            url = _link_url(html.unescape(m.group(2)), resolve)
+            return f'<a href="{html.escape(url)}" style="color:{link_color};">{m.group(1)}</a>' if url else m.group(1)
+        t = re.sub(r"\[([^\]]+)\]\(([^\s)]+)\)", link, t)
         t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
         t = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", r"<em>\1</em>", t)
         t = re.sub(r"^#+\s*", "", t)
@@ -1512,18 +1536,19 @@ def render_lang_html(lang: str, data: dict, cfg: dict, links: Links, max_per: in
   </td></tr></table>
 </td></tr>""")
 
-    # ---- announcements (last month, still current)
+    # ---- the bulletin's posts (last month, still current)
     ann = data["groups"]["announcement"]
     if ann:
         body = []
         for a in ann[:max_per]:
             text = tx(a, "body_md", lang) or tx(a, "summary", lang)
-            short = text if len(text) <= 700 else shorten(md_to_text(text), 600)
+            site = lambda u, lang=lang: links.site_path(u, lang)  # noqa: E731 — a post's links to the site
+            short = text if len(text) <= 700 else shorten(md_to_text(text, site), 600)
             body.append(f"""<div style="margin:0 0 14px;">
-  <div style="font-size:16px;font-weight:bold;margin:0 0 4px;"><a href="{_esc(links.item(a, lang, '/announcements/'))}" style="{link_style}">{_esc(tx(a, 'title', lang))}</a></div>
-  <div style="font-size:14px;line-height:1.6;color:{C['ink']};">{md_to_html(short, C['gv'])}</div>
+  <div style="font-size:16px;font-weight:bold;margin:0 0 4px;"><a href="{_esc(links.item(a, lang, '/bulletin/'))}" style="{link_style}">{_esc(tx(a, 'title', lang))}</a></div>
+  <div style="font-size:14px;line-height:1.6;color:{C['ink']};">{md_to_html(short, C['gv'], site)}</div>
 </div>""")
-        parts.append(section(t["announcement"], C["vine"], "".join(body), "/announcements/", max(0, len(ann) - max_per), len(ann)))
+        parts.append(section(t["announcement"], C["vine"], "".join(body), "/bulletin/", max(0, len(ann) - max_per), len(ann)))
 
     # ---- this month in the magazines + put it to work + the toolkit
     bm = botm_block(data, lang, links)
@@ -1726,10 +1751,10 @@ def render_text(data: dict, cfg: dict, links: Links, max_per: int) -> str:
             out += head(f"{t['announcement']} ({len(ann)})")
             for a in ann[:max_per]:
                 out.append(f"* {tx(a, 'title', lang)}")
-                body = md_to_text(tx(a, "body_md", lang) or tx(a, "summary", lang))
+                body = md_to_text(tx(a, "body_md", lang) or tx(a, "summary", lang), lambda u: links.site_path(u, lang))
                 if body:
                     out.append("  " + shorten(body, 600))
-            out += [f"  → {links.page('/announcements/', lang)}", ""]
+            out += [f"  → {links.page('/bulletin/', lang)}", ""]
         # this month in the magazines
         bm = botm_block(data, lang, links)
         if data["issues"]:

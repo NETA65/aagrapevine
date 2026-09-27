@@ -41,27 +41,31 @@ const nav = {
         // (It was /documents/ — documents-redirect.njk keeps that address working.)
         { key: "nav.portfolio", url: "/portfolio/", icon: "folder-open", page: "portfolio", descKey: "nav.portfolio_desc" },
         { key: "nav.photos", url: "/photos/", icon: "images", page: "photos", descKey: "nav.photos_desc" },
-        { key: "nav.announcements", url: "/announcements/", icon: "megaphone", page: "announcements", descKey: "nav.announcements_desc" },
+        // Bulletin: the committee's notices (Drive "bulletin" folder or content/bulletin/*.md). (It was
+        // /announcements/ — announcements-redirect.njk keeps that address working.)
+        { key: "nav.bulletin", url: "/bulletin/", icon: "megaphone", page: "bulletin", descKey: "nav.bulletin_desc" },
       ],
     },
   ],
   // Pages outside the header menus. group "stay" → the footer's "Stay updated" column (after the
-  // official aagrapevine.org / aalavina.org sites, before the RSS and calendar feeds); group "site" →
-  // the footer's bottom bar (right side, with "Last updated"), except About, which is a button beside
-  // the e-mail and neta65.org ones under the footer's about blurb. The phone drawer lists them all
-  // under "More" (except Search, which has its own button there). `icon`: a Lucide name, or a local
-  // icon from src/_includes/icons (instagram).
+  // official aagrapevine.org / aalavina.org sites, before the RSS and calendar feeds, in this order:
+  // Instagram, QR Post); group "site" → the footer's bottom bar (right side, with "Last updated"),
+  // except About, which is a button beside the e-mail and neta65.org ones under the footer's about
+  // blurb. The phone drawer lists them all, in this order, under "More" (except Search, which has its
+  // own button there). `icon`: a Lucide name, or a local icon from src/_includes/icons (instagram).
   footer: [
     // A media feed (like Listen / Watch), not a way to take part: footer + drawer "More", and linked
     // from the home page and /photos/.
     { key: "nav.instagram", url: "/instagram/", page: "instagram", icon: "instagram", group: "stay" },
+    // QR Post (/share/): the site's QR codes, the printable poster (with the committee meeting) and
+    // table tent, ready-made messages — a way to pass the site on, so it sits with "Stay updated".
+    { key: "nav.share", url: "/share/", page: "share", icon: "qr-code", group: "stay" },
     { key: "nav.about", url: "/about/", page: "about", icon: "info", group: "site" },
     // Accessibility: the reading settings explained, captions, ASL, audio, joining meetings by phone,
     // printing (src/pages/accessibility.njk). Also linked from the "Aa" panel.
     { key: "nav.accessibility", url: "/accessibility/", page: "accessibility", icon: "accessibility", group: "site" },
     // Saved pages & app (/offline/): what is saved on this device, "Save key pages", installing the site.
     { key: "nav.offline", url: "/offline/", page: "offline", icon: "hard-drive-download", group: "site" },
-    { key: "nav.share", url: "/share/", page: "share", icon: "qr-code", group: "site" },
     { key: "nav.search", url: "/search/", page: "search", icon: "search", group: "site" },
     { key: "nav.status", url: "/status/", page: "status", icon: "activity", group: "site" },
   ],

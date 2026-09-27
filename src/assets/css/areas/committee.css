@@ -1,5 +1,5 @@
 /* Area styles: committee — owned by the committee page agent.
-   Pages: /meetings/ /events/ /portfolio/ /photos/ /announcements/
+   Pages: /meetings/ /events/ /portfolio/ /photos/ /bulletin/
    Prefer Tailwind utilities in templates; put only what utilities cannot
    express here (pseudo-elements, dialog/backdrop, animations, tone variables,
    complex grids). Everything uses theme tokens so dark mode just works.
@@ -361,7 +361,7 @@
     .cm-naming-head > span:last-child { display: block; }
   }
 
-  /* ---------- small linked cards (announcements "Coming up") ---------- */
+  /* ---------- small linked cards (the bulletin's "Coming up") ---------- */
   .cm-mini-card { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.1rem; text-decoration: none; }
   .cm-mini-card .cm-date-tile { width: 3.9rem; height: 4.5rem; }
   .cm-mini-card .cm-tile-day { font-size: 1.65rem; }
@@ -386,7 +386,7 @@
 
   /* ---------- documents ---------- */
   .cm-doc-section + .cm-doc-section { margin-top: 3rem; }
-  /* ("Nothing here yet" on documents, photos and announcements is the shared ui.pageEmpty card.) */
+  /* ("Nothing here yet" on documents, photos and the bulletin is the shared ui.pageEmpty card.) */
   .cm-doc-thumb { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--tone-soft); border-bottom: 1px solid var(--c-line); }
   .cm-doc-thumb img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.35s; }
   .cm-doc:hover .cm-doc-thumb img { transform: scale(1.035); }
@@ -464,7 +464,7 @@
     border-radius: 9999px; color: #fff; background: rgb(0 0 0 / 0.55); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
   }
 
-  /* ---------- announcements ----------
+  /* ---------- the bulletin (/bulletin/) ----------
      Two per row from 1280px when there are several: each card is then ~600px wide, so the text
      keeps a readable line length. With none: the visitors' card alone ("Coming up" — the next
      meeting and event — is the hero's right-hand card). */
@@ -475,7 +475,7 @@
   .cm-hash { margin-left: 0.4rem; color: var(--c-faint); opacity: 0; transition: opacity 0.15s; }
   .cm-anchor-link:hover .cm-hash, .cm-anchor-link:focus-visible .cm-hash { opacity: 1; }
   .cm-original { border-radius: 0.9rem; background: var(--c-surface-2); padding: 0.25rem 1rem; }
-  .cm-original > summary { display: flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; cursor: pointer; font-size: 0.875rem; font-weight: 600; color: var(--c-muted); list-style: none; }
+  .cm-original > summary { display: flex; flex-wrap: wrap; align-items: center; gap: 0 0.5rem; min-height: 2.75rem; cursor: pointer; font-size: 0.875rem; font-weight: 600; color: var(--c-muted); list-style: none; }
   .cm-original > summary::-webkit-details-marker { display: none; }
   .cm-original[open] { padding-bottom: 0.75rem; }
 
@@ -632,7 +632,7 @@
      (a light card). /events/ "Save the date": a date tile (the event's kind as its top edge) beside
      the kind badge, the title and the date · /portfolio/ "Latest upload": the file's kind icon under
      its picture (a picture that fails leaves the icon). (/photos/ "Next chance for photos" and
-     /announcements/ "Coming up" are plain ui.heroAsideLink rows.) */
+     /bulletin/ "Coming up" are plain ui.heroAsideLink rows.) */
   .cm-ha-ev { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0.875rem; }
   .cm-ha-ev-tile {
     display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;
@@ -659,8 +659,39 @@ html:not(.cm-js) [data-cm-js] { display: none !important; }
 /* The "Next" badge only shows on the first upcoming date. */
 .cm-next-badge { display: none !important; }
 .is-next .cm-next-badge { display: inline-flex !important; }
-/* Pinned announcement: amber edge. */
+/* Pinned bulletin post: amber edge. */
 .cm-ann.is-pinned { border-color: color-mix(in srgb, var(--c-lv) 40%, var(--c-line)); box-shadow: inset 4px 0 0 var(--c-lv), var(--shadow-card); }
+
+/* ---------- A bulletin post's text (/bulletin/ and the home page's bulletin cards): whatever Markdown
+   the chair wrote (scripts/sync/announcements.py tidies it, eleventy.config.js `md` renders it). prose-site
+   sets paragraphs, lists and h2/h3; these add the rest, unlayered so they beat it: smaller headings (a
+   post's own start at h3, under its h2 title — h4 in the home page's cards), nested lists, quotes, code,
+   a table in a box of its own that scrolls sideways when it is wider than the card (on a phone), pictures
+   no wider than the text, and long words or web addresses that wrap instead of widening the page. */
+.cm-md { overflow-wrap: anywhere; }
+.cm-md > :first-child { margin-top: 0; }
+.cm-md :is(h4, h5, h6) { max-width: 72ch; margin: 1.25rem 0 0.375rem; font-weight: 600; line-height: 1.3; color: var(--c-ink); }
+.cm-md h4 { font-family: var(--font-display); font-size: 1.125rem; }
+.cm-md h5 { font-size: 1rem; }
+.cm-md h6 { font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--c-muted); }
+.cm-md li + li { margin-top: 0.25rem; }
+.cm-md li > :is(ul, ol) { margin-block: 0.25rem; }
+.cm-md ul ul { list-style-type: circle; }
+.cm-md li > p { margin-block: 0.25rem; }
+.cm-md blockquote { margin: 1rem 0; padding: 0.125rem 0 0.125rem 1rem; border-left: 3px solid var(--c-line); color: var(--c-muted); }
+.cm-md blockquote > :is(p, ul, ol) { margin-block: 0.375rem; }
+.cm-md code { padding: 0.1em 0.35em; border-radius: 0.3rem; background: var(--c-surface-2); font-size: 0.9em; }
+/* a code block wraps its lines (a Zoom ID, a list of times …) rather than scrolling: no box to scroll */
+.cm-md pre { max-width: 100%; margin: 1rem 0; padding: 0.875rem 1rem; border-radius: 0.75rem; background: var(--c-surface-2); font-size: 0.875rem; line-height: 1.55; white-space: pre-wrap; }
+.cm-md pre code { padding: 0; background: none; font-size: inherit; }
+.cm-md hr { max-width: 72ch; margin: 1.5rem 0; border: 0; border-top: 1px solid var(--c-line); }
+.cm-md img { max-width: 100%; height: auto; margin: 0.75rem 0; border-radius: 0.75rem; }
+.cm-md del { color: var(--c-muted); }
+.cm-md .md-table { max-width: 100%; margin: 1rem 0; overflow-x: auto; border: 1px solid var(--c-line); border-radius: 0.75rem; }
+.cm-md table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; line-height: 1.45; overflow-wrap: normal; }
+.cm-md :is(th, td) { min-width: 6.5rem; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--c-line); text-align: left; vertical-align: top; }
+.cm-md th { background: var(--c-surface-2); font-weight: 600; color: var(--c-ink); }
+.cm-md tbody tr:last-child td { border-bottom: 0; }
 
 /* Dark mode: white text on light accent fills → use the page color instead. */
 [data-theme="dark"] .cm-subnav-link.is-current,

@@ -26,8 +26,8 @@ Sitio web del **Comité de Grapevine y La Viña del Área 65 del Noreste de Texa
   talleres en el **Portafolio** (`/es/portfolio/`; la antigua dirección `/es/documents/` lleva allí).
   - Un **volante** con la fecha al inicio del nombre se convierte en **evento** — con hora y lugar si
     los escribe: `2027-03-14 Asamblea de primavera 9am @ Tyler TX.pdf`
-  - Un **Google Doc** en `anuncios` se convierte en **anuncio**; `(fijado)` lo deja arriba y
-    `(hasta 2027-02-01)` lo oculta después de esa fecha.
+  - Un **Google Doc** en `boletín` (o `bulletin`) se convierte en un aviso del **Boletín**; `(fijado)` lo
+    deja arriba y `(hasta 2027-02-01)` lo oculta después de esa fecha.
   - Cada **subcarpeta** de `fotos` es un **álbum**. Por favor, solo fotos donde **no se reconozca la
     cara** de ningún miembro de AA.
 - **Tienda** (`/es/shop/`): el **libro del mes** de Grapevine y La Viña y los **precios de suscripción** por
@@ -73,7 +73,7 @@ Las instrucciones detalladas están abajo (en inglés); puede usar el traductor 
 | picks up new **Grapevine** and **La Viña** magazine stories | **upload files** to the committee's Google Drive folders (flyers, reports, notes, slides, photos) |
 | searches **aagrapevine.org** and **aalavina.org** for every **PDF** (flyers, catalogs, GVR/RLV kits, order forms…) | *(optional)* change a setting in **`config/site.yml`** |
 | adds new episodes of **both podcasts**, new **YouTube** videos and **Instagram** posts | |
-| turns dated **flyers** into **events** and Drive docs into **announcements** | *(rarely)* fix a translation in **`data/translations/overrides.yml`** |
+| turns dated **flyers** into **events** and Drive docs into **bulletin posts** | *(rarely)* fix a translation in **`data/translations/overrides.yml`** |
 | **translates everything** English ⇄ Spanish (free, open-source, no account needed) | |
 | rebuilds and publishes the website — and keeps the last good version if a source is down | |
 
@@ -89,7 +89,7 @@ No paid services, no passwords or API keys required.
 3. [Changing settings (`config/site.yml`)](#3-changing-settings-configsiteyml)
 4. [The monthly GV/LV report](#4-the-monthly-gvlv-report)
 5. [Fixing a translation](#5-fixing-a-translation)
-6. [Announcements and events without Drive (optional)](#6-announcements-and-events-without-drive-optional)
+6. [Bulletin posts and events without Drive (optional)](#6-bulletin-posts-and-events-without-drive-optional)
 7. [Running the update right now](#7-running-the-update-right-now)
 8. [Is everything working?](#8-is-everything-working)
 9. [Instagram: how the site reads it (please read)](#9-instagram-how-the-site-reads-it-please-read)
@@ -120,7 +120,7 @@ It also runs within a few minutes whenever someone saves a change to the setting
 | **Grapevine Weekly Open AA Meeting** (podcast) | Every recorded meeting, playable on the site | **Listen** |
 | **YouTube** (@AAGrapevine — Grapevine *and* La Viña videos) | Every video, playable on the site | **Watch** |
 | **Instagram** (@alcoholicsanonymous_gv, @alcoholicosanonimos_lv) | Newest posts — see [section 9](#9-instagram-how-the-site-reads-it-please-read) | **Instagram** |
-| **Committee Google Drive** | Reports, notes, slides, workshops, forms, photo albums; dated flyers → events; docs in *announcements* → announcements | **Portfolio · Photos · Events · Announcements** |
+| **Committee Google Drive** | Reports, notes, slides, workshops, forms, photo albums; dated flyers → events; docs in *bulletin* → bulletin posts | **Portfolio · Photos · Events · Bulletin** |
 | **Editorial calendar** (Grapevine) and suggested topics (La Viña) | Upcoming themes and story deadlines | **Contribute** |
 | **Grapevine Weekly Open meeting** (web page) | Current day, time and Zoom details | **Meetings** |
 | **La Viña's weekly open meeting** (from the settings, `lavina_weekly_open:` — an official La Viña flyer) | Thursdays in Spanish, first date, Zoom details | **Meetings** (one line on Home · Listen · Watch · monthly posters) |
@@ -131,10 +131,10 @@ It also runs within a few minutes whenever someone saves a change to the setting
 | **Local meeting lists** (the 8 intergroup / central office lists the Rowlett Group's meeting page uses — in or at our Area: Dallas Intergroup, Fort Worth Central Office, Tyler Central Service Office, the Spanish-speaking Dallas office, District 71 Abilene; nearby: Arkansas Central Office, OKC Intergroup, Northwest Texas Area 66) | Every meeting with the Grapevine ("GR") type: day, time, place, directions, link to the office's page. A meeting in two lists is shown once; our Area first (by county), nearby areas after | **Meetings** (one line on Home; each meeting is in the site search) |
 | **Monthly events** (from the settings, e.g. our booth at CityWide Dallas) | The next dates, "add to calendar" | **Events · Home · Meetings · calendar feed · monthly digest** |
 | **Other calendars** (optional, e.g. the NETA 65 workshop calendar on neta65.org) | Their events, each shown **once** even when it is also in `content/events` (yours wins). *neta65.org currently blocks robots — see [the NETA 65 workshop calendar](#the-neta-65-workshop-calendar)* | **Events** |
-| **Translation** | Every title, teaser and announcement in both languages | Everywhere |
+| **Translation** | Every title, teaser and bulletin post in both languages | Everywhere |
 
 The site also offers, automatically: a **What's New** page (the newest items from every source),
-an **RSS feed**, a **calendar file** your phone can subscribe to, a **share kit** for districts,
+an **RSS feed**, a **calendar file** your phone can subscribe to, **QR posters** for districts (with the committee meeting on them),
 a **search** page, and a **status** page that shows the health of every source. **Shop** is the one
 page for subscribing and buying (every purchase links to the official Grapevine / La Viña stores;
 the old `/subscribe/` address redirects there, #anchors included).
@@ -177,9 +177,11 @@ What the newer pages do:
 **Menus** (`src/_data/nav.js`): What's New · Read · Listen · Watch · Library · Shop ·
 **Get Involved** (monthly toolkit & GV/LV report, GVR / RLV 101, share your story, published writers, GVR / RLV
 corner) · **Committee** (Meetings — committee meeting, Grapevine meetings & weekly open meetings —, events,
-Portfolio — the committee's reports, notes, slides and workshop files, `/portfolio/` —, photos, announcements).
+Portfolio — the committee's reports, notes, slides and workshop files, `/portfolio/` —, photos, bulletin).
 The Portfolio was called *Committee documents* (`/documents/`); that address forwards to `/portfolio/`, `#anchors` included.
-Instagram, the monthly digest, the share kit, search and status are in the footer and the phone menu.
+The Bulletin was called *Announcements* (`/announcements/`); that address forwards to `/bulletin/` the same way.
+Instagram and QR Post (`/share/`) are in the footer's *Stay updated* column; accessibility, saved pages,
+search and status in its bottom bar; the phone menu lists them all under *More*.
 Each piece of information has one home page; other pages only link to it.
 
 **Wording on the site** (both languages): visitors read "document(s)" / "documento(s)", never "PDF", and
@@ -207,7 +209,7 @@ A65_GV/
     ├── flyers/         (or volantes)         → dated flyers become EVENTS
     ├── workshops/      (or talleres)
     ├── forms/          (or formularios)
-    ├── announcements/  (or anuncios)         → Google Docs become ANNOUNCEMENTS
+    ├── bulletin/       (or boletín; announcements, anuncios) → Google Docs become BULLETIN posts
     └── photos/         (or fotos)
         ├── Spring Assembly 2027/             → each sub-folder is an ALBUM
         └── Writing Workshop/
@@ -230,8 +232,8 @@ place if you like — the place goes after an `@`:
 | `2027-03-14 Spring Assembly booth 9am @ Tyler Civic Center.pdf` | Mar 14, 2027 at 9:00 AM, at "Tyler Civic Center" |
 | `2027-05-02 Writing workshop 10-12pm @ Ross Ave Group.pdf` | 10:00 AM – 12:00 PM |
 
-**Announcements.** Put a Google Doc (or a .txt / .docx file) in *announcements*. The file name is
-the headline and the document's text is the body:
+**The Bulletin.** Put a Google Doc (or a .txt / .docx file) in *bulletin*. It becomes a post on the
+Bulletin page (`/bulletin/`, under *Committee*); the file name is the headline and the document's text is the body:
 
 | File name | Result |
 |---|---|
@@ -401,11 +403,14 @@ Saving either file rebuilds the site in about 10–20 minutes.
 
 ---
 
-## 6. Announcements and events without Drive (optional)
+## 6. Bulletin posts and events without Drive (optional)
 
 Drive is the easy way. If you prefer GitHub, you can also add a small text file:
 
-- **Announcement:** a Markdown file in [`content/announcements/`](content/announcements/README.md), e.g. `2027-01-10-welcome-gvrs.md`.
+- **Bulletin post:** a Markdown file in [`content/bulletin/`](content/bulletin/README.md), e.g. `2027-01-10-welcome-gvrs.md`.
+  It needs no header (the first `# heading` is the title, a date at the start of the file name is the date),
+  pictures and PDFs saved next to it can be linked by name, and [`_example.md`](content/bulletin/_example.md)
+  shows every option.
 - **Event without a flyer:** a Markdown file in [`content/events/`](content/events/README.md).
 
 Each folder's README shows a copy-and-paste example. English or Spanish — it is translated automatically.
@@ -481,7 +486,7 @@ After that, nothing needs changing here: the next daily update reads it, and the
      Leave it **empty** to use the daily setting (normally 40 minutes). Use up to `300` only for a
      big catch-up (see the [first-run checklist](#11-first-run-checklist)).
    - **skip_crawl** — tick it for a **quick refresh** (about 10–20 minutes): only **Google Drive**,
-     **announcements**, the **podcasts** and the **daily quote** are updated. Videos, magazine stories, Instagram and
+     the **bulletin**, the **podcasts** and the **daily quote** are updated. Videos, magazine stories, Instagram and
      PDFs wait for the next daily run.
 4. Click the green **Run workflow** button. A normal run takes about an hour in total (the PDF
    search waits 5 seconds between pages, as the sites ask); a 300-minute catch-up about 6 hours.
@@ -624,7 +629,7 @@ changed format — that office's previous meetings stay on the site until it wor
 On the **1st of every month** (around 9–10 AM Central) the site can e-mail a clean **English + Spanish**
 edition — the same one GVRs copy from the **Monthly digest** page (`/digest/`):
 
-- **last month's news:** announcements, podcast episodes (a YouTube upload of the same episode is shown
+- **last month's news:** bulletin posts, podcast episodes (a YouTube upload of the same episode is shown
   once, with an "also on YouTube" link), other videos, new documents and committee files, and stories by
   writers from Area 65 and the rest of Texas;
 - **this month:** the Grapevine and La Viña issues (theme, number of stories, a few highlights — free
@@ -695,7 +700,7 @@ details are in **[docs/SETUP-GITHUB.md](docs/SETUP-GITHUB.md)**:
 
 - **Magazine stories, both podcasts, videos and Instagram** appear on the first run.
 - **The PDF Library** shows what the first PDF search found and keeps growing and re-checking daily.
-- **Committee sections** (Portfolio, Photos, flyer events, Drive announcements) show a friendly
+- **Committee sections** (Portfolio, Photos, flyer events, the Bulletin) show a friendly
   **"nothing here yet"** message: the Panel 77 folders in Drive are still empty. They fill in the
   morning after the first uploads. The **committee meeting** dates show right away (from the settings).
 - **Translations:** the first run translates hundreds of titles (up to 40 minutes a day); anything not
@@ -790,14 +795,14 @@ the new **Events** page, in Spanish if they had chosen Spanish on the old site.
 | Red ✗ right after editing a settings file | A typo in the YAML (usually indentation or a missing quote) | Open the failed run → the red step shows the line. Fix the file, or undo your change from the file's **History**. The live site is unaffected. |
 | A Drive file does not appear | Wrong folder, folder not public, name contains `PRIVATE`, it is a spreadsheet, or the update hasn't run yet | Check the file is inside the current Panel folder and the root folder is shared "Anyone with the link". Wait for the next run or run it manually. |
 | A flyer did not become an event | No date at the start of the name, or it is not in *flyers* | Rename it like `2027-03-14 Title 9am @ Place.pdf`. |
-| An announcement did not appear | Not in *announcements*, or its `(until …)` date passed | Move/rename it; it must be a Google Doc, .txt, .md or .docx. |
+| A bulletin post did not appear | Not in the *bulletin* folder, or its `(until …)` date passed | Move/rename it; it must be a Google Doc, .txt, .md or .docx. |
 | A translation is wrong | Machine translation | Add a fix to `data/translations/overrides.yml` ([section 5](#5-fixing-a-translation)). |
 | Instagram stopped updating | Instagram is refusing robots for a while (or `anonymous: false` without a token) | The last posts stay and it usually recovers. For a permanent fix add the [Instagram token](#b-instagram-token-the-official-way). |
 | The PDF library looks small | Usually nothing is wrong: the PDF search has checked every page of both sites (about 3,450 pages) and found about 130 PDFs; the Library shows the official ones, each once (about 90 entries: copies, older versions and language editions are merged) | Open the last **Update & Deploy** run's summary → the **PDF crawl** line (or `data/site/status.json` → `crawl`). If (nearly) every known page is crawled, the library is complete and there is nothing to do. Only if few are (for example after the crawl's saved progress was deleted) run **Update & Deploy** once with `crawl_minutes = 300`. The run log's `pdf_curate` lines say which documents were merged and why. |
 | Site shows "404 — There isn't a GitHub Pages site here" | Pages not switched to GitHub Actions | **Settings → Pages → Source: GitHub Actions**, then run **Update & Deploy**. |
 | Run fails at "Read GitHub Pages settings" | Same as above | Same as above. |
 | Run fails at "Commit refreshed data" with *permission denied* / *403* / *protected branch* | A rule on `main` stops the bot from saving its data | If `main` has branch protection or a ruleset, add **GitHub Actions** to its bypass list (**Settings → Rules** or **Settings → Branches**). The workflow already asks for write access itself; *Workflow permissions* does not need changing. |
-| Status page: a calendar under *Other calendars we read* says "Blocked by the site's bot protection" | That website (neta65.org) turns robots away with Cloudflare | Until it is fixed, a workshop or assembly shows on the Events page only after someone adds it to `content/events` by hand ([how](#6-announcements-and-events-without-drive-optional)). To fix it, ask the site's webmaster to let calendar requests through ([what to send](#the-neta-65-workshop-calendar)). |
+| Status page: a calendar under *Other calendars we read* says "Blocked by the site's bot protection" | That website (neta65.org) turns robots away with Cloudflare | Until it is fixed, a workshop or assembly shows on the Events page only after someone adds it to `content/events` by hand ([how](#6-bulletin-posts-and-events-without-drive-optional)). To fix it, ask the site's webmaster to let calendar requests through ([what to send](#the-neta-65-workshop-calendar)). |
 | An issue "A content source has stopped updating" appeared | One source has not updated for 7 days (the site keeps its older items) | Open the issue: it names the source, the error and what to check (for Google Drive: is the folder still shared "Anyone with the link"?). It closes itself when the source works again. |
 | Yellow ⚠ "Translation models missing" or "Translation is not working" | The free translation models could not be downloaded (their website was down or moved) | New titles stay in their original language; nothing else is affected. If it lasts more than a few days, send the run's log to whoever helps with the website. |
 | Run fails at "Publish to GitHub Pages" with *environment protection* | The `github-pages` environment only allows certain branches | **Settings → Environments → github-pages** → allow the `main` branch. |

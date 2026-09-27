@@ -166,7 +166,7 @@ class DigestCase(unittest.TestCase):
             item("yt:undated", "video", "youtube", None, "No date"),
         ]})
         self.write("announcements", {"items": [
-            item("ann:1", "announcement", "committee", "2026-09-05", "New GVR orientation", url="/announcements/#new",
+            item("ann:1", "announcement", "committee", "2026-09-05", "New GVR orientation", url="/bulletin/#new",
                  extra={"body_md": "Join us **Saturday**."}),
             item("ann:gone", "announcement", "committee", "2026-09-06", "Expired", extra={"expires": "2026-09-30"}),
         ]})
@@ -299,9 +299,9 @@ class Sections(DigestCase):
         self.assertEqual(self.data["instagram"], ["alcoholicsanonymous_gv", "alcoholicosanonimos_lv"])
         self.assertEqual(D.total_count(self.data), 6 + 2)                     # 6 news + 2 writers
         self.assertEqual(D.count_list(self.data, "en"),
-                         "1 magazine story, 1 podcast episode, 1 video, 1 document, 1 committee file and 1 announcement")
+                         "1 magazine story, 1 podcast episode, 1 video, 1 document, 1 committee file and 1 bulletin post")
         self.assertEqual(D.count_list(self.data, "es"),
-                         "1 historia de las revistas, 1 episodio de podcast, 1 video, 1 documento, 1 archivo del comité y 1 anuncio")
+                         "1 historia de las revistas, 1 episodio de podcast, 1 video, 1 documento, 1 archivo del comité y 1 aviso del boletín")
 
     def test_this_months_issues_highlights_and_tips(self):
         gv, lv = self.data["issues"]

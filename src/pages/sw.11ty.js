@@ -8,7 +8,8 @@
 //   save      the pages "Save key pages for offline" keeps, in the visitor's language: home, Meetings,
 //             the Monthly toolkit hub (with the district report editor) and this month's page ({month},
 //             worked out in the worker — skipped when it is missing), Contribute, Shop, and
-//             Accessibility / GVR 101 (the hub and every lesson page) when those pages exist
+//             Accessibility / GVR 101 (the hub and every lesson page) / the expense tracker when those
+//             pages exist
 // Registered by src/assets/js/pwa.js with scope = base. Served from the base path, so its scope
 // can cover the whole site.
 import fs from "node:fs";
@@ -24,6 +25,9 @@ export const data = {
 const OPTIONAL = [
   ["accessibility/", "accesibilidad/"],
   ["gvr-101/", "gvr101/", "orientation/", "gvr/101/"],
+  // the expense tracker: a GVR adds miles and receipts on the road, with no signal
+  // (its entries live in the browser; the page and its two scripts are what is saved)
+  ["expenses/"],
 ];
 
 export function render(data) {

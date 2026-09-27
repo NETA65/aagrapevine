@@ -134,13 +134,13 @@ class CrossHostPacing(unittest.TestCase):
                          common.PoliteSession.pace_key("https://www.aagrapevine.org/y"))
 
 
-# --------------------------------------------------------------------------- announcements
+# --------------------------------------------------------------------------- the bulletin (content/bulletin)
 class Announcements(TempRaw):
     def setUp(self):
         super().setUp()
         from scripts.sync import announcements as A
         self.A = A
-        self.ann, self.evs = self.tmp / "announcements", self.tmp / "events"
+        self.ann, self.evs = self.tmp / "bulletin", self.tmp / "events"
         self.ann.mkdir()
         self.evs.mkdir()
         for name, val in (("ANN_DIR", self.ann), ("EVENTS_DIR", self.evs)):
@@ -167,7 +167,7 @@ class Announcements(TempRaw):
         self.assertIsNone(a["image"])
         self.assertIsNone(a["extra"]["expires"])
         self.assertIsNone(a["extra"]["link"])
-        self.assertEqual(a["url"], "/announcements/#welcome")
+        self.assertEqual(a["url"], "/bulletin/#welcome")
         self.assertIsNone(e["extra"]["online_url"])
         self.assertIsNone(e["extra"]["location"])
         self.assertEqual(e["extra"]["body_md"], "")
@@ -630,7 +630,7 @@ class AnnouncementHeaders(TempRaw):
         super().setUp()
         from scripts.sync import announcements as A
         self.A = A
-        self.ann, self.evs = self.tmp / "announcements", self.tmp / "events"
+        self.ann, self.evs = self.tmp / "bulletin", self.tmp / "events"
         self.ann.mkdir()
         self.evs.mkdir()
         for name, val in (("ANN_DIR", self.ann), ("EVENTS_DIR", self.evs)):
@@ -672,7 +672,7 @@ class AnnouncementHeaders(TempRaw):
         self.assertEqual(self.env("announcements")["items"], [])
 
     def test_hand_written_translations_are_kept(self):
-        """title_es / summary_es (content/events, content/announcements) are shown as written — never
+        """title_es / summary_es (content/events, content/bulletin) are shown as written — never
         replaced by a machine translation ("Fort Worth" once became "Valía la pena") — and only a
         language left out is machine-translated."""
         from scripts.sync import build_data as B

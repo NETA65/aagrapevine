@@ -421,7 +421,7 @@
 }
 [data-theme="dark"] .home-sheet-tag { color: var(--c-paper); }
 
-/* ---------- 4. Announcements ---------- */
+/* ---------- 4. The bulletin (its latest posts) ---------- */
 .home-ann::before {
   content: ""; position: absolute; inset: 0 auto 0 0; width: 4px;
   background: linear-gradient(to bottom, var(--c-vine), var(--c-gv));

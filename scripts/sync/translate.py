@@ -1882,8 +1882,10 @@ class Translator:
                 in_code = not in_code
                 plan.append((line, "", False))
                 continue
+            # (an indented line is code — unless it is a nested list item: "     - the digest")
             if in_code or not st or st.startswith("<") or re.match(r"^\s*\|?\s*:?-{3,}", line) \
-                    or re.match(r"^(?: {4}|\t)", line) or re.fullmatch(r"[-*_]{3,}", st):
+                    or (re.match(r"^(?: {4}|\t)", line) and not re.match(r"^\s+(?:[-*+]|\d{1,3}[.)])\s", line)) \
+                    or re.fullmatch(r"[-*_]{3,}", st):
                 plan.append((line, "", False))
                 continue
             m = re.match(r"^(\s*(?:#{1,6}\s+|>\s?)*(?:[-*+]\s+(?:\[[ xX]\]\s+)?|\d{1,3}[.)]\s+)?)", line)
@@ -1893,7 +1895,7 @@ class Translator:
             content = re.sub(r"<(?:https?://|mailto:)[^>]+>", lambda x: mark("keep", x.group(0)), content)
             content = re.sub(r"\[([^\]\n]+)\]\((\S+?)(\s+\"[^\"]*\")?\)",
                              lambda x: mark("link", (x.group(1), x.group(2) + (x.group(3) or ""))), content)
-            content = re.sub(r"(\*\*|__)(?=\S)(.+?)(?<=\S)\1", lambda x: mark("em", (x.group(1), x.group(2))), content)
+            content = re.sub(r"(\*\*|__|~~)(?=\S)(.+?)(?<=\S)\1", lambda x: mark("em", (x.group(1), x.group(2))), content)
             content = re.sub(r"(?<![\w*])(\*|_)(?=[^\s*_])(.+?)(?<=[^\s*_])\1(?![\w*])",
                              lambda x: mark("em", (x.group(1), x.group(2))), content)
             content = re.sub(r"\|", lambda x: mark("keep", "|"), content) if st.startswith("|") else content

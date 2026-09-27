@@ -26,7 +26,7 @@ const DAY = 864e5;
 /* ------------------------------------------------------------------ */
 // `page` = where "see all" links go; `emoji` = WhatsApp bullet.
 export const GROUPS = {
-  announcement: { icon: "megaphone", tone: "vine", page: "/announcements/", emoji: "📣" },
+  announcement: { icon: "megaphone", tone: "vine", page: "/bulletin/", emoji: "📣" },
   article: { icon: "newspaper", tone: "gv", page: "/read/", emoji: "📰" },
   episode: { icon: "headphones", tone: "grape", page: "/listen/", emoji: "🎧" },
   video: { icon: "circle-play", tone: "grape", page: "/watch/", emoji: "🎬" },
@@ -673,7 +673,7 @@ export function monthNews(db, ed, now = Date.now()) {
     if (!t || t > now + DAY) return;
     const ymd = ymdChicago(it._when);
     if (ymd < ed.prevFirst || ymd > ed.prevLast) return;
-    // an announcement is over after its `expires` day (Central time) — the rule of /announcements/, the
+    // a bulletin post is over after its `expires` day (Central time) — the rule of /bulletin/, the
     // home page, build_data and the e-mail (send_digest.py; tests/test_digest_parity.py compares them)
     if (it.kind === "announcement" && it.extra?.expires && String(it.extra.expires).slice(0, 10) < ymdChicago(new Date(now))) return;
     found.set(raw.id, it);
@@ -683,7 +683,7 @@ export function monthNews(db, ed, now = Date.now()) {
   const list = mergeMediaTwins([...found.values()].sort((a, b) => ms(b._when) - ms(a._when) || String(a.id).localeCompare(String(b.id))));
   const out = {};
   for (const k of MONTH_NEWS) out[k] = list.filter((i) => i._group === k);
-  // pinned announcements first
+  // pinned bulletin posts first
   out.announcement.sort((a, b) => (b.extra?.pinned === true) - (a.extra?.pinned === true));
   return out;
 }
@@ -882,7 +882,7 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
     out.push("");
   }
 
-  // Announcements
+  // The bulletin
   const ann = md.news.announcement;
   if (ann.length) {
     out.push(head(`${both("community.group.announcement")} (${ann.length})`, "📣"));
@@ -892,7 +892,7 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
       for (const r of others) out.push(`  ${r}`);
       out.push(`  ${absUrl(hrefOf(a, main), site)}`);
     }
-    if (ann.length > per) out.push(more(ann.length - per, "/announcements/"));
+    if (ann.length > per) out.push(more(ann.length - per, "/bulletin/"));
     out.push("");
   }
 

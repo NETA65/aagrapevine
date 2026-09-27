@@ -92,13 +92,13 @@
     "en": "Booths, workshops & service in action",
     "es": "Mesas, talleres y servicio en acción"
   },
-  "nav.announcements": {
-    "en": "Announcements",
-    "es": "Anuncios"
+  "nav.bulletin": {
+    "en": "Bulletin",
+    "es": "Boletín"
   },
-  "nav.announcements_desc": {
-    "en": "News from the committee",
-    "es": "Noticias del comité"
+  "nav.bulletin_desc": {
+    "en": "News and notices from the committee",
+    "es": "Noticias y avisos del comité"
   },
   "nav.gvr": {
     "en": "GVR / RLV corner",
@@ -173,8 +173,8 @@
     "es": "Millas, compras, regalos y reembolsos, guardados en tu dispositivo"
   },
   "nav.share": {
-    "en": "QR codes & posters",
-    "es": "Códigos QR y carteles"
+    "en": "QR Post",
+    "es": "Cartel QR"
   },
   "nav.search": {
     "en": "Search",
@@ -319,6 +319,10 @@
   "common.copy": {
     "en": "Copy",
     "es": "Copiar"
+  },
+  "common.md_table": {
+    "en": "Table",
+    "es": "Tabla"
   },
   "common.copied": {
     "en": "Copied!",
@@ -493,8 +497,8 @@
     "es": "Formulario"
   },
   "kind.announcement": {
-    "en": "Announcement",
-    "es": "Anuncio"
+    "en": "Bulletin",
+    "es": "Boletín"
   },
   "kind.event": {
     "en": "Event",

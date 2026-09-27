@@ -28,7 +28,7 @@ on:
     # 6:07 AM CST (winter), so it is always after 6 AM in Texas — the 10:17
     # run can be too early for it in winter. "Decide what to sync" below
     # recognises this exact string (github.event.schedule) and runs
-    # `run_all --quick` (Drive, announcements, podcasts, the daily quote;
+    # `run_all --quick` (Drive, announcements = the bulletin, podcasts, the daily quote;
     # QUICK_MODULES in scripts/sync/run_all.py). Keep the two equal.
     - cron: "7 12 * * *"
 
@@ -39,7 +39,7 @@ on:
         type: string
         default: ""
       skip_crawl:
-        description: "Quick refresh only: Google Drive, announcements, podcasts and the daily quote (about 10–20 minutes). Videos, magazine stories, Instagram and PDFs wait for the next daily run."
+        description: "Quick refresh only: Google Drive, the bulletin, podcasts and the daily quote (about 10–20 minutes). Videos, magazine stories, Instagram and PDFs wait for the next daily run."
         type: boolean
         default: false
 
@@ -54,7 +54,7 @@ on:
       - "!*.md"                             # …except documentation
       - "!**/*.md"
       - "src/**"                            # (Markdown pages in src/ DO count)
-      - "content/**"                        # (announcements/events written as Markdown DO count)
+      - "content/**"                        # (bulletin posts, their pictures, and events written as Markdown DO count)
       - "!content/**/README.md"
       - "!data/**"                          # the bot's own data commits
       - "data/translations/overrides.yml"   # …but a translation fix must rebuild
@@ -183,7 +183,7 @@ jobs:
           if [ "$EVENT" = "push" ] || [ "${INPUT_SKIP:-false}" = "true" ] \
              || { [ "$EVENT" = "schedule" ] && [ "${SCHEDULE:-}" = "$QUOTE_CRON" ]; }; then
             # Settings/content/template edit, "skip_crawl" ticked, or the morning quote run:
-            # quick refresh (only Google Drive, announcements, podcasts and the daily quote;
+            # quick refresh (only Google Drive, the bulletin, podcasts and the daily quote;
             # see QUICK_MODULES in scripts/sync/run_all.py) and rebuild. The daily run does the rest.
             mode=quick
             minutes=0

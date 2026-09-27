@@ -12,7 +12,7 @@ pageScripts: ["/assets/js/community.js"]
 {#- Monthly digest: ONE edition per calendar month (America/Chicago), built by community.js
     buildMonthlyDigest — the same rules as the monthly e-mail (scripts/notify/send_digest.py):
       * what was new LAST month (What's New entries + the full episode / video / document /
-        announcement lists), writers from Area 65 and Texas published last month;
+        bulletin post lists), writers from Area 65 and Texas published last month;
       * THIS month: the magazine issues (count, highlights, "put it to work" tips of /monthly/),
         events not over yet, the weekly open meetings, the Grapevine meetings count;
       * story deadlines through NEXT month, the phone story lines, Book of the Month, the
@@ -159,7 +159,7 @@ pageScripts: ["/assets/js/community.js"]
 
         {#- ================= LAST MONTH + THIS MONTH'S ISSUES (left column from 1280px) ================= -#}
         <div class="cm-dg-news">
-        {#- Announcements of last month (still current) -#}
+        {#- The bulletin's posts of last month (still current) -#}
         {%- set ann = md.news.announcement -%}
         {% if ann | length %}
         <section class="cm-digest-group" aria-labelledby="dg-announcement">
@@ -177,7 +177,7 @@ pageScripts: ["/assets/js/community.js"]
             </li>
             {% endfor %}
           </ul>
-          {% if (ann | length) > PER %}<p class="mt-1 text-sm"><a class="link tap-link" href="{{ '/announcements/' | lurl(lang) }}">{{ "community.digest.and_more" | t(lang, { n: (ann | length) - PER }) }} — {{ "community.digest.see_all" | t(lang, { n: ann | length }) }}</a></p>{% endif %}
+          {% if (ann | length) > PER %}<p class="mt-1 text-sm"><a class="link tap-link" href="{{ '/bulletin/' | lurl(lang) }}">{{ "community.digest.and_more" | t(lang, { n: (ann | length) - PER }) }} — {{ "community.digest.see_all" | t(lang, { n: ann | length }) }}</a></p>{% endif %}
         </section>
         {% endif %}
 

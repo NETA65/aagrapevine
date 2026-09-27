@@ -116,15 +116,17 @@ recurring_events:
 #  Recognized category folder names (any capitalization; English or
 #  Spanish): reports/informes, notes/notas/minutes/actas,
 #  slides/presentaciones, flyers/volantes, photos/fotos,
-#  workshops/talleres, announcements/anuncios, forms/formularios.
+#  workshops/talleres, bulletin/boletín (announcements/anuncios work
+#  too), forms/formularios.
 #  Any other folder name shows up in the Library under its own name.
 #
 #  FLYERS → EVENTS: name a flyer with its date and it becomes an event.
 #  You can add a time and a place too:
 #    "2027-03-14 Spring Assembly GV booth.pdf"
 #    "2027-03-14 Spring Assembly booth 9am @ Tyler Civic Center.pdf"
-#  ANNOUNCEMENTS: put a Google Doc (or .txt/.docx) in "announcements"; the
-#  doc's name is the headline. Start the name with a date to set it:
+#  BULLETIN: put a Google Doc (or .txt/.docx) in "bulletin"; it becomes a
+#  post on the Bulletin page (/bulletin/) and the doc's name is the
+#  headline. Start the name with a date to set it:
 #  "2027-01-10 Welcome new GVRs". Add "(pinned)" / "(fijado)" to keep it
 #  on top, and "(until 2027-02-01)" / "(hasta 2027-02-01)" to hide it
 #  after that date.

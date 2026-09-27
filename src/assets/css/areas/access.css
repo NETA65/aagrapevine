@@ -403,7 +403,7 @@ html:root.tts-bar-on {
 /* Events: with relaxed spacing a date range ("25–27") in its 5rem tile is a little smaller (1.35rem, not
    1.5rem), so the spaced-out figures stay inside the tile */
 @media (width >= 40rem) { :root[data-spacing="relaxed"] .cm-tile-range .cm-tile-day { font-size: 1.35rem; } }
-/* Committee pages' tabs (Meetings · Events · … · Announcements) below 360px at 150%: the tab icons go, so
+/* Committee pages' tabs (Meetings · Events · … · Bulletin) below 360px at 150%: the tab icons go, so
    the current tab's name fits in its pill inside the row that scrolls sideways */
 @media (width < 22.5rem) { :root[data-text="150"] .cm-subnav-link > svg { display: none; } }
 /* Home Instagram tiles: the date on the picture may wrap onto two lines; from 1024 to 1279px, six tiles to

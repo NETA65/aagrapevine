@@ -10,6 +10,46 @@ import markdownIt from "markdown-it";
 
 const require = createRequire(import.meta.url);
 const md = markdownIt({ html: false, linkify: true, breaks: true });
+// Markdown written by the committee (bulletin posts, event descriptions) — the `md` filter. Raw HTML is
+// shown as text (html: false), so a post can never put a script on the page. Options, for text that
+// sits under a heading of its own: {{ body | md({ h: 3, lang: lang }) | safe }}
+//   h     the level the text's own top headings get: a bulletin post's title is an h2, so its biggest
+//         headings become h3 and the others follow ("# / ##" or "## / ###" → h3 / h4 …, h6 at most) —
+//         the page's outline stays in order, with no level skipped;
+//   lang  "es": links to the site's own pages ("/events/") lead to the Spanish page ("/es/events/"),
+//         and the tables' label is in that language.
+// A table comes in a box of its own that scrolls sideways on a phone (a named, focusable region, so a
+// keyboard can scroll it too); pictures load lazily.
+const mdHeading = (tokens, idx, options, env, self) => {
+  const h = Math.min(6, Math.max(1, Number(env?.h) || 1));
+  if (h > 1) {
+    // the text's biggest heading level, worked out once per render (env is new for each one)
+    env.hTop ??= Math.min(...tokens.filter((t) => t.type === "heading_open").map((t) => Number(t.tag.slice(1))));
+    tokens[idx].tag = "h" + Math.min(6, Number(tokens[idx].tag.slice(1)) - env.hTop + h);
+  }
+  return self.renderToken(tokens, idx, options);
+};
+md.renderer.rules.heading_open = mdHeading;
+md.renderer.rules.heading_close = mdHeading;
+md.renderer.rules.table_open = (tokens, idx, options, env, self) =>
+  `<div class="md-table" role="region" tabindex="0" aria-label="${md.utils.escapeHtml(translateKey("common.md_table", env?.lang || "en"))}">`
+  + self.renderToken(tokens, idx, options);
+md.renderer.rules.table_close = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options) + "</div>";
+const mdImage = md.renderer.rules.image;
+md.renderer.rules.image = (tokens, idx, options, env, self) => {
+  tokens[idx].attrSet("loading", "lazy");
+  tokens[idx].attrSet("decoding", "async");
+  return mdImage(tokens, idx, options, env, self);
+};
+md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+  const href = tokens[idx].attrGet("href") || "";
+  const pathOnly = href.split(/[?#]/)[0];
+  // a page of this site ("/events/", "/" …), not a file ("/bulletin/files/flyer.pdf", "/feed.xml")
+  if (env?.lang === "es" && /^\/(?![/\\])/.test(href) && !/^\/(en|es)(\/|$)/.test(pathOnly) && !/\.[a-z0-9]{2,5}$/i.test(pathOnly)) {
+    tokens[idx].attrSet("href", "/es" + href);
+  }
+  return self.renderToken(tokens, idx, options);
+};
 const TZ = "America/Chicago";
 const LOCALES = { en: "en-US", es: "es-US" };
 const LUCIDE_DIR = path.join(path.dirname(require.resolve("lucide-static/package.json")), "icons");
@@ -105,7 +145,7 @@ export function esMeridiem(s) {
 /*  Links from data                                                    */
 /* ------------------------------------------------------------------ */
 // Every link that comes from synced data or hand-edited content (content/events/*.md,
-// content/announcements/*.md → data/site/*.json) passes through safeUrl()
+// content/bulletin/*.md → data/site/*.json) passes through safeUrl()
 // before a template writes it into href/src:
 //   * http(s)://…, mailto:…, tel:…, "#fragment" and site-relative "/path" are kept;
 //   * "//host/…", "www.district5.org" or "zoom.us/j/123" (scheme forgotten) become "https://…";
@@ -175,6 +215,13 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
   if (fs.existsSync("src/CNAME")) eleventyConfig.addPassthroughCopy({ "src/CNAME": "CNAME" });
   eleventyConfig.addPassthroughCopy({ "src/.nojekyll": ".nojekyll" });
+  // Pictures and documents saved next to the bulletin's posts (content/bulletin/flyer.jpg) are published
+  // at /bulletin/files/, where scripts/sync/announcements.py points the posts' links (any capitalization
+  // of the extension: "Flyer.JPG" too).
+  const anyCase = (ext) => [...ext].map((c) => `[${c}${c.toUpperCase()}]`).join("");
+  eleventyConfig.addPassthroughCopy({
+    [`content/bulletin/*.{${["jpg", "jpeg", "png", "gif", "webp", "pdf"].map(anyCase).join(",")}}`]: "bulletin/files",
+  });
   // Self-hosted open-source vendor libs (no CDN dependency)
   const nm = (p) => "node_modules/" + p;
   eleventyConfig.addPassthroughCopy({
@@ -279,7 +326,7 @@ export default function (eleventyConfig) {
   });
 
   /* ---------- text ---------- */
-  eleventyConfig.addFilter("md", (s) => (s ? md.render(String(s)) : ""));
+  eleventyConfig.addFilter("md", (s, opts) => (s ? md.render(String(s), { ...(opts || {}) }) : ""));
   eleventyConfig.addFilter("mdInline", (s) => (s ? md.renderInline(String(s)) : ""));
   eleventyConfig.addFilter("stripHtml", (s) => String(s || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim());
   eleventyConfig.addFilter("excerpt", (s, n = 160) => {

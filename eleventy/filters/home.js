@@ -454,9 +454,9 @@ export default function (eleventyConfig, helpers) {
      there carries its "every month" line, the add-to-calendar menu and the organizers' link. */
   eleventyConfig.addFilter("homeEventAnchor", (e) => (e ? eventAnchor(e) : ""));
 
-  /* Announcements: not expired, pinned first, then newest. */
+  /* The bulletin's posts: not expired, pinned first, then newest. */
   eleventyConfig.addFilter("homeAnnouncements", (items) => {
-    const today = ymdCentral(Date.now()); // Central-time day, like /announcements/
+    const today = ymdCentral(Date.now()); // Central-time day, like /bulletin/
     return arr(items).filter((a) => {
       if (!alive(a)) return false;
       const exp = a.extra && a.extra.expires;
