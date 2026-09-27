@@ -1,5 +1,5 @@
 # =====================================================================
-#  Service expense tracker (/expenses/) — the defaults every visitor starts with
+#  Service expense tracker (/tracker/) — the defaults every visitor starts with
 #  Read by src/_data/expenses.js (templates see it as expenses.*). The page embeds it as JSON
 #  (<script id="xp-config">) and the tracker (src/assets/js/expenses-core.js, mergeDefaults) adds
 #  it to each visitor's own settings, kept in their browser: they can rename, hide, reorder and

@@ -1,4 +1,4 @@
-/* The service expense tracker's logic (/expenses/, src/pages/expenses.njk + expenses.js).
+/* The service expense tracker's logic (/tracker/, src/pages/tracker.njk + expenses.js).
    Pure functions, no DOM: this file only knows about entries, settings and text. The page's app
    (expenses.js) owns storage, IndexedDB receipts, the forms and the words on screen. Tested in Node
    by tests/test_expenses_core.py (the file runs in a vm context, as sw-core.js does).

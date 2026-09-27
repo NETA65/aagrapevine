@@ -1667,6 +1667,8 @@ export default function (eleventyConfig, helpers) {
       { key: "portfolio", url: "/portfolio/", icon: "folder-open" },
       { key: "photos", url: "/photos/", icon: "images" },
       { key: "bulletin", url: "/bulletin/", icon: "megaphone" },
+      // the Tracker's entries live on the visitor's device: no count
+      { key: "tracker", url: "/tracker/", icon: "receipt" },
     ];
     const links = pages.map((p) => {
       const on = p.key === current;

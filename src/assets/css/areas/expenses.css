@@ -1,5 +1,5 @@
 /* =====================================================================
-   The service expense tracker — /expenses/ (src/pages/expenses.njk, src/assets/js/expenses.js,
+   The Tracker (the service expense tracker) — /tracker/ (src/pages/tracker.njk, src/assets/js/expenses.js,
    expenses-core.js). Owner: the expenses area. Every class is prefixed "xp-".
    1. Tones: the 8 category colours (light, dark, high contrast) — colour is never the only signal
    2. The app card: tab bar, panels, the device line
