@@ -863,5 +863,10 @@
   "search.county": {
     "en": "{county} County",
     "es": "condado de {county}"
-  }
+  },
+  "library.aside_title": { "en": "Current catalog", "es": "Catálogo actual" },
+  "library.aside_shop": { "en": "See the shop", "es": "Ver la tienda" },
+  "library.aside_open": { "en": "Open the catalog", "es": "Abrir el catálogo" },
+  "search.aside_title": { "en": "Just added", "es": "Lo más reciente" },
+  "search.aside_all": { "en": "See what's new", "es": "Ver novedades" }
 }

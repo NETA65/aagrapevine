@@ -7,10 +7,11 @@ titleKey: read.subs.title
 descKey: read.subs.meta_desc
 pageScripts: ["/assets/js/shop.js"]
 ---
-{#- SHOP — the ONE page for buying and subscribing. Order (docs: ui.njk): hero → page nav →
-    Book of the Month + bulk discounts (db.shop — eleventy/filters/shop.js) → the two magazines →
-    subscription prices → Carry the Message (the one feature band) → home groups + order forms →
-    catalogs (db.pdfs) with customer service beside them (one band). Every purchase links to the official stores
+{#- SHOP — the ONE page for buying and subscribing. Order (docs: ui.njk): hero (+ the specialty items
+    teaser on its right) → page nav → Book of the Month + bulk discounts (db.shop — eleventy/filters/shop.js)
+    → the two magazines → subscription prices → specialty items (cards, planner, calendar) → Carry the
+    Message (the one feature band) → home groups + order forms → catalogs (db.pdfs) with customer service
+    beside them (one band). Every purchase links to the official stores
     (aagrapevine.org / aalavina.org); prices and dates only ever come from synced data, never typed
     here. Other pages show at most a one-line link here (keep it that way). The old /subscribe/
     address is a redirect stub (subscribe-redirect.njk) that keeps its #anchors (#carry,
@@ -25,6 +26,7 @@ pageScripts: ["/assets/js/shop.js"]
 {%- set botm = shop | shopBotm(lang) -%}
 {%- set subs = shop | shopSubs(lang) -%}
 {%- set bulk = shop | shopBulk(lang) -%}
+{%- set specials = shop | shopSpecialty(lang) -%}
 {#- one percent in the heading when every book has the same discount -#}
 {%- set pctAll = botm[0].pct if (botm.length and (botm.length == 1 or botm[0].pct == botm[1].pct)) else 0 -%}
 {#- the last day of the latest offer (the heading's percent stays until every offer has ended) -#}
@@ -252,8 +254,18 @@ pageScripts: ["/assets/js/shop.js"]
 
 {#- Hero: the page's two main tasks (subscribe, gift). The other sections are in the page nav below,
     so the hero carries no more jumps. Without price data the subscribe button opens the official
-    subscribe page instead. "read-hero" (read.css) keeps both buttons on one row on a 390px phone. -#}
-{% call ui.pageHero(lang, "read.subs.title" | t(lang), "read.subs.subtitle" | t(lang), "shopping-bag", "read.subs.eyebrow" | t(lang), { class: "read-hero" }) %}
+    subscribe page instead. "read-hero" (read.css) keeps both buttons on one row on a 390px phone.
+    Its right-hand card (the shared hero aside, from 1024px): a teaser of the specialty items — their
+    pictures and names, linking to #specialty far below (the Book of the Month, right under the hero,
+    is not repeated). "hide": on smaller screens and at larger text the page nav's chip leads there. -#}
+{% call(slot) ui.pageHero(lang, "read.subs.title" | t(lang), "read.subs.subtitle" | t(lang), "shopping-bag", "read.subs.eyebrow" | t(lang), { class: "read-hero", side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if specials.length %}
+  {%- set teaser = [] -%}
+  {%- for sp in specials %}{% set _n = teaser.push({ src: sp.image, href: "#" + sp.anchor, title: sp.title, titleLang: sp.titleLang }) %}{% endfor -%}
+  {{ ui.heroAsideMedia("shop.special_eyebrow" | t(lang), teaser, lang, { id: "shop-aside-title", icon: "gift", lead: "shop.special_lead" | t(lang), href: "#specialty", linkLabel: "shop.special_see" | t(lang) }) }}
+  {%- endif %}
+{%- else %}
   <div class="hero-actions">
     {% if subs.pubs.length %}
     <a class="btn-light" href="#subscriptions">{% icon "newspaper", "size-4" %} {{ "shop.hero_subs" | t(lang) }}</a>
@@ -262,6 +274,7 @@ pageScripts: ["/assets/js/shop.js"]
     {% endif %}
     <a class="btn-on-dark" href="#carry">{% icon "gift", "size-4" %} {{ "shop.nav_gift" | t(lang) }}</a>
   </div>
+{%- endif %}
 {% endcall %}
 
 {#- In-page navigation (the page is long): the sections in page order (docs: ui.njk pageNav) -#}
@@ -270,6 +283,7 @@ pageScripts: ["/assets/js/shop.js"]
   { href: "#bulk" if bulk.rows.length else "", label: "shop.nav_bulk" | t(lang), icon: "package" },
   { href: "#magazines", label: "shop.nav_mags" | t(lang), icon: "grapes" },
   { href: "#subscriptions", label: "shop.nav_subs" | t(lang), icon: "newspaper" },
+  { href: "#specialty" if specials.length else "", label: "shop.nav_special" | t(lang), icon: "calendar-heart" },
   { href: "#carry", label: "shop.nav_gift" | t(lang), icon: "gift" },
   { href: "#group", label: "shop.nav_group" | t(lang), icon: "house" },
   { href: "#catalogs", label: "shop.nav_catalogs" | t(lang), icon: "book-open" },
@@ -424,7 +438,54 @@ pageScripts: ["/assets/js/shop.js"]
   {% endif %}
 </section>
 
-{#- ---------- 4. Carry the Message: the page's one feature band ---------- -#}
+{#- ---------- 4. Specialty items (db.shop.specialty): one card per kind — greeting cards, the pocket
+    planner, the wall calendar — from the page language's store (/es/: La Viña's), with a link to the other
+    store's item of the same kind. The store's own words only in the page's language; else our own line
+    (shop.special_desc_*). Pictures are the synced product images (Data saver hides them). ---------- -#}
+{% if specials.length %}
+<section id="specialty" class="section container-page pt-0" aria-labelledby="special-title">
+  {{ ui.sectionHead("shop.special_title" | t(lang), "shop.special_sub" | t(lang), "", "", "calendar-heart", { eyebrow: "shop.special_eyebrow" | t(lang), tone: "text-lv", id: "special-title", lang: lang }) }}
+  {%- set spIcons = { cards: "mail", planner: "notebook-pen", calendar: "calendar-days" } -%}
+  <ul class="shop-special-grid" role="list">
+    {% for sp in specials %}
+    <li id="{{ sp.anchor }}" class="shop-special card">
+      <span class="shop-special-img" aria-hidden="true">
+        {%- if sp.image %}<img src="{{ sp.image }}" alt="" width="480" height="480" loading="lazy" decoding="async">{% endif -%}
+        <span class="shop-special-ph">{% icon spIcons[sp.type] or "gift", "size-8" %}</span>
+      </span>
+      <div class="shop-special-body">
+        <p class="flex flex-wrap items-center gap-1.5">
+          <span class="{{ 'badge-lv' if sp.isLv else 'badge-gv' }}"{% if sp.isLv and lang != 'es' %} lang="es"{% endif %}>{% icon "grapes", "size-3" %} {{ sp.mag }}</span>
+          {%- if sp.trilingual %} <span class="badge-muted">{% icon "languages", "size-3" %} {{ "shop.special_trilingual" | t(lang) }}</span>{% endif -%}
+          {%- if sp.pack %} <span class="badge-muted">{{ sp.pack }}</span>{% endif %}
+        </p>
+        <h3 class="h-card mt-2.5 text-xl"{% if sp.titleLang != lang %} lang="{{ sp.titleLang }}"{% endif %}>{{ sp.title }}</h3>
+        <p class="mt-1.5 text-sm leading-relaxed text-muted"{% if sp.textLang != lang %} lang="{{ sp.textLang }}"{% endif %}>{{ sp.text }}</p>
+        <div class="mt-auto pt-4">
+          <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span class="font-display text-2xl font-semibold leading-none tabular-nums {{ 'text-lv' if sp.isLv else 'text-gv' }}">{{ sp.price }}</span>
+            {%- if sp.volume %} <span class="text-xs text-muted">{{ sp.volume }}</span>{% endif %}
+          </p>
+          <a class="{{ 'btn-lv' if sp.isLv else 'btn-primary' }} mt-3.5" href="{{ sp.url }}" target="_blank" rel="noopener">{{ "shop.special_buy" | t(lang, { store: sp.store }) }} {% icon "external-link", "size-4" %}<span class="sr-only">: <span{% if sp.titleLang != lang %} lang="{{ sp.titleLang }}"{% endif %}>{{ sp.title }}</span> ({{ "common.external" | t(lang) }})</span></a>
+          {% if sp.also %}
+          <p class="mt-2 text-sm">
+            {%- if sp.also.same %}
+            <a class="link tap-link inline-flex items-center gap-1" href="{{ sp.also.url }}" target="_blank" rel="noopener">{{ "shop.special_also_same" | t(lang, { store: sp.also.store }) }}<span class="sr-only">: <span lang="{{ sp.also.titleLang }}">{{ sp.also.title }}</span> ({{ "common.external" | t(lang) }})</span> {% icon "arrow-up-right", "size-3.5 shrink-0" %}</a>
+            {%- else %}
+            <span class="text-muted">{{ "shop.special_also_other" | t(lang, { mag: sp.also.mag }) }}</span> <a class="link tap-link inline-flex items-center gap-1" href="{{ sp.also.url }}" target="_blank" rel="noopener"><span{% if sp.also.titleLang != lang %} lang="{{ sp.also.titleLang }}"{% endif %}>{{ sp.also.title }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span> {% icon "arrow-up-right", "size-3.5 shrink-0" %}</a>
+            {%- endif %}
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="mt-5 flex items-start gap-2 text-xs leading-relaxed text-muted">{% icon "info", "size-4 shrink-0" %}<span>{{ "shop.special_note" | t(lang) }}</span></p>
+</section>
+{% endif %}
+
+{#- ---------- 5. Carry the Message: the page's one feature band ---------- -#}
 <section id="carry" class="border-y border-line bg-lv-soft/60" aria-labelledby="ctm-title">
   <div class="container-page section grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
     <div>
@@ -456,7 +517,7 @@ pageScripts: ["/assets/js/shop.js"]
   </div>
 </section>
 
-{#- ---------- 5. Home group subscriptions + the official order forms ---------- -#}
+{#- ---------- 6. Home group subscriptions + the official order forms ---------- -#}
 <section id="group" class="section container-page" aria-labelledby="group-title">
   {{ ui.sectionHead("read.subs.group_title" | t(lang), "read.subs.group_sub" | t(lang), "", "", "house", { eyebrow: "shop.nav_group" | t(lang), tone: "text-lv", id: "group-title", lang: lang }) }}
   <ol class="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2 xl:grid-cols-4" role="list">
@@ -487,7 +548,7 @@ pageScripts: ["/assets/js/shop.js"]
   </div>
 </section>
 
-{#- ---------- 6. Catalogs (db.pdfs) + 7. customer service: one band ----------
+{#- ---------- 7. Catalogs (db.pdfs) + 8. customer service: one band ----------
     From 1024px customer service sits on the RIGHT of the catalogs: two equal columns with 1–3
     catalogs (the usual case; with ONE catalog the catalog column stops at 42rem from 1536px, so the
     card never stretches empty and customer service gets the room), or a 20rem / 24rem column beside

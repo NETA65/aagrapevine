@@ -289,6 +289,11 @@
           this.$watch("q", function () { self.apply(); });
           this.$watch("how", function () { self.apply(); });
           this.$watch("nearby", function () { self.apply(); });
+          // The hero card's "Grapevine meetings · Today: N" link (gvmTeaser below): show today's
+          // meetings — the Day filter set to today, the other filters cleared
+          window.addEventListener("cm:gvm-day", function (e) {
+            self.q = ""; self.how = ""; self.nearby = true; self.day = String(e.detail);
+          });
           // A link to one group (#gvg-…, the site search) or to one of its meetings (#mtg-…, older
           // links): bring the group's card into view and outline it
           var id = "";
@@ -655,7 +660,9 @@
       }
       box.classList.toggle("is-live", !before && live);
       var dt = box.querySelector("[data-cm-weekly-date]");
-      if (dt && !before) dt.textContent = cap(fmt(d, { weekday: "long", month: "long", day: "numeric" })) + " · " + fmt(d, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+      // data-cm-weekly-short (the /meetings/ hero card, a narrow column): "Wed, Sep 30 · 11:00 AM CDT"
+      var short = box.hasAttribute("data-cm-weekly-short");
+      if (dt && !before) dt.textContent = cap(fmt(d, short ? { weekday: "short", month: "short", day: "numeric" } : { weekday: "long", month: "long", day: "numeric" })) + " · " + fmt(d, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
       var loc = box.querySelector("[data-cm-weekly-local]");
       if (loc) {
         try {
@@ -768,11 +775,39 @@
   }
   window.addEventListener("hashchange", openTarget);
 
+  /* ---------------- /meetings/ hero card: how many Grapevine meetings there are today ----------------
+     <a data-gvm-today-link …><span data-gvm-today-teaser data-counts="3,2,4,1,5,2,0" (meetings per
+     weekday, Sunday first) data-one="Today: 1 meeting" data-many="Today: {n} meetings"
+     data-none="None today · {n} this week">{n} a week …</span></a>
+     Today is the weekday in Central time. When some meet today the link also sets the list's Day
+     filter to today (cmGvMeetings listens for "cm:gvm-day"); without JavaScript it is a plain jump. */
+  function gvmTeaser() {
+    var el = document.querySelector("[data-gvm-today-teaser]");
+    if (!el) return;
+    var counts = String(el.getAttribute("data-counts") || "").split(",").map(Number);
+    if (counts.length !== 7) return;
+    var d;
+    try { d = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(new Intl.DateTimeFormat("en-US", { timeZone: TZ, weekday: "short" }).format(new Date())); }
+    catch (e) { d = new Date().getDay(); }
+    if (d < 0) return;
+    var n = counts[d] || 0, week = counts.reduce(function (s, x) { return s + (x || 0); }, 0);
+    var tpl = n === 1 ? el.getAttribute("data-one") : n ? el.getAttribute("data-many") : el.getAttribute("data-none");
+    if (tpl) el.textContent = tpl.replace("{n}", n || week);
+    var a = el.closest("[data-gvm-today-link]");
+    if (a) a.setAttribute("data-day", n ? String(d) : "");
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest && e.target.closest("[data-gvm-today-link]");
+    var d = a && a.getAttribute("data-day");
+    if (d) window.dispatchEvent(new CustomEvent("cm:gvm-day", { detail: d }));
+  });
+
   /* ---------------- boot ---------------- */
   // Deferred script: the DOM is parsed already; Alpine starts right after us.
   expire();
   weekly();
-  setInterval(function () { expire(); weekly(); }, 60000);
+  gvmTeaser();
+  setInterval(function () { expire(); weekly(); gvmTeaser(); }, 60000);
   function ready() { centerSubnav(); bindIcsButtons(); wireDialog(); initLightbox(); openTarget(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ready); else ready();
 })();

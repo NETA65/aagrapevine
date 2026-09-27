@@ -21,6 +21,26 @@
   .read-hero .gv-hero-eyebrow { display: none; }
 }
 
+/* ---------- Read: the hero aside "What are Grapevine and La Viña?" (read.njk, ui.heroAside) ----------
+   The two magazines side by side — the tone tile (the shared .hero-aside-link-icon, so it follows the
+   card's colours in the hero and below it), the year each began over its name (DOM: name first, so
+   a screen reader says "Grapevine, since 1944") — then the one "Our history" link row. */
+.read-aside-mags { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+.read-aside-mags > li { display: flex; align-items: center; gap: 0.625rem; min-width: 0; }
+.read-aside-mag { display: flex; flex-direction: column-reverse; min-width: 0; }
+.read-aside-year { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 1.05; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; color: var(--ha-ink); }
+.read-aside-name { font-size: 0.8125rem; font-weight: 600; line-height: 1.3; color: var(--ha-muted); overflow-wrap: break-word; }
+/* a narrow card (a phone at 150 % text): one magazine per row, so no year or name ever breaks */
+@container (width < 17rem) { .read-aside-mags { grid-template-columns: minmax(0, 1fr); } }
+.hero-aside-body > .read-aside-mags { margin-top: 0.875rem; }
+.hero-aside-body > .read-aside-mags + .hero-aside-links { margin-top: 0.625rem; }
+/* At 1024–1279px, with the card inside the hero, the title column is about 600px wide and "Read
+   Grapevine & La Viña" takes two lines: the two hero numbers are left out there (they show from
+   1280px, and below 1024px), so the hero keeps its 480px. Same guard as main.css's in-hero rules. */
+@media (64rem <= width < 80rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell > .read-page-hero .hero-stats { display: none; }
+}
+
 /* ---------- Magazine "cover" panels (GV = navy/blue, LV = deep amber) ---------- */
 .read-cover--gv {
   background:
@@ -194,6 +214,13 @@
 .read-check-body { padding: 0 0 0.25rem 2.1rem; }
 .read-progress { height: 0.5rem; border-radius: 999px; background: var(--c-surface-2); overflow: hidden; }
 .read-progress > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--c-vine), var(--c-gv)); transition: width 0.35s ease; }
+
+/* ---------- About #videos: our translation of the other language's video (a quiet surface-2 box, no border:
+   the translated title shows, the summary opens under it) ---------- */
+.read-vid-tr { border-radius: 0.75rem; background: var(--c-surface-2); }
+.read-vid-tr > summary { display: flex; align-items: flex-start; gap: 0.625rem; min-height: 2.75rem; padding: 0.75rem 1rem; cursor: pointer; list-style: none; border-radius: inherit; }
+.read-vid-tr > summary::-webkit-details-marker { display: none; }
+.read-vid-tr > summary:hover .text-ink { text-decoration: underline; text-underline-offset: 3px; }
 
 /* ---------- History of Grapevine & La Viña (About #history; config/history.yml → src/_data/history.js) ----------
    Narrow: one rail on the left, the milestones in one column. When the timeline is at least 58rem wide

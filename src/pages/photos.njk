@@ -14,14 +14,25 @@ pageStyles: ["/assets/vendor/glightbox.min.css"]
     grid per album (2 → 3 → 4 → 5 → 6 columns) — or, with no photos yet, the shared page-level empty
     card (ui.pageEmpty; the one visitor action is the hero's). Then "Protecting anonymity" (what is great to share
     | what never is), and, collapsed, "For committee members · Share photos" (ui.memberHelp,
-    #share-photos): the steps, where photos go, Open Drive folder · Ask for upload access. -#}
+    #share-photos): the steps, where photos go, Open Drive folder · Ask for upload access.
+    The hero's right-hand card (the shared hero aside, "Anonymity first"): what is great to share and
+    what never is, in one line each, linking to "Protecting anonymity" further down (no pictures: the
+    albums follow right below). Hidden on smaller screens and at larger text. -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set albums = db.drive.items | cmAlbums(lang) -%}
 {%- set nPhotos = albums | pluck("photos") | sum -%}
 {%- set nVideos = albums | pluck("videos") | sum -%}
 {%- set di = db.status | cmDriveInfo(site) -%}
 
-{% call ui.pageHero(lang, "nav.photos" | t(lang), "committee.photos.hero_sub" | t(lang), "images", "committee.photos.eyebrow" | t(lang)) %}
+{% call(slot) ui.pageHero(lang, "nav.photos" | t(lang), "committee.photos.hero_sub" | t(lang), "images", "committee.photos.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("committee.photos.aside_title" | t(lang), lang, { id: "photos-aside-title", icon: "shield-check", href: "#anon-h", linkLabel: "committee.photos.aside_link" | t(lang) }) %}
+  <ul class="cm-ha-rules" role="list">
+    <li><span class="cm-ha-rule is-ok" aria-hidden="true">{% icon "circle-check", "size-5" %}</span><span class="min-w-0"><span class="cm-ha-rule-h">{{ "committee.photos.ok_title" | t(lang) }}</span><span class="hero-aside-text block">{{ "committee.photos.aside_ok" | t(lang) }}</span></span></li>
+    <li><span class="cm-ha-rule is-no" aria-hidden="true">{% icon "circle-x", "size-5" %}</span><span class="min-w-0"><span class="cm-ha-rule-h">{{ "committee.photos.never_title" | t(lang) }}</span><span class="hero-aside-text block">{{ "committee.photos.no_faces" | t(lang) }}</span></span></li>
+  </ul>
+  {% endcall %}
+{%- else %}
   <div class="hero-actions">
     {#- one visitor action (the committee how-to is ui.memberHelp, below) -#}
     {% if albums | length %}
@@ -37,6 +48,7 @@ pageStyles: ["/assets/vendor/glightbox.min.css"]
     { value: (nVideos if nVideos else null), label: "committee.photos.stat_videos" | t(lang) }
   ]) }}
   {% endif %}
+{%- endif %}
 {% endcall %}
 
 {% committeeNav lang, "photos", db %}

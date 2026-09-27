@@ -187,8 +187,25 @@ pageScripts: ["/assets/js/read.js"]
     at every width, like every other page; "read-hero" (read.css) keeps phone heroes within
     24–28rem: both buttons on one row (no icon, a little less padding, like the home page) and
     no eyebrow below 360px. Stats show from 768px (the shared hero-stats rule). How fresh the
-    list is — ui.freshness — is said once, under the Current issues heading. -#}
-{% call ui.pageHero(lang, "read.title" | t(lang), "read.subtitle" | t(lang), "book-open", "read.eyebrow" | t(lang), { class: "read-hero" }) %}
+    list is — ui.freshness — is said once, under the Current issues heading.
+    On its right (the shared hero aside; the first card under the hero on smaller screens and at
+    larger text): "What are Grapevine and La Viña?" — the two magazines and the year each began
+    (said only here: the issue covers below give the frequency and language), a link to About us
+    (the canonical place) and one to its history timeline (/about/#history). -#}
+{% call(slot) ui.pageHero(lang, "read.title" | t(lang), "read.subtitle" | t(lang), "book-open", "read.eyebrow" | t(lang), { class: "read-hero read-page-hero", side: "below" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("read.aside_title" | t(lang), lang, { icon: "info", id: "read-aside-title", class: "read-aside",
+       href: "/about/" | lurl(lang), linkLabel: "nav.about" | t(lang), lead: "read.aside_lead" | t(lang) }) %}
+  <ul class="read-aside-mags" role="list">
+    {%- for p in order %}
+    <li><span class="hero-aside-link-icon is-{{ p }}">{% icon "grapes", "size-4" %}</span><span class="read-aside-mag"><span class="read-aside-name">{{ "La Viña" if p == "lv" else "Grapevine" }}</span> <span class="read-aside-year"><span class="sr-only">{{ "read.aside_since" | t(lang) }} </span>{{ "1996" if p == "lv" else "1944" }}</span></span></li>
+    {%- endfor %}
+  </ul>
+  <ul class="hero-aside-links" role="list">
+    <li>{{ ui.heroAsideLink({ href: ("/about/" | lurl(lang)) + "#history", label: "read.about.hist_title" | t(lang), text: "read.aside_hist_text" | t(lang), icon: "history", tone: "vine" }, lang) }}</li>
+  </ul>
+  {% endcall %}
+{%- else %}
   <div class="hero-actions">
     {% for p in order %}
     {%- set cur = lvCur if p == "lv" else gvCur -%}
@@ -203,6 +220,7 @@ pageScripts: ["/assets/js/read.js"]
     { value: gvIssues.length + lvIssues.length, label: "read.hero_issues" | t(lang) }
   ]) }}
   {% endif %}
+{%- endif %}
 {% endcall %}
 
 {#- Compact link card to the /published/ page — writers from our Area (and all of Texas) in the

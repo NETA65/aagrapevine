@@ -6,6 +6,8 @@
 //   shopBotm(shop, lang)      → Book of the Month views, page-language publication first
 //   shopSubs(shop, lang)      → subscription comparison: publications → regions → plan types → terms
 //   shopBulk(shop, lang)      → bulk-book discount rows (tiers with a discount) + note + source
+//   shopSpecialty(shop, lang) → specialty items: one card per kind (cards · planner · calendar), the page
+//                               language's store first, the other store's item of that kind as `also`
 //   shopFromMonthly(shop)     → lowest monthly price (for "Subscriptions from $2.99/month"), or null
 //   shopMoney(n, lang)        → "$11.99" (USD, the stores' currency)
 //   shopToday()               → today's date (YYYY-MM-DD) in the site's time zone, at build time
@@ -240,6 +242,62 @@ export function shopFromMonthly(shop) {
   return rates.length ? round2(Math.min(...rates)) : null;
 }
 
+/* ---------------- Specialty items (greeting cards, pocket planner, wall calendar) ---------------- */
+const SPECIAL_ORDER = ["cards", "planner", "calendar"];
+// The same product sold by both stores: "MS08LV" (La Viña) is "MS08" (Grapevine).
+const skuRoot = (sku) => String(sku || "").trim().toUpperCase().replace(/-?LV$/, "");
+
+function specialView(p, lang, twin, t) {
+  const pub = p.pub === "lv" ? "lv" : "gv";
+  const itemLang = p.lang || STORE_LANG[pub];
+  const cur = p.currency || "USD";
+  // The store's own words only in the page's language (never a machine translation); else our own line.
+  const own = p.text && itemLang === lang ? p.text : "";
+  const vol = (Array.isArray(p.volume) ? p.volume : []).filter((v) => v && Number(v.price) > 0 && v.min > 1)[0];
+  return {
+    id: p.id || "",
+    type: p.type,
+    anchor: "special-" + p.type,
+    pub,
+    isLv: pub === "lv",
+    mag: MAG[pub],
+    store: pub === "lv" ? "aalavina.org" : "aagrapevine.org",
+    title: p.title || "",
+    titleLang: itemLang,
+    url: p.url || "",
+    // the same product's picture from the other store when this one has none yet
+    image: p.image || (twin && twin.image) || "",
+    price: money(p.price, lang, cur),
+    volume: vol ? t(vol.max ? "shop.special_vol_range" : "shop.special_vol", lang, { a: vol.min, b: vol.max, price: money(vol.price, lang, cur) }) : "",
+    pack: Number(p.pack) > 1 ? t("shop.special_pack", lang, { n: p.pack }) : "",
+    trilingual: !!(p.trilingual || (twin && twin.trilingual)),
+    text: own || t("shop.special_desc_" + p.type, lang),
+    textLang: own ? itemLang : lang,
+  };
+}
+
+// One card per kind (cards · planner · calendar): the page language's store first (/es/: La Viña), the
+// other store's item of the same kind as `also` (a link). Kinds the stores do not list are left out.
+export function shopSpecialty(shop, lang = "en", t = (k) => k) {
+  const all = (shop && Array.isArray(shop.specialty) ? shop.specialty : [])
+    .filter((p) => p && p.url && p.title && Number(p.price) > 0 && SPECIAL_ORDER.includes(p.type));
+  const order = pubOrder(lang);
+  const out = [];
+  for (const type of SPECIAL_ORDER) {
+    const of = (pub) => all.filter((p) => p.type === type && (p.pub === "lv" ? "lv" : "gv") === pub);
+    const first = of(order[0])[0] || of(order[1])[0];
+    if (!first) continue;
+    const otherPub = (first.pub === "lv" ? "lv" : "gv") === "lv" ? "gv" : "lv";
+    const other = of(otherPub)[0] || null;
+    const twin = other && skuRoot(other.sku) && skuRoot(other.sku) === skuRoot(first.sku) ? other : null;
+    const v = specialView(first, lang, twin, t);
+    v.also = other ? { url: other.url, title: other.title, titleLang: other.lang || STORE_LANG[other.pub === "lv" ? "lv" : "gv"],
+      mag: MAG[otherPub], store: otherPub === "lv" ? "aalavina.org" : "aagrapevine.org", isLv: otherPub === "lv", same: !!twin } : null;
+    out.push(v);
+  }
+  return out;
+}
+
 /* ---------------- Bulk-book discounts ---------------- */
 export function shopBulk(shop, lang = "en", t = (k) => k) {
   const bd = shop && shop.bulk_discounts;
@@ -260,6 +318,7 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("shopBotm", (shop, lang) => shopBotm(shop, lang));
   eleventyConfig.addFilter("shopSubs", (shop, lang) => shopSubs(shop, lang, t));
   eleventyConfig.addFilter("shopBulk", (shop, lang) => shopBulk(shop, lang, t));
+  eleventyConfig.addFilter("shopSpecialty", (shop, lang) => shopSpecialty(shop, lang, t));
   eleventyConfig.addFilter("shopFromMonthly", (shop) => shopFromMonthly(shop));
   eleventyConfig.addFilter("shopMoney", (n, lang) => money(n, lang));
   eleventyConfig.addFilter("shopToday", () => todayYmd());

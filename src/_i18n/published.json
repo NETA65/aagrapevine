@@ -334,5 +334,8 @@
   "published.tell.write": {
     "en": "Haven’t written one yet? Your story could be next.",
     "es": "¿Todavía no has escrito una? Tu historia podría ser la próxima."
-  }
+  },
+
+  "published.aside_title": { "en": "Your story could be next", "es": "Tu historia puede ser la próxima" },
+  "published.aside_link": { "en": "How to send", "es": "Cómo enviarla" }
 }

@@ -57,8 +57,47 @@ pageScripts: ["/assets/js/community.js"]
 {{ cmWnIcons | cmIconSprite | safe }}
 
 {#- Hero: the shared ui.pageHero — one actions row + two numbers (ui.heroStats, shown from 768px).
-    How fresh the list is ("Updated 2 hours ago") is said once, by the feed (ui.freshness). -#}
-{% call ui.pageHero(lang, "nav.whats_new" | t(lang), "community.wn.hero_sub" | t(lang), "sparkles", "community.wn.eyebrow" | t(lang)) %}
+    How fresh the list is ("Updated 2 hours ago") is said once, by the feed (ui.freshness).
+    On its right (the shared hero aside; the first card under the hero on smaller screens and at
+    larger text): one photo from each official Instagram account (La Viña first on /es/), picked at
+    random on every page view from its 12 newest posts that have a picture. The build renders the
+    newest of each (the no-JS and Data saver choice); the small script right after the card swaps in
+    a random one from wn-ig-pool before the (lazy) pictures load — never with Data saver on, which
+    keeps the build's choice so no extra picture is fetched. Each tile opens its post (new tab);
+    its alt text is the start of the caption. "All posts" → /instagram/, their canonical place. -#}
+{%- set igCfg = (site.sources.instagram and site.sources.instagram.accounts) or [] -%}
+{%- set igAccs = (igCfg | reverse) if lang == "es" else igCfg -%}
+{%- set igPosts = db.instagram | mediaItems("instagram") -%}
+{%- set igTiles = [] -%}{%- set igPool = [] -%}{%- set igMore = [] -%}
+{%- for acc in igAccs -%}
+  {%- set igList = [] -%}{%- set igSrc = [] -%}
+  {%- for p in igPosts | mediaIgFor(acc) -%}
+    {%- set igImg = p | mediaIgImage -%}
+    {%- if igImg and igList.length < 12 -%}
+      {%- set igAlt = (p | mediaIgCaption(lang) | excerpt(110)) or ("community.wn.ig_post" | t(lang, { name: acc.name })) -%}
+      {%- set _n = igSrc.push(igImg) -%}
+      {%- set _n = igList.push({ i: igImg | url, a: igAlt, u: p.url | mediaSafeUrl("https://www.instagram.com/" + acc.username + "/") }) -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if igList.length -%}
+    {#- the tile's picture as stored (the build adds the site's base path to src); the pool's with it -#}
+    {%- set _n = igTiles.push({ src: igSrc[0], href: igList[0].u, title: acc.name, alt: igList[0].a }) -%}
+    {%- set _n = igPool.push(igList) -%}
+    {%- if igList.length > 1 %}{% set _n = igMore.push(acc.key) %}{% endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- set igMany = igMore.length > 0 -%}
+{% call(slot) ui.pageHero(lang, "nav.whats_new" | t(lang), "community.wn.hero_sub" | t(lang), "sparkles", "community.wn.eyebrow" | t(lang), { side: "below" }) %}
+{%- if slot == "side" %}
+  {%- if igTiles.length %}
+  {{ ui.heroAsideMedia("community.wn.ig_title" | t(lang), igTiles, lang, { icon: "instagram", id: "wn-ig-title", class: "cm-wn-ig",
+       href: "/instagram/" | lurl(lang), linkLabel: "community.wn.ig_all" | t(lang) }) }}
+  {%- if igMany %}
+  <script type="application/json" id="wn-ig-pool">{{ igPool | jsonScript | safe }}</script>
+  <script>(function(){try{var d=document;if(d.documentElement.getAttribute("data-saver")==="on")return;var P=JSON.parse(d.getElementById("wn-ig-pool").textContent),T=d.querySelectorAll(".cm-wn-ig .hero-aside-item");for(var k=0;k<P.length;k++){var L=P[k],a=T[k];if(!a||!L||L.length<2)continue;var p=L[Math.floor(Math.random()*L.length)],m=a.querySelector("img");a.href=p.u;if(m){m.src=p.i;m.alt=p.a;}}}catch(e){}})();</script>
+  {%- endif %}
+  {%- endif %}
+{%- else %}
 <div class="hero-actions cm-hero-tight">
   <a class="btn-light" href="#subscribe">{% icon "rss", "size-4" %} {{ "community.wn.btn_subscribe" | t(lang) }}</a>
   <a class="btn-on-dark" href="{{ '/digest/' | lurl(lang) }}">{% icon "newspaper", "size-4" %} {{ "community.wn.btn_digest" | t(lang) }}</a>
@@ -67,6 +106,7 @@ pageScripts: ["/assets/js/community.js"]
   { value: week | cmNum(lang), label: "community.wn.stat_week" | t(lang) },
   { value: month | cmNum(lang), label: "community.wn.stat_month" | t(lang) }
 ]) }}
+{%- endif %}
 {% endcall %}
 
 {#- cm-wn-page: the container the three-column layout measures itself against (community.css) -#}

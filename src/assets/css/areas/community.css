@@ -234,6 +234,12 @@
   grid-template-areas: "tools" "digest" "previews"; }
 .cm-dg-tools { grid-area: tools; }
 .cm-dg-previews { grid-area: previews; align-self: end; }
+/* The previews card's last two rows (the monthly e-mail, the district report) MOVE into the hero's
+   right-hand card while it is shown there — the same condition as main.css "HERO ASIDE" (≥1024px,
+   100 % text, normal spacing). Elsewhere that card is hidden and the rows stay here. */
+@media (width >= 64rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-dg-moved { display: none; }
+}
 .cm-digest { grid-area: digest; }
 @media (width < 64rem) {
   /* without JavaScript the tool card is hidden (data-js-only): no empty row for it */
@@ -300,6 +306,13 @@
   letter-spacing: 0; word-spacing: 0; line-height: 1.5;
 }
 @media screen and (width >= 96rem) { .cm-frame { max-width: 38rem; } } /* bigger previews on wide screens */
+/* The hero's right-hand card (share.njk): the poster as a miniature beside its one-line caption */
+.cm-share-aside .hero-aside-body { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); align-items: center; column-gap: 1rem; }
+.cm-share-aside .hero-aside-body > * + * { margin-top: 0; }
+.cm-share-mini { display: block; border-radius: 0.5rem; text-decoration: none; }
+.cm-share-mini .cm-frame { border-radius: 0.375rem; box-shadow: 0 16px 34px -16px rgb(0 0 0 / 0.7); transition: transform 0.2s; }
+.cm-share-mini:hover .cm-frame { transform: translateY(-3px); }
+@media (width >= 80rem) { .cm-share-aside .hero-aside-body { grid-template-columns: 9rem minmax(0, 1fr); } }
 .cm-sheet { position: absolute; inset: 0; display: flex; flex-direction: column; }
 
 /* Poster */

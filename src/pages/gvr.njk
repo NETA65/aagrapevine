@@ -26,11 +26,34 @@ pageScripts: ["/assets/js/read.js"]
 {#- Hero: the two registrations (the page-language magazine first). The in-page jumps live in the
     page nav below, so the hero has no jump buttons. The kit counts are shown once, in each kit's
     header. "read-hero" (read.css) keeps both buttons on one row on a 390px phone. -#}
-{% call ui.pageHero(lang, "nav.gvr" | t(lang), "read.gvr.subtitle" | t(lang), "badge-check", "read.gvr.eyebrow" | t(lang), { class: "read-hero" }) %}
+{#- The hero's right-hand card (the shared hero aside): what to announce at the group this month — the
+    Grapevine and La Viña themes (the page language's magazine first) — with "Monthly toolkit" → /monthly/,
+    their one home (posters, tips, dates). Nothing on this page shows them. "below": the first card under
+    the hero on smaller screens and at larger text (time-sensitive). No theme known → no card. -#}
+{%- set gm = (db | mpMonths(carry, site, lang))[0] -%}
+{% call(slot) ui.pageHero(lang, "nav.gvr" | t(lang), "read.gvr.subtitle" | t(lang), "badge-check", "read.gvr.eyebrow" | t(lang), { class: "read-hero", side: "below" }) %}
+{%- if slot == "side" %}
+  {%- if gm and (gm.gv or gm.lv) %}
+  {% call ui.heroAside("read.gvr.aside_title" | t(lang), lang, { id: "gvr-aside-title", icon: "megaphone", href: "/monthly/" | lurl(lang), linkLabel: "nav.monthly" | t(lang), class: "gvr-aside" }) %}
+    <ul class="grid gap-3" role="list">
+      {%- for p in (["lv", "gv"] if lang == "es" else ["gv", "lv"]) %}{% set iss = gm[p] %}{% if iss %}
+      <li class="flex items-center gap-3">
+        <span class="hero-aside-link-icon is-{{ p }}" aria-hidden="true">{% icon "grapes", "size-4" %}</span>
+        <span class="min-w-0">
+          <span class="hero-aside-note block">{{ ("monthly.in_gv" | t(lang, { month: gm.monthName })) if p == "gv" else (("monthly.in_lv" | t(lang)) ~ " · " ~ iss.label) }}</span>
+          <span class="hero-aside-title block">{{ iss.theme }}</span>
+        </span>
+      </li>
+      {%- endif %}{% endfor %}
+    </ul>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
   <div class="hero-actions">
     <a class="btn-light" href="{{ L.rlv_register if lang == 'es' else L.gvr_register }}" target="_blank" rel="noopener">{% icon "user-plus", "size-4" %} {{ ("read.gvr.register_rlv" if lang == "es" else "read.gvr.register_gvr") | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
     <a class="btn-on-dark" href="{{ L.gvr_register if lang == 'es' else L.rlv_register }}" target="_blank" rel="noopener">{% icon "user-plus", "size-4" %} {{ ("read.gvr.register_gvr" if lang == "es" else "read.gvr.register_rlv") | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
   </div>
+{%- endif %}
 {% endcall %}
 
 <div class="container-page page-overlap">{{ ui.pageNav([

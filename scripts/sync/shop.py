@@ -1,4 +1,4 @@
-"""Book of the Month and subscription prices from the official stores → data/raw/shop.json
+"""Book of the Month, subscription prices and specialty items from the official stores → data/raw/shop.json
 
 Grapevine and La Viña are published by AA Grapevine, Inc.; this module only READS their public store
 pages so our site can show the current offer and prices and link to the official store to buy.
@@ -14,22 +14,29 @@ Pages (config/site.yml → sources.grapevine / sources.lavina; defaults below):
       SKU, optional "Volume Discount Pricing" table, link, image
   * types (monthly at most) — one product page per subscription type per publication, for a short
       official description of print / digital / complete
+  * specialty items (weekly at most) — the greeting cards, the annual pocket planner and the annual
+      wall calendar (sources.<pub>.specialty: product pages — title, price, SKU, image, a short
+      official description, the "5+" volume price — or a category listing, whose cards of those
+      three kinds are kept: aalavina.org/tienda/articulos-especiales)
 
-Cost: ~12 page requests a day (+ robots.txt, + a product page per type once a month, + images only
-the first time they are seen), all through the shared polite session (5 s between requests).
+Cost: ~12 page requests a day (+ robots.txt, + a product page per type once a month, + 4 specialty
+pages once a week, + images only the first time they are seen), all through the shared polite
+session (5 s between requests).
 
 Output (docs/DATA_SCHEMA.md → "shop"): items
     botm:gv / botm:lv            kind "botm"          (extra: price, sale_price, discount_pct, sku, starts, ends …)
     sub:<pub>:<region>:<sku>     kind "subscription"  (extra: type, term_months, price, sku, volume …)
-  + envelope keys `bulk_discounts`, `types`, `listings`, `types_checked`.
+    special:<pub>:<sku>          kind "specialty"     (extra: type cards|planner|calendar|other, price, sku,
+                                                       volume, trilingual, pack, page_url, position …)
+  + envelope keys `bulk_discounts`, `types`, `listings`, `types_checked`, `specialty_checked`.
 build_data.py turns it into data/site/shop.json (translations, expired offers left out).
 
-Each part (GV offer, LV offer, GV subscriptions, LV subscriptions) is independent: when one cannot be
-fetched or parsed, its previous items are kept and the envelope is marked ok=false (→ /status/ and
-the "not updating for 7 days" report). A Book of the Month page that is up but shows no offer is not
+Each part (GV offer, LV offer, GV subscriptions, LV subscriptions, each specialty page) is independent:
+when one cannot be fetched or parsed, its previous items are kept and the envelope is marked ok=false
+(→ /status/ and the "not updating for 7 days" report). A Book of the Month page that is up but shows no offer is not
 an error: the offer is simply gone.
 
-Run:  python -m scripts.sync.shop [--dry-run] [--no-images] [--refresh-types]
+Run:  python -m scripts.sync.shop [--dry-run] [--no-images] [--refresh-types] [--refresh-specialty]
                                   [--html-dir DIR] [--save-html DIR]
 """
 from __future__ import annotations
@@ -62,17 +69,22 @@ PUBS: dict[str, dict] = {
     "gv": {"cfg": "grapevine", "source": "grapevine", "lang": "en", "base": "https://www.aagrapevine.org",
            "botm": "/BOTM", "subscriptions": "/store/grapevine-subscriptions",
            "subscription_regions": {"us": "/store/us-subscriptions", "ca": "/store/canada-subscriptions",
-                                    "intl": "/store/international-subscriptions"}},
+                                    "intl": "/store/international-subscriptions"},
+           "specialty": ["/store/greeting-cards", "/store/annual-pocket-planner", "/store/annual-wall-calendar"]},
     "lv": {"cfg": "lavina", "source": "lavina", "lang": "es", "base": "https://www.aalavina.org",
            "botm": "/libro-del-mes", "subscriptions": "/tienda/suscripciones",
            "subscription_regions": {"us": "/US-suscripciones", "ca": "/tienda/canada-suscripciones",
-                                    "intl": "/tienda/internacional-suscripciones"}},
+                                    "intl": "/tienda/internacional-suscripciones"},
+           "specialty": ["/tienda/articulos-especiales"]},
 }
 REGIONS = ("us", "ca", "intl")
 TYPES = ("print", "digital", "complete")
 TYPES_REFRESH_DAYS = 30          # product pages for the type descriptions: at most once a month
 MAX_NEW_IMAGES = 4               # new image downloads per run (each is a request to the same server)
 MAX_LISTING_PAGES = 3            # a region listing with a pager: follow "next" at most twice
+SPECIALTY_REFRESH_DAYS = 7       # the specialty pages (cards, planner, calendar): at most once a week
+SPECIALTY_KINDS = ("cards", "planner", "calendar")
+MAX_SPECIALTY_PER_PAGE = 4       # a category listing: its first few products of those kinds
 
 MONTHS_EN = ("January", "February", "March", "April", "May", "June", "July", "August", "September",
              "October", "November", "December")
@@ -143,11 +155,13 @@ def settings(cfg: dict | None = None) -> dict[str, dict]:
             v = v or default
             return v if re.match(r"(?i)https?://", str(v)) else base + "/" + str(v).lstrip("/")
         regions_cfg = c.get("subscription_regions") if isinstance(c.get("subscription_regions"), dict) else {}
+        special = c.get("specialty") if isinstance(c.get("specialty"), list) else d["specialty"]
         out[pub] = {
             "pub": pub, "lang": d["lang"], "source": d["source"], "base": base,
             "botm": url(c.get("botm"), d["botm"]),
             "subscriptions": url(c.get("subscriptions"), d["subscriptions"]),
             "regions": {r: url(regions_cfg.get(r), d["subscription_regions"][r]) for r in REGIONS},
+            "specialty": [url(v, v) for v in special if v],
         }
     return out
 
@@ -480,6 +494,87 @@ def parse_listing(html: str, listing_url: str) -> tuple[list[dict], str | None]:
     return plans, (_abs(listing_url, nxt["href"]) if nxt else None)
 
 
+# --------------------------------------------------------------------------- specialty items
+def specialty_kind(title: str, url: str = "") -> str | None:
+    """'Annual Wall Calendar' / 'Calendario Anual de Pared' → 'calendar'; 'Agenda de Bolsillo' → 'planner';
+    'Greeting cards' / 'Tarjetas de Ocasión' → 'cards'; anything else (a group agenda, back issues) → None."""
+    f = fold(f"{title} {urlsplit(url).path.replace('-', ' ')}")
+    if re.search(r"greeting card|\btarjetas?\b", f):
+        return "cards"
+    if re.search(r"planner|agenda de bolsillo|pocket", f):
+        return "planner"
+    if re.search(r"\bcalendar|\bcalendario", f):
+        return "calendar"
+    return None
+
+
+def _tidy(text: str) -> str:
+    """The store's own words with two typing slips evened out: 'month-at- a-glance' → 'month-at-a-glance',
+    'English/ Spanish/French' → 'English/Spanish/French'."""
+    return re.sub(r"(\w)/\s+(\w)", r"\1/\2", re.sub(r"(\w)-\s+(\w)", r"\1-\2", clean_text(text)))
+
+
+def special_text(paras: list[str], name: str, minimum: int = 90, maximum: int = 230) -> str:
+    """A short official description: whole sentences of the first real paragraph (not the name line,
+    not a size line) until ≥ `minimum` characters (at most `maximum`)."""
+    for p in paras:
+        p = _tidy(p)
+        if len(p) < 40 or fold(p).rstrip(" .") == fold(name).rstrip(" .") or re.match(r"(?i)\(?(dimensions|the (open|closed))", p):
+            continue
+        out = ""
+        for sent in re.split(r"(?<=[.!?])\s+", p):
+            nxt = f"{out} {sent}".strip()
+            if out and len(nxt) > maximum:
+                break
+            out = nxt
+            if len(out) >= minimum:
+                break
+        return truncate(out, maximum)
+    return ""
+
+
+def parse_specialty(html: str, page_url: str) -> list[dict]:
+    """A specialty page → [{title, kind, price, currency, sku, url, image_src, text, volume, trilingual,
+    pack}]: ONE product (a product page) or the first few cards of the three kinds (a category listing).
+    Raises ShopParseError when neither is there."""
+    soup = _soup(html)
+    block = _content(soup)
+    full = block.select_one("article.product.view-mode-full")
+    if full is not None:
+        prod = parse_product(html, page_url)
+        name = clean_text(prod.get("name"))
+        if not name and soup.title:                       # the <title> without " | AA Grapevine"
+            name = clean_text(soup.title.get_text(" ").split("|")[0])
+        if not name or prod.get("price") is None:
+            raise ShopParseError(f"specialty product without a name or price on {page_url}")
+        body = full.select_one(".field--name-body") or full
+        paras = [clean_text(p.get_text(" ")) for p in body.find_all("p")]
+        words = " ".join(paras)
+        pack = re.search(r"(?i)\bbox(?:es)? of (\d{1,3})\b|\bcaja de (\d{1,3})\b", words)
+        price_el = full.select_one(".field--name-price .field__item")
+        return [{
+            "title": name, "kind": specialty_kind(name, page_url) or "other",
+            "price": prod["price"], "currency": money_currency(price_el.get_text(" ")) if price_el else (prod.get("currency") or "USD"),
+            "sku": prod.get("sku"), "url": _no_query(page_url), "image_src": prod.get("image"),
+            "text": special_text(paras, name), "volume": parse_volume(full),
+            "trilingual": bool(re.search(r"(?i)triling|english\s*/\s*spanish\s*/\s*french|ingl[ée]s\s*/\s*espa[ñn]ol\s*/\s*franc[ée]s", words)),
+            "pack": int(pack[1] or pack[2]) if pack else None,
+        }]
+    cards, _ = parse_listing(html, page_url)
+    if not cards:
+        raise ShopParseError(f"no product on the specialty page {page_url}")
+    out = []
+    for c in cards:
+        kind = specialty_kind(c["title"], c["url"])
+        if kind and c.get("price") is not None and len(out) < MAX_SPECIALTY_PER_PAGE:
+            out.append({"title": c["title"], "kind": kind, "price": c["price"], "currency": c.get("currency") or "USD",
+                        "sku": c.get("sku"), "url": c["url"], "image_src": c.get("image_src"), "text": "",
+                        "volume": c.get("volume") or [], "trilingual": False, "pack": None})
+    if not out:
+        raise ShopParseError(f"no greeting cards, planner or calendar listed on {page_url}")
+    return out
+
+
 # --------------------------------------------------------------------------- images
 class ImageCache:
     """Product images → ≤480 px WebP in src/assets/cache/shop/<hash>.webp (hash of the address
@@ -637,10 +732,43 @@ def collect_types(pub: str, plans: list[dict], fetch: Fetch) -> dict[str, dict]:
     return out
 
 
+def collect_specialty(pub: str, s: dict, fetch: Fetch, images: Callable,
+                      prev_items: list[dict]) -> tuple[list[dict], list[str]]:
+    """Every configured specialty page of one store → (items, errors). A page that cannot be fetched
+    or read keeps its previous items (matched by the page they were read from)."""
+    items: list[dict] = []
+    errors: list[str] = []
+    pos = 0
+    for page in s.get("specialty") or []:
+        try:
+            html = fetch(page)
+            if not html:
+                raise ShopParseError(f"could not fetch {page}")
+            found = parse_specialty(html, page)
+        except Exception as e:  # noqa: BLE001 — one page never stops the others
+            errors.append(f"{pub} specialty: {e}")
+            log.warning("%s specialty %s: %s — keeping the previous items", pub, page, e)
+            items.extend(i for i in prev_items if i["id"].startswith(f"special:{pub}:")
+                         and (i.get("extra") or {}).get("page_url") == page)
+            continue
+        for p in found:
+            key = p.get("sku") or slugify(p["title"], 40)
+            extra = {"pub": pub, "type": p["kind"], "price": p["price"], "currency": p.get("currency") or "USD",
+                     "sku": p.get("sku"), "volume": p.get("volume") or [], "trilingual": bool(p.get("trilingual")),
+                     "pack": p.get("pack"), "page_url": page, "position": pos, "image_src": p.get("image_src")}
+            pos += 1
+            items.append(make_item(
+                id=f"special:{pub}:{key}", source=s["source"], kind="specialty", url=p["url"], title=p["title"],
+                summary=p.get("text") or "", lang=s["lang"], image=images(p.get("image_src")), category="specialty",
+                extra={k: v for k, v in extra.items() if v not in (None, "")},
+            ))
+    return items, errors
+
+
 def collect(fetch: Fetch, images: Callable, prev: dict, today: date, cfg: dict | None = None,
-            refresh_types: bool = False) -> dict:
-    """Everything one run finds → {"items", "errors", "bulk_discounts", "types", "listings", "types_checked", "stats"}.
-    Parts that failed keep their previous items (prev = the previous raw envelope)."""
+            refresh_types: bool = False, refresh_specialty: bool = False) -> dict:
+    """Everything one run finds → {"items", "errors", "bulk_discounts", "types", "listings", "types_checked",
+    "specialty_checked", "stats"}. Parts that failed keep their previous items (prev = the previous raw envelope)."""
     st = settings(cfg)
     prev_items = [i for i in prev.get("items", []) if isinstance(i, dict) and i.get("id")]
     items: list[dict] = []
@@ -713,11 +841,34 @@ def collect(fetch: Fetch, images: Callable, prev: dict, today: date, cfg: dict |
         if all_ok:
             types_checked = now_iso()
 
+    # Specialty items (cards, planner, calendar): weekly (or --refresh-specialty). In between, the previous
+    # items are kept as they are — an image the download budget skipped is tried again on those days.
+    prev_special = [i for i in prev_items if i["id"].startswith("special:")]
+    s_checked = parse_iso(prev.get("specialty_checked"))
+    s_due = refresh_specialty or s_checked is None or \
+        datetime.now(timezone.utc) - s_checked > timedelta(days=SPECIALTY_REFRESH_DAYS)
+    specialty_checked = prev.get("specialty_checked")
+    if s_due:
+        s_errors: list[str] = []
+        for pub, s in st.items():
+            got, errs = collect_specialty(pub, s, fetch, images, prev_special)
+            items += got
+            s_errors += errs
+        errors += s_errors
+        if not s_errors:        # stamped only when every page was read; else the next run tries again
+            specialty_checked = now_iso()
+    else:
+        for it in prev_special:
+            src = (it.get("extra") or {}).get("image_src")
+            items.append({**it, "image": it.get("image") or images(src)} if src and not it.get("image") else it)
+
     stats.update({"botm": sum(1 for i in items if i.get("kind") == "botm"),
                   "plans": sum(1 for i in items if i.get("kind") == "subscription"),
-                  "types_refreshed": bool(due)})
+                  "specialty": sum(1 for i in items if i.get("kind") == "specialty"),
+                  "types_refreshed": bool(due), "specialty_refreshed": bool(s_due)})
     return {"items": items, "errors": errors, "bulk_discounts": bulk, "types": types,
-            "listings": listings, "types_checked": types_checked, "stats": stats}
+            "listings": listings, "types_checked": types_checked, "specialty_checked": specialty_checked,
+            "stats": stats}
 
 
 def keep_known_images(items: list[dict], prev_items: list[dict]) -> None:
@@ -742,6 +893,7 @@ def main(argv=None) -> None:
     ap.add_argument("--dry-run", action="store_true", help="print a summary, do not write data/raw")
     ap.add_argument("--no-images", action="store_true", help="do not download product images")
     ap.add_argument("--refresh-types", action="store_true", help="re-read the subscription type descriptions now")
+    ap.add_argument("--refresh-specialty", action="store_true", help="re-read the specialty items (cards, planner, calendar) now")
     ap.add_argument("--html-dir", help="read saved pages from this folder instead of fetching (testing)")
     ap.add_argument("--save-html", help="also save every fetched page into this folder (fixtures)")
     args = ap.parse_args(argv)
@@ -766,7 +918,7 @@ def main(argv=None) -> None:
     except Exception:  # noqa: BLE001
         tz = ZoneInfo("America/Chicago")
     today = datetime.now(tz).date()
-    res = collect(fetch, images, prev, today, refresh_types=args.refresh_types)
+    res = collect(fetch, images, prev, today, refresh_types=args.refresh_types, refresh_specialty=args.refresh_specialty)
     keep_known_images(res["items"], prev.get("items") or [])
     stats = {**res["stats"], "requests": http.requests_made - before, "images_downloaded": images.downloaded}
     if res["errors"]:
@@ -778,9 +930,10 @@ def main(argv=None) -> None:
     ok = not res["errors"]
     save_raw(SOURCE, merged, ok=ok, error="; ".join(res["errors"])[:300] if not ok else None, stats=stats,
              extra={"bulk_discounts": res["bulk_discounts"], "types": res["types"], "listings": res["listings"],
-                    "types_checked": res["types_checked"]})
-    log.info("shop: %d offer(s), %d subscription plan(s), %d request(s), %d image(s)%s", stats["botm"], stats["plans"],
-             stats["requests"], images.downloaded, f" — problems: {res['errors']}" if res["errors"] else "")
+                    "types_checked": res["types_checked"], "specialty_checked": res["specialty_checked"]})
+    log.info("shop: %d offer(s), %d subscription plan(s), %d specialty item(s), %d request(s), %d image(s)%s",
+             stats["botm"], stats["plans"], stats["specialty"], stats["requests"], images.downloaded,
+             f" — problems: {res['errors']}" if res["errors"] else "")
 
 
 if __name__ == "__main__":

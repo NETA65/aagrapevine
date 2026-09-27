@@ -29,6 +29,9 @@
   "community.wn.stat_month": { "en": "in the last 30 days", "es": "en los últimos 30 días" },
   "community.wn.btn_subscribe": { "en": "Subscribe", "es": "Suscribirse" },
   "community.wn.btn_digest": { "en": "Monthly digest", "es": "Resumen mensual" },
+  "community.wn.ig_title": { "en": "From Instagram", "es": "Desde Instagram" },
+  "community.wn.ig_all": { "en": "All posts", "es": "Ver todas" },
+  "community.wn.ig_post": { "en": "An Instagram post from {name}", "es": "Una publicación de Instagram de {name}" },
   "community.wn.filter_aria": { "en": "Filter updates by type", "es": "Filtrar novedades por tipo" },
   "community.wn.showing": { "en": "Showing {n} updates", "es": "Mostrando {n} novedades" },
   "community.wn.more_in_day": { "en": "Show {n} more from this day", "es": "Mostrar {n} más de este día" },
@@ -259,6 +262,10 @@
   "community.status.pill_feeds": { "en": "{n} optional calendars unavailable", "es": "{n} calendarios opcionales no disponibles" },
   "community.status.some_failed": { "en": "{n} of {total} sources had a problem on the last run", "es": "{n} de {total} fuentes tuvieron un problema en la última ejecución" },
   "community.status.not_run": { "en": "Waiting for the first update", "es": "Esperando la primera actualización" },
+  "community.status.glance": { "en": "At a glance", "es": "De un vistazo" },
+  "community.status.stat_ok": { "en": "sources up to date", "es": "fuentes al día" },
+  "community.status.stat_failed": { "en": "sources had a problem on the last run", "es": "fuentes tuvieron un problema en la última ejecución" },
+  "community.status.see_sources": { "en": "See all sources", "es": "Ver todas las fuentes" },
   "community.status.kpi_build": { "en": "Site last published", "es": "Sitio publicado por última vez" },
   "community.status.kpi_items": { "en": "Items tracked", "es": "Elementos registrados" },
   "community.status.kpi_new": { "en": "Found in the last 7 days", "es": "Encontrados en los últimos 7 días" },
@@ -385,6 +392,8 @@
   "community.nf.home": { "en": "Go to the home page", "es": "Ir a la página de inicio" },
   "community.nf.popular": { "en": "Popular pages", "es": "Páginas populares" },
   "community.nf.still_lost": { "en": "Still lost? Email us:", "es": "¿Sigues sin encontrarla? Escríbenos:" },
+  "community.nf.saved": { "en": "Pages saved on this device", "es": "Páginas guardadas en este dispositivo" },
+  "community.nf.saved_text": { "en": "They open even without a connection", "es": "Se abren incluso sin conexión" },
   "community.nf.page_title": { "en": "Page not found", "es": "Página no encontrada" },
 
   "community.banner.q": { "en": "Prefer English?", "es": "¿Prefieres español?" },
@@ -430,5 +439,12 @@
   "community.rec.lv_sample": { "en": "Sample audio", "es": "Audio de muestra" },
   "community.rec.official": { "en": "Visit the official page", "es": "Visita la página oficial" },
   "community.rec.unavailable": { "en": "We can't show the phone line details right now. You'll find them on the official page.", "es": "Ahora no podemos mostrar los datos de la línea. Los encontrarás en la página oficial." },
-  "community.rec.jump": { "en": "How to record by phone", "es": "Cómo grabar por teléfono" }
+  "community.rec.jump": { "en": "How to record by phone", "es": "Cómo grabar por teléfono" },
+
+  "community.digest.aside_title": { "en": "More ways to share it", "es": "Más formas de compartirlo" },
+  "community.digest.aside_email": { "en": "Get it by e-mail", "es": "Recíbelo por correo" },
+  "community.digest.aside_email_text": { "en": "Ask the chair to send it each month", "es": "Pídele al coordinador(a) que te lo envíe cada mes" },
+  "community.share.aside_title": { "en": "The poster", "es": "El cartel" },
+  "community.share.aside_link": { "en": "All versions", "es": "Todas las versiones" },
+  "community.share.aside_caption": { "en": "Letter size, in English, Spanish or both — plus a table tent.", "es": "Tamaño carta, en español, en inglés o en los dos, y una tarjeta de mesa." }
 }

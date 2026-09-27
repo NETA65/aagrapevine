@@ -394,12 +394,37 @@ data-deadline="{{ r.deadline }}" data-t-days="{{ 'read.contrib.due_in' | t(lang)
 {#- Hero: send to each magazine (the page-language magazine first). The sections are in the page
     nav below, so the hero has no jump buttons. "read-hero" (read.css) keeps both buttons on one
     row on a 390px phone. -#}
-{% call ui.pageHero(lang, "read.contrib.title" | t(lang), "read.contrib.subtitle" | t(lang), "pen-line", "read.contrib.eyebrow" | t(lang), { class: "read-hero" }) %}
+{#- The hero's right-hand card (the shared hero aside): the next story deadline (the date, the live "N days
+    left" — read.js — the theme and its issue) with "All deadlines" → #deadlines, and the phone story lines
+    (#record) at its foot. Both sections are far below, so nothing right under the hero is repeated.
+    "below": on smaller screens and at larger text it is the first card under the hero (time-sensitive).
+    Without a dated deadline: the phone line alone. -#}
+{%- set nextDl = (gvEd.upcoming | selectattr("isNext") | first) -%}
+{% call(slot) ui.pageHero(lang, "read.contrib.title" | t(lang), "read.contrib.subtitle" | t(lang), "pen-line", "read.contrib.eyebrow" | t(lang), { class: "read-hero", side: "below" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside(("read.contrib.next_deadline" if nextDl else "read.contrib.nav_record") | t(lang), lang, { id: "ct-aside-title", icon: "calendar-clock" if nextDl else "mic", href: "#deadlines" if nextDl else "#record", linkLabel: ("read.contrib.aside_all" if nextDl else "community.rec.jump") | t(lang), class: "ct-aside" }) %}
+    {%- if nextDl %}
+    <div data-deadline-row {{ dlAttrs(nextDl, lang) }}>
+      <p class="hero-aside-stat">
+        <span class="hero-aside-value"><time datetime="{{ nextDl.deadline }}">{% if lang == "es" %}{{ nextDl.deadline | fmtDate(lang, "day") }} {{ nextDl.deadline | fmtDate(lang, "monthShort") }}{% else %}{{ nextDl.deadline | fmtDate(lang, "monthShort") }} {{ nextDl.deadline | fmtDate(lang, "day") }}{% endif %}</time></span>
+        <span class="hero-aside-label" data-days-label>{{ dueText(nextDl, lang) }}</span>
+      </p>
+      <p class="hero-aside-title mt-2"><span lang="{{ nextDl.themeLang }}">{{ nextDl.theme }}</span>{% if nextDl.machine %} <span title="{{ 'common.auto_translated' | t(lang) }}">{% icon "languages", "inline size-3.5 align-[-0.1em] opacity-80" %}<span class="sr-only">({{ "common.auto_translated" | t(lang) }})</span></span>{% endif %}</p>
+      <p class="hero-aside-note">{% if nextDl.issueLabel %}{{ "read.contrib.for_issue" | t(lang, { issue: nextDl.issueLabel }) }} · {% endif %}{{ "read.contrib.aside_gv" | t(lang) }}</p>
+      {% if lang == "es" %}<p class="hero-aside-note">{{ "read.contrib.aside_lv" | t(lang) }}</p>{% endif %}
+    </div>
+    <div class="hero-aside-foot">{{ ui.heroAsideLink({ href: "#record", label: "read.contrib.nav_record" | t(lang), icon: "mic", tone: "vine" }, lang) }}</div>
+    {%- else %}
+    <p class="hero-aside-text">{{ "read.contrib.aside_record_text" | t(lang) }}</p>
+    {%- endif %}
+  {% endcall %}
+{%- else %}
   <div class="hero-actions">
     {% for p in pubOrder %}
     <a class="{{ 'btn-light' if loop.first else 'btn-on-dark' }}" href="{{ L.lv_share_story if p == 'lv' else L.gv_share_story }}" target="_blank" rel="noopener">{% icon "send", "size-4" %} {{ ("read.contrib.send_lv" if p == "lv" else "read.contrib.send_gv") | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
     {% endfor %}
   </div>
+{%- endif %}
 {% endcall %}
 
 <div class="container-page page-overlap">{{ ui.pageNav([

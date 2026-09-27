@@ -18,6 +18,9 @@
      layouts     measure · layout-aside · layout-sidebar · sticky-aside / sticky-aside-xl
      other       input · empty-state (ui.emptyState) · page-empty (ui.pageEmpty) · auto-note ·
                  section-head (ui.sectionHead) · page-nav (ui.pageNav)
+     hero        gv-hero (ui.pageHero) · hero-actions · hero-stats · the hero aside: gv-hero-shell /
+                 hero-side / hero-aside-* (opts.side + ui.heroAside*: in the hero from 1024px at
+                 100 % text, else the first card below it or hidden) — see "HERO ASIDE" below
    Touch sizes: btn is 44px everywhere; btn-sm and chip are 36px with a mouse on desktop and
    44px below 640px and on any touch screen (pointer: coarse). Never override with min-h-9!.
    Sticky rules and the z-index scale: see "Sticky rules" below (nothing may cover content).
@@ -699,6 +702,186 @@
   @media (width >= 96rem) { .gv-hero--split .gv-hero-inner { grid-template-columns: minmax(0, 1fr) minmax(24rem, 30rem); gap: 4rem; } }
   .gv-hero-copy, .gv-hero-aside { min-width: 0; }
 
+  /* ---------- HERO ASIDE — opts.side + the ui.heroAside* helpers (macros/ui.njk "HERO ASIDE") ----------
+     Markup (rendered ONCE, after the hero, so DOM order = reading order at every width):
+       <div class="gv-hero-shell side-below|side-hide">
+         <section class="gv-hero …">…</section>
+         <div class="hero-side container-page"><section class="hero-aside …">head · main · body · foot</section></div>
+       </div>
+     Two places, chosen by CSS alone:
+     · IN THE HERO ("overlay": ≥1024px at 100 % text — the --hs selectors below): the shell is a
+       one-cell grid shared by the hero and .hero-side; .hero-side is the container's right column
+       (--hero-side-w, px-stable) with the card vertically centred between the fixed header and the
+       bottom fade (0.75rem clear of each); the hero copy gives up that width. The cell is as tall as
+       the taller of the two, so a card taller than its room makes the hero taller — never cut off,
+       never over the page (the helpers are sized to fit: ≤ ≈ 330px). Dark glass in both themes, solid
+       navy with high contrast.
+     · BELOW THE HERO (narrower screens, 115 %+ text, relaxed spacing): side-below → the first card
+       under the hero, tucked into its fade like page-overlap (the page's own page-overlap block then
+       starts 1.25rem under it: the unlayered rule next to the page-overlap utility); side-hide → not
+       shown. A normal light card there (theme tokens).
+     The parts take their colours from --ha-*, so the same markup reads in both places. Parts are
+     placed by grid areas; missing parts leave no gap (spacing is margin-top between siblings). */
+  .hero-side { position: relative; z-index: 10; margin-top: -1.5rem; }
+  @media (width >= 40rem) { .hero-side { margin-top: -2.5rem; } }
+  .side-hide > .hero-side { display: none; }
+  .hero-aside {
+    --ha-ink: var(--c-ink); --ha-muted: var(--c-muted); --ha-eyebrow: var(--c-gv); --ha-link: var(--c-gv);
+    --ha-soft: var(--c-surface-2); --ha-hover: var(--c-surface-2); --ha-focus: var(--c-gv);
+    --ha-ok: var(--c-vine); --ha-alert: var(--c-danger); --ha-on-state: #fff;
+    --ha-cta-bg: var(--c-surface); --ha-cta-line: var(--c-line); --ha-cta-hover-bg: var(--c-surface); --ha-cta-hover-line: var(--c-gv); --ha-cta-hover-ink: var(--c-gv);
+    --ha-main-w: 8rem;  /* the player / pictures column when the parts sit side by side */
+    display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "main" "body" "foot"; align-content: start;
+    padding: 1.25rem; border: 1px solid var(--c-line); border-radius: var(--radius-card);
+    background: var(--c-surface); box-shadow: var(--shadow-card); color: var(--ha-ink);
+  }
+  @media (width >= 40rem) { .hero-aside { padding: 1.25rem 1.5rem; } }
+  [data-theme="dark"] .hero-aside { --ha-on-state: var(--c-paper); }
+  .hero-aside :focus-visible { outline-color: var(--ha-focus); }
+  .hero-aside-head { grid-area: head; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.25rem 0.75rem; min-width: 0; }
+  .hero-aside-main { grid-area: main; min-width: 0; margin-top: 0.875rem; }
+  .hero-aside-body { grid-area: body; min-width: 0; margin-top: 0.625rem; }
+  .hero-aside-foot { grid-area: foot; min-width: 0; margin-top: 0.875rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+  .hero-aside-body > * + * { margin-top: 0.375rem; }
+  /* head: small eyebrow h2 · the card's one link on its right · optional lead line */
+  .hero-aside-h {
+    display: flex; align-items: center; gap: 0.5rem; min-width: 0;
+    font-family: var(--font-sans); font-size: 0.72rem; font-weight: 600; line-height: 1.35;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ha-eyebrow);
+  }
+  .hero-aside-more {
+    display: inline-flex; align-items: center; gap: 0.25rem; min-height: 2rem; margin-block: -0.25rem;
+    font-size: 0.8125rem; font-weight: 600; line-height: 1.25; color: var(--ha-link); text-decoration: none;
+  }
+  .hero-aside-more:hover { text-decoration: underline; text-underline-offset: 3px; }
+  @media (width < 40rem), (pointer: coarse) { .hero-aside-more { min-height: 2.75rem; margin-block: -0.625rem; } }
+  .hero-aside-lead { flex-basis: 100%; margin-top: 0.25rem; font-size: 0.875rem; line-height: 1.45; color: var(--ha-muted); }
+  .hero-aside-title { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 600; line-height: 1.3; color: var(--ha-ink); text-wrap: balance; }
+  .hero-aside-text { font-size: 0.875rem; line-height: 1.5; color: var(--ha-muted); }
+  .hero-aside-note { font-size: 0.8125rem; line-height: 1.45; color: var(--ha-muted); }
+  .hero-aside--video .hero-aside-title, .hero-aside-item-title, .hero-aside-item-text {
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+  .hero-aside-cta {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 2.5rem; padding: 0.4rem 1rem;
+    border: 1px solid var(--ha-cta-line); border-radius: 9999px; background: var(--ha-cta-bg); color: var(--ha-ink);
+    font-size: 0.875rem; font-weight: 600; line-height: 1.2; text-decoration: none; transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .hero-aside-cta:hover { background: var(--ha-cta-hover-bg); border-color: var(--ha-cta-hover-line); color: var(--ha-cta-hover-ink); }
+  @media (width < 40rem), (pointer: coarse) { .hero-aside-cta { min-height: 2.75rem; } }
+  /* stat: [state icon] big number / date, the label under it */
+  .hero-aside-stat { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem 0.625rem; }
+  .hero-aside-state { display: grid; place-items: center; flex-shrink: 0; width: 2.25rem; height: 2.25rem; border-radius: 9999px; background: var(--ha-ok); color: var(--ha-on-state); }
+  .hero-aside-state.is-alert { background: var(--ha-alert); }
+  .hero-aside-state.is-wait { background: transparent; color: var(--ha-muted); box-shadow: inset 0 0 0 1.5px currentColor; }
+  .hero-aside-value { font-family: var(--font-display); font-size: 2.25rem; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--ha-ink); }
+  .hero-aside-label { flex-basis: 100%; font-size: 0.9375rem; line-height: 1.4; color: var(--ha-muted); }
+  /* link rows: icon tile · label (+ one line) · arrow; 44px tall */
+  .hero-aside-links { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.125rem; margin-inline: -0.5rem; }
+  .hero-aside-main > li { min-width: 0; }
+  .hero-aside-link {
+    display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; padding: 0.375rem 0.5rem; border-radius: 0.875rem;
+    color: var(--ha-ink); text-decoration: none; transition: background-color 0.15s;
+  }
+  .hero-aside-link:hover { background: var(--ha-hover); }
+  .hero-aside-link:hover .hero-aside-link-label { text-decoration: underline; text-underline-offset: 3px; }
+  .hero-aside-link-icon { --ha-tone: var(--c-gv); --ha-tone-soft: var(--c-gv-soft);
+    display: grid; place-items: center; flex-shrink: 0; width: 2.25rem; height: 2.25rem; border-radius: 0.75rem; background: var(--ha-tone-soft); color: var(--ha-tone); }
+  .hero-aside-link-icon.is-lv { --ha-tone: var(--c-lv); --ha-tone-soft: var(--c-lv-soft); }
+  .hero-aside-link-icon.is-grape { --ha-tone: var(--c-grape); --ha-tone-soft: var(--c-grape-soft); }
+  .hero-aside-link-icon.is-vine { --ha-tone: var(--c-vine); --ha-tone-soft: var(--c-vine-soft); }
+  .hero-aside-link-body { flex: 1 1 auto; min-width: 0; }
+  .hero-aside-link-label { display: block; font-size: 0.9375rem; font-weight: 600; line-height: 1.3; }
+  .hero-aside-link-text { display: block; margin-top: 0.0625rem; font-size: 0.8125rem; line-height: 1.35; color: var(--ha-muted); }
+  .hero-aside-link-go { color: var(--ha-muted); }
+  .hero-aside-foot > .hero-aside-link { flex: 1 1 100%; margin-inline: -0.5rem; }
+  /* pictures: tiles (2) · feature (1: picture left) · rows (3–4) */
+  .hero-aside-item { display: grid; gap: 0.5rem; align-content: start; min-width: 0; border-radius: 0.875rem; color: var(--ha-ink); text-decoration: none; }
+  .hero-aside-item:hover .hero-aside-item-title { text-decoration: underline; text-underline-offset: 3px; }
+  .hero-aside-item-body { min-width: 0; }
+  .hero-aside-item-title { font-size: 0.875rem; font-weight: 600; line-height: 1.3; }
+  .hero-aside-item-text { margin-top: 0.125rem; font-size: 0.8125rem; line-height: 1.4; color: var(--ha-muted); }
+  .hero-aside-thumb { position: relative; display: block; overflow: hidden; aspect-ratio: 1 / 1; border-radius: 0.75rem; background: var(--ha-soft); }
+  .hero-aside-thumb.is-portrait { aspect-ratio: 3 / 4; }
+  .hero-aside-thumb.is-video { aspect-ratio: 16 / 9; }
+  .hero-aside-thumb > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero-aside-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+  .hero-aside-feature .hero-aside-item { grid-template-columns: 6.5rem minmax(0, 1fr); align-items: center; gap: 0.875rem; }
+  .hero-aside-feature .hero-aside-item-title { font-family: var(--font-display); font-size: 1.0625rem; }
+  .hero-aside-feature .hero-aside-thumb.is-video { aspect-ratio: 4 / 3; }
+  .hero-aside-rows { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+  .hero-aside-rows .hero-aside-item { grid-template-columns: 3.25rem minmax(0, 1fr); align-items: center; gap: 0.75rem; min-height: 2.75rem; }
+  .hero-aside-rows .hero-aside-item-text { -webkit-line-clamp: 1; line-clamp: 1; }
+  /* parts side by side: the player / pictures on the left, head + text + foot beside them — for a
+     9:16 Short (stacked in a card narrower than 20rem: 320px phones, larger text); below the hero,
+     in a card at least 36rem wide, for a 16:9 player and two tiles too (links in two columns).
+     Container queries on .hero-side (the card's width, which grows with the text size in rem). In
+     the hero .hero-side is the whole hero width, so the overlay rules below set the column look. */
+  .hero-side { container-type: inline-size; }
+  .hero-aside--video.is-vertical { grid-template-columns: var(--ha-main-w) minmax(0, 1fr); grid-template-areas: "main head" "main body" "main foot"; grid-template-rows: auto auto 1fr; column-gap: 1rem; }
+  .hero-aside--video.is-vertical > .hero-aside-main { margin-top: 0; }
+  .hero-aside--video.is-vertical > .hero-aside-foot { align-self: start; }
+  @container (width < 20rem) {
+    .hero-aside--video.is-vertical { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "main" "body" "foot"; grid-template-rows: none; }
+    .hero-aside--video.is-vertical > .hero-aside-main { margin-top: 0.875rem; width: min(100%, 10rem); }
+  }
+  @container (width >= 36rem) {
+    .hero-aside--video:not(.is-vertical) { grid-template-columns: minmax(0, min(55%, 28rem)) minmax(0, 1fr); grid-template-areas: "main head" "main body" "main foot"; grid-template-rows: auto auto 1fr; column-gap: 1.5rem; }
+    .hero-aside--media.is-tiles { grid-template-columns: minmax(0, min(55%, 22rem)) minmax(0, 1fr); grid-template-areas: "main head" "main body" "main foot"; grid-template-rows: auto auto 1fr; column-gap: 1.5rem; }
+    :is(.hero-aside--video:not(.is-vertical), .hero-aside--media.is-tiles) > .hero-aside-main { margin-top: 0; }
+    :is(.hero-aside--video:not(.is-vertical), .hero-aside--media.is-tiles) > .hero-aside-foot { align-self: start; }
+    .hero-aside--links .hero-aside-links { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; }
+  }
+
+  /* IN THE HERO (overlay) — ≥1024px, text 100 %, normal spacing. Every rule here starts with the
+     same guard (:root:not(…) .gv-hero-shell); at 115 %+ text or relaxed spacing the card is below. */
+  @media (width >= 64rem) {
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell {
+      --hero-side-w: 20rem; --hero-side-gap: 2rem;
+      display: grid; grid-template-columns: minmax(0, 1fr);
+    }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell > :is(.gv-hero, .hero-side) { grid-area: 1 / 1; min-width: 0; }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .gv-hero-copy { margin-right: calc(var(--hero-side-w) + var(--hero-side-gap)); }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell > .hero-side {
+      display: flex; align-items: center; justify-content: flex-end; z-index: 4; margin-top: 0; pointer-events: none;
+      padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 0.75rem);
+      padding-bottom: 4.5rem; /* the hero's 3.75rem bottom fade + 0.75rem */
+    }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside {
+      --ha-ink: #fff; --ha-muted: rgb(255 255 255 / 0.86); --ha-eyebrow: rgb(255 255 255 / 0.92); --ha-link: #fff;
+      --ha-soft: rgb(255 255 255 / 0.08); --ha-hover: rgb(255 255 255 / 0.1); --ha-focus: #fff;
+      --ha-ok: #86efac; --ha-alert: #fca5a5; --ha-on-state: #06152b;
+      --ha-cta-bg: rgb(255 255 255 / 0.1); --ha-cta-line: rgb(255 255 255 / 0.28); --ha-cta-hover-bg: rgb(255 255 255 / 0.2); --ha-cta-hover-line: rgb(255 255 255 / 0.5); --ha-cta-hover-ink: #fff;
+      --ha-main-w: 7.5rem;
+      pointer-events: auto; width: var(--hero-side-w); max-width: 100%;
+      padding: 1.125rem 1.25rem; border-radius: 1.5rem; border-color: rgb(255 255 255 / 0.18); color: #fff;
+      background: linear-gradient(160deg, rgb(15 30 60 / 0.82), rgb(8 20 45 / 0.72));
+      box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.12);
+      -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%);
+    }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside-link-icon { --ha-tone-soft: rgb(255 255 255 / 0.1); --ha-tone: #a9d2f8; }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside-link-icon.is-lv { --ha-tone: #ffc79e; }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside-link-icon.is-grape { --ha-tone: #dcc3f5; }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside-link-icon.is-vine { --ha-tone: #abe4a6; }
+    /* in the narrow column the parts stack again (except a Short), links in one column */
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell :is(.hero-aside--video:not(.is-vertical), .hero-aside--media) {
+      grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "main" "body" "foot"; grid-template-rows: none; }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside:not(.is-vertical) > .hero-aside-main { margin-top: 0.75rem; }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside--links .hero-aside-links { grid-template-columns: minmax(0, 1fr); }
+    /* high contrast: solid navy, white edges and text */
+    :root[data-contrast="high"]:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside {
+      --ha-muted: #fff; --ha-eyebrow: #fff; --ha-cta-bg: #04101f; --ha-cta-line: #fff; --ha-hover: rgb(255 255 255 / 0.16);
+      background: #04101f; border-color: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  }
+  @media (width >= 80rem) {
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell { --hero-side-w: 24rem; --hero-side-gap: 3rem; }
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside { --ha-main-w: 8.5rem; }
+  }
+  @media (width >= 96rem) {
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell { --hero-side-w: 26rem; --hero-side-gap: 4rem; }
+    /* a 16:9 player: 24rem at most (its height grows with its width) */
+    :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .hero-aside--video:not(.is-vertical) { width: min(var(--hero-side-w), 24rem); }
+  }
+
   .gv-hero-eyebrow {
     display: inline-flex; align-items: center; gap: 0.5rem; max-width: 100%;
     margin-bottom: 0.875rem; padding: 0.3rem 0.8rem; border-radius: 9999px;
@@ -777,6 +960,7 @@
     .gv-hero, .page-hero { min-height: 0; padding: 0 0 1rem; background: none; color: #000; }
     .gv-hero::before, .gv-hero::after, .page-hero::before, .page-hero::after { display: none; }
     .gv-hero *, .page-hero * { color: #000 !important; text-shadow: none !important; }
+    .hero-side { display: none !important; } /* the hero aside is a teaser for the screen */
   }
 }
 
@@ -803,6 +987,19 @@
    page-start:   a normal section (use it INSTEAD of "section", it keeps the bottom padding). */
 @utility page-overlap { @apply relative z-10 -mt-6 sm:-mt-10; }
 @utility page-start { @apply pt-8 pb-12 sm:pt-10 sm:pb-16; }
+/* …when the hero aside (opts.side "below") is the card tucked into the fade, the page's own
+   page-overlap block starts 1.25rem under it instead (unlayered: beats the utility's -mt). Only
+   where the aside is below the hero: under 1024px, and at 115 %+ text / relaxed spacing. */
+@media (width < 64rem) { .gv-hero-shell.side-below + .page-overlap { margin-top: 1.25rem; } }
+:root:is([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell.side-below + .page-overlap { margin-top: 1.25rem; }
+/* Hero aside player (ui.heroAsideVideo). Unlayered, like the vendor lite-yt-embed.css it adjusts:
+   full width of its column (the vendor caps it at 720px), rounded, no title overlay (the caption is
+   under / beside it), 9:16 for a Short. */
+lite-youtube.hero-aside-lyt { width: 100%; max-width: none; border-radius: 0.75rem; overflow: hidden; background-color: #0b1a33; }
+lite-youtube.hero-aside-lyt::before { display: none; }
+lite-youtube.hero-aside-lyt.is-vertical::after { padding-bottom: calc(100% * 16 / 9); }
+lite-youtube.hero-aside-lyt > .lyt-playbtn { filter: none; }
+lite-youtube.hero-aside-lyt > .lyt-playbtn:focus-visible { outline: 3px solid #fff; outline-offset: -6px; }
 
 /* Language banner (partials/lang-banner.njk, a fixed bottom toast, z-40): while it is shown,
    <html> has class has-lang-banner and --banner-h (its height), and the page reserves that

@@ -19,6 +19,29 @@
 .o101-bar { height: 0.5rem; border-radius: 999px; background: color-mix(in srgb, var(--c-line) 80%, var(--c-surface)); overflow: hidden; }
 .o101-bar > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--c-vine), var(--c-gv)); transition: width 0.35s ease; }
 
+/* The hero's right-hand card (orientation.njk, the shared hero aside): the progress box MOVES there from
+   the welcome card while the card is in the hero — the same condition as main.css "HERO ASIDE" (≥1024px,
+   100 % text, normal spacing); the welcome card then runs in one column. Elsewhere the aside is hidden. */
+@media (width >= 64rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-welcome { grid-template-columns: minmax(0, 1fr); }
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-welcome > .o101-progress { display: none; }
+}
+/* 1024–1279px: the hero's text column is ≈ 600px beside that card — two buttons only (printing the
+   handout is also in the "Present or print" band below) */
+@media (width >= 64rem) and (width < 80rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .o101-hero-print { display: none; }
+}
+/* six numbered dots, one per session (a check mark once done — orientation.js); each links to its session */
+.o101-dots { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-block: 0.75rem 0.625rem; }
+.o101-dot { position: relative; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 9999px;
+  border: 1.5px solid var(--ha-cta-line); background: var(--ha-cta-bg); color: var(--ha-ink);
+  font-weight: 600; font-variant-numeric: tabular-nums; text-decoration: none; transition: background-color 0.15s, border-color 0.15s; }
+.o101-dot:hover { border-color: var(--ha-cta-hover-line); background: var(--ha-cta-hover-bg); }
+.o101-dot.is-done { border-color: var(--ha-ok); background: var(--ha-ok); color: var(--ha-on-state); }
+.o101-dot-check { position: absolute; right: -0.2rem; bottom: -0.2rem; display: grid; place-items: center; width: 1.1rem; height: 1.1rem;
+  border-radius: 9999px; background: var(--ha-on-state); color: var(--ha-ok); box-shadow: 0 0 0 1.5px var(--ha-ok); }
+.o101-dot-check[hidden] { display: none; }
+
 /* Keyboard legend (Present as slides) */
 .o101-keys { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr)); gap: 0.625rem 1.25rem; }
 .o101-keys > div { display: flex; align-items: center; gap: 0.5rem; min-width: 0; }

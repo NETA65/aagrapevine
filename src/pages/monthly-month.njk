@@ -23,11 +23,25 @@ eleventyComputed:
 {%- set L = site.links -%}
 {%- set pageAbs = m.url | siteUrl(site) -%}
 
-{#- Eyebrow: "Monthly toolkit", or "Monthly toolkit · This month" for the current month -#}
-{% call ui.pageHero(lang, m.title, "monthly.month_sub" | t(lang), "calendar-heart", ("monthly.month_eyebrow_now" if m.isCurrent else "monthly.month_eyebrow") | t(lang)) %}
+{#- Eyebrow: "Monthly toolkit", or "Monthly toolkit · This month" for the current month.
+    The hero's right-hand card (the shared hero aside, from 1024px): the covers of that month's issues when
+    the magazines have published them (db.articles issues — the toolkit below names the themes, never the
+    covers), each linking to its issue on the official site; the card's link goes to /read/. A month
+    without a published cover gets no card. "hide": the poster stays the first thing on smaller screens. -#}
+{%- set covers = [] -%}
+{%- for p in (["lv", "gv"] if lang == "es" else ["gv", "lv"]) %}{% set iss = m[p] %}{% if iss and iss.cover and iss.url %}
+  {%- set _n = covers.push({ src: iss.cover, href: iss.url, title: ("La Viña" if p == "lv" else "Grapevine"), text: iss.label, alt: "" }) -%}
+{%- endif %}{% endfor -%}
+{% call(slot) ui.pageHero(lang, m.title, "monthly.month_sub" | t(lang), "calendar-heart", ("monthly.month_eyebrow_now" if m.isCurrent else "monthly.month_eyebrow") | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if covers.length %}
+  {{ ui.heroAsideMedia("monthly.hero_covers" | t(lang), covers, lang, { id: "mp-aside-title", icon: "book-open", ratio: "portrait", href: "/read/" | lurl(lang), linkLabel: "nav.read" | t(lang), class: "mp-hero-covers" }) }}
+  {%- endif %}
+{%- else %}
 <div class="hero-actions">
   <a class="btn-light" href="{{ '/monthly/' | lurl(lang) }}">{% icon "layout-grid", "size-4" %} {{ "monthly.back_hub" | t(lang) }}</a>
 </div>
+{%- endif %}
 {% endcall %}
 
 <section class="container-page page-start mp-print-root" aria-labelledby="mp-toolkit-title">

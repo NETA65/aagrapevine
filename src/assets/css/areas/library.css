@@ -19,6 +19,18 @@
 .lib-q::-webkit-search-cancel-button,
 .ss-q::-webkit-search-cancel-button { appearance: none; }
 
+/* ---------- Library: the hero aside "Current catalog" (library.njk, ui.heroAside) ----------
+   The catalog's cover (3:4, the top of page 1) beside its title, one short meta line and "Open the
+   catalog" (the shared .hero-aside-* parts, so it reads in the hero and below it). */
+.lib-aside-cat { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); align-items: center; gap: 1rem; margin-top: 0.25rem; }
+.lib-aside-cover { border-radius: 0.375rem; box-shadow: 0 1px 2px rgb(0 0 0 / 0.2), 0 6px 16px -8px rgb(0 0 0 / 0.5); }
+.lib-aside-cover > img { object-position: top; }
+.lib-aside-info { display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem; min-width: 0; }
+.lib-aside-info > .hero-aside-cta { margin-top: 0.5rem; }
+/* Search: the hero aside "Just added" (search.njk, ui.heroAsideLinks) — its titles come from outside
+   content, so each is capped at two lines (the full title is on the page it opens). */
+.ss-aside .hero-aside-link-label { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+
 /* ---------- find bar: the search box right below the hero (library + site search) ----------
    <div class="container-page page-overlap"><div class="lib-find"><form class="lib-find-form">…
    A full-width card; from 1024px the note / keyboard hint sits to the right of the box. */

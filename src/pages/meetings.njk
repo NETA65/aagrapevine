@@ -22,7 +22,12 @@ pageScripts: ["/assets/js/committee.js"]
         when no group on the lists meets in Spanish, the intro points to #weekly-open;
     (c) #weekly-open — the weekly open meetings of AA Grapevine and La Viña (La Viña's card links to its
         official flyer on the committee's Drive when one matches lavina_weekly_open.flyer_match).
-    Each section opens with ui.sectionHead (eyebrow, title, one line of text). -#}
+    Each section opens with ui.sectionHead (eyebrow, title, one line of text).
+    The hero's right-hand card (the shared hero aside, "This week"): how many Grapevine meetings there
+    are today (committee.js gvmTeaser: its link also sets the list's Day filter to today) and the next
+    date of each weekly open meeting (rolled forward in the browser like the cards: committee.js
+    weekly()) — teasers of (b) and (c), never the countdown right below. Hidden on smaller screens and
+    at larger text: there the hero's two jump links lead to the same places. -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set m = site.meeting -%}
 {%- set gvm = db.meetings | cmGvMeetings(lang, site) -%}
@@ -55,7 +60,42 @@ pageScripts: ["/assets/js/committee.js"]
 {#- ============ Hero: title, what is on the page, and the two other sections of the page ============
     The committee meeting is the first block right under the hero (its Join button and live
     countdown are there), so it needs no jump link. -#}
-{% call ui.pageHero(lang, "nav.meetings" | t(lang), "committee.meetings.hero_sub" | t(lang), "calendar-clock", "committee.meetings.eyebrow" | t(lang)) %}
+{#- The hero card's rows (/es/: the weekly open meetings first, like the hero's buttons) -#}
+{%- set gvTodayRow -%}
+{%- if gvm.total %}
+  <li><a class="hero-aside-link" href="#grapevine-meetings" data-gvm-today-link>
+    <span class="hero-aside-link-icon is-gv">{% icon "grapes", "size-4" %}</span>
+    <span class="hero-aside-link-body"><span class="hero-aside-link-label">{{ "committee.gvm.title" | t(lang) }}</span><span class="hero-aside-link-text" data-gvm-today-teaser data-counts="{{ gvm.dayCounts | pluck('count') | join(',') }}"
+      data-one="{{ 'committee.meetings.aside_gv_today_one' | t(lang) }}" data-many="{{ 'committee.meetings.aside_gv_today' | t(lang) }}" data-none="{{ 'committee.meetings.aside_gv_none' | t(lang) }}">{{ "committee.meetings.aside_gv_week" | t(lang, { n: gvm.total }) }}</span></span>
+    {% icon "arrow-right", "hero-aside-link-go size-4 shrink-0" %}
+  </a></li>
+{%- endif %}
+{%- endset -%}
+{%- set woRows -%}
+{%- for w in wos %}{% if w.next %}
+  <li><a class="hero-aside-link" href="#weekly-open">
+    <span class="hero-aside-link-icon {{ 'is-lv' if w.isLv else 'is-grape' }}">{% icon "video", "size-4" %}</span>
+    <span class="hero-aside-link-body"><span class="hero-aside-link-label">{{ ("committee.meetings.aside_wo_lv" if w.isLv else "committee.meetings.aside_wo_gv") | t(lang) }}</span><span class="hero-aside-link-text" data-cm-weekly="{{ w.next.iso }}" data-cm-weekly-short data-cm-weekly-tz="{{ w.next.tz }}"{% if w.next.at %} data-cm-weekly-at="{{ w.next.at }}"{% endif %}{% if w.starts %} data-cm-weekly-starts="{{ w.starts.iso }}"{% endif %}>
+      {%- if w.starts -%}
+      <span data-cm-weekly-label data-next="{{ 'committee.meetings.aside_next' | t(lang) }}" data-live="{{ 'committee.meeting.live_now' | t(lang) }}">{{ "committee.weekly.starts" | t(lang, { date: w.starts.date }) }}</span> <span data-cm-weekly-date></span>
+      {%- else -%}
+      <span data-cm-weekly-label data-next="{{ 'committee.meetings.aside_next' | t(lang) }}" data-live="{{ 'committee.meeting.live_now' | t(lang) }}">{{ "committee.meetings.aside_next" | t(lang) }}</span> <span data-cm-weekly-date>{{ w.next.date }} · {{ w.next.time }}</span>
+      {%- endif -%}
+    </span></span>
+    {% icon "arrow-right", "hero-aside-link-go size-4 shrink-0" %}
+  </a></li>
+{%- endif %}{% endfor %}
+{%- endset -%}
+{% call(slot) ui.pageHero(lang, "nav.meetings" | t(lang), "committee.meetings.hero_sub" | t(lang), "calendar-clock", "committee.meetings.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if (gvTodayRow | trim | length) or (woRows | trim | length) %}
+  {% call ui.heroAside("committee.meetings.aside_title" | t(lang), lang, { id: "mtg-aside-title", icon: "calendar-check" }) %}
+  <ul class="hero-aside-links" role="list">
+    {%- if lang == "es" %}{{ woRows | safe }}{{ gvTodayRow | safe }}{% else %}{{ gvTodayRow | safe }}{{ woRows | safe }}{% endif %}
+  </ul>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
   {#- /es/: La Viña first (SPEC 1.18) — the weekly open meetings (La Viña's Reunión Abierta) lead -#}
   <nav class="hero-actions" aria-label="{{ 'committee.meetings.jump_aria' | t(lang) }}">
     {% if lang == "es" %}
@@ -66,6 +106,7 @@ pageScripts: ["/assets/js/committee.js"]
     <a href="#weekly-open" class="btn-on-dark">{% icon "video", "size-4" %} {{ "committee.meetings.jump_weekly" | t(lang) }}</a>
     {% endif %}
   </nav>
+{%- endif %}
 {% endcall %}
 
 {% committeeNav lang, "meetings", db %}

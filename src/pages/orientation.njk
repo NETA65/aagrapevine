@@ -34,12 +34,34 @@ pageScripts: ["/assets/js/orientation.js"]
 {%- set secondHalf = O.lessons | offset(half) -%}
 {%- set welcomeMin = 3 -%}{%- set closeMin = 3 -%}
 
-{% call ui.pageHero(lang, "nav.orientation" | t(lang), "orientation.hero_sub" | t(lang), "sprout", "orientation.eyebrow" | t(lang)) %}
+{#- The hero's right-hand card (the shared hero aside): "Your progress" — the sessions done on this device
+    (the same [data-o101-progress] box orientation.js fills) and the six sessions as numbered dots (each a
+    [data-o101-card], so it gets its check mark; they link to the sessions) + "All sessions" → #sessions.
+    It MOVES there from the welcome card: while the card is in the hero (≥1024px at 100 % text)
+    orientation.css hides the welcome card's own progress box; elsewhere the aside is hidden ("hide")
+    and the welcome card keeps it. -#}
+{% call(slot) ui.pageHero(lang, "nav.orientation" | t(lang), "orientation.hero_sub" | t(lang), "sprout", "orientation.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if total %}
+  {% call ui.heroAside("orientation.hero_title" | t(lang), lang, { id: "o101-aside-title", icon: "list-checks", href: "#sessions", linkLabel: "orientation.hero_link" | t(lang), class: "o101-aside" }) %}
+    <div data-o101-progress data-total="{{ total }}" data-t="{{ 'orientation.progress' | t(lang) }}" data-t-all="{{ 'orientation.progress_all' | t(lang) }}">
+      <p class="hero-aside-title" data-o101-count>{{ "orientation.progress" | t(lang, { n: 0, total: total }) }}</p>
+      <ol class="o101-dots" role="list" aria-label="{{ 'orientation.hero_dots' | t(lang) }}">
+        {%- for l in O.lessons %}
+        <li><a class="o101-dot" href="{{ ('/orientation/' + l.id + '/') | lurl(lang) }}" data-o101-card="{{ l.id }}" data-n="{{ l.n }}" title="{{ 'orientation.hero_dot' | t(lang, { n: l.n, title: (l.title | o101Text(lang)) }) }}"><span aria-hidden="true">{{ l.n }}</span><span class="o101-dot-check" data-o101-done hidden>{% icon "check", "size-3" %}</span><span class="sr-only">{{ "orientation.hero_dot" | t(lang, { n: l.n, title: (l.title | o101Text(lang)) }) }}<span data-o101-done-sr hidden> ({{ "orientation.done" | t(lang) }})</span></span></a></li>
+        {%- endfor %}
+      </ol>
+      <p class="hero-aside-note flex items-start gap-1.5">{% icon "lock", "mt-0.5 size-3 shrink-0" %}<span>{{ "orientation.hero_saved" | t(lang) }}</span></p>
+      <button type="button" class="hero-aside-cta mt-2" data-o101-reset hidden>{% icon "rotate-ccw", "size-4" %} {{ "orientation.progress_reset" | t(lang) }}</button>
+    </div>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
 <div class="hero-actions">
   {%- if total %}
   <a class="btn-light" href="{{ ('/orientation/' + O.lessons[0].id + '/') | lurl(lang) }}" data-o101-resume data-t-continue="{{ 'orientation.continue' | t(lang) }}" data-t-review="{{ 'orientation.review' | t(lang) }}">{% icon "play", "size-4" %} <span data-o101-resume-label>{{ "orientation.start" | t(lang) }}</span></a>
   <a class="btn-on-dark" href="?slides" data-o101-present data-js-only>{% icon "presentation", "size-4" %} {{ "orientation.present" | t(lang) }}</a>
-  <button type="button" class="btn-on-dark max-md:hidden" data-o101-print data-js-only>{% icon "printer", "size-4" %} {{ "orientation.handout_btn" | t(lang) }}</button>
+  <button type="button" class="btn-on-dark o101-hero-print max-md:hidden" data-o101-print data-js-only>{% icon "printer", "size-4" %} {{ "orientation.handout_btn" | t(lang) }}</button>
   {%- endif %}
 </div>
 {{ ui.heroStats([
@@ -47,6 +69,7 @@ pageScripts: ["/assets/js/orientation.js"]
   { value: O.totalMinutes, label: "orientation.stat_minutes" | t(lang) },
   { value: O.totalChecks, label: "orientation.stat_checks" | t(lang) }
 ]) }}
+{%- endif %}
 {% endcall %}
 
 {#- ---------- Welcome (page-overlap) + progress on this device ---------- -#}

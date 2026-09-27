@@ -233,5 +233,11 @@
   "search.kw.orientation": {
     "en": "orientation welcome new GVR RLV representative sessions session facilitator slides presentation handout panel rotation 101 service position",
     "es": "orientación bienvenida nuevo RLV GVR representante sesiones sesión facilitador diapositivas presentación hoja panel rotación 101 puesto de servicio"
-  }
+  },
+
+  "orientation.hero_title": { "en": "Your progress", "es": "Tu progreso" },
+  "orientation.hero_link": { "en": "All sessions", "es": "Todas las sesiones" },
+  "orientation.hero_dots": { "en": "The six sessions", "es": "Las seis sesiones" },
+  "orientation.hero_dot": { "en": "Session {n}: {title}", "es": "Sesión {n}: {title}" },
+  "orientation.hero_saved": { "en": "Saved only in this browser — nothing is sent anywhere.", "es": "Se guarda solo en este navegador; no se envía nada." }
 }

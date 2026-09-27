@@ -15,14 +15,40 @@ pageScripts: ["/assets/js/committee.js"]
     chips + search, one card grid per category (grid-cards: up to 5 columns); with none yet — the
     shared page-level empty card (ui.pageEmpty: what will be here). Then, collapsed, "For committee
     members · How to add documents" (ui.memberHelp, #how-docs): the steps, the folder names, where
-    a file goes, and the two Drive actions (Open Drive folder · Ask for upload access). -#}
+    a file goes, and the two Drive actions (Open Drive folder · Ask for upload access).
+    The hero's right-hand card (the shared hero aside, cmDocTeaser): never the list's first category,
+    which starts right below — "Flyers to share" (the two newest flyers) when there are flyers, else
+    "Latest upload" (the file added last in another category: its picture, name, kind and date). They
+    open in the preview like the list's cards; the card's link goes to their category. Hidden on
+    smaller screens and at larger text (the list follows right away). -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set dt = db.drive.items | cmDocTabs(lang) -%}
 {%- set emptyTabs = dt.tabs | where("count", 0) | length -%}
 {%- set nonEmpty = dt.tabs.length - emptyTabs -%}
 {%- set di = db.status | cmDriveInfo(site) -%}
 
-{% call ui.pageHero(lang, "nav.portfolio" | t(lang), "committee.docs.hero_sub" | t(lang), "folder-open", "committee.docs.eyebrow" | t(lang)) %}
+{%- set teaser = dt | cmDocTeaser -%}
+{% call(slot) ui.pageHero(lang, "nav.portfolio" | t(lang), "committee.docs.hero_sub" | t(lang), "folder-open", "committee.docs.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if teaser %}
+  {%- set many = teaser.docs | length > 1 %}
+  {% call ui.heroAside(("committee.docs.aside_flyers" if teaser.kind == "flyers" else "committee.docs.aside_title") | t(lang), lang, { id: "docs-aside-title", icon: ("megaphone" if teaser.kind == "flyers" else "sparkles"), href: "#docs-" + teaser.tab.key, linkLabel: "committee.docs.aside_more" | t(lang, { cat: teaser.tab.label }) }) %}
+  <ul class="{{ 'hero-aside-tiles' if many else 'hero-aside-feature' }}" role="list">
+    {%- for ld in teaser.docs %}
+    <li><a class="hero-aside-item" href="{{ ld.view }}" target="_blank" rel="noopener"{% if ld.preview %} data-cm-preview="{{ ld.preview }}" data-cm-title="{{ ld.title }}" data-cm-open="{{ ld.view }}" data-cm-download="{{ ld.download }}"{% endif %}>
+      <span class="hero-aside-thumb {{ 'is-square' if many else 'is-portrait' }} cm-ha-doc">{% icon ld.type.icon, "size-7" %}{% if ld.thumb %}<img src="{{ ld.thumb }}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}</span>
+      <span class="hero-aside-item-body">
+        <span class="hero-aside-item-title">{{ ld.title }}</span>
+        {%- if not many %}
+        <span class="hero-aside-item-text">{{ ("committee.type." + ld.type.key) | t(lang) }}{% if ld.added %} · {{ "committee.docs.added" | t(lang, { date: (ld.added | fmtDate(lang, "medium")) }) }}{% endif %}</span>
+        {%- endif %}
+      </span>
+    </a></li>
+    {%- endfor %}
+  </ul>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
   <div class="hero-actions">
     {#- one visitor action (the committee how-to is ui.memberHelp, below) -#}
     {% if dt.total %}
@@ -38,6 +64,7 @@ pageScripts: ["/assets/js/committee.js"]
     { value: (dt.panels[0] if (dt.panels | length == 1 and dt.panels[0]) else null), label: "committee.docs.stat_panel" | t(lang) }
   ]) }}
   {% endif %}
+{%- endif %}
 {% endcall %}
 
 {% committeeNav lang, "portfolio", db %}

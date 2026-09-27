@@ -10,7 +10,7 @@ pageScripts: ["/assets/js/community.js"]
 {% import "macros/ui.njk" as ui with context %}
 {#- Transparency dashboard built from db.status (written by build_data.py after every run).
     States: ok (vine) · failed (danger) · never run (muted); every state has an icon + label, never
-    colour alone. Order: the hero pill (how many sources are up to date) · three numbers · the sources
+    colour alone. Order: the hero aside card (how many sources are up to date) · three numbers · the sources
     (a table from 768px, compact rows on a phone) · the optional outside calendars (collapsed) · the
     document library and translations · how an update works · the open-source credits ("Built with
     open-source software", a tinted band, last).
@@ -62,17 +62,25 @@ pageScripts: ["/assets/js/community.js"]
 {% endif %}
 {% endmacro %}
 
-{% call ui.pageHero(lang, "nav.status" | t(lang), "community.status.hero_sub" | t(lang), "activity", "community.status.eyebrow" | t(lang)) %}
-<div class="hero-actions">
-  {#- a status, not a button: how many sources are up to date (+ the optional calendars that can't be read) -#}
-  {% if not total %}
-  <p class="inline-flex min-h-10 items-center gap-2 rounded-full bg-white/10 px-4 text-sm font-semibold text-white ring-1 ring-white/25">{% icon "circle-dashed", "size-4" %} {{ "community.status.not_run" | t(lang) }}</p>
-  {% elif sv.failedCount %}
-  <p class="inline-flex min-h-10 flex-wrap items-center gap-x-2.5 gap-y-1 rounded-3xl bg-white/10 py-1 pl-1.5 pr-4 text-sm font-semibold text-white ring-1 ring-white/25"><span class="grid size-7 place-items-center rounded-full bg-danger text-white">{% icon "circle-alert", "size-4" %}</span> {{ "community.status.some_failed" | t(lang, { n: sv.failedCount, total: total }) }}</p>
-  {% else %}
-  <p class="inline-flex min-h-10 flex-wrap items-center gap-x-2.5 gap-y-1 rounded-3xl bg-white/10 py-1 pl-1.5 pr-4 text-sm font-semibold text-white ring-1 ring-white/25"><span class="grid size-7 shrink-0 place-items-center rounded-full bg-vine text-white dark:text-paper">{% icon "check", "size-4" %}</span> <span>{{ "community.status.pill_ok" | t(lang, { n: sv.okCount, total: total }) }}{% if feedsDown %}<span class="font-medium text-white/80 max-sm:hidden"> · {{ ("community.status.pill_feeds_one" if feedsDown == 1 else "community.status.pill_feeds") | t(lang, { n: feedsDown }) }}</span>{% endif %}</span></p>
-  {% endif %}
-</div>
+{#- The hero's right-hand card (the shared hero aside, ui.heroAsideStat): how many sources are up to
+    date — a status, not a button — with a link to the table. Inside the hero from 1024px; the first
+    card under it on smaller screens and at larger text ("below"), then the three numbers. -#}
+{%- if not total -%}
+  {%- set gState = "wait" -%}{%- set gValue = "—" -%}{%- set gLabel = "community.status.not_run" | t(lang) -%}{%- set gSr = gLabel -%}
+{%- elif sv.failedCount -%}
+  {%- set gState = "alert" -%}{%- set gValue = sv.failedCount ~ "/" ~ total -%}{%- set gLabel = "community.status.stat_failed" | t(lang) -%}
+  {%- set gSr = "community.status.some_failed" | t(lang, { n: sv.failedCount, total: total }) -%}
+{%- else -%}
+  {%- set gState = "ok" -%}{%- set gValue = sv.okCount ~ "/" ~ total -%}{%- set gLabel = "community.status.stat_ok" | t(lang) -%}
+  {%- set gSr = "community.status.pill_ok" | t(lang, { n: sv.okCount, total: total }) -%}
+{%- endif -%}
+{%- set gNote = (("community.status.pill_feeds_one" if feedsDown == 1 else "community.status.pill_feeds") | t(lang, { n: feedsDown })) if (total and not sv.failedCount and feedsDown) else "" -%}
+{% call(slot) ui.pageHero(lang, "nav.status" | t(lang), "community.status.hero_sub" | t(lang), "activity", "community.status.eyebrow" | t(lang), { side: "below" }) %}
+{%- if slot == "side" %}
+  {{ ui.heroAsideStat("community.status.glance" | t(lang), gValue, gLabel, lang, {
+       id: "status-glance-title", icon: "radio-tower", state: gState, sr: gSr, note: gNote,
+       href: "#src-title" if total else "", linkLabel: "community.status.see_sources" | t(lang) }) }}
+{%- endif %}
 {% endcall %}
 
 {#- ============ Three numbers (one card, tucked into the hero's faded edge) ============ -#}

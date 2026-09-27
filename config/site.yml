@@ -24,11 +24,36 @@ site:
   contact_email: "grapevine@neta65.org"
   area_website: "https://neta65.org"
   committee_page: "https://neta65.org/trusted-servants/grapevine-la-vina/"
-  # /listen/ sidebar: an official AA Grapevine YouTube Short (the id is the last part of
-  # youtube.com/shorts/<id>), shown as a privacy-friendly vertical player. Delete these lines to hide it.
+  # /listen/ hero (the card on its right): an official AA Grapevine YouTube Short (the id is the last
+  # part of youtube.com/shorts/<id>), shown as a privacy-friendly vertical player next to the two app
+  # links. Delete these lines to hide it.
   listen:
     sidebar_short: "0uyVPlTcSeI"
     sidebar_short_title: "Grapevine Get The App!"
+  # /watch/ hero (the card on its right): one official video or Short from the channel (the id is the
+  # last part of youtube.com/watch?v=<id> or youtube.com/shorts/<id>). Its title and summary come from
+  # the channel's video list; `hero_video_title` is used only if the video isn't in that list yet.
+  # Delete these lines to hide it.
+  watch:
+    hero_video: "_mjB6hXYHn4"
+    hero_video_title: "Victor E. is back"
+  # /about/#videos: AA Grapevine's two videos that introduce the magazines, each in its own card (the
+  # title, the video's own summary and its length come from the channel's video list; the page
+  # language's magazine goes first). `title` replaces a title the channel writes in capitals; `tr` is
+  # our own translation into the other language, shown under the original on the other-language page
+  # (without it, the automatic translation is used and marked as such). Delete an entry to hide it.
+  about_videos:
+    - id: "V3RzyHdgQCY"        # AA's Twelfth Step Tools: Grapevine and La Viña (English)
+      pub: gv
+      title: "AA’s Twelfth Step Tools: Grapevine and La Viña"
+      tr:
+        title: "Herramientas de AA para el Paso Doce: Grapevine y La Viña"
+        summary: "Una mirada a lo que son Grapevine y La Viña: su historia, su lugar en AA, sus plataformas y servicios, y las muchas formas en que los miembros de AA los usan para mantenerse sobrios y hacer el trabajo del Paso Doce para ayudar a otros alcohólicos, todo en 5 minutos."
+    - id: "Bqb1FP0lx1E"        # La Viña: Su historia y el impacto en la Comunidad Hispana de AA (Spanish)
+      pub: lv
+      tr:
+        title: "La Viña: its history and its impact on AA’s Hispanic community"
+        summary: "How La Viña, AA’s international magazine in Spanish — in print, digital and audio — has been a pillar of recovery and support for thousands of Spanish-speaking members around the world. Learn about its editorial policy, how to send in your story, and the many ways to connect with this AA tool."
 
 # ---------------------------------------------------------------------
 #  Committee meeting (next date + countdown are computed automatically)
@@ -143,6 +168,13 @@ sources:
       us: "/store/us-subscriptions"
       ca: "/store/canada-subscriptions"
       intl: "/store/international-subscriptions"
+    # Specialty items shown on /shop/#specialty (read weekly by scripts/sync/shop.py): product pages
+    # (title, price, picture, a short description) or a category listing (its greeting cards, pocket
+    # planner and wall calendar). Delete a line to stop showing that item.
+    specialty:
+      - "/store/greeting-cards"
+      - "/store/annual-pocket-planner"
+      - "/store/annual-wall-calendar"
     # The Audio Project (members record a story by phone or send a recording), read daily by
     # scripts/sync/audio_project.py (→ data/site/audio_project.json → /contribute/#record).
     audio_project: "/audio-portal"
@@ -160,6 +192,10 @@ sources:
       us: "/US-suscripciones"
       ca: "/tienda/canada-suscripciones"
       intl: "/tienda/internacional-suscripciones"
+    # "Artículos especiales": the Tarjetas de Ocasión, the Agenda de Bolsillo and the Calendario Anual
+    # de Pared are taken from this listing (weekly, with the Grapevine ones above).
+    specialty:
+      - "/tienda/articulos-especiales"
     # "Graba tu historia" (a story by phone or a recording by e-mail), read daily by
     # scripts/sync/audio_project.py with its instructions page; the other three are only linked.
     record_story: "/graba-tu-historia"

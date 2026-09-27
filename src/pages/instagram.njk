@@ -105,8 +105,19 @@ pageScripts: ["/assets/js/media.js"]
 {#- ------------------------------------------------------------------ hero
     The shared hero (same height as every page): short lead + ONE actions row — a jump to each
     account's posts (the page language's account first; on phones it also picks that account's
-    tab, media.js igPage). Each account's Follow button is on its profile card, once. -#}
-{% call ui.pageHero(lang, "media.ig_title" | t(lang), "media.ig_sub" | t(lang), "instagram", "media.ig_eyebrow" | t(lang)) %}
+    tab, media.js igPage). Each account's Follow button is on its profile card, once.
+    On its right from 1024px (the shared hero aside, "hide": not repeated under the hero on smaller
+    screens — the same pages are in the menu): where else the magazines share their message —
+    Videos, Podcasts, What's New. The account cards and posts are right below, so the card never
+    shows them again. -#}
+{% call(slot) ui.pageHero(lang, "media.ig_title" | t(lang), "media.ig_sub" | t(lang), "instagram", "media.ig_eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {{ ui.heroAsideLinks("media.ig_aside_title" | t(lang), [
+       { href: "/watch/" | lurl(lang), label: "media.ig_aside_watch_t" | t(lang), text: "media.ig_aside_watch" | t(lang), icon: "circle-play", tone: "grape" },
+       { href: "/listen/" | lurl(lang), label: "media.ig_aside_listen_t" | t(lang), text: "media.ig_aside_listen" | t(lang), icon: "headphones", tone: "gv" },
+       { href: "/whats-new/" | lurl(lang), label: "nav.whats_new" | t(lang), text: "media.ig_aside_wn" | t(lang), icon: "sparkles", tone: "vine" }
+     ], lang, { icon: "compass", id: "ig-aside-title" }) }}
+{%- else %}
   {% if accounts.length %}
   <div class="hero-actions">
     {% for acc in accounts %}
@@ -114,6 +125,7 @@ pageScripts: ["/assets/js/media.js"]
     {% endfor %}
   </div>
   {% endif %}
+{%- endif %}
 {% endcall %}
 
 {#- Both accounts side by side from 1024px (the page language's account on the left); each

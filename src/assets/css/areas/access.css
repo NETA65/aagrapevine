@@ -450,3 +450,31 @@ kbd.ax-kbd, .ax-list kbd { display: inline-flex; min-width: 2.25rem; align-items
   border: 1px solid var(--c-line); border-bottom-width: 2px; border-radius: 0.5rem; background: var(--c-surface);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.875rem; font-weight: 700; color: var(--c-ink); }
 .ax-num { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 600; letter-spacing: 0.02em; }
+
+/* The hero's right-hand card on /accessibility/ ("Quick settings" — the shared hero aside, main.css
+   "HERO ASIDE"): the text size as four choices (native radios: arrow keys move and apply, like the
+   panel), then High contrast (a toggle, aria-pressed) and Read this page. They call the panel's own
+   GV.prefs / GV.tts (app.js). Colours come from the card's --ha-* variables: dark glass in the hero,
+   a light card under it (at 115 % text and up, where a size chosen here moves the card below). */
+.ax-quick { display: grid; gap: 0.875rem; max-width: 40rem; }   /* below the hero at large text, never stretched across a wide screen */
+.ax-quick-group { min-width: 0; margin: 0; padding: 0; border: 0; }
+.ax-quick-legend { float: left; width: 100%; margin: 0 0 0.375rem; padding: 0; font-size: 0.8125rem; font-weight: 600; line-height: 1.35; color: var(--ha-muted); }
+.ax-quick-group > :not(legend) { clear: both; }
+.ax-quick-seg { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.25rem; padding: 0.25rem; border-radius: 0.875rem; background: var(--ha-soft); }
+/* …2 × 2 on a narrow phone at 130 %+ or with relaxed spacing (like the panel's text size) */
+@media (width < 25rem) {
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .ax-quick-seg { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.ax-quick-opt { position: relative; min-width: 0; }
+.ax-quick-opt > span { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.125rem; min-height: 2.75rem;
+  padding: 0.25rem; border-radius: 0.625rem; cursor: pointer; font-size: 0.75rem; font-weight: 600; line-height: 1.15; color: var(--ha-muted);
+  transition: background-color 0.15s, color 0.15s; }
+.ax-quick-opt:hover > span { color: var(--ha-ink); }
+.ax-quick-opt:has(:checked) > span { background: var(--ha-link); color: var(--ha-on-state); }
+.ax-quick-opt:has(:focus-visible) > span { outline: 3px solid var(--ha-focus); outline-offset: 2px; }
+.ax-quick-btns { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.ax-quick-btns > * { flex: 1 1 auto; }   /* a row shared evenly; alone on a row, full width (never a ragged stack) */
+.ax-quick-cta[aria-pressed="true"] { background: var(--ha-link); border-color: var(--ha-link); color: var(--ha-on-state); }
+@media (forced-colors: active) {
+  .ax-quick-opt:has(:checked) > span, .ax-quick-cta[aria-pressed="true"] { outline: 3px solid Highlight; outline-offset: -3px; }
+}

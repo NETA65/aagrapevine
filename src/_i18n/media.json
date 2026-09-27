@@ -159,7 +159,7 @@
   "media.stat_playlists": { "en": "playlists", "es": "listas" },
   "media.latest_video": { "en": "Latest video", "es": "Video más reciente" },
   "media.short_eyebrow": { "en": "Official YouTube Short", "es": "Short oficial de YouTube" },
-  "media.short_text": { "en": "Get the Grapevine app — every issue, the audio and the archive on your phone.", "es": "Descarga la app de Grapevine: cada edición, el audio y el archivo en tu teléfono." },
+  "media.short_text": { "en": "Every issue, the audio and the archive on your phone.", "es": "Cada edición, el audio y el archivo en tu teléfono." },
   "media.short_gv_app": { "en": "Grapevine app", "es": "App de Grapevine" },
   "media.short_lv_app": { "en": "La Viña app", "es": "App de La Viña" },
   "media.watch_on_yt": { "en": "Watch on YouTube", "es": "Ver en YouTube" },
@@ -261,5 +261,14 @@
   },
   "media.ig_in_english": { "en": "In English", "es": "En inglés" },
   "media.ig_in_spanish": { "en": "In Spanish", "es": "En español" },
-  "media.record_own": { "en": "Record your own story for Grapevine or La Viña", "es": "Graba tu propia historia para La Viña o Grapevine" }
+  "media.record_own": { "en": "Record your own story for Grapevine or La Viña", "es": "Graba tu propia historia para La Viña o Grapevine" },
+  "media.aside_watch_title": { "en": "Featured video", "es": "Video destacado" },
+  "media.aside_all_shorts": { "en": "All Shorts", "es": "Todos los Shorts" },
+  "media.aside_all_videos": { "en": "All videos", "es": "Todos los videos" },
+  "media.ig_aside_title": { "en": "Also from Grapevine & La Viña", "es": "También de La Viña y Grapevine" },
+  "media.ig_aside_watch_t": { "en": "Videos", "es": "Videos" },
+  "media.ig_aside_listen_t": { "en": "Podcasts", "es": "Podcasts" },
+  "media.ig_aside_watch": { "en": "Videos from the official YouTube channel", "es": "Videos del canal oficial de YouTube" },
+  "media.ig_aside_listen": { "en": "Podcasts and the Weekly Open meeting", "es": "Podcasts y la Reunión Abierta Semanal" },
+  "media.ig_aside_wn": { "en": "Everything new, in one place", "es": "Todo lo nuevo, en un solo lugar" }
 }

@@ -106,8 +106,26 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {#- ------------------------------------------------------------------ hero
     The shared hero (same height as every page): short lead, ONE actions row and,
     from 768px, three compact stats (hidden on phones so the hero stays 24–28rem).
-    The latest video + the two "helpful paths" are the first block below it. -#}
-{% call ui.pageHero(lang, "media.watch_title" | t(lang), "media.watch_sub" | t(lang), "circle-play", "media.watch_eyebrow" | t(lang)) %}
+    On its right (the shared hero aside; the first card under the hero on smaller screens and at
+    larger text): one featured video from the channel, config/site.yml site.watch.hero_video — its
+    title and summary from db.videos (a Short plays in a 9:16 player), with a link to that kind of
+    video in the list below ("All Shorts" → /watch/?type=short#videos). Not the latest video, which
+    is the first block below the hero. -#}
+{%- set hvId = site.watch.hero_video if site.watch else "" -%}
+{%- set hv = (vids | where("extra.video_id", hvId) | first) if hvId else null -%}
+{%- set hvShort = (hv | mediaVideoKind) == "short" if hv else false -%}
+{% call(slot) ui.pageHero(lang, "media.watch_title" | t(lang), "media.watch_sub" | t(lang), "circle-play", "media.watch_eyebrow" | t(lang), { side: "below" }) %}
+{%- if slot == "side" %}
+  {%- if hvId and not (hv and fid0 == hvId) %}
+  {%- set hvTitle = (hv | mediaTitle(lang)) if hv else (site.watch.hero_video_title or ("media.watch_on_yt" | t(lang))) -%}
+  {%- set hvLink = ("?type=short#videos" if hvShort else "#videos") if hv else ("https://www.youtube.com/watch?v=" + hvId) -%}
+  {%- set hvLabel = ("media.aside_all_shorts" if hvShort else "media.aside_all_videos") | t(lang) if hv else "media.watch_on_yt" | t(lang) -%}
+  {%- set hvNote = (ui.autoNote(hv, lang) | trim) if hv else "" -%}
+  {% call ui.heroAsideVideo("media.aside_watch_title" | t(lang), hvId, lang, { vertical: hvShort, icon: "circle-play", id: "watch-aside-title",
+       caption: hvTitle, text: (hv | tx("summary", lang)) if hv else "", params: "enablejsapi=1", class: "watch-aside",
+       href: hvLink, linkLabel: hvLabel }) %}{{ hvNote | safe if hvNote }}{% endcall %}
+  {%- endif %}
+{%- else %}
   <div class="hero-actions">
     <a class="btn-light" href="{{ subscribeUrl }}" target="_blank" rel="noopener">{% icon "youtube", "size-5 text-[#e62117]" %} {{ "media.subscribe_yt" | t(lang) }}</a>
     {#- phones: one button row (the video grid follows the latest video anyway) -#}
@@ -120,6 +138,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     { value: plTotal if plTotal > 1 else "", label: "media.stat_playlists" | t(lang) }
   ]) }}
   {% endif %}
+{%- endif %}
 {% endcall %}
 
 {% if vids.length %}

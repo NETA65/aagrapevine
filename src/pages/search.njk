@@ -28,9 +28,33 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js"]
     (pwView, eleventy/filters/published.js). spot = { n, scope, days, query } (library.js). -#}
 {%- set spot = (db | pwView(lang)) | searchSpotlightTile(db) -%}
 {#- What's New tile: the updates of the last 30 days, counted like the page itself (media twins merged) -#}
-{%- set wnMonth = db.whatsnew.items | cmWnPrepare | cmWnCountRecent(30) -%}
+{%- set wnItems = db.whatsnew.items | cmWnPrepare -%}
+{%- set wnMonth = wnItems | cmWnCountRecent(30) -%}
+{#- The hero's right-hand card from 1024px (the shared hero aside, "hide": not repeated under the hero
+    on smaller screens, where the search box comes first): "Just added" — the newest item of three
+    different kinds (a story, an episode, a post …) from What's New, each linking to it, and "See
+    what's new" → /whats-new/, their canonical place. (The tips, popular searches and the browse
+    tiles are right below, so the card doesn't repeat them.) -#}
+{%- set fresh = [] -%}{%- set freshKinds = [] -%}
+{%- for it in wnItems | limit(80) -%}
+  {%- set fHref = it | cmHref(lang) -%}
+  {%- if fresh.length < 3 and fHref and not it._isGroup and not (it._group in freshKinds) -%}
+    {%- set fTitle = ((it | mediaTitle(lang)) if (it.kind == "episode" or it.kind == "video") else (it | tx("title", lang))) | excerpt(90) -%}
+    {%- if fTitle -%}
+      {%- set fKind = ("kind." + it.kind) | cmTOr(lang, "") -%}
+      {%- set fDate = (it._when | fmtDate(lang, "short")) if it._when else "" -%}
+      {%- set _n = freshKinds.push(it._group) -%}
+      {%- set _n = fresh.push({ href: fHref, label: fTitle, text: [fKind, fDate] | select | join(" · "), icon: it._icon, tone: it._tone if it._tone in ["gv", "lv", "grape", "vine"] else "gv" }) -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
 
-{{ ui.pageHero(lang, "nav.search" | t(lang), "search.subtitle" | t(lang), "search", "search.eyebrow" | t(lang)) }}
+{% call(slot) ui.pageHero(lang, "nav.search" | t(lang), "search.subtitle" | t(lang), "search", "search.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" and fresh.length >= 2 %}
+  {{ ui.heroAsideLinks("search.aside_title" | t(lang), fresh, lang, { icon: "sparkles", id: "ss-aside-title", class: "ss-aside",
+       href: "/whats-new/" | lurl(lang), linkLabel: "search.aside_all" | t(lang) }) }}
+{%- endif %}
+{% endcall %}
 
 {#- ---------- page start: the search box (tucked into the hero's fade) ---------- -#}
 <div class="container-page page-overlap">

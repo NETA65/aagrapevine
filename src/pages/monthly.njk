@@ -24,10 +24,21 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
 {%- set nx = months[1] -%}
 {%- set monthUrl = ('/monthly/' + m.key + '/') | lurl(lang) -%}
 
-{% call ui.pageHero(lang, "monthly.title" | t(lang), "monthly.hero_sub" | t(lang), "calendar-heart", "monthly.eyebrow" | t(lang)) %}
+{#- The hero's right-hand card (the shared hero aside): this month's poster, linking to its month page.
+    It MOVES there from the "This month" card: while the card is in the hero (≥1024px at 100 % text)
+    monthly.css hides the card's own poster column (.mp-now-poster) — never two copies; on smaller
+    screens and at larger text the aside is hidden ("hide") and the card keeps its poster. -#}
+{% call(slot) ui.pageHero(lang, "monthly.title" | t(lang), "monthly.hero_sub" | t(lang), "calendar-heart", "monthly.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("monthly.hero_poster" | t(lang, { month: m.label }), lang, { id: "mp-aside-title", icon: "image", href: monthUrl, linkLabel: "monthly.hero_open" | t(lang), class: "mp-hero-aside" }) %}
+    {#- the poster is a second way to the same page for the pointer (the heading's link is the one tab stop) -#}
+    <a class="mp-hero-poster" href="{{ monthUrl }}" tabindex="-1" aria-hidden="true"><span class="mp-stage mp-stage--thumb" inert><span class="mp-fit">{{ mp.poster(m, lang, site, "hero") }}</span></span></a>
+  {% endcall %}
+{%- else %}
 <div class="hero-actions">
   <a class="btn-light" href="{{ monthUrl }}">{% icon "image", "size-4" %} {{ "monthly.see_poster" | t(lang) }}</a>
 </div>
+{%- endif %}
 {% endcall %}
 
 <div class="container-page page-overlap">{{ ui.pageNav([

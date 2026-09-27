@@ -1456,6 +1456,24 @@ export default function (eleventyConfig, helpers) {
 
   eleventyConfig.addFilter("cmEvents", (items, site, lang) => normalizeEvents(EMPTY ? [] : items, site, lang));
   eleventyConfig.addFilter("cmDocTabs", (items, lang) => documentTabs(EMPTY ? [] : items, lang));
+  // The Portfolio hero card: never the list's first category (it starts right below the hero).
+  //   "flyers": the flyers tab (up to 2, newest first) when it has files and is not that first one;
+  //   "latest": else the file added last (first seen, else its own date) in any other category;
+  //   null: nothing else to show.   → { kind, tab, docs }        {% set teaser = dt | cmDocTeaser %}
+  eleventyConfig.addFilter("cmDocTeaser", (dt) => {
+    const tabs = ((dt && dt.tabs) || []).filter((tb) => tb.count);
+    const rest = tabs.slice(1);
+    const flyers = rest.find((tb) => tb.key === "flyers");
+    if (flyers) return { kind: "flyers", tab: flyers, docs: flyers.items.slice(0, 2) };
+    let best = null;
+    for (const tab of rest) {
+      for (const d of tab.items || []) {
+        const k = (parseInstant(d.added) || parseInstant(d.date))?.getTime() || 0;
+        if (!best || k > best.k) best = { k, doc: d, tab };
+      }
+    }
+    return best ? { kind: "latest", tab: best.tab, docs: [best.doc] } : null;
+  });
   eleventyConfig.addFilter("cmAlbums", (items, lang) => photoAlbums(EMPTY ? [] : items, lang));
   // A committee Drive file on the page it is about (La Viña's flyer on /meetings/, the "Share your
   // story" flyers, the editorial calendar on /monthly/) — see driveMatch
