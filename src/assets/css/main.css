@@ -801,7 +801,9 @@
   .hero-aside-item { display: grid; gap: 0.5rem; align-content: start; min-width: 0; border-radius: 0.875rem; color: var(--ha-ink); text-decoration: none; }
   .hero-aside-item:hover .hero-aside-item-title { text-decoration: underline; text-underline-offset: 3px; }
   .hero-aside-item-body { min-width: 0; }
-  .hero-aside-item-title { font-size: 0.875rem; font-weight: 600; line-height: 1.3; }
+  .hero-aside-item-title { font-size: 0.875rem; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+  /* larger reading text: a narrow tile (320 px phone, 150 %) gets a third line instead of cutting a word */
+  :root[data-text="130"] .hero-aside-item-title, :root[data-text="150"] .hero-aside-item-title { -webkit-line-clamp: 3; line-clamp: 3; }
   .hero-aside-item-text { margin-top: 0.125rem; font-size: 0.8125rem; line-height: 1.4; color: var(--ha-muted); }
   .hero-aside-thumb { position: relative; display: block; overflow: hidden; aspect-ratio: 1 / 1; border-radius: 0.75rem; background: var(--ha-soft); }
   .hero-aside-thumb.is-portrait { aspect-ratio: 3 / 4; }
