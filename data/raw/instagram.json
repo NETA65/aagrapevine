@@ -1,36 +1,43 @@
 {
  "source": "instagram",
  "updated": "2026-09-27T15:12:26Z",
- "attempted": "2026-09-27T15:12:26Z",
- "ok": true,
- "error": null,
+ "attempted": "2026-09-28T18:13:01Z",
+ "ok": false,
+ "error": "No new posts for @alcoholicsanonymous_gv, @alcoholicosanonimos_lv (redirected to login; HTTP 429 (rate-limited)). Posts already on the site are kept. Usually temporary; if it lasts, see the optional API setup in scripts/sync/instagram.py.",
  "stats": {
   "strategy": {
-   "gv": "profile_embed",
-   "lv": "profile_embed"
+   "gv": null,
+   "lv": null
   },
   "attempts": {
    "gv": [
     "graph_api: skipped — not configured (optional GitHub secrets IG_ACCESS_TOKEN + IG_BUSINESS_ID)",
-    "profile_embed: 6 posts"
+    "profile_embed: redirected to login",
+    "web_profile_info: i.instagram.com: HTTP 429 (rate-limited); www.instagram.com: HTTP 429 (rate-limited)",
+    "profile_html: redirected to login",
+    "rsshub: skipped — no rsshub_instances configured",
+    "embed_hovercard: redirected to login"
    ],
    "lv": [
     "graph_api: skipped — not configured (optional GitHub secrets IG_ACCESS_TOKEN + IG_BUSINESS_ID)",
-    "profile_embed: 6 posts"
+    "profile_embed: redirected to login",
+    "web_profile_info: i.instagram.com: skipped (api:i.instagram.com HTTP 429 (rate-limited) earlier this run); www.instagram.com: skipped (api:www.instagram.com HTTP 429 (rate-limited) earlier this run)",
+    "profile_html: redirected to login",
+    "rsshub: skipped — no rsshub_instances configured",
+    "embed_hovercard: redirected to login"
    ]
   },
-  "fetched": 12,
+  "fetched": 0,
   "manual": 0,
-  "thumbs_downloaded": 4,
   "pruned": 0,
   "thumbs_deleted": 0,
-  "new": 4,
+  "new": 0,
   "total": 38,
   "per_account": {
    "gv": 19,
    "lv": 19
   },
-  "requests": 2,
+  "requests": 8,
   "anonymous": true,
   "graph_api": false
  },

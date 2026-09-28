@@ -1,7 +1,7 @@
 {
  "source": "articles",
- "updated": "2026-09-27T15:14:05Z",
- "attempted": "2026-09-27T15:14:05Z",
+ "updated": "2026-09-28T18:14:39Z",
+ "attempted": "2026-09-28T18:14:39Z",
  "ok": true,
  "error": null,
  "stats": {
@@ -7489,7 +7489,7 @@
    "key": "2026-10",
    "publication": "gv",
    "hub": "https://www.aagrapevine.org/magazine",
-   "seen": "2026-09-27T15:12:32Z",
+   "seen": "2026-09-28T18:13:07Z",
    "cover": "/assets/cache/articles/4af15bfa155b69a0.webp"
   },
   "lv:2026-09": {
@@ -7501,7 +7501,7 @@
    "key": "2026-09",
    "publication": "lv",
    "hub": "https://www.aalavina.org/la-revista",
-   "seen": "2026-09-27T15:12:42Z",
+   "seen": "2026-09-28T18:13:17Z",
    "cover": "/assets/cache/articles/5f6983cc446a5d6a.webp"
   }
  },
@@ -7527,7 +7527,7 @@
  },
  "archive_state": {
   "gv": {
-   "last_run": "2026-09-27T15:13:22Z",
+   "last_run": "2026-09-28T18:13:57Z",
    "pages_last_run": 7,
    "new_last_run": 0,
    "oldest_seen": "2026-08",
@@ -7535,7 +7535,7 @@
    "backfill_days": 120
   },
   "lv": {
-   "last_run": "2026-09-27T15:14:05Z",
+   "last_run": "2026-09-28T18:14:39Z",
    "pages_last_run": 7,
    "new_last_run": 0,
    "oldest_seen": "2026-05",

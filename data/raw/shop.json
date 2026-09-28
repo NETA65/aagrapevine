@@ -1,7 +1,7 @@
 {
  "source": "shop",
- "updated": "2026-09-27T15:15:35Z",
- "attempted": "2026-09-27T15:15:35Z",
+ "updated": "2026-09-28T18:16:05Z",
+ "attempted": "2026-09-28T18:16:05Z",
  "ok": true,
  "error": null,
  "stats": {
@@ -10,8 +10,8 @@
   "specialty": 6,
   "types_refreshed": false,
   "specialty_refreshed": false,
-  "requests": 14,
-  "images_downloaded": 2
+  "requests": 12,
+  "images_downloaded": 0
  },
  "items": [
   {

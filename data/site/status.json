@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-28T11:31:31Z",
- "updated": "2026-09-28T11:31:31Z",
+ "generated": "2026-09-28T18:20:31Z",
+ "updated": "2026-09-28T18:20:31Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-09-28T11:31:10Z",
-   "attempted": "2026-09-28T11:31:10Z",
+   "updated": "2026-09-28T18:11:57Z",
+   "attempted": "2026-09-28T18:11:57Z",
    "count": 6,
    "new_7d": 6,
    "error": null,
@@ -75,8 +75,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-09-28T11:31:10Z",
-   "attempted": "2026-09-28T11:31:10Z",
+   "updated": "2026-09-28T18:11:57Z",
+   "attempted": "2026-09-28T18:11:57Z",
    "count": 0,
    "new_7d": 0,
    "error": null,
@@ -93,8 +93,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-09-28T11:31:10Z",
-   "attempted": "2026-09-28T11:31:10Z",
+   "updated": "2026-09-28T18:11:57Z",
+   "attempted": "2026-09-28T18:11:57Z",
    "count": 9,
    "new_7d": 9,
    "error": null,
@@ -110,8 +110,8 @@
    "label": "Grapevine & La Viña articles",
    "label_es": "Artículos de Grapevine y La Viña",
    "ok": true,
-   "updated": "2026-09-27T15:14:05Z",
-   "attempted": "2026-09-27T15:14:05Z",
+   "updated": "2026-09-28T18:14:39Z",
+   "attempted": "2026-09-28T18:14:39Z",
    "count": 226,
    "new_7d": 226,
    "error": null,
@@ -135,8 +135,8 @@
    "label": "Editorial themes (upcoming issues)",
    "label_es": "Temas editoriales (próximos números)",
    "ok": true,
-   "updated": "2026-09-27T15:14:15Z",
-   "attempted": "2026-09-27T15:14:15Z",
+   "updated": "2026-09-28T18:14:50Z",
+   "attempted": "2026-09-28T18:14:50Z",
    "count": 37,
    "new_7d": 37,
    "error": null,
@@ -161,8 +161,8 @@
    "label": "Document library (Grapevine, La Viña and AA)",
    "label_es": "Biblioteca de documentos (La Viña, Grapevine y AA)",
    "ok": true,
-   "updated": "2026-09-27T15:19:37Z",
-   "attempted": "2026-09-27T15:19:37Z",
+   "updated": "2026-09-28T18:20:30Z",
+   "attempted": "2026-09-28T18:20:30Z",
    "count": 92,
    "new_7d": 92,
    "error": null,
@@ -177,14 +177,14 @@
     "pdfs_with_thumbs": 129,
     "last_run_pages": 28,
     "fetched": 28,
-    "reused": 14,
+    "reused": 12,
     "new": 0,
     "not_modified": 0,
     "page_errors": 0,
     "discovered": 0,
     "details": 0,
     "heads": 0,
-    "requests": 28,
+    "requests": 30,
     "queue_remaining": 0,
     "est_days_to_full": 0.0
    }
@@ -194,10 +194,10 @@
    "label": "YouTube videos",
    "label_es": "Videos de YouTube",
    "ok": true,
-   "updated": "2026-09-27T15:12:21Z",
-   "attempted": "2026-09-27T15:12:21Z",
-   "count": 529,
-   "new_7d": 529,
+   "updated": "2026-09-28T18:12:42Z",
+   "attempted": "2026-09-28T18:12:42Z",
+   "count": 530,
+   "new_7d": 530,
    "error": null,
    "stats": {
     "channels": 1,
@@ -213,17 +213,17 @@
     "gone_checks": 0,
     "gone_marked": 0,
     "fetched": 248,
-    "new": 0,
-    "total": 529,
-    "active": 529,
+    "new": 1,
+    "total": 530,
+    "active": 530,
     "gone": 0,
     "spanish": 95,
     "shorts": 18,
     "approx_dates": 1,
     "playlists": 31,
-    "seconds": 41.4,
+    "seconds": 42.6,
     "warnings": [
-     "details stopped: ERROR: [youtube] Yf5SFhLiBwc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --c"
+     "details stopped: ERROR: [youtube] OVern6mSBrk: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --c"
     ]
    }
   },
@@ -232,14 +232,14 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-09-28T11:31:14Z",
-   "attempted": "2026-09-28T11:31:14Z",
+   "updated": "2026-09-28T18:11:59Z",
+   "attempted": "2026-09-28T18:11:59Z",
    "count": 297,
    "new_7d": 297,
    "error": null,
    "stats": {
     "fetched": 297,
-    "new": 1,
+    "new": 0,
     "total": 297,
     "active": 297,
     "gone": 0,
@@ -260,7 +260,7 @@
     "gone_checks": 0,
     "discovery_checked": "2026-09-23T16:27:25Z",
     "discovered_feeds": [],
-    "seconds": 3.2,
+    "seconds": 2.7,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -270,39 +270,46 @@
    "source": "instagram",
    "label": "Instagram posts",
    "label_es": "Publicaciones de Instagram",
-   "ok": true,
+   "ok": false,
    "updated": "2026-09-27T15:12:26Z",
-   "attempted": "2026-09-27T15:12:26Z",
+   "attempted": "2026-09-28T18:13:01Z",
    "count": 38,
    "new_7d": 38,
-   "error": null,
+   "error": "No new posts for @alcoholicsanonymous_gv, @alcoholicosanonimos_lv (redirected to login; HTTP 429 (rate-limited)). Posts already on the site are kept. Usually temporary; if it lasts, see the optional API setup in scripts/sync/instagram.py.",
    "stats": {
     "strategy": {
-     "gv": "profile_embed",
-     "lv": "profile_embed"
+     "gv": null,
+     "lv": null
     },
     "attempts": {
      "gv": [
       "graph_api: skipped — not configured (optional GitHub secrets IG_ACCESS_TOKEN + IG_BUSINESS_ID)",
-      "profile_embed: 6 posts"
+      "profile_embed: redirected to login",
+      "web_profile_info: i.instagram.com: HTTP 429 (rate-limited); www.instagram.com: HTTP 429 (rate-limited)",
+      "profile_html: redirected to login",
+      "rsshub: skipped — no rsshub_instances configured",
+      "embed_hovercard: redirected to login"
      ],
      "lv": [
       "graph_api: skipped — not configured (optional GitHub secrets IG_ACCESS_TOKEN + IG_BUSINESS_ID)",
-      "profile_embed: 6 posts"
+      "profile_embed: redirected to login",
+      "web_profile_info: i.instagram.com: skipped (api:i.instagram.com HTTP 429 (rate-limited) earlier this run); www.instagram.com: skipped (api:www.instagram.com HTTP 429 (rate-limited) earlier this run)",
+      "profile_html: redirected to login",
+      "rsshub: skipped — no rsshub_instances configured",
+      "embed_hovercard: redirected to login"
      ]
     },
-    "fetched": 12,
+    "fetched": 0,
     "manual": 0,
-    "thumbs_downloaded": 4,
     "pruned": 0,
     "thumbs_deleted": 0,
-    "new": 4,
+    "new": 0,
     "total": 38,
     "per_account": {
      "gv": 19,
      "lv": 19
     },
-    "requests": 2,
+    "requests": 8,
     "anonymous": true,
     "graph_api": false
    }
@@ -312,8 +319,8 @@
    "label": "Grapevine Weekly Open meeting",
    "label_es": "Reunión Grapevine Weekly Open",
    "ok": true,
-   "updated": "2026-09-27T15:14:20Z",
-   "attempted": "2026-09-27T15:14:20Z",
+   "updated": "2026-09-28T18:14:55Z",
+   "attempted": "2026-09-28T18:14:55Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -332,8 +339,8 @@
    "label": "GV/LV event calendars",
    "label_es": "Calendarios de eventos de GV/LV",
    "ok": true,
-   "updated": "2026-09-27T15:16:57Z",
-   "attempted": "2026-09-27T15:16:57Z",
+   "updated": "2026-09-28T18:17:20Z",
+   "attempted": "2026-09-28T18:17:20Z",
    "count": 0,
    "new_7d": 0,
    "error": null,
@@ -351,7 +358,7 @@
     "online_es": 0,
     "items": 0,
     "new": 0,
-    "requests": 39
+    "requests": 35
    }
   },
   {
@@ -359,8 +366,8 @@
    "label": "Book of the Month, prices & specialty items",
    "label_es": "Libro del mes, precios y artículos especiales",
    "ok": true,
-   "updated": "2026-09-27T15:15:35Z",
-   "attempted": "2026-09-27T15:15:35Z",
+   "updated": "2026-09-28T18:16:05Z",
+   "attempted": "2026-09-28T18:16:05Z",
    "count": 60,
    "new_7d": 60,
    "error": null,
@@ -370,8 +377,8 @@
     "specialty": 6,
     "types_refreshed": false,
     "specialty_refreshed": false,
-    "requests": 14,
-    "images_downloaded": 2
+    "requests": 12,
+    "images_downloaded": 0
    }
   },
   {
@@ -379,8 +386,8 @@
    "label": "Record your story by phone (Grapevine & La Viña)",
    "label_es": "Graba tu historia por teléfono (La Viña y Grapevine)",
    "ok": true,
-   "updated": "2026-09-27T15:15:50Z",
-   "attempted": "2026-09-27T15:15:50Z",
+   "updated": "2026-09-28T18:16:23Z",
+   "attempted": "2026-09-28T18:16:23Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -398,8 +405,8 @@
    "label": "Grapevine meetings (our Area and nearby)",
    "label_es": "Reuniones de Grapevine (nuestra Área y cercanas)",
    "ok": true,
-   "updated": "2026-09-27T15:16:46Z",
-   "attempted": "2026-09-27T15:16:46Z",
+   "updated": "2026-09-28T18:17:20Z",
+   "attempted": "2026-09-28T18:17:20Z",
    "count": 23,
    "new_7d": 23,
    "error": null,
@@ -423,8 +430,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-09-28T11:31:29Z",
-   "attempted": "2026-09-28T11:31:29Z",
+   "updated": "2026-09-28T18:17:30Z",
+   "attempted": "2026-09-28T18:17:30Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -433,12 +440,12 @@
     "parsed": 2,
     "requests": 2,
     "today": "2026-09-28",
-    "new": 2
+    "new": 0
    }
   }
  ],
  "crawl": {
-  "attempted": "2026-09-27T15:19:37Z",
+  "attempted": "2026-09-28T18:20:30Z",
   "crawled_pages": 3429,
   "est_days_to_full": 0.0,
   "known_pages": 3429,
@@ -452,23 +459,23 @@
   "pdfs_with_details": 129,
   "pdfs_with_thumbs": 92,
   "queue_remaining": 0,
-  "updated": "2026-09-27T15:19:37Z"
+  "updated": "2026-09-28T18:20:30Z"
  },
  "translations": {
   "cached": 1891,
   "engine": "argos1.0-ct2/v5",
   "model_enabled": true,
-  "translated_this_run": 2,
-  "from_cache": 1889,
+  "translated_this_run": 0,
+  "from_cache": 1891,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 1.3,
-  "model_seconds": 0.9,
-  "texts_per_second": 1.5,
+  "seconds": 0.1,
+  "model_seconds": 0.0,
+  "texts_per_second": null,
   "glossary_entries": 257
  },
  "counts": {
-  "videos": 529,
+  "videos": 530,
   "episodes": 297,
   "instagram": 38,
   "articles": 226,
@@ -498,7 +505,7 @@
    "error": "HTTP 403: the site's bot protection (Cloudflare “Just a moment…” check) turned the robot away",
    "last_success": null,
    "last_attempt": "2026-09-28T11:31:29Z",
-   "checked_this_run": true,
+   "checked_this_run": false,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,

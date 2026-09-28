@@ -1,7 +1,7 @@
 {
- "updated": "2026-09-27T15:15:50Z",
+ "updated": "2026-09-28T18:16:23Z",
  "fixture": false,
- "checked": "2026-09-27T15:15:40Z",
+ "checked": "2026-09-28T18:16:11Z",
  "gv": {
   "page_url": "https://www.aagrapevine.org/audio-portal",
   "phone": "(559) 726-1216",
@@ -39,7 +39,7 @@
     "url": "https://youtube.com/playlist?list=PL32cyZpp2liDpgykERimevsGVor06iC0u"
    }
   ],
-  "checked": "2026-09-27T15:15:40Z"
+  "checked": "2026-09-28T18:16:11Z"
  },
  "lv": {
   "page_url": "https://www.aalavina.org/graba-tu-historia",
@@ -61,6 +61,6 @@
    "MP3"
   ],
   "no_speakers": true,
-  "checked": "2026-09-27T15:15:50Z"
+  "checked": "2026-09-28T18:16:23Z"
  }
 }

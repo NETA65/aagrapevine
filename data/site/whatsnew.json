@@ -1,7 +1,53 @@
 {
- "updated": "2026-09-28T11:31:31Z",
+ "updated": "2026-09-28T18:20:31Z",
  "fixture": false,
  "items": [
+  {
+   "id": "yt:OVern6mSBrk",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=OVern6mSBrk",
+   "title": "In AA We Talk Truth [Season 11, Episode 13]",
+   "summary": "Rachel tells Don and Sam that drinking was a big part of her family life and she too followed that path. While friends were starting families, going to college, getting full-time jobs Rachel was going to jail, moving closer to bars so she didn't have to drive, and watching TV shows about interventions while drinking. She tried for years to avoid herself. Now in AA, Rachel is facing life on life's…",
+   "lang": "en",
+   "date": "2026-09-28T04:28:41Z",
+   "first_seen": "2026-09-28T18:12:42Z",
+   "image": "https://i.ytimg.com/vi/OVern6mSBrk/hqdefault.jpg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "OVern6mSBrk",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "AA Grapevine's Podcast"
+    ],
+    "is_short": false,
+    "views": 53,
+    "is_live_recording": false,
+    "date_approx": false,
+    "season": 11,
+    "episode": 13
+   },
+   "i18n": {
+    "title": {
+     "en": "In AA We Talk Truth [Season 11, Episode 13]",
+     "es": "En AA hablamos la verdad [Temporada 11, Episodio 13]"
+    },
+    "summary": {
+     "en": "Rachel tells Don and Sam that drinking was a big part of her family life and she too followed that path. While friends were starting families, going to college, getting full-time jobs Rachel was going to jail, moving closer to bars so she didn't have to drive, and watching TV shows about interventions while drinking. She tried for years to avoid herself. Now in AA, Rachel is facing life on life's…",
+     "es": "Rachel le dice a Don y Sam que beber era una gran parte de su vida familiar y ella también siguió ese camino. Mientras los amigos estaban empezando familias, yendo a la universidad, recibiendo empleos a tiempo completo Rachel iba a la cárcel, moviéndose más cerca de los bares, así que no tenía que conducir, y viendo programas de televisión sobre intervenciones mientras bebía. Trató durante años para evitarse. Ahora en AA, Rachel se enfrenta a la vida en … de la vida"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-09-28T04:28:41Z"
+  },
   {
    "id": "pod:gv:076de1d2af08",
    "source": "podcast",
@@ -695,7 +741,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 163,
+    "views": 200,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -3915,7 +3961,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 258,
+    "views": 272,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -4185,7 +4231,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 249,
+    "views": 258,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -4679,7 +4725,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 318,
+    "views": 322,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -4916,7 +4962,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 303,
+    "views": 306,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -5014,7 +5060,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 381,
+    "views": 384,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -5111,7 +5157,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 280,
+    "views": 282,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -5155,7 +5201,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 319,
+    "views": 323,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -5253,7 +5299,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 328,
+    "views": 331,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7599,7 +7645,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 463,
+    "views": 465,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7793,7 +7839,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 334,
+    "views": 337,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8268,7 +8314,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 199,
+    "views": 200,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8365,7 +8411,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 237,
+    "views": 238,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -8558,7 +8604,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 230,
+    "views": 231,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8772,7 +8818,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 245,
+    "views": 247,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8870,7 +8916,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 222,
+    "views": 224,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8891,56 +8937,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-08-07T04:32:52Z"
-  },
-  {
-   "id": "pod:wo:9256b265570b",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/04848dfc-2767-4b32-8159-6ecfca7ea052",
-   "title": "Grapevine Weekly Open AA Meeting, August 5, 2026 [Season 2, Episode 6]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on August 5, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Kimberly welcomes speakers Peter and Danielle, who share their experience…",
-   "lang": "en",
-   "date": "2026-08-07T04:15:00Z",
-   "first_seen": "2026-09-23T17:23:49Z",
-   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
-   "tags": [
-    "season-2"
-   ],
-   "category": "wo",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/04848dfc-2767-4b32-8159-6ecfca7ea052.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 72637910,
-    "duration_sec": 3026,
-    "season": 2,
-    "episode": 6,
-    "episode_type": "full",
-    "show": "wo",
-    "show_name": "Grapevine Weekly Open AA Meeting",
-    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "player_url": "https://player.captivate.fm/episode/04848dfc-2767-4b32-8159-6ecfca7ea052",
-    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
-    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
-    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, August 5, 2026 [Season 2, Episode 6]",
-     "es": "Grapevine Weekly Open AA Meeting, 5 de agosto de 2026 [Temporada 2, Episodio 6]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on August 5, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Kimberly welcomes speakers Peter and Danielle, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 5 de agosto de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Kimberly da la bienvenida a los oradores Peter y Danielle, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-08-07T04:15:00Z"
   }
  ]
 }
