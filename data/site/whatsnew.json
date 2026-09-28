@@ -1,7 +1,57 @@
 {
- "updated": "2026-09-27T22:56:17Z",
+ "updated": "2026-09-28T11:31:31Z",
  "fixture": false,
  "items": [
+  {
+   "id": "pod:gv:076de1d2af08",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/6ea203d0-5db7-43a1-aef2-6e2c4ab2d28e",
+   "title": "In AA We Talk Truth [Season 11, Episode 13]",
+   "summary": "Rachel tells Don and Sam that drinking was a big part of her family life and she too followed that path. While friends were starting families, going to college, getting full-time jobs Rachel was going to jail, moving closer to bars so she didn't have to drive, and watching TV shows about interventions while drinking. She tried for years to avoid herself. Now in AA, Rachel is facing life on life's…",
+   "lang": "en",
+   "date": "2026-09-28T04:15:00Z",
+   "first_seen": "2026-09-28T11:31:14Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/6ea203d0-5db7-43a1-aef2-6e2c4ab2d28e.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 38505534,
+    "duration_sec": 1925,
+    "season": 11,
+    "episode": 13,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/6ea203d0-5db7-43a1-aef2-6e2c4ab2d28e",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "In AA We Talk Truth [Season 11, Episode 13]",
+     "es": "En AA hablamos la verdad [Temporada 11, Episodio 13]"
+    },
+    "summary": {
+     "en": "Rachel tells Don and Sam that drinking was a big part of her family life and she too followed that path. While friends were starting families, going to college, getting full-time jobs Rachel was going to jail, moving closer to bars so she didn't have to drive, and watching TV shows about interventions while drinking. She tried for years to avoid herself. Now in AA, Rachel is facing life on life's…",
+     "es": "Rachel le dice a Don y Sam que beber era una gran parte de su vida familiar y ella también siguió ese camino. Mientras los amigos estaban empezando familias, yendo a la universidad, recibiendo empleos a tiempo completo Rachel iba a la cárcel, moviéndose más cerca de los bares, así que no tenía que conducir, y viendo programas de televisión sobre intervenciones mientras bebía. Trató durante años para evitarse. Ahora en AA, Rachel se enfrenta a la vida en … de la vida"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-09-28T04:15:00Z"
+  },
   {
    "id": "ig:Ddy4Z34lx33",
    "source": "instagram",
@@ -892,68 +942,6 @@
    ],
    "is_new": true,
    "wn_date": "2026-09-24T13:54:49Z"
-  },
-  {
-   "id": "ev:manual:2026-09-26-lv-writing-workshop-fort-worth",
-   "source": "committee",
-   "kind": "event",
-   "url": "https://neta65.org/event/lv-writing-workshop/",
-   "title": "La Viña Writing Workshop (in Spanish) — Fort Worth",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
-   "lang": "en",
-   "date": "2026-09-27T00:00:00Z",
-   "first_seen": "2026-09-24T11:10:08Z",
-   "image": null,
-   "tags": [
-    "workshop",
-    "la-vina"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-09-27T00:00:00Z",
-    "end": "2026-09-27T02:00:00Z",
-    "all_day": false,
-    "location": "Grupo Nueva Esperanza, 3401 E Belknap, Fort Worth, TX 76111",
-    "online_url": null,
-    "flyer_url": "https://neta65.org/wp-content/uploads/2026/09/New-Writing-Workshop-La-Nueva-Esperanza.jpg",
-    "flyer_thumb": null,
-    "city": "Fort Worth",
-    "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
-    "slug": "2026-09-26-lv-writing-workshop-fort-worth",
-    "file": "content/events/2026-09-26-lv-writing-workshop-fort-worth.md",
-    "confirmed": true,
-    "own_i18n": {
-     "title": {
-      "es": "Taller de Escritura de La Viña — Fort Worth"
-     },
-     "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
-     },
-     "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop (in Spanish) — Fort Worth",
-     "es": "Taller de Escritura de La Viña — Fort Worth"
-    },
-    "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
-    },
-    "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
-    }
-   },
-   "machine": [],
-   "is_new": true,
-   "wn_date": "2026-09-24T11:10:08Z"
   },
   {
    "id": "ev:manual:2026-10-03-gv-writing-workshop-arlington",
@@ -4947,7 +4935,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-14T04:29:14Z"
   },
   {
@@ -4997,7 +4985,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-14T04:15:00Z"
   },
   {

@@ -1,68 +1,7 @@
 {
- "updated": "2026-09-27T22:56:17Z",
+ "updated": "2026-09-28T11:31:31Z",
  "fixture": false,
  "items": [
-  {
-   "id": "ev:manual:2026-09-26-lv-writing-workshop-fort-worth",
-   "source": "committee",
-   "kind": "event",
-   "url": "https://neta65.org/event/lv-writing-workshop/",
-   "title": "La Viña Writing Workshop (in Spanish) — Fort Worth",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
-   "lang": "en",
-   "date": "2026-09-27T00:00:00Z",
-   "first_seen": "2026-09-24T11:10:08Z",
-   "image": null,
-   "tags": [
-    "workshop",
-    "la-vina"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-09-27T00:00:00Z",
-    "end": "2026-09-27T02:00:00Z",
-    "all_day": false,
-    "location": "Grupo Nueva Esperanza, 3401 E Belknap, Fort Worth, TX 76111",
-    "online_url": null,
-    "flyer_url": "https://neta65.org/wp-content/uploads/2026/09/New-Writing-Workshop-La-Nueva-Esperanza.jpg",
-    "flyer_thumb": null,
-    "city": "Fort Worth",
-    "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
-    "slug": "2026-09-26-lv-writing-workshop-fort-worth",
-    "file": "content/events/2026-09-26-lv-writing-workshop-fort-worth.md",
-    "confirmed": true,
-    "own_i18n": {
-     "title": {
-      "es": "Taller de Escritura de La Viña — Fort Worth"
-     },
-     "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
-     },
-     "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop (in Spanish) — Fort Worth",
-     "es": "Taller de Escritura de La Viña — Fort Worth"
-    },
-    "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
-    },
-    "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
-    }
-   },
-   "machine": [],
-   "is_new": true
-  },
   {
    "id": "ev:manual:2026-10-03-gv-writing-workshop-arlington",
    "source": "committee",
@@ -1416,6 +1355,67 @@
    },
    "machine": [],
    "is_new": true
+  },
+  {
+   "id": "ev:manual:2026-09-26-lv-writing-workshop-fort-worth",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://neta65.org/event/lv-writing-workshop/",
+   "title": "La Viña Writing Workshop (in Spanish) — Fort Worth",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
+   "lang": "en",
+   "date": "2026-09-27T00:00:00Z",
+   "first_seen": "2026-09-24T11:10:08Z",
+   "image": null,
+   "tags": [
+    "workshop",
+    "la-vina"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-09-27T00:00:00Z",
+    "end": "2026-09-27T02:00:00Z",
+    "all_day": false,
+    "location": "Grupo Nueva Esperanza, 3401 E Belknap, Fort Worth, TX 76111",
+    "online_url": null,
+    "flyer_url": "https://neta65.org/wp-content/uploads/2026/09/New-Writing-Workshop-La-Nueva-Esperanza.jpg",
+    "flyer_thumb": null,
+    "city": "Fort Worth",
+    "state": "TX",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
+    "slug": "2026-09-26-lv-writing-workshop-fort-worth",
+    "file": "content/events/2026-09-26-lv-writing-workshop-fort-worth.md",
+    "confirmed": true,
+    "own_i18n": {
+     "title": {
+      "es": "Taller de Escritura de La Viña — Fort Worth"
+     },
+     "summary": {
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
+     },
+     "body_md": {
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
+     }
+    },
+    "past": true
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Writing Workshop (in Spanish) — Fort Worth",
+     "es": "Taller de Escritura de La Viña — Fort Worth"
+    },
+    "summary": {
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
+    },
+    "body_md": {
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueva Esperanza in Fort Worth. A NETA 65 Grapevine / La Viña workshop.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueva Esperanza de Fort Worth. Un taller de Grapevine / La Viña de NETA 65."
+    }
+   },
+   "machine": [],
+   "is_new": false
   },
   {
    "id": "ev:recurring:citywide-dallas:2026-09-12",

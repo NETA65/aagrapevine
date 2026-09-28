@@ -1,21 +1,21 @@
 {
  "source": "podcasts",
- "updated": "2026-09-27T22:56:01Z",
- "attempted": "2026-09-27T22:56:01Z",
+ "updated": "2026-09-28T11:31:14Z",
+ "attempted": "2026-09-28T11:31:14Z",
  "ok": true,
  "error": null,
  "stats": {
-  "fetched": 296,
-  "new": 0,
-  "total": 296,
-  "active": 296,
+  "fetched": 297,
+  "new": 1,
+  "total": 297,
+  "active": 297,
   "gone": 0,
   "spanish": 0,
   "shows": {
    "gv": {
     "ok": true,
-    "episodes": 262,
-    "latest": "2026-09-21T04:15:00Z"
+    "episodes": 263,
+    "latest": "2026-09-28T04:15:00Z"
    },
    "wo": {
     "ok": true,
@@ -27,12 +27,48 @@
   "gone_checks": 0,
   "discovery_checked": "2026-09-23T16:27:25Z",
   "discovered_feeds": [],
-  "seconds": 2.2,
+  "seconds": 3.2,
   "artwork": 3,
   "artwork_missing": 0,
   "artwork_removed": 0
  },
  "items": [
+  {
+   "id": "pod:gv:076de1d2af08",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/6ea203d0-5db7-43a1-aef2-6e2c4ab2d28e",
+   "title": "In AA We Talk Truth [Season 11, Episode 13]",
+   "summary": "Rachel tells Don and Sam that drinking was a big part of her family life and she too followed that path. While friends were starting families, going to college, getting full-time jobs Rachel was going to jail, moving closer to bars so she didn't have to drive, and watching TV shows about interventions while drinking. She tried for years to avoid herself. Now in AA, Rachel is facing life on life's…",
+   "lang": "en",
+   "date": "2026-09-28T04:15:00Z",
+   "first_seen": "2026-09-28T11:31:14Z",
+   "last_seen": "2026-09-28T11:31:14Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/6ea203d0-5db7-43a1-aef2-6e2c4ab2d28e.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 38505534,
+    "duration_sec": 1925,
+    "season": 11,
+    "episode": 13,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/6ea203d0-5db7-43a1-aef2-6e2c4ab2d28e",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   }
+  },
   {
    "id": "pod:wo:a29f638e2d5d",
    "source": "podcast",
@@ -10704,7 +10740,7 @@
    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
-   "episodes": 262,
+   "episodes": 263,
    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
   },
   {
