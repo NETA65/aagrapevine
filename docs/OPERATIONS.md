@@ -189,8 +189,11 @@ reader as the fallback) builds the same **edition** as the `/digest/` page (`ele
   September).
 - Everything is read from the **full** data files, never `whatsnew.json` (it keeps only its newest
   `WHATSNEW_MAX` = 150 entries):
-  - **bulletin** (`announcements.json`): counted on the later of `date` (else `first_seen`) and
-    `extra.publish` (a scheduled post); in P, not after now + 1 day, not expired. Pinned first, then newest.
+  - **bulletin** (`announcements.json`): counted on the day it was added to the site — the **latest** of
+    `date` (else `first_seen`), `first_seen` and `extra.publish` (a scheduled post), so a post dated in an
+    earlier month but saved later (written on the 28th, saved on the 2nd, after that month's e-mail) is in
+    the edition of the month it appeared, like a committee upload; in P, not after now + 1 day, not expired.
+    Pinned first, then newest.
   - **events that took place** (`events.json`, any category but `committee`): starting in P (an event over
     several days counts in the month it starts) and started by now. P's committee meeting is added once it
     has started: its record, else the `meeting:` rule (`skip_dates` honoured; `events.json` drops a meeting

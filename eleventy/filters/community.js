@@ -597,8 +597,8 @@ const pubName = (item) => (item?.extra?.publication === "lv" || item?.source ===
 // K through the end of K, and the e-mail goes out once, early in K. It recaps what happened or was
 // published on the site in P, read from the FULL data files (never whatsnew.json, which keeps only its
 // newest 150 entries), a day being its Central calendar day:
-//   * the bulletin's posts (announcements.json) by the later of their date and their `publish` day, not
-//     expired;
+//   * the bulletin's posts (announcements.json) by the day they were added to the site — the latest of
+//     their date, the day the site first had them (first_seen) and their `publish` day —, not expired;
 //   * the events that took place in P (events.json, the month an event starts in) and P's committee
 //     meeting — its record, else the site.meeting rule (events.json drops a meeting once it is over) —
 //     with their days only; events are never "news" on their own (no count, no e-mail);
@@ -667,11 +667,14 @@ function laterOf(a, b) {
   return dbb && (!da || dbb > da) ? b : a || null;
 }
 
-/** A bulletin post's news date: the later of its date (else when it was first seen) and its `publish`
- *  day (a post scheduled with `publish:` counts from the day it appeared on the site). */
+/** A bulletin post's news date: the day it was ADDED to the site — the latest of its date (else when it
+ *  was first seen), when the site first had it (first_seen) and its `publish` day (a post scheduled with
+ *  `publish:` appears that morning). A post dated in an earlier month but added later (written on the 28th,
+ *  saved on the 2nd — after that month's e-mail went out) is in the edition of the month it appeared, like
+ *  a committee upload (uploadWhen): every post is in exactly one edition. */
 function postWhen(it) {
   const pub = String(it.extra?.publish || "").slice(0, 10);
-  return laterOf(it.date || it.first_seen || null, YMD.test(pub) ? pub : null);
+  return laterOf(laterOf(it.date || it.first_seen || null, it.first_seen || null), YMD.test(pub) ? pub : null);
 }
 
 /** A committee upload's news date (drive.json): the later of its date (the date its name starts with,
@@ -703,8 +706,8 @@ const digestStories = (db) => (db?.articles?.items || [])
  * YouTube twin folded into it, the committee's photos one entry per album:
  *   { id: "album:<key>", kind: "album", _album: true, _count: photos, _when: the newest photo's date,
  *     url: "/photos/#<album>", title: the album's folder (or ""), i18n: { album } }
- * `_when` is the date an item counts on (a scheduled post's `publish` day, an upload's first_seen …); the
- * item keeps its own `date` (a committee file's row shows the date in its name).
+ * `_when` is the date an item counts on (a scheduled post's `publish` day, a post's or an upload's
+ * first_seen …); the item keeps its own `date` (a committee file's row shows the date in its name).
  */
 export function monthNews(db, ed, now = Date.now()) {
   const today = ymdChicago(new Date(now));

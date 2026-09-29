@@ -9,8 +9,9 @@ tests/test_digest_parity.py compares what each one picks): what happened or was 
 in P, read from the FULL data files (never whatsnew.json, which keeps only its newest 150 entries), a
 day being its Central calendar day:
 
-  * the bulletin's posts (announcements.json) by the later of their date and their `publish` day
-    (a scheduled post), not expired
+  * the bulletin's posts (announcements.json) by the day they were added to the site — the latest of
+    their date, the day the site first had them (first_seen) and their `publish` day (a scheduled post)
+    —, not expired
   * the events that took place in P (events.json: the month an event starts in) and P's committee
     meeting — its record, else the config/site.yml `meeting:` rule (events.json drops a meeting once it
     is over) — with their days only; events are never "news" on their own
@@ -947,10 +948,14 @@ def later_of(a: str | None, b: str | None) -> str | None:
 
 
 def post_when(item: dict) -> str | None:
-    """A bulletin post's news date (community.js postWhen): the later of its date (else when it was first
-    seen) and its `publish` day — a post scheduled with `publish:` counts from the day it appeared."""
+    """A bulletin post's news date (community.js postWhen): the day it was ADDED to the site — the latest of
+    its date (else when it was first seen), when the site first had it (first_seen) and its `publish` day (a
+    post scheduled with `publish:` appears that morning). A post dated in an earlier month but added later
+    (written on the 28th, saved on the 2nd — after that month's e-mail went out) is in the edition of the
+    month it appeared, like a committee upload (upload_when): every post is in exactly one edition."""
     pub = str((item.get("extra") or {}).get("publish") or "")[:10]
-    return later_of(item.get("date") or item.get("first_seen") or None, pub if is_date_only(pub) else None)
+    seen = item.get("first_seen") or None
+    return later_of(later_of(item.get("date") or seen, seen), pub if is_date_only(pub) else None)
 
 
 def upload_when(item: dict) -> str | None:
@@ -1037,8 +1042,8 @@ def month_news(now: datetime, ed: dict) -> dict[str, list[dict]]:
     twin folded into it, the committee's photos one entry per album (community.js monthNews):
     {"id": "album:<key>", "kind": "album", "_album": True, "_count": photos, "_when": the newest photo's
     date, "_names": {"en", "es"}} (the e-mail links /photos/; the page, the album's own anchor).
-    `_when` is the date an item counts on (a scheduled post's `publish` day, an upload's first_seen …); the
-    item keeps its own `date` (a committee file's row shows the date in its name)."""
+    `_when` is the date an item counts on (a scheduled post's `publish` day, a post's or an upload's
+    first_seen …); the item keeps its own `date` (a committee file's row shows the date in its name)."""
     today = to_central(now).date().isoformat()
     hi = now + timedelta(days=1)
     found: dict[str, dict] = {}

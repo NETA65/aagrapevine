@@ -11,7 +11,8 @@ only fails here instead of drifting quietly:
   Texas writers and the events that took place (the committee meeting included).
 
 Two data sets: a small one made for the edge cases (a bulletin post that expired the day before, seen
-in the small hours of the 1st; a post scheduled with `publish:`; a video and an Instagram post at 11:30 PM
+in the small hours of the 1st; a post scheduled with `publish:`; posts saved after the month their date
+names; a video and an Instagram post at 11:30 PM
 on the last day; stories published on the last day and on the 1st, stories without a pub_date; a removed
 story of a newer issue; committee files added after the month their name dates them to; an album with a
 photo of the next month; a dated flyer; a skipped committee meeting …) and the repository's own data for
@@ -122,7 +123,9 @@ class FixtureParity(SD.DigestCase, Parity):
         self.full_month()
         # bulletin posts: one that expired on the last day of the month (gone on the 1st in the small hours
         # too, Central time), one that lasts through the 1st, one written in August and scheduled for
-        # September 2 (`publish:`), one scheduled for October 2
+        # September 2 (`publish:`), one scheduled for October 2; and — each counts on the day it was added
+        # to the site — one written in August but saved on September 10, one dated September 28 but saved
+        # on October 3, after the September e-mail
         self.write("announcements", {"items": [
             SD.item("ann:1", "announcement", "committee", "2026-09-05", "New GVR orientation", url="/bulletin/#new",
                     extra={"body_md": "Join us **Saturday**.", "pinned": True}),
@@ -130,6 +133,8 @@ class FixtureParity(SD.DigestCase, Parity):
             SD.item("ann:oct1", "announcement", "committee", "2026-09-07", "Until the 1st", extra={"expires": "2026-10-01"}),
             SD.item("ann:sched", "announcement", "committee", "2026-08-28", "Scheduled for September", extra={"publish": "2026-09-02"}),
             SD.item("ann:later", "announcement", "committee", "2026-09-20", "Scheduled for October", extra={"publish": "2026-10-02"}),
+            SD.item("ann:aug-saved", "announcement", "committee", "2026-08-20", "Saved in September", first_seen="2026-09-10T14:00:00Z"),
+            SD.item("ann:saved-oct", "announcement", "committee", "2026-09-28", "Saved on October 3", first_seen="2026-10-03T14:00:00Z"),
         ]})
         # August: a booth and a committee meeting that was skipped (settings) — the August digest has the booth only
         events = json.loads((self.site_dir / "events.json").read_text(encoding="utf-8"))["items"]
@@ -166,7 +171,7 @@ class FixtureParity(SD.DigestCase, Parity):
         self.compare(js, cases, highlights, max_per)
         # and the rules themselves
         early = summary(D.collect(datetime(2026, 10, 1, 6, 30, tzinfo=timezone.utc), None, max_per, highlights))
-        self.assertEqual(early["news"]["announcement"], ["ann:1", "ann:oct1", "ann:sched"])      # pinned, then newest
+        self.assertEqual(early["news"]["announcement"], ["ann:1", "ann:aug-saved", "ann:oct1", "ann:sched"])  # pinned, then newest
         self.assertIn("yt:late", early["news"]["video"])                                        # 11:30 PM CDT on the 30th
         self.assertIn("lv:a2", early["news"]["article"])                                        # published on the 30th
         self.assertNotIn("gv:a5", early["news"]["article"])                                     # … on October 2
@@ -179,6 +184,7 @@ class FixtureParity(SD.DigestCase, Parity):
         self.assertEqual(early["instagram"], [["gv", "alcoholicsanonymous_gv", 4, ["ig:g4", "ig:g3", "ig:g2"]],
                                               ["lv", "alcoholicosanonimos_lv", 1, ["ig:l1"]], ["xx", "xx", 1, ["ig:other"]]])
         later = summary(D.collect(datetime(2026, 11, 1, 15, 5, tzinfo=timezone.utc), None, max_per, highlights))
+        self.assertEqual(later["news"]["announcement"], ["ann:saved-oct", "ann:later"])            # saved / scheduled in October
         self.assertEqual(later["news"]["drive"], ["doc:min", "album:f:Booth"])                    # October's uploads
         self.assertEqual(later["albums"], [["album:f:Booth", 2]])                                # ph4 and the late ph5
         self.assertEqual(js[f"2026-08@{iso(cases[5][1])}"]["events"], ["ev:rec:2026-08-08", "ev:aug-ws"])   # no meeting: skipped
