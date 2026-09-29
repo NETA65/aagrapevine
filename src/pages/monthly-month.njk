@@ -226,7 +226,7 @@ eleventyComputed:
         <span class="min-w-0">
           <a class="mp-drow-t tap-link font-semibold text-ink no-underline hover:text-gv hover:underline" href="{{ d.href | lurl(lang) }}"{% if d.external %} target="_blank" rel="noopener"{% endif %}>{{ ("monthly.committee" | t(lang)) if d.kind == "committee" else d.title }}{% if d.external %}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span>{% endif %}</a>
           {#- the "Over" badge: this month's rows only (a later month's dates are all still to come) -#}
-          <span class="block text-sm text-muted">{% if m.isCurrent %}<span class="badge-muted mr-1.5" data-mp-over-badge{% if not over %} hidden{% endif %}>{{ "monthly.over" | t(lang) }}</span>{% endif %}{{ d.day }}{% if d.endDay %} – {{ d.endDay }}{% endif %}{% if d.time %} · {{ d.time }} {{ d.zone }}{% endif %}{% if d.kind == "committee" %} · {{ d.platform }}{% elif d.city %} · {{ d.city }}{% endif %}{% if d.tentative %} · {{ "committee.events.tentative" | t(lang) }}{% endif %}</span>
+          <span class="block text-sm text-muted">{% if m.isCurrent %}<span class="badge-muted mr-1.5" data-mp-over-badge{% if not over %} hidden{% endif %}>{{ "monthly.over" | t(lang) }}</span>{% endif %}{{ d.day }}{% if d.endDay %} – {{ d.endDay }}{% endif %}{% if d.time %} · {{ d.time }} {{ d.zone }}{% endif %}{% if d.kind == "committee" %} · {{ d.platform }}{% elif d.city %}{% if d.place %} · {{ d.place }}{% endif %}{% endif %}{% if d.tentative %} · {{ "committee.events.tentative" | t(lang) }}{% endif %}</span>
         </span>
       </li>
       {% endmacro %}

@@ -234,6 +234,12 @@ class Model(unittest.TestCase):
         self.assertEqual(by["ev:committee:2026-10-21"]["overAt"], "2026-10-22T01:00:00.000Z")
         self.assertEqual((by["ev:rec:2026-10-10"]["href"], by["ev:rec:2026-10-10"]["external"]), ("https://citywidedallasaa.org", True))
         self.assertEqual((by["ev:feed"]["category"], by["ev:feed"]["kind"]), ("neta65", "event"))
+        # the place once: the city after the title only when the title does not already name it (the page's
+        # row, the poster and the message)
+        self.assertEqual({k: (by[k]["city"], by[k]["place"]) for k in ("ev:ws-oct3", "ev:rec:2026-10-10", "ev:feed", "ev:assembly", "ev:talk")},
+                         {"ev:ws-oct3": ("Arlington", ""), "ev:rec:2026-10-10": ("Dallas", ""), "ev:feed": ("Plano", "Plano"),
+                          "ev:assembly": ("Tyler", "Tyler"), "ev:talk": ("", "")})
+        self.assertEqual(self.r["mm"]["es"]["dates"][0]["place"], "", "the Spanish title names it too")
         # an all-day event: over at midnight Central after its last day (November 1: daylight saving ends)
         self.assertEqual(by["ev:assembly"]["overAt"], "2026-11-02T06:00:00.000Z")
         self.assertEqual(by["ev:assembly"]["range"], "Oct 30–Nov 1")
@@ -410,6 +416,14 @@ class Templates(unittest.TestCase):
     def setUp(self):
         self.month = (ROOT / "src" / "pages" / "monthly-month.njk").read_text(encoding="utf-8")
         self.hub = (ROOT / "src" / "pages" / "monthly.njk").read_text(encoding="utf-8")
+
+    def test_a_place_is_said_once(self):
+        # the Dates card's rows and the poster print dateRow.place (the city unless the title names it):
+        # "Grapevine Writing Workshop — Arlington", never "… — Arlington · Arlington"
+        poster = (ROOT / "src" / "_includes" / "macros" / "monthly.njk").read_text(encoding="utf-8")
+        for name, t in (("monthly-month.njk", self.month), ("macros/monthly.njk", poster)):
+            self.assertIn("{% elif d.city %}{% if d.place %} · {{ d.place }}{% endif %}", t, name)
+            self.assertNotIn("· {{ d.city }}", t, name)
 
     def test_the_month_page(self):
         t = self.month

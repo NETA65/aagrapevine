@@ -275,6 +275,9 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
  *             keeps its own link: its later dates are folded on /events/, where an anchor could land on
  *             a hidden card. external = another site.
  *   category  the data's category (eventTone keeps the Grapevine / La Viña calendars' colours)
+ *   place     the city to show after the title: "" when the title already names it ("Writing Workshop —
+ *             Mansfield", "booth at CityWide Dallas") — the page's row, the poster and the message say a
+ *             place once
  * extra: { kind: "committee" | "recurring" | "event", … }
  */
 function dateRow(e, L, ctx, extra = {}) {
@@ -284,13 +287,16 @@ function dateRow(e, L, ctx, extra = {}) {
   const shownDay = d.start < ctx.first ? ctx.first : d.start;
   const overAt = iso(eventOverMs(e));
   const href = extra.kind === "committee" ? "/meetings/#committee-meeting" : e.url || "/events/";
+  const title = tr(e, "title", L);
+  const city = clean(ex.city);
   return {
-    id: e.id, title: tr(e, "title", L), url: e.url || "", href, external: /^https?:/.test(href), category: e.category || "",
+    id: e.id, title, url: e.url || "", href, external: /^https?:/.test(href), category: e.category || "",
     ymd: d.start, endYmd: d.end, chip: chip(shownDay, L), dayLabel: shortDate(shownDay, L, ctx.year), day: longDay(d.start, L),
     endDay: d.end !== d.start ? longDay(d.end, L) : "",
     range: d.end !== d.start ? dayRange(d.start, d.end, L) : "",
     time: timed ? `${timeRange(ex.start, ex.end, L)}` : "", zone: timed ? ctx.zone : "",
-    city: ex.city || "", online: !!ex.online || /zoom/i.test(ex.location || ""),
+    city, place: city && !title.toLowerCase().includes(city.toLowerCase()) ? city : "",
+    online: !!ex.online || /zoom/i.test(ex.location || ""),
     tentative: !!ex.tentative, overAt, past: !!overAt && Date.parse(overAt) <= ctx.nowMs, ...extra,
   };
 }
@@ -727,9 +733,8 @@ export function monthMessage(ctx, langs, style, site, t) {
     const bits = [when];
     if (d.kind === "recurring") bits.push(both("report.e_monthly"));
     if (d.tentative) bits.push(both("report.e_tbc"));
-    // the place once: most titles already name the city ("Writing Workshop — Mansfield")
-    const place = d.city && !d.title.toLowerCase().includes(String(d.city).toLowerCase()) ? ` — ${d.city}` : "";
-    out.push(`${bullet} ${bits.join(" · ")} — ${d.title}${place}`);
+    // the place once: most titles already name the city ("Writing Workshop — Mansfield"; dateRow.place)
+    out.push(`${bullet} ${bits.join(" · ")} — ${d.title}${d.place ? ` — ${d.place}` : ""}`);
     for (const l of Ls.slice(1)) { const o = (mm[l].dates || []).find((x) => x.id === d.id); if (o && o.title && o.title !== d.title) out.push(`  ${o.title}`); }
   }
   if (!rows.length) out.push(both(cur && (m.dates || []).length ? "monthly.no_more_dates" : "monthly.no_dates"));
