@@ -73,9 +73,12 @@ eleventyExcludeFromCollections: true
       <span class="grid size-11 place-items-center rounded-xl {{ c.tone }}">{% icon c.icon, "size-5" %}</span>
       <h3 class="h-card">{{ c.h | t(lang) }}</h3>
       <p class="text-sm leading-relaxed text-muted">{{ c.t | t(lang) }}</p>
-      {#- pwa.js: the save button (disabled while offline) / the install button or steps (empty → hidden) -#}
+      {#- pwa.js: the save button (disabled while offline) / the install row — one-tap Install, or
+          "Install as an app" → this device's steps on /app/ (empty in the installed app → hidden).
+          Without JavaScript: a plain link to /app/. -#}
       {% if c.save %}<div class="pwa-card-slot mt-auto empty:hidden" data-pwa-save></div>{% endif %}
-      {% if c.install %}<div class="pwa-card-slot mt-auto empty:hidden" data-pwa-install></div>{% endif %}
+      {% if c.install %}<div class="pwa-card-slot mt-auto empty:hidden" data-pwa-install></div>
+      <a class="link tap-link mt-auto" data-nojs-only href="{{ '/app/' | lurl(lang) }}">{{ 'nav.app' | t(lang) }}</a>{% endif %}
     </li>
     {% endfor %}
   </ul>

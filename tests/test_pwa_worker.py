@@ -3,7 +3,7 @@
 
   * install    — the app shell and both offline pages are kept; a missing required file (the CSS, the
                  scripts, an offline page) makes the install fail so the browser tries again; a missing
-                 optional file does not.
+                 optional file does not (a font, install-core.js — the "Install as an app" rules).
   * activate   — old versions' gvlv-* caches go; visitors' pages, saved pages and other sites' caches stay;
                  the page open during a first visit is kept WITH its own styles and scripts.
   * pages      — online: the page from the site (kept for later); offline, a server error or no answer
@@ -154,8 +154,15 @@ const R = {};
   const w = world();
   shellOnline(w);
   w.net.set(ORIGIN + B + "assets/fonts/fraunces-latin-opsz-normal.woff2", { status: 404, body: "" });   // an optional file is missing
-  R.config = { base: w.CONFIG.base, save: w.CONFIG.save, required: w.CONFIG.required, offline: w.CONFIG.offline };
+  R.config = { base: w.CONFIG.base, save: w.CONFIG.save, required: w.CONFIG.required, offline: w.CONFIG.offline, shell: w.CONFIG.shell };
   R.install = await w.lifecycle("install");
+
+  const nc = world();                                                                                   // install-core.js is missing:
+  shellOnline(nc);                                                                                      // pwa.js falls back to links to /app/
+  R.coreUrl = nc.CONFIG.shell.find((u) => u.includes("assets/js/install-core.js")) || "";
+  nc.net.set(ORIGIN + R.coreUrl, { status: 404, body: "" });
+  R.installNoCore = await nc.lifecycle("install");
+  R.shellNoCore = await nc.keys("gvlv-shell-t1");
   R.shell = await w.keys("gvlv-shell-t1");
   const off = await w.store.get("gvlv-shell-t1").match(ORIGIN + w.CONFIG.offline.es);
   R.offlineStamped = !!(off && off.headers.get("x-gvlv-saved"));
@@ -276,6 +283,19 @@ class Worker(unittest.TestCase):
         self.assertTrue(self.r["offlineStamped"])
         self.assertFalse(self.r["skippedOnInstall"])                         # a new version waits for the visitor
         self.assertEqual(self.r["installBad"], ["rejected"])                 # the CSS missing: try again later
+
+    def test_install_core_is_optional(self):
+        # the install notice's rules (install-core.js) are kept for offline use, but a worker installs
+        # without them: pwa.js then makes every install control a plain link to /app/
+        r = self.r
+        self.assertEqual(r["coreUrl"], B + "assets/js/install-core.js?v=t1")
+        self.assertIn(r["coreUrl"], r["config"]["shell"])
+        self.assertNotIn(r["coreUrl"], r["config"]["required"])
+        self.assertIn(ORIGIN + r["coreUrl"], r["shell"])
+        self.assertEqual(r["installNoCore"], ["fulfilled"])
+        self.assertNotIn(ORIGIN + r["coreUrl"], r["shellNoCore"])
+        for u in r["config"]["required"]:
+            self.assertIn(ORIGIN + u, r["shellNoCore"])
 
     def test_activate_keeps_what_visitors_saved(self):
         self.assertEqual(self.r["activate"], ["fulfilled"])

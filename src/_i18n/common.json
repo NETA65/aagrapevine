@@ -133,8 +133,8 @@
     "es": "Kit del mes"
   },
   "nav.monthly_desc": {
-    "en": "This month's issue, your GV/LV report, printable posters",
-    "es": "La revista del mes, tu informe de GV/LV y carteles para imprimir"
+    "en": "This month's issues and dates, your GV/LV report, posters",
+    "es": "Las revistas y fechas del mes, tu informe de GV/LV y carteles"
   },
   "nav.orientation": {
     "en": "GVR / RLV 101",
@@ -161,8 +161,8 @@
     "es": "Resumen mensual"
   },
   "nav.digest_desc": {
-    "en": "What's new each month — by e-mail or WhatsApp",
-    "es": "Las novedades de cada mes, por correo o WhatsApp"
+    "en": "Everything new last month, for WhatsApp or e-mail",
+    "es": "Todo lo nuevo del mes pasado, para WhatsApp o correo"
   },
   "nav.expenses": {
     "en": "Tracker",
@@ -545,8 +545,12 @@
     "es": "Accesibilidad"
   },
   "nav.offline": {
-    "en": "Saved pages & app",
-    "es": "Páginas guardadas y app"
+    "en": "Saved pages",
+    "es": "Páginas guardadas"
+  },
+  "nav.app": {
+    "en": "Install as an app",
+    "es": "Instalar como app"
   },
   "comfort.button": {
     "en": "Reading & display settings",

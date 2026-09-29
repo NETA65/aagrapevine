@@ -4,9 +4,11 @@
      1. What Data saver DOES — html[data-saver="on"] (the "Aa" panel's switch sets it; pwa.js also
         turns it on while offline). html.pwa-imgs = "Show images" for the page being viewed.
      2. The top notice (offline / slow connection → a saved copy) and the bottom toast (a new
-        version / images are off).
+        version / images are off / the install notice).
      3. The "Offline & app" part of the Aa panel (#pwa-slot) and the offline page's card slots.
      4. The offline page's list of saved pages.
+     5. Install as an app: the /app/ page's guides and notes (src/pages/app.njk), the install
+        notice's app icon, and the links to /app/ hidden inside the installed app.
    ===================================================================== */
 
 /* ---------- 1. Data saver ----------
@@ -122,6 +124,22 @@
   /* a phone at 130%+ or with relaxed spacing: always the words on their own row, the buttons under them */
   :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .pwa-toast-text { flex-basis: 100%; }
 }
+/* A short screen (under 32rem = 512px tall: a phone held sideways — wider than 640px, so the rule
+   above doesn't cap its text —, a small phone with its browser bars, a split screen): the toasts'
+   text is 115% at most here too (the same caps as a phone's --bar-zoom, areas/access.css), their
+   icon goes at larger text, and the install notice keeps its title and its two buttons (its
+   second sentence and the app icon go). So at 150% text + relaxed spacing it still fits in its
+   40vh box with both buttons whole. Should it ever be taller (a split screen a few lines high),
+   its buttons stay at the bottom of the box and the words scroll under them (the notice is opaque
+   here, the same colour as the buttons' band, so the band never shows while everything fits). */
+@media (height < 32rem) {
+  :root[data-text="130"] .pwa-toast { --bar-zoom: 0.8846; }
+  :root[data-text="150"] .pwa-toast { --bar-zoom: 0.7667; }
+  :root:is([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .pwa-toast-icon,
+  .pwa-toast[data-kind="install"] :is(.pwa-toast-icon, .pwa-toast-more) { display: none; }
+  .pwa-toast[data-kind="install"] { background: var(--c-surface); }
+  .pwa-toast[data-kind="install"] .pwa-toast-actions { position: sticky; bottom: 0; background: var(--c-surface); }
+}
 :root.pwa-toast-on body { padding-bottom: calc(var(--pwa-toast-h, 4rem) + var(--banner-h, 0px) + var(--player-h, 0px) + env(safe-area-inset-bottom, 0px) + 1.75rem); }
 :root.pwa-toast-on { --sticky-bottom: calc(var(--pwa-toast-h, 4rem) + var(--banner-h, 0px) + var(--player-h, 0px) + env(safe-area-inset-bottom, 0px) + 1.25rem);
   scroll-padding-bottom: var(--sticky-bottom); } /* keyboard focus is never left under the toast (WCAG 2.4.11) */
@@ -140,8 +158,6 @@
 .pwa-wide[aria-disabled="true"] { opacity: 0.6; cursor: progress; }
 .pwa-hint { margin-top: 0.5rem; font-size: 0.8125rem; line-height: 1.45; color: var(--c-muted); }
 .pwa-status { margin-top: 0.5rem; font-size: 0.8125rem; font-weight: 600; line-height: 1.45; color: var(--c-ink); }
-.pwa-steps { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.625rem 0.75rem; border-radius: 0.75rem; background: var(--c-surface-2); font-size: 0.8125rem; line-height: 1.45; color: var(--c-ink); }
-.pwa-steps > .icon { margin-top: 0.1rem; color: var(--c-gv); }
 .pwa-progress { display: flex; align-items: center; gap: 0.625rem; margin-top: 0.5rem; font-size: 0.8125rem; font-weight: 600; color: var(--c-ink); }
 .pwa-progress > progress { flex: 1 1 auto; min-width: 4rem; height: 0.5rem; accent-color: var(--c-gv); }
 .pwa-links { display: flex; flex-wrap: wrap; gap: 0 1rem; margin-top: 0.25rem; }
@@ -165,3 +181,74 @@
 .pwa-saved-link:hover .pwa-saved-title { color: var(--c-gv); text-decoration: underline; text-underline-offset: 3px; }
 .pwa-saved-title { font-weight: 600; overflow-wrap: anywhere; }
 .pwa-saved-when { font-size: 0.8125rem; color: var(--c-muted); }
+
+/* ---------- 5. Install as an app ----------
+   The install notice (pwa.js, toast kind "install") shows the app's own icon in its icon tile.
+   /app/ (src/pages/app.njk): one card per phone and browser, a <details> whose summary is a 56px
+   row — icon tile · title (then "Your device" on the guide pwa.js detected, wrapping under the
+   title's words on a narrow phone) · chevron; its steps are
+   numbered, and each one starts with the "key" to look for on the screen (.pwa-guide-key: a small
+   tile with the icon of that button, or the app's icon for "open it"). The notes above the guides
+   (.pwa-guide-note): inside another app (La Viña amber), you're using the app / it is already on
+   this device (vine green). Inside the installed app the links to /app/ go (the footer's and the
+   phone menu's, [data-pwa-app-link]): html.pwa-standalone (pwa.js) or the display mode itself. */
+.pwa-toast-app { background: none; overflow: hidden; border-radius: 0.625rem; }
+.pwa-toast-app > img { display: block; width: 100%; height: 100%; }
+
+/* one column on phones and tablets; side by side from 1024px (iPhone | iPhone's other browsers,
+   Android Chrome | Samsung …; three from 1536px), so a step's line stays readable — each card as
+   tall as its own content (an open guide never stretches the closed one beside it). At 130 %+ text
+   they stay one column below 1440px, like the site's other card grids (main.css). */
+.pwa-guide { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; align-items: start; }
+@media (width >= 64rem) { .pwa-guide { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (width >= 96rem) { .pwa-guide { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (width < 90rem) { :root:is([data-text="130"], [data-text="150"]) .pwa-guide { grid-template-columns: minmax(0, 1fr); } }
+@media (width >= 96rem) { :root:is([data-text="130"], [data-text="150"]) .pwa-guide { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.pwa-guide-os > summary {
+  list-style: none; display: flex; align-items: center; gap: 0.75rem; min-height: 3.5rem;
+  padding: 0.75rem 1rem 0.75rem 1.25rem; border-radius: var(--radius-card); cursor: pointer; font-weight: 600; color: var(--c-ink);
+}
+.pwa-guide-os > summary::-webkit-details-marker { display: none; }
+/* a phone at 130 %+ text or with relaxed spacing (the site's rule for decorative icons, areas/
+   access.css): the title leads the summary row (the icon tile would take a row of its own), and
+   the notes' and tips' words get the width their icon column took (at 150 % the in-app note ran to
+   one or two words a line) */
+@media (width < 40rem) {
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(.pwa-guide-os > summary > :first-child, .pwa-guide-note > .icon, .pwa-guide-tip > .icon) { display: none; }
+}
+.pwa-guide-os > summary:focus-visible { outline: 3px solid var(--c-gv); outline-offset: 2px; }
+.pwa-guide-os > summary:hover .pwa-guide-title { color: var(--c-gv); }
+.pwa-guide-here { margin-inline-start: 0.25rem; vertical-align: 0.1em; white-space: nowrap; }
+.pwa-guide-chev { display: grid; place-items: center; margin-left: auto; color: var(--c-muted); transition: transform 0.2s; }
+.pwa-guide-os[open] .pwa-guide-chev { transform: rotate(180deg); }
+:root[data-motion="reduce"] .pwa-guide-chev { transition: none; }
+@media (prefers-reduced-motion: reduce) { .pwa-guide-chev { transition: none; } }
+.pwa-guide-body { padding: 0 1.25rem 1.25rem; }
+.pwa-guide-lead { margin-bottom: 1rem; line-height: 1.6; color: var(--c-ink); }
+.pwa-guide-steps { display: grid; gap: 1rem; }
+.pwa-guide-step { display: flex; gap: 0.75rem; align-items: flex-start; }
+.pwa-guide-step p { line-height: 1.6; color: var(--c-ink); }
+.pwa-guide-key {
+  display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; margin-inline-end: 0.5rem; vertical-align: -0.45rem;
+  border: 1px solid var(--c-line); border-radius: 0.5rem; background: var(--c-surface-2); color: var(--c-ink);
+}
+.pwa-guide-key > img { display: block; width: 1.25rem; height: 1.25rem; border-radius: 0.3rem; }
+.pwa-guide-tip { margin-top: 0.375rem; font-size: 0.875rem; line-height: 1.55; color: var(--c-muted); }
+.pwa-guide-tip > .icon { margin-top: 0.15rem; color: var(--c-gv); }
+.pwa-guide-more { display: grid; gap: 0.625rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--c-line); }
+.pwa-guide-more > .pwa-guide-tip { margin-top: 0; }
+.pwa-guide-note { display: flex; gap: 0.625rem; padding: 0.875rem 1rem; border-radius: 0.75rem; background: var(--c-lv-soft); color: var(--c-ink); line-height: 1.55; }
+.pwa-guide-note > .icon { margin-top: 0.1rem; color: var(--c-lv-strong); }
+.pwa-guide-note.is-ok { background: var(--c-vine-soft); }
+.pwa-guide-note.is-ok > .icon { color: var(--c-vine); }
+.pwa-guide-notes { display: grid; gap: 0.75rem; margin-bottom: 0.75rem; }
+.pwa-guide-notes:not(:has(> :not([hidden]))) { display: none; }
+:root.pwa-standalone [data-pwa-app-link] { display: none !important; }
+@media (display-mode: standalone) { [data-pwa-app-link] { display: none !important; } }
+@media print {
+  .pwa-guide-note, .pwa-guide-notes, .pwa-guide-chev { display: none !important; }
+  .pwa-guide-os { break-inside: avoid; box-shadow: none; }
+  /* the in-app guide's "Or copy the link…": on paper the address itself follows (main.css hides the
+     Copy button in print and, with JavaScript on, this stand-in — more specific here, so it shows) */
+  :root.js .pwa-guide-more [data-nojs-only] { display: inline !important; }
+}

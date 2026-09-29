@@ -3,10 +3,12 @@
 <footer class="mt-16 border-t border-line bg-surface text-sm text-muted" style="padding-bottom: env(safe-area-inset-bottom)">
   {#- The footer mirrors the header: "Explore" (the top-level pages), one list per dropdown group
       (Get involved, Committee — nav.primary items with children) and "Stay updated" (the official
-      aagrapevine.org / aalavina.org sites, the nav.footer entries of group "stay" — Instagram and
-      QR Post —, the RSS and calendar feeds). Under the about blurb: About us · neta65.org ·
-      e-mail. The other site pages of group "site" (Accessibility, Saved pages & app, Search, Update
-      status) sit on the right of the bottom bar with "Last updated"; the disclaimer takes its left side.
+      aagrapevine.org / aalavina.org sites, the nav.footer entries of group "stay" — Install as an
+      app, Instagram and QR Post —, the RSS and calendar feeds). "Install as an app" (/app/) is
+      hidden inside the installed app (data-pwa-app-link, areas/pwa.css). Under the about blurb:
+      About us · neta65.org · e-mail. The other site pages of group "site" (Accessibility, Saved
+      pages, Search, Update status) sit on the right of the bottom bar with "Last updated"; the
+      disclaimer takes its left side.
       Phones: the groups sit two per row and every link is a 44px touch target; sm: four across;
       lg+: the about blurb joins the row (the wrapper becomes display:contents so the groups are
       items of the outer grid). -#}
@@ -58,7 +60,7 @@
           <li class="flex"><a class="inline-flex min-h-11 items-center gap-2 hover:text-gv sm:min-h-0" href="{{ u }}" target="_blank" rel="noopener">{% icon "grapes", "size-4 shrink-0" %} <span class="min-w-0">{{ u | hostname | replace(".", "<wbr>.") | safe }}</span>{% icon "arrow-up-right", "size-3.5 shrink-0 -ml-1 text-faint max-[359px]:hidden" %}<span class="sr-only"> ({{ 'common.external' | t(L) }})</span></a></li>
           {%- endif %}{% endfor %}
           {%- for f in nav.footer %}{% if f.group == "stay" %}
-          <li class="flex"><a class="inline-flex min-h-11 items-center gap-2 hover:text-gv sm:min-h-0" href="{{ f.url | lurl(L) }}"{% if pageKey == f.page %} aria-current="page"{% endif %}>{% icon f.icon, "size-4" %} {{ f.key | t(L) }}</a></li>
+          <li class="flex"{% if f.page == "app" %} data-pwa-app-link{% endif %}><a class="inline-flex min-h-11 items-center gap-2 hover:text-gv sm:min-h-0" href="{{ f.url | lurl(L) }}"{% if pageKey == f.page %} aria-current="page"{% endif %}>{% icon f.icon, "size-4" %} {{ f.key | t(L) }}</a></li>
           {%- endif %}{% endfor %}
           <li class="flex"><a class="inline-flex min-h-11 items-center gap-2 hover:text-gv sm:min-h-0" href="{{ '/feed.xml' | lurl(L) }}">{% icon "rss", "size-4" %} {{ "feeds.rss" | t(L) }}</a></li>
           <li class="flex"><a class="inline-flex min-h-11 items-center gap-2 hover:text-gv sm:min-h-0" href="{{ '/events.ics' | lurl(L) }}">{% icon "calendar-plus", "size-4" %} {{ "feeds.ics" | t(L) }}</a></li>
@@ -66,7 +68,7 @@
       </div>
     </div>
   </div>
-  {#- Bottom bar. Right: the site pages (Accessibility, Saved pages & app, Search, Update status) over
+  {#- Bottom bar. Right: the site pages (Accessibility, Saved pages, Search, Update status) over
       "Last updated … · ©". Left: the disclaimer. The right block comes first in the source (phones:
       the four links as two rows of two, the time, then the disclaimer); from 768px the grid puts it
       in the right column: as wide as its one-row width, or half the bar when that is less
