@@ -72,7 +72,7 @@ scripts and the templates see [DATA_SCHEMA.md](DATA_SCHEMA.md); for first-time s
                          │  not updated for 7+ days; closed automatically when it recovers      │
                          └───────────────────────────────────────────────────────────────────────┘
 
-   monthly-digest.yml (the 1st, 15:05 UTC = 9:05 CST / 10:05 CDT) → scripts/notify/send_digest.py → SMTP
+   monthly-digest.yml (1st–3rd, 12:07 · 15:07 · 18:07 · 21:07 UTC, until sent) → scripts/notify/send_digest.py → SMTP
    link-check.yml     (Sundays) → build → lychee on _site + polite check of config links → one GitHub issue
    check.yml          (every pull request + every code/settings/workflow push to main) → strict eleventy build +
                       checks (build.json included); offline Python tests; digest dry-run
@@ -154,76 +154,116 @@ morning refresh is live about 3 minutes later.
 
 ### `monthly-digest.yml`
 
-Runs on the 1st of every month at 15:05 UTC — 9:05 AM Central in winter (CST) and 10:05 AM in summer
-(CDT), so always after 6 AM Texas time and after the morning updates of `update.yml` (10:17 and
-12:07 UTC) — and exits immediately unless the four secrets `SMTP_SERVER`, `SMTP_USERNAME`,
-`SMTP_PASSWORD`, `DIGEST_TO` exist. A manual run defaults to **preview** (`--dry-run`, uploaded as the
-`digest-preview` artifact) and takes an optional *month* (`--month YYYY-MM`; anything typed there is
-passed on — spaces removed — so a mistyped month makes `send_digest` exit 2 instead of sending this
-month's edition); unticking *Preview only* sends immediately. The public address comes from the Pages API (`gh api repos/:repo/pages`), falling
-back to `site.url`.
+Sends **last month's** digest, once. Scheduled tries run four times a day on the 1st–3rd
+(`7 12,15,18,21 1-3 * *` UTC = 7:07 AM – 4:07 PM CDT / 6:07 AM – 3:07 PM CST; GitHub starts them late,
+sometimes by hours).
 
-`scripts/notify/send_digest.py` (standard library only; PyYAML for `config/site.yml` — a small reader is
-the fallback — and for the "put it to work" tips of `config/carry.yml`, which are left out without it)
-builds the same **edition** as the `/digest/` page (`eleventy/filters/community.js` →
-`buildMonthlyDigest`, `monthlyDigestText`) — keep their rules in step:
+Except for a preview, the first step (`check`) stops the run unless the four secrets `SMTP_SERVER`,
+`SMTP_USERNAME`, `SMTP_PASSWORD` and `DIGEST_TO` exist. A scheduled try then goes on only if both hold:
+- it is the 1st–3rd **Central** day, from 7 AM Central (`TZ=America/Chicago date`);
+- the month has no unexpired `digest-sent-YYYY-MM` artifact. The check is
+  `gh api repos/:repo/actions/artifacts?name=digest-sent-<month>`, which needs `permissions: actions: read`.
+  If the API does not answer: a `::warning`, nothing is sent, and the next try checks again.
 
-- **edition** = the Central-time month of the run (or `--month`); its **news window** is the whole
-  previous calendar month in America/Chicago (the January edition looks back at December; a news
-  date is compared as a Central calendar day, so 11:30 PM CDT on October 31 is October and 12:30 AM on
-  November 1 — the day daylight saving ends — is November);
-- **news** = the `whatsnew.json` entries whose `wn_date` falls in that month (build_data's rules: no
-  launch-day back catalog, no undated documents, next month's magazine issue from the day it is first
-  seen), completed from the full `episodes`, `videos`, `pdfs` and `announcements` (the bulletin's) files by their own
-  `date` (`whatsnew.json` keeps only its newest `WHATSNEW_MAX` = 150 entries, about one busy month);
-  expired bulletin posts are left out; a YouTube upload of a podcast episode (same Central day, same
-  title or season/episode) is folded into the episode as "also on YouTube" (`mergeMediaTwins`);
-  magazine stories are only counted (the issue block shows them); Instagram is one pointer line (its
-  feed keeps only the newest posts, so a monthly count would be wrong); events are in "coming up";
-- **this month's issues**: Grapevine's issue of the month and La Viña's bimonthly issue (key = the
-  month or the one before) from `articles.json` — count, free-to-read count, `digest.highlights`
-  stories (free to read first, members' stories before "In Every Issue", Area 65 then Texas writers,
-  then the magazine's order), the Grapevine theme (as on `/monthly/`: the issue's own once it is out, else the
-  editorial calendar's), up to
-  3 tips of `config/carry.yml` for the month and the link to `/monthly/YYYY-MM/`;
-- **writers**: `spotlight.json` stories by Area 65 / Texas writers whose `extra.pub_date` is in the
-  previous month (every story is in exactly one edition);
-- **coming up**: the next committee meeting (up to 60 days ahead, with Zoom ID/passcode and the chair's
-  `meeting.note` / `note_es` — without `note_es` the Spanish comes from the meeting event build_data
-  translated; an empty note shows no line); the month's events that are not over yet (an all-day event
-  until midnight after its last day, a timed one without an end 6 hours after its start, like
-  `eventEndMs`; a monthly event from `recurring_events:` once, with "every month"); the weekly open
-  meetings (La Viña's from its `starts` date); the number of Grapevine meetings in our Area and nearby;
-- **share your story**: deadlines from today through the end of next month, La Viña's 3 open topics of
-  the month (the `/monthly/` rotation), the phone story lines of `audio_project.json`;
-- Book of the Month (compact; an offer past its last day is left out), the lowest month-to-month
-  subscription price, said as exactly that (`shopFromMonthly`'s month-to-month plans; a yearly plan costs
-  less per month) and a pointer to the daily quote on the home page;
-- English half then Spanish half (La Viña first there), from the `i18n` fields build_data produced;
-  `digest.per_section` items per list + "and N more"; in the Spanish half issue labels read as in a
-  sentence ("septiembre/octubre de 2026", `in_sentence` = community.js `issueInSentence`), times say
-  "(hora del Centro)" instead of CDT/CST, and Grapevine's issue, writers and Weekly Open say "(en inglés)"
-  (La Viña's "(in Spanish)" in the English half); items with the same date are listed in the site's order
-  (`js_order` = JavaScript's `localeCompare`);
-- subject `Grapevine / La Viña — October 2026 edition · Edición de octubre de 2026`; multipart HTML +
-  plain text, RFC 2047 headers, `List-Unsubscribe`, several recipients → Bcc;
-- sending: port 465 = SSL; any other port must offer STARTTLS, or the run stops before the password is
-  sent (`RuntimeError`, exit 1). Connecting and logging in are tried 3 times on network trouble; the
-  message is handed over **once** — a failure then is reported as "It MAY have been sent — check before
-  re-running" (never retried: a retry could e-mail every district twice);
-- nothing new last month (no news and no writers) → nothing sent (exit 0): the issues, dates, deadlines
-  and Book of the Month come round every month, so on their own they never send an e-mail (nor do they
-  when the daily updates have stopped). Exit 1 = SMTP failure, 2 = not configured or `--month` not YYYY-MM.
+`send_digest` then waits for the data. It exits 3 (a `::notice` "Digest waits"; the run stays green) while a
+source it reads has not been tried since the month ended (below). The tries from noon Central on the 3rd pass
+`--stale-ok`. Exit 0 in send mode (sent, or nothing new in the month) uploads the `digest-sent-<month>`
+artifact (kept 40 days), so the later tries skip. On the 1st the Morning check starts the full daily update
+early ([`morning.yml`](#morningyml--morning-check), step 5), so the wait is usually over by the first try.
+
+A manual run defaults to **preview** (`--dry-run`, uploaded as the `digest-preview` artifact). It takes an
+optional *month*, the month the digest **covers** (`--month YYYY-MM`). Anything typed there is passed on
+(spaces removed), so a mistyped month makes `send_digest` exit 2 instead of sending another month's edition.
+Unticking *Preview only* sends at once — no day / hour / marker guard, `--stale-ok` — and marks the month (a
+month with nothing new is marked without an e-mail, as on a scheduled try).
+The public address comes from the Pages API (`gh api repos/:repo/pages`), falling back to `site.url`.
+
+`scripts/notify/send_digest.py` (standard library only; PyYAML for `config/site.yml`, with a small built-in
+reader as the fallback) builds the same **edition** as the `/digest/` page (`eleventy/filters/community.js`
+→ `buildMonthlyDigest`, `monthlyDigestText`). Keep their rules in step:
+
+- **edition** = ONE Central-time calendar month P, named after it (*September 2026 digest* / *Resumen de
+  septiembre de 2026*). By default it is the month before the run's Central month (`edition_of` /
+  `digestEdition`); `--month` / `MONTHLY_NOW` choose another. It is on `/digest/` from the first build on the
+  1st of K = P+1 all through K. A date counts on its Central calendar day (11:30 PM CDT on September 30 is
+  September).
+- Everything is read from the **full** data files, never `whatsnew.json` (it keeps only its newest
+  `WHATSNEW_MAX` = 150 entries):
+  - **bulletin** (`announcements.json`): counted on the later of `date` (else `first_seen`) and
+    `extra.publish` (a scheduled post); in P, not after now + 1 day, not expired. Pinned first, then newest.
+  - **events that took place** (`events.json`, any category but `committee`): starting in P (an event over
+    several days counts in the month it starts) and started by now. P's committee meeting is added once it
+    has started: its record, else the `meeting:` rule (`skip_dates` honoured; `events.json` drops a meeting
+    once it is over). Listed with their days only (no time, no "every month", no "to be confirmed"). Never
+    counted as news, so events alone never send an e-mail. `events.json` keeps only the newest 12 past
+    one-off events, so a very busy month loses its oldest.
+  - **committee uploads** (`drive.json`): counted on the **later** of `date` (the date the file's name starts
+    with, else when the photo was taken or the file created — drive.py) and `first_seen` (when the site first
+    had it: `later_of` / `laterOf`). A report named "2026-08-11 …" but added on September 25 is in the
+    September digest; a photo taken on the 30th but uploaded on the 2nd is in the next one — every upload is in
+    exactly one edition. Each file's row shows its own `date`. Not bulletin documents, and not dated flyers
+    (events). The photos and videos of an album (`isPhotoItem`) are ONE row per album for the month: "Photos:
+    Booth — 5 new photos", linking `/photos/#<album>` on the page and `/photos/` in the e-mail.
+  - **magazines** (`articles.json`): the issues with stories whose `extra.pub_date` is in P (so the September
+    digest features the October Grapevine, online since September 23). A story without a `pub_date` counts on
+    its issue's earliest `pub_date` (`story_day_of` / `storyDayOf`) — never on `first_seen`, so the stories
+    the site found at its launch never all land in one edition. Per issue: the count, all its stories, the
+    free-to-read count, and whether it is the newest issue on `/read/` (a removed story does not count, as on
+    `/read/`; its link is then `/read/#gv-current` / `#lv-current`, else `/read/`). Also the theme
+    (`issueTheme`: the issue's own, else its stories' `issue_theme`, else the editorial calendar) and
+    `digest.highlights` stories (free to read first, then members' stories; never the writers' stories).
+  - **writers**: `spotlight.json` stories by Area 65 / Texas writers whose `extra.pub_date` is in P. Every
+    story is in exactly one edition.
+  - **podcasts, videos, documents** (`episodes`, `videos`, `pdfs`): `date` in P and not after now + 1 day.
+    A YouTube upload of a podcast episode (same Central day, same title or season/episode) is folded into
+    the episode as "also on YouTube".
+  - **Instagram** (`instagram.json`): the magazines' posts dated in P (not after now + 1 day), per account
+    (`extra.account`, else `category`; Grapevine, La Viña, then any other; La Viña first in Spanish): how
+    many, and the 3 newest (their title — the caption's first line — and day, linking to the post), plus ONE
+    link to the site's `/instagram/` page. The WhatsApp / e-mail texts and the e-mail's text part give only
+    each account's count and that link. The file keeps each account's newest `keep_per_account` (60) posts,
+    so the page can show fewer of P's posts late in K than the e-mail did.
+- ONE pointer at the end: "Coming up in K" → `/monthly/K/`. These belong to the **toolkit** and are never in
+  the digest: the committee meeting and its Zoom details, events not over yet, the weekly meetings, story
+  deadlines, La Viña's topics, the phone lines, Book of the Month, subscriptions, the daily quote, the
+  Instagram accounts to follow (the digest has last month's posts).
+- The intro counts, in this order: magazine stories, podcast episodes, videos, Instagram posts, documents,
+  committee files, photo albums, bulletin posts (`COUNT_ORDER`, both files).
+- English half, then Spanish half (La Viña first there), from the `i18n` fields build_data produced.
+  `digest.per_section` items per list, then "and N more". In the Spanish half, issue labels read as in a
+  sentence ("septiembre/octubre de 2026") and Grapevine's issues and writers say "(en inglés)"; La Viña's say
+  "(in Spanish)" in the English half. Days are written like the website (Intl): "Sat, Sep 12" / "sáb, 12 de
+  sept", with the year when it is another year (`tests/test_digest_parity.py` DaySpelling). Items with the
+  same date are listed in the site's order (`js_order`).
+- The HTML: every section title is an `h3` (the "Coming up" box too), sub-groups are `h4`, and every text is at
+  least 4.5:1 against its background (the small print is "muted", never "faint"; a test checks it).
+- Subject: `Grapevine / La Viña — September 2026 digest · Resumen de septiembre de 2026` (`site.title` first).
+  Multipart HTML + plain text, RFC 2047 headers, `List-Unsubscribe`, several recipients → Bcc.
+- **Waiting for the data**: before sending, `data/site/status.json` must show every source it reads
+  (`FRESH_SOURCES`: announcements, manual_events, drive, articles, pdfs, youtube, podcasts, instagram) tried
+  (`sources[].attempted`, else `updated`) since 00:00 Central on the 1st of K. A source last tried before
+  that, but within `FRESH_IDLE_DAYS` = 3 days of it, gives exit 3 and nothing is sent. An older one has
+  stopped running and is not waited for (`/status/` shows it). `--stale-ok` and `--force` send anyway;
+  `--dry-run` never waits and says what a scheduled send would wait for. (The morning refresh reads only the
+  quick sources — on the 1st also `articles` —, so in practice the e-mail waits for the month's first full
+  update: `pdfs`, `youtube` and `instagram` are read only there.)
+- Sending: port 465 = SSL; any other port must offer STARTTLS, or the run stops before the password is sent
+  (`RuntimeError`, exit 1). Connecting and logging in are tried 3 times on network trouble. The message is
+  handed over **once**: a failure at that point is reported as "It MAY have been sent — check before
+  re-running" and never retried, because a retry could e-mail every district twice.
+- Nothing new in P (no news — Instagram posts count —, no writers) → nothing sent (exit 0).
+- Exit codes: 0 = sent / previewed / nothing new; 1 = SMTP failure; 2 = not configured, `--month` not
+  YYYY-MM, or (sending) a month that is not over yet; 3 = waiting for the data.
 
 `tests/test_digest_parity.py` builds the same editions with `buildMonthlyDigest` (Node.js) and
-`send_digest.collect` — a small data set with the edge cases and the repository's own data — and
-fails on any difference in what they pick, so a rule changed on one side only is caught by the
-Code check.
+`send_digest.collect`, on a small data set with the edge cases and on the repository's own data. It fails on
+any difference in what they pick (news, albums, twins, Instagram accounts, issues, writers, events), so a rule
+changed on one side only is caught by the Code check.
 
 ```bash
-python -m scripts.notify.send_digest --dry-run                          # → .tmp/digest.html + .tmp/digest.txt
-python -m scripts.notify.send_digest --dry-run --month 2026-10 --as-of 2026-10-01
-MONTHLY_NOW=2026-10-01T15:05:00Z npx @11ty/eleventy                     # the /digest/ page of that edition
+python -m scripts.notify.send_digest --dry-run                                     # last month → .tmp/digest.html + .tmp/digest.txt
+python -m scripts.notify.send_digest --dry-run --month 2026-09 --as-of 2026-10-01  # the September digest, as on October 1
+MONTHLY_NOW=2026-10-01T15:05:00Z npx @11ty/eleventy                                # that /digest/ page (and October's toolkit)
 ```
 
 ### `link-check.yml`
@@ -307,7 +347,8 @@ at CityWide Dallas: 2nd Saturday, 17:00–20:00 Central). Chair-facing instructi
 | `build_data.recurring_events()` | `meeting.upcoming_rule_dates()` → the next `months_ahead` dates **plus** the dates of the last 90 days. One event per date: id `ev:recurring:<key>:<YYYY-MM-DD>`, source `committee`, category `recurring`, fixed i18n (the config's `title`/`title_es`, `summary`/`summary_es`; a missing language is machine-translated once and marked in `machine`) and a rule-written `recurrence_label` (the committee meeting's wording: "Every second Saturday of the month · 5:00 – 8:00 PM") plus `extra.rule`, from which the pages write the same line with the meeting's helpers. `build_events` marks the past ones `past: true` without counting them in `PAST_EVENTS_KEEP`. Never `is_new`, never in `whatsnew.json` (`SCHEDULED_EVENT_CATEGORIES`). |
 | `/events/` (`normalizeEvents` in `eleventy/filters/committee.js`) | Every upcoming date as its own card in the **NETA 65 events** group (`GROUP_OF.recurring = "neta"`), with an "Every month" badge, the day rule, the place and the external "Event details" link; "add to calendar" per date. Past dates are left out of the *Past events* list (`whereNot("recurring", true)`). |
 | Calendar feeds (`events-ics.11ty.js`) | One `VEVENT` per date — like the committee meetings — with a stable `UID` from the id (`ev-recurring-<key>-<date>@neta65-gvlv`, `-es` in the Spanish feed), UTC `DTSTART`/`DTEND`, `LOCATION`, `URL`, and the rule line in `DESCRIPTION`. Chosen over one `RRULE` series because UTC instants need no `VTIMEZONE` (an `RRULE` on a UTC start would drift an hour at every DST change; with `TZID` it needs a `VTIMEZONE` that Outlook.com handles unevenly), a skipped month is simply absent (no `EXDATE` quirks), and each date can change on its own. The feed carries the 90 past days (subscribers keep them, as for the committee meetings) and `months_ahead` dates ahead; `REFRESH-INTERVAL` 12 h rolls new dates in. |
-| Home, search, digest, GV/LV report (`/monthly/#report`), e-mail | Only the **next** date of each series (`extra.series`): `homeEvents` (links to the card on `/events/`; the next date of every series **always keeps a place** in the home row of 4 — the other places go to the soonest one-off events, at least one of them when there is any, then at most one more committee meeting; shown by date), the search index (one `event` entry, found by "every month" / "cada mes" too), the monthly digest (`community.js`), the report (`report.js` → `upcomingEvents`), `send_digest.collect()`. In the e-mail a recurring event does not count toward "anything new?" (`total_count`). `/meetings/` shows an "Also every month" box (`cmRecurringNext`). |
+| Home, search, GV/LV report (`/monthly/#report`) | Only the **next** date of each series (`extra.series`): `homeEvents` (links to the card on `/events/`; the next date of every series **always keeps a place** in the home row of 4 — the other places go to the soonest one-off events, at least one of them when there is any, then at most one more committee meeting; shown by date), the search index (one `event` entry, found by "every month" / "cada mes" too), the report (`report.js` → `upcomingEvents`). `/meetings/` shows an "Also every month" box (`cmRecurringNext`). |
+| Monthly toolkit, monthly digest, e-mail | The toolkit (`/monthly/YYYY-MM/`: its dates, poster and message — `monthModel` in `eleventy/filters/monthly.js`) lists every date of its month; on this month's page a date is marked "Over" once it ends (`overAt`, `src/assets/js/monthly.js`). The monthly digest (`community.js` → `monthEventsHeld`) and the e-mail (`send_digest.month_events`) list last month's dates that took place — days only, no "every month" — and never count them as news (`total_count`), so a month with only the booth sends no e-mail. |
 
 ## Events: several days, "to be confirmed", places, outside calendars
 
@@ -317,8 +358,8 @@ Chair-facing instructions: [content/events/README.md](../content/events/README.m
 
 | Topic | How it works |
 |---|---|
-| Several days (the Area assemblies, Fri–Sun) | A content/events file with `start: 2027-03-19` and `end: 2027-03-21` (dates only) is an all-day event whose `end` is the **last** day. `build_data.event_end_ts` puts its end at 23:59 Central on that day (like every event it keeps `past: false` one more day: the `build_events` cutoff is now − 24 h); on the pages `normalizeEvents` (`eleventy/filters/committee.js`) sets `multiDay`, a range tile ("MAR · 19–21 · Fri–Sun"), `rangeLabel` ("Fri, Mar 19 – Sun, Mar 21, 2027" / "Vie, 19 de mar – dom, 21 de mar de 2027") and `timeLabel` "3 days"; the card's `data-cm-expire` is midnight after the last day. `/events.ics`, `/es/events.ics`, the per-event ".ics file" button (`CM.downloadIcs`) and the Google / Outlook links use DATE values with the **exclusive** end (`DTEND;VALUE=DATE:20270322`). Home (`homeEventInfo`, `homeEvents` via `chicagoDayEndMs`), the digest page, the WhatsApp / e-mail text and the district report (`eventWhen`: "Fri, Mar 19 – Sun, Mar 21") and the monthly e-mail (`event_row`) show the range; the digest keeps an event that is still going on (`eventEndMs`). A timed event that only runs past midnight is not "several days" (it must last more than 18 hours). |
-| Details to be confirmed | content/events `tentative: true` (also `yes`, `sí`) → `extra.tentative: true` (announcements.py); an outside calendar's `STATUS:TENTATIVE` does the same. Shown as the badge "Details to be confirmed" / "Detalles por confirmar" (`ui.tentativeBadge`, class `badge-tbc`: dashed outline; the explanation is its tooltip and screen-reader text) on `/events/` cards, the home row, the digest page, the "next event" card of `/announcements/` and search results (index flag `tb`); as " · Details to be confirmed" in the WhatsApp / e-mail text, the district report and the monthly e-mail. Calendar files: `STATUS:TENTATIVE` (every other event `STATUS:CONFIRMED`), and the first line of the description says it (Google / Outlook links cannot carry a status). Deleting the line makes the event confirmed on the next run. |
+| Several days (the Area assemblies, Fri–Sun) | A content/events file with `start: 2027-03-19` and `end: 2027-03-21` (dates only) is an all-day event whose `end` is the **last** day. `build_data.event_end_ts` puts its end at 23:59 Central on that day (like every event it keeps `past: false` one more day: the `build_events` cutoff is now − 24 h); on the pages `normalizeEvents` (`eleventy/filters/committee.js`) sets `multiDay`, a range tile ("MAR · 19–21 · Fri–Sun"), `rangeLabel` ("Fri, Mar 19 – Sun, Mar 21, 2027" / "Vie, 19 de mar – dom, 21 de mar de 2027") and `timeLabel` "3 days"; the card's `data-cm-expire` is midnight after the last day. `/events.ics`, `/es/events.ics`, the per-event ".ics file" button (`CM.downloadIcs`) and the Google / Outlook links use DATE values with the **exclusive** end (`DTEND;VALUE=DATE:20270322`). Home (`homeEventInfo`, `homeEvents` via `chicagoDayEndMs`), the district report (`eventWhen`: "Fri, Mar 19 – Sun, Mar 21") and the monthly toolkit (`dateRow`, over at midnight after its last day) show the range; the monthly digest and its e-mail (`cmEventDays`, `event_row`) list it with its days only, in the digest of the month it **starts** in, once it has started. A timed event that only runs past midnight is not "several days" (it must last more than 18 hours). |
+| Details to be confirmed | content/events `tentative: true` (also `yes`, `sí`) → `extra.tentative: true` (announcements.py); an outside calendar's `STATUS:TENTATIVE` does the same. Shown as the badge "Details to be confirmed" / "Detalles por confirmar" (`ui.tentativeBadge`, class `badge-tbc`: dashed outline; the explanation is its tooltip and screen-reader text) on `/events/` cards, the home row, the "next event" card of `/announcements/` and search results (index flag `tb`); as " · Details to be confirmed" on the monthly toolkit's date rows, poster and message, and in the district report. The monthly digest lists only events that took place, so it never shows it. Calendar files: `STATUS:TENTATIVE` (every other event `STATUS:CONFIRMED`), and the first line of the description says it (Google / Outlook links cannot carry a status). Deleting the line makes the event confirmed on the next run. |
 | The place in both languages | A place is **never** machine-translated. content/events `location_es` (in an English file) / `location_en` (in a Spanish one) → `extra.own_i18n.location` → build_data writes `i18n.location` (`location_pair`). A place that is not known yet ("Venue to be announced", "TBA", "Lugar por anunciarse", "Por confirmar" — `location_is_tba`) gets `extra.location_tba: true` and, when the other language was not written, the site's own words ("Lugar por anunciarse" / "Venue to be announced"). Such a place is shown as plain italic text with an hourglass (no map pin), is left out of `LOCATION` in the calendar files and of the Google / Outlook links (it goes into the description instead) and of the past-events list. Every page reads `i18n.location[lang]`, falling back to `extra.location`. |
 | Outside calendars (`sources.ics_feeds`) | `build_data.ics_events()`: per feed ONE request (see [Crawl politeness](#crawl-politeness)); the answer is `ok` (a calendar file that parses), `blocked` (HTTP 401 / 403 / 429, or Cloudflare's "Just a moment…" check: `cf-mitigated: challenge`, `challenges.cloudflare.com`) or `error`. The last good copy of each feed is kept in `data/state/ics_feeds.json` (with `attempted`, `state`, `http_status`, `error`, and `fetched` = the last success) and used while the feed fails. `_parse_ics` reads The Events Calendar's export (VTIMEZONE + `DTSTART;TZID=America/Chicago`, `UID` `<post id>-<start>-<end>@neta65.org`, `URL` = the event page, `LOCATION` without ", United States", `ATTACH;FMTTYPE=image/…` = the flyer, `CATEGORIES` → tags; CANCELLED left out, RRULE expanded, an all-day `DTEND` is exclusive → last day). `category:` `neta65` (or `ics`) puts the events with the NETA 65 events; `gv-calendar` / `lv-calendar` with the GV/LV calendars. Health → `status.json` `feeds` → the "Other calendars we read" card on `/status/` and the informational block of the run summary. Feeds are not content sources: a blocked feed never counts as failed, never becomes a warning and never opens the "stopped updating" issue. |
 | One event, several sources | `merge_feed_duplicates()` in `build_events`, against everything already on the calendar: content/events files, dated Drive flyers, the committee meeting and every `recurring_events:` date (so a feed that also lists the CityWide Dallas booth or the meeting never doubles them). Two events are the same only when they **start the same local day** and either (1) link the same event page — `event_url_key()` ignores the scheme, `www.`, the trailing slash, `?query` and `#fragment` (`neta65.org/event/<slug>`) — or (2) have the same shape (`_same_shape`: both all-day, or both timed and starting at most `TITLE_MATCH_MAX_GAP_H` = 2 hours apart; never one over several days against one on a single day), are not in two different cities, and have titles that name the same event (`similar_titles`: the telling words — the kind of event included: "workshop", "booth", "assembly" — shared / all ≥ 0.75, the shared city and the year ignored, `lv` / `gv` expanded, "grapevine", "la viña", "neta 65" ignored; word for word when a city is not known, e.g. a place "to be announced"). "LV Writing Workshop" ~ "La Viña Writing Workshop (in Spanish) — Fort Worth"; not ~ "LV Recording Workshop"; "Grapevine Workshop at the Spring Assembly" (7 PM on the assembly's Friday) is **not** the assembly. The same event page on another date is another date (a series, a page used again for a new workshop, or a date that changed): the feed event is kept. The hand-written event wins and keeps its own Spanish; the feed only fills what it leaves out — `flyer_url` / `flyer_thumb`, `online_url` and the event-page `url` only on a sure match (same page, or the same start); a missing place, or one "to be announced" (on a sure match: the feed's venue replaces it); a missing end of the same kind — recorded in `extra.also_in_feed` + `extra.feed_match` (`url` / `title`). Nothing is copied onto the meeting or a recurring date. What the feed says that a file does not (its event page on another date while the file is still upcoming, another start time, a venue the file calls "to be announced") → `feeds[].notes` → a *Check:* line and a `::notice` in the run summary, so the chair updates the file. The same event in two feeds is kept once. `feeds[].duplicates` counts them. Proven by `tests/test_events_feeds.py` with the six real workshop pages and the negative cases (a workshop / booth on an assembly's first day, with a known and with a TBA venue; the same page on another date; the booth and the meeting in a feed). |
@@ -487,8 +528,11 @@ Please keep local test runs short (`--crawl-minutes 5`, `--dry-run`): the magazi
 4. **Templates:** add the site file name to `FILES` in `src/_data/db.js`, then use
    `db.<file>.items` in a page; add UI strings to `src/_i18n/`.
 5. **Test:** `python -m scripts.sync.<name> --dry-run`, then a real run, `npm start`, check `/status/`.
-6. **Digest (optional):** add a group in `NEWS_GROUPS` / `GROUPS` (`scripts/notify/send_digest.py`) and in
-   `MONTH_NEWS` (`eleventy/filters/community.js`), so the e-mail and the `/digest/` page stay the same.
+6. **Digest (optional):** in `scripts/notify/send_digest.py`, add its data file to `NEWS_SOURCES`, its group to
+   `NEWS_GROUPS` and `COUNT_ORDER`, a list of its own to `MEDIA_GROUPS` and its `status.json` source to
+   `FRESH_SOURCES` (so the e-mail waits for it). In `eleventy/filters/community.js`, add the same to
+   `MONTH_SOURCES`, `MONTH_NEWS` and `COUNT_ORDER`, and a section to `src/pages/digest.njk` (`dgList`), so the
+   e-mail and the `/digest/` page stay the same; `tests/test_digest_parity.py` compares them.
 
 ## Environment variables and secrets
 

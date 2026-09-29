@@ -75,7 +75,7 @@ Source file names: `drive.json`, `youtube.json`, `podcasts.json`, `instagram.jso
 | crawl | pdf | `gvr` `rlv` `catalog` `flyer` `postcard` `news` `guidelines` `order-form` `workbook` `service` `literature` `other` | `host`, `file_url`, `size_bytes`, `pages`, `thumb` (site-relative path or null), `referrers` [{`url`,`title`}], `upload_month` ("2026-02"), `link_texts` [..] |
 | drive | document / slides / photo / video_file / form | `reports` `notes` `slides` `flyers` `photos` `workshops` `announcements` `forms` `other` | `file_id`, `mime`, `panel` (77), `panel_label`, `path` ["photos","WhatsApp"], `album` (sub-folder name or null), `view_url`, `preview_url`, `download_url`, `thumb_url`, `image_url`, `is_image`, `is_video`, `is_pdf` |
 | committee / drive / calendar | event | `committee` `recurring` `flyer` `gv-calendar` `lv-calendar` `manual` `ics` `neta65` | `start` (ISO datetime or date), `end` (for an all-day event: the LAST day, inclusive), `all_day`, `location`, `online_url`, `flyer_url`, `flyer_thumb`, `city`, `state`, `tentative` (present, `true`, only on an event whose details are not final) (+ `recurring`, `series`, `rule`, `recurrence_label` — see §5; manual: `own_i18n`; .ics feeds: `feed`, `uid`) |
-| committee / drive | announcement (a post on `/bulletin/`) | `manual` / `drive` | `body_md` (original-language Markdown), `expires` (date|null), `pinned` (bool); content/bulletin: `own_i18n` (below), `link` (the header's `url:`; a file saved next to the post is `/bulletin/files/<name>`); `url` = `/bulletin/#<slug>` unless `url:` names a web page |
+| committee / drive | announcement (a post on `/bulletin/`) | `manual` / `drive` | `body_md` (original-language Markdown), `expires` (date|null), `pinned` (bool), `publish` (date|null — content/bulletin `publish:` or a Drive name's "(from 2027-02-01)" / "(desde …)" / "(publish …)" / "(publicar …)": the post is left out of every site file until that day, Central time; a post without its own date is dated its publish day); content/bulletin: `own_i18n` (below), `link` (the header's `url:`; a file saved next to the post is `/bulletin/files/<name>`); `url` = `/bulletin/#<slug>` unless `url:` names a web page |
 
 `editorial.json` items (kind `topic`): `extra` = `publication`, `issue_label`, `deadline` (date\|null), `theme`.
 `extra.own_i18n` (content/events and content/bulletin files only, when the header has them):
@@ -408,8 +408,9 @@ the joining details (Zoom links, phones and contacts are never copied).
 ### quote.json — the daily quote (home page)
 Grapevine's "Daily Quote" and La Viña's "Cita Diaria", read by `scripts/sync/quote.py` from the block
 `#quote-of-the-day` of each magazine's home page (`sources.<grapevine|lavina>.quote_page`, default `/`): one
-request per site, in the full daily run (10:17 UTC) and again in the quick 12:07 UTC run (always after 6 AM
-Texas time, when the new quote is out) — none when an earlier module of the same run already read that home page
+request per site, in every update — the morning refresh the Morning check starts (by 5:30 AM Central; it
+reads the quote right after the bulletin), the midday refresh (the 12:07 UTC schedule) and the full daily run —
+none when an earlier module of the same run already read that home page
 (the shared session's page memo). `build_data.py` → `quote.build_site()`; nothing is translated.
 ```json
 { "updated": "2026-09-25T12:09:40Z", "fixture": false,
@@ -425,8 +426,9 @@ Texas time, when the new quote is out) — none when an earlier module of the sa
       "url": "https://www.aagrapevine.org/#quote-of-the-day",
       "signup_url": "https://visitor.r20.constantcontact.com/…" } ] }  // the publication's own e-mail sign-up
 ```
-* The raw file also keeps `history` (the last 14 days per publication — see *Raw envelope extras*): it is only
-  the guard that keeps a newer quote when a page shows an older one, so it is not copied into the site file.
+* The raw file also keeps `history` (the last 14 days per publication — see *Raw envelope extras*): the guard
+  that keeps a newer quote when a page shows an older one and, through each entry's `seen`, the source of
+  `status.json` → `quote_days`; it is not copied into the site file.
 * A page that cannot be fetched or read keeps that publication's previous quote (item + history); the raw
   envelope gets `ok: false` with the reason ("Daily quote" on /status/). The sign-up link is the teaser's
   own link field; the embed near the top of both pages links Grapevine's list, so a fallback only takes a
@@ -493,6 +495,18 @@ around the values below — never the official sentences machine-translated.
       "attempted": "…",      // last run, successful or not
       "count": 528, "new_7d": 3, "error": null, "stats": { /* the module's own counters */ } }
   ],
+  "scheduled": [            // bulletin posts whose `publish` day is still to come (build_announcements): soonest
+                            // first, at most 20 — not on the site yet; listed in the Actions run summary
+    { "publish": "2027-02-01", "title": "Spring Assembly sign-ups", "source": "committee",   // or "drive"
+      "file": "content/bulletin/spring.md" } ],            // a Drive post: its file name
+  "quote_days": {           // when each of the last 7 mornings' daily quotes came in (quote.py history `seen`)
+    "goal": "05:30",        // config site.morning_goal (missing / unreadable → "05:30"), Central time
+    "days": [ { "day": "2026-09-29",                  // newest first
+                "goal_at": "2026-09-29T10:30:00Z",    // that day's goal as an instant (10:30Z on a CDT day, 11:30Z on CST)
+                "gv": "2026-09-29T09:31:00Z",         // when Grapevine's quote of that day was first read (null: not in)
+                "lv": null } ] },
+  "full_update": "2026-09-28T18:17:20Z",   // when the last FULL daily update ran: the newest `attempted` of the
+                                           // sources only it reads (run_all.FULL_ONLY); null when none ran
   "crawl": { "known_pages": 3162, "crawled_pages": 52, "never_crawled": 3110, "never_crawled_events": 2939,
              "queue_remaining": 3110, "est_days_to_full": 9.6, "last_run_pages": 0, "page_errors": 0, "new": 0,
              "pdfs": 92,               // the Library's entries (curated: official, each once) — as sources[pdfs].count (its new_7d counts the same entries)
@@ -535,7 +549,32 @@ a site's bot protection blocks never counts as failed and never opens the "A con
 updating" issue.
 `pending` > 0 means the translation time budget ran out; the rest is translated on the next run.
 `rejected_by_guard` counts sentences whose machine translation was refused (repeated words,
-> 2.5× longer, changed numbers, HTML entities) — those keep their original text.
+more than 2.5× longer, changed numbers, HTML entities) — those keep their original text.
+
+`quote_days` is shown on /status/ (eleventy/filters/freshness.js `fsQuoteMornings`: the line under "Daily
+quote" — naming the magazine whose quote has not come in yet, when only one has — and the last 7 mornings in
+the technical details). "Came in" is when the update first READ the quote, not the deploy time; the Morning
+check's run summary has that. Days before the first recorded `seen` are left out (the list fills up over its
+first week), and so is a day whose quote is in the history without a time (an entry written before the times
+were kept): /status/ never shows an invented time. `full_update` goes into /build.json `full` (below).
+
+### /build.json — a note about the build (a site output, not a data file)
+Written by `src/pages/build-info.11ty.js` with every build; read only by the Morning check
+(`.github/workflows/morning.yml` first job, and `scripts/ops/morning_check.py`):
+```json
+{ "v": 1, "built": "2026-09-29T09:33:41Z",   // the build's time (UTC; the footer's "Last updated")
+  "day": "2026-09-29",                       // that time's day in site.timezone (Central)
+  "tz": "America/Chicago",
+  "quotes": { "gv": "2026-09-29", "lv": "2026-09-29" },   // the day of each quote in data/site/quote.json
+  "data": "2026-09-29T09:33:10Z",            // status.json `generated` (when build_data last ran), or null
+  "full": "2026-09-28T18:17:20Z",            // status.json `full_update` (when the last full update ran), or null
+  "run": "36480000000",                      // GITHUB_RUN_ID of the run that built it ("" locally)
+  "version": "c3f09a1b2d", "commit": "9b44e62" }          // src/_data/build.js
+```
+"Today's update is on the site" = `day` and both `quotes` are today (Central). The full daily update is due
+when `full` is before midnight on the 1st of the month (Central) or more than 30 hours old; the Morning check
+then starts one. Not linked, and not in the collections, sitemap or search. Nothing in it is new (/status/
+shows the same facts). update.yml warns and check.yml fails when it is missing.
 
 ### The monthly toolkit (`/monthly/`) — no data file of its own
 `eleventy/filters/monthly.js` builds one model per month at build time (America/Chicago): this month + the
@@ -668,7 +707,7 @@ field also gets `i18n.<name> = {en, es}` in the site file.
 | `pdfs.json` | `crawl` {`known_pages`, `crawled_pages`, `pdfs`, `last_run_pages`}; crawler counters are in `stats` |
 | `events_external.json` | `cache`, `sitemap` (module bookkeeping — not used by the site) |
 | `meetings.json` | `feeds` [{`id`, `name`, `url`, `lang`, `ok`, `count`, `method` (feed/page), `key_from` (secret/config/key_source — never the key), `error`, `note`, `updated`, `attempted`}], `type_labels` {code: {en, es}}. Items: `mtg:<hash>` (kind `meeting`, `title` = name, `url` = the meeting's page; `extra` = `day`, `time`, `end_time`, `location`, `address`, `street`, `zip`, `city`, `county`, `state`, `lat`, `lng`, `approximate`, `region`, `district`, `types`, `attendance`, `in_area`, `sources`) |
-| `quote.json` | `history` {gv/lv: [{`pub`, `lang`, `date`, `heading`, `text`, `attribution`, `source`, `source_lang`, `url`, `signup_url`}]} — the last 14 days, newest first, one per day (raw only: the guard against a page going back to an older quote; never shown). Items: `quote:<pub>:<date>` (kind `quote`, `title` = the official heading, `url` = the page anchor; `extra` = `pub`, `text`, `attribution`, `source`, `source_lang`, `signup_url`, `date_label`, `date_from_heading`, `block` (teaser/embed/anchor), `node`) |
+| `quote.json` | `history` {gv/lv: [{`pub`, `lang`, `date`, `heading`, `text`, `attribution`, `source`, `source_lang`, `url`, `signup_url`, `seen` (the UTC time that day's quote was first read; kept on later reads; null in an entry written before these times were kept — it never gets one)}]} — the last 14 days, newest first, one per day (raw only: the guard against a page going back to an older quote, and the times behind `status.json` → `quote_days`; never shown as such). Items: `quote:<pub>:<date>` (kind `quote`, `title` = the official heading, `url` = the page anchor; `extra` = `pub`, `text`, `attribution`, `source`, `source_lang`, `signup_url`, `date_label`, `date_from_heading`, `block` (teaser/embed/anchor), `node`) |
 | `shop.json` | `bulk_discounts` {`source_url`, `tiers`, `note` {en?, es?}}, `types` {gv/lv: {print/digital/complete: {`text`, `lang`, `url`}}}, `listings` [{`pub`, `region`, `url`}], `types_checked` (ISO; type descriptions are re-read every 30 days), `specialty_checked` (ISO; specialty pages are re-read every 7 days). Items: `botm:gv` / `botm:lv` (kind `botm`; `extra` = `pub`, `page_url`, `price`, `sale_price`, `discount_pct`, `currency`, `sku`, `starts`, `ends`, `month`, `month_label`, `offer_text`, `product_name`, `image_src`), `sub:<pub>:<region>:<sku>` (kind `subscription`; `extra` = `pub`, `region`, `listing_url`, `type`, `term_months`, `price`, `currency`, `sku`, `volume`, `position`, `image_src`) and `special:<pub>:<sku>` (kind `specialty`, `summary` = the short description; `extra` = `pub`, `type`, `price`, `currency`, `sku`, `volume`, `trilingual`, `pack`, `page_url`, `position`, `image_src`) |
 
 `articles.json` → `archive_state` — the archive listings (aagrapevine.org/archive, aalavina.org/archivo):
@@ -718,7 +757,7 @@ it is read once.
 | meeting (`weekly_open`) | `zoom_id`, `zoom_url`, `passcode`, `day`, `time`, `time_central`, `sentence`, `weekday`, `start_local`, `timezone`, `next_start`, `url`, `player_url`; La Viña item (`weekly_open_lv`, §2): no `sentence`/`player_url`, plus `starts`, `source_note`, `own_i18n` | written by rules from weekday/start_local/timezone: `day` ("Wednesdays"/"Miércoles"), `time` ("Noon Eastern"/"mediodía (hora del Este)"), `time_central` ("11:00 AM Central"/"11:00 a. m. (hora del Centro)"), `when` ("Wednesdays at 11:00 AM Central"/"Los miércoles a las 11:00 a. m. (hora del Centro)" — capitalized for a line of its own; a sentence lower-cases the first letter), `sentence` (join line with Zoom ID + passcode). Machine-translated only if those fields are missing |
 | event (`events`) | common: `start`, `end`, `all_day`, `location`, `online_url`, `flyer_url`, `flyer_thumb`, `city`, `state`, `past`; `tentative` (`true` only: details to be confirmed), `location_tba` (`true` only: the place is not known yet — "Venue to be announced"; decided by the item's own `location`, by `location_es` / `location_en` only when there is no `location`). Committee: `meeting_id`, `passcode`, `recurring`. Recurring (category `recurring`, below): `recurring` (`true`), `series`, `rule`, `recurrence_label`. External calendar: `platform`, `online`, `scope`, `site`, `country`, `website`, `organizer`, `date_text`. Drive flyer: `drive_id`, `is_pdf`, `is_image`. Manual: `body_md`, `slug`, `file`, `own_i18n`; `also_in_feed` (the key of an .ics feed that lists the same event — also on a flyer, committee or recurring event) + `feed_match` (`url` / `title`). .ics feed (category `neta65` / `ics` / `gv-calendar` / `lv-calendar`, source `calendar`): `feed` (the feed's key), `uid` | committee meetings and recurring events: fixed human `title`/`summary` in both languages; recurring: `recurrence_label` (rules); manual: `body_md` (+ the file's own `title_es` / `summary_es`, never machine-translated); `location` (the file's `location_es` / `location_en`, or the site's own words for a place not known yet — never machine-translated) |
 | document / slides / photo / video_file / form (`drive`) | `file_id`, `mime`, `name`, `panel`, `panel_label`, `path`, `album`, `view_url`, `preview_url`, `download_url`, `thumb_url`, `image_url`, `is_image`, `is_video`, `is_pdf`, `file_type`, `folder_id`, `folder_url`, `folder_chain`, `modified_text`, `size_bytes`, `duration_sec`, `shortcut_id`, `generic_name`, flyers: `event_date`, `event_title`, `event_time`, `event_end_time`, `event_location` / `event_month`, forms: `form_closed`, `form_signin_required` | `album` (photos in a sub-folder) |
-| announcement (`announcements`: the bulletin's posts) | `body_md`, `expires`, `pinned`, `slug`, `file` (`content/bulletin/<name>.md`), `link`, `own_i18n` | `body_md` (+ the file's own `title_es` / `summary_es`) |
+| announcement (`announcements`: the bulletin's posts) | `body_md`, `expires`, `publish`, `pinned`, `slug`, `file` (`content/bulletin/<name>.md`), `link`, `own_i18n` | `body_md` (+ the file's own `title_es` / `summary_es`) |
 
 #### Recurring events (category `recurring`; build_data.recurring_events)
 One item per date of each `recurring_events:` entry in `config/site.yml` — the next `months_ahead` (default 6;
