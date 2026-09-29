@@ -3,9 +3,14 @@
     python -m scripts.sync.run_all                       # everything (what GitHub Actions runs daily)
     python -m scripts.sync.run_all --crawl-minutes 40    # crawl budget (or env GV_CRAWL_MINUTES)
     python -m scripts.sync.run_all --crawl-minutes 0     # everything except the PDF crawl
-    python -m scripts.sync.run_all --quick               # push/edit refresh + the 12:07 UTC run: drive,
-                                                         #   announcements, podcasts (cheap), the daily
-                                                         #   quote (2 requests) + build_data; no crawl
+    python -m scripts.sync.run_all --quick               # push/edit refresh + the midday run (12:07 UTC):
+                                                         #   drive, announcements, podcasts (cheap), the
+                                                         #   daily quote (2 requests) + build_data; no crawl
+    python -m scripts.sync.run_all --morning             # the morning refresh the Morning check starts
+                                                         #   (new day + daily quote by 5:30 AM Central):
+                                                         #   --quick with the quote read second, plus the
+                                                         #   monthly sources on the 1st and 15th
+                                                         #   (MORNING_EXTRA, once that day)
     python -m scripts.sync.run_all --only youtube,podcasts
     python -m scripts.sync.run_all --skip crawl --no-translate
 
@@ -14,8 +19,8 @@ shop (Book of the Month + subscription prices, ~15 requests), audio_project (the
 phone lines of Grapevine and La Viña, 3 requests), meetings (Grapevine meetings from
 the intergroups' meeting lists, one request per list), events_external, quote (Grapevine's and La
 Viña's daily quote, one request per home page; as late as possible, so a winter run at 4:17 AM
-Central is more likely to find the new one), crawl (last, time-boxed), then build_data (which
-translates).
+Central is more likely to find the new one — except in the morning refresh, which reads it right after
+the bulletin: see MORNING_EXTRA), crawl (last, time-boxed), then build_data (which translates).
 
 Each module runs in this same process (so the polite crawl delay for aagrapevine.org /
 aalavina.org is shared) and is isolated: if one fails — or is missing — it is logged and the
@@ -35,7 +40,7 @@ import time
 import traceback
 from pathlib import Path
 
-from .common import RAW_DIR, get_logger, load_raw, run_module
+from .common import RAW_DIR, get_logger, load_raw, parse_iso, run_module
 
 log = get_logger("run_all")
 
@@ -43,12 +48,13 @@ MODULES = ["drive", "announcements", "podcasts", "youtube", "instagram", "articl
            "weekly_open", "shop", "audio_project", "meetings", "events_external", "quote", "crawl"]
 RAW_NAME = {"crawl": "pdfs"}            # module → data/raw/<name>.json it writes (default: same name)
 
-# --quick (a settings/content edit was pushed, or the 12:07 UTC scheduled run — see
-# .github/workflows/update.yml): only the sources that are cheap, then build_data. The daily run does
-# the rest. "quote" is the one that touches aagrapevine.org / aalavina.org (5 s crawl delay): just the
-# two home pages, so the day's quote (out before 6 AM Texas time) is on the site early every morning.
+# --quick (the push refresh after a settings/content edit, the midday run — the 12:07 UTC schedule —
+# and, with MORNING_EXTRA below, the morning refresh the Morning check starts; see
+# .github/workflows/update.yml and morning.yml): only the sources that are cheap, then build_data. The
+# daily run does the rest. "quote" is the one that touches aagrapevine.org / aalavina.org (5 s crawl
+# delay): just the two home pages, so the day's quote is on the site early every morning.
 QUICK_MODULES = ("drive", "announcements", "podcasts", "quote")
-# Flags for the slow, optional parts of a module under --quick (also with --only … --quick).
+# Flags for the slow, optional parts of a module under --quick / --morning (also with --only … --quick).
 # They are only passed if the module supports them.
 QUICK_ARGS = {
     "youtube": ["--no-backfill"],
@@ -56,6 +62,27 @@ QUICK_ARGS = {
     "articles": ["--no-details"],
     "instagram": ["--no-enrich"],
 }
+# --morning (Update & Deploy's MORNING mode, started by the Morning check so the new day and the daily
+# quote are on the site by 5:30 AM Central): the --quick sources with their quick options — the daily
+# quote, the reason for the run, read right after the bulletin — plus, on these days of the month
+# (Central), the sources whose news is monthly: the Book of the Month (shop, ~15 requests) changes on the
+# 15th, and the month on the 1st (shop again, and the new magazine issues: articles, hub pages only), so
+# /shop/, /monthly/ and /digest/ open the day with it. They come after the quote, so a slow magazine
+# server can never keep the quote out of the run's time box, and only in the day's first morning refresh
+# that gets to them: one whose raw file was already read (or tried) that day skips them (the Morning check
+# may start up to three refreshes a morning, for a late quote).
+MORNING_EXTRA = {1: ("shop", "articles"), 15: ("shop",)}
+# Time boxes of the morning refresh (on top of QUICK_ARGS); a flag a module does not support is dropped
+# with its value by run_source (never left behind as a stray argument).
+MORNING_ARGS = {"drive": ["--max-minutes", "5"], "articles": ["--no-archive"]}
+# The sources only the FULL daily update reads — neither --quick nor --morning (not even as a monthly
+# extra), and not the time-boxed PDF crawl, which a run may leave out (--crawl-minutes 0): the newest
+# `attempted` among them is when the last full update ran. build_data writes it to status.json
+# `full_update` and the build to /build.json `full`; the Morning check (.github/workflows/morning.yml,
+# scripts/ops/morning_check.py) starts a full update when it is older than midnight on the 1st of the
+# month, or older than 30 hours (GitHub skipped or failed the day's run).
+FULL_ONLY = tuple(m for m in MODULES if m != "crawl" and m not in QUICK_MODULES
+                  and not any(m in mods for mods in MORNING_EXTRA.values()))
 
 
 def _supports(mod, flag: str) -> bool:
@@ -63,6 +90,13 @@ def _supports(mod, flag: str) -> bool:
         return f'"{flag}"' in inspect.getsource(mod) or f"'{flag}'" in inspect.getsource(mod)
     except (OSError, TypeError):
         return False
+
+
+def _attempted_on(name: str, day, tz) -> bool:
+    """data/raw/<name>.json was read — or tried — on `day`, the site's calendar day (time zone `tz`)."""
+    raw = load_raw(RAW_NAME.get(name, name))
+    t = parse_iso(str(raw.get("attempted") or raw.get("updated") or ""))
+    return t is not None and t.astimezone(tz).date() == day
 
 
 def _raw_summary(name: str) -> dict:
@@ -94,11 +128,20 @@ def run_source(name: str, argv: list[str]) -> dict:
     if not callable(fn):
         row.update(status="missing", note="no main()")
         return row
-    args = list(argv)
-    dropped = [a for a in args if a.startswith("--") and not _supports(mod, a)]
+    # A flag the module does not know is dropped — with its value, if it has one ("--max-minutes 5").
+    args, dropped, i = [], [], 0
+    argv = list(argv)
+    while i < len(argv):
+        a = argv[i]
+        if a.startswith("--") and not _supports(mod, a):
+            has_value = i + 1 < len(argv) and not argv[i + 1].startswith("--")
+            dropped += argv[i:i + 2] if has_value else [a]
+            i += 2 if has_value else 1
+            continue
+        args.append(a)
+        i += 1
     if dropped:
         log.warning("%s does not support %s — ignored", name, dropped)
-        args = [a for a in args if a not in dropped]
 
     def call() -> None:
         try:
@@ -151,7 +194,7 @@ def run_build(no_translate: bool, out: str | None = None, translate_minutes: flo
     return row
 
 
-def print_table(rows: list[dict], total_seconds: float | None = None) -> None:
+def print_table(rows: list[dict], total_seconds: float | None = None, title: str = "Daily content update") -> None:
     head = f"{'module':<16}{'status':<14}{'secs':>7}{'items':>8}{'new':>6}  note"
     lines = [head, "─" * len(head)]
     for r in rows:
@@ -167,7 +210,7 @@ def print_table(rows: list[dict], total_seconds: float | None = None) -> None:
     if summary:                        # nice table on the GitHub Actions run page
         try:
             with open(summary, "a", encoding="utf-8") as f:
-                f.write("### Daily content update\n\n| module | status | seconds | items | new | note |\n"
+                f.write(f"### {title}\n\n| module | status | seconds | items | new | note |\n"
                         "|---|---|---:|---:|---:|---|\n")
                 for r in rows:
                     icon = {"ok": "✅", "skipped": "⏭️"}.get(r["status"], "⚠️")
@@ -189,6 +232,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--quick", action="store_true",
                     help=f"fast refresh: only {', '.join(QUICK_MODULES)} (cheap options) + build_data; "
                          "no crawl unless --crawl-minutes N (N > 0) is also given")
+    ap.add_argument("--morning", action="store_true",
+                    help="the morning refresh (the Morning check's): --quick, plus on the 1st and the 15th of "
+                         "the month (Central) the monthly sources — " + "; ".join(
+                             f"day {d}: {', '.join(m)}" for d, m in sorted(MORNING_EXTRA.items())))
     ap.add_argument("--no-translate", action="store_true", help="build without running the translation model")
     ap.add_argument("--translate-minutes", type=float, default=None, metavar="N",
                     help="time box for new translations in build_data (default 40 / env GV_TRANSLATE_MINUTES)")
@@ -214,9 +261,29 @@ def main(argv: list[str] | None = None) -> int:
     def skipped(name: str, why: str) -> dict:
         return {"module": name, "status": "skipped", "seconds": 0.0, "items": None, "new": None, "note": why}
 
+    # --quick and --morning are the two lean modes; --morning reads the daily quote right after the
+    # bulletin and adds the monthly sources of the day (MORNING_EXTRA, by the Central calendar day —
+    # quote.local_today, the day the site shows) that no run has read yet that day.
+    lean = a.quick or a.morning
+    flag = "--morning" if a.morning else "--quick"
+    order = list(MODULES)
+    extra: tuple[str, ...] = ()
+    read_today: tuple[str, ...] = ()
+    if a.morning:
+        from .quote import local_today, local_tz
+        today = local_today()
+        order.remove("quote")
+        order.insert(order.index("announcements") + 1, "quote")
+        due = MORNING_EXTRA.get(today.day, ())
+        read_today = tuple(m for m in due if _attempted_on(m, today, local_tz()))
+        extra = tuple(m for m in due if m not in read_today)
+        if due:
+            log.info("--morning on day %d of the month: also %s%s", today.day, ", ".join(extra) or "nothing more",
+                     f" ({', '.join(read_today)} read today already)" if read_today else "")
+
     t0 = time.monotonic()
     rows = []
-    for name in MODULES:
+    for name in order:
         if (only and name not in only) or name in skip:
             continue
         args: list[str] = []
@@ -224,16 +291,18 @@ def main(argv: list[str] | None = None) -> int:
             if crawl_minutes is not None and crawl_minutes <= 0:
                 rows.append(skipped(name, "--crawl-minutes 0"))
                 continue
-            if a.quick and a.crawl_minutes is None:          # (an env default never forces a crawl)
-                rows.append(skipped(name, "--quick"))
+            if lean and a.crawl_minutes is None:             # (an env default never forces a crawl)
+                rows.append(skipped(name, flag))
                 continue
             if crawl_minutes is not None:
                 args += ["--minutes", f"{crawl_minutes:g}"]
-        elif a.quick and not only and name not in QUICK_MODULES:
-            rows.append(skipped(name, "--quick"))
+        elif lean and not only and name not in QUICK_MODULES and name not in extra:
+            rows.append(skipped(name, f"{flag} (read today already)" if name in read_today else flag))
             continue
-        if a.quick:
+        if lean:
             args += QUICK_ARGS.get(name, [])
+        if a.morning:
+            args += MORNING_ARGS.get(name, [])
         rows.append(run_source(name, args))
 
     build_ok = True
@@ -241,7 +310,7 @@ def main(argv: list[str] | None = None) -> int:
         row = run_build(a.no_translate, a.out, a.translate_minutes)
         rows.append(row)
         build_ok = row["status"] == "ok"
-    print_table(rows, time.monotonic() - t0)
+    print_table(rows, time.monotonic() - t0, "Morning refresh" if a.morning else "Daily content update")
     log.info("total %.1f min", (time.monotonic() - t0) / 60)
     return 0 if build_ok else 1
 

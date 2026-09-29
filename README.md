@@ -14,7 +14,9 @@ to hand-edit pages, retype flyers or translate anything any more.
 ## Resumen en español
 
 Sitio web del **Comité de Grapevine y La Viña del Área 65 del Noreste de Texas**.
-**Se actualiza solo todas las mañanas** (≈ 5 a. m., hora del Centro), en **inglés y español**.
+**Se actualiza solo todos los días**, en **inglés y español**. La **cita del día** de Grapevine y La Viña y
+las fechas del nuevo día quedan en el sitio **antes de las 5:30 a. m.** (hora del Centro) con la **alarma de
+la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)).
 
 - Trae automáticamente los **artículos nuevos** de Grapevine y La Viña, **los documentos oficiales** (PDF) de
   aagrapevine.org y aalavina.org — **cada uno una sola vez**, con sus ediciones en inglés, español y francés
@@ -27,7 +29,8 @@ Sitio web del **Comité de Grapevine y La Viña del Área 65 del Noreste de Texa
   - Un **volante** con la fecha al inicio del nombre se convierte en **evento** — con hora y lugar si
     los escribe: `2027-03-14 Asamblea de primavera 9am @ Tyler TX.pdf`
   - Un **Google Doc** en `boletín` (o `bulletin`) se convierte en un aviso del **Boletín**; `(fijado)` lo
-    deja arriba y `(hasta 2027-02-01)` lo oculta después de esa fecha.
+    deja arriba, `(desde 2027-02-01)` lo publica ese día (con la actualización de esa mañana) y
+    `(hasta 2027-02-01)` lo oculta después de esa fecha.
   - Cada **subcarpeta** de `fotos` es un **álbum**. Por favor, solo fotos donde **no se reconozca la
     cara** de ningún miembro de AA.
 - **Tienda** (`/es/shop/`): el **libro del mes** de Grapevine y La Viña y los **precios de suscripción** por
@@ -59,8 +62,11 @@ Sitio web del **Comité de Grapevine y La Viña del Área 65 del Noreste de Texa
   **Corregir una traducción:** `data/translations/overrides.yml`.
 - **Eventos sin volante** (talleres, asambleas): un archivo en `content/events`. Si todavía faltan
   detalles, `tentative: true` muestra "Detalles por confirmar"; el lugar en español va en `location_es`.
-- **¿Funciona todo?** Página **/es/status/** del sitio, o la pestaña **Actions** en GitHub.
-  **Actualizar ya:** GitHub → **Actions** → **Update & Deploy** → **Run workflow**.
+- **¿Funciona todo?** Página **/es/status/** del sitio (junto a *Cita del día*: a qué hora llegaron las
+  citas de hoy), o la pestaña **Actions** en GitHub.
+  **Actualizar ya:** GitHub → **Actions** → **Update & Deploy** → **Run workflow**. **Poner ya la cita de
+  hoy:** **Actions** → **Morning check** → **Run workflow** (solo hace lo que falta: si la revista ya publicó
+  la cita, la trae; si no, lo dice).
 
 Las instrucciones detalladas están abajo (en inglés); puede usar el traductor de su navegador.
 
@@ -68,8 +74,9 @@ Las instrucciones detalladas están abajo (en inglés); puede usar el traductor 
 
 ## The short version
 
-| Every morning (≈ 5 AM Central) the site automatically… | You only… |
+| Every day the site automatically… | You only… |
 |---|---|
+| puts the new day and the Grapevine and La Viña **daily quote** up by **5:30 AM Central** (with the [morning alarm](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)) | *(once)* set up the morning alarm — about 15 minutes |
 | picks up new **Grapevine** and **La Viña** magazine stories | **upload files** to the committee's Google Drive folders (flyers, reports, notes, slides, photos) |
 | searches **aagrapevine.org** and **aalavina.org** for every **PDF** (flyers, catalogs, GVR/RLV kits, order forms…) | *(optional)* change a setting in **`config/site.yml`** |
 | adds new episodes of **both podcasts**, new **YouTube** videos and **Instagram** posts | |
@@ -93,7 +100,7 @@ No paid services, no passwords or API keys required.
 7. [Running the update right now](#7-running-the-update-right-now)
 8. [Is everything working?](#8-is-everything-working)
 9. [Instagram: how the site reads it (please read)](#9-instagram-how-the-site-reads-it-please-read)
-10. [Optional upgrades](#10-optional-upgrades) (Google API key · Instagram token · monthly e-mail)
+10. [Optional upgrades](#10-optional-upgrades) (Google API key · Instagram token · monthly e-mail · the morning alarm)
 11. [First-run checklist](#11-first-run-checklist) (and what to expect on day 1)
 12. [Using your own address (custom domain)](#12-using-your-own-address-custom-domain)
 13. [Replacing the old site](#13-replacing-the-old-site)
@@ -106,10 +113,19 @@ No paid services, no passwords or API keys required.
 
 ## 1. What updates automatically
 
-Every day at about **5:17 AM Central** (4:17 AM in winter) GitHub runs the **Update & Deploy** job.
-A short second run at about **7:07 AM Central** (6:07 AM in winter) picks up the Grapevine and La Viña
-**daily quote**, which is out before 6 AM Texas time.
-It also runs within a few minutes whenever someone saves a change to the settings or content.
+**By 5:30 AM Central every day** the new day's dates and both **daily quotes** are on the site: at 4:30 AM
+the [morning alarm](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended) starts the
+**Morning check**, which runs a short **morning refresh** of the **Update & Deploy** job (the daily quote,
+Google Drive, the bulletin and the podcasts — on the 1st also the new magazine issues, on the 1st and the
+15th the Book of the Month; about 3 minutes) and checks the live site. If a magazine has not published its
+quote yet, it asks again every 10 minutes until 7 AM (after that, each Morning check asks once).
+
+The **full update** (every source, the PDF search) runs once a day on GitHub's own schedule, at 5:17 AM
+Central (4:17 AM in winter) when GitHub is on time — lately GitHub starts timed runs hours late — and a
+**midday refresh** follows at 7:07 AM (6:07 AM in winter), also whenever GitHub gets to it. On the 1st of
+the month, and after a day GitHub skipped, the Morning check also starts the full update — even when
+today's quotes were already on the site. The site also updates within a few minutes whenever someone saves
+a change to the settings or content.
 
 | Source | What the site gets | Where it shows |
 |---|---|---|
@@ -135,7 +151,8 @@ It also runs within a few minutes whenever someone saves a change to the setting
 
 The site also offers, automatically: a **What's New** page (the newest items from every source),
 an **RSS feed**, a **calendar file** your phone can subscribe to, **QR posters** for districts (with the committee meeting on them),
-a **search** page, and a **status** page that shows the health of every source. **Shop** is the one
+a **search** page, and a **status** page that shows the health of every source (and when each morning's
+daily quotes came in). **Shop** is the one
 page for subscribing and buying (every purchase links to the official Grapevine / La Viña stores;
 the old `/subscribe/` address redirects there, #anchors included).
 
@@ -239,7 +256,11 @@ Bulletin page (`/bulletin/`, under *Committee*); the file name is the headline a
 |---|---|
 | `2027-01-10 Welcome new GVRs` | Headline "Welcome new GVRs", dated Jan 10, 2027 |
 | `2027-01-10 Welcome new GVRs (pinned)` — or `(fijado)` | Stays at the top |
+| `Spring Assembly sign-ups (from 2027-02-01)` — or `(desde 2027-02-01)` | Stays off the site until Feb 1, 2027, and appears that morning (by 5:30 AM) |
 | `Summer schedule (until 2027-08-31)` — or `(hasta 2027-08-31)` | Disappears by itself after Aug 31 |
+
+A scheduled post is kept off the site, not hidden: the Drive folder is shared with anyone who has its link,
+so the document can be opened there before its day.
 
 **Documents.** A date at the start of any file name sets its date: `2027-03-14 Area report.pdf`.
 Dates can also be written `03-14-2027`, `March 14, 2027` or `14 de marzo de 2027`.
@@ -410,7 +431,8 @@ Drive is the easy way. If you prefer GitHub, you can also add a small text file:
 - **Bulletin post:** a Markdown file in [`content/bulletin/`](content/bulletin/README.md), e.g. `2027-01-10-welcome-gvrs.md`.
   It needs no header (the first `# heading` is the title, a date at the start of the file name is the date),
   pictures and PDFs saved next to it can be linked by name, and [`_example.md`](content/bulletin/_example.md)
-  shows every option.
+  shows every option. To post it on a later day, add `publish: 2027-02-01` to the header: it stays off the
+  site until that morning's update (the file itself is public in the repository as soon as it is saved).
 - **Event without a flyer:** a Markdown file in [`content/events/`](content/events/README.md).
 
 Each folder's README shows a copy-and-paste example. English or Spanish — it is translated automatically.
@@ -484,15 +506,27 @@ After that, nothing needs changing here: the next daily update reads it, and the
 3. Click **Run workflow** (right side) and choose:
    - **crawl_minutes** — how long to search aagrapevine.org / aalavina.org for PDFs.
      Leave it **empty** to use the daily setting (normally 40 minutes). Use up to `300` only for a
-     big catch-up (see the [first-run checklist](#11-first-run-checklist)).
+     big catch-up (see the [first-run checklist](#11-first-run-checklist)) — and start it in the morning
+     or early afternoon, never in the evening: it runs up to 6 hours, and the next morning's refresh
+     would have to wait behind it.
    - **skip_crawl** — tick it for a **quick refresh** (about 10–20 minutes): only **Google Drive**,
      the **bulletin**, the **podcasts** and the **daily quote** are updated. Videos, magazine stories, Instagram and
      PDFs wait for the next daily run.
+   - **morning** — the **morning refresh** the Morning check starts every morning: the new day's dates,
+     the daily quote, Google Drive, the bulletin and the podcasts (on the 1st also the new magazine issues,
+     on the 1st and the 15th the Book of the Month), published in about 3 minutes. Ticked, it wins over
+     the two fields above.
 4. Click the green **Run workflow** button. A normal run takes about an hour in total (the PDF
    search waits 5 seconds between pages, as the sites ask); a 300-minute catch-up about 6 hours.
    You can close the page — it runs on GitHub's computers.
 
 Saving any settings or content file starts a quick update automatically — no need to do this by hand.
+
+**Put today's quote up now:** **Actions → Morning check → Run workflow**. It only does what is missing:
+when the site does not have today's update yet, it starts the morning refresh; when only a magazine's quote
+is missing, it asks that magazine (every 10 minutes until 7 AM, once after that) and brings the quote as
+soon as it is out; otherwise it ends in a few seconds. Tick **check_only** to only see what is on the site
+and what it would do.
 
 **Stopping a run:** open it and click **Cancel workflow**. Everything it fetched so far is still
 saved (nothing has to be fetched again), but the website is only republished by the next run.
@@ -514,6 +548,20 @@ saved (nothing has to be fetched again), but the website is only republished by 
   links a podcast the website does not show yet. Nothing is added by itself: to show it, add a
   `- key:` / `name:` / `feed:` entry like the two already under `podcasts:` in `config/site.yml`
   (or send the address to whoever helps with the website).
+- **The Morning check** (**Actions → Morning check**): each morning's run says when today's update went
+  live — "✅ Today's update is on the site since **4:34 AM CDT** — goal 5:30 AM" (a check that found it
+  already there says when the latest build is from) — with the day of each quote and the Update & Deploy
+  run it started. A red ✗ means today's update did **not** reach the site (GitHub e-mails whoever started
+  the check — for the alarm, the owner of its key); green with a yellow note means only a magazine's quote
+  was late at the source (the note says when the magazine was last asked; the site shows the last quote,
+  labelled "Yesterday", until the new one comes in). Runs that had nothing to do — today's update was
+  already there, or it was too early to ask a magazine — are deleted after a day. On the **Status** page,
+  the *Daily quote* row says when today's quotes came in (or which one has not yet), against the goal,
+  and *Technical details* at the bottom shows the last 7 mornings.
+- **In the Update & Deploy run summary** you also find **Bulletin files to fix** / **Event files to fix**
+  (a file in `content/bulletin` or `content/events` that could not be read — the rest of the site still
+  updated), **Scheduled bulletin posts** (posts waiting for their `publish:` / "(from …)" day) and the
+  **Daily quote** line (the day of each quote now on the site).
 - **The badge** at the top of this page is green when the last update succeeded.
 - **"Code check" runs:** when a settings, content or code file is saved, a **Code check** run also
   appears next to **Update & Deploy**. It builds a test copy of the site and runs the automatic tests;
@@ -561,9 +609,11 @@ the caption or picture). Instructions are at the top of that file.
 
 ## 10. Optional upgrades
 
-None of these are needed. Each one is a **GitHub secret** — a private value only the workflows can
+None of these are needed. a) to c) are each a **GitHub secret** — a private value only the workflows can
 read. To add one: repository **Settings** → **Secrets and variables** → **Actions** →
 **New repository secret** → enter the **Name** exactly as shown and the **Secret** → **Add secret**.
+d), the morning alarm, is set up outside GitHub (its key never goes into the repository) — and it is the
+one we recommend.
 
 ### a) Google API key: exact dates for Drive files
 
@@ -674,6 +724,75 @@ set in `config/site.yml` → `digest:` (`highlights`, `per_section`). The meetin
 `meeting:` settings as the website, including your `note` (and `note_es`, if you add one). If nothing
 was new last month, no e-mail is sent. To stop the digest, delete the `SMTP_PASSWORD` secret.
 
+### d) The morning alarm: today's quote on the site by 5:30 AM (recommended)
+
+**Why:** GitHub starts the site's own timed runs when it has room. Since late August 2026 that is often
+4 to 8 hours late, so without help the new day's quote may reach the site only in the afternoon. The
+morning alarm is a free outside alarm clock that presses the site's **Morning check** button at
+**4:30 AM Central** every day. The Morning check puts the new day and both daily quotes on the site within
+minutes, and does nothing when they are already there. Setting it up takes about 15 minutes, once. Sign in
+to GitHub as **the owner of the repository**.
+
+**Part 1 — a key for the site's workflows only (GitHub)**
+
+1. Click your picture (top right) → **Settings** → at the bottom of the left menu **Developer settings** →
+   **Personal access tokens** → **Fine-grained tokens** → **Generate new token**.
+2. Fill in:
+   - **Token name:** `Morning alarm`
+   - **Description:** `cron-job.org starts the Morning check of the GV/LV website at 4:30 AM Central`
+   - **Resource owner:** the account that owns AAGrapevine.
+   - **Expiration:** *Custom* → one year from today. **Write that date in your calendar**: that day the alarm
+     stops until you make a new key ([Housekeeping](#14-housekeeping)).
+   - **Repository access:** *Only select repositories* → **AAGrapevine**.
+   - **Permissions → Repository permissions → Actions → Read and write**. Nothing else (GitHub adds
+     *Metadata: Read-only* by itself).
+3. **Generate token** → copy it (it starts with `github_pat_`). GitHub shows it only once, so keep the page
+   open until Part 2 is done. **Never** paste it into a file of the repository, an issue or an e-mail.
+
+**Part 2 — the alarm clock (cron-job.org: free and open source)**
+
+1. Go to <https://cron-job.org> → **Sign up** with the committee's e-mail address → confirm it → sign in.
+2. **Cronjobs** → **Create cronjob**:
+   - **Title:** `GV/LV website — Morning check`
+   - **URL:** `https://api.github.com/repos/MKP715/AAGrapevine/actions/workflows/morning.yml/dispatches`
+   - **Execution schedule:** every day at **4:30**.
+   - **Notifications:** tick "execution fails" and "succeeds after previously failing".
+3. The **Advanced** tab:
+   - **Time zone:** `America/Chicago` (it follows daylight saving by itself)
+   - **Request method:** `POST`
+   - **Headers** (Key → Value):
+     - `Accept` → `application/vnd.github+json`
+     - `Authorization` → `Bearer ` and the key (one space after *Bearer*)
+     - `X-GitHub-Api-Version` → `2022-11-28`
+     - `Content-Type` → `application/json`
+   - **Request body:** `{"ref":"main"}`
+4. **Create**, open the job → **Test run**. The answer must be **204** ("OK, started"). On GitHub,
+   **Actions → Morning check** now shows a new run (it may simply say the site is already up to date).
+5. Close the page that shows the key.
+
+**See that it works:** the next mornings, **Actions → Morning check** → the day's run says "on the site
+since 4:34 AM CDT — goal 5:30 AM", and the **Status** page says when today's quotes came in.
+
+**If cron-job.org e-mails a failure**, open the job's **History**:
+
+| Answer | Meaning | What to do |
+|---|---|---|
+| **401** | The key expired or was deleted | Make a new key (Part 1) and replace the *Authorization* value |
+| **403** | The key's *Actions* permission is not *Read and write* | Edit the key (**Developer settings → Fine-grained tokens → Morning alarm**): **Permissions → Actions → Read and write** |
+| **404** | The repository or the workflow file was renamed (or the key cannot see the repository) | Fix the URL; check the key's *Repository access* |
+| **422** | The body is not exactly `{"ref":"main"}` | Correct the request body |
+
+Meanwhile the site still updates, only later in the day.
+
+**Stop the alarm:** disable the job at cron-job.org, then delete the key under **Developer settings**.
+The key can do what this repository's **Actions** tab can: start, re-run, cancel and delete its workflow
+runs (and their logs), clear its caches, switch its workflows on or off and change a few Actions settings.
+It cannot change the site's files or secrets. **If it ever leaks** (it was pasted somewhere others can
+see), delete it at once, look in **Actions** for a workflow that was switched off (**Enable workflow**),
+and make a new key (Part 1). Any scheduler that can send the same request works too — for example a Google
+Apps Script timer in the committee's Google account, or a scheduled task on a computer that is on at
+4:30 AM.
+
 ---
 
 ## 11. First-run checklist
@@ -695,6 +814,8 @@ details are in **[docs/SETUP-GITHUB.md](docs/SETUP-GITHUB.md)**:
 - [ ] When the run shows a green ✓, open the website and its **Status** page.
 - [ ] *(Recommended)* Turn on failure e-mails, and make sure they come to you (see
   [section 8](#8-is-everything-working)).
+- [ ] *(Recommended)* Set up the [morning alarm](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)
+  and press its **Test run** once (the answer must be 204).
 
 ### What to expect on day 1
 
@@ -782,7 +903,16 @@ the new **Events** page, in Spanish if they had chosen Spanish on the old site.
   [section 8](#8-is-everything-working)).
 - **Repository size** grows slowly (data files and small preview pictures). That is expected; see
   [docs/OPERATIONS.md](docs/OPERATIONS.md#repository-size) if it ever passes about 1 GB.
-- **Daily data commits** by `github-actions[bot]` ("chore(data): daily content sync …") are normal.
+- **Daily data commits** by `github-actions[bot]` ("chore(data): daily content sync …", "… morning refresh
+  with the daily quote …", "… midday refresh …") are normal.
+- **Renew the morning alarm's key once a year**, on the date you wrote in your calendar: **Settings →
+  Developer settings → Fine-grained tokens → Morning alarm → Regenerate token** (one more year), then paste
+  the new key after `Bearer ` in the cron-job.org job's *Authorization* header and press **Test run**
+  (204). A new chair makes a key of their own the same way ([10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)).
+- **Many Morning check runs** in the Actions tab are normal: GitHub's own schedule starts it every hour
+  through the night as a backstop. A run that had nothing to do (today's update was already there, or it was
+  too early to ask a magazine) takes a few seconds and is deleted the next day; the others stay, so you can
+  see what each morning did.
 
 ---
 
@@ -791,6 +921,10 @@ the new **Events** page, in Spanish if they had chosen Spanish on the old site.
 | What you see | Likely cause | What to do |
 |---|---|---|
 | The site did not change today | The run failed, is still running, or the schedule was paused | **Actions** tab: open the latest **Update & Deploy** run. If the workflow shows "disabled", click **Enable workflow**. Then **Run workflow**. |
+| Today's quote is not on the site at 5:30 AM | The morning alarm is not set up or failed; the magazine had not published it yet; or the morning refresh failed | **Actions → Morning check**: the day's run says which (a yellow "late at the source" note says when the magazine was last asked — the site shows yesterday's quote, labelled "Yesterday", until an update brings the new one). No run at 4:30 AM: check the alarm (cron-job.org's e-mail or the job's *History*). To bring it now: **Morning check → Run workflow** — it asks the magazine and brings the quote if it is out. |
+| cron-job.org e-mails that the alarm failed (401, 403, 404 or 422) | The key expired or was deleted (401), its *Actions* permission is not *Read and write* (403), the address changed (404), or the request body is wrong (422) | See [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended) → *If cron-job.org e-mails a failure*. Until it is fixed the site still updates, later in the day. |
+| Many **Morning check** runs in the Actions tab | Normal: GitHub's schedule starts it every hour through the night | Nothing to do: the runs that found nothing to do are deleted after a day. |
+| A bulletin post with `publish:` / "(from …)" is not on the site | Its day has not come yet (Central time), or its date could not be read | The **Update & Deploy** run summary lists it under *Scheduled bulletin posts*, or under *Bulletin files to fix* with the reason. |
 | One phone or computer shows an old page, or a page looks unstyled after an update | A copy the browser kept (the site works offline) | Reload the page; if the small "Updated" notice shows, choose **Reload**. Still wrong: close every tab of the site and open it again. Last resort on that device: browser settings → site data for the site → clear (its saved pages go too). |
 | Red ✗ right after editing a settings file | A typo in the YAML (usually indentation or a missing quote) | Open the failed run → the red step shows the line. Fix the file, or undo your change from the file's **History**. The live site is unaffected. |
 | A Drive file does not appear | Wrong folder, folder not public, name contains `PRIVATE`, it is a spreadsheet, or the update hasn't run yet | Check the file is inside the current Panel folder and the root folder is shared "Anyone with the link". Wait for the next run or run it manually. |

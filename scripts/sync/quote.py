@@ -23,16 +23,24 @@ fetch day when the heading has no date), the official page anchor and the public
 
 Cost: ONE page request per publication (+ robots.txt), through the shared polite session (5 s between
 requests to the magazines' server) — none when an earlier module of the same run already read that home
-page (the session's page memo; the crawl, later, reuses these copies too). Runs in the daily update AND in
-the quick one (run_all QUICK_MODULES): the 12:07 UTC scheduled run (.github/workflows/update.yml) is always
-after 6 AM Texas time.
+page (the session's page memo; the crawl, later, reuses these copies too). Runs in every update
+(run_all QUICK_MODULES): the MORNING refresh that the Morning check starts so the new day's quote is on
+the site by 5:30 AM Central (.github/workflows/morning.yml → update.yml's `morning` mode), the midday
+refresh (the 12:07 UTC schedule) and the full daily run.
 
 Output (docs/DATA_SCHEMA.md → "quote"): items `quote:<pub>:<date>` kind "quote" (the newest quote of each
 publication), and the envelope key `history` = {"gv": [...], "lv": [...]}: the quotes of the last
-HISTORY_DAYS days per publication, newest first, one per day. `history` stays in data/raw only: it is the
-memory behind "a page that shows an older quote than one we already have keeps the newer one". When a page
-cannot be fetched or read, that publication's previous quote is kept and the run is marked ok=false
-(→ /status/). build_data.py turns it into data/site/quote.json (build_site below: the items only).
+HISTORY_DAYS days per publication, newest first, one per day, each with `seen` — the UTC time that day's
+quote FIRST came in (a later read of the same quote keeps it; an entry written before these times were
+recorded has none, and never gets one). `history` stays in data/raw only: it is the
+memory behind "a page that shows an older quote than one we already have keeps the newer one", and its
+`seen` times are what build_data's status.json `quote_days` shows on /status/ (each morning against the
+goal, config site.morning_goal). When a page cannot be fetched or read, that publication's previous quote
+is kept and the run is marked ok=false (→ /status/). build_data.py turns it into data/site/quote.json
+(build_site below: the items only).
+
+peek() is the Morning check's question "is today's quote out yet?" (scripts/ops/morning_check.py): it
+reads the pages it is given and writes nothing.
 
 Run:  python -m scripts.sync.quote [--dry-run] [--only gv|lv] [--html-dir DIR] [--save-html DIR]
 """
@@ -49,7 +57,7 @@ from zoneinfo import ZoneInfo
 from bs4 import BeautifulSoup
 
 from .common import (MONTHS, clean_text, detect_lang, get_logger, load_config, load_raw, make_item, merge_items,
-                     run_module, save_raw, shared_session)
+                     now_iso, run_module, save_raw, shared_session)
 
 SOURCE = "quote"
 log = get_logger(SOURCE)
@@ -103,13 +111,18 @@ def settings(cfg: dict | None = None) -> dict[str, dict]:
     return out
 
 
-def local_today(cfg: dict | None = None) -> date:
+def local_tz(cfg: dict | None = None) -> ZoneInfo:
+    """The site's time zone: config site.timezone (Central when missing or unknown)."""
     cfg = cfg if cfg is not None else load_config()
     try:
-        tz = ZoneInfo((cfg.get("site") or {}).get("timezone") or "America/Chicago")
+        return ZoneInfo((cfg.get("site") or {}).get("timezone") or "America/Chicago")
     except Exception:  # noqa: BLE001
-        tz = ZoneInfo("America/Chicago")
-    return datetime.now(tz).date()
+        return ZoneInfo("America/Chicago")
+
+
+def local_today(cfg: dict | None = None) -> date:
+    """Today in the site's time zone — the day the site shows."""
+    return datetime.now(local_tz(cfg)).date()
 
 
 # --------------------------------------------------------------------------- text helpers
@@ -264,11 +277,12 @@ def parse_quote(html: str, page_url: str, lang: str, today: date, signup_re: re.
 Fetch = Callable[[str], "str | None"]
 
 
-def entry(pub: str, lang: str, q: dict, url: str) -> dict:
-    """One quote as stored in `history` (and in an item's extra)."""
+def entry(pub: str, lang: str, q: dict, url: str, seen: str | None = None) -> dict:
+    """One quote as stored in `history` (and in an item's extra). `seen`: the UTC time that day's quote
+    first came in (history only — collect() keeps the first one)."""
     return {"pub": pub, "lang": lang, "date": q["date"], "heading": q.get("heading") or "", "text": q["text"],
             "attribution": q.get("attribution") or "", "source": q.get("source") or "",
-            "source_lang": q.get("source_lang"), "url": url, "signup_url": q.get("signup_url")}
+            "source_lang": q.get("source_lang"), "url": url, "signup_url": q.get("signup_url"), "seen": seen}
 
 
 def add_history(history: list[dict], new: dict | None, today: date, keep_days: int = HISTORY_DAYS) -> list[dict]:
@@ -283,8 +297,13 @@ def add_history(history: list[dict], new: dict | None, today: date, keep_days: i
     return rows[:keep_days]
 
 
-def collect(fetch: Fetch, prev: dict, today: date, cfg: dict | None = None, only: str | None = None) -> dict:
-    """{items, history, errors, stats}. A publication that fails keeps its previous quote (item + history)."""
+def collect(fetch: Fetch, prev: dict, today: date, cfg: dict | None = None, only: str | None = None,
+            now: str | None = None) -> dict:
+    """{items, history, errors, stats}. A publication that fails keeps its previous quote (item + history).
+    A day's quote read for the FIRST time (no history entry of that day yet) gets `seen` = `now` (default:
+    this moment, UTC); reading it again keeps the entry's `seen` — it says when that day's quote came in.
+    An entry from before `seen` was recorded keeps none: its time is not known, and a later read is not
+    when it came in (build_data.quote_days leaves such a day out)."""
     conf = settings(cfg)
     prev_items = {((i.get("extra") or {}).get("pub")): i for i in prev.get("items") or [] if isinstance(i, dict)}
     prev_hist = prev.get("history") if isinstance(prev.get("history"), dict) else {}
@@ -317,7 +336,8 @@ def collect(fetch: Fetch, prev: dict, today: date, cfg: dict | None = None, only
             old_sign = ((old or {}).get("extra") or {}).get("signup_url")
             if not q.get("signup_url") and old_sign:     # keep the last known sign-up link
                 q["signup_url"] = old_sign
-            e = entry(pub, s["lang"], q, s["url"])
+            same_day = next((h for h in hist if str(h.get("date")) == q["date"]), None)
+            e = entry(pub, s["lang"], q, s["url"], seen=same_day.get("seen") if same_day else (now or now_iso()))
             # The site went back to an older quote than one we already have (a cache glitch): keep the newer.
             newest = hist[0] if hist else None
             hist = add_history(hist, e, today)
@@ -339,6 +359,32 @@ def collect(fetch: Fetch, prev: dict, today: date, cfg: dict | None = None, only
         if hist:
             history[pub] = hist
     return {"items": items, "history": history, "errors": errors, "stats": stats}
+
+
+def peek(fetch: Fetch, today: date, pubs=PUB_ORDER, cfg: dict | None = None) -> dict[str, str | None]:
+    """{pub: the date of the quote its home page shows right now, else None} — the Morning check's
+    question "is today's quote out yet?" (scripts/ops/morning_check.py), asked only for a publication whose
+    quote on OUR site is not today's, so a magazine is never asked for nothing. Only a date READ FROM THE
+    HEADING counts: parse_quote falls back to `today` for a heading without one, which here would claim a
+    quote that may not be there. Writes nothing and never raises (a page that fails or changed shape is
+    "not out yet": None)."""
+    out: dict[str, str | None] = {p: None for p in pubs}
+    try:
+        conf = settings(cfg)
+    except Exception:  # noqa: BLE001 — no settings: nothing can be asked
+        return out
+    for pub in pubs:
+        s = conf.get(pub)
+        if not s:
+            continue
+        try:
+            html = fetch(s["page"])
+            q = parse_quote(html, s["page"], s["lang"], today, s["signup_re"]) if html else None
+        except Exception as e:  # noqa: BLE001 — the question is asked again ten minutes later
+            log.info("%s: the quote could not be read (%s: %s)", pub, type(e).__name__, e)
+            q = None
+        out[pub] = q["date"] if q and q.get("date_from_heading") else None
+    return out
 
 
 # --------------------------------------------------------------------------- site file (build_data.py)

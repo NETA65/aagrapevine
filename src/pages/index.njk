@@ -21,6 +21,13 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     · the service band. (No mixed "newest" strip: every kind has its own section, and the hero's
     "See what's new" opens the full feed.)
     The hero art (hero-canvas.js) is loaded by layouts/base.njk on every page.
+    Between the daily builds (and in a copy kept for offline use) what has ended hides itself: each
+    bulletin post with an `expires` day, each dated "Write for the magazines" theme and each upcoming event
+    carries data-gv-expire (the moment it is over: fsDayEnd, homeEventEnd), and the bulletin and events
+    sections — and the themes' list — are data-gv-expire-list: they go away once all of theirs have
+    (src/assets/js/app.js GV.expire, checked every minute). The 4th event, hidden on a phone, is a spare
+    (data-gv-expire-spare): it shows there once an earlier one has ended. Counts and grid columns are not
+    redrawn (the next build does that).
     ====================================================================== -#}
 {% import "macros/ui.njk" as ui with context %}
 {% set L = lang %}
@@ -343,13 +350,14 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
        follows that block.
     ===================================================================== -#}
 {% if anns.length %}
-<section class="container-page pt-10 pb-12 sm:pt-12 sm:pb-16" aria-labelledby="ann-title">
+<section class="container-page pt-10 pb-12 sm:pt-12 sm:pb-16" aria-labelledby="ann-title" data-gv-expire-list>
   {{ ui.sectionHead("home.ann_title" | t(L), "home.ann_sub" | t(L), "/bulletin/" | lurl(L), "home.ann_all" | t(L), "megaphone", { eyebrow: "nav.bulletin" | t(L), tone: "text-vine", id: "ann-title", lang: L }) }}
   <div class="grid items-start gap-5 {{ 'lg:grid-cols-2' if anns.length > 1 }}">
     {% for a in anns %}
     {%- set body = a | tx("body_md", L) -%}
     {%- set pinned = a.extra and a.extra.pinned -%}
-    <article class="home-ann card relative overflow-hidden p-6 sm:p-8">
+    {%- set annEnd = (a.extra.expires | fsDayEnd) if (a.extra and a.extra.expires) else "" -%}
+    <article class="home-ann card relative overflow-hidden p-6 sm:p-8" data-gv-expire-item{% if annEnd %} data-gv-expire="{{ annEnd }}"{% endif %}>
       <p class="flex flex-wrap items-center gap-2 text-xs text-faint">
         {% if pinned %}<span class="badge-vine">{% icon "pin", "size-3" %} {{ "home.pinned" | t(L) }}</span>{% endif %}
         {% if a.is_new %}<span class="badge-new">{{ "common.new" | t(L) }}</span>{% endif %}
@@ -404,11 +412,13 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
         </div>
         {#- Phones: the themes fold into one link; 640px up: the theme cards (stacked in the tall-2xl column). -#}
         <a class="link tap-link mt-3 text-sm sm:hidden" href="{{ '/contribute/#deadlines' | lurl(L) }}">{{ ("home.write_themes_one" if themes.length == 1 else "home.write_themes_n") | t(L, { n: themes.length }) }} {% icon "arrow-right", "size-4" %}</a>
-        <ul class="mt-5 grid gap-3 max-sm:hidden sm:grid-cols-2 {{ 'lg:grid-cols-4' if themes.length >= 4 else ('lg:grid-cols-3' if themes.length == 3 else '') }} tall-2xl:grid-cols-1" role="list">
+        <ul class="mt-5 grid gap-3 max-sm:hidden sm:grid-cols-2 {{ 'lg:grid-cols-4' if themes.length >= 4 else ('lg:grid-cols-3' if themes.length == 3 else '') }} tall-2xl:grid-cols-1" role="list" data-gv-expire-list>
           {% for th in themes %}
           {%- set isLv = (th.extra.publication == "lv") -%}
           {%- set tt = th | tx("title", L) -%}
-          <li class="home-theme group relative flex flex-col rounded-xl border border-line bg-surface p-4 transition {{ 'hover:border-lv' if isLv else 'hover:border-gv' }}">
+          {#- a dated theme leaves once its deadline day is over (the invitation above stays) -#}
+          {%- set thEnd = (th.extra.deadline | fsDayEnd) if th.extra.deadline else "" -%}
+          <li class="home-theme group relative flex flex-col rounded-xl border border-line bg-surface p-4 transition {{ 'hover:border-lv' if isLv else 'hover:border-gv' }}" data-gv-expire-item{% if thEnd %} data-gv-expire="{{ thEnd }}"{% endif %}>
             <p class="flex flex-wrap items-center gap-1.5">
               <span class="{{ 'badge-lv' if isLv else 'badge-gv' }}">{{ "La Viña" if isLv else "Grapevine" }}</span>
               {% if th.extra.issue_label %}<span class="text-xs text-faint">{{ th.extra.issue_label | homeIssueLabel(L) }}</span>{% endif %}
@@ -721,7 +731,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {% set evs = D.events.items | homeEvents(meeting.next, 4) %}
 {%- set gvmHome = db.meetings | cmGvMeetings(L, site) -%}
 {% if evs.length %}
-<section class="section pt-0" aria-labelledby="events-title">
+<section class="section pt-0" aria-labelledby="events-title" data-gv-expire-list>
   <div class="container-page">
     {% call ui.sectionHead("home.events_title" | t(L), "home.events_sub" | t(L), "/events/" | lurl(L), "home.events_all" | t(L), "calendar-days", { eyebrow: "home.events_eyebrow" | t(L), tone: "text-vine", id: "events-title", lang: L }) %}
     {% if gvmHome.inArea %}<a href="{{ '/meetings/#grapevine-meetings' | lurl(L) }}" class="btn-ghost btn-sm">{% icon "map-pin", "size-4" %} {{ "committee.gvm.home_title" | t(L) }}</a>{% endif %}
@@ -741,7 +751,10 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
       {#- A monthly recurring event (e.g. the CityWide Dallas booth) opens its card on /events/ -#}
       {%- set href = (("/events/#" ~ (e | homeEventAnchor)) if e.category == "recurring" else (e.url or x.flyer_url or x.online_url or "/events/")) | lurl(L) -%}
       {%- set et = e | tx("title", L) -%}
-      <li{% if loop.index > 3 %} class="max-sm:hidden"{% endif %}>
+      {#- the card hides itself once the event is over (GV.expire); the calendar card below is not an event.
+          A phone shows three: the 4th is a spare that steps in there once an earlier one has ended. -#}
+      {%- set evEndAt = e | homeEventEnd -%}
+      <li{% if loop.index > 3 %} class="max-sm:hidden" data-gv-expire-spare="max-sm:hidden"{% endif %} data-gv-expire-item{% if evEndAt %} data-gv-expire="{{ evEndAt }}"{% endif %}>
         <article class="card card-link ev-accent ev-tone-{{ tone }} group relative flex h-full gap-4 p-4 sm:flex-col sm:p-5">
           <div class="home-datetile{{ ' is-range' if info.tile.range }}" aria-hidden="true">
             <span class="home-datetile-month">{{ info.tile.mon }}</span>

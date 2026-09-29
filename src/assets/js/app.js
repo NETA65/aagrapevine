@@ -173,6 +173,71 @@
     return null;
   };
 
+  /* ---------------- things whose time has passed (GV.expire) ----------------
+     Pages are rebuilt every morning; this keeps one right between builds (and a copy kept for offline
+     use): the home page's upcoming events, bulletin posts and story deadlines, and /bulletin/'s posts.
+       [data-gv-expire="<ISO instant>"]  a date AND a time with its zone ("2026-10-15T05:00:00.000Z" —
+                                         eleventy/filters/freshness.js fsDayEnd, home.js homeEventEnd); a
+                                         bare "2026-10-14" is ignored (no moment). Once passed: data-gv-expired
+                                         + hidden.
+       [data-gv-expire-list]             hidden once every [data-gv-expire-item] inside it is hidden; its
+                                         data-gv-expire-empty="#id" note (if it names one) is shown instead.
+       [data-gv-expire-spare="<class>"]  an item that <class> hides on some screens (the home page's 4th
+                                         event, "max-sm:hidden": three on a phone). For each item of its list
+                                         that has gone, one spare drops that class, so a phone keeps showing
+                                         three while there are three — and the list goes only when all have.
+     The element that holds keyboard focus (or a list around it) is never hidden under the reader: it is
+     hidden once focus leaves it. Runs on load, every minute and when the page is shown again.
+     These attributes are GV.expire's alone: committee.js (/events/, /meetings/ — and loaded on /bulletin/
+     too) and read.js (/contribute/) hide their own [data-cm-expire] without waiting for focus, so they
+     must never see these elements.
+       GV.expire(root?) → how many elements it hid */
+  var EXPIRE_AT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})$/;
+  GV.expire = function (root) {
+    root = root || document;
+    var now = Date.now(), hid = 0, active = document.activeElement;
+    var holdsFocus = function (el) { return !!(active && active !== document.body && el.contains(active)); };
+    var afterFocus = function (el) {                     // try again once focus has moved on
+      if (el.__gvExpireWait) return;
+      el.__gvExpireWait = true;
+      el.addEventListener("focusout", function () {
+        el.__gvExpireWait = false;
+        setTimeout(function () { GV.expire(); }, 0);
+      }, { once: true });
+    };
+    Array.prototype.forEach.call(root.querySelectorAll("[data-gv-expire]"), function (el) {
+      if (el.hidden && el.hasAttribute("data-gv-expired")) return;
+      var v = String(el.getAttribute("data-gv-expire") || "").trim();
+      if (!EXPIRE_AT.test(v) || !(Date.parse(v) <= now)) return;
+      if (holdsFocus(el)) { afterFocus(el); return; }
+      el.setAttribute("data-gv-expired", "");
+      el.hidden = true;
+      hid++;
+    });
+    Array.prototype.forEach.call(root.querySelectorAll("[data-gv-expire-list]"), function (list) {
+      var items = list.querySelectorAll("[data-gv-expire-item]");
+      if (list.hidden || !items.length) return;
+      // the spares step in for the items that have gone, in page order
+      var gone = 0, spares = [], i;
+      for (i = 0; i < items.length; i++) {
+        if (items[i].hasAttribute("data-gv-expire-spare")) { if (!items[i].hidden) spares.push(items[i]); }
+        else if (items[i].hidden) gone++;
+      }
+      for (i = 0; i < spares.length && i < gone; i++) {
+        var cls = String(spares[i].getAttribute("data-gv-expire-spare") || "").trim();
+        if (cls) spares[i].classList.remove(cls);
+      }
+      for (i = 0; i < items.length; i++) if (!items[i].hidden) return;
+      if (holdsFocus(list)) { afterFocus(list); return; }
+      list.hidden = true;
+      hid++;
+      var sel = list.getAttribute("data-gv-expire-empty"), note = null;
+      try { note = sel ? document.querySelector(sel) : null; } catch (e) { note = null; }
+      if (note) note.hidden = false;
+    });
+    return hid;
+  };
+
   /* ---------------- Reading & display settings (GV.prefs) ----------------
      The "Aa" panel (partials/comfort-panel.njk) edits these; base.njk's first <head> script
      applied the saved ones before the first paint. localStorage "gvlv-prefs" (this device only;
@@ -726,6 +791,14 @@
     document.querySelectorAll("[data-lang-switch]").forEach(function (a) {
       a.addEventListener("click", function () { if (location.hash || location.search) a.href = a.href.split(/[?#]/)[0] + location.search + location.hash; });
     });
+    // Things whose time has passed (GV.expire): now, every minute, and when the page is shown again
+    // (a tab brought back to the front, or a page restored by the Back button)
+    if (document.querySelector("[data-gv-expire], [data-gv-expire-list]")) {
+      GV.expire();
+      setInterval(function () { GV.expire(); }, 60000);
+      document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") GV.expire(); });
+      window.addEventListener("pageshow", function (e) { if (e.persisted) GV.expire(); });
+    }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", enhance); else enhance();
 })();

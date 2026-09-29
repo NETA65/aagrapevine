@@ -9,6 +9,11 @@ EN ⇄ ES automatically):
    works too, and so does an older `announcements` / `anuncios` folder). The
    file name is the headline. Start the name with a date to control the date
    shown, e.g. `2027-01-10 Welcome new GVRs`. The document text is the body.
+   Words in the name, in parentheses: `(pinned)` / `(fijado)` keeps it at the
+   top; `(from 2027-02-01)` / `(desde 2027-02-01)` keeps it off the site until
+   that day; `(until 2027-03-01)` / `(hasta 2027-03-01)` takes it down after
+   that day. They are taken out of the headline (`(from the Chair)`, with no
+   date in it, stays as written).
 2. **GitHub:** add a Markdown file (ending in `.md`) to this folder, e.g.
    `2027-01-10-welcome-gvrs.md`. **[`_example.md`](_example.md) shows every
    option** — copy it, rename the copy (without the `_`) and edit it.
@@ -27,7 +32,9 @@ Come to our committee meeting on the third Wednesday of the month.
   it is a heading (`# Welcome`), else the first `# ` heading, else the file
   name (`welcome-new-GVRs.md` → "Welcome new GVRs").
 - **Date:** the `date:` line; without one, the date the file name starts with
-  (`2027-01-10-…`), else the day the post first appears on the site.
+  (`2027-01-10-…`), else its `publish:` day (below), else the day the post first
+  appears on the site. The date is what the post shows; it does not decide when
+  the post goes up.
 
 ## A header for more options
 
@@ -35,6 +42,7 @@ Come to our committee meeting on the third Wednesday of the month.
 ---
 title: Welcome, new GVRs and RLVs!
 date: 2027-01-10
+publish: 2027-01-10     # optional — not on the site before this day
 expires: 2027-03-31     # optional — hidden after this date
 pinned: true            # optional — keep at the top
 image: flyer.jpg        # optional — a picture for the post in lists
@@ -47,6 +55,16 @@ Write in English **or** Spanish. Links like [aagrapevine.org](https://www.aagrap
 
 If a value contains `: ` (like `title: Reminder: Assembly`), put it in quotes:
 `title: "Reminder: Assembly"`.
+
+**Schedule a post (optional).** With `publish: 2027-02-01` the post stays off
+the site — the bulletin, the home page, What's New, the news feed and the search
+— until that day in Central time, and appears with that morning's update (by
+about 5:30 AM). Until then the update's report on the **Actions** tab lists it
+under *Scheduled bulletin posts*. On its day it counts as new, whatever its
+`date:` says. A `publish:` day after `expires:` is reported as a mistake (the
+post would never show). This is about timing, not secrecy: the file in this
+folder — like a document in the Drive folder — is public from the moment it is
+saved.
 
 **Your own translation (optional).** Add `title_es` and `summary_es` to a file
 written in English (or `title_en` and `summary_en` to one written in Spanish)

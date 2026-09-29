@@ -386,6 +386,15 @@ export default function (eleventyConfig, helpers) {
     return pick.sort((a, b) => evStart(a) - evStart(b));
   });
 
+  /* The moment a home-page event is over (the same evEnd homeEvents uses), as an ISO instant for the
+     card's data-gv-expire: src/assets/js/app.js (GV.expire) hides the card once it has passed, so a page
+     read between the daily builds (or kept for offline use) never lists an event that has ended. "" when
+     the event has no usable date. */
+  eleventyConfig.addFilter("homeEventEnd", (e) => {
+    const t = e && evStart(e) ? evEnd(e) : NaN;
+    return Number.isFinite(t) && t > 0 ? new Date(t).toISOString() : "";
+  });
+
   /* How a home-page event card shows its date, time and place (the same rules as /events/):
      { tile: {mon, day, wd, range}, srDate, when, location, tba, tentative, multiDay }.
      An event over several days (an Area assembly Fri–Sun) gets a date RANGE — on the tile

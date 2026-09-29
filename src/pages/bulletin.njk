@@ -21,7 +21,12 @@ pageScripts: ["/assets/js/committee.js"]
     pictures, long addresses that wrap.
     The hero's right-hand card (the shared hero aside, "Coming up"): the next committee meeting and the
     next event, linking to them. With no posts it is the page's first card on smaller screens and at
-    larger text too ("below"); with posts it is hidden there (they come first). -#}
+    larger text too ("below"); with posts it is hidden there (they come first).
+    A post with an `expires` day hides itself once that day is over in Central time, between the daily
+    builds too (data-gv-expire: fsDayEnd, app.js GV.expire — never while a button in it has keyboard focus;
+    committee.js, also loaded here, leaves these attributes alone); when the last one has gone, the
+    "nothing posted" card shows instead (data-gv-expire-list → data-gv-expire-empty). A post scheduled
+    for a later day (`publish:`, Drive "(from …)") is not in the data before its day at all (build_data). -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set anns = db.announcements.items | cmAnnouncements -%}
 {%- set pageAbs = page.url | siteUrl(site) -%}
@@ -56,12 +61,13 @@ pageScripts: ["/assets/js/committee.js"]
 
 <section class="container-page section pt-10 sm:pt-12" aria-label="{{ 'nav.bulletin' | t(lang) }}">
   {% if anns | length %}
-  <ol class="cm-ann-list{{ ' is-multi' if anns | length > 1 }}">
+  <ol class="cm-ann-list{{ ' is-multi' if anns | length > 1 }}" data-gv-expire-list data-gv-expire-empty="#ann-empty">
     {% for a in anns %}
     {%- set title = a | tx("title", lang) -%}
     {%- set body = a | tx("body_md", lang) or (a | tx("summary", lang)) -%}
     {%- set when = a.date or a.first_seen -%}
-    <li class="min-w-0">
+    {%- set annEnd = (a.extra.expires | fsDayEnd) if (a.extra and a.extra.expires) else "" -%}
+    <li class="min-w-0" data-gv-expire-item{% if annEnd %} data-gv-expire="{{ annEnd }}"{% endif %}>
       <article id="{{ a._anchor }}" class="card cm-ann flex flex-col{{ ' is-pinned' if a._pinned }}" aria-labelledby="{{ a._anchor }}-h">
         <div class="flex-1 p-5 sm:p-7">
           <div class="flex flex-wrap items-center gap-2 text-sm">
@@ -106,13 +112,13 @@ pageScripts: ["/assets/js/committee.js"]
     </li>
     {% endfor %}
   </ol>
-  {% else %}
+  {% endif %}
   {#- Nothing posted: one solid card for visitors ("Coming up" — the next meeting and event — is the
-      hero's right-hand card, the first card under the hero on smaller screens) -#}
-  <div class="cm-ann-empty is-solo">
+      hero's right-hand card, the first card under the hero on smaller screens). With posts it waits,
+      hidden, for the last of them to expire between two builds (GV.expire). -#}
+  <div id="ann-empty" class="cm-ann-empty is-solo"{% if anns | length %} hidden{% endif %}>
     {{ ui.pageEmpty("megaphone", "committee.ann.empty_title" | t(lang), "committee.ann.empty_text" | t(lang), { id: "ann-empty-h" }) }}
   </div>
-  {% endif %}
 </section>
 
 {#- ---------- For committee members (collapsed): how to post to the bulletin ---------- -#}
@@ -121,7 +127,7 @@ pageScripts: ["/assets/js/committee.js"]
   <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
     <div>
       <ol class="space-y-4">
-        {% for k in ["1", "2", "3"] %}
+        {% for k in ["1", "2", "3", "4"] %}
         <li class="flex gap-3.5">
           <span class="step-num" aria-hidden="true">{{ k }}</span>
           <p class="leading-relaxed text-muted">{{ ("committee.ann.how_" + k) | t(lang, { panel: (di.panel.label if di.panel else "Panel") }) }}</p>

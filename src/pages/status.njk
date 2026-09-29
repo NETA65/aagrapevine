@@ -15,10 +15,16 @@ pageScripts: ["/assets/js/community.js"]
     document library and translations · how an update works · the open-source credits ("Built with
     open-source software", a tinted band, last).
     Maintainer-only words (a failed source's raw message, where the translation models run and the
-    overrides file, "Behind the scenes" with the one GitHub Actions button) live in the collapsed
-    "Technical details (for the site maintainer)" disclosures (details[data-tech]). Source-row hints
-    are written for visitors: no repo paths. -#}
+    overrides file, "Behind the scenes" with the one GitHub Actions button and the last 7 mornings of
+    the daily quote) live in the collapsed "Technical details (for the site maintainer)" disclosures
+    (details[data-tech]). Source-row hints are written for visitors: no repo paths.
+    The daily quote's row also says when today's two quotes came in — or which one has not yet — against
+    the goal (config site.morning_goal — the Morning check, .github/workflows/morning.yml, puts the new day
+    and the quote on the site by then): status.json quote_days → fsQuoteMornings (eleventy/filters/
+    freshness.js). "Came in" is when the update first read the quote; times are Central time with the zone
+    name there, and without it in the 7-morning rows (their subtitle says Central time, once). -#}
 {%- set sv = db.status | cmStatus -%}
+{%- set qm = db.status | fsQuoteMornings -%}
 {%- set total = sv.sources | length -%}
 {%- set feedsDown = sv.feeds | whereNot("state", "ok") | length -%}
 {%- set actionsUrl = "https://github.com/MKP715/AAGrapevine/actions" -%}
@@ -48,6 +54,23 @@ pageScripts: ["/assets/js/community.js"]
 {%- elif s.state == "ok" and s.stale %}<span class="badge-muted" title="{{ 'community.status.stale_help' | t(lang, { n: s.ageDays }) }}">{% icon "clock", "size-3.5" %} {{ "community.status.state_stale" | t(lang) }}</span>
 {%- elif s.state == "failed" %}<span class="badge bg-danger text-white dark:text-paper">{% icon "circle-x", "size-3.5" %} {{ "community.status.state_failed" | t(lang) }}</span>
 {%- else %}<span class="badge-muted">{% icon "circle-dashed", "size-3.5" %} {{ "community.status.state_never" | t(lang) }}</span>{% endif -%}
+{% endmacro %}
+
+{#- Under "Daily quote" (the table and the phone rows): when today's two quotes came in — or the one that
+    has, naming the one that has not — then the goal -#}
+{% macro quoteLine(q) %}
+{%- if q.today.both %}{{ "freshness.quote_came" | t(lang, { date: q.today.day | fmtDate(lang, "medium"), time: q.today.both | fmtDate(lang, "time") }) }}
+{%- elif q.today.one %}{{ "freshness.quote_came_one" | t(lang, { pub_in: ("library.src." + q.today.one.pub) | t(lang), pub_out: ("library.src." + q.today.one.other) | t(lang), date: q.today.day | fmtDate(lang, "medium"), time: q.today.one.at | fmtDate(lang, "time") }) }}
+{%- else %}{{ "freshness.quote_missing" | t(lang, { date: q.today.day | fmtDate(lang, "medium") }) }}{% endif %}
+{%- if q.today.goal_at %} {{ "freshness.quote_goal" | t(lang, { time: q.today.goal_at | fmtDate(lang, "time") }) }}{% endif -%}
+{% endmacro %}
+
+{#- One magazine's morning in the 7-morning table: an icon AND words, never colour alone -#}
+{% macro quoteBadge(st) %}
+{%- if st == "on_time" %}<span class="badge-vine">{% icon "circle-check", "size-3.5" %} {{ "freshness.quote_on_time" | t(lang) }}</span>
+{%- elif st == "late" %}<span class="badge-muted">{% icon "clock", "size-3.5" %} {{ "freshness.quote_late" | t(lang) }}</span>
+{%- elif st == "waiting" %}<span class="badge-muted">{% icon "hourglass", "size-3.5" %} {{ "freshness.quote_waiting" | t(lang) }}</span>
+{%- else %}<span class="badge-muted">{% icon "circle-dashed", "size-3.5" %} {{ "freshness.quote_none" | t(lang) }}</span>{% endif -%}
 {% endmacro %}
 
 {#- A failed source: the calm explanation first; the raw message tucked away for the maintainer -#}
@@ -135,6 +158,7 @@ pageScripts: ["/assets/js/community.js"]
               <span class="min-w-0">
                 <span class="block">{{ label }}</span>
                 {% if s.hint %}<span class="mt-0.5 block max-w-md text-xs font-normal leading-snug text-muted">{{ ("community.status.hint." + s.hint) | t(lang, { panel: s.panel or ("community.status.hint.panel_generic" | t(lang)) }) }}</span>{% endif %}
+                {% if s.source == "quote" and qm %}<span class="mt-0.5 block max-w-md text-xs font-normal leading-snug text-muted">{{ quoteLine(qm) }}</span>{% endif %}
               </span>
             </span>
           </th>
@@ -179,6 +203,7 @@ pageScripts: ["/assets/js/community.js"]
           {%- if s.new_7d %}<span class="font-semibold text-vine">{{ "community.status.n_new" | t(lang, { n: s.new_7d | cmNum(lang) }) }}</span>{% endif %}
         </p>
         {% if s.hint %}<p class="mt-1 text-xs leading-snug text-muted">{{ ("community.status.hint." + s.hint) | t(lang, { panel: s.panel or ("community.status.hint.panel_generic" | t(lang)) }) }}</p>{% endif %}
+        {% if s.source == "quote" and qm %}<p class="mt-1 text-xs leading-snug text-muted">{{ quoteLine(qm) }}</p>{% endif %}
         {% if s.state == "failed" %}<div class="mt-2">{{ failedNote(s) }}</div>{% endif %}
       </div>
     </li>
@@ -294,7 +319,12 @@ pageScripts: ["/assets/js/community.js"]
     </li>
     {% endfor %}
   </ol>
-  {#- Behind the scenes (the run log + the GitHub Actions button): for the site maintainer only -#}
+  {#- Behind the scenes (the run log + the GitHub Actions button, and the daily quote's last 7 mornings):
+      for the site maintainer only. The mornings are a table from 640px — in its own named, focusable
+      region that scrolls sideways if it is ever wider than the card (larger text) — and one short block
+      per day on a phone; each magazine's morning is a time and a badge with an icon AND words (never
+      colour alone). Short labels ("Tue, Sep 29", "5:52 AM": fsShortDay, fsClock); Central time is said
+      once, in the subtitle with the goal. -#}
   <details class="cm-preview mt-6 rounded-lg border border-line bg-surface" data-tech>
     <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-xs font-semibold text-muted">{{ "community.status.tech_details" | t(lang) }}</summary>
     <div class="border-t border-line p-3">
@@ -305,6 +335,58 @@ pageScripts: ["/assets/js/community.js"]
         </div>
         <a class="btn-secondary shrink-0" href="{{ actionsUrl }}" target="_blank" rel="noopener">{% icon "git-branch", "size-4" %} {{ "community.status.actions_btn" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
       </div>
+      {% if qm %}
+      <div class="mt-5">
+        <h3 id="quote-days-title" class="h-card">{{ "freshness.quote_days_title" | t(lang) }}</h3>
+        {%- set goalClock = (qm.today.goal_at | fsClock(lang)) or qm.goal %}
+        <p class="mt-1 max-w-2xl text-sm leading-relaxed text-muted">{{ "freshness.quote_days_sub" | t(lang, { time: goalClock }) }}</p>
+        <div class="card mt-3 overflow-x-auto max-sm:hidden" role="region" tabindex="0" aria-labelledby="quote-days-title">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-surface-2/70 text-xs uppercase tracking-wider text-muted">
+              <tr>
+                <th scope="col" class="px-4 py-2.5 font-semibold">{{ "freshness.quote_col_day" | t(lang) }}</th>
+                <th scope="col" class="px-4 py-2.5 font-semibold">{{ "library.src.gv" | t(lang) }}</th>
+                <th scope="col" class="px-4 py-2.5 font-semibold"{% if lang != "es" %} lang="es"{% endif %}>{{ "library.src.lv" | t(lang) }}</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-line">
+              {% for d in qm.days %}
+              <tr>
+                <th scope="row" class="whitespace-nowrap px-4 py-3 font-semibold text-ink"><time datetime="{{ d.day }}">{{ d.day | fsShortDay(lang) }}</time></th>
+                {% for pub in ["gv", "lv"] %}
+                <td class="px-4 py-3">
+                  <span class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    {%- if d[pub] %}<time class="whitespace-nowrap tabular-nums text-ink" datetime="{{ d[pub] | isoDate }}">{{ d[pub] | fsClock(lang) }}</time>{% endif %}
+                    {{ quoteBadge(d[pub + "State"]) }}
+                  </span>
+                </td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {#- On a phone: one short block per day — the day, then each magazine's time and badge -#}
+        <ul class="card mt-3 divide-y divide-line sm:hidden" role="list">
+          {% for d in qm.days %}
+          <li class="px-4 py-3">
+            <p class="font-semibold text-ink"><time datetime="{{ d.day }}">{{ d.day | fsShortDay(lang) }}</time></p>
+            <dl class="mt-1.5 grid gap-1.5 text-sm">
+              {% for pub in ["gv", "lv"] %}
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <dt class="text-muted"{% if pub == "lv" and lang != "es" %} lang="es"{% endif %}>{{ ("library.src." + pub) | t(lang) }}</dt>
+                <dd class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  {%- if d[pub] %}<time class="whitespace-nowrap tabular-nums text-ink" datetime="{{ d[pub] | isoDate }}">{{ d[pub] | fsClock(lang) }}</time>{% endif %}
+                  {{ quoteBadge(d[pub + "State"]) }}
+                </dd>
+              </div>
+              {% endfor %}
+            </dl>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
     </div>
   </details>
 </section>

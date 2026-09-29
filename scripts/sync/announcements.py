@@ -12,6 +12,7 @@ Each file is Markdown with a small YAML header ("front matter"), e.g.
     ---
     title: Welcome, new GVRs and RLVs!
     date: 2027-01-10
+    publish: 2027-01-10     # optional — not on the site before this day (it appears with that morning's update)
     expires: 2027-03-31     # optional — hidden after this date
     pinned: false           # optional — keep at the top
     ---
@@ -20,7 +21,10 @@ Each file is Markdown with a small YAML header ("front matter"), e.g.
 A bulletin post needs no header at all: without `title:` the title is the first line when it is a
 heading ("# Welcome"), else the first "# " heading, else the file name ("welcome-new-GVRs.md" →
 "Welcome new GVRs"); without `date:` the date is the one the file name starts with
-("2027-01-10-welcome.md"), else the day the post first appeared on the site. Simple HTML is turned
+("2027-01-10-welcome.md"), else its `publish:` day, else the day the post first appeared on the site.
+`publish:` schedules a post (`extra.publish`): build_data leaves it out of the site data until that day
+in Central time and lists it in status.json `scheduled` meanwhile — timing, not secrecy: the file itself
+is public in the repository from the moment it is saved. Simple HTML is turned
 into Markdown (<b>, <i>, <a href>, <br>, <img>, headings, lists) and the rest of it is taken out —
 scripts and styles with everything inside them. Pictures and documents (.jpg .jpeg .png .gif .webp
 .pdf) saved next to the posts are published at /bulletin/files/ (eleventy.config.js), and a post's
@@ -50,7 +54,7 @@ import argparse
 import html
 import json
 import re
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 from pathlib import Path
 from urllib.parse import quote, unquote
 from zoneinfo import ZoneInfo
@@ -503,12 +507,17 @@ def parse_announcement(path: Path) -> dict:
         title = title or title_from_name(rest or stem)
     if not title:
         raise ValueError("it has no title (add a line 'title: …' to the header)")
-    when = as_date(meta.get("date")) or file_date
     if meta.get("date") and not as_date(meta.get("date")):
         raise ValueError(f"the date '{meta.get('date')}' is not a date (use YYYY-MM-DD)")
     expires = as_date(meta.get("expires"))
     if meta.get("expires") and not expires:
         raise ValueError(f"the expires date '{meta.get('expires')}' is not a date (use YYYY-MM-DD)")
+    publish = as_date(meta.get("publish"))
+    if meta.get("publish") and not publish:
+        raise ValueError(f"the publish date '{meta.get('publish')}' is not a date (use YYYY-MM-DD)")
+    if publish and expires and publish > expires:
+        raise ValueError("publish: is after expires: — the post would never show")
+    when = as_date(meta.get("date")) or file_date or publish
     body, missing = link_attachments(body, path.parent)
     missing += dropped
     slug = slugify(stem)
@@ -529,6 +538,8 @@ def parse_announcement(path: Path) -> dict:
     item_url = link if link and not link.startswith(ATTACH_URL) else f"{BULLETIN_URL}#{slug}"
     extra = {"body_md": body, "expires": expires, "pinned": as_bool(meta.get("pinned")), "slug": slug,
              "file": f"content/{path.parent.name}/{path.name}", "link": link}
+    if publish:
+        extra["publish"] = publish      # scheduled: not on the site before this day (build_data)
     if missing:
         extra["missing_files"] = sorted(set(missing))   # reported by collect() (status.json); the post still shows
     own = own_translations(meta)
@@ -664,11 +675,16 @@ def main(argv: list[str] | None = None) -> None:
                          ensure_ascii=False, indent=1, default=str))
         return
 
-    today = datetime.now(timezone.utc).date().isoformat()
+    # the site's calendar day (Central), as build_data counts expired and scheduled posts
+    today = datetime.now(tz).date().isoformat()
     ann_items, ann_new = finalize(load_raw("announcements").get("items", []), anns, ann_failed)
+
+    def active(it: dict) -> bool:
+        ex = it.get("extra") or {}
+        return not (ex.get("expires") and ex["expires"] < today) and not (ex.get("publish") and ex["publish"] > today)
     save_raw("announcements", ann_items, ok=True, stats={
         "files": len(anns), "new": ann_new, "problems": len(ann_err), "errors": ann_err,
-        "active": sum(1 for i in ann_items if not (i["extra"].get("expires") and i["extra"]["expires"] < today)),
+        "active": sum(1 for i in ann_items if active(i)),
     })
     ev_items, ev_new = finalize(load_raw("manual_events").get("items", []), events, ev_failed)
     save_raw("manual_events", ev_items, ok=True, stats={

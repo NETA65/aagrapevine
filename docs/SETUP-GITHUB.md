@@ -99,6 +99,8 @@ in the Actions tab and continue with Step 6. A cancelled run still saves what it
      repository (`data/state/crawl-state.json`), so the daily runs simply continue from there.
      Use **`300`** (about 5 hours) only if that first search was **not** saved — see Step 7, point 3.
    - **skip_crawl:** leave unticked
+   - **morning:** leave unticked (it is the short *morning refresh* the Morning check starts every
+     morning — Step 9)
 4. Click the green **Run workflow** button.
 
 You can close the browser. What happens:
@@ -126,7 +128,8 @@ refreshes only Google Drive, the bulletin, the podcasts and the daily quote, and
    tick **Use your GitHub Pages website** → **Save changes**. The address now shows at the top
    of the repository.
 
-From now on the site updates itself **every morning at about 5:17 AM Central**.
+From now on the site updates itself every day: the full update once a day, whenever GitHub starts it,
+and — once the morning alarm of Step 9 is set — the new day and the daily quote **by 5:30 AM Central**.
 
 **What to expect on day 1:** magazine stories, both podcasts (AA Grapevine's Podcast and the
 Grapevine Weekly Open AA Meeting), videos and Instagram appear right away. The committee's own
@@ -156,10 +159,25 @@ that says what to check; it closes itself when the source works again.
 
 ---
 
+## Step 9 (recommended) — the morning alarm
+
+GitHub starts the site's own timed runs when it has room — lately often 4 to 8 hours late — so on its
+own the new day's quote may reach the site only in the afternoon. The **Morning check** workflow puts
+the new day and both daily quotes on the site within minutes, and does nothing when they are already
+there; a free outside alarm clock presses its button at **4:30 AM Central** every day.
+
+Setting it up takes about 15 minutes, once: a key limited to this repository's workflows (Actions),
+and an alarm at cron-job.org. The click-by-click steps are in the README →
+**[10 d) The morning alarm](../README.md#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)**.
+Without the alarm everything still works, just later in the day.
+
+---
+
 ## Optional next steps
 
 | What | Where |
 |---|---|
+| The new day and the daily quote on the site by 5:30 AM | Step 9 above (the morning alarm) |
 | Monthly bilingual e-mail to the districts | README → *Optional upgrades → Monthly e-mail digest* |
 | Exact dates for Drive files (Google API key) | README → *Optional upgrades → Google API key* |
 | Instagram the official way (token), or no automated Instagram visits at all | README → *Instagram: how the site reads it* |

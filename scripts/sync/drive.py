@@ -21,7 +21,11 @@ Naming conventions the committee can use (all optional):
   * bulletin/ (boletín; the older "announcements" / "anuncios" folder names work too): a Google Doc,
     .txt, .md or .docx becomes a post on /bulletin/; the file name is the headline and the
     text is the body. Add "(pinned)" / "(fijado)" to pin it, "(until 2027-02-01)" /
-    "(hasta 2027-02-01)" to hide it after that date.
+    "(hasta 2027-02-01)" to hide it after that date, and "(from 2027-02-01)" / "(desde 2027-02-01)"
+    (also "publish" / "publicar") to keep it off the site until that day (`extra.publish`: build_data
+    leaves it out until then and it appears with that morning's update). Only a real date is taken
+    out of the headline — "(from the Chair)" stays as written. An undated post is dated its
+    "(from …)" day.
 
 No API key needed: folders are read from Drive's public "embedded folder view"
 (scripts/sync/drive_listing.py). If the GOOGLE_API_KEY secret exists, the Drive API is
@@ -155,6 +159,9 @@ _COPY_SUFFIX = re.compile(r"(?i)\s*(\(\d+\)|\bcopy\b|\bcopia\b)\s*$")
 _COPY_PREFIX = re.compile(r"(?i)^(copy of|copia de)\s+")
 _PINNED = re.compile(r"(?i)\s*[\[(](pinned|fijado|fijo|pin)[\])]\s*|📌")
 _UNTIL = re.compile(r"(?i)\s*[\[(]\s*(?:until|expires?|hasta|vence)\s*:?\s*([^)\]]+)[\])]\s*")
+# A bulletin post scheduled for a later day: "(from 2027-02-01)" / "(desde 2027-02-01)" (or "publish" /
+# "publicar"). Taken out of the headline only when it holds a date: "(from the Chair)" is a title.
+_FROM = re.compile(r"(?i)\s*[\[(]\s*(?:from|publish|desde|publicar)\s*:?\s*([^)\]]+)[\])]\s*")
 
 
 def strip_ext(name: str) -> str:
@@ -489,6 +496,13 @@ def build_item(f: Found, dcfg: dict) -> dict:
     if mu:
         expires = date_from_text(mu.group(1))[0]
         stem = stem[: mu.start()] + " " + stem[mu.end():]
+    publish = None
+    if kind == "announcement":
+        for mf in _FROM.finditer(stem):
+            publish = date_from_text(mf.group(1))[0]
+            if publish:                  # "(from 2027-02-01)" — never "(from the Chair)"
+                stem = stem[: mf.start()] + " " + stem[mf.end():]
+                break
     ndate, rest, explicit_day = name_date(stem)
     if ndate and not explicit_day:
         # Only "Month YYYY" — that IS the distinguishing part ("March 2026 Committee Meeting",
@@ -535,10 +549,11 @@ def build_item(f: Found, dcfg: dict) -> dict:
     elif kind == "photo":
         date = ndate or (e.taken[:10] if e.taken else None) or listing_date
     else:
-        date = ndate or listing_date
+        # a scheduled bulletin post without a date in its name is dated the day it goes up
+        date = ndate or publish or listing_date
 
     if kind == "announcement":
-        extra.update({"body_md": "", "expires": expires, "pinned": pinned})
+        extra.update({"body_md": "", "expires": expires, "pinned": pinned, "publish": publish})
     elif pinned:
         extra["pinned"] = True
 

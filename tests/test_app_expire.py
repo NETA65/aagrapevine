@@ -1,0 +1,312 @@
+"""Things whose time has passed hide themselves between the daily builds (src/assets/js/app.js GV.expire):
+
+  * [data-gv-expire="<ISO instant>"] — hidden (and data-gv-expired) once that moment has passed; a bare date
+    or anything else that is not a moment with its zone is ignored;
+  * [data-gv-expire-list] — hidden once every [data-gv-expire-item] inside it is hidden, and its
+    data-gv-expire-empty="#id" note shown instead; a [data-gv-expire-spare="<class>"] item (the home page's
+    4th event, hidden on a phone) drops that class once an earlier item has gone;
+  * the attributes are GV.expire's alone: committee.js and read.js, which hide their own [data-cm-expire]
+    without waiting for focus, never see them (committee.js is loaded on /bulletin/ too);
+  * the element holding keyboard focus (or a list around it) is never hidden under the reader — it goes once
+    focus leaves it;
+  * it runs when the page is ready, every minute and when the page is shown again;
+  * the moments come from eleventy/filters/freshness.js fsDayEnd (the end of a Central-time day: a post's
+    `expires`, a story deadline) and home.js homeEventEnd (the end of an event, as the home page's
+    upcoming-events row counts it); the home page and /bulletin/ carry the attributes.
+
+app.js runs in a Node.js vm with a small stand-in for the page (elements with attributes, `hidden`,
+contains(), focus, listeners, a clock and timers the test moves by hand).
+
+    python -m unittest tests.test_app_expire -v        (or: python -m unittest discover -s tests)
+"""
+from __future__ import annotations
+
+import sys
+import unittest
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from nodejs import run_js  # noqa: E402
+
+ROOT = Path(__file__).resolve().parents[1]
+
+# The page stand-in: el(tag, attrs, children) builds elements; `page(children)` loads app.js on a document
+# holding them → { G (window.GV), doc, win, clock: {now}, timers, intervals, fire(type) (DOMContentLoaded …),
+# run() (due timeouts) }. document.readyState is "loading", so app.js waits for DOMContentLoaded.
+DOM = r"""
+import vm from "node:vm";
+class El {
+  constructor(tag, attrs, children) {
+    this.tagName = String(tag).toUpperCase();
+    this.attrs = Object.assign({}, attrs || {});
+    this.children = children || [];
+    this.parent = null;
+    for (const c of this.children) c.parent = this;
+    this.hidden = "hidden" in this.attrs;
+    this.listeners = {};
+    this.style = {};
+    const self = this, cls = () => String(self.attrs.class || "").split(/\s+/).filter(Boolean);
+    this.classList = {
+      add(c) { if (!cls().includes(c)) self.attrs.class = [...cls(), c].join(" "); },
+      remove(c) { self.attrs.class = cls().filter((x) => x !== c).join(" "); },
+      toggle(c, on) { if (on === undefined ? !cls().includes(c) : on) this.add(c); else this.remove(c); },
+      contains: (c) => cls().includes(c),
+    };
+  }
+  getAttribute(n) { return n in this.attrs ? this.attrs[n] : null; }
+  setAttribute(n, v) { this.attrs[n] = String(v); }
+  hasAttribute(n) { return n in this.attrs; }
+  removeAttribute(n) { delete this.attrs[n]; }
+  contains(o) { for (let n = o; n; n = n.parent) if (n === this) return true; return false; }
+  appendChild(c) { c.parent = this; this.children.push(c); return c; }
+  *walk() { for (const c of this.children) { yield c; yield* c.walk(); } }
+  // "[attr]" selectors, comma-separated (all this script's own); anything else finds nothing
+  querySelectorAll(sel) {
+    const parts = String(sel).split(",").map((s) => s.trim());
+    const want = parts.every((p) => /^\[[\w-]+\]$/.test(p)) ? parts.map((p) => p.slice(1, -1)) : null;
+    const byId = /^#([\w-]+)$/.exec(String(sel).trim());
+    return [...this.walk()].filter((e) => (want ? want.some((a) => e.hasAttribute(a)) : byId ? e.attrs.id === byId[1] : false));
+  }
+  querySelector(sel) { return this.querySelectorAll(sel)[0] || null; }
+  addEventListener(t, fn, o) { (this.listeners[t] ||= []).push({ fn, once: !!(o && o.once) }); }
+  dispatch(t, ev) { const ls = this.listeners[t] || []; this.listeners[t] = ls.filter((l) => !l.once); for (const l of ls) l.fn(Object.assign({ type: t }, ev || {})); }
+}
+const el = (tag, attrs, children) => new El(tag, attrs, children);
+const page = (children) => {
+  const clock = { now: Date.parse("2026-10-03T20:00:00Z") };
+  const timers = [], intervals = [];
+  class FakeDate extends Date { static now() { return clock.now; } }
+  const body = el("body", {}, children || []);
+  const root = el("html", { lang: "en" }, [body]);
+  const docListeners = {}, winListeners = {};
+  const doc = {
+    readyState: "loading", documentElement: root, body, activeElement: body, visibilityState: "visible",
+    addEventListener: (t, fn) => { (docListeners[t] ||= []).push(fn); },
+    querySelectorAll: (s) => root.querySelectorAll(s), querySelector: (s) => root.querySelector(s),
+    getElementById: (id) => root.querySelector("#" + id),
+    createElement: (t) => el(t),
+  };
+  const win = {
+    addEventListener: (t, fn) => { (winListeners[t] ||= []).push(fn); },
+    dispatchEvent() {}, matchMedia: () => ({ matches: false }),
+  };
+  const ctx = {
+    console, JSON, Math, Object, Array, String, Number, RegExp, Intl, Promise, isNaN, isFinite, Date: FakeDate,
+    document: doc, navigator: {}, localStorage: { getItem: () => null, setItem() {}, removeItem() {} },
+    setTimeout: (fn, ms) => { timers.push({ fn, at: clock.now + (ms || 0) }); return timers.length; },
+    clearTimeout() {}, setInterval: (fn, ms) => { intervals.push({ fn, ms }); return intervals.length; },
+    NodeFilter: {}, CustomEvent: function () {},
+  };
+  ctx.window = Object.assign(ctx, win);
+  vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync("src/assets/js/app.js", "utf8"), ctx, { filename: "app.js" });
+  const run = () => { const due = timers.splice(0).filter((t) => t.at <= clock.now); due.forEach((t) => t.fn()); };
+  const fire = (t, ev) => { for (const fn of docListeners[t] || []) fn(Object.assign({ type: t }, ev || {})); };
+  const fireWin = (t, ev) => { for (const fn of winListeners[t] || []) fn(Object.assign({ type: t }, ev || {})); };
+  return { G: ctx.GV, doc, clock, timers, intervals, run, fire, fireWin };
+};
+const PAST = "2026-10-03T19:00:00Z", SOON = "2026-10-03T21:30:00.000Z", LATER = "2026-10-15T05:00:00.000Z";
+"""
+
+
+def js(case: unittest.TestCase, script: str):
+    return run_js(case, DOM + script, needs_modules=False, timeout=60)
+
+
+class Expire(unittest.TestCase):
+    def test_passed_moments_hide_and_future_ones_stay(self):
+        r = js(self, r"""
+          const a = el("li", { "data-gv-expire": PAST }), b = el("li", { "data-gv-expire": LATER }),
+                c = el("li", { "data-gv-expire": "2026-10-03T14:00:00-05:00" }), d = el("li", { "data-gv-expire": "2026-10-03T13:59-05:00" });
+          const p = page([a, b, c, d]);
+          const n = p.G.expire();
+          out({ n, a: [a.hidden, a.hasAttribute("data-gv-expired")], b: [b.hidden, b.hasAttribute("data-gv-expired")],
+                c: c.hidden, d: d.hidden, again: p.G.expire() });""")
+        self.assertEqual(r["n"], 3)
+        self.assertEqual(r["a"], [True, True])
+        self.assertEqual(r["b"], [False, False])
+        self.assertTrue(r["c"], "an offset instant (-05:00) is a moment too")
+        self.assertTrue(r["d"], "without seconds too")
+        self.assertEqual(r["again"], 0, "idempotent: a second pass hides nothing more")
+
+    def test_bare_dates_and_junk_are_ignored(self):
+        r = js(self, r"""
+          // a bare date (no moment), no zone (the visitor's own clock), a compact zone some browsers
+          // cannot read, words, nothing, a space instead of the T
+          const vals = ["2026-10-01", "2026-10-01T05:00", "2026-10-01T05:00-0500", "soon", "", "2026-10-01 05:00Z", "yesterdayT00:00:00Z"];
+          const els = vals.map((v) => el("li", { "data-gv-expire": v }));
+          const p = page(els);
+          out({ n: p.G.expire(), hidden: els.map((e) => e.hidden) });""")
+        self.assertEqual(r["n"], 0)
+        self.assertEqual(r["hidden"], [False] * 7)
+
+    def test_a_list_goes_when_all_its_items_have(self):
+        r = js(self, r"""
+          const i1 = el("article", { "data-gv-expire-item": "", "data-gv-expire": PAST });
+          const i2 = el("article", { "data-gv-expire-item": "", "data-gv-expire": SOON });
+          const list = el("section", { "data-gv-expire-list": "", "data-gv-expire-empty": "#none" }, [el("h2"), i1, i2]);
+          const note = el("div", { id: "none", hidden: "" });
+          // a list with an item that never expires (an evergreen theme) never goes
+          const keep = el("ul", { "data-gv-expire-list": "" }, [el("li", { "data-gv-expire-item": "", "data-gv-expire": PAST }), el("li", { "data-gv-expire-item": "" })]);
+          const p = page([list, note, keep]);
+          p.G.expire();
+          const first = { list: list.hidden, i1: i1.hidden, i2: i2.hidden, note: note.hidden };
+          p.clock.now = Date.parse("2026-10-03T21:31:00Z");
+          const n = p.G.expire();
+          out({ first, n, list: list.hidden, i2: i2.hidden, note: note.hidden, keep: keep.hidden });""")
+        self.assertEqual(r["first"], {"list": False, "i1": True, "i2": False, "note": True})
+        self.assertEqual(r["n"], 2)                      # the last item, then its list
+        self.assertTrue(r["list"])
+        self.assertFalse(r["note"], "the empty note shows instead")
+        self.assertFalse(r["keep"])
+
+    def test_a_spare_steps_in_for_an_item_that_has_gone(self):
+        # The home page's events on a phone: three, and a 4th hidden there by a class (max-sm:hidden). Once
+        # the first has ended the 4th shows in its place; the section goes only when all four have.
+        r = js(self, r"""
+          const at = ["2026-10-03T19:00:00Z", "2026-10-03T21:00:00Z", "2026-10-03T22:00:00Z", "2026-10-03T23:00:00Z"];
+          const ev = at.map((t, i) => el("li", Object.assign({ "data-gv-expire-item": "", "data-gv-expire": t },
+                                                           i === 3 ? { class: "max-sm:hidden", "data-gv-expire-spare": "max-sm:hidden" } : {})));
+          const cta = el("li", { class: "home-cal-cta" });             // not an item: never counted
+          const list = el("section", { "data-gv-expire-list": "" }, [el("h2"), el("ul", {}, [...ev, cta])]);
+          const p = page([list]);
+          const seen = [];
+          const snap = () => seen.push({ shown: ev.map((e) => !e.hidden), spareClass: ev[3].getAttribute("class"), list: list.hidden });
+          snap();                                                     // 20:00: nothing over yet
+          p.G.expire(); snap();                                       // the 19:00 one is over
+          p.clock.now = Date.parse("2026-10-03T22:30:00Z"); p.G.expire(); snap();
+          p.clock.now = Date.parse("2026-10-03T23:30:00Z"); p.G.expire(); snap();
+          out(seen);""")
+        self.assertEqual(r[0], {"shown": [True, True, True, True], "spareClass": "max-sm:hidden", "list": False})
+        self.assertEqual(r[1], {"shown": [False, True, True, True], "spareClass": "", "list": False},
+                         "one gone: the spare shows on a phone too")
+        self.assertEqual(r[2], {"shown": [False, False, False, True], "spareClass": "", "list": False})
+        self.assertEqual(r[3], {"shown": [False, False, False, False], "spareClass": "", "list": True})
+
+    def test_a_spare_that_ended_first_steps_in_for_nobody(self):
+        r = js(self, r"""
+          const a = el("li", { "data-gv-expire-item": "", "data-gv-expire": LATER });
+          const s = el("li", { "data-gv-expire-item": "", "data-gv-expire": PAST, class: "max-sm:hidden", "data-gv-expire-spare": "max-sm:hidden" });
+          const list = el("ul", { "data-gv-expire-list": "" }, [a, s]);
+          const p = page([list]);
+          p.G.expire();
+          out({ a: a.hidden, s: s.hidden, cls: s.getAttribute("class"), list: list.hidden });""")
+        self.assertEqual(r, {"a": False, "s": True, "cls": "max-sm:hidden", "list": False})
+
+    def test_the_focused_element_is_never_hidden_under_the_reader(self):
+        r = js(self, r"""
+          const link = el("a", { href: "#" });
+          const card = el("li", { "data-gv-expire-item": "", "data-gv-expire": PAST }, [link]);
+          const head = el("a", { href: "/events/" });
+          const list = el("section", { "data-gv-expire-list": "" }, [head, card]);
+          const p = page([list]);
+          p.doc.activeElement = link;
+          const n0 = p.G.expire();
+          const kept = card.hidden;
+          p.doc.activeElement = head;                  // focus moves on (Tab) — still inside the list
+          card.dispatch("focusout");
+          p.run();
+          const cardAfter = card.hidden, listWhileFocused = list.hidden;
+          p.doc.activeElement = p.doc.body;            // focus leaves the list
+          list.dispatch("focusout");
+          p.run();
+          out({ n0, kept, cardAfter, listWhileFocused, list: list.hidden });""")
+        self.assertEqual(r["n0"], 0)
+        self.assertFalse(r["kept"])
+        self.assertTrue(r["cardAfter"], "hidden once focus left the card")
+        self.assertFalse(r["listWhileFocused"], "the list holding focus stays")
+        self.assertTrue(r["list"])
+
+    def test_runs_when_ready_every_minute_and_when_shown_again(self):
+        r = js(self, r"""
+          const a = el("li", { "data-gv-expire-item": "", "data-gv-expire": PAST });
+          const b = el("li", { "data-gv-expire-item": "", "data-gv-expire": SOON });
+          const c = el("li", { "data-gv-expire-item": "", "data-gv-expire": "2026-10-03T22:00:00Z" });
+          const p = page([el("ul", { "data-gv-expire-list": "" }, [a, b, c])]);
+          const before = a.hidden;
+          p.fire("DOMContentLoaded");
+          const ready = a.hidden, every = p.intervals.map((i) => i.ms);
+          p.clock.now = Date.parse("2026-10-03T21:31:00Z");
+          p.intervals[0].fn();
+          const minute = b.hidden;
+          p.clock.now = Date.parse("2026-10-03T22:05:00Z");
+          p.fire("visibilitychange");
+          out({ before, ready, every, minute, shown: c.hidden });""")
+        self.assertFalse(r["before"])
+        self.assertTrue(r["ready"])
+        self.assertEqual(r["every"], [60000])
+        self.assertTrue(r["minute"])
+        self.assertTrue(r["shown"])
+
+    def test_a_page_without_them_starts_nothing(self):
+        r = js(self, r"""
+          const p = page([el("p")]);
+          p.fire("DOMContentLoaded");
+          out({ intervals: p.intervals.length });""")
+        self.assertEqual(r["intervals"], 0)
+
+
+class Moments(unittest.TestCase):
+    """fsDayEnd (freshness.js) and homeEventEnd (home.js): the instants the pages write."""
+
+    def test_day_end_in_central_time(self):
+        r = run_js(self, """
+          const f = filters.fsDayEnd;
+          out(["2026-10-14", "2026-12-14", "2026-10-31", "2027-03-13", "2026-10-14T09:00:00Z", "2026-02-30", "soon", "", null, 20261014]
+              .map((v) => f(v)));""")
+        self.assertEqual(r, ["2026-10-15T05:00:00.000Z", "2026-12-15T06:00:00.000Z", "2026-11-01T05:00:00.000Z",
+                             "2027-03-14T06:00:00.000Z", "2026-10-15T05:00:00.000Z", "", "", "", "", ""])
+
+    def test_event_end_as_the_home_page_counts_it(self):
+        r = run_js(self, """
+          const f = filters.homeEventEnd;
+          out([
+            f({ date: "2026-10-03T19:00:00Z", extra: { start: "2026-10-03T19:00:00Z", end: "2026-10-03T22:00:00Z" } }),
+            f({ date: "2026-10-03T19:00:00Z", extra: { start: "2026-10-03T19:00:00Z" } }),
+            f({ date: "2027-03-19", extra: { start: "2027-03-19", end: "2027-03-21", all_day: true } }),
+            f({ date: "2026-11-07", extra: { start: "2026-11-07", all_day: true } }),
+            f({ extra: {} }),
+            f(null),
+          ]);""")
+        self.assertEqual(r, ["2026-10-03T22:00:00.000Z", "2026-10-03T21:00:00.000Z", "2027-03-22T05:00:00.000Z",
+                             "2026-11-08T06:00:00.000Z", "", ""])
+
+
+class Pages(unittest.TestCase):
+    def test_their_attributes_are_gv_expires_alone(self):
+        # committee.js (loaded on /bulletin/) and read.js hide [data-cm-expire] without waiting for focus: the
+        # home page and /bulletin/ must never carry it, and they must never read GV.expire's attributes
+        for page in ("index.njk", "bulletin.njk"):
+            self.assertNotIn("data-cm-expire", (ROOT / "src" / "pages" / page).read_text(encoding="utf-8"), page)
+        for f in ("committee.js", "read.js"):
+            text = (ROOT / "src" / "assets" / "js" / f).read_text(encoding="utf-8")
+            self.assertNotIn("data-gv-expire", text, f)
+        app = (ROOT / "src" / "assets" / "js" / "app.js").read_text(encoding="utf-8")
+        self.assertNotIn('querySelectorAll("[data-cm-expire', app)
+
+    def test_home_and_bulletin_carry_the_attributes(self):
+        home = (ROOT / "src" / "pages" / "index.njk").read_text(encoding="utf-8")
+        # the bulletin section and the events section are lists; their cards are items with a moment
+        self.assertRegex(home, r'<section[^>]*aria-labelledby="ann-title"[^>]*data-gv-expire-list')
+        self.assertRegex(home, r'<section[^>]*aria-labelledby="events-title"[^>]*data-gv-expire-list')
+        self.assertRegex(home, r'<article class="home-ann[^"]*"[^>]*data-gv-expire-item\{% if annEnd %\} data-gv-expire="\{\{ annEnd \}\}"')
+        self.assertIn('(a.extra.expires | fsDayEnd)', home)
+        self.assertIn('(th.extra.deadline | fsDayEnd)', home)
+        self.assertRegex(home, r'<li class="home-theme[^"]*"[^>]*data-gv-expire-item\{% if thEnd %\} data-gv-expire="\{\{ thEnd \}\}"')
+        self.assertIn('{%- set evEndAt = e | homeEventEnd -%}', home)
+        self.assertRegex(home, r'data-gv-expire-item\{% if evEndAt %\} data-gv-expire="\{\{ evEndAt \}\}"')
+        # the 4th event (hidden on a phone) is a spare that steps in there
+        self.assertIn('<li{% if loop.index > 3 %} class="max-sm:hidden" data-gv-expire-spare="max-sm:hidden"{% endif %} '
+                      'data-gv-expire-item', home)
+        # the calendar card in the events row is not an event: never an item
+        cta = home.split('class="home-cal-cta', 1)[1].split("</article>", 1)[0]
+        self.assertNotIn("data-gv-expire", cta)
+        bulletin = (ROOT / "src" / "pages" / "bulletin.njk").read_text(encoding="utf-8")
+        self.assertIn('data-gv-expire-list data-gv-expire-empty="#ann-empty"', bulletin)
+        self.assertRegex(bulletin, r'<li class="min-w-0" data-gv-expire-item\{% if annEnd %\} data-gv-expire="\{\{ annEnd \}\}"')
+        self.assertRegex(bulletin, r'<div id="ann-empty"[^>]*\{% if anns \| length %\} hidden\{% endif %\}>')
+        self.assertIn('{% for k in ["1", "2", "3", "4"] %}', bulletin)
+
+
+if __name__ == "__main__":
+    unittest.main()

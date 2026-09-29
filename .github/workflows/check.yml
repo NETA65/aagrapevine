@@ -3,9 +3,10 @@
 #
 #  Runs for every pull request (for example Dependabot's monthly
 #  "chore(deps)" and "chore(actions)" updates) AND for every push to
-#  main that changes code, templates, settings or content. It builds the
-#  website exactly like the daily "Update & Deploy" does (strict about
-#  missing button/heading texts) and runs the offline Python tests.
+#  main that changes code, templates, settings, content or a workflow.
+#  It builds the website exactly like the daily "Update & Deploy" does
+#  (strict about missing button/heading texts; the Morning check's
+#  build.json included) and runs the offline Python tests.
 #
 #  On a pull request, a broken update shows a red ✗ BEFORE it is merged.
 #  On a push, a red ✗ here means "something in that change is broken" —
@@ -37,7 +38,8 @@ on:
       - "package.json"
       - "package-lock.json"
       - "requirements.txt"
-      - ".github/workflows/check.yml"
+      # every workflow (the tests read them: the schedules, the morning mode, the Morning check)
+      - ".github/workflows/**"
   workflow_dispatch:
 
 permissions:
@@ -86,6 +88,9 @@ jobs:
           test -s _site/index.html || { echo "::error::_site/index.html is missing — the build did not produce a home page."; exit 1; }
           test -s _site/es/index.html || { echo "::error::_site/es/index.html is missing — the Spanish site was not built."; exit 1; }
           test -s _site/assets/css/main.css || { echo "::error::The stylesheet was not built."; exit 1; }
+          # The Morning check (morning.yml) reads the live build.json: a change that loses it is caught here
+          # (Update & Deploy only warns, so that a deploy is never blocked by it).
+          test -s _site/build.json || { echo "::error::_site/build.json is missing — the Morning check could not see the site's builds."; exit 1; }
           pages=$(find _site -name '*.html' | wc -l)
           size=$(du -sm _site | cut -f1)
           echo "Built ${pages} pages, ${size} MB."
