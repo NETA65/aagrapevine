@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-09-28T18:17:20Z",
- "attempted": "2026-09-28T18:17:20Z",
+ "updated": "2026-09-29T16:38:49Z",
+ "attempted": "2026-09-29T16:38:49Z",
  "ok": true,
  "error": null,
  "stats": {
@@ -18,7 +18,7 @@
   "online_es": 0,
   "items": 0,
   "new": 0,
-  "requests": 35
+  "requests": 37
  },
  "items": [],
  "first_harvest": "2026-09-23T16:43:55Z",
@@ -328,14 +328,14 @@
  "sitemap": {
   "pages": {
    "https://www.aagrapevine.org/sitemap.xml?page=1": {
-    "lastmod": "2026-09-26T17:35:26-05:00",
+    "lastmod": "2026-09-28T14:43:12-05:00",
     "events": [],
-    "fetched": "2026-09-27T15:16:52Z",
+    "fetched": "2026-09-29T16:38:43Z",
     "urls_total": 2000,
     "events_total": 2000
    },
    "https://www.aagrapevine.org/sitemap.xml?page=2": {
-    "lastmod": "2026-09-26T17:35:26-05:00",
+    "lastmod": "2026-09-28T14:43:12-05:00",
     "events": [
      "https://www.aagrapevine.org/get-involved/events/2026-10-02/79th-powell-river-rally-2026",
      "https://www.aagrapevine.org/get-involved/events/2026-10-23/38th-northeast-woman-woman-conference",
@@ -353,7 +353,7 @@
      "https://www.aalavina.org/get-involved/events/2026-10-30/iii-convencion-hispana-del-estado-de-alabama",
      "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico"
     ],
-    "fetched": "2026-09-27T15:16:57Z",
+    "fetched": "2026-09-29T16:38:49Z",
     "urls_total": 1089,
     "events_total": 939
    }

@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-27T15:12:26Z",
+ "updated": "2026-09-29T16:34:21Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16878,
-   "posts": 3903,
+   "followers": 16895,
+   "posts": 3906,
    "owner_id": "48108439509",
-   "checked": "2026-09-27T15:12:22Z",
+   "checked": "2026-09-29T16:34:16Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,229 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2420,
-   "posts": 2943,
+   "followers": 2422,
+   "posts": 2945,
    "owner_id": "48275839129",
-   "checked": "2026-09-27T15:12:25Z",
+   "checked": "2026-09-29T16:34:19Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:Dd3p9lAl9uB",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dd3p9lAl9uB/",
+   "title": "“Los comienzos de Alcohólicos Anónimos fueron alrededor de una mesa de cocina. Es cierto…",
+   "summary": "“Los comienzos de Alcohólicos Anónimos fueron alrededor de una mesa de cocina. Es cierto que, en lo material, progresamos mucho: mejores muebles y entornos más cómodos. Pero la mesa de cocina siempre será apropiada para nosotros. Es el símbolo perfecto de la simplicidad”. \"“Los fundamentos en retrospectiva” DR. BOB, COFUNDADOR DE AA, SEPTIEMBRE DE 1948 De Spiritual Awakenings\" Cita Diaria en…",
+   "lang": "es",
+   "date": "2026-09-29T11:30:16Z",
+   "first_seen": "2026-09-29T16:34:21Z",
+   "image": "/assets/cache/ig/Dd3p9lAl9uB.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dd3p9lAl9uB",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dd3p9lAl9uB.webp",
+    "embed_url": "https://www.instagram.com/p/Dd3p9lAl9uB/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dd3p9lAl9uB/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The beginnings of Alcoholics Anonymous were around a kitchen table. It's true …",
+     "es": "“Los comienzos de Alcohólicos Anónimos fueron alrededor de una mesa de cocina. Es cierto…"
+    },
+    "summary": {
+     "en": "“The beginnings of Alcoholics Anonymous were around a kitchen table. It is true that, in the material, we progress a lot: better furniture and more comfortable environments. But the kitchen table will always be appropriate for us. It is the perfect symbol of simplicity.” Dr. Bob, co-founder of AA, September 1948 De Spiritual Awakenings Daily Quote in …",
+     "es": "“Los comienzos de Alcohólicos Anónimos fueron alrededor de una mesa de cocina. Es cierto que, en lo material, progresamos mucho: mejores muebles y entornos más cómodos. Pero la mesa de cocina siempre será apropiada para nosotros. Es el símbolo perfecto de la simplicidad”. \"“Los fundamentos en retrospectiva” DR. BOB, COFUNDADOR DE AA, SEPTIEMBRE DE 1948 De Spiritual Awakenings\" Cita Diaria en…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dd3p9kPl1uP",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dd3p9kPl1uP/",
+   "title": "“Personal glorification, overweening pride, consuming ambition, exhibitionism…",
+   "summary": "“Personal glorification, overweening pride, consuming ambition, exhibitionism, intolerant smugness, money or power madness, refusal to admit mistakes and learn from them, self-satisfaction, lazy complacency – these and many more are the garden variety of ills which so often beset movements as well as individuals.” AA Co-Founder, Bill W., August 1945, From: “Modesty One Plank for Good Public…",
+   "lang": "en",
+   "date": "2026-09-29T11:30:14Z",
+   "first_seen": "2026-09-29T16:34:21Z",
+   "image": "/assets/cache/ig/Dd3p9kPl1uP.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dd3p9kPl1uP",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dd3p9kPl1uP.webp",
+    "embed_url": "https://www.instagram.com/p/Dd3p9kPl1uP/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dd3p9kPl1uP/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Personal glorification, overweening pride, consuming ambition, exhibitionism…",
+     "es": "“La glorificación personal, el orgullo abrumador, la ambición consumida, el exhibicionismo …"
+    },
+    "summary": {
+     "en": "“Personal glorification, overweening pride, consuming ambition, exhibitionism, intolerant smugness, money or power madness, refusal to admit mistakes and learn from them, self-satisfaction, lazy complacency – these and many more are the garden variety of ills which so often beset movements as well as individuals.” AA Co-Founder, Bill W., August 1945, From: “Modesty One Plank for Good Public…",
+     "es": "“La glorificación personal, el orgullo abrumador, la ambición consumida, el exhibicionismo, el aumento intolerante, el dinero o la locura del poder, la negativa a admitir errores y aprender de ellos, la autosatisfacción, la perezosa complacencia – estos y muchos más son la variedad del jardín de males que tan a menudo se presentan movimientos y individuos”. AA cofundador, Bill W., agosto de 1945, de: “Modesty One Plank for Good Public …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dd1HxPQAyuG",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dd1HxPQAyuG/",
+   "title": "In AA We Talk Truth",
+   "summary": "In AA We Talk Truth",
+   "lang": "en",
+   "date": "2026-09-28T11:54:01Z",
+   "first_seen": "2026-09-29T16:34:21Z",
+   "image": "/assets/cache/ig/Dd1HxPQAyuG.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dd1HxPQAyuG",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dd1HxPQAyuG.webp",
+    "embed_url": "https://www.instagram.com/p/Dd1HxPQAyuG/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dd1HxPQAyuG/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "In AA We Talk Truth",
+     "es": "En AA hablamos la verdad"
+    },
+    "summary": {
+     "en": "In AA We Talk Truth",
+     "es": "En AA hablamos la verdad"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dd1FKtnl87t",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dd1FKtnl87t/",
+   "title": "“Los comienzos de Alcohólicos Anónimos fueron alrededor de una mesa de cocina. Es cierto…",
+   "summary": "“Los comienzos de Alcohólicos Anónimos fueron alrededor de una mesa de cocina. Es cierto que, en lo material, progresamos mucho: mejores muebles y entornos más cómodos. Pero la mesa de cocina siempre será apropiada para nosotros. Es el símbolo perfecto de la simplicidad”. \"“Los fundamentos en retrospectiva” DR. BOB, COFUNDADOR DE AA, SEPTIEMBRE DE 1948 De Spiritual Awakenings\" Cita Diaria en…",
+   "lang": "es",
+   "date": "2026-09-28T11:30:16Z",
+   "first_seen": "2026-09-29T16:34:21Z",
+   "image": "/assets/cache/ig/Dd1FKtnl87t.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dd1FKtnl87t",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dd1FKtnl87t.webp",
+    "embed_url": "https://www.instagram.com/p/Dd1FKtnl87t/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dd1FKtnl87t/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The beginnings of Alcoholics Anonymous were around a kitchen table. It's true …",
+     "es": "“Los comienzos de Alcohólicos Anónimos fueron alrededor de una mesa de cocina. Es cierto…"
+    },
+    "summary": {
+     "en": "“The beginnings of Alcoholics Anonymous were around a kitchen table. It is true that, in the material, we progress a lot: better furniture and more comfortable environments. But the kitchen table will always be appropriate for us. It is the perfect symbol of simplicity.” Dr. Bob, co-founder of AA, September 1948 De Spiritual Awakenings Daily Quote in …",
+     "es": "“Los comienzos de Alcohólicos Anónimos fueron alrededor de una mesa de cocina. Es cierto que, en lo material, progresamos mucho: mejores muebles y entornos más cómodos. Pero la mesa de cocina siempre será apropiada para nosotros. Es el símbolo perfecto de la simplicidad”. \"“Los fundamentos en retrospectiva” DR. BOB, COFUNDADOR DE AA, SEPTIEMBRE DE 1948 De Spiritual Awakenings\" Cita Diaria en…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dd1FKs6lyRH",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dd1FKs6lyRH/",
+   "title": "“I was so busy juggling the regrets of the past with the expectations of tomorrow I had…",
+   "summary": "“I was so busy juggling the regrets of the past with the expectations of tomorrow I had no time for living in the present.” Atlanta, Ga., August 2001, From: “How Is My Now?”, Beginner’s Book Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-09-28T11:30:16Z",
+   "first_seen": "2026-09-29T16:34:21Z",
+   "image": "/assets/cache/ig/Dd1FKs6lyRH.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dd1FKs6lyRH",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dd1FKs6lyRH.webp",
+    "embed_url": "https://www.instagram.com/p/Dd1FKs6lyRH/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dd1FKs6lyRH/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I was so busy juggling the regrets of the past with the expectations of tomorrow I had…",
+     "es": "“Estaba tan ocupado haciendo malabares con las expectativas de mañana que tenía …"
+    },
+    "summary": {
+     "en": "“I was so busy juggling the regrets of the past with the expectations of tomorrow I had no time for living in the present.” Atlanta, Ga., August 2001, From: “How Is My Now?”, Beginner’s Book Daily Quote at www.aagrapevine.org",
+     "es": "“Estaba tan ocupado haciendo malabares con las expectativas del pasado de mañana que no tenía tiempo para vivir en el presente”. Atlanta, Ga., agosto de 2001, de: “¿Cómo es mi ahora?”, Libro del principiante Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:Ddy4Z34lx33",
    "source": "instagram",
