@@ -28,12 +28,18 @@ What it does
      WINDOW_BEFORE before the goal until WINDOW_AFTER after it (4:00–7:00 AM for a 5:30 goal) it asks that
      magazine's home page every POLL_EVERY whether today's quote is out (quote.peek) — never sooner than
      POLL_EVERY after the last look, a run it started or followed included (every update reads the
-     quote) — and once it is, starts the morning refresh again (at most MAX_RUNS refreshes a check).
-     Before the window it stops (a later alarm or schedule asks again). A check that begins after the
-     window (a late schedule, or someone pressing Run workflow) asks ONCE and starts the refresh if the
-     quote is out. Otherwise — and at the end of the window — a yellow note that says when the magazine
-     was last asked: the site shows yesterday's quote, labelled "Yesterday" (home.js), until an update
-     brings the new one.
+     quote) — and once it is, starts the morning refresh again. Before the window it stops (a later alarm
+     or schedule asks again). A check that begins after the window (a late schedule, or someone pressing
+     Run workflow) asks ONCE and starts the refresh if the quote is out. Otherwise — and at the end of the
+     window — a yellow note that says when the magazine was last asked: the site shows yesterday's quote,
+     labelled "Yesterday" (home.js), until an update brings the new one.
+  In steps 3 and 4 together a check starts at most MAX_RUNS morning refreshes, never two without POLL_EVERY
+  between them (each refresh reads both magazines' home pages), and none after GUARD_MAX.
+  "Today" is the Central day of each moment, not of the check's start: a check still running at midnight
+  (a late evening firing, a run that waited in the queue) works for the NEW day from then on — the new
+  day's build is today's build, and its goal and asking window apply (right after midnight a late quote is
+  "too early to ask": the morning's checks ask). The run summary is then about the new day, with a
+  "Began" row that says so.
   5. Once today's update is on the site: on the 1st of the month (Central) before any full daily update of
      that day, and whenever none has run for CATCH_UP_AFTER (GitHub skipped or failed it), it also starts
      the full daily update — Update & Deploy with no inputs — without waiting for it; never while an
@@ -56,9 +62,10 @@ most mornings not at all. (The morning refresh itself reads each home page once:
 
 Exit codes: 0 = today's update is on the site, or only a magazine's quote is late at the source, or the
 site did not show a finished run yet ("Cannot confirm"), or --check-only; 1 = an update run failed, or did
-not start or finish within FOLLOW_MAX (GitHub then e-mails whoever started this check — for the morning
-alarm, the owner of its key; the runs this script starts are the bot's, and GitHub e-mails nobody about
-those); 2 = no token, repository or site address.
+not start or finish within FOLLOW_MAX, or today's build was still not on the site after MAX_RUNS morning
+refreshes or GUARD_MAX (GitHub then e-mails whoever started this check — for the morning alarm, the owner
+of its key; the runs this script starts are the bot's, and GitHub e-mails nobody about those); 2 = no
+token, repository or site address.
 """
 from __future__ import annotations
 
@@ -94,7 +101,7 @@ LIVE_MAX = timedelta(minutes=5)              # GitHub Pages shows a deploy withi
 LIVE_EVERY = timedelta(seconds=15)
 CATCH_UP_AFTER = timedelta(hours=30)         # no full daily update for this long → start one
 FULL_RETRY_AFTER = timedelta(hours=12)       # a full update started (and not finished well) → not again before
-MAX_RUNS = 3                                 # morning refreshes one check starts (the new day + 2 for a quote)
+MAX_RUNS = 3                                 # morning refreshes one check starts, in all (the new day + 2 for a quote)
 MAX_HOPS = 3                                 # replacements followed (GitHub's queue keeps one waiting run)
 # A check starts no refresh and asks no magazine after this long: its last refresh — at most FOLLOW_MAX +
 # LIVE_MAX, plus a few minutes of GitHub answering slowly — then still ends inside the 240 minutes that
@@ -388,8 +395,9 @@ def peek(late: list[str], today: date, fetch: Callable[[str], str | None] | None
 # --------------------------------------------------------------------------- the full daily update
 def last_full_update(live: dict | None, status: dict | None = None) -> datetime | None:
     """When the last FULL daily update ran: the live /build.json `full` — the value morning.yml's first job
-    decided on — else, when the live site could not be read, data/site/status.json `full_update` of this
-    checkout (both: the newest `attempted` of the sources only the full update reads, run_all.FULL_ONLY →
+    decided on — else, when the live site cannot say (it could not be read, or its build.json has no `full`
+    yet: a build from before the field existed), data/site/status.json `full_update` of this checkout (both:
+    the newest `attempted` of the sources only the full update reads, run_all.FULL_ONLY →
     build_data.build_status). None: not known."""
     got = parse_time(live.get("full")) if isinstance(live, dict) else None
     return got or (parse_time(status.get("full_update")) if isinstance(status, dict) else None)
@@ -463,7 +471,8 @@ class Report:
     """The run summary ($GITHUB_STEP_SUMMARY) and the annotations (a red ✗ / yellow note on the run page).
     `idle`: this check started, followed and asked nothing — written to $GITHUB_OUTPUT (idle=true|false):
     morning.yml then runs its step "Nothing to do", by which a later check's "tidy" job knows the run and
-    deletes it a day later."""
+    deletes it a day later. `today` / `goal_at` follow the day (main → new_day); `began`, set when the day
+    turned while the check ran, is the table's last row."""
 
     def __init__(self, today: date, tz: ZoneInfo, goal_at: datetime):
         self.today, self.tz, self.goal_at = today, tz, goal_at
@@ -471,6 +480,7 @@ class Report:
         self.rows: list[tuple[str, str]] = []
         self.notes: list[str] = []
         self.idle = False
+        self.began = ""
 
     def say(self, text: str) -> None:
         print(text, flush=True)
@@ -500,8 +510,9 @@ class Report:
         lines = [f"## Morning check — {day_label(self.today)} (Central time)", ""]
         if self.headline:
             lines += [self.headline, ""]
-        if self.rows:
-            lines += ["| | |", "|---|---|", *[f"| {a} | {str(b).replace('|', '/')} |" for a, b in self.rows], ""]
+        rows = self.rows + ([("Began", self.began)] if self.began else [])
+        if rows:
+            lines += ["| | |", "|---|---|", *[f"| {a} | {str(b).replace('|', '/')} |" for a, b in rows], ""]
         lines += [*self.notes]
         text = "\n".join(lines).rstrip() + "\n"
         for var, content in (("GITHUB_STEP_SUMMARY", text), ("GITHUB_OUTPUT", f"idle={'true' if self.idle else 'false'}\n")):
@@ -655,17 +666,46 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
         report.write()
         return 0
 
-    t_start = now
+    t_start, start_day = now, today
     poll_end = min(poll_until, t_start + GUARD_MAX)      # this check asks the magazines until then
+
+    def new_day(t: datetime) -> bool:
+        """Is `t` on a later Central day than `today`? Then the check works for that day from now on: a check
+        still running at midnight (a late evening firing, a run that waited in the queue) must take the new
+        day's build as today's — its day check alone would otherwise start a refresh at every look until
+        GUARD_MAX — and the new day's goal and asking window apply (right after midnight a late quote is
+        "too early to ask"; the morning's checks ask). The run summary is then about the new day, and its
+        "Began" row says when the check began."""
+        nonlocal today, goal_at, poll_from, poll_until, poll_end
+        d = t.astimezone(tz).date()
+        if d <= today:
+            return False
+        today = d
+        goal_at = datetime(d.year, d.month, d.day, goal[0], goal[1], tzinfo=tz)
+        poll_from, poll_until = goal_at - WINDOW_BEFORE, goal_at + WINDOW_AFTER
+        poll_end = min(poll_until, t_start + GUARD_MAX)
+        report.today, report.goal_at = today, goal_at
+        report.began = f"{day_label(start_day)}, {clock_label(t_start, tz)} — the day turned at midnight while it ran"
+        report.say(f"{clock_label(t, tz)}: a new day, {day_label(d)} — this check works for it from now on")
+        return True
 
     def guard() -> int:
         nonlocal live, waiting, running
         runs_started, asks = 0, 0
         last_run: dict | None = None
         # When this check last saw the magazines' pages: its own question (peek), or a run it started or
-        # followed (every update reads the daily quote). It asks again POLL_EVERY later — never at once.
+        # followed (every update reads the daily quote). It asks again POLL_EVERY later — never at once — and
+        # starts no refresh sooner than that after it either.
         last_look: datetime | None = None
         missed: list[str] = []        # out on the magazine's page, but the refresh this check started did not bring it
+
+        def turned() -> bool:
+            """new_day() for this moment — a new day forgets `missed` (that was the day before's quote)."""
+            nonlocal missed
+            if not new_day(clock.now()):
+                return False
+            missed = []
+            return True
 
         def late_note(late: list[str]) -> int:
             """The asking is over and a quote is still not today's → the summary with a yellow note, exit 0."""
@@ -721,8 +761,12 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
             """Waits until the magazines may be asked again — POLL_EVERY after the last look — → None (the
             loop reads the site and the queue, then asks); or, when that would be after the window, or this
             check is past it already (its one question after the window is asked), ends with the yellow note.
-            Never a wait past the window: the job's time is kept for a last refresh."""
+            Never a wait past the window: the job's time is kept for a last refresh. Before the window — the
+            day turned while a refresh ran, and the new day's build is up — it ends like a check that began
+            too early."""
             t = clock.now()
+            if t < poll_from:
+                return too_early(late)
             nxt = (last_look or t) + POLL_EVERY
             if t > poll_end or nxt > poll_end:
                 return late_note(late)
@@ -730,6 +774,7 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
             return None
 
         while True:
+            turned()
             now = clock.now()
             if waiting:
                 # Never start a run while one waits: it would take the waiting run's place in the queue.
@@ -745,6 +790,7 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
                 if not shown:
                     return not_shown(r, live2)
                 live = live2
+                turned()
                 if is_done(live, today):
                     return success(live, "Followed the Update & Deploy run that was already waiting.", r)
             elif not live or live.get("day") != today.isoformat():
@@ -752,18 +798,28 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
                 if now - t_start > GUARD_MAX:
                     return failed(report, gh, last_run, started_by, live, "today's build was still not on the site after "
                                   f"{int(GUARD_MAX.total_seconds() // 60)} minutes")
-                r = start_and_follow(gh, clock, report)
-                runs_started += 1
-                last_run = r
-                if r is None or r.get("timed_out") or r.get("conclusion") != "success":
-                    return failed(report, gh, r, started_by, live)
-                live2, shown = wait_live(site, r, today, clock, get)
-                last_look = clock.now()
-                if not shown:
-                    return not_shown(r, live2)
-                live = live2
-                if is_done(live, today):
-                    return success(live, "Started the morning refresh.", r)
+                if runs_started >= MAX_RUNS:
+                    return failed(report, gh, last_run, started_by, live, "today's build was still not on the site after "
+                                  f"{runs_started} morning refreshes")
+                if last_look is not None and now < last_look + POLL_EVERY:
+                    # A run this check started or followed has just read the magazines' pages, and the site still
+                    # does not show today's build (the day turned at midnight since): the next refresh waits
+                    # until POLL_EVERY after it — then the site and the queue are read again (below).
+                    clock.sleep((last_look + POLL_EVERY - now).total_seconds())
+                else:
+                    r = start_and_follow(gh, clock, report)
+                    runs_started += 1
+                    last_run = r
+                    if r is None or r.get("timed_out") or r.get("conclusion") != "success":
+                        return failed(report, gh, r, started_by, live)
+                    live2, shown = wait_live(site, r, today, clock, get)
+                    last_look = clock.now()
+                    if not shown:
+                        return not_shown(r, live2)
+                    live = live2
+                    turned()
+                    if is_done(live, today):
+                        return success(live, "Started the morning refresh.", r)
             else:
                 # Today's build is up; a magazine's quote is not today's yet.
                 late = late_pubs(live, today)
@@ -798,18 +854,25 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
                         if not shown:
                             return not_shown(r, live2)
                         live = live2
+                        day_turned = turned()
                         if is_done(live, today):
                             what = f"the {pub_names(out)} quote{'s' if len(out) > 1 else ''}"
                             how = (f"Waited for {what}, then started the morning refresh." if asks > 1
                                    else f"Found {what} out, then started the morning refresh.")
                             return success(live, how, r)
                         late = late_pubs(live, today)
-                        missed = [p for p in out if p in late]
-                    end = wait_to_ask(late)
-                    if end is not None:
-                        return end
+                        # a quote found out on the day before is no news about the new day's
+                        missed = [] if day_turned else [p for p in out if p in late]
+                    # Today's build: the next question POLL_EVERY after this look. (The day turned while the
+                    # refresh ran and the site shows the day before's build: the site and the queue are read
+                    # again below, then the new day comes first.)
+                    if live.get("day") == today.isoformat():
+                        end = wait_to_ask(late)
+                        if end is not None:
+                            return end
             # look again: the live site, and the queue
             live = read_live(site, get, clock) or live
+            turned()
             if is_done(live, today):
                 return success(live, "Today's update arrived.", last_run)
             try:

@@ -13,6 +13,8 @@ site.morning_goal) every day, while GitHub starts its own schedules hours late:
   * RunAllMorning    — run_all --morning: the quick sources, plus the monthly ones on the 1st and the 15th;
   * Guard            — scripts/ops/morning_check.py against a stand-in GitHub, site, clock and magazines:
                        what it starts, follows, waits for and reports, and its exit codes;
+  * GuardAtMidnight  — a check still running at midnight Central works for the new day, and no branch
+                       starts more than MAX_RUNS morning refreshes;
   * FullRun          — when it also starts the full daily update (the 1st; a skipped day);
   * BuildInfo        — /build.json (src/pages/build-info.11ty.js), run in Node.js;
   * QuoteDays        — status.json quote_days (build_data) and the /status/ view of it (freshness.js).
@@ -1276,6 +1278,93 @@ class GuardLateMagazine(unittest.TestCase):
         self.assertIn("::warning title=A daily quote could not be read::", log)
         times = [r["created"] for r in w.runs]
         self.assertTrue(all(b - a >= MC.POLL_EVERY for a, b in zip(times, times[1:])), "never one right after another")
+
+
+class GuardAtMidnight(unittest.TestCase):
+    """A check still running at midnight Central (a late evening firing of the hourly schedule, a run that
+    waited in the queue) works for the NEW day from then on: the new day's build is today's build, and the
+    new day's asking window applies. Before, its day check kept the start's day: every look started another
+    refresh until GUARD_MAX (54 and 45 of them in the two cases below) and it ended with a false red ✗.
+    And no branch starts more than MAX_RUNS morning refreshes."""
+    EVENING = datetime(2026, 9, 30, 4, 58, 30, tzinfo=timezone.utc)      # 11:58:30 PM CDT, Tuesday September 29
+    NEW_DAY = "2026-09-30"
+
+    def test_an_old_build_just_before_midnight(self):
+        # the refresh ends at 12:01 AM: the new day's build is today's — one refresh, green
+        w = World(self.EVENING, OLD, published={"gv": self.EVENING - timedelta(hours=20), "lv": self.EVENING - timedelta(hours=20)})
+        rc, log, summary = w.check()
+        self.assertEqual((rc, len(w.posts)), (0, 1), log)
+        self.assertNotIn("::error", log)
+        self.assertIn("## Morning check — Wednesday, September 30 (Central time)", summary)
+        self.assertIn("✅ Today's update is on the site since **12:01 AM CDT** — goal 5:30 AM.", summary)
+        self.assertIn("| Began | Tuesday, September 29, 11:58 PM CDT — the day turned at midnight while it ran |", summary)
+        self.assertNotIn("After the goal", log)
+        self.assertLess(w.clock.now() - self.EVENING, timedelta(minutes=10))
+
+    def test_the_new_days_quote_is_not_out_after_midnight(self):
+        # La Viña has not published the new day's quote: the new day's build goes up, and the magazine is left
+        # for the morning's checks (asked from 4:00 AM) — no second refresh, no question at 12:01 AM
+        w = World(self.EVENING, OLD, published={"gv": self.EVENING - timedelta(hours=20), "lv": None})
+        rc, log, summary = w.check()
+        self.assertEqual((rc, len(w.posts), w.fetches), (0, 1, []), log)
+        self.assertIn("⏳ Today's build is on the site; the La Viña quote is not out yet. The magazines are asked from "
+                      "4:00 AM CDT — a later check looks again.", summary)
+        self.assertIn(f"| New day | ✅ built 12:01 AM CDT ({self.NEW_DAY}) |", summary)
+        self.assertEqual(w.outputs, {"idle": "false"}, "it started a refresh: kept")
+
+    def test_a_waiting_run_that_ends_after_midnight(self):
+        # 11:40 PM: today's build, La Viña's quote never came; a push run waits in the queue and ends at
+        # 12:10 AM with the new day's build — followed, then too early to ask: no dispatch at all
+        at = datetime(2026, 9, 30, 4, 40, tzinfo=timezone.utc)
+        w = World(at, live_today(built="2026-09-29T22:00:00Z", lv=YESTERDAY), published={"gv": at - timedelta(hours=18), "lv": None})
+        w.add_run(at - timedelta(minutes=5), start=15 * 60, end=35 * 60, event="push")
+        rc, log, summary = w.check()
+        self.assertEqual((rc, w.posts, w.fetches), (0, [], []), log)
+        self.assertIn("## Morning check — Wednesday, September 30 (Central time)", summary)
+        self.assertIn("⏳ Today's build is on the site; the La Viña quote is not out yet.", summary)
+        self.assertIn("| Update & Deploy | [run 5001](https://github.com/o/r/actions/runs/5001) |", summary)
+        self.assertIn("| Began | Tuesday, September 29, 11:40 PM CDT — the day turned at midnight while it ran |", summary)
+
+    def test_a_quote_refresh_that_ends_after_midnight(self):
+        # 11:58 PM: La Viña's quote came out at 11:57 PM; the one question after the window finds it, and the
+        # refresh ends after midnight with the new day's build — green, never "the update did not get it"
+        at = datetime(2026, 9, 30, 4, 58, tzinfo=timezone.utc)
+        w = World(at, live_today(built="2026-09-29T22:00:00Z", lv=YESTERDAY),
+                  published={"gv": at - timedelta(hours=18), "lv": at - timedelta(minutes=1)})
+        rc, log, summary = w.check()
+        self.assertEqual((rc, len(w.posts), len(w.fetches)), (0, 1, 1), log)
+        self.assertNotIn("could not be read", log)
+        self.assertIn("✅ Today's update is on the site since **12:00 AM CDT** — goal 5:30 AM.", summary)
+        self.assertIn("| How | Found the La Viña quote out, then started the morning refresh. |", summary)
+
+    def test_a_refresh_that_ends_just_before_midnight(self):
+        # the refresh's build is from 11:59 PM, read at 12:00 AM: the new day needs its own build — one more
+        # refresh, POLL_EVERY after the first one read the magazines' pages
+        at = datetime(2026, 9, 30, 4, 57, tzinfo=timezone.utc)                  # 11:57 PM CDT
+        w = World(at, OLD, published={"gv": at - timedelta(hours=20), "lv": at - timedelta(hours=20)})
+        rc, log, summary = w.check()
+        self.assertEqual((rc, len(w.posts)), (0, 2), log)
+        self.assertEqual(w.runs[0]["end"].astimezone(CHICAGO).date().isoformat(), TODAY)
+        self.assertGreaterEqual(w.runs[1]["created"] - w.runs[0]["end"], MC.POLL_EVERY)
+        self.assertIn("✅ Today's update is on the site since **12:12 AM CDT** — goal 5:30 AM.", summary)
+
+    def test_every_refresh_counts(self):
+        # a site whose build.json keeps another day (a time-zone slip in the build): every refresh ends well
+        # and names its run, but the day is never today's — MAX_RUNS refreshes, POLL_EVERY apart, then a red ✗
+        class StuckDay(World):
+            def build(self):
+                b = super().build()
+                return {**b, "day": YESTERDAY} if isinstance(b, dict) else b
+
+        w = StuckDay(live=OLD)
+        rc, log, summary = w.check()
+        self.assertEqual((rc, len(w.posts)), (1, MC.MAX_RUNS), log)
+        times = [r["created"] for r in w.runs]
+        self.assertTrue(all(b - a >= MC.POLL_EVERY for a, b in zip(times, times[1:])), times)
+        self.assertIn(f"::error title=Morning update failed::today's build was still not on the site after {MC.MAX_RUNS} "
+                      "morning refreshes", log)
+        self.assertIn("❌ Today's update did not reach the site.", summary)
+        self.assertLess(w.clock.now() - T0, MC.GUARD_MAX)
 
 
 class FullRun(unittest.TestCase):
