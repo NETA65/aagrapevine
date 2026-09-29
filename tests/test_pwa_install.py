@@ -218,6 +218,22 @@ class Page(unittest.TestCase):
         self.assertNotIn("eleventyExcludeFromCollections", fm)
         self.assertNotIn('pageKey == "app"', read("src", "_includes", "layouts", "base.njk"))   # never noindex
 
+    def test_the_sitemap_requires_it(self):
+        # src/pages/sitemap.11ty.js REQUIRED: a build that lost /app/ or /es/app/ (renamed, excluded by
+        # mistake) says so in its log; with both, the sitemap lists them and says nothing
+        r = run_js(self, r"""
+          const m = await imp("src/pages/sitemap.11ty.js");
+          const warned = [];
+          console.warn = (s) => warned.push(String(s));
+          const page = (u) => ({ url: u, data: {} });
+          const all = ["/", "/whats-new/", "/published/", "/read/", "/monthly/", "/digest/"].flatMap((u) => [page(u), page("/es" + u)]);
+          m.render({ site: { url: "https://x.test" }, collections: { all } });
+          const xml = m.render({ site: { url: "https://x.test" }, collections: { all: [...all, page("/app/"), page("/es/app/")] } });
+          out({ warned, listed: xml.includes("<loc>https://x.test/app/</loc>") && xml.includes("<loc>https://x.test/es/app/</loc>") });""",
+                   needs_modules=False, env={"ONLY": ""})
+        self.assertEqual(r["warned"], ["[sitemap] missing page(s): /app/, /es/app/"])
+        self.assertTrue(r["listed"])
+
     def test_seven_guides_in_order(self):
         block = self.page[self.page.index("{%- set guides = ["):self.page.index("{%- set why = [")]
         self.assertEqual(re.findall(r'\{ id: "([a-z-]+)"', block), GUIDES)
