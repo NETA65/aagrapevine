@@ -542,6 +542,34 @@ class InstagramAvatar(unittest.TestCase):
             self.assertEqual(len(calls), 2)
 
 
+class InstagramRetention(unittest.TestCase):
+    """instagram.json keeps the newest sources.instagram.keep_per_account posts of each account (prune(), which
+    also deletes the pruned posts' thumbnails). The monthly digest of a month P is on /digest/ all through the
+    next month and counts P's posts from this file, so the setting must hold about 62 days of posts — the two
+    accounts post about 2 a day (September 2026) — or P's Instagram count shrinks late in that month."""
+
+    def test_the_setting_holds_two_months_of_posts(self):
+        from scripts.sync import instagram as I
+        from scripts.sync.common import load_config
+        cfg = (load_config().get("sources") or {}).get("instagram") or {}
+        keep = int(cfg.get("keep_per_account") or I.DEFAULT_KEEP_PER_ACCOUNT)
+        self.assertGreaterEqual(keep, 62 * 2)
+        self.assertGreaterEqual(I.DEFAULT_KEEP_PER_ACCOUNT, 62 * 2, "without the setting too")
+        # two posts a day for 70 days on each account, plus a manual post: every post of the last 62 days stays
+        start = datetime(2026, 8, 1, 15, 0, tzinfo=timezone.utc)
+        items = [{"id": f"ig:{a}:{n}", "category": a, "date": iso(start + timedelta(hours=12 * n)), "extra": {"shortcode": f"{a}{n}"}}
+                 for a in ("gv", "lv") for n in range(140)]
+        items.append({"id": "ig:gv:manual", "category": "gv", "date": iso(start - timedelta(days=90)), "extra": {"manual": True}})
+        kept, removed = I.prune(items, keep)
+        last = start + timedelta(hours=12 * 139)
+        recent = {i["id"] for i in items if not i["extra"].get("manual")
+                  and datetime.fromisoformat(i["date"].replace("Z", "+00:00")) > last - timedelta(days=62)}
+        self.assertEqual(len(recent), 2 * 124)
+        self.assertTrue(recent <= {i["id"] for i in kept})
+        self.assertIn("ig:gv:manual", {i["id"] for i in kept}, "a manual post is never pruned")
+        self.assertEqual(len(removed), 2 * (140 - keep))
+
+
 # --------------------------------------------------------------------------- review 2026-09 fixes
 class Resp:
     """A minimal requests.Response stand-in."""

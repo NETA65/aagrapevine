@@ -261,7 +261,10 @@ sources:
     #   collection). Set to false to use ONLY the official API + the manual
     #   list in content/instagram.yml.
     anonymous: true
-    keep_per_account: 60     # newest posts kept per account
+    # Newest posts kept per account (older ones and their thumbnails are deleted). The monthly digest
+    # of a month is on /digest/ all through the next one, so this must hold about 62 days of posts:
+    # the two accounts post about 2 a day (September 2026), and 130 ≈ 65 days (thumbnails ~23 KB each).
+    keep_per_account: 130
     enrich_per_run: 25       # max post look-ups per daily run
     graph_version: "v21.0"
     # Optional public RSSHub mirrors to try (leave empty to skip).

@@ -221,8 +221,9 @@ reader as the fallback) builds the same **edition** as the `/digest/` page (`ele
     (`extra.account`, else `category`; Grapevine, La Viña, then any other; La Viña first in Spanish): how
     many, and the 3 newest (their title — the caption's first line — and day, linking to the post), plus ONE
     link to the site's `/instagram/` page. The WhatsApp / e-mail texts and the e-mail's text part give only
-    each account's count and that link. The file keeps each account's newest `keep_per_account` (60) posts,
-    so the page can show fewer of P's posts late in K than the e-mail did.
+    each account's count and that link. The file keeps each account's newest `keep_per_account` (130) posts
+    — about 65 days at the accounts' ~2 posts a day — so P's count holds on the page all through K (a much
+    busier month could lose its oldest posts late in K; the e-mail, sent early in K, is complete).
 - ONE pointer at the end: "Coming up in K" → `/monthly/K/`. These belong to the **toolkit** and are never in
   the digest: the committee meeting and its Zoom details, events not over yet, the weekly meetings, story
   deadlines, La Viña's topics, the phone lines, Book of the Month, subscriptions, the daily quote, the
@@ -419,7 +420,7 @@ crawl is done, so these are real numbers, not estimates:
 | `data/raw` + `data/site` (130 PDFs, 528 videos, 295 episodes, 224 magazine stories, Instagram, events) | ~5 MB (1.6 + 3.3 MB) | a few MB a year (mostly new stories, episodes and videos) |
 | `data/state/crawl-state.json` (3,445 pages) | ~1.4 MB | only when the two sites add pages |
 | `data/translations/cache.json` | ~0.7 MB | grows with new titles |
-| `src/assets/cache/` thumbnails (`pdf` 129 · `ig` 26 · `articles` 22 · `pod` 3) | ~3.5 MB | ~20 KB per new thumbnail |
+| `src/assets/cache/` thumbnails (`pdf` 129 · `ig` 26 · `articles` 22 · `pod` 3) | ~3.5 MB | ~20 KB per new thumbnail; Instagram's stay at most `keep_per_account` (130) per account — about 6 MB for the two, older ones are deleted |
 | Git history growth (daily commits are small line-level changes, delta-compressed) | — | roughly 50–150 MB per year |
 
 GitHub recommends repositories stay under 1 GB (hard warnings start around 5 GB); GitHub Pages

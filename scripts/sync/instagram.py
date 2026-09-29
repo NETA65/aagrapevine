@@ -39,8 +39,10 @@ the media id, whose top bits are the creation time in milliseconds.
 
 The file is cumulative: known posts are never lost when Instagram blocks us for a day
 (ok=false + error is written instead, so /status/ shows it). The newest
-`keep_per_account` (default 60) posts per account are kept; older posts and their
+`keep_per_account` (default 130) posts per account are kept; older posts and their
 thumbnails are pruned (manual posts are never pruned — remove them from the YAML).
+130 is about 65 days at the accounts' ~2 posts a day: the monthly digest of a month is on
+/digest/ all through the next one and counts that month's posts from this file.
 
 A NOTE ON INSTAGRAM'S RULES
   instagram.com/robots.txt disallows generic crawlers and Meta's terms restrict automated
@@ -125,7 +127,7 @@ THUMB_URL = "/assets/cache/ig/"
 MANUAL_FILE = CONTENT_DIR / "instagram.yml"
 AVATAR_PREFIX = "_avatar_"
 
-DEFAULT_KEEP_PER_ACCOUNT = 60
+DEFAULT_KEEP_PER_ACCOUNT = 130          # about 65 days of posts (see the docstring)
 DEFAULT_ENRICH_PER_RUN = 25
 DEFAULT_MAX_MINUTES = 8.0
 ENRICH_RETRY_DAYS = 3          # re-try a post whose embed was unusable after N days
@@ -1137,7 +1139,8 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--strategies", help=f"comma list overriding the order ({','.join(ALL_STRATEGIES)})")
     ap.add_argument("--enrich-cap", type=int, default=None, help="max post embeds to fetch (default 25)")
     ap.add_argument("--no-enrich", action="store_true", help="skip post-embed enrichment")
-    ap.add_argument("--keep", type=int, default=None, help="posts kept per account (default 60)")
+    ap.add_argument("--keep", type=int, default=None,
+                    help=f"posts kept per account (default: config keep_per_account, else {DEFAULT_KEEP_PER_ACCOUNT})")
     ap.add_argument("--max-minutes", type=float, default=DEFAULT_MAX_MINUTES, help="time budget")
     ap.add_argument("--manual-file", type=Path, default=MANUAL_FILE, help=argparse.SUPPRESS)
     ap.add_argument("-v", "--verbose", action="store_true")

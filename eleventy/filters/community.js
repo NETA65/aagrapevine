@@ -622,7 +622,8 @@ const pubName = (item) => (item?.extra?.publication === "lv" || item?.source ===
 // out; the toolkit shows the themes and counts. Nothing is in both.
 // Two files keep only their newest entries, so a page read late in K can show fewer of P's items than the
 // e-mail did: events.json (the newest 12 past one-off events) and instagram.json (the newest
-// sources.instagram.keep_per_account posts of each account).
+// sources.instagram.keep_per_account posts of each account — 130, about 65 days at the accounts' ~2 posts a
+// day, so P's count normally holds all through K; a much busier month loses its oldest posts late in K).
 // send_digest.py applies the same rules: keep the two in step (tests/test_digest_parity.py compares what
 // each one picks; docs/OPERATIONS.md → monthly-digest.yml).
 
