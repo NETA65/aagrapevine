@@ -186,8 +186,9 @@ sources:
     # The Audio Project (members record a story by phone or send a recording), read daily by
     # scripts/sync/audio_project.py (→ data/site/audio_project.json → /contribute/#record).
     audio_project: "/audio-portal"
-    # The page with the "Grapevine Daily Quote" (#quote-of-the-day), read by scripts/sync/quote.py
-    # in the daily run and again at 12:07 UTC (→ data/site/quote.json → the home page card).
+    # The page with the "Grapevine Daily Quote" (#quote-of-the-day), read by scripts/sync/quote.py in
+    # every update — the morning refresh the Morning check starts (by 5:30 AM Central), the midday
+    # refresh and the full daily run (→ data/site/quote.json → the home page card).
     quote_page: "/"
   lavina:
     base: "https://www.aalavina.org"
@@ -675,9 +676,10 @@ library:
 #  Monthly digest — the /digest/ page and the optional monthly e-mail.
 #  One edition per month, named after the month it covers: everything
 #  that was new on the site LAST month (bulletin posts, events that took
-#  place, committee files and photos, magazine stories, writers from
-#  Area 65 & Texas, podcasts, videos, documents), plus one link to this
-#  month's toolkit (/monthly/), where everything current lives.
+#  place, committee files and photos added that month, magazine stories,
+#  writers from Area 65 & Texas, podcasts, videos, Instagram posts,
+#  documents), plus one link to this month's toolkit (/monthly/), where
+#  everything current lives.
 #  It is on /digest/ from the 1st; the e-mail goes out once, on the 1st
 #  from 7 AM Central after the site's first full update of the month
 #  (at the latest on the 3rd) (.github/workflows/monthly-digest.yml),
