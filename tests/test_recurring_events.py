@@ -385,20 +385,23 @@ recurring_events:
 
 # --------------------------------------------------------------------------- monthly e-mail
 class DigestEmail(unittest.TestCase):
-    def test_booth_listed_once_and_alone_it_is_not_news(self):
+    def test_the_booth_that_took_place_is_in_its_months_digest(self):
+        """The monthly digest recaps the month before: the booth's September date is in the September
+        digest (sent October 1) — with its day only, no "every month" —, never on its own "news"."""
         from scripts.notify import send_digest as D
-        ctx = ctx_with(CITYWIDE_YAML)
+        now = datetime(2026, 10, 1, 15, 5, tzinfo=timezone.utc)     # the September digest goes out
+        ctx = ctx_with(CITYWIDE_YAML, now)
         with mock.patch.object(B.T, "get_translator", lambda **kw: NoTranslator()), \
                 mock.patch.object(B, "ics_events", lambda c: []):
-            events = B.build_events(ctx)
-        now = datetime(2026, 10, 1, 15, 5, tzinfo=timezone.utc)     # the October edition goes out
-        with mock.patch.object(D, "load_items", lambda name: events if name == "events" else []),                 mock.patch.object(D, "load_file", lambda name: {}):
-            data = D.collect(now)                # this month only: Oct 10 (Nov 14 is the next edition's)
+            events = B.build_events(ctx)                # keeps the booth dates of the last 90 days (past: true)
+        with mock.patch.object(D, "load_items", lambda name: events if name == "events" else []), \
+                mock.patch.object(D, "load_file", lambda name: {}), mock.patch.object(D, "load_config", lambda: {}):
+            data = D.collect(now)                       # September only: Sep 12 (Oct 10 is the October digest's)
         booth = [e for e in data["events"] if e["category"] == "recurring"]
-        self.assertEqual([e["id"] for e in booth], ["ev:recurring:citywide-dallas:2026-10-10"])
+        self.assertEqual([e["id"] for e in booth], ["ev:recurring:citywide-dallas:2026-09-12"])
         self.assertEqual(D.total_count(data), 0)            # nothing new → no e-mail that month
         row = D.event_row(booth[0], "es", D.Links("https://example.org"))
-        self.assertIn("cada mes", row["when"])
+        self.assertEqual(row["when"], "sáb, 12 de sept")     # the day only (as the website writes it): no time, no "cada mes"
         self.assertEqual(row["url"], "https://citywidedallasaa.org")
 
 

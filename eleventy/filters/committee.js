@@ -733,7 +733,9 @@ export const DOC_TABS = [
 const DOC_KINDS = new Set(["document", "slides", "form", "video_file", "photo"]);
 const PHOTO_KINDS = new Set(["photo", "video_file"]);
 
-function isPhotoItem(it) {
+/** A photo or video of an album on /photos/ (not a flyer or a slide that happens to be a picture).
+ *  Also the monthly digest's rule for "photo albums" (community.js; send_digest.py is_album_media). */
+export function isPhotoItem(it) {
   return PHOTO_KINDS.has(it.kind) && (it.category === "photos" || it.category === "other" || !it.category);
 }
 function isDocItem(it) {
@@ -848,26 +850,69 @@ export function driveMatch(items, pattern, category = "", n = 0) {
   return n > 0 ? list.slice(0, n) : list[0] || null;
 }
 
+/* Which album a photo belongs to, and the album's anchors on /photos/. Shared by photoAlbums (the
+   /photos/ page) and the monthly digest (community.js: one "Photos: <album>" row per album and month,
+   linking to "/photos/#<slug>"), so a digest link always lands on its album. */
+const albumFolder = (it) => { const x = it.extra || {}; return x.album || (it.category === "other" && x.path && x.path[0]) || null; };
+
+/** The album of a photo: "f:<Drive sub-folder>" (extra.album; for a loose file in "other", its first
+ *  folder), else "p:<panel number>" (the panel's own album). send_digest.py album_key copies it. */
+export function photoAlbumKey(it) {
+  const folder = albumFolder(it);
+  return folder ? `f:${folder}` : `p:${(it.extra && it.extra.panel) || 0}`;
+}
+
+/* Each album's anchors, in the order its first photo appears in the list: `slug` ("album-<folder or
+   panel>", "-2", "-3" … when two albums would share it) and `alias` (the slug build_data.py gives a What's
+   New photo group, extra.album_slug — dropped when another album already has it). */
+function albumAnchors(photos) {
+  const firsts = new Map();
+  for (const it of photos) { const k = photoAlbumKey(it); if (!firsts.has(k)) firsts.set(k, it); }
+  const out = new Map();
+  const taken = new Set();
+  for (const [k, it] of firsts) {
+    const x = it.extra || {};
+    const pl = x.panel_label || (x.panel ? `Panel ${x.panel}` : "");
+    const base = "album-" + slugify(albumFolder(it) || pl || "photos", 50);
+    let slug = base, i = 2;
+    while (taken.has(slug)) slug = `${base}-${i++}`;
+    taken.add(slug);
+    let alias = itemAnchor(slugify(x.album || (x.path || []).join(" / "), 80), "");
+    if (alias && taken.has(alias)) alias = "";
+    else if (alias) taken.add(alias);
+    out.set(k, { slug, alias });
+  }
+  return out;
+}
+
+const albumPhotos = (items) => (items || []).filter((it) => it && it.status !== "gone" && it.source === "drive" && isPhotoItem(it));
+
+/** Every album's /photos/ anchor: Map(photoAlbumKey → "album-…"), exactly the ids photoAlbums gives. */
+export function photoAlbumSlugs(items) {
+  return new Map([...albumAnchors(albumPhotos(items))].map(([k, a]) => [k, a.slug]));
+}
+
 /**
  * Photo albums: one per Drive sub-folder (extra.album), else per folder/panel.
  * Returns [{key, slug, title, count, photos, videos, cover:[…], newest, oldest, panelLabel, items:[…]}] newest first.
  */
 export function photoAlbums(items, lang = "en") {
-  const photos = (items || []).filter((it) => it && it.status !== "gone" && it.source === "drive" && isPhotoItem(it));
+  const photos = albumPhotos(items);
+  const anchors = albumAnchors(photos);
   const albums = new Map();
   for (const it of photos) {
     const x = it.extra || {};
-    const folder = x.album || (it.category === "other" && x.path && x.path[0]) || null;
+    const folder = albumFolder(it);
     const pl = x.panel_label || (x.panel ? `Panel ${x.panel}` : "");
-    const key = folder ? `f:${folder}` : `p:${x.panel || 0}`;
+    const key = photoAlbumKey(it);
     if (!albums.has(key)) {
       const albumI18n = it.i18n?.album?.[lang];
       albums.set(key, {
         key,
-        // Same slug build_data.py gives a What's New photo group (extra.album_slug),
-        // so "/photos/#<album_slug>" lands on this album.
-        alias: itemAnchor(slugify(x.album || (x.path || []).join(" / "), 80), ""),
-        slug: "album-" + slugify(folder || pl || "photos", 50),
+        // alias: the slug build_data.py gives a What's New photo group (extra.album_slug), so
+        // "/photos/#<album_slug>" lands on this album too (albumAnchors).
+        alias: anchors.get(key).alias,
+        slug: anchors.get(key).slug,
         title: albumI18n || folder || (pl ? t("committee.photos.panel_album", lang, { panel: pl }) : t("committee.photos.untitled_album", lang)),
         panelLabel: pl,
         items: [],
@@ -889,7 +934,6 @@ export function photoAlbums(items, lang = "en") {
     });
   }
   const out = [...albums.values()];
-  const slugs = new Set();
   for (const a of out) {
     a.items.sort((p, q) => byNewest(p.item, q.item));
     a.count = a.items.length;
@@ -901,12 +945,6 @@ export function photoAlbums(items, lang = "en") {
     a.oldest = times.length ? new Date(Math.min(...times)).toISOString() : null;
     a.sortMs = times.length ? Math.max(...times) : Math.max(0, ...a.items.map((p) => sortKey(p.item)));
     a.hasNew = a.items.some((p) => p.isNew);
-    let s = a.slug, i = 2;
-    while (slugs.has(s)) s = `${a.slug}-${i++}`;
-    a.slug = s;
-    slugs.add(s);
-    if (a.alias && slugs.has(a.alias)) a.alias = "";
-    else if (a.alias) slugs.add(a.alias);
   }
   return out.sort((a, b) => b.sortMs - a.sortMs || a.title.localeCompare(b.title));
 }
@@ -914,8 +952,10 @@ export function photoAlbums(items, lang = "en") {
 /* ------------------------------------------------------------------ */
 /*  Bulletin (/bulletin/ — the data and these names say "announcement") */
 /* ------------------------------------------------------------------ */
-export function announcementList(items) {
-  const today = chicagoYmd(new Date());
+// `now` (default: the build's clock) decides which posts are over (`expires` before its Central day);
+// the monthly toolkit passes its own clock (MONTHLY_NOW) — monthly.js monthNow.
+export function announcementList(items, now = new Date()) {
+  const today = chicagoYmd(now);
   return (items || [])
     .filter((it) => it && it.status !== "gone")
     .filter((it) => {
@@ -1045,11 +1085,12 @@ export function weeklyOpenAll(items, lang = "en", now = new Date()) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Monthly digest: Book of the Month teaser + this month's toolkit    */
+/*  District report: Book of the Month teaser + this month's toolkit   */
 /* ------------------------------------------------------------------ */
-// The one canonical home for prices and dates is /shop/ (data/site/shop.json → db.shop): the digest
-// only shows a compact teaser — title, sale price, end date — linking there and to the official store.
-// digestShop is used by community.js (the monthly digest: page + texts) and report.js (the district report).
+// The one canonical home for prices and dates is /shop/ (data/site/shop.json → db.shop): the report
+// only gives a compact teaser — title, sale price, end date — pointing there and to the official store.
+// digestShop is used by report.js (the district report, /monthly/#report). The monthly digest no longer
+// carries the Book of the Month (it recaps last month); the toolkit's month model has its own (monthly.js botm).
 const moneyFmt = (v, lang) => {
   const n = Number(v);
   if (!Number.isFinite(n)) return "";

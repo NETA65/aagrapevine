@@ -47,6 +47,36 @@
 .mp-actions [aria-busy="true"] { cursor: progress; opacity: 0.75; }
 .mp-hint { display: flex; gap: 0.5rem; margin-top: 0.875rem; font-size: 0.8125rem; line-height: 1.45; color: var(--c-muted); }
 
+/* The month page's toolkit cards (monthly-month.njk). "In the magazines": one block per magazine, a line
+   between them. A date (or Book of the Month offer) that is over — built so, or marked by monthly.js when
+   its time passes — keeps full-contrast text in the muted colour, never faded: its "Over" badge says it in
+   words. "Keep up all month": one row per pointer (an icon tile, the link over the whole row, one line). The
+   Instagram handles may break anywhere ("@alcoholicsanonymous_gv" is wider than a 320px phone at 150 %). */
+.mp-mag + .mp-mag { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--c-line); }
+.mp-drow.is-past .mp-drow-t { color: var(--c-muted); }
+.mp-keep > li { position: relative; display: flex; align-items: flex-start; gap: 0.75rem; padding-block: 0.75rem; }
+.mp-handles { overflow-wrap: anywhere; }
+/* A row with two links (the Bulletin and its newest post) has no link over the whole row: each link is at
+   least 24px tall with a mouse too (WCAG 2.5.8; tap-link makes it 44px on phones). Padding on an inline
+   link grows its target without moving the text. */
+.mp-keep a.tap-link { padding-block: 0.25rem; }
+/* Large text on a phone (130 % / 150 % text or relaxed spacing, below 640px): the toolkit's words get the
+   width, so none breaks inside itself ("Copy for WhatsAp|p", "Novedad|es") — as on the digest's tool card
+   and the language banner (areas/community.css .cm-lang-banner-icon). The cards' padding is the digest tool
+   card's (0.75rem) — the hub's "This month" card and its two magazine boxes too; the message card's Copy
+   buttons and preview summaries drop their icons and the previews their inner frame (edge to edge, a line
+   above and below); the "put it to work" tips and the "Keep up all month" rows drop their icon tiles. All of
+   it is decoration — each button, summary, tip and row says what it is in words. */
+@media (width < 40rem) {
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(.mp-toolkit .card-pad, .mp-now-body) { padding: 0.75rem; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .mp-now-mag { padding: 0.75rem; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) #mp-message :is(button, summary) > svg { display: none; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .mp-msg-previews { margin-inline: -0.75rem; border-inline-width: 0; border-radius: 0; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .mp-msg-previews > .cm-preview > summary { padding-inline: 0.75rem; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .mp-msg-previews .cm-pre { padding-inline: 0.75rem; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(.mp-tiplist .mp-tipicon, .mp-keep > li > [aria-hidden="true"]:first-child) { display: none; }
+}
+
 .mp-tiplist { display: grid; gap: 1rem; }
 @media (width >= 48rem) { .mp-now .mp-tiplist { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .mp-tiplist > li { display: flex; gap: 0.875rem; align-items: flex-start; }

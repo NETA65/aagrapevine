@@ -787,7 +787,9 @@ class MultiDay(TempState):
             got = next(e for e in evs if e["id"] == ev["id"])
             self.assertIs(got["extra"]["past"], past, when)
 
-    def test_monthly_email_shows_the_range_the_place_and_the_note(self):
+    def test_monthly_email_shows_the_days_and_the_place(self):
+        """The monthly digest lists an event that took place with its day(s) and place — no time, no
+        "to be confirmed" (it is over) — in the digest of the month it started in."""
         from scripts.notify import send_digest as D
         ev = self.manual_events({"2027-06-25-summer.md": (
             'title: "NETA 65 Summer Assembly 2027"\ntitle_es: "Asamblea de Verano 2027 de NETA 65"\nstart: 2027-06-25\n'
@@ -795,27 +797,31 @@ class MultiDay(TempState):
             'lang: en\n')})[0]
         B.I18n(NoTranslator()).apply(ev)
         en, es = D.event_row(ev, "en", D.Links("https://example.org")), D.event_row(ev, "es", D.Links("https://example.org"))
-        self.assertEqual(en["when"], "Fri, Jun 25 – Sun, Jun 27 · details to be confirmed")
-        self.assertEqual(es["when"], "vie., 25 de jun. – dom., 27 de jun. · detalles por confirmar")
+        self.assertEqual(en["when"], "Fri, Jun 25 – Sun, Jun 27")
+        self.assertEqual(es["when"], "vie, 25 de jun – dom, 27 de jun")          # the website's spelling (Intl es-US)
         self.assertEqual((en["where"], es["where"]), ("Venue to be announced", "Lugar por anunciarse"))
-        # … and it stays in the monthly e-mail's "coming up" through Sunday
-        with mock.patch.object(D, "load_items", lambda name: [ev] if name == "events" else []):
-            data = D.collect(datetime(2027, 6, 27, 20, 0, tzinfo=CHI).astimezone(timezone.utc))   # the June 2027 edition
-        self.assertEqual([e["id"] for e in data["events"]], [ev["id"]])
+        # … in the June 2027 digest, sent July 1 (not in May's, not in July's)
+        with mock.patch.object(D, "load_items", lambda name: [ev] if name == "events" else []), \
+                mock.patch.object(D, "load_config", lambda: {}):
+            june = D.collect(datetime(2027, 7, 1, 15, 5, tzinfo=timezone.utc))
+            july = D.collect(datetime(2027, 8, 1, 15, 5, tzinfo=timezone.utc))
+            during = D.collect(datetime(2027, 6, 27, 20, 0, tzinfo=CHI).astimezone(timezone.utc))   # May's digest
+        self.assertEqual(june["edition"]["key"], "2027-06")
+        self.assertEqual([e["id"] for e in june["events"]], [ev["id"]])
+        self.assertEqual((july["events"], during["events"]), ([], []))
 
     def test_monthly_email_uses_the_sites_multi_day_rule(self):
         """A timed event that only runs past midnight is ONE day (as on the website: more than 18 hours, or
-        all-day over several dates); an end at midnight belongs to the day before."""
+        all-day over several dates); an end at midnight belongs to the day before. Days only, never a time."""
         from scripts.notify import send_digest as D
         links = D.Links("https://example.org")
 
         def when(start, end, all_day=False):
             return D.event_row({"kind": "event", "title": "X", "extra": {"start": start, "end": end, "all_day": all_day}},
                                "en", links)["when"]
-        self.assertEqual(when("2026-10-03T19:00:00-05:00", "2026-10-04T01:00:00-05:00"), "Sat, Oct 3 · 7:00 PM CDT")
-        self.assertEqual(when("2026-10-03T19:00:00-05:00", "2026-10-04T00:00:00-05:00"), "Sat, Oct 3 · 7:00 PM CDT")
-        self.assertEqual(when("2026-10-03T09:00:00-05:00", "2026-10-04T16:00:00-05:00"),
-                         "Sat, Oct 3 · 9:00 AM CDT – Sun, Oct 4")
+        self.assertEqual(when("2026-10-03T19:00:00-05:00", "2026-10-04T01:00:00-05:00"), "Sat, Oct 3")
+        self.assertEqual(when("2026-10-03T19:00:00-05:00", "2026-10-04T00:00:00-05:00"), "Sat, Oct 3")
+        self.assertEqual(when("2026-10-03T09:00:00-05:00", "2026-10-04T16:00:00-05:00"), "Sat, Oct 3 – Sun, Oct 4")
         self.assertEqual(when("2027-03-19", "2027-03-21", True), "Fri, Mar 19 – Sun, Mar 21")
         self.assertEqual(when("2027-03-19", "2027-03-19", True), "Fri, Mar 19")
 

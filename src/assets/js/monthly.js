@@ -1,15 +1,30 @@
-/* /monthly/ — poster scaling fallback, "Download image (PNG)" and "Share" (src/pages/monthly-month.njk).
-   Progressive enhancement: the Download and Share buttons are `hidden` in the HTML and shown here;
-   Print works on its own (onclick="window.print()"; the print stylesheet prints only the poster).
-   The PNG is made from the unscaled poster node (1080 × 1350) with html-to-image, self-hosted at
-   assets/vendor/html-to-image.js and loaded on first use. It waits for document.fonts.ready and
-   html-to-image embeds the site's self-hosted fonts, so the image looks like the page.
-   Share: Web Share API level 2 with the PNG file where the browser can share files (phones →
-   WhatsApp …); anywhere else it copies the page link. */
+/* /monthly/ — the Monthly toolkit's pages (src/pages/monthly.njk, the hub; monthly-month.njk, a month):
+   1. The poster: the scale-to-fit fallback and the "fill the canvas" fit (month pages).
+   2. "Over" marks (both pages; the build marks what was over when it ran, this keeps it true while the
+      page stays open or is read later): an element whose data-mp-over instant has passed — a hub chip
+      ([data-mp-chip]) hides, and its list ([data-mp-chips]) when no chip is left; a month page's date or
+      Book of the Month row gets .is-past and shows its "Over" badge ([data-mp-over-badge]). The new-month
+      notice ([data-mp-newmonth="YYYY-MM"]) shows once the visitor's month (Central time) is that month —
+      the site has not been rebuilt for it yet. On load and each time the tab comes back into view.
+   3. "Send it as a message" (month pages): the Alpine component mpMessage — this language or both,
+      remembered as "gv-digest-bi" (the Monthly digest's key: one choice for both tools), and the Copy
+      buttons (GV.copy copies the prebuilt text and says so).
+   4. "Download image (PNG)" and "Share" (month pages). Progressive enhancement: the Download and Share
+      buttons are `hidden` in the HTML and shown here; Print works on its own (onclick="window.print()";
+      the print stylesheet prints only the poster).
+      The PNG is made from the unscaled poster node (1080 × 1350) with html-to-image, self-hosted at
+      assets/vendor/html-to-image.js and loaded on first use. It waits for document.fonts.ready and
+      html-to-image embeds the site's self-hosted fonts, so the image looks like the page.
+      Share: Web Share API level 2 with the PNG file where the browser can share files (phones →
+      WhatsApp …); anywhere else it copies the page link.
+   Every storage access is in try/catch: the page works the same without storage (one language). */
 (function () {
   "use strict";
   var GV = window.GV || {};
   var announce = function (msg) { if (GV.announce) GV.announce(msg); };
+  var TZ = (window.SITE && window.SITE.tz) || "America/Chicago";
+
+  /* ---------- 1. The poster ---------- */
 
   /* Scale-to-fit fallback: the CSS uses tan(atan2(100cqw, 1080px)); older browsers get --mp-s here. */
   var cssScale = window.CSS && CSS.supports && CSS.supports("width", "calc(tan(atan2(1px, 2px)) * 1px)");
@@ -80,6 +95,57 @@
   var fitAll = function () { Array.prototype.forEach.call(document.querySelectorAll(".mp-stage:not(.mp-stage--thumb) [data-mp-poster]"), fit); };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll); else fitAll();
 
+  /* ---------- 2. "Over" marks and the new-month notice ---------- */
+  var each = function (sel, fn) { Array.prototype.forEach.call(document.querySelectorAll(sel), fn); };
+  // The visitor's month in Central time ("2026-10"), like the build's month (home.js does the same for days).
+  function centralMonth() {
+    try {
+      return new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()).slice(0, 7);
+    } catch (e) {
+      return new Date().toISOString().slice(0, 7);
+    }
+  }
+  function markOver() {
+    var now = Date.now();
+    each("[data-mp-over]", function (el) {
+      var t = Date.parse(el.getAttribute("data-mp-over") || "");
+      if (isNaN(t) || t > now) return;
+      if (el.hasAttribute("data-mp-chip")) { el.hidden = true; return; }
+      el.classList.add("is-past");
+      var badge = el.querySelector("[data-mp-over-badge]");
+      if (badge) badge.hidden = false;
+    });
+    each("[data-mp-chips]", function (list) {
+      list.hidden = !Array.prototype.some.call(list.querySelectorAll("[data-mp-chip]"), function (c) { return !c.hidden; });
+    });
+    var month = centralMonth();
+    each("[data-mp-newmonth]", function (el) { el.hidden = !(month >= (el.getAttribute("data-mp-newmonth") || "9999-99")); });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", markOver); else markOver();
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) markOver(); });
+
+  /* ---------- 3. "Send it as a message" (Alpine starts after this file: see base.njk) ---------- */
+  document.addEventListener("alpine:init", function () {
+    window.Alpine.data("mpMessage", function () {
+      return {
+        bi: false,
+        init: function () {
+          try { this.bi = localStorage.getItem("gv-digest-bi") === "1"; } catch (e) { /* no storage: this language */ }
+        },
+        setBi: function (v) {
+          this.bi = !!v;
+          try { localStorage.setItem("gv-digest-bi", v ? "1" : "0"); } catch (e) { /* not remembered */ }
+        },
+        // kind: "wa" | "email" → the prebuilt text of the chosen language(s): #mp-msg-<kind>-<one|bi>
+        copy: function (kind, btn) {
+          var el = document.getElementById("mp-msg-" + kind + "-" + (this.bi ? "bi" : "one"));
+          if (el && GV.copy) GV.copy(el.textContent, btn);
+        },
+      };
+    });
+  });
+
+  /* ---------- 4. Download image (PNG) and Share ---------- */
   var poster = document.querySelector(".mp-print-root [data-mp-poster]");
   var dl = document.querySelector("[data-mp-download]");
   var sh = document.querySelector("[data-mp-share]");

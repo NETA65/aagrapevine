@@ -1,11 +1,20 @@
 # =====================================================================
 #  Monthly e-mail digest (OPTIONAL — off until you add the secrets).
 #
-#  On the 1st of every month it sends one bilingual (English + Spanish)
-#  e-mail — the same edition as the website's /digest/ page: what was
-#  new last month, this month's magazine issues and "put it to work"
-#  tips, the committee meeting, events, story deadlines and more —
-#  e.g. to a Google Group that reaches every district.
+#  Sends LAST month's digest: one bilingual (English + Spanish) e-mail,
+#  the same edition as the website's /digest/ page — everything that was
+#  new on the site last month (bulletin posts, the events that took place,
+#  committee files and photos, the magazines' new stories, writers from
+#  Area 65 & Texas, podcasts, videos, Instagram posts, documents) plus ONE
+#  link to this month's toolkit (/monthly/), where everything current
+#  lives — e.g. to a Google Group that reaches every district.
+#
+#  When: on the 1st, from 7 AM Central, as soon as every source has been
+#  updated since the month ended (so the month's last items are in it);
+#  at the latest from noon Central on the 3rd, with the data there is.
+#  Only ONCE: a small "digest-sent-YYYY-MM" artifact marks a month as
+#  sent (kept 40 days) and the later tries skip it. A month with nothing
+#  new is not sent (and counts as done).
 #
 #  Turn it on: Settings → Secrets and variables → Actions → add
 #    SMTP_SERVER, SMTP_USERNAME, SMTP_PASSWORD, DIGEST_TO
@@ -14,17 +23,22 @@
 #
 #  Preview without sending: Actions → "Monthly e-mail digest" →
 #  Run workflow → leave "Preview only" ticked → download the preview
-#  artifact. The "month" box previews another edition (e.g. 2026-11).
+#  artifact. The "month" box is the month the digest COVERS (2026-09 =
+#  the September digest, sent October 1); empty = last month. A manual
+#  send ("Preview only" unticked) goes at once — with the data there is,
+#  without waiting — and marks the month as done (a month with nothing
+#  new is only marked: no e-mail, as on a scheduled try).
 # =====================================================================
 name: Monthly e-mail digest
 
 on:
   schedule:
-    # GitHub cron is always UTC: 15:05 UTC on the 1st = 10:05 AM Central in summer (CDT) and
-    # 9:05 AM in winter (CST) — always after 6 AM Texas time, and after the morning updates
-    # (update.yml: 10:17 and 12:07 UTC), so the edition includes the 1st's content.
-    # Minute 5 avoids the top-of-the-hour rush, when GitHub delays scheduled jobs the most.
-    - cron: "5 15 1 * *"
+    # GitHub cron is always UTC, and GitHub starts this repository's scheduled runs hours late: four
+    # tries a day on the 1st–3rd (12:07, 15:07, 18:07, 21:07 UTC = 7:07 AM – 4:07 PM CDT, 6:07 AM –
+    # 3:07 PM CST). The first step turns each into "skip" (not the 1st–3rd in Texas, before 7 AM Central,
+    # or already sent) or "send"; send_digest then waits for the data (exit 3 = "not yet": the next try).
+    # Minute 7 avoids the top-of-the-hour rush, when GitHub delays scheduled jobs the most.
+    - cron: "7 12,15,18,21 1-3 * *"
   workflow_dispatch:
     inputs:
       preview_only:
@@ -32,13 +46,14 @@ on:
         type: boolean
         default: true
       month:
-        description: "Edition to build, as YYYY-MM (empty = this month)"
+        description: "The month the digest covers, as YYYY-MM (empty = last month — the digest that goes out on the 1st)"
         type: string
         default: ""
 
 permissions:
   contents: read
   pages: read        # to look up the site's public address
+  actions: read      # to find the "digest-sent-YYYY-MM" marker of a month already sent
 
 concurrency:
   group: monthly-digest
@@ -50,45 +65,82 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Is the e-mail digest set up?
+      - name: Is it time, and is the e-mail digest set up?
         id: check
         env:
+          GH_TOKEN: ${{ github.token }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           DIGEST_TO: ${{ secrets.DIGEST_TO }}
+          EVENT: ${{ github.event_name }}
           PREVIEW: ${{ github.event_name == 'workflow_dispatch' && inputs.preview_only }}
+          MONTH: ${{ inputs.month }}
         run: |
+          set -uo pipefail
+          # Central time (the committee's): today's day and hour, and the month the digest covers — the
+          # one typed in the "month" box (spaces removed), else last month.
+          day=$(TZ=America/Chicago date +%-d)
+          hour=$(TZ=America/Chicago date +%-H)
+          due=$(TZ=America/Chicago date -d "$(TZ=America/Chicago date +%Y-%m-01) -1 day" +%Y-%m)
+          month="${MONTH:-}"
+          month="${month//[[:space:]]/}"
+          edition="${month:-$due}"
+          echo "edition=$edition" >> "$GITHUB_OUTPUT"
           if [ "$PREVIEW" = "true" ]; then
             echo "mode=preview" >> "$GITHUB_OUTPUT"
             echo "Preview mode — the e-mail will be built but not sent."
-          elif [ -n "$SMTP_SERVER" ] && [ -n "$SMTP_USERNAME" ] && [ -n "$SMTP_PASSWORD" ] && [ -n "$DIGEST_TO" ]; then
-            echo "mode=send" >> "$GITHUB_OUTPUT"
-          else
+            exit 0
+          fi
+          if [ -z "$SMTP_SERVER" ] || [ -z "$SMTP_USERNAME" ] || [ -z "$SMTP_PASSWORD" ] || [ -z "$DIGEST_TO" ]; then
             echo "mode=off" >> "$GITHUB_OUTPUT"
             echo "::notice title=E-mail digest is off::Add the SMTP_SERVER, SMTP_USERNAME, SMTP_PASSWORD and DIGEST_TO secrets to turn it on (README → Monthly e-mail digest)."
             echo "E-mail digest is not set up — nothing to do. (This is normal.)" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
           fi
+          if [ "$EVENT" != "schedule" ]; then
+            echo "mode=send" >> "$GITHUB_OUTPUT"          # a manual send: no day / hour / marker guard
+            exit 0
+          fi
+          # A scheduled try: only on the 1st–3rd in Texas, from 7 AM Central, until the month is sent.
+          if [ "$day" -gt 3 ] || [ "$hour" -lt 7 ]; then
+            echo "mode=skip" >> "$GITHUB_OUTPUT"
+            echo "Not the time for the monthly digest (Central time: day $day, hour $hour) — nothing to do." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if ! sent=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=digest-sent-$edition&per_page=10" --jq '[.artifacts[]|select(.expired|not)]|length'); then
+            echo "mode=skip" >> "$GITHUB_OUTPUT"
+            echo "::warning title=Digest not sent yet::Could not check whether the $edition digest was already sent (the GitHub API did not answer) — nothing was sent; the next try checks again."
+            exit 0
+          fi
+          if [ "${sent:-0}" -gt 0 ]; then
+            echo "mode=skip" >> "$GITHUB_OUTPUT"
+            echo "The $edition digest was already sent — nothing to do." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "mode=send" >> "$GITHUB_OUTPUT"
+          # the last tries (from noon Central on the 3rd) send with the data there is
+          if [ "$day" -eq 3 ] && [ "$hour" -ge 12 ]; then echo "last=true" >> "$GITHUB_OUTPUT"; fi
 
       - name: Check out the repository
-        if: steps.check.outputs.mode != 'off'
+        if: contains(fromJSON('["preview","send"]'), steps.check.outputs.mode)
         uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - name: Set up Python
-        if: steps.check.outputs.mode != 'off'
+        if: contains(fromJSON('["preview","send"]'), steps.check.outputs.mode)
         uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
-      - name: Install PyYAML (reads config/site.yml and config/carry.yml)
-        if: steps.check.outputs.mode != 'off'
+      - name: Install PyYAML (reads config/site.yml)
+        if: contains(fromJSON('["preview","send"]'), steps.check.outputs.mode)
         run: python -m pip install --quiet PyYAML
 
       - name: Find the site's public address
         id: site
-        if: steps.check.outputs.mode != 'off'
+        if: contains(fromJSON('["preview","send"]'), steps.check.outputs.mode)
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
@@ -100,7 +152,8 @@ jobs:
           echo "Site address: ${url:-"(from config/site.yml)"}"
 
       - name: Build (and send) the digest
-        if: steps.check.outputs.mode != 'off'
+        id: send
+        if: contains(fromJSON('["preview","send"]'), steps.check.outputs.mode)
         env:
           PYTHONIOENCODING: utf-8
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
@@ -112,18 +165,50 @@ jobs:
           DIGEST_REPLY_TO: ${{ secrets.DIGEST_REPLY_TO }}
           SITE_URL: ${{ steps.site.outputs.url }}
           MODE: ${{ steps.check.outputs.mode }}
+          LAST: ${{ steps.check.outputs.last }}
+          EVENT: ${{ github.event_name }}
           MONTH: ${{ inputs.month }}
         run: |
-          set -euo pipefail
+          set -uo pipefail
           args=()
           # (the preview goes to the runner's temp folder: upload-artifact skips hidden folders like .tmp/)
           if [ "$MODE" = "preview" ]; then args+=(--dry-run --out-dir "$RUNNER_TEMP/digest-preview"); fi
           # Any "month" typed in is passed on (spaces removed), so a mistyped one ("2026-9", "Oct")
-          # stops the run (send_digest exits 2) instead of sending this month's edition to everyone.
+          # stops the run (send_digest exits 2) instead of sending another month's digest to everyone.
           month="${MONTH:-}"
           month="${month//[[:space:]]/}"
           if [ -n "$month" ]; then args+=(--month "$month"); fi
-          python -m scripts.notify.send_digest "${args[@]}"
+          # the last scheduled tries (from noon Central on the 3rd) and a manual send: send with the data
+          # there is (only the other scheduled tries wait for every source to be updated)
+          if [ "${LAST:-}" = "true" ] || { [ "$MODE" = "send" ] && [ "$EVENT" != "schedule" ]; }; then args+=(--stale-ok); fi
+          code=0
+          python -m scripts.notify.send_digest "${args[@]}" || code=$?
+          case $code in
+            0)
+              # sent (or nothing new in the month): mark the month as done, so the later tries skip it
+              if [ "$MODE" = "send" ]; then
+                mkdir -p "$RUNNER_TEMP/digest-sent"
+                echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) run ${GITHUB_RUN_ID}" > "$RUNNER_TEMP/digest-sent/sent.txt"
+                echo "sent=true" >> "$GITHUB_OUTPUT"
+              fi
+              ;;
+            3)
+              # not sent yet: a source has not been updated since the month ended (send_digest wrote why)
+              echo "::notice title=Digest waits::Some sources have not been updated since the month ended — nothing was sent; the next try sends it (at the latest from noon Central on the 3rd)."
+              ;;
+            *)
+              exit "$code"
+              ;;
+          esac
+
+      - name: Mark the month as sent
+        if: steps.send.outputs.sent == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: digest-sent-${{ steps.check.outputs.edition }}
+          path: ${{ runner.temp }}/digest-sent/
+          if-no-files-found: error
+          retention-days: 40
 
       - name: Keep the preview
         if: steps.check.outputs.mode == 'preview'

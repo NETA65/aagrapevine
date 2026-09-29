@@ -72,8 +72,9 @@ const otherLangNote = (docLang, lang) => (docLang && docLang !== lang ? ` (${t(d
 /**
  * Events that start within `days` days and are not over yet (an assembly over several days stays
  * until its last day), soonest first; the committee meeting has its own section. A monthly series
- * (config/site.yml recurring_events, category "recurring") shows only its next date. The same rules
- * as What's New / the digest ("coming up").
+ * (config/site.yml recurring_events, category "recurring") shows only its next date. "Over" is the
+ * monthly toolkit's rule too (monthly.js eventOverMs: a timed event at its end — 6 hours after it
+ * starts without one —, an all-day one at midnight after its last day).
  */
 export function upcomingEvents(db, now, days = EVENT_DAYS) {
   const nowMs = now instanceof Date ? now.getTime() : Number(now);
@@ -252,7 +253,7 @@ function sectionsFor(L, ctx) {
       for (const ev of evs.slice(0, 10)) {
         const where = eventWhere(ev, L);
         // Spanish: "(hora del Centro)" in place of the CDT / CST abbreviation, as the committee line
-        // above and the Spanish e-mail digest say it (committee.js whenText)
+        // above (committee.js whenText) and the monthly toolkit say it
         const when = eventWhen(ev, L, now.getTime());
         const bits = [L === "es" ? when.replace(/\s*\b(?:CDT|CST|CT)\b/g, " (hora del Centro)") : when];
         if (ev._recurring) bits.push(T("e_monthly"));

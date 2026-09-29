@@ -300,8 +300,17 @@ html:root.tts-bar-on {
    two per line), and below 1536px the tool card goes above it instead of beside it (its 21rem grows
    with the text and would squeeze the newsletter). */
 :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-dg-body { display: flex; flex-direction: column; columns: auto; }
+/* …and on a phone the newsletter card's own padding is the tool card's (0.75rem), the rows' dots and the
+   issues' small covers (decoration: alt="") step aside and an issue's theme is a size smaller, so long words
+   ("coordinadores", "perfectamente", "“Sponsorship”") keep whole */
+@media (width < 40rem) {
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-digest > :is(.cm-digest-mast, .cm-dg-body, footer) { padding-inline: 0.75rem; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-digest-group li > span.rounded-full[aria-hidden="true"]:first-child,
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-dg-issues li img[alt=""] { display: none; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-dg-issues p.font-display { font-size: 1.125rem; }
+}
 @media screen and (width >= 80rem) {
-  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-dg-body :is(.cm-dg-intro, .cm-dg-next, .cm-digest-group, .cm-dg-line, .empty-state) { margin-bottom: 0; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-dg-body :is(.cm-dg-intro, .cm-digest-group, .cm-dg-line, .empty-state) { margin-bottom: 0; }
   :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-dg-body .cm-dg-line + .cm-dg-line { margin-top: -1.5rem; }
 }
 @media (width < 96rem) {

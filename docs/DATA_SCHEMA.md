@@ -307,7 +307,7 @@ hard-code a price, percent or date; other pages show at most a compact teaser th
   publication's type descriptions were read (else the next run tries again). The print plans' card text is always
   the site's own (`shop.desc_print_*`): the store's sentence counts one year's copies.
 * A book is always shown under the title it is sold under (`title`, in `lang`) — on /shop/, the home teaser,
-  the posters and the digest (web, text, e-mail); `i18n.title` of the other language is only a small subtitle.
+  the posters and the monthly toolkit (page and message); `i18n.title` of the other language is only a small subtitle.
 * `month_label` i18n is written by rule (never machine-translated); `title`/`blurb`/`types` texts are
   machine-translated into the other language (cached, like every other text).
 * A part that cannot be fetched or parsed (GV offer, LV offer, GV subscriptions, LV subscriptions — or one
@@ -540,13 +540,78 @@ updating" issue.
 ### The monthly toolkit (`/monthly/`) — no data file of its own
 `eleventy/filters/monthly.js` builds one model per month at build time (America/Chicago): this month + the
 next 12 (`monthlyPages` → `/monthly/YYYY-MM/` × en/es; `mpMonths` / `mpMonth` filters) from `db.editorial`
-(themes, story deadlines, La Viña's suggested topics), `db.articles.issues`, `config/carry.yml` (the 10 ways,
-the "put it to work" tips), `db.events` (+ the committee meeting from `site.meeting` and recurring dates from
-`site.recurring_events` for months past `events.json`), `db.weekly_open` and `db.shop.botm`. The hub (`/monthly/`)
-is the canonical home of the 10 ways; each month page of that month's toolkit and poster (PNG 1080 × 1350,
-share, print on one Letter page). The 3 months before this one keep small redirect pages to `/monthly/`
-(`monthlyPastPages`, `src/pages/monthly-past.njk`), so a printed poster's QR code never lands on a 404.
-`MONTHLY_NOW=2026-12-15` fixes "today" for testing.
+(themes, story deadlines, La Viña's suggested topics), `db.articles` (`issues` and the stories themselves),
+`config/carry.yml` (the 10 ways, the "put it to work" tips), `db.events` (+ the committee meeting from
+`site.meeting` and recurring dates from `site.recurring_events` for months past `events.json`), `db.weekly_open`
+and `db.shop.botm`. The hub (`/monthly/`) is the canonical home of the 10 ways; each month page of that month's
+toolkit and poster (PNG 1080 × 1350, share, print on one Letter page). The 3 months before this one keep small
+redirect pages to `/monthly/` (`monthlyPastPages`, `src/pages/monthly-past.njk`), so a printed poster's QR code
+never lands on a 404. `MONTHLY_NOW=2026-12-15` (or an instant, `2026-10-22T06:00:00Z`) fixes "now" for testing.
+
+* **The plan and what is live now.** Every month page shows that month's plan (the poster, the issues' themes,
+  the tips, deadlines, dates, weekly open meetings, Book of the Month) and the same month as a message for a group
+  chat or an e-mail; the current month's page and the hub's "This month" card also show what is live now. The
+  Monthly digest (below) recaps LAST month; everything current lives here — as a link when another page is its one
+  home (the Zoom details on `/meetings/#committee-meeting`, prices on `/shop/`, how to send a story on
+  `/contribute/`, the quote on the home page). An issue's highlight stories are the digest's; the toolkit shows the
+  themes and the story counts and links to `/read/`.
+* **Dates** (`mpMonth(...).dates`): every event in `events.json` that is not `gone` and overlaps the month —
+  content/events, dated Drive flyers and the outside calendars (the NETA 65 workshop feed: source `calendar`) —,
+  the month's committee meeting (its record, else the `site.meeting` rule) and the recurring series. Each row has
+  `overAt` (an ISO instant: a timed event's end — without one, 6 hours after it starts —, an all-day or date-only
+  event's midnight Central after its last day), `past` (`overAt` ≤ now), `href` (`/meetings/#committee-meeting` for
+  the committee, else the event's own page or `/events/`), `external` and `category`. Deadlines and Book of the
+  Month offers have an `overAt` too (midnight Central after their day). The browser marks a date "Over" when its
+  `overAt` passes (`src/assets/js/monthly.js`, `data-mp-over`).
+* **The issues' names** (`issueTheme(db, pub, key, lang)`): the theme the issue itself carries (`issues[]`:
+  `i18n.theme`, else `theme`); else the theme its stories carry (the first story's `i18n.issue_theme` /
+  `extra.issue_theme` — so a month keeps its theme after `issues[]` has moved on to the next issue); else, for
+  Grapevine, the editorial calendar's titles for that `issue_key`. La Viña's bimonthly issue of a month is the
+  `issues[]` entry whose key is the month or the one before, else — once `issues[]` has moved on — the issue its
+  stories belong to (label from their `i18n.issue_label`, official page from `extra.issue_url`, no cover).
+* `mpNow(db, site, lang)` → the current month's live extras (`monthNow`): `nextCommittee` (this month's meeting,
+  then next month's once it is over: `{ ymd, day, dayLabel, time, zone, platform, overAt, thisMonth }`), `outNext`
+  (an issue already online before its month: `articles.issues` newer than this month's Grapevine key / than the La
+  Viña issue covering the month, with the link to that month's toolkit when it is in the window), `quote` (the home
+  page shows a quote: one of the last 2 days with its text and link), `instagram` (the handles), `news` (What's New
+  entries since the 1st), `bulletin` (`{ n, top }`: the posts not over yet, pinned first), `subsFrom` (the lowest
+  subscription price), `gvm` (`{ inArea, nearby }` Grapevine meetings) and `audio` (the phone story lines).
+* `mpIssues(key, db, carry, site, lang)` → the month's issues with stories on the site (`monthIssueLinks`):
+  `{ pub, name, label, theme, url, count, free, readHref }` — `readHref` is `/read/#<pub>-current` while it is the
+  newest issue of its magazine on /read/ (`read.js` `groupIssues`), else `/read/#archive-title`.
+* `mpMessage(key, db, carry, site, langs, style)` → the month as a text (`monthMessage`): `langs` `[lang]` or
+  `[lang, other]`, `style` `whatsapp` (`*bold*` headings with an emoji, "•") or `email` (UPPERCASE headings, "-",
+  no emoji). The current month leaves out what is over and adds the next committee meeting, the Grapevine
+  meetings count and the subscription price. The month page writes all four texts into the page (the previews,
+  the Copy buttons); the language choice is kept in the browser as `localStorage["gv-digest-bi"]` — the digest's.
+
+### The monthly digest (`/digest/` + the monthly e-mail) — no data file of its own
+`eleventy/filters/community.js` (`buildMonthlyDigest`, the page and its WhatsApp / e-mail texts) and
+`scripts/notify/send_digest.py` (the e-mail; the same rules, compared by `tests/test_digest_parity.py`) recap ONE
+calendar month P (America/Chicago) — the edition is named after it ("September 2026 digest" / "Resumen de
+septiembre de 2026"), is on `/digest/` from the first build on the 1st of the next month K all through K, and the
+e-mail goes out once, early in K. Everything is read from the FULL files (never `whatsnew.json`, which keeps only
+its newest 150 entries), a day being its Central calendar day:
+
+| file | in the digest | which items |
+|---|---|---|
+| `announcements.json` | the bulletin's posts | not `gone`; counted on the later of `date` (else `first_seen`) and `extra.publish`; that day in P and not after now + 1 day; not expired (`extra.expires` before today). Pinned first, then newest |
+| `articles.json` | "New in the magazines" (grouped by issue) and the story count | `kind` article, not `gone`, with a `url` and `extra.issue_key`; counted in the month it came out online: `extra.pub_date` in P (so the September digest features the October Grapevine, online since September 23). A story without a `pub_date` (build_data could not work it out) counts on its issue's earliest `pub_date` — never on `first_seen`, so the stories the site found at its launch never all land in one edition. Per issue: the stories of P, all its stories (`total`), the free ones, `current` (the newest issue of its magazine on /read/ — a `gone` story does not count, as on /read/), the theme (`issueTheme`, above) and a few highlights (free to read first, then members' stories — never the writers' stories below) |
+| `spotlight.json` | writers from Area 65 & Texas | `extra.pub_date` in P, `extra.geo.scope` `neta65` / `texas` |
+| `episodes.json`, `videos.json`, `pdfs.json` | podcasts, videos, documents | `date` in P and not after now + 1 day (undated: never); a podcast episode's YouTube upload is folded into it |
+| `instagram.json` | Instagram (the magazines' accounts) and the post count | not `gone`, `date` in P and not after now + 1 day. Per account (`extra.account`, else `category`; Grapevine, La Viña, then any other; the page language's magazine first): how many posts, and the 3 newest (their title — the caption's first line — and day, linking to the post). ONE link to the site's `/instagram/` page, their home; the WhatsApp / e-mail texts and the e-mail's text part give only each account's count and that link. The file keeps the newest `sources.instagram.keep_per_account` (60) posts of each account, so late in K the page can show fewer of P's posts than the e-mail did |
+| `drive.json` | the committee's uploads | counted on the LATER of `date` (the date the file's name starts with, else when the photo was taken or the file created — drive.py) and `first_seen` (the day the site first had it): a report named "2026-08-11 …" but added on September 25 is in the September digest, a photo taken on the 30th but uploaded on the 2nd in the next month's — every upload is in exactly one edition, the one of the month it was added. That day in P and not after now + 1 day; not a bulletin document and not a dated flyer (`extra.event_date`: an event). A file's row shows its own `date` (the one in its name). Photos and videos of an album (committee.js `isPhotoItem`) are ONE entry per album for the month: `{ id: "album:<key>", _count, _when: the newest photo's day, url: "/photos/#<album>" }` (the e-mail links `/photos/`) |
+| `events.json` | the events that took place | not `gone`, any category but `committee`, starting in P (an event over several days: the month it starts in) and started by now; plus P's committee meeting — its record (`ev:committee:<P>-…`), else the `site.meeting` rule (`skip_dates` honoured) — once it has started. Listed with their days only; never counted as news (events alone never send an e-mail). `events.json` keeps the newest 12 past one-off events, so a very busy month loses its oldest |
+| `whatsnew.json` | the page's "N more updates since the 1st" pointer only | `wn_date` from the 1st of K |
+| `status.json` | the e-mail's wait | `sources[].attempted` of `announcements`, `manual_events`, `drive`, `articles`, `pdfs`, `youtube`, `podcasts`, `instagram`: the e-mail waits (exit 3) while one was last tried before P ended but within the 3 days before — later ones are there, older ones have stopped |
+
+Not in the digest (current or upcoming — the toolkit's): the committee meeting's Zoom details, events not over
+yet, the weekly open meetings, story deadlines, La Viña's topics, the phone lines, Book of the Month, the
+subscription price, the daily quote, the Instagram accounts to follow (the digest has P's posts). The page and
+the texts end with ONE pointer: "Coming up in K" → `/monthly/K/`. Counts (the intro, `COUNT_ORDER`): magazine
+stories, podcast episodes, videos, Instagram posts, documents, committee files, photo albums, bulletin posts.
+`MONTHLY_NOW=2026-10-01T15:05:00Z` builds the September digest; `send_digest --month 2026-09` is the same
+edition.
 
 ### The district report (`/monthly/#report`) — no data file of its own
 `eleventy/filters/report.js` (`rpModel`) writes the current month's report in English AND Spanish as 12 sections
@@ -687,8 +752,8 @@ calendar feed keeps them for subscribers):
   third Wednesday of the month"). `rule` is the entry's rule in the shape of `meeting:` (the end as used:
   a missing one is start + 1 hour); the web pages build the line from it with the meeting's own helpers
   (committee.js `recurrenceText`: same words, the browser's clock format) and fall back to `recurrence_label`.
-* Never `is_new`, never in `whatsnew.json`, never in the /events/ "Past events" list. Home, search, the
-  digest pages and the e-mail show only the next date of each `series`.
+* Never `is_new`, never in `whatsnew.json`, never in the /events/ "Past events" list. Home and search show only
+  the next date of each `series`; the monthly digest lists the date that took place.
 * Entries with a mistake are skipped; `status.json` → `problems.recurring_events` says which and why.
 
 #### Events from several places; several days (`events.json`)
@@ -763,7 +828,7 @@ calendar feed keeps them for subscribers):
   both labels keep the writer's spelling of the city.
 
 `extra.pub_date` (`YYYY-MM-DD`) = the day the story counts as published for the 60/90-day windows and the
-monthly digest (last month's writers): the EARLIER of the first day of its issue (La Viña's bimonthly issues: the first month) and
+monthly digest (the issues and writers of the month it covers): the EARLIER of the first day of its issue (La Viña's bimonthly issues: the first month) and
 the day the story was first seen online (`first_seen`, in America/Chicago) — never later than today. It
 does not move: an October issue seen online on September 16 counts from September 16, also after
 October 1 (so the digest lists it once); a back-catalog story found by the archive backfill counts
