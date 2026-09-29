@@ -1,7 +1,7 @@
 {
  "source": "quote",
- "updated": "2026-09-29T16:38:59Z",
- "attempted": "2026-09-29T16:38:59Z",
+ "updated": "2026-09-29T18:02:50Z",
+ "attempted": "2026-09-29T18:02:50Z",
  "ok": true,
  "error": null,
  "stats": {
@@ -9,7 +9,7 @@
   "parsed": 2,
   "requests": 2,
   "today": "2026-09-29",
-  "new": 2
+  "new": 0
  },
  "items": [
   {
