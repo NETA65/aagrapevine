@@ -101,14 +101,27 @@
      Share your story › "Next workshops" ([data-ws-list]): each row carries the moment its workshop
      ends ([data-cm-expire="ISO"], the same attribute as /events/ — committee.js is not loaded here).
      The page is built once a day, so a workshop that has ended hides itself, and the list with it
-     when none is left. */
+     when none is left — but never under the reader: a row that holds keyboard focus (its link) waits
+     until focus leaves it, then goes (app.js GV.expire's rule). */
   function expireWorkshops() {
-    var now = Date.now();
+    var now = Date.now(), active = document.activeElement;
     document.querySelectorAll("[data-ws-list]").forEach(function (list) {
       var left = 0;
       list.querySelectorAll("[data-cm-expire]").forEach(function (el) {
         var t = Date.parse(el.getAttribute("data-cm-expire"));
-        if (t && t <= now) el.hidden = true; else left++;
+        if (!(t && t <= now)) { left++; return; }
+        if (!el.hidden && active && active !== document.body && el.contains(active)) {
+          left++;
+          if (!el.__wsExpireWait) {                  // try again once focus has moved on
+            el.__wsExpireWait = true;
+            el.addEventListener("focusout", function () {
+              el.__wsExpireWait = false;
+              setTimeout(expireWorkshops, 0);
+            }, { once: true });
+          }
+          return;
+        }
+        el.hidden = true;
       });
       list.hidden = !left;
     });

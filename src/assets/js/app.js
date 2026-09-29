@@ -189,8 +189,8 @@
      The element that holds keyboard focus (or a list around it) is never hidden under the reader: it is
      hidden once focus leaves it. Runs on load, every minute and when the page is shown again.
      These attributes are GV.expire's alone: committee.js (/events/, /meetings/ — and loaded on /bulletin/
-     too) and read.js (/contribute/) hide their own [data-cm-expire] without waiting for focus, so they
-     must never see these elements.
+     too) and read.js (/contribute/) hide their own [data-cm-expire] — with the same focus rule, but their
+     own marker (data-cm-expired), counts and lists — so they must never see these elements.
        GV.expire(root?) → how many elements it hid */
   var EXPIRE_AT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})$/;
   GV.expire = function (root) {

@@ -581,13 +581,30 @@
 
   /* ---------------- hide things whose time has passed ----------------
      Pages are rebuilt daily; this keeps them right between builds.
-     [data-cm-expire="ISO"] → hidden once that moment passes.
+     [data-cm-expire="ISO"] → hidden once that moment passes (data-cm-expired) — but never under the
+     reader: the element that holds keyboard focus (a link or button inside an event card, a meeting
+     date) waits until focus leaves it, then goes (app.js GV.expire's rule).
      [data-cm-max="6"] on a list → only the first N non-expired children show. */
+  function holdsFocus(el) {
+    var a = document.activeElement;
+    return !!(a && a !== document.body && el.contains(a));
+  }
+  function afterFocus(el) {                            // try again once focus has moved on
+    if (el.__cmExpireWait) return;
+    el.__cmExpireWait = true;
+    el.addEventListener("focusout", function () {
+      el.__cmExpireWait = false;
+      setTimeout(expire, 0);
+    }, { once: true });
+  }
   function expire() {
     var now = Date.now();
     document.querySelectorAll("[data-cm-expire]").forEach(function (el) {
       var t = Date.parse(el.getAttribute("data-cm-expire"));
-      if (t && t <= now && !el.hasAttribute("data-cm-expired")) { el.setAttribute("data-cm-expired", ""); el.hidden = true; }
+      if (!t || t > now || el.hasAttribute("data-cm-expired")) return;
+      if (holdsFocus(el)) { afterFocus(el); return; }
+      el.setAttribute("data-cm-expired", "");
+      el.hidden = true;
     });
     document.querySelectorAll("[data-cm-max]").forEach(function (list) {
       var max = Number(list.getAttribute("data-cm-max")) || 6, i = 0;

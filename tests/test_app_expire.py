@@ -6,16 +6,17 @@
     data-gv-expire-empty="#id" note shown instead; a [data-gv-expire-spare="<class>"] item (the home page's
     4th event, hidden on a phone) drops that class once an earlier item has gone;
   * the attributes are GV.expire's alone: committee.js and read.js, which hide their own [data-cm-expire]
-    without waiting for focus, never see them (committee.js is loaded on /bulletin/ too);
+    (their own marker, counts and lists), never see them (committee.js is loaded on /bulletin/ too);
   * the element holding keyboard focus (or a list around it) is never hidden under the reader — it goes once
-    focus leaves it;
+    focus leaves it; committee.js (/events/, /meetings/) and read.js (/contribute/'s next workshops) keep the
+    same rule for their [data-cm-expire] (CommitteeExpire, WorkshopsExpire);
   * it runs when the page is ready, every minute and when the page is shown again;
   * the moments come from eleventy/filters/freshness.js fsDayEnd (the end of a Central-time day: a post's
     `expires`, a story deadline) and home.js homeEventEnd (the end of an event, as the home page's
     upcoming-events row counts it); the home page and /bulletin/ carry the attributes.
 
-app.js runs in a Node.js vm with a small stand-in for the page (elements with attributes, `hidden`,
-contains(), focus, listeners, a clock and timers the test moves by hand).
+app.js (and committee.js, read.js) run in a Node.js vm with a small stand-in for the page (elements with
+attributes, `hidden`, contains(), focus, listeners, a clock and timers the test moves by hand).
 
     python -m unittest tests.test_app_expire -v        (or: python -m unittest discover -s tests)
 """
@@ -30,9 +31,10 @@ from nodejs import run_js  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# The page stand-in: el(tag, attrs, children) builds elements; `page(children)` loads app.js on a document
-# holding them → { G (window.GV), doc, win, clock: {now}, timers, intervals, fire(type) (DOMContentLoaded …),
-# run() (due timeouts) }. document.readyState is "loading", so app.js waits for DOMContentLoaded.
+# The page stand-in: el(tag, attrs, children) builds elements; `page(children, files)` loads app.js (or the
+# given scripts, in order) on a document holding them → { G (window.GV), doc, win, clock: {now}, timers,
+# intervals, fire(type) (DOMContentLoaded …), run() (due timeouts) }. document.readyState is "loading", so
+# the scripts wait for DOMContentLoaded.
 DOM = r"""
 import vm from "node:vm";
 class El {
@@ -72,7 +74,7 @@ class El {
   dispatch(t, ev) { const ls = this.listeners[t] || []; this.listeners[t] = ls.filter((l) => !l.once); for (const l of ls) l.fn(Object.assign({ type: t }, ev || {})); }
 }
 const el = (tag, attrs, children) => new El(tag, attrs, children);
-const page = (children) => {
+const page = (children, files) => {
   const clock = { now: Date.parse("2026-10-03T20:00:00Z") };
   const timers = [], intervals = [];
   class FakeDate extends Date { static now() { return clock.now; } }
@@ -95,11 +97,12 @@ const page = (children) => {
     document: doc, navigator: {}, localStorage: { getItem: () => null, setItem() {}, removeItem() {} },
     setTimeout: (fn, ms) => { timers.push({ fn, at: clock.now + (ms || 0) }); return timers.length; },
     clearTimeout() {}, setInterval: (fn, ms) => { intervals.push({ fn, ms }); return intervals.length; },
-    NodeFilter: {}, CustomEvent: function () {},
+    NodeFilter: {}, CustomEvent: function () {}, URLSearchParams,
+    location: { hash: "", search: "", pathname: "/" }, history: { replaceState() {} },
   };
   ctx.window = Object.assign(ctx, win);
   vm.createContext(ctx);
-  vm.runInContext(fs.readFileSync("src/assets/js/app.js", "utf8"), ctx, { filename: "app.js" });
+  for (const f of files || ["src/assets/js/app.js"]) vm.runInContext(fs.readFileSync(f, "utf8"), ctx, { filename: f });
   const run = () => { const due = timers.splice(0).filter((t) => t.at <= clock.now); due.forEach((t) => t.fn()); };
   const fire = (t, ev) => { for (const fn of docListeners[t] || []) fn(Object.assign({ type: t }, ev || {})); };
   const fireWin = (t, ev) => { for (const fn of winListeners[t] || []) fn(Object.assign({ type: t }, ev || {})); };
@@ -246,6 +249,84 @@ class Expire(unittest.TestCase):
         self.assertEqual(r["intervals"], 0)
 
 
+class CommitteeExpire(unittest.TestCase):
+    """committee.js expire() (/events/ cards, /meetings/ dates): a passed [data-cm-expire] moment hides its
+    element (data-cm-expired) and a [data-cm-max] list shows its first N left — but the element that holds
+    keyboard focus is never hidden under the reader: it goes once focus leaves it (GV.expire's rule)."""
+
+    def test_passed_moments_hide_and_the_list_keeps_its_first_n(self):
+        r = js(self, r"""
+          const items = [PAST, SOON, LATER, LATER].map((t) => el("li", { "data-cm-expire": t }));
+          const list = el("ul", { "data-cm-max": "2" }, items);
+          const p = page([list], ["src/assets/js/committee.js"]);
+          const boot = items.map((i) => [i.hidden, i.hasAttribute("data-cm-expired"), i.classList.contains("hidden")]);
+          p.clock.now = Date.parse("2026-10-03T21:31:00Z");
+          p.intervals.find((i) => i.ms === 60000).fn();
+          // what shows: gone, or [hidden by the list's max, the first one left]
+          out({ boot, minute: items.map((i) => (i.hidden ? "gone" : [i.classList.contains("hidden"), i.classList.contains("is-next")])) });""")
+        self.assertEqual(r["boot"], [[True, True, False], [False, False, False], [False, False, False], [False, False, True]])
+        self.assertEqual(r["minute"], ["gone", "gone", [False, True], [False, False]])
+
+    def test_the_focused_element_is_never_hidden_under_the_reader(self):
+        r = js(self, r"""
+          const link = el("a", { href: "#" });
+          const card = el("li", { "data-cm-expire": SOON }, [link]);
+          const other = el("li", { "data-cm-expire": "2026-10-03T21:00:00Z" });
+          const next = el("li", { "data-cm-expire": LATER });
+          const list = el("ul", { "data-cm-max": "2" }, [card, other, next]);
+          const p = page([list], ["src/assets/js/committee.js"]);
+          p.doc.activeElement = link;                    // the card's link has keyboard focus …
+          p.clock.now = Date.parse("2026-10-03T21:31:00Z");
+          p.intervals.find((i) => i.ms === 60000).fn();  // … when both events are over (the minute tick)
+          const tick = { card: card.hidden, marked: card.hasAttribute("data-cm-expired"), other: other.hidden,
+                         nextShown: !next.classList.contains("hidden") };
+          const link2 = el("a", { href: "#" });
+          card.appendChild(link2);
+          p.doc.activeElement = link2;                   // Tab to another link in the same card: still there
+          card.dispatch("focusout");
+          p.run();
+          const moved = card.hidden;
+          p.doc.activeElement = p.doc.body;              // focus leaves the card
+          card.dispatch("focusout");
+          p.run();
+          out({ tick, moved, after: [card.hidden, card.hasAttribute("data-cm-expired")], nextFirst: next.classList.contains("is-next") });""")
+        self.assertEqual(r["tick"], {"card": False, "marked": False, "other": True, "nextShown": True})
+        self.assertFalse(r["moved"], "focus is still inside the card")
+        self.assertEqual(r["after"], [True, True], "hidden once focus left it")
+        self.assertTrue(r["nextFirst"], "the list is counted again without it")
+
+
+class WorkshopsExpire(unittest.TestCase):
+    """read.js on /contribute/ ("Next workshops", [data-ws-list]): a workshop that has ended hides itself, and
+    the list with it when none is left — never the row that holds keyboard focus (GV.expire's rule)."""
+
+    def test_the_focused_row_waits_then_the_list_goes(self):
+        r = js(self, r"""
+          const link = el("a", { href: "#" });
+          const row = el("li", { "data-cm-expire": PAST }, [link]);
+          const gone = el("li", { "data-cm-expire": PAST });
+          const list = el("ul", { "data-ws-list": "" }, [gone, row]);
+          const p = page([list], ["src/assets/js/read.js"]);
+          p.doc.activeElement = link;
+          p.fire("DOMContentLoaded");
+          const kept = { gone: gone.hidden, row: row.hidden, list: list.hidden };
+          p.doc.activeElement = p.doc.body;
+          row.dispatch("focusout");
+          p.run();
+          out({ kept, after: { row: row.hidden, list: list.hidden } });""")
+        self.assertEqual(r["kept"], {"gone": True, "row": False, "list": False})
+        self.assertEqual(r["after"], {"row": True, "list": True})
+
+    def test_rows_still_to_come_stay(self):
+        r = js(self, r"""
+          const a = el("li", { "data-cm-expire": PAST }), b = el("li", { "data-cm-expire": LATER });
+          const list = el("ul", { "data-ws-list": "" }, [a, b]);
+          const p = page([list], ["src/assets/js/read.js"]);
+          p.fire("DOMContentLoaded");
+          out([a.hidden, b.hidden, list.hidden]);""")
+        self.assertEqual(r, [True, False, False])
+
+
 class Moments(unittest.TestCase):
     """fsDayEnd (freshness.js) and homeEventEnd (home.js): the instants the pages write."""
 
@@ -274,8 +355,8 @@ class Moments(unittest.TestCase):
 
 class Pages(unittest.TestCase):
     def test_their_attributes_are_gv_expires_alone(self):
-        # committee.js (loaded on /bulletin/) and read.js hide [data-cm-expire] without waiting for focus: the
-        # home page and /bulletin/ must never carry it, and they must never read GV.expire's attributes
+        # committee.js (loaded on /bulletin/) and read.js hide [data-cm-expire] with their own marker, counts and
+        # lists: the home page and /bulletin/ must never carry it, and they must never read GV.expire's attributes
         for page in ("index.njk", "bulletin.njk"):
             self.assertNotIn("data-cm-expire", (ROOT / "src" / "pages" / page).read_text(encoding="utf-8"), page)
         for f in ("committee.js", "read.js"):
