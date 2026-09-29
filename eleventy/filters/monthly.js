@@ -546,7 +546,9 @@ const msOf = (v) => (isYmd(v) ? Date.parse(v + "T12:00:00Z") : Date.parse(v));
  *                  its text and link) — the toolkit points there, never repeats it
  *   instagram      [{ username, url }] the page language's magazine first
  *   news           { n: What's New entries since the 1st (their news date up to now + 1 day), since, sinceLabel }
- *   bulletin       { n: bulletin posts not over yet (as /bulletin/ lists them, pinned first), top: { title, href } }
+ *   bulletin       { n: bulletin posts not over yet (announcementList — /bulletin/'s list), top: { title, href }:
+ *                  the newest of them by its day (its date, or its `publish` day when later — never simply
+ *                  the first on /bulletin/, where pinned posts come first) }
  *   subsFrom       the lowest subscription price (shopFromMonthly) or null
  *   gvm            { inArea, nearby } Grapevine meetings (gvMeetings) or null when there are none in our Area
  *   audio          { gv, lv } the phone story lines ({ phone, tel } or null) — standing information: the
@@ -594,7 +596,15 @@ export function monthNow(db = {}, site = {}, lang = "en", now = nowDate()) {
     && chicagoYmd(i.wn_date) >= first && msOf(i.wn_date) <= nowMs + DAY).length;
 
   const posts = announcementList((db.announcements && db.announcements.items) || [], now);
-  const top = posts[0];
+  // "the newest:" names the newest post by its own day — its date (else when it was first seen), or its
+  // `publish` day when that is later (a scheduled post appears that morning) — not the first on /bulletin/,
+  // where pinned posts come first. The same day: /bulletin/'s order (pinned first, then newest).
+  const postDay = (p) => {
+    const d = chicagoYmd(p.date || p.first_seen || "");
+    const pub = String((p.extra && p.extra.publish) || "").slice(0, 10);
+    return isYmd(pub) && pub > d ? pub : d;
+  };
+  const top = posts.reduce((best, p) => (!best || postDay(p) > postDay(best) ? p : best), null);
 
   const from = shopFromMonthly(db.shop);
   const g = gvMeetings(db.meetings, L, site);

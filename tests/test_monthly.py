@@ -280,9 +280,23 @@ class Now(unittest.TestCase):
         self.assertEqual([p["username"] for p in en["instagram"]], ["alcoholicsanonymous_gv", "alcoholicosanonimos_lv"])
         self.assertEqual([p["username"] for p in es["instagram"]], ["alcoholicosanonimos_lv", "alcoholicsanonymous_gv"])
         self.assertEqual((en["news"]["n"], en["news"]["sinceLabel"], es["news"]["sinceLabel"]), (2, "Oct 1", "1 de octubre"))
-        self.assertEqual((en["bulletin"]["n"], en["bulletin"]["top"]), (2, {"title": "Pinned post", "href": "/bulletin/#pinned-post"}))
+        # "the newest:" is the newest post by its day (Oct 4) — not the pinned one /bulletin/ lists first (Oct 2)
+        self.assertEqual((en["bulletin"]["n"], en["bulletin"]["top"]), (2, {"title": "Newest post", "href": "/bulletin/#newest-post"}))
         self.assertEqual((en["subsFrom"], en["gvm"]), (2.99, {"inArea": 3, "nearby": 2}))
         self.assertEqual(en["audio"]["lv"], {"phone": "(559) 670-1601", "tel": "+15596701601"})
+
+    def test_the_newest_bulletin_post(self):
+        # a post dated Oct 1 but scheduled for Oct 5 (publish:) appeared that morning: it is the newest; on the
+        # same day, /bulletin/'s order decides (the pinned post first)
+        db = full_db()
+        db["announcements"]["items"].append(item("ann:sched", "announcement", title="Scheduled post", date="2026-10-01",
+                                                 extra={"publish": "2026-10-05", "slug": "scheduled-post"}))
+        top = run(self, [("a", NOW_A, "2026-10")], db)["a"]["nw"]["en"]["bulletin"]
+        self.assertEqual((top["n"], top["top"]["title"]), (3, "Scheduled post"))
+        db = full_db()
+        db["announcements"]["items"][0]["date"] = "2026-10-04"            # the pinned post, the same day as the newest
+        top = run(self, [("a", NOW_A, "2026-10")], db)["a"]["nw"]["en"]["bulletin"]["top"]
+        self.assertEqual(top["title"], "Pinned post")
 
     def test_a_stale_quote_is_not_pointed_to(self):
         db = full_db()

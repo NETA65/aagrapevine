@@ -613,8 +613,10 @@ never lands on a 404. `MONTHLY_NOW=2026-12-15` (or an instant, `2026-10-22T06:00
   (an issue already online before its month: `articles.issues` newer than this month's Grapevine key / than the La
   Viña issue covering the month, with the link to that month's toolkit when it is in the window), `quote` (the home
   page shows a quote: one of the last 2 days with its text and link), `instagram` (the handles), `news` (What's New
-  entries since the 1st), `bulletin` (`{ n, top }`: the posts not over yet, pinned first), `subsFrom` (the lowest
-  subscription price), `gvm` (`{ inArea, nearby }` Grapevine meetings) and `audio` (the phone story lines).
+  entries since the 1st), `bulletin` (`{ n, top }`: the posts not over yet, and the newest of them by its day — its
+  date, or its `publish` day when later; never simply the first on /bulletin/, where pinned posts come first),
+  `subsFrom` (the lowest subscription price), `gvm` (`{ inArea, nearby }` Grapevine meetings) and `audio` (the
+  phone story lines).
 * `mpIssues(key, db, carry, site, lang)` → the month's issues with stories on the site (`monthIssueLinks`):
   `{ pub, name, label, theme, url, count, free, readHref }` — `readHref` is `/read/#<pub>-current` while it is the
   newest issue of its magazine on /read/ (`read.js` `groupIssues`), else `/read/#archive-title`.
