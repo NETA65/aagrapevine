@@ -222,6 +222,17 @@ class Place(unittest.TestCase):
         stay = re.findall(r'key: "(nav\.\w+)"[^}]*group: "stay"', nav)
         self.assertEqual(stay, ["nav.instagram", "nav.share"])
 
+    def test_a_plain_text_drive_post_has_no_open_the_document(self):
+        # A .md / .txt file from the Drive bulletin folder is shown in full on the page: "Open the document"
+        # would only open the same words as raw text on Drive. PDFs, pictures, Google Docs and .docx keep it.
+        page = (ROOT / "src/pages/bulletin.njk").read_text(encoding="utf-8")
+        rule = re.search(r"\{%- set plainText = (.+?) -%\}", page)
+        self.assertIsNotNone(rule)
+        for bit in ('a.source == "drive"', "a.extra.body_md", 'a.extra.file_type == "MD"', 'a.extra.file_type == "TXT"',
+                    '(a.extra.mime or "").startsWith("text/")'):
+            self.assertIn(bit, rule.group(1))
+        self.assertIn('(a.url if (a.source == "drive" and a.url and not plainText) else "")', page)
+
 
 class Rendering(unittest.TestCase):
     """eleventy.config.js `md`: the post's headings under its title, links to our pages in the page's
