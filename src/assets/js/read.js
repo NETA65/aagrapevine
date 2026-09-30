@@ -14,6 +14,9 @@
     } catch (e) { return null; }
   }
   function fill(tpl, n) { return String(tpl || "").replace("{n}", n); }
+  // The recounts below run every minute: a text is written only when it changes, so a screen reader
+  // reading the page is never disturbed by the same words written again.
+  function setText(el, v) { if (el.textContent !== v) el.textContent = v; }
 
   /* ------------------------------------------------------------------
      Deadlines: <span data-deadline="2026-10-15" data-t-days="{n} days left"
@@ -33,13 +36,13 @@
       if (!/^\d{4}-\d{2}-\d{2}$/.test(ymd)) return;
       var days = Math.round((new Date(ymd + "T12:00:00Z").getTime() - today) / 864e5);
       var numEl = el.querySelector("[data-days-num]");
-      if (numEl) numEl.textContent = String(Math.max(0, days));
+      if (numEl) setText(numEl, String(Math.max(0, days)));
       var unitEl = el.querySelector("[data-days-unit]");
-      if (unitEl) unitEl.textContent = el.getAttribute(days === 1 ? "data-t-unit1" : "data-t-unitn") || unitEl.textContent;
+      if (unitEl) setText(unitEl, el.getAttribute(days === 1 ? "data-t-unit1" : "data-t-unitn") || unitEl.textContent);
       var txt = days < 0 ? el.getAttribute("data-t-past") : days === 0 ? el.getAttribute("data-t-today")
         : days === 1 ? el.getAttribute("data-t-tomorrow") : fill(el.getAttribute("data-t-days"), days);
       var label = el.querySelector("[data-days-label]") || el;
-      if (txt) label.textContent = txt;
+      if (txt) setText(label, txt);
       var row = el.closest("[data-deadline-row]");
       if (row) row.classList.toggle("is-past", days < 0);
     });
@@ -74,9 +77,9 @@
       var key = dd.getAttribute("data-spot-n"), c = 0;
       (dd.getAttribute("data-dates") || "").split(" ").forEach(function (d) { if (d && d >= cutoff) c++; });
       n[key] = c;
-      dd.textContent = String(c);
+      setText(dd, String(c));
       var box = dd.parentNode, dt = box.querySelector("dt");
-      if (dt) dt.textContent = dt.getAttribute(c === 1 ? "data-one" : "data-many") || dt.textContent;
+      if (dt) setText(dt, dt.getAttribute(c === 1 ? "data-one" : "data-many") || dt.textContent);
       box.hidden = !c;
     });
     root.querySelectorAll("[data-spot-list] [data-date]").forEach(function (li) {
@@ -225,6 +228,10 @@
   function refresh() { updateDeadlines(); recountSpots(); expireWorkshops(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", refresh);
   else refresh();
-  // A tab left open past midnight: recount when the page is shown again.
+  // A page left open: every minute (a workshop that has just ended goes, as on /events/ and the home page;
+  // past midnight the days left and the writers' window move on), and when the page is shown again (a tab
+  // brought back to the front, or a page restored by the Back button).
+  setInterval(refresh, 60000);
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") refresh(); });
+  window.addEventListener("pageshow", function (e) { if (e.persisted) refresh(); });
 })();

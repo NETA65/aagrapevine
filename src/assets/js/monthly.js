@@ -5,7 +5,8 @@
       ([data-mp-chip]) hides, and its list ([data-mp-chips]) when no chip is left; a month page's date or
       Book of the Month row gets .is-past and shows its "Over" badge ([data-mp-over-badge]). The new-month
       notice ([data-mp-newmonth="YYYY-MM"]) shows once the visitor's month (Central time) is that month —
-      the site has not been rebuilt for it yet. On load and each time the tab comes back into view.
+      the site has not been rebuilt for it yet. On load, every minute (a page left open) and each time the
+      page is shown again; a chip that holds keyboard focus goes once focus leaves it.
    3. "Send it as a message" (month pages): the Alpine component mpMessage — this language or both,
       remembered as "gv-digest-bi" (the Monthly digest's key: one choice for both tools), and the Copy
       buttons (GV.copy copies the prebuilt text and says so).
@@ -105,12 +106,23 @@
       return new Date().toISOString().slice(0, 7);
     }
   }
+  // A hub chip that holds keyboard focus is never hidden under the reader: it goes once focus leaves it
+  // (app.js GV.expire's rule).
+  var afterFocus = function (el) {
+    if (el.__mpOverWait) return;
+    el.__mpOverWait = true;
+    el.addEventListener("focusout", function () { el.__mpOverWait = false; setTimeout(markOver, 0); }, { once: true });
+  };
   function markOver() {
-    var now = Date.now();
+    var now = Date.now(), active = document.activeElement;
     each("[data-mp-over]", function (el) {
       var t = Date.parse(el.getAttribute("data-mp-over") || "");
       if (isNaN(t) || t > now) return;
-      if (el.hasAttribute("data-mp-chip")) { el.hidden = true; return; }
+      if (el.hasAttribute("data-mp-chip")) {
+        if (!el.hidden && active && active !== document.body && el.contains(active)) { afterFocus(el); return; }
+        el.hidden = true;
+        return;
+      }
       el.classList.add("is-past");
       var badge = el.querySelector("[data-mp-over-badge]");
       if (badge) badge.hidden = false;
@@ -121,8 +133,13 @@
     var month = centralMonth();
     each("[data-mp-newmonth]", function (el) { el.hidden = !(month >= (el.getAttribute("data-mp-newmonth") || "9999-99")); });
   }
+  // Now, every minute (a month page left open — shown at a district meeting — marks a meeting "Over" as it
+  // ends, as the home page, /events/ and /bulletin/ hide theirs), and when the page is shown again (a tab
+  // brought back to the front, or a page restored by the Back button).
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", markOver); else markOver();
+  setInterval(markOver, 60000);
   document.addEventListener("visibilitychange", function () { if (!document.hidden) markOver(); });
+  window.addEventListener("pageshow", function (e) { if (e.persisted) markOver(); });
 
   /* ---------- 3. "Send it as a message" (Alpine starts after this file: see base.njk) ---------- */
   document.addEventListener("alpine:init", function () {

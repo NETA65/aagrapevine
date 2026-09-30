@@ -10,7 +10,9 @@
   * the element holding keyboard focus (or a list around it) is never hidden under the reader — it goes once
     focus leaves it; committee.js (/events/, /meetings/) and read.js (/contribute/'s next workshops) keep the
     same rule for their [data-cm-expire] (CommitteeExpire, WorkshopsExpire);
-  * it runs when the page is ready, every minute and when the page is shown again;
+  * it runs when the page is ready, every minute and when the page is shown again — and so do the monthly
+    toolkit's "Over" marks (monthly.js), /contribute/'s next workshops (read.js) and the digest's "last
+    month's edition" note (community.js): PageLeftOpen;
   * the moments come from eleventy/filters/freshness.js fsDayEnd (the end of a Central-time day: a post's
     `expires`, a story deadline) and home.js homeEventEnd (the end of an event, as the home page's
     upcoming-events row counts it); the home page and /bulletin/ carry the attributes.
@@ -106,7 +108,7 @@ const page = (children, files) => {
   const run = () => { const due = timers.splice(0).filter((t) => t.at <= clock.now); due.forEach((t) => t.fn()); };
   const fire = (t, ev) => { for (const fn of docListeners[t] || []) fn(Object.assign({ type: t }, ev || {})); };
   const fireWin = (t, ev) => { for (const fn of winListeners[t] || []) fn(Object.assign({ type: t }, ev || {})); };
-  return { G: ctx.GV, doc, clock, timers, intervals, run, fire, fireWin };
+  return { G: ctx.GV, doc, win: ctx, clock, timers, intervals, run, fire, fireWin };
 };
 const PAST = "2026-10-03T19:00:00Z", SOON = "2026-10-03T21:30:00.000Z", LATER = "2026-10-15T05:00:00.000Z";
 """
@@ -325,6 +327,73 @@ class WorkshopsExpire(unittest.TestCase):
           p.fire("DOMContentLoaded");
           out([a.hidden, b.hidden, list.hidden]);""")
         self.assertEqual(r, [True, False, False])
+
+
+class PageLeftOpen(unittest.TestCase):
+    """The other between-builds marks keep time like GV.expire and committee.js: now, every minute and when the
+    page is shown again — a month page shown at a district meeting marks the meeting "Over" as it ends
+    (monthly.js), /contribute/'s next workshops drop one that has ended (read.js), and the digest says it is
+    last month's edition once the new one is due (community.js digestPage). Before, only a reload or a tab
+    switch did it, so a page left open kept a finished meeting without "Over"."""
+
+    def test_the_toolkit_marks_over_every_minute(self):
+        r = js(self, r"""
+          const link = el("a", { href: "#" });
+          const chip = el("li", { "data-mp-chip": "", "data-mp-over": SOON }, [link]);
+          const later = el("li", { "data-mp-chip": "", "data-mp-over": LATER });
+          const chips = el("ul", { "data-mp-chips": "" }, [chip, later]);
+          const badge = el("span", { "data-mp-over-badge": "", hidden: "" });
+          const row = el("li", { "data-mp-over": SOON }, [badge]);
+          const p = page([chips, row], ["src/assets/js/monthly.js"]);
+          p.fire("DOMContentLoaded");
+          const boot = [chip.hidden, row.classList.contains("is-past"), badge.hidden];
+          p.doc.activeElement = link;                    // the chip's link has keyboard focus when it ends
+          p.clock.now = Date.parse("2026-10-03T21:31:00Z");
+          p.intervals.find((i) => i.ms === 60000).fn();
+          const minute = [chip.hidden, row.classList.contains("is-past"), badge.hidden, chips.hidden];
+          p.doc.activeElement = p.doc.body;              // focus leaves it: it goes
+          chip.dispatch("focusout");
+          p.run();
+          const after = [chip.hidden, later.hidden, chips.hidden];
+          p.clock.now = Date.parse("2026-10-16T00:00:00Z");
+          p.fireWin("pageshow", { persisted: true });    // a page restored by the Back button
+          out({ boot, minute, after, restored: [later.hidden, chips.hidden] });""")
+        self.assertEqual(r["boot"], [False, False, True])
+        self.assertEqual(r["minute"], [False, True, False, False], "the row is Over; the focused chip waits")
+        self.assertEqual(r["after"], [True, False, False])
+        self.assertEqual(r["restored"], [True, True], "the last chip, then its list")
+
+    def test_the_next_workshops_drop_one_that_ended(self):
+        r = js(self, r"""
+          const a = el("li", { "data-cm-expire": SOON }), b = el("li", { "data-cm-expire": LATER });
+          const list = el("ul", { "data-ws-list": "" }, [a, b]);
+          const p = page([list], ["src/assets/js/read.js"]);
+          p.fire("DOMContentLoaded");
+          const boot = [a.hidden, b.hidden];
+          p.clock.now = Date.parse("2026-10-03T21:31:00Z");
+          p.intervals.find((i) => i.ms === 60000).fn();
+          const minute = [a.hidden, b.hidden, list.hidden];
+          p.clock.now = Date.parse("2026-10-16T00:00:00Z");
+          p.fireWin("pageshow", { persisted: true });
+          out({ boot, minute, restored: [b.hidden, list.hidden] });""")
+        self.assertEqual(r["boot"], [False, False])
+        self.assertEqual(r["minute"], [True, False, False])
+        self.assertEqual(r["restored"], [True, True])
+
+    def test_the_digest_notices_it_is_last_months(self):
+        r = js(self, r"""
+          const p = page([], ["src/assets/js/community.js"]);
+          const comps = {};
+          p.win.Alpine = { data: (name, fn) => { comps[name] = fn; } };
+          p.fire("alpine:init");
+          const c = comps.digestPage();
+          Object.assign(c, { $el: el("div", { "data-stale-after": SOON }), $watch() {} });
+          c.init();
+          const boot = c.stale;
+          p.clock.now = Date.parse("2026-10-03T21:31:00Z");
+          p.intervals.find((i) => i.ms === 60000).fn();
+          out({ boot, minute: c.stale });""")
+        self.assertEqual(r, {"boot": False, "minute": True})
 
 
 class Moments(unittest.TestCase):

@@ -121,8 +121,9 @@
        toolkit's "Send it as a message" uses (monthly.js mpMessage).
        stale: the page is last month's edition by now — its data-stale-after instant (midnight Central
        after the month it came out in) has passed: a copy built before the 1st (or a saved or offline one)
-       says which edition it is and that the next one comes out on the 1st — reload the page to see it.
-       Checked again when the tab comes back into view. */
+       says which edition it is and when the next one comes out. Checked now, every minute (a page left
+       open over midnight), and when the page is shown again (a tab brought back to the front, or a page
+       restored by the Back button). */
     Alpine.data("digestPage", function () {
       return {
         bi: false,
@@ -135,7 +136,9 @@
           var after = Date.parse(this.$el.getAttribute("data-stale-after") || "");
           var check = function () { self.stale = !isNaN(after) && Date.now() >= after; };
           check();
+          setInterval(check, 60000);
           document.addEventListener("visibilitychange", function () { if (!document.hidden) check(); });
+          window.addEventListener("pageshow", function (e) { if (e.persisted) check(); });
         },
         src: function (kind) { return "#digest-" + kind + "-" + (this.bi ? "bi" : "one"); },
       };
