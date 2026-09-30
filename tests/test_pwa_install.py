@@ -258,6 +258,22 @@ class Page(unittest.TestCase):
         self.assertTrue(r["listed"])
         self.assertNotIn('"/app/"', read("src", "pages", "sitemap.11ty.js"))
 
+    def test_the_site_search_finds_it(self):
+        # the site's own search: one entry for the page (library.js walks nav.footer), by its name, found by the
+        # words for saved pages AND for installing — and none for the old install page
+        r = run_js(self, r"""
+          const nav = (await imp("src/_data/nav.js")).default;
+          out(["en", "es"].map((lang) => JSON.parse(filters.searchIndexJson({}, nav, lang, {})).items.filter((e) => /^page:(offline|app)$/.test(e.id))));
+        """, env={"LIB_EMPTY": "1"})
+        en, es = r
+        self.assertEqual([e["id"] for e in en + es], ["page:offline", "page:offline"])
+        self.assertEqual((en[0]["t"], en[0]["u"], es[0]["t"], es[0]["u"]), ("Saved pages & app", "/offline/", "Páginas guardadas y app", "/es/offline/"))
+        for e in (en[0], es[0]):
+            for word in ("saved pages", "install", "home screen", "páginas guardadas", "instalar", "pantalla de inicio"):
+                self.assertIn(word, e["x"], word)
+        self.assertIn("as an app", en[0]["s"])
+        self.assertIn("como app", es[0]["s"])
+
     def test_sections_in_order_and_nothing_said_twice(self):
         # hero → the pages saved on this device → how it works offline → the install steps → why → good to know
         p = self.page

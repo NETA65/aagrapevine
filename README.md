@@ -231,7 +231,8 @@ The Bulletin was called *Announcements* (`/announcements/`); that address forwar
 Instagram and QR Post (`/share/`) are in the footer's *Stay updated* column, after the two magazine sites;
 accessibility, Saved pages & app (`/offline/`: the pages saved on the device and the steps to install the
 site), search and status in its bottom bar; the phone menu lists them all under *More*. The install steps
-used to be a page of their own; old links to it forward to `/offline/#steps`, `#guides` included.
+used to be a page of their own; old links to it forward to `/offline/#steps` (a guide's own `#anchor`,
+like `#android`, is kept).
 Each piece of information has one home page; other pages only link to it.
 
 **Wording on the site** (both languages): visitors read "document(s)" / "documento(s)", never "PDF", and
