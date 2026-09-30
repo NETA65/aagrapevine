@@ -1,12 +1,14 @@
-/* "Install as an app" — which phone and browser this is, which guide on /app/ fits it, and whether
-   the install notice may be offered now (src/pages/app.njk, src/assets/js/pwa.js).
+/* "Install as an app" — which phone and browser this is, which guide on /offline/ (the steps of
+   "Saved pages & app", src/pages/offline.njk) fits it, and whether the install notice may be offered
+   now (src/assets/js/pwa.js).
    Pure functions, no DOM, no storage: pwa.js owns localStorage, the notice, the Aa panel's install
-   row and the /app/ page; this file only knows about user-agent strings, a small record and clocks.
+   row and the steps on /offline/; this file only knows about user-agent strings, a small record and
+   clocks.
    Tested in Node by tests/test_pwa_install.py (the file runs in a vm context, as expenses-core.js
    and sw-core.js do). A plain script (no imports, ES2019): it defines window.GVInstall
    (globalThis.GVInstall in Node). Loaded by layouts/base.njk right before pwa.js; the service worker
    keeps it in its shell as an optional file — without it (a first offline visit) pwa.js makes every
-   install control a plain link to /app/.
+   install control a plain link to the steps (/offline/#steps).
 
    DETECT — detect(ua, env) → { os, phone, browser, version, inApp, app, guide, variant, canInstall }
    env (all optional): touch = navigator.maxTouchPoints · small = the screen's short side < 600px ·
@@ -23,9 +25,9 @@
      Facebook, Threads before Instagram (their user agents carry both) — or Telegram, or a web
      view with no browser around it (Android "; wv)", a real iPhone / iPad user agent without
      "Safari/"): inApp true, app = its name ("" when unknown), guide "in-app", canInstall false.
-     Those browsers can't install anything; /app/#in-app explains how to open the page in the phone's
-     browser. (Chrome Custom Tabs and Safari views opened from Gmail look exactly like Chrome and
-     Safari: the iPhone and Android guides carry an "opened from Gmail?" tip instead.)
+     Those browsers can't install anything; /offline/#in-app explains how to open the page in the
+     phone's browser. (Chrome Custom Tabs and Safari views opened from Gmail look exactly like Chrome
+     and Safari: the iPhone and Android guides carry an "opened from Gmail?" tip instead.)
    * iPhone / iPad, other browsers (Chrome, Edge, Firefox, Opera, Yandex, DuckDuckGo): guide
      "iphone-other"; they can add to the home screen from iOS 16.4 (an unknown version counts as new).
    * iPhone / iPad, Safari: guide "iphone"; variant = which button leads to Share, from Safari's own
@@ -40,12 +42,13 @@
    THE OFFER — offer(rec, ctx) → true when the install notice may show now. ctx: now (ms), phone,
    canInstall, inApp, installed (running as the app), knownInstalled (the app is on this device),
    prompt (the browser offers one-tap install), online, busy (another bar, panel or field is in use),
-   page (non-empty on /app/, the offline page, a noindex page), dwell (ms visible on this page),
-   touched (a tap, a key or a scroll on this page). Never on a computer, inside another app, in the
-   app itself, offline, while something else is up, on those pages, or once it is known to be
-   installed. Otherwise only after RULES.views page views (RULES.viewsWithPrompt when the browser
-   offers one-tap install), RULES.dwell on the page and a first touch; then at most RULES.maxShows
-   showings in all and RULES.maxNo "Not now"s, each followed by a quiet time.
+   page (non-empty on the offline page — the steps are there — and on a noindex page), dwell (ms
+   visible on this page), touched (a tap, a key or a scroll on this page). Never on a computer,
+   inside another app, in the app itself, offline, while something else is up, on those pages, or
+   once it is known to be installed. Otherwise only after RULES.views page views
+   (RULES.viewsWithPrompt when the browser offers one-tap install), RULES.dwell on the page and a
+   first touch; then at most RULES.maxShows showings in all and RULES.maxNo "Not now"s, each followed
+   by a quiet time.
 
    THE RECORD — localStorage "gvlv-app" = {v: 1, views, shown, no, quiet, app, done} (pwa.js reads
    and writes it; blocked storage means the notice is never offered, as a "Not now" could not be
@@ -57,8 +60,9 @@
      view(r)            one more page view
      shown(r, now)      the notice was shown: +1, quiet for RULES.quietAfterShow
      later(r, now)      "Not now" (or Escape): +1 no, quiet for RULES.quietAfterNo
-     guided(r, now)     the steps were shown ("Show me how", the Aa panel's "Install as an app", a
-                        visit to /app/): quiet for RULES.quietAfterNo
+     guided(r, now)     the steps were read ("Show me how", the Aa panel's "Install as an app", the
+                        steps on /offline/ reached — not a look at the saved pages above them):
+                        quiet for RULES.quietAfterNo
      opened(r, now)     the site runs as the installed app now
      done(r, now)       installed from this browser (appinstalled, or the prompt was accepted)
      notInstalled(r)    the browser offers one-tap install (beforeinstallprompt), which it only does

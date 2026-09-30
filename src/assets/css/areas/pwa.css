@@ -5,10 +5,11 @@
         turns it on while offline). html.pwa-imgs = "Show images" for the page being viewed.
      2. The top notice (offline / slow connection → a saved copy) and the bottom toast (a new
         version / images are off / the install notice).
-     3. The "Offline & app" part of the Aa panel (#pwa-slot) and the offline page's card slots.
+     3. The "Offline & app" part of the Aa panel (#pwa-slot) and the offline page's "Save key
+        pages" slot.
      4. The offline page's list of saved pages.
-     5. Install as an app: the /app/ page's guides and notes (src/pages/app.njk), the install
-        notice's app icon, and the links to /app/ hidden inside the installed app.
+     5. Install as an app: the guides and notes of the offline page's install steps
+        (src/pages/offline.njk, #steps) and the install notice's app icon.
    ===================================================================== */
 
 /* ---------- 1. Data saver ----------
@@ -146,7 +147,7 @@
 
 @media print { .pwa-bar, .pwa-toast { display: none !important; } }
 
-/* ---------- 3. "Offline & app" (#pwa-slot in the Aa panel; the offline page's card slots) ---------- */
+/* ---------- 3. "Offline & app" (#pwa-slot in the Aa panel; the offline page's "Save key pages" slot) ---------- */
 .pwa-slot-h { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; color: var(--c-ink); }
 .pwa-slot-h > .icon { color: var(--c-gv); }
 .pwa-line { display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.8125rem; line-height: 1.45; color: var(--c-muted); }
@@ -184,14 +185,13 @@
 
 /* ---------- 5. Install as an app ----------
    The install notice (pwa.js, toast kind "install") shows the app's own icon in its icon tile.
-   /app/ (src/pages/app.njk): one card per phone and browser, a <details> whose summary is a 56px
-   row — icon tile · title (then "Your device" on the guide pwa.js detected, wrapping under the
-   title's words on a narrow phone) · chevron; its steps are
-   numbered, and each one starts with the "key" to look for on the screen (.pwa-guide-key: a small
-   tile with the icon of that button, or the app's icon for "open it"). The notes above the guides
-   (.pwa-guide-note): inside another app (La Viña amber), you're using the app / it is already on
-   this device (vine green). Inside the installed app the links to /app/ go (the footer's and the
-   phone menu's, [data-pwa-app-link]): html.pwa-standalone (pwa.js) or the display mode itself. */
+   The offline page's install steps (src/pages/offline.njk, #steps): one card per phone and
+   browser, a <details> whose summary is a 56px row — icon tile · title (then "Your device" on the
+   guide pwa.js detected, wrapping under the title's words on a narrow phone) · chevron; its steps
+   are numbered, and each one starts with the "key" to look for on the screen (.pwa-guide-key: a
+   small tile with the icon of that button, or the app's icon for "open it"). The notes above the
+   guides (.pwa-guide-note): inside another app (La Viña amber), you're using the app / it is
+   already on this device (vine green). */
 .pwa-toast-app { background: none; overflow: hidden; border-radius: 0.625rem; }
 .pwa-toast-app > img { display: block; width: 100%; height: 100%; }
 
@@ -243,8 +243,6 @@
 .pwa-guide-note.is-ok > .icon { color: var(--c-vine); }
 .pwa-guide-notes { display: grid; gap: 0.75rem; margin-bottom: 0.75rem; }
 .pwa-guide-notes:not(:has(> :not([hidden]))) { display: none; }
-:root.pwa-standalone [data-pwa-app-link] { display: none !important; }
-@media (display-mode: standalone) { [data-pwa-app-link] { display: none !important; } }
 @media print {
   .pwa-guide-note, .pwa-guide-notes, .pwa-guide-chev { display: none !important; }
   .pwa-guide-os { break-inside: avoid; box-shadow: none; }

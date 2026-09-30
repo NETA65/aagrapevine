@@ -4,10 +4,11 @@
 //             and its app-shell cache — changes when the code does, not with each daily content sync
 //   base      the site's base path ("/AAGrapevine/" on GitHub Pages, "/" on a custom domain)
 //   shell     what is saved on install: styles, scripts, the two main fonts, the logo and app icons,
-//             and the two offline pages (/offline/, /es/offline/); `required` is the part without which
-//             the worker does not install (the browser tries again later) — install-core.js (which
-//             phone, the "Install as an app" notice's rules) is optional: without it pwa.js links to
-//             /app/ instead
+//             and the two offline pages (/offline/, /es/offline/ — "Saved pages & app", also the
+//             stand-in for a page not saved); `required` is the part without which the worker does
+//             not install (the browser tries again later) — install-core.js (which phone, the "Install
+//             as an app" notice's rules) is optional: without it pwa.js links to the steps
+//             (/offline/#steps) instead
 //   save      the pages "Save key pages for offline" keeps, in the visitor's language: home, Meetings,
 //             the Monthly toolkit hub (with the district report editor) and this month's page ({month},
 //             worked out in the worker — skipped when it is missing), Contribute, Shop, and

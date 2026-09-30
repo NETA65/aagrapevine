@@ -6,9 +6,10 @@ and Data saver").
                  maskable + iPhone icons are opaque and keep the mark inside the 80 % safe circle.
   * Strings    — src/_i18n/pwa.json: every key in English AND Spanish, within the length budgets of
                  the design spec; every pwa.* key the offline page uses exists.
-  * Pages      — the offline page is out of the sitemap/collections and noindex; base.njk links the
-                 manifest, loads install-core.js right before pwa.js and versions styles/scripts with
-                 build.version. (Installing as an app — /app/, install-core.js, the notice: test_pwa_install.)
+  * Pages      — the offline page ("Saved pages & app") is a page like the others: in the sitemap and
+                 the collections, indexed; base.njk links the manifest, loads install-core.js right before
+                 pwa.js and versions styles/scripts with build.version. (Installing as an app — the steps
+                 on /offline/, install-core.js, the notice, the stand-in's script: test_pwa_install.)
   * Worker     — sw-core.js only handles GET requests to our own origin, revalidates navigations,
                  never skips waiting on its own, and keeps visitors' saved pages across versions.
 
@@ -91,7 +92,7 @@ class Strings(unittest.TestCase):
 
     def test_length_budgets(self):
         # design spec §1.2 / §1.18: hero subtitle 110 / 135, eyebrow 32 / 38 characters
-        for key in ("pwa.offline.sub", "pwa.offline.sub_online"):
+        for key in ("pwa.offline.sub", "pwa.offline.sub_online", "pwa.offline.sub_direct"):
             self.assertLessEqual(len(self.pwa[key]["en"]), 110, key)
             self.assertLessEqual(len(self.pwa[key]["es"]), 135, key)
         self.assertLessEqual(len(self.pwa["pwa.offline.eyebrow"]["en"]), 32)
@@ -109,13 +110,18 @@ class Strings(unittest.TestCase):
 
 
 class Pages(unittest.TestCase):
-    def test_offline_page_is_hidden_from_sitemap_and_search_engines(self):
+    def test_offline_page_is_a_page_like_the_others(self):
+        # "Saved pages & app" holds the steps to install the site: in the sitemap and the collections, indexed
+        # (canonical + hreflang) — the worker's stand-in copy only exists on a visitor's device
         src = read("src", "pages", "offline.njk")
-        self.assertRegex(src, r"(?m)^sitemap: false$")
-        self.assertRegex(src, r"(?m)^eleventyExcludeFromCollections: true$")
+        self.assertNotRegex(src, r"(?m)^sitemap: false$")
+        self.assertNotRegex(src, r"(?m)^eleventyExcludeFromCollections: true$")
         self.assertRegex(src, r"(?m)^pageKey: offline$")
         base = read("src", "_includes", "layouts", "base.njk")
-        self.assertIn('pageKey == "offline"', base)
+        self.assertNotIn('pageKey == "offline"', base)
+        noindex = base[base.index("{%- if pageKey == \"404\" %}"):base.index("{%- else %}", base.index("{%- if pageKey == \"404\" %}"))]
+        self.assertIn('<meta name="robots" content="noindex">', noindex)
+        self.assertIn('"/offline/"', read("src", "pages", "sitemap.11ty.js"))       # REQUIRED there (test_pwa_install)
 
     def test_base_layout_wiring(self):
         base = read("src", "_includes", "layouts", "base.njk")
@@ -165,7 +171,7 @@ class Worker(unittest.TestCase):
     def test_template_config(self):
         for needle in ('permalink: "/sw.js"', "offline.en, offline.es", '"monthly/{month}/"', '"meetings/"', '"contribute/"', '"shop/"'):
             self.assertIn(needle, self.tpl)
-        # install-core.js is in the shell but optional: without it pwa.js links to /app/
+        # install-core.js is in the shell but optional: without it pwa.js links to the steps (/offline/#steps)
         self.assertIn("a(`assets/js/install-core.js?v=${v}`)", self.tpl)
         self.assertNotIn("install-core", re.search(r"const required = \[(.*?)\];", self.tpl, re.S).group(1))
 

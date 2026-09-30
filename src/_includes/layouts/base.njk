@@ -48,10 +48,13 @@
   </script>
   <title>{{ fullTitle }}</title>
   <meta name="description" content="{{ desc }}">
-  {%- if pageKey == "404" or pageKey == "offline" %}
+  {%- if pageKey == "404" %}
   {#- "Page not found" is served for every missing address; fetched directly as /404.html it
       answers 200, so keep it out of search results and don't claim a canonical URL for it.
-      The offline page (/offline/) is the service worker's stand-in for pages not saved yet. #}
+      (The offline page, /offline/, is a page like the others — "Saved pages & app", with the
+      steps to install the site —, so it is indexed with its canonical and hreflang links: the
+      service worker's stand-in copy of it, shown for a page not saved yet, only ever exists on a
+      visitor's device, where no search engine reads it.) #}
   <meta name="robots" content="noindex">
   {%- else %}
   <link rel="canonical" href="{{ page.url | siteUrl(site) }}">
@@ -127,8 +130,9 @@
   {% include "partials/footer.njk" %}
 
   <script src="/assets/js/app.js?v={{ build.version }}" defer></script>
-  {#- install-core.js: which phone and browser, the /app/ guide for it and the install notice's rules
-      (window.GVInstall) — right before pwa.js, which draws them (without it: plain links to /app/). #}
+  {#- install-core.js: which phone and browser, the /offline/ guide for it and the install notice's
+      rules (window.GVInstall) — right before pwa.js, which draws them (without it: plain links to
+      the steps, /offline/#steps). #}
   <script src="/assets/js/install-core.js?v={{ build.version }}" defer></script>
   <script src="/assets/js/pwa.js?v={{ build.version }}" defer></script>
   <script src="/assets/js/hero-canvas.js?v={{ build.version }}" defer></script>

@@ -1,18 +1,32 @@
-"""Install the site as an app (/app/, src/pages/app.njk; src/assets/js/install-core.js; the install parts of
-src/assets/js/pwa.js) — the checks that need no browser. (The browser checks — the notice on an Android
-Chrome with the real prompt, the iPhone / Samsung / Firefox / in-app user agents, the installed app,
-keyboard and focus, 320–1280 px at 150 % text / relaxed spacing / high contrast, axe — are QA scripts.)
+"""Install the site as an app (the steps on Saved pages & app, /offline/#steps, src/pages/offline.njk;
+src/assets/js/install-core.js; the install parts of src/assets/js/pwa.js) — the checks that need no
+browser. (The browser checks — the notice on an Android Chrome with the real prompt, the iPhone / Samsung /
+Firefox / in-app user agents, the installed app, the offline stand-in, keyboard and focus, 320–1280 px at
+150 % text / relaxed spacing / high contrast, axe — are QA scripts.)
 
-  * Strings   — every pwa.app.* key in English AND Spanish, used by the page and none left over; the
+  * Strings   — every pwa.app.* key in English AND Spanish, used by the pages and none left over; the
                 length budgets; the platforms' own words as their help pages print them today (EN and
                 Latin-American ES — re-check them every September and after big Chrome releases); menus
                 named in words, never ⋮ ≡ •••; no "PDF", no words about how the site is kept up to date;
-                the {app} and {a} {b} {c} placeholders in both languages; each key in one i18n file only.
-  * Page      — /app/ + /es/app/ (front matter, in the sitemap and the search), the seven guides in
-                order, the data-attribute contract with pwa.js, Safari's step-1 versions, the official
-                help links and the magazines' apps from config/site.yml, the Android shortcuts named as
-                in the manifest, "Install as an app" the first of the site's own links in the footer's
-                "Stay updated" (after the two magazine sites), the local safari-menu icon.
+                the {app} and {a} {b} {c} placeholders in both languages; each key in one i18n file only;
+                the page's name "Saved pages & app" and its search words (saved pages AND installing);
+                the hero's install link and button name the app; a meeting ID wraps between its groups.
+  * Page      — /offline/ + /es/offline/, the one page with the steps (front matter, in the sitemap, the
+                search and search engines), its sections in order with nothing said twice, the seven
+                guides in order, the data-attribute contract with pwa.js, Safari's step-1 versions, the
+                official help links and the magazines' apps from config/site.yml, the Android shortcuts
+                named as in the manifest, one footer entry (the bottom bar's "Saved pages & app", no
+                "Install as an app" in "Stay updated"), the Accessibility page's one link, the local
+                safari-menu icon.
+  * Stand-in  — the script after the hero's buttons (inside the hero), run in Node against a pretend
+                page: standing in for a page that isn't saved it says "You're offline" (hero and tab
+                title), leaves "Try again" alone and takes the address's #fragment off (/gvr/#steps: the
+                page has a #steps of its own), kept for pwa.js to put back before reloading; opened on
+                purpose (index.html included) it changes nothing — reloaded or Back, the #fragment is off
+                the address while the page loads (Chrome would jump to it before putting the visitor back
+                where they were); pwa.js tells standing in the same way.
+  * Redirect  — the old install page's address (src/pages/app-redirect.njk) forwards to /offline/ with
+                the ?query and the #guide, #steps without one; noindex, canonical, out of the sitemap.
   * Manifest  — both manifests name each other as related_applications (getInstalledRelatedApps),
                 prefer_related_applications stays false, id / scope / start_url / display unchanged
                 (Node.js, as the build renders them).
@@ -27,8 +41,12 @@ keyboard and focus, 320–1280 px at 150 % text / relaxed spacing / high contras
   * Wiring    — base.njk loads install-core.js right before pwa.js; the worker keeps it as optional;
                 pwa.js keeps the browser's prompt for its own buttons, catches a refused prompt, uses
                 localStorage "gvlv-app", leaves automated browsers alone, asks getInstalledRelatedApps,
-                has the "install" toast with Not now / Show me how; pwa.css; the footer / phone-menu
-                links hidden in the installed app; the offline page's link without JavaScript.
+                has the "install" toast with Not now / Show me how (and "Not now" names the page the steps
+                are on); every install link goes to /offline/, the hero's buttons give way to "Try again"
+                on the stand-in, a #guide asked for stays on screen as the saved list fills in (on arrival,
+                not after a reload or Back), forwarding pages are not listed, the steps count as read (the
+                notice's 30 days of quiet) only once reached, the installed app opens no guide; pwa.css;
+                nothing left of the old page (no /app/ anywhere but its forwarding stub).
 
     python -m unittest tests.test_pwa_install -v        (or: python -m unittest discover -s tests)
 """
@@ -48,6 +66,8 @@ from nodejs import run_js  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 DAY = 864e5
 GUIDES = ["iphone", "iphone-other", "android", "samsung", "android-other", "in-app", "computer"]
+PAGE = ("src", "pages", "offline.njk")            # Saved pages & app: the install steps are its #steps
+STUB = ("src", "pages", "app-redirect.njk")       # the old install page's address
 
 
 def read(*parts: str) -> str:
@@ -93,32 +113,54 @@ class Strings(unittest.TestCase):
 
     def test_every_key_in_both_languages(self):
         keys = app_keys()
-        self.assertEqual(len(keys), 79)
+        self.assertEqual(len(keys), 74)
         for key, v in keys.items():
             with self.subTest(key=key):
                 self.assertTrue((v.get("en") or "").strip())
                 self.assertTrue((v.get("es") or "").strip())
                 self.assertEqual(set(v), {"en", "es"})
 
-    def test_the_page_uses_every_key_and_no_other(self):
-        page = read("src", "pages", "app.njk")
-        used = set(re.findall(r"""["'](pwa\.app\.[a-z0-9_]+)["']""", page))
-        used |= set(re.findall(r"(?m)^(?:titleKey|descKey): (pwa\.app\.[a-z0-9_]+)$", page))
+    def test_the_pages_use_every_key_and_no_other(self):
+        # the steps on /offline/, and the old address's "moved" line
+        pages = read(*PAGE) + read(*STUB)
+        used = set(re.findall(r"""["'](pwa\.app\.[a-z0-9_]+)["']""", pages))
         keys = set(app_keys())
-        self.assertEqual(used - keys, set(), "keys the page uses that pwa.json lacks")
+        self.assertEqual(used - keys, set(), "keys the pages use that pwa.json lacks")
         self.assertEqual(keys - used, set(), "pwa.app.* keys nothing uses")
+        self.assertIn('"pwa.app.moved_text"', read(*STUB))
 
     def test_length_budgets(self):
+        # (the hero's subtitle and eyebrow are the offline page's: tests/test_pwa.py)
         s = pwa_strings()
         common = json.loads(read("src", "_i18n", "common.json"))
-        budgets = {"pwa.app.sub": (110, 135), "pwa.app.eyebrow": (32, 38),
-                   **{k: (24, 28) for k in ("pwa.app.cta_steps", "pwa.app.cta_install", "pwa.app.cta_send", "pwa.app.copy_link")}}
+        budgets = {k: (24, 28) for k in ("pwa.app.cta_steps", "pwa.app.cta_install", "pwa.app.cta_send", "pwa.app.copy_link")}
         for key, (en, es) in budgets.items():
             with self.subTest(key=key):
                 self.assertLessEqual(len(s[key]["en"]), en)
                 self.assertLessEqual(len(s[key]["es"]), es)
-        self.assertLessEqual(len(common["nav.app"]["en"]), 24)
-        self.assertLessEqual(len(common["nav.app"]["es"]), 28)
+        # the page's name: the footer's bottom bar and the phone menu
+        self.assertLessEqual(len(common["nav.offline"]["en"]), 24)
+        self.assertLessEqual(len(common["nav.offline"]["es"]), 28)
+
+    def test_the_hero_buttons_name_the_app(self):
+        # the hero's title is the whole page's ("Saved pages & app"): its install link and one-tap button say what
+        # they do on their own (a screen reader's list of links and buttons, WCAG 2.4.4 / 2.4.6)
+        s = pwa_strings()
+        self.assertEqual(s["pwa.app.cta_steps"], {"en": "How to install the app", "es": "Cómo instalar la app"})
+        self.assertEqual(s["pwa.app.cta_install"], {"en": "Install the app", "es": "Instalar la app"})
+
+    def test_a_meeting_id_breaks_between_its_groups(self):
+        # the hero's "Join by phone" card: the ID keeps a line of its own where it fits (an inline-block) and a narrow
+        # phone at 150 % text wraps it only between its digit groups ("871 2036" / "8287"), never inside one — and
+        # "ID" stays with the number (a no-break space)
+        s = pwa_strings()
+        self.assertEqual(s["pwa.offline.phone_call"], {"en": "Call now ({city})", "es": "Llamar ahora ({city})"})
+        self.assertEqual(s["pwa.offline.phone_id"], {"en": "ID\u00a0{id}", "es": "ID\u00a0{id}"})
+        page = read(*PAGE)
+        self.assertIn('''{%- set callText = (("pwa.offline.phone_call" | t(lang, { city: mt.callCity })) | escape) ~ " · " ~ '''
+                      '''\'<span class="inline-block">\' ~ (("pwa.offline.phone_id" | t(lang, { id: mt.id })) | escape) ~ "</span>" %}''', page)
+        self.assertIn("text: callText | safe,", page)
+        self.assertNotIn("mt.id | replace(", page)                                    # (the whole ID one word: broken anywhere)
 
     def test_the_platforms_own_words(self):
         s = pwa_strings()
@@ -156,7 +198,7 @@ class Strings(unittest.TestCase):
 
     def test_whatsapp_tip_says_both_cases(self):
         # WhatsApp opens links in the phone's browser OR in its own window (WAiOS / WA4A): the tip says both,
-        # and /app/ hides it inside WhatsApp's own window (Page.test_data_attribute_contract)
+        # and the steps hide it inside WhatsApp's own window (Page.test_data_attribute_contract)
         tip = pwa_strings()["pwa.app.inapp_whatsapp"]
         self.assertIn("browser", tip["en"])
         self.assertIn("its own window", tip["en"])
@@ -175,51 +217,59 @@ class Strings(unittest.TestCase):
 
     def test_each_key_lives_in_one_file(self):
         # eleventy.config.js merges every src/_i18n/*.json: a key in two files would silently override
-        mine = set(app_keys()) | {"nav.app", "nav.offline", "search.page_desc.app", "search.kw.app", "access.f_offline_cta"}
+        mine = set(app_keys()) | {"nav.offline", "search.page_desc.offline", "search.kw.offline"}
+        # …and the old install page's own keys are gone (its title is the page's, its words /offline/'s)
+        gone = {"nav.app", "search.page_desc.app", "search.kw.app", "access.f_offline_cta", "pwa.offline.page_title",
+                "pwa.offline.title_online", "pwa.app.meta_desc", "pwa.app.eyebrow", "pwa.app.sub", "pwa.app.steps_h"}
         seen = {}
         for f in sorted((ROOT / "src" / "_i18n").glob("*.json")):
             for k in json.loads(f.read_text(encoding="utf-8")):
-                if k in mine:
+                if k in mine or k in gone:
                     seen.setdefault(k, []).append(f.name)
         for k in sorted(mine):
             with self.subTest(key=k):
                 self.assertEqual(len(seen.get(k, [])), 1, seen.get(k))
+        self.assertEqual({k: v for k, v in seen.items() if k in gone}, {})
 
     def test_labels_and_search_words(self):
         common = json.loads(read("src", "_i18n", "common.json"))
         access = json.loads(read("src", "_i18n", "access.json"))
-        self.assertEqual(common["nav.app"], {"en": "Install as an app", "es": "Instalar como app"})
-        self.assertEqual(common["nav.offline"], {"en": "Saved pages", "es": "Páginas guardadas"})
-        self.assertEqual(access["access.f_offline_cta"], {"en": "Saved pages", "es": "Páginas guardadas"})
-        for k in ("search.page_desc.app", "search.kw.app"):
-            self.assertTrue(access[k]["en"] and access[k]["es"], k)
-        self.assertIn("home screen", access["search.kw.app"]["en"])
-        self.assertIn("pantalla de inicio", access["search.kw.app"]["es"])
-        # installing has its own page now: /offline/'s search words are about saved pages only
-        self.assertNotIn("install", access["search.kw.offline"]["en"])
-        self.assertNotIn("instalar", access["search.kw.offline"]["es"])
-        self.assertNotIn("app", access["search.page_desc.offline"]["en"])
+        # the page's name, as it was before the install steps had a page of their own
+        self.assertEqual(common["nav.offline"], {"en": "Saved pages & app", "es": "Páginas guardadas y app"})
+        # one page for both: the site's search finds it by saved pages AND by installing
+        kw, desc = access["search.kw.offline"], access["search.page_desc.offline"]
+        for word in ("saved pages", "offline", "data saver", "install", "home screen", "iphone", "android", "pwa"):
+            self.assertIn(word, kw["en"], word)
+        for word in ("páginas guardadas", "sin conexión", "ahorro de datos", "instalar", "pantalla de inicio", "iphone", "android", "celular"):
+            self.assertIn(word, kw["es"], word)
+        self.assertIn("as an app", desc["en"])
+        self.assertIn("como app", desc["es"])
 
 
 class Page(unittest.TestCase):
     def setUp(self):
-        self.page = read("src", "pages", "app.njk")
+        self.page = read(*PAGE)
 
     def test_front_matter(self):
         fm = re.match(r"---\n(.*?)\n---\n", self.page, re.S).group(1)
         self.assertIn("pagination: { data: languages, size: 1, alias: lang }", fm)
-        self.assertIn("""permalink: "{{ '/' if lang == 'en' else '/es/' }}app/index.html\"""", fm)
+        self.assertIn("""permalink: "{{ '/' if lang == 'en' else '/es/' }}offline/index.html\"""", fm)
         self.assertRegex(fm, r"(?m)^layout: layouts/base\.njk$")
-        self.assertRegex(fm, r"(?m)^pageKey: app$")
-        self.assertRegex(fm, r"(?m)^titleKey: pwa\.app\.title$")
-        self.assertRegex(fm, r"(?m)^descKey: pwa\.app\.meta_desc$")
-        # a page to share and to find: in the sitemap, the collections and the search
+        self.assertRegex(fm, r"(?m)^pageKey: offline$")
+        self.assertRegex(fm, r"(?m)^titleKey: nav\.offline$")                   # "Saved pages & app": nav, <title>, hero
+        self.assertRegex(fm, r"(?m)^descKey: pwa\.offline\.meta_desc$")
+        # a page to share and to find: in the sitemap, the collections and the search — and never noindex
         self.assertNotIn("sitemap: false", fm)
         self.assertNotIn("eleventyExcludeFromCollections", fm)
-        self.assertNotIn('pageKey == "app"', read("src", "_includes", "layouts", "base.njk"))   # never noindex
+        base = read("src", "_includes", "layouts", "base.njk")
+        self.assertNotIn('pageKey == "offline"', base)
+        self.assertIn('{%- if pageKey == "404" %}', base)
+        self.assertIn("so it is indexed with its canonical and hreflang links", base)   # (and the comment says why)
+        # the page it replaces is gone: its address is a forwarding stub (Redirect)
+        self.assertFalse(ROOT.joinpath("src", "pages", "app.njk").exists())
 
     def test_the_sitemap_requires_it(self):
-        # src/pages/sitemap.11ty.js REQUIRED: a build that lost /app/ or /es/app/ (renamed, excluded by
+        # src/pages/sitemap.11ty.js REQUIRED: a build that lost /offline/ or /es/offline/ (renamed, excluded by
         # mistake) says so in its log; with both, the sitemap lists them and says nothing
         r = run_js(self, r"""
           const m = await imp("src/pages/sitemap.11ty.js");
@@ -228,11 +278,54 @@ class Page(unittest.TestCase):
           const page = (u) => ({ url: u, data: {} });
           const all = ["/", "/whats-new/", "/published/", "/read/", "/monthly/", "/digest/"].flatMap((u) => [page(u), page("/es" + u)]);
           m.render({ site: { url: "https://x.test" }, collections: { all } });
-          const xml = m.render({ site: { url: "https://x.test" }, collections: { all: [...all, page("/app/"), page("/es/app/")] } });
-          out({ warned, listed: xml.includes("<loc>https://x.test/app/</loc>") && xml.includes("<loc>https://x.test/es/app/</loc>") });""",
+          const xml = m.render({ site: { url: "https://x.test" }, collections: { all: [...all, page("/offline/"), page("/es/offline/")] } });
+          out({ warned, listed: xml.includes("<loc>https://x.test/offline/</loc>") && xml.includes("<loc>https://x.test/es/offline/</loc>") });""",
                    needs_modules=False, env={"ONLY": ""})
-        self.assertEqual(r["warned"], ["[sitemap] missing page(s): /app/, /es/app/"])
+        self.assertEqual(r["warned"], ["[sitemap] missing page(s): /offline/, /es/offline/"])
         self.assertTrue(r["listed"])
+        self.assertNotIn('"/app/"', read("src", "pages", "sitemap.11ty.js"))
+
+    def test_the_site_search_finds_it(self):
+        # the site's own search: one entry for the page (library.js walks nav.footer), by its name, found by the
+        # words for saved pages AND for installing — and none for the old install page
+        r = run_js(self, r"""
+          const nav = (await imp("src/_data/nav.js")).default;
+          out(["en", "es"].map((lang) => JSON.parse(filters.searchIndexJson({}, nav, lang, {})).items.filter((e) => /^page:(offline|app)$/.test(e.id))));
+        """, env={"LIB_EMPTY": "1"})
+        en, es = r
+        self.assertEqual([e["id"] for e in en + es], ["page:offline", "page:offline"])
+        self.assertEqual((en[0]["t"], en[0]["u"], es[0]["t"], es[0]["u"]), ("Saved pages & app", "/offline/", "Páginas guardadas y app", "/es/offline/"))
+        for e in (en[0], es[0]):
+            for word in ("saved pages", "install", "home screen", "páginas guardadas", "instalar", "pantalla de inicio"):
+                self.assertIn(word, e["x"], word)
+        self.assertIn("as an app", en[0]["s"])
+        self.assertIn("como app", es[0]["s"])
+
+    def test_sections_in_order_and_nothing_said_twice(self):
+        # hero → the pages saved on this device → how it works offline → the install steps → why → good to know
+        p = self.page
+        order = [p.index("ui.pageHero(lang, \"nav.offline\" | t(lang)"), p.index('aria-labelledby="pwa-saved-h"'),
+                 p.index('aria-labelledby="pwa-how-h"'), p.index('<section id="steps"'), p.index('aria-labelledby="app-why-h"'),
+                 p.index('aria-labelledby="app-more-h"')]
+        self.assertEqual(order, sorted(order))
+        # one install card, not two: the hero's buttons and the steps (the "how" cards: kept pages, Save key
+        # pages, Data saver); "works with a weak signal" is the "how" section, not a "why" card too
+        how = p[p.index("{%- set how = ["):p.index("] -%}", p.index("{%- set how = ["))]
+        self.assertEqual(re.findall(r'h: "(pwa\.offline\.how\d_h)"', how), ["pwa.offline.how1_h", "pwa.offline.how2_h", "pwa.offline.how3_h"])
+        self.assertEqual(how.count("save: true"), 1)
+        self.assertNotIn("install", how)
+        why = p[p.index("{%- set why = ["):p.index("] -%}", p.index("{%- set why = ["))]
+        self.assertEqual(re.findall(r'h: "(pwa\.app\.why\d_h)"', why), ["pwa.app.why1_h", "pwa.app.why2_h", "pwa.app.why3_h"])
+        self.assertNotIn("wifi-off", why)
+        self.assertIsNone(re.search(r"data-pwa-install(?![-\w])", p))           # no install slot on the page
+        self.assertNotIn("'/offline/' | lurl", p)                                # never a link to itself
+        s = pwa_strings()
+        self.assertEqual(s["pwa.offline.how3_h"]["en"], "Use less data")
+        self.assertEqual(s["pwa.app.why2_h"]["en"], "In your language")
+        for k in ("pwa.offline.how4_h", "pwa.offline.how4_t", "pwa.app.why4_h", "pwa.app.why4_t"):
+            self.assertNotIn(k, s)
+        # the steps' own heading: the old page's title
+        self.assertIn('ui.sectionHead("pwa.app.title" | t(lang), "pwa.app.steps_sub" | t(lang)', p)
 
     def test_seven_guides_in_order(self):
         block = self.page[self.page.index("{%- set guides = ["):self.page.index("{%- set why = [")]
@@ -243,10 +336,19 @@ class Page(unittest.TestCase):
 
     def test_data_attribute_contract(self):
         p = self.page
-        self.assertRegex(p, r'<section id="steps" class="section container-page" aria-labelledby="app-steps-h" data-pwa-app>')
+        self.assertRegex(p, r'<section id="steps" class="section container-page pt-0" aria-labelledby="app-steps-h" data-pwa-app>')
         self.assertRegex(p, r'<span class="pwa-guide-title min-w-0 flex-1">\{\{ g\.h \| t\(lang\) \}\} <span class="badge-vine pwa-guide-here" data-pwa-here hidden>')
-        self.assertRegex(p, r'<a class="btn-light" href="#steps" data-pwa-steps-link>')
-        self.assertRegex(p, r'<button type="button" class="btn-light" data-pwa-act="install" data-pwa-install-hero hidden>')
+        # the hero: "Try again" (hidden: the stand-in shows it), "How to install the app", the one-tap "Install the app",
+        # "Send this page"
+        hero = p[p.index("<div class=\"hero-actions\" data-pwa-offline-copy"):p.index("</div>", p.index("<div class=\"hero-actions\" data-pwa-offline-copy"))]
+        for attr in ("data-title-standin=\"{{ 'pwa.offline.title' | t(lang) }}\"", "data-sub-standin=\"{{ 'pwa.offline.sub' | t(lang) }}\"",
+                     "data-sub-online=\"{{ 'pwa.offline.sub_online' | t(lang) }}\"", "data-sub-offline=\"{{ 'pwa.offline.sub_direct' | t(lang) }}\""):
+            self.assertIn(attr, hero)
+        self.assertRegex(hero, r'<a class="btn-light" href="[^"]*" data-pwa-retry hidden>')
+        self.assertRegex(hero, r'<a class="btn-light" href="#steps" data-pwa-steps-link>')
+        self.assertRegex(hero, r'<button type="button" class="btn-light" data-pwa-act="install" data-pwa-install-hero hidden>')
+        self.assertRegex(hero, r'<button type="button" class="btn-on-dark" data-js-only data-share="\{\{ appUrl \}\}" data-share-title="\{\{ \'pwa\.app\.title\' \| t\(lang\) \}\}"')
+        self.assertIn('"pwa.offline.sub_online" | t(lang)', p[p.index("ui.pageHero("):p.index("ui.pageHero(") + 200])   # the static subtitle
         self.assertRegex(p, r'data-pwa-inapp data-t="\{\{ \'pwa\.app\.inapp_now\' \| t\(lang\) \}\}" data-t-other="\{\{ \'pwa\.app\.inapp_other\' \| t\(lang\) \}\}" hidden>')
         self.assertIn("data-pwa-inapp-text", p)
         self.assertRegex(p, r'class="pwa-guide-note is-ok" data-pwa-using hidden>')
@@ -257,11 +359,10 @@ class Page(unittest.TestCase):
         self.assertEqual(re.findall(r'\["(any|27|26|share)"', v), ["any", "27", "26", "share"])
         self.assertIn('["27", "safari-menu", "pwa.app.ios_1_27", "pwa.app.ios_share_tip"]', v)
         self.assertIn('["26", "circle-ellipsis", "pwa.app.ios_1_26", "pwa.app.ios_share_tip"]', v)
-        # the Copy / Send buttons carry this page's full address (JavaScript only; the address as text without it)
-        self.assertIn("{%- set appUrl = page.url | siteUrl(site) -%}", p)
+        # the Copy / Send buttons carry the steps' full address (JavaScript only; the address as text without it)
+        self.assertIn('{%- set appUrl = (page.url | siteUrl(site)) + "#steps" -%}', p)
         self.assertRegex(p, r'data-js-only data-copy="\{\{ appUrl \}\}"')
         self.assertRegex(p, r'data-nojs-only>\{\{ appUrl \}\}<')
-        self.assertRegex(p, r'class="btn-on-dark" data-js-only data-share="\{\{ appUrl \}\}"')
         # a tip hidden inside one app's own browser (the WhatsApp tip inside WhatsApp: the note says it already),
         # by the app's name as install-core.js gives it
         self.assertIn('tips: [{ k: "pwa.app.inapp_whatsapp", notIn: "WhatsApp" }]', p)
@@ -273,6 +374,10 @@ class Page(unittest.TestCase):
         self.assertIn('<span class="step-num" aria-hidden="true">{{ n }}</span>', p)
         self.assertIn('<span class="sr-only">{{ n }}. </span>', p)
         self.assertIn('<span class="pwa-guide-key" aria-hidden="true">', p)
+        # the saved pages come first after the hero (pwa.js offlineList) and "Save key pages" has its slot
+        self.assertIn('<section class="container-page page-overlap" aria-labelledby="pwa-saved-h">', p)
+        self.assertIn("data-pwa-saved", p)
+        self.assertIn('<div class="pwa-card-slot mt-auto empty:hidden" data-pwa-save></div>', p)
 
     def test_links_from_site_settings(self):
         p = self.page
@@ -284,7 +389,7 @@ class Page(unittest.TestCase):
         self.assertIn("/es-mx/", links["app_help_iphone_es"])
         self.assertIn("hl=es-419", links["app_help_android_es"])
         self.assertIn("[[ln.gv_apps, \"media.short_gv_app\", \"en\"], [ln.lv_apps, \"media.short_lv_app\", \"es\"]]", p)
-        self.assertIn('magApps | reverse if lang == "es"', p)                      # La Viña first on /es/app/
+        self.assertIn('magApps | reverse if lang == "es"', p)                      # La Viña first on /es/offline/
 
     def test_shortcuts_named_as_in_the_manifest(self):
         manifest = read("src", "pages", "manifest.11ty.js")
@@ -294,25 +399,207 @@ class Page(unittest.TestCase):
         self.assertIsNotNone(m)
         self.assertEqual(list(m.groups()), keys)
 
-    def test_footer_entry_and_icon(self):
+    def test_one_footer_entry_and_the_icon(self):
+        # the footer stays uniform: "Stay updated" holds Instagram and QR Post only; the page is the bottom
+        # bar's "Saved pages & app" (group "site"), which the phone menu's "More" lists too
         nav = read("src", "_data", "nav.js")
-        self.assertIn('{ key: "nav.app", url: "/app/", page: "app", icon: "smartphone", group: "stay" }', nav)
-        self.assertEqual(re.findall(r'key: "(nav\.\w+)"[^}]*group: "stay"', nav)[0], "nav.app")
+        self.assertIn('{ key: "nav.offline", url: "/offline/", page: "offline", icon: "hard-drive-download", group: "site" }', nav)
+        self.assertEqual(re.findall(r'key: "(nav\.\w+)"[^}]*group: "stay"', nav), ["nav.instagram", "nav.share"])
+        self.assertEqual(len(re.findall(r'url: "/offline/"', nav)), 1)
+        self.assertNotIn("nav.app", nav)
+        footer = read("src", "_includes", "partials", "footer.njk")
+        header = read("src", "_includes", "partials", "header.njk")
+        for part in (footer, header):
+            self.assertNotIn("data-pwa-app-link", part)
+            self.assertNotIn('f.page == "app"', part)
         svg = read("src", "_includes", "icons", "safari-menu.svg")
         for d in ("M4 6h16", "M4 12h16", "M4 18h10"):
             self.assertIn(f'<path d="{d}"/>', svg)
         self.assertIn('viewBox="0 0 24 24"', svg)
         self.assertIn('stroke="currentColor"', svg)
 
-    def test_accessibility_and_offline_pages_link_here(self):
+    def test_the_accessibility_page_links_here_once(self):
         acc = read("src", "pages", "accessibility.njk")
-        card = acc[acc.index("Saved pages and the app (feature 14)"):acc.index("</li>", acc.index("Saved pages and the app (feature 14)"))]
-        self.assertIn("{{ '/offline/' | lurl(lang) }}", card)
-        self.assertIn("{{ '/app/' | lurl(lang) }}", card)
-        self.assertNotIn("after:absolute", card)                                  # two real links, no whole-card overlay
-        off = read("src", "pages", "offline.njk")
-        self.assertIn("data-pwa-install", off)
-        self.assertIn("""<a class="link tap-link mt-auto" data-nojs-only href="{{ '/app/' | lurl(lang) }}">{{ 'nav.app' | t(lang) }}</a>""", off)
+        at = acc.index("Saved pages and the app (feature 14)")
+        card = acc[at:acc.index("</li>", at)]
+        self.assertEqual(re.findall(r'href="([^"]+)"', card), ["{{ '/offline/' | lurl(lang) }}"])   # one real link…
+        self.assertIn('{{ "nav.offline" | t(lang) }}', card)                                      # …by the page's name
+        self.assertNotIn("after:absolute", card)
+
+
+# Runs the script the offline page puts after its hero's buttons (it is the page's own, so the test takes it
+# from the template) against a pretend page: input = [{ path, search, hash, nav, own, title }] → what each run changed
+# (beforeLoad: the addresses it set as the page was read; replaced: those and the ones set at load).
+STAND_IN = r"""
+import vm from "node:vm";
+const src = fs.readFileSync("src/pages/offline.njk", "utf8");
+const m = /<script>(\(function \(box\) \{[\s\S]*?\}\)\(document\.querySelector\("\[data-pwa-offline-copy\]"\)\);)<\/script>/.exec(src);
+if (!m) throw new Error("the stand-in script is not there");
+out(input.map((c) => {
+  const el = (attrs, extra) => Object.assign({ hidden: "hidden" in attrs, attrs: Object.assign({}, attrs),
+    hasAttribute(n) { return n in this.attrs; }, getAttribute(n) { return n in this.attrs ? this.attrs[n] : null; },
+    setAttribute(n, v) { this.attrs[n] = String(v); }, removeAttribute(n) { delete this.attrs[n]; } }, extra || {});
+  const retry = el({ href: "/AAGrapevine/", "data-pwa-retry": "", hidden: "" });
+  const kids = [retry, el({ href: "#steps", "data-pwa-steps-link": "" }), el({ "data-pwa-install-hero": "", hidden: "" }), el({ "data-share": "x" })];
+  const h1 = { textContent: "Saved pages & app" }, sub = { textContent: "The pages saved on this device open…" };
+  const hero = { querySelector: (q) => (q === ".gv-hero-title > span:last-child" ? h1 : q === ".gv-hero-sub" ? sub : null) };
+  const box = el({ "data-title-standin": "You're offline", "data-sub-standin": "This page isn't saved…" }, {
+    children: kids, closest: (q) => (q === "[data-gv-hero]" ? hero : null),
+    querySelector: (q) => (q === "[data-pwa-retry]" ? retry : null) });
+  const document = { title: c.title, querySelector: (q) => (q === "[data-pwa-offline-copy]" ? box : null) };
+  const replaced = [], history = { state: null, replaceState: (st, t, u) => { replaced.push(u); } };
+  const loads = [], performance = { getEntriesByType: (t) => (t === "navigation" && c.nav ? [{ type: c.nav }] : []) };
+  const code = m[1].replace(/\{\{ \(page\.url \| url\) \| dump \| safe \}\}/, JSON.stringify(c.own));
+  vm.runInContext(code, vm.createContext({ document, history, performance, addEventListener: (t, fn) => { if (t === "load") loads.push(fn); },
+                                           location: { pathname: c.path, search: c.search || "", hash: c.hash || "" } }));
+  const beforeLoad = replaced.slice(), heldBeforeLoad = box.getAttribute("data-hash-load");
+  loads.forEach((fn) => fn());
+  return { h1: h1.textContent, sub: sub.textContent, title: document.title, hidden: kids.map((k) => k.hidden), retry: retry.attrs.href,
+           hash: box.getAttribute("data-hash"), beforeLoad, replaced, heldBeforeLoad, heldAfterLoad: box.getAttribute("data-hash-load") };
+}));
+"""
+
+
+class StandIn(unittest.TestCase):
+    def test_standing_in_and_opened_on_purpose(self):
+        own = "/AAGrapevine/es/offline/"
+        title = "Páginas guardadas y app · Grapevine / La Viña — NETA 65"
+        r = run_js(self, STAND_IN, needs_modules=False, data=[
+            {"path": "/AAGrapevine/es/meetings/", "search": "?x=1", "own": own, "title": title},   # the worker's stand-in
+            {"path": own, "own": own, "title": title},                                             # opened on purpose
+            {"path": own + "index.html", "own": own, "title": title},                               # …as index.html
+            {"path": "/AAGrapevine/es/", "own": own, "title": "Grapevine"},                          # a title without " · "
+        ])
+        stand, direct, index, bare = r
+        self.assertEqual((stand["h1"], stand["sub"]), ("You're offline", "This page isn't saved…"))
+        self.assertEqual(stand["title"], "You're offline · Grapevine / La Viña — NETA 65")
+        self.assertEqual(bare["title"], "You're offline")
+        self.assertEqual(stand["hidden"], [False, True, True, True])                # "Try again" alone
+        self.assertEqual(stand["retry"], "/AAGrapevine/es/meetings/?x=1")            # …for the address asked for
+        for d in (direct, index):
+            self.assertEqual((d["h1"], d["title"]), ("Saved pages & app", title))
+            self.assertEqual(d["hidden"], [True, False, True, False])               # the page's own buttons
+            self.assertEqual(d["retry"], "/AAGrapevine/")
+        for d in r:
+            self.assertEqual((d["hash"], d["replaced"]), (None, []))                # no #fragment: the address as it is
+
+    def test_the_other_pages_fragment_comes_off(self):
+        # Offline, a saved GVR / RLV 101 lesson's "Your first steps (checklist)" → /gvr/#steps, not saved: the
+        # stand-in answers at that address, and it has a #steps of its own (the install steps, far below the saved
+        # pages). The #fragment comes off the address before the browser can jump there — kept in data-hash, which
+        # pwa.js puts back before reloading — so "You're offline" and the saved pages come first. Opened on
+        # purpose, a #guide is the visitor's to keep.
+        own = "/AAGrapevine/offline/"
+        title = "Saved pages & app · Grapevine / La Viña — NETA 65"
+        r = run_js(self, STAND_IN, needs_modules=False, data=[
+            {"path": "/AAGrapevine/gvr/", "hash": "#steps", "own": own, "title": title},
+            {"path": "/AAGrapevine/es/gvr/", "search": "?a=1", "hash": "#steps", "own": "/AAGrapevine/es/offline/", "title": title},
+            {"path": own, "hash": "#android", "own": own, "title": title},
+        ])
+        gvr, es, direct = r
+        self.assertEqual((gvr["hash"], gvr["replaced"], gvr["h1"]), ("#steps", ["/AAGrapevine/gvr/"], "You're offline"))
+        self.assertEqual(gvr["retry"], "/AAGrapevine/gvr/")                          # "Try again": pwa.js reloads, #steps back on
+        self.assertEqual((es["hash"], es["replaced"]), ("#steps", ["/AAGrapevine/es/gvr/?a=1"]))
+        self.assertEqual((direct["hash"], direct["replaced"], direct["h1"]), (None, [], "Saved pages & app"))
+        # pwa.js: the #fragment back on before either reload ("Try again", the connection back), and no scrolling
+        # to a #fragment while standing in (a browser that jumped anyway — it read the address first — goes back to
+        # the top once the list is drawn, or at load)
+        pwa = read("src", "assets", "js", "pwa.js")
+        again = pwa[pwa.index("function reloadAsked()"):pwa.index("function offlinePageCopy()")]
+        self.assertIn('box.getAttribute("data-hash")', again)
+        self.assertIn("history.replaceState(history.state, \"\", location.pathname + location.search + h)", again)
+        self.assertEqual(pwa.count("reloadAsked();"), 2)
+        self.assertEqual(pwa.count("location.reload();"), 2)                         # reloadAsked's, and the new version's
+        self.assertIn("if (wantReload) { wantReload = false; location.reload(); }", pwa)
+        lst = pwa[pwa.index("function offlineList()"):pwa.index('box.addEventListener("click"', pwa.index("function offlineList()"))]
+        self.assertIn("var dropped = isFallback && !!(copyBox && copyBox.getAttribute(\"data-hash\"));", lst)
+        self.assertIn("if (isFallback) { if (dropped && window.scrollY) window.scrollTo(0, 0); return; }", lst)
+        self.assertIn('if (dropped) window.addEventListener("load", keepFragment, { once: true });', lst)
+
+    def test_opened_again_the_browser_keeps_its_place(self):
+        # /offline/#android reloaded, or back to it: the browser puts the visitor back where they were — but Chrome
+        # first jumps to the #guide when it can't at once (the saved pages, listed a moment later, make the page
+        # taller than its first layout). The #fragment is off the address while the page loads, back on at load; a
+        # first arrival keeps it (the browser's own jump, then pwa.js keeps the guide on screen)
+        own = "/AAGrapevine/offline/"
+        title = "Saved pages & app · Grapevine / La Viña — NETA 65"
+        r = run_js(self, STAND_IN, needs_modules=False, data=[
+            {"path": own, "hash": "#android", "nav": "reload", "own": own, "title": title},
+            {"path": own, "search": "?x=1", "hash": "#steps", "nav": "back_forward", "own": own, "title": title},
+            {"path": own, "hash": "#android", "nav": "navigate", "own": own, "title": title},
+            {"path": own, "nav": "reload", "own": own, "title": title},
+        ])
+        reload, back, first, bare = r
+        self.assertEqual((reload["beforeLoad"], reload["replaced"]), (["/AAGrapevine/offline/"], ["/AAGrapevine/offline/", "/AAGrapevine/offline/#android"]))
+        self.assertEqual((back["beforeLoad"], back["replaced"]), (["/AAGrapevine/offline/?x=1"], ["/AAGrapevine/offline/?x=1", "/AAGrapevine/offline/?x=1#steps"]))
+        for d in (first, bare):
+            self.assertEqual(d["replaced"], [])
+        for d in r:
+            self.assertEqual((d["h1"], d["hash"], d["hidden"]), ("Saved pages & app", None, [True, False, True, False]))   # the page's own
+        # While the #guide is off the address, data-hash-load keeps it for pwa.js (the guide still opens — also one
+        # that is not this device's, e.g. a shared /offline/#iphone reloaded on an Android phone); gone at load.
+        self.assertEqual((reload["heldBeforeLoad"], reload["heldAfterLoad"]), ("#android", None))
+        self.assertEqual((back["heldBeforeLoad"], back["heldAfterLoad"]), ("#steps", None))
+        for d in (first, bare):
+            self.assertEqual((d["heldBeforeLoad"], d["heldAfterLoad"]), (None, None))
+        pwa = read("src", "assets", "js", "pwa.js")
+        guide = pwa[pwa.index("var hashGuide = function () {"):pwa.index('window.addEventListener("hashchange", hashGuide);')]
+        self.assertIn('location.hash || (held && held.getAttribute("data-hash-load")) || ""', guide)
+        self.assertIn("openGuide(decodeURIComponent(h.slice(1)))", guide)
+
+    def test_it_sits_in_the_hero(self):
+        # right after the buttons it changes, inside the hero's call: nothing may come between the hero and the
+        # saved pages' card (main.css: .gv-hero-shell.side-below + .page-overlap spaces the card under "Join by phone")
+        page = read(*PAGE)
+        at = page.index("<script>(function (box) {")
+        self.assertLess(page.index('<div class="hero-actions" data-pwa-offline-copy'), at)
+        self.assertLess(at, page.index("{% endcall %}\n\n{#- ============ The pages saved on this device"))
+        self.assertIn(".gv-hero-shell.side-below + .page-overlap", read("src", "assets", "css", "main.css"))
+
+    def test_pwa_js_tells_the_same_way(self):
+        page = read(*PAGE)
+        self.assertIn('if (location.pathname.replace(/index\\.html$/, "") === {{ (page.url | url) | dump | safe }}) {', page)
+        pwa = read("src", "assets", "js", "pwa.js")
+        self.assertIn('var isFallback = isOfflinePage && location.pathname.replace(/index\\.html$/, "") !== new URL(OFFLINE_URL, location.href).pathname;', pwa)
+
+
+# Runs the old address's forwarding line against pretend addresses: input = [{ search, hash }] → where it goes.
+REDIRECT = r"""
+import vm from "node:vm";
+const src = fs.readFileSync("src/pages/app-redirect.njk", "utf8");
+const m = /<script>(location\.replace\([\s\S]*?\);)<\/script>/.exec(src);
+if (!m) throw new Error("the forwarding script is not there");
+const code = m[1].replace(/\{\{ \(target \| url\) \| dump \| safe \}\}/, JSON.stringify("/AAGrapevine/offline/"));
+out(input.map((loc) => { let to = null; vm.runInContext(code, vm.createContext({ location: Object.assign({ replace: (u) => { to = u; } }, loc) })); return to; }));
+"""
+
+
+class Redirect(unittest.TestCase):
+    def setUp(self):
+        self.stub = read(*STUB)
+
+    def test_a_tiny_stand_alone_page(self):
+        fm = re.match(r"---\n(.*?)\n---\n", self.stub, re.S).group(1)
+        self.assertIn("pagination: { data: languages, size: 1, alias: lang }", fm)
+        self.assertIn("""permalink: "{{ '/' if lang == 'en' else '/es/' }}app/index.html\"""", fm)
+        for bit in ("layout: false", "sitemap: false", "eleventyExcludeFromCollections: true"):
+            self.assertRegex(fm, r"(?m)^" + re.escape(bit) + "$")
+        b = self.stub[len(fm):]
+        self.assertIn('{%- set target = "/offline/" | lurl(lang) -%}', b)
+        self.assertIn('<meta http-equiv="refresh" content="0; url={{ target }}#steps">', b)   # without JavaScript: the steps
+        self.assertIn('<meta name="robots" content="noindex">', b)
+        self.assertIn('<link rel="canonical" href="{{ target | siteUrl(site) }}">', b)
+        self.assertIn('{{ "read.subs.moved_title" | t(lang) }}', b)
+        self.assertIn('{{ "pwa.app.moved_text" | t(lang) }}', b)
+        self.assertIn('<a id="go" href="{{ target }}#steps">{{ "nav.offline" | t(lang) }} →</a>', b)
+        self.assertNotIn("Saved pages", pwa_strings()["pwa.app.moved_text"]["en"])             # the link names the page
+
+    def test_the_guide_and_the_query_go_along(self):
+        r = run_js(self, REDIRECT, needs_modules=False, data=[
+            {"search": "", "hash": "#android"}, {"search": "?utm=wa", "hash": "#in-app"}, {"search": "", "hash": ""},
+            {"search": "?x=1", "hash": ""}])
+        self.assertEqual(r, ["/AAGrapevine/offline/#android", "/AAGrapevine/offline/?utm=wa#in-app",
+                             "/AAGrapevine/offline/#steps", "/AAGrapevine/offline/?x=1#steps"])
 
 
 class Manifest(unittest.TestCase):
@@ -483,8 +770,7 @@ OFFERS = [
     [{"views": 9}, {"inApp": True}, False, "inside another app"],
     [{"views": 9}, {"canInstall": False}, False, "a browser that can't install (iOS 16.3 Chrome)"],
     [{"views": 9}, {"busy": True}, False, "a banner, the player, a panel or a field is in use"],
-    [{"views": 9}, {"page": "app"}, False, "on /app/"],
-    [{"views": 9}, {"page": "offline"}, False, "on the offline page"],
+    [{"views": 9}, {"page": "offline"}, False, "on the offline page (the steps are there)"],
     [{"views": 9}, {"page": "noindex"}, False, "on a noindex page"],
     [{"views": 9}, {"phone": False}, False, "a computer"],
     [{"views": 9}, {"online": False}, False, "offline"],
@@ -635,7 +921,7 @@ class Wiring(unittest.TestCase):
         self.assertIn("state.known = false;", handler)                         # the browser only offers it when not installed…
         self.assertIn("GI.notInstalled(", handler)                              # …so a remembered install is forgotten
         self.assertIn("!state.known && !state.installEvt", p[p.index("function relatedApps()"):])   # …and outweighs getInstalledRelatedApps
-        self.assertIn("known.hidden = state.installed || !!state.installEvt || !state.known;", p)   # /app/: never "already on this device" beside Install
+        self.assertIn("known.hidden = state.installed || !!state.installEvt || !state.known;", p)   # the steps: never "already on this device" beside Install
         inst = p[p.index("function install(from)"):p.index("function notNow()")]
         self.assertIn("Promise.resolve(e.prompt()).catch(", inst)              # a refused prompt is caught…
         self.assertIn("state.installEvt = null;", inst)
@@ -650,7 +936,7 @@ class Wiring(unittest.TestCase):
             self.assertIn("try", p[max(0, m.start() - 40):m.start()])
         self.assertIn("!navigator.webdriver", p)
         self.assertIn("navigator.getInstalledRelatedApps()", p)
-        self.assertIn('root.classList.add("pwa-standalone")', p)
+        self.assertIn("state.installed = standalone();", p)
         self.assertIn('window.GVInstall || null', p)
         self.assertIn("setInterval(", p)
         self.assertIn("++checks > 36", p)
@@ -663,10 +949,15 @@ class Wiring(unittest.TestCase):
         self.assertIn("state.offer && !state.installed && !state.known && !busy()", kind)
         for bit in ('data-pwa-act="install-later"', 'data-pwa-act="install-how"', 'data-from="toast"', "pwa-toast-icon pwa-toast-app",
                     'class="pwa-toast-actions"', '"Install this site as an app", "Instala este sitio como app"',
-                    '"Not now", "Ahora no"', '"Show me how", "Ver cómo"',
-                    "Okay. “Install as an app” is always in the menu and at the bottom of every page.",
-                    "De acuerdo. «Instalar como app» siempre está en el menú y al pie de cada página."):
+                    '"Not now", "Ahora no"', '"Show me how", "Ver cómo"'):
             self.assertIn(bit, p)
+        # "Not now" says where the steps always are: the page's name as the footer's bottom bar and the phone menu
+        # print it (nav.offline — so the two can't drift apart)
+        common = json.loads(read("src", "_i18n", "common.json"))
+        later = p[p.index("function notNow()"):p.index("function guided(a)")]
+        en, es = re.search(r'announce\(T\("([^"]+)", "([^"]+)"\)\);', later).groups()
+        self.assertEqual(en, "Okay. The steps are always in “%s”, in the menu and at the bottom of every page." % common["nav.offline"]["en"])
+        self.assertEqual(es, "De acuerdo. Los pasos siempre están en «%s», en el menú y al pie de cada página." % common["nav.offline"]["es"])
         self.assertIn('e.key === "Escape"', p)
         # redrawn under keyboard focus: the same control stays focused (Show me how <-> Install; Not now stays Not
         # now), and when another notice takes its place, focus goes back where the visitor was
@@ -676,9 +967,9 @@ class Wiring(unittest.TestCase):
         self.assertIn("} else if (had) focusBack();", toast)
         # the second sentence can go on a short screen (pwa.css)
         self.assertIn('<span class="pwa-toast-more">', p)
-        # /app/: a link to a guide opens it (no hashchange when the address has it already); the Aa panel's link
-        # moves focus to the opened guide's title after the jump
-        start = p[p.index("function startAppPage()"):]
+        # the steps: a link to a guide opens it (no hashchange when the address has it already); the Aa panel's
+        # link moves focus to the opened guide's title after the jump
+        start = p[p.index("function startAppSteps()"):]
         self.assertIn("closest('a[href^=\"#\"]')", start)
         guided = p[p.index("function guided(a)"):p.index("/* The install row")]
         self.assertIn('d.querySelector("summary")', guided)
@@ -691,11 +982,10 @@ class Wiring(unittest.TestCase):
     def test_styles(self):
         css = read("src", "assets", "css", "areas", "pwa.css")
         for bit in (".pwa-toast-app {", ".pwa-guide {", ".pwa-guide-os > summary {", ".pwa-guide-key {", ".pwa-guide-note {",
-                    ":root.pwa-standalone [data-pwa-app-link] { display: none !important; }",
-                    "@media (display-mode: standalone) { [data-pwa-app-link] { display: none !important; } }",
                     ':root[data-motion="reduce"] .pwa-guide-chev { transition: none; }'):
             self.assertIn(bit, css)
         self.assertNotIn(".pwa-steps", css)
+        self.assertNotIn("data-pwa-app-link", css)                             # no link to hide in the installed app
         # a short screen (a phone held sideways): the phone's text caps, the install notice's title and buttons only,
         # its buttons kept at the bottom of the box
         short = css[css.index("@media (height < 32rem) {"):]
@@ -713,12 +1003,102 @@ class Wiring(unittest.TestCase):
                       '.pwa-guide-note > .icon, .pwa-guide-tip > .icon) { display: none; }', css)
         self.assertIn("5. Install as an app", css[:css.index("*/")])            # listed in the file's header
 
-    def test_links_hidden_in_the_installed_app(self):
-        footer = read("src", "_includes", "partials", "footer.njk")
-        header = read("src", "_includes", "partials", "header.njk")
-        self.assertIn('<li class="flex"{% if f.page == "app" %} data-pwa-app-link{% endif %}>', footer)
-        self.assertIn('{% if f.page == "app" %} data-pwa-app-link{% endif %}', header)
-        self.assertNotIn("Saved pages & app", footer + header + read("src", "_data", "nav.js"))
+    def test_every_install_link_goes_to_the_steps(self):
+        p = self.pwa
+        # "Show me how", the Aa panel's row and "How to open it in your browser": this device's guide on
+        # /offline/ (without install-core.js: the steps themselves)
+        self.assertIn('var guideUrl = OFFLINE_URL + "#" + (dev ? dev.guide : "steps");', p)
+        self.assertIn('esc(OFFLINE_URL + "#in-app")', p)
+        self.assertIn('var appSteps = document.querySelector("[data-pwa-app]");', p)
+        # the Aa panel's install row is the only one (the offline page's install card went with its slot)
+        self.assertNotIn("APP_URL", p)
+        self.assertIsNone(re.search(r"data-pwa-install(?![-\w])", p))
+        self.assertIn("function installHtml() {", p)
+        # on the stand-in the hero's own buttons give way to "Try again" (the page's script hides them first)
+        self.assertIn("if (btn) btn.hidden = state.installed || isFallback || !state.installEvt;", p)
+        self.assertIn("steps.hidden = state.installed || isFallback || !!state.installEvt;", p)
+        # opened on purpose, the hero's subtitle follows the connection
+        copy = p[p.index("function offlinePageCopy()"):p.index("function readCache(")]
+        self.assertIn("if (!box || isFallback) return;", copy)
+        self.assertIn('box.getAttribute(state.online ? "data-sub-online" : "data-sub-offline")', copy)
+        # the notice never shows on the page with the steps (nor on a noindex page)
+        self.assertIn('page: isOfflinePage ? "offline" : isNoindex ? "noindex" : "",', p)
+        self.assertIn("if (!canOffer() || isOfflinePage || isNoindex) return;", p)
+
+    def test_a_guide_asked_for_stays_on_screen(self):
+        # /offline/#android (Show me how, a link someone sent): the saved list fills in above the steps after the
+        # browser has scrolled there, so it scrolls back to the guide once drawn — whatever the list turned out to
+        # be — unless the visitor has scrolled, tapped or pressed a key since; and on arrival only: after a reload
+        # or Back the browser puts the visitor back where they were (the navigation's type says which)
+        p = self.pwa
+        lst = p[p.index("function offlineList()"):p.index('box.addEventListener("click"', p.index("function offlineList()"))]
+        self.assertIn('["wheel", "touchstart", "pointerdown", "keydown"]', lst)
+        keep = lst[lst.index("var keepFragment = function () {"):lst.index("};", lst.index("var keepFragment = function () {"))]
+        self.assertIn('nav = performance.getEntriesByType("navigation")[0];', keep)
+        self.assertIn('if (moved || (nav && (nav.type === "reload" || nav.type === "back_forward"))) return;', keep)
+        self.assertLess(keep.index("nav.type"), keep.index("if (isFallback)"))
+        self.assertLess(keep.index("if (isFallback)"), keep.index("if (!location.hash) return;"))   # (never the other page's #fragment)
+        self.assertIn("box.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING", keep)   # only a target below the list
+        self.assertIn('t.scrollIntoView({ block: "start", behavior: "instant" })', keep)
+        self.assertEqual(lst.count("keepFragment();"), 3)                        # empty, listed, or the caches failed
+
+    def test_forwarding_pages_are_not_listed(self):
+        # the old addresses' forwarding pages (/meeting/, the old install page …) are kept by the worker, so an old
+        # link still works offline, but the list leaves them out: the worker marks them (tests/test_pwa_worker.py)
+        p = self.pwa
+        self.assertIn('moved: !!(res && res.headers.get("x-gvlv-moved"))', p)
+        lst = p[p.index("function offlineList()"):p.index('box.addEventListener("click"', p.index("function offlineList()"))]
+        self.assertIn("r = r.map(function (a) { return a.filter(function (e) { return !e.moved; }); });", lst)
+        self.assertLess(lst.index("return !e.moved;"), lst.index("var savedUrls = {};"))
+
+    def test_the_steps_read_only_once_reached(self):
+        # a visit for the saved pages is not reading the steps (they are below them): the page view counts, and the
+        # 30 days of quiet (GI.guided) start once the steps are reached — the address asks for them, a link to them
+        # or a guide's title is used, or they come on screen; never while standing in or in the installed app
+        p = self.pwa
+        rec = p[p.index("  if (GI) {\n    rec = loadRec();"):p.index('window.addEventListener("beforeinstallprompt"')]
+        self.assertNotIn("GI.guided", rec)
+        self.assertIn("else if (!isFallback && !isNoindex) rec = saveRec(GI.view(rec));", rec)
+        read_ = p[p.index("function readSteps()"):p.index("function inSteps(id)")]
+        self.assertIn("if (stepsRead || !GI || state.installed || isFallback) return;", read_)
+        self.assertIn("rec = saveRec(GI.guided(loadRec(), Date.now()));", read_)
+        self.assertIn("return !!(el && appSteps && appSteps.contains(el));", p[p.index("function inSteps(id)"):])
+        self.assertEqual(p.count("GI.guided("), 2)                               # readSteps, and "Show me how" / the Aa row
+        start = p[p.index("function startAppSteps()"):p.index("/* ================================================================= Save for offline")]
+        self.assertIn("if (inSteps(location.hash.slice(1))) readSteps();", start)    # the address (and a hashchange)
+        self.assertIn("if (inSteps(id)) readSteps();", start)                          # a link into the steps
+        self.assertIn('if (e.target.closest("[data-pwa-guide] > summary")) readSteps();', start)   # a guide's title
+        self.assertIn('{ rootMargin: "0px 0px -20% 0px" }', start)                    # on screen
+        self.assertIn("seen.observe(appSteps);", start)
+        core = read("src", "assets", "js", "install-core.js")
+        self.assertIn("steps on /offline/ reached — not a look at the saved pages above them", core)
+
+    def test_the_installed_app_opens_no_guide(self):
+        # inside the app the steps say "You're using the app": no phone's guide opened or marked "Your device" (a
+        # #guide in the address or a link to one still opens)
+        p = self.pwa
+        self.assertIn("if (dev && !state.installed) openGuide(dev.guide);", p)
+        self.assertIn('badge.hidden = !(dev && !state.installed && dev.guide === d.getAttribute("data-pwa-guide"));', p)
+        self.assertEqual(p.count("openGuide(dev.guide)"), 1)
+
+    def test_nothing_left_of_the_old_page(self):
+        # no link to /app/ anywhere: only its forwarding stub (and this file) name that address
+        hits = []
+        for top in ("src", "eleventy", "config", "docs", "content", "scripts", "tests", ".github"):
+            for f in ROOT.joinpath(top).rglob("*"):
+                if not f.is_file() or f.suffix not in {".njk", ".js", ".mjs", ".json", ".yml", ".yaml", ".md", ".py", ".css", ".txt", ".html"}:
+                    continue
+                rel = f.relative_to(ROOT).as_posix()
+                if rel in ("src/pages/app-redirect.njk", "tests/test_pwa_install.py"):
+                    continue
+                if re.search(r"/(es/)?app/", f.read_text(encoding="utf-8", errors="replace")):
+                    hits.append(rel)
+        if re.search(r"/(es/)?app/", read("README.md")):
+            hits.append("README.md")
+        self.assertEqual(hits, [])
+        for part in ("footer.njk", "header.njk"):
+            self.assertNotIn("nav.app", read("src", "_includes", "partials", part))
+        self.assertNotIn("pwa-standalone", self.pwa + read("src", "assets", "css", "areas", "pwa.css"))   # it only hid the old links
 
 
 if __name__ == "__main__":

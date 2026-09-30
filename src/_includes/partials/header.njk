@@ -126,11 +126,9 @@
           {%- endif %}
         {%- endfor %}
         <p class="eyebrow mt-4 mb-1 px-3">{{ "nav.more" | t(L) }}</p>
-        {#- Search has its own button at the bottom of the drawer, so it is not repeated here. "Install
-            as an app" (/app/) comes first, and is hidden inside the installed app (data-pwa-app-link,
-            areas/pwa.css); "Saved pages" is /offline/. -#}
+        {#- Search has its own button at the bottom of the drawer, so it is not repeated here. -#}
         {%- for f in nav.footer %}{% if f.page != "search" %}
-        <a href="{{ f.url | lurl(L) }}" class="flex min-h-11 items-center gap-3 rounded-xl px-3 font-medium no-underline hover:bg-surface-2 {{ 'bg-gv-soft text-gv' if pageKey == f.page }}"{% if pageKey == f.page %} aria-current="page"{% endif %}{% if f.page == "app" %} data-pwa-app-link{% endif %}>{% if f.icon %}{% icon f.icon, "size-5 text-muted" %}{% endif %} {{ f.key | t(L) }}</a>
+        <a href="{{ f.url | lurl(L) }}" class="flex min-h-11 items-center gap-3 rounded-xl px-3 font-medium no-underline hover:bg-surface-2 {{ 'bg-gv-soft text-gv' if pageKey == f.page }}"{% if pageKey == f.page %} aria-current="page"{% endif %}>{% if f.icon %}{% icon f.icon, "size-5 text-muted" %}{% endif %} {{ f.key | t(L) }}</a>
         {%- endif %}{% endfor %}
       </nav>
       <div class="grid gap-2 border-t border-line p-4">

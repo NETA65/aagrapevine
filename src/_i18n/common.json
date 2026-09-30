@@ -545,12 +545,8 @@
     "es": "Accesibilidad"
   },
   "nav.offline": {
-    "en": "Saved pages",
-    "es": "Páginas guardadas"
-  },
-  "nav.app": {
-    "en": "Install as an app",
-    "es": "Instalar como app"
+    "en": "Saved pages & app",
+    "es": "Páginas guardadas y app"
   },
   "comfort.button": {
     "en": "Reading & display settings",

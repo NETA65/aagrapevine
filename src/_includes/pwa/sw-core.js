@@ -130,12 +130,17 @@ const ENT = { amp: "&", lt: "<", gt: ">", quot: '"', "#39": "'", "#x27": "'", nb
 function decode(s) { return s.replace(/&(#39|#x27|amp|lt|gt|quot|nbsp);/g, (m, k) => ENT[k] || m); }
 
 /* The copy we keep: the page's HTML + when it was saved + its title (the offline page lists both
-   without reading every page again). Only safe headers are carried over. */
+   without reading every page again) + x-gvlv-moved when it is only a forwarding page (an old address
+   whose meta refresh sends the visitor on — /meeting/, the old install page, a month gone from
+   /monthly/ …: kept, so an old link still works offline, but the offline page doesn't list it). Only
+   safe headers are carried over. */
 async function stamp(res) {
   const text = await res.text();
-  const m = /<title>([^<]*)<\/title>/i.exec(text.slice(0, 12000));
+  const head = text.slice(0, 12000);
+  const m = /<title>([^<]*)<\/title>/i.exec(head);
   const h = new Headers({ "content-type": res.headers.get("content-type") || "text/html; charset=utf-8", "x-gvlv-saved": new Date().toISOString() });
   if (m) h.set("x-gvlv-title", encodeURIComponent(decode(m[1]).trim()));
+  if (/<meta\b[^>]*\bhttp-equiv=["']?refresh\b/i.test(head)) h.set("x-gvlv-moved", "1");
   return new Response(text, { status: 200, statusText: "OK", headers: h });
 }
 
