@@ -450,6 +450,9 @@ class Templates(unittest.TestCase):
         # the "Over" badge only on this month's rows: nothing on a later month's page could ever show it
         badge = t.index("data-mp-over-badge")
         self.assertIn("{% if m.isCurrent %}<span", t[t.rindex("\n", 0, badge):badge])
+        # … and it is a word of its own: a real space after it on both rows (the page's text, copy and paste
+        # and screen readers read "Over Wednesday, October 21", never "OverWednesday")
+        self.assertEqual(t.count('{{ "monthly.over" | t(lang) }}</span> {% endif %}'), 2)
         self.assertIn('data-mp-newmonth="{{ m.next }}"', t)
         self.assertIn("/contribute/' | lurl(lang) }}#record", t)
         # the Bulletin row of "Keep up all month": two links, so no link covers the row; both are tap-links and
