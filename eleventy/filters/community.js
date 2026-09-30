@@ -597,8 +597,9 @@ const pubName = (item) => (item?.extra?.publication === "lv" || item?.source ===
 // K through the end of K, and the e-mail goes out once, early in K. It recaps what happened or was
 // published on the site in P, read from the FULL data files (never whatsnew.json, which keeps only its
 // newest 150 entries), a day being its Central calendar day:
-//   * the bulletin's posts (announcements.json) by the day they were added to the site — the latest of
-//     their date, the day the site first had them (first_seen) and their `publish` day —, not expired;
+//   * the bulletin's posts (announcements.json) by the day they were added to the site — the day the site
+//     first had them (first_seen; their date on that same day), never before their `publish` day —, not
+//     expired;
 //   * the events that took place in P (events.json, the month an event starts in) and P's committee
 //     meeting — its record, else the site.meeting rule (events.json drops a meeting once it is over) —
 //     with their days only; events are never "news" on their own (no count, no e-mail);
@@ -667,14 +668,20 @@ function laterOf(a, b) {
   return dbb && (!da || dbb > da) ? b : a || null;
 }
 
-/** A bulletin post's news date: the day it was ADDED to the site — the latest of its date (else when it
- *  was first seen), when the site first had it (first_seen) and its `publish` day (a post scheduled with
- *  `publish:` appears that morning). A post dated in an earlier month but added later (written on the 28th,
- *  saved on the 2nd — after that month's e-mail went out) is in the edition of the month it appeared, like
- *  a committee upload (uploadWhen): every post is in exactly one edition. */
+/** A bulletin post's news date: the day it was ADDED to the site — when the site first had it (first_seen;
+ *  its own `date` instead when that is the same Central day, for its time, or when there is no first_seen),
+ *  and never before its `publish` day (a post scheduled with `publish:` appears that morning). Its `date`
+ *  is only the post's label: one dated in an earlier month but added later (written on the 28th, saved on
+ *  the 2nd — after that month's e-mail went out) is in the edition of the month it appeared, like a
+ *  committee upload (uploadWhen); one dated AHEAD (a notice dated with its event's day, saved on the 25th)
+ *  is in the edition of the month it was added too — by that event's month it has usually expired, and it
+ *  would be in no edition (build_data.effective_ts: a date more than a day ahead → first_seen, What's New's
+ *  rule). Every post is in exactly one edition. send_digest.py post_when is the twin. */
 function postWhen(it) {
   const pub = String(it.extra?.publish || "").slice(0, 10);
-  return laterOf(laterOf(it.date || it.first_seen || null, it.first_seen || null), YMD.test(pub) ? pub : null);
+  const seen = it.first_seen || null;
+  const base = it.date && (!seen || ymdChicago(it.date) === ymdChicago(seen)) ? it.date : seen;
+  return laterOf(base, YMD.test(pub) ? pub : null);
 }
 
 /** A committee upload's news date (drive.json): the later of its date (the date its name starts with,

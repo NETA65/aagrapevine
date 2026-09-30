@@ -125,7 +125,8 @@ class FixtureParity(SD.DigestCase, Parity):
         # too, Central time), one that lasts through the 1st, one written in August and scheduled for
         # September 2 (`publish:`), one scheduled for October 2; and — each counts on the day it was added
         # to the site — one written in August but saved on September 10, one dated September 28 but saved
-        # on October 3, after the September e-mail
+        # on October 3, after the September e-mail, one dated with its event's day (October 10, expiring
+        # then) but saved on September 25
         self.write("announcements", {"items": [
             SD.item("ann:1", "announcement", "committee", "2026-09-05", "New GVR orientation", url="/bulletin/#new",
                     extra={"body_md": "Join us **Saturday**.", "pinned": True}),
@@ -135,6 +136,8 @@ class FixtureParity(SD.DigestCase, Parity):
             SD.item("ann:later", "announcement", "committee", "2026-09-20", "Scheduled for October", extra={"publish": "2026-10-02"}),
             SD.item("ann:aug-saved", "announcement", "committee", "2026-08-20", "Saved in September", first_seen="2026-09-10T14:00:00Z"),
             SD.item("ann:saved-oct", "announcement", "committee", "2026-09-28", "Saved on October 3", first_seen="2026-10-03T14:00:00Z"),
+            SD.item("ann:ahead", "announcement", "committee", "2026-10-10", "Fall Assembly sign-ups",
+                    first_seen="2026-09-25T15:00:00Z", extra={"expires": "2026-10-10"}),
         ]})
         # August: a booth and a committee meeting that was skipped (settings) — the August digest has the booth only
         events = json.loads((self.site_dir / "events.json").read_text(encoding="utf-8"))["items"]
@@ -171,7 +174,7 @@ class FixtureParity(SD.DigestCase, Parity):
         self.compare(js, cases, highlights, max_per)
         # and the rules themselves
         early = summary(D.collect(datetime(2026, 10, 1, 6, 30, tzinfo=timezone.utc), None, max_per, highlights))
-        self.assertEqual(early["news"]["announcement"], ["ann:1", "ann:aug-saved", "ann:oct1", "ann:sched"])  # pinned, then newest
+        self.assertEqual(early["news"]["announcement"], ["ann:1", "ann:ahead", "ann:aug-saved", "ann:oct1", "ann:sched"])  # pinned, then newest
         self.assertIn("yt:late", early["news"]["video"])                                        # 11:30 PM CDT on the 30th
         self.assertIn("lv:a2", early["news"]["article"])                                        # published on the 30th
         self.assertNotIn("gv:a5", early["news"]["article"])                                     # … on October 2

@@ -189,11 +189,13 @@ reader as the fallback) builds the same **edition** as the `/digest/` page (`ele
   September).
 - Everything is read from the **full** data files, never `whatsnew.json` (it keeps only its newest
   `WHATSNEW_MAX` = 150 entries):
-  - **bulletin** (`announcements.json`): counted on the day it was added to the site — the **latest** of
-    `date` (else `first_seen`), `first_seen` and `extra.publish` (a scheduled post), so a post dated in an
-    earlier month but saved later (written on the 28th, saved on the 2nd, after that month's e-mail) is in
-    the edition of the month it appeared, like a committee upload; in P, not after now + 1 day, not expired.
-    Pinned first, then newest.
+  - **bulletin** (`announcements.json`): counted on the day it was added to the site — `first_seen` (its
+    `date` instead when that is the same Central day, or when there is no `first_seen`), never before its
+    `extra.publish` day (a scheduled post). The `date` is only the post's label: a post dated in an earlier
+    month but saved later (written on the 28th, saved on the 2nd, after that month's e-mail) is in the
+    edition of the month it appeared, like a committee upload, and so is one dated ahead (a notice dated
+    with its event's day, saved weeks before; by that month it has usually expired — What's New dates it on
+    `first_seen` too); in P, not after now + 1 day, not expired. Pinned first, then newest.
   - **events that took place** (`events.json`, any category but `committee`): starting in P (an event over
     several days counts in the month it starts) and started by now. P's committee meeting is added once it
     has started: its record, else the `meeting:` rule (`skip_dates` honoured; `events.json` drops a meeting

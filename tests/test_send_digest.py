@@ -3,8 +3,8 @@
   * EditionWindow — the edition is the Central-time month before the run's (January → December), named
                     after the month it covers; news dates are Central calendar days (daylight saving).
   * Sections      — a realistic September 2026 edition (sent October 1) built from a small data/site folder
-                    written for each test: the bulletin (a post counts on the day it was added: its date,
-                    first_seen or `publish` day, the latest; expired posts), the magazine
+                    written for each test: the bulletin (a post counts on the day it was added: first_seen —
+                    its date on that day —, never before its `publish` day; expired posts), the magazine
                     issues whose stories came out in September (pub_date; a story without one), the writers,
                     the committee's uploads (the later of their date and first_seen; one row per photo album,
                     dated flyers left out), podcasts / videos / Instagram (per account) / documents, the events
@@ -310,11 +310,18 @@ class Sections(DigestCase):
         self.data = D.collect(OCT1, None, 3, 2)
 
     def test_a_post_counts_in_the_month_it_was_added(self):
-        # A bulletin post counts on the day it was added to the site: the latest of its date, when the site
-        # first had it and its publish day (the committee uploads' rule). Written in August but saved on
-        # September 10 → September's; dated September 28 but saved on October 3, after the September e-mail
-        # went out → October's (never in no e-mail); scheduled for October 2 → October's.
+        # A bulletin post counts on the day it was added to the site: when the site first had it (its own date
+        # on that same day), never before its publish day. Written in August but saved on September 10 →
+        # September's; dated September 28 but saved on October 3, after the September e-mail went out →
+        # October's (never in no e-mail); scheduled for October 2 → October's; dated with its event's day,
+        # October 10, but saved on September 25 → September's: by the October edition it has expired, so it
+        # would be in no edition (What's New dates it on September 25 too); the same, scheduled for October 4
+        # → October's.
         self.write("announcements", {"items": [
+            item("ann:ahead", "announcement", "committee", "2026-10-10", "Fall Assembly sign-ups", first_seen="2026-09-25T15:00:00Z",
+                 extra={"expires": "2026-10-10"}),
+            item("ann:ahead-sched", "announcement", "committee", "2026-10-10", "Scheduled ahead", first_seen="2026-09-20T12:00:00Z",
+                 extra={"publish": "2026-10-04"}),
             item("ann:aug-saved", "announcement", "committee", "2026-08-20", "Saved in September", first_seen="2026-09-10T14:00:00Z"),
             item("ann:late", "announcement", "committee", "2026-09-28", "Saved on October 3", first_seen="2026-10-03T14:00:00Z"),
             item("ann:sched", "announcement", "committee", "2026-08-28", "Scheduled", first_seen="2026-08-28T12:00:00Z",
@@ -325,9 +332,11 @@ class Sections(DigestCase):
         ]})
         sep = D.collect(OCT1, None, 3, 2)["groups"]["announcement"]
         self.assertEqual([(i["id"], i["_when"]) for i in sep],
-                         [("ann:same-day", "2026-09-15"), ("ann:aug-saved", "2026-09-10T14:00:00Z"), ("ann:sched", "2026-09-02")])
+                         [("ann:ahead", "2026-09-25T15:00:00Z"), ("ann:same-day", "2026-09-15"),
+                          ("ann:aug-saved", "2026-09-10T14:00:00Z"), ("ann:sched", "2026-09-02")])
         oct_ = D.collect(datetime(2026, 11, 1, 15, 5, tzinfo=timezone.utc), None, 3, 2)["groups"]["announcement"]
-        self.assertEqual([i["id"] for i in oct_], ["ann:late", "ann:sched-oct"])
+        self.assertEqual([i["id"] for i in oct_], ["ann:ahead-sched", "ann:late", "ann:sched-oct"])
+        self.assertEqual([D.post_when(i) for i in oct_], ["2026-10-04", "2026-10-03T14:00:00Z", "2026-10-02"])
 
     def test_last_months_news(self):
         g = self.data["groups"]
