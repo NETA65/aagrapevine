@@ -51,7 +51,7 @@
 
 // (community.js imports this file too: the cycle is safe, both only call each other's functions.)
 import { qrSvg, issueLabel, issueInSentence } from "./community.js";
-import { chicagoDayEndMs, gvMeetings, announcementList } from "./committee.js";
+import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList } from "./committee.js";
 import { shopFromMonthly, money } from "./shop.js";
 import { groupIssues } from "./read.js";
 
@@ -249,18 +249,6 @@ function eventDays(ev) {
   return { start, end };
 }
 
-/** When an event is over (ms): a timed event at its end (without one, 6 hours after it starts); an
- *  all-day or date-only event — or one whose end is a date — at midnight Central after its last day.
- *  The district report's rule too (report.js upcomingEvents). */
-function eventOverMs(e) {
-  const ex = e.extra || {};
-  const s = ex.start || e.date;
-  if (!s) return NaN;
-  if (ex.end && !isYmd(ex.end)) return Date.parse(ex.end);
-  if (ex.end || ex.all_day || isYmd(s)) return chicagoDayEndMs(eventDays(e).end);
-  return Date.parse(s) + 6 * 3600e3;
-}
-
 /** The month a row is shown in: its 1st (a date that began the month before shows its chip on the 1st),
  *  its year (dates of another year say it), the time-zone word, and "now" for the `past` marks. */
 const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), zone: L === "es" ? "(hora del Centro)" : "Central", nowMs: now.getTime() });
@@ -268,7 +256,9 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
 /**
  * One row of a month's dates — the page's Dates card, the poster, the hub's chips and the message:
  * the fields the poster always had (chip, day, range, time + zone, city, tentative …) plus
- *   overAt    when it is over, as an ISO instant (eventOverMs) — the browser marks it "Over" then
+ *   overAt    when it is over, as an ISO instant (committee.js eventEndMs: a timed event at its end — one
+ *             hour after it starts without one —, an all-day one at midnight Central after its last day;
+ *             the instant /events/ and the home page write too) — the browser marks it "Over" then
  *             (src/assets/js/monthly.js); past = overAt ≤ now (an instant, not a day)
  *   href      where its title links: the committee meeting → /meetings/#committee-meeting (the one home
  *             of its Zoom details); anything else → its own page (url) or /events/. A monthly series
@@ -285,7 +275,7 @@ function dateRow(e, L, ctx, extra = {}) {
   const ex = e.extra || {};
   const timed = !ex.all_day && ex.start && !isYmd(ex.start);
   const shownDay = d.start < ctx.first ? ctx.first : d.start;
-  const overAt = iso(eventOverMs(e));
+  const overAt = iso(eventEndMs(e));
   const href = extra.kind === "committee" ? "/meetings/#committee-meeting" : e.url || "/events/";
   const title = tr(e, "title", L);
   const city = clean(ex.city);

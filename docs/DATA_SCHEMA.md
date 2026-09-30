@@ -597,7 +597,7 @@ never lands on a 404. `MONTHLY_NOW=2026-12-15` (or an instant, `2026-10-22T06:00
 * **Dates** (`mpMonth(...).dates`): every event in `events.json` that is not `gone` and overlaps the month —
   content/events, dated Drive flyers and the outside calendars (the NETA 65 workshop feed: source `calendar`) —,
   the month's committee meeting (its record, else the `site.meeting` rule) and the recurring series. Each row has
-  `overAt` (an ISO instant: a timed event's end — without one, 6 hours after it starts —, an all-day or date-only
+  `overAt` (an ISO instant: a timed event's end — without one, one hour after it starts —, an all-day or date-only
   event's midnight Central after its last day), `past` (`overAt` ≤ now), `href` (`/meetings/#committee-meeting` for
   the committee, else the event's own page or `/events/`), `external` and `category`. Deadlines and Book of the
   Month offers have an `overAt` too (midnight Central after their day). The browser marks a date "Over" when its
@@ -805,6 +805,15 @@ calendar feed keeps them for subscribers):
   assembly ending Sunday Mar 21 is `past: true` from 23:59 on Monday Mar 22). The pages do not wait for
   that: they hide it at midnight after its last day (`chicagoDayEndMs`). The pages show a date range; the
   calendar feeds write `DTSTART;VALUE=DATE:20270319` + `DTEND;VALUE=DATE:20270322`.
+* **When an event is over** — the same instant on every page, so none disagrees between builds
+  (`eleventy/filters/committee.js` `eventSpan` / `eventEndMs`): `/events/` and `/meetings/` (the card's
+  `past` and `data-cm-expire`, the calendars' end), the home page (`homeEventEnd` → `data-gv-expire`), the
+  monthly toolkit (`overAt` → `data-mp-over`) and the district report (`upcomingEvents`). An all-day or
+  date-only event: midnight Central after its last day (an `end` given as an instant: its Central day, or the
+  day before when it is exactly midnight). A timed event: its `end` (a date as its end: midnight after that
+  day). A timed event without an end — or with one that cannot be read or is not after its start — lasts one
+  hour (`EVENT_NO_END_MS`: the hour the calendars give it, and what `meeting:` and `recurring_events:`
+  assume); its card shows the start time alone.
 * **Outside calendars** (`sources.ics_feeds`): one item per VEVENT (RRULE expanded; CANCELLED left out), id
   `ev:ics:<hash of UID + start>`, `source: "calendar"`, `category` = the feed's `category:` (`neta65` or `ics`
   → shown with the NETA 65 events; `gv-calendar` / `lv-calendar` → with the GV/LV calendars), `url` = the

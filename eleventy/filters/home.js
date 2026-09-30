@@ -16,7 +16,7 @@ import path from "node:path";
 import { libraryDocs, libraryCollections, docKitType, CATEGORIES, COLLECTIONS } from "./library.js";
 // The id of an event's card on /events/ (a monthly recurring event links there) and the end of a
 // Central-time day (an all-day event is upcoming through its last day).
-import { eventAnchor, chicagoDayEndMs } from "./committee.js";
+import { eventAnchor, eventEndMs } from "./committee.js";
 
 const TZ = "America/Chicago";
 const LOCALES = { en: "en-US", es: "es-US" };
@@ -352,16 +352,10 @@ export default function (eleventyConfig, helpers) {
      takes at most ONE more committee meeting (a row of identical monthly meetings says little). */
   const isYmd = (v) => /^\d{4}-\d{2}-\d{2}$/.test(String(v || ""));
   const evStart = (e) => time((e.extra && e.extra.start) || e.date);
-  // When an event is over: an all-day event at midnight Central after its LAST day (an assembly
-  // Fri–Sun stays upcoming all Sunday); a timed one at its end (no end: 2 hours after the start).
-  const evEnd = (e) => {
-    const x = e.extra || {};
-    const s = x.start || e.date;
-    const last = x.end || (isYmd(s) || x.all_day ? String(s).slice(0, 10) : "");
-    if (isYmd(last)) return chicagoDayEndMs(last);
-    if (x.end) return time(x.end);
-    return evStart(e) + 2 * 3600e3;
-  };
+  // When an event is over: committee.js eventEndMs — the rule of /events/, the monthly toolkit and the
+  // report too: an all-day event at midnight Central after its LAST day (an assembly Fri–Sun stays upcoming
+  // all Sunday); a timed one at its end (no end: one hour after the start).
+  const evEnd = (e) => eventEndMs(e);
   eleventyConfig.addFilter("homeEvents", (events, next, n = 4) => {
     const now = Date.now();
     const nextT = next && next.start ? time(next.start) : 0;
@@ -386,10 +380,11 @@ export default function (eleventyConfig, helpers) {
     return pick.sort((a, b) => evStart(a) - evStart(b));
   });
 
-  /* The moment a home-page event is over (the same evEnd homeEvents uses), as an ISO instant for the
-     card's data-gv-expire: src/assets/js/app.js (GV.expire) hides the card once it has passed, so a page
-     read between the daily builds (or kept for offline use) never lists an event that has ended. "" when
-     the event has no usable date. */
+  /* The moment a home-page event is over (the same evEnd homeEvents uses — the instant /events/ writes as
+     its card's data-cm-expire and the toolkit as data-mp-over), as an ISO instant for the card's
+     data-gv-expire: src/assets/js/app.js (GV.expire) hides the card once it has passed, so a page read
+     between the daily builds (or kept for offline use) never lists an event that has ended. "" when the
+     event has no usable date. */
   eleventyConfig.addFilter("homeEventEnd", (e) => {
     const t = e && evStart(e) ? evEnd(e) : NaN;
     return Number.isFinite(t) && t > 0 ? new Date(t).toISOString() : "";

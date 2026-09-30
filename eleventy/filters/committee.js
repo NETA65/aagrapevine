@@ -90,6 +90,59 @@ export function chicagoDayEndMs(ymd) {
   return isYmd(ymd) ? chicagoMidnight(ymdAddDays(ymd, 1)).getTime() : NaN;
 }
 
+// An event without an end time lasts ONE HOUR: the length the calendars give it (the .ics feed, the
+// add-to-calendar links), and what config/site.yml's committee meeting (src/_data/meeting.js) and its
+// recurring events (build_data: a missing end is start + 1 hour) assume. content/events README: give
+// `end:` for anything longer.
+export const EVENT_NO_END_MS = 3600e3;
+
+/**
+ * An event's span as every page reads it — THE rule, so no two pages disagree about when an event is over,
+ * not even between builds (each writes this end as the moment its browser script hides the event or marks
+ * it "Over"): /events/ and /meetings/ (normalizeEvents: the card's "past", its data-cm-expire, the
+ * calendars' end), the home page (home.js homeEvents, homeEventEnd → data-gv-expire), the monthly toolkit
+ * (monthly.js dateRow overAt → data-mp-over) and the district report (report.js upcomingEvents).
+ *   · all-day (a date-only start, or `all_day`): from midnight Central of its first day to midnight after
+ *     its last day — the `end` date (an end given as an instant: its Central day, or the day before when
+ *     it is exactly midnight), never before the first; an assembly Fri–Sun stays current all Sunday;
+ *   · timed: from its start to its end — an `end` given as a date: midnight after that day; no end, one
+ *     that cannot be read, or one not after the start: EVENT_NO_END_MS after the start.
+ * → { allDay, startMs, endMs, startYmd, endYmd (the Central day of its last moment), hasEnd (a timed
+ * event's end came from the data) }, or null without a readable start.
+ */
+export function eventSpan(it) {
+  const x = (it && it.extra) || {};
+  const rawStart = x.start || (it && it.date);
+  const s = parseInstant(rawStart);
+  if (!s) return null;
+  const allDay = isYmd(rawStart) || x.all_day === true;
+  if (allDay) {
+    const startYmd = isYmd(rawStart) ? rawStart : chicagoYmd(s);
+    let endYmd = startYmd;
+    if (isYmd(x.end)) endYmd = x.end;
+    else if (x.end) {
+      const e = parseInstant(x.end);
+      if (e) {
+        const d = chicagoYmd(e);
+        endYmd = e.getTime() === chicagoMidnight(d).getTime() ? chicagoYmd(new Date(e.getTime() - 1)) : d;
+      }
+    }
+    if (endYmd < startYmd) endYmd = startYmd;
+    return { allDay, startMs: chicagoMidnight(startYmd).getTime(), endMs: chicagoDayEndMs(endYmd), startYmd, endYmd, hasEnd: true };
+  }
+  const startMs = s.getTime();
+  const e = isYmd(x.end) ? chicagoDayEndMs(x.end) : x.end ? (parseInstant(x.end)?.getTime() ?? NaN) : NaN;
+  const hasEnd = e > startMs;
+  const endMs = hasEnd ? e : startMs + EVENT_NO_END_MS;
+  return { allDay, startMs, endMs, startYmd: chicagoYmd(s), endYmd: chicagoYmd(new Date(endMs - 1)), hasEnd };
+}
+
+/** When an event is over (ms): eventSpan's end — NaN without a readable start. */
+export function eventEndMs(it) {
+  const sp = eventSpan(it);
+  return sp ? sp.endMs : NaN;
+}
+
 // Any IANA time zone (the Grapevine Weekly Open is hosted in Eastern time).
 const zoneFmts = new Map();
 function zoneFmt(tz) {
@@ -462,25 +515,11 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
 
 function shapeEvent(it, site, lang, now, descOverride) {
   const x = it.extra || {};
-  const rawStart = x.start || it.date;
-  if (!rawStart) return null;
-  const allDay = isYmd(rawStart) || x.all_day === true;
-  let startMs, endMs, startYmd, endYmd;
-  if (allDay) {
-    startYmd = isYmd(rawStart) ? rawStart : chicagoYmd(parseInstant(rawStart));
-    const rawEnd = x.end ? (isYmd(x.end) ? x.end : chicagoYmd(parseInstant(x.end))) : startYmd;
-    endYmd = rawEnd < startYmd ? startYmd : rawEnd;
-    startMs = chicagoMidnight(startYmd).getTime();
-    endMs = chicagoMidnight(ymdAddDays(endYmd, 1)).getTime(); // exclusive end of last day
-  } else {
-    const s = parseInstant(rawStart);
-    if (!s) return null;
-    const e = parseInstant(x.end);
-    startMs = s.getTime();
-    endMs = e && e.getTime() > startMs ? e.getTime() : startMs + 3600e3; // no end → assume 1 hour
-    startYmd = chicagoYmd(s);
-    endYmd = chicagoYmd(new Date(endMs - 1));
-  }
+  // Its days and times (all-day: midnight to the midnight after its last day; a timed event without an end:
+  // one hour) — eventSpan, the rule the home page, the monthly toolkit and the report use too.
+  const span = eventSpan(it);
+  if (!span) return null;
+  const { allDay, startMs, endMs, startYmd, endYmd } = span;
   const start = new Date(startMs), end = new Date(endMs);
   const startNoon = new Date(startYmd + "T12:00:00Z");
   // An event over several days (an Area assembly, Fri–Sun): a date RANGE on the card, its tile and in the
@@ -540,7 +579,10 @@ function shapeEvent(it, site, lang, now, descOverride) {
       // "Fri, Mar 19, 6:00 PM CDT – Sun, Mar 21, 12:00 PM CDT": the times are in the range itself
       rangeLabel = cap(fmtRange(start, end, lang, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" }));
       dateLabel = cap(fmtRange(start, end, lang, { weekday: "long", month: "long", day: "numeric", year: "numeric" }));
-    } else timeLabel = fmtRange(start, end, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+    } else if (span.hasEnd) timeLabel = fmtRange(start, end, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+    // no end in the data: the start alone, as on the home page and the monthly toolkit — never the hour the
+    // calendars assume presented as its end
+    else timeLabel = fmt(start, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
   }
   const monthKey = startYmd.slice(0, 7);
   const monthLabel = cap(fmt(new Date(monthKey + "-15T12:00:00Z"), lang, { month: "long", year: "numeric", timeZone: "UTC" }));

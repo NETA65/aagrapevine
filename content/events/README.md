@@ -18,6 +18,10 @@ summary_es: "Visita nuestra mesa en la asamblea." # optional — your own Spanis
 Optional description (English or Spanish).
 ```
 
+**Give the `end` whenever you know it.** Without an end time the site counts the event as one hour long:
+an hour after it starts it leaves the upcoming lists (the Events page, the home page, the monthly
+toolkit's dates) and calendars get a one-hour entry. The card then shows the start time only.
+
 **Your own translation (optional).** The site translates the title and the
 description into the other language automatically, and marks them
 "auto-translated". To write them yourself, add `title_es` and `summary_es` to a

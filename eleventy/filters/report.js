@@ -23,7 +23,7 @@
 // Filters: rpModel(db, meeting, carry, site) · rpText(model, lang) · rpJson(value) · rpUi(lang)
 // Dev/test: MONTHLY_NOW=2026-12-15 fixes "today" (as for the posters).
 import { eventWhen, eventWhere, writersPick, spotlightOf, spotlightHomeDays, writerName, issueLabelOf, issueInSentence } from "./community.js";
-import { digestShop, weeklyOpenAll, gvMeetings, chicagoDayEndMs } from "./committee.js";
+import { digestShop, weeklyOpenAll, gvMeetings, eventEndMs } from "./committee.js";
 import { monthModel, nowDate, chicagoYmd, shortDate, timeRange, monthLabel } from "./monthly.js";
 import { scriptJson } from "../script-json.js";
 
@@ -72,25 +72,19 @@ const otherLangNote = (docLang, lang) => (docLang && docLang !== lang ? ` (${t(d
 /**
  * Events that start within `days` days and are not over yet (an assembly over several days stays
  * until its last day), soonest first; the committee meeting has its own section. A monthly series
- * (config/site.yml recurring_events, category "recurring") shows only its next date. "Over" is the
- * monthly toolkit's rule too (monthly.js eventOverMs: a timed event at its end — 6 hours after it
- * starts without one —, an all-day one at midnight after its last day).
+ * (config/site.yml recurring_events, category "recurring") shows only its next date. "Over" is the rule
+ * of every page that lists events (committee.js eventEndMs: a timed event at its end — one hour after it
+ * starts without one —, an all-day one at midnight Central after its last day).
  */
 export function upcomingEvents(db, now, days = EVENT_DAYS) {
   const nowMs = now instanceof Date ? now.getTime() : Number(now);
   const isYmd = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
   const startOf = (e) => (e.extra && e.extra.start) || e.date || null;
   const msOf = (v) => (isYmd(v) ? Date.parse(v + "T12:00:00Z") : Date.parse(v));
-  const endMs = (e) => {
-    const x = e.extra || {}, s = startOf(e);
-    if (x.end && !isYmd(x.end)) return msOf(x.end);
-    if (x.end || x.all_day || isYmd(s)) return chicagoDayEndMs(isYmd(x.end) ? x.end : chicagoYmd(s));
-    return msOf(s) + 6 * 3600e3;
-  };
   const seen = new Set();
   return ((db.events && db.events.items) || [])
     .filter((e) => e && e.kind === "event" && e.status !== "gone" && e.category !== "committee" && startOf(e))
-    .filter((e) => { const t = msOf(startOf(e)); return Number.isFinite(t) && t <= nowMs + days * DAY && endMs(e) >= nowMs; })
+    .filter((e) => { const t = msOf(startOf(e)); return Number.isFinite(t) && t <= nowMs + days * DAY && eventEndMs(e) >= nowMs; })
     .sort((a, b) => msOf(startOf(a)) - msOf(startOf(b)))
     .filter((e) => {
       if (e.category !== "recurring") return true;

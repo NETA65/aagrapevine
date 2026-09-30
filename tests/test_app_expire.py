@@ -349,8 +349,63 @@ class Moments(unittest.TestCase):
             f({ extra: {} }),
             f(null),
           ]);""")
-        self.assertEqual(r, ["2026-10-03T22:00:00.000Z", "2026-10-03T21:00:00.000Z", "2027-03-22T05:00:00.000Z",
+        # a timed event without an end: one hour (committee.js eventSpan — every page's rule, OneEndRule)
+        self.assertEqual(r, ["2026-10-03T22:00:00.000Z", "2026-10-03T20:00:00.000Z", "2027-03-22T05:00:00.000Z",
                              "2026-11-08T06:00:00.000Z", "", ""])
+
+
+class OneEndRule(unittest.TestCase):
+    """Every page that lists an event says it is over at the SAME instant — /events/ and /meetings/
+    (committee.js normalizeEvents → the card's data-cm-expire and the calendars' end), the home page
+    (homeEventEnd → data-gv-expire), the monthly toolkit (monthModel dates[].overAt → data-mp-over) and the
+    district report (upcomingEvents lists it until then) — through committee.js eventSpan. Before, a timed
+    event without an end was over after 1 hour on /events/, 2 on the home page and 6 in the toolkit and the
+    report, so between builds the pages disagreed for five hours."""
+    SITE = {"url": "https://example.org/site", "title": "Grapevine / La Viña", "recurring_events": [],
+            "meeting": {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00", "platform": "Zoom"}}
+
+    def test_the_pages_agree(self):
+        r = run_js(self, r"""
+          const C = await imp("eleventy/filters/committee.js");
+          const M = await imp("eleventy/filters/monthly.js");
+          const R = await imp("eleventy/filters/report.js");
+          const ev = (id, start, end, extra = {}) => ({ id, kind: "event", status: "ok", source: "committee", category: "manual",
+            title: id, url: "/events/", date: start, lang: "en", i18n: {}, machine: [], extra: { start, end, ...extra } });
+          const items = [
+            ev("no-end", "2026-10-02T00:00:00Z", null),                          // 7 PM CDT on the 1st, no end
+            ev("timed", "2026-10-03T15:00:00Z", "2026-10-03T18:00:00Z"),
+            ev("bad-end", "2026-10-04T15:00:00Z", "2026-10-04T14:00:00Z"),       // an end before the start
+            ev("junk-end", "2026-10-05T15:00:00Z", "soon"),                       // an end that cannot be read
+            ev("date-end", "2026-10-09T23:00:00Z", "2026-10-10"),                 // a date as its end: through it
+            ev("assembly", "2026-10-16", "2026-10-18", { all_day: true }),
+            ev("one-day", "2026-10-20", null, { all_day: true }),
+            ev("exclusive", "2026-10-23", "2026-10-25T05:00:00Z", { all_day: true }),   // 00:00 after the 24th
+          ];
+          const cm = Object.fromEntries(C.normalizeEvents(items, input.site, "en").filter((e) => !e.committee)
+            .map((e) => [e.id, [e.expireIso, e.endIso]]));
+          const home = Object.fromEntries(items.map((e) => [e.id, filters.homeEventEnd(e)]));
+          const mm = M.monthModel("2026-10", { events: { items } }, { ways: [], tips: {}, wayById: {} }, input.site, "en",
+                                  new Date("2026-10-01T15:00:00Z"));
+          const tk = Object.fromEntries(mm.dates.filter((d) => items.some((e) => e.id === d.id)).map((d) => [d.id, d.overAt]));
+          const rep = {};
+          for (const e of items) {
+            const at = Date.parse(home[e.id]);
+            const listed = (ms) => R.upcomingEvents({ events: { items } }, new Date(ms)).some((x) => x.id === e.id);
+            rep[e.id] = [listed(at - 60e3), listed(at + 60e3)];
+          }
+          const noEnd = C.normalizeEvents([items[0]], input.site, "en").find((e) => e.id === "no-end");
+          out({ cm, home, tk, rep, label: noEnd.timeLabel });""", data={"site": self.SITE})
+        want = {"no-end": "2026-10-02T01:00:00.000Z", "timed": "2026-10-03T18:00:00.000Z",
+                "bad-end": "2026-10-04T16:00:00.000Z", "junk-end": "2026-10-05T16:00:00.000Z",
+                "date-end": "2026-10-11T05:00:00.000Z", "assembly": "2026-10-19T05:00:00.000Z",
+                "one-day": "2026-10-21T05:00:00.000Z", "exclusive": "2026-10-25T05:00:00.000Z"}
+        self.assertEqual({k: v[0] for k, v in r["cm"].items()}, want, "/events/ (data-cm-expire)")
+        self.assertEqual(r["home"], want, "the home page (data-gv-expire)")
+        self.assertEqual(r["tk"], want, "the monthly toolkit (data-mp-over)")
+        self.assertEqual(r["rep"], {k: [True, False] for k in want}, "the district report lists it until then")
+        # the calendars get the same hour; the card shows the start alone — never an end the data did not give
+        self.assertEqual(r["cm"]["no-end"][1], "2026-10-02T01:00:00.000Z")
+        self.assertEqual(r["label"], "7:00 PM CDT")
 
 
 class Pages(unittest.TestCase):

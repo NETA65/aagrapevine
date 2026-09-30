@@ -82,8 +82,9 @@ def full_db() -> dict:
         "events": {"items": [
             event("ev:ws-oct3", "2026-10-03T19:00:00Z", "2026-10-03T22:00:00Z", "Grapevine Writing Workshop — Arlington",
                   url="https://neta65.org/event/arlington", extra={"city": "Arlington"}),
-            # a timed event without an end: over 6 hours after it starts (10 AM CDT → 4 PM CDT, 21:00 UTC)
-            event("ev:talk", "2026-10-05T15:00:00Z", None, "Service talk", url="https://neta65.org/event/talk"),
+            # a timed event without an end: over one hour after it starts — every page's rule (committee.js
+            # eventSpan): 11:30 AM CDT → 12:30 PM CDT, 17:30 UTC
+            event("ev:talk", "2026-10-05T16:30:00Z", None, "Service talk", url="https://neta65.org/event/talk"),
             event("ev:rec:2026-10-10", "2026-10-10T22:00:00Z", "2026-10-11T01:00:00Z", "GV/LV booth at CityWide Dallas",
                   category="recurring", url="https://citywidedallasaa.org", extra={"recurring": True, "series": "citywide", "city": "Dallas"}),
             event("ev:gone", "2026-10-12T19:00:00Z", None, "Cancelled workshop", status="gone"),
@@ -243,10 +244,10 @@ class Model(unittest.TestCase):
         # an all-day event: over at midnight Central after its last day (November 1: daylight saving ends)
         self.assertEqual(by["ev:assembly"]["overAt"], "2026-11-02T06:00:00.000Z")
         self.assertEqual(by["ev:assembly"]["range"], "Oct 30–Nov 1")
-        # a timed event without an end is over 6 hours after it starts: the talk began 2 hours before NOW_A
-        # (noon CDT) and is not over yet; its time has no end
+        # a timed event without an end is over one hour after it starts (the rule of /events/ and the home page
+        # too): the talk began half an hour before NOW_A (noon CDT) and is not over yet; its time has no end
         self.assertEqual((by["ev:talk"]["overAt"], by["ev:talk"]["past"], by["ev:talk"]["time"]),
-                         ("2026-10-05T21:00:00.000Z", False, "10 AM"))
+                         ("2026-10-05T17:30:00.000Z", False, "11:30 AM"))
         self.assertEqual(by["ev:ws-oct17"]["time"], "7–9 PM")                       # a no-break space: never split
 
     def test_deadlines_and_book_of_the_month(self):
@@ -383,7 +384,7 @@ class Message(unittest.TestCase):
         # in the middle of the line, after the colon, the Spanish weekday is lower-case (as the page writes it)
         self.assertIn("• Próxima reunión del comité: mié, 18 de noviembre · 7–8 p. m. (hora del Centro) — Zoom",
                       self.plain["b"]["es:whatsapp"])
-        self.assertIn("• Mon, Oct 5 · 10 AM Central — Service talk", self.plain["a"]["en:whatsapp"])     # still to come at noon
+        self.assertIn("• Mon, Oct 5 · 11:30 AM Central — Service talk", self.plain["a"]["en:whatsapp"])     # still on at noon
         self.assertNotIn("Service talk", self.plain["b"]["en:whatsapp"])                                 # over by October 22
         self.assertNotIn("Book of the Month", wa)                                           # the offer ended Oct 14
         self.assertIn("📬 Subscriptions from", wa)
