@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-29T18:02:51Z",
- "updated": "2026-09-29T18:02:51Z",
+ "generated": "2026-09-30T05:19:18Z",
+ "updated": "2026-09-30T05:19:18Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-09-29T18:02:32Z",
-   "attempted": "2026-09-29T18:02:32Z",
+   "updated": "2026-09-30T05:18:59Z",
+   "attempted": "2026-09-30T05:18:59Z",
    "count": 6,
    "new_7d": 6,
    "error": null,
@@ -75,8 +75,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-09-29T18:02:32Z",
-   "attempted": "2026-09-29T18:02:32Z",
+   "updated": "2026-09-30T05:18:59Z",
+   "attempted": "2026-09-30T05:18:59Z",
    "count": 0,
    "new_7d": 0,
    "error": null,
@@ -93,8 +93,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-09-29T18:02:32Z",
-   "attempted": "2026-09-29T18:02:32Z",
+   "updated": "2026-09-30T05:18:59Z",
+   "attempted": "2026-09-30T05:18:59Z",
    "count": 9,
    "new_7d": 9,
    "error": null,
@@ -232,8 +232,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-09-29T18:02:34Z",
-   "attempted": "2026-09-29T18:02:34Z",
+   "updated": "2026-09-30T05:19:01Z",
+   "attempted": "2026-09-30T05:19:01Z",
    "count": 297,
    "new_7d": 297,
    "error": null,
@@ -423,8 +423,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-09-29T18:02:50Z",
-   "attempted": "2026-09-29T18:02:50Z",
+   "updated": "2026-09-30T05:19:17Z",
+   "attempted": "2026-09-30T05:19:17Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -432,11 +432,24 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-09-29",
+    "today": "2026-09-30",
     "new": 0
    }
   }
  ],
+ "scheduled": [],
+ "quote_days": {
+  "goal": "05:30",
+  "days": [
+   {
+    "day": "2026-09-30",
+    "goal_at": "2026-09-30T10:30:00Z",
+    "gv": null,
+    "lv": null
+   }
+  ]
+ },
+ "full_update": "2026-09-29T16:38:49Z",
  "crawl": {
   "attempted": "2026-09-29T16:41:45Z",
   "crawled_pages": 3429,
@@ -507,7 +520,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-09-29",
+  "today": "2026-09-30",
   "home_days": 60,
   "list_days": [
    60,
@@ -520,11 +533,11 @@
     "all": 102
    },
    "90": {
-    "neta65": 4,
-    "texas": 15,
-    "all": 158
+    "neta65": 2,
+    "texas": 8,
+    "all": 102
    }
   },
-  "items": 158
+  "items": 102
  }
 }
