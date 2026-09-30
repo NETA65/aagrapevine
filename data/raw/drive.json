@@ -1,7 +1,7 @@
 {
  "source": "drive",
- "updated": "2026-09-30T05:18:59Z",
- "attempted": "2026-09-30T05:18:59Z",
+ "updated": "2026-09-30T09:45:34Z",
+ "attempted": "2026-09-30T09:45:34Z",
  "ok": true,
  "error": null,
  "stats": {
@@ -29,21 +29,23 @@
    "40th Annual Gathering of Eagles - Grapevine Table Signup"
   ],
   "skipped_panels": [],
-  "folders": 8,
-  "files": 6,
-  "fetched": 6,
-  "new": 0,
+  "folders": 9,
+  "files": 7,
+  "fetched": 7,
+  "new": 1,
   "removed": 0,
   "kept_unverified": 0,
   "by_category": {
    "flyers": 2,
    "reports": 2,
+   "announcements": 1,
    "workshops": 1,
    "notes": 1
   },
   "by_kind": {
    "document": 4,
-   "photo": 2
+   "photo": 2,
+   "announcement": 1
   },
   "albums": {},
   "events_from_flyers": 0,
@@ -54,13 +56,64 @@
   "unreadable_folders": [],
   "depth_limited": [],
   "shortcuts_resolved": 0,
-  "announcements": {},
+  "announcements": {
+   "fetched": 1
+  },
   "forms": {},
-  "requests": 8,
+  "requests": 10,
   "truncated": false,
   "warnings": []
  },
  "items": [
+  {
+   "id": "drive:18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW",
+   "source": "drive",
+   "kind": "announcement",
+   "url": "https://drive.google.com/file/d/18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW/view",
+   "title": "Grapevine and La Viña — ways to carry the message",
+   "summary": "A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it. Why it matters **A meeting in print, every day.** Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on…",
+   "lang": "en",
+   "date": "2026-09-30",
+   "first_seen": "2026-09-30T09:45:34Z",
+   "last_seen": "2026-09-30T09:45:34Z",
+   "image": null,
+   "tags": [
+    "panel-77",
+    "md"
+   ],
+   "category": "announcements",
+   "status": "ok",
+   "extra": {
+    "file_id": "18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW",
+    "mime": "text/markdown",
+    "name": "Grapevine and La Viña — ways to carry the message.md",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "bulletin"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW/view",
+    "preview_url": "https://drive.google.com/file/d/18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW",
+    "thumb_url": "https://lh3.googleusercontent.com/d/18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "MD",
+    "folder_id": "1Ka4i255epTjiLcbGVzasZR4Xq7cZZ7G7",
+    "folder_url": "https://drive.google.com/drive/folders/1Ka4i255epTjiLcbGVzasZR4Xq7cZZ7G7",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1Ka4i255epTjiLcbGVzasZR4Xq7cZZ7G7"
+    ],
+    "modified_text": "11:07 pm",
+    "body_md": "A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it.\n\n# Why it matters\n\n- **A meeting in print, every day.** Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on prison and treatment tablets, and ASL videos for deaf and hard-of-hearing members.\n- **Most of it is free.** Subscriptions pay for all of it, so every subscription keeps the free services going.\n- **The 183 Challenge.** If every area added about 183 subscriptions (print, app or online), Grapevine would be fully self-supporting. That is fewer people than come to most area assemblies.\n- **La Viña needs its readers.** La Viña is not yet self-supporting. Spanish-speaking members and groups make the biggest difference by subscribing, sharing it and writing for it.\n\n# What groups can do\n\n- **Subscribe as a group.** A group subscription is Seventh Tradition support, and many treasurers don't know it is an option. If even one group in ten subscribed, it would make a big difference.\n- **Welcome newcomers.** Give a subscription along with the Big Book. A digital subscription costs about 8 cents a day ([current prices](/shop/)).\n- **Carry the Message.** A group can send subscriptions to correctional facilities, treatment centers and professionals who work with alcoholics ([how it works](https://www.aagrapevine.org/carry-the-message)).\n- **Put it in the budget.** Include a Carry the Message subscription in the group's regular spending, next to rent, coffee, literature and contributions to the district, area and GSO.\n- **Share the free resources.** Put a one-page handout on the literature table with links to the Grapevine app, the [podcast](/listen/), the Daily Quote sign-up, Instagram and YouTube. Many members don't know these exist.\n\n# At meetings\n\n- **Mention it in your share.** Not a pitch, just experience: \"I read something in Grapevine this week that really hit home…\"\n- **Make a 30-second announcement.** \"Grapevine reaches millions of people through daily quotes, podcasts and prison tablets, mostly for free. A subscription helps keep the lights on for all of it.\" Anyone can say it.\n- **Set out QR table cards.** A card on the literature table that links to the subscription page works every week without an announcement ([QR posters](/share/)).\n- **Hold a \"meeting after the meeting.\"** Once a month, for 15 minutes after a regular meeting, read a story, play a podcast clip or show a short video. People subscribe to what they have experienced.\n- **Invite an \"I got sober reading this\" minute.** Once a month, a member shares one minute about a Grapevine or La Viña story that helped them.\n- **Use the coffee comparison at business meetings.** A digital subscription costs less than one fancy coffee a month.\n\n# One on one\n\n- **Sponsor to sponsee.** A gift subscription is a meeting that never closes, especially for someone in a rural area, working odd hours or unable to get to meetings.\n- **Share the podcast.** It is free Twelfth Step work: one text, one link.\n- **Share the Daily Quote.** Signing up is free, and it takes ten seconds to read. Share it in your group's text chain ([today's quote](/#quote-title)).\n- **Mark anniversaries.** Give a year of Grapevine or La Viña with, or instead of, a chip.\n- **Give in Gratitude Month.** In November, ask: \"What are you grateful for? Give someone a reason to be grateful every day for a year.\" A group can set a goal, such as five gift subscriptions.\n\n# Online\n\n- **Ask for a follow.** It takes five seconds: \"If you're on Instagram, follow Grapevine and La Viña\" ([our Instagram page](/instagram/)).\n- **Reach young people.** Bring the app, the podcast, Instagram and the Daily Quote to YPAA events and meetings near campuses. They don't need to be sold on technology; they need to know the content exists.\n\n# Beyond the meeting room\n\n- **Give a \"Grapevine Minute\" at the district meeting.** Three minutes, one story and a sign-up sheet or QR card, in front of every GSR.\n- **Set up an intergroup or central office display.** Current issues, a tablet with the podcast or app, and sign-up cards where members already come for literature and chips.\n- **Add it to H&I visit kits.** Leave a current issue alongside the Big Book.\n- **Build a bridge from treatment and corrections.** A group-funded subscription waiting for someone leaving treatment or a correctional facility means the message follows them home.\n- **Work with the professional community (CPC).** Include a current issue with other A.A. literature for doctors, counselors, social workers and clergy.\n- **Read it, then pass it.** Read one print copy at the meeting, then leave it in a waiting room, a laundromat or a break room.\n\n# Every month\n\nThe [Monthly toolkit](/monthly/) has this month's issues, the story deadlines and more ways to put them to work. Talk with your GVR or RLV, bring one idea to your next business meeting, and share what works at the [committee meeting](/meetings/#committee-meeting).",
+    "pinned": false
+   }
+  },
   {
    "id": "drive:1PQk08ukyuVAWKnq1kLRbnURvS1FUyX1i",
    "source": "drive",

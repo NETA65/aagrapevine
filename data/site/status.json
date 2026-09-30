@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-30T05:19:18Z",
- "updated": "2026-09-30T05:19:18Z",
+ "generated": "2026-09-30T09:45:57Z",
+ "updated": "2026-09-30T09:45:57Z",
  "fixture": false,
  "sources": [
   {
@@ -8,10 +8,10 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-09-30T05:18:59Z",
-   "attempted": "2026-09-30T05:18:59Z",
-   "count": 6,
-   "new_7d": 6,
+   "updated": "2026-09-30T09:45:34Z",
+   "attempted": "2026-09-30T09:45:34Z",
+   "count": 7,
+   "new_7d": 7,
    "error": null,
    "stats": {
     "mode": "html",
@@ -38,21 +38,23 @@
      "40th Annual Gathering of Eagles - Grapevine Table Signup"
     ],
     "skipped_panels": [],
-    "folders": 8,
-    "files": 6,
-    "fetched": 6,
-    "new": 0,
+    "folders": 9,
+    "files": 7,
+    "fetched": 7,
+    "new": 1,
     "removed": 0,
     "kept_unverified": 0,
     "by_category": {
      "flyers": 2,
      "reports": 2,
+     "announcements": 1,
      "workshops": 1,
      "notes": 1
     },
     "by_kind": {
      "document": 4,
-     "photo": 2
+     "photo": 2,
+     "announcement": 1
     },
     "albums": {},
     "events_from_flyers": 0,
@@ -63,9 +65,11 @@
     "unreadable_folders": [],
     "depth_limited": [],
     "shortcuts_resolved": 0,
-    "announcements": {},
+    "announcements": {
+     "fetched": 1
+    },
     "forms": {},
-    "requests": 8,
+    "requests": 10,
     "truncated": false,
     "warnings": []
    }
@@ -75,8 +79,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-09-30T05:18:59Z",
-   "attempted": "2026-09-30T05:18:59Z",
+   "updated": "2026-09-30T09:45:34Z",
+   "attempted": "2026-09-30T09:45:34Z",
    "count": 0,
    "new_7d": 0,
    "error": null,
@@ -93,8 +97,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-09-30T05:18:59Z",
-   "attempted": "2026-09-30T05:18:59Z",
+   "updated": "2026-09-30T09:45:34Z",
+   "attempted": "2026-09-30T09:45:34Z",
    "count": 9,
    "new_7d": 9,
    "error": null,
@@ -232,8 +236,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-09-30T05:19:01Z",
-   "attempted": "2026-09-30T05:19:01Z",
+   "updated": "2026-09-30T09:45:36Z",
+   "attempted": "2026-09-30T09:45:36Z",
    "count": 297,
    "new_7d": 297,
    "error": null,
@@ -423,8 +427,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-09-30T05:19:17Z",
-   "attempted": "2026-09-30T05:19:17Z",
+   "updated": "2026-09-30T09:45:52Z",
+   "attempted": "2026-09-30T09:45:52Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -433,7 +437,7 @@
     "parsed": 2,
     "requests": 2,
     "today": "2026-09-30",
-    "new": 0
+    "new": 2
    }
   }
  ],
@@ -444,8 +448,8 @@
    {
     "day": "2026-09-30",
     "goal_at": "2026-09-30T10:30:00Z",
-    "gv": null,
-    "lv": null
+    "gv": "2026-09-30T09:45:42Z",
+    "lv": "2026-09-30T09:45:52Z"
    }
   ]
  },
@@ -468,16 +472,16 @@
   "updated": "2026-09-29T16:41:45Z"
  },
  "translations": {
-  "cached": 1898,
+  "cached": 1901,
   "engine": "argos1.0-ct2/v5",
   "model_enabled": true,
-  "translated_this_run": 0,
+  "translated_this_run": 3,
   "from_cache": 1898,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.1,
-  "model_seconds": 0.0,
-  "texts_per_second": null,
+  "seconds": 4.5,
+  "model_seconds": 3.8,
+  "texts_per_second": 0.7,
   "glossary_entries": 257
  },
  "counts": {
@@ -489,7 +493,7 @@
   "drive": 6,
   "editorial": 37,
   "weekly_open": 2,
-  "announcements": 0,
+  "announcements": 1,
   "events": 30,
   "whatsnew": 150,
   "shop": 60,
