@@ -26,8 +26,9 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     carries data-gv-expire (the moment it is over: fsDayEnd, homeEventEnd), and the bulletin and events
     sections — and the themes' list — are data-gv-expire-list: they go away once all of theirs have
     (src/assets/js/app.js GV.expire, checked every minute). The 4th event, hidden on a phone, is a spare
-    (data-gv-expire-spare): it shows there once an earlier one has ended. Counts and grid columns are not
-    redrawn (the next build does that).
+    (data-gv-expire-spare): it shows there once an earlier one has ended. The phone's "See the 3 upcoming
+    themes" link counts down with them (data-gv-expire-count); grid columns are not redrawn (the next build
+    does that).
     ====================================================================== -#}
 {% import "macros/ui.njk" as ui with context %}
 {% set L = lang %}
@@ -411,7 +412,10 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           <a href="{{ '/contribute/' | lurl(L) }}" class="btn-secondary btn-sm max-sm:hidden">{% icon "feather", "size-4" %} {{ "home.write_cta" | t(L) }}</a>
         </div>
         {#- Phones: the themes fold into one link; 640px up: the theme cards (stacked in the tall-2xl column). -#}
-        <a class="link tap-link mt-3 text-sm sm:hidden" href="{{ '/contribute/#deadlines' | lurl(L) }}">{{ ("home.write_themes_one" if themes.length == 1 else "home.write_themes_n") | t(L, { n: themes.length }) }} {% icon "arrow-right", "size-4" %}</a>
+        {#- … and its count goes down as their deadlines pass (app.js GV.expire: data-gv-expire-count) -#}
+        {%- set thEnds = [] -%}
+        {%- for th in themes %}{% set _te = thEnds.push((th.extra.deadline | fsDayEnd) or "-") %}{% endfor -%}
+        <a class="link tap-link mt-3 text-sm sm:hidden" href="{{ '/contribute/#deadlines' | lurl(L) }}" data-gv-expire-count="{{ thEnds | join(' ') }}" data-gv-expire-one="{{ 'home.write_themes_one' | t(L) }}" data-gv-expire-n="{{ 'home.write_themes_n' | t(L, { n: '{n}' }) }}"><span data-gv-expire-text>{{ ("home.write_themes_one" if themes.length == 1 else "home.write_themes_n") | t(L, { n: themes.length }) }}</span> {% icon "arrow-right", "size-4" %}</a>
         <ul class="mt-5 grid gap-3 max-sm:hidden sm:grid-cols-2 {{ 'lg:grid-cols-4' if themes.length >= 4 else ('lg:grid-cols-3' if themes.length == 3 else '') }} tall-2xl:grid-cols-1" role="list" data-gv-expire-list>
           {% for th in themes %}
           {%- set isLv = (th.extra.publication == "lv") -%}

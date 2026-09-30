@@ -25,7 +25,8 @@ pageScripts: ["/assets/js/committee.js"]
     A post with an `expires` day hides itself once that day is over in Central time, between the daily
     builds too (data-gv-expire: fsDayEnd, app.js GV.expire — never while a button in it has keyboard focus;
     committee.js, also loaded here, leaves these attributes alone); when the last one has gone, the
-    "nothing posted" card shows instead (data-gv-expire-list → data-gv-expire-empty). A post scheduled
+    "nothing posted" card shows instead (data-gv-expire-list → data-gv-expire-empty), and the sub-nav's
+    Bulletin count goes down with them (committeeNav: data-gv-expire-count). A post scheduled
     for a later day (`publish:`, Drive "(from …)") is not in the data before its day at all (build_data). -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set anns = db.announcements.items | cmAnnouncements -%}

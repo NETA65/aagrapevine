@@ -5,6 +5,8 @@
   * [data-gv-expire-list] — hidden once every [data-gv-expire-item] inside it is hidden, and its
     data-gv-expire-empty="#id" note shown instead; a [data-gv-expire-spare="<class>"] item (the home page's
     4th event, hidden on a phone) drops that class once an earlier item has gone;
+  * [data-gv-expire-count] — a number of things that end (the committee pages' Events and Bulletin counts,
+    the home page's "See the 3 upcoming themes") goes down as they end, and is hidden at 0 (Counts);
   * the attributes are GV.expire's alone: committee.js and read.js, which hide their own [data-cm-expire]
     (their own marker, counts and lists), never see them (committee.js is loaded on /bulletin/ too);
   * the element holding keyboard focus (or a list around it) is never hidden under the reader — it goes once
@@ -249,6 +251,65 @@ class Expire(unittest.TestCase):
           p.fire("DOMContentLoaded");
           out({ intervals: p.intervals.length });""")
         self.assertEqual(r["intervals"], 0)
+
+
+class Counts(unittest.TestCase):
+    """[data-gv-expire-count]: a number of things that end — the committee pages' Events and Bulletin counts,
+    the home page's "See the 3 upcoming themes" — goes down as they end between builds, and is hidden at 0
+    (never while it holds keyboard focus). Before, /bulletin/'s sub-nav kept "Bulletin 3" next to "Nothing
+    on the bulletin right now" once every post had expired."""
+
+    def test_the_number_goes_down_and_goes_at_zero(self):
+        r = js(self, r"""
+          const n = el("span", { "data-gv-expire-count": [PAST, SOON, LATER, "-"].join(" ") });
+          n.textContent = "4";
+          const text = el("span", { "data-gv-expire-text": "" });
+          const link = el("a", { href: "#", "data-gv-expire-count": SOON + " 2026-10-03T21:45:00Z",
+                                 "data-gv-expire-one": "See the upcoming theme", "data-gv-expire-n": "See the {n} upcoming themes" }, [text]);
+          const p = page([n, link]);
+          p.fire("DOMContentLoaded");
+          const boot = [n.textContent, text.textContent, link.hidden];
+          p.clock.now = Date.parse("2026-10-03T21:31:00Z");
+          p.intervals.find((i) => i.ms === 60000).fn();
+          const minute = [n.textContent, text.textContent, link.hidden];
+          p.doc.activeElement = link;                      // it has keyboard focus when its last theme ends
+          p.clock.now = Date.parse("2026-10-03T21:46:00Z");
+          p.intervals.find((i) => i.ms === 60000).fn();
+          const focused = link.hidden;
+          p.doc.activeElement = p.doc.body;
+          link.dispatch("focusout");
+          p.run();
+          out({ boot, minute, focused, after: [link.hidden, n.hidden, n.textContent] });""")
+        self.assertEqual(r["boot"], ["3", "See the 2 upcoming themes", False], "one had ended already")
+        self.assertEqual(r["minute"], ["2", "See the upcoming theme", False])
+        self.assertFalse(r["focused"], "never hidden under the reader")
+        self.assertEqual(r["after"], [True, False, "2"], "gone once focus left it; '-' never ends")
+
+    def test_the_committee_counts_carry_their_moments(self):
+        # committeeNav writes one moment per thing it counts: an event's end (the instant /events/ hides its
+        # card at), a monthly series once — its last listed date's —, a post's `expires` day end ("-": none)
+        ev = lambda iid, start, end, **x: {"id": iid, "kind": "event", "status": "ok", "source": "committee", "category": x.pop("category", "manual"),
+                                           "title": iid, "url": "/events/", "date": start, "lang": "en", "i18n": {}, "machine": [],
+                                           "extra": {"start": start, "end": end, **x}}
+        ann = lambda iid, **x: {"id": iid, "kind": "announcement", "status": "ok", "source": "committee", "title": iid, "date": "2030-01-02",
+                                "lang": "en", "i18n": {}, "machine": [], "extra": {"slug": iid, **x}}
+        db = {"events": {"items": [
+                  ev("ev:ws", "2030-03-02T15:00:00Z", "2030-03-02T18:00:00Z"),
+                  ev("ev:rec:1", "2030-03-09T23:00:00Z", "2030-03-10T02:00:00Z", category="recurring", recurring=True, series="booth"),
+                  ev("ev:rec:2", "2030-04-13T23:00:00Z", "2030-04-14T02:00:00Z", category="recurring", recurring=True, series="booth")]},
+              "announcements": {"items": [ann("ann:a", expires="2030-01-14"), ann("ann:b"), ann("ann:old", expires="2020-01-01")]},
+              "drive": {"items": []}}
+        html = run_js(self, r"""
+          const C = await imp("eleventy/filters/committee.js");
+          const sc = {};
+          C.default(new Proxy({}, { get: (_t, name) => (name === "addShortcode" ? (n, fn) => { sc[n] = fn; } : () => {}) }));
+          out(sc.committeeNav("en", "bulletin", input.db));""", data={"db": db})
+        import re
+        counts = dict(re.findall(r'href="/(events|bulletin)/"[^>]*>(?:(?!</a>).)*?<span class="cm-subnav-count" data-gv-expire-count="([^"]*)">\d+</span>',
+                                 html, re.S))
+        self.assertEqual(counts["events"].split(), ["2030-03-02T18:00:00.000Z", "2030-04-14T02:00:00.000Z"])
+        self.assertEqual(counts["bulletin"].split(), ["2030-01-15T06:00:00.000Z", "-"])
+        self.assertNotIn('data-gv-expire-count', re.search(r'href="/meetings/".*?</a>', html, re.S).group(0))
 
 
 class CommitteeExpire(unittest.TestCase):

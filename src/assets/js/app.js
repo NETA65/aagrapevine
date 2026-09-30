@@ -186,6 +186,12 @@
                                          event, "max-sm:hidden": three on a phone). For each item of its list
                                          that has gone, one spare drops that class, so a phone keeps showing
                                          three while there are three — and the list goes only when all have.
+       [data-gv-expire-count="<instant> …"]  a number of things that end (the committee pages' Events and
+                                         Bulletin counts, the home page's "See the 3 upcoming themes"): one
+                                         entry per thing — the ISO instant it is over, or "-" (it does not
+                                         end). Its text becomes how many have not passed — in words, the
+                                         data-gv-expire-one / data-gv-expire-n text ({n}) written into its
+                                         [data-gv-expire-text] — and it is hidden at 0.
      The element that holds keyboard focus (or a list around it) is never hidden under the reader: it is
      hidden once focus leaves it. Runs on load, every minute and when the page is shown again.
      These attributes are GV.expire's alone: committee.js (/events/, /meetings/ — and loaded on /bulletin/
@@ -234,6 +240,20 @@
       var sel = list.getAttribute("data-gv-expire-empty"), note = null;
       try { note = sel ? document.querySelector(sel) : null; } catch (e) { note = null; }
       if (note) note.hidden = false;
+    });
+    Array.prototype.forEach.call(root.querySelectorAll("[data-gv-expire-count]"), function (el) {
+      var left = 0;
+      String(el.getAttribute("data-gv-expire-count") || "").split(/\s+/).forEach(function (v) {
+        if (v && (!EXPIRE_AT.test(v) || !(Date.parse(v) <= now))) left++;    // "-": it does not end
+      });
+      var tpl = el.getAttribute(left === 1 ? "data-gv-expire-one" : "data-gv-expire-n");
+      var text = tpl ? tpl.replace("{n}", String(left)) : String(left);
+      var target = el.querySelector("[data-gv-expire-text]") || el;
+      if (target.textContent !== text) target.textContent = text;
+      if (left || el.hidden) return;
+      if (holdsFocus(el)) { afterFocus(el); return; }
+      el.hidden = true;
+      hid++;
     });
     return hid;
   };
@@ -793,7 +813,7 @@
     });
     // Things whose time has passed (GV.expire): now, every minute, and when the page is shown again
     // (a tab brought back to the front, or a page restored by the Back button)
-    if (document.querySelector("[data-gv-expire], [data-gv-expire-list]")) {
+    if (document.querySelector("[data-gv-expire], [data-gv-expire-list], [data-gv-expire-count]")) {
       GV.expire();
       setInterval(function () { GV.expire(); }, 60000);
       document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") GV.expire(); });

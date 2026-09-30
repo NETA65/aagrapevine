@@ -1731,19 +1731,32 @@ export default function (eleventyConfig, helpers) {
   });
 
   // Committee section sub-navigation: {% committeeNav lang, "events", db %}
+  // The Events and Bulletin counts go down between builds as those things end: each carries, in
+  // data-gv-expire-count, the moment each thing it counts is over (src/assets/js/app.js GV.expire recounts
+  // it — the moments /events/ and /bulletin/ hide their cards at — and hides it at 0).
   eleventyConfig.addShortcode("committeeNav", function (lang, current, db) {
     const L = lang || "en";
+    // upcoming events as /events/ lists them: a monthly series counts once (cmCollapseRecurring), until its
+    // last listed date is over
+    const eventEnds = new Map();
+    for (const e of EMPTY ? [] : normalizeEvents(db?.events?.items || [], {}, L, { monthsBack: 0, monthsAhead: 0 })) {
+      if (e.past || e.committee) continue;
+      const k = e.recurring && e.series ? `s:${e.series}` : `e:${e.id}`;
+      if (!eventEnds.has(k) || e.expireIso > eventEnds.get(k)) eventEnds.set(k, e.expireIso);
+    }
+    // the bulletin's posts: each is over at midnight Central after its `expires` day (bulletin.njk's rule)
+    const posts = announcementList(EMPTY ? [] : db?.announcements?.items);
+    const postEnd = (p) => {
+      const t = chicagoDayEndMs(String(p.extra?.expires || "").slice(0, 10));
+      return Number.isFinite(t) ? new Date(t).toISOString() : "-";
+    };
     const n = {
-      // upcoming events as /events/ lists them: a monthly series counts once (cmCollapseRecurring)
-      events: EMPTY ? 0 : (() => {
-        const seen = new Set();
-        return normalizeEvents(db?.events?.items || [], {}, L, { monthsBack: 0, monthsAhead: 0 })
-          .filter((e) => !e.past && !e.committee && !(e.recurring && e.series && (seen.has(e.series) || !seen.add(e.series)))).length;
-      })(),
+      events: eventEnds.size,
       portfolio: documentTabs(EMPTY ? [] : db?.drive?.items, L).total,
       photos: photoAlbums(EMPTY ? [] : db?.drive?.items, L).reduce((s, a) => s + a.count, 0),
-      bulletin: announcementList(EMPTY ? [] : db?.announcements?.items).length,
+      bulletin: posts.length,
     };
+    const ends = { events: [...eventEnds.values()], bulletin: posts.map(postEnd) };
     const pages = [
       { key: "meetings", url: "/meetings/", icon: "calendar-clock" },
       { key: "events", url: "/events/", icon: "calendar-days" },
@@ -1755,7 +1768,8 @@ export default function (eleventyConfig, helpers) {
     ];
     const links = pages.map((p) => {
       const on = p.key === current;
-      const count = n[p.key] ? `<span class="cm-subnav-count">${n[p.key]}</span>` : "";
+      const until = ends[p.key] ? ` data-gv-expire-count="${esc(ends[p.key].join(" "))}"` : "";
+      const count = n[p.key] ? `<span class="cm-subnav-count"${until}>${n[p.key]}</span>` : "";
       return `<a href="${localPath(p.url, L)}" class="cm-subnav-link${on ? " is-current" : ""}"${on ? ' aria-current="page"' : ""}>${icon(p.icon, "size-4")}<span>${esc(t("committee.subnav." + p.key, L))}</span>${count}</a>`;
     });
     // page-overlap (main.css): the pill bar tucks into the hero's faded bottom edge — the
