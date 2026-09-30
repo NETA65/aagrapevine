@@ -99,6 +99,8 @@ in the Actions tab and continue with Step 6. A cancelled run still saves what it
      repository (`data/state/crawl-state.json`), so the daily runs simply continue from there.
      Use **`300`** (about 5 hours) only if that first search was **not** saved — see Step 7, point 3.
    - **skip_crawl:** leave unticked
+   - **morning:** leave unticked (it is the short *morning refresh* the Morning check starts every
+     morning — Step 9)
 4. Click the green **Run workflow** button.
 
 You can close the browser. What happens:
@@ -126,7 +128,8 @@ refreshes only Google Drive, the bulletin, the podcasts and the daily quote, and
    tick **Use your GitHub Pages website** → **Save changes**. The address now shows at the top
    of the repository.
 
-From now on the site updates itself **every morning at about 5:17 AM Central**.
+From now on the site updates itself every day: the full update once a day, whenever GitHub starts it,
+and — once the morning alarm of Step 9 is set — the new day and the daily quote **by 5:30 AM Central**.
 
 **What to expect on day 1:** magazine stories, both podcasts (AA Grapevine's Podcast and the
 Grapevine Weekly Open AA Meeting), videos and Instagram appear right away. The committee's own
@@ -144,7 +147,9 @@ original language meanwhile.
 3. **Make the daily run's e-mails come to you.** GitHub sends them to the person who last switched
    the workflow on (or last changed its schedule) — not automatically to whoever ticked step 2.
    Open the repository's **Actions** tab → **Update & Deploy** → **⋯** (top right) →
-   **Disable workflow**, then the same menu (or the banner) → **Enable workflow**.
+   **Disable workflow**, then the same menu (or the banner) → **Enable workflow**. Do the same for
+   **Morning check** (its hourly backstop is a timed run too) and, once the monthly e-mail is set up,
+   **Monthly e-mail digest**. (The runs the morning alarm of Step 9 starts e-mail the owner of its key.)
 4. On the repository page, check the **Watch** button (top right) is set to **All Activity**, or
    **Custom** with **Issues** ticked, so you receive the issue described below. (People who can
    push to the repository usually watch it already.)
@@ -156,10 +161,25 @@ that says what to check; it closes itself when the source works again.
 
 ---
 
+## Step 9 (recommended) — the morning alarm
+
+GitHub starts the site's own timed runs when it has room — lately often 4 to 8 hours late — so on its
+own the new day's quote may reach the site only in the afternoon. The **Morning check** workflow puts
+the new day and both daily quotes on the site within minutes, and does nothing when they are already
+there; a free outside alarm clock presses its button at **4:30 AM Central** every day.
+
+Setting it up takes about 15 minutes, once: a key limited to this repository's workflows (Actions),
+and an alarm at cron-job.org. The click-by-click steps are in the README →
+**[10 d) The morning alarm](../README.md#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)**.
+Without the alarm everything still works, just later in the day.
+
+---
+
 ## Optional next steps
 
 | What | Where |
 |---|---|
+| The new day and the daily quote on the site by 5:30 AM | Step 9 above (the morning alarm) |
 | Monthly bilingual e-mail to the districts | README → *Optional upgrades → Monthly e-mail digest* |
 | Exact dates for Drive files (Google API key) | README → *Optional upgrades → Google API key* |
 | Instagram the official way (token), or no automated Instagram visits at all | README → *Instagram: how the site reads it* |
@@ -184,11 +204,16 @@ exactly (capital letters, underscores). Secrets can be replaced any time but nev
 
 ## If you move or copy the repository later
 
-After a **transfer**, **rename** or **fork**, repeat Steps 3, 4 and 8, re-add any secrets that did
-not come along, update `url:` in `config/site.yml`, and run **Update & Deploy** once. The workflow
+After a **transfer**, **rename** or **fork**, repeat Steps 3, 4, 8 and 9 — the morning alarm needs a new
+key with the new owner as *Resource owner* (an organisation must allow fine-grained keys) and the new
+address in the job's URL —, re-add any secrets that did not come along, update `url:` in
+`config/site.yml`, and run **Update & Deploy** once. The workflow
 works out the new address and folder name by itself — no code changes are needed.
 A fork also needs **Actions → Enable workflows**; scheduled runs only happen on the `main` branch.
 
-**New owner or new chair:** the failure e-mails of the daily run keep going to the person who last
-switched the workflow on. Whoever should receive them now does Step 8, point 3
-(**Actions → Update & Deploy → ⋯ → Disable workflow**, then **Enable workflow**).
+**New owner or new chair:** the failure e-mails of the timed runs keep going to the person who last
+switched each workflow on. Whoever should receive them now does Step 8, point 3 for **Update & Deploy**,
+**Morning check** and **Monthly e-mail digest** (**Actions → the workflow → ⋯ → Disable workflow**, then
+**Enable workflow**). The morning alarm's key belongs to the repository's owner (a key only reaches its
+owner's repositories): a new chair who does not own the repository leaves it with the owner; a new owner
+makes a new one (Step 9).

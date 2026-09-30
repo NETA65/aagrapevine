@@ -36,6 +36,7 @@ from .common import (RAW_DIR, SITE_DIR, STATE_DIR, clean_text, get_logger, load_
 from .geo import SCOPES, classify_location, fold
 from .meeting import (MonthlyRule, check_skip_dates, meeting_skip_notes, parse_hhmm, upcoming_meetings,
                       upcoming_rule_dates, week_of_month_value, weekday_index)
+from .run_all import FULL_ONLY
 
 log = get_logger("build_data")
 
@@ -222,6 +223,8 @@ class Ctx:
         self.hub_issues: set[str] = set()      # "gv:2026-10" — magazine issues seen on a hub (current issues)
         self.feeds: list[dict] = []            # health of each sources.ics_feeds entry (→ status.json `feeds`)
         self.feed_requests = 0                 # requests made to .ics feeds this run (one per feed at most)
+        # bulletin posts whose `publish` day is still to come (build_announcements → status.json `scheduled`)
+        self.scheduled: list[dict] = []
 
     # ---------------------------------------------------------------- raw loading
     def load_raw(self) -> None:
@@ -264,13 +267,30 @@ class Ctx:
         """The date an item became news: its publish date; for future-dated items (next month's
         magazine issue) and undated items the day we found it — but only if found after the
         source's first harvest (so launch day isn't 3,000 "new" items). The crawler already dates
-        PDFs it saw appear on a known page, so an undated PDF is never news by itself."""
+        PDFs it saw appear on a known page, so an undated PDF is never news by itself.
+        A bulletin post scheduled for a later day (`extra.publish`: content/bulletin `publish:`, Drive
+        "(from …)") is news from the start of that day (Central) at the earliest — What's New, the feed,
+        the "New" badge and the monthly digest all count it then, whatever its `date` says."""
         d = ts(it.get("date"))
         if d is not None and d <= self.now_ts + 86400:
-            return d
-        if source == "pdfs":
+            base = d
+        elif source == "pdfs":
             return None
-        return self.found_ts(it, source)
+        else:
+            base = self.found_ts(it, source)
+        publish = (it.get("extra") or {}).get("publish") if it.get("kind") == "announcement" else None
+        start = self.day_start_ts(publish) if publish else None
+        if start is None:
+            return base
+        return start if base is None else max(base, start)
+
+    def day_start_ts(self, ymd: Any) -> float | None:
+        """00:00 in the site's time zone (Central) on a 'YYYY-MM-DD' day, as POSIX seconds; None otherwise."""
+        try:
+            d = date.fromisoformat(str(ymd)[:10])
+        except ValueError:
+            return None
+        return datetime(d.year, d.month, d.day, tzinfo=self.tz).timestamp()
 
     def found_ts(self, it: dict, source: str | None = None) -> float | None:
         """first_seen, but only when the item appeared AFTER its source's first harvest (the very
@@ -327,7 +347,16 @@ def closed_form(it: dict) -> bool:
     return it.get("kind") == "form" and (it.get("extra") or {}).get("form_closed") is True
 
 
+SCHEDULED_MAX = 20           # scheduled bulletin posts listed in status.json (soonest first)
+
+
 def build_announcements(ctx: Ctx) -> list[dict]:
+    """The bulletin (content/bulletin + the Drive "bulletin" folder): pinned first, then newest. A post
+    past its `expires` day is left out; so is one whose `publish` day (content/bulletin `publish:`, Drive
+    "(from …)") has not come yet in Central time — it never reaches the site data before that day (not
+    the bulletin, What's New, the feed or the search); it is listed in ctx.scheduled (status.json
+    `scheduled`, the run summary) instead, and appears with the first update of its day (the morning
+    refresh). A published post keeps `extra.publish`: Ctx.effective_ts dates its news from that day."""
     raw = [i for i in ctx.items("announcements") if i.get("kind") == "announcement"]
     raw += [i for i in ctx.items("drive") if i.get("kind") == "announcement"]
     items = safe_each(raw, prep, "announcement")
@@ -336,6 +365,12 @@ def build_announcements(ctx: Ctx) -> list[dict]:
     for it in items:
         exp = it["extra"].get("expires")
         if exp and str(exp)[:10] < today:
+            continue
+        publish = str(it["extra"].get("publish") or "")[:10]
+        if publish and publish > today:
+            ex = it["extra"]
+            ctx.scheduled.append({"publish": publish, "title": it.get("title") or "", "source": it.get("source"),
+                                  "file": ex.get("file") or ex.get("name") or ""})
             continue
         it["extra"].setdefault("body_md", it.get("summary") or "")
         it["extra"]["pinned"] = bool(it["extra"].get("pinned"))
@@ -2278,6 +2313,57 @@ def crawl_summary(ctx: Ctx) -> dict:
     return {k: crawl[k] for k in sorted(crawl)}
 
 
+MORNING_GOAL = (5, 30)        # config site.morning_goal when missing or unreadable ("05:30", Central)
+
+
+def quote_days(ctx: Ctx, days: int = 7) -> dict:
+    """status.json → quote_days = {"goal": "HH:MM", "days": [{day, goal_at, gv, lv}]}, newest first: when
+    the Grapevine and La Viña quotes of each of the last `days` days (Central) first came in —
+    data/raw/quote.json history[].seen (quote.py: the UTC time the sync first read that day's quote; None
+    = it has not come in) — and that day's goal as an instant: config site.morning_goal ("05:30" when
+    missing or unreadable, `meeting.parse_hhmm`) in site.timezone, the time the Morning check
+    (.github/workflows/morning.yml) puts the new day and the quote on the site by. /status/ shows each
+    morning against it (eleventy/filters/freshness.js). The history did not keep these times before, so
+    days before the first recorded `seen` are left out — the list fills up over its first week instead of
+    saying those quotes never came in — and so is a day whose quote IS in the history without a time (an
+    entry from before, today's on the day this came in included): its time is not known, and /status/
+    never shows an invented one."""
+    goal = parse_hhmm((ctx.cfg.get("site") or {}).get("morning_goal"), MORNING_GOAL)
+    hist = (ctx.raw.get("quote") or {}).get("history")
+    hist = hist if isinstance(hist, dict) else {}
+    seen: dict[tuple[str, str], str] = {}
+    unknown: set[str] = set()                     # days with a quote in, at a time not recorded
+    for pub in QUOTE.PUB_ORDER:
+        for h in hist.get(pub) or []:
+            if not isinstance(h, dict) or not h.get("date"):
+                continue
+            if h.get("seen"):
+                seen[(pub, str(h["date"])[:10])] = str(h["seen"])
+            else:
+                unknown.add(str(h["date"])[:10])
+    first = min((d for _p, d in seen), default=None)
+    rows = []
+    for i in range(max(1, days)):
+        d = ctx.today_local - timedelta(days=i)
+        if i and (first is None or d.isoformat() < first):
+            break
+        if d.isoformat() in unknown:
+            continue
+        rows.append({"day": d.isoformat(),
+                     "goal_at": to_iso(datetime(d.year, d.month, d.day, goal[0], goal[1], tzinfo=ctx.tz)),
+                     **{p: seen.get((p, d.isoformat())) for p in QUOTE.PUB_ORDER}})
+    return {"goal": f"{goal[0]:02d}:{goal[1]:02d}", "days": rows}
+
+
+def full_update(sources: list[dict]) -> str | None:
+    """status.json → full_update: when the last FULL daily update ran — the newest `attempted` of the
+    sources only it reads (run_all.FULL_ONLY; a source that is switched off or broken does not hold it
+    back), or None when none of them ever ran. The build copies it into /build.json `full`, from which the
+    Morning check starts the full update on the 1st of the month and after a day GitHub skipped."""
+    times = [t for t in (ts(s.get("attempted")) for s in sources if s.get("source") in FULL_ONLY) if t is not None]
+    return to_iso(datetime.fromtimestamp(max(times), timezone.utc)) if times else None
+
+
 def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: dict[str, int],
                  translation_enabled: bool, tr_seconds: float) -> dict:
     week_ago = ctx.now_ts - 7 * 86400
@@ -2299,9 +2385,21 @@ def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: 
         })
     tr = translator.summary() if translator else {}
     n_tr = tr.get("translated", 0)
+    try:
+        qdays = quote_days(ctx)
+    except Exception as e:  # a status detail never breaks the build
+        log.warning("quote_days could not be built (%s: %s)", type(e).__name__, e)
+        qdays = None
     return {
         "generated": now_iso(), "updated": now_iso(), "fixture": False,
         "sources": sources,
+        # Bulletin posts whose `publish` day is still to come (build_announcements): soonest first, for the
+        # Actions run summary ("Scheduled bulletin posts") — they are not on the site yet.
+        "scheduled": sorted(ctx.scheduled, key=lambda s: (s["publish"], s["title"], s["file"]))[:SCHEDULED_MAX],
+        # When each of the last 7 mornings' daily quotes came in, against the goal (quote_days → /status/).
+        "quote_days": qdays,
+        # When the last full daily update ran (→ /build.json `full` → the Morning check).
+        "full_update": full_update(sources),
         "crawl": crawl_summary(ctx),
         "translations": {"cached": tr.get("cached", 0), "engine": T.ENGINE_VERSION,
                          "model_enabled": translation_enabled, "translated_this_run": n_tr,

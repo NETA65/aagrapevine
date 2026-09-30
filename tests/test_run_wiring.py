@@ -2,8 +2,10 @@
 
   * PageMemo      — one run asks the magazines' server for each page ONCE, whichever modules need it
                     (common.PoliteSession page memo; the crawler reuses those copies).
-  * Schedule      — the 12:07 UTC quick run for the daily quote: the cron string in update.yml, the
-                    plan step and the commit step agree, and run_all runs `quote` in quick mode.
+  * Schedule      — the 12:07 UTC quick run (the midday refresh): the cron string in update.yml, the
+                    plan step and the commit step agree, and run_all runs `quote` in quick mode; the
+                    Morning check's morning refresh and the midday refresh name their data commits.
+                    (tests/test_morning.py runs the plan and commit steps themselves.)
   * QuoteMain     — quote.main() keeps `history` in data/raw (and a crash keeps it too); --only.
   * AudioMain     — audio_project.main() asks for a page once; a warning is not a failed source.
 
@@ -156,6 +158,17 @@ class Schedule(unittest.TestCase):
         self.assertIn("quote", run_all.QUICK_MODULES)
         self.assertLess(run_all.MODULES.index("quote"), run_all.MODULES.index("crawl"))
         self.assertEqual(run_all.MODULES[-1], "crawl")
+
+    def test_the_morning_and_midday_commits_say_which_run(self):
+        commit = self.step("Commit refreshed data")
+        morning = commit.index('elif [ "${MODE:-}" = "morning" ]; then')
+        midday = commit.index(f'elif [ "$EVENT" = "schedule" ] && [ "${{SCHEDULE:-}}" = "{self.QUOTE_CRON}" ]; then')
+        self.assertLess(morning, midday, "a morning refresh is named so, whatever started it")
+        self.assertIn('msg="chore(data): morning refresh with the daily quote ${day} [skip ci]"', commit[morning:midday])
+        self.assertIn('msg="chore(data): midday refresh ${day} [skip ci]"', commit[midday:])
+        # the morning mode reaches run_all
+        self.assertIn('INPUT_MORNING: ${{ inputs.morning }}', (ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
+        self.assertIn("morning) args=(--morning) ;;", self.step("Sync all sources (articles, PDFs, podcasts, videos, Instagram, Drive) + translate"))
 
 
 # --------------------------------------------------------------------------- quote.main

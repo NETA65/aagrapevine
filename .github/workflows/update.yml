@@ -10,26 +10,40 @@
 #    2. BUILD  – builds the website with Eleventy + Tailwind.
 #    3. DEPLOY – publishes it to GitHub Pages.
 #
+#  When it runs:
+#    · every MORNING, started by the Morning check (morning.yml) in MORNING
+#      mode — the new day's dates, the daily quote, Drive, the bulletin
+#      and podcasts — so the new day and both daily quotes are on the site
+#      by 5:30 AM Central (config/site.yml → site.morning_goal);
+#    · on GitHub's schedule below: the FULL daily update and a MIDDAY
+#      refresh, whenever GitHub starts them (often hours late);
+#    · a quick refresh right after a settings / content / template edit.
+#
 #  If a source is down, the site still deploys with the last good data;
 #  if it stays down for a week, the "report" job opens an issue about it.
 #  Run it by hand: Actions tab → "Update & Deploy" → "Run workflow".
 # =====================================================================
 name: Update & Deploy
+# The Morning check's runs get their own name (scripts/ops/morning_check.py MORNING_TITLE — keep the two
+# equal); every other run keeps GitHub's own (an empty run-name falls back to it). Quoted: the name has ": ".
+run-name: "${{ inputs.morning && 'Morning refresh: new day and daily quote' || '' }}"
 
 on:
   schedule:
-    # GitHub cron is always UTC: 10:17 UTC = 5:17 AM Central in summer
-    # (CDT) and 4:17 AM in winter (CST). Minute 17 avoids the top-of-the-
-    # hour rush, when GitHub delays scheduled jobs the most.
-    # The FULL daily run (every source + the PDF crawl).
+    # GitHub cron is always UTC, and GitHub starts a scheduled run when it
+    # has room — since late August 2026 often 4 to 8 hours late (and a busy
+    # day can skip one; docs/OPERATIONS.md → Morning check). So these two
+    # are NOT what puts the day's quote up early: the Morning check
+    # (morning.yml) starts this workflow in MORNING mode before 5:30 AM
+    # Central. Minutes 17 and 7 avoid the top-of-the-hour rush.
+    # The FULL daily run (every source + the PDF crawl): 10:17 UTC = 5:17 AM
+    # CDT (summer) / 4:17 AM CST (winter) when GitHub starts it on time.
     - cron: "17 10 * * *"
-    # A second, QUICK run for the Grapevine / La Viña daily quote, which is
-    # out before 6 AM Texas time: 12:07 UTC = 7:07 AM CDT (summer) and
-    # 6:07 AM CST (winter), so it is always after 6 AM in Texas — the 10:17
-    # run can be too early for it in winter. "Decide what to sync" below
-    # recognises this exact string (github.event.schedule) and runs
-    # `run_all --quick` (Drive, announcements = the bulletin, podcasts, the daily quote;
-    # QUICK_MODULES in scripts/sync/run_all.py). Keep the two equal.
+    # The MIDDAY refresh — a QUICK run (Drive, the bulletin, podcasts, the
+    # daily quote; QUICK_MODULES in scripts/sync/run_all.py), the quote's
+    # backstop on GitHub's side: 12:07 UTC = 7:07 AM CDT / 6:07 AM CST when
+    # on time. "Decide what to sync" and "Commit refreshed data" below
+    # recognise this exact string (github.event.schedule). Keep the three equal.
     - cron: "7 12 * * *"
 
   workflow_dispatch:
@@ -39,7 +53,11 @@ on:
         type: string
         default: ""
       skip_crawl:
-        description: "Quick refresh only: Google Drive, the bulletin, podcasts and the daily quote (about 10–20 minutes). Videos, magazine stories, Instagram and PDFs wait for the next daily run."
+        description: "Quick refresh only: Google Drive, the bulletin, podcasts and the daily quote (a few minutes). Videos, magazine stories, Instagram and PDFs wait for the next daily run."
+        type: boolean
+        default: false
+      morning:
+        description: "Morning refresh (what the Morning check starts): the new day's dates, the daily quote, Google Drive, the bulletin and podcasts — on the 1st also the magazines' new issues and, on the 1st and 15th, the Book of the Month. Published in about 3 minutes. Overrides the two fields above."
         type: boolean
         default: false
 
@@ -170,6 +188,7 @@ jobs:
           SCHEDULE: ${{ github.event.schedule }}
           INPUT_MINUTES: ${{ inputs.crawl_minutes }}
           INPUT_SKIP: ${{ inputs.skip_crawl }}
+          INPUT_MORNING: ${{ inputs.morning }}
         run: |
           set -euo pipefail
           # Daily crawl budget from config/site.yml (sources.crawler.minutes_per_run).
@@ -177,12 +196,19 @@ jobs:
           CONFIG_MINUTES="$(python -c "from scripts.sync.common import load_config as c; v=((c().get('sources') or {}).get('crawler') or {}).get('minutes_per_run'); print(40 if v in (None, '') else max(0, int(float(v))))" 2>/dev/null || echo 40)"
           if ! [[ "$CONFIG_MINUTES" =~ ^[0-9]+$ ]]; then CONFIG_MINUTES=40; fi
 
-          # The 12:07 UTC schedule (the daily quote, after 6 AM Texas time) is a quick run;
-          # the 10:17 UTC schedule stays the full daily run. Same string as `cron:` above.
+          # The 12:07 UTC schedule (the midday refresh) is a quick run; the 10:17 UTC schedule
+          # stays the full daily run. Same string as `cron:` above.
           QUOTE_CRON="7 12 * * *"
-          if [ "$EVENT" = "push" ] || [ "${INPUT_SKIP:-false}" = "true" ] \
+          if [ "${INPUT_MORNING:-false}" = "true" ]; then
+            # The Morning check (morning.yml) — or someone who ticked "morning": the lean MORNING
+            # refresh (run_all --morning: the quick sources, plus on the 1st and the 15th the monthly
+            # ones — MORNING_EXTRA in scripts/sync/run_all.py), so the new day and the daily quote are
+            # on the site by 5:30 AM Central. It wins over the two other fields.
+            mode=morning
+            minutes=0
+          elif [ "$EVENT" = "push" ] || [ "${INPUT_SKIP:-false}" = "true" ] \
              || { [ "$EVENT" = "schedule" ] && [ "${SCHEDULE:-}" = "$QUOTE_CRON" ]; }; then
-            # Settings/content/template edit, "skip_crawl" ticked, or the morning quote run:
+            # Settings/content/template edit, "skip_crawl" ticked, or the midday run:
             # quick refresh (only Google Drive, the bulletin, podcasts and the daily quote;
             # see QUICK_MODULES in scripts/sync/run_all.py) and rebuild. The daily run does the rest.
             mode=quick
@@ -219,6 +245,13 @@ jobs:
           if [ "$translate" -lt 10 ]; then translate=10; fi
           budget=$(( minutes + 30 + translate + 20 ))
           if [ "$budget" -gt 345 ]; then budget=345; fi
+          if [ "$mode" = "morning" ]; then
+            # Before 5:30 AM Central: at most 5 minutes of new translations (the bulletin's come first;
+            # the rest waits for the daily run) and 20 minutes for the whole step, so the site is
+            # published in time.
+            translate=5
+            budget=20
+          fi
 
           echo "Sync plan: event=$EVENT${SCHEDULE:+ ($SCHEDULE)} mode=$mode crawl=${minutes} min, translation ≤ ${translate} min, step budget ${budget} min"
           {
@@ -245,11 +278,11 @@ jobs:
           MINUTES: ${{ steps.plan.outputs.minutes }}
         run: |
           set -euo pipefail
-          if [ "$MODE" = "quick" ]; then
-            args=(--quick)
-          else
-            args=(--crawl-minutes "$MINUTES")
-          fi
+          case "$MODE" in
+            morning) args=(--morning) ;;
+            quick) args=(--quick) ;;
+            *) args=(--crawl-minutes "$MINUTES") ;;
+          esac
           echo "python -m scripts.sync.run_all ${args[*]}"
           # Exit code is non-zero only if the site data could not be built;
           # a single source failing is reported in the summary instead.
@@ -297,6 +330,7 @@ jobs:
         env:
           EVENT: ${{ github.event_name }}
           SCHEDULE: ${{ github.event.schedule }}
+          MODE: ${{ steps.plan.outputs.mode }}
           BRANCH: ${{ github.ref_name }}
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -323,11 +357,15 @@ jobs:
             exit 0
           fi
 
+          # The message says which run it was: an edit, the morning refresh (the Morning check), the
+          # midday refresh (the "7 12 * * *" schedule — the same string as `cron:` above) or the daily run.
           day="$(TZ=America/Chicago date +%F)"
           if [ "$EVENT" = "push" ]; then
             msg="chore(data): content sync after settings/content change ${day} [skip ci]"
-          elif [ "$EVENT" = "schedule" ] && [ "${SCHEDULE:-}" = "7 12 * * *" ]; then
+          elif [ "${MODE:-}" = "morning" ]; then
             msg="chore(data): morning refresh with the daily quote ${day} [skip ci]"
+          elif [ "$EVENT" = "schedule" ] && [ "${SCHEDULE:-}" = "7 12 * * *" ]; then
+            msg="chore(data): midday refresh ${day} [skip ci]"
           else
             msg="chore(data): daily content sync ${day} [skip ci]"
           fi
@@ -401,6 +439,22 @@ jobs:
                   if src.get("ok") is False and (days is None or days >= STALE_DAYS):
                       stale.append({"source": src.get("source"), "label": label, "days": days,
                                     "updated": src.get("updated"), "error": err})
+          # The day of each magazine's daily quote on the site after this run (data/site/quote.json) —
+          # the Morning check's summary says when it went live.
+          try:
+              with open("data/site/quote.json", encoding="utf-8") as f:
+                  qitems = [q for q in (json.load(f).get("items") or []) if isinstance(q, dict)]
+          except Exception:
+              qitems = []
+          mags, qbits = {"gv": "Grapevine", "lv": "La Viña"}, []
+          for q in qitems:
+              try:
+                  qd = datetime.strptime(str(q.get("date") or "")[:10], "%Y-%m-%d")
+              except ValueError:
+                  continue
+              qbits.append(f"{mags.get(q.get('pub'), q.get('pub'))} {qd:%b} {qd.day}")
+          if qbits:
+              lines += ["", "**Daily quote:** " + " · ".join(qbits)]
           c = s.get("crawl") or {}
           if c:
               line = (f"**PDF crawl:** {c.get('known_pages', 0)} pages known · {c.get('crawled_pages', 0)} crawled · "
@@ -472,6 +526,30 @@ jobs:
                         *[f"- {msg}" for _k, msg in settings]]
               for k, msg in settings:
                   print(f"::warning title=Settings problem ({k})::{msg.replace('%', '%25')}")
+          # Bulletin posts and events written by hand (content/bulletin, content/events) that could not be
+          # read — or that link a picture or document not saved next to them (announcements.py
+          # stats.errors): the rest of the site still updated; the chair fixes the file.
+          for key, title in (("announcements", "Bulletin files to fix"), ("manual_events", "Event files to fix")):
+              src = next((x for x in s.get("sources", []) if x.get("source") == key), None) or {}
+              st = src.get("stats") if isinstance(src.get("stats"), dict) else {}
+              errs = [" ".join(str(e).split()).replace("|", "/") for e in (st.get("errors") or []) if str(e).strip()][:10]
+              if errs:
+                  lines += ["", f"**{title}** (the rest of the site still updated — fix the file and save it again):",
+                            *[f"- {e}" for e in errs]]
+                  for e in errs:
+                      print(f"::warning title={title}::{e.replace('%', '%25')}")
+          # Bulletin posts scheduled for a later day (content/bulletin `publish:`, Drive "(from …)"):
+          # build_data leaves them off the site until their day (status.json `scheduled`, soonest first).
+          sched = [x for x in (s.get("scheduled") or []) if isinstance(x, dict) and x.get("publish")]
+          if sched:
+              def where(x):
+                  f = str(x.get("file") or "")
+                  return f"({f})" if f.startswith("content/") else f"(Google Drive: {f})" if f else ""
+              lines += ["", "**Scheduled bulletin posts** (not on the site yet):",
+                        *[" ".join(b for b in (f"- {x['publish']} —", str(x.get("title") or "(no title)"), where(x)) if b)
+                          .replace("|", "/") for x in sched]]
+              print(f"::notice title=Scheduled bulletin posts::{len(sched)} post(s) will appear by themselves on their day"
+                    f" — the first on {sched[0]['publish']} (see the run summary).")
           # Weekly podcast discovery (scripts/sync/podcasts.py): feeds found on the magazine sites that
           # are not in config/site.yml yet. They are never added automatically.
           pod = next((x for x in s.get("sources", []) if x.get("source") == "podcasts"), None) or {}
@@ -577,6 +655,10 @@ jobs:
           test -s _site/index.html || { echo "::error::_site/index.html is missing — the build did not produce a home page."; exit 1; }
           test -s _site/es/index.html || { echo "::error::_site/es/index.html is missing — the Spanish site was not built."; exit 1; }
           test -s _site/assets/css/main.css || { echo "::error::The stylesheet was not built."; exit 1; }
+          # The Morning check (morning.yml) reads the LIVE build.json to see whether today's update is
+          # on the site; without it, it would start a morning refresh every time. Never blocks a deploy
+          # (the Code check fails on it before a change is merged).
+          test -s _site/build.json || echo "::warning::build.json is missing — the Morning check cannot see this build."
           pages=$(find _site -name '*.html' | wc -l)
           size=$(du -sm _site | cut -f1)
           echo "Built ${pages} pages, ${size} MB."

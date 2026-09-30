@@ -116,7 +116,7 @@
         <span class="mp-date-m">
           {%- if d.range %}{{ d.range }}{% if d.time %} · {% endif %}{% endif -%}
           {%- if d.time %}{{ d.time }} {{ d.zone }}{% endif -%}
-          {%- if d.kind == "committee" %} · {{ d.platform }} · {{ "monthly.all_welcome" | t(lang) }}{% elif d.city %} · {{ d.city }}{% elif d.online %} · {{ "monthly.online" | t(lang) }}{% endif -%}
+          {%- if d.kind == "committee" %} · {{ d.platform }} · {{ "monthly.all_welcome" | t(lang) }}{% elif d.city %}{% if d.place %} · {{ d.place }}{% endif %}{% elif d.online %} · {{ "monthly.online" | t(lang) }}{% endif -%}
           {%- if d.tentative %} · {{ "committee.events.tentative" | t(lang) }}{% endif -%}
         </span>
       </span>

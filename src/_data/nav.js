@@ -21,8 +21,9 @@ const nav = {
         // GVR / RLV 101: six short sessions for new representatives (config/orientation.yml), with slides and a handout.
         { key: "nav.orientation", url: "/orientation/", icon: "sprout", page: "orientation", descKey: "nav.orientation_desc" },
         { key: "nav.monthly", url: "/monthly/", icon: "calendar-heart", page: "monthly", descKey: "nav.monthly_desc" },
-        // Monthly digest: last month's news and this month's dates, to paste into a WhatsApp group or
-        // send by e-mail (it was in the footer's "Stay updated" column).
+        // Monthly digest: everything that was new on the site LAST month, to paste into a WhatsApp group
+        // or send by e-mail (it was in the footer's “Stay updated” column); what is coming up this month
+        // is the Monthly toolkit's, just above.
         { key: "nav.digest", url: "/digest/", icon: "newspaper", page: "digest", descKey: "nav.digest_desc" },
         { key: "nav.contribute", url: "/contribute/", icon: "pen-line", page: "contribute", descKey: "nav.contribute_desc" },
         { key: "nav.published", url: "/published/", icon: "award", page: "published", descKey: "nav.published_desc" },
@@ -50,11 +51,18 @@ const nav = {
   ],
   // Pages outside the header menus. group "stay" → the footer's "Stay updated" column (after the
   // official aagrapevine.org / aalavina.org sites, before the RSS and calendar feeds, in this order:
-  // Instagram, QR Post); group "site" → the footer's bottom bar (right side, with "Last updated"),
-  // except About, which is a button beside the e-mail and neta65.org ones under the footer's about
-  // blurb. The phone drawer lists them all, in this order, under "More" (except Search, which has its
-  // own button there). `icon`: a Lucide name, or a local icon from src/_includes/icons (instagram).
+  // Install as an app, Instagram, QR Post); group "site" → the footer's bottom bar (right side, with
+  // "Last updated"), except About, which is a button beside the e-mail and neta65.org ones under the
+  // footer's about blurb. The phone drawer lists them all, in this order, under "More" (except Search,
+  // which has its own button there). `icon`: a Lucide name, or a local icon from src/_includes/icons
+  // (instagram).
   footer: [
+    // Install as an app (/app/, src/pages/app.njk): the steps for each phone and browser, the visitor's
+    // own opened. The first of the site's own links in "Stay updated" (after the aagrapevine.org /
+    // aalavina.org sites) and first in the drawer's "More" — the install notice (pwa.js) says it is
+    // "always in the menu and at the bottom of every page". Hidden inside the installed app
+    // (footer.njk / header.njk data-pwa-app-link + areas/pwa.css).
+    { key: "nav.app", url: "/app/", page: "app", icon: "smartphone", group: "stay" },
     // A media feed (like Listen / Watch), not a way to take part: footer + drawer "More", and linked
     // from the home page and /photos/.
     { key: "nav.instagram", url: "/instagram/", page: "instagram", icon: "instagram", group: "stay" },
@@ -65,7 +73,8 @@ const nav = {
     // Accessibility: the reading settings explained, captions, ASL, audio, joining meetings by phone,
     // printing (src/pages/accessibility.njk). Also linked from the "Aa" panel.
     { key: "nav.accessibility", url: "/accessibility/", page: "accessibility", icon: "accessibility", group: "site" },
-    // Saved pages & app (/offline/): what is saved on this device, "Save key pages", installing the site.
+    // Saved pages (/offline/): what is saved on this device and "Save key pages" (installing the site
+    // has its own page, /app/, above).
     { key: "nav.offline", url: "/offline/", page: "offline", icon: "hard-drive-download", group: "site" },
     { key: "nav.search", url: "/search/", page: "search", icon: "search", group: "site" },
     { key: "nav.status", url: "/status/", page: "status", icon: "activity", group: "site" },

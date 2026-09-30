@@ -74,5 +74,213 @@
   "pwa.offline.how4_t": {
     "en": "Turn on Data saver in the Aa menu: images, video previews and the moving art stay off until you ask for them.",
     "es": "Activa el Ahorro de datos en el menú Aa: las imágenes, las vistas previas de video y el arte animado quedan apagados hasta que los pidas."
+  },
+  "pwa.app.title": { "en": "Install this site as an app", "es": "Instala este sitio como app" },
+  "pwa.app.meta_desc": {
+    "en": "Put the NETA 65 Grapevine / La Viña site on your phone's home screen: the steps for iPhone, Android and computers.",
+    "es": "Pon el sitio de Grapevine / La Viña de NETA 65 en la pantalla de inicio de tu teléfono: los pasos para iPhone, Android y computadoras."
+  },
+  "pwa.app.eyebrow": { "en": "Our site · On your phone", "es": "Nuestro sitio · En tu teléfono" },
+  "pwa.app.sub": {
+    "en": "Its own icon on your home screen: it opens in its own window, in your language, even with a weak signal.",
+    "es": "Su propio ícono en tu pantalla de inicio: se abre en su propia ventana, en tu idioma, aun con poca señal."
+  },
+  "pwa.app.cta_steps": { "en": "See the steps", "es": "Ver los pasos" },
+  "pwa.app.cta_install": { "en": "Install", "es": "Instalar" },
+  "pwa.app.cta_send": { "en": "Send this page", "es": "Enviar esta página" },
+  "pwa.app.send_text": {
+    "en": "How to put the NETA 65 Grapevine / La Viña site on your phone's home screen:",
+    "es": "Cómo poner el sitio de Grapevine / La Viña de NETA 65 en la pantalla de inicio de tu teléfono:"
+  },
+  "pwa.app.steps_eyebrow": { "en": "Step by step", "es": "Paso a paso" },
+  "pwa.app.steps_h": { "en": "Choose your phone and its browser", "es": "Elige tu teléfono y su navegador" },
+  "pwa.app.steps_sub": {
+    "en": "A few taps, under a minute — nothing to download from an app store.",
+    "es": "Unos toques, menos de un minuto; no hay que bajar nada de una tienda de apps."
+  },
+  "pwa.app.here": { "en": "Your device", "es": "Tu dispositivo" },
+  "pwa.app.os_iphone": { "en": "iPhone or iPad — Safari", "es": "iPhone o iPad — Safari" },
+  "pwa.app.os_iphone_other": { "en": "iPhone or iPad — Chrome, Edge or Firefox", "es": "iPhone o iPad — Chrome, Edge o Firefox" },
+  "pwa.app.os_android": { "en": "Android — Chrome", "es": "Android — Chrome" },
+  "pwa.app.os_samsung": { "en": "Android — Samsung Internet", "es": "Android — Samsung Internet" },
+  "pwa.app.os_android_other": { "en": "Android — Firefox, Edge and others", "es": "Android — Firefox, Edge y otros" },
+  "pwa.app.os_in_app": { "en": "Opened inside Facebook, Instagram or another app", "es": "Abierta dentro de Facebook, Instagram u otra app" },
+  "pwa.app.os_computer": { "en": "A computer — Chrome, Edge or Safari", "es": "Una computadora — Chrome, Edge o Safari" },
+  "pwa.app.ios_1": {
+    "en": "Tap Safari's menu button next to the address bar — **Page Menu** (three lines) on iOS 27, **More** (three dots) on iOS 26 — then **Share**. If you see the **Share** button (a square with an arrow pointing up), tap it instead.",
+    "es": "Toca el botón de menú de Safari junto a la barra de direcciones —**Menú de página** (tres líneas) en iOS 27, **Más** (tres puntos) en iOS 26— y luego **Compartir**. Si ves el botón **Compartir** (un cuadro con una flecha hacia arriba), tócalo directamente."
+  },
+  "pwa.app.ios_1_27": {
+    "en": "Tap the **Page Menu** button (three lines) next to the address bar, then **Share**.",
+    "es": "Toca el botón **Menú de página** (tres líneas) junto a la barra de direcciones y luego **Compartir**."
+  },
+  "pwa.app.ios_1_26": {
+    "en": "Tap the **More** button (three dots) next to the address bar, then **Share**.",
+    "es": "Toca el botón **Más** (tres puntos) junto a la barra de direcciones y luego **Compartir**."
+  },
+  "pwa.app.ios_1_share": {
+    "en": "Tap the **Share** button (a square with an arrow pointing up) in Safari's toolbar.",
+    "es": "Toca el botón **Compartir** (un cuadro con una flecha hacia arriba) en la barra de Safari."
+  },
+  "pwa.app.ios_share_tip": {
+    "en": "Does your Safari show the **Share** button? Tap it directly.",
+    "es": "¿Tu Safari muestra el botón **Compartir**? Tócalo directamente."
+  },
+  "pwa.app.ios_2": {
+    "en": "Scroll down (or tap **View More**) and tap **Add to Home Screen**.",
+    "es": "Desplázate hacia abajo (o toca **Ver más**) y toca **Agregar a Inicio**."
+  },
+  "pwa.app.ios_2_tip": {
+    "en": "Not in the list? At the bottom, tap **Edit Actions** and add it.",
+    "es": "¿No está en la lista? Abajo, toca **Editar acciones** y agrégala."
+  },
+  "pwa.app.ios_3": {
+    "en": "Leave **Open as Web App** on (iOS 26 and later), then tap **Add**.",
+    "es": "Deja activado **Abrir como app web** (iOS 26 y posteriores) y toca **Agregar**."
+  },
+  "pwa.app.ios_fix": {
+    "en": "Already added it, and it opens in Safari? Remove it and add it again with **Open as Web App** on.",
+    "es": "¿Ya la agregaste y se abre en Safari? Quítala y vuelve a agregarla con **Abrir como app web** activado."
+  },
+  "pwa.app.ios_from_app": {
+    "en": "Opened this page from Gmail or another app? First tap the **Safari** button (a compass) to open it in Safari.",
+    "es": "¿Abriste esta página desde Gmail u otra app? Primero toca el botón de **Safari** (una brújula) para abrirla en Safari."
+  },
+  "pwa.app.done": { "en": "Open **GV/LV 65** from your home screen or your list of apps.", "es": "Abre **GV/LV 65** desde tu pantalla de inicio o tu lista de apps." },
+  "pwa.app.ios_other_1": {
+    "en": "**Chrome**: tap the **Share** button at the right of the address bar. **Edge** or **Firefox**: open the browser's menu and tap **Share**.",
+    "es": "**Chrome**: toca el botón **Compartir** a la derecha de la barra de direcciones. **Edge** o **Firefox**: abre el menú del navegador y toca **Compartir**."
+  },
+  "pwa.app.ios_other_2": {
+    "en": "Tap **Add to Home Screen** (scroll down if you don't see it), then **Add**.",
+    "es": "Toca **Agregar a Inicio** (desplázate hacia abajo si no la ves) y luego **Agregar**."
+  },
+  "pwa.app.ios_other_old": {
+    "en": "On iOS 16.3 or earlier only Safari can do this: open this page in Safari.",
+    "es": "En iOS 16.3 o anterior solo Safari puede hacerlo: abre esta página en Safari."
+  },
+  "pwa.app.android_1": { "en": "Tap Chrome's **More** menu (three dots) at the top right.", "es": "Toca el menú **Más** de Chrome (tres puntos), arriba a la derecha." },
+  "pwa.app.android_2": {
+    "en": "Tap **Install and create shortcut** (on older versions: **Install app** or **Add to Home screen**).",
+    "es": "Toca **Instalar y crear acceso directo** (en versiones anteriores: **Instalar aplicación** o **Agregar a la pantalla principal**)."
+  },
+  "pwa.app.android_3": {
+    "en": "Choose **Install** — not “Create shortcut”: shortcuts open in Chrome.",
+    "es": "Elige **Instalar**, no «Crear acceso directo»: los accesos directos se abren en Chrome."
+  },
+  "pwa.app.android_fix": {
+    "en": "Already have an icon with a small Chrome logo? That's a shortcut: remove it and choose **Install** instead.",
+    "es": "¿Ya tienes un ícono con un pequeño logo de Chrome? Es un acceso directo: quítalo y elige **Instalar**."
+  },
+  "pwa.app.android_from_app": {
+    "en": "Opened this page from Gmail or another app? First tap the menu (three dots) and **Open in Chrome**.",
+    "es": "¿Abriste esta página desde Gmail u otra app? Primero toca el menú (tres puntos) y **Abrir en Chrome**."
+  },
+  "pwa.app.samsung_1": { "en": "Tap the menu (three lines) at the bottom right.", "es": "Toca el menú (tres líneas) abajo a la derecha." },
+  "pwa.app.samsung_2": { "en": "Tap **Add page to**, then **Home screen**.", "es": "Toca **Añadir página a** (o **Agregar página a**) y luego **Pantalla de inicio**." },
+  "pwa.app.samsung_3": { "en": "Tap **Add** (or **Install**).", "es": "Toca **Añadir** (o **Instalar**)." },
+  "pwa.app.samsung_tip": {
+    "en": "Some versions show an **Install** button in the address bar: it does the same in one tap.",
+    "es": "Algunas versiones muestran un botón de **Instalar** en la barra de direcciones: hace lo mismo con un toque."
+  },
+  "pwa.app.other_firefox": {
+    "en": "**Firefox**: tap the menu (three dots), then **More**, **Add app to Home screen** and **Add**.",
+    "es": "**Firefox**: toca el menú (tres puntos) y luego **Más**, **Agregar app a la pantalla de inicio** y **Agregar**."
+  },
+  "pwa.app.other_edge": {
+    "en": "**Edge**: tap the menu (three dots at the bottom), then **Add to phone** and **Install**.",
+    "es": "**Edge**: toca el menú (tres puntos, abajo) y luego **Agregar al teléfono** e **Instalar**."
+  },
+  "pwa.app.other_rest": {
+    "en": "**Opera, Brave and others**: in the browser's menu, look for **Install app** or **Add to Home screen**.",
+    "es": "**Opera, Brave y otros**: en el menú del navegador, busca **Instalar aplicación** o **Agregar a la pantalla principal**."
+  },
+  "pwa.app.other_tip": {
+    "en": "For the full app — with its own place in your list of apps — use Chrome, or Samsung Internet on a Samsung phone.",
+    "es": "Para la app completa —con su propio lugar en tu lista de apps— usa Chrome, o Samsung Internet en un teléfono Samsung."
+  },
+  "pwa.app.inapp_t": {
+    "en": "A page opened inside another app can't be installed. Open it in your phone's browser first:",
+    "es": "Una página abierta dentro de otra app no se puede instalar. Primero ábrela en el navegador de tu teléfono:"
+  },
+  "pwa.app.inapp_1": {
+    "en": "Tap the app's menu (three dots, usually at the top right) — or its **compass** or **Safari** button.",
+    "es": "Toca el menú de la app (tres puntos, casi siempre arriba a la derecha) o su botón de **brújula** o de **Safari**."
+  },
+  "pwa.app.inapp_2": {
+    "en": "Choose **Open in browser** — it may say **Open in Safari**, **Open in Chrome** or **Open in external browser**.",
+    "es": "Elige **Abrir en el navegador** (puede decir **Abrir en Safari**, **Abrir en Chrome** o **Abrir en navegador externo**)."
+  },
+  "pwa.app.inapp_3": { "en": "Then follow the steps for your phone on this page.", "es": "Luego sigue los pasos de tu teléfono en esta página." },
+  "pwa.app.inapp_copy": { "en": "Or copy the link and paste it into Safari or Chrome:", "es": "O copia el enlace y pégalo en Safari o Chrome:" },
+  "pwa.app.copy_link": { "en": "Copy the link", "es": "Copiar el enlace" },
+  "pwa.app.inapp_whatsapp": {
+    "en": "Links from a WhatsApp chat often open in your phone's browser, where you can install the app right away. If WhatsApp opens them in its own window, follow the steps above.",
+    "es": "Los enlaces de un chat de WhatsApp muchas veces se abren en el navegador de tu teléfono, donde puedes instalar la app enseguida. Si WhatsApp los abre en su propia ventana, sigue los pasos de arriba."
+  },
+  "pwa.app.inapp_now": {
+    "en": "You're reading this inside {app}, which can't install apps. Open this page in your phone's browser first — the steps are below.",
+    "es": "Estás leyendo esto dentro de {app}, que no puede instalar apps. Primero abre esta página en el navegador de tu teléfono; los pasos están abajo."
+  },
+  "pwa.app.inapp_other": { "en": "another app", "es": "otra app" },
+  "pwa.app.pc_chrome": {
+    "en": "**Chrome or Edge**: select **Install** at the right of the address bar — or, in Chrome's menu (three dots), **Cast, save, and share** and then **Install page as app**.",
+    "es": "**Chrome o Edge**: selecciona **Instalar** a la derecha de la barra de direcciones o, en el menú de Chrome (tres puntos), **Transmitir, guardar y compartir** y luego **Instalar página como app**."
+  },
+  "pwa.app.pc_safari": { "en": "**Safari on a Mac**: **File**, then **Add to Dock**.", "es": "**Safari en una Mac**: **Archivo** y luego **Agregar al Dock**." },
+  "pwa.app.pc_other": {
+    "en": "**Other browsers**: look for **Install**, **Add to Dock** or **Add to taskbar** in the address bar or the menu.",
+    "es": "**Otros navegadores**: busca **Instalar**, **Agregar al Dock** o **Agregar a la barra de tareas** en la barra de direcciones o en el menú."
+  },
+  "pwa.app.help": { "en": "Official help:", "es": "Ayuda oficial:" },
+  "pwa.app.help_apple": { "en": "Apple Support", "es": "Soporte de Apple" },
+  "pwa.app.help_google": { "en": "Chrome Help", "es": "Ayuda de Chrome" },
+  "pwa.app.using_h": { "en": "You're using the app", "es": "Estás usando la app" },
+  "pwa.app.using_t": {
+    "en": "It's installed on this device. To pass it on, send this page to your group.",
+    "es": "Está instalada en este dispositivo. Para compartirla, envía esta página a tu grupo."
+  },
+  "pwa.app.known": {
+    "en": "The app is already on this device: open **GV/LV 65** from your home screen or your list of apps.",
+    "es": "La app ya está en este dispositivo: abre **GV/LV 65** desde tu pantalla de inicio o tu lista de apps."
+  },
+  "pwa.app.why_eyebrow": { "en": "Why install it", "es": "Por qué instalarla" },
+  "pwa.app.why_h": { "en": "The same site, one tap away", "es": "El mismo sitio, a un toque" },
+  "pwa.app.why1_h": { "en": "Its own icon", "es": "Su propio ícono" },
+  "pwa.app.why1_t": {
+    "en": "On your home screen and in your list of apps. It opens without the browser's bars, like any app.",
+    "es": "En tu pantalla de inicio y en tu lista de apps. Se abre sin las barras del navegador, como cualquier app."
+  },
+  "pwa.app.why2_h": { "en": "Works with a weak signal", "es": "Funciona con poca señal" },
+  "pwa.app.why2_t": {
+    "en": "Pages you open are kept on your phone, and you can save the key ones before a trip.",
+    "es": "Las páginas que abres se guardan en tu teléfono, y puedes guardar las más importantes antes de un viaje."
+  },
+  "pwa.app.why3_h": { "en": "In your language", "es": "En tu idioma" },
+  "pwa.app.why3_t": {
+    "en": "Installed from a Spanish page, it opens in Spanish; from an English page, in English.",
+    "es": "Si la instalas desde una página en español, se abre en español; desde una en inglés, en inglés."
+  },
+  "pwa.app.why4_h": { "en": "Always up to date", "es": "Siempre al día" },
+  "pwa.app.why4_t": {
+    "en": "It is this same site, and we keep it updated regularly: there's nothing to update from a store.",
+    "es": "Es este mismo sitio y lo mantenemos al día con regularidad: no hay nada que actualizar desde una tienda."
+  },
+  "pwa.app.more_h": { "en": "Good to know", "es": "Para tener en cuenta" },
+  "pwa.app.more_free": {
+    "en": "Free, with no account and no app store. Your settings and saved pages stay on your phone; nothing is sent anywhere.",
+    "es": "Gratis, sin cuenta y sin tienda de apps. Tus ajustes y páginas guardadas se quedan en tu teléfono; no se envía nada."
+  },
+  "pwa.app.more_shortcuts": {
+    "en": "On Android, touch and hold the icon to go straight to {a}, {b} or {c}.",
+    "es": "En Android, mantén presionado el ícono para ir directo a {a}, {b} o {c}."
+  },
+  "pwa.app.more_remove": {
+    "en": "To remove it, touch and hold its icon, then choose **Uninstall** (Android) or **Delete Bookmark** (iPhone).",
+    "es": "Para quitarla, mantén presionado su ícono y elige **Desinstalar** (Android) o **Eliminar marcador** (iPhone)."
+  },
+  "pwa.app.more_magazines": {
+    "en": "Looking for the Grapevine or La Viña magazine apps? Those are separate, official apps:",
+    "es": "¿Buscas las apps de las revistas Grapevine o La Viña? Son apps oficiales, aparte:"
   }
 }

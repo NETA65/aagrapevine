@@ -7,7 +7,8 @@ and Data saver").
   * Strings    — src/_i18n/pwa.json: every key in English AND Spanish, within the length budgets of
                  the design spec; every pwa.* key the offline page uses exists.
   * Pages      — the offline page is out of the sitemap/collections and noindex; base.njk links the
-                 manifest, loads pwa.js and versions styles/scripts with build.version.
+                 manifest, loads install-core.js right before pwa.js and versions styles/scripts with
+                 build.version. (Installing as an app — /app/, install-core.js, the notice: test_pwa_install.)
   * Worker     — sw-core.js only handles GET requests to our own origin, revalidates navigations,
                  never skips waiting on its own, and keeps visitors' saved pages across versions.
 
@@ -120,6 +121,10 @@ class Pages(unittest.TestCase):
         base = read("src", "_includes", "layouts", "base.njk")
         self.assertIn("'/manifest.webmanifest' | lurl(L)", base)
         self.assertIn('/assets/js/pwa.js?v={{ build.version }}', base)
+        # install-core.js (window.GVInstall) is loaded before pwa.js, which uses it; both deferred
+        core = '<script src="/assets/js/install-core.js?v={{ build.version }}" defer></script>'
+        self.assertIn(core, base)
+        self.assertLess(base.index(core), base.index('<script src="/assets/js/pwa.js?v={{ build.version }}" defer></script>'))
         self.assertIn('/assets/css/main.css?v={{ build.version }}', base)
         self.assertEqual(len(re.findall(r'<meta name="theme-color"[^>]*media="\(prefers-color-scheme: (?:light|dark)\)"', base)), 2)
         self.assertIn('rel="apple-touch-icon" href="/assets/img/apple-touch-icon-180.png"', base)
@@ -160,6 +165,9 @@ class Worker(unittest.TestCase):
     def test_template_config(self):
         for needle in ('permalink: "/sw.js"', "offline.en, offline.es", '"monthly/{month}/"', '"meetings/"', '"contribute/"', '"shop/"'):
             self.assertIn(needle, self.tpl)
+        # install-core.js is in the shell but optional: without it pwa.js links to /app/
+        self.assertIn("a(`assets/js/install-core.js?v=${v}`)", self.tpl)
+        self.assertNotIn("install-core", re.search(r"const required = \[(.*?)\];", self.tpl, re.S).group(1))
 
 
 if __name__ == "__main__":

@@ -10,12 +10,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { safeUrl } from "../../eleventy.config.js";
-import { ownLangs, chicagoDayEndMs, digestShop, gvMeetings } from "./committee.js";
-// The monthly digest reuses the /monthly/ month model (issue theme, "put it to work" tips, weekly open
-// meetings, La Viña topics) and the shop's "from $X a month" rule, so every page says the same.
-// (monthly.js imports qrSvg from this file: the cycle is safe, both only call each other's functions.)
-import { monthModel, nowDate, addMonths, monthLabel } from "./monthly.js";
-import { shopFromMonthly, money } from "./shop.js";
+// The monthly digest groups the committee's photos into the albums of /photos/ (the same anchors).
+import { ownLangs, chicagoDayEndMs, isPhotoItem, photoAlbumKey, photoAlbumSlugs } from "./committee.js";
+// The monthly digest names its months like /monthly/ (monthLabel), finds the committee meeting of the
+// month it covers by the same rule (meetingByRule) and gives an issue the toolkit's theme (issueTheme).
+// (monthly.js imports from this file too: the cycle is safe, both only call each other's functions.)
+import { nowDate, addMonths, monthLabel, meetingByRule, issueTheme } from "./monthly.js";
+// An issue is "current" when /read/ shows it as the newest of its magazine (the page's own rule).
+import { groupIssues } from "./read.js";
 
 const TZ = "America/Chicago";
 const LOCALES = { en: "en-US", es: "es-US" };
@@ -265,21 +267,6 @@ function eventStart(ev) {
   return ev?.extra?.start || ev?.date || null;
 }
 
-/** A date of a monthly event from config/site.yml `recurring_events:` (e.g. the booth at CityWide Dallas). */
-const isRecurring = (ev) => ev?.category === "recurring";
-
-/** Only the first (soonest) date of each recurring event: one line for the booth, not one per month. */
-function nextOfEachSeries(events) {
-  const seen = new Set();
-  return events.filter((e) => {
-    if (!isRecurring(e)) return true;
-    const k = String(e.extra?.series || e.id);
-    if (seen.has(k)) return false;
-    seen.add(k);
-    return true;
-  });
-}
-
 /** The calendar day an event ends on (Central time): its `end` day, else its start day. */
 function eventLastDay(ev) {
   const x = ev?.extra || {};
@@ -297,16 +284,6 @@ function isMultiDay(ev) {
   return !!(x.all_day || isDateOnly(s)) || ms(x.end) - ms(s) > 18 * 3600e3;
 }
 
-/** When an event is over: midnight Central after its last day for an all-day event (it stays
- *  "coming up" all of that day); a timed event at its end (no end: 6 hours after it starts). */
-function eventEndMs(ev) {
-  const x = ev?.extra || {};
-  const s = eventStart(ev);
-  if (x.end && !isDateOnly(x.end)) return ms(x.end);
-  if (x.end || x.all_day || isDateOnly(s)) return chicagoDayEndMs(eventLastDay(ev));
-  return ms(s) + 6 * 3600e3;
-}
-
 /** Does an event's date need its year? When it ends in another year than `now`, or more than about
  *  six months ahead ("Fri, Sep 17 – Sun, Sep 19, 2027" next to this September's dates on What's New). */
 const YEAR_AFTER_DAYS = 183;
@@ -317,11 +294,12 @@ function needsYear(lastYmd, now) {
 
 /** "Sat, Oct 17", "Wed, Oct 21 · 7:00 PM CDT" — or, over several days, "Fri, Mar 19 – Sun, Mar 21".
  *  With the year when it is another year or far ahead: "Fri, Sep 17 – Sun, Sep 19, 2027" /
- *  "Vie, 17 de sept – dom, 19 de sept de 2027". */
-export function eventWhen(ev, lang, now = Date.now()) {
+ *  "Vie, 17 de sept – dom, 19 de sept de 2027". opts.time === false: the days only, never the time
+ *  (the monthly digest lists the events that took place that way: cmEventDays). */
+export function eventWhen(ev, lang, now = Date.now(), opts = {}) {
   const s = eventStart(ev);
   if (!s) return "";
-  const allDay = ev?.extra?.all_day || isDateOnly(s);
+  const allDay = opts.time === false || ev?.extra?.all_day || isDateOnly(s);
   const multi = isMultiDay(ev);
   const firstYmd = ymdChicago(s);
   const lastYmd = multi ? eventLastDay(ev) : firstYmd;
@@ -614,20 +592,42 @@ const pubName = (item) => (item?.extra?.publication === "lv" || item?.source ===
 /* ------------------------------------------------------------------ */
 /*  Monthly digest (/digest/ — its e-mail twin is scripts/notify/send_digest.py) */
 /* ------------------------------------------------------------------ */
-// One EDITION per calendar month (America/Chicago). Edition "2026-10" goes out on October 1 and
-// stays on /digest/ all of October:
-//   * what was new in the PREVIOUS month (September): the What's New entries whose news date
-//     (wn_date) falls in it, completed from the full episode / video / document / announcement
-//     lists, because whatsnew.json only keeps its newest 150 entries (about one busy month);
-//     a YouTube upload of a podcast episode is folded into the episode (mergeMediaTwins, as on
-//     What's New); Instagram is one pointer line (its feed only keeps the newest posts);
-//   * this month's magazine issues: count, a few highlights (free to read first, then members'
-//     stories, Area 65 and Texas writers first) and the "put it to work" tips of the /monthly/ page;
-//   * stories by writers from Area 65 / Texas published last month (spotlight, extra.pub_date);
-//   * what is coming up THIS month (events not over yet, the weekly open meetings, the Grapevine
-//     meetings count), story deadlines through the end of NEXT month, the phone story lines,
-//     Book of the Month, the cheapest subscription and a pointer to the daily quote.
-// send_digest.py applies the same rules: keep the two in step (docs/OPERATIONS.md → monthly-digest.yml).
+// One EDITION per calendar month P (America/Chicago), named after it — "September 2026 digest" /
+// "Resumen de septiembre de 2026". It is on /digest/ from the first build on the 1st of the next month
+// K through the end of K, and the e-mail goes out once, early in K. It recaps what happened or was
+// published on the site in P, read from the FULL data files (never whatsnew.json, which keeps only its
+// newest 150 entries), a day being its Central calendar day:
+//   * the bulletin's posts (announcements.json) by the day they were added to the site — the day the site
+//     first had them (first_seen; their date on that same day), never before their `publish` day —, not
+//     expired;
+//   * the events that took place in P (events.json, the month an event starts in) and P's committee
+//     meeting — its record, else the site.meeting rule (events.json drops a meeting once it is over) —
+//     with their days only; events are never "news" on their own (no count, no e-mail);
+//   * the committee's uploads (drive.json) by the later of their date and the day the site first had
+//     them (first_seen): a file named after an earlier meeting ("2026-08-11 Report", uploaded in
+//     September) is September's, and a photo taken on the 30th but uploaded on the 2nd is the next
+//     month's — each upload is in exactly one edition, the one of the month it was added. A dated flyer
+//     is an event, not an upload; photos are ONE entry per album for the month ("Photos: Booth — 5 new
+//     photos", linking to /photos/#album);
+//   * the magazine stories that came out online in P (articles.json extra.pub_date; a story without one
+//     counts in the month its issue came out online — never by first_seen, so the site's launch never
+//     puts the back catalog into one edition), grouped by issue with a few highlights (free to read
+//     first, then members' stories, in the magazine's order);
+//   * stories by writers from Area 65 and the rest of Texas published in P (spotlight.json);
+//   * podcast episodes (a YouTube upload of the same episode folded into it, mergeMediaTwins), videos,
+//     the magazines' Instagram posts (instagram.json: per account, how many and the 3 newest — the
+//     site's /instagram/ page is their one home) and documents, by date.
+// Plus ONE pointer: "Coming up in K" → /monthly/K/, the toolkit, the home of everything current (the
+// committee meeting — its Zoom details stay on /meetings/, which the toolkit links to —, events not over
+// yet, the weekly open meetings, deadlines, Book of the Month, the daily quote …). An issue's highlight
+// stories are only here, in the month they came out; the toolkit shows the themes and counts. Nothing is
+// in both.
+// Two files keep only their newest entries, so a page read late in K can show fewer of P's items than the
+// e-mail did: events.json (the newest 12 past one-off events) and instagram.json (the newest
+// sources.instagram.keep_per_account posts of each account — 130, about 65 days at the accounts' ~2 posts a
+// day, so P's count normally holds all through K; a much busier month loses its oldest posts late in K).
+// send_digest.py applies the same rules: keep the two in step (tests/test_digest_parity.py compares what
+// each one picks; docs/OPERATIONS.md → monthly-digest.yml).
 
 const pad2 = (n) => String(n).padStart(2, "0");
 /** "2026-09" → "2026-09-30" */
@@ -640,46 +640,134 @@ export function monthWord(key, lang) {
 }
 
 /**
- * The edition of `now` (its Central-time month) or of an explicit "YYYY-MM": the month itself
- * (key, first, last), the previous month the news comes from (prev, prevFirst, prevLast) and the
- * next month (next, nextLast — story deadlines run through it).
+ * The edition shown at `now`: the Central-time month BEFORE now's (October 1–31 → the September digest),
+ * or the one covering an explicit "YYYY-MM" (`month`): the month it covers (key, first, last) and the
+ * month it comes out in (out, outFirst: its toolkit pointer, the page's "since" pointer).
  */
-export function digestEdition(now = nowDate(), edition = "") {
-  const key = /^\d{4}-(0[1-9]|1[0-2])$/.test(edition || "") ? edition : ymdChicago(new Date(now)).slice(0, 7);
-  const prev = addMonths(key, -1);
-  const next = addMonths(key, 1);
-  return {
-    key, first: `${key}-01`, last: monthLastDay(key),
-    prev, prevFirst: `${prev}-01`, prevLast: monthLastDay(prev),
-    next, nextLast: monthLastDay(next),
-  };
+export function digestEdition(now = nowDate(), month = "") {
+  const key = /^\d{4}-(0[1-9]|1[0-2])$/.test(month || "") ? month : addMonths(ymdChicago(new Date(now)).slice(0, 7), -1);
+  const out = addMonths(key, 1);
+  return { key, first: `${key}-01`, last: monthLastDay(key), out, outFirst: `${out}-01` };
 }
 
-// What the edition counts as news (What's New groups); Instagram and events have their own lines.
-const MONTH_NEWS = ["announcement", "article", "episode", "video", "pdf", "drive"];
-// Full source lists read on top of whatsnew.json (a dated item only: its date is its news date,
-// the same rule as build_data's effective_ts; undated or future-dated items count only from What's New).
-const MONTH_SOURCES = ["episodes", "videos", "pdfs", "announcements"];
+// What the edition counts as news (What's New groups; the drive group holds the albums too, "post" is
+// Instagram).
+const MONTH_NEWS = ["announcement", "article", "episode", "video", "post", "pdf", "drive"];
+// The intro's list, in this order: "89 magazine stories, 8 podcast episodes, 2 videos, 38 Instagram posts …
+// 1 photo album and 1 bulletin post".
+export const COUNT_ORDER = ["article", "episode", "video", "post", "pdf", "drive", "album", "announcement"];
+// The full source lists read by their own date (the magazine stories by extra.pub_date, below).
+const MONTH_SOURCES = ["announcements", "episodes", "videos", "instagram", "pdfs", "drive"];
+// How many of an Instagram account's posts of the month the edition shows (the rest: /instagram/).
+const IG_NEWEST = 3;
 
-/** The previous month's news, newest first, podcast/video twins folded ({ key: [items] }). */
+/** The later of two news dates by their Central calendar day: `b` only when its day is after `a`'s (or
+ *  there is no `a`), so on the same day `a` keeps its own time. */
+function laterOf(a, b) {
+  const da = a ? ymdChicago(a) : "";
+  const dbb = b ? ymdChicago(b) : "";
+  return dbb && (!da || dbb > da) ? b : a || null;
+}
+
+/** A bulletin post's news date: the day it was ADDED to the site — when the site first had it (first_seen;
+ *  its own `date` instead when that is the same Central day, for its time, or when there is no first_seen),
+ *  and never before its `publish` day (a post scheduled with `publish:` appears that morning). Its `date`
+ *  is only the post's label: one dated in an earlier month but added later (written on the 28th, saved on
+ *  the 2nd — after that month's e-mail went out) is in the edition of the month it appeared, like a
+ *  committee upload (uploadWhen); one dated AHEAD (a notice dated with its event's day, saved on the 25th)
+ *  is in the edition of the month it was added too — by that event's month it has usually expired, and it
+ *  would be in no edition (build_data.effective_ts: a date more than a day ahead → first_seen, What's New's
+ *  rule). Every post is in exactly one edition. send_digest.py post_when is the twin. */
+function postWhen(it) {
+  const pub = String(it.extra?.publish || "").slice(0, 10);
+  const seen = it.first_seen || null;
+  const base = it.date && (!seen || ymdChicago(it.date) === ymdChicago(seen)) ? it.date : seen;
+  return laterOf(base, YMD.test(pub) ? pub : null);
+}
+
+/** A committee upload's news date (drive.json): the later of its date (the date its name starts with,
+ *  else when the photo was taken or the file created — drive.py) and when the site first had it, so each
+ *  upload is in the edition of the month it was added. */
+const uploadWhen = (it) => laterOf(it.date || null, it.first_seen || null);
+
+/**
+ * The day a magazine story counts in, for a list of stories: its extra.pub_date (the day it came out
+ * online — build_data), else — a story whose pub_date could not be worked out — the earliest pub_date of
+ * its issue's stories (the day the issue came out online). Never first_seen: the stories the site found
+ * at its launch (the back catalog) would all land in one edition. "" when neither is known.
+ */
+function storyDayOf(stories) {
+  const issueOf = (a) => `${a.extra.publication || a.category}|${a.extra.issue_key}`;
+  const first = new Map();
+  for (const a of stories) {
+    const pd = a.extra.pub_date;
+    if (YMD.test(pd || "") && (!first.has(issueOf(a)) || pd < first.get(issueOf(a)))) first.set(issueOf(a), pd);
+  }
+  return (a) => (YMD.test(a.extra.pub_date || "") ? a.extra.pub_date : first.get(issueOf(a)) || "");
+}
+/** The magazine stories the digest reads: articles.json stories on the site, with a link and an issue. */
+const digestStories = (db) => (db?.articles?.items || [])
+  .filter((a) => a && a.kind === "article" && a.status !== "gone" && a.url && a.extra?.issue_key);
+
+/**
+ * P's news by group ({ key: [items] }), newest first — the bulletin's pinned posts first, a podcast's
+ * YouTube twin folded into it, the committee's photos one entry per album:
+ *   { id: "album:<key>", kind: "album", _album: true, _count: photos, _when: the newest photo's date,
+ *     url: "/photos/#<album>", title: the album's folder (or ""), i18n: { album } }
+ * `_when` is the date an item counts on (a scheduled post's `publish` day, a post's or an upload's
+ * first_seen …); the item keeps its own `date` (a committee file's row shows the date in its name).
+ */
 export function monthNews(db, ed, now = Date.now()) {
+  const today = ymdChicago(new Date(now));
+  const inMonth = (v) => { const d = ymdChicago(v); return !!d && d >= ed.first && d <= ed.last; };
   const found = new Map();
-  const add = (raw, fromWhatsNew) => {
-    if (!raw || !raw.id || raw.status === "gone" || found.has(raw.id)) return;
-    if (!fromWhatsNew && !(isDateOnly(raw.date) || (typeof raw.date === "string" && ms(raw.date)))) return;
-    const it = fromWhatsNew ? prep(raw, now) : { ...prep(raw, now), _when: raw.date };
-    if (!MONTH_NEWS.includes(it._group)) return;
-    const t = ms(it._when);
-    if (!t || t > now + DAY) return;
-    const ymd = ymdChicago(it._when);
-    if (ymd < ed.prevFirst || ymd > ed.prevLast) return;
-    // a bulletin post is over after its `expires` day (Central time) — the rule of /bulletin/, the
-    // home page, build_data and the e-mail (send_digest.py; tests/test_digest_parity.py compares them)
-    if (it.kind === "announcement" && it.extra?.expires && String(it.extra.expires).slice(0, 10) < ymdChicago(new Date(now))) return;
-    found.set(raw.id, it);
-  };
-  for (const i of db?.whatsnew?.items || []) add(i, true);
-  for (const name of MONTH_SOURCES) for (const i of db?.[name]?.items || []) add(i, false);
+  for (const name of MONTH_SOURCES) {
+    for (const raw of db?.[name]?.items || []) {
+      if (!raw || !raw.id || raw.status === "gone" || found.has(raw.id)) continue;
+      const it = prep(raw, now);
+      if (!MONTH_NEWS.includes(it._group)) continue;
+      if (name === "drive" && (raw.kind === "announcement" || raw.extra?.event_date)) continue;   // a bulletin doc / a dated flyer (an event)
+      const when = raw.kind === "announcement" ? postWhen(raw) : name === "drive" ? uploadWhen(raw) : raw.date;
+      if (!(isDateOnly(when) || (typeof when === "string" && ms(when)))) continue;              // undated: never news
+      if (ms(when) > now + DAY || !inMonth(when)) continue;
+      // a bulletin post is over after its `expires` day (Central time) — the rule of /bulletin/, the
+      // home page, build_data and the e-mail (send_digest.py; tests/test_digest_parity.py compares them)
+      if (it.kind === "announcement" && it.extra?.expires && String(it.extra.expires).slice(0, 10) < today) continue;
+      found.set(raw.id, { ...it, _when: when });
+    }
+  }
+  // the magazine stories that came out online in P (storyDayOf: extra.pub_date, else their issue's)
+  const stories = digestStories(db);
+  const dayOf = storyDayOf(stories);
+  for (const a of stories) {
+    if (!a.id || found.has(a.id)) continue;
+    const pd = dayOf(a);
+    if (!pd || pd < ed.first || pd > ed.last) continue;
+    found.set(a.id, { ...prep(a, now), _when: pd });
+  }
+  // the committee's photos: ONE entry per album for the month, dated by its newest photo and linking to
+  // the album on /photos/ (committee.js photoAlbumKey / photoAlbumSlugs: the same ids as that page)
+  const albums = new Map();
+  for (const it of found.values()) {
+    if (it.source !== "drive" || !isPhotoItem(it)) continue;
+    const k = photoAlbumKey(it);
+    if (!albums.has(k)) albums.set(k, []);
+    albums.get(k).push(it);
+  }
+  if (albums.size) {
+    const slugs = photoAlbumSlugs(db?.drive?.items || []);
+    for (const [k, members] of albums) {
+      for (const p of members) found.delete(p.id);
+      const newest = members.reduce((a, b) => (ms(b._when) > ms(a._when) ? b : a));
+      const slug = slugs.get(k);
+      found.set(`album:${k}`, {
+        id: `album:${k}`, kind: "album", source: "drive", category: "photos", _group: "drive", _album: true,
+        _count: members.length, _when: newest._when, _tone: "vine", _icon: "images", _ext: false,
+        url: slug ? `/photos/#${slug}` : "/photos/", title: k.startsWith("f:") ? k.slice(2) : "",
+        i18n: { album: members[0].i18n?.album || null }, machine: members[0].machine || [], extra: {},
+      });
+    }
+  }
   const list = mergeMediaTwins([...found.values()].sort((a, b) => ms(b._when) - ms(a._when) || String(a.id).localeCompare(String(b.id))));
   const out = {};
   for (const k of MONTH_NEWS) out[k] = list.filter((i) => i._group === k);
@@ -690,147 +778,200 @@ export function monthNews(db, ed, now = Date.now()) {
 
 const EVERY_ISSUE_RE = /in every issue|en cada (?:edici[oó]n|n[uú]mero)/i;
 const isDepartment = (a) => a?.extra?.department === true || EVERY_ISSUE_RE.test(String(a?.extra?.section || ""));
-const scopeRank = (a) => ({ neta65: 0, texas: 1 })[a?.extra?.geo?.scope] ?? 2;
 
 /**
- * The magazine issues on the stands in the edition's month: Grapevine's issue of that month and
- * La Viña's bimonthly issue (key = the month, or the month before) — each from articles.json
- * (the latest synced issue gets its cover and official page from `issues`; the theme of this
- * month's Grapevine issue is the /monthly/ month model's: the issue's own theme once it is out,
- * else the editorial calendar's).
- * highlights: `n` stories — free to read first, then members' stories (not "In Every Issue"),
- * Area 65 and Texas writers first, then in the magazine's own order.
+ * The magazine issues whose stories came out online in P (extra.pub_date — so the September digest
+ * features the October Grapevine, online since September 23; storyDayOf), Grapevine first, the newest
+ * issue key first (issuesByLang.es puts La Viña first). Each: the stories of P (`count`, `free`), all the
+ * issue's stories on the site (`total`), `current` (the newest issue of that magazine on /read/ — read.js
+ * groupIssues, the page's own rule), label, theme (monthly.js issueTheme — the toolkit's name for it),
+ * the official issue page and cover, the /read/ link, and `n` highlights: the stories of P minus `skip`
+ * (the writers' stories, listed in their own section), free to read first, then members' stories (not
+ * "In Every Issue"), then the magazine's order.
  */
-export function monthIssues(db, ed, mm = {}, n = 3) {
-  const arts = (db?.articles?.items || []).filter((a) => a && a.kind === "article" && a.status !== "gone" && a.url && a.extra?.issue_key);
+export function monthIssues(db, ed, n = 3, skip = new Set()) {
   const pubOf = (a) => a.extra.publication || a.category;
-  const out = [];
-  for (const pub of ["gv", "lv"]) {
-    const key = [ed.key, addMonths(ed.key, -1)].find((k) => arts.some((a) => pubOf(a) === pub && a.extra.issue_key === k));
-    if (!key) continue;
-    const list = arts.filter((a) => pubOf(a) === pub && a.extra.issue_key === key);
+  const stories = digestStories(db);
+  const dayOf = storyDayOf(stories);
+  const groups = new Map();
+  for (const a of stories) {
+    const pub = pubOf(a);
+    const pd = dayOf(a);
+    if ((pub !== "gv" && pub !== "lv") || !pd || pd < ed.first || pd > ed.last) continue;
+    const k = `${pub}|${a.extra.issue_key}`;
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(a);
+  }
+  const out = [...groups.entries()].map(([k, list]) => {
+    const [pub, key] = k.split("|");
     const meta = (db?.articles?.issues || []).find((i) => i && i.publication === pub && i.key === key) || null;
     const first = list[0];
-    const pick = (l) => {
-      const fromMonth = pub === "gv" && key === ed.key ? clean(mm[l]?.gv?.theme) : "";
-      return fromMonth || clean(meta?.i18n?.theme?.[l] || first.i18n?.issue_theme?.[l] || meta?.theme || first.extra.issue_theme || first.extra.topic);
-    };
     const label = (l) => clean(meta?.i18n?.label?.[l] || first.i18n?.issue_label?.[l]) || issueLabel(first.extra.issue_label || meta?.label || key, l);
-    const ranked = list.map((a, i) => ({ a, i }))
-      .sort((x, y) => (x.a.extra.free === true ? 0 : 1) - (y.a.extra.free === true ? 0 : 1)
-        || isDepartment(x.a) - isDepartment(y.a) || scopeRank(x.a) - scopeRank(y.a) || x.i - y.i)
+    const newest = groupIssues(db?.articles, pub)[0];
+    const current = !!newest && newest.key === key;
+    const ranked = list.filter((a) => !skip.has(a.id) && !skip.has(a.url)).map((a, i) => ({ a, i }))
+      .sort((x, y) => (x.a.extra.free === true ? 0 : 1) - (y.a.extra.free === true ? 0 : 1) || isDepartment(x.a) - isDepartment(y.a) || x.i - y.i)
       .map((x) => x.a);
-    out.push({
+    return {
       pub, key, isLv: pub === "lv", name: pub === "lv" ? "La Viña" : "Grapevine",
       label: { en: label("en"), es: label("es") },
-      theme: { en: pick("en"), es: pick("es") },
-      themeMachine: pub === "gv" && key === ed.key ? !!mm.es?.gv?.machine : false,
+      theme: { en: issueTheme(db, pub, key, "en"), es: issueTheme(db, pub, key, "es") },
       url: meta?.url || first.extra.issue_url || "",
       cover: meta?.cover || "",
       count: list.length,
+      total: stories.filter((a) => pubOf(a) === pub && a.extra.issue_key === key).length,
       free: list.filter((a) => a.extra.free === true).length,
+      current,
+      readHref: current ? `/read/#${pub}-current` : "/read/",
       highlights: ranked.slice(0, n),
-    });
-  }
-  return out;
+    };
+  });
+  return out.sort((a, b) => (a.pub === b.pub ? 0 : a.pub === "gv" ? -1 : 1) || (a.key < b.key ? 1 : a.key > b.key ? -1 : 0));
 }
 
-/** Events of the edition's month that are not over yet (the committee meeting has its own box;
- *  a monthly series — the CityWide booth — once), soonest first. */
-function monthEvents(db, ed, now) {
-  return nextOfEachSeries((db?.events?.items || [])
-    .filter((e) => e && e.status !== "gone" && e.category !== "committee" && eventStart(e))
-    .filter((e) => { const first = ymdChicago(eventStart(e)); return first <= ed.last && eventLastDay(e) >= ed.first && eventEndMs(e) >= now; })
-    .sort((a, b) => ms(eventStart(a)) - ms(eventStart(b))))
-    .map((e) => ({ ...prep(e, now), _recurring: isRecurring(e), _tentative: e.extra?.tentative === true }));
+/**
+ * P's Instagram posts (monthNews' "post" group, newest first) per account of the magazines — Grapevine,
+ * La Viña, then any other in the order of their key: { key, name, username, url (the account on
+ * Instagram), count, newest: the IG_NEWEST newest posts }. The page shows each account's count and its
+ * newest posts, the texts only the counts; all of them are on the site's /instagram/ page (one link).
+ * `profiles` = instagram.json profiles (the handle and the account's address).
+ */
+export function monthInstagram(posts, profiles = {}) {
+  const by = new Map();
+  for (const p of posts || []) {
+    const key = String(p.extra?.account || p.category || p.extra?.username || "");
+    if (!by.has(key)) by.set(key, []);
+    by.get(key).push(p);
+  }
+  const rank = (k) => (k === "gv" ? 0 : k === "lv" ? 1 : 2);
+  return [...by.entries()]
+    .sort(([a], [b]) => rank(a) - rank(b) || a.localeCompare(b))
+    .map(([key, list]) => {
+      const prof = (profiles && profiles[key]) || {};
+      const username = String(prof.username || list[0].extra?.username || "").replace(/^@/, "");
+      return {
+        key, name: key === "lv" ? "La Viña" : key === "gv" ? "Grapevine" : clean(prof.name) || username,
+        username, url: prof.url || (username ? `https://www.instagram.com/${username}/` : ""),
+        count: list.length, newest: list.slice(0, IG_NEWEST),
+      };
+    });
+}
+
+/**
+ * The events that took place in P — every category but the committee's, in the month an event starts
+ * in, once it has started — plus P's committee meeting: its events.json record, else the site.meeting
+ * rule (monthly.js meetingByRule: skip_dates honoured) when the settings have a meeting, once it has
+ * started: { id: "ev:committee:<day>", category: "committee", url: "/meetings/", _committee: true }.
+ * Soonest first. (A meeting cancelled without a skip date still reads as held — the rule cannot know.)
+ */
+export function monthEventsHeld(db, ed, site = {}, now = Date.now()) {
+  const inMonth = (v) => { const d = ymdChicago(v); return !!d && d >= ed.first && d <= ed.last; };
+  const all = (db?.events?.items || []).filter((e) => e && e.status !== "gone");
+  const evs = all.filter((e) => e.category !== "committee" && eventStart(e) && inMonth(eventStart(e)) && ms(eventStart(e)) <= now)
+    .map((e) => prep(e, now));
+  const rule = site?.meeting && typeof site.meeting === "object" && Object.keys(site.meeting).length ? site.meeting : null;
+  const rec = all.find((e) => String(e.id || "").startsWith(`ev:committee:${ed.key}-`));
+  const cm = rec && eventStart(rec) ? { ymd: ymdChicago(eventStart(rec)), start: eventStart(rec), end: rec.extra?.end || null }
+    : rule ? meetingByRule(ed.key, rule) : null;
+  if (cm && cm.start && ms(cm.start) <= now) {
+    const base = rec || { kind: "event", source: "committee", title: "", lang: "en", i18n: {}, machine: [] };
+    evs.push({
+      ...prep({ ...base, id: `ev:committee:${cm.ymd}`, category: "committee", url: "/meetings/", date: cm.start,
+        extra: { start: cm.start, end: cm.end, all_day: false, location: (rule && rule.platform) || "Zoom" } }, now),
+      _committee: true,
+    });
+  }
+  return evs.sort((a, b) => ms(eventStart(a)) - ms(eventStart(b)) || String(a.id).localeCompare(String(b.id)));
 }
 
 /**
  * Everything the monthly edition shows (the /digest/ page, its WhatsApp / e-mail texts).
- * opts: carry (config/carry.yml), site, now, edition ("YYYY-MM"), highlights, perSection.
+ * opts: site, now, month ("YYYY-MM": the month covered), highlights, perSection.
  */
-export function buildMonthlyDigest(db, meeting, opts = {}) {
+export function buildMonthlyDigest(db, opts = {}) {
   const now = opts.now instanceof Date ? opts.now.getTime() : Number(opts.now) || nowDate().getTime();
   const site = opts.site || {};
   const cfg = site.digest || {};
   const intOr = (v, d) => (Number.isInteger(Number(v)) && Number(v) > 0 ? Number(v) : d);
   const highlights = intOr(opts.highlights ?? cfg.highlights, 3);
   const perSection = intOr(opts.perSection ?? cfg.per_section, 5);
-  const ed = digestEdition(now, opts.edition);
-  const today = ymdChicago(new Date(now));
-  const mm = {
-    en: monthModel(ed.key, db || {}, opts.carry || {}, site, "en", new Date(now)),
-    es: monthModel(ed.key, db || {}, opts.carry || {}, site, "es", new Date(now)),
-  };
+  const ed = digestEdition(now, opts.month);
 
   const news = monthNews(db, ed, now);
-  const counts = Object.fromEntries(MONTH_NEWS.map((k) => [k, news[k].length]));
-  const total = MONTH_NEWS.reduce((n, k) => n + counts[k], 0);
-
-  const deadlines = (db?.editorial?.items || [])
-    .filter((e) => e && e.status !== "gone" && e.extra?.deadline && e.extra.deadline >= today && e.extra.deadline <= ed.nextLast)
-    .sort((a, b) => a.extra.deadline.localeCompare(b.extra.deadline) || clean(a.title).localeCompare(clean(b.title)));
-
-  const gvm = (L) => { const g = gvMeetings(db?.meetings, L, site); return { inArea: g.inArea, nearby: g.nearby }; };
-  const ap = db?.audio_project || {};
-  const line = (d) => (d && d.phone && d.tel ? { phone: String(d.phone), tel: String(d.tel) } : null);
-  const igProfiles = db?.instagram?.profiles || {};
-  const ig = ["gv", "lv"].map((k) => igProfiles[k]).filter((p) => p && (p.username || p.url))
-    .map((p) => ({ username: String(p.username || "").replace(/^@/, ""), url: p.url || (p.username ? `https://www.instagram.com/${String(p.username).replace(/^@/, "")}/` : "") }));
+  const counts = {
+    article: news.article.length, episode: news.episode.length, video: news.video.length, post: news.post.length,
+    pdf: news.pdf.length, drive: news.drive.filter((i) => !i._album).length, album: news.drive.filter((i) => i._album).length,
+    announcement: news.announcement.length,
+  };
+  const instagram = monthInstagram(news.post, db?.instagram?.profiles);
+  const total = COUNT_ORDER.reduce((n, k) => n + counts[k], 0);
+  const writers = writersPick(spotlightOf(db), 0, now, { since: ed.first, until: ed.last });
+  // the writers' stories have their own section: never again among an issue's highlights
+  const skip = new Set([...writers.neta65, ...writers.texas].flatMap((w) => [w.id, w.url]).filter(Boolean));
+  const issues = monthIssues(db, ed, highlights, skip);
   // What's New entries since the edition came out (the page's "since" pointer, never in the texts)
-  const since = (db?.whatsnew?.items || []).filter((i) => i && i.status !== "gone" && i.wn_date && ymdChicago(i.wn_date) >= ed.first && ms(i.wn_date) <= now + DAY).length;
-  const from = shopFromMonthly(db?.shop);
+  const since = (db?.whatsnew?.items || []).filter((i) => i && i.status !== "gone" && i.wn_date && ymdChicago(i.wn_date) >= ed.outFirst && ms(i.wn_date) <= now + DAY).length;
 
   return {
-    edition: ed,
-    until: new Date(now).toISOString(),
-    today,
+    edition: { ...ed, label: { en: monthLabel(ed.key, "en"), es: monthLabel(ed.key, "es") } },
+    // once K is over (midnight Central after its last day), a copy of this page read then says it is
+    // last month's edition (digest.njk, src/assets/js/community.js digestPage `stale`)
+    staleAfter: new Date(chicagoDayEndMs(monthLastDay(ed.out))).toISOString(),
+    today: ymdChicago(new Date(now)),
     highlights,
     perSection,
     news,
     counts,
     total,
-    issues: monthIssues(db, ed, mm, highlights),
-    // "put it to work": the tips of this month's Grapevine issue (config/carry.yml), at most 3
-    tips: { en: (mm.en.tips || []).slice(0, 3), es: (mm.es.tips || []).slice(0, 3) },
-    toolkit: { path: `/monthly/${ed.key}/`, label: { en: monthLabel(ed.key, "en"), es: monthLabel(ed.key, "es") } },
-    writers: writersPick(spotlightOf(db), 0, now, { since: ed.prevFirst, until: ed.prevLast }),
-    events: monthEvents(db, ed, now),
-    weekly: { en: mm.en.weekly || [], es: mm.es.weekly || [] },
-    gvm: { en: gvm("en"), es: gvm("es") },
-    deadlines,
-    lvTopics: { en: mm.en.lvTopics || [], es: mm.es.lvTopics || [] },
-    audio: { gv: line(ap.gv), lv: line(ap.lv) },
-    shop: { en: digestShop(db?.shop, "en", new Date(now)), es: digestShop(db?.shop, "es", new Date(now)) },
-    subsFrom: Number.isFinite(from) && from > 0 ? from : null,
-    quote: (db?.quote?.items || []).some((q) => q && q.text),
-    instagram: ig,
+    issues,
+    // the page language's magazine first: La Viña on /es/ (stable: the newest issue key first within each)
+    issuesByLang: { en: issues, es: [...issues.filter((i) => i.isLv), ...issues.filter((i) => !i.isLv)] },
+    // P's Instagram posts per account (monthInstagram), the page language's magazine first
+    instagram,
+    instagramByLang: { en: instagram, es: [...instagram.filter((a) => a.key === "lv"), ...instagram.filter((a) => a.key !== "lv")] },
+    writers,
+    events: monthEventsHeld(db, ed, site, now),
     since,
-    next: meeting?.next || null,
+    // the ONE pointer to what is current: the toolkit of the month the edition comes out in
+    toolkit: {
+      path: `/monthly/${ed.out}/`,
+      label: { en: monthLabel(ed.out, "en"), es: monthLabel(ed.out, "es") },
+      month: { en: monthWord(ed.out, "en"), es: monthWord(ed.out, "es") },
+    },
   };
 }
 
-/** "13 meetings every week in our Area, plus 10 in nearby areas" (md.gvm[lang]). */
-export function gvmText(g, lang, t) {
-  if (!g || !g.inArea) return "";
-  const ours = t(g.inArea === 1 ? "community.digest.n_meetings_one" : "community.digest.n_meetings", lang, { n: g.inArea });
-  return t(g.nearby ? "community.digest.gvm_text" : "community.digest.gvm_text_area", lang, { ours, nearby: g.nearby });
-}
-
-/** "9 podcast episodes, 2 videos and 8 documents" (zero counts left out), in `lang`. */
+/** "89 magazine stories, 8 podcast episodes, 38 Instagram posts, 1 photo album and 1 bulletin post" (zero counts
+ *  left out), in `lang`. */
 export function digestCountList(md, lang, t) {
-  const parts = ["article", "episode", "video", "pdf", "drive", "announcement"]
+  const parts = COUNT_ORDER
     .filter((k) => md.counts[k] > 0)
     .map((k) => t(`community.digest.n_${k}${md.counts[k] === 1 ? "_one" : ""}`, lang, { n: md.counts[k] }));
   if (parts.length < 2) return parts[0] || "";
   return `${parts.slice(0, -1).join(", ")} ${t("community.digest.and", lang)} ${parts[parts.length - 1]}`;
 }
 
-/** The edition's one-sentence intro ("In September: …. Here's what's coming up in October."). */
+/** The edition's one-sentence intro ("In September: 89 magazine stories, … and 1 bulletin post."). */
 export function digestIntro(md, lang, t) {
-  const vars = { prev: monthWord(md.edition.prev, lang), month: monthWord(md.edition.key, lang) };
+  const vars = { prev: monthWord(md.edition.key, lang) };
   const list = digestCountList(md, lang, t);
   return list ? t("community.digest.intro", lang, { ...vars, list }) : t("community.digest.intro_quiet", lang, vars);
+}
+
+/** An Instagram post's one line in the digest: its title in `lang` (the caption's first line — the sync
+ *  writes it), else — a post without a caption ("AA Grapevine — Instagram": media.js IG_GENERIC_TITLE) —
+ *  "An Instagram post from Grapevine" (`name`: the account). */
+const IG_GENERIC_TITLE = /^\s*(?:aa\s+grapevine|la\s+vi[ñn]a)\s*[—–-]\s*instagram\s*$/i;
+export function postLine(it, lang, t, name) {
+  const s = clean(pickLang(it, "title", lang));
+  return s && !IG_GENERIC_TITLE.test(s) && !IG_GENERIC_TITLE.test(String(it?.title || "")) ? s : t("community.wn.ig_post", lang, { name });
+}
+
+/** An album row's title: "Photos: Booth" / "Fotos: Booth" (the album's name in `lang` when there is one),
+ *  else "New photos" (a panel's own photos). */
+export function albumTitle(it, lang, t) {
+  const name = clean(it?.i18n?.album?.[lang] || it?.title);
+  return name ? t("community.digest.album", lang, { name }) : t("community.digest.album_plain", lang);
 }
 
 /**
@@ -839,6 +980,9 @@ export function digestIntro(md, lang, t) {
  * `media` = the shared podcast/video title helpers of eleventy/filters/media.js
  * ({ title, cleanTitle, videoKind } — see mediaHelpers below), so episodes and
  * videos read as on Home, Listen and Watch (no "[Season 11, Episode 12]" tail).
+ * The order of the page: the intro · the bulletin · the events of the month · the committee's uploads ·
+ * the magazines · the writers · podcasts, videos, Instagram (each account's count and one link),
+ * documents · (a quiet month) · the one pointer to this month's toolkit · the footer.
  */
 export function monthlyDigestText(md, langs, style, site, t, media = {}) {
   const L = Array.isArray(langs) ? langs : [langs];
@@ -852,7 +996,9 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
   const per = wa ? 3 : md.perSection;
   const url = (p) => absUrl(langPath(p, main), site);
   const ed = md.edition;
-  const until = Date.parse(md.until) || Date.now();
+  const prevW = (l) => ({ prev: monthWord(ed.key, l) });
+  // the events' days are written as seen from the month covered (a date of another year says it)
+  const asOf = Date.parse(`${ed.last}T12:00:00Z`);
   const titleOf = (item, l) => {
     const raw = clean(pickLang(item, "title", l));
     if (!isMediaItem(item) || !media.title) return raw;
@@ -865,22 +1011,13 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
   const more = (n, page) => `${wa ? "➕" : "+"} ${both("community.digest.text_more", { n })} ${url(page)}`;
   const out = [];
 
-  out.push(wa ? `*NETA 65 Grapevine / La Viña — ${both("community.digest.masthead")}*` : `NETA 65 Grapevine / La Viña — ${both("community.digest.masthead")}`);
-  const edLine = `${both("community.digest.edition", (l) => ({ month: monthLabel(ed.key, l) }))} · ${both("community.digest.edition_sub", (l) => ({ prev: monthWord(ed.prev, l), month: monthWord(ed.key, l) }))}`;
-  out.push(wa ? `_${edLine}_` : edLine);
+  const title = `NETA 65 Grapevine / La Viña — ${both("community.digest.edition", (l) => ({ month: ed.label[l] }))}`;
+  out.push(wa ? `*${title}*` : title);
+  const sub = both("community.digest.edition_sub", prevW);
+  out.push(wa ? `_${sub}_` : sub);
   out.push("");
   for (const l of L) out.push(digestIntro(md, l, t));
   out.push("");
-
-  // Next committee meeting
-  if (md.next) {
-    const when = uniq(L.map((l) => `${fmtShortDay(md.next.start, l)} · ${fmtTime(md.next.start, l)}`)).join(" / ");
-    out.push(head(both("community.digest.next_meeting"), "🗓️"));
-    out.push(`${when} — Zoom`);
-    out.push(both("community.digest.text_all_welcome"));
-    out.push(url("/meetings/"));
-    out.push("");
-  }
 
   // The bulletin
   const ann = md.news.announcement;
@@ -896,35 +1033,61 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
     out.push("");
   }
 
-  // This month in the magazines + put it to work
-  const issues = [...md.issues].sort((a, b) => (a.isLv === (main === "es") ? -1 : 0) - (b.isLv === (main === "es") ? -1 : 0));
+  // The events that took place (days only; the committee meeting under its own name)
+  if (md.events.length) {
+    out.push(head(both("community.digest.events_title", prevW), "📅"));
+    for (const ev of md.events) {
+      const [first, ...rest] = ev._committee ? [both("community.digest.committee_meeting")] : titleLines(ev);
+      const where = eventWhere(ev, main);
+      out.push(`${bullet} ${eventWhen(ev, main, asOf, { time: false })} — ${first}${where ? ` (${where})` : ""}`);
+      for (const r of rest) out.push(`  ${r}`);
+      if (ev.url) out.push(`  ${ev._committee ? url("/meetings/") : absUrl(hrefOf(ev, main), site)}`);
+    }
+    out.push("");
+  }
+
+  // The committee's uploads: files, and the photos one line per album
+  const drive = md.news.drive;
+  if (drive.length) {
+    out.push(head(`${both("community.group.drive")} (${drive.length})`, "📁"));
+    for (const item of drive.slice(0, per)) {
+      if (item._album) {
+        const names = uniq(L.map((l) => albumTitle(item, l, t)));
+        out.push(`${bullet} ${names[0]} — ${t(item._count === 1 ? "community.digest.n_photos_one" : "community.digest.n_photos", main, { n: item._count })}`);
+        for (const r of names.slice(1)) out.push(`  ${r}`);
+      } else {
+        // a file with its own date (the one in its name: two "Area Chair Meeting Report" files of different
+        // meetings can be added the same month)
+        const [first, ...others] = titleLines(item);
+        out.push(`${bullet} ${first}${item.date ? ` (${fmtDay(item.date, main)})` : ""}`);
+        for (const r of others) out.push(`  ${r}`);
+      }
+      out.push(`  ${absUrl(hrefOf(item, main), site)}`);
+    }
+    if (drive.length > per) out.push(more(drive.length - per, GROUPS.drive.page));
+    out.push("");
+  }
+
+  // New in the magazines: each issue whose stories came out in P (La Viña first in Spanish)
+  const issues = md.issuesByLang[main] || md.issues;
   if (issues.length) {
     out.push(head(both("community.digest.issues_title"), "📖"));
     for (const iss of issues) {
       const theme = uniq(L.map((l) => iss.theme[l])).map((x) => `“${x}”`).join(" / ");
-      out.push(`${bullet} ${iss.name} — ${iss.label[main]}${theme ? `: ${theme}` : ""} (${both(iss.count === 1 ? "community.digest.n_stories_one" : "community.digest.n_stories", { n: iss.count })})`);
+      const n = both(iss.count === 1 ? "community.digest.n_stories_one" : "community.digest.n_stories", { n: iss.count });
+      out.push(`${bullet} ${iss.name} — ${iss.label[main]}${theme ? `: ${theme}` : ""} (${n})`);
       for (const a of iss.highlights.slice(0, per)) {
         const [first, ...others] = titleLines(a);
         out.push(`  “${first}”${a.extra?.free === true ? ` — ${both("community.digest.free")}` : ""}`);
         for (const r of others) out.push(`  “${r}”`);
         out.push(`  ${a.url}`);
       }
-      out.push(`  ${both("community.digest.issue_more", { n: iss.count })}: ${url("/read/")}`);
+      out.push(`  ${both("community.digest.issue_more", { n: iss.total })}: ${url(iss.readHref)}`);
     }
     out.push("");
   }
-  const tips = md.tips[main] || [];
-  if (tips.length) {
-    out.push(head(both("monthly.put_to_work"), "💡"));
-    tips.forEach((tip, i) => {
-      out.push(`${bullet} ${tip.title}: ${tip.text}`);
-      for (const l of L.slice(1)) { const o = md.tips[l]?.[i]; if (o && o.text !== tip.text) out.push(`  ${o.title}: ${o.text}`); }
-    });
-  }
-  out.push(`${wa ? "🖼️ " : ""}${both("community.digest.monthly", (l) => ({ month: md.toolkit.label[l] }))}: ${url(md.toolkit.path)}`);
-  out.push("");
 
-  // Writers from Area 65 (first) and the rest of Texas, published last month
+  // Writers from Area 65 (first) and the rest of Texas, published in P
   const W = md.writers;
   if (W && W.total) {
     out.push(head(`${both("community.writers.digest_title")} (${W.total})`, "⭐"));
@@ -945,12 +1108,20 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
     out.push("");
   }
 
-  // Listen & watch, the new documents and committee files
-  const lists = [["episode", "🎧"], ["video", "🎬"], ["pdf", "📄"], ["drive", "📁"]];
-  for (const [key, emoji] of lists) {
+  // Listen & watch, Instagram, the new documents
+  for (const [key, emoji] of [["episode", "🎧"], ["video", "🎬"], ["post", "📸"], ["pdf", "📄"]]) {
     const items = md.news[key];
     if (!items.length) continue;
     out.push(head(`${both(`community.group.${key}`)} (${items.length})`, emoji));
+    if (key === "post") {
+      // Instagram: how many posts each account shared (the page language's magazine first) and ONE link,
+      // the site's Instagram page — never the posts one by one in a message
+      for (const acc of md.instagramByLang[main] || md.instagram) {
+        out.push(`${bullet} ${acc.name}${acc.username ? ` @${acc.username}` : ""}: ${both(acc.count === 1 ? "community.digest.ig_n_one" : "community.digest.ig_n", { n: acc.count })}`);
+      }
+      out.push(`  ${url("/instagram/")}`, "");
+      continue;
+    }
     for (const item of items.slice(0, per)) {
       const [first, ...others] = titleLines(item);
       out.push(`${bullet} ${first}`);
@@ -960,86 +1131,17 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
     if (items.length > per) out.push(more(items.length - per, GROUPS[key].page));
     out.push("");
   }
-  if (md.instagram.length) {
-    out.push(`${wa ? "📸 " : ""}${both("community.digest.ig_line")}: ${md.instagram.map((p) => `@${p.username}`).join(" · ")} — ${url("/instagram/")}`);
-    out.push("");
-  }
   if (!md.total && !(W && W.total)) {
-    out.push(both("community.digest.text_quiet", (l) => ({ prev: monthWord(ed.prev, l) })));
+    out.push(both("community.digest.text_quiet", prevW));
     out.push("");
   }
 
-  // Coming up this month
-  out.push(head(both("community.digest.coming_month", (l) => ({ month: monthWord(ed.key, l) })), "📅"));
-  if (md.events.length) {
-    for (const ev of md.events) {
-      const [first, ...rest] = titleLines(ev);
-      const where = eventWhere(ev, main);
-      const monthly = ev._recurring ? ` · ${both("community.digest.every_month")}` : "";
-      const tbc = ev._tentative ? ` · ${both("committee.events.tentative")}` : "";
-      out.push(`${bullet} ${eventWhen(ev, main, until)}${monthly}${tbc} — ${first}${where ? ` (${where})` : ""}`);
-      for (const r of rest) out.push(`  ${r}`);
-      if (ev.url) out.push(`  ${absUrl(hrefOf(ev, main), site)}`);
-    }
-  } else {
-    out.push(both("community.digest.no_events", (l) => ({ month: monthWord(ed.key, l) })));
-  }
-  const weekly = md.weekly[main] || [];
-  weekly.forEach((w, i) => {
-    const starts = w.startsLabel ? ` (${t("monthly.weekly_from", main, { date: w.startsLabel })})` : "";
-    out.push(`${bullet} ${both("community.digest.every_week")}: ${w.title} — ${w.when}${starts}`);
-    for (const l of L.slice(1)) { const o = md.weekly[l]?.[i]; if (o && (o.title !== w.title || o.when !== w.when)) out.push(`  ${o.title} — ${o.when}`); }
-  });
-  if (weekly.length) out.push(`  ${url("/meetings/#weekly-open")}`);
-  const g = md.gvm[main];
-  if (g && g.inArea) {
-    out.push(`${wa ? "📍" : bullet} ${both("community.digest.gvm_title")}: ${gvmText(g, main, t)}`);
-    out.push(`  ${url("/meetings/#grapevine-meetings")}`);
-  }
-  out.push(`${both("community.digest.events_link")}: ${url("/events/")}`);
+  // The one pointer to what is current: this month's toolkit
+  out.push(head(both("community.digest.coming_month", (l) => ({ month: md.toolkit.month[l] })), "🗓️"));
+  const kit = uniq(L.map((l) => t("community.digest.toolkit_text", l)));
+  if (kit.length === 1) out.push(`${kit[0]} ${url(md.toolkit.path)}`);
+  else out.push(...kit, url(md.toolkit.path));
   out.push("");
-
-  // Share your story: deadlines through next month, La Viña's open topics, the phone story lines
-  const lvTopics = md.lvTopics[main] || [];
-  // La Viña first in a Spanish message (the site's order on /es/)
-  const phones = (main === "es" ? [["La Viña", md.audio.lv], ["Grapevine", md.audio.gv]] : [["Grapevine", md.audio.gv], ["La Viña", md.audio.lv]]).filter(([, d]) => d);
-  if (md.deadlines.length || lvTopics.length || phones.length) {
-    out.push(head(both("community.digest.deadlines"), "✍️"));
-    for (const d of md.deadlines) {
-      const pub = d.extra?.publication === "lv" ? "La Viña" : "Grapevine";
-      const theme = uniq(L.map((l) => clean(pickLang(d, "title", l)))).join(" / ");
-      out.push(`${bullet} ${fmtShortDay(d.extra.deadline, main)} — "${theme}" (${pub}, ${issueInSentence(issueLabelOf(d, main), main)})`);
-    }
-    // La Viña publishes in Spanish: an English message gives the Spanish topic too
-    if (lvTopics.length) out.push(`${bullet} ${both("community.digest.text_lv_anytime")} ${lvTopics.map((x) => `"${x.text}"${x.es && x.es !== x.text ? ` ("${x.es}")` : ""}`).join(", ")}`);
-    if (phones.length) out.push(`${wa ? "🎙️" : bullet} ${both("community.rec.title")}: ${phones.map(([n, d]) => `${n} ${d.phone}`).join(" · ")}`);
-    out.push(`  ${url("/contribute/")}`);
-    out.push("");
-  }
-
-  // Book of the Month (the prices and dates have ONE home: /shop/#botm) + the cheapest subscription
-  const sh = md.shop[main];
-  if (sh && sh.offers.length) {
-    const label = sh.pct ? both("community.digest.botm_title", { pct: sh.pct }) : both("community.digest.botm_title_plain");
-    out.push(head(label, "📚"));
-    for (const o of sh.offers) {
-      // the title it is sold under first, then the translations as a second line
-      const titles = uniq([o.raw.title, ...L.map((l) => o.raw.i18n?.title?.[l])]);
-      const price = o.price ? t("community.digest.botm_price", main, { sale: o.sale, price: o.price }) : o.sale;
-      const ends = o.endsLabel ? ` · ${t("community.digest.botm_ends", main, { date: o.endsLabel })}` : "";
-      out.push(`${bullet} "${titles[0] || o.title}" (${o.pubName}) — ${price}${ends}`);
-      for (const r of titles.slice(1)) out.push(`  "${r}"`);
-      out.push(`  ${o.url}`);
-    }
-    out.push(`${both("community.digest.botm_more")}: ${url("/shop/")}#botm`);
-  }
-  if (md.subsFrom) out.push(`${wa ? "📬 " : ""}${both("shop.subs_from", (l) => ({ amount: money(md.subsFrom, l) }))}: ${url("/shop/")}#subscriptions`);
-  if ((sh && sh.offers.length) || md.subsFrom) out.push("");
-
-  if (md.quote) {
-    out.push(`${wa ? "💬 " : ""}${both("community.digest.quote_line")}: ${url("/")}`);
-    out.push("");
-  }
 
   out.push(`${wa ? "🌐 " : ""}${both("community.digest.text_footer")}`);
   for (const l of L) out.push(absUrl(langPath("/whats-new/", l), site));
@@ -1227,19 +1329,22 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("cmDateRange", (a, b, lang) => fmtRange(a, b, lang));
   eleventyConfig.addFilter("cmIssueLabel", (label, lang) => issueLabel(label, lang));
 
-  // Monthly digest (/digest/): {% set md = db | cmMonthlyDigest(meeting, carry, site) %}. MONTHLY_NOW
-  // (the /monthly/ test clock) also moves the edition: MONTHLY_NOW=2026-10-01 builds the October one.
-  eleventyConfig.addFilter("cmMonthlyDigest", (db, meeting, carry, site) => buildMonthlyDigest(db, meeting, { carry, site }));
+  // Monthly digest (/digest/): {% set md = db | cmMonthlyDigest(site) %} — LAST month's edition. MONTHLY_NOW
+  // (the /monthly/ test clock) also moves it: MONTHLY_NOW=2026-10-01T15:05:00Z builds the September one.
+  eleventyConfig.addFilter("cmMonthlyDigest", (db, site) => buildMonthlyDigest(db, { site }));
   eleventyConfig.addFilter("cmDigestIntro", (md, lang) => digestIntro(md, lang, t));
   eleventyConfig.addFilter("cmMonthWord", (key, lang) => monthWord(key, lang));
-  eleventyConfig.addFilter("cmGvmText", (g, lang) => gvmText(g, lang, t));
+  // An event that took place, as the digest lists it: its day(s) only, seen from the month covered
+  // ("Sat, Sep 12"; "Fri, Jun 25 – Sun, Jun 27"): {{ ev | cmEventDays(lang, md.edition) }}
+  eleventyConfig.addFilter("cmEventDays", (ev, lang, ed) => eventWhen(ev, lang, Date.parse(`${ed && ed.last}T12:00:00Z`) || Date.now(), { time: false }));
+  // An album row of the committee's uploads: "Photos: Booth" / "New photos"
+  eleventyConfig.addFilter("cmAlbumTitle", (it, lang) => albumTitle(it, lang, t));
+  // An Instagram post's one line (its caption's first line): {{ p | cmPostLine(lang, acc.name) }}
+  eleventyConfig.addFilter("cmPostLine", (it, lang, name) => postLine(it, lang, t, name));
   // The media filters (media.js) register after this file (alphabetical load order),
   // so they are looked up when the digest renders, not now. Missing → raw titles.
-  const mediaHelpers = () => ({
-    title: eleventyConfig.getFilter("mediaTitle"),
-    cleanTitle: eleventyConfig.getFilter("mediaCleanTitle"),
-    videoKind: eleventyConfig.getFilter("mediaVideoKind"),
-  });
+  const filterFn = (name) => { const f = eleventyConfig.getFilter ? eleventyConfig.getFilter(name) : null; return typeof f === "function" ? f : null; };
+  const mediaHelpers = () => ({ title: filterFn("mediaTitle"), cleanTitle: filterFn("mediaCleanTitle"), videoKind: filterFn("mediaVideoKind") });
   eleventyConfig.addFilter("cmDigestText", (md, langs, style, site) => monthlyDigestText(md, langs, style, site, t, mediaHelpers()));
 
   // Published writers (Area 65 first, then the rest of Texas): the digest's list is md.writers;

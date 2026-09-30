@@ -4,7 +4,8 @@
 # saved on this device and there is no connection. It is also "See saved pages" in the Aa menu, so it
 # reads naturally online too: pwa.js swaps the hero to its online wording (data-pwa-offline-copy).
 # The list of saved pages is read from the worker's caches by pwa.js (no JavaScript or no service
-# worker: a plain note instead). Not in the sitemap or the search index; noindex (base.njk).
+# worker: a plain note instead). Not in the sitemap; noindex (base.njk). The site's own search lists it as
+# "Saved pages" (library.js walks nav.footer; search.page_desc.offline / search.kw.offline).
 pagination: { data: languages, size: 1, alias: lang }
 permalink: "{{ '/' if lang == 'en' else '/es/' }}offline/index.html"
 layout: layouts/base.njk
@@ -73,9 +74,12 @@ eleventyExcludeFromCollections: true
       <span class="grid size-11 place-items-center rounded-xl {{ c.tone }}">{% icon c.icon, "size-5" %}</span>
       <h3 class="h-card">{{ c.h | t(lang) }}</h3>
       <p class="text-sm leading-relaxed text-muted">{{ c.t | t(lang) }}</p>
-      {#- pwa.js: the save button (disabled while offline) / the install button or steps (empty → hidden) -#}
+      {#- pwa.js: the save button (disabled while offline) / the install row — one-tap Install, or
+          "Install as an app" → this device's steps on /app/ (empty in the installed app → hidden).
+          Without JavaScript: a plain link to /app/. -#}
       {% if c.save %}<div class="pwa-card-slot mt-auto empty:hidden" data-pwa-save></div>{% endif %}
-      {% if c.install %}<div class="pwa-card-slot mt-auto empty:hidden" data-pwa-install></div>{% endif %}
+      {% if c.install %}<div class="pwa-card-slot mt-auto empty:hidden" data-pwa-install></div>
+      <a class="link tap-link mt-auto" data-nojs-only href="{{ '/app/' | lurl(lang) }}">{{ 'nav.app' | t(lang) }}</a>{% endif %}
     </li>
     {% endfor %}
   </ul>

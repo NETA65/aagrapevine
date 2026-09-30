@@ -9,33 +9,39 @@ bodyClass: "cm-page-digest cm-print-light"
 pageScripts: ["/assets/js/community.js"]
 ---
 {% import "macros/ui.njk" as ui with context %}
-{#- Monthly digest: ONE edition per calendar month (America/Chicago), built by community.js
-    buildMonthlyDigest — the same rules as the monthly e-mail (scripts/notify/send_digest.py):
-      * what was new LAST month (What's New entries + the full episode / video / document /
-        bulletin post lists), writers from Area 65 and Texas published last month;
-      * THIS month: the magazine issues (count, highlights, "put it to work" tips of /monthly/),
-        events not over yet, the weekly open meetings, the Grapevine meetings count;
-      * story deadlines through NEXT month, the phone story lines, Book of the Month, the
-        cheapest subscription and a pointer to the daily quote.
+{#- Monthly digest: ONE edition per calendar month P (America/Chicago), named after it — "September 2026
+    digest" / "Resumen de septiembre de 2026" — built by community.js buildMonthlyDigest with the same rules
+    as the monthly e-mail (scripts/notify/send_digest.py). A recap of what happened or was published on
+    the site in P, in this order:
+      the intro (one sentence; + "N more updates since the 1st" → What's New) · the bulletin's posts ·
+      the events that took place (the committee meeting included; days only) · the committee's uploads
+      of the month (a file with the date in its name; photos: one row per album, linking to it on
+      /photos/) · the magazine issues whose stories came out in P (a few highlights each; "See all N
+      stories" → /read/) · the writers from Area 65 and Texas · podcasts · videos · Instagram (per
+      account: how many posts and the 3 newest; ONE link to /instagram/, their home) · documents ·
+      (a quiet month) ·
+      ONE pointer: "Coming up in K" → this month's toolkit (/monthly/K/), the home of everything current
+      (the committee meeting — its Zoom details stay on /meetings/ —, events not over yet, deadlines, Book of
+      the Month …).
+    It is on this page from the first build on the 1st of the next month K, all through K. A copy read
+    after K is over (the build of the 1st has not run yet, or a saved copy) says so — and that the next
+    edition comes with that morning's update, never that a reload shows it at once: data-stale-after
+    (the midnight Central after K's last day; src/assets/js/community.js digestPage `stale`).
     Plain-text versions (WhatsApp / e-mail, one language or both) come from cmDigestText.
-    MONTHLY_NOW=2026-10-01 (the /monthly/ test clock) builds the October edition.
-    Layout: the newsletter card + share panel (≥1024px); from 1280px the card itself has two
-    newspaper columns — last month's news on the left, this month on the right. Its job: a group chat
-    or e-mail. For the district meeting there is the district report (/monthly/#report): the card
-    under the previews points there, and the report points back here. -#}
-{%- set md = db | cmMonthlyDigest(meeting, carry, site) -%}
+    MONTHLY_NOW=2026-10-01T15:05:00Z (the /monthly/ test clock) builds the September digest.
+    Layout: the newsletter card + share panel (≥1024px); from 1280px the card's body flows into two
+    newspaper columns (CSS columns, in DOM order). Its job: a group chat or e-mail. For the district
+    meeting there is the district report (/monthly/#report): the card under the previews points there,
+    and the report points back here. -#}
+{%- set md = db | cmMonthlyDigest(site) -%}
 {%- set ed = md.edition -%}
 {%- set other = lang | otherLang -%}
 {%- set biLangs = [lang, other] -%}
 {%- set homeAbs = '/' | lurl(lang) | siteUrl(site) -%}
 {%- set PER = md.perSection -%}
-{%- set prevW = ed.prev | cmMonthWord(lang) -%}
-{%- set prevWo = ed.prev | cmMonthWord(other) -%}
-{%- set monW = ed.key | cmMonthWord(lang) -%}
-{%- set monWo = ed.key | cmMonthWord(other) -%}
-{%- set igProfiles = db.instagram.profiles or {} -%}
+{%- set prevW = ed.key | cmMonthWord(lang) -%}
+{%- set prevWo = ed.key | cmMonthWord(other) -%}
 {%- set W = md.writers -%}
-{%- set sh = md.shop[lang] -%}
 
 {#- Section heading inside the newsletter: icon tile, title (+ the other language in bilingual
     mode), an optional count. `tone` must be literal classes (Tailwind reads the template). -#}
@@ -47,9 +53,72 @@ pageScripts: ["/assets/js/community.js"]
 </h3>
 {% endmacro %}
 
+{#- One of P's lists: the committee's uploads (a photo album is ONE row — "Photos: Booth · 5 new photos",
+    linking to the album on /photos/; a file shows its own date — the one in its name —, which may be
+    before P when it was added in P), podcast episodes (a YouTube upload of the same episode is folded
+    in: "also on YouTube"), the other videos, the new documents. At most PER rows, then "+ N more — See
+    all N" → the list's own page. `tone` must be literal classes (Tailwind reads the template). -#}
+{% macro dgList(key, icon, tone, page) %}
+{%- set items = md.news[key] -%}
+{% if items | length %}
+<section class="cm-digest-group" aria-labelledby="dg-{{ key }}">
+  {{ dgHead("dg-" ~ key, icon, tone, ("community.group." + key) | t(lang), ("community.group." + key) | t(other), other, items | length) }}
+  <ul class="divide-y divide-line" role="list">
+    {% for it in items | limit(PER) %}
+    {%- if it._album %}
+    {%- set title = it | cmAlbumTitle(lang) -%}
+    {%- set otherTitle = it | cmAlbumTitle(other) -%}
+    <li class="cm-avoid-break relative flex items-start gap-3 py-3">
+      <span class="mt-1.5 size-1.5 shrink-0 rounded-full bg-faint" aria-hidden="true"></span>
+      <div class="min-w-0 flex-1">
+        <a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ it | cmHref(lang) }}">{{ title }}</a>
+        {% if otherTitle != title %}<p class="text-sm italic text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ otherTitle }}</p>{% endif %}
+        <p class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-muted">
+          <span>{{ ("community.digest.n_photos_one" if it._count == 1 else "community.digest.n_photos") | t(lang, { n: it._count }) }}</span>
+          {% if it._when %}<time class="whitespace-nowrap" datetime="{{ it._when | isoDate }}">{{ it._when | fmtDate(lang, "short") }}</time>{% endif %}
+          {{ ui.autoNote(it, lang) }}
+        </p>
+      </div>
+    </li>
+    {%- else %}
+    {#- Podcast episodes / videos: the shared media titles (as on Home, Listen and Watch — no
+        "[Season 11, Episode 12]" tail) + an "S11 · E12" badge. -#}
+    {%- set isMedia = it.kind == "episode" or it.kind == "video" -%}
+    {%- set title = (it | mediaTitle(lang)) if isMedia else (it | tx("title", lang)) -%}
+    {%- set otherTitle = (it | mediaTitle(other)) if isMedia else (it | tx("title", other)) -%}
+    {%- set se = (it | mediaSE(lang)) if isMedia else "" -%}
+    {%- set isWeeklyVideo = it.kind == "video" and (it | mediaVideoKind) == "weekly" -%}
+    <li class="cm-avoid-break relative flex items-start gap-3 py-3">
+      <span class="mt-1.5 size-1.5 shrink-0 rounded-full bg-faint" aria-hidden="true"></span>
+      <div class="min-w-0 flex-1">
+        <a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ it | cmHref(lang) }}"{% if it._ext %} target="_blank" rel="noopener"{% endif %}>{{ title }}{% if it._ext %}<span class="sr-only"> {{ "community.new_tab" | t(lang) }}</span>{% endif %}</a>
+        {% if otherTitle and otherTitle != title %}<p class="text-sm italic text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ otherTitle }}</p>{% endif %}
+        <p class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-muted">
+          {% if se %}<span class="badge-gv">{{ se }}</span>{% endif %}
+          <span>{% if it.source == "podcast" %}{{ it.extra.show_name or "Podcast" }}{% elif it.source == "youtube" %}YouTube{% if isWeeklyVideo %} ·&nbsp;{{ "media.show_short_weekly" | t(lang) }}{% endif %}{% elif it.source == "drive" or it.source == "committee" %}NETA 65{% elif it.source == "lavina" or it.category == "lv" or (it.extra.host and "lavina" in it.extra.host) %}La Viña{% else %}Grapevine{% endif %}</span>
+          {#- a row with a link in it: gap only, no "·" (spec 1.11) — so no line ever starts with one. The
+              item's own date (a committee file: the date in its name), else the day it counts on. -#}
+          {%- set shownDate = it.date or it._when -%}
+          {% if shownDate %}<time class="whitespace-nowrap" datetime="{{ shownDate | isoDate }}">{{ shownDate | fmtDate(lang, "month" if it._approx else "short") }}</time>{% endif %}
+          {% if it._twin %}<span class="whitespace-nowrap"><a class="link relative z-10" href="{{ it._twin | cmHref(lang) }}"{% if it._twin._ext %} target="_blank" rel="noopener"{% endif %}>{{ "community.digest.twin" | t(lang) }}<span class="sr-only"> — {{ title }}{% if it._twin._ext %} {{ "community.new_tab" | t(lang) }}{% endif %}</span></a></span>{% endif %}
+          {{ ui.autoNote(it, lang) }}
+        </p>
+      </div>
+    </li>
+    {%- endif %}
+    {% endfor %}
+  </ul>
+  {% if (items | length) > PER %}
+  <p class="mt-1 text-sm"><a class="link tap-link" href="{{ page | lurl(lang) }}">{{ "community.digest.and_more" | t(lang, { n: (items | length) - PER }) }} — {{ "community.digest.see_all" | t(lang, { n: items | length }) }}</a></p>
+  {% endif %}
+</section>
+{% endif %}
+{% endmacro %}
+
 {#- One Alpine scope for the hero and the page: the hero's "Copy for WhatsApp" copies the
-    language the visitor picked in the tool card (bi = both languages). -#}
-<div x-data="digestPage()">
+    language the visitor picked in the tool card (bi = both languages). data-stale-after: when this
+    edition is last month's news (digestPage shows the note under the title). -#}
+<div x-data="digestPage()" data-stale-after="{{ md.staleAfter }}">
 {#- The hero's right-hand card (the shared hero aside): two more ways to pass the digest on — the monthly
     e-mail (write to the chair) and the district report (/monthly/#report). They MOVE there from the end
     of the previews card: while the card is in the hero (≥1024px at 100 % text) community.css hides those
@@ -67,7 +136,11 @@ pageScripts: ["/assets/js/community.js"]
   <button type="button" class="btn-light" data-copy-from="#digest-wa-one" :data-copy-from="src('wa')">{% icon "message-circle", "size-4" %} {{ "community.digest.copy_wa" | t(lang) }}</button>
   <button type="button" class="btn-on-dark" onclick="window.print()">{% icon "printer", "size-4" %} {{ "community.digest.print_short" | t(lang) }}</button>
 </div>
-{% if md.total %}{{ ui.heroStats([{ value: md.total | cmNum(lang), label: "community.digest.stat_items" | t(lang, { prev: prevW }) }]) }}{% endif %}
+{#- what P brought (the writers' stories are counted among the magazine stories too) -#}
+{% if md.total or W.total %}{{ ui.heroStats([
+  { value: (md.total | cmNum(lang)) if md.total else null, label: "community.digest.stat_items" | t(lang, { prev: prevW }) },
+  { value: (W.total | cmNum(lang)) if W.total else null, label: "community.digest.stat_writers" | t(lang) }
+]) }}{% endif %}
 {%- endif %}
 {% endcall %}
 
@@ -120,46 +193,24 @@ pageScripts: ["/assets/js/community.js"]
       <header class="cm-digest-mast flex items-start justify-between gap-4 border-b border-line px-5 py-5 sm:px-8 sm:py-7">
         <div class="min-w-0">
           <p class="eyebrow">NETA 65 · Grapevine / La Viña</p>
-          <h2 id="digest-title" class="mt-1 font-display text-3xl font-semibold leading-tight text-ink sm:text-4xl">{{ "community.digest.masthead" | t(lang) }}</h2>
-          <p class="mt-1.5 font-semibold text-gv">{{ "community.digest.edition" | t(lang, { month: md.toolkit.label[lang] }) }}<span x-show="bi" x-cloak lang="{{ other }}" class="font-normal text-muted"> · {{ "community.digest.edition" | t(other, { month: md.toolkit.label[other] }) }}</span></p>
-          <p class="mt-0.5 text-sm text-muted">{{ "community.digest.edition_sub" | t(lang, { prev: prevW, month: monW }) }}</p>
+          <h2 id="digest-title" class="mt-1 font-display text-3xl font-semibold leading-tight text-ink sm:text-4xl">{{ "community.digest.edition" | t(lang, { month: ed.label[lang] }) }}<span x-show="bi" x-cloak lang="{{ other }}" class="block font-sans text-base font-normal text-muted sm:text-lg">{{ "community.digest.edition" | t(other, { month: ed.label[other] }) }}</span></h2>
+          <p class="mt-1.5 font-semibold text-gv">{{ "community.digest.edition_sub" | t(lang, { prev: prevW }) }}<span x-show="bi" x-cloak lang="{{ other }}" class="font-normal text-muted"> · {{ "community.digest.edition_sub" | t(other, { prev: prevWo }) }}</span></p>
+          {#- shown by the browser once this edition is last month's news (a page read after the month it came
+              out in, before the build of the 1st — or a saved copy): the next one is on its way -#}
+          <p class="cm-no-print mt-2 flex items-start gap-1.5 text-sm font-semibold text-lv-strong" x-show="stale" x-cloak role="status">{% icon "info", "mt-0.5 size-4 shrink-0" %}<span>{{ "community.digest.stale_note" | t(lang, { month: ed.label[lang], next: md.toolkit.label[lang] }) }}</span></p>
         </div>
         <img src="/assets/img/logo-wide.png" alt="NETA 65" width="128" height="63" class="hidden h-14 w-auto shrink-0 rounded-md bg-white p-1 ring-1 ring-line sm:block print:block">
       </header>
 
       <div class="cm-dg-body px-5 py-6 sm:px-8 sm:py-8">
-        {#- The headline: last month in one sentence (+ the other language in bilingual mode) -#}
+        {#- The headline: the month in one sentence (+ the other language in bilingual mode) -#}
         <div class="cm-dg-intro">
           <p class="text-[1.05rem] leading-relaxed text-ink">{{ md | cmDigestIntro(lang) }}</p>
           <p class="mt-1 text-sm leading-relaxed text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ md | cmDigestIntro(other) }}</p>
-          {% if md.since %}<p class="cm-no-print mt-2 text-sm"><a class="link tap-link inline-flex items-center gap-1" href="{{ '/whats-new/' | lurl(lang) }}">{{ ("community.digest.since_one" if md.since == 1 else "community.digest.since") | t(lang, { n: md.since | cmNum(lang), date: ed.first | fmtDate(lang, "medium") }) }} {% icon "arrow-right", "size-4 shrink-0" %}</a></p>{% endif %}
+          {% if md.since %}<p class="cm-no-print mt-2 text-sm"><a class="link tap-link inline-flex items-center gap-1" href="{{ '/whats-new/' | lurl(lang) }}">{{ ("community.digest.since_one" if md.since == 1 else "community.digest.since") | t(lang, { n: md.since | cmNum(lang), date: ed.outFirst | fmtDate(lang, "medium") }) }} {% icon "arrow-right", "size-4 shrink-0" %}</a></p>{% endif %}
         </div>
 
-        {#- Next committee meeting -#}
-        {% if md.next %}
-        {#- @container: date + text side by side always; the button joins the row only when the box
-            is wide enough (the one-column layout), and sits below them in the narrow column. -#}
-        <section class="cm-dg-next cm-avoid-break @container rounded-2xl bg-gv-soft p-5" aria-labelledby="dg-next">
-          <div class="flex flex-col gap-4 @xl:flex-row @xl:items-center">
-          <div class="flex min-w-0 flex-1 items-start gap-4">
-          <div class="cm-datebox grid w-16 shrink-0 place-items-center rounded-xl bg-surface py-2 text-center shadow-sm ring-1 ring-line">
-            <span class="text-[0.68rem] font-bold uppercase tracking-wider text-gv">{{ md.next.start | fmtDate(lang, "monthShort") }}</span>
-            <span class="font-display text-2xl font-semibold leading-none text-ink">{{ md.next.start | fmtDate(lang, "day") }}</span>
-          </div>
-          <div class="min-w-0 flex-1">
-            <h3 id="dg-next" class="font-display text-lg font-semibold text-ink">{{ "community.digest.next_meeting" | t(lang) }}<span x-show="bi" x-cloak lang="{{ other }}" class="font-normal text-muted"> / {{ "community.digest.next_meeting" | t(other) }}</span></h3>
-            <p class="text-sm font-semibold text-gv">{{ md.next.start | fmtDate(lang, "long") }} · {{ md.next.start | fmtDate(lang, "time") }} · Zoom</p>
-            <p class="mt-0.5 text-sm text-muted">{{ "community.digest.meeting_text" | t(lang) }}</p>
-          </div>
-          </div>
-          <a class="btn-secondary btn-sm cm-no-print shrink-0 self-start @xl:self-auto" href="{{ '/meetings/' | lurl(lang) }}">{{ "community.digest.meeting_btn" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
-          </div>
-        </section>
-        {% endif %}
-
-        {#- ================= LAST MONTH + THIS MONTH'S ISSUES (left column from 1280px) ================= -#}
-        <div class="cm-dg-news">
-        {#- The bulletin's posts of last month (still current) -#}
+        {#- The bulletin's posts of P (not over yet) -#}
         {%- set ann = md.news.announcement -%}
         {% if ann | length %}
         <section class="cm-digest-group" aria-labelledby="dg-announcement">
@@ -170,7 +221,7 @@ pageScripts: ["/assets/js/community.js"]
             {%- set otherTitle = it | tx("title", other) -%}
             {%- set sum = it | tx("summary", lang) -%}
             <li class="cm-avoid-break relative py-3">
-              <a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ it | cmHref(lang) }}"{% if it._ext %} target="_blank" rel="noopener"{% endif %}>{{ title }}</a>
+              <a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ it | cmHref(lang) }}"{% if it._ext %} target="_blank" rel="noopener"{% endif %}>{{ title }}{% if it._ext %}<span class="sr-only"> {{ "community.new_tab" | t(lang) }}</span>{% endif %}</a>
               {% if otherTitle and otherTitle != title %}<p class="text-sm italic text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ otherTitle }}</p>{% endif %}
               {% if sum %}<p class="mt-1 line-clamp-3 text-sm leading-relaxed text-muted">{{ sum }}</p>{% endif %}
               <p class="mt-1 text-xs text-muted"><time datetime="{{ it._when | isoDate }}">{{ it._when | fmtDate(lang, "short") }}</time> {{ ui.autoNote(it, lang) }}</p>
@@ -181,12 +232,46 @@ pageScripts: ["/assets/js/community.js"]
         </section>
         {% endif %}
 
-        {#- This month in the magazines: each issue (La Viña first on /es/) with its theme, the number
-            of stories and a few highlights (free to read first); then "put it to work" + the toolkit. -#}
-        {%- set issues = md.issues | reverse if lang == "es" else md.issues -%}
+        {#- The events that took place in P (the month each one started in): the committee meeting, the
+            monthly booth, workshops, assemblies — their days only (never a time or "every month"). The date
+            box is decoration: the line under the title says the day in words. -#}
+        {% if md.events | length %}
+        <section class="cm-digest-group" aria-labelledby="dg-events">
+          {{ dgHead("dg-events", "calendar-check", "bg-vine-soft text-vine", "community.digest.events_title" | t(lang, { prev: prevW }), "community.digest.events_title" | t(other, { prev: prevWo }), other, md.events | length) }}
+          <ul class="divide-y divide-line" role="list">
+            {% for ev in md.events %}
+            {%- set title = ("community.digest.committee_meeting" | t(lang)) if ev._committee else (ev | tx("title", lang)) -%}
+            {%- set otherTitle = ("community.digest.committee_meeting" | t(other)) if ev._committee else (ev | tx("title", other)) -%}
+            <li class="cm-avoid-break relative flex items-start gap-4 py-3">
+              <span class="cm-datebox grid w-12 shrink-0 place-items-center rounded-lg bg-surface-2 py-1.5 text-center" aria-hidden="true">
+                {#- "APR–MAY" / "30–2" for an event over several days that ends in another month -#}
+                {%- set monthBox = ev | cmEventMonthBox(lang) -%}
+                <span class="whitespace-nowrap {{ 'text-[0.55rem] tracking-normal' if '–' in monthBox else 'text-[0.62rem] tracking-wider' }} font-bold uppercase text-vine">{{ monthBox }}</span>
+                {%- set dayBox = ev | cmEventDayBox(lang) -%}
+                <span class="font-display {{ 'text-sm' if '–' in dayBox else 'text-lg' }} whitespace-nowrap font-semibold leading-none text-ink">{{ dayBox }}</span>
+              </span>
+              <div class="min-w-0 flex-1">
+                {% if ev.url %}<a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ ev | cmHref(lang) }}"{% if ev._ext %} target="_blank" rel="noopener"{% endif %}>{{ title }}{% if ev._ext %}<span class="sr-only"> {{ "community.new_tab" | t(lang) }}</span>{% endif %}</a>{% else %}<span class="font-semibold text-ink">{{ title }}</span>{% endif %}
+                {% if otherTitle and otherTitle != title %}<p class="text-sm italic text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ otherTitle }}</p>{% endif %}
+                {%- set where = ev | cmEventWhere(lang) -%}
+                <p class="mt-0.5 text-xs text-muted">{{ ev | cmEventDays(lang, ed) }}{% if where %} ·&nbsp;<span{% if ev.extra.location_tba %} class="italic"{% endif %}>{{ where }}</span>{% endif %}{% if not ev._committee %} {{ ui.autoNote(ev, lang) }}{% endif %}</p>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+
+        {#- The committee's uploads of P: files, and the photos one row per album -#}
+        {{ dgList("drive", "folder-open", "bg-vine-soft text-vine", "/portfolio/") }}
+
+        {#- New in the magazines: the issues whose stories came out online in P (La Viña first on /es/),
+            each with its theme, the number of stories and a few highlights (free to read first; the Area 65
+            and Texas writers' stories are in their own section below) — then all its stories on /read/. -#}
+        {%- set issues = md.issuesByLang[lang] -%}
+        {% if issues | length %}
         <section class="cm-digest-group cm-dg-issues" aria-labelledby="dg-issues">
           {{ dgHead("dg-issues", "book-open", "bg-gv-soft text-gv", "community.digest.issues_title" | t(lang), "community.digest.issues_title" | t(other), other) }}
-          {% if issues | length %}
           <ul class="divide-y divide-line" role="list">
             {% for iss in issues %}
             <li class="cm-avoid-break py-4">
@@ -230,41 +315,16 @@ pageScripts: ["/assets/js/community.js"]
                 {% endfor %}
               </ul>
               {% endif %}
-              <p class="cm-no-print mt-2 text-sm"><a class="link tap-link" href="{{ '/read/' | lurl(lang) }}">{{ "community.digest.issue_more" | t(lang, { n: iss.count }) }}</a></p>
+              {#- all its stories: the issue on /read/ (its own card while it is the newest, else the archive) -#}
+              <p class="cm-no-print mt-2 text-sm"><a class="link tap-link" href="{{ iss.readHref | lurl(lang) }}">{{ "community.digest.issue_more" | t(lang, { n: iss.total }) }}</a></p>
             </li>
             {% endfor %}
           </ul>
-          {% endif %}
-          {#- "Put it to work": up to 3 tips for this month's Grapevine issue (config/carry.yml, the
-              same as the /monthly/ page), then the one link to this month's toolkit. -#}
-          {%- set tips = md.tips[lang] -%}
-          <div class="cm-avoid-break mt-2 rounded-xl bg-surface-2 p-4">
-            {% if tips | length %}
-            <h4 class="eyebrow flex items-center gap-1.5 text-lv-strong">{% icon "lightbulb", "size-3.5" %} {{ "monthly.put_to_work" | t(lang) }}<span x-show="bi" x-cloak lang="{{ other }}"> / {{ "monthly.put_to_work" | t(other) }}</span></h4>
-            <p class="mt-1 text-xs text-muted">{{ "community.digest.tips_sub" | t(lang) }}</p>
-            <ul class="mt-3 space-y-3" role="list">
-              {% for tip in tips %}
-              {%- set otip = md.tips[other][loop.index0] -%}
-              <li class="flex items-start gap-3">
-                <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-surface text-lv" aria-hidden="true">{% icon tip.icon, "size-4" %}</span>
-                <span class="min-w-0 text-sm">
-                  <span class="block font-semibold text-ink">{{ tip.title }}</span>
-                  <span class="block leading-relaxed text-muted">{{ tip.text }}</span>
-                  {% if otip and otip.text != tip.text %}<span class="mt-0.5 block italic leading-relaxed text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ otip.title }}: {{ otip.text }}</span>{% endif %}
-                </span>
-              </li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-            <p class="relative flex min-h-11 items-center gap-2 text-sm{{ ' mt-3' if tips | length }}">
-              <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-lv-soft text-lv">{% icon "calendar-heart", "size-4" %}</span>
-              <a class="link font-semibold after:absolute after:inset-0 after:rounded-xl" href="{{ md.toolkit.path | lurl(lang) }}">{{ "community.digest.monthly" | t(lang, { month: md.toolkit.label[lang] }) }}</a>
-            </p>
-          </div>
         </section>
+        {% endif %}
 
-        {#- Stories by writers from Area 65 (first) and the rest of Texas, published LAST month
-            (db.spotlight, extra.pub_date in the previous calendar month). Left out when there are none. -#}
+        {#- Stories by writers from Area 65 (first) and the rest of Texas, published in P
+            (db.spotlight, extra.pub_date in the month). Left out when there are none. -#}
         {% if W and W.total %}
         <section class="cm-digest-group cm-dg-writers" aria-labelledby="dg-writers">
           {{ dgHead("dg-writers", "award", "bg-lv-soft text-lv", "community.writers.digest_title" | t(lang), "community.writers.digest_title" | t(other), other, W.total) }}
@@ -302,222 +362,64 @@ pageScripts: ["/assets/js/community.js"]
         </section>
         {% endif %}
 
-        {#- Last month's podcast episodes (a YouTube upload of the same episode is folded into it:
-            "also on YouTube"), the other videos, the new documents and committee files. -#}
-        {%- set media = [
-          { key: "episode", icon: "headphones", tone: "bg-grape-soft text-grape", page: "/listen/" },
-          { key: "video", icon: "circle-play", tone: "bg-grape-soft text-grape", page: "/watch/" },
-          { key: "pdf", icon: "file-text", tone: "bg-gv-soft text-gv", page: "/library/" },
-          { key: "drive", icon: "folder-open", tone: "bg-vine-soft text-vine", page: "/portfolio/" }
-        ] -%}
-        {% for g in media %}
-        {%- set items = md.news[g.key] -%}
-        {% if items | length %}
-        <section class="cm-digest-group" aria-labelledby="dg-{{ g.key }}">
-          {{ dgHead("dg-" ~ g.key, g.icon, g.tone, ("community.group." + g.key) | t(lang), ("community.group." + g.key) | t(other), other, items | length) }}
+        {#- P's podcast episodes, the other videos, the magazines' Instagram posts, the new documents -#}
+        {{ dgList("episode", "headphones", "bg-grape-soft text-grape", "/listen/") }}
+        {{ dgList("video", "circle-play", "bg-grape-soft text-grape", "/watch/") }}
+
+        {#- Instagram: per account (the page language's magazine first) how many posts it shared in P and its
+            3 newest — their first line and date, each opening the post on Instagram — then ONE link to the
+            site's Instagram page, the home of the posts (never the whole list here). -#}
+        {%- set igAccs = md.instagramByLang[lang] -%}
+        {% if igAccs | length %}
+        <section class="cm-digest-group" aria-labelledby="dg-post">
+          {{ dgHead("dg-post", "instagram", "bg-grape-soft text-grape", "community.group.post" | t(lang), "community.group.post" | t(other), other, md.counts.post) }}
+          {% for acc in igAccs %}
+          {#- a meta-row: "Grapevine · @account · 19 posts" (the "·" is drawn by CSS and never starts a line) -#}
+          <h4 class="meta-row mt-4 text-sm font-normal text-muted">
+            <span class="font-semibold text-ink">{{ acc.name }}</span>
+            {% if acc.username %}<span class="[overflow-wrap:anywhere]">@{{ acc.username }}</span>{% endif %}
+            <span>{{ ("community.digest.ig_n_one" if acc.count == 1 else "community.digest.ig_n") | t(lang, { n: acc.count }) }}</span>
+          </h4>
           <ul class="divide-y divide-line" role="list">
-            {% for it in items | limit(PER) %}
-            {#- Podcast episodes / videos: the shared media titles (as on Home, Listen and Watch — no
-                "[Season 11, Episode 12]" tail) + an "S11 · E12" badge. -#}
-            {%- set isMedia = it.kind == "episode" or it.kind == "video" -%}
-            {%- set title = (it | mediaTitle(lang)) if isMedia else (it | tx("title", lang)) -%}
-            {%- set otherTitle = (it | mediaTitle(other)) if isMedia else (it | tx("title", other)) -%}
-            {%- set se = (it | mediaSE(lang)) if isMedia else "" -%}
-            {%- set isWeeklyVideo = it.kind == "video" and (it | mediaVideoKind) == "weekly" -%}
-            <li class="cm-avoid-break relative flex items-start gap-3 py-3">
+            {% for p in acc.newest %}
+            {%- set title = p | cmPostLine(lang, acc.name) -%}
+            {%- set otherTitle = p | cmPostLine(other, acc.name) -%}
+            {%- set href = p.url | mediaSafeUrl(acc.url) -%}
+            <li class="cm-avoid-break relative flex items-start gap-3 py-2.5">
               <span class="mt-1.5 size-1.5 shrink-0 rounded-full bg-faint" aria-hidden="true"></span>
               <div class="min-w-0 flex-1">
-                <a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ it | cmHref(lang) }}"{% if it._ext %} target="_blank" rel="noopener"{% endif %}>{{ title }}</a>
+                <a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ href }}" target="_blank" rel="noopener">{{ title }}<span class="sr-only"> {{ "community.new_tab" | t(lang) }}</span></a>
                 {% if otherTitle and otherTitle != title %}<p class="text-sm italic text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ otherTitle }}</p>{% endif %}
                 <p class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-muted">
-                  {% if se %}<span class="badge-gv">{{ se }}</span>{% endif %}
-                  <span>{% if it.source == "podcast" %}{{ it.extra.show_name or "Podcast" }}{% elif it.source == "youtube" %}YouTube{% if isWeeklyVideo %} ·&nbsp;{{ "media.show_short_weekly" | t(lang) }}{% endif %}{% elif it.source == "drive" or it.source == "committee" %}NETA 65{% elif it.source == "lavina" or it.category == "lv" or (it.extra.host and "lavina" in it.extra.host) %}La Viña{% else %}Grapevine{% endif %}</span>
-                  {#- a row with a link in it: gap only, no "·" (spec 1.11) — so no line ever starts with one -#}
-                  {% if it._when %}<time class="whitespace-nowrap" datetime="{{ it._when | isoDate }}">{{ it._when | fmtDate(lang, "month" if it._approx else "short") }}</time>{% endif %}
-                  {% if it._twin %}<span class="whitespace-nowrap"><a class="link relative z-10" href="{{ it._twin | cmHref(lang) }}"{% if it._twin._ext %} target="_blank" rel="noopener"{% endif %}>{{ "community.digest.twin" | t(lang) }}<span class="sr-only"> — {{ title }}{% if it._twin._ext %} {{ "community.new_tab" | t(lang) }}{% endif %}</span></a></span>{% endif %}
-                  {{ ui.autoNote(it, lang) }}
+                  {% if p._when %}<time class="whitespace-nowrap" datetime="{{ p._when | isoDate }}">{{ p._when | fmtDate(lang, "short") }}</time>{% endif %}
+                  {{ ui.autoNote(p, lang) }}
                 </p>
               </div>
             </li>
             {% endfor %}
           </ul>
-          {% if (items | length) > PER %}
-          <p class="mt-1 text-sm"><a class="link tap-link" href="{{ g.page | lurl(lang) }}">{{ "community.digest.and_more" | t(lang, { n: (items | length) - PER }) }} — {{ "community.digest.see_all" | t(lang, { n: items | length }) }}</a></p>
-          {% endif %}
+          {% endfor %}
+          <p class="cm-no-print mt-1 text-sm"><a class="link tap-link" href="{{ '/instagram/' | lurl(lang) }}">{{ "community.digest.ig_link" | t(lang) }}</a></p>
         </section>
         {% endif %}
-        {% endfor %}
 
-        {#- Instagram: one pointer line (the accounts post several times a day; the site shows them) -#}
-        {% if md.instagram | length %}
-        <p class="cm-dg-line cm-avoid-break relative flex items-center gap-3 rounded-xl bg-surface-2 px-4 py-3 text-sm">
-          <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-grape-soft text-grape">{% icon "instagram", "size-4" %}</span>
-          <span class="min-w-0"><a class="link font-semibold after:absolute after:inset-0 after:rounded-xl" href="{{ '/instagram/' | lurl(lang) }}">{{ "community.digest.ig_line" | t(lang) }}</a>
-          <span class="block text-xs text-muted">{% for p in md.instagram %}@{{ p.username }}{% if not loop.last %} · {% endif %}{% endfor %}</span></span>
-        </p>
-        {% endif %}
+        {{ dgList("pdf", "file-text", "bg-gv-soft text-gv", "/library/") }}
 
         {% if not md.total and not W.total %}{{ ui.emptyState("coffee", "community.digest.quiet_title" | t(lang), "community.digest.quiet_text" | t(lang, { prev: prevW }), "/whats-new/" | lurl(lang), "nav.whats_new" | t(lang)) }}{% endif %}
-        </div>
 
-        {#- ================= THIS MONTH (right column from 1280px) ================= -#}
-        <div class="cm-dg-side">
-        {#- Coming up this month: events not over yet (the committee meeting has its box above;
-            a monthly series once), the weekly open meetings, the Grapevine meetings near you. -#}
-        <section class="cm-digest-group" aria-labelledby="dg-events">
-          {{ dgHead("dg-events", "calendar-days", "bg-vine-soft text-vine", "community.digest.coming_month" | t(lang, { month: monW }), "community.digest.coming_month" | t(other, { month: monWo }), other) }}
-          {% if md.events | length %}
-          <ul class="divide-y divide-line" role="list">
-            {% for ev in md.events %}
-            {%- set title = ev | tx("title", lang) -%}
-            {%- set otherTitle = ev | tx("title", other) -%}
-            <li class="cm-avoid-break relative flex items-start gap-4 py-3">
-              <span class="cm-datebox grid w-12 shrink-0 place-items-center rounded-lg bg-surface-2 py-1.5 text-center">
-                {#- "APR–MAY" / "30–2" for an event over several days that ends in another month -#}
-                {%- set monthBox = ev | cmEventMonthBox(lang) -%}
-                <span class="whitespace-nowrap {{ 'text-[0.55rem] tracking-normal' if '–' in monthBox else 'text-[0.62rem] tracking-wider' }} font-bold uppercase text-vine">{{ monthBox }}</span>
-                {%- set dayBox = ev | cmEventDayBox(lang) -%}
-                <span class="font-display {{ 'text-sm' if '–' in dayBox else 'text-lg' }} whitespace-nowrap font-semibold leading-none text-ink">{{ dayBox }}</span>
-              </span>
-              <div class="min-w-0 flex-1">
-                {% if ev.url %}<a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ ev | cmHref(lang) }}"{% if ev._ext %} target="_blank" rel="noopener"{% endif %}>{{ title }}</a>{% else %}<span class="font-semibold text-ink">{{ title }}</span>{% endif %}
-                {% if otherTitle and otherTitle != title %}<p class="text-sm italic text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ otherTitle }}</p>{% endif %}
-                {%- set where = ev | cmEventWhere(lang) -%}
-                <p class="mt-0.5 text-xs text-muted">{{ ev | cmEventWhen(lang) }}{% if ev._recurring %} ·&nbsp;<span class="whitespace-nowrap">{% icon "repeat", "inline size-3 align-[-0.1em]" %} {{ "community.digest.every_month" | t(lang) }}</span>{% endif %}{% if where %} ·&nbsp;<span{% if ev.extra.location_tba %} class="italic"{% endif %}>{{ where }}</span>{% endif %} {{ ui.autoNote(ev, lang) }}</p>
-                {% if ev._tentative %}<p class="mt-1">{{ ui.tentativeBadge(lang) }}</p>{% endif %}
-              </div>
-            </li>
-            {% endfor %}
-          </ul>
-          {% else %}
-          <p class="py-3 text-sm text-muted">{{ "community.digest.no_events" | t(lang, { month: monW }) }}</p>
-          {% endif %}
-          {#- Every week: the Grapevine Weekly Open / La Viña's open meeting (the /monthly/ model) -#}
-          {%- set weekly = md.weekly[lang] -%}
-          {% if weekly | length %}
-          <ul class="divide-y divide-line border-t border-line" role="list">
-            {% for w in weekly %}
-            <li class="cm-avoid-break relative flex items-start gap-4 py-3">
-              <span class="grid w-12 shrink-0 place-items-center self-stretch rounded-lg bg-surface-2 text-grape" aria-hidden="true">{% icon "repeat", "size-4" %}</span>
-              <div class="min-w-0 flex-1">
-                <a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ '/meetings/#weekly-open' | lurl(lang) }}">{{ w.title }}</a>
-                <p class="mt-0.5 text-xs text-muted"><span class="font-semibold text-grape">{{ "community.digest.every_week" | t(lang) }}</span> · {{ w.when }}{% if w.startsLabel %} · {{ "monthly.weekly_from" | t(lang, { date: w.startsLabel }) }}{% endif %}</p>
-              </div>
-            </li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          {#- Grapevine meetings near you: the count only; the meetings have ONE home, /meetings/ -#}
-          {%- set g = md.gvm[lang] -%}
-          {% if g.inArea %}
-          <div class="cm-avoid-break relative flex items-start gap-4 border-t border-line py-3">
-            <span class="grid w-12 shrink-0 place-items-center self-stretch rounded-lg bg-surface-2 py-2 text-gv" aria-hidden="true">{% icon "map-pin", "size-4" %}</span>
-            <div class="min-w-0 flex-1">
-              <a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ '/meetings/#grapevine-meetings' | lurl(lang) }}">{{ "community.digest.gvm_title" | t(lang) }}</a>
-              <p class="mt-0.5 text-xs text-muted">{{ g | cmGvmText(lang) }}</p>
-            </div>
+        {#- The ONE pointer to what is current: this month's toolkit — the committee meeting (it links to the
+            Zoom details on /meetings/), events not over yet, the story deadlines, this month's issues, Book of
+            the Month.
+            The whole box is the link; it prints (the URL is on the toolkit's own QR code). -#}
+        <section class="cm-dg-line cm-avoid-break relative flex items-start gap-3 rounded-xl bg-surface-2 px-4 py-3 text-sm" aria-labelledby="dg-toolkit">
+          <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-lv-soft text-lv" aria-hidden="true">{% icon "calendar-heart", "size-4" %}</span>
+          <div class="min-w-0">
+            <h3 id="dg-toolkit" class="font-display text-lg font-semibold leading-snug text-ink">{{ "community.digest.coming_month" | t(lang, { month: md.toolkit.month[lang] }) }}<span x-show="bi" x-cloak lang="{{ other }}" class="font-normal text-muted"> / {{ "community.digest.coming_month" | t(other, { month: md.toolkit.month[other] }) }}</span></h3>
+            <p class="mt-0.5 leading-relaxed text-muted">{{ "community.digest.toolkit_text" | t(lang) }}</p>
+            <p class="mt-0.5 text-sm italic leading-relaxed text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ "community.digest.toolkit_text" | t(other) }}</p>
+            <a class="link mt-1 inline-flex items-center gap-1 font-semibold after:absolute after:inset-0 after:rounded-xl" href="{{ md.toolkit.path | lurl(lang) }}">{{ "community.digest.monthly" | t(lang, { month: md.toolkit.label[lang] }) }} {% icon "arrow-right", "size-4 shrink-0" %}</a>
           </div>
-          {% endif %}
-          <p class="cm-no-print mt-1 text-sm"><a class="link tap-link" href="{{ '/events/' | lurl(lang) }}">{{ "community.digest.events_link" | t(lang) }}</a></p>
         </section>
-
-        {#- Share your story: deadlines through the end of next month, La Viña's open topics (the /monthly/
-            model's 3 of the month), the magazines' phone story lines (db.audio_project). -#}
-        {%- set lvTopics = md.lvTopics[lang] -%}
-        {% if md.deadlines | length or lvTopics | length or md.audio.gv or md.audio.lv %}
-        <section class="cm-digest-group" aria-labelledby="dg-deadlines">
-          {{ dgHead("dg-deadlines", "pen-line", "bg-lv-soft text-lv", "community.digest.deadlines" | t(lang), "community.digest.deadlines" | t(other), other) }}
-          {% if md.deadlines | length %}
-          <ul class="divide-y divide-line" role="list">
-            {% for d in md.deadlines %}
-            {%- set dLv = d.extra.publication == "lv" -%}
-            <li class="cm-avoid-break py-3">
-              <p class="font-display text-lg font-semibold leading-snug text-ink">{{ d | tx("title", lang) }}</p>
-              {% if (d | tx("title", other)) != (d | tx("title", lang)) %}<p class="text-sm italic text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ d | tx("title", other) }}</p>{% endif %}
-              <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
-                <span class="{{ 'badge-lv' if dLv else 'badge-gv' }}">{{ "La Viña" if dLv else "Grapevine" }}</span>
-                <span class="text-muted">{{ d | cmItemIssue(lang) }}</span>
-                <span class="inline-flex gap-x-2 whitespace-nowrap font-semibold text-lv-strong"><span aria-hidden="true" class="font-normal text-faint">·</span>{{ "community.digest.deadline_due" | t(lang, { date: d.extra.deadline | fmtDate(lang, "medium") }) }}</span>
-                {{ ui.autoNote(d, lang) }}
-              </p>
-            </li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          {% if lvTopics | length %}
-          {#- La Viña's suggested themes never close — three of them, rotating by month (as on /monthly/) -#}
-          <div class="cm-avoid-break mt-3 rounded-xl bg-lv-soft/60 p-4">
-            <p class="flex flex-wrap items-center gap-2 text-sm"><span class="badge-lv">La Viña</span><span class="text-ink">{{ "community.digest.lv_anytime" | t(lang) }}</span></p>
-            <ul class="mt-2 space-y-1" role="list">
-              {% for d in lvTopics %}
-              <li class="font-display text-lg font-semibold leading-snug text-ink">“{{ d.text }}”{% if lang != "es" and d.es and d.es != d.text %} <span class="font-sans text-sm font-normal italic text-muted" lang="es">— {{ d.es }}</span>{% endif %}</li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% endif %}
-          {% if md.audio.gv or md.audio.lv %}
-          {#- Record your story by phone: the numbers are tap-to-call; the steps live on /contribute/#record -#}
-          <div class="cm-avoid-break mt-3 flex items-start gap-3 rounded-xl bg-surface-2 p-4">
-            <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-grape-soft text-grape" aria-hidden="true">{% icon "mic", "size-4" %}</span>
-            <div class="min-w-0 text-sm">
-              <p class="font-semibold text-ink">{{ "community.rec.title" | t(lang) }}</p>
-              <p class="mt-0.5 flex flex-wrap gap-x-3">
-                {% for pub in (["lv", "gv"] if lang == "es" else ["gv", "lv"]) %}{% set d = md.audio[pub] %}{% if d %}
-                <span class="whitespace-nowrap text-muted">{{ "La Viña" if pub == "lv" else "Grapevine" }}: <a class="link tap-link font-semibold" href="tel:{{ d.tel }}">{{ d.phone }}</a></span>
-                {% endif %}{% endfor %}
-              </p>
-              <p class="cm-no-print"><a class="link tap-link" href="{{ '/contribute/#record' | lurl(lang) }}">{{ "community.rec.jump" | t(lang) }}</a></p>
-            </div>
-          </div>
-          {% endif %}
-          <p class="cm-no-print mt-3 text-sm"><a class="link tap-link" href="{{ '/contribute/' | lurl(lang) }}">{{ "nav.contribute" | t(lang) }}</a></p>
-        </section>
-        {% endif %}
-
-        {#- Book of the Month: a compact teaser of db.shop.botm (title, sale price, last day; the title opens
-            the official store). Prices and dates have ONE home, /shop/#botm — linked, never repeated in full. -#}
-        {% if sh.offers | length %}
-        <section class="cm-digest-group" aria-labelledby="dg-botm">
-          {%- set botmKey = "community.digest.botm_title" if sh.pct else "community.digest.botm_title_plain" -%}
-          {{ dgHead("dg-botm", "book-open", "bg-grape-soft text-grape", botmKey | t(lang, { pct: sh.pct }), botmKey | t(other, { pct: sh.pct }), other) }}
-          <ul class="divide-y divide-line" role="list">
-            {% for o in sh.offers %}
-            <li class="cm-avoid-break relative flex items-start gap-3 py-3">
-              {% if o.image %}<img src="{{ o.image }}" alt="" width="40" height="56" loading="lazy" decoding="async" class="w-10 shrink-0 rounded-sm bg-surface-2 shadow-sm ring-1 ring-line" onerror="this.remove()">{% endif %}
-              <div class="min-w-0 flex-1">
-                <a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ o.url }}" target="_blank" rel="noopener"><span lang="{{ o.titleLang }}">{{ o.title }}</span><span class="sr-only"> — {{ o.host }} {{ "community.new_tab" | t(lang) }}</span></a>
-                {% if o.gloss %}<span class="block text-xs text-muted">{{ o.gloss }}</span>{% endif %}
-                <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted">
-                  <span class="{{ 'badge-lv' if o.isLv else 'badge-gv' }}">{{ o.pubName }}</span>
-                  {#- price · until …: a meta-row (the "·" is drawn by CSS and never starts a line) -#}
-                  <span class="meta-row"><span><span class="text-sm font-semibold text-ink">{{ o.sale }}</span>{% if o.price %} {{ "community.digest.botm_regular" | t(lang, { price: o.price }) }}{% endif %}</span>
-                  {% if o.endsLabel %}<time datetime="{{ o.ends }}">{{ "community.digest.botm_ends" | t(lang, { date: o.endsLabel }) }}</time>{% endif %}</span>
-                  {% if o.machine and o.gloss %}<span class="auto-note" title="{{ 'common.auto_translated_help' | t(lang) }}">{% icon "languages", "size-3" %} {{ "common.auto_translated" | t(lang) }}</span>{% endif %}
-                </p>
-              </div>
-            </li>
-            {% endfor %}
-          </ul>
-          <p class="cm-no-print mt-1 text-sm"><a class="link tap-link" href="{{ '/shop/' | lurl(lang) }}#botm">{{ "community.digest.botm_more" | t(lang) }}</a></p>
-        </section>
-        {% endif %}
-        {#- The cheapest subscription ("Subscriptions from $2.99 a month" — the prices live on /shop/) -#}
-        {% if md.subsFrom %}
-        <p class="cm-dg-line cm-avoid-break relative flex items-center gap-3 rounded-xl bg-surface-2 px-4 py-3 text-sm">
-          <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-lv-soft text-lv">{% icon "newspaper", "size-4" %}</span>
-          <a class="link font-semibold after:absolute after:inset-0 after:rounded-xl" href="{{ '/shop/' | lurl(lang) }}#subscriptions">{{ "shop.subs_from" | t(lang, { amount: md.subsFrom | shopMoney(lang) }) }}</a>
-        </p>
-        {% endif %}
-
-        {#- The daily quote: a pointer to the home page (the quote itself changes every morning there) -#}
-        {% if md.quote %}
-        <p class="cm-dg-line cm-avoid-break relative flex items-center gap-3 rounded-xl bg-surface-2 px-4 py-3 text-sm">
-          <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-gv-soft text-gv">{% icon "quote", "size-4" %}</span>
-          <span class="min-w-0"><span class="block text-ink">{{ "community.digest.quote_line" | t(lang) }}</span>
-          <a class="link font-semibold after:absolute after:inset-0 after:rounded-xl" href="{{ '/' | lurl(lang) }}#quote-title">{{ "community.digest.quote_link" | t(lang) }}</a></span>
-        </p>
-        {% endif %}
-        </div>
       </div>
 
       <footer class="flex items-center gap-4 border-t border-line bg-surface-2/50 px-5 py-5 sm:px-8">

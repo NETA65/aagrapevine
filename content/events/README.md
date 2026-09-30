@@ -18,6 +18,10 @@ summary_es: "Visita nuestra mesa en la asamblea." # optional — your own Spanis
 Optional description (English or Spanish).
 ```
 
+**Give the `end` whenever you know it.** Without an end time the site counts the event as one hour long:
+an hour after it starts it leaves the upcoming lists (the Events page, the home page, the monthly
+toolkit's dates) and calendars get a one-hour entry. The card then shows the start time only.
+
 **Your own translation (optional).** The site translates the title and the
 description into the other language automatically, and marks them
 "auto-translated". To write them yourself, add `title_es` and `summary_es` to a
@@ -66,14 +70,16 @@ tentative: true            # also works: yes, sí
 ```
 
 The event then shows a **"Details to be confirmed" / "Detalles por confirmar"**
-badge on the Events page, the home page, the monthly digest and the search, and
-people's calendar apps mark it as *tentative*.
+badge on the Events page, the home page and the search, the same words on the
+monthly toolkit's dates, poster and message, and people's calendar apps mark it
+as *tentative*.
 
 **When the details are final**, edit the file: put the real place in `location`
 (and delete `location_es`, unless the Spanish needs other words), fix the dates
 or times if they changed, update the description (and `summary_es`), and
-**delete the `tentative: true` line**. The next update (10–20 minutes after you
-save) shows it as confirmed everywhere, including in subscribed calendars.
+**delete the `tentative: true` line**. The next update (a few minutes after you
+save) shows it as confirmed on the site; subscribed calendars follow the next
+time they refresh.
 
 ## The same event on the NETA 65 calendar
 

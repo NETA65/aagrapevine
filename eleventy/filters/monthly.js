@@ -3,29 +3,61 @@
 // eleventy.config.js. Owned by src/pages/monthly.njk (hub) and src/pages/monthly-month.njk
 // (one poster page per month × language).
 //
+// The rule — the PLAN and what is LIVE NOW:
+//   * every month page shows that month's plan: the poster, the issues' themes, the "put it to work"
+//     tips, story deadlines, the dates, the weekly open meetings, Book of the Month, and the same month
+//     as a message for a group chat or an e-mail (monthMessage);
+//   * the current month's page and the hub's "This month" card also show what is live right now
+//     (monthNow): which dates are over, the next committee meeting (next month's once this month's is
+//     over), the next issue when it is already online, and one-line pointers to the daily quote, What's
+//     New, the Bulletin, Instagram, the Grapevine meetings count and the subscription price.
+// The Monthly digest (/digest/, community.js) recaps LAST month; everything current lives here — as a
+// link when another page is its one home (the Zoom details on /meetings/#committee-meeting, prices on
+// /shop/, how to send a story on /contribute/, the quote itself on the home page). No list is on both:
+// an issue's highlight stories are the digest's; the toolkit shows the themes and story counts and
+// links to /read/.
+//
 // Everything here is read from data the site already has — nothing is typed in:
 //   db.editorial   Grapevine themes per issue (extra.issue_key) until the issue is out, story
 //                  deadlines (extra.deadline), La Viña's evergreen suggested topics (extra.evergreen)
 //   db.articles    issues[] — the Grapevine issue on the stands (its own theme, once it is out),
-//                  La Viña's bimonthly issue
+//                  La Viña's bimonthly issue; items — the stories (counts, free to read, and the theme
+//                  and La Viña's issue when issues[] has moved on to the next one: issueTheme)
 //   carry          config/carry.yml — the 10 ways and the "put it to work" tips per GV issue
 //   db.events      committee meetings, the monthly recurring events (CityWide Dallas booth …),
-//                  workshops and assemblies
+//                  workshops and assemblies (content/events, dated Drive flyers, the outside calendars)
 //   db.weekly_open the Weekly Open meetings (La Viña's from its extra.starts date)
 //   db.shop.botm   Book of the Month offers (starts / ends window)
 //   site.meeting   the committee meeting rule (used when a month's meeting is not in events.json:
 //                  the current month once its meeting is over, or the 13th month)
+//   live extras    db.quote, db.whatsnew, db.announcements, db.instagram, db.meetings, db.shop,
+//                  db.audio_project (monthNow)
 //
 // Globals:   monthlyPages  [{ key: "YYYY-MM", lang }]  → pagination for the per-month pages
 //            monthlyKeys   ["YYYY-MM", …]              (13 keys, current month first)
 //            monthlyPastPages [{ key, lang, label }]   the 3 months before: redirect stubs to /monthly/
 // Filters:   mpMonths(db, carry, site, lang)            → [model, …] for the whole window
 //            mpMonth(key, db, carry, site, lang)        → one model
+//            mpNow(db, site, lang)                      → the current month's live extras (monthNow)
+//            mpIssues(key, db, carry, site, lang)       → the month's issues on the site: story counts and
+//                                                         the /read/ links (monthIssueLinks)
+//            mpMessage(key, db, carry, site, langs, style) → the month as a WhatsApp / e-mail text
+//                                                         (monthMessage; langs ["en"] or ["en", "es"])
 //            mpQr(url, label)                           → QR code SVG (qrSvg from community.js)
 //            mpGuides(pdfs, lang)                       → the GVR / RLV guides in the Library (repGuides)
-// Dev/test:  MONTHLY_NOW=2026-12-15 fixes "today" (the window and the "past" checks).
+// Everything is built once per build and language (the hub and 26 month pages share it).
+// Dev/test:  MONTHLY_NOW=2026-12-15 (or an instant: 2026-10-22T06:00:00Z) fixes "now" — the window,
+//            the "over" marks, the next committee meeting and the live extras.
 
-import { qrSvg } from "./community.js";
+// (community.js imports this file too: the cycle is safe, both only call each other's functions.)
+import { qrSvg, issueLabel, issueInSentence } from "./community.js";
+import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList } from "./committee.js";
+import { shopFromMonthly, money } from "./shop.js";
+import { groupIssues } from "./read.js";
+
+// Helpers handed over by eleventy.config.js (translateKey …); the fallback keeps the module usable
+// from a plain `node` script too (as report.js).
+let H = { translateKey: (k) => k };
 
 const TZ = "America/Chicago";
 const LOC = { en: "en-US", es: "es-US" };
@@ -184,6 +216,10 @@ const tr = (item, field, lang) => {
   return item[field] || (item.extra && item.extra[field]) || "";
 };
 const pair = (p, lang) => (p ? p[lang] || p.en || p.es || "" : "");
+const clean = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
+const isYmd = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
+/** ms → ISO instant ("" when unknown): the `overAt` of a date row, a deadline, an offer */
+const iso = (ms) => (Number.isFinite(ms) ? new Date(ms).toISOString() : "");
 /** A poster hook: the first question of the summary (short), else its first sentence. */
 export function hook(summary, max = 110) {
   const s = String(summary || "").replace(/\s+/g, " ").trim();
@@ -198,6 +234,8 @@ const slug = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-
 /* ------------------------------------------------------------------ */
 /*  The month model                                                    */
 /* ------------------------------------------------------------------ */
+const DAY = 864e5;
+
 function eventDays(ev) {
   const ex = ev.extra || {};
   const start = chicagoYmd(ex.start || ev.date);
@@ -211,8 +249,115 @@ function eventDays(ev) {
   return { start, end };
 }
 
+/** The month a row is shown in: its 1st (a date that began the month before shows its chip on the 1st),
+ *  its year (dates of another year say it), the time-zone word, and "now" for the `past` marks. */
+const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), zone: L === "es" ? "(hora del Centro)" : "Central", nowMs: now.getTime() });
+
 /**
- * One month's model.
+ * One row of a month's dates — the page's Dates card, the poster, the hub's chips and the message:
+ * the fields the poster always had (chip, day, range, time + zone, city, tentative …) plus
+ *   overAt    when it is over, as an ISO instant (committee.js eventEndMs: a timed event at its end — one
+ *             hour after it starts without one —, an all-day one at midnight Central after its last day;
+ *             the instant /events/ and the home page write too) — the browser marks it "Over" then
+ *             (src/assets/js/monthly.js); past = overAt ≤ now (an instant, not a day)
+ *   href      where its title links: the committee meeting → /meetings/#committee-meeting (the one home
+ *             of its Zoom details); anything else → its own page (url) or /events/. A monthly series
+ *             keeps its own link: its later dates are folded on /events/, where an anchor could land on
+ *             a hidden card. external = another site.
+ *   category  the data's category (eventTone keeps the Grapevine / La Viña calendars' colours)
+ *   place     the city to show after the title: "" when the title already names it ("Writing Workshop —
+ *             Mansfield", "booth at CityWide Dallas") — the page's row, the poster and the message say a
+ *             place once
+ * extra: { kind: "committee" | "recurring" | "event", … }
+ */
+function dateRow(e, L, ctx, extra = {}) {
+  const d = eventDays(e);
+  const ex = e.extra || {};
+  const timed = !ex.all_day && ex.start && !isYmd(ex.start);
+  const shownDay = d.start < ctx.first ? ctx.first : d.start;
+  const overAt = iso(eventEndMs(e));
+  const href = extra.kind === "committee" ? "/meetings/#committee-meeting" : e.url || "/events/";
+  const title = tr(e, "title", L);
+  const city = clean(ex.city);
+  return {
+    id: e.id, title, url: e.url || "", href, external: /^https?:/.test(href), category: e.category || "",
+    ymd: d.start, endYmd: d.end, chip: chip(shownDay, L), dayLabel: shortDate(shownDay, L, ctx.year), day: longDay(d.start, L),
+    endDay: d.end !== d.start ? longDay(d.end, L) : "",
+    range: d.end !== d.start ? dayRange(d.start, d.end, L) : "",
+    time: timed ? `${timeRange(ex.start, ex.end, L)}` : "", zone: timed ? ctx.zone : "",
+    city, place: city && !title.toLowerCase().includes(city.toLowerCase()) ? city : "",
+    online: !!ex.online || /zoom/i.test(ex.location || ""),
+    tentative: !!ex.tentative, overAt, past: !!overAt && Date.parse(overAt) <= ctx.nowMs, ...extra,
+  };
+}
+
+/** A month's committee meeting as a date row: its events.json record, else the site.meeting rule
+ *  (events.json drops a meeting once it is over; skip_dates are honoured) — null when there is none. */
+function committeeRow(events, key, site, L, ctx) {
+  let ev = events.find((e) => e.id && String(e.id).startsWith(`ev:committee:${key}-`));
+  if (!ev) {
+    const r = meetingByRule(key, site.meeting || {});
+    if (r) ev = { id: `ev:committee:${r.ymd}`, kind: "event", url: "/meetings/", title: "", extra: { start: r.start, end: r.end, location: "Zoom", online: true } };
+  }
+  if (!ev) return null;
+  const row = dateRow(ev, L, ctx, { kind: "committee" });
+  row.title = "";
+  row.platform = (site.meeting && site.meeting.platform) || "Zoom";
+  return row;
+}
+
+/* The magazines' stories on the site (db.articles items): what the issue counts, the La Viña fallback
+   and the theme fallback read. The publication as the digest reads it (community.js monthIssues). */
+const storyPub = (a) => (a && a.extra && a.extra.publication) || (a && a.category) || "";
+const storiesOf = (db) => ((db.articles && db.articles.items) || [])
+  .filter((a) => a && a.kind === "article" && a.status !== "gone" && a.extra && a.extra.issue_key);
+
+/* An issue's theme and where it came from ("issue" | "stories" | "calendar"): see issueTheme. */
+function themeOf(db, pub, key, L) {
+  const meta = ((db.articles && db.articles.issues) || []).find((i) => i && i.publication === pub && i.key === key) || null;
+  const own = meta ? clean(tr(meta, "theme", L)) : "";
+  if (own) return { text: own, themes: [own], from: "issue", machine: L === "es" && (meta.machine || []).includes("es") };
+  const first = storiesOf(db).find((a) => storyPub(a) === pub && a.extra.issue_key === key);
+  const told = first ? clean((first.i18n && first.i18n.issue_theme && first.i18n.issue_theme[L]) || first.extra.issue_theme) : "";
+  if (told) return { text: told, themes: [told], from: "stories", machine: L === "es" && (first.machine || []).includes("es") };
+  if (pub === "gv") {
+    const themed = ((db.editorial && db.editorial.items) || []).filter((i) => i && i.extra && i.extra.publication === "gv" && i.extra.issue_key === key);
+    const themes = themed.map((i) => clean(tr(i, "title", L))).filter(Boolean);
+    if (themes.length) return { text: themes.join(" / "), themes, from: "calendar", machine: L === "es" && themed.some((i) => (i.machine || []).includes("es")) };
+  }
+  return { text: "", themes: [], from: "", machine: false };
+}
+
+/**
+ * A magazine issue's theme — ONE name everywhere (the month pages and posters, the district report, the
+ * monthly digest and its e-mail): the theme the issue itself carries once it is out (articles.json
+ * issues[]: i18n.theme[lang], else i18n.theme.en, else theme); else the one its stories on the site carry
+ * (the first story's i18n.issue_theme[lang], else extra.issue_theme — so a month keeps its theme after
+ * issues[] has moved on to the next issue late in the month); else, for Grapevine, the editorial
+ * calendar's call for stories (its titles for that issue_key, joined " / "); else "".
+ * scripts/notify/send_digest.py issue_theme() is the same rule (tests/test_digest_parity.py).
+ */
+export function issueTheme(db, pub, key, lang) {
+  return themeOf(db || {}, pub, key, lang === "es" ? "es" : "en").text;
+}
+
+/* La Viña's bimonthly issue that covers a month: the synced issue (issues[], key = the month or the one
+   before), else — once issues[] has moved on to the next issue late in the month — the issue its stories
+   on the site belong to (the same two keys): label from the stories (i18n.issue_label, else the rule),
+   its official page from extra.issue_url, no cover. */
+function lvIssueOf(db, key, L) {
+  const meta = ((db.articles && db.articles.issues) || []).find((i) => i && i.publication === "lv" && i.key && (i.key === key || addMonths(i.key, 1) === key)) || null;
+  if (meta) return { key: meta.key, theme: issueTheme(db, "lv", meta.key, L), label: tr(meta, "label", L), url: meta.url || "", cover: meta.cover || "" };
+  const lvStories = storiesOf(db).filter((a) => storyPub(a) === "lv");
+  const k = [key, addMonths(key, -1)].find((x) => lvStories.some((a) => a.extra.issue_key === x));
+  if (!k) return null;
+  const first = lvStories.find((a) => a.extra.issue_key === k);
+  const label = clean(first.i18n && first.i18n.issue_label && first.i18n.issue_label[L]) || issueLabel(first.extra.issue_label || "", L);
+  return { key: k, theme: issueTheme(db, "lv", k, L), label, url: first.extra.issue_url || "", cover: "" };
+}
+
+/**
+ * One month's model (the month's PLAN: every month page, the posters, the district report).
  * @param {string} key   "YYYY-MM"
  * @param {object} db    { editorial, articles, events, weekly_open, shop }
  * @param {object} carry the `carry` global (config/carry.yml)
@@ -234,24 +379,22 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
   const issues = (db.articles && db.articles.issues) || [];
 
   /* Grapevine issue on the stands. Its theme is ONE name everywhere (this page, the month pages, the
-     monthly e-mail, the district report, Read and Home): the theme the issue itself carries once it
-     is out (the synced issue, "Loneliness"); before that, the editorial calendar's call for stories
-     ("Dealing with Loneliness"). scripts/notify/send_digest.py gv_theme() follows the same rule. */
+     district report, the monthly digest, Read and Home): issueTheme — the theme the issue itself
+     carries once it is out (the synced issue, "Loneliness"), kept after the next issue is synced from
+     its stories; before that, the editorial calendar's call for stories ("Dealing with Loneliness"). */
   const gvIssue = issues.find((i) => i && i.publication === "gv" && i.key === key) || null;
+  const gvStory = storiesOf(db).find((a) => storyPub(a) === "gv" && a.extra.issue_key === key) || null;
   const themed = gvEd.filter((i) => i.extra.issue_key === key);
-  const own = gvIssue ? tr(gvIssue, "theme", L) : "";
-  const themes = own ? [own] : themed.map((i) => tr(i, "title", L)).filter(Boolean);
-  const theme = themes.join(" / ");
-  const gv = theme ? {
-    key, theme, themes, label: monthLabel(key, L),
-    summary: own ? tr(gvIssue, "description", L) : tr(themed[0], "summary", L),
-    url: gvIssue ? gvIssue.url : "", cover: gvIssue ? gvIssue.cover || "" : "",
-    machine: L === "es" && (own ? (gvIssue.machine || []).includes("es") : themed.some((i) => (i.machine || []).includes("es"))),
+  const gvTheme = themeOf(db, "gv", key, L);
+  const gv = gvTheme.text ? {
+    key, theme: gvTheme.text, themes: gvTheme.themes, label: monthLabel(key, L),
+    summary: gvTheme.from === "issue" ? tr(gvIssue, "description", L) : tr(themed[0], "summary", L),
+    url: (gvIssue && gvIssue.url) || (gvStory && gvStory.extra.issue_url) || "", cover: gvIssue ? gvIssue.cover || "" : "",
+    machine: gvTheme.machine,
   } : null;
 
-  /* La Viña's bimonthly issue, when the synced one covers this month */
-  const lvIssue = issues.find((i) => i && i.publication === "lv" && i.key && (i.key === key || addMonths(i.key, 1) === key)) || null;
-  const lv = lvIssue ? { key: lvIssue.key, theme: tr(lvIssue, "theme", L), label: tr(lvIssue, "label", L), url: lvIssue.url || "", cover: lvIssue.cover || "" } : null;
+  /* La Viña's bimonthly issue that covers this month (lvIssueOf) */
+  const lv = lvIssueOf(db, key, L);
 
   /* "Put it to work" tips for this month's Grapevine issue */
   const wayById = carry.wayById || {};
@@ -259,7 +402,8 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
     way: t.way, icon: wayById[t.way].icon || "circle", title: pair(wayById[t.way].title, L), text: pair(t.text, L),
   }));
 
-  /* Story deadlines from the 1st of this month through the 1st of next month (still open) */
+  /* Story deadlines from the 1st of this month through the 1st of next month (still open); overAt =
+     midnight Central after the deadline (the browser marks a passed one on the hub) */
   const deadlines = gvEd
     .filter((i) => i.extra.deadline && i.extra.deadline >= first && i.extra.deadline <= nextFirst && i.extra.deadline >= today)
     .sort((a, b) => a.extra.deadline.localeCompare(b.extra.deadline) || String(a.title).localeCompare(String(b.title)))
@@ -268,6 +412,7 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
       summary: tr(i, "summary", L),
       issueKey: i.extra.issue_key, issueLabel: i.extra.issue_key ? monthLabel(i.extra.issue_key, L) : tr(i, "issue_label", L),
       due: i.extra.deadline, dueLabel: shortDate(i.extra.deadline, L, year), dueLong: shortDate(i.extra.deadline, L, "0"),
+      overAt: iso(chicagoDayEndMs(i.extra.deadline)),
       submitUrl: i.extra.submit_url || "", guidelinesUrl: i.extra.guidelines_url || "",
       machine: L === "es" && (i.machine || []).includes("es"),
     }));
@@ -286,49 +431,26 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
   }
   const lvTopicList = topics.map((i) => ({ id: i.id, es: tr(i, "title", "es"), text: tr(i, "title", L) }));
 
-  /* Book of the Month offers whose window overlaps the month */
+  /* Book of the Month offers whose window overlaps the month; overAt = midnight Central after its last day */
   const botm = (((db.shop && db.shop.botm) || []).filter((b) => b && b.ends && (!b.starts || b.starts <= last) && b.ends >= first))
     .sort((a, b) => (a.pub === (L === "es" ? "lv" : "gv") ? -1 : 1) - (b.pub === (L === "es" ? "lv" : "gv") ? -1 : 1))
     .map((b) => ({
       // The book's own title (a Grapevine book is in English, a La Viña book in Spanish), never a translation.
       id: b.id, pub: b.pub, title: b.title || tr(b, "title", L), lang: b.lang || (b.pub === "lv" ? "es" : "en"), discount: b.discount_pct || null,
-      ends: b.ends, endsLabel: shortDate(b.ends, L, year), starts: b.starts, past: b.ends < today,
+      ends: b.ends, endsLabel: shortDate(b.ends, L, year), starts: b.starts, past: b.ends < today, overAt: iso(chicagoDayEndMs(b.ends)),
     }));
 
   /* The shared offer when every book has the same discount and end date (the poster says it once) */
   const botmOffer = botm.length > 1 && botm.every((b) => b.discount === botm[0].discount && b.ends === botm[0].ends)
     ? { discount: botm[0].discount, endsLabel: botm[0].endsLabel } : null;
 
-  /* Dates: committee meeting, the monthly recurring events, other events */
-  const events = ((db.events && db.events.items) || []).filter((e) => e && e.kind === "event");
+  /* Dates: committee meeting, the monthly recurring events, other events — every event in events.json that
+     is not gone: content/events, dated Drive flyers, the outside calendars (the NETA 65 workshop feed, the
+     Grapevine / La Viña calendars) … */
+  const events = ((db.events && db.events.items) || []).filter((e) => e && e.kind === "event" && e.status !== "gone");
   const inMonth = (e) => { const d = eventDays(e); return d.start && d.start <= last && d.end >= first; };
-  const zone = L === "es" ? "(hora del Centro)" : "Central";
-  const evView = (e, extra = {}) => {
-    const d = eventDays(e);
-    const ex = e.extra || {};
-    const timed = !ex.all_day && ex.start && !/^\d{4}-\d{2}-\d{2}$/.test(ex.start);
-    const shownDay = d.start < first ? first : d.start;
-    return {
-      id: e.id, title: tr(e, "title", L), url: e.url || "",
-      ymd: d.start, endYmd: d.end, chip: chip(shownDay, L), dayLabel: shortDate(shownDay, L, year), day: longDay(d.start, L),
-      endDay: d.end !== d.start ? longDay(d.end, L) : "",
-      range: d.end !== d.start ? dayRange(d.start, d.end, L) : "",
-      time: timed ? `${timeRange(ex.start, ex.end, L)}` : "", zone: timed ? zone : "",
-      city: ex.city || "", online: !!ex.online || /zoom/i.test(ex.location || ""),
-      tentative: !!ex.tentative, past: d.end < today, ...extra,
-    };
-  };
-  let meetingEv = events.find((e) => e.id && e.id.startsWith(`ev:committee:${key}-`));
-  let committee = null;
-  if (meetingEv) committee = evView(meetingEv, { kind: "committee" });
-  else {
-    const r = meetingByRule(key, site.meeting || {});
-    if (r) committee = evView({ id: `ev:committee:${r.ymd}`, kind: "event", url: "/meetings/", title: "", extra: { start: r.start, end: r.end, location: "Zoom", online: true } }, { kind: "committee" });
-  }
-  if (committee) {
-    committee.title = "";
-    committee.platform = (site.meeting && site.meeting.platform) || "Zoom";
-  }
+  const ctx = monthCtx(key, L, now);
+  const committee = committeeRow(events, key, site, L, ctx);
   /* The recurring series (config/site.yml recurring_events:) — events.json lists only the next
      `months_ahead` dates, so a later month's date is worked out from the same rule (like the
      committee meeting from site.meeting), with the series' own title and repeat line. */
@@ -346,10 +468,10 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
   }
   const recurring = recIn
     .sort((a, b) => eventDays(a).start.localeCompare(eventDays(b).start))
-    .map((e) => evView(e, { kind: "recurring", series: e.extra.series, label: tr(e, "recurrence_label", L) }));
-  const other = events.filter((e) => e.source !== "calendar" && !(e.extra && e.extra.recurring) && !String(e.id).startsWith("ev:committee:") && inMonth(e))
+    .map((e) => dateRow(e, L, ctx, { kind: "recurring", series: e.extra.series, label: tr(e, "recurrence_label", L) }));
+  const other = events.filter((e) => !(e.extra && e.extra.recurring) && !String(e.id).startsWith("ev:committee:") && inMonth(e))
     .sort((a, b) => eventDays(a).start.localeCompare(eventDays(b).start))
-    .map((e) => evView(e, { kind: "event" }));
+    .map((e) => dateRow(e, L, ctx, { kind: "event" }));
   const dates = [committee, ...recurring, ...other].filter(Boolean).sort((a, b) => a.chip.ymd.localeCompare(b.chip.ymd));
 
   /* Weekly open meetings (La Viña's only from its start date) */
@@ -397,6 +519,276 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
   };
 }
 
+/* ------------------------------------------------------------------ */
+/*  This month, live (the hub's "This month" card, the current page)   */
+/* ------------------------------------------------------------------ */
+/** "2026-10-05" minus n calendar days */
+const ymdMinus = (ymd, n) => { const [y, m, d] = ymd.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d - n)).toISOString().slice(0, 10); };
+/** A news date as ms (a date-only value at noon UTC, like the rest of the site) */
+const msOf = (v) => (isYmd(v) ? Date.parse(v + "T12:00:00Z") : Date.parse(v));
+
+/**
+ * What is live in the current Central-time month — the hub's "This month" card and the current month's
+ * page show it, never a later month (MONTHLY_NOW moves it, like the window):
+ *   key            the current month, "YYYY-MM"
+ *   nextCommittee  the next committee meeting that is not over: this month's (its events.json record,
+ *                  else the rule), then next month's — { ymd, day, dayLabel, time, zone, platform, overAt,
+ *                  thisMonth } or null. (Not src/_data/meeting.js: that one ignores MONTHLY_NOW.)
+ *   outNext        an issue already online before its month (the district report's rule: articles.json
+ *                  issues[] newer than this month's Grapevine key / than the La Viña issue covering this
+ *                  month) → [{ pub, theme, issue (inside a sentence), monthKey, monthLabel, monthUrl (its
+ *                  toolkit, "" outside the window) }], the page language's magazine first
+ *   quote          true when the home page shows a daily quote (homeDailyQuotes: of the last 2 days, with
+ *                  its text and link) — the toolkit points there, never repeats it
+ *   instagram      [{ username, url }] the page language's magazine first
+ *   news           { n: What's New entries since the 1st (their news date up to now + 1 day), since, sinceLabel }
+ *   bulletin       { n: bulletin posts not over yet (announcementList — /bulletin/'s list), top: { title, href }:
+ *                  the newest of them by its day (its date, or its `publish` day when later — never simply
+ *                  the first on /bulletin/, where pinned posts come first) }
+ *   subsFrom       the lowest subscription price (shopFromMonthly) or null
+ *   gvm            { inArea, nearby } Grapevine meetings (gvMeetings) or null when there are none in our Area
+ *   audio          { gv, lv } the phone story lines ({ phone, tel } or null) — standing information: the
+ *                  message of every month gives them
+ */
+export function monthNow(db = {}, site = {}, lang = "en", now = nowDate()) {
+  const L = lang === "es" ? "es" : "en";
+  const nowMs = now.getTime();
+  const today = chicagoYmd(now);
+  const key = today.slice(0, 7);
+  const first = `${key}-01`;
+  const events = ((db.events && db.events.items) || []).filter((e) => e && e.kind === "event" && e.status !== "gone");
+
+  let nextCommittee = null;
+  for (const k of [key, addMonths(key, 1)]) {
+    const row = committeeRow(events, k, site, L, monthCtx(k, L, now));
+    if (!row || row.past) continue;
+    nextCommittee = { ymd: row.ymd, day: row.day, dayLabel: row.dayLabel, time: row.time, zone: row.zone, platform: row.platform, overAt: row.overAt, thisMonth: row.ymd.startsWith(key) };
+    break;
+  }
+
+  const issues = (db.articles && db.articles.issues) || [];
+  const keys = windowKeys(now);
+  const lv = lvIssueOf(db, key, L);
+  const newer = (pub, after) => issues.filter((i) => i && i.publication === pub && i.key && i.key > after).sort((a, b) => a.key.localeCompare(b.key))[0];
+  const outNext = [];
+  for (const pub of L === "es" ? ["lv", "gv"] : ["gv", "lv"]) {
+    const i = pub === "gv" ? newer("gv", key) : lv ? newer("lv", lv.key) : null;
+    const theme = i ? clean(tr(i, "theme", L)) : "";
+    if (!theme) continue;
+    const own = clean(i.i18n && i.i18n.label && i.i18n.label[L]);
+    const label = own || (pub === "gv" ? monthLabel(i.key, L) : clean(i.label) || i.key);
+    outNext.push({ pub, theme, issue: issueInSentence(label, L), monthKey: i.key, monthLabel: monthLabel(i.key, L), monthUrl: keys.includes(i.key) ? `/monthly/${i.key}/` : "" });
+  }
+
+  const since2 = ymdMinus(today, 2);
+  const quote = ((db.quote && db.quote.items) || []).some((q) => q && (q.pub === "gv" || q.pub === "lv") && clean(q.text)
+    && /^https?:\/\//.test(String(q.url || "")) && isYmd(String(q.date || "").slice(0, 10)) && String(q.date).slice(0, 10) >= since2);
+
+  const profiles = (db.instagram && db.instagram.profiles) || {};
+  const instagram = (L === "es" ? ["lv", "gv"] : ["gv", "lv"]).map((k) => profiles[k]).filter((p) => p && p.username)
+    .map((p) => { const u = String(p.username).replace(/^@/, ""); return { username: u, url: p.url || `https://www.instagram.com/${u}/` }; });
+
+  const n = ((db.whatsnew && db.whatsnew.items) || []).filter((i) => i && i.status !== "gone" && i.wn_date
+    && chicagoYmd(i.wn_date) >= first && msOf(i.wn_date) <= nowMs + DAY).length;
+
+  const posts = announcementList((db.announcements && db.announcements.items) || [], now);
+  // "the newest:" names the newest post by its own day — its date (else when it was first seen), or its
+  // `publish` day when that is later (a scheduled post appears that morning) — not the first on /bulletin/,
+  // where pinned posts come first. The same day: /bulletin/'s order (pinned first, then newest).
+  const postDay = (p) => {
+    const d = chicagoYmd(p.date || p.first_seen || "");
+    const pub = String((p.extra && p.extra.publish) || "").slice(0, 10);
+    return isYmd(pub) && pub > d ? pub : d;
+  };
+  const top = posts.reduce((best, p) => (!best || postDay(p) > postDay(best) ? p : best), null);
+
+  const from = shopFromMonthly(db.shop);
+  const g = gvMeetings(db.meetings, L, site);
+  const ap = db.audio_project || {};
+  const line = (d) => (d && d.phone && d.tel ? { phone: String(d.phone), tel: String(d.tel) } : null);
+  return {
+    key, nextCommittee, outNext, quote, instagram,
+    news: { n, since: first, sinceLabel: shortDate(first, L) },
+    bulletin: { n: posts.length, top: top ? { title: clean(tr(top, "title", L)), href: `/bulletin/#${top._anchor}` } : null },
+    subsFrom: Number.isFinite(from) && from > 0 ? from : null,
+    gvm: g.inArea ? { inArea: g.inArea, nearby: g.nearby } : null,
+    audio: { gv: line(ap.gv), lv: line(ap.lv) },
+  };
+}
+
+/**
+ * A month's magazine issues that have stories on the site (db.articles items): the page language's
+ * magazine first → [{ pub, isLv, name, label, theme, url (the official issue page), count, free,
+ * readHref }] — [] when neither has any. Grapevine's issue key is the month; La Viña's is the bimonthly
+ * issue covering it (m.lv). readHref: "/read/#<pub>-current" when it is the newest issue of that
+ * magazine on /read/ (read.js groupIssues — the page's own rule), else the archive. No highlight lists
+ * here: an issue's stories are the monthly digest's (the month they came out).
+ */
+export function monthIssueLinks(db = {}, m = {}) {
+  const L = m.lang === "es" ? "es" : "en";
+  const stories = storiesOf(db || {}).filter((a) => a.url);
+  const out = [];
+  for (const pub of L === "es" ? ["lv", "gv"] : ["gv", "lv"]) {
+    const x = m[pub] || null;
+    const key = pub === "gv" ? m.key : x && x.key;
+    if (!key) continue;
+    const list = stories.filter((a) => storyPub(a) === pub && a.extra.issue_key === key);
+    if (!list.length) continue;
+    const first = list[0];
+    const label = (x && x.label) || clean(first.i18n && first.i18n.issue_label && first.i18n.issue_label[L]) || issueLabel(first.extra.issue_label || "", L) || monthLabel(key, L);
+    const newest = groupIssues(db.articles, pub)[0];
+    out.push({
+      pub, isLv: pub === "lv", name: pub === "lv" ? "La Viña" : "Grapevine", key, label,
+      theme: (x && x.theme) || issueTheme(db, pub, key, L),
+      url: (x && x.url) || first.extra.issue_url || "",
+      count: list.length, free: list.filter((a) => a.extra.free === true).length,
+      readHref: newest && newest.key === key ? `/read/#${pub}-current` : "/read/#archive-title",
+    });
+  }
+  return out;
+}
+
+/**
+ * The month as a message for a group chat ("whatsapp": *bold* headings with an emoji, "•" bullets) or an
+ * e-mail ("email": UPPERCASE headings underlined with dashes, "-" bullets, no emoji and no asterisks), in
+ * one language or both (langs = [lang] or [lang, other]: the first leads; headings then read
+ * "English / Español" and each line gets the other language's words on an indented line when they
+ * differ). Pure — everything comes in: ctx = { mm: {en, es} month models, nw: {en, es} monthNow,
+ * iss: {en, es} monthIssueLinks }, t = translateKey. The live parts (dates already over left out, the
+ * next committee meeting, the Grapevine meetings count, the subscription price) only on the current
+ * month; a later month gives its whole plan. Links go to the site in the first language. Sections with
+ * nothing to say are left out. The poster says the same things; this is its text version.
+ */
+export function monthMessage(ctx, langs, style, site, t) {
+  const Ls = (Array.isArray(langs) ? langs : [langs]).map((l) => (l === "es" ? "es" : "en"));
+  const main = Ls[0];
+  const wa = style === "whatsapp";
+  const mm = ctx.mm;
+  const m = mm[main];
+  const nw = (ctx.nw && ctx.nw[main]) || null;
+  const cur = !!(m.isCurrent && nw);
+  const iss = (ctx.iss && ctx.iss[main]) || [];
+  const uniq = (a) => a.filter((v, i) => v && a.indexOf(v) === i);
+  // vars: an object, or a function of the language (month names differ by language)
+  const both = (key, vars) => uniq(Ls.map((l) => t(key, l, typeof vars === "function" ? vars(l) : vars))).join(" / ");
+  const head = (s, emoji) => (wa ? `${emoji} *${s}*` : `${s.toUpperCase()}\n${"-".repeat(Math.min(s.length, 60))}`);
+  const bullet = wa ? "•" : "-";
+  const base = String((site && site.url) || "").replace(/\/+$/, "");
+  const url = (p) => base + (main === "es" ? "/es" : "") + p;
+  const out = [];
+
+  // Masthead: "Grapevine & La Viña · NETA 65 — October 2026" + the tagline
+  const title = `${both("monthly.kicker")} — ${uniq(Ls.map((l) => mm[l].title)).join(" / ")}`;
+  out.push(wa ? `*${title}*` : title, wa ? `_${both("monthly.tagline")}_` : both("monthly.tagline"), "");
+
+  // 📖 In the magazines: each magazine's theme (the page language's first) and its stories on the site
+  const magLines = [];
+  for (const p of main === "es" ? ["lv", "gv"] : ["gv", "lv"]) {
+    const x = m[p];
+    if (!x || !x.theme) continue;
+    const v = iss.find((i) => i.pub === p);
+    const issue = p === "lv" && main === "es" ? issueInSentence(x.label, main) : x.label;
+    let line = t(p === "gv" ? "report.i_gv" : "report.i_lv", main, { issue, theme: x.theme });
+    if (v && v.count) line += ` — ${t(v.count === 1 ? "read.n_stories_one" : "read.n_stories", main, { n: v.count })}${v.free ? ` · ${t("community.wn.free_n", main, { n: v.free })}` : ""}`;
+    magLines.push(`${bullet} ${line}`);
+    for (const l of Ls.slice(1)) { const o = mm[l][p]; if (o && o.theme && o.theme !== x.theme) magLines.push(`  “${o.theme}”`); }
+  }
+  if (magLines.length) {
+    out.push(head(both("monthly.issues_title"), "📖"), ...magLines);
+    if (iss.length) out.push(`  ${t("monthly.msg_read", main, { url: url("/read/") })}`);
+    out.push("");
+  }
+
+  // 💡 Put it to work: up to 3 tips (the other language's words on a second line)
+  const tips = (m.tips || []).slice(0, 3);
+  if (tips.length) {
+    out.push(head(both("monthly.put_to_work"), "💡"));
+    tips.forEach((tp, i) => {
+      out.push(`${bullet} ${tp.title}: ${tp.text}`);
+      for (const l of Ls.slice(1)) { const o = (mm[l].tips || [])[i]; if (o && o.text !== tp.text) out.push(`  ${o.title}: ${o.text}`); }
+    });
+    out.push("");
+  }
+
+  // 📅 Dates: this month only what is not over yet (+ the next committee meeting once this month's is
+  // over); a later month every date. "Sat, Oct 10 · 5–8 PM Central · every month — Title — City"
+  const rows = (m.dates || []).filter((d) => !cur || !d.past);
+  out.push(head(both("monthly.msg_dates", (l) => ({ month: mm[l].monthName })), "📅"));
+  for (const d of rows) {
+    const when = [d.range || `${d.chip.wd}, ${d.dayLabel}`, d.time ? `${d.time} ${d.zone}` : ""].filter(Boolean).join(" · ");
+    if (d.kind === "committee") {
+      out.push(`${bullet} ${when} — ${both("monthly.committee")} (${d.platform}) — ${both("monthly.all_welcome")}`);
+      continue;
+    }
+    const bits = [when];
+    if (d.kind === "recurring") bits.push(both("report.e_monthly"));
+    if (d.tentative) bits.push(both("report.e_tbc"));
+    // the place once: most titles already name the city ("Writing Workshop — Mansfield"; dateRow.place)
+    out.push(`${bullet} ${bits.join(" · ")} — ${d.title}${d.place ? ` — ${d.place}` : ""}`);
+    for (const l of Ls.slice(1)) { const o = (mm[l].dates || []).find((x) => x.id === d.id); if (o && o.title && o.title !== d.title) out.push(`  ${o.title}`); }
+  }
+  if (!rows.length) out.push(both(cur && (m.dates || []).length ? "monthly.no_more_dates" : "monthly.no_dates"));
+  // … written like the rows above: "Next committee meeting: Wed, Nov 18 · 7–8 PM Central — Zoom" (in the
+  // middle of a line, after the colon, Spanish goes on in lower case: "Próxima reunión del comité: mié, 18 …")
+  const nc = cur && nw ? nw.nextCommittee : null;
+  if (nc && !nc.thisMonth) {
+    const wd = chip(nc.ymd, main).wd;
+    const when = [`${main === "es" ? wd.toLowerCase() : wd}, ${nc.dayLabel}`, nc.time ? `${nc.time} ${nc.zone}` : ""].filter(Boolean).join(" · ");
+    out.push(`${bullet} ${both("monthly.next_meeting")}: ${when} — ${nc.platform}`);
+  }
+  out.push(`  ${t("monthly.msg_events", main, { url: url("/events/") })}`, `  ${t("monthly.msg_join", main, { url: url("/meetings/#committee-meeting") })}`, "");
+
+  // 🔁 Every week: the weekly open meetings (+ this month: the Grapevine meetings near you)
+  const weekly = m.weekly || [];
+  const g = cur ? nw.gvm : null;
+  if (weekly.length || g) {
+    out.push(head(both("monthly.every_week"), "🔁"));
+    for (const w of weekly) out.push(`${bullet} ${t("report.o_line", main, { title: w.title, when: w.when })}${w.startsLabel ? ` — ${t("report.o_starts", main, { date: w.startsLabel })}` : ""}`);
+    if (weekly.length) out.push(`  ${t("report.o_more", main, { url: url("/meetings/#weekly-open") })}`);
+    if (g) {
+      const ours = t(g.inArea === 1 ? "committee.gvm.count_one" : "committee.gvm.count", main, { n: g.inArea });
+      out.push(`${bullet} ${both("committee.gvm.home_title")}: ${t(g.nearby ? "committee.gvm.home_text" : "committee.gvm.home_text_area", main, { ours, nearby: g.nearby })}`);
+      out.push(`  ${url("/meetings/#grapevine-meetings")}`);
+    }
+    out.push("");
+  }
+
+  // ✍️ Share your story: Grapevine's deadlines, La Viña's open topics (no deadline), the phone story
+  // lines (La Viña first in Spanish), how to send one
+  const ap = (nw && nw.audio) || {};
+  const phones = (main === "es" ? [["La Viña", ap.lv], ["Grapevine", ap.gv]] : [["Grapevine", ap.gv], ["La Viña", ap.lv]]).filter(([, d]) => d);
+  const deadlines = m.deadlines || [];
+  const lvTopics = m.lvTopics || [];
+  if (deadlines.length || lvTopics.length || phones.length) {
+    out.push(head(both("monthly.msg_stories"), "✍️"));
+    for (const d of deadlines) {
+      const themes = uniq(Ls.map((l) => ((mm[l].deadlines || []).find((x) => x.id === d.id) || {}).theme));
+      out.push(`${bullet} ${t("monthly.msg_deadline", main, { date: d.dueLabel, theme: themes.join(" / "), issue: d.issueLabel })}`);
+    }
+    if (lvTopics.length) out.push(`${bullet} ${t("monthly.msg_lv_topics", main)} ${lvTopics.map((x) => `“${x.es}”`).join(", ")}`);
+    if (phones.length) out.push(`${wa ? "🎙️" : bullet} ${t("monthly.msg_phone", main)} ${phones.map(([name, d]) => `${name} ${d.phone}`).join(" · ")}`);
+    out.push(`  ${t("monthly.msg_how", main, { url: url("/contribute/") })}`, "");
+  }
+
+  // 📚 Book of the Month (this month: the offers not over yet; the discount said once when the books
+  // share it) + this month: the subscription price (the prices' one home is /shop/)
+  const offers = (m.botm || []).filter((b) => !cur || !b.past);
+  if (offers.length) {
+    const o0 = offers[0];
+    const shared = offers.every((b) => b.discount === o0.discount && b.ends === o0.ends);
+    const endsIn = (l) => ((mm[l].botm || []).find((x) => x.id === o0.id) || o0).endsLabel;
+    out.push(head(shared && o0.discount ? both("monthly.msg_botm_off", (l) => ({ pct: o0.discount, date: endsIn(l) })) : both("monthly.botm"), "📚"));
+    for (const b of offers) out.push(`${bullet} “${b.title}” (${b.pub === "lv" ? "La Viña" : "Grapevine"})${!shared && b.discount ? ` — ${t("monthly.botm_off", main, { pct: b.discount, date: b.endsLabel })}` : ""}`);
+    out.push(`  ${t("monthly.msg_botm_more", main, { url: url("/shop/#botm") })}`);
+  }
+  if (cur && nw.subsFrom) out.push(`${wa ? "📬 " : ""}${both("shop.subs_from", (l) => ({ amount: money(nw.subsFrom, l) }))}: ${url("/shop/#subscriptions")}`);
+  if (offers.length || (cur && nw.subsFrom)) out.push("");
+
+  // 🖼️ The month's toolkit page (its poster is there)
+  out.push(`${wa ? "🖼️ " : ""}${t("monthly.msg_footer", main, { month: m.monthName, url: url(`/monthly/${m.key}/`) })}`);
+  return out.join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+}
+
 /**
  * The representatives' official guides among the Library's documents (db.pdfs): Grapevine's GVR
  * Workbook and La Viña's RLV manual, the newest of each → [{ pub, title, url, lang }], the page
@@ -414,7 +806,8 @@ export function repGuides(pdfs, lang = "en") {
   return lang === "es" ? out.reverse() : out;
 }
 
-export default function (eleventyConfig) {
+export default function (eleventyConfig, helpers) {
+  if (helpers && helpers.translateKey) H = { ...H, translateKey: helpers.translateKey };
   eleventyConfig.addGlobalData("monthlyKeys", () => windowKeys());
   eleventyConfig.addGlobalData("monthlyPages", () => {
     const keys = windowKeys();
@@ -428,9 +821,12 @@ export default function (eleventyConfig) {
     return ["en", "es"].flatMap((lang) => keys.map((key) => ({ key, lang, label: monthLabel(key, lang) })));
   });
 
-  // The window's models are built once per language per build (the hub and 26 pages share them).
+  // The window's models, this month's live extras and the messages are built once per language per
+  // build (the hub and 26 pages share them).
   let cache = new Map();
-  eleventyConfig.on("eleventy.before", () => { cache = new Map(); });
+  let nowCache = new Map();
+  let msgCache = new Map();
+  eleventyConfig.on("eleventy.before", () => { cache = new Map(); nowCache = new Map(); msgCache = new Map(); });
   const months = (db, carry, site, lang) => {
     const k = lang;
     if (!cache.has(k)) {
@@ -446,8 +842,33 @@ export default function (eleventyConfig) {
     }
     return cache.get(k);
   };
+  const model = (key, db, carry, site, lang) => months(db, carry, site, lang).find((m) => m.key === key) || monthModel(key, db || {}, carry || {}, site || {}, lang);
+  const live = (db, site, lang) => {
+    const L = lang === "es" ? "es" : "en";
+    if (!nowCache.has(L)) nowCache.set(L, monthNow(db || {}, site || {}, L, nowDate()));
+    return nowCache.get(L);
+  };
   eleventyConfig.addFilter("mpMonths", (db, carry, site, lang) => months(db, carry, site, lang));
-  eleventyConfig.addFilter("mpMonth", (key, db, carry, site, lang) => months(db, carry, site, lang).find((m) => m.key === key) || monthModel(key, db || {}, carry || {}, site || {}, lang));
+  eleventyConfig.addFilter("mpMonth", (key, db, carry, site, lang) => model(key, db, carry, site, lang));
+  // This month's live extras (the hub's "This month" card, the current month's page): {% set nx = db | mpNow(site, lang) %}
+  eleventyConfig.addFilter("mpNow", (db, site, lang) => live(db, site, lang));
+  // A month's issues on the site (story counts, the /read/ link): {% set views = m.key | mpIssues(db, carry, site, lang) %}
+  eleventyConfig.addFilter("mpIssues", (key, db, carry, site, lang) => monthIssueLinks(db || {}, model(key, db, carry, site, lang)));
+  // The month as a message: {{ m.key | mpMessage(db, carry, site, [lang, other], "whatsapp") }} (or "email")
+  eleventyConfig.addFilter("mpMessage", (key, db, carry, site, langs, style) => {
+    const L = (Array.isArray(langs) ? langs : [langs]).map((l) => (l === "es" ? "es" : "en"));
+    const k = `${key}|${L.join("+")}|${style}`;
+    if (!msgCache.has(k)) {
+      const mm = { en: model(key, db, carry, site, "en"), es: model(key, db, carry, site, "es") };
+      const ctx = {
+        mm,
+        nw: { en: live(db, site, "en"), es: live(db, site, "es") },
+        iss: { en: monthIssueLinks(db || {}, mm.en), es: monthIssueLinks(db || {}, mm.es) },
+      };
+      msgCache.set(k, monthMessage(ctx, L, style, site || {}, (key2, lang, vars) => H.translateKey(key2, lang, vars)));
+    }
+    return msgCache.get(k);
+  });
   eleventyConfig.addFilter("mpQr", (url, label = "") => qrSvg(url, { label, cls: "mp-qr-svg", margin: 2 }));
   eleventyConfig.addFilter("mpGuides", (pdfs, lang) => repGuides(pdfs, lang));
 }

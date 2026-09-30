@@ -117,10 +117,25 @@ class Contract(unittest.TestCase):
             self.assertIn(f'seg("{group}"', panel, group)
         # the Aa buttons: header (from 640 px) and the drawer, all pointing at the one panel
         self.assertGreaterEqual(header.count('aria-controls="gvlv-panel"'), 3)
+        # the Menu button names the drawer only once Alpine has made it (x-teleport): without JavaScript a
+        # plain aria-controls="mobile-drawer" pointed at nothing (axe: aria-valid-attr-value)
+        self.assertIn(":aria-controls=\"'mobile-drawer'\"", header)
+        self.assertNotIn(' aria-controls="mobile-drawer"', header)
         self.assertIn('"comfort.button"', header)
         # the order the offline-app contract expects: data saver, then #pwa-slot, then Reset
         self.assertLess(panel.index('seg("saver"'), panel.index('id="pwa-slot"'))
         self.assertLess(panel.index('id="pwa-slot"'), panel.index('"comfort.reset"'))
+
+    def test_raw_messages_say_their_language(self):
+        # /status/'s technical details show the update's own messages (English): each is lang="en" and has a
+        # caption that says so on /es/status/ — the one place the Spanish page shows words in English
+        status = read("src", "pages", "status.njk")
+        pres = [m.start() for m in re.finditer(r'<pre lang="en"', status)]
+        self.assertEqual(len(pres), 2)
+        for at in pres:
+            self.assertIn('"community.status.raw_message" | t(lang)', status[at - 200:at])
+        strings = json.loads(read("src", "_i18n", "community.json"))
+        self.assertIn("(en inglés)", strings["community.status.raw_message"]["es"])
 
     def test_app_js_prefs_api(self):
         app = read("src", "assets", "js", "app.js")

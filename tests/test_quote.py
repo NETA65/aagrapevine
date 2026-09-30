@@ -184,6 +184,82 @@ class CollectTest(unittest.TestCase):
         self.assertEqual([h["date"] for h in res["history"]["gv"]], ["2026-09-25", "2026-09-24"])
 
 
+class PeekTest(unittest.TestCase):
+    """quote.peek — the Morning check's "is today's quote out yet?" (scripts/ops/morning_check.py)."""
+
+    def test_the_date_each_page_shows(self):
+        f = fetcher({"gv": page("gv_home.html"), "lv": page("lv_home.html")})
+        self.assertEqual(Q.peek(f, TODAY, cfg=CFG), {"gv": "2026-09-25", "lv": "2026-09-25"})
+        self.assertEqual(len(f.calls), 2)
+
+    def test_a_heading_without_a_date_is_not_a_quote_of_today(self):
+        html = page("gv_home.html").replace("Grapevine Daily Quote September 25", "Grapevine Daily Quote")
+        self.assertEqual(Q.peek(fetcher({"gv": html}), date(2026, 9, 26), ("gv",), CFG), {"gv": None})
+
+    def test_no_page_no_quote_block_or_a_broken_fetch(self):
+        self.assertEqual(Q.peek(fetcher({"gv": None, "lv": "<html><body>maintenance</body></html>"}), TODAY, cfg=CFG),
+                         {"gv": None, "lv": None})
+
+        def boom(_url):
+            raise ConnectionError("down")
+        self.assertEqual(Q.peek(boom, TODAY, cfg=CFG), {"gv": None, "lv": None})
+        empty = re.sub(r"(?s)<div class=\"clearfix text-formatted field field--name-body.*?</div>", "", page("gv_home.html"))
+        empty = re.sub(r"(?s)<div class=\"quote-container\">.*?</p>\s*</div>", "", empty)
+        self.assertEqual(Q.peek(fetcher({"gv": empty}), TODAY, ("gv",), CFG), {"gv": None})   # QuoteParseError: not out
+
+    def test_only_the_publications_asked_for(self):
+        f = fetcher({"gv": page("gv_home.html"), "lv": page("lv_home.html")})
+        self.assertEqual(Q.peek(f, TODAY, ("lv",), CFG), {"lv": "2026-09-25"})
+        self.assertEqual(f.calls, [Q.settings(CFG)["lv"]["page"]])
+        self.assertEqual(Q.peek(f, TODAY, ("xx",), CFG), {"xx": None})                 # unknown: nothing asked
+        self.assertEqual(len(f.calls), 1)
+
+
+class SeenTest(unittest.TestCase):
+    """history[].seen — when each day's quote first came in (build_data → status.json quote_days → /status/)."""
+    T1, T2, T3 = "2026-09-25T09:31:00Z", "2026-09-25T17:07:00Z", "2026-09-26T10:02:00Z"
+
+    def test_first_read_sets_it_and_a_reread_keeps_it(self):
+        pages = {"gv": page("gv_home.html"), "lv": page("lv_home.html")}
+        first = Q.collect(fetcher(pages), {}, TODAY, CFG, now=self.T1)
+        self.assertEqual([h["seen"] for h in first["history"]["gv"]], [self.T1])
+        env = {"items": first["items"], "history": first["history"]}
+        again = Q.collect(fetcher(pages), env, TODAY, CFG, now=self.T2)
+        self.assertEqual(again["history"]["gv"][0]["seen"], self.T1, "the same day's quote read again: first time kept")
+        self.assertEqual(again["history"]["lv"][0]["seen"], self.T1)
+        # the items (and so data/site/quote.json) do not carry it
+        self.assertEqual(again["items"], first["items"])
+        self.assertNotIn("seen", again["items"][0]["extra"])
+        self.assertNotIn("seen", Q.build_site({"items": again["items"]})["items"][0])
+        # the next day's quote gets its own time; yesterday's keeps its own
+        nxt = {"gv": page("gv_home.html").replace("September 25", "September 26"), "lv": pages["lv"]}
+        env = {"items": again["items"], "history": again["history"]}
+        day2 = Q.collect(fetcher(nxt), env, date(2026, 9, 26), CFG, now=self.T3)
+        self.assertEqual([(h["date"], h["seen"]) for h in day2["history"]["gv"]],
+                         [("2026-09-26", self.T3), ("2026-09-25", self.T1)])
+        self.assertEqual([(h["date"], h["seen"]) for h in day2["history"]["lv"]], [("2026-09-25", self.T1)])
+
+    def test_default_is_now(self):
+        res = Q.collect(fetcher({"gv": page("gv_home.html")}), {}, TODAY, CFG, only="gv")
+        self.assertRegex(res["history"]["gv"][0]["seen"], r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
+
+    def test_an_entry_from_before_the_times_never_gets_one(self):
+        # The history written before `seen` existed (the day this change comes in): today's quote is already
+        # in it without a time. Reading it again in the afternoon is NOT when it came in — it stays unknown
+        # (build_data.quote_days leaves that day out); the next day's quote is timed as usual.
+        pages = {"gv": page("gv_home.html"), "lv": page("lv_home.html")}
+        first = Q.collect(fetcher(pages), {}, TODAY, CFG, now=self.T1)
+        legacy = {pub: [{k: v for k, v in h.items() if k != "seen"} for h in rows] for pub, rows in first["history"].items()}
+        again = Q.collect(fetcher(pages), {"items": first["items"], "history": legacy}, TODAY, CFG, now=self.T2)
+        self.assertEqual([(h["date"], h["seen"]) for h in again["history"]["gv"]], [("2026-09-25", None)])
+        self.assertEqual([(h["date"], h["seen"]) for h in again["history"]["lv"]], [("2026-09-25", None)])
+        nxt = {"gv": page("gv_home.html").replace("September 25", "September 26"), "lv": pages["lv"]}
+        day2 = Q.collect(fetcher(nxt), {"items": again["items"], "history": again["history"]}, date(2026, 9, 26), CFG,
+                         now=self.T3)
+        self.assertEqual([(h["date"], h["seen"]) for h in day2["history"]["gv"]],
+                         [("2026-09-26", self.T3), ("2026-09-25", None)])
+
+
 class SiteFileTest(unittest.TestCase):
     def test_build_site(self):
         res = Q.collect(fetcher({"gv": page("gv_home.html"), "lv": page("lv_home.html")}), {}, TODAY, CFG)

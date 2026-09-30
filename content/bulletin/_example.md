@@ -8,7 +8,8 @@
 # lines too). Lines that start with # are notes for you; the site ignores them.
 # ---------------------------------------------------------------------------------------------
 title: Welcome, new GVRs and RLVs!   # without it: the first "# Heading" below, else the file's name
-date: 2027-01-10                     # without it: the date the file's name starts with, else the day it first appears
+date: 2027-01-10                     # without it: the date the file's name starts with, else the publish: day, else the day it first appears
+publish: 2027-01-10                  # the post appears on the site that day (with that morning's update), not before; without it: as soon as it is saved
 expires: 2027-03-31                  # the post leaves the bulletin after this day
 pinned: true                         # keep it at the top (true / false — also yes / no, sí)
 lang: en                             # en or es — usually found by itself

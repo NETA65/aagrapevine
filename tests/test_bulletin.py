@@ -218,9 +218,9 @@ class Place(unittest.TestCase):
         common_i18n = json.loads((ROOT / "src/_i18n/common.json").read_text(encoding="utf-8"))
         self.assertEqual(common_i18n["nav.bulletin"], {"en": "Bulletin", "es": "Boletín"})
         self.assertEqual(common_i18n["nav.share"], {"en": "QR Post", "es": "Cartel QR"})
-        # the footer: QR Post in "Stay updated", right after Instagram
+        # the footer's "Stay updated": Install as an app first (/app/), then Instagram, then QR Post
         stay = re.findall(r'key: "(nav\.\w+)"[^}]*group: "stay"', nav)
-        self.assertEqual(stay, ["nav.instagram", "nav.share"])
+        self.assertEqual(stay, ["nav.app", "nav.instagram", "nav.share"])
 
 
 class Rendering(unittest.TestCase):

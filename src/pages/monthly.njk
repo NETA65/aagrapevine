@@ -12,16 +12,24 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
     (a teaser with a one-line link to next month; the full toolkit lives on the month's own page,
     monthly-month.njk) → the GV/LV report → all posters (band) → the 10 ways (its header links the full
     editorial calendar when the committee has it on Drive). Prices stay in the shop.
+    "This month" is live (monthly.js mpNow): its date chips are only the ones still to come — a chip whose
+    time passes while the page is open hides itself (data-mp-chip / data-mp-over, src/assets/js/monthly.js)
+    — plus the next committee meeting once this month's is over; a notice points to next month's page
+    when the visitor's month has changed before the site was rebuilt (data-mp-newmonth); and it links to
+    the month as a message for a group chat (the month page's #mp-message).
     #report is the one home of the GV/LV report a GVR / RLV tailors for the district meeting
     (eleventy/filters/report.js + src/assets/js/report.js; the old /districts/ page redirects here);
-    its intro points to the Monthly digest (/digest/: for a group chat or e-mail), which points back.
+    its intro points to this month as a message and to last month's Monthly digest (/digest/: for a
+    group chat or e-mail), which point back.
     This page is the canonical home of the district guide
     "how each month's magazine can be useful in carrying the message" (config/carry.yml). -#}
 {% import "macros/ui.njk" as ui with context %}
 {% import "macros/monthly.njk" as mp with context %}
 {%- set months = db | mpMonths(carry, site, lang) -%}
 {%- set m = months[0] -%}
-{%- set nx = months[1] -%}
+{%- set nm = months[1] -%}
+{#- what is live this month: the next committee meeting (mpNow) -#}
+{%- set nx = db | mpNow(site, lang) -%}
 {%- set monthUrl = ('/monthly/' + m.key + '/') | lurl(lang) -%}
 
 {#- The hero's right-hand card (the shared hero aside): this month's poster, linking to its month page.
@@ -52,19 +60,27 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
 <section id="now" class="section container-page pt-10 sm:pt-12" aria-labelledby="mp-now-title">
   <div class="card overflow-hidden">
     <div class="mp-now">
-      <div class="flex flex-col p-6 sm:p-8">
+      {#- (.mp-now-body / .mp-now-mag: less padding at large text on a phone — areas/monthly.css) -#}
+      <div class="mp-now-body flex flex-col p-6 sm:p-8">
         <div class="md:my-auto">
+          {#- shown by the browser once the visitor's month (Central time) is the next one while this build is
+              still last month's (src/assets/js/monthly.js): that month's toolkit is the one to open -#}
+          {% if nm %}
+          <p class="mb-5 rounded-xl border border-lv bg-lv-soft px-4 py-3 text-sm" data-mp-newmonth="{{ nm.key }}" role="status" hidden>
+            <a class="tap-link inline-flex items-start gap-2 font-semibold text-lv-strong underline-offset-2 hover:underline" href="{{ ('/monthly/' + nm.key + '/') | lurl(lang) }}">{% icon "calendar-heart", "mt-0.5 size-4 shrink-0" %}<span>{{ "monthly.newmonth" | t(lang, { month: nm.monthName }) }} <span aria-hidden="true">→</span></span></a>
+          </p>
+          {% endif %}
           {{ ui.sectionHead(m.title, "", "", "", "calendar-heart", { eyebrow: "monthly.this_month" | t(lang), id: "mp-now-title", class: "mb-5! sm:mb-6!", lang: lang }) }}
           <div class="grid gap-4 sm:grid-cols-2">
             {% set gvBox %}
-            <div class="rounded-xl bg-gv-soft p-4">
+            <div class="mp-now-mag rounded-xl bg-gv-soft p-4">
               <p class="text-xs font-semibold uppercase tracking-wider text-gv-strong">{{ "monthly.in_gv" | t(lang, { month: m.monthName }) }}</p>
               <p class="mt-1 font-display text-xl font-semibold text-ink">{{ m.gv.theme if m.gv else ("monthly.no_issue" | t(lang)) }}</p>
             </div>
             {% endset %}
             {% set lvBox %}
             {% if m.lv %}
-            <div class="rounded-xl bg-lv-soft p-4">
+            <div class="mp-now-mag rounded-xl bg-lv-soft p-4">
               <p class="text-xs font-semibold uppercase tracking-wider text-lv-strong">{{ "monthly.in_lv" | t(lang) }} · {{ m.lv.label }}</p>
               <p class="mt-1 font-display text-xl font-semibold text-ink">{{ m.lv.theme }}</p>
             </div>
@@ -73,14 +89,18 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
             {% if lang == "es" %}{{ lvBox | safe }}{{ gvBox | safe }}{% else %}{{ gvBox | safe }}{{ lvBox | safe }}{% endif %}
           </div>
 
-          {#- this month's dates as chips: a story deadline only when it is due THIS month, then the
-              committee / booth dates -#}
-          {%- set dueNow = [] -%}
-          {%- for d in m.deadlines %}{% if d.due and d.due.startsWith(m.key) %}{% set _n = dueNow.push(d) %}{% endif %}{% endfor -%}
-          <ul class="mt-5 flex flex-wrap gap-2" role="list" aria-label="{{ 'monthly.dates' | t(lang) }}">
-            {% for d in dueNow %}<li class="badge-gv">{% icon "pen-line", "size-3" %} {{ d.theme }} · {{ d.dueLabel }}</li>{% endfor %}
-            {% for d in m.dates %}{% if d.kind != "event" %}{% set dIcon = "video" if d.kind == "committee" else "repeat" %}<li class="badge ev-badge ev-tone-{{ d | eventTone }}">{% icon dIcon, "size-3" %} {{ ("monthly.committee" | t(lang)) if d.kind == "committee" else d.title }} · {{ d.dayLabel }}</li>{% endif %}{% endfor %}
+          {#- this month's dates still to come, as chips: a story deadline due THIS month, the committee /
+              booth dates not over yet, and — once this month's meeting is over — the next one. Each chip
+              hides itself when its time passes (data-mp-over, an instant; monthly.js), and the list with it. -#}
+          {%- set chips = [] -%}
+          {%- for d in m.deadlines %}{% if d.due and d.due.startsWith(m.key) %}{% set _n = chips.push({ cls: "badge-gv", icon: "pen-line", text: d.theme + " · " + d.dueLabel, over: d.overAt }) %}{% endif %}{% endfor -%}
+          {%- for d in m.dates %}{% if d.kind != "event" and not d.past %}{% set _n = chips.push({ cls: "badge ev-badge ev-tone-" + (d | eventTone), icon: ("video" if d.kind == "committee" else "repeat"), text: (("monthly.committee" | t(lang)) if d.kind == "committee" else d.title) + " · " + d.dayLabel, over: d.overAt }) %}{% endif %}{% endfor -%}
+          {%- if nx.nextCommittee and not nx.nextCommittee.thisMonth %}{% set _n = chips.push({ cls: "badge ev-badge ev-tone-committee", icon: "video", text: ("monthly.next_meeting" | t(lang)) + " · " + nx.nextCommittee.dayLabel, over: nx.nextCommittee.overAt }) %}{% endif -%}
+          {% if chips.length %}
+          <ul class="mt-5 flex flex-wrap gap-2" role="list" aria-label="{{ 'monthly.dates' | t(lang) }}" data-mp-chips>
+            {% for c in chips %}<li class="{{ c.cls }}" data-mp-chip data-mp-over="{{ c.over }}">{% icon c.icon, "size-3" %} {{ c.text }}</li>{% endfor %}
           </ul>
+          {% endif %}
 
           {% if m.tips.length %}
           <h3 class="eyebrow mt-6">{{ "monthly.put_to_work" | t(lang) }}</h3>
@@ -93,7 +113,8 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
 
           <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
             <a class="btn-primary" href="{{ monthUrl }}">{% icon "calendar-heart", "size-4" %} {{ "monthly.open_toolkit" | t(lang, { month: m.monthName }) }}</a>
-            {% if nx %}<a class="tap-link inline-flex items-center gap-1.5 text-sm font-semibold text-gv no-underline hover:underline" href="{{ ('/monthly/' + nx.key + '/') | lurl(lang) }}">{{ "monthly.next_link" | t(lang, { theme: (nx.gv.theme if nx.gv else nx.title) }) }} {% icon "arrow-right", "size-4 shrink-0" %}</a>{% endif %}
+            <a class="tap-link inline-flex items-center gap-1.5 text-sm font-semibold text-gv no-underline hover:underline" href="{{ monthUrl }}#mp-message">{% icon "message-circle", "size-4 shrink-0" %} {{ "monthly.msg_link" | t(lang) }}</a>
+            {% if nm %}<a class="tap-link inline-flex items-center gap-1.5 text-sm font-semibold text-gv no-underline hover:underline" href="{{ ('/monthly/' + nm.key + '/') | lurl(lang) }}">{{ "monthly.next_link" | t(lang, { theme: (nm.gv.theme if nm.gv else nm.title) }) }} {% icon "arrow-right", "size-4 shrink-0" %}</a>{% endif %}
           </div>
         </div>
       </div>
@@ -116,10 +137,11 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
     the whole report as text in the page language (.rp-nojs). Printing prints only the report. -#}
 {%- set rp = db | rpModel(meeting, carry, site) -%}
 <section id="report" class="section container-page pt-0" aria-labelledby="report-title">
-  {#- one job each: this report is for the district meeting; the Monthly digest is for a group chat or
-      e-mail — a one-line pointer to it (and the digest points back here) -#}
+  {#- one job each: this report is for the district meeting; a group chat or e-mail gets this month as a
+      message (the month page's #mp-message) or last month's Monthly digest — a one-line pointer to both
+      (and they point back here) -#}
   {%- set reportSub -%}
-  {{ "community.report.sub" | t(lang) }}<span class="mt-2 flex items-start gap-2 text-sm"><span class="mt-0.5 shrink-0 text-gv">{% icon "mail-open", "size-4" %}</span><span>{{ "monthly.report_digest_hint" | t(lang) }} <a class="link font-semibold" href="{{ '/digest/' | lurl(lang) }}">{{ "nav.digest" | t(lang) }}<span aria-hidden="true"> →</span></a></span></span>
+  {{ "community.report.sub" | t(lang) }}<span class="mt-2 flex items-start gap-2 text-sm"><span class="mt-0.5 shrink-0 text-gv">{% icon "mail-open", "size-4" %}</span><span>{{ "monthly.report_digest_hint" | t(lang) }} <a class="link font-semibold" href="{{ monthUrl }}#mp-message">{{ "monthly.msg_link_month" | t(lang, { month: m.label }) }}</a> · <a class="link font-semibold" href="{{ '/digest/' | lurl(lang) }}">{{ "monthly.digest_last" | t(lang) }}<span aria-hidden="true"> →</span></a></span></span>
   {%- endset %}
   {{ ui.sectionHead("community.report.title" | t(lang), reportSub, "", "", "clipboard-list", { eyebrow: "community.report.eyebrow" | t(lang), id: "report-title", lang: lang }) }}
 

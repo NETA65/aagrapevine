@@ -19,6 +19,10 @@ site:
   # GitHub Pages default: https://<user>.github.io/<repo>/
   url: "https://mkp715.github.io/AAGrapevine"
   timezone: "America/Chicago"
+  # The Morning check (.github/workflows/morning.yml) puts the new day and both daily quotes on the
+  # site by this time (24 h, in `timezone`) every day; the Status page shows each morning against it.
+  # The morning alarm (README → “d) The morning alarm”) rings about an hour earlier.
+  morning_goal: "05:30"
   default_lang: "en"
   languages: ["en", "es"]
   contact_email: "grapevine@neta65.org"
@@ -80,8 +84,9 @@ meeting:
 # ---------------------------------------------------------------------
 #  Recurring events — things the committee does EVERY MONTH (a booth,
 #  a workshop …). Each one shows on the Events page, the home page, the
-#  calendar feed, the monthly digest and the search, with the next dates
-#  worked out automatically (Central time, daylight saving included).
+#  calendar feed, the monthly toolkit and the search, with the next dates
+#  worked out automatically (Central time, daylight saving included); the
+#  monthly digest lists a date once it has taken place.
 #
 #  To add one: copy the block that starts with "- key:" (keep the
 #  spaces at the start of each line), paste it below the last one and
@@ -129,7 +134,8 @@ recurring_events:
 #  headline. Start the name with a date to set it:
 #  "2027-01-10 Welcome new GVRs". Add "(pinned)" / "(fijado)" to keep it
 #  on top, and "(until 2027-02-01)" / "(hasta 2027-02-01)" to hide it
-#  after that date.
+#  after that date. "(from 2027-02-01)" / "(desde 2027-02-01)" keeps it
+#  off the site until that day (it appears with that morning's update).
 #  PHOTOS: each sub-folder inside "photos" becomes an album. Please only
 #  upload photos where no AA member's face can be identified.
 # ---------------------------------------------------------------------
@@ -180,8 +186,9 @@ sources:
     # The Audio Project (members record a story by phone or send a recording), read daily by
     # scripts/sync/audio_project.py (→ data/site/audio_project.json → /contribute/#record).
     audio_project: "/audio-portal"
-    # The page with the "Grapevine Daily Quote" (#quote-of-the-day), read by scripts/sync/quote.py
-    # in the daily run and again at 12:07 UTC (→ data/site/quote.json → the home page card).
+    # The page with the "Grapevine Daily Quote" (#quote-of-the-day), read by scripts/sync/quote.py in
+    # every update — the morning refresh the Morning check starts (by 5:30 AM Central), the midday
+    # refresh and the full daily run (→ data/site/quote.json → the home page card).
     quote_page: "/"
   lavina:
     base: "https://www.aalavina.org"
@@ -255,7 +262,11 @@ sources:
     #   collection). Set to false to use ONLY the official API + the manual
     #   list in content/instagram.yml.
     anonymous: true
-    keep_per_account: 60     # newest posts kept per account
+    # Newest posts kept per account (older ones and their thumbnails are deleted). The monthly digest
+    # of a month is on /digest/ all through the next one, so this must hold about 62 days of posts:
+    # each account posts about 2 a day (September 2026), so 130 per account ≈ 65 days (thumbnails ~23 KB
+    # each).
+    keep_per_account: 130
     enrich_per_run: 25       # max post look-ups per daily run
     graph_version: "v21.0"
     # Optional public RSSHub mirrors to try (leave empty to skip).
@@ -611,6 +622,13 @@ links:
   rlv_resources: "https://www.aalavina.org/recursos"
   gv_apps: "https://www.aagrapevine.org/apps"
   lv_apps: "https://www.aalavina.org/aplicaciones"
+  # "Install as an app" page (/app/): the official help for adding a web app to the home screen —
+  # Apple's iPhone guide ("Open as Web App") and Chrome Help's "Use web apps" for Android, in English
+  # and in Spanish (the Spanish page links the _es one).
+  app_help_iphone: "https://support.apple.com/guide/iphone/open-as-web-app-iphea86e5236/ios"
+  app_help_iphone_es: "https://support.apple.com/es-mx/guide/iphone/iphea86e5236/ios"
+  app_help_android: "https://support.google.com/chrome/answer/9658361?hl=en&co=GENIE.Platform%3DAndroid"
+  app_help_android_es: "https://support.google.com/chrome/answer/9658361?hl=es-419&co=GENIE.Platform%3DAndroid"
   sobriety_calculator: "https://www.aagrapevine.org/sobriety-calculator"
   weekly_open: "https://www.aagrapevine.org/grapevine-weekly-open"
   podcasts_page: "https://www.aagrapevine.org/podcasts"
@@ -657,12 +675,19 @@ library:
 
 # ---------------------------------------------------------------------
 #  Monthly digest — the /digest/ page and the optional monthly e-mail.
-#  One edition per month: what was new LAST month + this month's issues,
-#  dates and story deadlines. The e-mail goes out on the 1st of each
-#  month around 9–10 AM Central (.github/workflows/monthly-digest.yml),
+#  One edition per month, named after the month it covers: everything
+#  that was new on the site LAST month (bulletin posts, events that took
+#  place, committee files and photos added that month, magazine stories,
+#  writers from Area 65 & Texas, podcasts, videos, Instagram posts,
+#  documents), plus one link to this month's toolkit page
+#  (/monthly/YYYY-MM/), where everything current lives.
+#  It is on /digest/ from the 1st; the e-mail goes out once, on the 1st
+#  from 7 AM Central after the site's first full update of the month
+#  (at the latest on the 3rd) (.github/workflows/monthly-digest.yml),
 #  and only if these GitHub secrets exist:
-#  SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, DIGEST_TO
-#  (DIGEST_TO can be a Google Group address that reaches all districts).
+#  SMTP_SERVER, SMTP_USERNAME, SMTP_PASSWORD, DIGEST_TO (SMTP_PORT is
+#  optional: 587) — DIGEST_TO can be a Google Group address that
+#  reaches all districts.
 #  A month with nothing new is not sent.
 # ---------------------------------------------------------------------
 digest:

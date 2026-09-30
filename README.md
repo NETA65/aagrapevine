@@ -14,7 +14,9 @@ to hand-edit pages, retype flyers or translate anything any more.
 ## Resumen en español
 
 Sitio web del **Comité de Grapevine y La Viña del Área 65 del Noreste de Texas**.
-**Se actualiza solo todas las mañanas** (≈ 5 a. m., hora del Centro), en **inglés y español**.
+**Se actualiza solo todos los días**, en **inglés y español**. La **cita del día** de Grapevine y La Viña y
+las fechas del nuevo día quedan en el sitio **antes de las 5:30 a. m.** (hora del Centro) con la **alarma de
+la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)).
 
 - Trae automáticamente los **artículos nuevos** de Grapevine y La Viña, **los documentos oficiales** (PDF) de
   aagrapevine.org y aalavina.org — **cada uno una sola vez**, con sus ediciones en inglés, español y francés
@@ -27,23 +29,36 @@ Sitio web del **Comité de Grapevine y La Viña del Área 65 del Noreste de Texa
   - Un **volante** con la fecha al inicio del nombre se convierte en **evento** — con hora y lugar si
     los escribe: `2027-03-14 Asamblea de primavera 9am @ Tyler TX.pdf`
   - Un **Google Doc** en `boletín` (o `bulletin`) se convierte en un aviso del **Boletín**; `(fijado)` lo
-    deja arriba y `(hasta 2027-02-01)` lo oculta después de esa fecha.
+    deja arriba, `(desde 2027-02-01)` lo publica ese día (con la actualización de esa mañana) y
+    `(hasta 2027-02-01)` lo oculta después de esa fecha.
   - Cada **subcarpeta** de `fotos` es un **álbum**. Por favor, solo fotos donde **no se reconozca la
     cara** de ningún miembro de AA.
 - **Tienda** (`/es/shop/`): el **libro del mes** de Grapevine y La Viña y los **precios de suscripción** por
   región, leídos cada día de las tiendas oficiales (toda compra se hace allí). **Kit del mes**
-  (`/es/monthly/`): un cartel para cada mes (descargar en PNG, compartir, imprimir) y las 10 maneras de poner
-  una edición a trabajar. La **reunión abierta semanal de La Viña** (jueves, en español) está en
-  `/es/meetings/#weekly-open`. La página **Reuniones** (`/es/meetings/`) también reúne las **reuniones de
-  Grapevine** de los grupos de AA de nuestra Área y de las áreas cercanas (de las 8 listas de reuniones que usa
-  la página del Grupo Rowlett). El **informe de GV/LV** para la reunión del distrito está en
-  `/es/monthly/#report` (la antigua página *Distritos* ya no existe; su dirección lleva allí).
+  (`/es/monthly/`): todo lo de este mes — la reunión del comité, los eventos, las fechas límite para
+  historias, las revistas del mes y el libro del mes —, un cartel para cada mes (descargar en PNG, compartir,
+  imprimir), las 10 maneras de poner una edición a trabajar y cada mes también como mensaje para WhatsApp o
+  correo. El **Resumen mensual** (`/es/digest/`) reúne todo lo nuevo del mes pasado (el correo mensual,
+  sección [10 c](#c-monthly-e-mail-digest-keep-every-district-informed), es la misma edición). La **reunión
+  abierta semanal de La Viña** (jueves, en español) está en `/es/meetings/#weekly-open`. La página
+  **Reuniones** (`/es/meetings/`) también reúne las **reuniones de Grapevine** de los grupos de AA de nuestra
+  Área y de las áreas cercanas (de las 8 listas de reuniones que usa la página del Grupo Rowlett). El
+  **informe de GV/LV** para la reunión del distrito está en `/es/monthly/#report` (la antigua página
+  *Distritos* ya no existe; su dirección lleva allí).
 - **RLV / GVR 101** (`/es/orientation/`): seis lecciones breves para los nuevos RLV y GVR (el Panel 77 empieza
   en enero de 2027), cada una con preguntas de repaso; también como **diapositivas** para una reunión del
   distrito ("Presentar diapositivas") y como **hoja para imprimir** (una por lección). El texto está en
   `config/orientation.yml` (inglés y español en el mismo archivo).
-- **Instalar como app y usar sin conexión:** menú **Aa** (arriba en cada página) → **Sin conexión y app**:
-  **Instalar la app** (en iPhone o iPad: Safari → Compartir → **Agregar a inicio**) y **Guardar páginas
+- **Instalar como app:** la página **Instalar como app** (`/es/app/`; al pie de cada página, en *Mantente al
+  día*, después de los sitios de las dos revistas, y en el menú del celular, en *Más*) tiene los pasos para
+  cada teléfono y navegador, y abre los del teléfono de quien la visita («Tu dispositivo»). En Chrome y
+  Samsung Internet (Android) basta un toque en **Instalar** (no «Crear acceso directo»); en iPhone, Safari →
+  **Menú de página** (iOS 27) o **Más** (iOS 26) → **Compartir** → **Agregar a Inicio**, con **Abrir como app
+  web** activado. Para pasarla a un grupo, envíen el enlace `https://mkp715.github.io/AAGrapevine/es/app/`.
+  En los celulares, un aviso discreto la ofrece a partir de la tercera página visitada (la segunda si el
+  navegador permite instalarla con un toque); «Ahora no» = 30 días, y nunca aparece dentro de otras apps, sin
+  conexión ni en la app ya instalada.
+- **Usar sin conexión:** menú **Aa** (arriba en cada página) → **Sin conexión y app** → **Guardar páginas
   clave** (Inicio, Reuniones, el kit del mes, Comparte tu historia, Tienda, Accesibilidad y RLV / GVR 101),
   que luego se abren sin señal; las páginas que se abren también se guardan (las últimas 80). El **Ahorro de
   datos** apaga las imágenes, las vistas previas de video y el arte animado. Detalles:
@@ -59,8 +74,12 @@ Sitio web del **Comité de Grapevine y La Viña del Área 65 del Noreste de Texa
   **Corregir una traducción:** `data/translations/overrides.yml`.
 - **Eventos sin volante** (talleres, asambleas): un archivo en `content/events`. Si todavía faltan
   detalles, `tentative: true` muestra "Detalles por confirmar"; el lugar en español va en `location_es`.
-- **¿Funciona todo?** Página **/es/status/** del sitio, o la pestaña **Actions** en GitHub.
-  **Actualizar ya:** GitHub → **Actions** → **Update & Deploy** → **Run workflow**.
+- **¿Funciona todo?** Página **/es/status/** del sitio (junto a *Cita del día*: a qué hora llegaron las
+  citas de hoy), o la pestaña **Actions** en GitHub.
+  **Actualizar ya:** GitHub → **Actions** → **Update & Deploy** → **Run workflow**. **Poner ya la cita de
+  hoy:** **Actions** → **Morning check** → **Run workflow** (solo hace lo que falta: desde las 4 a. m., hora
+  del Centro, si la revista ya publicó la cita, la trae; si no, lo dice; si otra actualización está en curso,
+  primero la espera).
 
 Las instrucciones detalladas están abajo (en inglés); puede usar el traductor de su navegador.
 
@@ -68,8 +87,9 @@ Las instrucciones detalladas están abajo (en inglés); puede usar el traductor 
 
 ## The short version
 
-| Every morning (≈ 5 AM Central) the site automatically… | You only… |
+| Every day the site automatically… | You only… |
 |---|---|
+| puts the new day and the Grapevine and La Viña **daily quote** up by **5:30 AM Central** (with the [morning alarm](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)) | *(once)* set up the morning alarm — about 15 minutes |
 | picks up new **Grapevine** and **La Viña** magazine stories | **upload files** to the committee's Google Drive folders (flyers, reports, notes, slides, photos) |
 | searches **aagrapevine.org** and **aalavina.org** for every **PDF** (flyers, catalogs, GVR/RLV kits, order forms…) | *(optional)* change a setting in **`config/site.yml`** |
 | adds new episodes of **both podcasts**, new **YouTube** videos and **Instagram** posts | |
@@ -93,7 +113,7 @@ No paid services, no passwords or API keys required.
 7. [Running the update right now](#7-running-the-update-right-now)
 8. [Is everything working?](#8-is-everything-working)
 9. [Instagram: how the site reads it (please read)](#9-instagram-how-the-site-reads-it-please-read)
-10. [Optional upgrades](#10-optional-upgrades) (Google API key · Instagram token · monthly e-mail)
+10. [Optional upgrades](#10-optional-upgrades) (Google API key · Instagram token · monthly e-mail · the morning alarm)
 11. [First-run checklist](#11-first-run-checklist) (and what to expect on day 1)
 12. [Using your own address (custom domain)](#12-using-your-own-address-custom-domain)
 13. [Replacing the old site](#13-replacing-the-old-site)
@@ -106,10 +126,22 @@ No paid services, no passwords or API keys required.
 
 ## 1. What updates automatically
 
-Every day at about **5:17 AM Central** (4:17 AM in winter) GitHub runs the **Update & Deploy** job.
-A short second run at about **7:07 AM Central** (6:07 AM in winter) picks up the Grapevine and La Viña
-**daily quote**, which is out before 6 AM Texas time.
-It also runs within a few minutes whenever someone saves a change to the settings or content.
+**With the [morning alarm](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended) set up, by 5:30 AM
+Central every day** the new day's dates and both **daily quotes** are on the site (unless a magazine
+publishes its quote later than that): at 4:30 AM the alarm starts the **Morning check**, which runs a short
+**morning refresh** of the **Update & Deploy** job (the daily quote, Google Drive, the bulletin and the
+podcasts — on the 1st also the new magazine issues, on the 1st and the 15th the Book of the Month; about
+3 minutes) and checks the live site. If a magazine has not published its quote yet, it asks again every
+10 minutes until 7 AM (after that, each Morning check asks once). Without the alarm, GitHub's own hourly
+backstop starts the Morning check whenever GitHub gets to it — often hours late.
+
+The **full update** (every source, the PDF search) runs once a day on GitHub's own schedule, at 5:17 AM
+Central (4:17 AM in winter) when GitHub is on time — lately GitHub starts timed runs hours late — and a
+second, short run, the **midday refresh**, is scheduled for 7:07 AM (6:07 AM in winter): it usually starts
+around midday, because GitHub runs late. On the 1st of
+the month, and after a day GitHub skipped, the Morning check also starts the full update — even when
+today's quotes were already on the site. The site also updates within a few minutes whenever someone saves
+a change to the settings or content (a page may take up to about 10 more minutes to show it everywhere).
 
 | Source | What the site gets | Where it shows |
 |---|---|---|
@@ -124,18 +156,19 @@ It also runs within a few minutes whenever someone saves a change to the setting
 | **Editorial calendar** (Grapevine) and suggested topics (La Viña) | Upcoming themes and story deadlines | **Contribute** |
 | **Grapevine Weekly Open meeting** (web page) | Current day, time and Zoom details | **Meetings** |
 | **La Viña's weekly open meeting** (from the settings, `lavina_weekly_open:` — an official La Viña flyer) | Thursdays in Spanish, first date, Zoom details | **Meetings** (one line on Home · Listen · Watch · monthly posters) |
-| **Official stores** (aagrapevine.org / aalavina.org store pages) | **Book of the Month** (title, cover, percent, sale price, dates) and **subscription prices** per region (U.S. · Canada · International; print / digital / complete) | **Shop** (a short teaser on Home, the monthly posters and the monthly digest) |
+| **Official stores** (aagrapevine.org / aalavina.org store pages) | **Book of the Month** (title, cover, percent, sale price, dates) and **subscription prices** per region (U.S. · Canada · International; print / digital / complete) | **Shop** (a short teaser on Home, the monthly posters and the monthly toolkit) |
 | **Daily quote** (the home pages of aagrapevine.org and aalavina.org) | Grapevine's *Daily Quote* and La Viña's *Cita Diaria*: the quote as published (never translated), who said it, the book it comes from, the official e-mail sign-up | **Home** |
 | **Record your story by phone** (aagrapevine.org/audio-portal, aalavina.org/graba-tu-historia) | Grapevine's *Audio Project* and La Viña's *Graba tu historia*: the phone number, the keys to press, the length, the e-mail address for recordings, Grapevine's story playlists | **Share your story** (`/contribute/#record`; one link on Listen · Watch) |
 | **Committee meeting** (from the settings) | Next dates, countdown, "add to calendar" | **Meetings · Events** |
 | **Local meeting lists** (the 8 intergroup / central office lists the Rowlett Group's meeting page uses — in or at our Area: Dallas Intergroup, Fort Worth Central Office, Tyler Central Service Office, the Spanish-speaking Dallas office, District 71 Abilene; nearby: Arkansas Central Office, OKC Intergroup, Northwest Texas Area 66) | Every meeting with the Grapevine ("GR") type: day, time, place, directions, link to the office's page. A meeting in two lists is shown once; our Area first (by county), nearby areas after | **Meetings** (one line on Home; each meeting is in the site search) |
-| **Monthly events** (from the settings, e.g. our booth at CityWide Dallas) | The next dates, "add to calendar" | **Events · Home · Meetings · calendar feed · monthly digest** |
+| **Monthly events** (from the settings, e.g. our booth at CityWide Dallas) | The next dates, "add to calendar" | **Events · Home · Meetings · calendar feed · monthly toolkit** (and, once it has taken place, the monthly digest) |
 | **Other calendars** (optional, e.g. the NETA 65 workshop calendar on neta65.org) | Their events, each shown **once** even when it is also in `content/events` (yours wins). *neta65.org currently blocks robots — see [the NETA 65 workshop calendar](#the-neta-65-workshop-calendar)* | **Events** |
 | **Translation** | Every title, teaser and bulletin post in both languages | Everywhere |
 
 The site also offers, automatically: a **What's New** page (the newest items from every source),
 an **RSS feed**, a **calendar file** your phone can subscribe to, **QR posters** for districts (with the committee meeting on them),
-a **search** page, and a **status** page that shows the health of every source. **Shop** is the one
+a **search** page, and a **status** page that shows the health of every source (and when each morning's
+daily quotes came in). **Shop** is the one
 page for subscribing and buying (every purchase links to the official Grapevine / La Viña stores;
 the old `/subscribe/` address redirects there, #anchors included).
 
@@ -147,13 +180,27 @@ What the newer pages do:
 - **Subscriptions & prices** (`/shop/#subscriptions`): a switch for magazine × region (U.S., Canada,
   International) with every term's price as the stores list it, volume prices, gift subscriptions (Carry the
   Message), home-group order forms and catalogs. Links like `/shop/?pub=lv#subscriptions` open La Viña's prices.
-- **Monthly toolkit** (`/monthly/`): the "10 ways to put an issue to work" guide
-  (`config/carry.yml`), and a page for this month and each of the next 12 — the issue themes, tips, story
-  deadlines, dates (committee meeting, the CityWide booth, workshops) and a **poster** in its own seasonal
-  design to download as a PNG for WhatsApp / Instagram (1080 × 1350), share, or print on one letter page.
-  Its QR code opens that month's page; the three previous months' addresses forward to `/monthly/`.
-  The same page holds the **GV/LV report** for district meetings (`/monthly/#report`, see section 4); the old
-  `/districts/` address forwards there.
+- **Monthly toolkit** (`/monthly/`) — everything current for this month: the "10 ways to put an issue to
+  work" guide (`config/carry.yml`), and a page for this month and each of the next 12 — the issue themes, tips,
+  story deadlines, dates (committee meeting, the CityWide booth, workshops), the Book of the Month and a
+  **poster** in its own seasonal design to download as a PNG for WhatsApp / Instagram (1080 × 1350), share, or
+  print on one letter page. Each month's page also has the month **as a message** — the same toolkit as text
+  with its links, in one language or both, with *Copy for WhatsApp* / *Copy for e-mail* — and how many
+  stories each magazine issue has on the site, with a link to them. **This month's** page also shows what is
+  live now: a date is marked "Over" as soon as it ends, even between updates, and the next update moves it
+  under "Earlier in …"; once the month's committee meeting is over, the next one; a newer issue that is
+  already out; and "Keep up all month" (the daily quote, What's New, the bulletin, Instagram, subscriptions).
+  `/monthly/`'s "This month" card drops a date once it is over and shows the next committee meeting. A page
+  left open after the month ends says so and links the new month. Its QR code opens that month's page; the
+  three previous months' addresses forward to `/monthly/`. The same page holds the **GV/LV report** for
+  district meetings (`/monthly/#report`, see section 4); the old `/districts/` address forwards there.
+- **Monthly digest** (`/digest/`) — everything from last month on one page (the *September 2026 digest* all
+  through October): bulletin posts, the events that took place, the committee's files and photo albums added
+  that month, the magazines' new stories, writers from Area 65 & Texas, podcasts, videos, the magazines'
+  Instagram posts (how many each account shared, the newest ones and a link to the site's Instagram page) and
+  documents — with one link to this month's toolkit, and *Copy for WhatsApp* / *Copy for e-mail* in one
+  language or both. The monthly e-mail ([section 10 c](#c-monthly-e-mail-digest-keep-every-district-informed))
+  is the same edition.
 - **GVR / RLV 101** (`/orientation/`): the orientation for new GVRs and RLVs — six short lessons (5–8 minutes
   each: goal, key points, "try this at your group", a live example from the site's own data, official links and
   a 3-question self-check with instant feedback; "lessons done on this device" is kept in the browser only),
@@ -180,8 +227,10 @@ corner) · **Committee** (Meetings — committee meeting, Grapevine meetings & w
 Portfolio — the committee's reports, notes, slides and workshop files, `/portfolio/` —, photos, bulletin).
 The Portfolio was called *Committee documents* (`/documents/`); that address forwards to `/portfolio/`, `#anchors` included.
 The Bulletin was called *Announcements* (`/announcements/`); that address forwards to `/bulletin/` the same way.
-Instagram and QR Post (`/share/`) are in the footer's *Stay updated* column; accessibility, saved pages,
-search and status in its bottom bar; the phone menu lists them all under *More*.
+Install as an app (`/app/`), Instagram and QR Post (`/share/`) are in the footer's *Stay updated* column,
+after the two magazine sites; accessibility, Saved pages (`/offline/`), search and status in its bottom
+bar; the phone menu lists them all under *More*, Install as an app first (inside the installed app, the
+"Install as an app" links are hidden).
 Each piece of information has one home page; other pages only link to it.
 
 **Wording on the site** (both languages): visitors read "document(s)" / "documento(s)", never "PDF", and
@@ -239,7 +288,11 @@ Bulletin page (`/bulletin/`, under *Committee*); the file name is the headline a
 |---|---|
 | `2027-01-10 Welcome new GVRs` | Headline "Welcome new GVRs", dated Jan 10, 2027 |
 | `2027-01-10 Welcome new GVRs (pinned)` — or `(fijado)` | Stays at the top |
+| `Spring Assembly sign-ups (from 2027-02-01)` — or `(desde 2027-02-01)` | Stays off the site until Feb 1, 2027, and appears with that morning's update (by 5:30 AM with the morning alarm) |
 | `Summer schedule (until 2027-08-31)` — or `(hasta 2027-08-31)` | Disappears by itself after Aug 31 |
+
+A scheduled post is kept off the site, not hidden: the Drive folder is shared with anyone who has its link,
+so the document can be opened there before its day.
 
 **Documents.** A date at the start of any file name sets its date: `2027-03-14 Area report.pdf`.
 Dates can also be written `03-14-2027`, `March 14, 2027` or `14 de marzo de 2027`.
@@ -269,7 +322,8 @@ All settings live in **one file**: [`config/site.yml`](config/site.yml). To edit
 2. Change the value after the colon. **Keep the spaces at the start of each line exactly as they are**
    (YAML uses indentation), and keep quotes around text that has them.
 3. Click **Commit changes…** → **Commit changes**.
-4. The site rebuilds automatically in about **10–20 minutes** (watch it in the **Actions** tab).
+4. The site rebuilds automatically in **a few minutes** (watch it in the **Actions** tab; a page may take
+   up to about 10 more minutes to show the change everywhere).
 
 Common changes:
 
@@ -324,7 +378,8 @@ To add another one, copy the whole block (from `- key:` down), paste it under th
 change the values. Every date then shows on the **Events** page (with an "Every month" badge); the
 next one always keeps a place in the home page's **Upcoming events** row (the other places go to the
 soonest workshops and other events, so a busy month never pushes the booth off the home page), and it
-is on the **Meeting** page and in the **monthly digest**; all of them are in the **calendar feed** — in
+is on the **Meeting** page and in the **monthly toolkit** (the month's page, poster and message); once it
+has taken place it is in that month's **monthly digest**; all of them are in the **calendar feed** — in
 both languages, with daylight-saving time handled. Write the Spanish
 yourself (`title_es`, `summary_es`); if you leave it out, the site translates the English
 automatically and marks it "auto-translated". A monthly event never shows as "New" and does not,
@@ -399,7 +454,7 @@ translation you want:
 Add names that must never be translated under `keep:` (for example a group's name) and AA terms
 that always need the same translation under `terms:`. Instructions are at the top of that file.
 
-Saving either file rebuilds the site in about 10–20 minutes.
+Saving either file rebuilds the site in a few minutes.
 
 ---
 
@@ -410,7 +465,8 @@ Drive is the easy way. If you prefer GitHub, you can also add a small text file:
 - **Bulletin post:** a Markdown file in [`content/bulletin/`](content/bulletin/README.md), e.g. `2027-01-10-welcome-gvrs.md`.
   It needs no header (the first `# heading` is the title, a date at the start of the file name is the date),
   pictures and PDFs saved next to it can be linked by name, and [`_example.md`](content/bulletin/_example.md)
-  shows every option.
+  shows every option. To post it on a later day, add `publish: 2027-02-01` to the header: it stays off the
+  site until that morning's update (the file itself is public in the repository as soon as it is saved).
 - **Event without a flyer:** a Markdown file in [`content/events/`](content/events/README.md).
 
 Each folder's README shows a copy-and-paste example. English or Spanish — it is translated automatically.
@@ -437,8 +493,8 @@ The event shows a **"Details to be confirmed"** badge everywhere and calendar ap
 3. Correct `start:` / `end:` if the dates changed, and update the description and `summary_es:`
    (the host districts, the format …). Add `url:` with the event's page on neta65.org if there is one.
 4. **Delete the `tentative: true` line.**
-5. **Commit changes.** About 10–20 minutes later the Events page, the home page, the digest and
-   everyone's subscribed calendar show it as confirmed, with the new place.
+5. **Commit changes.** A few minutes later the Events page, the home page and the monthly toolkit show it
+   as confirmed, with the new place; subscribed calendars follow the next time they refresh.
 
 (A date change only needs the file renamed if you want the name to match; the site reads the date
 from `start:`.)
@@ -484,15 +540,29 @@ After that, nothing needs changing here: the next daily update reads it, and the
 3. Click **Run workflow** (right side) and choose:
    - **crawl_minutes** — how long to search aagrapevine.org / aalavina.org for PDFs.
      Leave it **empty** to use the daily setting (normally 40 minutes). Use up to `300` only for a
-     big catch-up (see the [first-run checklist](#11-first-run-checklist)).
-   - **skip_crawl** — tick it for a **quick refresh** (about 10–20 minutes): only **Google Drive**,
+     big catch-up (see the [first-run checklist](#11-first-run-checklist)) — and start it in the morning
+     or early afternoon, never in the evening: it runs up to 6 hours, and the next morning's refresh
+     would have to wait behind it.
+   - **skip_crawl** — tick it for a **quick refresh** (a few minutes): only **Google Drive**,
      the **bulletin**, the **podcasts** and the **daily quote** are updated. Videos, magazine stories, Instagram and
      PDFs wait for the next daily run.
+   - **morning** — the **morning refresh** the Morning check starts every morning: the new day's dates,
+     the daily quote, Google Drive, the bulletin and the podcasts (on the 1st also the new magazine issues,
+     on the 1st and the 15th the Book of the Month), published in about 3 minutes. Ticked, it wins over
+     the two fields above.
 4. Click the green **Run workflow** button. A normal run takes about an hour in total (the PDF
    search waits 5 seconds between pages, as the sites ask); a 300-minute catch-up about 6 hours.
    You can close the page — it runs on GitHub's computers.
 
 Saving any settings or content file starts a quick update automatically — no need to do this by hand.
+
+**Put today's quote up now:** **Actions → Morning check → Run workflow**. It only does what is missing:
+when the site does not have today's update yet, it starts the morning refresh; when only a magazine's quote
+is missing, it asks that magazine (from 4 AM Central — earlier, the 4:30 alarm does it —, every 10 minutes
+until 7 AM, once after that) and brings the quote as soon as it is out; otherwise it ends in a few seconds.
+When another update is already running (on the 1st, the full daily update), it waits for that one first —
+it reads the quote too — and then brings only what is still missing. Tick **check_only** to only see what
+is on the site and what it would do.
 
 **Stopping a run:** open it and click **Cancel workflow**. Everything it fetched so far is still
 saved (nothing has to be fetched again), but the website is only republished by the next run.
@@ -514,15 +584,31 @@ saved (nothing has to be fetched again), but the website is only republished by 
   links a podcast the website does not show yet. Nothing is added by itself: to show it, add a
   `- key:` / `name:` / `feed:` entry like the two already under `podcasts:` in `config/site.yml`
   (or send the address to whoever helps with the website).
+- **The Morning check** (**Actions → Morning check**): each morning's run says when today's update went
+  live — "✅ Today's update is on the site since **4:34 AM CDT** — goal 5:30 AM" (a check that found it
+  already there says when the latest build is from) — with the day of each quote and the Update & Deploy
+  run it started. A red ✗ means today's update did **not** reach the site (GitHub e-mails whoever started
+  the check — for the alarm, the owner of its key); green with a yellow note means only a magazine's quote
+  was late at the source (the note says when the magazine was last asked; the site shows the last quote,
+  labelled "Yesterday", until the new one comes in). Runs that had nothing to do — today's update was
+  already there, or it was too early to ask a magazine — are deleted after a day. On the **Status** page,
+  the *Daily quote* row says when today's quotes came in (or which one has not yet), against the goal,
+  and *Technical details* at the bottom shows the last 7 mornings.
+- **In the Update & Deploy run summary** you also find **Bulletin files to fix** / **Event files to fix**
+  (a file in `content/bulletin` or `content/events` that could not be read — the rest of the site still
+  updated), **Scheduled bulletin posts** (posts waiting for their `publish:` / "(from …)" day) and the
+  **Daily quote** line (the day of each quote now on the site).
 - **The badge** at the top of this page is green when the last update succeeded.
 - **"Code check" runs:** when a settings, content or code file is saved, a **Code check** run also
   appears next to **Update & Deploy**. It builds a test copy of the site and runs the automatic tests;
   nothing is published. A red ✗ there means that change broke something: undo it from the file's
   **History** (or send the run to whoever helps with the website). The live site keeps working either way.
 - **E-mail when a run fails:** GitHub → your picture → Settings → Notifications → *Actions* →
-  "Only notify for failed workflows". **Good to know:** e-mails about the *daily* run go to the
-  person who last switched the workflow on. To make sure they come to **you**: **Actions** →
-  **Update & Deploy** → **⋯** (top right) → **Disable workflow**, then **Enable workflow**.
+  "Only notify for failed workflows". **Good to know:** e-mails about the *timed* runs go to the
+  person who last switched each workflow on. To make sure they come to **you**: **Actions** →
+  **Update & Deploy** → **⋯** (top right) → **Disable workflow**, then **Enable workflow** — and the same
+  for **Morning check** (its hourly backstop) and **Monthly e-mail digest** (if it is used). The runs the
+  morning alarm starts e-mail the owner of its key.
 - **An issue when a source stops updating:** if the same source (for example Google Drive) has not
   updated for **7 days**, the site opens one issue titled **"A content source has stopped
   updating"** in this repository's **Issues** tab, explaining what to check. GitHub e-mails it to
@@ -561,9 +647,11 @@ the caption or picture). Instructions are at the top of that file.
 
 ## 10. Optional upgrades
 
-None of these are needed. Each one is a **GitHub secret** — a private value only the workflows can
+None of these are needed. a) to c) are each a **GitHub secret** — a private value only the workflows can
 read. To add one: repository **Settings** → **Secrets and variables** → **Actions** →
 **New repository secret** → enter the **Name** exactly as shown and the **Secret** → **Add secret**.
+d), the morning alarm, is set up outside GitHub (its key never goes into the repository) — and it is the
+one we recommend.
 
 ### a) Google API key: exact dates for Drive files
 
@@ -626,18 +714,27 @@ changed format — that office's previous meetings stay on the site until it wor
 
 ### c) Monthly e-mail digest: keep every district informed
 
-On the **1st of every month** (around 9–10 AM Central) the site can e-mail a clean **English + Spanish**
-edition — the same one GVRs copy from the **Monthly digest** page (`/digest/`):
+Early each month the site can e-mail a clean **English + Spanish** recap of **last month** — the same
+edition GVRs copy from the **Monthly digest** page (`/digest/`, which shows the *September 2026 digest* all
+through October):
 
-- **last month's news:** bulletin posts, podcast episodes (a YouTube upload of the same episode is shown
-  once, with an "also on YouTube" link), other videos, new documents and committee files, and stories by
-  writers from Area 65 and the rest of Texas;
-- **this month:** the Grapevine and La Viña issues (theme, number of stories, a few highlights — free
-  to read first), up to 3 "put it to work" tips from `config/carry.yml` and the link to the month's
-  toolkit; the next committee meeting with its Zoom link; the events that are not over yet, the weekly
-  open meetings and how many Grapevine meetings there are near you;
-- story deadlines through the end of next month, La Viña's open topics, the phone story lines, the
-  Book of the Month, the lowest month-to-month subscription price and a pointer to the daily quote.
+- the bulletin's posts, the events that took place (the committee meeting included), and the committee's
+  files and new photo albums added that month (a report named after an earlier meeting too, with its own date);
+- the Grapevine and La Viña issues whose stories came out online that month: theme, number of stories, a few
+  highlights (free to read first) and a link to all of them;
+- stories by writers from Area 65 and the rest of Texas;
+- podcast episodes (a YouTube upload of the same episode is shown once, with an "also on YouTube" link),
+  other videos, the magazines' **Instagram** posts (how many each account shared, the newest ones and a link
+  to the site's Instagram page) and new documents;
+- and **one link**, "Coming up in October", to this month's page of the **Monthly toolkit**
+  (`/monthly/2026-10/` in October) — the home of everything current: the committee meeting (with a link to
+  its Zoom details on Meetings), the events still to come, the weekly open meetings, story deadlines and
+  La Viña's topics, this month's issues and tips, the Book of the Month and subscriptions.
+
+It goes out **once**, on the **1st from 7 AM Central**, as soon as the site's first full update of the month
+has run (the Morning check starts it early on the 1st), so the month's last items are in it — usually on the
+1st. If that update is late, it tries again later that day and on the 2nd; from **noon on the 3rd** it goes
+out with the data there is. (GitHub starts these scheduled runs late, sometimes by hours — that is normal.)
 
 Send it to one **Google Group** that includes all DCMs / GVRs / RLVs, and the districts get it
 without anyone lifting a finger.
@@ -660,19 +757,91 @@ without anyone lifting a finger.
 | `DIGEST_REPLY_TO` | *(optional)* where replies go (default: `contact_email` in the settings) |
 
 4. **Preview first:** Actions → **Monthly e-mail digest** → **Run workflow** (leave *Preview only* ticked) →
-   open the finished run → **Artifacts** → download **digest-preview** → open `digest.html`. Type a month
-   such as `2026-11` in the *month* box to preview another edition (written exactly like that: a month
-   typed any other way — `2026-9`, `Oct` — stops the run, and nothing is sent).
-5. To send one right away, run it again with *Preview only* **unticked**.
+   open the finished run → **Artifacts** → download **digest-preview** → open `digest.html`. The *month* box
+   is the month the digest **covers**: empty = last month; `2026-09` = the September digest (the one sent on
+   October 1). Write it exactly like that: a month typed any other way — `2026-9`, `Oct` — stops the run,
+   and nothing is sent.
+5. To send one right away, run it again with *Preview only* **unticked**. A manual send goes at once (with the
+   data there is — it does not wait for the update) and counts as that month's e-mail, so the scheduled tries
+   then skip it. Like a scheduled try, it sends nothing when nothing was new that month.
 6. If a run ever fails with **"It MAY have been sent"**, the connection broke while the e-mail was being
    handed over: check the Google Group (or a district's inbox) **before** running it again, so nobody
    gets it twice. Other failures (wrong password, server not reachable) happen before anything is sent
    and are safe to re-run.
 
 How many stories each magazine issue shows and how many items each list shows before "and N more" are
-set in `config/site.yml` → `digest:` (`highlights`, `per_section`). The meeting box uses the same
-`meeting:` settings as the website, including your `note` (and `note_es`, if you add one). If nothing
-was new last month, no e-mail is sent. To stop the digest, delete the `SMTP_PASSWORD` secret.
+set in `config/site.yml` → `digest:` (`highlights`, `per_section`). If nothing was new last month, no
+e-mail is sent. To stop the digest, delete the `SMTP_PASSWORD` secret.
+
+### d) The morning alarm: today's quote on the site by 5:30 AM (recommended)
+
+**Why:** GitHub starts the site's own timed runs when it has room. Since late August 2026 that is often
+4 to 8 hours late, so without help the new day's quote may reach the site only in the afternoon. The
+morning alarm is a free outside alarm clock that presses the site's **Morning check** button at
+**4:30 AM Central** every day. The Morning check puts the new day and both daily quotes on the site within
+minutes, and does nothing when they are already there. Setting it up takes about 15 minutes, once. Sign in
+to GitHub as **the owner of the repository**.
+
+**Part 1 — a key for the site's workflows only (GitHub)**
+
+1. Click your picture (top right) → **Settings** → at the bottom of the left menu **Developer settings** →
+   **Personal access tokens** → **Fine-grained tokens** → **Generate new token**.
+2. Fill in:
+   - **Token name:** `Morning alarm`
+   - **Description:** `cron-job.org starts the Morning check of the GV/LV website at 4:30 AM Central`
+   - **Resource owner:** the account that owns AAGrapevine.
+   - **Expiration:** *Custom* → one year from today. **Write that date in your calendar**, with a reminder a
+     week before: on that date the alarm stops until the key is renewed ([Housekeeping](#14-housekeeping)).
+   - **Repository access:** *Only select repositories* → **AAGrapevine**.
+   - **Permissions → Repository permissions → Actions → Read and write**. Nothing else (GitHub adds
+     *Metadata: Read-only* by itself).
+3. **Generate token** → copy it (it starts with `github_pat_`). GitHub shows it only once, so keep the page
+   open until Part 2 is done. **Never** paste it into a file of the repository, an issue or an e-mail.
+
+**Part 2 — the alarm clock (cron-job.org: free and open source)**
+
+1. Go to <https://cron-job.org> → **Sign up** with the committee's e-mail address → confirm it → sign in.
+2. **Cronjobs** → **Create cronjob**:
+   - **Title:** `GV/LV website — Morning check`
+   - **URL:** `https://api.github.com/repos/MKP715/AAGrapevine/actions/workflows/morning.yml/dispatches`
+   - **Execution schedule:** every day at **4:30**.
+   - **Notifications:** tick "execution fails" and "succeeds after previously failing".
+3. The **Advanced** tab:
+   - **Time zone:** `America/Chicago` (it follows daylight saving by itself)
+   - **Request method:** `POST`
+   - **Headers** (Key → Value):
+     - `Accept` → `application/vnd.github+json`
+     - `Authorization` → `Bearer ` and the key (one space after *Bearer*)
+     - `X-GitHub-Api-Version` → `2022-11-28`
+     - `Content-Type` → `application/json`
+   - **Request body:** `{"ref":"main"}`
+4. **Create**, open the job → **Test run**. The answer must be **204** ("OK, started"). On GitHub,
+   **Actions → Morning check** now shows a new run (it may simply say the site is already up to date).
+5. Close the page that shows the key.
+
+**See that it works:** the next mornings, **Actions → Morning check** → the day's run says "on the site
+since 4:34 AM CDT — goal 5:30 AM", and the **Status** page says when today's quotes came in.
+
+**If cron-job.org e-mails a failure**, open the job's **History**:
+
+| Answer | Meaning | What to do |
+|---|---|---|
+| **401** | The key expired or was deleted | Make a new key (Part 1) and replace the *Authorization* value |
+| **403** | The key's *Actions* permission is not *Read and write* | Edit the key (**Settings → Developer settings → Personal access tokens → Fine-grained tokens → Morning alarm**): **Permissions → Actions → Read and write** |
+| **404** | The repository or the workflow file was renamed (or the key cannot see the repository) | Fix the URL; check the key's *Repository access* |
+| **422** | The body is not exactly `{"ref":"main"}`, or the Morning check is switched off | Correct the request body; or **Actions → Morning check → Enable workflow** |
+
+Meanwhile the site still updates, only later in the day.
+
+**Stop the alarm:** disable the job at cron-job.org, then delete the key under **Developer settings**.
+The key can do what this repository's **Actions** tab can: start, re-run, cancel and delete its workflow
+runs (and their logs), clear its caches, switch its workflows on or off and change a few Actions settings.
+It cannot change the site's files or secrets — but it could, for example, send the monthly e-mail to every
+district again, or start hours-long searches of the magazines' websites. **If it ever leaks** (it was
+pasted somewhere others can see), delete it at once, look in **Actions** for a workflow that was switched
+off (**Enable workflow**), and make a new key (Part 1). Any scheduler that can send the same request works
+too — for example a Google Apps Script timer in the committee's Google account, or a scheduled task on a
+computer that is on at 4:30 AM.
 
 ---
 
@@ -695,6 +864,8 @@ details are in **[docs/SETUP-GITHUB.md](docs/SETUP-GITHUB.md)**:
 - [ ] When the run shows a green ✓, open the website and its **Status** page.
 - [ ] *(Recommended)* Turn on failure e-mails, and make sure they come to you (see
   [section 8](#8-is-everything-working)).
+- [ ] *(Recommended)* Set up the [morning alarm](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)
+  and press its **Test run** once (the answer must be 204).
 
 ### What to expect on day 1
 
@@ -739,9 +910,12 @@ artwork live on in the new design. Pick **one** of these:
 2. On this repository: **Settings → General → Danger Zone → Transfer ownership** → to `neta65`.
 3. After the transfer: **Settings → General** → rename `AAGrapevine` to `Grapevine`.
 4. Re-check **Settings → Pages** (Source: GitHub Actions), the **Actions** permissions, and any
-   secrets (see [docs/SETUP-GITHUB.md](docs/SETUP-GITHUB.md)). Then switch **Update & Deploy** off
-   and on again (**Actions → Update & Deploy → ⋯ → Disable workflow**, then **Enable workflow**)
-   so the failure e-mails go to the new owner.
+   secrets (see [docs/SETUP-GITHUB.md](docs/SETUP-GITHUB.md)). Then switch **Update & Deploy**,
+   **Morning check** and **Monthly e-mail digest** off and on again (**Actions → the workflow → ⋯ →
+   Disable workflow**, then **Enable workflow**) so the failure e-mails go to the new owner. Redo the
+   [morning alarm](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended):
+   a new key with `neta65` as *Resource owner* (the organisation must allow fine-grained keys: its
+   **Settings → Personal access tokens**), and the new address `…/repos/neta65/Grapevine/…` in the job's URL.
 5. In `config/site.yml` set `url: "https://neta65.github.io/Grapevine"` and update the address in
    `sources: → crawler: → user_agent`.
 6. Run **Update & Deploy**. The site is live at the old address; bookmarks keep working.
@@ -768,21 +942,38 @@ the new **Events** page, in Spanish if they had chosen Spanish on the old site.
   A private repository gets 2,000 free minutes a month, which the daily update would use up.
 - **The 60-day rule.** GitHub pauses scheduled workflows in a public repository after 60 days
   without activity. The daily data commit counts as activity, so this should never happen. If it
-  ever does: **Actions → Update & Deploy → Enable workflow**.
+  ever does: **Actions → Update & Deploy → Enable workflow**, and the same for **Morning check** and
+  **Monthly e-mail digest** (a switched-off Morning check also turns the morning alarm away: 422).
 - **Dependabot pull requests.** Once a month GitHub may open a pull request titled
   `chore(actions)…` or `chore(deps)…` that updates the building blocks. A few minutes later the
   **Code check** has built the website with the update and run the tests: **merge only if the pull request
   shows a green ✓**. If it shows a red ✗, leave it open (or close it) — the live site is not
   affected. After merging, glance at the next **Update & Deploy** run; if it is red, open the merged
   pull request and click **Revert**.
-- **Who gets the failure e-mails.** E-mails about the daily run go to the person who last switched
-  the workflow on (or last changed its schedule). When a new chair takes over, or after moving the
-  repository, the person who should receive them opens **Actions → Update & Deploy → ⋯ →
-  Disable workflow**, then **Enable workflow** (and turns on the e-mails, see
-  [section 8](#8-is-everything-working)).
+- **Who gets the failure e-mails.** E-mails about the timed runs — Update & Deploy, the Morning check's
+  hourly backstop, the Monthly e-mail digest — go to the person who last switched each workflow on (or
+  last changed its schedule). When a new chair takes over, or after moving the repository, the person
+  who should receive them opens **Actions → Update & Deploy → ⋯ → Disable workflow**, then **Enable
+  workflow**, and does the same for **Morning check** and **Monthly e-mail digest** (and turns on the
+  e-mails, see [section 8](#8-is-everything-working)). The runs the morning alarm starts e-mail the owner
+  of its key.
 - **Repository size** grows slowly (data files and small preview pictures). That is expected; see
   [docs/OPERATIONS.md](docs/OPERATIONS.md#repository-size) if it ever passes about 1 GB.
-- **Daily data commits** by `github-actions[bot]` ("chore(data): daily content sync …") are normal.
+- **Daily data commits** by `github-actions[bot]` ("chore(data): daily content sync …", "… morning refresh
+  with the daily quote …", "… midday refresh …") are normal.
+- **Renew the morning alarm's key once a year**, about a week before the date in your calendar (on that
+  date it stops working): **Settings → Developer settings → Personal access tokens → Fine-grained tokens
+  → Morning alarm → Regenerate token** → **Expiration:** *Custom* → one year from today → **Regenerate
+  token**, then paste the new key after `Bearer ` in the cron-job.org job's *Authorization* header, press
+  **Test run** (204) and write the new date in your calendar. The key must be made by the repository's
+  **owner** (a key only reaches its owner's repositories): when the chair changes, the owner keeps — or
+  remakes — it; if the repository moves ([section 13](#13-replacing-the-old-site)), make a new key with the
+  new owner as *Resource owner* and change the job's URL
+  ([10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)).
+- **Many Morning check runs** in the Actions tab are normal: GitHub's own schedule starts it every hour
+  through the night as a backstop. A run that had nothing to do (today's update was already there, or it was
+  too early to ask a magazine) takes a few seconds and is deleted the next day; the others stay, so you can
+  see what each morning did.
 
 ---
 
@@ -791,6 +982,10 @@ the new **Events** page, in Spanish if they had chosen Spanish on the old site.
 | What you see | Likely cause | What to do |
 |---|---|---|
 | The site did not change today | The run failed, is still running, or the schedule was paused | **Actions** tab: open the latest **Update & Deploy** run. If the workflow shows "disabled", click **Enable workflow**. Then **Run workflow**. |
+| Today's quote is not on the site at 5:30 AM | The morning alarm is not set up or failed; the magazine had not published it yet; or the morning refresh failed | **Actions → Morning check**: the day's run says which (a yellow "late at the source" note says when the magazine was last asked — the site shows yesterday's quote, labelled "Yesterday", until an update brings the new one). No run at 4:30 AM: check the alarm (cron-job.org's e-mail or the job's *History*). To bring it now: **Morning check → Run workflow** — from 4 AM Central it asks the magazine and brings the quote if it is out (earlier, the 4:30 alarm does it). If an update is already running — on the 1st, the full daily update — it waits for that run first (it reads the quote too) and then brings whatever it did not. |
+| cron-job.org e-mails that the alarm failed (401, 403, 404 or 422) | The key expired or was deleted (401), its *Actions* permission is not *Read and write* (403), the address changed (404), or the request body is wrong (422) | See [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended) → *If cron-job.org e-mails a failure*. Until it is fixed the site still updates, later in the day. |
+| Many **Morning check** runs in the Actions tab | Normal: GitHub's schedule starts it every hour through the night | Nothing to do: the runs that found nothing to do are deleted after a day. |
+| A bulletin post with `publish:` / "(from …)" is not on the site | Its day has not come yet (Central time), or its date could not be read | The **Update & Deploy** run summary lists it under *Scheduled bulletin posts*, or under *Bulletin files to fix* with the reason. |
 | One phone or computer shows an old page, or a page looks unstyled after an update | A copy the browser kept (the site works offline) | Reload the page; if the small "Updated" notice shows, choose **Reload**. Still wrong: close every tab of the site and open it again. Last resort on that device: browser settings → site data for the site → clear (its saved pages go too). |
 | Red ✗ right after editing a settings file | A typo in the YAML (usually indentation or a missing quote) | Open the failed run → the red step shows the line. Fix the file, or undo your change from the file's **History**. The live site is unaffected. |
 | A Drive file does not appear | Wrong folder, folder not public, name contains `PRIVATE`, it is a spreadsheet, or the update hasn't run yet | Check the file is inside the current Panel folder and the root folder is shared "Anyone with the link". Wait for the next run or run it manually. |
@@ -806,7 +1001,8 @@ the new **Events** page, in Spanish if they had chosen Spanish on the old site.
 | An issue "A content source has stopped updating" appeared | One source has not updated for 7 days (the site keeps its older items) | Open the issue: it names the source, the error and what to check (for Google Drive: is the folder still shared "Anyone with the link"?). It closes itself when the source works again. |
 | Yellow ⚠ "Translation models missing" or "Translation is not working" | The free translation models could not be downloaded (their website was down or moved) | New titles stay in their original language; nothing else is affected. If it lasts more than a few days, send the run's log to whoever helps with the website. |
 | Run fails at "Publish to GitHub Pages" with *environment protection* | The `github-pages` environment only allows certain branches | **Settings → Environments → github-pages** → allow the `main` branch. |
-| The monthly e-mail did not arrive | Secrets missing, wrong app password, or nothing new last month (it goes out on the 1st, around 9–10 AM Central) | Open the **Monthly e-mail digest** run: it says exactly which. Gmail needs an **app password**. |
+| The monthly e-mail did not arrive | Secrets missing, wrong app password, nothing new last month, or it is still waiting for the month's first full update (it goes out on the 1st from 7 AM Central once the site has updated — at the latest from noon on the 3rd) | Open the latest **Monthly e-mail digest** run: its summary says exactly which ("waiting for the data" means a later try sends it). Gmail needs an **app password**. To send it now, run it with *Preview only* unticked. |
+| Someone installed the site, but it opens in the browser (a small Chrome badge on its icon, or it opens in Safari) | It was added as a shortcut or a bookmark, not as the app | Send them `/app/`: on Android, remove the icon and choose **Install** (not "Create shortcut"); on iPhone, remove it and add it again with **Open as Web App** on. |
 | An issue "Broken links found by the weekly check" appeared | A link in the settings or in a `content/` file moved | Open the issue; fix the address in `config/site.yml` or the `content/` file. It closes itself when fixed. |
 
 Still stuck? Open the failed run, click the red step, copy the last 20 lines, and send them to
@@ -876,11 +1072,45 @@ visitor's own device; nothing is sent anywhere.
 
 **What to tell your group**
 
-- **Install it.** Open the **Aa** menu at the top of any page → **Offline & app** → **Install app**
-  (Chrome, Edge and Samsung Internet on Android, Windows, Mac and ChromeOS). **iPhone / iPad:** Safari →
-  **Share** → **Add to Home Screen**. **Safari on a Mac:** **File → Add to Dock**. The app is called
-  **GV/LV 65**, opens in its own window in the language it was installed from, and has shortcuts to
-  Meetings, Monthly toolkit and Listen (long-press or right-click the icon). The button hides once it is installed.
+- **Install it.** Send the group the **Install as an app** page: <https://mkp715.github.io/AAGrapevine/app/>
+  (Spanish: `/es/app/`). It is also in the footer's *Stay updated* column (the first of the site's own
+  links there, after aagrapevine.org and aalavina.org), first under *More* in the phone menu, and in the
+  **Aa** menu (**Offline & app** → **Install as an app**). The page opens the steps for the phone and
+  browser it is opened on, marked "Your device":
+  - Chrome and Samsung Internet on Android phones and tablets (and Chrome or Edge on a computer): one tap
+    on **Install**. Choose **Install**, not "Create shortcut": a shortcut opens in Chrome.
+  - Safari on iPhone and iPad: the menu next to the address bar — **Page Menu** on iOS 27, **More** on
+    iOS 26 — then **Share** (on older iPhones, and on iPads, the **Share** button itself) → **Add to Home
+    Screen**, with **Open as Web App** left on.
+  - Chrome, Edge or Firefox on iPhone or iPad (iOS 16.4 and later): **Share** (Chrome: the button at the
+    right of the address bar; Edge and Firefox: in the browser's menu) → **Add to Home Screen** → **Add**.
+  - Firefox, Edge and others on Android: the browser's menu → **Add app to Home screen** (Firefox: under
+    **More**) or **Add to phone** (Edge). The full app, with its own place in the list of apps, needs Chrome
+    or Samsung Internet.
+  - Safari on a Mac: **File → Add to Dock**.
+  - A link opened inside Facebook, Instagram, Messenger, TikTok, LinkedIn and similar apps can't be
+    installed. The page says so and shows how to open it in the phone's browser, with **Copy the link**.
+    WhatsApp opens a link either in the phone's browser (install right away) or in its own window; in its
+    own window the page says "You're reading this inside WhatsApp" and shows the same steps.
+
+  The app is called **GV/LV 65**. It opens in its own window, in the language it was installed from, and
+  has shortcuts to Meetings, Monthly toolkit and GVR / RLV 101 (touch and hold the icon on Android). Once
+  it is installed, the Aa menu says "The app is on this device" (where the browser can tell), and inside
+  the app the install links go away.
+- **The install notice.** On phones and tablets, a small notice at the bottom of the page says "Install this
+  site as an app", with **Install** (where the browser offers one-tap install) or **Show me how**, and
+  **Not now**. It appears after a visitor's 3rd page view (the 2nd with one-tap install), once they have
+  spent 20 seconds on a page and tapped or scrolled. It never shows inside other apps, in the installed
+  app, offline, on `/app/`, while typing, or together with the language banner, the podcast player, read
+  aloud, the Aa menu or the phone menu. How long it stays away:
+  - **Not now** (or Escape): 30 days; after two "Not now"s it never comes back.
+  - Reading the steps — a visit to `/app/`, **Show me how**, or the Aa menu's **Install as an app**: 30 days.
+  - Each time it shows and the visitor does neither: 7 days; after four showings it never comes back.
+  - Installed from that browser, or opened as the app in the last 90 days: not shown. If the app is later
+    removed and the browser offers one-tap install again, that is forgotten and the notice may return.
+
+  On a short screen (a phone held sideways) it shows just its title and its two buttons. It is remembered
+  on that device only (`localStorage "gvlv-app"`).
 - **Use it offline.** Every page opened on the device is kept (the last 80). **Save key pages for
   offline** (same menu) keeps Home, Meetings, this month's Monthly toolkit, Share your story, Shop,
   Accessibility and GVR / RLV 101, in the visitor's language, with their styles and scripts — a good
@@ -909,11 +1139,25 @@ download of the styles and scripts.
 
 | File | What it does |
 |---|---|
-| `src/pages/manifest.11ty.js` | `/manifest.webmanifest` and `/es/manifest.webmanifest`: name, icons, colours, shortcuts; both the same app (id and scope = the site's base path; the Spanish one opens on `/es/`) |
+| `src/pages/manifest.11ty.js` | `/manifest.webmanifest` and `/es/manifest.webmanifest`: name, icons, colours, shortcuts (Meetings, Monthly toolkit, GVR / RLV 101); both the same app (id and scope = the site's base path; the Spanish one opens on `/es/`), each naming both as `related_applications`, so Chrome on Android can tell a tab the app is installed |
 | `src/pages/sw.11ty.js` + `src/_includes/pwa/sw-core.js` | `/sw.js`: the cache rules are in the header comment of `sw-core.js`; the pages "Save key pages" keeps are the `save` list in `sw.11ty.js` (Accessibility and GVR 101 join it automatically once those pages exist) |
-| `src/assets/js/pwa.js`, `src/assets/css/areas/pwa.css` | registration and updates, the "Offline & app" part of the Aa menu, the notices, and everything Data saver does |
-| `src/pages/offline.njk` | the offline page (not in the sitemap or the search) |
+| `src/assets/js/pwa.js`, `src/assets/css/areas/pwa.css` | registration and updates, the "Offline & app" part of the Aa menu (with its install row), the notices (the install notice too), the live parts of `/app/`, and everything Data saver does |
+| `src/pages/app.njk` | `/app/` and `/es/app/` ("Install this site as an app"): the seven guides — `iphone`, `iphone-other`, `android`, `samsung`, `android-other`, `in-app`, `computer` (their ids are the `#links` the site uses) —, why install it, good to know. The data-attribute contract with pwa.js is in its header comment; the official help links are `app_help_iphone(_es)` and `app_help_android(_es)` in `config/site.yml` |
+| `src/assets/js/install-core.js` | which phone and browser this is (from its user agent — Android tablets asking for desktop sites included), which guide and which Safari step fit it, the name of the app a page is open inside, and the install notice's rules (`RULES`: page views, 20 s, quiet days, limits). Pure functions, tested with real user agents by `tests/test_pwa_install.py` |
+| `src/pages/offline.njk` | the Saved pages page (`/offline/`): what is saved on this device, and the page the worker shows for a page that is not saved when there is no connection (not in the sitemap, and `noindex`; the site's own search lists it as *Saved pages*, like every footer link) |
 | `scripts/dev/make_app_icons.py` | draws `src/assets/img/app-icon-*.png` and `apple-touch-icon-180.png` (`python -m scripts.dev.make_app_icons`) |
+
+**Keeping the install steps current.** Phones move their menus: Safari 26 put Share behind **More**,
+Safari 27 behind **Page Menu**, and Chrome 150 renamed its menu item **Install and create shortcut**.
+Every September (a new iOS) and after big Chrome releases:
+- compare the words in `src/_i18n/pwa.json` (`pwa.app.*`, English and Spanish) with Apple's and Google's
+  help pages (linked on `/app/`);
+- update the pinned words in `tests/test_pwa_install.py` together with them;
+- add any new in-app browser's user-agent token to `install-core.js` (and a test user agent).
+
+After such a change, check on real phones: Android Chrome (the notice's **Install** puts the app in the
+app drawer), a Samsung phone, an iPhone on the current iOS, and a `/app/` link tapped in a WhatsApp group
+(on both, whether it opens in the browser or in WhatsApp's own window).
 
 The worker only handles GET requests to this site: it never stores anything from other sites (YouTube,
 podcast audio, aagrapevine.org, aalavina.org, Google Drive) and never touches forms. Caches: the app

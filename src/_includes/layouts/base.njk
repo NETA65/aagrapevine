@@ -127,6 +127,9 @@
   {% include "partials/footer.njk" %}
 
   <script src="/assets/js/app.js?v={{ build.version }}" defer></script>
+  {#- install-core.js: which phone and browser, the /app/ guide for it and the install notice's rules
+      (window.GVInstall) — right before pwa.js, which draws them (without it: plain links to /app/). #}
+  <script src="/assets/js/install-core.js?v={{ build.version }}" defer></script>
   <script src="/assets/js/pwa.js?v={{ build.version }}" defer></script>
   <script src="/assets/js/hero-canvas.js?v={{ build.version }}" defer></script>
   {%- for s in pageScripts %}{% if s != "/assets/js/hero-canvas.js" %}

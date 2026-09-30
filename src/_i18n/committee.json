@@ -1255,6 +1255,10 @@
     "en": "Write in English or Spanish: it shows up on the bulletin after the next update, in both languages.",
     "es": "Escribe en español o en inglés: aparecerá en el boletín después de la próxima actualización, en los dos idiomas."
   },
+  "committee.ann.how_4": {
+    "en": "To have it appear on a later day, add “(from 2027-02-01)” to its name — it shows up that morning. “(until 2027-03-01)” takes it down after that day.",
+    "es": "Para que aparezca más adelante, agrega “(desde 2027-02-01)” a su nombre: aparecerá esa mañana. “(hasta 2027-03-01)” lo quita después de ese día."
+  },
   "committee.ann.example_name": {
     "en": "2027-01-10 Welcome new GVRs",
     "es": "2027-01-10 Bienvenidos nuevos RLV"

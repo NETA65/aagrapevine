@@ -90,6 +90,59 @@ export function chicagoDayEndMs(ymd) {
   return isYmd(ymd) ? chicagoMidnight(ymdAddDays(ymd, 1)).getTime() : NaN;
 }
 
+// An event without an end time lasts ONE HOUR: the length the calendars give it (the .ics feed, the
+// add-to-calendar links), and what config/site.yml's committee meeting (src/_data/meeting.js) and its
+// recurring events (build_data: a missing end is start + 1 hour) assume. content/events README: give
+// `end:` for anything longer.
+export const EVENT_NO_END_MS = 3600e3;
+
+/**
+ * An event's span as every page reads it — THE rule, so no two pages disagree about when an event is over,
+ * not even between builds (each writes this end as the moment its browser script hides the event or marks
+ * it "Over"): /events/ and /meetings/ (normalizeEvents: the card's "past", its data-cm-expire, the
+ * calendars' end), the home page (home.js homeEvents, homeEventEnd → data-gv-expire), the monthly toolkit
+ * (monthly.js dateRow overAt → data-mp-over) and the district report (report.js upcomingEvents).
+ *   · all-day (a date-only start, or `all_day`): from midnight Central of its first day to midnight after
+ *     its last day — the `end` date (an end given as an instant: its Central day, or the day before when
+ *     it is exactly midnight), never before the first; an assembly Fri–Sun stays current all Sunday;
+ *   · timed: from its start to its end — an `end` given as a date: midnight after that day; no end, one
+ *     that cannot be read, or one not after the start: EVENT_NO_END_MS after the start.
+ * → { allDay, startMs, endMs, startYmd, endYmd (the Central day of its last moment), hasEnd (a timed
+ * event's end came from the data) }, or null without a readable start.
+ */
+export function eventSpan(it) {
+  const x = (it && it.extra) || {};
+  const rawStart = x.start || (it && it.date);
+  const s = parseInstant(rawStart);
+  if (!s) return null;
+  const allDay = isYmd(rawStart) || x.all_day === true;
+  if (allDay) {
+    const startYmd = isYmd(rawStart) ? rawStart : chicagoYmd(s);
+    let endYmd = startYmd;
+    if (isYmd(x.end)) endYmd = x.end;
+    else if (x.end) {
+      const e = parseInstant(x.end);
+      if (e) {
+        const d = chicagoYmd(e);
+        endYmd = e.getTime() === chicagoMidnight(d).getTime() ? chicagoYmd(new Date(e.getTime() - 1)) : d;
+      }
+    }
+    if (endYmd < startYmd) endYmd = startYmd;
+    return { allDay, startMs: chicagoMidnight(startYmd).getTime(), endMs: chicagoDayEndMs(endYmd), startYmd, endYmd, hasEnd: true };
+  }
+  const startMs = s.getTime();
+  const e = isYmd(x.end) ? chicagoDayEndMs(x.end) : x.end ? (parseInstant(x.end)?.getTime() ?? NaN) : NaN;
+  const hasEnd = e > startMs;
+  const endMs = hasEnd ? e : startMs + EVENT_NO_END_MS;
+  return { allDay, startMs, endMs, startYmd: chicagoYmd(s), endYmd: chicagoYmd(new Date(endMs - 1)), hasEnd };
+}
+
+/** When an event is over (ms): eventSpan's end — NaN without a readable start. */
+export function eventEndMs(it) {
+  const sp = eventSpan(it);
+  return sp ? sp.endMs : NaN;
+}
+
 // Any IANA time zone (the Grapevine Weekly Open is hosted in Eastern time).
 const zoneFmts = new Map();
 function zoneFmt(tz) {
@@ -462,25 +515,11 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
 
 function shapeEvent(it, site, lang, now, descOverride) {
   const x = it.extra || {};
-  const rawStart = x.start || it.date;
-  if (!rawStart) return null;
-  const allDay = isYmd(rawStart) || x.all_day === true;
-  let startMs, endMs, startYmd, endYmd;
-  if (allDay) {
-    startYmd = isYmd(rawStart) ? rawStart : chicagoYmd(parseInstant(rawStart));
-    const rawEnd = x.end ? (isYmd(x.end) ? x.end : chicagoYmd(parseInstant(x.end))) : startYmd;
-    endYmd = rawEnd < startYmd ? startYmd : rawEnd;
-    startMs = chicagoMidnight(startYmd).getTime();
-    endMs = chicagoMidnight(ymdAddDays(endYmd, 1)).getTime(); // exclusive end of last day
-  } else {
-    const s = parseInstant(rawStart);
-    if (!s) return null;
-    const e = parseInstant(x.end);
-    startMs = s.getTime();
-    endMs = e && e.getTime() > startMs ? e.getTime() : startMs + 3600e3; // no end → assume 1 hour
-    startYmd = chicagoYmd(s);
-    endYmd = chicagoYmd(new Date(endMs - 1));
-  }
+  // Its days and times (all-day: midnight to the midnight after its last day; a timed event without an end:
+  // one hour) — eventSpan, the rule the home page, the monthly toolkit and the report use too.
+  const span = eventSpan(it);
+  if (!span) return null;
+  const { allDay, startMs, endMs, startYmd, endYmd } = span;
   const start = new Date(startMs), end = new Date(endMs);
   const startNoon = new Date(startYmd + "T12:00:00Z");
   // An event over several days (an Area assembly, Fri–Sun): a date RANGE on the card, its tile and in the
@@ -540,7 +579,10 @@ function shapeEvent(it, site, lang, now, descOverride) {
       // "Fri, Mar 19, 6:00 PM CDT – Sun, Mar 21, 12:00 PM CDT": the times are in the range itself
       rangeLabel = cap(fmtRange(start, end, lang, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" }));
       dateLabel = cap(fmtRange(start, end, lang, { weekday: "long", month: "long", day: "numeric", year: "numeric" }));
-    } else timeLabel = fmtRange(start, end, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+    } else if (span.hasEnd) timeLabel = fmtRange(start, end, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+    // no end in the data: the start alone, as on the home page and the monthly toolkit — never the hour the
+    // calendars assume presented as its end
+    else timeLabel = fmt(start, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
   }
   const monthKey = startYmd.slice(0, 7);
   const monthLabel = cap(fmt(new Date(monthKey + "-15T12:00:00Z"), lang, { month: "long", year: "numeric", timeZone: "UTC" }));
@@ -733,7 +775,9 @@ export const DOC_TABS = [
 const DOC_KINDS = new Set(["document", "slides", "form", "video_file", "photo"]);
 const PHOTO_KINDS = new Set(["photo", "video_file"]);
 
-function isPhotoItem(it) {
+/** A photo or video of an album on /photos/ (not a flyer or a slide that happens to be a picture).
+ *  Also the monthly digest's rule for "photo albums" (community.js; send_digest.py is_album_media). */
+export function isPhotoItem(it) {
   return PHOTO_KINDS.has(it.kind) && (it.category === "photos" || it.category === "other" || !it.category);
 }
 function isDocItem(it) {
@@ -848,26 +892,69 @@ export function driveMatch(items, pattern, category = "", n = 0) {
   return n > 0 ? list.slice(0, n) : list[0] || null;
 }
 
+/* Which album a photo belongs to, and the album's anchors on /photos/. Shared by photoAlbums (the
+   /photos/ page) and the monthly digest (community.js: one "Photos: <album>" row per album and month,
+   linking to "/photos/#<slug>"), so a digest link always lands on its album. */
+const albumFolder = (it) => { const x = it.extra || {}; return x.album || (it.category === "other" && x.path && x.path[0]) || null; };
+
+/** The album of a photo: "f:<Drive sub-folder>" (extra.album; for a loose file in "other", its first
+ *  folder), else "p:<panel number>" (the panel's own album). send_digest.py album_key copies it. */
+export function photoAlbumKey(it) {
+  const folder = albumFolder(it);
+  return folder ? `f:${folder}` : `p:${(it.extra && it.extra.panel) || 0}`;
+}
+
+/* Each album's anchors, in the order its first photo appears in the list: `slug` ("album-<folder or
+   panel>", "-2", "-3" … when two albums would share it) and `alias` (the slug build_data.py gives a What's
+   New photo group, extra.album_slug — dropped when another album already has it). */
+function albumAnchors(photos) {
+  const firsts = new Map();
+  for (const it of photos) { const k = photoAlbumKey(it); if (!firsts.has(k)) firsts.set(k, it); }
+  const out = new Map();
+  const taken = new Set();
+  for (const [k, it] of firsts) {
+    const x = it.extra || {};
+    const pl = x.panel_label || (x.panel ? `Panel ${x.panel}` : "");
+    const base = "album-" + slugify(albumFolder(it) || pl || "photos", 50);
+    let slug = base, i = 2;
+    while (taken.has(slug)) slug = `${base}-${i++}`;
+    taken.add(slug);
+    let alias = itemAnchor(slugify(x.album || (x.path || []).join(" / "), 80), "");
+    if (alias && taken.has(alias)) alias = "";
+    else if (alias) taken.add(alias);
+    out.set(k, { slug, alias });
+  }
+  return out;
+}
+
+const albumPhotos = (items) => (items || []).filter((it) => it && it.status !== "gone" && it.source === "drive" && isPhotoItem(it));
+
+/** Every album's /photos/ anchor: Map(photoAlbumKey → "album-…"), exactly the ids photoAlbums gives. */
+export function photoAlbumSlugs(items) {
+  return new Map([...albumAnchors(albumPhotos(items))].map(([k, a]) => [k, a.slug]));
+}
+
 /**
  * Photo albums: one per Drive sub-folder (extra.album), else per folder/panel.
  * Returns [{key, slug, title, count, photos, videos, cover:[…], newest, oldest, panelLabel, items:[…]}] newest first.
  */
 export function photoAlbums(items, lang = "en") {
-  const photos = (items || []).filter((it) => it && it.status !== "gone" && it.source === "drive" && isPhotoItem(it));
+  const photos = albumPhotos(items);
+  const anchors = albumAnchors(photos);
   const albums = new Map();
   for (const it of photos) {
     const x = it.extra || {};
-    const folder = x.album || (it.category === "other" && x.path && x.path[0]) || null;
+    const folder = albumFolder(it);
     const pl = x.panel_label || (x.panel ? `Panel ${x.panel}` : "");
-    const key = folder ? `f:${folder}` : `p:${x.panel || 0}`;
+    const key = photoAlbumKey(it);
     if (!albums.has(key)) {
       const albumI18n = it.i18n?.album?.[lang];
       albums.set(key, {
         key,
-        // Same slug build_data.py gives a What's New photo group (extra.album_slug),
-        // so "/photos/#<album_slug>" lands on this album.
-        alias: itemAnchor(slugify(x.album || (x.path || []).join(" / "), 80), ""),
-        slug: "album-" + slugify(folder || pl || "photos", 50),
+        // alias: the slug build_data.py gives a What's New photo group (extra.album_slug), so
+        // "/photos/#<album_slug>" lands on this album too (albumAnchors).
+        alias: anchors.get(key).alias,
+        slug: anchors.get(key).slug,
         title: albumI18n || folder || (pl ? t("committee.photos.panel_album", lang, { panel: pl }) : t("committee.photos.untitled_album", lang)),
         panelLabel: pl,
         items: [],
@@ -889,7 +976,6 @@ export function photoAlbums(items, lang = "en") {
     });
   }
   const out = [...albums.values()];
-  const slugs = new Set();
   for (const a of out) {
     a.items.sort((p, q) => byNewest(p.item, q.item));
     a.count = a.items.length;
@@ -901,12 +987,6 @@ export function photoAlbums(items, lang = "en") {
     a.oldest = times.length ? new Date(Math.min(...times)).toISOString() : null;
     a.sortMs = times.length ? Math.max(...times) : Math.max(0, ...a.items.map((p) => sortKey(p.item)));
     a.hasNew = a.items.some((p) => p.isNew);
-    let s = a.slug, i = 2;
-    while (slugs.has(s)) s = `${a.slug}-${i++}`;
-    a.slug = s;
-    slugs.add(s);
-    if (a.alias && slugs.has(a.alias)) a.alias = "";
-    else if (a.alias) slugs.add(a.alias);
   }
   return out.sort((a, b) => b.sortMs - a.sortMs || a.title.localeCompare(b.title));
 }
@@ -914,8 +994,10 @@ export function photoAlbums(items, lang = "en") {
 /* ------------------------------------------------------------------ */
 /*  Bulletin (/bulletin/ — the data and these names say "announcement") */
 /* ------------------------------------------------------------------ */
-export function announcementList(items) {
-  const today = chicagoYmd(new Date());
+// `now` (default: the build's clock) decides which posts are over (`expires` before its Central day);
+// the monthly toolkit passes its own clock (MONTHLY_NOW) — monthly.js monthNow.
+export function announcementList(items, now = new Date()) {
+  const today = chicagoYmd(now);
   return (items || [])
     .filter((it) => it && it.status !== "gone")
     .filter((it) => {
@@ -1045,11 +1127,12 @@ export function weeklyOpenAll(items, lang = "en", now = new Date()) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Monthly digest: Book of the Month teaser + this month's toolkit    */
+/*  District report: Book of the Month teaser + this month's toolkit   */
 /* ------------------------------------------------------------------ */
-// The one canonical home for prices and dates is /shop/ (data/site/shop.json → db.shop): the digest
-// only shows a compact teaser — title, sale price, end date — linking there and to the official store.
-// digestShop is used by community.js (the monthly digest: page + texts) and report.js (the district report).
+// The one canonical home for prices and dates is /shop/ (data/site/shop.json → db.shop): the report
+// only gives a compact teaser — title, sale price, end date — pointing there and to the official store.
+// digestShop is used by report.js (the district report, /monthly/#report). The monthly digest no longer
+// carries the Book of the Month (it recaps last month); the toolkit's month model has its own (monthly.js botm).
 const moneyFmt = (v, lang) => {
   const n = Number(v);
   if (!Number.isFinite(n)) return "";
@@ -1648,19 +1731,32 @@ export default function (eleventyConfig, helpers) {
   });
 
   // Committee section sub-navigation: {% committeeNav lang, "events", db %}
+  // The Events and Bulletin counts go down between builds as those things end: each carries, in
+  // data-gv-expire-count, the moment each thing it counts is over (src/assets/js/app.js GV.expire recounts
+  // it — the moments /events/ and /bulletin/ hide their cards at — and hides it at 0).
   eleventyConfig.addShortcode("committeeNav", function (lang, current, db) {
     const L = lang || "en";
+    // upcoming events as /events/ lists them: a monthly series counts once (cmCollapseRecurring), until its
+    // last listed date is over
+    const eventEnds = new Map();
+    for (const e of EMPTY ? [] : normalizeEvents(db?.events?.items || [], {}, L, { monthsBack: 0, monthsAhead: 0 })) {
+      if (e.past || e.committee) continue;
+      const k = e.recurring && e.series ? `s:${e.series}` : `e:${e.id}`;
+      if (!eventEnds.has(k) || e.expireIso > eventEnds.get(k)) eventEnds.set(k, e.expireIso);
+    }
+    // the bulletin's posts: each is over at midnight Central after its `expires` day (bulletin.njk's rule)
+    const posts = announcementList(EMPTY ? [] : db?.announcements?.items);
+    const postEnd = (p) => {
+      const t = chicagoDayEndMs(String(p.extra?.expires || "").slice(0, 10));
+      return Number.isFinite(t) ? new Date(t).toISOString() : "-";
+    };
     const n = {
-      // upcoming events as /events/ lists them: a monthly series counts once (cmCollapseRecurring)
-      events: EMPTY ? 0 : (() => {
-        const seen = new Set();
-        return normalizeEvents(db?.events?.items || [], {}, L, { monthsBack: 0, monthsAhead: 0 })
-          .filter((e) => !e.past && !e.committee && !(e.recurring && e.series && (seen.has(e.series) || !seen.add(e.series)))).length;
-      })(),
+      events: eventEnds.size,
       portfolio: documentTabs(EMPTY ? [] : db?.drive?.items, L).total,
       photos: photoAlbums(EMPTY ? [] : db?.drive?.items, L).reduce((s, a) => s + a.count, 0),
-      bulletin: announcementList(EMPTY ? [] : db?.announcements?.items).length,
+      bulletin: posts.length,
     };
+    const ends = { events: [...eventEnds.values()], bulletin: posts.map(postEnd) };
     const pages = [
       { key: "meetings", url: "/meetings/", icon: "calendar-clock" },
       { key: "events", url: "/events/", icon: "calendar-days" },
@@ -1672,7 +1768,8 @@ export default function (eleventyConfig, helpers) {
     ];
     const links = pages.map((p) => {
       const on = p.key === current;
-      const count = n[p.key] ? `<span class="cm-subnav-count">${n[p.key]}</span>` : "";
+      const until = ends[p.key] ? ` data-gv-expire-count="${esc(ends[p.key].join(" "))}"` : "";
+      const count = n[p.key] ? `<span class="cm-subnav-count"${until}>${n[p.key]}</span>` : "";
       return `<a href="${localPath(p.url, L)}" class="cm-subnav-link${on ? " is-current" : ""}"${on ? ' aria-current="page"' : ""}>${icon(p.icon, "size-4")}<span>${esc(t("committee.subnav." + p.key, L))}</span>${count}</a>`;
     });
     // page-overlap (main.css): the pill bar tucks into the hero's faded bottom edge — the

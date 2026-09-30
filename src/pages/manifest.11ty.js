@@ -51,6 +51,13 @@ export function render(data) {
       { src: `${base}assets/img/app-screenshot-${lang}-narrow.webp`, sizes: "1080x1920", type: "image/webp", form_factor: "narrow", label: t("pwa.manifest.shot_narrow") },
       { src: `${base}assets/img/app-screenshot-${lang}-wide.webp`, sizes: "1920x1080", type: "image/webp", form_factor: "wide", label: t("pwa.manifest.shot_wide") },
     ],
+    // Both manifests: the same app, installed from either language. They let Chrome on Android tell
+    // a browser tab that the app is already installed (navigator.getInstalledRelatedApps in pwa.js —
+    // only the first three entries count). Never a store app: prefer_related_applications stays false.
+    related_applications: [
+      { platform: "webapp", url: `${base}manifest.webmanifest` },
+      { platform: "webapp", url: `${base}es/manifest.webmanifest` },
+    ],
     prefer_related_applications: false,
   };
   return JSON.stringify(manifest, null, 2) + "\n";

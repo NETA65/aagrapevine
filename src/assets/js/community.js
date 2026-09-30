@@ -116,14 +116,29 @@
       };
     });
 
-    /* ---------------- Monthly digest ---------------- */
+    /* ---------------- Monthly digest ----------------
+       bi: one language or both in the texts — remembered as "gv-digest-bi", the same choice the monthly
+       toolkit's "Send it as a message" uses (monthly.js mpMessage).
+       stale: the page is last month's edition by now — its data-stale-after instant (midnight Central
+       after the month it came out in) has passed: a copy built before the 1st (or a saved or offline one)
+       says which edition it is and when the next one comes out. Checked now, every minute (a page left
+       open over midnight), and when the page is shown again (a tab brought back to the front, or a page
+       restored by the Back button). */
     Alpine.data("digestPage", function () {
       return {
         bi: false,
         more: false,   // phones: "More options" (e-mail, print, steps, previews) — always shown from 1024px
+        stale: false,
         init: function () {
+          var self = this;
           try { this.bi = localStorage.getItem("gv-digest-bi") === "1"; } catch (e) { /* ignore */ }
           this.$watch("bi", function (v) { try { localStorage.setItem("gv-digest-bi", v ? "1" : "0"); } catch (e) { /* ignore */ } });
+          var after = Date.parse(this.$el.getAttribute("data-stale-after") || "");
+          var check = function () { self.stale = !isNaN(after) && Date.now() >= after; };
+          check();
+          setInterval(check, 60000);
+          document.addEventListener("visibilitychange", function () { if (!document.hidden) check(); });
+          window.addEventListener("pageshow", function (e) { if (e.persisted) check(); });
         },
         src: function (kind) { return "#digest-" + kind + "-" + (this.bi ? "bi" : "one"); },
       };
