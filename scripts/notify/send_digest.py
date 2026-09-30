@@ -2092,10 +2092,12 @@ def main(argv: list[str] | None = None) -> int:
     links = Links(site_url)
 
     data = collect(now, ed["key"], max_per, highlights)
-    n = total_count(data)
+    # the edition's own count — the page's "149 new in September", the e-mail's intro; total_count (the
+    # writers too, whose stories are among the magazine stories) only decides whether there is anything to send
+    items = sum(counts(data).values())
     shown = {k: v for k, v in counts(data).items() if v}
     writers = sum(len(v) for v in data["writers"].values())
-    log(f"the {name_en} digest ({ed['first']} to {ed['last']}): {n} item(s) {shown} writers={writers} "
+    log(f"the {name_en} digest ({ed['first']} to {ed['last']}): {items} item(s) {shown} writers={writers} "
         f"· issues={len(data['issues'])} events={len(data['events'])}")
 
     subject = subject_of(data, cfg)
@@ -2113,7 +2115,7 @@ def main(argv: list[str] | None = None) -> int:
         if waiting:
             log(f"(a scheduled send would wait: not updated since {name_en} ended: {', '.join(waiting)})")
         step_summary(["### E-mail digest preview (not sent)", f"**Subject:** {subject}", "",
-                      f"{n} new item(s) in {name_en}: {shown}; writers {writers}; events that took place {len(data['events'])}", "",
+                      f"{items} new item(s) in {name_en}: {shown}; writers {writers}; events that took place {len(data['events'])}", "",
                       *([f"A scheduled send would still wait for: {', '.join(waiting)} (not updated since {name_en} ended).", ""] if waiting else []),
                       "Download the `digest-preview` artifact to see it."])
         return 0
@@ -2125,7 +2127,7 @@ def main(argv: list[str] | None = None) -> int:
                       "(at the latest from noon on the 3rd, with the data there is)."])
         return 3
 
-    if n == 0 and not args.force:
+    if not total_count(data) and not args.force:
         log(f"nothing new in {name_en} — not sending (use --force to send anyway)")
         step_summary(["### E-mail digest", f"Nothing new in {name_en} — no e-mail sent."])
         return 0
@@ -2150,7 +2152,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     log(f"sent to {len(recipients)} recipient(s): {subject}")
     step_summary(["### E-mail digest sent", f"**Subject:** {subject}", "",
-                  f"Recipients: {len(recipients)} · new items in {name_en}: {n} {shown}"])
+                  f"Recipients: {len(recipients)} · new items in {name_en}: {items} {shown}"])
     return 0
 
 

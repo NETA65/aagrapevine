@@ -432,6 +432,21 @@ class Sections(DigestCase):
         self.assertTrue(preheader.startswith("In September: 8 magazine stories, 1 podcast episode"), preheader)
         self.assertLessEqual(len(preheader), 140)
 
+    def test_the_log_counts_what_the_edition_counts(self):
+        # "N item(s)" in the log and the run summary is the edition's own count — the page's "N new in
+        # September", the e-mail's intro —: the writers are not added again (their stories are among the
+        # magazine stories); they only count towards "is there anything to send"
+        import io
+        from contextlib import redirect_stdout
+        summary = self.tmp_path / "summary.md"
+        buf = io.StringIO()
+        with mock.patch.dict(os.environ, {"GITHUB_STEP_SUMMARY": str(summary)}), redirect_stdout(buf):
+            self.preview()
+        n = sum(D.counts(self.data).values())
+        self.assertEqual((n, D.total_count(self.data)), (22, 24))
+        self.assertIn(f"(2026-09-01 to 2026-09-30): {n} item(s) ", buf.getvalue())
+        self.assertIn(f"{n} new item(s) in September 2026: ", summary.read_text(encoding="utf-8"))
+
     def test_dry_run_preview_in_both_languages(self):
         html, text = self.preview()
         en, es = self.halves(text)
