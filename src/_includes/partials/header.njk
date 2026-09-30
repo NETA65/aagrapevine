@@ -80,7 +80,9 @@
         <span x-show="theme === 'dark'" x-cloak>{% icon "sun", "size-5" %}</span>
         <span x-show="theme !== 'dark'">{% icon "moon", "size-5" %}</span>
       </button>
-      <button type="button" x-ref="menuBtn" @click="drawer = true" class="site-menu-btn grid size-11 place-items-center rounded-full transition hover:bg-white/10 sm:size-10 xl:hidden" :class="solid && 'hover:bg-surface-2'" aria-label="{{ 'nav.menu' | t(L) }}" :aria-expanded="drawer" aria-controls="mobile-drawer">
+      {#- The Menu button names its drawer (aria-controls) through Alpine only: the drawer exists once Alpine
+          has teleported it to <body>, so without JavaScript the attribute would point at nothing. -#}
+      <button type="button" x-ref="menuBtn" @click="drawer = true" class="site-menu-btn grid size-11 place-items-center rounded-full transition hover:bg-white/10 sm:size-10 xl:hidden" :class="solid && 'hover:bg-surface-2'" aria-label="{{ 'nav.menu' | t(L) }}" :aria-expanded="drawer" :aria-controls="'mobile-drawer'">
         {% icon "menu", "size-6" %}
       </button>
     </div>
