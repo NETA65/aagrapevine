@@ -16,7 +16,10 @@
 #      writes in the run summary when today's update went live. A magazine
 #      whose quote is not out yet is asked again every 10 minutes (one
 #      polite request), from 90 minutes before the goal until 90 minutes
-#      after it; a check that starts later asks it once.
+#      after it; a check that starts later asks it once. An Update & Deploy
+#      run already going (the full daily update, a long search) is
+#      followed first — a morning refresh would only wait behind it — and
+#      a refresh is started only for what that run did not bring.
 #    · on the 1st of the month — and when no full daily update has run for
 #      30 hours — it also starts the full daily update (also when today's
 #      update was already there);
@@ -147,7 +150,7 @@ jobs:
     # the script reads the live site itself — and when it has, but the full daily update is due
     if: ${{ !cancelled() && (needs.look.outputs.done != 'true' || needs.look.outputs.full != '') }}
     runs-on: ubuntu-latest
-    timeout-minutes: 240       # the quote is watched until 90 min after the goal; following a run takes ≤ 45 min
+    timeout-minutes: 240       # nothing new after 170 min (GUARD_MAX); a refresh it starts then takes ≤ 45 + 5 min
     permissions:
       actions: write           # start Update & Deploy (and the full daily update) and follow it
       contents: read           # the scripts

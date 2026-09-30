@@ -15,6 +15,8 @@ site.morning_goal) every day, while GitHub starts its own schedules hours late:
                        what it starts, follows, waits for and reports, and its exit codes;
   * GuardAtMidnight  — a check still running at midnight Central works for the new day, and no branch
                        starts more than MAX_RUNS morning refreshes;
+  * GuardBehindARunningUpdate — an Update & Deploy run already running (the full update, a long search) is
+                       followed before any refresh, which would only wait in the queue behind it;
   * FullRun          — when it also starts the full daily update (the 1st; a skipped day);
   * BuildInfo        — /build.json (src/pages/build-info.11ty.js), run in Node.js;
   * QuoteDays        — status.json quote_days (build_data) and the /status/ view of it (freshness.js).
@@ -840,8 +842,10 @@ class FakeClock:
 class World:
     """Update & Deploy's runs on GitHub, the live site's build.json and the two magazines' home pages, on one
     fake clock. A run that ends well is on the site DEPLOY seconds later; it carries today's quote of each
-    magazine that had published it by the run's end (`published`), unless that magazine is in `misses`, and
-    — a full update (dispatched with no inputs) — its end as `full`."""
+    magazine that had published it by the moment the run read the pages (`reads`; by default its end) —
+    `published` —, unless that magazine is in `misses`, and — a full update (dispatched with no inputs) — its
+    end as `full`. With `queue`, a dispatched run starts only once the run in progress has ended (update.yml's
+    concurrency group: one run at a time). `today` / `yesterday`: the days the magazines' pages show."""
     PLAN = {"start": 5, "end": 160, "conclusion": "success"}     # seconds after a dispatch
     DEPLOY = 20
 
@@ -859,16 +863,18 @@ class World:
         self.dispatch_mode = "details"
         self.plans: list[dict] = []
         self.api_down_after: datetime | None = None        # from then on GitHub answers 502
+        self.queue = False
+        self.today, self.yesterday = TODAY, YESTERDAY
         self._id = 5000
 
     # ---- GitHub
     def add_run(self, created: datetime, start: float | None = 5, end: float | None = 160, conclusion: str = "success",
                 title: str = "Update & Deploy", event: str = "schedule", cancel: float | None = None,
-                full: bool = False) -> dict:
+                full: bool = False, reads: float | None = None) -> dict:
         self._id += 1
         at = lambda s: None if s is None else created + timedelta(seconds=s)  # noqa: E731
         r = {"id": self._id, "created": created, "start": at(start), "end": at(end), "cancel": at(cancel),
-             "conclusion": conclusion, "title": title, "event": event, "full": full}
+             "conclusion": conclusion, "title": title, "event": event, "full": full, "reads": at(reads)}
         self.runs.append(r)
         return r
 
@@ -914,6 +920,13 @@ class World:
         if self.dispatch_mode == "422" and "return_run_details" in doc:
             return 422, json.dumps({"message": 'Invalid request.\n\n"return_run_details" is not a permitted key.'}).encode()
         plan = {**self.PLAN, **(self.plans.pop(0) if self.plans else {})}
+        now = self.clock.now()
+        busy = [r["end"] for r in self.runs if self.queue and r["start"] and r["end"] and r["start"] <= now < r["end"]
+                and not r["cancel"]]
+        if busy and plan["start"] is not None:              # it waits in the queue until the running one ends
+            shift = (max(busy) - now).total_seconds() + 5 - plan["start"]
+            if shift > 0:
+                plan = {**plan, "start": plan["start"] + shift, "end": plan["end"] + shift if plan["end"] is not None else None}
         morning = (doc.get("inputs") or {}).get("morning") == "true"
         r = self.add_run(self.clock.now(), plan["start"], plan["end"], plan["conclusion"],
                          MC.MORNING_TITLE if morning else "Update & Deploy", "workflow_dispatch", plan.get("cancel"),
@@ -941,7 +954,7 @@ class World:
             day = r["end"].astimezone(CHICAGO).date().isoformat()
             for p in ("gv", "lv"):
                 t = self.published.get(p)
-                if t and t <= r["end"] and p not in self.misses:
+                if t and t <= (r["reads"] or r["end"]) and p not in self.misses:
                     quotes[p] = day
             if r["full"]:                                 # a full update: when the last one ran
                 full = iso(r["end"])
@@ -962,7 +975,7 @@ class World:
         self.fetches.append((self.clock.now(), url))
         pub = "gv" if "aagrapevine" in url else "lv"
         t = self.published.get(pub)
-        return magazine_page(pub, TODAY if t and t <= self.clock.now() else YESTERDAY)
+        return magazine_page(pub, self.today if t and t <= self.clock.now() else self.yesterday)
 
     # ---- one Morning check
     def check(self, *argv: str, status: dict | None = None, token: bool = True, env: dict | None = None) -> tuple[int, str, str]:
@@ -1365,6 +1378,117 @@ class GuardAtMidnight(unittest.TestCase):
                       "morning refreshes", log)
         self.assertIn("❌ Today's update did not reach the site.", summary)
         self.assertLess(w.clock.now() - T0, MC.GUARD_MAX)
+
+
+class GuardBehindARunningUpdate(unittest.TestCase):
+    """An Update & Deploy run is already RUNNING when the check would start a morning refresh — the full daily
+    update (on the 1st the check starts it at the end of the asking window), a long search of the magazines,
+    a push's: update.yml's concurrency group runs one at a time, so the refresh would only wait in the queue
+    behind it, longer than FOLLOW_MAX — and the check ended with a false red ✗ while today's update was on its
+    way (the World here keeps that queue). The check follows the running one instead, then decides again."""
+    FIRST = datetime(2026, 10, 1, 12, 40, tzinfo=timezone.utc)          # 7:40 AM CDT, Thursday October 1
+
+    def first_of_the_month(self, reads_min: float) -> tuple[World, dict]:
+        # The 7:00 check ended with the note (La Viña late) and started the full update ("the 1st of the month");
+        # it runs 2 hours and reads the magazines' pages `reads_min` minutes in. La Viña publishes at 7:30; at
+        # 7:40 the chair presses Morning check → Run workflow.
+        live = {"v": 1, "built": "2026-10-01T09:35:00Z", "day": "2026-10-01", "tz": "America/Chicago",
+                "quotes": {"gv": "2026-10-01", "lv": "2026-09-30"}, "run": "4999", "full": "2026-09-30T19:00:00Z"}
+        w = World(self.FIRST, live, published={"gv": self.FIRST - timedelta(hours=4), "lv": self.FIRST - timedelta(minutes=10)})
+        w.queue, w.today, w.yesterday = True, "2026-10-01", "2026-09-30"
+        full = w.add_run(self.FIRST - timedelta(minutes=40), start=5, end=120 * 60, event="workflow_dispatch", full=True,
+                         reads=reads_min * 60)
+        return w, full
+
+    def test_the_first_of_the_month_after_the_note(self):
+        # the full update read the pages before La Viña published: the refresh starts once it has ended — green
+        w, full = self.first_of_the_month(5)
+        rc, log, summary = w.check()
+        self.assertEqual(rc, 0, log)
+        self.assertNotIn("::error", log)
+        self.assertEqual([b["inputs"] for _u, _h, b in w.posts], [{"morning": "true"}], "one refresh, and no full update")
+        self.assertGreaterEqual(w.runs[-1]["created"], full["end"], "never dispatched behind the running update")
+        self.assertEqual(len(w.fetches), 1, "one question: the page showed it")
+        self.assertIn("✅ Today's update is on the site since **9:03 AM CDT** — goal 5:30 AM.", summary)
+        self.assertIn("| How | Found the La Viña quote out, waited for the Update & Deploy run that was running, then "
+                      "started the morning refresh. |", summary)
+
+    def test_the_running_update_brings_it(self):
+        # the full update reads the pages after La Viña published: nothing to start
+        w, _full = self.first_of_the_month(45)
+        rc, log, summary = w.check()
+        self.assertEqual((rc, w.posts), (0, []), log)
+        self.assertIn("✅ Today's update is on the site since **9:00 AM CDT** — goal 5:30 AM.", summary)
+        self.assertIn("| Update & Deploy | [run 5001](https://github.com/o/r/actions/runs/5001) — 119 min 55 s |", summary)
+        self.assertIn("| How | Followed the Update & Deploy run that was already running. |", summary)
+
+    def test_the_new_day_comes_with_the_running_update(self):
+        # 4:30 AM, yesterday's build, a full update running since 4:00 that ends at 4:50: no refresh behind it
+        w = World(live=OLD)
+        w.queue = True
+        w.add_run(T0 - timedelta(minutes=30), start=5, end=50 * 60, event="workflow_dispatch", full=True)
+        rc, log, summary = w.check()
+        self.assertEqual((rc, w.posts), (0, []), log)
+        self.assertIn("✅ Today's update is on the site since **4:50 AM CDT** — goal 5:30 AM.", summary)
+        self.assertIn("| How | Followed the Update & Deploy run that was already running. |", summary)
+
+    def test_a_waiting_run_behind_a_running_one(self):
+        # a push waits behind a full update that runs until 5:30: following the push alone ended red after 45
+        # minutes; the running one is followed first, and it brings the new day
+        w = World(live=OLD)
+        w.queue = True
+        w.add_run(T0 - timedelta(minutes=30), start=5, end=60 * 60, event="workflow_dispatch", full=True)
+        w.add_run(T0 - timedelta(minutes=10), start=40 * 60 + 5, end=42 * 60, event="push")
+        rc, log, summary = w.check()
+        self.assertEqual((rc, w.posts), (0, []), log)
+        self.assertNotIn("::error", log)
+        self.assertIn("| How | Followed the Update & Deploy run that was already running. |", summary)
+
+    def test_a_running_update_that_fails(self):
+        # someone else's run that fails is no reason for a red ✗: the check starts its own refresh after it
+        w = World(live=OLD)
+        w.queue = True
+        w.add_run(T0 - timedelta(minutes=5), start=5, end=10 * 60, conclusion="failure", event="push")
+        rc, log, summary = w.check()
+        self.assertEqual(rc, 0, log)
+        self.assertEqual([b["inputs"] for _u, _h, b in w.posts], [{"morning": "true"}])
+        self.assertIn('| Waited for | [run 5001](https://github.com/o/r/actions/runs/5001) — it ended "failure" |', summary)
+        self.assertIn("| How | Started the morning refresh. |", summary)
+        # its look at the magazines' pages counts from when it started: the refresh POLL_EVERY after that
+        self.assertGreaterEqual(w.runs[-1]["created"], w.runs[0]["start"] + MC.POLL_EVERY)
+
+    def test_still_running_when_the_time_is_up(self):
+        # a 300-minute search started at 2 AM runs until 8 AM. Today's build not there: a red ✗ that says why —
+        # and no refresh queued behind it
+        w = World(live=OLD)
+        w.queue = True
+        w.add_run(T0 - timedelta(minutes=150), start=5, end=360 * 60, event="workflow_dispatch", full=True)
+        rc, log, summary = w.check()
+        self.assertEqual((rc, w.posts), (1, []), log)
+        self.assertIn("::error title=Morning update failed::an Update & Deploy run this check did not start (running since "
+                      "2:00 AM CDT) was still running after 170 minutes — a morning refresh cannot start before it ends — "
+                      "[run 5001](https://github.com/o/r/actions/runs/5001).", log)
+        self.assertLessEqual(w.clock.now() - T0, MC.GUARD_MAX + MC.FOLLOW_EVERY)
+        # today's build there, La Viña's quote out at 4:40 but the search read the pages at 2 AM: a yellow note
+        w = World(live=live_today(built="2026-09-29T09:05:00Z", lv=YESTERDAY),
+                  published={"gv": T0 - timedelta(hours=5), "lv": T0 + timedelta(minutes=10)})
+        w.queue = True
+        w.add_run(T0 - timedelta(minutes=150), start=5, end=360 * 60, event="workflow_dispatch", full=True, reads=5 * 60)
+        rc, log, summary = w.check()
+        self.assertEqual((rc, w.posts), (0, []), log)
+        self.assertEqual(len(w.fetches), 2, "asked at 4:30 (not yet) and 4:40 (out)")
+        self.assertIn("⚠️ Today's build is on the site; the La Viña quote is not on it yet — an update is still running.", summary)
+        self.assertIn("::warning title=An update is still running::The La Viña page shows today's quote, but an Update & "
+                      "Deploy run this check did not start (running since 2:00 AM CDT) was still running after 170 minutes",
+                      log)
+
+    def test_look_only_says_so(self):
+        w = World(live=OLD)
+        w.add_run(T0 - timedelta(minutes=10), start=5, end=60 * 60, event="workflow_dispatch", full=True)
+        _rc, _log, summary = w.check("--check-only")
+        self.assertEqual(w.posts, [])
+        self.assertIn("| Would | follow the running Update & Deploy run 5001 (a morning refresh would wait behind it), then "
+                      "start the morning refresh if the site is still not today's build |", summary)
 
 
 class FullRun(unittest.TestCase):

@@ -77,8 +77,9 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
 - **¿Funciona todo?** Página **/es/status/** del sitio (junto a *Cita del día*: a qué hora llegaron las
   citas de hoy), o la pestaña **Actions** en GitHub.
   **Actualizar ya:** GitHub → **Actions** → **Update & Deploy** → **Run workflow**. **Poner ya la cita de
-  hoy:** **Actions** → **Morning check** → **Run workflow** (solo hace lo que falta: si la revista ya publicó
-  la cita, la trae; si no, lo dice).
+  hoy:** **Actions** → **Morning check** → **Run workflow** (solo hace lo que falta: desde las 4 a. m., hora
+  del Centro, si la revista ya publicó la cita, la trae; si no, lo dice; si otra actualización está en curso,
+  primero la espera).
 
 Las instrucciones detalladas están abajo (en inglés); puede usar el traductor de su navegador.
 
@@ -553,9 +554,11 @@ Saving any settings or content file starts a quick update automatically — no n
 
 **Put today's quote up now:** **Actions → Morning check → Run workflow**. It only does what is missing:
 when the site does not have today's update yet, it starts the morning refresh; when only a magazine's quote
-is missing, it asks that magazine (every 10 minutes until 7 AM, once after that) and brings the quote as
-soon as it is out; otherwise it ends in a few seconds. Tick **check_only** to only see what is on the site
-and what it would do.
+is missing, it asks that magazine (from 4 AM Central — earlier, the 4:30 alarm does it —, every 10 minutes
+until 7 AM, once after that) and brings the quote as soon as it is out; otherwise it ends in a few seconds.
+When another update is already running (on the 1st, the full daily update), it waits for that one first —
+it reads the quote too — and then brings only what is still missing. Tick **check_only** to only see what
+is on the site and what it would do.
 
 **Stopping a run:** open it and click **Cancel workflow**. Everything it fetched so far is still
 saved (nothing has to be fetched again), but the website is only republished by the next run.
@@ -961,7 +964,7 @@ the new **Events** page, in Spanish if they had chosen Spanish on the old site.
 | What you see | Likely cause | What to do |
 |---|---|---|
 | The site did not change today | The run failed, is still running, or the schedule was paused | **Actions** tab: open the latest **Update & Deploy** run. If the workflow shows "disabled", click **Enable workflow**. Then **Run workflow**. |
-| Today's quote is not on the site at 5:30 AM | The morning alarm is not set up or failed; the magazine had not published it yet; or the morning refresh failed | **Actions → Morning check**: the day's run says which (a yellow "late at the source" note says when the magazine was last asked — the site shows yesterday's quote, labelled "Yesterday", until an update brings the new one). No run at 4:30 AM: check the alarm (cron-job.org's e-mail or the job's *History*). To bring it now: **Morning check → Run workflow** — it asks the magazine and brings the quote if it is out. |
+| Today's quote is not on the site at 5:30 AM | The morning alarm is not set up or failed; the magazine had not published it yet; or the morning refresh failed | **Actions → Morning check**: the day's run says which (a yellow "late at the source" note says when the magazine was last asked — the site shows yesterday's quote, labelled "Yesterday", until an update brings the new one). No run at 4:30 AM: check the alarm (cron-job.org's e-mail or the job's *History*). To bring it now: **Morning check → Run workflow** — from 4 AM Central it asks the magazine and brings the quote if it is out (earlier, the 4:30 alarm does it). If an update is already running — on the 1st, the full daily update — it waits for that run first (it reads the quote too) and then brings whatever it did not. |
 | cron-job.org e-mails that the alarm failed (401, 403, 404 or 422) | The key expired or was deleted (401), its *Actions* permission is not *Read and write* (403), the address changed (404), or the request body is wrong (422) | See [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended) → *If cron-job.org e-mails a failure*. Until it is fixed the site still updates, later in the day. |
 | Many **Morning check** runs in the Actions tab | Normal: GitHub's schedule starts it every hour through the night | Nothing to do: the runs that found nothing to do are deleted after a day. |
 | A bulletin post with `publish:` / "(from …)" is not on the site | Its day has not come yet (Central time), or its date could not be read | The **Update & Deploy** run summary lists it under *Scheduled bulletin posts*, or under *Bulletin files to fix* with the reason. |

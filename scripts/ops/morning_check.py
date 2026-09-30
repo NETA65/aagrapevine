@@ -19,7 +19,14 @@ What it does
      time) with today's Grapevine AND La Viña quotes = done — is_done(), the same test as morning.yml's
      first job.
   2. An Update & Deploy run already WAITING in the queue → follows it and never starts another: in the
-     update-deploy concurrency group a new run would replace the waiting one.
+     update-deploy concurrency group a new run would replace the waiting one. An Update & Deploy run already
+     RUNNING when this check is about to start a morning refresh (steps 3 and 4), or while a run waits behind
+     it — the full daily update (on the 1st, step 5 of an earlier check starts it), a push's, a person's —
+     is followed first, for as long as this check may act (GUARD_MAX): the group runs one at a time, so a
+     refresh started now would only wait in the queue until it ends, which for a full update or a long
+     search of the magazines is longer than FOLLOW_MAX (a false red ✗ while today's update was on its way).
+     Every run reads the daily quotes and builds the new day; once it has ended the check reads the site
+     and the queue and decides again, and starts a refresh only for what that run did not bring.
   3. The live build is not today's (or cannot be read) → starts the morning refresh, follows it (to the
      run that replaced it, if GitHub replaced it in the queue) and waits until the live build.json shows
      that run's build (GitHub Pages can take a few minutes). A run that finished well but does not show
@@ -60,12 +67,13 @@ OUR site is late — at most one page request per POLL_EVERY inside the window (
 7:00 AM), and one per check after it — through the shared polite session (robots.txt first, 5 s apart): on
 most mornings not at all. (The morning refresh itself reads each home page once: quote.py.)
 
-Exit codes: 0 = today's update is on the site, or only a magazine's quote is late at the source, or the
+Exit codes: 0 = today's update is on the site, or only a magazine's quote is late at the source (also when
+an update this check did not start was still running at GUARD_MAX, with today's build on the site), or the
 site did not show a finished run yet ("Cannot confirm"), or --check-only; 1 = an update run failed, or did
 not start or finish within FOLLOW_MAX, or today's build was still not on the site after MAX_RUNS morning
-refreshes or GUARD_MAX (GitHub then e-mails whoever started this check — for the morning alarm, the owner
-of its key; the runs this script starts are the bot's, and GitHub e-mails nobody about those); 2 = no
-token, repository or site address.
+refreshes or GUARD_MAX — a run this check did not start still running then included (GitHub then e-mails
+whoever started this check — for the morning alarm, the owner of its key; the runs this script starts are
+the bot's, and GitHub e-mails nobody about those); 2 = no token, repository or site address.
 """
 from __future__ import annotations
 
@@ -329,11 +337,13 @@ def active(gh: GitHub) -> tuple[list[dict], list[dict]]:
     return ([r for r in runs if r.get("status") in WAITING], [r for r in runs if r.get("status") == "in_progress"])
 
 
-def follow(gh: GitHub, run_id: int, clock: Clock) -> dict:
+def follow(gh: GitHub, run_id: int, clock: Clock, limit: timedelta = FOLLOW_MAX) -> dict:
     """Waits for an Update & Deploy run to finish → the run (GitHub's fields) + `timed_out`, `hops`.
     A run that GitHub cancelled because a newer one took its place in the queue is followed to that one
-    (every mode reads the daily quote), at most MAX_HOPS times. Gives up after FOLLOW_MAX."""
-    deadline = clock.now() + FOLLOW_MAX
+    (every mode reads the daily quote), at most MAX_HOPS times. Gives up after `limit`: FOLLOW_MAX for a run
+    this check started or found waiting (it must start AND finish within it); a run found already running
+    is followed for as long as the check may still act (main → follow_running)."""
+    deadline = clock.now() + limit
     hops = 0
     while True:
         r = gh.run(run_id)
@@ -642,10 +652,16 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
             report.row("Update & Deploy runs", "not looked at (no token)")
         else:
             report.row("Update & Deploy runs", f"{len(waiting)} waiting, {len(running)} running")
-        if waiting:
+        # a run already running: a refresh (or the waiting run) would only start when it ends — followed first
+        first = (f"follow the running Update & Deploy run {running[0].get('id')} (a morning refresh would wait behind "
+                 "it), then ") if running else ""
+        if waiting and running:
+            plan = f"{first}the waiting one, then decide again"
+        elif waiting:
             plan = f"follow the waiting Update & Deploy run {waiting[0].get('id')} (a new run would replace it)"
         elif not live or live.get("day") != today.isoformat():
-            plan = "start the morning refresh (the live site is not today's build)"
+            plan = (f"{first}start the morning refresh if the site is still not today's build" if running
+                    else "start the morning refresh (the live site is not today's build)")
         else:
             late = late_pubs(live, today)
             if now < poll_from:
@@ -654,7 +670,9 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
                 shown = peek(late, today, fetch, cfg)
                 out = [p for p in late if shown.get(p) == today.isoformat()]
                 report.row("The magazines' pages now", ", ".join(f"{PUB_NAMES.get(p, p)}: {shown.get(p) or 'no dated quote'}" for p in late))
-                if out:
+                if out and running:
+                    plan = f"{first}start the morning refresh if it did not bring today's {pub_names(out)} quote (it is out)"
+                elif out:
                     plan = f"start the morning refresh: today's {pub_names(out)} quote is out"
                 elif now + POLL_EVERY <= poll_until:
                     plan = f"ask again in {int(POLL_EVERY.total_seconds() // 60)} minutes (until {clock_label(poll_until, tz)})"
@@ -698,13 +716,18 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
         # starts no refresh sooner than that after it either.
         last_look: datetime | None = None
         missed: list[str] = []        # out on the magazine's page, but the refresh this check started did not bring it
+        # Out on the magazine's page while an Update & Deploy run was RUNNING: the refresh that brings it waits
+        # until that run has ended (follow_running) — and is started only if that run did not bring it.
+        pending: list[str] = []
+        waited = False                # this check followed a run that was already running (the "How" row says so)
+        followed: set[int] = set()    # those runs: a listing that still calls one running (GitHub's lag) is not followed again
 
         def turned() -> bool:
-            """new_day() for this moment — a new day forgets `missed` (that was the day before's quote)."""
-            nonlocal missed
+            """new_day() for this moment — a new day forgets `missed` and `pending` (the day before's quotes)."""
+            nonlocal missed, pending
             if not new_day(clock.now()):
                 return False
-            missed = []
+            missed, pending = [], []
             return True
 
         def late_note(late: list[str]) -> int:
@@ -713,7 +736,15 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
             if last_run:
                 report.row("Update & Deploy", run_link(gh, last_run.get("id"), last_run))
             report.row("Started by", started_by)
-            if missed:
+            if missed and not runs_started:
+                # out on the page, but this check's time was over when the run it waited for had ended
+                report.headline = f"⚠️ Today's build is on the site; {quotes_phrase(missed)} out, but the update did not get it."
+                report.annotate("warning", "A daily quote is waiting for an update",
+                                f"The {pub_names(missed)} page shows today's quote, but the Update & Deploy run that was "
+                                "running did not bring it, and this check's "
+                                f"{int(GUARD_MAX.total_seconds() // 60)} minutes were over before a morning refresh could "
+                                "start — the next update brings it (or Actions → Morning check → Run workflow).")
+            elif missed:
                 report.headline = f"⚠️ Today's build is on the site; {quotes_phrase(missed)} out, but the update did not get it."
                 refreshes = "the morning refresh" if runs_started == 1 else f"{runs_started} morning refreshes"
                 report.annotate("warning", "A daily quote could not be read",
@@ -757,6 +788,70 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
             report.write()
             return 0
 
+        def held_up(r: dict) -> int:
+            """GUARD_MAX came while this check waited for an Update & Deploy run it did not start (follow_running):
+            a long search of the magazines, a slow full update. A morning refresh would still only wait behind
+            it. Today's build on the site → a yellow note, exit 0 (that run, or the next update, brings the
+            quote); not → a red ✗ that says why."""
+            began = clock_label(parse_time(r.get("run_started_at") or r.get("created_at")), tz)
+            minutes = int(GUARD_MAX.total_seconds() // 60)
+            if not live or live.get("day") != today.isoformat():
+                return failed(report, gh, r, started_by, live, f"an Update & Deploy run this check did not start (running "
+                              f"since {began}) was still running after {minutes} minutes — a morning refresh cannot start "
+                              "before it ends")
+            late = late_pubs(live, today)
+            report.headline = f"⚠️ Today's build is on the site; {quotes_phrase(late)} not on it yet — an update is still running."
+            report.live_rows(live)
+            report.row("Update & Deploy", f"{run_link(gh, r.get('id'), r)} — running since {began}")
+            report.row("Started by", started_by)
+            report.annotate("warning", "An update is still running",
+                            f"The {pub_names(pending or late)} page shows today's quote, but an Update & Deploy run this "
+                            f"check did not start (running since {began}) was still running after {minutes} minutes, and a "
+                            "morning refresh would only wait behind it. The site shows the last quote, labelled "
+                            "\"Yesterday\", until an update brings the new one — that run, if it read the magazine's page "
+                            "after the quote came out, or the next one (Actions → Morning check → Run workflow once it "
+                            "has ended).")
+            full_run(live)
+            report.write()
+            return 0
+
+        def follow_running() -> int | None:
+            """An Update & Deploy run is RUNNING, and this check is about to start a morning refresh — or to follow
+            a run that waits behind it: either would only start once the running one ends (update.yml's
+            concurrency group runs one at a time; cancel-in-progress is off) — for a full daily update or a long
+            search of the magazines, later than FOLLOW_MAX: a false red ✗ while today's update was on its way.
+            Every run reads the daily quotes and builds the new day, so the running one is followed instead, for
+            as long as this check may act (GUARD_MAX) → None: it has ended, and the loop reads the site and the
+            queue and decides again — a refresh only for what it did not bring (its look at the magazines'
+            pages counts from when it started). Or an exit code: today's update came with it, the site does not
+            show it (not_shown), or it was still running at GUARD_MAX (held_up)."""
+            nonlocal live, last_run, last_look, waited
+            r0 = running[0]
+            began = parse_time(r0.get("run_started_at") or r0.get("created_at")) or clock.now()
+            left = t_start + GUARD_MAX - clock.now()
+            if left <= timedelta(0):
+                return held_up(r0)
+            report.say(f"{clock_label(clock.now(), tz)}: following run {r0.get('id')} ({r0.get('display_title') or 'Update & Deploy'},"
+                       f" running since {clock_label(began, tz)}) — a morning refresh started now would wait behind it")
+            r = follow(gh, int(r0["id"]), clock, left)
+            last_run, waited = r, True
+            followed.update(int(x) for x in (r0.get("id"), r.get("id")) if x)
+            if r.get("timed_out"):
+                return held_up(r)
+            last_look = max(last_look, began) if last_look else began
+            if r.get("conclusion") != "success":
+                # someone else's run that failed: this check goes on with its own refresh (the loop decides)
+                report.row("Waited for", f"{run_link(gh, r.get('id'), r)} — it ended \"{r.get('conclusion') or r.get('status') or '?'}\"")
+                return None
+            live2, shown = wait_live(site, r, today, clock, get)
+            if not shown:
+                return not_shown(r, live2)
+            live = live2
+            turned()
+            if is_done(live, today):
+                return success(live, "Followed the Update & Deploy run that was already running.", r)
+            return None
+
         def wait_to_ask(late: list[str]) -> int | None:
             """Waits until the magazines may be asked again — POLL_EVERY after the last look — → None (the
             loop reads the site and the queue, then asks); or, when that would be after the window, or this
@@ -773,10 +868,50 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
             clock.sleep((nxt - t).total_seconds())
             return None
 
+        def refresh_for(out: list[str]) -> int | None:
+            """Today's build is up and the quotes `out` are out on the magazines' pages: starts the morning refresh
+            (at most MAX_RUNS in all — then the yellow note), follows it and reads the site → an exit code, or
+            None: the loop reads the site and the queue again (the next question POLL_EVERY after this look —
+            or the day turned while the refresh ran, and the new day comes first)."""
+            nonlocal live, last_run, last_look, missed, runs_started
+            if runs_started >= MAX_RUNS:
+                missed = out
+                return late_note(late_pubs(live, today))
+            r = start_and_follow(gh, clock, report)
+            runs_started += 1
+            last_run = r
+            if r is None or r.get("timed_out") or r.get("conclusion") != "success":
+                return failed(report, gh, r, started_by, live)
+            live2, shown = wait_live(site, r, today, clock, get)
+            last_look = clock.now()
+            if not shown:
+                return not_shown(r, live2)
+            live = live2
+            day_turned = turned()
+            if is_done(live, today):
+                what = f"the {pub_names(out)} quote{'s' if len(out) > 1 else ''}"
+                how = (f"Found {what} out, waited for the Update & Deploy run that was running, then started the morning "
+                       "refresh." if waited else f"Waited for {what}, then started the morning refresh." if asks > 1
+                       else f"Found {what} out, then started the morning refresh.")
+                return success(live, how, r)
+            late = late_pubs(live, today)
+            # a quote found out on the day before is no news about the new day's
+            missed = [] if day_turned else [p for p in out if p in late]
+            # Today's build: the next question POLL_EVERY after this look. (The day turned while the refresh ran
+            # and the site shows the day before's build: the site and the queue are read again, then the new
+            # day comes first.)
+            return wait_to_ask(late) if live.get("day") == today.isoformat() else None
+
         while True:
             turned()
             now = clock.now()
-            if waiting:
+            new_day_missing = not live or live.get("day") != today.isoformat()
+            if running and (waiting or new_day_missing or pending):
+                # A run is going on: whatever this pass would start or follow must wait for it — so it goes first.
+                end = follow_running()
+                if end is not None:
+                    return end
+            elif waiting:
                 # Never start a run while one waits: it would take the waiting run's place in the queue.
                 if now - t_start > GUARD_MAX:
                     return failed(report, gh, last_run, started_by, live, "Update & Deploy runs kept waiting in the queue for "
@@ -793,7 +928,7 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
                 turned()
                 if is_done(live, today):
                     return success(live, "Followed the Update & Deploy run that was already waiting.", r)
-            elif not live or live.get("day") != today.isoformat():
+            elif new_day_missing:
                 # The NEW DAY first — even before the quote is out.
                 if now - t_start > GUARD_MAX:
                     return failed(report, gh, last_run, started_by, live, "today's build was still not on the site after "
@@ -823,9 +958,23 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
             else:
                 # Today's build is up; a magazine's quote is not today's yet.
                 late = late_pubs(live, today)
-                if now < poll_from:
+                pending = [p for p in pending if p in late]
+                if pending:
+                    # Out on the page while an update was running; that run has ended without bringing it: the
+                    # refresh now — POLL_EVERY after the last look at the pages, and never after GUARD_MAX.
+                    if now - t_start > GUARD_MAX:
+                        missed = pending
+                        return late_note(late)
+                    if last_look is not None and now < last_look + POLL_EVERY:
+                        clock.sleep((last_look + POLL_EVERY - now).total_seconds())      # then the site and the queue
+                    else:
+                        out, pending = pending, []
+                        end = refresh_for(out)
+                        if end is not None:
+                            return end
+                elif now < poll_from:
                     return too_early(late)
-                if last_look is not None and now < last_look + POLL_EVERY:
+                elif last_look is not None and now < last_look + POLL_EVERY:
                     # a run this check started or followed has just read the pages: ask POLL_EVERY after it
                     end = wait_to_ask(late)
                     if end is not None:
@@ -840,34 +989,11 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
                     out = [p for p in late if shown_now.get(p) == today.isoformat()]
                     report.say(f"{clock_label(now, tz)}: " + ", ".join(
                         f"{PUB_NAMES.get(p, p)}'s page shows {shown_now.get(p) or 'no dated quote'}" for p in late))
-                    if out and runs_started >= MAX_RUNS:
-                        missed = out
-                        return late_note(late)
-                    if out:
-                        r = start_and_follow(gh, clock, report)
-                        runs_started += 1
-                        last_run = r
-                        if r is None or r.get("timed_out") or r.get("conclusion") != "success":
-                            return failed(report, gh, r, started_by, live)
-                        live2, shown = wait_live(site, r, today, clock, get)
-                        last_look = clock.now()
-                        if not shown:
-                            return not_shown(r, live2)
-                        live = live2
-                        day_turned = turned()
-                        if is_done(live, today):
-                            what = f"the {pub_names(out)} quote{'s' if len(out) > 1 else ''}"
-                            how = (f"Waited for {what}, then started the morning refresh." if asks > 1
-                                   else f"Found {what} out, then started the morning refresh.")
-                            return success(live, how, r)
-                        late = late_pubs(live, today)
-                        # a quote found out on the day before is no news about the new day's
-                        missed = [] if day_turned else [p for p in out if p in late]
-                    # Today's build: the next question POLL_EVERY after this look. (The day turned while the
-                    # refresh ran and the site shows the day before's build: the site and the queue are read
-                    # again below, then the new day comes first.)
-                    if live.get("day") == today.isoformat():
-                        end = wait_to_ask(late)
+                    if out and running:
+                        # a refresh started now would only wait behind the running update: the loop follows it first
+                        pending = out
+                    else:
+                        end = refresh_for(out) if out else wait_to_ask(late)
                         if end is not None:
                             return end
             # look again: the live site, and the queue
@@ -877,6 +1003,7 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
                 return success(live, "Today's update arrived.", last_run)
             try:
                 waiting, running = active(gh)
+                running = [r for r in running if int(r.get("id") or 0) not in followed]
             except GitHubError as e:
                 report.say(f"(the runs on GitHub could not be listed: {e})")
                 waiting, running = [], []
