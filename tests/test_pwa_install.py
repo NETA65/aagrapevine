@@ -17,9 +17,10 @@ Firefox / in-app user agents, the installed app, the offline stand-in, keyboard 
                 named as in the manifest, one footer entry (the bottom bar's "Saved pages & app", no
                 "Install as an app" in "Stay updated"), the Accessibility page's one link, the local
                 safari-menu icon.
-  * Stand-in  — the script after the hero's buttons, run in Node against a pretend page: standing in for a page
-                that isn't saved it says "You're offline" (hero and tab title) and leaves "Try again"
-                alone; opened on purpose (index.html included) it changes nothing.
+  * Stand-in  — the script after the hero's buttons (inside the hero), run in Node against a pretend
+                page: standing in for a page that isn't saved it says "You're offline" (hero and tab
+                title) and leaves "Try again" alone; opened on purpose (index.html included) it changes
+                nothing; pwa.js tells the two apart the same way.
   * Redirect  — the old install page's address (src/pages/app-redirect.njk) forwards to /offline/ with
                 the ?query and the #guide, #steps without one; noindex, canonical, out of the sitemap.
   * Manifest  — both manifests name each other as related_applications (getInstalledRelatedApps),
@@ -38,8 +39,8 @@ Firefox / in-app user agents, the installed app, the offline stand-in, keyboard 
                 localStorage "gvlv-app", leaves automated browsers alone, asks getInstalledRelatedApps,
                 has the "install" toast with Not now / Show me how (and "Not now" names the page the steps
                 are on); every install link goes to /offline/, the hero's buttons give way to "Try again"
-                on the stand-in; pwa.css; nothing left of the old page (no /app/ anywhere but its
-                forwarding stub).
+                on the stand-in, a #guide asked for stays on screen as the saved list fills in; pwa.css;
+                nothing left of the old page (no /app/ anywhere but its forwarding stub).
 
     python -m unittest tests.test_pwa_install -v        (or: python -m unittest discover -s tests)
 """
