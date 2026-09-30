@@ -36,8 +36,8 @@ descKey: pwa.offline.meta_desc
     the manifest's, src/pages/manifest.11ty.js —, removing it, the magazines' own apps).
     The contract with pwa.js (header items 5 and 6; install-core.js tells which device this is):
       [data-pwa-offline-copy]               the hero's buttons, with the hero's other words: standing
-                                            in (data-title-standin, data-sub-standin — the script after
-                                            the hero) and opened on purpose (data-sub-online, or
+                                            in (data-title-standin, data-sub-standin — the script right
+                                            after them) and opened on purpose (data-sub-online, or
                                             data-sub-offline while there is no connection — pwa.js)
       [data-pwa-retry] (hidden)             "Try again": only while standing in for another page
       [data-pwa-steps-link] · [data-pwa-install-hero]   "See the steps" (to the visitor's guide) or the
@@ -144,7 +144,7 @@ descKey: pwa.offline.meta_desc
   {% call ui.heroAside("pwa.offline.phone_title" | t(lang), lang, { id: "pwa-phone-title", icon: "phone", lead: "pwa.offline.phone_lead" | t(lang), href: ("/accessibility/" | lurl(lang)) + "#phone", linkLabel: "pwa.offline.phone_link" | t(lang) }) %}
   <ul class="hero-aside-links" role="list">
     {%- for mt in phone.meetings %}{% if mt.call and loop.index <= 3 %}
-    <li>{{ ui.heroAsideLink({ href: mt.call, label: ("nav.meeting" if mt.key == "committee" else "access.aud_weekly_t") | t(lang), text: "pwa.offline.phone_call" | t(lang, { city: mt.callCity, id: (mt.id | replace(" ", " ")) }), icon: "phone-call", tone: ("vine" if mt.key == "committee" else "grape") }, lang) }}</li>
+    <li>{{ ui.heroAsideLink({ href: mt.call, label: ("nav.meeting" if mt.key == "committee" else "access.aud_weekly_t") | t(lang), text: "pwa.offline.phone_call" | t(lang, { city: mt.callCity, id: (mt.id | replace(" ", " ")) }), icon: "phone-call", tone: ("vine" if mt.key == "committee" else "grape") }, lang) }}</li>
     {%- endif %}{% endfor %}
   </ul>
   {% endcall %}
