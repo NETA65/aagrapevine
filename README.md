@@ -192,8 +192,8 @@ What the newer pages do:
   already out; and "Keep up all month" (the daily quote, What's New, the bulletin, Instagram, subscriptions).
   `/monthly/`'s "This month" card drops a date once it is over and shows the next committee meeting. A page
   left open after the month ends says so and links the new month. Its QR code opens that month's page; the
-  three previous months' addresses forward to `/monthly/`. The same page holds the **GV/LV report** for district meetings
-  (`/monthly/#report`, see section 4); the old `/districts/` address forwards there.
+  three previous months' addresses forward to `/monthly/`. The same page holds the **GV/LV report** for
+  district meetings (`/monthly/#report`, see section 4); the old `/districts/` address forwards there.
 - **Monthly digest** (`/digest/`) — everything from last month on one page (the *September 2026 digest* all
   through October): bulletin posts, the events that took place, the committee's files and photo albums added
   that month, the magazines' new stories, writers from Area 65 & Texas, podcasts, videos, the magazines'
@@ -728,8 +728,8 @@ through October):
   to the site's Instagram page) and new documents;
 - and **one link**, "Coming up in October", to this month's page of the **Monthly toolkit**
   (`/monthly/2026-10/` in October) — the home of everything current: the committee meeting (with a link to
-  its Zoom details on Meetings), the events still to come, the weekly open meetings, story deadlines and La Viña's topics, this
-  month's issues and tips, the Book of the Month and subscriptions.
+  its Zoom details on Meetings), the events still to come, the weekly open meetings, story deadlines and
+  La Viña's topics, this month's issues and tips, the Book of the Month and subscriptions.
 
 It goes out **once**, on the **1st from 7 AM Central**, as soon as the site's first full update of the month
 has run (the Morning check starts it early on the 1st), so the month's last items are in it — usually on the
@@ -838,10 +838,10 @@ The key can do what this repository's **Actions** tab can: start, re-run, cancel
 runs (and their logs), clear its caches, switch its workflows on or off and change a few Actions settings.
 It cannot change the site's files or secrets — but it could, for example, send the monthly e-mail to every
 district again, or start hours-long searches of the magazines' websites. **If it ever leaks** (it was
-pasted somewhere others can see), delete it at once, look in **Actions** for a workflow that was switched off (**Enable workflow**),
-and make a new key (Part 1). Any scheduler that can send the same request works too — for example a Google
-Apps Script timer in the committee's Google account, or a scheduled task on a computer that is on at
-4:30 AM.
+pasted somewhere others can see), delete it at once, look in **Actions** for a workflow that was switched
+off (**Enable workflow**), and make a new key (Part 1). Any scheduler that can send the same request works
+too — for example a Google Apps Script timer in the committee's Google account, or a scheduled task on a
+computer that is on at 4:30 AM.
 
 ---
 
@@ -913,9 +913,9 @@ artwork live on in the new design. Pick **one** of these:
    secrets (see [docs/SETUP-GITHUB.md](docs/SETUP-GITHUB.md)). Then switch **Update & Deploy**,
    **Morning check** and **Monthly e-mail digest** off and on again (**Actions → the workflow → ⋯ →
    Disable workflow**, then **Enable workflow**) so the failure e-mails go to the new owner. Redo the
-   [morning alarm](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended): a new key with `neta65` as *Resource owner* (the
-   organisation must allow fine-grained keys: its **Settings → Personal access tokens**), and the new
-   address `…/repos/neta65/Grapevine/…` in the job's URL.
+   [morning alarm](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended):
+   a new key with `neta65` as *Resource owner* (the organisation must allow fine-grained keys: its
+   **Settings → Personal access tokens**), and the new address `…/repos/neta65/Grapevine/…` in the job's URL.
 5. In `config/site.yml` set `url: "https://neta65.github.io/Grapevine"` and update the address in
    `sources: → crawler: → user_agent`.
 6. Run **Update & Deploy**. The site is live at the old address; bookmarks keep working.
@@ -968,7 +968,8 @@ the new **Events** page, in Spanish if they had chosen Spanish on the old site.
   **Test run** (204) and write the new date in your calendar. The key must be made by the repository's
   **owner** (a key only reaches its owner's repositories): when the chair changes, the owner keeps — or
   remakes — it; if the repository moves ([section 13](#13-replacing-the-old-site)), make a new key with the
-  new owner as *Resource owner* and change the job's URL ([10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)).
+  new owner as *Resource owner* and change the job's URL
+  ([10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)).
 - **Many Morning check runs** in the Actions tab are normal: GitHub's own schedule starts it every hour
   through the night as a backstop. A run that had nothing to do (today's update was already there, or it was
   too early to ask a magazine) takes a few seconds and is deleted the next day; the others stay, so you can
