@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-30T09:45:57Z",
- "updated": "2026-09-30T09:45:57Z",
+ "generated": "2026-09-30T09:57:21Z",
+ "updated": "2026-09-30T09:57:21Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-09-30T09:45:34Z",
-   "attempted": "2026-09-30T09:45:34Z",
+   "updated": "2026-09-30T09:57:02Z",
+   "attempted": "2026-09-30T09:57:02Z",
    "count": 7,
    "new_7d": 7,
    "error": null,
@@ -41,7 +41,7 @@
     "folders": 9,
     "files": 7,
     "fetched": 7,
-    "new": 1,
+    "new": 0,
     "removed": 0,
     "kept_unverified": 0,
     "by_category": {
@@ -66,10 +66,10 @@
     "depth_limited": [],
     "shortcuts_resolved": 0,
     "announcements": {
-     "fetched": 1
+     "reused": 1
     },
     "forms": {},
-    "requests": 10,
+    "requests": 9,
     "truncated": false,
     "warnings": []
    }
@@ -79,8 +79,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-09-30T09:45:34Z",
-   "attempted": "2026-09-30T09:45:34Z",
+   "updated": "2026-09-30T09:57:02Z",
+   "attempted": "2026-09-30T09:57:02Z",
    "count": 0,
    "new_7d": 0,
    "error": null,
@@ -97,8 +97,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-09-30T09:45:34Z",
-   "attempted": "2026-09-30T09:45:34Z",
+   "updated": "2026-09-30T09:57:02Z",
+   "attempted": "2026-09-30T09:57:02Z",
    "count": 9,
    "new_7d": 9,
    "error": null,
@@ -236,8 +236,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-09-30T09:45:36Z",
-   "attempted": "2026-09-30T09:45:36Z",
+   "updated": "2026-09-30T09:57:04Z",
+   "attempted": "2026-09-30T09:57:04Z",
    "count": 297,
    "new_7d": 297,
    "error": null,
@@ -264,7 +264,7 @@
     "gone_checks": 0,
     "discovery_checked": "2026-09-23T16:27:25Z",
     "discovered_feeds": [],
-    "seconds": 2.2,
+    "seconds": 2.7,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -427,8 +427,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-09-30T09:45:52Z",
-   "attempted": "2026-09-30T09:45:52Z",
+   "updated": "2026-09-30T09:57:20Z",
+   "attempted": "2026-09-30T09:57:20Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -437,7 +437,7 @@
     "parsed": 2,
     "requests": 2,
     "today": "2026-09-30",
-    "new": 2
+    "new": 0
    }
   }
  ],
@@ -472,16 +472,16 @@
   "updated": "2026-09-29T16:41:45Z"
  },
  "translations": {
-  "cached": 1901,
+  "cached": 1898,
   "engine": "argos1.0-ct2/v5",
   "model_enabled": true,
-  "translated_this_run": 3,
+  "translated_this_run": 0,
   "from_cache": 1898,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 4.5,
-  "model_seconds": 3.8,
-  "texts_per_second": 0.7,
+  "seconds": 0.1,
+  "model_seconds": 0.0,
+  "texts_per_second": null,
   "glossary_entries": 257
  },
  "counts": {

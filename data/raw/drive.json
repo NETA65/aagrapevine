@@ -1,7 +1,7 @@
 {
  "source": "drive",
- "updated": "2026-09-30T09:45:34Z",
- "attempted": "2026-09-30T09:45:34Z",
+ "updated": "2026-09-30T09:57:02Z",
+ "attempted": "2026-09-30T09:57:02Z",
  "ok": true,
  "error": null,
  "stats": {
@@ -32,7 +32,7 @@
   "folders": 9,
   "files": 7,
   "fetched": 7,
-  "new": 1,
+  "new": 0,
   "removed": 0,
   "kept_unverified": 0,
   "by_category": {
@@ -57,10 +57,10 @@
   "depth_limited": [],
   "shortcuts_resolved": 0,
   "announcements": {
-   "fetched": 1
+   "reused": 1
   },
   "forms": {},
-  "requests": 10,
+  "requests": 9,
   "truncated": false,
   "warnings": []
  },
