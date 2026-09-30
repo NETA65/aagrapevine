@@ -177,10 +177,11 @@ jobs:
           set -euo pipefail
           # Only what the Morning check imports (scripts/ops/morning_check.py → scripts/sync/quote.py and
           # common.py), at the versions requirements.txt allows — not the update's translation, video
-          # and PDF tools, so a problem with one of those never stops the morning.
+          # and PDF tools, so a problem with one of those never stops the morning. tzdata: the time-zone
+          # data zoneinfo falls back to where the system has none (Linux runners have it; Windows does not).
           grep -iE '^(requests|beautifulsoup4|lxml|protego|PyYAML)[<>=!~ ]' requirements.txt > "$RUNNER_TEMP/morning-requirements.txt"
           python -m pip install --upgrade pip
-          python -m pip install -r "$RUNNER_TEMP/morning-requirements.txt"
+          python -m pip install -r "$RUNNER_TEMP/morning-requirements.txt" tzdata
 
       - name: Start the morning update, follow it, check the live site
         id: check
