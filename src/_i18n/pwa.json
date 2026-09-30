@@ -28,7 +28,8 @@
   "pwa.offline.home": { "en": "Go to the home page", "es": "Ir a la página de inicio" },
   "pwa.offline.phone_title": { "en": "Join by phone", "es": "Únete por teléfono" },
   "pwa.offline.phone_lead": { "en": "No data? Call in to our Zoom meetings from any phone.", "es": "¿Sin datos? Entra a nuestras reuniones de Zoom desde cualquier teléfono." },
-  "pwa.offline.phone_call": { "en": "Call now ({city}) · ID {id}", "es": "Llamar ahora ({city}) · ID {id}" },
+  "pwa.offline.phone_call": { "en": "Call now ({city})", "es": "Llamar ahora ({city})" },
+  "pwa.offline.phone_id": { "en": "ID {id}", "es": "ID {id}" },
   "pwa.offline.phone_link": { "en": "All numbers", "es": "Todos los números" },
   "pwa.offline.list_h": { "en": "Saved on this device", "es": "Guardadas en este dispositivo" },
   "pwa.offline.group_saved": { "en": "Saved for offline", "es": "Guardadas para usar sin conexión" },
@@ -69,8 +70,8 @@
     "es": "Activa el Ahorro de datos en el menú Aa: las imágenes, las vistas previas de video y el arte animado quedan apagados hasta que los pidas."
   },
   "pwa.app.title": { "en": "Install this site as an app", "es": "Instala este sitio como app" },
-  "pwa.app.cta_steps": { "en": "See the steps", "es": "Ver los pasos" },
-  "pwa.app.cta_install": { "en": "Install", "es": "Instalar" },
+  "pwa.app.cta_steps": { "en": "How to install the app", "es": "Cómo instalar la app" },
+  "pwa.app.cta_install": { "en": "Install the app", "es": "Instalar la app" },
   "pwa.app.cta_send": { "en": "Send this page", "es": "Enviar esta página" },
   "pwa.app.send_text": {
     "en": "How to put the NETA 65 Grapevine / La Viña site on your phone's home screen:",

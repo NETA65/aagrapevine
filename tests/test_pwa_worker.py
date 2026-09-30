@@ -8,7 +8,9 @@
                  the page open during a first visit is kept WITH its own styles and scripts.
   * pages      — online: the page from the site (kept for later); offline, a server error or no answer
                  in time: the kept copy (and pwa.js is told it is a copy); no copy: the offline page in
-                 the address's language; GitHub Pages' 404 passes through and is never kept.
+                 the address's language; GitHub Pages' 404 passes through and is never kept; an old
+                 address's forwarding page is kept (it still forwards offline), marked so the offline page
+                 doesn't list it.
   * files      — the site's own GET requests only (other sites, POST, byte ranges, the worker and the
                  manifest are never touched); styles/images/JSON work offline once seen.
   * Save       — "Save key pages for offline" keeps the visitor's pages in their language, this month's
@@ -191,6 +193,15 @@ const R = {};
   R.offlineEs = await w.request(B + "es/shop/", { navigate: true });
   R.offlineEn = await w.request(B + "shop/", { navigate: true });
 
+  // an old address's forwarding page (a meta refresh): kept like any page, and marked
+  w.page(B + "meeting/", { body: `<!doctype html><html lang="en"><head><meta charset="utf-8"><script>location.replace("${B}meetings/");</script>` +
+    `<meta http-equiv="refresh" content="0; url=${B}meetings/"><title>Meetings</title></head><body>MOVED</body></html>` });
+  await w.request(B + "meeting/", { navigate: true });
+  const fwd = await w.store.get("gvlv-pages-v1").match(ORIGIN + B + "meeting/");
+  R.moved = { forwarding: fwd ? fwd.headers.get("x-gvlv-moved") : "not kept", page: copy.headers.get("x-gvlv-moved") };
+  w.net.delete(ORIGIN + B + "meeting/");
+  R.movedOffline = await w.request(B + "meeting/", { navigate: true });
+
   w.page(B + "meetings/", { status: 503, body: "Server trouble" });
   R.serverError = await w.request(B + "meetings/", { navigate: true });
   w.page(B + "nope/", { status: 404, body: html("Page not found", "404") });
@@ -335,6 +346,15 @@ class Worker(unittest.TestCase):
         self.assertNotIn(ORIGIN + B + "nope/", r["keptAfter404"])
         # no answer in time → the copy
         self.assertIn("ONLINE", r["slow"]["body"])
+
+    def test_forwarding_pages_are_kept_and_marked(self):
+        # an old address's forwarding page (its meta refresh sends the visitor on: /meeting/, the old install page …)
+        # is kept like any page, so an old link still forwards offline; x-gvlv-moved tells the offline page not to
+        # list it (pwa.js offlineList) — a page of its own has no such mark
+        r = self.r
+        self.assertEqual(r["moved"], {"forwarding": "1", "page": None})
+        self.assertIn("MOVED", r["movedOffline"]["body"])
+        self.assertTrue(r["movedOffline"]["saved"])
 
     def test_only_the_sites_own_get_requests(self):
         for name, res in self.r["untouched"].items():

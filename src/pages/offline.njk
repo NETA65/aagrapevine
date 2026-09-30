@@ -11,8 +11,9 @@
 # It is also the service worker's stand-in: src/pages/sw.11ty.js keeps both languages in its app shell
 # and shows them — in the language of the address asked for — when a page is not saved on this device
 # and there is no connection. The hero then says so from the first paint (the script after its
-# buttons), and the list of saved pages follows. The list is read from the worker's caches by pwa.js
-# (no JavaScript or no service worker: a plain note instead).
+# buttons), and the list of saved pages follows — at the top of the page, whatever #fragment that
+# address had. The list is read from the worker's caches by pwa.js (no JavaScript or no service
+# worker: a plain note instead; forwarding pages — old addresses — are never listed).
 pagination: { data: languages, size: 1, alias: lang }
 permalink: "{{ '/' if lang == 'en' else '/es/' }}offline/index.html"
 layout: layouts/base.njk
@@ -37,12 +38,13 @@ descKey: pwa.offline.meta_desc
     The contract with pwa.js (header items 5 and 6; install-core.js tells which device this is):
       [data-pwa-offline-copy]               the hero's buttons, with the hero's other words: standing
                                             in (data-title-standin, data-sub-standin — the script right
-                                            after them) and opened on purpose (data-sub-online, or
+                                            after them — and data-hash, the #fragment it took off the
+                                            address) and opened on purpose (data-sub-online, or
                                             data-sub-offline while there is no connection — pwa.js)
       [data-pwa-retry] (hidden)             "Try again": only while standing in for another page
-      [data-pwa-steps-link] · [data-pwa-install-hero]   "See the steps" (to the visitor's guide) or the
-                                            one-tap "Install", one shown at a time; neither while standing
-                                            in nor in the installed app
+      [data-pwa-steps-link] · [data-pwa-install-hero]   "How to install the app" (to the visitor's
+                                            guide) or the one-tap "Install the app", one shown at a time;
+                                            neither while standing in nor in the installed app
       [data-pwa-saved] …                    the list of saved pages (pwa.js offlineList)
       [data-pwa-save]                       the "Save key pages" button (pwa.js; empty without it)
       section[data-pwa-app]                 the guides — pwa.js only works where they are
@@ -144,15 +146,20 @@ descKey: pwa.offline.meta_desc
   {% call ui.heroAside("pwa.offline.phone_title" | t(lang), lang, { id: "pwa-phone-title", icon: "phone", lead: "pwa.offline.phone_lead" | t(lang), href: ("/accessibility/" | lurl(lang)) + "#phone", linkLabel: "pwa.offline.phone_link" | t(lang) }) %}
   <ul class="hero-aside-links" role="list">
     {%- for mt in phone.meetings %}{% if mt.call and loop.index <= 3 %}
-    <li>{{ ui.heroAsideLink({ href: mt.call, label: ("nav.meeting" if mt.key == "committee" else "access.aud_weekly_t") | t(lang), text: "pwa.offline.phone_call" | t(lang, { city: mt.callCity, id: (mt.id | replace(" ", " ")) }), icon: "phone-call", tone: ("vine" if mt.key == "committee" else "grape") }, lang) }}</li>
+    {#- "Call now (Houston) · ID 871 2036 8287": the ID keeps a line of its own where it fits (an
+        inline-block, "ID" and the number joined by a no-break space) and wraps only between its digit
+        groups where it doesn't — never inside one (a narrow phone at 150 %) -#}
+    {%- set callText = (("pwa.offline.phone_call" | t(lang, { city: mt.callCity })) | escape) ~ " · " ~ '<span class="inline-block">' ~ (("pwa.offline.phone_id" | t(lang, { id: mt.id })) | escape) ~ "</span>" %}
+    <li>{{ ui.heroAsideLink({ href: mt.call, label: ("nav.meeting" if mt.key == "committee" else "access.aud_weekly_t") | t(lang), text: callText | safe, icon: "phone-call", tone: ("vine" if mt.key == "committee" else "grape") }, lang) }}</li>
     {%- endif %}{% endfor %}
   </ul>
   {% endcall %}
   {%- endif %}
 {%- else %}
-{#- Opened on purpose: "See the steps" (→ the visitor's guide) · "Install" (one tap — only while the
-    browser offers it; then it takes the place of "See the steps") · "Send this page" (share sheet,
-    else Copy). Standing in for a page that isn't saved: "Try again" alone (it reloads that address). -#}
+{#- Opened on purpose: "How to install the app" (→ the visitor's guide) · "Install the app" (one tap —
+    only while the browser offers it; then it takes the place of the other) · "Send this page" (share
+    sheet, else Copy). The two install controls name the app themselves: the hero's title is the whole
+    page's. Standing in for a page that isn't saved: "Try again" alone (it reloads that address). -#}
 <div class="hero-actions" data-pwa-offline-copy
      data-title-standin="{{ 'pwa.offline.title' | t(lang) }}" data-sub-standin="{{ 'pwa.offline.sub' | t(lang) }}"
      data-sub-online="{{ 'pwa.offline.sub_online' | t(lang) }}" data-sub-offline="{{ 'pwa.offline.sub_direct' | t(lang) }}">
@@ -161,21 +168,39 @@ descKey: pwa.offline.meta_desc
   <button type="button" class="btn-light" data-pwa-act="install" data-pwa-install-hero hidden>{% icon "download", "size-4" %} {{ "pwa.app.cta_install" | t(lang) }}</button>
   <button type="button" class="btn-on-dark" data-js-only data-share="{{ appUrl }}" data-share-title="{{ 'pwa.app.title' | t(lang) }}" data-share-text="{{ 'pwa.app.send_text' | t(lang) }}">{% icon "share-2", "size-4" %} {{ "pwa.app.cta_send" | t(lang) }}</button>
 </div>
-{#- Standing in for a page that isn't saved — the service worker's answer at that page's address, so
-    JavaScript is on: from the first paint the hero (and the tab's title) says "You're offline" and
-    "This page isn't saved on this device yet…", and "Try again" (that address) is its one button.
-    pwa.js tells the same way (isFallback) and reloads the page once the connection is back. (Here,
-    inside the hero, right after what it changes: a script between the hero and the saved pages would
-    keep the saved pages' card from spacing itself under the "Join by phone" card, main.css.) -#}
+{#- The hero's script, read with the page — before the first paint, and before the browser looks for
+    the address's #fragment. (Here, inside the hero, right after what it changes: a script between the
+    hero and the saved pages would keep the saved pages' card from spacing itself under the "Join by
+    phone" card, main.css.)
+    * Standing in for a page that isn't saved — the service worker's answer at that page's address, so
+      JavaScript is on: the hero (and the tab's title) says "You're offline" and "This page isn't saved
+      on this device yet…", and "Try again" (that address) is its one button. The address's #fragment
+      belongs to the page asked for (/gvr/#steps), yet this page has ids of its own (#steps, the
+      guides) the browser would jump to, past the hero and the saved pages: it comes off the address,
+      kept in data-hash, and pwa.js puts it back before reloading. pwa.js tells standing in the same
+      way (isFallback) and reloads the page once the connection is back.
+    * Opened on purpose again — a reload, Back: the browser puts the visitor back where they were, but
+      Chrome first jumps to a #guide in the address when it can't do that at once (the saved pages,
+      listed a moment later, make the page taller than its first layout). The #fragment comes off for
+      the load and back on once it is done. -#}
 <script>(function (box) {
   try {
-    if (!box || location.pathname.replace(/index\.html$/, "") === {{ (page.url | url) | dump | safe }}) return;
+    if (!box) return;
+    if (location.pathname.replace(/index\.html$/, "") === {{ (page.url | url) | dump | safe }}) {
+      var nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null, h = location.hash;
+      if (h && nav && (nav.type === "reload" || nav.type === "back_forward")) {
+        history.replaceState(history.state, "", location.pathname + location.search);
+        addEventListener("load", function () { history.replaceState(history.state, "", location.pathname + location.search + h); });
+      }
+      return;
+    }
     var hero = box.closest("[data-gv-hero]"), title = box.getAttribute("data-title-standin"), rest = document.title.indexOf(" · ");
     hero.querySelector(".gv-hero-title > span:last-child").textContent = title;
     hero.querySelector(".gv-hero-sub").textContent = box.getAttribute("data-sub-standin");
     document.title = title + (rest < 0 ? "" : document.title.slice(rest));
     for (var i = 0; i < box.children.length; i++) box.children[i].hidden = !box.children[i].hasAttribute("data-pwa-retry");
     box.querySelector("[data-pwa-retry]").setAttribute("href", location.pathname + location.search);
+    if (location.hash) { box.setAttribute("data-hash", location.hash); history.replaceState(history.state, "", location.pathname + location.search); }
   } catch (e) { /* the page's own words stay */ }
 })(document.querySelector("[data-pwa-offline-copy]"));</script>
 {%- endif %}

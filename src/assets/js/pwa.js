@@ -23,11 +23,13 @@
       warm up connections, episode sizes show before playing (.pwa-saver-only). "Show images" undoes
       it for the page being viewed. Every change applies at once (html[data-saver] is watched).
    5. The offline page — "Saved pages & app" (/offline/, src/pages/offline.njk): lists the pages
-      saved on this device (read from the caches; a #guide asked for below the list stays on screen
-      as the list fills in). Opened on purpose, its hero is the page's own (offline, it adds that
-      the saved pages still open); standing in for a page that isn't saved (isFallback: the worker's
-      answer at another address), the page's own script has already made it "You're offline … Try
-      again", and the page reloads once the connection is back.
+      saved on this device (read from the caches, forwarding pages left out; a #guide asked for below
+      the list stays on screen as the list fills in — on arrival only: after a reload or Back the
+      visitor stays where the browser puts them). Opened on purpose, its hero is the page's own
+      (offline, it adds that the saved pages still open); standing in for a page that isn't saved
+      (isFallback: the worker's answer at another address), the page's own script has already made it
+      "You're offline … Try again" and taken the address's #fragment off (it is the other page's), so
+      the page opens at its top; it reloads, #fragment back on, once the connection is back.
    6. Install as an app. install-core.js (window.GVInstall, loaded just before this file) says which
       phone and browser this is, which guide on /offline/ fits it (#steps, src/pages/offline.njk)
       and when the notice may show; this section draws it all:
@@ -42,10 +44,13 @@
         Escape inside it) = 30 days of quiet, twice at most; 4 showings in all; focus goes back to
         where it was. No animation and nothing announced until the visitor acts on it.
       * the install row of section 2, and the offline page's install steps ([data-pwa-app]): the
-        visitor's guide opened and marked "Your device" (any #guide in the address — or a link to
-        one on the page — opens too), Safari's first step for its version ([data-pwa-v]), the
-        "inside another app" / "You're using the app" / "already on this device" notes, the hero's
-        Install button while the browser offers one-tap install, every guide open when printed.
+        visitor's guide opened and marked "Your device" (not in the installed app; any #guide in the
+        address — or a link to one on the page — opens too), Safari's first step for its version
+        ([data-pwa-v]), the "inside another app" / "You're using the app" / "already on this device"
+        notes, the hero's Install button while the browser offers one-tap install, every guide open
+        when printed. Reading the steps quiets the notice for 30 days, as "Show me how" does — once
+        they are reached (the address asks for them, a link to them or a guide's title is used, or
+        they come on screen), not for a look at the saved pages above them.
       * Inside the installed app (display-mode standalone …): no notice, no install row, and the
         steps say "You're using the app". "Known to be installed": installed from this browser,
         opened as the app in the last 90 days, or navigator.getInstalledRelatedApps() says so (the
@@ -470,13 +475,8 @@
   }
   if (GI) {
     rec = loadRec();
-    var now0 = Date.now();
-    if (state.installed) rec = saveRec(GI.opened(rec, now0));
-    else if (!isFallback && !isNoindex) {
-      rec = saveRec(GI.view(rec));
-      // on the page with the steps they are found: no notice for a while after it either
-      if (appSteps) rec = saveRec(GI.guided(rec, now0));
-    }
+    if (state.installed) rec = saveRec(GI.opened(rec, Date.now()));
+    else if (!isFallback && !isNoindex) rec = saveRec(GI.view(rec));   // (the steps read: readSteps)
     state.known = recKnown();
   }
 
@@ -686,12 +686,29 @@
     d.open = true;
     return d;
   }
+  /* The steps are read (install-core.js guided: no notice for 30 days) once they are reached — they
+     sit below the saved pages, and a look at those is not reading them: the address asks for them
+     (#steps or a guide: "Show me how", the Aa panel's row, a link someone sent), a link to them or a
+     guide's title is used, or they come on screen. Once per page view; never while standing in, nor
+     in the installed app. inSteps(id): the element with that id is part of the steps. */
+  var stepsRead = false;
+  function readSteps() {
+    if (stepsRead || !GI || state.installed || isFallback) return;
+    stepsRead = true;
+    rec = saveRec(GI.guided(loadRec(), Date.now()));
+  }
+  function inSteps(id) {
+    var el = null;
+    try { el = id ? document.getElementById(decodeURIComponent(id)) : null; } catch (e) { return false; }
+    return !!(el && appSteps && appSteps.contains(el));
+  }
   var printOpen = null;
   function renderAppSteps() {
     if (!appSteps) return;
+    // "Your device": not in the installed app (the steps say "You're using the app")
     appSteps.querySelectorAll("[data-pwa-guide]").forEach(function (d) {
       var badge = d.querySelector("[data-pwa-here]");
-      if (badge) badge.hidden = !(dev && dev.guide === d.getAttribute("data-pwa-guide"));
+      if (badge) badge.hidden = !(dev && !state.installed && dev.guide === d.getAttribute("data-pwa-guide"));
     });
     if (dev && dev.variant) appSteps.querySelectorAll("[data-pwa-v]").forEach(function (el) { el.hidden = el.getAttribute("data-pwa-v") !== dev.variant; });
     var inapp = appSteps.querySelector("[data-pwa-inapp]");
@@ -709,9 +726,9 @@
     // (the same order as the install row: a one-tap offer means it isn't installed)
     var known = appSteps.querySelector("[data-pwa-known]");
     if (known) known.hidden = state.installed || !!state.installEvt || !state.known;
-    // The hero: one-tap Install while the browser offers it, else "See the steps" (to this device's
-    // guide); neither in the installed app, nor while the page stands in for one that isn't saved
-    // ("Try again" alone). Focus on a button that goes moves to the one that stays.
+    // The hero: one-tap "Install the app" while the browser offers it, else "How to install the app"
+    // (to this device's guide); neither in the installed app, nor while the page stands in for one
+    // that isn't saved ("Try again" alone). Focus on a button that goes moves to the one that stays.
     var btn = document.querySelector("[data-pwa-install-hero]"), steps = document.querySelector("[data-pwa-steps-link]");
     var focused = document.activeElement;
     if (btn) btn.hidden = state.installed || isFallback || !state.installEvt;
@@ -724,16 +741,34 @@
   }
   function startAppSteps() {
     if (!appSteps) return;
-    var hashGuide = function () { try { openGuide(decodeURIComponent(location.hash.slice(1))); } catch (e) { /* a broken #fragment */ } };
-    if (dev) openGuide(dev.guide);
+    var hashGuide = function () {
+      try { openGuide(decodeURIComponent(location.hash.slice(1))); } catch (e) { /* a broken #fragment */ }
+      if (inSteps(location.hash.slice(1))) readSteps();
+    };
+    // this device's guide (in the installed app none: it is installed already)
+    if (dev && !state.installed) openGuide(dev.guide);
     hashGuide();
     window.addEventListener("hashchange", hashGuide);
-    // A link to a guide on the page ("See the steps"): it opens even when the address already has
-    // that #fragment (no hashchange: a guide the visitor closed would stay closed); the link scrolls.
+    // A link to a guide on the page ("How to install the app"): it opens even when the address already
+    // has that #fragment (no hashchange: a guide the visitor closed would stay closed); the link
+    // scrolls. A link into the steps, or a guide's title the visitor opens or closes: they are read.
     document.addEventListener("click", function (e) {
-      var a = e.target.closest && e.target.closest('a[href^="#"]');
-      if (a) { try { openGuide(decodeURIComponent(a.getAttribute("href").slice(1))); } catch (err) { /* a broken #fragment */ } }
+      if (!e.target.closest) return;
+      var a = e.target.closest('a[href^="#"]');
+      if (a) {
+        var id = a.getAttribute("href").slice(1);
+        try { openGuide(decodeURIComponent(id)); } catch (err) { /* a broken #fragment */ }
+        if (inSteps(id)) readSteps();
+      }
+      if (e.target.closest("[data-pwa-guide] > summary")) readSteps();
     });
+    // …and so are steps that come on screen (the top four fifths of the window: not a sliver at the bottom)
+    if (window.IntersectionObserver && GI && !state.installed && !isFallback) {
+      var seen = new IntersectionObserver(function (es) {
+        if (es.some(function (x) { return x.isIntersecting; })) { seen.disconnect(); readSteps(); }
+      }, { rootMargin: "0px 0px -20% 0px" });
+      seen.observe(appSteps);
+    }
     // Printed: every guide open (the closed ones would print as a list of titles), then as they were.
     window.addEventListener("beforeprint", function () {
       printOpen = [];
@@ -866,7 +901,7 @@
     if (b.hasAttribute("data-pwa-retry")) {
       if (!isFallback) return; // (shown only while standing in for another page)
       e.preventDefault();
-      location.reload();
+      reloadAsked();
       return;
     }
     var act = b.getAttribute("data-pwa-act");
@@ -893,7 +928,7 @@
       announce(state.online ? T("You're back online.", "Volviste a tener conexión.") : T("You're offline. Saved pages still open.", "Estás sin conexión. Las páginas guardadas se siguen abriendo."));
       if (state.online) { hideForSession("offline", true); state.copyFrom = null; }
       // The offline page shown in place of another page: that page, now that we can.
-      if (state.online && isFallback) { location.reload(); return; }
+      if (state.online && isFallback) { reloadAsked(); return; }
     }
     syncSaver();
     offlinePageCopy();
@@ -941,6 +976,14 @@
   }
 
   /* ================================================================= The offline page ========== */
+  /* Standing in, the page asked for again ("Try again", the connection back): with the #fragment the
+     page's own script took off the address (data-hash), so that page gets the address it was asked
+     for — /gvr/#steps, not /gvr/. */
+  function reloadAsked() {
+    var box = document.querySelector("[data-pwa-offline-copy]"), h = box && box.getAttribute("data-hash");
+    if (h && !location.hash) { try { history.replaceState(history.state, "", location.pathname + location.search + h); } catch (e) { /* reloaded without it */ } }
+    location.reload();
+  }
   function offlinePageCopy() {
     var box = document.querySelector("[data-pwa-offline-copy]");
     // Standing in for a page that isn't saved: the page's own script has put "You're offline", "This
@@ -962,7 +1005,7 @@
             return c.match(k).then(function (res) {
               var t = "";
               try { t = decodeURIComponent((res && res.headers.get("x-gvlv-title")) || ""); } catch (e) { t = ""; }
-              return { url: k.url, title: t, saved: (res && res.headers.get("x-gvlv-saved")) || "" };
+              return { url: k.url, title: t, saved: (res && res.headers.get("x-gvlv-saved")) || "", moved: !!(res && res.headers.get("x-gvlv-moved")) };
             });
           }));
         });
@@ -1000,17 +1043,30 @@
     // The list fills in after the browser has scrolled to a #fragment below it — a guide or #steps (the
     // notice's "Show me how", a link someone sent) — and pushes it down, off the screen when many pages
     // are listed (Safari keeps no scroll anchor): back to it, unless the visitor has scrolled, tapped or
-    // pressed a key since the page opened.
-    var moved = false;
+    // pressed a key since the page opened. On arrival only: after a reload or Back the browser puts the
+    // visitor back where they were, and that stays (the page's own script keeps Chrome from jumping to
+    // the #fragment first, offline.njk). Standing in, the #fragment was the page asked for's (the page's
+    // own script took it off the address, data-hash): a browser that jumped anyway goes back to the
+    // top, where "You're offline" and the saved pages are.
+    var moved = false, copyBox = document.querySelector("[data-pwa-offline-copy]");
+    var dropped = isFallback && !!(copyBox && copyBox.getAttribute("data-hash"));
     ["wheel", "touchstart", "pointerdown", "keydown"].forEach(function (t) { window.addEventListener(t, function () { moved = true; }, { capture: true, passive: true, once: true }); });
     var keepFragment = function () {
-      if (moved || !location.hash) return;
+      var nav = null;
+      try { nav = performance.getEntriesByType("navigation")[0]; } catch (e) { nav = null; }
+      if (moved || (nav && (nav.type === "reload" || nav.type === "back_forward"))) return;
+      if (isFallback) { if (dropped && window.scrollY) window.scrollTo(0, 0); return; }
+      if (!location.hash) return;
       var t = null;
       try { t = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { return; }
       if (!t || !(box.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING)) return;
       try { t.scrollIntoView({ block: "start", behavior: "instant" }); } catch (e) { t.scrollIntoView(true); }
     };
+    if (dropped) window.addEventListener("load", keepFragment, { once: true });   // (a jump after the list was drawn, too)
     Promise.all([readCache(SAVED_CACHE), readCache(PAGES_CACHE)]).then(function (r) {
+      // a forwarding page (an old address that sends the visitor on — the worker marks it) stays kept, so
+      // its link still works offline, but it is no page to list: it would lead back here, or elsewhere
+      r = r.map(function (a) { return a.filter(function (e) { return !e.moved; }); });
       var mine = function (a) { return a.filter(function (e) { return isThisLang(e.url); }).concat(a.filter(function (e) { return !isThisLang(e.url); })); };
       var savedUrls = {};
       r[0].forEach(function (e) { savedUrls[e.url] = 1; });

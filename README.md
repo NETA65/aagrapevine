@@ -1098,8 +1098,9 @@ visitor's own device; nothing is sent anywhere.
 
   The app is called **GV/LV 65**. It opens in its own window, in the language it was installed from, and
   has shortcuts to Meetings, Monthly toolkit and GVR / RLV 101 (touch and hold the icon on Android). Once
-  it is installed, the Aa menu says "The app is on this device" (where the browser can tell), and inside
-  the app the install links go away.
+  it is installed, the Aa menu says "The app is on this device" (where the browser can tell); inside the
+  app the install links go away and *Saved pages & app* says "You're using the app" (the guides stay
+  closed until someone opens one).
 - **The install notice.** On phones and tablets, a small notice at the bottom of the page says "Install this
   site as an app", with **Install** (where the browser offers one-tap install) or **Show me how**, and
   **Not now**. It appears after a visitor's 3rd page view (the 2nd with one-tap install), once they have
@@ -1107,7 +1108,8 @@ visitor's own device; nothing is sent anywhere.
   app, offline, on `/offline/`, while typing, or together with the language banner, the podcast player, read
   aloud, the Aa menu or the phone menu. How long it stays away:
   - **Not now** (or Escape): 30 days; after two "Not now"s it never comes back.
-  - Reading the steps — a visit to `/offline/`, **Show me how**, or the Aa menu's **Install as an app**: 30 days.
+  - Reading the steps — **Show me how**, the Aa menu's **Install as an app**, or the steps on `/offline/`
+    reached (a look at the saved pages above them doesn't count): 30 days.
   - Each time it shows and the visitor does neither: 7 days; after four showings it never comes back.
   - Installed from that browser, or opened as the app in the last 90 days: not shown. If the app is later
     removed and the browser offers one-tap install again, that is forgotten and the notice may return.

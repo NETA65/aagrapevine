@@ -60,8 +60,9 @@
      view(r)            one more page view
      shown(r, now)      the notice was shown: +1, quiet for RULES.quietAfterShow
      later(r, now)      "Not now" (or Escape): +1 no, quiet for RULES.quietAfterNo
-     guided(r, now)     the steps were shown ("Show me how", the Aa panel's "Install as an app", a
-                        visit to /offline/): quiet for RULES.quietAfterNo
+     guided(r, now)     the steps were read ("Show me how", the Aa panel's "Install as an app", the
+                        steps on /offline/ reached — not a look at the saved pages above them):
+                        quiet for RULES.quietAfterNo
      opened(r, now)     the site runs as the installed app now
      done(r, now)       installed from this browser (appinstalled, or the prompt was accepted)
      notInstalled(r)    the browser offers one-tap install (beforeinstallprompt), which it only does
