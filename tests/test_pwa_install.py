@@ -438,7 +438,7 @@ if (!m) throw new Error("the stand-in script is not there");
 out(input.map((c) => {
   const el = (attrs, extra) => Object.assign({ hidden: "hidden" in attrs, attrs: Object.assign({}, attrs),
     hasAttribute(n) { return n in this.attrs; }, getAttribute(n) { return n in this.attrs ? this.attrs[n] : null; },
-    setAttribute(n, v) { this.attrs[n] = String(v); } }, extra || {});
+    setAttribute(n, v) { this.attrs[n] = String(v); }, removeAttribute(n) { delete this.attrs[n]; } }, extra || {});
   const retry = el({ href: "/AAGrapevine/", "data-pwa-retry": "", hidden: "" });
   const kids = [retry, el({ href: "#steps", "data-pwa-steps-link": "" }), el({ "data-pwa-install-hero": "", hidden: "" }), el({ "data-share": "x" })];
   const h1 = { textContent: "Saved pages & app" }, sub = { textContent: "The pages saved on this device open…" };
@@ -452,10 +452,10 @@ out(input.map((c) => {
   const code = m[1].replace(/\{\{ \(page\.url \| url\) \| dump \| safe \}\}/, JSON.stringify(c.own));
   vm.runInContext(code, vm.createContext({ document, history, performance, addEventListener: (t, fn) => { if (t === "load") loads.push(fn); },
                                            location: { pathname: c.path, search: c.search || "", hash: c.hash || "" } }));
-  const beforeLoad = replaced.slice();
+  const beforeLoad = replaced.slice(), heldBeforeLoad = box.getAttribute("data-hash-load");
   loads.forEach((fn) => fn());
   return { h1: h1.textContent, sub: sub.textContent, title: document.title, hidden: kids.map((k) => k.hidden), retry: retry.attrs.href,
-           hash: box.getAttribute("data-hash"), beforeLoad, replaced };
+           hash: box.getAttribute("data-hash"), beforeLoad, replaced, heldBeforeLoad, heldAfterLoad: box.getAttribute("data-hash-load") };
 }));
 """
 
@@ -536,6 +536,16 @@ class StandIn(unittest.TestCase):
             self.assertEqual(d["replaced"], [])
         for d in r:
             self.assertEqual((d["h1"], d["hash"], d["hidden"]), ("Saved pages & app", None, [True, False, True, False]))   # the page's own
+        # While the #guide is off the address, data-hash-load keeps it for pwa.js (the guide still opens — also one
+        # that is not this device's, e.g. a shared /offline/#iphone reloaded on an Android phone); gone at load.
+        self.assertEqual((reload["heldBeforeLoad"], reload["heldAfterLoad"]), ("#android", None))
+        self.assertEqual((back["heldBeforeLoad"], back["heldAfterLoad"]), ("#steps", None))
+        for d in (first, bare):
+            self.assertEqual((d["heldBeforeLoad"], d["heldAfterLoad"]), (None, None))
+        pwa = read("src", "assets", "js", "pwa.js")
+        guide = pwa[pwa.index("var hashGuide = function () {"):pwa.index('window.addEventListener("hashchange", hashGuide);')]
+        self.assertIn('location.hash || (held && held.getAttribute("data-hash-load")) || ""', guide)
+        self.assertIn("openGuide(decodeURIComponent(h.slice(1)))", guide)
 
     def test_it_sits_in_the_hero(self):
         # right after the buttons it changes, inside the hero's call: nothing may come between the hero and the

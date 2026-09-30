@@ -742,7 +742,10 @@
   function startAppSteps() {
     if (!appSteps) return;
     var hashGuide = function () {
-      try { openGuide(decodeURIComponent(location.hash.slice(1))); } catch (e) { /* a broken #fragment */ }
+      // A reload or Back takes the #guide off the address until the page has loaded (offline.njk keeps it in
+      // data-hash-load meanwhile): that guide still opens, even when it is not this device's.
+      var held = document.querySelector("[data-pwa-offline-copy]"), h = location.hash || (held && held.getAttribute("data-hash-load")) || "";
+      try { openGuide(decodeURIComponent(h.slice(1))); } catch (e) { /* a broken #fragment */ }
       if (inSteps(location.hash.slice(1))) readSteps();
     };
     // this device's guide (in the installed app none: it is installed already)

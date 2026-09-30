@@ -182,15 +182,18 @@ descKey: pwa.offline.meta_desc
     * Opened on purpose again — a reload, Back: the browser puts the visitor back where they were, but
       Chrome first jumps to a #guide in the address when it can't do that at once (the saved pages,
       listed a moment later, make the page taller than its first layout). The #fragment comes off for
-      the load and back on once it is done. -#}
+      the load and back on once it is done; meanwhile data-hash-load keeps it, so pwa.js still opens
+      that guide (a shared /offline/#iphone reloaded on an Android phone stays open). -#}
 <script>(function (box) {
   try {
     if (!box) return;
     if (location.pathname.replace(/index\.html$/, "") === {{ (page.url | url) | dump | safe }}) {
       var nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null, h = location.hash;
       if (h && nav && (nav.type === "reload" || nav.type === "back_forward")) {
+        // (data-hash-load: pwa.js still opens that guide while the #fragment is off the address)
+        box.setAttribute("data-hash-load", h);
         history.replaceState(history.state, "", location.pathname + location.search);
-        addEventListener("load", function () { history.replaceState(history.state, "", location.pathname + location.search + h); });
+        addEventListener("load", function () { history.replaceState(history.state, "", location.pathname + location.search + h); box.removeAttribute("data-hash-load"); });
       }
       return;
     }
