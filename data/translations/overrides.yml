@@ -166,6 +166,119 @@
 # Grapevine's "Audio Project" keeps its own name (as on /contribute/#record)
 "GV Audio Project": { es: "Audio Project de GV" }
 
+# Bulletin post from Google Drive (2027-2028_Panel77_GVLV/bulletin): "Grapevine and La Viña — ways to carry the
+# message", translated by hand 2026-09-30 (the machine turned "hard-of-hearing" into "hard-hearted", among others).
+# Three keys: its title, its summary (the first 400 characters) and its whole text — spaces and line breaks don't
+# matter for a match. If the file on Drive is edited, the changed text goes back to the machine translation until
+# the English here is updated too (copy it from data/site/announcements.json → extra.body_md).
+"Grapevine and La Viña — ways to carry the message": { es: "Grapevine y La Viña — formas de llevar el mensaje" }
+? "A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it. Why it matters **A meeting in print, every day.** Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on…"
+: { es: "Una lista viva de formas sencillas en que los miembros, los grupos y los distritos pueden apoyar a Grapevine y La Viña y llevar el mensaje. Toma lo que le sirva a tu grupo y comparte lo que funcione en la próxima reunión del comité, para que todos aprendamos." }
+? |-
+  A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it.
+
+  # Why it matters
+
+  - **A meeting in print, every day.** Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on prison and treatment tablets, and ASL videos for deaf and hard-of-hearing members.
+  - **Most of it is free.** Subscriptions pay for all of it, so every subscription keeps the free services going.
+  - **The 183 Challenge.** If every area added about 183 subscriptions (print, app or online), Grapevine would be fully self-supporting. That is fewer people than come to most area assemblies.
+  - **La Viña needs its readers.** La Viña is not yet self-supporting. Spanish-speaking members and groups make the biggest difference by subscribing, sharing it and writing for it.
+
+  # What groups can do
+
+  - **Subscribe as a group.** A group subscription is Seventh Tradition support, and many treasurers don't know it is an option. If even one group in ten subscribed, it would make a big difference.
+  - **Welcome newcomers.** Give a subscription along with the Big Book. A digital subscription costs about 8 cents a day ([current prices](/shop/)).
+  - **Carry the Message.** A group can send subscriptions to correctional facilities, treatment centers and professionals who work with alcoholics ([how it works](https://www.aagrapevine.org/carry-the-message)).
+  - **Put it in the budget.** Include a Carry the Message subscription in the group's regular spending, next to rent, coffee, literature and contributions to the district, area and GSO.
+  - **Share the free resources.** Put a one-page handout on the literature table with links to the Grapevine app, the [podcast](/listen/), the Daily Quote sign-up, Instagram and YouTube. Many members don't know these exist.
+
+  # At meetings
+
+  - **Mention it in your share.** Not a pitch, just experience: "I read something in Grapevine this week that really hit home…"
+  - **Make a 30-second announcement.** "Grapevine reaches millions of people through daily quotes, podcasts and prison tablets, mostly for free. A subscription helps keep the lights on for all of it." Anyone can say it.
+  - **Set out QR table cards.** A card on the literature table that links to the subscription page works every week without an announcement ([QR posters](/share/)).
+  - **Hold a "meeting after the meeting."** Once a month, for 15 minutes after a regular meeting, read a story, play a podcast clip or show a short video. People subscribe to what they have experienced.
+  - **Invite an "I got sober reading this" minute.** Once a month, a member shares one minute about a Grapevine or La Viña story that helped them.
+  - **Use the coffee comparison at business meetings.** A digital subscription costs less than one fancy coffee a month.
+
+  # One on one
+
+  - **Sponsor to sponsee.** A gift subscription is a meeting that never closes, especially for someone in a rural area, working odd hours or unable to get to meetings.
+  - **Share the podcast.** It is free Twelfth Step work: one text, one link.
+  - **Share the Daily Quote.** Signing up is free, and it takes ten seconds to read. Share it in your group's text chain ([today's quote](/#quote-title)).
+  - **Mark anniversaries.** Give a year of Grapevine or La Viña with, or instead of, a chip.
+  - **Give in Gratitude Month.** In November, ask: "What are you grateful for? Give someone a reason to be grateful every day for a year." A group can set a goal, such as five gift subscriptions.
+
+  # Online
+
+  - **Ask for a follow.** It takes five seconds: "If you're on Instagram, follow Grapevine and La Viña" ([our Instagram page](/instagram/)).
+  - **Reach young people.** Bring the app, the podcast, Instagram and the Daily Quote to YPAA events and meetings near campuses. They don't need to be sold on technology; they need to know the content exists.
+
+  # Beyond the meeting room
+
+  - **Give a "Grapevine Minute" at the district meeting.** Three minutes, one story and a sign-up sheet or QR card, in front of every GSR.
+  - **Set up an intergroup or central office display.** Current issues, a tablet with the podcast or app, and sign-up cards where members already come for literature and chips.
+  - **Add it to H&I visit kits.** Leave a current issue alongside the Big Book.
+  - **Build a bridge from treatment and corrections.** A group-funded subscription waiting for someone leaving treatment or a correctional facility means the message follows them home.
+  - **Work with the professional community (CPC).** Include a current issue with other A.A. literature for doctors, counselors, social workers and clergy.
+  - **Read it, then pass it.** Read one print copy at the meeting, then leave it in a waiting room, a laundromat or a break room.
+
+  # Every month
+
+  The [Monthly toolkit](/monthly/) has this month's issues, the story deadlines and more ways to put them to work. Talk with your GVR or RLV, bring one idea to your next business meeting, and share what works at the [committee meeting](/meetings/#committee-meeting).
+: es: |-
+    Una lista viva de formas sencillas en que los miembros, los grupos y los distritos pueden apoyar a Grapevine y La Viña y llevar el mensaje. Toma lo que le sirva a tu grupo y comparte lo que funcione en la próxima reunión del comité, para que todos aprendamos.
+
+    # Por qué importa
+
+    - **Una reunión impresa, todos los días.** Grapevine y La Viña llegan a millones de personas por medio de las revistas, la Cita diaria, el podcast, las historias en las tabletas de prisiones y centros de tratamiento, y los videos en lengua de señas (ASL) para miembros sordos o con dificultades auditivas.
+    - **Casi todo es gratis.** Las suscripciones lo pagan todo, así que cada suscripción mantiene en marcha los servicios gratuitos.
+    - **El Reto 183.** Si cada área sumara unas 183 suscripciones (impresas, en la app o en línea), Grapevine sería totalmente automantenida. Son menos personas de las que van a la mayoría de las asambleas de área.
+    - **La Viña necesita a sus lectores.** La Viña todavía no es automantenida. Los miembros y grupos de habla hispana son los que más pueden ayudar: suscribiéndose, compartiéndola y escribiendo para ella.
+
+    # Lo que pueden hacer los grupos
+
+    - **Suscribirse como grupo.** Una suscripción de grupo es apoyo de la Séptima Tradición, y muchos tesoreros no saben que es una opción. Si tan solo uno de cada diez grupos se suscribiera, se notaría mucho.
+    - **Recibir a los recién llegados.** Regálenles una suscripción junto con el Libro Grande. Una suscripción digital cuesta unos 8 centavos al día ([precios actuales](/shop/)).
+    - **Lleva el Mensaje.** Un grupo puede enviar suscripciones a centros correccionales, centros de tratamiento y profesionales que trabajan con alcohólicos ([cómo funciona](https://www.aalavina.org/lleva-el-mensaje)).
+    - **Incluirlo en el presupuesto.** Agreguen una suscripción de Lleva el Mensaje a los gastos regulares del grupo, junto con la renta, el café, la literatura y las contribuciones al distrito, al área y a la OSG.
+    - **Dar a conocer los recursos gratuitos.** Pongan en la mesa de literatura una hoja con los enlaces a la app de Grapevine, el [podcast](/listen/), la suscripción a la Cita diaria, Instagram y YouTube. Muchos miembros no saben que existen.
+
+    # En las reuniones
+
+    - **Menciónalo al compartir.** No como propaganda, sino como experiencia: «Esta semana leí algo en La Viña que me llegó al corazón…».
+    - **Da un anuncio de 30 segundos.** «Grapevine y La Viña llegan a millones de personas con la cita diaria, los podcasts y las tabletas en las prisiones, casi siempre gratis. Una suscripción ayuda a mantener todo eso en marcha». Cualquiera puede decirlo.
+    - **Pon tarjetas con código QR.** Una tarjeta en la mesa de literatura con el enlace a la página de suscripciones funciona cada semana, sin necesidad de anuncios ([Cartel QR](/share/)).
+    - **Organiza una «reunión después de la reunión».** Una vez al mes, 15 minutos después de una reunión regular, lean una historia, pongan un fragmento del podcast o vean un video corto. La gente se suscribe a lo que ha vivido.
+    - **Invita a un minuto de «Esta historia me ayudó».** Una vez al mes, un miembro comparte durante un minuto sobre una historia de Grapevine o La Viña que lo ayudó en su sobriedad.
+    - **Usa la comparación del café en la reunión de trabajo.** Una suscripción digital cuesta menos que un café especial al mes.
+
+    # De persona a persona
+
+    - **De padrino a ahijado.** Una suscripción de regalo es una reunión que nunca cierra, sobre todo para quien vive en una zona rural, trabaja en horarios difíciles o no puede ir a las reuniones.
+    - **Comparte el podcast.** Es trabajo de Paso Doce gratuito: un mensaje, un enlace.
+    - **Comparte la Cita diaria.** Suscribirse es gratis y se lee en diez segundos. Compártela en el chat de tu grupo ([cita de hoy](/#quote-title)).
+    - **Celebra los aniversarios.** Regala un año de Grapevine o La Viña junto con la ficha, o en su lugar.
+    - **Regala en el mes de la gratitud.** En noviembre, pregunta: «¿Por qué estás agradecido? Dale a alguien un motivo para estar agradecido todos los días durante un año». Un grupo puede fijarse una meta, como cinco suscripciones de regalo.
+
+    # En línea
+
+    - **Pide que los sigan.** Toma cinco segundos: «Si usas Instagram, sigue a Grapevine y La Viña» ([nuestra página de Instagram](/instagram/)).
+    - **Llega a los jóvenes.** Lleva la app, el podcast, Instagram y la Cita diaria a los eventos de jóvenes en AA (YPAA) y a las reuniones cerca de las universidades. No hay que convencerlos de la tecnología; necesitan saber que el contenido existe.
+
+    # Más allá de la sala de reuniones
+
+    - **Da un «Minuto Grapevine» en la reunión del distrito.** Tres minutos, una historia y una hoja de inscripción o una tarjeta QR, frente a todos los RSG.
+    - **Pon una exhibición en el intergrupo o la oficina central.** Números recientes, una tableta con el podcast o la app y tarjetas de suscripción, donde los miembros ya van por literatura y fichas.
+    - **Agrégala a los paquetes de visitas a hospitales e instituciones.** Deja un número reciente junto al Libro Grande.
+    - **Tiende un puente desde el tratamiento y las prisiones.** Una suscripción pagada por el grupo, esperando a quien sale de un centro de tratamiento o de un centro correccional, hace que el mensaje lo acompañe a casa.
+    - **Colabora con la comunidad profesional (CCP).** Incluye un número reciente junto con otra literatura de A.A. para médicos, consejeros, trabajadores sociales y líderes religiosos.
+    - **Léela y pásala.** Lee un ejemplar impreso en la reunión y luego déjalo en una sala de espera, una lavandería o una sala de descanso.
+
+    # Cada mes
+
+    El [Kit del mes](/monthly/) tiene las revistas de este mes, las fechas límite para enviar historias y más formas de ponerlas a trabajar. Habla con tu RLV o GVR, lleva una idea a la próxima reunión de trabajo de tu grupo y comparte lo que funcione en la [reunión del comité](/meetings/#committee-meeting).
+
 # --- Spanish → English ------------------------------------------------
 # Committee Portfolio (Google Drive): La Viña's flyer is in Spanish, so is its file name
 "Nueva reunión abierta de La Viña - jueves a las 12 p. m. (hora del Este) por Zoom": { en: "New La Viña Open Meeting - Thursdays at 12 PM Eastern on Zoom" }
