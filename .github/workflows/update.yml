@@ -53,7 +53,7 @@ on:
         type: string
         default: ""
       skip_crawl:
-        description: "Quick refresh only: Google Drive, the bulletin, podcasts and the daily quote (about 10–20 minutes). Videos, magazine stories, Instagram and PDFs wait for the next daily run."
+        description: "Quick refresh only: Google Drive, the bulletin, podcasts and the daily quote (a few minutes). Videos, magazine stories, Instagram and PDFs wait for the next daily run."
         type: boolean
         default: false
       morning:

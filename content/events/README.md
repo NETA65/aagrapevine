@@ -70,14 +70,16 @@ tentative: true            # also works: yes, sí
 ```
 
 The event then shows a **"Details to be confirmed" / "Detalles por confirmar"**
-badge on the Events page, the home page, the monthly toolkit and the search, and
-people's calendar apps mark it as *tentative*.
+badge on the Events page, the home page and the search, the same words on the
+monthly toolkit's dates, poster and message, and people's calendar apps mark it
+as *tentative*.
 
 **When the details are final**, edit the file: put the real place in `location`
 (and delete `location_es`, unless the Spanish needs other words), fix the dates
 or times if they changed, update the description (and `summary_es`), and
-**delete the `tentative: true` line**. The next update (10–20 minutes after you
-save) shows it as confirmed everywhere, including in subscribed calendars.
+**delete the `tentative: true` line**. The next update (a few minutes after you
+save) shows it as confirmed on the site; subscribed calendars follow the next
+time they refresh.
 
 ## The same event on the NETA 65 calendar
 

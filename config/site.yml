@@ -264,7 +264,8 @@ sources:
     anonymous: true
     # Newest posts kept per account (older ones and their thumbnails are deleted). The monthly digest
     # of a month is on /digest/ all through the next one, so this must hold about 62 days of posts:
-    # the two accounts post about 2 a day (September 2026), and 130 ≈ 65 days (thumbnails ~23 KB each).
+    # each account posts about 2 a day (September 2026), so 130 per account ≈ 65 days (thumbnails ~23 KB
+    # each).
     keep_per_account: 130
     enrich_per_run: 25       # max post look-ups per daily run
     graph_version: "v21.0"
@@ -678,14 +679,15 @@ library:
 #  that was new on the site LAST month (bulletin posts, events that took
 #  place, committee files and photos added that month, magazine stories,
 #  writers from Area 65 & Texas, podcasts, videos, Instagram posts,
-#  documents), plus one link to this month's toolkit (/monthly/), where
-#  everything current lives.
+#  documents), plus one link to this month's toolkit page
+#  (/monthly/YYYY-MM/), where everything current lives.
 #  It is on /digest/ from the 1st; the e-mail goes out once, on the 1st
 #  from 7 AM Central after the site's first full update of the month
 #  (at the latest on the 3rd) (.github/workflows/monthly-digest.yml),
 #  and only if these GitHub secrets exist:
-#  SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, DIGEST_TO
-#  (DIGEST_TO can be a Google Group address that reaches all districts).
+#  SMTP_SERVER, SMTP_USERNAME, SMTP_PASSWORD, DIGEST_TO (SMTP_PORT is
+#  optional: 587) — DIGEST_TO can be a Google Group address that
+#  reaches all districts.
 #  A month with nothing new is not sent.
 # ---------------------------------------------------------------------
 digest:

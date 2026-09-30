@@ -4,7 +4,8 @@
 # saved on this device and there is no connection. It is also "See saved pages" in the Aa menu, so it
 # reads naturally online too: pwa.js swaps the hero to its online wording (data-pwa-offline-copy).
 # The list of saved pages is read from the worker's caches by pwa.js (no JavaScript or no service
-# worker: a plain note instead). Not in the sitemap or the search index; noindex (base.njk).
+# worker: a plain note instead). Not in the sitemap; noindex (base.njk). The site's own search lists it as
+# "Saved pages" (library.js walks nav.footer; search.page_desc.offline / search.kw.offline).
 pagination: { data: languages, size: 1, alias: lang }
 permalink: "{{ '/' if lang == 'en' else '/es/' }}offline/index.html"
 layout: layouts/base.njk

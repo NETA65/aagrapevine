@@ -59,7 +59,8 @@ If a value contains `: ` (like `title: Reminder: Assembly`), put it in quotes:
 **Schedule a post (optional).** With `publish: 2027-02-01` the post stays off
 the site — the bulletin, the home page, What's New, the news feed and the search
 — until that day in Central time, and appears with that morning's update (by
-about 5:30 AM). Until then the update's report on the **Actions** tab lists it
+about 5:30 AM with the morning alarm — README 10 d —, otherwise later that
+day). Until then the update's report on the **Actions** tab lists it
 under *Scheduled bulletin posts*. On its day it counts as new, whatever its
 `date:` says. A `publish:` day after `expires:` is reported as a mistake (the
 post would never show). This is about timing, not secrecy: the file in this

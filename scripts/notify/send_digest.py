@@ -27,8 +27,8 @@ day being its Central calendar day:
     Instagram posts (instagram.json: per account, how many and the 3 newest, and one link to the site's
     /instagram/ page — the text part gives only the counts and the link), documents
   * ONE pointer: "Coming up in K" → the toolkit of the month it goes out in (/monthly/K/), the home of
-    everything current (the committee meeting and its Zoom details, events not over yet, story
-    deadlines, this month's issues, Book of the Month …)
+    everything current (the committee meeting — its Zoom details stay on /meetings/ —, events not over
+    yet, story deadlines, this month's issues, Book of the Month …)
   * each section in English first, then in Spanish (titles are already translated)
 
 Standard library only (smtplib + email.mime) so it runs anywhere without installing the sync

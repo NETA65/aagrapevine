@@ -618,9 +618,10 @@ const pubName = (item) => (item?.extra?.publication === "lv" || item?.source ===
 //     the magazines' Instagram posts (instagram.json: per account, how many and the 3 newest — the
 //     site's /instagram/ page is their one home) and documents, by date.
 // Plus ONE pointer: "Coming up in K" → /monthly/K/, the toolkit, the home of everything current (the
-// committee meeting and its Zoom details, events not over yet, the weekly open meetings, deadlines, Book
-// of the Month, the daily quote …). An issue's highlight stories are only here, in the month they came
-// out; the toolkit shows the themes and counts. Nothing is in both.
+// committee meeting — its Zoom details stay on /meetings/, which the toolkit links to —, events not over
+// yet, the weekly open meetings, deadlines, Book of the Month, the daily quote …). An issue's highlight
+// stories are only here, in the month they came out; the toolkit shows the themes and counts. Nothing is
+// in both.
 // Two files keep only their newest entries, so a page read late in K can show fewer of P's items than the
 // e-mail did: events.json (the newest 12 past one-off events) and instagram.json (the newest
 // sources.instagram.keep_per_account posts of each account — 130, about 65 days at the accounts' ~2 posts a

@@ -21,7 +21,8 @@ pageScripts: ["/assets/js/community.js"]
       account: how many posts and the 3 newest; ONE link to /instagram/, their home) · documents ·
       (a quiet month) ·
       ONE pointer: "Coming up in K" → this month's toolkit (/monthly/K/), the home of everything current
-      (the committee meeting and its Zoom details, events not over yet, deadlines, Book of the Month …).
+      (the committee meeting — its Zoom details stay on /meetings/ —, events not over yet, deadlines, Book of
+      the Month …).
     It is on this page from the first build on the 1st of the next month K, all through K. A copy read
     after K is over (the build of the 1st has not run yet, or a saved copy) says so — and that the next
     edition comes with that morning's update, never that a reload shows it at once: data-stale-after
@@ -406,8 +407,9 @@ pageScripts: ["/assets/js/community.js"]
 
         {% if not md.total and not W.total %}{{ ui.emptyState("coffee", "community.digest.quiet_title" | t(lang), "community.digest.quiet_text" | t(lang, { prev: prevW }), "/whats-new/" | lurl(lang), "nav.whats_new" | t(lang)) }}{% endif %}
 
-        {#- The ONE pointer to what is current: this month's toolkit — the committee meeting (and its Zoom
-            details), events not over yet, the story deadlines, this month's issues, Book of the Month.
+        {#- The ONE pointer to what is current: this month's toolkit — the committee meeting (it links to the
+            Zoom details on /meetings/), events not over yet, the story deadlines, this month's issues, Book of
+            the Month.
             The whole box is the link; it prints (the URL is on the toolkit's own QR code). -#}
         <section class="cm-dg-line cm-avoid-break relative flex items-start gap-3 rounded-xl bg-surface-2 px-4 py-3 text-sm" aria-labelledby="dg-toolkit">
           <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-lv-soft text-lv" aria-hidden="true">{% icon "calendar-heart", "size-4" %}</span>

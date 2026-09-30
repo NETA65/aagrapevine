@@ -646,7 +646,8 @@ its newest 150 entries), a day being its Central calendar day:
 | `whatsnew.json` | the page's "N more updates since the 1st" pointer only | `wn_date` from the 1st of K |
 | `status.json` | the e-mail's wait | `sources[].attempted` of `announcements`, `manual_events`, `drive`, `articles`, `pdfs`, `youtube`, `podcasts`, `instagram`: the e-mail waits (exit 3) while one was last tried before P ended but within the 3 days before — later ones are there, older ones have stopped |
 
-Not in the digest (current or upcoming — the toolkit's): the committee meeting's Zoom details, events not over
+Not in the digest (current or upcoming — the toolkit's): the next committee meeting (its Zoom details stay on
+`/meetings/#committee-meeting`, which the toolkit links to), events not over
 yet, the weekly open meetings, story deadlines, La Viña's topics, the phone lines, Book of the Month, the
 subscription price, the daily quote, the Instagram accounts to follow (the digest has P's posts). The page and
 the texts end with ONE pointer: "Coming up in K" → `/monthly/K/`. Counts (the intro, `COUNT_ORDER`): magazine
