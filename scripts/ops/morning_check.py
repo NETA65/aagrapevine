@@ -794,23 +794,23 @@ def main(argv: list[str] | None = None, *, clock: Clock | None = None, gh: GitHu
             it. Today's build on the site → a yellow note, exit 0 (that run, or the next update, brings the
             quote); not → a red ✗ that says why."""
             began = clock_label(parse_time(r.get("run_started_at") or r.get("created_at")), tz)
-            minutes = int(GUARD_MAX.total_seconds() // 60)
+            still = (f"an Update & Deploy run this check did not start (running since {began}) was still running when "
+                     f"this check's {int(GUARD_MAX.total_seconds() // 60)} minutes were over")
             if not live or live.get("day") != today.isoformat():
-                return failed(report, gh, r, started_by, live, f"an Update & Deploy run this check did not start (running "
-                              f"since {began}) was still running after {minutes} minutes — a morning refresh cannot start "
-                              "before it ends")
+                return failed(report, gh, r, started_by, live, f"{still} — a morning refresh cannot start before it ends")
             late = late_pubs(live, today)
             report.headline = f"⚠️ Today's build is on the site; {quotes_phrase(late)} not on it yet — an update is still running."
             report.live_rows(live)
             report.row("Update & Deploy", f"{run_link(gh, r.get('id'), r)} — running since {began}")
             report.row("Started by", started_by)
+            first = quotes_phrase(late)
+            what = (f"The {pub_names(pending)} page shows today's quote, but" if pending      # asked: it is out
+                    else f"{first[0].upper()}{first[1:]} not on the site yet, and")
             report.annotate("warning", "An update is still running",
-                            f"The {pub_names(pending or late)} page shows today's quote, but an Update & Deploy run this "
-                            f"check did not start (running since {began}) was still running after {minutes} minutes, and a "
-                            "morning refresh would only wait behind it. The site shows the last quote, labelled "
-                            "\"Yesterday\", until an update brings the new one — that run, if it read the magazine's page "
-                            "after the quote came out, or the next one (Actions → Morning check → Run workflow once it "
-                            "has ended).")
+                            f"{what} {still}, and a morning refresh would only wait behind it. The site shows the last "
+                            "quote, labelled \"Yesterday\", until an update brings the new one — that run, if it read the "
+                            "magazine's page after the quote came out, or the next one (Actions → Morning check → Run "
+                            "workflow once it has ended).")
             full_run(live)
             report.write()
             return 0

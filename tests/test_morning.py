@@ -1466,8 +1466,8 @@ class GuardBehindARunningUpdate(unittest.TestCase):
         rc, log, summary = w.check()
         self.assertEqual((rc, w.posts), (1, []), log)
         self.assertIn("::error title=Morning update failed::an Update & Deploy run this check did not start (running since "
-                      "2:00 AM CDT) was still running after 170 minutes — a morning refresh cannot start before it ends — "
-                      "[run 5001](https://github.com/o/r/actions/runs/5001).", log)
+                      "2:00 AM CDT) was still running when this check's 170 minutes were over — a morning refresh cannot "
+                      "start before it ends — [run 5001](https://github.com/o/r/actions/runs/5001).", log)
         self.assertLessEqual(w.clock.now() - T0, MC.GUARD_MAX + MC.FOLLOW_EVERY)
         # today's build there, La Viña's quote out at 4:40 but the search read the pages at 2 AM: a yellow note
         w = World(live=live_today(built="2026-09-29T09:05:00Z", lv=YESTERDAY),
@@ -1479,8 +1479,19 @@ class GuardBehindARunningUpdate(unittest.TestCase):
         self.assertEqual(len(w.fetches), 2, "asked at 4:30 (not yet) and 4:40 (out)")
         self.assertIn("⚠️ Today's build is on the site; the La Viña quote is not on it yet — an update is still running.", summary)
         self.assertIn("::warning title=An update is still running::The La Viña page shows today's quote, but an Update & "
-                      "Deploy run this check did not start (running since 2:00 AM CDT) was still running after 170 minutes",
-                      log)
+                      "Deploy run this check did not start (running since 2:00 AM CDT) was still running when this check's "
+                      "170 minutes were over, and a morning refresh would only wait behind it.", log)
+        # a push waits behind the same search (it was a red ✗ after 45 minutes): no question asked, so the note
+        # never says the page shows the quote
+        w = World(live=live_today(built="2026-09-29T09:05:00Z", lv=YESTERDAY),
+                  published={"gv": T0 - timedelta(hours=5), "lv": None})
+        w.queue = True
+        w.add_run(T0 - timedelta(minutes=150), start=5, end=360 * 60, event="workflow_dispatch", full=True)
+        w.add_run(T0 - timedelta(minutes=20), start=210 * 60 + 5, end=212 * 60, event="push")
+        rc, log, _summary = w.check()
+        self.assertEqual((rc, w.posts, w.fetches), (0, [], []), log)
+        self.assertIn("::warning title=An update is still running::The La Viña quote is not on the site yet, and an Update "
+                      "& Deploy run this check did not start (running since 2:00 AM CDT) was still running", log)
 
     def test_look_only_says_so(self):
         w = World(live=OLD)
