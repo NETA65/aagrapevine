@@ -23,10 +23,11 @@
       warm up connections, episode sizes show before playing (.pwa-saver-only). "Show images" undoes
       it for the page being viewed. Every change applies at once (html[data-saver] is watched).
    5. The offline page — "Saved pages & app" (/offline/, src/pages/offline.njk): lists the pages
-      saved on this device (read from the caches). Opened on purpose, its hero is the page's own
-      (offline, it adds that the saved pages still open); standing in for a page that isn't saved
-      (isFallback: the worker's answer at another address), the page's own script has already made
-      it "You're offline … Try again", and the page reloads once the connection is back.
+      saved on this device (read from the caches; a #guide asked for below the list stays on screen
+      as the list fills in). Opened on purpose, its hero is the page's own (offline, it adds that
+      the saved pages still open); standing in for a page that isn't saved (isFallback: the worker's
+      answer at another address), the page's own script has already made it "You're offline … Try
+      again", and the page reloads once the connection is back.
    6. Install as an app. install-core.js (window.GVInstall, loaded just before this file) says which
       phone and browser this is, which guide on /offline/ fits it (#steps, src/pages/offline.njk)
       and when the notice may show; this section draws it all:
@@ -990,37 +991,37 @@
     var more = items.length > MAX ? '<button type="button" class="btn-ghost btn-sm mt-2" data-pwa-more>' + esc(T("Show all " + items.length, "Mostrar las " + items.length)) + "</button>" : "";
     return '<div class="pwa-saved-group"><h3 class="pwa-saved-h">' + esc(title) + " <span>(" + items.length + ')</span></h3><ul class="pwa-saved-list" role="list">' + rows + "</ul>" + more + "</div>";
   }
-  /* The list fills in after the browser has scrolled to a #fragment below it — a guide or #steps (the
-     notice's "Show me how", a link someone sent) — and pushes it down, off the screen when many pages
-     are listed (Safari keeps no scroll anchor): back to it, unless the visitor has scrolled, tapped or
-     pressed a key since the page opened. */
-  var moved = false;
-  ["wheel", "touchstart", "pointerdown", "keydown"].forEach(function (t) { window.addEventListener(t, function () { moved = true; }, { capture: true, passive: true }); });
-  function keepFragment(box) {
-    if (moved || !location.hash) return;
-    var t = null;
-    try { t = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { return; }
-    if (!t || !(box.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING)) return;
-    try { t.scrollIntoView({ block: "start", behavior: "instant" }); } catch (e) { t.scrollIntoView(true); }
-  }
   function offlineList() {
     var box = document.querySelector("[data-pwa-saved]");
     if (!box) return;
     var status = box.querySelector("[data-pwa-saved-status]"), list = box.querySelector("[data-pwa-saved-list]");
     var empty = box.querySelector("[data-pwa-saved-empty]"), unsup = box.querySelector("[data-pwa-saved-unsupported]");
     if (!canSW) { if (status) status.hidden = true; if (unsup) unsup.hidden = false; return; }
+    // The list fills in after the browser has scrolled to a #fragment below it — a guide or #steps (the
+    // notice's "Show me how", a link someone sent) — and pushes it down, off the screen when many pages
+    // are listed (Safari keeps no scroll anchor): back to it, unless the visitor has scrolled, tapped or
+    // pressed a key since the page opened.
+    var moved = false;
+    ["wheel", "touchstart", "pointerdown", "keydown"].forEach(function (t) { window.addEventListener(t, function () { moved = true; }, { capture: true, passive: true, once: true }); });
+    var keepFragment = function () {
+      if (moved || !location.hash) return;
+      var t = null;
+      try { t = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { return; }
+      if (!t || !(box.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING)) return;
+      try { t.scrollIntoView({ block: "start", behavior: "instant" }); } catch (e) { t.scrollIntoView(true); }
+    };
     Promise.all([readCache(SAVED_CACHE), readCache(PAGES_CACHE)]).then(function (r) {
       var mine = function (a) { return a.filter(function (e) { return isThisLang(e.url); }).concat(a.filter(function (e) { return !isThisLang(e.url); })); };
       var savedUrls = {};
       r[0].forEach(function (e) { savedUrls[e.url] = 1; });
       var saved = mine(r[0]);
       var recent = mine(r[1].filter(function (e) { return !savedUrls[e.url]; }).reverse()); // newest first
-      if (!saved.length && !recent.length) { if (status) status.hidden = true; if (empty) empty.hidden = false; keepFragment(box); return; }
+      if (!saved.length && !recent.length) { if (status) status.hidden = true; if (empty) empty.hidden = false; keepFragment(); return; }
       var n = saved.length + recent.length;
       if (status) status.textContent = T(n === 1 ? "1 page opens without a connection." : n + " pages open without a connection.", n === 1 ? "1 página se abre sin conexión." : n + " páginas se abren sin conexión.");
       list.innerHTML = listHtml(box.getAttribute("data-t-saved") || "", saved) + listHtml(box.getAttribute("data-t-recent") || "", recent);
-      keepFragment(box);
-    }).catch(function () { if (status) status.hidden = true; if (unsup) unsup.hidden = false; keepFragment(box); });
+      keepFragment();
+    }).catch(function () { if (status) status.hidden = true; if (unsup) unsup.hidden = false; keepFragment(); });
     box.addEventListener("click", function (e) {
       var b = e.target.closest("[data-pwa-more]");
       if (!b) return;

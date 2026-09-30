@@ -908,6 +908,18 @@ class Wiring(unittest.TestCase):
         self.assertIn('page: isOfflinePage ? "offline" : isNoindex ? "noindex" : "",', p)
         self.assertIn("if (!canOffer() || isOfflinePage || isNoindex) return;", p)
 
+    def test_a_guide_asked_for_stays_on_screen(self):
+        # /offline/#android (Show me how, a link someone sent): the saved list fills in above the steps after the
+        # browser has scrolled there, so it scrolls back to the guide once drawn — whatever the list turned out to
+        # be — unless the visitor has scrolled, tapped or pressed a key since
+        p = self.pwa
+        lst = p[p.index("function offlineList()"):p.index('box.addEventListener("click"', p.index("function offlineList()"))]
+        self.assertIn('["wheel", "touchstart", "pointerdown", "keydown"]', lst)
+        self.assertIn("if (moved || !location.hash) return;", lst)
+        self.assertIn("box.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING", lst)   # only a target below the list
+        self.assertIn('t.scrollIntoView({ block: "start", behavior: "instant" })', lst)
+        self.assertEqual(lst.count("keepFragment();"), 3)                        # empty, listed, or the caches failed
+
     def test_nothing_left_of_the_old_page(self):
         # no link to /app/ anywhere: only its forwarding stub (and this file) name that address
         hits = []
