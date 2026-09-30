@@ -10,9 +10,9 @@
 # each phone's guide.
 # It is also the service worker's stand-in: src/pages/sw.11ty.js keeps both languages in its app shell
 # and shows them — in the language of the address asked for — when a page is not saved on this device
-# and there is no connection. The hero then says so from the first paint (the script right after it),
-# and the list of saved pages follows. The list is read from the worker's caches by pwa.js (no
-# JavaScript or no service worker: a plain note instead).
+# and there is no connection. The hero then says so from the first paint (the script after its
+# buttons), and the list of saved pages follows. The list is read from the worker's caches by pwa.js
+# (no JavaScript or no service worker: a plain note instead).
 pagination: { data: languages, size: 1, alias: lang }
 permalink: "{{ '/' if lang == 'en' else '/es/' }}offline/index.html"
 layout: layouts/base.njk
@@ -161,23 +161,25 @@ descKey: pwa.offline.meta_desc
   <button type="button" class="btn-light" data-pwa-act="install" data-pwa-install-hero hidden>{% icon "download", "size-4" %} {{ "pwa.app.cta_install" | t(lang) }}</button>
   <button type="button" class="btn-on-dark" data-js-only data-share="{{ appUrl }}" data-share-title="{{ 'pwa.app.title' | t(lang) }}" data-share-text="{{ 'pwa.app.send_text' | t(lang) }}">{% icon "share-2", "size-4" %} {{ "pwa.app.cta_send" | t(lang) }}</button>
 </div>
-{%- endif %}
-{% endcall %}
 {#- Standing in for a page that isn't saved — the service worker's answer at that page's address, so
     JavaScript is on: from the first paint the hero (and the tab's title) says "You're offline" and
     "This page isn't saved on this device yet…", and "Try again" (that address) is its one button.
-    pwa.js tells the same way (isFallback) and reloads the page once the connection is back. -#}
+    pwa.js tells the same way (isFallback) and reloads the page once the connection is back. (Here,
+    inside the hero, right after what it changes: a script between the hero and the saved pages would
+    keep the saved pages' card from spacing itself under the "Join by phone" card, main.css.) -#}
 <script>(function (box) {
   try {
     if (!box || location.pathname.replace(/index\.html$/, "") === {{ (page.url | url) | dump | safe }}) return;
-    var hero = box.closest("[data-gv-hero]"), title = box.getAttribute("data-title-standin");
+    var hero = box.closest("[data-gv-hero]"), title = box.getAttribute("data-title-standin"), rest = document.title.indexOf(" · ");
     hero.querySelector(".gv-hero-title > span:last-child").textContent = title;
     hero.querySelector(".gv-hero-sub").textContent = box.getAttribute("data-sub-standin");
-    document.title = title + document.title.slice(document.title.indexOf(" · "));
+    document.title = title + (rest < 0 ? "" : document.title.slice(rest));
     for (var i = 0; i < box.children.length; i++) box.children[i].hidden = !box.children[i].hasAttribute("data-pwa-retry");
     box.querySelector("[data-pwa-retry]").setAttribute("href", location.pathname + location.search);
   } catch (e) { /* the page's own words stay */ }
 })(document.querySelector("[data-pwa-offline-copy]"));</script>
+{%- endif %}
+{% endcall %}
 
 {#- ============ The pages saved on this device (read from the service worker's caches) ============ -#}
 <section class="container-page page-overlap" aria-labelledby="pwa-saved-h">

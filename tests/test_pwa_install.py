@@ -17,7 +17,7 @@ Firefox / in-app user agents, the installed app, the offline stand-in, keyboard 
                 named as in the manifest, one footer entry (the bottom bar's "Saved pages & app", no
                 "Install as an app" in "Stay updated"), the Accessibility page's one link, the local
                 safari-menu icon.
-  * Stand-in  — the script after the hero, run in Node against a pretend page: standing in for a page
+  * Stand-in  — the script after the hero's buttons, run in Node against a pretend page: standing in for a page
                 that isn't saved it says "You're offline" (hero and tab title) and leaves "Try again"
                 alone; opened on purpose (index.html included) it changes nothing.
   * Redirect  — the old install page's address (src/pages/app-redirect.njk) forwards to /offline/ with
@@ -383,7 +383,7 @@ class Page(unittest.TestCase):
         self.assertNotIn("after:absolute", card)
 
 
-# Runs the script the offline page puts right after its hero (it is the page's own, so the test takes it
+# Runs the script the offline page puts after its hero's buttons (it is the page's own, so the test takes it
 # from the template) against a pretend page: input = [{ path, own, title }] → what each run changed.
 STAND_IN = r"""
 import vm from "node:vm";
@@ -417,16 +417,27 @@ class StandIn(unittest.TestCase):
             {"path": "/AAGrapevine/es/meetings/", "search": "?x=1", "own": own, "title": title},   # the worker's stand-in
             {"path": own, "own": own, "title": title},                                             # opened on purpose
             {"path": own + "index.html", "own": own, "title": title},                               # …as index.html
+            {"path": "/AAGrapevine/es/", "own": own, "title": "Grapevine"},                          # a title without " · "
         ])
-        stand, direct, index = r
+        stand, direct, index, bare = r
         self.assertEqual((stand["h1"], stand["sub"]), ("You're offline", "This page isn't saved…"))
         self.assertEqual(stand["title"], "You're offline · Grapevine / La Viña — NETA 65")
+        self.assertEqual(bare["title"], "You're offline")
         self.assertEqual(stand["hidden"], [False, True, True, True])                # "Try again" alone
         self.assertEqual(stand["retry"], "/AAGrapevine/es/meetings/?x=1")            # …for the address asked for
         for d in (direct, index):
             self.assertEqual((d["h1"], d["title"]), ("Saved pages & app", title))
             self.assertEqual(d["hidden"], [True, False, True, False])               # the page's own buttons
             self.assertEqual(d["retry"], "/AAGrapevine/")
+
+    def test_it_sits_in_the_hero(self):
+        # right after the buttons it changes, inside the hero's call: nothing may come between the hero and the
+        # saved pages' card (main.css: .gv-hero-shell.side-below + .page-overlap spaces the card under "Join by phone")
+        page = read(*PAGE)
+        at = page.index("<script>(function (box) {")
+        self.assertLess(page.index('<div class="hero-actions" data-pwa-offline-copy'), at)
+        self.assertLess(at, page.index("{% endcall %}\n\n{#- ============ The pages saved on this device"))
+        self.assertIn(".gv-hero-shell.side-below + .page-overlap", read("src", "assets", "css", "main.css"))
 
     def test_pwa_js_tells_the_same_way(self):
         page = read(*PAGE)

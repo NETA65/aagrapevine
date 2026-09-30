@@ -118,7 +118,7 @@
   };
   var isOfflinePage = !!document.querySelector("[data-pwa-saved]");
   // Standing in for a page that isn't saved: the worker answered another address with the offline
-  // page (the page's own script after its hero tells the same way).
+  // page (the page's own script, after its hero's buttons, tells the same way).
   var isFallback = isOfflinePage && location.pathname.replace(/index\.html$/, "") !== new URL(OFFLINE_URL, location.href).pathname;
 
   /* ================================================================= Data saver ================= */
@@ -990,6 +990,19 @@
     var more = items.length > MAX ? '<button type="button" class="btn-ghost btn-sm mt-2" data-pwa-more>' + esc(T("Show all " + items.length, "Mostrar las " + items.length)) + "</button>" : "";
     return '<div class="pwa-saved-group"><h3 class="pwa-saved-h">' + esc(title) + " <span>(" + items.length + ')</span></h3><ul class="pwa-saved-list" role="list">' + rows + "</ul>" + more + "</div>";
   }
+  /* The list fills in after the browser has scrolled to a #fragment below it — a guide or #steps (the
+     notice's "Show me how", a link someone sent) — and pushes it down, off the screen when many pages
+     are listed (Safari keeps no scroll anchor): back to it, unless the visitor has scrolled, tapped or
+     pressed a key since the page opened. */
+  var moved = false;
+  ["wheel", "touchstart", "pointerdown", "keydown"].forEach(function (t) { window.addEventListener(t, function () { moved = true; }, { capture: true, passive: true }); });
+  function keepFragment(box) {
+    if (moved || !location.hash) return;
+    var t = null;
+    try { t = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { return; }
+    if (!t || !(box.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING)) return;
+    try { t.scrollIntoView({ block: "start", behavior: "instant" }); } catch (e) { t.scrollIntoView(true); }
+  }
   function offlineList() {
     var box = document.querySelector("[data-pwa-saved]");
     if (!box) return;
@@ -1002,11 +1015,12 @@
       r[0].forEach(function (e) { savedUrls[e.url] = 1; });
       var saved = mine(r[0]);
       var recent = mine(r[1].filter(function (e) { return !savedUrls[e.url]; }).reverse()); // newest first
-      if (!saved.length && !recent.length) { if (status) status.hidden = true; if (empty) empty.hidden = false; return; }
+      if (!saved.length && !recent.length) { if (status) status.hidden = true; if (empty) empty.hidden = false; keepFragment(box); return; }
       var n = saved.length + recent.length;
       if (status) status.textContent = T(n === 1 ? "1 page opens without a connection." : n + " pages open without a connection.", n === 1 ? "1 página se abre sin conexión." : n + " páginas se abren sin conexión.");
       list.innerHTML = listHtml(box.getAttribute("data-t-saved") || "", saved) + listHtml(box.getAttribute("data-t-recent") || "", recent);
-    }).catch(function () { if (status) status.hidden = true; if (unsup) unsup.hidden = false; });
+      keepFragment(box);
+    }).catch(function () { if (status) status.hidden = true; if (unsup) unsup.hidden = false; keepFragment(box); });
     box.addEventListener("click", function (e) {
       var b = e.target.closest("[data-pwa-more]");
       if (!b) return;
