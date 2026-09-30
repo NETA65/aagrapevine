@@ -99,7 +99,11 @@ pageScripts: ["/assets/js/committee.js"]
           {% endif %}
         </div>
         <div class="flex flex-wrap items-center gap-2 border-t border-line px-5 py-3 sm:px-7">
-          {%- set more = a.extra.link if (a.extra and a.extra.link) else (a.url if (a.source == "drive" and a.url) else "") -%}
+          {#- A post whose whole text is shown above and came from a plain-text file on Drive (.md / .txt) needs no
+              "Open the document": Drive would only show the same words as raw text. A PDF, a picture, a Google
+              Doc or a .docx keeps the button (there the file itself, or its formatting, is the message). -#}
+          {%- set plainText = a.source == "drive" and a.extra and a.extra.body_md and (a.extra.file_type == "MD" or a.extra.file_type == "TXT" or a.extra.file_type == "MARKDOWN" or (a.extra.mime or "").startsWith("text/")) -%}
+          {%- set more = a.extra.link if (a.extra and a.extra.link) else (a.url if (a.source == "drive" and a.url and not plainText) else "") -%}
           {%- set isDoc = a.source == "drive" and not (a.extra and a.extra.link) -%}
           {%- set moreIcon = "file-text" if isDoc else "arrow-up-right" -%}
           {#- `url:` may name a file saved next to the post (/bulletin/files/…, the same in both languages) -#}
