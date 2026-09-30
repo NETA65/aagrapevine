@@ -6,25 +6,23 @@
   "pwa.manifest.shot_narrow": { "en": "The home page on a phone: the next committee meeting and what's new", "es": "La página de inicio en un celular: la próxima reunión del comité y las novedades" },
   "pwa.manifest.shot_wide": { "en": "GVR / RLV 101 on a computer: six short sessions for new representatives", "es": "RLV / GVR 101 en una computadora: seis sesiones breves para nuevos representantes" },
   "pwa.audio_size": { "en": "Download size:", "es": "Tamaño de descarga:" },
-  "pwa.offline.page_title": { "en": "Saved pages", "es": "Páginas guardadas" },
   "pwa.offline.meta_desc": {
-    "en": "The pages saved on this device, which open without a connection.",
-    "es": "Las páginas guardadas en este dispositivo, que se abren sin conexión."
+    "en": "The pages saved on this device, which open without a connection, and how to install the site as an app on iPhone, Android or a computer.",
+    "es": "Las páginas guardadas en este dispositivo, que se abren sin conexión, y cómo instalar el sitio como app en iPhone, Android o una computadora."
   },
-  "pwa.offline.eyebrow": { "en": "Offline use · Saved pages", "es": "Sin conexión · Páginas guardadas" },
+  "pwa.offline.eyebrow": { "en": "Offline use · On your phone", "es": "Sin conexión · En tu teléfono" },
+  "pwa.offline.sub_online": {
+    "en": "The pages saved on this device open without a connection, and the site installs on your phone like an app.",
+    "es": "Las páginas guardadas en este dispositivo se abren sin conexión, y el sitio se instala en tu teléfono como una app."
+  },
+  "pwa.offline.sub_direct": {
+    "en": "You're offline, but the pages saved on this device still open.",
+    "es": "Estás sin conexión, pero las páginas guardadas en este dispositivo se siguen abriendo."
+  },
   "pwa.offline.title": { "en": "You're offline", "es": "Estás sin conexión" },
   "pwa.offline.sub": {
     "en": "This page isn't saved on this device yet. The pages below are, and they open without a connection.",
     "es": "Esta página todavía no está guardada en este dispositivo. Las de abajo sí, y se abren sin conexión."
-  },
-  "pwa.offline.sub_direct": {
-    "en": "Pages saved on this device still open without a connection.",
-    "es": "Las páginas guardadas en este dispositivo se siguen abriendo sin conexión."
-  },
-  "pwa.offline.title_online": { "en": "Pages saved on this device", "es": "Páginas guardadas en este dispositivo" },
-  "pwa.offline.sub_online": {
-    "en": "These pages open even without a connection. Save more from the Aa menu at the top.",
-    "es": "Estas páginas se abren aun sin conexión. Guarda más desde el menú Aa de arriba."
   },
   "pwa.offline.retry": { "en": "Try again", "es": "Intentar de nuevo" },
   "pwa.offline.home": { "en": "Go to the home page", "es": "Ir a la página de inicio" },
@@ -65,26 +63,12 @@
     "en": "One tap in the Aa menu saves Meetings, this month's toolkit and district report, the GVR / RLV 101 sessions, Share your story, the Shop and the Tracker, in your language.",
     "es": "Un toque en el menú Aa guarda Reuniones, el kit y el informe del mes, las sesiones de RLV / GVR 101, Comparte tu historia, la Tienda y el Registro, en tu idioma."
   },
-  "pwa.offline.how3_h": { "en": "Install it like an app", "es": "Instálalo como una app" },
+  "pwa.offline.how3_h": { "en": "Use less data", "es": "Usa menos datos" },
   "pwa.offline.how3_t": {
-    "en": "Add the site to your phone's home screen or to your computer. It opens in its own window, even offline.",
-    "es": "Agrega el sitio a la pantalla de inicio de tu teléfono o a tu computadora. Se abre en su propia ventana, aun sin conexión."
-  },
-  "pwa.offline.how4_h": { "en": "Use less data", "es": "Usa menos datos" },
-  "pwa.offline.how4_t": {
     "en": "Turn on Data saver in the Aa menu: images, video previews and the moving art stay off until you ask for them.",
     "es": "Activa el Ahorro de datos en el menú Aa: las imágenes, las vistas previas de video y el arte animado quedan apagados hasta que los pidas."
   },
   "pwa.app.title": { "en": "Install this site as an app", "es": "Instala este sitio como app" },
-  "pwa.app.meta_desc": {
-    "en": "Put the NETA 65 Grapevine / La Viña site on your phone's home screen: the steps for iPhone, Android and computers.",
-    "es": "Pon el sitio de Grapevine / La Viña de NETA 65 en la pantalla de inicio de tu teléfono: los pasos para iPhone, Android y computadoras."
-  },
-  "pwa.app.eyebrow": { "en": "Our site · On your phone", "es": "Nuestro sitio · En tu teléfono" },
-  "pwa.app.sub": {
-    "en": "Its own icon on your home screen: it opens in its own window, in your language, even with a weak signal.",
-    "es": "Su propio ícono en tu pantalla de inicio: se abre en su propia ventana, en tu idioma, aun con poca señal."
-  },
   "pwa.app.cta_steps": { "en": "See the steps", "es": "Ver los pasos" },
   "pwa.app.cta_install": { "en": "Install", "es": "Instalar" },
   "pwa.app.cta_send": { "en": "Send this page", "es": "Enviar esta página" },
@@ -93,10 +77,9 @@
     "es": "Cómo poner el sitio de Grapevine / La Viña de NETA 65 en la pantalla de inicio de tu teléfono:"
   },
   "pwa.app.steps_eyebrow": { "en": "Step by step", "es": "Paso a paso" },
-  "pwa.app.steps_h": { "en": "Choose your phone and its browser", "es": "Elige tu teléfono y su navegador" },
   "pwa.app.steps_sub": {
-    "en": "A few taps, under a minute — nothing to download from an app store.",
-    "es": "Unos toques, menos de un minuto; no hay que bajar nada de una tienda de apps."
+    "en": "Choose your phone and its browser. A few taps, under a minute — nothing to download from an app store.",
+    "es": "Elige tu teléfono y su navegador. Unos toques, menos de un minuto; no hay que bajar nada de una tienda de apps."
   },
   "pwa.app.here": { "en": "Your device", "es": "Tu dispositivo" },
   "pwa.app.os_iphone": { "en": "iPhone or iPad — Safari", "es": "iPhone o iPad — Safari" },
@@ -251,18 +234,13 @@
     "en": "On your home screen and in your list of apps. It opens without the browser's bars, like any app.",
     "es": "En tu pantalla de inicio y en tu lista de apps. Se abre sin las barras del navegador, como cualquier app."
   },
-  "pwa.app.why2_h": { "en": "Works with a weak signal", "es": "Funciona con poca señal" },
+  "pwa.app.why2_h": { "en": "In your language", "es": "En tu idioma" },
   "pwa.app.why2_t": {
-    "en": "Pages you open are kept on your phone, and you can save the key ones before a trip.",
-    "es": "Las páginas que abres se guardan en tu teléfono, y puedes guardar las más importantes antes de un viaje."
-  },
-  "pwa.app.why3_h": { "en": "In your language", "es": "En tu idioma" },
-  "pwa.app.why3_t": {
     "en": "Installed from a Spanish page, it opens in Spanish; from an English page, in English.",
     "es": "Si la instalas desde una página en español, se abre en español; desde una en inglés, en inglés."
   },
-  "pwa.app.why4_h": { "en": "Always up to date", "es": "Siempre al día" },
-  "pwa.app.why4_t": {
+  "pwa.app.why3_h": { "en": "Always up to date", "es": "Siempre al día" },
+  "pwa.app.why3_t": {
     "en": "It is this same site, and we keep it updated regularly: there's nothing to update from a store.",
     "es": "Es este mismo sitio y lo mantenemos al día con regularidad: no hay nada que actualizar desde una tienda."
   },
@@ -282,5 +260,9 @@
   "pwa.app.more_magazines": {
     "en": "Looking for the Grapevine or La Viña magazine apps? Those are separate, official apps:",
     "es": "¿Buscas las apps de las revistas Grapevine o La Viña? Son apps oficiales, aparte:"
+  },
+  "pwa.app.moved_text": {
+    "en": "The steps to install this site as an app now live with the saved pages. Taking you there…",
+    "es": "Los pasos para instalar este sitio como app ahora están junto a las páginas guardadas. Te llevamos allí…"
   }
 }

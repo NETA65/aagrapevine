@@ -8,11 +8,11 @@
       "Updated" toast (it then takes over and the page reloads), or until every tab is closed.
    2. The "Aa" panel's #pwa-slot (partials/comfort-panel.njk) — and [data-pwa-slot] anywhere —
       gets: the connection / saved-pages status, the install row (section 6: one tap where the
-      browser offers it, else "Install as an app" → this device's steps on /app/; "The app is on
-      this device" once that is known; inside another app, how to open the page in the phone's
+      browser offers it, else "Install as an app" → this device's steps on /offline/; "The app is
+      on this device" once that is known; inside another app, how to open the page in the phone's
       browser; nothing in the installed app), "Save key pages for offline" (with progress), "See
       saved pages" and, while images are hidden, "Show images on this page".
-      [data-pwa-install] gets the install part only, [data-pwa-save] the save part only.
+      [data-pwa-save] gets the save part only (the offline page's "Save key pages" card).
    3. Offline: a small, dismissible notice under the header ("You're offline — showing saved
       pages"), also when the worker had to answer with a saved copy (slow connection). While
       offline the Data saver effects are on, without changing the visitor's choice.
@@ -22,31 +22,35 @@
       YouTube previews show a "Load video (uses data)" button instead of a thumbnail and don't
       warm up connections, episode sizes show before playing (.pwa-saver-only). "Show images" undoes
       it for the page being viewed. Every change applies at once (html[data-saver] is watched).
-   5. The offline page (/offline/): lists the pages saved on this device (read from the caches).
+   5. The offline page — "Saved pages & app" (/offline/, src/pages/offline.njk): lists the pages
+      saved on this device (read from the caches). Opened on purpose, its hero is the page's own
+      (offline, it adds that the saved pages still open); standing in for a page that isn't saved
+      (isFallback: the worker's answer at another address), the page's own script has already made
+      it "You're offline … Try again", and the page reloads once the connection is back.
    6. Install as an app. install-core.js (window.GVInstall, loaded just before this file) says which
-      phone and browser this is, which guide on /app/ fits it (src/pages/app.njk) and when the
-      notice may show; this section draws it all:
+      phone and browser this is, which guide on /offline/ fits it (#steps, src/pages/offline.njk)
+      and when the notice may show; this section draws it all:
       * the install notice — the bottom toast, kind "install", on phones and tablets only: "Install
         this site as an app" with Install (the browser's own one-tap prompt, kept for it: the
-        browser's mini bar is not shown) or "Show me how" (/app/#<guide>), and "Not now". After
+        browser's mini bar is not shown) or "Show me how" (/offline/#<guide>), and "Not now". After
         the 3rd page view (the 2nd when the browser offers one-tap install), 20 s on the page and a
-        first tap, key or scroll; never inside another app, in the app itself, offline, on /app/,
-        the offline page or a noindex page, for automated browsers, while typing, with the language
+        first tap, key or scroll; never inside another app, in the app itself, offline, on the
+        offline page or a noindex page, for automated browsers, while typing, with the language
         banner, the podcast player, the read-aloud bar, the Aa panel, the phone menu or a photo
         open, nor with another notice (it steps aside while any of those is up). "Not now" (or
         Escape inside it) = 30 days of quiet, twice at most; 4 showings in all; focus goes back to
         where it was. No animation and nothing announced until the visitor acts on it.
-      * the install row of section 2, and the /app/ page ([data-pwa-app]): the visitor's guide
-        opened and marked "Your device" (any #guide in the address — or a link to one on the page —
-        opens too), Safari's first step for its version ([data-pwa-v]), the "inside another app" /
-        "You're using the app" / "already on this device" notes, the hero's Install button while the
-        browser offers one-tap install, every guide open when printed.
-      * html.pwa-standalone while the site runs as the installed app (areas/pwa.css hides the links
-        to /app/ there). "Known to be installed": installed from this browser, opened as the app in
-        the last 90 days, or navigator.getInstalledRelatedApps() says so (the manifests list each
-        other as related_applications) — until the browser offers one-tap install, which it only
-        does while the app is not installed (it was removed: that is forgotten, the notice may come
-        back).
+      * the install row of section 2, and the offline page's install steps ([data-pwa-app]): the
+        visitor's guide opened and marked "Your device" (any #guide in the address — or a link to
+        one on the page — opens too), Safari's first step for its version ([data-pwa-v]), the
+        "inside another app" / "You're using the app" / "already on this device" notes, the hero's
+        Install button while the browser offers one-tap install, every guide open when printed.
+      * Inside the installed app (display-mode standalone …): no notice, no install row, and the
+        steps say "You're using the app". "Known to be installed": installed from this browser,
+        opened as the app in the last 90 days, or navigator.getInstalledRelatedApps() says so (the
+        manifests list each other as related_applications) — until the browser offers one-tap
+        install, which it only does while the app is not installed (it was removed: that is
+        forgotten, the notice may come back).
    Browser storage: sessionStorage "gvlv-pwa-hide" (notices closed in this tab session) and
    localStorage "gvlv-app" (install-core.js THE RECORD: page views, the notice's showings and "Not
    now"s, when the site last ran as the app and was installed; blocked → no notice). */
@@ -58,7 +62,6 @@
   var T = function (en, es) { return LANG === "es" ? es : en; };
   var BASE = GV.base || (window.SITE && window.SITE.base) || "/";
   var at = function (p) { return BASE.replace(/\/$/, "") + p; };
-  var HOME = at(LANG === "es" ? "/es/" : "/");
   var OFFLINE_URL = at(LANG === "es" ? "/es/offline/" : "/offline/");
   var SAVED_CACHE = "gvlv-saved-v1", PAGES_CACHE = "gvlv-pages-v1";
   var canSW = !!(navigator.serviceWorker && window.isSecureContext && window.caches);
@@ -114,6 +117,8 @@
     swReady: false,
   };
   var isOfflinePage = !!document.querySelector("[data-pwa-saved]");
+  // Standing in for a page that isn't saved: the worker answered another address with the offline
+  // page (the page's own script after its hero tells the same way).
   var isFallback = isOfflinePage && location.pathname.replace(/index\.html$/, "") !== new URL(OFFLINE_URL, location.href).pathname;
 
   /* ================================================================= Data saver ================= */
@@ -253,7 +258,7 @@
   // Lists Alpine renders later (episodes, videos, search results …): new pictures → frames, labels;
   // a panel slot that appears later → filled. Text-only changes (a countdown, the player's clock) are ignored.
   var moTimer = 0;
-  var WATCH = "img, lite-youtube, #pwa-slot, [data-pwa-slot], [data-pwa-install], [data-pwa-save]";
+  var WATCH = "img, lite-youtube, #pwa-slot, [data-pwa-slot], [data-pwa-save]";
   function relevantNode(n) { return n.nodeType === 1 && (n.matches(WATCH) || !!n.querySelector(WATCH)); }
   new MutationObserver(function (muts) {
     if (moTimer) return;
@@ -283,7 +288,7 @@
      (pwa.css). One toast at a time: a new version, then images are off, then the install notice. */
   var bar = null, toast = null, barRO = null, toastRO = null, toastHtml = "", toastFrom = null, toastRedraw = false;
   function barKind() {
-    // the offline page's own hero already says "You're offline — this page isn't saved…": no second notice
+    // the offline page's own hero already says "You're offline" (standing in: "…this page isn't saved"): no second notice
     if (!state.online) return hidden.offline || isOfflinePage ? "" : "offline";
     if (state.copyFrom !== null && !hidden.copy) return "copy";
     return "";
@@ -417,11 +422,10 @@
   }
 
   /* ================================================================= Install as an app ========== */
-  /* Header item 6. Which phone and browser, which guide on /app/ and the notice's rules are
+  /* Header item 6. Which phone and browser, which guide on /offline/ and the notice's rules are
      install-core.js's (window.GVInstall). Without it (a first visit while offline) every control
-     is a plain link to /app/ and there is no notice. */
+     is a plain link to the steps (/offline/#steps) and there is no notice. */
   var GI = window.GVInstall || null;
-  var APP_URL = at(LANG === "es" ? "/es/app/" : "/app/");
   var dev = null;
   if (GI) {
     try {
@@ -434,8 +438,8 @@
       });
     } catch (e) { dev = null; }
   }
-  var guideUrl = APP_URL + (dev ? "#" + dev.guide : "");
-  var appPage = document.querySelector("[data-pwa-app]");
+  var guideUrl = OFFLINE_URL + "#" + (dev ? dev.guide : "steps");
+  var appSteps = document.querySelector("[data-pwa-app]");      // the offline page's install steps
   var isNoindex = !!document.querySelector('meta[name="robots"][content*="noindex"]');
 
   function standalone() {
@@ -445,7 +449,6 @@
     } catch (e) { return false; }
   }
   state.installed = standalone();
-  if (state.installed) root.classList.add("pwa-standalone");
 
   /* localStorage "gvlv-app" (install-core.js THE RECORD), read again before every decision (another
      tab may have said "Not now"). storeOk: storage answers (blocked → the notice is never offered:
@@ -470,20 +473,20 @@
     if (state.installed) rec = saveRec(GI.opened(rec, now0));
     else if (!isFallback && !isNoindex) {
       rec = saveRec(GI.view(rec));
-      // on /app/ itself the steps are found: no notice for a while after it either
-      if (appPage) rec = saveRec(GI.guided(rec, now0));
+      // on the page with the steps they are found: no notice for a while after it either
+      if (appSteps) rec = saveRec(GI.guided(rec, now0));
     }
     state.known = recKnown();
   }
 
   window.addEventListener("beforeinstallprompt", function (e) {
-    // The browser's own mini bar is not shown: the site's bilingual notice, the Aa panel and /app/
-    // offer the same one-tap install with this event.
+    // The browser's own mini bar is not shown: the site's bilingual notice, the Aa panel and the
+    // offline page's hero offer the same one-tap install with this event.
     e.preventDefault();
     state.installEvt = e;
     // The browser only offers this while the app is NOT installed: a remembered install (or an
-    // "opened as the app" in the last 90 days) is out of date — it was removed. Forget it, so /app/
-    // doesn't say "already on this device" beside Install and the notice may come back.
+    // "opened as the app" in the last 90 days) is out of date — it was removed. Forget it, so the
+    // steps don't say "already on this device" beside Install and the notice may come back.
     state.known = false;
     if (GI) { var r0 = loadRec(); if (r0.done || r0.app) rec = saveRec(GI.notInstalled(r0)); }
     renderInstall();
@@ -509,7 +512,7 @@
     } catch (e) { /* not allowed here */ }
   }
 
-  function renderInstall() { renderSlots(); renderToast(); renderAppPage(); }
+  function renderInstall() { renderSlots(); renderToast(); renderAppSteps(); }
 
   /* One tap: the browser's own install dialog (the event works once). No event: this device's steps.
      Every outcome redraws the controls — a refused or failed prompt never leaves the panel empty. */
@@ -537,18 +540,18 @@
     if (GI) rec = saveRec(GI.later(loadRec(), Date.now()));
     state.offer = false;
     renderToast();
-    announce(T("Okay. “Install as an app” is always in the menu and at the bottom of every page.", "De acuerdo. «Instalar como app» siempre está en el menú y al pie de cada página."));
+    announce(T("Okay. The steps are always in “Saved pages & app”, in the menu and at the bottom of every page.", "De acuerdo. Los pasos siempre están en «Páginas guardadas y app», en el menú y al pie de cada página."));
   }
   /* "Show me how" / the panel's "Install as an app": the steps are being read — quiet for 30 days.
-     Already on /app/ (a link to another guide on it): the Aa panel closes, that guide opens, the
-     link scrolls to it, and then focus moves to its title — the link it was on went away with the
-     panel, and the browser leaves focus on nothing after a jump to a #fragment (it can't focus a
-     <details>): a keyboard user goes on from the steps, a screen reader lands on them. */
+     Already on the offline page (a link to a guide on it): the Aa panel closes, that guide opens,
+     the link scrolls to it, and then focus moves to its title — the link it was on went away with
+     the panel, and the browser leaves focus on nothing after a jump to a #fragment (it can't focus
+     a <details>): a keyboard user goes on from the steps, a screen reader lands on them. */
   function guided(a) {
     if (GI) rec = saveRec(GI.guided(loadRec(), Date.now()));
     var u = null;
     try { u = new URL(a.getAttribute("href"), location.href); } catch (e) { return; }
-    if (!appPage || u.pathname !== location.pathname) return;
+    if (!appSteps || u.pathname !== location.pathname) return;
     try { if (window.Alpine) window.Alpine.store("gvlv").open = false; } catch (e) { /* no panel */ }
     var d = null;
     try { d = openGuide(decodeURIComponent(u.hash.slice(1))); } catch (e) { /* a broken #fragment */ }
@@ -556,8 +559,8 @@
     if (s) setTimeout(function () { s.focus({ preventScroll: true }); }, 0);   // (after the jump)
   }
 
-  /* The install row: the Aa panel ("full") and the offline page's card ("install"). */
-  function installHtml(where) {
+  /* The install row of the Aa panel (section 2). */
+  function installHtml() {
     if (state.installed) return "";
     if (state.installEvt) {
       return '<button type="button" class="btn-primary btn-sm pwa-wide" data-pwa-act="install">' + icon("download", "size-4") + esc(T("Install as an app", "Instalar como app")) + "</button>" +
@@ -571,10 +574,10 @@
       var name = dev.app || T("another app", "otra app");
       return '<p class="pwa-line">' + icon("external-link", "size-4 shrink-0") + "<span>" +
         esc(T("This page is open inside {app}: open it in your browser to install the app.", "Esta página está abierta dentro de {app}: ábrela en tu navegador para instalar la app.").replace("{app}", name)) + "</span></p>" +
-        '<p class="pwa-links"><a class="pwa-link" href="' + esc(APP_URL + "#in-app") + '" data-pwa-act="install-how">' + esc(T("How to open it in your browser", "Cómo abrirla en tu navegador")) + "</a></p>";
+        '<p class="pwa-links"><a class="pwa-link" href="' + esc(OFFLINE_URL + "#in-app") + '" data-pwa-act="install-how">' + esc(T("How to open it in your browser", "Cómo abrirla en tu navegador")) + "</a></p>";
     }
     return '<a class="btn-secondary btn-sm pwa-wide" href="' + esc(guideUrl) + '" data-pwa-act="install-how">' + icon("smartphone", "size-4") + esc(T("Install as an app", "Instalar como app")) + "</a>" +
-      (where === "install" ? "" : '<p class="pwa-hint">' + esc(T("The steps for this device take under a minute.", "Los pasos para este dispositivo toman menos de un minuto.")) + "</p>"); // (the card says it already)
+      '<p class="pwa-hint">' + esc(T("The steps for this device take under a minute.", "Los pasos para este dispositivo toman menos de un minuto.")) + "</p>";
   }
 
   /* The install notice (toast kind "install"). Its second sentence (.pwa-toast-more) and icon go on
@@ -631,7 +634,7 @@
         prompt: !!state.installEvt, online: state.online,
         dwell: dwell + (seenSince ? now - seenSince : 0), touched: touched || window.scrollY > 200,
         busy: document.hidden || other || busy(),
-        page: appPage ? "app" : isOfflinePage ? "offline" : isNoindex ? "noindex" : "",
+        page: isOfflinePage ? "offline" : isNoindex ? "noindex" : "",
       });
       if (!ok) return;
       rec = saveRec(GI.shown(rec, now));
@@ -644,7 +647,7 @@
   }
   function stopOffer() { if (offerTimer) { clearInterval(offerTimer); offerTimer = 0; } }
   function startOffer() {
-    if (!canOffer() || appPage || isOfflinePage || isNoindex) return;
+    if (!canOffer() || isOfflinePage || isNoindex) return;
     offerTimer = setInterval(function () { if (++checks > 36) stopOffer(); else maybeOffer(); }, 5000);
   }
   // Once offered, the notice follows the page: it steps aside while something else is up and comes
@@ -673,23 +676,24 @@
     document.addEventListener("toggle", again, true);    // a <dialog> or <details> opened or closed
   }
 
-  /* /app/ ([data-pwa-app], src/pages/app.njk — the data-attribute contract is in its header).
-     openGuide(id): that guide opened; it is returned (null when id is no guide on this page). */
+  /* The offline page's install steps ([data-pwa-app], src/pages/offline.njk — the data-attribute
+     contract is in its header). openGuide(id): that guide opened; it is returned (null when id is no
+     guide on this page). */
   function openGuide(id) {
-    var d = id && appPage ? document.getElementById(id) : null;
-    if (!(d && d.tagName === "DETAILS" && appPage.contains(d))) return null;
+    var d = id && appSteps ? document.getElementById(id) : null;
+    if (!(d && d.tagName === "DETAILS" && appSteps.contains(d))) return null;
     d.open = true;
     return d;
   }
   var printOpen = null;
-  function renderAppPage() {
-    if (!appPage) return;
-    appPage.querySelectorAll("[data-pwa-guide]").forEach(function (d) {
+  function renderAppSteps() {
+    if (!appSteps) return;
+    appSteps.querySelectorAll("[data-pwa-guide]").forEach(function (d) {
       var badge = d.querySelector("[data-pwa-here]");
       if (badge) badge.hidden = !(dev && dev.guide === d.getAttribute("data-pwa-guide"));
     });
-    if (dev && dev.variant) appPage.querySelectorAll("[data-pwa-v]").forEach(function (el) { el.hidden = el.getAttribute("data-pwa-v") !== dev.variant; });
-    var inapp = appPage.querySelector("[data-pwa-inapp]");
+    if (dev && dev.variant) appSteps.querySelectorAll("[data-pwa-v]").forEach(function (el) { el.hidden = el.getAttribute("data-pwa-v") !== dev.variant; });
+    var inapp = appSteps.querySelector("[data-pwa-inapp]");
     if (inapp) {
       var show = !!(dev && dev.inApp && !state.installEvt && !state.installed);
       var p = inapp.querySelector("[data-pwa-inapp-text]");
@@ -698,26 +702,27 @@
     }
     // a tip that doesn't fit inside one app ([data-pwa-not-in]: WhatsApp's own tip, while reading
     // inside WhatsApp's own browser — the note above already says so)
-    appPage.querySelectorAll("[data-pwa-not-in]").forEach(function (el) { el.hidden = !!(dev && dev.inApp && dev.app === el.getAttribute("data-pwa-not-in")); });
-    var using = appPage.querySelector("[data-pwa-using]");
+    appSteps.querySelectorAll("[data-pwa-not-in]").forEach(function (el) { el.hidden = !!(dev && dev.inApp && dev.app === el.getAttribute("data-pwa-not-in")); });
+    var using = appSteps.querySelector("[data-pwa-using]");
     if (using) using.hidden = !state.installed;
     // (the same order as the install row: a one-tap offer means it isn't installed)
-    var known = appPage.querySelector("[data-pwa-known]");
+    var known = appSteps.querySelector("[data-pwa-known]");
     if (known) known.hidden = state.installed || !!state.installEvt || !state.known;
     // The hero: one-tap Install while the browser offers it, else "See the steps" (to this device's
-    // guide); neither in the installed app. Focus on a button that goes moves to the one that stays.
+    // guide); neither in the installed app, nor while the page stands in for one that isn't saved
+    // ("Try again" alone). Focus on a button that goes moves to the one that stays.
     var btn = document.querySelector("[data-pwa-install-hero]"), steps = document.querySelector("[data-pwa-steps-link]");
     var focused = document.activeElement;
-    if (btn) btn.hidden = state.installed || !state.installEvt;
+    if (btn) btn.hidden = state.installed || isFallback || !state.installEvt;
     if (steps) {
-      steps.hidden = state.installed || !!state.installEvt;
+      steps.hidden = state.installed || isFallback || !!state.installEvt;
       if (dev) steps.setAttribute("href", "#" + dev.guide);
     }
     if (focused === btn && btn && btn.hidden && steps && !steps.hidden) steps.focus({ preventScroll: true });
     else if (focused === steps && steps && steps.hidden && btn && !btn.hidden) btn.focus({ preventScroll: true });
   }
-  function startAppPage() {
-    if (!appPage) return;
+  function startAppSteps() {
+    if (!appSteps) return;
     var hashGuide = function () { try { openGuide(decodeURIComponent(location.hash.slice(1))); } catch (e) { /* a broken #fragment */ } };
     if (dev) openGuide(dev.guide);
     hashGuide();
@@ -731,13 +736,13 @@
     // Printed: every guide open (the closed ones would print as a list of titles), then as they were.
     window.addEventListener("beforeprint", function () {
       printOpen = [];
-      appPage.querySelectorAll("details[data-pwa-guide]").forEach(function (d) { printOpen.push([d, d.open]); d.open = true; });
+      appSteps.querySelectorAll("details[data-pwa-guide]").forEach(function (d) { printOpen.push([d, d.open]); d.open = true; });
     });
     window.addEventListener("afterprint", function () {
       if (printOpen) printOpen.forEach(function (x) { x[0].open = x[1]; });
       printOpen = null;
     });
-    renderAppPage();
+    renderAppSteps();
   }
 
   /* ================================================================= Save for offline =========== */
@@ -817,10 +822,9 @@
       esc(state.online ? T("You're online", "Tienes conexión") : T("You're offline", "Estás sin conexión")) + (saved ? " · " + esc(saved) : "") + "</span></p>";
   }
   function slotHtml(kind) {
-    if (kind === "install") return installHtml("install");
     if (kind === "save") return saveHtml(true);
     var parts = ['<p class="pwa-slot-h">' + icon("save", "size-4 shrink-0") + "<span>" + esc(T("Offline & app", "Sin conexión y app")) + "</span></p>", statusHtml()];
-    var inst = installHtml("full");
+    var inst = installHtml();
     if (inst) parts.push('<div class="pwa-row">' + inst + "</div>");
     parts.push('<div class="pwa-row">' + saveHtml() + "</div>");
     var links = [];
@@ -832,7 +836,6 @@
   function slots() {
     var out = [];
     document.querySelectorAll("#pwa-slot, [data-pwa-slot]").forEach(function (el) { out.push([el, "full"]); });
-    document.querySelectorAll("[data-pwa-install]").forEach(function (el) { out.push([el, "install"]); });
     document.querySelectorAll("[data-pwa-save]").forEach(function (el) { out.push([el, "save"]); });
     return out;
   }
@@ -853,14 +856,14 @@
     });
     renderProgress();
   }
-  function fillSlots() { if (document.querySelector("#pwa-slot:not([data-pwa-ready]), [data-pwa-slot]:not([data-pwa-ready]), [data-pwa-install]:not([data-pwa-ready]), [data-pwa-save]:not([data-pwa-ready])")) renderSlots(); }
+  function fillSlots() { if (document.querySelector("#pwa-slot:not([data-pwa-ready]), [data-pwa-slot]:not([data-pwa-ready]), [data-pwa-save]:not([data-pwa-ready])")) renderSlots(); }
 
   /* ================================================================= Clicks ===================== */
   document.addEventListener("click", function (e) {
     var b = e.target.closest && e.target.closest("[data-pwa-act], [data-pwa-retry]");
     if (!b) return;
     if (b.hasAttribute("data-pwa-retry")) {
-      if (!isFallback) return; // /offline/ opened on purpose (online or not): a plain link home
+      if (!isFallback) return; // (shown only while standing in for another page)
       e.preventDefault();
       location.reload();
       return;
@@ -868,7 +871,7 @@
     var act = b.getAttribute("data-pwa-act");
     if (act === "install") install(b.getAttribute("data-from") || "");
     else if (act === "install-later") notNow();
-    else if (act === "install-how") guided(b);          // a link: it goes on to /app/#<guide>
+    else if (act === "install-how") guided(b);          // a link: it goes on to /offline/#<guide>
     else if (act === "save") savePages();
     else if (act === "show-images") showImages();
     else if (act === "update" && state.waiting) { wantReload = true; state.waiting.postMessage({ type: "SKIP_WAITING" }); b.disabled = true; }
@@ -939,20 +942,14 @@
   /* ================================================================= The offline page ========== */
   function offlinePageCopy() {
     var box = document.querySelector("[data-pwa-offline-copy]");
-    // Standing in for a page that isn't saved: the page's own words ("This page isn't saved…") and
-    // "Try again" are right.
+    // Standing in for a page that isn't saved: the page's own script has put "You're offline", "This
+    // page isn't saved…" and "Try again" in the hero, and they stay until the page reloads.
     if (!box || isFallback) return;
-    // Opened on purpose ("See saved pages"): online, "Pages saved on this device"; offline, "You're
-    // offline" and that the pages below open without a connection. The button goes home.
-    var h1 = document.querySelector(".gv-hero-title > span:last-child"), sub = document.querySelector(".gv-hero-sub");
-    var copy = function (el, attr) { var v = box.getAttribute(attr); if (el && v) el.textContent = v; };
-    copy(h1, state.online ? "data-title-online" : "data-title-direct");
-    copy(sub, state.online ? "data-sub-online" : "data-sub-direct");
-    var btn = box.querySelector("[data-pwa-retry]");
-    if (btn) {
-      btn.setAttribute("href", HOME);
-      btn.innerHTML = '<svg class="icon size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> <span>' + esc(box.getAttribute("data-home-label") || "") + "</span>";
-    }
+    // Opened on purpose: the page's own words; while there is no connection, that the visitor is
+    // offline and the saved pages still open.
+    var hero = box.closest("[data-gv-hero]"), sub = hero && hero.querySelector(".gv-hero-sub");
+    var v = box.getAttribute(state.online ? "data-sub-online" : "data-sub-offline");
+    if (sub && v && sub.textContent !== v) sub.textContent = v;
   }
 
   function readCache(name) {
@@ -1029,7 +1026,7 @@
     syncSaver();
     offlinePageCopy();
     offlineList();
-    startAppPage();
+    startAppSteps();
     relatedApps();
     startOffer();
     if (canSW) {

@@ -158,7 +158,7 @@ const R = {};
   R.install = await w.lifecycle("install");
 
   const nc = world();                                                                                   // install-core.js is missing:
-  shellOnline(nc);                                                                                      // pwa.js falls back to links to /app/
+  shellOnline(nc);                                                                                      // pwa.js falls back to links to the steps
   R.coreUrl = nc.CONFIG.shell.find((u) => u.includes("assets/js/install-core.js")) || "";
   nc.net.set(ORIGIN + R.coreUrl, { status: 404, body: "" });
   R.installNoCore = await nc.lifecycle("install");
@@ -286,7 +286,7 @@ class Worker(unittest.TestCase):
 
     def test_install_core_is_optional(self):
         # the install notice's rules (install-core.js) are kept for offline use, but a worker installs
-        # without them: pwa.js then makes every install control a plain link to /app/
+        # without them: pwa.js then makes every install control a plain link to the steps (/offline/#steps)
         r = self.r
         self.assertEqual(r["coreUrl"], B + "assets/js/install-core.js?v=t1")
         self.assertIn(r["coreUrl"], r["config"]["shell"])

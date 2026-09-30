@@ -92,17 +92,15 @@ descKey: access.meta_desc
     </li>
     {% endfor %}
     {#- Saved pages and the app (feature 14): a card across the whole row (6 settings + 1 never leaves
-        an orphan) with its two pages as two links of their own (not a whole-card link): /offline/ —
-        the pages saved on this device and "Save key pages" (it switches to its online wording) — and
-        /app/, installing the site as an app. -#}
+        an orphan) with one link, to their page by its name: /offline/, "Saved pages & app" — the pages
+        saved on this device, "Save key pages" and the steps to install the site as an app. -#}
     <li class="card flex flex-col gap-4 p-5 sm:col-span-full sm:flex-row">
       <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-vine-soft text-vine">{% icon "hard-drive-download", "size-5" %}</span>
       <div class="min-w-0 flex-1">
         <h3 class="h-card">{{ "access.f_offline_t" | t(lang) }}</h3>
         <p class="mt-1 text-sm leading-relaxed text-muted">{{ "access.f_offline" | t(lang) }}</p>
-        <p class="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-sm">
-          <a class="tap-link inline-flex items-center gap-1.5 font-semibold text-gv hover:underline" href="{{ '/offline/' | lurl(lang) }}">{{ "access.f_offline_cta" | t(lang) }} {% icon "arrow-right", "size-4 shrink-0" %}</a>
-          <a class="tap-link inline-flex items-center gap-1.5 font-semibold text-gv hover:underline" href="{{ '/app/' | lurl(lang) }}">{{ "nav.app" | t(lang) }} {% icon "arrow-right", "size-4 shrink-0" %}</a>
+        <p class="mt-3 text-sm">
+          <a class="tap-link inline-flex items-center gap-1.5 font-semibold text-gv hover:underline" href="{{ '/offline/' | lurl(lang) }}">{{ "nav.offline" | t(lang) }} {% icon "arrow-right", "size-4 shrink-0" %}</a>
         </p>
       </div>
     </li>

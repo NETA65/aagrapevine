@@ -622,9 +622,9 @@ links:
   rlv_resources: "https://www.aalavina.org/recursos"
   gv_apps: "https://www.aagrapevine.org/apps"
   lv_apps: "https://www.aalavina.org/aplicaciones"
-  # "Install as an app" page (/app/): the official help for adding a web app to the home screen —
-  # Apple's iPhone guide ("Open as Web App") and Chrome Help's "Use web apps" for Android, in English
-  # and in Spanish (the Spanish page links the _es one).
+  # The install steps on Saved pages & app (/offline/#steps): the official help for adding a web app to
+  # the home screen — Apple's iPhone guide ("Open as Web App") and Chrome Help's "Use web apps" for
+  # Android, in English and in Spanish (the Spanish page links the _es one).
   app_help_iphone: "https://support.apple.com/guide/iphone/open-as-web-app-iphea86e5236/ios"
   app_help_iphone_es: "https://support.apple.com/es-mx/guide/iphone/iphea86e5236/ios"
   app_help_android: "https://support.google.com/chrome/answer/9658361?hl=en&co=GENIE.Platform%3DAndroid"

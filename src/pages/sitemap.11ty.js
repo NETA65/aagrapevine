@@ -6,8 +6,8 @@
 // ignore a date that always moves) and no <changefreq> (ignored by Google).
 // Pages that must always be listed (both languages) are checked at build time: if one is
 // missing (renamed, excluded by mistake) the build log says so. Not checked in ONLY= dev builds.
-// /app/ is the page the committee sends to install the site on a phone.
-const REQUIRED = ["/", "/whats-new/", "/published/", "/read/", "/monthly/", "/digest/", "/app/"];
+// /offline/ ("Saved pages & app") holds the steps the committee sends to install the site on a phone.
+const REQUIRED = ["/", "/whats-new/", "/published/", "/read/", "/monthly/", "/digest/", "/offline/"];
 
 export const data = {
   permalink: "/sitemap.xml",

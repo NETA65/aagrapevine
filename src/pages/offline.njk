@@ -1,27 +1,136 @@
 ---
-# The offline page (/offline/ and /es/offline/). The service worker (src/pages/sw.11ty.js) keeps both
-# in its app shell and shows them — in the language of the address asked for — when a page is not
-# saved on this device and there is no connection. It is also "See saved pages" in the Aa menu, so it
-# reads naturally online too: pwa.js swaps the hero to its online wording (data-pwa-offline-copy).
-# The list of saved pages is read from the worker's caches by pwa.js (no JavaScript or no service
-# worker: a plain note instead). Not in the sitemap; noindex (base.njk). The site's own search lists it as
-# "Saved pages" (library.js walks nav.footer; search.page_desc.offline / search.kw.offline).
+# Saved pages & app (/offline/ and /es/offline/): the one page for a weak signal — the pages saved on
+# this device, how the site works without a connection, and the steps to install it as an app (they
+# had a page of their own: app-redirect.njk keeps its address and #guide links working). The footer's
+# bottom bar and the phone menu's "More" link here ("Saved pages & app", nav.js), and so do the Aa
+# panel's "See saved pages" and install row, the offline notice and the install notice's "Show me
+# how" (with the visitor's own guide as the #fragment). A real page: in the sitemap (REQUIRED there),
+# the site's search (library.js walks nav.footer; search.page_desc.offline, search.kw.offline) and
+# search engines (canonical + hreflang, base.njk). Send it to a group as …/offline/#steps: it opens
+# each phone's guide.
+# It is also the service worker's stand-in: src/pages/sw.11ty.js keeps both languages in its app shell
+# and shows them — in the language of the address asked for — when a page is not saved on this device
+# and there is no connection. The hero then says so from the first paint (the script right after it),
+# and the list of saved pages follows. The list is read from the worker's caches by pwa.js (no
+# JavaScript or no service worker: a plain note instead).
 pagination: { data: languages, size: 1, alias: lang }
 permalink: "{{ '/' if lang == 'en' else '/es/' }}offline/index.html"
 layout: layouts/base.njk
 pageKey: offline
-titleKey: pwa.offline.page_title
+titleKey: nav.offline
 descKey: pwa.offline.meta_desc
-sitemap: false
-eleventyExcludeFromCollections: true
 ---
+{#- In this order: the hero · the pages saved on this device · how the site works without a connection
+    (three cards: the pages you open are kept, "Save key pages" with its button, Data saver) · #steps,
+    installing the site as an app: three notes (JavaScript only) and seven guides, one <details> per
+    phone and browser, in this order — their ids are the #fragments the other pages use:
+      iphone         iPhone or iPad, Safari (step 1 in four versions, [data-pwa-v] below)
+      iphone-other   iPhone or iPad, Chrome / Edge / Firefox (from iOS 16.4)
+      android        Android, Chrome ("Install", not "Create shortcut": shortcuts open in Chrome)
+      samsung        Android, Samsung Internet
+      android-other  Android, Firefox / Edge / Opera / Brave and others
+      in-app         a page opened inside Facebook, Instagram, WhatsApp … (those can't install): open
+                     it in the phone's browser, or Copy the link
+      computer       Chrome / Edge / Safari on a computer
+    · "Why install it" (three cards) · "Good to know" (free, the Android shortcuts — the same three as
+    the manifest's, src/pages/manifest.11ty.js —, removing it, the magazines' own apps).
+    The contract with pwa.js (header items 5 and 6; install-core.js tells which device this is):
+      [data-pwa-offline-copy]               the hero's buttons, with the hero's other words: standing
+                                            in (data-title-standin, data-sub-standin — the script after
+                                            the hero) and opened on purpose (data-sub-online, or
+                                            data-sub-offline while there is no connection — pwa.js)
+      [data-pwa-retry] (hidden)             "Try again": only while standing in for another page
+      [data-pwa-steps-link] · [data-pwa-install-hero]   "See the steps" (to the visitor's guide) or the
+                                            one-tap "Install", one shown at a time; neither while standing
+                                            in nor in the installed app
+      [data-pwa-saved] …                    the list of saved pages (pwa.js offlineList)
+      [data-pwa-save]                       the "Save key pages" button (pwa.js; empty without it)
+      section[data-pwa-app]                 the guides — pwa.js only works where they are
+      details#<id>[data-pwa-guide=<id>]     a guide: the visitor's opens, and so does any #<id> in the address
+      [data-pwa-here] (hidden)              "Your device", in the summary of the visitor's guide
+      [data-pwa-v=any|27|26|share]          Safari's step 1: "any" (it names each button) shows without
+                                            JavaScript; the others are rendered hidden and pwa.js shows
+                                            the one for this Safari — Page Menu (27), More (26), Share
+      [data-pwa-inapp] (hidden)             "You're reading this inside {app}": data-t, {app} = the app's
+                                            name or data-t-other, written into [data-pwa-inapp-text]
+      [data-pwa-using] / [data-pwa-known]   "You're using the app" (in the app) / "already on this device"
+      [data-pwa-not-in=<app>]               a tip hidden while reading inside that app's own browser
+                                            (the WhatsApp tip inside WhatsApp: the note says it already)
+      [data-pwa-act="install"]              one-tap install (the browser's own prompt)
+      [data-copy] / [data-share]            app.js GV.copy / GV.share, with the address of the steps
+    Printed, every guide is open (pwa.js). The words on the platforms' own buttons live in
+    src/_i18n/pwa.json (pwa.app.* — tests/test_pwa_install.py pins them): re-check them every
+    September (a new iOS) and after big Chrome releases, against the official help pages linked
+    here (config/site.yml links: app_help_iphone, app_help_android, and their _es). -#}
 {% import "macros/ui.njk" as ui with context %}
+{#- the address "Send this page" and "Copy the link" hand on: the steps, in this page's language -#}
+{%- set appUrl = (page.url | siteUrl(site)) + "#steps" -%}
+{%- set ln = site.links -%}
 {%- set how = [
   { icon: "history", tone: "bg-gv-soft text-gv", h: "pwa.offline.how1_h", t: "pwa.offline.how1_t" },
   { icon: "hard-drive-download", tone: "bg-vine-soft text-vine", h: "pwa.offline.how2_h", t: "pwa.offline.how2_t", save: true },
-  { icon: "smartphone", tone: "bg-grape-soft text-grape", h: "pwa.offline.how3_h", t: "pwa.offline.how3_t", install: true },
-  { icon: "gauge", tone: "bg-lv-soft text-lv", h: "pwa.offline.how4_h", t: "pwa.offline.how4_t" }
+  { icon: "gauge", tone: "bg-lv-soft text-lv", h: "pwa.offline.how3_h", t: "pwa.offline.how3_t" }
 ] -%}
+{#- The button to look for, drawn in a small tile before a step's words: a Lucide icon (or the local
+    safari-menu, Safari 27's Page Menu), or "app" = the app's own icon (open it from the home screen). -#}
+{% macro key(name) -%}
+<span class="pwa-guide-key" aria-hidden="true">{% if name == "app" %}<img src="/assets/img/app-icon-192.png" alt="" width="20" height="20">{% else %}{% icon name, "size-4" %}{% endif %}</span>
+{%- endmacro %}
+{#- A guide: steps (numbered; key + words k + an optional tip — or v, Safari's step-1 versions
+    [variant, key, words, tip]) or list (the browsers of a group, not numbered); lead (a line before
+    them), copy (Copy the link), tips (info lines: a key, or { k, notIn } — hidden inside that app),
+    help ([link, label] of the official help page). -#}
+{%- set guides = [
+  { id: "iphone", icon: "smartphone", tone: "bg-gv-soft text-gv", h: "pwa.app.os_iphone", steps: [
+      { v: [["any", "share", "pwa.app.ios_1", ""], ["27", "safari-menu", "pwa.app.ios_1_27", "pwa.app.ios_share_tip"],
+            ["26", "circle-ellipsis", "pwa.app.ios_1_26", "pwa.app.ios_share_tip"], ["share", "share", "pwa.app.ios_1_share", ""]] },
+      { key: "square-plus", k: "pwa.app.ios_2", tip: "pwa.app.ios_2_tip" },
+      { key: "toggle-right", k: "pwa.app.ios_3" },
+      { key: "app", k: "pwa.app.done" }
+    ], tips: ["pwa.app.ios_fix", "pwa.app.ios_from_app"],
+    help: [ln.app_help_iphone_es if lang == "es" else ln.app_help_iphone, "pwa.app.help_apple"] },
+  { id: "iphone-other", icon: "smartphone", tone: "bg-gv-soft text-gv", h: "pwa.app.os_iphone_other", steps: [
+      { key: "share", k: "pwa.app.ios_other_1" },
+      { key: "square-plus", k: "pwa.app.ios_other_2" },
+      { key: "app", k: "pwa.app.done" }
+    ], tips: ["pwa.app.ios_other_old"] },
+  { id: "android", icon: "smartphone", tone: "bg-vine-soft text-vine", h: "pwa.app.os_android", steps: [
+      { key: "ellipsis-vertical", k: "pwa.app.android_1" },
+      { key: "monitor-down", k: "pwa.app.android_2" },
+      { key: "download", k: "pwa.app.android_3" },
+      { key: "app", k: "pwa.app.done" }
+    ], tips: ["pwa.app.android_fix", "pwa.app.android_from_app"],
+    help: [ln.app_help_android_es if lang == "es" else ln.app_help_android, "pwa.app.help_google"] },
+  { id: "samsung", icon: "smartphone", tone: "bg-grape-soft text-grape", h: "pwa.app.os_samsung", steps: [
+      { key: "menu", k: "pwa.app.samsung_1" },
+      { key: "square-plus", k: "pwa.app.samsung_2" },
+      { key: "download", k: "pwa.app.samsung_3" },
+      { key: "app", k: "pwa.app.done" }
+    ], tips: ["pwa.app.samsung_tip"] },
+  { id: "android-other", icon: "smartphone", tone: "bg-grape-soft text-grape", h: "pwa.app.os_android_other", list: [
+      { key: "ellipsis-vertical", k: "pwa.app.other_firefox" },
+      { key: "ellipsis", k: "pwa.app.other_edge" },
+      { key: "menu", k: "pwa.app.other_rest" }
+    ], tips: ["pwa.app.other_tip"] },
+  { id: "in-app", icon: "external-link", tone: "bg-lv-soft text-lv", h: "pwa.app.os_in_app", lead: "pwa.app.inapp_t", steps: [
+      { key: "ellipsis", k: "pwa.app.inapp_1" },
+      { key: "external-link", k: "pwa.app.inapp_2" },
+      { key: "list-ordered", k: "pwa.app.inapp_3" }
+    ], copy: true, tips: [{ k: "pwa.app.inapp_whatsapp", notIn: "WhatsApp" }] },
+  { id: "computer", icon: "monitor", tone: "bg-gv-soft text-gv", h: "pwa.app.os_computer", list: [
+      { key: "monitor-down", k: "pwa.app.pc_chrome" },
+      { key: "app-window", k: "pwa.app.pc_safari" },
+      { key: "globe", k: "pwa.app.pc_other" }
+    ] }
+] -%}
+{#- (working with a weak signal is the section "How the site works without a connection", above) -#}
+{%- set why = [
+  { icon: "smartphone", tone: "bg-gv-soft text-gv", h: "pwa.app.why1_h", t: "pwa.app.why1_t" },
+  { icon: "languages", tone: "bg-grape-soft text-grape", h: "pwa.app.why2_h", t: "pwa.app.why2_t" },
+  { icon: "refresh-cw", tone: "bg-lv-soft text-lv", h: "pwa.app.why3_h", t: "pwa.app.why3_t" }
+] -%}
+{#- the magazines' own apps (not this one): La Viña's first on the Spanish page -#}
+{%- set magApps = [[ln.gv_apps, "media.short_gv_app", "en"], [ln.lv_apps, "media.short_lv_app", "es"]] -%}
 
 {#- The hero's right-hand card (the shared hero aside, "Join by phone"): no data needed to reach a
     meeting — a one-tap call (the number, then the meeting ID) to the committee meeting and to the
@@ -29,28 +138,46 @@ eleventyExcludeFromCollections: true
     same as /accessibility/#phone, which it links to). The first card under the hero on smaller
     screens and at larger text ("below"): a phone with no signal is where it helps most. -#}
 {%- set phone = site | axPhone(db.weekly_open.items | cmWeeklyAll(lang), lang) -%}
-{% call(slot) ui.pageHero(lang, "pwa.offline.title" | t(lang), "pwa.offline.sub" | t(lang), "", "pwa.offline.eyebrow" | t(lang), { eyebrowIcon: "wifi-off", titleId: "offline-title", side: "below" }) %}
+{% call(slot) ui.pageHero(lang, "nav.offline" | t(lang), "pwa.offline.sub_online" | t(lang), "", "pwa.offline.eyebrow" | t(lang), { eyebrowIcon: "wifi-off", titleId: "offline-title", side: "below" }) %}
 {%- if slot == "side" %}
   {%- if phone.ok %}
   {% call ui.heroAside("pwa.offline.phone_title" | t(lang), lang, { id: "pwa-phone-title", icon: "phone", lead: "pwa.offline.phone_lead" | t(lang), href: ("/accessibility/" | lurl(lang)) + "#phone", linkLabel: "pwa.offline.phone_link" | t(lang) }) %}
   <ul class="hero-aside-links" role="list">
     {%- for mt in phone.meetings %}{% if mt.call and loop.index <= 3 %}
-    <li>{{ ui.heroAsideLink({ href: mt.call, label: ("nav.meeting" if mt.key == "committee" else "access.aud_weekly_t") | t(lang), text: "pwa.offline.phone_call" | t(lang, { city: mt.callCity, id: (mt.id | replace(" ", " ")) }), icon: "phone-call", tone: ("vine" if mt.key == "committee" else "grape") }, lang) }}</li>
+    <li>{{ ui.heroAsideLink({ href: mt.call, label: ("nav.meeting" if mt.key == "committee" else "access.aud_weekly_t") | t(lang), text: "pwa.offline.phone_call" | t(lang, { city: mt.callCity, id: (mt.id | replace(" ", " ")) }), icon: "phone-call", tone: ("vine" if mt.key == "committee" else "grape") }, lang) }}</li>
     {%- endif %}{% endfor %}
   </ul>
   {% endcall %}
   {%- endif %}
 {%- else %}
+{#- Opened on purpose: "See the steps" (→ the visitor's guide) · "Install" (one tap — only while the
+    browser offers it; then it takes the place of "See the steps") · "Send this page" (share sheet,
+    else Copy). Standing in for a page that isn't saved: "Try again" alone (it reloads that address). -#}
 <div class="hero-actions" data-pwa-offline-copy
-     data-title-online="{{ 'pwa.offline.title_online' | t(lang) }}" data-sub-online="{{ 'pwa.offline.sub_online' | t(lang) }}"
-     data-title-direct="{{ 'pwa.offline.title' | t(lang) }}" data-sub-direct="{{ 'pwa.offline.sub_direct' | t(lang) }}"
-     data-home-label="{{ 'pwa.offline.home' | t(lang) }}">
-  {#- No JavaScript, or this page opened on purpose (online or offline): a plain link home. With
-      JavaScript, standing in for a page that isn't saved: reload that address. -#}
-  <a class="btn-light" href="{{ '/' | lurl(lang) }}" data-pwa-retry>{% icon "refresh-cw", "size-4" %} <span>{{ "pwa.offline.retry" | t(lang) }}</span></a>
+     data-title-standin="{{ 'pwa.offline.title' | t(lang) }}" data-sub-standin="{{ 'pwa.offline.sub' | t(lang) }}"
+     data-sub-online="{{ 'pwa.offline.sub_online' | t(lang) }}" data-sub-offline="{{ 'pwa.offline.sub_direct' | t(lang) }}">
+  <a class="btn-light" href="{{ '/' | lurl(lang) }}" data-pwa-retry hidden>{% icon "refresh-cw", "size-4" %} <span>{{ "pwa.offline.retry" | t(lang) }}</span></a>
+  <a class="btn-light" href="#steps" data-pwa-steps-link>{% icon "list-ordered", "size-4" %} {{ "pwa.app.cta_steps" | t(lang) }}</a>
+  <button type="button" class="btn-light" data-pwa-act="install" data-pwa-install-hero hidden>{% icon "download", "size-4" %} {{ "pwa.app.cta_install" | t(lang) }}</button>
+  <button type="button" class="btn-on-dark" data-js-only data-share="{{ appUrl }}" data-share-title="{{ 'pwa.app.title' | t(lang) }}" data-share-text="{{ 'pwa.app.send_text' | t(lang) }}">{% icon "share-2", "size-4" %} {{ "pwa.app.cta_send" | t(lang) }}</button>
 </div>
 {%- endif %}
 {% endcall %}
+{#- Standing in for a page that isn't saved — the service worker's answer at that page's address, so
+    JavaScript is on: from the first paint the hero (and the tab's title) says "You're offline" and
+    "This page isn't saved on this device yet…", and "Try again" (that address) is its one button.
+    pwa.js tells the same way (isFallback) and reloads the page once the connection is back. -#}
+<script>(function (box) {
+  try {
+    if (!box || location.pathname.replace(/index\.html$/, "") === {{ (page.url | url) | dump | safe }}) return;
+    var hero = box.closest("[data-gv-hero]"), title = box.getAttribute("data-title-standin");
+    hero.querySelector(".gv-hero-title > span:last-child").textContent = title;
+    hero.querySelector(".gv-hero-sub").textContent = box.getAttribute("data-sub-standin");
+    document.title = title + document.title.slice(document.title.indexOf(" · "));
+    for (var i = 0; i < box.children.length; i++) box.children[i].hidden = !box.children[i].hasAttribute("data-pwa-retry");
+    box.querySelector("[data-pwa-retry]").setAttribute("href", location.pathname + location.search);
+  } catch (e) { /* the page's own words stay */ }
+})(document.querySelector("[data-pwa-offline-copy]"));</script>
 
 {#- ============ The pages saved on this device (read from the service worker's caches) ============ -#}
 <section class="container-page page-overlap" aria-labelledby="pwa-saved-h">
@@ -65,7 +192,7 @@ eleventyExcludeFromCollections: true
   </div>
 </section>
 
-{#- ============ How it works (the four things a visitor can do about a weak signal) ============ -#}
+{#- ============ How it works (what a visitor can do about a weak signal; installing is #steps) ============ -#}
 <section class="section container-page pt-10 sm:pt-12" aria-labelledby="pwa-how-h">
   {{ ui.sectionHead("pwa.offline.how_h" | t(lang), "pwa.offline.how_sub" | t(lang), "", "", "wifi", { eyebrow: "pwa.offline.how_eyebrow" | t(lang), tone: "text-vine", id: "pwa-how-h", lang: lang }) }}
   <ul class="grid-cards-4" role="list">
@@ -74,13 +201,124 @@ eleventyExcludeFromCollections: true
       <span class="grid size-11 place-items-center rounded-xl {{ c.tone }}">{% icon c.icon, "size-5" %}</span>
       <h3 class="h-card">{{ c.h | t(lang) }}</h3>
       <p class="text-sm leading-relaxed text-muted">{{ c.t | t(lang) }}</p>
-      {#- pwa.js: the save button (disabled while offline) / the install row — one-tap Install, or
-          "Install as an app" → this device's steps on /app/ (empty in the installed app → hidden).
-          Without JavaScript: a plain link to /app/. -#}
+      {#- pwa.js: the save button (disabled while offline; empty without JavaScript → hidden) -#}
       {% if c.save %}<div class="pwa-card-slot mt-auto empty:hidden" data-pwa-save></div>{% endif %}
-      {% if c.install %}<div class="pwa-card-slot mt-auto empty:hidden" data-pwa-install></div>
-      <a class="link tap-link mt-auto" data-nojs-only href="{{ '/app/' | lurl(lang) }}">{{ 'nav.app' | t(lang) }}</a>{% endif %}
     </li>
     {% endfor %}
   </ul>
+</section>
+
+{#- ============ Install the app: one guide per phone and browser (the visitor's opened by pwa.js) ============ -#}
+<section id="steps" class="section container-page pt-0" aria-labelledby="app-steps-h" data-pwa-app>
+  {{ ui.sectionHead("pwa.app.title" | t(lang), "pwa.app.steps_sub" | t(lang), "", "", "list-ordered", { eyebrow: "pwa.app.steps_eyebrow" | t(lang), id: "app-steps-h", lang: lang }) }}
+  {#- pwa.js shows the one that applies (none without JavaScript) -#}
+  <div class="pwa-guide-notes">
+    <div class="pwa-guide-note" data-pwa-inapp data-t="{{ 'pwa.app.inapp_now' | t(lang) }}" data-t-other="{{ 'pwa.app.inapp_other' | t(lang) }}" hidden>
+      {% icon "external-link", "size-5" %}<p class="min-w-0" data-pwa-inapp-text></p>
+    </div>
+    <div class="pwa-guide-note is-ok" data-pwa-using hidden>
+      {% icon "circle-check", "size-5" %}
+      <div class="min-w-0">
+        <p class="font-semibold">{{ "pwa.app.using_h" | t(lang) }}</p>
+        <p>{{ "pwa.app.using_t" | t(lang) }} <a class="link" href="{{ '/' | lurl(lang) }}">{{ "pwa.offline.home" | t(lang) }}</a></p>
+      </div>
+    </div>
+    <div class="pwa-guide-note is-ok" data-pwa-known hidden>
+      {% icon "circle-check", "size-5" %}<p class="min-w-0">{{ "pwa.app.known" | t(lang) | mdInline | safe }}</p>
+    </div>
+  </div>
+
+  <div class="pwa-guide">
+    {%- for g in guides %}
+    <details class="pwa-guide-os card" id="{{ g.id }}" data-pwa-guide="{{ g.id }}">
+      <summary>
+        <span class="grid size-10 shrink-0 place-items-center rounded-xl {{ g.tone }}">{% icon g.icon, "size-5" %}</span>
+        {#- "Your device" flows after the title and wraps under it on a narrow phone -#}
+        <span class="pwa-guide-title min-w-0 flex-1">{{ g.h | t(lang) }} <span class="badge-vine pwa-guide-here" data-pwa-here hidden>{{ "pwa.app.here" | t(lang) }}</span></span>
+        <span class="pwa-guide-chev" aria-hidden="true">{% icon "chevron-down", "size-5" %}</span>
+      </summary>
+      <div class="pwa-guide-body">
+        {%- if g.lead %}
+        <p class="pwa-guide-lead">{{ g.lead | t(lang) }}</p>
+        {%- endif %}
+        {%- if g.steps %}
+        <ol class="pwa-guide-steps" role="list">
+          {%- for s in g.steps %}{% set n = loop.index %}
+          <li class="pwa-guide-step">
+            <span class="step-num" aria-hidden="true">{{ n }}</span>
+            <div class="min-w-0 flex-1">
+              {%- if s.v %}{% for x in s.v %}
+              <div data-pwa-v="{{ x[0] }}"{% if x[0] != "any" %} hidden{% endif %}>
+                <p><span class="sr-only">{{ n }}. </span>{{ key(x[1]) }}{{ x[2] | t(lang) | mdInline | safe }}</p>
+                {%- if x[3] %}
+                <p class="pwa-guide-tip">{{ x[3] | t(lang) | mdInline | safe }}</p>
+                {%- endif %}
+              </div>
+              {%- endfor %}{% else %}
+              <p><span class="sr-only">{{ n }}. </span>{{ key(s.key) }}{{ s.k | t(lang) | mdInline | safe }}</p>
+              {%- if s.tip %}
+              <p class="pwa-guide-tip">{{ s.tip | t(lang) | mdInline | safe }}</p>
+              {%- endif %}{% endif %}
+            </div>
+          </li>
+          {%- endfor %}
+        </ol>
+        {%- endif %}
+        {%- if g.list %}
+        <ul class="pwa-guide-steps" role="list">
+          {%- for s in g.list %}
+          <li class="pwa-guide-step"><p class="min-w-0">{{ key(s.key) }}{{ s.k | t(lang) | mdInline | safe }}</p></li>
+          {%- endfor %}
+        </ul>
+        {%- endif %}
+        {%- if g.copy or g.tips or (g.help and g.help[0]) %}
+        <div class="pwa-guide-more">
+          {%- if g.copy %}
+          {#- the address to paste into Safari or Chrome (JavaScript: a Copy button; without it: the address itself) -#}
+          <p class="text-ink">{{ "pwa.app.inapp_copy" | t(lang) }}</p>
+          <p class="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <button type="button" class="btn-secondary btn-sm" data-js-only data-copy="{{ appUrl }}">{% icon "copy", "size-4" %} {{ "pwa.app.copy_link" | t(lang) }}</button>
+            <span class="break-all font-medium text-ink" data-nojs-only>{{ appUrl }}</span>
+          </p>
+          {%- endif %}
+          {%- for tip in g.tips %}
+          <p class="pwa-guide-tip flex gap-2"{% if tip.notIn %} data-pwa-not-in="{{ tip.notIn }}"{% endif %}>{% icon "info", "size-4" %}<span class="min-w-0">{{ (tip.k or tip) | t(lang) | mdInline | safe }}</span></p>
+          {%- endfor %}
+          {%- if g.help and g.help[0] %}
+          <p class="pwa-guide-tip">{{ "pwa.app.help" | t(lang) }} <a class="link" href="{{ g.help[0] }}" target="_blank" rel="noopener">{{ g.help[1] | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
+          {%- endif %}
+        </div>
+        {%- endif %}
+      </div>
+    </details>
+    {%- endfor %}
+  </div>
+</section>
+
+{#- ============ Why install it ============ -#}
+<section class="section container-page pt-0" aria-labelledby="app-why-h">
+  {{ ui.sectionHead("pwa.app.why_h" | t(lang), "", "", "", "sparkles", { eyebrow: "pwa.app.why_eyebrow" | t(lang), tone: "text-grape", id: "app-why-h", lang: lang }) }}
+  <ul class="grid-cards-4" role="list">
+    {%- for c in why %}
+    <li class="card card-pad flex flex-col gap-3">
+      <span class="grid size-11 place-items-center rounded-xl {{ c.tone }}">{% icon c.icon, "size-5" %}</span>
+      <h3 class="h-card">{{ c.h | t(lang) }}</h3>
+      <p class="text-sm leading-relaxed text-muted">{{ c.t | t(lang) }}</p>
+    </li>
+    {%- endfor %}
+  </ul>
+</section>
+
+{#- ============ Good to know ============ -#}
+<section class="section container-page pt-0" aria-labelledby="app-more-h">
+  <div class="panel-muted">
+    <h2 id="app-more-h" class="card-h"><span>{% icon "info", "size-5" %}</span>{{ "pwa.app.more_h" | t(lang) }}</h2>
+    <ul class="mt-4 grid gap-x-10 gap-y-3 text-sm leading-relaxed lg:grid-cols-2" role="list">
+      <li class="flex gap-2.5"><span class="mt-0.5 shrink-0 text-gv">{% icon "shield-check", "size-4" %}</span><span class="min-w-0 text-ink">{{ "pwa.app.more_free" | t(lang) }}</span></li>
+      {#- the manifest's three shortcuts (src/pages/manifest.11ty.js), by their menu names -#}
+      <li class="flex gap-2.5"><span class="mt-0.5 shrink-0 text-gv">{% icon "hand", "size-4" %}</span><span class="min-w-0 text-ink">{{ "pwa.app.more_shortcuts" | t(lang, { a: "nav.meetings" | t(lang), b: "nav.monthly" | t(lang), c: "nav.orientation" | t(lang) }) }}</span></li>
+      <li class="flex gap-2.5"><span class="mt-0.5 shrink-0 text-gv">{% icon "trash-2", "size-4" %}</span><span class="min-w-0 text-ink">{{ "pwa.app.more_remove" | t(lang) | mdInline | safe }}</span></li>
+      <li class="flex gap-2.5"><span class="mt-0.5 shrink-0 text-gv">{% icon "grapes", "size-4" %}</span><span class="min-w-0 text-ink">{{ "pwa.app.more_magazines" | t(lang) }}{% for m in (magApps | reverse if lang == "es" else magApps) %}{% if m[0] %}{{ " " }}{% if not loop.first %}<span aria-hidden="true">·</span>{{ " " }}{% endif %}<a class="link" href="{{ m[0] }}" target="_blank" rel="noopener"{% if m[2] != lang %} hreflang="{{ m[2] }}"{% endif %}>{{ m[1] | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>{% endif %}{% endfor %}</span></li>
+    </ul>
+  </div>
 </section>
