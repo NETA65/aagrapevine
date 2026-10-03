@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-03T15:06:10Z",
- "updated": "2026-10-03T15:06:10Z",
+ "generated": "2026-10-03T16:03:20Z",
+ "updated": "2026-10-03T16:03:20Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-10-03T15:05:51Z",
-   "attempted": "2026-10-03T15:05:51Z",
+   "updated": "2026-10-03T16:03:01Z",
+   "attempted": "2026-10-03T16:03:01Z",
    "count": 35,
    "new_7d": 29,
    "error": null,
@@ -41,7 +41,7 @@
     "folders": 11,
     "files": 35,
     "fetched": 35,
-    "new": 15,
+    "new": 0,
     "removed": 0,
     "kept_unverified": 0,
     "by_category": {
@@ -74,11 +74,11 @@
      "reused": 1
     },
     "forms": {},
-    "requests": 13,
+    "requests": 11,
     "truncated": false,
     "warnings": [],
     "booth_texts": {
-     "fetched": 2
+     "reused": 2
     }
    }
   },
@@ -87,8 +87,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-10-03T15:05:51Z",
-   "attempted": "2026-10-03T15:05:51Z",
+   "updated": "2026-10-03T16:03:01Z",
+   "attempted": "2026-10-03T16:03:01Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -105,8 +105,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-10-03T15:05:51Z",
-   "attempted": "2026-10-03T15:05:51Z",
+   "updated": "2026-10-03T16:03:01Z",
+   "attempted": "2026-10-03T16:03:01Z",
    "count": 9,
    "new_7d": 0,
    "error": null,
@@ -256,8 +256,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-10-03T15:05:53Z",
-   "attempted": "2026-10-03T15:05:53Z",
+   "updated": "2026-10-03T16:03:19Z",
+   "attempted": "2026-10-03T16:03:19Z",
    "count": 298,
    "new_7d": 2,
    "error": null,
@@ -284,7 +284,7 @@
     "gone_checks": 0,
     "discovery_checked": "2026-10-01T07:18:55Z",
     "discovered_feeds": [],
-    "seconds": 2.3,
+    "seconds": 2.6,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -447,8 +447,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-10-03T15:06:09Z",
-   "attempted": "2026-10-03T15:06:09Z",
+   "updated": "2026-10-03T16:03:16Z",
+   "attempted": "2026-10-03T16:03:16Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
