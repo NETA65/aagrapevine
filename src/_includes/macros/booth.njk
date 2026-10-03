@@ -1,0 +1,286 @@
+{#- =========================================================================
+    The booth display — a show that plays by itself on a screen at the committee's Grapevine / La Viña table
+    (assemblies, conventions, workshops). The screen is src/assets/js/booth.js (the logic — what may show now, what
+    comes next, how long — is booth-core.js, window.GVB); the look is areas/booth.css (class prefix gvb-). The show
+    itself is /about/booth.json (src/_data/booth.js: the CSV content/booth/booth.csv, the Drive booth folder and the
+    site's live data), fetched by the script — nothing of it is in this page. Import with context (it reads `site`
+    and the `url` filter), under a name other than `booth` (that name is the global data of src/_data/booth.js,
+    which an import called `booth` would hide on the page):
+      {% import "macros/booth.njk" as boothUi with context %}
+      {{ boothUi.section(lang) }}   the About page's #booth section (after #committee)
+      {{ boothUi.player(lang) }}    the player's dialog shell, its icons and #gvb-config — once, at the end of the page
+
+    section(lang): the eyebrow, heading and two lines on what it is; a 16:9 preview card (a still welcome slide
+      in the HTML — what shows without JavaScript and with reduced motion; the script cycles a few real slides in it,
+      small and without sound, only while it is on screen); the quick controls (event name, its Spanish name,
+      language, preset) and "Start the booth" · "Settings" · "Preview here"; three status chips the script fills
+      (how many slides the show has, the content's date, the offline copy); a closed <details> "How to use it at a
+      booth" with the steps and the link to how-to/booth.md; a <noscript> line. The controls are data-js-only.
+    player(lang) prints, all inert until the script uses them:
+      #gvb-tpl     the dialog, cloned when the booth starts: the host the script draws the screen into (header,
+                   stage, footer, the visitors' bar — their words follow the slide's language, so the script writes
+                   them from `screen`), the Settings drawer (eight tabs; the panels are drawn by the script; its foot
+                   has "Leave the show", a touch screen's way out), the PIN and "Leave?" panels, a live region and
+                   the toast — every label in the page language
+      #gvb-icons   the Lucide icons the script puts on what it draws
+      #gvb-config  JSON for the script: { lang, base, json (the show's address), build (build.json: the online
+                   probe), pages (both About pages, saved for offline), site: { url, url_es, host, committee_en,
+                   committee_es }, howto, t: the booth.* strings in the page language, screen: { en, es } — the
+                   booth.screen.* words in BOTH languages (a slide shows its content's language, not the page's) }.
+                   "<" is written <, so no text can end the script element.
+    Strings: src/_i18n/booth.json (tests/test_booth_page.py checks that every key the script and this file use
+    exists in both languages and reaches the script). -#}
+{% import "macros/ui.njk" as ui with context %}
+
+{% macro section(lang) %}
+{#- the language choices and the presets, in the order the controls list them (the presets' names are the ones
+    booth.js hands to GVB.preset) -#}
+{%- set boothLangs = ["en", "es", "both", "alternate"] -%}
+{%- set boothPresets = ["assembly", "spanish", "english", "quiet", "quizparty"] -%}
+{%- set howto = (site.repository or "https://github.com/NETA65/aagrapevine") ~ "/blob/main/how-to/booth.md" -%}
+{%- set committee = site | pick(lang, "committee") -%}
+{#- (after the tinted #committee band: its own top padding; the block after it brings its own, so none at the bottom) -#}
+<section id="booth" class="container-page section pb-0" aria-labelledby="booth-title" data-gvb-section>
+  {{ ui.sectionHead("booth.title" | t(lang), "booth.sub" | t(lang), "", "", "monitor-play", { eyebrow: "booth.eyebrow" | t(lang), tone: "text-grape", id: "booth-title", lang: lang }) }}
+  <p class="-mt-3 mb-8 max-w-3xl leading-relaxed text-muted sm:-mt-5">{{ "booth.lead" | t(lang) }}</p>
+  <div class="gvb-sec">
+    {#- The preview: a still welcome slide (no JavaScript, reduced motion); the script swaps in real slides. It is a
+        picture for screen readers (role img + its name) until "Preview here" makes it a live, playable screen. -#}
+    <figure class="gvb-pv">
+      <div class="gvb-pv-frame" data-gvb-pv-frame role="img" aria-label="{{ 'booth.preview_still' | t(lang) }}">
+        <div class="gvb-screen gvb-screen--pv" data-gvb-theme="dark" data-gvb-still>
+          <div class="gvb-bg" data-pub="both" aria-hidden="true"></div>
+          <div class="gvb-head" aria-hidden="true">
+            <div class="gvb-event"><p class="gvb-event-name">{{ "booth.screen.both" | t(lang) }}</p><p class="gvb-event-sub">{{ committee }}</p></div>
+          </div>
+          <div class="gvb-stage" aria-hidden="true">
+            <section class="gvb-slide gvb-t-welcome is-shown" data-pub="both" lang="{{ lang }}">
+              <div class="gvb-s gvb-s--center">
+                <p class="gvb-welcome-mark">{% icon "grapes", "gvb-ic" %}</p>
+                <p class="gvb-h gvb-h--xl">{{ "booth.screen.welcome_plain" | t(lang) }}</p>
+                <p class="gvb-txt">{{ "booth.screen.welcome_line" | t(lang) }}</p>
+              </div>
+            </section>
+          </div>
+          <div class="gvb-foot" aria-hidden="true"><span class="gvb-progress"><span></span></span></div>
+        </div>
+      </div>
+      <figcaption class="gvb-pv-cap" data-gvb-pv-cap>{% icon "volume-x", "size-4 shrink-0" %}<span>{{ "booth.preview_label" | t(lang) }}</span></figcaption>
+      {#- shown while "Preview here" plays the show in the card -#}
+      <div class="gvb-pv-ctl" data-gvb-pv-ctl hidden>
+        <button type="button" class="btn-secondary btn-sm" data-gvb-pv-act="pause">{% icon "pause", "size-4" %} <span>{{ "booth.preview_pause" | t(lang) }}</span></button>
+        <button type="button" class="btn-secondary btn-sm" data-gvb-pv-act="next">{% icon "skip-forward", "size-4" %} <span>{{ "booth.preview_next" | t(lang) }}</span></button>
+        <button type="button" class="btn-secondary btn-sm" data-gvb-pv-act="stop">{% icon "x", "size-4" %} <span>{{ "booth.preview_stop" | t(lang) }}</span></button>
+      </div>
+    </figure>
+
+    <div class="card card-pad gvb-quick" data-js-only>
+      <h3 class="h-card flex items-center gap-2">{% icon "sliders-horizontal", "size-5 shrink-0 text-grape" %}<span>{{ "booth.quick_h" | t(lang) }}</span></h3>
+      <div class="gvb-q-field">
+        <label class="gvb-q-label" for="gvb-q-event">{{ "booth.f_event" | t(lang) }}</label>
+        <input class="input" id="gvb-q-event" type="text" maxlength="80" autocomplete="off" spellcheck="false" data-gvb-q="event" placeholder="{{ 'booth.f_event_ph' | t(lang) }}" aria-describedby="gvb-q-event-hint">
+        <p class="gvb-q-hint" id="gvb-q-event-hint">{{ "booth.f_event_hint" | t(lang) }}</p>
+      </div>
+      <div class="gvb-q-field">
+        <label class="gvb-q-label" for="gvb-q-event-es">{{ "booth.f_event_es" | t(lang) }}</label>
+        <input class="input" id="gvb-q-event-es" type="text" maxlength="80" autocomplete="off" spellcheck="false" lang="es" data-gvb-q="event_es" placeholder="{{ 'booth.f_event_es_ph' | t(lang) }}">
+      </div>
+      <div class="gvb-q-row">
+        <div class="gvb-q-field">
+          <label class="gvb-q-label" for="gvb-q-lang">{{ "booth.f_lang" | t(lang) }}</label>
+          <select class="input" id="gvb-q-lang" data-gvb-q="lang">
+            {%- for l in boothLangs %}
+            <option value="{{ l }}"{% if l == "en" %} lang="en"{% elif l == "es" %} lang="es"{% endif %}>{{ ("booth.lang." + l) | t(lang) }}</option>
+            {%- endfor %}
+          </select>
+        </div>
+        <div class="gvb-q-field">
+          <label class="gvb-q-label" for="gvb-q-preset">{{ "booth.f_preset" | t(lang) }}</label>
+          <select class="input" id="gvb-q-preset" data-gvb-q="preset">
+            <option value="">{{ "booth.preset_choose" | t(lang) }}</option>
+            {%- for p in boothPresets %}
+            <option value="{{ p }}">{{ ("booth.preset." + p) | t(lang) }}</option>
+            {%- endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="gvb-q-actions">
+        <button type="button" class="btn-primary" data-gvb-start>{% icon "monitor-play", "size-4" %} {{ "booth.start" | t(lang) }}</button>
+        <button type="button" class="btn-secondary" data-gvb-settings>{% icon "sliders-horizontal", "size-4" %} {{ "booth.open_settings" | t(lang) }}</button>
+        <button type="button" class="btn-secondary" data-gvb-preview aria-pressed="false">{% icon "eye", "size-4" %} {{ "booth.preview_here" | t(lang) }}</button>
+      </div>
+      {#- filled by the script: how many slides can show, the content's date, the offline copy -#}
+      <ul class="gvb-chips" role="list" aria-label="{{ 'booth.st_label' | t(lang) }}">
+        <li class="gvb-chip" data-gvb-chip="items">{% icon "presentation", "size-3.5 shrink-0" %}<span>{{ "booth.st_waiting" | t(lang) }}</span></li>
+        <li class="gvb-chip" data-gvb-chip="content" hidden>{% icon "calendar-days", "size-3.5 shrink-0" %}<span></span></li>
+        <li class="gvb-chip" data-gvb-chip="offline" hidden>{% icon "wifi-off", "size-3.5 shrink-0" %}<span></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <details class="gvb-how group/how mt-6">
+    <summary>
+      {% icon "circle-help", "size-5 shrink-0 text-grape" %}
+      <span class="min-w-0 flex-1 font-semibold text-ink">{{ "booth.how_h" | t(lang) }}</span>
+      {% icon "chevron-down", "size-4 shrink-0 text-muted transition group-open/how:rotate-180" %}
+    </summary>
+    <div class="gvb-how-body">
+      <ol class="gvb-how-steps" role="list">
+        {%- for n in range(1, 8) %}
+        <li><span class="step-num" aria-hidden="true">{{ n }}</span><span>{{ ("booth.how_" + n) | t(lang) }}</span></li>
+        {%- endfor %}
+      </ol>
+      <p class="mt-4 flex gap-2.5 text-sm leading-relaxed text-muted"><span class="mt-0.5 text-vine">{% icon "shield-check", "size-4" %}</span><span>{{ "booth.how_aa" | t(lang) }}</span></p>
+      <p class="mt-3"><a class="link tap-link" href="{{ howto }}" target="_blank" rel="noopener">{{ "booth.how_link" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
+    </div>
+  </details>
+  <noscript><p class="mt-4 text-sm text-muted">{{ "booth.noscript" | t(lang) }}</p></noscript>
+</section>
+{% endmacro %}
+
+{% macro player(lang) %}
+{#- Every booth.* string the script asks for: T("booth.…") in the page language (the controls, Settings, the PIN,
+    the toasts), written here without "booth." — with the keys it builds from these names: booth.tab.<tab>,
+    booth.ch.<channel> (a channel's dashes as underscores), booth.tag.<tag> (a topic of Settings → Show: every tag
+    content/booth/booth.csv and the live items use, dashes as underscores), booth.type.<type>, booth.why.<reason>,
+    booth.lang.<mode>, booth.lang_d.<mode>, booth.pace.<pace>, booth.theme.<theme>, booth.text.<size>,
+    booth.motion.<motion>, booth.order.<order>, booth.it_f.<filter>, booth.preset.<name> (+ _d). -#}
+{%- set pageKeys = [
+  "preview_label", "f_event", "f_event_es", "f_event_ph", "f_event_es_ph", "lang.en", "lang.es",
+  "lang.both", "lang.alternate", "preset.assembly", "preset.spanish", "preset.english", "preset.quiet", "preset.quizparty",
+  "preset.assembly_d", "preset.spanish_d", "preset.english_d", "preset.quiet_d", "preset.quizparty_d", "preview_pause", "preview_play",
+  "preview_on", "st_loading", "st_waiting", "st_items", "st_items_one", "st_content", "st_ready",
+  "st_partial", "st_not_saved", "st_no_sw", "st_offline", "load_failed", "retry", "loading",
+  "pin_for_settings", "pin_for_leave", "pin_wrong", "hold", "sound_on", "sound_off", "lang_set", "of_reload",
+  "updated", "link_applied", "link_bad", "link_too_big", "empty", "yt_down", "no_storage", "full",
+  "full_exit", "undo", "undone", "copy", "copied", "ev_names_h", "f_sub",
+  "f_sub_ph", "f_show_event", "pick_h", "pick_label", "pick_choose", "pick_empty", "pick_done",
+  "presets_h", "presets_intro", "preset_done", "sh_lang_h", "lang_d.en", "lang_d.es", "lang_d.both",
+  "lang_d.alternate", "sh_first_h", "sh_pubs_h", "sh_channels_h", "sh_net", "sh_sound_note", "sh_collections_h", "sh_collection_main",
+  "sh_tags_h", "sh_order_h", "order.shuffle", "order.inorder", "n_slides", "n_slides_one", "ch.quiz",
+  "ch.puzzles", "ch.facts", "ch.quotes", "ch.polls", "ch.prompts", "ch.messages", "ch.qr",
+  "ch.web_video", "ch.web_audio", "ch.web_image", "ch.photos", "ch.posters", "ch.videos", "ch.sounds",
+  "ch.notes", "ch.live_events", "ch.live_quote", "ch.live_video", "ch.live_podcast", "ch.live_themes", "ch.live_prices",
+  "ch.live_book", "ch.live_meetings", "ch.live_bulletin", "ch.welcome", "ch.about", "it_search", "it_filter",
+  "it_f.all", "it_f.on", "it_f.off", "it_f.out", "it_count", "it_more", "it_none",
+  "it_show_now", "it_switch", "it_shown_now", "it_untitled", "it_problems_h", "type.quiz", "type.truefalse",
+  "type.fact", "type.quote", "type.history", "type.fill", "type.scramble", "type.poll", "type.prompt",
+  "type.message", "type.qr", "type.video", "type.audio", "type.image", "type.photo", "type.poster",
+  "type.events", "type.countdown", "type.themes", "type.prices", "type.book", "type.meetings", "type.welcome",
+  "type.about", "why.off", "why.channel", "why.pub", "why.collection", "why.tag", "why.date",
+  "why.ended", "why.lang", "why.offline", "why.muted", "why.media", "why.youtube", "why.unknown",
+  "ti_pace_h", "pace.calm", "pace.normal", "pace.lively", "ti_reveal", "ti_photo", "ti_media",
+  "ti_webmedia", "ti_clip", "ti_sound_h", "ti_sound", "ti_sound_note", "ti_volume", "ti_captions", "sc_theme_h",
+  "theme.dark", "theme.daylight", "sc_text_h", "text.normal", "text.large", "sc_motion_h", "motion.full",
+  "motion.calm", "sc_parts_h", "sc_clock", "sc_qr", "sc_progress", "sc_overscan", "ki_pin_h",
+  "ki_pin", "ki_pin_note", "ki_pin_set", "ki_pin_clear", "ki_pin_bad", "ki_pin_saved", "ki_pin_removed",
+  "ki_visitors_h", "ki_visitor", "ki_idle", "ki_quiz", "ki_device_h", "ki_wake", "ki_wake_on",
+  "ki_wake_no", "ki_wake_off", "ki_autofull", "ki_iphone", "ki_refresh", "ki_autosave", "ki_link_h",
+  "ki_link_text", "ki_link_label", "of_state_h", "of_ready", "of_ready_nodate", "of_partial", "of_none",
+  "of_checking", "of_saving", "of_saving_start", "of_done", "of_failed", "of_full", "of_gave_up",
+  "of_no_sw", "of_save", "of_clear", "of_clear_confirm", "of_cleared", "of_need_net", "of_net_h",
+  "of_online", "of_offline", "of_storage", "of_persist_yes", "of_persist_no", "sr_share_h", "sr_share_text",
+  "sr_link_label", "sr_reset_h", "sr_reset_settings", "sr_reset_settings_confirm", "sr_reset_done", "sr_reset_polls", "sr_reset_polls_confirm",
+  "sr_polls_done", "sr_reset_all", "sr_reset_all_confirm", "sr_all_done", "sr_privacy",
+  "tag.about", "tag.accessibility", "tag.anonymity", "tag.app", "tag.archive", "tag.asl", "tag.audio",
+  "tag.books", "tag.carry", "tag.carry_the_message", "tag.committee", "tag.conference", "tag.corrections", "tag.editorial",
+  "tag.fact", "tag.format", "tag.founders", "tag.fun", "tag.gift", "tag.gvr", "tag.history",
+  "tag.humor", "tag.identity", "tag.meetings", "tag.message", "tag.newcomer", "tag.official", "tag.online",
+  "tag.podcast", "tag.poll", "tag.preamble", "tag.prices", "tag.print", "tag.prompt", "tag.qr",
+  "tag.quote", "tag.recording", "tag.responsibility", "tag.rlv", "tag.self_support", "tag.service", "tag.story",
+  "tag.subscribe", "tag.traditions", "tag.twelfth_step", "tag.unity", "tag.video", "tag.website", "tag.welcome",
+  "tag.writing", "tag.youtube", "tag.zoom"
+] -%}
+{#- The words ON the screen (booth.screen.<name>), in both languages: the visitors' bar, the slides' eyebrows,
+    True / False, the quiz round, the welcome and "about" slides … -#}
+{%- set screenKeys = [
+  "slide", "controls", "back", "pause", "paused", "play", "next",
+  "quiz_me", "lang", "lang_en", "lang_es", "lang_both", "take_home", "take_home_text",
+  "take_site", "take_slide", "close", "sound", "skip", "tap_full",
+  "tap_play", "quiz", "truefalse", "true", "false", "fact", "quote",
+  "history", "fill", "scramble", "poll", "prompt", "prompt_line", "qr",
+  "video", "audio", "events", "countdown", "themes", "prices", "book",
+  "meetings", "as_of", "answer", "right", "wrong", "right_answer", "your_answer",
+  "show_answer", "votes", "votes_one", "votes_none", "voted", "days", "day",
+  "hours", "hour", "minutes", "minute", "today", "welcome", "welcome_plain", "this_event",
+  "welcome_line", "about_line", "about_note", "question_n", "score", "score_all", "score_good",
+  "score_some", "score_line", "next_question", "see_score", "play_again", "back_to_show", "did_you",
+  "got_it", "missed_it", "no_quiz", "gv", "lv", "both"
+] -%}
+{%- set tabs = [["event", "calendar-days"], ["show", "list-checks"], ["items", "presentation"], ["timing", "timer"], ["screen", "monitor"], ["kiosk", "lock"], ["offline", "wifi-off"], ["share", "share-2"]] -%}
+<template id="gvb-tpl">
+  <div class="gvb" role="dialog" aria-modal="true" aria-labelledby="gvb-dialog-title" tabindex="-1" data-gvb lang="{{ lang }}">
+    <h2 id="gvb-dialog-title" class="sr-only">{{ "booth.dialog_label" | t(lang) }}</h2>
+    {#- the screen (drawn by the script: header, stage, footer, the visitors' bar, the "Take it home" panel) -#}
+    <div class="gvb-host" data-gvb-host></div>
+    <aside class="gvb-drawer" data-gvb-drawer hidden aria-labelledby="gvb-drawer-h">
+      <div class="gvb-dhead">
+        <h3 id="gvb-drawer-h" class="gvb-dh">{% icon "sliders-horizontal", "size-5" %}<span>{{ "booth.set_h" | t(lang) }}</span></h3>
+        <button type="button" class="gvb-iconbtn" data-gvb-act="settings" aria-label="{{ 'booth.set_close' | t(lang) }}" title="{{ 'booth.set_close' | t(lang) }} (Esc)">{% icon "x", "size-5" %}</button>
+      </div>
+      <p class="gvb-dnote">{{ "booth.set_note" | t(lang) }}</p>
+      {#- shown while this browser keeps nothing (a private window, site data turned off) -#}
+      <p class="gvb-nostore" data-gvb-nostore hidden>{% icon "info", "size-4" %}<span>{{ "booth.no_storage" | t(lang) }}</span></p>
+      <div class="gvb-tabs" role="tablist" aria-label="{{ 'booth.set_h' | t(lang) }}" data-gvb-tabs>
+        {%- for tb in tabs %}
+        <button type="button" role="tab" class="gvb-tab" id="gvb-tab-{{ tb[0] }}" aria-controls="gvb-panel-{{ tb[0] }}" aria-selected="false" tabindex="-1" data-gvb-tab="{{ tb[0] }}">{% icon tb[1], "size-4" %}<span>{{ ("booth.tab." + tb[0]) | t(lang) }}</span></button>
+        {%- endfor %}
+      </div>
+      <div class="gvb-panels">
+        {%- for tb in tabs %}
+        <div class="gvb-panel" role="tabpanel" id="gvb-panel-{{ tb[0] }}" aria-labelledby="gvb-tab-{{ tb[0] }}" tabindex="0" data-gvb-panel="{{ tb[0] }}" hidden></div>
+        {%- endfor %}
+      </div>
+      {#- under every tab: the way out on a touch screen (Settings asked for the PIN already; "Leave?" still asks) -#}
+      <div class="gvb-dfoot"><button type="button" class="gvb-pill" data-gvb-act="leave">{% icon "log-out", "size-4" %}<span>{{ "booth.leave_show" | t(lang) }}</span></button></div>
+    </aside>
+    {#- the PIN (asked before Settings and before leaving, when one is set) -#}
+    <div class="gvb-modal" data-gvb-pin role="dialog" aria-modal="true" aria-labelledby="gvb-pin-h" aria-describedby="gvb-pin-why" hidden>
+      <form class="gvb-modal-box" data-gvb-pin-form novalidate>
+        <h3 id="gvb-pin-h" class="gvb-modal-h">{% icon "lock", "size-5" %}<span>{{ "booth.pin_h" | t(lang) }}</span></h3>
+        <p id="gvb-pin-why" class="gvb-modal-text" data-gvb-pin-why></p>
+        <label class="gvb-label" for="gvb-pin-input">{{ "booth.pin_label" | t(lang) }}</label>
+        <input class="gvb-input gvb-pin-input" id="gvb-pin-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" data-gvb-pin-input aria-describedby="gvb-pin-err">
+        <p class="gvb-modal-err" id="gvb-pin-err" data-gvb-pin-err aria-live="assertive"></p>
+        <div class="gvb-modal-acts">
+          <button type="submit" class="gvb-pill gvb-pill--primary">{{ "booth.ok" | t(lang) }}</button>
+          <button type="button" class="gvb-pill" data-gvb-act="pin-cancel">{{ "booth.cancel" | t(lang) }}</button>
+        </div>
+      </form>
+    </div>
+    {#- Esc, or Settings → "Leave the show", asks before leaving the show (the PIN, when one is set, comes first) -#}
+    <div class="gvb-modal" data-gvb-leave role="dialog" aria-modal="true" aria-labelledby="gvb-leave-h" aria-describedby="gvb-leave-text" hidden>
+      <div class="gvb-modal-box">
+        <h3 id="gvb-leave-h" class="gvb-modal-h">{% icon "log-out", "size-5" %}<span>{{ "booth.leave_h" | t(lang) }}</span></h3>
+        <p id="gvb-leave-text" class="gvb-modal-text">{{ "booth.leave_text" | t(lang) }}</p>
+        <div class="gvb-modal-acts">
+          <button type="button" class="gvb-pill gvb-pill--primary" data-gvb-act="leave-yes">{{ "booth.leave" | t(lang) }}</button>
+          <button type="button" class="gvb-pill" data-gvb-act="leave-no">{{ "booth.stay" | t(lang) }}</button>
+        </div>
+      </div>
+    </div>
+    <p class="sr-only" aria-live="polite" data-gvb-live></p>
+    {#- the toast: a live region that is there from the start, out of sight while it has nothing to say -#}
+    <div class="gvb-toast is-idle" data-gvb-toast role="status" aria-live="polite"></div>
+  </div>
+</template>
+<template id="gvb-icons">
+  {%- for n in ["chevron-left", "chevron-right", "pause", "play", "party-popper", "languages", "qr-code", "x", "sliders-horizontal",
+               "maximize", "minimize", "volume-2", "volume-x", "skip-forward", "check", "circle-x", "circle-check", "rotate-ccw",
+               "copy", "search", "download", "trash-2", "wifi", "wifi-off", "monitor-play", "circle-help", "lightbulb", "quote",
+               "history", "puzzle", "vote", "message-circle-question", "message-square-text", "calendar-days", "map-pin", "clock",
+               "book-open", "sparkles", "film", "music", "image", "headphones", "pen-line", "tag", "users", "timer", "lock", "eye",
+               "grapes", "hand", "info", "circle-play", "megaphone", "presentation", "smartphone"] %}
+  <span data-gvb-icon="{{ n }}">{% icon n, "gvb-ic" %}</span>
+  {%- endfor %}
+</template>
+{%- set cfg %}{"lang": {{ lang | dump | safe }}, "base": {{ ('/' | url) | dump | safe }}, "json": {{ ('/about/booth.json' | url) | dump | safe }},
+"build": {{ ('/build.json' | url) | dump | safe }}, "pages": [{{ ('/about/' | url) | dump | safe }}, {{ ('/es/about/' | url) | dump | safe }}],
+"site": {"url": {{ ('/' | siteUrl(site)) | dump | safe }}, "url_es": {{ ('/es/' | siteUrl(site)) | dump | safe }}, "host": {{ (site.url | replace("https://", "") | replace("http://", "")) | dump | safe }},
+"committee_en": {{ (site.committee or "") | dump | safe }}, "committee_es": {{ (site.committee_es or site.committee or "") | dump | safe }}},
+"howto": {{ ((site.repository or "https://github.com/NETA65/aagrapevine") ~ "/blob/main/how-to/booth.md") | dump | safe }},
+"t": { {%- for k in pageKeys %}{{ ("booth." + k) | dump | safe }}: {{ (("booth." + k) | t(lang)) | dump | safe }}{{ "," if not loop.last }}{% endfor %}},
+"screen": {
+  {%- for sl in ["en", "es"] %}{{ sl | dump | safe }}: { {%- for k in screenKeys %}{{ ("booth.screen." + k) | dump | safe }}: {{ (("booth.screen." + k) | t(sl)) | dump | safe }}{{ "," if not loop.last }}{% endfor %}}{{ "," if not loop.last }}{% endfor %}}}{% endset %}
+<script type="application/json" id="gvb-config">{{ cfg | replace("<", "\\u003c") | safe }}</script>
+{%- endmacro %}

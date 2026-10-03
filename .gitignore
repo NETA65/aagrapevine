@@ -1,0 +1,111 @@
+# =====================================================================
+#  Files that must never be uploaded to GitHub: things that are rebuilt
+#  automatically, private settings, and the junk that Windows, macOS,
+#  editors and test tools leave behind.
+#  (Note: a "#" only starts a comment at the beginning of a line.)
+# =====================================================================
+
+# ---- The built website and the site tools (rebuilt on every run) ----
+node_modules/
+_site/
+.npm/
+.eslintcache
+.stylelintcache
+
+# ---- Downloads: translation models (~175 MB) and other caches ----
+.cache/
+
+# ---- Scratch space: local builds, e-mail previews, QA screenshots ----
+.tmp/
+/tmp/
+/temp/
+/scratch/
+/scratchpad/
+/qa/
+/screenshots/
+/test-results/
+/playwright-report/
+/coverage/
+# a local build of the site with sample booth photos and videos (browser checks of the booth display)
+/_site_samples/
+
+# ---- Python ----
+.venv/
+/venv/
+/env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
+.ipynb_checkpoints/
+
+# ---- Half-written files a stopped run can leave (the sync writes to a
+#      temporary name first; the daily data commit must never pick them up) ----
+*.tmp
+*.part
+# Backups the sync makes when a data file is unreadable (inspect locally, never commit)
+*.corrupt-*
+
+# ---- Weekly link check (lychee) ----
+.lycheecache
+/lychee/
+
+# ---- Logs ----
+*.log
+
+# ---- Private settings: never commit passwords, tokens or keys ----
+.env
+.env.*
+*.env
+!.env.example
+*.pem
+client_secret*.json
+
+# ---- Windows ----
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+# Office "owner" files (~$report.docx) while a document is open
+~$*
+
+# ---- macOS / Linux ----
+.DS_Store
+._*
+.Spotlight-V100/
+.Trashes/
+.directory
+*~
+
+# ---- Editors ----
+.vs/
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+*.code-workspace
+*.sublime-workspace
+*.swp
+*.swo
+*.suo
+*.user
+
+# ---- Leftovers from merges and hand edits ----
+*.orig
+*.rej
+*.bak
+
+# Chair's private working files (reports, images) — never published
+/Mack/
+/mack/

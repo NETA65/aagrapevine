@@ -1,0 +1,87 @@
+---
+# GitHub Pages serves /404.html for EVERY missing address (English or Spanish),
+# so the page is fully bilingual. /es/404.html (Spanish first) also exists so
+# the header's language switch works from this page. Not listed in the sitemap.
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}404.html"
+layout: layouts/base.njk
+pageKey: "404"
+titleKey: community.nf.page_title
+descKey: community.nf.meta_desc
+sitemap: false
+eleventyExcludeFromCollections: true
+pageScripts: ["/assets/js/community.js"]
+---
+{% import "macros/ui.njk" as ui with context %}
+{%- set other = lang | otherLang -%}
+{%- set popular = [
+  { key: "nav.whats_new", url: "/whats-new/", icon: "sparkles" },
+  { key: "nav.read", url: "/read/", icon: "book-open" },
+  { key: "nav.listen", url: "/listen/", icon: "headphones" },
+  { key: "nav.watch", url: "/watch/", icon: "circle-play" },
+  { key: "nav.library", url: "/library/", icon: "library" },
+  { key: "nav.meetings", url: "/meetings/", icon: "calendar-clock" },
+  { key: "nav.events", url: "/events/", icon: "calendar-days" },
+  { key: "nav.gvr", url: "/gvr/", icon: "badge-check" },
+  { key: "nav.monthly", url: "/monthly/", icon: "calendar-heart" }
+] -%}
+
+{#- The shared hero (same height as every page) in the page language. Its right-hand card (the
+    shared hero aside) is the search: the box (pre-filled with words from the missing address,
+    community.js), the address itself and the pages saved on this device — in the hero from 1024px,
+    the first card under it on smaller screens and at larger text ("below"). The same message in the
+    other language and "Still lost? Email us" are in the card after it. -#}
+{% call(slot) ui.pageHero(lang, "community.nf.title" | t(lang), "community.nf.text" | t(lang), "", "community.nf.code" | t(lang), { eyebrowIcon: "circle-help", side: "below" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("community.nf.search_label" | t(lang), lang, { id: "nf-search-title", icon: "search" }) %}
+  <form action="{{ '/search/' | lurl(lang) }}" method="get" role="search" aria-labelledby="nf-search-title">
+    <p class="hero-aside-text" lang="{{ other }}">{{ "community.nf.search_label" | t(other) }}</p>
+    <div class="nf-search-row mt-2.5 flex flex-nowrap gap-2">
+      <input id="nf-q" name="q" type="search" class="input nf-q" aria-labelledby="nf-search-title" placeholder="{{ 'community.nf.search_ph' | t(lang) }}" data-nf-query autocomplete="off" enterkeyhint="search">
+      <button type="submit" class="btn-primary size-11 shrink-0 p-0" aria-label="{{ 'community.nf.search_btn' | t(lang) }}">{% icon "search", "size-5" %}</button>
+    </div>
+    <p class="hero-aside-note mt-2 break-all font-mono empty:hidden" data-nf-path></p>
+  </form>
+  <ul class="hero-aside-links mt-2.5" role="list">
+    <li>{{ ui.heroAsideLink({ href: "/offline/" | lurl(lang), label: "community.nf.saved" | t(lang), text: "community.nf.saved_text" | t(lang), icon: "hard-drive-download", tone: "vine" }, lang) }}</li>
+  </ul>
+  {% endcall %}
+{%- else %}
+<div class="hero-actions cm-hero-tight">
+  <a class="btn-light" href="{{ '/' | lurl(lang) }}">{% icon "house", "size-4" %} {{ "community.nf.home" | t(lang) }}</a>
+  <a class="btn-on-dark max-sm:hidden" href="#nf-popular">{% icon "arrow-down", "size-4" %} {{ "community.nf.popular" | t(lang) }}</a>
+</div>
+{%- endif %}
+{% endcall %}
+
+{#- ============ The same message in the other language | still lost? (tucks into the hero's edge) ============ -#}
+<section class="container-page page-overlap" data-nf aria-labelledby="nf-other-h">
+  <div class="card grid gap-6 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-12">
+    <div lang="{{ other }}">
+      <p id="nf-other-h" class="font-display text-2xl font-semibold leading-tight text-ink sm:text-3xl">{{ "community.nf.title" | t(other) }}</p>
+      <p class="mt-2 max-w-xl leading-relaxed text-muted">{{ "community.nf.text" | t(other) }}</p>
+      <p class="mt-4"><a class="btn-secondary btn-sm" href="{{ '/' | lurl(other) }}" hreflang="{{ other }}">{% icon "house", "size-4" %} {{ "community.nf.home" | t(other) }}</a></p>
+    </div>
+    <p class="flex flex-wrap items-center gap-x-1.5 border-t border-line pt-5 text-sm text-muted lg:border-t-0 lg:pt-0">{% icon "mail", "size-4 shrink-0" %} <span>{{ "community.nf.still_lost" | t(lang) }}</span> <a class="link tap-link" href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></p>
+  </div>
+</section>
+
+<section class="section container-page pb-0" aria-labelledby="nf-popular-h">
+  <div id="nf-popular">{{ ui.sectionHead("community.nf.popular" | t(lang), '<span lang="' + other + '">' + ("community.nf.popular" | t(other)) + '</span>', "", "", "compass", { eyebrow: "Grapevine · La Viña", id: "nf-popular-h", lang: lang }) }}</div>
+  {#- 9 links: three even rows of 3 on every wide screen -#}
+  <ul class="grid-cards-4 [--cards-max:3] [--cards-gap:0.75rem]" role="list">
+    {% for p in popular %}
+    <li class="card card-link relative flex items-center gap-4 p-4">
+      <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-gv-soft text-gv">{% icon p.icon, "size-5" %}</span>
+      <span class="min-w-0 flex-1">
+        <a class="block font-semibold text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ p.url | lurl(lang) }}">{{ p.key | t(lang) }}</a>
+        {#- the page in the other language: a small link of its own from 640px; on a phone (too small to
+            tap) just the name — the whole card opens the page -#}
+        <a class="relative z-10 text-sm text-muted hover:text-gv hover:underline max-sm:hidden" href="{{ p.url | lurl(other) }}" hreflang="{{ other }}" lang="{{ other }}">{{ p.key | t(other) }}</a>
+        <span class="block text-sm text-muted sm:hidden" lang="{{ other }}">{{ p.key | t(other) }}</span>
+      </span>
+      {% icon "arrow-right", "size-4 text-faint" %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>

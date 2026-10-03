@@ -1,0 +1,239 @@
+# A second, smaller SAMPLE deck (tests and previews; see sample-workshop.yml): a monthly committee meeting with the
+# year's meeting dates (a `meeting` slide with limit 12), a slide that starts switched off, an announcement in
+# Spanish to read aloud (a shown slide with lang: "es", as a script card), the meeting's own day and month on the
+# title slide ({live:meeting_day}, {live:meeting_month}: tonight's until midnight Central after the meeting) and the
+# next meeting as the closing shows it DURING the meeting ({live:meeting_after}), a
+# version with its own agenda title (version_fields) and notes lines (`{only:…}` / `{not:…}`), and a "For the chair"
+# part made of facilitator pages — a facilitator section is never one of the presentation's parts.
+id: "sample-meeting"
+order: 2
+lang: "en"
+title: "Grapevine and La Viña Sample Committee Meeting"
+short: "Sample Meeting"
+eyebrow: "Committee Meeting"
+footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
+minutes: 30
+icon: "users"
+tone: "grape"
+# no PowerPoint copy of this sample in the Drive: the deck's JSON then says "drive": null
+drive_title: "Grapevine and La Viña Sample Committee Meeting"
+card:
+  title:
+    en: "Sample committee meeting (tests and previews)"
+    es: "Reunión de comité de muestra (pruebas y vistas previas)"
+  summary:
+    en: "A short sample of a monthly committee meeting: the year's dates, events, business and sharing."
+    es: "Una muestra breve de una reunión mensual del comité: las fechas del año, eventos, asuntos y compartimiento."
+  audience:
+    en: "For checking the player with a second deck: versions, a slide that starts off and pages for the chair."
+    es: "Para revisar el reproductor con una segunda presentación: versiones, una diapositiva apagada al inicio y páginas para quien coordina."
+presets:
+  - id: "full"
+    label: { en: "Full meeting (about 30 minutes)", es: "Reunión completa (unos 30 minutos)" }
+    minutes: 30
+  - id: "short"
+    label: { en: "Short meeting (about 20 minutes)", es: "Reunión breve (unos 20 minutos)" }
+    minutes: 20
+    hide: ["business"]
+    note:
+      en: "Leaves out old and new business: take it up at the next meeting."
+      es: "Deja fuera los asuntos pendientes y nuevos: se tratan en la próxima reunión."
+fillins:
+  - key: "presenter"
+    label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
+    hint: "Service position"
+    default: "Area 65 Grapevine / La Viña Chair"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre (solo en tus notas)" }
+    hint: "first name"
+    shared: true
+    notes_only: true
+slides:
+  - id: "title"
+    layout: "title"
+    title: "Grapevine and La Viña Monthly Committee Meeting"
+    # the meeting's own day and month: tonight's during AND after tonight's meeting, until midnight Central
+    # ({live:meeting_next} is next month's as soon as tonight's meeting ends)
+    subtitle: "{live:meeting_month} meeting · {live:panel}"
+    lines:
+      - "{fill:presenter}"
+      - "{live:meeting_day} · {live:meeting_time} · Zoom"
+    minutes: 1
+    notes: |
+      SAY: (Have this slide up while people arrive.) Welcome to the Grapevine and La Viña committee meeting. My name is {fill:first_name}, and I'm an alcoholic. I serve as {fill:presenter}. We'll start in a minute; while we wait, please rename yourself on Zoom with your first name and your district or group.
+      DO: Open the Zoom room ten minutes early. Check that recording is off, that you can share your screen, and that a co-host can admit people and watch the chat.
+
+  - id: "opening"
+    layout: "bullets"
+    eyebrow: "Opening"
+    title: "Welcome"
+    items:
+      - "A moment of silence, then the Serenity Prayer"
+      - "**Anonymity:** no screenshots or recordings; first names only"
+      - "**Not an official AA Grapevine, Inc. presentation**: a local committee of trusted servants"
+      - "Every AA member is welcome; GVRs and RLVs, please say hello in the chat"
+    takeaway: "Our leaders are but trusted servants; they do not govern."
+    minutes: 2
+    notes: |
+      SAY: Let's open with a moment of silence, followed by the Serenity Prayer. (Pause.) Thank you. A reminder about anonymity: please don't take screenshots or record the meeting, and use your first name only. This is a local committee of trusted servants; we don't speak for AA Grapevine, Inc. or for AA as a whole.
+      ASK: Is anyone here for the first time? Welcome. Please tell us your first name and your district or group.
+
+  - id: "agenda"
+    layout: "agenda"
+    title: "Tonight's agenda"
+    items:
+      - time: "0:00"
+        title: "Opening and welcome"
+        from: "title"
+      - time: "0:04"
+        title: "Dates and events"
+        detail: "The year's meeting dates and what's coming up in the Area"
+        from: "reports"
+      - time: "0:11"
+        title: "Old and new business"
+        from: "business"
+      - time: "0:19"
+        title: "Sharing, and closing"
+        from: "sharing"
+    minutes: 0.5
+    version_fields:
+      short: { title: "Tonight's agenda (about 20 minutes)" }
+    notes: |
+      SAY: Here's tonight's agenda. We'll look at the year's meeting dates and the events coming up, take care of old and new business, and end with a round of sharing about how the magazines are carrying the message in your groups.
+      {only:short} SAY: Tonight is a short meeting: old and new business wait for next month.
+      DO: The times follow the version you choose in {ui:customize} → {ui:version}; the short meeting leaves out the business ({slide:business}).
+
+  - id: "reports"
+    layout: "section"
+    number: 1
+    title: "Dates and events"
+    subtitle: "What's coming up in the Area"
+    accent: "grape"
+    minutes: 0.25
+    notes: |
+      SAY: First, the dates: the committee's own meetings for the year ahead, and the events coming up in the Area. Both come from the committee website, so they're always current.
+      TRANSITION: Here are our meeting dates.
+
+  - id: "dates"
+    layout: "live"
+    kind: "meeting"
+    title: "The year at a glance"
+    intro: "The committee meets {live:meeting_rule}, {live:meeting_time}, on Zoom:"
+    options: { limit: 12 }
+    minutes: 2
+    notes: |
+      SAY: These are the committee's meeting dates for the next twelve months, {live:meeting_rule}. The meeting ID is {live:meeting_zoom_id} and the passcode is {live:meeting_passcode}. Please put the next one, {live:meeting_after}, on your calendar.
+      TIP: The Meetings page of the committee website has a calendar file with every date.
+
+  - id: "events"
+    layout: "live"
+    kind: "events"
+    title: "NETA 65 events coming up"
+    intro: "From the committee's Events page. The next Area assembly: {live:assembly_next}."
+    options: { limit: 5, filter: "neta" }
+    minutes: 3
+    notes: |
+      SAY: These are the NETA 65 events coming up: workshops, assemblies and the committee's literature booth. Each one has its own page on the committee website with the details and a flyer.
+      ASK: Who can help at the booth, or carry a flyer back to their district?
+      {not:short} TRANSITION: Next, old and new business.
+      {only:short} TRANSITION: Business waits for next month; let's go to our round of sharing.
+
+  # written in Spanish, to read aloud (a script card): the player marks the slide lang="es" (its notes stay English)
+  - id: "announcement-es"
+    layout: "text"
+    style: "script"
+    lang: "es"
+    eyebrow: "Anuncio"
+    title: "Un anuncio para leer en español"
+    body: |
+      El Comité de Grapevine y La Viña del Área 65 se reúne cada mes por Zoom, y todos los miembros de AA son bienvenidos.
+
+      - ID de la reunión de Zoom: {live:meeting_zoom_id}
+      - Graba tu historia por teléfono para La Viña: {live:lv_audio_phone}
+      - Escribe al comité: grapevine@neta65.org
+    optional: true
+    minutes: 1
+    notes: |
+      SAY: If Spanish-speaking members are with us tonight, here's a short announcement in Spanish. Read it aloud, or ask a bilingual member ahead of time to read it. It gives the meeting's Zoom ID, La Viña's line for recording a story by phone, and the committee's e-mail.
+      TIP: Post the same text in the chat, so members can copy the details for their groups.
+
+  - id: "business"
+    layout: "bullets"
+    title: "Old and new business"
+    items:
+      - "Action items from last month's meeting"
+      - "Reports from districts: literature tables, workshops, GVR and RLV news"
+      - "New business: ideas for carrying the message with Grapevine and La Viña"
+    minutes: 8
+    notes: |
+      SAY: Let's start with last month's action items, then hear from the districts, and then any new business. Please keep reports short so everyone has time; anything that needs a longer discussion can go to the next meeting.
+      DO: Keep a list of new action items with a service position for each, never a full name.
+
+  - id: "topic"
+    layout: "bullets"
+    title: "Topic of the month"
+    optional: true
+    starts_off: true
+    items:
+      - "This month's Grapevine: {live:gv_issue}"
+      - "La Viña: {live:lv_issue}"
+      - "How could your group use this month's issue?"
+    minutes: 5
+    notes: |
+      SAY: A short topic to share on. This month's Grapevine is {live:gv_issue}, and La Viña is {live:lv_issue}. How could your group use this month's issue? Let's hear from two or three people.
+      FACILITATOR TIP: This slide starts switched off. Turn it on in Customize → Slides when the meeting has time for a topic.
+
+  - id: "sharing"
+    layout: "qa"
+    eyebrow: "Sharing"
+    title: "How is the message getting through?"
+    prompts:
+      - "What has your group done with Grapevine or La Viña this month?"
+      - "Where could a magazine reach someone who needs it?"
+    note: "Share your experience; the committee carries the good ideas to the next meeting."
+    minutes: 10
+    notes: |
+      SAY: Let's end with a round of sharing. What has your group done with Grapevine or La Viña this month, and where could a magazine reach someone who needs it? Please keep it to two or three minutes so everyone who wants to share can.
+      DO: Keep time gently, and thank each person who shares.
+
+  - id: "closing"
+    layout: "closing"
+    title: "Thank you for your service"
+    message: "See you at the next meeting."
+    # shown DURING tonight's meeting: {live:meeting_day} is tonight's until midnight, {live:meeting_after} the one
+    # after it
+    lines:
+      - "Next meeting: {live:meeting_after}, {live:meeting_time}, on Zoom"
+      - "By phone: {live:meeting_phone} · meeting ID {live:meeting_zoom_id}"
+      - "{live:email} · {live:site}"
+    qr: "/meetings/"
+    minutes: 1
+    notes: |
+      SAY: Thank you for being here, and for everything you do to carry the message. The next meeting is on the screen, with the number to join by phone. If you have questions, the committee's e-mail is there too. Good night.
+      DO: Stop sharing your screen only after the last person has left, then write up the action items.
+
+  - id: "for-chair"
+    layout: "section"
+    number: "A"
+    title: "For the chair"
+    subtitle: "Preparing the meeting. Never shown during the meeting."
+    facilitator: true
+    accent: "navy"
+    notes: |
+      These pages are for the chair: they are never projected. Find them in Customize → Prepare.
+
+  - id: "chair-checklist"
+    layout: "bullets"
+    facilitator: true
+    checklist: true
+    eyebrow: "Appendix · For the chair"
+    title: "The week before each meeting"
+    items:
+      - "Check your service position in {ui:customize} → {ui:your_details}; the meeting's date and month fill in by themselves"
+      - "Copy last month's open action items into the business slide ({slide:business})"
+      - "Decide whether to show the topic of the month ({slide:topic})"
+      - "Zoom: recording off; a co-host, a timekeeper and someone to take the minutes"
+      - "E-mail the agenda and the draft minutes, with every address in BCC"
+    notes: |
+      DO: Work through this list the week before each meeting. Your ticks stay on this device.

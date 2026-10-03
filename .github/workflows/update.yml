@@ -1,0 +1,873 @@
+# =====================================================================
+#  Update & Deploy — the heart of the self-updating website.
+#
+#  Every day (and whenever settings/content/templates change) this:
+#    1. SYNC   – fetches new Grapevine & La Viña articles, crawls both
+#                sites for PDFs, reads the two podcast feeds, YouTube,
+#                Instagram and the committee's Google Drive folders,
+#                machine-translates everything EN ⇄ ES (offline, open
+#                source), and commits the updated data back to the repo.
+#    2. BUILD  – builds the website with Eleventy + Tailwind.
+#    3. DEPLOY – publishes it to GitHub Pages.
+#
+#  When it runs:
+#    · every MORNING, started by the Morning check (morning.yml) in MORNING
+#      mode — the new day's dates, the daily quote, Drive, the bulletin
+#      and podcasts — so the new day and both daily quotes are on the site
+#      by 5:30 AM Central (config/site.yml → site.morning_goal);
+#    · on GitHub's schedule below: the FULL daily update and a MIDDAY
+#      refresh, whenever GitHub starts them (often hours late);
+#    · a quick refresh right after a settings / content / template edit.
+#
+#  If a source is down, the site still deploys with the last good data;
+#  if it stays down for a week, the "report" job opens an issue about it.
+#  Run it by hand: Actions tab → "Update & Deploy" → "Run workflow".
+# =====================================================================
+name: Update & Deploy
+# The Morning check's runs get their own name (scripts/ops/morning_check.py MORNING_TITLE — keep the two
+# equal); every other run keeps GitHub's own (an empty run-name falls back to it). Quoted: the name has ": ".
+run-name: "${{ inputs.morning && 'Morning refresh: new day and daily quote' || '' }}"
+
+on:
+  schedule:
+    # GitHub cron is always UTC, and GitHub starts a scheduled run when it
+    # has room — since late August 2026 usually 4 to 6 hours late, sometimes 8
+    # (and a busy day can skip one; docs/OPERATIONS.md → Morning check). So
+    # both are set 4 hours EARLIER than the time they are meant for, and
+    # neither is what puts the day's quote up early: the Morning check
+    # (morning.yml) starts this workflow in MORNING mode before 5:30 AM
+    # Central. Minutes 17 and 7 avoid the top-of-the-hour rush.
+    # The FULL daily run (every source + the PDF crawl): 06:17 UTC = 1:17 AM
+    # CDT (summer) / 12:17 AM CST (winter) on time; 4 to 6 hours late, it
+    # starts about 5 to 7 AM Central.
+    - cron: "17 6 * * *"
+    # The MIDDAY refresh — a QUICK run (Drive, the bulletin, podcasts, the
+    # daily quote; QUICK_MODULES in scripts/sync/run_all.py), the quote's
+    # backstop on GitHub's side: 08:07 UTC = 3:07 AM CDT / 2:07 AM CST on
+    # time; 4 to 6 hours late, about 7 to 9 AM Central. "Decide what to sync"
+    # and "Commit refreshed data" below recognise this exact string
+    # (github.event.schedule). Keep the three equal.
+    - cron: "7 8 * * *"
+
+  workflow_dispatch:
+    inputs:
+      crawl_minutes:
+        description: "Minutes to search aagrapevine.org + aalavina.org for PDFs (empty = the daily setting in config/site.yml, normally 40; up to 300 for a big catch-up crawl)"
+        type: string
+        default: ""
+      skip_crawl:
+        description: "Quick refresh only: Google Drive, the bulletin, podcasts and the daily quote (a few minutes). Videos, magazine stories, Instagram and PDFs wait for the next daily run."
+        type: boolean
+        default: false
+      morning:
+        description: "Morning refresh (what the Morning check starts): the new day's dates, the daily quote, Google Drive, the bulletin and podcasts — on the 1st also the magazines' new issues and, on the 1st and 15th, the Book of the Month. Published in about 3 minutes. Overrides the two fields above."
+        type: boolean
+        default: false
+
+  # Rebuild right away when someone edits settings, content, templates or
+  # code. The bot's own daily data commits never trigger this: they are
+  # excluded below AND pushed with the built-in token, which by design
+  # cannot start new workflow runs (so there is no loop).
+  push:
+    branches: [main]
+    paths:
+      - "**"                                # anything…
+      - "!*.md"                             # …except documentation
+      - "!**/*.md"
+      - "src/**"                            # (Markdown pages in src/ DO count)
+      - "content/**"                        # (bulletin posts, their pictures, and events written as Markdown DO count)
+      - "!content/**/README.md"
+      - "!data/**"                          # the bot's own data commits
+      - "data/translations/overrides.yml"   # …but a translation fix must rebuild
+      - "data/translations/glossary.yml"    # …and so must a glossary change
+      - "!src/assets/cache/**"              # thumbnails downloaded by the bot
+      - "!docs/**"
+      - "!tests/**"
+      - "!LICENSE"
+      - "!.github/**"
+      - ".github/workflows/update.yml"      # editing this file re-runs it
+
+# Least privilege by default; each job asks for what it needs.
+permissions:
+  contents: read
+
+# Never run two updates at once (they would fight over the data commit).
+# A run triggered while another is going waits its turn.
+concurrency:
+  group: update-deploy
+  cancel-in-progress: false
+
+env:
+  PYTHONIOENCODING: utf-8
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  # -------------------------------------------------------------------
+  sync:
+    name: Sync content + translate
+    runs-on: ubuntu-latest
+    # GitHub stops any job after 6 hours (360 min). The sync step itself
+    # gets a smaller budget (see "Decide what to sync") so that the data
+    # commit below always has time to run.
+    timeout-minutes: 360
+    permissions:
+      contents: write          # to commit the refreshed data
+    outputs:
+      # Sources that have not updated for a week (JSON) — read by the "report" job below.
+      health: ${{ steps.summary.outputs.health }}
+    env:
+      # Offline translation models (Argos Translate 1.0, CTranslate2 format,
+      # ~175 MB). scripts/sync/translate.py downloads them into this folder
+      # on first use; the Actions cache below keeps them between runs.
+      # The cache step uses the SAME folder (.cache/models) — keep them equal.
+      GV_MODELS_DIR: ${{ github.workspace }}/.cache/models
+      GV_MT_THREADS: "4"       # GitHub's Linux runners have 4 CPU cores
+    steps:
+      # The branch's LATEST commit, not the one that started this run: a run that waited
+      # its turn (see "concurrency" above) must start from the data the previous run just
+      # committed, or it would crawl the same pages again and push older data.
+      # persist-credentials: false — the write-access token is NOT left in .git/config while
+      # the third-party Python packages below are installed and run; only the "Commit refreshed
+      # data" step uses it, and removes it again when it is done.
+      - name: Check out the repository (latest commit on the branch, including the previous run's data)
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Work out the translation-model cache key
+        id: modelkey
+        run: |
+          set -euo pipefail
+          # The key is a fingerprint of MODEL_URLS in scripts/sync/translate.py,
+          # so the models are downloaded again only when those URLs change —
+          # never because of an unrelated code edit. (If MODEL_URLS cannot be
+          # found, the whole file is fingerprinted instead: safe, just less stable.)
+          fp="$(python - <<'PY'
+          import ast, hashlib, json, pathlib
+          src = pathlib.Path("scripts/sync/translate.py").read_text(encoding="utf-8")
+          urls = None
+          for node in ast.walk(ast.parse(src)):
+              if isinstance(node, ast.Assign):
+                  targets = node.targets
+              elif isinstance(node, ast.AnnAssign):
+                  targets = [node.target]
+              else:
+                  continue
+              if node.value is not None and any(getattr(t, "id", None) == "MODEL_URLS" for t in targets):
+                  urls = ast.literal_eval(node.value)
+          blob = json.dumps(urls, sort_keys=True) if urls else src
+          print(("urls-" if urls else "file-") + hashlib.sha256(blob.encode()).hexdigest()[:16])
+          PY
+          )"
+          echo "key=translation-models-v1-${RUNNER_OS}-${fp}" >> "$GITHUB_OUTPUT"
+          echo "Translation model cache key: translation-models-v1-${RUNNER_OS}-${fp}"
+
+      - name: Restore translation models from cache
+        id: models
+        uses: actions/cache/restore@v6
+        with:
+          path: .cache/models
+          key: ${{ steps.modelkey.outputs.key }}
+
+      - name: Install Python packages
+        run: |
+          python -m pip install --upgrade pip
+          # requirements.txt uses ">=" so every run gets the newest yt-dlp etc.
+          python -m pip install -r requirements.txt
+
+      # The sync loads a model only when a text needs it, so a run with nothing new to translate never
+      # downloads them. On a cache miss (a new or moved repository, a cleared cache, new MODEL_URLS) both
+      # are fetched here: the check below then warns only about a real download failure, and the first
+      # run of any kind (push, morning, midday, daily) saves them to the cache.
+      - name: Download the translation models (only when the cache had none)
+        if: ${{ steps.models.outputs.cache-hit != 'true' }}
+        continue-on-error: true
+        timeout-minutes: 10
+        run: python -m scripts.sync.translate --download
+
+      - name: Decide what to sync
+        id: plan
+        env:
+          EVENT: ${{ github.event_name }}
+          # The cron string that started a scheduled run ("17 6 * * *" or "7 8 * * *").
+          SCHEDULE: ${{ github.event.schedule }}
+          INPUT_MINUTES: ${{ inputs.crawl_minutes }}
+          INPUT_SKIP: ${{ inputs.skip_crawl }}
+          INPUT_MORNING: ${{ inputs.morning }}
+        run: |
+          set -euo pipefail
+          # Daily crawl budget from config/site.yml (sources.crawler.minutes_per_run).
+          # Not set → 40. 0 is a real value: it pauses the PDF search (run_all skips the crawl).
+          CONFIG_MINUTES="$(python -c "from scripts.sync.common import load_config as c; v=((c().get('sources') or {}).get('crawler') or {}).get('minutes_per_run'); print(40 if v in (None, '') else max(0, int(float(v))))" 2>/dev/null || echo 40)"
+          if ! [[ "$CONFIG_MINUTES" =~ ^[0-9]+$ ]]; then CONFIG_MINUTES=40; fi
+
+          # The 08:07 UTC schedule (the midday refresh) is a quick run; the 06:17 UTC schedule
+          # stays the full daily run. Same string as `cron:` above.
+          QUOTE_CRON="7 8 * * *"
+          if [ "${INPUT_MORNING:-false}" = "true" ]; then
+            # The Morning check (morning.yml) — or someone who ticked "morning": the lean MORNING
+            # refresh (run_all --morning: the quick sources, plus on the 1st and the 15th the monthly
+            # ones — MORNING_EXTRA in scripts/sync/run_all.py), so the new day and the daily quote are
+            # on the site by 5:30 AM Central. It wins over the two other fields.
+            mode=morning
+            minutes=0
+          elif [ "$EVENT" = "push" ] || [ "${INPUT_SKIP:-false}" = "true" ] \
+             || { [ "$EVENT" = "schedule" ] && [ "${SCHEDULE:-}" = "$QUOTE_CRON" ]; }; then
+            # Settings/content/template edit, "skip_crawl" ticked, or the midday run:
+            # quick refresh (only Google Drive, the bulletin, podcasts and the daily quote;
+            # see QUICK_MODULES in scripts/sync/run_all.py) and rebuild. The daily run does the rest.
+            mode=quick
+            minutes=0
+          else
+            mode=crawl
+            # Scheduled runs use the config value; manual runs use the form value
+            # (an empty form field also means the config value).
+            minutes="${INPUT_MINUTES:-}"
+            minutes="${minutes// /}"
+            if [ "$EVENT" = "schedule" ] || [ -z "$minutes" ]; then minutes="$CONFIG_MINUTES"; fi
+            if ! [[ "$minutes" =~ ^[0-9]+$ ]]; then
+              echo "::warning title=crawl_minutes::'$minutes' is not a whole number of minutes; using $CONFIG_MINUTES."
+              minutes="$CONFIG_MINUTES"
+            fi
+            if [ "${#minutes}" -gt 4 ]; then minutes=9999; fi   # absurdly long input → capped below
+            minutes=$((10#$minutes))
+            if [ "$minutes" -gt 300 ]; then
+              echo "::warning title=crawl_minutes::Capped at 300 minutes (GitHub stops jobs after 6 hours)."
+              minutes=300
+            fi
+            if [ "$minutes" -eq 0 ]; then
+              echo "::notice title=PDF search paused::Crawl minutes = 0 (config/site.yml → sources → crawler → minutes_per_run, or the crawl_minutes field), so this run does not search aagrapevine.org / aalavina.org for PDFs. Everything else is updated as usual."
+            fi
+          fi
+
+          # Time budget. The job may run 360 min; setup (~5) and the data
+          # commit (~5, with push retries) need ~15, so the sync step may use
+          # up to 345. The other sources take up to ~30 min; translation gets
+          # up to 40 (the rest continues tomorrow), squeezed on very long
+          # crawls so everything still fits.
+          translate=$(( 345 - minutes - 30 - 5 ))
+          if [ "$translate" -gt 40 ]; then translate=40; fi
+          if [ "$translate" -lt 10 ]; then translate=10; fi
+          budget=$(( minutes + 30 + translate + 20 ))
+          if [ "$budget" -gt 345 ]; then budget=345; fi
+          if [ "$mode" = "morning" ]; then
+            # Before 5:30 AM Central: at most 5 minutes of new translations (the bulletin's come first;
+            # the rest waits for the daily run) and 20 minutes for the whole step, so the site is
+            # published in time.
+            translate=5
+            budget=20
+          fi
+
+          echo "Sync plan: event=$EVENT${SCHEDULE:+ ($SCHEDULE)} mode=$mode crawl=${minutes} min, translation ≤ ${translate} min, step budget ${budget} min"
+          {
+            echo "mode=$mode"
+            echo "minutes=$minutes"
+            echo "translate=$translate"
+            echo "budget=$budget"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Sync all sources (articles, PDFs, podcasts, videos, Instagram, Drive) + translate
+        id: sync
+        timeout-minutes: ${{ fromJSON(steps.plan.outputs.budget) }}
+        env:
+          # All optional — the site works without them (README → "Optional upgrades").
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_BUSINESS_ID: ${{ secrets.IG_BUSINESS_ID }}
+          # Meeting-list keys of Dallas Intergroup / Fort Worth Central Office (scripts/sync/meetings.py);
+          # without them the key stored in config/site.yml (feed_obf) is used.
+          TSML_KEY_AADALLAS: ${{ secrets.TSML_KEY_AADALLAS }}
+          TSML_KEY_FORTWORTHAA: ${{ secrets.TSML_KEY_FORTWORTHAA }}
+          GV_TRANSLATE_MINUTES: ${{ steps.plan.outputs.translate }}
+          MODE: ${{ steps.plan.outputs.mode }}
+          MINUTES: ${{ steps.plan.outputs.minutes }}
+        run: |
+          set -euo pipefail
+          case "$MODE" in
+            morning) args=(--morning) ;;
+            quick) args=(--quick) ;;
+            *) args=(--crawl-minutes "$MINUTES") ;;
+          esac
+          echo "python -m scripts.sync.run_all ${args[*]}"
+          # Exit code is non-zero only if the site data could not be built;
+          # a single source failing is reported in the summary instead.
+          python -m scripts.sync.run_all "${args[@]}"
+
+      - name: Check the translation models are complete
+        id: models_ready
+        if: ${{ !cancelled() && steps.models.outputs.cache-hit != 'true' }}
+        env:
+          SYNC_OUTCOME: ${{ steps.sync.outcome }}
+        run: |
+          # Same test as model_ready() in scripts/sync/translate.py. Only real,
+          # complete models are cached, so a failed download is never cached.
+          rm -rf .cache/models/.download-* 2>/dev/null || true
+          n=0
+          for pair in en_es es_en; do
+            d=".cache/models/${pair}"
+            if [ -n "$(find "$d/model/model.bin" -size +1M 2>/dev/null)" ] && [ -f "$d/sentencepiece.model" ]; then
+              n=$((n + 1))
+            fi
+          done
+          echo "Found ${n} of 2 translation models."
+          if [ "$n" -eq 2 ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          elif [ "$SYNC_OUTCOME" != "success" ]; then
+            echo "The sync step did not finish (${SYNC_OUTCOME}), so the models may not have been needed yet."
+          else
+            # Translation then quietly keeps new titles in their original language — say so loudly.
+            echo "::warning title=Translation models missing::Only ${n} of 2 translation models could be downloaded (is argos-net.com down or moved? See MODEL_URLS in scripts/sync/translate.py and the 'Sync all sources' log). New titles stay in their original language until a run can download them; already-translated titles are not affected."
+          fi
+
+      - name: Save translation models to cache (only after a fresh download)
+        if: ${{ !cancelled() && steps.models_ready.outputs.ready == 'true' }}
+        uses: actions/cache/save@v6
+        with:
+          path: .cache/models
+          key: ${{ steps.modelkey.outputs.key }}
+
+      - name: Commit refreshed data
+        # Runs even if the sync step failed, ran out of time or the run was
+        # cancelled: whatever was fetched is still good (every file is written
+        # atomically, and the crawler saves its progress when it is stopped).
+        # GitHub allows about 5 minutes for this after a cancel; it takes seconds.
+        if: ${{ always() }}
+        env:
+          EVENT: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+          MODE: ${{ steps.plan.outputs.mode }}
+          BRANCH: ${{ github.ref_name }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # The checkout keeps no token (persist-credentials: false), so log in for this step
+          # only — covers both the push and the "git pull --rebase" retry — and log out on exit.
+          auth_key="http.https://github.com/.extraheader"
+          trap 'git config --local --unset-all "$auth_key" || true' EXIT
+          git config --local "$auth_key" "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+
+          # Everything the sync writes (new, changed AND deleted files).
+          # People's files (settings, content/, overrides.yml, glossary.yml)
+          # are never committed by the robot.
+          paths=()
+          for p in data/raw data/site data/state data/translations/cache.json src/assets/cache; do
+            if [ -e "$p" ] || [ -n "$(git ls-files -- "$p" | head -n1)" ]; then paths+=("$p"); fi
+          done
+          if [ ${#paths[@]} -eq 0 ]; then echo "Nothing to commit (no data folders)."; exit 0; fi
+          git add -A -- "${paths[@]}"
+          if git diff --cached --quiet; then
+            echo "No content changes to commit."
+            exit 0
+          fi
+
+          # The message says which run it was: an edit, the morning refresh (the Morning check), the
+          # midday refresh (the "7 8 * * *" schedule — the same string as `cron:` above) or the daily run.
+          day="$(TZ=America/Chicago date +%F)"
+          if [ "$EVENT" = "push" ]; then
+            msg="chore(data): content sync after settings/content change ${day} [skip ci]"
+          elif [ "${MODE:-}" = "morning" ]; then
+            msg="chore(data): morning refresh with the daily quote ${day} [skip ci]"
+          elif [ "$EVENT" = "schedule" ] && [ "${SCHEDULE:-}" = "7 8 * * *" ]; then
+            msg="chore(data): midday refresh ${day} [skip ci]"
+          else
+            msg="chore(data): daily content sync ${day} [skip ci]"
+          fi
+          git commit -q -m "$msg"
+          git --no-pager show --stat --oneline HEAD | tail -n 25
+
+          # Someone (a person or another run) may have pushed meanwhile:
+          # rebase our data commit on top and retry. On a conflict inside a
+          # generated file, our fresh data wins (-X theirs = the commit being replayed).
+          # --autostash: any other local leftovers must not block the rebase.
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${BRANCH}"; then
+              echo "Pushed data commit."
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}/5) — rebasing on the latest ${BRANCH}…"
+            sleep $(( attempt * 7 ))
+            if ! git pull --rebase --autostash -X theirs origin "${BRANCH}"; then
+              git rebase --abort || true
+              echo "::error title=Data commit::Could not rebase the data commit onto ${BRANCH}. Tomorrow's run will redo the sync."
+              exit 1
+            fi
+          done
+          echo "::error title=Data commit::Could not push the data commit after 5 attempts."
+          exit 1
+
+      - name: Write run summary
+        id: summary
+        if: ${{ always() }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          out = os.environ.get("GITHUB_STEP_SUMMARY")
+          try:
+              with open("data/site/status.json", encoding="utf-8") as f:
+                  s = json.load(f)
+          except Exception as e:
+              print(f"No status.json yet ({e})")
+              raise SystemExit(0)
+          if s.get("fixture"):
+              print("status.json is still sample (fixture) data: the site data was not rebuilt this run.")
+              raise SystemExit(0)
+
+          STALE_DAYS = 7          # README → "Only worry if the same source fails for more than a week"
+          now = datetime.now(timezone.utc)
+
+          def days_since(iso):
+              try:
+                  return (now - datetime.fromisoformat(str(iso).replace("Z", "+00:00"))).days
+              except (TypeError, ValueError):
+                  return None
+
+          lines = ["## Content sources", "",
+                   "| Source | Status | Items | New in 7 days | Last success (UTC) | Problem |",
+                   "|---|---|---:|---:|---|---|"]
+          stale = []
+          for src in s.get("sources", []):
+              ok = bool(src.get("ok"))
+              label = src.get("label") or src.get("source")
+              err = (src.get("error") or "").replace("|", "/").replace("\n", " ")[:160]
+              lines.append(f"| {label} | {'OK' if ok else '**PROBLEM**'} | "
+                           f"{src.get('count', '')} | {src.get('new_7d', '')} | {(src.get('updated') or '—')[:16].replace('T', ' ')} | {err} |")
+              if not ok:
+                  # Shows as a yellow warning on the run page (the site still deploys).
+                  days = days_since(src.get("updated"))
+                  since = (f" — no successful update for {days} days" if days and days >= 1
+                           else " — has not worked yet" if src.get("ok") is False and not src.get("updated") else "")
+                  print(f"::warning title={label}::{err or 'failed'} (previous items kept){since}")
+                  # ok is None = never ran (e.g. only quick runs so far): nothing to report yet.
+                  if src.get("ok") is False and (days is None or days >= STALE_DAYS):
+                      stale.append({"source": src.get("source"), "label": label, "days": days,
+                                    "updated": src.get("updated"), "error": err})
+          # The day of each magazine's daily quote on the site after this run (data/site/quote.json) —
+          # the Morning check's summary says when it went live.
+          try:
+              with open("data/site/quote.json", encoding="utf-8") as f:
+                  qitems = [q for q in (json.load(f).get("items") or []) if isinstance(q, dict)]
+          except Exception:
+              qitems = []
+          mags, qbits = {"gv": "Grapevine", "lv": "La Viña"}, []
+          for q in qitems:
+              try:
+                  qd = datetime.strptime(str(q.get("date") or "")[:10], "%Y-%m-%d")
+              except ValueError:
+                  continue
+              qbits.append(f"{mags.get(q.get('pub'), q.get('pub'))} {qd:%b} {qd.day}")
+          if qbits:
+              lines += ["", "**Daily quote:** " + " · ".join(qbits)]
+          c = s.get("crawl") or {}
+          if c:
+              line = (f"**PDF crawl:** {c.get('known_pages', 0)} pages known · {c.get('crawled_pages', 0)} crawled · "
+                      f"{c.get('pdfs', 0)} PDFs · {c.get('last_run_pages') or 0} pages this run")
+              if c.get("est_days_to_full"):
+                  line += f" · about {c['est_days_to_full']} more day(s) to reach every page"
+              lines += ["", line]
+          t = s.get("translations") or {}
+          if t:
+              lines += ["", f"**Translations:** {t.get('cached', 0)} cached · {t.get('translated_this_run', 0)} new this run"
+                            f" · {t.get('pending', 0)} waiting for the next run"]
+              if t.get("model_enabled", True) and t.get("pending") and not t.get("translated_this_run"):
+                  print(f"::warning title=Translation is not working::{t['pending']} texts are waiting but none could be translated "
+                        "this run. The translation models are probably missing (see 'Check the translation models are "
+                        "complete' and the 'Sync all sources' log). New titles stay in their original language until then.")
+          # Smaller problems of a source that still updated (e.g. one of several feeds did not answer).
+          # Nothing to do unless the same note shows up here day after day.
+          notes = []
+          for src in s.get("sources", []):
+              warns = (src.get("stats") or {}).get("warnings") if isinstance(src.get("stats"), dict) else None
+              if src.get("ok") and isinstance(warns, list) and warns:
+                  label = src.get("label") or src.get("source")
+                  notes += [f"- {label}: " + str(w).replace("\n", " ")[:200] for w in warns[:2]]
+          if notes:
+              lines += ["", "**Notes** (these sources still updated; only look into a note that repeats for a week):", *notes]
+          # Optional outside calendars (config/site.yml sources.ics_feeds) — INFORMATIONAL only: they are
+          # kept apart from the content sources above, so a feed that a site's bot protection blocks
+          # (neta65.org's Cloudflare check) is a notice here, never a warning, and never opens the
+          # "A content source has stopped updating" issue. Its `notes` (the feed gives another date or
+          # time, or a venue a content/events file still calls "to be announced") are notices too.
+          feeds = [f for f in (s.get("feeds") or []) if isinstance(f, dict)]
+          if feeds:
+              words = {"ok": "working", "blocked": "blocked by the site's bot protection",
+                       "error": "not answering", "never": "not checked yet"}
+              lines += ["", "**Other calendars (optional, informational):**"]
+              for f in feeds:
+                  state = str(f.get("state") or "never")
+                  bits = [words.get(state, state)]
+                  if f.get("http_status"):
+                      bits.append(f"HTTP {f['http_status']}")
+                  bits.append(f"{f.get('events_count') or 0} event(s)"
+                              + (f", {f['duplicates']} already on the Events page (shown once)" if f.get("duplicates") else ""))
+                  if state != "ok" and f.get("last_success"):
+                      bits.append(f"last read {str(f['last_success'])[:10]} (that copy is still used)")
+                  if not f.get("checked_this_run"):
+                      bits.append("not asked this run (at most once a day)")
+                  lines.append(f"- {f.get('label') or f.get('url')}: " + " · ".join(bits))
+                  fnotes = [" ".join(str(n).split()) for n in (f.get("notes") or [])][:10]
+                  lines += [f"  - Check: {n.replace('|', '/')}" for n in fnotes]
+                  for n in fnotes:
+                      print(f"::notice title=Check a content/events file ({f.get('label') or f.get('url')})::{n.replace('%', '%25')}")
+                  if state == "blocked" and f.get("checked_this_run"):
+                      print(f"::notice title=Calendar feed blocked ({f.get('label') or f.get('url')})::"
+                            "The site's bot protection turned the robot away, so this calendar can't be read. Until "
+                            "it can, a workshop or assembly shows on the Events page only after someone on the "
+                            "committee adds it by hand to content/events (see content/events/README.md). To fix it, "
+                            "the site's webmaster can let calendar requests through (see the comment above "
+                            "ics_feeds in config/site.yml).")
+          # Settings build_data could not use (config/site.yml `meeting:` / `recurring_events:` /
+          # `sources.ics_feeds:` / `price_changes:`, a slip in a content/events file such as a
+          # location_es left saying "Lugar por anunciarse", a YAML typo in data/translations/glossary.yml
+          # or overrides.yml): that part was skipped or corrected, the rest of the site still updated.
+          probs = s.get("problems") if isinstance(s.get("problems"), dict) else {}
+          settings = [(k, " ".join(str(v).split()).replace("|", "/")[:1000])
+                      for k, v in probs.items()
+                      if k in ("meeting", "recurring_events", "ics_feeds", "price_changes", "content_events", "translations")]
+          if settings:
+              lines += ["", "**Settings problems** (the rest of the site still updated — fix the file and save it again):",
+                        *[f"- {msg}" for _k, msg in settings]]
+              for k, msg in settings:
+                  print(f"::warning title=Settings problem ({k})::{msg.replace('%', '%25')}")
+          # Bulletin posts and events written by hand (content/bulletin, content/events) that could not be
+          # read — or that link a picture or document not saved next to them (announcements.py
+          # stats.errors): the rest of the site still updated; the chair fixes the file.
+          for key, title in (("announcements", "Bulletin files to fix"), ("manual_events", "Event files to fix")):
+              src = next((x for x in s.get("sources", []) if x.get("source") == key), None) or {}
+              st = src.get("stats") if isinstance(src.get("stats"), dict) else {}
+              errs = [" ".join(str(e).split()).replace("|", "/") for e in (st.get("errors") or []) if str(e).strip()][:10]
+              if errs:
+                  lines += ["", f"**{title}** (the rest of the site still updated — fix the file and save it again):",
+                            *[f"- {e}" for e in errs]]
+                  for e in errs:
+                      print(f"::warning title={title}::{e.replace('%', '%25')}")
+          # Files in the committee's Drive booth folder that the booth display (About page → "Booth display") can
+          # never show — data/site/booth.json `problems` (build_data.build_booth): a type it can't show, a video or
+          # sound type browsers don't play, a note with no text, (from …) after (until …) — each with what to do.
+          # The rest of the booth and of the site still updated; rename, convert or replace the file in Drive
+          # (content/booth/README.md has the naming rules). Drive's own note above only counts them.
+          try:
+              with open("data/site/booth.json", encoding="utf-8") as f:
+                  bprobs = [p for p in (json.load(f).get("problems") or []) if isinstance(p, dict) and p.get("problem")]
+          except Exception:
+              bprobs = []
+          if bprobs:
+              blines = [" ".join(f"{p.get('file') or 'booth'} — {p['problem']}".split()).replace("|", "/") for p in bprobs]
+              lines += ["", f"**Booth folder files the booth display can't show** ({len(bprobs)}; the rest of the booth "
+                            "still updated — fix the file in the Drive booth folder):", *[f"- {b}" for b in blines[:30]]]
+              if len(blines) > 30:
+                  lines.append(f"- … and {len(blines) - 30} more (the player's Settings → Slides lists them all)")
+              for b in blines[:10]:
+                  print(f"::warning title=Booth folder file to fix::{b.replace('%', '%25')}")
+          # Bulletin posts scheduled for a later day (content/bulletin `publish:`, Drive "(from …)"):
+          # build_data leaves them off the site until their day (status.json `scheduled`, soonest first).
+          sched = [x for x in (s.get("scheduled") or []) if isinstance(x, dict) and x.get("publish")]
+          if sched:
+              def where(x):
+                  f = str(x.get("file") or "")
+                  return f"({f})" if f.startswith("content/") else f"(Google Drive: {f})" if f else ""
+              lines += ["", "**Scheduled bulletin posts** (not on the site yet):",
+                        *[" ".join(b for b in (f"- {x['publish']} —", str(x.get("title") or "(no title)"), where(x)) if b)
+                          .replace("|", "/") for x in sched]]
+              print(f"::notice title=Scheduled bulletin posts::{len(sched)} post(s) will appear by themselves on their day"
+                    f" — the first on {sched[0]['publish']} (see the run summary).")
+          # Weekly podcast discovery (scripts/sync/podcasts.py): feeds found on the magazine sites that
+          # are not in config/site.yml yet. They are never added automatically.
+          pod = next((x for x in s.get("sources", []) if x.get("source") == "podcasts"), None) or {}
+          pstats = pod.get("stats") if isinstance(pod.get("stats"), dict) else {}
+          feeds = [f for f in (pstats.get("discovered_feeds") or []) if isinstance(f, dict) and f.get("feed")]
+          if feeds:
+              lines += ["", "**New podcast feeds found** (not on the website yet; to show one, add it under "
+                            "`sources.podcasts` in `config/site.yml`):"]
+              for f in feeds[:6]:
+                  bits = [str(f.get("title") or "(no title)"),
+                          f"{f['episodes']} episodes" if f.get("episodes") else "",
+                          "Spanish" if f.get("spanish") else "",
+                          f"latest {str(f['latest'])[:10]}" if f.get("latest") else ""]
+                  lines.append("- " + " · ".join(b for b in bits if b) + f" — {f['feed']}")
+              print(f"::notice title=New podcast feed found::{len(feeds)} podcast feed(s) on the magazine sites "
+                    "are not on the website yet. See the run summary.")
+          if stale:
+              lines += ["", f"**Not updating for {STALE_DAYS}+ days:** " + ", ".join(x["label"] for x in stale)
+                        + " — reported in the issue *\"A content source has stopped updating\"*."]
+          if out:
+              with open(out, "a", encoding="utf-8") as f:
+                  f.write("\n".join(lines) + "\n")
+          print("\n".join(lines))
+
+          # For the "Report sources that stopped updating" job below (one line of JSON).
+          try:
+              from scripts.sync.common import load_config
+              site = str((load_config().get("site") or {}).get("url") or "").rstrip("/")
+          except Exception:
+              site = ""
+          if os.environ.get("GITHUB_OUTPUT"):
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+                  f.write("health=" + json.dumps({"stale": stale, "site": site, "days": STALE_DAYS}) + "\n")
+          PY
+
+  # -------------------------------------------------------------------
+  build-deploy:
+    name: Build & publish website
+    needs: sync
+    # Deploy even when the sync failed or timed out (the site then shows the
+    # last good data), but not when someone cancelled the run, and only from main.
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    # (the booth display's media: at most 20 minutes to download, 5 to save — the build and the publishing still fit)
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      pages: write             # to deploy to GitHub Pages
+      id-token: write          # to prove the deployment comes from this repo
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out the latest main (including the data just committed)
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install site tools (Eleventy, Tailwind, …)
+        run: npm ci --no-audit --no-fund
+
+      - name: Read GitHub Pages settings
+        id: pages
+        uses: actions/configure-pages@v6
+
+      - name: Work out the site address
+        id: addr
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          BASE_URL: ${{ steps.pages.outputs.base_url }}
+        run: |
+          set -euo pipefail
+          # base_path is "/aagrapevine" for https://neta65.github.io/aagrapevine/
+          # and "" for a custom domain or a <user>.github.io repository.
+          # Eleventy wants the folder with slashes on both ends: "/aagrapevine/" or "/".
+          p="${BASE_PATH%/}"
+          case "$p" in "" | "/") p="" ;; /*) ;; *) p="/$p" ;; esac
+          url="${BASE_URL%/}"
+          echo "path_prefix=${p}/" >> "$GITHUB_OUTPUT"
+          echo "site_url=${url}" >> "$GITHUB_OUTPUT"
+          echo "Building for ${url:-"(site.url from config/site.yml)"} with path prefix '${p}/'"
+
+      # The booth display (About page → "Booth display") keeps playing OFFLINE at a table with no internet, so the
+      # photos and videos of the committee's Drive booth folder (data/site/booth.json) are published with the site,
+      # at /about/booth/media/. They are far too big for git, so they live in .cache/booth-media/, and GitHub's
+      # Actions cache keeps that folder from one run to the next: each run downloads only what is new or changed.
+      # Restored here and saved right after the download (the two steps after it), like the translation models in
+      # the sync job — not with the all-in-one actions/cache, which saves only when its key was NOT an exact hit:
+      # with one key per booth.json, only the first run of each booth.json would ever be saved, and every later run
+      # (morning, midday, daily, each push) would download again whatever that first run could not save (Drive's
+      # "too many downloads" page, the time running out) — and throw it away. A saved copy's key is the fingerprint
+      # of booth.json and config/site.yml + a fingerprint of the files saved (their names and sizes); "restore-keys"
+      # brings back the newest copy saved for this booth.json, else the newest of any (most of its files still are).
+      - name: Restore the booth display's media (saved between runs)
+        id: boothmedia
+        uses: actions/cache/restore@v6
+        with:
+          path: .cache/booth-media
+          key: booth-media-v1-${{ hashFiles('data/site/booth.json', 'config/site.yml') }}
+          restore-keys: |
+            booth-media-v1-${{ hashFiles('data/site/booth.json', 'config/site.yml') }}-
+            booth-media-v1-
+
+      # scripts/build/booth-media.mjs (its header says it all): keeps what the cache brought back, deletes what is no
+      # longer in the folder, downloads the rest — a photo as Google's 1920-pixel picture of it, a video or sound
+      # file whole — and writes .cache/booth-media/manifest.json, which the build reads. The size limits are in
+      # config/site.yml → booth: max_file_mb (95 MB for one video or sound file; a bigger one is skipped) and
+      # max_total_mb (400 MB in all; never more than 800 MB, whatever it says — GitHub Pages takes sites up to 1 GB).
+      # If a file can't be saved (too big, over the limit, Drive's "too many downloads" page, no answer), a yellow
+      # warning names it (a failed download is simply tried again by the next run); the booth then shows that picture
+      # from Google's copy while online and leaves that video out. If the whole step fails, the site is still built
+      # and published (only without the saved copies): it never stops a deploy. The script's downloads end by the
+      # 15th minute, inside this step's 20, so the job always has time to publish.
+      - name: Download the booth display's photos and videos (Drive booth folder)
+        continue-on-error: true
+        timeout-minutes: 20
+        run: node scripts/build/booth-media.mjs
+
+      # The key of the folder as the download left it: booth.json's and config/site.yml's fingerprint, then a
+      # fingerprint of the saved files' names and sizes (each name starts with its Drive file's stamp, so a new
+      # version of a file is a new name). A run that saved nothing new has the very key it restored, and the next
+      # step saves nothing; an empty folder (nothing to show offline) gives no key, and nothing is saved either.
+      - name: Work out the booth display's media cache key
+        id: boothkey
+        if: ${{ !cancelled() }}
+        env:
+          BOOTH_KEY: ${{ hashFiles('data/site/booth.json', 'config/site.yml') }}
+        run: |
+          set -euo pipefail
+          fp=""
+          dir=.cache/booth-media/files
+          if [ -d "$dir" ] && [ -n "$(find "$dir" -maxdepth 1 -type f -print -quit)" ]; then
+            fp="$(cd "$dir" && find . -maxdepth 1 -type f -printf '%f %s\n' | LC_ALL=C sort | sha256sum | cut -c1-16)"
+          fi
+          key="${fp:+booth-media-v1-${BOOTH_KEY}-${fp}}"
+          echo "key=${key}" >> "$GITHUB_OUTPUT"
+          echo "Booth display media cache key: ${key:-(no saved files, nothing to keep)}"
+
+      # Saved before the build, so a build that fails later no longer loses this run's downloads; a cache that can't
+      # be saved (GitHub's cache service busy, another run saving the same key) never stops a deploy.
+      - name: Save the booth display's media for the next run (only when this run changed it)
+        if: ${{ !cancelled() && steps.boothkey.outputs.key != '' && steps.boothkey.outputs.key != steps.boothmedia.outputs.cache-matched-key }}
+        continue-on-error: true
+        timeout-minutes: 5
+        uses: actions/cache/save@v6
+        with:
+          path: .cache/booth-media
+          key: ${{ steps.boothkey.outputs.key }}
+
+      - name: Build the website
+        env:
+          PATH_PREFIX: ${{ steps.addr.outputs.path_prefix }}
+          # Public address for feeds, share links and QR codes; it overrides
+          # site.url in config/site.yml, so a custom domain is picked up automatically.
+          SITE_URL: ${{ steps.addr.outputs.site_url }}
+          # A button or heading whose text is missing from src/_i18n/ stops the build here
+          # (GitHub Pages keeps the previous site) instead of showing its raw key on the live site.
+          I18N_STRICT: "1"
+        run: npx @11ty/eleventy
+
+      - name: Check the build
+        run: |
+          set -euo pipefail
+          test -s _site/index.html || { echo "::error::_site/index.html is missing — the build did not produce a home page."; exit 1; }
+          test -s _site/es/index.html || { echo "::error::_site/es/index.html is missing — the Spanish site was not built."; exit 1; }
+          test -s _site/assets/css/main.css || { echo "::error::The stylesheet was not built."; exit 1; }
+          # The Morning check (morning.yml) reads the LIVE build.json to see whether today's update is
+          # on the site; without it, it would start a morning refresh every time. Never blocks a deploy
+          # (the Code check fails on it before a change is merged).
+          test -s _site/build.json || echo "::warning::build.json is missing — the Morning check cannot see this build."
+          pages=$(find _site -name '*.html' | wc -l)
+          size=$(du -sm _site | cut -f1)
+          echo "Built ${pages} pages, ${size} MB."
+          echo "**Website:** ${pages} pages, ${size} MB" >> "$GITHUB_STEP_SUMMARY"
+          # GitHub Pages sites must stay under 1 GB.
+          if (( size > 900 )); then echo "::warning::The site is ${size} MB — GitHub Pages allows 1 GB. See docs/OPERATIONS.md → Repository size."; fi
+
+      - name: Upload the website
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+
+  # -------------------------------------------------------------------
+  report:
+    name: Report sources that stopped updating
+    needs: sync
+    # A source that fails now and then is normal (the site keeps its older items).
+    # One that has not updated for a week needs a person, so this job keeps ONE
+    # GitHub issue open ("A content source has stopped updating") while that is
+    # the case — GitHub e-mails the repository's watchers when it opens — and
+    # closes it by itself when every source works again. It never fails the run.
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.sync.outputs.health != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write            # to open / update / close the report issue
+    steps:
+      - name: Open, update or close the report issue
+        continue-on-error: true      # e.g. Issues switched off in the repository settings
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          HEALTH: ${{ needs.sync.outputs.health }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+
+          TITLE = "A content source has stopped updating"
+          h = json.loads(os.environ["HEALTH"])
+          stale, site, limit = h.get("stale") or [], h.get("site") or "", h.get("days") or 7
+          run_url, repo_url = os.environ["RUN_URL"], os.environ["REPO_URL"]
+          # What the chair can do about each kind of source (everything else: generic advice).
+          HINTS = {
+              "drive": "check that the committee folder (config/site.yml → drive → root_folder_id) is still "
+                       "shared as **Anyone with the link — Viewer** (README → section 2).",
+              "instagram": "Instagram keeps refusing the site's robot. The last posts stay on the site; for a lasting "
+                           "fix add the free Instagram token (README → section 10 b) or list posts by hand (section 9).",
+          }
+
+          def gh(*args):
+              r = subprocess.run(["gh", *args], capture_output=True, text=True)
+              if r.returncode:
+                  raise SystemExit(f"'gh {' '.join(args[:2])}' failed: {r.stderr.strip()}")
+              return r.stdout
+
+          def code(s):   # inline code: keeps "@name" in error texts from notifying GitHub users
+              s = re.sub(r"\s+", " ", str(s or "")).replace("`", "'").strip()
+              return f"`{s}`" if s else "—"
+
+          issues = json.loads(gh("issue", "list", "--state", "open", "--limit", "100",
+                                 "--json", "number,title,body") or "[]")
+          issue = next((i for i in issues if i.get("title") == TITLE), None)
+
+          if not stale:
+              if issue:
+                  gh("issue", "close", str(issue["number"]), "--comment",
+                     f"Every content source is updating again ({run_url}). Closing automatically.")
+                  print(f"Closed issue #{issue['number']}")
+              else:
+                  print(f"No source has been failing for {limit}+ days.")
+              raise SystemExit(0)
+
+          rows, todo = [], []
+          for x in stale:
+              when = (f"{x['updated'][:10]} ({x['days']} days ago)" if x.get("updated") and x.get("days") is not None
+                      else "never")
+              rows.append(f"| {x['label']} | {when} | {code(x.get('error'))} |")
+              todo.append(f"- **{x['label']}:** " + HINTS.get(x.get("source"),
+                          "the other website may have changed or be down. Send this issue to whoever helps with the website."))
+          keys = sorted(str(x.get("source")) for x in stale)
+          status = f"[Status page]({site}/status/) · " if site else ""
+          body = "\n".join([
+              f"**{len(stale)} content source(s) of the website have not updated for {limit} days or more.** "
+              "The website still works and keeps showing their older items, but nothing new arrives from "
+              "them until the cause is fixed.", "",
+              "| Source | Last successful update | Problem reported |", "|---|---|---|", *rows, "",
+              "**What to do**", "", *todo, "",
+              f"{status}[Latest run]({run_url}) · [Troubleshooting]({repo_url}#15-troubleshooting)", "",
+              "*This issue is updated after every run of Update & Deploy and closes by itself once every "
+              "source works again.*",
+              f"<!-- failing-sources: {','.join(keys)} -->",
+          ])
+
+          if not issue:
+              gh("issue", "create", "--title", TITLE, "--body", body)
+              print("Opened a new issue:\n" + body)
+              raise SystemExit(0)
+          num = str(issue["number"])
+          m = re.search(r"<!-- failing-sources: ([^>]*?) -->", issue.get("body") or "")
+          before = set(filter(None, (m.group(1) if m else "").split(",")))
+          gh("issue", "edit", num, "--body", body)       # silent: edits send no e-mail
+          added = [x["label"] for x in stale if str(x.get("source")) not in before]
+          if added:                                      # a comment does: only for a NEW problem
+              gh("issue", "comment", num, "--body", "Now also not updating: " + ", ".join(added)
+                 + f". See the updated description above ({run_url}).")
+          print(f"Updated issue #{num}" + (f" (new: {', '.join(added)})" if added else ""))
+          PY

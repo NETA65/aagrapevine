@@ -1,0 +1,195 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}photos/index.html"
+layout: layouts/base.njk
+pageKey: photos
+titleKey: nav.photos
+descKey: committee.photos.meta_desc
+pageScripts: ["/assets/vendor/glightbox.min.js", "/assets/js/committee.js"]
+pageStyles: ["/assets/vendor/glightbox.min.css"]
+---
+{#- Photo albums from the committee's Google Drive "photos" folder.
+    Every sub-folder becomes an album. Lightbox: GLightbox (MIT, self-hosted).
+    Below the shared page hero and the committee sub-nav: the album index (grid-cards) and one photo
+    grid per album (2 → 3 → 4 → 5 → 6 columns) — or, with no photos yet, the shared page-level empty
+    card (ui.pageEmpty; the one visitor action is the hero's). Then "Protecting anonymity" (what is great to share
+    | what never is), and, collapsed, "For committee members · Share photos" (ui.memberHelp,
+    #share-photos): the steps, where photos go, Open Drive folder · Ask for upload access.
+    The hero's right-hand card (the shared hero aside, "Next chance for photos"): the next two in-person
+    NETA 65 events — a booth, a workshop, an assembly (db.events through cmEvents: no committee meetings,
+    no online events, no later dates of a monthly series, not the magazines' own calendars) — each
+    linking to its card on /events/. Nothing the page shows (no pictures: the albums follow right below;
+    no anonymity rules: "Protecting anonymity" has them). Hidden on smaller screens and at larger text. -#}
+{% import "macros/ui.njk" as ui with context %}
+{%- set albums = db.drive.items | cmAlbums(lang) -%}
+{%- set nPhotos = albums | pluck("photos") | sum -%}
+{%- set nVideos = albums | pluck("videos") | sum -%}
+{%- set di = db.status | cmDriveInfo(site) -%}
+{%- set photoEvs = [] -%}
+{%- for ev in db.events.items | cmEvents(site, lang) | cmCollapseRecurring %}{% if photoEvs.length < 2 and not ev.past and not ev.committee and not ev.later and not ev.isOnline and ev.category != "gv-calendar" and ev.category != "lv-calendar" %}{% set _n = photoEvs.push(ev) %}{% endif %}{% endfor -%}
+{%- set toneOf = { gv: "gv", lv: "lv", booth: "lv", assembly: "grape" } -%}
+
+{% call(slot) ui.pageHero(lang, "nav.photos" | t(lang), "committee.photos.hero_sub" | t(lang), "images", "committee.photos.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("committee.photos.aside_title" | t(lang), lang, { id: "photos-aside-title", icon: "camera", lead: "committee.photos.aside_lead" | t(lang) }) %}
+  {%- if photoEvs.length %}
+  <ul class="hero-aside-links" role="list">
+    {%- for ev in photoEvs %}{% set evTone = ev | eventTone %}
+    <li>{{ ui.heroAsideLink({ href: ("/events/" | lurl(lang)) + "#" + ev.anchor, label: ev.title, text: (ev.rangeLabel if ev.multiDay else ((ev.startIso | fmtDate(lang, "short")) + (" · " + ev.timeLabel if ev.timeLabel else ""))), icon: "calendar-days", tone: toneOf[evTone] or "vine" }, lang) }}</li>
+    {%- endfor %}
+  </ul>
+  {%- else %}
+  <p class="hero-aside-text">{{ "committee.photos.aside_none" | t(lang) }}</p>
+  <p class="mt-3"><a class="hero-aside-cta" href="{{ '/events/' | lurl(lang) }}">{% icon "calendar-days", "size-4 shrink-0" %}{{ "committee.ann.all_events" | t(lang) }}</a></p>
+  {%- endif %}
+  {% endcall %}
+{%- else %}
+  <div class="hero-actions">
+    {#- one visitor action (the committee how-to is ui.memberHelp, below) -#}
+    {% if albums | length %}
+    <a class="btn-light" href="#albums">{% icon "layout-grid", "size-4" %} {{ "committee.photos.browse" | t(lang) }}</a>
+    {% else %}
+    <a class="btn-light" href="{{ '/instagram/' | lurl(lang) }}">{% icon "instagram", "size-4" %} {{ "committee.photos.see_instagram" | t(lang) }}</a>
+    {% endif %}
+  </div>
+  {% if albums | length %}
+  {{ ui.heroStats([
+    { value: albums | length, label: "committee.photos.stat_albums" | t(lang) },
+    { value: nPhotos, label: "committee.photos.stat_photos" | t(lang) },
+    { value: (nVideos if nVideos else null), label: "committee.photos.stat_videos" | t(lang) }
+  ]) }}
+  {% endif %}
+{%- endif %}
+{% endcall %}
+
+{% committeeNav lang, "photos", db %}
+<div hidden id="cm-lb-i18n" data-label="{{ 'nav.photos' | t(lang) }}" data-close="{{ 'common.close' | t(lang) }}" data-prev="{{ 'committee.photos.prev' | t(lang) }}" data-next="{{ 'committee.photos.next' | t(lang) }}"></div>
+
+{% if albums | length %}
+{#- ---------- Album index ---------- -#}
+<section class="container-page section pt-10 sm:pt-12" aria-labelledby="albums-h">
+  <div id="albums">{{ ui.sectionHead("committee.photos.albums" | t(lang), "committee.photos.albums_sub" | t(lang), "", "", "layout-grid", { eyebrow: "nav.photos" | t(lang), id: "albums-h", lang: lang }) }}</div>
+  <ul class="grid-cards">
+    {% for a in albums %}
+    <li>
+      <a href="#{{ a.slug }}" class="card card-link group block overflow-hidden no-underline">
+        <div class="cm-mosaic cm-mosaic-{{ a.cover | length }}" aria-hidden="true">
+          {% for c in a.cover %}<span>{% icon "image", "size-7 cm-mosaic-ph" %}<img src="{{ c.thumb }}" alt="" loading="lazy" decoding="async" width="600" height="600" referrerpolicy="no-referrer" onerror="this.remove()"></span>{% else %}<span class="grid place-items-center text-faint">{% icon "images", "size-10" %}</span>{% endfor %}
+        </div>
+        <div class="flex items-start justify-between gap-3 p-5">
+          <div class="min-w-0">
+            <h3 class="h-card truncate group-hover:text-gv">{{ a.title }}</h3>
+            <p class="meta-row mt-1 text-sm text-muted">
+              <span>{{ ("committee.photos.count_one" if a.photos == 1 else "committee.photos.count") | t(lang, { n: a.photos }) }}</span>
+              {%- if a.videos %}<span>{{ ("committee.photos.count_videos_one" if a.videos == 1 else "committee.photos.count_videos") | t(lang, { n: a.videos }) }}</span>{% endif %}
+              {%- if a.newest %}<time datetime="{{ a.newest }}">{{ a.newest | fmtDate(lang, "month") }}</time>{% endif %}
+            </p>
+          </div>
+          {% if a.hasNew %}<span class="badge-new shrink-0">{{ "common.new" | t(lang) }}</span>{% endif %}
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{#- ---------- Albums ---------- -#}
+{% for a in albums %}
+{% if a.alias and a.alias != a.slug %}<span id="{{ a.alias }}" class="block" aria-hidden="true"></span>{% endif %}
+<section id="{{ a.slug }}" class="container-page cm-album" x-data="cmAlbum()" aria-labelledby="{{ a.slug }}-h">
+  <div class="border-t border-line pt-8">
+  {% call ui.sectionHead(a.title, "", "", "", "images", { eyebrow: a.panelLabel + ((" · " + (a.newest | fmtDate(lang, "month"))) if a.newest else ""), id: a.slug + "-h", lang: lang }) %}
+    <button type="button" class="btn-secondary btn-sm" data-cm-open-gallery="{{ a.slug }}">{% icon "maximize", "size-4" %} {{ "committee.photos.slideshow" | t(lang) }}</button>
+    <button type="button" class="btn-ghost btn-sm" data-share="{{ page.url | siteUrl(site) }}#{{ a.slug }}" data-share-title="{{ a.title }} — {{ 'nav.photos' | t(lang) }} NETA 65">{% icon "share-2", "size-4" %} {{ "common.share" | t(lang) }}</button>
+    <a class="btn-ghost btn-sm" href="#albums" aria-label="{{ 'committee.photos.back_to_albums' | t(lang) }}">{% icon "arrow-up", "size-4" %}</a>
+  {% endcall %}
+  </div>
+  {#- An album of 5+ photos opens with a big first photo and shows only as many photos as
+      fill whole rows at the current column count (committee.css, "photo grid"); "Show all"
+      reveals the rest. Without JavaScript every photo shows. -#}
+  {%- set feat = a.count >= 5 -%}
+  <ul class="cm-photo-grid{{ ' has-feature' if feat }}" :class="all && 'is-all'">
+    {#- data-title / data-description go through cmLbText: GLightbox inserts them with
+        innerHTML, so a Drive file or folder name must be escaped twice (XSS). -#}
+    {% for p in a.items %}
+    <li class="{{ 'cm-photo-feature' if loop.first and feat }}">
+      <a href="{{ p.full }}" class="cm-photo glightbox-cm" data-gallery="{{ a.slug }}" data-type="{{ 'external' if p.isVideo else 'image' }}"{% if p.isVideo %} data-width="960px" data-height="540px"{% endif %}
+         data-title="{{ p.title | cmLbText }}" data-description="{{ (a.title + ((' · ' + (p.date | fmtDate(lang, 'medium'))) if p.date else '')) | cmLbText }}"
+         aria-label="{{ ('committee.photos.open_video' if p.isVideo else 'committee.photos.open_photo') | t(lang, { title: p.title }) }}">
+        {% if p.thumb %}<img src="{{ p.thumb }}" alt="{{ p.title }}" loading="lazy" decoding="async" width="600" height="600" referrerpolicy="no-referrer" onerror="this.closest('.cm-photo').classList.add('is-broken')">{% endif %}
+        <span class="cm-photo-fallback" aria-hidden="true">{% icon "image", "size-8" %}</span>
+        {% if p.isVideo %}<span class="cm-play" aria-hidden="true">{% icon "play", "size-6 translate-x-px" %}</span>{% endif %}
+        <span class="cm-photo-cap" aria-hidden="true">{{ p.title }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {#- The button shows only at the column counts where photos are hidden (cm-more-N:
+      N columns → 11 / 12 / 13 / 12 / 15 photos shown at 2 / 3 / 4 / 5 / 6 columns). -#}
+  {%- set more = [] -%}
+  {%- if feat -%}
+  {%- for c in [[2, 11], [3, 12], [4, 13], [5, 12], [6, 15]] %}{% if a.count > c[1] and more.push("cm-more-" ~ c[0]) %}{% endif %}{% endfor -%}
+  {%- endif %}
+  {% if more | length %}
+  <div class="cm-more {{ more | join(' ') }} mt-5 text-center" x-show="!all" data-cm-js>
+    <button type="button" class="btn-secondary" @click="showAll()">{% icon "images", "size-4" %} {{ "committee.photos.show_all" | t(lang, { n: a.count }) }}</button>
+  </div>
+  {% endif %}
+</section>
+{% endfor %}
+
+{% else %}
+{#- ---------- No photos yet: the shared page-level empty card (the visitor action is the hero's) ---------- -#}
+<div class="container-page section pt-10 sm:pt-12">
+  {{ ui.pageEmpty("images", "committee.photos.empty_title" | t(lang), "committee.photos.empty_text" | t(lang), { id: "photos-empty-h" }) }}
+</div>
+{% endif %}
+
+{#- ---------- Protecting anonymity: what is great to share | what never is ---------- -#}
+<section class="container-page section{{ ' pt-0' if not (albums | length) else ' pt-8 sm:pt-10' }}" aria-labelledby="anon-h">
+  {{ ui.sectionHead("committee.photos.anon_title" | t(lang), "committee.photos.anon_text" | t(lang), "", "", "shield-check", { eyebrow: "committee.photos.anon_eyebrow" | t(lang), tone: "text-vine", id: "anon-h", lang: lang }) }}
+  <div class="card card-pad grid gap-6 sm:grid-cols-2 sm:gap-0 sm:divide-x sm:divide-line">
+    <div class="sm:pr-8">
+      <h3 class="card-h"><span class="text-vine!">{% icon "circle-check", "size-5" %}</span>{{ "committee.photos.ok_title" | t(lang) }}</h3>
+      <ul class="mt-4 grid gap-2.5">
+        {% for k in ["ok_booths", "ok_literature", "ok_venue"] %}
+        <li class="flex items-start gap-2.5"><span class="mt-0.5 text-vine">{% icon "circle-check", "size-4" %}</span><span class="text-ink">{{ ("committee.photos." + k) | t(lang) }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="sm:pl-8">
+      <h3 class="card-h"><span class="text-danger!">{% icon "circle-x", "size-5" %}</span>{{ "committee.photos.never_title" | t(lang) }}</h3>
+      <ul class="mt-4 grid gap-2.5">
+        <li class="flex items-start gap-2.5"><span class="mt-0.5 text-danger">{% icon "scan-face", "size-4" %}</span><span class="text-ink">{{ "committee.photos.no_faces" | t(lang) }}</span></li>
+        <li class="flex items-start gap-2.5"><span class="mt-0.5 text-danger">{% icon "id-card", "size-4" %}</span><span class="text-ink">{{ "committee.photos.no_names" | t(lang) }}</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+{#- ---------- For committee members (collapsed): how to share photos ---------- -#}
+<div class="container-page">
+  {% call ui.memberHelp(lang, "committee.photos.how_title" | t(lang), { id: "share-photos" }) %}
+  <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
+    <div>
+      <ol class="space-y-4">
+        {% for k in ["1", "2", "3"] %}
+        <li class="flex gap-3.5">
+          <span class="step-num" aria-hidden="true">{{ k }}</span>
+          <p class="leading-relaxed text-muted">{{ ("committee.photos.how_" + k) | t(lang, { panel: (di.panel.label if di.panel else "Panel") }) }}</p>
+        </li>
+        {% endfor %}
+      </ol>
+      <div class="mt-6 flex flex-wrap gap-2.5">
+        {% if di.url %}<a class="btn-primary" href="{{ di.url }}" target="_blank" rel="noopener">{% icon "folder-open", "size-4" %} {{ "committee.drive.open_folder" | t(lang) }}</a>{% endif %}
+        <a class="btn-secondary" href="mailto:{{ site.contact_email }}?subject={{ 'committee.photos.mail_subject' | t(lang) | urlencode }}">{% icon "mail", "size-4" %} {{ "committee.docs.ask_access" | t(lang) }}</a>
+      </div>
+    </div>
+    <div class="panel-muted">
+      <p class="eyebrow">{{ "committee.photos.empty_where" | t(lang) }}</p>
+      {% cmDrivePath lang, di, "photos/" + ("committee.photos.example_album" | t(lang)), "IMG_0142.jpg" %}
+      {% if not (albums | length) %}{% cmDriveChecked lang, di %}{% endif %}
+    </div>
+  </div>
+  {% endcall %}
+</div>

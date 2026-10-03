@@ -1,0 +1,1005 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}index.html"
+layout: layouts/base.njk
+pageKey: home
+descKey: home.meta_desc
+pageScripts: ["/assets/vendor/lite-yt-embed.js", "/assets/js/home.js", "/assets/js/shop.js"]
+pageStyles: ["/assets/vendor/lite-yt-embed.css"]
+---
+{#- ======================================================================
+    HOME PAGE — NETA 65 Grapevine / La Viña Committee (EN + ES)
+    Every section reads synced data through `D` (= db | homeData) and hides
+    itself or shows a friendly empty state when its data is empty.
+    Every section opens with ui.sectionHead (eyebrow form, its tone colour, the "all" link on
+    the right) and is left out when it has no data — Home never shows an empty section.
+    Section order: hero (the shared ui.pageHero, with the next-meeting card on the
+    right from 1024px) · meeting card (below 1024px) + site counters · the Grapevine / La Viña
+    daily quote (a second card in the same page-overlap block) · the bulletin · magazines (+ write
+    for the magazines, + this month in the Shop: Book of the Month · subscriptions · monthly
+    toolkit) · listen & watch · PUBLISHED WRITERS · events · library · instagram · committee uploads
+    · the service band. (No mixed "newest" strip: every kind has its own section, and the hero's
+    "See what's new" opens the full feed.)
+    The hero art (hero-canvas.js) is loaded by layouts/base.njk on every page.
+    Between the daily builds (and in a copy kept for offline use) what has ended hides itself: each
+    bulletin post with an `expires` day, each dated "Write for the magazines" theme and each upcoming event
+    carries data-gv-expire (the moment it is over: fsDayEnd, homeEventEnd), and the bulletin and events
+    sections — and the themes' list — are data-gv-expire-list: they go away once all of theirs have
+    (src/assets/js/app.js GV.expire, checked every minute). The 4th event, hidden on a phone, is a spare
+    (data-gv-expire-spare): it shows there once an earlier one has ended. The phone's "See the 3 upcoming
+    themes" link counts down with them (data-gv-expire-count); grid columns are not redrawn (the next build
+    does that) — except the bulletin's two cards: once one has gone, the other takes the whole row
+    (home.css .home-ann-grid), as a post alone does.
+    ====================================================================== -#}
+{% import "macros/ui.njk" as ui with context %}
+{% set L = lang %}
+{% set D = db | homeData %}
+{% set lastUpdate = D.status.generated if (D.status and D.status.generated) else site.built %}
+{#- Podcast shows, as on /listen/ (AA Grapevine's Podcast + the Weekly Open recordings):
+    name, short name ("Weekly Open") and the `weekly` flag. Episode / video titles use the
+    shared `mediaTitle` filter, so they read the same as on /listen/ and /watch/. -#}
+{% set epShows = D.episodes | mediaShowList(site.sources.podcasts, D.episodes | mediaItems("episodes"), L) %}
+
+{#- ---------- local macros ---------- -#}
+
+{#- Decorative tile for items without a picture (article / pdf / post / drive doc). -#}
+{% macro tile(item, L) %}
+{%- set tone = item | homeTone -%}
+<div class="home-tile home-tone-{{ tone }} absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center" aria-hidden="true">
+  {% if item.kind == "article" %}
+  <span class="font-display text-2xl font-semibold italic leading-none">{{ "La Viña" if tone == "lv" else "Grapevine" }}</span>
+  {% if item.extra and item.extra.issue_label %}<span class="text-[0.7rem] font-semibold uppercase tracking-[0.14em] opacity-80">{{ item.extra.issue_label | homeIssueLabel(L) }}</span>{% endif %}
+  {% elif item.kind == "pdf" %}
+  <span class="home-sheet"><span class="home-sheet-tag">{% icon "file-down", "my-0.5 block size-3" %}</span></span>
+  {% else %}
+  <span class="grid size-14 place-items-center rounded-2xl bg-surface/70 shadow-sm">{% icon item.kind | homeKindIcon, "size-7" %}</span>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{#- Remote images can vanish (expired CDN links, private Drive files): drop them and let the tile underneath show. -#}
+{% macro img(src, cls="", alt="") %}<img src="{{ src }}" alt="{{ alt }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="{{ cls }}" onerror="this.remove()">{% endmacro %}
+
+{#- Compact "next committee meeting" card with a live countdown (home.js → homeMeeting).
+    v = "hero": dark glass, in the hero's right column (1024px and up);
+    v = "page": light card right below the hero (below 1024px). Only one of the two is
+    ever displayed, so each has its own heading id. Meeting ID and passcode are on /meetings/
+    ("Details"); the Zoom link carries the passcode. -#}
+{% macro meetingCard(v, L, meeting, mt) %}
+{%- set dark = v == "hero" -%}
+{%- set tid = "home-meeting-title" if dark else "home-meeting-title-2" -%}
+<div class="home-meet home-meet--{{ v }}" role="group" aria-labelledby="{{ tid }}"
+     x-data="homeMeeting" data-rule="{{ meeting.rule | json }}" data-start="{{ meeting.next.start }}" data-end="{{ meeting.next.end }}"
+     data-cal-title="{{ 'home.meeting_cal_title' | t(L) }}" data-cal-desc="{{ 'home.meeting_cal_desc' | t(L) }} {{ mt.zoom_url }}" data-cal-loc="{{ mt.zoom_url }}">
+  <div class="home-meet-info">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <h2 id="{{ tid }}" class="home-meet-eyebrow">{{ "home.meeting_eyebrow" | t(L) }}</h2>
+      <span x-show="live" x-cloak class="home-live-pill">{{ "home.meeting_live" | t(L) }}</span>
+    </div>
+    <p class="home-meet-date" x-ref="date" x-text="dateLabel">{{ meeting.next.start | homeMeetingDate(L) }}</p>
+    <p class="home-meet-time">
+      {% icon "clock", "size-4 shrink-0" %}<span x-ref="time" x-text="timeLabel">{{ meeting.next.start | homeTimeRange(meeting.next.end, L) }}</span>
+      <span aria-hidden="true">·</span><span>{{ mt.platform or "Zoom" }}</span>
+    </p>
+    {% if not dark and meeting.rule and meeting.rule.n %}
+    <p class="home-meet-rule">{{ "home.meeting_rule" | t(L, { nth: ("home.nth." ~ meeting.rule.n) | t(L), weekday: meeting.rule.weekday | homeWeekday(L) }) }}</p>
+    {% endif %}
+  </div>
+  <div class="home-meet-count" role="timer" aria-label="{{ 'home.countdown_aria' | t(L) }}" x-show="!live">
+    {% for u in [["d", "common.days"], ["h", "common.hours"], ["m", "common.min"], ["s", "common.sec"]] %}
+    <div class="home-count"><span class="home-count-n" x-text="pad({{ u[0] }})">--</span><span class="home-count-l">{{ u[1] | t(L) }}</span></div>
+    {% endfor %}
+  </div>
+  <div class="home-meet-actions">
+    <a class="{{ 'btn-light' if dark else 'btn-primary' }} home-meet-join" href="{{ mt.zoom_url }}" target="_blank" rel="noopener">{% icon "video", "size-4" %} {{ "home.meeting_join" | t(L) }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
+    <button type="button" class="{{ 'btn-on-dark' if dark else 'btn-secondary' }} btn-sm" x-show="ready" x-cloak @click="addToCalendar()" title="{{ 'common.add_to_calendar' | t(L) }}">{% icon "calendar-plus", "size-4" %} {{ "home.meeting_add_cal" | t(L) }}</button>
+    <a class="{{ 'btn-on-dark' if dark else 'btn-secondary' }} btn-sm home-meet-more" href="{{ '/meetings/' | lurl(L) }}">{{ "home.meeting_details_short" | t(L) }} {% icon "arrow-right", "size-3.5" %}<span class="sr-only"> — {{ "home.meeting_eyebrow" | t(L) }}</span></a>
+  </div>
+</div>
+{% endmacro %}
+
+{#- One published-writer card (Published writers spotlight). featured = Area 65 writer:
+    wider (two grid columns, picture on the left from 640px), vine-green accent + ribbon.
+    The writer's name is printed exactly as the magazine printed it ("Jake B."). -#}
+{% macro spotCard(a, L, featured) %}
+{%- set x = a.extra or {} -%}
+{%- set g = x.geo or {} -%}
+{%- set isLv = x.publication == "lv" -%}
+{%- set mag = "La Viña" if isLv else "Grapevine" -%}
+{%- set ttl = a | tx("title", L) -%}
+{%- set sec = a | tx("section", L) -%}
+{%- set topic = a | tx("topic", L) -%}
+{%- set kicker = sec or topic -%}
+{%- set kickerOrig = x.section if sec else x.topic -%}
+{%- set place = g["label_" ~ L] or (a | tx("author_location", L)) or x.author_location -%}
+{%- set writer = (x.author or "") | trim -%}
+{%- set ini = writer | homeInitials -%}
+{%- set pic = a | homeImage -%}
+{%- set sum = (a | tx("summary", L)) if featured else "" -%}
+{%- set foreign = a.lang and a.lang != L and a.lang != "und" -%}
+<article class="home-spot-card card card-link group relative flex h-full overflow-hidden{{ ' is-featured' if featured }}">
+  <div class="home-spot-media home-tone-{{ 'lv' if isLv else 'gv' }}">
+    <div class="home-tile absolute inset-0 flex flex-col items-center justify-center gap-1 p-4 text-center" aria-hidden="true">
+      {% icon "grapes", "size-7 opacity-70" %}
+      <span class="font-display text-xl font-semibold italic leading-none">{{ mag }}</span>
+    </div>
+    {% if pic %}{{ img(pic, "absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.04]") }}{% endif %}
+    {% if featured %}<span class="home-spot-ribbon">{% icon "award", "size-3.5 shrink-0" %} {{ "home.spot_featured" | t(L) }}</span>{% endif %}
+  </div>
+  <div class="home-spot-body">
+    <div class="flex items-center gap-3">
+      <span class="home-spot-avatar home-tone-{{ 'vine' if featured else ('lv' if isLv else 'gv') }}" aria-hidden="true">{% if ini %}{{ ini }}{% else %}{% icon "feather", "size-5" %}{% endif %}</span>
+      <div class="min-w-0">
+        <h3 class="home-spot-writer">{{ writer or ("home.spot_no_name" | t(L)) }}</h3>
+        {% if place %}<p class="home-spot-place">{% icon "map-pin", "size-3.5 shrink-0" %}<span class="min-w-0 truncate">{{ place }}</span></p>{% endif %}
+      </div>
+    </div>
+    <p class="home-spot-title"{% if foreign and ttl == a.title %} lang="{{ a.lang }}"{% endif %}>
+      <a href="{{ a.url }}" target="_blank" rel="noopener" class="no-underline after:absolute after:inset-0 {{ 'group-hover:text-lv' if isLv else 'group-hover:text-gv' }}">{{ ttl }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
+    </p>
+    {% if sum %}<p class="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted max-sm:hidden"{% if foreign and sum == a.summary %} lang="{{ a.lang }}"{% endif %}>{{ sum | excerpt(180) }}</p>{% endif %}
+    {% if x.issue_label or kicker or x.online_exclusive %}
+    <p class="home-spot-meta">
+      {%- set sep = joiner('<span aria-hidden="true">·</span>' | safe) -%}
+      {% if x.issue_label %}{{ sep() }}<span>{{ "home.issue_label" | t(L, { label: x.issue_label | homeIssueLabel(L) }) }}</span>{% endif %}
+      {% if kicker %}{{ sep() }}<span{% if foreign and kicker == kickerOrig %} lang="{{ a.lang }}"{% endif %}>{{ kicker }}</span>{% endif %}
+      {% if x.online_exclusive %}{{ sep() }}<span>{{ "home.spot_online" | t(L) }}</span>{% endif %}
+    </p>
+    {% endif %}
+    <p class="home-spot-foot">
+      {% if featured %}<span class="badge-vine">{% icon "grapes", "size-3" %} {{ "home.spot_badge_a65" | t(L) }}</span>
+      {% else %}<span class="home-badge-tx badge">{% icon "star", "size-3" %} {{ "home.spot_badge_tx" | t(L) }}</span>{% endif %}
+      <span class="{{ 'badge-lv' if isLv else 'badge-gv' }}"{% if isLv and L != "es" %} lang="es"{% endif %}>{{ mag }}</span>
+      {% if x.free === false %}<span class="inline-flex items-center gap-1 font-medium" title="{{ 'home.subscriber_help' | t(L) }}">{% icon "lock", "size-3" %} {{ "home.spot_subscriber" | t(L) }}</span>
+      {% elif x.free === true %}<span class="inline-flex items-center gap-1 font-medium text-vine">{% icon "lock-open", "size-3" %} {{ "home.free_read" | t(L) }}</span>{% endif %}
+      {{ ui.autoNote(a, L) }}
+    </p>
+  </div>
+</article>
+{% endmacro %}
+
+{#- One magazine column (Grapevine = blue, La Viña = amber): current cover + a few stories. -#}
+{% macro magColumn(pub, issue, L, site) %}
+{%- set isLv = pub == "lv" -%}
+{%- set mag = "La Viña" if isLv else "Grapevine" -%}
+{%- set src = site.sources.lavina if isLv else site.sources.grapevine -%}
+{%- set hub = src.base + src.magazine_hub -%}
+{%- set issueUrl = issue.url or hub -%}
+{%- set label = issue.label | homeIssueLabel(L) -%}
+{#- Every story shown is machine-translated from one language: say so once, not on each row. -#}
+{%- set mtFrom = issue.items | homeAllMachine(L) -%}
+<article class="card home-mag flex flex-col overflow-hidden" aria-labelledby="mag-{{ pub }}-title">
+  <header class="home-mag-head home-tone-{{ pub }} relative overflow-hidden px-5 pt-6 pb-6 sm:px-8 sm:pt-7">
+    {% if not issue.cover %}<svg class="home-mag-grapes" viewBox="0 0 120 120" aria-hidden="true"><g fill="currentColor"><circle cx="46" cy="52" r="11"/><circle cx="68" cy="52" r="11"/><circle cx="57" cy="70" r="11"/><circle cx="35" cy="70" r="11"/><circle cx="79" cy="70" r="11"/><circle cx="46" cy="88" r="11"/><circle cx="68" cy="88" r="11"/><circle cx="57" cy="106" r="11"/></g><path d="M57 40 C 58 26, 66 16, 80 12" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/></svg>{% endif %}
+    {#- The cover floats right, so on narrow screens the chips flow underneath it. -#}
+    <div class="relative flow-root">
+      {% if issue.cover %}
+      <a href="{{ issueUrl }}" target="_blank" rel="noopener" class="home-mag-cover float-right mb-2 ml-4 sm:ml-6">
+        <img src="{{ issue.cover }}" alt="{{ 'home.cover_alt' | t(L, { mag: mag, label: label }) }}" width="480" height="686" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.parentElement.remove()">
+      </a>
+      {% endif %}
+      <p class="text-xs font-semibold uppercase tracking-[0.16em] opacity-90">{{ ("home.lv_tagline" if isLv else "home.gv_tagline") | t(L) }}</p>
+      <h3 id="mag-{{ pub }}-title" class="mt-1 font-display text-4xl font-semibold italic sm:text-[2.6rem] md:max-lg:text-3xl"{% if isLv and L != "es" %} lang="es"{% endif %}>{{ mag }}</h3>
+      {% if issue.label %}
+      {#- Inline chips (not flex) so they can wrap around / below the floated cover. -#}
+      <p class="mt-4 -mb-2 text-sm font-semibold">
+        <span class="home-mag-chip bg-surface/80 shadow-sm">{% icon "book-open-text", "size-4 shrink-0" %} <span>{{ "home.issue_label" | t(L, { label: label }) }}</span></span>
+        {% if issue.topic %}<span class="home-mag-chip bg-surface/60"><span>{{ "home.issue_theme" | t(L) }} <span class="italic"{% if issue.topicLang %} lang="{{ issue.topicLang }}"{% endif %}>{{ issue.topic }}</span></span></span>{% endif %}
+      </p>
+      {% endif %}
+    </div>
+  </header>
+  {% if issue.items.length %}
+  {% if mtFrom %}<p class="home-mag-mt flex items-center gap-1.5 border-b border-line px-5 py-2.5 text-xs text-muted sm:px-8">{% icon "languages", "size-3.5 shrink-0" %} {{ ("home.mag_mt_from_" ~ mtFrom) | t(L) }}</p>{% endif %}
+  <ol class="flex-1 divide-y divide-line" role="list">
+    {% for a in issue.items %}
+    {%- set sum = a | tx("summary", L) -%}
+    {%- set ttl = a | tx("title", L) -%}
+    {%- set sec = a | tx("section", L) -%}
+    {%- set freeFlag = a.extra.free if a.extra else "" -%}
+    {#- Phones: three stories per magazine, titles only (no summary), keep the page short; the rest are one tap away. -#}
+    <li class="group relative px-5 py-4 transition hover:bg-surface-2/60 sm:px-8{% if loop.index > 3 %} max-sm:hidden{% endif %}">
+      {% if sec %}<p class="text-[0.7rem] font-semibold uppercase tracking-[0.12em] {{ 'text-lv' if isLv else 'text-gv' }}"{% if a.lang and a.lang != L and sec == a.extra.section %} lang="{{ a.lang }}"{% endif %}>{{ sec }}</p>{% endif %}
+      <h4 class="mt-0.5 font-display text-lg font-semibold leading-snug text-ink"{% if a.lang and a.lang != L and ttl == a.title %} lang="{{ a.lang }}"{% endif %}>
+        <a href="{{ a.url }}" target="_blank" rel="noopener" class="no-underline after:absolute after:inset-0 {{ 'group-hover:text-lv' if isLv else 'group-hover:text-gv' }}">{{ ttl }}</a>
+        <span class="inline-block align-middle text-faint">{% icon "arrow-up-right", "size-4" %}</span>
+      </h4>
+      {% if sum %}<p class="mt-1 line-clamp-2 text-sm leading-relaxed text-muted max-sm:hidden">{{ sum | excerpt(190) }}</p>{% endif %}
+      {% if freeFlag === true or freeFlag === false or (not mtFrom and ((a | machineFor(L)) or (a.lang and a.lang != L))) %}
+      <p class="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-faint">
+        {% if freeFlag === true %}<span class="badge-vine">{% icon "lock-open", "size-3" %} {{ "home.free_read" | t(L) }}</span>{% elif freeFlag === false %}<span class="inline-flex items-center gap-1 font-medium" title="{{ 'home.subscriber_help' | t(L) }}">{% icon "lock", "size-3" %} {{ "home.subscriber_only" | t(L) }}</span>{% endif %}
+        {% if not mtFrom %}{{ ui.langPill(a, L) }}{{ ui.autoNote(a, L) }}{% endif %}
+      </p>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <div class="flex flex-1 flex-col items-center justify-center gap-2 px-6 py-10 text-center sm:px-8">
+    <span class="grid size-12 place-items-center rounded-full bg-surface-2 text-faint">{% icon "book-open-text", "size-6" %}</span>
+    <p class="font-semibold text-ink">{{ "home.mag_empty_title" | t(L) }}</p>
+    <p class="max-w-sm text-sm text-muted">{{ ("home.mag_empty_lv" if isLv else "home.mag_empty_gv") | t(L) }}</p>
+  </div>
+  {% endif %}
+  <footer class="flex flex-wrap items-center gap-2 border-t border-line px-5 py-5 sm:px-8">
+    <a class="{{ 'btn-lv' if isLv else 'btn-primary' }}" href="{{ issueUrl if issue.items.length else hub }}" target="_blank" rel="noopener">{% icon "book-open", "size-4" %} {{ ("home.read_issue" if issue.items.length else "home.visit_site") | t(L) }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
+    {#- (Subscribe: the Shop row that closes this section — once, not on each magazine) -#}
+    {% if issue.total > 3 %}<a href="{{ ('/read/#' ~ pub ~ '-current') | lurl(L) }}" class="btn-secondary btn-sm ml-auto">{{ "home.issue_count" | t(L, { n: issue.total }) }} {% icon "arrow-right", "size-4" %}</a>{% endif %}
+  </footer>
+</article>
+{% endmacro %}
+
+{#- =====================================================================
+    1. HERO — the shared page hero (ui.pageHero: the committee's animated grapevine art,
+       same height as every other page) · headline, lead, two CTAs · from 1024px the
+       compact next-meeting card on the right (below 1024px it is the first block under
+       the hero, so the hero keeps its standard height on tablets and phones).
+    ===================================================================== -#}
+{%- set mt = site.meeting -%}
+{% call(slot) ui.pageHero(L, ("home.hero_title" | t(L)) | mdInline | safe, "home.hero_lead" | t(L), "", "home.hero_eyebrow" | t(L), { id: "homeHero", titleId: "home-title", aside: true, eyebrowIcon: "grapes" }) %}
+  {%- if slot == "aside" %}
+  {% if meeting.next %}{{ meetingCard("hero", L, meeting, mt) }}{% endif %}
+  {%- else %}
+  <div class="hero-actions home-hero-actions">
+    <a class="btn-light" href="{{ '/whats-new/' | lurl(L) }}">{% icon "sparkles", "size-4" %} {{ "home.cta_whats_new" | t(L) }}</a>
+    <a class="btn-on-dark" href="{{ '/library/' | lurl(L) }}">{% icon "library", "size-4" %} {{ "home.cta_library" | t(L) }}</a>
+  </div>
+  {%- endif %}
+{% endcall %}
+
+{#- Right below the hero, tucked into its faded edge (page-overlap): the next-meeting card
+    (below 1024px — from 1024px it is inside the hero) and the site counters (from 640px;
+    on phones the same sections are in the menu and further down the page). The counters
+    link to their pages, so the strip doubles as a quick way in.
+    Then the DAILY QUOTE card (db.quote ← scripts/sync/quote.py; homeDailyQuotes): Grapevine's Daily
+    Quote and La Viña's Cita Diaria exactly as published, each in its own language (lang set, never
+    translated), the page language's magazine first — side by side from 1024px, stacked below; on
+    phones (< 640px, with JS) only the page language's quote, the other behind one button.
+    Each quote shows ITS day; home.js adds "Today" / "Yesterday" in the visitor's browser (Central time)
+    and, for a quote that is not today's, names the link "Today's quote on …" (the official page has
+    moved on). Links: the quote on the official home page and the official e-mail sign-up (its
+    magazine named for screen readers). No other page repeats it; left out when there is no quote from
+    the last 2 days (two runs a day keep it current). -#}
+{%- set quotes = D.quote | homeDailyQuotes(L, 2) -%}
+{#- the bulletin's posts (section 4) are the first section after this block; without them the magazines
+    band follows it, so the block keeps the band's outside gap itself (mb-10 / sm:mb-12) -#}
+{%- set anns = (D.announcements.items | homeAnnouncements) | limit(2) -%}
+{%- set stats = [
+  { n: D.pdfs.items.length, key: "home.stat_pdfs", url: "/library/", icon: "file-text", tone: "gv" },
+  { n: D.episodes.items.length, key: "home.stat_episodes", url: "/listen/", icon: "headphones", tone: "grape" },
+  { n: D.videos.items.length, key: "home.stat_videos", url: "/watch/", icon: "circle-play", tone: "grape" },
+  { n: D.articles.items.length, key: "home.stat_articles", url: "/read/", icon: "book-open-text", tone: "lv" }
+] %}
+{%- set statCount = 0 %}{% for s in stats %}{% if s.n %}{% set statCount = statCount + 1 %}{% endif %}{% endfor %}
+{% if meeting.next or statCount or quotes.length %}
+<div class="container-page page-overlap home-under{{ ' mb-10 sm:mb-12' if not anns.length }}">
+  {% if meeting.next or statCount %}
+  <div class="card home-under-card{{ ' max-sm:hidden' if not meeting.next }}{{ ' lg:hidden' if not statCount }}">
+    {% if meeting.next %}<div class="home-under-meet lg:hidden">{{ meetingCard("page", L, meeting, mt) }}</div>{% endif %}
+    {% if statCount %}
+    <div class="home-under-stats">
+      <p class="home-under-label">{% icon "sprout", "size-4 shrink-0" %} {{ "home.stats_label" | t(L) }}</p>
+      <ul class="home-stats" role="list" aria-label="{{ 'home.stats_aria' | t(L) }}">
+        {% for s in stats %}{% if s.n %}
+        <li><a href="{{ s.url | lurl(L) }}" class="home-stat group">
+          <span class="home-stat-icon home-tone-{{ s.tone }}" aria-hidden="true">{% icon s.icon, "size-5" %}</span>
+          <span class="min-w-0"><span class="home-stat-n">{{ s.n | homeNum(L) }}</span> <span class="home-stat-l">{{ s.key | t(L) }}</span></span>
+        </a></li>
+        {% endif %}{% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% if quotes.length %}
+  <section class="card home-quote" aria-labelledby="quote-title">
+    <h2 id="quote-title" class="home-quote-title">{% icon "quote", "size-4 shrink-0" %} {{ "home.quote_title" | t(L) }}</h2>
+    <div class="home-quote-grid{{ ' is-single' if quotes.length == 1 }}" data-quote-grid>
+      {% for q in quotes %}
+      {%- set isLv = q.pub == "lv" -%}
+      {%- set mag = "La Viña" if isLv else "Grapevine" -%}
+      {% if not loop.first %}
+      <button type="button" class="home-q-toggle btn-ghost btn-sm" aria-expanded="false" aria-controls="quote-{{ q.pub }}" data-quote-toggle>{% icon "chevron-down", "size-4 shrink-0" %}<span>{{ ("home.quote_show_" ~ q.pub) | t(L) }}</span></button>
+      {% endif %}
+      <article id="quote-{{ q.pub }}" class="home-q home-tone-{{ q.pub }}{{ ' is-other' if not loop.first }}" aria-labelledby="quote-{{ q.pub }}-mag" data-quote-day="{{ q.date }}">
+        <div class="home-q-head">
+          <h3 id="quote-{{ q.pub }}-mag" class="home-q-mag"{% if isLv and L != "es" %} lang="es"{% endif %}>{{ mag }}</h3>
+          <p class="home-q-when"><span class="badge-new" data-quote-today hidden>{{ "home.quote_today" | t(L) }}</span><span class="badge-muted" data-quote-yesterday hidden>{{ "home.quote_yesterday" | t(L) }}</span><time datetime="{{ q.date }}">{{ q.day }}</time></p>
+          {% if q.lang != L %}<span class="badge-muted"><span class="uppercase" aria-hidden="true">{{ q.lang }}</span><span class="sr-only">{{ ('lang.' ~ q.lang) | t(L) }}</span></span>{% endif %}
+        </div>
+        <figure class="home-q-fig">
+          <blockquote class="home-q-text" lang="{{ q.lang }}" cite="{{ q.url }}"><p>{{ q.text }}</p></blockquote>
+          {% if q.attribution or q.source %}
+          <figcaption class="home-q-by">
+            {% if q.attribution %}<span class="block" lang="{{ q.lang }}">— {{ q.attribution }}</span>{% endif %}
+            {% if q.source %}<span class="block">{{ "home.quote_from" | t(L) }} <cite{% if (q.source_lang or q.lang) != L %} lang="{{ q.source_lang or q.lang }}"{% endif %}>{{ q.source }}</cite></span>{% endif %}
+          </figcaption>
+          {% endif %}
+        </figure>
+        <p class="home-q-links">
+          <a class="link tap-link" href="{{ q.url }}" target="_blank" rel="noopener"><span data-quote-link="this"{% if not q.fresh %} hidden{% endif %}>{{ "home.quote_more" | t(L, { host: q.host }) }}</span><span data-quote-link="today"{% if q.fresh %} hidden{% endif %}>{{ "home.quote_today_on" | t(L, { host: q.host }) }}</span><span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
+          {% if q.signup_url %}<a class="link tap-link" href="{{ q.signup_url }}" target="_blank" rel="noopener">{% icon "mail", "size-4 shrink-0" %}{{ "home.quote_email" | t(L) }}<span class="sr-only"> ({{ mag }}) {{ "home.opens_new_tab" | t(L) }}</span></a>{% endif %}
+        </p>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endif %}
+
+{#- =====================================================================
+    Data for every section first.
+    ===================================================================== -#}
+{% set spot = D | homeSpotlight(site.spotlight.home_days if site.spotlight else 60, site.spotlight.list_days if site.spotlight else null) %}
+{% set gvIssue = D.articles.items | homeLatestIssue("gv", 5, D.articles.issues, L) %}
+{% set lvIssue = D.articles.items | homeLatestIssue("lv", 5, D.articles.issues, L) %}
+{% set themes = D.editorial.items | homeThemes(4) %}
+{#- /es/: La Viña's themes first, like the magazine columns (magOrder) -#}
+{% if L == "es" %}{% set themes = (themes | where("extra.publication", "lv")).concat(themes | whereNot("extra.publication", "lv")) %}{% endif %}
+{% set epPick = D.episodes.items | homeEpisodes(D.episodes.shows or site.sources.podcasts) %}
+{% set ep = epPick.featured %}
+{% set moreEps = epPick.more %}
+{#- 5 videos: phones swipe through all 5; 2 × 2 from 640px, 4 in a row from 1024px, 5 from 1800px. -#}
+{% set vids = D.videos.items | homeVideos(5, ep, moreEps) %}
+{% set newestPdfs = D.pdfs.items | homeNewestPdfs(6) %}
+{% set posts = D.instagram.items | homeInstagram(6) %}
+{% set driveItems = D.drive.items | homeDrive(6) %}
+
+{#- =====================================================================
+    4. THE BULLETIN — its latest posts, pinned first; left out when there are none. The first
+       section after the page-overlap block (pt-10 / sm:pt-12); without it the magazines band
+       follows that block.
+    ===================================================================== -#}
+{% if anns.length %}
+<section class="container-page pt-10 pb-12 sm:pt-12 sm:pb-16" aria-labelledby="ann-title" data-gv-expire-list>
+  {{ ui.sectionHead("home.ann_title" | t(L), "home.ann_sub" | t(L), "/bulletin/" | lurl(L), "home.ann_all" | t(L), "megaphone", { eyebrow: "nav.bulletin" | t(L), tone: "text-vine", id: "ann-title", lang: L }) }}
+  <div class="home-ann-grid grid items-start gap-5 {{ 'lg:grid-cols-2' if anns.length > 1 }}">
+    {% for a in anns %}
+    {%- set body = a | tx("body_md", L) -%}
+    {%- set pinned = a.extra and a.extra.pinned -%}
+    {%- set annEnd = (a.extra.expires | fsDayEnd) if (a.extra and a.extra.expires) else "" -%}
+    <article class="home-ann card relative overflow-hidden p-6 sm:p-8" data-gv-expire-item{% if annEnd %} data-gv-expire="{{ annEnd }}"{% endif %}>
+      <p class="flex flex-wrap items-center gap-2 text-xs text-faint">
+        {% if pinned %}<span class="badge-vine">{% icon "pin", "size-3" %} {{ "home.pinned" | t(L) }}</span>{% endif %}
+        {% if a.is_new %}<span class="badge-new">{{ "common.new" | t(L) }}</span>{% endif %}
+        {% if a.date %}<time datetime="{{ a.date | isoDate }}">{{ a.date | fmtDate(L, "medium") }}</time>{% endif %}
+        {{ ui.autoNote(a, L) }}
+      </p>
+      <h3 class="card-h mt-2">{{ a | tx("title", L) }}</h3>
+      {% if body and body.length <= 700 %}
+      {#- the card's title is an h3: the post's own headings start at h4 (cm-md: committee.css) -#}
+      <div class="prose-site cm-md mt-2 text-muted">{{ body | md({ h: 4, lang: L }) | safe }}</div>
+      {% else %}
+      <p class="mt-2 leading-relaxed text-muted">{{ (a | tx("summary", L)) | excerpt(320) }}</p>
+      <a class="link tap-link mt-3 text-sm" href="{{ (a.url if (a.url and a.url.startsWith('/bulletin/')) else '/bulletin/') | lurl(L) }}">{{ "common.read_more" | t(L) }}</a>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{#- =====================================================================
+    5. FROM THE MAGAZINES — the latest Grapevine + La Viña issues side by side (La Viña first on
+       /es/); on screens at least 1536px wide AND 896px tall the "Write for the magazines" themes are a
+       third column that sticks while the magazines scroll (home.css; the tall-2xl variant) — on
+       shorter windows they stay the full-width row under both magazines, so no column ends short.
+       Closing row: this month in the Shop — Book of the Month · subscriptions · the monthly
+       toolkit, as three compact link cards (the Shop page is the ONE home of the prices/dates).
+    ===================================================================== -#}
+{%- set magOrder = ["lv", "gv"] if L == "es" else ["gv", "lv"] -%}
+{%- set hBotm = db.shop | shopBotm(L) -%}
+{%- set subsFrom = db.shop | shopFromMonthly -%}
+{%- set shopHref = "/shop/" | lurl(L) -%}
+{%- set hSoon = null -%}
+{#- the card runs until the LAST offer ends -#}
+{%- for b in hBotm %}{% if b.ends and (not hSoon or b.ends > hSoon.ends) %}{% set hSoon = b %}{% endif %}{% endfor -%}
+{%- set hPct = hBotm[0].pct if (hBotm.length and (hBotm.length == 1 or hBotm[0].pct == hBotm[1].pct)) else 0 -%}
+<section class="section section-band" aria-labelledby="mag-title">
+  <div class="container-page">
+    {{ ui.sectionHead("home.mag_title" | t(L), "home.mag_sub" | t(L), "/read/" | lurl(L), "home.mag_all" | t(L), "book-open", { eyebrow: "home.mag_eyebrow" | t(L), tone: "text-gv", id: "mag-title", lang: L }) }}
+    {#- the two magazines side by side from 768px (tablets too); the themes panel spans below them -#}
+    <div class="home-mags grid grid-cols-1 gap-6 md:grid-cols-2{{ ' has-write' if themes.length }}">
+      {% for pub in magOrder %}{{ magColumn(pub, lvIssue if pub == "lv" else gvIssue, L, site) }}{% endfor %}
+
+      {% if themes.length %}
+      <div class="home-write flex flex-col rounded-[var(--radius-card)] border border-line bg-paper p-5 sm:p-7 md:col-span-2 tall-2xl:col-span-1">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="min-w-0">
+            <h3 class="card-h"><span class="text-grape!">{% icon "pen-line", "size-5" %}</span>{{ "home.write_title" | t(L) }}</h3>
+            <p class="mt-1 max-w-xl text-sm text-muted">{{ "home.write_sub" | t(L) }}</p>
+          </div>
+          <a href="{{ '/contribute/' | lurl(L) }}" class="btn-secondary btn-sm max-sm:hidden">{% icon "feather", "size-4" %} {{ "home.write_cta" | t(L) }}</a>
+        </div>
+        {#- Phones: the themes fold into one link; 640px up: the theme cards (stacked in the tall-2xl column). -#}
+        {#- … and its count goes down as their deadlines pass (app.js GV.expire: data-gv-expire-count) -#}
+        {%- set thEnds = [] -%}
+        {%- for th in themes %}{% set _te = thEnds.push((th.extra.deadline | fsDayEnd) or "-") %}{% endfor -%}
+        <a class="link tap-link mt-3 text-sm sm:hidden" href="{{ '/contribute/#deadlines' | lurl(L) }}" data-gv-expire-count="{{ thEnds | join(' ') }}" data-gv-expire-one="{{ 'home.write_themes_one' | t(L) }}" data-gv-expire-n="{{ 'home.write_themes_n' | t(L, { n: '{n}' }) }}"><span data-gv-expire-text>{{ ("home.write_themes_one" if themes.length == 1 else "home.write_themes_n") | t(L, { n: themes.length }) }}</span> {% icon "arrow-right", "size-4" %}</a>
+        <ul class="mt-5 grid gap-3 max-sm:hidden sm:grid-cols-2 {{ 'lg:grid-cols-4' if themes.length >= 4 else ('lg:grid-cols-3' if themes.length == 3 else '') }} tall-2xl:grid-cols-1" role="list" data-gv-expire-list>
+          {% for th in themes %}
+          {%- set isLv = (th.extra.publication == "lv") -%}
+          {%- set tt = th | tx("title", L) -%}
+          {#- a dated theme leaves once its deadline day is over (the invitation above stays) -#}
+          {%- set thEnd = (th.extra.deadline | fsDayEnd) if th.extra.deadline else "" -%}
+          <li class="home-theme group relative flex flex-col rounded-xl border border-line bg-surface p-4 transition {{ 'hover:border-lv' if isLv else 'hover:border-gv' }}" data-gv-expire-item{% if thEnd %} data-gv-expire="{{ thEnd }}"{% endif %}>
+            <p class="flex flex-wrap items-center gap-1.5">
+              <span class="{{ 'badge-lv' if isLv else 'badge-gv' }}">{{ "La Viña" if isLv else "Grapevine" }}</span>
+              {% if th.extra.issue_label %}<span class="text-xs text-faint">{{ th.extra.issue_label | homeIssueLabel(L) }}</span>{% endif %}
+            </p>
+            <p class="mt-2 font-display text-lg font-semibold leading-snug text-ink"{% if th.lang and th.lang != L and tt == th.title %} lang="{{ th.lang }}"{% endif %}>
+              <a href="{{ '/contribute/#deadlines' | lurl(L) }}" class="no-underline after:absolute after:inset-0 {{ 'group-hover:text-lv' if isLv else 'group-hover:text-gv' }}">{{ tt }}</a>
+            </p>
+            <p class="mt-auto inline-flex items-center gap-1.5 pt-2 text-xs font-medium text-muted">
+              {% if th.extra.deadline %}{% icon "calendar-clock", "size-3.5 shrink-0" %} {{ "home.deadline" | t(L, { date: th.extra.deadline | fmtDate(L, "short") }) }}
+              {% else %}{% icon "infinity", "size-3.5 shrink-0" %} {{ "home.no_deadline" | t(L) }}{% endif %}
+            </p>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+
+    {#- This month in the Shop: three compact link cards (Book of the Month · subscriptions · toolkit).
+        assets/js/shop.js keeps "N days left" current and swaps the offer line once it has ended. -#}
+    <ul class="home-shop mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list" aria-label="{{ 'home.shop_label' | t(L) }}">
+      {% if hBotm.length %}
+      <li class="sm:col-span-2 lg:col-span-1">
+        <a class="shop-teaser card card-link group flex h-full items-center gap-4 p-4 no-underline" href="{{ shopHref }}#botm" data-shop-offer{% if hSoon %} data-ends="{{ hSoon.ends }}"{% endif %}>
+          <span class="shop-teaser-covers" aria-hidden="true">{% for b in hBotm %}{% if b.image %}<img src="{{ b.image }}" alt="" width="389" height="600" loading="lazy" decoding="async">{% endif %}{% endfor %}</span>
+          <span class="min-w-0 flex-1">
+            <span class="eyebrow flex items-center gap-1.5 text-lv">{% icon "badge-percent", "size-4 shrink-0" %} {{ "shop.botm_title" | t(L) }}</span>
+            <span class="mt-1 block font-display text-lg font-semibold leading-snug text-balance text-ink group-hover:text-lv">{% if hPct %}<span data-shop-live>{{ "home.botm_title" | t(L, { pct: hPct }) }}</span><span data-shop-ended hidden>{{ "shop.botm_title" | t(L) }}</span>{% else %}{{ "home.botm_title_plain" | t(L) }}{% endif %}</span>
+            {% if hSoon and hSoon.days !== null %}<span class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted" data-shop-live><span data-shop-days class="shop-days{{ ' is-urgent' if hSoon.days <= 3 }}" data-t-many="{{ 'shop.days_left' | t(L) }}" data-t-tomorrow="{{ 'shop.ends_tomorrow' | t(L) }}" data-t-last="{{ 'shop.last_day' | t(L) }}">{% if hSoon.days === 0 %}{{ "shop.last_day" | t(L) }}{% elif hSoon.days === 1 %}{{ "shop.ends_tomorrow" | t(L) }}{% else %}{{ "shop.days_left" | t(L, { n: hSoon.days }) }}{% endif %}</span></span>{% endif %}
+          </span>
+          <span class="shrink-0 text-faint transition group-hover:translate-x-0.5 group-hover:text-lv" aria-hidden="true">{% icon "arrow-right", "size-4" %}</span>
+        </a>
+      </li>
+      {% endif %}
+      {% if subsFrom %}
+      <li>
+        <a class="card card-link group flex h-full items-center gap-4 p-4 no-underline" href="{{ shopHref }}#subscriptions">
+          <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-gv-soft text-gv">{% icon "newspaper", "size-5" %}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-display text-lg font-semibold leading-snug text-ink group-hover:text-gv">{{ "shop.subs_from" | t(L, { amount: subsFrom | shopMoney(L) }) }}</span>
+            <span class="mt-0.5 block text-sm text-muted max-sm:hidden">{{ "home.subs_desc" | t(L) }}</span>
+          </span>
+          <span class="shrink-0 text-faint transition group-hover:translate-x-0.5 group-hover:text-gv" aria-hidden="true">{% icon "arrow-right", "size-4" %}</span>
+        </a>
+      </li>
+      {% endif %}
+      <li>
+        <a class="card card-link group flex h-full items-center gap-4 p-4 no-underline" href="{{ '/monthly/' | lurl(L) }}">
+          <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-grape-soft text-grape">{% icon "image", "size-5" %}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-display text-lg font-semibold leading-snug text-ink group-hover:text-grape">{{ "home.monthly_title" | t(L) }}</span>
+            <span class="mt-0.5 block text-sm text-muted max-sm:hidden">{{ "home.monthly_desc" | t(L) }}</span>
+          </span>
+          <span class="shrink-0 text-faint transition group-hover:translate-x-0.5 group-hover:text-grape" aria-hidden="true">{% icon "arrow-right", "size-4" %}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+{#- =====================================================================
+    6. LISTEN & WATCH — the featured podcast episode (inline player) + more episodes, then the
+       newest YouTube videos (left out when there are none)
+    ===================================================================== -#}
+{%- set podCfg = (site.sources.podcasts | homeShow(ep)) if ep else {} -%}
+{%- set show = (D.episodes.shows | homeShow(ep)) if ep else {} -%}
+{%- set pod = {
+  apple: (ep.extra.apple if ep else "") or show.apple or podCfg.apple,
+  spotify: (ep.extra.spotify if ep else "") or show.spotify or podCfg.spotify,
+  amazon: (ep.extra.amazon if ep else "") or show.amazon or podCfg.amazon
+} -%}
+{% set wo = D.weekly_open.items[0] %}
+{% if ep or vids.length %}
+<section class="section" aria-labelledby="lw-title">
+  <div class="container-page">
+    {{ ui.sectionHead("home.lw_title" | t(L), "home.lw_sub" | t(L), ("/listen/" | lurl(L)) if ep else ("/watch/" | lurl(L)), ("home.all_episodes" if ep else "home.all_videos") | t(L), "headphones", { eyebrow: "home.lw_eyebrow" | t(L), tone: "text-grape", id: "lw-title", lang: L }) }}
+
+    {% if ep %}
+    {%- set epShow = ep | mediaShowOf(epShows) -%}
+    {%- set epTitle = ep | mediaTitle(L) -%}
+    {%- set epSE = ep | mediaSE(L) -%}
+    {#- A Weekly Open title already names the meeting's date ("Meeting of September 16, 2026"). -#}
+    {%- set epMeta = ([ep.extra.duration_sec | duration] if (epShow and epShow.weekly) else [ep.date | fmtDate(L, "medium"), ep.extra.duration_sec | duration]) | join(" · ") -%}
+    {#- Side by side (from 1024px) the two cards are the same height (the grid stretches them; they
+        stack at 150% text below 1280px, home.css .home-lw). Each one's footer is anchored to its
+        bottom (mt-auto): the player in the episode card (the extra height of a shorter episode card
+        sits between its text and the player), the weekly open meetings link in "More episodes"
+        (there the episode rows share the extra height: the list grows and so does each row). -#}
+    <div class="home-lw grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]" x-data="homePlayer">
+      <article class="home-episode card relative flex flex-col overflow-hidden p-5 sm:p-7" aria-labelledby="ep-title">
+        <div class="relative mb-5 flex items-start gap-4 sm:gap-5">
+          <div class="relative size-20 shrink-0 overflow-hidden rounded-2xl bg-grape-soft shadow-[var(--shadow-card)] sm:size-40">
+            <span class="absolute inset-0 grid place-items-center text-grape" aria-hidden="true">{% icon "headphones", "size-10" %}</span>
+            {% if ep.extra.thumb or ep.image %}<img x-ref="art" src="{{ ep.extra.thumb or ep.image }}" alt="" width="160" height="160" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="absolute inset-0 size-full object-cover" onerror="this.style.visibility='hidden'">{% endif %}
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="flex flex-wrap items-center gap-2 text-xs text-muted">
+              <span class="badge-grape" x-show="!current">{% icon "headphones", "size-3" %} {{ "home.latest_episode" | t(L) }}</span>
+              <span class="badge-grape" x-show="current" x-cloak>{% icon "audio-lines", "size-3" %} {{ "home.now_playing" | t(L) }}</span>
+              {% if epSE %}<span x-show="!current" class="font-semibold">{{ epSE }}</span>{% endif %}
+              {% if ep.extra.show_name or show.name %}<span x-show="!current"{% if L != "en" %} lang="en"{% endif %}>{{ ep.extra.show_name or show.name }}</span>{% endif %}
+            </p>
+            <h3 id="ep-title" class="mt-2 font-display text-2xl font-semibold leading-snug text-ink sm:text-[1.7rem]" x-ref="title" x-text="title">{{ epTitle }}</h3>
+            <p class="mt-1 text-sm text-faint" x-ref="meta" x-text="meta">{{ epMeta }}</p>
+            {#- the audio file's size — only while Data saver is on (areas/pwa.css .pwa-saver-only) -#}
+            {% if ep.extra.audio_bytes %}<p class="pwa-saver-only mt-0.5 text-sm text-faint" x-show="!current"><span class="sr-only">{{ "pwa.audio_size" | t(L) }} </span>{{ ep.extra.audio_bytes | fileSize }}</p>{% endif %}
+            {%- set epSum = ep | tx("summary", L) -%}
+            {% if epSum %}<p class="mt-3 line-clamp-3 text-sm leading-relaxed text-muted max-sm:hidden lg:line-clamp-4" x-show="!current">{{ epSum | excerpt(300) }}</p>{% endif %}
+            {% if ep | machineFor(L) %}<p class="mt-2" x-show="!current">{{ ui.autoNote(ep, L) }}</p>{% endif %}
+          </div>
+        </div>
+        {#- The player sits in the same frame as the Listen page's player (media-player) -#}
+        <div class="media-player relative mt-auto">
+          {% if ep.extra.audio_url %}
+          <audio x-ref="audio" class="home-audio w-full" controls preload="none" src="{{ ep.extra.audio_url }}">
+            {{ "home.audio_fallback" | t(L) }} <a href="{{ ep.extra.audio_url }}">{{ "home.download_episode" | t(L) }}</a>.
+          </audio>
+          {% endif %}
+          {% if pod.apple or pod.spotify or pod.amazon %}
+          {#- one line: it scrolls sideways on phones, wraps from 1024px -#}
+          <div class="flex min-w-0 items-center gap-2{{ ' mt-3' if ep.extra.audio_url }}">
+            <span class="shrink-0 text-xs font-semibold uppercase tracking-wider text-faint">{{ "home.listen_on" | t(L) }}</span>
+            <div class="chip-row flex-1">
+              {% if pod.apple %}<a class="btn-secondary btn-sm" href="{{ pod.apple }}" target="_blank" rel="noopener">{% icon "podcast", "size-4" %} Apple Podcasts</a>{% endif %}
+              {% if pod.spotify %}<a class="btn-secondary btn-sm" href="{{ pod.spotify }}" target="_blank" rel="noopener">{% icon "spotify", "size-4" %} Spotify</a>{% endif %}
+              {% if pod.amazon %}<a class="btn-secondary btn-sm" href="{{ pod.amazon }}" target="_blank" rel="noopener">{% icon "music", "size-4" %} Amazon Music</a>{% endif %}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </article>
+
+      <div class="card card-pad flex flex-col">
+        <h3 class="card-h"><span class="text-grape!">{% icon "list-music", "size-5" %}</span>{{ "home.more_episodes" | t(L) }}</h3>
+        <ul class="mt-2 flex grow flex-col divide-y divide-line{{ ' mb-3' if (wo and wo.extra) }}" role="list">
+          {% for e in moreEps %}
+          {%- set et = e | mediaTitle(L) -%}
+          {%- set eShow = e | mediaShowOf(epShows) -%}
+          {%- set eWeekly = eShow and eShow.weekly -%}
+          {#- A Weekly Open title already names the meeting's date: then the meta line skips the date. -#}
+          {%- set em = ([e.extra.duration_sec | duration] if eWeekly else [e.date | fmtDate(L, "short"), e.extra.duration_sec | duration]) | join(" · ") -%}
+          {#- Rows of the other show say which show (like the badge on /listen/), and so does the player title. -#}
+          {%- set otherShow = eShow and epShow and eShow.key != epShow.key -%}
+          {%- set eFull = (eShow.short ~ " · " ~ et) if otherShow else et -%}
+          <li class="flex grow items-center gap-3 py-3{{ ' max-sm:hidden' if loop.index > 2 }}">
+            <span class="relative size-14 shrink-0 overflow-hidden rounded-xl bg-grape-soft text-grape">
+              <span class="absolute inset-0 grid place-items-center" aria-hidden="true">{% icon "headphones", "size-5" %}</span>
+              {#- the ≤480px copy the sync makes (extra.thumb) for a 56px tile, not the 1500–3000px cover art;
+                  data-img below gets the site's base from `url` (the base plugin rewrites src/href, never data-*) -#}
+              {%- set eArt = e.extra.thumb or e.image -%}
+              {% if eArt %}{{ img(eArt, "absolute inset-0 size-full object-cover") }}{% endif %}
+            </span>
+            <div class="min-w-0 flex-1">
+              {% if otherShow %}<p class="truncate text-[0.68rem] font-semibold uppercase tracking-wider text-grape"{% if L != "en" and not eWeekly %} lang="en"{% endif %}>{{ eShow.short }}</p>{% endif %}
+              <p class="line-clamp-2 text-sm font-semibold leading-snug text-ink">{{ et }}</p>
+              <p class="mt-0.5 text-xs text-faint">{{ em }}{% if e.extra.audio_bytes %}<span class="pwa-saver-only"> · <span class="sr-only">{{ "pwa.audio_size" | t(L) }} </span>{{ e.extra.audio_bytes | fileSize }}</span>{% endif %}</p>
+            </div>
+            {% if e.extra.audio_url %}
+            <a href="{{ e.extra.audio_url }}" class="home-play grid size-11 shrink-0 place-items-center rounded-full bg-grape-soft text-grape transition"
+               :class="isPlaying($el.dataset.id) && 'is-playing'"
+               @click.prevent="play($el)" data-id="{{ e.id }}" data-src="{{ e.extra.audio_url }}" data-title="{{ eFull }}" data-meta="{{ [e.date | fmtDate(L, 'medium'), e.extra.duration_sec | duration] | join(' · ') }}" data-img="{{ (eArt | url) if eArt else '' }}"
+               aria-label="{{ 'home.play_episode' | t(L, { title: eFull }) }}">
+              <span x-show="!isPlaying($el.parentElement.dataset.id)">{% icon "play", "size-5 translate-x-px" %}</span>
+              <span x-show="isPlaying($el.parentElement.dataset.id)" x-cloak>{% icon "pause", "size-5" %}</span>
+            </a>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        {% if wo and wo.extra %}
+        {#- both weekly open meetings in one line (as on /listen/ and /watch/); details on /meetings/ -#}
+        {%- set woWhen = D.weekly_open.items | mediaWeeklyDays(L) -%}
+        <a href="{{ '/meetings/#weekly-open' | lurl(L) }}" class="group mt-auto flex items-start gap-3 rounded-xl bg-gv-soft/60 p-3.5 no-underline transition hover:bg-gv-soft">
+          <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-surface text-gv">{% icon "video", "size-5" %}</span>
+          <span class="min-w-0">
+            <span class="block text-sm font-semibold text-ink group-hover:text-gv">{{ ("home.weekly_opens" if D.weekly_open.items.length > 1 else "home.weekly_open") | t(L) }}</span>
+            <span class="block text-xs leading-snug text-muted">{{ "home.weekly_open_text" | t(L, { when: woWhen }) if woWhen else ("home.weekly_open_fallback" | t(L)) }}</span>
+          </span>
+          <span class="ml-auto self-center text-faint transition group-hover:translate-x-0.5 group-hover:text-gv" aria-hidden="true">{% icon "arrow-right", "size-4" %}</span>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if vids.length %}
+    <div class="{{ 'mt-12 sm:mt-14' if ep }}">
+      {% call ui.sectionHead("home.new_videos" | t(L), "", "/watch/" | lurl(L), "home.all_videos" | t(L), "youtube", { eyebrow: "nav.watch" | t(L), tone: "text-grape", level: 3, lang: L }) %}
+      <a href="{{ site.links.youtube_channel }}" target="_blank" rel="noopener" class="btn-ghost btn-sm">{% icon "youtube", "size-4" %} {{ "home.youtube_subscribe" | t(L) }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
+      {% endcall %}
+      <ul class="home-rail home-rail--videos no-scrollbar" role="list">
+        {% for v in vids %}
+        {%- set vt = v | mediaTitle(L) -%}
+        {%- set vse = v | mediaSE(L) -%}
+        {%- set vWeekly = (v | mediaVideoKind) == "weekly" -%}
+        {%- set vLv = v.category == "lv" or v.lang == "es" -%}
+        <li class="home-rail-item">
+          <article class="card relative flex h-full flex-col overflow-hidden">
+            <lite-youtube videoid="{{ v.extra.video_id }}" class="home-yt" playlabel="{{ 'home.video_play' | t(L, { title: vt }) }}" style="background-image: url('{{ v.extra.video_id | ytThumb }}');">
+              <a href="{{ v.url }}" class="lyt-playbtn" title="{{ 'home.video_play' | t(L, { title: vt }) }}"><span class="lyt-visually-hidden">{{ "home.video_play" | t(L, { title: vt }) }}</span></a>
+            </lite-youtube>
+            {#- the text part is one link to YouTube (the video above plays right here) -#}
+            <div class="relative flex flex-1 flex-col gap-2 p-4">
+              <p class="flex flex-wrap items-center gap-1.5">
+                <span class="badge-grape">{% icon "youtube", "size-3" %} YouTube</span>
+                {% if vWeekly %}<span class="badge-grape">{% icon "users", "size-3" %} {{ "media.show_short_weekly" | t(L) }}</span>
+                {% elif vLv %}<span class="badge-lv">La Viña</span>{% endif %}
+                {{ ui.langPill(v, L) }}
+              </p>
+              <h4 class="font-display text-base font-semibold leading-snug text-ink"{% if v.lang and v.lang != L and v.lang != "und" and vt == (v | mediaTitle(v.lang)) %} lang="{{ v.lang }}"{% endif %}>
+                <a href="{{ v.url }}" target="_blank" rel="noopener" class="line-clamp-2 no-underline after:absolute after:inset-0 hover:text-gv">{{ vt }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
+              </h4>
+              <p class="meta-row mt-auto text-xs text-faint">
+                {% if vse %}<span class="font-semibold text-gv">{{ vse }}</span>{% endif %}
+                {% if v.date %}<time datetime="{{ v.date | isoDate }}">{{ v.date | fmtDate(L, ("month" if v.extra.date_approx else "short")) }}</time>{% endif %}
+                {% if v.extra.duration_sec %}<span>{{ v.extra.duration_sec | duration }}</span>{% endif %}
+              </p>
+              {% if v | machineFor(L) %}<p class="-mt-1">{{ ui.autoNote(v, L) }}</p>{% endif %}
+            </div>
+          </article>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{#- =====================================================================
+    7. PUBLISHED WRITERS — every Grapevine / La Viña story published in the last 60 days
+       (spotlight.home_days) by a writer from Texas: Area 65 writers first (featured, wider
+       cards), then the rest of Texas; newest first in each group. The whole list — every
+       place, 60 or 90 days, Area 65 by default — is on /published/.
+       home.js recounts the window in the visitor's browser (data-pub / data-days), so the
+       page stays right between daily builds; this server-rendered version is the same
+       list for visitors without JavaScript.
+    ===================================================================== -#}
+{% set spotHref = "/published/" | lurl(L) %}
+{% set spotAllLabel = ("home.spot_all" | t(L, { a: spot.listDays[0], b: spot.listDays[1] })) if spot.listDays.length > 1 else ("home.spot_all_one" | t(L)) %}
+{#- How the grid closes its last row at 2 / 3 / 4 / 5 columns (see homeSpotFill); home.js redoes it in the browser. -#}
+{% set fill = spot | homeSpotFill %}
+{%- set spotSub -%}
+{{ "home.spot_sub" | t(L, { days: spot.days }) }}
+<span class="mt-3 flex flex-wrap items-center gap-2"{% if not spot.total %} hidden{% endif %} data-spot-counts>
+  <span class="badge-vine home-spot-count" data-spot-count="neta65" data-one="{{ 'home.spot_count_a65_one' | t(L) }}" data-many="{{ 'home.spot_count_a65' | t(L) }}"{% if not spot.a65.length %} hidden{% endif %}>{% icon "grapes", "size-3.5" %} <span data-text>{{ ("home.spot_count_a65_one" | t(L)) if spot.a65.length == 1 else ("home.spot_count_a65" | t(L, { n: spot.a65.length | homeNum(L) })) }}</span></span>
+  <span class="home-badge-tx badge home-spot-count" data-spot-count="texas" data-one="{{ 'home.spot_count_tx_one' | t(L) }}" data-many="{{ 'home.spot_count_tx' | t(L) }}"{% if not spot.tx.length %} hidden{% endif %}>{% icon "star", "size-3.5" %} <span data-text>{{ ("home.spot_count_tx_one" | t(L)) if spot.tx.length == 1 else ("home.spot_count_tx" | t(L, { n: spot.tx.length | homeNum(L) })) }}</span></span>
+</span>
+{%- endset %}
+<section id="published-writers" class="home-spot section{{ ' pt-0' if (ep or vids.length) }}" aria-labelledby="spot-title" data-home-spot data-days="{{ spot.days }}">
+  <div class="container-page">
+    {% call ui.sectionHead("home.spot_title" | t(L), spotSub, spotHref, "home.spot_all_short" | t(L), "award", { eyebrow: "home.spot_eyebrow" | t(L), tone: "text-vine", id: "spot-title", lang: L }) %}
+    <a class="btn-ghost btn-sm" href="{{ '/contribute/' | lurl(L) }}">{% icon "feather", "size-4" %} {{ "home.spot_share" | t(L) }}</a>
+    {% endcall %}
+
+    {#- One grid for both groups (the lists use display: contents from 640px): Area 65 cards
+        span two columns, the Texas cards fill in around them. Phones: Area 65 cards stacked,
+        the Texas cards in a swipe row. From 640px a compact "see the full list" link card closes
+        the last row (data-f2…data-f5 = its width at 2 / 3 / 4 / 5 columns, 0 = the row is full:
+        no card); data-full = the column counts at which each Area 65 card takes a whole row
+        (only when too few Texas cards are left to sit beside them). -#}
+    <div class="home-spot-grid" data-spot-grid{% if fill.full %} data-full="{{ fill.full }}"{% endif %}{% if not spot.total %} hidden{% endif %}>
+      <ul class="home-spot-list home-spot-list--a65" role="list" aria-label="{{ 'home.spot_list_a65' | t(L) }}" data-spot-list{% if not spot.a65.length %} hidden{% endif %}>
+        {% for a in spot.a65 %}
+        <li class="home-spot-item is-featured" data-pub="{{ a | homePubDate }}" data-scope="neta65">{{ spotCard(a, L, true) }}</li>
+        {% endfor %}
+      </ul>
+      <div class="home-spot-none" data-spot-none-a65{% if spot.a65.length or not spot.tx.length %} hidden{% endif %}>
+        <span class="grid size-12 shrink-0 place-items-center rounded-2xl bg-vine-soft text-vine">{% icon "sprout", "size-6" %}</span>
+        <div class="min-w-0">
+          <h3 class="font-display text-lg font-semibold leading-snug text-ink">{{ "home.spot_none_a65_title" | t(L, { days: spot.days }) }}</h3>
+          <p class="mt-1 text-sm leading-relaxed text-muted">{{ "home.spot_none_a65_text" | t(L) }}</p>
+          <a class="link tap-link mt-3 gap-1.5 text-sm" href="{{ '/contribute/' | lurl(L) }}">{% icon "feather", "size-4" %} {{ "home.spot_share" | t(L) }}</a>
+        </div>
+      </div>
+      <ul class="home-spot-list home-spot-list--tx rail no-scrollbar" role="list" aria-label="{{ 'home.spot_list_tx' | t(L) }}" data-spot-list{% if not spot.tx.length %} hidden{% endif %}>
+        {% for a in spot.tx %}
+        <li class="home-spot-item rail-item" data-pub="{{ a | homePubDate }}" data-scope="texas">{{ spotCard(a, L, false) }}</li>
+        {% endfor %}
+      </ul>
+      <a class="home-spot-fill card card-link group relative overflow-hidden no-underline" href="{{ spotHref }}" data-spot-fill data-f2="{{ fill.f2 }}" data-f3="{{ fill.f3 }}" data-f4="{{ fill.f4 }}" data-f5="{{ fill.f5 }}">
+        <svg class="home-spot-fill-art" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="46" cy="52" r="11"/><circle cx="68" cy="52" r="11"/><circle cx="57" cy="70" r="11"/><circle cx="35" cy="70" r="11"/><circle cx="79" cy="70" r="11"/><circle cx="46" cy="88" r="11"/><circle cx="68" cy="88" r="11"/><circle cx="57" cy="106" r="11"/></g><path d="M57 40 C 58 26, 66 16, 80 12" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+        <span class="home-spot-fill-in">
+          <span class="home-spot-fill-icon" aria-hidden="true">{% icon "users", "size-6" %}</span>
+          <span class="home-spot-fill-text">
+            <span class="block font-display text-lg font-semibold leading-snug text-ink group-hover:text-vine">{{ "home.spot_fill_title" | t(L) }}</span>
+            <span class="mt-1 block text-sm leading-relaxed text-muted">{{ "home.spot_fill_text" | t(L, { days: spot.maxDays }) }}</span>
+          </span>
+          <span class="home-spot-fill-arrow" aria-hidden="true">{% icon "arrow-right", "size-5" %}</span>
+        </span>
+      </a>
+    </div>
+
+    <div class="home-spot-empty" data-spot-empty{% if spot.total %} hidden{% endif %}>
+      <span class="grid size-14 shrink-0 place-items-center rounded-2xl bg-vine-soft text-vine">{% icon "feather", "size-7" %}</span>
+      <div class="min-w-0 flex-1">
+        <h3 class="font-display text-xl font-semibold leading-snug text-ink sm:text-2xl">{{ "home.spot_empty_title" | t(L, { days: spot.days }) }}</h3>
+        <p class="mt-2 max-w-2xl leading-relaxed text-muted">{{ "home.spot_empty_text" | t(L) }}</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <a class="btn-primary" href="{{ '/contribute/' | lurl(L) }}">{% icon "feather", "size-4" %} {{ "home.spot_share" | t(L) }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{#- =====================================================================
+    8. UPCOMING EVENTS — date tiles (the next committee meeting is in the card at the top).
+       The Grapevine meetings of local groups have ONE home, /meetings/ — a header action here.
+    ===================================================================== -#}
+{% set evs = D.events.items | homeEvents(meeting.next, 4) %}
+{%- set gvmHome = db.meetings | cmGvMeetings(L, site) -%}
+{% if evs.length %}
+<section class="section pt-0" aria-labelledby="events-title" data-gv-expire-list>
+  <div class="container-page">
+    {% call ui.sectionHead("home.events_title" | t(L), "home.events_sub" | t(L), "/events/" | lurl(L), "home.events_all" | t(L), "calendar-days", { eyebrow: "home.events_eyebrow" | t(L), tone: "text-vine", id: "events-title", lang: L }) %}
+    {% if gvmHome.inArea %}<a href="{{ '/meetings/#grapevine-meetings' | lurl(L) }}" class="btn-ghost btn-sm">{% icon "map-pin", "size-4" %} {{ "committee.gvm.home_title" | t(L) }}</a>{% endif %}
+    {% endcall %}
+    {#- Fewer than 4 events: a "calendar on your phone" card fills the row (and the grid narrows).
+        grid-cols-1 on phones: a long place name (one truncated line) must not widen the column. -#}
+    {%- set withCta = evs.length < 4 -%}
+    {%- set cols = evs.length + (1 if withCta else 0) -%}
+    <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 {{ 'lg:grid-cols-4' if cols >= 4 else ('lg:grid-cols-3' if cols == 3 else '') }}" role="list">
+      {% for e in evs %}
+      {%- set x = e.extra or {} -%}
+      {#- date tile, "when" line and place — the same rules as /events/ (a date RANGE for an event over
+          several days, the place in the page language, "Venue to be announced" without a map pin) -#}
+      {%- set info = e | homeEventInfo(L) -%}
+      {#- the kind's colour, the same as on /events/ (eventTone: committee · gv · lv · booth · assembly · other) -#}
+      {%- set tone = e | eventTone -%}
+      {#- A monthly recurring event (e.g. the CityWide Dallas booth) opens its card on /events/ -#}
+      {%- set href = (("/events/#" ~ (e | homeEventAnchor)) if e.category == "recurring" else (e.url or x.flyer_url or x.online_url or "/events/")) | lurl(L) -%}
+      {%- set et = e | tx("title", L) -%}
+      {#- the card hides itself once the event is over (GV.expire); the calendar card below is not an event.
+          A phone shows three: the 4th is a spare that steps in there once an earlier one has ended. -#}
+      {%- set evEndAt = e | homeEventEnd -%}
+      <li{% if loop.index > 3 %} class="max-sm:hidden" data-gv-expire-spare="max-sm:hidden"{% endif %} data-gv-expire-item{% if evEndAt %} data-gv-expire="{{ evEndAt }}"{% endif %}>
+        <article class="card card-link ev-accent ev-tone-{{ tone }} group relative flex h-full gap-4 p-4 sm:flex-col sm:p-5">
+          <div class="home-datetile{{ ' is-range' if info.tile.range }}" aria-hidden="true">
+            <span class="home-datetile-month">{{ info.tile.mon }}</span>
+            <span class="home-datetile-day">{{ info.tile.day }}</span>
+            <span class="home-datetile-wd">{{ info.tile.wd }}</span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="flex flex-wrap items-center gap-1.5">
+              {#- names the kind in words — the same labels and icons as the /events/ badges, so colour is never the only signal -#}
+              {%- set kindIcon = { committee: "users", gv: "grapes", lv: "grapes", booth: "store", assembly: "landmark", other: "map-pin" } -%}
+              {%- if tone == "gv" and e.category == "gv-calendar" %}{% set kindLabel = "committee.events.badge_gv" | t(L) %}
+              {%- elif tone == "lv" and e.category == "lv-calendar" %}{% set kindLabel = "committee.events.badge_lv" | t(L) %}
+              {%- elif tone == "other" %}{% set kindLabel = ("committee.events.kind.neta" if e.category == "neta65" else "committee.events.kind.event") | t(L) %}
+              {%- else %}{% set kindLabel = ("committee.events.kind." ~ tone) | t(L) %}{% endif %}
+              <span class="badge ev-badge">{% icon kindIcon[tone], "size-3" %} {{ kindLabel }}</span>
+              {% if info.tentative %}{{ ui.tentativeBadge(L) }}{% endif %}
+              {% if e.lang and e.lang != L and e.lang != "und" and ((e | machineFor(L)) or et == e.title) %}<span class="badge-muted uppercase" title="{{ ('lang.' ~ e.lang) | t(L) }}">{{ e.lang }}</span>{% endif %}
+            </p>
+            <h3 class="mt-2 font-display text-lg font-semibold leading-snug text-ink"{% if e.lang and e.lang != L and e.lang != "und" and et == e.title %} lang="{{ e.lang }}"{% endif %}>
+              <a href="{{ href }}" class="no-underline after:absolute after:inset-0 group-hover:text-gv"{% if href.startsWith('http') %} target="_blank" rel="noopener"{% endif %}>{{ et }}</a>
+            </h3>
+            <p class="sr-only">{{ info.srDate }}</p>
+            <ul class="mt-2 space-y-1 text-sm text-muted">
+              {#- An outside calendar that only gives a date: the time isn't listed (same wording as /events/), not "all day". -#}
+              <li class="flex items-start gap-1.5">{% set whenIcon = "calendar-range" if info.multiDay else "clock" %}{% icon whenIcon, "mt-0.5 size-4 shrink-0 text-faint" %}{{ info.when }}</li>
+              {% if info.location and info.tba %}<li class="flex items-start gap-1.5 italic">{% icon "hourglass", "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0 line-clamp-2">{{ info.location }}</span></li>
+              {% elif info.location %}{% set locIcon = "video" if (x.online_url and not x.city) else "map-pin" %}<li class="flex items-start gap-1.5">{% icon locIcon, "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0 line-clamp-2">{{ info.location }}</span></li>
+              {#- online only (no place: La Viña's monthly workshop on Zoom) — "Online on Zoom", as on /events/ -#}
+              {% elif info.online %}<li class="flex items-start gap-1.5">{% icon "video", "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0">{{ info.online }}</span></li>{% endif %}
+            </ul>
+          </div>
+        </article>
+      </li>
+      {% endfor %}
+      {% if withCta %}
+      <li>
+        <article class="home-cal-cta card card-link group relative flex h-full flex-col gap-3 p-4 sm:p-5">
+          <span class="grid size-11 place-items-center rounded-xl bg-vine-soft text-vine">{% icon "calendar-heart", "size-5" %}</span>
+          <h3 class="font-display text-lg font-semibold leading-snug text-ink">
+            <a href="{{ '/events/#subscribe' | lurl(L) }}" class="no-underline after:absolute after:inset-0 group-hover:text-vine">{{ "home.cal_cta_title" | t(L) }}</a>
+          </h3>
+          <p class="text-sm leading-relaxed text-muted">{{ "home.cal_cta_text" | t(L) }}</p>
+          <p class="mt-auto inline-flex items-center gap-1.5 pt-1 text-sm font-semibold text-vine">{{ "home.cal_cta_link" | t(L) }} {% icon "arrow-right", "size-4 transition group-hover:translate-x-0.5" %}</p>
+        </article>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+{#- =====================================================================
+    9. LIBRARY — search + popular collections, then the newest documents (one row of 6 from
+       1280px; phones: the 2 newest)
+    ===================================================================== -#}
+{% set pdfCount = D.pdfs.items.length %}
+{% set cats = D | homeLibChips(L, 5) %}
+{% if pdfCount or newestPdfs.length %}
+<section class="home-lib section border-y border-line" aria-labelledby="lib-title">
+  <div class="container-page">
+    {{ ui.sectionHead("home.lib_title" | t(L), "home.lib_sub" | t(L), "/library/" | lurl(L), "home.lib_browse" | t(L), "library", { eyebrow: "home.lib_eyebrow" | t(L), tone: "text-gv", id: "lib-title", lang: L }) }}
+    <div class="home-lib-grid grid gap-5 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:items-end lg:gap-10">
+      {#- Searches the document library (library.js reads ?q=); the site-wide search lives at /search/. -#}
+      <form action="{{ '/library/' | lurl(L) }}" method="get" role="search">
+        <label for="home-lib-q" class="mb-2 block text-sm font-semibold text-ink">{{ "home.lib_search_label" | t(L) }}</label>
+        {#- Phones: the magnifier moves from the field onto an icon-only button, so the placeholder has room. -#}
+        <div class="flex gap-2">
+          <div class="relative min-w-0 flex-1">
+            <span class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-faint max-sm:hidden">{% icon "search", "size-5" %}</span>
+            <input id="home-lib-q" name="q" type="search" autocomplete="off" enterkeyhint="search" class="input sm:pl-12" placeholder="{{ 'home.lib_search_ph' | t(L) }}">
+          </div>
+          <button type="submit" class="btn-primary shrink-0 max-sm:w-11 max-sm:px-0">{% icon "search", "size-5 sm:hidden" %}<span class="max-sm:sr-only">{{ "nav.search" | t(L) }}</span></button>
+        </div>
+      </form>
+      {% if cats.length %}
+      <ul class="chip-row" role="list" aria-label="{{ 'home.lib_quick' | t(L) }}">
+        {% for c in cats %}
+        <li><a href="{{ c.href | lurl(L) }}" class="chip no-underline">{% icon c.icon, "size-4 shrink-0 text-faint" %} {{ c.label }} <span class="text-xs text-faint tabular-nums">{{ c.count | homeNum(L) }}</span></a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+
+    {% if newestPdfs.length %}
+    <h3 class="eyebrow mt-10 mb-4 font-sans">{{ "home.lib_newest" | t(L) }}</h3>
+    <ul class="home-pdfs grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6" role="list">
+      {% for p in newestPdfs %}
+      {%- set thumb = p | homeImage -%}
+      {%- set docLang = p | homeDocLang -%}
+      {%- set pt = p | homeTitle(L) -%}
+      <li{% if loop.index > 2 %} class="max-sm:hidden"{% endif %}>
+        <article class="card card-link group relative flex h-full flex-col overflow-hidden">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-t-[var(--radius-card)] bg-surface-2">
+            {{ tile(p, L) }}
+            {% if thumb %}{{ img(thumb, "absolute inset-0 size-full object-cover object-top") }}{% endif %}
+          </div>
+          <div class="flex flex-1 flex-col gap-1.5 p-3.5">
+            <p class="flex flex-wrap items-center gap-1.5">{{ ui.sourceBadge(p, L) }}{% if docLang and docLang != L %}<span class="badge-muted uppercase" title="{{ ('lang.' ~ docLang) | t(L) }}">{{ docLang }}</span>{% endif %}</p>
+            <h4 class="text-sm font-semibold leading-snug text-ink"{% if p.lang and p.lang != L and p.lang != "und" and pt == p.title %} lang="{{ p.lang }}"{% endif %}>
+              <a href="{{ p.url }}" target="_blank" rel="noopener" class="line-clamp-2 no-underline after:absolute after:inset-0 group-hover:text-gv">{{ pt }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
+            </h4>
+            <p class="meta-row mt-auto text-xs text-faint">
+              {% if p.date %}<time datetime="{{ p.date | isoDate }}">{{ p.date | fmtDate(L, "month") }}</time>{% endif %}
+              {% if p.extra and p.extra.pages %}<span>{{ ("home.pages_one" if p.extra.pages == 1 else "home.pages") | t(L, { n: p.extra.pages }) }}</span>{% endif %}
+            </p>
+          </div>
+        </article>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{#- =====================================================================
+    10. INSTAGRAM — the newest posts from both accounts (phones: a swipe row)
+    ===================================================================== -#}
+{% if posts.length %}
+<section class="section{{ ' pt-0' if not (pdfCount or newestPdfs.length) }}" aria-labelledby="ig-title">
+  <div class="container-page">
+    {{ ui.sectionHead("home.ig_title" | t(L), "home.ig_sub" | t(L), "/instagram/" | lurl(L), "home.ig_all" | t(L), "instagram", { eyebrow: "home.ig_eyebrow" | t(L), tone: "text-grape", id: "ig-title", lang: L }) }}
+    {#- phones: one row that swipes sideways (all 6); 3 columns from 640px, 6 from 1024px -#}
+    <ul class="home-ig-grid no-scrollbar" role="list">
+      {% for p in posts %}
+      {%- set pic = p | homeImage -%}
+      {%- set cap = p | tx("summary", L) or (p | tx("title", L)) -%}
+      {%- set isLv = p.category == "lv" -%}
+      <li>
+        <a href="{{ p.url }}" target="_blank" rel="noopener" class="home-ig group relative block aspect-square overflow-hidden rounded-2xl no-underline shadow-[var(--shadow-card)]">
+          {#- pb-8 keeps the caption clear of the date row (shown here when there is no picture, or it fails to load). -#}
+          <span class="home-ig-ph home-tone-{{ 'lv' if isLv else 'grape' }} absolute inset-0 flex flex-col justify-between gap-2 p-3.5 pb-8" aria-hidden="true">
+            <span class="flex items-center justify-between">{% icon "instagram", "size-5" %}<span class="text-[0.65rem] font-semibold uppercase tracking-wider opacity-80">{{ "La Viña" if isLv else "Grapevine" }}</span></span>
+            {% if cap %}<span class="line-clamp-4 font-display lg:line-clamp-3 text-[0.95rem] leading-snug"{% if p.lang and p.lang != L and p.lang != "und" and (cap == p.summary or cap == p.title) %} lang="{{ p.lang }}"{% endif %}>{{ cap | excerpt(140) | homeQuote }}</span>{% else %}<span class="grid flex-1 place-items-center">{% icon "grapes", "size-12 opacity-40" %}</span>{% endif %}
+          </span>
+          {% if pic %}{{ img(pic, "absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-105") }}{% endif %}
+          <span class="home-ig-meta home-tone-{{ 'lv' if isLv else 'grape' }}{{ ' has-pic' if pic }} absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 px-3 pt-8 pb-2.5 text-[0.7rem] font-semibold">
+            {% if pic %}<span class="inline-flex min-w-0 items-center gap-1">{% icon "instagram", "size-3.5 shrink-0" %}<span class="truncate max-sm:sr-only">{{ "La Viña" if isLv else "Grapevine" }}</span></span>{% else %}<span></span>{% endif %}
+            {% if p.date %}<time datetime="{{ p.date | isoDate }}" class="shrink-0">{{ p.date | fmtDate(L, "short") }}</time>{% endif %}
+          </span>
+          <span class="sr-only">{{ "home.ig_open" | t(L) }}{% if cap %}: {{ cap | excerpt(120) }}{% endif %} {{ "home.opens_new_tab" | t(L) }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+{#- =====================================================================
+    11. COMMITTEE UPLOADS — the newest Drive documents / photos; left out while there are none.
+        A file from the Drive "flyers" folder is labelled "Flyer" (kind.flyer), not "Photo". The
+        Photos button shows only when /photos/ has an album (the same cmAlbums list), so Home never
+        links to an empty page. A deck's picture (its first slide, 16:9) is shown whole on the tile's
+        tone (object-contain), as on /portfolio/: cropped to the 4:3 tile it lost the ends of its title.
+    ===================================================================== -#}
+{% if driveItems.length %}
+{%- set hasAlbums = (db.drive.items | cmAlbums(L)) | length -%}
+<section class="section{{ ' pt-0' if posts.length }}" aria-labelledby="drive-title">
+  <div class="container-page">
+    {% call ui.sectionHead("home.drive_title" | t(L), "home.drive_sub" | t(L), "/portfolio/" | lurl(L), "home.drive_all" | t(L), "folder-open", { eyebrow: "home.drive_eyebrow" | t(L), tone: "text-vine", id: "drive-title", lang: L }) %}
+    {% if hasAlbums %}<a href="{{ '/photos/' | lurl(L) }}" class="btn-ghost btn-sm">{% icon "images", "size-4" %} {{ "nav.photos" | t(L) }}</a>{% endif %}
+    {% endcall %}
+    <ul class="home-drive-grid grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6" role="list">
+      {% for f in driveItems %}
+      {%- set pic = f | homeImage -%}
+      {%- set isPhoto = f.kind == "photo" or (f.extra and f.extra.is_image) -%}
+      {%- set fHref = (f.url or (f.extra.view_url if f.extra else "") or ("/photos/" if isPhoto else "/portfolio/")) | lurl(L) -%}
+      <li>
+        <article class="card card-link group relative flex h-full flex-col overflow-hidden">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-t-[var(--radius-card)] bg-surface-2">
+            {{ tile(f, L) }}
+            {% if pic %}{{ img(pic, "absolute inset-0 size-full " ~ ("object-contain" if f.kind == "slides" else ("object-cover" ~ ("" if isPhoto else " object-top"))) ~ " transition duration-500 group-hover:scale-[1.04]") }}{% endif %}
+          </div>
+          <div class="flex flex-1 flex-col gap-1 p-3.5">
+            {%- set isFlyer = f.category == "flyers" -%}
+            <p class="inline-flex items-center gap-1 text-[0.7rem] font-semibold uppercase tracking-wider text-vine">{% set fIcon = "megaphone" if isFlyer else (f.kind | homeKindIcon) %}{% icon fIcon, "size-3.5" %} {{ ("kind.flyer" if isFlyer else ("kind." ~ f.kind)) | t(L) }}</p>
+            <h3 class="text-sm font-semibold leading-snug text-ink">
+              <a href="{{ fHref }}"{% if fHref.startsWith('http') %} target="_blank" rel="noopener"{% endif %} class="line-clamp-2 no-underline after:absolute after:inset-0 group-hover:text-gv">{{ f | homeTitle(L) }}</a>
+            </h3>
+            {% if f.extra and f.extra.album %}<p class="truncate text-xs text-muted">{{ f | tx("album", L) }}</p>{% endif %}
+            {% if f.date %}<p class="mt-auto pt-1 text-xs text-faint"><time datetime="{{ f.date | isoDate }}">{{ f.date | fmtDate(L, "short") }}</time></p>{% endif %}
+          </div>
+        </article>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+{#- =====================================================================
+    12. FOR GVRs, RLVs & DISTRICTS — the closing feature band (the monthly GV/LV report lives on
+        /monthly/#report): the two registration buttons and four link tiles (2 × 2 from 640px).
+    ===================================================================== -#}
+{#- Four service tools for a group's GVR / RLV, the course for new representatives first. The feeds
+    (RSS, calendar) are not repeated here: they live in the footer's "Stay updated" column, right
+    below; the digest is the one "get updates" tile. The QR Post page (/share/) is in that column
+    too and in the GVR corner's checklist. -#}
+{%- set svcLinks = [
+  { url: "/orientation/", icon: "sprout", key: "nav.orientation", desc: "nav.orientation_desc" },
+  { url: "/gvr/", icon: "badge-check", key: "nav.gvr", desc: "home.svc_corner_desc" },
+  { url: "/monthly/#report", icon: "clipboard-list", key: "home.svc_report", desc: "home.svc_report_desc" },
+  { url: "/digest/", icon: "mail-open", key: "nav.digest", desc: "home.svc_digest_desc" }
+] %}
+<section class="home-band relative isolate overflow-hidden text-white" aria-labelledby="svc-title">
+  <div class="container-page relative z-10 grid gap-10 py-16 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] lg:items-center lg:gap-14">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-white/85">{{ "home.svc_eyebrow" | t(L) }}</p>
+      <h2 id="svc-title" class="mt-2 font-display text-3xl font-semibold leading-tight sm:text-4xl">{{ "home.svc_title" | t(L) }}</h2>
+      <p class="mt-4 max-w-lg text-lg leading-relaxed text-white/90">{{ "home.svc_sub" | t(L) }}</p>
+      <div class="mt-7 grid grid-cols-1 gap-3 min-[26rem]:flex min-[26rem]:flex-wrap">
+        <a class="btn-light" href="{{ site.links.gvr_register }}" target="_blank" rel="noopener">{% icon "badge-check", "size-4" %} {{ "home.svc_gvr" | t(L) }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
+        <a class="home-btn-amber btn" href="{{ site.links.rlv_register }}" target="_blank" rel="noopener">{% icon "badge-check", "size-4" %} {{ "home.svc_rlv" | t(L) }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
+      </div>
+    </div>
+    <ul class="grid gap-3 sm:grid-cols-2" role="list">
+      {% for s in svcLinks %}
+      <li>
+        <a href="{{ s.url | lurl(L) }}" class="home-band-link group flex h-full items-start gap-3.5 rounded-2xl p-4 no-underline">
+          <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-white/12 text-white ring-1 ring-white/20">{% icon s.icon, "size-5" %}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-semibold leading-snug">{{ s.key | t(L) }}</span>
+            <span class="mt-0.5 block text-sm leading-snug text-pretty text-white/85">{{ s.desc | t(L) }}</span>
+          </span>
+          <span class="mt-0.5 text-white/70 transition group-hover:translate-x-0.5 group-hover:text-white" aria-hidden="true">{% icon "arrow-right", "size-4" %}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{#- Structured data (schema.org): who we are (the committee) and this website, for search engines -#}
+{%- set homeAbsLd = ('/' | lurl(L)) | siteUrl(site) -%}
+{%- set siteRootLd = '/' | siteUrl(site) -%}
+<script type="application/ld+json">{{ { "@context": "https://schema.org", "@graph": [
+  { "@type": "Organization", "@id": siteRootLd + "#committee", "name": site | pick(L, "committee"), "url": homeAbsLd,
+    "logo": "/assets/img/app-icon-512.png" | siteUrl(site), "parentOrganization": { "@type": "Organization", "name": "Northeast Texas Area 65 (NETA 65)" } },
+  { "@type": "WebSite", "@id": siteRootLd + "#website", "name": site | pick(L, "title"), "url": homeAbsLd, "inLanguage": "es-US" if L == "es" else "en-US",
+    "publisher": { "@id": siteRootLd + "#committee" } }
+] } | rpJson | safe }}</script>

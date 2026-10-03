@@ -1,0 +1,2038 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}tracker/index.html"
+layout: layouts/base.njk
+pageKey: expenses
+titleKey: nav.expenses
+descKey: expenses.meta_desc
+bodyClass: xp-page
+pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/js/committee.js"]
+---
+{#- /tracker/ — the TRACKER (the service expense tracker; it was /expenses/, and expenses-redirect.njk
+    keeps that address working): a GVR / RLV's (or any service member's) miles, purchases,
+    gift subscriptions, giveaways and reimbursements, kept ONLY in this browser (nothing is uploaded).
+    Flow (docs: ui.njk): hero (+ the "On this device" aside) → the committee sub-nav (page-overlap, as on
+    every Committee page) → the app (card: Entries · Summary · Giveaways · Requests · Settings, in the
+    address as #entries …) → privacy, in plain words.
+    The logic: src/assets/js/expenses-core.js (window.GVX); the screen: src/assets/js/expenses.js
+    ("xpApp"); the defaults: config/expenses.yml (src/_data/expenses.js); the words:
+    src/_i18n/expenses.json (handed to the app as #xp-ui); the look: areas/expenses.css.
+    One Alpine component wraps the hero AND the app (the hero's buttons and aside use its data).
+    Without JavaScript the page says what the tracker is and that it needs JavaScript.
+    Its home is the Committee menu (nav.js) and the committee sub-nav; the GVR corner has one card
+    linking here. Nothing else on the site repeats this page. Internal names (files, the expenses.* keys,
+    pageKey "expenses", the storage keys) keep the old word: renaming them would only churn. -#}
+{% import "macros/ui.njk" as ui with context %}
+{%- set bulk = (db.shop or {}) | shopBulk(lang) -%}
+{%- set carryHref = ('/shop/' | lurl(lang)) + ('#bulk' if bulk.rows.length else '#carry') -%}
+{%- set views = [
+  { id: "entries", icon: "list" },
+  { id: "summary", icon: "chart-column" },
+  { id: "giveaways", icon: "gift" },
+  { id: "requests", icon: "file-text" },
+  { id: "settings", icon: "settings-2" }
+] -%}
+{%- set typeList = [
+  { id: "expense", icon: "receipt" },
+  { id: "mileage", icon: "car" },
+  { id: "received", icon: "banknote" },
+  { id: "giveaway", icon: "heart-handshake" },
+  { id: "stock", icon: "package" }
+] -%}
+<div class="xp-root" x-data="xpApp('{{ lang }}')">
+
+{#- The hero's right-hand card: what is on THIS device (entries, the last backup, whether the browser
+    protects it from automatic clean-up) + "Back up now" (the full backup, photos included). It is in
+    the hero only from 1024px at 100 % text ("hide"); anywhere else the same facts sit at the foot of
+    the app card (.xp-device) — never two copies at once (areas/expenses.css). -#}
+{% call(slot) ui.pageHero(lang, "nav.expenses" | t(lang), "expenses.hero_sub" | t(lang), "receipt", "expenses.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("expenses.aside.title" | t(lang), lang, { id: "xp-aside-title", icon: "hard-drive" }) %}
+    <p class="hero-aside-text" data-nojs-only>{{ "expenses.aside.nojs" | t(lang) }}</p>
+    <p class="hero-aside-text" x-show="broken" x-cloak>{{ "expenses.aside.nojs" | t(lang) }}</p>
+    <div x-show="ready" x-cloak>
+      <dl class="xp-aside-facts">
+        <div><dt class="hero-aside-note">{{ "expenses.aside.entries" | t(lang) }}</dt><dd class="hero-aside-title" x-text="count(E().length)"></dd></div>
+        <div><dt class="hero-aside-note">{{ "expenses.aside.last_backup" | t(lang) }}</dt><dd class="hero-aside-title" x-text="lastBackupText()"></dd></div>
+        <div class="col-span-2"><dt class="hero-aside-note">{{ "expenses.aside.protected" | t(lang) }}</dt><dd class="hero-aside-title" x-text="persisted ? t('aside.yes') : t('aside.no')"></dd></div>
+      </dl>
+      <div class="hero-aside-foot">
+        <button type="button" class="hero-aside-cta" @click="exportBackup()">{% icon "hard-drive-download", "size-4" %} {{ "expenses.aside.backup_now" | t(lang) }}</button>
+      </div>
+    </div>
+  {% endcall %}
+{%- else %}
+  <div class="hero-actions">
+    <button type="button" class="btn-light" data-js-only data-xp-add @click="ready && openAdd()">{% icon "plus", "size-4" %} {{ "expenses.add" | t(lang) }}</button>
+    <button type="button" class="btn-on-dark" data-js-only @click="ready && exportAll()">{% icon "download", "size-4" %} {{ "expenses.export_csv" | t(lang) }}</button>
+  </div>
+{%- endif %}
+{% endcall %}
+
+{% committeeNav lang, "tracker", db %}
+
+{#- ============ The app: a card under the committee sub-nav ============ -#}
+<section id="app" class="container-page pt-10 sm:pt-12" aria-labelledby="xp-app-title">
+  <div class="card xp-app">
+    <h2 id="xp-app-title" class="sr-only">{{ "expenses.app_title" | t(lang) }}</h2>
+
+    {#- without JavaScript / when the app can't start -#}
+    <div class="xp-pad xp-nojs" data-nojs-only>
+      <p class="card-h"><span>{% icon "info", "size-5" %}</span>{{ "expenses.nojs_title" | t(lang) }}</p>
+      <p class="mt-2 max-w-2xl leading-relaxed text-muted">{{ "expenses.nojs_text" | t(lang) }}</p>
+    </div>
+    <div class="xp-pad" x-show="broken" x-cloak role="alert">
+      <p class="card-h"><span>{% icon "triangle-alert", "size-5" %}</span>{{ "expenses.broken_title" | t(lang) }}</p>
+      <p class="mt-2 max-w-2xl leading-relaxed text-muted">{{ "expenses.broken_text" | t(lang) }}</p>
+      <button type="button" class="btn-secondary btn-sm mt-4" onclick="location.reload()">{% icon "rotate-ccw", "size-4" %} {{ "expenses.reload" | t(lang) }}</button>
+    </div>
+
+    <template x-if="ready">
+    <div>
+      {#- storage is not working (private window, blocked, full): the app works in memory -#}
+      <p class="xp-alert" x-show="!storageOk" role="alert">{% icon "triangle-alert", "size-5 shrink-0" %}<span>{{ "expenses.storage_off" | t(lang) }}</span></p>
+
+      {#- the tab bar: one row of chips that scrolls sideways on phones, never wraps -#}
+      <div class="xp-bar">
+        <div class="chip-row-nowrap xp-tabs" role="tablist" aria-label="{{ 'expenses.tabs_label' | t(lang) }}" @keydown="tabKey($event)">
+          {%- for v in views %}
+          <button type="button" role="tab" class="xp-tab" id="xp-tab-{{ v.id }}" aria-controls="xp-panel-{{ v.id }}"
+                  :aria-selected="view === '{{ v.id }}' ? 'true' : 'false'" :tabindex="view === '{{ v.id }}' ? 0 : -1" @click="go('{{ v.id }}')">
+            {% icon v.icon, "size-4 shrink-0" %}<span>{{ ("expenses.tab." + v.id) | t(lang) }}</span>
+            {%- if v.id == "summary" %}<span class="xp-tab-n" x-show="reminderCount()" x-text="reminderCount()" aria-hidden="true"></span><span class="sr-only" x-show="reminderCount()" x-text="'(' + t('sum.reminders_n', { n: reminderCount() }) + ')'"></span>{% endif %}
+          </button>
+          {%- endfor %}
+        </div>
+        <button type="button" class="btn-primary btn-sm xp-bar-add" data-xp-add @click="openAdd()">{% icon "plus", "size-4" %} <span>{{ "expenses.add_short" | t(lang) }}</span></button>
+      </div>
+
+      {#- ================= 1. Entries ================= -#}
+      <section role="tabpanel" id="xp-panel-entries" aria-labelledby="xp-tab-entries" class="xp-panel" x-show="view === 'entries'" tabindex="-1">
+        <template x-if="view === 'entries'">
+        <div class="xp-pad">
+          <p class="xp-banner" x-show="hasExamples()">{% icon "sparkles", "size-4 shrink-0" %}<span>{{ "expenses.list.examples_banner" | t(lang) }}</span>
+            <button type="button" class="btn-secondary btn-sm" @click="removeExamples()">{% icon "eraser", "size-4" %} {{ "expenses.list.remove_examples" | t(lang) }}</button></p>
+
+          <template x-if="!E().length">
+            <div class="xp-empty">
+              <span class="page-empty-icon" aria-hidden="true">{% icon "receipt", "size-8" %}</span>
+              <h3 class="h-section mt-6 text-balance">{{ "expenses.list.empty_title" | t(lang) }}</h3>
+              <p class="mx-auto mt-3 max-w-xl leading-relaxed text-muted">{{ "expenses.list.empty_text" | t(lang) }}</p>
+              <div class="xp-empty-actions">
+                <button type="button" class="btn-primary" @click="openAdd()">{% icon "plus", "size-4" %} {{ "expenses.list.add_first" | t(lang) }}</button>
+                <button type="button" class="btn-secondary" @click="addExamples()">{% icon "sparkles", "size-4" %} {{ "expenses.list.try_examples" | t(lang) }}</button>
+              </div>
+              <p class="mx-auto mt-5 max-w-xl text-sm text-muted">{{ "expenses.list.empty_import" | t(lang) }} <button type="button" class="link" @click="go('settings'); setGo('data')">{{ "expenses.list.empty_import_link" | t(lang) }}</button></p>
+            </div>
+          </template>
+
+          <template x-if="E().length">
+          <div>
+            {#- the toolbar: search · period · sort; the type chips; "More filters" -#}
+            <div class="xp-toolbar">
+              <div class="xp-f xp-f-q">
+                <label class="xp-label" for="xp-q">{{ "expenses.f.search" | t(lang) }}</label>
+                <span class="xp-search">{% icon "search", "size-4" %}<input id="xp-q" class="input" type="search" autocomplete="off" x-model.debounce.250ms="f.q" placeholder="{{ 'expenses.f.search_ph' | t(lang) }}"></span>
+              </div>
+              <div class="xp-f">
+                <label class="xp-label" for="xp-period">{{ "expenses.f.period" | t(lang) }}</label>
+                <select id="xp-period" class="input xp-select" @change="setPeriod($event.target.value)">
+                  <template x-for="p in periods()" :key="p.id"><option :value="p.id" :selected="p.id === f.period" x-text="p.label"></option></template>
+                </select>
+              </div>
+              <div class="xp-f" x-show="f.period === 'custom'">
+                <label class="xp-label" for="xp-from">{{ "expenses.f.from" | t(lang) }}</label>
+                <input id="xp-from" class="input" type="date" x-model="f.from" @change="saveUi()">
+              </div>
+              <div class="xp-f" x-show="f.period === 'custom'">
+                <label class="xp-label" for="xp-to">{{ "expenses.f.to" | t(lang) }}</label>
+                <input id="xp-to" class="input" type="date" x-model="f.to" @change="saveUi()">
+              </div>
+              <div class="xp-f">
+                <label class="xp-label" for="xp-sort">{{ "expenses.f.sort" | t(lang) }}</label>
+                <select id="xp-sort" class="input xp-select" x-model="sort" @change="saveUi()">
+                  {%- for s in ["date_desc", "date_asc", "amount_desc", "amount_asc", "category", "updated"] %}
+                  <option value="{{ s }}">{{ ("expenses.sort." + s) | t(lang) }}</option>
+                  {%- endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="xp-chips">
+              <div class="chip-row" role="group" aria-label="{{ 'expenses.f.types' | t(lang) }}">
+                <button type="button" class="chip" :aria-pressed="f.types.length ? 'false' : 'true'" @click="f.types = []">{{ "common.all" | t(lang) }}</button>
+                {%- for ty in typeList %}
+                <button type="button" class="chip" :aria-pressed="typeOn('{{ ty.id }}') ? 'true' : 'false'" @click="toggleType('{{ ty.id }}')">{% icon ty.icon, "size-4 shrink-0" %}{{ ("expenses.type." + ty.id) | t(lang) }}</button>
+                {%- endfor %}
+              </div>
+              <button type="button" class="btn-ghost btn-sm xp-more-btn" aria-controls="xp-more" :aria-expanded="moreFilters ? 'true' : 'false'" @click="moreFilters = !moreFilters">
+                {% icon "sliders-horizontal", "size-4" %} {{ "expenses.f.more" | t(lang) }}<span class="xp-pill" x-show="moreCount()" x-text="moreCount()"></span>
+              </button>
+            </div>
+            <div id="xp-more" class="xp-more" x-show="moreFilters">
+              <div class="xp-f">
+                <label class="xp-label" for="xp-f-cat">{{ "expenses.field.category" | t(lang) }}</label>
+                <select id="xp-f-cat" class="input xp-select" x-model="f.category">
+                  <option value="">{{ "common.all" | t(lang) }}</option>
+                  {%- for ty in typeList %}
+                  <optgroup label="{{ ('expenses.type_add.' + ty.id) | t(lang) }}">
+                    <template x-for="c in cats('{{ ty.id }}', f.category)" :key="c.id"><option :value="c.id" :selected="c.id === f.category" x-text="lbl(c.label)"></option></template>
+                  </optgroup>
+                  {%- endfor %}
+                </select>
+              </div>
+              <div class="xp-f">
+                <label class="xp-label" for="xp-f-fun">{{ "expenses.field.funder" | t(lang) }}</label>
+                <select id="xp-f-fun" class="input xp-select" x-model="f.funder">
+                  <option value="">{{ "common.all" | t(lang) }}</option>
+                  <template x-for="x in funders(f.funder)" :key="x.id"><option :value="x.id" :selected="x.id === f.funder" x-text="lbl(x.name)"></option></template>
+                </select>
+              </div>
+              <div class="xp-f">
+                <label class="xp-label" for="xp-f-st">{{ "expenses.field.status" | t(lang) }}</label>
+                <select id="xp-f-st" class="input xp-select" x-model="f.status">
+                  <option value="">{{ "common.all" | t(lang) }}</option>
+                  {%- for s in ["none", "to_request", "submitted", "paid", "denied"] %}<option value="{{ s }}">{{ ("expenses.status." + s) | t(lang) }}</option>{% endfor %}
+                </select>
+              </div>
+              <div class="xp-f">
+                <label class="xp-label" for="xp-f-act">{{ "expenses.field.activity" | t(lang) }}</label>
+                <select id="xp-f-act" class="input xp-select" x-model="f.activity">
+                  <option value="">{{ "common.all" | t(lang) }}</option>
+                  <template x-for="a in activities(f.activity)" :key="a.id"><option :value="a.id" :selected="a.id === f.activity" x-text="lbl(a.name)"></option></template>
+                  <option value="-">{{ "expenses.f.no_activity" | t(lang) }}</option>
+                </select>
+              </div>
+              <div class="xp-f">
+                <label class="xp-label" for="xp-f-ev">{{ "expenses.field.event" | t(lang) }}</label>
+                <select id="xp-f-ev" class="input xp-select" x-model="f.event">
+                  <option value="">{{ "common.all" | t(lang) }}</option>
+                  <template x-for="v in usedEvents()" :key="v"><option :value="v" :selected="v === f.event" x-text="v"></option></template>
+                </select>
+              </div>
+              <div class="xp-f">
+                <label class="xp-label" for="xp-f-tag">{{ "expenses.field.tags" | t(lang) }}</label>
+                <select id="xp-f-tag" class="input xp-select" x-model="f.tag">
+                  <option value="">{{ "common.all" | t(lang) }}</option>
+                  <template x-for="v in usedTags()" :key="v"><option :value="v" :selected="v === f.tag" x-text="v"></option></template>
+                </select>
+              </div>
+              <div class="xp-f">
+                <label class="xp-label" for="xp-f-rc">{{ "expenses.field.receipt" | t(lang) }}</label>
+                <select id="xp-f-rc" class="input xp-select" x-model="f.receipt">
+                  <option value="">{{ "common.all" | t(lang) }}</option>
+                  <option value="yes">{{ "expenses.f.receipt_yes" | t(lang) }}</option>
+                  <option value="no">{{ "expenses.f.receipt_no" | t(lang) }}</option>
+                </select>
+              </div>
+              <div class="xp-more-foot">
+                <button type="button" class="btn-ghost btn-sm" x-show="anyFilter()" @click="clearFilters()">{% icon "x", "size-4" %} {{ "expenses.f.clear" | t(lang) }}</button>
+              </div>
+            </div>
+
+            <p class="xp-count" role="status" aria-live="polite" aria-atomic="true" x-text="countLine()"></p>
+
+            {#- bulk changes to the selected entries -#}
+            <div class="xp-bulk" x-show="selCount()" role="region" aria-label="{{ 'expenses.bulk.label' | t(lang) }}">
+              <div class="xp-bulk-row">
+                <p class="font-semibold text-ink" x-text="plural(selCount(), 'bulk.selected_one', 'bulk.selected')"></p>
+                <button type="button" class="btn-ghost btn-sm" x-show="selCount() < filtered().length" @click="selectAllMatching()">{{ "expenses.bulk.select_all" | t(lang) }}</button>
+                <button type="button" class="btn-ghost btn-sm" @click="clearSel()">{% icon "x", "size-4" %} {{ "expenses.bulk.clear" | t(lang) }}</button>
+              </div>
+              <div class="xp-bulk-row">
+                <button type="button" class="btn-secondary btn-sm" @click="bulkStatus('submitted')">{% icon "send", "size-4" %} {{ "expenses.bulk.submitted" | t(lang) }}</button>
+                <button type="button" class="btn-secondary btn-sm" @click="bulkStatus('paid')">{% icon "circle-check", "size-4" %} {{ "expenses.bulk.paid" | t(lang) }}</button>
+                <button type="button" class="btn-secondary btn-sm" @click="bulkExport()">{% icon "download", "size-4" %} {{ "expenses.bulk.export" | t(lang) }}</button>
+                <button type="button" class="btn-secondary btn-sm xp-danger" @click="remove(selIds())">{% icon "trash-2", "size-4" %} {{ "expenses.bulk.delete" | t(lang) }}</button>
+              </div>
+              <div class="xp-bulk-row">
+                <label class="sr-only" for="xp-bulk-fun">{{ "expenses.bulk.funder" | t(lang) }}</label>
+                <select id="xp-bulk-fun" class="input xp-select xp-bulk-sel" x-model="bulkFunder">
+                  <option value="">{{ "expenses.bulk.funder" | t(lang) }}</option>
+                  <template x-for="x in funders()" :key="x.id"><option :value="x.id" x-text="lbl(x.name)"></option></template>
+                </select>
+                <button type="button" class="btn-secondary btn-sm" :disabled="!bulkFunder" @click="bulkSetFunder()">{{ "expenses.bulk.apply" | t(lang) }}</button>
+                <label class="sr-only" for="xp-bulk-cat">{{ "expenses.bulk.category" | t(lang) }}</label>
+                <select id="xp-bulk-cat" class="input xp-select xp-bulk-sel" x-model="bulkCat">
+                  <option value="">{{ "expenses.bulk.category" | t(lang) }}</option>
+                  <template x-for="c in bulkCats()" :key="c.id"><option :value="c.id" x-text="lbl(c.label)"></option></template>
+                </select>
+                <button type="button" class="btn-secondary btn-sm" :disabled="!bulkCat" @click="bulkSetCat()">{{ "expenses.bulk.apply" | t(lang) }}</button>
+              </div>
+            </div>
+
+            {#- nothing matches -#}
+            <template x-if="!filtered().length">
+              <div class="empty-state mt-4">
+                <span class="mx-auto mb-3 grid size-12 place-items-center rounded-full bg-surface-2 text-faint">{% icon "search-x", "size-6" %}</span>
+                <p class="font-semibold text-ink">{{ "expenses.list.none_title" | t(lang) }}</p>
+                <p class="mx-auto mt-1 max-w-md text-sm" x-show="f.period !== 'all'">{{ "expenses.list.none_period" | t(lang) }}</p>
+                <div class="mt-4 flex flex-wrap justify-center gap-2">
+                  <button type="button" class="btn-secondary btn-sm" x-show="anyFilter()" @click="clearFilters()">{{ "expenses.f.clear" | t(lang) }}</button>
+                  <button type="button" class="btn-secondary btn-sm" x-show="f.period !== 'all'" @click="setPeriod('all')">{{ "expenses.list.show_all_periods" | t(lang) }}</button>
+                </div>
+              </div>
+            </template>
+
+            {#- wide screens: a table -#}
+            <template x-if="wide && filtered().length">
+              <div class="xp-table-wrap" role="region" tabindex="0" aria-labelledby="xp-list-cap">
+                <table class="xp-table xp-list">
+                  <caption id="xp-list-cap" class="sr-only">{{ "expenses.list.caption" | t(lang) }}</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="xp-c-sel"><label class="xp-check"><input type="checkbox" :checked="allShownSel()" @change="toggleAllShown()"><span class="sr-only">{{ "expenses.list.select_shown" | t(lang) }}</span></label></th>
+                      <th scope="col" class="xp-c-date">{{ "expenses.field.date" | t(lang) }}</th>
+                      <th scope="col">{{ "expenses.field.description" | t(lang) }}</th>
+                      <th scope="col" class="xp-c-cat">{{ "expenses.field.category" | t(lang) }}</th>
+                      <th scope="col" class="xp-c-fun">{{ "expenses.field.funder" | t(lang) }}</th>
+                      <th scope="col" class="xp-c-st">{{ "expenses.field.status" | t(lang) }}</th>
+                      <th scope="col" class="xp-c-amt">{{ "expenses.field.amount" | t(lang) }}</th>
+                      <th scope="col" class="xp-c-act"><span class="sr-only">{{ "expenses.list.actions" | t(lang) }}</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <template x-for="r in rows()" :key="r.id">
+                      <tr :class="{ 'is-flash': flashId === r.id, 'is-sel': isSel(r.id) }">
+                        <td class="xp-c-sel"><label class="xp-check"><input type="checkbox" :checked="isSel(r.id)" @change="toggleSel(r.id)"><span class="sr-only" x-text="t('list.select', { what: r.desc })"></span></label></td>
+                        <td class="xp-c-date" x-text="r.date"></td>
+                        <td class="xp-c-desc">
+                          <span class="xp-desc"><span x-text="r.desc"></span><span class="xp-flags"><span class="xp-rc" x-show="r.receipt !== 'none'" :title="t('receipt.' + r.receipt)">{% icon "paperclip", "size-3.5" %}<span class="sr-only" x-text="t('receipt.' + r.receipt)"></span></span><span class="badge-muted" x-show="r.direct">{{ "expenses.list.direct" | t(lang) }}</span><span class="badge-muted" x-show="r.example">{{ "expenses.list.example" | t(lang) }}</span></span></span>
+                          <span class="xp-sub meta-row"><span class="xp-sub-cat" x-text="r.cat"></span><span class="xp-sub-fun" x-show="r.funder" x-text="r.funder"></span><span x-show="r.miles" x-text="r.miles"></span><span x-show="r.sub" x-text="r.sub"></span></span>
+                        </td>
+                        <td class="xp-c-cat"><span class="xp-cat" :class="r.tone"><span class="xp-cat-i" x-xp-icon="r.icon"></span><span x-text="r.cat"></span></span></td>
+                        <td class="xp-c-fun" x-text="r.funder"></td>
+                        <td class="xp-c-st"><span class="xp-status" x-show="r.status" :class="'is-' + r.status"><span x-xp-icon="r.statusIcon"></span><span x-text="r.statusText"></span></span></td>
+                        <td class="xp-c-amt"><span class="xp-amt" :class="'is-' + r.flow"><span x-show="r.flow === 'in'" aria-hidden="true">{% icon "arrow-down-left", "size-3.5" %}</span><span x-text="r.amount"></span></span></td>
+                        <td class="xp-c-act">
+                          <div class="xp-acts">
+                            <button type="button" class="xp-icon-btn" :aria-label="t('list.edit', { what: r.desc })" @click="openEdit(r.id)">{% icon "pencil", "size-4" %}</button>
+                            <button type="button" class="xp-icon-btn" :aria-label="t('list.duplicate', { what: r.desc })" @click="duplicate(r.id)">{% icon "copy", "size-4" %}</button>
+                            <button type="button" class="xp-icon-btn xp-danger" :aria-label="t('list.delete', { what: r.desc })" @click="remove([r.id])">{% icon "trash-2", "size-4" %}</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+            </template>
+
+            {#- phones and large text: cards -#}
+            <template x-if="!wide && filtered().length">
+              <div>
+                <label class="xp-check xp-check-all"><input type="checkbox" :checked="allShownSel()" @change="toggleAllShown()"><span>{{ "expenses.list.select_shown" | t(lang) }}</span></label>
+                <ul class="xp-cards" role="list" aria-label="{{ 'expenses.list.caption' | t(lang) }}">
+                  <template x-for="r in rows()" :key="r.id">
+                    <li class="xp-card" :class="{ 'is-flash': flashId === r.id, 'is-sel': isSel(r.id) }">
+                      <div class="xp-card-top">
+                        <span class="xp-cat" :class="r.tone"><span class="xp-cat-i" x-xp-icon="r.icon"></span><span x-text="r.cat"></span></span>
+                        <span class="xp-card-date" x-text="r.date"></span>
+                      </div>
+                      <p class="xp-desc" x-text="r.desc"></p>
+                      <p class="xp-sub meta-row"><span x-show="r.funder" x-text="r.funder"></span><span x-show="r.miles" x-text="r.miles"></span><span x-show="r.sub" x-text="r.sub"></span></p>
+                      <div class="xp-card-mid">
+                        <span class="xp-status" x-show="r.status" :class="'is-' + r.status"><span x-xp-icon="r.statusIcon"></span><span x-text="r.statusText"></span></span>
+                        <span class="badge-muted" x-show="r.example">{{ "expenses.list.example" | t(lang) }}</span>
+                        <span class="badge-muted" x-show="r.direct">{{ "expenses.list.direct" | t(lang) }}</span>
+                        <span class="xp-rc" x-show="r.receipt !== 'none'">{% icon "paperclip", "size-3.5" %}<span class="sr-only" x-text="t('receipt.' + r.receipt)"></span></span>
+                        <span class="xp-amt" :class="'is-' + r.flow"><span x-show="r.flow === 'in'" aria-hidden="true">{% icon "arrow-down-left", "size-3.5" %}</span><span x-text="r.amount"></span></span>
+                      </div>
+                      <div class="xp-card-acts">
+                        <label class="xp-check"><input type="checkbox" :checked="isSel(r.id)" @change="toggleSel(r.id)"><span class="sr-only" x-text="t('list.select', { what: r.desc })"></span></label>
+                        <button type="button" class="xp-icon-btn" :aria-label="t('list.edit', { what: r.desc })" @click="openEdit(r.id)">{% icon "pencil", "size-4" %}</button>
+                        <button type="button" class="xp-icon-btn" :aria-label="t('list.duplicate', { what: r.desc })" @click="duplicate(r.id)">{% icon "copy", "size-4" %}</button>
+                        <button type="button" class="xp-icon-btn xp-danger" :aria-label="t('list.delete', { what: r.desc })" @click="remove([r.id])">{% icon "trash-2", "size-4" %}</button>
+                      </div>
+                    </li>
+                  </template>
+                </ul>
+              </div>
+            </template>
+            <div class="mt-5 text-center" x-show="remaining()">
+              <button type="button" class="btn-secondary btn-sm" @click="more()">{% icon "chevrons-down", "size-4" %} <span x-text="t('list.show_more', { n: count(Math.min(remaining(), 100)) })"></span></button>
+            </div>
+          </div>
+          </template>
+        </div>
+        </template>
+      </section>
+
+      {#- ================= 2. Summary ================= -#}
+      <section role="tabpanel" id="xp-panel-summary" aria-labelledby="xp-tab-summary" class="xp-panel" x-show="view === 'summary'" tabindex="-1">
+        <template x-if="view === 'summary'">
+        <div class="xp-pad">
+          <div class="xp-head">
+            <div class="min-w-0">
+              <h3 class="card-h"><span>{% icon "chart-column", "size-5" %}</span>{{ "expenses.sum.title" | t(lang) }}</h3>
+              <p class="mt-1 text-sm text-muted">{{ "expenses.sum.sub" | t(lang) }}</p>
+            </div>
+            <div class="xp-f xp-f-inline">
+              <label class="xp-label" for="xp-s-period">{{ "expenses.f.period" | t(lang) }}</label>
+              <select id="xp-s-period" class="input xp-select" @change="setPeriod($event.target.value)">
+                <template x-for="p in periods()" :key="p.id"><option :value="p.id" :selected="p.id === f.period" x-text="p.label"></option></template>
+              </select>
+            </div>
+          </div>
+          <div class="xp-custom-dates" x-show="f.period === 'custom'">
+            <div class="xp-f"><label class="xp-label" for="xp-s-from">{{ "expenses.f.from" | t(lang) }}</label><input id="xp-s-from" class="input" type="date" x-model="f.from" @change="saveUi()"></div>
+            <div class="xp-f"><label class="xp-label" for="xp-s-to">{{ "expenses.f.to" | t(lang) }}</label><input id="xp-s-to" class="input" type="date" x-model="f.to" @change="saveUi()"></div>
+          </div>
+
+          <ul class="xp-stats" role="list">
+            <template x-for="s in stats()" :key="s.id">
+              <li class="xp-stat" :class="s.tone">
+                <span class="xp-stat-i" x-xp-icon="s.icon"></span>
+                <span class="xp-stat-label" x-text="s.label"></span>
+                <span class="xp-stat-value" x-text="s.value"></span>
+                <span class="xp-stat-note" x-text="s.note"></span>
+              </li>
+            </template>
+          </ul>
+
+          <div class="xp-sum-grid">
+            {#- by category: CSS bars (the amount and the share in text; the bar is a picture of them) -#}
+            <div class="xp-box">
+              <h4 class="xp-h4">{{ "expenses.sum.by_category" | t(lang) }}</h4>
+              <p class="xp-none" x-show="!byCat().length">{{ "expenses.sum.nothing" | t(lang) }}</p>
+              <ul class="xp-bars" role="list">
+                <template x-for="c in byCat()" :key="c.id">
+                  <li class="xp-bar-row" :class="c.tone">
+                    <span class="xp-bar-label"><span class="xp-cat-i" x-xp-icon="c.icon"></span><span x-text="c.label"></span></span>
+                    <span class="xp-bar-val"><span x-text="c.amount"></span> <span class="text-muted" x-show="c.items" x-text="'· ' + c.items"></span> <span class="text-muted" x-text="'· ' + c.share"></span></span>
+                    <span class="xp-bar-track" aria-hidden="true"><span class="xp-bar-fill" :style="'width:' + c.w + '%'"></span></span>
+                  </li>
+                </template>
+              </ul>
+            </div>
+            {#- by month: spent vs received -#}
+            <div class="xp-box">
+              <h4 class="xp-h4">{{ "expenses.sum.by_month" | t(lang) }}</h4>
+              <p class="xp-legend" aria-hidden="true" x-show="byMonth().length"><span class="xp-key is-spent"></span>{{ "expenses.sum.spent_short" | t(lang) }} <span class="xp-key is-received"></span>{{ "expenses.sum.received_short" | t(lang) }}</p>
+              <p class="xp-none" x-show="!byMonth().length">{{ "expenses.sum.nothing" | t(lang) }}</p>
+              <ul class="xp-months" role="list">
+                <template x-for="m in byMonth()" :key="m.ym">
+                  <li class="xp-month">
+                    <span class="xp-month-label" x-text="m.label"></span>
+                    <span class="xp-month-bars" aria-hidden="true">
+                      <span class="xp-mbar is-spent" :style="'width:' + m.ws + '%'"></span>
+                      <span class="xp-mbar is-received" :style="'width:' + m.wr + '%'"></span>
+                    </span>
+                    <span class="xp-month-val" x-text="t('sum.month_line', { spent: m.spent, received: m.received })"></span>
+                  </li>
+                </template>
+              </ul>
+            </div>
+            {#- by service activity: assemblies, district meetings, tables … — what each cost (its trips and its
+                expenses), its miles and trips: the sections of the service report -#}
+            <div class="xp-box">
+              <h4 class="xp-h4">{{ "expenses.sum.by_activity" | t(lang) }}</h4>
+              <p class="xp-none" x-show="!actRows().length">{{ "expenses.sum.nothing" | t(lang) }}</p>
+              <ul class="xp-bars" role="list">
+                <template x-for="a in actRows()" :key="a.id">
+                  <li class="xp-bar-row xp-tone-grape">
+                    <span class="xp-bar-label"><span x-text="a.label"></span></span>
+                    <span class="xp-bar-val"><span x-text="a.amount"></span> <span class="text-muted" x-show="a.line" x-text="'· ' + a.line"></span></span>
+                    <span class="xp-bar-track" aria-hidden="true"><span class="xp-bar-fill" :style="'width:' + a.w + '%'"></span></span>
+                  </li>
+                </template>
+              </ul>
+              <p class="xp-hint" x-show="actRows().length">{{ "expenses.sum.by_activity_hint" | t(lang) }}</p>
+            </div>
+          </div>
+
+          {#- who owes you: one row per funder (Area, district, group … and people you helped) -#}
+          <div class="xp-box mt-5" id="xp-owed">
+            <h4 class="xp-h4">{{ "expenses.sum.owed_title" | t(lang) }}</h4>
+            <p class="mt-1 text-sm text-muted">{{ "expenses.sum.owed_sub" | t(lang) }}</p>
+            <p class="xp-none" x-show="!balances().length">{{ "expenses.sum.owed_none" | t(lang) }}</p>
+            <template x-if="wide && balances().length">
+            <div class="xp-table-wrap mt-3" role="region" tabindex="0" aria-labelledby="xp-owed-cap">
+              <table class="xp-table">
+                <caption id="xp-owed-cap" class="sr-only">{{ "expenses.sum.owed_title" | t(lang) }}</caption>
+                <thead><tr>
+                  <th scope="col">{{ "expenses.sum.col_funder" | t(lang) }}</th>
+                  <th scope="col" class="xp-num">{{ "expenses.sum.col_to_request" | t(lang) }}</th>
+                  <th scope="col" class="xp-num">{{ "expenses.sum.col_submitted" | t(lang) }}</th>
+                  <th scope="col" class="xp-num">{{ "expenses.sum.col_received" | t(lang) }}</th>
+                  <th scope="col">{{ "expenses.sum.col_balance" | t(lang) }}</th>
+                  <th scope="col"><span class="sr-only">{{ "expenses.list.actions" | t(lang) }}</span></th>
+                </tr></thead>
+                <tbody>
+                  <template x-for="b in balances()" :key="b.id">
+                    <tr>
+                      <th scope="row" class="font-semibold text-ink"><span x-text="b.name"></span> <span class="badge-muted" x-show="b.person">{{ "expenses.kind.person" | t(lang) }}</span></th>
+                      <td class="xp-num" x-text="b.toRequest"></td>
+                      <td class="xp-num" x-text="b.submitted"></td>
+                      <td class="xp-num" x-text="b.received"></td>
+                      <td><span class="xp-bal" :class="b.balance < 0 ? 'is-owed' : b.balance > 0 ? 'is-held' : 'is-even'" x-text="b.balanceText"></span></td>
+                      <td><button type="button" class="btn-secondary btn-sm" x-show="!b.person" @click="rqStart(b.id)">{% icon "file-text", "size-4" %} {{ "expenses.sum.build_request" | t(lang) }}</button></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+            </template>
+            <template x-if="!wide && balances().length">
+              <ul class="xp-rows mt-3" role="list">
+                <template x-for="b in balances()" :key="b.id">
+                  <li class="xp-row">
+                    <p class="xp-row-top"><span class="font-semibold text-ink" x-text="b.name"></span><span class="xp-bal" :class="b.balance < 0 ? 'is-owed' : b.balance > 0 ? 'is-held' : 'is-even'" x-text="b.balanceText"></span></p>
+                    <p class="mt-0.5 text-sm text-muted" x-text="t('sum.owed_line', { to_request: b.toRequest, submitted: b.submitted, received: b.received })"></p>
+                    <button type="button" class="btn-secondary btn-sm mt-2" x-show="!b.person" @click="rqStart(b.id)">{% icon "file-text", "size-4" %} {{ "expenses.sum.build_request" | t(lang) }}</button>
+                  </li>
+                </template>
+              </ul>
+            </template>
+          </div>
+
+          <div class="xp-sum-grid mt-5">
+            {#- budgets -#}
+            <div class="xp-box">
+              <h4 class="xp-h4">{{ "expenses.sum.budgets" | t(lang) }}</h4>
+              <p class="xp-none" x-show="!budgetRows().length">{{ "expenses.sum.budgets_none" | t(lang) }} <button type="button" class="link" @click="go('settings'); setGo('budgets')">{{ "expenses.sum.budgets_add" | t(lang) }}</button></p>
+              <ul class="space-y-4" role="list">
+                <template x-for="b in budgetRows()" :key="b.id">
+                  <li>
+                    <p class="flex flex-wrap justify-between gap-x-3 text-sm"><span class="font-semibold text-ink" x-text="b.label + (b.year ? ' · ' + b.year : '')"></span><span class="text-muted" x-text="t('sum.budget_line', { used: b.used, total: b.total })"></span></p>
+                    <span class="xp-bar-track mt-1.5" :class="{ 'is-over': b.over }" role="progressbar" aria-valuemin="0" aria-valuemax="100" :aria-valuenow="Math.min(100, b.pct)" :aria-label="b.label"><span class="xp-bar-fill" :style="'width:' + Math.min(100, b.pct) + '%'"></span></span>
+                    <p class="mt-1 text-xs" :class="b.over ? 'text-danger font-semibold' : 'text-muted'" x-text="b.over ? t('sum.budget_over', { amount: b.left.replace('-', '') }) : t('sum.budget_left', { amount: b.left, pct: b.pct })"></p>
+                  </li>
+                </template>
+              </ul>
+            </div>
+            {#- subscriptions: renewals due soon; helped purchases not paid back -#}
+            <div class="xp-box">
+              <h4 class="xp-h4">{{ "expenses.sum.subs" | t(lang) }}</h4>
+              <p class="xp-none" x-show="!renewalRows().length">{{ "expenses.sum.renew_none" | t(lang) }}</p>
+              <ul class="xp-lines" role="list">
+                <template x-for="r in renewalRows()" :key="r.id">
+                  <li><span class="font-semibold text-ink" x-text="r.what"></span><span class="text-muted" x-show="r.who" x-text="' · ' + r.who"></span>
+                    <span class="block text-sm" :class="r.past ? 'text-danger' : 'text-muted'" x-text="t(r.past ? 'sum.renew_ended' : 'sum.renew_due', { date: r.end })"></span>
+                    <button type="button" class="link text-sm" @click="renew(r.id)">{{ "expenses.sum.renew_now" | t(lang) }}</button></li>
+                </template>
+              </ul>
+              <p class="mt-3 text-sm text-muted" x-show="peopleOwed().length">
+                <span x-text="plural(peopleOwed().length, 'sum.helped_one', 'sum.helped')"></span>
+                <a class="link" href="#xp-owed">{{ "expenses.sum.see_owed" | t(lang) }}</a>
+              </p>
+              <p class="mt-3"><button type="button" class="link text-sm xp-link-btn" @click="jump('giveaways', 'xp-subs')">{{ "expenses.sum.see_subs" | t(lang) }}</button></p>
+            </div>
+            {#- reminders -#}
+            <div class="xp-box">
+              <h4 class="xp-h4">{{ "expenses.sum.reminders" | t(lang) }}</h4>
+              <p class="xp-none" x-show="!reminderCount()">{% icon "circle-check", "size-4 inline -mt-0.5 text-vine" %} {{ "expenses.sum.reminders_none" | t(lang) }}</p>
+              <ul class="xp-lines" role="list">
+                <li x-show="backupDue()">
+                  <span class="font-semibold text-ink">{{ "expenses.sum.backup_due" | t(lang) }}</span>
+                  <span class="block text-sm text-muted" x-text="t('sum.backup_last', { when: lastBackupText() })"></span>
+                  <button type="button" class="link text-sm" @click="exportBackup()">{{ "expenses.aside.backup_now" | t(lang) }}</button>
+                </li>
+                <template x-for="s in staleRows()" :key="s.id">
+                  <li><span class="font-semibold text-ink" x-text="t('sum.stale', { funder: s.funder, amount: s.amount })"></span>
+                    <span class="block text-sm text-muted" x-text="s.desc + ' · ' + t('sum.stale_since', { date: s.since })"></span>
+                    <button type="button" class="link text-sm" @click="openEdit(s.id)">{{ "expenses.sum.stale_open" | t(lang) }}</button></li>
+                </template>
+              </ul>
+            </div>
+          </div>
+        </div>
+        </template>
+      </section>
+
+      {#- ================= 3. Giveaways (carry the message): literature, then subscriptions ================= -#}
+      <section role="tabpanel" id="xp-panel-giveaways" aria-labelledby="xp-tab-giveaways" class="xp-panel" x-show="view === 'giveaways'" tabindex="-1">
+        <template x-if="view === 'giveaways'">
+        <div class="xp-pad">
+          <div class="xp-head">
+            <div class="min-w-0 max-w-3xl">
+              <h3 class="card-h"><span>{% icon "gift", "size-5" %}</span>{{ "expenses.give.title" | t(lang) }}</h3>
+              <p class="mt-1 text-sm leading-relaxed text-muted">{{ "expenses.give.why" | t(lang) }} <a class="link" href="{{ carryHref }}">{{ "expenses.give.shop_link" | t(lang) }}</a></p>
+            </div>
+            {#- the period (the same one as Entries and Summary): what came in and went out in it -#}
+            <div class="xp-f xp-f-inline">
+              <label class="xp-label" for="xp-g-period">{{ "expenses.f.period" | t(lang) }}</label>
+              <select id="xp-g-period" class="input xp-select" @change="setPeriod($event.target.value)">
+                <template x-for="p in periods()" :key="p.id"><option :value="p.id" :selected="p.id === f.period" x-text="p.label"></option></template>
+              </select>
+            </div>
+          </div>
+          <div class="xp-custom-dates" x-show="f.period === 'custom'">
+            <div class="xp-f"><label class="xp-label" for="xp-g-from">{{ "expenses.f.from" | t(lang) }}</label><input id="xp-g-from" class="input" type="date" x-model="f.from" @change="saveUi()"></div>
+            <div class="xp-f"><label class="xp-label" for="xp-g-to">{{ "expenses.f.to" | t(lang) }}</label><input id="xp-g-to" class="input" type="date" x-model="f.to" @change="saveUi()"></div>
+          </div>
+          {#- the view's two parts (a long page on a phone): a jump to each -#}
+          <div class="chip-row xp-jumps" role="group" aria-label="{{ 'expenses.give.parts' | t(lang) }}">
+            <button type="button" class="chip" @click="jump('', 'xp-lit')">{% icon "book-open", "size-4 shrink-0" %}{{ "expenses.give.jump_lit" | t(lang) }}</button>
+            <button type="button" class="chip" @click="jump('', 'xp-subs')">{% icon "newspaper", "size-4 shrink-0" %}{{ "expenses.subs.title" | t(lang) }}</button>
+          </div>
+
+          {#- ---- literature to give away: the period's stock (start + bought + received − given = on hand) ---- -#}
+          <h4 id="xp-lit" class="xp-h4 xp-part" tabindex="-1">{{ "expenses.give.lit" | t(lang) }}</h4>
+          <div class="xp-actions mt-3">
+            <button type="button" class="btn-primary btn-sm" @click="openAdd('giveaway')">{% icon "heart-handshake", "size-4" %} {{ "expenses.give.record" | t(lang) }}</button>
+            <button type="button" class="btn-secondary btn-sm" @click="openAdd('expense', 'giveaways')">{% icon "shopping-bag", "size-4" %} {{ "expenses.give.buy" | t(lang) }}</button>
+            <button type="button" class="btn-secondary btn-sm" @click="openAdd('stock')">{% icon "package", "size-4" %} {{ "expenses.give.stock" | t(lang) }}</button>
+          </div>
+          <ul class="xp-stats mt-4" role="list">
+            <template x-for="s in giveTiles()" :key="s.id">
+              <li class="xp-stat" :class="s.tone">
+                <span class="xp-stat-i" x-xp-icon="s.icon"></span>
+                <span class="xp-stat-label" x-text="s.label"></span>
+                <span class="xp-stat-value" x-text="s.value"></span>
+                <span class="xp-stat-note" x-text="s.note"></span>
+              </li>
+            </template>
+          </ul>
+
+          <h5 class="xp-h5 mt-6">{{ "expenses.give.inventory" | t(lang) }}</h5>
+          {#- empty: "in this period" once anything was ever recorded, "yet" before that -#}
+          <p class="xp-none" x-show="!inv().length" x-text="everLit() ? t('give.inventory_none_period') : t('give.inventory_none')"></p>
+          <template x-if="inv().length && wide">
+            <div class="xp-table-wrap mt-3" role="region" tabindex="0" aria-labelledby="xp-inv-cap">
+              <table class="xp-table">
+                <caption id="xp-inv-cap" class="sr-only">{{ "expenses.give.inventory" | t(lang) }}</caption>
+                <thead><tr>
+                  <th scope="col">{{ "expenses.field.item" | t(lang) }}</th>
+                  <th scope="col" class="xp-num" x-show="anyStart()">{{ "expenses.give.col_start" | t(lang) }}</th>
+                  <th scope="col" class="xp-num">{{ "expenses.give.col_bought" | t(lang) }}</th>
+                  <th scope="col" class="xp-num">{{ "expenses.give.col_received" | t(lang) }}</th>
+                  <th scope="col" class="xp-num">{{ "expenses.give.col_given" | t(lang) }}</th>
+                  <th scope="col" class="xp-num">{{ "expenses.give.col_on_hand" | t(lang) }}</th>
+                  <th scope="col" class="xp-num">{{ "expenses.give.col_each" | t(lang) }}</th>
+                </tr></thead>
+                <tbody>
+                  <template x-for="x in inv()" :key="x.key">
+                    <tr>
+                      <th scope="row"><span class="font-semibold text-ink" x-text="x.item"></span> <span class="xp-fmt" :class="'is-' + x.format" x-show="x.format" x-text="x.formatText"></span></th>
+                      <td class="xp-num" x-show="anyStart()" x-text="x.start"></td>
+                      <td class="xp-num" x-text="x.bought"></td>
+                      <td class="xp-num" x-text="x.received"></td>
+                      <td class="xp-num" x-text="x.given"></td>
+                      <td class="xp-num"><span :class="x.onHand < 0 ? 'xp-neg' : 'font-semibold text-ink'"><span x-show="x.onHand < 0" aria-hidden="true">{% icon "triangle-alert", "size-3.5" %}</span><span x-text="x.onHandText"></span><span class="sr-only" x-show="x.onHand < 0">{{ "expenses.give.negative_sr" | t(lang) }}</span></span></td>
+                      <td class="xp-num" x-text="x.avg"></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </template>
+          <template x-if="inv().length && !wide">
+            <ul class="xp-rows mt-3" role="list">
+              <template x-for="x in inv()" :key="x.key">
+                <li class="xp-row">
+                  <p><span class="font-semibold text-ink" x-text="x.item"></span> <span class="xp-fmt" :class="'is-' + x.format" x-show="x.format" x-text="x.formatText"></span></p>
+                  <p class="text-sm text-muted" x-show="anyStart()" x-text="t('give.row_start', { n: x.start })"></p>
+                  <p class="text-sm text-muted" x-text="t(x.hasAvg ? 'give.row_line' : 'give.row_line_free', { bought: x.bought, received: x.received, given: x.given, each: x.avg })"></p>
+                  <p class="text-sm" :class="x.onHand < 0 ? 'xp-neg' : 'font-semibold text-ink'" x-text="t(x.onHand < 0 ? 'give.row_negative' : 'give.row_on_hand', { n: x.onHandText })"></p>
+                </li>
+              </template>
+            </ul>
+          </template>
+          <p class="mt-2 text-xs text-muted" x-show="anyStart()">{{ "expenses.give.start_note" | t(lang) }}</p>
+          <p class="mt-2 text-xs text-muted" x-show="invNegative()">{{ "expenses.give.negative_note" | t(lang) }}</p>
+
+          <h5 class="xp-h5 mt-8">{{ "expenses.give.by_event" | t(lang) }}</h5>
+          <p class="xp-none" x-show="!giveEvents().length" x-text="everGiven() ? t('give.by_event_none_period') : t('give.by_event_none')"></p>
+          <ul class="xp-events" role="list">
+            <template x-for="g in giveEvents()" :key="g.key">
+              <li class="xp-event">
+                <p class="flex flex-wrap items-baseline justify-between gap-x-3"><span class="font-semibold text-ink" x-text="g.name"></span><span class="text-sm text-muted" x-text="g.date"></span></p>
+                <p class="mt-0.5 text-sm font-semibold text-vine" x-text="t('give.event_total', { n: g.total })"></p>
+                <ul class="mt-2 space-y-1 text-sm text-muted" role="list">
+                  <template x-for="i in g.items" :key="i.key"><li class="flex justify-between gap-3"><span x-text="i.text"></span><span class="tabular-nums" x-text="i.qty"></span></li></template>
+                </ul>
+              </li>
+            </template>
+          </ul>
+
+          {#- ---- subscriptions: every one you gave (or bought for someone, the group, yourself), where it
+              stands today, and the end dates for your calendar ---- -#}
+          <h4 id="xp-subs" class="xp-h4 xp-part mt-10" tabindex="-1">{{ "expenses.subs.title" | t(lang) }}</h4>
+          <p class="mt-1 max-w-3xl text-sm leading-relaxed text-muted">{{ "expenses.subs.intro" | t(lang) }}</p>
+          <div class="xp-actions mt-3">
+            <button type="button" class="btn-primary btn-sm" @click="openAdd('expense', 'subscriptions')">{% icon "plus", "size-4" %} {{ "expenses.subs.add" | t(lang) }}</button>
+            <button type="button" class="btn-secondary btn-sm" :disabled="!subStatusCount('ending') && !subStatusCount('active')" @click="subsIcs()" aria-describedby="xp-ics-hint">{% icon "calendar-plus", "size-4" %} {{ "expenses.subs.ics" | t(lang) }}</button>
+          </div>
+          <p id="xp-ics-hint" class="xp-hint">{{ "expenses.subs.ics_hint" | t(lang) }}</p>
+          <ul class="xp-stats mt-4" role="list">
+            <template x-for="s in subTiles()" :key="s.id">
+              <li class="xp-stat" :class="s.tone">
+                <span class="xp-stat-i" x-xp-icon="s.icon"></span>
+                <span class="xp-stat-label" x-text="s.label"></span>
+                <span class="xp-stat-value" x-text="s.value"></span>
+                <span class="xp-stat-note" x-text="s.note"></span>
+              </li>
+            </template>
+          </ul>
+          <p class="xp-none" x-show="!subsAll().length">{{ "expenses.subs.none" | t(lang) }}</p>
+          <template x-if="subsAll().length">
+          <div>
+            <div class="xp-chips">
+              <div class="chip-row" role="group" aria-label="{{ 'expenses.subs.show' | t(lang) }}">
+                <button type="button" class="chip" :aria-pressed="subF.status ? 'false' : 'true'" @click="subF.status = ''">{{ "common.all" | t(lang) }}<span class="xp-chip-n tabular-nums" x-text="subStatusCount('')"></span></button>
+                {%- for s in ["ending", "ended", "active", "renewed", "no_end"] %}
+                <button type="button" class="chip" x-show="subStatusCount('{{ s }}')" :aria-pressed="subF.status === '{{ s }}' ? 'true' : 'false'" @click="subToggle('{{ s }}')">{{ ("expenses.subs.st_" + s) | t(lang) }}<span class="xp-chip-n tabular-nums" x-text="subStatusCount('{{ s }}')"></span></button>
+                {%- endfor %}
+              </div>
+              <div class="xp-f">
+                <label class="sr-only" for="xp-sub-kind">{{ "expenses.subs.kind_filter" | t(lang) }}</label>
+                <select id="xp-sub-kind" class="input xp-select xp-select-sm" x-model="subF.kind">
+                  <option value="">{{ "expenses.subs.all_kinds" | t(lang) }}</option>
+                  {%- for k in ["gift", "helped", "group", "self"] %}<option value="{{ k }}">{{ ("expenses.sub_kind." + k) | t(lang) }}</option>{% endfor %}
+                </select>
+              </div>
+            </div>
+            {#- how many subscriptions are listed (10 gifts bought at once count 10, as on the tiles) -#}
+            <p class="xp-count" role="status" aria-live="polite" aria-atomic="true" x-text="plural(subShown(), 'subs.shown_one', 'subs.shown')"></p>
+            {#- the table needs a laptop's width (six columns and "Record the renewal"): below it, cards (subsWide) -#}
+            <template x-if="subsWide && subRows().length">
+              <div class="xp-table-wrap mt-3" role="region" tabindex="0" aria-labelledby="xp-subs-cap">
+                <table class="xp-table xp-subs-table">
+                  <caption id="xp-subs-cap" class="sr-only">{{ "expenses.subs.title" | t(lang) }}</caption>
+                  <thead><tr>
+                    <th scope="col">{{ "expenses.subs.col_who" | t(lang) }}</th>
+                    <th scope="col">{{ "expenses.field.sub_product" | t(lang) }}</th>
+                    <th scope="col">{{ "expenses.subs.col_started" | t(lang) }}</th>
+                    <th scope="col">{{ "expenses.subs.col_ends" | t(lang) }}</th>
+                    <th scope="col">{{ "expenses.field.status" | t(lang) }}</th>
+                    <th scope="col"><span class="sr-only">{{ "expenses.list.actions" | t(lang) }}</span></th>
+                  </tr></thead>
+                  <tbody>
+                    <template x-for="s in subRows()" :key="s.id">
+                      <tr>
+                        <th scope="row"><span class="font-semibold text-ink" x-text="s.who"></span><span class="xp-sub" x-show="s.kind || s.qty" x-text="[s.kind, s.qty].filter(Boolean).join(' · ')"></span></th>
+                        <td x-text="s.what"></td>
+                        <td class="whitespace-nowrap" x-text="s.start"></td>
+                        <td class="whitespace-nowrap" x-text="s.end"></td>
+                        <td><span class="xp-status" :class="'is-sub-' + s.status"><span x-xp-icon="s.icon"></span><span x-text="s.statusText"></span></span><span class="xp-sub" x-show="s.when" x-text="s.when"></span></td>
+                        <td>
+                          <div class="xp-acts">
+                            <button type="button" class="btn-ghost btn-sm" x-show="s.canRenew" @click="renew(s.id)">{% icon "repeat", "size-4" %}<span>{{ "expenses.sum.renew_now" | t(lang) }}</span><span class="sr-only" x-text="': ' + s.who"></span></button>
+                            <button type="button" class="xp-icon-btn" :aria-label="t('list.edit', { what: s.who + ' · ' + s.what })" @click="openEdit(s.id)">{% icon "pencil", "size-4" %}</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+            </template>
+            <template x-if="!subsWide && subRows().length">
+              <ul class="xp-rows mt-3" role="list">
+                <template x-for="s in subRows()" :key="s.id">
+                  <li class="xp-row">
+                    <p class="xp-row-top"><span class="font-semibold text-ink" x-text="s.who"></span><span class="xp-status" :class="'is-sub-' + s.status"><span x-xp-icon="s.icon"></span><span x-text="s.statusText"></span></span></p>
+                    <p class="mt-0.5 text-sm text-muted" x-text="[s.what, s.kind, s.qty].filter(Boolean).join(' · ')"></p>
+                    <p class="text-sm text-muted" x-text="t('subs.dates', { start: s.start, end: s.end })"></p>
+                    <p class="text-sm font-semibold text-ink" x-show="s.when" x-text="s.when"></p>
+                    <div class="xp-row-acts">
+                      <button type="button" class="btn-secondary btn-sm" x-show="s.canRenew" @click="renew(s.id)">{% icon "repeat", "size-4" %}<span>{{ "expenses.sum.renew_now" | t(lang) }}</span><span class="sr-only" x-text="': ' + s.who"></span></button>
+                      <button type="button" class="xp-icon-btn" :aria-label="t('list.edit', { what: s.who + ' · ' + s.what })" @click="openEdit(s.id)">{% icon "pencil", "size-4" %}</button>
+                    </div>
+                  </li>
+                </template>
+              </ul>
+            </template>
+            <p class="xp-none" x-show="!subRows().length">{{ "expenses.subs.none_match" | t(lang) }}</p>
+          </div>
+          </template>
+        </div>
+        </template>
+      </section>
+
+      {#- ================= 4. Requests (reimbursement) ================= -#}
+      <section role="tabpanel" id="xp-panel-requests" aria-labelledby="xp-tab-requests" class="xp-panel" x-show="view === 'requests'" tabindex="-1">
+        <template x-if="view === 'requests'">
+        <div class="xp-pad">
+          <div class="xp-head">
+            <div class="min-w-0 max-w-3xl">
+              <h3 class="card-h"><span>{% icon "file-text", "size-5" %}</span>{{ "expenses.req.title" | t(lang) }}</h3>
+              <p class="mt-1 text-sm leading-relaxed text-muted">{{ "expenses.req.sub" | t(lang) }}</p>
+            </div>
+          </div>
+          <div class="xp-rq">
+            {#- the choices -#}
+            <div class="xp-rq-setup panel-muted">
+              <div class="xp-f">
+                <label class="xp-label" for="xp-rq-funder"><span class="step-num" aria-hidden="true">1</span>{{ "expenses.req.who" | t(lang) }}</label>
+                <select id="xp-rq-funder" class="input xp-select" x-model="rq.funder">
+                  <option value="">{{ "expenses.req.pick" | t(lang) }}</option>
+                  <template x-for="x in claimFunders()" :key="x.id"><option :value="x.id" :selected="x.id === rq.funder" x-text="lbl(x.name)"></option></template>
+                </select>
+              </div>
+              <div class="xp-f">
+                <label class="xp-label" for="xp-rq-period"><span class="step-num" aria-hidden="true">2</span>{{ "expenses.req.when" | t(lang) }}</label>
+                <select id="xp-rq-period" class="input xp-select" x-model="rq.period">
+                  <template x-for="p in periods()" :key="p.id"><option :value="p.id" :selected="p.id === rq.period" x-text="p.label"></option></template>
+                </select>
+              </div>
+              <div class="xp-custom-dates" x-show="rq.period === 'custom'">
+                <div class="xp-f"><label class="xp-label" for="xp-rq-from">{{ "expenses.f.from" | t(lang) }}</label><input id="xp-rq-from" class="input" type="date" x-model="rq.from"></div>
+                <div class="xp-f"><label class="xp-label" for="xp-rq-to">{{ "expenses.f.to" | t(lang) }}</label><input id="xp-rq-to" class="input" type="date" x-model="rq.to"></div>
+              </div>
+              <fieldset class="xp-f">
+                <legend class="xp-label"><span class="step-num" aria-hidden="true">3</span>{{ "expenses.req.which" | t(lang) }}</legend>
+                <div class="xp-checks">
+                  {%- for s in ["to_request", "submitted", "paid", "denied"] %}
+                  <label class="xp-check-line"><input type="checkbox" x-model="rq.st.{{ s }}"><span>{{ ("expenses.status." + s) | t(lang) }}</span></label>
+                  {%- endfor %}
+                </div>
+              </fieldset>
+              <fieldset class="xp-f">
+                <legend class="xp-label">{{ "expenses.req.options" | t(lang) }}</legend>
+                <label class="xp-check-line"><input type="checkbox" x-model="rq.names"><span>{{ "expenses.req.names" | t(lang) }}</span></label>
+                <p class="xp-hint">{{ "expenses.req.names_hint" | t(lang) }}</p>
+                <label class="xp-check-line"><input type="checkbox" x-model="rq.photos" @change="rqLoadPhotos()"><span>{{ "expenses.req.photos" | t(lang) }}</span></label>
+              </fieldset>
+              <p class="xp-hint" x-show="!profileLine()">{{ "expenses.req.profile_hint" | t(lang) }} <button type="button" class="link" @click="go('settings'); setGo('profile')">{{ "expenses.req.profile_link" | t(lang) }}</button></p>
+            </div>
+
+            {#- the request itself (what is printed) + its actions -#}
+            <div class="xp-rq-out">
+              <p class="xp-none" x-show="!rq.funder">{{ "expenses.req.pick_first" | t(lang) }}</p>
+              <template x-if="rq.funder">
+              <div>
+                <div class="xp-actions">
+                  <button type="button" class="btn-primary btn-sm" :disabled="!rqLines().length && !rqMileage().length" @click="rqPrint()">{% icon "printer", "size-4" %} {{ "expenses.req.print" | t(lang) }}</button>
+                  <button type="button" class="btn-secondary btn-sm" :disabled="!rqLines().length && !rqMileage().length" @click="rqCopy()">{% icon "copy", "size-4" %} {{ "expenses.req.copy" | t(lang) }}</button>
+                  <button type="button" class="btn-secondary btn-sm" :disabled="!rqLines().length && !rqMileage().length" @click="rqShare()">{% icon "share-2", "size-4" %} {{ "expenses.req.share" | t(lang) }}</button>
+                  <button type="button" class="btn-secondary btn-sm" :disabled="!rqEntries().length" @click="rqCsv()">{% icon "file-spreadsheet", "size-4" %} {{ "expenses.req.csv" | t(lang) }}</button>
+                </div>
+                <div class="xp-mark" x-show="rqToMark()">
+                  <div class="xp-f">
+                    <label class="xp-label" for="xp-rq-ref">{{ "expenses.req.ref" | t(lang) }}</label>
+                    <input id="xp-rq-ref" class="input" type="text" autocomplete="off" maxlength="40" x-model="rq.ref" :placeholder="rqRefDefault()" aria-describedby="xp-rq-ref-hint">
+                    <p id="xp-rq-ref-hint" class="xp-hint">{{ "expenses.req.ref_hint" | t(lang) }}</p>
+                  </div>
+                  <button type="button" class="btn-secondary btn-sm" @click="rqMark()">{% icon "send", "size-4" %} <span x-text="plural(rqToMark(), 'req.mark_one', 'req.mark')"></span></button>
+                </div>
+
+                <article class="xp-doc" id="xp-request" aria-labelledby="xp-doc-title">
+                  <header class="xp-doc-head">
+                    <p class="xp-doc-site">{{ site | pick(lang, "title") }} — NETA 65</p>
+                    <h4 id="xp-doc-title" class="xp-doc-title">{{ "expenses.req.doc_title" | t(lang) }}</h4>
+                    <dl class="xp-doc-meta">
+                      <div><dt>{{ "expenses.req.to" | t(lang) }}</dt><dd x-text="funderName(rq.funder)"></dd></div>
+                      <div><dt>{{ "expenses.req.from" | t(lang) }}</dt><dd x-text="profileLine() || '—'"></dd></div>
+                      <div x-show="prof('email')"><dt>{{ "expenses.req.email" | t(lang) }}</dt><dd x-text="prof('email')"></dd></div>
+                      <div><dt>{{ "expenses.req.period" | t(lang) }}</dt><dd x-text="rqPeriodText()"></dd></div>
+                      <div><dt>{{ "expenses.req.prepared" | t(lang) }}</dt><dd x-text="todayLong()"></dd></div>
+                    </dl>
+                  </header>
+                  <p class="xp-none" x-show="!rqLines().length && !rqMileage().length">{{ "expenses.req.empty" | t(lang) }}</p>
+                  <template x-if="rqLines().length">
+                    <div class="xp-doc-sec">
+                      <h5 class="xp-doc-h">{{ "expenses.req.lines" | t(lang) }}</h5>
+                      <div class="xp-table-wrap" role="region" tabindex="0" aria-label="{{ 'expenses.req.lines' | t(lang) }}">
+                        <table class="xp-table xp-doc-table">
+                          {#- on a narrow sheet the date, the category and the receipt go under the description (.xp-doc-sub) and
+                              their columns step aside (.xp-wide-col): Description | Amount, the amount always in sight — under the
+                              words too when even that leaves a word no room (.xp-amt-line, .xp-amt-col: expenses.css) -#}
+                          <thead><tr><th scope="col" class="xp-wide-col">{{ "expenses.field.date" | t(lang) }}</th><th scope="col">{{ "expenses.field.description" | t(lang) }}</th><th scope="col" class="xp-wide-col">{{ "expenses.field.category" | t(lang) }}</th><th scope="col" class="xp-wide-col">{{ "expenses.field.receipt" | t(lang) }}</th><th scope="col" class="xp-num xp-amt-col">{{ "expenses.field.amount" | t(lang) }}</th></tr></thead>
+                          <tbody><template x-for="l in rqLines()" :key="l.i"><tr><td class="whitespace-nowrap xp-wide-col" x-text="l.date"></td><td><span x-text="l.desc"></span><span class="xp-doc-sub" x-text="[l.date, l.cat, l.hasReceipt ? t('req.receipt_line', { receipt: l.receipt }) : ''].filter(Boolean).join(' · ')"></span><span class="xp-amt-line" x-text="l.amount"></span></td><td class="xp-wide-col" x-text="l.cat"></td><td class="xp-wide-col"><span x-show="l.hasReceipt" aria-hidden="true">✓ </span><span x-text="l.receipt"></span></td><td class="xp-num xp-amt-col" x-text="l.amount"></td></tr></template></tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </template>
+                  <template x-if="rqMileage().length">
+                    <div class="xp-doc-sec">
+                      <h5 class="xp-doc-h">{{ "expenses.req.mileage" | t(lang) }}</h5>
+                      <div class="xp-table-wrap" role="region" tabindex="0" aria-label="{{ 'expenses.req.mileage' | t(lang) }}">
+                        <table class="xp-table xp-doc-table">
+                          <thead><tr><th scope="col" class="xp-wide-col">{{ "expenses.field.date" | t(lang) }}</th><th scope="col">{{ "expenses.req.route" | t(lang) }}</th><th scope="col" class="xp-wide-col">{{ "expenses.req.purpose" | t(lang) }}</th><th scope="col" class="xp-num xp-wide-col">{{ "expenses.field.miles" | t(lang) }}</th><th scope="col" class="xp-num xp-wide-col">{{ "expenses.field.rate" | t(lang) }}</th><th scope="col" class="xp-num xp-amt-col">{{ "expenses.field.amount" | t(lang) }}</th></tr></thead>
+                          <tbody><template x-for="l in rqMileage()" :key="l.i"><tr><td class="whitespace-nowrap xp-wide-col" x-text="l.date"></td><td><span x-text="l.route"></span><span class="xp-doc-sub" x-text="[l.date, l.purpose !== l.route ? l.purpose : '', t('req.miles_at', { miles: l.miles, rate: l.rate })].filter(Boolean).join(' · ')"></span><span class="xp-amt-line" x-text="l.amount"></span></td><td class="xp-wide-col" x-text="l.purpose"></td><td class="xp-num xp-wide-col" x-text="l.miles"></td><td class="xp-num xp-wide-col" x-text="l.rate"></td><td class="xp-num xp-amt-col" x-text="l.amount"></td></tr></template></tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </template>
+                  <template x-if="rqLines().length || rqMileage().length">
+                    <div class="xp-doc-sec xp-doc-totals">
+                      <h5 class="xp-doc-h">{{ "expenses.req.totals" | t(lang) }}</h5>
+                      <dl class="xp-totals">
+                        <template x-for="c in rqTotals().cats" :key="c.id"><div><dt x-text="c.label"></dt><dd x-text="c.amount"></dd></div></template>
+                        <div class="is-total"><dt>{{ "expenses.req.total" | t(lang) }}</dt><dd x-text="rqTotals().total"></dd></div>
+                      </dl>
+                    </div>
+                  </template>
+                  <div class="xp-doc-sign">
+                    {%- for k in ["sign_submitted", "sign_date", "sign_approved", "sign_paid_date", "sign_check"] %}
+                    <p><span class="xp-sign-line"></span>{{ ("expenses.req." + k) | t(lang) }}</p>
+                    {%- endfor %}
+                  </div>
+                  <template x-if="rq.photos && rqPhotos.length">
+                    <div class="xp-doc-sec xp-receipts">
+                      <h5 class="xp-doc-h">{{ "expenses.req.receipts" | t(lang) }}</h5>
+                      <template x-for="p in rqPhotos" :key="p.id"><figure class="xp-receipt"><img :src="p.url" :alt="p.label"><figcaption x-text="p.label"></figcaption></figure></template>
+                    </div>
+                  </template>
+                </article>
+              </div>
+              </template>
+            </div>
+          </div>
+
+          {#- the service report (printable): what your service cost, set out as a GVR's own expense report is —
+              the money by category, the miles by service activity, every entry if you like, and the total cost
+              of service; giveaways and subscriptions counted. For your records, your district or the next GVR:
+              a record, not a request (GVX.serviceReport). "Prepared for" and the note are kept with the
+              settings; names and notes stay out unless asked, as on a request. -#}
+          <div class="xp-box xp-rp-box mt-8" id="xp-report">
+            <div class="xp-head">
+              <div class="min-w-0 max-w-3xl">
+                <h4 class="card-h"><span>{% icon "calendar-range", "size-5" %}</span>{{ "expenses.rep.title" | t(lang) }}</h4>
+                <p class="mt-1 text-sm leading-relaxed text-muted">{{ "expenses.rep.sub" | t(lang) }}</p>
+              </div>
+            </div>
+            <div class="xp-rq xp-rp">
+              <div class="xp-rq-setup panel-muted">
+                <div class="xp-f">
+                  <label class="xp-label" for="xp-rp-period">{{ "expenses.f.period" | t(lang) }}</label>
+                  <select id="xp-rp-period" class="input xp-select" x-model="rp.period">
+                    <template x-for="p in rpPeriods()" :key="p.id"><option :value="p.id" :selected="p.id === rp.period" x-text="p.label"></option></template>
+                  </select>
+                </div>
+                <div class="xp-custom-dates" x-show="rp.period === 'custom'">
+                  <div class="xp-f"><label class="xp-label" for="xp-rp-from">{{ "expenses.f.from" | t(lang) }}</label><input id="xp-rp-from" class="input" type="date" x-model="rp.from"></div>
+                  <div class="xp-f"><label class="xp-label" for="xp-rp-to">{{ "expenses.f.to" | t(lang) }}</label><input id="xp-rp-to" class="input" type="date" x-model="rp.to"></div>
+                </div>
+                <div class="xp-f">
+                  <label class="xp-label" for="xp-rp-for">{{ "expenses.rep.prepared_for" | t(lang) }}</label>
+                  {#- (the example under the field, not in it: a placeholder was cut off at every width) -#}
+                  <input id="xp-rp-for" class="input" type="text" autocomplete="off" maxlength="120" :value="repField('prepared_for')" @change="setReport('prepared_for', $event.target.value)" aria-describedby="xp-rp-for-hint">
+                  <p id="xp-rp-for-hint" class="xp-hint">{{ "expenses.rep.prepared_for_hint" | t(lang) }}</p>
+                </div>
+                <div class="xp-f">
+                  <label class="xp-label" for="xp-rp-note">{{ "expenses.rep.note" | t(lang) }}</label>
+                  <textarea id="xp-rp-note" class="input xp-textarea" rows="3" maxlength="2000" :value="repField('note')" @change="setReport('note', $event.target.value)" aria-describedby="xp-rp-note-hint"></textarea>
+                  <p id="xp-rp-note-hint" class="xp-hint">{{ "expenses.rep.note_hint" | t(lang) }}</p>
+                </div>
+                <fieldset class="xp-f">
+                  <legend class="xp-label">{{ "expenses.req.options" | t(lang) }}</legend>
+                  <label class="xp-check-line"><input type="checkbox" x-model="rp.detail"><span>{{ "expenses.rep.detail" | t(lang) }}</span></label>
+                  <label class="xp-check-line"><input type="checkbox" x-model="rp.names"><span>{{ "expenses.req.names" | t(lang) }}</span></label>
+                  <label class="xp-check-line"><input type="checkbox" x-model="rp.notes"><span>{{ "expenses.rep.notes" | t(lang) }}</span></label>
+                  <p class="xp-hint">{{ "expenses.rep.names_hint" | t(lang) }}</p>
+                </fieldset>
+                <p class="xp-hint" x-show="!profileLine()">{{ "expenses.req.profile_hint" | t(lang) }} <button type="button" class="link" @click="go('settings'); setGo('profile')">{{ "expenses.req.profile_link" | t(lang) }}</button></p>
+              </div>
+
+              <div class="xp-rq-out">
+                <div class="xp-actions">
+                  <button type="button" class="btn-primary btn-sm" :disabled="rpView().empty" @click="rpPrint()">{% icon "printer", "size-4" %} {{ "expenses.rep.print" | t(lang) }}</button>
+                  <button type="button" class="btn-secondary btn-sm" :disabled="rpView().empty" @click="rpCsv()">{% icon "file-spreadsheet", "size-4" %} {{ "expenses.req.csv" | t(lang) }}</button>
+                </div>
+                <article class="xp-doc xp-doc-report" id="xp-report-doc" aria-labelledby="xp-rep-title">
+                  <header class="xp-doc-head">
+                    <p class="xp-doc-site">{{ site | pick(lang, "title") }} — NETA 65</p>
+                    <h5 id="xp-rep-title" class="xp-doc-title" x-text="t('rep.doc_title') + ' — ' + rpPeriodLabel()"></h5>
+                    <dl class="xp-doc-meta">
+                      <div><dt>{{ "expenses.rep.submitted_by" | t(lang) }}</dt><dd x-text="profileLine() || '—'"></dd></div>
+                      <div x-show="repField('prepared_for')"><dt>{{ "expenses.rep.prepared_for" | t(lang) }}</dt><dd x-text="repField('prepared_for')"></dd></div>
+                      <div><dt>{{ "expenses.req.period" | t(lang) }}</dt><dd x-text="rpView().period"></dd></div>
+                      <div><dt>{{ "expenses.rep.prepared" | t(lang) }}</dt><dd x-text="todayLong()"></dd></div>
+                      <div x-show="rpView().rates"><dt>{{ "expenses.field.rate" | t(lang) }}</dt><dd x-text="rpView().rates"></dd></div>
+                    </dl>
+                  </header>
+                  <p class="xp-doc-note" x-show="repField('note')" x-text="repField('note')"></p>
+                  <p class="xp-none" x-show="rpView().empty">{{ "expenses.rep.empty" | t(lang) }}</p>
+                  <template x-if="!rpView().empty">
+                  <div>
+                    {#- the summary: a line per category of spending and per service activity, the mileage total and
+                        the total cost of service -#}
+                    <div class="xp-doc-sec">
+                      <h6 class="xp-doc-h" id="xp-rep-sum-h">{{ "expenses.rep.summary" | t(lang) }}</h6>
+                      <div class="xp-table-wrap" role="region" x-xp-scroll aria-labelledby="xp-rep-sum-h">
+                        <table class="xp-table xp-doc-table xp-rep-sum">
+                          <thead><tr><th scope="col">{{ "expenses.rep.col_section" | t(lang) }}</th><th scope="col" class="xp-num xp-wide-col">{{ "expenses.field.miles" | t(lang) }}</th><th scope="col" class="xp-num xp-amt-col">{{ "expenses.field.amount" | t(lang) }}</th></tr></thead>
+                          <tbody><template x-for="x in rpView().rows" :key="x.key"><tr :class="'is-' + x.kind"><th scope="row"><span x-text="x.label"></span><span class="xp-rep-sub xp-wide-only" x-show="x.trips" x-text="x.trips"></span><span class="xp-doc-sub" x-text="[x.miles, x.trips].filter(Boolean).join(' · ')"></span><span class="xp-amt-line" x-text="x.amount"></span></th><td class="xp-num xp-wide-col" x-text="x.miles || '—'"></td><td class="xp-num xp-amt-col" x-text="x.amount"></td></tr></template></tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {#- every entry: a table per category of spending, then a mileage log per service activity (on a
+                        narrow sheet the secondary columns go under the first one, as on a request: expenses.css). A
+                        table's box is a Tab stop only while it scrolls sideways (x-xp-scroll) -#}
+                    <template x-if="rp.detail">
+                    <div>
+                      <template x-for="s in rpView().money" :key="'m:' + s.key">
+                        <div class="xp-doc-sec">
+                          <h6 class="xp-doc-h"><span x-text="s.label"></span><span class="xp-doc-h-sum" x-text="s.total"></span></h6>
+                          <div class="xp-table-wrap" role="region" x-xp-scroll :aria-label="s.label">
+                            <table class="xp-table xp-doc-table xp-rep-money">
+                              <thead><tr><th scope="col" class="xp-wide-col">{{ "expenses.rep.col_dates" | t(lang) }}</th><th scope="col">{{ "expenses.field.description" | t(lang) }}</th><th scope="col" class="xp-wide-col">{{ "expenses.rep.col_where" | t(lang) }}</th><th scope="col" class="xp-wide-col">{{ "expenses.rep.col_paid" | t(lang) }}</th><th scope="col" class="xp-num xp-amt-col">{{ "expenses.field.amount" | t(lang) }}</th></tr></thead>
+                              <tbody><template x-for="l in s.lines" :key="l.key"><tr>
+                                <td class="xp-wide-col xp-rep-dates" x-text="l.dates"></td>
+                                <td><span x-text="l.what"></span><span class="xp-rep-sub" x-show="l.event" x-text="l.event"></span><span class="xp-doc-sub" x-text="[l.dates, l.where, l.paid].filter(Boolean).join(' · ')"></span><span class="xp-rep-sub xp-rep-notes" x-show="l.notes" x-text="l.notes"></span><span class="xp-amt-line" x-text="l.amount"></span></td>
+                                <td class="xp-wide-col" x-text="l.where"></td>
+                                <td class="xp-wide-col" x-text="l.paid"></td>
+                                <td class="xp-num xp-amt-col" x-text="l.amount"></td>
+                              </tr></template></tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </template>
+                      <template x-for="s in rpView().miles" :key="'t:' + s.key">
+                        <div class="xp-doc-sec">
+                          <h6 class="xp-doc-h"><span x-text="s.label"></span><span class="xp-doc-h-sum" x-text="[s.miles, s.trips, s.total].join(' · ')"></span></h6>
+                          <div class="xp-table-wrap" role="region" x-xp-scroll :aria-label="s.label">
+                            <table class="xp-table xp-doc-table xp-rep-miles">
+                              <thead><tr><th scope="col" class="xp-wide-col">{{ "expenses.rep.col_dates" | t(lang) }}</th><th scope="col">{{ "expenses.field.event" | t(lang) }}</th><th scope="col" class="xp-wide-col">{{ "expenses.req.route" | t(lang) }}</th><th scope="col" class="xp-wide-col">{{ "expenses.field.role" | t(lang) }}</th><th scope="col" class="xp-num xp-wide-col">{{ "expenses.rep.col_trips" | t(lang) }}</th><th scope="col" class="xp-num xp-wide-col">{{ "expenses.rep.col_one_way" | t(lang) }}</th><th scope="col" class="xp-num xp-wide-col">{{ "expenses.field.miles" | t(lang) }}</th><th scope="col" class="xp-num xp-amt-col">{{ "expenses.field.amount" | t(lang) }}</th></tr></thead>
+                              <tbody><template x-for="l in s.lines" :key="l.key"><tr>
+                                <td class="xp-wide-col xp-rep-dates" x-text="l.dates"></td>
+                                <td><span x-text="l.what"></span><span class="xp-doc-sub" x-text="[l.dates, l.route, l.role, l.tripLine, l.milesText].filter(Boolean).join(' · ')"></span><span class="xp-rep-sub xp-rep-notes" x-show="l.notes" x-text="l.notes"></span><span class="xp-amt-line" x-text="l.amount"></span></td>
+                                <td class="xp-wide-col" x-text="l.route"></td>
+                                <td class="xp-wide-col" x-text="l.role"></td>
+                                <td class="xp-num xp-wide-col" x-text="l.trips"></td>
+                                <td class="xp-num xp-wide-col" x-text="l.oneWay"></td>
+                                <td class="xp-num xp-wide-col" x-text="l.miles"></td>
+                                <td class="xp-num xp-amt-col" x-text="l.amount"></td>
+                              </tr></template></tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                    </template>
+
+                    {#- what was given away and the subscriptions bought, counted (no names) -#}
+                    <div class="xp-doc-cols" x-show="rpView().hasGiven || rpView().hasSubs">
+                      <div class="xp-doc-sec" x-show="rpView().hasGiven">
+                        <h6 class="xp-doc-h">{{ "expenses.rep.given" | t(lang) }}</h6>
+                        <dl class="xp-totals">
+                          <div><dt><span>{{ "expenses.give.t_given" | t(lang) }}</span> <span class="text-muted" x-show="rpView().given.split" x-text="'(' + rpView().given.split + ')'"></span></dt><dd x-text="rpView().given.total"></dd></div>
+                          <template x-for="g in rpView().given.events" :key="g.key"><div><dt x-text="g.name"></dt><dd x-text="g.n"></dd></div></template>
+                        </dl>
+                      </div>
+                      <div class="xp-doc-sec" x-show="rpView().hasSubs">
+                        <h6 class="xp-doc-h">{{ "expenses.rep.subs" | t(lang) }}</h6>
+                        <dl class="xp-totals">
+                          <div><dt><span>{{ "expenses.rep.subs_all" | t(lang) }}</span> <span class="text-muted" x-show="rpView().subsSplit" x-text="'(' + rpView().subsSplit + ')'"></span></dt><dd x-text="rpView().subsTotal"></dd></div>
+                          <template x-for="x in rpView().subs" :key="x.key"><div><dt x-text="x.label"></dt><dd x-text="x.n"></dd></div></template>
+                        </dl>
+                      </div>
+                    </div>
+
+                    {#- who covers it: what you gave yourself, what you asked back, what came back, what is still owed -#}
+                    <div class="xp-doc-sec">
+                      <h6 class="xp-doc-h">{{ "expenses.rep.who_covers" | t(lang) }}</h6>
+                      <dl class="xp-totals"><template x-for="x in rpView().totals" :key="x.key"><div><dt x-text="x.label"></dt><dd x-text="x.value"></dd></div></template></dl>
+                    </div>
+                  </div>
+                  </template>
+                  <div class="xp-doc-sign xp-doc-sign-pairs">
+                    {%- for k in ["req.sign_submitted", "req.sign_date", "rep.sign_received", "req.sign_date"] %}
+                    <p><span class="xp-sign-line"></span>{{ ("expenses." + k) | t(lang) }}</p>
+                    {%- endfor %}
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+        </template>
+      </section>
+
+      {#- ================= 5. Settings: every list editable ================= -#}
+      {#- (a tab's word is its panel's heading, expenses.set.<id> — or a shorter one of its own, `tab`: "Activities"
+          for "Service activities"; from 1024px the ten tabs sit in two rows of five: expenses.css) -#}
+      {%- set setTabs = [
+        { id: "data", icon: "hard-drive" }, { id: "profile", icon: "user-round" }, { id: "categories", icon: "tag" },
+        { id: "funders", icon: "users" }, { id: "methods", icon: "wallet" }, { id: "activities", icon: "calendar-range", tab: "tab_activities" }, { id: "mileage", icon: "car" },
+        { id: "budgets", icon: "piggy-bank" }, { id: "fields", icon: "list-plus" }, { id: "reminders", icon: "bell" }
+      ] -%}
+      <section role="tabpanel" id="xp-panel-settings" aria-labelledby="xp-tab-settings" class="xp-panel" x-show="view === 'settings'" tabindex="-1">
+        <template x-if="view === 'settings'">
+        <div class="xp-pad xp-set-pad">
+          <div class="chip-row xp-set-nav" role="group" aria-label="{{ 'expenses.set.nav_label' | t(lang) }}">
+            {%- for s in setTabs %}
+            <button type="button" class="chip" :aria-pressed="setTab === '{{ s.id }}' ? 'true' : 'false'" @click="setGo('{{ s.id }}')">{% icon s.icon, "size-4 shrink-0" %}{{ ("expenses.set." + (s.tab or s.id)) | t(lang) }}</button>
+            {%- endfor %}
+          </div>
+
+          {#- ---- Data: export, import, examples, erase, storage ---- -#}
+          <template x-if="setTab === 'data'">
+          <div class="xp-set">
+            <h3 class="card-h"><span>{% icon "hard-drive", "size-5" %}</span>{{ "expenses.set.data" | t(lang) }}</h3>
+            <p class="xp-set-intro">{{ "expenses.data.intro" | t(lang) }}</p>
+            <dl class="xp-facts">
+              <div><dt>{{ "expenses.aside.entries" | t(lang) }}</dt><dd x-text="count(E().length)"></dd></div>
+              <div><dt>{{ "expenses.data.size" | t(lang) }}</dt><dd x-text="t('data.kb', { n: count(storageKb()) }) + (usageText() ? ' · ' + usageText() : '')"></dd></div>
+              <div><dt>{{ "expenses.aside.last_backup" | t(lang) }}</dt><dd x-text="lastBackupText()"></dd></div>
+              <div><dt>{{ "expenses.aside.protected" | t(lang) }}</dt><dd x-text="persisted ? t('aside.yes') : t('aside.no')"></dd></div>
+            </dl>
+            <p class="xp-hint" x-show="!persisted">{{ "expenses.data.protected_hint" | t(lang) }}</p>
+
+            <div class="xp-set-grid">
+              <div class="xp-box">
+                <h4 class="xp-h4">{{ "expenses.data.export_title" | t(lang) }}</h4>
+                <p class="mt-1 text-sm text-muted">{{ "expenses.data.export_text" | t(lang) }}</p>
+                <div class="xp-actions mt-3">
+                  <button type="button" class="btn-primary btn-sm" @click="exportAll()">{% icon "file-spreadsheet", "size-4" %} {{ "expenses.data.export_csv" | t(lang) }}</button>
+                  <button type="button" class="btn-secondary btn-sm" @click="exportBackup()">{% icon "hard-drive-download", "size-4" %} {{ "expenses.data.export_backup" | t(lang) }}</button>
+                </div>
+              </div>
+
+              <div class="xp-box">
+                <h4 class="xp-h4" id="xp-imp-title">{{ "expenses.imp.title" | t(lang) }}</h4>
+                <p class="mt-1 text-sm text-muted">{{ "expenses.imp.text" | t(lang) }}</p>
+                {#- step 1: a file (picker or drop) -#}
+                <template x-if="!imp || imp.step === 'pick' || imp.err">
+                  <div>
+                    <label class="xp-drop" :class="{ 'is-over': dragOver }" @dragover.prevent="dragOver = true" @dragleave="dragOver = false" @drop.prevent="impDrop($event)">
+                      <input type="file" class="sr-only" accept=".csv,.tsv,.txt,.json,text/csv,application/json" @change="impPick($event)">
+                      {% icon "upload", "size-6" %}
+                      <span class="font-semibold text-ink">{{ "expenses.imp.choose" | t(lang) }}</span>
+                      <span class="text-sm text-muted">{{ "expenses.imp.drop" | t(lang) }}</span>
+                    </label>
+                    <p class="xp-err mt-2" role="alert" x-show="imp && imp.err"><span x-text="imp && imp.name ? imp.name + ': ' : ''"></span><span x-text="imp ? imp.err : ''"></span></p>
+                  </div>
+                </template>
+                {#- step 2 (a spreadsheet of another shape): which column is which -#}
+                <template x-if="imp && imp.step === 'map' && !imp.err">
+                  <div class="xp-imp">
+                    <p class="text-sm text-ink"><strong x-text="imp.name"></strong> — {{ "expenses.imp.map_intro" | t(lang) }}</p>
+                    <div class="xp-imp-map">
+                      {%- for m in ["date", "description", "amount", "category", "miles", "notes"] %}
+                      <div class="xp-f">
+                        <label class="xp-label" for="xp-map-{{ m }}">{{ ("expenses.imp.map_" + m) | t(lang) }}{% if m == "date" %} <span class="text-danger" aria-hidden="true">*</span>{% elif m in ["amount", "miles"] %} <span class="text-danger" aria-hidden="true">†</span>{% endif %}</label>
+                        <select id="xp-map-{{ m }}" class="input xp-select" x-model="imp.map.{{ m }}"{% if m == "date" %} aria-required="true"{% elif m in ["amount", "miles"] %} aria-describedby="xp-map-needs"{% endif %}>
+                          <option value="">{{ "expenses.imp.map_none" | t(lang) }}</option>
+                          <template x-for="h in imp.headers" :key="h.i"><option :value="String(h.i)" :selected="String(h.i) === imp.map.{{ m }}" x-text="h.name"></option></template>
+                        </select>
+                      </div>
+                      {%- endfor %}
+                    </div>
+                    <p class="xp-hint" id="xp-map-needs">{{ "expenses.imp.map_needs" | t(lang) }}</p>
+                    <p class="xp-hint">{{ "expenses.imp.map_rest" | t(lang) }}</p>
+                    <div class="xp-table-wrap mt-3" role="region" tabindex="0" aria-label="{{ 'expenses.imp.sample' | t(lang) }}">
+                      <table class="xp-table xp-table-sm">
+                        <thead><tr><template x-for="h in imp.headers" :key="h.i"><th scope="col" x-text="h.name"></th></template></tr></thead>
+                        <tbody><template x-for="(r, ri) in imp.sample" :key="ri"><tr><template x-for="(c, ci) in r" :key="ci"><td x-text="c"></td></template></tr></template></tbody>
+                      </table>
+                    </div>
+                    <div class="xp-actions mt-4">
+                      <button type="button" class="btn-primary btn-sm" :disabled="!impMapReady()" @click="impUseMap()">{% icon "arrow-right", "size-4" %} {{ "expenses.imp.map_next" | t(lang) }}</button>
+                      <button type="button" class="btn-ghost btn-sm" @click="impReset()">{{ "expenses.imp.cancel" | t(lang) }}</button>
+                    </div>
+                  </div>
+                </template>
+                {#- step 3: the preview (nothing is saved yet) -#}
+                <template x-if="imp && imp.step === 'preview' && !imp.err">
+                  <div class="xp-imp">
+                    <p class="text-sm text-ink"><strong x-text="imp.name"></strong></p>
+                    <ul class="xp-imp-counts" role="list">
+                      <li><strong x-text="count(imp.counts.add)"></strong> {{ "expenses.imp.new" | t(lang) }}</li>
+                      <li><strong x-text="count(imp.counts.update)"></strong> {{ "expenses.imp.updated" | t(lang) }}</li>
+                      <li><strong x-text="count(imp.counts.dup)"></strong> {{ "expenses.imp.duplicates" | t(lang) }}</li>
+                      <li><strong x-text="count(imp.counts.same + imp.counts.older)"></strong> {{ "expenses.imp.unchanged" | t(lang) }}</li>
+                      <li :class="imp.counts.errors ? 'text-danger' : ''"><strong x-text="count(imp.counts.errors)"></strong> {{ "expenses.imp.errors" | t(lang) }}</li>
+                    </ul>
+                    <div class="xp-imp-opts">
+                      <div class="xp-f">
+                        <label class="xp-label" for="xp-imp-dates">{{ "expenses.imp.date_order" | t(lang) }}</label>
+                        <select id="xp-imp-dates" class="input xp-select" x-model="imp.opts.dateOrder" @change="impPlan()">
+                          <option value="mdy">{{ "expenses.imp.mdy" | t(lang) }}</option>
+                          <option value="dmy">{{ "expenses.imp.dmy" | t(lang) }}</option>
+                        </select>
+                      </div>
+                      <div class="xp-f">
+                        <label class="xp-label" for="xp-imp-dec">{{ "expenses.imp.decimal" | t(lang) }}</label>
+                        <select id="xp-imp-dec" class="input xp-select" x-model="imp.opts.decimal" @change="impPlan()">
+                          <option value="auto">{{ "expenses.imp.dec_auto" | t(lang) }}</option>
+                          <option value=".">{{ "expenses.imp.dec_dot" | t(lang) }}</option>
+                          <option value=",">{{ "expenses.imp.dec_comma" | t(lang) }}</option>
+                        </select>
+                      </div>
+                      {#- somebody else's sheet: are its amounts with no minus spending (a card statement) or money in (a bank account)? -#}
+                      <div class="xp-f" x-show="imp.signs">
+                        <label class="xp-label" for="xp-imp-sign">{{ "expenses.imp.positive" | t(lang) }}</label>
+                        <select id="xp-imp-sign" class="input xp-select" x-model="imp.opts.positive" @change="impPlan()" aria-describedby="xp-imp-sign-hint">
+                          <option value="spent">{{ "expenses.imp.pos_spent" | t(lang) }}</option>
+                          <option value="received">{{ "expenses.imp.pos_received" | t(lang) }}</option>
+                        </select>
+                        <p class="xp-hint" id="xp-imp-sign-hint">{{ "expenses.imp.positive_hint" | t(lang) }}</p>
+                      </div>
+                    </div>
+                    <label class="xp-check-line" x-show="imp.counts.dup"><input type="checkbox" x-model="imp.opts.includeDuplicates" @change="impPlan()"><span>{{ "expenses.imp.include_dups" | t(lang) }}</span></label>
+                    <p class="mt-3 text-sm text-ink" x-show="imp.newCats.length"><strong>{{ "expenses.imp.new_cats" | t(lang) }}</strong> <span x-text="imp.newCats.join(', ')"></span></p>
+                    <p class="mt-1 text-sm text-ink" x-show="imp.newFunders.length"><strong>{{ "expenses.imp.new_funders" | t(lang) }}</strong> <span x-text="imp.newFunders.join(', ')"></span></p>
+                    <p class="mt-1 text-sm text-ink" x-show="imp.newActs && imp.newActs.length"><strong>{{ "expenses.imp.new_activities" | t(lang) }}</strong> <span x-text="(imp.newActs || []).join(', ')"></span></p>
+                    <template x-if="imp.sampleRows.length">
+                      <div class="xp-table-wrap mt-3" role="region" tabindex="0" aria-labelledby="xp-imp-cap">
+                        <table class="xp-table xp-table-sm">
+                          <caption id="xp-imp-cap" class="xp-caption">{{ "expenses.imp.first_rows" | t(lang) }}</caption>
+                          <thead><tr><th scope="col">{{ "expenses.field.date" | t(lang) }}</th><th scope="col">{{ "expenses.field.description" | t(lang) }}</th><th scope="col">{{ "expenses.field.category" | t(lang) }}</th><th scope="col" class="xp-num">{{ "expenses.field.amount" | t(lang) }}</th></tr></thead>
+                          <tbody><template x-for="r in imp.sampleRows" :key="r.i"><tr><td class="whitespace-nowrap" x-text="r.date"></td><td x-text="r.desc"></td><td x-text="r.cat"></td><td class="xp-num" x-text="r.amount"></td></tr></template></tbody>
+                        </table>
+                      </div>
+                    </template>
+                    <template x-if="imp.errorList.length">
+                      <div class="mt-3">
+                        <p class="text-sm font-semibold text-danger">{{ "expenses.imp.errors_title" | t(lang) }}</p>
+                        <ul class="mt-1 space-y-1 text-sm text-muted" role="list"><template x-for="x in imp.errorList" :key="x.i"><li x-text="x.text"></li></template></ul>
+                        <p class="mt-1 text-sm text-muted" x-show="imp.moreErrors" x-text="t('imp.more_errors', { n: count(imp.moreErrors) })"></p>
+                      </div>
+                    </template>
+                    <fieldset class="xp-f mt-4">
+                      <legend class="xp-label">{{ "expenses.imp.mode" | t(lang) }}</legend>
+                      <label class="xp-check-line"><input type="radio" name="xp-imp-mode" value="merge" x-model="imp.mode"><span>{{ "expenses.imp.merge" | t(lang) }}</span></label>
+                      <label class="xp-check-line"><input type="radio" name="xp-imp-mode" value="replace" x-model="imp.mode"><span>{{ "expenses.imp.replace" | t(lang) }}</span></label>
+                    </fieldset>
+                    <div class="xp-actions mt-4">
+                      <button type="button" class="btn-primary btn-sm" :disabled="imp.mode === 'replace' ? !imp.counts.all : !imp.counts.add && !imp.counts.update" @click="impApply()">{% icon "upload", "size-4" %} <span x-text="plural(imp.mode === 'replace' ? imp.counts.all : imp.counts.add + imp.counts.update, 'imp.apply_one', 'imp.apply')"></span></button>
+                      <button type="button" class="btn-ghost btn-sm" x-show="imp.ours" @click="impMapMyself()">{% icon "columns-3", "size-4" %} {{ "expenses.imp.map_myself" | t(lang) }}</button>
+                      <button type="button" class="btn-ghost btn-sm" @click="impReset()">{{ "expenses.imp.cancel" | t(lang) }}</button>
+                    </div>
+                  </div>
+                </template>
+                {#- a full backup: merge or replace -#}
+                <template x-if="imp && imp.step === 'backup' && !imp.err">
+                  <div class="xp-imp">
+                    <p class="text-sm text-ink"><strong x-text="imp.name"></strong> — <span x-text="t('imp.backup_counts', { n: count(imp.counts.entries), photos: count(imp.counts.photos) })"></span></p>
+                    <fieldset class="xp-f mt-3">
+                      <legend class="xp-label">{{ "expenses.imp.mode" | t(lang) }}</legend>
+                      <label class="xp-check-line"><input type="radio" name="xp-imp-bmode" value="merge" x-model="imp.mode"><span>{{ "expenses.imp.merge_backup" | t(lang) }}</span></label>
+                      <label class="xp-check-line"><input type="radio" name="xp-imp-bmode" value="replace" x-model="imp.mode"><span>{{ "expenses.imp.replace" | t(lang) }}</span></label>
+                    </fieldset>
+                    <div class="xp-actions mt-4">
+                      <button type="button" class="btn-primary btn-sm" @click="impApply()">{% icon "upload", "size-4" %} {{ "expenses.imp.restore" | t(lang) }}</button>
+                      <button type="button" class="btn-ghost btn-sm" @click="impReset()">{{ "expenses.imp.cancel" | t(lang) }}</button>
+                    </div>
+                  </div>
+                </template>
+                <template x-if="imp && imp.step === 'done'">
+                  <div class="xp-imp">
+                    <p class="text-sm font-semibold text-vine" role="status">{% icon "circle-check", "size-4 inline -mt-0.5" %} <span x-text="plural(imp.added + imp.updated, 'imp.done_one', 'imp.done')"></span></p>
+                    <div class="xp-actions mt-3">
+                      <button type="button" class="btn-secondary btn-sm" @click="go('entries')">{{ "expenses.imp.see_entries" | t(lang) }}</button>
+                      <button type="button" class="btn-ghost btn-sm" @click="impReset()">{{ "expenses.imp.another" | t(lang) }}</button>
+                    </div>
+                  </div>
+                </template>
+              </div>
+
+              <div class="xp-box">
+                <h4 class="xp-h4">{{ "expenses.data.examples_title" | t(lang) }}</h4>
+                <p class="mt-1 text-sm text-muted">{{ "expenses.data.examples_text" | t(lang) }}</p>
+                <div class="xp-actions mt-3">
+                  <button type="button" class="btn-secondary btn-sm" x-show="!hasExamples()" @click="addExamples()">{% icon "sparkles", "size-4" %} {{ "expenses.list.try_examples" | t(lang) }}</button>
+                  <button type="button" class="btn-secondary btn-sm" x-show="hasExamples()" @click="removeExamples()">{% icon "eraser", "size-4" %} {{ "expenses.list.remove_examples" | t(lang) }}</button>
+                </div>
+              </div>
+
+              <div class="xp-box xp-box-danger">
+                <h4 class="xp-h4">{{ "expenses.data.erase_title" | t(lang) }}</h4>
+                <p class="mt-1 text-sm text-muted">{{ "expenses.data.erase_text" | t(lang) }}</p>
+                <div class="xp-f mt-3">
+                  <label class="xp-label" for="xp-erase">{{ "expenses.data.erase_label" | t(lang) }}</label>
+                  <input id="xp-erase" class="input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" x-model="eraseText">
+                </div>
+                <button type="button" class="btn-secondary btn-sm xp-danger mt-3" :disabled="!eraseReady()" @click="eraseAll()">{% icon "trash-2", "size-4" %} {{ "expenses.data.erase_btn" | t(lang) }}</button>
+              </div>
+            </div>
+          </div>
+          </template>
+
+          {#- ---- Your details (printed on requests) ---- -#}
+          <template x-if="setTab === 'profile'">
+          <div class="xp-set">
+            <h3 class="card-h"><span>{% icon "user-round", "size-5" %}</span>{{ "expenses.set.profile" | t(lang) }}</h3>
+            <p class="xp-set-intro">{{ "expenses.prof.intro" | t(lang) }}</p>
+            <div class="xp-form-grid mt-4">
+              {%- for p in ["name", "position", "district", "email"] %}
+              <div class="xp-f">
+                <label class="xp-label" for="xp-p-{{ p }}">{{ ("expenses.prof." + p) | t(lang) }}</label>
+                <input id="xp-p-{{ p }}" class="input" type="{{ 'email' if p == 'email' else 'text' }}" autocomplete="off" maxlength="80" :value="prof('{{ p }}')" @change="setProf('{{ p }}', $event.target.value)" aria-describedby="xp-p-{{ p }}-hint">
+                <p id="xp-p-{{ p }}-hint" class="xp-hint">{{ ("expenses.prof." + p + "_hint") | t(lang) }}</p>
+              </div>
+              {%- endfor %}
+            </div>
+          </div>
+          </template>
+
+          {#- ---- Categories, by type ---- -#}
+          <template x-if="setTab === 'categories'">
+          <div class="xp-set">
+            <h3 class="card-h"><span>{% icon "tag", "size-5" %}</span>{{ "expenses.set.categories" | t(lang) }}</h3>
+            <p class="xp-set-intro">{{ "expenses.set.categories_intro" | t(lang) }}</p>
+            {#- one editor in the page, repeated by Alpine for each kind of entry (the icon picker is
+                32 icons: drawn once here, not once per kind) -#}
+            <template x-for="ty in catTypes()" :key="ty.id">
+            <div>
+            <h4 class="xp-h4 mt-6" x-text="ty.label"></h4>
+            <ul class="xp-items" role="list">
+              <template x-for="(c, i) in list('categories', ty.id)" :key="c.id">
+                <li class="xp-item" :class="{ 'is-hidden': c.hidden }">
+                  <div class="xp-item-row">
+                    <span class="xp-cat xp-cat-lg" :class="'xp-tone-' + c.color"><span class="xp-cat-i" x-xp-icon="c.icon"></span></span>
+                    <span class="xp-item-name"><span x-text="lbl(c.label)"></span>
+                      <span class="xp-item-meta"><span x-text="t('tpl.' + c.template)"></span><span x-text="plural(usedCount('category', c.id), 'set.used_one', 'set.used')"></span><span x-show="c.hidden">{{ "expenses.set.hidden" | t(lang) }}</span></span></span>
+                    <span class="xp-move">
+                      <button type="button" class="xp-icon-btn" data-move="up" :data-id="c.id" :aria-disabled="i === 0 ? 'true' : 'false'" :aria-label="t('set.move_up', { name: lbl(c.label) })" @click="i > 0 && move('categories', c.id, -1, ty.id)">{% icon "arrow-up", "size-4" %}</button>
+                      <button type="button" class="xp-icon-btn" data-move="down" :data-id="c.id" :aria-disabled="i === list('categories', ty.id).length - 1 ? 'true' : 'false'" :aria-label="t('set.move_down', { name: lbl(c.label) })" @click="move('categories', c.id, 1, ty.id)">{% icon "arrow-down", "size-4" %}</button>
+                    </span>
+                    <button type="button" class="btn-ghost btn-sm" :aria-expanded="open['cat:' + c.id] ? 'true' : 'false'" :aria-controls="'xp-ed-' + c.id" @click="toggleOpen('cat:' + c.id)">{% icon "pencil", "size-4" %}<span>{{ "expenses.set.edit" | t(lang) }}</span><span class="sr-only" x-text="': ' + lbl(c.label)"></span></button>
+                  </div>
+                  <template x-if="open['cat:' + c.id]">
+                  <div class="xp-item-ed" :id="'xp-ed-' + c.id">
+                    <div class="xp-form-grid">
+                      <div class="xp-f">
+                        <label class="xp-label" :for="'xp-s-cat-' + c.id">{{ "expenses.set.label" | t(lang) }}</label>
+                        <input class="input" type="text" maxlength="80" :id="'xp-s-cat-' + c.id" :value="lbl(c.label)" @change="setName('categories', c.id, 'label', $event.target.value)">
+                      </div>
+                      <div class="xp-f" x-show="ty.id === 'expense'">
+                        <label class="xp-label" :for="'xp-s-tpl-' + c.id">{{ "expenses.set.template" | t(lang) }}</label>
+                        <select class="input xp-select" :id="'xp-s-tpl-' + c.id" @change="setField('categories', c.id, 'template', $event.target.value)">
+                          {%- for tp in ["general", "books", "subscription", "lodging", "meal", "printing", "travel"] %}
+                          <option value="{{ tp }}" :selected="c.template === '{{ tp }}'">{{ ("expenses.tpl." + tp) | t(lang) }}</option>
+                          {%- endfor %}
+                        </select>
+                      </div>
+                      <div class="xp-f" x-show="ty.id === 'expense'">
+                        <label class="xp-label" :for="'xp-s-df-' + c.id">{{ "expenses.set.default_funder" | t(lang) }}</label>
+                        <select class="input xp-select" :id="'xp-s-df-' + c.id" @change="setField('categories', c.id, 'default_funder', $event.target.value)">
+                          <option value="" :selected="!c.default_funder">{{ "expenses.set.default_funder_none" | t(lang) }}</option>
+                          <template x-for="x in funders(c.default_funder)" :key="x.id"><option :value="x.id" :selected="x.id === c.default_funder" x-text="lbl(x.name)"></option></template>
+                        </select>
+                      </div>
+                    </div>
+                    <fieldset class="xp-f mt-3">
+                      <legend class="xp-label">{{ "expenses.set.color" | t(lang) }}</legend>
+                      <div class="xp-swatches">
+                        <template x-for="tone in tones()" :key="tone">
+                          <label class="xp-swatch" :class="'xp-tone-' + tone"><input type="radio" class="sr-only" :name="'xp-tone-' + c.id" :value="tone" :checked="c.color === tone" @change="setField('categories', c.id, 'color', tone)"><span class="xp-swatch-dot" aria-hidden="true"></span><span class="sr-only" x-text="t('tone.' + tone)"></span></label>
+                        </template>
+                      </div>
+                    </fieldset>
+                    <fieldset class="xp-f mt-3">
+                      <legend class="xp-label">{{ "expenses.set.icon" | t(lang) }}</legend>
+                      <div class="xp-icons-pick">
+                        <template x-for="ic in pickIcons()" :key="ic">
+                          <label class="xp-icon-opt"><input type="radio" class="sr-only" :name="'xp-icon-' + c.id" :value="ic" :checked="c.icon === ic" @change="setField('categories', c.id, 'icon', ic)"><span x-xp-icon="ic" aria-hidden="true"></span><span class="sr-only" x-text="t('icon.' + ic.replace(/-/g, '_'))"></span></label>
+                        </template>
+                      </div>
+                    </fieldset>
+                    <div class="xp-item-foot">
+                      <label class="xp-check-line" x-show="ty.id === 'expense'"><input type="checkbox" :checked="!!c.giveaway_default" @change="setField('categories', c.id, 'giveaway_default', $event.target.checked)"><span>{{ "expenses.set.giveaway_default" | t(lang) }}</span></label>
+                      <label class="xp-check-line"><input type="checkbox" :checked="!!c.hidden" @change="setField('categories', c.id, 'hidden', $event.target.checked)"><span>{{ "expenses.set.hide" | t(lang) }}</span></label>
+                    </div>
+                    <div class="xp-item-foot">
+                      <button type="button" class="btn-ghost btn-sm xp-danger" x-show="canDelete('categories', c.id)" @click="del('categories', c.id)">{% icon "trash-2", "size-4" %} {{ "expenses.set.delete" | t(lang) }}</button>
+                      <template x-if="usedCount('category', c.id) && mergeTargets('categories', c.id).length">
+                        <span class="xp-merge">
+                          <label class="xp-merge-l" :for="'xp-mg-' + c.id">{{ "expenses.set.merge_into" | t(lang) }}</label>
+                          <select class="input xp-select xp-select-sm" :id="'xp-mg-' + c.id">
+                            <template x-for="x in mergeTargets('categories', c.id)" :key="x.id"><option :value="x.id" x-text="lbl(x.label)"></option></template>
+                          </select>
+                          <button type="button" class="btn-secondary btn-sm" @click="merge('categories', c.id, document.getElementById('xp-mg-' + c.id).value)">{% icon "merge", "size-4" %} {{ "expenses.set.merge" | t(lang) }}</button>
+                        </span>
+                      </template>
+                    </div>
+                  </div>
+                  </template>
+                </li>
+              </template>
+            </ul>
+            </div>
+            </template>
+            <div class="xp-add-row">
+              <label class="xp-label" for="xp-new-cat-type">{{ "expenses.set.new_for" | t(lang) }}</label>
+              <select id="xp-new-cat-type" class="input xp-select xp-select-sm" x-model="newCatType">
+                {%- for ty in typeList %}<option value="{{ ty.id }}">{{ ("expenses.type_add." + ty.id) | t(lang) }}</option>{% endfor %}
+              </select>
+              <button type="button" class="btn-secondary btn-sm" @click="addCategory()">{% icon "plus", "size-4" %} {{ "expenses.set.add_category" | t(lang) }}</button>
+            </div>
+          </div>
+          </template>
+
+          {#- ---- Who pays: funders and people ---- -#}
+          <template x-if="setTab === 'funders'">
+          <div class="xp-set">
+            <h3 class="card-h"><span>{% icon "users", "size-5" %}</span>{{ "expenses.set.funders" | t(lang) }}</h3>
+            <p class="xp-set-intro">{{ "expenses.set.funders_intro" | t(lang) }}</p>
+            <ul class="xp-items mt-4" role="list">
+              <template x-for="(x, i) in list('funders')" :key="x.id">
+                <li class="xp-item" :class="{ 'is-hidden': x.hidden }">
+                  <div class="xp-item-row xp-item-row-edit">
+                    <div class="xp-f xp-grow">
+                      <label class="xp-label" :for="'xp-s-fun-' + x.id">{{ "expenses.set.name" | t(lang) }}</label>
+                      <input class="input" type="text" maxlength="80" :id="'xp-s-fun-' + x.id" :value="lbl(x.name)" @change="setName('funders', x.id, 'name', $event.target.value)" :aria-describedby="'xp-s-fun-m-' + x.id">
+                      <p class="xp-hint" :id="'xp-s-fun-m-' + x.id" x-text="plural(usedCount('funder', x.id), 'set.used_one', 'set.used')"></p>
+                    </div>
+                    <div class="xp-f">
+                      <label class="xp-label" :for="'xp-s-kind-' + x.id">{{ "expenses.set.kind" | t(lang) }}</label>
+                      <select class="input xp-select" :id="'xp-s-kind-' + x.id" :disabled="x.id === 'me'" @change="setField('funders', x.id, 'kind', $event.target.value)">
+                        {%- for k in ["self", "area", "district", "group", "committee", "person", "other"] %}
+                        <option value="{{ k }}" :selected="x.kind === '{{ k }}'">{{ ("expenses.kind." + k) | t(lang) }}</option>
+                        {%- endfor %}
+                      </select>
+                    </div>
+                    <span class="xp-move">
+                      <button type="button" class="xp-icon-btn" data-move="up" :data-id="x.id" :aria-disabled="i === 0 ? 'true' : 'false'" :aria-label="t('set.move_up', { name: lbl(x.name) })" @click="i > 0 && move('funders', x.id, -1)">{% icon "arrow-up", "size-4" %}</button>
+                      <button type="button" class="xp-icon-btn" data-move="down" :data-id="x.id" :aria-disabled="i === list('funders').length - 1 ? 'true' : 'false'" :aria-label="t('set.move_down', { name: lbl(x.name) })" @click="move('funders', x.id, 1)">{% icon "arrow-down", "size-4" %}</button>
+                    </span>
+                  </div>
+                  <div class="xp-item-foot" x-show="x.id !== 'me'">
+                    <label class="xp-check-line"><input type="checkbox" :checked="!!x.hidden" @change="setField('funders', x.id, 'hidden', $event.target.checked)"><span>{{ "expenses.set.hide" | t(lang) }}</span></label>
+                    <button type="button" class="btn-ghost btn-sm xp-danger" x-show="canDelete('funders', x.id)" @click="del('funders', x.id)">{% icon "trash-2", "size-4" %} {{ "expenses.set.delete" | t(lang) }}</button>
+                    <template x-if="usedCount('funder', x.id) && mergeTargets('funders', x.id).length">
+                      <span class="xp-merge">
+                        <label class="xp-merge-l" :for="'xp-mgf-' + x.id">{{ "expenses.set.merge_into" | t(lang) }}</label>
+                        <select class="input xp-select xp-select-sm" :id="'xp-mgf-' + x.id"><template x-for="y in mergeTargets('funders', x.id)" :key="y.id"><option :value="y.id" x-text="lbl(y.name)"></option></template></select>
+                        <button type="button" class="btn-secondary btn-sm" @click="merge('funders', x.id, document.getElementById('xp-mgf-' + x.id).value)">{% icon "merge", "size-4" %} {{ "expenses.set.merge" | t(lang) }}</button>
+                      </span>
+                    </template>
+                  </div>
+                </li>
+              </template>
+            </ul>
+            <div class="xp-actions mt-4">
+              <button type="button" class="btn-secondary btn-sm" @click="addFunder('other')">{% icon "plus", "size-4" %} {{ "expenses.set.add_funder" | t(lang) }}</button>
+              <button type="button" class="btn-secondary btn-sm" @click="addFunder('person')">{% icon "user-plus", "size-4" %} {{ "expenses.set.add_person" | t(lang) }}</button>
+            </div>
+            <p class="xp-hint mt-2">{{ "expenses.set.person_hint" | t(lang) }}</p>
+          </div>
+          </template>
+
+          {#- ---- Payment methods ---- -#}
+          <template x-if="setTab === 'methods'">
+          <div class="xp-set">
+            <h3 class="card-h"><span>{% icon "wallet", "size-5" %}</span>{{ "expenses.set.methods" | t(lang) }}</h3>
+            <p class="xp-set-intro">{{ "expenses.set.methods_intro" | t(lang) }}</p>
+            <ul class="xp-items mt-4" role="list">
+              <template x-for="(x, i) in list('methods')" :key="x.id">
+                <li class="xp-item" :class="{ 'is-hidden': x.hidden }">
+                  <div class="xp-item-row xp-item-row-edit">
+                    <div class="xp-f xp-grow">
+                      <label class="xp-label" :for="'xp-s-met-' + x.id">{{ "expenses.set.name" | t(lang) }}</label>
+                      <input class="input" type="text" maxlength="80" :id="'xp-s-met-' + x.id" :value="lbl(x.name)" @change="setName('methods', x.id, 'name', $event.target.value)">
+                    </div>
+                    <span class="xp-move">
+                      <button type="button" class="xp-icon-btn" data-move="up" :data-id="x.id" :aria-disabled="i === 0 ? 'true' : 'false'" :aria-label="t('set.move_up', { name: lbl(x.name) })" @click="i > 0 && move('methods', x.id, -1)">{% icon "arrow-up", "size-4" %}</button>
+                      <button type="button" class="xp-icon-btn" data-move="down" :data-id="x.id" :aria-disabled="i === list('methods').length - 1 ? 'true' : 'false'" :aria-label="t('set.move_down', { name: lbl(x.name) })" @click="move('methods', x.id, 1)">{% icon "arrow-down", "size-4" %}</button>
+                    </span>
+                  </div>
+                  <div class="xp-item-foot">
+                    <span class="text-xs text-muted" x-text="plural(usedCount('method', x.id), 'set.used_one', 'set.used')"></span>
+                    <label class="xp-check-line"><input type="checkbox" :checked="!!x.hidden" @change="setField('methods', x.id, 'hidden', $event.target.checked)"><span>{{ "expenses.set.hide" | t(lang) }}</span></label>
+                    <button type="button" class="btn-ghost btn-sm xp-danger" x-show="canDelete('methods', x.id)" @click="del('methods', x.id)">{% icon "trash-2", "size-4" %} {{ "expenses.set.delete" | t(lang) }}</button>
+                    <template x-if="usedCount('method', x.id) && mergeTargets('methods', x.id).length">
+                      <span class="xp-merge">
+                        <label class="xp-merge-l" :for="'xp-mgm-' + x.id">{{ "expenses.set.merge_into" | t(lang) }}</label>
+                        <select class="input xp-select xp-select-sm" :id="'xp-mgm-' + x.id"><template x-for="y in mergeTargets('methods', x.id)" :key="y.id"><option :value="y.id" x-text="lbl(y.name)"></option></template></select>
+                        <button type="button" class="btn-secondary btn-sm" @click="merge('methods', x.id, document.getElementById('xp-mgm-' + x.id).value)">{% icon "merge", "size-4" %} {{ "expenses.set.merge" | t(lang) }}</button>
+                      </span>
+                    </template>
+                  </div>
+                </li>
+              </template>
+            </ul>
+            <button type="button" class="btn-secondary btn-sm mt-4" @click="addMethod()">{% icon "plus", "size-4" %} {{ "expenses.set.add_method" | t(lang) }}</button>
+          </div>
+          </template>
+
+          {#- ---- Service activities: the kinds of service an entry is for (the service report's sections) ---- -#}
+          <template x-if="setTab === 'activities'">
+          <div class="xp-set">
+            <h3 class="card-h"><span>{% icon "calendar-range", "size-5" %}</span>{{ "expenses.set.activities" | t(lang) }}</h3>
+            <p class="xp-set-intro">{{ "expenses.set.activities_intro" | t(lang) }}</p>
+            <ul class="xp-items mt-4" role="list">
+              <template x-for="(x, i) in list('activities')" :key="x.id">
+                <li class="xp-item" :class="{ 'is-hidden': x.hidden }">
+                  <div class="xp-item-row xp-item-row-edit">
+                    <div class="xp-f xp-grow">
+                      <label class="xp-label" :for="'xp-s-act-' + x.id">{{ "expenses.set.name" | t(lang) }}</label>
+                      <input class="input" type="text" maxlength="80" :id="'xp-s-act-' + x.id" :value="lbl(x.name)" @change="setName('activities', x.id, 'name', $event.target.value)">
+                    </div>
+                    <span class="xp-move">
+                      <button type="button" class="xp-icon-btn" data-move="up" :data-id="x.id" :aria-disabled="i === 0 ? 'true' : 'false'" :aria-label="t('set.move_up', { name: lbl(x.name) })" @click="i > 0 && move('activities', x.id, -1)">{% icon "arrow-up", "size-4" %}</button>
+                      <button type="button" class="xp-icon-btn" data-move="down" :data-id="x.id" :aria-disabled="i === list('activities').length - 1 ? 'true' : 'false'" :aria-label="t('set.move_down', { name: lbl(x.name) })" @click="move('activities', x.id, 1)">{% icon "arrow-down", "size-4" %}</button>
+                    </span>
+                  </div>
+                  <div class="xp-item-foot">
+                    <span class="text-xs text-muted" x-text="plural(usedCount('activity', x.id), 'set.used_one', 'set.used')"></span>
+                    <label class="xp-check-line"><input type="checkbox" :checked="!!x.hidden" @change="setField('activities', x.id, 'hidden', $event.target.checked)"><span>{{ "expenses.set.hide" | t(lang) }}</span></label>
+                    <button type="button" class="btn-ghost btn-sm xp-danger" x-show="canDelete('activities', x.id)" @click="del('activities', x.id)">{% icon "trash-2", "size-4" %} {{ "expenses.set.delete" | t(lang) }}</button>
+                    <template x-if="usedCount('activity', x.id) && mergeTargets('activities', x.id).length">
+                      <span class="xp-merge">
+                        <label class="xp-merge-l" :for="'xp-mga-' + x.id">{{ "expenses.set.merge_into" | t(lang) }}</label>
+                        <select class="input xp-select xp-select-sm" :id="'xp-mga-' + x.id"><template x-for="y in mergeTargets('activities', x.id)" :key="y.id"><option :value="y.id" x-text="lbl(y.name)"></option></template></select>
+                        <button type="button" class="btn-secondary btn-sm" @click="merge('activities', x.id, document.getElementById('xp-mga-' + x.id).value)">{% icon "merge", "size-4" %} {{ "expenses.set.merge" | t(lang) }}</button>
+                      </span>
+                    </template>
+                  </div>
+                </li>
+              </template>
+            </ul>
+            <button type="button" class="btn-secondary btn-sm mt-4" @click="addActivity()">{% icon "plus", "size-4" %} {{ "expenses.set.add_activity" | t(lang) }}</button>
+            <p class="xp-hint mt-2">{{ "expenses.set.activities_note" | t(lang) }}</p>
+          </div>
+          </template>
+
+          {#- ---- Mileage: rates and saved places ---- -#}
+          <template x-if="setTab === 'mileage'">
+          <div class="xp-set">
+            <h3 class="card-h"><span>{% icon "car", "size-5" %}</span>{{ "expenses.set.mileage" | t(lang) }}</h3>
+            <p class="xp-set-intro">{{ "expenses.set.rates_intro" | t(lang) }}</p>
+            <ul class="xp-items mt-4" role="list">
+              <template x-for="r in list('rates')" :key="r.id">
+                <li class="xp-item">
+                  <div class="xp-item-row xp-item-row-edit">
+                    <div class="xp-f xp-grow">
+                      <label class="xp-label" :for="'xp-s-rate-' + r.id">{{ "expenses.set.name" | t(lang) }}</label>
+                      <input class="input" type="text" maxlength="80" :id="'xp-s-rate-' + r.id" :value="lbl(r.name)" @change="setName('rates', r.id, 'name', $event.target.value)" :aria-describedby="r.note ? 'xp-s-rn-' + r.id : null">
+                      <p class="xp-hint" :id="'xp-s-rn-' + r.id" x-show="r.note" x-text="lbl(r.note)"></p>
+                    </div>
+                    <div class="xp-f xp-f-rate">
+                      <label class="xp-label" :for="'xp-s-rv-' + r.id">{{ "expenses.set.rate_value" | t(lang) }}</label>
+                      <span class="xp-money"><span aria-hidden="true">$</span><input class="input" type="text" inputmode="decimal" autocomplete="off" maxlength="6" :id="'xp-s-rv-' + r.id" :value="r.rate" placeholder="0.14" @change="setRate(r.id, $event.target.value)"></span>
+                    </div>
+                  </div>
+                  <div class="xp-item-foot">
+                    <label class="xp-check-line"><input type="radio" name="xp-default-rate" :checked="defaultRate().id === r.id" @change="setDefaultRate(r.id)"><span>{{ "expenses.set.default_rate" | t(lang) }}</span></label>
+                    <button type="button" class="btn-ghost btn-sm xp-danger" x-show="canDelete('rates', r.id)" @click="del('rates', r.id)">{% icon "trash-2", "size-4" %} {{ "expenses.set.delete" | t(lang) }}</button>
+                  </div>
+                </li>
+              </template>
+            </ul>
+            <button type="button" class="btn-secondary btn-sm mt-4" @click="addRate()">{% icon "plus", "size-4" %} {{ "expenses.set.add_rate" | t(lang) }}</button>
+            <p class="xp-hint mt-2">{{ "expenses.set.rates_note" | t(lang) }}</p>
+
+            <h4 class="xp-h4 mt-8">{{ "expenses.set.places" | t(lang) }}</h4>
+            <p class="mt-1 text-sm text-muted">{{ "expenses.set.places_intro" | t(lang) }}</p>
+            <ul class="xp-items mt-3" role="list">
+              <template x-for="(p, i) in list('places')" :key="i + ':' + p">
+                <li class="xp-item">
+                  <div class="xp-item-row xp-item-row-edit">
+                    <div class="xp-f xp-grow">
+                      <label class="sr-only" :for="'xp-pl-' + i" x-text="t('set.place_n', { n: i + 1 })"></label>
+                      <input class="input" type="text" maxlength="80" :id="'xp-pl-' + i" :value="p" @change="setPlace(i, $event.target.value)">
+                    </div>
+                    <span class="xp-move">
+                      <button type="button" class="xp-icon-btn" :aria-disabled="i === 0 ? 'true' : 'false'" :aria-label="t('set.move_up', { name: p })" @click="movePlace(i, -1)">{% icon "arrow-up", "size-4" %}</button>
+                      <button type="button" class="xp-icon-btn" :aria-disabled="i === list('places').length - 1 ? 'true' : 'false'" :aria-label="t('set.move_down', { name: p })" @click="movePlace(i, 1)">{% icon "arrow-down", "size-4" %}</button>
+                      <button type="button" class="xp-icon-btn xp-danger" :aria-label="t('set.remove', { name: p })" @click="delPlace(i)">{% icon "x", "size-4" %}</button>
+                    </span>
+                  </div>
+                </li>
+              </template>
+            </ul>
+            <form class="xp-add-row" @submit.prevent="addPlace()">
+              <label class="xp-label" for="xp-new-place">{{ "expenses.set.add_place" | t(lang) }}</label>
+              <input id="xp-new-place" class="input" type="text" maxlength="80" autocomplete="off" x-model="newPlace" placeholder="{{ 'expenses.set.place_ph' | t(lang) }}">
+              <button type="submit" class="btn-secondary btn-sm">{% icon "plus", "size-4" %} {{ "expenses.set.add" | t(lang) }}</button>
+            </form>
+          </div>
+          </template>
+
+          {#- ---- Budgets ---- -#}
+          <template x-if="setTab === 'budgets'">
+          <div class="xp-set">
+            <h3 class="card-h"><span>{% icon "piggy-bank", "size-5" %}</span>{{ "expenses.set.budgets" | t(lang) }}</h3>
+            <p class="xp-set-intro">{{ "expenses.set.budgets_intro" | t(lang) }}</p>
+            <ul class="xp-items mt-4" role="list">
+              <template x-for="b in list('budgets')" :key="b.id">
+                <li class="xp-item">
+                  <div class="xp-form-grid">
+                    <div class="xp-f">
+                      <label class="xp-label" :for="'xp-s-bud-' + b.id">{{ "expenses.set.budget_label" | t(lang) }}</label>
+                      <input class="input" type="text" maxlength="80" :id="'xp-s-bud-' + b.id" :value="b.label" @change="setField('budgets', b.id, 'label', $event.target.value.trim())">
+                    </div>
+                    <div class="xp-f">
+                      <label class="xp-label" :for="'xp-s-budf-' + b.id">{{ "expenses.field.funder" | t(lang) }}</label>
+                      <select class="input xp-select" :id="'xp-s-budf-' + b.id" @change="setField('budgets', b.id, 'funder', $event.target.value)">
+                        <template x-for="x in funders(b.funder)" :key="x.id"><option :value="x.id" :selected="x.id === b.funder" x-text="lbl(x.name)"></option></template>
+                      </select>
+                    </div>
+                    <div class="xp-f">
+                      <label class="xp-label" :for="'xp-s-budy-' + b.id">{{ "expenses.set.budget_year" | t(lang) }}</label>
+                      <input class="input" type="number" inputmode="numeric" min="2000" max="2100" :id="'xp-s-budy-' + b.id" :value="b.year" @change="setField('budgets', b.id, 'year', Number($event.target.value) || new Date().getFullYear())">
+                    </div>
+                    <div class="xp-f">
+                      <label class="xp-label" :for="'xp-s-buda-' + b.id">{{ "expenses.set.budget_amount" | t(lang) }}</label>
+                      <span class="xp-money"><span aria-hidden="true">$</span><input class="input" type="text" inputmode="decimal" autocomplete="off" :id="'xp-s-buda-' + b.id" :value="(b.amount_cents / 100).toFixed(2)" @change="setBudgetAmount(b.id, $event.target.value)"></span>
+                    </div>
+                  </div>
+                  <div class="xp-item-foot"><button type="button" class="btn-ghost btn-sm xp-danger" @click="delBudget(b.id)">{% icon "trash-2", "size-4" %} {{ "expenses.set.delete" | t(lang) }}</button></div>
+                </li>
+              </template>
+            </ul>
+            <button type="button" class="btn-secondary btn-sm mt-4" @click="addBudget()">{% icon "plus", "size-4" %} {{ "expenses.set.add_budget" | t(lang) }}</button>
+          </div>
+          </template>
+
+          {#- ---- Custom fields ---- -#}
+          <template x-if="setTab === 'fields'">
+          <div class="xp-set">
+            <h3 class="card-h"><span>{% icon "list-plus", "size-5" %}</span>{{ "expenses.set.fields" | t(lang) }}</h3>
+            <p class="xp-set-intro">{{ "expenses.set.fields_intro" | t(lang) }}</p>
+            <ul class="xp-items mt-4" role="list">
+              <template x-for="c in list('custom_fields')" :key="c.id">
+                <li class="xp-item">
+                  <div class="xp-form-grid">
+                    <div class="xp-f">
+                      <label class="xp-label" :for="'xp-s-cf-' + c.id">{{ "expenses.set.label" | t(lang) }}</label>
+                      <input class="input" type="text" maxlength="60" :id="'xp-s-cf-' + c.id" :value="c.label" @change="setName('custom_fields', c.id, 'label', $event.target.value)">
+                    </div>
+                    <div class="xp-f">
+                      <label class="xp-label" :for="'xp-s-cft-' + c.id">{{ "expenses.set.field_type" | t(lang) }}</label>
+                      <select class="input xp-select" :id="'xp-s-cft-' + c.id" @change="setField('custom_fields', c.id, 'type', $event.target.value)">
+                        {%- for k in ["text", "number", "date", "yesno", "choice"] %}<option value="{{ k }}" :selected="c.type === '{{ k }}'">{{ ("expenses.cf_type." + k) | t(lang) }}</option>{% endfor %}
+                      </select>
+                    </div>
+                    <div class="xp-f" x-show="c.type === 'choice'">
+                      <label class="xp-label" :for="'xp-s-cfo-' + c.id">{{ "expenses.set.field_options" | t(lang) }}</label>
+                      <input class="input" type="text" :id="'xp-s-cfo-' + c.id" :value="(c.options || []).join(', ')" @change="setOptions(c.id, $event.target.value)" :aria-describedby="'xp-s-cfo-h-' + c.id">
+                      <p class="xp-hint" :id="'xp-s-cfo-h-' + c.id">{{ "expenses.set.field_options_hint" | t(lang) }}</p>
+                    </div>
+                  </div>
+                  <fieldset class="xp-f mt-3">
+                    <legend class="xp-label">{{ "expenses.set.field_types" | t(lang) }}</legend>
+                    <div class="xp-checks">
+                      {%- for ty in typeList %}
+                      <label class="xp-check-line"><input type="checkbox" :checked="(c.types || []).indexOf('{{ ty.id }}') !== -1" @change="toggleCfType(c.id, '{{ ty.id }}')"><span>{{ ("expenses.type." + ty.id) | t(lang) }}</span></label>
+                      {%- endfor %}
+                    </div>
+                  </fieldset>
+                  <div class="xp-item-foot"><button type="button" class="btn-ghost btn-sm xp-danger" @click="delCustom(c.id)">{% icon "trash-2", "size-4" %} {{ "expenses.set.delete" | t(lang) }}</button></div>
+                </li>
+              </template>
+            </ul>
+            <button type="button" class="btn-secondary btn-sm mt-4" @click="addCustom()">{% icon "plus", "size-4" %} {{ "expenses.set.add_field" | t(lang) }}</button>
+            <p class="xp-hint mt-2">{{ "expenses.set.fields_examples" | t(lang) }}</p>
+          </div>
+          </template>
+
+          {#- ---- Reminders ---- -#}
+          <template x-if="setTab === 'reminders'">
+          <div class="xp-set">
+            <h3 class="card-h"><span>{% icon "bell", "size-5" %}</span>{{ "expenses.set.reminders" | t(lang) }}</h3>
+            <p class="xp-set-intro">{{ "expenses.set.reminders_intro" | t(lang) }}</p>
+            <div class="xp-form-grid mt-4">
+              {%- for k in ["renewal_days", "backup_reminder_days"] %}
+              <div class="xp-f">
+                <label class="xp-label" for="xp-s-{{ k }}">{{ ("expenses.set." + k) | t(lang) }}</label>
+                <input id="xp-s-{{ k }}" class="input" type="number" inputmode="numeric" min="1" max="365" :value="st().{{ k }}" @change="setDays('{{ k }}', $event.target.value)" aria-describedby="xp-s-{{ k }}-h">
+                <p id="xp-s-{{ k }}-h" class="xp-hint">{{ ("expenses.set." + k + "_hint") | t(lang) }}</p>
+              </div>
+              {%- endfor %}
+            </div>
+          </div>
+          </template>
+        </div>
+        </template>
+      </section>
+
+      {#- the same facts as the hero's aside, where that aside is not shown (phones, larger text) -#}
+      <p class="xp-device">
+        {% icon "lock", "size-4 shrink-0" %}
+        <span>{{ "expenses.device.saved_here" | t(lang) }}</span>
+        <span x-text="t('device.line', { n: count(E().length), when: lastBackupText() })"></span>
+        <button type="button" class="link" @click="exportBackup()">{{ "expenses.aside.backup_now" | t(lang) }}</button>
+      </p>
+    </div>
+    </template>
+  </div>
+</section>
+
+{#- ============ The add / edit dialog ============ -#}
+{%- macro fi(name, labelKey, lang, o) -%}
+{%- set o = o or {} -%}
+<div class="xp-f{{ (' ' ~ o.cls) if o.cls }}"{% if o.show %} x-show="{{ o.show }}"{% endif %}>
+  <label class="xp-label" for="xp-f-{{ name }}">{{ labelKey | t(lang) }}{% if o.req %} <span class="xp-req" aria-hidden="true">*</span>{% endif %}</label>
+  {%- if o.money %}<span class="xp-money"><span aria-hidden="true">$</span>{% endif %}
+  <input id="xp-f-{{ name }}" class="input" type="{{ o.type or 'text' }}"{% if o.im %} inputmode="{{ o.im }}"{% endif %}{% if o.list %} list="{{ o.list }}"{% endif %} autocomplete="off"{% if o.max %} maxlength="{{ o.max }}"{% endif %}{% if o.min %} min="{{ o.min }}"{% endif %}{% if o.ph %} placeholder="{{ o.ph | t(lang) }}"{% endif %}{% if o.req %} aria-required="true"{% endif %} x-model="form.{{ name }}" :aria-invalid="errText('{{ name }}') ? 'true' : null" aria-describedby="xp-e-{{ name }}{{ (' xp-h-' ~ name) if o.hint }}">
+  {%- if o.money %}</span>{% endif %}
+  {%- if o.hint %}<p id="xp-h-{{ name }}" class="xp-hint">{{ o.hint | t(lang) }}</p>{% endif %}
+  <p id="xp-e-{{ name }}" class="xp-err" x-show="errText('{{ name }}')" x-text="errText('{{ name }}')"></p>
+</div>
+{%- endmacro -%}
+{%- set typeTone = { expense: "gv", mileage: "grape", received: "vine", giveaway: "rose", stock: "teal" } -%}
+<dialog x-ref="dlg" class="xp-dialog" aria-labelledby="xp-dlg-title" @cancel.prevent="tryClose()" @close="formClosed()">
+  <template x-if="form">
+  <div class="xp-dlg">
+    <header class="xp-dlg-head">
+      <button type="button" class="xp-icon-btn" x-show="formStep === 2 && formMode === 'add'" @click="backToTypes()" :aria-label="t('form.back')">{% icon "arrow-left", "size-5" %}</button>
+      <h2 id="xp-dlg-title" class="xp-dlg-title" x-text="formTitle()"></h2>
+      <button type="button" class="xp-icon-btn" @click="tryClose()" :aria-label="t('form.close')">{% icon "x", "size-5" %}</button>
+    </header>
+    <p class="xp-dlg-msg" role="status" x-text="dlgMsg"></p>
+
+    {#- step 1: what are you recording? -#}
+    <div class="xp-dlg-body" x-show="formStep === 1">
+      <fieldset>
+        <legend class="xp-lead">{{ "expenses.form.what_intro" | t(lang) }}</legend>
+        <div class="xp-types">
+          {%- for ty in typeList %}
+          <button type="button" class="xp-type"{% if loop.first %} data-type-btn{% endif %} @click="chooseType('{{ ty.id }}')">
+            <span class="xp-type-i xp-tone-{{ typeTone[ty.id] }}">{% icon ty.icon, "size-6" %}</span>
+            <span class="min-w-0"><span class="xp-type-t">{{ ("expenses.type_add." + ty.id) | t(lang) }}</span><span class="xp-type-h">{{ ("expenses.type_hint." + ty.id) | t(lang) }}</span></span>
+          </button>
+          {%- endfor %}
+        </div>
+      </fieldset>
+    </div>
+
+    {#- step 2: the fields of the category's template -#}
+    <form id="xp-form" class="xp-dlg-body" x-show="formStep === 2" novalidate @submit.prevent="saveForm(false)">
+      <div id="xp-form-errors" class="xp-errsum" tabindex="-1" x-show="formErrs.length" role="alert">
+        <p class="font-semibold">{% icon "triangle-alert", "size-4 inline -mt-0.5" %} {{ "expenses.form.errors_title" | t(lang) }}</p>
+        <ul role="list"><template x-for="e in formErrs" :key="e.field"><li><button type="button" class="link" @click="errFocus(e.field)" x-text="e.text"></button></li></template></ul>
+      </div>
+      <p class="xp-banner xp-banner-sm" x-show="form.example">{% icon "sparkles", "size-4 shrink-0" %}<span>{{ "expenses.form.is_example" | t(lang) }}</span></p>
+
+      <div class="xp-form-grid">
+        {#- category (when the type has more than one) -#}
+        <div class="xp-f xp-span" x-show="cats(form.type, form.category).length > 1">
+          <label class="xp-label" for="xp-f-category">{{ "expenses.field.category" | t(lang) }}</label>
+          <select id="xp-f-category" class="input xp-select" @change="form.category = $event.target.value; onCat()" :aria-invalid="errText('category') ? 'true' : null" aria-describedby="xp-e-category">
+            <template x-for="c in cats(form.type, form.category)" :key="c.id"><option :value="c.id" :selected="c.id === form.category" x-text="lbl(c.label)"></option></template>
+          </select>
+          <p id="xp-e-category" class="xp-err" x-show="errText('category')" x-text="errText('category')"></p>
+        </div>
+
+        {#- dates (a hotel: check-in / check-out, and the nights; a trip over several days: its last day) -#}
+        <div class="xp-f">
+          <label class="xp-label" for="xp-f-date" x-text="has('lodging') ? t('field.check_in') : t('field.date')"></label>
+          <input id="xp-f-date" class="input" type="date" x-model="form.date" aria-required="true" :aria-invalid="errText('date') ? 'true' : null" aria-describedby="xp-e-date">
+          <p id="xp-e-date" class="xp-err" x-show="errText('date')" x-text="errText('date')"></p>
+        </div>
+        <div class="xp-f" x-show="has('end_date')">
+          <label class="xp-label" for="xp-f-end_date" x-text="has('lodging') ? t('field.check_out') : t('field.last_day')"></label>
+          <input id="xp-f-end_date" class="input" type="date" x-model="form.end_date" :min="form.date" :aria-invalid="errText('end_date') ? 'true' : null" aria-describedby="xp-e-end_date xp-h-nights">
+          <p id="xp-h-nights" class="xp-hint" x-text="has('lodging') ? nights() : t('form.last_day_hint')"></p>
+          <p id="xp-e-end_date" class="xp-err" x-show="errText('end_date')" x-text="errText('end_date')"></p>
+        </div>
+
+        {#- miles driven — or "I didn't drive" (rode with someone): the event and your role on record, no
+            miles and nothing to ask back -#}
+        <template x-if="tpl() === 'mileage'">
+        <div class="xp-span xp-form-grid">
+          <div class="xp-f xp-span">
+            <label class="xp-check-line"><input id="xp-f-no_miles" type="checkbox" x-model="form.no_miles" aria-describedby="xp-h-no_miles"><span>{{ "expenses.field.no_miles" | t(lang) }}</span></label>
+            <p id="xp-h-no_miles" class="xp-hint" x-text="form.no_miles ? t('form.no_miles_hint') : ''"></p>
+          </div>
+          <template x-if="form.no_miles">
+            <div class="xp-f xp-span">
+              <label class="xp-label" for="xp-f-person">{{ "expenses.field.rode_with" | t(lang) }}</label>
+              <input id="xp-f-person" class="input" type="text" list="xp-dl-person" autocomplete="off" maxlength="60" x-model="form.person" aria-describedby="xp-h-person">
+              <p id="xp-h-person" class="xp-hint">{{ "expenses.form.rode_hint" | t(lang) }}</p>
+            </div>
+          </template>
+          <template x-if="!form.no_miles">
+          <div class="xp-span xp-form-grid">
+            {{ fi("from", "expenses.field.from", lang, { list: "xp-dl-place", max: 120, ph: "expenses.form.from_ph" }) }}
+            {{ fi("to", "expenses.field.to", lang, { list: "xp-dl-place", max: 120, ph: "expenses.form.to_ph" }) }}
+            <div class="xp-f">
+              <label class="xp-label" for="xp-f-miles">{{ "expenses.field.miles_one_way" | t(lang) }}</label>
+              <input id="xp-f-miles" class="input" type="text" inputmode="decimal" autocomplete="off" x-model="form.miles" :disabled="odo()" :aria-invalid="errText('miles') ? 'true' : null" aria-describedby="xp-e-miles">
+              <p id="xp-e-miles" class="xp-err" x-show="errText('miles')" x-text="errText('miles')"></p>
+            </div>
+            <div class="xp-f xp-f-end">
+              <label class="xp-check-line"><input type="checkbox" x-model="form.round_trip" :disabled="odo()"><span>{{ "expenses.field.round_trip" | t(lang) }}</span></label>
+            </div>
+            {#- the same trip made several times (3 days at a convention, 7 CityWide Saturdays): one entry -#}
+            {{ fi("trips", "expenses.field.trips", lang, { type: "number", im: "numeric", min: 1, hint: "expenses.form.trips_hint", show: "has('trips')" }) }}
+            <details class="xp-span xp-odo">
+              <summary>{{ "expenses.form.odometer" | t(lang) }}</summary>
+              <div class="xp-form-grid mt-3">
+                {{ fi("odometer_start", "expenses.field.odometer_start", lang, { im: "decimal" }) }}
+                {{ fi("odometer_end", "expenses.field.odometer_end", lang, { im: "decimal" }) }}
+              </div>
+              <p class="xp-hint">{{ "expenses.form.odometer_hint" | t(lang) }}</p>
+            </details>
+            <div class="xp-f xp-span">
+              <label class="xp-label" for="xp-f-rate_id">{{ "expenses.field.rate" | t(lang) }}</label>
+              <select id="xp-f-rate_id" class="input xp-select" @change="form.rate_id = $event.target.value; onRate()" aria-describedby="xp-h-rate">
+                <template x-for="r in rateOptions()" :key="r.id"><option :value="r.id" :selected="r.id === form.rate_id" x-text="lbl(r.name) + ' · ' + rateText(r.rate)"></option></template>
+              </select>
+              <p id="xp-h-rate" class="xp-hint" x-text="form.rate === '' ? t('form.rate_missing') : rateText(form.rate)"></p>
+            </div>
+            <p class="xp-f xp-span xp-preview" aria-live="polite" x-text="mileagePreview()"></p>
+          </div>
+          </template>
+        </div>
+        </template>
+
+        {#- a magazine subscription: how it was paid, for whom -#}
+        <template x-if="has('subscription')">
+        <div class="xp-span xp-form-grid">
+          <fieldset class="xp-f xp-span">
+            <legend class="xp-label">{{ "expenses.field.sub_kind" | t(lang) }}</legend>
+            <div class="xp-seg xp-seg-4">
+              {%- for k in ["gift", "helped", "group", "self"] %}
+              <label class="xp-seg-opt"><input type="radio" name="xp-subkind" value="{{ k }}" :checked="form.sub_kind === '{{ k }}'" @change="form.sub_kind = '{{ k }}'; onSubKind()"><span>{{ ("expenses.sub_kind." + k) | t(lang) }}</span></label>
+              {%- endfor %}
+            </div>
+            <p class="xp-hint" x-text="t('sub_kind_hint.' + (form.sub_kind || 'gift'))"></p>
+          </fieldset>
+          <div class="xp-f" x-show="form.sub_kind === 'helped'">
+            <label class="xp-label" for="xp-f-person_name">{{ "expenses.field.person_owes" | t(lang) }} <span class="xp-req" aria-hidden="true">*</span></label>
+            <input id="xp-f-person_name" class="input" type="text" list="xp-dl-people" autocomplete="off" maxlength="60" x-model="form.person_name" aria-describedby="xp-h-person_name xp-e-person_name" :aria-invalid="errText('person_name') ? 'true' : null">
+            <p id="xp-h-person_name" class="xp-hint">{{ "expenses.form.person_hint" | t(lang) }}</p>
+            <p id="xp-e-person_name" class="xp-err" x-show="errText('person_name')" x-text="errText('person_name')"></p>
+          </div>
+          <div class="xp-f" x-show="form.sub_kind !== 'helped'">
+            <label class="xp-label" for="xp-f-person">{{ "expenses.field.person" | t(lang) }}</label>
+            <input id="xp-f-person" class="input" type="text" list="xp-dl-person" autocomplete="off" maxlength="60" x-model="form.person" aria-describedby="xp-h-person">
+            <p id="xp-h-person" class="xp-hint">{{ "expenses.form.person_hint" | t(lang) }}</p>
+          </div>
+          <div class="xp-f">
+            <label class="xp-label" for="xp-f-sub_product">{{ "expenses.field.sub_product" | t(lang) }}</label>
+            <select id="xp-f-sub_product" class="input xp-select" x-model="form.sub_product">
+              <option value="">{{ "expenses.form.choose" | t(lang) }}</option>
+              {%- for p in (["lv_print", "lv_online", "lv_complete", "gv_print", "gv_online", "gv_complete", "other"] if lang == "es" else ["gv_print", "gv_online", "gv_complete", "lv_print", "lv_online", "lv_complete", "other"]) %}
+              <option value="{{ p }}">{{ ("expenses.sub_product." + p) | t(lang) }}</option>
+              {%- endfor %}
+            </select>
+          </div>
+          {{ fi("sub_term", "expenses.field.sub_term", lang, { type: "number", im: "numeric", min: 1 }) }}
+          {{ fi("sub_start", "expenses.field.sub_start", lang, { type: "date", hint: "expenses.form.sub_start_hint" }) }}
+          {#- several bought at once (10 gift subscriptions for a jail): the amount is what they all cost -#}
+          {{ fi("quantity", "expenses.field.quantity_subscription", lang, { type: "number", im: "numeric", min: 1, hint: "expenses.form.sub_qty_hint" }) }}
+        </div>
+        </template>
+
+        {#- books, printing, giveaways, items received: what and how many -#}
+        <template x-if="has('item')">
+        <div class="xp-span xp-form-grid">
+          <div class="xp-f xp-span">
+            <label class="xp-label" for="xp-f-item" x-text="tpl() === 'printing' ? t('field.item_printed') : t('field.item')"></label>
+            <input id="xp-f-item" class="input" type="text" list="xp-dl-item" autocomplete="off" maxlength="120" x-model="form.item" :placeholder="tpl() === 'printing' ? t('form.item_printed_ph') : t('form.item_ph')" :aria-invalid="errText('item') ? 'true' : null" aria-describedby="xp-e-item">
+            <p id="xp-e-item" class="xp-err" x-show="errText('item')" x-text="errText('item')"></p>
+          </div>
+          <fieldset class="xp-f xp-span" x-show="has('format')">
+            <legend class="xp-label">{{ "expenses.field.format" | t(lang) }}</legend>
+            <div class="xp-seg xp-seg-4">
+              {%- for k in (["lv", "gv", "other", ""] if lang == "es" else ["gv", "lv", "other", ""]) %}
+              <label class="xp-seg-opt"><input type="radio" name="xp-format" value="{{ k }}" :checked="form.format === '{{ k }}'" @change="form.format = '{{ k }}'"><span>{{ ("expenses.format." + (k or "none")) | t(lang) }}</span></label>
+              {%- endfor %}
+            </div>
+          </fieldset>
+          <div class="xp-f" x-show="has('quantity')">
+            <label class="xp-label" for="xp-f-quantity" x-text="t('field.quantity_' + tpl())"></label>
+            <input id="xp-f-quantity" class="input" type="text" inputmode="decimal" autocomplete="off" x-model="form.quantity" :aria-invalid="errText('quantity') ? 'true' : null" aria-describedby="xp-e-quantity">
+            <p id="xp-e-quantity" class="xp-err" x-show="errText('quantity')" x-text="errText('quantity')"></p>
+          </div>
+          {{ fi("unit_cost", "expenses.field.unit_cost", lang, { im: "decimal", money: true, show: "has('unit_cost')" }) }}
+          <p class="xp-f xp-span xp-preview" x-show="booksAuto()" aria-live="polite" x-text="booksTotal()"></p>
+          <div class="xp-f xp-span" x-show="has('giveaway')">
+            <label class="xp-check-line"><input type="checkbox" x-model="form.giveaway"><span>{{ "expenses.field.giveaway" | t(lang) }}</span></label>
+          </div>
+        </div>
+        </template>
+
+        {{ fi("attendees", "expenses.field.attendees", lang, { type: "number", im: "numeric", min: 1, show: "has('attendees')" }) }}
+
+        {#- a hotel: its name, city and confirmation number (other templates keep these under "More details") -#}
+        <template x-if="has('lodging')">
+        <div class="xp-span xp-form-grid">
+          {{ fi("vendor", "expenses.field.hotel", lang, { list: "xp-dl-vendor", max: 120 }) }}
+          {{ fi("place", "expenses.field.city", lang, { list: "xp-dl-place", max: 120 }) }}
+          {{ fi("ref", "expenses.field.ref_lodging", lang, { max: 80, ph: "expenses.form.ref_lodging_ph", cls: "xp-span" }) }}
+        </div>
+        </template>
+
+        {#- what it was for -#}
+        <div class="xp-f xp-span">
+          <label class="xp-label" for="xp-f-description"><span x-text="t('field.description_' + form.type)"></span> <span class="xp-req" aria-hidden="true" x-show="form.type === 'expense' || form.type === 'received'">*</span></label>
+          <input id="xp-f-description" class="input" type="text" autocomplete="off" maxlength="200" x-model="form.description" :placeholder="t('form.description_ph_' + form.type)" :aria-required="form.type === 'expense' || form.type === 'received' ? 'true' : null" :aria-invalid="errText('description') ? 'true' : null" aria-describedby="xp-e-description">
+          <p id="xp-e-description" class="xp-err" x-show="errText('description')" x-text="errText('description')"></p>
+        </div>
+
+        {#- how much -#}
+        <div class="xp-f" x-show="has('money') && !booksAuto()">
+          <label class="xp-label" for="xp-f-amount"><span x-text="form.type === 'received' ? t('field.amount_received') : t('field.amount')"></span> <span class="xp-req" aria-hidden="true">*</span></label>
+          <span class="xp-money"><span aria-hidden="true">$</span><input id="xp-f-amount" class="input" type="text" inputmode="decimal" autocomplete="off" x-model="form.amount" placeholder="0.00" aria-required="true" :aria-invalid="errText('amount') || errText('amount_cents') ? 'true' : null" aria-describedby="xp-e-amount"></span>
+          <p id="xp-e-amount" class="xp-err" x-show="errText('amount') || errText('amount_cents')" x-text="errText('amount') || errText('amount_cents')"></p>
+        </div>
+
+        {#- who pays for it in the end (money received / items received: who it came from) -#}
+        <div class="xp-f" x-show="has('funder')">
+          <label class="xp-label" for="xp-f-funder" x-text="funderLabel()"></label>
+          <select id="xp-f-funder" class="input xp-select" @change="form.funder = $event.target.value; onFunder()" aria-describedby="xp-h-funder xp-e-funder">
+            <template x-for="x in funders(form.funder)" :key="x.id"><option :value="x.id" :selected="x.id === form.funder" x-text="lbl(x.name)"></option></template>
+          </select>
+          <p id="xp-h-funder" class="xp-hint" x-show="(form.type === 'expense' || form.type === 'mileage') && isSelf(form.funder)">{{ "expenses.form.self_hint" | t(lang) }}</p>
+          <p id="xp-e-funder" class="xp-err" x-show="errText('funder')" x-text="errText('funder')"></p>
+        </div>
+        <div class="xp-f" x-show="has('status')">
+          <label class="xp-label" for="xp-f-claim_status">{{ "expenses.field.status" | t(lang) }}</label>
+          <select id="xp-f-claim_status" class="input xp-select" x-model="form.claim_status">
+            {%- for s in ["to_request", "submitted", "paid", "denied"] %}<option value="{{ s }}">{{ ("expenses.status." + s) | t(lang) }}</option>{% endfor %}
+          </select>
+        </div>
+
+        {{ fi("event", "expenses.field.event", lang, { list: "xp-dl-event", max: 120, ph: "expenses.form.event_ph", cls: "xp-span" }) }}
+
+        {#- the kind of service it was for (the service report's sections) and, on a trip, what you did there -#}
+        <div class="xp-f" x-show="has('activity')">
+          <label class="xp-label" for="xp-f-activity">{{ "expenses.field.activity" | t(lang) }}</label>
+          <select id="xp-f-activity" class="input xp-select" @change="form.activity = $event.target.value" :aria-invalid="errText('activity') ? 'true' : null" aria-describedby="xp-h-activity xp-e-activity">
+            <option value="" :selected="!form.activity">{{ "expenses.form.no_activity" | t(lang) }}</option>
+            <template x-for="a in activities(form.activity)" :key="a.id"><option :value="a.id" :selected="a.id === form.activity" x-text="lbl(a.name)"></option></template>
+          </select>
+          <p id="xp-h-activity" class="xp-hint">{{ "expenses.form.activity_hint" | t(lang) }}</p>
+          <p id="xp-e-activity" class="xp-err" x-show="errText('activity')" x-text="errText('activity')"></p>
+        </div>
+        {{ fi("role", "expenses.field.role", lang, { list: "xp-dl-role", max: 80, ph: "expenses.form.role_ph", show: "has('role')" }) }}
+
+        {#- the receipt: kept on paper, a photo on this device, or somewhere else -#}
+        <div class="xp-f xp-span" x-show="has('receipt')">
+          <label class="xp-label" for="xp-f-receipt">{{ "expenses.field.receipt" | t(lang) }}</label>
+          <div class="xp-receipt-row">
+            <select id="xp-f-receipt" class="input xp-select" x-model="form.receipt">
+              {%- for r in ["none", "paper", "photo", "file"] %}<option value="{{ r }}">{{ ("expenses.receipt." + r) | t(lang) }}</option>{% endfor %}
+            </select>
+            <label class="btn-secondary btn-sm xp-photo-btn" x-show="form.receipt === 'photo' && !photoUrl">
+              <input type="file" class="sr-only" accept="image/*" @change="onPhoto($event)">
+              {% icon "camera", "size-4" %} <span x-text="photoBusy ? t('form.photo_busy') : t('form.photo_take')"></span>
+            </label>
+          </div>
+          <div class="xp-photo" x-show="photoUrl && form.receipt === 'photo'">
+            <img :src="photoUrl || null" alt="{{ 'expenses.form.photo_alt' | t(lang) }}">
+            <button type="button" class="btn-ghost btn-sm xp-danger" @click="removePhoto()">{% icon "trash-2", "size-4" %} {{ "expenses.form.photo_remove" | t(lang) }}</button>
+          </div>
+          <p class="xp-hint" x-show="form.receipt === 'photo'">{{ "expenses.form.photo_hint" | t(lang) }}</p>
+          <div class="xp-f mt-2" x-show="form.receipt === 'file'">
+            <label class="xp-label" for="xp-f-receipt_ref">{{ "expenses.field.receipt_ref" | t(lang) }}</label>
+            <input id="xp-f-receipt_ref" class="input" type="text" autocomplete="off" maxlength="120" x-model="form.receipt_ref" placeholder="{{ 'expenses.form.receipt_ref_ph' | t(lang) }}">
+          </div>
+        </div>
+      </div>
+
+      {#- the rest, folded -#}
+      <details class="xp-moredet" :open="formMore" @toggle="formMore = $event.target.open">
+        <summary>{% icon "chevron-down", "size-4 shrink-0 xp-chev" %} {{ "expenses.form.more" | t(lang) }}</summary>
+        <div class="xp-form-grid mt-3">
+          <div class="xp-f" x-show="has('method')">
+            <label class="xp-label" for="xp-f-method" x-text="form.type === 'received' ? t('field.method_received') : t('field.method')"></label>
+            <select id="xp-f-method" class="input xp-select" @change="form.method = $event.target.value" aria-describedby="xp-h-method">
+              <option value="" :selected="!form.method">{{ "expenses.form.choose" | t(lang) }}</option>
+              <template x-for="m in methods(form.method)" :key="m.id"><option :value="m.id" :selected="m.id === form.method" x-text="lbl(m.name)"></option></template>
+            </select>
+            <p id="xp-h-method" class="xp-hint" x-show="form.method === 'direct'">{{ "expenses.form.direct_hint" | t(lang) }}</p>
+          </div>
+          <template x-if="!has('lodging') && form.type !== 'giveaway' && form.type !== 'stock'">
+            {{ fi("vendor", "expenses.field.vendor", lang, { list: "xp-dl-vendor", max: 120, ph: "expenses.form.vendor_ph" }) }}
+          </template>
+          <template x-if="!has('lodging') && tpl() !== 'mileage'">
+            {{ fi("place", "expenses.field.place", lang, { list: "xp-dl-place", max: 120 }) }}
+          </template>
+          {#- the store's own number for it: an order, a confirmation, the check you wrote (a hotel's is above) -#}
+          <template x-if="has('ref') && !has('lodging')">
+            {{ fi("ref", "expenses.field.ref", lang, { max: 80, ph: "expenses.form.ref_ph" }) }}
+          </template>
+          <template x-if="form.claim_status === 'submitted' || form.claim_status === 'paid' || form.claim_status === 'denied' || form.type === 'received'">
+            {{ fi("claim_ref", "expenses.field.claim_ref", lang, { max: 60, ph: "expenses.form.claim_ref_ph" }) }}
+          </template>
+          <template x-if="form.claim_status === 'submitted' || form.claim_status === 'paid' || form.claim_status === 'denied'">
+            {{ fi("claim_date", "expenses.field.claim_date", lang, { type: "date" }) }}
+          </template>
+          <template x-if="form.claim_status === 'paid'">
+            {{ fi("paid_date", "expenses.field.paid_date", lang, { type: "date" }) }}
+          </template>
+          <div class="xp-f" x-show="form.sub_kind === 'helped'">
+            <label class="xp-label" for="xp-f-repaid">{{ "expenses.field.repaid" | t(lang) }}</label>
+            <select id="xp-f-repaid" class="input xp-select" x-model="form.repaid">
+              {%- for r in ["owed", "repaid", "forgiven"] %}<option value="{{ r }}">{{ ("expenses.repaid." + r) | t(lang) }}</option>{% endfor %}
+            </select>
+          </div>
+          {{ fi("tags", "expenses.field.tags", lang, { max: 200, hint: "expenses.form.tags_hint", cls: "xp-span" }) }}
+          <div class="xp-f xp-span">
+            <label class="xp-label" for="xp-f-notes">{{ "expenses.field.notes" | t(lang) }}</label>
+            <textarea id="xp-f-notes" class="input xp-textarea" rows="3" maxlength="5000" x-model="form.notes"></textarea>
+          </div>
+          <template x-for="c in customFields()" :key="c.id">
+            <div class="xp-f">
+              <template x-if="c.type === 'yesno'">
+                <label class="xp-check-line xp-mt-label"><input type="checkbox" :id="'xp-f-cf-' + c.id" :checked="!!form.custom[c.id]" @change="form.custom[c.id] = $event.target.checked"><span x-text="c.label"></span></label>
+              </template>
+              <template x-if="c.type !== 'yesno'">
+                <div>
+                  <label class="xp-label" :for="'xp-f-cf-' + c.id" x-text="c.label"></label>
+                  <template x-if="c.type === 'choice'">
+                    <select class="input xp-select" :id="'xp-f-cf-' + c.id" @change="form.custom[c.id] = $event.target.value">
+                      <option value="">{{ "expenses.form.choose" | t(lang) }}</option>
+                      <template x-for="o in (c.options || [])" :key="o"><option :value="o" :selected="form.custom[c.id] === o" x-text="o"></option></template>
+                    </select>
+                  </template>
+                  <template x-if="c.type !== 'choice'">
+                    <input class="input" :type="c.type === 'date' ? 'date' : 'text'" :inputmode="c.type === 'number' ? 'decimal' : null" autocomplete="off" :id="'xp-f-cf-' + c.id" :value="form.custom[c.id] == null ? '' : form.custom[c.id]" @input="form.custom[c.id] = $event.target.value">
+                  </template>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+      </details>
+
+      {#- suggestions from what was typed before (and the site's events) -#}
+      <datalist id="xp-dl-event"><template x-for="v in suggest('event')" :key="v"><option :value="v"></option></template></datalist>
+      <datalist id="xp-dl-place"><template x-for="v in suggest('place')" :key="v"><option :value="v"></option></template></datalist>
+      <datalist id="xp-dl-item"><template x-for="v in itemSuggest()" :key="v"><option :value="v"></option></template></datalist>
+      <datalist id="xp-dl-vendor"><template x-for="v in suggest('vendor')" :key="v"><option :value="v"></option></template></datalist>
+      <datalist id="xp-dl-person"><template x-for="v in suggest('person')" :key="v"><option :value="v"></option></template></datalist>
+      <datalist id="xp-dl-people"><template x-for="x in people()" :key="x.id"><option :value="lbl(x.name)"></option></template></datalist>
+      <datalist id="xp-dl-role"><template x-for="v in roleSuggest()" :key="v"><option :value="v"></option></template></datalist>
+    </form>
+
+    <footer class="xp-dlg-foot" x-show="formStep === 2">
+      <button type="submit" form="xp-form" class="btn-primary">{% icon "check", "size-4" %} {{ "expenses.form.save" | t(lang) }}</button>
+      <button type="button" class="btn-secondary xp-save-next" x-show="formMode === 'add'" title="{{ 'expenses.form.save_another' | t(lang) }}" @click="saveForm(true)">{% icon "plus", "size-4" %} <span>{{ "expenses.form.save_another" | t(lang) }}</span></button>
+      <button type="button" class="btn-ghost" @click="tryClose()">{{ "expenses.form.cancel" | t(lang) }}</button>
+    </footer>
+  </div>
+  </template>
+</dialog>
+
+{#- "Are you sure?" -#}
+<dialog x-ref="ask" class="xp-ask" aria-labelledby="xp-ask-msg" @close="askDone(false)">
+  <p id="xp-ask-msg" class="text-ink" x-text="ask.msg"></p>
+  <div class="xp-ask-acts">
+    <button type="button" class="btn-secondary" data-ask-no @click="askDone(false)">{{ "expenses.form.cancel" | t(lang) }}</button>
+    <button type="button" :class="ask.danger ? 'btn-primary xp-btn-danger' : 'btn-primary'" @click="askDone(true)" x-text="ask.ok"></button>
+  </div>
+</dialog>
+
+{#- short messages ("Saved", "Deleted — Undo"): role=status, 10 s with Undo -#}
+<div class="xp-toast" :class="{ 'is-on': toastMsg }" role="status" aria-live="polite" aria-atomic="true">
+  <template x-if="toastMsg">
+    <div class="xp-toast-in" @focusin="toastHold(true)" @focusout="$el.contains($event.relatedTarget) || toastHold(false)" @mouseenter="toastHold(true)" @mouseleave="$el.contains(document.activeElement) || toastHold(false)">
+      <span x-text="toastMsg"></span>
+      <button type="button" class="xp-toast-btn" data-xp-undo x-show="toastUndo" @click="undoToast()">{{ "expenses.toast.undo" | t(lang) }}</button>
+      <button type="button" class="xp-icon-btn xp-toast-x" @click="closeToast()" aria-label="{{ 'common.close' | t(lang) }}">{% icon "x", "size-4" %}</button>
+    </div>
+  </template>
+</div>
+
+{#- the icons the app draws by name (x-xp-icon): drawn once here at build time (the categories' icons, the
+    entry types, the request statuses, the subscriptions' statuses and the tiles' icons) -#}
+<div id="xp-icons" hidden aria-hidden="true">
+  {%- for n in expenses.icons %}<span data-i="{{ n }}">{% icon n, "size-4 shrink-0" %}</span>{% endfor -%}
+  {%- for n in ["receipt", "car", "banknote", "heart-handshake", "package", "hand-heart", "clock", "send", "circle-check", "circle-x", "shapes",
+                "repeat", "calendar-x", "bell", "gift", "newspaper", "calendar", "library"] %}{% if not (n in expenses.icons) %}<span data-i="{{ n }}">{% icon n, "size-4 shrink-0" %}</span>{% endif %}{% endfor -%}
+</div>
+
+{#- ============ Privacy, in plain words (every promise here is true: see expenses.js) ============ -#}
+<section id="privacy" class="section container-page pt-10 sm:pt-12" aria-labelledby="xp-privacy-title">
+  {{ ui.sectionHead("expenses.privacy.title" | t(lang), "expenses.privacy.sub" | t(lang), "", "", "lock", { eyebrow: "expenses.privacy.eyebrow" | t(lang), tone: "text-vine", id: "xp-privacy-title", lang: lang }) }}
+  <ul class="grid-cards-4" role="list">
+    {%- for p in [["hard-drive", "p1", "bg-gv-soft text-gv"], ["hard-drive-download", "p2", "bg-lv-soft text-lv"], ["eye-off", "p3", "bg-grape-soft text-grape"], ["hand-heart", "p4", "bg-vine-soft text-vine"]] %}
+    <li class="card card-pad">
+      <span class="grid size-11 place-items-center rounded-xl {{ p[2] }}">{% icon p[0], "size-5" %}</span>
+      <h3 class="h-card mt-3">{{ ("expenses.privacy." + p[1] + "_t") | t(lang) }}</h3>
+      <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("expenses.privacy." + p[1]) | t(lang) }}</p>
+    </li>
+    {%- endfor %}
+  </ul>
+  <p class="mt-6 flex max-w-3xl items-start gap-2 text-sm leading-relaxed text-muted">{% icon "info", "mt-0.5 size-4 shrink-0" %}<span>{{ "expenses.privacy.tax" | t(lang) }}</span></p>
+</section>
+
+{#- the app's words (this page's language), its defaults and the site's events (suggestions) -#}
+{%- set evTitles = [] -%}
+{%- for e in ((db.events.items if db.events) or []) %}{% set tt = (e.i18n.title[lang] if (e.i18n and e.i18n.title and e.i18n.title[lang]) else e.title) %}{% if tt and not (tt in evTitles) %}{% set _n = evTitles.push(tt) %}{% endif %}{% endfor -%}
+<script type="application/json" id="xp-config">{{ expenses.config | jsonScript | safe }}</script>
+<script type="application/json" id="xp-ui">{{ expenses.ui[lang] | jsonScript | safe }}</script>
+<script type="application/json" id="xp-events">{{ evTitles | jsonScript | safe }}</script>
+</div>
