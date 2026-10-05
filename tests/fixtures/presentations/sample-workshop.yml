@@ -1,0 +1,790 @@
+# A SAMPLE deck — not one of the committee's four presentations (those are config/presentations/<id>.yml).
+# For tests and previews only: PRESENTATIONS_DIR=tests/fixtures/presentations builds the site with these decks
+# instead (tests/test_presentations_build.py; the player and the /orientation/ page are developed against it).
+# It uses every layout, every live kind and every {live:…} key, fill-ins (shared and notes_only), {slide:…}
+# tokens, versions with `hide` and with `only` (one naming a slide that starts off), version notes and
+# version_minutes, facilitator, handout (a facilitator page, and a slide that is shown AND printed), starts_off and
+# optional slides, show_from / show_until, when: "price_notice", a section accent and a slide's own accent, a slide
+# in Spanish (lang: "es"), agenda rows with `from`, and some long texts (the player fits text with them). And the
+# additions of SPEC UPDATE 3: version_fields, notes lines for some versions only ({only:…} / {not:…}), {lang:es}…{/lang}
+# spans, every {ui:…} control name (the facilitator page "The player's controls"), a read-aloud announcement card
+# (text style "script") and a pause slide ("break"), four columns as cards (2×2), a short quote beside the long
+# Preamble, a handout printed portrait (the others landscape), deadlines with limit_each and the events filter
+# "assemblies"; and tick boxes in columns (checklist: true — a printed checklist in English and Spanish). It passes
+# the deck checker:
+#     .venv\Scripts\python.exe tests\test_presentations.py tests\fixtures\presentations\sample-workshop.yml
+# The field reference: config/presentations/README.md.
+id: "sample-workshop"
+order: 1
+lang: "en"
+title: "Grapevine and La Viña Sample Workshop"
+short: "Sample Workshop"
+eyebrow: "Sample Workshop"
+footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
+minutes: 60
+icon: "book-open"
+tone: "gv"
+# a real file of the Drive slides folder, so a preview's "PowerPoint copy" link opens something
+drive_title: "Grapevine and La Viña Information Workshop"
+card:
+  title:
+    en: "Sample workshop (tests and previews)"
+    es: "Taller de muestra (pruebas y vistas previas)"
+  summary:
+    en: "A sample hour about Grapevine and La Viña: what the magazines are, what stays current on the committee website, and how to share your story."
+    es: "Una hora de muestra sobre Grapevine y La Viña: qué son las revistas, qué se mantiene al día en el sitio del comité y cómo compartir tu historia."
+  audience:
+    en: "For checking the presentation player: every kind of slide in one deck."
+    es: "Para revisar el reproductor de presentaciones: todos los tipos de diapositiva en una sola."
+presets:
+  - id: "full"
+    label: { en: "Full workshop (about 60 minutes)", es: "Taller completo (unos 60 minutos)" }
+    minutes: 60
+  - id: "short"
+    label: { en: "Running late (about 45 minutes)", es: "Si vas con retraso (unos 45 minutos)" }
+    minutes: 45
+    hide: ["history", "how-it-reaches", "book-of-the-month", "holiday-gifts", "toolkit", "stretch"]
+    note:
+      en: "Leaves out the slides marked optional, the toolkit ideas and the break; the activity is shorter."
+      es: "Deja fuera las diapositivas marcadas como opcionales, las ideas del mes y la pausa; la actividad es más corta."
+  - id: "visit"
+    label: { en: "20-minute group visit", es: "Visita de 20 minutos a un grupo" }
+    minutes: 20
+    # "bulletin" starts switched off; a version's `only` shows it all the same
+    only: ["title", "about", "two-magazines", "this-month", "next-meetings", "coming-up", "story-deadlines", "prices", "bulletin", "send-a-story", "resources", "closing"]
+    note:
+      en: "For a district or group visit: about a minute a slide, then questions."
+      es: "Para visitar un distrito o un grupo: cerca de un minuto por diapositiva y luego preguntas."
+fillins:
+  - key: "date"
+    label: { en: "Date", es: "Fecha" }
+    hint: "Month DD, YYYY"
+  - key: "place"
+    label: { en: "Place, or Zoom", es: "Lugar o Zoom" }
+    hint: "Place, or Zoom"
+  - key: "presenter"
+    label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
+    hint: "Service position"
+    default: "Area 65 Grapevine / La Viña Chair"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre (solo en tus notas)" }
+    hint: "first name"
+    shared: true
+    notes_only: true
+  - key: "end_time"
+    label: { en: "When you will finish", es: "Hora en que terminas" }
+    hint: "end time"
+slides:
+  - id: "title"
+    layout: "title"
+    title: "Grapevine and La Viña Sample Workshop"
+    subtitle: "Our meeting in print: what it is, how members use it, and how to share your story"
+    lines:
+      - "{fill:presenter} · {live:panel}"
+      - "{fill:date} · {fill:place}"
+    minutes: 1
+    notes: |
+      SAY: (Show this slide while people arrive.) Welcome, everyone, and thank you for coming. My name is {fill:first_name}, and I'm an alcoholic. I serve as {fill:presenter} for Northeast Texas Area 65. Over the next hour we'll look at the two magazines AA calls our meeting in print, at what stays current on the committee website, and at how you can share your own story.
+      DO: Before you start, fill in the date, the place and your end time in {ui:customize} → {ui:your_details}, and look over the facilitator pages in {ui:customize} → {ui:prepare} (the page "The player's controls" names every button). Have a printed Grapevine and a printed La Viña in your hand to pass around; we never put magazine covers on slides.
+      FACILITATOR TIP: Anyone can open these notes. Keep names, phone numbers and personal e-mail addresses out of them, and give your service position on the slide, never a full name.
+      TRANSITION: Let's take care of a few things first so everyone feels at home.
+
+  - id: "welcome"
+    layout: "bullets"
+    eyebrow: "Opening"
+    title: "Welcome"
+    items:
+      - "**Opening:** a moment of silence, then the Preamble ({slide:preamble})"
+      - text: "**Anonymity:** please don't photograph, screenshot or record anyone"
+        items:
+          - "Who you see here and what you hear here stays here"
+          - "On Zoom, rename yourself with your first name; cameras are optional"
+      - "Phones on silent · we'll finish by {fill:end_time}"
+      - "Questions are welcome: we'll gather them and answer them at the end"
+    takeaway: "All are welcome, whether you've read every issue or never seen one."
+    minutes: 2
+    notes: |
+      SAY: Let's open with a moment of silence, and then we'll read the Preamble together on the next slide. (Pause for the moment of silence.) Thank you. A few things so this hour goes well. First, anonymity: please don't take photos of people or record this session, and if we're on Zoom, please no screenshots. If you're joining online, rename yourself with just your first name. Cameras are up to you. Questions are welcome at any time; I'll keep a list, and we'll have time for them at the end.
+      DO: In a room, have a sheet of paper or a whiteboard for questions. On Zoom, ask a co-host to watch the chat, gather the questions and keep recording off.
+      FACILITATOR TIP: If someone starts recording or photographing the room, a quiet, friendly word afterward is enough. Anonymity reminders work best when they're warm, not stern.
+      TRANSITION: Many groups open with the Preamble. Here it is, and it has a Grapevine story of its own.
+
+  - id: "preamble"
+    layout: "quote"
+    eyebrow: "Opening"
+    title: "The AA Preamble"
+    quote: "Alcoholics Anonymous® is a fellowship of people who share their experience, strength and hope with each other that they may solve their common problem and help others to recover from alcoholism. The only requirement for membership is a desire to stop drinking. There are no dues or fees for A.A. membership; we are self-supporting through our own contributions. A.A. is not allied with any sect, denomination, politics, organization or institution; does not wish to engage in any controversy; neither endorses nor opposes any causes. Our primary purpose is to stay sober and help other alcoholics to achieve sobriety."
+    credit: "Copyright © by AA Grapevine, Inc.; reprinted with permission."
+    minutes: 1.25
+    notes: |
+      SAY: Many of our meetings open with the Preamble, so you probably know it by heart. Let's read it together. (Read it together.) What many members don't know is that it was first printed in the Grapevine, in June 1947. AA Grapevine, Inc. still holds its copyright, which is why you see the credit line under it.
+      IF TIME, ASK: Did anyone know the Preamble began in the Grapevine?
+      DO: Read it aloud, or invite the room to read it together.
+      SOURCES: Text and credit line: AA Grapevine and La Viña: Our Meetings in Print (P-52). History: P-52, p. 5.
+
+  - id: "about"
+    layout: "bullets"
+    eyebrow: "Opening"
+    title: "About this workshop"
+    items:
+      - "Presented by the **NETA 65 Grapevine & La Viña Committee**, trusted servants of Area 65"
+      - "**Not an official AA Grapevine, Inc. presentation**, and not Conference-approved literature"
+      - "We share information and experience; we don't speak for AA as a whole"
+      - "Nothing here is a requirement: each member and each group decides (Tradition Four)"
+    takeaway: "Inform and invite, never pressure."
+    source: "Sources: Traditions Two and Four · the committee website, {live:site}"
+    minutes: 1
+    notes: |
+      SAY: I want to say plainly what this workshop is and isn't. It's put on by our Area committee, a group of trusted servants, not by AA Grapevine, Inc., the publisher. Nobody here speaks for the magazines or for AA as a whole. What we can do is share accurate information, with the source for each fact, and our own experience of using the magazines. And nothing you hear today is a rule: whether you read, subscribe, write or serve is up to you, and what a group does is up to its group conscience.
+      FACILITATOR TIP: Small "Sources" lines sit at the bottom of many slides. If someone asks where a fact comes from, point to that line and to the credits ({slide:credits}).
+      TRANSITION: Here's the plan for our hour.
+
+  - id: "agenda"
+    layout: "agenda"
+    title: "Our hour together"
+    items:
+      - time: "0:00"
+        title: "Welcome and opening"
+        from: "title"
+      - time: "0:06"
+        title: "Part 1 · What Grapevine and La Viña are"
+        detail: "Two magazines, many ways to read them, and this month's issues"
+        from: "part-1"
+      - time: "0:18"
+        title: "Part 2 · What stays current"
+        detail: "Meeting dates, story deadlines, prices and events, straight from the committee website"
+        from: "part-2"
+      - time: "0:36"
+        title: "Part 3 · Share your story"
+        detail: "A short writing activity, and how to send a story to Grapevine or La Viña"
+        from: "part-3"
+      - time: "0:51"
+        title: "Questions, and closing"
+        from: "questions"
+    minutes: 0.5
+    # the running-late version's own title for this slide (the times below follow the version by themselves)
+    version_fields:
+      short: { title: "Our hour together (about 45 minutes)" }
+    version_notes:
+      short: "RUNNING LATE: the history slides are left out of this version. Say one sentence instead: Grapevine began in June 1944, La Viña in 1996."
+    notes: |
+      SAY: Here's our hour. We'll start with what the magazines are and the many ways to read them, then look at what stays current on the committee website, then write a little ourselves, and finish with your questions.
+      DO: The times are minutes from the start, and the player works them out for the version you choose in {ui:customize} → {ui:version}. Running late? The slides marked optional can go: the history ({slide:history}), how a story reaches the page ({slide:how-it-reaches}) and the Book of the Month ({slide:book-of-the-month}).
+      {not:short} SAY: Halfway through we'll take a short break ({slide:stretch}) to stretch our legs.
+      TRANSITION: First, what are these two magazines?
+
+  - id: "part-1"
+    layout: "section"
+    number: 1
+    title: "What Grapevine and La Viña are"
+    subtitle: "AA's international journals: our meeting in print"
+    accent: "gv"
+    minutes: 0.25
+    notes: |
+      SAY: Part one: what the magazines are, who makes them, and how they fit in AA. If you brought a copy, now is a good moment to hold it up and pass it around the room.
+      TRANSITION: Let's start with a phrase you'll hear all day: our meeting in print.
+
+  - id: "two-magazines"
+    layout: "columns"
+    title: "Two magazines, one publisher"
+    style: "panels"
+    columns:
+      - heading: "Grapevine"
+        gloss: "In English · every month since June 1944"
+        accent: "gv"
+        items:
+          - "Stories of experience, strength and hope, written by AA members"
+          - "In print, online, in the app and as audio"
+          - "Free stories every month on aagrapevine.org"
+      - heading: "La Viña"
+        gloss: "In Spanish · every two months since 1996"
+        accent: "lv"
+        items:
+          - "Stories by Spanish-speaking AA members, in their own words: {lang:es}nuestra reunión impresa{/lang}"
+          - "In print and online"
+          - "Free stories on aalavina.org"
+    takeaway: "One publisher, AA Grapevine, Inc., part of AA's General Service Board."
+    source: "Sources: aa.org/aa-grapevine-la-vina · P-52, pp. 6–13"
+    minutes: 3
+    notes: |
+      SAY: Grapevine and La Viña are the international journals of Alcoholics Anonymous. Every issue is full of members' stories, their experience, strength and hope, the same thing you'd hear around the tables. Grapevine comes out every month in English; La Viña comes out every two months in Spanish, and its readers call it {lang:es}nuestra reunión impresa{/lang}, our meeting in print. Both come from the same publisher, AA Grapevine, Inc., one of the two operating companies of AA's General Service Board.
+      IF TIME, ASK: For anyone who reads one: when do you read it? Morning coffee, before a meeting, on a lunch break?
+      FACILITATOR TIP: Keep the corporate structure light. Most people only need to hear: part of AA's General Service Board, with its own publisher, board and staff.
+      SOURCES: aagrapevine.org; P-52, pp. 6, 8, 13.
+      {not:visit} TRANSITION: So, two magazines. Here are the ways to read them.
+      {only:visit} TRANSITION: So, two magazines. Here are this month's issues.
+
+  - id: "ways-to-read"
+    layout: "table"
+    title: "Ways to read, listen and share"
+    header: ["", "Grapevine", "La Viña"]
+    widths: [2, 3, 3]
+    first_col_bold: true
+    rows:
+      - ["Print", "A monthly magazine mailed to your home, your group or a gift recipient; a one-year print subscription in the U.S. is {live:price_gv_print}", "A magazine in Spanish every two months, mailed anywhere in the U.S. and abroad; a one-year print subscription in the U.S. is {live:price_lv_print}"]
+      - ["Online", "Every issue online and in the app, with the story archive going back to 1944: {live:price_gv_digital} a year", "Every issue online, with La Viña's story archive: {live:price_lv_digital} a year"]
+      - ["Free", "A few stories from each issue, the podcast, and the Grapevine Weekly Open, an open AA meeting on Zoom", "Stories from each issue, the podcast, and La Viña's monthly virtual workshop on Zoom ({live:lv_workshop_time})"]
+      - ["Share", "Leave a copy at a treatment center, a library or a doctor's office; bring the new issue to your home group and read a story aloud", "Bring an issue to a Spanish-speaking group, a jail or a hospital meeting; pass it on when you're done with it"]
+    source: "Prices as of {live:as_of} (1 year, U.S.) · aagrapevine.org · aalavina.org"
+    minutes: 3
+    notes: |
+      SAY: There are many ways in. Print comes in the mail; the online subscription opens every issue and the archive of stories going back decades; and a lot is free: stories from each issue, the podcasts, and the weekly open meetings on Zoom. And the last row may matter most: a magazine that has been read can still carry the message, on a waiting-room table or in a meeting at a jail.
+      ASK: Which of these does your home group use today?
+      FACILITATOR TIP: The prices on this slide come from the official stores and stay current by themselves. Don't quote a price from memory; read it from the slide.
+      TRANSITION: And here's what a group can do with them.
+
+  # four columns as cards: the player lays them out two by two, as the PowerPoint's card slides were
+  - id: "four-ways"
+    layout: "columns"
+    title: "Four ways a group can use the magazines"
+    style: "cards"
+    columns:
+      - heading: "Read"
+        accent: "gv"
+        text: "Read a story aloud at the start of a meeting, or choose one as the topic."
+      - heading: "Share"
+        accent: "lv"
+        text: "Leave a read copy at a treatment center, a library or a waiting room."
+      - heading: "Write"
+        accent: "vine"
+        text: "Write your own story, or record it by phone on the magazines' story lines."
+      - heading: "Serve"
+        accent: "grape"
+        text: "Elect a GVR and an RLV, the group's link with the magazines."
+    minutes: 1.5
+    notes: |
+      SAY: Here are four simple things any group can do with the magazines. Read a story aloud at the start of a meeting, or use one as the topic. Pass on a copy you've finished with. Write your own story, or record it by phone. And elect a GVR and an RLV, so the group has someone who keeps the magazines in front of it.
+      ASK: Which of the four does your group already do? Which could it try next?
+      {not:short} TRANSITION: How did all this begin?
+      {only:short} TRANSITION: Here are this month's issues.
+
+  - id: "history"
+    layout: "text"
+    title: "A short history"
+    body: |
+      The first Grapevine came out in June 1944. It went to every AA group of the day, about 300 of them, and to the AA members anyone knew of who were serving overseas in the armed forces. Far from any meeting, those members started calling it their "meeting in print".
+
+      La Viña followed in 1996, carrying the same kind of stories to Spanish-speaking members.
+
+      - 1944: the first Grapevine
+      - 1947: the Preamble first printed in the Grapevine
+      - 1996: the first La Viña
+    optional: true
+    minutes: 1.5
+    notes: |
+      SAY: Here's where the phrase "our meeting in print" comes from. The very first Grapevine, in June 1944, went to every AA group, about 300 at the time, and to every AA member anyone knew of who was serving overseas. Those members, far from any meeting, started calling the Grapevine their meeting in print. La Viña followed in 1996.
+      IF TIME, ASK: Has anyone here ever been far from a meeting, traveling or in the hospital, and read a story instead?
+      SOURCES: P-52, pp. 5–8; aagrapevine.org.
+      TRANSITION: So how does a member's story end up on these pages?
+
+  - id: "how-it-reaches"
+    layout: "flow"
+    title: "How a story reaches the page"
+    steps:
+      - title: "A member writes"
+        text: "A story in their own words, about their own experience, strength and hope"
+      - title: "The editors read"
+        text: "They choose stories for each issue and its theme"
+      - title: "The issue comes out"
+        text: "In print, online and in the app, a few months after the deadline"
+      - title: "A group shares it"
+        text: "A member reads it at a meeting, and the message travels on"
+    optional: true
+    minutes: 1.5
+    notes: |
+      SAY: Every story in these magazines started with a member like you, sitting down to write about one moment of their sobriety. The editors read the stories that come in and choose some for each issue, many of them for the issue's theme. Months later, the story is in print, online and in the app, and somewhere a group reads it aloud.
+      TIP: If someone asks how long it takes, say "a few months": the deadline for a Grapevine theme is about seven months before the issue.
+      TRANSITION: Speaking of themes, here are this month's.
+
+  - id: "this-month"
+    layout: "live"
+    kind: "issues"
+    title: "This month's issues"
+    intro: "Each issue has a theme. Here are the ones for {live:month}:"
+    minutes: 1.5
+    notes: |
+      SAY: Each Grapevine has a special section on one theme, and La Viña has one too. This month's Grapevine is {live:gv_issue}, and the La Viña on the stands is {live:lv_issue}. If you have a copy, pass it around now so people can see the theme for themselves: {live:gv_theme} in Grapevine, {live:lv_theme} in La Viña.
+      IF TIME, SAY: Coming next: Grapevine's {live:gv_next_issue}, and La Viña's {live:lv_next_issue}.
+      DO: The themes on this slide come from the committee website and stay current by themselves; you don't need to type them in.
+      TRANSITION: That's what the magazines are. Now, what stays current on the committee website.
+
+  - id: "part-2"
+    layout: "section"
+    number: 2
+    title: "What stays current"
+    subtitle: "From the committee website, {live:site}"
+    accent: "vine"
+    minutes: 0.25
+    notes: |
+      SAY: Part two: the things that change every month. Meeting dates, story deadlines, prices and events all come from the committee website, so these slides always show the next date and the current price.
+      TRANSITION: Let's start with the committee itself.
+
+  - id: "next-meetings"
+    layout: "live"
+    kind: "meeting"
+    title: "The committee's next meetings"
+    intro: "We meet {live:meeting_rule}, {live:meeting_time}, on Zoom. Every AA member is welcome."
+    options: { limit: 3 }
+    minutes: 1.5
+    notes: |
+      SAY: The Grapevine and La Viña committee meets on Zoom {live:meeting_rule}, {live:meeting_time}. The next meeting is on {live:meeting_next}. The meeting ID is {live:meeting_zoom_id} and the passcode is {live:meeting_passcode}. GVRs and RLVs come, and so does any AA member who is curious; you don't need to be elected to anything to attend.
+      TIP: No internet? Anyone can join by phone: call {live:meeting_phone}, enter the meeting ID, then the phone passcode {live:meeting_phone_passcode} (when it's blank here, ask the chair).
+      TIP: On a meeting night, the next meeting above is next month's as soon as tonight's meeting ends. The committee's own slides keep tonight's until midnight: the {live:meeting_month} meeting on {live:meeting_day}, and after it {live:meeting_after}.
+      DO: Point to the dates on the slide; they always show the next ones.
+      TRANSITION: La Viña holds a monthly meeting of its own.
+
+  # its own accent: La Viña's colour on this slide only (the part's stays "vine" for the slides after it)
+  - id: "lv-workshops"
+    layout: "live"
+    kind: "lv-workshop"
+    title: "La Viña's monthly virtual workshop"
+    intro: "In Spanish and open to all, on Zoom: {live:lv_workshop_time}."
+    options: { limit: 3 }
+    accent: "lv"
+    minutes: 1
+    notes: |
+      SAY: La Viña's office holds a monthly information workshop on Zoom, in Spanish, to keep us informed about the latest from La Viña. It's usually on the fourth Thursday of the month. The next one is on {live:lv_workshop_next}; the Zoom meeting ID is {live:lv_workshop_zoom_id}.
+      TIP: This is a good one to pass on to Spanish-speaking groups, RLVs and district La Viña committees.
+      TRANSITION: The magazines also hold open AA meetings every week.
+
+  # the weekly open meetings of /meetings/#weekly-open: day and time, La Viña's first meeting, the shared Zoom room
+  - id: "weekly-open"
+    layout: "bullets"
+    title: "Every week: open AA meetings on Zoom"
+    items:
+      - "**Grapevine Weekly Open:** {live:gv_open_meeting}"
+      - "**Reunión Abierta de La Viña**, in Spanish: {live:lv_open_meeting}"
+      - "Both in the same room: {live:open_meeting_zoom}"
+    takeaway: "Open meetings: anyone may come, a newcomer too."
+    minutes: 1.5
+    notes: |
+      SAY: Grapevine holds an open AA meeting on Zoom every week, with a host and two speakers, and it's recorded for the Grapevine podcast. La Viña holds its own open meeting in Spanish, the {lang:es}Reunión Abierta de La Viña{/lang}, in the same Zoom room. Both are open meetings: anyone may attend, a newcomer too.
+      TIP: The days, the times and the Zoom room on this slide come from the committee website's Meetings page and stay current by themselves.
+      TRANSITION: And there are workshops near you, too.
+
+  - id: "coming-up"
+    layout: "live"
+    kind: "events"
+    title: "Workshops coming up"
+    intro: "Writing, recording and information workshops near you, from the committee's Events page:"
+    options: { limit: 5, filter: "workshops" }
+    minutes: 1.5
+    notes: |
+      SAY: The committee and the districts hold writing, recording and information workshops across the Area, in English and in Spanish. These are the next ones. Each has its own page on the committee website with the time, the place and a flyer to print.
+      ASK: Is anyone here from one of these districts? Would you carry a flyer back to your group?
+      TRANSITION: The Area itself meets three times a year.
+
+  # NETA 65's assemblies only (the events filter "assemblies"): every one ahead, then the next three are shown
+  - id: "assemblies"
+    layout: "live"
+    kind: "events"
+    title: "Area assemblies"
+    intro: "The next one: {live:assembly_next}."
+    options: { filter: "assemblies", limit: 3 }
+    minutes: 1
+    notes: |
+      SAY: NETA 65 holds three assemblies a year, where the groups' GSRs and the Area's trusted servants take up the Area's business. The next one is {live:assembly_next}. Any AA member may come and listen, and the committee usually has a literature table there.
+      TIP: The dates come from the committee website's Events page; a date marked "to be confirmed" there says so here too.
+      TRANSITION: If you'd like to write a story yourself, timing matters.
+
+  # both magazines: the next three of EACH (limit_each), never cut between two themes of one issue
+  - id: "story-deadlines"
+    layout: "live"
+    kind: "deadlines"
+    title: "Story deadlines"
+    intro: "Grapevine asks for stories on a theme months ahead; La Viña welcomes stories on its suggested topics at any time."
+    options: { pub: "both", limit: 6, limit_each: 3 }
+    minutes: 1.5
+    notes: |
+      SAY: Grapevine plans its issues around themes, and asks for stories months ahead. The next Grapevine deadline is {live:next_deadline_gv}. La Viña welcomes stories on its suggested topics at any time; when it has a dated call for stories, it shows here: {live:next_deadline_lv}.
+      TIP: A story that misses a deadline is still welcome: the editors keep stories for later issues too.
+      TRANSITION: Before we look at prices, a word about how we talk about them.
+
+  # a short quote (centred on the slide), beside the long Preamble
+  - id: "attraction"
+    layout: "quote"
+    title: "Attraction rather than promotion"
+    quote: "Our public relations policy is based on attraction rather than promotion; we need always maintain personal anonymity at the level of press, radio and films."
+    credit: "— Tradition Eleven (short form)\nReprinted from AA Grapevine and La Viña: Our Meetings in Print (P-52), p. 17, with permission of Alcoholics Anonymous World Services, Inc."
+    minutes: 0.75
+    notes: |
+      SAY: Tradition Eleven is why we describe the magazines and never sell them. We say what they are, what they cost and where to find them, and each member and each group decides for themselves. That is attraction rather than promotion.
+      TRANSITION: Now, what does it cost to read them?
+
+  - id: "prices"
+    layout: "live"
+    kind: "prices"
+    title: "Subscription prices"
+    intro: "One-year subscriptions in the U.S., from the official stores:"
+    options: { pub: "both" }
+    source: "Sources: the aagrapevine.org and aalavina.org stores, as of {live:as_of}"
+    minutes: 1.5
+    notes: |
+      SAY: These are the one-year prices in the U.S., from the official stores. A group can subscribe for its literature table, and a member can give a subscription to a sponsee or a newcomer. The magazines are self-supporting through what readers pay for them, the same way our groups are.
+      FACILITATOR TIP: Describe, never sell. Say what the prices are and where to find them, and leave the decision to each member and each group.
+      TRANSITION: AA Grapevine has announced new prices.
+
+  - id: "new-prices"
+    layout: "bullets"
+    title: "New prices from AA Grapevine"
+    when: "price_notice"
+    items:
+      - "{live:price_change_note}"
+      - "Grapevine, 1 year: print {live:price_gv_print} · online {live:price_gv_digital}"
+      - "La Viña, 1 year: print {live:price_lv_print} · online {live:price_lv_digital}"
+    takeaway: "The new prices start on {live:price_change_date}; the store shows the final price."
+    source: "Source: AA Grapevine's letter to Intergroups and Central Offices"
+    minutes: 1
+    notes: |
+      SAY: AA Grapevine has announced new prices for Grapevine and La Viña. The costs of printing, paper and postage keep rising, and the magazines pay their own way. Here is what changes, and when. Groups that buy books or subscriptions for their literature table may want to plan their budget with the new prices in mind.
+      FACILITATOR TIP: This slide is shown only while the notice is current; the player leaves it out by itself before and after.
+      TRANSITION: Each month there's also a book on offer.
+
+  - id: "book-of-the-month"
+    layout: "live"
+    kind: "botm"
+    title: "Book of the Month"
+    intro: "Every month Grapevine and La Viña each offer one of their books at a reduced price:"
+    optional: true
+    minutes: 1
+    notes: |
+      SAY: Every month, Grapevine and La Viña each put one of their books on sale: real stories from AA members on one theme. This month Grapevine's book is {live:botm}, and La Viña's Libro del mes is {live:botm_lv}. The Shop page of the committee website has both books, their prices and how to order.
+      TRANSITION: How can a group use this month's issue?
+
+  - id: "toolkit"
+    layout: "live"
+    kind: "monthly"
+    title: "Put this month's issue to work"
+    intro: "Ideas from the committee's monthly toolkit for {live:month}:"
+    options: { limit: 3 }
+    minutes: 1.5
+    notes: |
+      SAY: Every month the committee website has a toolkit page with ideas for using the new issue: who to give it to, what to talk about at a group, where to leave a copy. Here are three of this month's ideas. The page also has a poster to print for your group's bulletin board.
+      ASK: Which of these could your group try this month?
+      TRANSITION: Here's one more idea: a short announcement your group can read.
+
+  # a read-aloud announcement card (text style "script"): the ‹…› parts are for the reader to fill in
+  - id: "announcement"
+    layout: "text"
+    style: "script"
+    title: "An announcement to read at your group"
+    body: |
+      Did you know AA has a magazine? Grapevine, our meeting in print, has stories by members like us every month. This month's theme is {live:gv_theme}.
+
+      Ask ‹our GVR› for a copy, or come to ‹the literature table› after the meeting.
+    minutes: 1.5
+    notes: |
+      SAY: Here's a short announcement any group can read at the end of a meeting. Read it slowly, and fill in the parts in brackets with your own group's details. The theme on the card changes with each issue.
+      DO: Print this slide from {ui:print} for your GVR, or send them the link to this presentation.
+      TRANSITION: The committee also posts news on its Bulletin page.
+
+  - id: "bulletin"
+    layout: "live"
+    kind: "bulletin"
+    title: "From the committee bulletin"
+    intro: "The newest posts on the committee's Bulletin page:"
+    options: { limit: 3 }
+    optional: true
+    starts_off: true
+    minutes: 1
+    notes: |
+      SAY: The committee's Bulletin page has its news: price changes, new flyers, service opportunities and reminders. These are the newest posts. Each one has its own link, so you can send it to your group.
+      FACILITATOR TIP: This slide starts switched off. Turn it on in Customize → Slides when there's news worth sharing.
+
+  - id: "holiday-gifts"
+    layout: "bullets"
+    title: "Gift subscriptions for the holidays"
+    show_from: "2026-11-15"
+    show_until: "2026-12-31"
+    optional: true
+    items:
+      - "A gift subscription carries the message to a sponsee, a newcomer or a family member"
+      - "A group can send one to a treatment center, a jail or a public library"
+      - "The official stores have gift subscriptions in print and online"
+    minutes: 1
+    notes: |
+      SAY: Around the holidays, many members give a Grapevine or a La Viña subscription as a gift: to a sponsee, to a newcomer, or to a family member who wants to understand AA. Some groups send one to a treatment center or a jail. It's one more way a story can reach someone who needs it.
+      FACILITATOR TIP: This slide is in the show only from November 15 to December 31; the player leaves it out at other times.
+
+  - id: "new-panel"
+    layout: "bullets"
+    title: "A new panel of service"
+    show_from: "2026-09-01"
+    show_until: "2027-06-30"
+    items:
+      - "{live:panel} begins in January: new GVRs and RLVs take up their service positions"
+      - "Your group can elect a GVR (Grapevine representative) and an RLV (La Viña representative)"
+      - "The committee welcomes every new GVR and RLV at its monthly meeting"
+    minutes: 1
+    notes: |
+      SAY: A new panel of service begins in January. Groups elect their representatives for the next two years, and that includes a Grapevine representative, a GVR, and a La Viña representative, an RLV. If your group doesn't have one yet, this is a good time to ask about it at your next business meeting. Every new GVR and RLV is welcome at the committee's monthly meeting.
+      {not:short} TRANSITION: Let's take a short break before part three.
+      {only:short} TRANSITION: And now, part three: your own story.
+
+  # a pause (text style "break"), left out of the running-late version
+  - id: "stretch"
+    layout: "text"
+    style: "break"
+    title: "Stretch break"
+    body: "Two minutes to stretch, refill your coffee and say hello to someone new."
+    minutes: 2
+    notes: |
+      SAY: Let's take two minutes to stretch, refill our coffee and say hello to someone we haven't met yet. When we come back, we'll write a little.
+      DO: Keep the break short. On Zoom, leave this slide up and tell people when you'll start again.
+      TRANSITION: And now, part three: your own story.
+
+  - id: "part-3"
+    layout: "section"
+    number: 3
+    title: "Share your story"
+    subtitle: "Every story carries the message"
+    accent: "lv"
+    minutes: 0.25
+    notes: |
+      SAY: Part three: sharing your story. You don't need to be a writer. Every story in these magazines was written by a member who sat down to share one moment of their sobriety.
+      TRANSITION: Let's try it right now, together.
+
+  - id: "write-together"
+    layout: "activity"
+    eyebrow: "Activity"
+    title: "A story in three sentences"
+    steps:
+      - "Think of one moment in your sobriety when another member's words made a difference: at a meeting, over coffee, on the phone, or in a story you read in Grapevine or La Viña."
+      - "Write three sentences about it: what it was like, what happened, and what it's like now. Use your own words; no one will judge it, and spelling doesn't matter."
+      - "Turn to the person next to you (on Zoom, in a breakout room) and read your three sentences aloud, if you're comfortable. Then listen to theirs."
+      - "Ask yourself: could this be the start of a story for the magazine? Many published stories began exactly this way, with a few lines on a piece of paper."
+    duration: 10
+    materials: ["Paper and pens", "The story planner handout (one per person)", "A printed Grapevine and a printed La Viña to pass around"]
+    minutes: 12
+    # running late, the activity is shorter: its schedule and TIME line in that version use 7 minutes, and its time
+    # card and its last step say so
+    version_minutes: { short: 7 }
+    version_fields:
+      short:
+        duration: 5
+        materials: ["Paper and pens", "The story planner handout (one per person)"]
+    version_notes:
+      short: "RUNNING LATE: give five minutes for writing, then invite two people to read theirs to the room."
+    notes: |
+      {not:short} SAY: Let's try it. Think of one moment when another member's words made a difference to you. Write three sentences about it: what it was like, what happened, and what it's like now. You have ten minutes, and no one has to read theirs aloud.
+      {only:short} SAY: Let's try it. Think of one moment when another member's words made a difference to you, and write three sentences about it. You have five minutes, and no one has to read theirs aloud.
+      DO: Hand out the story planner (printed from {ui:customize} → {ui:prepare}) and pens. Keep time, and give a one-minute warning. On Zoom, open breakout rooms of two or three people.
+      WATCH FOR: Someone who starts to share something very painful. Thank them gently, and remind the room that what's shared here stays here.
+      TRANSITION: If your three sentences want to become a story, here's how to send it.
+
+  # shown AND printed for the participants (handout on a slide of the show)
+  - id: "send-a-story"
+    layout: "bullets"
+    title: "How to send your story"
+    numbered: true
+    handout: true
+    items:
+      - "Write it in your own words, about your own experience; sign it with your first name and last initial, or as anonymous, as you choose"
+      - "**Grapevine:** send it through [the story form](https://www.aagrapevine.org/share) or to gveditorial@aagrapevine.org, and read [the guidelines](https://www.aagrapevine.org/guidelines-contributing-grapevine) first"
+      - "**La Viña:** in Spanish, through [aalavina.org](https://www.aalavina.org/comparte) or to manuscritoslv@aagrapevine.org"
+      - "Not a writer? Record it by phone: Grapevine's story line {live:gv_audio_phone} · La Viña's {live:lv_audio_phone}"
+      - "The next Grapevine deadline: {live:next_deadline_gv}"
+    takeaway: "Every story carries the message to someone who needs it."
+    minutes: 2
+    version_notes:
+      visit: "ON A VISIT: hold up a printed copy as you say this, and leave it with the group."
+    notes: |
+      SAY: Sending a story is simple. Write it in your own words, about your own experience. Grapevine takes stories through its online form or by e-mail, and its guidelines page answers most questions. La Viña takes stories in Spanish the same way. You choose how your name appears: first name and last initial, or anonymous.
+      {lang:es}EN ESPAÑOL: Escribe tu historia con tus propias palabras y envíala a La Viña en aalavina.org/comparte.{/lang}
+      TIP: The committee website's Share your story page has the deadlines and themes, and the e-mail addresses on this slide.
+      TRANSITION: Here's where to find everything we talked about today.
+
+  - id: "resources"
+    layout: "resources"
+    title: "Where to find it all"
+    links:
+      - label: "The committee website"
+        url: "/"
+        note: "{live:site} — this month's issues, deadlines, events and prices"
+      - label: "Story deadlines and how to send a story"
+        url: "/contribute/#deadlines"
+        note: "Grapevine's themes and La Viña's suggested topics"
+      - label: "Events"
+        url: "/events/"
+        note: "Workshops, assemblies and La Viña's monthly workshop"
+      - label: "Grapevine"
+        url: "https://www.aagrapevine.org"
+        note: "Stories, the podcast and the store"
+      - label: "La Viña"
+        url: "https://www.aalavina.org"
+        note: "Stories in Spanish, the podcast and the store"
+      - label: "Write to the committee"
+        url: "grapevine@neta65.org"
+        note: "{live:email}"
+    minutes: 1
+    notes: |
+      SAY: Here are the places to find everything from today. The committee website is the easiest start: it has this month's issues, the story deadlines, the events and the prices, and it stays current every day. Grapevine and La Viña have their own sites with stories, podcasts and the stores.
+      DO: Leave this slide up for a moment so people can write the addresses down or take a picture of the slide.
+      TRANSITION: Or scan this.
+
+  - id: "qr-contribute"
+    layout: "live"
+    kind: "qr"
+    title: "Scan to share your story"
+    intro: "The committee's Share your story page: deadlines, themes and how to send a story."
+    options: { url: "/contribute/", caption: "Share your story on the committee website" }
+    minutes: 0.5
+    notes: |
+      SAY: If you'd like to keep going with your three sentences, scan this code with your phone's camera. It opens the committee website's page about sharing your story, with the deadlines, the themes and the addresses.
+      TRANSITION: Now, your questions.
+
+  - id: "questions"
+    layout: "qa"
+    eyebrow: "Review"
+    title: "Questions"
+    prompts:
+      - "Which way of reading or listening would work for your home group?"
+      - "Who in your life could use a gift subscription or a free story?"
+      - "What would you write about for the next Grapevine theme?"
+    note: "Answers stay in the room. The committee meets {live:meeting_rule}: bring your questions there too."
+    minutes: 8
+    notes: |
+      SAY: Let's take your questions now, and the ones we gathered during the hour. If I don't know an answer, I'll say so, and we'll find it together after the workshop. The review questions on the slide are there if the room is quiet.
+      DO: Read out the questions from the paper or the chat first. Keep answers short, and point to the committee website for details.
+      IF TIME, ASK: What's one thing you'll take back to your home group?
+
+  - id: "credits"
+    layout: "credits"
+    title: "Credits and sources"
+    sources:
+      - "The AA Preamble: Copyright © by AA Grapevine, Inc.; reprinted with permission."
+      - "AA Grapevine and La Viña: Our Meetings in Print (P-52)"
+      - "Facts about the magazines: aagrapevine.org and aalavina.org, as of {live:as_of}"
+      - "Grapevine and La Viña are trademarks of AA Grapevine, Inc.; no logos, covers or artwork are reproduced."
+    disclaimer: true
+    note: "Not an official AA Grapevine, Inc. presentation. Prepared by the NETA 65 Grapevine & La Viña Committee for local service use; the committee website is {live:site_url} ({live:year})."
+    minutes: 0.5
+    notes: |
+      SAY: These are the sources for the facts and the words we used today. This workshop is a local service piece from our Area committee. It isn't Conference-approved literature, and it doesn't speak for AA as a whole or for AA Grapevine, Inc.
+      DO: Leave this slide up for a few seconds; you don't need to read it aloud.
+
+  - id: "closing"
+    layout: "closing"
+    title: "Thank you for your service"
+    message: "Keep coming back, and keep carrying the message."
+    lines:
+      - "Next committee meeting: {live:meeting_next}, {live:meeting_time}, on Zoom"
+      - "Zoom ID {live:meeting_zoom_id} · passcode {live:meeting_passcode}"
+      - "{live:email} · {live:site}"
+    qr: "/"
+    minutes: 0.5
+    notes: |
+      SAY: Thank you for being here, and for everything you do to carry the message. The committee's next meeting is on the screen, and every AA member is welcome. If you have questions later, the committee's e-mail is on the screen too. Good night, and keep coming back.
+      DO: Leave this slide up while people say goodbye. On Zoom, stop sharing your screen only after the last person has left.
+
+  - id: "prepare"
+    layout: "bullets"
+    facilitator: true
+    checklist: true
+    eyebrow: "For the facilitator"
+    title: "Before the workshop"
+    items:
+      - "Fill in the date, the place and your end time in Customize → Your details"
+      - "Choose the version: the full workshop, running late, or a 20-minute visit"
+      - "The morning of the workshop, look over the slides that stay current ({slide:next-meetings}, {slide:story-deadlines}, {slide:prices})"
+      - "Print the story planner handout ({slide:story-planner}): one per person"
+      - "Bring a printed Grapevine and a printed La Viña to pass around"
+      - text: "On Zoom"
+        items:
+          - "Recording off, and a co-host to admit people and watch the chat"
+          - "Breakout rooms ready for the activity ({slide:write-together})"
+    notes: |
+      DO: Work through this list the week before. Your ticks stay on this device.
+
+  # every control of the player by its name in the page's language ({ui:…}: "Customize" / "Personalizar" …)
+  - id: "player-controls"
+    layout: "bullets"
+    facilitator: true
+    eyebrow: "For the facilitator"
+    title: "The player's controls"
+    items:
+      - "{ui:customize}: {ui:version}, {ui:slides}, {ui:edit}, {ui:add}, {ui:your_details}, {ui:prepare} and {ui:save_share}"
+      - "{ui:notes} and {ui:overview}, under the slide; {ui:presenter_view} on a second screen"
+      - "{ui:print}: the slides, the slides with notes, a handout for participants, or the speaker script"
+      - "{ui:full_screen} for the room; {ui:black_screen} for a pause"
+    notes: |
+      DO: Try each control once before the workshop, so nothing surprises you in front of the room.
+
+  # printed portrait (a handout page prints landscape unless it says so)
+  - id: "story-planner"
+    layout: "text"
+    facilitator: true
+    handout: true
+    print: "portrait"
+    title: "Handout: plan your story"
+    body: |
+      Many published stories start as a few lines on a piece of paper. Use this page to plan yours; no one needs to see it but you.
+
+      - What was it like? One or two sentences about the drinking, or the days before you found AA.
+      - What happened? The moment, the meeting or the member that made a difference.
+      - What is it like now? What you can share with someone who is where you were.
+
+      Grapevine: send your story through aagrapevine.org/share or to gveditorial@aagrapevine.org. La Viña: in Spanish, through aalavina.org/comparte or to manuscritoslv@aagrapevine.org.
+
+      The story deadlines and themes are on the committee website: {live:site}/contribute/
+    notes: |
+      DO: Print one copy per person ({ui:customize} → {ui:prepare} → {ui:print}) and hand it out before the activity ({slide:write-together}). The same page in Spanish: {slide:story-planner-es}.
+
+  # the same handout in Spanish: a slide written in Spanish (the player marks it lang="es")
+  - id: "story-planner-es"
+    layout: "text"
+    facilitator: true
+    handout: true
+    lang: "es"
+    eyebrow: "Hoja para participantes"
+    title: "Planea tu historia"
+    body: |
+      Muchas historias publicadas empiezan como unas pocas líneas en una hoja de papel. Usa esta hoja para planear la tuya; nadie más necesita verla.
+
+      - ¿Cómo era? Una o dos frases sobre la bebida, o los días antes de llegar a AA.
+      - ¿Qué pasó? El momento, la reunión o el miembro que hizo la diferencia.
+      - ¿Cómo es ahora? Lo que puedes compartir con alguien que está donde tú estabas.
+
+      La Viña: envía tu historia en aalavina.org/comparte o a manuscritoslv@aagrapevine.org, o grábala por teléfono al {live:lv_audio_phone}.
+    notes: |
+      DO: Print one copy for each Spanish-speaking participant (Customize → Prepare → Print), with the English page ({slide:story-planner}).
+
+  # tick boxes in columns (checklist: true): a printed checklist, the same list in English and in Spanish
+  - id: "story-checklist"
+    layout: "columns"
+    facilitator: true
+    handout: true
+    checklist: true
+    eyebrow: "Handout"
+    title: "Before you send your story"
+    columns:
+      - heading: "In English"
+        accent: "gv"
+        items:
+          - "It is my own experience, in my own words"
+          - "No last names and no one else's story"
+          - "A title, and within the word limit"
+      - heading: "{lang:es}En español{/lang}"
+        accent: "lv"
+        items:
+          - "{lang:es}Es mi propia experiencia, con mis palabras{/lang}"
+          - "{lang:es}Sin apellidos y sin la historia de otra persona{/lang}"
+          - "{lang:es}Con un título, y dentro del límite de palabras{/lang}"
+    notes: |
+      DO: Print one per person with the story planner ({slide:story-planner}). Each writer ticks the boxes before sending a story.
+
+  - id: "timing-plan"
+    layout: "table"
+    facilitator: true
+    title: "Timing plan"
+    header: ["Part", "Slides", "Full", "Running late"]
+    widths: [3, 3, 2, 2]
+    rows:
+      - ["Opening", "{slide:title}–{slide:agenda}", "6 min", "6 min"]
+      - ["Part 1 · What Grapevine and La Viña are", "{slide:part-1}–{slide:this-month}", "12 min", "9 min"]
+      - ["Part 2 · What stays current", "{slide:part-2}–{slide:stretch}", "18 min", "13 min"]
+      - ["Part 3 · Share your story", "{slide:part-3}–{slide:qr-contribute}", "16 min", "11 min"]
+      - ["Questions, and closing", "{slide:questions}–{slide:closing}", "9 min", "9 min"]
+    notes: |
+      TIP: The slide numbers follow the version you choose. The player writes each slide's timing in its notes.

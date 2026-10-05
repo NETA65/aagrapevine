@@ -1,0 +1,1465 @@
+# =====================================================================
+#  "Grapevine and La Viña Writing Workshop" — the committee's writing
+#  workshop as a web presentation (/orientation/#presentations, "Workshop
+#  presentations"). Read by src/_data/presentations.js, checked by
+#  tests/test_presentations.py (run it on this file after every change).
+#
+#  Source: the PowerPoint deck built 2026-10-01 by
+#  aagrapevine-ops/decks/deck3_writing-workshop.py (59 slides, the last 11
+#  hidden: the facilitator section and the printable handouts). Every slide
+#  and every speaker note is here, in the same order and the same words.
+#  Only what the web player does differently was adapted:
+#  - Facts that change come from the site's data at every build: the two
+#    theme tables are `live` deadline lists (passed deadlines drop off by
+#    themselves), the committee meeting and the two story lines (Grapevine's
+#    Audio Project, La Viña's Graba tu historia) are {live:…}, "as of October
+#    2026" markers are gone (the player shows "Current as of <date>").
+#  - The deck's orange [fill-ins] are presenter blanks ({fill:…}, Customize
+#    → Your details). A first name appears only in the notes (anonymity).
+#    The notes name the player's buttons with {ui:…} ("{ui:customize} →
+#    {ui:your_details}"), so the Spanish page shows its own names for them.
+#  - Spanish words inside the English slides and notes (La Viña's sections
+#    and topics, the "EN ESPAÑOL" prompts) are {lang:es}…{/lang}, so a
+#    screen reader reads them in Spanish.
+#  - Each note's "TIME:" line is `minutes` (the player writes the TIME line
+#    for the version being presented); an exercise's split of its minutes
+#    stays as "TIME SPLIT:" (the full plan's: see the 90-minute plan below).
+#  - The hidden facilitator section is `facilitator: true` (Customize →
+#    Prepare); the six printable pages are also `handout: true` (Prepare →
+#    Print; they print landscape, as in the deck), and so are the two shown
+#    slides the deck had printed for everyone (the revision checklist, "How
+#    to submit"). The Spanish handouts stay in Spanish, as in the deck,
+#    marked `lang: "es"`.
+#  - The deck's 90-minute plan (its timing page) is the "short" version:
+#    Exercise 4 is done at home (left out), the slides that take less time
+#    have `version_minutes.short`, so the agenda and the TIME lines follow
+#    that plan, and each part's 90-minute target is a `version_notes.short`
+#    line on the slide that starts it. What the room sees follows it too
+#    (`version_fields.short`: the exercises' time cards, the break, the
+#    agenda's "Revise" row), and a notes line only one plan needs starts with
+#    {not:short} / {only:short}. The TIME line is the one count of a slide's
+#    minutes: the 90-minute notes give no other (the deck decided only each
+#    exercise's total there, so its split is the full plan's alone).
+#  - Colours: a part's colour is its section slide's `accent`, as in the
+#    deck; a slide the deck drew in another colour has its own `accent` (the
+#    exercises' green, the quotations' and the Q&A's grape, La Viña's
+#    orange …).
+#  - Facts that change are never written into a sentence as a date: the
+#    notes give the next deadline as {live:…}, or say what to do if a theme
+#    is still on the slide, and read well when a fact has nothing to say.
+#  - Wording rules: a few of the deck's words were changed (automatically,
+#    job, lesson, taught, homework, PDF) — see the comments where it
+#    happened.
+# =====================================================================
+
+id: "writing-workshop"
+order: 3
+lang: "en"
+title: "Grapevine and La Viña Writing Workshop"
+short: "Writing Workshop"
+eyebrow: "Writing Workshop"
+footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
+minutes: 115            # the deck's full plan: 115 minutes in a two-hour slot (its timing page)
+icon: "pen-line"
+tone: "lv"
+drive_title: "Grapevine and La Viña Writing Workshop"
+
+card:
+  title:
+    en: "Grapevine and La Viña Writing Workshop"
+    es: "Taller de escritura de Grapevine y La Viña"
+  summary:
+    en: "A hands-on workshop for putting our experience, strength and hope on paper: four short writing exercises with sharing in pairs, what Grapevine and La Viña publish, their current themes and deadlines, anonymity in your writing, and how to send or record your story."
+    es: "Un taller práctico para poner por escrito nuestra experiencia, fortaleza y esperanza: cuatro ejercicios breves de escritura con momentos para compartir en parejas, lo que publican La Viña y Grapevine, sus temas y fechas límite actuales, cómo cuidar el anonimato al escribir y cómo enviar o grabar tu historia."
+  audience:
+    en: "AA members who want to write their story or a short piece, in English for Grapevine or in Spanish for La Viña. A group or district hosts it, in person or on Zoom."
+    es: "Miembros de AA que quieren escribir su historia o un texto breve, en español para La Viña o en inglés para Grapevine. Lo organiza un grupo o un distrito, en persona o por Zoom."
+
+presets:
+  - id: "full"
+    label: { en: "Full workshop (about 2 hours)", es: "Taller completo (unas 2 horas)" }
+    minutes: 115
+  # The deck's "Short: 84 (+6 spare)" plan for a 90-minute slot (its timing page): Exercise 4 leaves the show (the
+  # deck's "homework": done at home), the break takes 5 minutes, and the rest comes from trimming the talking, never
+  # the writing.
+  # The slides that take less time in it have `version_minutes.short`, so each segment adds up to the plan's
+  # (welcome: 7, Parts 1–3: 12, Exercise 1: 8, Part 4: 8, Exercise 2: 12, break: 5, Part 5: 5, Exercise 3: 12,
+  # checklist: 3, submit and record: 6, closing: 6) and the agenda shows the plan's times. `minutes` is the plan's
+  # 84, as the full version's is its 115 in a two-hour slot.
+  - id: "short"
+    label: { en: "90-minute workshop (Exercise 4 at home)", es: "Taller de 90 minutos (el ejercicio 4, en casa)" }
+    minutes: 84
+    hide: ["exercise-4"]
+    note:
+      en: "The deck's 90-minute plan: Exercise 4 is done at home and the break is about five minutes; the rest of the time comes from trimming the talking, never the writing. The agenda, the exercises' time cards, the break and the times in the notes follow this plan, and each part's target time is in the notes."
+      es: "El plan de 90 minutos de la presentación: el ejercicio 4 se hace en casa y el descanso dura unos cinco minutos; el resto del tiempo sale de hablar menos, nunca de escribir menos. La agenda, el tiempo de cada ejercicio, el descanso y los tiempos de las notas siguen este plan, y el tiempo de cada parte está en las notas."
+
+fillins:
+  - key: "presenter"
+    label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
+    hint: "Service position"
+    default: "Area 65 Grapevine / La Viña Chair"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre de pila (solo en tus notas)" }
+    hint: "first name"
+    shared: true
+    notes_only: true
+  - key: "date"
+    label: { en: "Date", es: "Fecha" }
+    hint: "Month DD, YYYY"
+  - key: "host_group"
+    label: { en: "Host group or district", es: "Grupo o distrito anfitrión" }
+    hint: "host group or district"
+  - key: "place"
+    label: { en: "Place, or Zoom", es: "Lugar o Zoom" }
+    hint: "in person / on Zoom"
+  - key: "break_end"
+    label: { en: "Back from the break at (clock time)", es: "Hora de regreso del descanso" }
+    hint: "clock time"
+  - key: "supported_by"
+    label: { en: "Who supports this workshop (host group, district or Area)", es: "Quién sostiene este taller (grupo, distrito o Área)" }
+    hint: "the host group, district or Area"
+  - key: "basket_for"
+    label: { en: "Who today's basket supports (host group or district)", es: "A quién sostiene la canasta de hoy (grupo o distrito)" }
+    hint: "the host group or district"
+  # (The two story lines are not blanks: they are {live:gv_audio_phone} and {live:lv_audio_phone}, the numbers the
+  # site's Share your story page shows from the two official audio pages. Nor are next year's themes, the deck's
+  # "2028 themes: [not published yet …]" line: the theme slides show them once the magazines publish them.)
+
+slides:
+  # ---------------------------------------------------------------- Opening (pptx 1–5)
+  - id: "title"
+    layout: "title"
+    eyebrow: "NETA 65 · Grapevine & La Viña Committee"
+    title: "Grapevine and La Viña Writing Workshop"
+    subtitle: "Putting our experience, strength and hope on paper"
+    # The deck's line was "[First name, last initial] · [service position]": on the web a presenter is a service
+    # position, and a first name lives only in the notes.
+    lines:
+      - "{fill:presenter}"
+      - "{fill:date} · {fill:host_group} · {fill:place}"
+    minutes: 1
+    # SAY: the deck's "For the next [two hours / ninety minutes]" is one line per version ({not:short} / {only:short}).
+    notes: |
+      {not:short} SAY: Good [morning / afternoon], everyone, and welcome to the Grapevine and La Viña Writing Workshop. My name is {fill:first_name}, I'm an alcoholic, and I serve as {fill:presenter} with the NETA 65 Grapevine & La Viña Committee. Thank you to {fill:host_group} for inviting us and for making room for us today. For the next two hours we're going to do more writing than listening. By the time we close, most of you will have the beginning of a story, maybe a whole one, that you could send to Grapevine or La Viña if you choose to.
+      {only:short} SAY: Good [morning / afternoon], everyone, and welcome to the Grapevine and La Viña Writing Workshop. My name is {fill:first_name}, I'm an alcoholic, and I serve as {fill:presenter} with the NETA 65 Grapevine & La Viña Committee. Thank you to {fill:host_group} for inviting us and for making room for us today. For the next ninety minutes we're going to do more writing than listening. By the time we close, most of you will have the beginning of a story, maybe a whole one, that you could send to Grapevine or La Viña if you choose to.
+      DO: Before anyone arrives: put a story planner, a revision checklist, paper and a pen on every chair; start the slides on this slide; have a timer ready. On Zoom: open the room 15 minutes early, make a trusted servant co-host for the breakout rooms, and put the committee's contribute page link in the chat. Introduce yourself with your first name only. This presentation is posted publicly, so the title line carries a service title, never a name: your first name is only in these notes.
+      FACILITATOR TIP: Everything a facilitator needs (a checklist for before the day, supplies, Zoom set-up, a 90-minute and a 120-minute timing plan, and the printable handouts in English and Spanish) is in the facilitator section, {ui:customize} → {ui:prepare}. Those pages are never projected, so the show ends on the credits. To print the handouts: {ui:customize} → {ui:prepare} → {ui:print}. Read the section before the day. Anyone the host trusts can give this presentation: the notes are written so a member can read them almost word for word.
+      UPDATE: the bracketed presenter, date and host line: {ui:customize} → {ui:your_details}. "Current as of" fills in by itself.
+      TRANSITION: 'Let's start the way we start our meetings, with a few words about who we are and what today is.'
+    version_notes:
+      short: "90-MINUTE PLAN: welcome, Preamble, safe room and agenda take about 7 minutes (9 in the full plan)."
+
+  - id: "welcome"
+    layout: "bullets"
+    eyebrow: "Welcome"
+    title: "Welcome: you belong here"
+    items:
+      - "No writing experience needed: just willingness and a story"
+      - "Hands-on: four short writing exercises, with sharing in pairs (always optional)"
+      - "Write in English for Grapevine, {lang:es}_en español para La Viña_{/lang}"
+      - "Presented by the NETA 65 Grapevine & La Viña Committee, **not** an official AA Grapevine, Inc. presentation"
+      - "We share experience and suggestions; what you do with them is up to you"
+    takeaway: "Everyone here has a story that someone else needs to read."
+    minutes: 2
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Whether you've written a dozen stories or you haven't picked up a pen since school, you are in the right place. I want to be plain about two things. First, this workshop is put on by our Area committee. We're trusted servants, not experts, and we don't speak for AA Grapevine, Inc. or for its editors. What you'll hear about how the magazines work comes from their own published guidelines, and I'll show you where to check it for yourself. Second, nobody has to read anything aloud today. When we share in pairs, you can always pass. If you write in Spanish, wonderful: La Viña takes stories in Spanish, and Grapevine takes them in English.
+      ASK: Show of hands: who has read a story in Grapevine or La Viña that stayed with you? And who has ever thought, 'I could have written that'? Hold on to that thought: it's why you're here.
+      FACILITATOR TIP: In a bilingual room, seat Spanish-speaking writers near each other so pairs can share in Spanish, and invite a bilingual member to help with the prompts. Never single out a newcomer; let people volunteer.
+      TRANSITION: 'Let's open with a moment of silence, followed by the AA Preamble.'
+
+  - id: "preamble"
+    layout: "quote"
+    eyebrow: "Welcome · Opening"
+    title: "We open with the AA Preamble"
+    quote: |-
+      Alcoholics Anonymous® is a fellowship of people who share their experience, strength and hope with each other that they may solve their common problem and help others to recover from alcoholism.
+      The only requirement for membership is a desire to stop drinking. There are no dues or fees for A.A. membership; we are self-supporting through our own contributions.
+      A.A. is not allied with any sect, denomination, politics, organization or institution; does not wish to engage in any controversy; neither endorses nor opposes any causes.
+      Our primary purpose is to stay sober and help other alcoholics to achieve sobriety.
+    credit: "Copyright © by AA Grapevine, Inc.; reprinted with permission."
+    minutes: 2
+    notes: |
+      SAY: Please join me in a moment of silence. (Pause.) Would someone be willing to read the AA Preamble for us? (Invite a volunteer, or read it yourself.) Thank you. A little history that fits today: the Preamble first appeared in the Grapevine in June 1947, and it was written by a Grapevine editor. So the words we open most meetings with came out of the same magazine we're going to write for.
+      DO: Leave the slide up while it is read. Read the text exactly as shown; do not shorten it. The credit line stays on the slide.
+      FACILITATOR TIP: Follow the host group's custom. If the group opens with the Serenity Prayer, or with the Preamble read from its own card, do that and skip this slide. The Preamble's wording here is the 2021 revision ('a fellowship of people').
+      TRANSITION: 'Before we write a word, let's agree on how we'll keep this room safe.'
+
+  - id: "safe-room"
+    layout: "bullets"
+    eyebrow: "Welcome"
+    title: "A safe room for writing and sharing"
+    items:
+      - "**What is shared here stays here:** in the room, in pairs, in breakout rooms"
+      - "No photos, screenshots or recordings of anyone, in the room or on Zoom"
+      - "On Zoom: first name and last initial; cameras are optional"
+      - "Sharing is optional: you can always pass"
+      - "In pairs: listen without fixing; afterwards, speak only about your own writing"
+      - "Your draft is yours: only you decide whether to send it"
+    source: "“…taking pictures or screenshots is not in keeping with anonymity principles.” Reprinted from _Anonymity — Our Spiritual Foundation_ (P-47), p. 12, with permission of Alcoholics Anonymous World Services, Inc."
+    minutes: 3
+    version_minutes: { short: 2 }
+    notes: |
+      SAY: Today we're going to write about real lives: ours, and sometimes the people in them. So we need the same safety we have in a meeting. What you hear today stays here, and that includes what your partner reads to you in the pair exercises. Please don't take photos, screenshots or recordings of anyone, in the room or on the screen; AA's pamphlet on anonymity makes the same point about online meetings. If you'd like the slides, there's no need to photograph the screen: they're posted on our committee website, and the handouts are yours to keep. When you share in pairs, you're a listener, not an editor: no advice, no fixing. When we talk as a whole room afterwards, speak about your own writing only, never about what your partner wrote.
+      ASK: Is everyone comfortable with these? Is there anything this group would like to add? (This is the room's own conscience; accept any suggestion that keeps people safe.)
+      FACILITATOR TIP: On Zoom, say the no-screenshot reminder out loud and also paste it in the chat. Repeat it privately by chat to anyone who joins late. Confirm the meeting is not being recorded. The quotation at the bottom is A.A.W.S. material; keep its credit line with it if you edit the slide.
+      TRANSITION: 'Here's how we'll spend our time together.'
+
+  # The deck's last row read "Questions and closing (we finish by 1:55)": the finishing time is its own row here,
+  # worked out like the others (the credits slide starts when the workshop ends), so it stays right in every version.
+  - id: "agenda"
+    layout: "agenda"
+    eyebrow: "Welcome"
+    title: "Our time together"
+    items:
+      - { time: "0:00", title: "Welcome, opening and a safe room", from: "title" }
+      - { time: "0:09", title: "Why we write · what the magazines publish · current themes", from: "part-1" }
+      - { time: "0:27", title: "Exercise 1: a warm-up", from: "exercise-1" }
+      - { time: "0:37", title: "What makes a strong story · Exercise 2", from: "part-4" }
+      - { time: "1:02", title: "Break", from: "break" }
+      - { time: "1:09", title: "Anonymity in your writing · Exercise 3", from: "part-5" }
+      - { time: "1:30", title: "Revise (Exercise 4) · how to submit or record your story", from: "part-6" }
+      - { time: "1:48", title: "Questions and closing", from: "self-support" }
+      - { time: "1:55", title: "We finish", from: "credits" }
+    minutes: 1
+    # The 90-minute plan's agenda: its own times (the player works them out from `from` in any case), and "Revise"
+    # without Exercise 4, which that version leaves out. Change a row in both lists.
+    version_fields:
+      short:
+        items:
+          - { time: "0:00", title: "Welcome, opening and a safe room", from: "title" }
+          - { time: "0:07", title: "Why we write · what the magazines publish · current themes", from: "part-1" }
+          - { time: "0:19", title: "Exercise 1: a warm-up", from: "exercise-1" }
+          - { time: "0:27", title: "What makes a strong story · Exercise 2", from: "part-4" }
+          - { time: "0:47", title: "Break", from: "break" }
+          - { time: "0:52", title: "Anonymity in your writing · Exercise 3", from: "part-5" }
+          - { time: "1:09", title: "Revise · how to submit or record your story", from: "part-6" }
+          - { time: "1:18", title: "Questions and closing", from: "self-support" }
+          - { time: "1:24", title: "We finish", from: "credits" }
+    # DO: the deck said breakout rooms "will open automatically" (a word the site never uses).
+    notes: |
+      {not:short} SAY: Here's the plan. We'll start with why we write and what Grapevine and La Viña actually publish, including the themes the editors are asking for right now. Then we write: four short exercises, each one building on the last, with a break in the middle. Between exercises I'll share a few ideas about what makes a story strong, how to protect anonymity on paper, and how to send your story in when you're ready. We'll leave time for questions at the end, and we'll finish on time.
+      {only:short} SAY: Here's the plan. We'll start with why we write and what Grapevine and La Viña actually publish, including the themes the editors are asking for right now. Then we write: three short exercises, each one building on the last, with a break in the middle, and a fourth one to do at home. Between exercises I'll share a few ideas about what makes a story strong, how to protect anonymity on paper, and how to send your story in when you're ready. We'll leave time for questions at the end, and we'll finish on time.
+      DO: Point out where the restrooms and coffee are. On Zoom, explain that breakout rooms will open on their own and close with a one-minute warning.
+      FACILITATOR TIP: The times are minutes from the start, so they work for any start time; write clock times next to them on a printed copy if you like. If you only have 90 minutes, choose the 90-minute version ({ui:customize} → {ui:version}): Exercise 4 is done at home and the break is five minutes.
+      UPDATE: nothing to change by hand: the times follow the version you present and the slides you switch off ({ui:customize} → {ui:slides}).
+      TRANSITION: 'So, why write at all?'
+    version_notes:
+      short: "90-MINUTE PLAN: the times on this slide are the 90-minute plan's. Exercise 4 is done at home (under 'Revise', show the revision checklist instead), the break is about five minutes, and the plan leaves a few minutes to spare in a 90-minute slot."
+
+  # ---------------------------------------------------------------- Part 1 · Why we write (pptx 6–9)
+  - id: "part-1"
+    layout: "section"
+    number: 1
+    accent: "gv"
+    title: "Why we write"
+    subtitle: "Our meeting in print, and Twelfth Step work on paper"
+    minutes: 0.5
+    notes: |
+      SAY: Before we pick up our pens, let's take a few minutes on why this matters. Some of you have read these magazines for years; some of you may be holding one for the first time. Either way, I hope you'll leave seeing them a little differently: not as something other people write, but as something you can be part of.
+      DO: If you brought current issues of Grapevine and La Viña, hold them up now and pass them around. Hold up the printed issue rather than showing a cover on screen: the covers are AA Grapevine's artwork.
+      TRANSITION: 'Let's start with where the magazines came from.'
+    version_notes:
+      short: "90-MINUTE PLAN: Parts 1–3 (up to the first exercise) take about 12 minutes (18 in the full plan). Trim the talking, not the writing time: if you are running short, trim the slides in Parts 1 and 2."
+
+  - id: "meeting-in-print"
+    layout: "bullets"
+    title: "Our meeting in print"
+    items:
+      - "Grapevine: monthly, in English, since **June 1944**"
+      - "La Viña: every two months, in Spanish, since **1996**"
+      - "In the 1940s, members serving overseas in the armed forces called it their _meeting in print_"
+      - "Almost every story is written by an AA member: people like us"
+      - "Recognized by the General Service Conference as _the international journal of Alcoholics Anonymous_ (1986); the recognition extends to La Viña"
+      - "Stories are members' experience, not statements of AA policy"
+    source: "Sources: aagrapevine.org/history-aa-grapevine; P-52 (2026); The A.A. Service Manual, 2024–2026, pp. 81–85."
+    minutes: 2
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: The first Grapevine came out in June 1944. It was started by six members in the New York area, and it went to every AA group, about 300 at the time, and to every AA member known to be serving overseas in the armed forces. Those members wrote back, and each month a full page printed their letters. They began calling the Grapevine their 'meeting in print', and both magazines still carry that phrase. La Viña followed in 1996, so Spanish-speaking members could have a meeting in print in their own language. Here is what I want you to notice: almost everything in both magazines is written by AA members. Not professionals. People like us. And the editors decide what goes in each issue; what you read there is members' experience, not AA policy. That freedom is exactly what makes room for your story.
+      ASK: How did you first come across Grapevine or La Viña? (Take one or two answers.)
+      FACILITATOR TIP: Say 'recognized by the Conference as the international journal of AA', not 'Conference-approved': a monthly magazine can't go through the yearly approval process, which is why the Conference recognized it this way in 1986.
+      TRANSITION: 'So why would any of us sit down and write for it?'
+
+  - id: "twelfth-step-work"
+    layout: "columns"
+    style: "cards"
+    title: "Writing is Twelfth Step work"
+    columns:
+      - heading: "Carries the message"
+        text: "A story written today may reach someone years from now: in a prison, a hospital, a library, at a kitchen table at 2 a.m."
+      - heading: "Helps the writer"
+        text: "Putting experience on paper is a lot like a good inventory: clarity, gratitude and fresh insight."
+      - heading: "Every voice is needed"
+        text: "The magazines pay no writers. They depend on members' stories: newcomers and longtime members, English and Spanish."
+    takeaway: "Your experience, strength and hope, for someone you will never meet."
+    minutes: 2
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: When we write a story, we are doing Twelfth Step work. A story you write today may be read years from now by someone in a prison cell, a hospital bed, a public library, or at a kitchen table at two in the morning, someone who will never walk into your home group. Writing also does something for the writer. Many of us find that putting our experience on paper works a lot like an inventory: things get clearer, and we end up more grateful than when we started. And the magazines need us. They can't pay for stories; they depend on members willing to share, and they're richer when they sound like all of us: newcomers and old-timers, big cities and small towns, English and Spanish.
+      ASK: Has a story ever reached you at exactly the right moment? (If you have one, share it in a sentence or two, with no names, then invite one person from the room.)
+      FACILITATOR TIP: Keep your own share short. The point of this slide is the room's willingness, not the presenter's story.
+      TRANSITION: 'And if you're thinking, "but I'm not a writer", this next one is for you.'
+
+  # The deck's quotation slides have a grape quote mark (kit.py's quote(), accent="grape"), whatever the part.
+  - id: "not-a-writer"
+    layout: "quote"
+    accent: "grape"
+    title: "You don't need to be a writer"
+    quote: "A.A. members are encouraged to submit articles even though they may think their grammar and spelling aren't perfect."
+    credit: "— Reprinted from _The A.A. Service Manual_, 2024–2026 Edition, p. 85, with permission of Alcoholics Anonymous World Services, Inc."
+    minutes: 2
+    version_minutes: { short: 1 }
+    # SAY: the deck says "the editors' job"; the site's wording rules never use "job" (→ "task").
+    notes: |
+      SAY: This is from The A.A. Service Manual, and I love that it's in there at all. Grammar and spelling are the editors' task, not yours. If you have ever written a Fourth Step, a note to your sponsor, or an email, you can write a story. La Viña says the same thing in its own guidelines: you don't need to be an experienced writer; the only requirement is that you're an alcoholic in recovery. What the editors need from you is honesty, not polish.
+      ASK: What most often stops you from writing? (Take two or three answers: time, fear, 'my story isn't interesting'. Answer each one kindly: the exercises today take minutes, not hours; nobody sees your draft unless you choose; and every story helps someone.)
+      FACILITATOR TIP: If someone says their story is 'boring', remind them that a reader in a hospital or a prison is looking for someone like them, not for drama.
+      TRANSITION: 'Now let's look at what the two magazines actually publish.'
+
+  # ---------------------------------------------------------------- Part 2 · What Grapevine and La Viña publish (pptx 10–15)
+  - id: "part-2"
+    layout: "section"
+    number: 2
+    accent: "lv"
+    title: "What Grapevine and La Viña publish"
+    subtitle: "Stories, departments, short pieces, length and tone"
+    minutes: 0.5
+    notes: |
+      SAY: Knowing what the editors look for saves a lot of guesswork. In the next few slides I'll go through the kinds of stories each magazine prints, the regular sections you can write for, a few short pieces that make an easy first submission, how long a story should be, and what they don't publish.
+      DO: Keep a copy of each magazine open to its table of contents, so you can show a department page if someone asks.
+      TRANSITION: 'Two magazines, one message.'
+
+  # The deck colours a two-column slide (its eyebrow, its takeaway) with its first column's colour: Grapevine blue
+  # here and on the next slide, in La Viña's part.
+  - id: "two-magazines"
+    layout: "columns"
+    style: "panels"
+    accent: "gv"
+    title: "Two magazines, one message"
+    columns:
+      - heading: "Grapevine: in English"
+        accent: "gv"
+        items:
+          - "Monthly"
+          - "First-person stories of experience with alcoholism and AA"
+          - "An article on a Step and on a Tradition in every issue"
+          - "Letters, opinions, jokes, photos of meeting places"
+      - heading: "La Viña: {lang:es}en español{/lang}"
+        accent: "lv"
+        items:
+          - "Every two months"
+          - "Testimonies told as in a meeting: what it was like, how you came to AA, what it is like now"
+          - "Original stories in Spanish, plus some translated from Grapevine"
+          - "Photos of meeting rooms and favorite jokes, too"
+    source: "Sources: both magazines' guidelines for contributors; P-52 (2026); La Viña News (Sept.–Oct. 2026)."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Grapevine comes out every month in English. Most of what it prints is first-person stories: members' own experience with alcoholism and with AA. Every issue carries an article on a Step and an article on a Tradition. La Viña comes out every two months in Spanish. It asks for your testimony told the way you'd tell it in a meeting: what your life was like, how you came to AA, and what it's like now. La Viña's guidelines even call your article a Twelfth Step. Both magazines also print letters, jokes and photos of meeting places.
+      ASK: Who here plans to write in Spanish? In English? (A show of hands; it helps you pair people for the exercises.)
+      FACILITATOR TIP: If a bilingual member asks which magazine to choose: write in the language you think and pray in. A story goes to one magazine, in its own language.
+      TRANSITION: 'Both magazines have regular sections, and each one is a door for your story.'
+
+  - id: "departments"
+    layout: "columns"
+    style: "panels"
+    accent: "gv"
+    title: "Departments: a home for your story"
+    columns:
+      - heading: "Grapevine departments"
+        accent: "gv"
+        text: "Emotional Sobriety · Sponsorship · Newcomers · Old-Timers · Young & Sober (YES) · Spiritual Awakenings · Home Group · Into Action · Our Personal Stories · **Steps and Traditions**"
+      - heading: "Some La Viña sections"
+        accent: "lv"
+        text: "**{lang:es}_Pasos y Tradiciones_{/lang} (Steps and Traditions)** · {lang:es}_Veteranos_{/lang} (old-timers) · {lang:es}_Jóvenes en AA_{/lang} (young people in AA) · {lang:es}_Servicio_{/lang} (service)"
+    takeaway: "The editors always need stories on Steps 4–12 and on every Tradition."
+    source: "Sources: aagrapevine.org/contribute; La Viña's {lang:es}Pautas para Colaborar{/lang} (2020)."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Each issue is organized into departments, and they're a great way to find your angle. If you've been sober a few months, Newcomers might be your place. If your sponsor changed your life, Sponsorship. YES stands for Youth Enjoying Sobriety, the young people's section. La Viña has its own sections, among them Steps and Traditions, {lang:es}Veteranos{/lang} for long-time members, {lang:es}Jóvenes en AA{/lang} for young people, and {lang:es}Servicio{/lang}. Notice the takeaway: Grapevine's editors say they always need stories on Steps Four through Twelve and on every Tradition. Those are harder to write, which is exactly why they're needed. Your experience with Tradition Seven at a group business meeting is a story.
+      ASK: Looking at these, which one could you write for today? Just think of it; you'll use it in a few minutes.
+      FACILITATOR TIP: These are the departments named on aagrapevine.org and in La Viña's guidelines as of October 2026. Sections change from time to time; the current issue's table of contents is the best check.
+      TRANSITION: 'If a whole story feels like too much, start small.'
+
+  - id: "short-pieces"
+    layout: "bullets"
+    title: "Short pieces: an easy first step"
+    items:
+      - "**Dear Grapevine:** a letter about a story you read"
+      - "**What's On Your Mind?:** your opinion on meetings, sponsorship, the Traditions, AA life"
+      - "**At Wit's End:** clean AA jokes and funny sober moments"
+      - "**If Walls Could Talk:** photos of your meeting place with no people in them, with the group's name and location"
+    takeaway: "La Viña welcomes meeting-room photos and favorite jokes too."
+    source: "Sources: aagrapevine.org/contribute and guidelines; GVR Workbook (2026), pp. 36–37; La Viña News (Sept.–Oct. 2026)."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Not everyone's first piece has to be a full story. Grapevine has short sections that come almost entirely from readers. Dear Grapevine is letters: maybe a story in last month's issue hit home and you want to say why. What's On Your Mind? is for opinions about meetings, sponsorship, the Traditions, AA life. At Wit's End is jokes and funny sober moments; there's even a monthly online cartoon caption contest. And If Walls Could Talk is photos of meeting places, the rooms, never the people, with the group's name and location. La Viña asks for meeting-room photos and favorite jokes too. A letter or a photo is a real contribution to our meeting in print.
+      ASK: Does your home group have a meeting room with a story? A coffee pot that has seen forty years of meetings? That's an If Walls Could Talk photo.
+      FACILITATOR TIP: Photos and art go in as high-resolution JPEG files, 300 dpi. Stress the anonymity rule: nobody recognizable in a photo. Grapevine also runs a yearly wall-calendar photo contest; the current deadline is at aagrapevine.org/photocontest.
+      TRANSITION: 'How long should a story be?'
+
+  - id: "length-format"
+    layout: "table"
+    title: "Length, format and tone"
+    header: ["", "Grapevine", "La Viña"]
+    rows:
+      - ["Length", "300–1,800 words (3–5 double-spaced typed pages); short anecdotes welcome too", "5–6 double-spaced typed pages"]
+      - ["Handwritten", "Clear, on one side of the paper", "Legible, one side of the page, space between lines"]
+      - ["Language", "English", "Spanish"]
+      - ["Tone", "Like a share at your home group: first person, honest, hopeful", "The same: told as in a meeting"]
+    widths: [1.5, 3.2, 2.6]
+    first_col_bold: true
+    source: "Sources: aagrapevine.org/guidelines-contributing-grapevine; aalavina.org/guia-para-contribuciones."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Grapevine suggests 300 to 1,800 words, which is about three to five double-spaced typed pages, and it also prints one-liners and one-paragraph anecdotes. La Viña asks for five or six double-spaced typed pages. Please notice that the 300-to-1,800-words figure is Grapevine's guideline, not La Viña's. Handwritten is fine for both: write clearly, on one side of the page, and for La Viña leave space between the lines. As for tone, write the way you'd share at your home group: in the first person, honestly, with hope. In our experience, a focused short story is easier to finish and send, so don't worry if yours comes in on the short side.
+      DO: If you have a printed story handy, show how long 300 words is: about one typed page, double-spaced.
+      FACILITATOR TIP: Today's drafts will be short, and that's fine: Grapevine's own range starts at 300 words. Don't speak for the editors about what they choose; say what members have found.
+      TRANSITION: 'And a few things neither magazine publishes.'
+
+  - id: "not-published"
+    layout: "bullets"
+    title: "What the magazines don't publish"
+    items:
+      - "Poems, prayers or song lyrics"
+      - "Plays, and tributes to individuals"
+      - "Anything already published elsewhere"
+      - "Material unrelated to AA, or against AA's principles"
+    takeaway: "Have a poem in you? Tell the experience behind it as a story instead."
+    source: "Paraphrased from Grapevine's Guidelines for Contributing (rev. April 2019) and La Viña's {lang:es}Pautas para Colaborar{/lang} (2020)."
+    minutes: 1
+    version_minutes: { short: 0.5 }
+    notes: |
+      SAY: This surprises people every time: neither magazine publishes poems. Grapevine's guidelines also rule out prayers, song lyrics, plays and tributes to individuals; La Viña's rule out poems, songs and tributes. Neither prints something already published elsewhere, and neither prints material that has nothing to do with AA or goes against its principles. So send only original work you wrote yourself. If you're someone who writes poetry, don't give it up: take the experience behind the poem and tell it as a story. That's usually where the gold is anyway.
+      ASK: Any questions so far about what to send? (Keep answers short; the full Q&A is at the end.)
+      FACILITATOR TIP: 'Tributes to individuals' means a piece praising a person, for example a memorial to a sponsor. A story about what your sponsor shared with you (or showed you), told as your own experience, is different and welcome.
+      TRANSITION: 'Now, what are the editors asking for right now?'
+
+  # ---------------------------------------------------------------- Part 3 · Current themes and deadlines (pptx 16–20)
+  - id: "part-3"
+    layout: "section"
+    number: 3
+    accent: "grape"
+    title: "Current themes and deadlines"
+    subtitle: "Check them before each workshop"
+    minutes: 0.5
+    notes: |
+      SAY: Both magazines plan special theme issues months ahead and publish their themes and deadlines. A theme is a great place to start, because the editors are actively looking for those stories. But themes are always optional: a good story on any AA topic is welcome at any time.
+      UPDATE: the next three slides come from the official calendars, through the committee's page {live:site}/contribute/#deadlines, which is kept current from the official calendars and shows a countdown for each one: deadlines that have passed drop off by themselves, and the player shows the date the list is current as of. The exercise slides point to the same theme slides. A look at aagrapevine.org/contribute and La Viña's {lang:es}Temas{/lang} at aalavina.org/recursos before each workshop is still a good check.
+      TRANSITION: 'Here's what Grapevine is asking for.'
+
+  # The deck's table listed the open themes of the 2026–27 calendar "as of October 2026" (built from GV_THEMES in the
+  # generator); here the rows come from the site's data at every build, so a passed deadline never shows. Its table
+  # head and its "Current information" eyebrow were navy. The deck's "Nov. 2027: Classic Grapevine (no deadline)"
+  # holds every year (the November issue is Classic Grapevine, as the committee meeting's deck puts it), and the
+  # notes' dated sentences (the next deadline, the Annual Prison Issue's request) follow the calendar: the next
+  # deadline is {live:next_deadline_gv}, the prison issue's request is said only while that issue is on the slide.
+  - id: "gv-themes"
+    layout: "live"
+    kind: "deadlines"
+    options: { pub: "gv", limit: 6 }
+    accent: "navy"
+    eyebrow: "Current information"
+    title: "Grapevine: upcoming themes"
+    source: "Source: aagrapevine.org/contribute. November: Classic Grapevine (no deadline)."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: These are Grapevine's upcoming theme issues. Look at how early the deadlines are: Grapevine starts choosing the stories for an issue about five months before the date on the cover, so each story is due about five months ahead of its issue. If you have a story for a theme that has already closed, write it anyway: Grapevine keeps stories on file, and a story that misses its deadline may still be used in a later issue. The next deadline: {live:next_deadline_gv}. Any others, with their dates, are on the slide. (If the July 2027 Annual Prison Issue is still on the slide, add: for that issue the editors especially want stories from women in long-term custody.) The November issue is Classic Grapevine, made of stories from the archive, so the calendar gives it no deadline.
+      ASK: Which of these themes speaks to you? (Ask people to jot one down; they will pick a theme in Exercise 3.)
+      UPDATE: nothing to change by hand: the rows come from Grapevine's editorial calendar through the committee's website, and themes whose deadline has passed drop off. Grapevine publishes next year's calendar early in the year (around February); its themes show here once it is out. What the editors ask for under each theme is in that calendar, on aagrapevine.org/contribute.
+      TRANSITION: 'And here is La Viña's calendar.'
+
+  # The deck's table: Temas de La Viña 2027 "as of October 2026", with our English glosses (LV_THEMES in the generator),
+  # under a La Viña orange table head.
+  - id: "lv-themes"
+    layout: "live"
+    kind: "deadlines"
+    options: { pub: "lv", limit: 6 }
+    accent: "lv"
+    eyebrow: "Current information"
+    title: "La Viña: upcoming themes"
+    source: "Source: {lang:es}Temas de La Viña{/lang} (aalavina.org/recursos). English glosses are ours."
+    minutes: 1
+    # SAY: the deck named the next deadline and listed the four themes; here the next deadline is
+    # {live:next_deadline_lv} (it reads "see aalavina.org for La Viña's themes" while the site has none), and the
+    # DO line says what to do when the table is empty.
+    notes: |
+      SAY: La Viña comes out every two months, so it has six themes a year. Its next deadline: {live:next_deadline_lv}. La Viña also keeps a list of suggested topics with no deadline at all, which I'll show you in a moment. Stories go to La Viña in Spanish.
+      DO: If the slide lists no themes yet, say so, and read the next ones from the {lang:es}Temas de La Viña{/lang} list on aalavina.org/recursos instead (it is in Spanish: each theme, its issue and its date).
+      ASK: Anyone writing for La Viña today? Which theme calls to you?
+      FACILITATOR TIP: The English glosses are ours, for the English-speaking members in the room; say the theme in Spanish first. If {lang:es}Hispanos Veteranos en AA{/lang} is on the slide, our gloss is 'Hispanic Veterans in AA': '{lang:es}Veteranos{/lang}' can mean long-time members (La Viña's {lang:es}Veteranos{/lang} section is for old-timers) or military veterans, and La Viña's themes list gives only the title. Check La Viña's own description before you explain this theme.
+      UPDATE: nothing to change by hand: the rows come from the committee's website, and themes whose deadline has passed drop off. La Viña publishes next year's themes on aalavina.org/recursos early in the year; they show here once the committee's website has them.
+      TRANSITION: 'A few things to know about deadlines.'
+
+  - id: "planning-ahead"
+    layout: "bullets"
+    eyebrow: "Current information"
+    title: "Planning ahead"
+    items:
+      - "Grapevine picks stories about **five months** before the cover date"
+      - "Themes are optional: a good story is welcome any time"
+      - "Missed a deadline? Send it anyway; it may run in a later issue"
+      - "La Viña's {lang:es}_temas sugeridos_{/lang} have no deadline: {lang:es}_Mi Primer Paso_, _Lo que me enseñó mi Padrino_…{/lang}"
+      - "Next year's themes: on slides {slide:gv-themes}–{slide:lv-themes} once they're published"
+    takeaway: "Every deadline, with a countdown: [{live:site}/contribute/](/contribute/)"
+    source: "Sources: aagrapevine.org/contribute; GVR Workbook (2026), p. 42; aalavina.org/temas-sugeridos."
+    # "Lo que me enseñó mi Padrino" is the title of one of La Viña's suggested topics, quoted as La Viña writes it.
+    allow_words: ["enseñó"]
+    minutes: 1
+    # SAY: the deck's "my first sober job" (La Viña's topic "Mi primer trabajo sobrio") → "my first time working
+    # sober": the site's wording rules never use "job"; its "what my sponsor taught me" ("Lo que me enseñó mi
+    # Padrino") → "showed me". The deck's last item, "2028 themes: [not published yet: check in early 2027]", was a
+    # blank to fill in by hand; the theme slides show next year's themes by themselves, so the item says so.
+    notes: |
+      SAY: Here's how the deadlines work. Take the December issue: Grapevine's editors choose its stories in early August, editing and production take about three months, and the issue comes off the press in early November. That's why theme deadlines feel so far ahead. Themes are optional, though, and a good story is welcome any time. If you miss a deadline, send it anyway: Grapevine keeps stories on file and may use yours in a later issue. La Viña keeps a list of suggested topics you can write on at any time of year: my First Step, what my sponsor showed me, how I deal with fear today, my first time working sober, how I found my Higher Power, and more. And our committee's website shows every upcoming deadline with a countdown, so you never have to guess.
+      ASK: Who would like a reminder of the next deadline? (Point them to {live:site}/contribute/#deadlines: the link is on the slide. Anyone who wants a reminder can write to grapevine@neta65.org themselves; don't collect email addresses at the workshop.)
+      UPDATE: nothing to change by hand: Grapevine and La Viña publish next year's themes early in the year, and the theme slides show them as soon as the committee's website has them.
+      TRANSITION: 'Enough listening. Let's write.'
+
+  # The deck draws every exercise in green (kit.py's activity(), accent="vine"), whatever the part.
+  - id: "exercise-1"
+    layout: "activity"
+    accent: "vine"
+    eyebrow: "Exercise 1 of 4 · warm-up"
+    title: "Warm-up: one fun sober moment"
+    steps:
+      - "Think of one time you had fun sober: a trip, a game night, a dance, a service event, a belly laugh"
+      - "Write for **5 minutes** without stopping. Don't fix anything"
+      - "Stuck? Begin with: _The first time I noticed I was having fun sober…_"
+      - "In pairs, read one sentence you like (1 minute each), or pass"
+    duration: 10
+    materials: ["Paper and pen, or your phone", "A timer (the facilitator keeps time)"]
+    takeaway: "**Share back:** What surprised you in your own memory?"
+    minutes: 10
+    version_minutes: { short: 8 }
+    # The 90-minute plan's time card. Its TIME SPLIT is the full plan's only: the deck gave the 90-minute plan this
+    # exercise's total alone, so that version's notes keep the writing and leave the rest to the presenter (its DO
+    # gives the breakout rooms no minutes: change the DO in both lines).
+    version_fields:
+      short: { duration: 8 }
+    # DO: the deck's "opened automatically" → "set to open by themselves" (wording rules).
+    notes: |
+      SAY: Our first exercise is a warm-up, and it's meant to be fun. As our Big Book puts it, we are not a glum lot. Think of one time you had fun sober: a trip, a game night, a dance, a service event, a moment you laughed so hard you cried. Now write for five minutes without stopping. Don't fix spelling, don't cross anything out, don't worry about where it's going. If you get stuck, write the opening line on the screen and keep going. Ready? Begin.
+      {not:short} DO: Start a visible 5-minute timer. Say 'one minute left' at 4 minutes, then 'finish your sentence'. Pair people up (neighbors in the room; on Zoom, breakout rooms of two for 3 minutes, set to open by themselves). Each person reads one sentence they like, or passes. Bring everyone back and take two or three answers to the debrief question, about their own writing only.
+      {only:short} DO: Start a visible 5-minute timer. Say 'one minute left' at 4 minutes, then 'finish your sentence'. Pair people up in the time that is left (neighbors in the room; on Zoom, breakout rooms of two, set to open by themselves). Each person reads one sentence they like, or passes. Bring everyone back and take two or three answers to the debrief question, about their own writing only.
+      FACILITATOR TIP: The warm-up isn't tied to a deadline. A fun sober story can fit many issues; if someone asks where to send it, point to the next open theme on slides {slide:gv-themes} and {slide:lv-themes}, or to La Viña's suggested topic '{lang:es}Tiempos de fiesta en sobriedad{/lang}', which has no deadline. Write along with the room for the first minute; it makes it easier for others to start.
+      EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Piensa en una vez que te divertiste en sobriedad: un viaje, una noche de juegos, un baile, un evento de servicio, una carcajada. Escribe 5 minutos sin parar; no corrijas nada. ¿No sabes cómo empezar? Comienza así: «La primera vez que me di cuenta de que me estaba divirtiendo en sobriedad…». En parejas, lee una frase que te guste (1 minuto cada uno), o pasa. Para compartir: ¿Qué te sorprendió de tu propio recuerdo?{/lang}
+      {not:short} TIME SPLIT: 5 writing, 3 in pairs, 2 debrief.
+      TRANSITION: 'Hold on to what you wrote. Now let's talk about what makes a story strong.'
+    version_notes:
+      short: "90-MINUTE PLAN: keep the five minutes of writing; the pairs and the debrief share the rest of the time. Never cut the pair sharing entirely; it's where people discover their story is worth telling."
+
+  # ---------------------------------------------------------------- Part 4 · What makes a strong story (pptx 21–28)
+  - id: "part-4"
+    layout: "section"
+    number: 4
+    accent: "gv"
+    title: "What makes a strong story"
+    subtitle: "One moment, told honestly, in your own voice"
+    minutes: 0.5
+    notes: |
+      SAY: You've just written for five minutes. Now let's look at a few things that turn a piece of writing into a story another alcoholic can't put down. None of these are rules; they're experience, from members who have been published and from what the editors themselves have shared.
+      TRANSITION: 'Three things first.'
+    version_notes:
+      short: "90-MINUTE PLAN: Part 4 takes about 8 minutes (11 in the full plan)."
+
+  - id: "strong-story"
+    layout: "columns"
+    style: "cards"
+    title: "A strong story is…"
+    columns:
+      - heading: "1 · One moment"
+        text: "One experience or turning point, not your whole life. Get right to the point."
+      - heading: "2 · Honest"
+        text: "Tell it the way it happened. Make it clear you're an alcoholic and a member of AA."
+      - heading: "3 · Specific"
+        text: "One real detail (a coffee pot, a late-night call, your first chip) puts the reader in the room."
+    takeaway: "Ask yourself: will a reader recognize themselves in this?"
+    minutes: 2.5
+    version_minutes: { short: 2 }
+    notes: |
+      SAY: First, one moment. The most common mistake is trying to tell your whole life in five pages. Pick one experience, one turning point, and tell it well. Tips from a Grapevine editor, shared at one of our earlier workshops, put it simply: get right to the point. Second, honest. Tell it the way it happened, including the parts that don't make you look good. And make it clear early on that you're an alcoholic and an AA member; the reader needs to know they're hearing from one of their own. Third, specific. 'I was lonely' is a sentence. 'I ate dinner standing at the kitchen counter every night for a year' is a picture. The editor's other question is the one in the takeaway: will a reader recognize themselves in this?
+      ASK: Look at what you wrote in the warm-up. Is there one specific detail in it? Underline it.
+      FACILITATOR TIP: The editor tips are reported from an earlier committee workshop; credit them to 'a Grapevine editor', never by name.
+      TRANSITION: 'Four more marks of a strong story.'
+
+  - id: "sounds-like-you"
+    layout: "bullets"
+    title: "…and it sounds like you"
+    items:
+      - "**Show, don't tell:** let the reader see what you did and heard, instead of naming the feeling"
+      - "**AA language:** write as you'd share at your home group: _I_, not _you should_; our words, not clinical ones"
+      - "**Humility:** share, don't preach; experience, not advice"
+      - "**Humor:** laughter belongs in recovery; a funny moment can carry a serious message"
+    takeaway: "Your own voice is the one a reader trusts."
+    minutes: 2
+    version_minutes: { short: 1 }
+    # SAY: the deck's "let the reader draw the lesson" → "draw the conclusion" (the site never says "lesson").
+    notes: |
+      SAY: Show, don't tell: we'll look at an example on the next slide. AA language: write the way you'd share at your home group. Say 'I', not 'you should'. Use the words we use in meetings, like the Steps, a sponsor, a Higher Power as you understand it, rather than clinical or textbook terms. Humility: share, don't preach. A story full of advice is a lecture; a story full of experience is a meeting. Let what happened to you carry the message, and let the reader draw the conclusion. And humor: laughter belongs in recovery. Some of the stories members remember longest are the funny ones, and a light moment can carry a serious message further than a heavy one.
+      ASK: Which of these is hardest for you? (Most rooms say 'show, don't tell'; that's the next slide.)
+      FACILITATOR TIP: If someone asks about God or spirituality in their story: write about your own experience in your own words. The magazines print members of every belief and none; there's no required vocabulary.
+      TRANSITION: 'Here's what show, don't tell looks like.'
+
+  # Navy in the deck, as the next slide: the colour of its first column (eyebrow and takeaway).
+  - id: "show-dont-tell"
+    layout: "columns"
+    style: "panels"
+    accent: "navy"
+    title: "Show, don't tell: an example"
+    columns:
+      - heading: "Telling"
+        accent: "navy"
+        text: "I was in bad shape when I got to AA, and the people there really helped me."
+      - heading: "Showing"
+        accent: "vine"
+        text: "The night of my first meeting I sat in my truck for twenty minutes with the engine running. A man tapped on the window, held up two cups of coffee and said, \"Coffee's on.\" I turned the key off."
+    takeaway: "Same facts. The second one lets the reader sit in the truck with you."
+    minutes: 2
+    version_minutes: { short: 1.5 }
+    notes: |
+      SAY: Both of these say the same thing. The first one tells us: I was in bad shape, and AA helped. We nod, and we forget it. The second one shows us: we're sitting in that truck, we hear the engine, we see the coffee cups, and when the writer turns the key off, we know exactly what happened without being told. Nobody had to write 'I was afraid' or 'I felt welcomed'. That's what we're after. You don't have to do this in every sentence. A story needs some telling to move along. But the moments that matter most deserve a scene.
+      ASK: Take one 'telling' sentence from your warm-up, something like 'I had a great time', and say out loud what someone would have seen or heard. (Take one or two volunteers.)
+      FACILITATOR TIP: Both examples were written for this workshop; neither comes from a published story. Never put a published story on a slide: stories belong to AA Grapevine, Inc. Hold up the magazine or read a short passage aloud from the printed issue instead.
+      TRANSITION: 'Now, how do you put a whole story together?'
+
+  - id: "three-parts"
+    layout: "columns"
+    style: "cards"
+    accent: "navy"
+    title: "One familiar shape: three parts"
+    columns:
+      - heading: "1 · What it was like"
+        accent: "navy"
+        text: "Short and true. Enough to identify with; no need for every drink."
+      - heading: "2 · What happened"
+        accent: "gv"
+        text: "The turning point: a meeting, a Step, a sponsor, a moment of willingness."
+      - heading: "3 · What it is like now"
+        accent: "vine"
+        text: "Where the hope is: what's different today, and what you do to keep it that way."
+    takeaway: "It's how we share in meetings, and how La Viña asks for testimonies."
+    minutes: 2
+    version_minutes: { short: 1.5 }
+    notes: |
+      SAY: You know this shape already: it's how we share in meetings. What it was like, what happened, and what it's like now. La Viña asks for testimonies in exactly this form. A few suggestions from members who've been published: keep the first part short. The reader needs enough to identify with you, not every drink you ever had. Give real space to what happened, the turning point. And give the most care to what it's like now, because that's where the hope is, and hope is what the reader came for. The same shape works for a small story too: what I used to do when I got angry, what happened, what I do now.
+      ASK: In your own sobriety, what's one 'what happened' moment you could write about?
+      TRANSITION: 'There's another way to build a story, and it's often stronger.'
+
+  - id: "single-scene"
+    layout: "bullets"
+    title: "Or tell a single scene"
+    items:
+      - "Pick one hour, one evening, one phone call"
+      - "**Where** were you? **When** was it? **Who** was there (first names only)?"
+      - "**What** did you see, hear, smell? What was said?"
+      - "**Why** does it matter to you today?"
+      - "Start in the middle of the action; end on what it means now"
+    takeaway: "A single scene can be the whole story, or the heart of a longer one."
+    minutes: 2
+    version_minutes: { short: 1.5 }
+    notes: |
+      SAY: Instead of covering years, some of the best stories cover one evening. One phone call to a sponsor. One meeting in a church basement. The questions on this slide are the ones on your story planner handout: who, what, where, when and why. Answer them and you have the bones of a scene. Here's a tip that works almost every time: start in the middle of the action. Not 'I was born in 1962'; start with 'The phone rang at 3 a.m.' Then end on what the scene means to you now. A single scene can be the whole story, or it can be the heart of a longer one.
+      DO: Hold up the story planner handout so everyone knows which sheet you mean. On Zoom, paste the link to the handout in the chat.
+      FACILITATOR TIP: Remind the room of the first-names-only rule here, before Exercise 3, so it shapes the drafts from the start.
+      TRANSITION: 'Let's try the three-part shape now.'
+
+  # SAY: the deck said Emotional Sobriety is "one of its upcoming theme issues too: the deadline is on slide 17" while
+  # that deadline (November 1, 2026) was open; here the presenter adds it only while that theme is on the slide.
+  # The 90-minute plan gives this exercise 12 minutes (the deck gave only that total): its time card says so, and
+  # the slide and the notes keep the three bursts of writing and give no count for the pairs that the 12 minutes
+  # could not hold; the full plan keeps the deck's counts and its TIME SPLIT. Change a step, or the Spanish prompt,
+  # in both versions.
+  - id: "exercise-2"
+    layout: "activity"
+    accent: "vine"
+    eyebrow: "Exercise 2 of 4 · Emotional Sobriety"
+    title: "Then, what happened, now"
+    steps:
+      - "Recall a moment you reacted differently than you used to: to anger, fear, a resentment, bad news"
+      - "3 minutes: what I used to do"
+      - "3 minutes: what happened (the tool, the Step, the person)"
+      - "3 minutes: what it's like now"
+      - "In pairs, read your _now_ paragraph (2 minutes each)"
+    duration: 14
+    materials: ["Paper and pen", "Your warm-up notes"]
+    takeaway: "**Share back:** Which tool of the program showed up in your own writing?"
+    minutes: 14
+    version_minutes: { short: 12 }
+    version_fields:
+      short:
+        duration: 12
+        steps:
+          - "Recall a moment you reacted differently than you used to: to anger, fear, a resentment, bad news"
+          - "3 minutes: what I used to do"
+          - "3 minutes: what happened (the tool, the Step, the person)"
+          - "3 minutes: what it's like now"
+          - "In pairs, read your _now_ paragraph"
+    notes: |
+      SAY: This exercise fits Emotional Sobriety, one of Grapevine's regular departments. (If Emotional Sobriety is on slide {slide:gv-themes}, add: it's the theme of an upcoming issue too, and its deadline is on that slide.) In January 1958 Bill W. wrote a Grapevine article called 'The Next Frontier: Emotional Sobriety', and members have been writing about it ever since. Think of a moment when you reacted differently than you used to: someone cut you off in traffic, bad news came, an old resentment flared up, and this time you didn't do what you always did. You'll write in three short bursts of three minutes. I'll call the time. First burst: what I used to do. Begin.
+      {not:short} DO: Call time every 3 minutes: 'Now write what happened: the tool, the Step, the person.' Then: 'Now write what it's like now.' Then pairs, 2 minutes each, reading only the 'now' paragraph (on Zoom, breakout rooms of two for 5 minutes). Debrief with two or three volunteers, about their own writing.
+      {only:short} DO: Call time every 3 minutes: 'Now write what happened: the tool, the Step, the person.' Then: 'Now write what it's like now.' Then pairs, reading only the 'now' paragraph, in the time that is left (on Zoom, breakout rooms of two). Debrief with two or three volunteers, about their own writing.
+      FACILITATOR TIP: If someone writes about something painful and becomes upset, let them take a break; offer a quiet word afterwards and suggest they talk with their sponsor. Nobody has to share. In Spanish, this exercise suits La Viña's suggested topic '{lang:es}Cómo trato con el miedo hoy{/lang}' (no deadline), or the next open La Viña theme on slide {slide:lv-themes}.
+      {not:short} EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Recuerda un momento en que reaccionaste de manera diferente a como lo hacías antes: ante el enojo, el miedo, un resentimiento o una mala noticia. Escribe en tres partes de 3 minutos. Primero: lo que yo hacía antes. Después: lo que pasó (la herramienta, el Paso, la persona). Al final: cómo es ahora. ¿No sabes cómo empezar? Comienza así: «Antes, cuando algo me enojaba, yo…». En parejas, lee tu párrafo de «ahora» (2 minutos cada uno). Para compartir: ¿Qué herramienta del programa apareció en lo que escribiste?{/lang}
+      {only:short} EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Recuerda un momento en que reaccionaste de manera diferente a como lo hacías antes: ante el enojo, el miedo, un resentimiento o una mala noticia. Escribe en tres partes de 3 minutos. Primero: lo que yo hacía antes. Después: lo que pasó (la herramienta, el Paso, la persona). Al final: cómo es ahora. ¿No sabes cómo empezar? Comienza así: «Antes, cuando algo me enojaba, yo…». En parejas, lee tu párrafo de «ahora». Para compartir: ¿Qué herramienta del programa apareció en lo que escribiste?{/lang}
+      {not:short} TIME SPLIT: 9 writing, 4 in pairs, 1 debrief.
+      TRANSITION: 'Good work. Let's take a break.'
+    version_notes:
+      short: "90-MINUTE PLAN: keep the three bursts of writing as they are; the pairs and the debrief share the rest of the time (never cut the pair sharing entirely)."
+
+  # The deck's big centred message slide, with no eyebrow (style "break"); its "Back at [clock time]" is a presenter
+  # blank. The 90-minute plan's break is five minutes: its message and its SAY say so.
+  - id: "break"
+    layout: "text"
+    style: "break"
+    title: "Time for a break"
+    body: |-
+      **About seven minutes**
+
+      Back at {fill:break_end}
+
+      Stretch, refill your coffee, rest your writing hand. On Zoom: stay in the meeting; camera off is fine.
+    minutes: 7
+    version_minutes: { short: 5 }
+    version_fields:
+      short:
+        body: |-
+          **About five minutes**
+
+          Back at {fill:break_end}
+
+          Stretch, refill your coffee, rest your writing hand. On Zoom: stay in the meeting; camera off is fine.
+    notes: |
+      {not:short} SAY: Let's take about seven minutes. Stretch, refill your coffee, rest your writing hand. When we come back, we'll talk about anonymity on paper, how your name appears and how to protect the people in your story, and then you'll write a full scene.
+      {only:short} SAY: Let's take about five minutes. Stretch, refill your coffee, rest your writing hand. When we come back, we'll talk about anonymity on paper, how your name appears and how to protect the people in your story, and then you'll write a full scene.
+      DO: Put the return time in {ui:customize} → {ui:your_details} before the workshop, or say it out loud. On Zoom, leave this slide shared and ask people to stay connected. Use the break to check the room temperature, the supplies and the Zoom breakout settings for Exercise 3.
+      FACILITATOR TIP: Stay available during the break: this is when hesitant writers ask the questions they won't ask in front of the room. Keep anything you hear confidential.
+      UPDATE: the return time ({ui:customize} → {ui:your_details}), and the length if your plan differs ({ui:customize} → {ui:edit}).
+      TRANSITION: 'Welcome back. Let's talk about anonymity in your writing.'
+
+  # ---------------------------------------------------------------- Part 5 · Anonymity in your writing (pptx 29–34)
+  - id: "part-5"
+    layout: "section"
+    number: 5
+    accent: "lv"
+    title: "Anonymity in your writing"
+    subtitle: "Your name, other people's names, and the Traditions on paper"
+    minutes: 0.5
+    notes: |
+      SAY: Welcome back. Before you write a full scene, let's talk about anonymity, because it shapes what goes on the page. The good news: the magazines have protected writers' anonymity for more than eighty years, and the system is simple. The part that's up to us is protecting the other people in our stories.
+      DO: Check that everyone is back; on Zoom, wait until the participant count is steady.
+      TRANSITION: 'First, your own name.'
+    version_notes:
+      short: "90-MINUTE PLAN: Part 5 takes about 5 minutes (6 in the full plan)."
+
+  # Navy in the deck: the colour of its first column (eyebrow and takeaway).
+  - id: "your-name"
+    layout: "columns"
+    style: "panels"
+    accent: "navy"
+    title: "How your name appears"
+    columns:
+      - heading: "What the editors receive"
+        accent: "navy"
+        items:
+          - "Your full name, address, phone and email"
+          - "Used by the office to contact you; never printed"
+          - "Grapevine protects anonymity at all times (1974 Advisory Action)"
+      - heading: "What readers see"
+        accent: "vine"
+        items:
+          - "You choose: first name and last initial, initials only, or _Anonymous_"
+          - "Usually with your city and state"
+          - "For example: _Maria G., Tyler, Texas_"
+    takeaway: "Full name to the office; a first name and initial, or less, in print."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: When you send a story, you give the editors your full name, address, phone and email, so they can reach you if your story is chosen. It is never printed: back in 1974 the General Service Conference noted that the Grapevine protects anonymity at all times. In print, you choose how your name appears. Grapevine's online form gives three choices: first name and last initial, first and last initials only, or Anonymous. Published stories usually show your city and state as well; the example on the slide is made up. If you live in a very small town and that worries you, you can ask to be published as Anonymous.
+      ASK: Does anyone have a question about their own name in print? (Answer generally; invite anyone with a personal situation to talk with you privately at the break or after.)
+      FACILITATOR TIP: 'Usually with your city and state' is what published bylines show; it is not a written rule, so say 'usually'. The three name choices come from Grapevine's online submission form (aagrapevine.org/submit-your-story).
+      TRANSITION: 'This is AA's own custom, in AA's own words.'
+
+  - id: "custom-in-print"
+    layout: "quote"
+    accent: "grape"
+    title: "The AA custom in print"
+    quote: "In printed articles, on websites or email, we are identified by our first names and last initials only."
+    credit: "— Reprinted from _Anonymity Online and Digital Media_ (SMF-197), p. 1, with permission of A.A. World Services, Inc."
+    minutes: 1
+    notes: |
+      SAY: This is our custom across AA, not only in the magazines; the service piece on the screen is quoting the pamphlet The A.A. Group. In print, on websites and in email, we use first names and last initials. Tradition Eleven asks us to keep personal anonymity at the level of press, radio and films, and today that includes the internet and social media. So if your story is published, celebrate it, share the issue with your home group, and think twice before posting it on social media with your full name or your photo next to it.
+      ASK: How does your home group handle anonymity online, in WhatsApp groups or on social media? (One or two answers; don't let it become a debate.)
+      FACILITATOR TIP: If someone asks whether they can share their published story online: point them to the magazine's own link, without their full name or a photo, and remember that the story's copyright belongs to AA Grapevine, Inc. once published.
+      TRANSITION: 'Now, the people in our stories.'
+
+  # The deck's "a rare job" (slide) and "a very unusual job" (notes) → "line of work": the site never says "job".
+  - id: "other-people"
+    layout: "bullets"
+    title: "Protecting other people in your story"
+    items:
+      - "Sponsors, family, friends: first names only, or none (_my sponsor_, _my sister_)"
+      - "Never reveal that someone else is in AA if they could be recognized"
+      - "Leave out details that point to one person: a workplace, a rare line of work, a tiny town"
+      - "Photos: no one who can be recognized; show rooms, chairs, the coffee pot"
+      - "Tell your part of the story; theirs is theirs to tell"
+    takeaway: "Ask yourself: if this person read my story, would they feel safe?"
+    minutes: 1.5
+    notes: |
+      SAY: Our stories are full of other people: sponsors, spouses, children, the friend who drove us to our first meeting. Their anonymity matters as much as ours. Use first names only, or no names at all: 'my sponsor', 'my sister' works beautifully. Never reveal that someone else is a member of AA if they could be recognized. Watch for details that point to one person, like their workplace or a very unusual line of work. With photos, nobody who can be recognized. And the deepest one: tell your part of the story. If your story involves a family member's struggles, write about what you did and how you changed, and leave their story for them to tell.
+      ASK: Look at your drafts from Exercises 1 and 2. Is there a full name, or a detail that identifies someone? Fix it now; it takes ten seconds.
+      FACILITATOR TIP: This applies to the room as well: if pairs mention other people, that stays in the pair.
+      TRANSITION: 'And a few Traditions that apply to writing.'
+
+  - id: "traditions-on-paper"
+    layout: "bullets"
+    title: "Keep it AA: the Traditions on paper"
+    items:
+      - "**Singleness of purpose:** your experience with alcohol and with recovery in AA"
+      - "**No outside issues:** no politics, causes or current events; no medical or legal advice; no opinions on treatment, medications or other fellowships"
+      - "**Attraction, not promotion:** don't recommend outside businesses, websites, products or treatment centers; AA literature is fine to mention; let the hope in your story do the work"
+      - "**Your experience, not AA's voice:** stories are not statements of AA policy"
+    source: "Our summary of Traditions Five, Six, Ten and Eleven; Grapevine's Guidelines for Contributing (rev. April 2019) ask that stories reflect AA's singleness of purpose."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: The Traditions apply on paper just as they do in the meeting room. Grapevine asks that a story relate to AA experience and reflect AA's singleness of purpose, so write about your experience with alcohol and with recovery in AA. Tradition Ten: no outside issues: no politics, causes or current events, no medical or legal advice, and no opinions on treatment, medications or other fellowships. If any of those were part of your life, say what you did, without telling the reader what to do or think. Traditions Six and Eleven: attraction, not promotion. Don't recommend an outside business, website, product or treatment center as the answer; mentioning the Big Book or other AA literature is fine. And you speak only for yourself: stories are members' experience, never AA policy.
+      ASK: Can anyone think of how to write about, say, a hospital stay without giving medical advice? (Answer: describe what happened to you and what you did; leave out recommendations.)
+      FACILITATOR TIP: Present these as our summary of the Traditions' guidance, not as the committee's rules or the magazines' rules: the editors decide what they print.
+      TRANSITION: 'Now let's put it all together in a full scene.'
+
+  # Step 1 listed the next open themes "as of October 2026" (Emotional Sobriety, Annual Prison Issue, Sober Seniors,
+  # Recaídas, Prisiones: GV_THEMES / LV_THEMES in the generator). It now points to the live theme slides in the
+  # words the generator itself used when no theme was open ("Pick a theme from the current calendars …"), and the
+  # SAY gives the Annual Prison Issue's request only while that issue is on the theme slide. The 90-minute plan
+  # gives this exercise 12 minutes: as on Exercise 2, its time card says so, the ten minutes of writing stay, and
+  # the pairs get no count the 12 minutes could not hold. Change a step, or the Spanish prompt, in both versions.
+  - id: "exercise-3"
+    layout: "activity"
+    accent: "vine"
+    eyebrow: "Exercise 3 of 4 · pick a theme"
+    title: "Write one scene"
+    steps:
+      - "Pick a theme from the current calendars (slides {slide:gv-themes} and {slide:lv-themes}), or any Step or Tradition"
+      - "Choose one moment: an hour, an evening, a phone call"
+      - "Write for **10 minutes**: where you are, what you see and hear, one thing someone said, what changed in you"
+      - "In pairs (2 minutes each): read your scene; your partner names one detail that stayed with them"
+    duration: 15
+    materials: ["Story planner handout", "Your notes so far"]
+    takeaway: "**Share back:** What did you leave out, and does your story need it?"
+    minutes: 15
+    version_minutes: { short: 12 }
+    version_fields:
+      short:
+        duration: 12
+        steps:
+          - "Pick a theme from the current calendars (slides {slide:gv-themes} and {slide:lv-themes}), or any Step or Tradition"
+          - "Choose one moment: an hour, an evening, a phone call"
+          - "Write for **10 minutes**: where you are, what you see and hear, one thing someone said, what changed in you"
+          - "In pairs: read your scene; your partner names one detail that stayed with them"
+    notes: |
+      SAY: This is the longest writing time today: ten minutes. Pick a theme from the calendars we saw, on slides {slide:gv-themes} and {slide:lv-themes}, which show the next open themes, or pick any Step or Tradition, and choose one moment that belongs to it. (If the July 2027 Annual Prison Issue is still on slide {slide:gv-themes}, add: for that issue the editors especially want stories from women in long-term custody.) Use your story planner if it helps: where were you, who was there, first names only, what did you see and hear, what changed. Start in the middle of the action. Ten minutes. Begin.
+      {not:short} DO: Start a 10-minute timer; give a 2-minute and a 1-minute warning. Then pairs for 2 minutes each (Zoom: breakout rooms of two, 5 minutes, with a 1-minute broadcast warning). The listener names one detail that stayed with them: nothing else, no advice. Debrief with two or three volunteers.
+      {only:short} DO: Start a 10-minute timer; give a 2-minute and a 1-minute warning. Then pairs, in the time that is left (Zoom: breakout rooms of two, with a 1-minute broadcast warning). The listener names one detail that stayed with them: nothing else, no advice. Debrief with two or three volunteers.
+      FACILITATOR TIP: Walk the room quietly (or watch the Zoom chat) for anyone who looks stuck, and offer a prompt: 'Where were you sitting?' 'What did the room smell like?' Writers who need to talk instead of write can record their story later (Audio Project, coming up).
+      {not:short} EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Elige un tema: uno del calendario de La Viña (diapositiva {slide:lv-themes}), un tema sugerido de La Viña (por ejemplo, «Mi Primer Paso») o cualquier Paso o Tradición. Elige un solo momento: una hora, una noche, una llamada. Escribe 10 minutos: dónde estás, qué ves y oyes, algo que alguien dijo, qué cambió en ti. Empieza en medio de la acción, por ejemplo: «Sonó el teléfono a las tres de la mañana…». En parejas (2 minutos cada uno): lee tu escena; tu compañero o compañera menciona un detalle que se le quedó grabado. Para compartir: ¿Qué dejaste fuera, y le hace falta a tu historia?{/lang}
+      {only:short} EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Elige un tema: uno del calendario de La Viña (diapositiva {slide:lv-themes}), un tema sugerido de La Viña (por ejemplo, «Mi Primer Paso») o cualquier Paso o Tradición. Elige un solo momento: una hora, una noche, una llamada. Escribe 10 minutos: dónde estás, qué ves y oyes, algo que alguien dijo, qué cambió en ti. Empieza en medio de la acción, por ejemplo: «Sonó el teléfono a las tres de la mañana…». En parejas: lee tu escena; tu compañero o compañera menciona un detalle que se le quedó grabado. Para compartir: ¿Qué dejaste fuera, y le hace falta a tu historia?{/lang}
+      UPDATE: nothing to change: step 1 points to the theme slides, which stay current by themselves.
+      {not:short} TIME SPLIT: 10 writing, 4 in pairs, 1 debrief.
+      TRANSITION: 'You have a draft. Let's make it ready to send.'
+    version_notes:
+      short: "90-MINUTE PLAN: keep the ten minutes of writing; the pairs and the debrief share the rest of the time (never cut the pair sharing entirely)."
+
+  # ---------------------------------------------------------------- Part 6 · Revise and send (pptx 35–43)
+  - id: "part-6"
+    layout: "section"
+    number: 6
+    accent: "vine"
+    title: "Revise and send"
+    subtitle: "A checklist, a submission, a recording, and then letting it go"
+    minutes: 0.5
+    notes: |
+      {not:short} SAY: You now have three pieces of writing, and at least one of them has a story in it. In this last part we'll go over a checklist for revising, do one last short exercise, and then cover exactly how to send your story to Grapevine or La Viña, how to record it instead if you'd rather talk than write, and what happens after you hit send.
+      {only:short} SAY: You now have three pieces of writing, and at least one of them has a story in it. In this last part we'll go over a checklist for revising, which you can use at home for one last short exercise, and then cover exactly how to send your story to Grapevine or La Viña, how to record it instead if you'd rather talk than write, and what happens after you hit send.
+      TRANSITION: 'Here's the checklist; it's also on your handout.'
+    version_notes:
+      short: "90-MINUTE PLAN: this section and the checklist take about 3 minutes, and Exercise 4 is done at home (it is left out of this version): show the revision checklist and invite people to use it before they send their story."
+
+  # The deck's tick boxes (☐) are `checklist: true`, here and on the Spanish 'lista-de-revision'. Shown AND printed:
+  # the deck's notes have it printed for everyone as the revision handout. In the 90-minute plan it takes Exercise
+  # 4's place (the section slide and this one: 3 minutes), so it takes longer there.
+  - id: "checklist"
+    layout: "columns"
+    style: "panels"
+    checklist: true
+    handout: true
+    title: "Revision checklist"
+    columns:
+      - heading: "The story"
+        accent: "vine"
+        items:
+          - "One moment or turning point"
+          - "A first line that starts in the action"
+          - "Clear that I'm an alcoholic in AA"
+          - "More showing than telling"
+          - "Experience, not advice"
+          - "Hope: what it's like now"
+      - heading: "The details"
+        accent: "gv"
+        items:
+          - "Others: first names, or none"
+          - "No outside issues or promotion"
+          - "Original and unpublished"
+          - "A length that fits the magazine"
+          - "A title and my contact details"
+          - "Read it aloud, or have a sponsor read it"
+    minutes: 1.5
+    version_minutes: { short: 2.5 }
+    notes: |
+      SAY: Here's a checklist for revising. On the left, the story itself: is it one story? Does the first line start in the action? Is it clear early that I'm an alcoholic and an AA member? Am I showing more than telling? Is it my experience, not advice? Is there hope in it? On the right, the details: other people protected, no outside issues or promotion, original work, about the right length, a title, and my contact details for the office. And the last item is the one members swear by: read it aloud, or ask your sponsor or a friend in the program to read it. They'll tell you if it rings true. Then send it.
+      DO: Point to the printed checklist. On Zoom, paste the link to this presentation or the committee's contribute page in the chat.
+      FACILITATOR TIP: This slide is also the revision handout: print one per person; the Spanish version is with the handouts in the facilitator section ({ui:customize} → {ui:prepare}). Don't let the checklist become a reason not to send: 'good enough and sent' carries the message; 'perfect and in a drawer' doesn't.
+      {not:short} TRANSITION: 'Let's use it right now.'
+      {only:short} TRANSITION: 'When you're ready, here's where to send it.'
+    version_notes:
+      short: "90-MINUTE PLAN: Exercise 4 is done at home (it is left out of this version): invite people to use this checklist before they send their story, then go on to how to submit."
+
+  - id: "exercise-4"
+    layout: "activity"
+    eyebrow: "Exercise 4 of 4"
+    title: "Revise and give it a title"
+    steps:
+      - "Choose your favorite draft from today"
+      - "Run the checklist and circle one thing to fix"
+      - "Rewrite your first line so it starts in the moment"
+      - "Give it a title; write the theme and deadline at the top"
+      - "In pairs: read your new first line and title (1 minute each)"
+    duration: 8
+    materials: ["Your drafts", "Revision checklist handout"]
+    takeaway: "**Share back:** What is one next step for your story this week?"
+    minutes: 8
+    notes: |
+      SAY: Last exercise, and it's short. Choose your favorite draft from today. Run down the checklist and circle one thing to fix; just one. Then rewrite your first line so it starts in the moment. Then give your story a title and write the theme and deadline at the top of the page, so future-you knows where it's going. Five minutes. Begin.
+      DO: 5-minute timer, then pairs for 1 minute each (Zoom: breakout rooms of two, 3 minutes). Debrief: invite two or three people to say their next step out loud. Let people choose freely; nobody is asked to promise anything.
+      FACILITATOR TIP: In the 90-minute plan, skip this exercise (the 90-minute version leaves it out): show the checklist, and invite people to do this at home before they send their story.
+      EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Elige tu borrador favorito de hoy. Repasa la lista de revisión y encierra en un círculo una sola cosa para mejorar. Vuelve a escribir tu primera línea para que empiece en el momento. Ponle un título y escribe arriba el tema y la fecha límite. En parejas: lee tu nueva primera línea y tu título (1 minuto cada uno). Para compartir: ¿Cuál es un próximo paso para tu historia esta semana? (La lista de revisión en español está en la sección para facilitadores.){/lang}
+      TIME SPLIT: 5 writing, 2 in pairs, 1 debrief (10 with the checklist slide).
+      TRANSITION: 'When you're ready, here's where to send it.'
+
+  # Shown AND printed: the deck's notes have it printed for everyone, with the story planner and the checklist. Its
+  # takeaway was Grapevine blue in the deck (under a navy "Current information" eyebrow), as on "Record your story".
+  - id: "how-to-submit"
+    layout: "table"
+    handout: true
+    accent: "gv"
+    eyebrow: "Current information"
+    title: "How to submit"
+    header: ["", "Grapevine: in English", "La Viña: in Spanish"]
+    rows:
+      - ["Online", "[aagrapevine.org/submit-your-story](https://www.aagrapevine.org/submit-your-story)", "[aalavina.org/comparte](https://www.aalavina.org/comparte)"]
+      - ["Email", "[gveditorial@aagrapevine.org](gveditorial@aagrapevine.org)", "[manuscritoslv@aagrapevine.org](manuscritoslv@aagrapevine.org)"]
+      - ["Mail", "Grapevine, Editorial Dept.\n475 Riverside Drive\nNew York, NY 10115", "La Viña\n475 Riverside Drive, Suite 1100\nNew York, NY 10115"]
+    widths: [1.1, 3.4, 3.3]
+    first_col_bold: true
+    takeaway: "Send each story once (form or email), and keep a copy."
+    source: "Sources: aagrapevine.org/contact-us; aalavina.org/guia-para-contribuciones."
+    minutes: 1.5
+    notes: |
+      SAY: Writing in English? It goes to Grapevine. The fastest way is the online form at aagrapevine.org/submit-your-story. You can also email it to gveditorial@aagrapevine.org, or mail it to the Editorial Department at 475 Riverside Drive in New York. Writing in Spanish? It goes to La Viña: the online form at aalavina.org/comparte, or email manuscritoslv@aagrapevine.org, or mail it to La Viña at the same address, Suite 1100. Two things: send each story once, by the form or by email but not both, and keep a copy, because manuscripts aren't returned.
+      DO: Leave this slide up a little longer; people copy addresses. Tell them it's also on their handout and on the committee's contribute page. Spell the La Viña address aloud, 'manuscritos L V', all one word, with a lowercase L: on screen it can look like a capital I.
+      FACILITATOR TIP: For a story in Spanish, the committee gives manuscritoslv@aagrapevine.org; La Viña's web form, aalavina.org/comparte, works too. A recorded story sent as a file goes to the same address (slide {slide:record}). Do not use 'manuscritos@aagrapevine.org' from an older committee deck: it is wrong. If someone handwrote their story today and wants to mail it, the addresses are on the handout.
+      UPDATE: check the addresses on aagrapevine.org/contact-us and aalavina.org/guia-para-contribuciones once a year; if one changes, edit this slide, the 'Record your story' slide ({slide:record}) and the Spanish handout ({ui:customize} → {ui:edit}).
+      TRANSITION: 'What should you include?'
+    version_notes:
+      short: "90-MINUTE PLAN: How to submit through Where to find it all take about 6 minutes (8 in the full plan)."
+
+  - id: "what-to-include"
+    layout: "bullets"
+    title: "What to include"
+    items:
+      - "Your story with a title: typed, or clearly handwritten on one side of the page"
+      - "Your full name, address, phone and email (for the editors only)"
+      - "How your name should appear: first name and last initial, initials only, or _Anonymous_"
+      - "Writing for a theme? Mention which one"
+      - "Photos or art: high-resolution JPEG, 300 dpi"
+      - "Your own, unpublished work, not sent anywhere else"
+    source: "Sources: aagrapevine.org (guidelines; submit-your-story); aalavina.org/guia-para-contribuciones."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Here's what goes with your story. A title. Your full name, address, phone and email, which, again, the editors keep to themselves. How you'd like your name to appear. If you wrote for a theme, mention it. Photos and art go in as high-resolution JPEGs, 300 dpi. On Grapevine's online form you confirm that the work is your own and accept a copyright transfer: if your story is accepted, its copyright passes to AA Grapevine, Inc. La Viña sends a letter to sign the copyright release if your story is accepted.
+      ASK: Anyone planning to mail a handwritten story? (Make sure they have the address from the handout.)
+      FACILITATOR TIP: Each writer sends their own story, with their own contact details. Never send a story for someone else without their consent, and the committee does not collect stories to send in bulk. Grapevine's form also asks you to confirm the story hasn't been published and isn't being considered anywhere else. La Viña's web form also takes photos and illustrations.
+      TRANSITION: 'What happens after you send it?'
+
+  # Grapevine blue in the deck: the colour of its first column (eyebrow and takeaway).
+  - id: "after-you-send"
+    layout: "columns"
+    style: "panels"
+    accent: "gv"
+    title: "After you send it"
+    columns:
+      - heading: "Grapevine"
+        accent: "gv"
+        items:
+          - "You hear back **only if** your story is selected"
+          - "No rejection letters; stories stay on file"
+          - "At least three staff read each story"
+      - heading: "La Viña"
+        accent: "lv"
+        items:
+          - "An acknowledgment for every submission"
+          - "If chosen: a copyright release to sign, and the publication date"
+          - "A free copy of the issue with your story"
+    takeaway: "We can't promise publication: the editors decide."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Here's what to expect. Grapevine's editors contact you only if your story is selected. There are no rejection letters; stories are kept on file, and some are used in later issues. At least three staff members read every story. La Viña sends every writer an acknowledgment that the story arrived, and if yours is chosen, a letter with the copyright release and the date it will appear. Both magazines receive several hundred submissions a month, so the waiting is normal. I can't promise anyone publication; nobody here can. The editors decide, and the Conference Charter protects their right to accept or reject material. Our part is to write it and send it. After that, we let it go.
+      ASK: How might it feel to wait months without hearing anything? (Invite one answer; suggest writing the next story while you wait.)
+      FACILITATOR TIP: If someone is published, the committee loves to hear about it: published members can tell us at grapevine@neta65.org. We mention them only as the magazine printed them, and only with their permission. Stories are chosen after discussion and the consensus of the editorial staff (P-52).
+      TRANSITION: 'A word on editing and rights.'
+
+  - id: "editing-rights"
+    layout: "bullets"
+    title: "Editing, rights and thanks"
+    items:
+      - "Stories are lightly edited for clarity, style and length"
+      - "Once a story is published, it isn't changed"
+      - "If a story is accepted, its copyright passes to AA Grapevine, Inc."
+      - "No payment: published writers receive a free copy of the issue"
+      - "The editors choose; the Conference Charter protects their right to accept or reject"
+    source: "Sources: Grapevine Editorial Policy (aagrapevine.org); aagrapevine.org/submit-your-story; The A.A. Service Manual, 2024–2026, p. 81; aalavina.org/guia-para-contribuciones."
+    minutes: 1
+    version_minutes: { short: 0.5 }
+    notes: |
+      SAY: Some writers worry their story will be rewritten. Grapevine's editorial policy says stories are edited lightly, for clarity, style and length, and they aren't changed once they're published. When a story is accepted, its copyright goes to AA Grapevine, Inc. Grapevine's and La Viña's books are collections of stories first published in their pages, so a story can keep carrying the message long after its issue. There's no payment. Published writers receive a copy of the issue. That fits who we are: the story is a gift, the same way a share is.
+      ASK: Any questions about editing or rights? (If a question goes beyond these points, say you don't know and suggest asking the magazine directly; don't guess.)
+      FACILITATOR TIP: For questions you can't answer, the Grapevine office's customer service is customerservice@aagrapevine.org (in Spanish, preguntas@aagrapevine.org).
+      TRANSITION: 'And if writing isn't your thing, you can talk instead.'
+
+  # The two story lines the deck typed in come from the site's data ({live:gv_audio_phone}, {live:lv_audio_phone}: the
+  # numbers its Share your story page gives from the two official audio pages). Its takeaway was Grapevine blue in
+  # the deck (under a navy "Current information" eyebrow), as on "How to submit".
+  - id: "record"
+    layout: "table"
+    accent: "gv"
+    eyebrow: "Current information"
+    title: "Rather talk than write? Record your story"
+    header: ["", "Grapevine Audio Project", "La Viña: {lang:es}_Graba tu historia_{/lang}"]
+    rows:
+      - ["Length", "6–8 minutes, one topic", "Up to 7 minutes"]
+      - ["By phone", "**{live:gv_audio_phone}**: 1 to record, # to finish, 1 to save, 2 for permission", "**{live:lv_audio_phone}**: 1 to record; your name and phone, then the permission statement"]
+      - ["Or a file", "WAV or MP3 to webcoord@aagrapevine.org", "WAV or MP3 to manuscritoslv@aagrapevine.org"]
+    widths: [1.3, 3.45, 3.45]
+    first_col_bold: true
+    takeaway: "Neither magazine collects recordings of speakers at AA meetings or events."
+    minutes: 1.5
+    notes: |
+      SAY: Some of us are talkers, not writers, and both magazines welcome recorded stories. Grapevine's Audio Project takes stories of six to eight minutes on one topic, told the way you'd share in a meeting. Call the number on the screen, press 1 to hear tips and record after the tone, press pound when you're done, 1 to save, and 2 to give Grapevine permission to use it. Or record on your phone and email the file. Stories the editors accept go on AA Grapevine's YouTube channel. La Viña's '{lang:es}Graba tu historia{/lang}' takes recordings of up to seven minutes: call its line, press 1, begin as you would in a meeting, give your name and phone number, and read aloud the permission statement on its instructions page. You can also email the file to La Viña. Recorded stories go through the same editorial process as written ones.
+      DO: Write both numbers on a whiteboard or paste them in the chat.
+      FACILITATOR TIP: Test both lines before the workshop: the Grapevine line was reported down in May 2026. Instructions are at aagrapevine.org/audio-portal and aalavina.org/instrucciones-graba-tu-historia; long-distance charges may apply on La Viña's line. Don't record anyone at the workshop for this; each member records on their own, by their own choice. Don't mention a subscription requirement: the current audio page doesn't state one.
+      UPDATE: nothing to change by hand for the two numbers: they come from the two pages above through the committee's website (its Share your story page). The menus are as those pages gave them in October 2026; if one changes, edit this slide ({ui:customize} → {ui:edit}).
+      TRANSITION: 'Everything we've covered is in a few places online.'
+
+  - id: "find-it-all"
+    layout: "resources"
+    title: "Where to find it all"
+    links:
+      - { label: "Grapevine: share your story", url: "https://aagrapevine.org/contribute", note: "Themes, guidelines, the online form" }
+      - { label: "La Viña: {lang:es}guía para contribuir{/lang}", url: "https://aalavina.org/guia-para-contribuciones", note: "{lang:es}Pautas, temas, el formulario{/lang}" }
+      - { label: "Grapevine Audio Project", url: "https://aagrapevine.org/audio-portal", note: "Record by phone, in English" }
+      - { label: "La Viña: {lang:es}Graba tu historia{/lang}", url: "https://aalavina.org/graba-tu-historia", note: "{lang:es}Graba por teléfono, en español{/lang}" }
+      - { label: "Our committee: share your story", url: "/contribute/", note: "Deadline countdowns, tips, workshops" }
+      - { label: "Committee email", url: "grapevine@neta65.org", note: "Questions, or to host a workshop" }
+    minutes: 1
+    version_minutes: { short: 0.5 }
+    notes: |
+      SAY: Here is everything in one place. Grapevine's contribute page has the themes, the guidelines and the online form. La Viña's guide for contributors has the same in Spanish. The two audio pages explain how to record by phone. Our committee's contribute page brings it all together, with a countdown to every deadline, writing tips and how to host a workshop like this one at your group. And if you have questions, write to the committee at grapevine@neta65.org.
+      DO: Leave the slide up during Q&A if you like, so people can copy the addresses.
+      FACILITATOR TIP: These links were checked in October 2026. Before each workshop, click each one once.
+      TRANSITION: 'Before we take questions, a word about self-support.'
+
+  # ---------------------------------------------------------------- Closing (pptx 44–48)
+  # The closing slides keep the deck's own colours: this one navy (accent="navy" in the generator), the Q&A grape,
+  # the Responsibility Statement a quotation (grape), the credits Grapevine blue.
+  - id: "self-support"
+    layout: "bullets"
+    accent: "navy"
+    eyebrow: "Closing"
+    title: "Self-support: the Seventh Tradition"
+    items:
+      - "This workshop is supported by AA members' own contributions, through {fill:supported_by}"
+      - "A basket passed today supports {fill:basket_for}, not Grapevine"
+      - "AA Grapevine, Inc. accepts no contributions: subscriptions, books and other items support the magazines, and the General Service Board covers La Viña's shortfall"
+      - "To read or give the magazines: [{live:site}/shop/](/shop/) (links to both official stores)"
+    takeaway: "Grapevine and La Viña are supported by members who buy and use them in Twelfth Step work."
+    source: "Sources: The A.A. Service Manual, 2024–2026, p. 66; F-3, Self-Support (June 2026), pp. 12–13."
+    minutes: 0.5
+    notes: |
+      SAY: A word about money, because the Seventh Tradition matters here too. Today's workshop is supported by AA members' own contributions, through {fill:supported_by}. If a basket is passed, it goes to {fill:basket_for}, not to Grapevine: AA Grapevine, Inc. doesn't accept contributions. The magazines are supported by members who buy and use them in their Twelfth Step work.
+      DO: Follow the host group's custom about the basket. Never pass a basket 'for Grapevine', and don't sell anything at the workshop beyond what the host group has agreed to.
+      FACILITATOR TIP: Never call a subscription a 'contribution to Grapevine'. A group subscription is an ordinary group expense, decided by the group conscience (F-3). La Viña is not yet self-supporting; its shortfall is covered by the General Service Board. Don't put prices on this slide: they change, and the shop page updates itself every day. Keep an informative attitude, not a 'hard sell' (1960 Advisory Action).
+      UPDATE: the two bracketed items, for each workshop ({ui:customize} → {ui:your_details}).
+      TRANSITION: 'Let's open it up for questions.'
+    version_notes:
+      short: "90-MINUTE PLAN: self-support, Q&A and closing take about 6 minutes (7 in the full plan)."
+
+  # No eyebrow in the deck; "Closing", as on the slides before and after it, rather than the part's ("Part 6 · Revise
+  # and send").
+  - id: "questions"
+    layout: "qa"
+    accent: "grape"
+    eyebrow: "Closing"
+    title: "Questions & answers"
+    prompts:
+      - "What questions do you have about writing or sending your story?"
+      - "Which theme or department will you write for next?"
+      - "What would help you finish: a writing partner, a sponsor's read, another workshop?"
+    note: "Please keep shares short so everyone has a turn."
+    minutes: 4.5
+    version_minutes: { short: 3.5 }
+    notes: |
+      SAY: We have a few minutes for questions and sharing. Ask anything about writing, sending or recording your story. And if you're willing, tell us which theme or department you'll write for next. Saying it out loud is a good way to make it happen.
+      DO: Read questions from the Zoom chat aloud. Keep each share to about a minute. If a question needs a long answer, offer to talk afterwards.
+      FACILITATOR TIP: If you don't know an answer, say so and point to the official page or to customerservice@aagrapevine.org; don't guess. Questions about one member's personal situation are best answered privately after the workshop.
+      TRANSITION: 'Let's close together.'
+
+  - id: "responsibility"
+    layout: "quote"
+    accent: "grape"
+    eyebrow: "Closing"
+    title: "We close together"
+    quote: "I am responsible. When anyone, anywhere, reaches out for help, I want the hand of A.A. always to be there. And for that: I am responsible."
+    credit: "— Responsibility Statement, written for the 1965 International Convention, Toronto"
+    minutes: 1
+    notes: |
+      SAY: Thank you all for your willingness today. Every story you write is a hand reaching out to someone you'll never meet. Fittingly, this statement was written for the 1965 International Convention by a former Grapevine editor. Please join me in the Responsibility Statement. (Read it together, slowly.)
+      DO: Read the text exactly as shown, word for word. If the host group closes differently, follow its custom.
+      FACILITATOR TIP: Give no author's name; 'a former Grapevine editor' is enough.
+      TRANSITION: Move to the last slide and leave it up while people leave.
+
+  # The committee meeting's day, time, Zoom ID and passcode were typed into the deck; here they come from
+  # config/site.yml `meeting:` at every build.
+  - id: "thank-you"
+    layout: "closing"
+    title: "Thank you, and keep writing"
+    message: "Your story could be what another alcoholic needs."
+    lines:
+      - "NETA 65 Grapevine & La Viña Committee"
+      - "{live:email} · {live:site}"
+      - "Committee meeting: {live:meeting_rule}, {live:meeting_time}, on Zoom"
+      - "Zoom ID {live:meeting_zoom_id} · passcode {live:meeting_passcode} · All AA members welcome"
+    minutes: 1
+    notes: |
+      SAY: Thank you for coming, and thank you to {fill:host_group} for hosting. Please take your handouts and your drafts home, and send your story when it's ready. If you'd like help, or you'd like to host a workshop at your group, write to us at grapevine@neta65.org. Our committee meets on Zoom {live:meeting_rule}, {live:meeting_time}; every AA member is welcome, no registration needed. Keep writing.
+      DO: Leave this slide up while people leave. Stay a few minutes for private questions. Collect any feedback in person, not on a sign-in sheet with names.
+      FACILITATOR TIP: The next slide lists the sources and the disclaimer; it stays in the show because this presentation is posted publicly, and it is the last slide of the show. The facilitator pages after it are never projected ({ui:customize} → {ui:prepare}).
+      TRANSITION: End of the workshop.
+
+  # "TIME: Not presented." in the deck: the slide stays in the show (the presentation is public, and this is where its
+  # sources and disclaimer are), with the smallest time the player takes. Its start is the agenda's "We finish".
+  - id: "credits"
+    layout: "credits"
+    accent: "gv"
+    eyebrow: "Closing"
+    title: "Credits & sources"
+    sources:
+      - "aagrapevine.org: contribute, guidelines (rev. April 2019), submit-your-story, editorial policy, audio-portal, history"
+      - "aalavina.org: {lang:es}guía para contribuciones, enviar a La Viña, temas sugeridos, graba tu historia, Pautas{/lang} (2020), {lang:es}Temas{/lang} 2027"
+      - "Grapevine Editorial Calendar 2026–27; GVR Workbook (2026); Writing Workshop Guidelines"
+      - "A.A.W.S.: Service Manual 2024–2026; P-52; P-47 (Sept. 2026); SMF-197; F-3 (June 2026); M-39"
+      - "Preamble: Copyright © by AA Grapevine, Inc.; reprinted with permission. Responsibility Statement: 1965 International Convention, Toronto"
+    note: |-
+      Presented by the NETA 65 Grapevine & La Viña Committee; not an official AA Grapevine, Inc. presentation. Dates and deadlines as of {live:as_of}.
+      Grapevine and La Viña are trademarks of AA Grapevine, Inc. The names are used only to identify the magazines; no logos, covers or artwork are reproduced.
+      This presentation was prepared by the NETA 65 Grapevine & La Viña Committee for local service use. It is not AA Conference-approved literature and does not speak for AA as a whole or for AA Grapevine, Inc.
+    minutes: 0.25
+    # DO: the deck's "because the deck and its PDF are posted publicly" → "because this presentation is posted
+    # publicly" (the site never says "PDF").
+    notes: |
+      SAY: (Not presented: this slide follows the Thank-you slide.) If anyone asks where the facts come from: everything in this workshop comes from these sources, the magazines' own pages and guidelines and AA's service literature. This workshop was prepared by our Area committee for local service. It isn't Conference-approved literature, it isn't an official AA Grapevine, Inc. presentation, and it doesn't speak for AA as a whole. When in doubt, the magazines' own pages are the final word.
+      DO: Leave the Thank-you slide up at the end; show this one only if someone asks. It stays in the show, visible, because this presentation is posted publicly.
+      FACILITATOR TIP: The quoted A.A.W.S. passages carry their credit lines on their own slides. Grapevine and La Viña material is paraphrased, never pasted; no logos, covers or artwork appear anywhere in this presentation.
+      TRANSITION: End of the show. The facilitator section follows ({ui:customize} → {ui:prepare}).
+
+  # ---------------------------------------------------------------- For facilitators (pptx 49–59, hidden in the deck)
+  # Never projected: Customize → Prepare. The deck's "TIME: Not presented." lines are gone (no minutes), and its
+  # PowerPoint printing steps (File > Print, "Print Hidden Slides", Google Slides' "Include skipped slides") are now
+  # "Customize → Prepare → Print".
+  - id: "facilitators"
+    layout: "section"
+    facilitator: true
+    number: "A"
+    accent: "navy"
+    title: "For facilitators"
+    subtitle: "Preparation, supplies, Zoom, timing and the handouts"
+    notes: |
+      SAY: This section is for whoever leads the workshop. Its pages are never projected: they are in {ui:customize} → {ui:prepare}. It covers what to do before the day, the supplies for an in-person workshop, how to run the exercises on Zoom, a 90-minute and a 120-minute timing plan, the printable handouts in English and Spanish, and how to keep this presentation up to date.
+      FACILITATOR TIP: Read these pages a week before the workshop, and again the day before. Workshops follow AA Grapevine's own Writing Workshop Guidelines (aagrapevine.org/gvr-resources): an hour and a half to two hours, a well-lit room, pens and paper, sharing for inspiration, writing time, and reading aloud for anyone who wants to.
+      TRANSITION: Before the day.
+
+  - id: "before-the-day"
+    layout: "bullets"
+    facilitator: true
+    checklist: true
+    eyebrow: "For facilitators"
+    title: "Before the day"
+    items:
+      - "Agree on date, place or Zoom link, language and format with the host group or district: they decide"
+      - "Invite at meetings and by flyer; consider inviting a published member to share about writing"
+      - "Fill in the marked items: all orange text ({ui:customize} → {ui:your_details}); themes, deadlines, the audio lines and the agenda's times stay current by themselves"
+      - "Call both story lines to test them"
+      - "Print the handouts for everyone, in English and in Spanish"
+      - "Free printed materials: email gvrc@aagrapevine.org 4–6 weeks ahead (may be limited to larger events; ask)"
+    notes: |
+      SAY: Workshops happen because a group or district asks for one, and the host decides the date, the place, the language and the format; the committee suggests and supports. Invite people at meetings and with a flyer; the committee can help with one. Some workshops invite a member whose story was published to share about the experience of writing. If you do, introduce them by first name only, and have them share their experience rather than read the published story from a screen. Fill in the marked items, test both phone lines, and print the handouts for each person, plus a few large-print copies ({ui:customize} → {ui:prepare} → {ui:print}). English: the story planner (two pages), the revision checklist ({slide:checklist}) and 'How to submit' ({slide:how-to-submit}). Spanish: the {lang:es}planificador{/lang}, the {lang:es}lista de revisión{/lang} and '{lang:es}Cómo enviar tu historia a La Viña{/lang}'.
+      DO: For free printed materials, email gvrc@aagrapevine.org 4 to 6 weeks ahead with your name, Area, service position and contact details, and the event's name, date and expected attendance. Ask whether your event qualifies: printed materials may be limited to larger events, so don't count on them for a small workshop.
+      FACILITATOR TIP: Don't promise the host a published story or a number of submissions. Our part is the invitation and the room.
+      PREPARATION: about an hour, a week ahead.
+      TRANSITION: Supplies and Zoom.
+
+  - id: "supplies"
+    layout: "columns"
+    style: "panels"
+    facilitator: true
+    eyebrow: "For facilitators"
+    title: "Supplies, room and Zoom"
+    columns:
+      - heading: "In person"
+        accent: "navy"
+        items:
+          - "Paper, pens, clipboards"
+          - "A visible timer or a bell"
+          - "Handouts, some in large print"
+          - "Current issues to pass around"
+          - "Envelopes for mailed stories"
+          - "Good light, a quiet room"
+      - heading: "On Zoom"
+        accent: "gv"
+        items:
+          - "A co-host runs breakout pairs"
+          - "Rename: first name, last initial"
+          - "No screenshots; no recording"
+          - "Prompts in the chat for callers"
+          - "Odd number: one room of three"
+          - "Handouts by link, not attachment"
+    # SAY: the deck's breakout rooms "assigned automatically" → "assigned at random by Zoom" (wording rules).
+    notes: |
+      SAY: In person: lined paper, pens, a few clipboards for people without a table, a visible timer or a bell, the printed handouts, a few current issues to pass around, and a few envelopes for members who want to mail a handwritten story. Choose a well-lit, quiet room. On Zoom: make a trusted servant co-host to run breakout rooms of two, assigned at random by Zoom, with the countdown turned on and a one-minute broadcast warning. At the start, ask everyone to rename to a first name and last initial and remind them: no screenshots and no recording. Don't record the session yourself. Paste each exercise prompt into the chat, because members calling in by phone can't see the slides. With an odd number, make one room of three, or have the co-host pair up.
+      FACILITATOR TIP: Accessibility: read every prompt aloud, offer large-print handouts, and let anyone who prefers to talk use the audio options instead of writing. Zoom is named here only as the platform the committee uses.
+      TRANSITION: Timing.
+
+  # The deck's TIMING plan. Each segment's slides add up to its row: `minutes` for the full plan, `version_minutes`
+  # (else `minutes`) of the "short" version for the 90-minute one. Change a slide's time and its row together.
+  - id: "timing"
+    layout: "table"
+    facilitator: true
+    eyebrow: "For facilitators"
+    title: "Timing: about 2 hours, or 90 minutes"
+    header: ["Segment (minutes)", "Full: 115", "Short: 84 (+6 spare)"]
+    rows:
+      - ["Welcome, Preamble, safe room, agenda", "9", "7"]
+      - ["Parts 1–3: why we write, what they publish, themes", "18", "12"]
+      - ["Exercise 1 · Part 4 (a strong story) · Exercise 2", "35", "28"]
+      - ["Break", "7", "5"]
+      - ["Part 5 (anonymity) · Exercise 3", "21", "17"]
+      - ["Part 6: checklist, Exercise 4, submit, record", "18", "9 (Exercise 4 at home)"]
+      - ["Self-support, Q&A, closing", "7", "6"]
+    widths: [5.4, 1.2, 3.0]
+    first_col_bold: true
+    notes: |
+      SAY: Two plans. The full plan runs about 115 minutes and leaves a few minutes of slack in a two-hour slot. The 90-minute plan trims the talking, shortens the break to 5 minutes, and leaves Exercise 4 for home: show the revision checklist and invite people to use it before they send their story. Never cut the pair sharing entirely; it's where people discover their story is worth telling. If you are running short, trim the slides in Parts 1 and 2 rather than the writing time. In detail, full (and 90-minute) minutes: Welcome, Preamble, safe room, agenda – 9 (7); Parts 1–3: why we write, what they publish, themes – 18 (12); Exercise 1 (warm-up) – 10 (8); Part 4: what makes a strong story – 11 (8); Exercise 2 – 14 (12); Break – 7 (5); Part 5: anonymity in your writing – 6 (5); Exercise 3 – 15 (12); Revision checklist and Exercise 4 – 10 (3); Submit, record, after you send – 8 (6); Self-support, Q&A and closing – 7 (6).
+      DO: Assign one trusted servant to keep time, separate from the presenter.
+      FACILITATOR TIP: These minutes match the agenda slide (minutes from the start), the exercises' time cards and the TIME line in each slide's notes, in both plans: choose the version you present ({ui:customize} → {ui:version}), the full plan or the 90-minute one with Exercise 4 left out, and this presentation works the times out for it and for the slides you switch off ({ui:customize} → {ui:slides}). The split of each exercise in its notes (TIME SPLIT) is the full plan's; in 90 minutes, keep the writing time and shorten the pairs and the debrief.
+      TRANSITION: The story planner handout.
+
+  # The printable pages (white paper, no footer in the deck): three boxes to write in; page 2's writing lines
+  # ("My first line:", "My title:") are its bottom box.
+  - id: "planner-1"
+    layout: "columns"
+    style: "cards"
+    facilitator: true
+    handout: true
+    eyebrow: "Handout · print both pages for each person"
+    title: "Story planner (1 of 2)"
+    columns:
+      - heading: "Who was there?"
+        accent: "navy"
+        text: "First names only, or none"
+      - heading: "Where and when?"
+        accent: "navy"
+        text: "One place, one time"
+      - heading: "What happened?"
+        accent: "navy"
+        text: "The moment itself, step by step"
+    notes: |
+      SAY: (Not presented.) This is page 1 of the story planner handout; print both pages for each person. It follows the questions from the single-scene slide: who, where and when, what happened, what it was like before, what it's like now, and why it matters. Page 2 ends with lines for the writer's first line and title, which they fill in during Exercise 4.
+      DO: Print both planner pages ({ui:customize} → {ui:prepare} → {ui:print}) with the revision checklist ({slide:checklist}) and 'How to submit' ({slide:how-to-submit}). Letter-size paper, landscape. The two planner pages can go double-sided.
+      FACILITATOR TIP: The planner is a help, not a form: some writers will ignore it and just write, and that's perfect.
+      TRANSITION: Page 2 of the planner.
+
+  - id: "planner-2"
+    layout: "columns"
+    style: "cards"
+    facilitator: true
+    handout: true
+    eyebrow: "Handout · print both pages for each person"
+    title: "Story planner (2 of 2)"
+    columns:
+      - heading: "What was it like before?"
+        accent: "navy"
+        text: "A few true details"
+      - heading: "What is it like now?"
+        accent: "navy"
+        text: "What's different today"
+      - heading: "Why does it matter?"
+        accent: "navy"
+        text: "To you, and to a reader"
+    takeaway: |-
+      **My first line:**
+
+      **My title:**
+    notes: |
+      SAY: (Not presented.) Page 2 of the story planner: what it was like before, what it's like now, why it matters, and lines for the first line and the title. Writers fill in the first line and the title during Exercise 4, or at home in the 90-minute plan.
+      DO: Print it with page 1 ({ui:customize} → {ui:prepare} → {ui:print}). Letter-size paper, landscape. The two planner pages can go double-sided.
+      TRANSITION: The Spanish handouts.
+
+  # ---- The Spanish handouts: in Spanish, as in the deck (La Viña first), so `lang: "es"` (the player marks them as
+  # Spanish); their notes stay in English.
+  - id: "planificador-1"
+    layout: "columns"
+    style: "cards"
+    facilitator: true
+    handout: true
+    lang: "es"
+    eyebrow: "Para imprimir · las dos páginas, una por persona"
+    title: "Planificador de tu historia (1 de 2)"
+    columns:
+      - heading: "¿Quién estaba allí?"
+        accent: "navy"
+        text: "Solo nombres de pila, o ninguno"
+      - heading: "¿Dónde y cuándo?"
+        accent: "navy"
+        text: "Un lugar, un momento"
+      - heading: "¿Qué pasó?"
+        accent: "navy"
+        text: "El momento mismo, paso a paso"
+    notes: |
+      SAY: (Not presented.) The story planner in Spanish, page 1 of 2, for members writing for La Viña: the same six questions as the English planner, in Latin-American Spanish with 'tú'.
+      DO: Print both pages ({ui:customize} → {ui:prepare} → {ui:print}) for each Spanish-speaking writer, with the {lang:es}lista de revisión{/lang} and '{lang:es}Cómo enviar tu historia a La Viña{/lang}'. Letter-size paper, landscape. The two planner pages can go double-sided.
+      TRANSITION: Page 2 of the Spanish planner.
+
+  - id: "planificador-2"
+    layout: "columns"
+    style: "cards"
+    facilitator: true
+    handout: true
+    lang: "es"
+    eyebrow: "Para imprimir · las dos páginas, una por persona"
+    title: "Planificador de tu historia (2 de 2)"
+    columns:
+      - heading: "¿Cómo era antes?"
+        accent: "navy"
+        text: "Algunos detalles verdaderos"
+      - heading: "¿Cómo es ahora?"
+        accent: "navy"
+        text: "Qué es diferente hoy"
+      - heading: "¿Por qué importa?"
+        accent: "navy"
+        text: "Para ti y para quien lo lea"
+    takeaway: |-
+      **Mi primera línea:**
+
+      **Mi título:**
+    notes: |
+      SAY: (Not presented.) Page 2 of the Spanish story planner: what it was like before, what it is like now, why it matters, and lines for the first line ('{lang:es}Mi primera línea{/lang}') and the title ('{lang:es}Mi título{/lang}').
+      DO: Print it with page 1 ({ui:customize} → {ui:prepare} → {ui:print}). Letter-size paper, landscape. The two planner pages can go double-sided.
+      TRANSITION: The Spanish revision checklist.
+
+  - id: "lista-de-revision"
+    layout: "columns"
+    style: "panels"
+    checklist: true
+    facilitator: true
+    handout: true
+    lang: "es"
+    eyebrow: "Para imprimir · una por persona"
+    title: "Lista de revisión"
+    columns:
+      - heading: "La historia"
+        accent: "vine"
+        items:
+          - "Un momento o un punto decisivo"
+          - "Una primera línea que empieza en la acción"
+          - "Queda claro que soy alcohólico y miembro de AA"
+          - "Muestro más de lo que cuento"
+          - "Experiencia, no consejos"
+          - "Esperanza: cómo es ahora"
+      - heading: "Los detalles"
+        accent: "lv"
+        items:
+          - "Otras personas: solo nombre de pila, o ninguno"
+          - "Sin asuntos ajenos ni promoción"
+          - "Original y sin publicar"
+          - "De 5 a 6 páginas a doble espacio"
+          - "Un título y mis datos de contacto"
+          - "Leerla en voz alta, o que mi padrino o madrina la lea"
+    notes: |
+      SAY: (Not presented.) The revision checklist in Spanish, for members writing for La Viña. It matches the English checklist on slide {slide:checklist}, with La Viña's length (five to six double-spaced pages) in place of 'a length that fits the magazine'.
+      DO: Print one per Spanish-speaking writer ({ui:customize} → {ui:prepare} → {ui:print}). Letter-size paper, landscape.
+      TRANSITION: How to send a story to La Viña, in Spanish.
+
+  # The deck's "datos de octubre de 2026" (eyebrow and source line) is gone: the player shows "Current as of <date>".
+  # La Viña's orange, as in the deck (its bullets and takeaway), and La Viña's story line from the site's data.
+  - id: "enviar-a-la-vina"
+    layout: "bullets"
+    facilitator: true
+    handout: true
+    lang: "es"
+    accent: "lv"
+    eyebrow: "Para imprimir · una por persona"
+    title: "Cómo enviar tu historia a La Viña"
+    items:
+      - "**En línea:** [www.aalavina.org/comparte](https://www.aalavina.org/comparte) (texto, fotos o ilustraciones)"
+      - "**Correo electrónico:** [manuscritoslv@aagrapevine.org](manuscritoslv@aagrapevine.org)"
+      - "**Correo postal:** La Viña, 475 Riverside Drive, Suite 1100, New York, NY 10115"
+      - "**Extensión:** de 5 a 6 páginas a doble espacio; a mano, con letra legible, de un solo lado y con espacio entre líneas"
+      - "**Incluye:** un título, tu nombre completo y tus datos de contacto (solo para la redacción), cómo quieres que aparezca tu nombre y el tema, si escribiste para uno"
+      - "**¿Prefieres grabarla?** _Graba tu historia:_ {live:lv_audio_phone}, hasta 7 minutos"
+    takeaway: "Envía cada historia una sola vez y guarda una copia."
+    source: "Fuentes: aalavina.org/guia-para-contribuciones; aalavina.org/graba-tu-historia."
+    notes: |
+      SAY: (Not presented.) How to send a story to La Viña, in Spanish: the web form, the email and postal addresses, the length, what to include, and the '{lang:es}Graba tu historia{/lang}' phone line. It is the Spanish counterpart of the 'How to submit' slide ({slide:how-to-submit}), with La Viña first.
+      DO: Print one per Spanish-speaking writer ({ui:customize} → {ui:prepare} → {ui:print}). Letter-size paper, landscape.
+      UPDATE: the addresses once a year, with the English slides ({ui:customize} → {ui:edit}); the phone line comes from the committee's website and stays current by itself, as on the 'Record your story' slide ({slide:record}).
+      TRANSITION: Keeping this presentation current.
+
+  # The deck's "Keeping this deck current" page, rewritten for the web: what stays current by itself and what the
+  # presenter fills in or checks. Its generator steps (WORKSHOP_DATE, GV_THEMES, LV_THEMES, the audio phones, TIMING,
+  # LAST_UPDATED, AS_OF, re-run) and its PowerPoint export tip ("Include hidden slides") were only about rebuilding
+  # the .pptx file, so they are gone.
+  - id: "keeping-current"
+    layout: "bullets"
+    facilitator: true
+    eyebrow: "For facilitators"
+    title: "Keeping this presentation current"
+    items:
+      - "Themes and deadlines: the theme slides ({slide:gv-themes}, {slide:lv-themes}) come from the committee's website and drop passed deadlines by themselves (check them against aagrapevine.org/contribute and aalavina.org/recursos); the exercise slides ({slide:exercise-1}, {slide:exercise-2}, {slide:exercise-3}) point to them"
+      - "Phone lines and addresses: slides {slide:how-to-submit} and {slide:record}, and the Spanish handouts; the two story lines' numbers come from the committee's website and stay current by themselves"
+      - "Title slide: your service title, the date, the host, in person or on Zoom ({ui:customize} → {ui:your_details}; your first name only in the notes)"
+      - "Agenda times follow the version and the slides you present; the break's return time and the Seventh Tradition line are in {ui:your_details}"
+      - "The \"Current as of\" date, and the committee meeting on the Thank-you slide ({slide:thank-you}), fill in by themselves"
+      - "Find every item to change: {ui:customize} → {ui:your_details} (an empty blank shows in orange)"
+    notes: |
+      SAY: Most of this presentation stays true for years. A few things change, and they are all marked. Slides with a 'Current information' eyebrow carry dates, deadlines, phone numbers or addresses; the themes, the deadlines and the two story lines on them come from the committee's website and stay current by themselves. Bracketed text in orange is a blank to fill in each time ({ui:customize} → {ui:your_details}). The themes come from Grapevine's editorial calendar and La Viña's annual themes list; both publish next year's themes early in the year, and the theme slides show them once the committee's website has them. The exercise slides point to the theme slides, so they stay in step with them. Never add prices to a slide: link to the committee's shop page, which updates itself every day.
+      DO: To change a slide for your workshop, use {ui:customize} → {ui:edit}: your changes stay on this device, and resetting the slide brings back the committee's version.
+      FACILITATOR TIP: Keep the presentation anonymous when you edit it: service titles only, first name and last initial at most, no personal phones or emails, no photos of people, and no Grapevine or La Viña logos, covers or artwork. The notes are public too. The facilitator pages (this section) are never projected.
+      TRANSITION: End of the presentation.

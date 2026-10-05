@@ -1,0 +1,169 @@
+{#- Base layout. Every page sets in front matter:
+      lang (via pagination alias), pageKey, titleKey (i18n key) or title, descKey/description,
+      optional: pageScripts [..], pageStyles [..], bodyClass, noHero
+    Every page starts with the shared hero, ui.pageHero (macros/ui.njk): the header is
+    transparent over it and turns solid on scroll. hero-canvas.js (the animated grapevine art
+    in that hero) is loaded here for every page — pages don't list it in pageScripts. -#}
+{%- set L = lang or "en" -%}
+{%- set pageTitle = (titleKey | t(L)) if titleKey else (title or "") -%}
+{%- set siteTitle = site | pick(L, "title") -%}
+{#- home: "Grapevine / La Viña — NETA 65 Committee" (the tagline would say Grapevine & La Viña twice) -#}
+{%- set fullTitle = (pageTitle + " · " + siteTitle + " — NETA 65") if (pageTitle and pageKey != "home") else (siteTitle + " — " + ("site.home_title_tail" | t(L))) -%}
+{%- set desc = (descKey | t(L)) if descKey else (description or ("site.description" | t(L))) -%}
+{%- set alt = page.url | altLangUrl(L) -%}
+<!doctype html>
+<html lang="{{ L }}" data-theme="light" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>
+    // Reading & display settings before the first paint (the "Aa" panel, app.js GV.prefs):
+    // localStorage "gvlv-prefs" = {text: 100|115|130|150, spacing: "normal"|"relaxed",
+    // contrast: "normal"|"high", motion: "auto"|"reduce", saver: "off"|"on"|"auto"} → data-text,
+    // data-spacing, data-contrast, data-motion and data-saver on <html> (main.css reacts to them).
+    // data-saver is "on" for saver "on", or for "auto" (the default) when the browser asks to save
+    // data, the connection is 2G or the device is offline. Blocked storage or bad JSON → the
+    // defaults; the page works either way.
+    (function (d) {
+      var p = {};
+      try { p = JSON.parse(localStorage.getItem("gvlv-prefs") || "{}") || {}; } catch (e) {}
+      var c = navigator.connection || {}, txt = String(p.text);
+      d.setAttribute("data-text", /^(115|130|150)$/.test(txt) ? txt : "100");
+      d.setAttribute("data-spacing", p.spacing === "relaxed" ? "relaxed" : "normal");
+      d.setAttribute("data-contrast", p.contrast === "high" ? "high" : "normal");
+      d.setAttribute("data-motion", p.motion === "reduce" ? "reduce" : "auto");
+      d.setAttribute("data-saver", p.saver === "on" || (p.saver !== "off" && (c.saveData === true || /^(slow-2g|2g)$/.test(c.effectiveType || "") || navigator.onLine === false)) ? "on" : "off");
+      // The body font, early (a preload competes with the stylesheet, so only this one: the display
+      // font has a measured fallback, main.css — except on the home page, whose big hero title in
+      // Fraunces would still move a little when it arrives). Not with Data saver on: the site then
+      // uses the fallback faces and the device's own fonts (areas/pwa.css).
+      if (d.getAttribute("data-saver") !== "on") {
+        ["{{ '/assets/fonts/inter-latin-wght-normal.woff2' | url }}"{% if pageKey == "home" %}, "{{ '/assets/fonts/fraunces-latin-opsz-normal.woff2' | url }}"{% endif %}].forEach(function (href) {
+          var f = document.createElement("link");
+          f.rel = "preload"; f.as = "font"; f.type = "font/woff2"; f.crossOrigin = "anonymous"; f.href = href;
+          document.head.appendChild(f);
+        });
+      }
+    })(document.documentElement);
+  </script>
+  <title>{{ fullTitle }}</title>
+  <meta name="description" content="{{ desc }}">
+  {%- if pageKey == "404" %}
+  {#- "Page not found" is served for every missing address; fetched directly as /404.html it
+      answers 200, so keep it out of search results and don't claim a canonical URL for it.
+      (The offline page, /offline/, is a page like the others — "Saved pages & app", with the
+      steps to install the site —, so it is indexed with its canonical and hreflang links: the
+      service worker's stand-in copy of it, shown for a page not saved yet, only ever exists on a
+      visitor's device, where no search engine reads it.) #}
+  <meta name="robots" content="noindex">
+  {%- else %}
+  <link rel="canonical" href="{{ page.url | siteUrl(site) }}">
+  <link rel="alternate" hreflang="{{ L }}" href="{{ page.url | siteUrl(site) }}">
+  <link rel="alternate" hreflang="{{ L | otherLang }}" href="{{ alt | siteUrl(site) }}">
+  <link rel="alternate" hreflang="x-default" href="{{ (alt if L == 'es' else page.url) | siteUrl(site) }}">
+  {%- endif %}
+  <link rel="alternate" type="application/rss+xml" title="{{ 'feeds.rss_title' | t(L) }}" href="{{ '/feed.xml' | lurl(L) }}">
+  {#- Installable app (src/pages/manifest.11ty.js, sw.11ty.js, assets/js/pwa.js): the manifest of the
+      page's language; address-bar colour = --c-gv-strong (light) / --c-paper (dark) — pwa.js keeps
+      both metas on the site's own theme choice; iPhone/iPad home-screen name and icon. #}
+  <link rel="manifest" href="{{ '/manifest.webmanifest' | lurl(L) }}">
+  <meta name="theme-color" content="#07457c" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121019" media="(prefers-color-scheme: dark)">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="GV/LV 65">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ siteTitle }} — NETA 65">
+  <meta property="og:title" content="{{ fullTitle }}">
+  <meta property="og:description" content="{{ desc }}">
+  {%- if pageKey != "404" %}
+  <meta property="og:url" content="{{ page.url | siteUrl(site) }}">
+  {%- endif %}
+  {#- the share picture: the page's own, else the committee's card in the page language (1200 × 630).
+      ?v=2: the card shows the site's address — a new ?v when it changes makes the apps that keep an
+      old copy of a preview (WhatsApp, Facebook, Slack…) fetch the new one -#}
+  <meta property="og:image" content="{{ (ogImage or ('/assets/img/og-default-es.png?v=2' if L == 'es' else '/assets/img/og-default.png?v=2')) | siteUrl(site) }}">
+  {%- if not ogImage %}
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ siteTitle }} — {{ 'site.tagline' | t(L) }}">
+  {%- endif %}
+  <meta property="og:locale" content="{{ 'es_US' if L == 'es' else 'en_US' }}">
+  <meta property="og:locale:alternate" content="{{ 'en_US' if L == 'es' else 'es_US' }}">
+  <meta name="twitter:card" content="summary_large_image">
+  {#- favicon.ico holds a 16px picture only: no sizes="any" (Chrome would prefer it over the 32px PNG on 2x screens) -#}
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/logo-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/logo-192x192.png">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon-180.png">
+  <script>
+    // Theme before paint (no flash): saved choice ("gvlv-theme", our own key: neta65.github.io is one
+    // origin shared by every Pages project, so a bare "theme" there belongs to another project) → OS
+    // preference. Only "dark" / "light" are ever applied.
+    // html.js: JS is on, so CSS can draw JS-folded blocks (digest tools, report box, kit groups)
+    // folded from the first paint.
+    document.documentElement.classList.add("js");
+    (function () {
+      var ok = function (v) { return v === "dark" || v === "light"; }, t = null;
+      try { t = localStorage.getItem("gvlv-theme"); } catch (e) {}
+      if (!ok(t)) { try { t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } catch (e) { t = "light"; } }
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+    window.SITE = { lang: "{{ L }}", base: "{{ '/' | url }}", tz: "{{ site.timezone }}" };
+    // A part of the page that changes at a set moment (macros/ui.njk ui.when: data-gv-when with data-gv-from /
+    // data-gv-expire — the price an announced change brings at midnight Central, "New prices since …") is set
+    // right while the page loads, before the first paint: a page built — or saved for offline use — before
+    // that moment and opened after it never shows the old state first, so nothing moves. app.js GV.expire does
+    // the same once the page is ready, every minute and when it is shown again (a page left open over the
+    // moment swaps then: a one-time reflow where the two states differ in height).
+    (function () {
+      if (!window.MutationObserver) return;
+      var AT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})$/, now = Date.now();
+      var past = function (v) { v = String(v || "").trim(); return AT.test(v) && Date.parse(v) <= now; };
+      var mo = new MutationObserver(function (records) {
+        for (var i = 0; i < records.length; i++) {
+          for (var j = 0; j < records[i].addedNodes.length; j++) {
+            var el = records[i].addedNodes[j];
+            if (el.nodeType !== 1 || !el.hasAttribute("data-gv-when")) continue;
+            if (past(el.getAttribute("data-gv-expire"))) { el.hidden = true; el.setAttribute("data-gv-expired", ""); }
+            else if (el.hidden && past(el.getAttribute("data-gv-from"))) { el.hidden = false; el.setAttribute("data-gv-started", ""); }
+          }
+        }
+      });
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+      document.addEventListener("DOMContentLoaded", function () { mo.disconnect(); });
+    })();
+  </script>
+  {#- ?v= = build.version (src/_data/build.js, a fingerprint of the site's code): new styles and
+      scripts get a new address, so no cache (browser or service worker) pairs a page with old ones. #}
+  <link rel="stylesheet" href="/assets/css/main.css?v={{ build.version }}">
+  {%- for s in pageStyles %}
+  <link rel="stylesheet" href="{{ s }}{{ '&' if '?' in s else '?' }}v={{ build.version }}">
+  {%- endfor %}
+</head>
+<body class="min-h-screen flex flex-col {{ bodyClass }}">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-lg focus:bg-gv focus:px-4 focus:py-2 focus:text-white">{{ "a11y.skip" | t(L) }}</a>
+
+  {% include "partials/header.njk" %}
+  {% include "partials/lang-banner.njk" ignore missing %}
+
+  <main id="main" class="flex-1" tabindex="-1">
+    {{ content | safe }}
+  </main>
+
+  {% include "partials/footer.njk" %}
+
+  <script src="/assets/js/app.js?v={{ build.version }}" defer></script>
+  {#- install-core.js: which phone and browser, the /offline/ guide for it and the install notice's
+      rules (window.GVInstall) — right before pwa.js, which draws them (without it: plain links to
+      the steps, /offline/#steps). #}
+  <script src="/assets/js/install-core.js?v={{ build.version }}" defer></script>
+  <script src="/assets/js/pwa.js?v={{ build.version }}" defer></script>
+  <script src="/assets/js/hero-canvas.js?v={{ build.version }}" defer></script>
+  {%- for s in pageScripts %}{% if s != "/assets/js/hero-canvas.js" %}
+  <script src="{{ s }}{{ '&' if '?' in s else '?' }}v={{ build.version }}" defer></script>
+  {%- endif %}{% endfor %}
+  <script src="/assets/vendor/alpine.min.js?v={{ build.version }}" defer></script>
+</body>
+</html>

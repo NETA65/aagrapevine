@@ -1,0 +1,29 @@
+{
+ "built": "2099-10-15T11:30:00Z",
+ "items": {
+  "fileWelcome01": {
+   "file": "filewe-welcome.png",
+   "bytes": 123456,
+   "type": "image/png",
+   "w": 1920,
+   "h": 1080
+  },
+  "fileTestimonio1": {
+   "file": "filete-testimonio.mp4",
+   "bytes": 9000000,
+   "type": "video/mp4"
+  },
+  "fileTeaser0001": {
+   "file": "filete-podcast-teaser.mp3",
+   "bytes": 500000,
+   "type": "audio/mpeg"
+  }
+ },
+ "skipped": [
+  {
+   "file_id": "fileBigVideo01",
+   "name": "Big video.mp4",
+   "reason": "too big"
+  }
+ ]
+}

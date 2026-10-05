@@ -1,0 +1,497 @@
+# =====================================================================
+#  Translation fixes. The site machine-translates titles and summaries
+#  (open-source Argos/OPUS-MT models). If one comes out wrong, add the
+#  exact original text and the translation you want. Overrides always win.
+#
+#  Format (quotes are safest):
+#    "Original text exactly as on the site": { es: "Spanish you want" }
+#    "Texto original en español":             { en: "English you want" }
+#  A fix for a whole title also fixes it when a " [Season …]" or
+#  " (Spanish)" tail follows, because those tails are translated apart.
+#  For a word or phrase that appears in many texts, use glossary.yml.
+# =====================================================================
+
+# --- English → Spanish ------------------------------------------------
+# Book of the Month (shop.json), checked by hand 2026-09-24: the English edition of La Viña's
+# "Frente a Frente" is "One on One"; "fire" is a house fire, not a gunshot.
+"Frente a Frente: El apadrinamiento en acción": { en: "One on One: AA Sponsorship in Action" }
+"No Matter What: Dealing With Adversity in Sobriety": { es: "Pase lo que pase: cómo enfrentar la adversidad en la sobriedad" }
+"All recovering alcoholics have had to deal with adversity throughout sobriety...a serious illness, an ugly divorce, the death of a child, the loss of a house to fire or to the bank. The stories in this book show how AA members use the tools of the program and embrace the Fellowship to deal with tough issues.": { es: "Todos los alcohólicos en recuperación han tenido que enfrentar la adversidad durante su sobriedad… una enfermedad grave, un divorcio difícil, la muerte de un hijo, la pérdida de una casa por un incendio o a manos del banco. Las historias de este libro muestran cómo los miembros de AA usan las herramientas del programa y se apoyan en la Comunidad para enfrentar situaciones difíciles." }
+"Detrás de cada historia de recuperación suele haber alguien que extendió una mano y compartió su experiencia. En Frente a Frente, miembros de AA relatan cómo el apadrinamiento les brindó esperanza, fortaleció su sobriedad y les enseñó a confiar, a pedir ayuda y a llevar el mensaje a otros alcohólicos.": { en: "Behind almost every recovery story is someone who reached out a hand and shared their experience. In Frente a Frente, AA members tell how sponsorship gave them hope, strengthened their sobriety and taught them to trust, to ask for help and to carry the message to other alcoholics." }
+"Retrofit Completion Return to Office": { es: "Finalización de la remodelación: regreso a la oficina" }
+"Laughing Our way to Jail": { es: "Riéndonos camino a la cárcel" }
+"Coming in": { es: "Llegando a AA" }                       # YouTube playlist
+"Sponsorship: “Willing to go to any length.”": { es: "Padrinazgo: “Dispuestos a llegar hasta donde sea necesario”" }
+"Introducing The Grapevine Open AA Meeting": { es: "Presentamos la Grapevine Open AA Meeting" }
+"GV Plays: “A Grapevine Christmas Carol”": { es: "Obras de GV: “Un cuento de Navidad de Grapevine”" }
+# Texas writers in the published-writers spotlight (home page), checked by hand 2026-09-23
+"A sober granddad survives a boozy holiday block party and gets to give the performance of a lifetime": { es: "Un abuelo sobrio sobrevive a una fiesta de barrio con mucho alcohol y logra dar la actuación de su vida" }
+"Willingness & a Little Glue": { es: "Buena voluntad y un poco de pegamento" }
+"I Finally Got The Message": { es: "Por fin entendí el mensaje" }
+"Coming to after a blackout, she discovered a missive to herself": { es: "Al volver en sí tras una laguna mental, descubrió una nota que se había escrito a sí misma" }
+"Relationships have nothing to do with recovery? Read on….": { es: "¿Las relaciones no tienen nada que ver con la recuperación? Sigue leyendo…" }
+# Reviewed 2026-09-24: machine translations that were wrong, vulgar or garbled.
+# Video / podcast titles and summaries
+"A BIG BOOK IS BORN: A timeline of the making of Alcoholics Anonymous’ first book": { es: "NACE UN LIBRO GRANDE: cronología de cómo se hizo el primer libro de Alcohólicos Anónimos" }
+"Date with higher power": { es: "Una cita con el Poder Superior" }
+"A Well-Whooped Ass": { es: "Una buena paliza" }
+"Hot Topic: Twelve-Step Calls": { es: "Tema candente: las visitas de Paso Doce" }
+"Hot Topic: AA Burnout": { es: "Tema candente: el agotamiento en AA" }
+"Hot Topic: Surrender to a Power Greater than Ourselves": { es: "Tema candente: entregarse a un Poder superior a nosotros mismos" }
+"Of Elders and Bleeding Deacons": { es: "Sobre veteranos sabios y eternos quejosos" }
+"Bottle to Throttle": { es: "De la botella al volante" }
+"A Nudge from the Judge": { es: "Un empujoncito del juez" }
+"A Fork in the Road: Accept Help or Die": { es: "Una encrucijada: aceptar ayuda o morir" }
+"From Surviving to Thriving": { es: "De sobrevivir a prosperar" }
+"Seeking Balance": { es: "En busca del equilibrio" }
+"Our Liabilities Become Assets": { es: "Nuestros defectos se convierten en virtudes" }
+"Stick with the Winners": { es: "Júntate con los ganadores" }
+"Room to Grow": { es: "Espacio para crecer" }
+"Be of Service": { es: "Estar al servicio" }
+"I Found God in the Psych Ward": { es: "Encontré a Dios en el pabellón psiquiátrico" }
+"Sober Since Disco": { es: "Sobrio desde la época disco" }
+"Rocketed into Fourth Dimension": { es: "Catapultado a la cuarta dimensión" }
+"Rocketed Into the Fourth Dimension—Instead of Jail": { es: "Catapultado a la cuarta dimensión, en vez de a la cárcel" }
+"To Thine Own Self Be True": { es: "Sé fiel a ti mismo" }
+"Completely Whipped": { es: "Completamente derrotado" }
+"A Wrench for Every Nut": { es: "Una llave para cada tuerca" }
+"The No Matter What Club": { es: "El club del «pase lo que pase»" }
+# Members' first names stay names; meanings and genders as in the English
+"Lucky “There wasn’t language for people like me.”": { es: "Lucky “No había palabras para gente como yo”." }
+"Sky “I grew up in A.A.”": { es: "Sky “Crecí en A.A.”" }
+"Eleanor F. “Hope was around the corner.”": { es: "Eleanor F. “La esperanza estaba a la vuelta de la esquina”." }
+"Teya “Being willing saved my life.”": { es: "Teya “Estar dispuesta me salvó la vida”." }
+"Suzanne “I have a new heart. Beating strong. Beating sober.”": { es: "Suzanne “Tengo un corazón nuevo. Late fuerte. Late sobrio”." }
+"Marissa. “AA is full of hope dealers.”": { es: "Marissa. “AA está lleno de vendedores de esperanza”." }
+"Myra G. “Whatever you do, be honest.”": { es: "Myra G. “Hagas lo que hagas, sé honesta”." }
+"Once she got sober, she had to carve out her own space as a transgender alcoholic, using AA’s Steps, Traditions and Concepts.": { es: "Una vez sobria, tuvo que abrirse su propio espacio como alcohólica transgénero, con los Pasos, las Tradiciones y los Conceptos de AA." }
+"As a transgender woman with seven months sober, Haley was feeling rejected by the home group she had decided to adopt.": { es: "Como mujer transgénero con siete meses sobria, Haley se sentía rechazada por el grupo base que había decidido adoptar." }
+"After one meeting, she was hurried out the door, literally on her way to get a drink, but met the man who would become her sponsor—sent, she believes, by her Higher Power Photocredit: B.Willman": { es: "Después de una reunión la apuraron a salir, literalmente camino a tomarse un trago, pero conoció al hombre que se convertiría en su padrino, enviado, según cree, por su Poder Superior. Foto: B.Willman" }
+# YouTube playlists
+"International Voices: \"Stories from ICYPAA and EURYPAA.”": { es: "Voces internacionales: “Historias de ICYPAA y EURYPAA”" }
+"Willingness": { es: "Buena voluntad" }
+"Blessed": { es: "Bendecidos" }
+# Magazine stories (/read/, /published/, home page)
+"He looked to fill the ache of loneliness through people and things. Now he turns to his Higher Power": { es: "Buscaba llenar el dolor de la soledad con personas y cosas. Ahora recurre a su Poder Superior" }
+"A retired teacher in Australia shares about the peace and contentment many years of AA has given him": { es: "Un maestro jubilado en Australia habla de la paz y la satisfacción que le han dado muchos años en AA" }
+"She saw a sober life was possible from the older members. But when she joined the young AAs, her life took off": { es: "Los miembros mayores le mostraron que una vida sobria era posible. Pero cuando se unió a los AA jóvenes, su vida despegó" }
+"In 1968 a drunken college student passed out in a big house in San Francisco. Years later she discovered how important that building was": { es: "En 1968, una estudiante universitaria borracha perdió el conocimiento en una casa grande de San Francisco. Años después descubrió lo importante que era ese edificio" }
+"Drunk, homeless and helpless, she came to AA and found love and support that lasted 40 years": { es: "Borracha, sin hogar e indefensa, llegó a AA y encontró un amor y un apoyo que duraron 40 años" }
+"A Well-Worn Path": { es: "Un camino muy transitado" }
+"Safe at 30,000 Feet": { es: "A salvo a 30.000 pies" }
+"My Wild Card Sponsor": { es: "Mi padrino comodín" }
+"Chipping Away": { es: "Poco a poco" }
+"Nothing Short of a Miracle": { es: "Nada menos que un milagro" }
+"A Hole in One": { es: "Un hoyo en uno" }
+"Embracing the The Long Haul": { es: "Aceptar el largo camino" }
+"Bridesmaid to the rescue": { es: "Una dama de honor al rescate" }
+"Mother Earth, Father Sky, God & me": { es: "Madre Tierra, Padre Cielo, Dios y yo" }
+"When Growth & Joy Mix": { es: "Cuando se mezclan el crecimiento y la alegría" }
+"Inside Job": { es: "Un trabajo interior" }
+"Good Times on Snag Lake": { es: "Buenos tiempos en Snag Lake" }
+"God Bless Mashed Potatoes": { es: "Bendito sea el puré de papas" }
+"Bad Girls Club": { es: "El club de las chicas malas" }
+"All of Me": { es: "Todo mi ser" }
+"Action In Practice": { es: "La acción en la práctica" }
+"Borrowing Faith": { es: "Fe prestada" }
+"Truly Life-Changing": { es: "De verdad me cambió la vida" }
+"Sober in Iran": { es: "Sobria en Irán" }
+"Red Light Blue Light": { es: "Luz roja, luz azul" }
+"A Happy Father’s Day": { es: "Un feliz Día del Padre" }
+"Peace Of Mind": { es: "Paz mental" }
+"Getting Honest": { es: "Volverse honesto" }
+"Watch What We Say": { es: "Cuidado con lo que decimos" }
+"Yets & Agains": { es: "Los «todavía» y los «otra vez»" }
+"Purrrfect Solution": { es: "Una solución purrrfecta" }
+# Library PDFs
+"Letter to the Fellowahip Retrofit Completion and Return to Office": { es: "Carta a la Comunidad: fin de la remodelación y regreso a la oficina" }
+"Letter to the Fellowship: Retrofit Completion and Return to Office": { es: "Carta a la Comunidad: fin de la remodelación y regreso a la oficina" }
+"SP Letter to the Fellowahip Retrofit Completion and Return to Office": { es: "Carta a la Comunidad: fin de la remodelación y regreso a la oficina" }
+"Back Issue 30 Packs Form": { es: "Formulario de paquetes de 30 ediciones anteriores" }
+"SETA (Southeast Texas Are 67) Correctional Facilities Conference": { es: "Conferencia de Instituciones Correccionales de SETA (Área 67, Sureste de Texas)" }
+"Park County Intergroup Campout": { es: "Campamento del Intergrupo del Condado de Park" }
+
+# Reviewed 2026-09-24 (2): magazine stories and podcast episodes, titles and summary sentences
+"Ready Set Go!": { es: "¡Preparados, listos, ya!" }
+"Sober bikers peddle across Iowa on an annual trip of fellowship, pulled pork, pizza and fun!": { es: "¡Ciclistas sobrios pedalean por Iowa en un viaje anual de compañerismo, cerdo deshebrado, pizza y diversión!" }
+"Now Hiring": { es: "Se busca personal" }
+"I didn’t know you were allowed to fire a sponsor.": { es: "No sabía que uno podía despedir a su padrino." }
+"I thought once you picked one, you were locked in; that resistance meant ego, and ego meant danger.": { es: "Creía que, una vez que elegías uno, ya no había vuelta atrás; que resistirse era ego, y el ego era peligro." }
+"Struck Sober": { es: "Sobrio de golpe" }
+"Heidi tells Olis and Sam that she thought she'd found the solution early on, and didn't need all the tools found in the twelve steps.": { es: "Heidi les cuenta a Olis y Sam que al principio creyó haber encontrado la solución y que no necesitaba todas las herramientas de los Doce Pasos." }
+"She learned later that alcoholism is a tricky disease.": { es: "Más tarde aprendió que el alcoholismo es una enfermedad engañosa." }
+"Sober in AA, Heidi helped her group get online during the pandemic, and that led her down a new path of service.": { es: "Ya sobria en AA, Heidi ayudó a su grupo a reunirse en línea durante la pandemia, y eso la llevó por un nuevo camino de servicio." }
+"Two Way Prayer": { es: "La oración como diálogo" }
+"Father Bill tells Olis and Sam about hitting a botttom and intentionally living in a shelter for a year.": { es: "El padre Bill les cuenta a Olis y Sam cómo tocó fondo y vivió a propósito en un albergue durante un año." }
+"He stresses the importance of prayer and meditation in his sober journey and explains \"two way prayer\" as he understands it.": { es: "Destaca la importancia de la oración y la meditación en su camino de sobriedad y explica la \"oración como diálogo\" tal como él la entiende." }
+"Father Bill talks about hearing the AA program boiled down to three words: connection, correction and direction.": { es: "El padre Bill cuenta que oyó resumir el programa de AA en tres palabras: conexión, corrección y dirección." }
+"Widening the Doorway — The Plain Language Big Book": { es: "Ampliar la puerta: el Libro Grande en lenguaje sencillo" }
+"Melody and Eric join Don and Sam to share their experience, strength and hope in recovery from alcoholism, and their recent experience with the Plain Language Big Book.": { es: "Melody y Eric acompañan a Don y Sam para compartir su experiencia, fortaleza y esperanza en la recuperación del alcoholismo, y su experiencia reciente con el Libro Grande en lenguaje sencillo." }
+"Melody says even as an atheist she cried out to whatever alien to please stop her drinking, and she then accidentally ended up in an AA meeting.": { es: "Melody cuenta que, aun siendo atea, le suplicó a cualquier extraterrestre que la hiciera dejar de beber, y luego fue a parar por casualidad a una reunión de AA." }
+# (these summaries are cut off by the podcast feed, hence the "…")
+"He says that in his guided life part of his job is too…": { es: "Dice que, en su vida guiada, parte de su trabajo es…" }
+"She talks about the upcoming National AA Technology Workshop that is coming up the weekend of…": { es: "Habla del próximo Taller Nacional de Tecnología de AA, que se celebrará el fin de semana del…" }
+"Eric says he came in wanting to stand out rather than fit in, and that he's been…": { es: "Eric dice que llegó queriendo destacar en vez de encajar, y que ha estado…" }
+# Library PDFs: titles the crawler gives from 2026-09-24 (crawl_rules.TITLE_OVERRIDES and fixed link texts)
+# … and the "(Spanish)"-style tail it adds: language names are lower-case in Spanish ("(En inglés)" before)
+"(English)": { es: "(inglés)" }
+"(Spanish)": { es: "(español)" }
+"(French)": { es: "(francés)" }
+# titles of other library PDFs whose machine translation read badly (word-for-word order, "Bookmark" untranslated)
+"The Home Group: Heartbeat of AA": { es: "El Grupo Base: Corazón de AA" }
+"Grapevine Open Meeting": { es: "Reunión abierta de Grapevine" }
+"12 Ways Grapevine Helps": { es: "12 maneras en que Grapevine ayuda" }
+"2026 Catalog Postcard": { es: "Postal del catálogo 2026" }
+"Cartoon Book": { es: "Libro de caricaturas" }
+"Bookmark": { es: "Separador de libros" }
+"By-The-Month Order Form": { es: "Formulario de pedido mensual" }
+"La Viña 30 Anniversary": { es: "30 aniversario de La Viña" }
+"Audiobook The Language of the Heart": { es: "Audiolibro: El lenguaje del corazón" }
+"Guidelines for Contributing to GV": { es: "Pautas para colaborar con GV" }
+"Area 29 Fall Convention": { es: "Convención de otoño del Área 29" }
+"AAGV 2024 Pricing": { es: "Precios de AAGV 2024" }
+"GV Annual Prices": { es: "Precios anuales de GV" }
+"La Viña Subscription Form": { es: "Formulario de suscripción a La Viña" }
+"Grapevine's New Podcast": { es: "El nuevo podcast de Grapevine" }
+"ASL Videos Announcement": { es: "Anuncio: videos en lengua de señas americana (ASL)" }
+"Letter about the Grapevine and La Viña Apps Survey": { es: "Carta sobre la encuesta de la aplicación de Grapevine y La Viña" }
+"The Home Group: Heartbeat of AA (30th Anniversary Edition)": { es: "El Grupo Base: Corazón de AA (edición del 30.º aniversario)" }
+
+# Committee Portfolio (Google Drive, Panel 77), written by hand 2026-09-25: "Area Chair" = the
+# Grapevine chair of each Area (coordinador de Área), "Put Them to Work" = the magazine copies.
+"Grapevine Area Chair Meeting Report": { es: "Informe de la reunión de coordinadores de Área de Grapevine" }
+"Grapevine Area Chair Meeting Agenda": { es: "Orden del día de la reunión de coordinadores de Área de Grapevine" }
+"Grapevine Editorial - Share your story - Fun in Sobriety and Emotional Sobriety": { es: "Editorial de Grapevine - Comparte tu historia - La diversión en la sobriedad y la sobriedad emocional" }
+"Grapevine as a Twelfth Step Tool - Put Them to Work (2026-2027 editorial calendar)": { es: "Grapevine como herramienta de Paso Doce - Ponlas a trabajar (calendario editorial 2026-2027)" }
+# AA Grapevine's letter to Intergroups and Central Offices (notes), October 1, 2026 (config/site.yml price_changes links it)
+"Grapevine & La Viña Pricing Update - Effective January 1, 2027": { es: "Actualización de precios de Grapevine y La Viña - A partir del 1 de enero de 2027" }
+# The committee's four decks (slides, in English), uploaded 2026-10-01, written by hand: the machine kept the
+# English word order ("Grapevine y La Viña taller de información"). Spanish says "RLV y GVR", as on the site.
+"GVR and RLV Orientation Workshop": { es: "Taller de orientación para RLV y GVR" }
+"Grapevine and La Viña Information Workshop": { es: "Taller informativo de Grapevine y La Viña" }
+"Grapevine and La Viña Writing Workshop": { es: "Taller de escritura de Grapevine y La Viña" }
+"Grapevine and La Viña Monthly Committee Meeting": { es: "Reunión mensual del Comité de Grapevine y La Viña" }
+# Grapevine's "Audio Project" keeps its own name (as on /contribute/#record)
+"GV Audio Project": { es: "Audio Project de GV" }
+# A workshop's flyer (a copy in the Drive folder flyers/, 2026-10-02): the group's name is its own, never translated
+# (the machine wrote "Grupo de propósito primario"); the La Viña flyers are in the Spanish → English part below.
+"Grapevine Writing Workshop - Primary Purpose Group, Arlington": { es: "Taller de Escritura de Grapevine - Primary Purpose Group, Arlington" }
+
+# Bulletin post from Google Drive (2027-2028_Panel77_GVLV/bulletin): "Grapevine and La Viña — ways to carry the
+# message", translated by hand 2026-09-30 (the machine turned "hard-of-hearing" into "hard-hearted", among others).
+# Five keys: its title, its summary (the first 400 characters: as the sync now makes it, without Markdown marks,
+# and as older runs made it, with them — a run that cannot read Drive keeps the older one) and its whole text —
+# spaces and line breaks don't matter for a match. If the file on Drive is edited, the changed text goes back to the machine translation until
+# the English here is updated too (copy it from data/site/announcements.json → extra.body_md).
+# The whole text is here TWICE (2026-10-01): as first written ("A digital subscription costs about 8 cents a day") and
+# with that one sentence corrected for the new prices of January 1, 2027 ("less than 10 cents a day" — true at $29.99
+# and at $34.00 a year) — so the Spanish page keeps this translation before and after the file on Drive is changed.
+"Grapevine and La Viña — ways to carry the message": { es: "Grapevine y La Viña — formas de llevar el mensaje" }
+? "A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it. Why it matters A meeting in print, every day. Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on…"
+: { es: "Una lista viva de formas sencillas en que los miembros, los grupos y los distritos pueden apoyar a Grapevine y La Viña y llevar el mensaje. Toma lo que le sirva a tu grupo y comparte lo que funcione en la próxima reunión del comité, para que todos aprendamos." }
+? "A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it. Why it matters **A meeting in print, every day.** Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on…"
+: { es: "Una lista viva de formas sencillas en que los miembros, los grupos y los distritos pueden apoyar a Grapevine y La Viña y llevar el mensaje. Toma lo que le sirva a tu grupo y comparte lo que funcione en la próxima reunión del comité, para que todos aprendamos." }
+? |-
+  A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it.
+
+  # Why it matters
+
+  - **A meeting in print, every day.** Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on prison and treatment tablets, and ASL videos for deaf and hard-of-hearing members.
+  - **Most of it is free.** Subscriptions pay for all of it, so every subscription keeps the free services going.
+  - **The 183 Challenge.** If every area added about 183 subscriptions (print, app or online), Grapevine would be fully self-supporting. That is fewer people than come to most area assemblies.
+  - **La Viña needs its readers.** La Viña is not yet self-supporting. Spanish-speaking members and groups make the biggest difference by subscribing, sharing it and writing for it.
+
+  # What groups can do
+
+  - **Subscribe as a group.** A group subscription is Seventh Tradition support, and many treasurers don't know it is an option. If even one group in ten subscribed, it would make a big difference.
+  - **Welcome newcomers.** Give a subscription along with the Big Book. A digital subscription costs about 8 cents a day ([current prices](/shop/)).
+  - **Carry the Message.** A group can send subscriptions to correctional facilities, treatment centers and professionals who work with alcoholics ([how it works](https://www.aagrapevine.org/carry-the-message)).
+  - **Put it in the budget.** Include a Carry the Message subscription in the group's regular spending, next to rent, coffee, literature and contributions to the district, area and GSO.
+  - **Share the free resources.** Put a one-page handout on the literature table with links to the Grapevine app, the [podcast](/listen/), the Daily Quote sign-up, Instagram and YouTube. Many members don't know these exist.
+
+  # At meetings
+
+  - **Mention it in your share.** Not a pitch, just experience: "I read something in Grapevine this week that really hit home…"
+  - **Make a 30-second announcement.** "Grapevine reaches millions of people through daily quotes, podcasts and prison tablets, mostly for free. A subscription helps keep the lights on for all of it." Anyone can say it.
+  - **Set out QR table cards.** A card on the literature table that links to the subscription page works every week without an announcement ([QR posters](/share/)).
+  - **Hold a "meeting after the meeting."** Once a month, for 15 minutes after a regular meeting, read a story, play a podcast clip or show a short video. People subscribe to what they have experienced.
+  - **Invite an "I got sober reading this" minute.** Once a month, a member shares one minute about a Grapevine or La Viña story that helped them.
+  - **Use the coffee comparison at business meetings.** A digital subscription costs less than one fancy coffee a month.
+
+  # One on one
+
+  - **Sponsor to sponsee.** A gift subscription is a meeting that never closes, especially for someone in a rural area, working odd hours or unable to get to meetings.
+  - **Share the podcast.** It is free Twelfth Step work: one text, one link.
+  - **Share the Daily Quote.** Signing up is free, and it takes ten seconds to read. Share it in your group's text chain ([today's quote](/#quote-title)).
+  - **Mark anniversaries.** Give a year of Grapevine or La Viña with, or instead of, a chip.
+  - **Give in Gratitude Month.** In November, ask: "What are you grateful for? Give someone a reason to be grateful every day for a year." A group can set a goal, such as five gift subscriptions.
+
+  # Online
+
+  - **Ask for a follow.** It takes five seconds: "If you're on Instagram, follow Grapevine and La Viña" ([our Instagram page](/instagram/)).
+  - **Reach young people.** Bring the app, the podcast, Instagram and the Daily Quote to YPAA events and meetings near campuses. They don't need to be sold on technology; they need to know the content exists.
+
+  # Beyond the meeting room
+
+  - **Give a "Grapevine Minute" at the district meeting.** Three minutes, one story and a sign-up sheet or QR card, in front of every GSR.
+  - **Set up an intergroup or central office display.** Current issues, a tablet with the podcast or app, and sign-up cards where members already come for literature and chips.
+  - **Add it to H&I visit kits.** Leave a current issue alongside the Big Book.
+  - **Build a bridge from treatment and corrections.** A group-funded subscription waiting for someone leaving treatment or a correctional facility means the message follows them home.
+  - **Work with the professional community (CPC).** Include a current issue with other A.A. literature for doctors, counselors, social workers and clergy.
+  - **Read it, then pass it.** Read one print copy at the meeting, then leave it in a waiting room, a laundromat or a break room.
+
+  # Every month
+
+  The [Monthly toolkit](/monthly/) has this month's issues, the story deadlines and more ways to put them to work. Talk with your GVR or RLV, bring one idea to your next business meeting, and share what works at the [committee meeting](/meetings/#committee-meeting).
+: es: |-
+    Una lista viva de formas sencillas en que los miembros, los grupos y los distritos pueden apoyar a Grapevine y La Viña y llevar el mensaje. Toma lo que le sirva a tu grupo y comparte lo que funcione en la próxima reunión del comité, para que todos aprendamos.
+
+    # Por qué importa
+
+    - **Una reunión impresa, todos los días.** Grapevine y La Viña llegan a millones de personas por medio de las revistas, la Cita diaria, el podcast, las historias en las tabletas de prisiones y centros de tratamiento, y los videos en lengua de señas (ASL) para miembros sordos o con dificultades auditivas.
+    - **Casi todo es gratis.** Las suscripciones lo pagan todo, así que cada suscripción mantiene en marcha los servicios gratuitos.
+    - **El Reto 183.** Si cada área sumara unas 183 suscripciones (impresas, en la app o en línea), Grapevine sería totalmente automantenida. Son menos personas de las que van a la mayoría de las asambleas de área.
+    - **La Viña necesita a sus lectores.** La Viña todavía no es automantenida. Los miembros y grupos de habla hispana son los que más pueden ayudar: suscribiéndose, compartiéndola y escribiendo para ella.
+
+    # Lo que pueden hacer los grupos
+
+    - **Suscribirse como grupo.** Una suscripción de grupo es apoyo de la Séptima Tradición, y muchos tesoreros no saben que es una opción. Si tan solo uno de cada diez grupos se suscribiera, se notaría mucho.
+    - **Recibir a los recién llegados.** Regálenles una suscripción junto con el Libro Grande. Una suscripción digital cuesta unos 8 centavos al día ([precios actuales](/shop/)).
+    - **Lleva el Mensaje.** Un grupo puede enviar suscripciones a centros correccionales, centros de tratamiento y profesionales que trabajan con alcohólicos ([cómo funciona](https://www.aalavina.org/lleva-el-mensaje)).
+    - **Incluirlo en el presupuesto.** Agreguen una suscripción de Lleva el Mensaje a los gastos regulares del grupo, junto con la renta, el café, la literatura y las contribuciones al distrito, al área y a la OSG.
+    - **Dar a conocer los recursos gratuitos.** Pongan en la mesa de literatura una hoja con los enlaces a la app de Grapevine, el [podcast](/listen/), la suscripción a la Cita diaria, Instagram y YouTube. Muchos miembros no saben que existen.
+
+    # En las reuniones
+
+    - **Menciónalo al compartir.** No como propaganda, sino como experiencia: «Esta semana leí algo en La Viña que me llegó al corazón…».
+    - **Da un anuncio de 30 segundos.** «Grapevine y La Viña llegan a millones de personas con la cita diaria, los podcasts y las tabletas en las prisiones, casi siempre gratis. Una suscripción ayuda a mantener todo eso en marcha». Cualquiera puede decirlo.
+    - **Pon tarjetas con código QR.** Una tarjeta en la mesa de literatura con el enlace a la página de suscripciones funciona cada semana, sin necesidad de anuncios ([Cartel QR](/share/)).
+    - **Organiza una «reunión después de la reunión».** Una vez al mes, 15 minutos después de una reunión regular, lean una historia, pongan un fragmento del podcast o vean un video corto. La gente se suscribe a lo que ha vivido.
+    - **Invita a un minuto de «Esta historia me ayudó».** Una vez al mes, un miembro comparte durante un minuto sobre una historia de Grapevine o La Viña que lo ayudó en su sobriedad.
+    - **Usa la comparación del café en la reunión de trabajo.** Una suscripción digital cuesta menos que un café especial al mes.
+
+    # De persona a persona
+
+    - **De padrino a ahijado.** Una suscripción de regalo es una reunión que nunca cierra, sobre todo para quien vive en una zona rural, trabaja en horarios difíciles o no puede ir a las reuniones.
+    - **Comparte el podcast.** Es trabajo de Paso Doce gratuito: un mensaje, un enlace.
+    - **Comparte la Cita diaria.** Suscribirse es gratis y se lee en diez segundos. Compártela en el chat de tu grupo ([cita de hoy](/#quote-title)).
+    - **Celebra los aniversarios.** Regala un año de Grapevine o La Viña junto con la ficha, o en su lugar.
+    - **Regala en el mes de la gratitud.** En noviembre, pregunta: «¿Por qué estás agradecido? Dale a alguien un motivo para estar agradecido todos los días durante un año». Un grupo puede fijarse una meta, como cinco suscripciones de regalo.
+
+    # En línea
+
+    - **Pide que los sigan.** Toma cinco segundos: «Si usas Instagram, sigue a Grapevine y La Viña» ([nuestra página de Instagram](/instagram/)).
+    - **Llega a los jóvenes.** Lleva la app, el podcast, Instagram y la Cita diaria a los eventos de jóvenes en AA (YPAA) y a las reuniones cerca de las universidades. No hay que convencerlos de la tecnología; necesitan saber que el contenido existe.
+
+    # Más allá de la sala de reuniones
+
+    - **Da un «Minuto Grapevine» en la reunión del distrito.** Tres minutos, una historia y una hoja de inscripción o una tarjeta QR, frente a todos los RSG.
+    - **Pon una exhibición en el intergrupo o la oficina central.** Números recientes, una tableta con el podcast o la app y tarjetas de suscripción, donde los miembros ya van por literatura y fichas.
+    - **Agrégala a los paquetes de visitas a hospitales e instituciones.** Deja un número reciente junto al Libro Grande.
+    - **Tiende un puente desde el tratamiento y las prisiones.** Una suscripción pagada por el grupo, esperando a quien sale de un centro de tratamiento o de un centro correccional, hace que el mensaje lo acompañe a casa.
+    - **Colabora con la comunidad profesional (CCP).** Incluye un número reciente junto con otra literatura de A.A. para médicos, consejeros, trabajadores sociales y líderes religiosos.
+    - **Léela y pásala.** Lee un ejemplar impreso en la reunión y luego déjalo en una sala de espera, una lavandería o una sala de descanso.
+
+    # Cada mes
+
+    El [Kit del mes](/monthly/) tiene las revistas de este mes, las fechas límite para enviar historias y más formas de ponerlas a trabajar. Habla con tu RLV o GVR, lleva una idea a la próxima reunión de trabajo de tu grupo y comparte lo que funcione en la [reunión del comité](/meetings/#committee-meeting).
+? |-
+  A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it.
+
+  # Why it matters
+
+  - **A meeting in print, every day.** Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on prison and treatment tablets, and ASL videos for deaf and hard-of-hearing members.
+  - **Most of it is free.** Subscriptions pay for all of it, so every subscription keeps the free services going.
+  - **The 183 Challenge.** If every area added about 183 subscriptions (print, app or online), Grapevine would be fully self-supporting. That is fewer people than come to most area assemblies.
+  - **La Viña needs its readers.** La Viña is not yet self-supporting. Spanish-speaking members and groups make the biggest difference by subscribing, sharing it and writing for it.
+
+  # What groups can do
+
+  - **Subscribe as a group.** A group subscription is Seventh Tradition support, and many treasurers don't know it is an option. If even one group in ten subscribed, it would make a big difference.
+  - **Welcome newcomers.** Give a subscription along with the Big Book. A digital subscription costs less than 10 cents a day ([current prices](/shop/)).
+  - **Carry the Message.** A group can send subscriptions to correctional facilities, treatment centers and professionals who work with alcoholics ([how it works](https://www.aagrapevine.org/carry-the-message)).
+  - **Put it in the budget.** Include a Carry the Message subscription in the group's regular spending, next to rent, coffee, literature and contributions to the district, area and GSO.
+  - **Share the free resources.** Put a one-page handout on the literature table with links to the Grapevine app, the [podcast](/listen/), the Daily Quote sign-up, Instagram and YouTube. Many members don't know these exist.
+
+  # At meetings
+
+  - **Mention it in your share.** Not a pitch, just experience: "I read something in Grapevine this week that really hit home…"
+  - **Make a 30-second announcement.** "Grapevine reaches millions of people through daily quotes, podcasts and prison tablets, mostly for free. A subscription helps keep the lights on for all of it." Anyone can say it.
+  - **Set out QR table cards.** A card on the literature table that links to the subscription page works every week without an announcement ([QR posters](/share/)).
+  - **Hold a "meeting after the meeting."** Once a month, for 15 minutes after a regular meeting, read a story, play a podcast clip or show a short video. People subscribe to what they have experienced.
+  - **Invite an "I got sober reading this" minute.** Once a month, a member shares one minute about a Grapevine or La Viña story that helped them.
+  - **Use the coffee comparison at business meetings.** A digital subscription costs less than one fancy coffee a month.
+
+  # One on one
+
+  - **Sponsor to sponsee.** A gift subscription is a meeting that never closes, especially for someone in a rural area, working odd hours or unable to get to meetings.
+  - **Share the podcast.** It is free Twelfth Step work: one text, one link.
+  - **Share the Daily Quote.** Signing up is free, and it takes ten seconds to read. Share it in your group's text chain ([today's quote](/#quote-title)).
+  - **Mark anniversaries.** Give a year of Grapevine or La Viña with, or instead of, a chip.
+  - **Give in Gratitude Month.** In November, ask: "What are you grateful for? Give someone a reason to be grateful every day for a year." A group can set a goal, such as five gift subscriptions.
+
+  # Online
+
+  - **Ask for a follow.** It takes five seconds: "If you're on Instagram, follow Grapevine and La Viña" ([our Instagram page](/instagram/)).
+  - **Reach young people.** Bring the app, the podcast, Instagram and the Daily Quote to YPAA events and meetings near campuses. They don't need to be sold on technology; they need to know the content exists.
+
+  # Beyond the meeting room
+
+  - **Give a "Grapevine Minute" at the district meeting.** Three minutes, one story and a sign-up sheet or QR card, in front of every GSR.
+  - **Set up an intergroup or central office display.** Current issues, a tablet with the podcast or app, and sign-up cards where members already come for literature and chips.
+  - **Add it to H&I visit kits.** Leave a current issue alongside the Big Book.
+  - **Build a bridge from treatment and corrections.** A group-funded subscription waiting for someone leaving treatment or a correctional facility means the message follows them home.
+  - **Work with the professional community (CPC).** Include a current issue with other A.A. literature for doctors, counselors, social workers and clergy.
+  - **Read it, then pass it.** Read one print copy at the meeting, then leave it in a waiting room, a laundromat or a break room.
+
+  # Every month
+
+  The [Monthly toolkit](/monthly/) has this month's issues, the story deadlines and more ways to put them to work. Talk with your GVR or RLV, bring one idea to your next business meeting, and share what works at the [committee meeting](/meetings/#committee-meeting).
+: es: |-
+    Una lista viva de formas sencillas en que los miembros, los grupos y los distritos pueden apoyar a Grapevine y La Viña y llevar el mensaje. Toma lo que le sirva a tu grupo y comparte lo que funcione en la próxima reunión del comité, para que todos aprendamos.
+
+    # Por qué importa
+
+    - **Una reunión impresa, todos los días.** Grapevine y La Viña llegan a millones de personas por medio de las revistas, la Cita diaria, el podcast, las historias en las tabletas de prisiones y centros de tratamiento, y los videos en lengua de señas (ASL) para miembros sordos o con dificultades auditivas.
+    - **Casi todo es gratis.** Las suscripciones lo pagan todo, así que cada suscripción mantiene en marcha los servicios gratuitos.
+    - **El Reto 183.** Si cada área sumara unas 183 suscripciones (impresas, en la app o en línea), Grapevine sería totalmente automantenida. Son menos personas de las que van a la mayoría de las asambleas de área.
+    - **La Viña necesita a sus lectores.** La Viña todavía no es automantenida. Los miembros y grupos de habla hispana son los que más pueden ayudar: suscribiéndose, compartiéndola y escribiendo para ella.
+
+    # Lo que pueden hacer los grupos
+
+    - **Suscribirse como grupo.** Una suscripción de grupo es apoyo de la Séptima Tradición, y muchos tesoreros no saben que es una opción. Si tan solo uno de cada diez grupos se suscribiera, se notaría mucho.
+    - **Recibir a los recién llegados.** Regálenles una suscripción junto con el Libro Grande. Una suscripción digital cuesta menos de 10 centavos al día ([precios actuales](/shop/)).
+    - **Lleva el Mensaje.** Un grupo puede enviar suscripciones a centros correccionales, centros de tratamiento y profesionales que trabajan con alcohólicos ([cómo funciona](https://www.aalavina.org/lleva-el-mensaje)).
+    - **Incluirlo en el presupuesto.** Agreguen una suscripción de Lleva el Mensaje a los gastos regulares del grupo, junto con la renta, el café, la literatura y las contribuciones al distrito, al área y a la OSG.
+    - **Dar a conocer los recursos gratuitos.** Pongan en la mesa de literatura una hoja con los enlaces a la app de Grapevine, el [podcast](/listen/), la suscripción a la Cita diaria, Instagram y YouTube. Muchos miembros no saben que existen.
+
+    # En las reuniones
+
+    - **Menciónalo al compartir.** No como propaganda, sino como experiencia: «Esta semana leí algo en La Viña que me llegó al corazón…».
+    - **Da un anuncio de 30 segundos.** «Grapevine y La Viña llegan a millones de personas con la cita diaria, los podcasts y las tabletas en las prisiones, casi siempre gratis. Una suscripción ayuda a mantener todo eso en marcha». Cualquiera puede decirlo.
+    - **Pon tarjetas con código QR.** Una tarjeta en la mesa de literatura con el enlace a la página de suscripciones funciona cada semana, sin necesidad de anuncios ([Cartel QR](/share/)).
+    - **Organiza una «reunión después de la reunión».** Una vez al mes, 15 minutos después de una reunión regular, lean una historia, pongan un fragmento del podcast o vean un video corto. La gente se suscribe a lo que ha vivido.
+    - **Invita a un minuto de «Esta historia me ayudó».** Una vez al mes, un miembro comparte durante un minuto sobre una historia de Grapevine o La Viña que lo ayudó en su sobriedad.
+    - **Usa la comparación del café en la reunión de trabajo.** Una suscripción digital cuesta menos que un café especial al mes.
+
+    # De persona a persona
+
+    - **De padrino a ahijado.** Una suscripción de regalo es una reunión que nunca cierra, sobre todo para quien vive en una zona rural, trabaja en horarios difíciles o no puede ir a las reuniones.
+    - **Comparte el podcast.** Es trabajo de Paso Doce gratuito: un mensaje, un enlace.
+    - **Comparte la Cita diaria.** Suscribirse es gratis y se lee en diez segundos. Compártela en el chat de tu grupo ([cita de hoy](/#quote-title)).
+    - **Celebra los aniversarios.** Regala un año de Grapevine o La Viña junto con la ficha, o en su lugar.
+    - **Regala en el mes de la gratitud.** En noviembre, pregunta: «¿Por qué estás agradecido? Dale a alguien un motivo para estar agradecido todos los días durante un año». Un grupo puede fijarse una meta, como cinco suscripciones de regalo.
+
+    # En línea
+
+    - **Pide que los sigan.** Toma cinco segundos: «Si usas Instagram, sigue a Grapevine y La Viña» ([nuestra página de Instagram](/instagram/)).
+    - **Llega a los jóvenes.** Lleva la app, el podcast, Instagram y la Cita diaria a los eventos de jóvenes en AA (YPAA) y a las reuniones cerca de las universidades. No hay que convencerlos de la tecnología; necesitan saber que el contenido existe.
+
+    # Más allá de la sala de reuniones
+
+    - **Da un «Minuto Grapevine» en la reunión del distrito.** Tres minutos, una historia y una hoja de inscripción o una tarjeta QR, frente a todos los RSG.
+    - **Pon una exhibición en el intergrupo o la oficina central.** Números recientes, una tableta con el podcast o la app y tarjetas de suscripción, donde los miembros ya van por literatura y fichas.
+    - **Agrégala a los paquetes de visitas a hospitales e instituciones.** Deja un número reciente junto al Libro Grande.
+    - **Tiende un puente desde el tratamiento y las prisiones.** Una suscripción pagada por el grupo, esperando a quien sale de un centro de tratamiento o de un centro correccional, hace que el mensaje lo acompañe a casa.
+    - **Colabora con la comunidad profesional (CCP).** Incluye un número reciente junto con otra literatura de A.A. para médicos, consejeros, trabajadores sociales y líderes religiosos.
+    - **Léela y pásala.** Lee un ejemplar impreso en la reunión y luego déjalo en una sala de espera, una lavandería o una sala de descanso.
+
+    # Cada mes
+
+    El [Kit del mes](/monthly/) tiene las revistas de este mes, las fechas límite para enviar historias y más formas de ponerlas a trabajar. Habla con tu RLV o GVR, lleva una idea a la próxima reunión de trabajo de tu grupo y comparte lo que funcione en la [reunión del comité](/meetings/#committee-meeting).
+
+# --- Spanish → English ------------------------------------------------
+# Committee Portfolio (Google Drive): La Viña's flyer is in Spanish, so is its file name
+"Nueva reunión abierta de La Viña - jueves a las 12 p. m. (hora del Este) por Zoom": { en: "New La Viña Open Meeting - Thursdays at 12 PM Eastern on Zoom" }
+# …La Viña's monthly workshop flyer (renamed 2026-10-01) and its holiday cards flyer ("tarjetas de ocasión" are
+# greeting cards, not "occasional cards"; Grapevine sells them as "Holiday Greeting Cards - 12 pack")
+"Taller Mensual y Virtual de La Viña - jueves, 3 p. m. (hora del Este), por Zoom": { en: "La Viña Monthly Virtual Workshop - Thursday, 3 PM Eastern, on Zoom" }
+"¡Tarjetas de ocasión para las fiestas! Paquete de 12 por $22 en La Viña": { en: "Holiday greeting cards! Pack of 12 for $22 at La Viña" }
+# …the workshops' flyers (copies in the Drive folder flyers/, 2026-10-02 — content/events/README.md): a group's
+# name is its own and is never translated (the machine wrote "Group Only for Today", "Big Book, Tyler Group").
+# A new flyer copy whose name holds a group's name needs its line here too (its file name without the extension).
+"Taller de Escritura de La Viña - Grupo La Nueva Esperanza, Fort Worth": { en: "La Viña Writing Workshop - Grupo La Nueva Esperanza, Fort Worth" }
+"Taller de Escritura de La Viña - Grupo 7 Defectos y 7 Virtudes, Mansfield": { en: "La Viña Writing Workshop - Grupo 7 Defectos y 7 Virtudes, Mansfield" }
+"Taller de Audio de La Viña - Grupo Progreso Latino, Duncanville": { en: "La Viña Audio Workshop - Grupo Progreso Latino, Duncanville" }
+"Taller de Escritura de La Viña - Grupo Libro Grande, Tyler": { en: "La Viña Writing Workshop - Grupo Libro Grande, Tyler" }
+"Taller de Información de La Viña - Grupo Solo por Hoy, Longview": { en: "La Viña Information Workshop - Grupo Solo por Hoy, Longview" }
+"Tocaron Fondo": { en: "Hitting Bottom" }                  # YouTube playlist
+"Atados por la misma enfermedad": { en: "Bound by the Same Illness" }
+"Reparando relaciones": { en: "Repairing Relationships" }
+"De condado en condado": { en: "From County to County" }
+"Como rezo": { en: "How I Pray" }
+"Cómo rezo": { en: "How I Pray" }
+"Tiempos de fiesta en sobriedad (elige uno)": { en: "Holidays in Sobriety (Choose One)" }
+"Llamada de esperanza": { en: "A Call of Hope" }
+# Texas writers in the published-writers spotlight (home page), checked by hand 2026-09-23
+"Aguafiestas": { en: "Party Pooper" }
+"Seguros y Protegidos": { en: "Safe and Protected" }
+"El poder de tu historia": { en: "The Power of Your Story" }
+"Una cuerda salvavidas": { en: "A Lifeline" }
+"Halló en las juntas de AA un lugar al que, por fin, pudo llamar hogar": { en: "In AA meetings she finally found a place she could call home" }
+"Caer en la cárcel se convirtió en una oportunidad para reflexionar sobre su vida y el rumbo que había tomado": { en: "Landing in jail became a chance to reflect on his life and the path he had taken" }
+"A través de pruebas y aprendizajes, descubre cómo convivir en armonía": { en: "Through trials and lessons, discover how to live in harmony with others" }
+"Compañeros, soy Oscar y soy un alcohólico. Actualmente soy el RLV (representante de La Viña) de mi grupo.": { en: "Friends, I'm Oscar and I'm an alcoholic. I'm currently the RLV (La Viña representative) for my group." }
+# Reviewed 2026-09-24
+"Cuentas por saldar": { en: "Unsettled Accounts" }
+"Lleva el mensaje 2025": { en: "Carry the Message 2025" }
+"¡Descárgala ahora! ¡Luego suscríbete!": { en: "Download It Now! Then Subscribe!" }
+# Quotes from AA literature: the official English wording (English-edition page), not a
+# machine back-translation of the Spanish edition
+"“Encontrarás amigos para toda la vida. Te unirán a ellos nuevos y excelentes lazos, porque habrán escapado juntos del desastre”. Libro Grande, pág. 140": { en: "“Among them you will make lifelong friends. You will be bound to them with new and wonderful ties, for you will escape disaster together.” Big Book, p. 152" }
+"“Si cientos de experiencias le han demostrado que una copa significa otro desastre..., ¿por qué se toma esa primera copa?” Libro Grande, pág. 22": { en: "“If hundreds of experiences have shown him that one drink means another debacle… why is it he takes that one drink?” Big Book" }
+# Reviewed 2026-09-24 (2)
+# A YouTube playlist written in capitals without accents. An entry in the text's OWN language (es
+# here) only restores accents and capitals — build_data never lets it change the wording.
+"UN DIA A LA VEZ": { es: "Un día a la vez", en: "One Day at a Time" }
+# Library PDFs (see above)
+"Formulario de pedido de materiales gratuitos": { en: "Free Materials Order Form" }
+"Carta sobre la encuesta de la aplicación de Grapevine y La Viña": { en: "Letter about the Grapevine and La Viña Apps Survey" }
+"Política de privacidad de Grapevine": { en: "Grapevine Privacy Policy" }
+"Catálogo 2026": { en: "2026 Catalog" }
+"(inglés)": { en: "(English)" }
+"(español)": { en: "(Spanish)" }
+"(francés)": { en: "(French)" }
+"2023 AAGV Comunicado Aumento Precios": { en: "2023 AAGV Price Increase Release" }
+"LV Aumento-Precios enero2025": { en: "LV Price Increase, January 2025" }
+"Carta de Grapevine para miembros AA": { en: "Grapevine Letter to AA Members" }
+"Manual del Representante LV": { en: "LV Representative Handbook" }
+"30 ediciones pasadas LV": { en: "30 LV Back Issues" }
+"Marca Libro de LV": { en: "LV Bookmark" }
+"Libros de La Viña": { en: "La Viña Books" }
+"Temas de LV 2026 y 2027": { en: "LV Themes for 2026 and 2027" }
+# …and the themes in it (data/site/editorial.json: /contribute/#deadlines, /monthly/, Home, the presentations, the
+# district report), written by hand 2026-10-02 — EVERY theme of the document, so no page or slide shows a machine
+# gloss for them (tests/test_editorial.py checks it; a new year's document needs its new themes here):
+# "Nuevos" are newcomers (the machine would say "New"). "Veteranos" is "Veterans" on purpose, written here so the
+# gloss is ours (no machine mark): the word means long-time members (La Viña's "Veteranos" section) or military
+# veterans, the document gives only the title, and its September–October 2027 issue lines up with Grapevine's
+# October 2027 "AA in the Military" (as "Prisiones" does with July's "Annual Prison Issue" and "Celebrando en
+# sobriedad" with December's "Sober Holidays!"). "Veterans" keeps both meanings, as "veteranos" does; "Old-Timers"
+# could put the wrong one on every page and slide. The glossary's old-timer → veterano lines don't decide it: they
+# are `only: es`, English→Spanish only. The decks' tips say to check La Viña's own description of the theme; once
+# it says which, write that here.
+"Nuevos": { en: "Newcomers" }
+"Apadrinamiento": { en: "Sponsorship" }
+"Recaídas": { en: "Relapses" }
+"Prisiones": { en: "Prisons" }
+"Hispanos Veteranos en AA": { en: "Hispanic Veterans in AA" }
+"Celebrando en sobriedad": { en: "Celebrating in Sobriety" }
+"Jóvenes en AA": { en: "Young People in AA" }
+"Pase lo que pase": { en: "No Matter What" }
+"El amor al servicio": { en: "The Love of Service" }
+"La alegría de vivir": { en: "The Joy of Living" }
+"Libro de trabajo de La Viña": { en: "La Viña Workbook" }
+"La Viña en Instagram": { en: "La Viña on Instagram" }
+"Poster de la App (8.5 x 11)": { en: "App Poster (8.5 x 11)" }
+"Aplicaciones de La Viña y Grapevine": { en: "La Viña and Grapevine Apps" }
+"Descarga de Audios": { en: "Audio Downloads" }
+"Libro Bajo el Mismo Techo": { en: "Book: Under the Same Roof" }
+# Twelve Steps and Twelve Traditions quotes on La Viña stories: the official English wording and the
+# English-edition page (Step Seven p. 73, Step Eight p. 79 — checked against aa.org's PDFs 2026-09-24)
+"“Nos enfrentamos con aquellos graves defectos de carácter que originalmente nos convirtieron en bebedores problema, defectos que tenemos que intentar remediar...” -Doce Pasos y Doce Tradiciones, pág. 71": { en: "“…we reluctantly come to grips with those serious character flaws that made problem drinkers of us in the first place, flaws which must be dealt with…” -Twelve Steps and Twelve Traditions, p. 73" }
+"“Estas eran algunas de las formas en las que el temor conspiraba con el orgullo para impedir que hiciéramos una lista...” -Doce Pasos y Doce Tradiciones, pág. 78": { en: "“These were some of the ways in which fear conspired with pride to hinder our making a list…” -Twelve Steps and Twelve Traditions, p. 79" }
+
+# La Viña's calendar: the North Texas Spanish-speaking zone's 42nd gathering (the machine wrote "Xlii" and kept
+# the source's stray space before the parenthesis)
+"XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )": { en: "XLII North Texas Zone A.A. Gathering (A.A. A Way of Life)" }

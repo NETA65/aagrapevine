@@ -1,0 +1,256 @@
+# =====================================================================
+#  Service expense tracker (/tracker/) — the defaults every visitor starts with
+#  Read by src/_data/expenses.js (templates see it as expenses.*). The page embeds it as JSON
+#  (<script id="xp-config">) and the tracker (src/assets/js/expenses-core.js, mergeDefaults) adds
+#  it to each visitor's own settings, kept in their browser: they can rename, hide, reorder and
+#  extend every list. This file is the ONLY place the defaults live.
+#
+#  Format
+#  - Every text is a pair:  { en: "English", es: "Español" }  — both are required (the site
+#    build stops if one is missing). Latin-American Spanish, "tú".
+#  - `id`s are stable: a CSV exported on one device maps back on another through them. Never
+#    rename an id; change the label instead. A new id is added to visitors' lists the next time
+#    they open the tracker (a builtin they deleted stays deleted only if it was a custom one).
+#  - `icon` is a Lucide icon name (https://lucide.dev/icons) and must be in `icons` (the set the
+#    page draws at build time for the icon picker). `color` is one of `tones` (areas/expenses.css
+#    draws each in light, dark and high contrast).
+#  - categories: `type` is what kind of entry the category is for (expense · mileage · received ·
+#    giveaway · stock); `template` picks which form fields show:
+#      general · books · subscription · lodging · meal · printing · travel · mileage · received ·
+#      giveaway · stock
+#    Optional: default_funder (a funder id), default_claim (none · to_request),
+#    giveaway_default (true: a purchase adds to the giveaway stock by default).
+#  - funders: who pays for an entry in the end (or, for money received, who it came from).
+#    kind: self · area · district · group · committee · person · other. "me" is self-supported:
+#    nothing to ask back (Seventh Tradition — self-funded service is never "lost money").
+#  - methods: how it was paid. "direct" = the funder paid the vendor directly: kept for the
+#    record, left out of "my spending".
+#  - activities: the kinds of service an entry is for — assemblies, district meetings, information
+#    tables … (one per entry, optional). They are the service report's sections ("Miles by service
+#    activity", as a GVR's own report groups its trips) and a filter of the Entries list. A name in
+#    both languages; visitors rename, hide, reorder and add their own (Settings → Service
+#    activities), and a CSV's activity_label column finds them by name in either language.
+#  - rates: dollars per mile, a string with up to 3 decimals ("0.14"); "" = not set yet (the
+#    visitor fills it in). default_rate: a rate id.
+#  - panels: service panels (two-year terms) the period filter offers, inclusive ISO dates.
+# =====================================================================
+
+tones: [gv, lv, grape, vine, rose, teal, gold, slate]
+
+icons: [book-open, gift, newspaper, bed-double, utensils, coffee, printer, ticket, bus, fuel, plane,
+        train-front, store, mail, smartphone, hand-coins, shapes, car, banknote, wallet, handshake,
+        badge-dollar-sign, piggy-bank, heart-handshake, package, library, megaphone, video, users,
+        map-pin, tag, calendar]
+
+categories:
+  # ---- money spent ----
+  - id: books
+    type: expense
+    template: books
+    icon: book-open
+    color: gv
+    label: { en: "Books & literature", es: "Libros y literatura" }
+  - id: giveaways
+    type: expense
+    template: books
+    icon: gift
+    color: vine
+    giveaway_default: true
+    label: { en: "Literature to give away (carry the message)", es: "Literatura para regalar (llevar el mensaje)" }
+  - id: subscriptions
+    type: expense
+    template: subscription
+    icon: newspaper
+    color: lv
+    label: { en: "Magazine subscriptions", es: "Suscripciones a revistas" }
+  - id: lodging
+    type: expense
+    template: lodging
+    icon: bed-double
+    color: grape
+    label: { en: "Hotel & lodging", es: "Hotel y hospedaje" }
+  - id: meals
+    type: expense
+    template: meal
+    icon: utensils
+    color: gold
+    label: { en: "Meals", es: "Comidas" }
+  - id: printing
+    type: expense
+    template: printing
+    icon: printer
+    color: slate
+    label: { en: "Printing & copies", es: "Impresiones y copias" }
+  - id: registration
+    type: expense
+    template: general
+    icon: ticket
+    color: teal
+    label: { en: "Registration fees", es: "Cuotas de inscripción" }
+  - id: travel
+    type: expense
+    template: travel
+    icon: bus
+    color: rose
+    label: { en: "Parking, tolls & fares", es: "Estacionamiento, peajes y pasajes" }
+  - id: supplies
+    type: expense
+    template: general
+    icon: store
+    color: teal
+    label: { en: "Display & booth supplies", es: "Materiales para mesa o exhibición" }
+  - id: postage
+    type: expense
+    template: general
+    icon: mail
+    color: slate
+    label: { en: "Postage & shipping", es: "Correo y envíos" }
+  - id: tech
+    type: expense
+    template: general
+    icon: smartphone
+    color: grape
+    label: { en: "Phone, internet & software", es: "Teléfono, internet y programas" }
+  - id: contributions
+    type: expense
+    template: general
+    icon: hand-coins
+    color: vine
+    default_funder: me
+    default_claim: none
+    label: { en: "Seventh Tradition contributions", es: "Contribuciones de la Séptima Tradición" }
+  - id: other
+    type: expense
+    template: general
+    icon: shapes
+    color: slate
+    label: { en: "Other", es: "Otros" }
+
+  # ---- miles driven ----
+  - id: mileage
+    type: mileage
+    template: mileage
+    icon: car
+    color: gv
+    label: { en: "Miles driven", es: "Millas recorridas" }
+
+  # ---- money received ----
+  - id: reimbursement
+    type: received
+    template: received
+    icon: banknote
+    color: vine
+    label: { en: "Reimbursement", es: "Reembolso" }
+  - id: advance
+    type: received
+    template: received
+    icon: wallet
+    color: teal
+    label: { en: "Money advanced to me", es: "Dinero adelantado" }
+  - id: repayment
+    type: received
+    template: received
+    icon: handshake
+    color: lv
+    label: { en: "Paid back by a person", es: "Me lo devolvió una persona" }
+  - id: sales
+    type: received
+    template: received
+    icon: badge-dollar-sign
+    color: gold
+    label: { en: "Literature sales at a table", es: "Ventas de literatura en una mesa" }
+  - id: received_other
+    type: received
+    template: received
+    icon: piggy-bank
+    color: slate
+    label: { en: "Other money received", es: "Otro dinero recibido" }
+
+  # ---- items given away / received to give away (no money) ----
+  - id: given
+    type: giveaway
+    template: giveaway
+    icon: heart-handshake
+    color: vine
+    label: { en: "Given away at an event", es: "Regalado en un evento" }
+  - id: stock_in
+    type: stock
+    template: stock
+    icon: package
+    color: grape
+    label: { en: "Received to give away (no cost)", es: "Recibido para regalar (sin costo)" }
+
+funders:
+  - id: me
+    kind: self
+    name: { en: "Me (self-supported)", es: "Yo (lo pago yo)" }
+  - id: area
+    kind: area
+    name: { en: "Area 65 (NETA 65)", es: "Área 65 (NETA 65)" }
+  - id: district
+    kind: district
+    name: { en: "My district", es: "Mi distrito" }
+  - id: group
+    kind: group
+    name: { en: "My home group", es: "Mi grupo base" }
+  - id: committee
+    kind: committee
+    name: { en: "Grapevine / La Viña committee", es: "Comité de Grapevine / La Viña" }
+
+methods:
+  - id: cash
+    name: { en: "Cash", es: "Efectivo" }
+  - id: card
+    name: { en: "Card", es: "Tarjeta" }
+  - id: check
+    name: { en: "Check", es: "Cheque" }
+  - id: app
+    name: { en: "App (Zelle / Venmo / PayPal)", es: "App (Zelle / Venmo / PayPal)" }
+  - id: direct
+    name: { en: "Paid directly by the funder", es: "Lo pagó directamente quien lo cubre" }
+
+# in the order a GVR's expense report sets out its trips (and the service report follows):
+# assemblies & ACMs, district meetings, information tables & conventions, workshops & events
+activities:
+  - id: assembly
+    name: { en: "Assemblies & Area committee meetings", es: "Asambleas y reuniones del comité de Área" }
+  - id: district
+    name: { en: "District meetings", es: "Reuniones del distrito" }
+  - id: table
+    name: { en: "Information tables & conventions", es: "Mesas de información y convenciones" }
+  - id: workshop
+    name: { en: "Workshops & events", es: "Talleres y eventos" }
+  - id: committee
+    name: { en: "Grapevine / La Viña committee meetings", es: "Reuniones del comité de Grapevine / La Viña" }
+  - id: group
+    name: { en: "Groups & group visits", es: "Grupos y visitas a grupos" }
+  - id: other
+    name: { en: "Other service", es: "Otro servicio" }
+
+rates:
+  - id: irs_charity
+    name: { en: "IRS charitable rate", es: "Tarifa caritativa del IRS" }
+    rate: "0.14"
+    note: { en: "For volunteer driving; check with a tax professional.", es: "Para manejar como voluntario; consulta con un profesional de impuestos." }
+  - id: service
+    name: { en: "My district's / Area's rate", es: "Tarifa de mi distrito o del Área" }
+    rate: ""
+    note: { en: "Ask your treasurer and fill it in.", es: "Pregúntale a tu tesorero y escríbela aquí." }
+default_rate: irs_charity
+
+defaults:
+  funder: me
+  method: cash
+  round_trip: false
+
+panels:
+  - id: "77"
+    from: "2027-01-01"
+    to: "2028-12-31"
+
+# reminders (each visitor changes theirs in Settings → Reminders): a subscription that ends within
+# renewal_days is "Ending soon" (Summary, Giveaways → Subscriptions), and the calendar file of the end
+# dates (.ics) sets its alarm that many days before each end (the next morning for one that ends sooner:
+# never an alarm already past); the backup reminder after so many days
+renewal_days: 60
+backup_reminder_days: 30

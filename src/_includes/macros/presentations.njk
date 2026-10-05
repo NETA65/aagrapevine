@@ -1,0 +1,189 @@
+{#- =========================================================================
+    The workshop presentations' player (src/assets/js/presentations.js + presentations-core.js) — what the page
+    needs for it, printed once where the page calls it (src/pages/orientation.njk):
+      {% import "macros/presentations.njk" as pres with context %}{{ pres.player(lang) }}
+    Context: `presentations` (src/_data/presentations.js: the decks' list) and the `url` filter (the path prefix).
+
+    pres.player(lang) prints, all inert until the script uses them:
+      #gvp-tpl      the dialog shell, cloned when a presentation is opened: progress line, the stage, the notes
+                    panel, the presenter view's timer / clock / next slide, the Customize drawer (seven tabs; their
+                    panels are drawn by the script), the overview, the control bar and its two menus (Print · More),
+                    a live region and the toast. Every label in the page language; the slides inside are English
+                    (marked lang="en" by the script; "(en inglés)" on /es/). Areas/presentations.css (prefix gvp-).
+      #gvp-icons    the Lucide icons the script puts on the buttons it makes (Move up, Edit, Print …)
+      #gvp-config   JSON for the script: the page language, the site's base path and the decks' JSON folder (both
+                    with the path prefix), the decks (id, titles, slide count, versions — for the status lines,
+                    without fetching anything) and every pres.* string (src/_i18n/presentations.json) in the page
+                    language. "<" is written <, so no text can end the script element.
+    The hooks on the cards (data-pres-open, data-pres-print, data-pres-status, data-pres-reset) are the page's own
+    markup; presentations.js lists them. Without JavaScript none of this shows. -#}
+{% macro player(lang) %}
+{%- set decks = (presentations.decks if presentations and presentations.decks else []) -%}
+{#- every string the script asks for (T("pres.…") / tInto(…, "pres.…") in presentations.js and the core's error
+    keys); the markup below also builds some names from parts: pres.tab_version … pres.tab_edit … pres.tab_save,
+    pres.print_slides / pres.print_slides_d, pres.print_notes_d, pres.print_handout_d, pres.print_script_d. The
+    controls' names that {ui:…} in the notes asks for (customize_btn, the tabs …) are here too. -#}
+{%- set keys = [
+  "pres.dialog_title", "pres.slide", "pres.live_slide", "pres.thumb_label", "pres.go_to", "pres.loading", "pres.load_failed",
+  "pres.retry", "pres.no_slides", "pres.preview_tag", "pres.why_left_out", "pres.why_facilitator", "pres.why_window",
+  "pres.black_on", "pres.black_off", "pres.no_storage", "pres.old_copy", "pres.ok", "pres.cancel", "pres.undo", "pres.undone", "pres.full",
+  "pres.full_exit", "pres.notes", "pres.notes_for", "pres.no_notes",
+  "pres.customize_btn", "pres.notes_btn", "pres.overview_btn", "pres.presenter_btn", "pres.print_btn", "pres.black_btn", "pres.tab_edit",
+  "pres.next_slide", "pres.next_end", "pres.plan", "pres.pace_on_time", "pres.pace_behind", "pres.pace_ahead", "pres.popup_h",
+  "pres.popup_text", "pres.presenter_here", "pres.presenter_opened",
+  "pres.blanks_title", "pres.blanks_title_one", "pres.blanks_text", "pres.blanks_text_more", "pres.blanks_fill", "pres.blanks_anyway",
+  "pres.stale_title", "pres.stale_title_one", "pres.stale_text", "pres.stale_also", "pres.stale_also_one", "pres.stale_review",
+  "pres.tab_version", "pres.tab_slides", "pres.tab_add", "pres.tab_details", "pres.tab_prepare", "pres.tab_save",
+  "pres.version_intro", "pres.version_len", "pres.version_now", "pres.version_mine", "pres.version_set",
+  "pres.slides_intro", "pres.show_all", "pres.original_order", "pres.all_shown", "pres.order_back", "pres.drag", "pres.part",
+  "pres.b_optional", "pres.b_yours", "pres.b_edited", "pres.b_updated", "pres.b_facilitator", "pres.b_not_today", "pres.b_handout",
+  "pres.b_checklist", "pres.b_in_show", "pres.switch_label", "pres.move_up", "pres.move_down", "pres.edit", "pres.moved",
+  "pres.delete_slide", "pres.delete_confirm", "pres.deleted", "pres.reset_slide", "pres.slide_reset",
+  "pres.edit_h", "pres.edit_h_off", "pres.edit_help", "pres.stale_one", "pres.stale_one_text", "pres.use_new", "pres.keep_mine",
+  "pres.slide_long",
+  "pres.f_title", "pres.f_eyebrow", "pres.f_subtitle", "pres.f_lines", "pres.f_number", "pres.f_items", "pres.f_columns",
+  "pres.f_heading", "pres.f_text", "pres.f_header", "pres.f_rows", "pres.f_agenda", "pres.f_quote", "pres.f_credit", "pres.f_steps",
+  "pres.f_duration", "pres.f_materials", "pres.f_prompts", "pres.f_note", "pres.f_links", "pres.f_sources", "pres.f_message",
+  "pres.f_body", "pres.f_intro", "pres.f_takeaway", "pres.f_source", "pres.f_minutes", "pres.f_notes",
+  "pres.hint_list", "pres.hint_outline", "pres.hint_cells", "pres.hint_table", "pres.hint_links", "pres.hint_flow",
+  "pres.hint_minutes", "pres.hint_agenda", "pres.column_n", "pres.auto_time", "pres.left_out_short", "pres.agenda_time",
+  "pres.agenda_title", "pres.agenda_detail", "pres.agenda_detail_ph", "pres.agenda_remove", "pres.agenda_add",
+  "pres.add_after", "pres.add_after_off", "pres.add_end", "pres.add_bullets", "pres.add_bullets_d", "pres.add_text",
+  "pres.add_text_d", "pres.add_section", "pres.add_section_d", "pres.add_qa", "pres.add_qa_d", "pres.add_note", "pres.add_full",
+  "pres.added",
+  "pres.details_intro", "pres.details_empty", "pres.details_empty_one", "pres.details_done", "pres.details_group",
+  "pres.details_group_off", "pres.details_other", "pres.details_count", "pres.details_shared", "pres.details_notes_only",
+  "pres.details_default", "pres.details_hint", "pres.details_hint_notes",
+  "pres.prepare_intro", "pres.prepare_none", "pres.print_handouts", "pres.print_handouts_one", "pres.print_pages",
+  "pres.print_pages_one", "pres.print_pages_file", "pres.view", "pres.print_page",
+  "pres.save_h", "pres.save_text", "pres.save_btn", "pres.saved_file", "pres.open_h", "pres.open_text", "pres.open_btn",
+  "pres.import_failed", "pres.import_confirm", "pres.imported", "pres.print_h", "pres.print_text", "pres.print_slides",
+  "pres.print_notes", "pres.print_handout", "pres.print_script", "pres.print_slides_d", "pres.print_notes_d",
+  "pres.print_handout_d", "pres.print_script_d", "pres.save_doc", "pres.print_wait", "pres.reset_h", "pres.reset_text",
+  "pres.reset_deck", "pres.reset_confirm", "pres.reset_done", "pres.reset_all_note", "pres.reset_all_confirm",
+  "pres.reset_all_done", "pres.privacy",
+  "pres.err.not_json", "pres.err.not_ours", "pres.err.newer", "pres.err.other_deck", "pres.err.too_big", "pres.err.unknown",
+  "pres.err.bad_field", "pres.err.bad_edit", "pres.err.bad_added", "pres.err.html",
+  "pres.st_changed", "pres.st_changed_visit", "pres.st_version", "pres.st_hidden", "pres.st_hidden_one", "pres.st_shown", "pres.st_shown_one",
+  "pres.st_edited", "pres.st_edited_one", "pres.st_added", "pres.st_added_one", "pres.st_moved", "pres.st_details",
+  "pres.st_details_one", "pres.st_last", "pres.st_last_n", "pres.st_resume", "pres.st_resume_label"
+] -%}
+{%- set tabs = [["version", "timer"], ["slides", "list"], ["edit", "pencil"], ["add", "plus"], ["details", "notebook-pen"], ["prepare", "list-checks"], ["save", "download"]] -%}
+{%- set printModes = ["slides", "notes", "handout", "script"] -%}
+<template id="gvp-tpl">
+  <div class="gvp" role="dialog" aria-modal="true" aria-labelledby="gvp-dialog-title" tabindex="-1" data-gvp data-mode="present" lang="{{ lang }}">
+    <h2 id="gvp-dialog-title" class="sr-only" data-gvp-dialog-title>{{ "pres.dialog_label" | t(lang) }}</h2>
+    <div class="gvp-progress" aria-hidden="true"><span data-gvp-bar></span></div>
+    <div class="gvp-top">
+      <p class="gvp-top-title"><span data-gvp-short></span>{% if lang == "es" %} <span class="gvp-top-lang">{{ "pres.in_english" | t(lang) }}</span>{% endif %}</p>
+      <button type="button" class="gvp-btn" data-gvp-act="close" aria-label="{{ 'pres.close_label' | t(lang) }}" title="{{ 'pres.close' | t(lang) }} (Esc)">{% icon "x", "size-5" %}</button>
+    </div>
+    <div class="gvp-pvbar" data-gvp-pv hidden>
+      <div class="gvp-pv-timerbox" role="group" aria-label="{{ 'pres.timer' | t(lang) }}">
+        <p class="gvp-pv-timer" data-gvp-pv-timer aria-live="off">0:00</p>
+        <button type="button" class="gvp-btn" data-gvp-act="timer-start" aria-label="{{ 'pres.timer_start' | t(lang) }}" title="{{ 'pres.timer_start' | t(lang) }}">{% icon "play", "size-5" %}</button>
+        <button type="button" class="gvp-btn" data-gvp-act="timer-pause" aria-label="{{ 'pres.timer_pause' | t(lang) }}" title="{{ 'pres.timer_pause' | t(lang) }}" hidden>{% icon "pause", "size-5" %}</button>
+        <button type="button" class="gvp-btn" data-gvp-act="timer-reset" aria-label="{{ 'pres.timer_reset' | t(lang) }}" title="{{ 'pres.timer_reset' | t(lang) }}">{% icon "timer-reset", "size-5" %}</button>
+      </div>
+      <p class="gvp-pv-pace" data-gvp-pv-pace></p>
+      <p class="gvp-pv-clockbox"><span class="sr-only">{{ "pres.clock" | t(lang) }}: </span>{% icon "clock", "size-4" %}<span data-gvp-pv-clock></span></p>
+      <div class="gvp-pv-size" role="group" aria-label="{{ 'pres.notes_h' | t(lang) }}">
+        <button type="button" class="gvp-btn" data-gvp-act="notes-smaller" aria-label="{{ 'pres.notes_smaller' | t(lang) }}" title="{{ 'pres.notes_smaller' | t(lang) }}">{% icon "a-arrow-down", "size-5" %}</button>
+        <button type="button" class="gvp-btn" data-gvp-act="notes-larger" aria-label="{{ 'pres.notes_larger' | t(lang) }}" title="{{ 'pres.notes_larger' | t(lang) }}">{% icon "a-arrow-up", "size-5" %}</button>
+      </div>
+    </div>
+    <div class="gvp-body">
+      <div class="gvp-main">
+        <div class="gvp-stagewrap" data-gvp-stagewrap>
+          <div class="gvp-stage" data-gvp-stage></div>
+          <p class="gvp-preview-tag" data-gvp-preview hidden></p>
+          <div class="gvp-black" data-gvp-black hidden><span class="sr-only">{{ "pres.black_sr" | t(lang) }}</span></div>
+        </div>
+        <div class="gvp-pvnext" data-gvp-pv hidden>
+          <p class="gvp-pvnext-label" data-gvp-pvnext-label>{{ "pres.next_h" | t(lang) }}</p>
+          <div class="gvp-pvnext-stage" data-gvp-pvnext-stage aria-hidden="true"></div>
+          <p class="gvp-pv-plan" data-gvp-pv-plan></p>
+        </div>
+        <section class="gvp-notes" data-gvp-notes hidden aria-labelledby="gvp-notes-h">
+          <h3 id="gvp-notes-h" class="gvp-notes-h" data-gvp-notes-title>{{ "pres.notes_h" | t(lang) }}</h3>
+          {%- if lang == "es" %}<p class="gvp-notes-lang">{{ "pres.notes_en" | t(lang) }}</p>{% endif %}
+          <div class="gvp-notes-body" data-gvp-notes-body lang="en" tabindex="0"></div>
+        </section>
+      </div>
+      <aside class="gvp-drawer" data-gvp-drawer hidden aria-labelledby="gvp-drawer-h">
+        <div class="gvp-drawer-head">
+          <h3 id="gvp-drawer-h" class="gvp-drawer-h">{% icon "sliders-horizontal", "size-5" %}<span>{{ "pres.customize_h" | t(lang) }}</span></h3>
+          <button type="button" class="gvp-iconbtn" data-gvp-act="customize" aria-label="{{ 'pres.close_customize' | t(lang) }}" title="{{ 'pres.close_customize' | t(lang) }}">{% icon "x", "size-5" %}</button>
+        </div>
+        <div class="gvp-tabs" role="tablist" aria-label="{{ 'pres.customize_h' | t(lang) }}" data-gvp-tabs>
+          {%- for tb in tabs %}
+          <button type="button" role="tab" class="gvp-tab" id="gvp-tab-{{ tb[0] }}" aria-controls="gvp-panel-{{ tb[0] }}" aria-selected="false" tabindex="-1" data-gvp-tab="{{ tb[0] }}">{% icon tb[1], "size-4" %}<span>{{ ("pres.tab_" + tb[0]) | t(lang) }}</span></button>
+          {%- endfor %}
+        </div>
+        {#- shown while this browser keeps nothing (a private window, site data turned off) -#}
+        <p class="gvp-nostore" data-gvp-nostore hidden>{% icon "info", "size-4" %}<span>{{ "pres.no_storage_line" | t(lang) }}</span></p>
+        <div class="gvp-panels">
+          {%- for tb in tabs %}
+          <div class="gvp-panel" role="tabpanel" id="gvp-panel-{{ tb[0] }}" aria-labelledby="gvp-tab-{{ tb[0] }}" tabindex="0" data-gvp-panel="{{ tb[0] }}" hidden></div>
+          {%- endfor %}
+        </div>
+      </aside>
+    </div>
+    <section class="gvp-overview" data-gvp-overview hidden aria-labelledby="gvp-ov-h">
+      <div class="gvp-ov-head">
+        <h3 id="gvp-ov-h" class="gvp-ov-h">{% icon "layout-grid", "size-5" %}<span>{{ "pres.overview_h" | t(lang) }}</span></h3>
+        <button type="button" class="gvp-iconbtn gvp-iconbtn--dark" data-gvp-act="overview" aria-label="{{ 'pres.close_overview' | t(lang) }}" title="{{ 'pres.close_overview' | t(lang) }}">{% icon "x", "size-5" %}</button>
+      </div>
+      <ol class="gvp-ov-grid" data-gvp-ov-grid role="list"></ol>
+    </section>
+    {#- a notice over the slide takes no focus: its words are said once through the live region after it -#}
+    <div class="gvp-notice" data-gvp-notice role="region" hidden></div>
+    <p class="sr-only" role="status" data-gvp-notice-live></p>
+    <p class="gvp-digits" data-gvp-digits aria-live="polite" hidden></p>
+    <div class="gvp-bar" role="group" aria-label="{{ 'pres.controls' | t(lang) }}">
+      <button type="button" class="gvp-btn" data-gvp-act="prev" aria-label="{{ 'pres.prev' | t(lang) }}" title="{{ 'pres.prev' | t(lang) }} (←)">{% icon "chevron-left", "size-5" %}</button>
+      <p class="gvp-count" data-gvp-count aria-hidden="true">– / –</p>
+      <button type="button" class="gvp-btn" data-gvp-act="next" aria-label="{{ 'pres.next' | t(lang) }}" title="{{ 'pres.next' | t(lang) }} (→)">{% icon "chevron-right", "size-5" %}</button>
+      <p class="gvp-bar-title"><span data-gvp-short></span>{% if lang == "es" %} <span class="gvp-top-lang">{{ "pres.in_english" | t(lang) }}</span>{% endif %}</p>
+      <button type="button" class="gvp-btn gvp-btn--text" data-gvp-act="notes" aria-pressed="false" title="{{ 'pres.notes_btn' | t(lang) }} (N)">{% icon "notebook-pen", "size-5" %}<span class="gvp-btn-label">{{ "pres.notes_btn" | t(lang) }}</span></button>
+      <button type="button" class="gvp-btn gvp-btn--text" data-gvp-act="overview" aria-pressed="false" title="{{ 'pres.overview_btn' | t(lang) }} (O)">{% icon "layout-grid", "size-5" %}<span class="gvp-btn-label">{{ "pres.overview_btn" | t(lang) }}</span></button>
+      <button type="button" class="gvp-btn gvp-btn--text" data-gvp-act="customize" aria-pressed="false" title="{{ 'pres.customize_btn' | t(lang) }} (C)">{% icon "sliders-horizontal", "size-5" %}<span class="gvp-btn-label">{{ "pres.customize_btn" | t(lang) }}</span></button>
+      <button type="button" class="gvp-btn gvp-btn--text gvp-wide" data-gvp-act="presenter" aria-pressed="false" title="{{ 'pres.presenter_btn' | t(lang) }} (P)">{% icon "projector", "size-5" %}<span class="gvp-btn-label">{{ "pres.presenter_btn" | t(lang) }}</span></button>
+      <button type="button" class="gvp-btn gvp-btn--text gvp-wide" data-gvp-act="print" aria-haspopup="menu" aria-expanded="false" title="{{ 'pres.print_btn' | t(lang) }}">{% icon "printer", "size-5" %}<span class="gvp-btn-label">{{ "pres.print_btn" | t(lang) }}</span></button>
+      <button type="button" class="gvp-btn gvp-btn--text gvp-wide" data-gvp-act="full" title="{{ 'pres.full' | t(lang) }} (F)">{% icon "maximize", "size-5" %}<span class="gvp-btn-label">{{ "pres.full" | t(lang) }}</span></button>
+      <button type="button" class="gvp-btn gvp-btn--text gvp-narrow" data-gvp-act="more" aria-haspopup="menu" aria-expanded="false" title="{{ 'pres.more_btn' | t(lang) }}">{% icon "ellipsis", "size-5" %}<span class="gvp-btn-label">{{ "pres.more_btn" | t(lang) }}</span></button>
+      <button type="button" class="gvp-btn gvp-btn--text gvp-wide gvp-btn--close" data-gvp-act="close" aria-label="{{ 'pres.close_label' | t(lang) }}" title="{{ 'pres.close' | t(lang) }} (Esc)">{% icon "x", "size-5" %}<span class="gvp-btn-label" aria-hidden="true">{{ "pres.close" | t(lang) }}</span></button>
+    </div>
+    <div class="gvp-menuwrap" data-gvp-menuwrap="print" hidden>
+      <div class="gvp-menu" role="menu" aria-label="{{ 'pres.print_menu' | t(lang) }}">
+        {%- for m in printModes %}
+        <button type="button" role="menuitem" class="gvp-menuitem" data-gvp-print-mode="{{ m }}">{% icon "printer", "size-4" %}<span><span class="gvp-mi-t">{{ ("pres.print_" + m) | t(lang) }}</span><span class="gvp-mi-d">{{ ("pres.print_" + m + "_d") | t(lang) }}</span></span></button>
+        {%- endfor %}
+      </div>
+      <p class="gvp-menu-note">{{ "pres.save_doc" | t(lang) }}</p>
+    </div>
+    <div class="gvp-menuwrap" data-gvp-menuwrap="more" hidden>
+      <div class="gvp-menu" role="menu" aria-label="{{ 'pres.more_btn' | t(lang) }}">
+        <button type="button" role="menuitem" class="gvp-menuitem" data-gvp-act="presenter">{% icon "projector", "size-4" %}<span class="gvp-mi-t">{{ "pres.presenter_btn" | t(lang) }}</span></button>
+        <button type="button" role="menuitem" class="gvp-menuitem" data-gvp-act="full">{% icon "maximize", "size-4" %}<span class="gvp-mi-t" data-gvp-full-label>{{ "pres.full" | t(lang) }}</span></button>
+        {%- for m in printModes %}
+        <button type="button" role="menuitem" class="gvp-menuitem" data-gvp-print-mode="{{ m }}">{% icon "printer", "size-4" %}<span><span class="gvp-mi-t">{{ "pres.print_btn" | t(lang) }}: {{ ("pres.print_" + m) | t(lang) }}</span><span class="gvp-mi-d">{{ ("pres.print_" + m + "_d") | t(lang) }}</span></span></button>
+        {%- endfor %}
+      </div>
+      <p class="gvp-menu-note">{{ "pres.save_doc" | t(lang) }}</p>
+    </div>
+    <p class="sr-only" aria-live="polite" data-gvp-live></p>
+    {#- the toast: a live region that is there from the start, out of sight while it has nothing to say -#}
+    <div class="gvp-toast is-idle" data-gvp-toast role="status" aria-live="polite"></div>
+  </div>
+</template>
+<template id="gvp-icons">
+  {%- for n in ["grip-vertical", "arrow-up", "arrow-down", "pencil", "rotate-ccw", "trash-2", "list", "text", "bookmark", "message-circle-question", "eye", "printer", "download", "upload", "plus", "x"] %}
+  <span data-gvp-icon="{{ n }}">{% icon n, "size-4" %}</span>
+  {%- endfor %}
+</template>
+{%- set cfg %}{"lang": {{ lang | dump | safe }}, "site": {{ ('/' | url) | dump | safe }}, "json": {{ ('/orientation/presentations/' | url) | dump | safe }},
+"decks": [{% for d in decks %}{"id": {{ d.id | dump | safe }}, "title": {{ d.title | dump | safe }}, "short": {{ d.short | dump | safe }}, "count": {{ d.count or 0 }}, "minutes": {{ d.minutes or 0 }}, "presets": {{ d.presets | dump | safe }}}{{ "," if not loop.last }}{% endfor %}],
+"t": { {%- for k in keys %}{{ k | dump | safe }}: {{ (k | t(lang)) | dump | safe }}{{ "," if not loop.last }}{% endfor %}}}{% endset %}
+<script type="application/json" id="gvp-config">{{ cfg | replace("<", "\\u003c") | safe }}</script>
+{%- endmacro %}

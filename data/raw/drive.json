@@ -1,0 +1,2106 @@
+{
+ "source": "drive",
+ "updated": "2026-10-05T01:35:05Z",
+ "attempted": "2026-10-05T01:35:05Z",
+ "ok": true,
+ "error": null,
+ "stats": {
+  "mode": "html",
+  "root": "A65_GV",
+  "panels": [
+   "Panel 77 (2027–2028)"
+  ],
+  "panel_folders": [
+   {
+    "panel": 77,
+    "label": "Panel 77 (2027–2028)",
+    "name": "2027-2028_Panel77_GVLV",
+    "id": "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0"
+   }
+  ],
+  "include_loose": false,
+  "loose_skipped": [
+   "flyers",
+   "notes",
+   "photos",
+   "reports",
+   "slides",
+   "workshops",
+   "40th Annual Gathering of Eagles - Grapevine Table Signup"
+  ],
+  "skipped_panels": [],
+  "folders": 11,
+  "files": 35,
+  "fetched": 35,
+  "new": 0,
+  "removed": 0,
+  "kept_unverified": 0,
+  "by_category": {
+   "booth": 15,
+   "flyers": 10,
+   "slides": 4,
+   "notes": 2,
+   "reports": 2,
+   "announcements": 1,
+   "workshops": 1
+  },
+  "by_kind": {
+   "photo": 19,
+   "document": 10,
+   "slides": 4,
+   "video_file": 1,
+   "announcement": 1
+  },
+  "albums": {},
+  "events_from_flyers": 0,
+  "excluded": 3,
+  "excluded_by_reason": {
+   "type text/csv": 1,
+   "type application/vnd.google-apps.spreadsheet": 1,
+   "name contains 'PRIVATE'": 1
+  },
+  "unreadable_folders": [],
+  "depth_limited": [],
+  "shortcuts_resolved": 0,
+  "announcements": {
+   "reused": 1
+  },
+  "forms": {},
+  "requests": 11,
+  "truncated": false,
+  "warnings": [],
+  "booth_texts": {
+   "reused": 2
+  }
+ },
+ "items": [
+  {
+   "id": "drive:1xv4RzqkSM81mxUrAAa0OH08tIME6BmwT",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/1xv4RzqkSM81mxUrAAa0OH08tIME6BmwT/view",
+   "title": "README - how to name booth files",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1xv4RzqkSM81mxUrAAa0OH08tIME6BmwT=w600",
+   "tags": [
+    "panel-77",
+    "txt"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1xv4RzqkSM81mxUrAAa0OH08tIME6BmwT",
+    "mime": "text/plain",
+    "name": "_README - how to name booth files.txt",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1xv4RzqkSM81mxUrAAa0OH08tIME6BmwT/view",
+    "preview_url": "https://drive.google.com/file/d/1xv4RzqkSM81mxUrAAa0OH08tIME6BmwT/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1xv4RzqkSM81mxUrAAa0OH08tIME6BmwT",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1xv4RzqkSM81mxUrAAa0OH08tIME6BmwT=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "TXT",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "message",
+     "pub": "both",
+     "langs": [],
+     "title": "README - how to name booth files",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": true,
+     "fit": null,
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1zVgh_ZBk0vzLdfWEz-PJOKfO_MRwpViF",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/1zVgh_ZBk0vzLdfWEz-PJOKfO_MRwpViF/view",
+   "title": "Ask us about Grapevine",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1zVgh_ZBk0vzLdfWEz-PJOKfO_MRwpViF=w600",
+   "tags": [
+    "panel-77",
+    "txt"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1zVgh_ZBk0vzLdfWEz-PJOKfO_MRwpViF",
+    "mime": "text/plain",
+    "name": "GV EN Ask us about Grapevine.txt",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1zVgh_ZBk0vzLdfWEz-PJOKfO_MRwpViF/view",
+    "preview_url": "https://drive.google.com/file/d/1zVgh_ZBk0vzLdfWEz-PJOKfO_MRwpViF/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1zVgh_ZBk0vzLdfWEz-PJOKfO_MRwpViF",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1zVgh_ZBk0vzLdfWEz-PJOKfO_MRwpViF=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "TXT",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "message",
+     "pub": "gv",
+     "langs": [
+      "en"
+     ],
+     "title": "Ask us about Grapevine",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": null,
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": "Ask us how to:\n- subscribe for yourself or your group\n- become your group's GVR\n- write or record your story\n- give a Carry the Message gift subscription",
+     "problem": null
+    },
+    "modified": "2026-10-03",
+    "body_md": "Ask us how to:\n- subscribe for yourself or your group\n- become your group's GVR\n- write or record your story\n- give a Carry the Message gift subscription"
+   }
+  },
+  {
+   "id": "drive:1UrrfWzVzq1g1YgJll3poLVyn_ijHiN4T",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1UrrfWzVzq1g1YgJll3poLVyn_ijHiN4T/view",
+   "title": "Write your story for Grapevine",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1UrrfWzVzq1g1YgJll3poLVyn_ijHiN4T=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1UrrfWzVzq1g1YgJll3poLVyn_ijHiN4T",
+    "mime": "image/png",
+    "name": "GV EN Write your story for Grapevine (15s).png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1UrrfWzVzq1g1YgJll3poLVyn_ijHiN4T/view",
+    "preview_url": "https://drive.google.com/file/d/1UrrfWzVzq1g1YgJll3poLVyn_ijHiN4T/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1UrrfWzVzq1g1YgJll3poLVyn_ijHiN4T",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1UrrfWzVzq1g1YgJll3poLVyn_ijHiN4T=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1UrrfWzVzq1g1YgJll3poLVyn_ijHiN4T=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "poster",
+     "pub": "gv",
+     "langs": [
+      "en"
+     ],
+     "title": "Write your story for Grapevine",
+     "caption": true,
+     "order": null,
+     "seconds": 15,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1wpQONGuCtLmwF4jW5XFIvRslGiTLMOVY",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1wpQONGuCtLmwF4jW5XFIvRslGiTLMOVY/view",
+   "title": "Read listen watch - Lee escucha mira",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1wpQONGuCtLmwF4jW5XFIvRslGiTLMOVY=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1wpQONGuCtLmwF4jW5XFIvRslGiTLMOVY",
+    "mime": "image/png",
+    "name": "GVLV BI Read listen watch - Lee escucha mira (poster).png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1wpQONGuCtLmwF4jW5XFIvRslGiTLMOVY/view",
+    "preview_url": "https://drive.google.com/file/d/1wpQONGuCtLmwF4jW5XFIvRslGiTLMOVY/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1wpQONGuCtLmwF4jW5XFIvRslGiTLMOVY",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1wpQONGuCtLmwF4jW5XFIvRslGiTLMOVY=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1wpQONGuCtLmwF4jW5XFIvRslGiTLMOVY=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "poster",
+     "pub": "both",
+     "langs": [
+      "en",
+      "es"
+     ],
+     "title": "Read listen watch - Lee escucha mira",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1MmdJ_9xxwxkwn9x2A9wfts4bQ7_ajyS_",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1MmdJ_9xxwxkwn9x2A9wfts4bQ7_ajyS_/view",
+   "title": "Welcome - Bienvenidos",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1MmdJ_9xxwxkwn9x2A9wfts4bQ7_ajyS_=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1MmdJ_9xxwxkwn9x2A9wfts4bQ7_ajyS_",
+    "mime": "image/png",
+    "name": "GVLV BI Welcome - Bienvenidos (x2) (12s).png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1MmdJ_9xxwxkwn9x2A9wfts4bQ7_ajyS_/view",
+    "preview_url": "https://drive.google.com/file/d/1MmdJ_9xxwxkwn9x2A9wfts4bQ7_ajyS_/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1MmdJ_9xxwxkwn9x2A9wfts4bQ7_ajyS_",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1MmdJ_9xxwxkwn9x2A9wfts4bQ7_ajyS_=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1MmdJ_9xxwxkwn9x2A9wfts4bQ7_ajyS_=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "poster",
+     "pub": "both",
+     "langs": [
+      "en",
+      "es"
+     ],
+     "title": "Welcome - Bienvenidos",
+     "caption": true,
+     "order": null,
+     "seconds": 12,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 2,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1POA_B6sQsCjH3-CCqE8TqzVtNXJTURzx",
+   "source": "drive",
+   "kind": "video_file",
+   "url": "https://drive.google.com/file/d/1POA_B6sQsCjH3-CCqE8TqzVtNXJTURzx/view",
+   "title": "Welcome video - Video de bienvenida",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1POA_B6sQsCjH3-CCqE8TqzVtNXJTURzx=w600",
+   "tags": [
+    "panel-77",
+    "mp4"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1POA_B6sQsCjH3-CCqE8TqzVtNXJTURzx",
+    "mime": "video/mp4",
+    "name": "GVLV BI Welcome video - Video de bienvenida.mp4",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1POA_B6sQsCjH3-CCqE8TqzVtNXJTURzx/view",
+    "preview_url": "https://drive.google.com/file/d/1POA_B6sQsCjH3-CCqE8TqzVtNXJTURzx/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1POA_B6sQsCjH3-CCqE8TqzVtNXJTURzx",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1POA_B6sQsCjH3-CCqE8TqzVtNXJTURzx=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": true,
+    "is_pdf": false,
+    "file_type": "MP4",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "video",
+     "pub": "both",
+     "langs": [
+      "en",
+      "es"
+     ],
+     "title": "Welcome video - Video de bienvenida",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1LpWVLaMD1XzUj-_jrhRwBDZtz7OoLqhr",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1LpWVLaMD1XzUj-_jrhRwBDZtz7OoLqhr/view",
+   "title": "Become a GVR or RLV",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1LpWVLaMD1XzUj-_jrhRwBDZtz7OoLqhr=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1LpWVLaMD1XzUj-_jrhRwBDZtz7OoLqhr",
+    "mime": "image/png",
+    "name": "GVLV EN Become a GVR or RLV.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1LpWVLaMD1XzUj-_jrhRwBDZtz7OoLqhr/view",
+    "preview_url": "https://drive.google.com/file/d/1LpWVLaMD1XzUj-_jrhRwBDZtz7OoLqhr/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1LpWVLaMD1XzUj-_jrhRwBDZtz7OoLqhr",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1LpWVLaMD1XzUj-_jrhRwBDZtz7OoLqhr=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1LpWVLaMD1XzUj-_jrhRwBDZtz7OoLqhr=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "poster",
+     "pub": "both",
+     "langs": [
+      "en"
+     ],
+     "title": "Become a GVR or RLV",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1g46MoS2QV9VFDnPyK6MrGWaZxxKKCTtY",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/1g46MoS2QV9VFDnPyK6MrGWaZxxKKCTtY/view",
+   "title": "Our committee meets every third Wednesday",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1g46MoS2QV9VFDnPyK6MrGWaZxxKKCTtY=w600",
+   "tags": [
+    "panel-77",
+    "pdf"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1g46MoS2QV9VFDnPyK6MrGWaZxxKKCTtY",
+    "mime": "application/pdf",
+    "name": "GVLV EN Our committee meets every third Wednesday.pdf",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1g46MoS2QV9VFDnPyK6MrGWaZxxKKCTtY/view",
+    "preview_url": "https://drive.google.com/file/d/1g46MoS2QV9VFDnPyK6MrGWaZxxKKCTtY/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1g46MoS2QV9VFDnPyK6MrGWaZxxKKCTtY",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1g46MoS2QV9VFDnPyK6MrGWaZxxKKCTtY=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": true,
+    "file_type": "PDF",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "poster",
+     "pub": "both",
+     "langs": [
+      "en"
+     ],
+     "title": "Our committee meets every third Wednesday",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:152g2em6IDutMAxH0eFRFOdTlsMO2B5w2",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/152g2em6IDutMAxH0eFRFOdTlsMO2B5w2/view",
+   "title": "Welcome message",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/152g2em6IDutMAxH0eFRFOdTlsMO2B5w2=w600",
+   "tags": [
+    "panel-77",
+    "mp3"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "152g2em6IDutMAxH0eFRFOdTlsMO2B5w2",
+    "mime": "audio/mpeg",
+    "name": "GVLV EN Welcome message.mp3",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/152g2em6IDutMAxH0eFRFOdTlsMO2B5w2/view",
+    "preview_url": "https://drive.google.com/file/d/152g2em6IDutMAxH0eFRFOdTlsMO2B5w2/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=152g2em6IDutMAxH0eFRFOdTlsMO2B5w2",
+    "thumb_url": "https://lh3.googleusercontent.com/d/152g2em6IDutMAxH0eFRFOdTlsMO2B5w2=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "MP3",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "audio",
+     "pub": "both",
+     "langs": [
+      "en"
+     ],
+     "title": "Welcome message",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": null,
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1Zk9YJ34xwBO9Dq-x8Hb6vpnLxcHN2GDB",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1Zk9YJ34xwBO9Dq-x8Hb6vpnLxcHN2GDB/view",
+   "title": "Sé RLV o GVR de tu grupo",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1Zk9YJ34xwBO9Dq-x8Hb6vpnLxcHN2GDB=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1Zk9YJ34xwBO9Dq-x8Hb6vpnLxcHN2GDB",
+    "mime": "image/png",
+    "name": "GVLV ES Sé RLV o GVR de tu grupo.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1Zk9YJ34xwBO9Dq-x8Hb6vpnLxcHN2GDB/view",
+    "preview_url": "https://drive.google.com/file/d/1Zk9YJ34xwBO9Dq-x8Hb6vpnLxcHN2GDB/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1Zk9YJ34xwBO9Dq-x8Hb6vpnLxcHN2GDB",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1Zk9YJ34xwBO9Dq-x8Hb6vpnLxcHN2GDB=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1Zk9YJ34xwBO9Dq-x8Hb6vpnLxcHN2GDB=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "poster",
+     "pub": "both",
+     "langs": [
+      "es"
+     ],
+     "title": "Sé RLV o GVR de tu grupo",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1wdGjtQd1uvKDTYk8n3m-uz0UQOQLjzRI",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1wdGjtQd1uvKDTYk8n3m-uz0UQOQLjzRI/view",
+   "title": "Grapevine leaves",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1wdGjtQd1uvKDTYk8n3m-uz0UQOQLjzRI=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1wdGjtQd1uvKDTYk8n3m-uz0UQOQLjzRI",
+    "mime": "image/jpeg",
+    "name": "GVLV Grapevine leaves (photo).jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1wdGjtQd1uvKDTYk8n3m-uz0UQOQLjzRI/view",
+    "preview_url": "https://drive.google.com/file/d/1wdGjtQd1uvKDTYk8n3m-uz0UQOQLjzRI/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1wdGjtQd1uvKDTYk8n3m-uz0UQOQLjzRI",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1wdGjtQd1uvKDTYk8n3m-uz0UQOQLjzRI=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1wdGjtQd1uvKDTYk8n3m-uz0UQOQLjzRI=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "photo",
+     "pub": "both",
+     "langs": [],
+     "title": "Grapevine leaves",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "cover",
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1QnlwSvBxIw_kNCsUBYePujRD5Zsvff9o",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1QnlwSvBxIw_kNCsUBYePujRD5Zsvff9o/view",
+   "title": "Escribe tu historia para La Viña",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1QnlwSvBxIw_kNCsUBYePujRD5Zsvff9o=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1QnlwSvBxIw_kNCsUBYePujRD5Zsvff9o",
+    "mime": "image/png",
+    "name": "LV ES Escribe tu historia para La Viña (15s).png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1QnlwSvBxIw_kNCsUBYePujRD5Zsvff9o/view",
+    "preview_url": "https://drive.google.com/file/d/1QnlwSvBxIw_kNCsUBYePujRD5Zsvff9o/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1QnlwSvBxIw_kNCsUBYePujRD5Zsvff9o",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1QnlwSvBxIw_kNCsUBYePujRD5Zsvff9o=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1QnlwSvBxIw_kNCsUBYePujRD5Zsvff9o=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "poster",
+     "pub": "lv",
+     "langs": [
+      "es"
+     ],
+     "title": "Escribe tu historia para La Viña",
+     "caption": true,
+     "order": null,
+     "seconds": 15,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1JgwGTJTKCUj0koMXbUfew6R19aPzc-uc",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/1JgwGTJTKCUj0koMXbUfew6R19aPzc-uc/view",
+   "title": "Pregúntanos sobre La Viña",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1JgwGTJTKCUj0koMXbUfew6R19aPzc-uc=w600",
+   "tags": [
+    "panel-77",
+    "md"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1JgwGTJTKCUj0koMXbUfew6R19aPzc-uc",
+    "mime": "text/markdown",
+    "name": "LV ES Pregúntanos sobre La Viña.md",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1JgwGTJTKCUj0koMXbUfew6R19aPzc-uc/view",
+    "preview_url": "https://drive.google.com/file/d/1JgwGTJTKCUj0koMXbUfew6R19aPzc-uc/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1JgwGTJTKCUj0koMXbUfew6R19aPzc-uc",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1JgwGTJTKCUj0koMXbUfew6R19aPzc-uc=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "MD",
+    "folder_id": "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_url": "https://drive.google.com/drive/folders/1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "message",
+     "pub": "lv",
+     "langs": [
+      "es"
+     ],
+     "title": "Pregúntanos sobre La Viña",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": null,
+     "collection": "main",
+     "collection_label": "Booth folder",
+     "text": "Pregúntanos cómo:\n- suscribirte tú o tu grupo\n- ser RLV de tu grupo\n- escribir o grabar tu historia\n- regalar una suscripción con Lleva el Mensaje",
+     "problem": null
+    },
+    "modified": "2026-10-03",
+    "body_md": "Pregúntanos cómo:\n- suscribirte tú o tu grupo\n- ser RLV de tu grupo\n- escribir o grabar tu historia\n- regalar una suscripción con Lleva el Mensaje"
+   }
+  },
+  {
+   "id": "drive:1a2dLnkkVSM88MyjfbCGDPQId-DQ77Hbp",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1a2dLnkkVSM88MyjfbCGDPQId-DQ77Hbp/view",
+   "title": "A writing workshop for your group",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1a2dLnkkVSM88MyjfbCGDPQId-DQ77Hbp=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1a2dLnkkVSM88MyjfbCGDPQId-DQ77Hbp",
+    "mime": "image/png",
+    "name": "GV EN A writing workshop for your group.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth",
+     "Writing workshops"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1a2dLnkkVSM88MyjfbCGDPQId-DQ77Hbp/view",
+    "preview_url": "https://drive.google.com/file/d/1a2dLnkkVSM88MyjfbCGDPQId-DQ77Hbp/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1a2dLnkkVSM88MyjfbCGDPQId-DQ77Hbp",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1a2dLnkkVSM88MyjfbCGDPQId-DQ77Hbp=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1a2dLnkkVSM88MyjfbCGDPQId-DQ77Hbp=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1MlO_2ZLFcfBusX0CL8HOixvll88P8BVp",
+    "folder_url": "https://drive.google.com/drive/folders/1MlO_2ZLFcfBusX0CL8HOixvll88P8BVp",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+     "1MlO_2ZLFcfBusX0CL8HOixvll88P8BVp"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "poster",
+     "pub": "gv",
+     "langs": [
+      "en"
+     ],
+     "title": "A writing workshop for your group",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "writing-workshops",
+     "collection_label": "Writing workshops",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1BgCRIKSnU7SnP1QtXS-zwOENvZc49zgG",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1BgCRIKSnU7SnP1QtXS-zwOENvZc49zgG/view",
+   "title": "Un taller de escritura para tu grupo",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-03",
+   "first_seen": "2026-10-03T15:05:51Z",
+   "last_seen": "2026-10-03T15:05:51Z",
+   "image": "https://lh3.googleusercontent.com/d/1BgCRIKSnU7SnP1QtXS-zwOENvZc49zgG=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1BgCRIKSnU7SnP1QtXS-zwOENvZc49zgG",
+    "mime": "image/png",
+    "name": "LV ES Un taller de escritura para tu grupo.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth",
+     "Writing workshops"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1BgCRIKSnU7SnP1QtXS-zwOENvZc49zgG/view",
+    "preview_url": "https://drive.google.com/file/d/1BgCRIKSnU7SnP1QtXS-zwOENvZc49zgG/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1BgCRIKSnU7SnP1QtXS-zwOENvZc49zgG",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1BgCRIKSnU7SnP1QtXS-zwOENvZc49zgG=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1BgCRIKSnU7SnP1QtXS-zwOENvZc49zgG=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1MlO_2ZLFcfBusX0CL8HOixvll88P8BVp",
+    "folder_url": "https://drive.google.com/drive/folders/1MlO_2ZLFcfBusX0CL8HOixvll88P8BVp",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+     "1MlO_2ZLFcfBusX0CL8HOixvll88P8BVp"
+    ],
+    "modified_text": "Oct 3",
+    "booth": {
+     "kind": "poster",
+     "pub": "lv",
+     "langs": [
+      "es"
+     ],
+     "title": "Un taller de escritura para tu grupo",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "writing-workshops",
+     "collection_label": "Writing workshops",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-03"
+   }
+  },
+  {
+   "id": "drive:1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/view",
+   "title": "Grapevine Writing Workshop - Primary Purpose Group, Arlington",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-02",
+   "first_seen": "2026-10-02T14:42:43Z",
+   "last_seen": "2026-10-02T14:42:43Z",
+   "image": "https://lh3.googleusercontent.com/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu",
+    "mime": "image/png",
+    "name": "Grapevine Writing Workshop - Primary Purpose Group, Arlington.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/view",
+    "preview_url": "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Oct 2"
+   }
+  },
+  {
+   "id": "drive:1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH/view",
+   "title": "Taller de Audio de La Viña - Grupo Progreso Latino, Duncanville",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-02",
+   "first_seen": "2026-10-02T14:42:43Z",
+   "last_seen": "2026-10-02T14:42:43Z",
+   "image": "https://lh3.googleusercontent.com/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH",
+    "mime": "image/png",
+    "name": "Taller de Audio de La Viña - Grupo Progreso Latino, Duncanville.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH/view",
+    "preview_url": "https://drive.google.com/file/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Oct 2"
+   }
+  },
+  {
+   "id": "drive:1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj/view",
+   "title": "Taller de Escritura de La Viña - Grupo 7 Defectos y 7 Virtudes, Mansfield",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-02",
+   "first_seen": "2026-10-02T14:42:43Z",
+   "last_seen": "2026-10-02T14:42:43Z",
+   "image": "https://lh3.googleusercontent.com/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj",
+    "mime": "image/jpeg",
+    "name": "Taller de Escritura de La Viña - Grupo 7 Defectos y 7 Virtudes, Mansfield.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj/view",
+    "preview_url": "https://drive.google.com/file/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Oct 2"
+   }
+  },
+  {
+   "id": "drive:1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j/view",
+   "title": "Taller de Escritura de La Viña - Grupo La Nueva Esperanza, Fort Worth",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-02",
+   "first_seen": "2026-10-02T14:42:43Z",
+   "last_seen": "2026-10-02T14:42:43Z",
+   "image": "https://lh3.googleusercontent.com/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j",
+    "mime": "image/jpeg",
+    "name": "Taller de Escritura de La Viña - Grupo La Nueva Esperanza, Fort Worth.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j/view",
+    "preview_url": "https://drive.google.com/file/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Oct 2"
+   }
+  },
+  {
+   "id": "drive:1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN/view",
+   "title": "Taller de Escritura de La Viña - Grupo Libro Grande, Tyler",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-02",
+   "first_seen": "2026-10-02T14:42:43Z",
+   "last_seen": "2026-10-02T14:42:43Z",
+   "image": "https://lh3.googleusercontent.com/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN",
+    "mime": "image/jpeg",
+    "name": "Taller de Escritura de La Viña - Grupo Libro Grande, Tyler.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN/view",
+    "preview_url": "https://drive.google.com/file/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Oct 2"
+   }
+  },
+  {
+   "id": "drive:1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf/view",
+   "title": "Taller de Información de La Viña - Grupo Solo por Hoy, Longview",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-02",
+   "first_seen": "2026-10-02T14:42:43Z",
+   "last_seen": "2026-10-02T14:42:43Z",
+   "image": "https://lh3.googleusercontent.com/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf",
+    "mime": "image/jpeg",
+    "name": "Taller de Información de La Viña - Grupo Solo por Hoy, Longview.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf/view",
+    "preview_url": "https://drive.google.com/file/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Oct 2"
+   }
+  },
+  {
+   "id": "drive:18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW",
+   "source": "drive",
+   "kind": "announcement",
+   "url": "https://drive.google.com/file/d/18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW/view",
+   "title": "Grapevine and La Viña — ways to carry the message",
+   "summary": "A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it. Why it matters A meeting in print, every day. Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on…",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-09-30T09:45:34Z",
+   "last_seen": "2026-09-30T09:45:34Z",
+   "image": null,
+   "tags": [
+    "panel-77",
+    "md"
+   ],
+   "category": "announcements",
+   "status": "ok",
+   "extra": {
+    "file_id": "18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW",
+    "mime": "text/markdown",
+    "name": "Grapevine and La Viña — ways to carry the message.md",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "bulletin"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW/view",
+    "preview_url": "https://drive.google.com/file/d/18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW",
+    "thumb_url": "https://lh3.googleusercontent.com/d/18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "MD",
+    "folder_id": "1Ka4i255epTjiLcbGVzasZR4Xq7cZZ7G7",
+    "folder_url": "https://drive.google.com/drive/folders/1Ka4i255epTjiLcbGVzasZR4Xq7cZZ7G7",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1Ka4i255epTjiLcbGVzasZR4Xq7cZZ7G7"
+    ],
+    "modified_text": "Oct 1",
+    "body_md": "A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it.\n\n# Why it matters\n\n- **A meeting in print, every day.** Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on prison and treatment tablets, and ASL videos for deaf and hard-of-hearing members.\n- **Most of it is free.** Subscriptions pay for all of it, so every subscription keeps the free services going.\n- **The 183 Challenge.** If every area added about 183 subscriptions (print, app or online), Grapevine would be fully self-supporting. That is fewer people than come to most area assemblies.\n- **La Viña needs its readers.** La Viña is not yet self-supporting. Spanish-speaking members and groups make the biggest difference by subscribing, sharing it and writing for it.\n\n# What groups can do\n\n- **Subscribe as a group.** A group subscription is Seventh Tradition support, and many treasurers don't know it is an option. If even one group in ten subscribed, it would make a big difference.\n- **Welcome newcomers.** Give a subscription along with the Big Book. A digital subscription costs less than 10 cents a day ([current prices](/shop/)).\n- **Carry the Message.** A group can send subscriptions to correctional facilities, treatment centers and professionals who work with alcoholics ([how it works](https://www.aagrapevine.org/carry-the-message)).\n- **Put it in the budget.** Include a Carry the Message subscription in the group's regular spending, next to rent, coffee, literature and contributions to the district, area and GSO.\n- **Share the free resources.** Put a one-page handout on the literature table with links to the Grapevine app, the [podcast](/listen/), the Daily Quote sign-up, Instagram and YouTube. Many members don't know these exist.\n\n# At meetings\n\n- **Mention it in your share.** Not a pitch, just experience: \"I read something in Grapevine this week that really hit home…\"\n- **Make a 30-second announcement.** \"Grapevine reaches millions of people through daily quotes, podcasts and prison tablets, mostly for free. A subscription helps keep the lights on for all of it.\" Anyone can say it.\n- **Set out QR table cards.** A card on the literature table that links to the subscription page works every week without an announcement ([QR posters](/share/)).\n- **Hold a \"meeting after the meeting.\"** Once a month, for 15 minutes after a regular meeting, read a story, play a podcast clip or show a short video. People subscribe to what they have experienced.\n- **Invite an \"I got sober reading this\" minute.** Once a month, a member shares one minute about a Grapevine or La Viña story that helped them.\n- **Use the coffee comparison at business meetings.** A digital subscription costs less than one fancy coffee a month.\n\n# One on one\n\n- **Sponsor to sponsee.** A gift subscription is a meeting that never closes, especially for someone in a rural area, working odd hours or unable to get to meetings.\n- **Share the podcast.** It is free Twelfth Step work: one text, one link.\n- **Share the Daily Quote.** Signing up is free, and it takes ten seconds to read. Share it in your group's text chain ([today's quote](/#quote-title)).\n- **Mark anniversaries.** Give a year of Grapevine or La Viña with, or instead of, a chip.\n- **Give in Gratitude Month.** In November, ask: \"What are you grateful for? Give someone a reason to be grateful every day for a year.\" A group can set a goal, such as five gift subscriptions.\n\n# Online\n\n- **Ask for a follow.** It takes five seconds: \"If you're on Instagram, follow Grapevine and La Viña\" ([our Instagram page](/instagram/)).\n- **Reach young people.** Bring the app, the podcast, Instagram and the Daily Quote to YPAA events and meetings near campuses. They don't need to be sold on technology; they need to know the content exists.\n\n# Beyond the meeting room\n\n- **Give a \"Grapevine Minute\" at the district meeting.** Three minutes, one story and a sign-up sheet or QR card, in front of every GSR.\n- **Set up an intergroup or central office display.** Current issues, a tablet with the podcast or app, and sign-up cards where members already come for literature and chips.\n- **Add it to H&I visit kits.** Leave a current issue alongside the Big Book.\n- **Build a bridge from treatment and corrections.** A group-funded subscription waiting for someone leaving treatment or a correctional facility means the message follows them home.\n- **Work with the professional community (CPC).** Include a current issue with other A.A. literature for doctors, counselors, social workers and clergy.\n- **Read it, then pass it.** Read one print copy at the meeting, then leave it in a waiting room, a laundromat or a break room.\n\n# Every month\n\nThe [Monthly toolkit](/monthly/) has this month's issues, the story deadlines and more ways to put them to work. Talk with your GVR or RLV, bring one idea to your next business meeting, and share what works at the [committee meeting](/meetings/#committee-meeting).",
+    "pinned": false
+   }
+  },
+  {
+   "id": "drive:16Tm35F7P7ynir3lH03wZBWmVE0MllVuR",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/16Tm35F7P7ynir3lH03wZBWmVE0MllVuR/view",
+   "title": "Taller Mensual y Virtual de La Viña - jueves, 3 p. m. (hora del Este), por Zoom",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-01T15:25:08Z",
+   "last_seen": "2026-10-01T15:25:08Z",
+   "image": "https://lh3.googleusercontent.com/d/16Tm35F7P7ynir3lH03wZBWmVE0MllVuR=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "16Tm35F7P7ynir3lH03wZBWmVE0MllVuR",
+    "mime": "image/png",
+    "name": "Taller Mensual y Virtual de La Viña - jueves, 3 p. m. (hora del Este), por Zoom.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/16Tm35F7P7ynir3lH03wZBWmVE0MllVuR/view",
+    "preview_url": "https://drive.google.com/file/d/16Tm35F7P7ynir3lH03wZBWmVE0MllVuR/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=16Tm35F7P7ynir3lH03wZBWmVE0MllVuR",
+    "thumb_url": "https://lh3.googleusercontent.com/d/16Tm35F7P7ynir3lH03wZBWmVE0MllVuR=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/16Tm35F7P7ynir3lH03wZBWmVE0MllVuR=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Oct 1"
+   }
+  },
+  {
+   "id": "drive:1qXSnwgiwxeqPoEvbm8iz9lMnkqkP3Q2l",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1qXSnwgiwxeqPoEvbm8iz9lMnkqkP3Q2l/view",
+   "title": "¡Tarjetas de ocasión para las fiestas! Paquete de 12 por $22 en La Viña",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-01T15:25:08Z",
+   "last_seen": "2026-10-01T15:25:08Z",
+   "image": "https://lh3.googleusercontent.com/d/1qXSnwgiwxeqPoEvbm8iz9lMnkqkP3Q2l=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1qXSnwgiwxeqPoEvbm8iz9lMnkqkP3Q2l",
+    "mime": "image/png",
+    "name": "¡Tarjetas de ocasión para las fiestas! Paquete de 12 por $22 en La Viña.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1qXSnwgiwxeqPoEvbm8iz9lMnkqkP3Q2l/view",
+    "preview_url": "https://drive.google.com/file/d/1qXSnwgiwxeqPoEvbm8iz9lMnkqkP3Q2l/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1qXSnwgiwxeqPoEvbm8iz9lMnkqkP3Q2l",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1qXSnwgiwxeqPoEvbm8iz9lMnkqkP3Q2l=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1qXSnwgiwxeqPoEvbm8iz9lMnkqkP3Q2l=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Oct 1"
+   }
+  },
+  {
+   "id": "drive:1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view",
+   "title": "Grapevine & La Viña Pricing Update - Effective January 1, 2027",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "last_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p=w600",
+   "tags": [
+    "panel-77",
+    "pdf"
+   ],
+   "category": "notes",
+   "status": "ok",
+   "extra": {
+    "file_id": "1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p",
+    "mime": "application/pdf",
+    "name": "2026-10-01 Grapevine & La Viña Pricing Update - Effective January 1, 2027.pdf",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "notes"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view",
+    "preview_url": "https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": true,
+    "file_type": "PDF",
+    "folder_id": "1jVTdPsLhBK4RUsHqnxuWsrJF0qg9BSnL",
+    "folder_url": "https://drive.google.com/drive/folders/1jVTdPsLhBK4RUsHqnxuWsrJF0qg9BSnL",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1jVTdPsLhBK4RUsHqnxuWsrJF0qg9BSnL"
+    ],
+    "modified_text": "Oct 2"
+   }
+  },
+  {
+   "id": "drive:19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6",
+   "source": "drive",
+   "kind": "slides",
+   "url": "https://drive.google.com/file/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6/view",
+   "title": "Grapevine and La Viña Information Workshop",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "last_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6=w600",
+   "tags": [
+    "panel-77",
+    "pptx"
+   ],
+   "category": "slides",
+   "status": "ok",
+   "extra": {
+    "file_id": "19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "name": "Grapevine and La Viña Information Workshop.pptx",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "slides"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6/view",
+    "preview_url": "https://drive.google.com/file/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6",
+    "thumb_url": "https://lh3.googleusercontent.com/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PPTX",
+    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
+    ],
+    "modified_text": "Oct 1"
+   }
+  },
+  {
+   "id": "drive:1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U",
+   "source": "drive",
+   "kind": "slides",
+   "url": "https://drive.google.com/file/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U/view",
+   "title": "Grapevine and La Viña Monthly Committee Meeting",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "last_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U=w600",
+   "tags": [
+    "panel-77",
+    "pptx"
+   ],
+   "category": "slides",
+   "status": "ok",
+   "extra": {
+    "file_id": "1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "name": "Grapevine and La Viña Monthly Committee Meeting.pptx",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "slides"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U/view",
+    "preview_url": "https://drive.google.com/file/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PPTX",
+    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
+    ],
+    "modified_text": "Oct 1"
+   }
+  },
+  {
+   "id": "drive:1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+   "source": "drive",
+   "kind": "slides",
+   "url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
+   "title": "Grapevine and La Viña Writing Workshop",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "last_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
+   "tags": [
+    "panel-77",
+    "pptx"
+   ],
+   "category": "slides",
+   "status": "ok",
+   "extra": {
+    "file_id": "1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "name": "Grapevine and La Viña Writing Workshop.pptx",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "slides"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
+    "preview_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PPTX",
+    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
+    ],
+    "modified_text": "Oct 1"
+   }
+  },
+  {
+   "id": "drive:1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3",
+   "source": "drive",
+   "kind": "slides",
+   "url": "https://drive.google.com/file/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3/view",
+   "title": "GVR and RLV Orientation Workshop",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "last_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3=w600",
+   "tags": [
+    "panel-77",
+    "pptx"
+   ],
+   "category": "slides",
+   "status": "ok",
+   "extra": {
+    "file_id": "1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "name": "GVR and RLV Orientation Workshop.pptx",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "slides"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3/view",
+    "preview_url": "https://drive.google.com/file/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PPTX",
+    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
+    ],
+    "modified_text": "Oct 1"
+   }
+  },
+  {
+   "id": "drive:1PQk08ukyuVAWKnq1kLRbnURvS1FUyX1i",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1PQk08ukyuVAWKnq1kLRbnURvS1FUyX1i/view",
+   "title": "Grapevine Editorial - Share your story - Fun in Sobriety and Emotional Sobriety",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-09-25",
+   "first_seen": "2026-09-25T15:09:59Z",
+   "last_seen": "2026-10-02T22:18:30Z",
+   "image": "https://lh3.googleusercontent.com/d/1PQk08ukyuVAWKnq1kLRbnURvS1FUyX1i=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1PQk08ukyuVAWKnq1kLRbnURvS1FUyX1i",
+    "mime": "image/jpeg",
+    "name": "Grapevine Editorial - Share your story - Fun in Sobriety and Emotional Sobriety.jpeg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1PQk08ukyuVAWKnq1kLRbnURvS1FUyX1i/view",
+    "preview_url": "https://drive.google.com/file/d/1PQk08ukyuVAWKnq1kLRbnURvS1FUyX1i/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1PQk08ukyuVAWKnq1kLRbnURvS1FUyX1i",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1PQk08ukyuVAWKnq1kLRbnURvS1FUyX1i=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1PQk08ukyuVAWKnq1kLRbnURvS1FUyX1i=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Sep 25"
+   }
+  },
+  {
+   "id": "drive:1NeF9BQOvPOTbb1feiPYykHbjFuZ7iRBJ",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1NeF9BQOvPOTbb1feiPYykHbjFuZ7iRBJ/view",
+   "title": "Nueva reunión abierta de La Viña - jueves a las 12 p. m. (hora del Este) por Zoom",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-09-25",
+   "first_seen": "2026-09-25T15:09:59Z",
+   "last_seen": "2026-10-02T22:18:30Z",
+   "image": "https://lh3.googleusercontent.com/d/1NeF9BQOvPOTbb1feiPYykHbjFuZ7iRBJ=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1NeF9BQOvPOTbb1feiPYykHbjFuZ7iRBJ",
+    "mime": "image/png",
+    "name": "Nueva reunión abierta de La Viña - jueves a las 12 p. m. (hora del Este) por Zoom.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1NeF9BQOvPOTbb1feiPYykHbjFuZ7iRBJ/view",
+    "preview_url": "https://drive.google.com/file/d/1NeF9BQOvPOTbb1feiPYykHbjFuZ7iRBJ/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1NeF9BQOvPOTbb1feiPYykHbjFuZ7iRBJ",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1NeF9BQOvPOTbb1feiPYykHbjFuZ7iRBJ=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1NeF9BQOvPOTbb1feiPYykHbjFuZ7iRBJ=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Sep 25"
+   }
+  },
+  {
+   "id": "drive:18mW_xghlvSL14WBAmas4gG987EeRN7-w",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/18mW_xghlvSL14WBAmas4gG987EeRN7-w/view",
+   "title": "Grapevine as a Twelfth Step Tool - Put Them to Work (2026-2027 editorial calendar)",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-09-25",
+   "first_seen": "2026-09-25T15:09:59Z",
+   "last_seen": "2026-10-02T22:18:30Z",
+   "image": "https://lh3.googleusercontent.com/d/18mW_xghlvSL14WBAmas4gG987EeRN7-w=w600",
+   "tags": [
+    "panel-77",
+    "pdf"
+   ],
+   "category": "workshops",
+   "status": "ok",
+   "extra": {
+    "file_id": "18mW_xghlvSL14WBAmas4gG987EeRN7-w",
+    "mime": "application/pdf",
+    "name": "Grapevine as a Twelfth Step Tool - Put Them to Work (2026-2027 editorial calendar).pdf",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "workshops"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/18mW_xghlvSL14WBAmas4gG987EeRN7-w/view",
+    "preview_url": "https://drive.google.com/file/d/18mW_xghlvSL14WBAmas4gG987EeRN7-w/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=18mW_xghlvSL14WBAmas4gG987EeRN7-w",
+    "thumb_url": "https://lh3.googleusercontent.com/d/18mW_xghlvSL14WBAmas4gG987EeRN7-w=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": true,
+    "file_type": "PDF",
+    "folder_id": "1F-JX93b8nDV3tqx97bYxev2OJpv-XnNt",
+    "folder_url": "https://drive.google.com/drive/folders/1F-JX93b8nDV3tqx97bYxev2OJpv-XnNt",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1F-JX93b8nDV3tqx97bYxev2OJpv-XnNt"
+    ],
+    "modified_text": "Sep 25"
+   }
+  },
+  {
+   "id": "drive:1Fs9t4jxeMXemu_FQP-bKc7smr6NZHuiu",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/1Fs9t4jxeMXemu_FQP-bKc7smr6NZHuiu/view",
+   "title": "Grapevine Area Chair Meeting Agenda",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-08-11",
+   "first_seen": "2026-09-25T15:09:59Z",
+   "last_seen": "2026-10-02T22:18:30Z",
+   "image": "https://lh3.googleusercontent.com/d/1Fs9t4jxeMXemu_FQP-bKc7smr6NZHuiu=w600",
+   "tags": [
+    "panel-77",
+    "pdf"
+   ],
+   "category": "notes",
+   "status": "ok",
+   "extra": {
+    "file_id": "1Fs9t4jxeMXemu_FQP-bKc7smr6NZHuiu",
+    "mime": "application/pdf",
+    "name": "2026-08-11 Grapevine Area Chair Meeting Agenda.pdf",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "notes"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1Fs9t4jxeMXemu_FQP-bKc7smr6NZHuiu/view",
+    "preview_url": "https://drive.google.com/file/d/1Fs9t4jxeMXemu_FQP-bKc7smr6NZHuiu/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1Fs9t4jxeMXemu_FQP-bKc7smr6NZHuiu",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1Fs9t4jxeMXemu_FQP-bKc7smr6NZHuiu=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": true,
+    "file_type": "PDF",
+    "folder_id": "1jVTdPsLhBK4RUsHqnxuWsrJF0qg9BSnL",
+    "folder_url": "https://drive.google.com/drive/folders/1jVTdPsLhBK4RUsHqnxuWsrJF0qg9BSnL",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1jVTdPsLhBK4RUsHqnxuWsrJF0qg9BSnL"
+    ],
+    "modified_text": "Sep 25"
+   }
+  },
+  {
+   "id": "drive:1fC3vvsu0CG-XdUagGDb_fgiwzkqEEfG4",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/1fC3vvsu0CG-XdUagGDb_fgiwzkqEEfG4/view",
+   "title": "Grapevine Area Chair Meeting Report",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-08-11",
+   "first_seen": "2026-09-25T15:09:59Z",
+   "last_seen": "2026-10-02T22:18:30Z",
+   "image": "https://lh3.googleusercontent.com/d/1fC3vvsu0CG-XdUagGDb_fgiwzkqEEfG4=w600",
+   "tags": [
+    "panel-77",
+    "pdf"
+   ],
+   "category": "reports",
+   "status": "ok",
+   "extra": {
+    "file_id": "1fC3vvsu0CG-XdUagGDb_fgiwzkqEEfG4",
+    "mime": "application/pdf",
+    "name": "2026-08-11 Grapevine Area Chair Meeting Report.pdf",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "reports"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1fC3vvsu0CG-XdUagGDb_fgiwzkqEEfG4/view",
+    "preview_url": "https://drive.google.com/file/d/1fC3vvsu0CG-XdUagGDb_fgiwzkqEEfG4/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1fC3vvsu0CG-XdUagGDb_fgiwzkqEEfG4",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1fC3vvsu0CG-XdUagGDb_fgiwzkqEEfG4=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": true,
+    "file_type": "PDF",
+    "folder_id": "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_url": "https://drive.google.com/drive/folders/1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r"
+    ],
+    "modified_text": "Sep 25"
+   }
+  },
+  {
+   "id": "drive:1a54yYQkKPkTffjCeGLD9fFC6r7fL7G9k",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/1a54yYQkKPkTffjCeGLD9fFC6r7fL7G9k/view",
+   "title": "Grapevine Area Chair Meeting Report",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-05-12",
+   "first_seen": "2026-09-25T15:09:59Z",
+   "last_seen": "2026-10-02T22:18:30Z",
+   "image": "https://lh3.googleusercontent.com/d/1a54yYQkKPkTffjCeGLD9fFC6r7fL7G9k=w600",
+   "tags": [
+    "panel-77",
+    "pdf"
+   ],
+   "category": "reports",
+   "status": "ok",
+   "extra": {
+    "file_id": "1a54yYQkKPkTffjCeGLD9fFC6r7fL7G9k",
+    "mime": "application/pdf",
+    "name": "2026-05-12 Grapevine Area Chair Meeting Report.pdf",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "reports"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1a54yYQkKPkTffjCeGLD9fFC6r7fL7G9k/view",
+    "preview_url": "https://drive.google.com/file/d/1a54yYQkKPkTffjCeGLD9fFC6r7fL7G9k/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1a54yYQkKPkTffjCeGLD9fFC6r7fL7G9k",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1a54yYQkKPkTffjCeGLD9fFC6r7fL7G9k=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": true,
+    "file_type": "PDF",
+    "folder_id": "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_url": "https://drive.google.com/drive/folders/1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r"
+    ],
+    "modified_text": "Sep 25"
+   }
+  }
+ ],
+ "first_harvest": "2026-09-24T06:47:35Z"
+}

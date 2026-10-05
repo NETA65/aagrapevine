@@ -1,0 +1,11 @@
+id,type,title_en,text_en,qr_url,source_url
+qr-missing,qr,Scan,,,
+qr-site,qr,Scan,,{site}contribute/,
+qr-site-es,qr,Escanea,,{site_es}/meetings/,
+qr-site-middle,qr,Scan,,https://www.aa.org/{site},
+qr-host,qr,Scan,,https://www.facebook.com/aagrapevine,
+qr-mailto,qr,Scan,,mailto:grapevine@neta65.org,
+fact-no-source,fact,,A fact.,,
+fact-bad-source,fact,,A fact.,,www.aa.org
+message-qr,message,,Hello.,https://www.aalavina.org/comparte,
+qr-document,qr,Scan,,https://www.aa.org/sites/default/files/literature/f-127_AAGrapevine_and_LaVina.pdf,

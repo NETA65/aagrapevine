@@ -1,0 +1,1200 @@
+# =====================================================================
+#  Grapevine and La Viña Monthly Committee Meeting — the chair's template for every monthly Zoom meeting
+#  (3rd Wednesday, 7:00–8:00 p.m. Central), as a web presentation on /orientation/ ("Workshop presentations").
+#
+#  Made from the committee's PowerPoint deck of 2026-10-01 (the copy in the Panel 77 slides folder, linked from
+#  the card as "PowerPoint copy"): every slide, in the same order, with the same words on the slide and in the
+#  notes. Only what the web player does differently was changed:
+#   · the orange [fill-ins] are {fill:…} blanks (Customize → Your details; kept on the chair's own device);
+#   · the facts that change come from the site's data: {live:…} (the meeting dates: tonight's on the title
+#     slide, with its month, the one after it on "Next meeting" and "Thank you" — a meeting stays tonight's until
+#     midnight Central, so both read right during AND after it; the time, the Zoom details and Zoom's number for
+#     callers; the weekly open meetings and La Viña's workshop; this month's issues; both Books of the Month; the
+#     next assembly) and `live` slides (story deadlines, coming events, the next twelve meeting dates). A fact
+#     the site has nothing for says where to look ("see the Meetings page"), so every sentence around one is
+#     written to read well with that phrase too;
+#   · each note's TIME line is `minutes:` (the player writes the TIME line for the current version), or
+#     `version_minutes` where a version gives a slide less time (a month with a topic of the month). The TIME
+#     line is the one that counts: a timekeeping tip names only minutes that agree with it, in every version
+#     ({not:topic} / {only:topic} lines where the versions differ). The title slide (up before 7:00), the part
+#     dividers ("a few seconds") and "Thank you" (up after the hour) have the least time a slide can have;
+#   · the notes name the player's buttons with {ui:…} ("Customize → Your details" on the English page,
+#     "Personalizar → Tus datos" on the Spanish one), and Spanish words are marked {lang:es}…{/lang};
+#   · the price heads-up shows only while AA Grapevine's price notice is current (when: "price_notice");
+#   · "Topic of the month" starts switched off; the version "A month with a topic of the month" shows it, with
+#     the agenda's news row as "News and topic of the month" (version_fields);
+#   · the hidden appendix "For the chair" is facilitator pages (Customize → Prepare), rewritten for the web:
+#     what stays current by itself, and what the chair fills in or checks.
+#  The content stays English (the owner's decision); the card, the versions and the blanks' labels are
+#  bilingual. Checked by tests/test_presentations.py (and by the build, with I18N_STRICT=1).
+# =====================================================================
+id: "committee-meeting"
+order: 4
+lang: "en"
+title: "Grapevine and La Viña Monthly Committee Meeting"
+short: "Monthly Committee Meeting"
+eyebrow: "Opening"
+footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
+minutes: 60
+icon: "users"
+tone: "grape"
+drive_title: "Grapevine and La Viña Monthly Committee Meeting"
+card:
+  title:
+    en: "Grapevine and La Viña Monthly Committee Meeting"
+    es: "Reunión mensual del Comité de Grapevine y La Viña"
+  summary:
+    en: "A ready-to-use outline for the committee's monthly meeting on Zoom, from the opening to the Responsibility Statement; the chair fills in the details."
+    es: "Un esquema listo para usar de la reunión mensual del comité por Zoom, desde la apertura hasta la Declaración de Responsabilidad; quien coordina completa los detalles."
+  audience:
+    en: "For the Area Grapevine / La Viña chair, or the alternate, who leads the meeting. GVRs, RLVs, district chairs and any AA member are welcome to attend."
+    es: "Para ti, si coordinas La Viña y Grapevine en el Área (o eres suplente) y diriges la reunión. Pueden asistir los RLV, los GVR, los coordinadores de distrito y cualquier miembro de AA."
+
+# The versions (Customize → Version). The notes describe one other selection: a month with a topic of the
+# month (the "Topic of the month" slide's notes, WHERE THE TIME COMES FROM). Its 5 minutes come from the news
+# block: 'Open meetings' and 'More news' are left out, and 'Grapevine and La Viña this month' and the deadlines
+# take about 30 seconds each (their `version_minutes`), so the hour stays about 60 minutes; the agenda's news
+# row says so by itself (its `version_fields`). `only` lists its slides, so it can show the slide that starts
+# switched off.
+presets:
+  - id: "full"
+    label:
+      en: "The full meeting (about 60 minutes)"
+      es: "La reunión completa (unos 60 minutos)"
+    minutes: 60
+  - id: "topic"
+    label:
+      en: "A month with a topic of the month (about 60 minutes)"
+      es: "Un mes con tema del mes (unos 60 minutos)"
+    minutes: 60
+    only: ["title", "welcome", "serenity-prayer", "preamble", "introductions", "new-reps", "agenda",
+           "last-minutes", "part-1", "chairs-report", "this-month", "deadlines", "price-heads-up",
+           "topic-of-the-month", "treasurer", "district-reports", "part-2", "since-last-meeting", "coming-up",
+           "old-business", "new-business", "workshops-volunteers", "part-3", "sharing", "action-items",
+           "next-meeting", "responsibility", "thank-you"]
+    note:
+      en: "Shows the 'Topic of the month' slide and leaves out 'Open meetings and La Viña's workshop' and 'More news' (post their links in the chat instead), as the topic slide's notes suggest. The agenda's news row reads 'News and topic of the month'."
+      es: "Muestra la diapositiva «Topic of the month» y deja fuera «Open meetings and La Viña's workshop» y «More news» (publica sus enlaces en el chat), como sugieren las notas de la diapositiva del tema. En la agenda, la fila de noticias dice «News and topic of the month»."
+
+# The chair's blanks (Customize → Your details), in slide order: each one is an orange [fill-in] of the
+# PowerPoint deck, and `hint` is its text in the brackets (what an empty blank shows, in orange). They stay on
+# the chair's device from month to month until changed — the week-before checklist (Customize → Prepare) says
+# what to carry over and what to clear.
+fillins:
+  - key: "presenter"
+    label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
+    hint: "Service position"
+    default: "Area 65 Grapevine / La Viña Chair"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre de pila (solo en tus notas)" }
+    hint: "first name"
+    shared: true
+    notes_only: true
+  # Last month's minutes
+  - key: "minutes_month"
+    label: { en: "Minutes · month of the last meeting", es: "Acta · mes de la reunión anterior" }
+    hint: "Month YYYY"
+  - key: "minutes_sent"
+    label: { en: "Minutes · how and when they were sent", es: "Acta · cómo y cuándo se envió" }
+    hint: "by email on Month DD"
+  - key: "minutes_approved"
+    label: { en: "Minutes · approved as presented or as corrected", es: "Acta · aprobada tal como se presentó o con correcciones" }
+    hint: "as presented / as corrected"
+  - key: "minutes_taker"
+    label: { en: "Minutes · who takes them tonight", es: "Acta · quién la toma esta noche" }
+    hint: "service position or volunteer"
+  # Chair's report
+  - key: "chair_since"
+    label: { en: "Chair's report · since we last met", es: "Informe de coordinación · desde la última reunión" }
+    hint: "visits, tables and workshops"
+  - key: "chair_area"
+    label: { en: "Chair's report · from the Area", es: "Informe de coordinación · noticias del Área" }
+    hint: "Area Committee or assembly news"
+  - key: "chair_office"
+    label: { en: "Chair's report · from the Grapevine office", es: "Informe de coordinación · de la oficina de Grapevine" }
+    hint: "Grapevine's call with Area chairs, or Grapevine News highlights"
+  - key: "chair_next"
+    label: { en: "Chair's report · working on next", es: "Informe de coordinación · próximos pasos" }
+    hint: "one or two priorities"
+  # Grapevine and La Viña this month (the issues and both Books of the Month fill in by themselves)
+  - key: "gv_story"
+    label: { en: "Grapevine · a story to mention", es: "Grapevine · una historia para mencionar" }
+    hint: "title"
+  - key: "gv_section"
+    label: { en: "Grapevine · the story's section", es: "Grapevine · la sección de la historia" }
+    hint: "section"
+  - key: "lv_story"
+    label: { en: "La Viña · a story to mention", es: "La Viña · una historia para mencionar" }
+    hint: "título (title)"
+  # More news
+  - key: "news_gv"
+    label: { en: "More news · from AA Grapevine", es: "Más noticias · de AA Grapevine" }
+    hint: "Grapevine News highlight, new book or item"
+  - key: "news_lv"
+    label: { en: "More news · from La Viña", es: "Más noticias · de La Viña" }
+    hint: "Noticias highlight, new book or item"
+  - key: "news_seasonal"
+    label: { en: "More news · seasonal", es: "Más noticias · de temporada" }
+    hint: "for example, holiday cards or the wall calendar photo contest"
+  - key: "news_area"
+    label: { en: "More news · from the Area", es: "Más noticias · del Área" }
+    hint: "assembly or Area Committee news"
+  # Topic of the month (a slide that starts switched off)
+  - key: "topic"
+    label: { en: "Topic of the month", es: "Tema del mes" }
+    hint: "topic"
+  - key: "topic_why"
+    label: { en: "Topic · why now", es: "Tema · por qué ahora" }
+    hint: "one line, e.g. the Conference agenda items, to help our delegate"
+  - key: "topic_points"
+    label: { en: "Topic · what we'll look at", es: "Tema · qué vamos a ver" }
+    hint: "one or two points, or a link"
+  - key: "topic_question"
+    label: { en: "Topic · a question for the room", es: "Tema · una pregunta para todos" }
+    hint: "one question"
+  - key: "topic_next"
+    label: { en: "Topic · what happens next", es: "Tema · qué sigue" }
+    hint: "e.g. ideas go to the delegate by (date)"
+  # Treasurer's report (the year fills in by itself)
+  - key: "treasurer_budget"
+    label: { en: "Treasurer · the budget, in general terms", es: "Tesorería · el presupuesto, en términos generales" }
+    hint: "in general terms, e.g. “within budget”, or “see the Area treasurer's report”"
+  - key: "treasurer_spent"
+    label: { en: "Treasurer · spent since the last report", es: "Tesorería · gastos desde el último informe" }
+    hint: "mileage, table literature, workshop supplies"
+  - key: "treasurer_reimburse"
+    label: { en: "Treasurer · reimbursement requests", es: "Tesorería · solicitudes de reembolso" }
+    hint: "how, and to whom"
+  # District GVR and RLV reports
+  - key: "district_order"
+    label: { en: "District reports · the order tonight", es: "Informes de distrito · el orden de esta noche" }
+    hint: "districts, in order"
+  # Since we last met: three events
+  - key: "since_1_event"
+    label: { en: "Since we last met · 1 · event", es: "Desde la última reunión · 1 · evento" }
+    hint: "Event"
+  - key: "since_1_date"
+    label: { en: "Since we last met · 1 · date", es: "Desde la última reunión · 1 · fecha" }
+    hint: "date"
+  - key: "since_1_place"
+    label: { en: "Since we last met · 1 · district or city", es: "Desde la última reunión · 1 · distrito o ciudad" }
+    hint: "district or city"
+  - key: "since_1_count"
+    label: { en: "Since we last met · 1 · about how many attended", es: "Desde la última reunión · 1 · cuántos asistieron, más o menos" }
+    hint: "number"
+  - key: "since_2_event"
+    label: { en: "Since we last met · 2 · event", es: "Desde la última reunión · 2 · evento" }
+    hint: "Event"
+  - key: "since_2_date"
+    label: { en: "Since we last met · 2 · date", es: "Desde la última reunión · 2 · fecha" }
+    hint: "date"
+  - key: "since_2_place"
+    label: { en: "Since we last met · 2 · district or city", es: "Desde la última reunión · 2 · distrito o ciudad" }
+    hint: "district or city"
+  - key: "since_2_count"
+    label: { en: "Since we last met · 2 · about how many attended", es: "Desde la última reunión · 2 · cuántos asistieron, más o menos" }
+    hint: "number"
+  - key: "since_3_event"
+    label: { en: "Since we last met · 3 · event", es: "Desde la última reunión · 3 · evento" }
+    hint: "Event"
+  - key: "since_3_date"
+    label: { en: "Since we last met · 3 · date", es: "Desde la última reunión · 3 · fecha" }
+    hint: "date"
+  - key: "since_3_place"
+    label: { en: "Since we last met · 3 · district or city", es: "Desde la última reunión · 3 · distrito o ciudad" }
+    hint: "district or city"
+  - key: "since_3_count"
+    label: { en: "Since we last met · 3 · about how many attended", es: "Desde la última reunión · 3 · cuántos asistieron, más o menos" }
+    hint: "number"
+  # Old business: four items
+  - key: "old_1_item"
+    label: { en: "Old business · 1 · item carried over", es: "Asuntos pendientes · 1 · asunto del mes pasado" }
+    hint: "Item carried over from last month"
+  - key: "old_1_status"
+    label: { en: "Old business · 1 · status", es: "Asuntos pendientes · 1 · cómo va" }
+    hint: "status"
+  - key: "old_2_item"
+    label: { en: "Old business · 2 · item", es: "Asuntos pendientes · 2 · asunto" }
+    hint: "Item"
+  - key: "old_2_status"
+    label: { en: "Old business · 2 · status", es: "Asuntos pendientes · 2 · cómo va" }
+    hint: "status"
+  - key: "old_3_item"
+    label: { en: "Old business · 3 · item", es: "Asuntos pendientes · 3 · asunto" }
+    hint: "Item"
+  - key: "old_3_status"
+    label: { en: "Old business · 3 · status", es: "Asuntos pendientes · 3 · cómo va" }
+    hint: "status"
+  - key: "old_4_item"
+    label: { en: "Old business · 4 · item", es: "Asuntos pendientes · 4 · asunto" }
+    hint: "Item"
+  - key: "old_4_status"
+    label: { en: "Old business · 4 · status", es: "Asuntos pendientes · 4 · cómo va" }
+    hint: "status"
+  # New business: two items
+  - key: "new_1_item"
+    label: { en: "New business · 1 · item", es: "Asuntos nuevos · 1 · asunto" }
+    hint: "New item"
+  - key: "new_1_by"
+    label: { en: "New business · 1 · brought by (service position)", es: "Asuntos nuevos · 1 · lo propone (puesto de servicio)" }
+    hint: "service position"
+  - key: "new_2_item"
+    label: { en: "New business · 2 · item", es: "Asuntos nuevos · 2 · asunto" }
+    hint: "New item"
+  - key: "new_2_by"
+    label: { en: "New business · 2 · brought by (service position)", es: "Asuntos nuevos · 2 · lo propone (puesto de servicio)" }
+    hint: "service position"
+  # Workshop requests and volunteers: two events that need helpers
+  - key: "volunteer_1_event"
+    label: { en: "Volunteers · 1 · event and date", es: "Voluntarios · 1 · evento y fecha" }
+    hint: "Event, date"
+  - key: "volunteer_1_helpers"
+    label: { en: "Volunteers · 1 · helpers needed", es: "Voluntarios · 1 · cuánta ayuda se necesita" }
+    hint: "helpers needed"
+  - key: "volunteer_2_event"
+    label: { en: "Volunteers · 2 · event and date", es: "Voluntarios · 2 · evento y fecha" }
+    hint: "Event, date"
+  - key: "volunteer_2_helpers"
+    label: { en: "Volunteers · 2 · helpers needed", es: "Voluntarios · 2 · cuánta ayuda se necesita" }
+    hint: "helpers needed"
+  # Action items: four rows, filled in live during the meeting
+  - key: "action_1_what"
+    label: { en: "Action items · 1 · what will be done", es: "Tareas acordadas · 1 · qué se hará" }
+    hint: "What will be done"
+  - key: "action_1_who"
+    label: { en: "Action items · 1 · who (service position)", es: "Tareas acordadas · 1 · quién (puesto de servicio)" }
+    hint: "Service position"
+  - key: "action_1_when"
+    label: { en: "Action items · 1 · by when", es: "Tareas acordadas · 1 · para cuándo" }
+    hint: "Date"
+  - key: "action_2_what"
+    label: { en: "Action items · 2 · what will be done", es: "Tareas acordadas · 2 · qué se hará" }
+    hint: "What will be done"
+  - key: "action_2_who"
+    label: { en: "Action items · 2 · who (service position)", es: "Tareas acordadas · 2 · quién (puesto de servicio)" }
+    hint: "Service position"
+  - key: "action_2_when"
+    label: { en: "Action items · 2 · by when", es: "Tareas acordadas · 2 · para cuándo" }
+    hint: "Date"
+  - key: "action_3_what"
+    label: { en: "Action items · 3 · what will be done", es: "Tareas acordadas · 3 · qué se hará" }
+    hint: "What will be done"
+  - key: "action_3_who"
+    label: { en: "Action items · 3 · who (service position)", es: "Tareas acordadas · 3 · quién (puesto de servicio)" }
+    hint: "Service position"
+  - key: "action_3_when"
+    label: { en: "Action items · 3 · by when", es: "Tareas acordadas · 3 · para cuándo" }
+    hint: "Date"
+  - key: "action_4_what"
+    label: { en: "Action items · 4 · what will be done", es: "Tareas acordadas · 4 · qué se hará" }
+    hint: "What will be done"
+  - key: "action_4_who"
+    label: { en: "Action items · 4 · who (service position)", es: "Tareas acordadas · 4 · quién (puesto de servicio)" }
+    hint: "Service position"
+  - key: "action_4_when"
+    label: { en: "Action items · 4 · by when", es: "Tareas acordadas · 4 · para cuándo" }
+    hint: "Date"
+  # Next meeting: Zoom's numbers-only passcode for callers (the same every month: type it once). Zoom's number
+  # for callers fills in by itself; the passcode stays a blank while the site has none (see "Next meeting").
+  - key: "phone_passcode"
+    label: { en: "Phone passcode for callers (numbers only)", es: "Código para quienes llaman por teléfono (solo números)" }
+    hint: "numeric passcode from the Zoom invitation"
+
+slides:
+  # ------------------------------------------------------------------ OPENING
+  # The title slide is up while people arrive (about 10 minutes before 7:00): the hour starts when the chair
+  # moves on, at 7:00 (0:00 of the TIME lines), so it has the least time a slide can have (15 seconds).
+  # Its "Last updated" line is gone: the player shows "Current as of <the day's date>" by itself.
+  # The month is the meeting's own ({live:meeting_month}, never the calendar's {live:month}): it switches with
+  # the date under it ({live:meeting_day}, never {live:meeting_next}, which moves on as soon as the meeting ends),
+  # at midnight Central after the meeting, so the two always name the same meeting.
+  - id: "title"
+    layout: "title"
+    eyebrow: "NETA 65 · Grapevine & La Viña Committee"
+    title: "Grapevine and La Viña Monthly Committee Meeting"
+    subtitle: "{live:meeting_month} meeting · {live:panel}"
+    lines:
+      - "{fill:presenter}"
+      - "{live:meeting_day} · {live:meeting_time} · Zoom"
+    minutes: 0.25
+    notes: |
+      WHEN: Have this slide up about 10 minutes early, while people arrive. The hour starts when you move on, at 7:00 sharp: that is 0:00 in the timing lines of these notes.
+      DO: Open the Zoom room by 6:50 p.m. Central. Check that recording is off (both cloud and local), that you can share your screen, and that a co-host can admit people and watch the chat. Line up a timekeeper and someone to take the minutes before you start.
+      SAY (as people arrive): Welcome, come on in. We'll start right at seven. While we wait, please rename yourself on Zoom with your first name, your district and your service position, so we all know who's here.
+      UPDATE EACH MONTH: nothing on this slide: the meeting's month and date (always the third Wednesday), the time and the panel fill in by themselves. Every orange item in square brackets, on any slide, is something to fill in: {ui:customize} → {ui:your_details} lists them all, and orange always means 'still to fill in'. What you typed last month stays on this device until you change it, so save your version first if you want to keep it ({ui:customize} → {ui:save_share}). The pages 'For the chair', in {ui:customize} → {ui:prepare}, list what to update on each slide and where to find it.
+      TIP: This presentation, the slides AND these notes, is public on the committee's website. What you type in {ui:customize} stays on this device and is never sent anywhere, but it is shown on screen at the meeting and goes with any copy you save and share. Use service positions, not names, and keep internal figures out of it. Anything that must stay private goes in your own Drive, never in the shared A65_GV folders: PRIVATE in a name only hides a file from the website, not from Drive.
+
+  - id: "welcome"
+    layout: "bullets"
+    title: "Welcome to the committee meeting"
+    items:
+      - "Rename yourself on Zoom: **first name · district · service position**"
+      - "Cameras are optional; please stay muted unless you're speaking"
+      - "Use the chat or the raise-hand button to ask for a turn"
+      - "Please don't take photos, screenshots or recordings of members"
+      - "All AA members are welcome; no registration is needed"
+    takeaway: "Presented by the NETA 65 Grapevine & La Viña Committee for local service. This is not an official AA Grapevine, Inc. presentation."
+    minutes: 1
+    notes: |
+      SAY: Good evening, and welcome to the monthly meeting of the NETA 65 Grapevine and La Viña Committee. My name is {fill:first_name}, and I'm grateful to serve as {fill:presenter}. Whether you're a GVR, an RLV, a district chair, a DCM, a GSR, or simply curious about the magazines, you're welcome here.
+      A few housekeeping notes so the hour runs smoothly. If you haven't yet, please rename yourself with your first name, district and service position. Cameras are up to you. Please stay muted unless you're speaking, and use the chat or the raise-hand button when you'd like a turn. Out of respect for everyone's anonymity, please don't take photos or screenshots while people are on camera, and please don't record. We aren't recording tonight either.
+      One more thing: this is our Area committee's meeting. We share what we learn from AA Grapevine and La Viña, but we don't speak for them, and this isn't an official AA Grapevine, Inc. presentation.
+      DO: Before you say 'we aren't recording', make sure recording really is off. If someone joins by phone, read aloud anything you post in the chat. If Spanish-speaking members are present, ask a bilingual volunteer ahead of time to interpret (Zoom's Language Interpretation, or a short summary in the chat), and post the key links in both languages.
+      TRANSITION: Let's begin the way we always do.
+
+  # The opening's prayer and reading keep the deck's grape (its quote slides' big quote mark, its reading's
+  # accent bar) inside the Opening, whose colour is Grapevine blue: `accent` colours these two slides only.
+  - id: "serenity-prayer"
+    layout: "quote"
+    accent: "grape"
+    title: "A moment of silence, then the Serenity Prayer"
+    quote: "God, grant me the serenity to accept the things I cannot change, courage to change the things I can, and wisdom to know the difference."
+    credit: "— The Serenity Prayer"
+    source: "Said at many AA meetings. A.A. World Services does not hold its copyright (aa.org, Terms of Use)."
+    minutes: 2
+    notes: |
+      SAY: Please join me in a moment of silence for the alcoholic who still suffers, inside and outside our rooms. (Pause for about ten seconds.) Thank you. Those who wish, please join me in the Serenity Prayer. (Read it slowly, following the words on the screen.)
+      DO: On Zoom, unmuting everyone at once creates an echo. It usually works best if the chair says the prayer aloud and everyone else says it along with their microphones muted.
+      TIP: 'Those who wish' keeps the invitation open: some members prefer not to pray, and silence is always welcome. How the committee opens its meeting is the committee's own decision. If its group conscience chooses a different opening, change this slide ({ui:customize} → {ui:edit}).
+      TRANSITION: Now let's hear our reading for tonight.
+
+  # The Preamble, word for word, with AA Grapevine's credit line exactly as on the slide.
+  - id: "preamble"
+    layout: "quote"
+    accent: "grape"
+    title: "Reading: the AA Preamble"
+    quote: "Alcoholics Anonymous® is a fellowship of people who share their experience, strength and hope with each other that they may solve their common problem and help others to recover from alcoholism. The only requirement for membership is a desire to stop drinking. There are no dues or fees for A.A. membership; we are self-supporting through our own contributions. A.A. is not allied with any sect, denomination, politics, organization or institution; does not wish to engage in any controversy; neither endorses nor opposes any causes. Our primary purpose is to stay sober and help other alcoholics to achieve sobriety."
+    credit: "Copyright © by AA Grapevine, Inc.; reprinted with permission. Revised per 2021 General Service Conference."
+    minutes: 2
+    notes: |
+      SAY: Could I have a volunteer to read the AA Preamble for us tonight? (Wait a moment; if nobody offers, read it yourself.) Thank you.
+      DO: If you can, ask a reader ahead of time by private chat, so nobody is put on the spot. Rotate readers from month to month: it's an easy first piece of service for a new GVR or RLV.
+      WHY THIS TEXT: The Preamble first appeared in the Grapevine in June 1947. AA Grapevine, Inc. holds its copyright and lets AA entities reprint it word for word with this credit line (SMF-101, Q4; Service Manual, p. 23). Read it exactly as written. This is the 2021 wording ('a fellowship of people').
+      OTHER READINGS THE COMMITTEE MAY CHOOSE: the Tradition that matches the month (January, Tradition One, and so on), copied word for word from the short form in P-52, page 17, with the line 'Reprinted from AA Grapevine and La Viña: Our Meetings in Print (P-52), p. 17, with permission of Alcoholics Anonymous World Services, Inc.' Don't put Grapevine or La Viña stories, Daily Quotes or Workbook pages on a slide: they need AA Grapevine's permission. A member may hold up the printed issue and read a line or two aloud instead.
+      TRANSITION: Next, let's meet each other.
+
+  # 7:05, 5 minutes for introductions and the next slide (4 + 1).
+  - id: "introductions"
+    layout: "bullets"
+    title: "Introductions"
+    items:
+      - "Your **first name**, your **district** and your **service position**"
+      - "Is this your first committee meeting? Welcome!"
+      - "Optional: one thing you hope to take home tonight"
+      - "More than 15 of us? Please type your introduction in the chat"
+    takeaway: "New GVR or RLV? Email [grapevine@neta65.org](grapevine@neta65.org) so we can add you to our reminders (always sent by BCC)."
+    minutes: 4
+    notes: |
+      TIP (timekeeping): introductions take 5 minutes, including the next slide. With up to 15 people, that's about 15 seconds each. With more than 15, ask everyone to type their introduction in the chat, and invite only first-timers to unmute and say hello.
+      SAY: Let's go around the room. Please unmute and tell us your first name, your district and your service position. If it's your first time with us, let us know so we can welcome you, and if you like, share one thing you hope to take home tonight. I'll call on people in the order I see them on my screen, and those on the phone will go last.
+      SAY (more than 15 people): There are a lot of us tonight, which is wonderful. To save time, please type your first name, district and service position in the chat. If this is your first committee meeting, please unmute and say hello so we can welcome you.
+      DO: Call on people from the participant list rather than waiting for volunteers: it's faster, and nobody is skipped. Welcome each first-timer warmly, and ask the alternate chair or a co-host to send them a welcome email after the meeting. Read the chat introductions aloud only in summary ('we have reps from Districts 3, 22 and 91').
+      ASK (first-timers): How did you hear about the committee?
+      TIP: First names and last initials are fine inside the meeting. Don't copy the attendance list into the slides or into minutes that may be posted publicly; the minutes can simply record how many attended, by district.
+      TRANSITION: If you're new to the GVR or RLV service position, this next slide is for you.
+
+  - id: "new-reps"
+    layout: "bullets"
+    title: "New to the service position? Start here"
+    items:
+      - "**Grapevine:** register at [www.aagrapevine.org/get-involved/become-grapevine-rep](https://www.aagrapevine.org/get-involved/become-grapevine-rep) (you'll receive the Digital Grapevine Kit)"
+      - "**La Viña:** register ({lang:es}regístrate{/lang}) at [www.aalavina.org/servicio/conviertete-en-rlv](https://www.aalavina.org/servicio/conviertete-en-rlv)"
+      - "Free tools: [www.aagrapevine.org/gvr-resources](https://www.aagrapevine.org/gvr-resources) (GVR Workbook) and [www.aalavina.org/recursos](https://www.aalavina.org/recursos) ({lang:es}Manual del RLV{/lang})"
+      - "Questions for the office: [gvrc@aagrapevine.org](gvrc@aagrapevine.org) · order problems: [customerservice@aagrapevine.org](customerservice@aagrapevine.org) ({lang:es}en español{/lang}: [preguntas@aagrapevine.org](preguntas@aagrapevine.org))"
+      - "Our committee's corner for reps: [{live:site}/gvr/](/gvr/)"
+    takeaway: "Each group decides how its rep is chosen and for how long; two years is common."
+    minutes: 1
+    notes: |
+      TIP (timekeeping): this minute is inside the 5 minutes for introductions. If nobody is new to the service position tonight, skip it with one sentence: 'New reps, the first steps are on this slide and on our website.'
+      SAY: Welcome to everyone who's new in this service position. Here are the first steps most reps find helpful. Register with the Grapevine office, or with La Viña if you serve as an RLV, so you receive the reps' newsletter (Grapevine News monthly, La Viña's {lang:es}Noticias{/lang} every two months); the Grapevine form also sends you a digital welcome kit. Both offices have free resources: the GVR Workbook in English and the RLV Manual in Spanish. Our committee's website has a corner for reps and a short orientation in six sessions. If you have a question for the office, the address for reps is on the screen, and customer service can help with any problem with an order; for help in Spanish, write to preguntas@aagrapevine.org.
+      ASK: Is anyone still waiting to hear from the office, or not sure whether you're registered?
+      DO: Offer to help new reps after the meeting. The orientation sessions on the committee site (/orientation/) work one-on-one or at a district meeting. Remind reps who are rotating out to tell the office, so the lists stay current.
+      TIP: Many reps like to read the current issue in whatever form suits them (print, digital or the app), but nobody needs to buy anything to serve.
+      TRANSITION: Here's our plan for the hour.
+
+  # The agenda's clock times are the committee's plan for the hour (Central time), not times the player
+  # works out, so the rows have no `from:`. In a month with a topic, the version "topic" shows the same plan
+  # with its news row as "News and topic of the month" (`version_fields`: the whole list, one row changed).
+  - id: "agenda"
+    layout: "agenda"
+    title: "Tonight's agenda (Central time)"
+    items:
+      - { time: "7:00", title: "Welcome and opening" }
+      - { time: "7:03", title: "Reading" }
+      - { time: "7:05", title: "Introductions" }
+      - { time: "7:10", title: "Agenda and minutes" }
+      - { time: "7:13", title: "Chair's report" }
+      - { time: "7:17", title: "Grapevine and La Viña news" }
+      - { time: "7:23", title: "Treasurer's report" }
+      - { time: "7:25", title: "District GVR and RLV reports" }
+      - { time: "7:37", title: "Events calendar" }
+      - { time: "7:41", title: "Old business" }
+      - { time: "7:44", title: "New business" }
+      - { time: "7:47", title: "Workshops and volunteers" }
+      - { time: "7:49", title: "Sharing: what's working" }
+      - { time: "7:55", title: "Action items, next meeting" }
+      - { time: "7:57", title: "Closing" }
+    version_fields:
+      topic:
+        items:
+          - { time: "7:00", title: "Welcome and opening" }
+          - { time: "7:03", title: "Reading" }
+          - { time: "7:05", title: "Introductions" }
+          - { time: "7:10", title: "Agenda and minutes" }
+          - { time: "7:13", title: "Chair's report" }
+          - { time: "7:17", title: "News and topic of the month" }
+          - { time: "7:23", title: "Treasurer's report" }
+          - { time: "7:25", title: "District GVR and RLV reports" }
+          - { time: "7:37", title: "Events calendar" }
+          - { time: "7:41", title: "Old business" }
+          - { time: "7:44", title: "New business" }
+          - { time: "7:47", title: "Workshops and volunteers" }
+          - { time: "7:49", title: "Sharing: what's working" }
+          - { time: "7:55", title: "Action items, next meeting" }
+          - { time: "7:57", title: "Closing" }
+    minutes: 1
+    notes: |
+      SAY: Here's tonight's agenda. We'll hear reports and news in the first half hour, then turn it over to the districts, look at events and business, and close with sharing and the Responsibility Statement before eight. Our timekeeper tonight is (first name), who'll give a gentle signal when an item runs over. Is there anything anyone would like to add under new business? (Note any additions.) If there are no objections, we'll follow the agenda as presented.
+      DO: Write down any added items for new business. If the agenda is very full, ask the committee which items can wait until next month instead of deciding alone.
+      TIP (timekeeping): The plan on this slide adds up to 58 minutes, so the closing ends by 7:58 and about two minutes are left spare for an item that runs over; through January 2027, the price heads-up takes one of them. The timing lines in these notes also count a few seconds for the title slide and for each part's divider, so they can run a minute behind this plan. The times are a guide, not a rule. If the district reports run long because members are sharing real experience, shorten the news instead: the reports belong to the members. Start on time even if only a few people are there; it respects the people who came on time.
+      UPDATE: Change the times only if the committee changes its format ({ui:customize} → {ui:edit}). In a month with a topic of the month, the version 'A month with a topic of the month' shows the news row as 'News and topic of the month' by itself; if you switch the topic slide on in {ui:customize} → {ui:slides} instead, change that row here. If there's no treasurer's report, delete that row.
+    version_notes:
+      topic: "A MONTH WITH A TOPIC: in this version the news row reads 'News and topic of the month' by itself."
+
+  - id: "last-minutes"
+    layout: "bullets"
+    title: "Last month's minutes"
+    items:
+      - "Minutes of the {fill:minutes_month} meeting, sent {fill:minutes_sent}"
+      - "Any corrections or additions?"
+      - "Approved {fill:minutes_approved}"
+      - "Taking the minutes tonight: {fill:minutes_taker}"
+    takeaway: "Minutes may be posted publicly: first names or service positions only, and no contact details."
+    minutes: 2
+    notes: |
+      SAY: Last month's minutes went out by email. Has everyone had a chance to look at them? Are there any corrections or additions? (Pause.) Hearing none, may we accept them as presented? (Wait for a show of hands or a thumbs-up on Zoom.) Thank you; the minutes are approved.
+      IF THERE ARE CORRECTIONS: note each one, read it back, and ask whether the committee accepts the minutes as corrected.
+      DO: Send the draft minutes a week before the meeting, with every address in BCC. Confirm who is taking tonight's minutes, or take them yourself and say so.
+      TIP: Files in the committee's Drive folders for notes and minutes are published on the website, just like the slides. So the minutes should use first names, or better, service positions, and never phone numbers, email addresses, or a person's name linked to a home group. Keep the decisions and the action items: that's what next month's chair needs.
+      UPDATE ({ui:customize} → {ui:your_details}): the month of the minutes, how they were sent, and who takes the minutes tonight.
+
+  # ------------------------------------------------------------------ 1. REPORTS AND NEWS
+  - id: "part-1"
+    layout: "section"
+    number: 1
+    title: "Reports and news"
+    subtitle: "Chair · Grapevine and La Viña · Treasurer · Districts"
+    accent: "gv"
+    minutes: 0.25
+    notes: |
+      SAY: Let's move on to reports and news. I'll start with a short chair's report, then share what's new from AA Grapevine and La Viña, then the treasurer if we have a report, and then the floor is yours for the district reports.
+      TIP: Keep your own part short and lively. The most valuable time tonight is what the districts and groups share, so protect those twelve minutes.
+
+  - id: "chairs-report"
+    layout: "bullets"
+    title: "Chair's report"
+    items:
+      - "Since we last met: {fill:chair_since}"
+      - "From the Area: {fill:chair_area}"
+      - "From the Grapevine office: {fill:chair_office}"
+      - "Working on next: {fill:chair_next}"
+    takeaway: "The chair informs and suggests; decisions belong to the committee's group conscience."
+    minutes: 4
+    notes: |
+      TIP (timekeeping): four minutes at most.
+      SAY: Here's a short report on what I've been doing on your behalf since our last meeting. (Cover the four lines briefly: where you went, what's happening at the Area level, news from the Grapevine office, and what you're working on next.) If anything here needs a decision, I'll bring it back under new business so we can talk it over together.
+      DO: Prepare one or two short sentences per line. Thank volunteers as a group ('the members who helped at our table'), not by name, since this presentation is public.
+      NEWS FROM THE GRAPEVINE OFFICE: The Grapevine publisher meets the Area Grapevine chairs on Zoom about every quarter. Share what you heard in your own words. Figures given on those calls (subscriptions, revenue, followers) are internal: you may say them aloud here, with who reported them and when, but don't type them on the slide or in these notes, and never copy GSO's confidential Quarterly Report into a deck.
+      TIP: Tradition Two reminds us that our leaders are but trusted servants; they do not govern. The chair informs and suggests, and the committee decides.
+      UPDATE: all four lines, every month ({ui:customize} → {ui:your_details}).
+
+  # This month's issues and both Books of the Month (Grapevine's, and La Viña's Libro del mes) come from the
+  # site's data ({live:…}); once a book's offer is over, until the site has the next one, its line says where to
+  # look ("see aagrapevine.org's Book of the Month"), and the "Details" line under it links the official page.
+  # The script names them after a colon, so that phrase reads well there too. The stories to mention are the
+  # chair's blanks.
+  - id: "this-month"
+    layout: "columns"
+    title: "Grapevine and La Viña this month"
+    style: "panels"
+    columns:
+      - heading: "Grapevine (monthly)"
+        accent: "gv"
+        items:
+          - "**Issue:** {live:gv_issue}"
+          - "A story to mention: {fill:gv_story}, in {fill:gv_section}"
+          - "Book of the Month: {live:botm}"
+          - "Details: [www.aagrapevine.org/BOTM](https://www.aagrapevine.org/BOTM)"
+      - heading: "La Viña (every two months)"
+        accent: "lv"
+        items:
+          - "**Issue:** {live:lv_issue}"
+          - "A story to mention: {fill:lv_story}"
+          - "{lang:es}Libro del mes{/lang} (Book of the Month): {live:botm_lv}"
+          - "Details: [www.aalavina.org/libro-del-mes](https://www.aalavina.org/libro-del-mes)"
+    takeaway: "This month's issues, dates and ideas: [{live:site}/monthly/](/monthly/)"
+    minutes: 2
+    version_minutes: { topic: 0.5 }
+    notes: |
+      {not:topic} TIP (timekeeping): The news block runs about 6 minutes over four slides: 2 here, about 1 for the deadlines, 1 for the open meetings and 2 for 'More news'. Through January 2027 a fifth slide, the price heads-up after 'More news', adds a minute of its own: if the hour is tight, keep 'More news' short.
+      SAY: Here's what's new in the magazines. This month's theme in Grapevine: {live:gv_theme}. In La Viña, for these two months: {live:lv_theme}. One story that stayed with me is {fill:gv_story}; you'll find it in the {fill:gv_section} section. Each magazine also has a Book of the Month: an older book offered at a discount for a set period; the official pages have the details. This month's books: from Grapevine, {live:botm}; from La Viña, {live:botm_lv}.
+      DO: Hold the printed issue up to your camera, or open it in the app. Don't put covers, artwork or story text on the slide: AA Grapevine's copyright policy doesn't allow it without permission. Mention a story by its title and invite people to read it.
+      ASK: Has anyone used this month's theme as a meeting topic at their group? How did it go?
+      STAYS CURRENT: both issues and their themes, and both Books of the Month, fill in by themselves from the committee website. When a book's offer is over and the website doesn't have the next one yet, its line points to the magazine's own page instead, like the 'Details' links on the slide.
+      UPDATE ({ui:customize} → {ui:your_details}): one story per magazine. The committee's /monthly/ page has all of it. Describe the book, not the bargain: keep the informative attitude, not a hard sell.
+      TIP: Grapevine comes out every month; La Viña every two months, so one La Viña issue covers two months (for example, September/October).
+    version_notes:
+      topic: "A MONTH WITH A TOPIC: keep this slide to about 30 seconds."
+
+  # The four-row table of fill-ins → the next deadlines from the site's data (/contribute/#deadlines): the next
+  # two of EACH magazine, as the deck's table had them (`limit_each`; an issue with two themes is never cut in
+  # half, so a row may be added).
+  - id: "deadlines"
+    layout: "live"
+    title: "Story deadlines coming up"
+    kind: "deadlines"
+    options: { pub: "both", limit: 4, limit_each: 2 }
+    takeaway: "Send stories: [www.aagrapevine.org/submit-your-story](https://www.aagrapevine.org/submit-your-story) · [www.aalavina.org/comparte](https://www.aalavina.org/comparte)"
+    minutes: 1
+    version_minutes: { topic: 0.5 }
+    notes: |
+      SAY: If you or someone in your group has a story on one of these themes, here's when the magazines need it. Grapevine starts choosing stories about five months before an issue's cover date, so the deadlines come early. Anyone in AA can write; you don't need to be a writer, and the editors take care of spelling. Grapevine stories go through the form on its website or to gveditorial@aagrapevine.org. La Viña stories go through its '{lang:es}Comparte{/lang}' page or to manuscritoslv@aagrapevine.org. Writers give their full name and contact details to the office, and the magazine protects their anonymity in print.
+      ASK: Is any group thinking about a writing workshop around one of these themes? We'll come back to workshop requests later in the meeting.
+      STAYS CURRENT: the next two deadlines of each magazine fill in by themselves from the committee's /contribute/#deadlines page, which keeps the current list with countdowns. When the website has no date yet for a magazine, its themes are on its own site: aagrapevine.org/contribute, or aalavina.org/recursos ('{lang:es}Temas de LV{/lang}'). The pages 'Grapevine deadlines' and 'La Viña deadlines', in {ui:customize} → {ui:prepare}, have more.
+      TIP: Never promise anyone that a story will be published; the editors decide. A story that misses its deadline may still be used in a later issue.
+    version_notes:
+      topic: "A MONTH WITH A TOPIC: keep this slide to about 30 seconds."
+
+  # The weekly open meetings come from the site's data, as the Meetings page lists them: their day and time
+  # ({live:gv_open_meeting}, {live:lv_open_meeting} — "starting Nov. 5, 2026" until La Viña's first meeting, then
+  # "since", so the slide never calls it running before it starts) and their shared Zoom room
+  # ({live:open_meeting_zoom}); La Viña's monthly workshop takes its time and Zoom room from config/site.yml
+  # (recurring_events). The small "as of [Month YYYY]" line is gone: these facts stay current, and the player
+  # shows the date they are current as of. "\u00a0" is a space that never breaks a line, so "Zoom" stays with
+  # its ID, as the site's facts keep the ID's own digits together.
+  - id: "open-meetings"
+    layout: "bullets"
+    title: "Open meetings and La Viña's workshop"
+    items:
+      - text: "**Grapevine Weekly Open AA Meeting**, in English"
+        items: ["{live:gv_open_meeting} · {live:open_meeting_zoom}"]
+      - text: "{lang:es}**Reunión Abierta de La Viña**{/lang}, La Viña's open meeting in Spanish"
+        items: ["{live:lv_open_meeting} · same Zoom room"]
+      - text: "{lang:es}**Taller informativo mensual de La Viña**{/lang}, La Viña's monthly workshop in Spanish"
+        items: ["Usually the 4th Thursday, {live:lv_workshop_time} · Zoom\u00a0{live:lv_workshop_zoom_id}"]
+    takeaway: "Workshop dates: [www.aalavina.org/calendario-de-eventos](https://www.aalavina.org/calendario-de-eventos)"
+    minutes: 1
+    notes: |
+      IF NOTHING CHANGED since last month: say one sentence ('the open meetings are on the screen, and I'll post the links in the chat') and move on, or switch this slide off ({ui:customize} → {ui:slides}) and mention the meetings under 'More news'.
+      SAY: AA Grapevine and La Viña hold their own open AA meetings on Zoom, and anyone may join. The Grapevine Weekly Open, in English: {live:gv_open_meeting}. It has a host and two speakers, and it's recorded for the Grapevine's podcast. La Viña's open meeting in Spanish, the {lang:es}Reunión Abierta de La Viña{/lang}, in the same Zoom room: {live:lv_open_meeting}. La Viña also holds a monthly information workshop in Spanish on Zoom, usually on the fourth Thursday, {live:lv_workshop_time}, to keep members up to date on La Viña's news and products. In November and December La Viña has held it on the Thursday before Thanksgiving and before Christmas, so please check La Viña's events calendar each month.
+      DO: Before the meeting, check aagrapevine.org/grapevine-weekly-open and La Viña's events calendar (aalavina.org/calendario-de-eventos) for any change, and post the next workshop date in the chat. Next date listed on the committee's /events/ page: {live:lv_workshop_next}.
+      SOURCE: The {lang:es}Reunión Abierta de La Viña{/lang} is known from La Viña's flyer (2026), which gives its start as Thursday, November 5, 2026, at noon Eastern, in the Grapevine Weekly Open's Zoom room. Until that day the slide says 'starting Nov. 5, 2026', and from then on 'since Nov. 5, 2026'. It had no web page yet in October 2026; check aalavina.org for one.
+      TIP: Say 'usually the fourth Thursday': La Viña's own calendar has kept the fourth Thursday even in months with five Thursdays. It starts at 3 p.m. Eastern, La Viña's own time; La Viña publishes no end time, so the committee lists it as one hour. Always give the calendar link along with the rule.
+      ANONYMITY: AA Grapevine records both weekly meetings to publish them as podcasts, and says its podcast respects anonymity. Anyone who speaks at these meetings should know they are recorded.
+      STAYS CURRENT: the weekly open meetings' days, times, Zoom room and passcode (as the committee's /meetings/ page lists them), and La Viña's workshop time and Zoom room, fill in by themselves. If either magazine's website shows a change that the committee website doesn't have yet, tell whoever looks after the website.
+
+  - id: "more-news"
+    layout: "bullets"
+    title: "More news"
+    items:
+      - "From AA Grapevine: {fill:news_gv}"
+      - "From La Viña: {fill:news_lv}"
+      - "Seasonal: {fill:news_seasonal}"
+      - "From the Area: {fill:news_area}"
+      - "Prices change: see the official stores or [{live:site}/shop/](/shop/)"
+    takeaway: "We share information; each group decides what, if anything, to buy."
+    minutes: 2
+    notes: |
+      TIP (timekeeping): through January 2027 the price heads-up follows this slide with a minute of its own; if the hour is tight, keep this slide short then.
+      SAY: A few more news items. (Give each line a sentence or two.) For prices, I'll point you to the official stores or to our committee's shop page, which reads the current prices every day, because prices change and I don't want to give you an old number.
+      DO: Read the monthly Grapevine News for reps and La Viña's {lang:es}Noticias{/lang} before the meeting; both are on the rep resource pages (aagrapevine.org/gvr-resources and aalavina.org/recursos). The committee's /digest/ page lists everything new last month, ready to paste into a message or an email to the districts.
+      TIP: Keep an informative attitude, not a 'hard sell': the General Service Conference asked for exactly that in Grapevine presentations in 1960. Never call a purchase a contribution to Grapevine. AA Grapevine, Inc. does not accept contributions; groups support it by buying and using the magazines, and a group subscription is an ordinary group expense.
+      SEASONAL IDEAS: November, gift subscriptions and Carry the Message certificates; December, holiday cards and the Sober Holidays issue; around December 1, the wall calendar photo contest deadline; June, 'Grapevine Month' in some Areas; July, La Viña's anniversary and Grapevine's annual prison issue.
+      UPDATE: every line, every month ({ui:customize} → {ui:your_details}).
+
+  # AA Grapevine's letter of October 1, 2026. The slide is in the show only while the site's price notice is
+  # current (config/site.yml price_changes: from October 1, 2026 through January 31, 2027 — the deck's "the
+  # October to December 2026 meetings and January 2027 at the latest"), and never after January 31, 2027
+  # (show_until, the generator's PRICE_HEADS_UP_UNTIL): a notice of a later price change must not bring these
+  # figures back. They are the letter's own (new price, up from the old one), so they stay as written rather
+  # than {live:price_…}, which would show the price of the day. Information only: never "before prices go up".
+  - id: "price-heads-up"
+    layout: "table"
+    title: "Heads-up: new prices from January 1, 2027"
+    when: "price_notice"
+    show_until: "2027-01-31"
+    header: ["", "Grapevine", "La Viña"]
+    rows:
+      - ["Print, 1 year", "**$39.00** (up from $36.00)", "**$19.50** (up from $18.00)"]
+      - ["Digital, 1 year", "**$34.00** (up from $29.99)", "**$17.00** (up from $14.99)"]
+      - ["Every book", "**$2.00** more", "**$2.00** more"]
+    widths: [3.0, 4.4, 4.4]
+    first_col_bold: true
+    source: "Source: AA Grapevine's letter to intergroups and central offices, October 1, 2026. Other plans and current prices: the official stores or [{live:site}/shop/](/shop/)"
+    takeaway: "Pass it on to your groups, and to treasurers planning the 2027 budget."
+    minutes: 1
+    notes: |
+      WHEN: for the October, November and December 2026 meetings, and January 2027 at the latest: this slide is in the show by itself only until January 31, 2027. If the committee still wants a reminder after that, add a slide of your own in the past tense ('Prices since January 1, 2027'), without the 'up from' figures ({ui:customize} → {ui:add}).
+      {not:topic} TIP (timekeeping): this minute comes out of the two minutes the agenda keeps spare; if the hour is tight, keep 'More news', just before this slide, short while this one is in the show.
+      {only:topic} TIP (timekeeping): this minute comes out of the two minutes the agenda keeps spare: in a month with a topic, 'More news' is left out.
+      SAY: Here's a heads-up from AA Grapevine to pass on. On October 1, AA Grapevine wrote to intergroups and central offices that its prices change on January 1, 2027. A year of Grapevine in print goes from $36 to $39, and a year of La Viña in print from $18 to $19.50. Digital goes from $29.99 to $34 for Grapevine, and from $14.99 to $17 for La Viña. And every Grapevine and La Viña book costs $2 more. AA Grapevine gives the reason as rising costs: printing, paper and materials, fulfillment, postage and shipping. Please tell your groups, and especially the group treasurers who are planning the 2027 budget. As always, each group decides what, if anything, to buy.
+      DO: Post the prices in the chat so reps can copy them. The committee website announces the change on its Shop and Bulletin pages, and its Shop page switches to the new prices by itself on January 1, 2027.
+      TIP: Share it as information, not as a reason to rush: never suggest subscribing or buying ahead of the new prices. The Conference asked for an informative attitude rather than a hard sell in Grapevine presentations (1960 Advisory Action). The letter covers only the yearly print and digital subscriptions and the books; it says nothing about 2- or 3-year, Complete or monthly plans or other regions, so don't guess at those: point people to the official stores or the committee's Shop page.
+      SOURCE: AA Grapevine, Inc., letter to intergroups and central offices, October 1, 2026: 'Grapevine & La Viña Pricing Update, Effective January 1, 2027'. The 2026 prices: the official stores, October 2026.
+      UPDATE: nothing: the slide leaves the show by itself after January 31, 2027 (see WHEN).
+
+  # Hidden in the PowerPoint template; here it starts switched off. The version "A month with a topic of the
+  # month" shows it (Customize → Version), or the chair switches it on in Customize → Slides.
+  - id: "topic-of-the-month"
+    layout: "bullets"
+    title: "Topic of the month: {fill:topic}"
+    starts_off: true
+    items:
+      - "Why now: {fill:topic_why}"
+      - "What we'll look at: {fill:topic_points}"
+      - "A question for the room: {fill:topic_question}"
+      - "What happens next: {fill:topic_next}"
+    takeaway: "We share experience and ideas here; each group decides for itself."
+    minutes: 5
+    notes: |
+      WHEN: when used, its 5 minutes are taken from the news block. This slide starts switched off, so the show skips it. In a month with a topic, choose the version 'A month with a topic of the month' ({ui:customize} → {ui:version}), or switch this slide on in {ui:customize} → {ui:slides}.
+      WHERE THE TIME COMES FROM: in a month with a topic, leave out 'Open meetings' and 'More news' (post their links in the chat instead), keep 'Grapevine and La Viña this month' and the deadlines to about 30 seconds each, and show the agenda's news row as 'News and topic of the month'. The version 'A month with a topic of the month' does all of this by itself, timing lines included. If you switch this slide on in {ui:customize} → {ui:slides} instead, switch the other two off there and change the agenda's row yourself ({ui:customize} → {ui:edit}). If the discussion needs more than 5 minutes, carry it to next month.
+      WHICH TOPIC: the page 'Topic of the month: the year at a glance' ({ui:customize} → {ui:prepare}) suggests one for each month. Don't miss February and March: the Conference agenda items for the Conference Committee on Grapevine and La Viña, to help prepare our delegate (in 2027, they include the final report of the Fellowship survey on Grapevine's products). In May, the delegate reports back.
+      SAY: This month's topic is {fill:topic}. (Two or three sentences on why it matters now.) Here's a question to start us off: {fill:topic_question} Who would like to share? (At the end:) Thank you. (Say what happens next, for example: I'll pass these thoughts to our delegate.)
+      DO: In February, March and May, invite the delegate or the alternate delegate ahead of time. Send any background material by email beforehand (BCC). Keep internal figures off the slide.
+      UPDATE: the topic and the four lines ({ui:customize} → {ui:your_details}), or leave the slide switched off.
+
+  - id: "treasurer"
+    layout: "bullets"
+    title: "Treasurer's report"
+    items:
+      - "Committee budget for {live:year}: {fill:treasurer_budget}"
+      - "Spent since the last report: {fill:treasurer_spent}"
+      - "Reimbursement requests: {fill:treasurer_reimburse}"
+    takeaway: "Committee expenses are paid from Area funds, which the groups support through the Seventh Tradition."
+    minutes: 2
+    notes: |
+      IF THE COMMITTEE HAS NO BUDGET OR NO REPORT: switch this slide off ({ui:customize} → {ui:slides}) and delete the treasurer's row of the agenda ({ui:customize} → {ui:edit}).
+      SAY (treasurer or chair): Here's where our committee's money stands. (Give the totals in general terms.) If you've spent money on committee business, such as mileage to a workshop or literature for a table, here's how to ask for reimbursement.
+      DO: Keep receipts and send them with each request. The committee's /tracker/ page can keep a record of miles and purchases; it stores everything only on your own device.
+      TIP: In this public presentation, keep amounts general. Detailed figures belong in the treasurer's written report to the committee and the Area.
+      SELF-SUPPORT: Our committee's costs come from the Area, and the Area is supported by the groups' Seventh Tradition contributions. AA Grapevine, Inc. is different: it accepts no contributions from groups or members and is supported by the sale of its magazines, books and other items. La Viña is not yet self-supporting; the General Service Board covers its shortfall as a service to the Fellowship. So we never pass a basket 'for Grapevine', and we never ask for money, prizes or discounts from outside AA.
+      UPDATE ({ui:customize} → {ui:your_details}): the budget in general terms, what was spent and the reimbursement process. The year fills in by itself.
+
+  # The deck's three numbered cards (kit cards(numbered=True)): the number leads each heading.
+  - id: "district-reports"
+    layout: "columns"
+    title: "District GVR and RLV reports"
+    style: "cards"
+    columns:
+      - heading: "1 · Carrying the message"
+        text: "How groups use the issue, new subscriptions or gifts, Carry the Message certificates"
+      - heading: "2 · Events"
+        text: "Workshops, tables, visits to groups, and meetings that read Grapevine or La Viña"
+      - heading: "3 · Needs"
+        text: "Materials, a workshop, help for a new rep, or a question for the Area"
+    takeaway: "Order tonight: {fill:district_order} · 1–2 minutes each · then group reps"
+    minutes: 12
+    notes: |
+      TIP (timekeeping): 12 minutes. This is the heart of the meeting.
+      SAY: Now it's your turn. We'll go district by district, and then any group GVRs or RLVs who'd like to share. Please keep it to a minute or two, and use these three headings if they help. Carrying the message: how groups are using the issue, and any new subscriptions, gifts or Carry the Message certificates. Events: any workshops, tables or visits. Needs: what would help you, whether that's materials, a workshop, or help for a new rep.
+      DO: Call each district by number, in the order on the slide. If nobody from a district is here, say 'we'll catch up with that district next month' and move on. Ask the timekeeper to signal at two minutes. Write down every need: each one becomes an action item.
+      TIP: Share experience, not scores. Don't compare groups or districts, and don't post totals by group. Each group decides for itself whether to subscribe, and a group that is less interested is within its rights under the Fourth Tradition.
+      ASK (if there's time): What's one idea from another district that you might try?
+      UPDATE: the order of districts ({ui:customize} → {ui:your_details}). Reps can prepare their report with the committee's report builder at /monthly/#report.
+
+  # ------------------------------------------------------------------ 2. EVENTS AND BUSINESS
+  - id: "part-2"
+    layout: "section"
+    number: 2
+    title: "Events and business"
+    subtitle: "Events · old and new business · workshops and volunteers"
+    accent: "vine"
+    minutes: 0.25
+    notes: |
+      SAY: Thank you all for those reports. Let's look at events, past and coming, then take up old and new business, and finish this part with workshop requests and volunteers.
+      TIP: Check the clock here. If the district reports ran long, tell the room which item you'll shorten, so nobody is surprised.
+
+  - id: "since-last-meeting"
+    layout: "bullets"
+    title: "Since we last met"
+    items:
+      - "{fill:since_1_event} · {fill:since_1_date} · {fill:since_1_place}, about {fill:since_1_count} attended"
+      - "{fill:since_2_event} · {fill:since_2_date} · {fill:since_2_place}, about {fill:since_2_count} attended"
+      - "{fill:since_3_event} · {fill:since_3_date} · {fill:since_3_place}, about {fill:since_3_count} attended"
+    takeaway: "Thank you to every member who helped at a table or a workshop."
+    minutes: 1
+    notes: |
+      SAY: Let's look back for a minute at what happened since our last meeting. (Read each line.) Thank you to everyone who gave their time: tables and workshops happen only because members show up and help.
+      DO: Invite one person who was there to say in a sentence what worked well.
+      ANONYMITY: In this public presentation, thank volunteers as a group, not by name, and don't add photos of members. A photo of an empty table or display, with nobody in it, is fine. An approximate attendance count is enough; never list who attended.
+      UPDATE ({ui:customize} → {ui:your_details}): every line, from the events that took place since the last meeting (the committee's /digest/ page lists last month's). Delete lines you don't need ({ui:customize} → {ui:edit}), or switch the whole slide off in a quiet month ({ui:customize} → {ui:slides}).
+
+  # The table of fill-in rows → the next events on /events/ (the CityWide booth, workshops, assemblies and
+  # other Area events: filter "neta"). The deck's row for the NETA 65 assembly is the line above the list
+  # ({live:assembly_next}): the next assembly is often months away, after the five rows. La Viña's monthly
+  # workshop has its own slide ("Open meetings"). The booth, a monthly series, takes one row: its next date.
+  - id: "coming-up"
+    layout: "live"
+    title: "Coming up"
+    kind: "events"
+    intro: "Next assembly: {live:assembly_next}"
+    options: { filter: "neta", limit: 5 }
+    takeaway: "Full calendar: [{live:site}/events/](/events/)"
+    minutes: 3
+    notes: |
+      SAY: Here's what's coming up. Our booth at CityWide Dallas is on the second Saturday of every month, from 5 to 8 p.m.; the potluck is at 5:30 and the speaker at 7. (Read the other rows, and the next assembly above them.) If you'd like to help at any of these, please say so in the chat or email the committee.
+      DO: Ask who can help at each event that needs volunteers, and note first names only for the follow-up email. Those events and the helpers they need are the volunteer lines of 'Workshop requests and volunteers' ({slide:workshops-volunteers}).
+      TIP: At a table we show the magazines and share information. Members buy directly from the official stores, or a group buys after its group conscience approves the expense. If the committee ever collects money for a group order, give dated receipts and keep records. Take photos only of the table, never of people.
+      REFERENCE: The next assembly: {live:assembly_next}. The page 'CityWide booth and Area events, coming up' ({ui:customize} → {ui:prepare}) lists the Area's events with the booth dates. Check the Area's website (neta65.org) before you announce an assembly, especially while its details are still to be confirmed.
+      STAYS CURRENT: every row, and the next assembly above them, fill in by themselves from the committee's /events/ page, and its calendar feed lists the next dates too.
+
+  - id: "old-business"
+    layout: "bullets"
+    title: "Old business"
+    numbered: true
+    items:
+      - "{fill:old_1_item}: {fill:old_1_status}"
+      - "{fill:old_2_item}: {fill:old_2_status}"
+      - "{fill:old_3_item}: {fill:old_3_status}"
+      - "{fill:old_4_item}: {fill:old_4_status}"
+    takeaway: "For each item: a short update, then decide together: done, keep working, or ask for the committee's group conscience."
+    minutes: 3
+    notes: |
+      SAY: We have (number) items carried over from last month. For each one, I'll ask whoever took it on for a quick update, and then we'll decide together whether it's done, still in progress, or needs a decision from the committee.
+      DO: Take the list from the open action items of last month ({ui:customize} → {ui:your_details} keeps them until you change them) and the minutes. If an item needs a long discussion, ask the committee whether to form a small working group or carry it to next month, rather than letting it take over the hour.
+      TIP (rotation): If the same person has carried an item for months, ask whether someone else would like to help or take it on. Service is shared, and rotation gives more members the chance to serve.
+      UPDATE ({ui:customize} → {ui:your_details}): the list of items. Delete lines you don't need ({ui:customize} → {ui:edit}), or switch the whole slide off if there's no old business ({ui:customize} → {ui:slides}).
+
+  - id: "new-business"
+    layout: "bullets"
+    title: "New business"
+    items:
+      - "{fill:new_1_item}: brought by {fill:new_1_by}"
+      - "{fill:new_2_item}: brought by {fill:new_2_by}"
+      - "How we decide: present the idea, ask questions, hear every voice, then reach a group conscience or carry it to next month"
+    takeaway: "The committee serves the groups (Tradition Nine); each group decides its own affairs (Tradition Four)."
+    minutes: 3
+    notes: |
+      TIP (timekeeping): If the discussion will take more than 3 minutes, carry the item to next month.
+      SAY: Is there any new business? (Take the items added at the start and any others.) For each one, the person who brings it explains it briefly, we ask questions, and we hear from everyone who wants to speak, especially anyone who sees it differently. Then we either reach a group conscience tonight or carry it to next month, so people can talk it over with their districts first.
+      DO: Restate each proposal in one sentence before the committee decides, and ask for any minority opinion. Record each decision, and who will act on it, in the action items.
+      TIP (principles before personalities): Keep the discussion on the idea, not on who suggested it. If a decision affects the Area as a whole, such as spending or Area events, it may need to go to the Area Committee or the assembly. If it affects a group, it belongs to that group's conscience.
+      UPDATE ({ui:customize} → {ui:your_details}): the new items, or delete those lines ({ui:customize} → {ui:edit}) and simply ask the room.
+
+  - id: "workshops-volunteers"
+    layout: "columns"
+    title: "Workshop requests and volunteers"
+    style: "panels"
+    columns:
+      - heading: "Request a workshop"
+        items:
+          - "Writing: Grapevine, La Viña or bilingual"
+          - "Recording your story by phone"
+          - "New-rep orientation, or a short talk"
+          - "Ask: [grapevine@neta65.org](grapevine@neta65.org)"
+          - "Free printed materials for your event: [gvrc@aagrapevine.org](gvrc@aagrapevine.org), 4–6 weeks ahead"
+      - heading: "Volunteer"
+        items:
+          - "{fill:volunteer_1_event}: {fill:volunteer_1_helpers}"
+          - "{fill:volunteer_2_event}: {fill:volunteer_2_helpers}"
+          - "To help: say so in the chat, or write to [grapevine@neta65.org](grapevine@neta65.org)"
+    takeaway: "Presented by our Area committee, not by AA Grapevine, Inc."
+    minutes: 2
+    notes: |
+      SAY: Any group or district can ask the committee for a workshop: a writing workshop for Grapevine or La Viña, a session on recording your story by phone, an orientation for new reps, or a short talk at a group or district meeting. Just email the committee with the date, the place and the language. And here's where we could use some help. (Read the volunteer lines.)
+      DO: Write down each request with a contact by service position, and follow up by email (BCC when you write to several people). For events, the Grapevine office can send free printed materials: write to gvrc@aagrapevine.org four to six weeks ahead with your name, Area, service position and contact details, and the event's name, date and expected attendance. The office may reserve printed materials for larger events (about 100+, as reported on the May 2026 Area Chair call), so ask early.
+      TIP: Say plainly at every workshop that our Area committee presents it, not AA Grapevine, Inc. If you invite Grapevine office staff to speak, the committee that invites them pays their expenses. And never promise anyone that their story will be published.
+      UPDATE ({ui:customize} → {ui:your_details}): the volunteer lines, every month, from the events on the 'Coming up' slide that need help.
+
+  # ------------------------------------------------------------------ 3. SHARING AND CLOSING
+  - id: "part-3"
+    layout: "section"
+    number: 3
+    title: "Sharing and closing"
+    subtitle: "What's working · action items · next meeting"
+    accent: "grape"
+    minutes: 0.25
+    notes: |
+      SAY: We're coming to the end of our hour. Let's take a few minutes to share what's working, read back what we've agreed to do, and close together.
+      TIP: If you're behind schedule, keep the sharing but shorten it; it's often the part people remember most.
+
+  - id: "sharing"
+    layout: "qa"
+    title: "Sharing: what's working?"
+    prompts:
+      - "What's working in your group or district with Grapevine and La Viña?"
+      - "What's the biggest challenge in your service position right now?"
+      - "Who else could the magazines reach, and how can we help?"
+      - "How can the Area committee help you?"
+    note: "Please keep shares short so more people can speak."
+    minutes: 6
+    notes: |
+      TIP (timekeeping): about 6 minutes; longer if the agenda ran short, shorter if it ran long. At about a minute each, five or six people can speak.
+      SAY: We have a few minutes to share experience. Any of these questions is a good place to start, or share anything on your heart about this service. Who would like to begin?
+      DO: Wait through the silence; someone usually speaks within ten seconds. Call first on people who haven't spoken yet tonight, and make sure new reps get a turn: some of the best ideas come from them. If questions come in the chat, read them aloud for anyone on the phone.
+      TIP: Keep it to experience, strength and hope. If a share drifts into outside issues, such as politics, treatment methods, other fellowships or commercial apps, gently bring it back to how we carry the message with Grapevine and La Viña. If a question needs research, say you'll find out, and add it to the action items.
+      UPDATE: nothing, unless the committee wants a theme for the sharing (for example, the month's issue theme).
+
+  - id: "action-items"
+    layout: "table"
+    title: "Action items"
+    header: ["Action", "Who (service position)", "By when"]
+    rows:
+      - ["{fill:action_1_what}", "{fill:action_1_who}", "{fill:action_1_when}"]
+      - ["{fill:action_2_what}", "{fill:action_2_who}", "{fill:action_2_when}"]
+      - ["{fill:action_3_what}", "{fill:action_3_who}", "{fill:action_3_when}"]
+      - ["{fill:action_4_what}", "{fill:action_4_who}", "{fill:action_4_when}"]
+    widths: [6.0, 3.6, 2.2]
+    takeaway: "Read back for the minutes; open items become next month's old business."
+    minutes: 1
+    notes: |
+      SAY: Before we close, let's read back what we've agreed to do. (Read each row: what, who, and by when.) Did I miss anything?
+      DO: Fill in the table live during the meeting ({ui:customize} → {ui:your_details}), or keep the list on paper and read it back. Send the action items with the draft minutes.
+      TIP: Every action has one person who takes it on, even if others help. On this slide, write the service position (for example, 'a district GVR' or 'the alternate chair'), not a name.
+      UPDATE: the rows are blanks in {ui:customize} → {ui:your_details}, and this device keeps them from month to month: before the meeting, copy last month's open items to the old business blanks, then clear these rows for tonight.
+
+  # Shown DURING tonight's meeting, so its date is the meeting after tonight's ({live:meeting_after}): until
+  # midnight Central after tonight's meeting, {live:meeting_day} is still tonight's, the title slide's date, so
+  # the slide reads right during the meeting, after it, and while the chair prepares it the week before. The
+  # time and the Zoom details come from config/site.yml `meeting`, Zoom's number for callers from `phone_access`
+  # (as the site's "Join by phone" section, /accessibility/#phone, gives it: the number and its city, as the deck
+  # wrote them). The date and the time are two facts side by side (" · "), and the script names the date after a
+  # colon, so both still read well when the date says where to look ("see the Meetings page"). "\u00a0" keeps
+  # "meeting ID" and "passcode" on the same line as their value.
+  # The numbers-only phone passcode stays the chair's blank: the site keeps none yet
+  # (phone_access.committee.phone_passcode is empty), and an empty {live:meeting_phone_passcode} would leave
+  # "phone passcode" with nothing after it. Once the site has it, that key can replace the blank.
+  - id: "next-meeting"
+    layout: "bullets"
+    title: "Next meeting"
+    items:
+      - "**{live:meeting_after}** · {live:meeting_time}"
+      - "Zoom: meeting ID\u00a0{live:meeting_zoom_id}, passcode\u00a0{live:meeting_passcode}"
+      - "By phone: {live:meeting_phone} · meeting ID\u00a0{live:meeting_zoom_id} · phone passcode\u00a0{fill:phone_passcode}"
+      - "Every 3rd Wednesday · all AA members welcome · no registration"
+      - "Details: [{live:site}/meetings/](/meetings/)"
+    takeaway: "Questions between meetings: [grapevine@neta65.org](grapevine@neta65.org)"
+    minutes: 1
+    notes: |
+      SAY: Our next meeting: {live:meeting_after}. As always, it's on the third Wednesday, at seven, in this same Zoom room. You can also join by phone: the number, the meeting ID and the phone passcode are on the screen. Please invite anyone in your district who might be interested: GVRs, RLVs, GSRs or any member. Everyone is welcome, and there's nothing to sign up for.
+      DO: Post the date and the Zoom details in the chat (in Spanish too, if Spanish-speaking members attend), and read the phone details aloud for anyone on the phone. Send a reminder about a week ahead, by email with every address in BCC.
+      STAYS CURRENT: the date (the meeting after tonight's, until midnight after the meeting), the time, the Zoom details and Zoom's number for callers fill in by themselves ({ui:customize} → {ui:prepare} lists the next twelve dates). If the committee skips or moves a meeting, tell whoever looks after the website, so the date here and the countdown on its meetings page stay right.
+      TIP: The Zoom meeting ID and passcode are already public on the Area's website, so they can stay on this slide. Zoom gives callers a numbers-only phone passcode, which is in the host's Zoom invitation (in its dial-in section). It is made from the public passcode, so it is no more private: copy it into {ui:customize} → {ui:your_details}. It doesn't change from month to month, so you type it only once on this device.
+
+  - id: "responsibility"
+    layout: "quote"
+    title: "Closing: the Responsibility Statement"
+    quote: "I am responsible. When anyone, anywhere, reaches out for help, I want the hand of A.A. always to be there. And for that: I am responsible."
+    credit: "— Responsibility Statement, written for the 1965 International Convention, Toronto"
+    minutes: 1
+    notes: |
+      TIP (timekeeping): even when an item ran over, keep this closing: it takes a minute, and the meeting still ends by eight.
+      SAY: Thank you all for your service tonight. Let's close with the Responsibility Statement. Those who wish, please say it along with me. (Read it slowly.)
+      DO: As with the prayer, say it aloud yourself while everyone else says it muted, to avoid an echo. If the committee also closes with the Serenity Prayer, go back to the opening slide, or simply say it together.
+      TIP: Read the words exactly as they appear on the slide. Some older committee slides had a misquoted version. The wording shouldn't be changed or shortened.
+      AFTER THE MEETING: stay on Zoom for a few minutes for newcomers' questions. Then send the draft minutes and the action items within a week.
+
+  # The navy closing slide keeps its addresses as plain text, as in the deck. Its date is the meeting after
+  # tonight's, as on "Next meeting" ({live:meeting_after}). It stays up after the hour, while people say
+  # goodbye (the deck's "leave up"), so it has the least time a slide can have (15 seconds): the hour's length
+  # (Customize → Version) is the meeting itself.
+  - id: "thank-you"
+    layout: "closing"
+    title: "Thank you for your service"
+    message: |-
+      Next meeting: {live:meeting_after}
+      {live:meeting_time}, on Zoom
+    lines:
+      - "Area 65 Grapevine / La Viña Chair: grapevine@neta65.org"
+      - "Committee website: {live:site}"
+      - "Northeast Texas Area 65: neta65.org"
+    minutes: 0.25
+    notes: |
+      WHEN: after the hour: leave this slide up while people say goodbye.
+      SAY: Thank you for being here, and for everything you do to carry the message. If you have questions, the committee's email is on the screen, and our website has this month's news, deadlines and events. Good night, and see you next month.
+      DO: Stop sharing your screen only after the last person has left. Then write up the minutes and action items, make sure the website shows the right date for the next meeting, and save this month's version if you want to keep it ({ui:customize} → {ui:save_share}): anything that shouldn't be public stays in your own Drive, outside the shared folders.
+      TIP: The contact on this slide is the committee's service address. Never put a personal phone number or email address here.
+      STAYS CURRENT: the date of the next meeting (the one after tonight's, until midnight after the meeting) fills in by itself.
+
+  # ------------------------------------------------------------------ APPENDIX · FOR THE CHAIR
+  # Hidden slides in the PowerPoint template → facilitator pages: never in the show, read and printed in
+  # Customize → Prepare (which lists every one, this divider too, and prints any of them). Rewritten for the web
+  # where they explained the .pptx (fresh copies, Ctrl+F, orange text, hidden slides, "as of" lines); the 2027
+  # dates and deadline tables are now lists that stay current.
+  - id: "for-the-chair"
+    layout: "section"
+    facilitator: true
+    number: "A"
+    title: "For the chair"
+    subtitle: "Preparing the meeting, chairing tips and reference. Hidden during the meeting."
+    eyebrow: "Appendix · For the chair"
+    accent: "navy"
+    notes: |
+      NOT PRESENTED: the meeting ends with the 'Thank you' slide just before this one.
+      WHAT'S HERE: credits and sources; a checklist for the week before each meeting; what to update on each slide and where to find it; a topic for each month of the year; chairing tips; how to keep this presentation and the minutes AA-safe; and the next meeting dates, the CityWide booth and Area events, and the story deadlines, which stay current by themselves.
+      FOR THE CHAIR ONLY: this divider and every page after it are never part of the show, even if you click past the 'Thank you' slide. They are in {ui:customize} → {ui:prepare}, where you can read each one before the meeting, or print it.
+
+  - id: "credits"
+    layout: "credits"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "Credits & sources"
+    sources:
+      - "The AA Preamble: Copyright © by AA Grapevine, Inc.; reprinted with permission"
+      - "Responsibility Statement: written for the 1965 International Convention, Toronto"
+      - "Serenity Prayer: said at many AA meetings; A.A. World Services does not hold its copyright (aa.org, Terms of Use)"
+      - "Facts about the magazines: [www.aagrapevine.org](https://www.aagrapevine.org) and [www.aalavina.org](https://www.aalavina.org), as of October 2026"
+      - "Meeting dates, issues, themes, deadlines, Books of the Month, open meetings and events on the slides: the committee website, {live:site}, as of the date on the title slide"
+      - "Prices from January 1, 2027: AA Grapevine's letter to intergroups and central offices, October 1, 2026"
+      - "The A.A. Service Manual, 2024–2026 Edition, Chapter 11; AA Grapevine and La Viña: Our Meetings in Print (P-52); Self-Support (F-3, June 2026); Anonymity (P-47, Sept. 2026)"
+      - "Committee meeting details: neta65.org and the committee website"
+    note: |-
+      Grapevine and La Viña are trademarks of AA Grapevine, Inc. The names are used only to identify the magazines; no logos, covers or artwork are reproduced.
+      This presentation was prepared by the NETA 65 Grapevine & La Viña Committee for local service use. It is not AA Conference-approved literature and does not speak for AA as a whole or for AA Grapevine, Inc.
+    notes: |
+      NOT PRESENTED: this page keeps the record of where the words and facts come from.
+      SAY (if someone asks): This presentation is a local service piece from our Area committee. It isn't Conference-approved literature, and it doesn't speak for AA as a whole or for AA Grapevine, Inc.
+      DO: When you add a fact or a quotation, add its source here. Quote A.A.W.S. literature only briefly and word for word, with 'Reprinted from (publication, page), with permission of Alcoholics Anonymous World Services, Inc.' Grapevine and La Viña stories and other AA Grapevine material need AA Grapevine's permission (licensing@aagrapevine.org), so paraphrase and link instead.
+      NO LOGO: since October 2026 the committee's decks carry no NETA 65 Area logo on any slide, by decision. The Area's logo is the Area's own, so please don't add it back, and never add Grapevine or La Viña logos, covers or artwork either.
+      AS OF: the facts in these notes were checked in October 2026; the dates and the other facts on the slides come from the committee website, which reads the official sites every day, so they are current as of the date on the title slide.
+      UPDATE: the Service Manual's chapter and page references when the 2026–2028 edition comes out, and the 'as of' month above when someone checks the facts again (ask whoever looks after the website).
+
+  # A checklist: Prepare gives each line a tick box the chair's device remembers. Not numbered as well: a
+  # number and a tick box would share the same spot in front of each line.
+  - id: "week-before"
+    layout: "bullets"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "The week before each meeting"
+    checklist: true
+    items:
+      - "Save last month's version first ({ui:customize} → {ui:save_share}); name it “YYYY-MM GV-LV Committee Meeting”"
+      - "{ui:customize} → {ui:your_details}: fill in each orange blank; what is still orange is still to fill in"
+      - "From last month's version, copy only the open action items and the events that took place"
+      - "Check issues, deadlines, Books of the Month, meetings, events and the month's topic: most fill in by themselves"
+      - "Zoom: recording off; a co-host, a timekeeper and a minutes-taker lined up"
+      - "Email the agenda, the draft minutes and a reminder, with every address in BCC"
+    notes: |
+      WHEN: about 30 to 45 minutes of preparation, the week before the meeting.
+      WHY: Most of this presentation stays the same every month, and the meeting dates, deadlines, issues and events fill in by themselves. Only the orange blanks change, so a careful pass through {ui:customize} → {ui:your_details} is usually all it takes.
+      STEP 1: What you typed last month stays on this device until you change it. Before you change it, save last month's version ({ui:customize} → {ui:save_share}) with the year and month first in its name (for example, '2027-01 GV-LV Committee Meeting'), so your saved versions sort in order. 'Reset to the original', also in {ui:customize} → {ui:save_share}, starts again from the committee's version, with this presentation's blanks empty.
+      STEP 2: Fill in this month's blanks in {ui:customize} → {ui:your_details}. A blank you haven't filled in shows on its slide in orange, in square brackets, and before you present, a short notice lists the blanks still empty. That way orange always means 'still to fill in'.
+      STEP 3: From last month, carry over only two things: its open action items, to the 'Old business' blanks, and the events that took place, to 'Since we last met' (the committee's /digest/ page lists last month's events).
+      STEP 4: The month's topic is on the page 'Topic of the month: the year at a glance'. If you use it, choose the version 'A month with a topic of the month' ({ui:customize} → {ui:version}), or switch the 'Topic of the month' slide on in {ui:customize} → {ui:slides}.
+      TIP: Ask your alternate chair to look over the presentation before the meeting (send your saved version: {ui:customize} → {ui:save_share}). A second pair of eyes catches stale details, and it prepares the alternate to chair whenever you can't.
+      TIP: The committee's /monthly/ page gathers this month's issues, deadlines, Books of the Month and events in one place, so you can fill in most of your blanks from it.
+
+  # "What to update, slide by slide", rewritten for the web: what now stays current by itself, and what the
+  # chair still fills in (Customize → Your details) or checks.
+  - id: "what-to-update"
+    layout: "table"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "What to update, slide by slide"
+    header: ["Slide", "What to update", "Where to look"]
+    rows:
+      - ["Title; Next meeting; Thank you", "Nothing: the meeting's month and date fill in by themselves (3rd Wednesday)", "A meeting skipped or moved: tell whoever looks after the website"]
+      - ["Last month's minutes", "Month, how sent, minutes-taker", "The draft minutes"]
+      - ["Chair's report", "All four lines", "Area news; Grapevine News"]
+      - ["Grapevine and La Viña this month", "One story per magazine (the issues and both Books of the Month fill in by themselves)", "/monthly/"]
+      - ["Story deadlines", "Nothing: the next two of each magazine fill in by themselves", "/contribute/#deadlines; the deadline pages here"]
+      - ["Open meetings", "Nothing: the weekly open meetings and La Viña's workshop fill in by themselves", "/meetings/; both magazines' websites"]
+      - ["More news", "Every line", "Rep resource pages; /digest/"]
+    widths: [4.3, 3.9, 3.6]
+    first_col_bold: true
+    notes: |
+      NOT PRESENTED: a reference for preparation.
+      HOW TO USE IT: Work down this table the week before the meeting. Everything you fill in is in {ui:customize} → {ui:your_details}. A path that starts with '/' is a page of the committee website, {live:site}. Every slide not listed here (the welcome, the opening, the Preamble, introductions, the agenda, the sharing and the closing) stays the same from month to month unless the committee changes its format.
+      STAYS CURRENT: the meeting dates, the story deadlines, this month's issues, both Books of the Month, the weekly open meetings, La Viña's workshop, the coming events and the next assembly fill in by themselves, and the price heads-up shows only while it is current: they come from the committee website, which updates itself every day from the official Grapevine and La Viña sites. Its /monthly/, /contribute/, /meetings/, /events/ and /shop/ pages are the quickest place to check a theme, a deadline, a meeting, a price or an event. When the website has nothing yet for one of them, the slide says where to look instead.
+      OFFICIAL PAGES: Books of the Month, aagrapevine.org/BOTM and aalavina.org/libro-del-mes. Open meetings, aagrapevine.org/grapevine-weekly-open and aalavina.org/calendario-de-eventos. Themes and deadlines, aagrapevine.org/contribute and aalavina.org/recursos ({lang:es}Temas de LV{/lang}).
+
+  - id: "what-to-update-2"
+    layout: "table"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "What to update, slide by slide (continued)"
+    header: ["Slide", "What to update", "Where to look"]
+    rows:
+      - ["Price heads-up (until Jan. 2027)", "Nothing: it leaves the show by itself after January 31, 2027", "Its notes"]
+      - ["Topic of the month (switched off)", "Topic and its four lines, or leave it off", "Year at a glance"]
+      - ["Treasurer's report", "Budget, spending, process (the year fills in by itself)", "Treasurer's report"]
+      - ["District reports", "Order of districts", "Last month's attendance"]
+      - ["Since we last met", "Every line", "Last month's minutes; /digest/"]
+      - ["Coming up", "Nothing: the next events and the next assembly fill in by themselves", "/events/"]
+      - ["Old and new business; action items", "Every item", "Last month's details or minutes"]
+      - ["Workshops and volunteers", "Volunteer lines", "Coming up; /events/"]
+    widths: [4.3, 3.9, 3.6]
+    first_col_bold: true
+    notes: |
+      NOT PRESENTED: a reference for preparation. This continues the table on the previous page.
+      MORE NEWS: the monthly Grapevine News for reps is on aagrapevine.org/gvr-resources, and La Viña's {lang:es}Noticias{/lang} on aalavina.org/recursos. The committee's /digest/ page lists everything new last month in one place.
+      PRICE HEADS-UP: the slide after 'More news' announces AA Grapevine's prices from January 1, 2027. It is for the October to December 2026 meetings and January 2027 at the latest, and it leaves the show by itself after January 31, 2027. To remind the room after that, add a slide of your own in the past tense ({ui:customize} → {ui:add}).
+      DISTRICT REPORTS: list the districts in the order you'll call them. Changing the order from month to month gives every district a turn to go first, and a district that wasn't heard last month can start.
+      TOPIC OF THE MONTH: the next page suggests one for each month. The slide for it in Part 1 starts switched off; switch it on only in a month when you use it ({ui:customize} → {ui:version}: 'A month with a topic of the month', or {ui:customize} → {ui:slides}).
+      EVENTS: the 'Coming up' slide fills in by itself from the committee's /events/ page, with the next NETA 65 assembly above the list, and the Area's website (neta65.org) lists what's coming too. For 'Since we last met', write the events that took place since the last meeting (the /digest/ page lists last month's). The volunteer lines on the workshop slide come from the events that need help.
+      BUSINESS: copy the open action items from last month ({ui:customize} → {ui:your_details} keeps them until you change them, and the minutes have them) to the old business blanks, then clear the action items for tonight.
+
+  # The deck's two-column "year at a glance" (drawn like its agenda: the month where the time would be).
+  - id: "topics-year"
+    layout: "agenda"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "Topic of the month: the year at a glance"
+    items:
+      - { time: "Jan.", title: "Welcome new reps; orientation" }
+      - { time: "Feb.–Mar.", title: "The Conference agenda items, to prepare the delegate" }
+      - { time: "Apr.", title: "Writing workshops; recording your story" }
+      - { time: "May", title: "The delegate's report; Advisory Actions" }
+      - { time: "June", title: "“Grapevine Month” ideas; Summer Assembly" }
+      - { time: "July", title: "La Viña's anniversary; the Prison Issue" }
+      - { time: "Aug.", title: "Carry the Message" }
+      - { time: "Sept.", title: "Fall Assembly; Young & Sober outreach" }
+      - { time: "Oct.", title: "Displays and tables" }
+      - { time: "Nov.", title: "Gratitude; gift subscriptions; photo contest" }
+      - { time: "Dec.", title: "Holiday cards; Sober Holidays; year in review" }
+    notes: |
+      NOT PRESENTED: a reference for preparation.
+      HOW TO USE IT: a suggested topic for each month, about 5 minutes, on the 'Topic of the month' slide in Part 1, which starts switched off (switch it on in a month when you use it: {ui:customize} → {ui:version} or {ui:customize} → {ui:slides}). The cycle follows the General Service Conference calendar, the GVR Workbook and the magazines' editorial calendars. It is a suggestion: the committee may choose its own topics.
+      DON'T MISS: Feb./Mar. 2027: review the Conference agenda items for the Conference Committee on Grapevine and La Viña with the delegate, including the final report of the Fellowship survey on Grapevine's products (M-39, p. 58); May: the delegate's report and the Advisory Actions about Grapevine and La Viña. The 2027 agenda items were not published yet in October 2026, so ask the delegate when the background material arrives, and invite the delegate or the alternate delegate to those meetings. The same cycle applies in 2028.
+      OTHER MONTHS: January, welcome the new reps (the committee site's /orientation/ and /gvr/ pages). April, writing workshops and recording your story by phone. June, 'Grapevine Month' ideas from other Areas, and the Summer Assembly. July, La Viña's anniversary and Grapevine's Annual Prison Issue: a good month to work with the Area's Corrections committee. August, the Carry the Message program. September, the Fall Assembly and the Young & Sober issue: reaching young people. October, displays and tables. November, gratitude, gift subscriptions, and the wall calendar photo contest (due around December 1). December, holiday cards, the Sober Holidays issue, and a look back at the year.
+      UPDATE: only if the committee changes its yearly plan.
+
+  - id: "committee-pages"
+    layout: "resources"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "Committee pages the chair uses every month"
+    links:
+      - label: "Monthly toolkit"
+        url: "/monthly/"
+        note: "This month's issues, dates and ideas, and the rep report builder"
+      - label: "Themes and deadlines"
+        url: "/contribute/"
+        note: "Current themes with countdowns, how to submit, writing tips"
+      - label: "Events and calendar feed"
+        url: "/events/"
+        note: "Booths, workshops, assemblies and committee meetings"
+    notes: |
+      NOT PRESENTED: a reference for preparation.
+      WHAT THEY ARE: three pages of our committee's own website. The monthly toolkit gathers this month's issues, deadlines and ideas for putting the issue to work, and it has a report builder that reps can use for their district report. The contribute page lists the current themes and deadlines with countdowns. The events page lists booths, workshops, assemblies and our own meetings, and offers a calendar feed.
+      TIP: The /digest/ page collects everything new from last month, ready to paste into an email to the districts, and the /gvr/ page is the corner for new reps.
+      UPDATE: nothing: these links follow the website, even if its address changes.
+
+  # The deck's 2 × 2 tinted cards, one accent each (gv, vine, lv, grape).
+  - id: "chairing-tips"
+    layout: "columns"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "Chairing tips"
+    style: "cards"
+    columns:
+      - heading: "Timekeeping"
+        accent: "gv"
+        items: ["Start at 7:00, end by 8:00", "A timekeeper signals at 2 minutes", "Long topics can wait a month"]
+      - heading: "Group conscience"
+        accent: "vine"
+        items: ["Present, discuss, then decide", "Ask for the minority view", "Or carry it to next month"]
+      - heading: "Rotation"
+        accent: "lv"
+        items: ["Rotate readers and note-takers", "Invite new reps to help", "Share tasks with the alternate"]
+      - heading: "Principles before personalities"
+        accent: "grape"
+        items: ["Ideas, not people", "No 'star system' for writers", "Thank volunteers as a group"]
+    notes: |
+      NOT PRESENTED: a reference for the chair.
+      TIMEKEEPING: Starting on time respects the people who came on time. A timekeeper who signals in the chat at two minutes lets the chair stay friendly. When a topic needs more than its slot, offer to carry it to next month or to a small working group.
+      GROUP CONSCIENCE: Tradition Two: our leaders are but trusted servants; they do not govern. Present the question, let people ask and discuss, ask directly for the minority view, then decide, or wait a month if the districts need to talk it over.
+      ROTATION: Give the readings, timekeeping and minutes to different members each month, and invite new reps into small tasks. Involve the alternate chair in planning, so the committee keeps going whoever chairs.
+      PRINCIPLES BEFORE PERSONALITIES: Tradition Twelve. Keep discussions on ideas. Celebrate members who are published without building a 'star system' around them, and thank volunteers as a group.
+
+  - id: "aa-safe"
+    layout: "bullets"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "Keeping this presentation and the minutes AA-safe"
+    items:
+      - "This presentation and its notes are public, and so is any copy saved in the Panel 77 folders"
+      - "No full names, faces, personal phones or emails: use service positions and [grapevine@neta65.org](grapevine@neta65.org)"
+      - "No Grapevine or La Viña logos, covers, artwork, stories or Daily Quotes: link, or hold up the issue"
+      - "Internal figures (Grapevine's calls with Area chairs, GSO's Quarterly Report): say them aloud with the source; never type them here"
+      - "No screenshots of the Zoom gallery, and no recordings of members"
+      - "Need a private copy? Keep it OUTSIDE the shared A65_GV folder (your own Drive, sharing set to Restricted). PRIVATE in a file name only keeps it off the website."
+    notes: |
+      NOT PRESENTED: a reference for the chair.
+      WHY: This presentation, slides and notes, is published on the committee's website; what you type in {ui:customize} stays on this device unless you share a saved copy. The website also publishes the files in the Panel 77 Drive folder, and anyone with the link can open them: the whole A65_GV folder is shared as 'Anyone with the link: Viewer'. Anything that must stay private goes in your own Drive, never in the shared A65_GV folders: PRIVATE in a name only hides a file from the website, not from Drive. AA's pamphlet on anonymity (P-47) says a public web page needs the same care as press, radio and film: no full names and no full-face photos of members.
+      COPYRIGHT: AA Grapevine, Inc. owns all Grapevine and La Viña content. Writing the magazines' names is fine, but their logos, covers, artwork and cartoons may not be reproduced, and stories need permission. The AA Preamble, with its credit line, is the exception we use.
+      INSIDE THE MEETING: last names are fine inside AA for service business, but not in this presentation. Email lists go in BCC, and nobody's email or phone number is shared without their permission.
+      UPDATE: only if the Area's or the website's practice changes.
+
+  # "2027 dates: January to June" and "July to December" (tables of the committee's Wednesdays, the CityWide
+  # booth's Saturdays and the Area events, as of October 2026) → two lists that stay current: the next twelve
+  # committee meetings (config/site.yml `meeting`, skip dates included), then the booth and the Area's events
+  # from /events/ (filter "neta": every booth Saturday, the workshops, the assemblies), under the next NETA 65
+  # assembly ({live:assembly_next}), which is often further away than twelve events. An events list shows a
+  # monthly series once, its next date (as on "Coming up"); `series: "all"` lists every booth Saturday here.
+  - id: "meeting-dates"
+    layout: "live"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "Committee meeting dates, the year ahead"
+    kind: "meeting"
+    options: { limit: 12 }
+    notes: |
+      NOT PRESENTED: a reference for the chair.
+      HOW THESE ARE WORKED OUT: the committee meets on the third Wednesday of every month, 7 to 8 p.m. Central, and the CityWide Dallas booth is on the second Saturday, 5 to 8 p.m. The dates follow those rules and stay current by themselves. If the committee skips or moves a meeting (for example, around a holiday), tell whoever looks after the website, so the dates here, on the slides and the website's countdown stay right.
+      ASSEMBLIES: the next one: {live:assembly_next}. As of October 2026, the Spring Assembly (March 19 to 21, 2027, in Dallas) was set; the Summer Assembly (June 25 to 27) and the Fall Assembly (September 17 to 19) were still to be confirmed, with venues to be announced. Check neta65.org before you announce them. The next page names the next assembly above the CityWide booth dates and the Area's other events, as the committee's /events/ page shows them.
+      TIP: The committee's /events/ page has a calendar feed you can subscribe to, so these dates appear in your own calendar.
+
+  - id: "events-ahead"
+    layout: "live"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "CityWide booth and Area events, coming up"
+    kind: "events"
+    intro: "Next assembly: {live:assembly_next}"
+    options: { filter: "neta", limit: 12, series: "all" }
+    notes: |
+      NOT PRESENTED: a reference for the chair. The same rules as the previous page: the committee meets on the third Wednesday, and the CityWide booth is on the second Saturday. This list fills in by itself from the committee's /events/ page, every booth Saturday included (the 'Coming up' slide shows the booth once, at its next date), and the line above it names the next NETA 65 assembly.
+      FALL ASSEMBLY: September 17 to 19, 2027, was still to be confirmed in October 2026, with the venue to be announced. Check neta65.org before you announce it.
+      HOLIDAYS: if the committee decides to skip or move the November or December meeting, tell whoever looks after the website, so the dates here, on the slides and the website's countdown stay right. La Viña's monthly workshop is usually on the fourth Thursday, but in November and December La Viña has held it on the Thursday before Thanksgiving and before Christmas (November 20 and December 18 in 2025). Check La Viña's events calendar (aalavina.org/calendario-de-eventos) each month before you announce a date.
+
+  # The deadline tables (as of October 2026) → the deadlines from the site's data (an issue with two themes,
+  # like Grapevine's December 2027, always shows both). The 2027 dates the deck listed stay in the notes, in case
+  # the site's list has not caught up (La Viña's dated themes, especially).
+  # Each page keeps its magazine's colour inside the navy appendix, as the deck's table headers had it
+  # (header_accents: Grapevine blue, La Viña orange).
+  - id: "gv-deadlines"
+    layout: "live"
+    facilitator: true
+    accent: "gv"
+    eyebrow: "Appendix · For the chair"
+    title: "Grapevine deadlines"
+    kind: "deadlines"
+    options: { pub: "gv", limit: 6 }
+    notes: |
+      NOT PRESENTED: a reference for the chair.
+      SOURCE: AA Grapevine's editorial calendar (aagrapevine.org/contribute). This list stays current by itself, and the 'Story deadlines coming up' slide shows the next ones.
+      AS OF OCTOBER 2026, the 2027 calendar: August 2027, 'Sober Seniors', due January 1, 2027; September 2027, 'Young & Sober', due February 1, 2027; October 2027, 'AA in the Military', due March 1, 2027; November 2027, 'Classic Grapevine' (stories from the archive), no deadline; December 2027, 'Remote Communities / Sober Holidays!', due May 1, 2027. The 2028 calendar was not yet published; it was expected in early 2027.
+      EARLIER DEADLINES, for a meeting before January 2027: the June 2027 issue, 'Emotional Sobriety', is due November 1, 2026, and the July 2027 Annual Prison Issue is due December 1, 2026; for that issue the editors especially want stories from women in long-term custody. The November issue is 'Classic Grapevine', made of stories from the archive, so it has no deadline.
+      TIP: Stories go through aagrapevine.org/submit-your-story or to gveditorial@aagrapevine.org. Grapevine suggests 300 to 1,800 words. A story that misses its deadline may still be used later.
+      UPDATE: nothing: when the 2028 calendar comes out, its issues appear here once the committee's /contribute/ page shows them.
+
+  - id: "lv-deadlines"
+    layout: "live"
+    facilitator: true
+    accent: "lv"
+    eyebrow: "Appendix · For the chair"
+    title: "La Viña deadlines"
+    kind: "deadlines"
+    options: { pub: "lv", limit: 6 }
+    takeaway: "Send to [www.aalavina.org/comparte](https://www.aalavina.org/comparte) or [manuscritoslv@aagrapevine.org](manuscritoslv@aagrapevine.org)"
+    notes: |
+      NOT PRESENTED: a reference for the chair.
+      SOURCE: La Viña's themes ({lang:es}Temas de LV{/lang}, on aalavina.org/recursos); this list fills in from the committee website. La Viña comes out every two months, so there are six issues a year.
+      AS OF OCTOBER 2026 (in case the list doesn't show them yet), the 2027 themes: September/October 2027, '{lang:es}Hispanos Veteranos en AA{/lang}' (Hispanic veterans), due February 2, 2027; November/December 2027, '{lang:es}Celebrando en sobriedad{/lang}' (celebrating in sobriety), due April 3, 2027. The 2028 themes were not yet published; they were expected in early 2027.
+      EARLIER DEADLINES, for a meeting before January 2027: the May/June 2027 issue, '{lang:es}Recaídas{/lang}' (relapses), is due October 17, 2026, and the July/August 2027 issue, '{lang:es}Prisiones{/lang}' (prisons), is due December 15, 2026.
+      BEFORE YOU ANNOUNCE A THEME: read La Viña's own description of it. '{lang:es}Veteranos{/lang}' usually means long-time members (La Viña's {lang:es}Veteranos{/lang} section is for old-timers), but it can also mean military veterans, and La Viña's themes list gives only the title (the committee website's English, 'Hispanic Veterans in AA', keeps both meanings), so check the description of the September/October theme before you explain it.
+      TIP: La Viña wants personal stories told as in a meeting, about five or six double-spaced typed pages. Stories go by email to manuscritoslv@aagrapevine.org, the address the committee gives, as on its /contribute/ page (say it '{lang:es}manuscritos{/lang} L V', for La Viña: on screen a lowercase l can look like a capital I); La Viña's web form, aalavina.org/comparte, works too. La Viña also keeps a list of open topics that can be sent at any time (aalavina.org/temas-sugeridos).
+      UPDATE: nothing: when the 2028 themes come out, they appear here once the committee's /contribute/ page shows them.

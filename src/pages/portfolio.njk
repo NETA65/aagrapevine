@@ -1,0 +1,213 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}portfolio/index.html"
+layout: layouts/base.njk
+pageKey: portfolio
+titleKey: nav.portfolio
+descKey: committee.docs.meta_desc
+pageScripts: ["/assets/js/committee.js"]
+---
+{#- /portfolio/ — the committee's Portfolio: its own files from the public Google Drive folder
+    (reports, notes, slides, workshops, flyers, forms, and any other folder by name), grouped by
+    category and panel. Preview opens an accessible modal with Drive's viewer. The old address,
+    /documents/, is a redirect stub (documents-redirect.njk) that keeps its #anchors.
+    Below the shared page hero (one visitor action) and the committee sub-nav: with files — category
+    chips + search, one card grid per category (grid-cards: up to 5 columns); with none yet — the
+    shared page-level empty card (ui.pageEmpty: what will be here). Then, collapsed, "For committee
+    members · How to add documents" (ui.memberHelp, #how-docs): the steps, the folder names, where
+    a file goes, and the two Drive actions (Open Drive folder · Ask for upload access).
+    The hero's right-hand card (the shared hero aside, cmDocTeaser): never the list's first category,
+    which starts right below — "Flyers to share" (the two newest flyers) when there are flyers, else
+    "Latest upload" (the file added last in another category: its picture, name, kind and date). They
+    open in the preview like the list's cards; the card's link goes to their category. Hidden on
+    smaller screens and at larger text (the list follows right away).
+    The committee's PowerPoint decks are fixed copies; the same decks are web presentations on GVR / RLV 101
+    that stay current (config/presentations/): a deck's card gets "Present on the web" → /orientation/?present=<id>
+    (it opens there) — matched by the Drive file's own title, as /orientation/ finds a deck's PowerPoint copy
+    (the deck's drive_title; on /es/ the card shows a translated title, so never by that). -#}
+{% import "macros/ui.njk" as ui with context %}
+{%- set dt = db.drive.items | cmDocTabs(lang) -%}
+{%- set webDecks = presentations.decks if (presentations and presentations.decks) else [] -%}
+{%- set emptyTabs = dt.tabs | where("count", 0) | length -%}
+{%- set nonEmpty = dt.tabs.length - emptyTabs -%}
+{%- set di = db.status | cmDriveInfo(site) -%}
+
+{%- set teaser = dt | cmDocTeaser -%}
+{% call(slot) ui.pageHero(lang, "nav.portfolio" | t(lang), "committee.docs.hero_sub" | t(lang), "folder-open", "committee.docs.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if teaser %}
+  {%- set many = teaser.docs | length > 1 %}
+  {% call ui.heroAside(("committee.docs.aside_flyers" if teaser.kind == "flyers" else "committee.docs.aside_title") | t(lang), lang, { id: "docs-aside-title", icon: ("megaphone" if teaser.kind == "flyers" else "sparkles"), href: "#docs-" + teaser.tab.key, linkLabel: "committee.docs.aside_more" | t(lang, { cat: teaser.tab.label }) }) %}
+  <ul class="{{ 'hero-aside-tiles' if many else 'hero-aside-feature' }}" role="list">
+    {%- for ld in teaser.docs %}
+    <li><a class="hero-aside-item" href="{{ ld.view }}" target="_blank" rel="noopener"{% if ld.preview %} data-cm-preview="{{ ld.preview }}" data-cm-title="{{ ld.title }}" data-cm-open="{{ ld.view }}" data-cm-download="{{ ld.download }}"{% endif %}>
+      <span class="hero-aside-thumb {{ 'is-square' if many else 'is-portrait' }} cm-ha-doc">{% icon ld.type.icon, "size-7" %}{% if ld.thumb %}<img src="{{ ld.thumb }}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}</span>
+      <span class="hero-aside-item-body">
+        <span class="hero-aside-item-title">{{ ld.title }}</span>
+        {%- if not many %}
+        <span class="hero-aside-item-text">{{ ("committee.type." + ld.type.key) | t(lang) }}{% if ld.added %} · {{ "committee.docs.added" | t(lang, { date: (ld.added | fmtDate(lang, "medium")) }) }}{% endif %}</span>
+        {%- endif %}
+      </span>
+    </a></li>
+    {%- endfor %}
+  </ul>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
+  <div class="hero-actions">
+    {#- one visitor action (the committee how-to is ui.memberHelp, below) -#}
+    {% if dt.total %}
+    <a class="btn-light" href="#doc-list">{% icon "layout-grid", "size-4" %} {{ "committee.docs.browse" | t(lang) }}</a>
+    {% else %}
+    <a class="btn-light" href="{{ '/library/' | lurl(lang) }}">{% icon "library", "size-4" %} {{ "committee.docs.browse_library" | t(lang) }}</a>
+    {% endif %}
+  </div>
+  {% if dt.total %}
+  {{ ui.heroStats([
+    { value: dt.total, label: "committee.docs.stat_files" | t(lang) },
+    { value: nonEmpty, label: "committee.docs.stat_folders" | t(lang) },
+    { value: (dt.panels[0] if (dt.panels | length == 1 and dt.panels[0]) else null), label: "committee.docs.stat_panel" | t(lang) }
+  ]) }}
+  {% endif %}
+{%- endif %}
+{% endcall %}
+
+{% committeeNav lang, "portfolio", db %}
+
+<div class="container-page section pt-10 sm:pt-12">
+{% if dt.total > 0 %}
+<section id="doc-list" x-data="cmDocs()" data-count-label="{{ 'committee.docs.showing' | t(lang) }}" data-count-label-one="{{ 'committee.docs.showing_one' | t(lang) }}" aria-labelledby="docs-list-h">
+  <h2 id="docs-list-h" class="sr-only">{{ "nav.portfolio" | t(lang) }}</h2>
+
+  {#- ---------- Category "tabs" (toggle buttons; without JS every section is shown) + search.
+       A category with no files has no chip (a kind with 0 results is hidden). ---------- -#}
+  <div class="mb-8 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+    <div class="chip-row min-w-0" role="group" aria-label="{{ 'committee.docs.tabs_aria' | t(lang) }}">
+      <button type="button" class="chip" @click="set('all')" :aria-pressed="(tab === 'all').toString()" aria-pressed="true">
+        {% icon "layout-grid", "size-4" %} {{ "common.all" | t(lang) }} <span class="cm-chip-count">{{ dt.total }}</span>
+      </button>
+      {% for tb in dt.tabs %}{% if tb.count %}
+      <button type="button" class="chip" @click="set('{{ tb.key }}')" :aria-pressed="(tab === '{{ tb.key }}').toString()" aria-pressed="false" aria-controls="docs-{{ tb.key }}">
+        {% icon tb.icon, "size-4" %} {{ tb.label }} <span class="cm-chip-count">{{ tb.count }}</span>
+      </button>
+      {% endif %}{% endfor %}
+    </div>
+    <div class="relative w-full xl:max-w-xs">
+      <label for="doc-q" class="sr-only">{{ "committee.docs.search_label" | t(lang) }}</label>
+      <span class="pointer-events-none absolute inset-y-0 left-3.5 grid place-items-center text-faint">{% icon "search", "size-4" %}</span>
+      <input id="doc-q" type="search" class="input pl-10" placeholder="{{ 'committee.docs.search_placeholder' | t(lang) }}" x-model.debounce.150ms="q" autocomplete="off">
+    </div>
+  </div>
+  <p class="sr-only" aria-live="polite" x-text="q ? countText() : ''"></p>
+
+  {#- ---------- One section per category that has files ---------- -#}
+  {% for tb in dt.tabs %}{% if tb.count %}
+  <section id="docs-{{ tb.key }}" class="cm-doc-section" x-show="sectionVisible('{{ tb.key }}', {{ tb.count }}, $el)" aria-labelledby="docs-h-{{ tb.key }}">
+    {{ ui.sectionHead(tb.label, tb.desc, "", "", tb.icon, { eyebrow: ("committee.docs.count_one" if tb.count == 1 else "committee.docs.count") | t(lang, { n: tb.count }), id: "docs-h-" + tb.key, lang: lang }) }}
+    {% for g in tb.groups %}
+    {% if dt.multiPanel %}<h3 class="eyebrow mb-3 mt-6 flex items-center gap-2">{% icon "layers", "size-3.5" %} {{ g.label }}</h3>{% endif %}
+    <ul class="grid-cards">
+      {% for d in g.items %}
+      <li data-text="{{ (d.title + ' ' + (d.item.title or '')) | lower }}" x-show="match($el)">
+        {#- One column (phones): compact card, thumbnail on the left, the whole title beside it — no line limit
+            there: in that narrow column three lines cut most titles before the words that tell them apart
+            (a date, a language, "Workshop" or "Meeting"), and the card simply grows. In the grid (from 660px):
+            thumbnail on top, the title at most three lines (the cards of a row stay even).
+            A deck's thumbnail (its first slide, 16:9) is shown whole: is-slides (committee.css) -#}
+        <article class="card cm-doc group relative flex h-full flex-row overflow-hidden min-[41.25rem]:flex-col">
+          <div class="cm-doc-thumb cm-tone-{{ d.type.tone }}{{ ' is-slides' if d.type.key == 'slides' }} w-32 shrink-0 min-[41.25rem]:w-auto">
+            <span class="cm-doc-icon" aria-hidden="true">{% icon d.type.icon, "size-9" %}</span>
+            {% if d.thumb %}<img src="{{ d.thumb }}" alt="" loading="lazy" decoding="async" width="600" height="450" referrerpolicy="no-referrer" onerror="this.remove()">{% endif %}
+            <span class="cm-doc-type">{{ ("committee.type." + d.type.key) | t(lang) }}</span>
+            {% if d.isNew %}<span class="badge-new absolute right-3 top-3">{{ "common.new" | t(lang) }}</span>{% endif %}
+          </div>
+          <div class="flex min-w-0 flex-1 flex-col gap-2 p-4">
+            <h3 class="h-card text-base min-[41.25rem]:line-clamp-3">
+              {%- if d.preview -%}
+              <a href="{{ d.view }}" target="_blank" rel="noopener" class="hover:text-gv" data-cm-preview="{{ d.preview }}" data-cm-title="{{ d.title }}" data-cm-open="{{ d.view }}" data-cm-download="{{ d.download }}">{{ d.title }}</a>
+              {%- else -%}
+              <a href="{{ d.view }}" target="_blank" rel="noopener" class="hover:text-gv">{{ d.title }}</a>
+              {%- endif -%}
+            </h3>
+            <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-faint">
+              {% if d.date %}<span class="inline-flex items-center gap-1">{% icon "calendar", "size-3.5" %}<time datetime="{{ d.date | isoDate }}">{{ d.date | fmtDate(lang, "medium") }}</time></span>
+              {% elif d.added %}<span class="inline-flex items-center gap-1">{% icon "clock-3", "size-3.5" %}{{ "committee.docs.added" | t(lang, { date: (d.added | fmtDate(lang, "medium")) }) }}</span>{% endif %}
+            </p>
+            {{ ui.autoNote(d.item, lang) }}
+            {%- set rawTitle = (d.item.title or "") | replace(r/\s+/g, " ") | trim -%}
+            {%- set web = (webDecks | where("drive_title", rawTitle))[0] if rawTitle else null %}
+            {%- if web %}
+            <p class="flex items-start gap-1.5 text-xs leading-snug text-muted">{% icon "refresh-cw", "mt-px size-3.5 shrink-0" %}<span>{{ "committee.docs.present_web_note" | t(lang) }}</span></p>
+            {#- on a line of its own, over the file's buttons (a fourth button in their row left Download alone on the next) -#}
+            <div class="mt-auto pt-2"><a class="btn-primary btn-sm" href="{{ ('/orientation/' | lurl(lang)) + '?present=' + web.id }}">{% icon "presentation", "size-4" %} {{ "committee.docs.present_web" | t(lang) }}<span class="sr-only">: {{ d.title }}</span></a></div>
+            {%- endif %}
+            <div class="{{ 'mt-1.5' if web else 'mt-auto pt-2' }} flex flex-wrap gap-1.5">
+              {% if d.type.key == "form" %}
+              <a class="btn-primary btn-sm" href="{{ d.view }}" target="_blank" rel="noopener">{% icon "clipboard-pen-line", "size-4" %} {{ "committee.docs.sign_up" | t(lang) }}</a>
+              {% else %}
+              {% if d.preview %}<a class="btn-secondary btn-sm" href="{{ d.preview }}" target="_blank" rel="noopener" data-cm-preview="{{ d.preview }}" data-cm-title="{{ d.title }}" data-cm-open="{{ d.view }}" data-cm-download="{{ d.download }}">{% icon "eye", "size-4" %} {{ "common.preview" | t(lang) }}</a>{% endif %}
+              <a class="btn-ghost btn-sm" href="{{ d.view }}" target="_blank" rel="noopener" aria-label="{{ 'committee.docs.open_aria' | t(lang, { title: d.title }) }}">{% icon "external-link", "size-4" %} {{ "common.open" | t(lang) }}</a>
+              {% if d.download %}<a class="btn-ghost btn-sm" href="{{ d.download }}" rel="noopener" aria-label="{{ 'committee.docs.download_aria' | t(lang, { title: d.title }) }}">{% icon "download", "size-4" %}<span class="sr-only">{{ "common.download" | t(lang) }}</span></a>{% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </article>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endfor %}
+  </section>
+  {% endif %}{% endfor %}
+
+  <div x-show="q && visibleCount === 0" x-cloak>
+    {{ ui.emptyState("search-x", "common.no_results" | t(lang), "committee.docs.no_match" | t(lang)) }}
+  </div>
+</section>
+{% else %}
+{#- ---------- Nothing uploaded yet: the shared page-level empty card (the visitor action is the hero's) ---------- -#}
+{{ ui.pageEmpty("folder-open", ("committee.docs.empty_title_panel" | t(lang, { panel: di.panel.label })) if di.panel else ("committee.docs.empty_title" | t(lang)), "committee.docs.empty_text" | t(lang), { id: "docs-empty-title" }) }}
+{% endif %}
+</div>
+
+{#- ---------- For committee members (collapsed): how to add documents ---------- -#}
+<div class="container-page">
+  {% call ui.memberHelp(lang, "committee.docs.how_btn" | t(lang), { id: "how-docs" }) %}
+  <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
+    <div>
+      <h2 class="card-h"><span>{% icon "list-checks", "size-5" %}</span>{{ "committee.docs.how_title" | t(lang) }}</h2>
+      <ol class="mt-5 space-y-4">
+        {% for k in ["1", "2", "3"] %}
+        <li class="flex gap-3.5">
+          <span class="step-num" aria-hidden="true">{{ k }}</span>
+          <p class="leading-relaxed text-muted"><strong class="text-ink">{{ ("committee.docs.how_" + k + "_title") | t(lang) }}</strong> {{ ("committee.docs.how_" + k) | t(lang, { panel: (di.panel.label if di.panel else "Panel") }) }}</p>
+        </li>
+        {% endfor %}
+      </ol>
+      <div class="mt-5">
+        <p class="eyebrow">{{ "committee.docs.empty_where" | t(lang) }}</p>
+        {% cmDrivePath lang, di, "reports", ("committee.docs.empty_example" | t(lang)) %}
+      </div>
+      <div class="mt-6 flex flex-wrap gap-2.5">
+        {% if di.url %}<a class="btn-primary" href="{{ di.url }}" target="_blank" rel="noopener">{% icon "folder-open", "size-4" %} {{ "committee.drive.open_folder" | t(lang) }}</a>{% endif %}
+        <a class="btn-secondary" href="mailto:{{ site.contact_email }}?subject={{ 'committee.docs.mail_subject' | t(lang) | urlencode }}">{% icon "mail", "size-4" %} {{ "committee.docs.ask_access" | t(lang) }}</a>
+      </div>
+      {% if not dt.total %}{% cmDriveChecked lang, di %}{% endif %}
+    </div>
+    <div class="panel-muted">
+      <p class="eyebrow">{{ "committee.docs.folders_title" | t(lang) }}</p>
+      <ul class="mt-4 grid gap-2 sm:grid-cols-2">
+        {% for f in [["reports", "informes", "file-bar-chart"], ["notes", "notas", "notebook-pen"], ["slides", "presentaciones", "presentation"], ["workshops", "talleres", "pen-line"], ["flyers", "volantes", "megaphone"], ["forms", "formularios", "clipboard-list"], ["photos", "fotos", "images"], ["bulletin", "boletín", "bell-ring"]] %}
+        <li class="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-0.5 rounded-xl bg-surface px-3 py-2.5 text-sm">
+          <span class="text-gv">{% icon f[2], "size-4" %}</span>
+          <span class="font-mono text-[0.8rem] font-semibold text-ink"{% if lang != "en" %} title="{{ f[1] }}"{% endif %}>{{ f[0] }}</span>
+          <span class="ml-auto text-xs text-muted">{{ ("committee.docs.goes_" + f[0]) | t(lang) }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      <p class="mt-4 flex gap-2 text-xs leading-relaxed text-muted">{% icon "info", "size-4 shrink-0 text-faint" %} {{ "committee.docs.folders_note" | t(lang) }}</p>
+    </div>
+  </div>
+  {% endcall %}
+</div>
+
+{% cmPreviewDialog lang %}

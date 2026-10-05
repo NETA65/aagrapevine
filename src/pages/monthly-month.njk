@@ -1,0 +1,410 @@
+---
+pagination: { data: monthlyPages, size: 1, alias: mpage }
+permalink: "{{ '/' if mpage.lang == 'en' else '/es/' }}monthly/{{ mpage.key }}/index.html"
+layout: layouts/base.njk
+pageKey: monthly
+bodyClass: mp-page
+pageScripts: ["/assets/js/monthly.js"]
+eleventyComputed:
+  lang: "{{ mpage.lang }}"
+  # `| safe`: the layout escapes the title and description once (no "&amp;amp;" in the tab / share preview)
+  title: "{{ ('monthly.month_title' | t(mpage.lang, { month: (mpage.key | mpMonth(db, carry, site, mpage.lang)).title })) | safe }}"
+  description: "{% set mm = mpage.key | mpMonth(db, carry, site, mpage.lang) %}{{ (('monthly.month_desc' | t(mpage.lang, { month: mm.title, theme: mm.gv.theme })) if mm.gv else ('monthly.month_desc_plain' | t(mpage.lang, { month: mm.title }))) | safe }}"
+---
+{#- ONE month of /monthly/: the poster (1080 × 1350, scaled to fit; Download PNG / Share / Print) and that
+    month's full toolkit beside / below it, with previous / next month links.
+    Pages: this month + the next 12 (monthlyPages, eleventy/filters/monthly.js) × en / es.
+    The rule (monthly.js): every month page shows that month's PLAN — the poster, the issues' themes, the
+    "put it to work" tips, the dates, the weekly open meetings, the stories wanted, Book of the Month —
+    and the same month as a message for a group chat or an e-mail (#mp-message: 4 texts, one language or
+    both, WhatsApp or e-mail; mpMessage). The CURRENT month's page also shows what is live now (mpNow): the
+    dates already over — marked "Over" and folded under "Earlier in …" (src/assets/js/monthly.js keeps the
+    marks up to date between builds) —, the next committee meeting once this month's is over, the next
+    issue when it is already online, only the Book of the Month offers not over, and "Keep up all month"
+    (#mp-keep: pointers to the daily quote, What's New, the Bulletin, Instagram, the subscription price —
+    never copies of them); a notice points to next month's page once the visitor's month has changed and
+    the site has not been rebuilt yet (data-mp-newmonth).
+    Order: hero → in-page nav → the poster (sticky from 1024px) · the toolkit: message · the magazines ·
+    put it to work · dates · every week · stories wanted · Book of the Month · keep up → pager. Headings:
+    h1 (hero) → h2 (the toolkit) → h3 (its cards) → h4 (each magazine).
+    One home per fact — this page links there: the hub (/monthly/) of the 10 ways; /shop/#botm of the
+    prices; /events/ and /meetings/#committee-meeting of the events' details and the Zoom link;
+    /contribute/ of how to send a story; /read/ of the stories (an issue's highlights are the monthly
+    digest's, the month they came out). -#}
+{% import "macros/ui.njk" as ui with context %}
+{% import "macros/monthly.njk" as mp with context %}
+{%- set m = mpage.key | mpMonth(db, carry, site, lang) -%}
+{%- set all = db | mpMonths(carry, site, lang) -%}
+{%- set L = site.links -%}
+{%- set pageAbs = m.url | siteUrl(site) -%}
+{%- set other = lang | otherLang -%}
+{#- what is live now: the current month only -#}
+{%- set nx = (db | mpNow(site, lang)) if m.isCurrent else null -%}
+{%- set views = mpage.key | mpIssues(db, carry, site, lang) -%}
+{#- Book of the Month: the current month keeps the offers not over yet -#}
+{%- set botmShown = [] -%}
+{%- for b in m.botm %}{% if not (m.isCurrent and b.past) %}{% set _n = botmShown.push(b) %}{% endif %}{% endfor -%}
+{%- set gvmLive = nx.gvm if nx else null -%}
+
+{#- Eyebrow: "Monthly toolkit", or "Monthly toolkit · This month" for the current month.
+    The hero's right-hand card (the shared hero aside, from 1024px): the covers of that month's issues when
+    the magazines have published them (db.articles issues — the toolkit below names the themes, never the
+    covers), each linking to its issue on the official site; the card's link goes to /read/. A month
+    without a published cover yet (most months ahead) shows the months around it instead — the toolkits
+    just before and after, each with its magazine theme — linking to them (the hero's own button already
+    goes to "All months", and the pager with the month names is at the very end of the page).
+    "hide": the poster stays the first thing on smaller screens. -#}
+{%- set covers = [] -%}
+{%- for p in (["lv", "gv"] if lang == "es" else ["gv", "lv"]) %}{% set iss = m[p] %}{% if iss and iss.cover and iss.url %}
+  {%- set _n = covers.push({ src: iss.cover, href: iss.url, title: ("La Viña" if p == "lv" else "Grapevine"), text: iss.label, alt: "" }) -%}
+{%- endif %}{% endfor -%}
+{%- set around = [] -%}
+{%- if not covers.length -%}
+  {#- the month before and the month after (at either end of the window: the two nearest on one side) -#}
+  {%- for j in [m.index - 1, m.index + 1, m.index - 2, m.index + 2] %}{% if around.length < 2 and j >= 0 and j < all.length %}{% set _n = around.push(all[j]) %}{% endif %}{% endfor -%}
+{%- endif -%}
+{% call(slot) ui.pageHero(lang, m.title, "monthly.month_sub" | t(lang, { month: m.monthName }), "calendar-heart", ("monthly.month_eyebrow_now" if m.isCurrent else "monthly.month_eyebrow") | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {%- if covers.length %}
+  {{ ui.heroAsideMedia("monthly.hero_covers" | t(lang), covers, lang, { id: "mp-aside-title", icon: "book-open", ratio: "portrait", href: "/read/" | lurl(lang), linkLabel: "nav.read" | t(lang), class: "mp-hero-covers" }) }}
+  {%- elif around.length %}
+  {%- set links = [] -%}
+  {%- set pubs = ["lv", "gv"] if lang == "es" else ["gv", "lv"] -%}
+  {%- for x in around | sort(false, false, "index") -%}
+    {#- its magazine theme (the page language's magazine first); the icon tile takes that magazine's colour -#}
+    {%- set thm = [] -%}{%- for p in pubs %}{% if not thm.length and x[p] and x[p].theme %}{% set _n = thm.push({ pub: p, text: ("La Viña" if p == "lv" else "Grapevine") ~ ": " ~ x[p].theme }) %}{% endif %}{% endfor -%}
+    {%- set _n = links.push({ href: ("/monthly/" + x.key + "/") | lurl(lang), label: x.title, text: (thm[0].text if thm.length else ("monthly.month_eyebrow" | t(lang))), icon: "calendar-heart", tone: (thm[0].pub if thm.length else "grape") }) -%}
+  {%- endfor -%}
+  {{ ui.heroAsideLinks("monthly.hero_around" | t(lang), links, lang, { id: "mp-aside-title", icon: "calendar-range", class: "mp-hero-around" }) }}
+  {%- endif %}
+{%- else %}
+<div class="hero-actions">
+  <a class="btn-light" href="{{ '/monthly/' | lurl(lang) }}">{% icon "layout-grid", "size-4" %} {{ "monthly.back_hub" | t(lang) }}</a>
+</div>
+{%- endif %}
+{% endcall %}
+
+{#- The in-page nav (a long page: up to 9 cards). The current month also carries a notice the browser shows
+    once the visitor's month (Central time) is the next one while this build is still last month's
+    (src/assets/js/monthly.js): it points to that month's page. -#}
+<div class="container-page page-overlap">
+  {{ ui.pageNav([
+    { href: "#mp-poster", label: "monthly.nav_poster" | t(lang), icon: "image" },
+    { href: "#mp-message", label: "monthly.nav_message" | t(lang), icon: "message-circle" },
+    { href: "#mp-issues", label: "monthly.issues_title" | t(lang), icon: "book-open-text" },
+    { href: "#mp-dates", label: "monthly.dates" | t(lang), icon: "calendar-days" },
+    { href: "#mp-weekly" if (m.weekly.length or gvmLive) else "", label: "monthly.every_week" | t(lang), icon: "video" },
+    { href: "#mp-stories", label: "monthly.stories_wanted" | t(lang), icon: "pen-line" },
+    { href: "#mp-botm" if botmShown.length else "", label: "monthly.botm" | t(lang), icon: "book-heart" },
+    { href: "#mp-keep" if nx else "", label: "monthly.keep_title" | t(lang), icon: "sparkles" }
+  ], lang) }}
+  {% if m.isCurrent and m.hasNext %}
+  <p class="mt-3 rounded-xl border border-lv bg-lv-soft px-4 py-3 text-sm" data-mp-newmonth="{{ m.next }}" data-mp-newmonth-text="{{ 'monthly.newmonth' | t(lang) }}" role="status" hidden>
+    <a class="tap-link inline-flex items-start gap-2 font-semibold text-lv-strong underline-offset-2 hover:underline" href="{{ ('/monthly/' + m.next + '/') | lurl(lang) }}">{% icon "calendar-heart", "mt-0.5 size-4 shrink-0" %}<span><span data-mp-newmonth-label>{{ "monthly.newmonth" | t(lang, { month: all[m.index + 1].monthName }) }}</span> <span aria-hidden="true">→</span></span></a>
+  </p>
+  {% endif %}
+</div>
+
+<section class="section container-page pt-6 sm:pt-8 mp-print-root" aria-labelledby="mp-toolkit-title">
+  <div class="mp-layout">
+    <div class="mp-poster-col" id="mp-poster">
+      <div class="mp-stage" data-mp-stage>
+        <div class="mp-fit">{{ mp.poster(m, lang, site, "p") }}</div>
+      </div>
+      <div class="mp-actions mp-no-print">
+        <button type="button" class="btn-primary" hidden data-mp-download data-file="{{ m.fileName }}" data-working="{{ 'monthly.working' | t(lang) }}" data-done="{{ 'monthly.saved' | t(lang) }}" data-failed="{{ 'monthly.failed' | t(lang) }}">{% icon "image-down", "size-4" %} {{ "monthly.download" | t(lang) }}</button>
+        <button type="button" class="btn-secondary" hidden data-mp-share data-file="{{ m.fileName }}" data-url="{{ pageAbs }}" data-title="{{ m.title }} — {{ site | pick(lang, 'title') }}" data-text="{{ 'monthly.share_text' | t(lang, { month: m.label, url: pageAbs }) }}" data-copied="{{ 'monthly.link_copied' | t(lang) }}">{% icon "share-2", "size-4" %} {{ "monthly.share" | t(lang) }}</button>
+        <button type="button" class="btn-secondary" data-js-only onclick="window.print()" title="{{ 'monthly.print' | t(lang) }}">{% icon "printer", "size-4" %} {{ "monthly.print_short" | t(lang) }}</button>
+      </div>
+      <p class="mp-hint mp-no-print">{% icon "info", "size-4 shrink-0" %} {{ "monthly.poster_hint" | t(lang) }}</p>
+    </div>
+
+    <div class="mp-toolkit mp-no-print">
+      <div>
+        {{ ui.sectionHead("monthly.toolkit" | t(lang), "monthly.toolkit_intro" | t(lang), "", "", "calendar-heart", { eyebrow: m.title, id: "mp-toolkit-title", class: "mb-1! sm:mb-2!", lang: lang }) }}
+        {% if m.isCurrent %}{{ ui.freshness(site.built, lang, { note: true }) }}{% endif %}
+      </div>
+
+      {#- The month as a message: the poster's text version for a group chat or an e-mail (mpMessage). Four
+          texts are written into the page — WhatsApp / e-mail × this language / both — and the choice of
+          language is the digest's too (localStorage "gv-digest-bi"). Without JavaScript the previews still
+          open and their text can be selected; the choice and the Copy buttons need it (data-js-only). -#}
+      <section id="mp-message" class="card card-pad" aria-labelledby="mp-message-title" x-data="mpMessage">
+        <h3 id="mp-message-title" class="card-h"><span class="text-vine">{% icon "message-circle", "size-5" %}</span>{{ "monthly.msg_title" | t(lang) }}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-muted">{{ "monthly.msg_text" | t(lang) }}</p>
+        <fieldset class="mt-4" data-js-only>
+          <legend class="sr-only">{{ "community.digest.lang_label" | t(lang) }}</legend>
+          <div class="grid grid-cols-2 gap-1 rounded-full border border-line bg-surface-2 p-1">
+            <label class="cm-seg"><input type="radio" name="mp-msg-lang" value="one" class="sr-only" :checked="!bi" @change="setBi(false)" checked><span>{{ "community.digest.lang_only" | t(lang) }}</span></label>
+            <label class="cm-seg"><input type="radio" name="mp-msg-lang" value="bi" class="sr-only" :checked="bi" @change="setBi(true)"><span>{{ "community.digest.lang_bi" | t(lang) }}</span></label>
+          </div>
+        </fieldset>
+        <div class="mt-3 flex flex-wrap gap-2" data-js-only>
+          <button type="button" class="btn-primary min-w-0 grow basis-48" @click="copy('wa', $el)">{% icon "message-circle", "size-4" %} {{ "community.digest.copy_wa" | t(lang) }}</button>
+          <button type="button" class="btn-secondary min-w-0 grow basis-48" @click="copy('email', $el)">{% icon "mail", "size-4" %} {{ "community.digest.copy_email" | t(lang) }}</button>
+        </div>
+        {#- (.mp-msg-previews: edge to edge in the card at large text on a phone — areas/monthly.css) -#}
+        <div class="mp-msg-previews mt-4 divide-y divide-line overflow-hidden rounded-xl border border-line">
+          <details class="cm-preview">
+            <summary class="flex min-h-12 cursor-pointer items-center gap-2 px-4 text-sm font-semibold text-ink">{% icon "message-circle", "size-4 shrink-0 text-vine" %} {{ "community.digest.preview" | t(lang) }}</summary>
+            <pre id="mp-msg-wa-one" class="cm-pre" x-show="!bi" role="region" tabindex="0" aria-label="{{ 'community.digest.wa_label' | t(lang) }} ({{ 'community.digest.lang_only' | t(lang) }})">{{ m.key | mpMessage(db, carry, site, [lang], "whatsapp") }}</pre>
+            <pre id="mp-msg-wa-bi" class="cm-pre" x-show="bi" x-cloak role="region" tabindex="0" aria-label="{{ 'community.digest.wa_label' | t(lang) }} ({{ 'community.digest.lang_bi' | t(lang) }})">{{ m.key | mpMessage(db, carry, site, [lang, other], "whatsapp") }}</pre>
+          </details>
+          <details class="cm-preview">
+            <summary class="flex min-h-12 cursor-pointer items-center gap-2 px-4 text-sm font-semibold text-ink">{% icon "mail", "size-4 shrink-0 text-gv" %} {{ "community.digest.preview_email" | t(lang) }}</summary>
+            <pre id="mp-msg-email-one" class="cm-pre" x-show="!bi" role="region" tabindex="0" aria-label="{{ 'community.digest.email_label' | t(lang) }} ({{ 'community.digest.lang_only' | t(lang) }})">{{ m.key | mpMessage(db, carry, site, [lang], "email") }}</pre>
+            <pre id="mp-msg-email-bi" class="cm-pre" x-show="bi" x-cloak role="region" tabindex="0" aria-label="{{ 'community.digest.email_label' | t(lang) }} ({{ 'community.digest.lang_bi' | t(lang) }})">{{ m.key | mpMessage(db, carry, site, [lang, other], "email") }}</pre>
+          </details>
+        </div>
+        {% if m.isCurrent %}
+        {#- one job each: the message is for a group chat; the district meeting has its own report -#}
+        <p class="mt-4 text-sm leading-relaxed text-muted">{{ "community.digest.report_hint" | t(lang) }} <a class="link tap-link inline-flex items-center gap-1.5 font-semibold" href="{{ '/monthly/' | lurl(lang) }}#report">{% icon "clipboard-list", "size-4 shrink-0" %} {{ "community.digest.report_link" | t(lang) }}<span aria-hidden="true"> →</span></a></p>
+        {% endif %}
+      </section>
+
+      {#- The magazines of the month (La Viña first in Spanish): the theme; once the issue's stories are on the
+          site, how many (and how many free to read), the official issue page and all its stories on /read/
+          (mpIssues — no highlight list: those are the monthly digest's). The current month adds a line for
+          an issue already online before its month, pointing to that month's toolkit. -#}
+      {%- set pubs = ["lv", "gv"] if lang == "es" else ["gv", "lv"] -%}
+      <section id="mp-issues" class="card card-pad" aria-labelledby="mp-issues-title">
+        <h3 id="mp-issues-title" class="card-h"><span>{% icon "book-open-text", "size-5" %}</span>{{ "monthly.issues_title" | t(lang) }}</h3>
+        {% for p in pubs %}
+        {%- set x = m[p] -%}
+        {%- set v = (views | selectattr("isLv") | first) if p == "lv" else (views | rejectattr("isLv") | first) -%}
+        {% if x or v or p == "gv" %}
+        {%- set issueUrl = (x.url if x else "") or (v.url if v else "") -%}
+        <section class="mp-mag mt-4" aria-labelledby="mp-mag-{{ p }}">
+          <p class="eyebrow {{ 'text-lv' if p == 'lv' else 'text-gv' }}">{% if p == "lv" %}{{ "monthly.in_lv" | t(lang) }} · {{ x.label if x else v.label }}{% else %}{{ "monthly.in_gv" | t(lang, { month: m.monthName }) }}{% endif %}</p>
+          {#- La Viña's theme of an issue not out yet may have no English words yet: its language is marked -#}
+          <h4 id="mp-mag-{{ p }}" class="h-card mt-1 text-xl"{% if x and x.theme and x.themeLang and x.themeLang != lang %} lang="{{ x.themeLang }}"{% endif %}>{{ (x.theme if x else "") or (v.theme if v else "") or ("monthly.no_issue" | t(lang)) }}</h4>
+          {% if v and v.count %}
+          <p class="meta-row mt-1 text-sm text-muted">
+            <span>{{ ("read.n_stories_one" if v.count == 1 else "read.n_stories") | t(lang, { n: v.count }) }}</span>
+            {% if v.free %}<span>{{ "community.wn.free_n" | t(lang, { n: v.free }) }}</span>
+            {% else %}<span title="{{ 'read.subscriber_help' | t(lang) }}">{% icon "lock", "mr-1 size-3.5 align-[-0.1em]" %}{{ "community.wn.subscriber_all" | t(lang) }}</span>{% endif %}
+          </p>
+          {% endif %}
+          {% if issueUrl or (v and v.count) %}
+          <p class="mt-2 flex flex-wrap gap-x-6 gap-y-1">
+            {% if issueUrl %}<a class="link tap-link inline-flex items-center gap-1 text-sm font-semibold" href="{{ issueUrl }}" target="_blank" rel="noopener" hreflang="{{ 'es' if p == 'lv' else 'en' }}">{{ "monthly.issue_link" | t(lang) }} {% icon "arrow-up-right", "size-4 shrink-0" %}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>{% endif %}
+            {% if v and v.count %}<a class="link tap-link inline-flex items-center gap-1 text-sm font-semibold" href="{{ v.readHref | lurl(lang) }}">{{ "monthly.all_stories" | t(lang, { n: v.count }) }} {% icon "arrow-right", "size-4 shrink-0" %}</a>{% endif %}
+          </p>
+          {% endif %}
+        </section>
+        {% endif %}
+        {% endfor %}
+        {% if nx %}{% for o in nx.outNext %}
+        <p class="panel-muted mt-4 p-4! text-sm leading-relaxed">{{ ("report.i_out_lv" if o.pub == "lv" else "report.i_out_gv") | t(lang, { issue: o.issue, theme: o.theme }) }}{% if o.monthUrl %} <a class="link tap-link gap-1 font-semibold" href="{{ o.monthUrl | lurl(lang) }}">{{ "monthly.open_month" | t(lang, { month: o.monthLabel }) }}<span aria-hidden="true"> →</span></a>{% endif %}</p>
+        {% endfor %}{% endif %}
+      </section>
+
+      {#- Put it to work: every tip for this month's Grapevine issue (config/carry.yml; the hub shows two, the
+          poster up to three, the message three) and the 10 ways on the hub -#}
+      {% if m.tips.length %}
+      <section id="mp-tips" class="card card-pad" aria-labelledby="mp-tips-title">
+        <h3 id="mp-tips-title" class="card-h"><span class="text-lv">{% icon "lightbulb", "size-5" %}</span>{{ "monthly.put_to_work" | t(lang) }}</h3>
+        {% if m.gv %}<p class="mt-1 text-sm text-muted">{{ "monthly.tips_sub" | t(lang, { month: m.monthName, theme: m.gv.theme }) }}</p>{% endif %}
+        <ul class="mp-tiplist mt-4" role="list">
+          {% for tp in m.tips %}
+          <li><span class="mp-tipicon">{% icon tp.icon, "size-5" %}</span><span class="min-w-0"><strong class="block text-ink">{{ tp.title }}</strong><span class="text-sm text-muted">{{ tp.text }}</span></span></li>
+          {% endfor %}
+        </ul>
+        {% if carry.ways.length %}<a class="link tap-link mt-3 inline-flex items-center gap-1 text-sm font-semibold" href="{{ '/monthly/' | lurl(lang) }}#ways">{{ "monthly.ways_link" | t(lang) }} {% icon "arrow-right", "size-4 shrink-0" %}</a>{% endif %}
+      </section>
+      {% endif %}
+
+      {#- Dates. The current month: what is still to come first (a row whose time passes while the page is
+          open is marked "Over" by the browser: data-mp-over), the next committee meeting once this month's is
+          over, and the dates already over folded under "Earlier in …" (full contrast, the "Over" badge says
+          it in words). A later month: every date. -#}
+      {%- set upcoming = [] -%}{%- set earlier = [] -%}
+      {%- for d in m.dates %}{% if m.isCurrent and d.past %}{% set _n = earlier.push(d) %}{% else %}{% set _n = upcoming.push(d) %}{% endif %}{% endfor -%}
+      {% macro dateRow(d) %}
+      {%- set over = m.isCurrent and d.past -%}
+      <li class="mp-drow{{ ' is-past' if over }} flex gap-3 py-3"{% if m.isCurrent %} data-mp-over="{{ d.overAt }}"{% endif %}>
+        <span class="mp-minichip ev-tile ev-tone-{{ d | eventTone }}" aria-hidden="true"><span>{{ d.chip.mon }}</span><strong>{{ d.chip.day }}</strong></span>
+        <span class="min-w-0">
+          <a class="mp-drow-t tap-link font-semibold text-ink no-underline hover:text-gv hover:underline" href="{{ d.href | lurl(lang) }}"{% if d.external %} target="_blank" rel="noopener"{% endif %}>{{ ("monthly.committee" | t(lang)) if d.kind == "committee" else d.title }}{% if d.external %}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span>{% endif %}</a>
+          {#- the "Over" badge: this month's rows only (a later month's dates are all still to come) -#}
+          <span class="block text-sm text-muted">{% if m.isCurrent %}<span class="badge-muted mr-1" data-mp-over-badge{% if not over %} hidden{% endif %}>{{ "monthly.over" | t(lang) }}</span> {% endif %}{{ d.day }}{% if d.endDay %} – {{ d.endDay }}{% endif %}{% if d.time %} · {{ d.time }} {{ d.zone }}{% endif %}{% if d.kind == "committee" %} · {{ d.platform }}{% elif d.place %} · {{ d.place }}{% elif d.online and not d.city %} · {{ "monthly.online" | t(lang) }}{% endif %}{% if d.tentative %} · {{ "committee.events.tentative" | t(lang) }}{% endif %}</span>
+        </span>
+      </li>
+      {% endmacro %}
+      <section id="mp-dates" class="card card-pad" aria-labelledby="mp-dates-title">
+        <h3 id="mp-dates-title" class="card-h"><span>{% icon "calendar-days", "size-5" %}</span>{{ "monthly.dates" | t(lang) }}</h3>
+        {% if upcoming.length %}
+        <ul class="mt-3 divide-y divide-line" role="list">{% for d in upcoming %}{{ dateRow(d) }}{% endfor %}</ul>
+        {% else %}
+        <p class="mt-2 text-sm text-muted">{{ ("monthly.no_more_dates" if m.dates.length else "monthly.no_dates") | t(lang) }}</p>
+        {% endif %}
+        {%- set nc = nx.nextCommittee if nx else null -%}
+        {% if nc and not nc.thisMonth %}
+        <p class="mt-3 flex flex-wrap items-start gap-x-2 gap-y-1 rounded-xl bg-gv-soft p-3 text-sm">
+          <span class="mt-0.5 shrink-0 text-gv">{% icon "video", "size-4" %}</span>
+          <span class="min-w-0 flex-1"><strong class="text-ink">{{ "monthly.next_meeting" | t(lang) }}:</strong> {{ nc.day }} · {{ nc.time }} {{ nc.zone }} · {{ nc.platform }}</span>
+          <a class="link tap-link gap-1 font-semibold" href="{{ '/meetings/' | lurl(lang) }}#committee-meeting">{{ "monthly.meeting_link" | t(lang) }}<span aria-hidden="true"> →</span></a>
+        </p>
+        {% endif %}
+        {% if earlier.length %}
+        <details class="cm-preview mt-3 rounded-xl border border-line">
+          <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-sm font-semibold text-ink">{% icon "history", "size-4 shrink-0 text-muted" %} {{ "monthly.earlier" | t(lang, { month: m.monthName, n: earlier.length }) }}</summary>
+          <ul class="divide-y divide-line border-t border-line px-3" role="list">{% for d in earlier %}{{ dateRow(d) }}{% endfor %}</ul>
+        </details>
+        {% endif %}
+        {#- the same "link + arrow" footer as the other cards -#}
+        <p class="mt-3 flex flex-wrap gap-x-6">
+          <a class="link tap-link inline-flex items-center gap-1 text-sm font-semibold" href="{{ '/events/' | lurl(lang) }}">{{ "monthly.events_link" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
+          <a class="link tap-link inline-flex items-center gap-1 text-sm font-semibold" href="{{ '/meetings/' | lurl(lang) }}#committee-meeting">{{ "monthly.meeting_link" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
+        </p>
+      </section>
+
+      {#- Every week: the weekly open meetings (La Viña's from its first date); the current month adds how many
+          Grapevine meetings there are near you (their one home: /meetings/#grapevine-meetings) -#}
+      {% if m.weekly.length or gvmLive %}
+      <section id="mp-weekly" class="card card-pad" aria-labelledby="mp-weekly-title">
+        <h3 id="mp-weekly-title" class="card-h"><span class="text-vine">{% icon "video", "size-5" %}</span>{{ "monthly.every_week" | t(lang) }}</h3>
+        <ul class="mt-3 space-y-3" role="list">
+          {% for w in m.weekly %}
+          <li class="min-w-0"><strong class="text-ink">{{ w.title }}</strong>{% if w.new %} <span class="badge-new">{{ "monthly.new" | t(lang) }}</span>{% endif %}<span class="block text-sm text-muted">{{ w.when }}{% if w.startsLabel %} · {{ "monthly.weekly_from" | t(lang, { date: w.startsLabel }) }}{% endif %}</span></li>
+          {% endfor %}
+          {% if gvmLive %}
+          {%- set ours = ("committee.gvm.count_one" if gvmLive.inArea == 1 else "committee.gvm.count") | t(lang, { n: gvmLive.inArea }) -%}
+          <li class="relative flex min-w-0 items-start gap-2">
+            <span class="mt-0.5 shrink-0 text-gv">{% icon "map-pin", "size-4" %}</span>
+            <span class="min-w-0"><a class="font-semibold text-ink no-underline after:absolute after:inset-0 hover:text-gv hover:underline" href="{{ '/meetings/' | lurl(lang) }}#grapevine-meetings">{{ "committee.gvm.home_title" | t(lang) }}</a><span class="block text-sm text-muted">{{ ("committee.gvm.home_text" if gvmLive.nearby else "committee.gvm.home_text_area") | t(lang, { ours: ours, nearby: gvmLive.nearby }) }}</span></span>
+          </li>
+          {% endif %}
+        </ul>
+        {% if m.weekly.length %}<a class="link tap-link mt-3 inline-flex items-center gap-1 text-sm font-semibold" href="{{ '/meetings/' | lurl(lang) }}#weekly-open">{{ "monthly.weekly_link" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>{% endif %}
+      </section>
+      {% endif %}
+
+      {#- Stories wanted (La Viña first in Spanish; the first card is #mp-stories). How to send a story and
+          how to record one by phone have ONE home: /contribute/ (#submit, #deadlines, #record). La Viña's
+          deadlines of the month (its yearly themes) come first in its card: the theme in La Viña's own Spanish
+          words (lang="es"), on the English page its English words under it -#}
+      {% set lvCard %}
+      <article class="card card-pad"{% if lang == "es" %} id="mp-stories"{% endif %}>
+        <h3 class="card-h"><span class="text-lv">{% icon "pen-line", "size-5" %}</span>{{ "monthly.share_story_lv" | t(lang) }}</h3>
+        {% if m.lvDeadlines.length %}
+        <ul class="mt-2 divide-y divide-line" role="list">
+          {% for d in m.lvDeadlines %}
+          <li class="py-3">
+            <p class="font-display text-lg font-semibold text-ink" lang="{{ d.themeLang }}">{{ d.theme }}</p>
+            {% if d.gloss %}<p class="text-sm text-muted">{{ d.gloss }}{% if d.glossMachine %} <span class="auto-note align-middle" title="{{ 'common.auto_translated' | t(lang) }} — {{ 'common.auto_translated_help' | t(lang) }}">{% icon "languages", "size-3" %}<span class="sr-only">{{ "common.auto_translated" | t(lang) }}</span></span>{% endif %}</p>{% endif %}
+            <p class="mt-0.5 text-sm font-semibold text-lv-strong">{{ "monthly.for_issue" | t(lang, { issue: d.issueLabel }) }} — {{ "monthly.due" | t(lang, { date: d.dueLong }) }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if m.lvTopics.length %}
+        <p class="mt-2 text-sm text-muted">{{ "monthly.lv_topics" | t(lang) }}</p>
+        <ul class="mt-2 flex flex-wrap gap-2" role="list">{% for tp in m.lvTopics %}<li class="badge-lv" lang="es">{{ tp.es }}</li>{% endfor %}</ul>
+        {% endif %}
+        {#- how to send (e-mail, guidelines) has ONE home: /contribute/ (the poster keeps the e-mail for print) -#}
+        <p class="mt-3 flex flex-wrap gap-x-6 gap-y-1">
+          <a class="link tap-link inline-flex items-center gap-1 text-sm font-semibold" href="{{ '/contribute/' | lurl(lang) }}#submit">{{ "monthly.lv_send_link" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
+          <a class="link tap-link inline-flex items-center gap-1 text-sm font-semibold" href="{{ '/contribute/' | lurl(lang) }}#record">{{ "monthly.record_link" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
+        </p>
+      </article>
+      {% endset %}
+      {% set gvCard %}
+      <article class="card card-pad"{% if lang != "es" %} id="mp-stories"{% endif %}>
+        <h3 class="card-h"><span>{% icon "pen-line", "size-5" %}</span>{{ "monthly.share_story" | t(lang) }}</h3>
+        {% if lang == "es" %}<p class="mt-1 text-sm font-semibold text-gv">{{ "monthly.gv_english" | t(lang) }}</p>{% endif %}
+        {% if m.deadlines.length %}
+        {#- one divided list (no boxes inside the card) -#}
+        <ul class="mt-2 divide-y divide-line" role="list">
+          {% for d in m.deadlines %}
+          <li class="py-3">
+            <p class="font-display text-lg font-semibold text-ink">{{ d.theme }}</p>
+            <p class="mt-0.5 text-sm font-semibold text-gv">{{ "monthly.for_issue" | t(lang, { issue: d.issueLabel }) }} — {{ "monthly.due" | t(lang, { date: d.dueLong }) }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="mt-2 text-sm text-muted">{{ "monthly.no_deadlines" | t(lang) }}</p>
+        {% endif %}
+        {#- the full prompts, the e-mail and the guidelines have ONE home: /contribute/#deadlines -#}
+        <p class="mt-3 flex flex-wrap gap-x-6 gap-y-1">
+          <a class="link tap-link inline-flex items-center gap-1 text-sm font-semibold" href="{{ '/contribute/' | lurl(lang) }}#deadlines">{{ "monthly.deadlines_link" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
+          <a class="link tap-link inline-flex items-center gap-1 text-sm font-semibold" href="{{ '/contribute/' | lurl(lang) }}#record">{{ "monthly.record_link" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
+        </p>
+      </article>
+      {% endset %}
+      {% if lang == "es" %}{{ lvCard | safe }}{{ gvCard | safe }}{% else %}{{ gvCard | safe }}{{ lvCard | safe }}{% endif %}
+
+      {#- Book of the Month: essentials only; prices live in the shop. The current month shows the offers not
+          over yet (one that ends while the page is open is marked "Over" by the browser). -#}
+      {% if botmShown.length %}
+      <section id="mp-botm" class="card card-pad" aria-labelledby="mp-botm-title">
+        <h3 id="mp-botm-title" class="card-h"><span class="text-grape">{% icon "book-heart", "size-5" %}</span>{{ "monthly.botm" | t(lang) }}</h3>
+        <ul class="mt-3 space-y-2" role="list">
+          {% for b in botmShown %}
+          <li class="mp-drow min-w-0"{% if m.isCurrent %} data-mp-over="{{ b.overAt }}"{% endif %}><strong class="mp-drow-t text-ink" lang="{{ b.lang }}">{{ b.title }}</strong> <span class="text-sm text-muted">{% if m.isCurrent %}<span class="badge-muted mr-1" data-mp-over-badge hidden>{{ "monthly.over" | t(lang) }}</span> {% endif %}— {{ ("monthly.botm_off" | t(lang, { pct: b.discount, date: b.endsLabel })) if b.discount else ("monthly.botm_until" | t(lang, { date: b.endsLabel })) }}</span></li>
+          {% endfor %}
+        </ul>
+        <a class="link tap-link mt-3 inline-flex items-center gap-1 text-sm font-semibold" href="{{ '/shop/' | lurl(lang) }}#botm">{{ "monthly.botm_more" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
+      </section>
+      {% endif %}
+
+      {#- Keep up all month (the current month only): one line each pointing to the page that is the home of
+          what changes during the month — never a copy of it: the daily quote (only while the home page shows
+          one), What's New since the 1st, the Bulletin (its newest post), Instagram, the subscription price. -#}
+      {% if nx %}
+      <section id="mp-keep" class="card card-pad" aria-labelledby="mp-keep-title">
+        <h3 id="mp-keep-title" class="card-h"><span class="text-grape">{% icon "sparkles", "size-5" %}</span>{{ "monthly.keep_title" | t(lang) }}</h3>
+        <ul class="mp-keep mt-2 divide-y divide-line" role="list">
+          {% if nx.quote %}
+          <li>
+            <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-gv-soft text-gv" aria-hidden="true">{% icon "quote", "size-4" %}</span>
+            <span class="min-w-0"><strong class="block text-ink">{{ "home.quote_title" | t(lang) }}</strong><span class="block text-sm text-muted">{{ "monthly.quote_line" | t(lang) }}</span><a class="link font-semibold after:absolute after:inset-0" href="{{ '/' | lurl(lang) }}#quote-title">{{ "monthly.quote_link" | t(lang) }}<span aria-hidden="true"> →</span></a></span>
+          </li>
+          {% endif %}
+          <li>
+            <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-vine-soft text-vine" aria-hidden="true">{% icon "sparkles", "size-4" %}</span>
+            <span class="min-w-0"><a class="font-semibold text-ink no-underline after:absolute after:inset-0 hover:text-gv hover:underline" href="{{ '/whats-new/' | lurl(lang) }}">{{ "nav.whats_new" | t(lang) }}</a><span class="block text-sm text-muted">{% if nx.news.n %}{{ ("monthly.news_line_one" if nx.news.n == 1 else "monthly.news_line") | t(lang, { n: nx.news.n | cmNum(lang), date: nx.news.sinceLabel }) }}{% else %}{{ "monthly.news_none" | t(lang) }}{% endif %}</span></span>
+          </li>
+          {#- the Bulletin row has two links (the bulletin, its newest post): no link covers this row, each one
+              is its own target (tap-link: 44px on phones; at least 24px with a mouse, monthly.css), and the
+              number of posts is said in words -#}
+          {% if nx.bulletin.n %}
+          <li>
+            <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-vine-soft text-vine" aria-hidden="true">{% icon "megaphone", "size-4" %}</span>
+            <span class="min-w-0"><a class="tap-link font-semibold text-ink no-underline hover:text-gv hover:underline" href="{{ '/bulletin/' | lurl(lang) }}">{{ "nav.bulletin" | t(lang) }}</a><span class="block text-sm text-muted">{{ ("monthly.bulletin_n_one" if nx.bulletin.n == 1 else "monthly.bulletin_n") | t(lang, { n: nx.bulletin.n }) }}</span>{% if nx.bulletin.top %}<a class="link tap-link text-sm" href="{{ nx.bulletin.top.href | lurl(lang) }}">{{ nx.bulletin.top.title }}</a>{% endif %}</span>
+          </li>
+          {% endif %}
+          {% if nx.instagram.length %}
+          <li>
+            <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-grape-soft text-grape" aria-hidden="true">{% icon "instagram", "size-4" %}</span>
+            <span class="min-w-0"><a class="font-semibold text-ink no-underline after:absolute after:inset-0 hover:text-gv hover:underline" href="{{ '/instagram/' | lurl(lang) }}">{{ "nav.instagram" | t(lang) }}</a><span class="mp-handles block text-sm text-muted">{% for p in nx.instagram %}@{{ p.username }}{% if not loop.last %} · {% endif %}{% endfor %}</span></span>
+          </li>
+          {% endif %}
+          {#- a price change AA Grapevine announced (shop.json price_changes): the prices side by side until its
+              day, the new prices from it through its notice_until — each row in its window (ui.when: the page
+              switches by itself at midnight Central). The link says what it opens (/shop/#price-changes), never
+              the headline: the Bulletin row above may show the post with that title; the day is in its line. -#}
+          {% for pc in (db.shop | shopPriceChanges(lang)) %}{% for part in ["before", "after"] %}{% set n = pc[part] %}{% if n %}
+          <li{{ ui.when(n.win) }}>
+            <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-gv-soft text-gv" aria-hidden="true">{% icon "calendar-clock", "size-4" %}</span>
+            <span class="min-w-0"><a class="font-semibold text-ink no-underline after:absolute after:inset-0 hover:text-gv hover:underline" href="{{ '/shop/' | lurl(lang) }}#price-changes">{{ ("monthly.pc_link_" + part) | t(lang) }}</a><span class="block text-sm text-muted">{{ ("monthly.pc_" + part) | t(lang, { date: pc.date }) }}</span></span>
+          </li>
+          {% endif %}{% endfor %}{% endfor %}
+          {% if nx.subsFrom %}
+          <li>
+            <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-lv-soft text-lv" aria-hidden="true">{% icon "newspaper", "size-4" %}</span>
+            <span class="min-w-0"><a class="font-semibold text-ink no-underline after:absolute after:inset-0 hover:text-gv hover:underline" href="{{ '/shop/' | lurl(lang) }}#subscriptions">{{ "shop.subs_from" | t(lang, { amount: nx.subsFrom | shopMoney(lang) }) }}</a><span class="block text-sm text-muted">{{ "home.subs_desc" | t(lang) }}</span></span>
+          </li>
+          {% endif %}
+        </ul>
+      </section>
+      {% endif %}
+    </div>
+  </div>
+
+  <nav class="mp-pager mp-no-print" aria-label="{{ 'monthly.back_hub' | t(lang) }}">
+    {% if m.hasPrev %}<a class="btn-secondary" href="{{ ('/monthly/' + m.prev + '/') | lurl(lang) }}" rel="prev">{% icon "chevron-left", "size-4" %} <span>{{ "monthly.prev" | t(lang) }}<span class="mp-pager-m">{{ (all[m.index - 1]).title }}</span></span></a>{% else %}<span></span>{% endif %}
+    {% if m.hasNext %}<a class="btn-secondary mp-pager-next" href="{{ ('/monthly/' + m.next + '/') | lurl(lang) }}" rel="next"><span>{{ "monthly.next" | t(lang) }}<span class="mp-pager-m">{{ (all[m.index + 1]).title }}</span></span> {% icon "chevron-right", "size-4" %}</a>{% endif %}
+  </nav>
+</section>
