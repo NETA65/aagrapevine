@@ -1,13 +1,13 @@
 {
  "source": "events_external",
- "updated": "2026-10-04T12:28:56Z",
- "attempted": "2026-10-04T12:28:56Z",
+ "updated": "2026-10-05T14:47:38Z",
+ "attempted": "2026-10-05T14:47:38Z",
  "ok": true,
  "error": null,
  "stats": {
   "discovery": "sitemap",
   "discovery_complete": true,
-  "upcoming_urls": 17,
+  "upcoming_urls": 16,
   "kept_from_cache": 0,
   "fetched": 0,
   "refreshed": 0,
@@ -18,7 +18,7 @@
   "online_es": 1,
   "items": 2,
   "new": 0,
-  "requests": 37
+  "requests": 39
  },
  "items": [
   {
@@ -440,14 +440,14 @@
  "sitemap": {
   "pages": {
    "https://www.aagrapevine.org/sitemap.xml?page=1": {
-    "lastmod": "2026-10-02T09:36:33-05:00",
+    "lastmod": "2026-10-04T10:36:04-05:00",
     "events": [],
-    "fetched": "2026-10-02T22:30:37Z",
+    "fetched": "2026-10-05T14:47:33Z",
     "urls_total": 2000,
     "events_total": 2000
    },
    "https://www.aagrapevine.org/sitemap.xml?page=2": {
-    "lastmod": "2026-10-02T09:36:33-05:00",
+    "lastmod": "2026-10-04T10:36:04-05:00",
     "events": [
      "https://www.aagrapevine.org/get-involved/events/2026-10-02/79th-powell-river-rally-2026",
      "https://www.aagrapevine.org/get-involved/events/2026-10-23/38th-northeast-woman-woman-conference",
@@ -467,7 +467,7 @@
      "https://www.aalavina.org/get-involved/events/2027-05-28/xxiv-encuentro-hispano-de-aa-del-estado-de-kansas-sede-topeka",
      "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico"
     ],
-    "fetched": "2026-10-02T22:30:42Z",
+    "fetched": "2026-10-05T14:47:38Z",
     "urls_total": 1090,
     "events_total": 942
    }

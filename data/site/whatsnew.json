@@ -1,7 +1,185 @@
 {
- "updated": "2026-10-05T09:08:22Z",
+ "updated": "2026-10-05T14:50:29Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DeHMGIfANDj",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeHMGIfANDj/",
+   "title": "The Right Door",
+   "summary": "The Right Door",
+   "lang": "en",
+   "date": "2026-10-05T12:17:41Z",
+   "first_seen": "2026-10-05T14:43:07Z",
+   "image": "/assets/cache/ig/DeHMGIfANDj.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeHMGIfANDj",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeHMGIfANDj.webp",
+    "embed_url": "https://www.instagram.com/p/DeHMGIfANDj/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeHMGIfANDj/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The Right Door",
+     "es": "La puerta correcta"
+    },
+    "summary": {
+     "en": "The Right Door",
+     "es": "La puerta correcta"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-05T12:17:41Z"
+  },
+  {
+   "id": "ig:DeHGu2Yl-6l",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeHGu2Yl-6l/",
+   "title": "“La vida no ha sido un lecho de rosas, pero gracias a AA, ya no tengo que vivir con…",
+   "summary": "“La vida no ha sido un lecho de rosas, pero gracias a AA, ya no tengo que vivir con miedo. Duermo por la noche. Tengo un propósito en la vida”. \"“Buscado” MANKATO, MINNESOTA, MAYO DE 1997 De Young & Sober\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-05T11:30:16Z",
+   "first_seen": "2026-10-05T14:43:07Z",
+   "image": "/assets/cache/ig/DeHGu2Yl-6l.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeHGu2Yl-6l",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeHGu2Yl-6l.webp",
+    "embed_url": "https://www.instagram.com/p/DeHGu2Yl-6l/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeHGu2Yl-6l/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Life has not been a bed of roses, but thanks to AA, I no longer have to live with …",
+     "es": "“La vida no ha sido un lecho de rosas, pero gracias a AA, ya no tengo que vivir con…"
+    },
+    "summary": {
+     "en": "“Life has not been a bed of roses, but thanks to AA, I no longer have to live in fear. I sleep at night. I have a purpose in life.” \"Search\" MANKATO, MINNESOTA, MAY 1997 De Young and Sovereign Daily Quote in www.aalavina.org",
+     "es": "“La vida no ha sido un lecho de rosas, pero gracias a AA, ya no tengo que vivir con miedo. Duermo por la noche. Tengo un propósito en la vida”. \"“Buscado” MANKATO, MINNESOTA, MAYO DE 1997 De Young & Sober\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-05T11:30:16Z"
+  },
+  {
+   "id": "ig:DeHGu0QlyVl",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeHGu0QlyVl/",
+   "title": "“The phrase ‘God as we understand him’ is perhaps the most important expression to be…",
+   "summary": "“The phrase ‘God as we understand him’ is perhaps the most important expression to be found in our whole AA vocabulary. Within the compass of these five significant words there can be included every kind and degree of faith, together with the positive assurance that each of us may choose his own.” AA Co-Founder, Bill W., April 1961, “God As We Understand Him: The Dilemma of No Faith”, The…",
+   "lang": "en",
+   "date": "2026-10-05T11:30:14Z",
+   "first_seen": "2026-10-05T14:43:07Z",
+   "image": "/assets/cache/ig/DeHGu0QlyVl.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeHGu0QlyVl",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeHGu0QlyVl.webp",
+    "embed_url": "https://www.instagram.com/p/DeHGu0QlyVl/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeHGu0QlyVl/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The phrase ‘God as we understand him’ is perhaps the most important expression to be…",
+     "es": "“La frase ‘Dios como lo entendemos’ es quizás la expresión más importante para ser …"
+    },
+    "summary": {
+     "en": "“The phrase ‘God as we understand him’ is perhaps the most important expression to be found in our whole AA vocabulary. Within the compass of these five significant words there can be included every kind and degree of faith, together with the positive assurance that each of us may choose his own.” AA Co-Founder, Bill W., April 1961, “God As We Understand Him: The Dilemma of No Faith”, The…",
+     "es": "“La frase ‘Dios como lo entendemos’ es quizás la expresión más importante que se encuentra en todo nuestro vocabulario AA. Dentro de la brújula de estas cinco palabras importantes se puede incluir todo tipo y grado de fe, junto con la seguridad positiva de que cada uno de nosotros puede elegir el suyo propio.” AA cofundador, Bill W., abril de 1961, “Dios como lo entendemos: el dilema de ninguna fe”, el …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-05T11:30:14Z"
+  },
+  {
+   "id": "yt:DQQmWy8khe0",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=DQQmWy8khe0",
+   "title": "The Right Door [Season 11, Episode 14]",
+   "summary": "Christina, whose story appears in the October 2026 issue of Grapevine, tells Olis and Don that when drinking she saw everyone else living these normal lives, but it never occurred to her that alcohol was messing with her life. Christine tells the story that after judges, psych wards, losing relationships, she mysteriously found herself in the Vancouver Intergroup Office and talked to a woman who…",
+   "lang": "en",
+   "date": "2026-10-05T04:54:17Z",
+   "first_seen": "2026-10-05T14:43:02Z",
+   "image": "https://i.ytimg.com/vi/DQQmWy8khe0/hqdefault.jpg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "DQQmWy8khe0",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "AA Grapevine's Podcast"
+    ],
+    "is_short": false,
+    "views": 40,
+    "is_live_recording": false,
+    "date_approx": false,
+    "season": 11,
+    "episode": 14
+   },
+   "i18n": {
+    "title": {
+     "en": "The Right Door [Season 11, Episode 14]",
+     "es": "La puerta correcta [Temporada 11, Episodio 14]"
+    },
+    "summary": {
+     "en": "Christina, whose story appears in the October 2026 issue of Grapevine, tells Olis and Don that when drinking she saw everyone else living these normal lives, but it never occurred to her that alcohol was messing with her life. Christine tells the story that after judges, psych wards, losing relationships, she mysteriously found herself in the Vancouver Intergroup Office and talked to a woman who…",
+     "es": "Christina, cuya historia aparece en el número de octubre de 2026 de Grapevine, cuenta a Olis y Don que cuando bebía vio a todos los demás viviendo estas vidas normales, pero nunca se le ocurrió que el alcohol estaba jugando con su vida. Christine cuenta la historia de que después de jueces, psiquiatras, perder relaciones, se encontró misteriosamente en la Oficina de Vancouver Intergrupo y habló con una mujer que …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-05T04:54:17Z"
+  },
   {
    "id": "pod:gv:2534152e98f9",
    "source": "podcast",
@@ -1011,7 +1189,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 176,
+    "views": 203,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2396,7 +2574,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 324,
+    "views": 344,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3111,7 +3289,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 288,
+    "views": 293,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -6269,7 +6447,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 342,
+    "views": 349,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -6424,7 +6602,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-21T11:30:16Z"
   },
   {
@@ -6468,7 +6646,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-21T11:30:16Z"
   },
   {
@@ -6512,7 +6690,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-21T10:46:11Z"
   },
   {
@@ -6539,7 +6717,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 285,
+    "views": 291,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7033,7 +7211,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 343,
+    "views": 344,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7270,7 +7448,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 315,
+    "views": 316,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7368,7 +7546,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 394,
+    "views": 398,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7465,7 +7643,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 296,
+    "views": 297,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -7509,7 +7687,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 336,
+    "views": 337,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7607,7 +7785,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 339,
+    "views": 340,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8049,326 +8227,6 @@
     "issue_label": {
      "en": "September / October 2026",
      "es": "Septiembre / Octubre 2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-01T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-09:casados-sobrios-y-felices",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/casados-sobrios-y-felices",
-   "title": "Casados, sobrios y felices",
-   "summary": "La experiencia de sus padrinos les ayuda a fortalecer su recuperación y su relación de pareja",
-   "lang": "es",
-   "date": "2026-09-01",
-   "first_seen": "2026-09-23T16:34:47Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-08/p48-1447055616%20copy.jpg?itok=kqiOnr3O",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Septiembre / Octubre 2026",
-    "issue_key": "2026-09",
-    "issue_date": "2026-09-01",
-    "issue_theme": "Servicio en AA",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/septiembre-octubre-2026",
-    "topic": "Servicio en AA",
-    "section": "Familia",
-    "author": "I. D.",
-    "author_location": "North Hollywood, California",
-    "subtitle": "La experiencia de sus padrinos les ayuda a fortalecer su recuperación y su relación de pareja",
-    "teaser": "Llegué al grupo a los veintisiete años de edad, soltera y sin haber tenido hijos. Mi grupo es un grupo de terapia directa y algo escandaloso.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "North Hollywood",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "North Hollywood, California",
-     "label_es": "North Hollywood, California"
-    },
-    "pub_date": "2026-09-01"
-   },
-   "i18n": {
-    "title": {
-     "en": "Married, Sober and Happy",
-     "es": "Casados, sobrios y felices"
-    },
-    "summary": {
-     "en": "The experience of your sponsors helps you strengthen your recovery and your partner relationship",
-     "es": "La experiencia de sus padrinos les ayuda a fortalecer su recuperación y su relación de pareja"
-    },
-    "section": {
-     "en": "Family",
-     "es": "Familia"
-    },
-    "topic": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_theme": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_label": {
-     "en": "September / October 2026",
-     "es": "Septiembre / Octubre 2026"
-    },
-    "author_location": {
-     "en": "North Hollywood, California",
-     "es": "North Hollywood, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-01T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-09:de-condado-en-condado",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/de-condado-en-condado",
-   "title": "De condado en condado",
-   "summary": "La sobriedad también puede devolver la dignidad y la esperanza",
-   "lang": "es",
-   "date": "2026-09-01",
-   "first_seen": "2026-09-23T16:34:47Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-08/p54-173680128.jpg?itok=YSxr_HDx",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Septiembre / Octubre 2026",
-    "issue_key": "2026-09",
-    "issue_date": "2026-09-01",
-    "issue_theme": "Servicio en AA",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/septiembre-octubre-2026",
-    "topic": "Servicio en AA",
-    "section": "Recaídas",
-    "author": "Jair G.",
-    "author_location": "San José, California",
-    "subtitle": "La sobriedad también puede devolver la dignidad y la esperanza",
-    "teaser": "Mi nombre es Jair y soy un enfermo alcohólico. Mi contacto con el alcohol comenzó cuando tenía apenas nueve o diez años. Recuerdo que mi padre me daba sorbos de su cerveza.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "San José",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "San José, California",
-     "label_es": "San José, California"
-    },
-    "pub_date": "2026-09-01"
-   },
-   "i18n": {
-    "title": {
-     "en": "From County to County",
-     "es": "De condado en condado"
-    },
-    "summary": {
-     "en": "Sobriety can also return dignity and hope",
-     "es": "La sobriedad también puede devolver la dignidad y la esperanza"
-    },
-    "section": {
-     "en": "Relapses",
-     "es": "Recaídas"
-    },
-    "topic": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_theme": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_label": {
-     "en": "September / October 2026",
-     "es": "Septiembre / Octubre 2026"
-    },
-    "author_location": {
-     "en": "San José, California",
-     "es": "San José, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-01T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-09:decisiones",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/decisiones",
-   "title": "Decisiones",
-   "summary": "Halló en las juntas de AA un lugar al que, por fin, pudo llamar hogar",
-   "lang": "es",
-   "date": "2026-09-01",
-   "first_seen": "2026-09-23T16:34:47Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-08/p46-1672416596.jpg?itok=zUcRqRZ6",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Septiembre / Octubre 2026",
-    "issue_key": "2026-09",
-    "issue_date": "2026-09-01",
-    "issue_theme": "Servicio en AA",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/septiembre-octubre-2026",
-    "topic": "Servicio en AA",
-    "section": "Mujeres en AA",
-    "author": "Eliana M.",
-    "author_location": "San Antonio, Texas",
-    "subtitle": "Halló en las juntas de AA un lugar al que, por fin, pudo llamar hogar",
-    "teaser": "Cuando acepté que tenía un problema con la manera de beber, estaba pidiendo mi salida de un centro de rehabilitación. El empleado que me entregó los papeles me dijo: “Por favor, no te vayas.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "texas",
-     "city": "San Antonio",
-     "county": "Bexar",
-     "counties": [
-      "Bexar",
-      "Comal",
-      "Medina"
-     ],
-     "state": "TX",
-     "country": "US",
-     "label_en": "San Antonio, Texas",
-     "label_es": "San Antonio, Texas"
-    },
-    "pub_date": "2026-09-01"
-   },
-   "i18n": {
-    "title": {
-     "en": "Decisions",
-     "es": "Decisiones"
-    },
-    "summary": {
-     "en": "In AA meetings she finally found a place she could call home",
-     "es": "Halló en las juntas de AA un lugar al que, por fin, pudo llamar hogar"
-    },
-    "section": {
-     "en": "Women in AA",
-     "es": "Mujeres en AA"
-    },
-    "topic": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_theme": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_label": {
-     "en": "September / October 2026",
-     "es": "Septiembre / Octubre 2026"
-    },
-    "author_location": {
-     "en": "San Antonio, Texas",
-     "es": "San Antonio, Texas"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-01T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-09:detenido",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/detenido",
-   "title": "Detenido",
-   "summary": "Caer en la cárcel se convirtió en una oportunidad para reflexionar sobre su vida y el rumbo que había tomado",
-   "lang": "es",
-   "date": "2026-09-01",
-   "first_seen": "2026-09-23T16:34:47Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-08/p24-160321702.jpg?itok=nX3_ZTbH",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Septiembre / Octubre 2026",
-    "issue_key": "2026-09",
-    "issue_date": "2026-09-01",
-    "issue_theme": "Servicio en AA",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/septiembre-octubre-2026",
-    "topic": "Servicio en AA",
-    "section": "Sección Especial",
-    "author": "Gustavo S.",
-    "author_location": "San Antonio, Texas",
-    "subtitle": "Caer en la cárcel se convirtió en una oportunidad para reflexionar sobre su vida y el rumbo que había tomado",
-    "teaser": "Hace algunos años, cuando llegué a mi grupo base, un seis de abril de 2009, comencé la tarea de empezar una nueva vida sin alcohol y sus derivados. Duré cinco meses.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "texas",
-     "city": "San Antonio",
-     "county": "Bexar",
-     "counties": [
-      "Bexar",
-      "Comal",
-      "Medina"
-     ],
-     "state": "TX",
-     "country": "US",
-     "label_en": "San Antonio, Texas",
-     "label_es": "San Antonio, Texas"
-    },
-    "pub_date": "2026-09-01"
-   },
-   "i18n": {
-    "title": {
-     "en": "Detained",
-     "es": "Detenido"
-    },
-    "summary": {
-     "en": "Landing in jail became a chance to reflect on his life and the path he had taken",
-     "es": "Caer en la cárcel se convirtió en una oportunidad para reflexionar sobre su vida y el rumbo que había tomado"
-    },
-    "section": {
-     "en": "Special Section",
-     "es": "Sección Especial"
-    },
-    "topic": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_theme": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_label": {
-     "en": "September / October 2026",
-     "es": "Septiembre / Octubre 2026"
-    },
-    "author_location": {
-     "en": "San Antonio, Texas",
-     "es": "San Antonio, Texas"
     }
    },
    "machine": [

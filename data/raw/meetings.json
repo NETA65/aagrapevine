@@ -1,13 +1,13 @@
 {
  "source": "meetings",
- "updated": "2026-10-04T12:28:56Z",
- "attempted": "2026-10-04T12:28:56Z",
+ "updated": "2026-10-05T14:47:28Z",
+ "attempted": "2026-10-05T14:47:28Z",
  "ok": true,
  "error": null,
  "stats": {
   "offices": 8,
   "offices_ok": 7,
-  "listed": 5127,
+  "listed": 5128,
   "grapevine": 24,
   "meetings": 23,
   "in_area": 13,
@@ -1091,8 +1091,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-10-04T12:28:00Z",
-   "attempted": "2026-10-04T12:28:00Z",
+   "updated": "2026-10-05T14:46:34Z",
+   "attempted": "2026-10-05T14:46:34Z",
    "note": null
   },
   {
@@ -1105,8 +1105,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-10-04T12:28:00Z",
-   "attempted": "2026-10-04T12:28:00Z",
+   "updated": "2026-10-05T14:46:34Z",
+   "attempted": "2026-10-05T14:46:34Z",
    "note": null
   },
   {
@@ -1119,8 +1119,8 @@
    "method": "page",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-04T12:28:00Z",
-   "attempted": "2026-10-04T12:28:00Z",
+   "updated": "2026-10-05T14:46:34Z",
+   "attempted": "2026-10-05T14:46:34Z",
    "note": null
   },
   {
@@ -1133,8 +1133,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-04T12:28:00Z",
-   "attempted": "2026-10-04T12:28:00Z",
+   "updated": "2026-10-05T14:46:34Z",
+   "attempted": "2026-10-05T14:46:34Z",
    "note": null
   },
   {
@@ -1147,8 +1147,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-04T12:28:00Z",
-   "attempted": "2026-10-04T12:28:00Z",
+   "updated": "2026-10-05T14:46:34Z",
+   "attempted": "2026-10-05T14:46:34Z",
    "note": null
   },
   {
@@ -1161,8 +1161,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-04T12:28:00Z",
-   "attempted": "2026-10-04T12:28:00Z",
+   "updated": "2026-10-05T14:46:34Z",
+   "attempted": "2026-10-05T14:46:34Z",
    "note": null
   },
   {
@@ -1175,8 +1175,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-04T12:28:00Z",
-   "attempted": "2026-10-04T12:28:00Z",
+   "updated": "2026-10-05T14:46:34Z",
+   "attempted": "2026-10-05T14:46:34Z",
    "note": null
   },
   {
@@ -1190,7 +1190,7 @@
    "key_from": null,
    "error": "feed: nwta66.org answered HTTP 202; page: nwta66.org answered HTTP 202",
    "updated": "2026-10-03T11:45:46Z",
-   "attempted": "2026-10-04T12:28:00Z"
+   "attempted": "2026-10-05T14:46:34Z"
   }
  ],
  "type_labels": {

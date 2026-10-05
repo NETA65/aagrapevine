@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-05T01:28:59Z",
+ "updated": "2026-10-05T14:43:07Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16908,
-   "posts": 3919,
+   "posts": 3921,
    "owner_id": "48108439509",
-   "checked": "2026-10-05T01:28:55Z",
+   "checked": "2026-10-05T14:43:03Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,142 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2424,
-   "posts": 2953,
+   "posts": 2954,
    "owner_id": "48275839129",
-   "checked": "2026-10-05T01:28:58Z",
+   "checked": "2026-10-05T14:43:06Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DeHMGIfANDj",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeHMGIfANDj/",
+   "title": "The Right Door",
+   "summary": "The Right Door",
+   "lang": "en",
+   "date": "2026-10-05T12:17:41Z",
+   "first_seen": "2026-10-05T14:43:07Z",
+   "image": "/assets/cache/ig/DeHMGIfANDj.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeHMGIfANDj",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeHMGIfANDj.webp",
+    "embed_url": "https://www.instagram.com/p/DeHMGIfANDj/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeHMGIfANDj/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The Right Door",
+     "es": "La puerta correcta"
+    },
+    "summary": {
+     "en": "The Right Door",
+     "es": "La puerta correcta"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeHGu2Yl-6l",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeHGu2Yl-6l/",
+   "title": "“La vida no ha sido un lecho de rosas, pero gracias a AA, ya no tengo que vivir con…",
+   "summary": "“La vida no ha sido un lecho de rosas, pero gracias a AA, ya no tengo que vivir con miedo. Duermo por la noche. Tengo un propósito en la vida”. \"“Buscado” MANKATO, MINNESOTA, MAYO DE 1997 De Young & Sober\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-05T11:30:16Z",
+   "first_seen": "2026-10-05T14:43:07Z",
+   "image": "/assets/cache/ig/DeHGu2Yl-6l.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeHGu2Yl-6l",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeHGu2Yl-6l.webp",
+    "embed_url": "https://www.instagram.com/p/DeHGu2Yl-6l/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeHGu2Yl-6l/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Life has not been a bed of roses, but thanks to AA, I no longer have to live with …",
+     "es": "“La vida no ha sido un lecho de rosas, pero gracias a AA, ya no tengo que vivir con…"
+    },
+    "summary": {
+     "en": "“Life has not been a bed of roses, but thanks to AA, I no longer have to live in fear. I sleep at night. I have a purpose in life.” \"Search\" MANKATO, MINNESOTA, MAY 1997 De Young and Sovereign Daily Quote in www.aalavina.org",
+     "es": "“La vida no ha sido un lecho de rosas, pero gracias a AA, ya no tengo que vivir con miedo. Duermo por la noche. Tengo un propósito en la vida”. \"“Buscado” MANKATO, MINNESOTA, MAYO DE 1997 De Young & Sober\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeHGu0QlyVl",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeHGu0QlyVl/",
+   "title": "“The phrase ‘God as we understand him’ is perhaps the most important expression to be…",
+   "summary": "“The phrase ‘God as we understand him’ is perhaps the most important expression to be found in our whole AA vocabulary. Within the compass of these five significant words there can be included every kind and degree of faith, together with the positive assurance that each of us may choose his own.” AA Co-Founder, Bill W., April 1961, “God As We Understand Him: The Dilemma of No Faith”, The…",
+   "lang": "en",
+   "date": "2026-10-05T11:30:14Z",
+   "first_seen": "2026-10-05T14:43:07Z",
+   "image": "/assets/cache/ig/DeHGu0QlyVl.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeHGu0QlyVl",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeHGu0QlyVl.webp",
+    "embed_url": "https://www.instagram.com/p/DeHGu0QlyVl/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeHGu0QlyVl/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The phrase ‘God as we understand him’ is perhaps the most important expression to be…",
+     "es": "“La frase ‘Dios como lo entendemos’ es quizás la expresión más importante para ser …"
+    },
+    "summary": {
+     "en": "“The phrase ‘God as we understand him’ is perhaps the most important expression to be found in our whole AA vocabulary. Within the compass of these five significant words there can be included every kind and degree of faith, together with the positive assurance that each of us may choose his own.” AA Co-Founder, Bill W., April 1961, “God As We Understand Him: The Dilemma of No Faith”, The…",
+     "es": "“La frase ‘Dios como lo entendemos’ es quizás la expresión más importante que se encuentra en todo nuestro vocabulario AA. Dentro de la brújula de estas cinco palabras importantes se puede incluir todo tipo y grado de fe, junto con la seguridad positiva de que cada uno de nosotros puede elegir el suyo propio.” AA cofundador, Bill W., abril de 1961, “Dios como lo entendemos: el dilema de ninguna fe”, el …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DeE5-D_l1sp",
    "source": "instagram",
@@ -2223,7 +2352,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdjDml1HNtr",
@@ -2266,7 +2395,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Ddi-lbMg3Of",
@@ -2309,7 +2438,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdhkB_AOd9a",
