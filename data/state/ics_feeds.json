@@ -1,6 +1,6 @@
 {
  "https://neta65.org/events/category/workshop/list/?ical=1": {
-  "attempted": "2026-10-04T11:24:22Z",
+  "attempted": "2026-10-05T09:08:21Z",
   "state": "blocked",
   "http_status": 403,
   "error": "HTTP 403: the site's bot protection (Cloudflare “Just a moment…” check) turned the robot away"

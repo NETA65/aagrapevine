@@ -1,12 +1,12 @@
 {
  "source": "podcasts",
- "updated": "2026-10-05T05:53:51Z",
- "attempted": "2026-10-05T05:53:51Z",
+ "updated": "2026-10-05T09:08:18Z",
+ "attempted": "2026-10-05T09:08:18Z",
  "ok": true,
  "error": null,
  "stats": {
   "fetched": 299,
-  "new": 1,
+  "new": 0,
   "total": 299,
   "active": 299,
   "gone": 0,
