@@ -1,7 +1,57 @@
 {
- "updated": "2026-10-05T03:43:50Z",
+ "updated": "2026-10-05T05:53:56Z",
  "fixture": false,
  "items": [
+  {
+   "id": "pod:gv:2534152e98f9",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/576e2064-bdf6-43c6-bdf9-0d684211b7ad",
+   "title": "The Right Door [Season 11, Episode 14]",
+   "summary": "Christina, whose story appears in the October 2026 issue of Grapevine, tells Olis and Don that when drinking she saw everyone else living these normal lives, but it never occurred to her that alcohol was messing with her life. Christine tells the story that after judges, psych wards, losing relationships, she mysteriously found herself in the Vancouver Intergroup Office and talked to a woman who…",
+   "lang": "en",
+   "date": "2026-10-05T04:15:00Z",
+   "first_seen": "2026-10-05T05:53:51Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/576e2064-bdf6-43c6-bdf9-0d684211b7ad.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 35531755,
+    "duration_sec": 1777,
+    "season": 11,
+    "episode": 14,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/576e2064-bdf6-43c6-bdf9-0d684211b7ad",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "The Right Door [Season 11, Episode 14]",
+     "es": "La puerta correcta [Temporada 11, Episodio 14]"
+    },
+    "summary": {
+     "en": "Christina, whose story appears in the October 2026 issue of Grapevine, tells Olis and Don that when drinking she saw everyone else living these normal lives, but it never occurred to her that alcohol was messing with her life. Christine tells the story that after judges, psych wards, losing relationships, she mysteriously found herself in the Vancouver Intergroup Office and talked to a woman who…",
+     "es": "Christina, cuya historia aparece en el número de octubre de 2026 de Grapevine, cuenta a Olis y Don que cuando bebía vio a todos los demás viviendo estas vidas normales, pero nunca se le ocurrió que el alcohol estaba jugando con su vida. Christine cuenta la historia de que después de jueces, psiquiatras, perder relaciones, se encontró misteriosamente en la Oficina de Vancouver Intergrupo y habló con una mujer que …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-05T04:15:00Z"
+  },
   {
    "id": "ig:DeE5-D_l1sp",
    "source": "instagram",
@@ -6508,7 +6558,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-21T04:33:29Z"
   },
   {
@@ -6558,7 +6608,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-21T04:15:00Z"
   },
   {
@@ -8319,84 +8369,6 @@
     "author_location": {
      "en": "San Antonio, Texas",
      "es": "San Antonio, Texas"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-01T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-09:el-corazon-de-aa",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/el-corazon-de-aa",
-   "title": "El corazón de AA",
-   "summary": "El bienestar común siempre debe tener la preferencia",
-   "lang": "es",
-   "date": "2026-09-01",
-   "first_seen": "2026-09-23T16:34:47Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-08/p18-483835393.jpg?itok=rZrSMnAN",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Septiembre / Octubre 2026",
-    "issue_key": "2026-09",
-    "issue_date": "2026-09-01",
-    "issue_theme": "Servicio en AA",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/septiembre-octubre-2026",
-    "topic": "Servicio en AA",
-    "section": "Sección Especial",
-    "author": "Héctor H.",
-    "author_location": "Madera, California",
-    "subtitle": "El bienestar común siempre debe tener la preferencia",
-    "teaser": "Mi nombre es Héctor, y soy miembro de Alcohólicos Anónimos.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Madera",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Madera, California",
-     "label_es": "Madera, California"
-    },
-    "pub_date": "2026-09-01"
-   },
-   "i18n": {
-    "title": {
-     "en": "The Heart of AA",
-     "es": "El corazón de AA"
-    },
-    "summary": {
-     "en": "Common well-being must always have a preference",
-     "es": "El bienestar común siempre debe tener la preferencia"
-    },
-    "section": {
-     "en": "Special Section",
-     "es": "Sección Especial"
-    },
-    "topic": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_theme": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_label": {
-     "en": "September / October 2026",
-     "es": "Septiembre / Octubre 2026"
-    },
-    "author_location": {
-     "en": "Madera, California",
-     "es": "Madera, California"
     }
    },
    "machine": [

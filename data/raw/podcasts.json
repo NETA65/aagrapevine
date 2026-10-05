@@ -1,21 +1,21 @@
 {
  "source": "podcasts",
- "updated": "2026-10-05T03:43:31Z",
- "attempted": "2026-10-05T03:43:31Z",
+ "updated": "2026-10-05T05:53:51Z",
+ "attempted": "2026-10-05T05:53:51Z",
  "ok": true,
  "error": null,
  "stats": {
-  "fetched": 298,
-  "new": 0,
-  "total": 298,
-  "active": 298,
+  "fetched": 299,
+  "new": 1,
+  "total": 299,
+  "active": 299,
   "gone": 0,
   "spanish": 0,
   "shows": {
    "gv": {
     "ok": true,
-    "episodes": 263,
-    "latest": "2026-09-28T04:15:00Z"
+    "episodes": 264,
+    "latest": "2026-10-05T04:15:00Z"
    },
    "wo": {
     "ok": true,
@@ -27,12 +27,48 @@
   "gone_checks": 0,
   "discovery_checked": "2026-10-01T07:18:55Z",
   "discovered_feeds": [],
-  "seconds": 3.0,
+  "seconds": 2.4,
   "artwork": 3,
   "artwork_missing": 0,
   "artwork_removed": 0
  },
  "items": [
+  {
+   "id": "pod:gv:2534152e98f9",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/576e2064-bdf6-43c6-bdf9-0d684211b7ad",
+   "title": "The Right Door [Season 11, Episode 14]",
+   "summary": "Christina, whose story appears in the October 2026 issue of Grapevine, tells Olis and Don that when drinking she saw everyone else living these normal lives, but it never occurred to her that alcohol was messing with her life. Christine tells the story that after judges, psych wards, losing relationships, she mysteriously found herself in the Vancouver Intergroup Office and talked to a woman who…",
+   "lang": "en",
+   "date": "2026-10-05T04:15:00Z",
+   "first_seen": "2026-10-05T05:53:51Z",
+   "last_seen": "2026-10-05T05:53:51Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/576e2064-bdf6-43c6-bdf9-0d684211b7ad.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 35531755,
+    "duration_sec": 1777,
+    "season": 11,
+    "episode": 14,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/576e2064-bdf6-43c6-bdf9-0d684211b7ad",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   }
+  },
   {
    "id": "pod:wo:7574d90d16ee",
    "source": "podcast",
@@ -10776,7 +10812,7 @@
    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
-   "episodes": 263,
+   "episodes": 264,
    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
   },
   {

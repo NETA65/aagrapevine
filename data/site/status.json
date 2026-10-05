@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-05T03:43:51Z",
- "updated": "2026-10-05T03:43:51Z",
+ "generated": "2026-10-05T05:53:56Z",
+ "updated": "2026-10-05T05:53:56Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-10-05T03:43:28Z",
-   "attempted": "2026-10-05T03:43:28Z",
+   "updated": "2026-10-05T05:53:33Z",
+   "attempted": "2026-10-05T05:53:33Z",
    "count": 35,
    "new_7d": 29,
    "error": null,
@@ -88,8 +88,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-10-05T03:43:28Z",
-   "attempted": "2026-10-05T03:43:28Z",
+   "updated": "2026-10-05T05:53:33Z",
+   "attempted": "2026-10-05T05:53:33Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -106,8 +106,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-10-05T03:43:28Z",
-   "attempted": "2026-10-05T03:43:28Z",
+   "updated": "2026-10-05T05:53:33Z",
+   "attempted": "2026-10-05T05:53:33Z",
    "count": 9,
    "new_7d": 0,
    "error": null,
@@ -148,8 +148,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-10-05T03:43:34Z",
-   "attempted": "2026-10-05T03:43:34Z",
+   "updated": "2026-10-05T05:53:54Z",
+   "attempted": "2026-10-05T05:53:54Z",
    "count": 1261,
    "new_7d": 1261,
    "error": null,
@@ -278,23 +278,23 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-10-05T03:43:31Z",
-   "attempted": "2026-10-05T03:43:31Z",
-   "count": 298,
-   "new_7d": 2,
+   "updated": "2026-10-05T05:53:51Z",
+   "attempted": "2026-10-05T05:53:51Z",
+   "count": 299,
+   "new_7d": 3,
    "error": null,
    "stats": {
-    "fetched": 298,
-    "new": 0,
-    "total": 298,
-    "active": 298,
+    "fetched": 299,
+    "new": 1,
+    "total": 299,
+    "active": 299,
     "gone": 0,
     "spanish": 0,
     "shows": {
      "gv": {
       "ok": true,
-      "episodes": 263,
-      "latest": "2026-09-28T04:15:00Z"
+      "episodes": 264,
+      "latest": "2026-10-05T04:15:00Z"
      },
      "wo": {
       "ok": true,
@@ -306,7 +306,7 @@
     "gone_checks": 0,
     "discovery_checked": "2026-10-01T07:18:55Z",
     "discovered_feeds": [],
-    "seconds": 3.0,
+    "seconds": 2.4,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -472,8 +472,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-10-05T03:43:50Z",
-   "attempted": "2026-10-05T03:43:50Z",
+   "updated": "2026-10-05T05:53:48Z",
+   "attempted": "2026-10-05T05:53:48Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -481,7 +481,7 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-10-04",
+    "today": "2026-10-05",
     "new": 0
    }
   }
@@ -497,6 +497,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-10-05",
+    "goal_at": "2026-10-05T10:30:00Z",
+    "gv": null,
+    "lv": null
+   },
    {
     "day": "2026-10-04",
     "goal_at": "2026-10-04T10:30:00Z",
@@ -548,21 +554,21 @@
   "updated": "2026-10-04T12:31:41Z"
  },
  "translations": {
-  "cached": 3800,
+  "cached": 3802,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 0,
+  "translated_this_run": 2,
   "from_cache": 3800,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.1,
-  "model_seconds": 0.0,
-  "texts_per_second": null,
+  "seconds": 1.0,
+  "model_seconds": 0.7,
+  "texts_per_second": 1.9,
   "glossary_entries": 258
  },
  "counts": {
   "videos": 531,
-  "episodes": 298,
+  "episodes": 299,
   "instagram": 64,
   "articles": 228,
   "pdfs": 92,
@@ -602,7 +608,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-10-04",
+  "today": "2026-10-05",
   "home_days": 60,
   "list_days": [
    60,
