@@ -1,6 +1,6 @@
 {%- set L = lang or "en" -%}
 {%- set st = db.status -%}
-<footer class="mt-16 border-t border-line bg-surface text-sm text-muted" style="padding-bottom: env(safe-area-inset-bottom)">
+<footer class="site-footer mt-16 border-t border-line bg-surface text-sm text-muted" style="padding-bottom: env(safe-area-inset-bottom)">
   {#- The footer mirrors the header: "Explore" (the top-level pages), one list per dropdown group
       (Get involved, Committee — nav.primary items with children) and "Stay updated" (the official
       aagrapevine.org / aalavina.org sites, the nav.footer entries of group "stay" — Instagram and
@@ -10,7 +10,7 @@
       copyright / reprint-permission notice runs under both, across the whole bar.
       Phones: the groups sit two per row and every link is a 44px touch target; sm: four across;
       lg+: the about blurb joins the row (the wrapper becomes display:contents so the groups are
-      items of the outer grid). -#}
+      items of the outer grid). Print: no footer (main.css, .site-footer). -#}
   <div class="site-footer-main container-page grid gap-8 py-10 md:py-12 lg:grid-cols-[minmax(0,1.6fr)_repeat(4,minmax(0,1fr))] lg:gap-6 xl:gap-12">
     <div>
       <a href="{{ '/' | lurl(L) }}" class="inline-flex items-center gap-3 no-underline">

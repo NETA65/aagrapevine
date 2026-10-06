@@ -125,9 +125,11 @@
       {% icon "chevron-down", "size-4 shrink-0 text-muted transition group-open/how:rotate-180" %}
     </summary>
     <div class="gvb-how-body">
+      {#- a line may break after a "/" (step 7's "content/booth/booth.csv") rather than inside a word, on a
+          phone at large text (booth.css .gvb-how-steps) -#}
       <ol class="gvb-how-steps" role="list">
         {%- for n in range(1, 8) %}
-        <li><span class="step-num" aria-hidden="true">{{ n }}</span><span>{{ ("booth.how_" + n) | t(lang) }}</span></li>
+        <li><span class="step-num" aria-hidden="true">{{ n }}</span><span>{{ ("booth.how_" + n) | t(lang) | escape | replace("/", "/<wbr>") | safe }}</span></li>
         {%- endfor %}
       </ol>
       <p class="mt-4 flex gap-2.5 text-sm leading-relaxed text-muted"><span class="mt-0.5 text-vine">{% icon "shield-check", "size-4" %}</span><span>{{ "booth.how_aa" | t(lang) }}</span></p>

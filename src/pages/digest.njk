@@ -101,7 +101,8 @@ pageScripts: ["/assets/js/community.js"]
               item's own date (a committee file: the date in its name), else the day it counts on. -#}
           {%- set shownDate = it.date or it._when -%}
           {% if shownDate %}<time class="whitespace-nowrap" datetime="{{ shownDate | isoDate }}">{{ shownDate | fmtDate(lang, "month" if it._approx else "short") }}</time>{% endif %}
-          {% if it._twin %}<span class="whitespace-nowrap"><a class="link relative z-10" href="{{ it._twin | cmHref(lang) }}"{% if it._twin._ext %} target="_blank" rel="noopener"{% endif %}>{{ "community.digest.twin" | t(lang) }}<span class="sr-only"> — {{ title }}{% if it._twin._ext %} {{ "community.new_tab" | t(lang) }}{% endif %}</span></a></span>{% endif %}
+          {#- "also on YouTube": a target of its own on the row's link, so at least 24px tall (WCAG 2.5.8) -#}
+          {% if it._twin %}<span class="whitespace-nowrap"><a class="link relative z-10 inline-flex min-h-6 items-center" href="{{ it._twin | cmHref(lang) }}"{% if it._twin._ext %} target="_blank" rel="noopener"{% endif %}>{{ "community.digest.twin" | t(lang) }}<span class="sr-only"> — {{ title }}{% if it._twin._ext %} {{ "community.new_tab" | t(lang) }}{% endif %}</span></a></span>{% endif %}
           {{ ui.autoNote(it, lang) }}
         </p>
       </div>

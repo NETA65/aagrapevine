@@ -50,8 +50,9 @@ class Menu(unittest.TestCase):
         self.assertLess(d.index('role="switch"'), d.index("<nav "))
 
     def test_the_header_button_stays_from_640px(self):
+        # a "Dark mode" toggle (aria-pressed), named like the drawer's switch (tests/test_a11y_layout.HeaderAria)
         outside = self.header.replace(self.drawer, "")
-        btn = re.search(r'<button type="button" @click="toggleTheme\(\)" class="([^"]*)"[^>]*aria-label="\{\{ \'nav\.theme_aria\' \| t\(L\) \}\}"', outside)
+        btn = re.search(r'<button type="button" @click="toggleTheme\(\)" class="([^"]*)"[^>]*aria-label="\{\{ \'nav\.theme_dark\' \| t\(L\) \}\}"\s+aria-pressed="false"', outside)
         self.assertIsNotNone(btn)
         self.assertIn("hidden", btn.group(1).split())
         self.assertIn("sm:grid", btn.group(1).split())
@@ -75,9 +76,10 @@ class Menu(unittest.TestCase):
         self.assertIn("<strong>Dark mode</strong> switch", dev["en"])
         self.assertIn("interruptor <strong>Modo oscuro</strong>", dev["es"])
         css = read("src", "assets", "css", "main.css")
-        for bit in (".site-switch {", "border: 2px solid var(--c-faint);",
-                    '[aria-checked="true"] > .site-switch { border-color: var(--c-gv); background: var(--c-gv); }',
-                    '[aria-checked="true"] > .site-switch::after { transform: translateX(1.25rem);', "@media (forced-colors: active)"):
+        # (the pages' .cm-switch shares the picture: tests/test_a11y_layout.Switch)
+        for bit in (".site-switch, .cm-switch {", "border: 2px solid var(--c-faint);",
+                    '[aria-checked="true"] > .site-switch, .cm-switch:checked { border-color: var(--c-gv); background: var(--c-gv); }',
+                    '[aria-checked="true"] > .site-switch::after, .cm-switch:checked::after { transform: translateX(1.25rem);', "@media (forced-colors: active)"):
             self.assertIn(bit, css)
         # the narrowest phones at larger text: the row's moon steps aside so the label keeps whole words
         self.assertIn(".site-theme > svg { display: none; }", read("src", "assets", "css", "areas", "access.css"))

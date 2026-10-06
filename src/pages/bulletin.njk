@@ -114,9 +114,10 @@ pageScripts: ["/assets/js/committee.js"]
         {#- The post's aside, after its text (the reading and Tab order at every width): "In this post" — its
             sections — and its actions. A narrow card (phones, tablets) shows only the actions, as a bar
             along the bottom of the card; a wide one (every post on a desktop: one per row) puts the aside
-            beside the text, sticky while the post scrolls by (committee.css .cm-ann-side). An aside
-            inside an article is no landmark; the list is a nav named "In this post" + the title. -#}
-        <aside class="cm-ann-side">
+            beside the text, sticky while the post scrolls by (committee.css .cm-ann-side). A <div>, not an
+            <aside>: inside the page's named section an aside is a landmark within a landmark (axe
+            landmark-complementary-is-top-level); the list is a nav named "In this post" + the title. -#}
+        <div class="cm-ann-side">
           {%- if toc | length %}
           <nav class="cm-ann-toc" aria-labelledby="{{ a._anchor }}-toc {{ a._anchor }}-h">
             <p id="{{ a._anchor }}-toc" class="cm-ann-toc-h">{% icon "list", "size-4 shrink-0" %}<span>{{ "committee.ann.in_post" | t(lang) }}</span></p>
@@ -142,7 +143,7 @@ pageScripts: ["/assets/js/committee.js"]
             <button type="button" class="btn-ghost btn-sm cm-ann-copy" data-copy="{{ pageAbs }}#{{ a._anchor }}">{% icon "link", "size-4" %} {{ "common.copy_link" | t(lang) }}</button>
             <button type="button" class="btn-secondary btn-sm" data-share="{{ pageAbs }}#{{ a._anchor }}" data-share-title="{{ title }}" data-share-text="{{ (a | tx('summary', lang)) | excerpt(140) }}">{% icon "share-2", "size-4" %} {{ "common.share" | t(lang) }}</button>
           </div>
-        </aside>
+        </div>
       </article>
     </li>
     {% endfor %}

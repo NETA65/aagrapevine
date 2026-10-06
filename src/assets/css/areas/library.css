@@ -48,14 +48,15 @@
 @media (width >= 40rem) { .lib-find { padding: 1rem; } }
 @media (width >= 64rem) { .lib-find { grid-template-columns: minmax(0, 1fr) auto; padding: 1rem 1.75rem 1rem 1rem; } }
 .lib-find-form { min-width: 0; }
+/* (its edge: --c-field, ≥ 3:1 like every text box — main.css input) */
 .lib-find-input {
   display: block; width: 100%; height: 3.5rem; padding: 0 3.5rem 0 3rem;
-  border-radius: 1rem; border: 1px solid var(--c-line); background: var(--c-paper);
+  border-radius: 1rem; border: 1px solid var(--c-field); background: var(--c-paper);
   font-size: 1rem; color: var(--c-ink);
   transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
 }
 .lib-find-input::placeholder { color: var(--c-faint); opacity: 1; }
-.lib-find-input:hover { border-color: color-mix(in srgb, var(--c-gv) 45%, var(--c-line)); }
+.lib-find-input:hover { border-color: color-mix(in srgb, var(--c-gv) 45%, var(--c-field)); }
 .lib-find-input:focus { outline: none; border-color: var(--c-gv); background: var(--c-surface); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-gv) 35%, transparent); }
 @media (width >= 40rem) { .lib-find-input { height: 3.75rem; font-size: 1.125rem; } }
 .lib-find-clear {

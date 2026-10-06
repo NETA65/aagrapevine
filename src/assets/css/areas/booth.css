@@ -50,8 +50,11 @@
 .gvb-how > summary { display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; padding: 0.85rem 1.25rem; cursor: pointer; list-style: none; }
 .gvb-how > summary::-webkit-details-marker { display: none; }
 .gvb-how-body { padding: 0 1.25rem 1.25rem; }
-.gvb-how-steps { display: grid; gap: 0.75rem; }
+/* one column no wider than the card, and a step's words may break inside a long name (step 7's file path
+   "content/booth/booth.csv"): at 130–150 % text on a 360px phone they ran past the screen's edge */
+.gvb-how-steps { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; }
 .gvb-how-steps > li { display: flex; align-items: flex-start; gap: 0.75rem; max-width: 72ch; line-height: 1.55; color: var(--c-ink); }
+.gvb-how-steps > li > :last-child { min-width: 0; overflow-wrap: anywhere; }
 
 /* ---------- 2. The screen ---------- */
 /* no page scroll behind the player, and a sideways swipe is never the browser's Back */
@@ -479,11 +482,13 @@
   height: max(44px, calc(6.4 * var(--u))); border: 0; border-radius: 50%; background: #f1ece2; color: #1d1a26; }
 .gvb-take-close .gvb-ic { width: 50%; height: 50%; }
 
-/* "Tap for full screen & sound" (the show opened by its address, before anyone touched it) */
-.gvb-tapchip { position: absolute; left: 50%; top: calc(14 * var(--u)); z-index: 22; display: inline-flex; align-items: center; gap: calc(1 * var(--u));
+/* "Tap for full screen & sound" (the show opened by its address, before anyone touched it). Under .gvb-screen: the
+   chip is a button, and ".gvb-screen button" (font and colour inherited) would win over a bare class — it gave
+   near-white words on the gold (1.24:1) in the page's own small type */
+.gvb-screen .gvb-tapchip { position: absolute; left: 50%; top: calc(14 * var(--u)); z-index: 22; display: inline-flex; align-items: center; gap: calc(1 * var(--u));
   padding: calc(1.2 * var(--u)) calc(2.4 * var(--u)); border: 0; border-radius: 999px; background: var(--gold); color: #1d1a26; font-size: calc(2.6 * var(--u)); font-weight: 750;
   transform: translateX(-50%); box-shadow: 0 calc(1 * var(--u)) calc(4 * var(--u)) rgb(0 0 0 / 0.4); animation: gvb-bob 2.4s ease-in-out infinite; }
-.gvb-tapchip .gvb-ic { width: calc(3.2 * var(--u)); height: calc(3.2 * var(--u)); }
+.gvb-screen .gvb-tapchip .gvb-ic { width: calc(3.2 * var(--u)); height: calc(3.2 * var(--u)); }
 @keyframes gvb-bob { 50% { transform: translateX(-50%) translateY(calc(-0.8 * var(--u))); } }
 
 /* the quiz round: "Question 2 of 5" and a dot per question */
@@ -542,7 +547,8 @@
 .gvb-field { margin-top: 0.8rem; }
 .gvb-field:first-child { margin-top: 0; }
 .gvb-label { display: block; font-size: 0.8125rem; font-weight: 700; color: #1d1a26; }
-.gvb-input { display: block; width: 100%; min-height: 2.5rem; margin-top: 0.3rem; padding: 0.45rem 0.65rem; border: 1px solid #a8a1b5; border-radius: 0.5rem; background: #fff;
+/* (the box's edge: 3.8:1 on the white drawer — the site's text boxes' --c-field, main.css) */
+.gvb-input { display: block; width: 100%; min-height: 2.5rem; margin-top: 0.3rem; padding: 0.45rem 0.65rem; border: 1px solid #857f95; border-radius: 0.5rem; background: #fff;
   color: #1d1a26; font-size: 0.9375rem; line-height: 1.45; }
 .gvb-input::placeholder { color: #6e6980; }
 .gvb-input:focus { border-color: #0a5fa8; }

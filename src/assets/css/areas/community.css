@@ -84,19 +84,28 @@
   @media (width < 40rem) { :root:is([data-text="150"], [data-spacing="relaxed"]) main .cm-entry .flex > .meta-row.min-w-0 { flex-basis: 100% !important; } }
   @media (width < 24rem) { :root:is([data-text="115"], [data-text="130"]) main .cm-entry .flex > .meta-row.min-w-0 { flex-basis: 100% !important; } }
 }
-/* The filter bar (until the three-column layout below): ONE line of chips (chip-row-nowrap) under
-   the header, sticky only in windows at least 40rem tall (a shorter window keeps all of its height
-   for the feed). Entries and day headings that get focus or a jump land below it
-   (scroll-padding-top covers the header only). */
+/* The filter bar (until the three-column layout below): a line of chips under the header, sticky only in
+   windows at least 40rem tall (a shorter window keeps all of its height for the feed). Anything that gets
+   keyboard focus or a jump lands below it: html's scroll-padding-top makes room for the header AND the bar
+   (--wn-bar-h: the bar's height while it covers the feed — community.js whatsNew measures it, one or two rows
+   of chips; 0 in a short window, in the three-column layout and without JavaScript, where the bar is hidden). */
 @media (height >= 40rem) { .cm-chipbar { position: sticky; top: var(--header-h); z-index: 20; } }
 :root:not(.js) .cm-chipbar { display: none; }
-/* On a desktop (mouse: no sideways swipe) every chip must fit on the one line: from 1024px the bar
-   shows the labels only — no icons, no counts (the day headings give the filtered counts) — and where
-   it is narrowest (1280–1439px, beside the subscribe column) the chips are a little slimmer; measured
-   in EN and ES. In three columns the chips are a list with icons and counts. */
-@media (width >= 64rem) { .cm-chipbar :is(.chip > svg, .cm-wn-count) { display: none; } }
-@media (80rem <= width < 90rem) { .cm-chipbar .cm-chips { gap: 0.375rem; } .cm-chipbar .chip { padding-inline: 0.625rem; } }
-.cm-wn-main .cm-entry, .cm-wn-main .cm-day-head { scroll-margin-top: 4.5rem; }
+:root:has(.cm-chipbar) { scroll-padding-top: calc(var(--header-h) + var(--wn-bar-h, 0px) + 1.5rem); }
+/* Phones and tablets: ONE line (chip-row-nowrap) that scrolls sideways. On a desktop (a mouse: no sideways
+   swipe) no chip may hide under the row's fade: from 1024px the bar shows the labels only — no icons, no
+   counts (the day headings give the filtered counts) —, where it is narrowest (1280–1535px, beside the
+   subscribe column) the chips are a little slimmer, so they fit on one line in EN and ES; a chip that still
+   doesn't fit (another kind of update, larger text) wraps onto a second line instead of being cut off. At
+   130 %+ text (or relaxed spacing) the bar stops sticking there, like the side columns (main.css): two or
+   three rows of big chips would cover a third of a laptop screen. In three columns the chips are a list with
+   icons and counts. */
+@media (width >= 64rem) {
+  .cm-chipbar :is(.chip > svg, .cm-wn-count) { display: none; }
+  .cm-chipbar .cm-chips { flex-wrap: wrap; overflow: visible; padding-right: 0.25rem; -webkit-mask-image: none; mask-image: none; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-chipbar { position: static; }
+}
+@media (80rem <= width < 96rem) { .cm-chipbar .cm-chips { gap: 0.25rem; } .cm-chipbar .chip { padding-inline: 0.5rem; } }
 /* The subscribe card, 768–1279px (under the timeline): two columns — title + e-mail | the feeds. */
 @media (width >= 48rem) and (width < 80rem) {
   .cm-wn-sub { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); grid-template-rows: auto 1fr; }

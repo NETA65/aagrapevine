@@ -190,8 +190,9 @@ pageScripts: ["/assets/js/read.js"]
         <p class="border-t border-line bg-surface-2 px-5 py-3 text-xs text-muted sm:px-6">{% icon "lock", "size-3 inline -mt-0.5" %} {{ "read.gvr.saved_note" | t(lang) }}</p>
       </div>
 
-      {#- A short companion for the checklist: sticks beside it from 1024px (sticky-aside). -#}
-      <aside class="sticky-aside space-y-5" aria-label="{{ 'read.gvr.help_title' | t(lang) }}">
+      {#- A short companion for the checklist: sticks beside it from 1024px (sticky-aside). A <div>: an <aside>
+          in this named section was a landmark within a landmark; its cards' headings name them. -#}
+      <div class="sticky-aside space-y-5">
         <div class="card card-pad">
           <h3 class="card-h"><span>{% icon "video", "size-5" %}</span>{{ "read.gvr.help_title" | t(lang) }}</h3>
           <p class="mt-2 text-sm leading-relaxed text-muted">{{ "read.gvr.help_text" | t(lang) }}</p>
@@ -211,7 +212,7 @@ pageScripts: ["/assets/js/read.js"]
           <p class="mt-2 text-sm text-muted">{{ "read.gvr.contact_text" | t(lang) }}</p>
           <a class="link tap-link mt-1 break-all" href="mailto:{{ site.meeting.chair_email or site.contact_email }}">{{ site.meeting.chair_email or site.contact_email }}</a>
         </div>
-      </aside>
+      </div>
     </div>
   </div>
 </section>

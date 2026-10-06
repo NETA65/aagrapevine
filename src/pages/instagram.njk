@@ -52,9 +52,11 @@ pageScripts: ["/assets/js/media.js"]
   </template>
   {% endif %}
   {% if img %}
+  {#- The picture's alt text: empty when the caption is printed right under it (as the alt it was read twice),
+      else "A post from @…"; the link is named by "View on Instagram" (and the post's type) -#}
   <a x-show="!embed" href="{{ href }}" target="_blank" rel="noopener" class="ig-photo">
     <img src="{{ img }}" alt="" aria-hidden="true" loading="lazy" decoding="async" class="ig-photo-bg" onerror="this.style.display='none'">
-    <img src="{{ img }}" alt="{{ (cap | excerpt(140)) or fromLabel }}" width="480" height="600" loading="lazy" decoding="async" class="ig-photo-img" onerror="this.style.visibility='hidden'">
+    <img src="{{ img }}" alt="{{ '' if cap else fromLabel }}" width="480" height="600" loading="lazy" decoding="async" class="ig-photo-img" onerror="this.style.visibility='hidden'">
     {% if mt == "video" %}<span class="ig-type">{% micon "clapperboard", "size-4", "media.ig_type_video" | t(lang) %}</span>
     {% elif mt == "carousel" %}<span class="ig-type">{% micon "gallery-horizontal-end", "size-4", "media.ig_type_carousel" | t(lang) %}</span>{% endif %}
     <span class="sr-only">{{ "media.ig_view" | t(lang) }} ({{ "common.external" | t(lang) }})</span>

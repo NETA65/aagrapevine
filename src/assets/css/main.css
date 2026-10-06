@@ -95,6 +95,7 @@
   --color-muted: var(--c-muted);
   --color-faint: var(--c-faint);
   --color-line: var(--c-line);
+  --color-field: var(--c-field);      /* a text box's / dropdown's edge (input): ≥ 3:1, unlike line */
   --color-gv: var(--c-gv);            /* Grapevine / NETA blue — primary */
   --color-gv-strong: var(--c-gv-strong);
   --color-gv-soft: var(--c-gv-soft);
@@ -129,6 +130,9 @@
   --c-muted: #57526a;
   --c-faint: #6e6980;
   --c-line: #e6dfd2;
+  /* text boxes and dropdowns (input): their edge is what shows where to type, so it keeps ≥ 3:1 (WCAG 1.4.11)
+     against surface, surface-2 and paper in both themes (line is a soft 1.3:1 divider) */
+  --c-field: #857f95;
   --c-gv: #0a5fa8;
   --c-gv-strong: #07457c;
   --c-gv-soft: #e5f0fa;
@@ -150,6 +154,7 @@
   --c-muted: #b3adc4;
   --c-faint: #948ea6;
   --c-line: #312c40;
+  --c-field: #77728c;
   --c-gv: #6cb0ef;
   --c-gv-strong: #9ccbf5;
   --c-gv-soft: #16283d;
@@ -213,7 +218,7 @@
 /* High contrast: ink ≥ 15:1, muted text ≥ 12:1, borders ≥ 6:1 (light) / ≥ 6:1 (dark), accents ≥ 9:1 */
 :root[data-contrast="high"] {
   --c-paper: #ffffff; --c-surface: #ffffff; --c-surface-2: #f0ede6;
-  --c-ink: #000000; --c-muted: #22202c; --c-faint: #34313f; --c-line: #5f596d;
+  --c-ink: #000000; --c-muted: #22202c; --c-faint: #34313f; --c-line: #5f596d; --c-field: #5f596d;
   --c-gv: #063e73; --c-gv-strong: #042b52; --c-gv-soft: #e2edf9;
   --c-lv: #7a2b05; --c-lv-strong: #5c2003; --c-lv-soft: #fcebdc;
   --c-grape: #44206a; --c-grape-soft: #eee3f7;
@@ -222,7 +227,7 @@
 }
 :root[data-contrast="high"][data-theme="dark"] {
   --c-paper: #000000; --c-surface: #0b0a10; --c-surface-2: #17151f;
-  --c-ink: #ffffff; --c-muted: #ece9f6; --c-faint: #d8d4e6; --c-line: #9b95ae;
+  --c-ink: #ffffff; --c-muted: #ece9f6; --c-faint: #d8d4e6; --c-line: #9b95ae; --c-field: #9b95ae;
   --c-gv: #a9d2f8; --c-gv-strong: #d2e8fc; --c-gv-soft: #0e2238;
   --c-lv: #ffb47f; --c-lv-strong: #ffd3b2; --c-lv-soft: #2d1a0b;
   --c-grape: #dcc3f5; --c-grape-soft: #241834;
@@ -479,7 +484,8 @@
   & > * *, & > *::before { text-indent: 0; }
   & > *::before { content: "·"; content: "·" / ""; display: inline-block; width: 1.1em; text-align: center; color: var(--c-faint); } }
 
-@utility input { @apply min-h-11 w-full rounded-xl border border-line bg-surface px-4 text-ink placeholder:text-faint focus:border-gv focus:ring-2 focus:ring-gv/30 focus:outline-none; }
+/* (border-field: the box's edge stays visible, ≥ 3:1, in light, dark and high contrast) */
+@utility input { @apply min-h-11 w-full rounded-xl border border-field bg-surface px-4 text-ink placeholder:text-faint focus:border-gv focus:ring-2 focus:ring-gv/30 focus:outline-none; }
 
 @utility link { @apply font-medium text-gv underline decoration-gv/30 underline-offset-2 hover:decoration-gv; }
 @utility icon { display: inline-block; flex-shrink: 0; }
@@ -551,14 +557,15 @@
    tool, aside or facet column (sticky-aside / sticky-aside-xl below) · the Listen player + Short
    column (≥1440; the Short alone in shorter windows) · the month poster · a bulletin post's aside
    inside its wide card (areas/committee.css .cm-ann-side: the same rules as sticky-aside, decided
-   by the card's width) · the What's New filter bar (one line, z-20). Nothing else: no sticky page
+   by the card's width) · the What's New filter bar (z-20). Nothing else: no sticky page
    nav, no sticky section headers, no floating buttons. JS never switches sticky
    on and off (that shifts the layout): width AND height media queries decide it.
    z-index scale: content 0–10 · sticky bars and asides 20 · banner + mini-player 40 ·
    header 50 · phone drawer 60 · skip link 100.
-   Anchors: html { scroll-padding-top } (header + 1.5rem) is the ONLY offset — never add
-   scroll-mt-* to a section (it adds up). Exception: targets under a sticky filter bar get
-   scroll-mt-[4.5rem] (the bar's height only).
+   Anchors and keyboard focus: html { scroll-padding-top } (header + 1.5rem) is the ONLY offset —
+   never add scroll-mt-* to a section (it adds up). Exception: a page with a sticky filter bar adds
+   the bar's height to that padding (What's New: --wn-bar-h, areas/community.css), so a focused
+   link or a jump never lands under the bar.
 
    sticky-aside     a right (or left) column that sticks from 1024px, when the window is at least
                     40rem (640px) tall. It never grows taller than the window: it scrolls on its
@@ -949,6 +956,14 @@
   @media (width >= 96rem) { .gv-hero-sub { max-width: 50rem; } }
   /* White focus ring on the dark hero */
   .gv-hero :focus-visible, .page-hero :focus-visible { outline-color: #fff; }
+  /* …and in the site header, which lies over the hero at the top of the page (white words) and turns solid once
+     the page scrolls (ink words): the ring takes the header's own text colour, so it stands out on both — in
+     light, dark and high contrast (the blue ring was ≈ 1.6:1 on the hero). Its dropdown panels are ink on
+     surface, so their links get an ink ring. */
+  .site-header :focus-visible { outline-color: currentColor; }
+  /* Windows High Contrast drops the hero's gradient, scrim and fade but not the canvas art (string lights behind
+     system-coloured words): no art there, the hero's words sit on the plain system background */
+  @media (forced-colors: active) { .gv-hero-canvas { display: none !important; } }
 
   /* In-page navigation — ui.pageNav(): a card with "On this page" (label shown from 1280px) and
      ONE row of chip links that never wraps (chip-row-nowrap scrolls sideways with a fade).
@@ -1049,12 +1064,12 @@ main > :not(script, template, dialog, style):not(:has(~ :not(script, template, d
 @media print {
   :root { color-scheme: light !important; }
   :root[data-theme="dark"] {
-    --c-paper: #fbf8f2; --c-surface: #ffffff; --c-surface-2: #f4efe6; --c-ink: #1d1a26; --c-muted: #57526a; --c-faint: #6e6980; --c-line: #e6dfd2;
+    --c-paper: #fbf8f2; --c-surface: #ffffff; --c-surface-2: #f4efe6; --c-ink: #1d1a26; --c-muted: #57526a; --c-faint: #6e6980; --c-line: #e6dfd2; --c-field: #857f95;
     --c-gv: #0a5fa8; --c-gv-strong: #07457c; --c-gv-soft: #e5f0fa; --c-lv: #b8430b; --c-lv-strong: #8f3207; --c-lv-soft: #fdeee3;
     --c-grape: #5b2a86; --c-grape-soft: #f1e8f8; --c-vine: #2f6e2c; --c-vine-soft: #e7f3e3; --c-danger: #b42318;
   }
   :root[data-theme="dark"][data-contrast="high"] {
-    --c-paper: #ffffff; --c-surface: #ffffff; --c-surface-2: #f0ede6; --c-ink: #000000; --c-muted: #22202c; --c-faint: #34313f; --c-line: #5f596d;
+    --c-paper: #ffffff; --c-surface: #ffffff; --c-surface-2: #f0ede6; --c-ink: #000000; --c-muted: #22202c; --c-faint: #34313f; --c-line: #5f596d; --c-field: #5f596d;
     --c-gv: #063e73; --c-gv-strong: #042b52; --c-gv-soft: #e2edf9; --c-lv: #7a2b05; --c-lv-strong: #5c2003; --c-lv-soft: #fcebdc;
     --c-grape: #44206a; --c-grape-soft: #eee3f7; --c-vine: #1b4c19; --c-vine-soft: #e2f0dd; --c-danger: #8a1a11;
   }
@@ -1072,25 +1087,29 @@ main > :not(script, template, dialog, style):not(:has(~ :not(script, template, d
 /* The menu's "Dark mode" switch (partials/header.njk, the drawer's first row): the row is the button
    (role="switch", aria-checked), this is its picture — a track whose knob slides right and fills with
    --c-gv when dark mode is on. Off, the track is a 2px --c-faint ring around a --c-faint knob (≥ 4.5:1
-   on the drawer's surface in every theme, high contrast included: WCAG 1.4.11), so either state reads
-   without colour alone. rem sizes: it grows with the reading text size like the row's label (on the
-   narrowest phones at larger text the row's moon steps aside for the words: areas/access.css). */
-.site-switch {
+   on the drawer's surface and on the page in every theme, high contrast included: WCAG 1.4.11), so either
+   state reads without colour alone. rem sizes: it grows with the reading text size like the row's label (on
+   the narrowest phones at larger text the row's moon steps aside for the words: areas/access.css).
+   The pages' on / off switches (.cm-switch: Events "Show every date", Meetings "Nearby areas") are the same
+   picture drawn on their own checkbox (appearance: none; checked = on) — the soft grey track they had was
+   1.3:1 and vanished in Windows High Contrast. */
+.site-switch, .cm-switch {
   position: relative; flex-shrink: 0; width: 2.75rem; height: 1.5rem; border-radius: 9999px;
   border: 2px solid var(--c-faint); background: var(--c-surface); transition: background-color 0.15s, border-color 0.15s;
 }
-.site-switch::after {
+.cm-switch { appearance: none; -webkit-appearance: none; margin: 0; cursor: pointer; }
+.site-switch::after, .cm-switch::after {
   content: ""; position: absolute; top: 0.1875rem; left: 0.1875rem; width: 0.875rem; height: 0.875rem; border-radius: 9999px;
   background: var(--c-faint); transition: transform 0.15s, background-color 0.15s;
 }
-[aria-checked="true"] > .site-switch { border-color: var(--c-gv); background: var(--c-gv); }
-[aria-checked="true"] > .site-switch::after { transform: translateX(1.25rem); background: var(--c-surface); }
+[aria-checked="true"] > .site-switch, .cm-switch:checked { border-color: var(--c-gv); background: var(--c-gv); }
+[aria-checked="true"] > .site-switch::after, .cm-switch:checked::after { transform: translateX(1.25rem); background: var(--c-surface); }
 /* Windows High Contrast drops fills: the knob and the "on" track keep system colours */
 @media (forced-colors: active) {
-  .site-switch { border-color: ButtonText; }
-  .site-switch::after { background: ButtonText; forced-color-adjust: none; }
-  [aria-checked="true"] > .site-switch { border-color: Highlight; background: Highlight; forced-color-adjust: none; }
-  [aria-checked="true"] > .site-switch::after { background: HighlightText; }
+  .site-switch, .cm-switch { border-color: ButtonText; }
+  .site-switch::after, .cm-switch::after { background: ButtonText; forced-color-adjust: none; }
+  [aria-checked="true"] > .site-switch, .cm-switch:checked { border-color: Highlight; background: Highlight; forced-color-adjust: none; }
+  [aria-checked="true"] > .site-switch::after, .cm-switch:checked::after { background: HighlightText; }
 }
 
 /* Print: the site header prints once at the top (logo + name), not fixed over the content */
@@ -1099,6 +1118,9 @@ main > :not(script, template, dialog, style):not(:has(~ :not(script, template, d
   .site-header nav, .site-header button, .site-header [data-lang-switch], .site-header a[href*="search"] { display: none !important; }
   /* The phone menu lives at the end of <body> (x-teleport), outside .site-header */
   #mobile-drawer { display: none !important; }
+  /* …and the site footer not at all: its link lists, buttons and notices were an extra sheet under every page
+     (as on the digest and the share kit, which print without it: areas/community.css) */
+  .site-footer { display: none !important; }
 }
 
 /* Utility: hide scrollbar on horizontal scrollers */

@@ -411,8 +411,9 @@ class Layout(unittest.TestCase):
         # anchors for shared links / QR codes, the expiry item
         self.assertRegex(p, r'<article id="\{\{ a\._anchor \}\}" class="card cm-ann[^"]*"[^>]*aria-labelledby="\{\{ a\._anchor \}\}-h"')
         self.assertIn('<li class="min-w-0" data-gv-expire-item', p)
-        # DOM order: the text, then the aside (In this post, then the actions)
-        body, side, toc, actions = (p.index('class="cm-ann-main"'), p.index('<aside class="cm-ann-side">'),
+        # DOM order: the text, then the aside (In this post, then the actions) — a <div>: no landmark inside the
+        # page's named section (test_accessibility.Landmarks)
+        body, side, toc, actions = (p.index('class="cm-ann-main"'), p.index('<div class="cm-ann-side">'),
                                     p.index('class="cm-ann-toc"'), p.index('class="cm-ann-actions"'))
         self.assertLess(body, side)
         self.assertLess(side, toc)

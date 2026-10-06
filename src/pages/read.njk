@@ -283,15 +283,16 @@ pageScripts: ["/assets/js/read.js"]
       <p class="mt-3 text-center text-sm"><a class="link" href="{{ site.links.lv_home }}" target="_blank" rel="noopener">{{ "read.read_on" | t(lang, {site: site.links.lv_home | hostname}) }}</a></p>
     {% endif %}
 
-    {#- Paywall note — kind and clear -#}
-    <aside class="mt-8 flex flex-col gap-4 rounded-[var(--radius-card)] border border-line bg-surface-2 p-5 sm:flex-row sm:items-center sm:p-6" aria-label="{{ 'read.paywall_title' | t(lang) }}">
+    {#- Paywall note — kind and clear (a <div>: an <aside> in this named section was a landmark within a
+        landmark; its first line is its title) -#}
+    <div class="mt-8 flex flex-col gap-4 rounded-[var(--radius-card)] border border-line bg-surface-2 p-5 sm:flex-row sm:items-center sm:p-6">
       <span class="grid size-11 shrink-0 place-items-center rounded-full bg-surface text-grape ring-1 ring-line">{% ricon "key-round", "size-5" %}</span>
       <div class="flex-1">
         <p class="font-semibold text-ink">{{ "read.paywall_title" | t(lang) }}</p>
         <p class="measure mt-1 text-sm leading-relaxed text-muted">{{ "read.paywall_text" | t(lang) }}</p>
       </div>
       <a class="btn-primary shrink-0" href="{{ '/shop/' | lurl(lang) }}#subscriptions">{{ "read.paywall_cta" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
-    </aside>
+    </div>
   </section>
 
   {#- ---------- Archive ---------- -#}

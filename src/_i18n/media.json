@@ -221,7 +221,7 @@
   "media.ig_jump": { "en": "{name} posts", "es": "Publicaciones de {name}" },
   "media.ig_view": { "en": "View on Instagram", "es": "Ver en Instagram" },
   "media.ig_load_embed": { "en": "Show post here", "es": "Mostrar aquí" },
-  "media.ig_load_embed_aria": { "en": "Load this Instagram post on this page", "es": "Cargar esta publicación de Instagram en esta página" },
+  "media.ig_load_embed_aria": { "en": "Show post here: load this Instagram post on this page", "es": "Mostrar aquí: cargar esta publicación de Instagram en esta página" },
   "media.ig_hide_embed": { "en": "Hide post", "es": "Ocultar" },
   "media.ig_embed_title": { "en": "Instagram post from @{u}", "es": "Publicación de Instagram de @{u}" },
   "media.ig_posts_eyebrow": { "en": "On Instagram", "es": "En Instagram" },

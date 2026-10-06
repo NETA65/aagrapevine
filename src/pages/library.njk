@@ -177,7 +177,9 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js", "/assets/j
         <span class="inline-flex items-center gap-2">{% icon "sliders-horizontal", "size-4" %} {{ "library.filters" | t(lang) }} <span id="lib-facets-n" class="badge-gv" hidden>0</span></span>
         {% icon "chevron-down", "size-4 lib-chev" %}
       </button>
-      <aside id="lib-facets" class="lib-facets hidden lg:block" aria-label="{{ 'library.filters' | t(lang) }}">
+      {#- a <section> (a named region), not an <aside>: inside the page's named section an aside was a landmark
+          within a landmark -#}
+      <section id="lib-facets" class="lib-facets hidden lg:block" aria-label="{{ 'library.filters' | t(lang) }}">
         <h2 class="mb-4 hidden font-display text-xl font-semibold lg:block">{{ "library.filters_title" | t(lang) }}</h2>
         {% set groups = [["src", "library.facet_src", facets.src], ["lang", "library.facet_lang", facets.lang], ["cat", "library.facet_cat", facets.cat], ["year", "library.facet_year", facets.year]] %}
         {% for g in groups %}{% if g[2].length %}
@@ -187,7 +189,7 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js", "/assets/j
         </div>
         {% endif %}{% endfor %}
         <button type="button" id="lib-clear-all" class="btn-ghost btn-sm mt-2 w-full" hidden>{% icon "x", "size-4" %} {{ "library.clear_all" | t(lang) }}</button>
-      </aside>
+      </section>
     </div>
 
     {#- results -#}

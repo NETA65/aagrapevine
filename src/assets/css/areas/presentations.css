@@ -261,7 +261,8 @@ input.sr-only:focus-visible + .gvp-filelabel { outline: 3px solid #0a5fa8; outli
 .gvp-field { margin-top: 0.9rem; }
 .gvp-label { display: block; font-size: 0.8125rem; font-weight: 700; color: #1d1a26; }
 .gvp-hint { margin-top: 0.1rem; font-size: 0.75rem; line-height: 1.4; color: #57526a; }
-.gvp-input { display: block; width: 100%; min-height: 2.5rem; margin-top: 0.3rem; padding: 0.45rem 0.65rem; border: 1px solid #a8a1b5; border-radius: 0.5rem;
+/* (the box's edge: 3.8:1 on the white drawer — the site's text boxes' --c-field, main.css) */
+.gvp-input { display: block; width: 100%; min-height: 2.5rem; margin-top: 0.3rem; padding: 0.45rem 0.65rem; border: 1px solid #857f95; border-radius: 0.5rem;
   background: #fff; color: #1d1a26; font: inherit; font-size: 0.9375rem; line-height: 1.45; }
 .gvp-input::placeholder { color: #6e6980; }
 .gvp-input:focus { border-color: #0a5fa8; }

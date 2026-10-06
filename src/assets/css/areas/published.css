@@ -254,6 +254,11 @@
   transition: background-color 0.15s ease;
 }
 .pw-arc-row[hidden] { display: none; }
+/* "Show all" (≈1,300 rows of all of Texas) froze a slow phone for seconds while every row was laid out and
+   painted: a row far off the screen is skipped until it comes near (content-visibility), kept at about its own
+   height meanwhile (contain-intrinsic-size; "auto" remembers a row once it has been drawn), so the scrollbar
+   stays steady. Its words still count for find-in-page, the keyboard and screen readers; print draws them all. */
+.pw-arc-row { content-visibility: auto; contain-intrinsic-block-size: auto 8.5rem; }
 .pw-arc-row:hover { background: color-mix(in srgb, var(--c-surface-2) 55%, transparent); }
 @media (width >= 40rem) { .pw-arc-row { padding: 1rem 1.25rem 1.05rem; gap: 1rem; } }
 .pw-arc:is([data-scope="texas"], [data-scope="all"]) .pw-arc-row[data-scope="neta65"] { box-shadow: inset 4px 0 0 var(--c-vine); }
@@ -296,5 +301,5 @@
   .pw-filters, .pw-nudge, .pw-showall, .pw-empty-actions, .pw-tell-actions, .pw-arc-panel { display: none !important; }
   .pw-card { break-inside: avoid; box-shadow: none; }
   .pw-arc-rows { box-shadow: none; }
-  .pw-arc-row { break-inside: avoid; }
+  .pw-arc-row { break-inside: avoid; content-visibility: visible; }
 }

@@ -570,7 +570,8 @@ data-deadline="{{ r.deadline }}" data-t-days="{{ 'read.contrib.due_in' | t(lang)
         {% endfor %}
       </ol>
     </div>
-    <aside class="sticky-aside" aria-labelledby="anon-title">
+    {#- (a <div>: an <aside> in this named section was a landmark within a landmark; its h2 names the card) -#}
+    <div class="sticky-aside">
       <div class="card card-pad border-vine/30">
         <h2 id="anon-title" class="card-h"><span class="text-vine">{% icon "shield-check", "size-5" %}</span>{{ "read.contrib.anon_title" | t(lang) }}</h2>
         <p class="mt-2 leading-relaxed text-muted">{{ "read.contrib.anon_text" | t(lang) }}</p>
@@ -584,7 +585,7 @@ data-deadline="{{ r.deadline }}" data-t-days="{{ 'read.contrib.due_in' | t(lang)
           <p class="mt-1 font-display text-lg italic text-ink">{{ "read.contrib.sign_sample" | t(lang) }}</p>
         </div>
       </div>
-    </aside>
+    </div>
   </div>
 </section>
 

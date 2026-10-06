@@ -50,6 +50,25 @@
           var m = /[?&]type=([a-z]+)/.exec(location.search);
           if (m && this.days.some(function (d) { return d.counts[m[1]]; })) this.filter = m[1];
           this.updateStatus();
+          this.watchBar();
+        },
+        /* The sticky filter bar's height while it covers the feed, as --wn-bar-h on <html>: html's
+           scroll-padding-top adds it (community.css), so a link that gets keyboard focus — or a jump — never
+           lands under the bar. Its chips may wrap onto a second row on a desktop, so it is measured, not
+           guessed; 0 while it covers nothing: a window under 40rem tall (it scrolls away) or the
+           three-column layout (it is the left column). */
+        watchBar: function () {
+          var bar = this.$el.querySelector(".cm-chipbar"), feed = this.$el.querySelector(".cm-wn-feed");
+          if (!bar || !feed) return;
+          var html = document.documentElement;
+          var size = function () {
+            var b = bar.getBoundingClientRect(), f = feed.getBoundingClientRect();
+            var covers = getComputedStyle(bar).position === "sticky" && b.height > 0 && b.left < f.right && b.right > f.left;
+            html.style.setProperty("--wn-bar-h", covers ? Math.ceil(b.height) + "px" : "0px");
+          };
+          size();
+          if (window.ResizeObserver) new ResizeObserver(size).observe(bar);
+          window.addEventListener("resize", size);
         },
         count: function (d) { return this.filter ? d.counts[this.filter] || 0 : d.total; },
         /* Day heading "7 updates": the day's ITEMS of the chosen type (a magazine issue

@@ -201,12 +201,8 @@
     "es": "View in English"
   },
   "nav.switch_lang_aria": {
-    "en": "Ver este sitio en español",
-    "es": "View this site in English"
-  },
-  "nav.theme_aria": {
-    "en": "Switch light / dark mode",
-    "es": "Cambiar modo claro / oscuro"
+    "en": "ES, ver este sitio en español",
+    "es": "EN, view this site in English"
   },
   "nav.theme_dark": {
     "en": "Dark mode",
