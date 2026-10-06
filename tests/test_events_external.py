@@ -154,18 +154,28 @@ class Dates(unittest.TestCase):
                 ("del 2 al 4 de octubre de 2026", lv, ("2026-10-02", "2026-10-04")),
                 ("2 - 4 de octubre de 2026", lv, ("2026-10-02", "2026-10-04")),
                 ("02/10/2026 - 04/10/2026", lv, ("2026-10-02", "2026-10-04")),      # day first on aalavina.org
+                # Drupal's dates with times: the last piece with a whole day is the end
+                ("Thu, 10/01/2026 - 12:00 - Sun, 10/04/2026 - 12:00", GV + "2026-10-01/retreat", ("2026-10-01", "2026-10-04")),
                 ("October 2, 2026", gv, ("2026-10-02", None))):
             with self.subTest(when=when):
                 ev = written(when, url)
                 self.assertEqual((ev["start"], ev.get("end"), ev["all_day"]), (*want, True))
-        # a date that could be read two ways is said, with the page, in the notes main() puts in stats.warnings
+        # numbers that could be read two ways: the reading that gives the first day in the page's own address wins
+        # (/events/2026-05-10/… — on either site, whatever its usual order), and then there is nothing to say
         notes: list[str] = []
-        ev = written("10/05/2026", GV + "2026-10-05/workshop", notes)
+        for url, day in ((GV + "2026-10-05/workshop", "2026-10-05"), (GV + "2026-05-10/workshop", "2026-05-10"),
+                         (LV + "2026-05-10/taller", "2026-05-10"), (LV + "2026-10-05/taller", "2026-10-05")):
+            with self.subTest(url=url):
+                self.assertEqual(written("10/05/2026", url, notes)["start"], day)
+                self.assertEqual(written("10/05/2026 - 10/07/2026", url, notes)["start"], day)
+        self.assertEqual(written("10/05/2026 - 12/05/2026", LV + "2026-05-10/taller")["end"], "2026-05-12")
+        self.assertEqual(notes, [])
+        # …neither reading is the address's day: read month first, and said, with the page, in the notes main()
+        # puts in stats.warnings
+        ev = written("10/05/2026", GV + "2026-10-04/workshop", notes)
         self.assertEqual(ev["start"], "2026-10-05")
         self.assertEqual(len(notes), 1)
         self.assertTrue(notes[0].startswith("grapevine event workshop: “10/05/2026” could be October 5 or May 10"), notes)
-        written("10/05/2026", LV + "2026-05-10/taller", notes)              # La Viña: day first, nothing to say
-        self.assertEqual(len(notes), 1)
 
     def test_a_written_time_is_a_timed_event(self):
         ev = self.ev("2026-11-07T19:00:00-0600", "2026-11-07T21:00:00-0600", "November 7, 2026 7:00pm - 9:00pm")
@@ -309,7 +319,8 @@ class Runs(unittest.TestCase):
         self.assertNotIn(long_url, {i["url"] for i in self.run_on(date(2026, 10, 6), web)["items"]})
 
     def test_a_range_and_a_date_note_in_a_whole_run(self):
-        rng, odd = GV + "2026-10-09/fall-roundup", GV + "2026-10-05/workshop"
+        # (the odd page's address says Oct 4, its date "10/05/2026" — October 5 or May 10: neither is that day)
+        rng, odd = GV + "2026-10-09/fall-roundup", GV + "2026-10-04/workshop"
 
         def written(when: str) -> str:
             return (f'<h1>Roundup</h1><div class="field--name-field-daterange"><div class="field__item">{when}</div></div>'

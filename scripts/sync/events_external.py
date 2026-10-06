@@ -490,18 +490,29 @@ def parse_event(html: str, url: str, notes: list[str] | None = None) -> dict:
         ev["all_day"] = all_day
     else:
         # No JSON-LD: the written dates — a range too ("October 2 - 4, 2026", "del 2 al 4 de octubre de 2026"),
-        # numbers day first on La Viña's Spanish pages. A second whole day after a dash that the range reader
-        # does not join (a time between them, a weekday before it) is the end.
+        # numbers day first on La Viña's Spanish pages. A numbers-only date that could be read two ways is read
+        # the way that gives the first day in the page's own address (/events/2026-10-02/…): then nothing needs
+        # saying. When the range reader finds no end (a time between the days, a weekday before the second), the
+        # last piece after a dash that holds a whole day is the end: "Thu, 10/01/2026 - 12:00 - Sun, 10/04/2026 - 12:00".
         lang = "es" if site_of(url) == "lavina" else None
+        d0 = url_date(url)
         said: list[str] = []
         s_iso, e_iso, _rest = date_range_from_text(date_text, lang, said) if date_text else (None, None, "")
+        if d0 and s_iso:
+            for order in ([lang] if lang else []) + ["en", "es"]:      # "en": month first, "es": day first
+                s2, e2, _rest = date_range_from_text(date_text, order, [])
+                if s2 == d0.isoformat():
+                    s_iso, e_iso, lang, said = s2, e2, order, []
+                    break
         pieces = re.split(r"\s+[-–]\s+", date_text) if date_text else []
-        if s_iso and not e_iso and len(pieces) > 1:
-            e_iso = date_from_text(pieces[-1], lang, said)[0]
+        if s_iso and not e_iso:
+            for piece in reversed(pieces[1:]):
+                e_iso = date_from_text(piece, lang, said)[0]
+                if e_iso:
+                    break
         if notes is not None:
             where = urlparse(url).path.rstrip("/").rsplit("/", 1)[-1] or url
             notes += [line for n in said if (line := f"{site_of(url)} event {where}: {n}") not in notes]
-        d0 = url_date(url)
         ev["start"] = s_iso or (d0.isoformat() if d0 else None)
         if e_iso and ev["start"] and e_iso > ev["start"]:
             ev["end"] = e_iso

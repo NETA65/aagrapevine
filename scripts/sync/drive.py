@@ -50,8 +50,10 @@ LOOKS EMPTY although it held files is believed only when the next update finds i
 and a sudden drop of most files is held back for one run as well (common.save_raw).
 
 Not published = not named: what is left out (loose entries outside the panel folders, older
-panels, folders too deep or unreadable, excluded files) is only COUNTED in data/raw/drive.json
-and status.json, which are in the public repo; the names go to the run log.
+panels, folders too deep or unreadable, excluded files, a file that could not be read) is only
+COUNTED in data/raw/drive.json, status.json AND the run log — all public (the repository and its
+Actions logs). An unreadable folder or a failed file is logged by its Drive address (an id) and
+the folder above it, so it can still be found.
 
 Run:  python -m scripts.sync.drive [--include-loose] [--root ID] [--dry-run] [--no-api]
 """
@@ -1153,7 +1155,7 @@ def main(argv: list[str] | None = None) -> None:
         "panels": [p["label"] for p in c.panels],
         "panel_folders": c.panels,
         "include_loose": include_loose,
-        # what is NOT published is counted, never named (names: the run log)
+        # what is NOT published is counted, never named (in the run log neither)
         "loose_skipped": c.loose_skipped,
         "skipped_panels": sorted(set(c.skipped_panels)),
         "folders": len(c.listed_ok),

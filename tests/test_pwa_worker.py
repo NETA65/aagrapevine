@@ -1202,9 +1202,14 @@ R.feedAsked = asked(FEED);
 // online: the site's answer, which becomes the copy
 w.page(ICS, cal(2));
 R.online = (await w.request(ICS)).body;
+// a tap on the page's link is a NAVIGATION to the file: the same route (never the page handler)
+R.onlineTap = (await w.request(ICS, { navigate: true })).body;
 // offline: the copy; the feed and a month not saved are not answered by the worker (straight to the network)
 for (const u of [ICS, FEED, ELSEWHERE]) w.net.delete(ORIGIN + u);
 R.offline = await w.request(ICS);
+R.offlineTap = await w.request(ICS, { navigate: true });
+// a month not saved, its link tapped offline: the offline page, as for any page not saved
+R.elsewhereTap = await w.request(ELSEWHERE, { navigate: true });
 R.feed = await w.request(FEED);
 w.page(ELSEWHERE, cal("ELSEWHERE"));
 R.elsewhere = (await w.request(ELSEWHERE)).body;
@@ -1256,12 +1261,18 @@ class MonthCalendar(unittest.TestCase):
         self.assertIn("X-V:2", r["online"])
         self.assertEqual(r["offline"]["status"], 200)
         self.assertIn("X-V:2", r["offline"]["body"], "the copy the last online answer left")
+        # the link tapped (a navigation): the file too — online the site's, offline the copy, never the offline page
+        self.assertIn("X-V:2", r["onlineTap"])
+        self.assertEqual(r["offlineTap"]["status"], 200)
+        self.assertIn("X-V:2", r["offlineTap"]["body"])
+        self.assertNotIn("OFFLINE-EN", r["offlineTap"]["body"])
         self.assertIn("X-V:3", r["refreshed"], "the page opened online again brings its file up to date")
 
     def test_feeds_and_months_not_saved_are_left_alone(self):
         r, m = self.r, self.r["month"]
         self.assertIsNone(r["feed"], "/events.ics: not answered by the worker")
         self.assertIn("X-V:ELSEWHERE", r["elsewhere"], "a month not saved: the network")
+        self.assertIn("OFFLINE-EN", r["elsewhereTap"]["body"], "its link tapped offline: the offline page")
         self.assertEqual(r["assetsAfter"], [f"{B}monthly/{m}/neta65-grapevine-{m}-en.ics"], "and never kept")
 
     def test_this_month_is_the_month_in_the_sites_zone(self):

@@ -165,9 +165,10 @@ self.addEventListener("fetch", (event) => {
   // the booth display's photos and videos: its saved copy first — byte ranges too (a video plays offline)
   if (url.pathname.startsWith(BASE + BOOTH.media)) { event.respondWith(boothMedia(event, url)); return; }
   if (req.headers.has("range")) return;
-  if (req.mode === "navigate") { event.respondWith(page(event, url)); return; }
   const p = url.pathname;
+  // (before the pages: the month page's link to it is followed as a navigation — a tap on it is one)
   if (MONTH_ICS.test(p)) { event.respondWith(calendarFile(event, url)); return; }
+  if (req.mode === "navigate") { event.respondWith(page(event, url)); return; }
   if (/\/sw\.js$|\/build\.json$|\.(webmanifest|xml|ics|txt)$/.test(p)) return;
   if (p === BASE + BOOTH.json) { event.respondWith(boothJson(event, url)); return; }
   if (/\.json$/.test(p)) { event.respondWith(networkFirst(event)); return; }
@@ -639,13 +640,14 @@ async function keepCalendars(html, pageUrl) {
     } catch (e) { /* offline again: the copy there is stays */ }
   }));
 }
-// A month's calendar file asked for: kept with its saved page → NETWORK FIRST (the answer replaces the copy), that
-// copy offline, on a server error or after 6 s; not kept → the network, as without a worker (nothing is kept)
+// A month's calendar file asked for — a tap on the page's link is a navigation: kept with its saved page → NETWORK
+// FIRST (the answer replaces the copy), that copy offline, on a server error or after 6 s; not kept → the network,
+// as without a worker (nothing is kept; a tap on the link offline gets the offline page, as any page not saved)
 async function calendarFile(event, url) {
   const key = url.origin + url.pathname;
   const cache = await caches.open(CACHE.savedAssets);
   const hit = await cache.match(key);
-  if (!hit) return fetch(event.request);
+  if (!hit) return event.request.mode === "navigate" ? page(event, url) : fetch(event.request);
   return fromNetwork(event, hit, (copy) => cache.put(key, copy));
 }
 
