@@ -56,13 +56,16 @@ export function iconSvg(name, cls = "size-5", label = "") {
 
 /** A page with its sprite: the <symbol>s of every icon it points at, in one hidden <svg> right after <body> (before
     every icon, so each draws as soon as it arrives on a weak signal). A page that points at none is returned as it
-    is, and so is one that has its sprite already. */
+    is, and so is one that has its sprite already (its <svg data-icon-sprite>: the words alone, in a script or a
+    how-to, don't count). <body>'s end is found past quoted attribute values (an x-data="… a > b …" holds a ">"). */
+const SPRITE = /<svg data-icon-sprite[\s>]/;
+const BODY = /<body\b(?:[^>"']|"[^"]*"|'[^']*')*>/i;
 export function iconSprite(html) {
-  if (html.includes("data-icon-sprite")) return html;
+  if (SPRITE.test(html)) return html;
   const symbols = [...new Set(Array.from(html.matchAll(REF), (m) => m[1]))].sort()
     .map((n) => { const p = iconParts(n); return p ? `<symbol id="i-${n}"${p.viewBox}>${p.body}</symbol>` : ""; }).join("");
   if (!symbols) return html;
   const sprite = `<svg data-icon-sprite xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">${symbols}</svg>`;
-  const body = /<body\b[^>]*>/i.exec(html);
+  const body = BODY.exec(html);
   return body ? html.slice(0, body.index + body[0].length) + sprite + html.slice(body.index + body[0].length) : html + sprite;
 }

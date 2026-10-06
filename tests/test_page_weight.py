@@ -94,6 +94,9 @@ r.again = page("/site/index.html", r.page);
 r.none = page("/site/plain/index.html", "<!doctype html><html><body><p>No icons</p></body></html>");
 r.xml = page("/site/feed.xml", html);
 r.fragment = page("/site/frag.html", icon("x"));
+// a ">" inside one of <body>'s attribute values (Alpine), and the sprite's name only as words in a script
+r.alpine = page("/site/a/index.html", `<html><head><script>document.querySelector("[data-icon-sprite]")</script></head>` +
+  `<body x-data="{ wide: innerWidth > 640 }" class='a>b'><main>${icon("menu")}</main></body></html>`);
 r.warned = warned;
 console.warn = warn;
 out(r);
@@ -167,6 +170,14 @@ class Icons(unittest.TestCase):
         frag = self.r["fragment"]
         self.assertTrue(frag.startswith("<svg class=\"icon"), "a fragment without <body> keeps its start")
         self.assertIn('<symbol id="i-x"', frag)
+
+    def test_the_sprite_goes_after_the_whole_body_tag_whatever_its_attributes_hold(self):
+        page = self.r["alpine"]
+        self.assertIn("<body x-data=\"{ wide: innerWidth > 640 }\" class='a>b'><svg data-icon-sprite ", page,
+                      "after <body …>'s own end, not inside an attribute value that holds a \">\"")
+        self.assertEqual(page.count("<svg data-icon-sprite"), 1,
+                         "the words data-icon-sprite in a script are not a sprite: the page still gets one")
+        self.assertIn('<symbol id="i-menu"', page)
 
 
 # ------------------------------------------------------------------------------------------ the poster's picture
@@ -389,12 +400,12 @@ class BuiltSite(unittest.TestCase):
         for url, html in self.pages.items():
             pointed = set(re.findall(r'href=(?:"|\\"|&quot;)#(i-[a-z0-9-]+)', html))
             with self.subTest(page=url):
-                self.assertLessEqual(html.count("data-icon-sprite"), 1)
+                self.assertLessEqual(html.count("<svg data-icon-sprite"), 1)
                 if not pointed:
-                    self.assertNotIn("data-icon-sprite", html)
+                    self.assertNotIn("<svg data-icon-sprite", html)
                     continue
                 with_sprite += 1
-                m = re.search(r"<body\b[^>]*>(<svg data-icon-sprite [^>]*>)(.*?)</svg>", html, re.S)
+                m = re.search(r"""<body\b(?:[^>"']|"[^"]*"|'[^']*')*>(<svg data-icon-sprite [^>]*>)(.*?)</svg>""", html, re.S)
                 self.assertIsNotNone(m, "the sprite is the first thing in <body>")
                 self.assertIn('aria-hidden="true"', m.group(1))
                 symbols = dict(re.findall(r'<symbol id="(i-[a-z0-9-]+)"[^>]*>(.*?)</symbol>', m.group(2), re.S))
