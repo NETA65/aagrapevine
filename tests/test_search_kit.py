@@ -4,7 +4,7 @@ indexes (tests/fixtures/search: titles only):
 
   * Spanish ñ  — "Año" finds the años (and "40 Años, 9 padrinos" first), never "Anonimato …" or "Alcohólicos
                  Anónimos"; a query typed without the tilde ("ano", "vina") still finds the ñ words; the
-                 highlight marks the word found, ñ or not
+                 highlight marks the word found, ñ or not; "Did you mean …?" gives a ñ word once, with its ñ
   * the other language — AA's own words (search.js BILINGUAL): "sponsor" on the English page also finds "padrino",
                  "reuniones" finds "meeting", "big book" finds "Libro Grande"; those matches come after the ones on
                  the words typed (alt), in the Library too; a query with none of those words runs as before
@@ -84,6 +84,7 @@ out({
   hl: [K.highlight("40 Años, 9 padrinos", ["años"]), K.highlight("Anonimato y medios", ["año"]), K.highlight("El mejor año", ["ano"]),
        K.highlight("Alcohólicos Anónimos", ["anonimos"]), old.K.highlight("El mejor año de mi vida", ["año"])],
   enAno: en.find("año"),
+  suggest: [K.suggest(es.ms, "vinaa"), K.suggest(es.ms, "anoss")],
 });
 """, data={"es": index("es"), "en": index("en")}, needs_modules=False)
         self.r = SpanishEnye.r
@@ -118,6 +119,10 @@ out({
         self.assertEqual(hl[1], "Anonimato y medios")                                # "año" never marks "Anonimato"
         self.assertEqual(hl[2], "El mejor <mark>año</mark>")                         # the index's "ano" for "año"
         self.assertEqual(hl[3], "Alcohólicos <mark>Anónimos</mark>")
+
+    def test_did_you_mean_gives_the_word_once_with_its_enye(self):
+        # a ñ word is in the index under both spellings: "Did you mean …?" says it once, as it is written
+        self.assertEqual(self.r["suggest"], ["viña", "años"])                       # (not "viña vina", "años anos")
 
     def test_older_browsers_without_unicode_classes(self):
         # P5-7: a browser without \p{…} in regular expressions — search.js still loads and searches

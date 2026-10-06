@@ -1620,13 +1620,17 @@
     node.src = src;
     if (kind === "img" && node.decode) node.decode().catch(function () { /* the error event says it */ });
   }
-  /** The element loaded ahead for this picture or clip (once: its slide keeps it), or null. */
+  /** The element loaded ahead for this picture or clip (its slide keeps it), or null. It stays E.warm until the
+   *  slide is drawn for good (E.show: releaseWarm) — a sound slide drawn again in one language takes it again,
+   *  never a second copy loading beside it. */
   function takeWarm(E, kind, src) {
     var w = E && E.warm;
     if (!w || w.kind !== kind || w.src !== src || w.failed) return null;
-    E.warm = null;
+    w.taken = true;
     return w.node;
   }
+  /** The slide is drawn: the element it took is its own now. */
+  function releaseWarm(E) { if (E.warm && E.warm.taken) E.warm = null; }
   /** Nothing loading ahead any more (a clip stops its download). */
   function dropWarm(E) {
     var w = E.warm;
@@ -2144,6 +2148,7 @@
       var R = makeR(langs);
       var built = draw(R);
       if (!built || !built.node) {
+        releaseWarm(E);
         E.fails += 1;
         if (item.id && item.id !== "auto:about") FAILED[item.id] = now();
         clearTimeout(E.timers.skip);
@@ -2204,6 +2209,7 @@
           fitSlide(node);
         }
       }
+      releaseWarm(E);
       var total = built.seconds || durationOf(item, eff, lmode);
       var rv = built.reveal ? revealOf(item, eff, lmode) : 0;
       if (E.mode === "card") { total = Math.min(total, 7); rv = rv ? Math.min(rv, 4) : 0; }

@@ -305,9 +305,10 @@ function refreshOffline(url) {
 
 /* The pages saved for offline ("Save key pages", the booth display's About page) stay fresh: one opened online is
    kept again then (keepPage); one not opened for a WEEK is fetched again in the background, once a page opened
-   online shows there is a signal — one page at a time, each given SETTLE_TIMEOUT, with its styles and scripts
-   (keepAssets), and the first that fails ends the round (the signal is weak again: the next round tries). A page
-   gone (404) or moved elsewhere keeps its copy as it is. Looked at most every 6 hours, one round at a time. */
+   online shows there is a signal — one page at a time, each given SETTLE_TIMEOUT, and its styles and scripts
+   (keepAssets) SETTLE_TIMEOUT more; the first that fails or is too slow ends the round (the signal is weak again:
+   the next round tries). A page gone (404) or moved elsewhere keeps its copy as it is, and so does one whose files
+   did not all come (the old copy opens whole offline). Looked at most every 6 hours, one round at a time. */
 const SAVED_REFRESH = 7 * 24 * 3600e3;
 let savedLooked = 0, savedRound = null;
 function refreshSaved() {
@@ -330,7 +331,14 @@ function refreshSaved() {
         });
       } catch (e) { break; }
       if (!copy) continue;
-      await keepAssets(await copy.clone().text(), req.url);
+      // its styles and scripts (a new version's, after a deploy) within the time limit too — and the new copy only
+      // replaces the old one when they are all there: without them it would open offline unstyled, its scripts gone
+      const html = await copy.clone().text();
+      let whole = false;
+      try {
+        whole = await within(SETTLE_TIMEOUT, async () => { await keepAssets(html, req.url); return assetsKept(html, req.url); });
+      } catch (e) { break; }
+      if (!whole) continue;
       await saved.put(req.url, copy);
       fresh += 1;
     }
@@ -578,6 +586,13 @@ async function keepAssets(html, pageUrl) {
     } catch (e) { /* offline again */ }
   }));
   return added;
+}
+// Every style and script the page asks for is among the saved pages' files (a font may be missing: the page shows
+// in the device's own)
+async function assetsKept(html, pageUrl) {
+  const cache = await caches.open(CACHE.savedAssets);
+  for (const u of assetUrls(html, pageUrl)) if (/\.(css|js)$/.test(new URL(u).pathname) && !(await cache.match(u))) return false;
+  return true;
 }
 
 /* Keep only the files the saved pages still ask for (older versions' files go once no saved copy

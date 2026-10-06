@@ -25,7 +25,9 @@
 //                                               max_bytes, timeout_ms }]   (estimate: a picture's guess, a video's
 //                                               or sound file's size — 0 when booth.json gives none: the
 //                                               downloader then caps it at the room really left)
-//                                   reuse     [{ file_id, name, kind, group, file, bytes }]   (kept from last run)
+//                                   reuse     [{ file_id, name, kind, group, file, bytes }]   (kept from last run;
+//                                               a picture only when it is a raster one by its name — one an older
+//                                               run kept as an SVG is downloaded again, and checked)
 //                                   delete    ["<name in files/>", …]   (no longer listed, or not ours)
 //                                   skipped   [{ file_id, name, kind, code, reason }]
 //                                   bytes     the folder's size once done, as far as it is known before the
@@ -205,6 +207,9 @@ const TYPE_BY_EXT = {
   wav: "audio/wav", flac: "audio/flac",
 };
 const SAME_EXT = { jpeg: "jpg" };
+// A saved picture's name ends in one of these (the raster kinds, PICTURE_TYPES): an older run's .svg or .bmp is not kept
+const PICTURE_EXT = new Set(["jpg", "jpeg", "png", "webp", "gif", "avif"]);
+const isPictureFile = (name) => PICTURE_EXT.has((/\.([A-Za-z0-9]{1,5})$/.exec(String(name ?? "")) || [])[1]?.toLowerCase());
 
 export const baseType = (contentType) => String(contentType ?? "").split(";")[0].trim().toLowerCase();
 
@@ -324,7 +329,7 @@ export function plan(booth, cfg, cached) {
       continue;
     }
     const hit = byStamp.get(stampOf(item));
-    if (hit && !kept.has(hit.name)) {
+    if (hit && !kept.has(hit.name) && (group !== "picture" || isPictureFile(hit.name))) {
       const bytes = hit.bytes ?? 0;
       if (group === "media" && bytes > limits.fileBytes) { skip("too_big", { bytes, limit: limits.fileBytes }); continue; }
       if (used + bytes > limits.totalBytes) { skip("over_limit", { limit: limits.totalBytes }); continue; }

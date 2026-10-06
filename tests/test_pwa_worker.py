@@ -32,7 +32,8 @@
                  first, then the booth's copy, then the data cache's.
   * fresh      — saved pages not opened for a week are fetched again once a page opened online shows there
                  is a signal: one at a time, the first that fails ends the round, at most every 6 hours; a
-                 page gone (404) keeps its copy (class Updates).
+                 page gone (404), or one whose new styles and scripts did not all come, keeps its copy (class
+                 Updates).
   * the page   — pwa.js's side, run against a pretend page and worker: "Save key pages" gives up only
                  after 45 s without news from the worker (a weak signal saves slowly, not never), ignores
                  what a save it gave up on still says (a worker ready only by then gets no SAVE) and saves
@@ -484,6 +485,33 @@ const kept = async (w, p) => ((await w.keys("gvlv-pages-v1")) || []).includes(OR
   await k.request(B + "accessibility/", { navigate: true });
   R.refresh.later = { copies: copies(), asked: asked(from) };
   R.refresh.stamped = Math.abs(Date.now() - Date.parse(entry("shop/").headers.find(([n]) => n === "x-gvlv-saved")[1])) < 60e3;   // (stamped now)
+}
+
+/* ---------------- a saved page whose new copy's own files don't come keeps its old copy ---------------- */
+{
+  const k = world();
+  shellOnline(k);
+  await k.lifecycle("install");
+  k.page(B + "shop/", { body: html("shop", "OLD-shop") });
+  k.page(B + "meetings/", { body: html("meetings", "OLD-meetings") });
+  await k.message({ type: "SAVE", lang: "en" });
+  const entry = (p) => k.store.get("gvlv-saved-v1").m.get(ORIGIN + B + p);
+  for (const p of ["shop/", "meetings/"]) {
+    const e = entry(p);
+    e.headers = e.headers.map(([n, v]) => [n, n === "x-gvlv-saved" ? new Date(Date.now() - 8 * 864e5).toISOString() : v]);
+  }
+  const copy = (p) => marker({ body: new TextDecoder().decode(entry(p).body) });
+  const SCRIPT = `<script src="${B}assets/js/shop.js?v=t2"></script>`;                 // a new version's script …
+  k.page(B + "shop/", { body: html("shop", "NEW-shop" + SCRIPT) });                    // … not reachable yet
+  k.page(B + "meetings/", { body: html("meetings", "NEW-meetings") });
+  k.page(B + "accessibility/", { body: html("Accessibility", "A11Y") });
+  await k.request(B + "accessibility/", { navigate: true });
+  R.partial = { shop: copy("shop/"), meetings: copy("meetings/") };
+  k.page(B + "assets/js/shop.js?v=t2", { body: "/* shop */", ct: "text/javascript" });   // there now
+  k.skew(7 * 3600e3);
+  await k.request(B + "accessibility/", { navigate: true });
+  R.partial.later = copy("shop/");
+  R.partial.script = ((await k.keys("gvlv-saved-assets-v1")) || []).includes(ORIGIN + B + "assets/js/shop.js?v=t2");
 }
 out(R);
 """
@@ -1138,6 +1166,14 @@ class Updates(unittest.TestCase):
         self.assertEqual(r["later"]["copies"], {"home": "NEW-home", "meetings": "NEW-meetings", "monthly": "OLD-monthly",
                                                 "contribute": "OLD-contribute", "shop": "NEW-shop"})
         self.assertTrue(r["stamped"])
+
+    def test_a_new_copy_whose_files_did_not_come_leaves_the_old_one(self):
+        # the old copy opens whole offline; the new one, without its new script, would not: it waits for the next round
+        r = self.r["partial"]
+        self.assertEqual(r["shop"], "OLD-shop")
+        self.assertEqual(r["meetings"], "NEW-meetings")
+        self.assertTrue(r["later"].startswith("NEW-shop"), r["later"])
+        self.assertTrue(r["script"])
 
 
 MEDIA = B + "about/booth/media/"

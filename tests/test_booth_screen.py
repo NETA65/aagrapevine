@@ -10,6 +10,7 @@
   * on the booth's own screen the next video starts loading ahead too (muted, preload auto) and its slide plays that
     very element — but not while a clip plays (two would share the signal); "Preview here" never loads a clip ahead
   * with Data saver on and a connection nothing is loaded ahead (offline, the saved copy answers at no cost: it is)
+  * a sound loaded ahead is the one its slide plays, also when the slide is drawn again in one language
 
     python -m unittest tests.test_booth_screen -v        (or: python -m unittest discover -s tests)
 """
@@ -215,6 +216,49 @@ class ClipsAhead(unittest.TestCase):
             if s["clip"]:
                 # its video was made by its own slide, not ahead
                 self.assertEqual(s["el"], r["log"][k - 1].get("madeAtEnd", r["log"][k - 1]["made"]), r["log"])
+
+
+# The booth's own screen with its sound on, on a screen too small for a slide in two languages (every box 100 px, its
+# words 1000 px tall): a sound slide is drawn again in one language. Each <audio> made, with its address and its plays.
+SOUND_JS = PAGE_JS + r"""
+const cfg = { lang: "en", base: "/aagrapevine/", json: "/aagrapevine/about/booth.json", build: "/aagrapevine/build.json", t: {}, screen: { en: {}, es: {} } };
+const fetch = (u) => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(JSON.parse(JSON.stringify(input.show))), body: null });
+const p = page({ html: input.html.replace("__CFG__", JSON.stringify(cfg)), url: "https://example.test/aagrapevine/about/?booth=start",
+                 globals: { fetch, SITE: { lang: "en", base: "/aagrapevine/" }, navigator: { userActivation: { hasBeenActive: true } } },
+                 scripts: ["src/assets/js/booth-core.js", "src/assets/js/booth.js"] });
+const proto = p.win.Element.prototype;
+Object.defineProperty(proto, "clientHeight", { get() { return 100; } });
+Object.defineProperty(proto, "clientWidth", { get() { return 100; } });
+Object.defineProperty(proto, "scrollHeight", { get() { return 1000; } });
+const made = [];
+const create = p.doc.createElement.bind(p.doc);
+p.doc.createElement = (t) => { const e = create(t); if (t === "audio") made.push(e); return e; };
+await p.ready();
+const seen = [];
+for (let i = 0; i < 160; i++) {
+  await p.tick(250);
+  const st = p.$(".gvb-stage");
+  const s = st ? st.children.filter((n) => !n.classList.contains("is-out")) : [];
+  const c = s[s.length - 1];
+  const title = c ? c.getAttribute("aria-label") : null;
+  if (seen[seen.length - 1] !== title) seen.push(title);
+}
+out({ seen, audio: made.map((a) => ({ src: a.getAttribute("src"), played: a._played || 0 })), errors: p.errors.map(String) });
+"""
+
+
+class SoundAhead(unittest.TestCase):
+    def test_a_sound_loaded_ahead_is_the_one_its_slide_plays(self):
+        # its slide drawn twice (two languages that don't fit, then one): the sound loaded ahead is taken both times —
+        # no second copy downloading beside it, none left loading once the slide has gone
+        snd = item("drive:a1", "audio", "sounds", "A sound", langs=["en", "es"], es=words("Un sonido"),
+                   media=media("audio", f"{B}about/booth/media/a1.mp3", local=True))
+        s = show([photo(1, first=True), snd, photo(2), photo(3)])
+        s["defaults"] = {"sound": True, "lang": "both"}
+        r = run_js(self, SOUND_JS, data={"html": FULL_HTML, "show": s}, needs_modules=False)
+        self.assertEqual(r["errors"], [])
+        self.assertIn("A sound", r["seen"])
+        self.assertEqual(r["audio"], [{"src": None, "played": 1}])               # one, played, emptied when it went
 
 
 SAVER_JS = BOOTH_JS + r"""

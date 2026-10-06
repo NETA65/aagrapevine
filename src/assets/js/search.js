@@ -208,12 +208,18 @@
       return { hits: hits, partial: partial };
     },
 
-    /* "Did you mean …?" — best fuzzy suggestion that differs from the query. */
+    /* "Did you mean …?" — best fuzzy suggestion that differs from the query. A word with ñ is in the index
+       under both spellings (indexTerm): it is suggested once, with its ñ ("español", not "español espanol"). */
     suggest: function (ms, q) {
       try {
         var s = ms.autoSuggest(q, { fuzzy: 0.34, prefix: false, combineWith: "AND" });
         var nq = norm(q).trim();
-        for (var i = 0; i < s.length && i < 5; i++) if (norm(s[i].suggestion) !== nq) return s[i].suggestion;
+        for (var i = 0; i < s.length && i < 5; i++) {
+          var ws = s[i].suggestion.split(" "), enye = {};
+          ws.forEach(function (w) { if (plainN(w) !== w) enye[plainN(w)] = 1; });
+          var one = ws.filter(function (w, k) { return !enye[w] && ws.indexOf(w) === k; }).join(" ");
+          if (norm(one) !== nq) return one;
+        }
       } catch (e) {}
       return "";
     },

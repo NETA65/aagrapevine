@@ -500,6 +500,17 @@ class RasterOnly(unittest.TestCase):
         got = core(self, '[C.extFor("image/svg+xml", ""), C.extFor("", "logo.svg"), C.typeForExt("svg"), C.extOf("image/svg+xml", "logo.svg", "image/svg+xml"), C.extFor("image/avif", "")]')
         self.assertEqual(got, ["", "", "application/octet-stream", "bin", "avif"])
 
+    def test_an_svg_an_older_run_kept_is_not_published_again(self):
+        # saved before this rule (the Actions cache keeps the folder from run to run): downloaded again — and checked —
+        # instead of kept by its stamp; the old file goes
+        cached = [{"name": "st1-logo.svg", "bytes": 100}, {"name": "st2-poster.png", "bytes": 100},
+                  {"name": "st3-scan.bmp", "bytes": 100}, {"name": "st4-clip.mp4", "bytes": 100}]
+        rows = [item(1, "photo"), item(2, "poster"), item(3, "poster"), item(4, "video", size_bytes=100)]
+        p = core(self, "C.plan({ items: input.items }, {}, input.cached)", {"items": rows, "cached": cached})
+        self.assertEqual([r["file"] for r in p["reuse"]], ["st2-poster.png", "st4-clip.mp4"])
+        self.assertEqual(ids(p["downloads"]), ["F000000001", "F000000003"])
+        self.assertEqual(sorted(p["delete"]), ["st1-logo.svg", "st3-scan.bmp"])
+
 
 # ---------------------------------------------------------------------------------------------------------- results
 class Results(unittest.TestCase):
