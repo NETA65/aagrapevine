@@ -1,28 +1,40 @@
 """PDF inspection for the crawler (scripts/sync/crawl.py).
 
-  * head_from_response() – status / size / type / Last-Modified from any HTTP response
-  * download_pdf()       – streaming GET with a size cap and a time cap
-  * analyze_pdf()        – pypdfium2: metadata title, page count, text of pages 1-2 (also page by
-                           page, so a bilingual sheet can be told from a one-language document),
-                           and a small WebP thumbnail of page 1 (Pillow)
+  * head_from_response()   – status / size / type / Last-Modified from any HTTP response
+  * download_pdf()         – streaming GET with a size cap and a time cap
+  * analyze_pdf()          – pypdfium2: metadata title, page count, text of pages 1-2 (also page by
+                             page, so a bilingual sheet can be told from a one-language document),
+                             and a small WebP thumbnail of page 1 (Pillow)
+  * analyze_pdf_isolated() – analyze_pdf() in a separate process with a time limit and, on Linux, a
+                             memory limit: a file that crashes or hangs the PDF reader costs that one
+                             document, never the crawl (the crawler uses this one)
 
 Nothing here raises for a bad file: every function returns an error string instead.
 Personal metadata (Author, Creator…) is deliberately NOT read — AA anonymity.
+
+    python -m scripts.sync.crawl_pdf --analyze [--thumb FILE] [--memory-mb N] < file.pdf
+        (the child process: prints analyze_pdf()'s result as one line of JSON)
 """
 from __future__ import annotations
 
+import argparse
 import io
+import json
+import subprocess
+import sys
 import time
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 
-from .common import clean_text, now_iso, to_iso
+from .common import ROOT, clean_text, now_iso, to_iso
 
 THUMB_WIDTH = 360          # px — cards show ~180-240 px, so this is sharp on retina screens
 THUMB_QUALITY = 65         # WebP quality → ~8-25 KB per thumbnail
 THUMB_MAX_RATIO = 1.6      # very tall first pages are cropped to the top (height ≤ 1.6 × width)
 TEXT_PAGES = 2             # pages of text sampled for language / title detection
 TEXT_MAX_CHARS = 4000
+PARSE_TIMEOUT_S = 60       # one document's analysis (a separate process; usually 1-3 s) …
+PARSE_MEMORY_MB = 2048     # … and the memory it may use (Linux only: RLIMIT_DATA, see limit_memory)
 
 
 def http_date_iso(value: str | None) -> str | None:
@@ -180,3 +192,88 @@ def analyze_pdf(data: bytes, thumb_file: Path | None) -> dict:
         except Exception:
             pass
     return out
+
+
+# --------------------------------------------------------------------------- the reader in a child process
+def limit_memory(mb: int) -> bool:
+    """Cap this process's memory at `mb` MB. Linux: RLIMIT_DATA — the heap and every private writable
+    mapping, i.e. memory really in use; address space that is only reserved (as some allocators do up
+    front) does not count, so a limit on it (RLIMIT_AS) could break the reader for every file.
+    An allocation beyond the cap fails (Python: MemoryError) instead of the machine running out of
+    memory. Elsewhere (Windows) nothing happens → False."""
+    if not sys.platform.startswith("linux") or not mb or mb <= 0:
+        return False
+    try:
+        import resource
+        _soft, hard = resource.getrlimit(resource.RLIMIT_DATA)
+        want = int(mb) * 1024 * 1024
+        if hard != resource.RLIM_INFINITY:
+            want = min(want, hard)
+        resource.setrlimit(resource.RLIMIT_DATA, (want, hard))
+        return True
+    except (ImportError, ValueError, OSError):
+        return False
+
+
+def _child_argv(thumb_file: Path | None, memory_mb: int | None) -> list[str]:
+    argv = [sys.executable, "-m", "scripts.sync.crawl_pdf", "--analyze"]
+    if thumb_file is not None:
+        argv += ["--thumb", str(thumb_file)]
+    if memory_mb:
+        argv += ["--memory-mb", str(int(memory_mb))]
+    return argv
+
+
+def analyze_pdf_isolated(data: bytes, thumb_file: Path | None, *, timeout: float = PARSE_TIMEOUT_S,
+                         memory_mb: int | None = PARSE_MEMORY_MB) -> dict:
+    """analyze_pdf() in a child process (the file goes in on stdin, the result comes back as JSON), so
+    a document that crashes the PDF reader, hangs it or eats all memory never takes the crawl with it.
+    Same result as analyze_pdf(); when the child gives none, `error` is "parse: no result after 60 s",
+    "parse: crashed (out of memory)", "parse: crashed (exit code -11)"… and `final` False (tried again
+    after the crawler's back-off). The child is killed at `timeout` — also when the crawl itself is
+    stopped meanwhile (subprocess.run kills it on any exception)."""
+    out: dict = {"title": None, "pages": None, "text": "", "page_texts": [], "error": None, "final": False,
+                 "thumb_written": False}
+    try:
+        p = subprocess.run(_child_argv(thumb_file, memory_mb), input=data, capture_output=True,
+                           timeout=max(1.0, timeout), cwd=str(ROOT))
+    except subprocess.TimeoutExpired:
+        out["error"] = f"parse: no result after {timeout:.0f} s"
+        return out
+    except OSError as e:          # could not start the child at all
+        out["error"] = f"parse: {type(e).__name__}"
+        return out
+    if p.returncode != 0:
+        tail = (p.stderr or b"")[-2000:].decode("utf-8", "replace")
+        why = "out of memory" if "MemoryError" in tail else f"exit code {p.returncode}"
+        out["error"] = f"parse: crashed ({why})"
+        return out
+    try:
+        res = json.loads((p.stdout or b"").decode("utf-8", "replace").strip().splitlines()[-1])
+        if not isinstance(res, dict):
+            raise ValueError("not an object")
+    except (ValueError, IndexError):
+        out["error"] = "parse: no result"
+        return out
+    return {**out, **res}
+
+
+def _child_main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(prog="python -m scripts.sync.crawl_pdf",
+                                 description="Read one PDF from stdin; print analyze_pdf()'s result as JSON.")
+    ap.add_argument("--analyze", action="store_true", required=True)
+    ap.add_argument("--thumb", default=None, help="write the page-1 thumbnail here (WebP)")
+    ap.add_argument("--memory-mb", type=int, default=None, help="memory cap (Linux)")
+    args = ap.parse_args(argv)
+    if args.memory_mb:
+        limit_memory(args.memory_mb)      # before the file is read: it counts too
+    data = sys.stdin.buffer.read()
+    res = analyze_pdf(data, Path(args.thumb) if args.thumb else None)
+    # one ASCII line, last on stdout (anything printed before it is ignored)
+    sys.stdout.buffer.write(b"\n" + json.dumps(res, ensure_ascii=True).encode("ascii") + b"\n")
+    sys.stdout.flush()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(_child_main())

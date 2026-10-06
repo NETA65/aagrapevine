@@ -446,10 +446,12 @@ def merge_items(old: list[dict], new: list[dict], *, drop_missing: bool = False,
 class PoliteSession:
     """requests.Session wrapper: identifies itself, obeys robots.txt + Crawl-delay per server
     (host names of one server share one delay slot — SAME_SERVER_HOSTS), retries transient errors
-    with backoff, and never hammers a host.
+    with backoff, and never hammers a host. A robots.txt that answers 5xx / 429 or does not answer at
+    all closes its whole host for now (RFC 9309 — see ROBOTS_RETRY_S); a 4xx one allows everything.
 
         http = PoliteSession(min_delay=1.0)           # generic
-        r = http.get(url)                             # returns Response or None (robots-disallowed / failed)
+        r = http.get(url)                             # returns Response or None (robots-disallowed / failed;
+                                                      # http.last_failure says which)
         html = http.get_text(url)                     # text of a 200 answer, else None (a magazine page
                                                       # already read in this run is not asked for again)
     """
@@ -461,6 +463,10 @@ class PoliteSession:
     # get_text() is kept for the rest of the process (oldest dropped first above MEMO_MAX_CHARS); the
     # next get_text() of it returns that copy, and the crawler takes it through remembered().
     MEMO_MAX_CHARS = 48 * 1024 * 1024
+    # robots.txt answered 5xx / 429 or not at all: the host stays closed this long, then the next request
+    # asks for robots.txt again — so one bad answer during a site deploy does not silence the magazine
+    # sites for the rest of a two-hour run (RFC 9309 §2.3.1.4: assume complete disallow meanwhile).
+    ROBOTS_RETRY_S = 600.0
 
     def __init__(self, user_agent: str | None = None, min_delay: float = 1.0, respect_robots: bool = True,
                  timeout: float = 30.0, retries: int = 3, browser_ua: bool = False):
@@ -473,7 +479,12 @@ class PoliteSession:
         self.respect_robots = respect_robots
         self.timeout = timeout
         self.retries = retries
-        self._robots: dict[str, Any] = {}
+        # host → (parser or None, problem or None, monotonic time until which a problem stands)
+        self._robots: dict[str, tuple[Any, str | None, float]] = {}
+        # why the last request()/get() returned None: "robots" (its rules disallow the URL),
+        # "robots-unavailable" (robots.txt answered 5xx / 429), "unreachable" (no answer — from the URL
+        # or from robots.txt), "redirects" (too many); None after an answer
+        self.last_failure: str | None = None
         self._last: dict[str, float] = {}          # pace key (see pace_key) → time of the last request
         self._delay: dict[str, float] = {}         # pace key → strictest delay seen for that group
         self.requests_made = 0
@@ -498,28 +509,58 @@ class PoliteSession:
                 time.sleep(delay - gap)
 
     # robots ---------------------------------------------------------------
-    def _robots_for(self, url: str):
+    def _robots_for(self, url: str) -> tuple[Any, str | None]:
+        """(parser or None, problem or None) for the URL's host, read once per run (RFC 9309 §2.3.1):
+          * 200                      → its rules (parser)
+          * 4xx, too many redirects  → no rules: everything allowed (None, None)
+          * 5xx or 429               → (None, "HTTP 503"): the whole host is disallowed …
+          * no answer                → (None, "unreachable"): … likewise
+        A problem holds for ROBOTS_RETRY_S, then robots.txt is asked for again. Each failing read is
+        tried twice (a single network blip must not close a host)."""
         host = urlparse(url).netloc
-        if host in self._robots:
-            return self._robots[host]
-        rp = None
+        hit = self._robots.get(host)
+        if hit is not None and (hit[1] is None or time.monotonic() < hit[2]):
+            return hit[0], hit[1]
+        rp, problem = None, None
         if self.respect_robots and Protego is not None:
             key = self.pace_key(url)
-            # robots.txt is a request to the same server too (its own delay is not known yet)
-            self._pause(key, max(self.min_delay, self._delay.get(key, 0.0)))
-            try:
-                r = self.s.get(f"{urlparse(url).scheme}://{host}/robots.txt", timeout=self.timeout)
-                if r.status_code == 200:
-                    rp = Protego.parse(r.text)
-            except Exception as e:  # robots unreachable → assume allowed
-                self.log.debug("robots fetch failed for %s: %s", host, e)
-            finally:
-                self._last[key] = time.monotonic()
-        self._robots[host] = rp
-        return rp
+            for attempt in (1, 2):
+                # robots.txt is a request to the same server too (its own delay is not known yet)
+                self._pause(key, max(self.min_delay, self._delay.get(key, 0.0)))
+                try:
+                    r = self.s.get(f"{urlparse(url).scheme}://{host}/robots.txt", timeout=self.timeout)
+                    code = r.status_code
+                    problem = f"HTTP {code}" if code == 429 or code >= 500 else None
+                    if code == 200:
+                        try:
+                            rp = Protego.parse(r.text)
+                        except Exception as e:  # noqa: BLE001 — unparsable rules: none
+                            self.log.debug("robots.txt of %s unparsable: %s", host, e)
+                except requests.TooManyRedirects:
+                    problem = None             # no robots.txt to be found: like a 404 (allowed)
+                except Exception as e:  # noqa: BLE001 — timeout, DNS, refused connection …
+                    problem = "unreachable"
+                    self.log.debug("robots.txt of %s: %s", host, e)
+                finally:
+                    self._last[key] = time.monotonic()
+                if problem is None:
+                    break
+            if problem:
+                self.log.warning("robots.txt of %s: %s — the site is not asked for anything for %d min",
+                                 host, "no answer" if problem == "unreachable" else problem,
+                                 self.ROBOTS_RETRY_S // 60)
+        self._robots[host] = (rp, problem, time.monotonic() + self.ROBOTS_RETRY_S)
+        return rp, problem
+
+    def robots_problem(self, url: str) -> str | None:
+        """Why robots.txt closes the URL's whole host for now — "unreachable" (no answer) or "HTTP 503"
+        (a 5xx / 429 answer) — or None when its rules (if any) apply."""
+        return self._robots_for(url)[1]
 
     def allowed(self, url: str) -> bool:
-        rp = self._robots_for(url)
+        rp, problem = self._robots_for(url)
+        if problem:
+            return False
         if rp is None:
             return True
         try:
@@ -527,8 +568,13 @@ class PoliteSession:
         except Exception:
             return True
 
+    def _refusal(self, url: str) -> str:
+        """last_failure for a URL that allowed() refused."""
+        problem = self.robots_problem(url)
+        return "robots" if not problem else "unreachable" if problem == "unreachable" else "robots-unavailable"
+
     def delay_for(self, url: str) -> float:
-        rp = self._robots_for(url)
+        rp, _problem = self._robots_for(url)
         d = self.min_delay
         if rp is not None:
             try:
@@ -552,7 +598,8 @@ class PoliteSession:
     def request(self, method: str, url: str, **kw) -> requests.Response | None:
         """One polite request. Redirects of the magazine server (SAME_SERVER_HOSTS) are followed
         by hand, so every hop also waits the Crawl-delay and is checked against robots.txt (requests
-        itself would follow them at once, inside the same call)."""
+        itself would follow them at once, inside the same call). None → `last_failure` says why."""
+        self.last_failure = None
         follow = kw.pop("allow_redirects", True)
         if not follow or (urlparse(url).hostname or "").lower() not in SAME_SERVER_HOSTS:
             return self._send(method, url, allow_redirects=follow, **kw)
@@ -568,16 +615,21 @@ class PoliteSession:
             except Exception:  # noqa: BLE001 — closing a finished redirect response never matters
                 pass
             if not self.allowed(nxt):
+                self.last_failure = self._refusal(nxt)
                 self.log.info("robots.txt disallows %s (redirected from %s)", nxt, url)
                 return None
             url = nxt
+        self.last_failure = "redirects"
         self.log.warning("%s %s: too many redirects", method, url)
         return None
 
     def _send(self, method: str, url: str, **kw) -> requests.Response | None:
         if not self.allowed(url):
-            self.log.info("robots.txt disallows %s", url)
+            self.last_failure = self._refusal(url)
+            if self.last_failure == "robots":
+                self.log.info("robots.txt disallows %s", url)
             return None
+        self.last_failure = "unreachable"          # until an answer comes
         kw.setdefault("timeout", self.timeout)
         kw.setdefault("allow_redirects", True)
         key = self.pace_key(url)
@@ -593,6 +645,7 @@ class PoliteSession:
                     self.log.warning("%s %s -> %s, retry in %.0fs", method, url, r.status_code, backoff)
                     time.sleep(min(backoff, 60))
                     continue
+                self.last_failure = None
                 return r
             except requests.RequestException as e:
                 self._last[key] = time.monotonic()

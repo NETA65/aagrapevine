@@ -6,24 +6,36 @@ scattered over ~3,100 pages. This module finds ALL of them and keeps the list cu
 HOW (one daily run, time-boxed; default 40 min, see config sources.crawler):
   1. Refresh the sitemaps (2-4 requests) → every page + its <lastmod>.
   2. Priority queue of pages to fetch:
-       0 hub pages (resource pages, home pages, news…)        – every day
-       1 never-crawled content pages (sitemap + discovered links)
+       0 hub pages (resource pages, home pages, news…)        – every day, whatever their last answer
+                                                                 (a failing one at every run)
+       1 never-crawled content pages (sitemap + discovered links); pages awaiting a second 404
        2 pages whose sitemap <lastmod> is newer than our last visit
        3 never-crawled event pages, newest event date first
        4 pages not visited for `recheck_days` (past events: yearly)
   3. Each page: conditional GET (ETag / Last-Modified), collect every PDF link (a/iframe/embed/object,
      viewers, Drupal file links) with its link text, image alt and section heading; discover new
      internal pages (never login/cart/search/paywalled articles – see crawl_rules.SKIP_PATH_PATTERNS).
+     A page that answered before keeps its PDF links through one 404/410: they are dropped only after
+     a second one at least a day later (one bad answer during a site deploy must not re-file a kit).
   4. ~30 % of the time goes to PDF work: download new PDFs (capped per run) for page count, metadata
-     title, language and a WebP thumbnail of page 1; HEAD the rest; re-check PDFs that vanished from
-     every page and, slowly, every PDF about once a month. A PDF becomes "gone" only after TWO failing
-     checks at least a day apart (404/410, or an HTML page where the file was); a gone PDF that a page
-     still links is checked again after a week, then monthly, and comes back when it answers again. A
-     PDF on another site whose host has not answered at all for a month (4+ tries) is gone too.
+     title, language and a WebP thumbnail of page 1 (read in a separate process with a time limit and,
+     on Linux, a memory limit; the attempt is recorded first, so a file that crashes or hangs the
+     reader is skipped for a while and the run goes on); HEAD the rest; re-check PDFs that vanished
+     from every page and, slowly, every PDF about once a month. A PDF becomes "gone" only after TWO
+     failing checks at least a day apart (404/410, or an HTML page where the file was); a gone PDF
+     that a page still links is checked again after a week, then monthly, and comes back when it
+     answers again. A PDF on another site whose host has not answered at all for a month (4+ tries) is
+     gone too. Such a host is asked twice before it counts as down for the run; its other PDFs then
+     simply wait for the next run (no strike without a request), and a file robots.txt forbids is
+     never "unreachable".
   5. Everything is remembered in data/state/crawl-state.json, so tomorrow's run resumes where today's
-     stopped. data/raw/pdfs.json is rebuilt from that state at the end of every run.
+     stopped (pages that only take room — junk addresses, pages gone for PRUNE_GONE_DAYS that nothing
+     links any more — are forgotten: prune()). data/raw/pdfs.json is rebuilt from that state at the
+     end of every run, with `hub_problems` (hub / kit pages that did not load this run) and a line
+     about them in stats.warnings.
 
-The bot is polite: robots.txt is obeyed and the 5-second Crawl-delay is applied across BOTH hosts
+The bot is polite: robots.txt is obeyed (one that answers 5xx or not at all closes its host for now,
+RFC 9309 — PoliteSession) and the 5-second Crawl-delay is applied across BOTH hosts
 together (they are one server), through the pipeline's shared_session(). A page (or sitemap) that an
 earlier module of the same run already read — the home pages (quote), /BOTM (shop), the sitemap
 (events_external)… — is taken from that session's page memo instead of being requested again, so the
@@ -45,13 +57,15 @@ import signal
 import time
 from collections import Counter
 from datetime import datetime, timedelta, timezone
+from functools import lru_cache
 from urllib.parse import urljoin, urlsplit, urlunsplit
+from zoneinfo import ZoneInfo
 
 from . import crawl_rules as R
 from .common import (CACHE_ASSETS, STATE_DIR, PoliteSession, clean_text, detect_lang, get_logger, load_config,
                      load_raw, make_item, merge_items, now_iso, parse_iso, read_json, run_module, save_raw,
                      shared_session, short_hash, to_iso)
-from .crawl_pdf import analyze_pdf, download_pdf, head_from_response
+from .crawl_pdf import PARSE_MEMORY_MB, PARSE_TIMEOUT_S, analyze_pdf_isolated, download_pdf, head_from_response
 
 SOURCE = "pdfs"
 STATE_FILE = STATE_DIR / "crawl-state.json"
@@ -65,12 +79,15 @@ PARSER_VERSION = 1           # bump when parse_page() changes → pages are re-p
 PDF_TIME_SHARE = 0.30        # share of the run spent on PDF downloads / HEAD checks when work is queued
 STOP_MARGIN_S = 30           # stop starting new requests when fewer seconds than this remain
 HUB_REFRESH_H = 20           # hub pages are re-fetched when older than this (≈ daily)
+HUB_RETRY_H = 12             # a hub that did not load (5xx, no answer, a 404…) is tried again after this
+                             # (= at every daily run; other pages back off for days, see _fail)
 PAST_EVENT_AFTER_DAYS = 60   # an event page this long past its date is "archived" …
 PAST_EVENT_RECHECK_DAYS = 365  # … and only re-checked yearly (or when its sitemap lastmod changes)
 ERROR_RECHECK_DAYS = {"404": 60, "410": 60, "400": 120, "not-html": 120, "robots": 30, "login": 30, "offsite": 60,
                       "pdf": 120}
 GONE_RECHECK_DAYS = (7, 30)  # a "gone" PDF that a page still links is re-checked after 7 days, later monthly
-GONE_CONFIRM_H = 24          # a PDF is "gone" only after two failing checks at least this many hours apart
+GONE_CONFIRM_H = 24          # a PDF is "gone" — and a page's PDF links are dropped on a 404/410 — only after
+                             # two failing checks at least this many hours apart
 UNREACHABLE_GONE = (4, 30)   # an external PDF whose host never answers: gone after 4 tries over 30+ days
 PERIODIC_HEAD_DAYS = 30      # re-HEAD every PDF about once a month (to notice deletions) …
 MIN_PERIODIC_CHECKS = 20     # … at least this many per run (more when the library is large: n/30);
@@ -80,8 +97,15 @@ MAX_DEPTH = 2                # discovered pages: at most 2 links away from a sit
 MAX_KNOWN_PAGES = 8000       # runaway guards for link discovery
 MAX_PER_SECTION = 400        # … per first path segment (e.g. /store/…)
 MAX_REFERRERS = 40
+GONE_PAGE_STATUSES = ("404", "410", "400")
+PRUNE_GONE_DAYS = 90         # prune(): a page gone (404/410/400) this long that no page linked meanwhile
+LINKED_STAMP_DAYS = 7        # a gone page's `linked_at` is refreshed at most this often (state-file churn)
 SAVE_EVERY_S = 120           # checkpoint the state file this often during a run
 LOGIN_PATH_RE = re.compile(r"(^|/)(user|usuario)/(login|inicio-sesion)|/login$")
+# Crawler.last_failure values after which a PDF is simply asked again next run (no strike): robots.txt
+# answered 5xx (host closed for now), the host is down for this run, or one miss with no time left to
+# ask again (Crawler.request)
+REQUEUE_FAILURES = ("robots-unavailable", "host-down", "no-time")
 
 log = get_logger("crawl")
 
@@ -107,6 +131,37 @@ def _host(url: str) -> str:
 def _month_num(um: str | None) -> int:
     """'2026-02' → 202602 (0 when unknown) — used for 'newest first' ordering."""
     return int(um.replace("-", "")) if um else 0
+
+
+def _backoff(tries: int) -> str:
+    """next_try after the n-th failed try of a PDF download / analysis: 2, 4, 8, 16, then 30 days."""
+    return to_iso(_now() + timedelta(days=min(30, 2 ** tries)))
+
+
+@lru_cache(maxsize=1)
+def _site_tz():
+    try:
+        return ZoneInfo((load_config().get("site") or {}).get("timezone") or "America/Chicago")
+    except Exception:  # noqa: BLE001 — a bad setting or no time-zone data: the magazines' own calendar
+        return ZoneInfo("America/Chicago")
+
+
+def _local_day(iso: str) -> str:
+    """'2026-11-01T04:30:00Z' → '2026-10-31': the day in the site's time zone (config site.timezone,
+    America/Chicago) — the day the site shows, not the UTC one."""
+    d = parse_iso(iso)
+    return d.astimezone(_site_tz()).date().isoformat() if d else iso[:10]
+
+
+class _ViaCrawler:
+    """The `session` download_pdf() is given: every GET goes through Crawler.request (one retry for a
+    silent host, hosts down for the run, robots.txt reasons in Crawler.last_failure, request count)."""
+
+    def __init__(self, crawler: "Crawler"):
+        self.crawler = crawler
+
+    def get(self, url: str, **kw):
+        return self.crawler.request("GET", url, **kw)
 
 
 class Budget:
@@ -294,11 +349,14 @@ class Crawler:
         self.use_sitemap = use_sitemap and not self.only_urls
         self.http = shared_session()   # aagrapevine.org / aalavina.org (5 s crawl-delay, robots.txt)
         self.ext = PoliteSession(min_delay=2.0, timeout=15, retries=1)  # third-party PDF hosts
+        self.via = _ViaCrawler(self)   # download_pdf()'s session: Crawler.request (retry, dead hosts)
         self.dead_hosts: set[str] = set()
+        self.last_failure: str | None = None   # why the last request() returned None (see request)
+        self.robots_down: dict[str, str] = {}  # host → robots.txt problem met this run (RFC 9309: host closed)
+        self.tried: set[str] = set()           # pages actually asked for (or read from the memo) this run
         self.hubs = R.hub_urls()
         self.hub_rank = {u.lower(): i for i, u in enumerate(self.hubs)}
-        self.page_lc = {k.lower(): k for k in self.pages}
-        self.section_counts = Counter(self._section_key(u) for u, p in self.pages.items() if p.get("src") == "link")
+        self._index_pages()
         self.page_q: list = []
         self.pdf_q: list = []
         self.queued_pdf: set[tuple[str, str]] = set()
@@ -312,26 +370,51 @@ class Crawler:
         self.sitemap_ok: bool | None = None
         self.periodic_cap = max(MIN_PERIODIC_CHECKS, -(-len(self.pdfs) * 11 // (10 * PERIODIC_HEAD_DAYS)))
 
+    def _index_pages(self) -> None:
+        self.page_lc = {k.lower(): k for k in self.pages}
+        self.section_counts = Counter(self._section_key(u) for u, p in self.pages.items() if p.get("src") == "link")
+
     # ------------------------------------------------------------------ HTTP (polite, budgeted)
     # The Crawl-delay across BOTH Drupal hosts (one server) and all modules is applied by
     # shared_session() itself (PoliteSession paces per server — common.SAME_SERVER_HOSTS).
     def request(self, method: str, url: str, **kw):
+        """One polite request → the response, or None with self.last_failure = why (PoliteSession's
+        "robots" / "robots-unavailable" / "unreachable" / "redirects", or "host-down" / "no-time").
+        Another site that gives no answer is asked once more; a second miss marks the host down for the
+        rest of the run ("host-down": nothing is sent — its PDFs wait for the next run, see
+        REQUEUE_FAILURES; "no-time": one miss and no time left to ask again, likewise)."""
         host = _host(url)
         drupal = host in R.DRUPAL_HOSTS
         sess = self.http if drupal else self.ext
         if not drupal and host in self.dead_hosts:
+            self.last_failure = "host-down"
             return None
         old = sess.retries
         if self.budget.remaining() < 150:
             sess.retries = 1       # near the end of the budget: no long retry back-offs
+        why = "unreachable"
         try:
-            r = sess.request(method, url, **kw)
+            for attempt in (1, 2):
+                r = sess.request(method, url, **kw)
+                why = getattr(sess, "last_failure", None) or "unreachable"
+                if r is not None or why in ("unreachable", "redirects"):
+                    self.c["requests"] += 1     # (robots.txt refusals send nothing)
+                if r is not None:
+                    self.last_failure = None
+                    return r
+                if drupal or why != "unreachable" or attempt == 2:
+                    break
+                if not self.budget.ok():
+                    why = "no-time"         # no time left to ask again: one miss is no verdict
+                    break
+                log.info("%s %s: no answer — asking once more", method, url)
         finally:
             sess.retries = old
-        self.c["requests"] += 1
-        if r is None and not drupal:
+        if not drupal and why == "unreachable":
             self.dead_hosts.add(host)
-        return r
+            log.warning("%s: no answer twice — its other documents wait for the next run", host)
+        self.last_failure = why
+        return None
 
     # ------------------------------------------------------------------ sitemap
     def refresh_sitemaps(self) -> None:
@@ -404,6 +487,8 @@ class Crawler:
                     if not nu:
                         continue
                     hosts_in_urls.add(_host(nu))
+                    if not R.should_crawl_path(urlsplit(nu).path):
+                        continue        # e.g. /site-search: never fetched, so not kept either (prune())
                     lastmod = None
                     if lm is not None and lm.text:
                         d = parse_iso(lm.text.strip())
@@ -450,15 +535,19 @@ class Crawler:
         if nt and nt > now:
             return None
         crawled = _dt(pg.get("crawled_at"))
+        hub = self.hub_rank.get(url.lower())
+        if hub is not None:
+            # before the error rule below: whatever a hub last answered (404, an outage, a login page),
+            # it is asked again daily — a failing one at every run (_note_error caps its next_try)
+            if crawled is None or pg.get("error_since") or now - crawled > timedelta(hours=HUB_REFRESH_H):
+                return (0, hub, 0.0, url)
+            return None
+        if pg.get("gone_strike_at") and pg.get("status") == 200:
+            return (1, -1, 0.0, url)       # one 404/410 so far: the confirming check (_page_gone)
         status = str(pg.get("status"))
         if crawled is not None and status in ERROR_RECHECK_DAYS:    # 404, login, not-html … : rarely
             if now - crawled > timedelta(days=ERROR_RECHECK_DAYS[status]):
                 return (4, 0, crawled.timestamp(), url)
-            return None
-        hub = self.hub_rank.get(url.lower())
-        if hub is not None:
-            if crawled is None or now - crawled > timedelta(hours=HUB_REFRESH_H):
-                return (0, hub, 0.0, url)
             return None
         ev = R.event_date_of(url)
         lastmod = _dt(pg.get("lastmod"))
@@ -572,8 +661,42 @@ class Crawler:
         for key in list(self.pdfs):
             self.push_pdf(key, now)
 
+    # ------------------------------------------------------------------ pruning
+    def prune(self) -> None:
+        """Forget the pages that only take room under MAX_KNOWN_PAGES (link discovery stops there):
+          * addresses the crawler never fetches (should_crawl_path: an e-mail address or a host name read
+            as a relative link, search pages…) — earlier rules let some in; never fetched, never useful;
+          * pages gone (404/410/400) for PRUNE_GONE_DAYS that no crawled page has linked meanwhile
+            (`linked_at`, see discover()) and that the sitemap does not list.
+        Hubs are always kept. A pruned page that some page links again is simply discovered anew."""
+        now = _now()
+        cut = now - timedelta(days=PRUNE_GONE_DAYS)
+        for url in list(self.pages):
+            pg = self.pages[url]
+            if url.lower() in self.hub_rank:
+                continue
+            if not R.should_crawl_path(urlsplit(url).path):
+                why = "junk"
+            elif str(pg.get("status")) in GONE_PAGE_STATUSES and not pg.get("in_sitemap"):
+                since = _dt(pg.get("error_since") or pg.get("crawled_at"))
+                linked = _dt(pg.get("linked_at"))
+                if since is None or since > cut or (linked is not None and linked > cut):
+                    continue
+                why = "gone"
+            else:
+                continue
+            if pg.get("pdfs"):
+                self.set_page_pdfs(url, pg, [])      # its PDFs lose this referrer (as on a 404)
+            del self.pages[url]
+            self.c[f"pruned_{why}"] += 1
+        if self.c["pruned_junk"] or self.c["pruned_gone"]:
+            self._index_pages()
+            log.info("pruned %d junk and %d long-gone page(s) from the state", self.c["pruned_junk"],
+                     self.c["pruned_gone"])
+
     # ------------------------------------------------------------------ main loop
     def run(self) -> None:
+        self.prune()
         if self.use_sitemap and self.budget.ok():
             self.refresh_sitemaps()
         self.build_queues()
@@ -608,22 +731,78 @@ class Crawler:
             raise
         except Exception as e:  # never let one page stop the crawl
             log.warning("page %s failed: %s: %s", url, type(e).__name__, e)
-            self._fail(self.pages[url], f"{type(e).__name__}")
+            self._fail(url, self.pages[url], f"{type(e).__name__}")
 
-    def _fail(self, pg: dict, status) -> None:
+    def _fail(self, url: str, pg: dict, status) -> None:
+        """No usable answer (5xx, no answer, a read error): try again after 1, 2, 4 … 30 days — a hub
+        after HUB_RETRY_H (_note_error), so five 503s in a row never hide it for weeks."""
         pg["fails"] = int(pg.get("fails") or 0) + 1
-        pg["last_error"] = str(status)[:60]
         pg["next_try"] = to_iso(_now() + timedelta(days=min(30, 2 ** (pg["fails"] - 1))))
+        self._note_error(url, pg, now_iso(), status)
         self.c["page_errors"] += 1
+
+    def _note_error(self, url: str, pg: dict, now: str, label) -> None:
+        """Any answer that is not a readable page (an error, a first 404, a login page, robots.txt…):
+        `last_error` = what it was, `error_since` = when the streak began (the hub report, prune()). A
+        hub gets its next try at the next run (HUB_RETRY_H), whatever the error."""
+        pg["last_error"] = str(label)[:60]
+        pg.setdefault("error_since", now)
+        if pg.get("status") != 200:
+            pg.pop("gone_strike_at", None)    # only a page that last answered 200 awaits a confirming 404
+        if url.lower() in self.hub_rank:
+            cap = _now() + timedelta(hours=HUB_RETRY_H)
+            nt = _dt(pg.get("next_try"))
+            if nt is None or nt > cap:
+                pg["next_try"] = to_iso(cap)
+
+    @staticmethod
+    def _clear_error(pg: dict) -> None:
+        for k in ("last_error", "error_since", "gone_strike_at", "linked_at"):
+            pg.pop(k, None)
+
+    def _page_gone(self, url: str, pg: dict, code: int, now: str) -> None:
+        """404 / 410. A page that answered before keeps its PDF links until a SECOND such answer at least
+        GONE_CONFIRM_H later (as a PDF must fail twice, _mark_gone): one bad answer during a site deploy
+        must not re-file or orphan every document of a kit page. Until then it is asked again the next
+        day (priority 1; a hub at every run). Confirmed: status "404"/"410", its PDF links are dropped."""
+        if pg.get("status") == 200:
+            strike = _dt(pg.get("gone_strike_at"))
+            if strike is None:
+                strike = _dt(now)
+                pg["gone_strike_at"] = now
+                self.c["pages_gone_strikes"] += 1
+            if _dt(now) - strike < timedelta(hours=GONE_CONFIRM_H):
+                pg["next_try"] = to_iso(strike + timedelta(hours=GONE_CONFIRM_H))
+                self._note_error(url, pg, now, code)
+                log.warning("page %s -> %s: its %d PDF link(s) are kept until a second check confirms it",
+                            url, code, len(pg.get("pdfs") or []))
+                return
+        elif str(pg.get("status")) in GONE_PAGE_STATUSES and not pg.get("error_since"):
+            pg["error_since"] = pg.get("crawled_at") or now     # gone since before this was recorded
+        pg.update(status=str(code), crawled_at=now, fails=0, next_try=None)
+        pg.pop("gone_strike_at", None)
+        self._note_error(url, pg, now, code)
+        self.set_page_pdfs(url, pg, [])
+        self.c["pages_gone"] += 1
 
     def crawl_page(self, url: str, pg: dict) -> None:
         now = now_iso()
         # PDFs that appear on a page we had crawled before are genuinely new ("fresh")
         known_before = pg.get("status") == 200 and bool(pg.get("crawled_at"))
         if not self.http.allowed(url):
+            problem = self.http.robots_problem(url)
+            if problem:
+                # robots.txt itself did not answer properly: the whole host is off-limits for now (RFC
+                # 9309). Nothing is recorded — the page is due again at the next run.
+                self.robots_down[_host(url)] = problem
+                self.c["robots_unavailable"] += 1
+                return
+            self.tried.add(url)
             pg.update(status="robots", crawled_at=now)
+            self._note_error(url, pg, now, "robots")
             self.c["robots_skipped"] += 1
             return
+        self.tried.add(url)
         memo = self.http.remembered(url) if _host(url) in R.DRUPAL_HOSTS else None
         if memo is not None and self.crawl_remembered(url, pg, memo, known_before, now):
             return
@@ -636,7 +815,16 @@ class Crawler:
         r = self.request("GET", url, headers=headers, stream=True, timeout=(10, 30))
         self.c["pages_fetched"] += 1
         if r is None:
-            self._fail(pg, "no-response")
+            why = self.last_failure
+            if why == "robots-unavailable":            # robots.txt failed meanwhile: as above
+                self.tried.discard(url)
+                self.robots_down[_host(url)] = self.http.robots_problem(url) or "unavailable"
+                self.c["robots_unavailable"] += 1
+            elif why == "robots":                      # a redirect to a disallowed address
+                pg.update(status="robots", crawled_at=now)
+                self._note_error(url, pg, now, "robots")
+            else:
+                self._fail(url, pg, "too many redirects" if why == "redirects" else "no-response")
             return
         body = b""
         try:
@@ -645,7 +833,7 @@ class Crawler:
             ctype = (r.headers.get("Content-Type") or "").lower()
             if code == 304:
                 pg.update(crawled_at=now, fails=0, next_try=None)
-                pg.pop("last_error", None)
+                self._clear_error(pg)
                 self.c["not_modified"] += 1
                 for key in pg.get("pdfs") or []:
                     if key in self.pdfs:
@@ -653,22 +841,23 @@ class Crawler:
                         self.push_pdf(key)     # no-op when already queued / nothing needed
                 return
             if code in (404, 410):
-                pg.update(status=str(code), crawled_at=now, fails=0, next_try=None)
-                self.set_page_pdfs(url, pg, [])
-                self.c["pages_gone"] += 1
+                self._page_gone(url, pg, code, now)
                 return
             if code == 400:            # a malformed address — asking again soon will not help
                 pg.update(status="400", crawled_at=now, fails=0, next_try=None)
+                self._note_error(url, pg, now, code)
                 return
             if code != 200:
-                self._fail(pg, code)
+                self._fail(url, pg, code)
                 return
             fpath = urlsplit(final).path.lower()
             if LOGIN_PATH_RE.search(fpath):
                 pg.update(status="login", crawled_at=now, fails=0, next_try=None)
+                self._note_error(url, pg, now, "login")
                 return
             if _host(final) not in R.DRUPAL_HOSTS:
                 pg.update(status="offsite", crawled_at=now, final=r.url, fails=0, next_try=None)
+                self._note_error(url, pg, now, "offsite")
                 return
             if "application/pdf" in ctype:
                 # the "page" is itself a PDF (e.g. a /node/… that redirects to a file)
@@ -678,9 +867,11 @@ class Crawler:
                     self.add_pdf_refs(ref, self.pages[ref], [{"url": purl, "text": "", "title_attr": "", "alt": "",
                                                                "section": "", "hint": True}], replace=False)
                 pg.update(status="pdf", crawled_at=now, fails=0, next_try=None)
+                self._clear_error(pg)
                 return
             if "html" not in ctype and "xml" not in ctype:
                 pg.update(status="not-html", crawled_at=now, fails=0, next_try=None)
+                self._note_error(url, pg, now, "not-html")
                 return
             buf = bytearray()
             for chunk in r.iter_content(chunk_size=64 * 1024):
@@ -693,7 +884,7 @@ class Crawler:
             last_mod = r.headers.get("Last-Modified")
             charset = r.encoding if "charset" in ctype else None
         except Exception as e:
-            self._fail(pg, f"read: {type(e).__name__}")
+            self._fail(url, pg, f"read: {type(e).__name__}")
             return
         finally:
             try:
@@ -723,7 +914,7 @@ class Crawler:
         title, pdf_links, links = parse_page(body, final, charset)
         pg.update(status=200, crawled_at=now, etag=etag, last_modified=last_mod, title=title[:200],
                   out_links=len(links), fails=0, next_try=None, pv=PARSER_VERSION)
-        pg.pop("last_error", None)
+        self._clear_error(pg)
         if final != url:
             pg["final"] = final
         else:
@@ -735,10 +926,17 @@ class Crawler:
             log.info("page %s: %d PDF links", url, len({p['url'] for p in pdf_links}))
 
     def discover(self, url: str, pg: dict, links: set[str]) -> None:
+        now = _now()
+        for link in links:
+            # a gone page that a page still links is kept (prune()): note when it was last seen linked
+            known = self.pages.get(self.page_lc.get(link.lower(), ""))
+            if known is not None and str(known.get("status")) in GONE_PAGE_STATUSES:
+                seen = _dt(known.get("linked_at"))
+                if seen is None or now - seen >= timedelta(days=LINKED_STAMP_DAYS):
+                    known["linked_at"] = to_iso(now)
         depth = int(pg.get("depth") or 0) + 1
         if depth > MAX_DEPTH or self.only_urls:
             return
-        now = _now()
         for link in sorted(links):
             if link.lower() in self.page_lc:
                 continue
@@ -823,6 +1021,9 @@ class Crawler:
         self.queued_pdf.discard((key, kind))
         rec = self.pdfs.get(key)
         if rec is None:
+            return
+        if rec.get("external") and _host(rec["url"]) in self.dead_hosts:
+            self.c["pdfs_requeued"] += 1    # its host did not answer this run: asked again next run, no strike
             return
         now = _now()
         try:
@@ -921,6 +1122,27 @@ class Crawler:
             rec["status"] = "gone"
             rec["gone_since"] = now_iso()
 
+    def _robots_refused(self, rec: dict) -> None:
+        """robots.txt does not allow this file: nothing can be learned about it, and it is NOT
+        "unreachable" (no strike, never retired for it). The file's last known answer is kept; it is
+        asked again after ERROR_RECHECK_DAYS["robots"]."""
+        head = dict(rec.get("head") or {})
+        head.update(error="robots", checked_at=now_iso(),
+                    next_try=to_iso(_now() + timedelta(days=ERROR_RECHECK_DAYS["robots"])))
+        rec["head"] = head
+        rec.pop("recheck", None)
+        self.c["pdfs_robots"] += 1
+
+    def _no_answer(self, rec: dict) -> None:
+        """request() gave no response for this PDF: what that means depends on why (last_failure)."""
+        why = self.last_failure
+        if why in REQUEUE_FAILURES:
+            self.c["pdfs_requeued"] += 1   # nothing was asked: nothing recorded, due again next run
+        elif why == "robots":
+            self._robots_refused(rec)
+        else:                              # no answer (twice), too many redirects
+            self._unreachable(rec)
+
     def fetch_head(self, key: str, rec: dict) -> None:
         url = rec["url"]
         r = self.request("HEAD", url, timeout=(10, 20))
@@ -931,7 +1153,7 @@ class Crawler:
             if r is not None:
                 r.close()
         if r is None:
-            self._unreachable(rec)
+            self._no_answer(rec)
             return
         self._apply_head(rec, head_from_response(r))
 
@@ -941,20 +1163,35 @@ class Crawler:
             return
         self.c["details"] += 1
         max_s = max(20.0, min(120.0, self.budget.remaining() - 25))
-        head, data, err, final = download_pdf(self.ext if rec.get("external") else self.http, url,
-                                              max_bytes=self.max_bytes, max_seconds=max_s)
-        self.c["requests"] += 1
+        head, data, err, final = download_pdf(self.via, url, max_bytes=self.max_bytes, max_seconds=max_s)
         if head.get("status"):
             self._apply_head(rec, head)
-        elif rec.get("external"):
-            self.dead_hosts.add(_host(url))
-            if err == "unreachable":
+        elif err == "unreachable":         # no response: why?
+            why = self.last_failure
+            if why in REQUEUE_FAILURES:
+                self.c["details"] -= 1     # nothing was asked: due again next run
+                self.c["pdfs_requeued"] += 1
+                return
+            if why == "robots":
+                self._robots_refused(rec)
+                err = "robots"
+            elif rec.get("external"):
                 self._unreachable(rec)
         d = dict(rec.get("details") or {})
         d["checked_at"] = now_iso()
+        tries = int(d.get("attempts") or 0) + 1
         if data is not None:
             thumb_name = short_hash(key, 16) + ".webp"
-            a = analyze_pdf(data, None if self.dry_run else THUMB_DIR / thumb_name)
+            # The attempt is on record BEFORE the file is read (and saved, if the reader should take the
+            # whole run down): a file that crashes or hangs the reader is skipped next time, with the
+            # back-off below. A normal result replaces this right away.
+            rec["details"] = {**{k: v for k, v in d.items() if k != "final" and v not in (None, "")},
+                              "error": "parse: interrupted", "attempts": tries, "next_try": _backoff(tries)}
+            save_state(self.st, self.dry_run)
+            self.last_save = time.monotonic()
+            parse_s = max(15.0, min(float(PARSE_TIMEOUT_S), self.budget.remaining() - 20))
+            a = analyze_pdf_isolated(data, None if self.dry_run else THUMB_DIR / thumb_name, timeout=parse_s,
+                                     memory_mb=PARSE_MEMORY_MB)
             text = clean_text(a.get("text") or "")
             page_langs = [detect_lang(clean_text(t)[:3000]) if len(clean_text(t)) >= 200 else None
                           for t in a.get("page_texts") or []]
@@ -967,6 +1204,10 @@ class Crawler:
             err, final = a.get("error"), a.get("final")
             if err and err.startswith("thumb"):
                 final = True       # metadata is fine; a thumbnail failure is not worth re-downloading
+            if err and err.startswith("parse:"):
+                self.c["parse_failed"] += 1
+                log.warning("PDF %s: the PDF reader gave no result (%s) — skipped for %d day(s)", url,
+                            err, min(30, 2 ** tries))
             self.c["details_ok"] += 1
         if err:
             d["error"] = err
@@ -980,8 +1221,9 @@ class Crawler:
                 d["final"] = True
                 d.pop("next_try", None)
             else:
-                d["attempts"] = int(d.get("attempts") or 0) + 1
-                d["next_try"] = to_iso(_now() + timedelta(days=min(30, 2 ** d["attempts"])))
+                d.pop("final", None)
+                d["attempts"] = tries
+                d["next_try"] = _backoff(tries)
         else:
             for k in ("error", "attempts", "next_try", "final"):
                 d.pop(k, None)
@@ -997,7 +1239,42 @@ class Crawler:
             "page_errors": self.c["page_errors"], "discovered": self.c["pages_discovered"],
             "new_pdfs": self.c["new_pdfs"], "details": self.c["details"], "heads": self.c["heads"],
             "requests": self.c["requests"],
+            **{k: self.c[k] for k in ("pruned_junk", "pruned_gone", "parse_failed", "pdfs_requeued",
+                                      "robots_unavailable") if self.c[k]},
         }
+
+    def hub_report(self) -> list[dict]:
+        """The hub / kit pages (crawl_rules.HUB_PATHS — KIT_PAGES are among them) asked for in this run
+        that did not give a readable page: [{"url", "status" (404, 503, "no-response", "login"…),
+        "since" (when it began failing, UTC ISO)}], in HUB_PATHS order."""
+        out = []
+        for url in self.hubs:
+            key = self.page_lc.get(url.lower(), url)
+            pg = self.pages.get(key) or {}
+            if key not in self.tried or not pg.get("error_since"):
+                continue
+            status = str(pg.get("last_error") or pg.get("status") or "error")
+            out.append({"url": key, "status": int(status) if status.isdigit() else status,
+                        "since": pg["error_since"]})
+        return out
+
+
+def run_warnings(crawler: Crawler | None, hub_problems: list[dict]) -> list[str]:
+    """Plain lines for stats.warnings (the run summary's notes): hub / kit pages that did not load, and a
+    magazine site whose robots.txt kept the crawl away this run."""
+    out = []
+    if hub_problems:
+        parts = [f"{urlsplit(h['url']).hostname.removeprefix('www.')}{urlsplit(h['url']).path} "
+                 f"({h['status']} since {str(h['since'])[:10]})" for h in hub_problems]
+        line = (f"{len(parts)} main page(s) of the magazine sites did not load: " + ", ".join(parts)
+                + " — checked again every day")
+        out.append(line if len(line) <= 200 else line[:197].rstrip(" ,") + "…")
+    for host, problem in sorted((crawler.robots_down if crawler else {}).items()):
+        if host in R.DRUPAL_HOSTS:
+            why = "no answer" if problem == "unreachable" else problem
+            out.append(f"robots.txt of {host} did not answer properly ({why}): its pages were left for the "
+                       f"next run")
+    return out
 
 
 # ==================================================================================================
@@ -1014,15 +1291,18 @@ def _item_date(upload_month: str | None, last_modified: str | None, first_seen: 
     """Upload month from the path (Last-Modified day when it falls in that month), else
     Last-Modified, else first_seen — but first_seen only for `fresh` PDFs (ones that appeared on a
     page we had already crawled). During the first crawl of a page first_seen says nothing about
-    age, and dating old flyers "today" would flood What's New."""
+    age, and dating old flyers "today" would flood What's New. Times (UTC) count by their day in the
+    site's time zone: a file uploaded on October 31 at 8 PM Central (1 AM UTC on November 1) in the
+    2026-10 folder is dated October 31, not October 1."""
+    lm_day = _local_day(last_modified) if last_modified else None
     if upload_month:
-        if last_modified and last_modified[:7] == upload_month:
-            return last_modified[:10]
+        if lm_day and lm_day[:7] == upload_month:
+            return lm_day
         return upload_month + "-01"
-    if last_modified:
-        return last_modified[:10]
+    if lm_day:
+        return lm_day
     if fresh and first_seen:
-        return first_seen[:10]
+        return _local_day(first_seen)
     return None
 
 
@@ -1197,6 +1477,7 @@ def crawl_stats(st: dict, crawler: Crawler | None, pages_per_run: float) -> dict
         "details": c["details"],
         "heads": c["heads"],
         "requests": c["requests"],
+        "pruned_pages": c["pruned_junk"] + c["pruned_gone"],   # forgotten this run (Crawler.prune)
         "queue_remaining": queue_remaining,
         "est_days_to_full": round(len(never) / pages_per_run, 1) if pages_per_run > 0 else None,
     }
@@ -1295,6 +1576,11 @@ def main(argv=None) -> None:
         if ls and _last_seen_changed(it.get("last_seen"), ls):
             it["last_seen"] = ls
     stats = crawl_stats(st, crawler, _pages_per_run(st, float(cfg.get("minutes_per_run", 40))))
+    # hub / kit pages that did not load this run (the run summary reads `hub_problems` from the envelope)
+    hub_problems = crawler.hub_report() if crawler else []
+    warnings = run_warnings(crawler, hub_problems)
+    if warnings:
+        stats["warnings"] = warnings
     ok = True
     error = None
     if crawler and crawler.c["requests"] > 3 and crawler.c["pages_ok"] == 0 and crawler.c["not_modified"] == 0 \
@@ -1311,7 +1597,8 @@ def main(argv=None) -> None:
             # recovered from pdfs.json, which must be kept.
             save_state(st)
         save_raw(SOURCE, merged, ok=ok, error=error, stats=stats,
-                 extra={"crawl": {k: stats[k] for k in ("known_pages", "crawled_pages", "pdfs", "last_run_pages")}})
+                 extra={"crawl": {k: stats[k] for k in ("known_pages", "crawled_pages", "pdfs", "last_run_pages")},
+                        "hub_problems": hub_problems})
     print_summary(stats, crawler, len(merged))
 
 
@@ -1328,6 +1615,12 @@ def print_summary(stats: dict, crawler: Crawler | None, n_items: int) -> None:
             f"  PDF downloads (details): {c['details']} (ok {c['details_ok']}), HEAD checks: {c['heads']} "
             f"(vanished {c['vanished_checks']}, periodic {c['periodic_checks']})",
             f"  new PDFs this run      : {c['new_pdfs']}   total requests: {c['requests']}",
+            f"  pages pruned           : {c['pruned_junk']} junk, {c['pruned_gone']} long gone;  first 404s "
+            f"(links kept): {c['pages_gone_strikes']}",
+            f"  PDF checks left for the next run: {c['pdfs_requeued']} (hosts without answer: "
+            f"{', '.join(sorted(crawler.dead_hosts)) or 'none'}; robots.txt unavailable: "
+            f"{', '.join(f'{h} ({p})' for h, p in sorted(crawler.robots_down.items())) or 'none'}); "
+            f"PDF reader failures: {c['parse_failed']}",
         ]
     lines += [
         f"  PDFs in library        : {stats['pdfs']} ok, {stats['pdfs_gone']} gone ({n_items} items; "
@@ -1336,6 +1629,7 @@ def print_summary(stats: dict, crawler: Crawler | None, n_items: int) -> None:
         f"(never crawled: {stats['never_crawled']}, of which events {stats['never_crawled_events']})",
         f"  queue remaining (due)  : {stats['queue_remaining']}",
         f"  est. days to full scan : {stats['est_days_to_full']}",
+        *[f"  note: {w}" for w in stats.get("warnings") or []],
         "",
     ]
     print("\n".join(lines), flush=True)
