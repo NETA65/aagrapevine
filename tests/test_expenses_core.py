@@ -19,6 +19,9 @@ People's money: every amount is checked against numbers worked out by hand (in t
                            period, the service report (a GVR's 2026 report, number for number — its names, references and
                            distances invented),
                            and the files written before 1.1.0 (tests/fixtures/expenses/) read as they did
+  * 1.2.0                — what is owed is the balance at a period's end; Area 65's service panels by rule;
+                           UTF-16 text; the .zip backup's receipts by file name (expenses-files.js has its own
+                           tests: tests/test_expenses_files.py)
   * examples             — a realistic GVR season, first names only, one of each kind
 The file runs in a vm context, as tests/test_pwa_worker.py runs sw-core.js. Skipped without Node.js.
 
@@ -867,12 +870,17 @@ class ImportShapes(unittest.TestCase):
         self.assertEqual(r["tab"], [["a", "b\tc", "d"]])
 
     def test_what_a_picked_file_is(self):
-        r = core(self, r"""out({ kinds: [G.importKind("backup.json", ""), G.importKind("Backup.JSON", "x"), G.importKind("x.txt", "﻿  {\"format\""),
+        r = core(self, r"""const b = (a) => new Uint8Array(a);
+          out({ kinds: [G.importKind("backup.json", ""), G.importKind("Backup.JSON", "x"), G.importKind("x.txt", "﻿  {\"format\""),
                    G.importKind("x.txt", "[{"), G.importKind("x.csv", "date,amount"), G.importKind(null, null)],
-                   limits: [G.importLimit("csv"), G.importLimit("backup"), G.importLimit("?")],
+                   // by the first bytes, whatever the name: a .zip (a backup or an .xlsx) and Excel's older .xls
+                   bytes: [G.importKind("x.xlsx", "PK", b([0x50, 0x4b, 3, 4, 20])), G.importKind("backup.json", "PK", b([0x50, 0x4b, 3, 4])),
+                           G.importKind("old.xls", "", b([0xd0, 0xcf, 0x11, 0xe0, 0xa1])), G.importKind("x.csv", "date", b([0x64, 0x61]))],
+                   limits: [G.importLimit("csv"), G.importLimit("backup"), G.importLimit("zip"), G.importLimit("?")],
                    bigBackup: G.readBackup(G.toBackup(G.emptyState(CONFIG), [{ id: "p1", type: "image/jpeg", dataUrl: "data:image/jpeg;base64," + "A".repeat(12 * 1048576) }]), CONFIG).ok });""")
         self.assertEqual(r["kinds"], ["backup", "backup", "backup", "backup", "csv", "csv"])
-        self.assertEqual(r["limits"], [10485760, 83886080, 10485760])
+        self.assertEqual(r["bytes"], ["zip", "zip", "xls", "csv"])
+        self.assertEqual(r["limits"], [10485760, 4 * 1024 ** 3, 4 * 1024 ** 3, 10485760])   # a backup is the visitor's own: no real limit
         self.assertTrue(r["bigBackup"])                            # a backup over 10 MB (photos) is read
 
 
@@ -1873,6 +1881,94 @@ class OlderFiles(unittest.TestCase):
         self.assertTrue(r["kept"])
         self.assertTrue(r["same"])
         self.assertEqual(r["reasons"], ["same"])                                 # what the file says, the ledger says too
+
+
+class OwedAtTheEnd(unittest.TestCase):
+    """P1-4: what is owed is a balance — everything up to the period's end counts, not the period alone."""
+
+    def test_a_december_claim_paid_back_in_january(self):
+        r = core(self, r"""
+          const E = [N({ id: "h", type: "expense", date: "2026-12-10", category: "lodging", description: "Hotel", amount_cents: 30000, funder: "district",
+                         claim_status: "submitted", claim_date: "2026-12-12" }),
+                     N({ id: "r", type: "received", date: "2027-01-15", category: "reimbursement", description: "District check", amount_cents: 30000, funder: "district" })];
+          const y27 = { from: "2027-01-01", to: "2027-12-31" }, y26 = { from: "2026-01-01", to: "2026-12-31" };
+          const bal = (range) => G.funderBalances(E, S, range).map((b) => [b.funder, b.claimed_cents, b.received_cents, b.balance_cents]);
+          out({ owed27: G.summary(E, S, y27).owed_cents, owed26: G.summary(E, S, y26).owed_cents, all: G.summary(E, S, {}).owed_cents,
+                upTo27: bal({ to: y27.to }), within27: bal(y27), received27: G.summary(E, S, y27).received_cents });""")
+        self.assertEqual(r["owed27"], 0)                       # January's view: the check settled December's hotel
+        self.assertEqual(r["owed26"], 30000)                   # at the end of 2026 the district still owed it
+        self.assertEqual(r["all"], 0)
+        self.assertEqual(r["upTo27"], [["district", 30000, 30000, 0]])
+        self.assertEqual(r["within27"], [["district", 0, 30000, 30000]])   # the period alone: "you hold $300" — what the views no longer say
+        self.assertEqual(r["received27"], 30000)               # (the period's own totals stay the period's)
+
+
+class ServicePanels(unittest.TestCase):
+    """P1-11 / F-17: Area 65's panels by the rule — two-year terms from January 1 of an odd year, Panel N starting
+    in 1950 + N — with config/expenses.yml's panels as overrides."""
+
+    def test_the_rule_on_fixed_days(self):
+        r = core(self, r"""
+          const ids = (list) => list.map((p) => [p.id, p.from, p.to]);
+          const e = (date) => N({ type: "expense", date, category: "books", description: "x", amount_cents: 1 });
+          out({ oct26: ids(G.servicePanels([], "2026-10-06", [])), oct26cfg: ids(G.servicePanels(CONFIG.panels, "2026-10-06", [])),
+                jan27: ids(G.servicePanels([], "2027-01-15", [e("2026-11-02"), e("2027-01-03")])),
+                jan29: ids(G.servicePanels(CONFIG.panels, "2029-01-10", [e("2026-03-01"), e("2026-03-01")])),
+                override: ids(G.servicePanels([{ id: "75", from: "2025-01-01", to: "2026-11-30" }, { id: "x", from: "bad", to: "2026-01-01" }], "2026-10-06", [])),
+                byId: [G.panelById("75"), G.panelById("77"), G.panelById("76"), G.panelById("abc"), G.panelById("")] });""")
+        self.assertEqual(r["oct26"], [["75", "2025-01-01", "2026-12-31"]])                     # October 2026: the current term
+        self.assertEqual(r["oct26cfg"], [["77", "2027-01-01", "2028-12-31"], ["75", "2025-01-01", "2026-12-31"]])
+        self.assertEqual(r["jan27"], [["77", "2027-01-01", "2028-12-31"], ["75", "2025-01-01", "2026-12-31"]])   # newest first
+        self.assertEqual(r["jan29"], [["79", "2029-01-01", "2030-12-31"], ["77", "2027-01-01", "2028-12-31"], ["75", "2025-01-01", "2026-12-31"]])
+        self.assertEqual(r["override"], [["75", "2025-01-01", "2026-11-30"]])                  # a listed panel's dates win; a bad one is left out
+        self.assertEqual(r["byId"], [{"id": "75", "from": "2025-01-01", "to": "2026-12-31"}, {"id": "77", "from": "2027-01-01", "to": "2028-12-31"},
+                                     None, None, None])
+
+
+class Utf16(unittest.TestCase):
+    """P8-4 / F-8: a UTF-16 CSV (Excel's "Unicode text", some banks' exports) reads as its UTF-8 twin."""
+
+    def test_utf16_with_and_without_a_mark(self):
+        r = core(self, r"""
+          const text = "Fecha\tDescripción\tMonto\r\n27/09/2026\tCafé y pan dulce\t12,50\r\n28/09/2026\tAño nuevo — Niño\t3\r\n";
+          const le = Buffer.from(text, "utf16le"), be = Buffer.from(le).swap16();
+          const mark = (b, m) => new Uint8Array([...m, ...b]);
+          const read = (bytes) => G.decodeText(bytes);
+          const variants = { le_bom: mark(le, [0xff, 0xfe]), be_bom: mark(be, [0xfe, 0xff]), le: new Uint8Array(le), be: new Uint8Array(be),
+                             utf8: new Uint8Array(Buffer.from("﻿" + text, "utf8")), cp1252: new Uint8Array(Buffer.from(text.replace("—", "-"), "latin1")) };
+          const res = {};
+          for (const [k, b] of Object.entries(variants)) res[k] = G.parseCSV(read(b)).map((row) => row.join("|"));
+          const plan = G.planImport(variants.le_bom.buffer.slice(0), [], S, { mapping: { date: 0, description: 1, amount: 2 }, dateOrder: "dmy" });
+          out({ res, plan: plan.add.map((e) => [e.date, e.description, e.amount_cents]), errors: plan.errors });""")
+        want = ["Fecha|Descripción|Monto", "27/09/2026|Café y pan dulce|12,50", "28/09/2026|Año nuevo — Niño|3"]
+        for k in ("le_bom", "be_bom", "le", "be", "utf8"):
+            self.assertEqual(r["res"][k], want, k)
+        self.assertEqual(r["res"]["cp1252"], [w.replace("—", "-") for w in want])               # Windows-1252 as before
+        self.assertEqual(r["plan"], [["2026-09-27", "Café y pan dulce", 1250], ["2026-09-28", "Año nuevo — Niño", 300]])
+        self.assertEqual(r["errors"], [])
+
+
+class ZipBackupFormat(unittest.TestCase):
+    """F-8: the backup.json inside the full backup's .zip names each photo's file; the photos inside an older .json
+    (data: URLs) keep reading."""
+
+    def test_receipts_by_file_and_their_names(self):
+        r = core(self, r"""
+          const e = N({ id: "x1abc", type: "expense", date: "2026-09-27", category: "lodging", description: "Hotel for the Fall Assembly — año", amount_cents: 100, receipt: "photo" });
+          const st = { v: 1, entries: [e], settings: S, meta: {} };
+          const json = G.toBackup(st, [{ id: "x1abc", type: "image/jpeg", file: G.receiptFile(e, "image/jpeg"), name: "IMG_1.jpg", w: 10, h: 20 },
+                                       { id: "bad1", type: "image/jpeg", file: "../secret.jpg" }, { id: "bad2", file: "a.exe" }, { id: "bad3", type: "text/html", file: "x.png" },
+                                       { id: "old", type: "image/png", dataUrl: "data:image/png;base64,AA" }]);
+          const back = G.readBackup(json, CONFIG);
+          out({ receipts: back.receipts, names: [G.receiptFile(e, "image/png"), G.receiptFile({ id: "x2", date: "", description: "" }, "image/webp"),
+                                                 G.receiptFile({ id: "x3", date: "2026-01-02", description: "", vendor: "Kinko's" }, "")],
+                format: JSON.parse(json).app });""")
+        self.assertEqual(r["receipts"], [
+            {"id": "x1abc", "type": "image/jpeg", "file": "2026-09-27-hotel-for-the-fall-assembly-ano-x1abc.jpg", "name": "IMG_1.jpg", "w": 10, "h": 20},
+            {"id": "bad3", "type": "image/jpeg", "file": "x.png"},                # (the type follows: only images)
+            {"id": "old", "type": "image/png", "dataUrl": "data:image/png;base64,AA"}])
+        self.assertEqual(r["names"], ["2026-09-27-hotel-for-the-fall-assembly-ano-x1abc.png", "x2.webp", "2026-01-02-kinko-s-x3.jpg"])
+        self.assertEqual(r["format"], "1.2.0")
 
 
 class MessageKeys(unittest.TestCase):

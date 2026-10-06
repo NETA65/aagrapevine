@@ -7,7 +7,8 @@
 //                       funders [{id, kind, name: {en, es}, builtin, order}] · methods [{id, name, builtin, order}]
 //                       activities [{id, name: {en, es}, builtin, hidden, order}] (the kinds of service: the report's sections)
 //                       rates [{id, name, rate, note, builtin}] · default_rate · defaults {funder, method, round_trip}
-//                       panels [{id, from, to}] · renewal_days · backup_reminder_days · tones · types · templates
+//                       panels [{id, from, to}] (overrides: GVX.servicePanels works Area 65's terms out by itself)
+//                       · renewal_days · backup_reminder_days · tones · types · templates
 //                       · icons (the icon picker: drawn at build time in #xp-icons)
 //   expenses.icons    the Lucide names the page draws once at build time (category icons + the picker)
 //   expenses.ui       {en: {...}, es: {...}}: every "expenses.*" string of src/_i18n/expenses.json with the

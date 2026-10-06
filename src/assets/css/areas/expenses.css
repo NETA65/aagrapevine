@@ -305,6 +305,11 @@
 @media (width < 40rem), (pointer: coarse) { .xp-check-line { min-height: 2.75rem; } }
 .xp-hint { margin-top: 0.375rem; font-size: 0.8125rem; line-height: 1.45; color: var(--c-muted); }
 .xp-hint:empty { display: none; }
+/* a hint that warns (a backup too big for e-mail): the error colour, without an error's weight of alarm */
+.xp-hint-warn { color: var(--c-danger); font-weight: 600; }
+/* the notice over the app: what it says, then what to do about it */
+.xp-alert-body { display: grid; gap: 0.625rem; min-width: 0; }
+.xp-alert-body .xp-actions { margin: 0; }
 .xp-mark { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.75rem 1rem; margin-top: 1rem; padding: 0.875rem 1rem; border-radius: 0.875rem; background: var(--c-vine-soft); }
 .xp-mark > .xp-f { flex: 1 1 14rem; }
 .xp-mark .xp-hint { margin-bottom: -0.25rem; }

@@ -37,12 +37,22 @@ Node.js — the rules that live in the app itself, not in the core (tests/test_e
     named in the page's language
   * service activities in Settings — add, rename, merge a used one (a built-in is hidden, never deleted)
   * the tab bar — on a phone the open tab is scrolled into sight (a reopened view, a link, a tap)
+  * backups (1.2.0) — the full backup is a .zip (backup.json + each photo a file) another device restores, photos
+    and all; its size is said first and a big one is asked about; "without photos" (.json) keeps this device's
+    photos; an unpacked .zip restores from its backup.json picked with its photos; a pre-1.2.0 .json of 88 MB
+    restores in slices; UTF-16 CSVs and Excel workbooks import; what a browser can't read says why
+  * an edit keeps the fields its form doesn't show (an imported trip's nights, quantity, item, attendees);
+    "Who owes you" is the balance at the period's end; the service panels come from Area 65's rule; the
+    Requests view and the report make their formatters once (not per cell)
+  * stored data — an unreadable ledger is set aside (or, with no room, never saved over) and offered as a file;
+    a newer page's ledger is not saved over; closing the tab asks only while the form is unsaved; a photo
+    survives a delete another tab can still undo, or whose entry another tab brought back
   * the rest — the examples are added once; a CSV export is not a backup; the Summary's badge counts
     what its Reminders card lists, and "By category" counts subscriptions as subscriptions; "Sort:
     Category" follows the names on screen; two items that
     differ by an accent are two rows; "Last backup" counts calendar days
 
-The app is loaded as the page loads it (expenses-core.js, then expenses.js) into a vm context with a
+The app is loaded as the page loads it (expenses-core.js, expenses-files.js, then expenses.js) into a vm context with a
 small stand-in for the browser: localStorage (that can be made to refuse), no IndexedDB (the photos'
 calls fail softly, as in a private window) unless a test hands it the photos to keep, a document
 that records downloads, and an Alpine that hands back the component. The words and defaults come
@@ -57,7 +67,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from nodejs import run_js  # noqa: E402
+from nodejs import ROOT, run_js  # noqa: E402
 
 # The browser stand-in and the app: `make(lang, seed, moreEls, o)` → a fresh component (its own storage,
 # seeded from `seed`; `moreEls` are extra elements getElementById finds; o.photos: a Map that stands in
@@ -94,8 +104,9 @@ const fakeIDB = (recs) => ({
 });
 const make = (lang, seed, moreEls, o) => {
   o = o || {};
-  const store = new Map(Object.entries(seed || {}));
-  let full = false;
+  // (o.store: a Map two components share — two tabs of one browser; o.full: storage full from the start)
+  const store = o.store || new Map(Object.entries(seed || {}));
+  let full = !!o.full;
   const listeners = {}, docListeners = {}, blobs = new Map(), downloads = [];
   let n = 0;
   const els = {
@@ -107,14 +118,18 @@ const make = (lang, seed, moreEls, o) => {
   const now = o.now;
   const clock = now == null ? Date : class extends Date { constructor(...a) { if (a.length) super(...a); else super(now); } static now() { return now; } };
   const ctx = {
-    console, TextDecoder, Blob, Promise, JSON, Math, Date: clock, Intl, Object, Array, String, Number, isFinite, isNaN, Uint8Array, atob,
-    setTimeout: (fn, ms) => { const t = setTimeout(fn, ms); t.unref?.(); return t; },
+    console, TextDecoder, TextEncoder, Blob, Promise, JSON, Math, Date: clock, Intl: o.intl || Intl, Object, Array, String, Number, isFinite, isNaN,
+    Uint8Array, atob, DecompressionStream: o.noInflate ? undefined : DecompressionStream,
+    // (a toast's 10 seconds never keep Node waiting; a breath between two restored photos — 0 ms — is waited for)
+    setTimeout: (fn, ms) => { const t = setTimeout(fn, ms); if (ms > 0) t.unref?.(); return t; },
     clearTimeout, requestAnimationFrame: (fn) => setTimeout(fn, 0),
     getComputedStyle: (el) => (el && el.style) || {},      // an element's "computed" style is its own style
     localStorage: {
       getItem: (k) => (store.has(k) ? store.get(k) : null),
       setItem: (k, v) => { if (full) { const e = new Error("full"); e.name = "QuotaExceededError"; throw e; } store.set(k, String(v)); },
       removeItem: (k) => { store.delete(k); },
+      get length() { return store.size; },
+      key: (i) => [...store.keys()][i] ?? null,
     },
     indexedDB: o.photos ? fakeIDB(o.photos) : undefined,
     URL: { createObjectURL: (b) => { const u = "blob:" + (++n); blobs.set(u, b); return u; }, revokeObjectURL() {} },
@@ -122,6 +137,7 @@ const make = (lang, seed, moreEls, o) => {
     navigator: { storage: { persist: () => Promise.resolve(false), persisted: () => Promise.resolve(false), estimate: () => Promise.resolve({ usage: 0 }) } },
     matchMedia: () => ({ matches: true, addEventListener() {} }),
     addEventListener: (type, fn) => { (listeners[type] ||= []).push(fn); },
+    removeEventListener: (type, fn) => { listeners[type] = (listeners[type] || []).filter((f) => f !== fn); },
     confirm: () => true,
     GV: {},
     document: {
@@ -136,7 +152,7 @@ const make = (lang, seed, moreEls, o) => {
   };
   ctx.window = ctx;
   vm.createContext(ctx);
-  for (const f of ["src/assets/js/expenses-core.js", "src/assets/js/expenses.js"]) vm.runInContext(fs.readFileSync(f, "utf8"), ctx, { filename: f });
+  for (const f of ["src/assets/js/expenses-core.js", "src/assets/js/expenses-files.js", "src/assets/js/expenses.js"]) vm.runInContext(fs.readFileSync(f, "utf8"), ctx, { filename: f });
   let factory = null;
   ctx.Alpine = { directive() {}, data: (name, fn) => { if (name === "xpApp") factory = fn; } };
   for (const fn of docListeners["alpine:init"] || []) fn();
@@ -146,12 +162,15 @@ const make = (lang, seed, moreEls, o) => {
   a.$watch = () => {};
   a.init();
   return {
-    a, ctx, store, downloads, listeners, G: ctx.GVX,
+    a, ctx, store, downloads, listeners, G: ctx.GVX, F: ctx.GVF,
     setFull: (v) => { full = v; },
     text: async (d) => await blobs.get(d.url).text(),
+    blob: (d) => blobs.get(d.url),
   };
 };
 const tick = async () => { for (let i = 0; i < 5; i++) await new Promise((r) => setImmediate(r)); };
+// a file the visitor picks: a Blob with a name (it can be sliced, as a browser's File can)
+const fileOf = (name, data, type) => Object.assign(new Blob(Array.isArray(data) ? data : [data], { type: type || "" }), { name });
 const KEY = "gv-expenses:v1";
 const state = (w) => JSON.parse(w.store.get(KEY));
 // the form for an entry of `type` (category optional), filled with `fields`, saved → the app's messages
@@ -455,13 +474,13 @@ class Storage(unittest.TestCase):
             csv: async (w) => {
               w.a.impFile(file("bank.csv", "Date,Description,Amount\n09/02/2026,Office Depot,45.00\n")); await tick();
               w.a.imp.map.date = "0"; w.a.imp.map.description = "1"; w.a.imp.map.amount = "2"; w.a.impUseMap();
-              w.a.imp.mode = "replace"; w.a.impApply(); await tick();
+              w.a.imp.mode = "replace"; await w.a.impApply(); await tick();
             },
             backup: async (w) => {
               const e = w.G.normalizeEntry({ id: "b1", type: "expense", date: "2026-09-01", category: "other", description: "From the backup", amount_cents: 100, receipt: "photo" }, w.a.st()).entry;
               w.a.impFile(file("backup.json", w.G.toBackup({ entries: [e], settings: w.a.st(), meta: {} }, [{ id: "b1", type: "image/jpeg", dataUrl: "data:image/jpeg;base64,/9j/4AAQ" }])));
               await tick();
-              w.a.imp.mode = "replace"; w.a.impApply(); await tick();
+              w.a.imp.mode = "replace"; await w.a.impApply(); await tick();
             },
           };
           const res = {};
@@ -536,27 +555,35 @@ class Requests(unittest.TestCase):
 
 class Import(unittest.TestCase):
     def test_a_big_full_backup_is_restored(self):
+        # P1-2: a .json backup with its photos inside (every full backup before 1.2.0), well over the 80 MB it
+        # used to be refused at, is read in slices (GVF.jsonBackup) and every photo restored, each to its own
+        # entry; a CSV still stops at 10 MB
         r = app(self, r"""
-          const w = make("en");
-          const G = w.G, big = "data:image/jpeg;base64," + "A".repeat(400 * 1024);
+          const photos = new Map(), w = make("en", null, null, { photos });
+          const G = w.G, fill = "A".repeat(400 * 1024);
           const entries = [], receipts = [];
-          for (let i = 0; i < 40; i++) {
+          for (let i = 0; i < 220; i++) {
             const id = "b" + i;
             entries.push(G.normalizeEntry({ id, type: "expense", date: "2026-09-01", description: "Receipt " + i, amount_cents: 100 + i, receipt: "photo" }, w.a.st()).entry);
-            receipts.push({ id, type: "image/jpeg", dataUrl: big });
+            // each photo starts with its own 6 bytes ("ph-007"), so the right one is checked at the right entry
+            receipts.push({ id, type: "image/jpeg", dataUrl: "data:image/jpeg;base64," + btoa("ph-" + String(i).padStart(3, "0")) + fill });
           }
           const text = G.toBackup({ entries, settings: w.a.st(), meta: {} }, receipts);
-          const file = (name, t) => ({ name, size: Buffer.byteLength(t), arrayBuffer: async () => new TextEncoder().encode(t).buffer });
-          w.a.impFile(file("big-backup.json", text)); await tick();
-          const backup = [w.a.imp.step, w.a.imp.err, w.a.imp.counts && w.a.imp.counts.entries];
+          const mb = +(text.length / 1048576).toFixed(1);
+          await w.a.impFile(fileOf("big-backup.json", text)); await tick();
+          const backup = [w.a.imp.step, w.a.imp.err, w.a.imp.counts && w.a.imp.counts.entries, w.a.imp.counts && w.a.imp.counts.photos];
+          await w.a.impApply();
+          const head = async (id) => new TextDecoder().decode((await photos.get(id).blob.arrayBuffer()).slice(0, 6));
+          const restored = [photos.size, await head("b0"), await head("b137"), await head("b219"), w.a.imp.photosDone, w.a.imp.photoErrs, w.a.E().length];
           const csv = "date,amount\n" + "2026-09-01,1\n".repeat(Math.ceil(11 * 1048576 / 13));
-          w.a.impFile(file("big.csv", csv)); await tick();
-          out({ mb: +(text.length / 1048576).toFixed(1), backup, csv: w.a.imp.err, limits: [G.importLimit("csv"), G.importLimit("backup")],
+          await w.a.impFile(fileOf("big.csv", csv)); await tick();
+          out({ mb, backup, restored, csv: w.a.imp.err, limits: [G.importLimit("csv"), G.importLimit("backup"), G.importLimit("zip")],
                 kinds: [G.importKind("x.json", ""), G.importKind("backup.txt", "﻿ {"), G.importKind("a.csv", "date,amount")] });""", )
-        self.assertGreater(r["mb"], 15)
-        self.assertEqual(r["backup"], ["backup", "", 40])
+        self.assertGreater(r["mb"], 85)
+        self.assertEqual(r["backup"], ["backup", "", 220, 220])
+        self.assertEqual(r["restored"], [220, "ph-000", "ph-137", "ph-219", 220, 0, 220])
         self.assertEqual(r["csv"], "The file is larger than 10 MB.")
-        self.assertEqual(r["limits"], [10 * 1048576, 80 * 1048576])
+        self.assertEqual(r["limits"], [10 * 1048576, 4 * 1024 ** 3, 4 * 1024 ** 3])     # a backup: no limit that matters
         self.assertEqual(r["kinds"], ["backup", "backup", "csv"])
 
     def test_the_mapping_step(self):
@@ -635,11 +662,11 @@ class Import(unittest.TestCase):
             amount_cents: 1200, receipt: "photo", created: "2026-09-01T10:00:00.000Z", updated: "2026-09-01T10:00:00.000Z" }, st).entry);
           const backup = G.toBackup({ entries: E, settings: st, meta: {} }, E.map((e) => ({ id: e.id, type: "image/jpeg", dataUrl: "data:image/jpeg;base64,/9j/4AAQ" })));
           w.a.impFile(file("service-expenses.csv", G.toCSV(E, st, { lang: "en" }))); await tick();
-          w.a.impApply(); await tick();
+          await w.a.impApply(); await tick();
           photos.set("p2", { id: "p2", type: "image/jpeg", blob: new Blob(["mine"]), mine: true });
           w.a.impFile(file("service-expenses-backup.json", backup)); await tick();
           const preview = [w.a.imp.step, w.a.imp.counts.entries, w.a.imp.counts.photos];
-          w.a.impApply(); await tick();
+          await w.a.impApply(); await tick();
           out({ preview, entries: w.a.E().map((e) => [e.id, e.receipt]), photos: [...photos.keys()].sort(), mine: !!photos.get("p2").mine,
                 blob: photos.has("p1") && photos.get("p1").blob instanceof Blob });""")
         self.assertEqual(r["preview"], ["backup", 2, 2])
@@ -669,7 +696,7 @@ class Import(unittest.TestCase):
               w.a.impFile(file("service-expenses.csv", lines.join("\n"))); await tick();
               w.a.imp.mode = "merge";
               const button = w.a.plural(w.a.imp.counts.add + w.a.imp.counts.update, "imp.apply_one", "imp.apply");
-              w.a.impApply(); await tick();
+              await w.a.impApply(); await tick();
               return { counts: [w.a.imp.added, w.a.imp.updated], button, done: w.a.plural(w.a.imp.added + w.a.imp.updated, "imp.done_one", "imp.done"), toast: w.a.toastMsg };
             };
             res[lang] = { two: await run(2), one: await run(1) };
@@ -1110,7 +1137,8 @@ class ServiceReport(unittest.TestCase):
                                       ["miles_total", "Mileage total", "$124.56"], ["total", "Total cost of service", "$274.56"]])
         self.assertEqual(en["rates"], "$0.30 a mile")
         self.assertEqual(en["periods"][:2], ["y:2026", "y:2025"])
-        self.assertEqual(en["money"], [[["2026-03-20 – 2026-03-22", "Check · Check #101", "Room shared with a member"]]])
+        # (a date's words kept together: no-break spaces; the year once)
+        self.assertEqual(en["money"], [[["Mar 20 – Mar 22, 2026", "Check · Check #101", "Room shared with a member"]]])
         self.assertEqual(en["miles"][1], ["Information tables & conventions", [["State Convention", "3", "58.7", "352.2", "Home → Fort Worth", "Table support"]]])
         # whom you rode with is a name: out unless names are in
         self.assertEqual(en["miles"][2][1], [["Big Country", "—", "—", "0", "Rode with someone: no miles", "Table support"]])
@@ -1173,6 +1201,412 @@ class ActivitiesSettings(unittest.TestCase):
         self.assertEqual(r["other"], [True, True])
         self.assertFalse(r["shown"])                                            # hidden from the form's list
         self.assertFalse(r["canNow"])
+
+
+class Backups(unittest.TestCase):
+    """P1-2 / F-8: the full backup is a .zip — backup.json and each receipt photo a file of its own — and another
+    device restores it, photos and all; its size is said first, a big one is asked about (or backed up without
+    photos); a .json without photos leaves this device's photos alone; an unpacked .zip restores from its
+    backup.json picked with its photos; the backups made before 1.2.0 (photos inside the .json) restore."""
+
+    def test_the_zip_round_trip(self):
+        r = app(self, r"""
+          const res = {};
+          for (const lang of ["en", "es"]) {
+            const photos = new Map(), w = make(lang, null, null, { photos });
+            add(w, "expense", { description: "Hotel for the Fall Assembly", amount: "90", receipt: "photo", date: "2026-09-26" }, "lodging");
+            add(w, "expense", { description: "Big Book", amount: "12", receipt: "photo", date: "2026-09-27" }, "books");
+            add(w, "expense", { description: "Stamps", amount: "3", date: "2026-09-28" }, "other");
+            const [hotel, book] = w.a.E();
+            photos.set(hotel.id, { id: hotel.id, type: "image/jpeg", blob: new Blob([new Uint8Array([0xff, 0xd8, 1, 2, 3])], { type: "image/jpeg" }), w: 1200, h: 900,
+                                   name: "IMG_1.jpg", added: "2026-09-26T10:00:00.000Z" });
+            photos.set(book.id, { id: book.id, type: "image/jpeg", blob: new Blob([new Uint8Array([0xff, 0xd8, 9])], { type: "image/jpeg" }) });
+            photos.set("gone", { id: "gone", type: "image/jpeg", blob: new Blob(["x"]) });          // no entry points to it: not backed up
+            await w.a.exportBackup();
+            const d = w.downloads.at(-1), zip = w.blob(d), ar = await w.F.readZip(zip);
+            const inside = JSON.parse(await ar.text("backup.json"));
+            // another device: a fresh tracker restores the .zip, photos and all
+            const photos2 = new Map(), w2 = make(lang, null, null, { photos: photos2 });
+            await w2.a.impFile(fileOf(d.name, zip));
+            const preview = [w2.a.imp.step, JSON.parse(JSON.stringify(w2.a.imp.counts))];
+            await w2.a.impApply();
+            const back = async (m, id) => Array.from(new Uint8Array(await m.get(id).blob.arrayBuffer()));
+            res[lang] = { name: d.name, toast: w.a.toastMsg, files: ar.entries.map((e) => e.name), receipts: inside.receipts.map((x) => [x.id, x.file, x.name || "", x.w || 0]),
+                          lastBackup: !!state(w).meta.lastBackup, preview, entries: w2.a.E().map((e) => e.description), photos: [...photos2.keys()].sort(),
+                          same: [await back(photos2, hotel.id), await back(photos2, book.id)], want: [await back(photos, hotel.id), await back(photos, book.id)],
+                          meta: [photos2.get(hotel.id).w, photos2.get(hotel.id).name, photos2.get(hotel.id).type], ids: [hotel.id, book.id], done: [w2.a.imp.photosDone, w2.a.imp.photoErrs] };
+          }
+          out(res);""")
+        en = r["en"]
+        hotel, book = en["ids"]
+        self.assertRegex(en["name"], r"^service-expenses-backup-\d{4}-\d{2}-\d{2}\.zip$")
+        self.assertRegex(r["es"]["name"], r"^gastos-de-servicio-respaldo-\d{4}-\d{2}-\d{2}\.zip$")
+        self.assertRegex(en["toast"], r"^Downloaded service-expenses-backup-[\d-]+\.zip · \d+ KB$")    # the size, at export
+        self.assertEqual(en["files"], ["backup.json", f"2026-09-26-hotel-for-the-fall-assembly-{hotel}.jpg", f"2026-09-27-big-book-{book}.jpg"])
+        self.assertEqual(en["receipts"], [[hotel, en["files"][1], "IMG_1.jpg", 1200], [book, en["files"][2], "", 0]])
+        self.assertTrue(en["lastBackup"])
+        self.assertEqual(en["preview"], ["backup", {"entries": 3, "photos": 2, "missing": 0}])
+        self.assertEqual(en["entries"], ["Hotel for the Fall Assembly", "Big Book", "Stamps"])
+        self.assertEqual(en["photos"], sorted([hotel, book]))
+        self.assertEqual(en["same"], en["want"])                           # each photo, byte for byte, at its own entry
+        self.assertEqual(en["meta"], [1200, "IMG_1.jpg", "image/jpeg"])
+        self.assertEqual(en["done"], [2, 0])
+        self.assertEqual(r["es"]["preview"], en["preview"])
+
+    def test_the_size_without_photos_and_a_big_one(self):
+        r = app(self, r"""
+          const photos = new Map(), w = make("en", null, null, { photos });
+          add(w, "expense", { description: "Hotel", amount: "90", receipt: "photo" }, "lodging");
+          add(w, "expense", { description: "Books", amount: "12", receipt: "photo" }, "books");
+          const [a, b] = w.a.E();
+          const mb = (n) => new Blob([new Uint8Array(n * 1048576)], { type: "image/jpeg" });
+          photos.set(a.id, { id: a.id, type: "image/jpeg", blob: mb(1) });
+          photos.set(b.id, { id: b.id, type: "image/jpeg", blob: mb(2) });
+          const bk = JSON.parse(JSON.stringify(await w.a.measureBackup()));
+          const line = w.a.bkLine(), bigNow = w.a.bkBig();
+          // without photos: the ledger alone (.json); restored here with "Replace", this device keeps the photos its entries point to
+          await w.a.exportBackup("plain");
+          const plain = w.downloads.at(-1), plainText = await w.text(plain);
+          await w.a.impFile(fileOf(plain.name, plainText));
+          w.a.imp.mode = "replace";
+          await w.a.impApply();
+          const kept = [...photos.keys()].sort();
+          // 19 MB more of photos: too big for e-mail — asked first (save it anyway, without photos, or not now)
+          photos.set(b.id, { id: b.id, type: "image/jpeg", blob: mb(19) });
+          w.a.$refs.ask = { open: false, showModal() { this.open = true; }, close() { this.open = false; }, querySelector: () => null };
+          const n0 = w.downloads.length;
+          const p1 = w.a.exportBackup(); await tick();
+          const asked = [w.a.ask.msg, w.a.ask.ok, w.a.ask.alt];
+          w.a.askDone("alt"); await p1;
+          const alt = w.downloads.slice(n0).map((d) => d.name);
+          const p2 = w.a.exportBackup(); await tick(); w.a.askDone(true); await p2;
+          const full = w.downloads.at(-1), n3 = w.downloads.length;
+          const p3 = w.a.exportBackup(); await tick(); w.a.askDone(false); await p3;
+          out({ bk, line, bigNow, plain: plain.name, plainReceipts: JSON.parse(plainText).receipts, kept, ids: [a.id, b.id].sort(), asked, alt,
+                full: [full.name, w.blob(full).size], cancel: w.downloads.length - n3, bigAfter: w.a.bkBig() });""")
+        self.assertEqual(r["bk"]["photos"], 2)
+        self.assertTrue(3 * 1048576 < r["bk"]["bytes"] < 3 * 1048576 + 50000, r["bk"])
+        self.assertLess(r["bk"]["plain"], 50000)
+        self.assertRegex(r["line"], r"^Full backup: about 3 MB, 2 receipt photos\. Without photos: about \d+ KB\.$")
+        self.assertFalse(r["bigNow"])
+        self.assertRegex(r["plain"], r"^service-expenses-backup-no-photos-\d{4}-\d{2}-\d{2}\.json$")
+        self.assertEqual(r["plainReceipts"], [])
+        self.assertEqual(r["kept"], r["ids"])
+        self.assertIn("about 20 MB (2 receipt photos): too big to send by e-mail", r["asked"][0])
+        self.assertEqual(r["asked"][1:], ["Save the full backup", "Without photos"])
+        self.assertEqual(len(r["alt"]), 1)
+        self.assertRegex(r["alt"][0], r"-backup-no-photos-[\d-]+\.json$")
+        self.assertRegex(r["full"][0], r"-backup-[\d-]+\.zip$")
+        self.assertGreater(r["full"][1], 20 * 1048576)
+        self.assertEqual(r["cancel"], 0)
+        self.assertTrue(r["bigAfter"])
+
+    def test_an_unpacked_backup_and_a_v1_backup(self):
+        r = app(self, r"""
+          const photos = new Map(), w = make("en", null, null, { photos });
+          add(w, "expense", { description: "Hotel", amount: "90", receipt: "photo" }, "lodging");
+          add(w, "expense", { description: "Books", amount: "12", receipt: "photo" }, "books");
+          for (const e of w.a.E()) photos.set(e.id, { id: e.id, type: "image/jpeg", blob: new Blob([e.id], { type: "image/jpeg" }) });
+          await w.a.exportBackup();
+          const ar = await w.F.readZip(w.blob(w.downloads.at(-1)));
+          const parts = await Promise.all(ar.entries.map(async (e) => fileOf(e.name, await ar.blob(e.name, "image/jpeg"))));
+          // a computer unpacked it: its backup.json alone says the photos are not with it …
+          const p2 = new Map(), w2 = make("en", null, null, { photos: p2 });
+          await w2.a.impFile(parts[0]);
+          const alone = [w2.a.imp.step, w2.a.imp.counts.photos, w2.a.imp.counts.missing, w2.a.t("imp.photos_missing", { n: "2" })];
+          // … picked together with them (in any order), it restores them too
+          await w2.a.impFiles(parts.slice().reverse());
+          const together = JSON.parse(JSON.stringify(w2.a.imp.counts));
+          await w2.a.impApply();
+          const restored = await Promise.all([...p2.values()].map(async (x) => (await x.blob.text()) === x.id));
+          // the backup the tracker made before 1.2.0 (tests/fixtures/expenses: its photo inside, as a data: URL — the
+          // entry it belongs to marked "photo" here, so it is one to restore)
+          const old = JSON.parse(input.v1);
+          old.entries.find((e) => e.id === "x0n").receipt = "photo";
+          const p3 = new Map(), w3 = make("en", null, null, { photos: p3 });
+          await w3.a.impFile(fileOf("service-expenses-backup-2026-09-27.json", JSON.stringify(old)));
+          const v1 = [w3.a.imp.step, JSON.parse(JSON.stringify(w3.a.imp.counts))];
+          await w3.a.impApply();
+          out({ alone, together, restored, v1, v1after: [w3.a.E().length, [...p3.keys()], p3.size && p3.values().next().value.blob.type] });""",
+                data={"v1": (ROOT / "tests" / "fixtures" / "expenses" / "v1-backup.json").read_text(encoding="utf-8")})
+        self.assertEqual(r["alone"][:3], ["backup", 0, 2])
+        self.assertIn("choose its backup.json together with all its photos", r["alone"][3])
+        self.assertEqual(r["together"], {"entries": 2, "photos": 2, "missing": 0})
+        self.assertEqual(r["restored"], [True, True])
+        self.assertEqual(r["v1"], ["backup", {"entries": 45, "photos": 1, "missing": 0}])
+        self.assertEqual(r["v1after"], [45, ["x0n"], "image/jpeg"])
+
+
+class ImportFiles(unittest.TestCase):
+    """F-8 / P8-4: a UTF-16 CSV reads as its UTF-8 twin; an Excel workbook (.xlsx) imports — its first sheet, dates
+    by their format — through the same preview; what this browser can't read says why."""
+
+    def test_utf16_csv(self):
+        r = app(self, r"""
+          const text = "Date,Description,Amount\r\n09/27/2026,Café con leche,4.50\r\n09/28/2026,Año nuevo,12\r\n";
+          const le = Buffer.from(text, "utf16le"), variants = { utf8: Buffer.from(text, "utf8"), le_bom: Buffer.concat([Buffer.from([0xff, 0xfe]), le]),
+            be_bom: Buffer.concat([Buffer.from([0xfe, 0xff]), Buffer.from(le).swap16()]), le_bare: le };
+          const res = {};
+          for (const [k, b] of Object.entries(variants)) {
+            const w = make("en");
+            await w.a.impFile(fileOf("bank-" + k + ".csv", new Uint8Array(b)));
+            if (w.a.imp.step === "map") w.a.impUseMap();          // (the columns guessed from the headers)
+            res[k] = [w.a.imp.step, w.a.imp.err, (w.a.imp.sampleRows || []).map((x) => [x.desc, x.amount])];
+          }
+          // our own export, saved by a spreadsheet as "Unicode text" (UTF-16, tabs): read as ours
+          const w = make("es");
+          add(w, "expense", { description: "Libros de La Viña", amount: "36" }, "books");
+          const tab = w.G.toCSV(w.a.E(), w.a.st(), { lang: "es" }).replace(/^﻿/, "").replace(/,/g, "\t");
+          const w2 = make("es");
+          await w2.a.impFile(fileOf("registro.txt", new Uint8Array(Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(tab, "utf16le")]))));
+          out({ res, ours: [w2.a.imp.step, w2.a.imp.ours, w2.a.imp.counts && w2.a.imp.counts.add, w2.a.imp.sampleRows && w2.a.imp.sampleRows[0].desc] });""")
+        want = ["preview", "", [["Café con leche", "$4.50"], ["Año nuevo", "$12.00"]]]
+        for k, v in r["res"].items():
+            self.assertEqual(v, want, k)
+        self.assertEqual(r["ours"], ["preview", True, 1, "Libros de La Viña"])
+
+    def test_an_excel_workbook(self):
+        from test_expenses_files import NS, workbook, serial  # the workbook builder (Excel's own layout)
+        sheet = (f'<worksheet {NS}><sheetData>'
+                 '<row r="1"><c r="A1" t="s"><v>0</v></c><c r="B1" t="s"><v>1</v></c><c r="C1" t="s"><v>2</v></c></row>'
+                 '<row r="2"><c r="A2" s="1"><v>46292</v></c><c r="B2" t="s"><v>4</v></c><c r="C2"><v>120.5</v></c></row>'
+                 '<row r="3"><c r="A3" s="2"><v>46293</v></c><c r="B3" t="inlineStr"><is><t>Café</t></is></c><c r="C3"><v>12.339999999999998</v></c></row>'
+                 '</sheetData></worksheet>')
+        ours = (f'<worksheet {NS}><sheetData><row r="1">' + "".join(f'<c r="{c}1" t="inlineStr"><is><t>{h}</t></is></c>' for c, h in zip("ABCD", ["date", "type", "amount", "description"]))
+                + '</row><row r="2"><c r="A2" s="1"><v>46295</v></c><c r="B2" t="inlineStr"><is><t>mileage</t></is></c><c r="C2"><v>0</v></c>'
+                '<c r="D2" t="inlineStr"><is><t>To the assembly</t></is></c></row></sheetData></worksheet>')
+        import base64
+        r = app(self, r"""
+          const bytes = (b64) => new Uint8Array(Buffer.from(b64, "base64"));
+          const w = make("en");
+          await w.a.impFile(fileOf("Expenses.xlsx", bytes(input.wb)));
+          const map = [w.a.imp.step, w.a.imp.from, w.a.imp.headers.map((h) => h.name), JSON.parse(JSON.stringify(w.a.imp.map))];
+          w.a.impUseMap();
+          await w.a.impApply();
+          const w2 = make("en");
+          await w2.a.impFile(fileOf("mine.xlsx", bytes(input.ours)));
+          out({ map, entries: w.a.E().map((e) => [e.date, e.description, e.amount_cents]), ours: [w2.a.imp.step, w2.a.imp.ours, w2.a.imp.counts.add] });""",
+                data={"wb": base64.b64encode(workbook(sheet2=sheet)).decode(), "ours": base64.b64encode(workbook(sheet2=ours)).decode()})
+        day = lambda n: serial(n).strftime("%Y-%m-%d")  # noqa: E731
+        self.assertEqual(r["map"], ["map", "xlsx", ["Date", "Description", "Amount"], {"date": "0", "description": "1", "amount": "2", "category": "", "miles": "", "notes": ""}])
+        self.assertEqual(r["entries"], [[day(46292), "Hotel & parking", 12050], [day(46293), "Café", 1234]])
+        self.assertEqual(r["ours"], ["preview", True, 1])
+
+    def test_what_this_browser_cannot_read_says_why(self):
+        from test_expenses_files import workbook, a_zip
+        import base64
+        import zipfile
+        r = app(self, r"""
+          const bytes = (b64) => new Uint8Array(Buffer.from(b64, "base64"));
+          const err = async (w, f) => { await w.a.impFile(f); return w.a.imp.err; };
+          const w = make("en"), old = make("en", null, null, { noInflate: true });
+          out([await err(w, fileOf("old.xls", new Uint8Array([0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1, 0, 0]))),
+               await err(old, fileOf("Expenses.xlsx", bytes(input.wb))), await err(w, fileOf("photos.zip", bytes(input.other))),
+               await err(w, fileOf("backup.zip", bytes(input.wb).slice(0, 200))),
+               [w.a.t("err.xls_old"), w.a.t("err.xlsx_browser"), w.a.t("err.backup_foreign"), w.a.t("err.zip_damaged")]]);""",
+                data={"wb": base64.b64encode(workbook()).decode(), "other": base64.b64encode(a_zip([("cat.jpg", b"\xff\xd8", zipfile.ZIP_STORED)])).decode()})
+        self.assertEqual(r[:4], r[4])
+        self.assertIn("(.xls)", r[0])
+
+
+class EditKeepsWhatTheFormDoesNotShow(unittest.TestCase):
+    """P1-3: an edit starts from the entry: an imported entry's fields its form doesn't show (a trip's nights,
+    quantity, item, attendees) survive a description fix; a new category (another form) drops what it has no
+    place for, as a new entry would."""
+
+    def test_an_imported_travel_entry(self):
+        r = app(self, r"""
+          const w = make("en");
+          const csv = "id,date,type,category,description,amount,funder,claim_status,nights,quantity,item,attendees,end_date,vendor,role,activity,miles,rate,from,to,trips\n" +
+            "t1,2026-09-20,expense,travel,Bus to the Assembly,45.00,district,to_request,2,3,Bus pass,4,2026-09-22,Greyhound,Driver,assembly,,,,,\n" +
+            "t2,2026-09-21,mileage,mileage,To Tyler,,district,to_request,,5,Gas card,,,Shell,Driver,assembly,50,0.14,Home,Tyler,2\n";
+          await w.a.impFile(fileOf("trips.csv", csv)); await w.a.impApply();
+          const pick = (id) => { const e = w.a.E().find((x) => x.id === id);
+            return [e.description, e.nights, e.quantity, e.item, e.attendees, e.end_date, e.vendor, e.role, e.activity, e.amount_cents, e.funder, e.claim_status, e.miles, e.trips]; };
+          const before = [pick("t1"), pick("t2")];
+          w.a.openEdit("t1"); w.a.form.description = "Bus to the Fall Assembly"; w.a.saveForm(false);
+          w.a.openEdit("t2"); w.a.form.description = "To Tyler and back"; w.a.saveForm(false);
+          const after = [pick("t1"), pick("t2"), w.a.formErrs.length];
+          // a new category (another form): what it has no place for goes, as on a new entry
+          w.a.openEdit("t1"); w.a.form.category = "other"; w.a.onCat(); w.a.saveForm(false);
+          const moved = pick("t1");
+          // literature bought to give away, moved to Meals: no longer stock to give away
+          add(w, "expense", { description: "GV issues", item: "Grapevine", format: "gv", quantity: "20", unit_cost: "2.50" }, "giveaways");
+          const g = w.a.E().at(-1);
+          w.a.openEdit(g.id); w.a.form.category = "meals"; w.a.onCat(); w.a.form.amount = "50"; w.a.saveForm(false);
+          const meal = w.a.E().find((e) => e.id === g.id);
+          out({ before, after, moved, meal: [g.giveaway, meal.giveaway, meal.item, meal.quantity, meal.amount_cents, w.a.inv().length] });""")
+        t1 = ["Bus to the Assembly", 2, 3, "Bus pass", 4, "2026-09-22", "Greyhound", "Driver", "assembly", 4500, "district", "to_request", "", ""]
+        t2 = ["To Tyler", "", 5, "Gas card", "", "", "Shell", "Driver", "assembly", 700, "district", "to_request", 50, 2]
+        self.assertEqual(r["before"], [t1, t2])
+        self.assertEqual(r["after"], [["Bus to the Fall Assembly"] + t1[1:], ["To Tyler and back"] + t2[1:], 0])   # nothing lost, nothing moved
+        self.assertEqual(r["moved"], ["Bus to the Fall Assembly", "", "", "", "", "", "Greyhound", "", "assembly", 4500, "district", "to_request", "", ""])
+        self.assertEqual(r["meal"], [True, False, "", "", 5000, 0])
+
+
+class OwedAtThePeriodsEnd(unittest.TestCase):
+    """P1-4: "Who owes you" is the balance at the period's end: a hotel claimed in December and paid back in
+    January is even in January's view (not "you hold $300 of theirs"); the period's lists stay the period's."""
+
+    def test_a_december_claim_and_a_january_check(self):
+        r = app(self, r"""
+          const w = make("en", null, null, { now: Date.UTC(2027, 0, 20, 18) });
+          add(w, "expense", { description: "Hotel for the Winter Assembly", amount: "300", funder: "district", claim_status: "submitted", date: "2026-12-10" }, "lodging");
+          add(w, "received", { description: "District check", amount: "300", funder: "district", date: "2027-01-15" }, "reimbursement");
+          const view = (p) => { w.a.setPeriod(p); return [w.a.balances().map((b) => [b.name, b.balanceText, b.received]), w.a.stats().find((s) => s.id === "owed").value, w.a.filtered().length]; };
+          out({ year: view("this_year"), month: view("this_month"), last: view("last_year"), all: view("all") });""")
+        self.assertEqual(r["year"], [[["My district", "Even", "$300.00"]], "$0.00", 1])
+        self.assertEqual(r["month"], r["year"])
+        self.assertEqual(r["last"], [[["My district", "Owes you $300.00", "$0.00"]], "$300.00", 1])   # at the end of 2026 it was still owed
+        self.assertEqual(r["all"], [[["My district", "Even", "$300.00"]], "$0.00", 2])
+
+
+class ServicePanelsInTheFilters(unittest.TestCase):
+    """P1-11 / F-17: the period filters offer the current panel by Area 65's rule — no settings needed — and
+    the panels config/expenses.yml lists."""
+
+    def test_on_fixed_days(self):
+        r = app(self, r"""
+          const at = (iso) => make("en", null, null, { now: Date.parse(iso + "T17:00:00Z") });
+          const panels = (w) => w.a.periods().filter((p) => p.id.startsWith("panel:")).map((p) => [p.id, p.label]);
+          const oct26 = at("2026-10-06"), jan27 = at("2027-01-15"), jan29 = at("2029-01-10"), bare = at("2026-10-06");
+          add(jan29, "expense", { description: "Old", amount: "1", date: "2024-03-01" }, "books");
+          bare.a.st().panels = []; bare.a.rev++;                                  // no panel listed at all: the rule alone
+          oct26.a.setPeriod("panel:75");
+          out({ oct26: panels(oct26), jan27: panels(jan27), jan29: panels(jan29), bare: panels(bare), range: oct26.a.range(),
+                rule: jan29.a.range("panel:81"), report: oct26.a.rpPeriods().filter((p) => p.id.startsWith("panel:")).map((p) => p.id) });""")
+        self.assertEqual(r["oct26"], [["panel:77", "Panel 77"], ["panel:75", "Panel 75"]])
+        self.assertEqual(r["jan27"], [["panel:77", "Panel 77"], ["panel:75", "Panel 75"]])
+        self.assertEqual(r["jan29"], [["panel:79", "Panel 79"], ["panel:77", "Panel 77"], ["panel:75", "Panel 75"], ["panel:73", "Panel 73"]])
+        self.assertEqual(r["bare"], [["panel:75", "Panel 75"]])                   # October 2026: the current term, by the rule
+        self.assertEqual(r["range"], {"from": "2025-01-01", "to": "2026-12-31"})
+        self.assertEqual(r["rule"], {"from": "2031-01-01", "to": "2032-12-31"})
+        self.assertEqual(r["report"], ["panel:77", "panel:75"])
+
+
+class Speed(unittest.TestCase):
+    """P5-4: the Requests view and the service report make their number and date formatters once — not one per
+    cell (two years of entries: a purchase a day, a trip every other day, all asked of the district)."""
+
+    def test_formatters_are_made_once(self):
+        r = app(self, r"""
+          let made = 0;
+          const intl = new Proxy(Intl, { get(t, k) { const v = t[k];
+            return k === "NumberFormat" || k === "DateTimeFormat" ? new Proxy(v, { construct(T, a) { made++; return new T(...a); } }) : v; } });
+          const w = make("en", null, null, { intl });
+          // app.js's GV.fmtDate makes a formatter per call: the tracker no longer goes through it for its dates
+          w.ctx.GV.fmtDate = (d, o) => new w.ctx.Intl.DateTimeFormat("en-US", Object.assign({ timeZone: "America/Chicago" }, o)).format(new Date(d));
+          const G = w.G, st = w.a.st(), E = [];
+          for (let day = 0; day < 730; day++) {
+            const date = G.addDays("2024-10-01", day);
+            E.push(G.normalizeEntry({ id: "e" + E.length, type: "expense", date, category: day % 3 ? "books" : "meals", description: "Purchase " + day,
+              amount_cents: 1000 + day, funder: "district", claim_status: "to_request" }, st).entry);
+            if (day % 2 === 0) E.push(G.normalizeEntry({ id: "e" + E.length, type: "mileage", date, from: "Home", to: "Place " + day, miles: 20, rate: "0.14",
+              funder: "district", claim_status: "to_request", activity: "district" }, st).entry);
+          }
+          w.store.set(KEY, JSON.stringify({ v: 1, entries: E, settings: st, meta: {} }));
+          w.a.loadState();
+          w.a.rq.funder = "district"; w.a.rq.period = "all"; w.a.rp.period = "all";
+          const before = made;
+          for (let i = 0; i < 3; i++) { w.a.rev++; w.a.rqLines(); w.a.rqMileage(); w.a.rqTotals(); w.a.rpView(); w.a.byMonth(); }
+          out({ made: made - before, lines: [w.a.rqLines().length, w.a.rqMileage().length], sample: [w.a.rqLines()[0].date, w.a.rpView().miles[0].lines[0].dates] });""")
+        self.assertEqual(r["lines"], [730, 365])
+        self.assertLessEqual(r["made"], 8)                                      # was one per cell: thousands
+        self.assertEqual(r["sample"], ["Oct 1, 2024", "Oct 1, 2024"])
+
+
+class StoredDataSafety(unittest.TestCase):
+    """P8-4: a stored ledger this page can't read is never written over (set aside, said, offered as a file); a
+    newer page's ledger is shown, not saved over; closing the tab asks only while the form holds something
+    unsaved; a receipt photo is never deleted while another tab can still undo its delete, or has its entry back."""
+
+    def test_an_unreadable_ledger(self):
+        r = app(self, r"""
+          const bad = '{"v":1,"entries":[{"id":"a1","type":"expense","date":"2026-09-01","descr';          // cut off
+          const aside = (w) => [...w.store.entries()].filter(([k, v]) => k.startsWith(KEY + ":unreadable-") && v === bad).length;
+          const w = make("en", { [KEY]: bad });
+          const first = [w.a.damaged, w.a.lock, w.store.get(KEY) === bad, aside(w)];
+          add(w, "expense", { description: "New", amount: "5" }, "books");          // the tracker works on; the copy stays aside
+          const after = [state(w).entries.map((e) => e.description), aside(w)];
+          const w2 = make("en", Object.fromEntries(w.store));                       // the next visit: still said, not copied twice
+          w2.a.damagedDownload();
+          const d = w2.downloads.at(-1), dl = [w2.a.damaged, d.name, (await w2.text(d)) === bad];
+          w2.a.damagedRemove(); await tick();
+          const gone = [w2.a.damaged, aside(w2), state(w2).entries.length];
+          // no room to set it aside: it stays where it is, and nothing is saved over it until it is taken away
+          const w3 = make("en", { [KEY]: bad }, null, { full: true });
+          w3.setFull(false);
+          const locked = [w3.a.lock, w3.a.damaged];
+          const r3 = add(w3, "expense", { description: "Typed", amount: "1" }, "books");
+          const kept = [w3.store.get(KEY) === bad, r3.toast === w3.a.t("toast.not_saved")];
+          w3.a.damagedDownload();
+          const dl3 = (await w3.text(w3.downloads.at(-1))) === bad;
+          w3.a.damagedRemove(); await tick();
+          const freed = [w3.a.lock, state(w3).entries.map((e) => e.description)];
+          // a ledger a newer version of the page saved: shown as far as it can be, never saved over
+          const newer = JSON.stringify({ v: 2, entries: [{ id: "n1", type: "expense", date: "2026-09-01", category: "books", description: "From a newer page", amount_cents: 100, later_field: 1 }], settings: {}, meta: {} });
+          const w4 = make("en", { [KEY]: newer });
+          const r4 = add(w4, "expense", { description: "Here", amount: "1" }, "books");
+          out({ first, after, dl, gone, locked, kept, dl3, freed,
+                newer: [w4.a.lock, w4.a.damaged, w4.a.E().map((e) => e.description), w4.store.get(KEY) === newer, r4.toast === w4.a.t("toast.not_saved")] });""")
+        self.assertEqual(r["first"], [1, "", True, 1])
+        self.assertEqual(r["after"], [["New"], 1])
+        self.assertEqual(r["dl"][0], 1)
+        self.assertRegex(r["dl"][1], r"^service-expenses-unreadable-\d{4}-\d{2}-\d{2}\.json$")
+        self.assertTrue(r["dl"][2])
+        self.assertEqual(r["gone"], [0, 0, 1])
+        self.assertEqual(r["locked"], ["unreadable", 1])
+        self.assertEqual(r["kept"], [True, True])
+        self.assertTrue(r["dl3"])
+        self.assertEqual(r["freed"], ["", ["Typed"]])
+        self.assertEqual(r["newer"], ["newer", 0, ["From a newer page", "Here"], True, True])
+
+    def test_closing_the_tab_asks_only_while_something_is_unsaved(self):
+        r = app(self, r"""
+          const w = make("en");
+          const armed = () => (w.listeners.beforeunload || []).length;
+          const s = [armed()];
+          w.a.openAdd("expense", "books"); s.push(armed());                              // open, nothing typed
+          w.a.form.description = "Big Book"; w.a.armLeave(); s.push(armed());            // typed
+          const ev = { prevented: false, preventDefault() { this.prevented = true; } };
+          w.listeners.beforeunload[0](ev); s.push(ev.prevented);
+          w.a.form.description = ""; w.a.armLeave(); s.push(armed());                    // back as it was
+          w.a.form.description = "Big Book"; w.a.form.amount = "12"; w.a.armLeave(); s.push(armed());
+          w.a.saveForm(false); s.push(armed());                                          // saved
+          w.a.openAdd("expense", "books"); w.a.form.description = "x"; w.a.armLeave(); w.a.formClosed(); s.push(armed());   // discarded
+          out(s);""")
+        self.assertEqual(r, [0, 0, 1, True, 0, 1, 0, 0])
+
+    def test_undo_across_two_tabs_keeps_the_photo(self):
+        r = app(self, r"""
+          const photos = new Map(), shared = new Map();
+          const a = make("en", null, null, { photos, store: shared });
+          add(a, "expense", { description: "Hotel", amount: "90", receipt: "photo" }, "lodging");
+          const e = a.a.E()[0], id = e.id;
+          photos.set(id, { id, type: "image/jpeg", blob: new Blob(["jpeg"]) });
+          // tab A deletes it ("Undo" for 10 seconds) …
+          a.a.remove([id]); await tick();
+          const pending = Object.keys(JSON.parse(shared.get(KEY + ":undo") || "{}"));
+          // … tab B opens meanwhile: its clean-up reads a ledger without the entry, and leaves the photo alone
+          const b = make("en", null, null, { photos, store: shared });
+          await b.a.cleanPhotos();
+          const duringB = photos.has(id);
+          a.a.undo(); await tick();
+          const undone = [photos.has(id), a.a.E().length, shared.get(KEY + ":undo") || null];
+          // A deletes it again; another tab brings the entry back before A's time is up: A's clean-up spares it
+          a.a.remove([id]); await tick();
+          const st = state(a); st.entries.push(e); shared.set(KEY, JSON.stringify(st));
+          a.a.finishUndo(); await tick();
+          const spared = photos.has(id);
+          // a delete nobody takes back: once its time is up, the photo goes
+          a.a.loadState(); a.a.remove([id]); await tick(); a.a.finishUndo(); await tick();
+          out({ pending, duringB, undone, spared, gone: photos.has(id), left: shared.get(KEY + ":undo") || null, ids: [id] });""")
+        self.assertEqual(r["pending"], r["ids"])
+        self.assertTrue(r["duringB"])
+        self.assertEqual(r["undone"], [True, 1, None])
+        self.assertTrue(r["spared"])
+        self.assertFalse(r["gone"])
+        self.assertIsNone(r["left"])
 
 
 if __name__ == "__main__":

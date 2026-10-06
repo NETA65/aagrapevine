@@ -75,19 +75,32 @@
    * planImport never throws: problems come back as message keys ("expenses.err.*" stop a row or the
      file; "expenses.warn.*" are shown and the row is still imported).
 
-   BACKUP: {format: "gv-expenses-backup", v, exported, entries, settings, meta, receipts: [{id, type,
-   dataUrl}]}. readBackup also takes the stored state itself and an older plain list of entries. */
+   BACKUP: {format: "gv-expenses-backup", v, app, exported, entries, settings, meta, receipts}, in one of two files:
+   * the full backup, a .zip (1.2.0; expenses-files.js writes and reads it): backup.json, its receipts [{id, type,
+     file, name, added, w, h}] — `file` names the receipt photo kept beside it in the .zip, as itself;
+   * a .json: the ledger alone (receipts: [] — "Back up without photos"), or, as every full backup was before
+     1.2.0, with the photos inside as data: URLs (receipts: [{id, type, dataUrl}]). Those keep restoring, at any size.
+   readBackup also takes the stored state itself and an older plain list of entries.
+
+   SERVICE PANELS (servicePanels): Area 65's two-year terms, worked out by a rule — a term starts on January 1 of
+   an odd year, and Panel N starts in 1950 + N (Panel 75: 2025–2026, Panel 77: 2027–2028). config/expenses.yml
+   `panels` only override a panel's dates or add one. */
 (function (root) {
   "use strict";
 
-  var VERSION = "1.1.0";
+  var VERSION = "1.2.0";
   // 1.1.0 added fields to an entry (activity, role, trips, no_miles, ref) without changing what the old
   // ones mean: an entry stored or exported by 1.0.0 reads as it did, the new fields at their defaults
   // (normalizeEntry fills them in), so the schema stays 1 and an older page still reads a newer file.
+  // 1.2.0 changed the files, not the entries: the full backup is a .zip (each receipt photo a file of its
+  // own), a .json backup of any size restores, and an import also reads Excel (.xlsx) and UTF-16 text.
   var SCHEMA = 1;
   var STORAGE_KEY = "gv-expenses:v1";
   var BACKUP_FORMAT = "gv-expenses-backup";
-  var LIMITS = { bytes: 10 * 1024 * 1024, rows: 20000, cents: 99999999999, number: 1e9, text: 5000 };
+  // bytes: a CSV (or text) file · backup: a backup file — no real limit: it is the visitor's own, read in
+  // slices (the most a .zip without ZIP64 can hold) · json: a .json backup not laid out as toBackup writes
+  // it, which has to be read whole
+  var LIMITS = { bytes: 10 * 1024 * 1024, backup: 4 * 1024 * 1024 * 1024, json: 400 * 1024 * 1024, rows: 20000, cents: 99999999999, number: 1e9, text: 5000 };
 
   var TYPES = ["expense", "mileage", "received", "giveaway", "stock"];
   var TEMPLATES = ["general", "books", "subscription", "lodging", "meal", "printing", "travel", "mileage", "received", "giveaway", "stock"];
@@ -789,7 +802,9 @@
   /* ------------------------------------------------------------------ the summary */
   /* Totals for a period (opts.from / opts.to, inclusive; either may be left out):
      spent = expenses + mileage I paid (not "direct") = self (nobody pays it back) + claimable (asked
-     back: to_request / submitted / paid); owed = what funders still owe (funderBalances).
+     back: to_request / submitted / paid); owed = what funders still owe at the period's END — a balance,
+     so everything up to opts.to counts (funderBalances, peopleOwed): a hotel claimed in December and paid
+     back in January is settled in January's view, not money "you hold".
      by_category: [{id, cents, count, items (books, copies, subscriptions bought: itemsOf),
      giveaway_cents (the part bought to give away)}], the largest first. by_activity: per service
      activity, in the settings' order ("" = none, last): {id, count, cents (spent), miles,
@@ -833,8 +848,9 @@
       if (e.type === "expense" && e.giveaway) r.items_bought += qty(e);
     });
     r.miles = Math.round(r.miles * 10) / 10;
-    funderBalances(entries, S, opts).forEach(function (b) { if (b.balance_cents < 0) r.owed_cents -= b.balance_cents; });
-    peopleOwed(entries, S, opts).forEach(function (p) { if (!p.funder) r.owed_cents += p.owed_cents; }); // helped purchases left on "me"
+    var upTo = { to: opts.to };
+    funderBalances(entries, S, upTo).forEach(function (b) { if (b.balance_cents < 0) r.owed_cents -= b.balance_cents; });
+    peopleOwed(entries, S, upTo).forEach(function (p) { if (!p.funder) r.owed_cents += p.owed_cents; }); // helped purchases left on "me"
     inventory(entries, { to: opts.to }).forEach(function (it) { if (it.on_hand > 0) r.items_on_hand += it.on_hand; });
     r.items_on_hand = Math.round(r.items_on_hand * 1000) / 1000;
     r.by_category = Object.keys(cats).map(function (k) { var c = cats[k]; c.items = Math.round(c.items * 1000) / 1000; return c; })
@@ -1309,6 +1325,36 @@
     return out.sort(function (a, b) { return b.days - a.days; });
   }
 
+  /* ------------------------------------------------------------------ service panels */
+  // Area 65's terms: two years from January 1 of an odd year; Panel N starts in 1950 + N.
+  var PANEL_EPOCH = 1950;
+  // the panel a year falls in (2026 → Panel 75, 2025-01-01 – 2026-12-31), or null
+  function panelOf(year) {
+    var y = Math.floor(Number(year));
+    if (!(y >= PANEL_EPOCH + 1 && y <= 2200)) return null;
+    if (y % 2 === 0) y -= 1;
+    return { id: String(y - PANEL_EPOCH), from: y + "-01-01", to: (y + 1) + "-12-31" };
+  }
+  // a panel by its number, by the rule ("77" → 2027-01-01 – 2028-12-31); null for a number no term has
+  function panelById(id) {
+    var s = str(id).trim();
+    return /^\d{1,3}$/.test(s) && Number(s) % 2 === 1 ? panelOf(PANEL_EPOCH + Number(s)) : null;
+  }
+  /* The panels the period filters offer, newest first: today's (the current term, always), the one of
+     every year with an entry, and every panel `configured` (config/expenses.yml, settings.panels) — a
+     configured one with a rule panel's id replaces its dates. [{id, from, to}] */
+  function servicePanels(configured, today, entries) {
+    var day = isISO(today) ? today : todayISO(), byId = {}, years = {};
+    years[day.slice(0, 4)] = 1;
+    list(entries).forEach(function (e) { if (isISO(e.date)) years[e.date.slice(0, 4)] = 1; });
+    Object.keys(years).forEach(function (y) { var p = panelOf(y); if (p) byId[p.id] = p; });
+    arr(configured).forEach(function (p) {
+      if (isObj(p) && validId(str(p.id)) && isISO(p.from) && isISO(p.to) && p.from <= p.to) byId[str(p.id)] = { id: str(p.id), from: p.from, to: p.to };
+    });
+    return Object.keys(byId).map(function (k) { return byId[k]; })
+      .sort(function (a, b) { return a.from < b.from ? 1 : a.from > b.from ? -1 : a.id < b.id ? -1 : a.id > b.id ? 1 : 0; });
+  }
+
   /* ------------------------------------------------------------------ the list */
   function collator() {
     try { var c = new Intl.Collator(undefined, { sensitivity: "base", numeric: true }); return function (a, b) { return c.compare(str(a), str(b)); }; }
@@ -1672,10 +1718,33 @@
   }
 
   /* ------------------------------------------------------------------ CSV: reading */
-  // A file's bytes → text: UTF-8, or Windows-1252 when it is not valid UTF-8 (Excel's "CSV" on Windows).
+  // bytes: an ArrayBuffer or a typed array (from this window or another: no `instanceof`)
+  function isBytes(v) { return !!v && (ArrayBuffer.isView(v) || Object.prototype.toString.call(v) === "[object ArrayBuffer]"); }
+  // A file's bytes → text: UTF-16 (Excel's "Unicode text", some banks' exports: utf16Of), UTF-8, or
+  // Windows-1252 when it is neither (Excel's "CSV" on Windows).
   function decodeText(bytes) {
+    // (bytes from another window or vm context are not `instanceof` this one's: isView and byteLength tell)
+    var b = null;
+    try { b = ArrayBuffer.isView(bytes) ? new Uint8Array(bytes.buffer, bytes.byteOffset, bytes.byteLength) : bytes && typeof bytes.byteLength === "number" ? new Uint8Array(bytes) : null; }
+    catch (e1) { b = null; }
+    var u16 = b ? utf16Of(b) : "";
+    if (u16) { try { return new TextDecoder(u16).decode(b); } catch (e0) { /* no UTF-16 decoder: as bytes */ } }
     try { return new TextDecoder("utf-8", { fatal: true }).decode(bytes); } catch (e) { /* not UTF-8 */ }
     try { return new TextDecoder("windows-1252").decode(bytes); } catch (e2) { return ""; }
+  }
+  /* UTF-16 text by its byte-order mark (FF FE little-endian, FE FF big-endian) — or, without one, by its
+     zero bytes: text in Latin letters has a 0 in every other byte (the high half of each character), in
+     the odd places little-endian and the even ones big-endian. UTF-8 and Windows-1252 text has no 0 at
+     all. → "utf-16le" / "utf-16be" / "". */
+  function utf16Of(b) {
+    if (b.length >= 2 && b[0] === 0xff && b[1] === 0xfe) return b.length >= 4 && b[2] === 0 && b[3] === 0 ? "" : "utf-16le";  // (FF FE 00 00: UTF-32)
+    if (b.length >= 2 && b[0] === 0xfe && b[1] === 0xff) return "utf-16be";
+    var pairs = Math.floor(Math.min(b.length, 1024) / 2), even = 0, odd = 0;
+    for (var i = 0; i < pairs * 2; i += 2) { if (b[i] === 0) even++; if (b[i + 1] === 0) odd++; }
+    if (pairs < 2) return "";
+    if (odd >= pairs * 0.6 && even <= pairs * 0.05) return "utf-16le";
+    if (even >= pairs * 0.6 && odd <= pairs * 0.05) return "utf-16be";
+    return "";
   }
   // the delimiter of the header line: the most used of , ; TAB outside quotes (a tie: the comma)
   function detectDelimiter(text) {
@@ -1694,7 +1763,7 @@
     opts = opts || {};
     var rows = [];
     if (typeof text !== "string") {
-      if (text && (text instanceof ArrayBuffer || ArrayBuffer.isView(text))) text = decodeText(text);
+      if (isBytes(text)) text = decodeText(text);
       else { rows.error = "expenses.err.empty"; return rows; }
     }
     if (text.length > LIMITS.bytes) { rows.error = "expenses.err.too_big"; return rows; }
@@ -1843,7 +1912,7 @@
   }
   function planInner(plan, rows, existing, settings, opts) {
     var fail = function (key) { plan.errors.push({ row: 0, field: "", message_key: key }); };
-    if (typeof rows === "string" || (rows && !Array.isArray(rows) && (rows instanceof ArrayBuffer || ArrayBuffer.isView(rows)))) rows = parseCSV(rows);
+    if (typeof rows === "string" || (rows && !Array.isArray(rows) && isBytes(rows))) rows = parseCSV(rows);
     if (!Array.isArray(rows)) return fail("expenses.err.unreadable");
     if (rows.error) return fail(rows.error);
     plan.delimiter = rows.delimiter || ",";
@@ -2175,37 +2244,57 @@
   }
 
   /* ------------------------------------------------------------------ what a picked file is */
-  /* A file the visitor picked to import: "backup" (a .json, or text that starts with { or [) or "csv",
-     and the most it may weigh. A full backup carries every receipt photo, so it may be much bigger
-     than a CSV (readBackup takes up to 8 × the CSV limit). head: the file's first characters. */
-  function importKind(name, head) {
+  /* A file the visitor picked to import → what it is: "zip" (a full backup or an Excel workbook: what is
+     inside decides — expenses-files.js), "xls" (Excel's older format: the page asks for .xlsx or CSV),
+     "backup" (a .json, or text that starts with { or [) or "csv"; and the most it may weigh — a backup is
+     the visitor's own and is read in slices, so its limit is only the one a .zip has. head: the file's
+     first characters; bytes (optional): its first bytes. */
+  function importKind(name, head, bytes) {
+    var b = bytes && typeof bytes.length === "number" ? bytes : null;
+    if (b && b.length >= 4 && b[0] === 0x50 && b[1] === 0x4b && b[2] === 3 && b[3] === 4) return "zip";
+    if (b && b.length >= 4 && b[0] === 0xd0 && b[1] === 0xcf && b[2] === 0x11 && b[3] === 0xe0) return "xls";
     return /\.json$/i.test(str(name)) || /^﻿?\s*[{[]/.test(str(head)) ? "backup" : "csv";
   }
-  function importLimit(kind) { return kind === "backup" ? LIMITS.bytes * 8 : LIMITS.bytes; }
+  function importLimit(kind) { return kind === "backup" || kind === "zip" ? LIMITS.backup : LIMITS.bytes; }
 
   /* ------------------------------------------------------------------ full backup */
+  // a receipt photo's name in the .zip: a plain file name (no folder), an image's extension
+  var RECEIPT_FILE = /^[^\\/:*?"<>|\u0000-\u001f]{1,160}\.(jpe?g|png|webp|gif)$/i;
   function cleanReceipts(list) {
-    return arr(list).filter(function (r) { return isObj(r) && validId(str(r.id)) && /^data:image\/(jpeg|png|webp|gif)[;,]/i.test(str(r.dataUrl)); }).map(function (r) {
-      var o = { id: r.id, type: str(r.type) || str(r.dataUrl).slice(5).split(/[;,]/)[0], dataUrl: r.dataUrl };
+    return arr(list).filter(function (r) {
+      return isObj(r) && validId(str(r.id)) && (/^data:image\/(jpeg|png|webp|gif)[;,]/i.test(str(r.dataUrl)) || RECEIPT_FILE.test(str(r.file)));
+    }).map(function (r) {
+      var url = /^data:/i.test(str(r.dataUrl));
+      var o = { id: r.id, type: /^image\/(jpeg|png|webp|gif)$/i.test(str(r.type)) ? str(r.type) : url ? str(r.dataUrl).slice(5).split(/[;,]/)[0] : "image/jpeg" };
+      if (url) o.dataUrl = r.dataUrl; else o.file = r.file;
       ["name", "added"].forEach(function (k) { if (typeof r[k] === "string") o[k] = r[k]; });
       ["w", "h"].forEach(function (k) { if (typeof r[k] === "number" && isFinite(r[k])) o[k] = r[k]; });
       return o;
     });
   }
-  // state (+ receipt photos as data: URLs, which the page reads from IndexedDB) → the backup's JSON text
+  /* state + receipt photos → the backup's JSON text. Each photo is a data: URL (the photos inside the
+     .json) or a `file`: its name in the .zip that holds the photo itself beside this text. */
   function toBackup(state, receipts) {
     var st = isObj(state) ? state : {};
     return JSON.stringify({ format: BACKUP_FORMAT, v: SCHEMA, app: VERSION, exported: nowISO(), entries: list(st.entries),
       settings: isObj(st.settings) ? st.settings : {}, meta: isObj(st.meta) ? st.meta : {}, receipts: cleanReceipts(receipts) });
   }
+  /* A receipt photo's name in the full backup's .zip: its date, a few words of what it was and the
+     entry's id (which makes it unique, and is how the backup finds it again) — "2026-09-27-hotel-for-the-
+     fall-assembly-x1abc2.jpg", so the photos read in order outside the tracker too. */
+  function receiptFile(entry, type) {
+    var e = isObj(entry) ? entry : {}, ext = /png/i.test(str(type)) ? "png" : /webp/i.test(str(type)) ? "webp" : /gif/i.test(str(type)) ? "gif" : "jpg";
+    var words = slug(e.description || e.vendor || e.event || "").replace(/_/g, "-").slice(0, 40).replace(/-+$/, "");
+    return [isISO(e.date) ? e.date : "", words, validId(str(e.id)) ? e.id : newId()].filter(Boolean).join("-") + "." + ext;
+  }
   /* A backup file's text (or the parsed object) → {ok: true, state, receipts, problems} or
      {ok: false, error: message key}. Also takes the stored state itself ({v, entries, settings}) and
      a plain list of entries (the first test version kept only that). Anything else is refused.
+     Any size is read (the photos of a .json backup are in it): it is the visitor's own file.
      configDefaults (optional): the site's defaults, merged into the backup's settings. */
   function readBackup(json, configDefaults) {
     var o = json;
     if (typeof json === "string") {
-      if (json.length > LIMITS.bytes * 8) return { ok: false, error: "expenses.err.too_big" };
       try { o = JSON.parse(json.replace(/^﻿/, "")); } catch (e) { return { ok: false, error: "expenses.err.backup_invalid" }; }
     }
     var looksLikeEntries = function (a) { return a.length > 0 && a.every(function (x) { return isObj(x) && has(x, "date") && (has(x, "type") || has(x, "amount_cents") || has(x, "amount")); }); };
@@ -2382,11 +2471,12 @@
     eventGiveaways: eventGiveaways, subscriptions: subscriptions, subscriptionCounts: subscriptionCounts, subscriptionsICS: subscriptionsICS,
     renewals: renewals, budgets: budgets, staleClaims: staleClaims, filterEntries: filterEntries, sortEntries: sortEntries,
     claimLines: claimLines, claimText: claimText, claimCSV: claimCSV, settleRepayments: settleRepayments,
-    serviceReport: serviceReport, reportCSV: reportCSV,
+    serviceReport: serviceReport, reportCSV: reportCSV, servicePanels: servicePanels, panelById: panelById,
     // CSV
     toCSV: toCSV, parseCSV: parseCSV, planImport: planImport, applyImport: applyImport, decodeText: decodeText, fingerprint: fingerprint,
     // backup and settings
     toBackup: toBackup, readBackup: readBackup, migrate: migrate, mergeDefaults: mergeDefaults, importKind: importKind, importLimit: importLimit,
+    receiptFile: receiptFile,
     // examples
     exampleEntries: exampleEntries,
   };

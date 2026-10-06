@@ -6,7 +6,7 @@ pageKey: expenses
 titleKey: nav.expenses
 descKey: expenses.meta_desc
 bodyClass: xp-page
-pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/js/committee.js"]
+pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses-files.js", "/assets/js/expenses.js", "/assets/js/committee.js"]
 ---
 {#- /tracker/ — the TRACKER (the service expense tracker; it was /expenses/, and expenses-redirect.njk
     keeps that address working): a GVR / RLV's (or any service member's) miles, purchases,
@@ -14,7 +14,8 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/
     Flow (docs: ui.njk): hero (+ the "On this device" aside) → the committee sub-nav (page-overlap, as on
     every Committee page) → the app (card: Entries · Summary · Giveaways · Requests · Settings, in the
     address as #entries …) → privacy, in plain words.
-    The logic: src/assets/js/expenses-core.js (window.GVX); the screen: src/assets/js/expenses.js
+    The logic: src/assets/js/expenses-core.js (window.GVX); the .zip backup and Excel import:
+    src/assets/js/expenses-files.js (window.GVF); the screen: src/assets/js/expenses.js
     ("xpApp"); the defaults: config/expenses.yml (src/_data/expenses.js); the words:
     src/_i18n/expenses.json (handed to the app as #xp-ui); the look: areas/expenses.css.
     One Alpine component wraps the hero AND the app (the hero's buttons and aside use its data).
@@ -91,6 +92,23 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/
     <div>
       {#- storage is not working (private window, blocked, full): the app works in memory -#}
       <p class="xp-alert" x-show="!storageOk" role="alert">{% icon "triangle-alert", "size-5 shrink-0" %}<span>{{ "expenses.storage_off" | t(lang) }}</span></p>
+      {#- the data stored on this device could not be read: kept as it was (never written over), offered as a file -#}
+      <div class="xp-alert" x-show="damaged" role="alert">{% icon "triangle-alert", "size-5 shrink-0" %}
+        <div class="xp-alert-body">
+          <p x-text="lock === 'unreadable' ? t('data.damaged_locked') : t('data.damaged')"></p>
+          <div class="xp-actions">
+            <button type="button" class="btn-secondary btn-sm" @click="damagedDownload()">{% icon "download", "size-4" %} {{ "expenses.data.damaged_download" | t(lang) }}</button>
+            <button type="button" class="btn-ghost btn-sm" @click="damagedRemove()">{% icon "trash-2", "size-4" %} {{ "expenses.data.damaged_remove" | t(lang) }}</button>
+          </div>
+        </div>
+      </div>
+      {#- …or a newer version of the page saved it: shown, never saved over, until the page is reloaded -#}
+      <div class="xp-alert" x-show="lock === 'newer'" role="alert">{% icon "triangle-alert", "size-5 shrink-0" %}
+        <div class="xp-alert-body">
+          <p>{{ "expenses.data.newer" | t(lang) }}</p>
+          <div class="xp-actions"><button type="button" class="btn-secondary btn-sm" onclick="location.reload()">{% icon "rotate-ccw", "size-4" %} {{ "expenses.reload" | t(lang) }}</button></div>
+        </div>
+      </div>
 
       {#- the tab bar: one row of chips that scrolls sideways on phones, never wraps -#}
       <div class="xp-bar">
@@ -1063,13 +1081,19 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/
             <p class="xp-hint" x-show="!persisted">{{ "expenses.data.protected_hint" | t(lang) }}</p>
 
             <div class="xp-set-grid">
-              <div class="xp-box">
+              {#- export: the CSV; the full backup (.zip: each receipt photo a file of its own) or the ledger alone
+                  (.json "without photos") — their sizes worked out first (again after each change while this
+                  tab is open: rev), and a big one said so -#}
+              <div class="xp-box" x-effect="rev, measureBackup()">
                 <h4 class="xp-h4">{{ "expenses.data.export_title" | t(lang) }}</h4>
                 <p class="mt-1 text-sm text-muted">{{ "expenses.data.export_text" | t(lang) }}</p>
                 <div class="xp-actions mt-3">
                   <button type="button" class="btn-primary btn-sm" @click="exportAll()">{% icon "file-spreadsheet", "size-4" %} {{ "expenses.data.export_csv" | t(lang) }}</button>
                   <button type="button" class="btn-secondary btn-sm" @click="exportBackup()">{% icon "hard-drive-download", "size-4" %} {{ "expenses.data.export_backup" | t(lang) }}</button>
+                  <button type="button" class="btn-ghost btn-sm" @click="exportBackup('plain')">{% icon "file-text", "size-4" %} {{ "expenses.data.export_plain" | t(lang) }}</button>
                 </div>
+                <p class="xp-hint" x-show="bk.ready && E().length" x-text="bkLine()"></p>
+                <p class="xp-hint xp-hint-warn" x-show="bkBig()">{{ "expenses.data.big" | t(lang) }}</p>
               </div>
 
               <div class="xp-box">
@@ -1079,7 +1103,8 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/
                 <template x-if="!imp || imp.step === 'pick' || imp.err">
                   <div>
                     <label class="xp-drop" :class="{ 'is-over': dragOver }" @dragover.prevent="dragOver = true" @dragleave="dragOver = false" @drop.prevent="impDrop($event)">
-                      <input type="file" class="sr-only" accept=".csv,.tsv,.txt,.json,text/csv,application/json" @change="impPick($event)">
+                      {#- several at once: an unpacked backup's backup.json with its photos -#}
+                      <input type="file" class="sr-only" multiple accept=".csv,.tsv,.txt,.json,.zip,.xlsx,.jpg,.jpeg,.png,.webp,.gif,text/csv,application/json,application/zip,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="impPick($event)">
                       {% icon "upload", "size-6" %}
                       <span class="font-semibold text-ink">{{ "expenses.imp.choose" | t(lang) }}</span>
                       <span class="text-sm text-muted">{{ "expenses.imp.drop" | t(lang) }}</span>
@@ -1189,6 +1214,8 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/
                 <template x-if="imp && imp.step === 'backup' && !imp.err">
                   <div class="xp-imp">
                     <p class="text-sm text-ink"><strong x-text="imp.name"></strong> — <span x-text="t('imp.backup_counts', { n: count(imp.counts.entries), photos: count(imp.counts.photos) })"></span></p>
+                    {#- photos the backup names but nothing holds: a .zip that was unpacked, its backup.json chosen alone -#}
+                    <p class="xp-hint" x-show="imp.counts.missing" x-text="t('imp.photos_missing', { n: count(imp.counts.missing || 0) })"></p>
                     <fieldset class="xp-f mt-3">
                       <legend class="xp-label">{{ "expenses.imp.mode" | t(lang) }}</legend>
                       <label class="xp-check-line"><input type="radio" name="xp-imp-bmode" value="merge" x-model="imp.mode"><span>{{ "expenses.imp.merge_backup" | t(lang) }}</span></label>
@@ -1203,6 +1230,9 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/
                 <template x-if="imp && imp.step === 'done'">
                   <div class="xp-imp">
                     <p class="text-sm font-semibold text-vine" role="status">{% icon "circle-check", "size-4 inline -mt-0.5" %} <span x-text="plural(imp.added + imp.updated, 'imp.done_one', 'imp.done')"></span></p>
+                    {#- a backup's photos, restored one by one after the entries -#}
+                    <p class="mt-1 text-sm text-muted" x-show="imp.photos && imp.photosDone + imp.photoErrs < imp.photos" x-text="t('imp.photos_progress', { n: count(imp.photosDone || 0), total: count(imp.photos || 0) })"></p>
+                    <p class="xp-err mt-1" x-show="imp.photoErrs" x-text="t('imp.photos_failed', { n: count(imp.photoErrs || 0) })"></p>
                     <div class="xp-actions mt-3">
                       <button type="button" class="btn-secondary btn-sm" @click="go('entries')">{{ "expenses.imp.see_entries" | t(lang) }}</button>
                       <button type="button" class="btn-ghost btn-sm" @click="impReset()">{{ "expenses.imp.another" | t(lang) }}</button>
@@ -1674,7 +1704,8 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/
     </div>
 
     {#- step 2: the fields of the category's template -#}
-    <form id="xp-form" class="xp-dlg-body" x-show="formStep === 2" novalidate @submit.prevent="saveForm(false)">
+    {#- (every input and change: closing the tab asks first while something is unsaved — armLeave) -#}
+    <form id="xp-form" class="xp-dlg-body" x-show="formStep === 2" novalidate @submit.prevent="saveForm(false)" @input="armLeave()" @change="armLeave()">
       <div id="xp-form-errors" class="xp-errsum" tabindex="-1" x-show="formErrs.length" role="alert">
         <p class="font-semibold">{% icon "triangle-alert", "size-4 inline -mt-0.5" %} {{ "expenses.form.errors_title" | t(lang) }}</p>
         <ul role="list"><template x-for="e in formErrs" :key="e.field"><li><button type="button" class="link" @click="errFocus(e.field)" x-text="e.text"></button></li></template></ul>
@@ -1991,6 +2022,8 @@ pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/
   <p id="xp-ask-msg" class="text-ink" x-text="ask.msg"></p>
   <div class="xp-ask-acts">
     <button type="button" class="btn-secondary" data-ask-no @click="askDone(false)">{{ "expenses.form.cancel" | t(lang) }}</button>
+    {#- a third choice, when there is one ("Without photos") -#}
+    <button type="button" class="btn-secondary" x-show="ask.alt" @click="askDone('alt')" x-text="ask.alt"></button>
     <button type="button" :class="ask.danger ? 'btn-primary xp-btn-danger' : 'btn-primary'" @click="askDone(true)" x-text="ask.ok"></button>
   </div>
 </dialog>

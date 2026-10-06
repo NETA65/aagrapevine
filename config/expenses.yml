@@ -32,7 +32,11 @@
 #    activities), and a CSV's activity_label column finds them by name in either language.
 #  - rates: dollars per mile, a string with up to 3 decimals ("0.14"); "" = not set yet (the
 #    visitor fills it in). default_rate: a rate id.
-#  - panels: service panels (two-year terms) the period filter offers, inclusive ISO dates.
+#  - panels: Area 65's service panels (two-year terms) the period filters offer. The tracker works them
+#    out by itself (expenses-core.js servicePanels): a term starts on January 1 of an odd year and
+#    Panel N starts in 1950 + N (Panel 75: 2025-01-01 – 2026-12-31, Panel 77: 2027 – 2028); it offers
+#    the current one, the one of every year with an entry, and every panel listed here. A panel listed
+#    here (inclusive ISO dates) only overrides its dates or adds one: nothing needs adding every two years.
 # =====================================================================
 
 tones: [gv, lv, grape, vine, rose, teal, gold, slate]
@@ -244,6 +248,9 @@ defaults:
   round_trip: false
 
 panels:
+  - id: "75"
+    from: "2025-01-01"
+    to: "2026-12-31"
   - id: "77"
     from: "2027-01-01"
     to: "2028-12-31"

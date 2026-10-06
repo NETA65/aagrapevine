@@ -8,17 +8,25 @@
        subscription with where it stands (ending soon, ended, renewed …) and its calendar file (.ics);
      · the reimbursement request (print / copy / share / CSV / "mark as submitted") and the service
        report (what the service cost: money by category, miles by service activity; print / CSV);
-     · import (CSV or a full backup: preview first, then merge or replace) and export;
+     · import (a CSV, an Excel workbook or a backup: preview first, then merge or replace) and export
+       (CSV; the full backup, a .zip with each receipt photo as a file — expenses-files.js; or the ledger
+       alone, a .json "without photos"), with the backup's size worked out first;
      · receipt photos.
    Storage — only in this browser, as the page promises:
      localStorage "gv-expenses:v1"         {v, entries, settings, meta} (GVX owns the shape; migrate on load)
      localStorage "gv-expenses:v1:ui"      {view, period, sort, from, to}: the screen's own conveniences,
                                            apart, so a tab click never looks like new data to another tab
+     localStorage "gv-expenses:v1:undo"    {photo id: until (ms)}: the receipt photos of deletes that can still
+                                           be undone, in this tab or another — never deleted meanwhile
+     localStorage "gv-expenses:v1:unreadable-YYYY-MM-DD"  a stored ledger that could not be read, kept aside
+                                           as it was (never overwritten); the notice over the app offers it as a file
      IndexedDB "gv-expenses" / "receipts"  one photo per entry (key = the entry id), a downscaled JPEG;
                                            a photo no entry points to any more is deleted on load
    Every storage call is wrapped: in a private window (or with storage blocked, or full) the app still
    works in memory, warns to export before closing, and never says "Saved" for something it could not
-   keep. A change made in another tab reloads the data here.
+   keep. A change made in another tab reloads the data here. A photo is deleted only once nothing points to
+   it: not the ledger as stored now (another tab may have brought its entry back), not a pending undo.
+   Closing the tab with the add / edit form changed (or photos still being restored) asks first.
    The entries live OUTSIDE Alpine's reactive proxies, so 5,000 of them stay fast: `rev` goes up on every
    change and each view is computed once per change (memo()), never once per row.
    Never x-html: every text goes through x-text; icons come from the build (#xp-icons → x-xp-icon).
@@ -29,11 +37,15 @@
   var GV = window.GV || {};
   var KEY = "gv-expenses:v1";
   var UI_KEY = KEY + ":ui";
+  var UNDO_KEY = KEY + ":undo";
+  var ASIDE = KEY + ":unreadable-";
   var DB_NAME = "gv-expenses";
   var DB_STORE = "receipts";
   var PAGE = 100;              // rows per "Show more"
   var UNDO_MS = 10000;         // how long "Undo" stays after a delete (paused while the toast has the focus or the mouse)
+  var UNDO_KEEP = 30 * 60000;  // …and how long its photos stay safe from another tab's clean-up (the toast can be held)
   var MAX_PHOTO = 1600;        // longest side of a stored receipt photo (px)
+  var BIG_BACKUP = 18 * 1048576;  // a full backup this big is too big for most e-mail (25 MB, encoded): the page says so
   var VIEWS = ["entries", "summary", "giveaways", "requests", "settings"];
   var TYPES = ["expense", "mileage", "received", "giveaway", "stock"];
   var CLAIMS = ["to_request", "submitted", "paid", "denied"];
@@ -78,6 +90,67 @@
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
   function lsDel(k) { try { localStorage.removeItem(k); return true; } catch (e) { return false; } }
+  // the stored keys that start with `prefix`
+  function lsKeys(prefix) {
+    var out = [];
+    try { for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf(prefix) === 0) out.push(k); } } catch (e) { /* blocked */ }
+    return out.sort();
+  }
+  // The receipt photos of deletes that can still be undone — here or in another tab ({id: until}).
+  function undoPending() {
+    var o = null, now = Date.now(), out = {};
+    try { o = JSON.parse(lsGet(UNDO_KEY) || "null"); } catch (e) { o = null; }
+    if (o && typeof o === "object") Object.keys(o).forEach(function (id) { if (Number(o[id]) > now) out[id] = Number(o[id]); });
+    return out;
+  }
+  function undoMark(ids, on) {
+    if (!ids.length) return;
+    var o = undoPending();
+    ids.forEach(function (id) { if (on) o[id] = Date.now() + UNDO_KEEP; else delete o[id]; });
+    if (Object.keys(o).length) lsSet(UNDO_KEY, JSON.stringify(o)); else lsDel(UNDO_KEY);
+  }
+  // the photos the ledger AS STORED points to ({id: 1}) — {} when nothing is stored; null when it can't
+  // be read (then no photo is deleted)
+  function storedPhotoIds() {
+    var raw = lsGet(KEY), out = {}, o;
+    if (!raw) return out;
+    try { o = JSON.parse(raw); } catch (e) { return null; }
+    var list = Array.isArray(o) ? o : o && Array.isArray(o.entries) ? o.entries : null;
+    if (!list) return null;
+    list.forEach(function (e) { if (e && e.receipt === "photo" && e.id) out[e.id] = 1; });
+    return out;
+  }
+  function breathe() { return new Promise(function (res) { setTimeout(res, 0); }); }
+  // 1536 KB → "1.5 MB"; 900 KB → "900 KB" (the words: data.kb / data.mb)
+  function sizeParts(bytes) {
+    var mb = bytes / 1048576;
+    return mb >= 1 ? { key: "data.mb", n: mb >= 10 ? Math.round(mb) : Math.round(mb * 10) / 10 } : { key: "data.kb", n: Math.max(1, Math.round(bytes / 1024)) };
+  }
+
+  /* Numbers and dates on screen: one Intl formatter per language and kind, made once for the page. The
+     Requests view and the service report show hundreds of them per change, and a new formatter for each
+     (GV.fmtDate makes one per call) took seconds on a slow phone. Dates are calendar days, formatted at
+     noon UTC: the same day everywhere, as GV.fmtDate shows them. */
+  var NUM_OPTS = { count: { maximumFractionDigits: 1 }, exact: { maximumFractionDigits: 6 } };
+  var DAY_OPTS = { short: { month: "short", day: "numeric" }, mid: { month: "short", day: "numeric", year: "numeric" },
+                   long: { month: "long", day: "numeric", year: "numeric" }, month: { month: "short", year: "numeric" } };
+  var FMT = {};
+  function fmtOf(kind, lang) {
+    var k = kind + "|" + lang;
+    if (!Object.prototype.hasOwnProperty.call(FMT, k)) {
+      var loc = lang === "es" ? "es-US" : "en-US";
+      try { FMT[k] = NUM_OPTS[kind] ? new Intl.NumberFormat(loc, NUM_OPTS[kind]) : new Intl.DateTimeFormat(loc, Object.assign({ timeZone: "UTC" }, DAY_OPTS[kind])); }
+      catch (e) { FMT[k] = null; }
+    }
+    return FMT[k];
+  }
+  // "YYYY-MM-DD" (or "YYYY-MM": the 15th) in one of DAY_OPTS' kinds; GV.fmtDate, then the ISO day, where Intl fails
+  function fmtDay(iso, kind, lang) {
+    var noon = (iso.length === 7 ? iso + "-15" : iso.slice(0, 10)) + "T12:00:00Z", f = fmtOf(kind, lang), s = "";
+    try { s = f ? f.format(new Date(noon)) : ""; } catch (e) { s = ""; }
+    if (!s && GV.fmtDate) s = GV.fmtDate(noon, DAY_OPTS[kind]);
+    return s || iso;
+  }
   function storageWorks() {
     try { var k = KEY + ":probe"; localStorage.setItem(k, "1"); localStorage.removeItem(k); return true; } catch (e) { return false; }
   }
@@ -94,8 +167,9 @@
   }
   function safeName(s) { return norm(s).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 32); }
 
-  /* The date range of a period: this / last month, this / last year, a service panel ("panel:77"),
-     everything (""), or the visitor's own dates. Inclusive ISO days. */
+  /* The date range of a period: this / last month, this / last year, a service panel ("panel:77": the
+     panels offered, else Area 65's rule — GVX.panelById), everything (""), or the visitor's own dates.
+     Inclusive ISO days. */
   function periodRange(p, panels, from, to) {
     var d = new Date(), y = d.getFullYear(), m = d.getMonth();
     if (p === "this_month") return { from: isoOf(new Date(y, m, 1)), to: isoOf(new Date(y, m + 1, 0)) };
@@ -104,6 +178,7 @@
     if (p === "last_year") return { from: (y - 1) + "-01-01", to: (y - 1) + "-12-31" };
     if (p && p.indexOf("panel:") === 0) {
       var id = p.slice(6), hit = (panels || []).filter(function (x) { return x.id === id; })[0];
+      if (!hit && window.GVX && window.GVX.panelById) hit = window.GVX.panelById(id);
       if (hit) return { from: hit.from, to: hit.to };
     }
     if (p === "custom") return { from: from || "", to: to || "" };
@@ -185,14 +260,21 @@
     a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
   }
-  // A file's text. Read as bytes and decoded by GVX.decodeText: UTF-8, or Windows-1252 when the file
-  // is not valid UTF-8 (Excel's "CSV" on Windows), so accented names never turn into "�".
-  function readText(file) {
-    var X = window.GVX;
-    var bytes = file.arrayBuffer ? file.arrayBuffer() : new Promise(function (res, rej) {
-      var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = function () { rej(r.error); }; r.readAsArrayBuffer(file);
+  // A file's text. Read as bytes and decoded by GVX.decodeText: UTF-16 (Excel's "Unicode text"), UTF-8,
+  // or Windows-1252 when the file is neither (Excel's "CSV" on Windows), so accented names never turn into "�".
+  function bufferOf(blob) {
+    return blob.arrayBuffer ? blob.arrayBuffer() : new Promise(function (res, rej) {
+      var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = function () { rej(r.error); }; r.readAsArrayBuffer(blob);
     });
-    return bytes.then(function (buf) { return X && X.decodeText ? X.decodeText(new Uint8Array(buf)) : new TextDecoder("utf-8").decode(buf); });
+  }
+  function decode(buf) {
+    var X = window.GVX;
+    return X && X.decodeText ? X.decodeText(new Uint8Array(buf)) : new TextDecoder("utf-8").decode(buf);
+  }
+  function readText(file) { return bufferOf(file).then(decode); }
+  // A file's first bytes, and as text: enough to tell a .zip, an old Excel file, a backup and a CSV apart.
+  function sniff(file) {
+    return bufferOf(file.slice ? file.slice(0, 64) : file).then(function (buf) { return { bytes: new Uint8Array(buf), text: decode(buf) }; });
   }
   function legacyCopy(text) {
     var back = document.activeElement, ta = document.createElement("textarea"), ok = false;
@@ -259,8 +341,16 @@
         rev: 0,
         view: "entries",
         storageOk: true,
+        // a stored ledger that could not be read is kept aside (damaged: how many copies; the notice offers
+        // them); lock: why nothing is saved — "unreadable" (no room to keep it aside: it stays where it is)
+        // or "newer" (a newer page saved it); "" = saving works
+        damaged: 0,
+        lock: "",
         persisted: null,
         usage: null,
+        // the full backup's size, worked out before it is made (measureBackup): photos, bytes (the .zip),
+        // plain (the .json without photos)
+        bk: { ready: false, photos: 0, bytes: 0, plain: 0 },
         wide: true,               // the lists as tables (else cards): from 768px, below 130 % text
         subsWide: true,           // …the subscriptions' table: from 1024px, more with larger text (fitList)
         // Entries: filters (the period is shared with Summary and Giveaways), sort, paging, selection
@@ -300,7 +390,7 @@
         imp: null,
         dragOver: false,
         eraseText: "",
-        ask: { msg: "", ok: "", danger: false },
+        ask: { msg: "", ok: "", danger: false, alt: "" },
 
         /* ================= start-up ================= */
         init: function () {
@@ -374,14 +464,25 @@
         },
 
         /* ================= storage ================= */
+        /* The stored ledger → S.state. One that can't be read (not JSON, not a ledger, or migrate fails) is
+           never overwritten: a copy is kept beside it (ASIDE + the day; the notice over the app offers it as
+           a file, and removes it) and the tracker starts empty — or, when the browser has no room for that copy, it is
+           left where it is and nothing is saved over it (lock "unreadable") until the visitor has taken it.
+           One saved by a newer version of the page (v above GVX.SCHEMA) is left as it is too: this page
+           shows it but saves nothing (lock "newer") — normalizing it here would drop what it doesn't know. */
         loadState: function () {
-          var X = S.X, raw = lsGet(KEY), st = null;
+          var X = S.X, raw = lsGet(KEY), st = null, bad = "", o = null;
           if (raw) {
-            try { st = X.migrate(JSON.parse(raw), S.cfg); } catch (e) { st = null; }
-            // never overwrite what we could not read: keep a copy beside it
-            if (!st) lsSet(KEY + ":unreadable-" + today(), raw);
+            try { o = JSON.parse(raw); } catch (e) { bad = "unreadable"; }
+            if (!bad && !(Array.isArray(o) || (o && typeof o === "object" && Array.isArray(o.entries)))) bad = "unreadable";
+            if (!bad && !Array.isArray(o) && Number(o.v) > X.SCHEMA) bad = "newer";
+            if (!bad || bad === "newer") { try { st = X.migrate(o, S.cfg); } catch (e) { st = null; bad = "unreadable"; } }
           }
-          S.readOk = !!(raw && st);    // the ledger really came from this browser (cleanPhotos trusts only that)
+          this.lock = "";
+          if (bad === "unreadable" && !this.keepAside(raw)) this.lock = "unreadable";
+          else if (bad === "newer") this.lock = "newer";
+          this.damaged = lsKeys(ASIDE).length + (this.lock === "unreadable" ? 1 : 0);
+          S.readOk = !!(raw && st && !bad);    // the ledger really came from this browser (cleanPhotos trusts only that)
           if (!st || typeof st !== "object") st = X.emptyState(S.cfg);
           st.entries = Array.isArray(st.entries) ? st.entries : [];
           st.settings = X.mergeDefaults(S.cfg, st.settings || {});
@@ -390,18 +491,49 @@
           S.memo = {};
           this.rev++;
         },
+        // A copy of an unreadable ledger beside it (once: the same text already kept is not kept twice).
+        // false: the browser had no room for it.
+        keepAside: function (raw) {
+          var have = lsKeys(ASIDE);
+          for (var i = 0; i < have.length; i++) if (lsGet(have[i]) === raw) return true;
+          var k = ASIDE + today(), n = 2;
+          while (lsGet(k) !== null) k = ASIDE + today() + "-" + n++;
+          return lsSet(k, raw);
+        },
         // Writes the data; false when the browser would not keep it (the warning shows, and stays until
-        // a save works again — space freed, for one).
+        // a save works again — space freed, for one), or when a ledger this page can't read is in the way
+        // (lock: nothing is written over it).
         save: function () {
-          var ok = lsSet(KEY, JSON.stringify(S.state));
-          this.storageOk = ok;
+          var ok = !this.lock && lsSet(KEY, JSON.stringify(S.state));
+          if (!this.lock) this.storageOk = ok;
           S.saveOk = ok;
           S.memo = {};
           this.rev++;
           return ok;
         },
         // the message after a change: never "Saved" (or "Deleted" …) when the last save failed
-        saySaved: function (msg, withUndo) { this.say(S.saveOk === false ? this.t("storage_off") : msg, withUndo); },
+        saySaved: function (msg, withUndo) { this.say(S.saveOk === false ? this.t(this.lock ? "toast.not_saved" : "storage_off") : msg, withUndo); },
+        // The unreadable ledger, as a file (each copy kept aside, or the one that is still where it was).
+        damagedDownload: function () {
+          var self = this, list = lsKeys(ASIDE).map(function (k) { return lsGet(k); });
+          if (this.lock === "unreadable") list.push(lsGet(KEY));
+          list.filter(Boolean).forEach(function (raw, i) {
+            var name = self.t("data.file_base") + "-" + safeName(self.t("data.damaged_word")) + "-" + today() + (i ? "-" + (i + 1) : "") + ".json";
+            saveBlob(new Blob([raw], { type: "application/json" }), name);
+            self.say(self.t("toast.downloaded", { file: name }));
+          });
+        },
+        // …and gone from this device, once the visitor says so (the tracker then saves again)
+        damagedRemove: function () {
+          var self = this;
+          this.confirm(this.t("ask.damaged_remove"), this.t("ask.damaged_remove_ok"), true).then(function (yes) {
+            if (!yes) return;
+            lsKeys(ASIDE).forEach(lsDel);
+            if (self.lock === "unreadable") { self.lock = ""; lsDel(KEY); if (S.state.entries.length) self.save(); }
+            self.damaged = 0;
+            self.say(self.t("toast.item_deleted"));
+          });
+        },
         saveUi: function () {
           lsSet(UI_KEY, JSON.stringify({ period: this.f.period, sort: this.sort, view: this.view, from: this.f.from, to: this.f.to }));
         },
@@ -427,23 +559,22 @@
           if (typeof x === "string") return x;
           return x[this.L] || x.en || x.es || "";
         },
+        // (GVX.fmtMoney keeps one currency formatter per language; count and day use the page's: fmtOf)
         money: function (c) {
           c = Number(c) || 0;
           try { if (S.X.fmtMoney) return S.X.fmtMoney(c, this.L); } catch (e) { /* fall through */ }
-          return new Intl.NumberFormat(this.L === "es" ? "es-US" : "en-US", { style: "currency", currency: "USD" }).format(c / 100);
+          return (c < 0 ? "-$" : "$") + (Math.abs(c) / 100).toFixed(2);
         },
-        count: function (n) { return new Intl.NumberFormat(this.L === "es" ? "es-US" : "en-US", { maximumFractionDigits: 1 }).format(Number(n) || 0); },
+        count: function (n) { var f = fmtOf("count", this.L); n = Number(n) || 0; return f ? f.format(n) : String(Math.round(n * 10) / 10); },
         // one-way miles as GVX.oneWayMiles works them out: every decimal they need to multiply back to the
         // total (12.65 for 25.3 mi there and back — count() would say 12.7, which doubles to 25.4), as the CSV has them
-        oneWayText: function (n) { return new Intl.NumberFormat(this.L === "es" ? "es-US" : "en-US", { maximumFractionDigits: 6 }).format(Number(n) || 0); },
+        oneWayText: function (n) { var f = fmtOf("exact", this.L); n = Number(n) || 0; return f ? f.format(n) : String(n); },
         plural: function (n, one, many) { return this.t(Number(n) === 1 ? one : many, { n: this.count(n) }); },
         day: function (iso, long) {
           if (!iso) return "";
           // long: "September 27, 2026" · "mid": "Sep 27, 2026" (the printed request) · else "Sep 27" (+ the year when not this year)
-          var o = long === true ? { month: "long", day: "numeric", year: "numeric" } : { month: "short", day: "numeric" };
-          if (long === "mid" || (!long && iso.slice(0, 4) !== String(new Date().getFullYear()))) o.year = "numeric";
-          var s = GV.fmtDate ? GV.fmtDate(iso.slice(0, 10) + "T12:00:00Z", o) : iso;
-          return s || iso;
+          var kind = long === true ? "long" : long === "mid" || iso.slice(0, 4) !== String(new Date().getFullYear()) ? "mid" : "short";
+          return fmtDay(iso, kind, this.L);
         },
         ago: function (isoTime) {
           if (!isoTime) return this.t("aside.never");
@@ -508,7 +639,15 @@
           var s = this.st(), id = s.default_rate || (s.defaults && s.defaults.rate), list = this.rates();
           return list.filter(function (r) { return r.id === id; })[0] || list[0] || { id: "", rate: "" };
         },
-        panels: function () { return this.st().panels || S.cfg.panels || []; },
+        // the service panels the period filters offer (GVX.servicePanels): today's, each one with entries, and
+        // the ones config/expenses.yml lists — newest first
+        panels: function () {
+          var day = today();
+          return this.memo("panels", day, function () {
+            var listed = this.st().panels || (S.cfg && S.cfg.panels) || [];
+            return S.X.servicePanels ? S.X.servicePanels(listed, day, S.state.entries) : listed;
+          }) || [];
+        },
         usedCount: function (field, id) {
           var m = this.memo("used:" + field, "", function () {
             var o = {};
@@ -749,8 +888,10 @@
             ids.forEach(function (id) { delete self.sel[id]; });
             self.save();
             self.finishUndo();
-            // the photos stay until the undo time is over
+            // the photos stay until the undo time is over — marked for the other tabs too, so their clean-up
+            // leaves them alone meanwhile
             S.undo = { entries: gone, photoIds: gone.filter(function (e) { return e.receipt === "photo"; }).map(function (e) { return e.id; }) };
+            undoMark(S.undo.photoIds, true);
             self.saySaved(self.plural(n, "toast.deleted_one", "toast.deleted"), true);
             // the row (and its button) is gone: the focus goes to "Undo" — a keyboard or screen reader
             // user can take it back at once (its time stands still while it has the focus)
@@ -767,18 +908,33 @@
           return e ? (e.description || this.catLabel(e.category)) + " · " + this.day(e.date) : "";
         },
         undo: function () {
-          var u = S.undo;
+          var u = S.undo, have = {};
           if (!u) return;
           S.undo = null;
-          S.state.entries = S.state.entries.concat(u.entries);
+          undoMark(u.photoIds, false);
+          // (an entry another tab brought back meanwhile is there once)
+          S.state.entries.forEach(function (e) { have[e.id] = 1; });
+          S.state.entries = S.state.entries.concat(u.entries.filter(function (e) { return !have[e.id]; }));
           this.save();
           this.saySaved(this.t("toast.restored"));
         },
-        // the undo window is over (or a new delete starts one): the photos of deleted entries go
+        // the undo window is over (or a new delete starts one): the photos of deleted entries go — unless
+        // something still points to them (dropPhotos)
         finishUndo: function () {
           var u = S.undo;
           S.undo = null;
-          if (u && u.photoIds.length) u.photoIds.forEach(function (id) { photos.del(id); });
+          if (!u || !u.photoIds.length) return;
+          undoMark(u.photoIds, false);
+          this.dropPhotos(u.photoIds);
+        },
+        /* Deletes receipt photos — only the ones nothing points to: not an entry here, not one of the ledger
+           as it is stored NOW (another tab may have brought its entry back: an undo, an import), not a delete
+           that can still be undone here or in another tab. A stored ledger that can't be read keeps them all. */
+        dropPhotos: function (ids) {
+          var keep = this.photoIds(), stored = storedPhotoIds();
+          if (stored === null || this.lock) return Promise.resolve(0);
+          var gone = (ids || []).filter(function (id) { return !keep[id] && !stored[id]; });
+          return Promise.all(gone.map(function (id) { return photos.del(id); })).then(function () { return gone.length; });
         },
 
         /* ================= messages ================= */
@@ -821,13 +977,14 @@
           clearTimeout(S.flashT);
           S.flashT = setTimeout(function () { self.flashId = ""; }, 2600);
         },
-        // The page's own "Are you sure?" (a modal <dialog>): resolves true / false.
-        confirm: function (msg, ok, danger) {
+        // The page's own "Are you sure?" (a modal <dialog>): resolves true / false — or "alt" for a third
+        // choice, when one is named (alt: its button's words)
+        confirm: function (msg, ok, danger, alt) {
           var self = this;
           return new Promise(function (res) {
             if (S.askResolve) S.askResolve(false);
             S.askResolve = res;
-            self.ask = { msg: msg, ok: ok || self.t("ask.ok"), danger: !!danger };
+            self.ask = { msg: msg, ok: ok || self.t("ask.ok"), danger: !!danger, alt: alt || "" };
             var d = self.$refs.ask;
             if (!d || !d.showModal) { res(window.confirm(msg)); S.askResolve = null; return; }
             S.askBack = document.activeElement;
@@ -840,7 +997,7 @@
           S.askResolve = null;
           if (d && d.open) d.close();
           if (S.askBack && S.askBack.focus && document.contains(S.askBack)) S.askBack.focus();
-          if (r) r(!!v);
+          if (r) r(v === "alt" ? "alt" : !!v);
         },
 
         /* ================= suggestions from history (datalists) ================= */
@@ -950,6 +1107,20 @@
           });
         },
         dirty: function () { return !!this.form && JSON.stringify(this.form) !== S.formSnap; },
+        /* Closing the tab (or leaving the page) while the form holds something unsaved — or while a backup's
+           photos are still being restored — asks first. The listener is there only meanwhile: a page with
+           nothing unsaved has none (the browser can keep it in its back-forward cache). The form calls this
+           on every input and change. */
+        armLeave: function () {
+          var busy = (!!this.form && (this.dirty() || !!S.photo)) || !!S.restoring;
+          if (busy && !S.onLeave) {
+            S.onLeave = function (e) { e.preventDefault(); e.returnValue = ""; return ""; };
+            window.addEventListener("beforeunload", S.onLeave);
+          } else if (!busy && S.onLeave) {
+            if (window.removeEventListener) window.removeEventListener("beforeunload", S.onLeave);
+            S.onLeave = null;
+          }
+        },
         // Esc, the close button and Cancel: ask first when something was typed.
         tryClose: function () {
           var self = this;
@@ -964,6 +1135,7 @@
         formClosed: function () {
           this.form = null;
           this.clearPhoto();
+          this.armLeave();
           var back = S.opener;
           S.opener = null;
           if (back && back.focus && document.contains(back) && back.offsetParent !== null) back.focus();
@@ -1167,14 +1339,25 @@
           });
           return ids.length;
         },
+        /* The form → an entry. An edit starts from the entry as it is: a field its form does not show keeps
+           what the entry has (an imported trip's quantity, a hotel's nights from a CSV, a purchase's
+           attendees) — fixing a typo never erases them. A field the form shows is the form's. Only a new
+           category (another form, other fields) leaves out what the new form has no place for, as a new
+           entry does; and a trip ticked "I didn't drive" keeps no route, money or receipt. */
         buildEntry: function () {
-          var f = this.form, t = f.type, tp = this.tpl(), errs = [];
+          var f = this.form, t = f.type, tp = this.tpl(), errs = [], self = this;
+          var cur = this.formMode === "edit" && f.id ? S.state.entries.filter(function (x) { return x.id === f.id; })[0] : null;
+          var o = cur && cur.type === t && cur.category === f.category ? cur : null;
+          var rode = tp === "mileage" && !!f.no_miles;
+          // what a field the form doesn't show becomes: the entry's own value on an edit, else blank
+          var kept = function (k, blank) { return o && o[k] !== undefined && o[k] !== null ? clone(o[k]) : blank === undefined ? "" : blank; };
+          var shown = function (field, k, v) { return self.has(field) ? v : kept(k); };
           var e = {
-            id: f.id, type: t, date: f.date, end_date: this.has("end_date") ? f.end_date : "", category: f.category,
+            id: f.id, type: t, date: f.date, end_date: shown("end_date", "end_date", f.end_date), category: f.category,
             description: clean(f.description), funder: f.funder, claim_status: f.claim_status,
             claim_date: f.claim_date, claim_ref: clean(f.claim_ref), paid_date: f.paid_date,
-            method: this.has("method") ? f.method : "", ref: this.has("ref") ? clean(f.ref) : "", vendor: clean(f.vendor), event: clean(f.event),
-            activity: this.has("activity") ? f.activity : "", role: this.has("role") ? clean(f.role) : "", place: clean(f.place),
+            method: rode ? "" : shown("method", "method", f.method), ref: shown("ref", "ref", clean(f.ref)), vendor: clean(f.vendor), event: clean(f.event),
+            activity: shown("activity", "activity", f.activity), role: shown("role", "role", clean(f.role)), place: clean(f.place),
             // a subscription's person: the field on screen first ("Who pays you back" for a purchase made
             // for someone, else "For whom"), then the other — the name the form filled in for a purchase
             // made for someone never overrides the one typed after it became a gift. A trip with no miles:
@@ -1183,13 +1366,16 @@
             // typed for a ride and then unticked
             person: this.has("subscription") ? clean(f.sub_kind === "helped" ? f.person_name || f.person : f.person || f.person_name)
               : tp === "mileage" && !f.no_miles ? clean(S.formPerson) : clean(f.person),
-            item: this.has("item") ? clean(f.item) : "",
-            format: this.has("format") ? f.format : "", quantity: this.has("quantity") ? num(f.quantity) : "",
-            unit_cost_cents: "", giveaway: this.has("giveaway") ? !!f.giveaway : false,
-            miles: "", rate: "", from: "", to: "", round_trip: false, trips: "", no_miles: false, odometer_start: "", odometer_end: "",
-            nights: "", attendees: this.has("attendees") ? num(f.attendees) : "",
-            sub_product: "", sub_term: "", sub_start: "", sub_kind: "", repaid: "",
-            receipt: this.has("receipt") ? f.receipt : "none", receipt_ref: f.receipt === "file" ? clean(f.receipt_ref) : clean(f.receipt_ref),
+            item: shown("item", "item", clean(f.item)),
+            format: shown("format", "format", f.format), quantity: shown("quantity", "quantity", num(f.quantity)),
+            unit_cost_cents: kept("unit_cost_cents"), giveaway: this.has("giveaway") ? !!f.giveaway : !!kept("giveaway", false),
+            // a trip's numbers come from its form below; any other entry keeps the ones it has (an import's)
+            miles: kept("miles"), rate: kept("rate"), from: kept("from"), to: kept("to"), round_trip: !!kept("round_trip", false), trips: kept("trips"),
+            no_miles: false, odometer_start: kept("odometer_start"), odometer_end: kept("odometer_end"),
+            // (a stay's nights follow its dates — GVX works them out when both are there)
+            nights: kept("nights"), attendees: shown("attendees", "attendees", num(f.attendees)),
+            sub_product: kept("sub_product"), sub_term: kept("sub_term"), sub_start: kept("sub_start"), sub_kind: kept("sub_kind"), repaid: kept("repaid"),
+            receipt: rode ? "none" : this.has("receipt") ? f.receipt : kept("receipt", "none"), receipt_ref: clean(f.receipt_ref),
             tags: uniq(String(f.tags || "").split(/[,;]/)), notes: String(f.notes || "").trim(), custom: clone(f.custom || {}),
             example: !!f.example, created: f.created || "", amount_cents: 0,
           };
@@ -1215,6 +1401,7 @@
             // (GVX keeps it at $0, never asked for), so nobody pays for it either: "me"
             e.no_miles = true;
             e.funder = "me";
+            e.from = ""; e.to = ""; e.miles = ""; e.rate = ""; e.round_trip = false; e.trips = ""; e.odometer_start = ""; e.odometer_end = "";
           } else if (tp === "mileage") {
             e.from = clean(f.from); e.to = clean(f.to); e.round_trip = !!f.round_trip && !this.odo();
             e.odometer_start = num(f.odometer_start); e.odometer_end = num(f.odometer_end);
@@ -1238,7 +1425,7 @@
               else if (e.repaid === "owed" && f.claim_status === "paid") e.repaid = "repaid";          // marked paid earlier: paid back
               else if (e.repaid === "owed" && f.claim_status === "none") e.claim_status = "to_request";
               if (e.repaid === "repaid" && !e.paid_date) e.paid_date = today();
-            }
+            } else e.repaid = "";               // (a gift, your own, the group's: nobody pays it back)
           }
           if (t === "giveaway") { e.funder = "me"; e.amount_cents = 0; e.claim_status = "none"; }
           if (t === "received" || t === "stock") e.claim_status = "none";
@@ -1272,17 +1459,20 @@
           else S.state.entries = S.state.entries.map(function (x) { return x.id === e.id ? e : x; });
           var first = S.state.entries.length === 1;
           // the photo: stored on this device under the entry's id (or removed — also when the receipt
-          // is now kept some other way: a photo nothing points to never stays behind)
+          // is now kept some other way: a photo nothing points to never stays behind; once the entry
+          // that no longer points to it is saved: dropPhotos checks the stored ledger)
+          var drop = false;
           if (S.photo && S.photo !== "remove" && e.receipt === "photo") {
             var p = S.photo;
             photos.put({ id: e.id, type: "image/jpeg", blob: p.blob, w: p.w, h: p.h, name: p.name || "", added: now })
               .catch(function () { self.say(self.t("toast.photo_failed")); });
-          } else if (S.photo === "remove" || (S.formOrig && S.formOrig.receipt === "photo" && e.receipt !== "photo")) photos.del(e.id);
+          } else if (S.photo === "remove" || (S.formOrig && S.formOrig.receipt === "photo" && e.receipt !== "photo")) drop = true;
           S.photo = null;
           // money a person paid back settles what was bought for them (oldest first)
           var settled = e.type === "received" ? this.settle(e.funder, e.date) : 0;
           var stored = this.save();
           if (stored) this.askPersist();
+          if (stored && drop) this.dropPhotos([e.id]);
           this.flash(e.id);
           var msg = first ? this.t("toast.saved_first") : this.t("toast.saved");
           if (settled) msg += " · " + this.plural(settled, "toast.settled_one", "toast.settled");
@@ -1296,11 +1486,14 @@
             this.clearPhoto();
             S.formSnap = JSON.stringify(nf);
             S.formPerson = "";
+            this.armLeave();
             this.formErr = {}; this.formErrs = [];
             this.dlgMsg = "";
             this.$nextTick(function () { self.dlgMsg = self.t("form.saved_next"); });
             this.focusForm();
           } else {
+            S.formSnap = JSON.stringify(this.form);    // (saved: nothing left to lose)
+            this.armLeave();
             this.closeForm();
           }
         },
@@ -1339,6 +1532,7 @@
             self.photoUrl = S.photoUrl;
             self.form.receipt = "photo";
             self.photoBusy = false;
+            self.armLeave();
             GV.announce && GV.announce(self.t("form.photo_added"));
           }, function () { self.photoBusy = false; self.say(self.t("toast.photo_failed")); });
         },
@@ -1347,6 +1541,7 @@
           S.photoUrl = ""; this.photoUrl = "";
           S.photo = "remove";
           this.form.receipt = "none";
+          this.armLeave();
           GV.announce && GV.announce(this.t("form.photo_removed"));
         },
 
@@ -1405,10 +1600,7 @@
           };
           this.$nextTick(run);
         },
-        monthName: function (ym) {
-          var s = GV.fmtDate ? GV.fmtDate(ym + "-15T12:00:00Z", { month: "short", year: "numeric" }) : ym;
-          return s || ym;
-        },
+        monthName: function (ym) { return fmtDay(ym, "month", this.L); },
         byMonth: function () {
           var self = this, list = (this.sum().by_month || []).slice().sort(function (a, b) { return a.ym < b.ym ? -1 : 1; });
           var max = list.reduce(function (a, x) { return Math.max(a, x.spent || 0, x.received || 0); }, 0) || 1;
@@ -1417,17 +1609,23 @@
                      ws: (x.spent ? Math.max(2, Math.round(x.spent / max * 100)) : 0), wr: (x.received ? Math.max(2, Math.round(x.received / max * 100)) : 0) };
           });
         },
+        /* "Who owes you": each one's balance as it stands at the period's END — everything up to its last day
+           counts, so a hotel claimed in December and paid back in January is even in January's view (the
+           period alone would say "you hold $300 of theirs"). Listed: whoever still owes or is owed then, or
+           had something in the period. */
         balances: function () {
           var self = this, r = this.range();
           return this.memo("bal", r.from + "|" + r.to, function () {
-            return (S.X.funderBalances(S.state.entries, this.st(), { from: r.from, to: r.to }) || []).filter(function (b) {
-              return !self.isSelf(b.funder) && (b.claimed_cents || b.received_cents);
+            var X = S.X, st = this.st(), upTo = { to: r.to }, active = {};
+            (X.funderBalances(S.state.entries, st, { from: r.from, to: r.to }) || []).forEach(function (b) { if (b.claimed_cents || b.received_cents) active[b.funder] = 1; });
+            return (X.funderBalances(S.state.entries, st, upTo) || []).filter(function (b) {
+              return !self.isSelf(b.funder) && (b.balance_cents || b.to_request_cents || b.submitted_cents || active[b.funder]);
             }).map(function (b) {
               return { id: b.funder, name: self.funderName(b.funder), person: (self.funder(b.funder) || {}).kind === "person",
                        claimed: self.money(b.claimed_cents), toRequest: self.money(b.to_request_cents), submitted: self.money(b.submitted_cents),
                        paid: self.money(b.paid_cents), received: self.money(b.received_cents), balance: b.balance_cents,
                        balanceText: b.balance_cents < 0 ? self.t("sum.they_owe", { amount: self.money(-b.balance_cents) }) : b.balance_cents > 0 ? self.t("sum.you_hold", { amount: self.money(b.balance_cents) }) : self.t("sum.even") };
-            }).concat((S.X.peopleOwed(S.state.entries, this.st(), { from: r.from, to: r.to }) || []).filter(function (p) { return !p.funder && p.owed_cents > 0; }).map(function (p, i) {
+            }).concat((X.peopleOwed(S.state.entries, st, upTo) || []).filter(function (p) { return !p.funder && p.owed_cents > 0; }).map(function (p, i) {
               return { id: "person:" + i, name: p.person, person: true, claimed: self.money(p.claimed_cents), toRequest: self.money(p.owed_cents), submitted: self.money(0),
                        paid: self.money(p.settled_cents), received: self.money(p.received_cents), balance: -p.owed_cents, balanceText: self.t("sum.they_owe", { amount: self.money(p.owed_cents) }) };
             }));
@@ -1802,7 +2000,7 @@
           if (!a) return "";
           var nb = function (s) { return String(s).replace(/ /g, "\u00a0"); };
           if (!(b && b > a)) return nb(this.day(a, "mid"));
-          var first = a.slice(0, 4) === b.slice(0, 4) && GV.fmtDate ? GV.fmtDate(a + "T12:00:00Z", { month: "short", day: "numeric" }) : "";
+          var first = a.slice(0, 4) === b.slice(0, 4) ? fmtDay(a, "short", this.L) : "";
           return nb(first || this.day(a, "mid")) + " – " + nb(this.day(b, "mid"));
         },
         // what the report says, ready for the screen and the paper
@@ -1898,75 +2096,170 @@
           this.say(this.t("toast.downloaded", { file: name }));
         },
         exportAll: function () { this.downloadCsv(S.state.entries.slice(), "all"); },
-        // The full backup: entries, settings and the receipt photos of the entries, in one .json file.
-        exportBackup: function () {
+        // the receipt photos the ledger's entries point to, kept on this device: [{id, rec, entry}], by date
+        backupPhotos: function () {
+          var byId = {};
+          S.state.entries.forEach(function (e) { if (e.receipt === "photo") byId[e.id] = e; });
+          return photos.all().then(function (recs) {
+            return (recs || []).filter(function (r) { return r && r.blob && byId[r.id]; }).map(function (r) { return { id: r.id, rec: r, entry: byId[r.id] }; })
+              .sort(function (a, b) { return a.entry.date < b.entry.date ? -1 : a.entry.date > b.entry.date ? 1 : a.id < b.id ? -1 : 1; });
+          });
+        },
+        // How big the backups will be, before they are made (Settings → Data says it, and a big one is
+        // asked about): the ledger, plus each photo as it is kept (the .zip stores them as they are).
+        measureBackup: function () {
+          var self = this, plain = 0;
+          try { plain = JSON.stringify(S.state).length + 300; } catch (e) { plain = 0; }
+          return this.backupPhotos().then(function (list) {
+            var bytes = plain;
+            list.forEach(function (p) { bytes += (p.rec.blob.size || 0) + 2 * (S.X.receiptFile(p.entry, p.rec.type).length + 46) + 200; });
+            self.bk = { ready: true, photos: list.length, bytes: bytes, plain: plain };
+            return self.bk;
+          }, function () { self.bk = { ready: true, photos: 0, bytes: plain, plain: plain }; return self.bk; });
+        },
+        sizeText: function (bytes) { var p = sizeParts(bytes); return this.t(p.key, { n: this.count(p.n) }); },
+        photosText: function (n) { return n ? this.plural(n, "data.photos_one", "data.photos") : this.t("data.photos_none"); },
+        bkLine: function () {
+          var b = this.bk;
+          return b.ready ? this.t("data.size_full", { size: this.sizeText(b.bytes), photos: this.photosText(b.photos) }) + " " +
+            this.t("data.size_plain", { size: this.sizeText(b.plain) }) : "";
+        },
+        bkBig: function () { return this.bk.ready && this.bk.bytes > BIG_BACKUP; },
+        /* "Back up now" / "Full backup": entries, settings and every receipt photo, in one .zip — the ledger
+           as backup.json and each photo a file of its own (GVF.zip, nothing compressed, read back in slices),
+           so even hundreds of photos restore. A big one is asked about first (too big for most e-mail): save
+           it anyway, or back up without photos. how "plain": the .json of the ledger alone ("Back up without
+           photos": the photos stay on this device). */
+        exportBackup: function (how) {
           var self = this;
-          if (!S.state.entries.length) { this.say(this.t("toast.nothing_to_export")); return; }
-          this.say(this.t("toast.preparing"));
-          var mine = this.photoIds();
-          photos.all().then(function (recs) {
-            return Promise.all((recs || []).filter(function (r) { return r && mine[r.id]; }).map(function (r) {
-              return r && r.blob ? blobToDataUrl(r.blob).then(function (u) { return { id: r.id, type: r.type || "image/jpeg", dataUrl: u }; }) : null;
-            }));
-          }).then(function (receipts) {
-            var b = S.X.toBackup(S.state, (receipts || []).filter(function (x) { return x && x.dataUrl; }));
-            var text = typeof b === "string" ? b : JSON.stringify(b);
-            var name = self.t("data.file_base") + "-" + self.t("data.backup_word") + "-" + today() + ".json";
-            saveBlob(new Blob([text], { type: "application/json" }), name);
-            self.stamp("lastBackup");
-            self.save();
-            self.say(self.t("toast.downloaded", { file: name }));
+          if (!S.state.entries.length) { this.say(this.t("toast.nothing_to_export")); return Promise.resolve(); }
+          if (how === "plain") { this.saveBackup(new Blob([S.X.toBackup(S.state, [])], { type: "application/json" }), "-" + safeName(this.t("data.no_photos_word")), ".json"); return Promise.resolve(); }
+          return this.measureBackup().then(function (b) {
+            if (b.bytes <= BIG_BACKUP) return true;
+            return self.confirm(self.t("ask.backup_big", { size: self.sizeText(b.bytes), photos: self.photosText(b.photos) }), self.t("ask.backup_big_ok"), false, self.t("ask.backup_big_alt"));
+          }).then(function (yes) {
+            if (yes === "alt") return self.exportBackup("plain");
+            if (!yes) return;
+            self.say(self.t("toast.preparing"));
+            return self.backupPhotos().then(function (list) {
+              var G = window.GVF;
+              if (!G) return self.backupJson(list);      // (no zip helper: the photos inside the .json, as before 1.2.0)
+              var files = [], receipts = [];
+              list.forEach(function (p) {
+                var name = S.X.receiptFile(p.entry, p.rec.type);
+                files.push({ name: name, data: p.rec.blob });
+                receipts.push({ id: p.id, type: p.rec.type || "image/jpeg", file: name, name: p.rec.name || "", added: p.rec.added || "", w: p.rec.w, h: p.rec.h });
+              });
+              files.unshift({ name: "backup.json", data: S.X.toBackup(S.state, receipts) });
+              return G.zip(files, new Date()).then(function (blob) { self.saveBackup(blob, "", ".zip"); });
+            });
           }).catch(function (e) { if (window.console) console.error("[expenses]", e); self.say(self.t("toast.backup_failed")); });
         },
-        // the entries that have a photo (and the ones a pending "Undo" would bring back)
+        // the photos inside the .json as data: URLs (the full backup of 1.1.0: when the zip helper is missing)
+        backupJson: function (list) {
+          var self = this;
+          return Promise.all(list.map(function (p) { return blobToDataUrl(p.rec.blob).then(function (u) { return { id: p.id, type: p.rec.type || "image/jpeg", dataUrl: u }; }); }))
+            .then(function (receipts) { self.saveBackup(new Blob([S.X.toBackup(S.state, receipts)], { type: "application/json" }), "", ".json"); });
+        },
+        saveBackup: function (blob, what, ext) {
+          var name = this.t("data.file_base") + "-" + this.t("data.backup_word") + what + "-" + today() + ext;
+          saveBlob(blob, name);
+          this.stamp("lastBackup");
+          this.save();
+          this.say(this.t("toast.backup_done", { file: name, size: this.sizeText(blob.size) }));
+        },
+        // the entries that have a photo (and the ones a pending "Undo" would bring back — this tab's, or
+        // another's that has not run out)
         photoIds: function () {
-          var ids = {};
+          var ids = undoPending();
           S.state.entries.forEach(function (e) { if (e.receipt === "photo") ids[e.id] = 1; });
           if (S.undo) S.undo.photoIds.forEach(function (id) { ids[id] = 1; });
           return ids;
         },
         // Photos no entry points to any more are deleted: a delete whose undo time never ran out (the
-        // page was closed), a CSV import that replaced everything. A deleted receipt never travels on
-        // in a backup.
+        // page was closed), an import that replaced everything. A deleted receipt never travels on in a
+        // backup.
         cleanPhotos: function () {
-          var mine = this.photoIds();
+          var self = this, mine = this.photoIds();
           return photos.keys().then(function (keys) {
-            return Promise.all((keys || []).filter(function (k) { return !mine[k]; }).map(function (k) { return photos.del(k); }));
+            return self.dropPhotos((keys || []).filter(function (k) { return !mine[k]; }));
           }).catch(function () {});
         },
         lastBackupText: function () { this.rev; return this.ago(S.state && S.state.meta ? S.state.meta.lastBackup : null); },
         storageKb: function () { this.rev; var raw = lsGet(KEY); return raw ? Math.max(1, Math.round(raw.length * 2 / 1024)) : 0; },
         usageText: function () { return this.usage == null || this.usage < 512000 ? "" : this.t("data.usage", { mb: (Math.round(this.usage / 104857.6) / 10).toLocaleString(this.L === "es" ? "es-US" : "en-US") }); },
 
-        /* ================= import: CSV or a full backup → preview → merge or replace ================= */
+        /* ================= import: a CSV, an Excel workbook or a backup → preview → merge or replace ================= */
         impReset: function () { S.impRows = null; S.impPlan = null; S.impBackup = null; this.imp = { step: "pick", err: "", name: "" }; this.dragOver = false; },
         impDrop: function (ev) {
           this.dragOver = false;
-          var file = ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files[0];
-          if (file) this.impFile(file);
+          var files = ev.dataTransfer && ev.dataTransfer.files;
+          if (files && files.length) this.impFiles(files);
         },
-        impPick: function (ev) { var file = ev.target.files && ev.target.files[0]; ev.target.value = ""; if (file) this.impFile(file); },
-        // A CSV may weigh up to 10 MB; a full backup (every receipt photo inside) much more — its limit
-        // is the core's (GVX.importKind / importLimit), checked once the file says what it is.
-        impFile: function (file) {
-          var self = this, X = S.X, most = X.importLimit("backup");
+        impPick: function (ev) { var files = Array.prototype.slice.call(ev.target.files || []); ev.target.value = ""; if (files.length) this.impFiles(files); },
+        // Several files at once: a backup that was unpacked (a computer may open a .zip by itself) — its
+        // backup.json with its photos. The one that is not a photo is the file; the photos go with it.
+        impFiles: function (list) {
+          var files = Array.prototype.slice.call(list || []).filter(Boolean), pic = /\.(jpe?g|png|webp|gif)$/i;
+          var main = files.filter(function (f) { return !pic.test(f.name || ""); })[0] || files[0], pics = {};
+          files.forEach(function (f) { if (f !== main && pic.test(f.name || "")) pics[f.name] = f; });
+          return this.impFile(main, pics);
+        },
+        /* What the file is decides how it is read (GVX.importKind, from its first bytes): a .zip — the full
+           backup, or an Excel workbook (.xlsx) —, Excel's older .xls (asked for as .xlsx or CSV), a .json
+           backup, or a CSV (UTF-8, UTF-16 or Windows-1252: GVX.decodeText). A CSV may weigh up to 10 MB; a
+           backup is the visitor's own and has no limit that matters (it is read in slices). */
+        impFile: function (file, pics) {
+          var self = this, X = S.X;
           this.impReset();
           this.imp.name = file.name;
           var tooBig = function (limit) { self.imp.err = self.t("imp.too_big", { mb: self.count(Math.round(limit / 1048576)) }); };
-          if (file.size > most) { tooBig(most); return; }
-          readText(file).then(function (text) {
-            var t = String(text || "").replace(/^﻿/, ""), kind = X.importKind(file.name, t.slice(0, 64)), limit = X.importLimit(kind);
-            if (file.size > limit) { tooBig(limit); return; }
-            if (kind === "backup") self.impBackupText(t);
-            else self.impCsvText(t);
-          }, function () { self.imp.err = self.t("imp.unreadable"); });
+          return sniff(file).then(function (head) {
+            var kind = X.importKind(file.name, String(head.text || "").replace(/^﻿/, ""), head.bytes), limit = X.importLimit(kind);
+            if (file.size > limit) return tooBig(limit);
+            if (kind === "xls") { self.imp.err = self.msgKey("expenses.err.xls_old"); return; }
+            if (kind === "zip") return self.impZip(file, pics || {});
+            if (kind === "backup") return self.impBackupFile(file, pics || {});
+            return readText(file).then(function (text) { self.impCsvText(String(text || "").replace(/^﻿/, "")); });
+          }).catch(function (e) {
+            if (window.console) console.error("[expenses]", e);
+            self.imp.err = e && e.key ? self.msgKey(e.key) : self.t("imp.unreadable");
+          });
+        },
+        // a .zip: the full backup (backup.json and its photos — or any one .json someone zipped), or an Excel workbook
+        impZip: function (file, pics) {
+          var self = this, X = S.X, G = window.GVF;
+          if (!G) { this.imp.err = this.t("imp.unreadable"); return Promise.resolve(); }
+          return G.readZip(file).then(function (zip) {
+            if (zip.has("xl/workbook.xml")) return G.xlsxRows(zip, { maxRows: X.LIMITS.rows + 1 }).then(function (rows) { self.impCsvRows(rows, "xlsx"); });
+            var jsons = zip.entries.filter(function (e) { return /^[^/]+\.json$/i.test(e.name); });
+            var main = zip.has("backup.json") ? "backup.json" : jsons.length === 1 ? jsons[0].name : "";
+            if (!main) { self.imp.err = self.msgKey("expenses.err.backup_foreign"); return; }
+            return zip.text(main, X.LIMITS.json).then(function (text) { self.impBackupRead(X.readBackup(text, S.cfg), null, pics, zip); });
+          });
+        },
+        // a .json backup: a small one read whole; a big one (its photos inside, as before 1.2.0) in slices
+        // (GVF.jsonBackup), each photo read only when it is restored — unless it is not laid out as the
+        // tracker writes it (then whole, up to GVX.LIMITS.json)
+        impBackupFile: function (file, pics) {
+          var self = this, X = S.X, G = window.GVF;
+          var whole = function () {
+            if (file.size > X.LIMITS.json) { self.imp.err = self.t("imp.too_big", { mb: self.count(Math.round(X.LIMITS.json / 1048576)) }); return; }
+            return readText(file).then(function (t) { self.impBackupText(t, pics); });
+          };
+          if (file.size <= X.LIMITS.bytes || !G || !file.slice) return whole();
+          return G.jsonBackup(file).then(function (jb) { return jb ? self.impBackupRead(X.readBackup(jb.head, S.cfg), jb.receipts, pics) : whole(); });
         },
         impCsvText: function (text) {
-          var X = S.X;
           if (!clean(text)) { this.imp.err = this.t("imp.empty"); return; }
-          var rows = X.parseCSV(text);
+          this.impCsvRows(S.X.parseCSV(text), "csv");
+        },
+        // the rows of a CSV or of an Excel sheet → the preview (or the mapping step)
+        impCsvRows: function (rows, from) {
           if (rows && rows.error) { this.imp.err = this.msgKey(rows.error); return; }
+          if (!rows || !rows.length) { this.imp.err = this.t("imp.empty"); return; }
           S.impRows = rows;
+          this.imp.from = from || "csv";
           this.imp.kind = "csv";
           this.imp.opts = { dateOrder: this.L === "es" ? "dmy" : "mdy", decimal: "auto", includeDuplicates: false, positive: "" };
           this.imp.map = { date: "", description: "", amount: "", category: "", miles: "", notes: "" };
@@ -2053,23 +2346,40 @@
           });
           this.imp.moreErrors = Math.max(0, probs.length - 20);
         },
-        impBackupText: function (text) {
+        impBackupText: function (text, pics) {
           var r;
           try { r = S.X.readBackup(text, S.cfg); } catch (e) { r = { ok: false, error: "expenses.err.backup_invalid" }; }
+          this.impBackupRead(r, null, pics);
+        },
+        /* A backup read (GVX.readBackup's answer r) → the preview. Its photos, each as a source to read when
+           it is restored: lazy (a big .json's, GVF.jsonBackup), a data: URL inside the .json, a file of the
+           .zip (zip), or one of the photos picked with an unpacked backup.json (pics, by name). A photo the
+           backup names but nothing holds is counted as missing (the preview says how to bring it along). */
+        impBackupRead: function (r, lazy, pics, zip) {
           if (!r || !r.ok) { this.imp.err = this.msgKey((r && r.error) || "expenses.err.backup_invalid"); return; }
-          var st = r.state || {};
-          S.impBackup = { entries: st.entries || [], settings: st.settings || null, receipts: r.receipts || st.receipts || [], meta: st.meta || null };
+          var st = r.state || {}, list = [], missing = 0;
+          (lazy || r.receipts || []).forEach(function (x) {
+            if (!x || !x.id) return;
+            var meta = { id: x.id, type: x.type || "image/jpeg", w: x.w || 0, h: x.h || 0, name: x.name || "", added: x.added || "" };
+            if (typeof x.load === "function") meta.load = x.load;
+            else if (x.dataUrl) meta.load = function () { return Promise.resolve(dataUrlToBlob(x.dataUrl)); };
+            else if (x.file && zip && zip.has(x.file)) meta.load = function () { return zip.blob(x.file, meta.type); };
+            else if (x.file && pics && Object.prototype.hasOwnProperty.call(pics, x.file)) meta.load = function () { return Promise.resolve(pics[x.file]); };
+            if (meta.load) list.push(meta); else missing++;
+          });
+          S.impBackup = { entries: st.entries || [], settings: st.settings || null, receipts: list, meta: st.meta || null };
           this.imp.kind = "backup";
           this.imp.mode = "merge";
-          this.imp.counts = { entries: S.impBackup.entries.length, photos: S.impBackup.receipts.length };
+          this.imp.counts = { entries: S.impBackup.entries.length, photos: list.length, missing: missing };
           this.imp.step = "backup";
         },
         impApply: function () {
           var self = this, im = this.imp, n = S.state.entries.length;
-          var go = function () { if (im.kind === "backup") self.impApplyBackup(); else self.impApplyCsv(); };
+          var go = function () { return im.kind === "backup" ? self.impApplyBackup() : self.impApplyCsv(); };
           if (im.mode === "replace" && n) {
-            this.confirm(this.t("ask.replace", { n: this.count(n) }), this.t("ask.replace_ok"), true).then(function (yes) { if (yes) go(); });
-          } else go();
+            return this.confirm(this.t("ask.replace", { n: this.count(n) }), this.t("ask.replace_ok"), true).then(function (yes) { return yes ? go() : null; });
+          }
+          return Promise.resolve(go());
         },
         impApplyCsv: function () {
           var X = S.X, plan = S.impPlan, before = S.state.entries.length;
@@ -2117,26 +2427,35 @@
           entries = entries.map(function (e) { var r = X.normalizeEntry(e, settings); return r && r.entry ? r.entry : e; });
           var added = Object.keys(touched).length, want = {};
           entries.forEach(function (e) { if (e.receipt === "photo") want[e.id] = 1; });
-          // the backup's photo of each entry that points to one: the entries taken from the backup, and
-          // any entry this device has no photo for (its copy came from a CSV: the same entry, no photo)
-          var put = function () {
-            return photos.keys().then(function (have) {
-              var got = {};
-              (have || []).forEach(function (k) { got[k] = 1; });
-              return Promise.all((b.receipts || []).filter(function (r) { return r && want[r.id] && (touched[r.id] || !got[r.id]); }).map(function (r) {
-                var blob = dataUrlToBlob(r.dataUrl);
-                return blob ? photos.put({ id: r.id, type: blob.type || "image/jpeg", blob: blob, w: 0, h: 0, name: "", added: now }).catch(function () {}) : null;
-              }));
-            });
-          };
           S.state = { v: st.v || 1, entries: entries, settings: settings, meta: Object.assign({}, st.meta || {}, { lastBackup: (b.meta && b.meta.lastBackup) || st.meta.lastBackup }) };
           var stored = this.save();
-          // "replace" clears the old photos only once the restored ledger is kept (a refused save leaves
-          // the old ledger stored, pointing to them)
-          (mode === "replace" && stored ? photos.clear() : Promise.resolve()).then(put).then(function () {}, function () {});
-          this.imp = { step: "done", added: added, updated: 0, err: "" };
+          this.imp = { step: "done", added: added, updated: 0, err: "", photos: 0, photosDone: 0, photoErrs: 0 };
           this.saySaved(this.plural(added, "toast.imported_one", "toast.imported"));
           if (entries.length) this.askPersist();
+          // the backup's photo of each entry that points to one: the entries taken from the backup, and any
+          // entry this device has no photo for (its copy came from a CSV: the same entry, no photo) — one
+          // at a time, a breath between them (hundreds restore without freezing the page; the "done" step
+          // counts them). "replace" then deletes the old photos — once the restored ledger is kept (a
+          // refused save leaves the old ledger stored, pointing to them) — and the photos of entries the
+          // backup has as well stay until their own arrives.
+          var im = this.imp;
+          S.restoring = true;
+          this.armLeave();
+          return photos.keys().then(function (have) {
+            var got = {};
+            (have || []).forEach(function (k) { got[k] = 1; });
+            var todo = (b.receipts || []).filter(function (r) { return r && want[r.id] && (touched[r.id] || !got[r.id]); });
+            im.photos = todo.length;
+            return todo.reduce(function (p, r) {
+              return p.then(function () { return r.load(); }).then(function (blob) {
+                if (!blob) throw new Error("photo");
+                return photos.put({ id: r.id, type: blob.type || r.type || "image/jpeg", blob: blob, w: r.w || 0, h: r.h || 0, name: r.name || "", added: r.added || now });
+              }).then(function () { im.photosDone++; }, function () { im.photoErrs++; }).then(breathe);
+            }, Promise.resolve());
+          }).then(function () { return mode === "replace" && stored ? self.cleanPhotos() : null; }).catch(function () {}).then(function () {
+            S.restoring = false;
+            self.armLeave();
+          });
         },
 
         /* ================= examples, erase ================= */
@@ -2155,8 +2474,8 @@
             if (!yes) return;
             var ids = [];
             S.state.entries = S.state.entries.filter(function (e) { if (e.example) { ids.push(e.id); return false; } return true; });
-            ids.forEach(function (id) { delete self.sel[id]; photos.del(id); });
-            self.save();
+            ids.forEach(function (id) { delete self.sel[id]; });
+            if (self.save()) self.dropPhotos(ids);
             self.saySaved(self.t("toast.examples_removed"));
           });
         },
@@ -2166,8 +2485,11 @@
           if (!this.eraseReady()) return;
           this.confirm(this.t("ask.erase"), this.t("ask.erase_ok"), true).then(function (yes) {
             if (!yes) return;
-            lsDel(KEY);
-            photos.clear();
+            // (a ledger that could not be read and could not be kept aside stays, with its photos: its
+            // notice offers it first)
+            if (self.lock !== "unreadable") { lsDel(KEY); self.lock = ""; photos.clear(); }
+            lsDel(UNDO_KEY);
+            S.undo = null;
             var st = S.X.emptyState(S.cfg);
             st.settings = S.X.mergeDefaults(S.cfg, st.settings || {});
             S.state = st;

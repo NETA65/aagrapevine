@@ -239,8 +239,8 @@ class Page(unittest.TestCase):
         self.assertIn("pageKey: expenses", head)
         self.assertIn("titleKey: nav.expenses", head)
         self.assertIn("descKey: expenses.meta_desc", head)
-        # the core first; committee.js runs the committee sub-nav
-        self.assertIn('pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses.js", "/assets/js/committee.js"]', head)
+        # the core first, then the files' helper (.zip, Excel); committee.js runs the committee sub-nav
+        self.assertIn('pageScripts: ["/assets/js/expenses-core.js", "/assets/js/expenses-files.js", "/assets/js/expenses.js", "/assets/js/committee.js"]', head)
 
     def test_no_html_from_data(self):
         self.assertNotIn("x-html", self.page)
