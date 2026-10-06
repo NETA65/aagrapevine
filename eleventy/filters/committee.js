@@ -13,6 +13,7 @@ import { monthlyRule, TZ } from "../../eleventy.config.js";
 // The site's one Central-time helper (the browser runs the same code: /assets/js/central-time.js)
 import { isZone, zoneParts, zoneInstant, ymdOf, overnight, ruleDate, timeRange, icsSequence, offsetMinutes } from "../central-time.js";
 import { iconSvg } from "../icons.js";
+import { buildWarning } from "../build-warnings.js";
 
 export { TZ }; // config/site.yml site.timezone (America/Chicago)
 const LOCALES = { en: "en-US", es: "es-US" };
@@ -211,9 +212,12 @@ function driveFileId(url) {
 }
 
 // A decorative icon, as the global {% icon %} shortcode draws it (eleventy/icons.js: a pointer at the page's
-// icon sprite) — needed because shortcodes can't call other shortcodes. "" for an unknown name.
-function icon(name, cls = "size-4") {
-  return iconSvg(name, cls);
+// icon sprite) — needed because shortcodes can't call other shortcodes. "" for an unknown name, and a build
+// warning, as the shortcode gives (eleventy/build-warnings.js).
+export function icon(name, cls = "size-4") {
+  const svg = iconSvg(name, cls);
+  if (!svg) buildWarning("icon", `missing icon: ${name}`);
+  return svg;
 }
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);

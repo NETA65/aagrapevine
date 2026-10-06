@@ -4,8 +4,9 @@ data that had to be repaired or hidden.
   * Each is printed as before ("[icon] missing icon: x", "[sitemap] missing page(s): …", "[links] …") and
     remembered; at the end of the build: STRICT_BUILD=1 fails it, listing them; BUILD_WARNINGS=<file> gets them,
     one per line (empty: none); on GitHub Actions each is an annotation (an error when strict, else a warning).
-  * Where they come from: the {% icon %} shortcode and the area sprites ({% micon %} …), the sitemap's required
-    pages, src/_data/db.js's link cleaning.
+    The same warning on many pages is listed once, with its count ("(×245)").
+  * Where they come from: the {% icon %} shortcode, committee.js's own icons and the area sprites ({% micon %} …),
+    the sitemap's required pages, src/_data/db.js's link cleaning.
   * The real command line: a strict build with the booth display's expected "not downloaded in this build"
     notes passes; one with a bad link in the data fails (exit code ≠ 0); without STRICT_BUILD it passes and
     writes the list.
@@ -70,6 +71,16 @@ class Module(unittest.TestCase):
             W.buildWarning("icon", "missing icon: 100%\nsure");
             res.zero = W.finishBuild({ STRICT_BUILD: "0", GITHUB_ACTIONS: "true" }, write);       // "0" is not strict
             res.annotations2 = logged.splice(0);
+            // the same warning on every page (an icon missing from the layout): printed each time, listed once
+            for (let i = 0; i < 245; i++) W.buildWarning("icon", "missing icon: in-the-layout");
+            W.buildWarning("sitemap", "missing page(s): /digest/");
+            W.buildWarning("icon", "missing icon: in-the-layout");
+            res.printedRepeats = said.filter((s) => s === "[icon] missing icon: in-the-layout").length;
+            try { W.finishBuild({ STRICT_BUILD: "1", BUILD_WARNINGS: "r.txt" }, write); res.threwRepeats = null; }
+            catch (e) { res.threwRepeats = e.message; }
+            res.strictValues = Object.fromEntries(["1", "true", "yes", "", "0", "false", "no", "off", " 0 ", "FALSE"]
+              .map((v) => [v, W.isStrict({ STRICT_BUILD: v })]));
+            res.strictUnset = W.isStrict({});
           } finally { console.warn = warn; console.log = log; }
           out({ ...res, said, files });""", needs_modules=False)
         self.assertEqual(r["said"][:3], ["[icon] missing icon: nope", '[links] events.json ev:x: url "www.x.org" → https://www.x.org',
@@ -85,6 +96,14 @@ class Module(unittest.TestCase):
         self.assertEqual((r["clean"], r["files"]["c.txt"]), ([], ""), "no warning: an empty file, no failure")
         self.assertEqual(r["zero"], ["[icon] missing icon: 100%\nsure"])
         self.assertEqual(r["annotations2"], ["::warning title=Build warning::[icon] missing icon: 100%25%0Asure"])
+        # a warning that comes on every page: printed each time (as before), listed once with its count
+        self.assertEqual(r["printedRepeats"], 246)
+        self.assertEqual(r["files"]["r.txt"], "[icon] missing icon: in-the-layout (×246)\n[sitemap] missing page(s): /digest/\n")
+        self.assertIn("STRICT_BUILD: 2 build warning(s)", r["threwRepeats"])
+        # STRICT_BUILD: on for any value but "", 0, false, no, off
+        self.assertEqual(r["strictValues"], {"1": True, "true": True, "yes": True, "": False, "0": False, "false": False,
+                                             "no": False, "off": False, " 0 ": False, "FALSE": False})
+        self.assertFalse(r["strictUnset"])
 
 
 # ============================================================================ where they come from
@@ -118,6 +137,22 @@ class Sources(unittest.TestCase):
             '[links] writers_archive.json wa:bad: url "javascript:alert(1)" is not a usable link — hidden',
             '[links] writers_archive.json wa:www: url "www.example.org/story" → https://www.example.org/story',
             "[links] writers_archive.json wa:bad: left out — its link is not usable"])
+
+    def test_the_committee_pages_own_icons(self):
+        """committee.js draws icons in its own markup (a shortcode can't call the {% icon %} shortcode): an unknown
+        name is a build warning there too."""
+        r = run_js(self, r"""
+          const W = await imp("eleventy/build-warnings.js");
+          const C = await imp("eleventy/filters/committee.js");
+          const warn = console.warn; console.warn = () => {};
+          try {
+            W.clearBuildWarnings();
+            const known = C.icon("calendar", "size-4"), unknown = C.icon("no-such-icon-anywhere");
+            out({ known, unknown, warnings: W.buildWarnings() });
+          } finally { console.warn = warn; }""")
+        self.assertIn('<use href="#i-calendar"/>', r["known"])
+        self.assertEqual(r["unknown"], "")
+        self.assertEqual(r["warnings"], ["[icon] missing icon: no-such-icon-anywhere"])
 
     def test_icons_in_a_build(self):
         """An Eleventy build (no files written) of one page with an unknown icon and an icon outside its sprite."""

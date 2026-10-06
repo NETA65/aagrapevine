@@ -483,21 +483,21 @@ class SettingsAreRead(unittest.TestCase):
         cfg["site"]["made_up_setting"] = "x"
         cfg["links"]["sobriety_calculator"] = "https://example.org/calc"
         cfg["meeting"]["breakout_rooms"] = True
-        cfg["recurring_events"][0]["parking_note"] = "Lot B"
+        # (an entry of its own: the list may be empty the day the committee has no recurring event)
+        cfg["recurring_events"] = list(cfg.get("recurring_events") or []) + [{"key": "x", "title": "x", "parking_note": "Lot B"}]
         cfg["links"]["gv_home_es"] = "https://example.org/es"          # the Spanish twin of a link that is read
         unread = unread_settings(cfg, self.index, MAP_LIKE["config/site.yml"])
-        self.assertEqual(unread, ["site.made_up_setting", "meeting.breakout_rooms", "recurring_events[].parking_note",
-                                  "links.sobriety_calculator"])
+        self.assertEqual(sorted(unread), sorted(["site.made_up_setting", "meeting.breakout_rooms", "recurring_events[].parking_note",
+                                                 "links.sobriety_calculator"]))
         # … and a reader makes it go away; a comment that names it does not
         index = code_index(extra={"src/pages/x.njk": "{# site.made_up_setting #}<p>{{ site.made_up_setting }}</p>",
                                   "scripts/x.py": "# links sobriety_calculator\nx = 1\n"})
-        self.assertEqual(unread_settings(cfg, index, MAP_LIKE["config/site.yml"]),
-                         ["meeting.breakout_rooms", "recurring_events[].parking_note", "links.sobriety_calculator"])
+        self.assertEqual(sorted(unread_settings(cfg, index, MAP_LIKE["config/site.yml"])),
+                         sorted(["meeting.breakout_rooms", "recurring_events[].parking_note", "links.sobriety_calculator"]))
         # a map whose keys are data: its keys are never "unread", its entries' own keys are checked
         carry = copy.deepcopy(load("config/carry.yml"))
-        month = next(iter(carry["tips"]))
-        carry["tips"][month][0]["colour"] = "red"
-        self.assertEqual(unread_settings(carry, self.index, MAP_LIKE["config/carry.yml"]), [f"tips.{month}[].colour"])
+        carry["tips"] = {**(carry.get("tips") or {}), "2099-01": [{"colour": "red"}]}
+        self.assertEqual(unread_settings(carry, self.index, MAP_LIKE["config/carry.yml"]), ["tips.2099-01[].colour"])
 
 
 class ReadsExist(unittest.TestCase):
@@ -541,7 +541,10 @@ class ReadsExist(unittest.TestCase):
                               "an exception nothing needs any more: remove it")
 
     def test_a_misspelled_read_is_caught(self):
-        cfg = self.cfg
+        # settings of their own (the proof does not change when config/site.yml does)
+        cfg = {"site": {"title": "x", "timezone": "America/Chicago"}, "meeting": {"platform": "Zoom"},
+               "links": {"gv_home": "https://example.org/"}, "spotlight": {"home_days": 60},
+               "meetings": {"feeds": [{"id": "a", "name": "A"}]}}
         # templates: a link the settings do not have (the old /contribute/ bug: links.lv_record_story)
         tpl = ('{%- set L = site.links -%}\n<a href="{{ site.links.lv_record_story }}">x</a>\n'
                '<p>{{ site.meeting.platfrom }}</p>\n<a href="{{ L.gv_hom }}">y</a>\n'
