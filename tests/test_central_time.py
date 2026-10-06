@@ -228,6 +228,26 @@ class SharedHelper(unittest.TestCase):
             h, mi = map(int, t.split(":"))
             self.assertEqual(got, iso(datetime(y, m, dd, h, mi, tzinfo=NYC)), (d, t))
 
+    def test_times_the_clocks_skip_or_pass_twice(self):
+        # 2:30 AM on the spring Sunday never shows on a clock: read with the offset from before the change (3:30 AM
+        # daylight time — zoneinfo's fold=0), never an hour earlier; 1:30 AM on the autumn Sunday comes twice: the
+        # first. The same east of UTC (Berlin) and with a half-hour change (Lord Howe Island), where a first look at
+        # the offset lands on the other side of the change.
+        cases = [["America/Chicago", "2026-03-08", "02:30"], ["America/Chicago", "2027-03-14", "02:00"],
+                 ["America/Chicago", "2026-11-01", "01:30"], ["America/Chicago", "2027-11-07", "01:59"],
+                 ["America/New_York", "2026-03-08", "02:30"], ["America/New_York", "2026-11-01", "01:30"],
+                 ["Europe/Berlin", "2026-03-29", "02:30"], ["Europe/Berlin", "2026-10-25", "02:30"],
+                 ["Australia/Lord_Howe", "2026-04-05", "01:45"], ["Australia/Lord_Howe", "2026-10-04", "02:15"]]
+        got = run_js(self, r"""
+          const T = await imp("eleventy/central-time.js");
+          out(input.map(([tz, d, t]) => { const ms = T.wallInstant(d, t, tz); return Number.isFinite(ms) ? new Date(ms).toISOString() : "NaN"; }));""",
+                     data=cases, needs_modules=False)
+        for (tz, d, t), g in zip(cases, got):
+            with self.subTest(zone=tz, day=d, time=t):
+                y, m, dd = map(int, d.split("-"))
+                h, mi = map(int, t.split(":"))
+                self.assertEqual(g, iso(datetime(y, m, dd, h, mi, tzinfo=ZoneInfo(tz))))
+
     def test_unknown_zones_and_text_give_nothing_never_a_guess(self):
         self.assertEqual(self.got["zone"], "America/Chicago")
         self.assertEqual(self.got["known"], [True, False, False, False])
@@ -347,6 +367,23 @@ class BrowserCopy(unittest.TestCase):
                    data=[str(tmp / n) for n in ("inline.js", "renamed.js", "none.js")], needs_modules=False)
         self.assertEqual(r, ["stopped"] * 3)
 
+    def test_only_whole_line_comments_are_left_out(self):
+        # a block comment with code after its end on the same line keeps that line — and every line after it
+        tmp = Path(tempfile.mkdtemp(prefix="gv-time-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        (tmp / "m.js").write_text("/* about\n   the file */\nvar a = 1;\n/* b */ var b = 2;\n  // c\nvar c = 3; /* d */\n"
+                                  "function setZone() {}\nfunction sum() { return a + b + c; }\n\nexport { sum };\n", encoding="utf-8")
+        r = run_js(self, r"""
+          import vm from "node:vm";
+          const { browserScript } = await imp("src/pages/central-time.11ty.js");
+          const script = browserScript(input);
+          const ctx = { window: {} };
+          vm.runInNewContext(script, ctx);
+          out({ sum: ctx.window.GVTime.sum(), comments: [/about|\/\/ c/.test(script), script.includes("/* b */")] });""",
+                   data=str(tmp / "m.js"), needs_modules=False)
+        self.assertEqual(r["sum"], 6)
+        self.assertEqual(r["comments"], [False, True])
+
     def test_old_iphones_get_the_summer_meeting_at_7_pm(self):
         # GV.nextMeeting (app.js): the countdown, the calendar links and the home page's card. iOS 15.3 and older
         # refuse timeZoneName "shortOffset": the old code then used a fixed −6 hours, an hour late in summer.
@@ -400,7 +437,9 @@ class SiteZone(unittest.TestCase):
       const T = await import(toUrl(input.root + "/eleventy/central-time.js").href);
       const M = (await import(toUrl(input.root + "/src/_data/meeting.js").href)).default;
       const F = await import(toUrl(input.root + "/eleventy/filters/committee.js").href);
-      out({ tz: C.TZ, zone: T.zone(), filters: F.TZ, next: M().next, range: F.clockRange(Date.parse("2026-10-22T00:00:00Z"), Date.parse("2026-10-22T01:00:00Z")) });"""
+      const S = (await import(toUrl(input.root + "/src/_data/site.js").href)).default;
+      out({ tz: C.TZ, zone: T.zone(), filters: F.TZ, site: S().timezone, next: M().next,
+            range: F.clockRange(Date.parse("2026-10-22T00:00:00Z"), Date.parse("2026-10-22T01:00:00Z")) });"""
 
     def run_in(self, yml: str | None):
         if not (ROOT / "node_modules" / "@11ty" / "eleventy").is_dir():
@@ -414,7 +453,7 @@ class SiteZone(unittest.TestCase):
 
     def test_the_build_uses_site_timezone(self):
         r = self.run_in('site: {timezone: "America/New_York"}\nmeeting: {week_of_month: 3, weekday: wednesday, start: "19:00"}\n')
-        self.assertEqual((r["tz"], r["zone"], r["filters"]), ("America/New_York",) * 3)
+        self.assertEqual((r["tz"], r["zone"], r["filters"], r["site"]), ("America/New_York",) * 4)
         self.assertEqual(plain(r["range"]), "8:00 – 9:00 PM EDT", "the area filters print in it too")
         self.assertTrue(r["next"]["start"].endswith(("T23:00:00.000Z", "T00:00:00.000Z")))     # 7 PM Eastern
         self.assertEqual(datetime.fromisoformat(r["next"]["start"].replace("Z", "+00:00")).astimezone(NYC).hour, 19)
@@ -424,6 +463,8 @@ class SiteZone(unittest.TestCase):
             with self.subTest(yml=yml):
                 r = self.run_in(yml)
                 self.assertEqual((r["tz"], r["zone"]), ("America/Chicago", "America/Chicago"))
+                # the pages' site.timezone — window.SITE.tz, the zone of the browser's scripts — is the same zone
+                self.assertEqual(r["site"], "America/Chicago")
 
 
 # --------------------------------------------------------------------------- one "now" per build

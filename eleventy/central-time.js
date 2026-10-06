@@ -17,10 +17,12 @@
      zoneParts(ms, tz)           the wall clock of an instant in a zone: { y, mo (0–11), d, h (0–23), mi, s } or null
      offsetMinutes(ms, tz)       the zone's offset from UTC at that instant (Central: −300 in summer, −360 in winter)
      zoneInstant(y, mo, d, h, mi, tz)  a wall-clock date and time in a zone → the instant (ms); month and day may
-                                 run over (Date.UTC rolls them). The offset is checked twice — at the first guess
-                                 and at the answer — so a time after the clocks change on that very day is right
-                                 (a single look used the offset from before the change: 3:30 AM on the spring
-                                 Sunday came out as 4:30 AM)
+                                 run over (Date.UTC rolls them). The offset is looked up on both sides of the day
+                                 and each answer is checked against it, so a time after the clocks change on that
+                                 very day is right (a single look used the offset from before the change: 3:30 AM
+                                 on the spring Sunday came out as 4:30 AM). A time the clocks pass twice (1:30 AM
+                                 on the autumn Sunday) is the first one; one they skip (2:30 AM in spring) is read
+                                 with the offset from before the change: 3:30 AM daylight time
      wallInstant("2026-10-21", "19:00", tz)  the same from text → ms, NaN when either cannot be read
      clock("19:00")              [19, 0]; null unless "H:MM" / "HH:MM" (24 h)
      ymdOf(ms, tz)               "YYYY-MM-DD" of an instant in the zone ("" without one)
@@ -108,10 +110,16 @@ function offsetMinutes(ms, tz) {
 
 function zoneInstant(y, mo, d, h, mi, tz) {
   var guess = Date.UTC(y, mo, d, h || 0, mi || 0);
-  var first = offsetMs(guess, tz);
-  if (isNaN(guess) || isNaN(first)) return NaN;
-  var at = guess - first, second = offsetMs(at, tz);
-  return isNaN(second) || second === first ? at : guess - second;
+  if (isNaN(guess)) return NaN;
+  // the zone's offset a day before and a day after: the same, except around a change of the clocks
+  var before = offsetMs(guess - 864e5, tz), after = offsetMs(guess + 864e5, tz);
+  if (isNaN(before) || isNaN(after)) return NaN;
+  var early = guess - before, late = guess - after;
+  if (before === after) return early;
+  // the reading whose offset is right at its own instant: both on the night the clocks go back (the first
+  // wins), neither for a time they skip (read with the offset from before the change)
+  var okEarly = offsetMs(early, tz) === before, okLate = offsetMs(late, tz) === after;
+  return okEarly && okLate ? Math.min(early, late) : okLate ? late : early;
 }
 
 function clock(s) {

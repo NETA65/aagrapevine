@@ -1,12 +1,17 @@
 // Loads config/site.yml and exposes it as `site` in every template.
 import fs from "node:fs";
 import * as yaml from "js-yaml";
+// the site's time zone as the build reads it (eleventy.config.js: site.timezone, America/Chicago when it is not one)
+import { TZ } from "../../eleventy.config.js";
 
 export default function () {
   const cfg = yaml.load(fs.readFileSync("config/site.yml", "utf8"));
   const s = cfg.site || {};
   return {
     ...s,
+    // the zone every page and the browser's scripts use (window.SITE.tz): a name that is not a time zone, or none,
+    // is America/Chicago here as in the build
+    timezone: TZ,
     // The GitHub Action exports SITE_URL from actions/configure-pages (custom domains, renames)
     url: String(process.env.SITE_URL || s.url || "").replace(/\/+$/, ""),
     // The repository (the Status page's links to its Actions tab and content/events/README.md): on GitHub

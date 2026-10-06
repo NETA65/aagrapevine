@@ -25,9 +25,10 @@ export function browserScript(file = SOURCE) {
     throw new Error(`${file}: end it with one plain \`export { name, … };\` list — the browser copy is made from it`);
   }
   const names = list[1].split(",").map((s) => s.trim()).filter(Boolean);
+  // block comments on lines of their own (one with code after its end stays, code and all), whole-line // ones
   const body = rest
-    .replace(/^[ \t]*\/\*[\s\S]*?\*\/[ \t]*\n/gm, "")   // block comments that start a line
-    .replace(/^[ \t]*\/\/.*\n/gm, "")                    // whole-line // comments
+    .replace(/^[ \t]*\/\*(?:(?!\*\/)[\s\S])*\*\/[ \t]*\n/gm, "")
+    .replace(/^[ \t]*\/\/.*\n/gm, "")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
   return "/* NETA 65 Grapevine / La Viña — Central time (window.GVTime). Generated from eleventy/central-time.js by src/pages/central-time.11ty.js. */\n" +
