@@ -1118,9 +1118,15 @@ main > :not(script, template, dialog, style):not(:has(~ :not(script, template, d
   .site-header nav, .site-header button, .site-header [data-lang-switch], .site-header a[href*="search"] { display: none !important; }
   /* The phone menu lives at the end of <body> (x-teleport), outside .site-header */
   #mobile-drawer { display: none !important; }
-  /* …and the site footer not at all: its link lists, buttons and notices were an extra sheet under every page
-     (as on the digest and the share kit, which print without it: areas/community.css) */
-  .site-footer { display: none !important; }
+  /* …and of the site footer only its copyright / reprint-permission notice, in small type right under the page:
+     the publishers' credit line goes with their material on paper too (Home's daily quote, …), while the link lists,
+     buttons, "Last updated" and the disclaimer were an extra sheet under every page. (The digest and the share
+     kit print without the footer at all: areas/community.css.) */
+  .site-footer { margin-top: 1.25rem !important; border: 0 !important; background: none !important; }
+  .site-footer-main, .site-footer :has(> .site-footer-notice) > :not(.site-footer-notice) { display: none !important; }
+  .site-footer > :has(.site-footer-notice) { border: 0 !important; }
+  .site-footer :has(> .site-footer-notice) { display: block !important; padding-block: 0 !important; }
+  .site-footer-notice { font-size: 0.6875rem; line-height: 1.35; break-inside: avoid; }
 }
 
 /* Utility: hide scrollbar on horizontal scrollers */

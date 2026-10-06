@@ -119,7 +119,7 @@
   "access.pr_sub": {"en": "Every page prints cleanly, and our monthly posters are made for Letter paper.", "es": "Cada página se imprime limpia, y nuestros carteles del mes están hechos para papel Carta."},
   "access.pr_page_t": {"en": "Print a page", "es": "Imprimir una página"},
   "access.pr_page1": {"en": "Use your browser's Print: Ctrl+P on Windows, ⌘+P on a Mac, or Share → Print on a phone.", "es": "Usa Imprimir en tu navegador: Ctrl+P en Windows, ⌘+P en Mac, o Compartir → Imprimir en el celular."},
-  "access.pr_page2": {"en": "The menu, the footer and the moving vineyard art are left out of the printout.", "es": "El menú, el pie de página y el viñedo animado no salen en la impresión."},
+  "access.pr_page2": {"en": "The menu, the footer (all but its copyright notice) and the moving vineyard art are left out of the printout.", "es": "El menú, el pie de página (salvo su aviso de derechos de autor) y el viñedo animado no salen en la impresión."},
   "access.pr_page3": {"en": "For bigger print, raise the Scale in the print window, or choose a larger Text size first: the page prints at that size too.", "es": "Para letra más grande, sube la Escala en la ventana de impresión, o elige antes un Tamaño del texto mayor: la página se imprime con ese tamaño."},
   "access.pr_large_t": {"en": "Posters and large-print books", "es": "Carteles y libros en letra grande"},
   "access.pr_posters": {"en": "The Monthly toolkit's posters print on Letter paper (8.5 × 11 in).", "es": "Los carteles del Kit del mes se imprimen en papel Carta (8.5 × 11 pulg.)."},

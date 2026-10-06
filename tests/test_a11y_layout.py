@@ -18,9 +18,10 @@ browser checks — focus-ring contrast at the top of the page, a focused link un
                    theme button is a "Dark mode" toggle (aria-pressed); accessible names start with the words
                    shown ("ES …", "Show post here …").
   * Landmarks    — no <aside> inside a named section or an article (axe landmark-complementary-is-top-level).
-  * Smaller      — the footer never prints; no hero art in Windows High Contrast; the digest's "also on
-                   YouTube" link is ≥ 24px tall; Instagram pictures don't repeat the caption printed under them;
-                   the Texas archive rows render only near the screen (content-visibility), all of them in print.
+  * Smaller      — of the footer only the copyright / reprint notice prints; no hero art in Windows High
+                   Contrast; the digest's "also on YouTube" link is ≥ 24px tall; Instagram pictures don't repeat
+                   the caption printed under them; the Texas archive rows render only near the screen
+                   (content-visibility), all of them in print.
 
     python -m unittest tests.test_a11y_layout -v        (or: python -m unittest discover -s tests)
 """
@@ -346,15 +347,25 @@ class Landmarks(unittest.TestCase):
 
 
 class Smaller(unittest.TestCase):
-    def test_the_footer_never_prints(self):
+    def test_only_the_footer_notice_prints(self):
         css = read("src", "assets", "css", "main.css")
-        prints = [m.start() for m in re.finditer(r"@media print \{", css)]
-        self.assertTrue(any(".site-footer { display: none !important; }" in css[p:css.find("\n}", p)] for p in prints))
-        self.assertRegex(read("src", "_includes", "partials", "footer.njk"), r'<footer class="site-footer [^"]*"')
+        prints = [css[m.start():css.find("\n}", m.start())] for m in re.finditer(r"@media print \{", css)]
+        footer = [p for p in prints if ".site-footer {" in p]
+        self.assertEqual(len(footer), 1)
+        rules = footer[0]
+        # the link lists, buttons, "Last updated" and the disclaimer go; the copyright / reprint notice stays
+        self.assertIn(".site-footer-main, .site-footer :has(> .site-footer-notice) > :not(.site-footer-notice) { display: none !important; }", rules)
+        self.assertNotRegex(rules, r"\.site-footer \{[^}]*display: none")
+        self.assertNotRegex(rules, r"\.site-footer-notice \{[^}]*display: none")
+        self.assertIn(".site-footer { margin-top: 1.25rem !important; border: 0 !important; background: none !important; }", rules)
+        tpl = read("src", "_includes", "partials", "footer.njk")
+        self.assertRegex(tpl, r'<footer class="site-footer [^"]*"')
+        self.assertRegex(tpl, r'<p class="site-footer-notice [^"]*">\{\{ "footer\.reprints" \| t\(L\) \}\}</p>')
+        self.assertEqual(tpl.count("site-footer-notice"), 1)
         # the Accessibility page says so
         pr = json.loads(read("src", "_i18n", "access.json"))["access.pr_page2"]
-        self.assertIn("footer", pr["en"])
-        self.assertIn("pie de página", pr["es"])
+        self.assertIn("footer (all but its copyright notice)", pr["en"])
+        self.assertIn("pie de página (salvo su aviso de derechos de autor)", pr["es"])
 
     def test_no_hero_art_in_windows_high_contrast(self):
         self.assertIn("@media (forced-colors: active) { .gv-hero-canvas { display: none !important; } }", read("src", "assets", "css", "main.css"))
