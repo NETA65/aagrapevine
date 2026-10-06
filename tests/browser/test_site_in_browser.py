@@ -71,12 +71,15 @@ def setUpModule():
     except RuntimeError as e:
         tearDownModule()
         _unavailable(str(e))
-    S["pw"] = sync_playwright().start()
     try:
+        S["pw"] = sync_playwright().start()
         S["browser"], S["channel"] = launch(S["pw"])
     except BrowserMissing as e:
         tearDownModule()
         _unavailable(str(e))
+    except BaseException:   # (Playwright could not start: the site server is never left running)
+        tearDownModule()
+        raise
 
 
 def tearDownModule():
@@ -118,11 +121,18 @@ def poster_months() -> list[str]:
                   if re.fullmatch(r"\d{4}-\d{2}", p.parent.name) and "data-mp-poster" in p.read_text(encoding="utf-8"))
 
 
+def answered(response, path: str) -> None:
+    """The page is in the build: a page renamed or gone would otherwise be checked as the site's 404 page."""
+    status = response.status if response else None
+    if status != 200:
+        raise AssertionError(f"/{path} answered {status or 'nothing'}, not 200 — is it still part of the site?")
+
+
 def open_page(ctx, path: str, errors: list | None = None):
     page = ctx.new_page()
     if errors is not None:
         page.on("pageerror", lambda e: errors.append(f"{path}: {str(e).splitlines()[0][:200]}"))
-    page.goto(url(path), wait_until="load", timeout=60_000)
+    answered(page.goto(url(path), wait_until="load", timeout=60_000), path)
     page.evaluate("async () => { if (document.fonts && document.fonts.ready) await document.fonts.ready; }")
     return page
 
@@ -200,6 +210,10 @@ class HeaderFocusRing(unittest.TestCase):
             ctx = new_context(1280, 800, theme=theme, prefs=prefs)
             try:
                 page = open_page(ctx, "")
+                # the saved theme and contrast took (else every mode would measure the light one)
+                self.assertEqual(page.evaluate("[document.documentElement.getAttribute('data-theme'), "
+                                               "document.documentElement.getAttribute('data-contrast')]"),
+                                 [theme, (prefs or {}).get("contrast", "normal")], mode)
                 page.keyboard.press("Tab")                  # a keyboard user: the browser shows the ring for focus()
                 page.evaluate("document.activeElement && document.activeElement.blur()")
                 for where, y in (("over the hero", 0), ("scrolled", 900)):
@@ -404,7 +418,7 @@ class ScriptErrors(unittest.TestCase):
                         page = ctx.new_page()
                         where = ("es/" if lang == "es" else "") + path
                         page.on("pageerror", lambda e, where=where: errors.append(f"/{where}: {str(e).splitlines()[0][:200]}"))
-                        page.goto(url(where), wait_until="commit", timeout=60_000)
+                        answered(page.goto(url(where), wait_until="commit", timeout=60_000), where)
                         batch.append(page)
                     for page in batch:
                         page.wait_for_load_state("load", timeout=60_000)
