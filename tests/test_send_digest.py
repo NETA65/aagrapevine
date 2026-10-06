@@ -15,14 +15,20 @@
   * Freshness     — the e-mail waits (exit 3) until every source has been updated since the month ended.
   * SendFailure   — exit 4 when the connection broke while the e-mail was handed over (it MAY have been
                     sent), 1 when nothing was handed over (the next try sends it).
-  * WorkflowSchedule — .github/workflows/monthly-digest.yml: when it tries, the once-only marker (exit 4
-                    sets it too), exit 3, the run's title (a scheduled try, a preview, a send by hand).
+  * Prepared      — the two halves the workflow sends in: --prepare builds and only saves the e-mail (by the
+                    same rules as a send), --send-prepared hands exactly that one to the server, once.
+  * WorkflowSchedule — .github/workflows/monthly-digest.yml: when it tries; every send — by hand too — looks at
+                    the month's markers first unless "force" is ticked; "sending" goes up BEFORE the e-mail goes,
+                    then "sent" (exit 4 too) or "unsent"; a send never confirmed waits for a person; exit 3; the
+                    run's title (a scheduled try, a preview, a send by hand, a send again).
   * RealData      — the real command on the repository's own data.
 
 Run:  python -m unittest tests.test_send_digest -v   (CI: python -m unittest discover -s tests)
 """
 from __future__ import annotations
 
+import email
+import io
 import json
 import os
 import re
@@ -32,6 +38,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from datetime import date, datetime, timezone
 from pathlib import Path
 from unittest import mock
@@ -1009,6 +1016,117 @@ class SendFailure(DigestCase):
         self.assertNotIn("MAY have been sent", summary)
 
 
+class Prepared(DigestCase):
+    """The workflow sends in two halves — --prepare builds the e-mail and only saves it, then (after the month's
+    "being sent" marker is up) --send-prepared hands exactly that e-mail to the mail server, once."""
+
+    def setUp(self):
+        super().setUp()
+        self.full_month()
+        self.summary = self.tmp_path / "summary.md"
+        self.dir = self.tmp_path / "send"
+        # the build step has no mail server settings — only the address the e-mail goes to (and the From's)
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("SMTP_", "DIGEST_"))}
+        env.update({"DIGEST_TO": "group@example.org, second@example.org", "SMTP_USERNAME": "digest@example.org",
+                    "GITHUB_STEP_SUMMARY": str(self.summary), "SITE_URL": SITE})
+        for p in (mock.patch.dict(os.environ, env, clear=True), mock.patch.object(D.time, "sleep", lambda s: None)):
+            p.start()
+            self.addCleanup(p.stop)
+
+    def prepare(self, *extra: str) -> int:
+        with mock.patch.object(D, "send") as send:
+            code = D.main(["--as-of", "2026-10-01", "--prepare", str(self.dir), *extra])
+        send.assert_not_called()
+        return code
+
+    def server(self, **kw):
+        cls = type("Server", (FakeSMTP,), {"log": [], "connect_errors": list(kw.pop("connect_errors", [])), **kw})
+        sent: list = []
+
+        class Recording(cls):
+            def send_message(self, msg, from_addr=None, to_addrs=None):
+                sent.append((msg, from_addr, list(to_addrs or ())))
+                return super().send_message(msg, from_addr, to_addrs)
+        p = mock.patch.object(D.smtplib, "SMTP", Recording)
+        p.start()
+        self.addCleanup(p.stop)
+        return cls, sent
+
+    def send(self) -> int:
+        with mock.patch.dict(os.environ, {"SMTP_SERVER": "smtp.example.org", "SMTP_PORT": "587", "SMTP_PASSWORD": "p"}):
+            return D.main(["--send-prepared", str(self.dir)])
+
+    def test_prepare_saves_the_e_mail_and_sends_nothing(self):
+        self.assertEqual(self.prepare(), 0)
+        self.assertEqual(sorted(p.name for p in self.dir.iterdir()), ["envelope.json", "message.eml"])
+        env = json.loads((self.dir / "envelope.json").read_text(encoding="utf-8"))
+        self.assertEqual((env["from"], env["to"], env["edition"]), ("digest@example.org", ["group@example.org", "second@example.org"], "2026-09"))
+        self.assertTrue(env["subject"].startswith("Grapevine / La Viña — September 2026 digest"))
+        msg = email.message_from_bytes((self.dir / "message.eml").read_bytes())
+        self.assertEqual(msg.get_content_type(), "multipart/alternative")
+        self.assertEqual([p.get_content_type() for p in msg.get_payload()], ["text/plain", "text/html"])
+        self.assertNotIn("Bcc", msg, "the districts' addresses never in the message itself")
+
+    def test_prepare_follows_the_same_rules_as_a_send(self):
+        # nothing new in the month: no e-mail (the workflow marks the month as done)
+        for name in ("announcements", "articles", "editorial", "spotlight", "episodes", "videos", "pdfs", "drive",
+                     "instagram", "events", "whatsnew"):
+            self.write(name, {"items": []})
+        self.assertEqual(self.prepare(), 0)
+        self.assertFalse(self.dir.exists())
+        self.full_month()
+        # the data not updated since the month ended: waits (3), saves nothing
+        self.write("status", {"sources": [{"source": "podcasts", "ok": True, "attempted": "2026-09-30T20:00:00Z"}]})
+        self.assertEqual(self.prepare(), 3)
+        self.assertFalse(self.dir.exists())
+        self.assertEqual(self.prepare("--stale-ok"), 0)
+        self.assertTrue((self.dir / "message.eml").exists())
+        # no address to send to: not configured
+        shutil.rmtree(self.dir)
+        with mock.patch.dict(os.environ, {"DIGEST_TO": ""}):
+            self.assertEqual(self.prepare("--stale-ok"), 2)
+        self.assertFalse(self.dir.exists())
+
+    def test_send_prepared_hands_over_that_very_e_mail_once(self):
+        self.assertEqual(self.prepare(), 0)
+        server, sent = self.server()
+        self.assertEqual(self.send(), 0)
+        self.assertEqual([e[0] for e in server.log], ["connect", "ehlo", "starttls", "ehlo", "login", "send", "quit"])
+        msg, from_addr, to = sent[0]
+        self.assertEqual((from_addr, to), ("digest@example.org", ["group@example.org", "second@example.org"]))
+        saved = email.message_from_bytes((self.dir / "message.eml").read_bytes())
+        self.assertEqual(msg["Message-ID"], saved["Message-ID"])
+        self.assertEqual(msg.as_bytes(), saved.as_bytes())
+        summary = self.summary.read_text(encoding="utf-8")
+        self.assertIn("### E-mail digest sent", summary)
+        self.assertIn("Recipients: 2 · new items in September 2026:", summary)
+
+    def test_send_prepared_exit_codes(self):
+        self.assertEqual(self.prepare(), 0)
+        self.server(send_error=smtplib.SMTPServerDisconnected("Connection unexpectedly closed"))
+        self.assertEqual(self.send(), 4, "it MAY have been sent")
+        self.server(send_error=smtplib.SMTPDataError(554, b"spam"))
+        self.assertEqual(self.send(), 1, "refused: nothing was sent")
+        self.server(connect_errors=[ConnectionRefusedError("refused")] * 3)
+        self.assertEqual(self.send(), 1)
+        # the settings missing: nothing was handed over either
+        with mock.patch.dict(os.environ, {"SMTP_SERVER": ""}):
+            self.assertEqual(D.main(["--send-prepared", str(self.dir)]), 2)
+        # nothing (or something broken) saved: nothing sent
+        (self.dir / "envelope.json").write_text("{ not json", encoding="utf-8")
+        server, sent = self.server()
+        self.assertEqual(self.send(), 1)
+        self.assertEqual(sent, [])
+        self.assertEqual(D.main(["--send-prepared", str(self.tmp_path / "nowhere")]), 1)
+
+    def test_a_sent_e_mail_is_never_turned_into_a_failure(self):
+        # after the server took it, a trouble with the run summary must not exit 1 (the next try would send it again)
+        self.assertEqual(self.prepare(), 0)
+        self.server()
+        with mock.patch.object(D, "step_summary", side_effect=RuntimeError("disk full")):
+            self.assertEqual(self.send(), 0)
+
+
 def bash_path() -> str | None:
     """A bash that runs the workflow's scripts here (as tests/test_morning.py finds it): Linux / macOS bash, or
     Git Bash on Windows — never WSL's launcher in System32 (another file system)."""
@@ -1043,65 +1161,221 @@ class WorkflowSchedule(unittest.TestCase):
         self.assertIn("covers", self.on["workflow_dispatch"]["inputs"]["month"]["description"])
         self.assertEqual(self.wf["permissions"], {"contents": "read", "pages": "read", "actions": "read"})
 
+    def run_step(self, sid: str, env: dict, stubs: str = "") -> tuple[subprocess.CompletedProcess, dict[str, str], Path]:
+        """One step's bash, with shell functions standing in for the tools it calls → (the result, its
+        $GITHUB_OUTPUT, the runner's temp folder)."""
+        bash = bash_path()
+        if not bash:
+            self.skipTest("needs bash (the GitHub runner has it)")
+        tmp = Path(tempfile.mkdtemp(prefix="gv-digest-step-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        out = tmp / "output.txt"
+        out.write_text("", encoding="utf-8")
+        full = {**os.environ, "RUNNER_TEMP": tmp.as_posix(), "GITHUB_OUTPUT": out.as_posix(), "GITHUB_RUN_ID": "77",
+                "GITHUB_RUN_ATTEMPT": "1", "GITHUB_STEP_SUMMARY": (tmp / "summary.md").as_posix(), **env}
+        r = subprocess.run([bash, "-c", stubs + self.steps[sid]["run"]], env=full, capture_output=True, text=True,
+                           encoding="utf-8", errors="replace", timeout=60)
+        outputs = dict(ln.split("=", 1) for ln in out.read_text(encoding="utf-8").splitlines() if "=" in ln)
+        return r, outputs, tmp
+
+    # ---- the first step: whether to send
+    def check(self, state: str | None, event: str = "workflow_dispatch", day: int = 1, hour: int = 9,
+              preview: str = "false", force: str = "false") -> tuple[subprocess.CompletedProcess, dict[str, str], str]:
+        """The first step, with the month's markers saying `state` (what its Python prints: "sent", "open <runs>",
+        "none"; None: the GitHub API did not answer) on Central `day`/`hour` → (result, outputs, summary)."""
+        # `python3` (its marker look) and `date` (the Central day and hour) are stand-ins; the Python itself: below
+        answer = "return 1" if state is None else f'echo "{state}"'
+        stubs = ("python3() { cat > /dev/null; " + answer + "; }\n"
+                 f'date() {{ case "$*" in "+%-d") echo {day} ;; "+%-H") echo {hour} ;; *) command date "$@" ;; esac; }}\n')
+        env = {"EVENT": event, "PREVIEW": preview, "FORCE": force, "MONTH": "2026-09", "SMTP_SERVER": "s",
+               "SMTP_USERNAME": "u", "SMTP_PASSWORD": "p", "DIGEST_TO": "g@example.org", "GITHUB_REPOSITORY": "o/r",
+               "GITHUB_SERVER_URL": "https://github.com"}
+        r, outputs, tmp = self.run_step("check", env, stubs)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        summary = tmp / "summary.md"
+        return r, outputs, summary.read_text(encoding="utf-8") if summary.exists() else ""
+
     def test_the_guard(self):
         run = self.steps["check"]["run"]
         for needle in ("TZ=America/Chicago date +%-d", "TZ=America/Chicago date +%-H", '"$day" -gt 3', '"$hour" -lt 7',
-                       'actions/artifacts?name=digest-sent-$edition', "select(.expired|not)", "::warning",
-                       '"$day" -eq 3', '"$hour" -ge 12', "last=true", 'if [ "$EVENT" != "schedule" ]'):
+                       '"$day" -eq 3', '"$hour" -ge 12', "last=true", 'if [ "$FORCE" != "true" ]; then'):
             self.assertIn(needle, run)
-        for step in ("Check out the repository", "Set up Python", "site", "send"):
+        self.assertEqual(self.steps["check"]["env"]["FORCE"], "${{ github.event_name == 'workflow_dispatch' && inputs.force }}")
+        for step in ("Check out the repository", "Set up Python", "site", "build"):
             self.assertEqual(self.steps[step]["if"], "contains(fromJSON('[\"preview\",\"send\"]'), steps.check.outputs.mode)")
+        # a scheduled try: the 1st–3rd from 7 AM Central; the last ones (from noon on the 3rd) with the data there is
+        self.assertEqual(self.check("none", "schedule", 1, 9)[1], {"edition": "2026-09", "mode": "send"})
+        self.assertEqual(self.check("none", "schedule", 3, 13)[1], {"edition": "2026-09", "mode": "send", "last": "true"})
+        for day, hour in ((1, 6), (4, 9)):
+            with self.subTest(day=day, hour=hour):
+                self.assertEqual(self.check("none", "schedule", day, hour)[1]["mode"], "skip")
+        self.assertEqual(self.check(None, "workflow_dispatch", preview="true")[1]["mode"], "preview")
 
-    def test_it_sends_once_and_waits_for_the_data(self):
-        run = self.steps["send"]["run"]
+    def test_a_send_by_hand_never_sends_a_month_twice_unless_forced(self):
+        # Before: "Preview only" unticked skipped the "already sent" look. Now every send looks — at any hour
+        r, out, summary = self.check("sent", "workflow_dispatch", 20, 23)
+        self.assertEqual(out["mode"], "skip")
+        self.assertIn("The 2026-09 digest was already sent — nothing to do.", summary)
+        self.assertIn("::warning title=Already sent::The 2026-09 digest was already sent, so nothing was sent now. To "
+                      "send it a second time, run this workflow again with \"force\" ticked.", r.stdout)
+        self.assertEqual(self.check("none", "workflow_dispatch", 20, 23)[1]["mode"], "send")
+        # "force" ticked: no look at all (the stand-in would say "sent")
+        self.assertEqual(self.check("sent", "workflow_dispatch", force="true")[1]["mode"], "send")
+        self.assertEqual(self.check(None, "workflow_dispatch", force="true")[1]["mode"], "send")
+        # a scheduled try is never forced (its inputs are empty)
+        self.assertEqual(self.check("sent", "schedule", 2, 9)[1]["mode"], "skip")
+
+    def test_a_send_that_was_never_confirmed_waits_for_a_person(self):
+        for event in ("schedule", "workflow_dispatch"):
+            with self.subTest(event=event):
+                r, out, summary = self.check("open 1234 5678", event, 2, 9)
+                self.assertEqual(out["mode"], "skip")
+                self.assertIn("::warning title=Digest send not confirmed::A send of the 2026-09 digest was started "
+                              "(https://github.com/o/r/actions/runs/1234, https://github.com/o/r/actions/runs/5678) but "
+                              "never confirmed — the e-mail MAY have gone out. Nothing is sent again by itself: check the "
+                              "group", r.stdout)
+                self.assertIn("\"force\" ticked", summary)
+        self.assertEqual(self.check("open 1234", "workflow_dispatch", force="true")[1]["mode"], "send")
+        # the API did not answer: nothing sent, the next try looks again
+        r, out, _summary = self.check(None, "schedule", 1, 9)
+        self.assertEqual(out["mode"], "skip")
+        self.assertIn("::warning title=Digest not sent yet::Could not check whether the 2026-09 digest was already sent", r.stdout)
+
+    def markers(self, sent=(), sending=(), unsent=(), fail: bool = False) -> tuple[str, list[list[str]]]:
+        """The first step's Python (its look at the month's markers) against a stand-in `gh` → (what it printed,
+        the gh calls). Each marker: (run id, created_at[, expired])."""
+        code = self.steps["check"]["run"].split("<<'PY'\n", 1)[1].split("\nPY\n", 1)[0]
+        arts = {"sent": sent, "sending": sending, "unsent": unsent}
+        calls: list[list[str]] = []
+
+        def gh(args, **_kw):
+            calls.append(list(args))
+            if fail:
+                return subprocess.CompletedProcess(args, 1, stdout="", stderr="HTTP 502")
+            kind = re.search(r"name=digest-(\w+)-2026-09&", args[2]).group(1)
+            rows = [{"name": f"digest-{kind}-2026-09", "workflow_run": {"id": m[0]}, "created_at": m[1],
+                     "expired": bool(m[2]) if len(m) > 2 else False} for m in arts[kind]]
+            return subprocess.CompletedProcess(args, 0, stdout=json.dumps({"total_count": len(rows), "artifacts": rows}), stderr="")
+        out = io.StringIO()
+        with mock.patch.dict(os.environ, {"GITHUB_REPOSITORY": "o/r", "EDITION": "2026-09"}), \
+                mock.patch("subprocess.run", gh), redirect_stdout(out):
+            try:
+                exec(compile(code, "markers", "exec"), {"__name__": "__main__"})  # noqa: S102 — the step's own script
+            except SystemExit as e:
+                if e.code not in (0, None):
+                    return f"exit {e.code}", calls
+        return out.getvalue().strip(), calls
+
+    def test_the_markers(self):
+        t1, t2, t3 = "2026-10-01T13:05:00Z", "2026-10-01T13:05:30Z", "2026-10-01T16:05:00Z"
+        self.assertEqual(self.markers()[0], "none")
+        self.assertEqual(self.markers(sent=[(11, t2)], sending=[(11, t1)])[0], "sent")
+        self.assertEqual(self.markers(sent=[(11, t2, True)])[0], "none", "an expired marker counts for nothing")
+        # a send started, its run said nothing more: it MAY have gone out
+        self.assertEqual(self.markers(sending=[(11, t1)])[0], "open 11")
+        # … its own run said the server took nothing: the next try sends
+        self.assertEqual(self.markers(sending=[(11, t1)], unsent=[(11, t2)])[0], "none")
+        self.assertEqual(self.markers(sending=[(11, t1), (12, t3)], unsent=[(11, t2)])[0], "open 12")
+        # another run's "unsent", or an older one of the same run (it was re-run and stopped again): still open
+        self.assertEqual(self.markers(sending=[(11, t1)], unsent=[(10, t2)])[0], "open 11")
+        self.assertEqual(self.markers(sending=[(11, t3)], unsent=[(11, t2)])[0], "open 11")
+        out, calls = self.markers(sending=[(11, t1)])
+        self.assertEqual([c[:2] for c in calls], [["gh", "api"]] * 3)
+        self.assertEqual(calls[0][2], "repos/o/r/actions/artifacts?name=digest-sent-2026-09&per_page=100")
+        self.assertEqual(self.markers(fail=True)[0], "exit 1", "no answer: the step skips and says so")
+
+    # ---- building, marking, sending
+    def test_the_e_mail_goes_only_after_the_sending_marker(self):
+        steps = self.wf["jobs"]["digest"]["steps"]
+        names = [s.get("name") for s in steps]
+        sending = self.steps["Mark the month as being sent"]
+        self.assertEqual(sending["if"], "steps.build.outputs.ready == 'true'")
+        self.assertEqual(sending["with"]["name"], "digest-sending-${{ steps.check.outputs.edition }}")
+        self.assertEqual((sending["with"]["if-no-files-found"], sending["with"]["retention-days"]), ("error", 40))
+        self.assertEqual(self.steps["send"]["if"], "steps.build.outputs.ready == 'true'", "and no step before failed")
+        self.assertEqual(names.index("Mark the month as being sent") + 1, names.index("Send the digest"))
+        self.assertIn('--prepare "$RUNNER_TEMP/digest-send"', self.steps["build"]["run"])
+        self.assertIn('--send-prepared "$RUNNER_TEMP/digest-send"', self.steps["send"]["run"])
+        # the mail server's password only where the e-mail is sent
+        self.assertNotIn("SMTP_PASSWORD", self.steps["build"]["env"])
+        self.assertEqual(self.steps["send"]["env"]["SMTP_PASSWORD"], "${{ secrets.SMTP_PASSWORD }}")
+        sent = self.steps["Mark the month as sent"]
+        self.assertEqual(sent["if"], "steps.build.outputs.sent == 'true' || steps.send.outputs.sent == 'true'")
+        self.assertEqual(sent["with"]["name"], "digest-sent-${{ steps.check.outputs.edition }}")
+        unsent = self.steps["Mark this try as not sent"]
+        self.assertEqual(unsent["if"], "steps.send.outputs.unsent == 'true'")
+        self.assertEqual(unsent["with"]["name"], "digest-unsent-${{ steps.check.outputs.edition }}")
+        for mark in (sending, sent, unsent):
+            self.assertIs(mark["with"]["overwrite"], True, "a re-run of the same run may write it again")
+        # the run fails (a red ✗) when the e-mail may have gone, or did not go — after the markers
+        for cond in ("steps.send.outputs.maybe == 'true'", "steps.send.outputs.unsent == 'true'"):
+            fail = [s for s in steps if s.get("if") == cond and "run" in s]
+            self.assertEqual([s["run"].strip() for s in fail], ["exit 1"])
+            self.assertGreater(steps.index(fail[0]), names.index("Mark this try as not sent"))
+
+    def test_it_builds_then_waits_for_the_data(self):
+        run = self.steps["build"]["run"]
         for needle in ("set -uo pipefail", 'args+=(--stale-ok)', 'code=0', 'python -m scripts.notify.send_digest "${args[@]}" || code=$?',
-                       "3)", "::notice title=Digest waits::", 'exit "$code"', "digest-sent/sent.txt", "sent=true"):
+                       "3)", "::notice title=Digest waits::", 'exit "$code"'):
             self.assertIn(needle, run)
         # only the scheduled tries before the last ones wait: the last ones and a manual send go with the data there is
         self.assertIn('if [ "${LAST:-}" = "true" ] || { [ "$MODE" = "send" ] && [ "$EVENT" != "schedule" ]; }; then args+=(--stale-ok); fi', run)
-        self.assertEqual(self.steps["send"]["env"]["EVENT"], "${{ github.event_name }}")
-        mark = self.steps["Mark the month as sent"]
-        self.assertEqual(mark["if"], "steps.send.outputs.sent == 'true'")
-        self.assertEqual(mark["with"]["name"], "digest-sent-${{ steps.check.outputs.edition }}")
-        self.assertEqual(mark["with"]["retention-days"], 40)
+        self.assertEqual(self.steps["build"]["env"]["EVENT"], "${{ github.event_name }}")
+        # a shell function stands in for `python -m scripts.notify.send_digest` (it writes the e-mail, or not, then exits)
+        for code, writes, want, files in ((0, True, {"ready": "true"}, ["digest-sending/sending.txt"]),
+                                          (0, False, {"sent": "true"}, ["digest-sent/sent.txt"]),
+                                          (3, False, {}, []), (2, False, None, [])):
+            with self.subTest(exit=code, writes=writes):
+                write = 'mkdir -p "$RUNNER_TEMP/digest-send"; echo x > "$RUNNER_TEMP/digest-send/message.eml"; ' if writes else ""
+                r, out, tmp = self.run_step("build", {"MODE": "send", "LAST": "", "EVENT": "schedule", "MONTH": ""},
+                                            f"python() {{ {write}return {code}; }}\n")
+                if want is None:
+                    self.assertEqual(r.returncode, code, "stops the run: nothing built, nothing sent")
+                    continue
+                self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+                self.assertEqual(out, want)
+                self.assertEqual(sorted(p.relative_to(tmp).as_posix() for p in tmp.glob("digest-sen*/*.txt")), files)
+        # a preview marks nothing
+        r, out, _tmp = self.run_step("build", {"MODE": "preview", "LAST": "", "EVENT": "workflow_dispatch", "MONTH": ""},
+                                     "python() { return 0; }\n")
+        self.assertEqual((r.returncode, out), (0, {}))
 
     def test_a_send_that_may_have_gone_out_counts_as_sent(self):
         # send_digest exits 4 when the connection broke while the e-mail was handed over (it MAY have been sent):
         # the month is marked as sent all the same — the next scheduled try would e-mail every district a second
-        # time —, and a step after the marker fails the run (a red ✗: someone checks the group). 1 — nothing
-        # was handed over — marks nothing: the next try sends it.
-        bash = bash_path()
-        if not bash:
-            self.skipTest("needs bash (the GitHub runner has it)")
-        for code, ok, outputs in ((0, True, ["sent=true"]), (4, True, ["sent=true", "maybe=true"]), (3, True, []), (1, False, [])):
-            with self.subTest(exit=code), tempfile.TemporaryDirectory() as tmp:
-                out = Path(tmp) / "output.txt"
-                out.write_text("", encoding="utf-8")
-                env = {**os.environ, "MODE": "send", "LAST": "", "EVENT": "schedule", "MONTH": "",
-                       "RUNNER_TEMP": Path(tmp).as_posix(), "GITHUB_OUTPUT": out.as_posix(), "GITHUB_RUN_ID": "1"}
-                # a shell function stands in for `python -m scripts.notify.send_digest`: it exits with `code`
-                r = subprocess.run([bash, "-c", f"python() {{ return {code}; }}\n" + self.steps["send"]["run"]], env=env,
-                                   capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60)
-                self.assertEqual(r.returncode == 0, ok, f"the step exits {r.returncode}: {r.stdout}{r.stderr}")
-                self.assertEqual(out.read_text(encoding="utf-8").split(), outputs)
-                self.assertEqual((Path(tmp) / "digest-sent" / "sent.txt").exists(), bool(outputs))
-        steps = self.wf["jobs"]["digest"]["steps"]
-        fail = [s for s in steps if s.get("if") == "steps.send.outputs.maybe == 'true'"]
-        self.assertEqual([s.get("run", "").strip() for s in fail], ["exit 1"])
-        self.assertGreater(steps.index(fail[0]), steps.index(self.steps["Mark the month as sent"]))
+        # time —, and a step after the markers fails the run (a red ✗: someone checks the group). Anything else
+        # but 0 — nothing was handed over — marks this try as not sent: the next try sends it.
+        for code, outputs, mark in ((0, {"sent": "true"}, "digest-sent/sent.txt"),
+                                    (4, {"sent": "true", "maybe": "true"}, "digest-sent/sent.txt"),
+                                    (1, {"unsent": "true"}, "digest-unsent/unsent.txt"),
+                                    (2, {"unsent": "true"}, "digest-unsent/unsent.txt")):
+            with self.subTest(exit=code):
+                r, out, tmp = self.run_step("send", {}, f"python() {{ return {code}; }}\n")
+                self.assertEqual(r.returncode, 0, "the markers come first; a later step fails the run")
+                self.assertEqual(out, outputs)
+                self.assertTrue((tmp / mark).exists())
+                self.assertIn(f"exit {code}", (tmp / mark).read_text(encoding="utf-8"))
+                if code in (1, 2):
+                    self.assertIn("::error title=The digest was not sent::", r.stdout)
+                if code == 4:
+                    self.assertIn("::error title=The digest MAY have been sent::", r.stdout)
 
     def test_the_title_says_what_the_run_does(self):
-        # In the Actions list: a scheduled try, a preview, or a send by hand — from the same input as the first
-        # step's PREVIEW, so the title always matches what the run does (every kind of run is worked out in
-        # tests/test_run_names.py). One line, with the workflow's own name kept.
+        # In the Actions list: a scheduled try, a preview, a send by hand, or one sent again — from the same inputs
+        # as the first step's PREVIEW and FORCE, so the title always matches what the run does (every kind of run is
+        # worked out in tests/test_run_names.py). One line, with the workflow's own name kept.
         name = self.wf["run-name"]
         self.assertNotIn("\n", name)
         self.assertEqual(self.wf["name"], "Monthly e-mail digest")
         self.assertTrue(name.startswith("${{ github.event_name == 'schedule' && 'Monthly e-mail digest (GitHub schedule)'"))
         self.assertIn("|| inputs.preview_only && 'Monthly e-mail digest: preview only'", name)
+        self.assertIn("|| inputs.force && 'Monthly e-mail digest: SEND AGAIN (forced, started by hand)'", name)
         self.assertTrue(name.endswith("|| 'Monthly e-mail digest: SEND NOW (started by hand)' }}"))
         self.assertEqual(self.steps["check"]["env"]["PREVIEW"], "${{ github.event_name == 'workflow_dispatch' && inputs.preview_only }}")
-        self.assertIs(self.on["workflow_dispatch"]["inputs"]["preview_only"]["default"], True, "Run workflow previews unless unticked")
+        inputs = self.on["workflow_dispatch"]["inputs"]
+        self.assertIs(inputs["preview_only"]["default"], True, "Run workflow previews unless unticked")
+        self.assertEqual((inputs["force"]["type"], inputs["force"]["default"]), ("boolean", False))
+        self.assertEqual(list(inputs), ["preview_only", "month", "force"])
 
 
 class RealData(unittest.TestCase):

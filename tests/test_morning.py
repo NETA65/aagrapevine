@@ -2,15 +2,18 @@
 site.morning_goal) every day, while GitHub starts its own schedules hours late:
 
   * MorningWorkflow  — .github/workflows/morning.yml: a plain-UTC schedule (no `timezone:`, never on the
-                       hour, 01–11 UTC), the one input, one check at a time, least privilege, the job names
-                       the script and the tidy job rely on, the packages it installs;
+                       hour, 01–11 UTC; firings on time and 4–6 hours late from 2 AM, when the magazines are
+                       first asked, to 5 AM Central), the one input, one check at a time, least privilege, the
+                       job names the script and the tidy job rely on, the packages it installs;
   * FastPathParity   — its first job's bash + curl + jq test of the live build.json says "done" exactly
                        when morning_check.is_done() does (skipped without bash, curl and jq);
   * Tidy             — its "tidy" job deletes only its own green no-op runs older than a day, at most 50
                        (run against a stand-in for `gh`; skipped without bash and jq);
-  * UpdateWorkflow   — update.yml: the three schedules (only the nightly one full), the `morning` input and
-                       title, the plan step's modes, budgets and a push's extra sources — each run's title says
-                       what the plan does —, the sync flags, the commit messages, the run summary (the sources
+  * UpdateWorkflow   — update.yml: the three schedules (only the nightly one full, and it keeps clear of the
+                       4:30 AM alarm in summer and in winter), the `morning` input and title, the plan step's
+                       modes, budgets and a push's extra sources — each run's title says what the plan does —,
+                       the commit the full-update sources ran with, the sync flags, the commit messages (the
+                       morning refresh's names the days of the quotes it brings), the run summary (the sources
                        not checked for days, the writers archive, the reminders), the booth media's cache key;
   * RunAllMorning    — run_all --morning: the quick sources, plus the monthly ones on the 1st and the 15th;
   * Guard            — scripts/ops/morning_check.py against a stand-in GitHub, site, clock and magazines:
@@ -174,11 +177,15 @@ class MorningWorkflow(unittest.TestCase):
         self.assertGreaterEqual(len(firings), 2)
         self.assertLessEqual(set(range(0, 12)) | {21, 22, 23}, {h for h, _m in firings}, "firings from 21 to 11 UTC")
         self.assertEqual([s["cron"] for s in self.on["schedule"]], ["25 0-11,21-23 * * *"])
-        # the early morning in Central time, summer (UTC−5) and winter (UTC−6): 4 and 5 AM are covered both by
+        # the early morning in Central time, summer (UTC−5) and winter (UTC−6): every hour from 2 AM (when the check
+        # starts asking the magazines for a late quote — WINDOW_BEFORE before the goal) to 5 AM is covered both by
         # firings that run on time and by the ones GitHub starts 4 to 6 hours late (it begins 4 hours early)
+        goal_h, goal_m = MC.GOAL
+        opens = datetime(2026, 9, 29, goal_h, goal_m) - MC.WINDOW_BEFORE
+        self.assertEqual((opens.hour, opens.minute), (2, 0))
         for offset in (5, 6):
             for late in (0, 4, 5, 6):
-                self.assertLessEqual({4, 5}, {(h + late - offset) % 24 for h, _m in firings}, (offset, late))
+                self.assertLessEqual({2, 3, 4, 5}, {(h + late - offset) % 24 for h, _m in firings}, (offset, late))
 
     def test_the_only_input_is_check_only(self):
         inputs = self.on["workflow_dispatch"]["inputs"]
@@ -587,17 +594,39 @@ class UpdateWorkflow(unittest.TestCase):
 
     def test_the_three_schedules_4_hours_early(self):
         # each about 4 hours before the time it is meant for — GitHub starts them 4 to 6 hours late: the nightly
-        # full update (about 5 to 7 AM Central), the midday refresh (about noon), the evening one (7 to 9 PM)
-        self.assertEqual(self.on["schedule"], [{"cron": "17 6 * * *"}, {"cron": "7 12 * * *"}, {"cron": "7 20 * * *"}])
-        for cron in ("17 6 * * *", "7 12 * * *", "7 20 * * *"):
+        # full update (about 5 to 8 AM Central), the midday refresh (about noon), the evening one (7 to 9 PM)
+        self.assertEqual(self.on["schedule"], [{"cron": "17 7 * * *"}, {"cron": "7 12 * * *"}, {"cron": "7 20 * * *"}])
+        for cron in ("17 7 * * *", "7 12 * * *", "7 20 * * *"):
             self.assertIn(f'    - cron: "{cron}"\n', self.text)
         self.assertEqual(len(re.findall(r"(?m)^\s*- cron:", self.text)), 3, "no other cron line")
-        for s, (lo, hi) in zip(self.on["schedule"], ((4, 7), (10, 13), (18, 21))):
+        for s, (lo, hi) in zip(self.on["schedule"], ((5, 8), (10, 13), (18, 21))):
             minute, hour = s["cron"].split()[:2]
             self.assertNotEqual(minute, "0", "never on the hour (GitHub's busiest minute)")
             for offset in (5, 6):                                 # CDT, CST
                 for late in (4, 6):
                     self.assertTrue(lo <= int(hour) + late - offset <= hi, (s["cron"], offset, late))
+
+    def test_the_nightly_full_update_keeps_clear_of_the_morning_alarm(self):
+        # The morning alarm starts the morning refresh at 4:30 AM Central; a full update RUNNING then would keep it
+        # waiting (one Website update at a time), past the 5:30 goal. In summer (CDT) and in winter (CST — from
+        # November 1, 2026): GitHub's usual 4 to 6 hours late (8 at worst), the nightly starts after the morning
+        # refresh is live (about 4:35); on time, even a long run — the whole 40-minute document search and 40
+        # minutes of translation, about 2 hours with setup, tests and publishing (most take 15 to 30 minutes) —
+        # ends before 4:30.
+        minute, hour = (int(x) for x in self.on["schedule"][0]["cron"].split()[:2])
+        longest = timedelta(hours=2)
+        for day in (date(2026, 10, 6), date(2027, 1, 12)):                   # CDT, CST
+            at = datetime(day.year, day.month, day.day, hour, minute, tzinfo=timezone.utc)
+            alarm = datetime(day.year, day.month, day.day, 4, 30, tzinfo=CHICAGO)
+            with self.subTest(zone=alarm.tzname()):
+                self.assertLess(at + longest, alarm, "on time: done before the alarm")
+                for late in (4, 5, 6, 8):
+                    start = (at + timedelta(hours=late)).astimezone(CHICAGO)
+                    self.assertGreaterEqual(start, alarm + timedelta(minutes=30), (late, start))
+                    self.assertLess(start.hour, 11, "and well before the midday refresh")
+        # the old time, 06:17 UTC, started at 4:17 AM CST when GitHub was 4 hours late — on top of the alarm
+        old = datetime(2027, 1, 12, 6, 17, tzinfo=timezone.utc) + timedelta(hours=4)
+        self.assertEqual(old.astimezone(CHICAGO).strftime("%H:%M %Z"), "04:17 CST")
 
     def test_morning_input_and_run_name(self):
         inputs = self.on["workflow_dispatch"]["inputs"]
@@ -619,8 +648,10 @@ class UpdateWorkflow(unittest.TestCase):
         self.addCleanup(shutil.rmtree, tmp, True)
         out = tmp / "out.txt"
         out.write_text("", encoding="utf-8")
+        # (and never this checkout's own data/state/sources-seen.json: the bot commits one — git would fetch from it)
         base = {"EVENT": "workflow_dispatch", "SCHEDULE": "", "INPUT_MINUTES": "", "INPUT_SKIP": "", "INPUT_MORNING": "",
-                "GITHUB_OUTPUT": str(out), "RUNNER_TEMP": str(tmp), "GITHUB_EVENT_PATH": "", "GITHUB_SHA": ""}
+                "GITHUB_OUTPUT": str(out), "RUNNER_TEMP": str(tmp), "GITHUB_EVENT_PATH": "", "GITHUB_SHA": "",
+                "GV_SOURCES_SEEN": str(tmp / "sources-seen.json")}
         r = run_bash(self.bash(), step_run(self.sync, "Decide what to sync"), {**base, **env})
         self.assertEqual(r.returncode, 0, r.stderr)
         self.log = r.stdout
@@ -635,8 +666,10 @@ class UpdateWorkflow(unittest.TestCase):
         def core(**env) -> dict:
             t0 = datetime.now(timezone.utc).replace(microsecond=0)
             got = self.plan(**env)
-            # every run says the daily search setting (the run summary's), and only a push adds sources
-            self.assertEqual((got.pop("daily_minutes"), got.pop("also"), got.pop("also_why")), (str(daily), "", ""))
+            # every run says the daily search setting (the run summary's), and only a push adds sources (or has a
+            # commit to record)
+            self.assertEqual((got.pop("daily_minutes"), got.pop("also"), got.pop("also_why"), got.pop("processed")),
+                             (str(daily), "", "", ""))
             # … and when it started to sync, written like common.now_iso() (the writers archive's imported_at)
             started = got.pop("started")
             self.assertRegex(started, r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
@@ -647,10 +680,10 @@ class UpdateWorkflow(unittest.TestCase):
         # "morning" wins over the two other fields
         self.assertEqual(core(INPUT_MORNING="true", INPUT_SKIP="true", INPUT_MINUTES="120")["mode"], "morning")
         # only the nightly schedule is a full run: the midday and evening ones — and any other — are quick
-        self.assertEqual(core(EVENT="schedule", SCHEDULE="17 6 * * *"),
+        self.assertEqual(core(EVENT="schedule", SCHEDULE="17 7 * * *"),
                          {"mode": "crawl", "minutes": str(daily), "translate": str(translate),
                           "budget": str(min(345, daily + 30 + translate + 20))})
-        for cron in ("7 12 * * *", "7 20 * * *", "5 3 * * *", ""):
+        for cron in ("7 12 * * *", "7 20 * * *", "5 3 * * *", "17 6 * * *", ""):
             with self.subTest(schedule=cron):
                 self.assertEqual(core(EVENT="schedule", SCHEDULE=cron), quick)
         self.assertIn("Sync plan: event=schedule mode=quick", self.log)
@@ -679,6 +712,7 @@ class UpdateWorkflow(unittest.TestCase):
         self.assertIn("mode=quick crawl=0 min, translation ≤ 40 min, step budget 90 min, also instagram,meetings", self.log)
         self.assertIn("::notice title=Push run::Could not compare this push in git — there is no commit before it "
                       "(a new branch) —, so the files its event file lists were used.", self.log)
+        self.assertEqual(got["processed"], "", "git did not say: no commit to record")
         # GitHub's own event file for a run names no files per commit: without git's answer, nothing — and a notice
         (tmp / "actions.json").write_text(json.dumps({"before": "0" * 40, "after": "c" * 40, "commits": [
             {"id": "c" * 40, "message": "Edit content/instagram.yml", "distinct": True}]}), encoding="utf-8")
@@ -696,6 +730,35 @@ class UpdateWorkflow(unittest.TestCase):
         for env in ({"EVENT": "schedule", "SCHEDULE": "7 12 * * *"}, {"INPUT_SKIP": "true"}, {"INPUT_MORNING": "true"}, {}):
             with self.subTest(**env):
                 self.assertEqual(self.plan(GITHUB_EVENT_PATH=both, **env)["also"], "")
+
+    def test_the_commit_the_full_update_sources_ran_with_is_recorded(self):
+        # data/state/sources-seen.json (scripts/ops/push_modules.py SEEN): after a full update its checkout, after a
+        # push run the push's last commit (the plan's `processed`) — only when the sync step ended well, never after a
+        # quick, midday, evening or morning refresh (they run none of those sources). Committed with the data.
+        st = step_of(self.sync, "Remember the commit the full-update sources ran with")
+        self.assertEqual(st["if"], "${{ steps.sync.outcome == 'success' && (steps.plan.outputs.mode == 'crawl' || "
+                                   "steps.plan.outputs.processed != '') }}")
+        self.assertEqual(st["env"], {"MODE": "${{ steps.plan.outputs.mode }}", "PROCESSED": "${{ steps.plan.outputs.processed }}"})
+        names = [s.get("name") for s in self.sync["steps"]]
+        self.assertEqual(names.index(st["name"]), names.index("Sync sources and translate") + 1)
+        self.assertLess(names.index(st["name"]), names.index("Commit refreshed data"))
+        self.assertIn("data/state", step_run(self.sync, "Commit refreshed data"), "committed with the data")
+        self.assertIn('echo "processed=$processed"', step_run(self.sync, "Decide what to sync"))
+        if not shutil.which("git"):
+            self.skipTest("needs git")
+        tmp = Path(tempfile.mkdtemp(prefix="gv-seen-step-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        seen = tmp / "sources-seen.json"
+        head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True)
+        if head.returncode != 0:
+            self.skipTest("not a git checkout")
+        for mode, processed, want, by in (("crawl", "", head.stdout.strip(), "full update"),
+                                          ("quick", "c" * 40, "c" * 40, "push")):
+            with self.subTest(mode=mode):
+                r = run_bash(self.bash(), st["run"], {"MODE": mode, "PROCESSED": processed, "GV_SOURCES_SEEN": str(seen)})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                doc = json.loads(seen.read_text(encoding="utf-8"))
+                self.assertEqual((doc["commit"], doc["by"]), (want, by))
 
     def test_each_kind_of_run_does_what_its_title_says(self):
         # the run-name (worked out by tests/test_run_names.py) and "Decide what to sync" see the same run: a full
@@ -745,11 +808,12 @@ class UpdateWorkflow(unittest.TestCase):
             self.assertRegex(out, r" \d{4}-\d{2}-\d{2} \[skip ci\]$")
             return re.sub(r" \d{4}-\d{2}-\d{2} \[skip ci\]$", "", out)
         self.assertEqual(msg(EVENT="push", MODE="quick"), "chore(data): content sync after settings/content change")
-        self.assertEqual(msg(EVENT="workflow_dispatch", MODE="morning"), "chore(data): morning refresh with the daily quote")
+        # (no data/site/quote.json here: no quote to name — tests below)
+        self.assertEqual(msg(EVENT="workflow_dispatch", MODE="morning"), "chore(data): morning refresh")
         self.assertEqual(msg(EVENT="schedule", SCHEDULE="7 12 * * *", MODE="quick"), "chore(data): midday refresh")
         self.assertEqual(msg(EVENT="schedule", SCHEDULE="5 3 * * *", MODE="quick"), "chore(data): midday refresh")
         self.assertEqual(msg(EVENT="schedule", SCHEDULE="7 20 * * *", MODE="quick"), "chore(data): evening refresh")
-        self.assertEqual(msg(EVENT="schedule", SCHEDULE="17 6 * * *", MODE="crawl"), "chore(data): daily content sync")
+        self.assertEqual(msg(EVENT="schedule", SCHEDULE="17 7 * * *", MODE="crawl"), "chore(data): daily content sync")
         self.assertEqual(msg(EVENT="workflow_dispatch", MODE="crawl"), "chore(data): daily content sync")
         self.assertEqual(msg(EVENT="workflow_dispatch", MODE="quick"), "chore(data): quick refresh")
         # A new file of the writers archive taken in by THIS run (its imported_at not older than the run's start,
@@ -763,8 +827,10 @@ class UpdateWorkflow(unittest.TestCase):
         new = archive(True, True, now, earlier)
         self.assertEqual(msg(new, EVENT="push", MODE="quick", STARTED=start),
                          "chore(data): content sync after settings/content change + writers archive")
-        self.assertEqual(msg(new, EVENT="schedule", SCHEDULE="17 6 * * *", MODE="crawl", STARTED=start),
+        self.assertEqual(msg(new, EVENT="schedule", SCHEDULE="17 7 * * *", MODE="crawl", STARTED=start),
                          "chore(data): daily content sync + writers archive")
+        self.assertEqual(msg(new, EVENT="workflow_dispatch", MODE="morning", STARTED=start),
+                         "chore(data): morning refresh + writers archive")
         for what, taken in (("the Grapevine file turned down (cut off), La Viña's new one taken in",
                              archive(False, True, earlier, now)),
                             ("a time written without its zone (UTC)", archive(True, True, "2026-11-05T12:03:10"))):
@@ -785,6 +851,71 @@ class UpdateWorkflow(unittest.TestCase):
         env = step_of(self.sync, "Commit refreshed data")["env"]
         self.assertEqual(env["MODE"], "${{ steps.plan.outputs.mode }}")
         self.assertEqual(env["STARTED"], "${{ steps.plan.outputs.started }}")
+
+    def test_the_morning_commit_names_the_days_of_its_quotes(self):
+        # The morning refresh's commit says the day of each daily quote it brings — a magazine whose quote in
+        # data/site/quote.json has another day than in the last commit —, never the run's day as if it were the
+        # quotes' (on October 5 a title said "with the daily quote 2026-10-05" for the quotes of October 4); no new
+        # quote: just "morning refresh". The run's own date stays the message's end, as in every data commit.
+        if not shutil.which("git"):
+            self.skipTest("needs git")
+        run = step_run(self.sync, "Commit refreshed data")
+        block = re.search(r'(archive=""\n.*?)\ngit commit -q -m "\$msg"', run, re.S).group(1)
+        tmp = Path(tempfile.mkdtemp(prefix="gv-quote-commit-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        (tmp / "no-settings").write_text("", encoding="utf-8")
+        repo = tmp / "repo"
+        quote = repo / "data" / "site" / "quote.json"
+        quote.parent.mkdir(parents=True)
+        git_env = {"GIT_CONFIG_GLOBAL": str(tmp / "no-settings"), "GIT_CONFIG_NOSYSTEM": "1", "GIT_TERMINAL_PROMPT": "0",
+                   "GIT_AUTHOR_NAME": "Test", "GIT_AUTHOR_EMAIL": "test@example.org", "GIT_COMMITTER_NAME": "Test",
+                   "GIT_COMMITTER_EMAIL": "test@example.org", "PYTHONIOENCODING": "utf-8"}
+
+        def git(*args: str) -> None:
+            r = subprocess.run(["git", *args], cwd=repo, env={**os.environ, **git_env}, capture_output=True, timeout=60)
+            self.assertEqual(r.returncode, 0, r.stderr)
+
+        def quotes(gv: str | None, lv: str | None) -> str:
+            return json.dumps({"items": [{"pub": p, "date": d, "text": "…"} for p, d in (("gv", gv), ("lv", lv)) if d]})
+
+        def msg(text: str | None, mode: str = "morning", event: str = "workflow_dispatch") -> str:
+            if text is None:
+                quote.unlink(missing_ok=True)
+            else:
+                quote.write_text(text, encoding="utf-8")
+            env = {"EVENT": event, "SCHEDULE": "7 20 * * *" if event == "schedule" else "", "MODE": mode, "STARTED": "",
+                   **git_env}
+            r = run_bash(self.bash(), block + '\necho "$msg"\n', env, cwd=repo)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            out = r.stdout.strip()
+            self.assertRegex(out, r" \d{4}-\d{2}-\d{2} \[skip ci\]$", "the run's date stays the end")
+            return re.sub(r" \d{4}-\d{2}-\d{2} \[skip ci\]$", "", out)
+
+        git("init", "-q")
+        quote.write_text(quotes("2026-10-04", "2026-10-04"), encoding="utf-8")
+        git("add", "-A")
+        git("commit", "-q", "-m", "the data of October 4")
+        for (gv, lv), want in (
+                (("2026-10-04", "2026-10-04"), "chore(data): morning refresh"),        # still October 4's: none new
+                (("2026-10-05", "2026-10-05"), "chore(data): morning refresh with the daily quotes of Oct 5"),
+                (("2026-10-05", "2026-10-04"), "chore(data): morning refresh with the Grapevine quote of Oct 5"),
+                (("2026-10-04", "2026-10-05"), "chore(data): morning refresh with the La Viña quote of Oct 5"),
+                (("2026-10-06", "2026-10-05"),
+                 "chore(data): morning refresh with the Grapevine quote of Oct 6 and the La Viña quote of Oct 5"),
+                (("2026-10-04", None), "chore(data): morning refresh"),                  # a quote gone: nothing new
+                ((None, "2026-11-01"), "chore(data): morning refresh with the La Viña quote of Nov 1")):
+            with self.subTest(gv=gv, lv=lv):
+                self.assertEqual(msg(quotes(gv, lv)), want)
+        for what, text in (("no quote file", None), ("not JSON", "{ not json"), ("no items", '{"items": null}'),
+                           ("a date that is not one", quotes("soon", "2026-10-04"))):
+            with self.subTest(what):
+                self.assertEqual(msg(text), "chore(data): morning refresh")
+        # only the morning refresh names them
+        self.assertEqual(msg(quotes("2026-10-05", "2026-10-05"), "quick", "schedule"), "chore(data): evening refresh")
+        # the last commit has no quote file (a new repository): every quote there is counts as new
+        git("rm", "-q", "--cached", "data/site/quote.json")
+        git("commit", "-q", "-m", "no quotes")
+        self.assertEqual(msg(quotes("2026-10-05", "2026-10-05")), "chore(data): morning refresh with the daily quotes of Oct 5")
 
     def test_build_json_is_checked(self):
         run = step_run(self.wf["jobs"]["build-deploy"], "Check the build")
@@ -1608,11 +1739,31 @@ class GuardLateMagazine(unittest.TestCase):
         self.assertIn("Waited for the La Viña quote, then started the morning refresh.", summary)
 
     def test_too_early_to_ask(self):
-        w = World(datetime(2026, 9, 29, 8, 30, tzinfo=timezone.utc), live_today(lv=YESTERDAY))      # 3:30 AM CDT
+        w = World(datetime(2026, 9, 29, 6, 30, tzinfo=timezone.utc), live_today(lv=YESTERDAY))      # 1:30 AM CDT
         rc, _log, summary = w.check()
         self.assertEqual((rc, w.fetches, w.posts), (0, [], []))
-        self.assertIn("The magazines are asked from 4:00 AM CDT", summary)
+        self.assertIn("The magazines are asked from 2:00 AM CDT", summary)
         self.assertEqual(w.outputs, {"idle": "true"}, "nothing started, followed or asked: tidied away a day later")
+
+    def test_asked_from_2_am(self):
+        # The magazines usually publish the new day's quote about 2 AM Central: a check at 2:25 AM (a schedule GitHub
+        # starts on time) asks then — every 10 minutes — and the quote out at 2:41 is on the site before 3 AM, not
+        # after the 4:30 alarm. In winter (CST) too.
+        for start, zone in ((datetime(2026, 9, 29, 7, 25, tzinfo=timezone.utc), "CDT"),
+                            (datetime(2027, 1, 12, 8, 25, tzinfo=timezone.utc), "CST")):
+            with self.subTest(zone=zone):
+                day = start.astimezone(CHICAGO).date().isoformat()
+                live = {**live_today(built=iso(start - timedelta(hours=2)), lv=YESTERDAY), "day": day,
+                        "quotes": {"gv": day, "lv": YESTERDAY}}
+                w = World(start, live, published={"gv": start - timedelta(hours=1), "lv": start + timedelta(minutes=16)})
+                w.today = day
+                rc, log, summary = w.check()
+                self.assertEqual(rc, 0, log)
+                times = [MC.clock_label(t, CHICAGO) for t, _u in w.fetches]
+                self.assertEqual(times, [f"2:25 AM {zone}", f"2:35 AM {zone}", f"2:45 AM {zone}"])
+                self.assertEqual(len(w.posts), 1)
+                self.assertIn(f"since **2:47 AM {zone}** — goal 5:30 AM.", summary)
+                self.assertNotIn("After the goal", log)
 
     def test_after_the_window_it_asks_once(self):
         # 7:10 AM (a late schedule, or someone pressing Run workflow): one question, and a note that says
@@ -1712,12 +1863,12 @@ class GuardAtMidnight(unittest.TestCase):
 
     def test_the_new_days_quote_is_not_out_after_midnight(self):
         # La Viña has not published the new day's quote: the new day's build goes up, and the magazine is left
-        # for the morning's checks (asked from 4:00 AM) — no second refresh, no question at 12:01 AM
+        # for the morning's checks (asked from 2:00 AM) — no second refresh, no question at 12:01 AM
         w = World(self.EVENING, OLD, published={"gv": self.EVENING - timedelta(hours=20), "lv": None})
         rc, log, summary = w.check()
         self.assertEqual((rc, len(w.posts), w.fetches), (0, 1, []), log)
         self.assertIn("⏳ Today's build is on the site; the La Viña quote is not out yet. The magazines are asked from "
-                      "4:00 AM CDT — a later check looks again.", summary)
+                      "2:00 AM CDT — a later check looks again.", summary)
         self.assertIn(f"| New day | ✅ built 12:01 AM CDT ({self.NEW_DAY}) |", summary)
         self.assertEqual(w.outputs, {"idle": "false"}, "it started a refresh: kept")
 

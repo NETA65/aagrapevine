@@ -16,8 +16,9 @@
 #      Month; about 3 minutes), follows it, reads the live site again and
 #      writes in the run summary when today's update went live. A magazine
 #      whose quote is not out yet is asked again every 10 minutes (one
-#      polite request), from 90 minutes before the goal until 90 minutes
-#      after it; a check that starts later asks it once. A Website update
+#      polite request), from 2 AM — 3½ hours before the goal; the magazines
+#      usually publish the new day's quote about then — until 90 minutes
+#      after the goal; a check that starts later asks it once. A Website update
 #      run already going (the full daily update, a long search) is
 #      followed first — a morning refresh would only wait behind it — and
 #      a refresh is started only for what that run did not bring.
@@ -61,8 +62,10 @@ on:
     # before the early-morning window because GitHub starts this repository's schedules 4 to 6
     # (sometimes 8) hours late: an evening firing that is delayed lands in the window, while one that
     # runs on time finds today's build already live and is a 5-second no-op (deleted the next day). It
-    # still ends at 11:25 UTC, so a day on which GitHub is on time is covered too. None of them is
-    # guaranteed — hence the alarm.
+    # still ends at 11:25 UTC, so a day on which GitHub is on time is covered too. Every hour from 2 AM
+    # (when the check starts asking the magazines for a late quote) to 5 AM Central gets firings both
+    # on time and 4 to 6 hours late, in summer (CDT) and in winter (CST) — tests/test_morning.py checks
+    # it. None of them is guaranteed — hence the alarm.
     - cron: "25 0-11,21-23 * * *"
   workflow_dispatch:
     # The alarm's request body is just {"ref":"main"}: no input is needed.

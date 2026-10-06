@@ -25,12 +25,25 @@ the push (a new branch's 000…0), a commit that cannot be fetched — those lis
 nothing is added and a notice says so: those sources show the change after the next full daily update. The same
 for config/site.yml alone when its copy from before the push cannot be read.
 
+A push run GitHub replaced in the queue never runs at all (update.yml's concurrency group keeps ONE run waiting:
+a newer push's run, a schedule's or a morning refresh takes its place), so its extra sources would wait for the
+next full daily update. So the comparison starts, when it can, from the last commit those sources have run with —
+SEEN (data/state/sources-seen.json, committed with the data): update.yml writes it (--record) after a full update
+(the commit it checked out: every source read it) and after a push run (the push's last commit, when git said what
+the push changed: every source whose input changed since then ran), each time only when the sync step ended well.
+The next push's run then compares SEEN with its own last commit — so it also runs what a replaced run's push
+needed — and reads the earlier copy of config/site.yml from SEEN too. No SEEN yet, or a commit git cannot fetch (a
+rewritten history): the commit before the push, as above (a notice says so when SEEN could not be used).
+
     python -m scripts.ops.push_modules --output "$RUNNER_TEMP/push-also.txt"      # on GitHub (push runs only)
     python -m scripts.ops.push_modules --event push.json --previous-config old-site.yml
+    python -m scripts.ops.push_modules --record <commit> --by "full update"         # writes SEEN
 
-It prints what it decided, and writes `also=<the sources, in run_all's order, comma-separated>` and
-`also_why=<one line: which change brought each one>` to --output (both empty when nothing is added). It never
-stops the step (exit 0): on any surprise it adds nothing and says why. Standard library and PyYAML only.
+It prints what it decided, and writes `also=<the sources, in run_all's order, comma-separated>`,
+`also_why=<one line: which change brought each one>` (both empty when nothing is added) and `processed=<the
+push's last commit, when git said what changed; else empty>` — what to --record once the sources ran — to
+--output. It never stops the step (exit 0): on any surprise it adds nothing and says why. Standard library and
+PyYAML only.
 """
 from __future__ import annotations
 
@@ -40,13 +53,16 @@ import os
 import re
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, NamedTuple
 
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 CONFIG = "config/site.yml"
+# The last commit the sources only the full update reads have run with — {"commit", "by", "recorded"} (see above).
+SEEN = "data/state/sources-seen.json"
 
 # The sources only the full daily update reads (run_all.FULL_ONLY, in run_all's order — tests/test_push_modules.py
 # checks both) → the parts of config/site.yml each one reads while it syncs, as read in the module itself. Left
@@ -146,16 +162,17 @@ class Git:
         return self.known[commit]
 
 
-def git_changes(before: str | None, after: str | None, git: Git) -> tuple[list[str] | None, str]:
-    """The files that differ between the commit the push started from and its last commit, as GitHub's `paths:`
-    filter sees the push (a renamed file counts with both names) → (the paths, sorted; "") — or (None, why git
-    cannot say)."""
+def git_changes(before: str | None, after: str | None, git: Git,
+                first: str = "the commit before it") -> tuple[list[str] | None, str]:
+    """The files that differ between the commit the push started from (or another one: `first` names it in the
+    answer) and its last commit, as GitHub's `paths:` filter sees the push (a renamed file counts with both names)
+    → (the paths, sorted; "") — or (None, why git cannot say)."""
     if not before:
         return None, "there is no commit before it (a new branch)"
     if not after:
         return None, "its last commit is not named"
     try:
-        for commit, what in ((before, "the commit before it"), (after, "its last commit")):
+        for commit, what in ((before, first), (after, "its last commit")):
             if not git.have(commit):
                 return None, f"{what} ({commit[:7]}) could not be fetched"
         r = git("diff", "--name-only", "--no-renames", "-z", before, after)
@@ -167,20 +184,74 @@ def git_changes(before: str | None, after: str | None, git: Git) -> tuple[list[s
     return sorted({p for p in out.split("\0") if p.strip()}), ""
 
 
-def push_changes(event: dict, git: Git, head: str | None = None) -> tuple[list[str], str, list[str]]:
-    """The files the push changed → (the paths, sorted; where they come from; notices). From git (git_changes, with
-    the payload's `before` and `after` — `head`, i.e. $GITHUB_SHA, when it names no `after`), plus the payload's own
-    lists; when git cannot say, those lists alone — and without any, none (a notice says so)."""
+class Changes(NamedTuple):
+    files: list[str]                  # the paths, sorted
+    source: str                       # where they come from ("" when nowhere)
+    notices: list[str]
+    base: str | None                  # the commit git compared from (SEEN or `before`) — None when git did not say
+    last: str | None                  # the push's last commit when git said what changed: what to --record, else None
+
+
+def push_changes(event: dict, git: Git, head: str | None = None, seen: str | None = None) -> Changes:
+    """The files the push changed → Changes. From git (git_changes): from `seen` (SEEN: the last commit the
+    full-update sources ran with — so a push whose run GitHub replaced in the queue counts too), else — no SEEN, or
+    git cannot compare from it — from the payload's `before`; to its `after` (`head`, i.e. $GITHUB_SHA, when it
+    names no `after`); plus the payload's own lists. When git cannot say, those lists alone — and without any, none
+    (a notice says so)."""
     listed = changed_files(event)
     before, after = commit_id(event.get("before")), commit_id(event.get("after")) or commit_id(head)
-    found, why = git_changes(before, after, git) if event else (None, "GitHub's event file could not be read")
+    seen = commit_id(seen)
+    notices: list[str] = []
+    if not event:
+        found, why, base = None, "GitHub's event file could not be read", before
+    else:
+        found, why, base = None, "", before
+        if seen and seen != before and after:
+            found, why = git_changes(seen, after, git, "that commit")
+            if found is not None:
+                base = seen
+            else:
+                notices.append(f"Could not compare this push with the last commit the sources only the full update "
+                               f"reads ran with ({SEEN}) — {why} —, so only its own changes count.")
+        if found is None:
+            found, why = git_changes(before, after, git)
     if found is not None:
-        return sorted(set(found) | set(listed)), f"git diff {before[:7]}..{after[:7]}", []
+        source = f"git diff {base[:7]}..{after[:7]}"
+        if base != before:
+            source += f", from the last commit the full-update sources ran with ({SEEN})"
+        return Changes(sorted(set(found) | set(listed)), source, notices, base, after)
     if any(key in c for c in commits(event) for key in LISTS):
-        return listed, "the files its event file lists", [
-            f"Could not compare this push in git — {why} —, so the files its event file lists were used."]
-    return [], "", [f"Could not tell which files this push changed — {why} —, so no other source was added for it: a "
-                    "source only the full daily update reads shows its changes after the next one."]
+        return Changes(listed, "the files its event file lists", notices + [
+            f"Could not compare this push in git — {why} —, so the files its event file lists were used."], None, None)
+    return Changes([], "", notices + [
+        f"Could not tell which files this push changed — {why} —, so no other source was added for it: a source only "
+        "the full daily update reads shows its changes after the next one."], None, None)
+
+
+def read_seen(path: str | Path = ROOT / SEEN) -> str | None:
+    """The commit in the SEEN file (None: no file yet, not readable, or not a commit id)."""
+    try:
+        doc = json.loads(read_text(path) or "{}")
+    except ValueError:
+        return None
+    return commit_id(doc.get("commit")) if isinstance(doc, dict) else None
+
+
+def record_seen(commit: str | None, by: str = "", path: str | Path = ROOT / SEEN,
+                now: datetime | None = None) -> str | None:
+    """Writes the SEEN file (atomically): the full-update sources have run with `commit` → the commit written, or
+    None when it is not a commit id (nothing is written)."""
+    c = commit_id(commit)
+    if not c:
+        return None
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    when = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(json.dumps({"commit": c, "by": str(by or ""), "recorded": when}, indent=2) + "\n",
+                   encoding="utf-8", newline="\n")
+    os.replace(tmp, path)
+    return c
 
 
 def parse(text: str | None) -> dict | None:
@@ -267,24 +338,51 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--repo", default=str(ROOT), help="the git checkout of the push (default: this one)")
     ap.add_argument("--config", help=f"{CONFIG} after the push (default: the checkout's)")
     ap.add_argument("--previous-config", metavar="FILE",
-                    help=f"{CONFIG} as it was before the push (default: from git, the commit before the push)")
-    ap.add_argument("--output", metavar="FILE", help="append also=… and also_why=… to this file")
+                    help=f"{CONFIG} as it was before the push (default: from git, the commit the comparison starts "
+                         f"from — {SEEN}'s, else the one before the push)")
+    ap.add_argument("--output", metavar="FILE", help="append also=…, also_why=… and processed=… to this file")
+    ap.add_argument("--record", metavar="COMMIT",
+                    help=f"only write {SEEN}: the sources only the full update reads have run with this commit")
+    ap.add_argument("--by", default="", help="with --record: what ran them (\"full update\", \"push\")")
+    # (the tests point it elsewhere: the checkout they run in has the bot's own copy)
+    ap.add_argument("--seen", metavar="FILE", default=os.environ.get("GV_SOURCES_SEEN") or None,
+                    help=f"the file of the last commit the full-update sources ran with (default: {SEEN} in --repo; "
+                         "env GV_SOURCES_SEEN)")
     a = ap.parse_args(argv)
+    seen_file = Path(a.seen) if a.seen else Path(a.repo) / SEEN
+    if a.record is not None:
+        try:
+            done = record_seen(a.record, a.by, seen_file)
+        except OSError as e:
+            done, why = None, f"{type(e).__name__}: {e}"
+        else:
+            why = f"{a.record!r} is not a commit id"
+        if done:
+            print(f"The sources only the full update reads have run with {done[:7]} ({a.by or 'a run'}): {SEEN}.", flush=True)
+        else:
+            print(f"::notice title=Push run::Could not write {SEEN} ({why}) — the next push compares from an older "
+                  "commit (at worst a source runs once more).", flush=True)
+        return 0
+    processed = None
     try:
         event = load_event(a.event)
         git = Git(a.repo)
         # the push's last commit, when its payload does not name it: the commit the run is for
-        changed, source, notices = push_changes(event, git, os.environ.get("GITHUB_SHA"))
-        if source:
-            print(f"Files this push changed: {len(changed)} ({source}).", flush=True)
+        found = push_changes(event, git, os.environ.get("GITHUB_SHA"), read_seen(seen_file))
+        changed, notices, processed = found.files, list(found.notices), found.last
+        if found.source:
+            print(f"Files this push changed: {len(changed)} ({found.source}).", flush=True)
         old_text = None
         if CONFIG in changed:
-            old_text = read_text(a.previous_config) if a.previous_config else previous_config(event.get("before"), git)
+            # as it was where the comparison started: SEEN, or the commit before the push
+            old_text = (read_text(a.previous_config) if a.previous_config
+                        else previous_config(found.base or event.get("before"), git))
         also, why, more = decide(changed, old_text, read_text(a.config or Path(a.repo) / CONFIG))
         notices += more
     except Exception as e:  # noqa: BLE001 — never stops the run: the sources then wait for the full daily update
-        also, why, notices = [], {}, [f"Could not work out which other sources this push needs ({type(e).__name__}: "
-                                      f"{e}) — they show its changes after the next full daily update."]
+        also, why, processed = [], {}, None
+        notices = [f"Could not work out which other sources this push needs ({type(e).__name__}: {e}) — they show "
+                   "its changes after the next full daily update."]
     for n in notices:
         print(f"::notice title=Push run::{n}", flush=True)
     line = "; ".join(f"{m} ({reason(why[m])})" for m in also)
@@ -292,7 +390,7 @@ def main(argv: list[str] | None = None) -> int:
     if a.output:
         try:
             with open(a.output, "a", encoding="utf-8", newline="\n") as f:
-                f.write(f"also={','.join(also)}\nalso_why={line}\n")
+                f.write(f"also={','.join(also)}\nalso_why={line}\nprocessed={processed or ''}\n")
         except OSError as e:
             print(f"::notice title=Push run::Could not write {a.output}: {e}", flush=True)
     return 0

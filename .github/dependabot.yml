@@ -7,13 +7,18 @@
 #   runs the tests. Merge only when the pull request shows a green ✓; a
 #   red ✗ means leave it (the live site is not affected).
 #   * "github-actions" updates keep the daily workflow running when GitHub
-#     retires old versions.
+#     retires old versions (the one outside action, in link-check.yml, is
+#     pinned to a commit: the pull request moves the commit and its
+#     "# vX.Y.Z" note together).
 #   * "npm" updates are the site-building tools. After merging, glance at
 #     the next "Website update" run; if it fails, revert the merge (one click).
-#
-# Python packages are NOT listed here on purpose: requirements.txt uses
-# ">=" so every daily run already installs the newest versions (important
-# for yt-dlp, which must keep up with YouTube changes).
+#   * "pip" updates are the Python packages of the daily sync — only NEW
+#     MAJOR versions: requirements.txt caps each package below its next
+#     major version (">=2.32,<3"), so every run already installs the newest
+#     minor and patch releases by itself; a new major version (which can
+#     change how a package behaves) waits for this pull request, which
+#     changes the line to allow it. yt-dlp has no cap (it must keep up
+#     with YouTube changes), so it is left out here.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -39,6 +44,23 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: "chore(deps)"
+    open-pull-requests-limit: 2
+
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      python-packages:
+        patterns: ["*"]
+        update-types: [major]
+    # Minor and patch releases need no pull request (see above); yt-dlp has no cap to raise.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-minor", "version-update:semver-patch"]
+      - dependency-name: "yt-dlp"
     commit-message:
       prefix: "chore(deps)"
     open-pull-requests-limit: 2

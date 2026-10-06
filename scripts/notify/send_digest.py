@@ -41,6 +41,11 @@ Usage (from the repo root):
     python -m scripts.notify.send_digest --dry-run                    # last month → .tmp/digest.html + .tmp/digest.txt
     python -m scripts.notify.send_digest --dry-run --month 2026-09 --as-of 2026-10-01   # the September digest, as on Oct 1
     python -m scripts.notify.send_digest                              # sends (needs the SMTP_* env vars below)
+    python -m scripts.notify.send_digest --prepare DIR                # builds it as for sending, only saves it in DIR
+    python -m scripts.notify.send_digest --send-prepared DIR          # sends what --prepare saved (builds nothing)
+
+The workflow sends in those two halves: between them it marks the month as "being sent", so a run stopped while
+the e-mail is handed over leaves that marker behind, and no later try sends the month again by itself.
 
 Environment (GitHub secrets in .github/workflows/monthly-digest.yml):
 
@@ -58,7 +63,9 @@ Environment (GitHub secrets in .github/workflows/monthly-digest.yml):
 Sending: connecting and logging in are tried up to 3 times; the message itself is handed over
 ONCE — if the connection breaks at that point the run fails with "it MAY have been sent" (exit 4) instead
 of trying again (a second try could e-mail every district twice), and the workflow marks the month as
-done all the same, so its later scheduled tries do not send it a second time either.
+done all the same, so its later scheduled tries do not send it a second time either. Any other failure
+of a send happens before the server has the e-mail (exit 1, or 2 when the settings are missing): the
+workflow marks that try as "not sent", and the next try sends it.
 
 Waiting for the data: a month's last items come in with the first updates after it ends (a podcast
 out at 11:15 PM on the 30th). Before it sends, data/site/status.json must show every source the digest
@@ -67,15 +74,16 @@ reads (FRESH_SOURCES) tried since 00:00 Central on the 1st of K; otherwise it se
 before that has stopped running and is not waited for (/status/ shows it). --stale-ok (the workflow's
 last tries, from noon on the 3rd, and a manual send) and --force send anyway.
 
-Exit codes: 0 = sent / previewed / nothing new in the month, 1 = sending failed, 2 = not configured, a
---month that is not YYYY-MM, or (sending) a month that is not over yet, 3 = the data has not been
-updated since the month ended yet (nothing sent), 4 = the connection broke while the e-mail was handed
-over: it MAY have been sent.
+Exit codes: 0 = sent / previewed / prepared (--prepare: DIR/message.eml written — none when nothing was
+new in the month), 1 = sending failed, 2 = not configured, a --month that is not YYYY-MM, or (sending) a
+month that is not over yet, 3 = the data has not been updated since the month ended yet (nothing sent),
+4 = the connection broke while the e-mail was handed over: it MAY have been sent.
 """
 from __future__ import annotations
 
 import argparse
 import calendar
+import email
 import html
 import json
 import os
@@ -2191,6 +2199,59 @@ def send(msg: MIMEMultipart, from_addr: str, recipients: list[str]) -> None:
         log(f"WARNING: {len(refused)} recipient(s) were refused by the mail server")
 
 
+PREPARED = ("message.eml", "envelope.json")          # what --prepare saves, --send-prepared reads
+
+
+def prepare(folder: Path, msg: MIMEMultipart, from_addr: str, recipients: list[str], info: dict) -> None:
+    """Saves the e-mail, ready to send: the message itself (exactly as it will go) and its envelope — the sender,
+    the recipients, and `info` (the subject, what the run summary says)."""
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / PREPARED[0]).write_bytes(msg.as_bytes())
+    (folder / PREPARED[1]).write_text(json.dumps({"from": from_addr, "to": recipients, **info}, ensure_ascii=False),
+                                      encoding="utf-8")
+
+
+def send_prepared(folder: Path) -> int:
+    """Hands the e-mail --prepare saved in `folder` to the mail server, once (send()) → 0 sent; 4 it MAY have been
+    sent; 1 not sent — and nothing was handed over: the saved e-mail cannot be read, or the server could not be
+    reached or refused it; 2 the SMTP settings are missing."""
+    try:
+        env = json.loads((folder / PREPARED[1]).read_text(encoding="utf-8"))
+        msg = email.message_from_bytes((folder / PREPARED[0]).read_bytes())
+        from_addr = str(env["from"])
+        recipients = [str(r) for r in env["to"] if str(r).strip()]
+        subject = str(env.get("subject") or "")
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as e:
+        log(f"ERROR: the e-mail to send could not be read from {folder} ({type(e).__name__}: {e}) — nothing was sent")
+        step_summary(["### E-mail digest", f"Not sent: the e-mail built for sending could not be read ({type(e).__name__})."])
+        return 1
+    missing = [k for k in ("SMTP_SERVER", "SMTP_USERNAME", "SMTP_PASSWORD") if not os.environ.get(k, "").strip()]
+    if missing or not recipients:
+        log(f"e-mail is not configured (missing: {', '.join(missing + ([] if recipients else ['DIGEST_TO']))}) — nothing was sent")
+        return 2
+    try:
+        send(msg, from_addr, recipients)
+    except MaybeSent as e:
+        # not 1 ("failed — the next try sends it"): the workflow's next scheduled try would e-mail every
+        # district a second time. 4 marks the month as done there, and still fails the run.
+        log(f"ERROR: {e}")
+        step_summary(["### E-mail digest", f"Sending FAILED — it MAY have been sent: {e}",
+                      "The month is marked as done, so the later tries do not send it again."])
+        return 4
+    except Exception as e:  # noqa: BLE001 — nothing was handed over (send() says MaybeSent once it may have been)
+        log(f"ERROR: {e}")
+        step_summary(["### E-mail digest", f"Sending FAILED: {e}"])
+        return 1
+    try:                    # sent: nothing after this may turn it into a failure (the next try would send it again)
+        log(f"sent to {len(recipients)} recipient(s): {subject}")
+        step_summary(["### E-mail digest sent", f"**Subject:** {subject}", "",
+                      f"Recipients: {len(recipients)} · new items in {env.get('month_name') or '?'}: "
+                      f"{env.get('items', '?')} {env.get('shown') or ''}".rstrip()])
+    except Exception:  # noqa: BLE001
+        pass
+    return 0
+
+
 def step_summary(lines: list[str]) -> None:
     p = os.environ.get("GITHUB_STEP_SUMMARY")
     if not p:
@@ -2241,7 +2302,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--stale-ok", action="store_true", help="send even if some sources were not updated since the month ended")
     ap.add_argument("--as-of", default=None, help="pretend today is YYYY-MM-DD (testing; 15:05 UTC)")
     ap.add_argument("--out-dir", default=str(ROOT / ".tmp"), help="where --dry-run writes the preview")
+    ap.add_argument("--prepare", metavar="DIR", help="build the e-mail as for sending, but only save it in DIR "
+                    "(message.eml, envelope.json; nothing when there is nothing new) — --send-prepared sends it")
+    ap.add_argument("--send-prepared", metavar="DIR", help="send the e-mail --prepare saved in DIR (builds nothing)")
     args = ap.parse_args(argv)
+    if args.send_prepared:
+        return send_prepared(Path(args.send_prepared))
 
     cfg = load_config()
     site = cfg.get("site") or {}
@@ -2315,7 +2381,9 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     recipients = parse_recipients(args.to or os.environ.get("DIGEST_TO", ""))
-    missing = [k for k in ("SMTP_SERVER", "SMTP_USERNAME", "SMTP_PASSWORD") if not os.environ.get(k, "").strip()]
+    # (--prepare sends nothing: the mail server's settings are --send-prepared's)
+    missing = [] if args.prepare else [k for k in ("SMTP_SERVER", "SMTP_USERNAME", "SMTP_PASSWORD")
+                                       if not os.environ.get(k, "").strip()]
     if missing or not recipients:
         log(f"e-mail is not configured (missing: {', '.join(missing + ([] if recipients else ['DIGEST_TO']))}). "
             "See README → 'Monthly e-mail digest'.")
@@ -2326,6 +2394,11 @@ def main(argv: list[str] | None = None) -> int:
     reply_to = parseaddr(os.environ.get("DIGEST_REPLY_TO", "").strip())[1] or site.get("contact_email", "") or from_addr
     from_name = site.get("committee") or site.get("title") or "Grapevine / La Viña"
     msg = build_message(subject, html_body, text_body, from_addr, from_name, recipients, reply_to)
+    if args.prepare:
+        prepare(Path(args.prepare), msg, from_addr, recipients,
+                {"subject": subject, "edition": ed["key"], "month_name": name_en, "items": items, "shown": shown})
+        log(f"ready to send to {len(recipients)} recipient(s): {subject}")
+        return 0
     try:
         send(msg, from_addr, recipients)
     except MaybeSent as e:

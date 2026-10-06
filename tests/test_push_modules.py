@@ -11,13 +11,18 @@ RealGit, repositories in a temporary folder (a fetch there reads another folder,
                   config/site.yml adds nothing (a notice says so);
   * PushFiles   — the files of the push from git (the event file GitHub writes for a workflow run lists none per
                   commit): the commits fetched one commit deep when missing, a payload's own lists added; when git
-                  cannot say, those lists alone — and without any, none and a notice;
+                  cannot say, those lists alone — and without any, none and a notice; compared from SEEN (the last
+                  commit the full-update sources ran with) when there is one, else — or when git cannot use it —
+                  from the commit before the push;
+  * Seen        — data/state/sources-seen.json: written by --record (only a commit id), read back;
   * RealGit     — the same with git itself: the repository pushed to, GitHub's one-commit-deep checkout, a run that
-                  waited its turn, a renamed file, a commit that cannot be fetched;
+                  waited its turn, a renamed file, a commit that cannot be fetched, a push whose run GitHub replaced
+                  in the queue (its sources run with the next push's), a SEEN commit that is gone;
   * EarlierCopy — config/site.yml before the push, from git: fetched one commit deep only when it is missing;
                   any trouble → None;
-  * Main        — what it writes for the plan step (also=, also_why=), that it never stops the step, and that it
-                  never reads the push of the CI run the tests run in ($GITHUB_EVENT_PATH, $GITHUB_SHA).
+  * Main        — what it writes for the plan step (also=, also_why=, processed=), that it never stops the step,
+                  and that it never reads the push of the CI run the tests run in ($GITHUB_EVENT_PATH, $GITHUB_SHA)
+                  nor this checkout's own SEEN file.
 
     python -m unittest tests.test_push_modules -v        (or: python -m unittest discover -s tests)
 """
@@ -238,9 +243,12 @@ class Decide(unittest.TestCase):
 
 
 class PushFiles(unittest.TestCase):
-    def changes(self, ev: dict, head: str | None = None, **git) -> tuple[list[str], str, list[str], list[list[str]]]:
+    def changes(self, ev: dict, head: str | None = None, seen: str | None = None,
+                **git) -> tuple[list[str], str, list[str], list[list[str]]]:
+        """push_changes → (the files, where from, notices, the git commands it ran); the whole answer: self.found."""
         run, calls = git_stand_in(**git)
-        return (*P.push_changes(ev, GIT(run=run), head), [c[0][1:] for c in calls])
+        self.found = P.push_changes(ev, GIT(run=run), head, seen)
+        return self.found.files, self.found.source, self.found.notices, [c[0][1:] for c in calls]
 
     def test_from_git(self):
         # GitHub checks out the branch's newest commit, one commit deep: the one before the push is fetched first
@@ -248,6 +256,7 @@ class PushFiles(unittest.TestCase):
                                                    diff=b"content/instagram.yml\0config/site.yml\0src/a b.njk\0")
         self.assertEqual(got, ["config/site.yml", "content/instagram.yml", "src/a b.njk"])
         self.assertEqual((source, notices), ("git diff 3f2a630..ccccccc", []))
+        self.assertEqual((self.found.base, self.found.last), (SHA, AFTER), "git said: the push's last commit to record")
         self.assertEqual(calls, [["cat-file", "-e", f"{SHA}^{{commit}}"],
                                  ["fetch", "--quiet", "--no-tags", "--depth=1", "origin", SHA],
                                  ["cat-file", "-e", f"{AFTER}^{{commit}}"],
@@ -271,6 +280,7 @@ class PushFiles(unittest.TestCase):
         self.assertEqual(notices, [f"Could not compare this push in git — {why} —, so the files its event file lists "
                                    "were used."])
         self.assertNotIn("diff", [c[0] for c in calls])
+        self.assertEqual((self.found.base, self.found.last), (None, None), "nothing to record: git did not say")
         # GitHub's event file for a run: nothing — and a notice says so
         got, source, notices, _calls = self.changes(actions_event(), fetch=False)
         self.assertEqual((got, source), ([], ""))
@@ -305,15 +315,105 @@ class PushFiles(unittest.TestCase):
         # the comparison fetches the commit before the push; the earlier copy of config/site.yml reads it then
         run, calls = git_stand_in(have=(AFTER,), diff=b"config/site.yml\0")
         git = GIT(run=run)
-        self.assertEqual(P.push_changes(actions_event(), git)[0], ["config/site.yml"])
+        self.assertEqual(P.push_changes(actions_event(), git).files, ["config/site.yml"])
         self.assertEqual(P.previous_config(SHA, git), "site: {}\n")
         self.assertEqual([c[0][1] for c in calls].count("fetch"), 1)
         # a fetch that failed (or never ended) is not tried again
         run, calls = git_stand_in(fail=subprocess.TimeoutExpired)
         git = GIT(run=run)
-        self.assertEqual(P.push_changes(event("config/site.yml"), git)[0], ["config/site.yml"])
+        self.assertEqual(P.push_changes(event("config/site.yml"), git).files, ["config/site.yml"])
         self.assertIsNone(P.previous_config(SHA, git))
         self.assertEqual(len(calls), 1)
+
+    def test_from_the_last_commit_the_sources_ran_with(self):
+        # A push run GitHub replaced in the queue never ran its sources: the next push compares from SEEN — the last
+        # commit the full-update sources ran with — so the replaced push's files count too
+        seen = "5" * 40
+        got, source, notices, calls = self.changes(actions_event(), seen=seen, have=(AFTER,),
+                                                   diff=b"content/instagram.yml\0src/a.njk\0")
+        self.assertEqual(got, ["content/instagram.yml", "src/a.njk"])
+        self.assertEqual(source, "git diff 5555555..ccccccc, from the last commit the full-update sources ran with "
+                                 "(data/state/sources-seen.json)")
+        self.assertEqual((notices, self.found.base, self.found.last), ([], seen, AFTER))
+        self.assertEqual(calls[-1], ["diff", "--name-only", "--no-renames", "-z", seen, AFTER])
+        self.assertNotIn(SHA, [c[-1] for c in calls], "the commit before the push is not needed then")
+        # even a push that starts a branch (no commit before it) is compared from there
+        got, _source, _notices, _calls = self.changes(actions_event(before="0" * 40), seen=seen, diff=b"x.md\0")
+        self.assertEqual((got, self.found.base), (["x.md"], seen))
+        # SEEN is the commit before the push (the last push's run recorded it): the plain comparison
+        _got, source, notices, _calls = self.changes(actions_event(), seen=SHA.upper(), diff=b"x.md\0")
+        self.assertEqual((source, notices, self.found.base), ("git diff 3f2a630..ccccccc", [], SHA))
+
+    def test_a_seen_commit_git_cannot_use(self):
+        # a rewritten history (the commit is gone), or git stops answering: the commit before the push — and a notice
+        seen = "5" * 40
+        run, calls = git_stand_in(have=(AFTER, SHA), diff=b"content/instagram.yml\0")
+
+        def no_seen(cmd, **kw):
+            if cmd[1] == "fetch" and cmd[-1] == seen:
+                calls.append((cmd, kw))
+                return SimpleNamespace(returncode=128, stdout=b"")
+            return run(cmd, **kw)
+        found = P.push_changes(actions_event(), GIT(run=no_seen), None, seen)
+        self.assertEqual((found.files, found.source, found.base, found.last),
+                         (["content/instagram.yml"], "git diff 3f2a630..ccccccc", SHA, AFTER))
+        self.assertEqual(found.notices, ["Could not compare this push with the last commit the sources only the full "
+                                         "update reads ran with (data/state/sources-seen.json) — that commit (5555555) "
+                                         "could not be fetched —, so only its own changes count."])
+        # not a commit id: as if there were none (git is not asked about it)
+        for bad in ("", "HEAD", "abc", None):
+            with self.subTest(seen=bad):
+                _got, source, notices, calls = self.changes(actions_event(), seen=bad, have=(AFTER, SHA))
+                self.assertEqual((source, notices), ("git diff 3f2a630..ccccccc", []))
+
+
+class Seen(unittest.TestCase):
+    """The SEEN file: written by --record (update.yml, once the sources ran), read by the next push's run."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(prefix="gv-seen-"))
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.file = self.tmp / "data" / "state" / "sources-seen.json"
+
+    def test_written_and_read_back(self):
+        from datetime import datetime, timezone
+        at = datetime(2026, 10, 6, 13, 28, 39, tzinfo=timezone.utc)
+        self.assertIsNone(P.read_seen(self.file), "no file yet")
+        self.assertEqual(P.record_seen(AFTER.upper(), "push", self.file, at), AFTER)
+        self.assertEqual(json.loads(self.file.read_text(encoding="utf-8")),
+                         {"commit": AFTER, "by": "push", "recorded": "2026-10-06T13:28:39Z"})
+        self.assertEqual(P.read_seen(self.file), AFTER)
+        self.assertEqual(sorted(p.name for p in self.file.parent.iterdir()), ["sources-seen.json"], "no leftover")
+        self.assertEqual(P.SEEN, "data/state/sources-seen.json")
+
+    def test_never_anything_but_a_commit(self):
+        for bad in ("", "HEAD", "0" * 40, SHA + "; rm -rf /", None):
+            with self.subTest(commit=bad):
+                self.assertIsNone(P.record_seen(bad, "full update", self.file))
+                self.assertFalse(self.file.exists())
+        self.file.parent.mkdir(parents=True)
+        for text in ("{ not json", "[1]", '{"commit": "HEAD"}', '{"commit": 7}', ""):
+            with self.subTest(text=text):
+                self.file.write_text(text, encoding="utf-8")
+                self.assertIsNone(P.read_seen(self.file))
+
+    def test_the_command(self):
+        log = io.StringIO()
+        with redirect_stdout(log):
+            self.assertEqual(P.main(["--record", SHA, "--by", "full update", "--seen", str(self.file)]), 0)
+        self.assertEqual(json.loads(self.file.read_text(encoding="utf-8"))["by"], "full update")
+        self.assertIn("have run with 3f2a630 (full update)", log.getvalue())
+        with redirect_stdout(io.StringIO()):
+            self.assertEqual(P.main(["--record", "", "--seen", str(self.file)]), 0, "never stops the step")
+        self.assertEqual(P.read_seen(self.file), SHA, "kept")
+        # --repo's own copy by default; GV_SOURCES_SEEN (the tests' way round the checkout's own copy) wins
+        with redirect_stdout(io.StringIO()):
+            P.main(["--record", AFTER, "--repo", str(self.tmp)])
+        self.assertEqual(P.read_seen(self.file), AFTER)
+        other = self.tmp / "other.json"
+        with mock.patch.dict(os.environ, {"GV_SOURCES_SEEN": str(other)}), redirect_stdout(io.StringIO()):
+            P.main(["--record", SHA, "--repo", str(self.tmp)])
+        self.assertEqual((P.read_seen(other), P.read_seen(self.file)), (SHA, AFTER))
 
 
 class RealGit(unittest.TestCase):
@@ -333,7 +433,7 @@ class RealGit(unittest.TestCase):
         env = mock.patch.dict(os.environ, {
             "GIT_CONFIG_GLOBAL": str(self.tmp / "no-settings"), "GIT_CONFIG_NOSYSTEM": "1", "GIT_TERMINAL_PROMPT": "0",
             "GIT_AUTHOR_NAME": "Test", "GIT_AUTHOR_EMAIL": "test@example.org", "GIT_COMMITTER_NAME": "Test",
-            "GIT_COMMITTER_EMAIL": "test@example.org", "GITHUB_EVENT_PATH": "", "GITHUB_SHA": ""})
+            "GIT_COMMITTER_EMAIL": "test@example.org", "GITHUB_EVENT_PATH": "", "GITHUB_SHA": "", "GV_SOURCES_SEEN": ""})
         env.start()
         self.addCleanup(env.stop)
         self.origin = self.tmp / "origin"
@@ -384,7 +484,8 @@ class RealGit(unittest.TestCase):
     def test_the_repository_pushed_to(self):
         got, log = self.main(self.origin, actions_event(self.before, self.after))
         self.assertEqual(got, {"also": "instagram,weekly_open",
-                               "also_why": "instagram (content/instagram.yml); weekly_open (config/site.yml: lavina_weekly_open)"})
+                               "also_why": "instagram (content/instagram.yml); weekly_open (config/site.yml: lavina_weekly_open)",
+                               "processed": self.after})
         self.assertIn(f"Files this push changed: 3 (git diff {self.before[:7]}..{self.after[:7]}).", log)
         self.assertNotIn("::notice", log)
 
@@ -409,7 +510,7 @@ class RealGit(unittest.TestCase):
         got, _log = self.main(repo, actions_event(self.before, self.after))
         self.assertEqual(got["also"], "instagram,weekly_open", "not meetings: the places list changed after the push")
         got, _log = self.main(repo, actions_event(self.after, later))
-        self.assertEqual(got, {"also": "meetings", "also_why": "meetings (data/geo/texas_places.json)"})
+        self.assertEqual(got, {"also": "meetings", "also_why": "meetings (data/geo/texas_places.json)", "processed": later})
 
     def test_a_renamed_file_counts_with_both_names(self):
         moved = self.commit({"data/geo/texas_places.json": None, "data/geo/texas_places_2026.json": '{"places": []}\n'})
@@ -418,9 +519,46 @@ class RealGit(unittest.TestCase):
 
     def test_a_commit_that_cannot_be_fetched(self):
         got, log = self.main(self.checkout(), actions_event("d" * 40, self.after))
-        self.assertEqual(got, {"also": "", "also_why": ""})
+        self.assertEqual(got, {"also": "", "also_why": "", "processed": ""}, "git did not say: nothing to record")
         self.assertIn("::notice title=Push run::Could not tell which files this push changed — the commit before it "
                       "(ddddddd) could not be fetched —", log)
+
+    def test_a_push_whose_run_github_replaced(self):
+        # The full update ran with `self.after` and the bot recorded it (SEEN, in its data commit). Then two pushes:
+        # the first changes content/instagram.yml and La Viña's weekly open meeting; its run waits in the queue, and
+        # GitHub replaces it with the second push's run, which changes only a page. That run compares from SEEN: it
+        # runs the first push's sources too — and reads the settings to compare with from SEEN's commit.
+        self.commit({P.SEEN: json.dumps({"commit": self.after, "by": "full update"}) + "\n"})
+        first = self.commit({"content/instagram.yml": "posts: []\n",
+                             P.CONFIG: edit(CFG, 'day: "thursday"', 'day: "saturday"')})
+        second = self.commit({"src/pages/index.njk": "c\n"})
+        repo = self.checkout()
+        got, log = self.main(repo, actions_event(first, second))
+        self.assertEqual(got, {"also": "instagram,weekly_open",
+                               "also_why": "instagram (content/instagram.yml); weekly_open (config/site.yml: lavina_weekly_open)",
+                               "processed": second})
+        self.assertIn(f"Files this push changed: 4 (git diff {self.after[:7]}..{second[:7]}, from the last commit the "
+                      "full-update sources ran with (data/state/sources-seen.json)).", log)
+        self.assertNotIn("::notice", log)
+        # before the change: only what the second push changed, and its sources never ran
+        (repo / P.SEEN).unlink()
+        got, _log = self.main(repo, actions_event(first, second))
+        self.assertEqual((got["also"], got["processed"]), ("", second))
+        # the run records `second` once its sources ran: the next push compares from there
+        self.assertEqual(P.record_seen(got["processed"], "push", repo / P.SEEN), second)
+        third = self.commit({"data/geo/texas_places.json": '{"places": ["Tyler"]}\n'})
+        got, _log = self.main(repo, actions_event(second, third))
+        self.assertEqual(got, {"also": "meetings", "also_why": "meetings (data/geo/texas_places.json)", "processed": third})
+
+    def test_a_seen_commit_that_is_gone(self):
+        # a rewritten history: SEEN names a commit GitHub no longer has — the commit before the push, and a notice
+        repo = self.checkout()
+        P.record_seen("e" * 40, "full update", repo / P.SEEN)
+        got, log = self.main(repo, actions_event(self.before, self.after))
+        self.assertEqual((got["also"], got["processed"]), ("instagram,weekly_open", self.after))
+        self.assertIn("::notice title=Push run::Could not compare this push with the last commit the sources only the "
+                      "full update reads ran with (data/state/sources-seen.json) — that commit (eeeeeee) could not be "
+                      "fetched —, so only its own changes count.", log)
 
 
 class EarlierCopy(unittest.TestCase):
@@ -478,7 +616,7 @@ class Main(unittest.TestCase):
         # Never the push of the CI run these tests run in (Code check runs them on a push: its event file and its
         # commit are in the environment) — and never the real git: a stand-in whose checkout has the push's own
         # commit and cannot fetch (a test can give it more).
-        env = mock.patch.dict(os.environ, {"GITHUB_EVENT_PATH": "", "GITHUB_SHA": ""})
+        env = mock.patch.dict(os.environ, {"GITHUB_EVENT_PATH": "", "GITHUB_SHA": "", "GV_SOURCES_SEEN": ""})
         env.start()
         self.addCleanup(env.stop)
         self.stand_in(have=(AFTER,), fetch=False)
@@ -490,7 +628,9 @@ class Main(unittest.TestCase):
         self.addCleanup(p.stop)
 
     def main(self, ev: dict | str | None, *extra: str) -> tuple[dict[str, str], str]:
-        args = ["--config", str(self.tmp / "new.yml"), "--output", str(self.tmp / "out.txt"), *extra]
+        # (never this checkout's own SEEN file: the bot commits one)
+        args = ["--config", str(self.tmp / "new.yml"), "--output", str(self.tmp / "out.txt"),
+                "--seen", str(self.tmp / "seen.json"), *extra]
         if ev is not None:
             (self.tmp / "event.json").write_text(ev if isinstance(ev, str) else json.dumps(ev), encoding="utf-8")
             args += ["--event", str(self.tmp / "event.json")]
@@ -504,10 +644,11 @@ class Main(unittest.TestCase):
     def test_what_the_plan_step_reads(self):
         got, log = self.main(event("config/site.yml", "content/instagram.yml"), "--previous-config", str(self.tmp / "old.yml"))
         self.assertEqual(got, {"also": "instagram,weekly_open",
-                               "also_why": "instagram (content/instagram.yml); weekly_open (config/site.yml: lavina_weekly_open)"})
+                               "also_why": "instagram (content/instagram.yml); weekly_open (config/site.yml: lavina_weekly_open)",
+                               "processed": ""})
         self.assertIn("Also run for this push: instagram (content/instagram.yml); weekly_open", log)
         got, log = self.main(event("src/pages/index.njk"))
-        self.assertEqual(got, {"also": "", "also_why": ""})
+        self.assertEqual(got, {"also": "", "also_why": "", "processed": ""})
         self.assertIn("No other source needs to run for this push.", log)
 
     def test_the_earlier_copy_from_git(self):
@@ -531,14 +672,15 @@ class Main(unittest.TestCase):
                       show=CFG.encode("utf-8"))
         got, log = self.main(actions_event())
         self.assertEqual(got, {"also": "instagram,weekly_open",
-                               "also_why": "instagram (content/instagram.yml); weekly_open (config/site.yml: lavina_weekly_open)"})
+                               "also_why": "instagram (content/instagram.yml); weekly_open (config/site.yml: lavina_weekly_open)",
+                               "processed": AFTER})
         self.assertIn("Files this push changed: 3 (git diff 3f2a630..ccccccc).", log)
         self.assertEqual([c[0][1] for c in self.git_calls], ["cat-file", "fetch", "cat-file", "diff", "show"])
         self.assertNotIn("::notice", log)
         # … and when git cannot say: nothing, and a notice
         self.stand_in(have=(AFTER,), fetch=False)
         got, log = self.main(actions_event())
-        self.assertEqual(got, {"also": "", "also_why": ""})
+        self.assertEqual(got, {"also": "", "also_why": "", "processed": ""})
         self.assertIn("::notice title=Push run::Could not tell which files this push changed — the commit before it "
                       "(3f2a630) could not be fetched —, so no other source was added for it", log)
         # a new branch (no commit before it): git is not asked
@@ -551,12 +693,12 @@ class Main(unittest.TestCase):
         for ev in (None, "{ not json", "[1, 2]"):
             with self.subTest(event=ev):
                 got, log = self.main(ev)
-                self.assertEqual(got, {"also": "", "also_why": ""})
+                self.assertEqual(got, {"also": "", "also_why": "", "processed": ""})
                 self.assertIn("— GitHub's event file could not be read —", log)
         self.assertEqual(self.git_calls, [], "nothing to compare: git is not asked")
         with mock.patch.object(P, "decide", side_effect=RuntimeError("boom")):
             got, log = self.main(event("content/instagram.yml"))
-        self.assertEqual(got, {"also": "", "also_why": ""})
+        self.assertEqual(got, {"also": "", "also_why": "", "processed": ""})
         self.assertIn("::notice title=Push run::Could not work out which other sources this push needs (RuntimeError: boom)", log)
 
     def test_never_the_ci_runs_own_push(self):
@@ -568,7 +710,18 @@ class Main(unittest.TestCase):
             got, _log = self.main(None)
         self.assertEqual(got["also"], "instagram", "an event file named in the environment is read (as on GitHub)")
         got, _log = self.main(None)
-        self.assertEqual(got, {"also": "", "also_why": ""}, "setUp keeps the CI run's own push out")
+        self.assertEqual(got, {"also": "", "also_why": "", "processed": ""}, "setUp keeps the CI run's own push out")
+
+    def test_the_earlier_settings_come_from_seens_commit(self):
+        # compared from SEEN: config/site.yml as it was there — not as it was before the push
+        seen = "5" * 40
+        P.record_seen(seen, "full update", self.tmp / "seen.json")
+        self.stand_in(have=(AFTER,), diff=b"config/site.yml\0")
+        with mock.patch.object(P, "previous_config", return_value=CFG) as prev:
+            got, log = self.main(actions_event())
+        self.assertEqual(prev.call_args.args[0], seen)
+        self.assertEqual((got["also"], got["processed"]), ("weekly_open", AFTER))
+        self.assertIn("(git diff 5555555..ccccccc, from the last commit the full-update sources ran with", log)
 
 
 if __name__ == "__main__":

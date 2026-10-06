@@ -343,16 +343,22 @@ class OtherTitles(unittest.TestCase):
         self.assertNotIn("\n", name)
         self.assertEqual(title(name, "schedule", schedule=on["schedule"][0]["cron"]),
                          "Monthly e-mail digest (GitHub schedule)")
-        # the title says what the first step decides, from the same input (its PREVIEW)
-        preview = Expr(inside(wf["jobs"]["digest"]["steps"][0]["env"]["PREVIEW"]))
-        for ticked, want in ((True, "Monthly e-mail digest: preview only"),
-                             (False, "Monthly e-mail digest: SEND NOW (started by hand)")):
-            with self.subTest(preview_only=ticked):
-                inputs = {"preview_only": ticked, "month": ""}
+        # the title says what the first step decides, from the same inputs (its PREVIEW and FORCE)
+        env = wf["jobs"]["digest"]["steps"][0]["env"]
+        preview, force = Expr(inside(env["PREVIEW"])), Expr(inside(env["FORCE"]))
+        for ticked, forced, want in ((True, False, "Monthly e-mail digest: preview only"),
+                                     (True, True, "Monthly e-mail digest: preview only"),      # a preview never sends
+                                     (False, False, "Monthly e-mail digest: SEND NOW (started by hand)"),
+                                     (False, True, "Monthly e-mail digest: SEND AGAIN (forced, started by hand)")):
+            with self.subTest(preview_only=ticked, force=forced):
+                inputs = {"preview_only": ticked, "month": "", "force": forced}
                 self.assertEqual(title(name, "workflow_dispatch", inputs), want)
+                self.assertLessEqual(len(want), 60, "short enough for the Actions list")
                 ctx = {"github": {"event_name": "workflow_dispatch"}, "inputs": inputs}
                 self.assertEqual(truthy(preview.value(ctx)), ticked)
-        self.assertFalse(truthy(preview.value({"github": {"event_name": "schedule"}, "inputs": {}})), "a scheduled try")
+                self.assertEqual(truthy(force.value(ctx)), forced)
+        for e in (preview, force):
+            self.assertFalse(truthy(e.value({"github": {"event_name": "schedule"}, "inputs": {}})), "a scheduled try")
 
     def test_weekly_link_check(self):
         wf, _on, _text = load("link-check.yml")

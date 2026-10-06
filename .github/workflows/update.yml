@@ -7,13 +7,17 @@
 #                Instagram and the committee's Google Drive folders,
 #                machine-translates everything EN ⇄ ES (offline, open
 #                source), and commits the updated data back to the repo.
-#    2. BUILD  – builds the website with Eleventy + Tailwind.
-#    3. DEPLOY – publishes it to GitHub Pages.
+#    2. BUILD  – builds the website with Eleventy + Tailwind, while the
+#                TESTS job runs the offline tests on the same commit
+#                (only when the code or the content changed since they
+#                last passed).
+#    3. DEPLOY – publishes it to GitHub Pages — only when the tests passed.
 #
 #  When it runs (each run's title in the Actions list says which kind):
 #    · every NIGHT, the FULL update — every source, plus the search of
 #      both magazine sites for documents — on GitHub's schedule below,
-#      whenever GitHub starts it (often hours late: about 5 to 7 AM Central);
+#      whenever GitHub starts it (often hours late: about 6 to 8 AM Central,
+#      5 to 7 in winter — after the morning refresh);
 #    · every MORNING, started by the Morning check (morning.yml) in MORNING
 #      mode — the new day's dates, the daily quote, Drive, the bulletin
 #      and podcasts — so the new day and both daily quotes are on the site
@@ -26,7 +30,9 @@
 #      edit changed (scripts/ops/push_modules.py).
 #
 #  If a source is down, the site still deploys with the last good data;
-#  if it stays down for a week, the "report" job opens an issue about it.
+#  if it stays down for a week, the "report" job opens an issue about it —
+#  and another one when a run nobody started by hand (the schedule, the
+#  Morning check) fails right after another failed run.
 #  Run it by hand: Actions tab → "Website update" → "Run workflow".
 # =====================================================================
 # The name shown in the Actions sidebar, the "Run workflow" menu, the README badge and GitHub's "Run failed: …"
@@ -36,14 +42,14 @@
 name: Website update
 # Each run's title in the Actions list says what kind of run it is and what started it. The first branch must stay
 # the morning refresh's: scripts/ops/morning_check.py finds its run by this exact title (MORNING_TITLE — keep the two
-# equal). Only the "17 6 * * *" schedule is a full update ("Decide what to sync" → FULL_CRON); every other schedule
+# equal). Only the "17 7 * * *" schedule is a full update ("Decide what to sync" → FULL_CRON); every other schedule
 # is a quick refresh, "7 20 * * *" the evening one. Every later branch tests the event before an input (a schedule's
 # or a push's inputs are null — and GitHub's null == '0' is true). A push keeps GitHub's own title, the commit's
 # subject ('' falls back to it). Folded (>-) into ONE line for GitHub: every line of it at the same indentation
 # (tests/test_run_names.py works out each kind of run's title).
 run-name: >-
   ${{ inputs.morning && 'Morning refresh: new day and daily quote'
-  || github.event_name == 'schedule' && github.event.schedule == '17 6 * * *' && 'Nightly full update (GitHub schedule)'
+  || github.event_name == 'schedule' && github.event.schedule == '17 7 * * *' && 'Nightly full update (GitHub schedule)'
   || github.event_name == 'schedule' && github.event.schedule == '7 20 * * *' && 'Evening refresh (GitHub schedule)'
   || github.event_name == 'schedule' && 'Midday refresh (GitHub schedule)'
   || github.event_name == 'workflow_dispatch' && inputs.skip_crawl && 'Quick refresh (started by hand)'
@@ -64,13 +70,22 @@ on:
     # Only the first one is a FULL run: "Decide what to sync" compares
     # github.event.schedule with FULL_CRON, so every other schedule (and any
     # added later) is a QUICK one. The strings are also matched by the
-    # run-name above ("17 6 * * *", "7 20 * * *") and by "Commit refreshed
+    # run-name above ("17 7 * * *", "7 20 * * *") and by "Commit refreshed
     # data" ("7 20 * * *") — change them there too; tests/test_morning.py and
     # tests/test_run_names.py check that all of them agree.
-    # The NIGHTLY full update (every source + the document search): 06:17 UTC
-    # = 1:17 AM CDT (summer) / 12:17 AM CST (winter) on time; with GitHub's
-    # usual delay, about 5 to 7 AM Central.
-    - cron: "17 6 * * *"
+    # The NIGHTLY full update (every source + the document search): 07:17 UTC
+    # = 2:17 AM CDT (summer) / 1:17 AM CST (winter) on time; with GitHub's
+    # usual 4 to 6 hour delay, about 6:17 to 8:17 AM CDT / 5:17 to 7:17 AM
+    # CST (8 hours late: 10:17 / 9:17). It must not be RUNNING at 4:30 AM
+    # Central, when the morning alarm starts the morning refresh: that would
+    # wait behind it (one update at a time), past the 5:30 goal. A full
+    # update usually takes 15 to 30 minutes (about 2 hours with the whole
+    # 40-minute document search and 40 minutes of translation), so one that
+    # GitHub starts on time is done by then, and one 4 or more hours late
+    # starts after the morning refresh is live (about 4:35), in summer and in
+    # winter. (At 06:17 UTC, a run 4 hours late started at 4:17 AM CST —
+    # right on top of the alarm.)
+    - cron: "17 7 * * *"
     # The MIDDAY refresh (quick: Drive, the bulletin, podcasts, the daily
     # quote, the writers archive — QUICK_MODULES in scripts/sync/run_all.py):
     # 12:07 UTC = 7:07 AM CDT / 6:07 AM CST on time; with the delay, about
@@ -150,6 +165,8 @@ jobs:
     outputs:
       # Sources that have not updated for a week (JSON) — read by the "report" job below.
       health: ${{ steps.summary.outputs.health }}
+      # The commit the tests and the build check out ("Commit refreshed data"): this run's data commit.
+      commit: ${{ steps.commit.outputs.commit }}
     env:
       # Offline translation models (Argos Translate 1.0, CTranslate2 format,
       # ~175 MB). scripts/sync/translate.py downloads them into this folder
@@ -215,7 +232,9 @@ jobs:
       - name: Install Python packages
         run: |
           python -m pip install --upgrade pip
-          # requirements.txt uses ">=" so every run gets the newest yt-dlp etc.
+          # requirements.txt lets each package update within its major version (">=2.32,<3"), so every run gets
+          # the newest minor and patch releases; a new major version waits for Dependabot's monthly pull request
+          # (.github/dependabot.yml). yt-dlp has no cap: every run gets its newest release (YouTube changes).
           python -m pip install -r requirements.txt
 
       # The sync loads a model only when a text needs it, so a run with nothing new to translate never
@@ -232,7 +251,7 @@ jobs:
         id: plan
         env:
           EVENT: ${{ github.event_name }}
-          # The cron string that started a scheduled run ("17 6 * * *", "7 12 * * *" or "7 20 * * *").
+          # The cron string that started a scheduled run ("17 7 * * *", "7 12 * * *" or "7 20 * * *").
           SCHEDULE: ${{ github.event.schedule }}
           INPUT_MINUTES: ${{ inputs.crawl_minutes }}
           INPUT_SKIP: ${{ inputs.skip_crawl }}
@@ -250,7 +269,7 @@ jobs:
           # Only the NIGHTLY schedule is a full run; every other schedule — the midday and the evening
           # refresh, and any added later — is a quick one, so a new cron line can never start a long
           # search by mistake. Same string as the first `cron:` above and the run-name.
-          FULL_CRON="17 6 * * *"
+          FULL_CRON="17 7 * * *"
           if [ "${INPUT_MORNING:-false}" = "true" ]; then
             # The Morning check (morning.yml) — or someone who ticked "morning": the lean MORNING
             # refresh (run_all --morning: the quick sources, plus on the 1st and the 15th the monthly
@@ -290,12 +309,16 @@ jobs:
 
           # A push also runs the sources only the full update reads whose own input it changed —
           # content/instagram.yml, data/geo, their part of config/site.yml (scripts/ops/push_modules.py says
-          # which, and why; never the crawl, the magazine stories or the store). It compares the commit the
-          # push started from with its last one in git (fetched one commit deep: this checkout has only the
-          # newest), since GitHub's event file for a run lists no files. Any trouble there only means those
-          # sources show the change after the next nightly run.
+          # which, and why; never the crawl, the magazine stories or the store). It compares, in git (commits
+          # fetched one commit deep: this checkout has only the newest), the push's last commit with the last
+          # commit those sources ran with (data/state/sources-seen.json — so a push whose own run GitHub replaced
+          # in the queue counts too), else with the commit the push started from, since GitHub's event file for
+          # a run lists no files. `processed` is the push's last commit when git said what changed: the step
+          # after the sync records it. Any trouble there only means those sources show the change after the next
+          # nightly run.
           also=""
           also_why=""
+          processed=""
           if [ "$EVENT" = "push" ]; then
             push_out="${RUNNER_TEMP:-/tmp}/push-also.txt"
             : > "$push_out"
@@ -303,6 +326,7 @@ jobs:
               || echo "::notice title=Push run::Could not work out which other sources this push needs — they show its changes after the next nightly run."
             also="$(sed -n 's/^also=//p' "$push_out" | tail -n 1)"
             also_why="$(sed -n 's/^also_why=//p' "$push_out" | tail -n 1)"
+            processed="$(sed -n 's/^processed=//p' "$push_out" | tail -n 1)"
           fi
 
           # Time budget. The job may run 360 min; setup (~5) and the data
@@ -331,6 +355,7 @@ jobs:
             echo "budget=$budget"
             echo "also=$also"
             echo "also_why=$also_why"
+            echo "processed=$processed"
             # the daily setting (the run summary never calls the PDF search "not checked" while it is 0)
             echo "daily_minutes=$CONFIG_MINUTES"
             echo "started=$started"
@@ -366,6 +391,25 @@ jobs:
           # a single source failing is reported in the summary instead.
           python -m scripts.sync.run_all "${args[@]}"
 
+      # The last commit the sources only the full update reads have run with (data/state/sources-seen.json, committed
+      # with the data below): a full update's checkout (every source read it), or a push's last commit (each source
+      # whose input changed since the last such commit ran — the plan step's `processed`). The next push compares
+      # from it (scripts/ops/push_modules.py), so a push whose run GitHub replaced in the queue still gets its sources
+      # run. Only after a sync step that ended well: otherwise the next push compares from the older commit again (at
+      # worst a source runs once more). Quick, midday, evening and morning refreshes run none of those sources.
+      - name: Remember the commit the full-update sources ran with
+        if: ${{ steps.sync.outcome == 'success' && (steps.plan.outputs.mode == 'crawl' || steps.plan.outputs.processed != '') }}
+        env:
+          MODE: ${{ steps.plan.outputs.mode }}
+          PROCESSED: ${{ steps.plan.outputs.processed }}
+        run: |
+          set -euo pipefail
+          if [ "$MODE" = "crawl" ]; then
+            python -m scripts.ops.push_modules --record "$(git rev-parse HEAD)" --by "full update"
+          else
+            python -m scripts.ops.push_modules --record "$PROCESSED" --by "push"
+          fi
+
       - name: Check the translation models are complete
         id: models_ready
         if: ${{ !cancelled() && steps.models.outputs.cache-hit != 'true' }}
@@ -400,10 +444,13 @@ jobs:
           key: ${{ steps.modelkey.outputs.key }}
 
       - name: Commit refreshed data
+        id: commit
         # Runs even if the sync step failed, ran out of time or the run was
         # cancelled: whatever was fetched is still good (every file is written
         # atomically, and the crawler saves its progress when it is stopped).
         # GitHub allows about 5 minutes for this after a cancel; it takes seconds.
+        # Its output `commit` is the commit the tests and the build check out (the data commit it pushed;
+        # else the one this job checked out, which is on GitHub already) — so both see the very same files.
         if: ${{ always() }}
         env:
           EVENT: ${{ github.event_name }}
@@ -420,7 +467,8 @@ jobs:
           # The checkout keeps no token (persist-credentials: false), so log in for this step
           # only — covers both the push and the "git pull --rebase" retry — and log out on exit.
           auth_key="http.https://github.com/.extraheader"
-          trap 'git config --local --unset-all "$auth_key" || true' EXIT
+          published="$(git rev-parse HEAD 2>/dev/null || true)"        # the checkout (on GitHub already)
+          trap 'git config --local --unset-all "$auth_key" || true; echo "commit=${published}" >> "$GITHUB_OUTPUT"' EXIT
           git config --local "$auth_key" "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
 
           # Everything the sync writes (new, changed AND deleted files).
@@ -462,11 +510,55 @@ jobs:
           this_run = start is not None and any(t is not None and t >= start for t in taken)
           sys.exit(0 if (r.get("stats") or {}).get("changed") is True and this_run else 1)
           PY
+          # The morning refresh names the daily quotes it brings, by the quotes' own day — never the run's: each
+          # magazine whose quote in data/site/quote.json has another day than in the last commit ("with the daily
+          # quotes of Oct 6", "with the La Viña quote of Oct 5"); no new quote → just "morning refresh". (The date
+          # at the end stays the run's Central day, as in every data commit.)
+          quotes=""
+          if [ "${MODE:-}" = "morning" ]; then
+            quotes="$(python - 2>/dev/null <<'PY' || true
+          import json, subprocess, sys
+          from datetime import date
+          NAMES = {"gv": "Grapevine", "lv": "La Viña"}
+          def days(text):
+              try:
+                  items = json.loads(text or "{}").get("items") or []
+              except (ValueError, AttributeError):
+                  return {}
+              out = {}
+              for q in items if isinstance(items, list) else []:
+                  if isinstance(q, dict) and q.get("pub") in NAMES:
+                      try:
+                          out[q["pub"]] = date.fromisoformat(str(q.get("date") or "")[:10])
+                      except ValueError:
+                          pass
+              return out
+          try:
+              with open("data/site/quote.json", encoding="utf-8") as f:
+                  now = days(f.read())
+          except OSError:
+              now = {}
+          try:
+              r = subprocess.run(["git", "show", "HEAD:data/site/quote.json"], capture_output=True, timeout=60)
+              before = days(r.stdout.decode("utf-8", "replace")) if r.returncode == 0 else {}
+          except (OSError, subprocess.SubprocessError):
+              before = {}
+          new = {p: d for p, d in now.items() if before.get(p) != d}
+          label = lambda d: f"{d:%b} {d.day}"
+          if len(new) == len(NAMES) and len(set(new.values())) == 1:
+              words = f" with the daily quotes of {label(next(iter(new.values())))}"
+          else:
+              words = "".join((" with " if i == 0 else " and ") + f"the {NAMES[p]} quote of {label(new[p])}"
+                              for i, p in enumerate(p for p in NAMES if p in new))
+          sys.stdout.buffer.write(words.encode("utf-8"))
+          PY
+          )"
+          fi
           day="$(TZ=America/Chicago date +%F)"
           if [ "$EVENT" = "push" ]; then
             msg="chore(data): content sync after settings/content change${archive} ${day} [skip ci]"
           elif [ "${MODE:-}" = "morning" ]; then
-            msg="chore(data): morning refresh with the daily quote${archive} ${day} [skip ci]"
+            msg="chore(data): morning refresh${quotes}${archive} ${day} [skip ci]"
           elif [ "$EVENT" = "schedule" ] && [ "${SCHEDULE:-}" = "7 20 * * *" ]; then
             msg="chore(data): evening refresh${archive} ${day} [skip ci]"
           elif [ "$EVENT" = "schedule" ] && [ "${MODE:-}" = "quick" ]; then
@@ -485,6 +577,7 @@ jobs:
           # --autostash: any other local leftovers must not block the rebase.
           for attempt in 1 2 3 4 5; do
             if git push origin "HEAD:${BRANCH}"; then
+              published="$(git rev-parse HEAD)"
               echo "Pushed data commit."
               exit 0
             fi
@@ -809,28 +902,35 @@ jobs:
           PY
 
   # -------------------------------------------------------------------
+  # The website is built here and published by "publish" below — only once the "tests" job, which runs at the
+  # same time on the very same commit, has passed (a change that breaks the tests never goes live; the site keeps
+  # the version before).
   build-deploy:
-    name: Build & publish website
+    name: Build website
     needs: sync
-    # Deploy even when the sync failed or timed out (the site then shows the
+    # Build even when the sync failed or timed out (the site then shows the
     # last good data), but not when someone cancelled the run, and only from main.
     if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    # (the booth display's media: at most 20 minutes to download, 5 to save — the build and the publishing still fit)
+    # (the booth display's media: at most 20 minutes to download, 5 to save — the build and the upload still fit)
     timeout-minutes: 35
     permissions:
       contents: read
-      pages: write             # to deploy to GitHub Pages
-      id-token: write          # to prove the deployment comes from this repo
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      pages: read              # the GitHub Pages settings (the site's address)
+    outputs:
+      commit: ${{ steps.code.outputs.commit }}
     steps:
-      - name: Check out the latest main (including the data just committed)
+      # The commit the sync job just pushed (its data included), the same one the tests check out — or, when it
+      # named none, the latest main.
+      - name: Check out the commit the sync job pushed (with its data)
         uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ needs.sync.outputs.commit || 'main' }}
           persist-credentials: false
+
+      - name: Name the commit built
+        id: code
+        run: echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js
         uses: actions/setup-node@v7
@@ -984,10 +1084,141 @@ jobs:
           # GitHub Pages sites must stay under 1 GB.
           if (( size > 900 )); then echo "::warning::The site is ${size} MB — GitHub Pages allows 1 GB. See docs/OPERATIONS.md → Repository size."; fi
 
+      # (published by the "publish" job below, once the tests have passed)
       - name: Upload the website
         uses: actions/upload-pages-artifact@v5
         with:
           path: _site
+
+  # -------------------------------------------------------------------
+  # The tests before publishing: the Code check's offline tests (check.yml, which only REPORTS on a change) — so a
+  # change that breaks them never goes live: the "publish" job waits for this one, and the site keeps the version
+  # before. On the very commit the build job builds, at the same time as the build (about 3 to 4 minutes, setup
+  # included, while the build takes about as long), so it adds little or nothing to a run — and only when the code
+  # or the content is new to it: everything in git but the bot's own data (data/raw, data/site, data/state, the
+  # translation cache, src/assets/cache) has a fingerprint, and a fingerprint whose tests passed once is remembered
+  # in GitHub's Actions cache. The daily data runs (the morning refresh, the midday, evening and nightly updates)
+  # change none of it, so they skip the tests (a few seconds) and the morning refresh is live as soon as before;
+  # a person's change — code, settings or content — is tested first. If the remembered pass is gone (a cache
+  # unused for 7 days is deleted), the tests simply run again. A few tests that judge the day's synced data rather
+  # than the code are left to the Code check (scripts/ops/gate_tests.py, DATA_TESTS): a day's data must never keep
+  # the site from updating.
+  tests:
+    name: Test the code before publishing
+    needs: sync
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      commit: ${{ steps.code.outputs.commit }}
+    steps:
+      - name: Check out the commit the sync job pushed (the one the build job builds)
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.sync.outputs.commit || 'main' }}
+          persist-credentials: false
+
+      # Everything in git but the bot's own files: the code, the settings and the content people edit (the
+      # tests themselves and this workflow included — a change to the gate is tested too).
+      - name: Fingerprint the code and the content
+        id: code
+        run: |
+          set -euo pipefail
+          fp="$(git ls-files -s -z -- . ':!data/raw' ':!data/site' ':!data/state' ':!data/translations/cache.json' \
+                ':!src/assets/cache' | sha256sum | cut -c1-40)"
+          {
+            echo "commit=$(git rev-parse HEAD)"
+            echo "fingerprint=${fp}"
+          } >> "$GITHUB_OUTPUT"
+          echo "Code and content fingerprint: ${fp}"
+
+      - name: Were these tests passed already?
+        id: passed
+        uses: actions/cache/restore@v6
+        with:
+          path: .cache/tests-passed
+          key: tests-passed-v1-${{ steps.code.outputs.fingerprint }}
+          lookup-only: true
+
+      - name: Set up Python
+        if: ${{ steps.passed.outputs.cache-hit != 'true' }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install Python packages
+        if: ${{ steps.passed.outputs.cache-hit != 'true' }}
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      # A few tests run the site's own JavaScript (tests/nodejs.py); without Node.js and the site's packages they
+      # would be skipped.
+      - name: Set up Node.js (for the tests that run the site's JavaScript)
+        if: ${{ steps.passed.outputs.cache-hit != 'true' }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install site tools
+        if: ${{ steps.passed.outputs.cache-hit != 'true' }}
+        run: npm ci --no-audit --no-fund
+
+      # The translation models are not downloaded here, so the tests that need them are skipped, as in the Code check.
+      - name: Run the tests
+        if: ${{ steps.passed.outputs.cache-hit != 'true' }}
+        env:
+          PYTHONIOENCODING: utf-8
+        run: python -m scripts.ops.gate_tests
+
+      - name: Remember that these tests passed
+        if: ${{ steps.passed.outputs.cache-hit != 'true' }}
+        run: |
+          mkdir -p .cache/tests-passed
+          echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) run ${GITHUB_RUN_ID} commit $(git rev-parse HEAD)" > .cache/tests-passed/passed.txt
+
+      - name: Save the pass for the next runs
+        if: ${{ steps.passed.outputs.cache-hit != 'true' }}
+        continue-on-error: true      # a pass that cannot be saved only means the next run tests again
+        uses: actions/cache/save@v6
+        with:
+          path: .cache/tests-passed
+          key: tests-passed-v1-${{ steps.code.outputs.fingerprint }}
+
+      - name: Say so when they were passed already
+        if: ${{ steps.passed.outputs.cache-hit == 'true' }}
+        run: echo "The tests passed already for this code and content (only the bot's data changed since) — not run again." | tee -a "$GITHUB_STEP_SUMMARY"
+
+  # -------------------------------------------------------------------
+  publish:
+    name: Publish to GitHub Pages
+    needs: [build-deploy, tests]
+    # Only a site whose code passed the tests — the build and the tests on the very same commit.
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.build-deploy.result == 'success' && needs.tests.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      pages: write             # to deploy to GitHub Pages
+      id-token: write          # to prove the deployment comes from this repo
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: The tests passed on the commit that was built
+        env:
+          BUILT: ${{ needs.build-deploy.outputs.commit }}
+          TESTED: ${{ needs.tests.outputs.commit }}
+        run: |
+          if [ -z "$BUILT" ] || [ "$BUILT" != "$TESTED" ]; then
+            echo "::error title=Not published::The website was built from ${BUILT:-?} but the tests ran on ${TESTED:-?} (a change arrived between the two) — nothing was published; the next run publishes."
+            exit 1
+          fi
+          echo "Built and tested: ${BUILT}"
 
       - name: Publish to GitHub Pages
         id: deployment
@@ -995,20 +1226,26 @@ jobs:
 
   # -------------------------------------------------------------------
   report:
-    name: Report sources that stopped updating
-    needs: sync
-    # A source that fails now and then is normal (the site keeps its older items).
-    # One that has not updated for a week needs a person, so this job keeps ONE
-    # GitHub issue open ("A content source has stopped updating") while that is
-    # the case — GitHub e-mails the repository's watchers when it opens — and
-    # closes it by itself when every source works again. It never fails the run.
-    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.sync.outputs.health != '' }}
+    # Its two steps keep two GitHub issues (GitHub e-mails the repository's watchers when one opens or gets a
+    # comment); it never fails the run:
+    #  · A source that fails now and then is normal (the site keeps its older items). One that has not updated
+    #    for a week needs a person, so ONE issue ("A content source has stopped updating") stays open while that
+    #    is the case, and closes by itself when every source works again.
+    #  · A run that fails is e-mailed by GitHub to whoever started it — but nobody starts the scheduled ones or
+    #    the Morning check's, so ONE issue ("The website update keeps failing") opens when such a run fails right
+    #    after another failed run (one failure can be a passing hiccup), gets a comment when something else
+    #    starts failing, and closes by itself, saying so, after the next run that works.
+    name: Report sources that stopped updating, and updates that keep failing
+    needs: [sync, tests, build-deploy, publish]
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
-      issues: write            # to open / update / close the report issue
+      issues: write            # to open / update / close the two report issues
+      actions: read            # how the previous Website update run ended
     steps:
       - name: Open, update or close the report issue
+        if: ${{ needs.sync.outputs.health != '' }}
         continue-on-error: true      # e.g. Issues switched off in the repository settings
         env:
           GH_TOKEN: ${{ github.token }}
@@ -1096,4 +1333,114 @@ jobs:
               gh("issue", "comment", num, "--body", "Now also not updating: " + ", ".join(added)
                  + f". See the updated description above ({run_url}).")
           print(f"Updated issue #{num}" + (f" (new: {', '.join(added)})" if added else ""))
+          PY
+
+      # How this run ended — each job's result — against the previous Website update run that ended (one GitHub
+      # replaced in the queue, or that someone cancelled, does not count): a run started by GitHub's schedule or by
+      # the Morning check (github-actions[bot]) that fails right after a failed run opens the issue; any later
+      # failure updates it (silently — a comment only when another job starts failing); the first run that works
+      # closes it with a note. A run a person started is e-mailed to them by GitHub: it never opens the issue.
+      - name: Open, update or close the issue about failing updates
+        continue-on-error: true      # e.g. Issues switched off in the repository settings
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
+          ACTOR: ${{ github.actor }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+          SYNC: ${{ needs.sync.result }}
+          TESTS: ${{ needs.tests.result }}
+          BUILD: ${{ needs.build-deploy.result }}
+          PUBLISH: ${{ needs.publish.result }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+
+          TITLE = "The website update keeps failing"
+          BOT = "github-actions[bot]"
+          # this run's jobs (their names on the run's page) → how each ended; what to do when one fails
+          JOBS = {"sync": ("Sync content + translate", os.environ.get("SYNC", "")),
+                  "tests": ("Test the code before publishing", os.environ.get("TESTS", "")),
+                  "build": ("Build website", os.environ.get("BUILD", "")),
+                  "publish": ("Publish to GitHub Pages", os.environ.get("PUBLISH", ""))}
+          HINTS = {
+              "sync": "the site data could not be built, or the data commit could not be saved — its log says which "
+                      "step; the site was still published with the data it had (if the other jobs worked).",
+              "tests": "a change broke the tests, so nothing was published (the live site keeps the version before): "
+                       "the run summary lists the failing tests — fix the change or undo it.",
+              "build": "the website could not be built (often a text missing from src/_i18n after an edit): fix the "
+                       "change or undo it; the live site keeps the version before.",
+              "publish": "GitHub Pages did not take the new version — usually GitHub's own trouble: open the run and "
+                         "press \"Re-run failed jobs\", or wait for the next run.",
+          }
+          FAILED = ("failure", "timed_out", "startup_failure")
+          run_id, run_url, repo_url = os.environ["RUN_ID"], os.environ["RUN_URL"], os.environ["REPO_URL"]
+
+          def gh(*args):
+              r = subprocess.run(["gh", *args], capture_output=True, text=True)
+              if r.returncode:
+                  raise SystemExit(f"'gh {' '.join(args[:2])}' failed: {r.stderr.strip()}")
+              return r.stdout
+
+          failed = [k for k, (_name, result) in JOBS.items() if result == "failure"]
+          worked = all(result == "success" for _name, result in JOBS.values())
+          unattended = os.environ.get("EVENT") == "schedule" or (os.environ.get("EVENT") == "workflow_dispatch"
+                                                                 and os.environ.get("ACTOR") == BOT)
+          issues = json.loads(gh("issue", "list", "--state", "open", "--limit", "100", "--json", "number,title,body") or "[]")
+          issue = next((i for i in issues if i.get("title") == TITLE), None)
+
+          if worked:
+              if issue:
+                  gh("issue", "close", str(issue["number"]), "--comment",
+                     f"The website update works again: this run published the site ({run_url}). Closing automatically.")
+                  print(f"Closed issue #{issue['number']}: the update works again.")
+              else:
+                  print("This run worked.")
+              raise SystemExit(0)
+          if not failed:
+              print("No job failed (" + ", ".join(f"{n}: {r or '?'}" for n, r in JOBS.values()) + ") — nothing to report.")
+              raise SystemExit(0)
+
+          # the previous Website update run that ended (not this one, still going; not one replaced or cancelled)
+          runs = json.loads(gh("api", "repos/{owner}/{repo}/actions/workflows/update.yml/runs?status=completed&per_page=30")
+                            or "{}").get("workflow_runs") or []
+          prev = next((r for r in runs if str(r.get("id")) != run_id
+                       and r.get("conclusion") not in ("cancelled", "skipped", "neutral", None)), None)
+          prev_failed = bool(prev) and prev.get("conclusion") in FAILED
+          what = [f"- **{JOBS[k][0]}** failed: {HINTS[k]}" for k in failed]
+          keys = ",".join(failed)
+
+          def body(n: int) -> str:
+              lines = [f"**The website update has failed {n} times in a row.** The last time: [this run]({run_url}).", "",
+                       *what, "",
+                       "**What to do:** open the run, then the job with the red ✗: its red step says what went wrong. "
+                       "The live site stays as it was published last; the Morning check reports a morning that did not "
+                       "reach the site.", "",
+                       f"[All Website update runs]({repo_url}/actions/workflows/update.yml) · "
+                       f"[Troubleshooting]({repo_url}#15-troubleshooting)", "",
+                       "*This issue is updated after every failed run and closes by itself after the next run that "
+                       "works.*",
+                       f"<!-- failing-jobs: {keys} --> <!-- failures: {n} -->"]
+              return "\n".join(lines)
+
+          if issue:
+              old = issue.get("body") or ""
+              m = re.search(r"<!-- failures: (\d+) -->", old)
+              n = (int(m.group(1)) if m else 2) + 1
+              gh("issue", "edit", str(issue["number"]), "--body", body(n))       # silent: edits send no e-mail
+              m = re.search(r"<!-- failing-jobs: ([^>]*?) -->", old)
+              new = [k for k in failed if k not in set(filter(None, (m.group(1) if m else "").split(",")))]
+              if new:                                                            # a comment does: a new kind of failure
+                  gh("issue", "comment", str(issue["number"]), "--body",
+                     "Now also failing: " + ", ".join(JOBS[k][0] for k in new) + f" ({run_url}).")
+              print(f"Updated issue #{issue['number']} ({n} failures in a row)")
+          elif unattended and prev_failed:
+              gh("issue", "create", "--title", TITLE, "--body", body(2))
+              print(f"Opened the issue: this run and the previous one ({prev.get('html_url')}) failed.")
+          elif unattended:
+              print("This run failed, the previous one did not: no issue yet (it opens if the next run fails too).")
+          else:
+              print("This run failed; it was started by a person, whom GitHub e-mails about it — no issue.")
           PY

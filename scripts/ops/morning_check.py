@@ -32,7 +32,8 @@ What it does
      that run's build (GitHub Pages can take a few minutes). A run that finished well but does not show
      within LIVE_MAX is "Cannot confirm" — never a reason to start another.
   4. Today's build is up but a quote is not today's (the magazine has not published it yet): from
-     WINDOW_BEFORE before the goal until WINDOW_AFTER after it (4:00–7:00 AM for a 5:30 goal) it asks that
+     WINDOW_BEFORE before the goal until WINDOW_AFTER after it (2:00–7:00 AM for a 5:30 goal: the magazines
+     usually publish the new day's quote about 2 AM Central) it asks that
      magazine's home page every POLL_EVERY whether today's quote is out (quote.peek) — never sooner than
      POLL_EVERY after the last look, a run it started or followed included (every update reads the
      quote) — and once it is, starts the morning refresh again. Before the window it stops (a later alarm
@@ -63,9 +64,10 @@ What it does
   the run a day later.
 
 Politeness: aagrapevine.org / aalavina.org are asked only in step 4, only for a magazine whose quote on
-OUR site is late — at most one page request per POLL_EVERY inside the window (16 from the alarm at 4:30 to
-7:00 AM), and one per check after it — through the shared polite session (robots.txt first, 5 s apart): on
-most mornings not at all. (The morning refresh itself reads each home page once: quote.py.)
+OUR site is late — at most one page request per POLL_EVERY inside the window (31 from 2:00 to 7:00 AM, on
+a morning the quote is that late; 16 from the alarm at 4:30), and one per check after it — through the
+shared polite session (robots.txt first, 5 s apart): on most mornings not at all. (The morning refresh
+itself reads each home page once: quote.py.)
 
 Exit codes: 0 = today's update is on the site, or only a magazine's quote is late at the source (also when
 an update this check did not start was still running at GUARD_MAX, with today's build on the site), or the
@@ -104,7 +106,9 @@ MORNING_TITLE = "Morning refresh: new day and daily quote"
 # a quick one is "Quick refresh …", "Midday refresh …" or "Evening refresh …".
 FULL_TITLES = ("Full update", "Nightly full update")
 GOAL = (5, 30)                               # config site.morning_goal when missing or unreadable
-WINDOW_BEFORE = timedelta(minutes=90)        # the magazines are asked about a late quote from goal − 90 min …
+# The magazines are asked about a late quote from goal − 3½ hours — 2:00 AM for a 5:30 goal: they usually publish
+# the new day's quote about 2 AM Central, so a check from then on brings it to the site soon after —
+WINDOW_BEFORE = timedelta(hours=3, minutes=30)
 WINDOW_AFTER = timedelta(minutes=90)         # … until goal + 90 min (after it: once per check)
 POLL_EVERY = timedelta(minutes=10)           # one request per late magazine per POLL_EVERY
 FOLLOW_MAX = timedelta(minutes=45)           # an update run must start AND finish within this
@@ -118,7 +122,8 @@ MAX_HOPS = 3                                 # replacements followed (GitHub's q
 # A check starts no refresh and asks no magazine after this long: its last refresh — at most FOLLOW_MAX +
 # LIVE_MAX, plus a few minutes of GitHub answering slowly — then still ends inside the 240 minutes that
 # morning.yml gives the job, its setup included (tests/test_morning.py checks the sum). A check that
-# begins at 4:00 AM therefore asks until 6:50; the alarm's, at 4:30, until 7:00.
+# begins at 2:00 AM therefore asks until 4:50 (the alarm's check, at 4:30, waits for it, then asks until 7:00);
+# one that begins at 4:00, until 6:50.
 GUARD_MAX = timedelta(minutes=170)
 PUBS = quote.PUB_ORDER
 PUB_NAMES = {"gv": "Grapevine", "lv": "La Viña"}

@@ -10,7 +10,10 @@
 #
 #  On a pull request, a broken update shows a red ✗ BEFORE it is merged.
 #  On a push, a red ✗ here means "something in that change is broken" —
-#  undo or fix the change (the live site keeps working either way).
+#  undo or fix the change (the live site keeps working either way:
+#  "Website update" runs the same tests before it publishes — all but
+#  the few that judge the day's synced data, scripts/ops/gate_tests.py —
+#  and publishes nothing until they pass).
 #
 #  Rule of thumb (README → Housekeeping): merge a pull request only when
 #  it shows a green ✓.

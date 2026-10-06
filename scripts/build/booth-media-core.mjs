@@ -1,5 +1,5 @@
 // The booth display's photos and videos, saved for offline use — the PURE half of scripts/build/booth-media.mjs
-// (the downloader that runs in the "Build & publish website" job of .github/workflows/update.yml, just before
+// (the downloader that runs in the "Build website" job of .github/workflows/update.yml, just before
 // Eleventy builds the site). Nothing here goes on the network or writes a file, so tests/test_booth_media.py can
 // check every rule through Node.js, offline.
 //

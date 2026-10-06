@@ -12,11 +12,20 @@
 #  When: on the 1st, from 7 AM Central, as soon as every source has been
 #  updated since the month ended (so the month's last items are in it);
 #  at the latest from noon Central on the 3rd, with the data there is.
-#  Only ONCE: a small "digest-sent-YYYY-MM" artifact marks a month as
-#  sent (kept 40 days) and the later tries skip it. A month with nothing
-#  new is not sent (and counts as done). If the connection breaks while
-#  the e-mail is handed over (it MAY have been sent), the month counts as
-#  done too, and the run fails: check the group before sending it again.
+#  Only ONCE — small markers (artifacts, kept 40 days) say how far each
+#  month got, and every send looks at them first:
+#    · "digest-sending-YYYY-MM" — uploaded just BEFORE the e-mail is handed
+#      to the mail server;
+#    · "digest-sent-YYYY-MM" — sent (or a month with nothing new: no
+#      e-mail, and it counts as done), or the connection broke while the
+#      e-mail was handed over (it MAY have been sent: the run fails —
+#      check the group);
+#    · "digest-unsent-YYYY-MM" — that run's mail server took nothing (not
+#      reachable, the password or the e-mail refused): the next try sends.
+#  A "sending" marker with neither of the others from its run (the run was
+#  cancelled, timed out or lost its connection in between, so the e-mail
+#  MAY have gone) is never sent again by itself: the tries skip with a
+#  yellow note, and a person checks the group and decides.
 #
 #  Turn it on: Settings → Secrets and variables → Actions → add
 #    SMTP_SERVER, SMTP_USERNAME, SMTP_PASSWORD, DIGEST_TO
@@ -28,16 +37,18 @@
 #  artifact. The "month" box is the month the digest COVERS (2026-09 =
 #  the September digest, sent October 1); empty = last month. A manual
 #  send ("Preview only" unticked) goes at once — with the data there is,
-#  without waiting — and marks the month as done (a month with nothing
-#  new is only marked: no e-mail, as on a scheduled try).
+#  without waiting — unless the month was already sent (or a send of it
+#  was not confirmed): then it only says so. To send a month AGAIN, tick
+#  "force" too — every district gets it a second time.
 # =====================================================================
 name: Monthly e-mail digest
-# Each run's title says what it does — from the same input as PREVIEW in the first step, so the title always
-# matches: a scheduled try, a preview, or a send by hand. Folded (>-) into one line (a plain one-line value could
-# not hold the titles' ": ").
+# Each run's title says what it does — from the same inputs as PREVIEW and FORCE in the first step, so the title
+# always matches: a scheduled try, a preview, a send by hand, or a send again. Folded (>-) into one line (a plain
+# one-line value could not hold the titles' ": ").
 run-name: >-
   ${{ github.event_name == 'schedule' && 'Monthly e-mail digest (GitHub schedule)'
   || inputs.preview_only && 'Monthly e-mail digest: preview only'
+  || inputs.force && 'Monthly e-mail digest: SEND AGAIN (forced, started by hand)'
   || 'Monthly e-mail digest: SEND NOW (started by hand)' }}
 
 on:
@@ -60,11 +71,15 @@ on:
         description: "The month the digest covers, as YYYY-MM (empty = last month — the digest that goes out on the 1st)"
         type: string
         default: ""
+      force:
+        description: "Send it AGAIN even if this month's digest was already sent (or a send of it was not confirmed) — check the group first: every district gets it a second time"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
   pages: read        # to look up the site's public address
-  actions: read      # to find the "digest-sent-YYYY-MM" marker of a month already sent
+  actions: read      # to find the markers of a month already sent (or being sent)
 
 concurrency:
   group: monthly-digest
@@ -86,6 +101,7 @@ jobs:
           DIGEST_TO: ${{ secrets.DIGEST_TO }}
           EVENT: ${{ github.event_name }}
           PREVIEW: ${{ github.event_name == 'workflow_dispatch' && inputs.preview_only }}
+          FORCE: ${{ github.event_name == 'workflow_dispatch' && inputs.force }}
           MONTH: ${{ inputs.month }}
         run: |
           set -uo pipefail
@@ -109,29 +125,67 @@ jobs:
             echo "E-mail digest is not set up — nothing to do. (This is normal.)" >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          if [ "$EVENT" != "schedule" ]; then
-            echo "mode=send" >> "$GITHUB_OUTPUT"          # a manual send: no day / hour / marker guard
-            exit 0
-          fi
-          # A scheduled try: only on the 1st–3rd in Texas, from 7 AM Central, until the month is sent.
-          if [ "$day" -gt 3 ] || [ "$hour" -lt 7 ]; then
+          # A scheduled try: only on the 1st–3rd in Texas, from 7 AM Central, until the month is sent. (A send by
+          # hand goes at any time.)
+          if [ "$EVENT" = "schedule" ] && { [ "$day" -gt 3 ] || [ "$hour" -lt 7 ]; }; then
             echo "mode=skip" >> "$GITHUB_OUTPUT"
             echo "Not the time for the monthly digest (Central time: day $day, hour $hour) — nothing to do." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          if ! sent=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=digest-sent-$edition&per_page=10" --jq '[.artifacts[]|select(.expired|not)]|length'); then
-            echo "mode=skip" >> "$GITHUB_OUTPUT"
-            echo "::warning title=Digest not sent yet::Could not check whether the $edition digest was already sent (the GitHub API did not answer) — nothing was sent; the next try checks again."
-            exit 0
-          fi
-          if [ "${sent:-0}" -gt 0 ]; then
-            echo "mode=skip" >> "$GITHUB_OUTPUT"
-            echo "The $edition digest was already sent — nothing to do." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
+          # Every send — a scheduled try, or one started by hand — first reads the month's markers, unless "force"
+          # is ticked: "sent" (or nothing new) → done; a "sending" marker of a run that has no later "unsent" one of
+          # its own → it MAY have gone out: nothing is sent again by itself — a person checks the group and, if it
+          # did not arrive, sends it with "force" ticked.
+          if [ "$FORCE" != "true" ]; then
+            if ! state="$(EDITION="$edition" python3 - <<'PY'
+          import json, os, subprocess, sys
+          repo, edition = os.environ["GITHUB_REPOSITORY"], os.environ["EDITION"]
+          def markers(kind):
+              """The month's markers of this kind that have not expired (each with its run and when it was made)."""
+              r = subprocess.run(["gh", "api", f"repos/{repo}/actions/artifacts?name=digest-{kind}-{edition}&per_page=100"],
+                                 capture_output=True, text=True)
+              if r.returncode:
+                  sys.exit(1)
+              arts = json.loads(r.stdout or "{}").get("artifacts") or []
+              return [((a.get("workflow_run") or {}).get("id"), str(a.get("created_at") or ""))
+                      for a in arts if isinstance(a, dict) and not a.get("expired")]
+          if markers("sent"):
+              print("sent")
+              sys.exit(0)
+          unsent = markers("unsent")
+          # a send started (its marker) whose own run never said the mail server took nothing
+          started = sorted({str(run) for run, at in markers("sending")
+                            if not any(u_run == run and u_at >= at for u_run, u_at in unsent)})
+          print("open " + " ".join(started) if started else "none")
+          PY
+          )"; then
+              echo "mode=skip" >> "$GITHUB_OUTPUT"
+              echo "::warning title=Digest not sent yet::Could not check whether the $edition digest was already sent (the GitHub API did not answer) — nothing was sent; the next try checks again."
+              exit 0
+            fi
+            case "$state" in
+              sent)
+                echo "mode=skip" >> "$GITHUB_OUTPUT"
+                echo "The $edition digest was already sent — nothing to do." >> "$GITHUB_STEP_SUMMARY"
+                if [ "$EVENT" != "schedule" ]; then
+                  echo "::warning title=Already sent::The $edition digest was already sent, so nothing was sent now. To send it a second time, run this workflow again with \"force\" ticked."
+                fi
+                exit 0
+                ;;
+              open*)
+                echo "mode=skip" >> "$GITHUB_OUTPUT"
+                runs=""
+                for id in ${state#open }; do runs="${runs:+$runs, }${GITHUB_SERVER_URL:-https://github.com}/${GITHUB_REPOSITORY}/actions/runs/${id}"; done
+                msg="A send of the $edition digest was started ($runs) but never confirmed — the e-mail MAY have gone out. Nothing is sent again by itself: check the group (or the mailbox); if it did not arrive, run this workflow with Preview only unticked and \"force\" ticked."
+                echo "::warning title=Digest send not confirmed::$msg"
+                echo "$msg" >> "$GITHUB_STEP_SUMMARY"
+                exit 0
+                ;;
+            esac
           fi
           echo "mode=send" >> "$GITHUB_OUTPUT"
-          # the last tries (from noon Central on the 3rd) send with the data there is
-          if [ "$day" -eq 3 ] && [ "$hour" -ge 12 ]; then echo "last=true" >> "$GITHUB_OUTPUT"; fi
+          # the last scheduled tries (from noon Central on the 3rd) send with the data there is
+          if [ "$EVENT" = "schedule" ] && [ "$day" -eq 3 ] && [ "$hour" -ge 12 ]; then echo "last=true" >> "$GITHUB_OUTPUT"; fi
 
       - name: Check out the repository
         if: contains(fromJSON('["preview","send"]'), steps.check.outputs.mode)
@@ -162,15 +216,14 @@ jobs:
           echo "url=${url%/}" >> "$GITHUB_OUTPUT"
           echo "Site address: ${url:-"(from config/site.yml)"}"
 
-      - name: Build (and send) the digest
-        id: send
+      # The e-mail is built here and only SAVED (send_digest --prepare: message.eml + envelope.json) — the next
+      # step marks the month as being sent, and only then does the step after it hand the e-mail to the server.
+      - name: Build the digest (and decide whether to send it)
+        id: build
         if: contains(fromJSON('["preview","send"]'), steps.check.outputs.mode)
         env:
           PYTHONIOENCODING: utf-8
-          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}     # (the default "From" address)
           DIGEST_TO: ${{ secrets.DIGEST_TO }}
           DIGEST_FROM: ${{ secrets.DIGEST_FROM }}
           DIGEST_REPLY_TO: ${{ secrets.DIGEST_REPLY_TO }}
@@ -184,6 +237,7 @@ jobs:
           args=()
           # (the preview goes to the runner's temp folder: upload-artifact skips hidden folders like .tmp/)
           if [ "$MODE" = "preview" ]; then args+=(--dry-run --out-dir "$RUNNER_TEMP/digest-preview"); fi
+          if [ "$MODE" = "send" ]; then args+=(--prepare "$RUNNER_TEMP/digest-send"); fi
           # Any "month" typed in is passed on (spaces removed), so a mistyped one ("2026-9", "Oct")
           # stops the run (send_digest exits 2) instead of sending another month's digest to everyone.
           month="${MONTH:-}"
@@ -195,17 +249,20 @@ jobs:
           code=0
           python -m scripts.notify.send_digest "${args[@]}" || code=$?
           case $code in
-            0|4)
-              # sent (or nothing new) — or it MAY have been sent (4): mark the month as done either way,
-              # so no later scheduled try can send it a second time
+            0)
               if [ "$MODE" = "send" ]; then
-                mkdir -p "$RUNNER_TEMP/digest-sent"
-                echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) run ${GITHUB_RUN_ID} exit ${code}" > "$RUNNER_TEMP/digest-sent/sent.txt"
-                echo "sent=true" >> "$GITHUB_OUTPUT"
-              fi
-              if [ "$code" -eq 4 ]; then
-                echo "maybe=true" >> "$GITHUB_OUTPUT"
-                echo "::error title=The digest MAY have been sent::The connection broke while the e-mail was being handed over. The month is marked as done so no later try sends it again. Check the group; if it did not arrive, send it with Run workflow (Preview only unticked)."
+                stamp="$(date -u +%Y-%m-%dT%H:%M:%SZ) run ${GITHUB_RUN_ID} attempt ${GITHUB_RUN_ATTEMPT:-1}"
+                if [ -s "$RUNNER_TEMP/digest-send/message.eml" ]; then
+                  # ready: the month's "sending" marker goes up first (next step)
+                  mkdir -p "$RUNNER_TEMP/digest-sending"
+                  echo "$stamp" > "$RUNNER_TEMP/digest-sending/sending.txt"
+                  echo "ready=true" >> "$GITHUB_OUTPUT"
+                else
+                  # nothing new in the month: no e-mail, and the month counts as done
+                  mkdir -p "$RUNNER_TEMP/digest-sent"
+                  echo "$stamp nothing new" > "$RUNNER_TEMP/digest-sent/sent.txt"
+                  echo "sent=true" >> "$GITHUB_OUTPUT"
+                fi
               fi
               ;;
             3)
@@ -217,17 +274,80 @@ jobs:
               ;;
           esac
 
+      # BEFORE the e-mail goes: a run stopped between this marker and the next ones leaves it alone — and then no
+      # try sends the month again by itself (the first step). If it cannot be saved, nothing is sent.
+      - name: Mark the month as being sent
+        if: steps.build.outputs.ready == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: digest-sending-${{ steps.check.outputs.edition }}
+          path: ${{ runner.temp }}/digest-sending/
+          if-no-files-found: error
+          retention-days: 40
+          overwrite: true
+
+      - name: Send the digest
+        id: send
+        if: steps.build.outputs.ready == 'true'
+        env:
+          PYTHONIOENCODING: utf-8
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        run: |
+          set -uo pipefail
+          code=0
+          python -m scripts.notify.send_digest --send-prepared "$RUNNER_TEMP/digest-send" || code=$?
+          stamp="$(date -u +%Y-%m-%dT%H:%M:%SZ) run ${GITHUB_RUN_ID} attempt ${GITHUB_RUN_ATTEMPT:-1} exit ${code}"
+          case $code in
+            0|4)
+              # sent — or it MAY have been sent (4): mark the month as done either way, so no later try can
+              # send it a second time
+              mkdir -p "$RUNNER_TEMP/digest-sent"
+              echo "$stamp" > "$RUNNER_TEMP/digest-sent/sent.txt"
+              echo "sent=true" >> "$GITHUB_OUTPUT"
+              if [ "$code" -eq 4 ]; then
+                echo "maybe=true" >> "$GITHUB_OUTPUT"
+                echo "::error title=The digest MAY have been sent::The connection broke while the e-mail was being handed over. The month is marked as done so no later try sends it again. Check the group; if it did not arrive, send it with Run workflow (Preview only unticked, force ticked)."
+              fi
+              ;;
+            *)
+              # nothing was handed over (send_digest stops before the server has the e-mail): this try is marked
+              # as not sent, so the next try sends it
+              mkdir -p "$RUNNER_TEMP/digest-unsent"
+              echo "$stamp" > "$RUNNER_TEMP/digest-unsent/unsent.txt"
+              echo "unsent=true" >> "$GITHUB_OUTPUT"
+              echo "::error title=The digest was not sent::The mail server took nothing (see the log above) — the next try sends it."
+              ;;
+          esac
+
       - name: Mark the month as sent
-        if: steps.send.outputs.sent == 'true'
+        if: steps.build.outputs.sent == 'true' || steps.send.outputs.sent == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: digest-sent-${{ steps.check.outputs.edition }}
           path: ${{ runner.temp }}/digest-sent/
           if-no-files-found: error
           retention-days: 40
+          overwrite: true
+
+      - name: Mark this try as not sent
+        if: steps.send.outputs.unsent == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: digest-unsent-${{ steps.check.outputs.edition }}
+          path: ${{ runner.temp }}/digest-unsent/
+          if-no-files-found: error
+          retention-days: 40
+          overwrite: true
 
       - name: Fail the run — the e-mail may not have gone out
         if: steps.send.outputs.maybe == 'true'
+        run: exit 1
+
+      - name: Fail the run — the e-mail was not sent
+        if: steps.send.outputs.unsent == 'true'
         run: exit 1
 
       - name: Keep the preview

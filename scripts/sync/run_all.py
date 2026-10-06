@@ -28,7 +28,7 @@ phone lines of Grapevine and La Viña, 3 requests), meetings (Grapevine meetings
 the intergroups' meeting lists, one request per list), events_external, writers_archive (the owner's
 archive files in content/archive — no request), quote (Grapevine's and La
 Viña's daily quote, one request per home page; as late as possible, so a full run GitHub starts on time
-(06:17 UTC = 12:17 AM CST) is more likely to find the new one — except in the morning refresh, which reads it right after
+(07:17 UTC = 1:17 AM CST) is more likely to find the new one — except in the morning refresh, which reads it right after
 the bulletin: see MORNING_EXTRA), crawl (last, time-boxed), then build_data (which translates).
 
 Each module runs in this same process (so the polite crawl delay for aagrapevine.org /

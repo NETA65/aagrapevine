@@ -137,7 +137,7 @@ class PageMemo(unittest.TestCase):
 
 # --------------------------------------------------------------------------- schedule wiring
 class Schedule(unittest.TestCase):
-    FULL_CRON = "17 6 * * *"          # the nightly full update
+    FULL_CRON = "17 7 * * *"          # the nightly full update
     MIDDAY_CRON = "7 12 * * *"        # the quick refreshes
     EVENING_CRON = "7 20 * * *"
 
@@ -183,7 +183,8 @@ class Schedule(unittest.TestCase):
         self.assertLess(morning, evening, "a morning refresh is named so, whatever started it")
         self.assertLess(evening, midday)
         self.assertLess(midday, by_hand)
-        self.assertIn('msg="chore(data): morning refresh with the daily quote${archive} ${day} [skip ci]"', commit[morning:evening])
+        # (the days of the daily quotes it brings: tests/test_morning.py)
+        self.assertIn('msg="chore(data): morning refresh${quotes}${archive} ${day} [skip ci]"', commit[morning:evening])
         self.assertIn('msg="chore(data): evening refresh${archive} ${day} [skip ci]"', commit[evening:midday])
         self.assertIn('msg="chore(data): midday refresh${archive} ${day} [skip ci]"', commit[midday:by_hand])
         self.assertIn('msg="chore(data): quick refresh${archive} ${day} [skip ci]"', commit[by_hand:])

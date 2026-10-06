@@ -15,6 +15,13 @@
 #  Result: the run summary, plus ONE GitHub issue titled "Broken links
 #  found by the weekly check" that is updated while problems remain and
 #  closed automatically once everything is fine again.
+#
+#  Two jobs, so the outside code never holds a key that can write: "Check
+#  links" (the link checker — an action from outside GitHub, pinned to one
+#  commit — and the Python packages of the polite check) may only READ the
+#  repository; it hands its reports (an artifact) to "Report broken
+#  links", a small job with no checkout and no outside code — the only
+#  one allowed to write issues.
 # =====================================================================
 name: Weekly link check
 run-name: ${{ github.event_name == 'schedule' && 'Weekly link check (GitHub schedule)' || 'Weekly link check (started by hand)' }}
@@ -24,9 +31,9 @@ on:
     - cron: "40 8 * * 0"       # Sundays 08:40 UTC (3:40 AM CDT / 2:40 AM CST): 4 hours early, as GitHub starts it 4–6 hours late
   workflow_dispatch:
 
+# Least privilege by default; each job asks for what it needs.
 permissions:
   contents: read
-  issues: write                # to open / update / close the report issue
 
 concurrency:
   group: link-check
@@ -41,6 +48,12 @@ jobs:
     name: Check links
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    permissions:
+      contents: read           # read only: lychee-action and the Python packages run in this job
+    # (for the "report" job below: lychee's exit code, the number of broken official links)
+    outputs:
+      lychee: ${{ steps.lychee.outputs.exit_code }}
+      broken: ${{ steps.official.outputs.broken }}
     steps:
       - name: Check out the repository
         uses: actions/checkout@v7
@@ -68,7 +81,9 @@ jobs:
 
       - name: Check links on every page
         id: lychee
-        uses: lycheeverse/lychee-action@v2
+        # Pinned to the commit of its release (a tag can be moved; a commit cannot) — Dependabot's monthly
+        # "chore(actions)" pull request moves the commit and the version note together.
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
           fail: false                # report only; never fail the workflow
           failIfEmpty: false
@@ -180,12 +195,40 @@ jobs:
               f.write(f"broken={len(broken)}\n")
           PY
 
+      # lychee/out.md (lychee's report) and lychee/official.md (the official links), for the "report" job.
+      - name: Keep the reports for the issue
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: link-check-report
+          path: lychee/
+          if-no-files-found: warn
+          retention-days: 7
+
+  # -------------------------------------------------------------------
+  report:
+    name: Report broken links (the issue)
+    needs: links
+    if: ${{ !cancelled() && needs.links.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write            # to open / update / close the report issue
+    steps:
+      - name: Get the reports of the link check
+        continue-on-error: true      # no reports: the issue still says what the outputs say
+        uses: actions/download-artifact@v8
+        with:
+          name: link-check-report
+          path: lychee
+
       - name: Open, update or close the report issue
         continue-on-error: true      # e.g. Issues switched off in the repository settings
         env:
           GH_TOKEN: ${{ github.token }}
-          LYCHEE_EXIT: ${{ steps.lychee.outputs.exit_code }}
-          OFFICIAL_BROKEN: ${{ steps.official.outputs.broken }}
+          GH_REPO: ${{ github.repository }}      # no checkout in this job: gh is told the repository
+          LYCHEE_EXIT: ${{ needs.links.outputs.lychee }}
+          OFFICIAL_BROKEN: ${{ needs.links.outputs.broken }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           set -uo pipefail

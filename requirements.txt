@@ -1,6 +1,7 @@
 # Content-sync pipeline (runs daily in GitHub Actions). All open source.
 # Each package may update within its current major version; a new major version (which can
-# change how the package behaves) is only installed after someone raises the upper bound here.
+# change how the package behaves) is only installed after someone raises the upper bound here —
+# Dependabot (.github/dependabot.yml) opens a pull request once a month when one is out.
 # yt-dlp is deliberately unbounded: it must keep up with YouTube changes.
 requests>=2.32,<3
 beautifulsoup4>=4.12,<5
