@@ -44,6 +44,19 @@ thumbnails are pruned (manual posts are never pruned — remove them from the YA
 130 is about 65 days at the accounts' ~2 posts a day: the monthly digest of a month is on
 /digest/ all through the next one and counts that month's posts from this file.
 
+REMOVED POSTS (a deleted, archived or now-private post leaves the site — anonymity)
+  Each run (not with --no-enrich) re-checks a few complete posts that are no longer in the
+  profile listing (`recheck_per_run`, default 5) through their public post embed: first a post
+  already found missing once, then a post that vanished from the listing while older ones
+  are still in it, then the one checked longest ago. A post counts as "not there" when its
+  embed is unusable (the generic page) or answers 404/410 — but only if a post embed DID work
+  in the same run (one we enriched or re-checked, else one control request for the newest
+  listed post): a login wall or a block makes every embed unusable, so it proves nothing.
+  429 / 401 / 403 / a redirect to the login page / no answer stop the re-check for the run
+  and decide nothing. A post found "not there" twice, at least GONE_CONFIRM_HOURS apart, is
+  removed with its thumbnail (stats.removal). Posts listed by hand are not re-checked (the
+  YAML decides). The marks live in the envelope's `removal` ({shortcode: {checked, missing}}).
+
 A NOTE ON INSTAGRAM'S RULES
   instagram.com/robots.txt disallows generic crawlers and Meta's terms restrict automated
   collection. This module does not crawl: it requests two public embed pages a day (plus a
@@ -129,6 +142,9 @@ AVATAR_PREFIX = "_avatar_"
 
 DEFAULT_KEEP_PER_ACCOUNT = 130          # about 65 days of posts (see the docstring)
 DEFAULT_ENRICH_PER_RUN = 25
+DEFAULT_RECHECK_PER_RUN = 5             # removal re-checks per run (docstring: REMOVED POSTS)
+GONE_CONFIRM_HOURS = 12                 # the second "not there" answer must come this long after the first
+LISTING_SPAN_DAYS = 14                  # listed posts older than the newest by more than this are pinned ones
 DEFAULT_MAX_MINUTES = 8.0
 ENRICH_RETRY_DAYS = 3          # re-try a post whose embed was unusable after N days
 THUMB_MAX_W, THUMB_MAX_H, THUMB_QUALITY = 480, 720, 70
@@ -510,7 +526,12 @@ def post_from_graph_api(m: dict, account: str, username: str) -> dict | None:
 
 # --------------------------------------------------------------------------- HTTP / strategies
 class StrategyError(Exception):
-    """A strategy could not produce posts (message is shown in stats / on /status/)."""
+    """A strategy could not produce posts (message is shown in stats / on /status/). `status`: the HTTP
+    status Instagram answered with, when that was the reason."""
+
+    def __init__(self, msg: str = "", status: int | None = None):
+        super().__init__(msg)
+        self.status = status
 
 
 class Skip(StrategyError):
@@ -539,6 +560,7 @@ class Fetcher:
                                  timeout=25, retries=2)
         self.blocked: dict[str, str] = {}      # family → reason ("embed", "api", "html")
         self.requests = 0
+        self.embeds_ok = 0                     # post embeds that were usable this run (removal_sweep's proof)
 
     def time_left(self) -> float:
         return self.deadline - time.monotonic()
@@ -559,11 +581,11 @@ class Fetcher:
             raise StrategyError("network error")
         if r.status_code == 429:
             self.blocked[family] = "HTTP 429 (rate-limited)"
-            raise StrategyError("HTTP 429 (rate-limited)")
+            raise StrategyError("HTTP 429 (rate-limited)", 429)
         if r.status_code in (401, 403):
-            raise StrategyError(f"HTTP {r.status_code} (login required / blocked)")
+            raise StrategyError(f"HTTP {r.status_code} (login required / blocked)", r.status_code)
         if r.status_code != 200:
-            raise StrategyError(f"HTTP {r.status_code}")
+            raise StrategyError(f"HTTP {r.status_code}", r.status_code)
         if "/accounts/login" in (r.url or ""):
             raise StrategyError("redirected to login")
         return r
@@ -736,6 +758,7 @@ class Fetcher:
         data = parse_post_embed(r.text)
         if not data:
             raise StrategyError("seed post embed unusable")
+        self.embeds_ok += 1
         if data.get("username") and data["username"].lower() != acct["username"].lower():
             raise StrategyError("seed post belongs to another account")
         posts = [new_post(sc, acct["key"], "embed_hovercard", username=acct["username"],
@@ -750,7 +773,10 @@ class Fetcher:
         """Returns parsed embed fields, None if the post has no usable embed, raises
         StrategyError on network trouble / rate limit."""
         r = self.ig_get(embed_url(sc), "embed", {"Referer": _referer()})
-        return parse_post_embed(r.text)
+        data = parse_post_embed(r.text)
+        if data:
+            self.embeds_ok += 1
+        return data
 
 
 def _scrub(msg: str, secret: str) -> str:
@@ -985,6 +1011,8 @@ def enrich(fx: Fetcher, records: dict[str, dict], prev_by_sc: dict[str, dict], c
         except StrategyError as e:
             stats["enrich_failed"] = stats.get("enrich_failed", 0) + 1
             log.info("embed %s: %s", sc, e)
+            if e.status in (404, 410):
+                rec["embed_unusable"] = True          # a "not there" answer for removal_sweep
             if "embed" in fx.blocked or fx.time_left() < 15:
                 stats.setdefault("warnings", []).append(f"post embeds: {e}")
                 break
@@ -995,6 +1023,7 @@ def enrich(fx: Fetcher, records: dict[str, dict], prev_by_sc: dict[str, dict], c
         if not data:
             stats["enrich_failed"] = stats.get("enrich_failed", 0) + 1
             log.info("embed %s: no usable embed (deleted, private or login wall)", sc)
+            rec["embed_unusable"] = True              # a "not there" answer for removal_sweep
             if rec.get("verify"):
                 records.pop(sc, None)
             continue
@@ -1022,6 +1051,99 @@ def enrich(fx: Fetcher, records: dict[str, dict], prev_by_sc: dict[str, dict], c
 def _neg_date(d: str | None) -> float:
     dt = parse_iso(d) if d else None
     return -(dt.timestamp()) if dt else 0.0
+
+
+# --------------------------------------------------------------------------- removed posts
+def _listing_floor(dates: list[str | None]) -> str | None:
+    """The oldest post date of an account's listing today, its pinned posts left out (listed posts older
+    than the newest one by more than LISTING_SPAN_DAYS). A known post newer than this that is not in the
+    listing has vanished from the profile — deleted, archived or made private."""
+    ds = sorted((d, parse_iso(d)) for d in dates if d and parse_iso(d))
+    if not ds:
+        return None
+    newest = ds[-1][1]
+    return next(d for d, dt in ds if (newest - dt).total_seconds() <= LISTING_SPAN_DAYS * 86400)
+
+
+def removal_sweep(fx: Fetcher, prev_items: list[dict], records: dict[str, dict], listed: dict[str, dict[str, str]],
+                  state: dict[str, dict], cap: int, stats: dict) -> set[str]:
+    """Re-check up to `cap` complete automatic posts that are not in today's listing (module docstring:
+    REMOVED POSTS); `listed` = {account: {shortcode: date}} of today's listings. enrich()'s answers about
+    known posts count too. Updates `state` ({shortcode: {checked, missing}}) in place and returns the
+    shortcodes found "not there" a second time, at least GONE_CONFIRM_HOURS after the first — to remove."""
+    now = datetime.now(timezone.utc)
+    stamp = now_iso()
+    floors = {k: _listing_floor(list(v.values())) for k, v in listed.items()}
+    listed_scs = {sc for v in listed.values() for sc in v}
+    for sc in listed_scs:                    # back in the listing: whatever an embed said before is over
+        if (state.get(sc) or {}).get("missing"):
+            state[sc] = {"checked": stamp}
+
+    def sc_of(it: dict) -> str:
+        return (it.get("extra") or {}).get("shortcode") or it["id"][3:]
+
+    cands = [it for it in prev_items
+             if not (it.get("extra") or {}).get("manual") and sc_of(it) not in listed_scs and sc_of(it) not in records
+             and (it.get("extra") or {}).get("caption_known") and (it.get("extra") or {}).get("media_type")]
+
+    def order(it: dict) -> tuple:
+        st = state.get(sc_of(it)) or {}
+        if st.get("missing"):
+            return 0, st["missing"]                              # found missing once: confirm it first
+        floor = floors.get(it.get("category") or (it.get("extra") or {}).get("account"))
+        if floor and str(it.get("date") or "") > floor and not st.get("checked"):
+            return 1, ""                                         # vanished while older posts are still listed
+        return 2, st.get("checked") or str(it.get("date") or "")  # then: checked longest ago (never: its date)
+
+    # enrich() asked the embeds of some known (incomplete) posts already: their answers count
+    answers: dict[str, bool] = {sc: not rec.get("embed_unusable") for sc, rec in records.items()
+                                if rec.get("stub") and (rec.get("checked_now") or rec.get("embed_unusable"))}
+    stopped = None
+    checked = 0
+    for it in sorted(cands, key=order)[:max(0, cap)]:
+        sc = sc_of(it)
+        try:
+            data = fx.post_embed(sc)
+        except StrategyError as e:
+            if e.status not in (404, 410):
+                stopped = str(e)                                 # rate limit, login, block, no answer, time
+                break
+            data = None
+        checked += 1
+        answers[sc] = bool(data)
+    if stopped is None and not fx.embeds_ok and not all(answers.values()):
+        # Nothing proved this run that post embeds work for us: ask one we know exists (the newest listed post).
+        control = max(((d or "", sc) for v in listed.values() for sc, d in v.items()), default=None)
+        if control:
+            try:
+                fx.post_embed(control[1])
+            except StrategyError as e:
+                stopped = str(e)
+    proof = fx.embeds_ok > 0
+    gone: set[str] = set()
+    undecided = 0
+    for sc, there in answers.items():
+        st = state.get(sc) or {}
+        if there:
+            state[sc] = {"checked": stamp}
+        elif not proof:
+            undecided += 1                                       # a login wall looks the same: decide nothing
+        elif (first := parse_iso(st.get("missing"))) and (now - first).total_seconds() >= GONE_CONFIRM_HOURS * 3600:
+            gone.add(sc)
+            state.pop(sc, None)
+        else:
+            state[sc] = {"checked": stamp, "missing": st.get("missing") or stamp}
+    stats["removal"] = {"checked": checked, "missing": sorted(s for s, v in state.items() if v.get("missing")),
+                        "removed": sorted(gone)}
+    if stopped and "earlier this run" not in stopped:           # (enrich() already named a rate limit)
+        stats.setdefault("warnings", []).append(f"removal re-check stopped: {stopped}")
+    if undecided:
+        stats.setdefault("warnings", []).append(
+            f"removal re-check: {undecided} post(s) showed no usable embed, but no post embed worked this run "
+            "(a login wall or a block?) — nothing was decided")
+    if gone:
+        log.info("removed %d post(s) Instagram no longer shows: %s", len(gone), ", ".join(sorted(gone)))
+    return gone
 
 
 # --------------------------------------------------------------------------- pruning
@@ -1138,7 +1260,10 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--account", action="append", help="only check this account key/username (repeatable)")
     ap.add_argument("--strategies", help=f"comma list overriding the order ({','.join(ALL_STRATEGIES)})")
     ap.add_argument("--enrich-cap", type=int, default=None, help="max post embeds to fetch (default 25)")
-    ap.add_argument("--no-enrich", action="store_true", help="skip post-embed enrichment")
+    ap.add_argument("--recheck", type=int, default=None,
+                    help=f"max removal re-checks (default: config recheck_per_run, else {DEFAULT_RECHECK_PER_RUN})")
+    ap.add_argument("--no-enrich", action="store_true",
+                    help="skip the post-embed requests: enrichment and the removal re-check")
     ap.add_argument("--keep", type=int, default=None,
                     help=f"posts kept per account (default: config keep_per_account, else {DEFAULT_KEEP_PER_ACCOUNT})")
     ap.add_argument("--max-minutes", type=float, default=DEFAULT_MAX_MINUTES, help="time budget")
@@ -1154,6 +1279,8 @@ def main(argv: list[str] | None = None) -> None:
     keep = args.keep or int(cfg.get("keep_per_account") or DEFAULT_KEEP_PER_ACCOUNT)
     enrich_cap = 0 if args.no_enrich else (args.enrich_cap if args.enrich_cap is not None
                                            else int(cfg.get("enrich_per_run") or DEFAULT_ENRICH_PER_RUN))
+    recheck = 0 if args.no_enrich else (args.recheck if args.recheck is not None
+                                        else int(cfg.get("recheck_per_run", DEFAULT_RECHECK_PER_RUN) or 0))
     order = [s.strip() for s in (args.strategies or ",".join(ALL_STRATEGIES)).split(",") if s.strip()]
     bad = [s for s in order if s not in ALL_STRATEGIES]
     if bad:
@@ -1167,12 +1294,14 @@ def main(argv: list[str] | None = None) -> None:
     prev_by_sc = {(i.get("extra") or {}).get("shortcode") or i["id"][3:]: i for i in prev_items}
     profiles: dict[str, dict] = {k: dict(v) for k, v in (prev_env.get("profiles") or {}).items()
                                  if isinstance(v, dict)}
+    removal: dict[str, dict] = {k: dict(v) for k, v in (prev_env.get("removal") or {}).items() if isinstance(v, dict)}
     stats: dict[str, Any] = {"strategy": {}, "attempts": {}, "warnings": []}
     fx = Fetcher(cfg, deadline=time.monotonic() + args.max_minutes * 60, dry_run=args.dry_run)
     THUMB_DIR.mkdir(parents=True, exist_ok=True)
 
     # ---- 1. automatic strategies, per account -----------------------------------------
     records: dict[str, dict] = {}
+    listed: dict[str, dict[str, str]] = {}        # account → {shortcode: date} of today's listing
     failures: list[tuple[str, list[str]]] = []
     for acct in selected:
         key, user = acct["key"], acct["username"]
@@ -1191,6 +1320,7 @@ def main(argv: list[str] | None = None) -> None:
             for rec in got:
                 sc = rec["shortcode"]
                 records[sc] = merge_post(records[sc], rec) if sc in records else rec
+                listed.setdefault(key, {})[sc] = rec.get("date") or ""
         else:
             stats["strategy"][key] = None
             failures.append((user, attempts))
@@ -1223,9 +1353,15 @@ def main(argv: list[str] | None = None) -> None:
             records[sc] = stub
     if enrich_cap > 0 and anonymous:      # post embeds are an anonymous request too
         enrich(fx, records, prev_by_sc, enrich_cap, accounts, stats)
+    # ---- 3b. posts Instagram no longer shows (deleted, archived, private) leave the site --
+    gone: set[str] = set()
+    if recheck > 0 and anonymous:
+        gone = removal_sweep(fx, prev_items, records, listed, removal, recheck, stats)
     for sc in [s for s, r in records.items()
-               if r.get("verify") or (r.get("stub") and not r.get("checked_now"))]:
-        records.pop(sc, None)             # unconfirmed / untouched → nothing to update
+               if r.get("verify") or (r.get("stub") and not r.get("checked_now")) or s in gone]:
+        records.pop(sc, None)             # unconfirmed / untouched → nothing to update; gone → removed
+    gone_items = [i for i in prev_items if ((i.get("extra") or {}).get("shortcode") or i["id"][3:]) in gone]
+    drop_ids |= {i["id"] for i in gone_items}
 
     # ---- 4. thumbnails (CDN links expire — download now) + items ----------------------
     new_items = []
@@ -1240,7 +1376,9 @@ def main(argv: list[str] | None = None) -> None:
     fix_missing_thumbs(merged)
     kept, removed = prune(merged, keep)
     stats["pruned"] = len(removed) + len(dropped_manual)
-    stats["thumbs_deleted"] = cleanup_thumbs(kept, removed + dropped_manual, args.dry_run)
+    stats["thumbs_deleted"] = cleanup_thumbs(kept, removed + dropped_manual + gone_items, args.dry_run)
+    kept_scs = {(i.get("extra") or {}).get("shortcode") for i in kept}
+    removal = {sc: v for sc, v in removal.items() if sc in kept_scs}      # marks of posts still on the site
 
     for key, profile in profiles.items():
         if key in accounts_by_key:
@@ -1261,7 +1399,7 @@ def main(argv: list[str] | None = None) -> None:
     if args.dry_run:
         _print_dry_run(kept, stats, error, profiles)
         return
-    save_raw(SOURCE, kept, ok=ok, error=error, stats=stats, extra={"profiles": profiles})
+    save_raw(SOURCE, kept, ok=ok, error=error, stats=stats, extra={"profiles": profiles, "removal": removal})
     log.info("saved %d posts (%d new) — %s", len(kept), added,
              ", ".join(f"{k}: {v or 'FAILED'}" for k, v in stats["strategy"].items()))
     if error:

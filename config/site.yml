@@ -420,6 +420,9 @@ sources:
     # each).
     keep_per_account: 130
     enrich_per_run: 25       # max post look-ups per daily run
+    # Posts no longer in the profile listing that each daily run looks up again: a post Instagram
+    # no longer shows (deleted, archived or private) leaves the site after two such look-ups.
+    recheck_per_run: 5
     graph_version: "v21.0"
     # Optional public RSSHub mirrors to try (leave empty to skip).
     rsshub_instances: []
