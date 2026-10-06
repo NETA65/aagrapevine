@@ -306,6 +306,17 @@ class SharedHelper(unittest.TestCase):
             nightEs: R("2027-01-01T01:00:00Z", "2027-01-01T06:00:00Z", "es-US"),
             nightWd: R("2027-01-01T01:00:00Z", "2027-01-01T06:00:00Z", "en-US", { weekday: "short" }),
             change: R("2026-11-01T00:00:00Z", "2026-11-01T07:30:00Z", "en-US"),
+            // the night the clocks change, both ends on that Sunday: each end its own zone (Intl's range names one)
+            spring: R("2027-03-14T07:00:00Z", "2027-03-14T08:00:00Z", "en-US"),
+            springEs: R("2027-03-14T07:00:00Z", "2027-03-14T08:00:00Z", "es-US"),
+            autumn: R("2026-11-01T05:30:00Z", "2026-11-01T08:30:00Z", "en-US"),
+            autumnSame: R("2026-11-01T05:30:00Z", "2026-11-01T06:30:00Z", "en-US"),
+            // into the next day for more than 12 hours (Friday 7 PM to Saturday noon): the day at both ends
+            long: R("2026-10-03T00:00:00Z", "2026-10-03T17:00:00Z", "en-US"),
+            longEs: R("2026-10-03T00:00:00Z", "2026-10-03T17:00:00Z", "es-US"),
+            longWd: R("2026-10-03T00:00:00Z", "2026-10-03T17:00:00Z", "en-US", { weekday: "long" }),
+            longDst: R("2026-10-31T23:00:00Z", "2026-11-01T18:00:00Z", "en-US"),
+            twelve: R("2026-10-03T00:00:00Z", "2026-10-03T12:00:00Z", "en-US"),
             zoneIgnored: R("2026-10-22T00:00:00Z", "2026-10-22T01:00:00Z", "en-US", { timeZoneName: "long" }),
             noEnd: R("2026-10-22T00:00:00Z", "2026-10-22T00:00:00Z", "en-US"),
             east: R("2026-10-07T16:00:00Z", "2026-10-07T17:00:00Z", "en-US", null, "America/New_York"),
@@ -319,6 +330,15 @@ class SharedHelper(unittest.TestCase):
         self.assertEqual(r["nightEs"], "7:00 p.m. – 12:00 a.m. CST")
         self.assertEqual(r["nightWd"], "Thu, 7:00 PM – Fri, 12:00 AM CST")
         self.assertEqual(r["change"], "7:00 PM CDT – 1:30 AM CST", "the night the clocks change: the zone at both ends")
+        self.assertEqual(r["spring"], "1:00 AM CST – 3:00 AM CDT", "one hour — never 1:00 AM CDT, which that night has not")
+        self.assertEqual(r["springEs"], "1:00 a.m. CST – 3:00 a.m. CDT")
+        self.assertEqual(r["autumn"], "12:30 AM CDT – 2:30 AM CST", "three hours, not two")
+        self.assertEqual(r["autumnSame"], "12:30 – 1:30 AM CDT", "both ends in daylight time: the zone once")
+        self.assertEqual(r["long"], "Fri, Oct 2, 7:00 PM – Sat, Oct 3, 12:00 PM CDT", "never 7:00 PM – 12:00 PM under one date")
+        self.assertEqual(r["longEs"], "vie, 2 de oct, 7:00 p.m. – sáb, 3 de oct, 12:00 p.m. CDT")
+        self.assertEqual(r["longWd"], "Friday, Oct 2, 7:00 PM – Saturday, Oct 3, 12:00 PM CDT", "the caller's weekday kept")
+        self.assertEqual(r["longDst"], "Sat, Oct 31, 6:00 PM CDT – Sun, Nov 1, 12:00 PM CST")
+        self.assertEqual(r["twelve"], "7:00 PM – 7:00 AM CDT", "12 hours is still a night (OVERNIGHT_MAX_HOURS)")
         self.assertEqual(r["zoneIgnored"], "7:00 – 8:00 PM CDT")
         self.assertEqual(r["noEnd"], "7:00 PM CDT")
         self.assertEqual(r["east"], "12:00 – 1:00 PM EDT")
@@ -583,7 +603,8 @@ class CrossMidnight(unittest.TestCase):
           const ev = (id, start, end) => ({ id, source: "committee", kind: "event", category: "manual", title: id, lang: "en", date: start,
                                             extra: { start, end, all_day: false, location: "Dallas" } });
           const items = [ev("nye", "2027-01-01T01:00:00Z", "2027-01-01T06:00:00Z"), ev("late", "2026-11-01T00:00:00Z", "2026-11-01T07:30:00Z"),
-                         ev("day", "2026-10-22T00:00:00Z", "2026-10-22T02:00:00Z"), ev("long", "2026-10-23T23:00:00Z", "2026-10-25T17:00:00Z")];
+                         ev("day", "2026-10-22T00:00:00Z", "2026-10-22T02:00:00Z"), ev("long", "2026-10-23T23:00:00Z", "2026-10-25T17:00:00Z"),
+                         ev("retreat", "2026-10-17T00:00:00Z", "2026-10-17T17:00:00Z")];
           const res = {};
           for (const L of ["en", "es"]) {
             const evs = C.normalizeEvents(items, {}, L, { now: new Date("2026-10-06T15:00:00Z") });
@@ -601,6 +622,10 @@ class CrossMidnight(unittest.TestCase):
         self.assertEqual(en["home"][:3], want_en)
         self.assertEqual(en["events"][:3], want_en, "/events/ reads the same")
         self.assertEqual(en["home"][3], "Fri, Oct 23, 6:00 PM CDT – Sun, Oct 25, 12:00 PM CDT", "a weekend (over 18 hours): its dates")
+        # an overnight retreat, Friday 7 PM to Saturday noon (17 hours): the day at both ends, never an end that reads
+        # as earlier than its start ("7:00 PM – 12:00 PM CDT" under Friday's date)
+        self.assertEqual((en["home"][4], en["events"][4]), ("Fri, Oct 16, 7:00 PM – Sat, Oct 17, 12:00 PM CDT",) * 2)
+        self.assertEqual((es["home"][4], es["events"][4]), ("Vie, 16 de oct, 7:00 p. m. – sáb, 17 de oct, 12:00 p. m. CDT",) * 2)
         self.assertEqual(es["home"][:3], ["7:00 p. m. – 12:00 a. m. CST", "7:00 p. m. CDT – 1:30 a. m. CST", "7:00–9:00 p. m. CDT"])
         self.assertEqual(es["events"][:3], es["home"][:3])
         for v in en["home"] + es["home"] + en["events"] + es["events"]:
@@ -665,6 +690,10 @@ class CalendarFiles(unittest.TestCase):
 
 
 class WeeklyOpen(unittest.TestCase):
+    # The cards and the calendar files are worked out at this moment: Node's clock is stopped there (run_js now) —
+    # the page that writes the files (src/pages/meetings-weekly-ics.11ty.js) reads the clock itself, so a test that
+    # left it running would see the next week's date once the 7 October meeting is over.
+    NOW = "2026-10-06T15:00:00Z"
     _r = None
 
     def setUp(self):
@@ -672,11 +701,11 @@ class WeeklyOpen(unittest.TestCase):
             WeeklyOpen._r = self.compute()
         self.r = WeeklyOpen._r
 
-    def compute(self):
+    def compute(self, at: str = NOW):
         return run_js(self, r"""
           const C = await imp("eleventy/filters/committee.js");
           const T = await imp("src/pages/meetings-weekly-ics.11ty.js");
-          const now = new Date("2026-10-06T15:00:00Z");
+          const now = new Date();
           const full = { db: { weekly_open: { items: input.items } }, site: input.site, languages: ["en", "es"] };
           const files = T.data.pagination.before(["en", "es"], full);
           const res = { files: files.map((f) => T.data.permalink({ file: f })), cards: {}, texts: {} };
@@ -687,7 +716,28 @@ class WeeklyOpen(unittest.TestCase):
           for (const f of files) res.texts[T.data.permalink({ file: f })] = T.render(Object.assign({ file: f }, full));
           res.vtz = { phoenix: C.vtimezone("America/Phoenix", now.getTime()), madrid: C.vtimezone("Europe/Madrid", now.getTime()) };
           res.none = C.weeklyCalendar(Object.assign({}, C.weeklyOpen(input.items[0], "en", now), { next: null }), input.site, "en");
-          out(res);""", data={"items": WEEKLY, "site": SITE})
+          res.now = now.toISOString();
+          out(res);""", data={"items": WEEKLY, "site": SITE}, now=at)
+
+    def test_the_clock_is_the_tests(self):
+        self.assertEqual(self.r["now"], "2026-10-06T15:00:00.000Z")
+
+    def test_the_files_start_at_the_next_meeting(self):
+        # The files follow the build's clock: once a Wednesday's meeting is over (12:15 PM CDT, its 75 minutes),
+        # the Grapevine file starts the next Wednesday; La Viña's keeps its first meeting until that has started.
+        first = lambda r, path: next(l for l in unfold(r["texts"][path]) if l.startswith("DTSTART;"))
+        cases = [("2026-10-07T17:14:00Z", "20261007", "20261105"),    # 12:14 PM CDT, during the meeting
+                 ("2026-10-07T18:00:00Z", "20261014", "20261105"),    # 1:00 PM CDT: over
+                 ("2026-11-06T15:00:00Z", "20261111", "20261112")]    # La Viña's first one is over too
+        for at, gv, lv in cases:
+            with self.subTest(at=at):
+                r = self.compute(at)
+                for lang in ("", "/es"):
+                    self.assertEqual(first(r, f"{lang}/meetings/weekly-open-gv.ics"), f"DTSTART;TZID=America/New_York:{gv}T120000")
+                    self.assertEqual(first(r, f"{lang}/meetings/weekly-open-lv.ics"), f"DTSTART;TZID=America/New_York:{lv}T120000")
+                # the cards show the same next date as the files
+                card = next(c for c in r["cards"]["en"] if c["key"] == "gv")
+                self.assertIn(f"dates={gv}T120000", card["cal"]["gcal"])
 
     def test_one_file_per_meeting_and_language(self):
         self.assertEqual(sorted(self.r["files"]), ["/es/meetings/weekly-open-gv.ics", "/es/meetings/weekly-open-lv.ics",
@@ -833,6 +883,50 @@ class MeetingLines(unittest.TestCase):
           out({ shell: cfg.shell, required: cfg.required });""", needs_modules=False)
         self.assertIn("/assets/js/central-time.js?v=t1", sw["shell"])
         self.assertNotIn("/assets/js/central-time.js?v=t1", sw["required"])
+
+
+# --------------------------------------------------------------------------- the home page's countdown
+class HomeCountdown(unittest.TestCase):
+    """The home page's countdown (src/assets/js/home.js homeMeeting) moves on to the next meeting once the one the
+    build wrote is over, with the build's own wording (homeMeetingDate + homeTimeRange): a meeting that ends after
+    midnight (config/site.yml meeting start "22:00", end "01:00") reads "10:00 PM – 1:00 AM CDT" — never Intl's
+    "10/21/2026, 10:00 PM CDT – 10/22/2026, 1:00 AM CDT"."""
+
+    SCRIPT = r"""
+      const res = {};
+      for (const [name, at, L, rule, files] of input) {
+        const p = page([], { at, lang: L, alpine: true, files: files || ["time", "src/assets/js/app.js", "src/assets/js/home.js"] });
+        p.ready();
+        const c = p.comps.homeMeeting();
+        // the build's card: a meeting that is over (September's)
+        c.$el = { dataset: { rule: JSON.stringify(rule), start: "2026-09-17T03:00:00Z", end: "2026-09-17T06:00:00Z" } };
+        c.$refs = { date: el("span", {}, [], "built date"), time: el("span", {}, [], "built time") };
+        c.init();
+        res[name] = { date: c.dateLabel, time: c.timeLabel, start: new Date(c.start).toISOString() };
+      }
+      out(res);"""
+
+    def test_an_overnight_meeting_rolls_on_without_dates_in_its_time(self):
+        night = {"weekday": 3, "n": 3, "start": "22:00", "end": "01:00", "skip": []}
+        evening = {"weekday": 3, "n": 3, "start": "19:00", "end": "20:00", "skip": []}
+        cases = [["en", "2026-10-06T15:00:00Z", "en", night], ["es", "2026-10-06T15:00:00Z", "es", night],
+                 ["winter", "2026-10-22T07:00:00Z", "en", night], ["evening", "2026-10-06T15:00:00Z", "en", evening],
+                 ["noHelper", "2026-10-06T15:00:00Z", "en", night, ["src/assets/js/app.js", "src/assets/js/home.js"]]]
+        r = js(self, self.SCRIPT, data=cases)
+        got = {k: {f: plain(v) for f, v in x.items()} for k, x in r.items()}
+        self.assertEqual(got["en"], {"date": "Wednesday, October 21", "time": "10:00 PM – 1:00 AM CDT",
+                                     "start": iso(datetime(2026, 10, 21, 22, tzinfo=CHI))})
+        self.assertEqual((got["es"]["date"], got["es"]["time"]), ("Miércoles, 21 de octubre", "10:00 p. m. – 1:00 a. m. CDT"))
+        self.assertEqual((got["winter"]["date"], got["winter"]["time"]), ("Wednesday, November 18", "10:00 PM – 1:00 AM CST"))
+        self.assertEqual(got["evening"]["time"], "7:00 – 8:00 PM CDT", "an evening meeting reads as before")
+        for v in got.values():
+            self.assertNotRegex(v["time"], r"\d+/\d+/\d{4}", "never a numeric date in the time")
+        # the build's text stays when the page has no helper (GV.nextMeeting needs it)
+        self.assertEqual((got["noHelper"]["date"], got["noHelper"]["time"]), ("built date", "built time"))
+        # and the build writes the same words (homeTimeRange)
+        built = run_js(self, r"""
+          out(["en", "es"].map((L) => filters.homeTimeRange("2026-10-22T03:00:00Z", "2026-10-22T06:00:00Z", L)));""")
+        self.assertEqual([plain(s) for s in built], [got["en"]["time"], got["es"]["time"]])
 
 
 # --------------------------------------------------------------------------- /events/ and /photos/

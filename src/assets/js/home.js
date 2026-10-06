@@ -22,14 +22,17 @@
     return lang === "es" ? "es-US" : "en-US";
   }
 
-  // Same wording as the server-side filters (homeMeetingDate + homeTimeRange).
+  // Same wording as the server-side filters (homeMeetingDate + homeTimeRange): the time with the site's own
+  // helper (GVTime.timeRange, the build's clockRange), so a meeting that ends after midnight reads
+  // "10:00 PM – 1:00 AM CDT", never Intl's "10/21/2026, 10:00 PM CDT – 10/22/2026, 1:00 AM CDT".
   function meetingLabels(start, end) {
-    var loc = locale(), out = { date: "", time: "" };
+    var loc = locale(), out = { date: "", time: "" }, T = window.GVTime;
     try {
       out.date = new Intl.DateTimeFormat(loc, { weekday: "long", month: "long", day: "numeric", timeZone: TZ }).format(start);
       if (loc === "es-US") out.date = out.date.charAt(0).toUpperCase() + out.date.slice(1);
       var tf = new Intl.DateTimeFormat(loc, { hour: "numeric", minute: "2-digit", timeZone: TZ, timeZoneName: "short" });
-      out.time = end && end > start && tf.formatRange ? tf.formatRange(start, end) : tf.format(start);
+      if (T && T.timeRange) out.time = T.timeRange(start, end && end > start ? end : start, loc, TZ);
+      else out.time = end && end > start && tf.formatRange ? tf.formatRange(start, end) : tf.format(start);
       if (window.GV && GV.esMeridiem) out.time = GV.esMeridiem(out.time); // "p. m." like the rest of the site (no-op in English)
     } catch (e) { /* very old browser: keep the server text */ }
     return out;

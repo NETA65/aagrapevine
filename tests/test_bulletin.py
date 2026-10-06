@@ -94,14 +94,12 @@ class NoHeader(Folder):
         self.assertEqual(self.parse("2027-01-10-welcome.md", "Hi.")["date"], "2027-01-10")
         self.write("no-date.md", "Just text, no header, no heading.")
         self.write("2027-02-03 Spring Assembly.md", "Hello.")
-        env = self.run_sync()
+        # first seen at 9:30 PM Central on October 6 — already October 7 in UTC: the post's day is the Central one
+        with mock.patch.object(common, "now_iso", return_value="2026-10-07T02:30:00Z"):
+            env = self.run_sync()
         by = {i["extra"]["slug"]: i for i in env["items"]}
         self.assertEqual(by["no-date"]["title"], "No date")
-        # its day in Central time (first_seen is UTC: from 7 PM Central on, the UTC date is already the next day)
-        from datetime import datetime
-        from zoneinfo import ZoneInfo
-        seen = datetime.fromisoformat(by["no-date"]["first_seen"].replace("Z", "+00:00"))
-        self.assertEqual(by["no-date"]["date"], seen.astimezone(ZoneInfo("America/Chicago")).date().isoformat())
+        self.assertEqual((by["no-date"]["first_seen"], by["no-date"]["date"]), ("2026-10-07T02:30:00Z", "2026-10-06"))
         self.assertEqual((by["2027-02-03-spring-assembly"]["title"], by["2027-02-03-spring-assembly"]["date"]),
                          ("Spring Assembly", "2027-02-03"))
 

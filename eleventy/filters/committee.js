@@ -184,7 +184,8 @@ function fmtRange(a, b, lang, opts) {
 }
 
 // "7:00 – 8:00 PM CDT"; an event that ends after midnight "7:00 PM – 1:00 AM CST" (not Intl's "12/31/2026,
-// 7:00 PM – 1/1/2027, 1:00 AM"): central-time.js timeRange, in Central time. opts: { weekday: "short" } …
+// 7:00 PM – 1/1/2027, 1:00 AM"); one over 12 hours into the next day "Fri, Oct 2, 7:00 PM – Sat, Oct 3, 12:00 PM
+// CDT": central-time.js timeRange, in Central time. opts: { weekday: "short" } …
 export function clockRange(a, b, lang = "en", opts) {
   const s = timeRange(a, b, LOCALES[lang] || "en-US", TZ, opts);
   return lang === "es" ? H.esMeridiem(s) : s;
@@ -257,17 +258,22 @@ const skipDates = (cfg = {}) => (cfg.skip_dates || []).map((d) => (d instanceof 
 /**
  * Committee meeting dates between `monthsBack` months ago and `monthsAhead`
  * months ahead, from config/site.yml `meeting` (same rule as src/_data/meeting.js).
+ * The months are counted from `now`'s month in Central time: the caller's clock (normalizeEvents' opt.now — the
+ * build's one moment, MONTHLY_NOW in a preview build or a test), else the real one.
  */
-export function meetingDates(cfg = {}, monthsBack = 3, monthsAhead = 12) {
+export function meetingDates(cfg = {}, monthsBack = 3, monthsAhead = 12, now = new Date()) {
   cfg = meetingCfg(cfg);
   const weekday = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
   const n = Number(cfg.week_of_month || 3);
   // (the countdown's rule: eleventy/central-time.js ruleDate, as src/_data/meeting.js and app.js GV.nextMeeting)
   const rule = { weekday, n, start: meetingStart(cfg), end: meetingEnd(cfg), skip: skipDates(cfg) };
-  const now = new Date();
+  let ms = now instanceof Date ? now.getTime() : Number(now);
+  if (!Number.isFinite(ms)) ms = Date.now();
+  // (its month in Central time: the last evening of a month is already the next month in UTC)
+  const at = zoneParts(ms, TZ) || { y: new Date(ms).getUTCFullYear(), mo: new Date(ms).getUTCMonth() };
   const out = [];
   for (let i = -monthsBack; i <= monthsAhead; i++) {
-    const d = ruleDate(now.getUTCFullYear(), now.getUTCMonth() + i, rule, TZ);
+    const d = ruleDate(at.y, at.mo + i, rule, TZ);
     if (d) out.push({ ymd: d.ymd, start: new Date(d.start).toISOString(), end: new Date(d.end).toISOString() });
   }
   return out;
@@ -473,7 +479,7 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
   //    calendar is right even if the daily data sync failed.
   //    (Titles/summaries are fixed human text — never machine translation.)
   const mTitle = meetingTitle(site, lang);
-  for (const d of meetingDates(m, opt.monthsBack ?? 3, opt.monthsAhead ?? 12)) {
+  for (const d of meetingDates(m, opt.monthsBack ?? 3, opt.monthsAhead ?? 12, new Date(now))) {
     const id = `ev:committee:${d.ymd}`;
     seen.add(id);
     out.push(shapeEvent({
@@ -570,7 +576,7 @@ function shapeEvent(it, site, lang, now, descOverride) {
       // "Fri, Mar 19, 6:00 PM CDT – Sun, Mar 21, 12:00 PM CDT": the times are in the range itself
       rangeLabel = cap(fmtRange(start, end, lang, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" }));
       dateLabel = cap(fmtRange(start, end, lang, { weekday: "long", month: "long", day: "numeric", year: "numeric" }));
-    } else if (span.hasEnd) timeLabel = clockRange(start, end, lang);
+    } else if (span.hasEnd) timeLabel = cap(clockRange(start, end, lang)); // ("Vie, 2 de oct, 7:00 p. m. – …": over 12 hours)
     // no end in the data: the start alone, as on the home page and the monthly toolkit — never the hour the
     // calendars assume presented as its end
     else timeLabel = fmt(start, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });

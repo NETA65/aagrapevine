@@ -1109,7 +1109,7 @@ class ServiceReport(unittest.TestCase):
         r = app(self, r"""
           const res = {};
           for (const lang of ["en", "es"]) {
-            const w = make(lang);
+            const w = make(lang, null, null, { now: Date.UTC(2026, 9, 6, 17) });      // a fixed today: Tuesday, October 6, 2026
             add(w, "expense", { description: "Spring Assembly room", amount: "150", vendor: "Room shared with a member", method: "check", ref: "Check #101",
                                 date: "2026-03-20", end_date: "2026-03-22", activity: "assembly" }, "lodging");
             add(w, "mileage", { from: "Home", to: "Duncanville", miles: "31.5", round_trip: true, rate: "0.30", event: "Spring Assembly", activity: "assembly",
@@ -1134,6 +1134,10 @@ class ServiceReport(unittest.TestCase):
                           totals: v.totals.map((x) => x.value), report: w.a.st().report, saved: JSON.parse(w.store.get(KEY)).settings.report,
                           name: d.name, csv, named, empty, title: w.a.rpPeriodLabel() };
           }
+          // on New Year's Day the new year comes first, before last year's entries
+          const ny = make("en", null, null, { now: Date.UTC(2027, 0, 1, 12) });
+          add(ny, "mileage", { from: "Home", to: "Dallas", miles: "10", rate: "0.30", date: "2026-12-01", activity: "district" });
+          res.newYear = ny.a.rpPeriods().map((p) => p.id).slice(0, 2);
           out(res);""")
         en = r["en"]
         # $150 room + 63 mi × $0.30 = $18.90 + 352.2 mi × $0.30 = $105.66 (+ the ride: $0) = $274.56; 2025's trip is out
@@ -1141,7 +1145,8 @@ class ServiceReport(unittest.TestCase):
                                       ["miles", "Information tables & conventions", "$105.66"], ["miles", "Workshops & events", "$0.00"],
                                       ["miles_total", "Mileage total", "$124.56"], ["total", "Total cost of service", "$274.56"]])
         self.assertEqual(en["rates"], "$0.30 a mile")
-        self.assertEqual(en["periods"][:2], ["y:2026", "y:2025"])
+        self.assertEqual(en["periods"][:2], ["y:2026", "y:2025"])           # this year (the page's clock) first
+        self.assertEqual(r["newYear"], ["y:2027", "y:2026"])
         # (a date's words kept together: no-break spaces; the year once)
         self.assertEqual(en["money"], [[["Mar 20 – Mar 22, 2026", "Check · Check #101", "Room shared with a member"]]])
         self.assertEqual(en["miles"][1], ["Information tables & conventions", [["State Convention", "3", "58.7", "352.2", "Home → Fort Worth", "Table support"]]])
@@ -1151,8 +1156,8 @@ class ServiceReport(unittest.TestCase):
         self.assertEqual(en["totals"], ["$274.56", "$0.00", "$0.00", "$0.00"])     # all of it self-supported
         self.assertEqual(en["report"], {"prepared_for": "District 22 treasurer", "note": "A record,\nnot a request."})
         self.assertEqual(en["saved"], en["report"])                                 # kept with the settings (and the backup)
-        self.assertRegex(en["name"], r"^service-expenses-report-2026-\d{4}-\d{2}-\d{2}\.csv$")
-        self.assertRegex(r["es"]["name"], r"^gastos-de-servicio-informe-2026-\d{4}-\d{2}-\d{2}\.csv$")
+        self.assertEqual(en["name"], "service-expenses-report-2026-2026-10-06.csv")      # the period, then today
+        self.assertEqual(r["es"]["name"], "gastos-de-servicio-informe-2026-2026-10-06.csv")
         self.assertTrue(en["csv"].startswith("Section,Date,"))                     # (the BOM is the file's; Blob.text() drops it)
         self.assertTrue(r["es"]["csv"].startswith("Sección,Fecha,"))
         self.assertNotIn("Area Archives", en["csv"])

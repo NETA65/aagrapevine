@@ -439,9 +439,10 @@ export default function (eleventyConfig, helpers) {
       when = translateKey(e && e.source === "calendar" ? "home.time_not_listed" : "home.all_day", lang);
     } else {
       // "7:00 – 9:00 PM CDT"; one that ends after midnight "7:00 PM – 12:00 AM CST" (as on /events/: clockRange) —
-      // not Intl's "12/31/2026, 7:00 PM – 1/1/2027, 12:00 AM"
+      // not Intl's "12/31/2026, 7:00 PM – 1/1/2027, 12:00 AM"; over 12 hours into the next day, the day at both
+      // ends: "Fri, Oct 2, 7:00 PM – Sat, Oct 3, 12:00 PM CDT"
       const st = time(s), en = time(x.end);
-      when = en > st ? clockRange(st, en, lang) : f(st, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+      when = en > st ? capital(clockRange(st, en, lang)) : f(st, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
     }
     const srDate = multiDay
       ? capital(fr(a, b, { weekday: "long", month: "long", day: "numeric", year: "numeric" }))

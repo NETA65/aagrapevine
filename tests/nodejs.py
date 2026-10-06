@@ -11,7 +11,9 @@ In the script:
     imp(path)      import a repository file (e.g. imp("eleventy/filters/report.js"))
     input          the JSON `data` passed from Python (null without it)
     out(value)     hand a JSON value back to Python (the last call wins)
-I18N_STRICT=1 is set, so a missing i18n key throws — as in the CI build.
+I18N_STRICT=1 is set, so a missing i18n key throws — as in the CI build. run_js(…, now="2026-10-06T15:00:00Z")
+stops the script's clock at that moment (fixed_clock): what a page or filter works out from "today" is then the
+same on any day the tests run.
 
 A test is skipped when Node.js is missing, and — for scripts that need the site's npm packages
 (needs_modules=True, the default) — when node_modules is missing ("npm ci"). CI installs both for
@@ -62,14 +64,29 @@ def node_path() -> str | None:
     return shutil.which("node")
 
 
+def fixed_clock(now: str) -> str:
+    """JavaScript that stops Node's clock at `now` (an ISO instant) for everything the script runs: `new Date()`
+    and Date.now() give that moment (a Date made from a value stays that value). Run first, before the modules are
+    imported."""
+    return ("{ const RealDate = Date, at = RealDate.parse(" + json.dumps(now) + ");\n"
+            "  if (!Number.isFinite(at)) throw new Error(\"run_js now: not an ISO time\");\n"
+            "  globalThis.Date = class extends RealDate {\n"
+            "    constructor(...a) { if (a.length) super(...a); else super(at); }\n"
+            "    static now() { return at; }\n"
+            "  }; }\n")
+
+
 def run_js(case: unittest.TestCase, script: str, data: Any = None, needs_modules: bool = True,
-           env: dict[str, str] | None = None, timeout: int = 180) -> Any:
+           env: dict[str, str] | None = None, timeout: int = 180, now: str | None = None) -> Any:
+    """now: the moment the script runs at ("2026-10-06T15:00:00Z", fixed_clock) — a test whose answer depends on
+    today's date never depends on the day it runs (the publish gate runs the tests)."""
     node = node_path()
     if not node:
         case.skipTest("Node.js is not installed")
     if needs_modules and not (ROOT / "node_modules" / "@11ty" / "eleventy").is_dir():
         case.skipTest("the site's npm packages are not installed (npm ci)")
-    code = f"globalThis.__NEEDS_MODULES__ = {str(bool(needs_modules)).lower()};\n" + PRELUDE + script + EPILOGUE
+    code = (fixed_clock(now) if now else "") + f"globalThis.__NEEDS_MODULES__ = {str(bool(needs_modules)).lower()};\n" \
+        + PRELUDE + script + EPILOGUE
     r = subprocess.run([node, "--input-type=module", "-e", code], cwd=ROOT, input=json.dumps(data),
                        capture_output=True, text=True, encoding="utf-8", timeout=timeout,
                        env={**os.environ, "I18N_STRICT": "1", "NODE_NO_WARNINGS": "1", **(env or {})})

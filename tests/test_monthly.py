@@ -1053,6 +1053,34 @@ class MonthCalendar(unittest.TestCase):
         self.assertIn('"monthly.ics_link" | t(lang, { month: m.monthName })', month)
 
 
+class MonthCalendarClock(unittest.TestCase):
+    """A month's calendar file has its committee meeting whatever the computer's clock says: the meetings are worked
+    out from the build's "now" (committee.js meetingDates, as normalizeEvents is given it) — not from the real date,
+    which dropped November 2026's meeting from its file once the computer's clock read 2027, and every meeting from
+    a preview build's months (MONTHLY_NOW) far from today."""
+
+    def test_the_computers_clock_changes_nothing(self):
+        db = full_db()
+        for clock in ("2027-01-01T06:30:00Z", "2027-06-02T15:00:00Z", "2025-01-15T15:00:00Z"):
+            with self.subTest(clock=clock):
+                r = run_js(self, ICS_JS, data={"db": db, "site": SITE, "carry": CARRY, "now": NOW_A, "runs": [["2026-11", "en"], ["2027-10", "en"]]},
+                           now=clock)
+                self.assertIn("ev-committee-2026-11-18@neta65-gvlv", {e["UID"] for e in vevents(r["2026-11:en"]["ics"])})
+                self.assertIn("ev-committee-2027-10-20@neta65-gvlv", {e["UID"] for e in vevents(r["2027-10:en"]["ics"])}, "the window's last month")
+
+    def test_a_preview_build_far_from_today(self):
+        # MONTHLY_NOW=2030-03-05: the March 2030 page lists the meeting of Wednesday, March 20 — and so does its file
+        r = run_js(self, r"""
+            const M = await imp("eleventy/filters/monthly.js");
+            const db = input.db, site = input.site;
+            out({ row: M.monthModel("2030-03", db, {}, site, "en").dates.filter((d) => d.kind === "committee").map((d) => d.id),
+                  ics: filters.mpIcs("2030-03", db, {}, site, "en"), later: filters.mpIcs("2031-03", db, {}, site, "en") });""",
+                   data={"db": full_db(), "site": SITE}, env={"MONTHLY_NOW": "2030-03-05"})
+        self.assertEqual(r["row"], ["ev:committee:2030-03-20"])
+        self.assertIn("ev-committee-2030-03-20@neta65-gvlv", {e["UID"] for e in vevents(r["ics"])})
+        self.assertIn("ev-committee-2031-03-19@neta65-gvlv", {e["UID"] for e in vevents(r["later"])}, "a year on: the window's last month")
+
+
 class LaterMonthSeries(unittest.TestCase):
     """F-4: a later month's date of a monthly series, worked out from its rule (events.json lists only its next dates),
     is in that month's calendar file too — written from the series' own record."""

@@ -39,8 +39,11 @@
                                  the next morning); no end, or one not after the start: one hour (the site's rule)
      timeRange(a, b, locale, tz, opts)  "7:00 – 8:00 PM CDT" (Intl formatRange); a time that ends after midnight
                                  "7:00 PM – 1:00 AM CST" — never the numeric dates Intl writes into a range over two
-                                 days ("12/31/2026, 7:00 PM – 1/1/2027, 12:00 AM"); the zone is said once, or at
-                                 both ends on the night the clocks change. opts: more Intl options for each end
+                                 days ("12/31/2026, 7:00 PM – 1/1/2027, 12:00 AM"); one that runs into the next day
+                                 for more than OVERNIGHT_MAX_HOURS says the day at both ends, so its end never reads
+                                 as earlier than its start ("Fri, Oct 2, 7:00 PM – Sat, Oct 3, 12:00 PM CDT"). The
+                                 zone is said once, or at both ends when they differ — the night the clocks change,
+                                 also on one day ("1:00 AM CST – 3:00 AM CDT"). opts: more Intl options for each end
                                  ({ weekday: "short" }). Spanish "p.m." is left to the caller's esMeridiem
      icsSequence(ms)             an iCalendar SEQUENCE for a file made at that moment: whole minutes since
                                  2026-01-01 UTC. Every .ics the site writes (the /events.ics feeds, the weekly open
@@ -189,8 +192,18 @@ function timeRange(a, b, locale, tz, opts) {
     var f = new Intl.DateTimeFormat(locale, o);
     if (!isFinite(A)) return "";
     if (!(B > A)) return f.format(A);
-    if (ymdOf(A, o.timeZone) === ymdOf(B, o.timeZone) && typeof f.formatRange === "function") return f.formatRange(A, B);
-    return (zoneName(f, A) === zoneName(f, B) ? withoutZone(f, A) : f.format(A)) + " – " + f.format(B);
+    // Intl's range names one zone: only when both ends have the same (not on the night the clocks change)
+    var sameZone = zoneName(f, A) === zoneName(f, B);
+    if (ymdOf(A, o.timeZone) === ymdOf(B, o.timeZone)) {
+      if (sameZone && typeof f.formatRange === "function") return f.formatRange(A, B);
+    } else if (B - A > OVERNIGHT_MAX_HOURS * 3600e3 && !has(o, "day")) {
+      // more than a night (Friday 7 PM to Saturday noon): the day at both ends, or the end reads as before the start
+      if (!has(o, "weekday")) o.weekday = "short";
+      o.month = o.month || "short";
+      o.day = "numeric";
+      f = new Intl.DateTimeFormat(locale, o);
+    }
+    return (sameZone ? withoutZone(f, A) : f.format(A)) + " – " + f.format(B);
   } catch (e) {
     return "";
   }

@@ -26,6 +26,8 @@ export const data = {
 
 export function render(data) {
   const { lang, key } = data.file;
-  const cal = weeklyOpenAll(items(data), lang).map((w) => weeklyCalendar(w, data.site || {}, lang)).find((c) => c && c.key === key);
-  return weeklyIcs(cal, new Date());
+  // one moment for the file: its first date (the next meeting, as on the cards) and its DTSTAMP / SEQUENCE
+  const now = new Date();
+  const cal = weeklyOpenAll(items(data), lang, now).map((w) => weeklyCalendar(w, data.site || {}, lang)).find((c) => c && c.key === key);
+  return weeklyIcs(cal, now);
 }
