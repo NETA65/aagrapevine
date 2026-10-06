@@ -45,8 +45,8 @@ from .common import (RAW_DIR, ROOT, SITE_DIR, STATE_DIR, as_json, clean_text, ev
                      write_json)
 from .events_external import platform_of
 from .geo import SCOPES, UNKNOWN, best_of, classify_location, fold
-from .meeting import (MonthlyRule, check_skip_dates, meeting_skip_notes, nth_weekday, parse_hhmm, upcoming_meetings,
-                      upcoming_rule_dates, week_of_month_value, weekday_index)
+from .meeting import (MonthlyRule, check_skip_dates, meeting_skip_notes, nth_weekday, overnight, parse_hhmm,
+                      upcoming_meetings, upcoming_rule_dates, week_of_month_value, weekday_index)
 from .run_all import FULL_ONLY
 
 log = get_logger("build_data")
@@ -612,7 +612,7 @@ def recurring_specs(ctx: Ctx) -> tuple[list[dict], list[str]]:
         end = parse_hhmm(e.get("end"), (-1, -1))
         if given("end") and end == (-1, -1):
             notes.append(f"end time “{e.get('end')}” is not a time like \"20:00\" — shown as one hour long")
-        elif end != (-1, -1) and start != (-1, -1) and end <= start:
+        elif end != (-1, -1) and start != (-1, -1) and end <= start and not overnight(start, end):
             notes.append(f"end time “{e.get('end')}” is not after the start — shown as one hour long")
         if errors:
             problems.append(f"{name}: " + "; ".join(errors) + " — skipped")

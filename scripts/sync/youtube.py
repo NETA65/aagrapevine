@@ -22,6 +22,10 @@ Where the videos come from (cheapest and most reliable first):
 yt-dlp is optional: when it is missing, slow or blocked (YouTube sometimes blocks
 cloud/CI IP addresses) steps 2–4 are skipped or cut short and the RSS feeds alone
 keep the site current. This module never fails the pipeline because of yt-dlp.
+When YouTube answers a step with its bot check ("Sign in to confirm you're not a bot")
+or a rate limit, stats.warnings (→ /status/) says so in plain words, once
+(bot_check_note): "details stopped: YouTube answered with a bot check (…) — nothing
+is wrong on our side; videos keep their last known details".
 
 A note on robots.txt: youtube.com's robots.txt asks *crawlers* not to index
 /feeds/videos.xml. We are not crawling. We fetch a small, fixed set of feed URLs
@@ -378,7 +382,7 @@ def backfill_channel(yt_dlp, channel_id: str, col: Collector, deadline: float) -
         if info is None:
             # a channel without a "streams"/"shorts" tab is normal, not an error
             if not re.search(r"does not have a \w+ tab", err or ""):
-                res["errors"].append(f"{tab}: {err[:120]}")
+                res["errors"].append(bot_check_note("listing", err) or f"{tab}: {err[:120]}")
                 log.warning("yt-dlp %s listing failed: %s", tab, err[:200])
             elif tab == "shorts":
                 res["shorts_ok"] = True
@@ -393,7 +397,7 @@ def backfill_channel(yt_dlp, channel_id: str, col: Collector, deadline: float) -
 
     info, err = _flat_list(yt_dlp, f"{base}/playlists", min(left(), 120))
     if info is None:
-        res["errors"].append(f"playlists: {err[:120]}")
+        res["errors"].append(bot_check_note("listing", err) or f"playlists: {err[:120]}")
         return res
     res["playlists_ok"] = True
     pls = []
@@ -413,7 +417,7 @@ def backfill_channel(yt_dlp, channel_id: str, col: Collector, deadline: float) -
         info, err = _flat_list(yt_dlp, f"https://www.youtube.com/playlist?list={pl['id']}", min(left(), 60))
         if info is None:
             complete = False
-            res["errors"].append(f"playlist {pl['id']}: {err[:80]}")
+            res["errors"].append(bot_check_note("listing", err) or f"playlist {pl['id']}: {err[:80]}")
             continue
         n = 0
         for e in info.get("entries") or []:
@@ -467,6 +471,20 @@ class DetailFetcher:
             self.ydl.close()
         except Exception:
             pass
+
+
+_BOT_WORDS = re.compile(r"(?i)not a bot|\bcaptcha\b")
+
+
+def bot_check_note(step: str, err: str | None) -> str | None:
+    """A plain message for /status/ when YouTube turned the runner away from `step` ("details": the per-video
+    details, "listing": the full yt-dlp listing) — its bot check ("Sign in to confirm you're not a bot") or
+    a rate limit. None for any other error (a time-out, a video that is gone …)."""
+    if not err or not DetailFetcher.BOT_CHECK.search(err):
+        return None
+    kept = "videos keep their last known details" if step == "details" else "the last good list is kept"
+    why = "a bot check (“confirm you’re not a bot”)" if _BOT_WORDS.search(err) else "a rate limit (too many requests)"
+    return f"{step} stopped: YouTube answered with {why} — nothing is wrong on our side; {kept}"
 
 
 def resolve_channel_id(yt_dlp, handle: str, seconds: float) -> str | None:
@@ -747,7 +765,10 @@ def main(argv: list[str] | None = None) -> None:
             for p in res["playlists"]:
                 p["channel_id"] = cid
             pls += res["playlists"]
-            errors += [f"yt-dlp {e}" for e in res["errors"]]
+            for e in res["errors"]:          # a bot check's plain note once, not per tab / playlist
+                e = e if "YouTube answered" in e else f"yt-dlp {e}"
+                if e not in errors:
+                    errors.append(e)
         secs = round(time.monotonic() - tb, 1)
         stats["backfill_seconds"] = secs
         stats["listed"] = len(listed)
@@ -866,7 +887,8 @@ def main(argv: list[str] | None = None) -> None:
                     if oembed_status(http, vid) in GONE_CODES:
                         gone.add(vid)
                 if blocked or consecutive_fail >= 5:
-                    errors.append(f"details stopped: {err[:100]}")
+                    # YouTube's bot check is said in plain words on /status/ (it is not our failure)
+                    errors.append(bot_check_note("details", err) or f"details stopped: {err[:100]}")
                     log.warning("details: stopping early (%s)", err[:160])
                     break
         finally:
@@ -933,7 +955,7 @@ def main(argv: list[str] | None = None) -> None:
         "seconds": round(time.monotonic() - t0, 1),
     })
     if errors:
-        stats["warnings"] = [e[:160] for e in errors[:8]]
+        stats["warnings"] = [e[:200] for e in errors[:8]]
 
     ok = rss_ok or bool(listed)
     error = None if ok else ("; ".join(errors) or "no data from RSS or yt-dlp")[:300]

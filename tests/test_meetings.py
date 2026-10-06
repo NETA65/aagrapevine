@@ -4,7 +4,8 @@ Fixtures in tests/fixtures/meetings/ are trimmed copies of the offices' public m
 2026): a few Grapevine ("GR") meetings and a few others per office. Every personal field (e-mail, phone,
 Zoom link, contact name, notes, payment link…) holds a FAKE value there, so the tests can prove none of
 them is copied. Two synthetic Grapevine meetings (Houston, TX and Ardmore, OK) test the Area rule. No
-real key is used anywhere: the key tests use a made-up one.
+real key is used anywhere: the key tests use a made-up one. sgcaptcha_202.html and cloudflare_challenge.html
+are bot-check pages in the shape SiteGround and Cloudflare send them (made up).
 Run:  python -m unittest tests.test_meetings -v   (CI: python -m unittest discover -s tests)
 """
 from __future__ import annotations
@@ -618,6 +619,125 @@ class Settings(unittest.TestCase):
         by = {f["id"]: f for f in st["feeds"]}
         self.assertEqual(by["tyleraa"]["methods"], ["page"], "tyler-aa.org's robots.txt does not allow /wp-admin/")
         self.assertTrue(all(f["region_label"]["en"] and f["region_label"]["es"] for f in st["feeds"]))
+
+
+# =========================================================================== past midnight
+class PastMidnight(unittest.TestCase):
+    """A meeting that runs past midnight keeps its end ("23:00"–"00:30"); an end_time earlier than the start
+    that would make it longer than MEETING_OVERNIGHT_HOURS is no real end ("11:00"–"00:00")."""
+
+    def end(self, start: str, end: str):
+        st = M.settings(feeds_cfg())
+        feed = next(f for f in st["feeds"] if f["id"] == "aadallas")
+        row = {"name": "Night Owls", "day": 5, "time": start, "end_time": end, "types": ["GR", "O"],
+               "formatted_address": "1144 N Plano Rd, Richardson, TX 75081, USA", "url": "https://www.aadallas.org/meetings/x/"}
+        return M.to_record(row, feed, "GR")[0]["end_time"]
+
+    def test_the_real_end_after_midnight(self):
+        self.assertEqual(self.end("23:00", "00:30"), "00:30")
+        self.assertEqual(self.end("22:30", "00:00"), "00:00")
+        self.assertEqual(self.end("23:30", "12:30 am"), "00:30")
+        self.assertEqual(self.end("21:00", "Midnight"), "00:00")
+
+    def test_no_real_end(self):
+        self.assertIsNone(self.end("11:00", "00:00"), "a noon meeting does not end at midnight")
+        self.assertIsNone(self.end("20:00", "19:00"))
+        self.assertIsNone(self.end("19:00", "19:00"))
+        self.assertIsNone(self.end("23:00", "03:30"), "four and a half hours: not a meeting's length")
+        self.assertEqual(self.end("19:00", "20:00"), "20:00")
+
+
+# =========================================================================== bot checks
+class BotChecks(unittest.TestCase):
+    """An office's site that answers with a bot check (SiteGround's HTTP 202 page — nwta66.org since 3 October
+    2026 —, Cloudflare's "Just a moment…") is named so in plain words, and its last good list is kept.
+    sgcaptcha_202.html and cloudflare_challenge.html are pages in the shape those services send (made up)."""
+
+    class Resp:
+        def __init__(self, url, status=200, body="", headers=None):
+            self.url, self.status_code, self.headers = url, status, headers or {}
+            self.content = body.encode() if isinstance(body, str) else body
+            self.is_redirect = False
+
+    class Http:
+        """PoliteSession for http_fetch: answers by address prefix."""
+
+        def __init__(self, answers):
+            self.answers, self.gets = answers, []
+
+        def allowed(self, url):
+            return True
+
+        def get(self, url, **kw):
+            self.gets.append((url, kw.get("params")))
+            for prefix, answer in self.answers.items():
+                if url.startswith(prefix):
+                    return answer(url) if callable(answer) else answer
+            return BotChecks.Resp(url, 404)
+
+    def test_http_202_is_a_bot_check(self):
+        http = self.Http({"https://nwta66.org/": self.Resp("https://nwta66.org/x", 202, fx("sgcaptcha_202.html"))})
+        with self.assertRaises(M.BotCheck) as cm:
+            M.http_fetch(http)("https://nwta66.org/wp-admin/admin-ajax.php?action=meetings", None)
+        self.assertEqual(str(cm.exception), "nwta66.org answered with a bot check (HTTP 202) instead of its meeting list")
+
+    def test_a_challenge_is_not_a_refused_key(self):
+        """Cloudflare's challenge answers 403 too: with a key, that must not read as "the key was not accepted"
+        (which would try the next key and ask the chair to update it)."""
+        cf = self.Resp(DALLAS_FEED, 403, fx("cloudflare_challenge.html"), {"cf-mitigated": "challenge"})
+        with self.assertRaises(M.BotCheck) as cm:
+            M.http_fetch(self.Http({DALLAS_FEED: cf}))(DALLAS_FEED, {"key": FAKE_KEY})
+        self.assertNotIsInstance(cm.exception, M.KeyRejected)
+        page_only = self.Resp(DALLAS_FEED, 403, fx("cloudflare_challenge.html"))       # no header: the page says it
+        with self.assertRaises(M.BotCheck):
+            M.http_fetch(self.Http({DALLAS_FEED: page_only}))(DALLAS_FEED, {"key": FAKE_KEY})
+        with self.assertRaises(M.KeyRejected):                                         # a plain 403 is still the key
+            M.http_fetch(self.Http({DALLAS_FEED: self.Resp(DALLAS_FEED, 403, "-1")}))(DALLAS_FEED, {"key": FAKE_KEY})
+
+    def test_a_200_challenge_page_is_named_and_a_normal_page_is_read(self):
+        feed = M.settings(feeds_cfg())["feeds"][2]                                     # Tyler: the page only
+        page = feed["page"]
+        http = self.Http({page: self.Resp(page, 200, fx("sgcaptcha_202.html"))})
+        with self.assertRaises(M.BotCheck) as cm:
+            M.read_office(feed, M.http_fetch(http), {}, lambda: None, "GR")
+        self.assertIn("nothing is wrong on our side; the last good list is kept", str(cm.exception))
+        # a meetings page that loads a captcha widget for its contact form is no bot check
+        widget = ('<script src="https://www.google.com/recaptcha/api.js"></script>'
+                  '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>')
+        http = self.Http({page: self.Resp(page, 200, fx("tyleraa_page.html").replace("</head>", widget + "</head>"))})
+        meetings, method, _key, _problems = M.read_office(feed, M.http_fetch(http), {}, lambda: None, "GR")
+        self.assertEqual((method, len(meetings) > 0), ("page", True))
+
+    def test_the_office_keeps_its_meetings_and_status_says_why(self):
+        nwta = {"id": "nwta66", "name": "Northwest Texas Area 66", "site": "https://nwta66.org",
+                "feed": "https://nwta66.org/wp-admin/admin-ajax.php?action=meetings", "in_area": False,
+                "region_label": {"en": "Northwest Texas", "es": "Noroeste de Texas"}}
+        cfg = feeds_cfg(feeds=[nwta])
+        before = {"id": "mtg:x", "kind": "meeting", "title": "Lubbock Grapevine Group", "url": "https://nwta66.org/m/1",
+                  "lang": "en", "extra": {"day": 2, "time": "19:00", "end_time": None, "location": None, "address": "1 Main St, Lubbock, TX",
+                            "street": "1 Main St", "zip": None, "city": "Lubbock", "county": "Lubbock", "state": "TX",
+                            "lat": None, "lng": None, "approximate": False, "region": None, "district": None,
+                            "types": ["GR"], "attendance": "in_person", "in_area": False, "lang": "en",
+                            "sources": ["nwta66"]}}
+        prev = {"items": [before]}
+        http = self.Http({"https://nwta66.org/": lambda url: self.Resp(url, 202, fx("sgcaptcha_202.html"))})
+        res = M.collect(M.http_fetch(http), prev, cfg, env={})
+        plain = "nwta66.org answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept"
+        self.assertEqual(res["feeds"][0]["error"], plain, "said once, not once per way of reading the list")
+        self.assertEqual(res["errors"], [f"Northwest Texas Area 66: {plain}"])
+        self.assertEqual([r["name"] for r in res["items"]], ["Lubbock Grapevine Group"], "the last good list is kept")
+        self.assertEqual(len(http.gets), 2, "the feed and the page: one request each")
+
+    def test_mixed_failures_keep_both_reasons(self):
+        feed = dict(M.settings(feeds_cfg())["feeds"][0], key_env="", key_const="", feed_obf="")   # Dallas, no key
+        page = feed["page"]
+        http = self.Http({DALLAS_FEED: self.Resp(DALLAS_FEED, 503, "down"),
+                          page: self.Resp(page, 202, fx("sgcaptcha_202.html"))})
+        with self.assertRaises(M.FeedError) as cm:
+            M.read_office(feed, M.http_fetch(http), {}, lambda: None, "GR")
+        self.assertNotIsInstance(cm.exception, M.BotCheck)
+        self.assertIn("feed: aadallas.org answered HTTP 503", str(cm.exception))
+        self.assertIn("page: aadallas.org answered with a bot check (HTTP 202)", str(cm.exception))
 
 
 if __name__ == "__main__":

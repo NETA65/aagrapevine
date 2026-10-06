@@ -62,11 +62,14 @@ needed), robots.txt and its Crawl-delay obeyed (common.PoliteSession; checked ag
 with its query), a clear User-Agent, timeouts, retries. If an office's list cannot be read — or its full
 list comes back empty, or its page has a meeting table without the location data — its previous meetings
 are kept (feeds[].ok = false, a note in stats.warnings); the envelope is ok=false only when no list at all
-could be read.
+could be read. A site that answers with a bot check instead (a challenge page for browsers — HTTP 202 from
+SiteGround's or Amazon's anti-bot page, Cloudflare's "Just a moment…") is named so in plain words: "<site>
+answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept" (BotCheck).
 
 Items: kind "meeting", source "meetings", id "mtg:<hash of day|time|place>" (place = the street address, else
 the meeting's own page), url = the meeting's page on
-the office's site, title = the meeting's name; extra = day (0 = Sunday), time, end_time, location,
+the office's site, title = the meeting's name; extra = day (0 = Sunday), time, end_time (earlier than time
+when the meeting runs past midnight, "23:00"–"00:30"), location,
 address, street, zip, city, county, state, lat, lng, approximate, region, district, types, attendance,
 in_area, sources. Envelope extras: `feeds` (per office: id, name, url, lang, ok, count, method,
 key_from, error, note, updated, attempted) and `type_labels` ({code: {en, es}} for the codes in use).
@@ -96,6 +99,7 @@ from bs4 import BeautifulSoup
 from .common import (PoliteSession, clean_text, get_logger, load_config, load_raw, make_item, merge_items, now_iso,
                      run_module, save_raw, short_hash)
 from .geo import classify_location, fold, neta65_counties, normalize_place
+from .meeting import overnight
 
 SOURCE = "meetings"
 log = get_logger(SOURCE)
@@ -104,6 +108,9 @@ DEFAULT_TYPE = "GR"
 TIMEOUT = 60                       # seconds — the Dallas list is ~2 MB
 MAX_BYTES = 25_000_000
 NEAR_METERS = 60                   # two records this close, same day and time = one meeting
+# An end_time earlier than the start is past midnight ("23:00"–"00:30") when the meeting then lasts at most
+# this long; further back it is no real end (a noon meeting "ending" at "00:00").
+MEETING_OVERNIGHT_HOURS = 3
 ATTENDANCE = ("in_person", "online", "hybrid")
 METHODS = ("feed", "page")
 
@@ -179,6 +186,39 @@ class FeedError(Exception):
 
 class KeyRejected(FeedError):
     """The office refused the key (HTTP 401 / 403): the next key source is tried."""
+
+
+class BotCheck(FeedError):
+    """The office's site answered with a bot check (a challenge page for browsers) instead of its list: nothing
+    is wrong on our side, and the office's last good list is kept (collect). `settled`: every way of reading
+    the office met it (read_office) — the plain message /status/ shows."""
+
+    def __init__(self, host: str, status: int | None, settled: bool = False):
+        self.host, self.status = host, status
+        code = f" (HTTP {status})" if status else ""
+        super().__init__(f"{host} answered with a bot check{code} — nothing is wrong on our side; the last good "
+                         "list is kept" if settled else f"{host} answered with a bot check{code} instead of its "
+                         "meeting list")
+
+
+# A bot check served instead of the list. HTTP 202 is one (a list is never "accepted for later"): SiteGround's
+# anti-bot page (a refresh to /.well-known/sgcaptcha/) answers so (nwta66.org has since 3 October 2026), and
+# so does Amazon's WAF challenge. Other walls answer 403 / 429 / 503 (Cloudflare: header cf-mitigated:
+# challenge, "Just a moment…") or even 200, so a page is only called a bot check by these marks, and a 200
+# answer only when it cannot be read as a list (a normal page may load a captcha widget for its contact form).
+_CHALLENGE_MARKS = re.compile(
+    r"(?i)/\.well-known/sgcaptcha|<title>\s*just a moment|_cf_chl_opt|\bcf-chl-|window\._cf_chl|awswafintegration|"
+    r"aws-waf-token|<title>\s*(?:attention required|human verification|verify you are human)|"
+    r"captcha-delivery\.com|pardon our interruption")
+
+
+def challenge_answer(status: int | None, headers: Any, body: Any) -> bool:
+    """Is this answer a bot check rather than the office's list? (http_fetch, read_office)"""
+    h = {str(k).lower(): str(v).lower() for k, v in (headers or {}).items()}
+    if status == 202 or h.get("cf-mitigated") == "challenge" or "x-amzn-waf-action" in h:
+        return True
+    text = body.decode("utf-8", "replace") if isinstance(body, (bytes, bytearray)) else str(body or "")
+    return bool(_CHALLENGE_MARKS.search(text[:20000]))
 
 
 # =========================================================================== keys & redaction
@@ -391,6 +431,12 @@ def clock24(v: Any) -> str | None:
     return f"{h:02d}:{mi:02d}" if 0 <= h <= 23 and 0 <= mi <= 59 else None
 
 
+def hhmm(t: str) -> tuple[int, int]:
+    """'18:30' (clock24) → (18, 30)."""
+    h, m = t.split(":")
+    return int(h), int(m)
+
+
 _OUR_PARAMS = ("tsml-day", "tsml-type", "key")
 
 
@@ -467,11 +513,24 @@ def parse_page(page: str, page_url: str) -> tuple[list[dict] | None, str | None]
     raise FeedError("no meeting list was found on the office's meetings page")
 
 
+def _parsed(parse: Callable, text: str, url: str, *args):
+    """parse(text, *args) — but an answer that cannot be read because it is a bot check's page is named so
+    (BotCheck), not "not a meeting list"."""
+    try:
+        return parse(text, *args)
+    except FeedError:
+        if challenge_answer(200, None, text):
+            raise BotCheck(_bare_host(url), None) from None
+        raise
+
+
 def read_office(feed: dict, fetch: Fetch, env: Mapping[str, str], key_page: Callable[[], str | None],
                 type_code: str) -> tuple[list[dict], str, str | None, list[str]]:
     """(meetings, method used, where the key came from, problems of the methods that failed first).
-    Raises FeedError (redacted) when no method worked."""
+    Raises FeedError (redacted) when no method worked — a BotCheck with the plain message when every
+    method met the site's bot check."""
     problems: list[str] = []
+    checks: list[BotCheck | None] = []      # per failed method: its bot check, or None for another failure
     key_from = None
     for method in feed["methods"]:
         try:
@@ -500,25 +559,30 @@ def read_office(feed: dict, fetch: Fetch, env: Mapping[str, str], key_page: Call
                                         f"{feed['key_env'] or 'feed_obf'} value — see config/site.yml)")
                 else:
                     text, _final = fetch(feed["feed"], None)
-                meetings = parse_feed(text)
+                meetings = _parsed(parse_feed, text, feed["feed"])
                 if not meetings:           # an office's whole list is never empty
                     raise FeedError("the meeting list is empty")
                 return meetings, method, key_from, problems
             page_url = feed["page"]
             text, final = fetch(page_url, {"tsml-day": "any", "tsml-type": type_code})
-            meetings, cache_url = parse_page(text, final or page_url)
+            meetings, cache_url = _parsed(parse_page, text, page_url, final or page_url)
             if cache_url is not None:
                 if _bare_host(cache_url) != _bare_host(page_url):
                     raise FeedError("the page's meeting data is on another site — not read")
                 text, _final = fetch(cache_url, None)
-                meetings = parse_feed(text)
+                meetings = _parsed(parse_feed, text, cache_url)
                 if not meetings:           # the cache file holds the office's whole list
                     raise FeedError("the meeting list is empty")
             return meetings or [], method, None, problems
         except FeedError as e:
             problems.append(f"{method}: {redact(e)}")
+            checks.append(e if isinstance(e, BotCheck) else None)
             if method != feed["methods"][-1]:
                 log.info("%s: %s — trying the next way", feed["id"], redact(e))
+    if checks and all(checks):
+        # Every way of reading the office met the bot check: say so plainly, once (not per method).
+        last = checks[-1]
+        raise BotCheck(redact(last.host), next((c.status for c in reversed(checks) if c.status), None), settled=True)
     raise FeedError("; ".join(problems) or "nothing to read")
 
 
@@ -645,8 +709,8 @@ def to_record(m: dict, feed: dict, type_code: str) -> tuple[dict | None, str]:
     if not 0 <= day <= 6 or not start or not name:
         return None, "incomplete"
     end = clock24(m.get("end_time"))
-    if end and end <= start:               # "00:00" = not given
-        end = None
+    if end and end <= start and not overnight(hhmm(start), hhmm(end), MEETING_OVERNIGHT_HOURS):
+        end = None                         # "00:00" for a noon meeting, the start again …: no real end
     parts = split_address(m.get("formatted_address"))
     in_area, g, note = area_of(parts["city"], parts["state"], feed, region)
     if note and (in_area or feed["in_area"]):
@@ -999,6 +1063,9 @@ def http_fetch(http: PoliteSession) -> Fetch:
             r = http.get(url, params=params)
         if r is None:
             raise FeedError(f"{_bare_host(url)} did not answer")
+        if r.status_code != 200 and challenge_answer(r.status_code, r.headers, r.content):
+            # before the key check: a challenge page answering 403 says nothing about the key
+            raise BotCheck(_bare_host(url), r.status_code)
         if r.status_code in (401, 403):
             if keyed:
                 raise KeyRejected(f"{_bare_host(url)} refused the request (HTTP {r.status_code}) — the key was "

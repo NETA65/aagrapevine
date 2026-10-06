@@ -8,6 +8,8 @@ One rule engine (upcoming_rule_dates) serves both
 Dates are counted on the local calendar and each start/end is turned into a real instant with the
 time zone's own rules, so a daylight-saving change (or a month / year boundary) never moves an
 event by an hour: 17:00 Central is 22:00 UTC in October (CDT) and 23:00 UTC in November (CST).
+An event that runs past midnight keeps its real end on the next day ("22:00"–"01:00" ends at 1 AM
+the next morning) — MonthlyRule.span says when an earlier end counts as the next day.
 """
 from __future__ import annotations
 
@@ -97,22 +99,43 @@ def ymd_text(v: Any) -> str | None:
         return None
 
 
+# An end earlier than the start is the next morning when the event then lasts at most this long ("22:00" to
+# "01:00": 3 hours). Further back it is a slip of the pen ("19:00" to "08:00" is not a 13-hour meeting).
+OVERNIGHT_MAX_HOURS = 12
+
+
+def overnight(start: tuple[int, int], end: tuple[int, int], max_hours: float = OVERNIGHT_MAX_HOURS) -> bool:
+    """True when `end`, earlier on the clock than `start`, is the next morning: "22:00"–"01:00" → True,
+    "19:00"–"08:00" (13 hours) → False, "19:00"–"20:00" → False (the same day)."""
+    (sh, sm), (eh, em) = start, end
+    if (eh, em) >= (sh, sm):
+        return False
+    return (24 * 60 - (sh * 60 + sm)) + (eh * 60 + em) <= max_hours * 60
+
+
 @dataclass(frozen=True)
 class MonthlyRule:
     """The Nth weekday of every month, from `start` to `end` (local wall-clock time)."""
     week_of_month: int                     # 1–5, or -1 = the last one of the month
     weekday: int                           # 0 = Monday … 6 = Sunday
     start: tuple[int, int]                 # (hour, minute)
-    end: tuple[int, int]                   # (hour, minute); not after start → a one-hour event
+    end: tuple[int, int]                   # (hour, minute); earlier than start → next day (see span)
     skip: frozenset[str] = frozenset()     # "YYYY-MM-DD" dates that do not happen
 
     def span(self) -> tuple[tuple[int, int], tuple[int, int]]:
-        """(start, end) as used for every date: an end that is missing or not after the start makes
-        it a one-hour event (a 23:30 start ends at 23:59, the same day)."""
+        """(start, end) as used for every date. An end earlier than the start is the next morning when the
+        event then lasts at most OVERNIGHT_MAX_HOURS ("22:00"–"01:00" ends at 1 AM the next day:
+        ends_next_day). An end that is missing, equal to the start or further back ("19:00"–"08:00") makes
+        it a one-hour event (a 23:30 start then ends at 23:59, the same day)."""
         (sh, sm), (eh, em) = self.start, self.end
-        if (eh, em) <= (sh, sm):
+        if (eh, em) <= (sh, sm) and not overnight(self.start, self.end):
             eh, em = min(sh + 1, 23), (sm if sh < 23 else 59)
         return (sh, sm), (eh, em)
+
+    def ends_next_day(self) -> bool:
+        """The end (span) is on the day after the start: the event runs past midnight."""
+        start, end = self.span()
+        return end < start
 
 
 def nth_weekday(y: int, m: int, weekday: int, n: int) -> date | None:
@@ -157,6 +180,7 @@ def upcoming_rule_dates(rule: MonthlyRule, count: int, tz: ZoneInfo, now: dateti
                         include_recent_days: int = 0, horizon_months: int | None = None) -> list[dict]:
     """The next `count` dates of a monthly rule that are not over yet (end ≥ now − include_recent_days),
     soonest first: [{"ymd": "2026-10-10", "start": "2026-10-10T22:00:00Z", "end": "2026-10-11T01:00:00Z"}].
+    "ymd" is the day it starts; an overnight rule ends on the next day (MonthlyRule.span).
 
     Months are walked on the LOCAL calendar starting with the month before `now` (so an evening event on
     the last day of a month is still found while it is running, even though it is already the next month
@@ -166,7 +190,8 @@ def upcoming_rule_dates(rule: MonthlyRule, count: int, tz: ZoneInfo, now: dateti
         return []
     now = now or datetime.now(timezone.utc)
     since = now - timedelta(days=include_recent_days)
-    (sh, sm), (eh, em) = rule.span()       # a missing / earlier end → a one-hour event
+    (sh, sm), (eh, em) = rule.span()       # a missing end → one hour; an overnight one → the next day
+    next_day = rule.ends_next_day()
     local = since.astimezone(tz)
     y, m = (local.year, local.month - 1) if local.month > 1 else (local.year - 1, 12)
     out: list[dict] = []
@@ -174,7 +199,8 @@ def upcoming_rule_dates(rule: MonthlyRule, count: int, tz: ZoneInfo, now: dateti
         d = nth_weekday(y, m, rule.weekday, rule.week_of_month)
         if d and d.isoformat() not in rule.skip:
             start = datetime(d.year, d.month, d.day, sh, sm, tzinfo=tz)
-            end = datetime(d.year, d.month, d.day, eh, em, tzinfo=tz)
+            e = d + timedelta(days=1) if next_day else d          # the wall clock of that day (DST-safe)
+            end = datetime(e.year, e.month, e.day, eh, em, tzinfo=tz)
             if end.astimezone(timezone.utc) >= since:
                 out.append({"ymd": d.isoformat(), "start": to_iso(start), "end": to_iso(end)})
                 if len(out) >= count:
@@ -200,7 +226,8 @@ def meeting_rule(cfg: dict | None) -> MonthlyRule:
     if n not in (1, 2, 3, 4, 5, -1):
         n = 3
     sh, sm = parse_hhmm(cfg.get("start"), (19, 0))
-    eh, em = parse_hhmm(cfg.get("end"), ((sh + 1) % 24, sm))
+    # no end: one hour, never past midnight (a 23:30 start ends at 23:59, as the web pages show it)
+    eh, em = parse_hhmm(cfg.get("end"), (sh + 1, sm) if sh < 23 else (23, 59))
     # Only real meeting days are skipped; anything else is ignored (meeting_skip_notes() tells the chair).
     skip, _notes = check_skip_dates(cfg.get("skip_dates"), wd, n)
     return MonthlyRule(week_of_month=n, weekday=wd, start=(sh, sm), end=(eh, em), skip=frozenset(skip))
