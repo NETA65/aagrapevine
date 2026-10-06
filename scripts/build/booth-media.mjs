@@ -291,11 +291,14 @@ async function fetchOnce(d, timeoutMs, ctx) {
     try {
       if (core.isHtml(body ? body.subarray(0, 1024) : await readHead(tmp, 1024), "")) throw new Stop("html");
       if (d.group === "picture") {
-        size = core.imageSize(body);
-        if (!size && !core.baseType(type).startsWith("image/")) {
-          throw new Stop("failed", `the answer is not a picture (${core.baseType(type) || "no type given"})`);
+        // Only a raster picture (JPEG, PNG, WebP, GIF, AVIF), by its bytes — never an SVG (published at the site's
+        // own address, it could run a script), whatever type the answer gives; its name follows the bytes too.
+        const kind = core.pictureType(body);
+        if (!kind) {
+          throw new Stop("failed", `the answer is not a picture (${core.baseType(type) || "no type given"}): the booth keeps JPEG, PNG, WebP, GIF and AVIF pictures`);
         }
-        if (!core.extFor(type, "") && size) ctype = size.type;   // a vague type ("application/octet-stream"): the bytes say
+        size = core.imageSize(body);
+        ctype = kind;
       }
       const file = `${d.stem}.${core.extOf(ctype, d.name, d.mime)}`;
       if (body) await fsp.writeFile(tmp, body);

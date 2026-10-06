@@ -2,9 +2,13 @@
    ------------------------------------------------------------------
    GV.searchKit: small helpers around MiniSearch (vendored at
    /assets/vendor/minisearch.js), shared with /assets/js/library.js:
-     - accent- and case-insensitive terms ("viña" = "vina", "catálogo" = "catalogo")
+     - accent- and case-insensitive terms ("catálogo" = "catalogo"), except that ñ is
+       a letter of its own: "año" never finds "anónimo"; typed without its tilde a
+       word still finds the ñ one ("vina" finds "Viña", "ano" finds "año")
      - English + Spanish stop words ignored (so "libro de trabajo" works)
      - prefix + light fuzzy matching; AND first, falls back to OR ("partial")
+     - AA's own words in the other language too (BILINGUAL: "sobriety" also finds
+       "sobriedad", "padrino" finds "sponsor"); those matches come after the others
      - highlight(text, terms) → safe HTML with <mark> around matches
    The /search/ page part only runs when #site-search exists. Its search box sits in the
    block below the hero; #ss-layout (type filters + results) shows only while there is a
@@ -22,10 +26,22 @@
     "al con de del el en es la las lo los o para por que se su sus un una uno y e")
     .split(" ").forEach(function (w) { STOP[w] = 1; });
 
-  var MARKS = /\p{M}/gu;
-  var WORDCH = /[\p{L}\p{N}]/u;
+  /* Unicode classes in a regular expression (\p{…}) are missing in some older browsers, where one written out
+     would stop this whole file: each is made inside try, with a plainer stand-in (Latin letters, the usual
+     accents and punctuation) where the browser can't. */
+  function re(src, flags, plain) { try { return new RegExp(src, flags); } catch (e) { return plain; } }
+  var MARKS = re("\\p{M}", "gu", /[\u0300-\u036f]/g);
+  var WORDCH = re("[\\p{L}\\p{N}]", "u", /[0-9A-Za-z\u00aa\u00b5\u00ba\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u024f]/);
+  var SPLIT = re("[\\s\\p{P}]+", "u", /[\s!-\/:-@\[-`{-~\u00a1\u00ab\u00b7\u00bb\u00bf\u2010-\u2027\u2030-\u205e]+/);
 
-  function norm(s) { return String(s == null ? "" : s).normalize("NFD").replace(MARKS, "").toLowerCase(); }
+  // Lower case, accents off — but ñ stays ñ: n and its tilde are put back together before the other marks go.
+  function norm(s) {
+    s = String(s == null ? "" : s);
+    if (s.normalize) s = s.normalize("NFD");
+    return s.replace(/n\u0303/g, "\u00f1").replace(/N\u0303/g, "\u00d1").replace(MARKS, "").toLowerCase();
+  }
+  // The same word typed without the tilde ("ano" for "año")
+  function plainN(t) { return t.replace(/\u00f1/g, "n"); }
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
@@ -33,41 +49,160 @@
   }
   function processTerm(term) { var t = norm(term); return !t || STOP[t] ? null : t; }
   function processTermKeep(term) { var t = norm(term); return t || null; }
+  // Indexing: a word with ñ goes in under both spellings, so a query typed without the tilde still finds it; a
+  // query keeps the spelling it was typed with (processTerm): "año" finds "año" and "años", never "anónimo".
+  function indexTerm(term) {
+    var t = processTerm(term);
+    if (!t) return null;
+    var p = plainN(t);
+    return p === t ? t : [t, p];
+  }
+
+  /* ---------- AA's words in the other language ----------
+     A search on an English page for "sponsor" also finds the Spanish stories about a "padrino", and one for
+     "reunión" finds the English "meeting" pages. Each line: English | Spanish, several words for one thing with
+     "/" (a phrase of up to four words). A word typed in the plural is found too ("meetings", "reuniones").
+     Such matches rank after the ones on the words typed (ALT_BOOST, then ranked()). */
+  var BILINGUAL = [
+    "sobriety|sobriedad", "sober|sobrio/sobria", "meeting|reunión/junta", "sponsor|padrino/madrina",
+    "sponsorship|apadrinamiento", "sponsee|ahijado/ahijada", "service|servicio", "general service|servicios generales",
+    "step|paso", "tradition|tradición", "concept|concepto", "home group|grupo base", "group|grupo",
+    "big book|libro grande", "newcomer|recién llegado/recién llegada/principiante", "alcoholic|alcohólico/alcohólica",
+    "alcoholism|alcoholismo", "drinking|beber/bebida", "recovery|recuperación", "unity|unidad",
+    "fellowship|comunidad/compañerismo", "higher power|poder superior", "god|dios", "prayer|oración",
+    "meditation|meditación", "serenity|serenidad", "anonymity|anonimato", "anonymous|anónimo/anónimos",
+    "story|historia/testimonio", "magazine|revista", "literature|literatura", "pamphlet|folleto", "book|libro",
+    "convention|convención", "assembly|asamblea", "district|distrito", "delegate|delegado/delegada",
+    "intergroup|intergrupo", "central office|oficina central", "gsr/general service representative|rsg/representante de servicios generales",
+    "gvr/grapevine representative|rlv/representante de la viña", "hope|esperanza", "gratitude|gratitud",
+    "honesty|honestidad", "humility|humildad", "relapse|recaída", "amends|enmiendas/reparaciones",
+    "inventory|inventario", "anniversary|aniversario", "resentment|resentimiento", "spirituality|espiritualidad",
+    "women|mujeres", "young people/youth|jóvenes", "corrections/prison|correccionales/cárcel/prisión",
+    "workshop|taller", "subscription|suscripción", "one day at a time|un día a la vez",
+  ];
+  var ALT_BOOST = 0.5;
+  function wordsOf(s) { return String(s || "").split(SPLIT).map(processTerm).filter(Boolean); }
+  var DICT = null; // "<words, ñ as n>" → [the other language's phrases, each a list of words]
+  function dict() {
+    if (DICT) return DICT;
+    DICT = {};
+    BILINGUAL.forEach(function (line) {
+      var sides = line.split("|").map(function (side) { return side.split("/").map(wordsOf).filter(function (w) { return w.length; }); });
+      [0, 1].forEach(function (i) {
+        sides[i].forEach(function (ws) {
+          var key = plainN(ws.join(" "));
+          var alts = sides[1 - i].filter(function (a) { return plainN(a.join(" ")) !== key; });
+          if (alts.length) DICT[key] = (DICT[key] || []).concat(alts);
+        });
+      });
+    });
+    return DICT;
+  }
+  // A word as typed, then without a plural's -s or -es ("meetings" → "meeting", "reuniones" → "reunion")
+  function forms(w) {
+    w = plainN(w);
+    var out = [w];
+    if (w.length > 3 && /s$/.test(w)) out.push(w.slice(0, -1));
+    if (w.length > 4 && /es$/.test(w)) out.push(w.slice(0, -2));
+    return out;
+  }
+  // The dictionary's phrase for these words (in any of their forms) → its other-language phrases, or null
+  function lookup(ws) {
+    var d = dict(), keys = [""];
+    ws.forEach(function (w) {
+      var next = [];
+      keys.forEach(function (k) { forms(w).forEach(function (f) { next.push(k ? k + " " + f : f); }); });
+      keys = next;
+    });
+    for (var i = 0; i < keys.length; i++) if (Object.prototype.hasOwnProperty.call(d, keys[i])) return d[keys[i]];
+    return null;
+  }
+  /* A query's words in groups: AA's words (and phrases, the longest first) with the other language's for them.
+     null when none of its words is one of them (then the query runs as it is). */
+  function expand(q) {
+    var words = wordsOf(q), groups = [], any = false;
+    for (var i = 0, n; i < words.length; i += n) {
+      var alts = null;
+      for (n = Math.min(4, words.length - i); n > 0; n--) if ((alts = lookup(words.slice(i, i + n)))) break;
+      if (!alts) n = 1;
+      groups.push({ words: words.slice(i, i + n), alts: alts || [] });
+      if (alts) any = true;
+    }
+    return any ? { words: words, groups: groups } : null;
+  }
+  // The query for MiniSearch: every group must match (combine: AND, or OR for "partial") — a group by its own
+  // words or by one of its other-language phrases, which counts for less (ALT_BOOST)
+  function treeOf(ex, combine) {
+    var lower = function () { return ALT_BOOST; };
+    return {
+      combineWith: combine,
+      queries: ex.groups.map(function (g) {
+        var own = g.words.join(" ");
+        if (!g.alts.length) return own;
+        return {
+          combineWith: "OR",
+          queries: [{ combineWith: "AND", queries: [own] }].concat(g.alts.map(function (a) {
+            return { combineWith: "AND", queries: [a.join(" ")], boostTerm: lower };
+          })),
+        };
+      }),
+    };
+  }
+  // The matches on the words typed first, then the ones found only through the other language's words (alt: true)
+  function ranked(hits, ex) {
+    var typed = {}, own = [], other = [];
+    ex.words.forEach(function (w) { typed[w] = 1; });
+    hits.forEach(function (h) {
+      if ((h.queryTerms || []).some(function (t) { return typed[t]; })) own.push(h);
+      else { h.alt = true; other.push(h); }
+    });
+    return own.concat(other);
+  }
 
   var kit = {
     norm: norm,
     esc: esc,
     processTerm: processTerm,
+    expand: expand,
 
     /* Create a MiniSearch index. fields: ["t","o",…]; boost: {t: 3, …} */
     create: function (fields, boost, extra) {
       if (typeof window.MiniSearch !== "function") throw new Error("MiniSearch not loaded");
-      return new window.MiniSearch(Object.assign({
+      var opts = Object.assign({
         idField: "id",
         fields: fields,
         storeFields: [],
-        processTerm: processTerm,
         searchOptions: {
           boost: boost || {},
           combineWith: "AND",
           prefix: function (term) { return term.length > 1; },
           fuzzy: function (term) { return term.length > 4 ? 0.2 : false; },
         },
-      }, extra || {}));
+      }, extra || {});
+      // (always these two: indexing keeps both spellings of a ñ word, a query only its own — see indexTerm)
+      opts.processTerm = indexTerm;
+      opts.searchOptions = Object.assign({}, opts.searchOptions, { processTerm: processTerm });
+      return new window.MiniSearch(opts);
     },
 
-    /* Run a query. Returns {hits:[{id,score,terms}], partial:bool}. */
+    /* Run a query. Returns {hits:[{id,score,terms,queryTerms,alt}], partial:bool} — alt: found only through
+       the other language's words (they come last). */
     search: function (ms, q, opts) {
       q = String(q || "").trim();
       if (!q) return { hits: [], partial: false };
       opts = opts || {};
       // Query made only of stop words ("la", "the") → search them literally.
-      var keep = !String(q).split(/[\s\p{P}]+/u).some(function (w) { return processTerm(w); });
+      var keep = !q.split(SPLIT).some(function (w) { return processTerm(w); });
       var base = keep ? { processTerm: processTermKeep } : {};
-      var hits = ms.search(q, Object.assign({}, opts, base));
+      var ex = keep ? null : expand(q);
+      var run = function (or) {
+        var o = Object.assign({}, opts, base, or ? { combineWith: "OR" } : {});
+        return ex ? ranked(ms.search(treeOf(ex, o.combineWith || "AND"), o), ex) : ms.search(q, o);
+      };
+      var hits = run(false);
       var partial = false;
       if (!hits.length && /\s/.test(q)) {
-        hits = ms.search(q, Object.assign({}, opts, base, { combineWith: "OR" }));
+        hits = run(true);
         partial = hits.length > 0;
       }
       return { hits: hits, partial: partial };
@@ -84,9 +219,11 @@
     },
 
     /* Escape text and wrap every word that STARTS with one of `terms`
-       (already normalized index terms) in <mark>. Accent-insensitive. */
+       (already normalized index terms) in <mark>. Accent-insensitive; a term
+       without ñ marks the ñ word too (the index's "ano" for "Año"). */
     highlight: function (text, terms) {
       text = String(text == null ? "" : text);
+      if (text.normalize) text = text.normalize("NFC");
       if (!text || !terms || !terms.length) return esc(text);
       var ns = "", st = [], en = [], pos = 0;
       for (var ch of text) {
@@ -94,11 +231,13 @@
         for (var k = 0; k < n.length; k++) { ns += n[k]; st.push(pos); en.push(pos + ch.length); }
         pos += ch.length;
       }
+      var np = plainN(ns); // (one letter for one: the positions stay the same)
       var ranges = [];
       terms.forEach(function (t) {
         if (!t || t.length < 1) return;
+        var hay = t.indexOf("\u00f1") === -1 ? np : ns;
         var from = 0, idx;
-        while ((idx = ns.indexOf(t, from)) !== -1) {
+        while ((idx = hay.indexOf(t, from)) !== -1) {
           if (idx === 0 || !WORDCH.test(ns[idx - 1])) ranges.push([st[idx], en[idx + t.length - 1]]);
           from = idx + t.length;
         }

@@ -11,8 +11,9 @@
       gets: the connection / saved-pages status, the install row (section 6: one tap where the
       browser offers it, else "Install as an app" → this device's steps on /offline/; "The app is
       on this device" once that is known; inside another app, how to open the page in the phone's
-      browser; nothing in the installed app), "Save key pages for offline" (with progress), "See
-      saved pages" and, while images are hidden, "Show images on this page".
+      browser; nothing in the installed app), "Save key pages for offline" (with progress; it also
+      asks the browser to keep them — navigator.storage.persist — and the result line says what it
+      answered), "See saved pages" and, while images are hidden, "Show images on this page".
       [data-pwa-save] gets the save part only (the offline page's "Save key pages" card).
    3. Offline: a small, dismissible notice under the header ("You're offline — showing saved
       pages"), also when the worker had to answer with a saved copy (slow connection). While
@@ -23,6 +24,8 @@
       YouTube previews show a "Load video (uses data)" button instead of a thumbnail and don't
       warm up connections, episode sizes show before playing (.pwa-saver-only). "Show images" undoes
       it for the page being viewed. Every change applies at once (html[data-saver] is watched).
+      With or without it, a YouTube preview on any page plays in privacy-enhanced mode
+      (youtube-nocookie.com, also on phones and in Safari: plainPlayer).
    5. The offline page — "Saved pages & app" (/offline/, src/pages/offline.njk): lists the pages
       saved on this device (read from the caches, forwarding pages left out; a #guide asked for below
       the list stays on screen as the list fills in — on arrival only: after a reload or Back the
@@ -239,6 +242,18 @@
       else if (!on && LYT.pwaBlocked) { LYT.preconnected = false; LYT.pwaBlocked = false; }
     }
   }
+
+  /* YouTube's privacy-enhanced mode on every page (Home, About, Watch …): on phones and in Safari lite-youtube
+     switches to YouTube's full player script, from youtube.com, not youtube-nocookie.com. Just before a preview
+     starts (a click — Enter and Space on its button are one too —, or a key on a link-style button), it is told
+     not to: the plain youtube-nocookie.com player (at worst a phone asks for a second tap on play). Capture
+     phase: before the element's own listener. */
+  function plainPlayer(e) {
+    var el = e.target && e.target.closest && e.target.closest("lite-youtube");
+    if (el) el.needsYTApi = false;
+  }
+  document.addEventListener("click", plainPlayer, true);
+  document.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") plainPlayer(e); }, true);
 
   function syncSaver() {
     root.classList.toggle("pwa-imgs", state.imgs);
@@ -800,9 +815,36 @@
   }
   function refreshCount() { countSaved().then(function (n) { state.saved = n; renderSlots(); }); }
 
+  /* Pages saved for offline are the browser's to remove when the device runs short of space (Safari's also after
+     some days without a visit) — unless it agrees to keep the site's storage: navigator.storage.persist(), asked
+     at the "Save" tap (Firefox asks the visitor, and only from a tap; Chrome and Edge decide by themselves — yes
+     for an installed app). → true (kept until the visitor removes them), false, or null (the browser can't
+     say: nothing is shown). */
+  function askToKeep() {
+    var st = navigator.storage;
+    if (!st || typeof st.persist !== "function") return Promise.resolve(null);
+    try { return Promise.resolve(st.persist()).then(function (p) { return !!p; }, function () { return null; }); } catch (e) { return Promise.resolve(null); }
+  }
+  function keepNote(kept) {
+    if (kept === true) return T("This browser will keep them until you remove them.", "Este navegador las conservará hasta que las borres.");
+    if (kept === false) return T("This browser may still remove them when the device is short of space. Installing the site as an app helps keep them.", "Este navegador aún puede borrarlas si al dispositivo le falta espacio. Instalar el sitio como app ayuda a conservarlas.");
+    return "";
+  }
+  var saveRun = 0;
+
   function savePages() {
     if (!canSW || state.saving) return;
     if (!state.online) { state.lastSave = T("You're offline: connect to save pages.", "Estás sin conexión: conéctate para guardar páginas."); renderSlots(); return; }
+    var run = (saveRun += 1), kept, saved = false;
+    // (at the tap; its answer joins the result line — or, when it comes after the save is done, is added to it)
+    askToKeep().then(function (k) {
+      kept = k;
+      var note = keepNote(k);
+      if (!over || !saved || !note || run !== saveRun || state.saving) return;
+      state.lastSave += " " + note;
+      renderSlots();
+      announce(note);
+    });
     state.saving = { done: 0, total: 0 };
     state.lastSave = "";
     renderSlots();
@@ -819,9 +861,11 @@
       over = true;
       state.saving = null;
       if (d && d.saved) {
+        saved = true;
         state.lastSave = d.saved === d.total
           ? T("Saved " + d.saved + " pages. They open without a connection.", "Se guardaron " + d.saved + " páginas. Se abren sin conexión.")
           : T("Saved " + d.saved + " of " + d.total + " pages.", "Se guardaron " + d.saved + " de " + d.total + " páginas.");
+        if (kept !== undefined && keepNote(kept)) state.lastSave += " " + keepNote(kept);
       } else {
         state.lastSave = T("Couldn't save the pages. Try again with a better signal.", "No se pudieron guardar las páginas. Intenta de nuevo con mejor señal.");
       }

@@ -3,10 +3,11 @@
    The page is server-rendered with the newest documents (works without JS).
    This script loads /library-index.json (every official document + committee document,
    see src/pages/library-index.11ty.js) and adds:
-     - instant search (MiniSearch via GV.searchKit: accent-insensitive, prefix, fuzzy)
+     - instant search (MiniSearch via GV.searchKit: accent-insensitive but ñ apart, prefix, fuzzy,
+       AA's words in the other language too — those matches listed last)
      - facets with live counts (source / language / category / year, multi-select;
        a document with editions in several languages (`ls`) counts in each of them)
-     - quick collections, sort, card/list view, "Load more" paging
+     - quick collections, sort, card/list view, "Load more" paging (focus moves to the first new card)
      - shareable URLs: ?q=&src=&lang=&cat=&year=&col=&sort=&view=
        (view= is only written when it differs from the screen's default)
        (?cat=gvr / ?cat=rlv - the crawler's kit categories, used by links on
@@ -51,13 +52,17 @@
   }
 
   var dialog = $("lib-preview"), frame = $("lib-preview-frame"), lastFocus = null;
+  // A card's addresses as the dialog uses them: a web address or one of the site's own; anything else
+  // (javascript:, data:, the "#" kit.href makes of one) → "".
+  function safeUrl(u) { u = String(u || ""); return /^https?:\/\//i.test(u) || /^\/(?!\/)/.test(u) ? u : ""; }
   function openPreview(btn) {
-    var url = btn.getAttribute("data-lib-preview"), open = btn.getAttribute("data-open") || url;
+    var url = safeUrl(btn.getAttribute("data-lib-preview")), open = safeUrl(btn.getAttribute("data-open")) || url;
+    if (!url) return;
     if (!dialog || typeof dialog.showModal !== "function") { window.open(open, "_blank", "noopener"); return; }
     lastFocus = btn;
     $("lib-preview-title").textContent = btn.getAttribute("data-title") || "";
     ["lib-preview-open", "lib-preview-open-m"].forEach(function (id) { var a = $(id); if (a) a.href = open; });
-    var dl = $("lib-preview-dl"), dlUrl = btn.getAttribute("data-dl");
+    var dl = $("lib-preview-dl"), dlUrl = safeUrl(btn.getAttribute("data-dl"));
     if (dl) { dl.href = dlUrl || open; dl.hidden = !dlUrl; }
     frame.src = url;
     dialog.showModal();
@@ -214,9 +219,10 @@
       var r = kit.search(ensureIndex(), q);
       partial = r.partial;
       termsById = {};
-      // Files no page links to any more rank below live ones with a similar score.
+      // Files no page links to any more rank below live ones with a similar score; documents found only through
+      // the other language's words (h.alt: "padrino" for "sponsor") come after the rest.
       var hits = r.hits.map(function (h, i) { return { h: h, i: i, sc: h.score * (docs[h.id].or ? 0.5 : 1) }; });
-      hits.sort(function (a, b) { return b.sc - a.sc || a.i - b.i; });
+      hits.sort(function (a, b) { return (a.h.alt ? 1 : 0) - (b.h.alt ? 1 : 0) || b.sc - a.sc || a.i - b.i; });
       base = hits.map(function (x) { termsById[x.h.id] = x.h.terms; return docs[x.h.id]; });
     } else base = docs;
     if (state.col) {
@@ -283,7 +289,7 @@
     if (d.hx) meta.push("<span>" + esc(kit.fill(S.opensOn, { host: d.hx })) + "</span>");
 
     var actions = d.pv
-      ? '<button type="button" class="lib-btn lib-btn-main" data-lib-preview="' + esc(kit.href(d.pv)) + '" data-title="' + esc(t) + '" data-open="' + open + '" data-dl="' + esc(d.dl || "") + '" aria-label="' + esc(kit.fill(S.previewAria, tA)) + '">' + icon("eye", "size-4") + "<span>" + esc(S.preview) + "</span></button>" +
+      ? '<button type="button" class="lib-btn lib-btn-main" data-lib-preview="' + esc(kit.href(d.pv)) + '" data-title="' + esc(t) + '" data-open="' + open + '" data-dl="' + esc(d.dl ? kit.href(d.dl) : "") + '" aria-label="' + esc(kit.fill(S.previewAria, tA)) + '">' + icon("eye", "size-4") + "<span>" + esc(S.preview) + "</span></button>" +
         '<a class="lib-btn lib-icon" href="' + open + '" target="_blank" rel="noopener" aria-label="' + esc(kit.fill(S.openAria, tA)) + '" title="' + esc(S.open) + '">' + icon("external-link", "size-4") + "</a>"
       : '<a class="lib-btn lib-btn-main" href="' + open + '" target="_blank" rel="noopener" aria-label="' + esc(kit.fill(S.openAria, tA)) + '">' + icon("external-link", "size-4") + "<span>" + esc(S.open) + "</span></a>";
     actions +=
@@ -470,11 +476,15 @@
   });
   moreBtn.addEventListener("click", function () {
     if (!docs) return;
-    var before = shown;
+    var before = shown, had = results.children.length;
     shown += CFG.pageSize;
     results.insertAdjacentHTML("beforeend", list.slice(before, shown).map(renderCard).join(""));
     renderStatus();
     announce(shownEl.textContent);
+    // Keyboard focus goes on to the first new document — on the last batch too, where "Load more" hides
+    // itself and the focus would otherwise drop to the top of the page.
+    var first = results.children[had], link = first && first.querySelector(".lib-title a");
+    if (link) link.focus();
   });
   document.addEventListener("click", function (e) {
     var rm = e.target.closest("[data-rm]"), rs = e.target.closest("[data-lib-reset]");

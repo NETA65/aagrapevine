@@ -86,15 +86,34 @@
     return LANG === "es" ? s.replace(/\b([ap])\.\s?m\./g, "$1.\u00a0m.").replace(/(\d) (?=[ap]\.\u00a0m\.)/g, "$1\u00a0") : s;
   };
 
+  /* Intl formatters, one per (kind, locale, options): building one is slow (milliseconds on a slow phone), and a
+     list of hundreds of dates — the Tracker's Requests, a search's results — would build one per date. An option
+     left undefined (timeZone: undefined = the device's own zone) is a key of its own. */
+  var FORMATTERS = {};
+  function formatter(kind, locale, opts) {
+    opts = opts || {};
+    var key = kind + "|" + locale + "|" + Object.keys(opts).sort().map(function (k) { return k + "=" + String(opts[k]); }).join("&");
+    return FORMATTERS[key] || (FORMATTERS[key] = new Intl[kind](locale, opts));
+  }
+
   GV.fmtDate = function (d, opts) {
-    try { return GV.esMeridiem(new Intl.DateTimeFormat(LOCALE, Object.assign({ timeZone: TZ }, opts || {})).format(new Date(d))); } catch (e) { return ""; }
+    try { return GV.esMeridiem(formatter("DateTimeFormat", LOCALE, Object.assign({ timeZone: TZ }, opts || {})).format(new Date(d))); } catch (e) { return ""; }
   };
 
+  /* "3 days ago", "in 2 hours" — or, in a browser without Intl.RelativeTimeFormat (iOS 13 and older), the plain
+     date ("Oct 3, 2026"): never an error, which would stop the rest of the page's script with it (the copy and
+     share buttons among it). "" for something that is not a date. */
   GV.relative = function (d) {
-    var rtf = new Intl.RelativeTimeFormat(LOCALE, { numeric: "auto" });
-    var diff = (new Date(d).getTime() - Date.now()) / 1000, abs = Math.abs(diff);
+    var t = new Date(d).getTime();
+    if (isNaN(t)) return "";
+    var rtf = null;
+    try { rtf = formatter("RelativeTimeFormat", LOCALE, { numeric: "auto" }); } catch (e) { rtf = null; }
+    if (!rtf) return GV.fmtDate(t, { month: "short", day: "numeric", year: "numeric" });
+    var diff = (t - Date.now()) / 1000, abs = Math.abs(diff);
     var units = [["year", 31536000], ["month", 2592000], ["week", 604800], ["day", 86400], ["hour", 3600], ["minute", 60]];
-    for (var i = 0; i < units.length; i++) if (abs >= units[i][1] || units[i][0] === "minute") return rtf.format(Math.round(diff / units[i][1]), units[i][0]);
+    try {
+      for (var i = 0; i < units.length; i++) if (abs >= units[i][1] || units[i][0] === "minute") return rtf.format(Math.round(diff / units[i][1]), units[i][0]);
+    } catch (e) { return GV.fmtDate(t, { month: "short", day: "numeric", year: "numeric" }); }
     return "";
   };
 

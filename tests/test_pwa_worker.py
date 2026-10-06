@@ -6,7 +6,8 @@
                  optional file does not (a font, install-core.js — the "Install as an app" rules).
   * activate   — old versions' gvlv-* caches go; visitors' pages, saved pages, the booth display's copy and
                  other sites' caches stay; the page open during a first visit is kept WITH its own styles and
-                 scripts.
+                 scripts — after activation, in the background (class Updates: "Reload" after an update never
+                 waits for the open tabs; a tab whose page never answers is given up in time).
   * pages      — online: the page from the site (kept for later); offline, a server error or no answer
                  in time: the kept copy (and pwa.js is told it is a copy); no copy: the offline page in
                  the address's language; GitHub Pages' 404 passes through and is never kept; an old
@@ -29,11 +30,16 @@
                  media player asks for (206 / 416 — "Range: bytes=a-b, a-, -n"); a file not saved goes to
                  the network with its range and is never kept; the show (/about/booth.json) is network
                  first, then the booth's copy, then the data cache's.
+  * fresh      — saved pages not opened for a week are fetched again once a page opened online shows there
+                 is a signal: one at a time, the first that fails ends the round, at most every 6 hours; a
+                 page gone (404) keeps its copy (class Updates).
   * the page   — pwa.js's side, run against a pretend page and worker: "Save key pages" gives up only
                  after 45 s without news from the worker (a weak signal saves slowly, not never), ignores
                  what a save it gave up on still says (a worker ready only by then gets no SAVE) and saves
-                 again when asked; "Reload" applies a new version — or, applied already in another tab,
-                 just reloads.
+                 again when asked, and asks the browser to keep the pages (navigator.storage.persist: its
+                 answer joins the result line, or follows it when it comes late); "Reload" applies a new
+                 version — or, applied already in another tab, just reloads; a YouTube preview is told to
+                 keep youtube-nocookie.com before it starts (a click, Enter or Space).
 
 Skipped without Node.js (tests/nodejs.py). The page-level checks (the panel, the banner) are in the
 browser QA scripts; the static contract checks are in tests/test_pwa.py.
@@ -225,6 +231,10 @@ function world() {
       return { replies, settled: until(waits) };
     },
     async keys(name) { return store.has(name) ? [...store.get(name).m.keys()] : null; },
+    // the open tabs being kept after activation (keepOpenTabs), done
+    settled: () => Promise.resolve(vm.runInContext("settling", ctx)),
+    // the worker's clock moves on
+    skew(ms) { ctx.__skew += ms; },
   };
 }
 
@@ -334,6 +344,7 @@ WORLD_JS = HARNESS_JS + r"""
   f.page(own[1], { body: "/* lyt */", ct: "text/css" });
   f.wins.push({ url: ORIGIN + B });
   R.firstActivate = await f.lifecycle("activate");
+  await f.settled();                                                                                     // (kept after activation)
   for (const u of [B, ...own]) f.net.delete(ORIGIN + u);
   R.firstVisit = { page: await f.request(B, { navigate: true }), js: await f.request(own[0]), css: await f.request(own[1]) };
 
@@ -405,6 +416,74 @@ WORLD_JS = HARNESS_JS + r"""
   ns.net.delete(ORIGIN + B + "es/");
   R.noSlash.esKept = await at(B + "es");
   R.noSlash.kept = ((await ns.keys("gvlv-pages-v1")) || []).map((u) => u.slice(ORIGIN.length)).sort();
+}
+out(R);
+"""
+
+# A new version taking over, and the saved pages kept fresh: their own worlds, same harness.
+UPDATE_JS = HARNESS_JS + r"""
+const kept = async (w, p) => ((await w.keys("gvlv-pages-v1")) || []).includes(ORIGIN + B + p);
+/* ---------------- "Reload" after an update: activation never waits for the open tabs ---------------- */
+{
+  const u = world();
+  shellOnline(u);
+  await u.lifecycle("install");
+  let release = null;
+  u.page(B + "shop/", { body: html("Shop", "SHOP-TAB"), wait: new Promise((r) => { release = r; }) });   // an open tab, its page slow
+  u.page(B + "meetings/", { body: html("Meetings", "RELOADED") });
+  u.wins.push({ url: ORIGIN + B + "shop/" });
+  R.update = { activate: await Promise.race([u.lifecycle("activate"), new Promise((r) => setTimeout(r, 3000, "still waiting"))]) };
+  R.update.reload = marker(await u.request(B + "meetings/", { navigate: true, settle: false }));   // the reloaded page: at once
+  R.update.keptMeanwhile = await kept(u, "shop/");
+  release();
+  await u.settled();
+  R.update.keptAfter = await kept(u, "shop/");                                                    // the tab, kept afterwards
+
+  const h = world();                                                                               // a tab whose page never comes
+  shellOnline(h);
+  await h.lifecycle("install");
+  h.page(B + "shop/", "hang");
+  h.wins.push({ url: ORIGIN + B + "shop/" });
+  h.fast = true;                                                                                   // (its time limit: at once)
+  R.hang = { activate: await h.lifecycle("activate") };
+  await h.settled();
+  h.fast = false;
+  R.hang.kept = await kept(h, "shop/");
+}
+
+/* ---------------- saved pages not opened for a week are fetched again once there is a signal ---------------- */
+{
+  const k = world();
+  shellOnline(k);
+  await k.lifecycle("install");
+  const PAGES = ["", "meetings/", "monthly/", "contribute/", "shop/"];
+  const name = (p) => p.slice(0, -1) || "home";
+  for (const p of PAGES) k.page(B + p, { body: html(name(p), "OLD-" + name(p)) });
+  await k.message({ type: "SAVE", lang: "en" });
+  const entry = (p) => k.store.get("gvlv-saved-v1").m.get(ORIGIN + B + p);
+  const age = (p, days) => {
+    const e = entry(p);
+    e.headers = e.headers.map(([n, v]) => [n, n === "x-gvlv-saved" ? new Date(Date.now() - days * 864e5).toISOString() : v]);
+  };
+  const copies = () => Object.fromEntries(PAGES.map((p) => [name(p), marker({ body: new TextDecoder().decode(entry(p).body) })]));
+  const asked = (from) => k.fetched.slice(from).map((x) => x.slice(ORIGIN.length + B.length) || "home").filter((x) => !x.includes("assets/"));
+  for (const p of PAGES) k.page(B + p, { body: html(name(p), "NEW-" + name(p)) });
+  k.page(B + "monthly/", { status: 404, body: html("Page not found", "404") });                 // gone: its copy stays
+  k.page(B + "accessibility/", { body: html("Accessibility", "A11Y") });
+  age("", 8); age("meetings/", 8); age("monthly/", 9); age("contribute/", 2); age("shop/", 10);
+  k.page(B + "meetings/", "offline");                                                              // the signal fails on it
+  let from = k.fetched.length;
+  await k.request(B + "accessibility/", { navigate: true });                                       // a page opened online
+  R.refresh = { weak: { copies: copies(), asked: asked(from) } };
+  from = k.fetched.length;
+  await k.request(B + "accessibility/", { navigate: true });                                       // again soon: no new round
+  R.refresh.soon = asked(from);
+  k.page(B + "meetings/", { body: html("meetings", "NEW-meetings") });
+  k.skew(7 * 3600e3);                                                                              // 7 hours later
+  from = k.fetched.length;
+  await k.request(B + "accessibility/", { navigate: true });
+  R.refresh.later = { copies: copies(), asked: asked(from) };
+  R.refresh.stamped = Math.abs(Date.now() - Date.parse(entry("shop/").headers.find(([n]) => n === "x-gvlv-saved")[1])) < 60e3;   // (stamped now)
 }
 out(R);
 """
@@ -689,7 +768,7 @@ out(R);
 # controllerchange) }. The page is loaded; the worker registers at tick(0).
 PAGE_JS = r"""
 import vm from "node:vm";
-function boot({ lang = "en", waiting = null, installing = false } = {}) {
+function boot({ lang = "en", waiting = null, installing = false, storage = undefined } = {}) {
   const clock = { now: Date.parse("2026-10-03T20:00:00Z") };
   let activate = () => {};
   let timers = [], seq = 0;
@@ -733,7 +812,7 @@ function boot({ lang = "en", waiting = null, installing = false } = {}) {
   const path = "/aagrapevine/" + (lang === "es" ? "es/" : "") + "meetings/";
   const ctx = {
     console, URL, Date: FakeDate, document, MessageChannel, MutationObserver,
-    navigator: { onLine: true, serviceWorker, userAgent: "", maxTouchPoints: 0 },
+    navigator: { onLine: true, serviceWorker, userAgent: "", maxTouchPoints: 0, storage },
     location: { pathname: path, search: "", hash: "", href: "https://example.test" + path, reload: () => { reloads.n += 1; } },
     history: { state: null, replaceState() {} }, sessionStorage: store, localStorage: store, isSecureContext: true,
     caches: { has: () => Promise.resolve(false), open: () => Promise.resolve({ keys: () => Promise.resolve([]) }) },
@@ -763,7 +842,7 @@ function boot({ lang = "en", waiting = null, installing = false } = {}) {
   };
   const button = (act) => ({ disabled: false, closest() { return this; }, hasAttribute: () => false, getAttribute: (n) => (n === "data-pwa-act" ? act : null) });
   const click = async (b) => { for (const fn of docL.click || []) fn({ target: b, preventDefault() {} }); await flush(); return b; };
-  return { announced, reloads, sw, tick, click, button, activate: () => activate(), saves: () => posted.filter((p) => p.msg.type === "SAVE") };
+  return { announced, reloads, sw, tick, click, button, activate: () => activate(), saves: () => posted.filter((p) => p.msg.type === "SAVE"), docL };
 }
 const R = {};
 
@@ -838,6 +917,39 @@ for (const [name, appliedElsewhere] of [["update", false], ["secondTab", true]])
     for (const fn of p.sw.controllerchange || []) fn();                           // it takes over: this tab reloads
   }
   R[name] = { offered, before, pressed, reloads: p.reloads.n };
+}
+
+/* ---------------- "Save key pages" asks the browser to keep them (navigator.storage.persist) ---------------- */
+const saveWith = async (lang, persist, late) => {
+  let answer = null, asked = 0;
+  const storage = persist === undefined ? undefined : { persist: () => { asked += 1; return late ? new Promise((r) => { answer = () => r(persist); }) : Promise.resolve(persist); } };
+  const p = boot({ lang, storage });
+  await p.tick(0);
+  await p.click(p.button("save"));
+  const port = p.saves()[0].port.peer;
+  port.onmessage({ data: { type: "SAVE_PROGRESS", done: 0, total: 9 } });
+  await p.tick(3000);
+  port.onmessage({ data: { type: "SAVE_DONE", saved: 9, total: 9, failed: [] } });
+  await p.tick(0);
+  if (answer) { answer(); await p.tick(0); }                                      // Firefox: the visitor answered its question late
+  return { asked, said: p.announced.slice() };
+};
+R.persist = { yes: await saveWith("en", true), no: await saveWith("es", false), none: await saveWith("en", undefined),
+              late: await saveWith("en", true, true) };
+
+/* ---------------- YouTube previews: the plain youtube-nocookie.com player on every page ---------------- */
+{
+  const p = boot();
+  await p.tick(0);
+  const preview = { needsYTApi: true };                                            // lite-youtube on a phone: true
+  const inside = { closest: (s) => (s === "lite-youtube" ? preview : null), getAttribute: () => null, hasAttribute: () => false };
+  for (const fn of p.docL.click || []) fn({ target: inside, preventDefault() {} });
+  const keyed = { needsYTApi: true };
+  const btn = { closest: (s) => (s === "lite-youtube" ? keyed : null) };
+  for (const fn of p.docL.keydown || []) fn({ key: "Enter", target: btn, preventDefault() {} });
+  const other = { needsYTApi: true };
+  for (const fn of p.docL.keydown || []) fn({ key: "a", target: { closest: (s) => (s === "lite-youtube" ? other : null) }, preventDefault() {} });
+  R.youtube = { click: preview.needsYTApi, enter: keyed.needsYTApi, otherKey: other.needsYTApi };
 }
 out(R);
 """
@@ -987,6 +1099,45 @@ class Worker(unittest.TestCase):
         self.assertEqual(r, {"es": "OFFLINE-ES", "esMeetings": "ES-MEETINGS", "meetings": "EN-MEETINGS", "esShop": "OFFLINE-ES",
                              "shop": "OFFLINE-EN", "esKept": "ES-HOME",
                              "kept": [B + "es/", B + "es/meetings/", B + "meetings/"]})
+
+
+class Updates(unittest.TestCase):
+    """UPDATE_JS: a new version taking over; the saved pages kept fresh."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.r = None
+
+    def setUp(self):
+        if Updates.r is None:
+            Updates.r = run_js(self, UPDATE_JS, needs_modules=False, env={"PATH_PREFIX": B}, timeout=120)
+        self.r = Updates.r
+
+    def test_reload_never_waits_for_the_open_tabs(self):
+        # P5-1: activation used to download every open tab (and its files) again before any page could load — a
+        # "Reload" after an update hung 10 s and more on a weak signal. Now the tabs are kept afterwards.
+        u = self.r["update"]
+        self.assertEqual(u["activate"], ["fulfilled"])
+        self.assertEqual(u["reload"], "RELOADED")
+        self.assertFalse(u["keptMeanwhile"])
+        self.assertTrue(u["keptAfter"])
+
+    def test_a_tab_that_never_answers_is_given_up(self):
+        self.assertEqual(self.r["hang"], {"activate": ["fulfilled"], "kept": False})
+
+    def test_saved_pages_older_than_a_week_are_fetched_again(self):
+        # F-7: a page opened online starts a round over the saved pages: those saved over a week ago are fetched
+        # again, one at a time; the first that fails ends the round (the signal is weak again)
+        r = self.r["refresh"]
+        self.assertEqual(r["weak"]["copies"], {"home": "NEW-home", "meetings": "OLD-meetings", "monthly": "OLD-monthly",
+                                               "contribute": "OLD-contribute", "shop": "OLD-shop"})
+        self.assertEqual(r["weak"]["asked"], ["accessibility/", "home", "meetings/"])
+        self.assertEqual(r["soon"], ["accessibility/"])                       # at most every 6 hours
+        # 7 hours later: the rest that is over a week old; a page now gone (404) keeps its copy; a fresh one is left
+        self.assertEqual(r["later"]["asked"], ["accessibility/", "meetings/", "monthly/", "shop/"])
+        self.assertEqual(r["later"]["copies"], {"home": "NEW-home", "meetings": "NEW-meetings", "monthly": "OLD-monthly",
+                                                "contribute": "OLD-contribute", "shop": "NEW-shop"})
+        self.assertTrue(r["stamped"])
 
 
 MEDIA = B + "about/booth/media/"
@@ -1229,6 +1380,25 @@ class ThePage(unittest.TestCase):
         r = self.r["secondTab"]
         self.assertEqual(r["before"], 0)                                                              # not on its own
         self.assertEqual(r["pressed"], {"reloads": 1, "sent": [], "disabled": True})
+
+    def test_save_asks_the_browser_to_keep_the_pages(self):
+        # F-7: a phone short of space may delete saved pages — the tap also asks the browser to keep them
+        # (navigator.storage.persist) and the result line says what it answered, in the page's language
+        p = self.r["persist"]
+        self.assertEqual(p["yes"], {"asked": 1, "said": ["Saving pages for offline use…",
+                                                         "Saved 9 pages. They open without a connection. This browser will keep them until you remove them."]})
+        self.assertEqual(p["no"]["asked"], 1)
+        self.assertEqual(p["no"]["said"][1], "Se guardaron 9 páginas. Se abren sin conexión. Este navegador aún puede borrarlas si al "
+                                             "dispositivo le falta espacio. Instalar el sitio como app ayuda a conservarlas.")
+        self.assertEqual(p["none"], {"asked": 0, "said": ["Saving pages for offline use…", "Saved 9 pages. They open without a connection."]})
+        # an answer that comes after the save is done (Firefox asks the visitor): said on its own, then
+        self.assertEqual(p["late"]["said"], ["Saving pages for offline use…", "Saved 9 pages. They open without a connection.",
+                                             "This browser will keep them until you remove them."])
+
+    def test_youtube_previews_keep_privacy_mode(self):
+        # P5-6: lite-youtube switches to YouTube's full player (youtube.com) on phones and in Safari; pwa.js (on every
+        # page: Home and About too) tells it not to just before it starts — a click, or Enter / Space on its button
+        self.assertEqual(self.r["youtube"], {"click": False, "enter": False, "otherKey": True})
 
 
 if __name__ == "__main__":

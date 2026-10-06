@@ -835,10 +835,8 @@
     });
   });
 
-  /* lite-youtube switches to the full YouTube IFrame API (youtube.com, not
-     youtube-nocookie.com) on phones and Safari. Keep every player in
-     privacy-enhanced mode instead; at worst the visitor taps play twice. */
-  document.querySelectorAll("lite-youtube").forEach(function (el) { el.needsYTApi = false; });
+  /* (lite-youtube's privacy-enhanced mode on phones and in Safari — youtube-nocookie.com, never the full
+     player script from youtube.com — is pwa.js's, on every page: the previews here, on Home and on About.) */
 
   /* Official Instagram embeds report their height with postMessage
      ({type:"MEASURE", details:{height}}); size the matching iframe. */

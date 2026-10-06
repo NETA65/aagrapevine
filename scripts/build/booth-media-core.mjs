@@ -44,6 +44,8 @@
 //   imageSize(bytes)              → { type, w, h } | null — read from the file's first bytes: PNG, JPEG (a phone
 //                                 photo turned by its EXIF note reports its turned size), GIF, WebP (VP8, VP8L,
 //                                 VP8X)
+//   pictureType(bytes)            → "image/png" … one of PICTURE_TYPES (JPEG, PNG, WebP, GIF, AVIF) by the file's
+//                                 first bytes, or "": the only pictures the downloader keeps (never an SVG)
 //   isHtml(bytes, contentType)    → true when Google answered with a web page instead of the file (Drive's "can't
 //                                 scan this file for viruses", "too many downloads", a sign-in page)
 //   manifestOf(entries, skipped, built) → the manifest.json object
@@ -183,9 +185,11 @@ export function stemOf(item) {
 }
 
 // The answer's content type → the extension. The booth's own kinds first (r5 SPEC §2.3), then their usual aliases.
+// Pictures: the raster kinds only (PICTURE_TYPES) — never an SVG, which a browser opening it at the site's own
+// address (/about/booth/media/…) would run as a page, scripts and all.
 const EXT_BY_TYPE = {
   "image/jpeg": "jpg", "image/jpg": "jpg", "image/pjpeg": "jpg", "image/png": "png", "image/webp": "webp",
-  "image/gif": "gif", "image/avif": "avif", "image/svg+xml": "svg", "image/bmp": "bmp",
+  "image/gif": "gif", "image/avif": "avif",
   "video/mp4": "mp4", "video/webm": "webm", "video/quicktime": "mov", "video/x-m4v": "m4v", "video/ogg": "ogv",
   "audio/mpeg": "mp3", "audio/mp3": "mp3", "audio/mpeg3": "mp3", "audio/x-mpeg": "mp3",
   "audio/mp4": "m4a", "audio/x-m4a": "m4a", "audio/m4a": "m4a", "audio/aac": "aac", "audio/x-aac": "aac",
@@ -196,7 +200,6 @@ const EXT_BY_TYPE = {
 // this list says nothing (a file's name never decides that it is, say, ".exe").
 const TYPE_BY_EXT = {
   jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp", gif: "image/gif", avif: "image/avif",
-  svg: "image/svg+xml", bmp: "image/bmp",
   mp4: "video/mp4", m4v: "video/mp4", webm: "video/webm", mov: "video/quicktime", ogv: "video/ogg",
   mp3: "audio/mpeg", m4a: "audio/mp4", aac: "audio/aac", ogg: "audio/ogg", oga: "audio/ogg", opus: "audio/ogg",
   wav: "audio/wav", flac: "audio/flac",
@@ -442,6 +445,20 @@ export function imageSize(bytes) {
     found = jpegSize(b);
   }
   return found && found.w > 0 && found.h > 0 ? found : null;
+}
+
+// The kinds of picture the booth keeps: raster images a browser shows as pictures and nothing else.
+export const PICTURE_TYPES = Object.freeze(["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"]);
+
+// What kind of picture the file's first bytes say it is — one of PICTURE_TYPES (JPEG, PNG, GIF and WebP as
+// imageSize reads them; AVIF by its "ftyp" box: brand avif / avis) — or "" (anything else: an SVG, a web page, a
+// text, a picture kind the booth does not keep). The bytes decide, never the answer's content type.
+export function pictureType(bytes) {
+  const b = bytesOf(bytes);
+  const size = imageSize(b);
+  if (size) return size.type;
+  if (b.length >= 12 && ascii(b, 4, 4) === "ftyp" && /^avi[fs]$/.test(ascii(b, 8, 4))) return "image/avif";
+  return "";
 }
 
 // ---------------------------------------------------------------------------------------------- web pages

@@ -54,7 +54,10 @@
    when a slide outlives its time by 20 s; media elements and iframes are stopped and emptied when their slide goes;
    YouTube that does not start within 12 s is skipped (and left out for 10 minutes) — the wait for a start is not
    taken from a clip's time, so a short clip is checked too; a video or sound that stops for lack of data for 12 s is
-   skipped; a failed load of YouTube's script leaves nothing behind; a picture or file that fails is skipped. Online /
+   skipped; a failed load of YouTube's script leaves nothing behind; a picture or file that fails is skipped — and the
+   next slide's picture is loaded and decoded while the one before shows (its video or sound starts loading too, on
+   the booth's own screen while no clip plays), so it is there when its slide comes; one that fails then is left out
+   before it shows (warmUp). A clip that ends right at its slide's time moves the show on once, not twice. Online /
    offline: navigator.onLine and a probe (build.json, every 60 s and after an online item fails; its unused answer is
    cancelled — an unread body keeps its loader alive); offline, the items that need internet leave the show quietly.
    New content (booth.json's `version`, checked every refreshMinutes) swaps in at the next slide. The screen stays on
@@ -1172,6 +1175,8 @@
     var M = { started: true, failed: false, live: false };
     img.addEventListener("error", function () { M.failed = true; if (M.live) R.E.mediaFailed(R.item, "image"); });
     img.addEventListener("load", function () { img.classList.add("is-loaded"); });
+    // (loaded ahead, while the slide before showed — warmUp: it is there at once, without fading in)
+    if (img.complete && img.naturalWidth > 0) img.classList.add("is-loaded");
     M.start = function () {
       M.live = true;
       if (M.failed || (img.complete && img.naturalWidth === 0 && img.getAttribute("src"))) R.E.mediaFailed(R.item, "image");
@@ -1186,7 +1191,9 @@
     var root = slideRoot(R, "gvb-slide--media");
     var wrap = el("div", "gvb-media");
     var lead = R.t(R.lead);
-    var img = el("img", "gvb-img " + (fit === "cover" ? "gvb-img--cover" : "gvb-img--contain"));
+    // (the picture loaded ahead, when this is the one warmUp loaded)
+    var img = takeWarm(R.E, "img", m.src) || el("img");
+    img.className = "gvb-img " + (fit === "cover" ? "gvb-img--cover" : "gvb-img--contain");
     img.alt = plain(lead.title || lead.text || "");
     img.decoding = "async";
     if (fit === "cover") {
@@ -1199,7 +1206,7 @@
       back.src = m.src;
       wrap.appendChild(back);
     }
-    img.src = m.src;
+    if (img.getAttribute("src") !== m.src) img.src = m.src;
     wrap.appendChild(img);
     root.appendChild(wrap);
     var cap = caption(R);
@@ -1222,6 +1229,11 @@
   function mediaStarted(R) {
     var c = R.E.cur;
     if (c && c.item === R.item && c.mediaMs) { c.total = elapsed(c) + c.mediaMs; c.mediaMs = 0; }
+  }
+  /** A video's or a sound's address as its player gets it: a video with a start or an end mark gets them as a media
+   *  fragment ("#t=12,40"). */
+  function clipUrl(m, isAudio) {
+    return m.src + (!isAudio && (m.start || m.end) ? "#t=" + (m.start || 0) + (m.end ? "," + m.end : "") : "");
   }
   /** A file's player (a <video> on the slide, or an Audio): it says when it ends, or fails, to the engine. Not
    *  playing 12 s after it was asked, or stopped for lack of data for 12 s once it played (the venue's Wi-Fi
@@ -1278,7 +1290,10 @@
       elm.muted = !soundOn(R, m);
       muteNews();
       try { elm.volume = Math.max(0, Math.min(1, Number(SETTINGS.volume) || 0.8)); } catch (e) { /* iOS: the device's volume */ }
-      elm.src = m.src + (!isAudio && (m.start || m.end) ? "#t=" + (m.start || 0) + (m.end ? "," + m.end : "") : "");
+      // (a clip loaded ahead — warmUp — already has its address: set again, it would load from the start)
+      var url = clipUrl(m, isAudio);
+      if (elm.getAttribute("src") !== url) elm.src = url;
+      else if (m.start && elm.readyState >= 1 && elm.currentTime < m.start - 0.5) { try { elm.currentTime = m.start; } catch (e) { /* not seekable yet */ } }
       var p = null;
       try { p = elm.play(); } catch (e) { fail(); return; }
       if (p && p.catch) p.catch(refused);
@@ -1518,7 +1533,9 @@
       if (!m.src) return null;
       root = slideRoot(R, "gvb-slide--media");
       var wrap = el("div", "gvb-media");
-      var v = el("video", "gvb-video");
+      // (the clip loaded ahead, when this is the one warmUp loaded)
+      var v = takeWarm(R.E, "video", clipUrl(m, false)) || el("video");
+      v.className = "gvb-video";
       attrs(v, { playsinline: "", "webkit-playsinline": "", "aria-label": title || null, disablepictureinpicture: "" });
       v.playsInline = true;
       if (m.poster) v.poster = m.poster;
@@ -1558,9 +1575,64 @@
     s.appendChild(enter(bars, 3));
     b.appendChild(s);
     root.appendChild(b);
-    var audio = new Audio();
+    var audio = takeWarm(R.E, "audio", clipUrl(m, true)) || new Audio();
     return { node: root, media: fileMedia(R, audio, m, true) };
   };
+
+  /* ---------- the next slide's picture or clip, loaded ahead ----------
+     A slow picture would come in with its slide: the frame first, empty, then the picture — and one a venue's
+     filtered Wi-Fi blocks would leave its slide empty until it fails. So while a slide shows (AHEAD_MS after it
+     came), the one the core will pick next is worked out (its pick is seeded by the show's state: the same then,
+     unless what may show changes meanwhile — a little data spent ahead for nothing) and its picture is loaded and
+     decoded, or its video or sound starts loading (the booth's own screen only, and not while a clip plays: two
+     would share the signal). Its slide then takes that very element (takeWarm): no second download, no fade. One
+     that fails ahead is left out like one that fails on screen (FAILED): the show picks another. Nothing is loaded
+     ahead while Data saver is on with a connection. */
+  var AHEAD_MS = 1500;
+  var PICTURE_TYPES = { photo: 1, poster: 1, image: 1 };
+  function warmUp(E, item) {
+    var m = item && item.media, kind = "";
+    if (m && m.src) {
+      if (PICTURE_TYPES[item.type]) kind = "img";
+      else if (item.type === "video" && m.kind !== "youtube") kind = "video";
+      else if (item.type === "audio") kind = "audio";
+    }
+    var src = kind === "img" ? m.src : kind ? clipUrl(m, kind === "audio") : "";
+    if (E.warm && E.warm.kind === kind && E.warm.src === src) return; // (on its way already)
+    dropWarm(E);
+    // (Data saver on while online: nothing is fetched ahead of time — offline, the saved copy answers at no cost)
+    if (!kind || (document.documentElement.getAttribute("data-saver") === "on" && navigator.onLine !== false)) return;
+    if (kind !== "img") {
+      var playing = E.cur && (E.cur.item.type === "video" || E.cur.item.type === "audio");
+      if (E.mode !== "full" || playing || (kind === "audio" && !soundOn({ E: E }, m))) return;
+    }
+    var node = kind === "img" ? new Image() : kind === "video" ? el("video") : new Audio();
+    var w = (E.warm = { id: item.id, kind: kind, src: src, node: node, failed: false });
+    node.addEventListener("error", function () {
+      if (E.warm !== w) return;
+      w.failed = true;
+      if (item.id && item.id !== "auto:about") FAILED[item.id] = now();
+      // (the pick that comes instead — the failed one is out of the pool now — starts loading at once)
+      E.ahead();
+    });
+    if (kind === "img") node.decoding = "async";
+    else { node.muted = true; node.preload = "auto"; }
+    node.src = src;
+    if (kind === "img" && node.decode) node.decode().catch(function () { /* the error event says it */ });
+  }
+  /** The element loaded ahead for this picture or clip (once: its slide keeps it), or null. */
+  function takeWarm(E, kind, src) {
+    var w = E && E.warm;
+    if (!w || w.kind !== kind || w.src !== src || w.failed) return null;
+    E.warm = null;
+    return w.node;
+  }
+  /** Nothing loading ahead any more (a clip stops its download). */
+  function dropWarm(E) {
+    var w = E.warm;
+    E.warm = null;
+    if (w && w.kind !== "img") { try { w.node.removeAttribute("src"); w.node.load(); } catch (e) { /* gone */ } }
+  }
 
   /* ---------- the live lists: events, meetings, themes, prices, the book of the month, the countdown ----------
      A list (events, meetings, themes) and the prices fill a screen in one language, so in Both their languages take
@@ -1961,7 +2033,7 @@
   function makeEngine(host, mode) {
     var E = {
       mode: mode, host: host, screen: null, stage: null, cur: null, paused: false, history: [], fails: 0, count: 0, sched: null,
-      langOverride: null, quiz: null, visitor: false, alive: false, timers: {}, leaving: [], qrKey: "", barKey: "",
+      langOverride: null, quiz: null, visitor: false, alive: false, timers: {}, leaving: [], qrKey: "", barKey: "", warm: null,
     };
     E.interactive = mode !== "card";
     buildScreen(E);
@@ -2026,6 +2098,7 @@
       if (E.ro) { E.ro.disconnect(); E.ro = null; }
       if (E.cur) stopSlide(E.cur);
       E.cur = null;
+      dropWarm(E);
       E.leaving.forEach(function (n) { n.remove(); });
       E.leaving = [];
       if (E.screen) E.screen.remove();
@@ -2156,7 +2229,17 @@
           try { E.cur.media.start(); } catch (err) { E.mediaFailed(item, "start"); return; }
         }
       }
+      // the next slide's picture or clip, loaded while this one shows (warmUp)
+      clearTimeout(E.timers.ahead);
+      if (!E.quiz) E.timers.ahead = setTimeout(function () { E.ahead(); }, AHEAD_MS);
       if (o.user) sayItem(E, E.cur);
+    };
+    /** What the core will pick next, worked out now (the same state, pool and settings E.next will use): its
+     *  picture or clip starts loading (warmUp). */
+    E.ahead = function () {
+      if (!E.alive || E.quiz || !E.cur) return;
+      var res = nextOf(E.sched, E.pool(), E.eff(), E.ctx());
+      warmUp(E, res && res.item);
     };
     E.rerender = function () {
       var c = E.cur;
@@ -2179,6 +2262,9 @@
       }
       var frac = null;
       if (c.media && c.media.progress) frac = c.media.progress();
+      // (a clip's progress can end its slide — YouTube past its end mark: the next slide is on already, and the
+      // time of the one that went must not move that one on at once too)
+      if (E.cur !== c) return;
       if (frac === null || frac === undefined) frac = Math.min(1, t / c.total);
       E.setProgress(frac);
       // a list in Both: the other language's part half-way through

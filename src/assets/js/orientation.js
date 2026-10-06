@@ -18,7 +18,8 @@
       Esc exits. A slide taller than the screen (larger text, a phone, a zoomed browser) scrolls on
       its own: ↓ Space PageDown (↑ Shift+Space PageUp) scroll it first and turn the page at its end. Click or tap the right two thirds (next) or the left third (back); swipe on touch.
       The rest of the page is inert while it is open; a live region reads "Slide 3 of 45: <title>";
-      focus returns to the button that opened it.
+      focus returns to the button that opened it. Opened by the address, the deck takes the focus back
+      once the page has loaded (the browser's jump to the #fragment moves it out).
    4. Print — [data-o101-print] prints the page (the hub prints as the handout, see orientation.css). */
 (function () {
   "use strict";
@@ -423,7 +424,17 @@
     document.querySelectorAll("[data-o101-quiz]").forEach(initQuiz);
     var hasSlides = false;
     try { hasSlides = new URLSearchParams(location.search).has("slides"); } catch (e) {}
-    if (hasSlides && tplEl()) openDeck(location.hash);
+    if (hasSlides && tplEl()) {
+      openDeck(location.hash);
+      // Opened by the address (a session's "slides" link: ?slides#session-<id>): as the page finishes loading, the
+      // browser's own jump to that #fragment takes the focus out of the deck, to the page behind it — once the
+      // page has loaded, the focus goes back into the deck (where a screen reader goes with it).
+      var refocus = function () {
+        setTimeout(function () { if (deck && !deck.contains(document.activeElement)) deck.focus({ preventScroll: true }); }, 0);
+      };
+      if (document.readyState === "complete") refocus();
+      else window.addEventListener("load", refocus, { once: true });
+    }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
   else start();

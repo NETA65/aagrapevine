@@ -20,6 +20,8 @@ the internet), the two steps of .github/workflows/update.yml and the passthrough
                   quarter turn in either byte order), GIF and WebP (VP8, VP8L, VP8X) headers, and real files Pillow
                   makes; anything else, or a file cut short: null
   * WebPages    — an answer that is a web page (by its type, or by its first bytes) is not the file
+  * RasterOnly  — a picture is kept only when its bytes are JPEG, PNG, WebP, GIF or AVIF (never an SVG, whatever type
+                  the answer gives — at the site's own address it could run a script); no name or type is .svg
   * Results     — the manifest's shape, GitHub's warning lines, sizes in words
   * Downloader  — the script end to end: the files and the manifest, what is skipped and why (warnings, the run
                   summary), retries, a second run downloads nothing, files no longer listed are deleted, --dry-run and
@@ -476,6 +478,29 @@ class WebPages(unittest.TestCase):
         self.assertEqual(got, [want for _b, _t, want in cases])
 
 
+# ---------------------------------------------------------------------------------------------------------- pictures only
+AVIF = b"\x00\x00\x00\x1cftypavif\x00\x00\x00\x00avifmif1miaf" + bytes(64)
+SVG = b'<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"><script>alert(2)</script></svg>'
+
+
+class RasterOnly(unittest.TestCase):
+    """P8-3: the booth keeps raster pictures only (JPEG, PNG, WebP, GIF, AVIF) — never an SVG, which, published at the
+    site's own address (/about/booth/media/), a browser opening it would run as a page, scripts and all."""
+
+    def test_the_kind_of_picture_comes_from_its_bytes(self):
+        cases = [(png_header(3, 2), "image/png"), (jpeg_header(10, 10), "image/jpeg"), (gif_header(4, 4), "image/gif"),
+                 (webp_vp8(10, 10), "image/webp"), (AVIF, "image/avif"), (b"\x00\x00\x00\x18ftypavis" + bytes(8), "image/avif"),
+                 (SVG, ""), (b"<svg></svg>", ""), (b"<!DOCTYPE html><html></html>", ""), (b"hello", ""), (b"\x00\x00\x00\x18ftypmp42", ""),
+                 (b"BM" + bytes(60), ""), (b"", "")]
+        got = core(self, 'input.map((s) => C.pictureType(Buffer.from(s, "base64")))', [b64(b) for b, _ in cases])
+        self.assertEqual(got, [want for _, want in cases])
+        self.assertEqual(core(self, "C.PICTURE_TYPES"), ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"])
+
+    def test_no_svg_name_or_type(self):
+        got = core(self, '[C.extFor("image/svg+xml", ""), C.extFor("", "logo.svg"), C.typeForExt("svg"), C.extOf("image/svg+xml", "logo.svg", "image/svg+xml"), C.extFor("image/avif", "")]')
+        self.assertEqual(got, ["", "", "application/octet-stream", "bin", "avif"])
+
+
 # ---------------------------------------------------------------------------------------------------------- results
 class Results(unittest.TestCase):
     def test_the_manifest(self):
@@ -782,6 +807,31 @@ class Downloader(unittest.TestCase):
                 if kept:
                     self.assertIn("::warning title=Booth display::data/site/booth.json could not be read", out)
         self.assertEqual(sum(self.site.hits.values()), 0)
+
+    def test_a_picture_is_a_raster_picture(self):
+        # P8-3: an SVG is never saved (published at the site's own address it could run a script) — whatever type the
+        # answer gives; an AVIF is; a picture is named by what its bytes are (a PNG sent as image/jpeg: .png)
+        self.site.routes.update({
+            "/logo.svg": lambda h, n: h.answer(200, "image/svg+xml", SVG),
+            "/fake.png": lambda h, n: h.answer(200, "image/png", SVG),
+            "/pic.avif": lambda h, n: h.answer(200, "application/octet-stream", AVIF),
+            "/named.jpg": lambda h, n: h.answer(200, "image/jpeg", PIC),
+        })
+        base = self.site.base
+        root = self.make_root({"items": [item(1, "poster", image_url=f"{base}/logo.svg", stamp="sv1"),
+                                         item(2, "poster", image_url=f"{base}/fake.png", stamp="sv2"),
+                                         item(3, "photo", image_url=f"{base}/pic.avif", stamp="av1"),
+                                         item(4, "photo", image_url=f"{base}/named.jpg", stamp="nm1")]})
+        self.run_script(root)
+        self.assertEqual(self.saved(root), ["av1-file-3.avif", "nm1-file-4.png"])
+        m = self.manifest(root)
+        self.assertEqual(m["items"]["F000000003"], {"file": "av1-file-3.avif", "bytes": len(AVIF), "type": "image/avif", "w": None, "h": None})
+        self.assertEqual(m["items"]["F000000004"]["type"], "image/png")
+        reason = {s["file_id"]: s["reason"] for s in m["skipped"]}
+        self.assertIn("not a picture (image/svg+xml)", reason["F000000001"])
+        self.assertIn("not a picture (image/png)", reason["F000000002"])
+        self.assertEqual({s["file_id"]: s["code"] for s in m["skipped"]}, {"F000000001": "failed", "F000000002": "failed"})
+        self.assertEqual((self.site.hits["/logo.svg"], self.site.hits["/fake.png"]), (1, 1))     # not tried again
 
     def test_a_compressed_answer_is_saved_whole(self):
         # fetch hands over the bytes uncompressed; the announced length is the compressed one — not a short download

@@ -11,8 +11,9 @@
      it "are we online?" — a kept copy would always say yes).
    * pages (navigations): NETWORK FIRST, revalidated with the site (cache: "no-cache": not even the
      browser's HTTP cache can hand back an old page). Online, you always get the page from the site;
-     the copy is kept (the last 80 pages, plus the ones saved with "Save key pages for offline"). The
-     saved copy is used only when the network fails, answers with a server error, or takes more than 4 s —
+     the copy is kept (the last 80 pages, plus the ones saved with "Save key pages for offline" — a saved
+     page not opened for a week is fetched again in the background once there is a signal: refreshSaved).
+     The saved copy is used only when the network fails, answers with a server error, or takes more than 4 s —
      then the page is told (pwa.js shows "Slow connection — this is a saved copy"). A page that is not
      saved → the offline page, in the language of the address. An address without its last slash
      ("…/es", "…/es/meetings": typed, or printed on a poster) is the same page as with it. GitHub
@@ -52,7 +53,9 @@
    before its own save or removal while this version's worker still waits. Answers go back through the
    MessageChannel port sent with the message, else to the page that sent it.
    Updates: a new version installs in the background and WAITS; pwa.js shows "Updated — reload" and
-   sends SKIP_WAITING when the visitor chooses it (otherwise it takes over once every tab is closed). */
+   sends SKIP_WAITING when the visitor chooses it (otherwise it takes over once every tab is closed). Its
+   activation only clears the old caches: the open tabs are kept afterwards, in the background, each download
+   with a time limit (keepOpenTabs), so the reloaded page never waits for them. */
 "use strict";
 
 const V = CONFIG.version;
@@ -103,25 +106,51 @@ self.addEventListener("activate", (event) => {
     // GitHub Pages); page() asks the site itself instead.
     if (self.registration.navigationPreload) { try { await self.registration.navigationPreload.disable(); } catch (e) { /* not supported */ } }
     await self.clients.claim(); // the first visit is looked after at once (offline works after one visit)
-    // The page(s) open while the worker starts (a first visit) are kept too, with the styles and
-    // scripts they asked for — usually straight from the browser's HTTP cache, so this costs no extra
-    // data. (Those files loaded before the worker was in charge: without them the page would open
-    // offline with none of its own scripts — Home's countdown and player, for one.)
-    // (matchAll returns every tab of the ORIGIN — on GitHub Pages other projects share it: only ours)
-    const wins = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
-    await Promise.all(wins.map(async (c) => {
-      if (!inScope(c.url)) return;
-      const key = pageKey(c.url);
-      try {
-        const res = await fetch(c.url, { credentials: "same-origin" });
-        if (!keepable(res, key)) return;
-        const html = await res.clone().text();
-        await keepPage(key, res);
-        await keepFiles(html, c.url);
-      } catch (e) { /* offline */ }
-    }));
+    // The open tabs are kept AFTER activation, in the background: while activate runs, no page of the site
+    // loads — "Reload" after an update would wait for every open tab and its files to download again (10 s
+    // and more on a weak signal).
+    settling = keepOpenTabs().catch(() => {}).finally(() => { settling = null; });
   })());
 });
+
+/* The page(s) open while the worker takes over (a first visit) are kept too, with the styles and scripts they
+   asked for — usually straight from the browser's HTTP cache, so this costs no extra data. (Those files loaded
+   before the worker was in charge: without them the page would open offline with none of its own scripts —
+   Home's countdown and player, for one.) Each download gets SETTLE_TIMEOUT: a weak signal gives up on it,
+   never holds anything up. Until it is done, the requests that come meanwhile keep the worker running for it
+   (settling: their waitUntil). (matchAll returns every tab of the ORIGIN — on GitHub Pages other projects
+   share it: only ours.) */
+const SETTLE_TIMEOUT = 8000;
+let settling = null;
+async function keepOpenTabs() {
+  const wins = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+  await Promise.all(wins.map(async (c) => {
+    if (!inScope(c.url)) return;
+    const key = pageKey(c.url);
+    try {
+      const got = await within(SETTLE_TIMEOUT, async (signal) => {
+        const res = await fetch(c.url, { credentials: "same-origin", signal });
+        return keepable(res, key) ? { res, html: await res.clone().text() } : null;
+      });
+      if (!got) return;
+      await keepPage(key, got.res);
+      await keepFiles(got.html, c.url);
+    } catch (e) { /* offline, or too slow */ }
+  }));
+}
+
+/* work(signal) with a time limit: past `ms` its downloads are let go (AbortController, where there is one) and
+   the promise fails — the work behind it is not waited for. */
+function within(ms, work) {
+  const abort = typeof AbortController === "function" ? new AbortController() : null;
+  let timer = 0;
+  const job = Promise.resolve().then(() => work(abort ? abort.signal : undefined));
+  job.catch(() => {});
+  const late = new Promise((resolve, reject) => {
+    timer = setTimeout(() => { if (abort) abort.abort(); reject(new Error("timeout")); }, ms);
+  });
+  return Promise.race([job, late]).finally(() => clearTimeout(timer));
+}
 
 /* ------------------------------------------------------------------ routing */
 self.addEventListener("fetch", (event) => {
@@ -129,6 +158,7 @@ self.addEventListener("fetch", (event) => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin || !url.pathname.startsWith(BASE)) return; // never other sites
+  if (settling) event.waitUntil(settling); // (the open tabs still being kept after activation: keepOpenTabs)
   // the booth display's photos and videos: its saved copy first — byte ranges too (a video plays offline)
   if (url.pathname.startsWith(BASE + BOOTH.media)) { event.respondWith(boothMedia(event, url)); return; }
   if (req.headers.has("range")) return;
@@ -230,6 +260,8 @@ async function page(event, url) {
     // language, checked once a day (not both: the offline page would be fetched twice).
     else if (isOfflinePage(key) && res.status === 200 && res.type === "basic" && isHtml(res)) event.waitUntil(keepOffline(key, res.clone()).catch(() => {}));
     if (res.ok && !isOfflinePage(key)) event.waitUntil(refreshOffline(url).catch(() => {}));
+    // (an answer from the site: there is a signal — saved pages not opened for a week are fetched again)
+    if (res.ok) event.waitUntil(refreshSaved().catch(() => {}));
     return res;
   })();
   let timer = 0;
@@ -269,6 +301,42 @@ function refreshOffline(url) {
     const res = await fetch(u, { cache: "no-cache", credentials: "same-origin" });
     if (res.status === 200 && res.type === "basic" && isHtml(res)) await shell.put(u, await stamp(res));
   })().finally(() => { delete refreshing[u]; }));
+}
+
+/* The pages saved for offline ("Save key pages", the booth display's About page) stay fresh: one opened online is
+   kept again then (keepPage); one not opened for a WEEK is fetched again in the background, once a page opened
+   online shows there is a signal — one page at a time, each given SETTLE_TIMEOUT, with its styles and scripts
+   (keepAssets), and the first that fails ends the round (the signal is weak again: the next round tries). A page
+   gone (404) or moved elsewhere keeps its copy as it is. Looked at most every 6 hours, one round at a time. */
+const SAVED_REFRESH = 7 * 24 * 3600e3;
+let savedLooked = 0, savedRound = null;
+function refreshSaved() {
+  if (savedRound) return savedRound;
+  if (Date.now() - savedLooked < REVALIDATE_AFTER) return Promise.resolve();
+  savedLooked = Date.now();
+  savedRound = (async () => {
+    if (!(await caches.has(CACHE.saved))) return;
+    const saved = await caches.open(CACHE.saved);
+    let fresh = 0;
+    for (const req of await saved.keys()) {
+      const have = await saved.match(req);
+      const at = Date.parse((have && have.headers.get("x-gvlv-saved")) || "") || 0;
+      if (Date.now() - at < SAVED_REFRESH || !inScope(req.url)) continue;
+      let copy;
+      try {
+        copy = await within(SETTLE_TIMEOUT, async (signal) => {
+          const res = await fetch(req.url, { credentials: "same-origin", cache: "no-cache", signal });
+          return keepable(res, req.url) && pageKey(res.url || req.url) === req.url ? stamp(res) : null;
+        });
+      } catch (e) { break; }
+      if (!copy) continue;
+      await keepAssets(await copy.clone().text(), req.url);
+      await saved.put(req.url, copy);
+      fresh += 1;
+    }
+    if (fresh) await pruneSavedAssets();
+  })().finally(() => { savedRound = null; });
+  return savedRound;
 }
 
 /* ------------------------------------------------------------------ static files */
@@ -479,16 +547,18 @@ function assetUrls(html, pageUrl) {
   return urls;
 }
 
-/* A first visit's page (kept in activate): the styles and scripts it asked for, into this version's
-   static cache (they are not in any of our caches yet). */
+/* A first visit's page (kept after activation: keepOpenTabs): the styles and scripts it asked for, into this
+   version's static cache (they are not in any of our caches yet) — each download within SETTLE_TIMEOUT. */
 async function keepFiles(html, pageUrl) {
   const cache = await caches.open(CACHE.static);
   await Promise.all([...assetUrls(html, pageUrl)].map(async (u) => {
     try {
       if (await caches.match(u)) return;
-      const res = await fetch(u, { credentials: "same-origin" });
-      if (res && res.ok && res.type === "basic") await cache.put(u, res);
-    } catch (e) { /* offline again */ }
+      await within(SETTLE_TIMEOUT, async (signal) => {
+        const res = await fetch(u, { credentials: "same-origin", signal });
+        if (res && res.ok && res.type === "basic") await cache.put(u, res);
+      });
+    } catch (e) { /* offline again, or too slow */ }
   }));
   await trim("static");
 }
