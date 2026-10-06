@@ -55,6 +55,16 @@ class NumbersOnly(unittest.TestCase):
         self.assertEqual(common.date_from_text("05-05-2026 Book sale")[0], "2026-05-05")           # the same both ways
         self.assertEqual(common.take_date_notes(), [])
 
+    def test_the_magazines_names_do_not_make_a_name_spanish(self):
+        """ "La Viña" in an English name ("Grapevine & La Viña Pricing Update") says nothing about its language."""
+        notes: list[str] = []
+        self.assertEqual(common.date_from_text("La Viña Report 05-10-2026", notes=notes), ("2026-05-10", "La Viña Report"))
+        self.assertEqual(len(notes), 1)                                        # month first, as before — and noted
+        self.assertEqual(common.date_from_text("Grapevine & La Viña order form 05-10-2026")[0], "2026-05-10")
+        self.assertEqual(common.date_from_text("Informe de La Viña 05-10-2026")[0], "2026-10-05")    # "de": Spanish
+        self.assertEqual(common.date_from_text("Revista La Viña 05-10-2026")[0], "2026-10-05")
+        common.take_date_notes()
+
     def test_a_name_that_does_not_tell_is_read_as_before_and_noted(self):
         notes: list[str] = []
         self.assertEqual(common.date_from_text("Report 05-10-2026", notes=notes), ("2026-05-10", "Report"))
@@ -99,6 +109,10 @@ class Ranges(unittest.TestCase):
         self.assertEqual(common.date_range_from_text("2026-10-17 Workshop 2-4pm @ Tyler, TX"),
                          ("2026-10-17", None, "Workshop 2-4pm @ Tyler, TX"))
         self.assertEqual(common.date_range_from_text("2026-10-05 a las 7 pm")[:2], ("2026-10-05", None))
+        # a part, a session, a week … counted before a dash: that number, then the day
+        self.assertEqual(common.date_range_from_text("Session 2 - 4 March 2027"), ("2027-03-04", None, "Session 2"))
+        self.assertEqual(common.date_range_from_text("Parte 1 - 3 de marzo de 2027"), ("2027-03-03", None, "Parte 1"))
+        self.assertEqual(common.date_range_from_text("Semana 1 al 7 de marzo de 2027")[:2], ("2027-03-01", "2027-03-07"))
 
 
 class Callers(unittest.TestCase):
@@ -137,6 +151,44 @@ class Callers(unittest.TestCase):
         from scripts.sync import booth_names as BN
         self.assertEqual(BN._day("14-03-2027", False), "2027-03-14")
         self.assertEqual(BN._day("March 2027", True), "2027-03-31")
+
+    def test_drive_run_names_the_file_of_each_note(self):
+        """drive.main: each name whose date could be read two ways is one line of its stats["warnings"] (→ /status/)
+        with the file's folders and name — also an "(until …)" date, whose own note quotes only the date; a note
+        left by an earlier module of the same run is not the Drive source's."""
+        from scripts.sync.drive_listing import FOLDER_MIME, Entry, Listing
+
+        def pdf(fid: str, name: str) -> Entry:
+            return Entry(fid, name, "application/pdf", modified_text="Sep 28", modified="2026-09-28")
+        tree = {"ROOT": [Entry("P77", "2027-2028_Panel77_GVLV", FOLDER_MIME, is_folder=True)],
+                "P77": [Entry("FL", "flyers", FOLDER_MIME, is_folder=True)],
+                "FL": [pdf("f1", "Report 05-10-2026.pdf"), pdf("f2", "Workshop (until 05-11-2026).pdf"),
+                       pdf("f3", "Taller 05-10-2026.pdf"), pdf("f4", "2026-10-17 Assembly.pdf")]}
+
+        class Lister:
+            mode, api_error, requests_made = "html", None, 0
+
+            class html:
+                shortcuts_resolved = 0
+
+            def __init__(self, **kw):
+                self.http = None
+
+            def list(self, fid):
+                return Listing(True, [Entry(**vars(e)) for e in tree[fid]])
+        cfg = {"drive": {"root_folder_id": "ROOT", "min_panel": 77}}
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(common, "RAW_DIR", Path(tmp)), \
+                mock.patch.object(D, "DriveLister", Lister), mock.patch.object(D, "load_config", lambda: cfg):
+            common.date_from_text("Minutes 05-10-2026")          # an earlier module's
+            D.main([])
+            env = json.loads((Path(tmp) / "drive.json").read_text(encoding="utf-8"))
+        notes = sorted(w for w in env["stats"]["warnings"] if "could be" in w)
+        self.assertEqual(len(notes), 2, notes)
+        self.assertTrue(notes[0].startswith("2027-2028_Panel77_GVLV/flyers/Report 05-10-2026.pdf: “Report 05-10-2026”: "
+                                            "“05-10-2026” could be May 10 or October 5, 2026"), notes)
+        self.assertTrue(notes[1].startswith("2027-2028_Panel77_GVLV/flyers/Workshop (until 05-11-2026).pdf: "
+                                            "“05-11-2026” could be May 11 or November 5, 2026"), notes)
+        self.assertEqual(common.take_date_notes(), [])
 
 
 class SiteDay(unittest.TestCase):
@@ -247,6 +299,35 @@ class EventFiles(unittest.TestCase):
         self.assertIn("events/open-house.md: “05/10/2027” could be May 10 or October 5, 2027",
                       " ".join(env["stats"]["errors"]))                       # … and the chair is told
 
+    def test_a_range_written_in_start(self):
+        """ "start: March 19 - 21, 2027" is those three days (dateutil alone read it as 8:27 PM in 2016); a range
+        without its year, or a year in two digits, is left out like any date without its year."""
+        self.write("assembly.md", "start: March 19 - 21, 2027\n")
+        self.write("taller.md", "start: del 14 al 16 de mayo de 2027\nlang: es\n")
+        self.write("convention.md", "start: March 30 - April 2, 2027\nend: 2027-04-03\n")    # end: as written
+        self.write("short.md", "start: March 19 - 21\n")
+        self.write("twodigit.md", 'start: "3/19/27"\n')
+        env = self.run_main()
+        ex = {i["extra"]["slug"]: i["extra"] for i in env["items"]}
+        self.assertEqual(set(ex), {"assembly", "taller", "convention"})
+        self.assertEqual((ex["assembly"]["start"], ex["assembly"]["end"], ex["assembly"]["all_day"]),
+                         ("2027-03-19", "2027-03-21", True))
+        self.assertEqual((ex["taller"]["start"], ex["taller"]["end"]), ("2027-05-14", "2027-05-16"))
+        self.assertEqual((ex["convention"]["start"], ex["convention"]["end"]), ("2027-03-30", "2027-04-03"))
+        text = " ".join(env["stats"]["errors"])
+        self.assertIn("events/short.md: start: “March 19 - 21” has no year", text)
+        self.assertIn("events/twodigit.md: start: “3/19/27” has no year written in full — the event is left out "
+                      "until it does: write the whole date (start: ", text)
+
+    def test_a_date_in_the_name_that_is_not_used_is_not_noted(self):
+        self.write("report-05-10-2027.md", "start: 2027-10-05\n", body="Panel 77.")     # start: decides
+        self.write("open-house-05-10-2027.md", "", body="Panel 77.")                     # the name decides
+        env = self.run_main()
+        self.assertEqual(len(env["items"]), 2)
+        self.assertEqual(len(env["stats"]["errors"]), 1)
+        self.assertIn("events/open-house-05-10-2027.md: “open-house-05-10-2027”: “05-10-2027” could be May 10",
+                      env["stats"]["errors"][0])
+
     def test_the_last_good_version_stays(self):
         self.write("workshop.md", "start: 2027-01-10\n")
         first = self.run_main()["items"][0]
@@ -269,8 +350,12 @@ class EventFiles(unittest.TestCase):
             A.as_when("Jan. 10th", CHI)
         with self.assertRaisesRegex(ValueError, "end: 1140 is not a date"):
             A.as_when("1140", CHI, field="end")
+        with self.assertRaisesRegex(ValueError, r"start: “2027” has no day — write the whole date \(start: 2027-MM-DD\)"):
+            A.as_when("2027", CHI)
         self.assertEqual(A.as_when("to be announced", CHI), (None, False))
         self.assertEqual(A.as_when("March 14, 2027", CHI), ("2027-03-14", True))
+        self.assertEqual(A.as_when("14 - 16 March 2027", CHI), ("2027-03-14", True))             # was 2014
+        self.assertEqual(A.as_when("2027-03-14 - 2027-03-16", CHI), ("2027-03-14", True))
         notes: list[str] = []
         self.assertEqual(A.as_when("2027-03-14T19:00:00-05:00", CHI, notes), ("2027-03-15T00:00:00Z", False))
         self.assertEqual(notes, [])                                  # March 14, 2027 7 PM: CDT (-05:00) is right
@@ -293,6 +378,18 @@ class BulletinDates(unittest.TestCase):
             it = A.parse_announcement(p)
             self.assertEqual(it["date"], "2026-05-10")
             self.assertEqual(len(it["extra"]["date_notes"]), 1)
+
+    def test_a_date_in_the_name_is_noted_only_when_it_is_the_one_used(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "Report 05-10-2026.md"
+            p.write_text("---\ntitle: Report\ndate: 2026-10-05\n---\nHi.\n", encoding="utf-8")
+            it = A.parse_announcement(p)
+            self.assertEqual(it["date"], "2026-10-05")
+            self.assertNotIn("date_notes", it["extra"])                     # date: decides
+            p.write_text("---\ntitle: Report\n---\nHi.\n", encoding="utf-8")
+            it = A.parse_announcement(p)
+            self.assertEqual(it["date"], "2026-05-10")
+            self.assertEqual(len(it["extra"]["date_notes"]), 1)              # the name decides: said
 
 
 if __name__ == "__main__":

@@ -1057,12 +1057,18 @@ def main(argv: list[str] | None = None) -> None:
     items: list[dict] = []
     seen: dict[str, int] = {}
     take_date_notes()       # names of an earlier module of this run are not this source's
+    date_notes: list[str] = []
     for f in c.found:
         try:
             it = build_item(f, dcfg)
         except Exception as ex:  # one odd file must not break the run
             log.warning("skipping %r: %s: %s", f.entry.name, type(ex).__name__, ex)
             continue
+        finally:
+            # a name whose numbers-only date could be read two ways ("Report 05-10-2026": read as May 10 —
+            # common.py), said with the file's folders and name ("(until 05-10-2026)" quotes only the date)
+            where = "/".join(([f.panel.folder_name] if f.panel.folder_name else []) + f.path + [f.entry.name])
+            date_notes += [line for n in take_date_notes() if (line := f"{where}: {n}") not in date_notes]
         if it["id"] in seen:  # same file reachable twice (e.g. original + shortcut) → keep the original
             j = seen[it["id"]]
             if items[j]["extra"].get("shortcut_id") and not it["extra"].get("shortcut_id"):
@@ -1097,8 +1103,7 @@ def main(argv: list[str] | None = None) -> None:
 
     live = [i for i in merged if i.get("status") == "ok"]
     albums = Counter(i["extra"].get("album") for i in live if i["extra"].get("album"))
-    # + a name whose numbers-only date could be read two ways ("Report 05-10-2026": read as May 10 — common.py)
-    warnings = list(c.warnings) + take_date_notes()
+    warnings = list(c.warnings) + date_notes
     if c.unreadable:
         warnings.append(f"{len(c.unreadable)} folder(s) could not be read — check their sharing settings")
     if c.unconfirmed:

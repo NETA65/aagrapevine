@@ -170,7 +170,12 @@ _YEAR_END = r",?\s+(?:de\s+|del\s+)?(20\d{2})\b"
 # A number right after one of these words counts something ("Distrito 7 - 14 de marzo de 2027" is the 14th, not
 # the 7th to the 14th): a range written with a dash after it is not read as one.
 _COUNTED = re.compile(r"(?i)(?:\b(?:distrito|district|panel|grupo|group|[aá]rea|paso|pasos|step|steps|tradici[oó]n|"
-                      r"tradiciones|tradition|traditions|concepto|concept|n[oº]|n[uú]m|number|n[uú]mero)\.?|#)\s*$")
+                      r"tradiciones|tradition|traditions|concepto|concept|n[oº]|n[uú]m|number|n[uú]mero|part|parte|"
+                      r"session|sesi[oó]n|week|semana|lesson|lecci[oó]n|chapter|cap[ií]tulo|vol|volume|volumen|"
+                      r"unit|unidad|module|m[oó]dulo)\.?|#)\s*$")
+# The magazines' names say nothing about the language of the words around a date ("La Viña Report 05-10-2026" is
+# English): _text_lang leaves them out, as drive.py does for a file's language.
+_PUB_NAMES = re.compile(r"(?i)\b(?:aa\s+)?(?:grapevine|la\s+vi[ñn]a)\b")
 
 # Notes about dates that could be read two ways, for callers that pass no `notes` list (drive.py's names): the
 # module that saves the source takes them with take_date_notes() into its stats["warnings"] (→ /status/).
@@ -197,8 +202,9 @@ def take_date_notes() -> list[str]:
 
 def _text_lang(text: str, lang: str | None) -> str:
     """The language a numbers-only date in `text` is written in: the caller's when it knows it, else the
-    language of the words around the date ("Taller …" → "es"; "und" when they do not tell)."""
-    return lang[:2].lower() if lang else detect_lang(text)
+    language of the words around the date, the magazines' names left out ("Taller …" → "es"; "und" when they
+    do not tell: "La Viña Report …")."""
+    return lang[:2].lower() if lang else detect_lang(_PUB_NAMES.sub(" ", text))
 
 
 def _numeric(m: re.Match, text: str, lang: str | None) -> tuple[date, None, str | None]:

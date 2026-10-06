@@ -33,10 +33,12 @@ there.
 
 Events use `title, start, end, location, url` (+ optional `online_url`, `meeting_id`, `flyer`, `image`).
 `start:` / `end:` must be whole dates: one without its year ("January 10" — it would land in THIS year, maybe
-already past), without its day, or a time alone (an unquoted "start: 19:00" is the number 1140 to YAML) leaves
-the event out and is listed on /status/ (as_when). A time written with a UTC offset that is not Central time's
-on that day ("2027-01-10T19:00:00-05:00": January is -06:00) still shows, at the moment it names, and is listed
-too (offset_note). tests/test_content_events.py checks every file of the folder the same way (the Code check).
+already past; "3/14/27": a year in two digits), without its day, or a time alone (an unquoted "start: 19:00" is
+the number 1140 to YAML) leaves the event out and is listed on /status/ (as_when). A range of days in start:
+("March 19 - 21, 2027", "del 19 al 21 de marzo de 2027") is those days: its last day is the end when end: is not
+written (parse_event). A time written with a UTC offset that is not Central time's on that day
+("2027-01-10T19:00:00-05:00": January is -06:00) still shows, at the moment it names, and is listed too
+(offset_note). tests/test_content_events.py checks every file of the folder the same way (the Code check).
 Both may add the other language by hand — `title_es` / `summary_es` for a file written in English
 (`title_en` / `summary_en` for one written in Spanish): build_data shows those words instead of a
 machine translation (`extra.own_i18n`; the summary also stands in for the text below the header).
@@ -320,12 +322,14 @@ def as_when(v, tz: ZoneInfo, notes: list[str] | None = None, lang: str | None = 
     """Event start/end → (ISO UTC datetime 'Z' or 'YYYY-MM-DD', all_day); (None, False) for text that holds no
     date ("to be announced").
 
+    A range of days ("March 14 - 16, 2027") gives its first day, all day.
     A date must be whole: one without its year ("January 10", "10 de enero", "3/14" — a reader would put it in
-    THIS year, often already past), without its day ("March 2027"), a time alone ("19:00"; unquoted, YAML gives
-    the number 1140) or a year outside FIRST_YEAR–LAST_YEAR raises ValueError (the file is reported on /status/,
-    its last good version stays). `notes` gets a line for a written UTC offset that is not Central time's at that
-    moment (offset_note) and for a numbers-only date that could be read two ways; `lang`: the file's language
-    (numbers-only dates are read day first in Spanish). `field`: the header line, for the messages."""
+    THIS year, often already past — or "3/14/27", the year in two digits), without its day ("March 2027"), a time
+    alone ("19:00"; unquoted, YAML gives the number 1140) or a year outside FIRST_YEAR–LAST_YEAR raises ValueError
+    (the file is reported on /status/, its last good version stays). `notes` gets a line for a written UTC offset
+    that is not Central time's at that moment (offset_note) and for a numbers-only date that could be read two
+    ways; `lang`: the file's language (numbers-only dates are read day first in Spanish). `field`: the header
+    line, for the messages."""
     if v is None or v == "" or isinstance(v, bool):
         return None, False
     if isinstance(v, (int, float)):
@@ -345,6 +349,15 @@ def as_when(v, tz: ZoneInfo, notes: list[str] | None = None, lang: str | None = 
         _whole(field, v, v)
         return v.isoformat(), True
     s = str(v).strip()
+    said: list[str] = []
+    first, last, _rest = date_range_from_text(s, lang, said)
+    if last:
+        # a range of days ("March 14 - 16, 2027", "del 14 al 16 de marzo de 2027"): its first day, all day — never
+        # dateutil, which reads "March 14 - 16, 2027" as 8:27 PM in 2016 (parse_event takes the last day as the end)
+        _whole(field, s, date.fromisoformat(first))
+        if notes is not None:
+            notes += [n for n in said if n not in notes]
+        return first, True
     if _NUMERIC_DATE.search(s):
         return _from_words(s, tz, notes, lang, field)
     try:
@@ -374,6 +387,10 @@ def as_when(v, tz: ZoneInfo, notes: list[str] | None = None, lang: str | None = 
         return _from_words(s, tz, notes, lang, field)
     if a.year == b.year:
         _whole(field, s, a)
+    if a.year == b.year and not re.search(r"(?<!\d)20\d\d(?!\d)", s):
+        # a short number taken for the year: "March 14 - 16" is 2016 to dateutil, "3/14/27" 2027
+        raise ValueError(f"{field}: “{s}” has no year written in full — the event is left out until it does: write "
+                         f"the whole date ({field}: {_example_day(a.month, a.day, tz)})")
     if a.year != b.year and (a.month != b.month or a.day != b.day):
         raise ValueError(f"{field}: “{s}” has no date — write the day too ({field}: 2027-03-14, or {_EXAMPLE} "
                          "with its time)")
@@ -381,7 +398,7 @@ def as_when(v, tz: ZoneInfo, notes: list[str] | None = None, lang: str | None = 
         raise _no_year(field, s, tz, a.month, a.day)
     if a.month != b.month or a.day != b.day:
         raise ValueError(f"{field}: “{s}” has no day — write the whole date ({field}: "
-                         f"{a.year:04d}-{a.month:02d}-DD)")
+                         f"{a.year:04d}-{f'{a.month:02d}' if a.month == b.month else 'MM'}-DD)")
     if a.hour != b.hour:
         return dt.date().isoformat(), True       # no time was written → an all-day event
     if dt.tzinfo and notes is not None and (note := offset_note(field, s, dt, tz)):
@@ -689,7 +706,8 @@ def parse_announcement(path: Path) -> dict:
     stem = path.stem
     notes: list[str] = []                # dates that could be read two ways (→ collect → /status/)
     dlang = date_lang(meta, f"{clean_text(meta.get('title'))}. {markdown_to_text(body)}")
-    file_date, rest = date_from_text(stem, dlang, notes)
+    name_notes: list[str] = []           # (said only when the name's date is the one used)
+    file_date, rest = date_from_text(stem, dlang, name_notes)
     title = clean_text(meta.get("title"))
     if _HTML_HINT.search(title):
         # a title pasted with its tags ("<b>Assembly</b>"): the page shows it as text, so the words only
@@ -714,7 +732,11 @@ def parse_announcement(path: Path) -> dict:
         raise ValueError(f"the publish date '{meta.get('publish')}' is not a date (use YYYY-MM-DD)")
     if publish and expires and publish > expires:
         raise ValueError("publish: is after expires: — the post would never show")
-    when = as_date(meta.get("date"), notes, dlang) or file_date or publish
+    when = as_date(meta.get("date"), notes, dlang)
+    if not when and file_date:
+        when = file_date
+        notes += name_notes
+    when = when or publish
     body, missing = link_attachments(body, path.parent)
     missing += dropped
     slug = slugify(stem)
@@ -752,29 +774,36 @@ def parse_announcement(path: Path) -> dict:
 
 
 def parse_event(path: Path, tz: ZoneInfo) -> dict:
-    """An event (content/events/<name>.md). Its `start:` (else `date:`, else the date its name starts with —
-    and then the last day of a range there, "2027-03-19 - 2027-03-21 Assembly", is its end when `end:` is not
-    written) must be a whole date (as_when: a start or end without its year is a ValueError, so the file is
-    reported instead of shown). Lines about its dates that the chair should check — a UTC offset that is not
-    Central time's, a numbers-only date that could be read two ways — go to extra["date_notes"] (→ collect)."""
+    """An event (content/events/<name>.md). Its `start:` (else `date:`, else the date its name starts with)
+    must be a whole date (as_when: a start or end without its year is a ValueError, so the file is reported
+    instead of shown). When `end:` is not written, the last day of a range there is the end ("start: March 19 -
+    21, 2027", "2027-03-19 - 2027-03-21 Assembly.md"). Lines about its dates that the chair should check — a UTC
+    offset that is not Central time's, a numbers-only date that could be read two ways (the name's only when its
+    date is the one used) — go to extra["date_notes"] (→ collect)."""
     meta, body = read_front_matter(path)
     stem = path.stem
     text = markdown_to_text(body)
     notes: list[str] = []
     dlang = date_lang(meta, f"{clean_text(meta.get('title'))}. {text}")
-    file_date, file_end, rest = date_range_from_text(stem, dlang, notes)
+    name_notes: list[str] = []           # (said only when the name's date is the one used)
+    file_date, file_end, rest = date_range_from_text(stem, dlang, name_notes)
     title = clean_text(meta.get("title")) or clean_text(re.sub(r"[-_]+", " ", rest or stem)).capitalize()
     written = meta.get("start") if meta.get("start") not in (None, "") else meta.get("date")
     start, all_day = as_when(written, tz, notes, dlang)
     from_name = not start and bool(file_date)
     if from_name:
         start, all_day = file_date, True
+        notes += name_notes
     if not start:
         raise ValueError("it has no start date (add a line 'start: 2027-03-14' or "
                          "'start: 2027-03-14T09:00:00-05:00' to the header)")
     end = event_end(meta.get("end"), start, all_day, tz, notes, dlang)
-    if end is None and from_name and file_end:
+    if end is None and from_name:
         end = file_end
+    elif end is None and isinstance(written, str):
+        # a range written in start: ("start: March 19 - 21, 2027" — as_when gave its first day): its last day
+        first, last, _rest = date_range_from_text(written, dlang, [])
+        end = last if first == start else None
     location = clean_text(meta.get("location"))
     city, state = city_state(location)
     slug = slugify(stem)
