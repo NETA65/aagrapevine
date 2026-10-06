@@ -41,6 +41,7 @@
   "monthly.new": { "en": "New", "es": "Nuevo" },
   "monthly.scan": { "en": "Scan for this month's toolkit", "es": "Escanea para ver el kit del mes" },
   "monthly.qr_alt": { "en": "QR code for {url}", "es": "Código QR de {url}" },
+  "monthly.share_alt": { "en": "The {month} poster of the Grapevine & La Viña committee, NETA 65 — Carry the message", "es": "El cartel de {month} del comité de La Viña y Grapevine, NETA 65 — Lleva el mensaje" },
   "monthly.tagline": { "en": "Carry the message", "es": "Lleva el mensaje" },
   "monthly.kicker": { "en": "Grapevine & La Viña · NETA 65", "es": "La Viña y Grapevine · NETA 65" },
   "monthly.all_posters": { "en": "A poster for every month", "es": "Un cartel para cada mes" },

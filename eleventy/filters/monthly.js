@@ -965,6 +965,22 @@ export function icsPath(key, lang) {
   return `${L === "es" ? "/es" : ""}/monthly/${key}/neta65-grapevine-${key}-${L}.ics`;
 }
 
+/** Where a month's share picture is — the picture the link previews of WhatsApp, Facebook … show for the month's
+ *  page (its og:image): a 1200 × 630 PNG of the top of its poster, beside the page — "/monthly/2026-10/share.png",
+ *  "/es/monthly/2026-10/share.png" (a site path: base.njk adds the site's address and folder). */
+export function sharePicturePath(key, lang) {
+  return `${lang === "es" ? "/es" : ""}/monthly/${key}/share.png`;
+}
+
+/** Whether this build's month pages point at their share pictures: only when the build is asked to (POSTER_SHARE=1).
+ *  The pictures are not made by the build: Website update (.github/workflows/update.yml) takes them with the
+ *  runner's Chrome right after it (scripts/ops/poster_share.py), and builds the site again without POSTER_SHARE when
+ *  they could not be made — so no page ever points at a picture that is not there. Every other build (a local one,
+ *  the Code check) keeps the committee's card on the month pages. */
+export function posterShareOn(env = process.env) {
+  return /^(?:1|true)$/i.test(String((env && env.POSTER_SHARE) || "").trim());
+}
+
 /** The site's calendar events (committee.js normalizeEvents, as /events.ics has them) by id, for monthIcs: the
  *  window's months, and the month before. */
 export function monthIcsEvents(db = {}, site = {}, lang = "en", now = nowDate()) {
@@ -1089,6 +1105,10 @@ export default function (eleventyConfig, helpers) {
     return msgCache.get(k);
   });
   eleventyConfig.addFilter("mpQr", (url, label = "") => qrSvg(url, { label, cls: "mp-qr-svg", margin: 2 }));
+  // A month page's share picture (its ogImage, monthly-month.njk): {{ mpage.key | mpShareImage(mpage.lang) }} — the
+  // site path of its share.png in a build asked for it (POSTER_SHARE=1), else "" (the page keeps the committee's card)
+  eleventyConfig.addFilter("mpShareImage", (key, lang) => (posterShareOn() && /^\d{4}-\d{2}$/.test(String(key || ""))
+    ? sharePicturePath(String(key), lang) : ""));
   eleventyConfig.addFilter("mpGuides", (pdfs, lang) => repGuides(pdfs, lang));
   // A month's calendar file (src/pages/monthly-ics.11ty.js): this.mpIcs(key, db, carry, site, lang) — the site's
   // calendar events worked out once per language and build (the 26 files share them)

@@ -15,7 +15,8 @@ works in a temporary folder.
   * Pinned         — every action from outside GitHub (not actions/…) in every workflow is pinned to a full commit
                      id, with its "# vX.Y.Z";
   * Dependabot     — it watches the Python packages too (new major versions only, one grouped pull request a month;
-                     yt-dlp has no cap), and every other package in requirements.txt is capped below its next major.
+                     yt-dlp has no cap), and every other package in requirements.txt is capped below its next major;
+                     the browser driver pinned in scripts/ops/requirements-browser.txt gets every release.
 
     python -m unittest tests.test_automation -v        (or: python -m unittest discover -s tests)
 """
@@ -532,7 +533,25 @@ class Pinned(unittest.TestCase):
 class Dependabot(unittest.TestCase):
     def setUp(self):
         self.text = (ROOT / ".github" / "dependabot.yml").read_text(encoding="utf-8")
-        self.updates = {u["package-ecosystem"]: u for u in yaml.safe_load(self.text)["updates"]}
+        every = yaml.safe_load(self.text)["updates"]
+        # the repository's own (directory "/"); scripts/ops has the browser checks' Playwright pin
+        self.updates = {u["package-ecosystem"]: u for u in every if u["directory"] == "/"}
+        self.others = [u for u in every if u["directory"] != "/"]
+
+    def test_the_browser_driver_every_release(self):
+        # scripts/ops/requirements-browser.txt pins Playwright: each release (minor and patch too — the runners'
+        # Chrome moves on) is a pull request of its own, never the packages of the daily sync
+        self.assertEqual([(u["package-ecosystem"], u["directory"]) for u in self.others], [("pip", "/scripts/ops")])
+        ops = self.others[0]
+        self.assertEqual(ops["allow"], [{"dependency-name": "playwright"}])
+        self.assertNotIn("ignore", ops)
+        self.assertEqual((ops["schedule"]["interval"], ops["commit-message"]["prefix"]), ("monthly", "chore(deps)"))
+        pins = [ln.split("#")[0].strip() for ln in (ROOT / "scripts" / "ops" / "requirements-browser.txt")
+                .read_text(encoding="utf-8").splitlines()]
+        self.assertIn("playwright", [re.split(r"[<>=!~ ]", p, maxsplit=1)[0].lower() for p in pins if p])
+        self.assertTrue(any(re.fullmatch(r"playwright==\d+\.\d+\.\d+", p) for p in pins), "one exact version")
+        self.assertNotIn("playwright", (ROOT / "requirements.txt").read_text(encoding="utf-8").lower(),
+                         "never a package of the daily sync")
 
     def test_the_python_packages_new_major_versions_only(self):
         self.assertEqual(set(self.updates), {"github-actions", "npm", "pip"})

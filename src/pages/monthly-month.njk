@@ -11,6 +11,14 @@ eleventyComputed:
   # `| safe`: the layout escapes the title and description once (no "&amp;amp;" in the tab / share preview)
   title: "{{ ('monthly.month_title' | t(mpage.lang, { month: (mpage.key | mpMonth(db, carry, site, mpage.lang)).title })) | safe }}"
   description: "{% set mm = mpage.key | mpMonth(db, carry, site, mpage.lang) %}{{ (('monthly.month_desc' | t(mpage.lang, { month: mm.title, theme: mm.gv.theme })) if mm.gv else ('monthly.month_desc_plain' | t(mpage.lang, { month: mm.title }))) | safe }}"
+  # The share picture (base.njk og:image): the top of this month's poster, 1200 × 630 — share.png beside the page,
+  # made by Website update after the build (scripts/ops/poster_share.py). Only a build with POSTER_SHARE=1 points at
+  # it (mpShareImage, eleventy/filters/monthly.js); in any other the src is "" and the page keeps the committee's card.
+  ogImage:
+    src: "{{ mpage.key | mpShareImage(mpage.lang) }}"
+    width: "1200"
+    height: "630"
+    alt: "{{ ('monthly.share_alt' | t(mpage.lang, { month: (mpage.key | mpMonth(db, carry, site, mpage.lang)).label })) | safe }}"
 ---
 {#- ONE month of /monthly/: the poster (1080 × 1350, scaled to fit; Download PNG / Share / Print) and that
     month's full toolkit beside / below it, with previous / next month links.

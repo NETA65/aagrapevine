@@ -7,7 +7,8 @@
 #                Instagram and the committee's Google Drive folders,
 #                machine-translates everything EN ⇄ ES (offline, open
 #                source), and commits the updated data back to the repo.
-#    2. BUILD  – builds the website with Eleventy + Tailwind, while the
+#    2. BUILD  – builds the website with Eleventy + Tailwind (and the
+#                monthly posters' share pictures), while the
 #                TESTS job runs the offline tests on the same commit
 #                (only when the code or the content changed since they
 #                last passed).
@@ -606,6 +607,7 @@ jobs:
           python - <<'PY'
           import json, os
           from datetime import datetime, timezone
+          from urllib.parse import urlsplit
           out = os.environ.get("GITHUB_STEP_SUMMARY")
           try:
               with open("data/site/status.json", encoding="utf-8") as f:
@@ -679,6 +681,82 @@ jobs:
                   if src.get("ok") is False and (days is None or days >= STALE_DAYS):
                       stale.append({"source": src.get("source"), "label": label, "days": days,
                                     "updated": src.get("updated"), "error": err})
+          # Sync health — so a source that suddenly loses items, or a magazine page the document search depends on,
+          # shows the day it happens. Per source, what THIS run added and removed (common.save_raw `changes`, which
+          # build_data copies into status.json sources[]) — only for a source this run read (its `attempted` is not
+          # older than STARTED: a source it did not read still shows its last run's counts) — and the items the
+          # mass-drop guard holds back (`held`: a source that suddenly lists far fewer items keeps the missing ones
+          # until the next run finds the same; "drop" false = the source kept them itself, e.g. a Drive folder that
+          # looked empty), shown while the hold lasts, whichever run made it. Then the document search's hub / kit
+          # pages that did not load in this run (data/raw/pdfs.json `hub_problems` — only from a search this run
+          # made that ended normally: a crashed one keeps the last run's list). Only rows with something to say.
+          def plain(v):
+              return " ".join(str(v if v is not None else "").split()).replace("|", "/")
+
+          def utc(iso):
+              t = moment(iso) if iso else None
+              return f"{t:%Y-%m-%d %H:%M} UTC" if t else "?"
+
+          def whole(v):
+              return v if isinstance(v, int) and not isinstance(v, bool) and v > 0 else 0
+
+          def prop(v):    # an annotation's title: a comma or a colon in a source's name would cut it
+              return str(v).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A").replace(",", "%2C").replace(":", "%3A")
+
+          health = []
+          for src in s.get("sources", []):
+              label = plain(src.get("label") or src.get("source"))
+              ch = src.get("changes") if isinstance(src.get("changes"), dict) else {}
+              hd = src.get("held") if isinstance(src.get("held"), dict) else None
+              at = moment(src.get("attempted")) if src.get("attempted") else None
+              ran = bool(started and at and at >= started)
+              added, removed = (whole(ch.get("added")), whole(ch.get("removed"))) if ran else (0, 0)
+              what = []
+              if hd and whole(hd.get("kept")):
+                  ex = [plain(x)[:60] for x in (hd.get("examples") or []) if plain(x)][:3]
+                  seen = f"found {plain(hd.get('found'))} of {plain(hd.get('previous'))}"
+                  if hd.get("drop"):
+                      what.append(f"**{hd['kept']} held back** since {utc(hd.get('since'))} ({seen}): they stay on "
+                                  "the site until the next run finds the same")
+                  else:
+                      what.append(f"**{hd['kept']} kept** since {utc(hd.get('since'))} ({seen}): removed only when "
+                                  "the next run confirms they are gone")
+                  if ex:
+                      what[-1] += " — e.g. " + "; ".join(f"“{x}”" for x in ex)
+                  print(f"::warning title={prop(label + ': items held back')}::{hd['kept']} of "
+                        f"{plain(hd.get('previous'))} item(s) kept on the site although "
+                        f"{'this run' if ran else 'its last run'} did not find them (since {utc(hd.get('since'))}) — see "
+                        "the run summary")
+              if ran and ch.get("confirmed"):
+                  what.append(f"removal confirmed (held back since {utc(ch.get('confirmed'))})")
+              if added or removed or what:
+                  health.append(f"| {label} | {added if ran else '—'} | {removed if ran else '—'} | {' · '.join(what)} |")
+          try:
+              with open("data/raw/pdfs.json", encoding="utf-8") as f:
+                  penv = json.load(f)
+          except Exception:
+              penv = {}
+          penv = penv if isinstance(penv, dict) else {}
+          pat = moment(penv.get("attempted")) if penv.get("attempted") else None
+          hub_lines = []
+          if started and pat and pat >= started and penv.get("ok") is True:
+              for h in penv.get("hub_problems") or []:
+                  if isinstance(h, dict) and h.get("url"):
+                      u = urlsplit(str(h["url"]))
+                      where = (u.hostname or "").removeprefix("www.") + (u.path or "/")
+                      hub_lines.append(f"- {plain(where)} — {plain(h.get('status')) or 'error'} since {utc(h.get('since'))}")
+          if health:
+              lines += ["", "**Sync health** (what each source added and removed in this run — \"—\" when this run did "
+                            "not read it — and items held back after a sudden drop):", "",
+                        "| Source | Added | Removed | Held back |", "|---|---:|---:|---|", *health]
+          if hub_lines:
+              lines += ["", f"**Main pages of the magazine sites that did not load** (this run's document search; the "
+                            "documents they list stay on the site, and each page is tried again every day):",
+                        *hub_lines[:15]]
+              if len(hub_lines) > 15:
+                  lines.append(f"- … and {len(hub_lines) - 15} more")
+              print(f"::warning title=Document search::{len(hub_lines)} main page(s) of the magazine sites did not load "
+                    "— see the run summary (checked again every day)")
           # A push that changed what a source only the full update reads (content/instagram.yml, data/geo, its
           # part of config/site.yml) ran that source too — the plan step (scripts/ops/push_modules.py) says why.
           also = [m.strip() for m in os.environ.get("ALSO", "").split(",") if m.strip()]
@@ -756,11 +834,16 @@ jobs:
               lines += ["", *[a.replace("|", "/") for a in alines]]
           # Smaller problems of a source that still updated (e.g. one of several feeds did not answer).
           # Nothing to do unless the same note shows up here day after day. (The writers archive's are in its
-          # own lines above.)
+          # own lines above; the bulletin's and the events' files come under "… files to fix" below, and the
+          # document search's main pages under "Sync health" above, when this run asked for them.)
           notes = []
           for src in s.get("sources", []):
               warns = (src.get("stats") or {}).get("warnings") if isinstance(src.get("stats"), dict) else None
-              if src.get("ok") and isinstance(warns, list) and warns and src.get("source") != "writers_archive":
+              if src.get("source") in ("writers_archive", "announcements", "manual_events"):
+                  continue
+              if src.get("source") == "pdfs" and hub_lines and isinstance(warns, list):
+                  warns = [w for w in warns if "did not load" not in str(w)]
+              if src.get("ok") and isinstance(warns, list) and warns:
                   label = src.get("label") or src.get("source")
                   notes += [f"- {label}: " + str(w).replace("\n", " ")[:200] for w in warns[:2]]
           if notes:
@@ -803,14 +886,40 @@ jobs:
           # location_es left saying "Lugar por anunciarse", a YAML typo in data/translations/glossary.yml
           # or overrides.yml): that part was skipped or corrected, the rest of the site still updated.
           probs = s.get("problems") if isinstance(s.get("problems"), dict) else {}
-          settings = [(k, " ".join(str(v).split()).replace("|", "/")[:1000])
-                      for k, v in probs.items()
-                      if k in ("meeting", "recurring_events", "ics_feeds", "price_changes", "content_events", "translations")]
+          # What kept translation from working fully, which is no settings file to fix (translate.Translator.problems →
+          # status.json translations.problems): a translation model that could not be installed — its download
+          # failed (the next run tries again by itself) or the package's checksum is not the pinned one
+          # (MODEL_SHA256 in scripts/sync/translate.py: a person checks the new package first) — or an unreadable
+          # data/translations/cache.json (moved aside; the line says how to restore it). Under a heading of their
+          # own; build_data also adds them after the glossary / overrides typos in problems.translations, so they
+          # are cut from that Settings problem below.
+          tr = s.get("translations") if isinstance(s.get("translations"), dict) else {}
+          tprobs = [" ".join(str(p).split()) for p in (tr.get("problems") if isinstance(tr.get("problems"), list) else [])
+                    if str(p).strip()]
+
+          def setting_text(k, v):
+              text = " ".join(str(v).split())
+              if k == "translations" and tprobs:
+                  cut = text.find(tprobs[0][:40])
+                  if cut >= 0:
+                      text = text[:cut].rstrip(" /")
+              return text.replace("|", "/")[:1000]
+          settings = [(k, msg) for k, v in probs.items()
+                      if k in ("meeting", "recurring_events", "ics_feeds", "price_changes", "content_events", "translations")
+                      for msg in [setting_text(k, v)] if msg]
           if settings:
               lines += ["", "**Settings problems** (the rest of the site still updated — fix the file and save it again):",
                         *[f"- {msg}" for _k, msg in settings]]
               for k, msg in settings:
                   print(f"::warning title=Settings problem ({k})::{msg.replace('%', '%25')}")
+          if tprobs:
+              tlines = [p.replace("|", "/")[:600] for p in tprobs[:6]]
+              lines += ["", "**Translation problems** (the rest of the site still updated; new titles may stay in their "
+                            "original language meanwhile — a model download that failed is simply tried again by the next "
+                            "run, a checksum that does not match needs a person to check the new package first):",
+                        *[f"- {p}" for p in tlines]]
+              for p in tlines:
+                  print(f"::warning title=Translation problem::{p.replace('%', '%25')}")
           # Bulletin posts and events written by hand (content/bulletin, content/events) that could not be
           # read — or that link a picture or document not saved next to them (announcements.py
           # stats.errors): the rest of the site still updated; the chair fixes the file.
@@ -912,8 +1021,9 @@ jobs:
     # last good data), but not when someone cancelled the run, and only from main.
     if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    # (the booth display's media: at most 20 minutes to download, 5 to save — the build and the upload still fit)
-    timeout-minutes: 35
+    # (the booth display's media: at most 20 minutes to download, 5 to save; the posters' share pictures at most 5 —
+    # the build, a second build when the pictures could not be made, and the upload still fit)
+    timeout-minutes: 40
     permissions:
       contents: read
       pages: read              # the GitHub Pages settings (the site's address)
@@ -1058,6 +1168,10 @@ jobs:
 
       - name: Build the website
         env:
+          # The month pages (/monthly/YYYY-MM/) point their link preview's picture at the share pictures of their
+          # posters, which the steps below make (eleventy/filters/monthly.js mpShareImage) — else they are built again
+          # without this, with the committee's card.
+          POSTER_SHARE: "1"
           PATH_PREFIX: ${{ steps.addr.outputs.path_prefix }}
           # Public address for feeds, share links and QR codes; it overrides
           # site.url in config/site.yml, so a custom domain is picked up automatically.
@@ -1070,6 +1184,42 @@ jobs:
           # never stops publishing (the Code check fails on them).
           BUILD_WARNINGS: ${{ runner.temp }}/build-warnings.txt
         run: npx @11ty/eleventy
+
+      # The monthly posters' share pictures — what WhatsApp, Facebook, iMessage … show when someone shares a month's
+      # page: the top of each month's poster (English and Spanish), 1200 × 630, taken with the runner's own Google
+      # Chrome through Python Playwright (scripts/ops/poster_share.py; Playwright's version is pinned in
+      # scripts/ops/requirements-browser.txt, installed only here and for the Code check's browser checks). About a
+      # minute in all. If anything fails, the step after builds the site again without them, so no page points at a
+      # missing picture (the month pages then show the committee's card, as before): it never stops a deploy.
+      - name: Set up Python (for the posters' share pictures)
+        continue-on-error: true
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/ops/requirements-browser.txt
+
+      - name: Make the monthly posters' share pictures
+        id: posters
+        continue-on-error: true
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          python -m pip install -r scripts/ops/requirements-browser.txt
+          python -m scripts.ops.poster_share _site
+
+      - name: Build the website again without the share pictures (only when they could not be made)
+        if: ${{ success() && steps.posters.outcome != 'success' }}
+        env:
+          # the same as "Build the website", without POSTER_SHARE
+          PATH_PREFIX: ${{ steps.addr.outputs.path_prefix }}
+          SITE_URL: ${{ steps.addr.outputs.site_url }}
+          I18N_STRICT: "1"
+        run: |
+          set -euo pipefail
+          find _site -path '*/monthly/*/share.png' -delete
+          npx @11ty/eleventy
+          echo "::warning title=Share pictures::The monthly posters' share pictures could not be made (see 'Make the monthly posters' share pictures'); the month pages show the committee's card in link previews until the next run."
 
       - name: Check the build
         env:

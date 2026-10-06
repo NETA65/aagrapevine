@@ -1,0 +1,10 @@
+# Only where a real browser is driven — never part of the daily sync (that is requirements.txt):
+#   * "Website update" (.github/workflows/update.yml, build job): the monthly posters' share pictures
+#     (scripts/ops/poster_share.py);
+#   * "Code check" (.github/workflows/check.yml, test build job): the browser checks (tests/browser).
+# Playwright drives the Google Chrome that GitHub's runners already have (nothing else is downloaded). Its version
+# is pinned, so the checks behave the same every run; Dependabot (.github/dependabot.yml) proposes each new release
+# once a month, and the Code check runs the browser checks with it before it is merged.
+playwright==1.63.0
+# the browser checks' picture comparisons (the same cap as requirements.txt)
+Pillow>=10.4,<13

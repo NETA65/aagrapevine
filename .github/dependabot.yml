@@ -19,6 +19,12 @@
 #     change how a package behaves) waits for this pull request, which
 #     changes the line to allow it. yt-dlp has no cap (it must keep up
 #     with YouTube changes), so it is left out here.
+#   * "pip" in scripts/ops is Playwright, the browser driver of the Code
+#     check's browser checks and of the monthly posters' share pictures
+#     (scripts/ops/requirements-browser.txt). It is pinned to one version,
+#     so every new release — minor and patch too: it must keep up with the
+#     Google Chrome on GitHub's runners — comes as this monthly pull
+#     request, and the Code check runs the browser checks with it.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -64,3 +70,14 @@ updates:
     commit-message:
       prefix: "chore(deps)"
     open-pull-requests-limit: 2
+
+  # Playwright, pinned in scripts/ops/requirements-browser.txt (see above): each new release.
+  - package-ecosystem: pip
+    directory: /scripts/ops
+    schedule:
+      interval: monthly
+    allow:
+      - dependency-name: "playwright"
+    commit-message:
+      prefix: "chore(deps)"
+    open-pull-requests-limit: 1
