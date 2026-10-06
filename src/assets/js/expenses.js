@@ -25,7 +25,8 @@
    Every storage call is wrapped: in a private window (or with storage blocked, or full) the app still
    works in memory, warns to export before closing, and never says "Saved" for something it could not
    keep. A change made in another tab reloads the data here. A photo is deleted only once nothing points to
-   it: not the ledger as stored now (another tab may have brought its entry back), not a pending undo.
+   it: not the ledger as stored now (another tab may have brought its entry back), not a pending undo, not
+   an unreadable ledger set aside.
    Closing the tab with the add / edit form changed (or photos still being restored) asks first.
    The entries live OUTSIDE Alpine's reactive proxies, so 5,000 of them stay fast: `rev` goes up on every
    change and each view is computed once per change (memo()), never once per row.
@@ -929,11 +930,13 @@
         },
         /* Deletes receipt photos — only the ones nothing points to: not an entry here, not one of the ledger
            as it is stored NOW (another tab may have brought its entry back: an undo, an import), not a delete
-           that can still be undone here or in another tab. A stored ledger that can't be read keeps them all. */
+           that can still be undone here or in another tab. A stored ledger that can't be read keeps them all,
+           and one set aside (until the visitor removes it) keeps every photo it names: repaired, it may be
+           restored. */
         dropPhotos: function (ids) {
-          var keep = this.photoIds(), stored = storedPhotoIds();
+          var keep = this.photoIds(), stored = storedPhotoIds(), aside = lsKeys(ASIDE).map(lsGet).join("\n");
           if (stored === null || this.lock) return Promise.resolve(0);
-          var gone = (ids || []).filter(function (id) { return !keep[id] && !stored[id]; });
+          var gone = (ids || []).filter(function (id) { return !keep[id] && !stored[id] && aside.indexOf('"' + id + '"') < 0; });
           return Promise.all(gone.map(function (id) { return photos.del(id); })).then(function () { return gone.length; });
         },
 
@@ -1341,17 +1344,22 @@
         },
         /* The form → an entry. An edit starts from the entry as it is: a field its form does not show keeps
            what the entry has (an imported trip's quantity, a hotel's nights from a CSV, a purchase's
-           attendees) — fixing a typo never erases them. A field the form shows is the form's. Only a new
-           category (another form, other fields) leaves out what the new form has no place for, as a new
-           entry does; and a trip ticked "I didn't drive" keeps no route, money or receipt. */
+           attendees) — fixing a typo, or moving it to another category with the same form ("Other" →
+           "Supplies"), never erases them. A field the form shows is the form's. Only another form (a
+           category of another template) leaves out what the new form has no place for, as a new entry
+           does; the hidden "to give away" mark goes with the category it came with; a pay-back mark stays
+           only while who pays and the request status stay as they were (a request set back to "Submitted"
+           is owed again); and a trip ticked "I didn't drive" keeps no route, money or receipt. */
         buildEntry: function () {
           var f = this.form, t = f.type, tp = this.tpl(), errs = [], self = this;
           var cur = this.formMode === "edit" && f.id ? S.state.entries.filter(function (x) { return x.id === f.id; })[0] : null;
-          var o = cur && cur.type === t && cur.category === f.category ? cur : null;
+          var curTpl = !cur ? "" : cur.type !== "expense" ? cur.type : ((this.cat(cur.category) || {}).template || "general");
+          var o = cur && cur.type === t && curTpl === tp ? cur : null;
           var rode = tp === "mileage" && !!f.no_miles;
           // what a field the form doesn't show becomes: the entry's own value on an edit, else blank
           var kept = function (k, blank) { return o && o[k] !== undefined && o[k] !== null ? clone(o[k]) : blank === undefined ? "" : blank; };
           var shown = function (field, k, v) { return self.has(field) ? v : kept(k); };
+          var same = function (k) { return !!o && str(o[k]) === str(f[k]); };
           var e = {
             id: f.id, type: t, date: f.date, end_date: shown("end_date", "end_date", f.end_date), category: f.category,
             description: clean(f.description), funder: f.funder, claim_status: f.claim_status,
@@ -1368,13 +1376,14 @@
               : tp === "mileage" && !f.no_miles ? clean(S.formPerson) : clean(f.person),
             item: shown("item", "item", clean(f.item)),
             format: shown("format", "format", f.format), quantity: shown("quantity", "quantity", num(f.quantity)),
-            unit_cost_cents: kept("unit_cost_cents"), giveaway: this.has("giveaway") ? !!f.giveaway : !!kept("giveaway", false),
+            unit_cost_cents: kept("unit_cost_cents"), giveaway: this.has("giveaway") ? !!f.giveaway : same("category") && !!kept("giveaway", false),
             // a trip's numbers come from its form below; any other entry keeps the ones it has (an import's)
             miles: kept("miles"), rate: kept("rate"), from: kept("from"), to: kept("to"), round_trip: !!kept("round_trip", false), trips: kept("trips"),
             no_miles: false, odometer_start: kept("odometer_start"), odometer_end: kept("odometer_end"),
             // (a stay's nights follow its dates — GVX works them out when both are there)
             nights: kept("nights"), attendees: shown("attendees", "attendees", num(f.attendees)),
-            sub_product: kept("sub_product"), sub_term: kept("sub_term"), sub_start: kept("sub_start"), sub_kind: kept("sub_kind"), repaid: kept("repaid"),
+            sub_product: kept("sub_product"), sub_term: kept("sub_term"), sub_start: kept("sub_start"), sub_kind: kept("sub_kind"),
+            repaid: same("funder") && same("claim_status") ? kept("repaid") : "",
             receipt: rode ? "none" : this.has("receipt") ? f.receipt : kept("receipt", "none"), receipt_ref: clean(f.receipt_ref),
             tags: uniq(String(f.tags || "").split(/[,;]/)), notes: String(f.notes || "").trim(), custom: clone(f.custom || {}),
             example: !!f.example, created: f.created || "", amount_cents: 0,
@@ -2199,9 +2208,12 @@
         impPick: function (ev) { var files = Array.prototype.slice.call(ev.target.files || []); ev.target.value = ""; if (files.length) this.impFiles(files); },
         // Several files at once: a backup that was unpacked (a computer may open a .zip by itself) — its
         // backup.json with its photos. The one that is not a photo is the file; the photos go with it.
+        // (photos alone are nothing to import: the message says to choose the backup.json with them)
         impFiles: function (list) {
           var files = Array.prototype.slice.call(list || []).filter(Boolean), pic = /\.(jpe?g|png|webp|gif)$/i;
           var main = files.filter(function (f) { return !pic.test(f.name || ""); })[0] || files[0], pics = {};
+          if (!main) return Promise.resolve();
+          if (pic.test(main.name || "")) { this.impReset(); this.imp.name = main.name; this.imp.err = this.t("imp.photos_alone"); return Promise.resolve(); }
           files.forEach(function (f) { if (f !== main && pic.test(f.name || "")) pics[f.name] = f; });
           return this.impFile(main, pics);
         },
@@ -2226,16 +2238,22 @@
             self.imp.err = e && e.key ? self.msgKey(e.key) : self.t("imp.unreadable");
           });
         },
-        // a .zip: the full backup (backup.json and its photos — or any one .json someone zipped), or an Excel workbook
+        /* a .zip: the full backup (backup.json and its photos — or any one .json someone zipped), or an Excel
+           workbook. An unpacked backup zipped again (its folder and all: Windows' "Compressed folder", a Mac's
+           "Compress", with its __MACOSX copies) is read too: the backup.json nearest the top, its photos beside it. */
         impZip: function (file, pics) {
           var self = this, X = S.X, G = window.GVF;
           if (!G) { this.imp.err = this.t("imp.unreadable"); return Promise.resolve(); }
           return G.readZip(file).then(function (zip) {
             if (zip.has("xl/workbook.xml")) return G.xlsxRows(zip, { maxRows: X.LIMITS.rows + 1 }).then(function (rows) { self.impCsvRows(rows, "xlsx"); });
-            var jsons = zip.entries.filter(function (e) { return /^[^/]+\.json$/i.test(e.name); });
-            var main = zip.has("backup.json") ? "backup.json" : jsons.length === 1 ? jsons[0].name : "";
+            var depth = function (n) { return n.split("/").length; };
+            var jsons = zip.entries.map(function (e) { return e.name; }).filter(function (n) { return /\.json$/i.test(n) && !/(^|\/)(__MACOSX\/|\._)/.test(n); })
+              .sort(function (a, b) { return depth(a) - depth(b) || (a < b ? -1 : a > b ? 1 : 0); });
+            var main = jsons.filter(function (n) { return /(^|\/)backup\.json$/i.test(n); })[0] || (jsons.length === 1 ? jsons[0] : "");
             if (!main) { self.imp.err = self.msgKey("expenses.err.backup_foreign"); return; }
-            return zip.text(main, X.LIMITS.json).then(function (text) { self.impBackupRead(X.readBackup(text, S.cfg), null, pics, zip); });
+            return zip.text(main, X.LIMITS.json).then(function (text) {
+              self.impBackupRead(X.readBackup(text, S.cfg), null, pics, zip, main.slice(0, main.lastIndexOf("/") + 1));
+            });
           });
         },
         // a .json backup: a small one read whole; a big one (its photos inside, as before 1.2.0) in slices
@@ -2353,17 +2371,19 @@
         },
         /* A backup read (GVX.readBackup's answer r) → the preview. Its photos, each as a source to read when
            it is restored: lazy (a big .json's, GVF.jsonBackup), a data: URL inside the .json, a file of the
-           .zip (zip), or one of the photos picked with an unpacked backup.json (pics, by name). A photo the
-           backup names but nothing holds is counted as missing (the preview says how to bring it along). */
-        impBackupRead: function (r, lazy, pics, zip) {
+           .zip (zip; dir: the folder its backup.json is in, "" at the top), or one of the photos picked with an
+           unpacked backup.json (pics, by name). A photo the backup names but nothing holds is counted as
+           missing (the preview says how to bring it along). */
+        impBackupRead: function (r, lazy, pics, zip, dir) {
           if (!r || !r.ok) { this.imp.err = this.msgKey((r && r.error) || "expenses.err.backup_invalid"); return; }
           var st = r.state || {}, list = [], missing = 0;
+          dir = dir || "";
           (lazy || r.receipts || []).forEach(function (x) {
             if (!x || !x.id) return;
             var meta = { id: x.id, type: x.type || "image/jpeg", w: x.w || 0, h: x.h || 0, name: x.name || "", added: x.added || "" };
             if (typeof x.load === "function") meta.load = x.load;
             else if (x.dataUrl) meta.load = function () { return Promise.resolve(dataUrlToBlob(x.dataUrl)); };
-            else if (x.file && zip && zip.has(x.file)) meta.load = function () { return zip.blob(x.file, meta.type); };
+            else if (x.file && zip && zip.has(dir + x.file)) meta.load = function () { return zip.blob(dir + x.file, meta.type); };
             else if (x.file && pics && Object.prototype.hasOwnProperty.call(pics, x.file)) meta.load = function () { return Promise.resolve(pics[x.file]); };
             if (meta.load) list.push(meta); else missing++;
           });

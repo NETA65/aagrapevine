@@ -1336,6 +1336,34 @@ class Backups(unittest.TestCase):
         self.assertEqual(r["v1"], ["backup", {"entries": 45, "photos": 1, "missing": 0}])
         self.assertEqual(r["v1after"], [45, ["x0n"], "image/jpeg"])
 
+    def test_an_unpacked_backup_zipped_again_and_photos_alone(self):
+        r = app(self, r"""
+          const photos = new Map(), w = make("en", null, null, { photos });
+          add(w, "expense", { description: "Hotel", amount: "90", receipt: "photo" }, "lodging");
+          const e = w.a.E()[0];
+          photos.set(e.id, { id: e.id, type: "image/jpeg", blob: new Blob([e.id], { type: "image/jpeg" }) });
+          await w.a.exportBackup();
+          const d = w.downloads.at(-1), ar = await w.F.readZip(w.blob(d));
+          // unpacked into its folder, then the folder zipped again (a Mac adds its __MACOSX copies)
+          const dir = d.name.replace(/\.zip$/, "") + "/";
+          const again = await w.F.zip([{ name: "__MACOSX/" + dir + "._backup.json", data: "not json" }]
+            .concat(await Promise.all(ar.entries.map(async (x) => ({ name: dir + x.name, data: await ar.bytes(x.name) })))));
+          const p2 = new Map(), w2 = make("en", null, null, { photos: p2 });
+          await w2.a.impFile(fileOf("again.zip", again));
+          const preview = [w2.a.imp.step, w2.a.imp.err, JSON.parse(JSON.stringify(w2.a.imp.counts || null))];
+          await w2.a.impApply();
+          const restored = [[...p2.keys()], p2.size && await p2.get(e.id).blob.text(), w2.a.E().map((x) => x.description)];
+          // photos picked without their backup.json: nothing to import, and the message says what to choose
+          const w3 = make("en");
+          await w3.a.impFiles([fileOf("IMG_0001.jpg", "jpeg", "image/jpeg"), fileOf("IMG_0002.JPG", "jpeg", "image/jpeg")]);
+          out({ preview, restored, id: e.id, alone: [w3.a.imp.step, w3.a.imp.err, w3.a.t("imp.photos_alone"), w3.a.E().length] });""")
+        self.assertEqual(r["preview"], ["backup", "", {"entries": 1, "photos": 1, "missing": 0}])
+        self.assertEqual(r["restored"], [[r["id"]], r["id"], ["Hotel"]])
+        self.assertEqual(r["alone"][0], "pick")
+        self.assertEqual(r["alone"][1], r["alone"][2])
+        self.assertIn("backup.json", r["alone"][1])
+        self.assertEqual(r["alone"][3], 0)
+
 
 class ImportFiles(unittest.TestCase):
     """F-8 / P8-4: a UTF-16 CSV reads as its UTF-8 twin; an Excel workbook (.xlsx) imports — its first sheet, dates
@@ -1411,8 +1439,9 @@ class ImportFiles(unittest.TestCase):
 
 class EditKeepsWhatTheFormDoesNotShow(unittest.TestCase):
     """P1-3: an edit starts from the entry: an imported entry's fields its form doesn't show (a trip's nights,
-    quantity, item, attendees) survive a description fix; a new category (another form) drops what it has no
-    place for, as a new entry would."""
+    quantity, item, attendees) survive a description fix, and a move to another category with the same form; a
+    category with another form drops what it has no place for, as a new entry would; a pay-back mark stays only
+    while the request it settled stays as it was."""
 
     def test_an_imported_travel_entry(self):
         r = app(self, r"""
@@ -1442,6 +1471,39 @@ class EditKeepsWhatTheFormDoesNotShow(unittest.TestCase):
         self.assertEqual(r["after"], [["Bus to the Fall Assembly"] + t1[1:], ["To Tyler and back"] + t2[1:], 0])   # nothing lost, nothing moved
         self.assertEqual(r["moved"], ["Bus to the Fall Assembly", "", "", "", "", "", "Greyhound", "", "assembly", 4500, "district", "to_request", "", ""])
         self.assertEqual(r["meal"], [True, False, "", "", 5000, 0])
+
+    def test_the_same_form_in_another_category_and_a_pay_back(self):
+        r = app(self, r"""
+          const w = make("en");
+          const csv = "id,date,type,category,description,amount,funder,claim_status,quantity,item,attendees,giveaway\n" +
+            "o1,2026-09-20,expense,other,Coffee for the workshop,45.00,district,to_request,3,Coffee,12,yes\n";
+          await w.a.impFile(fileOf("bank.csv", csv)); await w.a.impApply();
+          const pick = (id, ks) => { const e = w.a.E().find((x) => x.id === id); return ks.map((k) => e[k]); };
+          const K = ["category", "quantity", "item", "attendees", "giveaway"];
+          const imported = pick("o1", K);
+          w.a.openEdit("o1"); w.a.form.description = "Coffee for the fall workshop"; w.a.saveForm(false);
+          const typo = pick("o1", K);
+          // "Other" → "Supplies": the same form (general) — what it doesn't show stays; the hidden "to give away"
+          // mark was the old category's
+          w.a.openEdit("o1"); w.a.form.category = "supplies"; w.a.onCat(); w.a.saveForm(false);
+          const moved = pick("o1", K);
+          // a book bought for Pat, settled when Pat paid it back …
+          add(w, "expense", { description: "Big Book for Pat", amount: "20" }, "books");
+          const pat = w.a.ensurePerson("Pat"), b = w.a.E().at(-1).id;
+          w.a.openEdit(b); w.a.form.funder = pat; w.a.onFunder(); w.a.saveForm(false);
+          add(w, "received", { description: "Pat paid me back", amount: "20", funder: pat }, "repayment");
+          const R = ["repaid", "claim_status"], settled = pick(b, R);
+          w.a.openEdit(b); w.a.form.description = "Big Book for Pat K."; w.a.saveForm(false);
+          const fixed = pick(b, R);
+          // … and its request set back to "Submitted": owed again, not still marked paid back
+          w.a.openEdit(b); w.a.form.claim_status = "submitted"; w.a.saveForm(false);
+          out({ imported, typo, moved, settled, fixed, reopened: pick(b, R) });""")
+        self.assertEqual(r["imported"], ["other", 3, "Coffee", 12, True])
+        self.assertEqual(r["typo"], r["imported"])
+        self.assertEqual(r["moved"], ["supplies", 3, "Coffee", 12, False])
+        self.assertEqual(r["settled"], ["repaid", "paid"])
+        self.assertEqual(r["fixed"], ["repaid", "paid"])
+        self.assertEqual(r["reopened"], ["owed", "submitted"])
 
 
 class OwedAtThePeriodsEnd(unittest.TestCase):
@@ -1560,6 +1622,23 @@ class StoredDataSafety(unittest.TestCase):
         self.assertTrue(r["dl3"])
         self.assertEqual(r["freed"], ["", ["Typed"]])
         self.assertEqual(r["newer"], ["newer", 0, ["From a newer page", "Here"], True, True])
+
+    def test_the_photos_of_a_ledger_set_aside_stay_until_it_is_removed(self):
+        r = app(self, r"""
+          const photos = new Map(), jpeg = (id) => ({ id, type: "image/jpeg", blob: new Blob([id]) });
+          const bad = '{"v":1,"entries":[{"id":"ph1","type":"expense","date":"2026-09-01","receipt":"photo","descr';   // cut off
+          photos.set("ph1", jpeg("ph1")); photos.set("stray", jpeg("stray"));
+          const w = make("en", { [KEY]: bad }, null, { photos });
+          add(w, "expense", { description: "New", amount: "5" }, "books");          // saved: the unreadable one is now only set aside
+          // the next visit's clean-up: the photo the set-aside ledger names stays (repaired, it may be restored)
+          const w2 = make("en", Object.fromEntries(w.store), null, { photos });
+          await w2.a.cleanPhotos(); await tick();
+          const kept = [w2.a.damaged, photos.has("ph1"), photos.has("stray")];
+          w2.a.damagedRemove(); await tick();
+          await w2.a.cleanPhotos(); await tick();
+          out({ kept, removed: [w2.a.damaged, photos.has("ph1")] });""")
+        self.assertEqual(r["kept"], [1, True, False])
+        self.assertEqual(r["removed"], [0, False])
 
     def test_closing_the_tab_asks_only_while_something_is_unsaved(self):
         r = app(self, r"""
