@@ -11,8 +11,9 @@ Node.js — the rules that live in the app itself, not in the core (tests/test_e
     total); a purchase made for someone and left on "me" (the example) saves again as it is
   * storage — a save the browser refuses never says "Saved"; the screen's own choices (the view,
     the period) are kept apart, so another tab does not reload for them; an entry deleted in another
-    tab while it is being edited here is saved as a new one, and the dialog says so; a "replace"
-    import whose save is refused keeps the receipt photos of the ledger that stays
+    tab while it is being edited here is saved again as itself, its receipt photo with it, and the
+    dialog says so; a "replace" import whose save is refused keeps the receipt photos of the ledger
+    that stays
   * requests — "Download CSV" is the request's own lines, without people's names unless the request
     includes them; the files are named in the page's language
   * import — a full backup bigger than a CSV may be is still restored; a mileage log with no amount
@@ -40,13 +41,17 @@ Node.js — the rules that live in the app itself, not in the core (tests/test_e
   * backups (1.2.0) — the full backup is a .zip (backup.json + each photo a file) another device restores, photos
     and all; its size is said first and a big one is asked about; "without photos" (.json) keeps this device's
     photos; an unpacked .zip restores from its backup.json picked with its photos; a pre-1.2.0 .json of 88 MB
-    restores in slices; UTF-16 CSVs and Excel workbooks import; what a browser can't read says why
+    restores in slices; UTF-16 CSVs and Excel workbooks import; what a browser can't read says why; a photo the
+    browser can't read is left out of the backup and named (never the whole backup); one that fails all the same
+    points to "Back up without photos"; photos that fail to restore are said (read out)
   * an edit keeps the fields its form doesn't show (an imported trip's nights, quantity, item, attendees);
     "Who owes you" is the balance at the period's end; the service panels come from Area 65's rule; the
     Requests view and the report make their formatters once (not per cell)
-  * stored data — an unreadable ledger is set aside (or, with no room, never saved over) and offered as a file;
-    a newer page's ledger is not saved over; closing the tab asks only while the form is unsaved; a photo
-    survives a delete another tab can still undo, or whose entry another tab brought back
+  * stored data — an unreadable ledger is set aside (or, with no room, never saved over) and offered as a file,
+    with the receipt photos it names (restored with them once repaired); a newer page's ledger is not saved
+    over; closing the tab asks only while something is unsaved (the form, or changes the browser did not
+    keep); a photo survives a delete another tab can still undo, or whose entry another tab brought back or
+    saved again from its open form
   * the rest — the examples are added once; a CSV export is not a backup; the Summary's badge counts
     what its Reminders card lists, and "By category" counts subscriptions as subscriptions; "Sort:
     Category" follows the names on screen; two items that
@@ -452,10 +457,10 @@ class Storage(unittest.TestCase):
           for (const fn of w.listeners.storage || []) fn({ key: KEY });
           const mode = [w.a.formMode, w.a.form.id, w.a.dlgMsg];
           w.a.saveForm(false);
-          out({ mode, n: w.a.E().length, sameId: w.a.E()[0].id === id, msg: w.a.t("form.deleted_elsewhere") });""")
-        self.assertEqual(r["mode"], ["add", "", r["msg"]])
+          out({ mode, id, n: w.a.E().length, sameId: w.a.E()[0].id === id, msg: w.a.t("form.deleted_elsewhere") });""")
+        self.assertEqual(r["mode"], ["add", r["id"], r["msg"]])
         self.assertEqual(r["n"], 1)
-        self.assertFalse(r["sameId"])                                         # saved as a new entry, knowingly
+        self.assertTrue(r["sameId"])                      # saved again as itself (the other tab's "Undo" finds it there)
 
     def test_a_refused_replace_keeps_the_photos(self):
         # "Replace" with a CSV or a full backup while the browser refuses the new ledger (a full
@@ -1207,7 +1212,8 @@ class Backups(unittest.TestCase):
     """P1-2 / F-8: the full backup is a .zip — backup.json and each receipt photo a file of its own — and another
     device restores it, photos and all; its size is said first, a big one is asked about (or backed up without
     photos); a .json without photos leaves this device's photos alone; an unpacked .zip restores from its
-    backup.json picked with its photos; the backups made before 1.2.0 (photos inside the .json) restore."""
+    backup.json picked with its photos; the backups made before 1.2.0 (photos inside the .json) restore; a photo
+    the browser can't read is left out and named; photos that fail to restore are said."""
 
     def test_the_zip_round_trip(self):
         r = app(self, r"""
@@ -1387,6 +1393,122 @@ class Backups(unittest.TestCase):
         self.assertEqual(r["alone"][1], r["alone"][2])
         self.assertIn("backup.json", r["alone"][1])
         self.assertEqual(r["alone"][3], 0)
+
+    def test_a_photo_this_browser_cannot_read_is_left_out_and_named(self):
+        # One stored photo whose file the browser lost (Chrome's NotReadableError): the full backup is made with the
+        # others and names the one left out; it restores elsewhere. Every later backup works the same way. The photo
+        # store failing as a whole names every photo. A backup that fails all the same points to "Back up without
+        # photos" (or says its own reason), never to a CSV.
+        r = app(self, r"""
+          const res = {}, now = Date.parse("2026-10-06T15:00:00Z");
+          for (const lang of ["en", "es"]) {
+            const photos = new Map(), w = make(lang, null, null, { photos, now });
+            add(w, "expense", { description: "Hotel for the Fall Assembly", amount: "90", receipt: "photo", date: "2026-09-26" }, "lodging");
+            add(w, "expense", { description: "Big Book", amount: "12", receipt: "photo", date: "2026-09-27" }, "books");
+            add(w, "expense", { description: "Copies", amount: "3", receipt: "photo", date: "2026-09-28" }, "printing");
+            const [hotel, book, copies] = w.a.E();
+            const jpeg = (id, b) => ({ id, type: "image/jpeg", blob: new Blob([new Uint8Array(b)], { type: "image/jpeg" }) });
+            photos.set(hotel.id, jpeg(hotel.id, [0xff, 0xd8, 1]));
+            photos.set(book.id, jpeg(book.id, [0xff, 0xd8, 2]));
+            photos.get(book.id).blob.arrayBuffer = () => Promise.reject(Object.assign(new Error("A requested file or directory could not be found"), { name: "NotReadableError" }));
+            photos.set(copies.id, jpeg(copies.id, [0xff, 0xd8, 3]));
+            const runs = [];
+            for (let i = 0; i < 2; i++) {
+              const n0 = w.downloads.length;
+              await w.a.exportBackup();
+              const d = w.downloads.at(-1), ar = await w.F.readZip(w.blob(d));
+              runs.push({ made: w.downloads.length - n0, files: ar.entries.length, receipts: JSON.parse(await ar.text("backup.json")).receipts.map((x) => x.id), toast: w.a.toastMsg });
+            }
+            const d = w.downloads.at(-1);
+            // another device restores it: the two photos it has, and every entry
+            const p2 = new Map(), w2 = make(lang, null, null, { photos: p2 });
+            await w2.a.impFile(fileOf(d.name, w.blob(d)));
+            const preview = JSON.parse(JSON.stringify(w2.a.imp.counts));
+            await w2.a.impApply();
+            // the photo store fails as a whole (no IndexedDB): each photo is named, none is said to be in it
+            const w3 = make(lang, Object.fromEntries(w.store), null, { now });
+            await w3.a.exportBackup();
+            const zipped = (await w3.F.readZip(w3.blob(w3.downloads.at(-1)))).entries.map((e) => e.name);
+            res[lang] = { ids: [hotel.id, book.id, copies.id], runs, left: JSON.parse(JSON.stringify(w.a.bkLeft)), bookName: w.a.entryName(book.id),
+                          lastBackup: !!state(w).meta.lastBackup, preview, restored: [...p2.keys()].sort(), entries: w2.a.E().length,
+                          whole: [w3.downloads.length, zipped, w3.a.toastMsg, w3.a.bkLeft.map((x) => x.text), [hotel, book, copies].map((e) => w3.a.entryName(e.id))],
+                          failed: w.a.t("toast.backup_failed"), tooBig: w.a.t("err.backup_too_big") };
+            // a backup that fails all the same: its own reason when it has one, else the backup without photos
+            const zip = w.F.zip;
+            w.F.zip = () => Promise.reject(Object.assign(new Error("big"), { key: "expenses.err.backup_too_big" }));
+            await w.a.exportBackup(); res[lang].saidBig = w.a.toastMsg;
+            w.F.zip = () => Promise.reject(new Error("disk"));
+            await w.a.exportBackup(); res[lang].saidFailed = w.a.toastMsg;
+            w.F.zip = zip;
+          }
+          out(res);""")
+        for lang, x in r.items():
+            with self.subTest(lang=lang):
+                hotel, book, copies = x["ids"]
+                for run in x["runs"]:                                          # the first backup, and every one after it
+                    self.assertEqual(run["made"], 1)
+                    self.assertEqual(run["files"], 3)                         # backup.json and the two photos it can read
+                    self.assertEqual(run["receipts"], [hotel, copies])        # (never one that is not in the .zip)
+                    self.assertIn(x["bookName"], run["toast"])
+                self.assertEqual(x["left"], [{"id": book, "text": x["bookName"]}])
+                self.assertTrue(x["lastBackup"])
+                self.assertEqual(x["preview"], {"entries": 3, "photos": 2, "missing": 0})
+                self.assertEqual(x["restored"], sorted([hotel, copies]))
+                self.assertEqual(x["entries"], 3)
+                made, zipped, toast, named, names = x["whole"]
+                self.assertEqual((made, zipped, named), (1, ["backup.json"], names))
+                for n in names:
+                    self.assertIn(n, toast)
+                self.assertEqual(x["saidBig"], x["tooBig"])
+                self.assertEqual(x["saidFailed"], x["failed"])
+                self.assertNotIn("CSV", x["failed"])
+        self.assertRegex(r["en"]["runs"][0]["toast"],
+                         r"^Downloaded service-expenses-backup-2026-10-06\.zip · \d+ KB — without 1 receipt photo this browser couldn't read: Big Book · Sep 27\.$")
+        self.assertIn("— sin 1 foto de comprobante que este navegador no pudo leer: Big Book", r["es"]["runs"][0]["toast"])
+        self.assertIn("without 3 receipt photos this browser couldn't read", r["en"]["whole"][2])
+        self.assertIn("Back up without photos", r["en"]["failed"])
+        self.assertIn("Respalda sin fotos", r["es"]["failed"])
+        page = (ROOT / "src" / "pages" / "tracker.njk").read_text(encoding="utf-8")
+        self.assertIn('x-for="x in bkLeft"', page)                           # listed under the backup buttons too
+
+    def test_photos_that_fail_to_restore_are_said(self):
+        # A restored .zip with a photo damaged on the way: "Done: 2 entries imported" is read out at once; the photo
+        # that could not be restored is said too, once, when the photos are done (the toast, a live region) — beside
+        # an "Undo" on screen (kept) through the page's own live region (GV.announce)
+        r = app(self, r"""
+          const res = {};
+          for (const lang of ["en", "es"]) {
+            const photos = new Map(), w = make(lang, null, null, { photos });
+            add(w, "expense", { description: "Hotel", amount: "90", receipt: "photo" }, "lodging");
+            add(w, "expense", { description: "Books", amount: "12", receipt: "photo" }, "books");
+            const [a, b] = w.a.E();
+            photos.set(a.id, { id: a.id, type: "image/jpeg", blob: new Blob(["PHOTO-A-1234"], { type: "image/jpeg" }) });
+            photos.set(b.id, { id: b.id, type: "image/jpeg", blob: new Blob(["PHOTO-B-5678"], { type: "image/jpeg" }) });
+            await w.a.exportBackup();
+            const bytes = new Uint8Array(await w.blob(w.downloads.at(-1)).arrayBuffer());
+            bytes[Buffer.from(bytes).indexOf("PHOTO-B-5678")] = 0x51;           // its bytes no longer match their CRC
+            const said = [], w2 = make(lang, null, null, { photos: new Map() });
+            w2.ctx.GV.announce = (m) => said.push(m);
+            await w2.a.impFile(fileOf("backup.zip", bytes));
+            await w2.a.impApply(); await tick();
+            const said3 = [], w3 = make(lang, null, null, { photos: new Map() });
+            w3.ctx.GV.announce = (m) => said3.push(m);
+            await w3.a.impFile(fileOf("backup.zip", bytes));
+            const p = w3.a.impApply();
+            w3.a.say(w3.a.plural(1, "toast.deleted_one", "toast.deleted"), true);   // an entry deleted meanwhile: "Undo" on screen
+            await p; await tick();
+            res[lang] = { done: [w2.a.imp.photosDone, w2.a.imp.photoErrs], toast: w2.a.toastMsg, said,
+                          beside: [w3.a.toastMsg, w3.a.toastUndo, said3], want: w2.a.t("imp.photos_failed", { n: "1" }), deleted: w3.a.plural(1, "toast.deleted_one", "toast.deleted") };
+          }
+          out(res);""")
+        for lang, x in r.items():
+            with self.subTest(lang=lang):
+                self.assertEqual(x["done"], [1, 1])
+                self.assertEqual(x["toast"], x["want"])
+                self.assertEqual(x["said"], [])                               # (the toast says it: not twice)
+                self.assertEqual(x["beside"], [x["deleted"], True, [x["want"]]])
+        self.assertEqual(r["en"]["want"], "Receipt photos that couldn't be restored: 1.")
+        self.assertEqual(r["es"]["want"], "Fotos de comprobantes que no se pudieron restaurar: 1.")
 
 
 class ImportFiles(unittest.TestCase):
@@ -1602,9 +1724,10 @@ class Speed(unittest.TestCase):
 
 
 class StoredDataSafety(unittest.TestCase):
-    """P8-4: a stored ledger this page can't read is never written over (set aside, said, offered as a file); a
-    newer page's ledger is shown, not saved over; closing the tab asks only while the form holds something
-    unsaved; a receipt photo is never deleted while another tab can still undo its delete, or has its entry back."""
+    """P8-4: a stored ledger this page can't read is never written over (set aside, said, offered as a file, with
+    the receipt photos it names); a newer page's ledger is shown, not saved over; closing the tab asks only while
+    something is unsaved — the form, or changes the browser did not keep; a receipt photo is never deleted while
+    another tab can still undo its delete, has its entry back, or has it open in its form."""
 
     def test_an_unreadable_ledger(self):
         r = app(self, r"""
@@ -1615,7 +1738,7 @@ class StoredDataSafety(unittest.TestCase):
           add(w, "expense", { description: "New", amount: "5" }, "books");          // the tracker works on; the copy stays aside
           const after = [state(w).entries.map((e) => e.description), aside(w)];
           const w2 = make("en", Object.fromEntries(w.store));                       // the next visit: still said, not copied twice
-          w2.a.damagedDownload();
+          await w2.a.damagedDownload();
           const d = w2.downloads.at(-1), dl = [w2.a.damaged, d.name, (await w2.text(d)) === bad];
           w2.a.damagedRemove(); await tick();
           const gone = [w2.a.damaged, aside(w2), state(w2).entries.length];
@@ -1625,7 +1748,7 @@ class StoredDataSafety(unittest.TestCase):
           const locked = [w3.a.lock, w3.a.damaged];
           const r3 = add(w3, "expense", { description: "Typed", amount: "1" }, "books");
           const kept = [w3.store.get(KEY) === bad, r3.toast === w3.a.t("toast.not_saved")];
-          w3.a.damagedDownload();
+          await w3.a.damagedDownload();
           const dl3 = (await w3.text(w3.downloads.at(-1))) === bad;
           w3.a.damagedRemove(); await tick();
           const freed = [w3.a.lock, state(w3).entries.map((e) => e.description)];
@@ -1710,6 +1833,152 @@ class StoredDataSafety(unittest.TestCase):
         self.assertTrue(r["spared"])
         self.assertFalse(r["gone"])
         self.assertIsNone(r["left"])
+
+    def test_an_entry_deleted_in_another_tab_keeps_its_photo_when_saved_again(self):
+        # Tab B has an entry with a receipt photo open in its edit form; tab A deletes it; B is told, and saves it
+        # again. Whatever the order — A's undo time over before B saves (A deletes the photo meanwhile), B saving
+        # in time, A's "Undo" before or after B's save — there is one entry, under its own id, with its photo,
+        # byte for byte, and the next visit's clean-up keeps it. A's "Undo" stays on screen when B saves.
+        r = app(self, r"""
+          const photos = new Map(), shared = new Map(), fire = (w) => { for (const fn of w.listeners.storage || []) fn({ key: KEY }); };
+          const res = {};
+          for (const order of ["undo_over_first", "saved_in_time", "undone_after", "undone_before"]) {
+            photos.clear(); shared.clear();
+            const a = make("en", null, null, { photos, store: shared });
+            add(a, "expense", { description: "Hotel for the assembly", amount: "90", receipt: "photo", nights: "" }, "lodging");
+            const id = a.a.E()[0].id, created = a.a.E()[0].created;
+            photos.set(id, { id, type: "image/jpeg", blob: new Blob([new Uint8Array([0xff, 0xd8, 7, 7, 7])], { type: "image/jpeg" }), w: 1200, h: 900, name: "IMG_1.jpg", added: "2026-09-26T10:00:00.000Z" });
+            // an imported field this form doesn't show (kept by an edit — and by saving it again)
+            const st0 = state(a); st0.entries[0].attendees = 4; shared.set(KEY, JSON.stringify(st0)); a.a.loadState();
+            const b = make("en", null, null, { photos, store: shared });
+            b.a.openEdit(id); await tick();                                          // the photo is shown
+            b.a.form.description = "Hotel for the Fall Assembly";
+            a.a.remove([id]); await tick(); fire(b);                                 // A deletes it; B hears of it
+            const told = [b.a.formMode, b.a.form.id === id, b.a.dlgMsg === b.a.t("form.deleted_elsewhere"), (b.listeners.beforeunload || []).length];
+            if (order === "undo_over_first") { a.a.finishUndo(); await tick(); }      // A's undo time is over: A deletes the photo
+            const before = photos.has(id);
+            if (order === "undone_before") { a.a.undo(); await tick(); fire(b); }
+            b.a.saveForm(false); await tick(); fire(a);
+            const aToast = [a.a.toastUndo, a.a.toastMsg];
+            if (order === "saved_in_time") { a.a.closeToast(); await tick(); }       // A's undo time is over after B saved
+            if (order === "undone_after") { a.a.undoToast(); await tick(); }
+            const c = make("en", null, null, { photos, store: shared });             // the next visit, and its clean-up
+            await c.a.cleanPhotos(); await tick();
+            const p = photos.get(id);
+            res[order] = { told, before, aToast, entries: state(c).entries.map((e) => [e.id === id, e.receipt, e.description, e.created === created, e.attendees]),
+                           photo: p ? [Array.from(new Uint8Array(await p.blob.arrayBuffer())), p.w, p.h, p.name] : null, keys: photos.size,
+                           leave: (b.listeners.beforeunload || []).length };
+          }
+          out(res);""")
+        for order, x in r.items():
+            with self.subTest(order=order):
+                self.assertEqual(x["told"], ["add", True, True, 1])             # unsaved meanwhile: closing the tab asks
+                self.assertEqual(x["before"], order != "undo_over_first")
+                self.assertEqual(x["entries"], [[True, "photo", "Hotel for the Fall Assembly", True, 4]])
+                self.assertEqual(x["photo"], [[0xFF, 0xD8, 7, 7, 7], 1200, 900, "IMG_1.jpg"])
+                self.assertEqual(x["keys"], 1)
+                self.assertEqual(x["leave"], 0)                                  # saved: nothing left to lose
+        self.assertEqual(r["saved_in_time"]["aToast"], [True, "1 entry deleted"])   # A's "Undo" is still there
+
+    def test_an_edit_that_lets_the_photo_go_deletes_it(self):
+        # (the open form keeps its entry's photo safe — not one the visitor has just let go: "Remove photo", or the
+        # receipt now kept on paper — that one goes as the edit is saved, as before)
+        r = app(self, r"""
+          const photos = new Map(), w = make("en", null, null, { photos });
+          add(w, "expense", { description: "Hotel", amount: "90", receipt: "photo" }, "lodging");
+          add(w, "expense", { description: "Books", amount: "12", receipt: "photo" }, "books");
+          const [a, b] = w.a.E();
+          for (const e of [a, b]) photos.set(e.id, { id: e.id, type: "image/jpeg", blob: new Blob([e.id], { type: "image/jpeg" }) });
+          w.a.openEdit(a.id); await tick(); w.a.removePhoto(); w.a.saveForm(false); await tick();
+          w.a.openEdit(b.id); await tick(); w.a.form.receipt = "paper"; w.a.saveForm(false); await tick();
+          out({ left: [...photos.keys()], receipts: w.a.E().map((e) => e.receipt) });""")
+        self.assertEqual(r["left"], [])
+        self.assertEqual(r["receipts"], ["none", "paper"])
+
+    def test_closing_the_tab_asks_while_changes_are_only_in_this_tab(self):
+        # The browser keeps nothing (storage full or blocked, a newer page's ledger, an unreadable one with no room to
+        # set it aside): every entry added is only in this tab, and closing it asks — until a save works again or a
+        # full backup has them
+        r = app(self, r"""
+          const armed = (w) => (w.listeners.beforeunload || []).length;
+          const w = make("en", null, null, { full: true });
+          const s = [armed(w)];
+          add(w, "expense", { description: "Books", amount: "12" }, "books"); s.push(armed(w));
+          add(w, "expense", { description: "Hotel", amount: "90" }, "lodging"); s.push(armed(w));
+          const ev = { prevented: false, preventDefault() { this.prevented = true; } };
+          w.listeners.beforeunload[0](ev); s.push(ev.prevented);
+          await w.a.exportBackup("plain"); s.push(armed(w), w.downloads.length);     // a backup has them
+          add(w, "expense", { description: "Stamps", amount: "3" }, "other"); s.push(armed(w));
+          w.setFull(false);
+          add(w, "expense", { description: "Pens", amount: "2" }, "other"); s.push(armed(w), state(w).entries.length);
+          const w2 = make("en", { [KEY]: JSON.stringify({ v: 99, entries: [], settings: {}, meta: {} }) });
+          const newer = [w2.a.lock, armed(w2)];
+          add(w2, "expense", { description: "Here", amount: "1" }, "books"); newer.push(armed(w2));
+          const w3 = make("en", { [KEY]: "{cut" }, null, { full: true }); w3.setFull(false);
+          const locked = [w3.a.lock, armed(w3)];
+          add(w3, "expense", { description: "Typed", amount: "1" }, "books"); locked.push(armed(w3));
+          out({ s, newer, locked });""")
+        self.assertEqual(r["s"], [0, 1, 1, True, 0, 1, 1, 0, 4])
+        self.assertEqual(r["newer"], ["newer", 0, 1])
+        self.assertEqual(r["locked"], ["unreadable", 0, 1])
+
+    def test_the_unreadable_datas_download_has_its_photos(self):
+        # The notice says: download it, then remove it. The download is a .zip of its text as it was and the receipt
+        # photos it names ("<id>.jpg"); "Remove it" asks, saying the photos go too and that the download has them;
+        # repaired, it restores with its photos — picked unpacked, or zipped again. "Erase everything" leaves the
+        # set-aside data's photos with it; "Remove it" before anything was saved leaves nothing to set aside again.
+        r = app(self, r"""
+          const photos = new Map(), jpeg = (id, b) => ({ id, type: "image/jpeg", blob: new Blob([new Uint8Array(b)], { type: "image/jpeg" }) });
+          const bad = '{"v":1,"entries":[{"id":"ph1","type":"expense","date":"2026-09-01","category":"lodging","description":"Hotel","amount_cents":9000,"receipt":"photo"},'
+                    + '{"id":"ph2","type":"expense","date":"2026-09-02","category":"printing","receipt":"photo","descr';     // cut off
+          photos.set("ph1", jpeg("ph1", [0xff, 0xd8, 1])); photos.set("ph2", jpeg("ph2", [0xff, 0xd8, 2])); photos.set("stray", jpeg("stray", [9]));
+          const w = make("en", { [KEY]: bad }, null, { photos });
+          add(w, "expense", { description: "New", amount: "5" }, "books");          // saved: the unreadable data is only set aside now
+          await w.a.damagedDownload();
+          const d = w.downloads.at(-1), ar = await w.F.readZip(w.blob(d)), names = ar.entries.map((e) => e.name);
+          const textBack = (await ar.text(names[0])) === bad;
+          // repaired (the cut entry finished) and restored with the photos of its download: picked unpacked …
+          const fixed = bad + 'iption":"Copies","amount_cents":300}]}';
+          const pics = await Promise.all(names.slice(1).map(async (n) => fileOf(n, await ar.blob(n, "image/jpeg"), "image/jpeg")));
+          const p3 = new Map(), w3 = make("en", null, null, { photos: p3 });
+          await w3.a.impFiles([fileOf(names[0], fixed)].concat(pics));
+          const preview = JSON.parse(JSON.stringify(w3.a.imp.counts));
+          await w3.a.impApply();
+          const restored = [[...p3.keys()].sort(), w3.a.E().map((e) => e.description).sort(), Array.from(new Uint8Array(await p3.get("ph2").blob.arrayBuffer()))];
+          // … or zipped again
+          const again = await w.F.zip([{ name: names[0], data: fixed }].concat(await Promise.all(names.slice(1).map(async (n) => ({ name: n, data: await ar.bytes(n) })))));
+          const p4 = new Map(), w4 = make("en", null, null, { photos: p4 });
+          await w4.a.impFile(fileOf("repaired.zip", again)); await w4.a.impApply();
+          // "Erase everything" (another visit): the set-aside data and its photos stay, with the notice
+          const pe = new Map([["ph1", jpeg("ph1", [1])], ["mine", jpeg("mine", [2])]]), we = make("en", Object.fromEntries(w.store), null, { photos: pe });
+          we.a.eraseText = "ERASE"; we.a.eraseAll(); await tick();
+          const erased = [we.a.damaged, [...pe.keys()]];
+          // "Remove it": the question says so — then, the next visit, the photos only it named are gone
+          w.a.$refs.ask = { open: false, showModal() { this.open = true; }, close() { this.open = false; }, querySelector: () => null };
+          const p = w.a.damagedRemove(); await tick();
+          const asked = w.a.ask.msg; w.a.askDone(true); await p;
+          const w2 = make("en", Object.fromEntries(w.store), null, { photos }); await w2.a.cleanPhotos(); await tick();
+          // removed before anything was saved: the stored text goes too (the notice does not come back)
+          const w5 = make("en", { [KEY]: bad }, null, { photos: new Map([["ph1", jpeg("ph1", [1])]]) });
+          w5.a.$refs.ask = w.a.$refs.ask;
+          const p5 = w5.a.damagedRemove(); await tick();
+          const asked5 = w5.a.ask.msg; w5.a.askDone(true); await p5;
+          const w6 = make("en", Object.fromEntries(w5.store));
+          out({ name: d.name, names, textBack, preview, restored, zipped: [...p4.keys()].sort(), erased, asked, after: [...photos.keys()].sort(), damaged: w2.a.damaged,
+                asked5, again: [w5.store.has(KEY), w6.a.damaged] });""")
+        self.assertRegex(r["name"], r"^service-expenses-unreadable-\d{4}-\d{2}-\d{2}\.zip$")
+        self.assertEqual(r["names"], [r["name"][:-4] + ".json", "ph1.jpg", "ph2.jpg"])   # (not a photo it doesn't name)
+        self.assertTrue(r["textBack"])                                         # its text exactly as it was
+        self.assertEqual(r["preview"], {"entries": 2, "photos": 2, "missing": 0})
+        self.assertEqual(r["restored"], [["ph1", "ph2"], ["Copies", "Hotel"], [0xFF, 0xD8, 2]])
+        self.assertEqual(r["zipped"], ["ph1", "ph2"])
+        self.assertEqual(r["erased"], [1, ["ph1"]])
+        self.assertIn("and its receipt photos (2 receipt photos)?", r["asked"])
+        self.assertIn("the download has its photos too", r["asked"])
+        self.assertEqual(r["after"], [])                                       # gone once the visitor said so
+        self.assertEqual(r["damaged"], 0)
+        self.assertIn("(1 receipt photo)", r["asked5"])
+        self.assertEqual(r["again"], [False, 0])
 
 
 if __name__ == "__main__":

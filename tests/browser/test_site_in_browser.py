@@ -14,6 +14,9 @@ round-7 review found that no offline test could see:
   * ScriptErrors      — the main pages, English and Spanish, run without a script error.
   * PosterPicture     — a month's poster share picture (scripts/ops/poster_share.py, made by Website update) can be
                         made with this browser: 1200 × 630.
+  * TrackerPhotos     — the Tracker, in two tabs: an entry with a receipt photo, open in one tab's edit form while the
+                        other deletes it (and then its photo), is saved again with its photo, byte for byte; and
+                        closing a tab whose entries the browser would not store asks first.
 """
 from __future__ import annotations
 
@@ -452,6 +455,107 @@ class PosterPicture(unittest.TestCase):
         self.assertEqual(problems, [])
         self.assertEqual(P.png_size(out), (P.WIDTH, P.HEIGHT))
         self.assertGreater(out.stat().st_size, 30_000, "a picture with something on it")
+
+
+# ----------------------------------------------------------------------------------------------- the Tracker
+XP_APP = "Alpine.$data(document.querySelector('.xp-root'))"
+XP_IDB = """async ({ put, get }) => {
+  const db = await new Promise((res, rej) => { const r = indexedDB.open("gv-expenses", 1);
+    r.onupgradeneeded = () => { if (!r.result.objectStoreNames.contains("receipts")) r.result.createObjectStore("receipts", { keyPath: "id" }); };
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+  const run = (mode, fn) => new Promise((res, rej) => { const tx = db.transaction("receipts", mode), q = fn(tx.objectStore("receipts"));
+    tx.oncomplete = () => res(q.result); tx.onerror = () => rej(tx.error); });
+  let out = null;
+  if (put) {
+    const c = document.createElement("canvas"); c.width = 64; c.height = 48; c.getContext("2d").fillRect(8, 8, 30, 20);
+    const blob = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.8));
+    await run("readwrite", (s) => s.put({ id: put, type: "image/jpeg", blob, w: 64, h: 48, name: "IMG_1.jpg", added: "2026-09-26T10:00:00.000Z" }));
+  }
+  if (get) {
+    const rec = await run("readonly", (s) => s.get(get));
+    out = rec ? Array.from(new Uint8Array(await rec.blob.arrayBuffer())).reduce((a, x) => (a * 31 + x) % 1000000007, rec.blob.size) : null;
+  }
+  db.close();
+  return out;
+}"""
+
+
+class TrackerPhotos(unittest.TestCase):
+    """The Tracker keeps its data in this browser (localStorage and IndexedDB, shared by the tabs of one profile)."""
+
+    def tracker(self, ctx, errors):
+        page = open_page(ctx, "tracker/", errors)
+        page.wait_for_function(f"() => window.Alpine && document.querySelector('.xp-root') && {XP_APP}.ready", timeout=30_000)
+        return page
+
+    def test_an_entry_deleted_in_another_tab_keeps_its_photo_when_saved_again(self):
+        # Tab B has the entry open in its edit form; tab A deletes it, and its undo time runs out (A deletes the photo).
+        # B saves it again: the entry is back under its own id, with its photo, byte for byte, also after the next
+        # visit's clean-up (it used to come back as a new entry claiming a photo that was gone).
+        errors: list = []
+        ctx = new_context(1280, 900)
+        try:
+            a = self.tracker(ctx, errors)
+            a.evaluate("(l) => localStorage.setItem('gv-expenses:v1', l)", json.dumps({"v": 1, "settings": {}, "meta": {}, "entries": [
+                {"id": "xhotel1", "type": "expense", "date": "2026-09-26", "category": "lodging", "description": "Hotel for the assembly",
+                 "amount_cents": 9000, "receipt": "photo"}]}))
+            a.evaluate(XP_IDB, {"put": "xhotel1", "get": None})
+            a.reload()
+            a.wait_for_function(f"() => {XP_APP}.ready")
+            b = self.tracker(ctx, errors)
+            photo = b.evaluate(XP_IDB, {"put": None, "get": "xhotel1"})
+            self.assertIsNotNone(photo)
+            b.evaluate(f"() => {XP_APP}.openEdit('xhotel1')")
+            b.wait_for_function("() => { const i = document.querySelector('.xp-photo img'); return !!(i && i.src.startsWith('blob:') && i.naturalWidth); }")
+            b.fill("#xp-f-description", "Hotel for the Fall Assembly")
+            a.evaluate(f"() => {{ {XP_APP}.remove(['xhotel1']); }}")
+            a.click("dialog.xp-ask[open] .xp-ask-acts button.btn-primary")
+            a.wait_for_selector("[data-xp-undo]", state="visible")
+            b.wait_for_function("() => /deleted in another tab/.test(document.querySelector('.xp-dlg-msg').textContent)")
+            a.click(".xp-toast-x")                                   # A's undo time is over: its photo goes
+            a.wait_for_function("() => !document.querySelector('[data-xp-undo]') || !document.querySelector('[data-xp-undo]').offsetParent")
+            a.wait_for_timeout(300)
+            self.assertIsNone(a.evaluate(XP_IDB, {"put": None, "get": "xhotel1"}), "tab A deleted the photo (else nothing was checked)")
+            b.click("footer.xp-dlg-foot button[type=submit]")
+            b.wait_for_selector("dialog.xp-dialog[open]", state="hidden")
+            b.wait_for_timeout(300)
+            entries = a.evaluate("() => JSON.parse(localStorage.getItem('gv-expenses:v1')).entries.map((e) => [e.id, e.receipt, e.description])")
+            self.assertEqual(entries, [["xhotel1", "photo", "Hotel for the Fall Assembly"]])
+            self.assertEqual(a.evaluate(XP_IDB, {"put": None, "get": "xhotel1"}), photo)
+            c = self.tracker(ctx, errors)
+            c.wait_for_timeout(2200)                                 # the next visit's clean-up (1.5 s after it starts)
+            self.assertEqual(c.evaluate(XP_IDB, {"put": None, "get": "xhotel1"}), photo)
+        finally:
+            ctx.close()
+        self.assertEqual(errors, [])
+
+    def test_closing_the_tab_asks_while_the_browser_keeps_nothing(self):
+        # Storage refused (full, or blocked by the browser's settings): an entry added exists only in the tab, and
+        # closing it asks first; with nothing added, it does not.
+        ctx = new_context(1280, 900)
+        ctx.add_init_script("(() => { const set = Storage.prototype.setItem; Storage.prototype.setItem = function (k, v) {"
+                            " if (String(k).startsWith('gv-expenses:v1')) throw new DOMException('full', 'QuotaExceededError');"
+                            " return set.call(this, k, v); }; })();")
+        try:
+            asked = {}
+            for add in (False, True):
+                page = self.tracker(ctx, [])
+                asked[add] = []
+                page.on("dialog", lambda d, k=add: (asked[k].append(d.type), d.accept()))
+                if add:
+                    page.evaluate(f"() => {XP_APP}.openAdd('expense', 'books')")
+                    page.wait_for_selector("dialog.xp-dialog[open] #xp-f-description")
+                    page.fill("#xp-f-description", "Big Book")
+                    page.fill("#xp-f-amount", "12")
+                    page.click("footer.xp-dlg-foot button[type=submit]")
+                    page.wait_for_selector("dialog.xp-dialog[open]", state="hidden")
+                page.close(run_before_unload=True)
+                other = ctx.new_page()                               # (the dialog's event arrives meanwhile)
+                other.wait_for_timeout(600)
+                other.close()
+            self.assertEqual(asked, {False: [], True: ["beforeunload"]})
+        finally:
+            ctx.close()
 
 
 if __name__ == "__main__":

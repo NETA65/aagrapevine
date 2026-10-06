@@ -1095,6 +1095,11 @@ pageStyles: ["/assets/css/expenses.css"]
                 </div>
                 <p class="xp-hint" x-show="bk.ready && E().length" x-text="bkLine()"></p>
                 <p class="xp-hint xp-hint-warn" x-show="bkBig()">{{ "expenses.data.big" | t(lang) }}</p>
+                {#- the receipt photos the last full backup left out: this browser couldn't read them (its toast named them too) -#}
+                <div class="xp-hint xp-hint-warn" x-show="bkLeft.length">
+                  <p>{{ "expenses.data.left_out" | t(lang) }}</p>
+                  <ul class="mt-1 list-disc pl-4" role="list"><template x-for="x in bkLeft" :key="x.id"><li x-text="x.text"></li></template></ul>
+                </div>
               </div>
 
               <div class="xp-box">

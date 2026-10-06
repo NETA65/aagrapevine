@@ -26,8 +26,11 @@
    works in memory, warns to export before closing, and never says "Saved" for something it could not
    keep. A change made in another tab reloads the data here. A photo is deleted only once nothing points to
    it: not the ledger as stored now (another tab may have brought its entry back), not a pending undo, not
-   an unreadable ledger set aside.
-   Closing the tab with the add / edit form changed (or photos still being restored) asks first.
+   the entry open in the form here, not an unreadable ledger set aside. An entry open in the form here keeps
+   a copy of its photo meanwhile: deleted in another tab (and its photo with it, once that tab's undo time is
+   over), saving the form brings both back, under the entry's own id.
+   Closing the tab with the add / edit form changed (or photos still being restored, or changes this
+   browser did not keep: storage full or blocked, a ledger it can't save over) asks first.
    The entries live OUTSIDE Alpine's reactive proxies, so 5,000 of them stay fast: `rev` goes up on every
    change and each view is computed once per change (memo()), never once per row.
    Never x-html: every text goes through x-text; icons come from the build (#xp-icons → x-xp-icon).
@@ -40,6 +43,7 @@
   var UI_KEY = KEY + ":ui";
   var UNDO_KEY = KEY + ":undo";
   var ASIDE = KEY + ":unreadable-";
+  var ID_RX = /^[A-Za-z0-9_-]{1,64}$/;   // an entry's id (GVX): a photo's file name in a .zip ("<id>.jpg")
   var DB_NAME = "gv-expenses";
   var DB_STORE = "receipts";
   var PAGE = 100;              // rows per "Show more"
@@ -122,6 +126,8 @@
     return out;
   }
   function breathe() { return new Promise(function (res) { setTimeout(res, 0); }); }
+  // A stored receipt photo the ledger names: its id in the text, quoted (an unreadable ledger is never parsed)
+  function names(text, id) { return !!text && text.indexOf('"' + id + '"') >= 0; }
   // 1536 KB → "1.5 MB"; 900 KB → "900 KB" (the words: data.kb / data.mb)
   function sizeParts(bytes) {
     var mb = bytes / 1048576;
@@ -273,6 +279,15 @@
     return X && X.decodeText ? X.decodeText(new Uint8Array(buf)) : new TextDecoder("utf-8").decode(buf);
   }
   function readText(file) { return bufferOf(file).then(decode); }
+  // The receipt photos ([{rec: {blob}} …]) this browser can still read — each read once, one at a time, and let
+  // go — and the ones it can't (bad): a photo whose stored file is gone (Chrome's NotReadableError, Safari's
+  // "WebKitBlobResource error") is left out of a backup instead of failing all of it.
+  function readable(list) {
+    var ok = [], bad = [];
+    return list.reduce(function (p, x) {
+      return p.then(function () { return bufferOf(x.rec.blob); }).then(function () { ok.push(x); }, function () { bad.push(x); });
+    }, Promise.resolve()).then(function () { return { ok: ok, bad: bad }; });
+  }
   // A file's first bytes, and as text: enough to tell a .zip, an old Excel file, a backup and a CSV apart.
   function sniff(file) {
     return bufferOf(file.slice ? file.slice(0, 64) : file).then(function (buf) { return { bytes: new Uint8Array(buf), text: decode(buf) }; });
@@ -331,9 +346,11 @@
 
     Alpine.data("xpApp", function (pageLang) {
       // Outside Alpine's reactivity (see the header): the data, the memo cache, timers, the pending photo.
+      // (photoKeep: a copy of the photo of the entry open in the form, in memory; formEntry: that entry as it was
+      // when the form opened; formGone: it was deleted in another tab since; unsaved: changes the browser did not keep)
       var S = { X: null, cfg: null, ui: {}, state: null, memo: {}, undo: null, undoT: 0, toastT: 0, flashT: 0,
                 askResolve: null, opener: null, formSnap: "", formPerson: "", photo: null, photoUrl: "", rqUrls: [], persistTried: false,
-                siteEvents: [] };
+                siteEvents: [], photoKeep: null, formEntry: null, formGone: false, unsaved: false };
 
       return {
         L: pageLang === "es" ? "es" : "en",
@@ -352,6 +369,8 @@
         // the full backup's size, worked out before it is made (measureBackup): photos, bytes (the .zip),
         // plain (the .json without photos)
         bk: { ready: false, photos: 0, bytes: 0, plain: 0 },
+        // the receipt photos the last full backup left out — this browser could not read them: [{id, text}]
+        bkLeft: [],
         wide: true,               // the lists as tables (else cards): from 768px, below 130 % text
         subsWide: true,           // …the subscriptions' table: from 1024px, more with larger text (fitList)
         // Entries: filters (the period is shared with Summary and Giveaways), sort, paging, selection
@@ -433,13 +452,18 @@
           window.addEventListener("resize", function () { if (!fitT) fitT = requestAnimationFrame(function () { fitT = 0; self.fitList(); }); });
           window.addEventListener("gvlv:prefs", function () { self.fitList(); self.revealTab(); });
           // an edit in another tab on this device (the page's toast is behind an open dialog: the
-          // dialog says it; an entry being edited there that the other tab deleted is saved as a new one)
+          // dialog says it). An entry being edited here that the other tab deleted is saved again as it is
+          // here: its own id (that tab's "Undo" then finds it, never twice), when it was made, what its
+          // form doesn't show and its receipt photo (the copy loadPhoto keeps: that tab deletes the photo once
+          // its undo time is over) — unsaved meanwhile, so closing asks first. An "Undo" on screen here stays:
+          // the list has the other tab's change already, and the undo still works.
           window.addEventListener("storage", function (e) {
             if (e.key !== KEY) return;
             self.loadState();
-            if (!self.form) { self.say(self.t("toast.other_tab")); return; }
+            self.armLeave();
+            if (!self.form) { if (!self.toastUndo) self.say(self.t("toast.other_tab")); return; }
             var id = self.form.id, gone = self.formMode === "edit" && id && !S.state.entries.some(function (x) { return x.id === id; });
-            if (gone) { self.formMode = "add"; self.form.id = ""; self.form.created = ""; }
+            if (gone) { self.formMode = "add"; S.formGone = true; S.formSnap = ""; self.armLeave(); }
             self.dlgMsg = "";
             self.$nextTick(function () { self.dlgMsg = self.t(gone ? "form.deleted_elsewhere" : "toast.other_tab"); });
           });
@@ -490,6 +514,7 @@
           st.meta = st.meta || { lastBackup: null, lastExport: null, created: nowIso() };
           S.state = st;
           S.memo = {};
+          S.unsaved = false;     // (what is on screen is what is stored)
           this.rev++;
         },
         // A copy of an unreadable ledger beside it (once: the same text already kept is not kept twice).
@@ -503,36 +528,72 @@
         },
         // Writes the data; false when the browser would not keep it (the warning shows, and stays until
         // a save works again — space freed, for one), or when a ledger this page can't read is in the way
-        // (lock: nothing is written over it).
+        // (lock: nothing is written over it). Until then the changes are only in this tab: closing it asks
+        // first (armLeave) — until a save works again, or a backup has them (saveBackup).
         save: function () {
           var ok = !this.lock && lsSet(KEY, JSON.stringify(S.state));
           if (!this.lock) this.storageOk = ok;
           S.saveOk = ok;
+          S.unsaved = !ok;
           S.memo = {};
           this.rev++;
+          this.armLeave();
           return ok;
         },
         // the message after a change: never "Saved" (or "Deleted" …) when the last save failed
         saySaved: function (msg, withUndo) { this.say(S.saveOk === false ? this.t(this.lock ? "toast.not_saved" : "storage_off") : msg, withUndo); },
-        // The unreadable ledger, as a file (each copy kept aside, or the one that is still where it was).
+        // The unreadable ledger, as a file (each copy kept aside, or the one that is still where it was) — with
+        // the receipt photos on this device that it names: a .zip of its text as it was and each photo as
+        // "<entry id>.jpg", which is how the repaired ledger, restored with them, finds its photos again
+        // (impBackupRead). A photo this browser can't read any more is left out; no photo: the text alone (.json).
         damagedDownload: function () {
-          var self = this, list = lsKeys(ASIDE).map(function (k) { return lsGet(k); });
+          var self = this, G = window.GVF, list = lsKeys(ASIDE).map(function (k) { return lsGet(k); });
           if (this.lock === "unreadable") list.push(lsGet(KEY));
-          list.filter(Boolean).forEach(function (raw, i) {
-            var name = self.t("data.file_base") + "-" + safeName(self.t("data.damaged_word")) + "-" + today() + (i ? "-" + (i + 1) : "") + ".json";
-            saveBlob(new Blob([raw], { type: "application/json" }), name);
-            self.say(self.t("toast.downloaded", { file: name }));
+          list = list.filter(Boolean);
+          var download = function (blob, name) { saveBlob(blob, name); self.say(self.t("toast.downloaded", { file: name })); };
+          return (G && list.length ? photos.all() : Promise.resolve([])).then(function (recs) {
+            return list.reduce(function (p, raw, i) {
+              var base = self.t("data.file_base") + "-" + safeName(self.t("data.damaged_word")) + "-" + today() + (i ? "-" + (i + 1) : "");
+              var text = function () { download(new Blob([raw], { type: "application/json" }), base + ".json"); };
+              var named = (recs || []).filter(function (r) { return r && r.blob && ID_RX.test(String(r.id)) && names(raw, r.id); })
+                .map(function (r) { return { id: r.id, rec: r }; });
+              return p.then(function () { return readable(named); }).then(function (rd) {
+                if (!rd.ok.length) return text();
+                var files = [{ name: base + ".json", data: raw }].concat(rd.ok.map(function (x) { return { name: S.X.receiptFile({ id: x.id }, x.rec.type), data: x.rec.blob }; }));
+                return G.zip(files, new Date()).then(function (blob) { download(blob, base + ".zip"); });
+              }).catch(function (e) { if (window.console) console.error("[expenses]", e); text(); });
+            }, Promise.resolve());
           });
         },
-        // …and gone from this device, once the visitor says so (the tracker then saves again)
+        // …and gone from this device, once the visitor says so (the tracker then saves again). The receipt
+        // photos only it names go too (the next clean-up): the question says how many, and that its download
+        // has them.
         damagedRemove: function () {
           var self = this;
-          this.confirm(this.t("ask.damaged_remove"), this.t("ask.damaged_remove_ok"), true).then(function (yes) {
+          return this.asidePhotos().then(function (n) {
+            var msg = n ? self.t("ask.damaged_remove_photos", { photos: self.photosText(n) }) : self.t("ask.damaged_remove");
+            return self.confirm(msg, self.t("ask.damaged_remove_ok"), true);
+          }).then(function (yes) {
             if (!yes) return;
+            var texts = lsKeys(ASIDE).map(lsGet), now = lsGet(KEY);
             lsKeys(ASIDE).forEach(lsDel);
             if (self.lock === "unreadable") { self.lock = ""; lsDel(KEY); if (S.state.entries.length) self.save(); }
+            // (nothing saved since it was set aside: the stored ledger is still that text — it goes too, or the
+            // next visit would set it aside again)
+            else if (now && texts.indexOf(now) >= 0) { if (S.state.entries.length) self.save(); else lsDel(KEY); }
             self.damaged = 0;
             self.say(self.t("toast.item_deleted"));
+          });
+        },
+        // How many receipt photos on this device only the unreadable data names (not one an entry here, the
+        // stored ledger or a pending undo points to).
+        asidePhotos: function () {
+          var texts = lsKeys(ASIDE).map(lsGet), mine = this.photoIds(), stored = storedPhotoIds() || {};
+          if (this.lock === "unreadable") texts.push(lsGet(KEY));
+          var all = texts.filter(Boolean).join("\n");
+          if (!all) return Promise.resolve(0);
+          return photos.keys().then(function (keys) {
+            return (keys || []).filter(function (id) { return !mine[id] && !stored[id] && names(all, id); }).length;
           });
         },
         saveUi: function () {
@@ -928,15 +989,15 @@
           undoMark(u.photoIds, false);
           this.dropPhotos(u.photoIds);
         },
-        /* Deletes receipt photos — only the ones nothing points to: not an entry here, not one of the ledger
-           as it is stored NOW (another tab may have brought its entry back: an undo, an import), not a delete
-           that can still be undone here or in another tab. A stored ledger that can't be read keeps them all,
-           and one set aside (until the visitor removes it) keeps every photo it names: repaired, it may be
-           restored. */
+        /* Deletes receipt photos — only the ones nothing points to: not an entry here (nor the one open in the
+           form), not one of the ledger as it is stored NOW (another tab may have brought its entry back: an undo,
+           an import, an entry it saved again), not a delete that can still be undone here or in another tab. A
+           stored ledger that can't be read keeps them all, and one set aside (until the visitor removes it)
+           keeps every photo it names: repaired, it may be restored. */
         dropPhotos: function (ids) {
           var keep = this.photoIds(), stored = storedPhotoIds(), aside = lsKeys(ASIDE).map(lsGet).join("\n");
           if (stored === null || this.lock) return Promise.resolve(0);
-          var gone = (ids || []).filter(function (id) { return !keep[id] && !stored[id] && aside.indexOf('"' + id + '"') < 0; });
+          var gone = (ids || []).filter(function (id) { return !keep[id] && !stored[id] && !names(aside, id); });
           return Promise.all(gone.map(function (id) { return photos.del(id); })).then(function () { return gone.length; });
         },
 
@@ -1031,6 +1092,7 @@
         openAdd: function (type, catId) {
           S.opener = document.activeElement;
           S.formOrig = null;
+          S.formEntry = null;
           this.formMode = "add";
           this.clearPhoto();
           if (type) { this.form = this.blankForm(type, catId); this.formStep = 2; }
@@ -1054,6 +1116,8 @@
           // what the entry said when the form opened (buildEntry keeps a request status the form
           // does not show; saveForm deletes a photo the receipt no longer points to)
           S.formOrig = { repaid: e.repaid || "", receipt: e.receipt || "none" };
+          // …and the entry itself (deleted in another tab meanwhile, it is saved again with what its form doesn't show)
+          S.formEntry = clone(e);
           this.formStep = 2;
           // "More details" opens when it holds something (a hotel's name, city and confirmation are in the form itself)
           var lodging = this.tpl() === "lodging";
@@ -1070,6 +1134,7 @@
           if (!e) return;
           S.opener = document.activeElement;
           S.formOrig = null;
+          S.formEntry = null;
           this.formMode = "add";
           this.clearPhoto();
           var f = this.entryToForm(e), d = today();
@@ -1090,6 +1155,7 @@
           var self = this;
           this.formErr = {}; this.formErrs = []; this.dlgMsg = "";
           S.formSnap = JSON.stringify(this.form);
+          S.formGone = false;
           // the name the entry came with (buildEntry keeps it on a trip that was driven: no field shows it there)
           S.formPerson = this.form ? str(this.form.person) : "";
           this.$nextTick(function () {
@@ -1111,11 +1177,14 @@
         },
         dirty: function () { return !!this.form && JSON.stringify(this.form) !== S.formSnap; },
         /* Closing the tab (or leaving the page) while the form holds something unsaved — or while a backup's
-           photos are still being restored — asks first. The listener is there only meanwhile: a page with
-           nothing unsaved has none (the browser can keep it in its back-forward cache). The form calls this
-           on every input and change. */
+           photos are still being restored, or while changes are only in this tab (the browser did not keep
+           them: storage full or blocked, a ledger this page can't save over — save) — asks first. The listener
+           is there only meanwhile: a page with nothing unsaved has none (the browser can keep it in its
+           back-forward cache). The form calls this on every input and change; save() after every save. (A
+           phone that discards a tab in the background asks nothing: the notice over the tracker says to
+           back up.) */
         armLeave: function () {
-          var busy = (!!this.form && (this.dirty() || !!S.photo)) || !!S.restoring;
+          var busy = (!!this.form && (this.dirty() || !!S.photo)) || !!S.restoring || !!S.unsaved;
           if (busy && !S.onLeave) {
             S.onLeave = function (e) { e.preventDefault(); e.returnValue = ""; return ""; };
             window.addEventListener("beforeunload", S.onLeave);
@@ -1138,6 +1207,7 @@
         formClosed: function () {
           this.form = null;
           this.clearPhoto();
+          S.formEntry = null; S.formGone = false;
           this.armLeave();
           var back = S.opener;
           S.opener = null;
@@ -1349,10 +1419,12 @@
            category of another template) leaves out what the new form has no place for, as a new entry
            does; the hidden "to give away" mark goes with the category it came with; a pay-back mark stays
            only while who pays and the request status stay as they were (a request set back to "Submitted"
-           is owed again); and a trip ticked "I didn't drive" keeps no route, money or receipt. */
+           is owed again); and a trip ticked "I didn't drive" keeps no route, money or receipt. An entry
+           deleted in another tab while its form was open here is still an edit: of the entry as it was when
+           the form opened (S.formEntry). */
         buildEntry: function () {
-          var f = this.form, t = f.type, tp = this.tpl(), errs = [], self = this;
-          var cur = this.formMode === "edit" && f.id ? S.state.entries.filter(function (x) { return x.id === f.id; })[0] : null;
+          var f = this.form, t = f.type, tp = this.tpl(), errs = [], self = this, editing = this.formMode === "edit" || !!S.formGone;
+          var cur = editing && f.id ? S.state.entries.filter(function (x) { return x.id === f.id; })[0] || (S.formEntry && S.formEntry.id === f.id ? S.formEntry : null) : null;
           var curTpl = !cur ? "" : cur.type !== "expense" ? cur.type : ((this.cat(cur.category) || {}).template || "general");
           var o = cur && cur.type === t && curTpl === tp ? cur : null;
           var rode = tp === "mileage" && !!f.no_miles;
@@ -1429,7 +1501,7 @@
               // to ask for; paid back → paid (it leaves the requests and the list says so); forgiven →
               // nothing to ask (a gift). An edit that leaves the pay-back alone keeps the status the
               // entry has (a request marked submitted stays submitted: the form does not show it).
-              var o = S.formOrig, kept = this.formMode === "edit" && !!o && o.repaid === e.repaid;
+              var o = S.formOrig, kept = editing && !!o && o.repaid === e.repaid;
               if (!kept) e.claim_status = e.repaid === "repaid" ? "paid" : e.repaid === "forgiven" ? "none" : "to_request";
               else if (e.repaid === "owed" && f.claim_status === "paid") e.repaid = "repaid";          // marked paid earlier: paid back
               else if (e.repaid === "owed" && f.claim_status === "none") e.claim_status = "to_request";
@@ -1470,7 +1542,7 @@
           // the photo: stored on this device under the entry's id (or removed — also when the receipt
           // is now kept some other way: a photo nothing points to never stays behind; once the entry
           // that no longer points to it is saved: dropPhotos checks the stored ledger)
-          var drop = false;
+          var drop = false, fresh = S.photo, kp = S.photoKeep;
           if (S.photo && S.photo !== "remove" && e.receipt === "photo") {
             var p = S.photo;
             photos.put({ id: e.id, type: "image/jpeg", blob: p.blob, w: p.w, h: p.h, name: p.name || "", added: now })
@@ -1482,6 +1554,9 @@
           var stored = this.save();
           if (stored) this.askPersist();
           if (stored && drop) this.dropPhotos([e.id]);
+          // the photo the form opened with, kept: stored again when it no longer is (another tab deleted the
+          // entry meanwhile, and its photo once that tab's undo time was over) — checked now, never over another
+          else if (!fresh && e.receipt === "photo" && kp && kp.id === e.id) this.keepPhoto(kp);
           this.flash(e.id);
           var msg = first ? this.t("toast.saved_first") : this.t("toast.saved");
           if (settled) msg += " · " + this.plural(settled, "toast.settled_one", "toast.settled");
@@ -1493,6 +1568,7 @@
             this.form = nf;
             this.formMode = "add";
             this.clearPhoto();
+            S.formEntry = null; S.formGone = false;
             S.formSnap = JSON.stringify(nf);
             S.formPerson = "";
             this.armLeave();
@@ -1517,15 +1593,31 @@
         /* ---- the receipt photo in the form ---- */
         clearPhoto: function () {
           if (S.photoUrl) { try { URL.revokeObjectURL(S.photoUrl); } catch (e) { /* gone */ } }
-          S.photoUrl = ""; S.photo = null;
+          S.photoUrl = ""; S.photo = null; S.photoKeep = null;
           this.photoUrl = ""; this.photoBusy = false;
         },
+        /* The photo of the entry being edited: shown, and a copy of it kept in memory while the form is open —
+           the entry's photo even when another tab deletes the entry (and then the photo) meanwhile: saving the
+           form stores it again (saveForm, keepPhoto). One this browser can't read any more shows nothing: the
+           form offers to add the photo again. */
         loadPhoto: function (id) {
+          var self = this, here = function () { return !!self.form && self.form.id === id && !S.photo; };
+          return photos.get(id).then(function (rec) {
+            if (!rec || !rec.blob || !here()) return;
+            return bufferOf(rec.blob).then(function (buf) {
+              if (!here()) return;
+              var type = rec.type || rec.blob.type || "image/jpeg", blob = new Blob([buf], { type: type });
+              S.photoKeep = { id: id, type: type, blob: blob, w: rec.w || 0, h: rec.h || 0, name: rec.name || "", added: rec.added || "" };
+              S.photoUrl = URL.createObjectURL(blob);
+              self.photoUrl = S.photoUrl;
+            }, function () { /* unreadable */ });
+          });
+        },
+        // A kept photo (loadPhoto) stored again under its entry — only when nothing is stored there now.
+        keepPhoto: function (rec) {
           var self = this;
-          photos.get(id).then(function (rec) {
-            if (!rec || !rec.blob || !self.form || self.form.id !== id) return;
-            S.photoUrl = URL.createObjectURL(rec.blob);
-            self.photoUrl = S.photoUrl;
+          return photos.get(rec.id).then(function (have) {
+            if (!have) return photos.put(rec).catch(function () { self.say(self.t("toast.photo_failed")); });
           });
         },
         onPhoto: function (ev) {
@@ -2105,13 +2197,21 @@
           this.say(this.t("toast.downloaded", { file: name }));
         },
         exportAll: function () { this.downloadCsv(S.state.entries.slice(), "all"); },
-        // the receipt photos the ledger's entries point to, kept on this device: [{id, rec, entry}], by date
+        // the receipt photos the ledger's entries point to, kept on this device: [{id, rec, entry}], by date. Its
+        // .lost: the entries whose photo can't be read at all — this browser's photo store fails (never said
+        // to be backed up when it is not)
         backupPhotos: function () {
           var byId = {};
           S.state.entries.forEach(function (e) { if (e.receipt === "photo") byId[e.id] = e; });
-          return photos.all().then(function (recs) {
-            return (recs || []).filter(function (r) { return r && r.blob && byId[r.id]; }).map(function (r) { return { id: r.id, rec: r, entry: byId[r.id] }; })
+          return idbRun("readonly", function (s) { return s.getAll(); }).then(function (recs) {
+            var list = (recs || []).filter(function (r) { return r && r.blob && byId[r.id]; }).map(function (r) { return { id: r.id, rec: r, entry: byId[r.id] }; })
               .sort(function (a, b) { return a.entry.date < b.entry.date ? -1 : a.entry.date > b.entry.date ? 1 : a.id < b.id ? -1 : 1; });
+            list.lost = [];
+            return list;
+          }, function () {
+            var list = [];
+            list.lost = Object.keys(byId).map(function (id) { return { id: id, entry: byId[id] }; });
+            return list;
           });
         },
         // How big the backups will be, before they are made (Settings → Data says it, and a big one is
@@ -2143,7 +2243,10 @@
            as backup.json and each photo a file of its own (GVF.zip, nothing compressed, read back in slices),
            so even hundreds of photos restore. A big one is asked about first (too big for most e-mail): save
            it anyway, or back up without photos. how "plain": the .json of the ledger alone ("Back up without
-           photos": the photos stay on this device). */
+           photos": the photos stay on this device). A photo this browser can't read any more (its stored file
+           is gone) is left out — and named, in the message and under the backup buttons (bkLeft) —, never the
+           backup of everything else; one that fails all the same says why, and points to the backup without
+           photos. */
         exportBackup: function (how) {
           var self = this;
           if (!S.state.entries.length) { this.say(this.t("toast.nothing_to_export")); return Promise.resolve(); }
@@ -2155,39 +2258,57 @@
             if (yes === "alt") return self.exportBackup("plain");
             if (!yes) return;
             self.say(self.t("toast.preparing"));
-            return self.backupPhotos().then(function (list) {
+            return self.backupPhotos().then(function (all) {
               var G = window.GVF;
-              if (!G) return self.backupJson(list);      // (no zip helper: the photos inside the .json, as before 1.2.0)
-              var files = [], receipts = [];
-              list.forEach(function (p) {
-                var name = S.X.receiptFile(p.entry, p.rec.type);
-                files.push({ name: name, data: p.rec.blob });
-                receipts.push({ id: p.id, type: p.rec.type || "image/jpeg", file: name, name: p.rec.name || "", added: p.rec.added || "", w: p.rec.w, h: p.rec.h });
+              return readable(all).then(function (rd) {
+                var list = rd.ok, left = (all.lost || []).concat(rd.bad);
+                if (!G) return self.backupJson(list, left);      // (no zip helper: the photos inside the .json, as before 1.2.0)
+                var files = [], receipts = [];
+                list.forEach(function (p) {
+                  var name = S.X.receiptFile(p.entry, p.rec.type);
+                  files.push({ name: name, data: p.rec.blob });
+                  receipts.push({ id: p.id, type: p.rec.type || "image/jpeg", file: name, name: p.rec.name || "", added: p.rec.added || "", w: p.rec.w, h: p.rec.h });
+                });
+                files.unshift({ name: "backup.json", data: S.X.toBackup(S.state, receipts) });
+                return G.zip(files, new Date()).then(function (blob) { self.saveBackup(blob, "", ".zip", left); });
               });
-              files.unshift({ name: "backup.json", data: S.X.toBackup(S.state, receipts) });
-              return G.zip(files, new Date()).then(function (blob) { self.saveBackup(blob, "", ".zip"); });
             });
-          }).catch(function (e) { if (window.console) console.error("[expenses]", e); self.say(self.t("toast.backup_failed")); });
+          }).catch(function (e) {
+            if (window.console) console.error("[expenses]", e);
+            // (the files' own reason when there is one — "too big for one .zip" —, else: back up without photos)
+            var k = e && e.key ? String(e.key).replace(/^expenses\./, "") : "";
+            self.say(k && S.ui[k] != null ? self.t(k) : self.t("toast.backup_failed"));
+          });
         },
         // the photos inside the .json as data: URLs (the full backup of 1.1.0: when the zip helper is missing)
-        backupJson: function (list) {
+        backupJson: function (list, left) {
           var self = this;
           return Promise.all(list.map(function (p) { return blobToDataUrl(p.rec.blob).then(function (u) { return { id: p.id, type: p.rec.type || "image/jpeg", dataUrl: u }; }); }))
-            .then(function (receipts) { self.saveBackup(new Blob([S.X.toBackup(S.state, receipts)], { type: "application/json" }), "", ".json"); });
+            .then(function (receipts) { self.saveBackup(new Blob([S.X.toBackup(S.state, receipts)], { type: "application/json" }), "", ".json", left); });
         },
-        saveBackup: function (blob, what, ext) {
-          var name = this.t("data.file_base") + "-" + this.t("data.backup_word") + what + "-" + today() + ext;
+        /* The backup saved. It has everything this tab holds, also what the browser would not keep: closing
+           the tab no longer needs to ask (armLeave). left (a full backup): the photos it could not take
+           [{id} …] — said by name, in the message and under the backup buttons, until the next full backup. */
+        saveBackup: function (blob, what, ext, left) {
+          var self = this, name = this.t("data.file_base") + "-" + this.t("data.backup_word") + what + "-" + today() + ext;
           saveBlob(blob, name);
           this.stamp("lastBackup");
           this.save();
-          this.say(this.t("toast.backup_done", { file: name, size: this.sizeText(blob.size) }));
+          S.unsaved = false;
+          this.armLeave();
+          if (left) this.bkLeft = left.map(function (x) { return { id: x.id, text: self.entryName(x.id) || x.id }; });
+          var done = { file: name, size: this.sizeText(blob.size) };
+          if (!left || !left.length) { this.say(this.t("toast.backup_done", done)); return; }
+          var list = this.bkLeft.slice(0, 3).map(function (x) { return x.text; }).join("; ") + (left.length > 3 ? "; …" : "");
+          this.say(this.t("toast.backup_left", Object.assign(done, { photos: this.photosText(left.length), list: list })));
         },
         // the entries that have a photo (and the ones a pending "Undo" would bring back — this tab's, or
-        // another's that has not run out)
+        // another's that has not run out — and the entry open in the form with its photo, which saving may bring back)
         photoIds: function () {
-          var ids = undoPending();
+          var ids = undoPending(), f = this.form;
           S.state.entries.forEach(function (e) { if (e.receipt === "photo") ids[e.id] = 1; });
           if (S.undo) S.undo.photoIds.forEach(function (id) { ids[id] = 1; });
+          if (f && f.id && f.receipt === "photo") ids[f.id] = 1;
           return ids;
         },
         // Photos no entry points to any more are deleted: a delete whose undo time never ran out (the
@@ -2378,20 +2499,35 @@
            it is restored: lazy (a big .json's, GVF.jsonBackup), a data: URL inside the .json, a file of the
            .zip (zip; dir: the folder its backup.json is in, "" at the top), or one of the photos picked with an
            unpacked backup.json (pics, by name). A photo the backup names but nothing holds is counted as
-           missing (the preview says how to bring it along). */
+           missing (the preview says how to bring it along). A ledger that lists no photos — the unreadable
+           data's download (damagedDownload), once repaired, with the photos that came with it — finds each
+           entry's photo by the entry's id: "<id>.jpg" beside it. */
         impBackupRead: function (r, lazy, pics, zip, dir) {
           if (!r || !r.ok) { this.imp.err = this.msgKey((r && r.error) || "expenses.err.backup_invalid"); return; }
-          var st = r.state || {}, list = [], missing = 0;
+          var st = r.state || {}, list = [], missing = 0, listed = lazy || r.receipts || [];
+          var hasPic = function (f) { return !!pics && Object.prototype.hasOwnProperty.call(pics, f); };
           dir = dir || "";
-          (lazy || r.receipts || []).forEach(function (x) {
+          listed.forEach(function (x) {
             if (!x || !x.id) return;
             var meta = { id: x.id, type: x.type || "image/jpeg", w: x.w || 0, h: x.h || 0, name: x.name || "", added: x.added || "" };
             if (typeof x.load === "function") meta.load = x.load;
             else if (x.dataUrl) meta.load = function () { return Promise.resolve(dataUrlToBlob(x.dataUrl)); };
             else if (x.file && zip && zip.has(dir + x.file)) meta.load = function () { return zip.blob(dir + x.file, meta.type); };
-            else if (x.file && pics && Object.prototype.hasOwnProperty.call(pics, x.file)) meta.load = function () { return Promise.resolve(pics[x.file]); };
+            else if (x.file && hasPic(x.file)) meta.load = function () { return Promise.resolve(pics[x.file]); };
             if (meta.load) list.push(meta); else missing++;
           });
+          if (!listed.length && (zip || pics)) {
+            (st.entries || []).forEach(function (e) {
+              if (!e || e.receipt !== "photo" || !ID_RX.test(String(e.id))) return;
+              ["jpg", "jpeg", "png", "webp", "gif"].some(function (ext) {
+                var f = e.id + "." + ext, type = "image/" + (ext === "jpg" ? "jpeg" : ext), meta = { id: e.id, type: type, w: 0, h: 0, name: "", added: "" };
+                if (zip && zip.has(dir + f)) meta.load = function () { return zip.blob(dir + f, type); };
+                else if (hasPic(f)) meta.load = function () { return Promise.resolve(pics[f]); };
+                if (meta.load) list.push(meta);
+                return !!meta.load;
+              });
+            });
+          }
           S.impBackup = { entries: st.entries || [], settings: st.settings || null, receipts: list, meta: st.meta || null };
           this.imp.kind = "backup";
           this.imp.mode = "merge";
@@ -2480,6 +2616,12 @@
           }).then(function () { return mode === "replace" && stored ? self.cleanPhotos() : null; }).catch(function () {}).then(function () {
             S.restoring = false;
             self.armLeave();
+            // the photos that could not be restored, said once (the done step's line is not read out: it changes
+            // with each photo) — the toast, read out as it shows; beside an "Undo" on screen (kept), read out only
+            if (!im.photoErrs) return;
+            var msg = self.t("imp.photos_failed", { n: self.count(im.photoErrs) });
+            if (self.toastUndo) { if (GV.announce) GV.announce(msg); }
+            else self.say(msg);
           });
         },
 
@@ -2511,10 +2653,17 @@
           this.confirm(this.t("ask.erase"), this.t("ask.erase_ok"), true).then(function (yes) {
             if (!yes) return;
             // (a ledger that could not be read and could not be kept aside stays, with its photos: its
-            // notice offers it first)
-            if (self.lock !== "unreadable") { lsDel(KEY); self.lock = ""; photos.clear(); }
+            // notice offers it first — and so do the photos a set-aside copy names, with the copy)
+            if (self.lock !== "unreadable") {
+              var aside = lsKeys(ASIDE).map(lsGet).join("\n");
+              lsDel(KEY); self.lock = "";
+              if (!aside) photos.clear();
+              else photos.keys().then(function (keys) { (keys || []).forEach(function (id) { if (!names(aside, id)) photos.del(id); }); });
+            }
             lsDel(UNDO_KEY);
             S.undo = null;
+            S.unsaved = false;
+            self.armLeave();
             var st = S.X.emptyState(S.cfg);
             st.settings = S.X.mergeDefaults(S.cfg, st.settings || {});
             S.state = st;
