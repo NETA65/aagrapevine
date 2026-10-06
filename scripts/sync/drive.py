@@ -73,7 +73,7 @@ from datetime import datetime, timedelta, timezone
 from .announcements import markdown_to_text
 from .common import (
     MONTHS, date_from_text, get_logger, load_config, load_raw, now_iso, parse_iso, read_capped, run_module,
-    save_raw, make_item, sort_items, truncate,
+    save_raw, make_item, sort_items, take_date_notes, truncate,
 )
 # The language of a file's name or a doc's text, with the names of the magazines and of AA left out first (the
 # glossary's keep list): "Grapevine & La Viña Pricing Update" is English — "La Viña" alone made it Spanish, and
@@ -1056,6 +1056,7 @@ def main(argv: list[str] | None = None) -> None:
 
     items: list[dict] = []
     seen: dict[str, int] = {}
+    take_date_notes()       # names of an earlier module of this run are not this source's
     for f in c.found:
         try:
             it = build_item(f, dcfg)
@@ -1096,7 +1097,8 @@ def main(argv: list[str] | None = None) -> None:
 
     live = [i for i in merged if i.get("status") == "ok"]
     albums = Counter(i["extra"].get("album") for i in live if i["extra"].get("album"))
-    warnings = list(c.warnings)
+    # + a name whose numbers-only date could be read two ways ("Report 05-10-2026": read as May 10 — common.py)
+    warnings = list(c.warnings) + take_date_notes()
     if c.unreadable:
         warnings.append(f"{len(c.unreadable)} folder(s) could not be read — check their sharing settings")
     if c.unconfirmed:

@@ -68,6 +68,11 @@ ZOOM_ID_RE = re.compile(r"(?i)(?:zoom|meeting\s*id|id\s+de\s+(?:la\s+)?reuni[óo
 ZOOM_URL_RE = re.compile(r"(?i)https?://[\w.-]*zoom\.us/j/(\d{9,11})(?:\?pwd=[\w.-]+)?")
 PASS_RE = re.compile(r"(?i)\b(?:password|passcode|pass\s*code|pwd|contraseña|c[óo]digo\s+de\s+acceso)\b"
                      r"\s*(?:is|es)?\s*[:#-]?\s*([A-Za-z0-9]{3,20})\b")
+# Words that follow "password" / "passcode" in a sentence without being the code: "This meeting is password
+# protected; the passcode is 238047" (find_passcode).
+PASS_WORDS = {"protected", "required", "needed", "below", "above", "here", "the", "for", "and", "will", "sent",
+              "upon", "via", "not", "only", "may", "protegida", "protegido", "requerida", "requerido", "necesaria",
+              "necesario", "abajo", "arriba", "aqui", "para", "por", "del", "sera", "enviada", "enviado"}
 
 
 # --------------------------------------------------------------------------- parsing helpers
@@ -81,6 +86,16 @@ def _format_zoom_id(raw: str) -> str:
     if len(d) == 9:
         return f"{d[:3]} {d[3:6]} {d[6:]}"
     return d
+
+
+def find_passcode(*texts: str) -> str | None:
+    """The meeting's passcode: the first word after "password" / "passcode" / "contraseña" … (PASS_RE) that holds
+    a digit — Zoom's codes do ("238047"), the sentence's own words do not: "…password protected; the passcode is
+    238047" → 238047, never "protected". A code of letters only is taken when nothing better is there and it is
+    not one of those words (PASS_WORDS). `texts` are searched in order (the join sentence, then the whole page)."""
+    words = [m[1] for t in texts if t for m in PASS_RE.finditer(t)]
+    return (next((w for w in words if any(c.isdigit() for c in w)), None)
+            or next((w for w in words if w.lower() not in PASS_WORDS), None))
 
 
 def _parse_clock(txt: str) -> tuple[int, int] | None:
@@ -169,9 +184,9 @@ def parse_page(html: str, page_url: str) -> dict:
         if 9 <= len(digits) <= 11:
             out["zoom_id"] = _format_zoom_id(digits)
             out.setdefault("zoom_url", f"https://zoom.us/j/{digits}")
-    m = PASS_RE.search(hay) or PASS_RE.search(text)
-    if m:
-        out["passcode"] = m[1]
+    code = find_passcode(hay, text)
+    if code:
+        out["passcode"] = code
 
     day_m = DAY_RE.search(hay)
     if day_m:

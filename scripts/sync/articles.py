@@ -56,7 +56,8 @@ Item (docs/DATA_SCHEMA.md): source grapevine|lavina, kind article, category gv|l
             author, author_location, subtitle, teaser, free, online_exclusive, department
 `date` = first day of the issue month — except that magazines go online BEFORE their cover month
 (the October issue is online mid-September), so a future issue date is replaced by the day we first
-saw the article (the best-known online publish date). extra.issue_date always holds the cover date.
+saw the article (the best-known online publish date; its day in Central time, the site's). extra.issue_date
+always holds the cover date.
 
 The envelope also carries `issues`: {"gv:2026-10": {label, theme, description, image, url, …}} so the
 site can show the current covers/themes (only issues seen on a hub — back-catalog issues found in the
@@ -80,7 +81,7 @@ from urllib.parse import parse_qs, urljoin, urlparse
 from bs4 import BeautifulSoup
 
 from .common import (CACHE_ASSETS, MONTHS, clean_text, detect_lang, get_logger, load_config, load_raw,
-                     make_item, merge_items, now_iso, run_module, save_raw, shared_session, short_hash,
+                     make_item, merge_items, now_iso, run_module, save_raw, shared_session, short_hash, site_day,
                      truncate)
 from .geo import classify_location
 
@@ -731,7 +732,7 @@ def build_item(rec: dict, first_seen: str | None, issues: dict) -> dict:
     issue = issues.get(f"{pub}:{key}", {}) if key else {}
     label = tidy_label(rec.get("issue_label") or issue.get("label")) or label_from_key(pub, key)
     issue_date = f"{key}-01" if key else None
-    seen_day = (first_seen or now_iso())[:10]
+    seen_day = site_day(first_seen)      # its Central day: a story first seen at 8 PM is that day's, not tomorrow's
     date = issue_date if issue_date and issue_date <= seen_day else seen_day
     title = rec.get("title") or title_from_slug(rec.get("slug") or "")
     summary = rec.get("subtitle") or rec.get("teaser") or ""

@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import io
 import sys
+import tempfile
 import unittest
 from datetime import date
 from pathlib import Path
@@ -393,6 +394,29 @@ class Run(unittest.TestCase):
         self.assertIn("ed:lv:2026-09:el-amor-al-servicio", ids)
         self.assertEqual(sum(1 for i in env["items"] if E.part_of(i) != "lv-themes"), 3)
         self.assertEqual(env["stats"]["lv_themes"]["years"], [2026, 2027])
+
+    def test_a_field_the_page_no_longer_gives_disappears(self):
+        """P2-10: a part read successfully replaces its topics field by field (authoritative merge): Grapevine took
+        the deadline and the description off a theme — they leave the site too; the topic keeps its first day."""
+        old = {"id": "ed:gv:2027-01:spiritual-awakenings", "source": "grapevine", "kind": "topic",
+               "url": "https://www.aagrapevine.org/contribute", "title": "Spiritual Awakenings",
+               "summary": "Share your personal journey with Step Two.", "lang": "en", "date": "2026-06-01",
+               "first_seen": "2026-01-10T07:00:00Z", "last_seen": "2026-09-30T07:00:00Z", "image": None, "tags": [],
+               "category": "gv", "status": "ok",
+               "extra": {"publication": "gv", "issue_key": "2027-01", "issue_label": "January 2027",
+                         "deadline": "2026-06-01", "due_text": "June 1, 2026", "theme": "Spiritual Awakenings",
+                         "evergreen": False}}
+        with tempfile.TemporaryDirectory() as tmp:
+            html = Path(tmp) / "contribute.html"
+            html.write_text("<html><body><main><h2>Grapevine Editorial Calendar 2027</h2><p>JANUARY</p>"
+                            "<p>Spiritual Awakenings</p></main></body></html>", encoding="utf-8")
+            env = self.run_main(["--only", "gv", "--gv-html", str(html)], [old])
+        self.assertTrue(env["ok"])
+        it = next(i for i in env["items"] if i["id"] == old["id"])
+        self.assertEqual((it["date"], it["summary"]), (None, ""))
+        self.assertNotIn("deadline", it["extra"])
+        self.assertNotIn("due_text", it["extra"])
+        self.assertEqual(it["first_seen"], "2026-01-10T07:00:00Z")
 
     def test_a_problem_is_reported_and_the_old_themes_stay(self):
         bad = FIX / "lv_recursos.html"

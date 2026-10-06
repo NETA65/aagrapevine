@@ -49,7 +49,8 @@ Items (kind "topic", see docs/DATA_SCHEMA.md):
 
 Only the current/future issues plus the most recent past one are kept (keep_window, the same rule for both
 magazines). Each part is authoritative, so when it parses successfully its list REPLACES that part's previous
-topics (first_seen is still preserved) — the themes document only for the YEARS it covers: a dated La Viña
+topics, field by field (a deadline or a description the page no longer gives disappears; first_seen is still
+preserved) — the themes document only for the YEARS it covers: a dated La Viña
 topic of a year the newest document no longer lists (a document of 2028 alone) is kept until it leaves the
 window. When a part can't be fetched/parsed, its previous topics are kept and the envelope reports ok=false
 with a clear error.
@@ -144,7 +145,7 @@ def _main(soup: BeautifulSoup):
 def parse_deadline(text: str, issue_year: int, issue_month: int) -> str | None:
     """'June 1, 2026' / 'Sept. 1, 2026' / 'Jan 1 2027' → ISO date. When the year is missing
     ('June 1') pick the latest such date before the issue month (deadlines precede issues)."""
-    iso, _ = date_from_text(text)   # needs a 20xx year; "Month YYYY" alone → 1st of that month
+    iso, _ = date_from_text(text, "en")   # needs a 20xx year; "Month YYYY" alone → 1st of that month
     if iso:
         return iso
     m = re.search(r"(?i)\b([a-záéíóú]+)\.?\s+(\d{1,2})\b", text)
@@ -257,7 +258,7 @@ def parse_lv(html: str, page_url: str) -> tuple[list[dict], dict]:
         deadline = None
         issue_year = issue_month = None
         if re.search(r"(?i)fecha\s+l[íi]mite|antes del|hasta el", c):
-            deadline, _ = date_from_text(c)
+            deadline, _ = date_from_text(c, "es")
         theme = c.rstrip(" .")
         rows.append({"issue_year": issue_year, "issue_month": issue_month, "theme": theme,
                      "deadline": deadline, "due_text": "", "description": ""})
@@ -387,7 +388,7 @@ def _lv_deadline(line: str, title_year: int | None, month: int) -> tuple[str | N
     julio del 2026" → ("2026-07-30", "30 de julio del 2026"). Without a year ("30 de julio") the page's year is
     needed: the latest such day before the issue."""
     due_text = clean_text(line.split(":", 1)[1]) if ":" in line else clean_text(_LV_DEADLINE_RE.split(line)[-1])
-    iso, _ = date_from_text(due_text or line)
+    iso, _ = date_from_text(due_text or line, "es")
     if iso:
         return iso, due_text
     m = _LV_DAY_MONTH_RE.search(due_text or line)
@@ -723,10 +724,12 @@ def main(argv=None) -> None:
         print("kept:", len(kept), "errors:", errors)
         return
 
-    # Previous items of the parts refreshed today are replaced (drop_missing on that subset); items of failed
-    # parts — and the dated La Viña topics of years the document no longer lists — are carried over unchanged.
+    # Previous items of the parts refreshed today are replaced (drop_missing on that subset) — field by field too
+    # (authoritative: a deadline or a description the page no longer gives really disappears; only first_seen is
+    # remembered); items of failed parts — and the dated La Viña topics of years the document no longer lists —
+    # are carried over unchanged.
     old_for_refreshed = [i for i in prev_items if part_of(i) in res["refreshed"]]
-    merged, added = merge_items(old_for_refreshed, fresh, drop_missing=True)
+    merged, added = merge_items(old_for_refreshed, fresh, drop_missing=True, authoritative=True)
     stats["new"] = added
     carried_ids = {i["id"] for i in kept}
     all_items = [i for i in merged if i["id"] not in carried_ids] + kept

@@ -18,8 +18,9 @@ fallback looks for the publication's own sign-up link by its text instead.)
 
 What is kept: the quote exactly as published (only whitespace and the outer quotation marks are cleaned;
 nothing is translated — each quote is shown in its own language), the attribution and the source book
-split apart ("From:" / "De"), the day (from the heading, year inferred around today in Central time; the
-fetch day when the heading has no date), the official page anchor and the publication's sign-up link.
+split apart ("From:" / "De"), the day (from the heading, year inferred around today in Central time — a day
+from about a year ago up to tomorrow, never later: heading_window; the fetch day when the heading has no date,
+or one outside that window), the official page anchor and the publication's sign-up link.
 
 Cost: ONE page request per publication (+ robots.txt), through the shared polite session (5 s between
 requests to the magazines' server) — none when an earlier module of the same run already read that home
@@ -36,8 +37,10 @@ recorded has none, and never gets one). `history` stays in data/raw only: it is 
 memory behind "a page that shows an older quote than one we already have keeps the newer one", and its
 `seen` times are what build_data's status.json `quote_days` shows on /status/ (each morning against the
 goal, config site.morning_goal). When a page cannot be fetched or read, that publication's previous quote
-is kept and the run is marked ok=false (→ /status/). build_data.py turns it into data/site/quote.json
-(build_site below: the items only).
+is kept and the run is marked ok=false (→ /status/). Nothing dated after tomorrow is kept (a stored entry or
+quote of such a day is dropped). stats `warnings` (→ /status/; also in the error text of a failed run) lists
+such a drop, a heading whose date was not taken and a page that went back to an older quote — the run itself
+stays ok. build_data.py turns it into data/site/quote.json (build_site below: the items only).
 
 peek() is the Morning check's question "is today's quote out yet?" (scripts/ops/morning_check.py): it
 reads the pages it is given and writes nothing.
@@ -64,6 +67,7 @@ log = get_logger(SOURCE)
 
 ANCHOR = "quote-of-the-day"
 HISTORY_DAYS = 14                # quotes kept per publication (one per day)
+PAST_DAYS = 365                  # a heading's date may be up to about a year old … and at most tomorrow (heading_window)
 PUB_ORDER = ("gv", "lv")
 
 # Defaults — config/site.yml sources.grapevine / sources.lavina (`base`, `quote_page`) override them.
@@ -166,8 +170,19 @@ def split_attribution(s: str) -> tuple[str, str]:
     return who, src.rstrip(".") if src.count(".") == 1 and src.endswith(".") else src
 
 
+def heading_window(today: date) -> tuple[date, date]:
+    """(first, last) day a heading's date may be: from about a year ago (PAST_DAYS) up to TOMORROW — a magazine
+    may put tomorrow's quote up late in the evening (Central), never one further ahead. A later day is a stale or
+    mistyped heading ("January 2" read on 5 October): taken as such, it would stay the newest quote — on the site —
+    until the calendar caught up with it."""
+    return today - timedelta(days=PAST_DAYS), today + timedelta(days=1)
+
+
 def infer_date(month: int, day: int, year: int | None, today: date) -> date | None:
-    """The heading gives no year: the candidate closest to today (Dec 31 read on Jan 1 → last year)."""
+    """The day a heading means, inside heading_window(today); None when it can be no such day. Without a year:
+    the candidate closest to today in the window (Dec 31 read on Jan 1 → last year; Jan 1 read on Dec 31 →
+    tomorrow; "January 2" or "October 15" read on 5 October → THIS January 2nd, LAST October 15th: past days)."""
+    first, last = heading_window(today)
     years = [year] if year else [today.year - 1, today.year, today.year + 1]
     best = None
     for y in years:
@@ -175,12 +190,15 @@ def infer_date(month: int, day: int, year: int | None, today: date) -> date | No
             d = date(y, month, day)
         except ValueError:
             continue
+        if not first <= d <= last:
+            continue
         if best is None or abs((d - today).days) < abs((best - today).days):
             best = d
     return best
 
 
-def heading_date(heading: str, today: date) -> date | None:
+def _heading_parts(heading: str) -> tuple[int, int, int | None] | None:
+    """(month, day, year or None) of the date a heading gives, or None when it gives none."""
     m = HEAD_DATE_RE.search(heading or "")
     if not m:
         return None
@@ -190,7 +208,12 @@ def heading_date(heading: str, today: date) -> date | None:
         mo, d, y = MONTHS.get(m[5].lower().rstrip(".")), int(m[4]), m[6]
     if not mo or not 1 <= d <= 31:
         return None
-    return infer_date(mo, d, int(y) if y else None, today)
+    return mo, d, int(y) if y else None
+
+
+def heading_date(heading: str, today: date) -> date | None:
+    parts = _heading_parts(heading)
+    return infer_date(*parts, today) if parts else None
 
 
 def date_label(iso: str | None, lang: str) -> str:
@@ -259,10 +282,19 @@ def parse_quote(html: str, page_url: str, lang: str, today: date, signup_re: re.
             signup = href
             break
     day = heading_date(heading, today)
+    parts = _heading_parts(heading)
+    note = None
+    if parts and day is None:
+        # a date that is no day from about a year ago to tomorrow ("February 30", "January 2, 2027" on 5 October):
+        # never taken as written — the quote counts as today's, as under a heading without a date
+        first, last = heading_window(today)
+        note = (f"the heading “{heading}” gives no day from {first.isoformat()} to {last.isoformat()} — "
+                f"the quote was taken as today's ({today.isoformat()}, Central time)")
     return {
         "heading": heading,
         "date": (day or today).isoformat(),
         "date_from_heading": day is not None,
+        "date_note": note,
         "text": text,
         "attribution": who,
         "source": src,
@@ -287,31 +319,62 @@ def entry(pub: str, lang: str, q: dict, url: str, seen: str | None = None) -> di
 
 def add_history(history: list[dict], new: dict | None, today: date, keep_days: int = HISTORY_DAYS) -> list[dict]:
     """One quote per day, newest first: `new` (if any) replaces an entry of the same day; entries older
-    than `keep_days` days (and anything beyond `keep_days` entries) are dropped."""
+    than `keep_days` days, entries dated after tomorrow (heading_window) and anything beyond `keep_days`
+    entries are dropped."""
     rows = [h for h in history if isinstance(h, dict) and h.get("date") and (not new or h.get("date") != new.get("date"))]
     if new:
         rows.append(new)
     cutoff = (today - timedelta(days=keep_days - 1)).isoformat()
-    rows = [h for h in rows if str(h["date"]) >= cutoff]
+    last = heading_window(today)[1].isoformat()
+    rows = [h for h in rows if cutoff <= str(h["date"]) <= last]
     rows.sort(key=lambda h: str(h["date"]), reverse=True)
     return rows[:keep_days]
 
 
+def quote_item(pub: str, lang: str, best: dict, q: dict | None = None, read: dict | None = None) -> dict:
+    """The site's quote of a publication: the history entry `best` (the newest). `q` / `read`: today's parse
+    and its entry — the details only a fresh read knows (date_from_heading, block, node), when `best` is it."""
+    fresh = q is not None and best is read
+    return make_item(
+        id=f"quote:{pub}:{best['date']}", source=SOURCE, kind="quote", url=best["url"],
+        title=best.get("heading") or "", lang=lang, date=best["date"],
+        extra={"pub": pub, "text": best["text"], "attribution": best.get("attribution") or "",
+               "source": best.get("source") or "", "source_lang": best.get("source_lang"),
+               "signup_url": best.get("signup_url"), "date_label": date_label(best["date"], lang),
+               "date_from_heading": bool(q.get("date_from_heading")) if fresh else None,
+               "block": q.get("block") if fresh else None, "node": q.get("node") if fresh else None})
+
+
 def collect(fetch: Fetch, prev: dict, today: date, cfg: dict | None = None, only: str | None = None,
             now: str | None = None) -> dict:
-    """{items, history, errors, stats}. A publication that fails keeps its previous quote (item + history).
-    A day's quote read for the FIRST time (no history entry of that day yet) gets `seen` = `now` (default:
-    this moment, UTC); reading it again keeps the entry's `seen` — it says when that day's quote came in.
-    An entry from before `seen` was recorded keeps none: its time is not known, and a later read is not
-    when it came in (build_data.quote_days leaves such a day out)."""
+    """{items, history, errors, warnings, stats}. A publication that fails keeps its previous quote (item +
+    history). A day's quote read for the FIRST time (no history entry of that day yet) gets `seen` = `now`
+    (default: this moment, UTC); reading it again keeps the entry's `seen` — it says when that day's quote came
+    in. An entry from before `seen` was recorded keeps none: its time is not known, and a later read is not
+    when it came in (build_data.quote_days leaves such a day out).
+    `today` is the site's day (Central). Nothing dated after tomorrow is kept (heading_window): a heading never
+    gives such a day, and a stored entry or quote of one (written before that rule, or by a clock gone wrong) is
+    dropped — the newest quote left is shown instead. `warnings` lists that, a heading whose date was not
+    taken, and a page that went back to an older quote (main → stats["warnings"] → /status/)."""
     conf = settings(cfg)
     prev_items = {((i.get("extra") or {}).get("pub")): i for i in prev.get("items") or [] if isinstance(i, dict)}
     prev_hist = prev.get("history") if isinstance(prev.get("history"), dict) else {}
-    items, history, errors = [], {}, []
+    items, history, errors, warnings = [], {}, [], []
     stats = {"fetched": 0, "parsed": 0}
+    last = heading_window(today)[1].isoformat()
+
+    def warn(msg: str) -> None:
+        log.warning("%s", msg)
+        warnings.append(msg)
     for pub in PUB_ORDER:
         s = conf[pub]
         hist = [h for h in (prev_hist.get(pub) or []) if isinstance(h, dict)]
+        old = prev_items.get(pub)
+        ahead = sorted({str(h.get("date")) for h in hist if str(h.get("date") or "") > last}
+                       | ({str(old.get("date"))} if old and str(old.get("date") or "") > last else set()))
+        if ahead:
+            hist = [h for h in hist if str(h.get("date") or "") <= last]
+            warn(f"{pub}: dropped the stored quote of {', '.join(ahead)} — a day after tomorrow ({last}, Central time)")
         q = None
         if only and pub != only:
             pass
@@ -330,35 +393,38 @@ def collect(fetch: Fetch, prev: dict, today: date, cfg: dict | None = None, only
                 except Exception as e:  # noqa: BLE001 — one publication never breaks the other
                     log.exception("%s: quote parse failed", pub)
                     errors.append(f"{pub}: parse error {type(e).__name__}")
-        old = prev_items.get(pub)
         if q:
             stats["parsed"] += 1
+            if q.get("date_note"):
+                warn(f"{pub}: {q['date_note']}")
             old_sign = ((old or {}).get("extra") or {}).get("signup_url")
             if not q.get("signup_url") and old_sign:     # keep the last known sign-up link
                 q["signup_url"] = old_sign
             same_day = next((h for h in hist if str(h.get("date")) == q["date"]), None)
             e = entry(pub, s["lang"], q, s["url"], seen=same_day.get("seen") if same_day else (now or now_iso()))
-            # The site went back to an older quote than one we already have (a cache glitch): keep the newer.
+            # The site went back to an older quote than one we already have (a cache glitch, a stale or mistyped
+            # heading — "January 2" read on 5 October is THIS January's): keep the newer.
             newest = hist[0] if hist else None
             hist = add_history(hist, e, today)
             best = hist[0] if hist else e
             if newest and best is not e and str(newest.get("date")) > e["date"]:
-                log.warning("%s: the page shows %s but %s is already known — kept the newer", pub, e["date"],
-                            newest.get("date"))
-            items.append(make_item(
-                id=f"quote:{pub}:{best['date']}", source=SOURCE, kind="quote", url=best["url"],
-                title=best.get("heading") or "", lang=s["lang"], date=best["date"],
-                extra={"pub": pub, "text": best["text"], "attribution": best.get("attribution") or "",
-                       "source": best.get("source") or "", "source_lang": best.get("source_lang"),
-                       "signup_url": best.get("signup_url"), "date_label": date_label(best["date"], s["lang"]),
-                       "date_from_heading": bool(q.get("date_from_heading")) if best is e else None,
-                       "block": q.get("block") if best is e else None, "node": q.get("node") if best is e else None}))
-        elif old:
+                warn(f"{pub}: the page shows the quote of {e['date']} (“{e['heading']}”) but the one of "
+                     f"{newest.get('date')} is already known — kept the newer")
+            elif not any(h is e for h in hist):
+                # older than the history keeps, and nothing newer is known (a first run, a lost file): shown
+                warn(f"{pub}: the page shows the quote of {e['date']} (“{e['heading']}”) — over {HISTORY_DAYS} days "
+                     f"old: a stale page or a mistyped heading? It shows until a newer one comes")
+            items.append(quote_item(pub, s["lang"], best, q, e))
+        elif old and str(old.get("date") or "") <= last:
             items.append(old)                                   # keep yesterday's quote
             hist = add_history(hist, None, today)
+        elif old:
+            hist = add_history(hist, None, today)
+            if hist:            # the stored quote was dated after tomorrow (dropped above): the newest one left
+                items.append(quote_item(pub, s["lang"], hist[0]))
         if hist:
             history[pub] = hist
-    return {"items": items, "history": history, "errors": errors, "stats": stats}
+    return {"items": items, "history": history, "errors": errors, "warnings": warnings, "stats": stats}
 
 
 def peek(fetch: Fetch, today: date, pubs=PUB_ORDER, cfg: dict | None = None) -> dict[str, str | None]:
@@ -452,14 +518,17 @@ def main(argv=None) -> None:
     stats = {**res["stats"], "requests": http.requests_made - before, "today": today.isoformat()}
     if res["errors"]:
         stats["problems"] = res["errors"]
+    if res["warnings"]:
+        stats["warnings"] = res["warnings"]           # a date not taken, a stored quote dropped (→ /status/)
     if args.dry_run:
         print(json.dumps({**res, "stats": stats}, ensure_ascii=False, indent=1))
         return
     merged, new = merge_items(prev.get("items") or [], res["items"], drop_missing=True, authoritative=True)
     stats["new"] = new
     ok = not res["errors"]
-    save_raw(SOURCE, merged, ok=ok, error="; ".join(res["errors"])[:300] if not ok else None, stats=stats,
-             extra={"history": res["history"]})
+    # a failed run's error text carries the warnings too: /status/ shows it in full for a source that is not OK
+    error = "; ".join(res["errors"] + res["warnings"])[:300] if not ok else None
+    save_raw(SOURCE, merged, ok=ok, error=error, stats=stats, extra={"history": res["history"]})
     log.info("quote: %s, %d request(s)%s", ", ".join(f"{(i.get('extra') or {}).get('pub')} {i.get('date')}"
                                                      for i in merged) or "none", stats["requests"],
              f" — problems: {res['errors']}" if res["errors"] else "")

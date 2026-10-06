@@ -3,10 +3,12 @@ data/site/quote.json). Fixtures: tests/fixtures/quote/ (the two "quote of the da
 trimmed from the live pages of 2026-09-25). No network: pages are passed in as strings."""
 from __future__ import annotations
 
+import json
 import re
 import unittest
 from datetime import date
 from pathlib import Path
+from unittest import mock
 
 from scripts.sync import quote as Q
 
@@ -182,6 +184,147 @@ class CollectTest(unittest.TestCase):
             res = Q.collect(fetcher({"gv": older, "lv": page("lv_home.html")}), prev, TODAY, CFG)
         self.assertEqual(res["items"][0]["id"], "quote:gv:2026-09-25")
         self.assertEqual([h["date"] for h in res["history"]["gv"]], ["2026-09-25", "2026-09-24"])
+
+
+class HeadingWindowTest(unittest.TestCase):
+    """P1-1: a heading's date is taken only from about a year ago up to TOMORROW (Central). A stale or mistyped
+    heading once became a date months ahead ("January 2" read on 5 October → 2027-01-02) that stayed the newest
+    quote — on the site — until the calendar caught up with it."""
+    OCT5 = date(2026, 10, 5)
+
+    def gv(self, heading_date: str) -> str:
+        return page("gv_home.html").replace("September 25", heading_date)
+
+    def prev_env(self, day: date = OCT5) -> dict:
+        """What an earlier run kept: the quotes of `day` and the day before."""
+        older = Q.collect(fetcher({"gv": self.gv("October 4"), "lv": page("lv_home.html").replace("Septiembre 25",
+                                                                                                    "Octubre 4")}),
+                          {}, date(2026, 10, 4), CFG)
+        env = {"items": older["items"], "history": older["history"]}
+        res = Q.collect(fetcher({"gv": self.gv("October 5"), "lv": page("lv_home.html").replace("Septiembre 25",
+                                                                                                  "Octubre 5")}),
+                        env, day, CFG)
+        return {"items": res["items"], "history": res["history"]}
+
+    def test_the_year_is_chosen_inside_the_window(self):
+        self.assertEqual(Q.heading_date("Grapevine Daily Quote January 2", self.OCT5), date(2026, 1, 2))      # not 2027
+        self.assertEqual(Q.heading_date("Grapevine Daily Quote October 15", self.OCT5), date(2025, 10, 15))   # not the 15th
+        self.assertEqual(Q.heading_date("Grapevine Daily Quote October 6", self.OCT5), date(2026, 10, 6))     # tomorrow
+        self.assertEqual(Q.heading_date("Cita Diaria con La Viña Enero 1", date(2026, 12, 31)), date(2027, 1, 1))
+        self.assertEqual(Q.heading_date("Grapevine Daily Quote January 1", date(2026, 12, 30)), date(2026, 1, 1))
+        self.assertIsNone(Q.heading_date("Grapevine Daily Quote January 2, 2027", self.OCT5))
+        self.assertIsNone(Q.heading_date("Grapevine Daily Quote October 5, 2024", self.OCT5))         # over a year ago
+        self.assertEqual(Q.heading_window(self.OCT5), (date(2025, 10, 5), date(2026, 10, 6)))
+
+    def test_january_2_on_october_5_never_becomes_the_newest(self):
+        res = Q.collect(fetcher({"gv": self.gv("January 2"), "lv": page("lv_home.html").replace("Septiembre 25",
+                                                                                                 "Octubre 5")}),
+                        self.prev_env(), self.OCT5, CFG)
+        self.assertEqual(res["errors"], [])
+        self.assertEqual(res["items"][0]["id"], "quote:gv:2026-10-05")      # the newest known stays on the site
+        self.assertEqual([h["date"] for h in res["history"]["gv"]], ["2026-10-05", "2026-10-04"])
+        self.assertTrue(all(h["date"] <= "2026-10-06" for rows in res["history"].values() for h in rows))
+        self.assertEqual(len(res["warnings"]), 1)
+        self.assertIn("gv: the page shows the quote of 2026-01-02", res["warnings"][0])
+        self.assertIn("kept the newer", res["warnings"][0])
+        # the next morning's real quote replaces it as usual
+        nxt = Q.collect(fetcher({"gv": self.gv("October 6")}), {"items": res["items"], "history": res["history"]},
+                        date(2026, 10, 6), CFG, only="gv")
+        self.assertEqual(nxt["items"][0]["id"], "quote:gv:2026-10-06")
+        self.assertEqual(nxt["warnings"], [])
+
+    def test_october_15_on_october_5_is_last_years(self):
+        res = Q.collect(fetcher({"gv": self.gv("October 15")}), self.prev_env(), self.OCT5, CFG, only="gv")
+        self.assertEqual(res["items"][0]["id"], "quote:gv:2026-10-05")
+        self.assertNotIn("2026-10-15", json.dumps(res))
+        self.assertIn("the page shows the quote of 2025-10-15", res["warnings"][0])
+
+    def test_january_1_read_on_december_31_is_tomorrows(self):
+        dec31 = date(2026, 12, 31)
+        res = Q.collect(fetcher({"gv": self.gv("January 1")}), {}, dec31, CFG, only="gv")
+        self.assertEqual(res["items"][0]["id"], "quote:gv:2027-01-01")
+        self.assertEqual(res["items"][0]["extra"]["date_label"], "January 1")
+        self.assertTrue(res["items"][0]["extra"]["date_from_heading"])
+        self.assertEqual(res["warnings"], [])
+
+    def test_a_dated_heading_outside_the_window_is_todays_quote_with_a_warning(self):
+        res = Q.collect(fetcher({"gv": self.gv("January 2, 2027")}), {}, self.OCT5, CFG, only="gv")
+        self.assertEqual(res["items"][0]["id"], "quote:gv:2026-10-05")
+        self.assertFalse(res["items"][0]["extra"]["date_from_heading"])
+        self.assertIn("gives no day from 2025-10-05 to 2026-10-06", res["warnings"][0])
+        self.assertEqual(Q.peek(fetcher({"gv": self.gv("January 2, 2027")}), self.OCT5, ("gv",), CFG), {"gv": None})
+
+    def test_a_stored_quote_dated_after_tomorrow_is_dropped(self):
+        """A history entry (and the item) of 2027-01-02, written before this rule: dropped, and the newest quote
+        left is shown — also when the page cannot be read today."""
+        env = self.prev_env()
+        stuck = dict(env["history"]["gv"][0], date="2027-01-02", heading="Grapevine Daily Quote January 2")
+        bad_item = dict(env["items"][0], id="quote:gv:2027-01-02", date="2027-01-02")
+        env = {"items": [bad_item, env["items"][1]], "history": {**env["history"], "gv": [stuck, *env["history"]["gv"]]}}
+        res = Q.collect(fetcher({"gv": None, "lv": None}), env, self.OCT5, CFG)
+        self.assertEqual([i["id"] for i in res["items"]], ["quote:gv:2026-10-05", "quote:lv:2026-10-05"])
+        self.assertEqual([h["date"] for h in res["history"]["gv"]], ["2026-10-05", "2026-10-04"])
+        self.assertEqual(res["warnings"], ["gv: dropped the stored quote of 2027-01-02 — a day after tomorrow "
+                                           "(2026-10-06, Central time)"])
+        self.assertEqual(len(res["errors"]), 2)                                  # both pages unavailable
+        # read again: today's page replaces it the same way
+        res = Q.collect(fetcher({"gv": self.gv("October 5")}), env, self.OCT5, CFG, only="gv")
+        self.assertEqual(res["items"][0]["id"], "quote:gv:2026-10-05")
+        self.assertEqual(res["items"][0]["extra"]["date_from_heading"], True)
+        self.assertEqual(len(res["warnings"]), 1)
+
+    def test_add_history_drops_days_after_tomorrow(self):
+        hist = [{"date": "2027-01-02"}, {"date": "2026-10-06"}, {"date": "2026-10-05"}]
+        self.assertEqual([h["date"] for h in Q.add_history(hist, None, self.OCT5)], ["2026-10-06", "2026-10-05"])
+
+
+class MainWarningsTest(unittest.TestCase):
+    """main(): the warnings go to stats["warnings"] (→ /status/), and into the error text of a failed run."""
+
+    def run_main(self, prev: dict, pages: dict[str, str | None], today: date) -> dict:
+        saved: dict = {}
+
+        def save(source, items, ok=True, error=None, stats=None, extra=None):
+            saved.update(items=items, ok=ok, error=error, stats=stats, extra=extra)
+        f = fetcher(pages)
+
+        class Http:
+            requests_made = 0
+
+            @staticmethod
+            def get_text(url):
+                return f(url)
+        with mock.patch.object(Q, "load_raw", return_value=prev), mock.patch.object(Q, "save_raw", side_effect=save), \
+                mock.patch.object(Q, "shared_session", return_value=Http()), \
+                mock.patch.object(Q, "local_today", return_value=today), \
+                mock.patch.object(Q, "load_config", return_value=CFG):
+            Q.main([])
+        return saved
+
+    def test_ok_run_with_a_warning(self):
+        gv = page("gv_home.html").replace("September 25", "January 2")
+        env = self.run_main({}, {"gv": gv, "lv": page("lv_home.html")}, date(2026, 10, 5))
+        self.assertTrue(env["ok"])                                   # nothing newer known: shown, and said so
+        self.assertEqual(env["stats"]["warnings"], ["gv: the page shows the quote of 2026-01-02 (“Grapevine Daily "
+                                                    "Quote January 2”) — over 14 days old: a stale page or a mistyped "
+                                                    "heading? It shows until a newer one comes"])
+        stale = Q.collect(fetcher({"gv": page("gv_home.html").replace("September 25", "October 4")}), {},
+                          date(2026, 10, 4), CFG, only="gv")
+        env = self.run_main({"items": stale["items"], "history": stale["history"]},
+                            {"gv": gv, "lv": page("lv_home.html")}, date(2026, 10, 5))
+        self.assertTrue(env["ok"])
+        self.assertIn("kept the newer", env["stats"]["warnings"][0])     # … but here it would replace a newer one
+        self.assertIsNone(env["error"])
+
+    def test_failed_run_carries_the_warnings_in_its_error(self):
+        stale = Q.collect(fetcher({"gv": page("gv_home.html").replace("September 25", "October 4")}), {},
+                          date(2026, 10, 4), CFG, only="gv")
+        gv = page("gv_home.html").replace("September 25", "January 2")
+        env = self.run_main({"items": stale["items"], "history": stale["history"]}, {"gv": gv, "lv": None},
+                            date(2026, 10, 5))
+        self.assertFalse(env["ok"])
+        self.assertIn("lv: page unavailable", env["error"])
+        self.assertIn("gv: the page shows the quote of 2026-01-02", env["error"])
 
 
 class PeekTest(unittest.TestCase):

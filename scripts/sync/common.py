@@ -22,10 +22,11 @@ import sys
 import time
 import unicodedata
 from collections import OrderedDict
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import urljoin, urlparse, urlsplit, urlunsplit
+from zoneinfo import ZoneInfo
 
 import requests
 import yaml
@@ -113,6 +114,34 @@ def parse_iso(s: str | None) -> datetime | None:
         return None
 
 
+def site_tz() -> ZoneInfo:
+    """The site's time zone: config site.timezone (Central when it is missing or unknown)."""
+    try:
+        return ZoneInfo(str((load_config().get("site") or {}).get("timezone") or "America/Chicago"))
+    except Exception:  # noqa: BLE001 — an unknown name, no settings file
+        return ZoneInfo("America/Chicago")
+
+
+def site_day(when: str | datetime | None = None, tz: ZoneInfo | None = None) -> str:
+    """The calendar day ('YYYY-MM-DD') of a moment in the site's time zone (Central) — not the UTC day, which
+    is already tomorrow after about 7 PM Central. `when`: an ISO time ('…Z', with an offset; without one it is
+    UTC, as now_iso() writes), a datetime, or None for now. A date alone ('YYYY-MM-DD') is that day; text that
+    is not a time is None's day (now)."""
+    tz = tz or site_tz()
+    if isinstance(when, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", when.strip()):
+        return when.strip()
+    dt = when if isinstance(when, datetime) else None
+    if isinstance(when, str):
+        try:
+            dt = datetime.fromisoformat(when.strip().replace("Z", "+00:00"))
+        except ValueError:
+            dt = None
+    dt = dt or datetime.now(timezone.utc)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(tz).date().isoformat()
+
+
 MONTHS = {
     # English
     "january": 1, "jan": 1, "february": 2, "feb": 2, "march": 3, "mar": 3, "april": 4, "apr": 4,
@@ -124,36 +153,175 @@ MONTHS = {
     "noviembre": 11, "diciembre": 12, "dic": 12,
 }
 _MONTH_RE = "|".join(sorted(MONTHS, key=len, reverse=True))
+_MONTH_NAMES = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+                "November", "December")
+
+# Dates written with numbers only: "14-03-2027" can only be day-month-year (there is no 14th month), "03-14-2027"
+# only month-day-year; "05-10-2026" can be either. Those are read day first when the name is in a language that
+# writes the day first (Spanish: "Taller 05-10-2026" is 5 October), month first when it is in English (as in the
+# US), and month first with a note (`notes` / take_date_notes) when its words do not tell — so the chair can write
+# it year-month-day instead.
+_DAY_FIRST_LANGS = ("es", "fr")
+_RANGE_MAX_DAYS = 62                     # "March 14 - 16, 2027": a range longer than this is not one event's days
+_ORD = r"(?:st|nd|rd|th)?"
+_SEP = r"\s*(?:[-–—]|\b(?:to|through|thru|until|al|a|hasta)\b)\s*"          # "14 - 16", "14 al 16", "14 to 16"
+_FROM = r"(?:\b(?:from|desde|del)\s+)?"                                         # "del 14 al 16 de marzo de 2027"
+_YEAR_END = r",?\s+(?:de\s+|del\s+)?(20\d{2})\b"
+# A number right after one of these words counts something ("Distrito 7 - 14 de marzo de 2027" is the 14th, not
+# the 7th to the 14th): a range written with a dash after it is not read as one.
+_COUNTED = re.compile(r"(?i)(?:\b(?:distrito|district|panel|grupo|group|[aá]rea|paso|pasos|step|steps|tradici[oó]n|"
+                      r"tradiciones|tradition|traditions|concepto|concept|n[oº]|n[uú]m|number|n[uú]mero)\.?|#)\s*$")
+
+# Notes about dates that could be read two ways, for callers that pass no `notes` list (drive.py's names): the
+# module that saves the source takes them with take_date_notes() into its stats["warnings"] (→ /status/).
+_DATE_NOTES: list[str] = []
 
 
-def date_from_text(text: str) -> tuple[str | None, str]:
-    """Find a date inside a file name / title.
+def _md(mo: int, d: int) -> str:
+    return f"{_MONTH_NAMES[mo - 1]} {d}"
 
-    Returns (iso_date_or_None, text_without_the_date). Recognizes:
-      2026-10-05, 2026.10.05, 2026_10_05, 20261005, 10-05-2026, 10/05/2026,
-      "Oct 5 2026", "October 5, 2026", "5 de octubre de 2026", "March 2026" (→ 2026-03-01).
-    """
-    t = text
-    pats = [
-        (r"(?<!\d)(20\d{2})[-._ ](\d{1,2})[-._ ](\d{1,2})(?!\d)", lambda m: (int(m[1]), int(m[2]), int(m[3]))),
-        (r"(?<!\d)(20\d{2})(\d{2})(\d{2})(?!\d)", lambda m: (int(m[1]), int(m[2]), int(m[3]))),
-        (r"(?<!\d)(\d{1,2})[-/.](\d{1,2})[-/.](20\d{2})(?!\d)", lambda m: (int(m[3]), int(m[1]), int(m[2]))),
-        (rf"(?i)\b({_MONTH_RE})\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?,?\s+(20\d{{2}})\b", lambda m: (int(m[3]), MONTHS[m[1].lower()], int(m[2]))),
-        (rf"(?i)\b(\d{{1,2}})\s+(?:de\s+)?({_MONTH_RE})\.?,?\s+(?:de\s+|del\s+)?(20\d{{2}})\b", lambda m: (int(m[3]), MONTHS[m[2].lower()], int(m[1]))),
-        (rf"(?i)\b({_MONTH_RE})\.?,?\s+(?:de\s+|del\s+)?(20\d{{2}})\b", lambda m: (int(m[2]), MONTHS[m[1].lower()], 1)),
-    ]
-    for pat, fn in pats:
-        m = re.search(pat, t)
+
+def _note(notes: list[str] | None, msg: str) -> None:
+    target = _DATE_NOTES if notes is None else notes
+    if msg not in target:
+        target.append(msg)
+
+
+def take_date_notes() -> list[str]:
+    """The notes date_from_text() made since the last call for callers without a `notes` list (each once, in
+    order) — and forget them, so the next module of the same run starts empty."""
+    out = list(_DATE_NOTES)
+    _DATE_NOTES.clear()
+    return out
+
+
+def _text_lang(text: str, lang: str | None) -> str:
+    """The language a numbers-only date in `text` is written in: the caller's when it knows it, else the
+    language of the words around the date ("Taller …" → "es"; "und" when they do not tell)."""
+    return lang[:2].lower() if lang else detect_lang(text)
+
+
+def _numeric(m: re.Match, text: str, lang: str | None) -> tuple[date, None, str | None]:
+    """'14-03-2027' / '03-14-2027' / '05-10-2026' → (the day, no end, a note when it could be read two ways:
+    both numbers 12 or less in a name whose language does not tell — read month first, as before)."""
+    a, b, y = int(m[1]), int(m[2]), int(m[3])
+    if a > 12 >= b:
+        return date(y, b, a), None, None                      # 14-03-2027: day first
+    if a > 12 or b > 12 or a == b:
+        return date(y, a, b), None, None                      # 03-14-2027: month first (both > 12 → ValueError)
+    words = _text_lang(text, lang)
+    if words in _DAY_FIRST_LANGS:
+        return date(y, b, a), None, None                      # "Taller 05-10-2026": 5 October
+    if words == "en":
+        return date(y, a, b), None, None                      # "Writing Workshop 05-10-2026": May 10
+    alt = date(y, b, a)
+    where = "" if clean_text(text) == m[0] else f"“{clean_text(text)}”: "
+    note = (f"{where}“{m[0]}” could be {_md(a, b)} or {_md(b, a)}, {y} — read as {_md(a, b)} (month first). "
+            f"Write the date year-month-day ({date(y, a, b).isoformat()} or {alt.isoformat()}) to be sure")
+    return date(y, a, b), None, note
+
+
+def _counted_before(m: re.Match, text: str) -> bool:
+    return bool(_COUNTED.search(text[: m.start(1)]))
+
+
+def _day_range(m: re.Match, text: str, _lang) -> tuple[date, date, None] | None:
+    """'14 - 16 de marzo de 2027' / 'del 14 al 16 de marzo' / '14-16 March 2027' → (14 March, 16 March)."""
+    if re.fullmatch(r"\s*[-–—]\s*", m[2]) and _counted_before(m, text):
+        return None
+    y, mo = int(m[5]), MONTHS[m[4].lower()]
+    return date(y, mo, int(m[1])), date(y, mo, int(m[3])), None
+
+
+# (pattern, reader): a reader gives (start, end or None, a note or None), or None / ValueError for "not a date
+# here" (the next pattern is tried). The ranges come before the single dates they contain, so "March 30 - April 2,
+# 2027" starts on March 30 (not April 2) and "14 - 16 de marzo de 2027" on the 14th (not the 16th).
+_DATE_PATS: list[tuple[re.Pattern, Any]] = [
+    (re.compile(r"(?<!\d)(20\d{2})[-._ ](\d{1,2})[-._ ](\d{1,2})(?!\d)"),
+     lambda m, t, lang: (date(int(m[1]), int(m[2]), int(m[3])), None, None)),
+    (re.compile(r"(?<!\d)(20\d{2})(\d{2})(\d{2})(?!\d)"),
+     lambda m, t, lang: (date(int(m[1]), int(m[2]), int(m[3])), None, None)),
+    (re.compile(r"(?<!\d)(\d{1,2})[-/.](\d{1,2})[-/.](20\d{2})(?!\d)"), _numeric),
+    # "March 30 - April 2, 2027", "Oct. 30 – Nov. 1, 2026"
+    (re.compile(rf"(?i){_FROM}\b({_MONTH_RE})\.?\s+(\d{{1,2}}){_ORD}{_SEP}({_MONTH_RE})\.?\s+(\d{{1,2}}){_ORD}{_YEAR_END}"),
+     lambda m, t, lang: (date(int(m[5]) - (MONTHS[m[1].lower()] > MONTHS[m[3].lower()]), MONTHS[m[1].lower()],
+                              int(m[2])), date(int(m[5]), MONTHS[m[3].lower()], int(m[4])), None)),
+    # "March 14 - 16, 2027", "March 14-16 2027", "marzo 14 al 16, 2027"
+    (re.compile(rf"(?i){_FROM}\b({_MONTH_RE})\.?\s+(\d{{1,2}}){_ORD}{_SEP}(\d{{1,2}}){_ORD}{_YEAR_END}"),
+     lambda m, t, lang: (date(int(m[4]), MONTHS[m[1].lower()], int(m[2])),
+                         date(int(m[4]), MONTHS[m[1].lower()], int(m[3])), None)),
+    # "30 de marzo al 2 de abril de 2027", "30 March - 2 April 2027"
+    (re.compile(rf"(?i){_FROM}\b(\d{{1,2}})\s+(?:de\s+)?({_MONTH_RE})\.?{_SEP}(\d{{1,2}})\s+(?:de\s+)?({_MONTH_RE})\.?"
+                rf"{_YEAR_END}"),
+     lambda m, t, lang: (date(int(m[5]) - (MONTHS[m[2].lower()] > MONTHS[m[4].lower()]), MONTHS[m[2].lower()],
+                              int(m[1])), date(int(m[5]), MONTHS[m[4].lower()], int(m[3])), None)),
+    # "14 - 16 de marzo de 2027", "del 14 al 16 de marzo de 2027", "14-16 March 2027"
+    (re.compile(rf"(?i){_FROM}\b(\d{{1,2}})({_SEP})(\d{{1,2}})\s+(?:de\s+)?({_MONTH_RE})\.?{_YEAR_END}"), _day_range),
+    (re.compile(rf"(?i)\b({_MONTH_RE})\.?\s+(\d{{1,2}}){_ORD},?\s+(20\d{{2}})\b"),
+     lambda m, t, lang: (date(int(m[3]), MONTHS[m[1].lower()], int(m[2])), None, None)),
+    (re.compile(rf"(?i)\b(\d{{1,2}})\s+(?:de\s+)?({_MONTH_RE})\.?,?\s+(?:de\s+|del\s+)?(20\d{{2}})\b"),
+     lambda m, t, lang: (date(int(m[3]), MONTHS[m[2].lower()], int(m[1])), None, None)),
+    (re.compile(rf"(?i)\b({_MONTH_RE})\.?,?\s+(?:de\s+|del\s+)?(20\d{{2}})\b"),
+     lambda m, t, lang: (date(int(m[2]), MONTHS[m[1].lower()], 1), None, None)),
+]
+# the patterns of ONE whole day (no range, not a month alone): a second one after a dash is the end of a range
+# ("2027-03-14 - 2027-03-16", "March 14, 2027 – March 16, 2027")
+_DAY_PATS = [_DATE_PATS[i] for i in (0, 1, 2, 7, 8)]
+_SEP_RX = re.compile(rf"(?i){_SEP}")
+
+
+def date_range_from_text(text: str, lang: str | None = None,
+                         notes: list[str] | None = None) -> tuple[str | None, str | None, str]:
+    """Find a date — or a range of days — inside a file name / title.
+
+    Returns (start_or_None, end_or_None, text_without_the_dates). Recognizes:
+      2026-10-05, 2026.10.05, 2026_10_05, 20261005, 14-03-2027, 03/14/2027, 05-10-2026 (see _numeric),
+      "Oct 5 2026", "October 5, 2026", "5 de octubre de 2026", "March 2026" (→ 2026-03-01, no end),
+      and ranges: "March 14 - 16, 2027", "March 30 - April 2, 2027", "14 al 16 de marzo de 2027",
+      "30 de marzo al 2 de abril de 2027", "2027-03-14 - 2027-03-16" (end = the last day; None for one day).
+    `lang`: the language of the text when the caller knows it ("es": numbers-only dates are day first);
+    else the text's own words decide. `notes`: a list that gets a line for a date that could be read two
+    ways ("05-10-2026" in an English or unknown-language name); without one the line is kept for
+    take_date_notes()."""
+    t = text or ""
+    for rx, read in _DATE_PATS:
+        m = rx.search(t)
         if not m:
             continue
         try:
-            y, mo, d = fn(m)
-            dt = date(y, mo, d)
+            got = read(m, t, lang)
         except (ValueError, KeyError):
             continue
-        rest = (t[: m.start()] + " " + t[m.end():]).strip(" -_.,·|")
-        return dt.isoformat(), re.sub(r"\s{2,}", " ", rest).strip()
-    return None, text
+        if not got:
+            continue
+        start, end, note = got
+        stop = m.end()
+        if end is not None and not start < end <= start + timedelta(days=_RANGE_MAX_DAYS):
+            continue                     # "March 16 - 14, 2027", "14 - 3 de marzo": not a range of days
+        if end is None and (rx, read) in _DAY_PATS:
+            sm = _SEP_RX.match(t, stop)
+            for rx2, read2 in _DAY_PATS if sm else ():
+                m2 = rx2.match(t, sm.end())
+                try:
+                    got2 = read2(m2, t, lang) if m2 else None
+                except (ValueError, KeyError):
+                    got2 = None
+                if got2 and start < got2[0] <= start + timedelta(days=_RANGE_MAX_DAYS):
+                    end, stop = got2[0], m2.end()
+                    note = note or got2[2]
+                    break
+        if note:
+            _note(notes, note)
+        rest = (t[: m.start()] + " " + t[stop:]).strip(" -_.,·|")
+        return start.isoformat(), (end.isoformat() if end else None), re.sub(r"\s{2,}", " ", rest).strip()
+    return None, None, text
+
+
+def date_from_text(text: str, lang: str | None = None, notes: list[str] | None = None) -> tuple[str | None, str]:
+    """Find a date inside a file name / title → (iso_date_or_None, text_without_the_date). Every form
+    date_range_from_text() reads; a range of days gives its FIRST day (and the whole range leaves the text)."""
+    start, _end, rest = date_range_from_text(text, lang, notes)
+    return start, rest
 
 
 # --------------------------------------------------------------------------- text
