@@ -48,8 +48,10 @@ htmlcov/
 #      temporary name first; the daily data commit must never pick them up) ----
 *.tmp
 *.part
-# Backups the sync makes when a data file is unreadable (inspect locally, never commit)
+# Backups the sync makes when a data file is unreadable (inspect locally, never commit):
+# data/raw/<source>.json.corrupt-<time>, data/translations/cache.json.bad-<time>
 *.corrupt-*
+*.bad-*
 
 # ---- Weekly link check (lychee) ----
 .lycheecache

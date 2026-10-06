@@ -3319,7 +3319,7 @@ def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: 
     (ctx.unreadable) keeps that build's row — its count, dates and stats, as the site keeps its items
     (carry_unreadable) — with ok false and the reason. Each row also carries the raw envelope's `changes`
     (this run's {"added", "removed", "held"[, "confirmed"]} — common.save_raw) and `held` (items held back
-    after a sudden drop, or null)."""
+    after a sudden drop, without their ids, or null)."""
     week_ago = ctx.now_ts - 7 * 86400
     before = {r.get("source"): r for r in ((previous or {}).get("sources") or []) if isinstance(r, dict)}
     sources = []
@@ -3338,7 +3338,7 @@ def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: 
             "new_7d": sum(1 for i in items if (ts(i.get("first_seen")) or 0) >= week_ago),
             "error": err, "stats": env.get("stats") or {},
             "changes": env.get("changes") if isinstance(env.get("changes"), dict) else None,
-            "held": env.get("held") if isinstance(env.get("held"), dict) else None,
+            "held": {k: v for k, v in env["held"].items() if k != "ids"} if isinstance(env.get("held"), dict) else None,
         }
         if name in ctx.unreadable:
             old = before.get(name) or {}

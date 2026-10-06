@@ -3,9 +3,10 @@ translation cache are temporary folders; Drive, the downloads and the model serv
 
   * MassDropGuard   — common.save_raw: a source that says "ok" but suddenly lists far fewer items (zero, or more
                       than half of DROP_GUARD_MIN or more) keeps them for one run, marked `held`; the next run that
-                      sees the same drop accepts it; a recovery clears it; new items still come in; "gone" items
-                      count; failed runs keep the mark; exempt sources (DROP_GUARD_EXEMPT, drop_guard=, a source
-                      switched off) are not held; `changes` = this run's {"added", "removed", "held"}.
+                      still misses those same items accepts it (items that vanish only then are held in turn); a
+                      recovery clears it; new items still come in; "gone" items count and are put back once; failed
+                      runs keep the mark; exempt sources (DROP_GUARD_EXEMPT, drop_guard=, a source switched off) are
+                      not held; `changes` = this run's {"added", "removed", "held"}.
   * GuardChoices    — every source that writes a raw file is guarded or exempt on purpose (the table and its
                       reasons).
   * DriveEmptyFolders — drive_listing + drive.main: a folder (or the whole tree) that suddenly looks empty keeps
@@ -89,7 +90,8 @@ class MassDropGuard(TempRaw):
         self.assertTrue(env["ok"])
         self.assertEqual(self.ids(env), ["x:1", "x:2", "x:3", "x:4"], "the items stay on the site")
         self.assertEqual(env["held"], {"since": "2026-10-06T18:00:00Z", "kept": 4, "previous": 4, "found": 0,
-                                       "drop": True, "examples": ["Item 1", "Item 2", "Item 3", "Item 4"]})
+                                       "drop": True, "examples": ["Item 1", "Item 2", "Item 3", "Item 4"],
+                                       "ids": ["x:1", "x:2", "x:3", "x:4"]})
         self.assertEqual(env["changes"], {"added": 0, "removed": 0, "held": 4})
         env = self.save("podcasts", [], at="2026-10-07T06:00:00Z")      # the next run sees the same drop
         self.assertEqual(env["items"], [])
@@ -119,8 +121,8 @@ class MassDropGuard(TempRaw):
         self.assertFalse(common.is_mass_drop(10, 5))
 
     def test_new_items_of_a_held_run_still_come_in(self):
-        self.save("instagram", items(12))
-        env = self.save("instagram", items(2, start=50))
+        self.save("shop", items(12))
+        env = self.save("shop", items(2, start=50))
         self.assertEqual(len(env["items"]), 14)
         self.assertEqual(env["changes"], {"added": 2, "removed": 0, "held": 12})
 
@@ -131,7 +133,29 @@ class MassDropGuard(TempRaw):
             it["status"] = "gone"
         env = self.save("articles", marked)
         self.assertEqual(len(self.ids(env)), 12, "the 8 'gone' ones are put back as they were")
+        self.assertEqual(self.ids(env, live_only=False), self.ids(env), "each item once (the 'gone' copy replaced)")
         self.assertEqual(env["held"]["kept"], 8)
+
+    def test_only_the_same_drop_is_accepted(self):
+        self.save("pdfs", items(20))
+        env = self.save("pdfs", items(8), at="2026-10-06T18:00:00Z")               # 12 of 20 missing: held
+        self.assertEqual((env["held"]["kept"], len(env["held"]["ids"])), (12, 12))
+        # the next run finds nothing at all: the 12 still missing go (the drop is confirmed), but the 8 found last
+        # time and missing only now are a new drop of their own — held back in turn
+        env = self.save("pdfs", [], at="2026-10-07T06:00:00Z")
+        self.assertEqual(self.ids(env), sorted(f"x:{i}" for i in range(1, 9)))
+        self.assertEqual(env["changes"], {"added": 0, "removed": 12, "held": 8, "confirmed": "2026-10-06T18:00:00Z"})
+        self.assertEqual((env["held"]["since"], env["held"]["previous"], env["held"]["found"]),
+                         ("2026-10-07T06:00:00Z", 8, 0))
+        env = self.save("pdfs", [], at="2026-10-07T12:00:00Z")                     # still nothing: now they go
+        self.assertEqual((env["items"], "held" in env), ([], False))
+        self.assertEqual(env["changes"], {"added": 0, "removed": 8, "held": 0, "confirmed": "2026-10-07T06:00:00Z"})
+        # held items still missing while new ones arrive (no mass drop any more): their removal is confirmed too
+        self.save("pdfs", items(20, "y"))
+        self.save("pdfs", items(8, "y"), at="2026-10-08T06:00:00Z")
+        env = self.save("pdfs", [*items(8, "y"), *items(5, "z")], at="2026-10-08T12:00:00Z")
+        self.assertEqual((len(env["items"]), "held" in env), (13, False))
+        self.assertEqual(env["changes"], {"added": 5, "removed": 12, "held": 0, "confirmed": "2026-10-08T06:00:00Z"})
 
     def test_a_failed_run_keeps_the_mark_and_extras_never_override_it(self):
         self.save("shop", items(3))
@@ -166,7 +190,7 @@ class MassDropGuard(TempRaw):
         self.assertEqual(env["held"]["examples"], ["Item 5", "Item 6"])
         env = self.save("drive", items(4), confirmed=["x:5", "x:6"])
         self.assertNotIn("held", env)
-        self.assertEqual(env["changes"], {"added": 0, "removed": 2, "held": 0})
+        self.assertEqual(env["changes"], {"added": 0, "removed": 2, "held": 0, "confirmed": T0})
         # confirmed removals never count as a suspicious drop
         self.save("drive", items(12))
         env = self.save("drive", items(2), confirmed=[f"x:{i}" for i in range(3, 13)])
@@ -185,7 +209,8 @@ class GuardChoices(unittest.TestCase):
 
     def test_the_exempt_sources(self):
         self.assertEqual(set(common.DROP_GUARD_EXEMPT),
-                         {"announcements", "manual_events", "events_external", "editorial", "writers_archive"})
+                         {"announcements", "manual_events", "events_external", "editorial", "writers_archive",
+                          "instagram"})
         names = {n for n, *_ in B.SOURCES}
         for source, why in common.DROP_GUARD_EXEMPT.items():
             self.assertIn(source, names)
@@ -260,7 +285,7 @@ class DriveEmptyFolders(DriveTempRaw):
         self.assertEqual(len(env["items"]), 6)
         self.assertNotIn("held", env)
         self.assertNotIn("empty_folders", env)
-        self.assertEqual(env["changes"], {"added": 0, "removed": 3, "held": 0})
+        self.assertEqual(env["changes"], {"added": 0, "removed": 3, "held": 0, "confirmed": "2026-10-06T18:00:00Z"})
 
     def test_a_folder_that_comes_back(self):
         t = tree()
@@ -272,15 +297,27 @@ class DriveEmptyFolders(DriveTempRaw):
         self.assertNotIn("held", env)
         self.assertNotIn("empty_folders", env)
 
-    def test_the_whole_tree_looks_empty(self):
+    def test_a_folder_deleted_after_it_looked_empty_is_forgotten(self):
         t = tree()
         self.run_drive(t)
+        t["FLY"] = []
+        self.run_drive(t, "2026-10-06T18:00:00Z")
+        t["P77"] = [e for e in t["P77"] if e.id != "FLY"]                 # the folder itself is gone now
+        env = self.run_drive(t, "2026-10-07T06:00:00Z")
+        self.assertEqual(len(env["items"]), 6)
+        self.assertNotIn("empty_folders", env)
+
+    def test_the_whole_tree_looks_empty(self):
+        t = tree()
+        first = self.run_drive(t)
         t["ROOT"] = []
         env = self.run_drive(t, "2026-10-06T18:00:00Z")
         self.assertTrue(env["ok"])
         self.assertEqual((len(env["items"]), env["held"]["kept"]), (9, 9))
         self.assertEqual(env["empty_folders"], {"ROOT": "2026-10-06T18:00:00Z"})
         self.assertFalse(any("no Panel folder" in w for w in env["stats"]["warnings"]))
+        self.assertEqual(env["stats"]["panel_folders"], first["stats"]["panel_folders"],
+                         "nothing was read: the site still links the panel folder")
         env = self.run_drive(t, "2026-10-07T06:00:00Z")
         self.assertEqual(env["items"], [], "confirmed: removed now, not held a second time")
         self.assertNotIn("held", env)
@@ -370,6 +407,10 @@ class DriveDownloads(unittest.TestCase):
         self.assertIsNone(self.fetch(big, "post.docx", DOCX_MIME), "a cut-off .docx is not read")
         self.assertIsNone(self.fetch(Stream(10, "text/html"), "post.txt"), "a sign-in page instead of the file")
         self.assertEqual(self.fetch(Stream(0, body=docx("Hola")), "post.docx", DOCX_MIME), "Hola")
+        # a character split by the cap is left out; the rest is still read as UTF-8, not Windows-1252
+        body = ("a" * (D.MAX_TEXT_DOWNLOAD - 1) + "ñ La Viña").encode()
+        self.assertEqual(self.fetch(Stream(0, body=body), "notes.txt"), "a" * (D.MAX_TEXT_DOWNLOAD - 1))
+        self.assertEqual(self.fetch(Stream(0, body="Café ñ".encode("cp1252")), "notes.txt"), "Café ñ")
 
     def test_docx_caps(self):
         self.assertEqual(D.docx_to_text(docx("Welcome")), "Welcome")
@@ -535,6 +576,7 @@ class WholeBuilds(TempRaw):
         row = next(r for r in st["sources"] if r["source"] == "podcasts")
         self.assertEqual(row["changes"], {"added": 0, "removed": 0, "held": 3})
         self.assertEqual((row["held"]["kept"], row["held"]["since"]), (3, "2026-10-06T06:00:00Z"))
+        self.assertNotIn("ids", row["held"], "the ids stay in data/raw")
         other = next(r for r in st["sources"] if r["source"] == "youtube")
         self.assertEqual((other["changes"], other["held"]), (None, None), "never ran")
 

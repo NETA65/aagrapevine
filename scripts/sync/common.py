@@ -358,8 +358,9 @@ def read_capped(r: Any, cap: int) -> tuple[bytes, bool]:
 # A source that says "ok" but suddenly lists far fewer items than last time — an empty Google Drive folder
 # view, a half-rendered page, a feed answering with nothing — is far more often a bad moment at the source
 # than a real change. save_raw() then writes the run's items WITH the missing ones put back and marks the
-# envelope `held` (since when, how many, a few of their titles; /status/ shows it); the NEXT run that sees
-# the same drop accepts it, so a real removal is only one run late. Counted on live items (status != "gone"):
+# envelope `held` (since when, how many, a few of their titles, their ids; /status/ shows it); the NEXT run
+# that still misses those same items accepts it, so a real removal is only one run late (items that vanish
+# only on that next run are a new drop, held back in turn). Counted on live items (status != "gone"):
 #   * the list falls to zero (from any size), or
 #   * more than half of it disappears, once it held at least DROP_GUARD_MIN items. Below that a few posts or
 #     events coming and going is ordinary (today's small sources hold 2–9 items), while every source whose
@@ -376,6 +377,9 @@ DROP_GUARD_EXEMPT: dict[str, str] = {
     "events_external": "upcoming events only: past events leave the list, often several at once",
     "editorial": "a rolling window of upcoming deadlines, with its own guard (editorial.collect: a part whose list "
                  "shrinks below 40% keeps its previous topics)",
+    "instagram": "a bad listing never drops posts (they are merged into the saved ones; a failed account makes the "
+                 "run fail); posts leave only on purpose — the newest N kept per account, a post taken off the list "
+                 "— and their pictures are deleted in that same run, so a post put back would show without one",
     "writers_archive": "its own guard: a new archive file needs writers_archive.min_rows_ratio of the rows of the "
                        "file before, or the older rows stay",
 }
@@ -410,10 +414,11 @@ def save_raw(source: str, items: list[dict], ok: bool = True, error: str | None 
     `confirmed` the items it removes after that second look (they never count as a suspicious drop).
 
     Every envelope carries `changes` = this run's {"added", "removed", "held"} (live items; "held" = items
-    kept although this run did not find them) — plus "confirmed": the `held.since` of a drop this run
-    accepted — and `held` = {"since", "kept", "previous", "found", "drop", "examples"} while items are held
-    back ("drop": the guard put them back; false: the module kept them, `unconfirmed`). build_data copies
-    both into status.json sources[]."""
+    kept although this run did not find them) — plus "confirmed": the `held.since` of a hold whose items this
+    run removed (the same drop seen again, or a module's `confirmed`) — and `held` = {"since", "kept",
+    "previous", "found", "drop", "examples"[, "ids"]} while items are held back ("drop": the guard put them
+    back, "ids" = theirs; false: the module kept them, `unconfirmed`). build_data copies both into status.json
+    sources[] (`held` without its "ids")."""
     log = get_logger("common")
     now = now_iso()
     prev = load_raw(source)
@@ -433,22 +438,35 @@ def save_raw(source: str, items: list[dict], ok: bool = True, error: str | None 
     guard = (ok and (drop_guard if drop_guard is not None else source not in DROP_GUARD_EXEMPT)
              and (stats or {}).get("disabled") is not True)
     before, found = len(prev_live) - len(confirmed), len(new_live) - len(unconfirmed)
+    if ok and confirmed and prev_held:      # the module removed items it had kept back (drive: empty twice)
+        accepted = prev_held.get("since")
+    if guard and prev_held and prev_held.get("drop"):
+        # The items the last run held back (`held.ids`) that are still missing: the same drop seen again — it is
+        # real, they go now. Items that vanished only in THIS run are judged on their own (below).
+        ids = prev_held.get("ids") if isinstance(prev_held.get("ids"), list) else list(prev_live)
+        again = {i for i in ids if i in prev_live and i not in new_live and i not in confirmed}
+        if again:
+            accepted = prev_held.get("since")
+            confirmed |= again
+            before -= len(again)
+            log.warning("%s: %d item(s) held back since %s are still missing — their removal is accepted",
+                        source, len(again), accepted)
     if guard and is_mass_drop(before, found):
-        if prev_held and prev_held.get("drop"):
-            accepted = prev_held.get("since")       # the same drop on the next run: it is real
-            log.warning("%s: %d of %d items found again — the drop held back since %s is accepted", source,
-                        found, before, accepted)
-        else:
-            restored = [p for i, p in prev_live.items() if i not in new_live and i not in confirmed]
+        restored = [p for i, p in prev_live.items() if i not in new_live and i not in confirmed]
+        if restored:    # (nothing to put back when the module keeps them itself: `unconfirmed`)
             log.warning("%s: only %d of %d items found — %d held back until the next run confirms the drop",
                         source, found, before, len(restored))
-    if restored:
-        items = [*items, *restored]
+    if restored:        # (an item this run marked "gone" is put back as it was, not listed twice)
+        back = {p["id"] for p in restored}
+        items = [*(i for i in items if not (isinstance(i, dict) and i.get("id") in back)), *restored]
     if ok and (restored or unconfirmed):
         kept_ids = [p["id"] for p in restored] + sorted(unconfirmed)
         titles = [clean_text((prev_live.get(i) or new_live.get(i) or {}).get("title")) for i in kept_ids]
-        held = {"since": (prev_held or {}).get("since") or now, "kept": len(kept_ids), "previous": before,
-                "found": found, "drop": bool(restored), "examples": [t for t in titles if t][:HELD_EXAMPLES]}
+        held = {"since": (None if accepted else (prev_held or {}).get("since")) or now, "kept": len(kept_ids),
+                "previous": before, "found": found, "drop": bool(restored),
+                "examples": [t for t in titles if t][:HELD_EXAMPLES]}
+        if restored:
+            held["ids"] = sorted(back)
     items = sort_items(items)
     final_live = _live_ids(items)
     changes: dict[str, Any] = {"added": len(final_live.keys() - prev_live.keys()),

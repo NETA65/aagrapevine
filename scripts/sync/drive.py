@@ -58,6 +58,7 @@ Run:  python -m scripts.sync.drive [--include-loose] [--root ID] [--dry-run] [--
 from __future__ import annotations
 
 import argparse
+import codecs
 import html
 import io
 import json
@@ -704,11 +705,15 @@ def build_item(f: Found, dcfg: dict) -> dict:
 
 
 # --------------------------------------------------------------------------- announcement bodies
-def _decode(data: bytes) -> str:
-    """Bytes of a .txt/.md upload → str (UTF-8 with/without BOM, UTF-16 with BOM, or Windows-1252)."""
+def _decode(data: bytes, cut: bool = False) -> str:
+    """Bytes of a .txt/.md upload → str (UTF-8 with/without BOM, UTF-16 with BOM, or Windows-1252).
+    cut = the download stopped at its cap: a UTF-8 character split there is left out (the text is not read
+    as Windows-1252 because of it)."""
     if data[:2] in (b"\xff\xfe", b"\xfe\xff"):
         return data.decode("utf-16", "replace")
     try:
+        if cut:
+            return codecs.getincrementaldecoder("utf-8-sig")().decode(data, final=False)
         return data.decode("utf-8-sig")
     except UnicodeDecodeError:
         return data.decode("cp1252", "replace")
@@ -808,7 +813,7 @@ def fetch_body(http, fid: str, mime: str, name: str, what: str = "announcement")
     try:
         if docx:
             return docx_to_text(data)
-        return _decode(data)
+        return _decode(data, cut)
     except Exception as ex:
         log.warning("%s %r: could not read text: %s", what, name, ex)
         return None
@@ -1075,7 +1080,8 @@ def main(argv: list[str] | None = None) -> None:
     # Folders that looked empty: their files are kept this run (merge: below an uncertain folder) and marked held
     # (save_raw `unconfirmed`); the folders that looked empty last time too and were read as empty again are
     # confirmed: their files go now (save_raw `confirmed` — not a suspicious drop). An entry of the last run that
-    # this run could not look at stays until a run does.
+    # this run could not look at stays until a run does — while files of it are still kept (a folder deleted
+    # from the tree is forgotten).
     def below(fids) -> set[str]:
         return {i["id"] for i in merged if set((i.get("extra") or {}).get("folder_chain") or []) & set(fids)}
     confirmed_empty = {f for f in empty_before if f in c.empty_listed}
@@ -1085,7 +1091,8 @@ def main(argv: list[str] | None = None) -> None:
     unconfirmed_ids = below(c.unconfirmed)
     now = now_iso()
     empty_folders = {f: empty_before.get(f) or now for f in c.unconfirmed}
-    empty_folders.update({f: s for f, s in empty_before.items() if f not in c.listed_ok and f not in c.unconfirmed})
+    empty_folders.update({f: s for f, s in empty_before.items()
+                          if f not in c.listed_ok and f not in c.unconfirmed and below([f])})
 
     live = [i for i in merged if i.get("status") == "ok"]
     albums = Counter(i["extra"].get("album") for i in live if i["extra"].get("album"))
@@ -1142,6 +1149,11 @@ def main(argv: list[str] | None = None) -> None:
     }
     if booth_stats:      # only when the booth folder holds messages: {"fetched", "reused", "failed", "deferred"}
         stats["booth_texts"] = booth_stats
+    if root_id in c.unconfirmed:
+        # the whole tree looked empty (nothing was read): the panel folders are the last update's, so the site's
+        # "Open Drive folder" buttons (status.json → driveInfo) keep pointing at the panel meanwhile
+        old = prev.get("stats") or {}
+        stats.update({k: old[k] for k in ("panels", "panel_folders") if k in old})
     log.info("drive: %d items (%d new, %d removed, %d kept from unreadable folders) from %d folders; %s",
              len(live), mstats["new"], mstats["removed"], mstats["kept_unverified"], len(c.listed_ok),
              stats["by_category"])
