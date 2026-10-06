@@ -207,12 +207,24 @@
     return libPromise;
   }
 
+  // The poster's icons point at the page's icon sprite (<use href="#i-…">, eleventy/icons.js), which the picture
+  // doesn't hold (html-to-image copies the poster alone): each gets its drawing inline first, as on screen.
+  function inlineIcons(root) {
+    Array.prototype.forEach.call(root.querySelectorAll("svg > use[href^='#i-']"), function (u) {
+      var sym = document.getElementById(u.getAttribute("href").slice(1));
+      if (!sym) return;
+      Array.prototype.forEach.call(sym.childNodes, function (n) { u.parentNode.insertBefore(n.cloneNode(true), u); });
+      u.parentNode.removeChild(u);
+    });
+  }
+
   var blobPromise = null;
   function render() {
     if (blobPromise) return blobPromise;
     var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
     blobPromise = Promise.all([loadLib(), fontsReady]).then(function (r) {
       var h2i = r[0];
+      inlineIcons(poster);
       var opts = {
         width: 1080, height: 1350, canvasWidth: 1080, canvasHeight: 1350, pixelRatio: 1, cacheBust: false,
         backgroundColor: getComputedStyle(poster).backgroundColor || "#ffffff",

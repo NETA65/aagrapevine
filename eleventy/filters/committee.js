@@ -9,14 +9,11 @@
 // Dev helper: COMMITTEE_EMPTY=1 npx @11ty/eleventy …  renders every committee
 // page as if the Drive / events / bulletin data were empty (launch state).
 
-import fs from "node:fs";
-import path from "node:path";
-import { createRequire } from "node:module";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
 // The site's one Central-time helper (the browser runs the same code: /assets/js/central-time.js)
 import { isZone, zoneParts, zoneInstant, ymdOf, ruleDate, timeRange, icsSequence, offsetMinutes } from "../central-time.js";
+import { iconSvg } from "../icons.js";
 
-const require = createRequire(import.meta.url);
 export { TZ }; // config/site.yml site.timezone (America/Chicago)
 const LOCALES = { en: "en-US", es: "es-US" };
 const EMPTY = !!process.env.COMMITTEE_EMPTY;
@@ -213,23 +210,10 @@ function driveFileId(url) {
   return m ? m[1] : null;
 }
 
-// Lucide / local SVG icon (same logic as the global {% icon %} shortcode,
-// needed because shortcodes can't call other shortcodes).
-const LUCIDE_DIR = path.join(path.dirname(require.resolve("lucide-static/package.json")), "icons");
-const iconCache = new Map();
+// A decorative icon, as the global {% icon %} shortcode draws it (eleventy/icons.js: a pointer at the page's
+// icon sprite) — needed because shortcodes can't call other shortcodes. "" for an unknown name.
 function icon(name, cls = "size-4") {
-  let svg = iconCache.get(name);
-  if (!svg) {
-    const local = path.join("src/_includes/icons", `${name}.svg`);
-    const file = fs.existsSync(local) ? local : path.join(LUCIDE_DIR, `${name}.svg`);
-    if (!fs.existsSync(file)) return "";
-    svg = fs.readFileSync(file, "utf8").replace(/<!--.*?-->/gs, "").trim();
-    iconCache.set(name, svg);
-  }
-  return svg
-    .replace(/<svg([^>]*?)class="[^"]*"/, "<svg$1")
-    .replace("<svg", `<svg class="icon ${cls}" aria-hidden="true" focusable="false"`)
-    .replace(/\s(width|height)="24"/g, "");
+  return iconSvg(name, cls);
 }
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);

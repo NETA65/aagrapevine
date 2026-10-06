@@ -2,13 +2,14 @@
 // Shared filters live here; page-area specific filters can be added as
 // separate files in ./eleventy/filters/*.js (auto-loaded, see bottom).
 import { EleventyHtmlBasePlugin } from "@11ty/eleventy";
-import { execFileSync } from "node:child_process";
+import { execFile } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import * as yaml from "js-yaml";
 import markdownIt from "markdown-it";
 import { setZone, zoneInstant } from "./eleventy/central-time.js";
+import { iconSvg, iconSprite } from "./eleventy/icons.js";
 
 const require = createRequire(import.meta.url);
 const md = markdownIt({ html: false, linkify: true, breaks: true });
@@ -133,8 +134,6 @@ function siteTimezone() {
 }
 export const TZ = setZone(siteTimezone());
 const LOCALES = { en: "en-US", es: "es-US" };
-const LUCIDE_DIR = path.join(path.dirname(require.resolve("lucide-static/package.json")), "icons");
-const iconCache = new Map();
 
 /* ------------------------------------------------------------------ */
 /*  i18n helpers                                                       */
@@ -667,28 +666,45 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("mailto", (email, subject) => `mailto:${email}${subject ? "?subject=" + encodeURIComponent(subject) : ""}`);
   eleventyConfig.addFilter("urlencode", (s) => encodeURIComponent(String(s || "")));
 
-  /* ---------- icons: {% icon "name", "extra classes" %} ---------- */
+  /* ---------- icons: {% icon "name", "extra classes", "label" %} ----------
+     One small <svg> pointing at the page's icon sprite (<use href="#i-name">); the iconSprite transform then
+     puts the drawings of the icons each page uses in one hidden <svg> at the start of its <body>. The how and
+     why: eleventy/icons.js. label: the icon is a picture with that name (escaped); without one, decoration.
+     An unknown name: a warning and nothing. */
   eleventyConfig.addShortcode("icon", (name, cls = "size-5", label = "") => {
-    let svg = iconCache.get(name);
-    if (!svg) {
-      // Local icons (brands, custom art) win over Lucide.
-      const local = path.join("src/_includes/icons", `${name}.svg`);
-      const file = fs.existsSync(local) ? local : path.join(LUCIDE_DIR, `${name}.svg`);
-      if (!fs.existsSync(file)) { console.warn(`[icon] missing icon: ${name}`); return ""; }
-      svg = fs.readFileSync(file, "utf8").replace(/<!--.*?-->/gs, "").trim();
-      iconCache.set(name, svg);
-    }
-    const a11y = label ? `role="img" aria-label="${label}"` : `aria-hidden="true" focusable="false"`;
-    return svg.replace(/<svg([^>]*?)class="[^"]*"/, "<svg$1").replace("<svg", `<svg class="icon ${cls}" ${a11y}`).replace(/\s(width|height)="24"/g, "");
+    const svg = iconSvg(name, cls, label);
+    if (!svg) console.warn(`[icon] missing icon: ${name}`);
+    return svg;
+  });
+  eleventyConfig.addTransform("iconSprite", function (content) {
+    const out = (this.page && this.page.outputPath) || this.outputPath;
+    return typeof out === "string" && out.endsWith(".html") ? iconSprite(content) : content;
   });
 
-  /* ---------- Tailwind CSS (compiled after each build) ---------- */
-  eleventyConfig.on("eleventy.after", ({ directories, dir }) => {
+  /* ---------- Tailwind CSS (compiled after each build) ----------
+     Every .css file at the top of src/assets/css is a stylesheet of its own, at /assets/css/<same name>:
+     main.css (every page — base.njk) and the page-area stylesheets only some pages link (pageStyles:
+     booth.css, expenses.css … — see "Page-area styles" at the end of main.css). Compiled side by side, one
+     Tailwind process each; a failed one fails the build. The log shows Tailwind's own words only when it
+     says more than its name and "Done", then one line with each stylesheet's size. Not for a build that
+     writes no files (Eleventy's toJSON(), as tests use it): nothing to style, and no stray ./_site. */
+  eleventyConfig.on("eleventy.after", async ({ directories, dir, outputMode }) => {
+    if (outputMode && outputMode !== "fs") return;
     // `directories.output` honors the CLI --output flag (`dir` is deprecated in Eleventy 3)
-    const out = path.join((directories && directories.output) || dir.output, "assets/css/main.css");
-    fs.mkdirSync(path.dirname(out), { recursive: true });
+    const outDir = path.join((directories && directories.output) || dir.output, "assets/css");
+    fs.mkdirSync(outDir, { recursive: true });
     const cli = path.join(path.dirname(require.resolve("@tailwindcss/cli/package.json")), "dist", "index.mjs");
-    execFileSync(process.execPath, [cli, "-i", "src/assets/css/main.css", "-o", out, "--minify"], { stdio: "inherit" });
+    const sheets = fs.readdirSync("src/assets/css").filter((f) => f.endsWith(".css")).sort();
+    const routine = /^\s*(?:≈ tailwindcss v[\d.]+|Done in [\d.]+\s*m?s)?\s*$/;
+    await Promise.all(sheets.map((f) => new Promise((resolve, reject) => {
+      execFile(process.execPath, [cli, "-i", `src/assets/css/${f}`, "-o", path.join(outDir, f), "--minify"], (err, stdout, stderr) => {
+        const said = String(stderr || "").replace(/\x1b\[[0-9;]*m/g, "").split(/\r?\n/).filter((l) => !routine.test(l));
+        if (err || said.length) process.stderr.write(`[css] ${f}:\n${stderr}`);
+        if (err) reject(new Error(`[css] ${f}: Tailwind failed (${err.code ?? err.message})`));
+        else resolve();
+      });
+    })));
+    console.log(`[css] ${sheets.map((f) => `${f} ${Math.round(fs.statSync(path.join(outDir, f)).size / 1024)} KB`).join(" · ")}`);
   });
 
   /* ---------- area-specific filters (auto-loaded) ---------- */

@@ -161,7 +161,9 @@
     })();
   </script>
   {#- ?v= = build.version (src/_data/build.js, a fingerprint of the site's code): new styles and
-      scripts get a new address, so no cache (browser or service worker) pairs a page with old ones. #}
+      scripts get a new address, so no cache (browser or service worker) pairs a page with old ones.
+      pageStyles come after main.css: first the page's area stylesheet(s) (/assets/css/booth.css …, the end
+      of main.css: "Page-area styles"), then a vendor one (lite-youtube, the lightbox). #}
   <link rel="stylesheet" href="/assets/css/main.css?v={{ build.version }}">
   {%- for s in pageStyles %}
   <link rel="stylesheet" href="{{ s }}{{ '&' if '?' in s else '?' }}v={{ build.version }}">

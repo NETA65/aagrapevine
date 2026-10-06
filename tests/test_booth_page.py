@@ -9,7 +9,8 @@ src/assets/css/areas/booth.css and src/_i18n/booth.json.
               and the live items use has its two words (Settings → Show lists them in the page's language); the
               wording rules (never "PDF"; La Viña first in a Spanish text that names both magazines).
   * Wiring  — about.njk imports the macro, puts the section between #committee and #privacy, lists it in "On this
-              page" and loads booth-core.js before booth.js; main.css imports booth.css right after presentations.css;
+              page" and loads booth-core.js before booth.js; booth.css is a stylesheet of its own (src/assets/css/
+              booth.css → /assets/css/booth.css, not in main.css) that about.njk links (pageStyles);
               booth.js keeps its promises (storage in try/catch, the worker's messages — to the worker that knows
               them, the new one taking over from an old one —, a slide's QR code through GVB.qrOf, the settings kept
               as a diff, no PIN in a share link, a probe's answer never left unread) and its accessibility ones (the
@@ -211,10 +212,14 @@ class Wiring(unittest.TestCase):
         self.assertLess(hrefs.index("#booth"), hrefs.index("#privacy"))
         self.assertIn('label: "booth.nav" | t(lang)', nav)
 
-    def test_stylesheet_imported_after_presentations(self):
+    def test_stylesheet_of_its_own_on_the_about_page(self):
         imports = re.findall(r'@import "\./areas/([a-z-]+)\.css";', read(MAIN_CSS))
-        self.assertIn("booth", imports)
-        self.assertEqual(imports.index("booth"), imports.index("presentations") + 1)
+        self.assertNotIn("booth", imports, "only the About page loads the booth's styles")
+        entry = read(ROOT / "src" / "assets" / "css" / "booth.css")
+        self.assertIn('@reference "./main.css";', entry)
+        self.assertIn('@import "./areas/booth.css";', entry)
+        fm = read(PAGE).split("---")[1]
+        self.assertRegex(fm, r'pageStyles: \["/assets/css/booth\.css"')
         css = read(CSS)
         self.assertIn("container: gvb / size", css, "sizes in container units: the same slide fills a TV and the card")
         self.assertIn("prefers-reduced-motion", css)

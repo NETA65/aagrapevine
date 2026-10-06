@@ -1,0 +1,6 @@
+/* /assets/css/monthly.css — the Monthly toolkit and its posters (areas/monthly.css), only on its pages: /monthly/
+   and each month's page (pageStyles in src/pages/monthly.njk and monthly-month.njk). One of the page-area
+   stylesheets: see "Page-area styles" at the end of main.css. @reference reads main.css (theme, variants,
+   utilities for @apply) without writing any of it here. */
+@reference "./main.css";
+@import "./areas/monthly.css";

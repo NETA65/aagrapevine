@@ -13,7 +13,8 @@ tests (tests/test_expenses_core.py).
               drawn at build time (#xp-icons), the sheets fit their box (their tables fold by the
               sheet's own width; a report table's box is a Tab stop only while it scrolls), the page is
               in the service worker's "Save key pages" list (sw.11ty.js rendered with Node.js), its
-              stylesheet is imported, the menu and the GVR corner link to it.
+              stylesheet (/assets/css/expenses.css) is linked by the page alone, the menu and the GVR corner
+              link to it.
 
     python -m unittest tests.test_expenses_page -v        (or: python -m unittest discover -s tests)
 """
@@ -316,8 +317,10 @@ class Page(unittest.TestCase):
         self.assertIn("tracker/", out)
 
     def test_wired_into_the_site(self):
-        css = read(ROOT / "src" / "assets" / "css" / "main.css")
-        self.assertIn('@import "./areas/expenses.css";', css)
+        # its styles: a stylesheet of its own (/assets/css/expenses.css), linked by the page only — not in main.css
+        self.assertNotIn('@import "./areas/expenses.css";', read(ROOT / "src" / "assets" / "css" / "main.css"))
+        self.assertIn('@import "./areas/expenses.css";', read(ROOT / "src" / "assets" / "css" / "expenses.css"))
+        self.assertIn('pageStyles: ["/assets/css/expenses.css"]', read(PAGE))
         nav = read(ROOT / "src" / "_data" / "nav.js")
         # under Committee, after the Bulletin (it was under Get involved at /expenses/)
         self.assertLess(nav.index('key: "nav.committee"'), nav.index('url: "/tracker/"'))

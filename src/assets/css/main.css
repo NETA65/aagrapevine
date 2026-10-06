@@ -1,7 +1,8 @@
 /* =====================================================================
    NETA 65 Grapevine / La Viña — design system (Tailwind CSS v4)
    Tokens → base → shared components. Page-area styles live in
-   ./areas/*.css (one file per area, imported at the bottom).
+   ./areas/*.css (one file per area, imported at the bottom — or, for an
+   area of one or two pages, a stylesheet of its own: "Page-area styles").
 
    Shared components (usable as classes and with @apply), in file order:
      layout      container-page · section / section-tight · page-overlap / page-start (after the hero)
@@ -1132,7 +1133,14 @@ main > :not(script, template, dialog, style):not(:has(~ :not(script, template, d
 /* Utility: hide scrollbar on horizontal scrollers */
 @utility no-scrollbar { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
 
-/* ---------- Page-area styles (one owner per file) ---------- */
+/* ---------- Page-area styles (one owner per file) ----------
+   Imported here: the areas of many pages. The areas only one or two pages use — the booth display, the
+   presentations' player, the Tracker, GVR / RLV 101, the Monthly toolkit's posters, the report editor — are
+   stylesheets of their own instead (src/assets/css/<name>.css next to this file: booth, presentations,
+   expenses, orientation, monthly, report → /assets/css/<name>.css), each linked only by its pages
+   (pageStyles; base.njk links them after main.css), so every other page skips ~40 KB (compressed) of
+   rules it never uses. eleventy.config.js compiles every .css file at the top of src/assets/css.
+   A page that uses an area's classes lists its stylesheet (tests/test_page_weight.py checks every page). */
 @import "./areas/home.css";
 @import "./areas/library.css";
 @import "./areas/media.css";
@@ -1141,11 +1149,5 @@ main > :not(script, template, dialog, style):not(:has(~ :not(script, template, d
 @import "./areas/community.css";
 @import "./areas/published.css";
 @import "./areas/shop.css";
-@import "./areas/monthly.css";
-@import "./areas/report.css";
-@import "./areas/expenses.css";
-@import "./areas/orientation.css";
-@import "./areas/presentations.css";
-@import "./areas/booth.css";
 @import "./areas/access.css";
 @import "./areas/pwa.css";
