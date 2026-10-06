@@ -288,14 +288,18 @@ export function safeUrl(value) {
 // Every address the build writes ("/es/feed.xml", "/events/" …: the `eleventy.contentMap` event, before any
 // page is rendered); null outside a build (a filter called from a test or a script).
 let builtUrls = null;
+// The addresses that lead elsewhere and are left as they are (langPath, siteUrl). Any other "scheme:" — a
+// "javascript:" that got this far — stays an address on our site, as these helpers always made it: harmless.
+const OTHER_PLACE = /^(?:https?|mailto|tel|webcal):/i;
 
 /** A link to one of the site's pages or files in a language (the `lurl` filter; community.js hrefOf):
     "/events/" → "/es/events/" on a Spanish page. A file — a document or picture ("/bulletin/files/flyer.pdf"),
     anything in /assets/ — exists once for both languages: it gets the prefix only when the build writes that
     file for the language too (/es/feed.xml, /es/events.ics, /es/manifest.webmanifest, /es/search-index.json …),
-    never otherwise (outside a build: never). Other sites, mailto:, tel: and "#…" are left as they are. */
+    never otherwise (outside a build: never). Other sites ("https://…", "//host/…"), mailto:, tel:, webcal: and
+    "#…" are left as they are. */
 export function langPath(url, lang) {
-  if (!url || typeof url !== "string" || /^(?:[a-z][a-z0-9+.-]*:|#|\/\/)/i.test(url)) return url;
+  if (!url || typeof url !== "string" || OTHER_PLACE.test(url) || /^(?:#|\/\/)/.test(url)) return url;
   const u = url.startsWith("/") ? url : "/" + url;
   if (!lang || lang === "en") return u;
   const p = u.split(/[?#]/)[0];
@@ -305,11 +309,11 @@ export function langPath(url, lang) {
 }
 
 /** An absolute address on the public site (feeds, QR codes, share links and pictures): "/es/library/" →
-    "https://…/aagrapevine/es/library/". An address that is already absolute is left as it is ("//host/…" gets
-    https:). Nothing → the site's own address. */
+    "https://…/aagrapevine/es/library/". An address that is already absolute (https:, mailto:, tel:, webcal:) is
+    left as it is ("//host/…" gets https:). Nothing → the site's own address. */
 export function siteUrl(url, site) {
   const u = url === null || url === undefined ? "" : String(url).trim();
-  if (/^[a-z][a-z0-9+.-]*:/i.test(u)) return u;
+  if (OTHER_PLACE.test(u)) return u;
   if (u.startsWith("//")) return "https:" + u;
   const b = String(site?.url || "").replace(/\/$/, "");
   return b + (u.startsWith("/") ? u : "/" + u);

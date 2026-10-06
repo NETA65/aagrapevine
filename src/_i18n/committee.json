@@ -760,8 +760,8 @@
     "es": "Reuniones y eventos mensuales"
   },
   "committee.events.src_meetings_text": {
-    "en": "Worked out from our monthly schedule: the committee meeting (with its Zoom link) and the things we do every month, like our literature booths.",
-    "es": "Salen de nuestro horario mensual: la reunión del comité (con su enlace de Zoom) y lo que hacemos cada mes, como nuestras mesas de literatura."
+    "en": "Worked out from our monthly schedule: the committee meeting (with its {platform} link) and the things we do every month, like our literature booths.",
+    "es": "Salen de nuestro horario mensual: la reunión del comité (con su enlace de {platform}) y lo que hacemos cada mes, como nuestras mesas de literatura."
   },
   "committee.events.src_flyers": {
     "en": "NETA 65 events",

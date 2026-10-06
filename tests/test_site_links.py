@@ -17,7 +17,8 @@
   * La Viña's monthly workshop has one name, the one La Viña uses ("Taller Mensual y Virtual de La Viña");
   * share pictures — a page's `ogImage` (address or { src, width, height, alt }) → og:image / twitter:image;
                     every event of /events/ has a small share page (/events/<anchor>/) with its flyer as the
-                    picture, which its card's Share button sends; /events/ names its calendar file in <head>.
+                    picture, which its card's Share button sends (once its event has left the list, the 404 page
+                    sends that address on to /events/); /events/ names its calendar file in <head>.
 
     python -m unittest tests.test_site_links -v        (or: python -m unittest discover -s tests)
 """
@@ -116,6 +117,9 @@ res.hrefFileAfter = C.hrefOf({ url: "/bulletin/files/flyer.pdf" }, "es");
 res.site = ["/es/library/", "es/x/", "https://lh3.googleusercontent.com/d/abc=w1200", "//cdn.example.org/a.png",
   "http://old.example.org/x", "", null].map((u) => filters.siteUrl(u, site));
 res.siteNoBase = filters.siteUrl("/x/", {});
+// an address of no kind these helpers know ("javascript:", "data:") stays a harmless address on the site
+res.odd = { lurl: ["javascript:alert(1)", "data:text/html,x"].map((u) => filters.lurl(u, "es")),
+            site: ["javascript:alert(1)", "webcal://example.org/gv/events.ics"].map((u) => filters.siteUrl(u, site)) };
 const item = (o) => ({ title: "Original", ...o });
 res.pick = {
   // a Spanish story without a Spanish entry: its own Spanish words, not the English translation
@@ -185,6 +189,11 @@ class TemplateHelpers(unittest.TestCase):
                              "https://lh3.googleusercontent.com/d/abc=w1200", "https://cdn.example.org/a.png",
                              "http://old.example.org/x", "https://example.org/gv/", "https://example.org/gv/"])
         self.assertEqual(self.res()["siteNoBase"], "/x/")
+
+    def test_no_link_of_an_unknown_kind_is_let_through(self):
+        odd = self.res()["odd"]
+        self.assertEqual(odd["lurl"], ["/es/javascript:alert(1)", "/es/data:text/html,x"])
+        self.assertEqual(odd["site"], ["https://example.org/gv/javascript:alert(1)", "webcal://example.org/gv/events.ics"])
 
     def test_pick_lang_falls_back_to_the_items_own_words_before_english(self):
         p = self.res()["pick"]
@@ -257,13 +266,14 @@ class Settings(unittest.TestCase):
         self.assertEqual(m["platform"], "Zoom")
         self.assertTrue(m["note"] and m["note_es"])
         strings = {}
-        for f in ("committee", "home", "orientation", "read"):
+        for f in ("committee", "community", "home", "orientation", "read"):
             strings.update(json.loads(read("src", "_i18n", f + ".json")))
         keys = ["committee.meeting.hero_sub", "committee.meeting.join", "committee.meeting.join_hint",
                 "committee.meeting.how_to_join_text", "committee.meeting.cal_desc", "committee.meeting.cal_join",
                 "committee.meeting.copy_link", "committee.meeting.tip_phone", "committee.meeting.contact_text",
                 "committee.meetings.committee_eyebrow", "committee.meetings.meta_desc", "home.meeting_join",
-                "home.meeting_cal_desc", "orientation.live_meeting_sub", "orientation.ns_meeting_cta", "read.gvr.s_meeting"]
+                "home.meeting_cal_desc", "orientation.live_meeting_sub", "orientation.ns_meeting_cta", "read.gvr.s_meeting",
+                "committee.events.src_meetings_text", "community.share.msg_long_text"]
         for k in keys:
             for lang in ("en", "es"):
                 with self.subTest(key=k, lang=lang):
@@ -440,11 +450,11 @@ EVENTS = [
        flyer_url="https://www.aagrapevine.org/sites/default/files/flyer.jpg", flyer_thumb="https://www.aagrapevine.org/sites/default/files/flyer.jpg"),
 ]
 
-# /events/, /meetings/, /search/ and three test pages, as the build renders them: Eleventy with the site's own
+# /events/, /meetings/, /search/, /orientation/, /share/ and three test pages, as the build renders them: Eleventy with the site's own
 # config (only those pages: its ONLY switch), these events, no Grapevine meetings data (as without
 # data/site/meetings.json) and the committee meeting "on Google Meet" with its own note.
 PAGES_JS = r"""
-process.env.ONLY = "events,meetings,search";
+process.env.ONLY = "events,meetings,search,orientation.njk,share";
 process.env.PATH_PREFIX = "/";
 const os = await import("node:os");
 const { Eleventy } = await import("@11ty/eleventy");
@@ -628,7 +638,56 @@ class BuiltPages(unittest.TestCase):
         self.assertIn("Join on Zoom", en)
         ev_en = p["/events/"]
         self.assertIn("Join on Google Meet", ev_en)
+        self.assertIn("the committee meeting (with its Google Meet link)", ev_en)       # where events come from
+        self.assertIn("la reunión del comité (con su enlace de Google Meet)", p["/es/events/"])
         self.assertNotIn("{platform}", ev_en + p["/es/events/"])
+        # the orientation deck's closing slide and the share kit's announcement name it too
+        for url, s in (("/orientation/", " · Google Meet</span>"), ("/es/orientation/", " · Google Meet</span>"),
+                       ("/share/", "Our committee meets monthly on Google Meet"),
+                       ("/es/share/", "Nuestro comité se reúne cada mes por Google Meet")):
+            with self.subTest(page=url):
+                self.assertIn(s, p[url])
+                self.assertNotIn("{platform}", p[url])
+        self.assertNotIn(" · Zoom</span>", p["/orientation/"])
+
+
+# The 404 page's script (src/assets/js/community.js) on a pretend page: GitHub Pages shows it for every missing
+# address, so a shared event's page whose event has since left data/site/events.json lands there.
+NOT_FOUND_JS = r"""
+import vm from "node:vm";
+const run = (pathname, search = "") => {
+  const replaced = [], box = { value: "" }, nf = { getAttribute: () => null };
+  const document = {
+    readyState: "complete", addEventListener() {},
+    querySelector: (s) => (s === "[data-nf]" ? nf : null),
+    querySelectorAll: (s) => (s === "[data-nf-query]" ? [box] : []),
+  };
+  const ctx = { console, document, GV: {}, SITE: { lang: "en", base: "/aagrapevine/", tz: "America/Chicago" },
+                location: { pathname, search, hash: "", replace: (u) => replaced.push(u) } };
+  ctx.window = ctx;
+  vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync("src/assets/js/community.js", "utf8"), ctx, { filename: "community.js" });
+  return { replaced, query: box.value };
+};
+out({
+  en: run("/aagrapevine/events/2026-10-07-lv-writing-workshop-mansfield/", "?utm_source=x"),
+  es: run("/aagrapevine/es/events/ev-recurring-citywide-dallas-2026-07-11/"),
+  noSlash: run("/aagrapevine/events/2026-10-07-lv-writing-workshop-mansfield"),
+  deeper: run("/aagrapevine/events/2026/old-page/"),
+  other: run("/aagrapevine/library/sponsorship-flyer.pdf"),
+});
+"""
+
+
+class GoneEventSharePage(unittest.TestCase):
+    def test_a_gone_share_page_leads_on_to_the_events_page(self):
+        r = run_js(self, NOT_FOUND_JS, needs_modules=False)
+        self.assertEqual(r["en"]["replaced"], ["/aagrapevine/events/?utm_source=x#2026-10-07-lv-writing-workshop-mansfield"])
+        self.assertEqual(r["es"]["replaced"], ["/aagrapevine/es/events/#ev-recurring-citywide-dallas-2026-07-11"])
+        self.assertEqual(r["noSlash"]["replaced"], ["/aagrapevine/events/#2026-10-07-lv-writing-workshop-mansfield"])
+        # any other missing address keeps the 404 page and its search box
+        self.assertEqual((r["deeper"]["replaced"], r["other"]["replaced"]), ([], []))
+        self.assertEqual(r["other"]["query"], "library sponsorship flyer")
 
 
 if __name__ == "__main__":

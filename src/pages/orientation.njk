@@ -629,7 +629,7 @@ pageScripts: ["/assets/js/orientation.js", "/assets/js/presentations-core.js", "
               <ul class="o101-s-close" role="list">
                 <li><strong>{{ "orientation.deck_close_register" | t(lang) }}</strong><span>{% if lang == "es" %}aalavina.org · aagrapevine.org{% else %}aagrapevine.org · aalavina.org{% endif %}</span></li>
                 <li><strong>{{ "orientation.deck_close_steps" | t(lang) }}</strong><span>{{ (('/gvr/' | lurl(lang)) | siteUrl(site)) | replace("https://", "") }}</span></li>
-                <li><strong>{{ "orientation.deck_close_meeting" | t(lang) }}</strong><span>{% if meeting.next %}{{ meeting.next.start | fmtDate(lang, "long") }} · {% endif %}{{ site.meeting | cmTimeRange(lang) }} · Zoom</span></li>
+                <li><strong>{{ "orientation.deck_close_meeting" | t(lang) }}</strong><span>{% if meeting.next %}{{ meeting.next.start | fmtDate(lang, "long") }} · {% endif %}{{ site.meeting | cmTimeRange(lang) }} · {{ site.meeting.platform or "Zoom" }}</span></li>
                 <li><strong>{{ "orientation.deck_close_monthly" | t(lang) }}</strong><span>{{ (('/monthly/' | lurl(lang)) | siteUrl(site)) | replace("https://", "") }}</span></li>
               </ul>
             </div>

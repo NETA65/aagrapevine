@@ -209,6 +209,10 @@
       var path = location.pathname;
       try { path = decodeURIComponent(path); } catch (e) { /* malformed %-escape: use as-is */ }
       if (path.indexOf(base) === 0) path = path.slice(base.length);
+      // A shared event's page (/events/<its card>/, src/pages/event-share.11ty.js) whose event has left the
+      // events list since: on to the Events page — to that card, should it still be there.
+      var ev = /^((?:es\/)?events\/)([a-z0-9][a-z0-9-]*)\/?$/.exec(path);
+      if (ev) { location.replace(base + ev[1] + location.search + "#" + ev[2]); return; }
       var words = path.replace(/^es\//, "").replace(/\.[a-z0-9]{2,5}$/i, "")  // any file extension (.html, .php, .pdf …)
         .split(/[\/\-_.+]+/).filter(function (w) { return w && w.length > 2 && !/^(index|grapevine|es|en|www|\d+)$/i.test(w); });
       var q = words.slice(-4).join(" ");

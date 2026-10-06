@@ -363,7 +363,7 @@ calendarFeed: "/events.ics"
         <span class="grid size-10 shrink-0 place-items-center rounded-xl {{ s[2] }}">{% icon s[1], "size-5" %}</span>
         <div class="min-w-0">
           <h3 class="h-card text-base">{{ ("committee.events.src_" + s[0]) | t(lang) }}</h3>
-          <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("committee.events.src_" + s[0] + "_text") | t(lang) }}</p>
+          <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("committee.events.src_" + s[0] + "_text") | t(lang, pf) }}</p>
         </div>
       </li>
       {% endfor %}
