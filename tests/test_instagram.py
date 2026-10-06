@@ -85,10 +85,11 @@ class Resp:
 
 class FakeInstagram:
     """instagram.com as the module sees it. `gone`: posts whose embed is the generic page; `mode`: "ok", "wall"
-    (every post embed is the login wall), "429" (post embeds rate-limited) or "404" (gone posts answer 404)."""
+    (every post embed is the login wall), "429" (post embeds rate-limited) or "404" (gone posts answer 404);
+    `ok_first`: only that many post embeds of a run work, then the login wall (a block that begins mid-run)."""
 
-    def __init__(self, gone=(), mode="ok"):
-        self.gone, self.mode = set(gone), mode
+    def __init__(self, gone=(), mode="ok", ok_first=None):
+        self.gone, self.mode, self.ok_first = set(gone), mode, ok_first
         self.embeds: list[str] = []
 
     def get(self, url, headers=None, **kw):
@@ -97,7 +98,7 @@ class FakeInstagram:
         m = re.search(r"instagram\.com/p/([A-Za-z0-9_-]+)/embed/captioned/", url)
         if m:
             self.embeds.append(m[1])
-            if self.mode == "wall":
+            if self.mode == "wall" or (self.ok_first is not None and len(self.embeds) > self.ok_first):
                 return Resp(200, fx("login-wall.html"), url)
             if self.mode == "429":
                 return Resp(429, "", url)
@@ -205,6 +206,29 @@ class Removal(unittest.TestCase):
         self.assertIn("DeKDjjTktaM", web.embeds, "the control: the newest listed post")
         self.assertFalse(any(v.get("missing") for v in env["removal"].values()))
         self.assertTrue(any("nothing was decided" in w for w in env["stats"]["warnings"]), env["stats"].get("warnings"))
+
+    def test_a_block_that_begins_during_the_run_removes_nothing(self):
+        """The first post embed works, then Instagram serves its login wall: an answer that came after the last
+        embed that worked proves nothing. The control request (the newest listed post) meets the wall too."""
+        web = FakeInstagram(ok_first=1)
+        env = self.run_once(web)
+        self.assertEqual(web.embeds, [VANISHED, OLDER[1], OLDER[0], "DeKDjjTktaM"], "the last one: the control")
+        for _ in range(2):
+            self.age_marks(48)
+            env = self.run_once(web)
+        self.assertEqual(self.shortcodes(env), set(LISTED + [VANISHED] + OLDER))
+        self.assertFalse(any(v.get("missing") for v in env["removal"].values()))
+        self.assertTrue(any("nothing was decided" in w for w in env["stats"]["warnings"]), env["stats"].get("warnings"))
+
+    def test_an_answer_before_a_working_embed_counts(self):
+        """The gone post is asked first and the others work after it: no control request is needed."""
+        web = FakeInstagram(gone={VANISHED})
+        env = self.run_once(web)
+        self.assertNotIn("DeKDjjTktaM", web.embeds)
+        self.assertEqual(env["stats"]["removal"]["missing"], [VANISHED])
+        web = FakeInstagram(gone={VANISHED, *OLDER})                # the last one asked is gone too: a control
+        self.run_once(web)
+        self.assertEqual((len(web.embeds), web.embeds[-1]), (4, "DeKDjjTktaM"))
 
     def test_a_rate_limit_stops_the_recheck(self):
         web = FakeInstagram(gone={VANISHED}, mode="429")

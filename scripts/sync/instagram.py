@@ -50,8 +50,9 @@ REMOVED POSTS (a deleted, archived or now-private post leaves the site — anony
   already found missing once, then a post that vanished from the listing while older ones
   are still in it, then the one checked longest ago. A post counts as "not there" when its
   embed is unusable (the generic page) or answers 404/410 — but only if a post embed DID work
-  in the same run (one we enriched or re-checked, else one control request for the newest
-  listed post): a login wall or a block makes every embed unusable, so it proves nothing.
+  after that answer in the same run (one we enriched or re-checked, else one control request
+  for the newest listed post): a login wall or a block — also one that begins during the run —
+  makes every embed unusable, so it proves nothing.
   429 / 401 / 403 / a redirect to the login page / no answer stop the re-check for the run
   and decide nothing. A post found "not there" twice, at least GONE_CONFIRM_HOURS apart, is
   removed with its thumbnail (stats.removal). Posts listed by hand are not re-checked (the
@@ -560,7 +561,10 @@ class Fetcher:
                                  timeout=25, retries=2)
         self.blocked: dict[str, str] = {}      # family → reason ("embed", "api", "html")
         self.requests = 0
-        self.embeds_ok = 0                     # post embeds that were usable this run (removal_sweep's proof)
+        # post embeds asked this run, and the number of the last one that was usable (0: none) — removal_sweep's
+        # proof that a "not there" answer was not a login wall or a block that began during the run
+        self.embed_calls = 0
+        self.last_ok_call = 0
 
     def time_left(self) -> float:
         return self.deadline - time.monotonic()
@@ -754,11 +758,9 @@ class Fetcher:
     def embed_hovercard(self, acct: dict, profile: dict, seed: str | None = None) -> list[dict]:
         if not seed:
             raise Skip("no known post to start from")
-        r = self.ig_get(embed_url(seed), "embed", {"Referer": _referer()})
-        data = parse_post_embed(r.text)
+        data = self.post_embed(seed)
         if not data:
             raise StrategyError("seed post embed unusable")
-        self.embeds_ok += 1
         if data.get("username") and data["username"].lower() != acct["username"].lower():
             raise StrategyError("seed post belongs to another account")
         posts = [new_post(sc, acct["key"], "embed_hovercard", username=acct["username"],
@@ -771,11 +773,12 @@ class Fetcher:
     # ------------------------------------------------------------------ post embed (enrichment)
     def post_embed(self, sc: str) -> dict | None:
         """Returns parsed embed fields, None if the post has no usable embed, raises
-        StrategyError on network trouble / rate limit."""
+        StrategyError on network trouble / rate limit. Counts the request (embed_calls / last_ok_call)."""
+        self.embed_calls += 1
         r = self.ig_get(embed_url(sc), "embed", {"Referer": _referer()})
         data = parse_post_embed(r.text)
         if data:
-            self.embeds_ok += 1
+            self.last_ok_call = self.embed_calls
         return data
 
 
@@ -1012,7 +1015,7 @@ def enrich(fx: Fetcher, records: dict[str, dict], prev_by_sc: dict[str, dict], c
             stats["enrich_failed"] = stats.get("enrich_failed", 0) + 1
             log.info("embed %s: %s", sc, e)
             if e.status in (404, 410):
-                rec["embed_unusable"] = True          # a "not there" answer for removal_sweep
+                rec["embed_unusable"] = fx.embed_calls     # a "not there" answer for removal_sweep (its number)
             if "embed" in fx.blocked or fx.time_left() < 15:
                 stats.setdefault("warnings", []).append(f"post embeds: {e}")
                 break
@@ -1023,7 +1026,7 @@ def enrich(fx: Fetcher, records: dict[str, dict], prev_by_sc: dict[str, dict], c
         if not data:
             stats["enrich_failed"] = stats.get("enrich_failed", 0) + 1
             log.info("embed %s: no usable embed (deleted, private or login wall)", sc)
-            rec["embed_unusable"] = True              # a "not there" answer for removal_sweep
+            rec["embed_unusable"] = fx.embed_calls     # a "not there" answer for removal_sweep (its number)
             if rec.get("verify"):
                 records.pop(sc, None)
             continue
@@ -1095,9 +1098,10 @@ def removal_sweep(fx: Fetcher, prev_items: list[dict], records: dict[str, dict],
             return 1, ""                                         # vanished while older posts are still listed
         return 2, st.get("checked") or str(it.get("date") or "")  # then: checked longest ago (never: its date)
 
-    # enrich() asked the embeds of some known (incomplete) posts already: their answers count
-    answers: dict[str, bool] = {sc: not rec.get("embed_unusable") for sc, rec in records.items()
-                                if rec.get("stub") and (rec.get("checked_now") or rec.get("embed_unusable"))}
+    # {shortcode: 0 = the post is there, else the number of the post-embed request (Fetcher.embed_calls) that
+    # found it not there}. enrich() asked the embeds of some known (incomplete) posts already: their answers count.
+    answers: dict[str, int] = {sc: int(rec.get("embed_unusable") or 0) for sc, rec in records.items()
+                               if rec.get("stub") and (rec.get("checked_now") or rec.get("embed_unusable"))}
     stopped = None
     checked = 0
     for it in sorted(cands, key=order)[:max(0, cap)]:
@@ -1110,23 +1114,24 @@ def removal_sweep(fx: Fetcher, prev_items: list[dict], records: dict[str, dict],
                 break
             data = None
         checked += 1
-        answers[sc] = bool(data)
-    if stopped is None and not fx.embeds_ok and not all(answers.values()):
-        # Nothing proved this run that post embeds work for us: ask one we know exists (the newest listed post).
+        answers[sc] = 0 if data else fx.embed_calls
+    if stopped is None and max(answers.values(), default=0) > fx.last_ok_call:
+        # A "not there" answer counts only when a post embed worked AFTER it: a login wall, or a block that began
+        # during the run, makes every embed unusable. Nothing proved that yet: ask one we know exists (the newest
+        # listed post).
         control = max(((d or "", sc) for v in listed.values() for sc, d in v.items()), default=None)
         if control:
             try:
                 fx.post_embed(control[1])
             except StrategyError as e:
                 stopped = str(e)
-    proof = fx.embeds_ok > 0
     gone: set[str] = set()
     undecided = 0
-    for sc, there in answers.items():
+    for sc, miss in answers.items():
         st = state.get(sc) or {}
-        if there:
+        if not miss:
             state[sc] = {"checked": stamp}
-        elif not proof:
+        elif miss > fx.last_ok_call:
             undecided += 1                                       # a login wall looks the same: decide nothing
         elif (first := parse_iso(st.get("missing"))) and (now - first).total_seconds() >= GONE_CONFIRM_HOURS * 3600:
             gone.add(sc)
@@ -1139,7 +1144,7 @@ def removal_sweep(fx: Fetcher, prev_items: list[dict], records: dict[str, dict],
         stats.setdefault("warnings", []).append(f"removal re-check stopped: {stopped}")
     if undecided:
         stats.setdefault("warnings", []).append(
-            f"removal re-check: {undecided} post(s) showed no usable embed, but no post embed worked this run "
+            f"removal re-check: {undecided} post(s) showed no usable embed, but no post embed worked after that "
             "(a login wall or a block?) — nothing was decided")
     if gone:
         log.info("removed %d post(s) Instagram no longer shows: %s", len(gone), ", ".join(sorted(gone)))

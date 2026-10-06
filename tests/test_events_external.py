@@ -130,6 +130,9 @@ class Dates(unittest.TestCase):
         ev = self.ev("2026-11-07T00:00:00-0600", "2026-11-09T00:00:00-0600", "November 7, 2026 - November 8, 2026")
         self.assertEqual((ev["all_day"], ev["start"], ev["end"]), (True, "2026-11-07", "2026-11-08"),
                          "an end at midnight is the moment it is over: the 8th is its last day")
+        east = self.ev("2026-11-07T00:00:00-0500", "2026-11-09T00:00:00-0500", "November 7, 2026 - November 8, 2026")
+        self.assertEqual((east["all_day"], east["start"], east["end"]), (True, "2026-11-07", "2026-11-08"),
+                         "midnight in the offset the page writes: the 7th, not 11 PM on the 6th in Central time")
 
     def test_drupals_noon_utc_dates_stay_all_day(self):
         ev = self.ev("2027-01-29T06:00:00-0600", "2027-01-31T06:00:00-0600", "Enero 29, 2027 - Enero 31, 2027")

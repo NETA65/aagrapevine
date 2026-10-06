@@ -38,7 +38,7 @@ Items: kind "event", source "calendar", category "gv-calendar" | "lv-calendar" (
 "ev:gvcal:<hash>" / "ev:lvcal:<hash>". extra = start, end, all_day, location, city, state, country,
 online_url, website, organizer, flyer_url, flyer_thumb, scope, platform, site.
 All-day events use dates ("2026-11-20"; `end` is the inclusive last day, null for one-day events) —
-also an event page that gives its days without a time (a date-only startDate, or local midnight with
+also an event page that gives its days without a time (a date-only startDate, or midnight with
 no clock time on the page); timed events use UTC datetimes.
 
 PRIVACY: event descriptions often hold personal names/phones/e-mails of contacts. We keep only a
@@ -79,7 +79,6 @@ REFRESH_DAYS = 14                   # re-check a cached upcoming event this ofte
 REFRESH_PER_RUN = 10
 MAX_FAIL_TRIES = 5
 CACHE_KEEP_PAST_DAYS = 7            # forget cache entries for events older than this (unless still running)
-CHICAGO = ZoneInfo("America/Chicago")
 
 # --------------------------------------------------------------------------- geography
 US_STATES = {
@@ -229,14 +228,14 @@ def _date_only(s: str | None) -> bool:
 
 def _last_day(ed: datetime | None, raw: str | None) -> date | None:
     """The inclusive last day of an all-day event from its endDate: a day as written ('2026-11-22'), the day
-    of a Drupal 12:00 UTC value, or — for an end at local midnight (the moment the event is over) — the
-    day before it."""
+    of a Drupal 12:00 UTC value, or — for an end at midnight as written (the moment the event is over) —
+    the day before it. The day is read in the offset the page wrote ('…T00:00:00-0500' is the 22nd's
+    midnight wherever that is), not converted to Central time."""
     if ed is None:
         return None
     if _date_only(raw):
         return ed.date()
-    local = ed.astimezone(CHICAGO)
-    return local.date() - timedelta(days=1) if local.strftime("%H:%M") == "00:00" else local.date()
+    return ed.date() - timedelta(days=1) if ed.strftime("%H:%M") == "00:00" else ed.date()
 
 
 def platform_of(url: str | None) -> str | None:
@@ -469,13 +468,14 @@ def parse_event(html: str, url: str) -> dict:
     has_clock = bool(re.search(r"\d{1,2}:\d{2}|\b\d{1,2}\s*[ap]\.?m\b", date_text, re.I))
     if sd:
         # A day without a time is an all-day event, not one that starts at midnight: Drupal stores date-only
-        # ranges at 12:00 UTC, other pages give just the date ("2026-11-20") or local midnight. A time the
-        # page writes out ("7:00 PM") always makes it a timed event.
+        # ranges at 12:00 UTC, other pages give just the date ("2026-11-20") or midnight in the offset they
+        # write. A time the page writes out ("7:00 PM") always makes it a timed event. The day is the one
+        # written (12:00 UTC is the same day from UTC−11 to UTC+11).
         all_day = not has_clock and (_date_only(ld.get("startDate"))
                                      or sd.astimezone(timezone.utc).strftime("%H:%M") == "12:00"
-                                     or sd.astimezone(CHICAGO).strftime("%H:%M") == "00:00")
+                                     or sd.strftime("%H:%M") == "00:00")
         if all_day:
-            first = sd.astimezone(CHICAGO).date() if not _date_only(ld.get("startDate")) else sd.date()
+            first = sd.date()
             ev["start"] = first.isoformat()
             last = _last_day(ed, ld.get("endDate"))
             if last and last > first:
