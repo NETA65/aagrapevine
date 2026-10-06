@@ -27,7 +27,8 @@ Naming conventions the committee can use (all optional):
     leaves it out until then and it appears with that morning's update). Only a real date is taken
     out of the headline — "(from the Chair)" or "(until further notice)" stays as written (so does
     a date without its year, "(hasta el 1 de febrero)": the post does not expire). An undated post
-    is dated its "(from …)" day.
+    is dated its "(from …)" day. A numbers-only date after a Spanish word ("(hasta 05-11-2026)",
+    "(desde …)", "(vence …)", "(publicar …)") is read day first, like a Spanish name's own date.
   * booth/ (also mesa, kiosk / kiosko / kiosco, display / pantalla, stand, exhibit / exhibición): the
     pictures, videos, sound files and short texts of the booth display that plays at our table at
     assemblies (/about/#booth). The name says how each one is shown —
@@ -74,8 +75,8 @@ from datetime import datetime, timedelta, timezone
 
 from .announcements import markdown_to_text
 from .common import (
-    MONTHS, date_from_text, date_range_from_text, get_logger, load_config, load_raw, now_iso, parse_iso, read_capped,
-    run_module, save_raw, make_item, sort_items, take_date_notes, truncate,
+    date_from_text, date_has_day, date_range_from_text, get_logger, load_config, load_raw, now_iso, parse_iso,
+    read_capped, run_module, save_raw, make_item, sort_items, take_date_notes, truncate,
 )
 # The language of a file's name or a doc's text, with the names of the magazines and of AA left out first (the
 # glossary's keep list): "Grapevine & La Viña Pricing Update" is English — "La Viña" alone made it Spanish, and
@@ -187,15 +188,22 @@ def exclusion_reason(e: Entry, cfg: dict) -> str | None:
 
 
 # --------------------------------------------------------------------------- titles & dates
-_MONTH_ALT = "|".join(sorted(MONTHS, key=len, reverse=True))
-_MONTH_YEAR_ONLY = re.compile(rf"(?i)(?<!\d )(?<!\d de )\b({_MONTH_ALT})\.?,?\s+(?:de\s+|del\s+)?(20\d{{2}})\b")
 _COPY_SUFFIX = re.compile(r"(?i)\s*(\(\d+\)|\bcopy\b|\bcopia\b)\s*$")
 _COPY_PREFIX = re.compile(r"(?i)^(copy of|copia de)\s+")
 _PINNED = re.compile(r"(?i)\s*[\[(](pinned|fijado|fijo|pin)[\])]\s*|📌")
-_UNTIL = re.compile(r"(?i)\s*[\[(]\s*(?:until|expires?|hasta|vence)\s*:?\s*([^)\]]+)[\])]\s*")
+_UNTIL = re.compile(r"(?i)\s*[\[(]\s*(until|expires?|hasta|vence)\s*:?\s*([^)\]]+)[\])]\s*")
 # A bulletin post scheduled for a later day: "(from 2027-02-01)" / "(desde 2027-02-01)" (or "publish" /
 # "publicar"). Taken out of the headline only when it holds a date: "(from the Chair)" is a title.
-_FROM = re.compile(r"(?i)\s*[\[(]\s*(?:from|publish|desde|publicar)\s*:?\s*([^)\]]+)[\])]\s*")
+_FROM = re.compile(r"(?i)\s*[\[(]\s*(from|publish|desde|publicar)\s*:?\s*([^)\]]+)[\])]\s*")
+# The word before an "(until …)" / "(from …)" date tells its language: a Spanish one ("(hasta 05-11-2026)") reads a
+# numbers-only date day first, like the rest of a Spanish name (common._numeric); an English one leaves it to the
+# date itself (month first, with a note when it could be read two ways).
+_SPANISH_DATE_WORDS = ("hasta", "vence", "desde", "publicar", "a partir de", "a partir del")
+
+
+def keyword_lang(word: str) -> str | None:
+    """"es" for a Spanish "(hasta …)" / "(desde …)" word, else None."""
+    return "es" if " ".join(str(word or "").lower().split()) in _SPANISH_DATE_WORDS else None
 
 
 def strip_ext(name: str) -> str:
@@ -211,25 +219,21 @@ def tidy(text: str) -> str:
     return t.strip(" -–—_.,·|:;")
 
 
-def name_date_range(text: str) -> tuple[str | None, str | None, str, bool]:
+def name_date_range(text: str, lang: str | None = None) -> tuple[str | None, str | None, str, bool]:
     """(iso_date, last_day, text_without_the_dates, has_explicit_day): last_day is the end of a range of days
     written in the name ("Assembly March 14 - 16, 2027" → '2027-03-16'; common.date_range_from_text), else None.
-    'March 2026 …' → ('2026-03-01', None, '…', False)."""
-    iso, end, rest = date_range_from_text(text)
+    'March 2026 …' → ('2026-03-01', None, '…', False) — a month alone (common.date_has_day; "1° de marzo de
+    2027" names its day). `lang`: the language when the caller knows it (common.date_range_from_text)."""
+    iso, end, rest = date_range_from_text(text, lang)
     if not iso:
         return None, None, text, False
-    explicit = True
-    if iso.endswith("-01") and end is None:
-        # Was it only "Month YYYY"? Remove month-year phrases and see if a date is still found.
-        iso2, _ = date_from_text(_MONTH_YEAR_ONLY.sub(" ", text))
-        explicit = iso2 == iso
-    return iso, end, rest, explicit
+    return iso, end, rest, date_has_day(text, lang) is not False
 
 
-def name_date(text: str) -> tuple[str | None, str, bool]:
+def name_date(text: str, lang: str | None = None) -> tuple[str | None, str, bool]:
     """(iso_date, text_without_date, has_explicit_day). 'March 2026 …' → ('2026-03-01', '…', False). A range of
     days gives its first day (name_date_range: its last one too)."""
-    iso, _end, rest, explicit = name_date_range(text)
+    iso, _end, rest, explicit = name_date_range(text, lang)
     return iso, rest, explicit
 
 
@@ -611,7 +615,7 @@ def build_item(f: Found, dcfg: dict) -> dict:
     stem = _PINNED.sub(" ", stem)
     expires = None
     for mu in _UNTIL.finditer(stem):
-        expires = date_from_text(mu.group(1))[0]
+        expires = date_from_text(mu.group(2), keyword_lang(mu.group(1)))[0]
         # a bulletin post keeps an undated "(until further notice)" / "(hasta 20 personas)" in its headline; any
         # other file drops it as before (a flyer's "(until 5pm)" must not become the event's start time)
         if expires or kind != "announcement":
@@ -620,7 +624,7 @@ def build_item(f: Found, dcfg: dict) -> dict:
     publish = None
     if kind == "announcement":
         for mf in _FROM.finditer(stem):
-            publish = date_from_text(mf.group(1))[0]
+            publish = date_from_text(mf.group(2), keyword_lang(mf.group(1)))[0]
             if publish:                  # "(from 2027-02-01)" — never "(from the Chair)"
                 stem = stem[: mf.start()] + " " + stem[mf.end():]
                 break

@@ -157,11 +157,11 @@ _MONTH_NAMES = ("January", "February", "March", "April", "May", "June", "July", 
                 "November", "December")
 
 # Dates written with numbers only: "14-03-2027" can only be day-month-year (there is no 14th month), "03-14-2027"
-# only month-day-year; "05-10-2026" can be either. Those are read day first when the name is in a language that
-# writes the day first (Spanish: "Taller 05-10-2026" is 5 October), month first when it is in English (as in the
-# US), and month first with a note (`notes` / take_date_notes) when its words do not tell — so the chair can write
-# it year-month-day instead.
-_DAY_FIRST_LANGS = ("es", "fr")
+# only month-day-year; "05-10-2026" can be either. Those are read day first when the name is in Spanish ("Taller
+# 05-10-2026" is 5 October), month first when it is in English (as in the US), and month first with a note
+# (`notes` / take_date_notes) when its words do not tell — so the chair can write it year-month-day instead. The
+# site is English and Spanish: no other language reads the day first (a French-looking "ET" / "EST" is a time zone).
+_DAY_FIRST_LANGS = ("es",)
 _RANGE_MAX_DAYS = 62                     # "March 14 - 16, 2027": a range longer than this is not one event's days
 _ORD = r"(?:st|nd|rd|th)?"
 _SEP = r"\s*(?:[-–—]|\b(?:to|through|thru|until|al|a|hasta)\b)\s*"          # "14 - 16", "14 al 16", "14 to 16"
@@ -176,6 +176,17 @@ _COUNTED = re.compile(r"(?i)(?:\b(?:distrito|district|panel|grupo|group|[aá]rea
 # The magazines' names say nothing about the language of the words around a date ("La Viña Report 05-10-2026" is
 # English): _text_lang leaves them out, as drive.py does for a file's language.
 _PUB_NAMES = re.compile(r"(?i)\b(?:aa\s+)?(?:grapevine|la\s+vi[ñn]a)\b")
+# Nor do a time zone's letters ("7pm ET" — "et" / "est" are French words), the place after "@" ("… 7pm @ Grupo Solo
+# por Hoy, Tyler") or a group's or a town's own name written in the name ("… - Grupo Progreso Latino, Duncanville",
+# "… El Paso"): an English name that names a Spanish-named group or town stays English. A group's or a town's name
+# that STARTS the text is its subject, not a place ("Grupo de Escritura 05-10-2026"), and is kept.
+_ZONE_LETTERS = re.compile(r"\b[ECMP][SD]?T\b")                     # ET EST EDT · CT CST CDT · MT … · PT PST PDT
+_AT_PLACE = re.compile(r"@.*", re.S)
+_LINK = r"(?:de|del|la|las|los|el|por|en|y|al|of|the|and)"
+_CAPITAL_WORD = r"[A-ZÁÉÍÓÚÑÜ0-9][\w'’.]*"
+_NAMED_PLACE = re.compile(rf"\b(?:[Gg]rupo|GRUPO)\s+(?:{_LINK}\s+)*{_CAPITAL_WORD}"
+                          rf"(?:\s+(?:{_LINK}\s+)*{_CAPITAL_WORD})*"
+                          rf"|\b(?:El|La|Las|Los|Del)\s+[A-ZÁÉÍÓÚÑÜ][\w'’.]*")
 
 # Notes about dates that could be read two ways, for callers that pass no `notes` list (drive.py's names): the
 # module that saves the source takes them with take_date_notes() into its stats["warnings"] (→ /status/).
@@ -202,9 +213,22 @@ def take_date_notes() -> list[str]:
 
 def _text_lang(text: str, lang: str | None) -> str:
     """The language a numbers-only date in `text` is written in: the caller's when it knows it, else the
-    language of the words around the date, the magazines' names left out ("Taller …" → "es"; "und" when they
-    do not tell: "La Viña Report …")."""
-    return lang[:2].lower() if lang else detect_lang(_PUB_NAMES.sub(" ", text))
+    language of the words around the date — the magazines' names, a time zone's letters and the places named
+    left out (_PUB_NAMES, _ZONE_LETTERS, _AT_PLACE, _NAMED_PLACE) — and only when they clearly tell: Spanish or
+    English words alone, or two more of one than of the other ("Taller …" → "es", "Writing Workshop …" → "en");
+    "und" otherwise ("La Viña Report …", "Sober Workshop … - Grupo X": read month first, with a note)."""
+    if lang:
+        return lang[:2].lower()
+    t = _ZONE_LETTERS.sub(" ", _AT_PLACE.sub(" ", _PUB_NAMES.sub(" ", text)))
+
+    def place(m: re.Match) -> str:     # (only a date or punctuation before it: the name's subject — kept)
+        return m[0] if not t[: m.start()].strip(" -–—_.,·|:;([0123456789/") else " "
+    es, en, _fr = _lang_scores(_NAMED_PLACE.sub(place, t))
+    if es > en and (not en or es - en >= 2):
+        return "es"
+    if en > es and (not es or en - es >= 2):
+        return "en"
+    return "und"
 
 
 def _numeric(m: re.Match, text: str, lang: str | None) -> tuple[date, None, str | None]:
@@ -231,6 +255,14 @@ def _counted_before(m: re.Match, text: str) -> bool:
     return bool(_COUNTED.search(text[: m.start(1)]))
 
 
+def _ymd(m: re.Match, text: str, _lang) -> tuple[date, None, None]:
+    """'2027-03-14' / '2027.03.14' / '2027_03_14' / '2027 03 14' — the same mark twice (a year written in words and
+    then a time is no date: "October 17, 2026 7-9 PM", "March 14 2027 6.30 PM"; nor "2027 6 30 PM")."""
+    if m[2] == " " and re.match(r"\s*[ap]\.?\s?m\b", text[m.end():], re.I):
+        raise ValueError("a time of day")
+    return date(int(m[1]), int(m[3]), int(m[4])), None, None
+
+
 def _day_range(m: re.Match, text: str, _lang) -> tuple[date, date, None] | None:
     """'14 - 16 de marzo de 2027' / 'del 14 al 16 de marzo' / '14-16 March 2027' → (14 March, 16 March)."""
     if re.fullmatch(r"\s*[-–—]\s*", m[2]) and _counted_before(m, text):
@@ -243,8 +275,7 @@ def _day_range(m: re.Match, text: str, _lang) -> tuple[date, date, None] | None:
 # here" (the next pattern is tried). The ranges come before the single dates they contain, so "March 30 - April 2,
 # 2027" starts on March 30 (not April 2) and "14 - 16 de marzo de 2027" on the 14th (not the 16th).
 _DATE_PATS: list[tuple[re.Pattern, Any]] = [
-    (re.compile(r"(?<!\d)(20\d{2})[-._ ](\d{1,2})[-._ ](\d{1,2})(?!\d)"),
-     lambda m, t, lang: (date(int(m[1]), int(m[2]), int(m[3])), None, None)),
+    (re.compile(r"(?<!\d)(20\d{2})([-._ ])(\d{1,2})\2(\d{1,2})(?!\d)"), _ymd),
     (re.compile(r"(?<!\d)(20\d{2})(\d{2})(\d{2})(?!\d)"),
      lambda m, t, lang: (date(int(m[1]), int(m[2]), int(m[3])), None, None)),
     (re.compile(r"(?<!\d)(\d{1,2})[-/.](\d{1,2})[-/.](20\d{2})(?!\d)"), _numeric),
@@ -265,14 +296,21 @@ _DATE_PATS: list[tuple[re.Pattern, Any]] = [
     (re.compile(rf"(?i){_FROM}\b(\d{{1,2}})({_SEP})(\d{{1,2}})\s+(?:de\s+)?({_MONTH_RE})\.?{_YEAR_END}"), _day_range),
     (re.compile(rf"(?i)\b({_MONTH_RE})\.?\s+(\d{{1,2}}){_ORD},?\s+(20\d{{2}})\b"),
      lambda m, t, lang: (date(int(m[3]), MONTHS[m[1].lower()], int(m[2])), None, None)),
-    (re.compile(rf"(?i)\b(\d{{1,2}})\s+(?:de\s+)?({_MONTH_RE})\.?,?\s+(?:de\s+|del\s+)?(20\d{{2}})\b"),
+    # "14 de marzo de 2027", "14 March 2027", "2nd March 2027", "1° / 1º / 1.º / 1ro de marzo de 2027"
+    (re.compile(rf"(?i)\b(\d{{1,2}})(?:st|nd|rd|th|ro|er|o|\.?\s?[°º])?\.?\s+(?:de\s+)?({_MONTH_RE})\.?,?\s+"
+                rf"(?:de\s+|del\s+)?(20\d{{2}})\b"),
      lambda m, t, lang: (date(int(m[3]), MONTHS[m[2].lower()], int(m[1])), None, None)),
+    # "primero de marzo de 2027": the 1st, written out
+    (re.compile(rf"(?i)\bprimer[oa]?\s+(?:de\s+)?({_MONTH_RE})\.?,?\s+(?:de\s+|del\s+)?(20\d{{2}})\b"),
+     lambda m, t, lang: (date(int(m[2]), MONTHS[m[1].lower()], 1), None, None)),
+    # a month alone ("March 2027", "marzo de 2027"): its 1st — a date without its day (date_has_day)
     (re.compile(rf"(?i)\b({_MONTH_RE})\.?,?\s+(?:de\s+|del\s+)?(20\d{{2}})\b"),
      lambda m, t, lang: (date(int(m[2]), MONTHS[m[1].lower()], 1), None, None)),
 ]
 # the patterns of ONE whole day (no range, not a month alone): a second one after a dash is the end of a range
 # ("2027-03-14 - 2027-03-16", "March 14, 2027 – March 16, 2027")
-_DAY_PATS = [_DATE_PATS[i] for i in (0, 1, 2, 7, 8)]
+_DAY_PATS = [_DATE_PATS[i] for i in (0, 1, 2, 7, 8, 9)]
+_MONTH_ALONE = _DATE_PATS[-1]
 _SEP_RX = re.compile(rf"(?i){_SEP}")
 
 
@@ -282,13 +320,28 @@ def date_range_from_text(text: str, lang: str | None = None,
 
     Returns (start_or_None, end_or_None, text_without_the_dates). Recognizes:
       2026-10-05, 2026.10.05, 2026_10_05, 20261005, 14-03-2027, 03/14/2027, 05-10-2026 (see _numeric),
-      "Oct 5 2026", "October 5, 2026", "5 de octubre de 2026", "March 2026" (→ 2026-03-01, no end),
-      and ranges: "March 14 - 16, 2027", "March 30 - April 2, 2027", "14 al 16 de marzo de 2027",
-      "30 de marzo al 2 de abril de 2027", "2027-03-14 - 2027-03-16" (end = the last day; None for one day).
+      "Oct 5 2026", "October 5, 2026", "5 de octubre de 2026", "1° de marzo de 2027", "March 2026" (→ 2026-03-01,
+      no end — date_has_day tells it apart), and ranges: "March 14 - 16, 2027", "March 30 - April 2, 2027",
+      "14 al 16 de marzo de 2027", "30 de marzo al 2 de abril de 2027", "2027-03-14 - 2027-03-16" (end = the last
+      day; None for one day).
     `lang`: the language of the text when the caller knows it ("es": numbers-only dates are day first);
     else the text's own words decide. `notes`: a list that gets a line for a date that could be read two
     ways ("05-10-2026" in an English or unknown-language name); without one the line is kept for
     take_date_notes()."""
+    found = _find_date(text, lang, notes)
+    return found[:3] if found else (None, None, text)
+
+
+def date_has_day(text: str, lang: str | None = None) -> bool | None:
+    """Whether the date date_range_from_text() finds in `text` names its day: False for a month alone ("March
+    2027", "marzo de 2027" — read as the 1st), True for every other date ("1° de marzo de 2027" too), None when
+    there is no date. Makes no note."""
+    found = _find_date(text, lang, [])
+    return None if not found else not found[3]
+
+
+def _find_date(text: str, lang: str | None, notes: list[str] | None) -> tuple[str, str | None, str, bool] | None:
+    """(start, end or None, the rest of the text, read from a month alone) of the first date in `text`, or None."""
     t = text or ""
     for rx, read in _DATE_PATS:
         m = rx.search(t)
@@ -319,8 +372,9 @@ def date_range_from_text(text: str, lang: str | None = None,
         if note:
             _note(notes, note)
         rest = (t[: m.start()] + " " + t[stop:]).strip(" -_.,·|")
-        return start.isoformat(), (end.isoformat() if end else None), re.sub(r"\s{2,}", " ", rest).strip()
-    return None, None, text
+        return (start.isoformat(), (end.isoformat() if end else None), re.sub(r"\s{2,}", " ", rest).strip(),
+                (rx, read) == _MONTH_ALONE)
+    return None
 
 
 def date_from_text(text: str, lang: str | None = None, notes: list[str] | None = None) -> tuple[str | None, str]:
@@ -412,14 +466,9 @@ _FR_WORDS = set("""le les des est et une pour dans avec sur pas qui ce ne au du 
 réunion sobriété mouvement groupe histoire""".split())
 
 
-def detect_lang(text: str, prior: str | None = None) -> str:
-    """Tiny, dependency-free EN/ES/FR detector tuned for short titles.
-
-    `prior` (e.g. 'es' for aalavina.org) wins when the text is inconclusive.
-    """
+def _lang_scores(text: str) -> tuple[int, int, int]:
+    """(Spanish, English, French) evidence in a short text: its known words, accents and word endings."""
     t = clean_text(text).lower()
-    if not t:
-        return prior or "und"
     words = re.findall(r"[a-záéíóúüñàâçèêëîïôûœ']+", t)
     es = sum(1 for w in words if w in _ES_WORDS)
     en = sum(1 for w in words if w in _EN_WORDS)
@@ -428,6 +477,17 @@ def detect_lang(text: str, prior: str | None = None) -> str:
     es += sum(1 for w in words if re.search(r"(ción|ciones|dad|dades|mente|amos|aron)$", w))
     en += sum(1 for w in words if re.search(r"(ing|tion|ness|ship|ly)$", w) and not w.endswith("ción"))
     fr += 2 * len(re.findall(r"[àâçèêëîïôûœ]", t))
+    return es, en, fr
+
+
+def detect_lang(text: str, prior: str | None = None) -> str:
+    """Tiny, dependency-free EN/ES/FR detector tuned for short titles.
+
+    `prior` (e.g. 'es' for aalavina.org) wins when the text is inconclusive.
+    """
+    if not clean_text(text):
+        return prior or "und"
+    es, en, fr = _lang_scores(text)
     best = max((es, "es"), (en, "en"), (fr, "fr"))
     runner = sorted([es, en, fr])[-2]
     if best[0] == 0 or best[0] - runner < 1:
@@ -440,39 +500,58 @@ def raw_path(source: str) -> Path:
     return RAW_DIR / f"{source}.json"
 
 
-# source → message, for raw files found unreadable this run (reported by the next save_raw()).
-_CORRUPT_NOTES: dict[str, str] = {}
+class UnreadableRaw(RuntimeError):
+    """data/raw/<source>.json exists but cannot be read (a bad hand edit, a broken merge, an interrupted restore).
+    The source is never rebuilt from scratch over it — a source that builds up over time (YouTube, the articles,
+    the library, Instagram) would keep only what it lists today, and Instagram would delete the pictures of every
+    older post: the file stays as it is, nothing is written over it (load_raw raises, so every save_raw does too),
+    run_all does not run the source's module, and build_data keeps what the last build made of it
+    (carry_unreadable) and shows the source as failed on /status/ until a person restores the file from git."""
+
+    def __init__(self, source: str, reason: str):
+        self.source, self.reason = source, reason
+        super().__init__(unreadable_message(source, reason))
+
+
+def unreadable_message(source: str, reason: str = "") -> str:
+    """The plain line for /status/ and the run summary about a raw file that cannot be read."""
+    return (f"data/raw/{source}.json cannot be read{f' ({reason})' if reason else ''} — restore it from git; the "
+            "site keeps the last build's items")
+
+
+def _read_raw_file(p: Path) -> dict:
+    with open(p, encoding="utf-8") as f:
+        data = json.load(f)
+    if not isinstance(data, dict) or not isinstance(data.get("items", []), list):
+        raise ValueError("not a raw envelope (expected an object with an 'items' list)")
+    data.setdefault("items", [])
+    return data
+
+
+def raw_unreadable(source: str) -> str | None:
+    """Why data/raw/<source>.json cannot be read ("JSONDecodeError: …"), or None when it can — or does not exist."""
+    p = raw_path(source)
+    if not p.exists():
+        return None
+    try:
+        _read_raw_file(p)
+    except Exception as e:  # noqa: BLE001 — any reason it cannot be read
+        return f"{type(e).__name__}: {str(e)[:80]}"
+    return None
 
 
 def load_raw(source: str) -> dict:
-    """The raw envelope of a source (an empty one if the file does not exist yet).
+    """The raw envelope of a source (an empty one if the file does not exist yet — a new source, or one a person
+    deleted on purpose to read it again from scratch).
 
-    A file that exists but cannot be parsed (a bad hand edit, an interrupted restore) is never
-    silently overwritten: it is renamed to `<source>.json.corrupt-<UTC time>` (kept for recovery
-    from the git history), the module rebuilds the source from scratch, and the next save_raw()
-    marks the run ok=false with an explanation so the problem shows on /status/."""
+    A file that exists but cannot be parsed raises UnreadableRaw and is left exactly as it is: the source is not
+    rebuilt from scratch over it (see UnreadableRaw)."""
     p = raw_path(source)
     if p.exists():
         try:
-            with open(p, encoding="utf-8") as f:
-                data = json.load(f)
-            if not isinstance(data, dict) or not isinstance(data.get("items", []), list):
-                raise ValueError("not a raw envelope (expected an object with an 'items' list)")
-            data.setdefault("items", [])
-            return data
+            return _read_raw_file(p)
         except Exception as e:
-            stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-            backup = p.with_name(f"{p.name}.corrupt-{stamp}")
-            try:
-                os.replace(p, backup)
-            except OSError as e2:   # cannot move it aside → stop rather than overwrite it
-                raise RuntimeError(f"{p.name} is unreadable ({type(e).__name__}) and could not be "
-                                   f"renamed: {e2}") from e
-            _CORRUPT_NOTES[source] = (
-                f"data/raw/{p.name} was unreadable ({type(e).__name__}: {str(e)[:80]}); it was saved as "
-                f"{backup.name} and this source was rebuilt from scratch — restore the file from the git "
-                f"history to keep older items and first-seen dates")
-            get_logger("common").error("%s", _CORRUPT_NOTES[source])
+            raise UnreadableRaw(source, f"{type(e).__name__}: {str(e)[:80]}") from e
     return {"source": source, "updated": None, "ok": False, "error": None, "stats": {}, "items": []}
 
 
@@ -558,14 +637,22 @@ DROP_GUARD_EXEMPT: dict[str, str] = {
                        "file before, or the older rows stay",
 }
 HELD_EXAMPLES = 5               # titles of held items named in the envelope (`held.examples`)
-HELD_IDS_MAX = 50               # ids of held items stored in the envelope (`held.ids`; above it `held.ids_total`
-                                # says how many there are: a big source's whole list is never written out)
+# `held.ids` names EVERY held item (sorted): the next run accepts exactly those that are still missing, and judges
+# any other missing item on its own. (A cut list could not tell which missing items are new, and a source that
+# loses a few more each run would never be confirmed.) The list exists only while a hold lasts; the items carry the
+# same ids anyway, and status.json leaves it out.
 
 
 def _live_ids(items: Any) -> dict[str, dict]:
     """id → item of the live items (status != "gone") of a raw item list."""
     return {i["id"]: i for i in (items or []) if isinstance(i, dict) and i.get("id")
             and i.get("status", "ok") != "gone"}
+
+
+def _held_ids(held: dict, prev_live: dict[str, dict]) -> list[str]:
+    """The ids a guard hold kept back (`held.ids`); an envelope from before the ids were stored: every item."""
+    ids = held.get("ids")
+    return [str(i) for i in ids] if isinstance(ids, list) else list(prev_live)
 
 
 def is_mass_drop(before: int, found: int) -> bool:
@@ -592,16 +679,16 @@ def save_raw(source: str, items: list[dict], ok: bool = True, error: str | None 
     Every envelope carries `changes` = this run's {"added", "removed", "held"} (live items; "held" = items
     kept although this run did not find them) — plus "confirmed": the `held.since` of a hold whose items this
     run removed (the same drop seen again, or a module's `confirmed`) — and `held` = {"since", "kept",
-    "previous", "found", "drop", "examples"[, "ids"[, "ids_total"]]} while items are held back ("drop": the
-    guard put them back, "ids" = theirs — the first HELD_IDS_MAX, sorted, and "ids_total" how many when there
-    are more; false: the module kept them, `unconfirmed`). build_data copies both into status.json sources[]
-    (`held` without its "ids")."""
+    "previous", "found", "drop", "examples"[, "ids"]} while items are held back ("drop": the guard put them
+    back, "ids" = all of theirs, sorted; false: the module kept them, `unconfirmed`). build_data copies both into
+    status.json sources[] (`held` without its "ids").
+
+    A failed run (ok=False) keeps an earlier hold as it was — and while a guard hold lasts, the held items it
+    misses or marks gone are put back too: only a run that works confirms a removal. Nothing is written over a
+    raw file that cannot be read (load_raw raises UnreadableRaw)."""
     log = get_logger("common")
     now = now_iso()
-    prev = load_raw(source)
-    note = _CORRUPT_NOTES.pop(source, None)
-    if note:   # the previous file was unreadable (see load_raw): make it visible on /status/ once
-        ok, error = False, (f"{note}; {error}" if error else note)
+    prev = load_raw(source)         # (UnreadableRaw: nothing is ever written over a file that cannot be read)
     if not ok and not items:
         items = prev.get("items", [])
     prev_live = _live_ids(prev.get("items"))
@@ -612,25 +699,25 @@ def save_raw(source: str, items: list[dict], ok: bool = True, error: str | None 
     restored: list[dict] = []
     accepted = None
     held = prev_held if not ok else None        # a failed run saw nothing: an earlier hold stays as it was
-    guard = (ok and (drop_guard if drop_guard is not None else source not in DROP_GUARD_EXEMPT)
-             and (stats or {}).get("disabled") is not True)
+    guarded = ((drop_guard if drop_guard is not None else source not in DROP_GUARD_EXEMPT)
+               and (stats or {}).get("disabled") is not True)
+    guard = ok and guarded
     before, found = len(prev_live) - len(confirmed), len(new_live) - len(unconfirmed)
     if ok and confirmed and prev_held:      # the module removed items it had kept back (drive: empty twice)
         accepted = prev_held.get("since")
-    if guard and prev_held and prev_held.get("drop"):
+    held_ids = _held_ids(prev_held, prev_live) if prev_held and prev_held.get("drop") else None
+    if not ok and guarded and held_ids is not None:
+        # A failed run during a hold is not trusted with the removal either (crawl.py writes its list on a failed run
+        # too, the held documents marked gone as its saved state still says): the held items it misses or marks
+        # gone are put back as they were — the hold stays as it was, and the next run that works decides. (A hold
+        # written before every id was stored — `ids_total` — puts back every item the run misses.)
+        cut = isinstance(prev_held.get("ids_total"), int) and prev_held["ids_total"] > len(held_ids)
+        mine = set(held_ids)
+        restored = [p for i, p in prev_live.items() if i not in new_live and (cut or i in mine)]
+    if guard and held_ids is not None:
         # The items the last run held back (`held.ids`) that are still missing: the same drop seen again — it is
         # real, they go now. Items that vanished only in THIS run are judged on their own (below).
-        ids = prev_held.get("ids") if isinstance(prev_held.get("ids"), list) else list(prev_live)
-        again = {i for i in ids if i in prev_live and i not in new_live and i not in confirmed}
-        total = prev_held.get("ids_total")
-        if isinstance(prev_held.get("ids"), list) and isinstance(total, int) and total > len(ids):
-            # Only the first HELD_IDS_MAX ids were stored. The same drop is seen again when every one of them is
-            # still missing and no more items are missing than were held: then all the missing ones go. More
-            # missing than held means new ones vanished too (which, cannot be told): nothing is accepted yet, the
-            # whole drop stays held (same `since`) and the next run, with the new list, decides.
-            missing = {i for i in prev_live if i not in new_live and i not in confirmed}
-            sample = {i for i in ids if i in prev_live and i not in confirmed}
-            again = missing if again == sample and len(missing) <= total else set()
+        again = {i for i in held_ids if i in prev_live and i not in new_live and i not in confirmed}
         if again:
             accepted = prev_held.get("since")
             confirmed |= again
@@ -652,9 +739,7 @@ def save_raw(source: str, items: list[dict], ok: bool = True, error: str | None 
                 "previous": before, "found": found, "drop": bool(restored),
                 "examples": [t for t in titles if t][:HELD_EXAMPLES]}
         if restored:
-            held["ids"] = sorted(back)[:HELD_IDS_MAX]
-            if len(back) > HELD_IDS_MAX:
-                held["ids_total"] = len(back)
+            held["ids"] = sorted(back)
     items = sort_items(items)
     final_live = _live_ids(items)
     changes: dict[str, Any] = {"added": len(final_live.keys() - prev_live.keys()),
@@ -1077,7 +1162,8 @@ def absolute(base: str, href: str) -> str:
 
 def run_module(name: str, fn) -> int:
     """Standard CLI wrapper: `python -m scripts.sync.<name>` → exit code 0 even on soft failure
-    (the module is expected to have written ok=false itself)."""
+    (the module is expected to have written ok=false itself). A raw file that cannot be read (UnreadableRaw)
+    stops the module and nothing is written over it — not even the failure mark."""
     log = get_logger(name)
     t0 = time.time()
     try:
@@ -1086,6 +1172,9 @@ def run_module(name: str, fn) -> int:
         return 0
     except KeyboardInterrupt:
         raise
+    except UnreadableRaw as e:
+        log.error("%s — the source was not updated", e)
+        return 0
     except Exception as e:  # never fail the whole pipeline because one source broke
         log.exception("module crashed: %s", e)
         try:

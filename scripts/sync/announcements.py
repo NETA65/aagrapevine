@@ -71,9 +71,9 @@ from zoneinfo import ZoneInfo
 
 import yaml
 
-from .common import (CONTENT_DIR, MONTHS, clean_text, date_from_text, date_range_from_text, event_host, get_logger,
-                     load_config, load_raw, make_item, merge_items, run_module, save_raw, site_day, slugify, sort_items,
-                     to_iso, truncate)
+from .common import (CONTENT_DIR, MONTHS, clean_text, date_from_text, date_has_day, date_range_from_text, event_host,
+                     get_logger, load_config, load_raw, make_item, merge_items, run_module, save_raw, site_day, slugify,
+                     sort_items, to_iso, truncate)
 from .meeting import parse_hhmm
 from .translate import detect_language
 
@@ -290,8 +290,9 @@ def _no_year(field: str, s: str, tz: ZoneInfo, month: int | None = None, day: in
 
 def _from_words(s: str, tz: ZoneInfo, notes: list[str] | None, lang: str | None,
                 field: str) -> tuple[str | None, bool]:
-    """A date the text gives in words or numbers (common.date_from_text: "14 de marzo de 2027", "05/10/2026"),
-    with the time written with it kept. A day and a month without a year raise (_no_year)."""
+    """A date the text gives in words or numbers (common.date_from_text: "14 de marzo de 2027", "05/10/2026",
+    "1° de marzo de 2027"), with the time written with it kept. A day and a month without a year raise (_no_year),
+    and so does a month and a year without the day ("marzo de 2027" — as "March 2027" does on dateutil's way)."""
     d, rest = date_from_text(s, lang, notes)
     if not d:
         m = _YEARLESS.search(s)
@@ -299,6 +300,8 @@ def _from_words(s: str, tz: ZoneInfo, notes: list[str] | None, lang: str | None,
             month = next((MONTHS[w] for w in re.findall(r"[^\W\d_]+", m[0].lower()) if w in MONTHS), None)
             raise _no_year(field, s, tz, month, int(re.search(r"\d{1,2}", m[0])[0]))
         return None, False
+    if date_has_day(s, lang) is False:
+        raise ValueError(f"{field}: “{s}” has no day — write the whole date ({field}: {d[:7]}-DD)")
     _whole(field, s, date.fromisoformat(d))
     if re.search(r"(?i)\d\s*(?:[ap]\.?\s*m\b\.?)?\s*(?:[-–—]|\b(?:a|to|hasta)\b)\s*\d", rest):
         return d, True
@@ -324,7 +327,8 @@ def as_when(v, tz: ZoneInfo, notes: list[str] | None = None, lang: str | None = 
 
     A range of days ("March 14 - 16, 2027") gives its first day, all day.
     A date must be whole: one without its year ("January 10", "10 de enero", "3/14" — a reader would put it in
-    THIS year, often already past — or "3/14/27", the year in two digits), without its day ("March 2027"), a time
+    THIS year, often already past — or "3/14/27", the year in two digits), without its day ("March 2027", "marzo de
+    2027"; "1° de marzo de 2027" is the 1st), a time
     alone ("19:00"; unquoted, YAML gives the number 1140) or a year outside FIRST_YEAR–LAST_YEAR raises ValueError
     (the file is reported on /status/, its last good version stays). `notes` gets a line for a written UTC offset
     that is not Central time's at that moment (offset_note) and for a numbers-only date that could be read two

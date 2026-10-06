@@ -773,6 +773,68 @@ class RobotsTxtAnswers(unittest.TestCase):
         self.assertEqual(cr.c["robots_skipped"], 1)
 
 
+class MagazineServerDown(unittest.TestCase):
+    """Review of round 7: since robots.txt that does not answer closes the host (P2-12), a magazine server that is
+    down sends nothing for its pages — the "site down?" rule (pages asked for, none came back) could no longer fire,
+    and the run was saved ok, with a fresh "Last success", every day of the outage. A run that could read no page
+    because robots.txt of a magazine site did not answer is a failed run now."""
+
+    def state(self) -> dict:
+        crawled = iso(now() - timedelta(days=40))
+        return {"version": 1, "updated": None, "sitemaps": {}, "runs": [], "pdfs": {},
+                "pages": {u: {"src": "sitemap", "depth": 0, "status": 200, "crawled_at": crawled, "pdfs": [],
+                              "pv": C.PARSER_VERSION} for u in (HUB, PAGE, RLV_HUB)}}
+
+    def test_the_verdict(self):
+        for robots in ("unreachable", "HTTP 503"):
+            with self.subTest(robots=robots):
+                st = self.state()
+                cr = crawler(st, http=FakeSession(robots=robots))
+                for url in (HUB, PAGE, RLV_HUB):
+                    cr.crawl_page(url, st["pages"][url])
+                ok, error = C.run_verdict(cr)
+                self.assertFalse(ok)
+                why = "no answer" if robots == "unreachable" else robots
+                self.assertEqual(error, f"no page could be read: robots.txt of www.aagrapevine.org ({why}), "
+                                        f"www.aalavina.org ({why}) did not answer properly — site down?")
+        # the robots.txt hold lifted later in the run and pages were read: ok (the note says what happened)
+        st = self.state()
+        cr = crawler(st, http=FakeSession(robots="unreachable"))
+        cr.crawl_page(PAGE, st["pages"][PAGE])
+        cr.http = FakeSession({HUB: Answer(200, HUB, page_html())})
+        cr.crawl_page(HUB, st["pages"][HUB])
+        self.assertEqual(C.run_verdict(cr), (True, None))
+        # pages asked for, none came back: as before
+        st = self.state()
+        cr = crawler(st, http=FakeSession({u: Answer(503, u) for u in (HUB, PAGE, RLV_HUB)}))
+        cr.c["requests"] = 9
+        for url in (HUB, PAGE, RLV_HUB):
+            cr.crawl_page(url, st["pages"][url])
+        self.assertEqual(C.run_verdict(cr)[1], f"no page could be fetched ({cr.c['page_errors']} errors) — site down?")
+        self.assertEqual(C.run_verdict(None), (True, None), "a rebuild without network")
+        cr = crawler(self.state(), http=FakeSession(robots="unreachable"))
+        self.assertEqual(C.run_verdict(cr), (True, None), "nothing was due: nothing to say")
+
+    def test_a_whole_run_keeps_the_last_success(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            raw = Path(tmp)
+            with mock.patch.object(common, "RAW_DIR", raw), mock.patch.object(common, "now_iso",
+                                                                                return_value="2026-10-05T07:30:00Z"):
+                common.save_raw("pdfs", [{"id": "pdf:1", "title": "A PDF", "first_seen": "2026-01-01T00:00:00Z"}])
+            out = io.StringIO()
+            with mock.patch.object(common, "RAW_DIR", raw), \
+                    mock.patch.object(C, "shared_session", lambda: FakeSession(robots="unreachable")), \
+                    mock.patch.object(C, "load_state", return_value=(self.state(), True)), \
+                    mock.patch.object(C, "save_state"), \
+                    contextlib.redirect_stdout(out):
+                C.main(["--minutes", "1", "--no-sitemap"])
+            env = json.loads((raw / "pdfs.json").read_text(encoding="utf-8"))
+        self.assertFalse(env["ok"])
+        self.assertIn("did not answer properly — site down?", env["error"])
+        self.assertEqual(env["updated"], "2026-10-05T07:30:00Z", "the last success stays")
+        self.assertEqual([i["id"] for i in env["items"]], ["pdf:1"], "nothing is lost")
+
+
 # =========================================================================== P2-13: pruning the state
 class StatePruning(unittest.TestCase):
     """crawl-state.json forgets what only takes room under MAX_KNOWN_PAGES: junk addresses and pages gone

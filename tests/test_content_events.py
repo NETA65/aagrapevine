@@ -96,6 +96,17 @@ class TheCheckItself(unittest.TestCase):
         self.assertIn("has no year", self.check("start: 2027-01-10\nend: 12 de enero\n")[0])
         self.assertIn("is a time of day without its date", self.check("start: 19:00\n")[0])
 
+    def test_a_day_left_out(self):
+        # English and Spanish alike (review of round 7: "marzo de 2027" became March 1); a Spanish 1st is a day
+        for head in ("start: March 2027\n", "start: marzo de 2027\nlang: es\n", "start: Enero de 2027\n",
+                     "start: marzo del 2027 a las 7 pm\nlang: es\n"):
+            with self.subTest(head=head):
+                msgs = self.check(head)
+                self.assertEqual(len(msgs), 1, msgs)
+                self.assertIn("has no day", msgs[0])
+        self.assertEqual(self.check("start: 1° de marzo de 2027\nlang: es\n"), [])
+        self.assertEqual(self.check("start: primero de marzo de 2027\nlang: es\n"), [])
+
     def test_an_offset_that_is_not_centrals(self):
         msgs = self.check("start: 2027-01-10T19:00:00-05:00\nend: 2027-01-10T21:00:00-06:00\n")
         self.assertEqual(len(msgs), 1)

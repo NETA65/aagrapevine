@@ -363,6 +363,171 @@ class EventFiles(unittest.TestCase):
         self.assertEqual(notes, [])                                  # the second 1:30 of the night the clocks go back
 
 
+class NamesThatAreNotSpanish(unittest.TestCase):
+    """Review of round 7: an English Drive name was read day first, silently, when it carried the documented zone
+    letters ET / EST ("et" / "est" are French words, and French read the day first) or named a Spanish-named group or
+    town ("@ Grupo Solo por Hoy", "- Grupo Progreso Latino, Duncanville", "El Paso"). Only the words of the name's
+    own title count now, and only when they clearly tell; English stays month first."""
+
+    def setUp(self):
+        common.take_date_notes()
+
+    def read(self, name: str) -> tuple[str | None, int]:
+        got = common.date_from_text(name)[0]
+        return got, len(common.take_date_notes())
+
+    def test_english_flyer_names_stay_month_first(self):
+        for name, want in {
+                "03-04-2027 GV Workshop 7pm ET on Zoom": "2027-03-04",
+                "03-04-2027 Grapevine Writing Workshop 7pm EST @ Zoom": "2027-03-04",
+                "03-04-2027 Writing Workshop 7pm ET @ Tyler Civic Center": "2027-03-04",
+                "LV Writing Workshop 03-04-2027 7pm @ Grupo Solo por Hoy": "2027-03-04",
+                "Grapevine Writing Workshop 10-03-2026 - Grupo Progreso Latino, Duncanville": "2026-10-03",
+                "11-07-2026 Grapevine Writing Workshop 9-11am @ Grupo Libro Grande, Tyler": "2026-11-07",
+                "Writing Workshop 03-04-2027 - Grupo Los Amigos de la Calle": "2027-03-04",
+                "Writing Workshop 03-04-2027 El Paso": "2027-03-04",
+                "03-04-2027 Writing Workshop 7pm CT @ Primary Purpose Group, Arlington": "2027-03-04"}.items():
+            with self.subTest(name=name):
+                self.assertEqual(self.read(name), (want, 0))
+
+    def test_a_name_whose_own_words_do_not_tell_is_noted(self):
+        for name in ("Workshop 03-04-2027 7pm ET", "Workshop 03-04-2027 El Paso", "Panel 77 - 03-04-2027 - Grupo X"):
+            with self.subTest(name=name):
+                self.assertEqual(self.read(name), ("2027-03-04", 1))     # month first, as in the US — and said
+
+    def test_spanish_names_stay_day_first(self):
+        for name in ("Taller 05-10-2026", "Taller 05-10-2026 - Grupo Solo por Hoy", "05-10-2026 - Taller de escritura",
+                     "Taller de escritura 05-10-2026 12 p. m. hora del Este", "Grupo de Escritura 05-10-2026",
+                     "05-10-2026 Grupo Solo por Hoy, Aniversario", "Reunión de La Junta 05-10-2026",
+                     "Informe de La Viña 05-10-2026"):
+            with self.subTest(name=name):
+                self.assertEqual(self.read(name), ("2026-10-05", 0))
+
+    def test_french_is_not_a_day_first_language(self):
+        self.assertEqual(common.date_from_text("Réunion 05-10-2026", lang="fr")[0], "2026-05-10")
+        self.assertEqual(len(common.take_date_notes()), 1)
+
+    def test_drive_flyers(self):
+        def flyer(n: int, name: str) -> dict:
+            e = D.Entry(id=f"f{n}", name=name, mime="application/pdf", modified="2026-09-24")
+            return D.build_item(D.Found(e, D.Panel(77, "Panel 77", "p77", "P77"), ["flyers"], ["root", "p77", "fl"],
+                                        seq=n), {})["extra"]
+        got = [flyer(n, name) for n, name in enumerate(
+            ["03-04-2027 GV Workshop 7pm ET on Zoom.pdf", "LV Writing Workshop 03-04-2027 7pm @ Grupo Solo por Hoy.jpg",
+             "Grapevine Writing Workshop 10-03-2026 - Grupo Progreso Latino, Duncanville.png",
+             "Taller de escritura 05-03-2027 7pm @ Grupo Solo por Hoy.pdf"], 1)]
+        self.assertEqual([x["event_date"] for x in got], ["2027-03-04", "2027-03-04", "2026-10-03", "2027-03-05"])
+        self.assertEqual((got[0]["event_time"], got[0]["event_tz"]), ("19:00", "America/New_York"))
+        self.assertEqual(common.take_date_notes(), [])
+
+
+class YearMonthDay(unittest.TestCase):
+    """Review of round 7: "October 17, 2026 7-9 PM" was read as July 9 — the year-month-day pattern took a
+    different mark in each place ("2026 7-9"). The same mark twice now ("2027-03-14", "2027 03 14", "2027_03_14")."""
+
+    def test_a_time_after_a_year_written_in_words(self):
+        cases = {"October 17, 2026 7-9 PM Writing Workshop": ("2026-10-17", "7-9 PM Writing Workshop"),
+                 "Writing Workshop March 14, 2027 9-11am @ Tyler, TX": ("2027-03-14", "Writing Workshop 9-11am @ Tyler, TX"),
+                 "14 de marzo de 2027 10-12 Taller": ("2027-03-14", "10-12 Taller"),
+                 "March 14 2027 6.30 PM Booth": ("2027-03-14", "6.30 PM Booth"),
+                 "March 14 2027 6 30 PM Booth": ("2027-03-14", "6 30 PM Booth"),
+                 "October 17, 2026 1-2 PM": ("2026-10-17", "1-2 PM")}
+        for text, want in cases.items():
+            with self.subTest(text=text):
+                self.assertEqual(common.date_from_text(text), want)
+
+    def test_the_forms_that_are_one_date(self):
+        for text, want in {"2027 03 14 Assembly": "2027-03-14", "2027-3-4 x": "2027-03-04", "2027.03.14": "2027-03-14",
+                           "2027_03_14": "2027-03-14", "IMG_2026_10_17": "2026-10-17", "2026-10-17 7pm": "2026-10-17",
+                           "2027-03-14 - 2027-03-16 Assembly": "2027-03-14"}.items():
+            with self.subTest(text=text):
+                self.assertEqual(common.date_from_text(text)[0], want)
+        self.assertEqual(common.date_range_from_text("2027-03-14 - 2027-03-16 Assembly")[1], "2027-03-16")
+        # a mark of each kind is not one date: the name's real date is found
+        self.assertEqual(common.date_from_text("2026-10-01 Pricing Update - Effective January 1, 2027")[0], "2026-10-01")
+
+    def test_a_flyer_and_an_event_file(self):
+        e = D.Entry(id="f1", name="October 17, 2026 7-9 PM Writing Workshop.jpg", mime="image/jpeg", modified="2026-09-24")
+        x = D.build_item(D.Found(e, D.Panel(77, "Panel 77", "p77", "P77"), ["flyers"], ["root", "p77", "fl"], seq=1),
+                         {})["extra"]
+        self.assertEqual((x["event_date"], x["event_time"], x["event_end_time"], x["event_title"]),
+                         ("2026-10-17", "19:00", "21:00", "Writing Workshop"))
+        self.assertEqual(A.as_when("Mar 14, 2027 7-9 PM", CHI), ("2027-03-14", True))     # a range of hours: all day
+        self.assertEqual(A.as_when("14 de marzo de 2027 7-9 pm", CHI, lang="es"), ("2027-03-14", True))
+
+
+class MonthWithoutItsDay(unittest.TestCase):
+    """Review of round 7: start: "marzo de 2027" became March 1 — "no day: left out" held for English only."""
+
+    def test_spanish_month_and_year_raise(self):
+        for v in ("marzo de 2027", "Enero de 2027", "marzo 2027", "marzo del 2027 a las 7 pm", "Marzo de 2027 19:00"):
+            for lang in ("es", None):
+                with self.subTest(v=v, lang=lang), self.assertRaisesRegex(ValueError, "has no day — write the whole date"):
+                    A.as_when(v, CHI, [], lang)
+
+    def test_the_first_written_as_a_spanish_ordinal_is_a_day(self):
+        for v in ("1° de marzo de 2027", "1º de marzo de 2027", "1.º de marzo de 2027", "1ro de marzo de 2027",
+                  "primero de marzo de 2027"):
+            with self.subTest(v=v):
+                self.assertEqual(A.as_when(v, CHI, [], "es"), ("2027-03-01", True))
+                self.assertIs(common.date_has_day(v), True)
+        self.assertEqual(A.as_when("sábado 1° de marzo de 2027, 7 p. m.", CHI, [], "es"), ("2027-03-02T01:00:00Z", False))
+        self.assertEqual(A.as_when("14 de marzo de 2027", CHI, [], "es"), ("2027-03-14", True))
+        self.assertEqual(common.date_from_text("2nd March 2027")[0], "2027-03-02")
+        self.assertIs(common.date_has_day("marzo de 2027"), False)
+        self.assertIsNone(common.date_has_day("no date"))
+
+    def test_an_event_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "taller.md"
+            p.write_text("---\ntitle: Taller\nstart: marzo de 2027\nlang: es\n---\nUn taller.\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "has no day"):
+                A.parse_event(p, CHI)
+
+    def test_drive_names(self):
+        self.assertEqual(D.name_date("Taller 1° de marzo de 2027"), ("2027-03-01", "Taller", True))
+        self.assertEqual(D.name_date("Taller marzo de 2027")[2], False)
+
+
+class UntilAndFromInSpanish(unittest.TestCase):
+    """Review of round 7: "(hasta 05-11-2026)" / "(desde …)" in a Drive or booth name was read month first while the
+    name's own date was read day first — a Spanish post hidden at once, or put up early."""
+
+    def setUp(self):
+        common.take_date_notes()
+
+    def post(self, name: str) -> dict:
+        e = D.Entry(id="a1", name=name, mime="application/pdf", modified="2026-10-01")
+        return D.build_item(D.Found(e, D.Panel(77, "Panel 77", "p77", "P77"), ["Anuncios"], ["root", "p77", "an"],
+                                    seq=1), {})
+
+    def test_bulletin_files(self):
+        it = self.post("Aviso de la junta (hasta 05-11-2026).pdf")
+        self.assertEqual((it["kind"], it["extra"]["expires"]), ("announcement", "2026-11-05"))
+        it = self.post("Taller de escritura 03-10-2026 (hasta 05-11-2026).pdf")
+        self.assertEqual((it["date"], it["extra"]["expires"]), ("2026-10-03", "2026-11-05"), "one order in one name")
+        self.assertEqual(self.post("Inscripciones (desde 05-11-2026).pdf")["extra"]["publish"], "2026-11-05")
+        self.assertEqual(self.post("Aviso (vence 01/02/2027).pdf")["extra"]["expires"], "2027-02-01")
+        self.assertEqual(common.take_date_notes(), [])
+        # an English word leaves the date to itself: month first, and said
+        self.assertEqual(self.post("Workshop (until 05-11-2026).pdf")["extra"]["expires"], "2026-05-11")
+        self.assertEqual(len(common.take_date_notes()), 1)
+        self.assertEqual(self.post("Aviso (hasta 2027-03-15).pdf")["extra"]["expires"], "2027-03-15")
+
+    def test_booth_files(self):
+        from scripts.sync import booth_names as BN
+        self.assertEqual(BN.parse_booth_name("LV ES Taller (hasta 05-11-2026).png", "image/png", ["booth"])["until"],
+                         "2026-11-05")
+        self.assertEqual(BN.parse_booth_name("LV ES Taller (desde 05-11-2026).png", "image/png", ["booth"])["from"],
+                         "2026-11-05")
+        self.assertEqual(BN.parse_booth_name("LV ES Taller (a partir de 05-11-2026).png", "image/png", ["booth"])["from"],
+                         "2026-11-05")
+        self.assertEqual(common.take_date_notes(), [])
+        self.assertEqual(BN.parse_booth_name("GV EN Workshop (until 05-11-2026).png", "image/png", ["booth"])["until"],
+                         "2026-05-11")
+        self.assertEqual(len(common.take_date_notes()), 1)
+
+
 class BulletinDates(unittest.TestCase):
     """The bulletin's dates are read the same way: a numbers-only date in a Spanish post is day first."""
 

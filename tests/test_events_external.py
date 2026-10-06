@@ -176,6 +176,18 @@ class Dates(unittest.TestCase):
         self.assertEqual(ev["start"], "2026-10-05")
         self.assertEqual(len(notes), 1)
         self.assertTrue(notes[0].startswith("grapevine event workshop: “10/05/2026” could be October 5 or May 10"), notes)
+        # … and on La Viña's pages too (review of round 7: the day-first reading was kept with nothing said — an event
+        # moved to "11/12/2026" kept its address and was listed on December 11): the site's order stands, and is said
+        notes.clear()
+        ev = written("11/12/2026", LV + "2026-10-20/taller-mensual", notes)
+        self.assertEqual(ev["start"], "2026-12-11")
+        self.assertEqual(notes, ["lavina event taller-mensual: “11/12/2026” could be read two ways and neither gives the "
+                                 "date in the page's address (2026-10-20) — read as 2026-12-11. Check the event's date"])
+        ev = written("11/05/2026 - 11/07/2026", LV + "2026-10-01/x", notes)
+        self.assertEqual((ev["start"], ev["end"]), ("2026-05-11", "2026-07-11"))
+        self.assertEqual(len(notes), 2)
+        written("25/10/2026", LV + "2026-10-20/otro", notes)                 # one reading only: nothing to say
+        self.assertEqual(len(notes), 2)
 
     def test_a_written_time_is_a_timed_event(self):
         ev = self.ev("2026-11-07T19:00:00-0600", "2026-11-07T21:00:00-0600", "November 7, 2026 7:00pm - 9:00pm")

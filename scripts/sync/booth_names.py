@@ -61,7 +61,8 @@ data/site/booth.json and in NO other site file (docs/DATA_SCHEMA.md → booth.js
     (first) (primero) (primera)      shown FIRST when the show starts (and after the settings change)
     (from 2027-03-01) (desde …)      only from that day — any date common.date_from_text reads ("March 1,
                                      2027", "1 de marzo de 2027", "03/01/2027" …); a month alone ("(from
-                                     March 2027)") is its first day
+                                     March 2027)") is its first day; numbers only after "desde" / "a partir
+                                     de" (and "hasta" / "vence"): day first ("(hasta 05-11-2026)": Nov 5)
     (until 2027-03-15) (hasta …)     only until that day, inclusive (a month alone: its last day); after it
                                      build_data leaves the file out of data/site/booth.json
     (no caption) (no text)           the picture / video without its title; a message without its heading
@@ -102,7 +103,7 @@ from .common import MONTHS, slugify
 # drive.py's own name helpers, so a booth file's title is tidied exactly like every other Drive file's. (drive.py
 # imports this module inside the functions that need it, not at its top, so the two never import each other
 # half-way.)
-from .drive import _COPY_PREFIX, _COPY_SUFFIX, is_generic_media_name, name_date, tidy
+from .drive import _COPY_PREFIX, _COPY_SUFFIX, is_generic_media_name, keyword_lang, name_date, tidy
 
 BOOTH_CATEGORY = "booth"         # drive.CATEGORY_SYNONYMS key of the booth folder
 MAIN = "main"                    # the collection of the files directly in the booth folder
@@ -227,8 +228,8 @@ _MINUTES = re.compile(r"(\d{1,2})\s*(?:mins?|minutes?|minutos?)\.?")
 _WEIGHT = re.compile(r"[x×]\s*(\d{1,2})|(\d{1,2})\s*[x×]")
 _CLOCK = r"(?:\d{1,2}:)?\d{1,2}:[0-5]\d"                       # m:ss or h:mm:ss
 _RANGE = re.compile(rf"({_CLOCK}|\d{{1,5}})\s*(?:[-–—]|\b(?:to|a|hasta)\b)\s*({_CLOCK}|\d{{1,5}})?")
-_FROM = re.compile(r"(?:from|starting|desde|a partir del?)\s*:?\s+(.+)")
-_UNTIL = re.compile(r"(?:until|till|through|thru|expires?|hasta|vence)\s*:?\s+(.+)")
+_FROM = re.compile(r"(from|starting|desde|a partir del?)\s*:?\s+(.+)")               # (the word tells the date's
+_UNTIL = re.compile(r"(until|till|through|thru|expires?|hasta|vence)\s*:?\s+(.+)")      # language: drive.keyword_lang)
 _GROUP = re.compile(r"\(([^()\[\]]*)\)|\[([^()\[\]]*)\]")
 
 
@@ -272,11 +273,11 @@ def _secs(v: str) -> int:
     return total
 
 
-def _day(text: str, last: bool) -> str | None:
+def _day(text: str, last: bool, lang: str | None = None) -> str | None:
     """A date as common.date_from_text reads it → 'YYYY-MM-DD'. A month alone ("March 2027") is its first day,
     or its last one when `last` (an "until" day). None when the text holds no full date ("March 15" — no year
-    —, "the Chair", "further notice")."""
-    iso, _rest, explicit = name_date(text)
+    —, "the Chair", "further notice"). `lang` "es" (after "hasta" / "desde"): a numbers-only date is day first."""
+    iso, _rest, explicit = name_date(text, lang)
     if not iso:
         return None
     if last and not explicit:
@@ -309,11 +310,11 @@ def _option(part: str, media: bool) -> dict | None:
     if m and (media or (":" in m[1] and (m[2] is None or ":" in m[2]))):
         return {"range": (_secs(m[1]), _secs(m[2]) if m[2] else None)}
     m = _FROM.fullmatch(part)
-    day = _day(m[1], last=False) if m else None
+    day = _day(m[2], last=False, lang=keyword_lang(m[1])) if m else None
     if day:
         return {"from": day}
     m = _UNTIL.fullmatch(part)
-    day = _day(m[1], last=True) if m else None
+    day = _day(m[2], last=True, lang=keyword_lang(m[1])) if m else None
     if day:
         return {"until": day}
     return None

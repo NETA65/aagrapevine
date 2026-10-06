@@ -499,11 +499,19 @@ def parse_event(html: str, url: str, notes: list[str] | None = None) -> dict:
         said: list[str] = []
         s_iso, e_iso, _rest = date_range_from_text(date_text, lang, said) if date_text else (None, None, "")
         if d0 and s_iso:
+            readings = {}
             for order in ([lang] if lang else []) + ["en", "es"]:      # "en": month first, "es": day first
                 s2, e2, _rest = date_range_from_text(date_text, order, [])
+                readings[order] = s2
                 if s2 == d0.isoformat():
                     s_iso, e_iso, lang, said = s2, e2, order, []
                     break
+            else:
+                if readings["en"] != readings["es"] and not said:
+                    # neither reading of a date that could be read two ways gives the day in the page's address (an
+                    # event moved, its address kept): the site's own order stands (La Viña: day first) — and is said
+                    said.append(f"“{date_text}” could be read two ways and neither gives the date in the page's "
+                                f"address ({d0.isoformat()}) — read as {s_iso}. Check the event's date")
         pieces = re.split(r"\s+[-–]\s+", date_text) if date_text else []
         if s_iso and not e_iso:
             for piece in reversed(pieces[1:]):

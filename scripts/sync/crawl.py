@@ -35,7 +35,8 @@ HOW (one daily run, time-boxed; default 40 min, see config sources.crawler):
      about them in stats.warnings.
 
 The bot is polite: robots.txt is obeyed (one that answers 5xx or not at all closes its host for now,
-RFC 9309 — PoliteSession) and the 5-second Crawl-delay is applied across BOTH hosts
+RFC 9309 — PoliteSession; a run that could read no page because of it is a failed run, "site down?":
+run_verdict) and the 5-second Crawl-delay is applied across BOTH hosts
 together (they are one server), through the pipeline's shared_session(). A page (or sitemap) that an
 earlier module of the same run already read — the home pages (quote), /BOTM (shop), the sitemap
 (events_external)… — is taken from that session's page memo instead of being requested again, so the
@@ -1275,6 +1276,28 @@ class Crawler:
         return out
 
 
+def run_verdict(crawler: Crawler | None) -> tuple[bool, str | None]:
+    """(ok, error) of the run, for data/raw/pdfs.json. Not ok when the magazine sites gave nothing to read — so
+    /status/ shows the search as failed, its "Last success" stays, and a week of it reaches the failing-sources
+    report:
+      * pages were asked for and none came back ("site down?"), or
+      * robots.txt of a magazine site did not answer properly (5xx / 429 / no answer — the whole host stays closed,
+        RFC 9309), pages of it were due, and no page at all was read: a server that is down answers robots.txt no
+        better than its pages, so nothing is sent for them and the first rule cannot see it.
+    A run where the robots.txt hold lifted and pages were read again stays ok (the note says what happened)."""
+    if not crawler:
+        return True, None
+    c = crawler.c
+    read = c["pages_ok"] + c["not_modified"] + c["pages_reused"]
+    if c["requests"] > 3 and c["pages_ok"] == 0 and c["not_modified"] == 0 and c["pages_fetched"] > 0:
+        return False, f"no page could be fetched ({c['page_errors']} errors) — site down?"
+    closed = {h: p for h, p in crawler.robots_down.items() if h in R.DRUPAL_HOSTS}
+    if closed and c["robots_unavailable"] > 0 and not read:
+        why = ", ".join(f"{h} ({'no answer' if p == 'unreachable' else p})" for h, p in sorted(closed.items()))
+        return False, f"no page could be read: robots.txt of {why} did not answer properly — site down?"
+    return True, None
+
+
 def run_warnings(crawler: Crawler | None, hub_problems: list[dict]) -> list[str]:
     """Plain lines for stats.warnings (the run summary's notes): hub / kit pages that did not load, and a
     magazine site whose robots.txt kept the crawl away this run."""
@@ -1552,6 +1575,9 @@ def main(argv=None) -> None:
     ap.add_argument("--dry-run", action="store_true", help="crawl but write nothing (prints a sample)")
     args = ap.parse_args(argv)
 
+    # data/raw/pdfs.json first: one that cannot be read stops the run here (common.UnreadableRaw) — before forty
+    # minutes of crawling whose result could not be saved
+    prev = load_raw(SOURCE)
     st, loaded_ok = load_state()
     crawler = None
     interrupted = None
@@ -1583,7 +1609,6 @@ def main(argv=None) -> None:
         del runs[:-30]
 
     items = build_items(st)
-    prev = load_raw(SOURCE)
     merged, _added = merge_items(prev.get("items", []), items, drop_missing=loaded_ok)
     reapply_fresh_fields(merged, items)
     last_seen = {f"pdf:{short_hash(k, 12)}": r.get("last_seen_on_page") for k, r in st["pdfs"].items()}
@@ -1597,11 +1622,7 @@ def main(argv=None) -> None:
     warnings = run_warnings(crawler, hub_problems)
     if warnings:
         stats["warnings"] = warnings
-    ok = True
-    error = None
-    if crawler and crawler.c["requests"] > 3 and crawler.c["pages_ok"] == 0 and crawler.c["not_modified"] == 0 \
-            and crawler.c["pages_fetched"] > 0:
-        ok, error = False, f"no page could be fetched ({crawler.c['page_errors']} errors) — site down?"
+    ok, error = run_verdict(crawler)
     if args.dry_run:
         log.info("dry run: nothing written")
         for it in merged[:8]:

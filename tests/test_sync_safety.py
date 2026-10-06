@@ -5,8 +5,9 @@ translation cache are temporary folders; Drive, the downloads and the model serv
                       than half of DROP_GUARD_MIN or more) keeps them for one run, marked `held`; the next run that
                       still misses those same items accepts it (items that vanish only then are held in turn); a
                       recovery clears it; new items still come in; "gone" items count and are put back once; failed
-                      runs keep the mark; exempt sources (DROP_GUARD_EXEMPT, drop_guard=, a source switched off) are
-                      not held; `changes` = this run's {"added", "removed", "held"}.
+                      runs keep the mark and remove none of the held items; every held id is stored; exempt sources
+                      (DROP_GUARD_EXEMPT, drop_guard=, a source switched off) are not held; `changes` = this run's
+                      {"added", "removed", "held"}.
   * GuardChoices    — every source that writes a raw file is guarded or exempt on purpose (the table and its
                       reasons).
   * DriveEmptyFolders — drive_listing + drive.main: a folder (or the whole tree) that suddenly looks empty keeps
@@ -18,10 +19,13 @@ translation cache are temporary folders; Drive, the downloads and the model serv
   * TranslationSafety — an unreadable cache.json is moved aside and reported, never silently replaced (nor
                       overwritten when it cannot be moved); a model whose checksum is not the pinned one is not
                       installed — that direction is not translated, the run goes on, the reason is reported.
-  * WholeBuilds     — build_data.main: an unreadable raw file keeps the last build's data for its source (never an
-                      empty section) and marks it failed on /status/; status.json carries `changes` and `held`;
-                      files whose content did not change keep their `updated`; the cache is pruned while a
-                      settings note is open, not while a raw file cannot be read.
+  * WholeBuilds     — build_data.main: an unreadable raw file — or a missing one whose source had items — keeps the
+                      last build's data for its source (never an empty section) and marks it failed on /status/;
+                      status.json carries `changes` and `held`; files whose content did not change keep their
+                      `updated`; the cache is pruned while a settings note is open, not while a raw file cannot be
+                      read.
+  * UnreadableRawFiles — nothing is written over a raw file that cannot be read, and run_all does not run its source
+                      (no rebuild from scratch, no Instagram picture clean-up).
   * StatusPage      — /status/ and /es/status/ show a source on hold, a source's notes and translation problems.
 
     python -m unittest tests.test_sync_safety -v        (or: python -m unittest discover -s tests)
@@ -157,39 +161,79 @@ class MassDropGuard(TempRaw):
         self.assertEqual((len(env["items"]), "held" in env), (13, False))
         self.assertEqual(env["changes"], {"added": 5, "removed": 12, "held": 0, "confirmed": "2026-10-08T06:00:00Z"})
 
-    def test_a_big_hold_stores_50_ids_and_the_count(self):
-        # a big source's whole id list is never written out: the first HELD_IDS_MAX (sorted) and how many
-        self.assertEqual(common.HELD_IDS_MAX, 50)
+    def test_a_big_hold_stores_every_id(self):
+        # every held id is stored (review of round 7: a list cut at 50 could never tell which missing items were new)
         self.save("youtube", items(200))
         env = self.save("youtube", items(20), at="2026-10-06T18:00:00Z")          # 180 of 200 missing: held
         self.assertEqual(len(self.ids(env)), 200)
-        self.assertEqual((env["held"]["kept"], env["held"]["ids_total"]), (180, 180))
-        self.assertEqual(env["held"]["ids"], sorted(f"x:{i}" for i in range(21, 201))[:50])
-        self.assertLess(len(json.dumps(env["held"])), 1500)
+        self.assertEqual(env["held"]["kept"], 180)
+        self.assertEqual(env["held"]["ids"], sorted(f"x:{i}" for i in range(21, 201)))
+        self.assertNotIn("ids_total", env["held"])
         # the same drop again: all 180 go
         env = self.save("youtube", items(20), at="2026-10-07T06:00:00Z")
         self.assertEqual((len(env["items"]), "held" in env), (20, False))
         self.assertEqual(env["changes"], {"added": 0, "removed": 180, "held": 0, "confirmed": "2026-10-06T18:00:00Z"})
-        # more missing than were held (the 20 found last time vanish too): which ones are new cannot be told from
-        # 50 ids — nothing is accepted yet, the whole drop stays held (same since); the next run decides
+        # the held ones still missing go, and the 20 found last time and missing only now are a new drop, held in turn
         self.save("youtube", items(200), at="2026-10-08T06:00:00Z")
         self.save("youtube", items(20), at="2026-10-08T12:00:00Z")
         env = self.save("youtube", [], at="2026-10-09T06:00:00Z")
-        self.assertEqual(len(self.ids(env)), 200)
-        self.assertEqual((env["held"]["since"], env["held"]["kept"], env["held"]["ids_total"]),
-                         ("2026-10-08T12:00:00Z", 200, 200))
-        self.assertNotIn("confirmed", env["changes"])
-        env = self.save("youtube", [], at="2026-10-09T12:00:00Z")                  # the same (whole) drop again
-        self.assertEqual((env["items"], "held" in env), ([], False))
-        self.assertEqual(env["changes"], {"added": 0, "removed": 200, "held": 0, "confirmed": "2026-10-08T12:00:00Z"})
-        # a held item of the stored 50 is back: not the same drop — the rest is judged afresh (still a mass drop:
-        # held again, nothing removed)
+        self.assertEqual(self.ids(env), sorted(f"x:{i}" for i in range(1, 21)))
+        self.assertEqual(env["changes"], {"added": 0, "removed": 180, "held": 20, "confirmed": "2026-10-08T12:00:00Z"})
+        self.assertEqual((env["held"]["since"], env["held"]["previous"]), ("2026-10-09T06:00:00Z", 20))
+        # a held item is back: only the others still missing go
         self.save("youtube", items(200), at="2026-10-10T06:00:00Z")
-        back = self.save("youtube", items(20), at="2026-10-10T12:00:00Z")["held"]["ids"][0]   # "x:100" (sorted as text)
-        env = self.save("youtube", [*items(20), *items(1, start=int(back[2:]))], at="2026-10-11T06:00:00Z")
-        self.assertEqual(len(self.ids(env)), 200)
-        self.assertEqual((env["held"]["kept"], env["held"]["since"]), (179, "2026-10-10T12:00:00Z"))
-        self.assertNotIn("confirmed", env["changes"])
+        self.save("youtube", items(20), at="2026-10-10T12:00:00Z")
+        env = self.save("youtube", [*items(20), *items(1, start=100)], at="2026-10-11T06:00:00Z")
+        self.assertEqual(len(self.ids(env)), 21)
+        self.assertEqual(env["changes"], {"added": 0, "removed": 179, "held": 0, "confirmed": "2026-10-10T12:00:00Z"})
+
+    def test_a_big_hold_that_loses_a_few_more_each_run(self):
+        """Review of round 7: with more than 50 held, a source that kept losing a few items a night was never
+        confirmed — every run held the whole drop again (the PDF library after a site restructure). Now the held
+        ones still missing are removed the next run, and each run's new losses are judged on their own."""
+        self.save("pdfs", items(142))
+        env = self.save("pdfs", items(62), at="2026-10-06T06:00:00Z")              # 80 of 142 gone: held
+        self.assertEqual((env["held"]["kept"], len(env["held"]["ids"])), (80, 80))
+        env = self.save("pdfs", items(59), at="2026-10-07T06:00:00Z")              # … and 3 more the next night
+        self.assertEqual(len(self.ids(env)), 59)
+        self.assertNotIn("held", env, "3 of 62 is no mass drop")
+        self.assertEqual(env["changes"], {"added": 0, "removed": 83, "held": 0, "confirmed": "2026-10-06T06:00:00Z"})
+        env = self.save("pdfs", items(57), at="2026-10-08T06:00:00Z")
+        self.assertEqual(env["changes"], {"added": 0, "removed": 2, "held": 0})
+
+    def test_a_failed_run_during_a_hold_removes_nothing(self):
+        """Review of round 7: crawl.py writes its list on a failed run too (the held documents marked gone, as its
+        state still says); the held items left the site without the confirming run, while the envelope still said
+        they were held. A failed run now puts them back; the next run that works confirms the removal."""
+        self.save("pdfs", items(100))
+        marked = items(100)
+        for it in marked[40:]:
+            it["status"] = "gone"
+        env = self.save("pdfs", marked, at="2026-10-06T06:00:00Z")                 # 60 marked gone: held
+        self.assertEqual((env["held"]["kept"], len(self.ids(env))), (60, 100))
+        env = self.save("pdfs", marked, ok=False, error="no page could be fetched — site down?",
+                        at="2026-10-07T06:00:00Z")                                  # the site is down
+        self.assertEqual(len(self.ids(env)), 100, "still on the site")
+        self.assertEqual(self.ids(env, live_only=False), self.ids(env), "each item once")
+        self.assertEqual(env["changes"], {"added": 0, "removed": 0, "held": 60})
+        self.assertEqual((env["held"]["since"], env["held"]["kept"]), ("2026-10-06T06:00:00Z", 60))
+        self.assertEqual(env["updated"], "2026-10-06T06:00:00Z", "the last success stays")
+        env = self.save("pdfs", marked, at="2026-10-08T06:00:00Z")                  # a run that works: confirmed
+        self.assertEqual((len(self.ids(env)), "held" in env), (40, False))
+        self.assertEqual(env["changes"], {"added": 0, "removed": 60, "held": 0, "confirmed": "2026-10-06T06:00:00Z"})
+
+    def test_a_failed_run_during_a_hold_written_before_every_id_was_stored(self):
+        # an envelope of the last version: the first 50 ids and `ids_total` — the failed run puts back every item it
+        # misses; the next run that works accepts the 50 named ones and judges the others on their own
+        self.save("pdfs", items(100))
+        env = self.save("pdfs", items(40), at="2026-10-06T06:00:00Z")
+        env["held"]["ids"], env["held"]["ids_total"] = env["held"]["ids"][:50], 60
+        (self.raw / "pdfs.json").write_text(json.dumps(env), encoding="utf-8")
+        env = self.save("pdfs", items(30), ok=False, error="site down?", at="2026-10-07T06:00:00Z")
+        self.assertEqual((len(self.ids(env)), env["changes"]["removed"]), (100, 0))
+        env = self.save("pdfs", items(40), at="2026-10-08T06:00:00Z")
+        self.assertEqual(len(self.ids(env)), 40)
+        self.assertEqual(env["changes"]["confirmed"], "2026-10-06T06:00:00Z")
 
     def test_a_failed_run_keeps_the_mark_and_extras_never_override_it(self):
         self.save("shop", items(3))
@@ -645,8 +689,89 @@ class WholeBuilds(TempRaw):
             self.assertFalse(r["ok"], source)
             self.assertEqual(r["count"], count, source)
             self.assertEqual(r["updated"], "2026-10-06T06:00:00Z", "the last success it had")
-            self.assertIn(f"data/raw/{source}.json could not be read", r["error"])
+            self.assertRegex(r["error"], rf"^data/raw/{source}\.json cannot be read \(JSONDecodeError: .+\) — restore it "
+                                         r"from git; the site keeps the last build's items$")
         self.assertEqual(two["status"]["counts"]["videos"], 2)
+
+    def test_a_run_over_unreadable_raw_files_rebuilds_nothing(self):
+        """Review of round 7: the nightly run moved an unreadable raw file aside and rebuilt the source from scratch
+        — from today's listing only, or, when the source failed that night, empty, deployed as an empty section.
+        Now the module is not run, the file stays as it is, and every build keeps the last build's items."""
+        from scripts.sync import run_all as R
+        self.sources()
+        recent = (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.raw_file("instagram", [{"id": "ig:DeCVK7TktaJ", "source": "instagram", "kind": "post", "category": "gv",
+                                     "url": "https://www.instagram.com/p/DeCVK7TktaJ/", "title": "A post", "lang": "en",
+                                     "date": recent, "first_seen": recent, "extra": {"shortcode": "DeCVK7TktaJ"}}])
+        self.raw_file("articles", [{"id": "art:gv:1", "source": "articles", "kind": "article", "category": "gv",
+                                    "url": "https://www.aagrapevine.org/magazine/2026/oct/a-story", "title": "A story",
+                                    "lang": "en", "date": recent, "first_seen": recent, "extra": {}}])
+        one = self.build()
+        self.assertEqual((len(one["instagram"]["items"]), len(one["articles"]["items"])), (1, 1))
+        bad = '<<<<<<< HEAD\n{"source": "youtube", "items": []}\n=======\n'
+        for source in ("youtube", "instagram", "articles"):
+            (self.raw / f"{source}.json").write_text(bad, encoding="utf-8")
+        started = []
+        fake = mock.Mock(main=lambda argv: started.append(argv))
+        for source in ("youtube", "instagram", "articles"):
+            with mock.patch.object(R.importlib, "import_module", return_value=fake):
+                row = R.run_source(source, [])
+            self.assertEqual(row["status"], "failed")
+            self.assertTrue(row["note"].startswith(f"data/raw/{source}.json cannot be read (JSONDecodeError"), row)
+            self.assertEqual((self.raw / f"{source}.json").read_text(encoding="utf-8"), bad, "left exactly as it was")
+        self.assertEqual(started, [], "no module is run")
+        self.assertEqual(list(self.raw.glob("*.corrupt-*")), [])
+        two = self.build(at="2026-10-07T06:00:00Z")
+        for name in ("videos", "instagram", "articles", "spotlight", "writers_archive"):
+            self.assertEqual(two[name], one[name], name)
+        rows = {r["source"]: r for r in two["status"]["sources"]}
+        self.assertEqual((rows["youtube"]["ok"], rows["youtube"]["count"], rows["youtube"]["updated"]),
+                         (False, 2, "2026-10-06T06:00:00Z"))
+        self.assertEqual((rows["instagram"]["ok"], rows["articles"]["ok"]), (False, False))
+        # restored from git: the next run reads it again
+        self.sources()
+        with mock.patch.object(R.importlib, "import_module", return_value=fake):
+            R.run_source("youtube", [])
+        self.assertEqual(len(started), 1)
+
+    def test_a_missing_raw_file_keeps_the_last_builds_items(self):
+        """Review of round 7: a raw file deleted by a merge or a clean-up deployed an empty section, did not stop the
+        cache pruning, and /status/ said "not run yet". The last build's items stay until the source's next update
+        writes the file again; a source that never had items starts empty, as before."""
+        self.sources()
+        one = self.build()
+        (self.raw / "youtube.json").unlink()
+        self.cache_with_unused_entry()
+        two = self.build(at="2026-10-06T18:00:00Z")
+        self.assertEqual(two["videos"], one["videos"])
+        self.assertTrue({"yt:1", "yt:2"} <= {i["id"] for i in two["whatsnew"]["items"]})
+        rows = {r["source"]: r for r in two["status"]["sources"]}
+        self.assertEqual((rows["youtube"]["ok"], rows["youtube"]["count"], rows["youtube"]["updated"]),
+                         (False, 2, "2026-10-06T06:00:00Z"))
+        self.assertEqual(rows["youtube"]["error"], "data/raw/youtube.json is missing — the site keeps the last build's "
+                                                   "items until this source's next update writes the file again (or "
+                                                   "restore it from git)")
+        self.assertEqual((rows["podcasts"]["ok"], rows["podcasts"]["error"]), (None, "not run yet"), "never had items")
+        self.assertEqual(self.cached(), 1, "the cache is not pruned while a source's texts are not asked for")
+        ctx = B.Ctx(offline=True)
+        ctx.load_raw(two["status"])
+        self.assertEqual(B.prune_blockers(ctx, None), ["data/raw/youtube.json is missing"])
+        three = self.build(at="2026-10-07T06:00:00Z")           # still missing: still kept
+        self.assertEqual(three["videos"], one["videos"])
+        # the source's next update writes the file again (here: with one video)
+        video = one["videos"]["items"][0]
+        self.raw_file("youtube", [video], first_harvest="2026-01-01T00:00:00Z")
+        four = self.build(at="2026-10-07T12:00:00Z")
+        self.assertEqual([i["id"] for i in four["videos"]["items"]], [video["id"]])
+        self.assertTrue(next(r for r in four["status"]["sources"] if r["source"] == "youtube")["ok"])
+
+    def test_sample_data_is_not_kept_for_a_missing_file(self):
+        self.out.mkdir(parents=True)
+        (self.out / "status.json").write_text(json.dumps({"fixture": True, "sources": [
+            {"source": "youtube", "ok": True, "count": 9}]}), encoding="utf-8")
+        ctx = B.Ctx(offline=True)
+        ctx.load_raw(json.loads((self.out / "status.json").read_text(encoding="utf-8")))
+        self.assertEqual((ctx.unreadable, ctx.raw_problems.get("youtube")), (set(), "missing"))
 
     def test_changes_and_held_reach_status_json(self):
         with mock.patch.object(common, "now_iso", return_value="2026-10-06T06:00:00Z"):
@@ -713,6 +838,79 @@ class WholeBuilds(TempRaw):
         self.assertIn("cache.json could not be read", st["translations"]["problems"][0])
         self.assertIn("cache.json could not be read", st["problems"]["translations"], "a Settings problem too")
         self.assertEqual(len(list(self.tmp.glob("cache.json.bad-*"))), 1)
+
+
+# =========================================================================== a raw file that cannot be read
+class UnreadableRawFiles(TempRaw):
+    """Review of round 7: a raw file that cannot be read is never rebuilt from scratch over — not by load_raw (it
+    raises, the file stays), not by save_raw, not by run_module's failure mark — and run_all does not run its source:
+    Instagram's clean-up would otherwise delete the pictures of every older post, and the articles would lose their
+    archive."""
+
+    BAD = '{"source": "x", "items": [ {"id": "a"'
+
+    def test_nothing_is_written_over_it(self):
+        p = self.raw / "demo.json"
+        p.write_text(self.BAD, encoding="utf-8")
+        with self.assertRaises(common.UnreadableRaw) as cm:
+            common.load_raw("demo")
+        self.assertRegex(str(cm.exception), r"^data/raw/demo\.json cannot be read \(JSONDecodeError: .+\) — restore it "
+                                            r"from git; the site keeps the last build's items$")
+        with self.assertRaises(common.UnreadableRaw):
+            common.save_raw("demo", [{"id": "y", "title": "Y"}], ok=True)
+        with self.assertRaises(common.UnreadableRaw):
+            common.save_raw("demo", [], ok=False, error="site down")
+        self.assertEqual(common.run_module("demo", lambda: 1 / 0), 0)                   # a crash: no failure mark
+        self.assertEqual(common.run_module("demo", lambda: common.save_raw("demo", [], ok=False)), 0)
+        self.assertEqual(p.read_text(encoding="utf-8"), self.BAD)
+        self.assertEqual(list(self.raw.glob("demo.json*")), [p])
+        self.assertIsNotNone(common.raw_unreadable("demo"))
+        self.assertIsNone(common.raw_unreadable("nothing-yet"))
+        self.assertEqual(common.load_raw("nothing-yet")["items"], [], "a missing file: a new source")
+
+    def test_instagram_is_not_run_and_keeps_its_pictures(self):
+        from scripts.sync import instagram as I
+        from scripts.sync import run_all as R
+        thumbs = self.tmp / "ig"
+        thumbs.mkdir()
+        (thumbs / "DcAAAATktaA.webp").write_bytes(b"webp")
+        (self.raw / "instagram.json").write_text(self.BAD, encoding="utf-8")
+
+        def no_network(**kw):
+            raise AssertionError("no request may be made")
+        with mock.patch.object(I, "THUMB_DIR", thumbs), mock.patch.object(I, "PoliteSession", no_network):
+            row = R.run_source("instagram", [])
+            self.assertEqual(common.run_module("instagram", lambda: I.main(["--no-enrich"])), 0)   # run by hand
+        self.assertEqual(row["status"], "failed")
+        self.assertIn("data/raw/instagram.json cannot be read", row["note"])
+        self.assertTrue((thumbs / "DcAAAATktaA.webp").exists())
+        self.assertEqual((self.raw / "instagram.json").read_text(encoding="utf-8"), self.BAD)
+
+    def test_the_articles_and_the_crawl_are_not_run(self):
+        from scripts.sync import run_all as R
+        for module, raw in (("articles", "articles"), ("crawl", "pdfs")):
+            (self.raw / f"{raw}.json").write_text(self.BAD, encoding="utf-8")
+            with mock.patch.object(R.importlib, "import_module", side_effect=AssertionError("not imported")):
+                row = R.run_source(module, [])
+            self.assertEqual(row["status"], "failed", module)
+            self.assertIn(f"data/raw/{raw}.json cannot be read", row["note"])
+            self.assertEqual((self.raw / f"{raw}.json").read_text(encoding="utf-8"), self.BAD)
+
+    def test_the_bulletin_still_updates_when_only_the_events_file_cannot_be_read(self):
+        from scripts.sync import announcements as A
+        from scripts.sync import run_all as R
+        for d in ("bulletin", "events"):
+            (self.tmp / d).mkdir()
+        (self.tmp / "bulletin" / "2026-10-01-welcome.md").write_text("---\ntitle: Welcome\n---\nHi.\n", encoding="utf-8")
+        (self.raw / "manual_events.json").write_text(self.BAD, encoding="utf-8")
+        with mock.patch.object(A, "ANN_DIR", self.tmp / "bulletin"), mock.patch.object(A, "EVENTS_DIR", self.tmp / "events"), \
+                mock.patch.object(A, "LEGACY_ANN_DIR", self.tmp / "none"):
+            row = R.run_source("announcements", [])
+        self.assertEqual([i["title"] for i in self.env("announcements")["items"]], ["Welcome"])
+        self.assertTrue(self.env("announcements")["ok"])
+        self.assertEqual((self.raw / "manual_events.json").read_text(encoding="utf-8"), self.BAD)
+        self.assertEqual(row["status"], "failed")
+        self.assertIn("data/raw/manual_events.json cannot be read", row["note"])
 
 
 # =========================================================================== the /status/ page

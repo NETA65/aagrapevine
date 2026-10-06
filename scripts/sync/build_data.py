@@ -10,9 +10,10 @@ Contract: docs/DATA_SCHEMA.md §3 + §5.
     python -m scripts.sync.build_data --out .tmp/site    # write somewhere else (testing)
     python -m scripts.sync.build_data --no-translate     # only cached translations (fast)
 
-Robust by design: a missing raw file or a bad item is logged and skipped, never fatal; a raw file
-that exists but cannot be read keeps what the last build made of it (carry_unreadable — never an
-empty section) and shows as failed on /status/. Output is deterministic (stable sort, no run
+Robust by design: a bad item is logged and skipped, never fatal; a raw file that exists but cannot be
+read — or is missing although the last build had items from it — keeps what the last build made of it
+(carry_unreadable — never an empty section) and shows as failed on /status/ (a missing file of a source
+that never had items: "not run yet"). Output is deterministic (stable sort, no run
 timestamps inside items, no `last_seen`; a file whose content did not change keeps its `updated` —
 stamped) so daily git diffs stay small.
 """
@@ -42,7 +43,7 @@ from . import translate as T
 from . import writers_archive as WA
 from .common import (RAW_DIR, ROOT, SITE_DIR, STATE_DIR, as_json, clean_text, event_host, get_logger, load_config,
                      now_iso, parse_iso, read_capped, read_json, short_hash, slugify, strip_html, to_iso, truncate,
-                     write_json)
+                     unreadable_message, write_json)
 from .events_external import platform_of
 from .geo import SCOPES, UNKNOWN, best_of, classify_location, fold
 from .meeting import (MonthlyRule, check_skip_dates, meeting_skip_notes, nth_weekday, overnight, parse_hhmm,
@@ -231,9 +232,11 @@ class Ctx:
         self.offline = offline
         self.raw: dict[str, dict] = {}
         self.raw_problems: dict[str, str] = {}
-        # raw files that exist but could not be read: the site keeps what the last build made of them
-        # (carry_unreadable) and their row on /status/ says so (build_status)
+        # raw files that exist but could not be read — or that are missing while the last build had items from
+        # them (raw_missing): the site keeps what the last build made of them (carry_unreadable) and their row on
+        # /status/ says so (build_status)
         self.unreadable: set[str] = set()
+        self.raw_missing: set[str] = set()
         self.births: dict[str, float] = {}
         self.hub_issues: set[str] = set()      # "gv:2026-10" — magazine issues seen on a hub (current issues)
         self.feeds: list[dict] = []            # health of each sources.ics_feeds entry (→ status.json `feeds`)
@@ -245,12 +248,26 @@ class Ctx:
         self.series: list[dict] = []
 
     # ---------------------------------------------------------------- raw loading
-    def load_raw(self) -> None:
+    def load_raw(self, previous: Any = None) -> None:
+        """Read every source's raw file. `previous` = the last build's status.json: a raw file that is missing
+        although that build had items from the source (a merge or a clean-up deleted it, or a person did to read
+        the source again from scratch) keeps the last build's items too, until the source's next update writes the
+        file again; a source with nothing before (a new one) starts empty, "not run yet"."""
+        had = {r.get("source"): r for r in ((previous or {}).get("sources") or []) if isinstance(r, dict)} \
+            if isinstance(previous, dict) and previous.get("fixture") is not True else {}
         for name, *_ in SOURCES:
             p = RAW_DIR / f"{name}.json"
             env = {"source": name, "updated": None, "ok": False, "error": None, "stats": {}, "items": []}
             if not p.exists():
-                self.raw_problems[name] = "missing"
+                count = (had.get(name) or {}).get("count")
+                if isinstance(count, int) and not isinstance(count, bool) and count > 0:
+                    self.raw_problems[name] = f"missing: data/raw/{name}.json (the last build had {count} item(s))"
+                    self.unreadable.add(name)
+                    self.raw_missing.add(name)
+                    log.error("raw file %s is missing — the site keeps the last build's %d item(s) of it", p.name,
+                              count)
+                else:
+                    self.raw_problems[name] = "missing"
             else:
                 try:
                     with open(p, encoding="utf-8") as f:
@@ -3329,10 +3346,11 @@ def kept_full_update(previous_status: Path, computed: str | None) -> str | None:
 
 def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: dict[str, int],
                  translation_enabled: bool, tr_seconds: float, previous: dict | None = None) -> dict:
-    """status.json. `previous` = the last build's status.json: a source whose raw file cannot be read
-    (ctx.unreadable) keeps that build's row — its count, dates and stats, as the site keeps its items
-    (carry_unreadable) — with ok false and the reason. Each row also carries the raw envelope's `changes`
-    (this run's {"added", "removed", "held"[, "confirmed"]} — common.save_raw) and `held` (items held back
+    """status.json. `previous` = the last build's status.json: a source whose raw file cannot be read — or is
+    missing although the last build had items from it (ctx.unreadable, ctx.raw_missing) — keeps that build's row —
+    its count, dates and stats, as the site keeps its items (carry_unreadable) — with ok false and the reason (a
+    missing file of a source that had nothing: ok null, "not run yet"). Each row also carries the raw envelope's
+    `changes` (this run's {"added", "removed", "held"[, "confirmed"]} — common.save_raw) and `held` (items held back
     after a sudden drop, without their ids, or null)."""
     week_ago = ctx.now_ts - 7 * 86400
     before = {r.get("source"): r for r in ((previous or {}).get("sources") or []) if isinstance(r, dict)}
@@ -3357,10 +3375,12 @@ def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: 
         if name in ctx.unreadable:
             old = before.get(name) or {}
             row.update({k: old.get(k) for k in ("updated", "attempted", "count", "new_7d", "stats") if k in old})
-            row.update({"ok": False, "stats": row["stats"] or {}, "changes": None, "held": None,
-                        "error": (f"data/raw/{name}.json could not be read ({problem.split(': ', 1)[-1]}) — the site "
-                                  "keeps what the last build had for it until the file is fixed (restore it from the "
-                                  "git history) or this source's next update rebuilds it")[:300]})
+            if name in ctx.raw_missing:
+                err = (f"data/raw/{name}.json is missing — the site keeps the last build's items until this source's "
+                       "next update writes the file again (or restore it from git)")
+            else:   # (the line common.unreadable_message gives the run summary too)
+                err = unreadable_message(name, problem.split(": ", 1)[-1])
+            row.update({"ok": False, "stats": row["stats"] or {}, "changes": None, "held": None, "error": err[:300]})
         sources.append(row)
     tr = translator.summary() if translator else {}
     n_tr = tr.get("translated", 0)
@@ -3569,8 +3589,10 @@ def clean_private(it: dict) -> dict:
 # ---------------------------------------------------------------------------- a raw file that cannot be read
 # A raw file that exists but cannot be read (a bad hand edit, a broken merge — Ctx.unreadable) must not deploy
 # an empty section: every site file made from it keeps what the last build wrote (data/site, read before it is
-# written again), and its /status/ row says why (build_status). The next run of that source rebuilds the raw
-# file (common.load_raw moves the bad one aside). The whole file is kept when it comes from such a source alone:
+# written again), and its /status/ row says why (build_status). Nothing rebuilds such a file: its module is not run
+# (run_all; common.load_raw raises UnreadableRaw), so this lasts until a person restores the file from git. A raw
+# file that is missing while the last build had items from it (Ctx.raw_missing) is kept the same way, until the
+# source's next update writes it again. The whole file is kept when it comes from such a source alone:
 WHOLE_FILE_SOURCES: dict[str, tuple[str, ...]] = {
     **{name: (src,) for name, src in SINGLE_SOURCE.items()},
     "shop": ("shop",), "meetings": ("meetings",), "audio_project": ("audio_project",), "quote": ("quote",),
@@ -3602,7 +3624,7 @@ def carry_unreadable(ctx: Ctx, name: str, doc: dict, prev: Any) -> dict:
         return doc
     whole = set(WHOLE_FILE_SOURCES.get(name, ())) & lost
     if whole:
-        log.error("%s.json: kept from the last build — data/raw/%s.json could not be read", name,
+        log.error("%s.json: kept from the last build — data/raw/%s.json could not be read (or is missing)", name,
                   ".json, data/raw/".join(sorted(whole)))
         return prev
     if name not in MIXED_FILES:
@@ -3615,8 +3637,8 @@ def carry_unreadable(ctx: Ctx, name: str, doc: dict, prev: Any) -> dict:
         back = [i for i in back if not (str((i.get("extra") or {}).get("expires") or "9999")[:10] < today)]
     if not back:
         return doc
-    log.error("%s.json: %d item(s) of the last build kept — data/raw/%s.json could not be read", name, len(back),
-              ".json, data/raw/".join(sorted({site_source(i) for i in back})))
+    log.error("%s.json: %d item(s) of the last build kept — data/raw/%s.json could not be read (or is missing)", name,
+              len(back), ".json, data/raw/".join(sorted({site_source(i) for i in back})))
     items = [*doc.get("items", []), *back]
     if name == "events":
         items = order_events(ctx, items)
@@ -3651,7 +3673,8 @@ def stamped(prev: Any, doc: dict, now: str) -> dict:
 # open the cache grew without end.
 def prune_blockers(ctx: Ctx, translator: Any) -> list[str]:
     """Why the translation cache must not be pruned after this build ([] = it may be)."""
-    out = [f"data/raw/{n}.json could not be read" for n in sorted(ctx.unreadable)]
+    out = [f"data/raw/{n}.json {'is missing' if n in ctx.raw_missing else 'could not be read'}"
+           for n in sorted(ctx.unreadable)]
     if getattr(translator, "file_errors", None):
         out.append("data/translations/" + " / ".join(f"{n}.yml" for n in sorted(translator.file_errors))
                    + " could not be read")
@@ -3677,7 +3700,7 @@ def main(argv: list[str] | None = None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     ctx = Ctx(offline=a.offline)
-    ctx.load_raw()
+    ctx.load_raw(read_json(out_dir / "status.json"))     # (the last build's rows: a missing raw file keeps its items)
     translator = T.Translator(budget_seconds=max(a.translate_minutes, 0.1) * 60, use_model=not a.no_translate)
     T._DEFAULT = translator          # committee_meetings() etc. share the same cache
     if translator.file_errors:      # a YAML typo in glossary.yml / overrides.yml: the cache is kept as is

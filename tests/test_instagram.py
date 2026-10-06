@@ -255,6 +255,65 @@ class Removal(unittest.TestCase):
         self.run_once(web, "--recheck", "1")
         self.assertEqual(web.embeds, [VANISHED], "then the one checked longest ago")
 
+    def test_another_accounts_embeds_prove_nothing(self):
+        """Review of round 7: La Viña's posts answering the generic page while Grapevine's embeds work (La Viña turned
+        embedding off, say) were marked "not there" — and removed, pictures and all, the next night. Only an embed of
+        the same account that works after the answer proves it; with none of La Viña's posts listed today, nothing is
+        decided for them."""
+        lv = ["DcAAAATktaA", "DcBBBBTktaB", "DcCCCCTktaC"]
+        p = self.tmp / "raw" / "instagram.json"
+        env = json.loads(p.read_text(encoding="utf-8"))
+        accounts = {"gv": {"name": "AA Grapevine", "username": USER}, "lv": {"name": "La Viña", "username": "lavina"}}
+        for sc in lv:
+            (self.thumbs / f"{sc}.webp").write_bytes(b"webp")
+            rec = I.new_post(sc, "lv", "profile_embed", username="lavina", caption=f"Post {sc}", media_type="image",
+                             date=I.date_from_shortcode(sc), thumb=I.thumb_rel(sc))
+            env["items"].append(I.build_item(rec, accounts, None))
+        p.write_text(json.dumps(env), encoding="utf-8")
+        web = FakeInstagram(gone=set(lv))
+        env = self.run_once(web, "--recheck", "10")
+        self.assertTrue(set(lv) <= set(web.embeds), "La Viña's posts were asked …")
+        self.assertTrue({VANISHED, *OLDER} <= set(web.embeds), "… and Grapevine's worked after them")
+        self.assertFalse([sc for sc in lv if (env["removal"].get(sc) or {}).get("missing")], env["removal"])
+        self.assertTrue(any("nothing was decided" in w for w in env["stats"]["warnings"]), env["stats"].get("warnings"))
+        for _ in range(2):
+            self.age_marks(48)
+            env = self.run_once(web, "--recheck", "10")
+        self.assertTrue(set(lv) <= self.shortcodes(env))
+        self.assertTrue(all((self.thumbs / f"{sc}.webp").exists() for sc in lv))
+
+    def sweep(self, web: FakeInstagram, prev: list[dict], listed: dict, records: dict) -> tuple[set, dict, dict]:
+        state: dict = {}
+        stats: dict = {}
+        with mock.patch.object(I, "PoliteSession", lambda **kw: web):
+            fx = I.Fetcher({}, deadline=I.time.monotonic() + 600)
+            gone = I.removal_sweep(fx, prev, records, listed, state, 5, stats)
+        return gone, state, stats
+
+    def test_a_reel_is_proved_only_by_a_reel(self):
+        """…and the same kind of post: a Reel's embed page may come in another shape than a photo's."""
+        acct = {"gv": {"name": "AA Grapevine", "username": USER}}
+
+        def known(sc: str, reel: bool = False) -> dict:
+            rec = I.new_post(sc, "gv", "profile_embed", username=USER, caption=f"Post {sc}", media_type="video" if reel
+                             else "image", date=I.date_from_shortcode(sc), is_reel=reel)
+            return I.build_item(rec, acct, None)
+        prev = [known(VANISHED, reel=True), known(OLDER[0])]
+        day = I.date_from_shortcode(LISTED[0])
+        records = {LISTED[0]: I.new_post(LISTED[0], "gv", "profile_embed", date=day)}
+        gone, state, stats = self.sweep(FakeInstagram(gone={VANISHED}), prev, {"gv": {LISTED[0]: day}}, records)
+        self.assertEqual(gone, set())
+        self.assertNotIn("missing", state.get(VANISHED, {}), "a photo's embed that worked proves nothing about a Reel")
+        self.assertTrue(any("nothing was decided" in w for w in stats["warnings"]))
+        # a Reel listed today is asked as the control: now the answer counts
+        reel_day = I.date_from_shortcode(LISTED[1])
+        records[LISTED[1]] = I.new_post(LISTED[1], "gv", "profile_embed", date=reel_day, is_reel=True)
+        web = FakeInstagram(gone={VANISHED})
+        gone, state, stats = self.sweep(web, prev, {"gv": {LISTED[0]: day, LISTED[1]: reel_day}}, records)
+        self.assertEqual(web.embeds[-1], LISTED[1], "the control: the newest listed Reel")
+        self.assertIn("missing", state[VANISHED])
+        self.assertNotIn("warnings", stats)
+
     def test_manual_posts_are_not_rechecked(self):
         p = self.tmp / "raw" / "instagram.json"
         env = json.loads(p.read_text(encoding="utf-8"))

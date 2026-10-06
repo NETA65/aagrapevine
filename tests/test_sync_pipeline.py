@@ -72,22 +72,24 @@ class MergeItems(unittest.TestCase):
 
 # --------------------------------------------------------------------------- raw file I/O
 class RawFiles(TempRaw):
-    def test_corrupt_raw_file_is_kept_aside_and_reported(self):
+    def test_a_corrupt_raw_file_is_left_as_it_is(self):
+        # never rebuilt from scratch over (review of round 7): load_raw raises, nothing writes over it, and once the
+        # file is restored the source goes on from it
         common.save_raw("demo", [{"id": "x", "title": "X", "first_seen": "2026-01-01T00:00:00Z"}])
         p = self.raw / "demo.json"
-        p.write_text(p.read_text(encoding="utf-8")[:-5], encoding="utf-8")   # truncated file
-        env = common.load_raw("demo")
-        self.assertEqual(env["items"], [])
-        backups = list(self.raw.glob("demo.json.corrupt-*"))
-        self.assertEqual(len(backups), 1, "the unreadable file must be kept for recovery")
-        self.assertFalse(p.exists())
-        common.save_raw("demo", [{"id": "y", "title": "Y"}], ok=True)
+        good = p.read_text(encoding="utf-8")
+        p.write_text(good[:-5], encoding="utf-8")                           # truncated file
+        with self.assertRaises(common.UnreadableRaw):
+            common.load_raw("demo")
+        with self.assertRaises(common.UnreadableRaw):
+            common.save_raw("demo", [{"id": "y", "title": "Y"}], ok=True)
+        self.assertEqual(p.read_text(encoding="utf-8"), good[:-5])
+        self.assertEqual(list(self.raw.glob("demo.json.*")), [])
+        p.write_text(good, encoding="utf-8")                                # restored from git
+        common.save_raw("demo", [{"id": "x", "title": "X"}, {"id": "y", "title": "Y"}], ok=True)
         env = self.env("demo")
-        self.assertFalse(env["ok"])
-        self.assertIn("unreadable", env["error"])
-        self.assertEqual([i["id"] for i in env["items"]], ["y"])
-        common.save_raw("demo", [{"id": "y", "title": "Y"}], ok=True)     # reported once, then healthy
-        self.assertTrue(self.env("demo")["ok"])
+        self.assertTrue(env["ok"])
+        self.assertEqual(sorted(i["id"] for i in env["items"]), ["x", "y"])
 
     def test_write_json_accepts_dates(self):
         common.write_json(self.raw / "d.json", {"when": date(2026, 9, 1), "tags": {"b", "a"}})

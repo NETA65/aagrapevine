@@ -49,14 +49,15 @@ import time
 import traceback
 from pathlib import Path
 
-from .common import (RAW_DIR, get_logger, load_config, load_raw, now_iso, parse_iso, raw_path, read_json, run_module,
-                     save_raw, write_json)
+from .common import (RAW_DIR, UnreadableRaw, get_logger, load_config, load_raw, now_iso, parse_iso, raw_path,
+                     raw_unreadable, read_json, run_module, save_raw, unreadable_message, write_json)
 
 log = get_logger("run_all")
 
 MODULES = ["drive", "announcements", "podcasts", "youtube", "instagram", "articles", "editorial",
            "weekly_open", "shop", "audio_project", "meetings", "events_external", "writers_archive", "quote", "crawl"]
 RAW_NAME = {"crawl": "pdfs"}            # module → data/raw/<name>.json it writes (default: same name)
+RAW_ALSO = {"announcements": ("manual_events",)}    # … and the other raw files it writes
 
 # --quick (the push refresh after a settings/content edit, the daytime schedules, a quick run by hand —
 # and, with MORNING_EXTRA below, the morning refresh the Morning check starts; see
@@ -104,28 +105,53 @@ def _supports(mod, flag: str) -> bool:
         return False
 
 
+def _raw_files(name: str) -> tuple[str, ...]:
+    """Every data/raw/<file>.json a module writes (its own first)."""
+    return (RAW_NAME.get(name, name), *RAW_ALSO.get(name, ()))
+
+
+def _unreadable(name: str) -> list[str]:
+    """The plain lines (common.unreadable_message) for the module's raw files that exist but cannot be read."""
+    return [unreadable_message(f, why) for f in _raw_files(name) if (why := raw_unreadable(f))]
+
+
+def _read(name: str) -> dict:
+    """The module's own raw envelope as it is ({} when it cannot be read — load_raw never moves or rewrites it)."""
+    try:
+        return load_raw(RAW_NAME.get(name, name))
+    except UnreadableRaw:
+        return {}
+
+
 def _attempted_on(name: str, day, tz) -> bool:
-    """data/raw/<name>.json was read — or tried — on `day`, the site's calendar day (time zone `tz`)."""
-    raw = load_raw(RAW_NAME.get(name, name))
+    """data/raw/<name>.json was read — or tried — on `day`, the site's calendar day (time zone `tz`); a file that
+    cannot be read was not."""
+    raw = _read(name)
     t = parse_iso(str(raw.get("attempted") or raw.get("updated") or ""))
     return t is not None and t.astimezone(tz).date() == day
 
 
 def _raw_summary(name: str) -> dict:
-    raw = load_raw(RAW_NAME.get(name, name))
+    """ok / live items / new / error of the module's own raw file, and `unreadable`: the lines for those of its raw
+    files that cannot be read."""
+    raw = _read(name)
     items = raw.get("items") or []
     stats = raw.get("stats") or {}
     new = stats.get("new")
     return {"ok": raw.get("ok"), "items": sum(1 for i in items if i.get("status", "ok") != "gone"),
             "new": new if isinstance(new, int) else None, "error": raw.get("error"),
-            "exists": (RAW_DIR / f"{RAW_NAME.get(name, name)}.json").exists()}
+            "exists": (RAW_DIR / f"{RAW_NAME.get(name, name)}.json").exists(), "unreadable": _unreadable(name)}
 
 
 def _mark_failed(name: str, note: str) -> None:
     """A module that cannot start (it does not import, or has no main()) never writes its data/raw file, so
     /status/ and the "A content source has stopped updating" issue would go on showing its LAST success:
-    mark the file ok=false like a crash does (items, extras and the last success are kept)."""
+    mark the file ok=false like a crash does (items, extras and the last success are kept). A file that cannot
+    be read is left as it is (build_data shows it failed)."""
     raw = RAW_NAME.get(name, name)
+    if raw_unreadable(raw):
+        log.error("%s: %s", name, unreadable_message(raw))
+        return
     try:
         prev = load_raw(raw)
         keep = {k: v for k, v in prev.items()
@@ -156,7 +182,7 @@ def _note_paused_crawl() -> None:
     `updated`, the last success /status/ shows; items, stats, a hold (`held`) and the crawl summary stay. A file
     that says ok=false keeps its last try, and a missing or unreadable one is left alone."""
     path = raw_path(RAW_NAME["crawl"])
-    prev = read_json(path)                    # (never load_raw: it would move an unreadable file aside)
+    prev = read_json(path)                    # (a file that cannot be read gives None: left as it is)
     if not isinstance(prev, dict) or prev.get("ok") is not True:
         return
     held = prev.get("held") if isinstance(prev.get("held"), dict) else {}
@@ -170,9 +196,18 @@ def _note_paused_crawl() -> None:
 
 
 def run_source(name: str, argv: list[str]) -> dict:
-    """Import scripts.sync.<name> lazily and run its main(argv) through run_module()."""
+    """Import scripts.sync.<name> lazily and run its main(argv) through run_module(). A module whose own raw file
+    cannot be read is not run at all (common.UnreadableRaw): it would only rebuild the source from scratch — and
+    Instagram's clean-up would delete the pictures of every older post — so the file stays as it is, the row says
+    "failed" with the plain line, and build_data keeps the last build's items."""
     t0 = time.monotonic()
     row = {"module": name, "status": "ok", "seconds": 0.0, "items": None, "new": None, "note": ""}
+    own = RAW_NAME.get(name, name)
+    why = raw_unreadable(own)
+    if why:
+        row.update(status="failed", note=unreadable_message(own, why)[:160])
+        log.error("%s: not run — %s", name, unreadable_message(own, why))
+        return row
     try:
         mod = importlib.import_module(f"scripts.sync.{name}")
     except ModuleNotFoundError as e:
@@ -220,7 +255,9 @@ def run_source(name: str, argv: list[str]) -> dict:
     row["seconds"] = round(time.monotonic() - t0, 1)
     row["items"] = after["items"]
     row["new"] = after["new"] if after["new"] is not None else max(0, after["items"] - before["items"])
-    if not after["exists"]:
+    if after.get("unreadable"):          # (announcements: content/events' manual_events.json — left as it is)
+        row.update(status="failed", note="; ".join(after["unreadable"])[:160])
+    elif not after["exists"]:
         row.update(status="failed", note="wrote no data")
     elif after["ok"] is False:
         row.update(status="failed", note=str(after["error"] or "")[:160])
