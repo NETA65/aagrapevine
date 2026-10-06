@@ -7,10 +7,12 @@
 // "www.x.org" and "zoom.us/j/1" are repaired to https://…; unusable values become "" (the
 // templates hide empty links). An item whose own `url` is unusable points to its anchor on our
 // page (committee event / bulletin post) or is left out. Every repaired or dropped value is
-// written to the build log and listed in db.status.link_problems [{where, field, value, fixed}].
+// written to the build log — a build warning (eleventy/build-warnings.js) — and listed in
+// db.status.link_problems [{where, field, value, fixed}].
 import fs from "node:fs";
 import path from "node:path";
 import { safeUrl } from "../../eleventy.config.js";
+import { buildWarning } from "../../eleventy/build-warnings.js";
 
 // "spotlight" = the published-writers file (Grapevine / La Viña stories by Texas writers, Area 65
 // first — docs/DATA_SCHEMA.md → "spotlight.json"), read by the home page, /published/, /read/,
@@ -101,17 +103,18 @@ export default function () {
     });
     out[name] = data;
   }
-  if (problems.length) console.warn(`[links] ${problems.length} link value(s) in data/site repaired or hidden:`);
+  // Build warnings (eleventy/build-warnings.js: the Code check fails on them; Website update lists them).
+  if (problems.length) buildWarning("links", `${problems.length} link value(s) in data/site repaired or hidden:`);
   // The same item is often in two files (events.json + whatsnew.json): log each value once.
   const seen = new Set();
   for (const pr of problems) {
     const k = pr.field === "item" ? pr.where : pr.field + "\u0000" + pr.value;
     if (seen.has(k)) continue;
     seen.add(k);
-    if (seen.size > 25) { console.warn("[links] … more in db.status.link_problems"); break; }
-    console.warn(pr.field === "item" ? `[links] ${pr.where}: left out — its link is not usable`
-      : pr.fixed ? `[links] ${pr.where}: ${pr.field} ${JSON.stringify(pr.value)} → ${pr.fixed}`
-      : `[links] ${pr.where}: ${pr.field} ${JSON.stringify(pr.value)} is not a usable link — hidden`);
+    if (seen.size > 25) { buildWarning("links", "… more in db.status.link_problems"); break; }
+    buildWarning("links", pr.field === "item" ? `${pr.where}: left out — its link is not usable`
+      : pr.fixed ? `${pr.where}: ${pr.field} ${JSON.stringify(pr.value)} → ${pr.fixed}`
+      : `${pr.where}: ${pr.field} ${JSON.stringify(pr.value)} is not a usable link — hidden`);
   }
   out.status.link_problems = problems;
   return out;

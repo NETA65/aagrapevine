@@ -1673,9 +1673,6 @@ export function upcomingEventEnds(db, lang = "en") {
 export default function (eleventyConfig, helpers) {
   if (helpers) H = { ...H, ...helpers };
 
-  // Data guard: {{ db.drive.items | cmData }} → [] when COMMITTEE_EMPTY=1 (launch-state preview)
-  eleventyConfig.addFilter("cmData", (items) => (EMPTY ? [] : items || []));
-
   eleventyConfig.addFilter("cmEvents", (items, site, lang) => normalizeEvents(EMPTY ? [] : items, site, lang));
   // {{ db | cmEventEnds(lang) }}: the upcoming events' end moments (upcomingEventEnds) — their number is the Events count
   eleventyConfig.addFilter("cmEventEnds", (db, lang) => upcomingEventEnds(db, lang));
@@ -1705,12 +1702,8 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("cmAnnouncements", (items) => announcementList(EMPTY ? [] : items));
   eleventyConfig.addFilter("cmRule", (cfg, lang) => meetingRuleText(cfg, lang));
   eleventyConfig.addFilter("cmTimeRange", (cfg, lang) => meetingTimeRange(cfg, lang));
-  eleventyConfig.addFilter("cmWhen", (s, lang) => whenText(s, lang));
-  eleventyConfig.addFilter("cmSlug", (s) => slugify(s));
   eleventyConfig.addFilter("cmDigits", (s) => String(s || "").replace(/\D+/g, ""));
-  eleventyConfig.addFilter("cmPreview", (u) => drivePreviewUrl(u));
   eleventyConfig.addFilter("cmWebcal", (u) => String(u || "").replace(/^https?:\/\//, "webcal://"));
-  eleventyConfig.addFilter("cmWeekly", (wo, lang) => weeklyOpen(wo, lang));
   // Both weekly open meetings (Grapevine Weekly Open + La Viña), the page language's first — /meetings/#weekly-open
   eleventyConfig.addFilter("cmWeeklyAll", (items, lang) => weeklyOpenAll(EMPTY ? [] : items, lang));
   // A weekly open meeting's "Add to calendar": {% set wc = w | cmWeeklyCal(site, lang) %} → { gcal, ics } (weeklyCalendar)
@@ -1778,15 +1771,6 @@ export default function (eleventyConfig, helpers) {
       if (f.moreDates.length < 3) f.moreDates.push(e.shortLabel);
     }
     return events;
-  });
-
-  // The next date of each monthly recurring event (config/site.yml `recurring_events:`), soonest
-  // first. (No page shows it now — the booth's home is /events/ and Home's upcoming events; kept,
-  // with tests/test_recurring_events.py, for a page that needs the next dates again.)
-  eleventyConfig.addFilter("cmRecurringNext", (items, site, lang) => {
-    const seen = new Set();
-    return normalizeEvents(EMPTY ? [] : items, site, lang, { monthsBack: 0, monthsAhead: 0 })
-      .filter((e) => e.recurring && !e.past && !seen.has(e.series) && seen.add(e.series));
   });
 
   // Share your story (#workshop): the next `n` writing / recording workshops — from the same list

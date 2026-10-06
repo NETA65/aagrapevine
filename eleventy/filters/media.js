@@ -17,6 +17,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { scriptJson } from "../script-json.js";
+import { buildWarning } from "../build-warnings.js";
 import { TZ } from "../../eleventy.config.js"; // the site's time zone (config/site.yml site.timezone)
 
 const require = createRequire(import.meta.url);
@@ -203,7 +204,7 @@ function sprite() {
   for (const name of SPRITE_ICONS) {
     const local = path.join("src/_includes/icons", `${name}.svg`);
     const file = fs.existsSync(local) ? local : path.join(lucideDir, `${name}.svg`);
-    if (!fs.existsSync(file)) { console.warn(`[media] sprite: missing icon ${name}`); continue; }
+    if (!fs.existsSync(file)) { buildWarning("media", `sprite: missing icon ${name}`); continue; }
     const svg = fs.readFileSync(file, "utf8").replace(/<!--.*?-->/gs, "");
     const inner = (svg.match(/<svg[^>]*>([\s\S]*)<\/svg>/) || [])[1] || "";
     const sw = (svg.match(/stroke-width="([\d.]+)"/) || [])[1] || "2";
@@ -213,7 +214,7 @@ function sprite() {
   return spriteCache;
 }
 function micon(name, cls = "size-5", label = "") {
-  if (!SPRITE_ICONS.includes(name)) console.warn(`[media] micon: "${name}" is not in SPRITE_ICONS`);
+  if (!SPRITE_ICONS.includes(name)) buildWarning("media", `micon: "${name}" is not in SPRITE_ICONS`);
   const a11y = label ? `role="img" aria-label="${String(label).replace(/"/g, "&quot;")}"` : `aria-hidden="true" focusable="false"`;
   return `<svg class="icon ${cls}" ${a11y}><use href="#mi-${name}"/></svg>`;
 }
@@ -436,13 +437,11 @@ export default function (eleventyConfig, helpers) {
 
   eleventyConfig.addFilter("mediaItems", mediaItems);
   eleventyConfig.addFilter("mediaCleanTitle", (s) => stripNumbering(s));
-  eleventyConfig.addFilter("mediaSoftCaps", (s, lang) => softCaps(s, lang));
   /** Item title in the page language, numbering/show prefix removed: {{ item | mediaTitle(lang) }} */
   eleventyConfig.addFilter("mediaTitle", (item, lang) => displayTitle(item, lang));
   eleventyConfig.addFilter("mediaVideoKind", videoKind);
   eleventyConfig.addFilter("mediaVideoLang", videoLang);
   eleventyConfig.addFilter("mediaMinutes", minutes);
-  eleventyConfig.addFilter("mediaNum", num);
   eleventyConfig.addFilter("mediaEpisodePage", (item) => (item ? episodePage(item) : ""));
 
   /** Shows with their episodes' stats: {{ db.episodes | mediaShowList(site.sources.podcasts, eps, lang) }} */
@@ -477,13 +476,6 @@ export default function (eleventyConfig, helpers) {
 
   /** Playlists for the Watch filters: {{ db.videos | mediaPlaylists(vids, lang) }} */
   eleventyConfig.addFilter("mediaPlaylists", (vidFile, items, lang) => playlistList(vidFile, items, lang));
-  /** Chips: up to n non-type playlists, the page's language first, biggest first. */
-  eleventyConfig.addFilter("mediaPlaylistChips", (pls, lang, n = 4) => {
-    const want = lang === "es" ? "es" : "en";
-    return (pls || []).filter((p) => !p.kind && p.count >= 3)
-      .sort((a, b) => (a.lang === want ? 0 : 1) - (b.lang === want ? 0 : 1) || b.count - a.count || a.i - b.i)
-      .slice(0, n);
-  });
   /** Playlists grouped by language for the <select>: [{lang, items}] page language first. */
   eleventyConfig.addFilter("mediaPlaylistGroups", (pls, lang) => {
     const want = lang === "es" ? "es" : "en";
@@ -581,9 +573,6 @@ export default function (eleventyConfig, helpers) {
 
   /** Only http(s) or site-relative URLs make it into href/src attributes. */
   eleventyConfig.addFilter("mediaSafeUrl", (u, fallback = "#") => safeUrl(u, fallback));
-
-  /** Script-safe JSON (use inside <script type="application/json"> or attributes). */
-  eleventyConfig.addFilter("mediaJson", safeJson);
 
   /** JSON for the first N rows rendered on the server (same format as the index).
       episodes: extra = shows list (mediaShowList); videos: extra = playlists (mediaPlaylists). */

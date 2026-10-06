@@ -10,6 +10,7 @@ import * as yaml from "js-yaml";
 import markdownIt from "markdown-it";
 import { overnight, setZone, zoneInstant } from "./eleventy/central-time.js";
 import { iconSvg, iconSprite } from "./eleventy/icons.js";
+import { buildWarning, finishBuild } from "./eleventy/build-warnings.js";
 
 const require = createRequire(import.meta.url);
 const md = markdownIt({ html: false, linkify: true, breaks: true });
@@ -192,8 +193,8 @@ export function pickLang(item, field, lang) {
       "2026-10-21T19:00", "2026-10-21 19:00:00"  a date and time without a zone: Central wall-clock time (TZ),
                              whatever zone the computer that builds the site is in;
       an instant with its zone ("…Z", "…-05:00"), a Date, ms → that instant. An invalid one → null.
-    (Every filter that reads a date goes through here: fmtDate, isoDate, rfc822, isRecent, year, sortByDate and
-    the area filters' helpers.toDate.) */
+    (Every filter that reads a date goes through here: fmtDate, isoDate, year and the area filters'
+    helpers.toDate.) */
 function toDate(v) {
   if (!v || typeof v === "boolean") return null;
   if (v instanceof Date) return isNaN(v) ? null : v;
@@ -473,13 +474,6 @@ function relative(d, lang) {
   return "";
 }
 
-function dateVal(item) {
-  if (!item) return 0;
-  const v = item.extra && item.extra.start ? item.extra.start : item.date || item.first_seen;
-  const d = toDate(v);
-  return d ? d.getTime() : 0;
-}
-
 /* ------------------------------------------------------------------ */
 export default function (eleventyConfig) {
   const pathPrefix = process.env.PATH_PREFIX || "/";
@@ -577,16 +571,7 @@ export default function (eleventyConfig) {
 
   /* ---------- dates ---------- */
   eleventyConfig.addFilter("fmtDate", fmtDate);
-  // {{ label | meridiem(lang) }}: a time label built elsewhere gets the site's Spanish "p. m." spelling.
-  eleventyConfig.addFilter("meridiem", (s, lang) => (lang === "es" ? esMeridiem(s ?? "") : s));
-  eleventyConfig.addFilter("toDate", toDate);
   eleventyConfig.addFilter("isoDate", (v) => { const d = toDate(v); return d ? d.toISOString() : ""; });
-  eleventyConfig.addFilter("rfc822", (v) => { const d = toDate(v); return d ? d.toUTCString() : ""; });
-  eleventyConfig.addFilter("isRecent", (v, days = 14) => { const d = toDate(v); return !!d && Date.now() - d.getTime() < days * 864e5 && d.getTime() <= Date.now() + 864e5; });
-  eleventyConfig.addFilter("sortByDate", (items, dir = "desc") => [...(items || [])].sort((a, b) => (dir === "asc" ? dateVal(a) - dateVal(b) : dateVal(b) - dateVal(a))));
-  eleventyConfig.addFilter("upcoming", (items) => (items || []).filter((i) => dateVal(i) >= Date.now() - 6 * 3600e3).sort((a, b) => dateVal(a) - dateVal(b)));
-  eleventyConfig.addFilter("past", (items) => (items || []).filter((i) => dateVal(i) < Date.now() - 6 * 3600e3).sort((a, b) => dateVal(b) - dateVal(a)));
-  eleventyConfig.addFilter("withinDays", (items, days = 7) => (items || []).filter((i) => { const t = dateVal(i); return t && Date.now() - t <= days * 864e5 && t <= Date.now() + 864e5; }));
   eleventyConfig.addFilter("duration", (sec) => {
     sec = Math.round(Number(sec) || 0);
     if (!sec) return "";
@@ -607,10 +592,6 @@ export default function (eleventyConfig) {
     const v = key.split(".").reduce((o, k) => (o == null ? o : o[k]), i);
     return Array.isArray(val) ? !val.includes(v) : v !== val;
   }));
-  eleventyConfig.addFilter("whereIncludes", (items, key, val) => (items || []).filter((i) => {
-    const v = key.split(".").reduce((o, k) => (o == null ? o : o[k]), i);
-    return Array.isArray(v) ? v.includes(val) : typeof v === "string" && v.includes(val);
-  }));
   eleventyConfig.addFilter("limit", (arr, n) => (arr || []).slice(0, n));
   eleventyConfig.addFilter("offset", (arr, n) => (arr || []).slice(n));
   eleventyConfig.addFilter("groupBy", (items, key) => {
@@ -622,29 +603,16 @@ export default function (eleventyConfig) {
     }
     return [...m.entries()].map(([k, v]) => ({ key: k, items: v }));
   });
-  eleventyConfig.addFilter("countBy", (items, key) => {
-    const o = {};
-    for (const i of items || []) { const v = key.split(".").reduce((x, k) => (x == null ? x : x[k]), i) ?? "other"; o[v] = (o[v] || 0) + 1; }
-    return o;
-  });
   eleventyConfig.addFilter("pluck", (items, key) => (items || []).map((i) => key.split(".").reduce((o, k) => (o == null ? o : o[k]), i)));
   eleventyConfig.addFilter("uniq", (arr) => [...new Set((arr || []).filter((x) => x !== undefined && x !== null && x !== ""))]);
   eleventyConfig.addFilter("keys", (o) => Object.keys(o || {}));
-  eleventyConfig.addFilter("values", (o) => Object.values(o || {}));
   eleventyConfig.addFilter("length", (a) => (a ? (a.length ?? Object.keys(a).length) : 0));
-  eleventyConfig.addFilter("shuffleSeed", (arr, seed = 1) => {
-    // deterministic shuffle (build-time) so pages don't churn randomly
-    const a = [...(arr || [])]; let s = seed;
-    for (let i = a.length - 1; i > 0; i--) { s = (s * 9301 + 49297) % 233280; const j = Math.floor((s / 233280) * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
-    return a;
-  });
 
   /* ---------- text ---------- */
   eleventyConfig.addFilter("md", (s, opts) => (s ? md.render(String(s), { ...(opts || {}) }) : ""));
   // a text's sections for an "In this post" list: [{ id, text }] — the ids `md` gives with the same { h, ids, idsFrom }
   eleventyConfig.addFilter("mdToc", mdToc);
   eleventyConfig.addFilter("mdInline", (s) => (s ? md.renderInline(String(s)) : ""));
-  eleventyConfig.addFilter("stripHtml", (s) => String(s || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim());
   eleventyConfig.addFilter("excerpt", (s, n = 160) => {
     s = String(s || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
     return s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "") + "…" : s;
@@ -655,9 +623,6 @@ export default function (eleventyConfig) {
     const u = ["B", "KB", "MB", "GB"]; let i = 0; while (b >= 1024 && i < u.length - 1) { b /= 1024; i++; }
     return `${b.toFixed(i ? 1 : 0)} ${u[i]}`;
   });
-  eleventyConfig.addFilter("absUrl", (url, base) => {
-    try { return new URL(url, (base || "").replace(/\/?$/, "/")).toString(); } catch { return url; }
-  });
   // Absolute URL on the public site (feeds, QR codes, share pictures): {{ "/es/library/" | siteUrl(site) }} — siteUrl above
   eleventyConfig.addFilter("siteUrl", siteUrl);
   // A page's share picture (base.njk og:image / twitter:image): {{ ogImage | shareImage(site) }} — shareImage above
@@ -665,7 +630,6 @@ export default function (eleventyConfig) {
   // Data-driven href/src: {{ item.extra.website | extUrl }} → "" when the value is not a safe link.
   eleventyConfig.addFilter("extUrl", safeUrl);
   eleventyConfig.addFilter("hostname", (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } });
-  eleventyConfig.addFilter("driveImg", (fileId, w = 800) => (fileId ? `https://lh3.googleusercontent.com/d/${fileId}=w${w}` : ""));
   eleventyConfig.addFilter("ytThumb", (id, q = "hqdefault") => (id ? `https://i.ytimg.com/vi/${id}/${q}.jpg` : ""));
   eleventyConfig.addFilter("mailto", (email, subject) => `mailto:${email}${subject ? "?subject=" + encodeURIComponent(subject) : ""}`);
   eleventyConfig.addFilter("urlencode", (s) => encodeURIComponent(String(s || "")));
@@ -674,10 +638,10 @@ export default function (eleventyConfig) {
      One small <svg> pointing at the page's icon sprite (<use href="#i-name">); the iconSprite transform then
      puts the drawings of the icons each page uses in one hidden <svg> at the start of its <body>. The how and
      why: eleventy/icons.js. label: the icon is a picture with that name (escaped); without one, decoration.
-     An unknown name: a warning and nothing. */
+     An unknown name: a build warning (eleventy/build-warnings.js) and nothing. */
   eleventyConfig.addShortcode("icon", (name, cls = "size-5", label = "") => {
     const svg = iconSvg(name, cls, label);
-    if (!svg) console.warn(`[icon] missing icon: ${name}`);
+    if (!svg) buildWarning("icon", `missing icon: ${name}`);
     return svg;
   });
   eleventyConfig.addTransform("iconSprite", function (content) {
@@ -709,6 +673,14 @@ export default function (eleventyConfig) {
       });
     })));
     console.log(`[css] ${sheets.map((f) => `${f} ${Math.round(fs.statSync(path.join(outDir, f)).size / 1024)} KB`).join(" · ")}`);
+  });
+
+  /* ---------- build warnings (eleventy/build-warnings.js) ----------
+     A missing icon, a page missing from the sitemap, a link in the data repaired or hidden: summed up once the
+     pages are written — STRICT_BUILD=1 (the Code check) fails the build on any of them; BUILD_WARNINGS=<file>
+     (Website update) gets the list for the run's summary, and the site is published all the same. */
+  eleventyConfig.on("eleventy.after", () => {
+    finishBuild(process.env, (file, text) => fs.writeFileSync(file, text));
   });
 
   /* ---------- area-specific filters (auto-loaded) ---------- */

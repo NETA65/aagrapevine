@@ -148,10 +148,6 @@
     "en": "Instagram",
     "es": "Instagram"
   },
-  "nav.instagram_desc": {
-    "en": "Latest posts from GV & LV",
-    "es": "Publicaciones recientes de LV y GV"
-  },
   "nav.about": {
     "en": "About us",
     "es": "Quiénes somos"
@@ -260,10 +256,6 @@
     "en": "Translated automatically from the original language. Tap the original link for the source text.",
     "es": "Traducido automáticamente del idioma original. Abre el enlace original para ver el texto fuente."
   },
-  "common.original": {
-    "en": "Original",
-    "es": "Original"
-  },
   "common.read_more": {
     "en": "Read more",
     "es": "Leer más"
@@ -271,10 +263,6 @@
   "common.view_all": {
     "en": "View all",
     "es": "Ver todo"
-  },
-  "common.see_more": {
-    "en": "See more",
-    "es": "Ver más"
   },
   "common.show_more": {
     "en": "Show more",
@@ -284,21 +272,9 @@
     "en": "Show less",
     "es": "Mostrar menos"
   },
-  "common.listen": {
-    "en": "Listen",
-    "es": "Escuchar"
-  },
-  "common.watch": {
-    "en": "Watch",
-    "es": "Ver"
-  },
   "common.play": {
     "en": "Play",
     "es": "Reproducir"
-  },
-  "common.pause": {
-    "en": "Pause",
-    "es": "Pausa"
   },
   "common.download": {
     "en": "Download",
@@ -344,45 +320,17 @@
     "en": "Add to calendar",
     "es": "Agregar al calendario"
   },
-  "common.visit": {
-    "en": "Visit",
-    "es": "Visitar"
-  },
-  "common.source": {
-    "en": "Source",
-    "es": "Fuente"
-  },
   "common.updated": {
     "en": "Updated",
     "es": "Actualizado"
-  },
-  "common.published": {
-    "en": "Published",
-    "es": "Publicado"
   },
   "common.all": {
     "en": "All",
     "es": "Todo"
   },
-  "common.filter": {
-    "en": "Filter",
-    "es": "Filtrar"
-  },
-  "common.search": {
-    "en": "Search",
-    "es": "Buscar"
-  },
-  "common.search_placeholder": {
-    "en": "Search articles, documents, podcasts, videos…",
-    "es": "Busca artículos, documentos, podcasts, videos…"
-  },
   "common.no_results": {
     "en": "Nothing matches that yet.",
     "es": "Todavía no hay resultados."
-  },
-  "common.results": {
-    "en": "{n} results",
-    "es": "{n} resultados"
   },
   "common.loading": {
     "en": "Loading…",
@@ -392,17 +340,9 @@
     "en": "{n} pages",
     "es": "{n} páginas"
   },
-  "common.minutes": {
-    "en": "{n} min",
-    "es": "{n} min"
-  },
   "common.by": {
     "en": "By {name}",
     "es": "Por {name}"
-  },
-  "common.back_to_top": {
-    "en": "Back to top",
-    "es": "Volver arriba"
   },
   "common.english": {
     "en": "English",
@@ -415,10 +355,6 @@
   "common.today": {
     "en": "Today",
     "es": "Hoy"
-  },
-  "common.tomorrow": {
-    "en": "Tomorrow",
-    "es": "Mañana"
   },
   "common.days": {
     "en": "Days",

@@ -16,10 +16,6 @@
     "es": "Buscar en la biblioteca"
   },
   "library.search_placeholder": { "en": "Search titles, e.g. “workbook”", "es": "Busca títulos: “catálogo”" },
-  "library.search_submit": {
-    "en": "Search",
-    "es": "Buscar"
-  },
   "library.search_clear": {
     "en": "Clear search",
     "es": "Borrar búsqueda"
@@ -203,10 +199,6 @@
   "library.src.neta": {
     "en": "NETA 65 committee",
     "es": "Comité de NETA 65"
-  },
-  "library.src_short.neta": {
-    "en": "NETA 65",
-    "es": "NETA 65"
   },
   "library.lang.en": {
     "en": "English",
@@ -536,10 +528,6 @@
   "search.src.youtube": {
     "en": "YouTube",
     "es": "YouTube"
-  },
-  "search.src.site": {
-    "en": "This site",
-    "es": "Este sitio"
   },
   "search.count": {
     "en": "{n} results for “{q}”",

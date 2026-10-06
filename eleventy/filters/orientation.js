@@ -5,7 +5,6 @@
 //
 //   o101Text(pair, lang, vars)   → the {en, es} text in the page language, with {placeholders} filled
 //                                  from vars ({rule_lc}, {time}, {panel}, {panel_start}); unknown ones stay
-//   o101Month("2027-01", lang)   → "January 2027" / "enero de 2027"
 //   o101Lesson(lessons, id)      → one lesson (or null)
 //   o101Links(links, lang, site) → [{ href, label, ext }] — site pages in the page language, site.links keys
 //                                  resolved, links that can't be used left out; on /es/ La Viña's first
@@ -51,7 +50,6 @@ export function deckPlan(lessons) {
 
 export default function (eleventyConfig) {
   eleventyConfig.addFilter("o101Text", (pair, lang, vars) => pickText(pair, lang, vars));
-  eleventyConfig.addFilter("o101Month", (key, lang) => monthYear(key, lang));
   eleventyConfig.addFilter("o101Lesson", (lessons, id) => (lessons || []).find((l) => l.id === id) || null);
   eleventyConfig.addFilter("o101Letter", (i) => String.fromCharCode(65 + (Number(i) || 0)));
   // The placeholder values for o101Text: {{ orientation | o101Vars(lang, site.meeting | cmRule(lang), site.meeting | cmTimeRange(lang)) }}

@@ -16,7 +16,7 @@ pageScripts: ["/assets/js/read.js"]
     the archive becomes two columns; the issue cards lay themselves out by their
     OWN width (container queries, @container / @4xl: …), not the screen's. -#}
 {% import "macros/ui.njk" as ui with context %}
-{%- set SSR_ARCHIVE = 8 -%}
+{%- set SSR_ARCHIVE = readSsrArchive -%}{#- earlier issues shown here; the rest: /read-archive.json (read.js SSR_ARCHIVE) -#}
 {%- set spot = db.spotlight | readSpotlight -%}
 {%- set gvIssues = db.articles | readIssues("gv") -%}
 {%- set lvIssues = db.articles | readIssues("lv") -%}

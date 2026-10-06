@@ -89,6 +89,10 @@ jobs:
           PATH_PREFIX: /${{ github.event.repository.name }}/
           # Same as "Website update": a button or heading text missing from src/_i18n/ fails the build.
           I18N_STRICT: "1"
+          # Stricter than "Website update": a build warning — a missing icon, a page missing from the sitemap, a
+          # link in the data that had to be repaired or hidden (eleventy/build-warnings.js) — fails this check.
+          # (The booth display's "not downloaded in this build" notes are expected here and do not count.)
+          STRICT_BUILD: "1"
         run: npx @11ty/eleventy
 
       - name: Check the build
@@ -97,7 +101,11 @@ jobs:
           # Same checks as "Website update" → "Check the build".
           test -s _site/index.html || { echo "::error::_site/index.html is missing — the build did not produce a home page."; exit 1; }
           test -s _site/es/index.html || { echo "::error::_site/es/index.html is missing — the Spanish site was not built."; exit 1; }
-          test -s _site/assets/css/main.css || { echo "::error::The stylesheet was not built."; exit 1; }
+          # Every stylesheet: main.css and the page-area ones (booth, expenses, monthly, orientation, presentations,
+          # report …) — each .css at the top of src/assets/css is built to _site/assets/css/ under its own name.
+          for css in src/assets/css/*.css; do
+            test -s "_site/assets/css/${css##*/}" || { echo "::error::The stylesheet ${css##*/} was not built."; exit 1; }
+          done
           # The Morning check (morning.yml) reads the live build.json: a change that loses it is caught here
           # (Website update only warns, so that a deploy is never blocked by it).
           test -s _site/build.json || { echo "::error::_site/build.json is missing — the Morning check could not see the site's builds."; exit 1; }

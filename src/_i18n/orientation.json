@@ -299,7 +299,6 @@
   "orientation.lesson_done": { "en": "Session complete — saved on this device.", "es": "Sesión terminada: quedó guardada en este dispositivo." },
   "orientation.aside_title": { "en": "Your sessions", "es": "Tus sesiones" },
   "orientation.toc_all": { "en": "All {n} sessions", "es": "Las {n} sesiones" },
-  "orientation.current": { "en": "current session", "es": "sesión actual" },
   "orientation.prev": { "en": "Previous session", "es": "Sesión anterior" },
   "orientation.next": { "en": "Next session", "es": "Sesión siguiente" },
   "orientation.prevnext_label": { "en": "Previous and next session", "es": "Sesión anterior y siguiente" },

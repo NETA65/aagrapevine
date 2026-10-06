@@ -554,7 +554,7 @@ class ToDate(unittest.TestCase):
         return run_js(self, r"""
           out({ iso: input.map((v) => filters.isoDate(v)), month: filters.fmtDate("2026-10", "en", "month"),
                 monthEs: filters.fmtDate("2026-10", "es", "month"), year: filters.year("2027"),
-                invalidDate: filters.toDate(new Date("x")), recent: filters.isRecent("2026-01") });""",
+                invalidDate: filters.isoDate(new Date("x")) });""",
                       data=self.VALUES, env={"TZ": tz})
 
     def test_partial_dates_and_times_without_a_zone(self):
@@ -570,8 +570,7 @@ class ToDate(unittest.TestCase):
             self.assertEqual(r["month"], "October 2026", '"2026-10" is October, not September')
             self.assertEqual(r["monthEs"], "octubre de 2026")
             self.assertEqual(r["year"], 2027)
-            self.assertIsNone(r["invalidDate"])
-            self.assertFalse(r["recent"])
+            self.assertEqual(r["invalidDate"], "", "an invalid Date is no date")
         self.assertEqual(results[0], results[1], "the computer's own zone changes nothing")
 
 

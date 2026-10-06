@@ -9,6 +9,7 @@ import QRCode from "qrcode";
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { buildWarning } from "../build-warnings.js";
 // langPath: our page in a language ("/es/events/"; a file only when the build writes it for that language too)
 import { safeUrl, TZ, langPath, pickLang } from "../../eleventy.config.js";
 // The monthly digest groups the committee's photos into the albums of /photos/ (the same anchors).
@@ -79,17 +80,8 @@ function fmt(v, lang, opts) {
 export const esMeridiem = (s) => String(s).replace(/\b([ap])\.\s?m\./g, "$1. m.").replace(/(\d) (?=[ap]\. m\.)/g, "$1 ");
 const fmtShortDay = (v, lang) => fmt(v, lang, { weekday: "short", month: "short", day: "numeric" });
 const fmtShortDayYear = (v, lang) => fmt(v, lang, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
-// Inside a sentence ("fecha límite: jue, 1 de oct"): Spanish keeps the weekday lower-case.
-const fmtShortDayMid = (v, lang) => { const s = fmtShortDay(v, lang); return lang === "es" ? s.charAt(0).toLowerCase() + s.slice(1) : s; };
 const fmtDay = (v, lang) => fmt(v, lang, { month: "short", day: "numeric", year: "numeric" });
 const fmtTime = (v, lang) => fmt(v, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
-
-/** "Oct 17" – "Oct 23, 2026" style range. */
-function fmtRange(a, b, lang) {
-  const sameYear = toDate(a)?.getUTCFullYear() === toDate(b)?.getUTCFullYear();
-  const first = fmt(a, lang, sameYear ? { month: "short", day: "numeric" } : { month: "short", day: "numeric", year: "numeric" });
-  return `${first} – ${fmtDay(b, lang)}`;
-}
 
 /**
  * Localize a magazine issue label: "October 2026" ⇄ "Octubre 2026",
@@ -1186,18 +1178,8 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
   return out.join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
 }
 
-function uniqByTitle(items, lang) {
-  const seen = new Set();
-  return (items || []).filter((it) => {
-    const k = clean(pickLang(it, "title", lang)).toLowerCase();
-    if (!k || seen.has(k)) return false;
-    seen.add(k);
-    return true;
-  });
-}
-
 /* ------------------------------------------------------------------ */
-/*  Status dashboard                                                   */
+/*  Status dashboard                                                  */
 /* ------------------------------------------------------------------ */
 // Sources whose count is legitimately 0 until the committee adds something
 // get a friendly "how to fill this" hint instead of a bare 0.
@@ -1279,19 +1261,6 @@ export function statusView(status, now = Date.now()) {
   };
 }
 
-/**
- * 0–100 → "1.6%" / "42%" / "99.9%" (es: "1,6 %"). Whole numbers from 10 up, but a value
- * short of 100 never rounds up to "100%" (it keeps one decimal, at most 99.9: 99.88 and
- * 99.97 both read "99.9%"), and a tiny non-zero value never shows as "0%".
- */
-export function cmPct(n, lang) {
-  let v = Number(n) || 0;
-  if (v > 0 && v < 0.1) v = 0.1;
-  let digits = v >= 10 ? 0 : 1;
-  if (v < 100 && v >= 99.5) { digits = 1; v = Math.min(99.9, Math.round(v * 10) / 10); }
-  return new Intl.NumberFormat(LOCALES[lang] || "en-US", { style: "percent", maximumFractionDigits: digits }).format(v / 100);
-}
-
 /* ------------------------------------------------------------------ */
 /*  Icon sprite (What's New repeats the same few icons ~300 times)      */
 /* ------------------------------------------------------------------ */
@@ -1316,7 +1285,7 @@ export function iconSymbol(name) {
     const inner = svg.slice(svg.indexOf(open) + open.length, svg.lastIndexOf("</svg>")).replace(/>\s+</g, "><").replace(/\s+/g, " ").trim();
     out = `<symbol id="cmi-${name}"${attrs.includes("viewBox") ? "" : ' viewBox="0 0 24 24"'}${attrs}>${inner}</symbol>`;
   } else {
-    console.warn(`[community] missing icon for sprite: ${name}`);
+    buildWarning("community", `missing icon for sprite: ${name}`);
   }
   symbolCache.set(name, out);
   return out;
@@ -1368,8 +1337,6 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("cmEventWhere", (ev, lang) => eventWhere(ev, lang, t));
   eleventyConfig.addFilter("cmEventDayBox", (ev, lang) => eventDayBox(ev, lang));
   eleventyConfig.addFilter("cmEventMonthBox", (ev, lang) => eventMonthBox(ev, lang));
-  eleventyConfig.addFilter("cmDateRange", (a, b, lang) => fmtRange(a, b, lang));
-  eleventyConfig.addFilter("cmIssueLabel", (label, lang) => issueLabel(label, lang));
 
   // Monthly digest (/digest/): {% set md = db | cmMonthlyDigest(site) %} — LAST month's edition. MONTHLY_NOW
   // (the /monthly/ test clock) also moves it: MONTHLY_NOW=2026-10-01T15:05:00Z builds the September one.
@@ -1396,20 +1363,6 @@ export default function (eleventyConfig, helpers) {
 
 
   eleventyConfig.addFilter("cmStatus", (status) => statusView(status));
-  // Drop items whose title (in `lang`) repeats an earlier one — scraped section
-  // pages sometimes share a generic title ("Read"), which looks broken in lists.
-  eleventyConfig.addFilter("cmUniqTitle", (items, lang) => uniqByTitle(items, lang));
-  // Articles grouped by magazine issue (publication + issue key — GV September
-  // and LV September/October share the key "2026-09"), in first-seen order.
-  eleventyConfig.addFilter("cmByIssue", (items) => {
-    const m = new Map();
-    for (const it of items || []) {
-      const k = it?.extra?.issue_key ? `${it.extra.publication || it.source}|${it.extra.issue_key}` : "other";
-      if (!m.has(k)) m.set(k, []);
-      m.get(k).push(it);
-    }
-    return [...m.entries()].map(([key, list]) => ({ key, items: list }));
-  });
 
   // mailto: with subject AND body (the shared `mailto` filter only takes a subject)
   eleventyConfig.addFilter("cmMailto", (email, subject = "", body = "") => {
@@ -1423,9 +1376,6 @@ export default function (eleventyConfig, helpers) {
   // `cmWebcal` (https:// → webcal://) used by the community pages is registered in
   // committee.js; both files are auto-loaded, so it is available here too.
   eleventyConfig.addFilter("cmNum", (n, lang) => new Intl.NumberFormat(LOCALES[lang] || "en-US").format(Number(n) || 0));
-  // 0–100 → "1.6%" / "1,6 %" (≥ 10 without decimals; a tiny non-zero value never shows as 0,
-  // and anything short of 100 never rounds up to "100%": 99.9 → "99.9%", 99.97 → "99.9%")
-  eleventyConfig.addFilter("cmPct", (n, lang) => cmPct(n, lang));
 
   // UI string with a fallback when the key does not exist (safe with I18N_STRICT=1):
   //   {{ ("community.status.src." + s.source) | cmTOr(lang, s.label) }}

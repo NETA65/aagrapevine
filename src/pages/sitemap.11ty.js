@@ -5,8 +5,11 @@
 // No <lastmod> (every daily build would stamp every page with today's date — search engines learn to
 // ignore a date that always moves) and no <changefreq> (ignored by Google).
 // Pages that must always be listed (both languages) are checked at build time: if one is
-// missing (renamed, excluded by mistake) the build log says so. Not checked in ONLY= dev builds.
+// missing (renamed, excluded by mistake) the build log says so — a build warning (eleventy/build-warnings.js:
+// the Code check fails on it). Not checked in ONLY= dev builds.
 // /offline/ ("Saved pages & app") holds the steps the committee sends to install the site on a phone.
+import { buildWarning } from "../../eleventy/build-warnings.js";
+
 const REQUIRED = ["/", "/whats-new/", "/published/", "/read/", "/monthly/", "/digest/", "/offline/"];
 
 export const data = {
@@ -38,7 +41,7 @@ export function render(data) {
 
   if (!process.env.ONLY) {
     const missing = REQUIRED.flatMap((u) => [u, esOf(u)]).filter((u) => !urls.has(u));
-    if (missing.length) console.warn(`[sitemap] missing page(s): ${missing.join(", ")}`);
+    if (missing.length) buildWarning("sitemap", `missing page(s): ${missing.join(", ")}`);
   }
 
   const isEs = (u) => (u.startsWith("/es/") ? 1 : 0);

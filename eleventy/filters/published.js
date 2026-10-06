@@ -26,6 +26,7 @@ import { createRequire } from "node:module";
 import * as yaml from "js-yaml";
 import { safeUrl, TZ } from "../../eleventy.config.js";
 import { scriptJson } from "../script-json.js";
+import { buildWarning } from "../build-warnings.js";
 import { issueName, localizeIssueLabel } from "./read.js";
 
 const require = createRequire(import.meta.url);
@@ -624,7 +625,7 @@ function symbolOf(name) {
       out = `<symbol id="pw-i-${name}"${keep}>${m[2].replace(/>\s+</g, "><").trim()}</symbol>`;
     }
   } else {
-    console.warn(`[published] missing icon: ${name}`);
+    buildWarning("published", `missing icon: ${name}`);
   }
   symbolCache.set(name, out);
   return out;

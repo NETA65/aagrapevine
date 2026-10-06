@@ -13,6 +13,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { buildWarning } from "../build-warnings.js";
 // the site's time zone: config/site.yml site.timezone (America/Chicago)
 import { TZ } from "../../eleventy.config.js";
 
@@ -248,6 +249,12 @@ export function groupIssues(file, pub) {
 
 const monthName = (y, m, lang, withYear) =>
   new Intl.DateTimeFormat(LOCALES[lang] || "en-US", { month: "long", ...(withYear ? { year: "numeric" } : {}), timeZone: "UTC" }).format(new Date(Date.UTC(y, m - 1, 15)));
+
+/** How many of those earlier issues /read/ shows itself (without JavaScript too); /read-archive.json
+    (src/pages/read-archive.11ty.js) holds the rest, fetched when a visitor taps "Load older issues". The one
+    number both read — the page as the global `readSsrArchive`, the JSON file by importing it — so the file
+    always starts with the issue right after the page's last one. */
+export const SSR_ARCHIVE = 8;
 
 /** Every issue that has stories, except the newest one of each publication (those are "current"). */
 export function archiveIssues(file) {
@@ -717,7 +724,7 @@ export function readSprite() {
   const parts = [];
   for (const name of READ_SPRITE) {
     const file = iconFile(name);
-    if (!file || !fs.existsSync(file)) { console.warn(`[read] sprite: missing icon ${name}`); continue; }
+    if (!file || !fs.existsSync(file)) { buildWarning("read", `sprite: missing icon ${name}`); continue; }
     const svg = fs.readFileSync(file, "utf8").replace(/<!--.*?-->/gs, "");
     const inner = (svg.match(/<svg[^>]*>([\s\S]*)<\/svg>/) || [])[1] || "";
     const sw = (svg.match(/stroke-width="([\d.]+)"/) || [])[1] || "2";
@@ -727,7 +734,7 @@ export function readSprite() {
   return readSpriteCache;
 }
 export function ricon(name, cls = "size-5") {
-  if (!READ_SPRITE.includes(name)) console.warn(`[read] ricon: "${name}" is not in READ_SPRITE`);
+  if (!READ_SPRITE.includes(name)) buildWarning("read", `ricon: "${name}" is not in READ_SPRITE`);
   return `<svg class="icon ${cls}" aria-hidden="true" focusable="false"><use href="#ri-${name}"/></svg>`;
 }
 
@@ -790,10 +797,9 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("readDocLang", (item) => docLang(item));
   eleventyConfig.addFilter("readIssues", (file, pub) => groupIssues(file, pub || ""));
   eleventyConfig.addFilter("readArchive", (file) => archiveIssues(file));
+  eleventyConfig.addGlobalData("readSsrArchive", SSR_ARCHIVE); // the earlier issues /read/ shows itself (SSR_ARCHIVE)
   eleventyConfig.addFilter("readArchiveSince", (file) => archiveSince(file));
   eleventyConfig.addFilter("readIssueView", (issue, lang) => issueView(issue, lang, h));
-  eleventyConfig.addFilter("readIssueLabel", (issue, lang) => issueLabel(issue, lang));
-  eleventyConfig.addFilter("readArticle", (item, lang) => articleView(item, lang, h));
   eleventyConfig.addFilter("readPdfTitle", (item, lang) => pdfTitle(item, lang, h));
   eleventyConfig.addFilter("readPdfTitleInfo", (item, lang) => pdfTitleInfo(item, lang, h));
   eleventyConfig.addFilter("readCatalogs", (pdfs, lang) => catalogItems(pdfs, lang));
@@ -803,8 +809,6 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("readPdfsMatching", (pdfs, pattern, n) => pdfsMatching(pdfs, pattern, n));
   eleventyConfig.addFilter("readEditorial", (items, pub, lang) => editorialFor(items, pub, h, lang));
   eleventyConfig.addFilter("readItems", (items) => itemsOf(items));      // honours READ_EMPTY
-  eleventyConfig.addFilter("readFileTitle", (s) => cleanFileTitle(s));
-  eleventyConfig.addFilter("readAsset", (p) => localAsset(p));
   // "(800) 631-6025" → "tel:+18006316025"; "+1 (570) 567-0437" → "tel:+15705670437"
   eleventyConfig.addFilter("readTel", (phone) => {
     const s = String(phone || "").trim();

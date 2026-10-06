@@ -6,7 +6,9 @@
 //   issue: id, pub, key, label, topic, tl=topic lang, c=cover (site-relative), u=issue url, h=its host, count, items
 //   story: t=title, tl=title lang, o=original title, ol=original lang, u=url, s=section,
 //          a=author, f=1 free / 0 subscribers, m=machine-translated, n=new
-const SSR_ARCHIVE = 8; // keep in sync with SSR_ARCHIVE in read.njk
+// The issues the page shows itself are left out: the same number read.njk uses (eleventy/filters/read.js).
+import { SSR_ARCHIVE } from "../../eleventy/filters/read.js";
+
 const HUBS = { gv: "https://www.aagrapevine.org/magazine", lv: "https://www.aalavina.org/la-revista" };
 
 const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
@@ -16,6 +18,7 @@ export default class {
     return {
       pagination: { data: "languages", size: 1, alias: "lang" },
       permalink: (data) => (data.lang === "en" ? "/read-archive.json" : `/${data.lang}/read-archive.json`),
+      layout: false,
       eleventyExcludeFromCollections: true,
     };
   }

@@ -912,7 +912,6 @@
   "expenses.warn.category_type": { "en": "The category was for another kind of entry: the usual one is used.", "es": "La categoría era de otro tipo de registro: se usa la de siempre." },
   "expenses.warn.category_unknown": { "en": "Unknown category: the usual one is used.", "es": "Categoría desconocida: se usa la de siempre." },
   "expenses.warn.date_ignored": { "en": "A date that couldn't be read was left out.", "es": "Se dejó fuera una fecha que no se entendía." },
-  "expenses.warn.end_date": { "en": "The end date couldn't be read and was left out.", "es": "No se entendió la fecha final y se dejó fuera." },
   "expenses.warn.format_unknown": { "en": "Unknown magazine: left blank.", "es": "Revista desconocida: se dejó en blanco." },
   "expenses.warn.funder_unknown": { "en": "Unknown in “Who pays”: check it after importing.", "es": "No existe en “Quién paga”: revísalo después de importar." },
   "expenses.warn.id_invalid": { "en": "An invalid id was replaced with a new one.", "es": "Un id no válido se cambió por uno nuevo." },

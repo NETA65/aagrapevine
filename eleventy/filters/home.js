@@ -36,10 +36,6 @@ const JUNK_PREFIX = /^(read more|learn more|click here|lee m[aá]s|leer m[aá]s|
 // The pattern stays broad on purpose (any trailing bracket mentioning a season/episode).
 const SEASON_TAIL = /\s*[[(][^\])]*(season|temporada|episod)[^\])]*[\])]\s*$/i;
 
-// Kinds that are not counted as "new" news items (homeRecentCount): they have their own sections
-// or no page of their own.
-const FRESH_SKIP = new Set(["event", "topic", "meeting", "announcement"]);
-
 // Magazine sections that carry the issue's theme ("Featured Section", "Sección Especial" …).
 const FEATURED_SECTION = /featured|special|especial|destacad/i;
 
@@ -135,8 +131,6 @@ export default function (eleventyConfig, helpers) {
 
   const time = (v) => { const d = toDate(v); return d ? d.getTime() : 0; };
   const itemTime = (i) => (i ? time((i.extra && i.extra.start) || i.date || i.first_seen) : 0);
-  // "News date": What's New items carry `wn_date` (the date the sync sorted them by).
-  const newsTime = (i) => (i ? time(i.wn_date || i.date || i.first_seen) : 0);
   const byNewest = (a, b) => itemTime(b) - itemTime(a);
   const alive = (i) => i && typeof i === "object" && i.status !== "gone";
   // Lists from the data files: anything that isn't an array counts as empty.
@@ -261,16 +255,6 @@ export default function (eleventyConfig, helpers) {
     let s = new Intl.DateTimeFormat(LOCALES[lang] || "en-US", { weekday: "long", month: "long", day: "numeric", timeZone: TZ }).format(d);
     if (lang === "es") s = s.charAt(0).toUpperCase() + s.slice(1);
     return s;
-  });
-
-  /* Items whose news date is within the last `days` days (not in the future beyond a day). */
-  eleventyConfig.addFilter("homeRecentCount", (items, days = 7) => {
-    const now = Date.now();
-    return arr(items).filter((i) => {
-      if (!alive(i) || FRESH_SKIP.has(i.kind)) return false;
-      const t = newsTime(i);
-      return t && now - t <= days * DAY && t <= now + DAY;
-    }).length;
   });
 
   /* Latest issue of a publication ("gv" | "lv") for the page language:
@@ -679,32 +663,6 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("homeWeekday", (idx, lang = "en") => {
     const d = new Date(Date.UTC(2023, 0, 1 + (Number(idx) || 0), 12)); // 2023-01-01 was a Sunday
     return new Intl.DateTimeFormat(LOCALES[lang] || "en-US", { weekday: "long", timeZone: "UTC" }).format(d);
-  });
-
-  /* Grapevine Weekly Open schedule line. The sync writes it by rule in both languages
-     (i18n.when: "Wednesdays at 11:00 AM Central" / "Miércoles a las 11:00 a. m. (hora del Centro)").
-     Fallback when that is missing: build it from extra.day / extra.time. */
-  eleventyConfig.addFilter("homeWeeklyOpen", (item, lang = "en") => {
-    const i = item || {};
-    const when = i.i18n && i.i18n.when && i.i18n.when[lang];
-    if (when) return String(when);
-    const x = i.extra || {};
-    const day = String(x.day || "").trim(), tm = String(x.time_central || x.time || "").trim();
-    if (lang !== "es") return [day, tm].filter(Boolean).join(" · ");
-    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-    const di = days.findIndex((d) => day.toLowerCase().startsWith(d));
-    const dayEs = di >= 0
-      ? "Los " + new Intl.DateTimeFormat("es-US", { weekday: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2023, 0, 1 + di, 12))).replace(/s?$/, "s") // lunes…viernes are already plural; sábado → sábados
-      : day;
-    const m = tm.match(/(\d{1,2})(?::(\d{2}))?\s*([ap])\.?\s*m\.?/i);
-    let timeEs = tm;
-    if (m) {
-      let h = Number(m[1]) % 12; if (m[3].toLowerCase() === "p") h += 12;
-      timeEs = new Intl.DateTimeFormat("es-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" }).format(new Date(Date.UTC(2023, 0, 1, h, Number(m[2] || 0))));
-      if (helpers && helpers.esMeridiem) timeEs = helpers.esMeridiem(timeEs);
-      if (/central|ct\b|cst|cdt/i.test(tm)) timeEs += " (hora del Centro)";
-    }
-    return [dayEs, timeEs].filter(Boolean).join(" · ");
   });
 
   /* The original language when EVERY item is a machine translation from that same

@@ -91,29 +91,9 @@
     "en": "Add to calendar",
     "es": "Agregar al calendario"
   },
-  "home.meeting_id": {
-    "en": "Meeting ID",
-    "es": "ID de reunión"
-  },
-  "home.meeting_passcode": {
-    "en": "Passcode",
-    "es": "Código de acceso"
-  },
-  "home.meeting_copy_id": {
-    "en": "Copy meeting ID",
-    "es": "Copiar el ID de la reunión"
-  },
-  "home.meeting_details": {
-    "en": "Meeting details",
-    "es": "Detalles de la reunión"
-  },
   "home.meeting_details_short": {
     "en": "Details",
     "es": "Detalles"
-  },
-  "home.meeting_welcome": {
-    "en": "Every AA member is welcome — no sign-up needed.",
-    "es": "Todo miembro de AA es bienvenido — no hace falta registrarse."
   },
   "home.meeting_cal_title": {
     "en": "NETA 65 Grapevine & La Viña Committee Meeting",
@@ -347,10 +327,6 @@
     "en": "Now playing",
     "es": "Reproduciendo"
   },
-  "home.season_ep": {
-    "en": "S{s} · E{e}",
-    "es": "T{s} · E{e}"
-  },
   "home.more_episodes": {
     "en": "More episodes",
     "es": "Más episodios"
@@ -450,54 +426,6 @@
   "home.lib_newest": {
     "en": "Newest documents",
     "es": "Documentos más recientes"
-  },
-  "home.pdfcat.gvr": {
-    "en": "GVR resources",
-    "es": "Recursos para GVR"
-  },
-  "home.pdfcat.rlv": {
-    "en": "RLV resources",
-    "es": "Recursos para RLV"
-  },
-  "home.pdfcat.catalog": {
-    "en": "Catalogs",
-    "es": "Catálogos"
-  },
-  "home.pdfcat.flyer": {
-    "en": "Flyers",
-    "es": "Volantes"
-  },
-  "home.pdfcat.postcard": {
-    "en": "Postcards",
-    "es": "Postales"
-  },
-  "home.pdfcat.news": {
-    "en": "News",
-    "es": "Noticias"
-  },
-  "home.pdfcat.guidelines": {
-    "en": "Guidelines",
-    "es": "Guías"
-  },
-  "home.pdfcat.order-form": {
-    "en": "Order forms",
-    "es": "Formularios de pedido"
-  },
-  "home.pdfcat.workbook": {
-    "en": "Workbooks",
-    "es": "Cuadernos de trabajo"
-  },
-  "home.pdfcat.service": {
-    "en": "Service",
-    "es": "Servicio"
-  },
-  "home.pdfcat.literature": {
-    "en": "Literature",
-    "es": "Literatura"
-  },
-  "home.pdfcat.other": {
-    "en": "Other",
-    "es": "Otros"
   },
   "home.ig_eyebrow": {
     "en": "On Instagram",

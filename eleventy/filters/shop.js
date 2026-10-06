@@ -10,7 +10,6 @@
 //                               page language's store first, the other store's item of that kind as `also`
 //   shopFromMonthly(shop)     → lowest monthly price in the U.S. stores (for "Subscriptions from $2.99/month"), or null
 //   shopMoney(n, lang)        → "$11.99" (USD, the stores' currency)
-//   shopToday()               → today's date (YYYY-MM-DD) in the site's time zone, at build time
 //   shopPriceChanges(shop, lang) → the price changes AA Grapevine announced (shop.json price_changes): the
 //                               notices' views, each with the window it shows in (shopWindow)
 // (and, for the other filter files: shopWindow, shopPriceChangeIn, shopPlanPrice, shopNextChange, botmPriceState,
@@ -576,5 +575,4 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("shopSpecialty", (shop, lang) => shopSpecialty(shop, lang, t));
   eleventyConfig.addFilter("shopFromMonthly", (shop) => shopFromMonthly(shop));
   eleventyConfig.addFilter("shopMoney", (n, lang) => money(n, lang));
-  eleventyConfig.addFilter("shopToday", () => todayYmd(nowDate()));
 }

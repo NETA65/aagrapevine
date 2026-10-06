@@ -26,6 +26,7 @@ export default class {
     return {
       pagination: { data: "languages", size: 1, alias: "lang" },
       permalink: (data) => (data.lang === "en" ? "/published/texas-archive.json" : `/${data.lang}/published/texas-archive.json`),
+      layout: false,
       eleventyExcludeFromCollections: true,
     };
   }

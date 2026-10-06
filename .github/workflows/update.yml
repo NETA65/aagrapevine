@@ -1065,14 +1065,24 @@ jobs:
           # A button or heading whose text is missing from src/_i18n/ stops the build here
           # (GitHub Pages keeps the previous site) instead of showing its raw key on the live site.
           I18N_STRICT: "1"
+          # The build's warnings (a missing icon, a page missing from the sitemap, a link in the data repaired or
+          # hidden — eleventy/build-warnings.js) are written here for "Check the build". No STRICT_BUILD: a warning
+          # never stops publishing (the Code check fails on them).
+          BUILD_WARNINGS: ${{ runner.temp }}/build-warnings.txt
         run: npx @11ty/eleventy
 
       - name: Check the build
+        env:
+          BUILD_WARNINGS: ${{ runner.temp }}/build-warnings.txt
         run: |
           set -euo pipefail
           test -s _site/index.html || { echo "::error::_site/index.html is missing — the build did not produce a home page."; exit 1; }
           test -s _site/es/index.html || { echo "::error::_site/es/index.html is missing — the Spanish site was not built."; exit 1; }
-          test -s _site/assets/css/main.css || { echo "::error::The stylesheet was not built."; exit 1; }
+          # Every stylesheet: main.css and the page-area ones (booth, expenses, monthly, orientation, presentations,
+          # report …) — each .css at the top of src/assets/css is built to _site/assets/css/ under its own name.
+          for css in src/assets/css/*.css; do
+            test -s "_site/assets/css/${css##*/}" || { echo "::error::The stylesheet ${css##*/} was not built."; exit 1; }
+          done
           # The Morning check (morning.yml) reads the LIVE build.json to see whether today's update is
           # on the site; without it, it would start a morning refresh every time. Never blocks a deploy
           # (the Code check fails on it before a change is merged).
@@ -1083,6 +1093,21 @@ jobs:
           echo "**Website:** ${pages} pages, ${size} MB" >> "$GITHUB_STEP_SUMMARY"
           # GitHub Pages sites must stay under 1 GB.
           if (( size > 900 )); then echo "::warning::The site is ${size} MB — GitHub Pages allows 1 GB. See docs/OPERATIONS.md → Repository size."; fi
+          # The build's warnings, in the run's summary (the site is published all the same; the build already made
+          # each one a yellow annotation). The first 50 are listed.
+          if [ -s "$BUILD_WARNINGS" ]; then
+            n=$(grep -c . "$BUILD_WARNINGS" || true)
+            echo "The build printed ${n} warning(s):"
+            cat "$BUILD_WARNINGS"
+            {
+              echo ""
+              echo "**Build warnings (${n})** — published all the same; please fix them (the Code check fails on them):"
+              echo ""
+              echo "~~~~"
+              head -n 50 "$BUILD_WARNINGS"
+              echo "~~~~"
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       # (published by the "publish" job below, once the tests have passed)
       - name: Upload the website
