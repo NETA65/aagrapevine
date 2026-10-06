@@ -103,8 +103,8 @@ LINKED_STAMP_DAYS = 7        # a gone page's `linked_at` is refreshed at most th
 SAVE_EVERY_S = 120           # checkpoint the state file this often during a run
 LOGIN_PATH_RE = re.compile(r"(^|/)(user|usuario)/(login|inicio-sesion)|/login$")
 # Crawler.last_failure values after which a PDF is simply asked again next run (no strike): robots.txt
-# answered 5xx (host closed for now), the host is down for this run, or one miss with no time left to
-# ask again (Crawler.request)
+# answered 5xx (or, on the magazine sites, gave no answer: host closed for now), the host is down for
+# this run, or one miss with no time left to ask again (Crawler.request)
 REQUEUE_FAILURES = ("robots-unavailable", "host-down", "no-time")
 
 log = get_logger("crawl")
@@ -148,9 +148,14 @@ def _site_tz():
 
 def _local_day(iso: str) -> str:
     """'2026-11-01T04:30:00Z' → '2026-10-31': the day in the site's time zone (config site.timezone,
-    America/Chicago) — the day the site shows, not the UTC one."""
+    America/Chicago) — the day the site shows, not the UTC one. A time without an offset is UTC (as
+    every time the crawler writes), never the machine's own zone."""
     d = parse_iso(iso)
-    return d.astimezone(_site_tz()).date().isoformat() if d else iso[:10]
+    if d is None:
+        return iso[:10]
+    if d.tzinfo is None:
+        d = d.replace(tzinfo=timezone.utc)
+    return d.astimezone(_site_tz()).date().isoformat()
 
 
 class _ViaCrawler:
@@ -382,7 +387,10 @@ class Crawler:
         "robots" / "robots-unavailable" / "unreachable" / "redirects", or "host-down" / "no-time").
         Another site that gives no answer is asked once more; a second miss marks the host down for the
         rest of the run ("host-down": nothing is sent — its PDFs wait for the next run, see
-        REQUEUE_FAILURES; "no-time": one miss and no time left to ask again, likewise)."""
+        REQUEUE_FAILURES; "no-time": one miss and no time left to ask again, likewise). A robots.txt
+        that gave no answer (PoliteSession asked twice; nothing was sent for the URL) is "robots-
+        unavailable" on the magazine sites (their pages and files wait for the next run, as for a 5xx)
+        and "unreachable" on another site (its host is down for the run)."""
         host = _host(url)
         drupal = host in R.DRUPAL_HOSTS
         sess = self.http if drupal else self.ext
@@ -402,6 +410,9 @@ class Crawler:
                 if r is not None:
                     self.last_failure = None
                     return r
+                if why == "robots-unreachable":    # robots.txt was already asked twice: no new try
+                    why = "robots-unavailable" if drupal else "unreachable"
+                    break
                 if drupal or why != "unreachable" or attempt == 2:
                     break
                 if not self.budget.ok():
@@ -413,6 +424,9 @@ class Crawler:
         if not drupal and why == "unreachable":
             self.dead_hosts.add(host)
             log.warning("%s: no answer twice — its other documents wait for the next run", host)
+        elif drupal and why == "robots-unavailable":
+            # for the run's notes (run_warnings) — also when only a document met it
+            self.robots_down[host] = sess.robots_problem(url) or "unavailable"
         self.last_failure = why
         return None
 
@@ -1048,6 +1062,8 @@ class Crawler:
                 elif kind == "vanished":
                     self.c["vanished_checks"] += 1
                 self.fetch_head(key, rec)
+                if kind == "periodic" and self.last_failure in REQUEUE_FAILURES:
+                    self.c["periodic_checks"] -= 1     # nothing was asked: the run's quota is not used up
         except Stop:
             raise
         except Exception as e:
@@ -1265,7 +1281,7 @@ def run_warnings(crawler: Crawler | None, hub_problems: list[dict]) -> list[str]
     out = []
     if hub_problems:
         parts = [f"{urlsplit(h['url']).hostname.removeprefix('www.')}{urlsplit(h['url']).path} "
-                 f"({h['status']} since {str(h['since'])[:10]})" for h in hub_problems]
+                 f"({h['status']} since {_local_day(str(h['since']))})" for h in hub_problems]
         line = (f"{len(parts)} main page(s) of the magazine sites did not load: " + ", ".join(parts)
                 + " — checked again every day")
         out.append(line if len(line) <= 200 else line[:197].rstrip(" ,") + "…")

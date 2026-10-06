@@ -103,7 +103,7 @@ class FakeSession:
 
     def request(self, method, url, **kw):
         if self.robots:
-            self.last_failure = "unreachable" if self.robots == "unreachable" else "robots-unavailable"
+            self.last_failure = "robots-unreachable" if self.robots == "unreachable" else "robots-unavailable"
             return None
         self.sent.append((method, url))
         queue = self.answers.get(url) or ["unreachable"]
@@ -451,6 +451,59 @@ class HostsThatDoNotAnswer(unittest.TestCase):
             self.assertEqual(len(calls), n, "no request to a host that is down")
             self.assertNotIn("head", rec3)
 
+    def test_a_silent_robots_txt_on_the_magazine_sites_strikes_nothing(self):
+        # robots.txt of the magazine server gives no answer (PoliteSession asked it twice): its pages AND
+        # files wait for the next run — no "unreachable" strike for a file nobody asked for
+        crawled = iso(now() - timedelta(days=40))
+        st = {"pages": {PAGE: {"src": "sitemap", "depth": 0, "status": 200, "crawled_at": crawled, "pdfs": []}},
+              "pdfs": {"old": {"url": OWN_PDF, "status": "ok", "refs": [{"url": HUB}], "external": False,
+                               "head": {"status": 200, "size": 9, "checked_at": crawled}},
+                       "new": {"url": OWN_PDF.replace("Kit", "Flyer"), "status": "ok", "refs": [{"url": HUB}],
+                               "external": False}}}
+        cr = crawler(st, http=FakeSession(robots="unreachable"))
+        before = copy.deepcopy(st)
+        heapq.heappush(cr.pdf_q, ((3, 0, 0, "old"), "periodic", "old"))
+        heapq.heappush(cr.pdf_q, ((0, 0, 0, "new"), "details", "new"))
+        cr.do_pdf_task()
+        cr.do_pdf_task()
+        self.assertEqual(cr.robots_down, {"www.aagrapevine.org": "unreachable"}, "noted also when only files met it")
+        cr.crawl_page(PAGE, st["pages"][PAGE])
+        self.assertEqual(st, before, "nothing recorded: no strike, no back-off, the page not marked")
+        self.assertEqual((cr.c["pdfs_requeued"], cr.c["periodic_checks"], cr.c["details"]), (2, 0, 0))
+        self.assertEqual(C.run_warnings(cr, []), ["robots.txt of www.aagrapevine.org did not answer properly "
+                                                  "(no answer): its pages were left for the next run"])
+
+    def test_with_real_sessions_a_silent_robots_txt(self):
+        # aa.org: robots.txt asked twice, the file never, no pointless third try → down for the run, one
+        # strike (a host that does not answer at all is retired after a month, as before); the magazine
+        # site: its file waits for the next run
+        clock = FakeClock()
+        calls = []
+
+        def fake_request(_self, method, url, **kw):
+            calls.append(url)
+            if url.endswith("/robots.txt"):
+                clock.t += 15
+                raise requests.ConnectTimeout("timed out")
+            return Answer(200, url, ctype="application/pdf", headers={"Content-Length": "5000"})
+
+        with mock.patch.object(common.time, "monotonic", clock.monotonic), \
+                mock.patch.object(common.time, "sleep", clock.sleep), \
+                mock.patch("requests.Session.request", fake_request):
+            own = common.PoliteSession(min_delay=5.0, respect_robots=True)
+            cr = crawler(http=own)
+            rec = cr.pdfs["k"] = self.rec(AA_PDF)
+            cr.fetch_head("k", rec)
+            self.assertEqual(calls, ["https://www.aa.org/robots.txt"] * 2)
+            self.assertEqual(cr.dead_hosts, {"www.aa.org"})
+            self.assertEqual((rec["head"]["error"], rec["head"]["fails"]), ("unreachable", 1))
+            mine = cr.pdfs["m"] = {"url": OWN_PDF, "status": "ok", "refs": [{"url": HUB}], "external": False}
+            cr.fetch_head("m", mine)
+            self.assertEqual(calls[2:], ["https://www.aagrapevine.org/robots.txt"] * 2)
+            self.assertNotIn("head", mine, "no strike: due again next run")
+            self.assertEqual(cr.last_failure, "robots-unavailable")
+            self.assertEqual(cr.robots_down, {"www.aagrapevine.org": "unreachable"})
+
 
 # =========================================================================== P2-8: the PDF reader
 class PdfReaderInAChildProcess(unittest.TestCase):
@@ -628,7 +681,7 @@ class RobotsTxtAnswers(unittest.TestCase):
         clock = FakeClock()
         s, calls = self.session([requests.ConnectTimeout("timed out")], clock)
         self.assertIsNone(s.get(f"{self.SITE}/a.pdf"))
-        self.assertEqual((s.last_failure, s.robots_problem(self.SITE)), ("unreachable", "unreachable"))
+        self.assertEqual((s.last_failure, s.robots_problem(self.SITE)), ("robots-unreachable", "unreachable"))
         self.assertEqual(len(calls), 2)
 
     def test_a_client_error_allows_everything(self):
@@ -782,8 +835,9 @@ class StatePruning(unittest.TestCase):
         for url in gone:
             pg = known[url]
             junk = not R.should_crawl_path(urlsplit(url).path)
+            since = C._dt(pg.get("error_since") or pg.get("crawled_at"))
             long_gone = (str(pg.get("status")) in C.GONE_PAGE_STATUSES and not pg.get("in_sitemap")
-                         and C._dt(pg.get("error_since") or pg.get("crawled_at")) <= cut)
+                         and since is not None and since <= cut)
             self.assertTrue(junk or long_gone, url)
             self.assertNotIn(url.lower(), {h.lower() for h in R.hub_urls()})
         self.assertEqual(cr.c["pruned_junk"], sum(1 for u in known if not R.should_crawl_path(urlsplit(u).path)))
@@ -813,6 +867,8 @@ class DocumentDayInCentralTime(unittest.TestCase):
         self.assertEqual(C._item_date(None, "2026-07-01T04:30:00Z", None, False), "2026-06-30", "CDT: UTC-5")
         self.assertEqual(C._item_date(None, "2026-12-01T05:30:00Z", None, False), "2026-11-30", "CST: UTC-6")
         self.assertEqual(C._item_date(None, "2026-11-01T05:30:00Z", None, False), "2026-11-01")
+        self.assertEqual(C._item_date(None, "2026-11-01T04:30:00", None, False), "2026-10-31",
+                         "no offset: UTC, whatever the machine's own time zone")
         self.assertEqual(C._item_date(None, None, "2026-11-01T02:00:00Z", True), "2026-10-31")
         self.assertIsNone(C._item_date(None, None, "2026-11-01T02:00:00Z", False))
         # a folder month that is not the file's Central month: the folder's first day, as before

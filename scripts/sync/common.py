@@ -482,8 +482,9 @@ class PoliteSession:
         # host → (parser or None, problem or None, monotonic time until which a problem stands)
         self._robots: dict[str, tuple[Any, str | None, float]] = {}
         # why the last request()/get() returned None: "robots" (its rules disallow the URL),
-        # "robots-unavailable" (robots.txt answered 5xx / 429), "unreachable" (no answer — from the URL
-        # or from robots.txt), "redirects" (too many); None after an answer
+        # "robots-unavailable" (robots.txt answered 5xx / 429), "robots-unreachable" (robots.txt gave no
+        # answer, asked twice — nothing was sent for the URL), "unreachable" (the URL gave no answer),
+        # "redirects" (too many); None after an answer
         self.last_failure: str | None = None
         self._last: dict[str, float] = {}          # pace key (see pace_key) → time of the last request
         self._delay: dict[str, float] = {}         # pace key → strictest delay seen for that group
@@ -571,7 +572,7 @@ class PoliteSession:
     def _refusal(self, url: str) -> str:
         """last_failure for a URL that allowed() refused."""
         problem = self.robots_problem(url)
-        return "robots" if not problem else "unreachable" if problem == "unreachable" else "robots-unavailable"
+        return "robots" if not problem else "robots-unreachable" if problem == "unreachable" else "robots-unavailable"
 
     def delay_for(self, url: str) -> float:
         rp, _problem = self._robots_for(url)
