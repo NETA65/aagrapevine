@@ -173,7 +173,9 @@ to YouTube. Once the video is listed, the card takes the list's title and links 
 > **Note:** the file says "Delete these lines to hide it". The page does hide the card, but the tests
 > `test_config_has_the_short` and `test_featured_video_from_config` in `tests/test_read_media_asides.py`
 > expect both ids (exactly 11 characters). Deleting them, or a 10- or 12-character id, turns **Code check**
-> red. The live site still updates; change the test too if you really want the card gone.
+> red, and since October 2026 **Website update** does not publish the change either (it runs the same tests
+> first: *Tests failed — not published*; the live site keeps the version before). Change the test in the same
+> commit if you really want the card gone.
 
 ```yaml
   about_videos:
@@ -208,7 +210,7 @@ built, so they stay right even on a day the daily sync fails.
 | `week_of_month` | `3` | `1`–`5`, or `-1` for the last one (`"3"` in quotes works). `5` = only months that have a fifth one. **Words such as `"third"` or `"2nd"` are not read here**: the meeting silently stays on the 3rd. |
 | `weekday` | `"wednesday"` | An English or Spanish day name, any capitals, with or without the accent: `Wednesday`, `miércoles`, `miercoles`, `jueves`, `sábado`. **Plurals (`"Wednesdays"`) and short forms (`"Wed"`) are not read here**: silently Wednesday. |
 | `start` | `"19:00"` | Central time. `"19:00"`, `"7:00 PM"`, `"7pm"`, `"7 p.m."`, `19`, `"19h00"`, `"19.30"` all work. Unreadable (`"noon"`, `"25:00"`, `"13pm"`): 19:00. |
-| `end` | `"20:00"` | Same forms. Missing, unreadable or not after the start: one hour after the start. (An end earlier than the start and at most 12 hours later, such as `"22:00"`–`"01:00"`, is read as the next morning by the site data since October 2026, but the meeting pages still show one hour: keep the meeting within one day.) |
+| `end` | `"20:00"` | Same forms. Missing, unreadable or not after the start: one hour after the start. (An end earlier than the start and at most 12 hours later, such as `"22:00"`–`"01:00"`, is read as the next morning by the sync since October 2026, in `data/site/events.json`; but the pages and the calendar files work the committee meeting's dates out from this block themselves and still show one hour: keep the meeting within one day.) |
 | `platform` | `"Zoom"` | What the pages call the place, since October 2026 in every sentence about the committee meeting: "Join on Zoom", "Monthly on Zoom", "on Zoom" in the calendar text, the meta description, how to join, the share kit's announcement, the presentations' closing slide, the home card, `/events/`, the `/share/` poster, `/gvr/`. Left out (or empty): Zoom. The phone dial-in section and the two weekly open meetings always say Zoom: those are Zoom's own. |
 | `zoom_url` | the full Zoom link | Every **Join** button (home, `/meetings/`, `/events/`), "Copy Zoom link", the calendar description. Copy the whole link from Zoom: its `pwd=` part is a token, not the passcode. |
 | `meeting_id` | `"949 476 7497"` | `/meetings/` "How to join" (its Copy button copies the digits only), the poster, the calendar text, the tap-to-call links on `/accessibility/#phone`. A test requires 9–11 digits. |
@@ -888,8 +890,9 @@ Two kinds of checks:
   must be 1–3*), a bad or repeated `id`, an unknown `example`, `minutes` outside 3–12, a link without
   `href`, `link` or `url` (or a `url` that does not start with https://), or a `panel: starts` that is not
   `"YYYY-MM"`.
-- **Only Code check turns red** (`tests/test_orientation.py`): not exactly 6 sessions; `minutes` outside
-  5–8 (so `minutes: 10` builds but fails the test); a summary over 110 characters (English) or 135
+- **The build works, but a test fails** (`tests/test_orientation.py`: Code check red, and since October 2026
+  Website update does not publish either, *Tests failed — not published*): not exactly 6 sessions; `minutes`
+  outside 5–8 (so `minutes: 10` builds but fails the test); a summary over 110 characters (English) or 135
   (Spanish); a title over 32; a point over 240; the right answer always in the same place; an unknown
   placeholder; a banned word; a link that does not resolve (`link` must be a key in `links:`, `url` must
   be on aagrapevine.org or aalavina.org).
@@ -1159,8 +1162,12 @@ Where problems show up:
 - **A red ✗ on Website update**: the build stopped and the site stays as it was. Open the run, then the
   failed step ("Build the website"; for a YAML slip in `config/site.yml` also "Sync sources and translate"): the
   error names the file and the problem.
-- **A red ✗ on Code check only**: a test disagrees with the change; the live site did update. Open the job
-  "Python tests (offline)" and look for the `FAIL:` or `ERROR:` lines.
+- **A red ✗ on Code check, and on Website update with *Tests failed — not published***: a test disagrees with the
+  change, so since October 2026 the site was not published (it keeps the version before, and no later run
+  publishes until the test passes). Open the Code check's job "Python tests (offline)" (or the job *Test the code
+  before publishing*) and look for the `FAIL:` or `ERROR:` lines
+  ([automation-and-troubleshooting.md §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)).
+  Only the few tests listed in `DATA_TESTS` turn the Code check alone red.
 - **Notes** in the run summary: small problems of a source that still updated (for example
   `content/instagram.yml`).
 - **The log** of the step "Sync sources and translate": the only place where mistakes in `lavina_weekly_open:` and

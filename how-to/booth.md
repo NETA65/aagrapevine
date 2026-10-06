@@ -1705,9 +1705,13 @@ Subscribe!" and "¡Descárgala ahora! ¡Luego suscríbete!" are left out of the 
 
 ### 8.10 How mistakes are reported
 
-A row with any mistake is **left out** of the show; every other row still plays, and the site still updates. Each
-mistake is one line, naming the row by its number as a spreadsheet shows it (the header is row 1; on GitHub that is
-the line number, as long as no cell above it holds a line break) and its id:
+A row with any mistake is **left out** of the show, and every other row still plays. But the test that checks the
+CSV fails, and since October 2026 *Website update* runs the same tests before it publishes: until the row is fixed
+(or the change undone), **no update is published** — the site, the booth's show included, keeps the version before
+the commit, and its run is red with *Tests failed — not published*
+([Automation and troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)). So fix
+a CSV mistake soon. Each mistake is one line, naming the row by its number as a spreadsheet shows it (the header is
+row 1; on GitHub that is the line number, as long as no cell above it holds a line break) and its id:
 
 ```text
 booth.csv row 14 (quiz-12): correct "4": there are only 3 choices
@@ -1720,6 +1724,8 @@ You see it in four places:
    (`test_no_problem_at_all` in `tests/test_booth_csv.py`) prints every line. GitHub e-mails the person who
    pushed, when that person has its failure e-mails switched on
    ([Automation and troubleshooting §8.3](automation-and-troubleshooting.md#83-who-gets-githubs-run-failed-e-mails)).
+   The *Website update* run of the same commit is red too, at its job **Test the code before publishing** (its
+   run summary's *Tests before publishing* lists the same test), and publishes nothing.
 2. **The build** (the Website update run → **Build website** → **Build the website**): a warning
    `[booth] 1 problem(s) — left out of the booth display:` followed by the lines (CSV rows, Drive files, settings;
    live items are listed only in the player).

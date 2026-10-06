@@ -882,7 +882,9 @@ then read line by line and the title is kept as written.
 **The Code check tests every file too** (`tests/test_content_events.py`, since October 2026): each real file in
 `content/events/` is read exactly as the update reads it, and the check turns red, naming the file and what to
 change, when a year is missing, an offset is not Central time's, or the end is not after the start. So a slip
-shows as a red ✗ minutes after you save it, and the *Website update* run of that save does not publish it.
+shows as a red ✗ minutes after you save it. *Website update* runs the same test before it publishes, so **no run
+publishes anything** until the file is fixed or the change undone (the site keeps the version before; the run says
+*Tests failed — not published*, [Automation and troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)).
 
 ---
 
@@ -938,7 +940,7 @@ recurring_events:
 | `week_of_month` | `1`–`5`, or `-1` for the last; also `"2nd"`, `"second"`, `"segundo"`, `"2.º"`, `"last"`, `"último"` | missing or unreadable → **skipped** | which week. A month without a 5th one is simply left out. |
 | `weekday` | `saturday`, `Saturday`, `Saturdays`, `sábado`, `Sábados`, `miercoles` … | unreadable → **skipped** | which day |
 | `start` | `"17:00"`, `"5:00 PM"`, `5pm`, `17`, or unquoted `17:00` — Central time | missing → **skipped** | start |
-| `end` | the same forms | unreadable or not after the start → **one hour** + a note. Since October 2026 an end earlier than the start and at most 12 hours later (`"22:00"`–`"01:00"`) is the next morning on `/events/` and in the calendar files, with no note (the `/monthly/` posters still show one hour) | end |
+| `end` | the same forms | unreadable or not after the start → **one hour** + a note. Since October 2026 an end earlier than the start and at most 12 hours later (`"22:00"`–`"01:00"`) is the next morning on `/events/` and in `/events.ics`, with no note (what works the dates out from the rule itself still shows one hour: the `/monthly/` toolkit for months beyond the dates `events.json` lists, the booth display, the presentations) | end |
 | `location` | an address; the city is read from `…, City, TX` | — (an online series has none) | place |
 | `city`, `state` | override the city and state read from `location` | — | toolkit and duplicate matching |
 | `url` | `https://…` (a `www.…` address gets `https://`) | not an address → left out + note; none → the event links to its own card on `/events/` | title link, **Event details** button |

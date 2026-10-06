@@ -164,7 +164,7 @@ original language meanwhile.
    someone else changes a workflow's schedule (`cron:` line). (The runs the morning alarm of Step 9
    starts e-mail the owner of its key.)
 4. On the repository page, check the **Watch** button (top right) is set to **All Activity**, or
-   **Custom** with **Issues** ticked, so you receive the issue described below. (People who can
+   **Custom** with **Issues** ticked, so you receive the issues described below. (People who can
    push to the repository usually watch it already.)
 
 GitHub then e-mails you if a scheduled update fails. One source having a bad day is *not* a
@@ -173,8 +173,8 @@ updated for **7 days**, the update opens one issue, **"A content source has stop
 that says what to check; it closes itself when the source works again. A failed timed run e-mails
 only the person of point 3, and a run the Morning check starts e-mails nobody, so when two such runs
 fail **in a row** the update opens a second issue, **"The website update keeps failing"**, naming
-the part that failed; it closes itself after the next run that works. A change that fails the tests is never published — the site
-stays as it was until the change is fixed.
+the part that failed; it closes itself after the next run that works. A change that fails the tests
+is never published — the site stays as it was until the change is fixed.
 
 ---
 

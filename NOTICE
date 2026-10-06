@@ -6,10 +6,11 @@ https://neta65.github.io/aagrapevine/  ·  https://github.com/NETA65/aagrapevine
 
 1. What the license covers
 
-The GNU General Public License, version 3 (the file LICENSE) covers this project's own code
-only: the sync scripts (scripts/), the build (eleventy/, eleventy.config.js), the page
-templates, styles and scripts the committee wrote (src/), the tests (tests/), the workflows
-(.github/) and the committee's own guides (README.md, docs/, how-to/).
+The GNU General Public License, version 3 (the file LICENSE) covers only this project's own
+code and the guides that explain it: the sync scripts (scripts/), the build (eleventy/,
+eleventy.config.js), the page templates, styles and scripts the committee wrote (src/), the
+tests (tests/), the workflows (.github/) and the committee's own guides (README.md, docs/,
+how-to/).
 
 The open-source tools the website is built with (Eleventy, Tailwind CSS, Alpine.js, MiniSearch,
 the fonts, the Python packages …) keep their own licenses; README.md, section 17 ("Credits and

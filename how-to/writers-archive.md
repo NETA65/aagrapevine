@@ -557,8 +557,13 @@ screen in the address, `dec` included.
 ## 10. The safety checks, and what to do
 
 A new file is checked before it replaces the last one. A file that fails a check is **not used**: its magazine keeps
-the rows it had, the rest of the site updates as usual, and the source shows as failed. Nothing on the website
-breaks. If the file those rows came from is still in the folder, the run summary says it "stays in use until" the
+the rows it had, and the source shows as failed. Nothing on the website breaks. But since October 2026 *Website
+update* runs the tests before it publishes, and `test_the_headline_numbers` (`tests/test_writers_archive.py`) reads
+the same folder: a new file with a missing column, or one that cannot be read, fails it (the cut-off guard is the one
+check it cannot repeat: it has no earlier file to compare with). Until such a file is fixed (or deleted), **no run
+publishes the site**, which keeps the version before (*Tests failed — not published*, [Automation and
+troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)). So fix a **CSV file to
+fix** the same day. If the file those rows came from is still in the folder, the run summary says it "stays in use until" the
 new one is fixed, never that it "may be deleted". Only a magazine's very first import (no rows and no file on record
 yet) goes on to its newest older file that passes, and the error's end then says so.
 
@@ -730,7 +735,7 @@ file in use for each magazine, `imported_at` = when it was taken in) and `stats`
 | A writer from Area 65 is listed with the rest of Texas | the place is misspelt, missing from the Census table, or its county is not on the list | check the place (section 7); add a county, a `TYPO_ALIASES` or an `EXTRA_PLACES` entry |
 | A story is missing | neither reading of its place is in Texas and **Texas Author?** is not `Yes`; its link is not on aagrapevine.org or aalavina.org; it was listed twice (kept once) | fix the row in the next export, or wait for the daily capture (section 8) |
 | A Grapevine title is English on the Spanish page | its translation is still waiting | wait a few runs; or `overrides.yml` (section 11) |
-| The Code check is red after a new export: `test_the_headline_numbers` | the new file is one the site does not use (the test's message is the same text as the **CSV file to fix** line: a missing column, a file that cannot be read), or it holds no rows by Texas writers, no year at all, or a year before the magazine began | fix the file and push again (section 10); the test pins exact numbers only for the files of 4 October 2026 (section 6.3) |
+| The Code check is red after a new export: `test_the_headline_numbers` (and, since October 2026, the *Website update* run too: *Tests failed — not published*) | the new file is one the site does not use (the test's message is the same text as the **CSV file to fix** line: a missing column, a file that cannot be read), or it holds no rows by Texas writers, no year at all, or a year before the magazine began | fix the file and push again, or delete it (section 10): until then **no run publishes** the site, which keeps the version before ([Automation and troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)); the test pins exact numbers only for the files of 4 October 2026 (section 6.3) |
 | `/status/`: "Texas writers archive" **Failed** | a file was not used | the run summary's **CSV file to fix** line says why |
 | The issue "A content source has stopped updating" names the Texas writers archive | a file has not been usable for 7 days | follow its advice; it closes by itself |
 | "New in 7 days" for the archive is about 1,261, and "Found in the last 7 days" on `/status/` jumped | the first import: every row is new for a week (`first_seen`, section 6.1) | nothing: normal; it drops back after 7 days |

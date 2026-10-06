@@ -28,8 +28,10 @@ guide — the player's settings, using it at a table, what to do when something 
   10 more minutes to show it everywhere); a booth that is running picks up the new rows within half an hour, at the next slide.
 * **The check:** every commit runs the workflow *Code check (tests and test build)* (GitHub → Actions). A red ✗
   names the row and the mistake — `booth.csv row 14 (quiz-12): correct "4": there are only 3 choices`. A row with a
-  mistake is simply left out of the show (the rest plays), and the player lists it under *Settings → Slides*. On a
-  computer: `python tests/test_booth_csv.py content/booth/booth.csv` prints the same lines.
+  mistake is left out of the show (the rest plays), and the player lists it under *Settings → Slides*. The same
+  test runs in *Website update* before it publishes, so until the row is fixed **nothing is published** (the site
+  keeps the version before; the run says *Tests failed — not published*): fix a mistake soon. On a computer:
+  `python tests/test_booth_csv.py content/booth/booth.csv` prints the same lines.
 
 ## The rows
 

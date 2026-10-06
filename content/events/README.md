@@ -41,7 +41,9 @@ Sunday of November, `-06:00` the rest of the year) still shows the event, at the
 too — or leave the offset out: a time without one is Central time. A date in numbers only follows the file's
 `lang:` (Spanish: day first, `05-10-2026` is October 5); `2027-10-05` can only be read one way. The **Code check**
 reads every file here the same way (`tests/test_content_events.py`) and goes red, naming the file and what to
-change, so a slip shows minutes after you save it.
+change, so a slip shows minutes after you save it. *Website update* runs the same test before it publishes, so
+until the file is fixed **nothing is published** (the site keeps the version before; the run says *Tests failed —
+not published*): fix it soon.
 
 **Your own translation (optional).** The site translates the title and the
 description into the other language automatically, and marks them

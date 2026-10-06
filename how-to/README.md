@@ -364,7 +364,7 @@ Each guide ends with the principles for its own files. These apply to all of the
 | **Texas writers archive** | the list "Texas writers through the years" on `/published/#archive`, made from the two archive files in `content/archive/` and the stories the site captures ([Writers archive](writers-archive.md)) |
 | **the robot** | GitHub Actions' own account, `github-actions[bot]`, which commits the `data/` files |
 | **run summary** | the report on a run's page: files to fix, sources with problems, what was published |
-| **Code check** | the workflow that tests every change (*Code check (tests and test build)* in the Actions list). A red ✗ means that change broke something; the live site keeps working |
+| **Code check** | the workflow that tests every change (*Code check (tests and test build)* in the Actions list). A red ✗ means that change broke something; the live site keeps working, and Website update does not publish the change until the tests pass (*tests before publishing*, above) |
 | **Status page** | `/status/` on the website: when the site was last published and how each source is doing |
 | **YAML** | the plain-text format of the settings files: `key: value`, indented with spaces |
 | **secret** | a password or key kept in the repository's Settings, never in a file. Only NETA65 can see the Secrets page |

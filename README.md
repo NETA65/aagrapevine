@@ -160,7 +160,8 @@ runs, the **midday refresh** and the **evening refresh**, bring the day's Drive 
 and archive files during the day. GitHub starts timed runs 4 to 6 hours late (sometimes 8), so all three are
 scheduled about 4 hours early — 2:17 AM, 7:07 AM and 3:07 PM Central in summer (CDT; an hour earlier in winter,
 CST: 1:17 AM, 6:07 AM, 2:07 PM) — and usually start around 6 to 8 AM, 11 AM to 1 PM and 7 to 9 PM (summer times).
-The nightly one is set so that it is never running at 4:30 AM, when the morning alarm starts the morning refresh.
+The nightly one is set so that it is not running at 4:30 AM, when the morning alarm starts the morning refresh: on
+time it is done long before, and with GitHub's usual delay (4 hours or more) it starts after the morning refresh is live.
 Only the nightly one is a full update: any other schedule is a quick refresh. A full update usually takes 10 to 15
 minutes (at the very most a little over 2 hours, when the PDF search and the translations use all their time). On
 the 1st of the month, and after a day GitHub skipped, the Morning check also starts the full update — even when
@@ -702,7 +703,8 @@ keeps the event listed until its last day is over.
 stays) and the run summary lists it under **Event files to fix**, with a line to copy, for example `start:
 2027-01-10`. A time written with a UTC offset that is not Central time's on that day still shows, and is listed
 too. The Code check tests every file in `content/events` the same way (`tests/test_content_events.py`), so a
-mistake shows as a red ✗ right after you save it.
+mistake shows as a red ✗ right after you save it — and since *Website update* runs the same tests before it
+publishes, **nothing is published until the file is fixed** (the site keeps the version before).
 
 **Details not final yet** (a date is set, the venue is not): add `tentative: true` (or `yes` / `sí`)
 and, for the place, `location: "Venue to be announced"` with `location_es: "Lugar por anunciarse"`.
@@ -1311,7 +1313,7 @@ For a later move, follow
 | The monthly e-mail did not arrive | Secrets missing, wrong app password, nothing new last month, or it is still waiting for the month's first full update (it goes out on the 1st from 7 AM Central once the site has updated — at the latest from noon on the 3rd) | Open the latest **Monthly e-mail digest** run: its summary says exactly which ("waiting for the data" means a later try sends it; "Digest send not confirmed" means a send was cut off: check the group). Gmail needs an **app password**. To send it now, run it with *Preview only* unticked (and **force** ticked if the month was marked as sent). |
 | Someone installed the site, but it opens in the browser (a small Chrome badge on its icon, or it opens in Safari) | It was added as a shortcut or a bookmark, not as the app | Send them `/offline/#steps`: on Android, remove the icon and choose **Install** (not "Create shortcut"); on iPhone, remove it and add it again with **Open as Web App** on. |
 | An issue "Broken links found by the weekly check" appeared | A link in the settings or in a `content/` file moved | Open the issue; fix the address in `config/site.yml` or the `content/` file. It closes itself when fixed. |
-| A new archive file in `content/archive` is not on `/published/#archive` | Its name is not understood or carries an older date, it is not a `.csv` file (an `.xlsx` export, for example), or it was not used (a missing column, far fewer rows than the file before) | The **Website update** run summary's *Writers archive* lines say which (**CSV file to fix**); the older rows stay on the site meanwhile. See [how-to/writers-archive.md](how-to/writers-archive.md). |
+| A new archive file in `content/archive` is not on `/published/#archive` | Its name is not understood or carries an older date, it is not a `.csv` file (an `.xlsx` export, for example), or it was not used (a missing column, far fewer rows than the file before) | The **Website update** run summary's *Writers archive* lines say which (**CSV file to fix**); the older rows stay on the site meanwhile. A file with a missing column, or one that cannot be read, also fails the tests, so the run is red (*Tests failed — not published*) and nothing is published until the file is fixed or deleted. See [how-to/writers-archive.md](how-to/writers-archive.md). |
 
 Still stuck? Open the failed run, click the red step, copy the last 20 lines, and send them to
 whoever helps with the website (or open an **Issue** in this repository).

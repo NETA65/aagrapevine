@@ -1291,7 +1291,7 @@ touched until you merge. Merge only on a green ✓.
 files are documentation.
 
 **The facts are refreshed by every build**: each push, the nightly full update (scheduled 4 hours early on purpose,
-because GitHub starts timed runs late; it usually starts around 5 to 7 AM Central), the midday and evening
+because GitHub starts timed runs late; it usually starts around 6 to 8 AM Central, 5 to 7 in winter), the midday and evening
 refreshes, and the Morning check's refresh. Between builds the player still moves each fact on by the viewer's
 clock, from the `steps` in the JSON file. Where a fact's data comes from a source that only the full daily run reads (prices, the editorial
 calendar, the weekly open meetings, the story lines), a change there shows up after that run
@@ -1502,7 +1502,7 @@ See [Automation and troubleshooting](automation-and-troubleshooting.md) for sett
 | "Website update" fails at "Build website"; the site did not change at all | a deck problem stops the strict build | Open the step "Build the website", read the `[presentations] …` lines, fix the file (or undo it from its History). GitHub also e-mails a "run failed" notice to whoever pushed the change. |
 | `not valid YAML: …` with a line and a column | a missing quote, a tab, a line indented wrongly, an unquoted text that starts with `{` or holds `: ` | Look at that line and the one above it ([3.2](#32-yaml-rules-that-matter-in-these-files)). |
 | `… left out — the player cannot use it (an id, its slides and a first version are needed)` | the file name is not a valid id (capitals, spaces), or `slides:` / `presets:` is empty. On GitHub the build stops, as for any problem; in a PC build without `I18N_STRICT` the card is simply missing | Rename the file in lowercase with dashes, or restore the lists. |
-| Code check is red, "Website update" is green | a test failed; the build is fine. Often: the agenda's written times ([3.16 F](#f-change-a-slides-length)), a new `{live:…}` key missing from the README or the sample deck ([6.3](#63-example-add-a-new-fact-livemeeting_platform)), a new deck not in `DECKS` | Open the job "Python tests (offline)"; the failing test says what is wrong. |
+| Code check is red, and "Website update" is red with *Tests failed — not published* (the site keeps the version before) | a test failed; the build is fine. Often: the agenda's written times ([3.16 F](#f-change-a-slides-length)), a new `{live:…}` key missing from the README or the sample deck ([6.3](#63-example-add-a-new-fact-livemeeting_platform)), a new deck not in `DECKS`. (Only the test of the day's live values, `test_a_value_for_every_live_key`, leaves "Website update" green: it judges the synced data, not your change) | Open the job "Python tests (offline)"; the failing test says what is wrong. Fix it or undo the change: no run publishes until the tests pass ([Automation and troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)). |
 | The change is not on the site after 20 minutes | the run is still waiting or failed, or the browser shows an old page | Check Actions; reload the page; open the deck's JSON and look at `built`. |
 | A slide shows `{live:something}` or `{fill:something}` as typed | a misspelled key in a presenter's own edit (in the files, the checker refuses it) | Fix the spelling in Customize → Edit. |
 | An orange `[hint]` on a slide | an empty blank | The presenter fills it in (Customize → Your details), or the committee gives the blank a `default`. |

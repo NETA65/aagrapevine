@@ -667,7 +667,7 @@ your computer `PATH_PREFIX` is not set, so the site lives at `/`. The rules belo
 |---|---|---|
 | `<a href="{{ '/library/' \| lurl(lang) }}">` | `<a href="{{ '/library/' \| url }}">` | `\| url` + the plugin = the folder twice |
 | `<a href="/bulletin/files/flyer.pdf">` (a file that exists once) | — | Since October 2026 `lurl` leaves such a file alone (it adds `/es` to a file only when the build writes a Spanish copy: the feed, the calendar, the manifest, the JSON indexes, `/published/texas-archive.json`), so `\| lurl(lang)` does no harm there either; before, it made `/es/bulletin/files/flyer.pdf`, which does not exist. |
-| `data-share="{{ page.url \| siteUrl(site) }}#{{ ev.anchor }}"` (as in `events.njk`) | `data-share="/events/#{{ ev.anchor }}"` | `data-*` is not rewritten: the link would miss `/aagrapevine/` |
+| `data-share="{{ ('/events/' + ev.anchor + '/') \| lurl(lang) \| siteUrl(site) }}"` (as in `events.njk`: an event's share page) | `data-share="/events/{{ ev.anchor }}/"` | `data-*` is not rewritten: the link would miss `/aagrapevine/` |
 | `fetch(GV.url("/search-index.json"))` in a script | `fetch("/search-index.json")` | Scripts are not rewritten |
 | `{{ item.url \| extUrl }}` for a link from data | `{{ item.url }}` | `extUrl` hides unsafe or broken links |
 

@@ -1377,8 +1377,8 @@ the source is marked failed only when no office at all could be read.
 (HTTP 202 from SiteGround or Amazon's bot protection, Cloudflare's "Just a moment…"). That is said plainly, once:
 "Northwest Texas Area 66: nwta66.org answered with a bot check (HTTP 202) — nothing is wrong on our side; the last
 good list is kept" (in the run summary's *Notes* and on `/status/`). Nothing to do; the site never tries to get
-around it. (nwta66.org has answered this way since 3 October 2026.) A challenge is no longer mistaken for a refused
-key either.
+around it. (nwta66.org has answered this way since early October 2026; its last good list is from 3 October.) A
+challenge is no longer mistaken for a refused key either.
 
 **Meetings past midnight.** A meeting whose end is earlier than its start (`23:00`–`00:30`) ends the next morning
 when it lasts at most 3 hours; an end that would make it longer is dropped, as before.
@@ -1442,7 +1442,7 @@ meeting:
 | `start: "19.30"` | 7:30 PM |
 | `start: "noon"` or `"25:00"` | 7:00 PM (the default) |
 | `end` missing, or not after `start` (e.g. `"18:00"`) | one hour after the start |
-| `end` earlier than `start`, at most 12 hours later (`start: "22:00"`, `end: "01:00"`) | in the site data (`events.json`: the Events page, `/events.ics`) the next morning, 1:00 AM, since October 2026; the meeting pages, which work the dates out themselves, still show one hour, so keep the committee meeting within one day |
+| `end` earlier than `start`, at most 12 hours later (`start: "22:00"`, `end: "01:00"`) | the next morning, 1:00 AM, in the sync's data file `data/site/events.json` (since October 2026); but the pages and the calendar files (`/events/`, `/events.ics`, `/meetings/`, the home page …) work the committee meeting's dates out from this block themselves and still show one hour, so keep the committee meeting within one day |
 | `skip_dates: ["2026-12-16"]` | the December meeting is left out |
 | `skip_dates: ["2026-12-17"]` | ignored + Settings problem: skip date "2026-12-17" is not the 3rd Wednesday of its month — ignored (that month's is 2026-12-16) |
 | `skip_dates: ["Dec 16"]` | ignored + Settings problem: skip date "Dec 16" is not a date like "2027-01-09" — ignored |
@@ -1458,7 +1458,8 @@ With the settings of October 2026 the next meetings are **Oct 21, Nov 18 and Dec
 slide), Zoom when left out; the dial-in section and the weekly open meetings always say Zoom (Zoom's own). `note` /
 `note_es` is who may come: the first sentence of *Who can come* on `/meetings/` and the end of the meeting's calendar
 descriptions (`/events.ics`, the Google and Outlook links, the home page's "add to calendar"). Change both together:
-without `note_es`, the Spanish pages show the English note (the Events page's entries get a machine translation).
+without `note_es`, the Spanish pages show the English note (only the meeting's entries in `data/site/events.json` get a
+machine translation).
 
 **When.** The quick rebuild after you save: the dates are rebuilt in every run, and the pages compute
 them too.

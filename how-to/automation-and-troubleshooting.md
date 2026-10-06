@@ -658,7 +658,7 @@ them). The site keeps working either way:
 | Reminder | When it shows | Example |
 |---|---|---|
 | monthly tips (`config/carry.yml`) | the last month with tips is less than 12 months ahead | "config/carry.yml has monthly tips only through 2027-12; the /monthly/ pages look 12 months ahead — add tips for the next months." |
-| the Tracker's panels (`config/expenses.yml`) | the last panel ends within 90 days, or ended | "… the last service panel (Panel 77) ends 2028-12-31 — add the next panel." |
+| the Tracker's panels (`config/expenses.yml`) | the last panel ends within 90 days, or ended | "… the last service panel (Panel 77) ends 2028-12-31 — add the next panel." Since Tracker 1.2.0 (October 2026) the Tracker works the panels out itself, so nothing needs adding: this line is harmless until the code drops it |
 | GVR / RLV 101 (`config/orientation.yml`) | the panel named there has ended | "config/orientation.yml still names Panel 77 (from 2027-01), which ended 2028-12-31 — update the panel." |
 | skip dates (`config/site.yml` → `recurring_events`) | an event's last skip date is within 90 days, or past | "… add next year's skip dates for lv-monthly-workshop." |
 | the NETA 65 assemblies (`content/events`) | the last assembly listed starts within 60 days, or is past | "content/events: the last NETA 65 assembly listed is on … — add the next NETA 65 assemblies." |
@@ -712,7 +712,7 @@ that `ubuntu-latest` moves to Ubuntu 26 from October 19, 2026; see 13.8.) Everyt
 row, the notes are small, the blocked calendar is informational, and the scheduled post is waiting for its day.
 (Since October 2026 a bot check is said plainly instead of YouTube's raw error: "YouTube videos: details stopped:
 YouTube answered with a bot check (“confirm you’re not a bot”) — nothing is wrong on our side; videos keep their
-last known details", and a meeting list that answers with one, as nwta66.org has since 3 October 2026: "Grapevine
+last known details", and a meeting list that answers with one, as nwta66.org has since early October 2026: "Grapevine
 meetings (our Area and nearby): Northwest Texas Area 66: nwta66.org answered with a bot check (HTTP 202) — nothing
 is wrong on our side; the last good list is kept".)
 Runs since the archive was added also have the **Writers archive** block right after *Translations*; the one the
@@ -1169,7 +1169,7 @@ Two things to know on Windows:
 
 - Without `node_modules` (no `npm ci`), about 55 tests that run the site's own JavaScript skip silently: run
   `npm ci` once before you trust a green result.
-- Run the suite in **Git Bash** (or with Git's `usrin` folder on the `PATH`). About 40 tests run workflow steps
+- Run the suite in **Git Bash** (or with Git's `usr\bin` folder on the `PATH`). About 40 tests run workflow steps
   with `bash` and its tools; from a plain PowerShell window they fail with `date: command not found`, which says
   nothing about the code.
 
@@ -1595,7 +1595,7 @@ Status page row, maybe the e-mail). Follow
      confirm you're not a bot"): YouTube pushing back on the listing tool. `yt-dlp` is updated by every run
      (`requirements.txt` does not cap it); it usually passes.
    - **A meeting list** "… answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list
-     is kept" (in *Notes*; nwta66.org, since 3 October 2026): that office's earlier meetings stay; nothing to do.
+     is kept" (in *Notes*; nwta66.org, since early October 2026): that office's earlier meetings stay; nothing to do.
    - **An outside calendar** "blocked by the site's bot protection" (neta65.org, HTTP 403): informational only.
      Add those events by hand in `content/events` ([Flyers and events](flyers-and-events.md)).
 4. To try again at once: *Run workflow* (every box empty for sources only the full run reads; **skip_crawl** is

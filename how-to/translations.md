@@ -1008,7 +1008,9 @@ GitHub → **Actions** → **Website update** → the newest run → **Summary**
   settings file; the live site stays as it was.
 
 The **Code check** run shows a red ✗ when a test fails (a malformed entry, a missing language, different
-placeholders, a pinned wording). The site may still have been published by Website update; fix the file anyway.
+placeholders, a pinned wording). Since October 2026 Website update runs the same tests before it publishes, so its
+run is red too (*Tests failed — not published*): the site keeps the version before, and no later run publishes until
+the file is fixed ([Automation and troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)).
 
 ---
 

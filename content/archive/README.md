@@ -32,7 +32,9 @@ before it publishes; later when the file brings many stories that are new to the
 translated first). The run summary
 (*Actions → Website update →* the run) says `New archive file used: …`; a line **CSV file to fix** means the
 file was not used (a missing column, or far fewer rows than the file before) and the older rows stay on the site.
-A magazine you do not replace keeps its file. Keep the export as it was made (if you save it in Excel: **CSV UTF-8**).
+A file with a missing column, or one that cannot be read, also fails the tests the run makes before it publishes:
+then nothing is published (*Tests failed — not published*) until the file is fixed or deleted, so fix it the same
+day. A magazine you do not replace keeps its file. Keep the export as it was made (if you save it in Excel: **CSV UTF-8**).
 
 Saving this README starts no *Website update* run (only the *Code check*).
 
