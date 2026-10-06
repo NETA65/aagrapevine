@@ -17,20 +17,29 @@ What this module does (politely — 5 s between requests, see common.shared_sess
    sitemap is unavailable, fall back to the two calendar pages (their embedded FullCalendar JSON).
    On such a partial day, upcoming events already known from the cache stay listed — only a
    complete sitemap can tell that an event was removed.
-2. Keep event URLs dated from today-2 days to +18 months.
+2. Keep event URLs dated from today-2 days to +18 months — and, once known, an event that started up
+   to a month ago (LONG_EVENT_DAYS) while it is still running: a five-day convention stays listed
+   until its last day.
 3. Fetch each event page we have never seen (cap --max-fetch, default 60/run, time-boxed) and cache
    the parsed result per URL in the envelope (`cache`), so a page is fetched once; upcoming events
    are re-checked every 14 days (a few per run) to catch changes/cancellations.
 4. Output only events that are
-     * in Texas (state TX/Texas/Tejas, or an unambiguous Texas city)           → extra.scope "texas"
+     * in Texas                                                                 → extra.scope "texas"
      * or online/virtual AND Spanish-language (La Viña calendar or Spanish text) → extra.scope "online"
+   "In Texas" is read with the magazine bylines' own curated rules (scripts/sync/geo.py,
+   texas_decision): a state written in the location wins ("Gainesville, FL" is Florida); then
+   "Texas" / "Tejas" / "TX" in the location or title; another state, province or country named there
+   ("Florida State Convention", "Santiago, Chile") is not Texas; last, a city alone counts only when
+   geo.py's short list of unambiguous Texas cities has it (Dallas, Houston … — not Gainesville,
+   Midland or San Antonio, which exist elsewhere too).
    Past events are dropped from the output (the cache remembers them until they age out).
 
 Items: kind "event", source "calendar", category "gv-calendar" | "lv-calendar" (by site), id
 "ev:gvcal:<hash>" / "ev:lvcal:<hash>". extra = start, end, all_day, location, city, state, country,
 online_url, website, organizer, flyer_url, flyer_thumb, scope, platform, site.
-All-day events use dates ("2026-11-20"; `end` is the inclusive last day, null for one-day events);
-timed events use UTC datetimes.
+All-day events use dates ("2026-11-20"; `end` is the inclusive last day, null for one-day events) —
+also an event page that gives its days without a time (a date-only startDate, or local midnight with
+no clock time on the page); timed events use UTC datetimes.
 
 PRIVACY: event descriptions often hold personal names/phones/e-mails of contacts. We keep only a
 short description with e-mails, phone numbers and URLs removed; people can click through to the
@@ -48,11 +57,13 @@ import time
 import unicodedata
 from datetime import date, datetime, timedelta, timezone
 from difflib import SequenceMatcher
+from functools import lru_cache
 from urllib.parse import urljoin, urlparse
 from zoneinfo import ZoneInfo
 
 from bs4 import BeautifulSoup
 
+from . import geo
 from .common import (clean_text, date_from_text, detect_lang, get_logger, load_config, load_raw, make_item, merge_items,
                      now_iso, run_module, save_raw, shared_session, short_hash, to_iso, truncate)
 
@@ -63,10 +74,12 @@ EVENT_URL_RE = re.compile(
     r"^https?://(?:www\.)?(aagrapevine|aalavina)\.org/get-involved/events/(\d{4}-\d{2}-\d{2})/([^/?#\s]+)/?$", re.I)
 WINDOW_PAST_DAYS = 2
 WINDOW_FUTURE_DAYS = 548            # ~18 months
+LONG_EVENT_DAYS = 31                # a known event that started up to this long ago stays while it runs
 REFRESH_DAYS = 14                   # re-check a cached upcoming event this often
 REFRESH_PER_RUN = 10
 MAX_FAIL_TRIES = 5
-CACHE_KEEP_PAST_DAYS = 7            # forget cache entries for events older than this
+CACHE_KEEP_PAST_DAYS = 7            # forget cache entries for events older than this (unless still running)
+CHICAGO = ZoneInfo("America/Chicago")
 
 # --------------------------------------------------------------------------- geography
 US_STATES = {
@@ -105,8 +118,10 @@ MX_STATES = {"chihuahua", "coahuila", "nuevo leon", "tamaulipas", "sonora", "baj
              "michoacan", "guanajuato", "queretaro", "puebla", "veracruz", "oaxaca", "guerrero", "morelos",
              "hidalgo", "zacatecas", "durango", "sinaloa", "nayarit", "yucatan", "quintana roo", "chiapas",
              "tabasco", "campeche", "san luis potosi", "aguascalientes", "colima", "tlaxcala", "estado de mexico"}
-# Texas cities that are safe to recognize without a state (ambiguous names like Paris, Athens,
-# Arlington, Jacksonville, Pasadena, Huntsville, Lancaster, Palestine, Marshall are NOT here).
+# Texas city names, used ONLY to pick the city's name out of an address line for display ("… 1321 Commerce
+# St Dallas" → Dallas). Whether an event is in Texas is never read from this list: texas_decision asks
+# geo.py (its short list of unambiguous Texas cities — Gainesville, Greenville, Midland, Odessa, Denton or
+# San Antonio alone may well be elsewhere).
 TX_CITIES = {
     "dallas", "fort worth", "ft worth", "ft. worth", "houston", "san antonio", "el paso", "corpus christi",
     "laredo", "lubbock", "amarillo", "brownsville", "mcallen", "killeen", "waco", "beaumont", "abilene",
@@ -132,11 +147,15 @@ TX_CITIES = {
     "copperas cove", "harker heights", "belton", "georgetown tx", "leander", "kyle", "buda", "lockhart",
     "seguin", "boerne", "uvalde", "hondo", "rio grande city", "mission tx", "san benito", "mercedes tx",
 }
-# Place names that are also everyday words/surnames ("Sierra Nevada", "Juan Guerrero", "montaña"):
-# never treat them alone as proof that an event is outside Texas.
-_COMMON_WORDS = {"montana", "nevada", "florida", "colorado", "guerrero", "hidalgo", "morelos", "victoria",
-                 "georgia", "virginia", "india", "china", "chile", "jamaica", "israel", "washington", "maine",
-                 "indiana", "uk", "korea", "cuba", "panama", "peru", "durango", "colima", "sonora"}
+# Place names that are also everyday words, first names or surnames — or the names of Texas places ("Sierra
+# Nevada", "montaña", "Juan Guerrero", "Hidalgo County", "Colorado City", "Sonora", "Jamaica Beach",
+# "Victoria", "Washington Ave"): never proof on their own that an event is outside Texas. Florida, Georgia,
+# Chile … are not on it: a title like "Florida State Convention" names another place.
+_NOT_PROOF = {"montana", "nevada", "colorado", "guerrero", "hidalgo", "morelos", "victoria", "virginia",
+              "washington", "jamaica", "israel", "durango", "colima", "sonora"}
+# A place name that is part of a street name ("Florida Ave", "Calle Chile") is no proof either.
+_STREET_WORDS = (r"st|street|ave|avenue|av|blvd|boulevard|rd|road|dr|drive|ln|lane|way|pkwy|parkway|hwy|highway|"
+                 r"ct|court|pl|place|cir|circle|trl|trail|fwy|freeway|expy|expressway|ter|terrace|sq|square")
 TEXAS_RE = re.compile(r"(?i)\b(?:texas|tejas)\b|\bTX\b|\bTex\.")
 ONLINE_WORD_RE = re.compile(
     r"(?i)\b(zoom|virtual|online|on-line|en\s+l[ií]nea|google\s+meet|meet\.google|microsoft\s+teams|webex|"
@@ -201,6 +220,23 @@ def _parse_ld_dt(s: str | None) -> datetime | None:
     except ValueError:
         return None
     return dt if dt.tzinfo else dt.replace(tzinfo=ZoneInfo("America/Chicago"))
+
+
+def _date_only(s: str | None) -> bool:
+    """'2026-11-20' (a day, no time) — not '2026-11-20T06:00:00-0600'."""
+    return bool(re.fullmatch(r"\s*\d{4}-\d{2}-\d{2}\s*", str(s or "")))
+
+
+def _last_day(ed: datetime | None, raw: str | None) -> date | None:
+    """The inclusive last day of an all-day event from its endDate: a day as written ('2026-11-22'), the day
+    of a Drupal 12:00 UTC value, or — for an end at local midnight (the moment the event is over) — the
+    day before it."""
+    if ed is None:
+        return None
+    if _date_only(raw):
+        return ed.date()
+    local = ed.astimezone(CHICAGO)
+    return local.date() - timedelta(days=1) if local.strftime("%H:%M") == "00:00" else local.date()
 
 
 def platform_of(url: str | None) -> str | None:
@@ -310,24 +346,88 @@ def parse_location(loc: str, title: str = "", website: str | None = None) -> dic
     return out
 
 
+def _location_parts(loc_text: str) -> list[str]:
+    """'Hotel X, 1321 Commerce St, Dallas, TX 75201' → its comma / line / " - " separated parts (no links)."""
+    text = URL_IN_TEXT_RE.sub(" ", clean_text(re.sub(r"[*_]{1,3}", " ", loc_text or "")))
+    return [p.strip(" *.") for p in re.split(r"[,\n;|]| - ", text) if p.strip(" *.")]
+
+
+def _bare_texas_city(part: str) -> bool:
+    k = geo.normalize_place(part)
+    return k in geo.NETA65_BARE or k in geo.TEXAS_BARE
+
+
+def geo_place(loc_text: str) -> dict | None:
+    """The state or country an event's location names, read by geo.classify_location (the magazine bylines'
+    rules: "Gainesville, FL 32607" → Florida, "Monterrey, N.L." → Mexico, "Dallas TX" → Texas). The last
+    parts of the address are its "City, State[, Country]": three parts are tried, then two, then one (geo
+    reads at most 80 characters, and gives up on a part with a year-like street number). None when no
+    reading names a state or a country — a city alone ("Dallas") is not read here (texas_decision's last
+    step)."""
+    parts = _location_parts(loc_text)
+    for n in (3, 2, 1):
+        if len(parts) < n or (n == 1 and _bare_texas_city(parts[-1])):
+            continue
+        tail = ", ".join(parts[-n:])
+        if len(tail) > 80:
+            tail = tail[-80:].split(" ", 1)[-1]          # keep whole words, the state is at the end
+        g = geo.classify_location(tail)
+        if g.get("state") or g.get("country"):
+            return g
+    return None
+
+
+@lru_cache(maxsize=1)
+def _elsewhere_re() -> re.Pattern:
+    """The names of every place that is not Texas in geo.py's curated lists — US states, Canadian provinces,
+    Mexican states, countries, in English and Spanish — and this module's COUNTRIES (minus _NOT_PROOF)."""
+    names: set[str] = set(MX_STATES) | set(geo.MX_STATES) | set(CA_PROVINCES)
+    for code, (en, es) in geo.US_STATES.items():
+        if code != "TX":
+            names |= {en, es}
+    for en, es in geo.CA_PROVINCES.values():
+        names |= {en, es}
+    for code, en, es in geo.COUNTRIES.values():
+        if code != "US":
+            names |= {en, es}
+    names |= {c for c in COUNTRIES if c not in ("usa", "united states", "estados unidos", "eeuu", "ee.uu.")}
+    folded = {re.sub(r"[.\s]+", " ", _fold(n)).strip() for n in names}
+    folded = {n for n in folded if len(n) > 2 and n not in _NOT_PROOF}
+    alts = "|".join(re.escape(n) for n in sorted(folded, key=len, reverse=True))
+    return re.compile(rf"(?<!\bcalle )(?<!\bavenida )(?<!\bav )\b(?:{alts})\b(?!\s+(?:{_STREET_WORDS})\b)")
+
+
+def names_elsewhere(text: str) -> str | None:
+    """The first state, province or country other than Texas that `text` names ("Florida State Convention"
+    → "florida"), or None. Street names ("Florida Ave") and _NOT_PROOF words do not count."""
+    m = _elsewhere_re().search(re.sub(r"[.\s]+", " ", _fold(text)))
+    return m[0] if m else None
+
+
 def texas_decision(loc: dict, title: str) -> bool:
-    """True when the event is in Texas. A parsed state wins; then explicit 'Texas'/'Tejas'/'TX' in the
-    location or title; any other state/country mentioned → False; finally an unambiguous Texas city."""
-    if loc.get("state"):
-        return loc["state"] == "TX"
-    hay = f"{loc.get('display') or ''} | {title}"
+    """True when the event is in Texas — read with geo.py's curated lists, as the magazine bylines are:
+      1. a state the location names wins (geo_place, else parse_location's): "…, Gainesville, FL 32607" → no;
+      2. a country other than the USA → no ("Chiang Mai, Thailand");
+      3. "Texas" / "Tejas" / "TX" in the location or the title → yes ("Zona Norte de Texas");
+      4. another state, province or country named in the location or title → no ("Hilton University of
+         Florida Conference Center, Gainesville" + "Florida State Convention");
+      5. a part of the location that is one of geo.py's unambiguous Texas cities ("Iglesia San Juan Diego,
+         Houston") → yes; any other city alone → no (Gainesville, Midland, San Antonio … exist elsewhere)."""
+    display = loc.get("display") or ""
+    g = geo_place(display)
+    state = (g or {}).get("state") or loc.get("state")
+    country = (g or {}).get("country") or ("US" if loc.get("state") else None)
+    if state and (not country or country == "US"):
+        return state == "TX"
+    if (g and country and country != "US") or (loc.get("country") and _fold(loc["country"]) != "usa"):
+        return False
+    hay = f"{display} | {title}"
     if TEXAS_RE.search(hay):
         return True
-    fh = f" {_fold(hay)} "
-    others = [v for k, v in US_STATES.items() if k != "TX"] + list(_STATE_ALIASES)
-    if loc.get("country") and _fold(loc["country"]) not in ("usa",):
+    if names_elsewhere(hay):
         return False
-    for name in others + list(MX_STATES) + [c for c in COUNTRIES if c not in ("usa", "united states")]:
-        n = _fold(name)
-        if n and n not in ("tex", "tejas") and n not in _COMMON_WORDS and f" {n} " in fh:
-            return False
-    city = _fold(loc.get("city") or "")
-    return bool(city) and city in TX_CITIES      # ambiguous names (Paris, Athens…) aren't in the list
+    parts = [p for p in _location_parts(display) if re.sub(r"[^a-z]", "", geo.fold(p)) not in geo.COUNTRIES]
+    return any(_bare_texas_city(p) for p in parts)
 
 
 # --------------------------------------------------------------------------- event page parsing
@@ -368,12 +468,18 @@ def parse_event(html: str, url: str) -> dict:
     ev["date_text"] = date_text or None
     has_clock = bool(re.search(r"\d{1,2}:\d{2}|\b\d{1,2}\s*[ap]\.?m\b", date_text, re.I))
     if sd:
-        # Drupal stores date-only ranges at 12:00 UTC; anything else is a real time.
-        all_day = sd.astimezone(timezone.utc).strftime("%H:%M") == "12:00" and not has_clock
+        # A day without a time is an all-day event, not one that starts at midnight: Drupal stores date-only
+        # ranges at 12:00 UTC, other pages give just the date ("2026-11-20") or local midnight. A time the
+        # page writes out ("7:00 PM") always makes it a timed event.
+        all_day = not has_clock and (_date_only(ld.get("startDate"))
+                                     or sd.astimezone(timezone.utc).strftime("%H:%M") == "12:00"
+                                     or sd.astimezone(CHICAGO).strftime("%H:%M") == "00:00")
         if all_day:
-            ev["start"] = sd.date().isoformat()
-            if ed and ed.date() > sd.date():
-                ev["end"] = ed.date().isoformat()
+            first = sd.astimezone(CHICAGO).date() if not _date_only(ld.get("startDate")) else sd.date()
+            ev["start"] = first.isoformat()
+            last = _last_day(ed, ld.get("endDate"))
+            if last and last > first:
+                ev["end"] = last.isoformat()
         else:
             ev["start"] = to_iso(sd)
             if ed and ed > sd:
@@ -641,15 +747,25 @@ def _run(args, prev: dict, cache: dict, sm_state: dict) -> None:
     cfg = load_config().get("sources", {}) or {}
     base = (cfg.get("grapevine", {}).get("base") or "https://www.aagrapevine.org")
     errors: list[str] = []
+    # URLs carry the START date: a long event that began before win_from is still wanted while it runs
+    # (a five-day convention must not vanish on its third day) — once its page is known (cached).
+    long_from = today - timedelta(days=LONG_EVENT_DAYS)
+
+    def wanted(u: str) -> bool:
+        d = url_date(u) or date.min
+        if win_from <= d <= win_to:
+            return True
+        ev = (cache.get(u) or {}).get("ev")
+        return long_from <= d < win_from and bool(ev) and not_past(ev, today)
 
     # ---- 1. discover
-    urls, err = discover_from_sitemap(http, base, sm_state, today - timedelta(days=CACHE_KEEP_PAST_DAYS))
+    urls, err = discover_from_sitemap(http, base, sm_state, long_from)
     discovery = "sitemap"
     # A sitemap read without errors lists every event → an event missing from it was removed.
     discovery_complete = urls is not None and not err
     if urls is None:
         errors.append(err or "sitemap failed")
-        urls, err2 = discover_from_calendars(http, today - timedelta(days=CACHE_KEEP_PAST_DAYS))
+        urls, err2 = discover_from_calendars(http, long_from)
         discovery = "calendar"
         if urls is None:
             errors.append(err2 or "calendar failed")
@@ -663,8 +779,9 @@ def _run(args, prev: dict, cache: dict, sm_state: dict) -> None:
                      extra={"cache": cache, "sitemap": sm_state})
         log.warning("no discovery source worked: %s", errors)
         return
-    candidates = sorted((u for u in urls if win_from <= (url_date(u) or date.min) <= win_to), key=lambda u: (url_date(u), u))
-    log.info("%d event URLs dated %s … %s (discovery: %s)", len(candidates), win_from, win_to, discovery)
+    candidates = sorted((u for u in urls if wanted(u)), key=lambda u: (url_date(u), u))
+    log.info("%d event URLs dated %s … %s or still running (discovery: %s)", len(candidates), win_from, win_to,
+             discovery)
 
     # ---- 2. fetch new pages first (soonest first), then a few stale refreshes
     now = datetime.now(timezone.utc)
@@ -725,8 +842,7 @@ def _run(args, prev: dict, cache: dict, sm_state: dict) -> None:
         # cache "gone") drop out. Otherwise they would vanish today and return as "new" tomorrow.
         listed = set(candidates)
         known = sorted(u for u, e in cache.items()
-                       if u not in listed and (e or {}).get("ev") and not (e or {}).get("gone")
-                       and win_from <= (url_date(u) or date.min) <= win_to)
+                       if u not in listed and (e or {}).get("ev") and not (e or {}).get("gone") and wanted(u))
         pool += known
         kept_known = len(known)
     new_items = []
@@ -747,9 +863,11 @@ def _run(args, prev: dict, cache: dict, sm_state: dict) -> None:
     # event page no longer has (e.g. an online link) must disappear too (authoritative).
     merged, added = merge_items(prev.get("items", []), new_items, drop_missing=True, authoritative=True)
 
-    # ---- 4. prune cache: keep entries for events not older than a week
+    # ---- 4. prune cache: keep entries for events not older than a week, and long events still running
     cutoff = today - timedelta(days=CACHE_KEEP_PAST_DAYS)
-    cache = {u: v for u, v in cache.items() if (url_date(u) or date.min) >= cutoff}
+    cache = {u: v for u, v in cache.items()
+             if (url_date(u) or date.min) >= cutoff or ((url_date(u) or date.min) >= long_from
+                                                        and v.get("ev") and not_past(v["ev"], today))}
 
     stats = {
         "discovery": discovery,
