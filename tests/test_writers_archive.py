@@ -646,7 +646,7 @@ class Module(Pinned):
         self.assertEqual(two["files"]["gv"]["imported_at"], "2026-10-04T12:00:00Z")
         self.assertEqual((two["updated"], two["ok"], two["stats"]["changed"], two["stats"]["notes"], two["stats"]["new"]),
                          ("2026-10-05T12:00:00Z", True, False, [], 0))
-        self.assertEqual(set(one) - {"items"}, {"source", "updated", "attempted", "ok", "error", "stats",
+        self.assertEqual(set(one) - {"items"}, {"source", "updated", "attempted", "ok", "error", "changes", "stats",
                                                 "first_harvest", "parser_version", "files"})
 
     def test_imported_at_moves_only_with_its_file(self):

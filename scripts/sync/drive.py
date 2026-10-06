@@ -44,7 +44,14 @@ used instead for exact dates/sizes (falls back to the HTML view on any error).
 
 Drive is the source of truth: a file deleted/moved out of the tree disappears from the
 site — but only when its folder was actually read successfully this run (a network
-error or a folder that suddenly isn't public never deletes anything).
+error or a folder that suddenly isn't public never deletes anything). A folder that suddenly
+LOOKS EMPTY although it held files is believed only when the next update finds it empty too
+(its id waits in drive.json `empty_folders`; its files show as held on /status/ meanwhile),
+and a sudden drop of most files is held back for one run as well (common.save_raw).
+
+Not published = not named: what is left out (loose entries outside the panel folders, older
+panels, folders too deep or unreadable, excluded files) is only COUNTED in data/raw/drive.json
+and status.json, which are in the public repo; the names go to the run log.
 
 Run:  python -m scripts.sync.drive [--include-loose] [--root ID] [--dry-run] [--no-api]
 """
@@ -64,7 +71,7 @@ from datetime import datetime, timedelta, timezone
 
 from .announcements import markdown_to_text
 from .common import (
-    MONTHS, date_from_text, get_logger, load_config, load_raw, now_iso, parse_iso, run_module,
+    MONTHS, date_from_text, get_logger, load_config, load_raw, now_iso, parse_iso, read_capped, run_module,
     save_raw, make_item, sort_items, truncate,
 )
 # The language of a file's name or a doc's text, with the names of the magazines and of AA left out first (the
@@ -77,7 +84,9 @@ SOURCE = "drive"
 log = get_logger(SOURCE)
 
 MAX_BODY_CHARS = 12_000        # announcement body cap
-MAX_TEXT_DOWNLOAD = 3_000_000  # bytes — announcement source files (.txt/.md/.docx)
+MAX_TEXT_DOWNLOAD = 3_000_000  # bytes — announcement source files (.txt/.md/.docx): the download stops here
+MAX_DOCX_UNZIPPED = 25_000_000  # bytes — a .docx's parts unpacked, all together (zip-bomb guard: docx_to_text)
+MAX_DOCX_ENTRIES = 500         # parts inside a .docx (a Word file has a few dozen)
 MAX_ANNOUNCEMENT_FETCHES = 40  # per run (bodies are reused while a file is unchanged)
 BIG_FOLDER_WARN = 500          # the HTML view may not list more than this many files
 
@@ -398,13 +407,16 @@ class Crawl:
     root_title: str | None = None
     found: list[Found] = field(default_factory=list)
     listed_ok: set[str] = field(default_factory=set)
+    empty_listed: set[str] = field(default_factory=set)   # read fine, with nothing in them
     uncertain: set[str] = field(default_factory=set)   # folders we could not (fully) read
+    # Folders and files that are NOT published are counted in data/raw/drive.json (and status.json), never
+    # named: a name may carry a member's name ("PRIVATE …", a sign-up form), and both files are in the public
+    # repo. Their names go to the run log only (main). The REASON is kept for excluded files.
     unreadable: list[str] = field(default_factory=list)
+    unconfirmed: dict[str, int] = field(default_factory=dict)   # folder id → files: looked empty (DriveLister)
     panels: list[dict] = field(default_factory=list)
-    skipped_panels: list[str] = field(default_factory=list)
+    skipped_panels: list[int] = field(default_factory=list)   # older panels' numbers (below min_panel)
     loose_skipped: list[str] = field(default_factory=list)
-    # Only the REASON is recorded for excluded files, never their names: a file marked PRIVATE
-    # may carry a member's name, and data/raw + status.json are published in the public repo.
     excluded: list[str] = field(default_factory=list)
     depth_limited: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
@@ -426,11 +438,20 @@ def crawl(lister: DriveLister, dcfg: dict, *, root_id: str, include_loose: bool,
 
     root = lister.list(root_id)
     c.root_title = root.title
+    if root.unconfirmed:
+        # the whole tree looked empty although it held files on the last update: nothing is removed this run
+        # (every file is kept, as below an unreadable folder) — the next update decides
+        c.root_ok = True
+        c.uncertain.add(root_id)
+        c.unconfirmed[root_id] = root.unconfirmed
+        return c
     if not root.ok:
         c.root_error = root.error
         return c
     c.root_ok = True
     c.listed_ok.add(root_id)
+    if not root.entries:
+        c.empty_listed.add(root_id)
 
     queue: deque[tuple[str, list[str], Panel, list[str]]] = deque()
     root_files: list[Entry] = []
@@ -448,7 +469,7 @@ def crawl(lister: DriveLister, dcfg: dict, *, root_id: str, include_loose: bool,
                     c.panels.append({"panel": n, "label": p.label, "name": e.name, "id": e.id})
                     queue.append((e.id, [], p, [root_id, e.id]))
                 else:
-                    c.skipped_panels.append(e.name)
+                    c.skipped_panels.append(n)
                 continue
             if include_loose:
                 queue.append((e.id, [e.name], LOOSE, [root_id, e.id]))
@@ -477,10 +498,16 @@ def crawl(lister: DriveLister, dcfg: dict, *, root_id: str, include_loose: bool,
         t_listed += 1
         if not res.ok:
             c.uncertain.add(fid)
-            c.unreadable.append(f"{where}: {res.error}")
-            log.warning("folder %s unreadable: %s", where, res.error)
+            if res.unconfirmed:          # looked empty, held files last time: kept until the next update agrees
+                c.unconfirmed[fid] = res.unconfirmed
+                log.warning("folder %s looks empty (%d file(s) last time) — kept for now", where, res.unconfirmed)
+            else:
+                c.unreadable.append(f"{where}: {res.error}")
+                log.warning("folder %s unreadable: %s", where, res.error)
             continue
         c.listed_ok.add(fid)
+        if not res.entries:
+            c.empty_listed.add(fid)
         if len(res.entries) >= BIG_FOLDER_WARN and lister.mode == "html":
             c.warnings.append(f"{where} has {len(res.entries)} entries — add a GOOGLE_API_KEY secret "
                               "(or split the folder) so none are missed")
@@ -688,9 +715,20 @@ def _decode(data: bytes) -> str:
 
 
 def docx_to_text(data: bytes) -> str:
-    """Tiny .docx reader (paragraph text only) — no extra dependency."""
+    """Tiny .docx reader (paragraph text only) — no extra dependency. Zip-bomb safe: a file with more than
+    MAX_DOCX_ENTRIES parts, or whose parts would unpack to more than MAX_DOCX_UNZIPPED bytes, is refused
+    (ValueError) before anything is unpacked, and the text part is read no further than that."""
     with zipfile.ZipFile(io.BytesIO(data)) as z:
-        xml = z.read("word/document.xml").decode("utf-8", "replace")
+        parts = z.infolist()
+        if len(parts) > MAX_DOCX_ENTRIES:
+            raise ValueError(f"{len(parts)} parts inside (at most {MAX_DOCX_ENTRIES})")
+        if sum(max(0, p.file_size) for p in parts) > MAX_DOCX_UNZIPPED:
+            raise ValueError(f"it would unpack to more than {MAX_DOCX_UNZIPPED // 1_000_000} MB")
+        with z.open("word/document.xml") as f:
+            raw = f.read(MAX_DOCX_UNZIPPED + 1)
+        if len(raw) > MAX_DOCX_UNZIPPED:
+            raise ValueError(f"its text part unpacks to more than {MAX_DOCX_UNZIPPED // 1_000_000} MB")
+        xml = raw.decode("utf-8", "replace")
     paras = []
     for p in re.findall(r"(?s)<w:p[ >].*?</w:p>", xml):
         p = re.sub(r"<w:tab/>", "\t", p)
@@ -743,18 +781,32 @@ def fetch_body(http, fid: str, mime: str, name: str, what: str = "announcement")
     if url is None:
         return ""
     low = name.lower()
-    r = http.get(url)
-    if r is None or r.status_code != 200:
-        log.warning("%s %r: could not download text (%s)", what, name, getattr(r, "status_code", "no response"))
+    docx = "wordprocessingml" in mime or low.endswith(".docx")
+    r = http.get(url, stream=True)        # streamed: the download stops at MAX_TEXT_DOWNLOAD (read_capped)
+    try:
+        if r is None or r.status_code != 200:
+            log.warning("%s %r: could not download text (%s)", what, name, getattr(r, "status_code", "no response"))
+            return None
+        ctype = r.headers.get("Content-Type", "")
+        if "text/html" in ctype and not mime.startswith("text/html"):
+            # A sign-in / virus-scan page instead of the file.
+            log.warning("%s %r: Drive returned an HTML page instead of the file", what, name)
+            return None
+        data, cut = read_capped(r, MAX_TEXT_DOWNLOAD)
+    except Exception as ex:  # the connection broke mid-download
+        log.warning("%s %r: could not download text: %s: %s", what, name, type(ex).__name__, ex)
         return None
-    data = r.content[:MAX_TEXT_DOWNLOAD]
-    ctype = r.headers.get("Content-Type", "")
-    if "text/html" in ctype and not mime.startswith("text/html"):
-        # A sign-in / virus-scan page instead of the file.
-        log.warning("%s %r: Drive returned an HTML page instead of the file", what, name)
+    finally:
+        if r is not None:
+            try:
+                r.close()
+            except Exception:  # noqa: BLE001 — closing never matters
+                pass
+    if cut and docx:      # a cut-off .docx cannot be unzipped (a cut-off .txt / .md is read up to the cap)
+        log.warning("%s %r: larger than %d MB — not read", what, name, MAX_TEXT_DOWNLOAD // 1_000_000)
         return None
     try:
-        if "wordprocessingml" in mime or low.endswith(".docx"):
+        if docx:
             return docx_to_text(data)
         return _decode(data)
     except Exception as ex:
@@ -952,10 +1004,15 @@ def main(argv: list[str] | None = None) -> None:
     prev = load_raw(SOURCE)
     prev_items = prev.get("items") or []
     prev_by_id = {i["id"]: i for i in prev_items if i.get("id")}
+    # Folders that looked empty on the last update although they held files (drive.json `empty_folders`:
+    # folder id → since when; ids only, never names): looking empty again this run confirms it.
+    empty_before = {str(k): str(v) for k, v in (prev.get("empty_folders") or {}).items()} \
+        if isinstance(prev.get("empty_folders"), dict) else {}
+    keep_state = {"empty_folders": empty_before} if empty_before else None
 
     if not root_id:
         save_raw(SOURCE, prev_items, ok=False, error="drive.root_folder_id is not set in config/site.yml",
-                 stats=prev.get("stats"))
+                 stats=prev.get("stats"), extra=keep_state)
         return
 
     # Shortcut ids really resolved last time → no extra request needed. A shortcut that could not
@@ -966,7 +1023,11 @@ def main(argv: list[str] | None = None) -> None:
         sid, fid = ex.get("shortcut_id"), ex.get("file_id")
         if sid and fid and fid != sid:
             sc_cache[sid] = fid
-    lister = DriveLister(use_api=not args.no_api, shortcut_cache=sc_cache)
+    # each folder's files on the last update, at any depth below it (its id is in their folder_chain)
+    had_files = Counter(f for i in prev_items if i.get("id")
+                        for f in set((i.get("extra") or {}).get("folder_chain") or []))
+    lister = DriveLister(use_api=not args.no_api, shortcut_cache=sc_cache, had_files=dict(had_files),
+                         empty_before=empty_before)
     log.info("listing Drive folder %s via %s (include_loose=%s)", root_id, lister.mode, include_loose)
 
     c = crawl(lister, dcfg, root_id=root_id, include_loose=include_loose, max_depth=args.max_depth,
@@ -979,8 +1040,14 @@ def main(argv: list[str] | None = None) -> None:
             print(err)
             return
         save_raw(SOURCE, prev_items, ok=False, error=err[:300],
-                 stats={**(prev.get("stats") or {}), "requests": lister.requests_made})
+                 stats={**(prev.get("stats") or {}), "requests": lister.requests_made}, extra=keep_state)
         return
+    # What was not published, by name — in the run log only (the data files count them; an unreadable folder
+    # is named in the log by crawl())
+    if c.loose_skipped:
+        log.info("outside the panel folders (not published): %s", ", ".join(c.loose_skipped[:30]))
+    if c.depth_limited:
+        log.info("folders deeper than %d levels (not read): %s", args.max_depth, ", ".join(c.depth_limited[:20]))
 
     items: list[dict] = []
     seen: dict[str, int] = {}
@@ -1005,12 +1072,33 @@ def main(argv: list[str] | None = None) -> None:
     form_stats = check_forms(items, lister.http)
     merged, mstats = merge(prev_items, items, c.uncertain)
 
+    # Folders that looked empty: their files are kept this run (merge: below an uncertain folder) and marked held
+    # (save_raw `unconfirmed`); the folders that looked empty last time too and were read as empty again are
+    # confirmed: their files go now (save_raw `confirmed` — not a suspicious drop). An entry of the last run that
+    # this run could not look at stays until a run does.
+    def below(fids) -> set[str]:
+        return {i["id"] for i in merged if set((i.get("extra") or {}).get("folder_chain") or []) & set(fids)}
+    confirmed_empty = {f for f in empty_before if f in c.empty_listed}
+    gone_ids = {i["id"] for i in prev_items if i.get("id")} - {i["id"] for i in merged}
+    confirmed_ids = {i["id"] for i in prev_items if i.get("id") in gone_ids
+                     and set((i.get("extra") or {}).get("folder_chain") or []) & confirmed_empty}
+    unconfirmed_ids = below(c.unconfirmed)
+    now = now_iso()
+    empty_folders = {f: empty_before.get(f) or now for f in c.unconfirmed}
+    empty_folders.update({f: s for f, s in empty_before.items() if f not in c.listed_ok and f not in c.unconfirmed})
+
     live = [i for i in merged if i.get("status") == "ok"]
     albums = Counter(i["extra"].get("album") for i in live if i["extra"].get("album"))
     warnings = list(c.warnings)
     if c.unreadable:
         warnings.append(f"{len(c.unreadable)} folder(s) could not be read — check their sharing settings")
-    if not c.panels:
+    if c.unconfirmed:
+        warnings.append(f"{len(c.unconfirmed)} folder(s) looked empty although they held files on the last update — "
+                        f"their {len(unconfirmed_ids)} file(s) stay on the site until the next update confirms it")
+    if confirmed_ids:
+        warnings.append(f"{len(confirmed_empty)} folder(s) looked empty again — their {len(confirmed_ids)} file(s) "
+                        "were removed")
+    if not c.panels and root_id not in c.unconfirmed:
         warnings.append(f"no Panel folder >= {dcfg.get('min_panel')} found in the root folder")
     if lister.api_error:
         warnings.append(f"Drive API error (used the public view instead): {lister.api_error}")
@@ -1029,8 +1117,9 @@ def main(argv: list[str] | None = None) -> None:
         "panels": [p["label"] for p in c.panels],
         "panel_folders": c.panels,
         "include_loose": include_loose,
-        "loose_skipped": c.loose_skipped[:30],
-        "skipped_panels": c.skipped_panels,
+        # what is NOT published is counted, never named (names: the run log)
+        "loose_skipped": len(c.loose_skipped),
+        "skipped_panels": sorted(set(c.skipped_panels)),
         "folders": len(c.listed_ok),
         "files": len(live),
         "fetched": len(items),
@@ -1041,8 +1130,9 @@ def main(argv: list[str] | None = None) -> None:
         "events_from_flyers": sum(1 for i in live if i["extra"].get("event_date")),
         "excluded": len(c.excluded),
         "excluded_by_reason": dict(Counter(c.excluded).most_common()),
-        "unreadable_folders": c.unreadable[:30],
-        "depth_limited": c.depth_limited[:20],
+        "unreadable_folders": len(c.unreadable),
+        "unconfirmed_folders": len(c.unconfirmed),
+        "depth_limited": len(c.depth_limited),
         "shortcuts_resolved": lister.html.shortcuts_resolved,
         "announcements": ann_stats,
         "forms": form_stats,
@@ -1063,7 +1153,8 @@ def main(argv: list[str] | None = None) -> None:
         for it in merged[:3]:
             print(json.dumps(it, ensure_ascii=False, indent=1))
         return
-    save_raw(SOURCE, merged, ok=True, stats=stats)
+    save_raw(SOURCE, merged, ok=True, stats=stats, unconfirmed=unconfirmed_ids, confirmed=confirmed_ids,
+             extra={"empty_folders": empty_folders} if empty_folders else None)
 
 
 if __name__ == "__main__":

@@ -14,6 +14,9 @@ pageScripts: ["/assets/js/community.js"]
     (a table from 768px, compact rows on a phone) · the optional outside calendars (collapsed) · the
     document library and translations · how an update works · the open-source credits ("Built with
     open-source software", a tinted band, last).
+    A source "on hold" (status.json sources[].held) says how many items the last update did not find and
+    since when; a source's notes from the last update (sources[].stats.warnings) and translation problems
+    (translations.problems) are raw English text for the maintainer.
     Maintainer-only words (a failed source's raw message, where the translation models run and the
     overrides file, "Behind the scenes" with the one GitHub Actions button and the last 7 mornings of
     the daily quote) live in the collapsed "Technical details (for the site maintainer)" disclosures
@@ -48,9 +51,12 @@ pageScripts: ["/assets/js/community.js"]
 ] -%}
 {%- set srcIcons = { drive: "folder-open", articles: "newspaper", writers_archive: "library-big", pdfs: "file-text", youtube: "youtube", podcasts: "headphones", instagram: "instagram", editorial: "pen-line", events_external: "calendar-days", announcements: "megaphone", manual_events: "calendar-plus", weekly_open: "video", shop: "shopping-bag", meetings: "map-pin", audio_project: "mic", quote: "quote", translations: "languages" } -%}
 
-{#- A source's status badge (the same in the table and the phone rows) -#}
+{#- A source's status badge (the same in the table and the phone rows). "On hold": the last update did not
+    find items that were there before (a sudden drop, or a Drive folder that suddenly looks empty — status.json
+    sources[].held, common.save_raw); they stay on the site until the next update confirms it (heldNote). -#}
 {% macro stateBadge(s) %}
-{%- if s.state == "ok" and not s.stale %}<span class="badge-vine">{% icon "circle-check", "size-3.5" %} {{ "community.status.state_ok" | t(lang) }}</span>
+{%- if s.state == "ok" and s.held %}<span class="badge-muted">{% icon "hourglass", "size-3.5" %} {{ "community.status.state_held" | t(lang) }}</span>
+{%- elif s.state == "ok" and not s.stale %}<span class="badge-vine">{% icon "circle-check", "size-3.5" %} {{ "community.status.state_ok" | t(lang) }}</span>
 {%- elif s.state == "ok" and s.stale %}<span class="badge-muted" title="{{ 'community.status.stale_help' | t(lang, { n: s.ageDays }) }}">{% icon "clock", "size-3.5" %} {{ "community.status.state_stale" | t(lang) }}</span>
 {%- elif s.state == "failed" %}<span class="badge bg-danger text-white dark:text-paper">{% icon "circle-x", "size-3.5" %} {{ "community.status.state_failed" | t(lang) }}</span>
 {%- else %}<span class="badge-muted">{% icon "circle-dashed", "size-3.5" %} {{ "community.status.state_never" | t(lang) }}</span>{% endif -%}
@@ -88,6 +94,24 @@ pageScripts: ["/assets/js/community.js"]
   </div>
 </details>
 {% endif %}
+{% endmacro %}
+
+{#- A source on hold (stateBadge): what was not found and since when — calm, for visitors -#}
+{% macro heldNote(s) %}
+<p class="flex max-w-3xl gap-2 text-sm leading-relaxed text-ink">{% icon "hourglass", "size-4 mt-0.5 shrink-0 text-muted" %}<span>{{ ("community.status.held_note_one" if s.held.kept == 1 else "community.status.held_note") | t(lang, { n: (s.held.kept or 0) | cmNum(lang) }) }}</span></p>
+{% if s.held.since %}<p class="mt-1 pl-6 text-xs text-muted">{{ "community.status.held_since" | t(lang) }}: <time datetime="{{ s.held.since | isoDate }}" data-local-time>{{ s.held.since | fmtDate(lang, "datetime") }}</time></p>{% endif %}
+{% endmacro %}
+
+{#- A source's notes from the last update (status.json sources[].stats.warnings: plain English strings, e.g. one
+    of several feeds did not answer) — tucked away for the maintainer, like a failed source's raw message -#}
+{% macro notesBlock(notes) %}
+<details class="cm-preview mt-2 ml-6 rounded-lg border border-line bg-surface" data-tech>
+  <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-xs font-semibold text-muted">{{ "community.status.notes_summary" | t(lang, { n: notes | length }) }}</summary>
+  <div class="border-t border-line p-3 text-xs text-ink">
+    <p class="text-muted">{{ "community.status.notes_caption" | t(lang) }}</p>
+    <ul lang="en" class="mt-1 list-disc space-y-1 pl-4 font-mono" role="list">{% for w in notes %}<li class="whitespace-pre-wrap break-words">{{ w }}</li>{% endfor %}</ul>
+  </div>
+</details>
 {% endmacro %}
 
 {#- The hero's right-hand card (the shared hero aside, ui.heroAsideStat): how many sources are up to
@@ -183,9 +207,14 @@ pageScripts: ["/assets/js/community.js"]
             {% if s.new_7d %}<span class="font-semibold text-vine">+{{ s.new_7d | cmNum(lang) }}</span>{% else %}<span class="text-muted">0</span>{% endif %}
           </td>
         </tr>
+        {%- set notes = s.stats.warnings if (s.stats and s.stats.warnings and s.stats.warnings is iterable and not (s.stats.warnings is string)) else [] %}
         {% if s.state == "failed" %}
         <tr class="bg-[color-mix(in_srgb,var(--c-danger)_6%,transparent)]">
-          <td colspan="5" class="px-5 pb-4 pt-0">{{ failedNote(s) }}</td>
+          <td colspan="5" class="px-5 pb-4 pt-0">{{ failedNote(s) }}{% if notes | length %}{{ notesBlock(notes) }}{% endif %}</td>
+        </tr>
+        {% elif (s.state == "ok" and s.held) or notes | length %}
+        <tr>
+          <td colspan="5" class="px-5 pb-4 pt-0">{% if s.state == "ok" and s.held %}{{ heldNote(s) }}{% endif %}{% if notes | length %}{{ notesBlock(notes) }}{% endif %}</td>
         </tr>
         {% endif %}
         {% endfor %}
@@ -210,6 +239,9 @@ pageScripts: ["/assets/js/community.js"]
         {% if s.hint %}<p class="mt-1 text-xs leading-snug text-muted">{{ ("community.status.hint." + s.hint) | t(lang, { panel: s.panel or ("community.status.hint.panel_generic" | t(lang)) }) }}</p>{% endif %}
         {% if s.source == "quote" and qm %}<p class="mt-1 text-xs leading-snug text-muted">{{ quoteLine(qm) }}</p>{% endif %}
         {% if s.state == "failed" %}<div class="mt-2">{{ failedNote(s) }}</div>{% endif %}
+        {% if s.state == "ok" and s.held %}<div class="mt-2">{{ heldNote(s) }}</div>{% endif %}
+        {%- set notes = s.stats.warnings if (s.stats and s.stats.warnings and s.stats.warnings is iterable and not (s.stats.warnings is string)) else [] %}
+        {% if notes | length %}{{ notesBlock(notes) }}{% endif %}
       </div>
     </li>
     {% endfor %}
@@ -301,6 +333,20 @@ pageScripts: ["/assets/js/community.js"]
         <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-xs font-semibold text-muted">{{ "community.status.tech_details" | t(lang) }}</summary>
         <p class="border-t border-line p-3 text-xs leading-relaxed text-ink">{{ "community.status.tr_tech" | t(lang) }}</p>
       </details>
+      {#- what kept translation from working fully on the last update (status.json translations.problems: an
+          unreadable saved-translations file, a model that could not be installed): a calm line, the raw
+          messages for the maintainer -#}
+      {%- set trProblems = db.status.translations.problems if (db.status and db.status.translations and db.status.translations.problems) else [] %}
+      {% if trProblems | length %}
+      <p class="mt-4 flex gap-2 text-sm leading-relaxed text-ink">{% icon "info", "size-4 mt-0.5 shrink-0 text-grape" %}<span>{{ "community.status.tr_problem" | t(lang) }}</span></p>
+      <details class="cm-preview mt-2 rounded-lg border border-line bg-surface" data-tech>
+        <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-xs font-semibold text-muted">{{ "community.status.tech_details" | t(lang) }}</summary>
+        <div class="border-t border-line p-3 text-xs text-ink">
+          <p class="text-muted">{{ "community.status.notes_caption" | t(lang) }}</p>
+          <ul lang="en" class="mt-1 list-disc space-y-1 pl-4 font-mono" role="list">{% for p in trProblems %}<li class="whitespace-pre-wrap break-words">{{ p }}</li>{% endfor %}</ul>
+        </div>
+      </details>
+      {% endif %}
       {% if sv.translations.pending or sv.translations.rejected or sv.translations.glossary %}
       <ul class="mt-4 space-y-2 border-t border-line pt-4 text-xs leading-relaxed text-muted" role="list">
         {% if sv.translations.pending %}<li class="flex gap-2">{% icon "hourglass", "size-4 shrink-0 text-grape" %}<span>{{ ("community.status.tr_pending_one" if sv.translations.pending == 1 else "community.status.tr_pending") | t(lang, { n: sv.translations.pending | cmNum(lang) }) }}</span></li>{% endif %}

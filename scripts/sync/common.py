@@ -4,7 +4,8 @@ Every sync module (drive.py, youtube.py, …) uses:
   * CONFIG / load_config()          – config/site.yml
   * PoliteSession                   – requests with UA, robots.txt, per-server crawl-delay, retries,
                                       and a per-run page memo (a magazine page is asked for once per run)
-  * load_raw() / save_raw()         – data/raw/<source>.json envelope (see docs/DATA_SCHEMA.md)
+  * load_raw() / save_raw()         – data/raw/<source>.json envelope (see docs/DATA_SCHEMA.md); save_raw
+                                      holds back a sudden mass drop of items until the next run confirms it
   * merge_items()                   – cumulative merge that preserves first_seen and never drops items
                                       (authoritative=True for sources that are their own full truth)
   * detect_lang(), clean_text(), date helpers
@@ -310,6 +311,12 @@ def _json_default(o: Any) -> Any:
     return str(o)
 
 
+def as_json(data: Any) -> Any:
+    """`data` as write_json() stores it (dates → ISO text, sets → sorted lists, tuples → lists): what reading
+    the file back gives, so a fresh value can be compared with a written one."""
+    return json.loads(json.dumps(data, ensure_ascii=False, default=_json_default))
+
+
 def write_json(path: Path, data: Any, compact: bool = False) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -330,39 +337,145 @@ def read_json(path: Path, default: Any = None) -> Any:
         return default
 
 
+def read_capped(r: Any, cap: int) -> tuple[bytes, bool]:
+    """The body of a response asked for with stream=True, read no further than `cap` bytes → (data, cut):
+    cut = the file is longer, and the rest is never downloaded (a size cap applied while reading, not after
+    the whole download). A response object without iter_content gives its `content`, cut the same way."""
+    if not hasattr(r, "iter_content"):
+        data = getattr(r, "content", None) or b""
+        return data[:cap], len(data) > cap
+    buf = bytearray()
+    for chunk in r.iter_content(chunk_size=64 * 1024):
+        if not chunk:
+            continue
+        buf += chunk
+        if len(buf) > cap:
+            return bytes(buf[:cap]), True
+    return bytes(buf), False
+
+
+# --------------------------------------------------------------------------- mass-drop guard (save_raw)
+# A source that says "ok" but suddenly lists far fewer items than last time — an empty Google Drive folder
+# view, a half-rendered page, a feed answering with nothing — is far more often a bad moment at the source
+# than a real change. save_raw() then writes the run's items WITH the missing ones put back and marks the
+# envelope `held` (since when, how many, a few of their titles; /status/ shows it); the NEXT run that sees
+# the same drop accepts it, so a real removal is only one run late. Counted on live items (status != "gone"):
+#   * the list falls to zero (from any size), or
+#   * more than half of it disappears, once it held at least DROP_GUARD_MIN items. Below that a few posts or
+#     events coming and going is ordinary (today's small sources hold 2–9 items), while every source whose
+#     loss would hurt holds more (meetings 23, Drive 35, editorial 44, the store 62, Instagram 71, the
+#     library 142, articles 228, podcasts 299, YouTube 533).
+DROP_GUARD_MIN = 10
+# Sources whose lists may shrink a lot from one run to the next ON PURPOSE: not guarded (save_raw's
+# drop_guard=None reads this table; a module may also pass drop_guard=True / False itself). A source switched
+# off in the settings (stats.disabled — meetings.enabled: false) is never guarded either.
+DROP_GUARD_EXEMPT: dict[str, str] = {
+    "announcements": "hand-written content/bulletin files: a removal is the committee's own edit (a file that "
+                     "cannot be read is reported in stats.errors)",
+    "manual_events": "hand-written content/events files: a removal is the committee's own edit",
+    "events_external": "upcoming events only: past events leave the list, often several at once",
+    "editorial": "a rolling window of upcoming deadlines, with its own guard (editorial.collect: a part whose list "
+                 "shrinks below 40% keeps its previous topics)",
+    "writers_archive": "its own guard: a new archive file needs writers_archive.min_rows_ratio of the rows of the "
+                       "file before, or the older rows stay",
+}
+HELD_EXAMPLES = 5               # titles of held items named in the envelope (`held.examples`)
+
+
+def _live_ids(items: Any) -> dict[str, dict]:
+    """id → item of the live items (status != "gone") of a raw item list."""
+    return {i["id"]: i for i in (items or []) if isinstance(i, dict) and i.get("id")
+            and i.get("status", "ok") != "gone"}
+
+
+def is_mass_drop(before: int, found: int) -> bool:
+    """`found` live items where there were `before`: zero (from any size), or less than half once the list
+    held DROP_GUARD_MIN or more."""
+    return before > 0 and (found == 0 or (before >= DROP_GUARD_MIN and found * 2 < before))
+
+
 def save_raw(source: str, items: list[dict], ok: bool = True, error: str | None = None,
-             stats: dict | None = None, extra: dict | None = None) -> None:
+             stats: dict | None = None, extra: dict | None = None, *, drop_guard: bool | None = None,
+             unconfirmed: Iterable[str] = (), confirmed: Iterable[str] = ()) -> None:
     """Write data/raw/<source>.json. If ok=False and items is empty, previous items are kept.
 
     `first_harvest` records when the source was first read successfully (even with 0 items) and
     never moves afterwards: build_data uses it to tell the launch-day back catalog from real news.
     (The oldest first_seen cannot be used for that — it moves forward whenever a source drops old
-    items, e.g. past events.) When first written it is seeded from the oldest first_seen known."""
+    items, e.g. past events.) When first written it is seeded from the oldest first_seen known.
+
+    The mass-drop guard (above): drop_guard None = DROP_GUARD_EXEMPT decides. A module that keeps items
+    itself until a second run confirms they are gone (drive.py: the files of a folder that suddenly looks
+    empty) names them in `unconfirmed` — the envelope is marked `held` the same way — and names in
+    `confirmed` the items it removes after that second look (they never count as a suspicious drop).
+
+    Every envelope carries `changes` = this run's {"added", "removed", "held"} (live items; "held" = items
+    kept although this run did not find them) — plus "confirmed": the `held.since` of a drop this run
+    accepted — and `held` = {"since", "kept", "previous", "found", "drop", "examples"} while items are held
+    back ("drop": the guard put them back; false: the module kept them, `unconfirmed`). build_data copies
+    both into status.json sources[]."""
+    log = get_logger("common")
+    now = now_iso()
     prev = load_raw(source)
     note = _CORRUPT_NOTES.pop(source, None)
     if note:   # the previous file was unreadable (see load_raw): make it visible on /status/ once
         ok, error = False, (f"{note}; {error}" if error else note)
     if not ok and not items:
         items = prev.get("items", [])
+    prev_live = _live_ids(prev.get("items"))
+    prev_held = prev.get("held") if isinstance(prev.get("held"), dict) else None
+    new_live = _live_ids(items)
+    unconfirmed = {i for i in unconfirmed if i in new_live}
+    confirmed = {i for i in confirmed if i in prev_live and i not in new_live}
+    restored: list[dict] = []
+    accepted = None
+    held = prev_held if not ok else None        # a failed run saw nothing: an earlier hold stays as it was
+    guard = (ok and (drop_guard if drop_guard is not None else source not in DROP_GUARD_EXEMPT)
+             and (stats or {}).get("disabled") is not True)
+    before, found = len(prev_live) - len(confirmed), len(new_live) - len(unconfirmed)
+    if guard and is_mass_drop(before, found):
+        if prev_held and prev_held.get("drop"):
+            accepted = prev_held.get("since")       # the same drop on the next run: it is real
+            log.warning("%s: %d of %d items found again — the drop held back since %s is accepted", source,
+                        found, before, accepted)
+        else:
+            restored = [p for i, p in prev_live.items() if i not in new_live and i not in confirmed]
+            log.warning("%s: only %d of %d items found — %d held back until the next run confirms the drop",
+                        source, found, before, len(restored))
+    if restored:
+        items = [*items, *restored]
+    if ok and (restored or unconfirmed):
+        kept_ids = [p["id"] for p in restored] + sorted(unconfirmed)
+        titles = [clean_text((prev_live.get(i) or new_live.get(i) or {}).get("title")) for i in kept_ids]
+        held = {"since": (prev_held or {}).get("since") or now, "kept": len(kept_ids), "previous": before,
+                "found": found, "drop": bool(restored), "examples": [t for t in titles if t][:HELD_EXAMPLES]}
     items = sort_items(items)
+    final_live = _live_ids(items)
+    changes: dict[str, Any] = {"added": len(final_live.keys() - prev_live.keys()),
+                               "removed": len(prev_live.keys() - final_live.keys()),
+                               "held": (held or {}).get("kept", 0)}
+    if accepted:
+        changes["confirmed"] = accepted
     first = prev.get("first_harvest")
     if not first and ok:
         seen = sorted(str(i["first_seen"]) for i in [*(prev.get("items") or []), *items]
                       if isinstance(i, dict) and i.get("first_seen"))
-        first = seen[0] if seen else now_iso()
+        first = seen[0] if seen else now
     env = {
         "source": source,
-        "updated": now_iso() if ok else prev.get("updated"),
-        "attempted": now_iso(),
+        "updated": now if ok else prev.get("updated"),
+        "attempted": now,
         "ok": ok,
         "error": (error or None) if not ok else None,
+        **({"held": held} if held else {}),
+        "changes": changes,
         "stats": stats or {},
         "items": items,
     }
     if first:
         env["first_harvest"] = first
-    if extra:
-        env.update(extra)
+    if extra:       # (`held` and `changes` are this function's own: a copy of the last envelope's never wins)
+        env.update({k: v for k, v in extra.items() if k not in ("held", "changes")})
     write_json(raw_path(source), env)
 
 

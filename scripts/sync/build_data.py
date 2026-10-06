@@ -10,9 +10,11 @@ Contract: docs/DATA_SCHEMA.md §3 + §5.
     python -m scripts.sync.build_data --out .tmp/site    # write somewhere else (testing)
     python -m scripts.sync.build_data --no-translate     # only cached translations (fast)
 
-Robust by design: a missing/corrupt raw file or a bad item is logged and skipped, never fatal.
-Output is deterministic (stable sort, no run timestamps inside items, no `last_seen`) so daily git
-diffs stay small.
+Robust by design: a missing raw file or a bad item is logged and skipped, never fatal; a raw file
+that exists but cannot be read keeps what the last build made of it (carry_unreadable — never an
+empty section) and shows as failed on /status/. Output is deterministic (stable sort, no run
+timestamps inside items, no `last_seen`; a file whose content did not change keeps its `updated` —
+stamped) so daily git diffs stay small.
 """
 from __future__ import annotations
 
@@ -38,8 +40,9 @@ from . import price_changes as PC
 from . import quote as QUOTE
 from . import translate as T
 from . import writers_archive as WA
-from .common import (RAW_DIR, ROOT, SITE_DIR, STATE_DIR, clean_text, event_host, get_logger, load_config, now_iso,
-                     parse_iso, read_json, short_hash, slugify, strip_html, to_iso, truncate, write_json)
+from .common import (RAW_DIR, ROOT, SITE_DIR, STATE_DIR, as_json, clean_text, event_host, get_logger, load_config,
+                     now_iso, parse_iso, read_capped, read_json, short_hash, slugify, strip_html, to_iso, truncate,
+                     write_json)
 from .events_external import platform_of
 from .geo import SCOPES, UNKNOWN, best_of, classify_location, fold
 from .meeting import (MonthlyRule, check_skip_dates, meeting_skip_notes, nth_weekday, parse_hhmm, upcoming_meetings,
@@ -228,6 +231,9 @@ class Ctx:
         self.offline = offline
         self.raw: dict[str, dict] = {}
         self.raw_problems: dict[str, str] = {}
+        # raw files that exist but could not be read: the site keeps what the last build made of them
+        # (carry_unreadable) and their row on /status/ says so (build_status)
+        self.unreadable: set[str] = set()
         self.births: dict[str, float] = {}
         self.hub_issues: set[str] = set()      # "gv:2026-10" — magazine issues seen on a hub (current issues)
         self.feeds: list[dict] = []            # health of each sources.ics_feeds entry (→ status.json `feeds`)
@@ -255,7 +261,9 @@ class Ctx:
                     env["items"] = [i for i in data.get("items", []) if isinstance(i, dict) and i.get("id")]
                 except Exception as e:
                     self.raw_problems[name] = f"unreadable: {type(e).__name__}: {e}"[:200]
-                    log.error("raw file %s is unreadable (%s) — building without it", p.name, e)
+                    self.unreadable.add(name)
+                    log.error("raw file %s is unreadable (%s) — the site keeps the last build's data for it",
+                              p.name, e)
             self.raw[name] = env
             # The source's first harvest: the stable `first_harvest` stamp (common.save_raw); older
             # envelopes without it fall back to the oldest first_seen.
@@ -399,9 +407,14 @@ def build_announcements(ctx: Ctx) -> list[dict]:
         it["extra"].setdefault("body_md", it.get("summary") or "")
         it["extra"]["pinned"] = bool(it["extra"].get("pinned"))
         kept.append(it)
-    kept.sort(key=lambda i: (0 if i["extra"]["pinned"] else 1,
-                             -(ts(i.get("date")) or ts(i.get("first_seen")) or 0.0), i["id"]))
+    kept.sort(key=bulletin_order)
     return kept
+
+
+def bulletin_order(it: dict) -> tuple:
+    """The bulletin's order: pinned first, then newest."""
+    return (0 if (it.get("extra") or {}).get("pinned") else 1,
+            -(ts(it.get("date")) or ts(it.get("first_seen")) or 0.0), str(it.get("id")))
 
 
 # --------------------------------------------------------------------------- events
@@ -880,26 +893,41 @@ def _challenge_page(resp: Any, head: str) -> bool:
             or "challenges.cloudflare.com" in head or "cf-chl" in head or "_cf_chl" in head)
 
 
-def _response_text(resp: Any) -> str:
-    """The answer as text. A calendar file is UTF-8 unless the server names another charset (RFC 5545);
-    `requests` would read a "text/…" answer without a charset as ISO-8859-1 ("La ViÃ±a")."""
+def _response_text(resp: Any, body: bytes) -> str:
+    """The answer (`body`, its bytes) as text. A calendar file is UTF-8 unless the server names another charset
+    (RFC 5545); `requests` would read a "text/…" answer without a charset as ISO-8859-1 ("La ViÃ±a")."""
     headers = {str(k).lower(): str(v) for k, v in (getattr(resp, "headers", None) or {}).items()}
-    if "charset=" in headers.get("content-type", "").lower():
-        return resp.text
-    return (resp.content or b"").decode("utf-8-sig", "replace")
+    m = re.search(r"charset=[\"']?([\w.:-]+)", headers.get("content-type", ""), re.I)
+    if m:
+        try:
+            return body.decode(m.group(1), "replace")
+        except LookupError:      # a charset Python does not know: UTF-8, as without one
+            pass
+    return body.decode("utf-8-sig", "replace")
 
 
 def fetch_feed(url: str, user_agent: str) -> dict:
     """ONE plain request (no retries) → {"state": "ok" | "blocked" | "error", "http_status", "error", "text"}.
     "blocked" = the site's bot protection turned the robot away (Cloudflare's "Just a moment…" check, or
-    HTTP 401 / 403 / 429); "error" = anything else (no answer, 404, 500, not a calendar file)."""
+    HTTP 401 / 403 / 429); "error" = anything else (no answer, 404, 500, not a calendar file). The answer is
+    read no further than ICS_MAX_BYTES (streamed: a bigger file is never downloaded whole)."""
     import requests
     try:
-        r = requests.get(url, timeout=ICS_TIMEOUT, allow_redirects=True, headers={
+        r = requests.get(url, timeout=ICS_TIMEOUT, allow_redirects=True, stream=True, headers={
             "User-Agent": user_agent, "Accept": "text/calendar, text/plain;q=0.8, */*;q=0.1"})
     except Exception as e:      # no answer (timeout, DNS, TLS …) — never fatal, never retried this run
         return {"state": "error", "http_status": None, "error": f"no answer ({type(e).__name__})", "text": None}
-    text = _response_text(r) if len(r.content or b"") <= ICS_MAX_BYTES else ""
+    try:
+        body, cut = read_capped(r, ICS_MAX_BYTES)
+    except Exception as e:      # the connection broke while reading
+        return {"state": "error", "http_status": r.status_code, "error": f"no answer ({type(e).__name__})",
+                "text": None}
+    finally:
+        try:
+            r.close()
+        except Exception:  # noqa: BLE001 — closing never matters
+            pass
+    text = "" if cut else _response_text(r, body)
     head = text[:4000]
     if r.status_code == 200 and "BEGIN:VCALENDAR" in head[:2000]:
         return {"state": "ok", "http_status": 200, "error": None, "text": text}
@@ -1842,9 +1870,16 @@ def build_events(ctx: Ctx) -> list[dict]:
         for m in file_notes:
             log.warning("content/events: %s", m)
         ctx.raw_problems["content_events"] = " / ".join(file_notes)[:2000]
+    return order_events(ctx, evs.values())
+
+
+def order_events(ctx: Ctx, events: Iterable[dict]) -> list[dict]:
+    """events.json's list: the upcoming events (soonest first, extra.past false), then the past ones kept (newest
+    first, extra.past true). Also used for the events a build carries over from the last one (carry_unreadable)."""
+    evs = list(events)
     cutoff = ctx.now_ts - 86400
-    upcoming = [e for e in evs.values() if event_end_ts(ctx, e) >= cutoff]
-    over = [e for e in evs.values() if event_end_ts(ctx, e) < cutoff and e.get("category") != "committee"]
+    upcoming = [e for e in evs if event_end_ts(ctx, e) >= cutoff]
+    over = [e for e in evs if event_end_ts(ctx, e) < cutoff and e.get("category") != "committee"]
     # Past dates of a recurring event (the last RECURRING_KEEP_PAST_DAYS days) are kept for the calendar
     # feed only — they do not use up the PAST_EVENTS_KEEP places of real past events.
     past = [e for e in over if e.get("category") != "recurring"]
@@ -3279,8 +3314,14 @@ def kept_full_update(previous_status: Path, computed: str | None) -> str | None:
 
 
 def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: dict[str, int],
-                 translation_enabled: bool, tr_seconds: float) -> dict:
+                 translation_enabled: bool, tr_seconds: float, previous: dict | None = None) -> dict:
+    """status.json. `previous` = the last build's status.json: a source whose raw file cannot be read
+    (ctx.unreadable) keeps that build's row — its count, dates and stats, as the site keeps its items
+    (carry_unreadable) — with ok false and the reason. Each row also carries the raw envelope's `changes`
+    (this run's {"added", "removed", "held"[, "confirmed"]} — common.save_raw) and `held` (items held back
+    after a sudden drop, or null)."""
     week_ago = ctx.now_ts - 7 * 86400
+    before = {r.get("source"): r for r in ((previous or {}).get("sources") or []) if isinstance(r, dict)}
     sources = []
     for name, label, label_es in SOURCES:
         env = ctx.raw.get(name) or {}
@@ -3288,7 +3329,7 @@ def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: 
         problem = ctx.raw_problems.get(name)
         never_ran = problem == "missing"
         err = env.get("error") or (("not run yet" if never_ran else problem) if problem else None)
-        sources.append({
+        row = {
             "source": name, "label": label, "label_es": label_es,
             # ok: true = last run fine · false = last run failed (older data kept) · null = never ran
             "ok": None if never_ran else (bool(env.get("ok")) and not problem),
@@ -3296,7 +3337,17 @@ def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: 
             "count": len(items),
             "new_7d": sum(1 for i in items if (ts(i.get("first_seen")) or 0) >= week_ago),
             "error": err, "stats": env.get("stats") or {},
-        })
+            "changes": env.get("changes") if isinstance(env.get("changes"), dict) else None,
+            "held": env.get("held") if isinstance(env.get("held"), dict) else None,
+        }
+        if name in ctx.unreadable:
+            old = before.get(name) or {}
+            row.update({k: old.get(k) for k in ("updated", "attempted", "count", "new_7d", "stats") if k in old})
+            row.update({"ok": False, "stats": row["stats"] or {}, "changes": None, "held": None,
+                        "error": (f"data/raw/{name}.json could not be read ({problem.split(': ', 1)[-1]}) — the site "
+                                  "keeps what the last build had for it until the file is fixed (restore it from the "
+                                  "git history) or this source's next update rebuilds it")[:300]})
+        sources.append(row)
     tr = translator.summary() if translator else {}
     n_tr = tr.get("translated", 0)
     try:
@@ -3322,7 +3373,10 @@ def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: 
                          "seconds": round(tr_seconds, 1), "model_seconds": tr.get("model_seconds", 0),
                          "texts_per_second": round(n_tr / tr_seconds, 1) if n_tr and tr_seconds else None,
                          "glossary_entries": (len(translator.glossary.keep) + len(translator.glossary.terms))
-                         if translator else 0},
+                         if translator else 0,
+                         # what kept translation from working fully (an unreadable cache.json moved aside, a model
+                         # not installed — translate.Translator.problems): plain English, shown on /status/
+                         "problems": list(getattr(translator, "problems", None) or [])},
         "counts": counts,
         "problems": dict(sorted(ctx.raw_problems.items())),
         # Optional outside calendars (config sources.ics_feeds): kept apart from `sources` on purpose —
@@ -3513,6 +3567,98 @@ def clean_private(it: dict) -> dict:
     return it
 
 
+# ---------------------------------------------------------------------------- a raw file that cannot be read
+# A raw file that exists but cannot be read (a bad hand edit, a broken merge — Ctx.unreadable) must not deploy
+# an empty section: every site file made from it keeps what the last build wrote (data/site, read before it is
+# written again), and its /status/ row says why (build_status). The next run of that source rebuilds the raw
+# file (common.load_raw moves the bad one aside). The whole file is kept when it comes from such a source alone:
+WHOLE_FILE_SOURCES: dict[str, tuple[str, ...]] = {
+    **{name: (src,) for name, src in SINGLE_SOURCE.items()},
+    "shop": ("shop",), "meetings": ("meetings",), "audio_project": ("audio_project",), "quote": ("quote",),
+    "booth": ("drive",), "spotlight": ("articles",), "writers_archive": ("writers_archive", "articles"),
+}
+# …and these mix several sources: only that source's items of the last build are put back.
+MIXED_FILES = ("announcements", "events", "whatsnew")
+# event ids → the raw source they come from (the committee meetings, the recurring series and the .ics feeds are
+# made from the settings on every build)
+_EVENT_SOURCES = (("ev:flyer:", "drive"), ("ev:gvcal:", "events_external"), ("ev:lvcal:", "events_external"),
+                  ("ev:manual:", "manual_events"))
+
+
+def site_source(it: dict) -> str | None:
+    """The raw source a site item was made from (None: made from the settings)."""
+    if it.get("kind") == "event":
+        iid = str(it.get("id") or "")
+        return next((src for prefix, src in _EVENT_SOURCES if iid.startswith(prefix)), None)
+    return raw_source(it)
+
+
+def carry_unreadable(ctx: Ctx, name: str, doc: dict, prev: Any) -> dict:
+    """data/site/<name>.json for this build when a raw file it is made from could not be read: the last build's
+    file (`prev`) as it was — or, for a file of several sources, the new one plus that source's items of the last
+    one (in the file's own order; a bulletin post past its `expires` day stays out). Unchanged otherwise, and when
+    there is no usable last file (then the section is as empty as the source)."""
+    lost = ctx.unreadable
+    if not lost or not isinstance(prev, dict) or not isinstance(prev.get("items", []), list):
+        return doc
+    whole = set(WHOLE_FILE_SOURCES.get(name, ())) & lost
+    if whole:
+        log.error("%s.json: kept from the last build — data/raw/%s.json could not be read", name,
+                  ".json, data/raw/".join(sorted(whole)))
+        return prev
+    if name not in MIXED_FILES:
+        return doc
+    have = {i.get("id") for i in doc.get("items") or []}
+    back = [i for i in prev.get("items") or [] if isinstance(i, dict) and i.get("id") not in have
+            and site_source(i) in lost]
+    if name == "announcements":
+        today = ctx.today_local.isoformat()
+        back = [i for i in back if not (str((i.get("extra") or {}).get("expires") or "9999")[:10] < today)]
+    if not back:
+        return doc
+    log.error("%s.json: %d item(s) of the last build kept — data/raw/%s.json could not be read", name, len(back),
+              ".json, data/raw/".join(sorted({site_source(i) for i in back})))
+    items = [*doc.get("items", []), *back]
+    if name == "events":
+        items = order_events(ctx, items)
+    elif name == "announcements":
+        items.sort(key=bulletin_order)
+    else:   # whatsnew: newest first, at most WHATSNEW_MAX
+        items = sorted(items, key=lambda i: (-(ts(i.get("wn_date")) or 0.0), str(i.get("id"))))[:WHATSNEW_MAX]
+    return {**doc, "items": items}
+
+
+# ---------------------------------------------------------------------------- content-based stamps
+def stamped(prev: Any, doc: dict, now: str) -> dict:
+    """`doc` with its `updated` set: the last build's (`prev`, that file as read) when nothing else in it changed,
+    else `now`. A build that changed nothing in a file writes it again byte for byte, so the data commit does not
+    show five files whose only change is the time (announcements, events, whatsnew, spotlight, writers_archive —
+    and shop, meetings, audio_project, quote before their source first worked). Nothing reads these stamps as
+    "when the update ran": the freshness lines use status.json `generated` or a source's own `updated` (the last
+    time it was read), the Morning check build.json `day` and the quotes' days."""
+    if isinstance(prev, dict) and isinstance(prev.get("updated"), str) and prev["updated"]:
+        if {k: v for k, v in prev.items() if k != "updated"} == as_json({k: v for k, v in doc.items() if k != "updated"}):
+            return {**doc, "updated": prev["updated"]}
+    return {**doc, "updated": now}
+
+
+# ---------------------------------------------------------------------------- translation-cache pruning
+# Pruning drops the cache entries this build did not use. It needs a complete build with nothing left to translate
+# (i18n.pending 0) — and a build that asked for every text the site has: not while a raw file cannot be read (its
+# source's texts are not asked for: the site keeps the last build's items, carry_unreadable) nor while glossary.yml
+# or overrides.yml cannot be read (the cache is used as it is). A settings note (status.json `problems` meeting /
+# recurring_events / ics_feeds / price_changes / content_events: one entry skipped or corrected) leaves out a few
+# texts at most — they are translated again once it is fixed — so it no longer stops the pruning: while one stayed
+# open the cache grew without end.
+def prune_blockers(ctx: Ctx, translator: Any) -> list[str]:
+    """Why the translation cache must not be pruned after this build ([] = it may be)."""
+    out = [f"data/raw/{n}.json could not be read" for n in sorted(ctx.unreadable)]
+    if getattr(translator, "file_errors", None):
+        out.append("data/translations/" + " / ".join(f"{n}.yml" for n in sorted(translator.file_errors))
+                   + " could not be read")
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="python -m scripts.sync.build_data", description=__doc__.split("\n\n")[0])
     ap.add_argument("--out", default=str(SITE_DIR), help="output folder (default data/site)")
@@ -3537,7 +3683,7 @@ def main(argv: list[str] | None = None) -> int:
     T._DEFAULT = translator          # committee_meetings() etc. share the same cache
     if translator.file_errors:      # a YAML typo in glossary.yml / overrides.yml: the cache is kept as is
         # (status.json problems.translations → a Settings problem in the run summary; while a file is broken the
-        # cache is also not pruned, because pruning needs no raw_problems other than "missing")
+        # cache is also not pruned — prune_blockers)
         ctx.raw_problems["translations"] = " / ".join(
             f"data/translations/{n}.yml could not be read ({e}) — new texts stay untranslated until it is fixed"
             for n, e in translator.file_errors.items())[:2000]
@@ -3625,45 +3771,72 @@ def main(argv: list[str] | None = None) -> int:
         for it in whatsnew:
             it.setdefault("is_new", ctx.is_new(it, raw_source(it)))
 
-        counts = {name: len(items) for name, items in cols.items()}
-        counts.update({"whatsnew": len(whatsnew), "shop": shop_count(shop)})
         now = now_iso()
+        # The last build's files, read before any of them is written again: a file whose content did not change
+        # keeps its `updated` (stamped), and a source whose raw file cannot be read keeps what they had
+        # (carry_unreadable).
+        last = {n: read_json(out_dir / f"{n}.json") for n in (*SITE_FILES, "whatsnew", "spotlight", "writers_archive",
+                                                              "shop", "meetings", "audio_project", "quote", "booth",
+                                                              "status")}
+
+        def write(name: str, doc: dict, own_stamp: bool = True) -> dict:
+            """Write data/site/<name>.json → what was written. own_stamp=False: the doc has no time of its own
+            (its `updated` is this build's) → content-based (stamped)."""
+            doc = carry_unreadable(ctx, name, doc, last.get(name))
+            if not own_stamp and doc is not last.get(name):
+                doc = stamped(last.get(name), doc, now)
+            write_json(out_dir / f"{name}.json", doc)
+            return doc
+
+        counts: dict[str, int] = {}
+        docs: dict[str, dict] = {}
         for name in SITE_FILES:
             src = SINGLE_SOURCE.get(name)
             updated = (ctx.raw.get(src) or {}).get("updated") if src else None
             doc = {"updated": updated or now, "fixture": False}
             doc.update(meta.get(name) or {})
             doc["items"] = [clean_private(i) for i in cols[name]]
-            write_json(out_dir / f"{name}.json", doc)
-        write_json(out_dir / "whatsnew.json", {"updated": now, "fixture": False,
-                                              "items": [clean_private(i) for i in whatsnew]})
+            docs[name] = write(name, doc, own_stamp=bool(updated))
+            counts[name] = len(docs[name].get("items") or [])
+        wn_doc = write("whatsnew", {"updated": now, "fixture": False, "items": [clean_private(i) for i in whatsnew]},
+                       own_stamp=False)
+        counts.update({"whatsnew": len(wn_doc.get("items") or []), "shop": 0})       # (shop: counted below)
         spot_items, spot_counts = plan_spotlight(ctx, cols["articles"])     # again: translated + kept items
-        spotlight = build_spotlight(ctx, spot_items, spot_counts, now)
-        write_json(out_dir / "spotlight.json", spotlight)
+        spotlight = write("spotlight", build_spotlight(ctx, spot_items, spot_counts, now), own_stamp=False)
         try:   # again too: the captured stories now carry their translations
             writers = build_writers_archive(ctx, plan_writers_archive(ctx, cols["articles"]), i18n, now)
         except Exception as e:  # never breaks the build
             log.error("writers_archive.json could not be built (%s: %s) — writing an empty one", type(e).__name__, e)
             writers = empty_writers_archive(now)
-        counts["writers_archive"] = len(writers["items"])
-        write_json(out_dir / "writers_archive.json", writers)
-        write_json(out_dir / "shop.json", {**shop, "updated": shop.get("updated") or now})
-        counts["meetings"] = len(meetings["items"])
-        write_json(out_dir / "meetings.json", {**meetings, "updated": meetings.get("updated") or now})
+        writers = write("writers_archive", writers, own_stamp=False)
+        counts["writers_archive"] = len(writers.get("items") or [])
+        shop = write("shop", {**shop, "updated": shop.get("updated") or now}, own_stamp=bool(shop.get("updated")))
+        counts["shop"] = shop_count(shop)
+        meetings = write("meetings", {**meetings, "updated": meetings.get("updated") or now},
+                         own_stamp=bool(meetings.get("updated")))
+        counts["meetings"] = len(meetings.get("items") or [])
+        audio = write("audio_project", {**audio, "updated": audio.get("updated") or now},
+                      own_stamp=bool(audio.get("updated")))
         counts["audio_project"] = sum(1 for p in AUDIO_FIELDS if audio.get(p))
-        write_json(out_dir / "audio_project.json", {**audio, "updated": audio.get("updated") or now})
-        counts["quote"] = len(quote["items"])
-        write_json(out_dir / "quote.json", {**quote, "updated": quote.get("updated") or now})
-        counts["booth"] = len(booth["items"])
-        write_json(out_dir / "booth.json", booth)       # `updated` = when the booth folder last changed (build_booth)
-        status = build_status(ctx, translator, i18n, counts, translator.use_model, i18n.seconds)
+        quote = write("quote", {**quote, "updated": quote.get("updated") or now}, own_stamp=bool(quote.get("updated")))
+        counts["quote"] = len(quote.get("items") or [])
+        booth = write("booth", booth)       # `updated` = when the booth folder last changed (build_booth)
+        counts["booth"] = len(booth.get("items") or [])
+        # translation problems (an unreadable cache.json moved aside, a model not installed): a Settings problem
+        # in the run summary too, next to a glossary / overrides typo
+        if translator.problems:
+            ctx.raw_problems["translations"] = " / ".join(
+                [p for p in (ctx.raw_problems.get("translations"), *translator.problems) if p])[:2000]
+        status = build_status(ctx, translator, i18n, counts, translator.use_model, i18n.seconds,
+                              previous=last.get("status"))
+        library = docs["pdfs"].get("items") or []
         for s in status["sources"]:     # the Library's count: official documents, each once (pdf_curate.py)
-            if s["source"] == "pdfs":
+            if s["source"] == "pdfs" and "pdfs" not in ctx.unreadable:
                 s["count"] = counts["pdfs"]
-                s["new_7d"] = sum(1 for i in cols["pdfs"] if (ts(i.get("first_seen")) or 0) >= ctx.now_ts - 7 * 86400)
+                s["new_7d"] = sum(1 for i in library if (ts(i.get("first_seen")) or 0) >= ctx.now_ts - 7 * 86400)
         # the Status page's library panel counts the same curated entries (not the files before merging)
         status["crawl"]["pdfs"] = counts["pdfs"]
-        status["crawl"]["pdfs_with_thumbs"] = sum(1 for i in cols["pdfs"] if (i.get("extra") or {}).get("thumb"))
+        status["crawl"]["pdfs_with_thumbs"] = sum(1 for i in library if (i.get("extra") or {}).get("thumb"))
         status["spotlight"] = {"today": spotlight["today"], "home_days": spotlight["home_days"],
                                "list_days": spotlight["list_days"], "counts": spotlight["counts"],
                                "items": len(spotlight["items"])}
@@ -3675,9 +3848,12 @@ def main(argv: list[str] | None = None) -> int:
         completed = True
     finally:
         # Always keep the translations done this run (they took minutes of model time), even when a
-        # later step failed. Prune unused entries only after a complete, healthy run.
-        prune = (completed and not a.no_prune and not a.no_translate and i18n.pending == 0
-                 and not any(p != "missing" for p in ctx.raw_problems.values()))
+        # later step failed. Prune unused entries only after a complete build that asked for every text
+        # (prune_blockers — a settings note no longer stops it).
+        blockers = prune_blockers(ctx, translator)
+        prune = completed and not a.no_prune and not a.no_translate and i18n.pending == 0 and not blockers
+        if blockers and completed and not a.no_prune:
+            log.info("translation cache not pruned: %s", "; ".join(blockers))
         try:
             translator.save(prune_unused=prune)
         except Exception as e:

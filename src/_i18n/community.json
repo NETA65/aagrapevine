@@ -374,6 +374,13 @@
   "community.status.tr_rejected": { "en": "{n} machine translations looked wrong and were not used; those texts stay in their original language.", "es": "{n} traducciones automáticas parecían incorrectas y no se usaron; esos textos se quedan en su idioma original." },
   "community.status.tr_rejected_one": { "en": "1 machine translation looked wrong and was not used; that text stays in its original language.", "es": "1 traducción automática parecía incorrecta y no se usó; ese texto se queda en su idioma original." },
   "community.status.tr_glossary": { "en": "{n} glossary terms keep names like Grapevine, La Viña and GVR exactly as they are.", "es": "{n} términos del glosario mantienen nombres como Grapevine, La Viña y GVR tal como son." },
+  "community.status.tr_problem": { "en": "The last update could not translate everything as usual, so some new texts may stay in their original language for now. Everything translated before stays as it is.", "es": "La última actualización no pudo traducir todo como de costumbre, así que algunos textos nuevos pueden quedarse por ahora en su idioma original. Todo lo traducido antes sigue igual." },
+  "community.status.state_held": { "en": "On hold", "es": "En espera" },
+  "community.status.held_note": { "en": "The last update did not find {n} items that were here before. To be safe, they stay on the site until the next update confirms they are gone.", "es": "La última actualización no encontró {n} elementos que antes estaban aquí. Por seguridad, siguen en el sitio hasta que la próxima actualización confirme que ya no están." },
+  "community.status.held_note_one": { "en": "The last update did not find 1 item that was here before. To be safe, it stays on the site until the next update confirms it is gone.", "es": "La última actualización no encontró 1 elemento que antes estaba aquí. Por seguridad, sigue en el sitio hasta que la próxima actualización confirme que ya no está." },
+  "community.status.held_since": { "en": "On hold since", "es": "En espera desde" },
+  "community.status.notes_summary": { "en": "Notes from the last update ({n}) — for the site maintainer", "es": "Notas de la última actualización ({n}): para quien mantiene el sitio" },
+  "community.status.notes_caption": { "en": "As the update wrote them:", "es": "Tal como las escribió la actualización (en inglés):" },
 
   "community.nf.meta_desc": { "en": "Page not found — search the NETA 65 Grapevine / La Viña site or jump to a popular page.", "es": "Página no encontrada — busca en el sitio de Grapevine / La Viña de NETA 65 o ve a una página popular." },
   "community.nf.code": { "en": "Error 404", "es": "Error 404" },

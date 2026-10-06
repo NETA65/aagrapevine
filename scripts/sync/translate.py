@@ -48,7 +48,10 @@ Results are cached in data/translations/cache.json (one entry per line → small
 data/translations/overrides.yml always wins. Editing the glossary re-translates only the
 cached texts that contain the changed phrases; bumping ENGINE_VERSION re-translates all. While
 glossary.yml or overrides.yml cannot be read (a YAML typo), the cache is used as it is and nothing
-new is translated (Translator.file_errors).
+new is translated (Translator.file_errors). An unreadable cache.json is moved aside as
+cache.json.bad-<UTC time> and reported, never silently replaced; a model download whose checksum is
+not the pinned one (MODEL_SHA256) is not installed — that direction is not translated this run and
+the reason is reported (Translator.problems), the rest of the run goes on.
 
 API
     from scripts.sync.translate import translate_texts, translate_markdown, get_translator
@@ -100,9 +103,11 @@ MODEL_URLS = {
     "en_es": "https://argos-net.com/v1/translate-en_es-1_0.argosmodel",
     "es_en": "https://argos-net.com/v1/translate-es_en-1_0.argosmodel",
 }
-# SHA-256 of the packages as downloaded when this pipeline was built. A mismatch only logs a
-# warning (the package is still validated structurally) so a harmless re-upload upstream cannot
-# silently switch translation off.
+# SHA-256 of the packages as downloaded when this pipeline was built. A download that does not match is
+# NOT installed: that direction is not translated this run (the texts stay in their original language,
+# nothing else stops) and the reason is reported — Translator.problems → status.json `translations.problems`
+# and `problems.translations` (the run summary's Settings problems). After checking a new upload upstream,
+# put its checksum here (or point MODEL_URLS at another package).
 MODEL_SHA256: dict[str, str] = {
     "en_es": "d698d0ef87ad70d5d184b7fa6965905bf4368f09a2bb9ffb165a79bac96af0c4",
     "es_en": "1b963aa0e0cb6e5ce874f0aa1a1949a19bc4d762e833532239a8834340f6b378",
@@ -139,9 +144,14 @@ def model_ready(pair: str, models_dir: Path | None = None) -> bool:
     return mb.is_file() and mb.stat().st_size > 1_000_000 and (d / "sentencepiece.model").is_file()
 
 
+class ModelMismatch(RuntimeError):
+    """A downloaded model package whose SHA-256 is not the pinned one (MODEL_SHA256): never installed."""
+
+
 def ensure_models(pairs: Iterable[str] = ("en_es", "es_en"), models_dir: Path | None = None,
-                  download: bool = True) -> dict[str, bool]:
-    """Make sure the model folders exist; download + verify + unpack them if missing."""
+                  download: bool = True, errors: dict[str, str] | None = None) -> dict[str, bool]:
+    """Make sure the model folders exist; download + verify + unpack them if missing. A pair that could not
+    be installed is False, and `errors` (when given) gets pair → why."""
     out = {}
     for pair in pairs:
         if model_ready(pair, models_dir):
@@ -153,9 +163,11 @@ def ensure_models(pairs: Iterable[str] = ("en_es", "es_en"), models_dir: Path | 
         try:
             _download_pair(pair, Path(models_dir or MODELS_DIR))
             out[pair] = model_ready(pair, models_dir)
-        except Exception as e:  # network down, bad zip … → site still builds, untranslated
+        except Exception as e:  # network down, bad zip, checksum … → site still builds, untranslated
             log.error("could not install translation model %s: %s", pair, e)
             out[pair] = False
+            if errors is not None:
+                errors[pair] = f"{type(e).__name__}: {e}"[:300]
     return out
 
 
@@ -191,8 +203,9 @@ def _download_pair(pair: str, models_dir: Path) -> None:
             raise RuntimeError(f"downloaded package is too small ({size} bytes)")
         want = MODEL_SHA256.get(pair)
         if want and digest != want:
-            log.warning("model %s sha256 %s differs from the pinned %s (validating structure instead)",
-                        pair, digest, want)
+            raise ModelMismatch(f"the downloaded package's sha256 {digest[:16]}… is not the pinned {want[:16]}… "
+                                f"(MODEL_SHA256 in scripts/sync/translate.py) — not installed; this direction is not "
+                                f"translated until the package is checked and its checksum updated")
         log.info("model %s: %.1f MB, sha256 %s", pair, size / 1e6, digest)
 
         unpack = tmp / "unpacked"
@@ -394,6 +407,8 @@ class TranslationCache:
         self.meta: dict = {}
         self.used: set[str] = set()
         self.dirty = False
+        self.problem: str | None = None     # the file could not be read (→ Translator.problems)
+        self.locked = False                 # …nor moved aside: save() never overwrites it
         if enabled:
             self._load()
 
@@ -402,16 +417,36 @@ class TranslationCache:
         return hashlib.sha1(f"{src}|{tgt}|{text}".encode("utf-8")).hexdigest()
 
     def _load(self) -> None:
+        """Read the cache. A file that exists but cannot be read (a bad hand edit, a broken merge) is never
+        silently replaced: it is moved aside as cache.json.bad-<UTC time> (the git history has it too), a new
+        cache is started, and `problem` says so (status.json, the run summary). If it cannot even be moved,
+        the run goes on without it and save() leaves the file alone (`locked`)."""
         try:
             with open(self.path, encoding="utf-8") as f:
                 data = json.load(f)
+            if not isinstance(data, dict):
+                raise ValueError("not a JSON object")
         except FileNotFoundError:
             return
-        except Exception as e:  # corrupted cache → start over rather than crash
-            log.warning("translation cache unreadable (%s) — starting a new one", e)
+        except Exception as e:  # corrupted cache → kept aside and reported, never overwritten
+            why = f"{type(e).__name__}: {str(e)[:80]}"
+            backup = self.path.with_name(f"{self.path.name}.bad-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}")
+            try:
+                os.replace(self.path, backup)
+            except OSError as e2:
+                self.locked = True
+                self.problem = (f"data/translations/{self.path.name} could not be read ({why}) nor moved aside ({e2}); "
+                                "the cached translations are not used this run and the file is left as it is — "
+                                "restore it from the git history")
+            else:
+                self.problem = (f"data/translations/{self.path.name} could not be read ({why}); it was saved as "
+                                f"{backup.name} and the translations are being redone — restore the file from the "
+                                "git history to keep them")
+            log.error("%s", self.problem)
             return
-        self.meta = data.pop("_meta", {}) if isinstance(data, dict) else {}
-        self.entries = {k: v for k, v in (data or {}).items() if isinstance(v, dict) and "t" in v}
+        self.meta = data.pop("_meta", {})
+        self.meta = self.meta if isinstance(self.meta, dict) else {}
+        self.entries = {k: v for k, v in data.items() if isinstance(v, dict) and "t" in v}
 
     def __len__(self) -> int:
         return len(self.entries)
@@ -512,6 +547,9 @@ class TranslationCache:
     def save(self, prune_unused: bool = False) -> None:
         """Write one entry per line (sorted) so the daily git diff only shows real changes."""
         if not self.enabled:
+            return
+        if self.locked:      # an unreadable file that could not be moved aside is never overwritten
+            log.error("translation cache not saved: %s is unreadable and still in place", self.path.name)
             return
         if prune_unused:
             stale = [k for k in self.entries if k not in self.used]
@@ -1694,6 +1732,7 @@ class Engine:
         self.threads = threads or _threads()
         self.download = download
         self._loaded: dict[str, tuple | None] = {}
+        self.errors: dict[str, str] = {}      # pair → why it could not be installed (ensure_models)
 
     def load(self, src: str, tgt: str):
         pair = PAIRS.get((src, tgt))
@@ -1703,7 +1742,7 @@ class Engine:
             return self._loaded[pair]
         res = None
         try:
-            if ensure_models([pair], self.models_dir, self.download).get(pair):
+            if ensure_models([pair], self.models_dir, self.download, errors=self.errors).get(pair):
                 import ctranslate2
                 import sentencepiece as spm
                 d = model_dir(pair, self.models_dir)
@@ -1870,6 +1909,8 @@ class Translator:
         else:
             self.cache.sync_glossary(self.glossary)
             self.cache.sync_overrides(self.overrides)
+        if self.cache.locked:           # nothing new could be saved: do not spend the model's time on it
+            self.use_model = False
         self.cache.reapply("en>es", lambda s, t: post_edit_es(t, s))
         self.engine = Engine(models_dir, threads, download)
         self.protector = Protector(self.glossary)
@@ -2009,6 +2050,16 @@ class Translator:
 
     def save(self, prune_unused: bool = False) -> None:
         self.cache.save(prune_unused=prune_unused)
+
+    @property
+    def problems(self) -> list[str]:
+        """What kept translation from working fully this run, in plain English (build_data → status.json
+        `translations.problems` and `problems.translations`): an unreadable cache.json (moved aside), a model
+        that could not be installed (a download whose checksum is not the pinned one, a failed download)."""
+        out = [self.cache.problem] if self.cache.problem else []
+        out += [f"translation model {pair} could not be installed — {why}"
+                for pair, why in sorted(self.engine.errors.items())]
+        return out
 
     def summary(self) -> dict:
         s = dict(self.stats)
@@ -2317,9 +2368,11 @@ def main(argv: list[str] | None = None) -> int:
 
     models_dir = Path(a.models_dir) if a.models_dir else None
     if a.download:
-        res = ensure_models(models_dir=models_dir)
+        why: dict[str, str] = {}
+        res = ensure_models(models_dir=models_dir, errors=why)
         for pair, ok in res.items():
-            print(f"{pair}: {'ready' if ok else 'MISSING'}  ({model_dir(pair, models_dir)})")
+            print(f"{pair}: {'ready' if ok else 'MISSING'}  ({model_dir(pair, models_dir)})"
+                  + (f" — {why[pair]}" if pair in why else ""))
         return 0 if all(res.values()) else 1
     if a.stats:
         c = TranslationCache(CACHE_PATH)

@@ -19,7 +19,10 @@ Two interchangeable listers return the same `Listing` of `Entry` objects:
 
 A listing is only `ok` when Drive returned a real folder page. This matters because
 drive.py deletes files that disappeared from a folder — it must never do that because
-of a network error, a sign-in page, or a markup change on Google's side.
+of a network error, a sign-in page, or a markup change on Google's side. Nor because of
+ONE empty answer: DriveLister reports an empty listing of a folder that held files on the
+last update as `unconfirmed` (not ok — drive.py keeps its files), and accepts it only when
+the next update finds the folder empty again.
 """
 from __future__ import annotations
 
@@ -28,6 +31,7 @@ import os
 import re
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta, timezone
+from typing import Iterable
 from urllib.parse import unquote, urlparse
 
 from bs4 import BeautifulSoup
@@ -106,6 +110,7 @@ class Listing:
     title: str | None = None         # folder name (HTML mode: page <title>)
     error: str | None = None
     via: str = "html"
+    unconfirmed: int = 0             # not ok: the folder looked empty, but it held this many files last time
 
 
 # --------------------------------------------------------------------------- "last modified" text
@@ -428,11 +433,18 @@ def _api_message(r) -> str:
 
 # --------------------------------------------------------------------------- combined lister
 class DriveLister:
-    """Uses the API when a key is configured, otherwise (or on any API error) the HTML view."""
+    """Uses the API when a key is configured, otherwise (or on any API error) the HTML view.
+
+    `had_files` (folder id → files at any depth below it on the last update) and `empty_before` (the
+    folders that already looked empty on the last update, drive.json `empty_folders`): an empty listing
+    of a folder that held files is `unconfirmed` the first time (not ok: drive.py keeps the files and
+    save_raw marks them held) and accepted the second time in a row (`confirmed_empty`). Both views have
+    answered "no files" for a moment while the files were there — that must not wipe the site."""
 
     MAX_API_FAILURES = 3
 
-    def __init__(self, *, use_api: bool = True, shortcut_cache: dict[str, str] | None = None):
+    def __init__(self, *, use_api: bool = True, shortcut_cache: dict[str, str] | None = None,
+                 had_files: dict[str, int] | None = None, empty_before: Iterable[str] = ()):
         self.html = HtmlLister(shortcut_cache=shortcut_cache)
         key = (os.environ.get("GOOGLE_API_KEY") or "").strip()
         self.api = ApiLister(key) if (use_api and key) else None
@@ -440,6 +452,10 @@ class DriveLister:
         self.api_failures = 0
         self.api_error: str | None = None
         self.listed_via: dict[str, int] = {"api": 0, "html": 0}
+        self.had_files: dict[str, int] = dict(had_files or {})
+        self.empty_before: set[str] = set(empty_before)
+        self.unconfirmed: dict[str, int] = {}       # folder id → files it held: looked empty for the first time
+        self.confirmed_empty: set[str] = set()      # looked empty on the last update too: accepted
 
     @property
     def mode(self) -> str:
@@ -451,6 +467,9 @@ class DriveLister:
         return self.html.http
 
     def list(self, folder_id: str) -> Listing:
+        return self._check_empty(folder_id, self._list(folder_id))
+
+    def _list(self, folder_id: str) -> Listing:
         if self.api is not None:
             res = self.api.list(folder_id)
             if res.ok:
@@ -466,6 +485,22 @@ class DriveLister:
         if res.ok:
             self.listed_via["html"] += 1
         return res
+
+    def _check_empty(self, folder_id: str, res: Listing) -> Listing:
+        """An ok listing with no entries at all, of a folder that held files on the last update: `unconfirmed`
+        the first time, accepted when the last update saw it empty too (see the class)."""
+        held = self.had_files.get(folder_id, 0)
+        if not res.ok or res.entries or held <= 0:
+            return res
+        if folder_id in self.empty_before:
+            self.confirmed_empty.add(folder_id)
+            log.warning("folder %s is still empty — its %d file(s) are removed", folder_id, held)
+            return res
+        self.unconfirmed[folder_id] = held
+        log.warning("folder %s looks empty, but it held %d file(s) on the last update — kept until the next update "
+                    "confirms it", folder_id, held)
+        return Listing(False, title=res.title, via=res.via, unconfirmed=held,
+                       error=f"looks empty, but it held {held} file(s) on the last update — not confirmed yet")
 
     @property
     def requests_made(self) -> int:
