@@ -2128,6 +2128,11 @@
         },
         sizeText: function (bytes) { var p = sizeParts(bytes); return this.t(p.key, { n: this.count(p.n) }); },
         photosText: function (n) { return n ? this.plural(n, "data.photos_one", "data.photos") : this.t("data.photos_none"); },
+        // a backup's preview: "12 entries, 3 receipt photos" · "1 entry, 1 receipt photo" · "2 entries, no receipt photos"
+        backupCounts: function (c) {
+          c = c || {};
+          return this.t("imp.backup_counts", { entries: this.plural(c.entries || 0, "list.entries_one", "list.entries"), photos: this.photosText(c.photos || 0) });
+        },
         bkLine: function () {
           var b = this.bk;
           return b.ready ? this.t("data.size_full", { size: this.sizeText(b.bytes), photos: this.photosText(b.photos) }) + " " +

@@ -7,8 +7,11 @@
    What it does with each request — only GET requests to OUR site; anything else is not touched:
    * never: other sites (YouTube, podcast audio, aagrapevine.org, aalavina.org, Drive…), POST, audio
      or video byte ranges (except the booth display's own files, below), feeds and calendar files
-     (.xml, .ics), the worker, the manifest and the build note (/build.json: the booth display asks
-     it "are we online?" — a kept copy would always say yes).
+     (.xml, .ics — the big /events.ics feeds are never kept), the worker, the manifest and the build note
+     (/build.json: the booth display asks it "are we online?" — a kept copy would always say yes).
+   * a month page's own calendar file (/monthly/YYYY-MM/<name>.ics, the "Add October's dates to my calendar"
+     link beside the page): kept with the page when the page is saved for offline use (keepCalendars), then
+     NETWORK FIRST with that copy offline (calendarFile); a month not saved goes to the network, never kept.
    * pages (navigations): NETWORK FIRST, revalidated with the site (cache: "no-cache": not even the
      browser's HTTP cache can hand back an old page). Online, you always get the page from the site;
      the copy is kept (the last 80 pages, plus the ones saved with "Save key pages for offline" — a saved
@@ -164,6 +167,7 @@ self.addEventListener("fetch", (event) => {
   if (req.headers.has("range")) return;
   if (req.mode === "navigate") { event.respondWith(page(event, url)); return; }
   const p = url.pathname;
+  if (MONTH_ICS.test(p)) { event.respondWith(calendarFile(event, url)); return; }
   if (/\/sw\.js$|\/build\.json$|\.(webmanifest|xml|ics|txt)$/.test(p)) return;
   if (p === BASE + BOOTH.json) { event.respondWith(boothJson(event, url)); return; }
   if (/\.json$/.test(p)) { event.respondWith(networkFirst(event)); return; }
@@ -222,6 +226,7 @@ async function keepPage(key, res) {
     // a saved page stays fresh too — and so do the styles and scripts it asks for (this version's)
     const html = await copy.clone().text();
     await saved.put(key, copy);
+    await keepCalendars(html, key);
     if (await keepAssets(html, key)) await pruneSavedAssets();
   }
   await trim("pages");
@@ -336,7 +341,11 @@ function refreshSaved() {
       const html = await copy.clone().text();
       let whole = false;
       try {
-        whole = await within(SETTLE_TIMEOUT, async () => { await keepAssets(html, req.url); return assetsKept(html, req.url); });
+        whole = await within(SETTLE_TIMEOUT, async () => {
+          await keepAssets(html, req.url);
+          await keepCalendars(html, req.url);
+          return assetsKept(html, req.url);
+        });
       } catch (e) { break; }
       if (!whole) continue;
       await saved.put(req.url, copy);
@@ -515,9 +524,10 @@ function trim(which) {
 }
 
 /* ------------------------------------------------------------------ "Save key pages for offline" */
+// This month in the site's zone (CONFIG.tz: config/site.yml site.timezone — the worker has no window.SITE)
 function chicagoMonth() {
   try {
-    const p = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", year: "numeric", month: "2-digit" }).formatToParts(new Date());
+    const p = new Intl.DateTimeFormat("en-US", { timeZone: CONFIG.tz || "America/Chicago", year: "numeric", month: "2-digit" }).formatToParts(new Date());
     return p.find((x) => x.type === "year").value + "-" + p.find((x) => x.type === "month").value;
   } catch (e) {
     return new Date().toISOString().slice(0, 7);
@@ -595,6 +605,50 @@ async function assetsKept(html, pageUrl) {
   return true;
 }
 
+/* A month page's calendar file ("Add October's dates to my calendar": /monthly/YYYY-MM/<name>.ics, beside the page
+   that links it — src/pages/monthly-ics.11ty.js). Saved with the page into gvlv-saved-assets-v1 (and pruned with it:
+   last month's goes with last month's page), so the link works offline too. Only such a file, never the big
+   /events.ics feeds (they stay network only). Fetched again each time its page is saved (its dates change with the
+   daily content); a download that fails keeps the copy there is. */
+const MONTH_ICS = /\/monthly\/\d{4}-\d{2}\/[^/]+\.ics$/;
+const CAL_RE = /<a\b[^>]*?\bhref="([^"]+)"[^>]*>/gi;
+function calendarUrls(html, pageUrl) {
+  const urls = new Set();
+  const dir = new URL(pageKey(pageUrl)).pathname;
+  let m;
+  CAL_RE.lastIndex = 0;
+  while ((m = CAL_RE.exec(html))) {
+    try {
+      const u = new URL(m[1].replace(/&amp;/g, "&"), pageUrl);
+      // beside the page itself (its own folder), a month's file
+      if (inScope(u.href) && MONTH_ICS.test(u.pathname) && u.pathname.startsWith(dir) && !u.pathname.slice(dir.length).includes("/")) {
+        urls.add(u.origin + u.pathname);
+      }
+    } catch (e) { /* not a URL */ }
+  }
+  return urls;
+}
+async function keepCalendars(html, pageUrl) {
+  const files = [...calendarUrls(html, pageUrl)];
+  if (!files.length) return;
+  const cache = await caches.open(CACHE.savedAssets);
+  await Promise.all(files.map(async (u) => {
+    try {
+      const res = await fetch(u, { credentials: "same-origin", cache: "no-cache" });
+      if (res && res.ok && res.status === 200 && res.type === "basic") await cache.put(u, res);
+    } catch (e) { /* offline again: the copy there is stays */ }
+  }));
+}
+// A month's calendar file asked for: kept with its saved page → NETWORK FIRST (the answer replaces the copy), that
+// copy offline, on a server error or after 6 s; not kept → the network, as without a worker (nothing is kept)
+async function calendarFile(event, url) {
+  const key = url.origin + url.pathname;
+  const cache = await caches.open(CACHE.savedAssets);
+  const hit = await cache.match(key);
+  if (!hit) return fetch(event.request);
+  return fromNetwork(event, hit, (copy) => cache.put(key, copy));
+}
+
 /* Keep only the files the saved pages still ask for (older versions' files go once no saved copy
    needs them any more). */
 let pruning = Promise.resolve();
@@ -604,7 +658,10 @@ function pruneSavedAssets() {
     const need = new Set();
     for (const req of await saved.keys()) {
       const res = await saved.match(req);
-      if (res) for (const u of assetUrls(await res.text(), req.url)) need.add(u);
+      if (res) {
+        const html = await res.text();
+        for (const u of [...assetUrls(html, req.url), ...calendarUrls(html, req.url)]) need.add(u);
+      }
     }
     const cache = await caches.open(CACHE.savedAssets);
     for (const req of await cache.keys()) if (!need.has(req.url)) await cache.delete(req);
@@ -636,7 +693,9 @@ async function savePage(saved, tries, keys) {
       if (!inScope(key)) continue;
       if (keys.has(key)) return "dup"; // the same page again (a redirect): counted once
       const copy = await stamp(res);
-      await keepAssets(await copy.clone().text(), key);
+      const html = await copy.clone().text();
+      await keepAssets(html, key);
+      await keepCalendars(html, key);
       await saved.put(key, copy);
       keys.add(key);
       return "saved";

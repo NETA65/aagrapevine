@@ -171,7 +171,8 @@
 
   /* Next occurrence of an "nth weekday of month" meeting, in Central time (window.SITE.tz).
      Same rule and the same code as the build (src/_data/meeting.js: central-time.js ruleDate, window.GVTime
-     here): a month without a 5th <weekday> is skipped, a missing end means one hour, the offset comes from the
+     here): a month without a 5th <weekday> is skipped, a missing end means one hour, an overnight end
+     ("22:00"–"01:00") is the next morning (GVTime.overnight — the meeting counts until then), the offset comes from the
      wall clock Intl gives (no "shortOffset", which iOS 15.3 and older lack — and no guessed −6 hours: the
      summer meeting stays at 7 PM) and is checked again on the day the clocks change. The search starts one
      month back so an evening meeting on the last day of a month (already the next month in UTC) is still found
@@ -867,8 +868,10 @@
       el.textContent = GV.fmtDate(d, { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit", timeZone: undefined });
       el.title = GV.relative(d);
     });
+    // ("" for a date it cannot read: the build's own text stays)
     document.querySelectorAll("time[data-relative]").forEach(function (el) {
-      var d = el.getAttribute("datetime"); if (d) el.textContent = GV.relative(d);
+      var d = el.getAttribute("datetime"), r = d ? GV.relative(d) : "";
+      if (r) el.textContent = r;
     });
     // Copy buttons: <button data-copy="text">
     document.addEventListener("click", function (e) {

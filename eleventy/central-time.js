@@ -28,10 +28,15 @@
      ymdOf(ms, tz)               "YYYY-MM-DD" of an instant in the zone ("" without one)
      nthWeekday(y, mo, wd, n)    the day of the month of its nth weekday (wd 0 = Sunday; n 1–5, or −1 = the last),
                                  null when the month has no such day (a 5th Wednesday)
+     overnight(start, end)       an end earlier on the clock than the start that is the next morning: the event
+                                 then lasts at most OVERNIGHT_MAX_HOURS ("22:00"–"01:00" → true; "19:00"–"08:00",
+                                 13 hours, is a slip of the pen → false; "19:00"–"20:00" → false). "HH:MM" or [h, mi];
+                                 the rule of scripts/sync/meeting.py overnight()
      ruleDate(y, mo, rule, tz)   a monthly meeting's date in a month: rule { weekday 0–6, n, start "HH:MM", end,
                                  skip ["YYYY-MM-DD"] } (the countdown's shape: src/_data/meeting.js `rule`,
                                  committee.js cmRuleObj) → { ymd, start, end } (ms) or null (no such day, a
-                                 skipped date). No end, or one not after the start: one hour (the site's rule)
+                                 skipped date). An overnight end is on the next day ("22:00"–"01:00" ends at 1 AM
+                                 the next morning); no end, or one not after the start: one hour (the site's rule)
      timeRange(a, b, locale, tz, opts)  "7:00 – 8:00 PM CDT" (Intl formatRange); a time that ends after midnight
                                  "7:00 PM – 1:00 AM CST" — never the numeric dates Intl writes into a range over two
                                  days ("12/31/2026, 7:00 PM – 1/1/2027, 12:00 AM"); the zone is said once, or at
@@ -45,6 +50,7 @@
                                  details could come out lower after a change, and the change would be ignored). */
 
 var DEFAULT_ZONE = "America/Chicago";
+var OVERNIGHT_MAX_HOURS = 12;            // scripts/sync/meeting.py OVERNIGHT_MAX_HOURS
 var ZONE = DEFAULT_ZONE;
 var SEQ_EPOCH = Date.UTC(2026, 0, 1);
 var FMT = {};
@@ -146,6 +152,13 @@ function nthWeekday(y, mo, weekday, n) {
   return day >= 1 && day <= dim ? day : null;
 }
 
+function overnight(start, end, maxHours) {
+  var s = typeof start === "object" && start ? start : clock(start), e = typeof end === "object" && end ? end : clock(end);
+  if (!s || !e) return false;
+  var a = s[0] * 60 + s[1], b = e[0] * 60 + e[1];
+  return b < a && 24 * 60 - a + b <= (maxHours === undefined ? OVERNIGHT_MAX_HOURS : maxHours) * 60;
+}
+
 // (the site's defaults: the 3rd Wednesday, 19:00)
 function ruleDate(y, mo, rule, tz) {
   rule = rule || {};
@@ -162,7 +175,8 @@ function ruleDate(y, mo, rule, tz) {
   var s = clock(rule.start) || [19, 0], e = clock(rule.end);
   var start = zoneInstant(y, mo, day, s[0], s[1], tz);
   if (isNaN(start)) return null;
-  var end = e ? zoneInstant(y, mo, day, e[0], e[1], tz) : NaN;
+  // an overnight end is the next morning's wall clock (zoneInstant rolls the day over: DST-safe)
+  var end = e ? zoneInstant(y, mo, day + (overnight(s, e) ? 1 : 0), e[0], e[1], tz) : NaN;
   return { ymd: ymd, start: start, end: end > start ? end : start + 3600e3 };
 }
 
@@ -208,4 +222,4 @@ function icsSequence(ms) {
   return isFinite(t) && t > SEQ_EPOCH ? Math.floor((t - SEQ_EPOCH) / 60000) : 0;
 }
 
-export { DEFAULT_ZONE, zone, setZone, isZone, zoneParts, offsetMinutes, zoneInstant, wallInstant, clock, ymdOf, nthWeekday, ruleDate, timeRange, icsSequence };
+export { DEFAULT_ZONE, zone, setZone, isZone, zoneParts, offsetMinutes, zoneInstant, wallInstant, clock, ymdOf, nthWeekday, overnight, ruleDate, timeRange, icsSequence };

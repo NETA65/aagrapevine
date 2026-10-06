@@ -266,14 +266,14 @@ class Settings(unittest.TestCase):
         self.assertEqual(m["platform"], "Zoom")
         self.assertTrue(m["note"] and m["note_es"])
         strings = {}
-        for f in ("committee", "community", "home", "orientation", "read"):
+        for f in ("committee", "community", "home", "orientation", "read", "report"):
             strings.update(json.loads(read("src", "_i18n", f + ".json")))
         keys = ["committee.meeting.hero_sub", "committee.meeting.join", "committee.meeting.join_hint",
                 "committee.meeting.how_to_join_text", "committee.meeting.cal_desc", "committee.meeting.cal_join",
                 "committee.meeting.copy_link", "committee.meeting.tip_phone", "committee.meeting.contact_text",
                 "committee.meetings.committee_eyebrow", "committee.meetings.meta_desc", "home.meeting_join",
                 "home.meeting_cal_desc", "orientation.live_meeting_sub", "orientation.ns_meeting_cta", "read.gvr.s_meeting",
-                "committee.events.src_meetings_text", "community.share.msg_long_text"]
+                "committee.events.src_meetings_text", "community.share.msg_long_text", "report.c_next", "report.c_join"]
         for k in keys:
             for lang in ("en", "es"):
                 with self.subTest(key=k, lang=lang):

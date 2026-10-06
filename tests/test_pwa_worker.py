@@ -1176,6 +1176,100 @@ class Updates(unittest.TestCase):
         self.assertTrue(r["script"])
 
 
+# A month page's calendar file (class MonthCalendar): its own world, same harness.
+CALENDAR_JS = HARNESS_JS + r"""
+const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", year: "numeric", month: "2-digit" }).formatToParts(new Date());
+const MONTH = parts.find((x) => x.type === "year").value + "-" + parts.find((x) => x.type === "month").value;
+const PAGE = B + "monthly/" + MONTH + "/", ICS = PAGE + "neta65-grapevine-" + MONTH + "-en.ics";
+const OLD_PAGE = B + "monthly/2020-01/", OLD_ICS = OLD_PAGE + "neta65-grapevine-2020-01-en.ics";
+const FEED = B + "events.ics", ELSEWHERE = B + "monthly/2020-02/neta65-grapevine-2020-02-en.ics";
+const cal = (v) => ({ body: "BEGIN:VCALENDAR\r\nX-V:" + v + "\r\nEND:VCALENDAR\r\n", ct: "text/calendar; charset=utf-8" });
+const w = world();
+shellOnline(w);
+await w.lifecycle("install");
+for (const p of w.CONFIG.save.filter((p) => !p.includes("{month}"))) w.page(B + p, { body: html(p || "home") });
+w.page(PAGE, { body: html("Month", `<a class="link" href="${ICS}" type="text/calendar">Add this month's dates</a> ` +
+                                    `<a href="${FEED}">every event</a> <a href="${ELSEWHERE}">another month</a> MONTH`) });
+w.page(ICS, cal(1));
+w.page(FEED, cal("FEED"));
+// last month's page, saved last month, with its calendar file: both go with this save (dropOldMonths, the prune)
+await (await w.cache("gvlv-saved-v1")).put(ORIGIN + OLD_PAGE, new Response(html("Old", `<a href="${OLD_ICS}">Add</a>`), { headers: { "content-type": "text/html" } }));
+await (await w.cache("gvlv-saved-assets-v1")).put(ORIGIN + OLD_ICS, new Response("OLD"));
+R.reply = (await w.message({ type: "SAVE", lang: "en" })).at(-1);
+R.assets = ((await w.keys("gvlv-saved-assets-v1")) || []).filter((u) => u.endsWith(".ics")).map((u) => u.slice(ORIGIN.length));
+const asked = (u) => w.fetched.filter((x) => x === ORIGIN + u).length;
+R.feedAsked = asked(FEED);
+// online: the site's answer, which becomes the copy
+w.page(ICS, cal(2));
+R.online = (await w.request(ICS)).body;
+// offline: the copy; the feed and a month not saved are not answered by the worker (straight to the network)
+for (const u of [ICS, FEED, ELSEWHERE]) w.net.delete(ORIGIN + u);
+R.offline = await w.request(ICS);
+R.feed = await w.request(FEED);
+w.page(ELSEWHERE, cal("ELSEWHERE"));
+R.elsewhere = (await w.request(ELSEWHERE)).body;
+R.assetsAfter = ((await w.keys("gvlv-saved-assets-v1")) || []).filter((u) => u.endsWith(".ics")).map((u) => u.slice(ORIGIN.length));
+// the month page opened online again: its calendar file is fetched again with it (a saved page stays fresh)
+w.page(PAGE, { body: html("Month", `<a href="${ICS}">Add</a> MONTH-2`) });
+w.page(ICS, cal(3));
+await w.request(PAGE, { navigate: true });
+w.net.delete(ORIGIN + ICS);
+R.refreshed = (await w.request(ICS)).body;
+R.month = MONTH;
+
+/* ---------------- the site's zone (config/site.yml site.timezone): "this month" is the month there ---------------- */
+R.zones = {};
+for (const tz of [null, "America/Chicago", "Pacific/Kiritimati", "Pacific/Pago_Pago"]) {
+  const code = SW.render({ build: { version: "t1" }, collections: { all: [] }, site: tz ? { timezone: tz } : {} });
+  const ctx = vm.createContext({ self: { addEventListener() {}, location: { origin: ORIGIN } }, console, URL, Request, Response, Headers });
+  vm.runInContext(code, ctx);
+  // 2026-10-31 12:00 UTC: still October in Central time and in Samoa, already November on Kiritimati (UTC+14)
+  vm.runInContext("{ const D = Date; Date = class extends D { constructor(...a) { if (a.length) super(...a); else super(D.UTC(2026, 9, 31, 12)); } }; }", ctx);
+  R.zones[tz || "none"] = [vm.runInContext("CONFIG.tz", ctx), vm.runInContext("chicagoMonth()", ctx)];
+}
+out(R);
+"""
+
+
+class MonthCalendar(unittest.TestCase):
+    """A month page saved for offline use opens its own calendar file ("Add October's dates to my calendar") offline
+    too: the file is kept with the page (in gvlv-saved-assets-v1, pruned with it); the big /events.ics feeds and a
+    month not saved are never kept nor answered by the worker. And "this month" is the month in the site's zone."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.r = None
+
+    def setUp(self):
+        if MonthCalendar.r is None:
+            MonthCalendar.r = run_js(self, CALENDAR_JS, needs_modules=False, env={"PATH_PREFIX": B}, timeout=120)
+        self.r = MonthCalendar.r
+
+    def test_the_month_file_is_saved_with_its_page(self):
+        r, m = self.r, self.r["month"]
+        self.assertEqual(r["reply"]["type"], "SAVE_DONE")
+        self.assertEqual(r["assets"], [f"{B}monthly/{m}/neta65-grapevine-{m}-en.ics"], "last month's went with its page")
+        self.assertEqual(r["feedAsked"], 0, "the feed a saved page links is never fetched for it")
+
+    def test_online_the_site_offline_the_copy(self):
+        r = self.r
+        self.assertIn("X-V:2", r["online"])
+        self.assertEqual(r["offline"]["status"], 200)
+        self.assertIn("X-V:2", r["offline"]["body"], "the copy the last online answer left")
+        self.assertIn("X-V:3", r["refreshed"], "the page opened online again brings its file up to date")
+
+    def test_feeds_and_months_not_saved_are_left_alone(self):
+        r, m = self.r, self.r["month"]
+        self.assertIsNone(r["feed"], "/events.ics: not answered by the worker")
+        self.assertIn("X-V:ELSEWHERE", r["elsewhere"], "a month not saved: the network")
+        self.assertEqual(r["assetsAfter"], [f"{B}monthly/{m}/neta65-grapevine-{m}-en.ics"], "and never kept")
+
+    def test_this_month_is_the_month_in_the_sites_zone(self):
+        self.assertEqual(self.r["zones"], {"none": ["America/Chicago", "2026-10"], "America/Chicago": ["America/Chicago", "2026-10"],
+                                           "Pacific/Kiritimati": ["Pacific/Kiritimati", "2026-11"],
+                                           "Pacific/Pago_Pago": ["Pacific/Pago_Pago", "2026-10"]})
+
+
 MEDIA = B + "about/booth/media/"
 SHOW = B + "about/booth.json"
 VIDEO = "0123456789" * 100                                   # the saved video in BOOTH_JS: byte i is the digit i % 10

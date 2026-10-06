@@ -402,7 +402,7 @@ pageScripts: ["/assets/js/published.js", "/assets/js/published-archive.js"]
 {#- settings + strings for published.js -#}
 <script type="application/json" id="pw-config">{{ {
   lang: lang,
-  tz: "America/Chicago",
+  tz: site.timezone or "America/Chicago",
   today: V.today,
   listDays: V.listDays,
   defDays: D,

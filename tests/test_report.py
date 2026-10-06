@@ -159,9 +159,13 @@ const build = (db, meeting) => {
   const model = R.reportModel(db, meeting, carry, site, now);
   return { model, text: { en: R.reportText(model, "en"), es: R.reportText(model, "es") } };
 };
+// the committee meeting on another platform (config/site.yml meeting.platform): the report says that one
+const meet = (lang) => R.reportModel(input.full, input.meeting, carry, { ...site, meeting: { ...(site.meeting || {}), platform: "Google Meet" } }, now)
+  .langs[lang].sections.find((x) => x.id === "committee").text;
 out({
   ids: R.SECTION_IDS,
   full: build(input.full, input.meeting),
+  platform: { en: meet("en"), es: meet("es") },
   empty: build(input.empty, {}),
   ui: { en: R.uiStrings("en"), es: R.uiStrings("es") },
   events: R.upcomingEvents(input.full, now).map((e) => [e.id, e._recurring, e._tentative]),
@@ -243,6 +247,22 @@ class Model(unittest.TestCase):
             with self.subTest(section=sid):
                 self.assertEqual(bool(en[sid]["text"].strip()), bool(es[sid]["text"].strip()), "EN and ES say something alike")
 
+    def test_the_meeting_platform_is_the_settings_one(self):
+        # report.c_next / c_join take {platform} from config/site.yml meeting.platform (Zoom when not set)
+        for lang in ("en", "es"):
+            with self.subTest(lang=lang):
+                S = {k: v["text"] for k, v in self.sections("full", lang).items()}
+                self.assertIn("Zoom", S["committee"])
+                other = self.r["platform"][lang]
+                self.assertIn(self.tr("report.c_join", lang, url=SITE_URL + ("/es" if lang == "es" else "") + "/meetings/",
+                                      platform="Google Meet"), other)
+                self.assertIn("on Google Meet." if lang == "en" else "por Google Meet.", other)
+                self.assertNotIn("Zoom", other)
+        for key in ("report.c_next", "report.c_join"):
+            for lang in ("en", "es"):
+                self.assertIn("{platform}", self.s[key][lang], (key, lang))
+                self.assertNotIn("Zoom", self.s[key][lang], (key, lang))
+
     def test_what_the_sections_say(self):
         for lang in ("en", "es"):
             S = {k: v["text"] for k, v in self.sections("full", lang).items()}
@@ -252,7 +272,7 @@ class Model(unittest.TestCase):
                                                                month="October 2026" if lang == "en" else "octubre de 2026")))
             with self.subTest(lang=lang, section="committee"):
                 self.assertIn("October 21" if lang == "en" else "21 de octubre", S["committee"])
-                self.assertIn(self.tr("report.c_join", lang, url=f"{base}/meetings/"), S["committee"])
+                self.assertIn(self.tr("report.c_join", lang, url=f"{base}/meetings/", platform="Zoom"), S["committee"])
                 self.assertNotIn(self.s["report.c_none"][lang], S["committee"])
             with self.subTest(lang=lang, section="issues"):
                 self.assertIn("Loneliness" if lang == "en" else "Soledad", S["issues"])
@@ -583,7 +603,8 @@ const lang = (L) => ({
   custom: "My section", paste: "(paste)", meet: { pick: "Meetings in {where}:", none: "none", more: "more" },
 });
 const D = { v: 1, month: "2026-10", langs: { en: lang("en"), es: lang("es") }, meetings: { options: [] } };
-const UI = { prev_text: "You worked on a {month} report", prev_btn: "Start from my {month} draft", prev_done: "Started from {month}", downloaded: "{file}" };
+const UI = { prev_title: "Start from last month's draft?", prev_title_month: "Start from your {month} draft?",
+             prev_text: "You worked on a {month} report", prev_btn: "Start from my {month} draft", prev_done: "Started from {month}", downloaded: "{file}" };
 const store = new Map(Object.entries(input.store || {}).map(([k, v]) => [k, JSON.stringify(v)]));
 const nowMs = Date.parse(input.now || "2026-10-05T17:00:00Z");
 class FakeDate extends Date { constructor(...a) { if (a.length) super(...a); else super(nowMs); } static now() { return nowMs; } }
@@ -666,14 +687,15 @@ class LastMonthsDraft(unittest.TestCase):
     def test_the_offer_and_what_it_carries_over(self):
         r = self.run_editor({"gv-report:2026-09:en": self.SEPT, "gv-report:2026-08:en": {"custom": [{"id": "custom-1", "title": "Old", "text": "x"}]}}, r"""
           let a = boot();
-          const offered = a.prev && [a.prev.month, a.prev.label, a.prevText(), a.prevBtn()];
+          const offered = a.prev && [a.prev.month, a.prev.label, a.prevText(), a.prevBtn(), a.prevTitle()];
           a.startFromPrev();
           const d = JSON.parse(JSON.stringify(a.d));
           const after = [a.prev, a.textOf("committee"), a.textOf("asks"), a.textOf("notes"), a.titleOf("notes"), a.isOn("shop"),
                          a.plain().includes("Two new GVRs"), a.ui && a.msg];
           const again = boot();
           out({ offered, d, after, againPrev: again.prev, stored: JSON.parse(store.get("gv-report:2026-10:en")) });""")
-        self.assertEqual(r["offered"], ["2026-09", "September 2026", "You worked on a September 2026 report", "Start from my September 2026 draft"])
+        self.assertEqual(r["offered"], ["2026-09", "September 2026", "You worked on a September 2026 report", "Start from my September 2026 draft",
+                                        "Start from last month's draft?"])
         p, committee, asks, notes, notes_title, shop_on, custom_in, msg = r["after"]
         self.assertIsNone(p)                                                   # the offer is gone
         self.assertEqual(committee, "Text of committee", "a section made from the site's data: this month's")
@@ -697,18 +719,35 @@ class LastMonthsDraft(unittest.TestCase):
         }, r"""
           const a = boot();
           const first = a.prev && a.prev.month;
+          const title = a.prevTitle();                         // an older draft: its month in the title
           a.setText("asks", "This month's own words");        // editing this month: the offer goes
           const afterEdit = a.prev;
           a.saveNow();
           const reopened = boot().prev;
           a.setLang("es");                                    // the Spanish report: its own drafts
           const es = a.prev && a.prev.month;
-          out({ first, afterEdit, reopened, es, pruned: store.has("gv-report:2026-06:en") });""")
+          out({ first, title, afterEdit, reopened, es, pruned: store.has("gv-report:2026-06:en") });""")
         self.assertEqual(r["first"], "2026-08", "September's draft has nothing to carry over; August's has")
+        self.assertEqual(r["title"], "Start from your August 2026 draft?", "not 'last month's' for a draft two months old")
         self.assertIsNone(r["afterEdit"])
         self.assertIsNone(r["reopened"])
         self.assertEqual(r["es"], "2026-09")
         self.assertFalse(r["pruned"])
+
+
+class DraftTitleAcrossTheYear(unittest.TestCase):
+    def test_january_offers_decembers_as_last_months_and_the_strings_exist(self):
+        r = run_js(self, EDITOR2.replace('month: "2026-10"', 'month: "2027-01"') + r"""
+          const a = boot();
+          out({ dec: [a.prev && a.prev.month, a.prevTitle()] });""",
+                   data={"store": {"gv-report:2026-12:en": {"custom": [{"id": "custom-1", "title": "Mine", "text": "x"}]}},
+                         "now": "2027-01-05T17:00:00Z"}, needs_modules=False)
+        self.assertEqual(r["dec"], ["2026-12", "Start from last month's draft?"])
+        s = strings()
+        self.assertEqual((s["report.prev_title_month"]["en"], s["report.prev_title_month"]["es"]),
+                         ("Start from your {month} draft?", "¿Empezar con tu borrador de {month}?"))
+        page = (ROOT / "src" / "pages" / "monthly.njk").read_text(encoding="utf-8")
+        self.assertIn('<span x-text="prevTitle()">{{ "report.prev_title" | t(lang) }}</span>', page)
 
 
 class TimedTexts(unittest.TestCase):

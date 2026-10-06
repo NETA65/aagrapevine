@@ -120,6 +120,7 @@ IG_NEWEST = 3                                        # community.js IG_NEWEST: a
 IG_GENERIC_TITLE = re.compile(r"(?i)^\s*(?:aa\s+grapevine|la\s+vi[ñn]a)\s*[—–-]\s*instagram\s*$")  # media.js: a post without a caption
 PHOTO_KINDS = ("photo", "video_file")                # committee.js isPhotoItem: the media of an album on /photos/
 WEEKDAYS = {"sunday": 0, "monday": 1, "tuesday": 2, "wednesday": 3, "thursday": 4, "friday": 5, "saturday": 6}  # monthly.js WD
+OVERNIGHT_MAX_HOURS = 12                             # meeting.py OVERNIGHT_MAX_HOURS (central-time.js overnight)
 # The sources the e-mail waits for (their data must be tried after the month ended — status.json
 # sources[].attempted) and how long a source may have been idle before it no longer counts as running.
 FRESH_SOURCES = ("announcements", "manual_events", "drive", "articles", "pdfs", "youtube", "podcasts", "instagram")
@@ -1352,6 +1353,13 @@ def parse_hhmm(v: Any, default: tuple[int, int]) -> tuple[int, int]:
     return (h, mi) if 0 <= h <= 23 and 0 <= mi <= 59 else default
 
 
+def overnight(start: tuple[int, int], end: tuple[int, int]) -> bool:
+    """scripts/sync/meeting.py overnight(): an end earlier on the clock than the start is the next morning when
+    the meeting then lasts at most OVERNIGHT_MAX_HOURS ("22:00"–"01:00"); further back it is a slip of the pen."""
+    (sh, sm), (eh, em) = start, end
+    return (eh, em) < (sh, sm) and (24 * 60 - (sh * 60 + sm)) + (eh * 60 + em) <= OVERNIGHT_MAX_HOURS * 60
+
+
 def meeting_by_rule(key: str, meeting: dict) -> dict | None:
     """The committee meeting of a month from config/site.yml `meeting:`, read as the daily sync reads it
     (scripts/sync/meeting.py meeting_rule) and as the website's /digest/ does (monthly.js meetingByRule through
@@ -1359,7 +1367,8 @@ def meeting_by_rule(key: str, meeting: dict) -> dict | None:
     Wednesday; -1 = the last; anything but a whole number 1–5 or -1 counts as the 3rd), None on a skip date
     (one date written without the brackets counts too) or when the month has no such day; start / end
     (Central, any spelling parse_hhmm reads; default 19:00, the end one hour after the start when it is
-    missing, unreadable or not after it) as UTC ISO."""
+    missing, unreadable or not after it — except an overnight end, the next morning: "22:00"–"01:00",
+    MonthlyRule.span) as UTC ISO."""
     name = str(meeting.get("weekday") or "wednesday").strip().lower()
     wd = WEEKDAYS.get(WEEKDAYS_ES.get(name, name), 3)
     try:
@@ -1385,17 +1394,19 @@ def meeting_by_rule(key: str, meeting: dict) -> dict | None:
         return None
     sh, sm = parse_hhmm(meeting.get("start"), (19, 0))
     eh, em = parse_hhmm(meeting.get("end"), (-1, -1))
-    if (eh, em) <= (sh, sm):         # missing / unreadable / not after the start: one hour (MonthlyRule.span)
+    next_day = eh >= 0 and overnight((sh, sm), (eh, em))   # "22:00"–"01:00": 1 AM the next morning (MonthlyRule.span)
+    if (eh, em) <= (sh, sm) and not next_day:     # missing / unreadable / not after the start: one hour
         eh, em = (sh + 1, sm) if sh < 23 else (23, 59)
 
-    def at(h: int, mi: int) -> str:
-        local = datetime(y, m, d, h, mi)
+    def at(h: int, mi: int, later: int = 0) -> str:
+        day = date(y, m, d) + timedelta(days=later)              # the wall clock of that day (DST-safe)
+        local = datetime(day.year, day.month, day.day, h, mi)
         if TZ is not None:
             return local.replace(tzinfo=TZ).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        off = to_central(datetime(y, m, d, h, mi, tzinfo=timezone.utc)).utcoffset() or timedelta(hours=-6)
+        off = to_central(datetime(day.year, day.month, day.day, h, mi, tzinfo=timezone.utc)).utcoffset() or timedelta(hours=-6)
         return (local.replace(tzinfo=timezone.utc) - off).strftime("%Y-%m-%dT%H:%M:%SZ")
     try:
-        return {"ymd": ymd, "start": at(sh, sm), "end": at(eh, em)}
+        return {"ymd": ymd, "start": at(sh, sm), "end": at(eh, em, 1 if next_day else 0)}
     except (TypeError, ValueError):
         return None
 

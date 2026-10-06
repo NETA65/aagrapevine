@@ -11,7 +11,7 @@
 
 import { monthlyRule, TZ } from "../../eleventy.config.js";
 // The site's one Central-time helper (the browser runs the same code: /assets/js/central-time.js)
-import { isZone, zoneParts, zoneInstant, ymdOf, ruleDate, timeRange, icsSequence, offsetMinutes } from "../central-time.js";
+import { isZone, zoneParts, zoneInstant, ymdOf, overnight, ruleDate, timeRange, icsSequence, offsetMinutes } from "../central-time.js";
 import { iconSvg } from "../icons.js";
 
 export { TZ }; // config/site.yml site.timezone (America/Chicago)
@@ -232,7 +232,8 @@ const meetingCfg = (cfg) => monthlyRule(cfg && typeof cfg === "object" ? cfg : {
 // Start / end ("HH:MM", Central) of the committee meeting from config/site.yml `meeting`.
 // A missing end (or one that is not after the start) means a 1-hour meeting — the same
 // rule as src/_data/meeting.js and scripts/sync/meeting.py, so the hero, the event
-// cards, the calendar files and the live countdown always agree.
+// cards, the calendar files and the live countdown always agree. An overnight end ("22:00"–"01:00",
+// central-time.js overnight) stays: the next morning.
 const hhmmMinutes = (s) => {
   const [h, m] = String(s || "").split(":").map(Number);
   return (h || 0) * 60 + (m || 0);
@@ -244,7 +245,7 @@ function plusHour(hhmm) {
 const meetingStart = (cfg = {}) => String(cfg.start || "19:00");
 function meetingEnd(cfg = {}) {
   const start = meetingStart(cfg);
-  return cfg.end && hhmmMinutes(cfg.end) > hhmmMinutes(start) ? String(cfg.end) : plusHour(start);
+  return cfg.end && (hhmmMinutes(cfg.end) > hhmmMinutes(start) || overnight(start, String(cfg.end))) ? String(cfg.end) : plusHour(start);
 }
 // Unquoted YAML dates (skip_dates: [2026-12-16]) arrive as Date objects → "YYYY-MM-DD".
 const skipDates = (cfg = {}) => (cfg.skip_dates || []).map((d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d)));
@@ -279,13 +280,16 @@ function meetingRuleText(cfg = {}, lang = "en") {
   return t("committee.rule", lang, { ord, weekday });
 }
 
-// "7:00 – 8:00 PM" (Central wall clock), from HH:MM strings.
+// "7:00 – 8:00 PM" (Central wall clock), from HH:MM strings; an overnight meeting "10:00 PM – 1:00 AM" (its end
+// is the next morning: never Intl's "1/21/2026, 10:00 PM – 1/22/2026, 1:00 AM").
 function meetingTimeRange(cfg = {}, lang = "en") {
   cfg = meetingCfg(cfg);
   const a = atChicago(2026, 0, 21, meetingStart(cfg));
-  let b = atChicago(2026, 0, 21, meetingEnd(cfg));
+  const night = overnight(meetingStart(cfg), meetingEnd(cfg));
+  let b = atChicago(2026, 0, night ? 22 : 21, meetingEnd(cfg));
   if (b <= a) b = new Date(a.getTime() + 3600e3); // a 23:59 start (a 23:30 one ends at 23:59, as in the sync)
-  return fmtRange(a, b, lang, { hour: "numeric", minute: "2-digit" });
+  const opts = { hour: "numeric", minute: "2-digit" };
+  return night ? `${fmtRange(a, a, lang, opts)} – ${fmtRange(b, b, lang, opts)}` : fmtRange(a, b, lang, opts);
 }
 
 // The repeat line of a monthly event from config/site.yml `recurring_events:` (build_data writes its

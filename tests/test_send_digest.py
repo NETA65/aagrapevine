@@ -669,6 +669,25 @@ class Wording(unittest.TestCase):
         self.assertEqual(D.meeting_by_rule("2026-09", {"weekday": " Miércoles ", "week_of_month": 3})["ymd"], "2026-09-16")
         self.assertIsNone(D.meeting_by_rule("2026-09", {"skip_dates": "2026-09-16"}))
 
+    def test_an_overnight_meeting_ends_the_next_morning(self):
+        """An end earlier on the clock, at most 12 hours later, is the next morning (scripts/sync/meeting.py
+        overnight / MonthlyRule.span) — the same dates as the sync, also on the night the clocks go back."""
+        from zoneinfo import ZoneInfo
+
+        from scripts.sync import meeting as M
+        for start, end in (("22:00", "01:00"), ("23:00", "00:30"), ("19:00", "07:00"), ("19:00", "08:00"),
+                           ("19:00", "20:00"), ("23:30", "")):
+            with self.subTest(start=start, end=end):
+                cfg = {"weekday": "saturday", "week_of_month": -1, "start": start, "end": end}
+                if end:
+                    self.assertEqual(D.overnight(M.parse_hhmm(start, (19, 0)), M.parse_hhmm(end, (19, 0))),
+                                     M.overnight(M.parse_hhmm(start, (19, 0)), M.parse_hhmm(end, (19, 0))))
+                want = M.upcoming_rule_dates(M.meeting_rule(cfg), 1, ZoneInfo("America/Chicago"),
+                                             datetime(2026, 10, 1, tzinfo=timezone.utc))[0]
+                self.assertEqual(D.meeting_by_rule("2026-10", cfg), want)
+        self.assertEqual(D.meeting_by_rule("2026-10", {"weekday": "saturday", "week_of_month": -1, "start": "22:00", "end": "01:00"}),
+                         {"ymd": "2026-10-31", "start": "2026-11-01T03:00:00Z", "end": "2026-11-01T06:00:00Z"})
+
 
 class PostMarkdown(unittest.TestCase):
     """A bulletin post in the e-mail: whatever Markdown the chair wrote (content/bulletin/README.md) is

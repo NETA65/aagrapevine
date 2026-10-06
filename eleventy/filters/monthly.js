@@ -59,7 +59,7 @@
 import { qrSvg, issueLabel, issueInSentence, issueLabelOf } from "./community.js";
 import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs } from "./committee.js";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
-import { wallInstant } from "../central-time.js";
+import { overnight, wallInstant } from "../central-time.js";
 import { shopFromMonthly, money, shopPriceChangeIn, dayLabel } from "./shop.js";
 import { groupIssues, issueName } from "./read.js";
 
@@ -209,6 +209,7 @@ function nthWeekday(y, m0, weekday, n) {
 }
 // A Central wall-clock date and time → the instant (UTC ISO): the site's one helper, eleventy/central-time.js
 // (right on the days the clocks change; a time it cannot read is 19:00, the meeting's default)
+const ymdPlus = (ymd, n) => new Date(Date.parse(`${ymd}T12:00:00Z`) + n * 864e5).toISOString().slice(0, 10);
 function chicagoInstant(ymd, hhmm) {
   const ms = wallInstant(ymd, hhmm || "19:00", TZ);
   return new Date(Number.isFinite(ms) ? ms : wallInstant(ymd, "19:00", TZ)).toISOString();
@@ -216,8 +217,9 @@ function chicagoInstant(ymd, hhmm) {
 /** A month's date of a monthly rule in the shape of config/site.yml `meeting:` (the committee meeting, or a
  *  recurring event's rule) → { ymd, start, end } (UTC ISO), null on a skip date or when the month has no such
  *  day. Read the way scripts/sync/meeting.py reads it (eleventy.config.js monthlyRule): "5pm", "7:00 PM",
- *  "sábado", "third" … never stop the build or move the time by 12 hours, and an end that is missing or not
- *  after the start makes it one hour long (MonthlyRule.span) — as on /events/ and /meetings/. */
+ *  "sábado", "third" … never stop the build or move the time by 12 hours, an end that is missing or not
+ *  after the start makes it one hour long (MonthlyRule.span) — as on /events/ and /meetings/ — and an overnight
+ *  end ("22:00"–"01:00", central-time.js overnight) is the next morning. */
 export function meetingByRule(key, meeting = {}) {
   const rule = monthlyRule(meeting && typeof meeting === "object" ? meeting : {});
   const wd = WD[String(rule.weekday || "wednesday").toLowerCase()] ?? 3;
@@ -228,7 +230,8 @@ export function meetingByRule(key, meeting = {}) {
   const ymd = `${key}-${pad(d)}`;
   const skip = new Set(rule.skip_dates || []);
   if (skip.has(ymd)) return null;
-  return { ymd, start: chicagoInstant(ymd, rule.start || "19:00"), end: chicagoInstant(ymd, rule.end || "20:00") };
+  const endDay = overnight(rule.start || "19:00", rule.end || "20:00") ? ymdPlus(ymd, 1) : ymd;
+  return { ymd, start: chicagoInstant(ymd, rule.start || "19:00"), end: chicagoInstant(endDay, rule.end || "20:00") };
 }
 
 /* ------------------------------------------------------------------ */

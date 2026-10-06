@@ -48,6 +48,11 @@ CONFIGS = {
     "end before the start": ('meeting: {start: "19:00", end: "08:00"}', LINE),
     "no end": ('meeting: {start: "18:30"}', "Every third Wednesday of the month · 6:30 – 7:30 PM"),
     "late start": ('meeting: {start: "23:30"}', "Every third Wednesday of the month · 11:30 – 11:59 PM"),
+    # an end earlier on the clock, at most 12 hours later: the next morning (meeting.py overnight) — every page
+    # agrees with the sync's dates, never a one-hour meeting
+    "overnight": ('meeting: {start: "22:00", end: "01:00"}', "Every third Wednesday of the month · 10:00 PM – 1:00 AM"),
+    "overnight, 12-hour clock": ('meeting: {start: "11:00 PM", end: "12:30 AM"}',
+                                 "Every third Wednesday of the month · 11:00 PM – 12:30 AM"),
     "words": ("meeting: {week_of_month: third, weekday: sábado, start: late}", "Every third Saturday of the month · 7:00 – 8:00 PM"),
     "one skip date": ("meeting: {week_of_month: -1, weekday: Friday, skip_dates: 2026-10-30}",
                       "Every last Friday of the month · 7:00 – 8:00 PM"),

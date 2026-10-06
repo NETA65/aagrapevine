@@ -37,7 +37,9 @@
   {%- set gvm = (db.meetings.items | where("in_area", true)) | length -%}
   <p class="o101-live-label">{{ "orientation.live_meeting_label" | t(lang) }}</p>
   {%- if meeting.next %}
-  <p class="o101-live-main"><time datetime="{{ meeting.next.start }}">{{ meeting.next.start | fmtDate(lang, "long") }}</time></p>
+  {#- the next meeting of the build's day, rolled on in the browser once it is over (app.js GV.meetingLines, as on
+      /gvr/ and /about/) -#}
+  <p class="o101-live-main"><time datetime="{{ meeting.next.start }}" data-gv-meeting="{{ meeting.rule | json }}" data-at="{{ meeting.next.start }}" data-tpl="{date}" data-date="long">{{ meeting.next.start | fmtDate(lang, "long") }}</time></p>
   <p class="o101-live-sub">{{ "orientation.live_meeting_sub" | t(lang, { time: site.meeting | cmTimeRange(lang), platform: site.meeting.platform or "Zoom" }) }}</p>
   {%- else %}
   <p class="o101-live-main">{{ site.meeting | cmRule(lang) }}</p>

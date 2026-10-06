@@ -81,5 +81,55 @@ class DeckFocus(unittest.TestCase):
         self.assertEqual(self.r["inside"]["afterLoad"], "next")
 
 
+class DeckNextMeeting(unittest.TestCase):
+    """The closing slide's "next committee meeting" (and the hub's meeting card) roll on once the build's meeting is
+    over (app.js GV.meetingLines, as on /gvr/ and /about/): the slides live in a <template>, which app.js never
+    sees — orientation.js rolls the copy on as the deck opens. Real scripts: the browser's central-time.js,
+    app.js and orientation.js, on a page whose clock is past the October meeting."""
+
+    def test_the_slides_and_the_card_show_the_next_meeting(self):
+        import tempfile
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+        tmp = Path(tempfile.mkdtemp(prefix="gv-o101-"))
+        self.addCleanup(lambda: __import__("shutil").rmtree(tmp, True))
+        rule = '{&quot;weekday&quot;:3,&quot;n&quot;:3,&quot;start&quot;:&quot;19:00&quot;,&quot;end&quot;:&quot;20:00&quot;,&quot;skip&quot;:[]}'
+        at = "2026-10-22T00:00:00.000Z"                                   # the build's day: the October meeting
+        line = f'data-gv-meeting="{rule}" data-at="{at}" data-tpl="{{date}}" data-date="long"'
+        html = HTML.replace('<main><h1>GVR / RLV 101</h1>',
+                            f'<main><h1>GVR / RLV 101</h1><p class="o101-live-main"><time datetime="{at}" {line}>built</time></p>')
+        html = html.replace('<section data-o101-slide id="slide-3" hidden><h2>Points</h2></section>',
+                            f'<section data-o101-slide id="slide-3" hidden><h2>Next steps</h2><span {line}>built</span></section>')
+        r = run_js(self, PAGE_JS + r"""
+          const { browserScript } = await imp("src/pages/central-time.11ty.js");
+          fs.writeFileSync(input.time, browserScript());
+          const p = page({ html: input.html, url: "https://example.test/aagrapevine/orientation/",
+                           scripts: [input.time, "src/assets/js/app.js", "src/assets/js/orientation.js"],
+                           globals: { SITE: { lang: "en", base: "/aagrapevine/", tz: "America/Chicago" } } });
+          p.win.__clock.now = Date.parse("2026-10-30T12:00:00Z");           // the October meeting is over
+          await p.ready();
+          const card = p.$("time[data-gv-meeting]");
+          const res = { card: [card.textContent, card.getAttribute("datetime")] };
+          p.click(p.$("[data-o101-present]"));
+          await p.tick(0);
+          const slide = p.$(".o101-deck [data-gv-meeting]");
+          res.slide = slide ? [slide.textContent, slide.getAttribute("data-at")] : null;
+          res.inTemplate = p.$("#o101-deck-tpl").content.querySelector("[data-gv-meeting]").textContent;
+          res.errors = p.errors.map(String);
+          out(res);""", data={"html": html, "time": str(tmp / "central-time.js")}, needs_modules=True)
+        nov = datetime(2026, 11, 18, 19, tzinfo=ZoneInfo("America/Chicago")).astimezone(ZoneInfo("UTC"))
+        nov_iso = nov.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+        self.assertEqual(r["errors"], [])
+        self.assertEqual(r["card"], ["Wednesday, November 18, 2026", nov_iso])
+        self.assertEqual(r["slide"], ["Wednesday, November 18, 2026", nov_iso])
+        self.assertEqual(r["inTemplate"], "built", "the template itself is left as built")
+
+    def test_the_pages_carry_the_rule(self):
+        root = Path(__file__).resolve().parents[1]
+        for rel in ("src/pages/orientation.njk", "src/_includes/macros/orientation.njk"):
+            src = (root / rel).read_text(encoding="utf-8")
+            self.assertIn('data-gv-meeting="{{ meeting.rule | json }}" data-at="{{ meeting.next.start }}"', src, rel)
+
+
 if __name__ == "__main__":
     unittest.main()

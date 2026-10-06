@@ -444,6 +444,14 @@
           return b.custom.length > 0 || b.meet.length > 0 || Object.keys(b.off).length > 0 || Object.keys(b.titles).length > 0 ||
             texts.length > 0 || b.order.join() !== ids.join();
         },
+        // "Start from last month's draft?" — or, when the newest draft is older (two or three months back), its month:
+        // "Start from your August 2026 draft?"
+        prevTitle: function () {
+          if (!this.prev) return "";
+          var y = Number(this.D.month.slice(0, 4)), mo = Number(this.D.month.slice(5, 7)) - 1;
+          var before = mo ? y + "-" + (mo < 10 ? "0" : "") + mo : (y - 1) + "-12";
+          return this.prev.month === before || !this.ui.prev_title_month ? (this.ui.prev_title || "") : fmt(this.ui.prev_title_month, { month: this.prev.label });
+        },
         prevText: function () { return this.prev ? fmt(this.ui.prev_text, { month: this.prev.label }) : ""; },
         prevBtn: function () { return this.prev ? fmt(this.ui.prev_btn, { month: this.prev.label }) : ""; },
         startFromPrev: function () {

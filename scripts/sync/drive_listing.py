@@ -236,7 +236,7 @@ class HtmlLister:
             try:
                 e = self._parse_entry(div)
             except Exception as ex:  # one odd entry must not break the folder
-                log.warning("could not parse a Drive entry: %s", ex)
+                log.warning("could not parse a Drive entry: %s", type(ex).__name__)   # (no message: it may quote a name)
                 continue
             if e:
                 entries.append(e)
@@ -299,7 +299,7 @@ class HtmlLister:
             # The view link by shortcut id still opens the file, but its thumbnail and direct
             # download do not — mark it so no broken picture is published; retried next run.
             e.unresolved_shortcut = True
-            log.info("could not resolve shortcut %r (%s)", e.name, sid)
+            log.info("could not resolve a shortcut (id %s) — tried again next run", sid)   # (no name: it may not be published)
         else:
             e.id = target
         if is_folder:

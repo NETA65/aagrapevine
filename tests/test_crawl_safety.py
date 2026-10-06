@@ -732,6 +732,35 @@ class RobotsTxtAnswers(unittest.TestCase):
         self.assertEqual(lines, ["robots.txt of www.aagrapevine.org did not answer properly (HTTP 503): its pages "
                                  "were left for the next run"])
 
+    def test_an_answer_that_is_retried_is_closed_first(self):
+        # a 503 / 429 answer is dropped for a retry: its connection goes back at once (a stream=True download
+        # would otherwise hold it until garbage collection); the answer that is returned stays open
+        answers = []
+
+        class Closable(Answer):
+            closed = False
+
+            def close(self):
+                self.closed = True
+
+        def fake_request(_self, method, url, **kw):
+            if url.endswith("/robots.txt"):
+                return Answer(404, url)
+            a = Closable(503 if len(answers) == 0 else 429 if len(answers) == 1 else 200, url, b"%PDF-1.4")
+            answers.append(a)
+            return a
+
+        clock = FakeClock()
+        for p in (mock.patch.object(common.time, "monotonic", clock.monotonic),
+                  mock.patch.object(common.time, "sleep", clock.sleep),
+                  mock.patch("requests.Session.request", fake_request)):
+            p.start()
+            self.addCleanup(p.stop)
+        s = common.PoliteSession(min_delay=1.0, respect_robots=True, retries=3)
+        r = s.get(f"{RobotsTxtAnswers.SITE}/a.pdf", stream=True)
+        self.assertIs(r, answers[-1])
+        self.assertEqual([(a.status_code, a.closed) for a in answers], [(503, True), (429, True), (200, False)])
+
     def test_rules_that_forbid_a_page_are_recorded_as_before(self):
         class RulesSay(FakeSession):
             def allowed(self, url):

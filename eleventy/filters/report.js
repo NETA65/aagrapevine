@@ -5,7 +5,8 @@
 // reportModel() writes the report's 12 sections — each a title and a plain text — in English AND
 // Spanish, for the current month (Central time), from data the site already has:
 //   header     "District [##] Grapevine / La Viña report — <Month YYYY>" + "Prepared by: …" (blanks)
-//   committee  site `meeting` (next date, the rule), a pointer to /meetings/ for the Zoom details
+//   committee  site `meeting` (next date, the rule), a pointer to /meetings/ for the meeting's link (its platform:
+//              config/site.yml meeting.platform, Zoom when not set)
 //   issues     the month model (eleventy/filters/monthly.js): GV theme, LV issue, config/carry.yml tips
 //   deadlines  db.editorial (next 3 Grapevine deadlines, next 2 La Viña deadlines — its yearly themes —, La
 //              Viña's rotating topics), db.audio_project
@@ -30,6 +31,7 @@ import { digestShop, weeklyOpenAll, gvMeetings, eventEndMs, chicagoDayEndMs } fr
 import { monthModel, nowDate, chicagoYmd, shortDate, timeRange, monthLabel, midSentence } from "./monthly.js";
 import { botmPriceState, shopPlanPrice, shopNextChange, shopPriceChangeIn, dayLabel } from "./shop.js";
 import { scriptJson } from "../script-json.js";
+import { langLink } from "../../eleventy.config.js";
 
 const LOC = { en: "en-US", es: "es-US" };
 const DAY = 864e5;
@@ -168,8 +170,8 @@ function shopSection(L, T, ctx, at, next = null) {
   }
   out.push(T("s_group"));
   // Carry the Message: La Viña's own page ("Lleva el Mensaje", in Spanish) on a Spanish report, as on /es/shop/
-  const links = site.links || {};
-  const ctm = (L === "es" && links.lleva_el_mensaje) || links.carry_the_message;
+  // (the site's one rule for a link's Spanish twin: eleventy.config.js langLink)
+  const ctm = langLink(site.links, "carry_the_message", L);
   if (ctm) out.push(T("s_ctm", { url: ctm }));
   out.push(T("s_more", { url: abs("/shop/") }));
   return out.join("\n");
@@ -225,15 +227,17 @@ function sectionsFor(L, ctx) {
   {
     const out = [];
     const nx = meeting && meeting.next;
+    // where it meets (config/site.yml meeting.platform), as /meetings/ and the home page say it
+    const platform = clean((site && site.meeting && site.meeting.platform) || "") || "Zoom";
     if (nx && nx.start) {
       const time = T("c_time", { time: timeRange(nx.start, nx.end, L) });
-      out.push(T("c_next", { date: longDate(nx.ymd || chicagoYmd(nx.start), L), time }));
+      out.push(T("c_next", { date: longDate(nx.ymd || chicagoYmd(nx.start), L), time, platform }));
       const r = (meeting && meeting.rule) || {};
       const wd = Number.isInteger(r.weekday) ? new Intl.DateTimeFormat(LOC[L], { weekday: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2023, 0, 1 + r.weekday))) : "";
       const ord = r.n === -1 ? "last" : String(r.n || "");
       if (wd && ord) out.push(T("c_rule", { rule: lcFirst(t("committee.rule", L, { ord: t(`committee.ord.${ord}`, L), weekday: L === "es" ? wd : cap(wd) })) }));
     } else out.push(T("c_none"));
-    out.push(T("c_join", { url: abs("/meetings/") }));
+    out.push(T("c_join", { url: abs("/meetings/"), platform }));
     out.push(T("c_covers"));
     S.committee = out.join("\n");
   }
@@ -580,7 +584,7 @@ export const reportText = (model, lang) => composeText(((model && model.langs &&
 const UI_KEYS = ["saved_idle", "saved", "not_saved", "move_up", "move_down", "moved", "include", "included", "excluded", "reset_done", "removed", "added",
   "reset_all_confirm", "reset_all_done", "lang_done", "blanks", "blanks_one", "blanks_none", "read_time", "read_time_one",
   "copied_text", "copied_html", "copied_plain", "copy_failed", "downloaded", "mail_long", "opening", "wa_copied", "text_hint", "header_hint", "n_placeholder",
-  "prev_text", "prev_btn", "prev_done"];
+  "prev_title", "prev_title_month", "prev_text", "prev_btn", "prev_done"];
 export function uiStrings(lang) {
   const o = Object.fromEntries(UI_KEYS.map((k) => [k, t(`report.${k}`, lang)]));
   o.lang_en = t("community.lang_name_en", lang);

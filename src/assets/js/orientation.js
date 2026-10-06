@@ -363,6 +363,9 @@
     lastFocus = document.activeElement;
     if (!startUrl) startUrl = location.pathname + location.search.replace(/[?&]slides(=[^&]*)?/, "").replace(/^&/, "?") + (/^#(slide-|session-|lesson-)/.test(location.hash) ? "" : location.hash);
     deck = tpl.content.firstElementChild.cloneNode(true);
+    // the closing slide's "next committee meeting": the build's date, rolled on if that meeting is over (the
+    // page's own lines are rolled on by app.js; a <template>'s copy only now joins the page)
+    try { if (window.GV && GV.meetingLines) GV.meetingLines(deck); } catch (e) { /* the build's date stays */ }
     document.body.appendChild(deck);
     inerted = Array.prototype.filter.call(document.body.children, function (el) {
       return el !== deck && !/^(SCRIPT|TEMPLATE|STYLE)$/.test(el.tagName) && !el.hasAttribute("inert");

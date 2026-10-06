@@ -554,13 +554,16 @@ class HttpFetch(unittest.TestCase):
             self.is_redirect = bool(location) and status in (301, 302, 303, 307, 308)
 
     class Http:
-        def __init__(self, answers, disallow=()):
-            self.answers, self.disallow = list(answers), disallow
+        def __init__(self, answers, disallow=(), closed=None):
+            self.answers, self.disallow, self.closed = list(answers), disallow, closed
             self.asked, self.gets = [], []
 
         def allowed(self, url):
             self.asked.append(url)
-            return not any(d in url for d in self.disallow)
+            return not self.closed and not any(d in url for d in self.disallow)
+
+        def robots_problem(self, url):
+            return self.closed
 
         def get(self, url, **kw):
             self.gets.append((url, kw))
@@ -573,7 +576,18 @@ class HttpFetch(unittest.TestCase):
             fetch("https://x.org/meetings/", {"tsml-day": "any", "tsml-type": "GR"})
         self.assertIn("tsml-type=GR", http.asked[0])
         self.assertNotIn("tsml-type", str(cm.exception))
+        self.assertIn("robots.txt does not allow reading /meetings/", str(cm.exception))
+        self.assertNotIsInstance(cm.exception, M.RobotsUnavailable)
         self.assertEqual(http.gets, [])
+
+    def test_a_robots_txt_that_could_not_be_read_is_not_a_refusal(self):
+        for problem, said in (("HTTP 503", "(HTTP 503)"), ("unreachable", "(no answer)")):
+            with self.subTest(problem=problem):
+                http = self.Http([], closed=problem)
+                with self.assertRaises(M.RobotsUnavailable) as cm:
+                    M.http_fetch(http)("https://x.org/meetings/", {"tsml-day": "any"})
+                self.assertEqual(str(cm.exception), f"x.org's robots.txt could not be checked {said} — nothing was read")
+                self.assertEqual(http.gets, [])
 
     def test_a_redirect_to_another_site_is_not_followed_with_the_key(self):
         http = self.Http([self.Resp(DALLAS_FEED + "&key=" + FAKE_KEY, 302,
@@ -668,6 +682,9 @@ class BotChecks(unittest.TestCase):
         def allowed(self, url):
             return True
 
+        def robots_problem(self, url):
+            return None
+
         def get(self, url, **kw):
             self.gets.append((url, kw.get("params")))
             for prefix, answer in self.answers.items():
@@ -738,6 +755,70 @@ class BotChecks(unittest.TestCase):
         self.assertNotIsInstance(cm.exception, M.BotCheck)
         self.assertIn("feed: aadallas.org answered HTTP 503", str(cm.exception))
         self.assertIn("page: aadallas.org answered with a bot check (HTTP 202)", str(cm.exception))
+
+
+# =========================================================================== robots.txt down
+class RobotsTxtDown(unittest.TestCase):
+    """An office whose robots.txt answers 5xx / 429 or nothing (common.PoliteSession closes the site for now) is
+    not said to forbid reading: "could not be checked", once, and its last good list is kept."""
+    NWTA = {"id": "nwta66", "name": "Northwest Texas Area 66", "site": "https://nwta66.org",
+            "feed": "https://nwta66.org/wp-admin/admin-ajax.php?action=meetings", "in_area": False,
+            "region_label": {"en": "Northwest Texas", "es": "Noroeste de Texas"}}
+    BEFORE = {"id": "mtg:x", "kind": "meeting", "title": "Lubbock Grapevine Group", "url": "https://nwta66.org/m/1",
+              "lang": "en", "extra": {"day": 2, "time": "19:00", "end_time": None, "location": None,
+                                      "address": "1 Main St, Lubbock, TX", "street": "1 Main St", "zip": None,
+                                      "city": "Lubbock", "county": "Lubbock", "state": "TX", "lat": None, "lng": None,
+                                      "approximate": False, "region": None, "district": None, "types": ["GR"],
+                                      "attendance": "in_person", "in_area": False, "lang": "en",
+                                      "sources": ["nwta66"]}}
+
+    def run_with(self, robots):
+        """collect() through a real PoliteSession whose requests.Session answers robots.txt with `robots` (a
+        status code, or an exception) — and anything else with a 200 (which must never be asked for)."""
+        from unittest import mock
+
+        from scripts.sync import common
+        calls, clock = [], [1000.0]
+
+        class Answer:
+            def __init__(self, status, url):
+                self.status_code, self.url, self.text, self.content, self.headers = status, url, "", b"", {}
+                self.is_redirect = False
+
+            def close(self):
+                pass
+
+        def fake_request(_self, method, url, **kw):
+            calls.append(url)
+            if url.endswith("/robots.txt"):
+                if isinstance(robots, Exception):
+                    raise robots
+                return Answer(robots, url)
+            return Answer(200, url)
+
+        def sleep(s):
+            clock[0] += max(0.0, s)
+
+        for p in (mock.patch.object(common.time, "monotonic", lambda: clock[0]),
+                  mock.patch.object(common.time, "sleep", sleep),
+                  mock.patch("requests.Session.request", fake_request)):
+            p.start()
+            self.addCleanup(p.stop)
+        http = common.PoliteSession(min_delay=2.0, respect_robots=True, retries=1)
+        res = M.collect(M.http_fetch(http), {"items": [self.BEFORE]}, feeds_cfg(feeds=[self.NWTA]), env={})
+        return res, calls
+
+    def test_the_site_is_left_alone_and_the_message_says_why(self):
+        import requests
+        for robots, said in ((503, "HTTP 503"), (429, "HTTP 429"), (requests.ConnectTimeout("timed out"), "no answer")):
+            with self.subTest(robots=said):
+                res, calls = self.run_with(robots)
+                plain = f"nwta66.org's robots.txt could not be checked ({said}) — nothing was read; the last good list is kept"
+                self.assertEqual(res["feeds"][0]["error"], plain, "said once, not once per way of reading the list")
+                self.assertEqual(res["errors"], [f"Northwest Texas Area 66: {plain}"])
+                self.assertNotIn("does not allow", json.dumps(res, ensure_ascii=False))
+                self.assertEqual([r["name"] for r in res["items"]], ["Lubbock Grapevine Group"], "the last good list is kept")
+                self.assertTrue(calls and all(u.endswith("/robots.txt") for u in calls), "only robots.txt was asked for")
 
 
 if __name__ == "__main__":

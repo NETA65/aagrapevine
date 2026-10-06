@@ -65,6 +65,9 @@ are kept (feeds[].ok = false, a note in stats.warnings); the envelope is ok=fals
 could be read. A site that answers with a bot check instead (a challenge page for browsers — HTTP 202 from
 SiteGround's or Amazon's anti-bot page, Cloudflare's "Just a moment…") is named so in plain words: "<site>
 answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept" (BotCheck).
+A robots.txt that answers 5xx / 429 or nothing closes the site for now; that is said as it is — "<site>'s
+robots.txt could not be checked (HTTP 503) — nothing was read; the last good list is kept" (RobotsUnavailable)
+—, not as a refusal ("… robots.txt does not allow reading …" is kept for its rules really disallowing a page).
 
 Items: kind "meeting", source "meetings", id "mtg:<hash of day|time|place>" (place = the street address, else
 the meeting's own page), url = the meeting's page on
@@ -199,6 +202,19 @@ class BotCheck(FeedError):
         super().__init__(f"{host} answered with a bot check{code} — nothing is wrong on our side; the last good "
                          "list is kept" if settled else f"{host} answered with a bot check{code} instead of its "
                          "meeting list")
+
+
+class RobotsUnavailable(FeedError):
+    """The office's robots.txt answered 5xx / 429 or gave no answer (common.PoliteSession.robots_problem): the
+    site may not be asked for anything for now (RFC 9309), so nothing was read — its rules did not refuse us, they
+    could not be checked. The office's last good list is kept (collect). `settled`: every way of reading the
+    office met it (read_office) — the plain message /status/ shows."""
+
+    def __init__(self, host: str, problem: str | None, settled: bool = False):
+        self.host, self.problem = host, problem
+        why = "no answer" if problem in (None, "unreachable") else problem
+        super().__init__(f"{host}'s robots.txt could not be checked ({why}) — nothing was read"
+                         + ("; the last good list is kept" if settled else ""))
 
 
 # A bot check served instead of the list. HTTP 202 is one (a list is never "accepted for later"): SiteGround's
@@ -531,6 +547,7 @@ def read_office(feed: dict, fetch: Fetch, env: Mapping[str, str], key_page: Call
     method met the site's bot check."""
     problems: list[str] = []
     checks: list[BotCheck | None] = []      # per failed method: its bot check, or None for another failure
+    closed: list[RobotsUnavailable | None] = []   # … likewise: robots.txt could not be checked
     key_from = None
     for method in feed["methods"]:
         try:
@@ -577,12 +594,16 @@ def read_office(feed: dict, fetch: Fetch, env: Mapping[str, str], key_page: Call
         except FeedError as e:
             problems.append(f"{method}: {redact(e)}")
             checks.append(e if isinstance(e, BotCheck) else None)
+            closed.append(e if isinstance(e, RobotsUnavailable) else None)
             if method != feed["methods"][-1]:
                 log.info("%s: %s — trying the next way", feed["id"], redact(e))
     if checks and all(checks):
         # Every way of reading the office met the bot check: say so plainly, once (not per method).
         last = checks[-1]
         raise BotCheck(redact(last.host), next((c.status for c in reversed(checks) if c.status), None), settled=True)
+    if closed and all(closed):
+        # robots.txt could not be checked for any way of reading it: one plain line, not "does not allow"
+        raise RobotsUnavailable(redact(closed[-1].host), closed[-1].problem, settled=True)
     raise FeedError("; ".join(problems) or "nothing to read")
 
 
@@ -1044,6 +1065,10 @@ def http_fetch(http: PoliteSession) -> Fetch:
         # robots.txt is asked about the address that is really requested, with its query (never logged)
         full = requests.Request("GET", url, params=params or None).prepare().url
         if not http.allowed(full):
+            # refused by its rules — or robots.txt answered 5xx / 429 or nothing, so it could not be checked
+            problem = http.robots_problem(full)
+            if problem:
+                raise RobotsUnavailable(_bare_host(url), problem)
             raise FeedError(f"{_bare_host(url)}'s robots.txt does not allow reading {urlsplit(url).path}")
         keyed = bool(params and params.get("key"))
         if keyed:
@@ -1062,6 +1087,9 @@ def http_fetch(http: PoliteSession) -> Fetch:
         else:
             r = http.get(url, params=params)
         if r is None:
+            if getattr(http, "last_failure", None) in ("robots-unavailable", "robots-unreachable"):
+                # robots.txt stopped answering between the check above and the request (or for a redirect)
+                raise RobotsUnavailable(_bare_host(url), http.robots_problem(full))
             raise FeedError(f"{_bare_host(url)} did not answer")
         if r.status_code != 200 and challenge_answer(r.status_code, r.headers, r.content):
             # before the key check: a challenge page answering 403 says nothing about the key

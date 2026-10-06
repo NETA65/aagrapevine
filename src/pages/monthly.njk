@@ -221,7 +221,8 @@ pageStyles: ["/assets/css/monthly.css", "/assets/css/report.css"]
         {#- A new month with no draft yet: last month's draft on this device as the starting point (report.js findPrev /
             startFromPrev — the visitor's own sections, choices and words; the data sections are this month's) -#}
         <div class="rp-prev" x-show="prev" x-cloak role="group" aria-labelledby="rp-prev-title">
-          <p id="rp-prev-title" class="rp-prev-title">{% icon "history", "size-4 shrink-0" %} {{ "report.prev_title" | t(lang) }}</p>
+          {#- (the title names the draft's month when it is older than last month: report.js prevTitle) -#}
+          <p id="rp-prev-title" class="rp-prev-title">{% icon "history", "size-4 shrink-0" %} <span x-text="prevTitle()">{{ "report.prev_title" | t(lang) }}</span></p>
           <p class="rp-prev-text" x-text="prevText()"></p>
           <button type="button" class="btn-secondary btn-sm" data-rp-prev @click="startFromPrev()">{% icon "copy-plus", "size-4" %} <span x-text="prevBtn()"></span></button>
         </div>

@@ -1036,18 +1036,16 @@ class Reminders(unittest.TestCase):
         self.assertEqual(self.check("2026-10-04", cfg), {})
 
     def test_the_panels(self):
-        got = self.check("2028-11-01")
-        self.assertEqual(got["expenses-panel"]["message"],
-                         "config/expenses.yml: the last service panel (Panel 77) ends 2028-12-31 — add the next panel.")
-        self.assertEqual(got["expenses-panel"]["due"], "2028-12-31")
-        self.assertNotIn("orientation-panel", got, "Panel 77 runs until 2028-12-31")
+        # The Tracker works its panels out by rule (expenses-core.js servicePanels); config/expenses.yml `panels`
+        # only override, so the last one listed running out is nothing to do — no reminder about that file.
+        for day in ("2028-10-01", "2028-11-01", "2029-01-02", "2031-06-01"):
+            self.assertFalse([r for r in self.check(day).values() if r["file"] == "config/expenses.yml"], day)
+        self.assertNotIn("orientation-panel", self.check("2028-11-01"), "Panel 77 runs until 2028-12-31")
         got = self.check("2029-01-02")
-        self.assertIn("ended 2028-12-31", got["expenses-panel"]["message"])
         self.assertEqual(got["orientation-panel"], {
             "id": "orientation-panel", "file": "config/orientation.yml", "due": "2028-12-31",
             "message": "config/orientation.yml still names Panel 77 (from 2027-01), which ended 2028-12-31 — "
                        "update the panel."})
-        self.assertNotIn("expenses-panel", self.check("2028-10-01"), "more than 90 days ahead")
 
     def test_the_assemblies(self):
         self.assertNotIn("neta65-assemblies", self.check("2027-04-01"), "the summer one (asamblea) is 85 days away")

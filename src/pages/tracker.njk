@@ -1214,7 +1214,7 @@ pageStyles: ["/assets/css/expenses.css"]
                 {#- a full backup: merge or replace -#}
                 <template x-if="imp && imp.step === 'backup' && !imp.err">
                   <div class="xp-imp">
-                    <p class="text-sm text-ink"><strong x-text="imp.name"></strong> — <span x-text="t('imp.backup_counts', { n: count(imp.counts.entries), photos: count(imp.counts.photos) })"></span></p>
+                    <p class="text-sm text-ink"><strong x-text="imp.name"></strong> — <span x-text="backupCounts(imp.counts)"></span></p>
                     {#- photos the backup names but nothing holds: a .zip that was unpacked, its backup.json chosen alone -#}
                     <p class="xp-hint" x-show="imp.counts.missing" x-text="t('imp.photos_missing', { n: count(imp.counts.missing || 0) })"></p>
                     <fieldset class="xp-f mt-3">

@@ -1424,6 +1424,26 @@ class Clock(unittest.TestCase):
             ("2027-01-01T05:59:00Z", "2026-12-31"), ("2027-01-01T06:00:00Z", "2027-01-01"),
             ("2027-03-14T05:30:00Z", "2027-03-13"), ("2027-03-15T05:30:00Z", "2027-03-15")]
 
+    def test_the_day_is_the_sites_zone(self):
+        # config/site.yml site.timezone → window.SITE.tz (base.njk): the booth's "today" is the day there; without a
+        # page (Node) or a zone, Central time
+        r = core(self, r"""
+          const at = Date.parse("2026-10-31T12:00:00Z");                    // Oct 31 in Central time, Nov 1 on Kiritimati
+          const res = {};
+          for (const tz of ["Pacific/Kiritimati", "America/Chicago", ""]) {
+            const c = vm.createContext({ console, SITE: tz ? { tz } : {} });
+            vm.runInContext(fs.readFileSync("src/assets/js/booth-core.js", "utf8"), c);
+            res[tz || "none"] = [c.GVB.TZ, c.GVB.dayCentral(at)];
+          }
+          out(res);""")
+        self.assertEqual(r, {"Pacific/Kiritimati": ["Pacific/Kiritimati", "2026-11-01"], "America/Chicago": ["America/Chicago", "2026-10-31"],
+                             "none": ["America/Chicago", "2026-10-31"]})
+        # booth.js and presentations.js write their dates in the site's zone too (never a fixed "America/Chicago")
+        for f in ("booth.js", "presentations.js"):
+            src = (ROOT / "src" / "assets" / "js" / f).read_text(encoding="utf-8")
+            self.assertNotIn('timeZone: "America/Chicago"', src, f)
+            self.assertNotRegex(src, r'"UTC" : "America/Chicago"', f)
+
     def test_central_day_with_and_without_intl(self):
         r = core(self, r"""
           const t = input.days.map((d) => Date.parse(d[0]));

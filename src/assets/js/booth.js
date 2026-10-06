@@ -89,6 +89,7 @@
     try { return JSON.parse(node.textContent || "{}") || {}; } catch (e) { return {}; }
   })();
   var LANG = CFG.lang === "es" ? "es" : "en";
+  var TZ = G.TZ || (window.SITE && window.SITE.tz) || "America/Chicago";    // the site's zone (booth-core.js)
   var STRINGS = CFG.t || {};
   var SCREEN = CFG.screen || {};
   var BASE = String(CFG.base || (window.SITE && window.SITE.base) || "/").replace(/\/?$/, "/");
@@ -547,7 +548,7 @@
     var d = /^\d{4}-\d{2}-\d{2}$/.test(String(v)) ? new Date(String(v) + "T12:00:00Z") : new Date(v);
     if (isNaN(d)) return String(v);
     try {
-      return d.toLocaleDateString(locale(l), { month: "long", day: "numeric", year: withYear ? "numeric" : undefined, timeZone: /^\d{4}-\d{2}-\d{2}$/.test(String(v)) ? "UTC" : "America/Chicago" });
+      return d.toLocaleDateString(locale(l), { month: "long", day: "numeric", year: withYear ? "numeric" : undefined, timeZone: /^\d{4}-\d{2}-\d{2}$/.test(String(v)) ? "UTC" : TZ });
     } catch (e) { return d.toISOString().slice(0, 10); }
   }
   function fmtStamp(ms, l) {

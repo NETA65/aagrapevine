@@ -148,7 +148,8 @@
   var STORAGE_KEY = "gv-booth-v1";
   var POLLS_KEY = "gv-booth-polls-v1";
   var STATE_KEY = "gv-booth-state-v1";
-  var TZ = "America/Chicago";
+  // the site's zone (config/site.yml site.timezone → window.SITE.tz, base.njk); Central time without a page (Node)
+  var TZ = (root && root.SITE && root.SITE.tz) || "America/Chicago";
   var LANGS = ["en", "es"];
   var MODES = ["en", "es", "both", "alternate"];
   var PACE = { calm: 1.35, normal: 1, lively: 0.75 };

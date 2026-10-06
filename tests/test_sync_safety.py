@@ -157,6 +157,40 @@ class MassDropGuard(TempRaw):
         self.assertEqual((len(env["items"]), "held" in env), (13, False))
         self.assertEqual(env["changes"], {"added": 5, "removed": 12, "held": 0, "confirmed": "2026-10-08T06:00:00Z"})
 
+    def test_a_big_hold_stores_50_ids_and_the_count(self):
+        # a big source's whole id list is never written out: the first HELD_IDS_MAX (sorted) and how many
+        self.assertEqual(common.HELD_IDS_MAX, 50)
+        self.save("youtube", items(200))
+        env = self.save("youtube", items(20), at="2026-10-06T18:00:00Z")          # 180 of 200 missing: held
+        self.assertEqual(len(self.ids(env)), 200)
+        self.assertEqual((env["held"]["kept"], env["held"]["ids_total"]), (180, 180))
+        self.assertEqual(env["held"]["ids"], sorted(f"x:{i}" for i in range(21, 201))[:50])
+        self.assertLess(len(json.dumps(env["held"])), 1500)
+        # the same drop again: all 180 go
+        env = self.save("youtube", items(20), at="2026-10-07T06:00:00Z")
+        self.assertEqual((len(env["items"]), "held" in env), (20, False))
+        self.assertEqual(env["changes"], {"added": 0, "removed": 180, "held": 0, "confirmed": "2026-10-06T18:00:00Z"})
+        # more missing than were held (the 20 found last time vanish too): which ones are new cannot be told from
+        # 50 ids — nothing is accepted yet, the whole drop stays held (same since); the next run decides
+        self.save("youtube", items(200), at="2026-10-08T06:00:00Z")
+        self.save("youtube", items(20), at="2026-10-08T12:00:00Z")
+        env = self.save("youtube", [], at="2026-10-09T06:00:00Z")
+        self.assertEqual(len(self.ids(env)), 200)
+        self.assertEqual((env["held"]["since"], env["held"]["kept"], env["held"]["ids_total"]),
+                         ("2026-10-08T12:00:00Z", 200, 200))
+        self.assertNotIn("confirmed", env["changes"])
+        env = self.save("youtube", [], at="2026-10-09T12:00:00Z")                  # the same (whole) drop again
+        self.assertEqual((env["items"], "held" in env), ([], False))
+        self.assertEqual(env["changes"], {"added": 0, "removed": 200, "held": 0, "confirmed": "2026-10-08T12:00:00Z"})
+        # a held item of the stored 50 is back: not the same drop — the rest is judged afresh (still a mass drop:
+        # held again, nothing removed)
+        self.save("youtube", items(200), at="2026-10-10T06:00:00Z")
+        back = self.save("youtube", items(20), at="2026-10-10T12:00:00Z")["held"]["ids"][0]   # "x:100" (sorted as text)
+        env = self.save("youtube", [*items(20), *items(1, start=int(back[2:]))], at="2026-10-11T06:00:00Z")
+        self.assertEqual(len(self.ids(env)), 200)
+        self.assertEqual((env["held"]["kept"], env["held"]["since"]), (179, "2026-10-10T12:00:00Z"))
+        self.assertNotIn("confirmed", env["changes"])
+
     def test_a_failed_run_keeps_the_mark_and_extras_never_override_it(self):
         self.save("shop", items(3))
         self.save("shop", [], at="2026-10-06T18:00:00Z")
@@ -339,15 +373,54 @@ class DriveEmptyFolders(DriveTempRaw):
 
 class DrivePrivateNames(DriveTempRaw):
     def test_what_is_not_published_is_counted_never_named(self):
-        env = self.run_drive(tree())
+        # …in data/raw AND in the run log (an Actions log of a public repository is public): loose root entries,
+        # a folder deeper than --max-depth, an unreadable folder, a file whose build fails (and its date note)
+        t = tree()
+        t["NOTES"].append(file("bad1", "Secret Budget 05-10-2026.pdf"))
+        real = D.build_item
+
+        def build_item(f, cfg):
+            it = real(f, cfg)                           # (its name's date note is taken first, as for any file)
+            if f.entry.id == "bad1":
+                raise ValueError(f"cannot build {f.entry.name}")
+            return it
+
+        with mock.patch.object(D, "build_item", build_item), self.assertLogs("drive", "DEBUG") as logs:
+            env = self.run_drive(t)
         text = (self.raw / "drive.json").read_text(encoding="utf-8")
-        for name in ("Secret", "40th Annual", "Panel75_GVLV", "Private planning", "Hidden"):
+        said = "\n".join(logs.output)
+        for name in ("Secret", "40th Annual", "Panel75_GVLV", "Private planning", "Hidden", "Budget"):
             self.assertNotIn(name, text)
+        for name in ("Secret", "40th Annual", "Private planning", "Hidden", "Budget", "Sub Secret Drafts"):
+            self.assertNotIn(name, said)
         st = env["stats"]
         self.assertEqual((st["loose_skipped"], st["skipped_panels"], st["unreadable_folders"], st["depth_limited"]),
                          (2, [75], 1, 1))
         self.assertTrue(any("could not be read" in w for w in st["warnings"]))
         self.assertIn("Panel 77 (2027–2028)", st["panels"], "the published panel is still named")
+        # what the maintainer needs is still said: how many, and where (the published folder above, the id)
+        self.assertIn("2 entries outside the panel folders (not published)", said)
+        self.assertIn("1 folder(s) deeper than 1 levels (not read", said)
+        self.assertIn("a folder in 2027-2028_Panel77_GVLV could not be read "
+                      "(https://drive.google.com/drive/folders/PRIV)", said)
+        self.assertIn("skipping a file in 2027-2028_Panel77_GVLV/notes (https://drive.google.com/file/d/bad1/view): "
+                      "ValueError", said)
+        self.assertFalse([w for w in st["warnings"] if "05-10-2026" in w], "the failed file's date note goes with it")
+
+    def test_an_unresolved_shortcut_is_logged_by_its_id(self):
+        from scripts.sync.drive_listing import HtmlLister
+
+        class NoAnswer:
+            def head(self, url, **kw):
+                return None
+
+        lister = HtmlLister(NoAnswer())
+        e = Entry("SC1", "Secret shortcut name.pdf", "application/vnd.google-apps.shortcut")
+        with self.assertLogs("drive", "DEBUG") as logs:
+            lister._resolve_shortcut(e)
+        self.assertTrue(e.unresolved_shortcut)
+        self.assertNotIn("Secret", "\n".join(logs.output))
+        self.assertIn("SC1", "\n".join(logs.output))
 
 
 # =========================================================================== byte caps

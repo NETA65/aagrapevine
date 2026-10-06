@@ -19,7 +19,8 @@ export default function () {
   // Read the way the daily sync reads it (eleventy.config.js monthlyRule = scripts/sync/meeting.py
   // meeting_rule): "7:00 PM", "7pm" or 19 → "19:00" (a time as written never stops the build), "sábado",
   // a week it cannot read ("third") → the 3rd, one skip date without brackets, and an end that is missing
-  // or not after the start → one hour (the countdown's rule gets that end too).
+  // or not after the start → one hour (the countdown's rule gets that end too) — except an overnight one
+  // ("22:00"–"01:00": the next morning, as the sync has it).
   const cfg = monthlyRule(yaml.load(fs.readFileSync("config/site.yml", "utf8")).meeting || {});
   const weekday = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
   const n = Number(cfg.week_of_month || 3);
@@ -30,7 +31,8 @@ export default function () {
   const today = new Date(now);
   const dates = [];
   for (let i = -1; i < 14 && dates.length < 13; i++) {
-    // (a month's meeting in Central time; no end, or one not after the start: one hour)
+    // (a month's meeting in Central time; an overnight end is the next morning; no end, or one not after the
+    // start: one hour)
     const d = ruleDate(today.getUTCFullYear(), today.getUTCMonth() + i, rule, TZ);
     if (!d || d.end < now) continue;
     dates.push({ ymd: d.ymd, start: new Date(d.start).toISOString(), end: new Date(d.end).toISOString() });

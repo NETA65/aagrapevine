@@ -3,6 +3,8 @@
 //   version   build.version (src/_data/build.js): a fingerprint of the site's code, so the worker —
 //             and its app-shell cache — changes when the code does, not with each daily content sync
 //   base      the site's base path ("/aagrapevine/" on GitHub Pages, "/" on a custom domain)
+//   tz        the site's time zone (config/site.yml site.timezone, as src/_data/site.js checked it): the worker
+//             has no window.SITE, and "this month's page" ({month} below) is the month there
 //   shell     what is saved on install: styles, scripts, the two main fonts, the logo and app icons,
 //             and the two offline pages (/offline/, /es/offline/ — "Saved pages & app", also the
 //             stand-in for a page not saved; the worker keeps them up to date with the daily content,
@@ -45,7 +47,8 @@ const OPTIONAL = [
   ["accessibility/", "accesibilidad/"],
   ["gvr-101/", "gvr101/", "orientation/", "gvr/101/"],
   // the expense tracker: a GVR adds miles and receipts on the road, with no signal
-  // (its entries live in the browser; the page and its two scripts are what is saved)
+  // (its entries live in the browser; what is saved is the page plus the scripts and stylesheets its own
+  // <script>/<link> tags name — sw-core.js keepAssets reads them from the saved page, so nothing is listed here)
   ["tracker/"],
 ];
 
@@ -105,7 +108,10 @@ export function render(data) {
   // (relative to the base, like `save` and `files`; one show and one media folder for both languages)
   const booth = { media: "about/booth/media/", json: "about/booth.json" };
 
-  const config = { version: v, base, shell, required, offline, save, files, booth };
+  // the site's zone (src/_data/site.js: config/site.yml site.timezone as the build checked it): "this month"
+  // ({month} in `save`) is the month there, as on the pages
+  const tz = String(data.site?.timezone || "America/Chicago");
+  const config = { version: v, base, tz, shell, required, offline, save, files, booth };
   const core = fs.readFileSync(path.join("src", "_includes", "pwa", "sw-core.js"), "utf8");
   return `/* NETA 65 Grapevine / La Viña — service worker, version ${v}. Generated from src/pages/sw.11ty.js. */\n` +
     `const CONFIG = ${JSON.stringify(config, null, 2)};\n\n${core}`;

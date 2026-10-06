@@ -415,6 +415,33 @@ class BrowserCopy(unittest.TestCase):
         self.assertEqual(r["old"], want, "the same on an old iPhone: 7 PM CDT is 00:00 UTC, never 01:00")
         self.assertIsNone(r["without"], "no helper: no guess (the page keeps the build's date)")
 
+    def test_an_overnight_meeting_ends_the_next_morning(self):
+        # a rule from 10 PM to 1 AM (the last Saturday): the end is 1 AM the NEXT morning — also on the night the
+        # clocks go back (Oct 31 → Nov 1: 1:00 AM CDT) —, as scripts/sync/meeting.py overnight() has it; the
+        # countdown keeps the meeting until then. 7 PM to 8 AM is a slip of the pen (13 hours): one hour.
+        moments = ["2026-11-01T05:30:00Z", "2026-11-01T06:30:00Z"]          # 12:30 AM CDT (running) · after the end
+        r = js(self, r"""
+          const rule = { weekday: 6, n: -1, start: "22:00", end: "01:00", skip: [] };
+          const T = await imp("eleventy/central-time.js");
+          const show = (d) => (d ? [d.ymd, new Date(d.start).toISOString(), new Date(d.end).toISOString()] : null);
+          out({
+            build: [show(T.ruleDate(2026, 9, rule)), show(T.ruleDate(2026, 10, rule)),
+                    show(T.ruleDate(2026, 9, { weekday: 3, n: 3, start: "19:00", end: "08:00" }))],
+            overnight: [T.overnight("22:00", "01:00"), T.overnight([19, 0], [7, 0]), T.overnight("19:00", "08:00"),
+                        T.overnight("19:00", "20:00"), T.overnight("23:00", "00:30"), T.overnight("19:00", "")],
+            browser: input.map((at) => { const p = page([], { at }); const n = p.win.GV.nextMeeting(rule);
+                                         return n ? [n.ymd, n.start.toISOString(), n.end.toISOString()] : null; }),
+          });""", data=moments)
+        oct31, nov28 = datetime(2026, 10, 31, 22, tzinfo=CHI), datetime(2026, 11, 28, 22, tzinfo=CHI)
+        want_oct = ["2026-10-31", iso(oct31), iso(datetime(2026, 11, 1, 1, tzinfo=CHI))]
+        self.assertEqual(want_oct[2], "2026-11-01T06:00:00.000Z", "1:00 AM CDT, before the clocks go back")
+        self.assertEqual(r["build"][0], want_oct)
+        self.assertEqual(r["build"][1], ["2026-11-28", iso(nov28), iso(datetime(2026, 11, 29, 1, tzinfo=CHI))])
+        oct21 = datetime(2026, 10, 21, 19, tzinfo=CHI)
+        self.assertEqual(r["build"][2], ["2026-10-21", iso(oct21), iso(oct21 + timedelta(hours=1))], "a slip: one hour")
+        self.assertEqual(r["overnight"], [True, True, False, False, True, False])
+        self.assertEqual(r["browser"], [want_oct, r["build"][1]], "running at 12:30 AM; the next one once it ended")
+
     def test_a_browser_without_formatToParts(self):
         r = js(self, r"""
           function NoParts(l, o) { const f = new RealDTF(l, o); return { format: (d) => f.format(d), resolvedOptions: () => f.resolvedOptions() }; }

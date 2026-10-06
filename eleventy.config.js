@@ -8,7 +8,7 @@ import path from "node:path";
 import { createRequire } from "node:module";
 import * as yaml from "js-yaml";
 import markdownIt from "markdown-it";
-import { setZone, zoneInstant } from "./eleventy/central-time.js";
+import { overnight, setZone, zoneInstant } from "./eleventy/central-time.js";
 import { iconSvg, iconSprite } from "./eleventy/icons.js";
 
 const require = createRequire(import.meta.url);
@@ -404,7 +404,8 @@ export function hhmm(v, fallback = "") {
 }
 
 /** A monthly rule with canonical values: weekday "saturday", week_of_month 1–5 / -1, start / end "HH:MM" (the
-    end as used: one hour after the start when missing, unreadable or not after it — 23:59 at most), skip_dates
+    end as used: one hour after the start when missing, unreadable or not after it — 23:59 at most —, except an
+    overnight end, which stays: "22:00"–"01:00" ends at 1 AM the next morning, central-time.js overnight), skip_dates
     a list of "YYYY-MM-DD". forgiving = a recurring event (plurals "Saturdays", words "second" / "2nd" /
     "último", its key slugified as build_data.recurring_specs does); otherwise the committee meeting
     (meeting_rule: a day name, a whole number). Anything else in the entry (title, platform, zoom_url …) is
@@ -433,13 +434,16 @@ export function monthlyRule(o, forgiving = false) {
     if (t) out[k] = t; else delete out[k];
   }
   // The end as the sync uses it (MonthlyRule.span): missing, unreadable or not after the start → one hour
-  // after the start, 23:59 at most (the committee meeting's start defaults to 19:00, as in meeting_rule).
+  // after the start, 23:59 at most (the committee meeting's start defaults to 19:00, as in meeting_rule) — but an
+  // overnight end ("22:00"–"01:00", at most 12 hours: meeting.py overnight) stays: it is the next morning.
   // A meeting without any time keeps none (the pages' 19:00–20:00 apply): `meeting: {}` stays empty.
   const st = out.start || (!forgiving && ("start" in o || "end" in o) ? "19:00" : "");
   if (st) {
     const [sh, sm] = st.split(":").map(Number);
     const [eh, em] = String(out.end || "00:00").split(":").map(Number);
-    if (!out.end || eh * 60 + em <= sh * 60 + sm) out.end = sh < 23 ? `${String(sh + 1).padStart(2, "0")}:${String(sm).padStart(2, "0")}` : "23:59";
+    if (!out.end || (eh * 60 + em <= sh * 60 + sm && !overnight(st, out.end))) {
+      out.end = sh < 23 ? `${String(sh + 1).padStart(2, "0")}:${String(sm).padStart(2, "0")}` : "23:59";
+    }
   }
   // One date written without the brackets counts too (check_skip_dates); a date object → "YYYY-MM-DD".
   if ("skip_dates" in o) {

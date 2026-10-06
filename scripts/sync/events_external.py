@@ -64,8 +64,9 @@ from zoneinfo import ZoneInfo
 from bs4 import BeautifulSoup
 
 from . import geo
-from .common import (clean_text, date_from_text, detect_lang, get_logger, load_config, load_raw, make_item, merge_items,
-                     now_iso, run_module, save_raw, shared_session, short_hash, to_iso, truncate)
+from .common import (clean_text, date_from_text, date_range_from_text, detect_lang, get_logger, load_config, load_raw,
+                     make_item, merge_items, now_iso, run_module, save_raw, shared_session, short_hash, to_iso,
+                     truncate)
 
 SOURCE = "events_external"
 log = get_logger(SOURCE)
@@ -447,7 +448,9 @@ def _field(soup: BeautifulSoup, name: str):
     return soup.select_one(f".field--name-{name} .field__item") or soup.select_one(f".field--name-{name}")
 
 
-def parse_event(html: str, url: str) -> dict:
+def parse_event(html: str, url: str, notes: list[str] | None = None) -> dict:
+    """An event page → its fields (decide() adds the place). `notes` gets a line, with the page's address, for a
+    date the page writes that could be read two ways (common.date_range_from_text) — main → stats["warnings"]."""
     soup = BeautifulSoup(html, "lxml")
     ld = _ld_event(soup)
     ev: dict = {}
@@ -486,9 +489,18 @@ def parse_event(html: str, url: str) -> dict:
                 ev["end"] = to_iso(ed)
         ev["all_day"] = all_day
     else:
+        # No JSON-LD: the written dates — a range too ("October 2 - 4, 2026", "del 2 al 4 de octubre de 2026"),
+        # numbers day first on La Viña's Spanish pages. A second whole day after a dash that the range reader
+        # does not join (a time between them, a weekday before it) is the end.
+        lang = "es" if site_of(url) == "lavina" else None
+        said: list[str] = []
+        s_iso, e_iso, _rest = date_range_from_text(date_text, lang, said) if date_text else (None, None, "")
         pieces = re.split(r"\s+[-–]\s+", date_text) if date_text else []
-        s_iso = date_from_text(pieces[0])[0] if pieces else None
-        e_iso = date_from_text(pieces[-1])[0] if len(pieces) > 1 else None
+        if s_iso and not e_iso and len(pieces) > 1:
+            e_iso = date_from_text(pieces[-1], lang, said)[0]
+        if notes is not None:
+            where = urlparse(url).path.rstrip("/").rsplit("/", 1)[-1] or url
+            notes += [line for n in said if (line := f"{site_of(url)} event {where}: {n}") not in notes]
         d0 = url_date(url)
         ev["start"] = s_iso or (d0.isoformat() if d0 else None)
         if e_iso and ev["start"] and e_iso > ev["start"]:
@@ -796,6 +808,7 @@ def _run(args, prev: dict, cache: dict, sm_state: dict) -> None:
                 (not cache[u].get("ev") and not cache[u].get("gone") and cache[u].get("fails", 0) < MAX_FAIL_TRIES)]
     refresh = [u for u in candidates if u in cache and cache[u].get("ev") and stale(cache[u])][:REFRESH_PER_RUN]
     fetched = refreshed = failed = 0
+    date_notes: list[str] = []         # dates a page writes that could be read two ways → stats["warnings"]
     for u in new_urls + refresh:
         if fetched + refreshed + failed >= args.max_fetch or time.monotonic() - t0 > args.max_seconds:
             break
@@ -815,7 +828,7 @@ def _run(args, prev: dict, cache: dict, sm_state: dict) -> None:
             continue
         try:
             r.encoding = r.encoding or "utf-8"
-            ev = parse_event(r.text, u)
+            ev = parse_event(r.text, u, date_notes)
         except Exception as e:
             log.warning("parse failed %s: %s", u, e)
             entry["fails"] = entry.get("fails", 0) + 1
@@ -880,6 +893,8 @@ def _run(args, prev: dict, cache: dict, sm_state: dict) -> None:
         "online_es": sum(1 for i in merged if i["extra"].get("scope") == "online"),
         "items": len(merged), "new": added, "requests": http.requests_made,
     }
+    if date_notes:
+        stats["warnings"] = date_notes[:10]
     log.info("events: %s", stats)
     if args.dry_run:
         print(json.dumps({"stats": stats, "items": merged}, ensure_ascii=False, indent=1))

@@ -72,8 +72,8 @@ from datetime import datetime, timedelta, timezone
 
 from .announcements import markdown_to_text
 from .common import (
-    MONTHS, date_from_text, get_logger, load_config, load_raw, now_iso, parse_iso, read_capped, run_module,
-    save_raw, make_item, sort_items, take_date_notes, truncate,
+    MONTHS, date_from_text, date_range_from_text, get_logger, load_config, load_raw, now_iso, parse_iso, read_capped,
+    run_module, save_raw, make_item, sort_items, take_date_notes, truncate,
 )
 # The language of a file's name or a doc's text, with the names of the magazines and of AA left out first (the
 # glossary's keep list): "Grapevine & La Viña Pricing Update" is English — "La Viña" alone made it Spanish, and
@@ -209,16 +209,25 @@ def tidy(text: str) -> str:
     return t.strip(" -–—_.,·|:;")
 
 
-def name_date(text: str) -> tuple[str | None, str, bool]:
-    """(iso_date, text_without_date, has_explicit_day). 'March 2026 …' → ('2026-03-01', '…', False)."""
-    iso, rest = date_from_text(text)
+def name_date_range(text: str) -> tuple[str | None, str | None, str, bool]:
+    """(iso_date, last_day, text_without_the_dates, has_explicit_day): last_day is the end of a range of days
+    written in the name ("Assembly March 14 - 16, 2027" → '2027-03-16'; common.date_range_from_text), else None.
+    'March 2026 …' → ('2026-03-01', None, '…', False)."""
+    iso, end, rest = date_range_from_text(text)
     if not iso:
-        return None, text, False
+        return None, None, text, False
     explicit = True
-    if iso.endswith("-01"):
+    if iso.endswith("-01") and end is None:
         # Was it only "Month YYYY"? Remove month-year phrases and see if a date is still found.
         iso2, _ = date_from_text(_MONTH_YEAR_ONLY.sub(" ", text))
         explicit = iso2 == iso
+    return iso, end, rest, explicit
+
+
+def name_date(text: str) -> tuple[str | None, str, bool]:
+    """(iso_date, text_without_date, has_explicit_day). 'March 2026 …' → ('2026-03-01', '…', False). A range of
+    days gives its first day (name_date_range: its last one too)."""
+    iso, _end, rest, explicit = name_date_range(text)
     return iso, rest, explicit
 
 
@@ -410,16 +419,17 @@ class Crawl:
     listed_ok: set[str] = field(default_factory=set)
     empty_listed: set[str] = field(default_factory=set)   # read fine, with nothing in them
     uncertain: set[str] = field(default_factory=set)   # folders we could not (fully) read
-    # Folders and files that are NOT published are counted in data/raw/drive.json (and status.json), never
-    # named: a name may carry a member's name ("PRIVATE …", a sign-up form), and both files are in the public
-    # repo. Their names go to the run log only (main). The REASON is kept for excluded files.
-    unreadable: list[str] = field(default_factory=list)
+    # Folders and files that are NOT published are counted — in data/raw/drive.json, status.json AND the run
+    # log (public too: an Actions log of a public repository) —, never named: a name may carry a member's name
+    # ("PRIVATE …", a sign-up form). The REASON is kept for excluded files; an unreadable folder is logged by its
+    # Drive id and the folder above it (crawl), so it can still be found and its sharing fixed.
+    unreadable: list[str] = field(default_factory=list)      # folder ids
     unconfirmed: dict[str, int] = field(default_factory=dict)   # folder id → files: looked empty (DriveLister)
     panels: list[dict] = field(default_factory=list)
     skipped_panels: list[int] = field(default_factory=list)   # older panels' numbers (below min_panel)
-    loose_skipped: list[str] = field(default_factory=list)
-    excluded: list[str] = field(default_factory=list)
-    depth_limited: list[str] = field(default_factory=list)
+    loose_skipped: int = 0                                     # root entries outside the panel folders
+    excluded: list[str] = field(default_factory=list)         # the reasons (never the names)
+    depth_limited: int = 0                                     # folders deeper than max_depth (not read)
     warnings: list[str] = field(default_factory=list)
     truncated: bool = False
 
@@ -475,11 +485,11 @@ def crawl(lister: DriveLister, dcfg: dict, *, root_id: str, include_loose: bool,
             if include_loose:
                 queue.append((e.id, [e.name], LOOSE, [root_id, e.id]))
             else:
-                c.loose_skipped.append(e.name)
+                c.loose_skipped += 1
         elif include_loose:
             root_files.append(e)
         else:
-            c.loose_skipped.append(e.name)
+            c.loose_skipped += 1
     _add_files(c, root_files, LOOSE, [], [root_id])
 
     visited = {root_id}
@@ -503,8 +513,11 @@ def crawl(lister: DriveLister, dcfg: dict, *, root_id: str, include_loose: bool,
                 c.unconfirmed[fid] = res.unconfirmed
                 log.warning("folder %s looks empty (%d file(s) last time) — kept for now", where, res.unconfirmed)
             else:
-                c.unreadable.append(f"{where}: {res.error}")
-                log.warning("folder %s unreadable: %s", where, res.error)
+                # not named (nothing of it is published): the folder above it, and its id to open it by
+                above = "/".join(([panel.folder_name] if panel.folder_name else []) + path[:-1]) or "the root folder"
+                c.unreadable.append(fid)
+                log.warning("a folder in %s could not be read (https://drive.google.com/drive/folders/%s): %s",
+                            above, fid, res.error)
             continue
         c.listed_ok.add(fid)
         if not res.entries:
@@ -520,7 +533,7 @@ def crawl(lister: DriveLister, dcfg: dict, *, root_id: str, include_loose: bool,
                 continue
             if e.is_folder:
                 if len(path) + 1 > max_depth:
-                    c.depth_limited.append(f"{where}/{e.name}")
+                    c.depth_limited += 1
                     continue
                 if e.id not in visited and e.id not in chain:
                     queue.append((e.id, path + [e.name], panel, chain + [e.id]))
@@ -609,7 +622,7 @@ def build_item(f: Found, dcfg: dict) -> dict:
             if publish:                  # "(from 2027-02-01)" — never "(from the Chair)"
                 stem = stem[: mf.start()] + " " + stem[mf.end():]
                 break
-    ndate, rest, explicit_day = name_date(stem)
+    ndate, nend, rest, explicit_day = name_date_range(stem)
     if ndate and not explicit_day:
         # Only "Month YYYY" — that IS the distinguishing part ("March 2026 Committee Meeting",
         # "November December 2025"), so it stays in the title; the date still sorts the item.
@@ -663,6 +676,8 @@ def build_item(f: Found, dcfg: dict) -> dict:
             loc, no_loc = extract_location(no_time)
             extra.update({
                 "event_date": ndate, "event_title": tidy(no_loc) or title,
+                # a range of days in the name ("Assembly March 14 - 16, 2027"): its last day (build_data.flyer_events)
+                "event_end_date": nend if nend and nend > ndate else None,
                 "event_time": t_start, "event_end_time": t_end, "event_location": loc,
                 # the time's own zone ("12 p. m. (hora del Este)"); without one the time is Central
                 "event_tz": t_zone if t_start else None,
@@ -1047,28 +1062,35 @@ def main(argv: list[str] | None = None) -> None:
         save_raw(SOURCE, prev_items, ok=False, error=err[:300],
                  stats={**(prev.get("stats") or {}), "requests": lister.requests_made}, extra=keep_state)
         return
-    # What was not published, by name — in the run log only (the data files count them; an unreadable folder
-    # is named in the log by crawl())
+    # What was not published: counted, never named — the run log of a public repository is public too
     if c.loose_skipped:
-        log.info("outside the panel folders (not published): %s", ", ".join(c.loose_skipped[:30]))
+        log.info("%d entr%s outside the panel folders (not published)", c.loose_skipped,
+                 "y" if c.loose_skipped == 1 else "ies")
     if c.depth_limited:
-        log.info("folders deeper than %d levels (not read): %s", args.max_depth, ", ".join(c.depth_limited[:20]))
+        log.info("%d folder(s) deeper than %d levels (not read — move their files up)", c.depth_limited, args.max_depth)
 
     items: list[dict] = []
     seen: dict[str, int] = {}
     take_date_notes()       # names of an earlier module of this run are not this source's
     date_notes: list[str] = []
     for f in c.found:
+        it = None
         try:
             it = build_item(f, dcfg)
         except Exception as ex:  # one odd file must not break the run
-            log.warning("skipping %r: %s: %s", f.entry.name, type(ex).__name__, ex)
+            # not published, so not named (its message could quote the name): its folder and its id
+            above = "/".join(([f.panel.folder_name] if f.panel.folder_name else []) + f.path) or "the root folder"
+            log.warning("skipping a file in %s (https://drive.google.com/file/d/%s/view): %s", above, f.entry.id,
+                        type(ex).__name__)
             continue
         finally:
             # a name whose numbers-only date could be read two ways ("Report 05-10-2026": read as May 10 —
-            # common.py), said with the file's folders and name ("(until 05-10-2026)" quotes only the date)
-            where = "/".join(([f.panel.folder_name] if f.panel.folder_name else []) + f.path + [f.entry.name])
-            date_notes += [line for n in take_date_notes() if (line := f"{where}: {n}") not in date_notes]
+            # common.py), said with the file's folders and name ("(until 05-10-2026)" quotes only the date) —
+            # only for a file that is published (the notes of one that failed are dropped with it)
+            notes = take_date_notes()
+            if it is not None:
+                where = "/".join(([f.panel.folder_name] if f.panel.folder_name else []) + f.path + [f.entry.name])
+                date_notes += [line for n in notes if (line := f"{where}: {n}") not in date_notes]
         if it["id"] in seen:  # same file reachable twice (e.g. original + shortcut) → keep the original
             j = seen[it["id"]]
             if items[j]["extra"].get("shortcut_id") and not it["extra"].get("shortcut_id"):
@@ -1132,7 +1154,7 @@ def main(argv: list[str] | None = None) -> None:
         "panel_folders": c.panels,
         "include_loose": include_loose,
         # what is NOT published is counted, never named (names: the run log)
-        "loose_skipped": len(c.loose_skipped),
+        "loose_skipped": c.loose_skipped,
         "skipped_panels": sorted(set(c.skipped_panels)),
         "folders": len(c.listed_ok),
         "files": len(live),
@@ -1146,7 +1168,7 @@ def main(argv: list[str] | None = None) -> None:
         "excluded_by_reason": dict(Counter(c.excluded).most_common()),
         "unreadable_folders": len(c.unreadable),
         "unconfirmed_folders": len(c.unconfirmed),
-        "depth_limited": len(c.depth_limited),
+        "depth_limited": c.depth_limited,
         "shortcuts_resolved": lister.html.shortcuts_resolved,
         "announcements": ann_stats,
         "forms": form_stats,

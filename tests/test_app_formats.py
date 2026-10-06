@@ -26,6 +26,7 @@ APP_JS = PAGE_JS + r"""
 function app(lang, noRtf) {
   const copied = [];
   const p = page({ html: '<time data-local-time datetime="2026-10-03T23:30:00Z">x</time><time data-relative datetime="2026-10-03T15:00:00Z">y</time>' +
+                         '<time data-relative datetime="not a date" id="odd">Oct 3</time>' +
                          '<button type="button" id="copy" data-copy="the meeting ID">Copy</button>',
                    globals: { SITE: { lang, base: "/aagrapevine/" }, navigator: { clipboard: { writeText: (t) => { copied.push(t); return Promise.resolve(); } } } } });
   vm.runInContext(`(() => {
@@ -66,6 +67,7 @@ const R = {};
   R.noRtf = { relative: G.relative("2026-10-03T15:00:00Z"), bad: G.relative("nope"), relEl: null };
   await p.ready();
   R.noRtf.relEl = p.$("time[data-relative]").textContent;
+  R.noRtf.odd = p.$("#odd").textContent;
   R.noRtf.local = p.$("time[data-local-time]").textContent;
   R.noRtf.title = p.$("time[data-local-time]").getAttribute("title");
   p.click(p.$("#copy"));
@@ -111,6 +113,7 @@ class Formats(unittest.TestCase):
         self.assertEqual(n["relative"], "Oct 3, 2026")
         self.assertEqual(n["bad"], "")
         self.assertEqual(n["relEl"], "Oct 3, 2026")
+        self.assertEqual(n["odd"], "Oct 3", "a date GV.relative cannot read keeps the build's text (never blanked)")
         self.assertEqual(n["local"], "Oct 3, 2026, 11:30 PM")
         self.assertEqual(n["title"], "Oct 3, 2026")
         self.assertEqual(n["copied"], ["the meeting ID"])

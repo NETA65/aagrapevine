@@ -778,7 +778,9 @@ def recurring_events(ctx: Ctx) -> list[dict]:
 def flyer_events(ctx: Ctx) -> list[dict]:
     """Drive flyers whose file name starts with a date (drive.py sets extra.event_date). The time is
     Central unless the name gives its zone (extra.event_tz); an end not after the start ("8pm-1am") is
-    the next morning, and an end equal to it ("7pm-7pm") is no end."""
+    the next morning, and an end equal to it ("7pm-7pm") is no end. A range of days in the name ("Assembly
+    March 14 - 16, 2027": extra.event_end_date) spans its days: all day to its last day, or from the start time
+    to the end time on the last day (to the end of that day without one)."""
     out = []
     for d in ctx.items("drive"):
         ex = d.get("extra") or {}
@@ -797,6 +799,10 @@ def flyer_events(ctx: Ctx) -> list[dict]:
             elif end and "T" in start and end < start:                      # "8pm-1am": the next morning
                 nxt = (date.fromisoformat(str(day)[:10]) + timedelta(days=1)).isoformat()
                 end = _local_iso(nxt, ex.get("event_end_time"), tz)
+            last = str(ex.get("event_end_date") or "")[:10]
+            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", last) and last > str(day)[:10]:
+                # several days: the last day (inclusive) — at its end time when the name gives one
+                end = _local_iso(last, ex["event_end_time"], tz) if ex.get("event_time") and ex.get("event_end_time") else last
             loc = ex.get("event_location")
             city, state = city_state(loc)
             it = prep(d)
@@ -908,9 +914,11 @@ def _response_text(resp: Any, body: bytes) -> str:
 
 def fetch_feed(url: str, user_agent: str) -> dict:
     """ONE plain request (no retries) → {"state": "ok" | "blocked" | "error", "http_status", "error", "text"}.
-    "blocked" = the site's bot protection turned the robot away (Cloudflare's "Just a moment…" check, or
-    HTTP 401 / 403 / 429); "error" = anything else (no answer, 404, 500, not a calendar file). The answer is
-    read no further than ICS_MAX_BYTES (streamed: a bigger file is never downloaded whole)."""
+    "blocked" = the site's bot protection answered instead of the file (Cloudflare's "Just a moment…" check, or
+    HTTP 401 / 403 / 429) — said plainly, as meetings.py and youtube.py say it: "neta65.org answered with a bot
+    check (HTTP 403) — nothing is wrong on our side" (ics_events adds whether a good copy is kept); "error" =
+    anything else (no answer, 404, 500, not a calendar file). The answer is read no further than ICS_MAX_BYTES
+    (streamed: a bigger file is never downloaded whole)."""
     import requests
     try:
         r = requests.get(url, timeout=ICS_TIMEOUT, allow_redirects=True, stream=True, headers={
@@ -931,13 +939,17 @@ def fetch_feed(url: str, user_agent: str) -> dict:
     head = text[:4000]
     if r.status_code == 200 and "BEGIN:VCALENDAR" in head[:2000]:
         return {"state": "ok", "http_status": 200, "error": None, "text": text}
+    host = (urlsplit(url).hostname or "the site").lower().removeprefix("www.")
+    fine = "nothing is wrong on our side"
     if _challenge_page(r, head):
         return {"state": "blocked", "http_status": r.status_code, "text": None,
-                "error": f"HTTP {r.status_code}: the site's bot protection (Cloudflare “Just a moment…” check) "
-                         "turned the robot away"}
-    if r.status_code in (401, 403, 429):
+                "error": f"{host} answered with a bot check (HTTP {r.status_code}) — {fine}"}
+    if r.status_code == 429:
+        return {"state": "blocked", "http_status": 429, "text": None,
+                "error": f"{host} asked for fewer requests (HTTP 429) — {fine}"}
+    if r.status_code in (401, 403):
         return {"state": "blocked", "http_status": r.status_code, "text": None,
-                "error": f"HTTP {r.status_code}: the site refused the robot"}
+                "error": f"{host} refused the request (HTTP {r.status_code}), as its bot protection does — {fine}"}
     if r.status_code != 200:
         return {"state": "error", "http_status": r.status_code, "text": None, "error": f"HTTP {r.status_code}"}
     return {"state": "error", "http_status": 200, "text": None,
@@ -989,6 +1001,8 @@ def ics_events(ctx: Ctx) -> list[dict]:
             ctx.feed_requests += 1
             st.update({"attempted": to_iso(ctx.now), "state": res["state"], "http_status": res["http_status"],
                        "error": res["error"]})
+            if res["state"] == "blocked":       # what the site shows meanwhile
+                st["error"] += "; the last good copy is kept" if st.get("ics") else "; there is no good copy of it yet"
             if res["state"] == "ok":
                 try:          # a copy is only kept when it can be read
                     fresh = _parse_ics(ctx, {"_ics": res["text"], "_spec": spec})
@@ -3401,12 +3415,12 @@ def feed_status(h: dict) -> dict:
 
 
 # =========================================================================== reminders
-# Dated facts the committee writes by hand run out quietly (a month without tips, a panel the tracker no longer
-# offers, last year's skip dates): status.json `reminders` → the Actions run summary ("Reminders") a while before
-# they do. English, for whoever keeps the site's settings; nothing on the pages.
+# Dated facts the committee writes by hand run out quietly (a month without tips, an orientation panel that ended,
+# last year's skip dates): status.json `reminders` → the Actions run summary ("Reminders") a while before they do.
+# English, for whoever keeps the site's settings; nothing on the pages. (The Tracker's service panels need none:
+# expenses-core.js servicePanels works them out by rule, and config/expenses.yml `panels` only override.)
 CARRY_AHEAD_MONTHS = 12        # /monthly/ shows this month and the next 12 (eleventy/filters/monthly.js WINDOW)
 PANEL_MONTHS = 24              # a service panel lasts two years (config/orientation.yml panel.starts)
-PANEL_REMINDER_DAYS = 90       # config/expenses.yml: the last panel ends within …
 SKIP_DATES_REMINDER_DAYS = 90  # config/site.yml recurring_events: the last skip date is within …
 ASSEMBLY_REMINDER_DAYS = 60    # content/events: the last NETA 65 assembly is within …
 
@@ -3451,21 +3465,6 @@ def _carry_reminders(ctx: Ctx, root: Path, today: date) -> list[dict]:
     return [_reminder("carry-tips", "config/carry.yml",
                       f"config/carry.yml {said}; the /monthly/ pages look {CARRY_AHEAD_MONTHS} months ahead — add tips "
                       f"for the next months.", _month_plus(last, 1) if last else this)]
-
-
-def _expenses_reminders(ctx: Ctx, root: Path, today: date) -> list[dict]:
-    doc = _yaml_file(root / "config" / "expenses.yml")
-    panels = [p for p in (doc.get("panels") or []) if isinstance(p, dict)] if isinstance(doc, dict) else []
-    ends = [(d, p) for p in panels for d in [_a_day(p.get("to"))] if d]
-    if not ends:
-        return []
-    end, panel = max(ends, key=lambda e: e[0])
-    if (end - today).days > PANEL_REMINDER_DAYS:
-        return []
-    name = clean_text(panel.get("id"))
-    return [_reminder("expenses-panel", "config/expenses.yml",
-                      f"config/expenses.yml: the last service panel{f' (Panel {name})' if name else ''} "
-                      f"{'ended' if end < today else 'ends'} {end.isoformat()} — add the next panel.", end.isoformat())]
 
 
 def _orientation_reminders(ctx: Ctx, root: Path, today: date) -> list[dict]:
@@ -3536,8 +3535,8 @@ def _price_change_reminders(ctx: Ctx, root: Path, today: date) -> list[dict]:
             for c in changes if c["notice_until"] < today]
 
 
-REMINDER_CHECKS = (_carry_reminders, _expenses_reminders, _orientation_reminders, _skip_dates_reminders,
-                   _assembly_reminders, _price_change_reminders)
+REMINDER_CHECKS = (_carry_reminders, _orientation_reminders, _skip_dates_reminders, _assembly_reminders,
+                   _price_change_reminders)
 
 
 def reminders(ctx: Ctx, root: Path | None = None) -> list[dict]:

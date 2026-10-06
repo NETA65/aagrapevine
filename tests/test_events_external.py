@@ -138,6 +138,35 @@ class Dates(unittest.TestCase):
         ev = self.ev("2027-01-29T06:00:00-0600", "2027-01-31T06:00:00-0600", "Enero 29, 2027 - Enero 31, 2027")
         self.assertEqual((ev["all_day"], ev["start"], ev["end"]), (True, "2027-01-29", "2027-01-31"))
 
+    def test_written_ranges_without_json_ld_give_a_start_and_an_end(self):
+        # no JSON-LD: the written dates are read — a range of days too, numbers day first on La Viña's pages
+        def written(when: str, url: str, notes=None) -> dict:
+            html = (f'<h1>Roundup</h1><div class="field--name-field-daterange"><div class="field__item">{when}</div></div>'
+                    '<div class="field--name-field-event-location"><div class="field__item">Dallas, TX</div></div>')
+            return E.parse_event(html, url, notes)
+
+        gv, lv = GV + "2026-10-02/fall-roundup", LV + "2026-10-02/reunion-de-otono"
+        for when, url, want in (
+                ("October 2 - 4, 2026", gv, ("2026-10-02", "2026-10-04")),
+                ("Oct. 30 – Nov. 1, 2026", gv, ("2026-10-30", "2026-11-01")),
+                ("Friday, October 2, 2026 - Sunday, October 4, 2026", gv, ("2026-10-02", "2026-10-04")),
+                ("October 2, 2026 7:00pm - October 4, 2026 12:00pm", gv, ("2026-10-02", "2026-10-04")),
+                ("del 2 al 4 de octubre de 2026", lv, ("2026-10-02", "2026-10-04")),
+                ("2 - 4 de octubre de 2026", lv, ("2026-10-02", "2026-10-04")),
+                ("02/10/2026 - 04/10/2026", lv, ("2026-10-02", "2026-10-04")),      # day first on aalavina.org
+                ("October 2, 2026", gv, ("2026-10-02", None))):
+            with self.subTest(when=when):
+                ev = written(when, url)
+                self.assertEqual((ev["start"], ev.get("end"), ev["all_day"]), (*want, True))
+        # a date that could be read two ways is said, with the page, in the notes main() puts in stats.warnings
+        notes: list[str] = []
+        ev = written("10/05/2026", GV + "2026-10-05/workshop", notes)
+        self.assertEqual(ev["start"], "2026-10-05")
+        self.assertEqual(len(notes), 1)
+        self.assertTrue(notes[0].startswith("grapevine event workshop: “10/05/2026” could be October 5 or May 10"), notes)
+        written("10/05/2026", LV + "2026-05-10/taller", notes)              # La Viña: day first, nothing to say
+        self.assertEqual(len(notes), 1)
+
     def test_a_written_time_is_a_timed_event(self):
         ev = self.ev("2026-11-07T19:00:00-0600", "2026-11-07T21:00:00-0600", "November 7, 2026 7:00pm - 9:00pm")
         self.assertEqual((ev["all_day"], ev["start"], ev["end"]), (False, "2026-11-08T01:00:00Z", "2026-11-08T03:00:00Z"))
@@ -278,6 +307,19 @@ class Runs(unittest.TestCase):
         self.run_on(date(2026, 10, 3), web)
         web.pages.pop(long_url)
         self.assertNotIn(long_url, {i["url"] for i in self.run_on(date(2026, 10, 6), web)["items"]})
+
+    def test_a_range_and_a_date_note_in_a_whole_run(self):
+        rng, odd = GV + "2026-10-09/fall-roundup", GV + "2026-10-05/workshop"
+
+        def written(when: str) -> str:
+            return (f'<h1>Roundup</h1><div class="field--name-field-daterange"><div class="field__item">{when}</div></div>'
+                    '<div class="field--name-field-event-location"><div class="field__item">Tyler, TX</div></div>')
+
+        env = self.run_on(date(2026, 10, 1), FakeWeb({rng: written("October 9 - 11, 2026"), odd: written("10/05/2026")}))
+        by = {i["url"]: i["extra"] for i in env["items"]}
+        self.assertEqual((by[rng]["start"], by[rng]["end"]), ("2026-10-09", "2026-10-11"))
+        self.assertEqual(len(env["stats"]["warnings"]), 1)
+        self.assertIn("grapevine event workshop: “10/05/2026” could be", env["stats"]["warnings"][0])
 
     def test_the_calendar_fallback_keeps_a_running_long_event(self):
         long_url = GV + "2026-10-01/week-long-retreat"

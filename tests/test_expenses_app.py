@@ -1253,6 +1253,30 @@ class Backups(unittest.TestCase):
         self.assertEqual(en["done"], [2, 0])
         self.assertEqual(r["es"]["preview"], en["preview"])
 
+    def test_the_preview_says_one_entry_and_one_photo(self):
+        # the restore preview counts with the tracker's singular/plural keys: "1 entry, 1 receipt photo", not
+        # "1 entries, 1 photos" — and a backup without photos says so
+        r = app(self, r"""
+          const res = {};
+          for (const lang of ["en", "es"]) {
+            const photos = new Map(), w = make(lang, null, null, { photos });
+            add(w, "expense", { description: "Big Book", amount: "12", receipt: "photo", date: "2026-09-27" }, "books");
+            const [book] = w.a.E();
+            photos.set(book.id, { id: book.id, type: "image/jpeg", blob: new Blob([new Uint8Array([0xff, 0xd8, 9])], { type: "image/jpeg" }) });
+            await w.a.exportBackup();
+            const d = w.downloads.at(-1), w2 = make(lang, null, null, { photos: new Map() });
+            await w2.a.impFile(fileOf(d.name, w.blob(d)));
+            res[lang] = { one: [w2.a.imp.step, w2.a.backupCounts(w2.a.imp.counts)],
+                          many: w2.a.backupCounts({ entries: 12, photos: 3 }), none: w2.a.backupCounts({ entries: 2, photos: 0 }) };
+          }
+          out(res);""")
+        self.assertEqual(r["en"], {"one": ["backup", "1 entry, 1 receipt photo"], "many": "12 entries, 3 receipt photos",
+                                   "none": "2 entries, no receipt photos"})
+        self.assertEqual(r["es"], {"one": ["backup", "1 registro, 1 foto de comprobante"],
+                                   "many": "12 registros, 3 fotos de comprobantes", "none": "2 registros, sin fotos de comprobantes"})
+        page = (ROOT / "src" / "pages" / "tracker.njk").read_text(encoding="utf-8")
+        self.assertIn('x-text="backupCounts(imp.counts)"', page)
+
     def test_the_size_without_photos_and_a_big_one(self):
         r = app(self, r"""
           const photos = new Map(), w = make("en", null, null, { photos });

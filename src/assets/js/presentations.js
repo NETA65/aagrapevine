@@ -49,6 +49,7 @@
   var STRINGS = CFG.t || {};
   // the site's base path ("/aagrapevine/"), and where the decks' JSON files are
   var SITE_BASE = CFG.site || (window.SITE && window.SITE.base) || "/";
+  var TZ = (window.SITE && window.SITE.tz) || "America/Chicago";      // the site's zone (base.njk: site.timezone)
   var JSON_BASE = CFG.json || SITE_BASE.replace(/\/?$/, "/") + "orientation/presentations/";
   var META = {};
   (CFG.decks || []).forEach(function (d) { if (d && d.id) META[d.id] = d; });
@@ -1075,7 +1076,7 @@
     P.oldCopyShown[deck.id] = true;
     var day = "";
     try {
-      day = new Date(built).toLocaleDateString(LANG === "es" ? "es-US" : "en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "America/Chicago" });
+      day = new Date(built).toLocaleDateString(LANG === "es" ? "es-US" : "en-US", { month: "long", day: "numeric", year: "numeric", timeZone: TZ });
     } catch (e) { day = new Date(built).toISOString().slice(0, 10); }
     return T("pres.old_copy", { date: day });
   }

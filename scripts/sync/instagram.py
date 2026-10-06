@@ -30,7 +30,9 @@ HOW IT FINDS POSTS  (per account, the first strategy that returns posts wins)
   5. rsshub           Optional RSSHub mirrors from config `sources.instagram.rsshub_instances`.
   6. embed_hovercard  Last resort: the embed of the newest post we already know lists
                       the account's 2 newest posts.
-  +  manual           content/instagram.yml — always merged in (see that file).
+  +  manual           content/instagram.yml — always merged in (see that file). A YAML mistake in it
+                      keeps the hand-listed posts of the last run, pictures and all, with a note
+                      naming the file and the line (stats.warnings) — never drops them.
 
 Then every known post that still lacks a caption / image / type is "enriched" from its
 public post embed https://www.instagram.com/p/<code>/embed/captioned/ (capped per run,
@@ -880,15 +882,28 @@ def ensure_avatar(fx: Fetcher, key: str, profile: dict) -> None:
 
 
 # --------------------------------------------------------------------------- manual list
-def load_manual(accounts: list[dict], path: Path = MANUAL_FILE) -> tuple[list[dict], list[str]]:
-    """content/instagram.yml → records (+ list of problems to report, never fatal)."""
+def _file_name(path: Path) -> str:
+    """content/instagram.yml as the repository names it (just its name when it is elsewhere, e.g. a test's)."""
+    try:
+        return path.resolve().relative_to(CONTENT_DIR.parent.resolve()).as_posix()
+    except ValueError:
+        return path.name
+
+
+def load_manual(accounts: list[dict], path: Path = MANUAL_FILE) -> tuple[list[dict] | None, list[str]]:
+    """content/instagram.yml → records (+ list of problems to report, never fatal). Records = None when the
+    file itself cannot be read (a YAML mistake): the caller then keeps the hand-listed posts it already has —
+    an empty list would drop them all and delete their pictures. The problem names the file and the line."""
     problems: list[str] = []
     if not path.exists():
         return [], problems
     try:
         data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    except Exception as e:
-        return [], [f"{path.name}: YAML error — {str(e).splitlines()[0][:120]}"]
+    except Exception as e:  # noqa: BLE001 — a YAML mistake, or the file cannot be read as text
+        mark = getattr(e, "problem_mark", None) or getattr(e, "context_mark", None)
+        where = f" line {mark.line + 1}" if mark is not None and getattr(mark, "line", None) is not None else ""
+        what = clean_text(getattr(e, "problem", None) or (str(e).splitlines() or [type(e).__name__])[0])
+        return None, [f"{_file_name(path)}{where}: YAML error — {what[:120]}"]
     entries = data.get("posts") if isinstance(data, dict) else data
     keys = {a["key"] for a in accounts}
     by_user = {a["username"].lower(): a["key"] for a in accounts}
@@ -1333,12 +1348,22 @@ def main(argv: list[str] | None = None) -> None:
 
     # ---- 2. manual list (always) ------------------------------------------------------
     manual, problems = load_manual(accounts, args.manual_file)
+    held_manual: set[str] = set()     # the file has a mistake: the hand-listed posts of the last run, kept as they are
+    if manual is None:
+        held_manual = {(i.get("extra") or {}).get("shortcode") or i["id"][3:] for i in prev_items
+                       if (i.get("extra") or {}).get("manual")}
+        problems = [f"{problems[0]} — the {len(held_manual)} hand-listed post(s) of the last update are kept, "
+                    "pictures and all, until the file is fixed"]
+        log.warning("%s", problems[0])
+        manual = []
+        for sc in held_manual & set(records):  # also in today's listing: it stays a hand-listed post
+            records[sc]["manual"] = True
     stats["warnings"] += problems
-    manual_scs = {m["shortcode"] for m in manual}
+    manual_scs = {m["shortcode"] for m in manual} | held_manual
     for rec in manual:
         sc = rec["shortcode"]
         records[sc] = merge_post(records[sc], rec) if sc in records else rec
-    stats["manual"] = len(manual)
+    stats["manual"] = len(manual_scs)
     # posts that were only on the manual list and have been removed from it disappear
     dropped_manual = [i for i in prev_items if (i.get("extra") or {}).get("manual")
                       and (i.get("extra") or {}).get("shortcode") not in manual_scs
@@ -1347,7 +1372,7 @@ def main(argv: list[str] | None = None) -> None:
 
     # ---- 3. known posts that still miss something get a chance at enrichment ----------
     for sc, it in prev_by_sc.items():
-        if sc in records or it["id"] in drop_ids:
+        if sc in records or it["id"] in drop_ids or sc in held_manual:
             continue
         ex = it.get("extra") or {}
         stub = new_post(sc, ex.get("account") or it.get("category"), ex.get("strategy") or "known",

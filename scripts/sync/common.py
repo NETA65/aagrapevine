@@ -558,6 +558,8 @@ DROP_GUARD_EXEMPT: dict[str, str] = {
                        "file before, or the older rows stay",
 }
 HELD_EXAMPLES = 5               # titles of held items named in the envelope (`held.examples`)
+HELD_IDS_MAX = 50               # ids of held items stored in the envelope (`held.ids`; above it `held.ids_total`
+                                # says how many there are: a big source's whole list is never written out)
 
 
 def _live_ids(items: Any) -> dict[str, dict]:
@@ -590,9 +592,10 @@ def save_raw(source: str, items: list[dict], ok: bool = True, error: str | None 
     Every envelope carries `changes` = this run's {"added", "removed", "held"} (live items; "held" = items
     kept although this run did not find them) — plus "confirmed": the `held.since` of a hold whose items this
     run removed (the same drop seen again, or a module's `confirmed`) — and `held` = {"since", "kept",
-    "previous", "found", "drop", "examples"[, "ids"]} while items are held back ("drop": the guard put them
-    back, "ids" = theirs; false: the module kept them, `unconfirmed`). build_data copies both into status.json
-    sources[] (`held` without its "ids")."""
+    "previous", "found", "drop", "examples"[, "ids"[, "ids_total"]]} while items are held back ("drop": the
+    guard put them back, "ids" = theirs — the first HELD_IDS_MAX, sorted, and "ids_total" how many when there
+    are more; false: the module kept them, `unconfirmed`). build_data copies both into status.json sources[]
+    (`held` without its "ids")."""
     log = get_logger("common")
     now = now_iso()
     prev = load_raw(source)
@@ -619,6 +622,15 @@ def save_raw(source: str, items: list[dict], ok: bool = True, error: str | None 
         # real, they go now. Items that vanished only in THIS run are judged on their own (below).
         ids = prev_held.get("ids") if isinstance(prev_held.get("ids"), list) else list(prev_live)
         again = {i for i in ids if i in prev_live and i not in new_live and i not in confirmed}
+        total = prev_held.get("ids_total")
+        if isinstance(prev_held.get("ids"), list) and isinstance(total, int) and total > len(ids):
+            # Only the first HELD_IDS_MAX ids were stored. The same drop is seen again when every one of them is
+            # still missing and no more items are missing than were held: then all the missing ones go. More
+            # missing than held means new ones vanished too (which, cannot be told): nothing is accepted yet, the
+            # whole drop stays held (same `since`) and the next run, with the new list, decides.
+            missing = {i for i in prev_live if i not in new_live and i not in confirmed}
+            sample = {i for i in ids if i in prev_live and i not in confirmed}
+            again = missing if again == sample and len(missing) <= total else set()
         if again:
             accepted = prev_held.get("since")
             confirmed |= again
@@ -640,7 +652,9 @@ def save_raw(source: str, items: list[dict], ok: bool = True, error: str | None 
                 "previous": before, "found": found, "drop": bool(restored),
                 "examples": [t for t in titles if t][:HELD_EXAMPLES]}
         if restored:
-            held["ids"] = sorted(back)
+            held["ids"] = sorted(back)[:HELD_IDS_MAX]
+            if len(back) > HELD_IDS_MAX:
+                held["ids_total"] = len(back)
     items = sort_items(items)
     final_live = _live_ids(items)
     changes: dict[str, Any] = {"added": len(final_live.keys() - prev_live.keys()),
@@ -949,6 +963,12 @@ class PoliteSession:
                     ra = r.headers.get("Retry-After")
                     backoff = float(ra) if ra and ra.isdigit() else 5.0 * attempt
                     self.log.warning("%s %s -> %s, retry in %.0fs", method, url, r.status_code, backoff)
+                    # the answer is dropped: give its connection back now (a stream=True one would hold it
+                    # until garbage collection)
+                    try:
+                        r.close()
+                    except Exception:  # noqa: BLE001 — closing an answer we drop never matters
+                        pass
                     time.sleep(min(backoff, 60))
                     continue
                 self.last_failure = None

@@ -370,6 +370,45 @@ class Smaller(unittest.TestCase):
     def test_no_hero_art_in_windows_high_contrast(self):
         self.assertIn("@media (forced-colors: active) { .gv-hero-canvas { display: none !important; } }", read("src", "assets", "css", "main.css"))
 
+    def test_the_hidden_hero_art_draws_nothing(self):
+        # hero-canvas.js on a pretend page (tests/fakedom.py) with a 2D context that counts what is drawn: in forced
+        # colours (the canvas is hidden) nothing — no animation loop, no still picture —; switched off while the page
+        # is open, the lights run; switched on again, they stop
+        from fakedom import PAGE_JS
+        r = run_js(self, PAGE_JS + r"""
+          const forced = { matches: true, fns: [] };
+          const mm = (q) => /forced-colors/.test(q)
+            ? { get matches() { return forced.matches; }, media: q, addEventListener: (t, f) => forced.fns.push(f), removeEventListener() {} }
+            : { matches: false, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} };
+          const p = page({ html: '<section data-gv-hero><canvas class="gv-hero-canvas"></canvas><h1>Hi</h1></section>', scripts: [] });
+          let drawn = 0;
+          // (setTransform only sizes the canvas: everything else draws)
+          const ctx2d = new Proxy({}, { get: (t, k) => (k in t ? t[k] : (...a) => { if (k !== "setTransform") drawn += 1; return new Proxy({}, { get: () => () => {} }); }),
+                                        set: (t, k, v) => { t[k] = v; return true; } });
+          p.win.matchMedia = mm;
+          p.win.Element.prototype.getContext = () => ctx2d;
+          const hero = p.$("[data-gv-hero]");
+          Object.defineProperty(hero, "offsetWidth", { value: 900 });
+          Object.defineProperty(hero, "offsetHeight", { value: 360 });
+          vm.runInContext(fs.readFileSync("src/assets/js/hero-canvas.js", "utf8"), p.win, { filename: "hero-canvas.js" });
+          await p.ready();
+          await p.tick(3000);
+          const res = { forced: drawn, art: p.win.GVHeroArt.arts.length };
+          forced.matches = false; forced.fns.forEach((f) => f({ matches: false }));
+          await p.tick(3000);
+          res.off = drawn;
+          forced.matches = true; forced.fns.forEach((f) => f({ matches: true }));
+          const at = drawn;
+          await p.tick(5000);
+          res.onAgain = drawn - at;
+          res.errors = p.errors.map(String);
+          out(res);""", needs_modules=False)
+        self.assertEqual(r["errors"], [])
+        self.assertEqual(r["art"], 1)
+        self.assertEqual(r["forced"], 0, "hidden in forced colours: nothing drawn")
+        self.assertGreater(r["off"], 1000, "switched off: the lights run")
+        self.assertEqual(r["onAgain"], 0, "switched on again: the loop stops")
+
     def test_the_digest_youtube_link_is_24px_tall(self):
         dg = read("src", "pages", "digest.njk")
         link = re.search(r'\{% if it\._twin %\}<span class="whitespace-nowrap"><a class="([^"]*)"', dg).group(1).split()

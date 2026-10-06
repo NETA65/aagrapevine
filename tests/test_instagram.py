@@ -269,6 +269,53 @@ class Removal(unittest.TestCase):
         self.assertEqual(sorted(web.embeds), sorted(OLDER), "the hand-listed post is the YAML's to decide")
 
 
+class ManualListMistake(unittest.TestCase):
+    """content/instagram.yml with a YAML mistake: the hand-listed posts of the last run stay, pictures and all,
+    and the note names the file and the line — the list is never read as empty (that would drop them and
+    delete their pictures). Once the file is right again, it decides as before."""
+
+    def setUp(self):
+        Removal.setUp(self)
+
+    def run_with(self, yml: str, *args: str) -> dict:
+        (self.tmp / "list.yml").write_text(yml, encoding="utf-8")
+        with mock.patch.object(I, "PoliteSession", lambda **kw: FakeInstagram()):
+            I.main(["--account", "gv", "--manual-file", str(self.tmp / "list.yml"), "--no-enrich", *args])
+        return json.loads((self.tmp / "raw" / "instagram.json").read_text(encoding="utf-8"))
+
+    def test_the_hand_listed_posts_stay_until_the_file_is_fixed(self):
+        hand = [OLDER[0], LISTED[0]]                    # one only on the list, one also in today's listing
+        env = self.run_with("posts:\n" + "".join(f"  - url: https://www.instagram.com/p/{sc}/\n" for sc in hand), "--keep", "2")
+        manual = {i["extra"]["shortcode"] for i in env["items"] if i["extra"].get("manual")}
+        self.assertEqual(manual, set(hand))
+        self.assertTrue((self.thumbs / f"{OLDER[0]}.webp").exists())
+        broken = ("posts:\n  - url: https://www.instagram.com/p/DdmAbTTktaO/\n"
+                  '    caption: "a quote left open\n  - url: https://www.instagram.com/p/Dd9LlLTktaH/\n')
+        env = self.run_with(broken, "--keep", "2")
+        by = {i["extra"]["shortcode"]: i for i in env["items"]}
+        self.assertEqual({sc for sc, i in by.items() if i["extra"].get("manual")}, set(hand), "still hand-listed")
+        self.assertTrue((self.thumbs / f"{OLDER[0]}.webp").exists(), "its picture is not deleted")
+        self.assertEqual(by[OLDER[0]]["image"], I.thumb_rel(OLDER[0]))
+        self.assertTrue(env["ok"])
+        self.assertEqual(env["stats"]["manual"], 2)
+        note = [w for w in env["stats"]["warnings"] if "YAML error" in w]
+        self.assertEqual(len(note), 1)
+        self.assertRegex(note[0], r"^list\.yml line 5: YAML error — .+ — the 2 hand-listed post\(s\) of the last "
+                                  r"update are kept, pictures and all, until the file is fixed$")
+        env = self.run_with("posts: []\n", "--keep", "2")         # fixed: the list is empty now — they go
+        self.assertFalse([i for i in env["items"] if i["extra"].get("manual")])
+        self.assertFalse((self.thumbs / f"{OLDER[0]}.webp").exists())
+        self.assertNotIn("warnings", env["stats"])
+
+    def test_the_note_names_the_repository_file(self):
+        self.assertEqual(I._file_name(I.MANUAL_FILE), "content/instagram.yml")
+        bad = self.tmp / "instagram.yml"
+        bad.write_text("posts:\n  - url: x\n   bad: [\n", encoding="utf-8")
+        records, problems = I.load_manual([], bad)
+        self.assertIsNone(records)
+        self.assertRegex(problems[0], r"^instagram\.yml line \d+: YAML error — \S")
+
+
 class ListingFloor(unittest.TestCase):
     def test_pinned_posts_do_not_lower_the_floor(self):
         self.assertEqual(I._listing_floor(["2026-10-06T15:00:00Z", "2026-10-02T15:00:00Z", "2026-08-01T15:00:00Z"]),

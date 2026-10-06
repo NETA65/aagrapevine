@@ -352,7 +352,9 @@ class FeedHealth(TempState):
         h = ctx.feeds[0]
         self.assertEqual((h["state"], h["http_status"], h["events_count"], h["last_success"], h["checked_this_run"]),
                          ("blocked", 403, 0, None, True))
-        self.assertIn("Cloudflare", h["error"])
+        self.assertEqual(h["error"], "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; "
+                                     "there is no good copy of it yet")
+        self.assertNotRegex(h["error"], r"(?i)robot")
         st = self.state()[FEED_URL]
         self.assertEqual((st["state"], st["http_status"], st["attempted"]), ("blocked", 403, "2026-09-24T15:00:00Z"))
         self.assertNotIn("ics", st)
@@ -368,14 +370,22 @@ class FeedHealth(TempState):
         self.assertEqual(len(calls3), 1)
 
     def test_other_answers(self):
-        cases = [(FakeResp(429, "slow down"), "blocked", 429), (FakeResp(404, "not found"), "error", 404),
-                 (FakeResp(200, "<html>a web page</html>"), "error", 200),
-                 (requests.ConnectionError("no route"), "error", None), (TimeoutError("slow"), "error", None)]
-        for resp, state, http in cases:
+        fine = "nothing is wrong on our side; there is no good copy of it yet"
+        cases = [(FakeResp(429, "slow down"), "blocked", 429, f"neta65.org asked for fewer requests (HTTP 429) — {fine}"),
+                 (FakeResp(403, "Forbidden"), "blocked", 403,
+                  f"neta65.org refused the request (HTTP 403), as its bot protection does — {fine}"),
+                 (FakeResp(401, "Unauthorized"), "blocked", 401,
+                  f"neta65.org refused the request (HTTP 401), as its bot protection does — {fine}"),
+                 (FakeResp(404, "not found"), "error", 404, "HTTP 404"),
+                 (FakeResp(200, "<html>a web page</html>"), "error", 200, "the answer is not a calendar file (.ics)"),
+                 (requests.ConnectionError("no route"), "error", None, "no answer (ConnectionError)"),
+                 (TimeoutError("slow"), "error", None, "no answer (TimeoutError)")]
+        for resp, state, http, said in cases:
             (self.tmp / B.ICS_STATE_FILE).unlink(missing_ok=True)
             ctx = ctx_with()
             self.run_feed(ctx, resp)
-            self.assertEqual((ctx.feeds[0]["state"], ctx.feeds[0]["http_status"]), (state, http), resp)
+            self.assertEqual((ctx.feeds[0]["state"], ctx.feeds[0]["http_status"], ctx.feeds[0]["error"]),
+                             (state, http, said), resp)
 
     def test_a_good_copy_is_kept_and_used_while_blocked(self):
         ctx = ctx_with()
@@ -398,6 +408,8 @@ class FeedHealth(TempState):
         h2 = ctx2.feeds[0]
         self.assertEqual((h2["state"], h2["from_copy"], h2["last_success"], h2["events_count"]),
                          ("blocked", True, "2026-09-24T15:00:00Z", 11))
+        self.assertEqual(h2["error"], "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our "
+                                      "side; the last good copy is kept")
         # a new answer that cannot be read never replaces the good copy
         ctx3 = ctx_with(now=TODAY + timedelta(days=2))
         self.run_feed(ctx3, FakeResp(200, "BEGIN:VCALENDAR\r\nthis is not iCalendar"))
@@ -1006,6 +1018,29 @@ class DriveFlyers(TempState):
         starts = {e["extra"]["drive_id"]: e["extra"]["start"] for e in evs}
         self.assertEqual(starts["drive:file7"], "2026-10-17T23:30:00Z")          # "2026-10-17 6.30 PM": 6:30 PM CDT
         self.assertEqual({starts[f"drive:file{n}"] for n in (11, 12, 13)}, {"2026-10-18T00:00:00Z"})      # 7 PM CDT
+
+    def test_a_range_of_days_spans_its_days(self):
+        """A flyer named with a range of days ("Assembly March 14 - 16, 2027.pdf") is ONE event over those days —
+        all day to its last day, or from the start time to the end time on the last day — not a one-day event."""
+        names = ["Assembly March 14 - 16, 2027.pdf", "2027-03-19 - 2027-03-21 NETA 65 Spring Assembly.pdf",
+                 "Asamblea del 14 al 16 de mayo de 2027.pdf", "Roundup March 30 - April 2, 2027 9am-5pm @ Tyler, TX.pdf",
+                 "Convention June 4 - 6, 2027 9am.pdf", "2027-03-14 Workshop.pdf"]
+        raw = {it["extra"]["name"]: it["extra"] for it in self.flyers(*names)}
+        self.assertEqual([(raw[n]["event_date"], raw[n].get("event_end_date")) for n in names],
+                         [("2027-03-14", "2027-03-16"), ("2027-03-19", "2027-03-21"), ("2027-05-14", "2027-05-16"),
+                          ("2027-03-30", "2027-04-02"), ("2027-06-04", "2027-06-06"), ("2027-03-14", None)])
+        evs = {e["title"]: e["extra"] for e in self.events(*names)}
+        self.assertEqual((evs["Assembly"]["start"], evs["Assembly"]["end"], evs["Assembly"]["all_day"]), ("2027-03-14", "2027-03-16", True))
+        self.assertEqual((evs["NETA 65 Spring Assembly"]["start"], evs["NETA 65 Spring Assembly"]["end"]), ("2027-03-19", "2027-03-21"))
+        self.assertEqual((evs["Asamblea"]["start"], evs["Asamblea"]["end"]), ("2027-05-14", "2027-05-16"))
+        ru = evs["Roundup"]                                   # 9 AM CDT on the first day to 5 PM CDT on the last
+        self.assertEqual((ru["start"], ru["end"], ru["all_day"], ru["city"]), ("2027-03-30T14:00:00Z", "2027-04-02T22:00:00Z", False, "Tyler"))
+        cv = evs["Convention"]                                # no end time: to the end of its last day
+        self.assertEqual((cv["start"], cv["end"], cv["all_day"]), ("2027-06-04T14:00:00Z", "2027-06-06", False))
+        ctx = ctx_with()
+        self.assertEqual(B.event_end_ts(ctx, {"extra": cv}),
+                         datetime(2027, 6, 6, 23, 59, tzinfo=ZoneInfo("America/Chicago")).timestamp())
+        self.assertEqual((evs["Workshop"]["start"], evs["Workshop"]["end"]), ("2027-03-14", None), "one day: as before")
 
     def test_until_in_a_flyer_name_is_not_its_start(self):
         """Only a bulletin post keeps an undated "(until …)" in its headline: in a flyer's name it is dropped as

@@ -721,7 +721,7 @@
   "expenses.imp.restore": { "en": "Restore the backup", "es": "Restaurar el respaldo" },
   "expenses.imp.cancel": { "en": "Cancel", "es": "Cancelar" },
   "expenses.imp.map_myself": { "en": "Map the columns myself", "es": "Asignar las columnas yo" },
-  "expenses.imp.backup_counts": { "en": "{n} entries, {photos} photos", "es": "{n} registros, {photos} fotos" },
+  "expenses.imp.backup_counts": { "en": "{entries}, {photos}", "es": "{entries}, {photos}" },
   "expenses.imp.photos_missing": { "en": "Receipt photos it names that are not with it: {n}. If the .zip was unpacked, choose its backup.json together with all its photos.", "es": "Fotos de comprobantes que el respaldo nombra pero que no vienen con él: {n}. Si el .zip se descomprimió, elige su backup.json junto con todas sus fotos." },
   "expenses.imp.photos_alone": { "en": "These are only photos. To restore a backup that was unpacked, choose its backup.json together with its photos.", "es": "Son solo fotos. Para restaurar un respaldo que se descomprimió, elige su backup.json junto con sus fotos." },
   "expenses.imp.photos_progress": { "en": "Restoring the receipt photos: {n} of {total}…", "es": "Restaurando las fotos de comprobantes: {n} de {total}…" },

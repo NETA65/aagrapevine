@@ -20,6 +20,8 @@
      <html data-motion="reduce">): no animation loop — one still picture is painted, and
      repainted at the right size on every resize. Changing either while the page is open works.
      Data saver (<html data-saver="on">, also while offline) gets the same still picture.
+   - Forced colours (Windows High Contrast …): main.css hides the canvas (display:none), so nothing is
+     drawn at all — no loop, no still picture — until the setting is switched off again (followed live).
    - Battery: the lights run for 25 s, then settle into the still picture; moving the mouse over
      the hero (or touching it) brings them back for 20 s. Phones and tablets (a coarse pointer) and
      low-power computers (4 cores or fewer) start with the still picture — a touch wakes it.
@@ -34,6 +36,8 @@
   // Data saver (<html data-saver="on">: the Aa panel's switch, or offline — pwa.js) counts too: the
   // still picture, no animation loop (it spends battery and processor on the phones that most need them).
   function stillArt(){return motionReduced()||document.documentElement.getAttribute("data-saver")==="on"}
+  // Forced colours: the canvas is hidden (main.css) — draw nothing into it (followed live: setForced)
+  const FC=window.matchMedia?window.matchMedia("(forced-colors: active)"):{matches:false};
 
   function createGrapevineArt(hero,canvasEl){
   // ======================= ARTWORK (original, unchanged) =======================
@@ -430,9 +434,10 @@
   const RUN_FOR=25000,WAKE_FOR=20000;
   const LOW_POWER=(function(){try{return window.matchMedia("(pointer: coarse)").matches||(navigator.hardwareConcurrency||8)<=4}catch(e){return false}})();
   let idle=LOW_POWER,idleTimer=null;
+  let forced=!!FC.matches; // forced colours: the canvas is hidden — nothing is drawn
   cvs=canvasEl;
   ctx=cvs.getContext("2d");
-  function running(){return alive&&!held&&!idle&&!reducedMotion&&onScreen&&tabVisible&&W>0&&H>0}
+  function running(){return alive&&!held&&!idle&&!forced&&!reducedMotion&&onScreen&&tabVisible&&W>0&&H>0}
   // Start or stop the draw loop to match the current state.
   function sync(){
     if(running()){if(!raf){lastDrawTime=0;raf=requestAnimationFrame(draw);armIdle(RUN_FOR)}}
@@ -443,7 +448,7 @@
   function wake(){if(!alive||reducedMotion)return;if(idle){idle=false;sync()}if(raf)armIdle(WAKE_FOR)}
   // A still picture: the static layer plus one pass of the original draw() for the lights.
   function paintStill(){
-    if(raf||!scene||!W||!H)return;
+    if(raf||forced||!scene||!W||!H)return;
     renderStaticLayer();
     ctx.clearRect(0,0,W,H);
     if(staticCvs)ctx.drawImage(staticCvs,0,0,W,H);
@@ -498,6 +503,7 @@
     pause:function(){held=true;sync()},
     resume:function(){held=false;resize();sync()},
     setReducedMotion:function(m){reducedMotion=!!m;sync();if(reducedMotion)paintStill()},
+    setForced:function(m){forced=!!m;sync();if(!forced&&!raf)paintStill()},
     destroy:function(){
       alive=false;sync();clearTimeout(resizeTimer);clearTimeout(idleTimer);hero.removeEventListener("touchstart",wake);
       if(ro)ro.disconnect();
@@ -544,6 +550,9 @@
   if(RM.addEventListener)RM.addEventListener("change",onMotionPref);
   else if(RM.addListener)RM.addListener(onMotionPref);
   window.addEventListener("gvlv:prefs",onMotionPref); // the panel's Motion choice (app.js GV.prefs)
+  function onForced(){arts.forEach(function(a){a.setForced(FC.matches)})}
+  if(FC.addEventListener)FC.addEventListener("change",onForced);
+  else if(FC.addListener)FC.addListener(onForced);
   // data-saver / data-motion changed by anything (the panel, going offline, the connection): follow at once
   if(window.MutationObserver)new MutationObserver(onMotionPref).observe(document.documentElement,{attributes:true,attributeFilter:["data-saver","data-motion"]});
 

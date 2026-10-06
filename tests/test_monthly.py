@@ -402,7 +402,10 @@ out(res);
             ["skip one", site(skip_dates="2027-04-10"), "2027-04", False],
             ["skip list", site(skip_dates=["2027-04-10"]), "2027-04", False],
             ["skip another month", site(skip_dates="2027-05-08"), "2027-04", False],
+            # an end earlier on the clock, at most 12 hours later: the next morning (meeting.py overnight)
+            ["overnight", site(start="22:00", end="01:00"), "2027-04", True],
         ])
+        self.assertEqual(got["overnight"][0], "recurring Sat, Apr 10 · 10 PM–1 AM · 2027-04-11T06:00:00.000Z")
         self.assertEqual(got["no end"][0], "recurring Sat, Apr 10 · 5–6 PM · 2027-04-10T23:00:00.000Z")
         self.assertEqual(got["end before start"][0], "recurring Sat, Apr 10 · 5–6 PM · 2027-04-10T23:00:00.000Z")
         for name in ("skip one", "skip list"):
