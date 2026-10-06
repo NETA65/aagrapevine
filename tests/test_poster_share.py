@@ -391,6 +391,36 @@ class Server(unittest.TestCase):
             self.overrides.write_text("{ not json", encoding="utf-8")
             self.assertEqual(self.get(s, "/aagrapevine/sw.js")[0], 404, "an unreadable file: no overrides")
 
+    def test_never_left_running_when_its_python_is_killed(self):
+        # a check or the share pictures stopped halfway (killed, a time limit): the server stops with them
+        child = subprocess.Popen(
+            [sys.executable, "-c", "import sys, time; sys.path.insert(0, sys.argv[1]); "
+             "from scripts.ops.site_browser import SiteServer; s = SiteServer(sys.argv[2]).__enter__(); "
+             "print(s.url, flush=True); time.sleep(120)", str(ROOT), str(self.site)],
+            stdout=subprocess.PIPE, text=True, encoding="utf-8")
+        try:
+            served = child.stdout.readline().strip()
+            port = int(re.search(r":(\d+)/", served).group(1))
+            c = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+            c.request("GET", "/aagrapevine/about/")
+            self.assertEqual(c.getresponse().read(), b"about", "it serves while its Python runs")
+            c.close()
+        finally:
+            child.kill()
+            child.wait(10)
+            child.stdout.close()
+        stopped = False
+        for _ in range(100):
+            probe = http.client.HTTPConnection("127.0.0.1", port, timeout=2)
+            try:
+                probe.connect()
+                probe.close()
+            except OSError:
+                stopped = True
+                break
+            time.sleep(0.1)
+        self.assertTrue(stopped, "the server stopped with the Python process that started it")
+
     def test_another_folder_and_a_stopped_server(self):
         with B.SiteServer(self.site, prefix="/") as s:
             self.assertRegex(s.url, r"^http://127\.0\.0\.1:\d+/$")

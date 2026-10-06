@@ -77,8 +77,10 @@ class SiteServer:
         cmd = [node, str(SERVER), str(self.site), "--port", "0", "--prefix", self.prefix]
         if self.overrides:
             cmd += ["--overrides", str(self.overrides)]
-        self.proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
-                                     encoding="utf-8", errors="replace")
+        # (its standard input is a pipe from this process: when this process ends — even killed or stopped
+        # halfway — the pipe closes and the server stops with it, never left running on its own)
+        self.proc = subprocess.Popen([*cmd, "--stop-with-parent"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE, text=True, encoding="utf-8", errors="replace")
         first: list[str] = []
         reader = threading.Thread(target=lambda: first.append(self.proc.stdout.readline()), daemon=True)
         reader.start()
@@ -103,7 +105,7 @@ class SiteServer:
             except subprocess.TimeoutExpired:
                 self.proc.kill()
                 self.proc.wait(10)
-        for stream in (self.proc.stdout, self.proc.stderr):
+        for stream in (self.proc.stdin, self.proc.stdout, self.proc.stderr):
             try:
                 stream.close()
             except Exception:  # (a reader thread may still hold it: closed with the process anyway)

@@ -2,6 +2,7 @@
 // posters' share pictures (scripts/ops/poster_share.py), on this computer only (127.0.0.1):
 //
 //   node scripts/ops/serve_site.mjs <built site folder> [--port N] [--prefix /aagrapevine/] [--overrides file.json]
+//                                   [--stop-with-parent]
 //
 // It prints ONE line once it listens — "serving <folder> at http://127.0.0.1:<port>/aagrapevine/" — and serves until
 // it is stopped. --port 0 (the default) takes any free port (the line says which). --prefix is the site's folder on
@@ -15,6 +16,10 @@
 //   { "files": { "/aagrapevine/sw.js": "<file served instead>" }, "delay_ms": { "/aagrapevine/about/": 20000 } }
 // (addresses as the browser asks for them, without the ?query). (Node, not Python: Python's http.server can stall
 // on large files on Windows.)
+//
+// --stop-with-parent: stop when standard input closes — scripts/ops/site_browser.py starts the server with a pipe
+// there, which closes when that Python process ends, even when it is killed or stopped halfway, so no server is
+// ever left running on its own.
 import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
@@ -108,6 +113,13 @@ const server = http.createServer((req, res) => {
 });
 // a stopped browser leaves half-open connections behind: never let them keep this process alive or crash it
 server.on("clientError", (_e, socket) => socket.destroy());
+if (args.includes("--stop-with-parent")) {
+  const stop = () => process.exit(0);
+  process.stdin.on("end", stop);
+  process.stdin.on("close", stop);
+  process.stdin.on("error", stop);
+  process.stdin.resume();
+}
 server.listen(PORT, "127.0.0.1", () => {
   console.log(`serving ${ROOT} at http://127.0.0.1:${server.address().port}${PREFIX}/`);
 });
