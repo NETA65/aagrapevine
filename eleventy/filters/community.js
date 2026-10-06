@@ -9,7 +9,8 @@ import QRCode from "qrcode";
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
-import { safeUrl, TZ } from "../../eleventy.config.js";
+// langPath: our page in a language ("/es/events/"; a file only when the build writes it for that language too)
+import { safeUrl, TZ, langPath, pickLang } from "../../eleventy.config.js";
 // The monthly digest groups the committee's photos into the albums of /photos/ (the same anchors).
 import { ownLangs, chicagoDayEndMs, isPhotoItem, photoAlbumKey, photoAlbumSlugs } from "./committee.js";
 // The monthly digest names its months like /monthly/ (monthLabel), finds the committee meeting of the
@@ -163,7 +164,6 @@ function absUrl(url, site) {
   const b = String(site?.url || "").replace(/\/$/, "");
   return b + (url.startsWith("/") ? url : "/" + url);
 }
-const langPath = (url, lang) => (lang && lang !== "en" && url.startsWith("/") ? `/${lang}${url}` : url);
 const clean = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
 
 /**
@@ -249,13 +249,6 @@ export function hrefOf(item, lang) {
 
 const isMediaItem = (item) => item?.kind === "episode" || item?.kind === "video";
 
-function pickLang(item, field, lang) {
-  if (!item) return "";
-  const i = item.i18n && item.i18n[field];
-  if (i && (i[lang] || i[lang] === "")) return i[lang] || i[item.lang] || item[field] || "";
-  if (i && i.en) return i.en;
-  return item[field] ?? "";
-}
 
 /** Shallow copy of an item plus the display helpers templates need. */
 function prep(item, now = Date.now()) {

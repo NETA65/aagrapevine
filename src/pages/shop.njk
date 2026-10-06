@@ -613,7 +613,8 @@ pageScripts: ["/assets/js/shop.js"]
         {% endfor %}
       </ul>
       <div class="mt-7 flex flex-wrap gap-2 sm:gap-3">
-        <a class="btn-lv" href="{{ L.carry_the_message }}" target="_blank" rel="noopener">{% icon "gift", "size-4" %} {{ "read.subs.ctm_btn" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+        {#- the page language's Carry the Message page: La Viña's "Lleva el Mensaje" on /es/ (langLink) -#}
+        <a class="btn-lv" href="{{ L | langLink('carry_the_message', lang) }}" target="_blank" rel="noopener">{% icon "gift", "size-4" %} {{ "read.subs.ctm_btn" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
         <a class="btn-secondary" href="{{ '/gvr/' | lurl(lang) }}">{{ "read.subs.ctm_gvr" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
       </div>
     </div>
@@ -708,11 +709,11 @@ pageScripts: ["/assets/js/shop.js"]
       {{ ui.sectionHead("read.subs.help_title" | t(lang), "read.subs.help_text" | t(lang), "", "", "phone", { eyebrow: "shop.nav_help" | t(lang), id: "help-title", lang: lang }) }}
       <div class="card card-pad shop-help">
         <ul class="shop-help-list" role="list">
-          {#- pick(): the page language's number when config/site.yml has one (support_phone_intl_es:
+          {#- langLink: the page language's number when config/site.yml has one (support_phone_intl_es:
               the Spanish international desk on /es/), else the plain key. support_phone_es is the
               Spanish toll-free line and is shown on both pages. -#}
           {% for ph in [["support_phone_us", "help_us"], ["support_phone_es", "help_es"], ["support_phone_intl", "help_intl"]] %}
-          {%- set num = L | pick(lang, ph[0]) -%}
+          {%- set num = L | langLink(ph[0], lang) -%}
           {% if num %}
           <li>
             <p class="min-w-0 text-xs font-semibold uppercase tracking-wider text-muted">{{ ("read.subs." + ph[1]) | t(lang) }}</p>

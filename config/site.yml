@@ -30,8 +30,6 @@ site:
   # name in the Actions list, "Morning check (new day by 5:30 AM)", says this time too: after a
   # change, also change that `name:` in morning.yml (and in tests/test_run_names.py, which pins it).
   morning_goal: "05:30"
-  default_lang: "en"
-  languages: ["en", "es"]
   contact_email: "grapevine@neta65.org"
   area_website: "https://neta65.org"
   committee_page: "https://neta65.org/trusted-servants/grapevine-la-vina/"
@@ -75,6 +73,8 @@ meeting:
   weekday: "wednesday"
   start: "19:00"          # 24h, Central time
   end: "20:00"
+  # Where it is held, as the pages name it: "Join on Zoom", "… on Zoom" (leave out: Zoom). The link, ID and
+  # passcode below are what people use to join; the dial-in numbers (phone_access) are Zoom's own.
   platform: "Zoom"
   # The official "ZOOM Link" from the committee page (neta65.org/trusted-servants/grapevine-la-vina/).
   # Zoom's pwd= is an encoded token, not the passcode itself — copy the whole link from Zoom.
@@ -84,7 +84,9 @@ meeting:
   chair_title: "Grapevine / La Viña Chair"
   chair_title_es: "Coordinador(a) de Grapevine / La Viña"
   chair_email: "grapevine@neta65.org"
+  # Who may come, in a line: on /meetings/ ("Who can come") and in the meeting's calendar entries.
   note: "All AA members are welcome to attend. No registration required."
+  note_es: "Todos los miembros de AA pueden asistir. No hace falta registrarse."
   # Dates to skip (e.g. a holiday) — "YYYY-MM-DD"
   skip_dates: []
 
@@ -130,6 +132,9 @@ recurring_events:
 
   - key: "lv-monthly-workshop"     # La Viña's monthly workshop on Zoom — from its official Instagram flyer
                                    # (@alcoholicosanonimos_lv, Mar 10, 2024) and its calendar on aalavina.org
+    # Its name as La Viña itself gives it, on its flyer and on Instagram (Sept. 22, 2026); the committee's
+    # decks use the same one. (Its calendar lists each date in short — "Taller mensual LV"; in 2024 it was
+    # the "Taller informativo mensual de La Viña", which flyer_match below still finds.)
     title: "La Viña Monthly Virtual Workshop (in Spanish)"
     title_es: "Taller Mensual y Virtual de La Viña"
     # The card on /events/ shows 3 lines of the summary: keep each short (about 100 characters). The
@@ -776,6 +781,8 @@ links:
   lv_store: "https://www.aalavina.org/tienda"
   carry_the_message: "https://www.aagrapevine.org/carry-the-message"
   # La Viña's own Carry the Message page (in Spanish): the Spanish pages and the Spanish report use it.
+  # (Every link with a Spanish twin works the same way: a "<name>_es" line, or this one for carry_the_message,
+  # is what the Spanish pages show — the `langLink` filter in eleventy.config.js.)
   lleva_el_mensaje: "https://www.aalavina.org/lleva-el-mensaje"
   gv_share_story: "https://www.aagrapevine.org/share"
   gv_audio_project: "https://www.aagrapevine.org/audio-portal"
@@ -797,12 +804,9 @@ links:
   app_help_iphone_es: "https://support.apple.com/es-mx/guide/iphone/iphea86e5236/ios"
   app_help_android: "https://support.google.com/chrome/answer/9658361?hl=en&co=GENIE.Platform%3DAndroid"
   app_help_android_es: "https://support.google.com/chrome/answer/9658361?hl=es-419&co=GENIE.Platform%3DAndroid"
-  sobriety_calculator: "https://www.aagrapevine.org/sobriety-calculator"
   weekly_open: "https://www.aagrapevine.org/grapevine-weekly-open"
   podcasts_page: "https://www.aagrapevine.org/podcasts"
   youtube_channel: "https://www.youtube.com/@AAGrapevine"
-  instagram_gv: "https://www.instagram.com/alcoholicsanonymous_gv/"
-  instagram_lv: "https://www.instagram.com/alcoholicosanonimos_lv/"
   aa_org: "https://www.aa.org"
   aa_org_es: "https://www.aa.org/es"
   # Accessibility page (/accessibility/): the official ASL, audio and large-print resources,

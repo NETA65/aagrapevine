@@ -152,7 +152,8 @@ pageScripts: ["/assets/js/read.js"]
                 <span>{{ ("read.gvr.s_" + s.id + "_t") | t(lang) }}</span>
               </label>
               <div class="read-check-body">
-                <p class="text-sm leading-relaxed text-muted">{{ ("read.gvr.s_" + s.id) | t(lang) }}</p>
+                {#- (s_meeting names where the committee meets: config/site.yml meeting.platform) -#}
+                <p class="text-sm leading-relaxed text-muted">{{ ("read.gvr.s_" + s.id) | t(lang, { platform: site.meeting.platform or "Zoom" }) }}</p>
                 <p class="mt-1 flex flex-wrap gap-x-4 text-sm">
                   {% if s.id == "register" %}
                     {% for k in (["rlv", "gvr"] if lang == "es" else ["gvr", "rlv"]) %}

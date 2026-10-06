@@ -84,8 +84,8 @@
     "es": "último"
   },
   "home.meeting_join": {
-    "en": "Join on Zoom",
-    "es": "Entrar por Zoom"
+    "en": "Join on {platform}",
+    "es": "Entrar por {platform}"
   },
   "home.meeting_add_cal": {
     "en": "Add to calendar",
@@ -120,8 +120,8 @@
     "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
   },
   "home.meeting_cal_desc": {
-    "en": "Monthly NETA 65 Grapevine / La Viña committee meeting on Zoom. All AA members are welcome.",
-    "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65 por Zoom. Todos los miembros de AA son bienvenidos."
+    "en": "Monthly NETA 65 Grapevine / La Viña committee meeting on {platform}.",
+    "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65 por {platform}."
   },
   "home.countdown_aria": {
     "en": "Time left until the meeting starts",

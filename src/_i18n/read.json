@@ -392,7 +392,7 @@
   "read.gvr.s_handbook_t": { "en": "Read the handbook", "es": "Lee el manual" },
   "read.gvr.s_handbook": { "en": "The official handbook explains the service position step by step — it's short and practical.", "es": "El manual oficial explica el puesto de servicio paso a paso; es breve y práctico." },
   "read.gvr.s_meeting_t": { "en": "Come to our committee meeting", "es": "Ven a la reunión del comité" },
-  "read.gvr.s_meeting": { "en": "Meet other GVRs and RLVs from across NETA 65 on Zoom once a month.", "es": "Conoce a otros RLV y GVR de todo NETA 65 por Zoom una vez al mes." },
+  "read.gvr.s_meeting": { "en": "Meet other GVRs and RLVs from across NETA 65 on {platform} once a month.", "es": "Conoce a otros RLV y GVR de todo NETA 65 por {platform} una vez al mes." },
   "read.gvr.next_meeting": { "en": "Next: {date}", "es": "Próxima: {date}" },
   "read.gvr.s_table_t": { "en": "Set up a literature table", "es": "Arma una mesa de literatura" },
   "read.gvr.s_table": { "en": "Display the current issues, catalogs and free postcards from the kit.", "es": "Exhibe las ediciones actuales, los catálogos y las postales gratuitas del kit." },

@@ -6,6 +6,8 @@ pageKey: events
 titleKey: nav.events
 descKey: committee.events.meta_desc
 pageScripts: ["/assets/js/committee.js"]
+# the calendar file of this page's events (src/pages/events-ics.11ty.js), named in the page's <head> (base.njk)
+calendarFeed: "/events.ics"
 ---
 {#- Events: committee meetings (computed), monthly recurring events (config/site.yml
     `recurring_events:` — the next date is shown, with the following ones listed on it; "Show every
@@ -40,6 +42,8 @@ pageScripts: ["/assets/js/committee.js"]
 {%- set nOther = nNeta + nCal -%}
 {%- set pageAbs = page.url | siteUrl(site) -%}
 {%- set m = site.meeting -%}
+{#- where the committee meeting is held, in the page's words ("Join on Zoom"): config/site.yml meeting.platform -#}
+{%- set pf = { platform: m.platform or "Zoom" } -%}
 {%- set di = db.status | cmDriveInfo(site) -%}
 
 {#- The kind of an event, in words and in its colour (eventTone: eleventy/filters/event-tone.js; the
@@ -163,7 +167,7 @@ pageScripts: ["/assets/js/committee.js"]
 
   {#- ---------- Pinned: next committee meeting ---------- -#}
   {% if next %}
-  {%- set cfg = { rule: m | cmRuleObj, start: next.startIso, end: next.endIso, title: next.title, description: next.calDescription, location: next.calLocation, url: ('/meetings/' | lurl(lang) | siteUrl(site)), i18n: { join: "committee.meeting.join" | t(lang), soon: "committee.meeting.join_soon" | t(lang), live: "committee.meeting.join_live" | t(lang), yourTime: "committee.meeting.your_time" | t(lang) } } -%}
+  {%- set cfg = { rule: m | cmRuleObj, start: next.startIso, end: next.endIso, title: next.title, description: next.calDescription, location: next.calLocation, url: ('/meetings/' | lurl(lang) | siteUrl(site)), i18n: { join: "committee.meeting.join" | t(lang, pf), soon: "committee.meeting.join_soon" | t(lang), live: "committee.meeting.join_live" | t(lang), yourTime: "committee.meeting.your_time" | t(lang) } } -%}
   <article class="cm-pinned @container mb-10" x-show="filter === 'all' && !showAll" x-data="cmMeeting({{ cfg | json }})" aria-labelledby="ev-next-title">
     <div class="cm-pinned-grid">
       <div class="cm-date-tile cm-tone-light" aria-hidden="true">
@@ -181,12 +185,12 @@ pageScripts: ["/assets/js/committee.js"]
         <p class="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-white/80">
           <span class="inline-flex items-center gap-1.5">{% icon "calendar", "size-4" %} <span x-text="dateLabel">{{ next.dateLabel }}</span></span>
           <span class="inline-flex items-center gap-1.5">{% icon "clock-3", "size-4" %} <span x-text="timeLabel">{{ next.timeLabel }}</span></span>
-          <span class="inline-flex items-center gap-1.5">{% icon "video", "size-4" %} Zoom</span>
+          <span class="inline-flex items-center gap-1.5">{% icon "video", "size-4" %} {{ pf.platform }}</span>
         </p>
         <p class="mt-1 text-xs text-white/65" x-show="localLabel" x-text="localLabel" x-cloak></p>
       </div>
       <div class="cm-pinned-actions">
-        <a href="{{ m.zoom_url }}" target="_blank" rel="noopener" class="btn-light btn-sm" :class="phase !== 'upcoming' && 'cm-join-live'">{% icon "video", "size-4" %} <span x-text="joinText">{{ "committee.meeting.join" | t(lang) }}</span></a>
+        <a href="{{ m.zoom_url }}" target="_blank" rel="noopener" class="btn-light btn-sm" :class="phase !== 'upcoming' && 'cm-join-live'">{% icon "video", "size-4" %} <span x-text="joinText">{{ "committee.meeting.join" | t(lang, pf) }}</span></a>
         <details class="cm-menu">
           <summary class="btn-on-dark btn-sm">{% icon "calendar-plus", "size-4" %} {{ "common.add_to_calendar" | t(lang) }}</summary>
           <div class="cm-menu-panel cm-menu-right">
@@ -208,6 +212,9 @@ pageScripts: ["/assets/js/committee.js"]
     <ol class="grid gap-4">
       {% for ev in grp.items %}
       {%- set kind = ev | eventTone %}
+      {#- Share: the event's own small page (src/pages/event-share.11ty.js), whose link preview shows its title, day
+          and flyer — it leads on to this card; a committee meeting's card is shared as it is -#}
+      {%- set shareUrl = (pageAbs + "#" + ev.anchor) if ev.committee else (("/events/" + ev.anchor + "/") | lurl(lang) | siteUrl(site)) %}
       <li id="{{ ev.anchor }}" data-group="{{ ev.group }}" data-committee="{{ '1' if ev.committee else '0' }}"{% if ev.later %} data-later{% endif %}{% if ev.committee or ev.later %} data-dflt-hidden{% endif %} data-cm-expire="{{ ev.expireIso }}" x-show="show($el)">
         <article class="card cm-event ev-accent ev-tone-{{ kind }}">
           {#- the date: a tile column from 640px; on a phone a strip above the title (+ Share as an icon) -#}
@@ -219,7 +226,7 @@ pageScripts: ["/assets/js/committee.js"]
           <div class="min-w-0 flex-1">
             <div class="mb-2.5 flex items-center justify-between gap-3 sm:hidden">
               <p class="cm-date-strip" aria-hidden="true">{% icon "calendar", "size-3.5" %}<span>{{ ev.tile.wd }} · {{ ev.tile.mon }} {{ ev.tile.day }}</span></p>
-              <button type="button" class="btn-ghost -my-1 -mr-2 size-11 shrink-0 p-0" data-js-only data-share="{{ pageAbs }}#{{ ev.anchor }}" data-share-title="{{ ev.title }}" data-share-text="{{ ev.shareWhen }}" aria-label="{{ 'common.share' | t(lang) }}: {{ ev.title }}">{% icon "share-2", "size-4" %}</button>
+              <button type="button" class="btn-ghost -my-1 -mr-2 size-11 shrink-0 p-0" data-js-only data-share="{{ shareUrl }}" data-share-title="{{ ev.title }}" data-share-text="{{ ev.shareWhen }}" aria-label="{{ 'common.share' | t(lang) }}: {{ ev.title }}">{% icon "share-2", "size-4" %}</button>
             </div>
             <div class="flex flex-wrap items-center gap-1.5">
               {{ kindBadge(ev, kind) }}
@@ -274,7 +281,7 @@ pageScripts: ["/assets/js/committee.js"]
             <div class="cm-ev-actions">
               <div class="cm-ev-btns">
               {% if ev.committee %}
-              <a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "video", "size-4" %} {{ "committee.meeting.join" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+              <a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "video", "size-4" %} {{ "committee.meeting.join" | t(lang, pf) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
               {% elif ev.online %}
               <a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "globe", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.join_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.join_online" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
               {% endif %}
@@ -286,7 +293,7 @@ pageScripts: ["/assets/js/committee.js"]
               <a class="btn-secondary btn-sm" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.details_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.details" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
               {% endif %}
               </div>
-              <button type="button" class="btn-ghost btn-sm max-xl:px-2.5 max-sm:hidden" data-js-only data-share="{{ pageAbs }}#{{ ev.anchor }}" data-share-title="{{ ev.title }}" data-share-text="{{ ev.shareWhen }}">{% icon "share-2", "size-4" %}<span class="max-xl:sr-only">{{ "common.share" | t(lang) }}</span></button>
+              <button type="button" class="btn-ghost btn-sm max-xl:px-2.5 max-sm:hidden" data-js-only data-share="{{ shareUrl }}" data-share-title="{{ ev.title }}" data-share-text="{{ ev.shareWhen }}">{% icon "share-2", "size-4" %}<span class="max-xl:sr-only">{{ "common.share" | t(lang) }}</span></button>
             </div>
           </div>
           {#- The flyer on the side (from 640px; on a phone the "View flyer" button above is the way to it):

@@ -1045,9 +1045,9 @@ slides:
   - id: "lv-workshop"
     layout: "bullets"
     eyebrow: "Current information"
-    title: "La Viña's monthly information workshop"
+    title: "La Viña's monthly virtual workshop"
     items:
-      - "**{lang:es}Taller informativo mensual de La Viña{/lang}:** online, in Spanish, hosted by La Viña's office"
+      - "**{lang:es}Taller Mensual y Virtual de La Viña{/lang}:** online, in Spanish, hosted by La Viña's office"
       - "News about La Viña, its products and suggestions"
       - "Usually the **4th Thursday**, **{live:lv_workshop_time}**"
       - "Zoom ID **{live:lv_workshop_zoom_id}**"
@@ -1057,9 +1057,9 @@ slides:
     source: "Sources: La Viña News, Sept.–Oct. 2026, p. 3 · aalavina.org/calendario-de-eventos"
     minutes: 0.75
     notes: |
-      SAY: La Viña's office holds a monthly information workshop on Zoom, in Spanish: the '{lang:es}Taller informativo mensual de La Viña{/lang}', to keep us informed about the latest from La Viña, its products and suggestions. It's usually on the fourth Thursday of the month, {live:lv_workshop_time}. In November and December, La Viña has held it on the Thursday before Thanksgiving and before Christmas. (Read the next date on the slide.) This is a good one to pass on to Spanish-speaking groups, RLVs and district La Viña committees.
+      SAY: La Viña's office holds a monthly virtual workshop on Zoom, in Spanish: the '{lang:es}Taller Mensual y Virtual de La Viña{/lang}', to keep us informed about the latest from La Viña, its products and suggestions. It's usually on the fourth Thursday of the month, {live:lv_workshop_time}. In November and December, La Viña has held it on the Thursday before Thanksgiving and before Christmas. (Read the next date on the slide.) This is a good one to pass on to Spanish-speaking groups, RLVs and district La Viña committees.
       DO: The next date stays current by itself; before each workshop, check it against aalavina.org/calendario-de-eventos. Say 'usually the fourth Thursday': La Viña's own calendar has kept the fourth Thursday even in months with five Thursdays. La Viña publishes only the start time, so the committee lists it as one hour.
-      SOURCES: La Viña News, Sept.–Oct. 2026, p. 3; aalavina.org/calendario-de-eventos and its event pages (read Oct. 1, 2026; Oct. 22 was the latest date posted; November 20 and December 18 in 2025).
+      SOURCES: La Viña News, Sept.–Oct. 2026, p. 3; aalavina.org/calendario-de-eventos and its event pages (read Oct. 1, 2026; Oct. 22 was the latest date posted; November 20 and December 18 in 2025). The name as La Viña itself gives it on its flyer and on its Instagram (Sept. 22, 2026: '¡Taller Mensual y Virtual de La Viña!').
       TRANSITION: One way to stay connected is to serve as your group's GVR or RLV.
 
   - id: "gvr-rlv"

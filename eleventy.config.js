@@ -166,14 +166,20 @@ export function translateKey(key, lang = "en", vars) {
   return interpolate(s, vars);
 }
 
-function pickLang(item, field, lang) {
+// An item's text in a language: its translation (i18n[lang]), else the field written for that language
+// (title_es), else the item's own words — its language's entry (i18n[item.lang]) or the field as published
+// (extra.<field>, else <field>) — and English only when the item has no words of its own (a Spanish story
+// without a translation into another language keeps its Spanish title rather than an English one).
+export function pickLang(item, field, lang) {
   if (!item) return "";
   const i = item.i18n && item.i18n[field];
   if (i && (i[lang] || i[lang] === "")) return i[lang] || i[item.lang] || item[field] || "";
-  if (i && i.en) return i.en;
   if (item[field + "_" + lang]) return item[field + "_" + lang];
-  if (item.extra && item.extra[field] !== undefined) return item.extra[field];
-  return item[field] ?? "";
+  if (i && item.lang && i[item.lang]) return i[item.lang];
+  const own = item.extra && item.extra[field] !== undefined ? item.extra[field] : item[field];
+  if (own !== undefined && own !== null && own !== "") return own;
+  if (i && i.en) return i.en;
+  return own ?? "";
 }
 
 /* ------------------------------------------------------------------ */
@@ -274,6 +280,79 @@ export function safeUrl(value) {
   const host = s.match(BARE_HOST);
   if (host && (/^www\./i.test(s) || !FILE_EXT_TLD.test(host[0].replace(/:\d+$/, "")))) return "https://" + s;
   return "";
+}
+
+/* ------------------------------------------------------------------ */
+/*  Our own addresses in a language, absolute addresses, share pictures */
+/* ------------------------------------------------------------------ */
+// Every address the build writes ("/es/feed.xml", "/events/" …: the `eleventy.contentMap` event, before any
+// page is rendered); null outside a build (a filter called from a test or a script).
+let builtUrls = null;
+
+/** A link to one of the site's pages or files in a language (the `lurl` filter; community.js hrefOf):
+    "/events/" → "/es/events/" on a Spanish page. A file — a document or picture ("/bulletin/files/flyer.pdf"),
+    anything in /assets/ — exists once for both languages: it gets the prefix only when the build writes that
+    file for the language too (/es/feed.xml, /es/events.ics, /es/manifest.webmanifest, /es/search-index.json …),
+    never otherwise (outside a build: never). Other sites, mailto:, tel: and "#…" are left as they are. */
+export function langPath(url, lang) {
+  if (!url || typeof url !== "string" || /^(?:[a-z][a-z0-9+.-]*:|#|\/\/)/i.test(url)) return url;
+  const u = url.startsWith("/") ? url : "/" + url;
+  if (!lang || lang === "en") return u;
+  const p = u.split(/[?#]/)[0];
+  const file = p.startsWith("/assets/") || /\.[a-z0-9]{1,12}$/i.test(p.slice(p.lastIndexOf("/") + 1));
+  if (file && !(builtUrls && builtUrls.has(`/${lang}${p}`))) return u;
+  return `/${lang}${u}`;
+}
+
+/** An absolute address on the public site (feeds, QR codes, share links and pictures): "/es/library/" →
+    "https://…/aagrapevine/es/library/". An address that is already absolute is left as it is ("//host/…" gets
+    https:). Nothing → the site's own address. */
+export function siteUrl(url, site) {
+  const u = url === null || url === undefined ? "" : String(url).trim();
+  if (/^[a-z][a-z0-9+.-]*:/i.test(u)) return u;
+  if (u.startsWith("//")) return "https:" + u;
+  const b = String(site?.url || "").replace(/\/$/, "");
+  return b + (u.startsWith("/") ? u : "/" + u);
+}
+
+// The Spanish twin of a config/site.yml `links:` entry whose name is not "<name>_es": La Viña's own page of
+// the same thing (its "Lleva el Mensaje" page for Grapevine's Carry the Message).
+const LINK_TWINS = { es: { carry_the_message: "lleva_el_mensaje" } };
+
+/** One of the links in config/site.yml `links:` in the page's language (the `langLink` filter; area filters
+    get it as a helper): on a Spanish page its Spanish twin when the settings have one — "<name>_es"
+    (aa_twelve_and_twelve_es, support_phone_intl_es …) or the name in LINK_TWINS (carry_the_message →
+    lleva_el_mensaje) —, else the link itself ("" when there is none).
+      {{ site.links | langLink("carry_the_message", lang) }} */
+export function langLink(links, key, lang) {
+  const L = links && typeof links === "object" ? links : {};
+  if (lang && lang !== "en") {
+    const twin = L[(LINK_TWINS[lang] || {})[key]] || L[`${key}_${lang}`];
+    if (twin) return twin;
+  }
+  return L[key] ?? "";
+}
+
+// A picture the link previews of WhatsApp, Facebook, iMessage … show: PNG, JPEG, GIF or WebP (never an SVG or a
+// document) — by its file name, or Google's picture of a Drive file (lh3.googleusercontent.com, the event flyers)
+// and YouTube's video pictures, which have none.
+const SHARE_PICTURE = /\.(?:png|jpe?g|gif|webp)$/i;
+const SHARE_PICTURE_HOST = /^(?:lh\d\.googleusercontent\.com|i\d?\.ytimg\.com)$/i;
+
+/** A page's share picture (its `ogImage`: an address, or { src, width, height, alt }) → { url (absolute),
+    width, height, alt } — width and height only when both are known (0 otherwise), alt "" when not given —,
+    or null when there is none or it is not a picture the previews show (the page then keeps the committee's
+    card). */
+export function shareImage(img, site) {
+  const o = img && typeof img === "object" ? img : { src: img };
+  const src = safeUrl(o.src);
+  if (!src || src.startsWith("#") || /^(?:mailto|tel):/i.test(src)) return null;
+  const abs = siteUrl(src, site);
+  let parsed;
+  try { parsed = new URL(abs); } catch { return null; }
+  if (!SHARE_PICTURE.test(parsed.pathname) && !SHARE_PICTURE_HOST.test(parsed.hostname)) return null;
+  const w = Math.round(Number(o.width)) || 0, h = Math.round(Number(o.height)) || 0;
+  return { url: abs, width: w > 0 && h > 0 ? w : 0, height: w > 0 && h > 0 ? h : 0, alt: String(o.alt ?? "").replace(/\s+/g, " ").trim() };
 }
 
 /* ------------------------------------------------------------------ */
@@ -470,11 +549,12 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("t", (key, lang, vars) => translateKey(key, lang, vars));
   eleventyConfig.addFilter("tx", (item, field, lang) => pickLang(item, field, lang));
   eleventyConfig.addFilter("machineFor", (item, lang) => !!(item && item.machine && item.machine.includes(lang)));
-  eleventyConfig.addFilter("lurl", (url, lang) => {
-    if (!url || /^(https?:|mailto:|tel:|#)/.test(url)) return url;
-    const u = url.startsWith("/") ? url : "/" + url;
-    return lang && lang !== "en" ? `/${lang}${u}` : u;
-  });
+  // {{ "/events/" | lurl(lang) }}: our page (or file) in the page's language — langPath above. It learns which files
+  // the build writes per language here, before any page is rendered.
+  eleventyConfig.on("eleventy.contentMap", ({ urlToInputPath }) => { builtUrls = new Set(Object.keys(urlToInputPath || {})); });
+  eleventyConfig.addFilter("lurl", langPath);
+  // {{ site.links | langLink("carry_the_message", lang) }}: a config link in the page's language (its Spanish twin on /es/)
+  eleventyConfig.addFilter("langLink", langLink);
   eleventyConfig.addFilter("altLangUrl", (url, lang) => {
     const u = url || "/";
     if (lang === "es") return u.replace(/^\/es(\/|$)/, "/") || "/";
@@ -571,11 +651,10 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("absUrl", (url, base) => {
     try { return new URL(url, (base || "").replace(/\/?$/, "/")).toString(); } catch { return url; }
   });
-  eleventyConfig.addFilter("siteUrl", (url, site) => {
-    // Absolute URL on the public site (feeds, QR codes). url like "/es/library/"
-    const b = String(site?.url || "").replace(/\/$/, "");
-    return b + (url.startsWith("/") ? url : "/" + url);
-  });
+  // Absolute URL on the public site (feeds, QR codes, share pictures): {{ "/es/library/" | siteUrl(site) }} — siteUrl above
+  eleventyConfig.addFilter("siteUrl", siteUrl);
+  // A page's share picture (base.njk og:image / twitter:image): {{ ogImage | shareImage(site) }} — shareImage above
+  eleventyConfig.addFilter("shareImage", shareImage);
   // Data-driven href/src: {{ item.extra.website | extUrl }} → "" when the value is not a safe link.
   eleventyConfig.addFilter("extUrl", safeUrl);
   eleventyConfig.addFilter("hostname", (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } });
@@ -614,7 +693,7 @@ export default function (eleventyConfig) {
     for (const f of fs.readdirSync(extraDir).filter((f) => f.endsWith(".js")).sort()) {
       eleventyConfig.addPlugin(async (cfg) => {
         const mod = await import("./eleventy/filters/" + f);
-        await mod.default(cfg, { translateKey, pickLang, fmtDate, toDate, esMeridiem });
+        await mod.default(cfg, { translateKey, pickLang, fmtDate, toDate, esMeridiem, langLink, langPath });
       });
     }
   }

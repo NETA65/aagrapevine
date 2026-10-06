@@ -485,14 +485,18 @@ export function libraryCollections(docs, lang, helpers) {
   });
 }
 
-export function libraryStats(docs) {
-  const now = Date.now();
+// The hero's "new this month" (library.stat_new): documents dated this calendar month in Central time — from
+// the 1st through today (a crawled PDF known only by its upload month counts in that month), never one whose
+// page no longer links it (`or`).
+export function libraryStats(docs, now = Date.now()) {
+  const today = DAY_FMT.format(new Date(now));
+  const month = today.slice(0, 7);
   const bySrc = { gv: 0, lv: 0, neta: 0 };
   let recent = 0, pdf = 0;
   for (const d of docs) {
     bySrc[d.s] = (bySrc[d.s] || 0) + 1;
     if (d.ft === "pdf") pdf++;
-    if (d.d && !d.or && d.ts >= now - 31 * DAY && d.ts <= now + DAY) recent++;
+    if (d.d && !d.or && d.d.slice(0, 7) === month && d.d <= today) recent++;
   }
   return { total: docs.length, pdf, recent, bySrc, sources: Object.values(bySrc).filter(Boolean).length };
 }

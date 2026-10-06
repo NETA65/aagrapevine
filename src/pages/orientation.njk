@@ -542,7 +542,7 @@ pageScripts: ["/assets/js/orientation.js", "/assets/js/presentations-core.js", "
   {{ ui.nextSteps([
     { href: ("/gvr/" | lurl(lang)) + "#steps", title: "nav.gvr" | t(lang), text: "orientation.ns_gvr" | t(lang), cta: "orientation.ns_gvr_cta" | t(lang), icon: "badge-check", tone: "vine" },
     { href: "/monthly/" | lurl(lang), title: "nav.monthly" | t(lang), text: "orientation.ns_monthly" | t(lang), cta: "orientation.ns_monthly_cta" | t(lang), icon: "calendar-heart", tone: "gv" },
-    { href: ("/meetings/" | lurl(lang)) + "#committee-meeting", title: "orientation.ns_meeting_t" | t(lang), text: (site.meeting | cmRule(lang)) + " · " + (site.meeting | cmTimeRange(lang)) + " · " + (site.meeting.platform or "Zoom"), cta: "orientation.ns_meeting_cta" | t(lang), icon: "video", tone: "grape" },
+    { href: ("/meetings/" | lurl(lang)) + "#committee-meeting", title: "orientation.ns_meeting_t" | t(lang), text: (site.meeting | cmRule(lang)) + " · " + (site.meeting | cmTimeRange(lang)) + " · " + (site.meeting.platform or "Zoom"), cta: "orientation.ns_meeting_cta" | t(lang, { platform: site.meeting.platform or "Zoom" }), icon: "video", tone: "grape" },
     { href: ("/contribute/" | lurl(lang)) + "#deadlines", title: "nav.contribute" | t(lang), text: "orientation.ns_contribute" | t(lang), cta: "orientation.ns_contribute_cta" | t(lang), icon: "pen-line", tone: "lv" }
   ], lang) }}
 </section>

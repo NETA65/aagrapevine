@@ -8,7 +8,7 @@
 //   shopBulk(shop, lang)      → bulk-book discount rows (tiers with a discount) + note + source
 //   shopSpecialty(shop, lang) → specialty items: one card per kind (cards · planner · calendar · holiday), the
 //                               page language's store first, the other store's item of that kind as `also`
-//   shopFromMonthly(shop)     → lowest monthly price (for "Subscriptions from $2.99/month"), or null
+//   shopFromMonthly(shop)     → lowest monthly price in the U.S. stores (for "Subscriptions from $2.99/month"), or null
 //   shopMoney(n, lang)        → "$11.99" (USD, the stores' currency)
 //   shopToday()               → today's date (YYYY-MM-DD) in the site's time zone, at build time
 //   shopPriceChanges(shop, lang) → the price changes AA Grapevine announced (shop.json price_changes): the
@@ -397,9 +397,11 @@ export function shopSubs(shop, lang = "en", t = (k) => k, now = nowDate()) {
   return { pubs, regions: regionList, first: pubs.length ? pubs[0].pub : "", avail, pcNote };
 }
 
+// "Subscriptions from $2.99/month" (home page, monthly toolkit, orientation): the U.S. store's prices only — the
+// Canadian and international listings are other prices for other readers (no U.S. listing: null, no line).
 export function shopFromMonthly(shop) {
-  const subs = shop && Array.isArray(shop.subscriptions) ? shop.subscriptions : [];
-  const plans = subs.flatMap((s) => (s && Array.isArray(s.plans) ? s.plans : [])).filter((p) => p && Number(p.price) > 0);
+  const subs = (shop && Array.isArray(shop.subscriptions) ? shop.subscriptions : []).filter((s) => s && s.region === "us");
+  const plans = subs.flatMap((s) => (Array.isArray(s.plans) ? s.plans : [])).filter((p) => p && Number(p.price) > 0);
   const monthly = plans.filter((p) => p.term_months === 1).map((p) => Number(p.price));
   if (monthly.length) return Math.min(...monthly);
   const rates = plans.filter((p) => p.term_months).map((p) => Number(p.price) / p.term_months);

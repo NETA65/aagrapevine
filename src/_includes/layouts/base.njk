@@ -1,6 +1,8 @@
 {#- Base layout. Every page sets in front matter:
       lang (via pagination alias), pageKey, titleKey (i18n key) or title, descKey/description,
-      optional: pageScripts [..], pageStyles [..], bodyClass, noHero
+      optional: pageScripts [..], pageStyles [..], bodyClass, noHero,
+      ogImage (the page's own share picture: an address, or { src, width, height, alt } — see below),
+      calendarFeed (the address of a calendar file the page offers: "/events.ics")
     Every page starts with the shared hero, ui.pageHero (macros/ui.njk): the header is
     transparent over it and turns solid on scroll. hero-canvas.js (the animated grapevine art
     in that hero) is loaded here for every page — pages don't list it in pageScripts. -#}
@@ -9,7 +11,8 @@
 {%- set siteTitle = site | pick(L, "title") -%}
 {#- home: "Grapevine / La Viña — NETA 65 Committee" (the tagline would say Grapevine & La Viña twice) -#}
 {%- set fullTitle = (pageTitle + " · " + siteTitle + " — NETA 65") if (pageTitle and pageKey != "home") else (siteTitle + " — " + ("site.home_title_tail" | t(L))) -%}
-{%- set desc = (descKey | t(L)) if descKey else (description or ("site.description" | t(L))) -%}
+{#- (a description may name where the committee meets: {platform}, config/site.yml meeting.platform) -#}
+{%- set desc = (descKey | t(L, { platform: site.meeting.platform or "Zoom" })) if descKey else (description or ("site.description" | t(L))) -%}
 {%- set alt = page.url | altLangUrl(L) -%}
 <!doctype html>
 <html lang="{{ L }}" data-theme="light" class="scroll-smooth">
@@ -63,6 +66,11 @@
   <link rel="alternate" hreflang="x-default" href="{{ (alt if L == 'es' else page.url) | siteUrl(site) }}">
   {%- endif %}
   <link rel="alternate" type="application/rss+xml" title="{{ 'feeds.rss_title' | t(L) }}" href="{{ '/feed.xml' | lurl(L) }}">
+  {#- A page that offers a calendar file (calendarFeed: the Events page's "/events.ics") names it here, so calendar
+      apps and browsers find it: the page language's file (/es/events.ics on /es/). -#}
+  {%- if calendarFeed %}
+  <link rel="alternate" type="text/calendar" title="{{ 'committee.ics.name' | t(L) }}" href="{{ calendarFeed | lurl(L) }}">
+  {%- endif %}
   {#- Installable app (src/pages/manifest.11ty.js, sw.11ty.js, assets/js/pwa.js): the manifest of the
       page's language; address-bar colour = --c-gv-strong (light) / --c-paper (dark) — pwa.js keeps
       both metas on the site's own theme choice; iPhone/iPad home-screen name and icon. #}
@@ -80,18 +88,35 @@
   {%- if pageKey != "404" %}
   <meta property="og:url" content="{{ page.url | siteUrl(site) }}">
   {%- endif %}
-  {#- the share picture: the page's own, else the committee's card in the page language (1200 × 630).
+  {#- the share picture: the page's own — `ogImage` in its data, an address or { src, width, height, alt }, used
+      when it is a picture the previews show (PNG, JPEG, GIF, WebP: shareImage in eleventy.config.js), with its
+      size and words when the page gives them — else the committee's card in the page language (1200 × 630).
       ?v=2: the card shows the site's address — a new ?v when it changes makes the apps that keep an
       old copy of a preview (WhatsApp, Facebook, Slack…) fetch the new one -#}
-  <meta property="og:image" content="{{ (ogImage or ('/assets/img/og-default-es.png?v=2' if L == 'es' else '/assets/img/og-default.png?v=2')) | siteUrl(site) }}">
-  {%- if not ogImage %}
+  {%- set shareImg = ogImage | shareImage(site) -%}
+  {%- if shareImg %}
+  <meta property="og:image" content="{{ shareImg.url }}">
+  {%- if shareImg.width %}
+  <meta property="og:image:width" content="{{ shareImg.width }}">
+  <meta property="og:image:height" content="{{ shareImg.height }}">
+  {%- endif %}
+  {%- if shareImg.alt %}
+  <meta property="og:image:alt" content="{{ shareImg.alt }}">
+  {%- endif %}
+  {%- else %}
+  {%- set shareImg = { url: ('/assets/img/og-default-es.png?v=2' if L == 'es' else '/assets/img/og-default.png?v=2') | siteUrl(site), alt: siteTitle + " — " + ('site.tagline' | t(L)) } -%}
+  <meta property="og:image" content="{{ shareImg.url }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="{{ siteTitle }} — {{ 'site.tagline' | t(L) }}">
+  <meta property="og:image:alt" content="{{ shareImg.alt }}">
   {%- endif %}
   <meta property="og:locale" content="{{ 'es_US' if L == 'es' else 'en_US' }}">
   <meta property="og:locale:alternate" content="{{ 'en_US' if L == 'es' else 'es_US' }}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{ shareImg.url }}">
+  {%- if shareImg.alt %}
+  <meta name="twitter:image:alt" content="{{ shareImg.alt }}">
+  {%- endif %}
   {#- favicon.ico holds a 16px picture only: no sizes="any" (Chrome would prefer it over the 32px PNG on 2x screens) -#}
   <link rel="icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/logo-32x32.png">

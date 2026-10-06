@@ -100,8 +100,8 @@
     "es": "Reuniones del comité, talleres, mesas y eventos de Grapevine / La Viña del Área 65 del Noreste de Texas. Se actualiza automáticamente."
   },
   "committee.meeting.hero_sub": {
-    "en": "{rule} · {time} Central time, on Zoom.",
-    "es": "{rule} · {time}, hora del Centro, por Zoom."
+    "en": "{rule} · {time} Central time, on {platform}.",
+    "es": "{rule} · {time}, hora del Centro, por {platform}."
   },
   "committee.meeting.next": {
     "en": "Next meeting",
@@ -116,8 +116,8 @@
     "es": "En vivo ahora"
   },
   "committee.meeting.join": {
-    "en": "Join on Zoom",
-    "es": "Entrar por Zoom"
+    "en": "Join on {platform}",
+    "es": "Entrar por {platform}"
   },
   "committee.meeting.join_soon": {
     "en": "Starting soon — join now",
@@ -132,8 +132,8 @@
     "es": "Tu hora: {time}"
   },
   "committee.meeting.join_hint": {
-    "en": "The Zoom room opens about 15 minutes before we start — this button turns green when we're live.",
-    "es": "La sala de Zoom se abre unos 15 minutos antes de empezar — este botón se pone verde cuando estamos en vivo."
+    "en": "The {platform} room opens about 15 minutes before we start — this button turns green when we're live.",
+    "es": "La sala de {platform} se abre unos 15 minutos antes de empezar — este botón se pone verde cuando estamos en vivo."
   },
   "committee.meeting.no_next": {
     "en": "The next meeting date will be posted soon.",
@@ -144,8 +144,8 @@
     "es": "Cómo conectarte"
   },
   "committee.meeting.how_to_join_text": {
-    "en": "Use “Join on Zoom” in the next-meeting card, or type the meeting ID and passcode into the Zoom app.",
-    "es": "Usa “Entrar por Zoom” en la tarjeta de la próxima reunión, o escribe el ID de reunión y el código de acceso en la aplicación de Zoom."
+    "en": "Use “Join on {platform}” in the next-meeting card, or type the meeting ID and passcode into the {platform} app.",
+    "es": "Usa “Entrar por {platform}” en la tarjeta de la próxima reunión, o escribe el ID de reunión y el código de acceso en la aplicación de {platform}."
   },
   "committee.meeting.id": {
     "en": "Meeting ID",
@@ -156,12 +156,12 @@
     "es": "Código de acceso"
   },
   "committee.meeting.cal_desc": {
-    "en": "Monthly NETA 65 Grapevine / La Viña committee meeting on Zoom. All AA members are welcome.",
-    "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65 por Zoom. Todos los miembros de AA son bienvenidos."
+    "en": "Monthly NETA 65 Grapevine / La Viña committee meeting on {platform}.",
+    "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65 por {platform}."
   },
   "committee.meeting.cal_join": {
-    "en": "Join on Zoom",
-    "es": "Entrar por Zoom"
+    "en": "Join on {platform}",
+    "es": "Entrar por {platform}"
   },
   "committee.meeting.copy_id": {
     "en": "Copy meeting ID",
@@ -172,16 +172,16 @@
     "es": "Copiar código de acceso"
   },
   "committee.meeting.copy_link": {
-    "en": "Copy Zoom link",
-    "es": "Copiar enlace de Zoom"
+    "en": "Copy {platform} link",
+    "es": "Copiar enlace de {platform}"
   },
   "committee.meeting.tip_early": {
     "en": "Arrive a few minutes early to test your audio.",
     "es": "Llega unos minutos antes para probar tu audio."
   },
   "committee.meeting.tip_phone": {
-    "en": "Works on a phone, tablet or computer — no Zoom account needed.",
-    "es": "Funciona en celular, tableta o computadora — no necesitas cuenta de Zoom."
+    "en": "Works on a phone, tablet or computer — no {platform} account needed.",
+    "es": "Funciona en celular, tableta o computadora — no necesitas cuenta de {platform}."
   },
   "committee.meeting.tip_lang": {
     "en": "English and Spanish speakers are welcome.",
@@ -204,8 +204,8 @@
     "es": "Todos en AA son bienvenidos"
   },
   "committee.meeting.who_text": {
-    "en": "All AA members are welcome to attend — no registration required. GVRs, RLVs, DCMs and anyone curious about Grapevine and La Viña service will find a place here.",
-    "es": "Todos los miembros de AA pueden asistir — no hace falta registrarse. Los RLV, GVR, MCD y cualquier persona con curiosidad por el servicio de La Viña y Grapevine encontrará aquí su lugar."
+    "en": "GVRs, RLVs, DCMs and anyone curious about Grapevine and La Viña service will find a place here.",
+    "es": "Los RLV, GVR, MCD y cualquier persona con curiosidad por el servicio de La Viña y Grapevine encontrará aquí su lugar."
   },
   "committee.meeting.who_gvr": {
     "en": "GVRs",
@@ -224,8 +224,8 @@
     "es": "Cualquier miembro de AA"
   },
   "committee.meeting.contact_text": {
-    "en": "Want the agenda, need help with Zoom, or thinking about becoming a GVR or RLV? Write to our chair — we'd love to hear from you.",
-    "es": "¿Quieres la agenda, necesitas ayuda con Zoom o estás pensando en ser RLV o GVR? Escríbele a nuestro coordinador — nos encantará saber de ti."
+    "en": "Want the agenda, need help with {platform}, or thinking about becoming a GVR or RLV? Write to our chair — we'd love to hear from you.",
+    "es": "¿Quieres la agenda, necesitas ayuda con {platform} o estás pensando en ser RLV o GVR? Escríbele a nuestro coordinador — nos encantará saber de ti."
   },
   "committee.meeting.agenda_link": {
     "en": "Agendas and past reports in the Portfolio",
@@ -574,6 +574,14 @@
   "committee.events.flyer": {
     "en": "Flyer",
     "es": "Volante"
+  },
+  "committee.events.flyer_alt": {
+    "en": "Flyer: {title}",
+    "es": "Volante: {title}"
+  },
+  "committee.events.share_go": {
+    "en": "See this event on our Events page",
+    "es": "Ver este evento en nuestra página de eventos"
   },
   "committee.events.contact": {
     "en": "Contact",
@@ -1308,8 +1316,8 @@
     "es": "Los anuncios del comité ahora están en nuestro Boletín:"
   },
   "committee.meetings.meta_desc": {
-    "en": "Our committee's monthly Zoom meeting, AA groups in and near NETA 65 that read Grapevine or La Viña, and the weekly open meetings of both magazines.",
-    "es": "La reunión mensual del comité por Zoom, grupos de AA en NETA 65 y cerca que leen La Viña o Grapevine, y las reuniones abiertas semanales de ambas revistas."
+    "en": "Our committee's monthly {platform} meeting, AA groups in and near NETA 65 that read Grapevine or La Viña, and the weekly open meetings of both magazines.",
+    "es": "La reunión mensual del comité por {platform}, grupos de AA en NETA 65 y cerca que leen La Viña o Grapevine, y las reuniones abiertas semanales de ambas revistas."
   },
   "committee.meetings.eyebrow": {
     "en": "Committee · Meetings",
@@ -1332,8 +1340,8 @@
     "es": "Reuniones abiertas semanales"
   },
   "committee.meetings.committee_eyebrow": {
-    "en": "The committee · Monthly on Zoom",
-    "es": "El comité · Cada mes por Zoom"
+    "en": "The committee · Monthly on {platform}",
+    "es": "El comité · Cada mes por {platform}"
   },
   "committee.meetings.committee_title": {
     "en": "Our committee meeting",

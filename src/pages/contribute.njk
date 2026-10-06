@@ -21,8 +21,9 @@ pageScripts: ["/assets/js/read.js"]
 {%- set lvCalendar = site.sources.lavina.base + site.sources.lavina.contribute -%}
 {%- set gvAudio = L.gv_audio_project or (L.gv_home + "/audio-portal") -%}
 {%- set gvPhoto = L.gv_photo_contest or (L.gv_home + "/photocontest") -%}
-{#- La Viña's own page for recorded stories (a phone call) — not the general "Comparte" form -#}
-{%- set lvRecord = L.lv_record_story or (site.sources.lavina.base + "/graba-tu-historia") -%}
+{#- La Viña's own page for recorded stories (a phone call) — not the general "Comparte" form: "Graba tu
+    historia", config/site.yml sources.lavina.record_story (the page scripts/sync/audio_project.py reads) -#}
+{%- set lvRecord = site.sources.lavina.base + (site.sources.lavina.record_story or "/graba-tu-historia") -%}
 {%- set writerPdfs = db.pdfs | readWriterKit(4) -%}
 {%- set lvTopicsPdf = (db.pdfs | readPdfsMatching("temas de lv|temas sugeridos", 1))[0] -%}
 {%- set pubOrder = ["lv", "gv"] if lang == "es" else ["gv", "lv"] -%}

@@ -167,19 +167,24 @@ descKey: access.meta_desc
 {#- ================= Audio ================= -#}
 <section id="audio" class="section container-page pt-0" aria-labelledby="audio-title">
   {{ ui.sectionHead("access.aud_title" | t(lang), "access.aud_sub" | t(lang), "", "", "headphones", { eyebrow: "access.aud_eyebrow" | t(lang), tone: "text-grape", id: "audio-title", lang: lang }) }}
+  {#- The Twelve and Twelve read aloud: on /es/ aa.org's Spanish page, read aloud in Spanish (langLink:
+      links.aa_twelve_and_twelve_es); "(in English)" only when the settings have no Spanish page. (The ASL
+      list above keeps aa.org's English pages: the ASL videos are known to be there.) -#}
+  {%- set aaAudio = ln | langLink("aa_twelve_and_twelve", lang) -%}
+  {%- set aaAudioLang = lang if (lang == "en" or aaAudio != ln.aa_twelve_and_twelve) else "en" -%}
   {%- set audioCards = [
     { href: "/listen/" | lurl(lang), k: "listen", icon: "headphones", tone: "bg-grape-soft text-grape" },
     { href: "/meetings/" | lurl(lang) + "#weekly-open", k: "weekly", icon: "video", tone: "bg-grape-soft text-grape" },
     { href: "/contribute/" | lurl(lang) + "#record", k: "record", icon: "mic", tone: "bg-lv-soft text-lv" },
-    { href: ln.aa_twelve_and_twelve, k: "aa", icon: "book-open-text", tone: "bg-gv-soft text-gv" }
+    { href: aaAudio, k: "aa", icon: "book-open-text", tone: "bg-gv-soft text-gv", hl: aaAudioLang }
   ] -%}
   {#- 4 cards: 2 × 2, then 4 in a row from 1280px (never 3 + 1) -#}
   <ul class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4" role="list">
     {% for c in audioCards %}{% if c.href %}{%- set isExt = c.href.startsWith("http") -%}
     <li class="card card-link relative flex flex-col gap-3 p-5">
       <span class="grid size-11 place-items-center rounded-xl {{ c.tone }}">{% icon c.icon, "size-5" %}</span>
-      <h3 class="h-card"><a class="no-underline after:absolute after:inset-0 after:rounded-[var(--radius-card)] hover:text-gv" href="{{ c.href }}"{% if isExt %} target="_blank" rel="noopener" hreflang="en"{% endif %}>{{ ("access.aud_" + c.k + "_t") | t(lang) }}{% if isExt %}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span>{% endif %}</a></h3>
-      <p class="text-sm leading-relaxed text-muted">{{ ("access.aud_" + c.k) | t(lang) }}</p>
+      <h3 class="h-card"><a class="no-underline after:absolute after:inset-0 after:rounded-[var(--radius-card)] hover:text-gv" href="{{ c.href }}"{% if isExt %} target="_blank" rel="noopener" hreflang="{{ c.hl or 'en' }}"{% endif %}>{{ ("access.aud_" + c.k + "_t") | t(lang) }}{% if isExt %}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span>{% endif %}</a></h3>
+      <p class="text-sm leading-relaxed text-muted">{{ ("access.aud_" + c.k) | t(lang) }}{% if isExt and (c.hl or "en") != lang %} {{ "access.in_english" | t(lang) }}{% endif %}</p>
       <span class="mt-auto inline-flex items-center gap-1.5 pt-1 text-sm font-semibold text-gv" aria-hidden="true">{{ ("access.aud_" + c.k + "_cta") | t(lang) }} {% set ic = "external-link" if isExt else "arrow-right" %}{% icon ic, "size-4" %}</span>
     </li>
     {% endif %}{% endfor %}

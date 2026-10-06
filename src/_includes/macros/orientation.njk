@@ -38,10 +38,10 @@
   <p class="o101-live-label">{{ "orientation.live_meeting_label" | t(lang) }}</p>
   {%- if meeting.next %}
   <p class="o101-live-main"><time datetime="{{ meeting.next.start }}">{{ meeting.next.start | fmtDate(lang, "long") }}</time></p>
-  <p class="o101-live-sub">{{ "orientation.live_meeting_sub" | t(lang, { time: site.meeting | cmTimeRange(lang) }) }}</p>
+  <p class="o101-live-sub">{{ "orientation.live_meeting_sub" | t(lang, { time: site.meeting | cmTimeRange(lang), platform: site.meeting.platform or "Zoom" }) }}</p>
   {%- else %}
   <p class="o101-live-main">{{ site.meeting | cmRule(lang) }}</p>
-  <p class="o101-live-sub">{{ "orientation.live_meeting_sub" | t(lang, { time: site.meeting | cmTimeRange(lang) }) }}</p>
+  <p class="o101-live-sub">{{ "orientation.live_meeting_sub" | t(lang, { time: site.meeting | cmTimeRange(lang), platform: site.meeting.platform or "Zoom" }) }}</p>
   {%- endif %}
   {#- the Grapevine meetings sentence links to their list (/meetings/#grapevine-meetings); "Meeting
       details" below stays with the committee meeting -#}

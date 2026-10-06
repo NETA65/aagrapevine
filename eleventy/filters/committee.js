@@ -353,11 +353,19 @@ export function meetingTitle(site, lang = "en") {
   return t("committee.meeting_title", lang, { committee: name });
 }
 
+// The meeting in a line for calendars and its card: "Monthly … committee meeting on Zoom." and who may come
+// (config/site.yml meeting.platform — Zoom when left out — and meeting.note / note_es).
+function meetingSummary(site, lang) {
+  const m = site?.meeting || {};
+  const note = String((lang !== "en" && m[`note_${lang}`]) || m.note || "").replace(/\s+/g, " ").trim();
+  return [t("committee.meeting.cal_desc", lang, { platform: String(m.platform || "").trim() || "Zoom" }), note].filter(Boolean).join(" ");
+}
+
 // Plain-text description used in calendars (Google / Outlook / .ics).
 function meetingDescription(site, lang, pageUrl) {
   const m = site.meeting || {};
-  const lines = [t("committee.meeting.cal_desc", lang)];
-  if (m.zoom_url) lines.push("", `${t("committee.meeting.cal_join", lang)}: ${m.zoom_url}`);
+  const lines = [meetingSummary(site, lang)];
+  if (m.zoom_url) lines.push("", `${t("committee.meeting.cal_join", lang, { platform: String(m.platform || "").trim() || "Zoom" })}: ${m.zoom_url}`);
   if (m.meeting_id) lines.push(`${t("committee.meeting.id", lang)}: ${m.meeting_id}`);
   if (m.passcode) lines.push(`${t("committee.meeting.passcode", lang)}: ${m.passcode}`);
   if (pageUrl) lines.push("", `${t("committee.cal.details", lang)}: ${pageUrl}`);
@@ -478,7 +486,7 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
     seen.add(id);
     out.push(shapeEvent({
       id, source: "committee", kind: "event", category: "committee", lang: "en",
-      url: "/meetings/", title: mTitle, summary: t("committee.meeting.cal_desc", lang),
+      url: "/meetings/", title: mTitle, summary: meetingSummary(site, lang),
       date: d.start, is_new: false, _i18nTitle: true,
       extra: { start: d.start, end: d.end, all_day: false, location: m.platform || "Zoom", online_url: m.zoom_url || null },
     }, site, lang, now, meetingDescription(site, lang, meetingPage)));
@@ -1655,6 +1663,21 @@ export function gvMeetings(data, lang = "en", site = {}) {
   };
 }
 
+/**
+ * The upcoming events as /events/ lists them — the committee sub-nav's Events count and the /search/ page's
+ * Events tile (cmEventEnds): one entry per event, the moment it is over (ISO), a monthly series once
+ * (cmCollapseRecurring), until its last listed date is over. Committee meetings are not counted.
+ */
+export function upcomingEventEnds(db, lang = "en") {
+  const ends = new Map();
+  for (const e of EMPTY ? [] : normalizeEvents(db?.events?.items || [], {}, lang, { monthsBack: 0, monthsAhead: 0 })) {
+    if (e.past || e.committee) continue;
+    const k = e.recurring && e.series ? `s:${e.series}` : `e:${e.id}`;
+    if (!ends.has(k) || e.expireIso > ends.get(k)) ends.set(k, e.expireIso);
+  }
+  return [...ends.values()];
+}
+
 /* ------------------------------------------------------------------ */
 /*  Eleventy registration                                              */
 /* ------------------------------------------------------------------ */
@@ -1665,6 +1688,8 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("cmData", (items) => (EMPTY ? [] : items || []));
 
   eleventyConfig.addFilter("cmEvents", (items, site, lang) => normalizeEvents(EMPTY ? [] : items, site, lang));
+  // {{ db | cmEventEnds(lang) }}: the upcoming events' end moments (upcomingEventEnds) — their number is the Events count
+  eleventyConfig.addFilter("cmEventEnds", (db, lang) => upcomingEventEnds(db, lang));
   eleventyConfig.addFilter("cmDocTabs", (items, lang) => documentTabs(EMPTY ? [] : items, lang));
   // The Portfolio hero card: never the list's first category (it starts right below the hero).
   //   "flyers": the flyers tab (up to 2, newest first) when it has files and is not that first one;
@@ -1878,14 +1903,8 @@ export default function (eleventyConfig, helpers) {
   // it — the moments /events/ and /bulletin/ hide their cards at — and hides it at 0).
   eleventyConfig.addShortcode("committeeNav", function (lang, current, db) {
     const L = lang || "en";
-    // upcoming events as /events/ lists them: a monthly series counts once (cmCollapseRecurring), until its
-    // last listed date is over
-    const eventEnds = new Map();
-    for (const e of EMPTY ? [] : normalizeEvents(db?.events?.items || [], {}, L, { monthsBack: 0, monthsAhead: 0 })) {
-      if (e.past || e.committee) continue;
-      const k = e.recurring && e.series ? `s:${e.series}` : `e:${e.id}`;
-      if (!eventEnds.has(k) || e.expireIso > eventEnds.get(k)) eventEnds.set(k, e.expireIso);
-    }
+    // upcoming events as /events/ lists them (the /search/ page's Events tile counts the same)
+    const eventEnds = upcomingEventEnds(db, L);
     // the bulletin's posts: each is over at midnight Central after its `expires` day (bulletin.njk's rule)
     const posts = announcementList(EMPTY ? [] : db?.announcements?.items);
     const postEnd = (p) => {
@@ -1893,12 +1912,12 @@ export default function (eleventyConfig, helpers) {
       return Number.isFinite(t) ? new Date(t).toISOString() : "-";
     };
     const n = {
-      events: eventEnds.size,
+      events: eventEnds.length,
       portfolio: documentTabs(EMPTY ? [] : db?.drive?.items, L).total,
       photos: photoAlbums(EMPTY ? [] : db?.drive?.items, L).reduce((s, a) => s + a.count, 0),
       bulletin: posts.length,
     };
-    const ends = { events: [...eventEnds.values()], bulletin: posts.map(postEnd) };
+    const ends = { events: eventEnds, bulletin: posts.map(postEnd) };
     const pages = [
       { key: "meetings", url: "/meetings/", icon: "calendar-clock" },
       { key: "events", url: "/events/", icon: "calendar-days" },
