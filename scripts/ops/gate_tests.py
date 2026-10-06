@@ -12,7 +12,7 @@ The job runs this only for code and content it has not passed yet (its fingerpri
 bot's own data is remembered in GitHub's Actions cache): the daily data runs — the same code — publish without
 running the tests again.
 
-    python -m scripts.ops.gate_tests        # exit 0: every test passed (or was skipped), 1: one failed
+    python -m scripts.ops.gate_tests        # exit 0: every test passed (or was skipped), 1: one failed (or none found)
 
 It writes what happened to the run summary ($GITHUB_STEP_SUMMARY). Standard library only.
 """
@@ -74,6 +74,10 @@ def summary(result: unittest.TestResult, left: list[str]) -> str:
                   "The failing tests (the job's log says why):", "", *[f"- `{b}`" for b in bad[:30]]]
         if len(bad) > 30:
             lines.append(f"- … and {len(bad) - 30} more")
+    elif not result.testsRun:
+        # (as `python -m unittest` since Python 3.12: no test found is no pass)
+        lines.append("**No tests were found — the website was NOT published** (the live site keeps the version "
+                     "before): the tests/ folder could not be read.")
     else:
         lines.append(f"All {result.testsRun} tests passed ({skipped} skipped) — the website may be published.")
     if left:
@@ -99,10 +103,11 @@ def main(argv: list[str] | None = None) -> int:
         except OSError:
             pass
     print(text, flush=True)
-    if not result.wasSuccessful():
-        print("::error title=Tests failed — not published::Some tests failed, so this run does not publish the "
-              "website (the live site keeps the version before). See the run summary.", flush=True)
-    return 0 if result.wasSuccessful() else 1
+    ok = result.wasSuccessful() and result.testsRun > 0
+    if not ok:
+        print("::error title=Tests failed — not published::Some tests failed (or none was found), so this run does "
+              "not publish the website (the live site keeps the version before). See the run summary.", flush=True)
+    return 0 if ok else 1
 
 
 if __name__ == "__main__":

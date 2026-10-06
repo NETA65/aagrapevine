@@ -289,6 +289,15 @@ class GateTests(unittest.TestCase):
         self.assertIn("All 1 tests passed", summary)
         self.assertIn("Left to the Code check (they judge the day's synced data, not the code): 1.", summary)
 
+    def test_no_test_found_is_no_pass(self):
+        # an empty (or unreadable) tests/ folder must not publish as "all 0 tests passed"
+        d = Path(tempfile.mkdtemp(prefix="gv-gate-"))
+        self.addCleanup(shutil.rmtree, d, True)
+        code, log, summary = self.run_main(d)
+        self.assertEqual(code, 1)
+        self.assertIn("**No tests were found — the website was NOT published**", summary)
+        self.assertIn("::error title=Tests failed — not published::", log)
+
     def test_a_module_that_cannot_be_imported_fails(self):
         d = Path(tempfile.mkdtemp(prefix="gv-gate-"))
         self.addCleanup(shutil.rmtree, d, True)
@@ -371,6 +380,12 @@ class FailingUpdates(unittest.TestCase):
         self.assertEqual(len(self.made(calls, "create")), 1)
         calls, _log = self.run_step({"PUBLISH": "failure"}, ["cancelled", "success", "failure"])
         self.assertEqual(self.made(calls, "create"), [])
+        # a job that ran out of time (its timeout-minutes) is "cancelled" in `needs` — the run itself was not (or this
+        # job would not run): it failed
+        calls, _log = self.run_step({"BUILD": "cancelled", "PUBLISH": "skipped"}, ["failure"])
+        create = self.made(calls, "create")
+        self.assertEqual(len(create), 1)
+        self.assertIn("- **Build website** failed:", create[0][create[0].index("--body") + 1])
 
     def test_a_persons_run_never_opens_it(self):
         # whoever started it gets GitHub's own e-mail

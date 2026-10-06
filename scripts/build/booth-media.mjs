@@ -1,6 +1,6 @@
 // Downloads the booth display's photos and videos, so the booth keeps playing offline at a table with no internet —
-// the step "Download the booth display's photos and videos" of .github/workflows/update.yml (job "Build & publish
-// website"), run just before Eleventy builds the site:
+// the step "Download the booth display's photos and videos" of .github/workflows/update.yml (job "Build website"),
+// run just before Eleventy builds the site:
 //
 //     node scripts/build/booth-media.mjs              (from the repository's folder)
 //     node scripts/build/booth-media.mjs --dry-run    only says what a run would do now (nothing is downloaded,

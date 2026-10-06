@@ -1384,7 +1384,8 @@ jobs:
                   raise SystemExit(f"'gh {' '.join(args[:2])}' failed: {r.stderr.strip()}")
               return r.stdout
 
-          failed = [k for k, (_name, result) in JOBS.items() if result == "failure"]
+          # (a job that ran out of time is "cancelled" here: this job runs only when the run itself was not cancelled)
+          failed = [k for k, (_name, result) in JOBS.items() if result in ("failure", "cancelled")]
           worked = all(result == "success" for _name, result in JOBS.values())
           unattended = os.environ.get("EVENT") == "schedule" or (os.environ.get("EVENT") == "workflow_dispatch"
                                                                  and os.environ.get("ACTOR") == BOT)
