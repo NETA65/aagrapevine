@@ -1,24 +1,24 @@
 {
  "source": "events_external",
- "updated": "2026-10-05T14:47:38Z",
- "attempted": "2026-10-05T14:47:38Z",
+ "updated": "2026-10-06T13:25:42Z",
+ "attempted": "2026-10-06T13:25:42Z",
  "ok": true,
  "error": null,
  "stats": {
   "discovery": "sitemap",
   "discovery_complete": true,
-  "upcoming_urls": 16,
+  "upcoming_urls": 17,
   "kept_from_cache": 0,
-  "fetched": 0,
+  "fetched": 1,
   "refreshed": 0,
   "failed": 0,
   "pending": 0,
-  "cached": 17,
+  "cached": 18,
   "texas": 1,
   "online_es": 1,
   "items": 2,
   "new": 0,
-  "requests": 39
+  "requests": 40
  },
  "items": [
   {
@@ -435,19 +435,40 @@
    },
    "http": 200,
    "fails": 0
+  },
+  "https://www.aagrapevine.org/get-involved/events/2027-01-29/47th-hilton-head-midwinter-conference": {
+   "at": "2026-10-06T13:25:42Z",
+   "ev": {
+    "title": "47th Hilton Head Midwinter Conference",
+    "date_text": "January 29, 2027 - January 31, 2027",
+    "start": "2027-01-29",
+    "end": "2027-01-31",
+    "all_day": true,
+    "location_raw": "Hilton Head, South Carolina",
+    "website": "https://www.hiltonheadmidwinterconference.com/",
+    "lang": "en",
+    "location": "Hilton Head, South Carolina",
+    "city": "Hilton Head",
+    "state": "SC",
+    "country": "USA",
+    "online": false,
+    "texas": false
+   },
+   "http": 200,
+   "fails": 0
   }
  },
  "sitemap": {
   "pages": {
    "https://www.aagrapevine.org/sitemap.xml?page=1": {
-    "lastmod": "2026-10-04T10:36:04-05:00",
+    "lastmod": "2026-10-06T01:39:31-05:00",
     "events": [],
-    "fetched": "2026-10-05T14:47:33Z",
+    "fetched": "2026-10-06T13:25:31Z",
     "urls_total": 2000,
     "events_total": 2000
    },
    "https://www.aagrapevine.org/sitemap.xml?page=2": {
-    "lastmod": "2026-10-04T10:36:04-05:00",
+    "lastmod": "2026-10-06T01:39:31-05:00",
     "events": [
      "https://www.aagrapevine.org/get-involved/events/2026-10-02/79th-powell-river-rally-2026",
      "https://www.aagrapevine.org/get-involved/events/2026-10-23/38th-northeast-woman-woman-conference",
@@ -458,6 +479,7 @@
      "https://www.aagrapevine.org/get-involved/events/2026-11-20/37th-mchenrys-soberfest",
      "https://www.aagrapevine.org/get-involved/events/2026-11-27/36th-gratitude-roundup",
      "https://www.aagrapevine.org/get-involved/events/2026-12-04/14th-chiang-mai-roundup-2026",
+     "https://www.aagrapevine.org/get-involved/events/2027-01-29/47th-hilton-head-midwinter-conference",
      "https://www.aagrapevine.org/get-involved/events/2027-03-19/southern-maryland-roundup",
      "https://www.aalavina.org/get-involved/events/2026-10-22/taller-mensual-lv",
      "https://www.aalavina.org/get-involved/events/2026-10-23/24-convencion-hispana-del-estado-de-wisconsin",
@@ -467,9 +489,9 @@
      "https://www.aalavina.org/get-involved/events/2027-05-28/xxiv-encuentro-hispano-de-aa-del-estado-de-kansas-sede-topeka",
      "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico"
     ],
-    "fetched": "2026-10-05T14:47:38Z",
-    "urls_total": 1090,
-    "events_total": 942
+    "fetched": "2026-10-06T13:25:37Z",
+    "urls_total": 1091,
+    "events_total": 943
    }
   }
  }

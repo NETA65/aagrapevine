@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-05T14:43:07Z",
+ "updated": "2026-10-06T13:20:56Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16908,
-   "posts": 3921,
+   "followers": 16912,
+   "posts": 3923,
    "owner_id": "48108439509",
-   "checked": "2026-10-05T14:43:03Z",
+   "checked": "2026-10-06T13:20:53Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,191 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2424,
-   "posts": 2954,
+   "posts": 2956,
    "owner_id": "48275839129",
-   "checked": "2026-10-05T14:43:06Z",
+   "checked": "2026-10-06T13:20:55Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DeJrhtXF7XV",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeJrhtXF7XV/",
+   "title": "“La capacidad única de cada miembro de AA para identificarse con el principiante y…",
+   "summary": "“La capacidad única de cada miembro de AA para identificarse con el principiante y conducirle hacia la recuperación no depende en absoluto de su cultura, su elocuencia ni de cualquier otra pericia particular. Lo único que cuenta es que él es un alcohólico que ha encontrado la clave de la sobriedad”. \"“Quinta Tradición” BILL W., COFUNDADOR DE AA, SEPTIEMBRE DE 1952 Del AA Grapevine (Reimpreso en…",
+   "lang": "es",
+   "date": "2026-10-06T11:30:16Z",
+   "first_seen": "2026-10-06T13:20:56Z",
+   "image": "/assets/cache/ig/DeJrhtXF7XV.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeJrhtXF7XV",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeJrhtXF7XV.webp",
+    "embed_url": "https://www.instagram.com/p/DeJrhtXF7XV/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeJrhtXF7XV/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The unique capacity of each AA member to identify with the beginner and …",
+     "es": "“La capacidad única de cada miembro de AA para identificarse con el principiante y…"
+    },
+    "summary": {
+     "en": "“The unique ability of each AA member to identify with the beginner and lead him to recovery does not depend at all on his culture, eloquence or any other particular expertise. The only thing that counts is that he is an alcoholic who has found the sobriety key.” \"Five Tradition\" Bill W., AA co-founder, September 1952 AA Grapevine (reprinted in …",
+     "es": "“La capacidad única de cada miembro de AA para identificarse con el principiante y conducirle hacia la recuperación no depende en absoluto de su cultura, su elocuencia ni de cualquier otra pericia particular. Lo único que cuenta es que él es un alcohólico que ha encontrado la clave de la sobriedad”. \"“Quinta Tradición” BILL W., COFUNDADOR DE AA, SEPTIEMBRE DE 1952 Del AA Grapevine (Reimpreso en…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeJrhq7F5Ek",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeJrhq7F5Ek/",
+   "title": "“I’ve likened that transforming instant, when despair gave way to a glimmer of hope, to…",
+   "summary": "“I’ve likened that transforming instant, when despair gave way to a glimmer of hope, to a tiny flower sprung into bloom amid the bombed-out wreckage of my life. Thanks to AA, that tiny bloom was to become a garden.” “Reciprocal Strength,” Vancouver, British Columbia, January 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-06T11:30:15Z",
+   "first_seen": "2026-10-06T13:20:56Z",
+   "image": "/assets/cache/ig/DeJrhq7F5Ek.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeJrhq7F5Ek",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeJrhq7F5Ek.webp",
+    "embed_url": "https://www.instagram.com/p/DeJrhq7F5Ek/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeJrhq7F5Ek/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I’ve likened that transforming instant, when despair gave way to a glimmer of hope, to…",
+     "es": "“Me he gustado ese instante transformador, cuando la desesperación dio paso a un brillo de esperanza, a …"
+    },
+    "summary": {
+     "en": "“I’ve likened that transforming instant, when despair gave way to a glimmer of hope, to a tiny flower sprung into bloom amid the bombed-out wreckage of my life. Thanks to AA, that tiny bloom was to become a garden.” “Reciprocal Strength,” Vancouver, British Columbia, January 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“Me he gustado ese instante transformador, cuando la desesperación dio paso a un brillo de esperanza, a una pequeña flor floreció en medio de los bombardeos de mi vida. Gracias a AA, esa pequeña floración se convirtió en un jardín”. “Fuerza recíproca”, Vancouver, British Columbia, enero de 1998, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeHsgonl9DC",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeHsgonl9DC/",
+   "title": "De Luis A., -\"Grupo Central NY\" New York . 📣 Envíanos tus mejores fotografías que…",
+   "summary": "De Luis A., -\"Grupo Central NY\" New York. 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad.. 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes!",
+   "lang": "es",
+   "date": "2026-10-05T17:00:22Z",
+   "first_seen": "2026-10-06T13:20:56Z",
+   "image": "/assets/cache/ig/DeHsgonl9DC.webp",
+   "tags": [
+    "alcoholicosanónimos",
+    "laviña",
+    "aa",
+    "sobriedad",
+    "recuperación"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeHsgonl9DC",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeHsgonl9DC.webp",
+    "embed_url": "https://www.instagram.com/p/DeHsgonl9DC/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeHsgonl9DC/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Luis A., \"Central NY Group\" New York. 📣 Send us your best pictures than …",
+     "es": "De Luis A., -\"Grupo Central NY\" New York . 📣 Envíanos tus mejores fotografías que…"
+    },
+    "summary": {
+     "en": "From Luis A., \"Central NY Group\" New York. 📣 Send us your best photos that reflect the joy of living, serenity and other themes of sobriety.. 📣 Please: ➡️ Include your name, the initial of your last name ➡️ Indica where photo was taken, location ➡️ Send your photos to: social@aagrapevine.org Don't let us send your best images!",
+     "es": "De Luis A., -\"Grupo Central NY\" New York. 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad.. 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes!"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeHsgiOF7aF",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeHsgiOF7aF/",
+   "title": "From Michelle H., - \"Monthly bonfire meeting\" Winters, CA",
+   "summary": "From Michelle H., - \"Monthly bonfire meeting\" Winters, CA GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+   "lang": "en",
+   "date": "2026-10-05T17:00:20Z",
+   "first_seen": "2026-10-06T13:20:56Z",
+   "image": "/assets/cache/ig/DeHsgiOF7aF.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeHsgiOF7aF",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeHsgiOF7aF.webp",
+    "embed_url": "https://www.instagram.com/p/DeHsgiOF7aF/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeHsgiOF7aF/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Michelle H., - \"Monthly bonfire meeting\" Winters, CA",
+     "es": "De Michelle H., - \"Mensil reunión de fogatas\" Winters, CA"
+    },
+    "summary": {
+     "en": "From Michelle H., - \"Monthly bonfire meeting\" Winters, CA GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+     "es": "¡De Michelle H., - \"Mesly bonfire meeting\" Winters, CA Grapevine Instagram concurso de fotos! Envíenos sus fotos a social@aagrapevine.org ➡️ Por favor incluya su nombre y su última inicial, y su ubicación. Las fotos ➡️ deben ser protegidas por el anonimato (no poses de cara completa o imágenes identificables de las personas.) ¡Esperando ver sus imágenes! El concurso está en curso."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DeHMGIfANDj",
    "source": "instagram",
@@ -2174,7 +2352,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdloZeCFzMI",
@@ -2217,7 +2395,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdjfEdcjfEc",

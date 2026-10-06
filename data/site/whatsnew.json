@@ -1,7 +1,234 @@
 {
- "updated": "2026-10-06T09:07:34Z",
+ "updated": "2026-10-06T13:28:38Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DeJrhtXF7XV",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeJrhtXF7XV/",
+   "title": "“La capacidad única de cada miembro de AA para identificarse con el principiante y…",
+   "summary": "“La capacidad única de cada miembro de AA para identificarse con el principiante y conducirle hacia la recuperación no depende en absoluto de su cultura, su elocuencia ni de cualquier otra pericia particular. Lo único que cuenta es que él es un alcohólico que ha encontrado la clave de la sobriedad”. \"“Quinta Tradición” BILL W., COFUNDADOR DE AA, SEPTIEMBRE DE 1952 Del AA Grapevine (Reimpreso en…",
+   "lang": "es",
+   "date": "2026-10-06T11:30:16Z",
+   "first_seen": "2026-10-06T13:20:56Z",
+   "image": "/assets/cache/ig/DeJrhtXF7XV.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeJrhtXF7XV",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeJrhtXF7XV.webp",
+    "embed_url": "https://www.instagram.com/p/DeJrhtXF7XV/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeJrhtXF7XV/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The unique capacity of each AA member to identify with the beginner and …",
+     "es": "“La capacidad única de cada miembro de AA para identificarse con el principiante y…"
+    },
+    "summary": {
+     "en": "“The unique ability of each AA member to identify with the beginner and lead him to recovery does not depend at all on his culture, eloquence or any other particular expertise. The only thing that counts is that he is an alcoholic who has found the sobriety key.” \"Five Tradition\" Bill W., AA co-founder, September 1952 AA Grapevine (reprinted in …",
+     "es": "“La capacidad única de cada miembro de AA para identificarse con el principiante y conducirle hacia la recuperación no depende en absoluto de su cultura, su elocuencia ni de cualquier otra pericia particular. Lo único que cuenta es que él es un alcohólico que ha encontrado la clave de la sobriedad”. \"“Quinta Tradición” BILL W., COFUNDADOR DE AA, SEPTIEMBRE DE 1952 Del AA Grapevine (Reimpreso en…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-06T11:30:16Z"
+  },
+  {
+   "id": "ig:DeJrhq7F5Ek",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeJrhq7F5Ek/",
+   "title": "“I’ve likened that transforming instant, when despair gave way to a glimmer of hope, to…",
+   "summary": "“I’ve likened that transforming instant, when despair gave way to a glimmer of hope, to a tiny flower sprung into bloom amid the bombed-out wreckage of my life. Thanks to AA, that tiny bloom was to become a garden.” “Reciprocal Strength,” Vancouver, British Columbia, January 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-06T11:30:15Z",
+   "first_seen": "2026-10-06T13:20:56Z",
+   "image": "/assets/cache/ig/DeJrhq7F5Ek.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeJrhq7F5Ek",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeJrhq7F5Ek.webp",
+    "embed_url": "https://www.instagram.com/p/DeJrhq7F5Ek/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeJrhq7F5Ek/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I’ve likened that transforming instant, when despair gave way to a glimmer of hope, to…",
+     "es": "“Me he gustado ese instante transformador, cuando la desesperación dio paso a un brillo de esperanza, a …"
+    },
+    "summary": {
+     "en": "“I’ve likened that transforming instant, when despair gave way to a glimmer of hope, to a tiny flower sprung into bloom amid the bombed-out wreckage of my life. Thanks to AA, that tiny bloom was to become a garden.” “Reciprocal Strength,” Vancouver, British Columbia, January 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“Me he gustado ese instante transformador, cuando la desesperación dio paso a un brillo de esperanza, a una pequeña flor floreció en medio de los bombardeos de mi vida. Gracias a AA, esa pequeña floración se convirtió en un jardín”. “Fuerza recíproca”, Vancouver, British Columbia, enero de 1998, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-06T11:30:15Z"
+  },
+  {
+   "id": "yt:daNbma33_to",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=daNbma33_to",
+   "title": "THOSE WHO STILL SUFFER",
+   "summary": "ASL Grapevine night live recording Topic: THOSE WHO STILL SUFFER No Transcript",
+   "lang": "en",
+   "date": "2026-10-05T18:46:11Z",
+   "first_seen": "2026-10-06T13:20:51Z",
+   "image": "https://i.ytimg.com/vi/daNbma33_to/hqdefault.jpg",
+   "tags": [
+    "live",
+    "asl"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "daNbma33_to",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "American Sign Language"
+    ],
+    "is_short": false,
+    "views": 102,
+    "is_live_recording": true,
+    "date_approx": false
+   },
+   "i18n": {
+    "title": {
+     "en": "THOSE WHO STILL SUFFER",
+     "es": "Los que aún sufren"
+    },
+    "summary": {
+     "en": "ASL Grapevine night live recording Topic: THOSE WHO STILL SUFFER No Transcript",
+     "es": "ASL Grapevine noche de grabación en vivo Tema: aquellos que aún sufren No hay Transcripción"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-05T18:46:11Z"
+  },
+  {
+   "id": "ig:DeHsgonl9DC",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeHsgonl9DC/",
+   "title": "De Luis A., -\"Grupo Central NY\" New York . 📣 Envíanos tus mejores fotografías que…",
+   "summary": "De Luis A., -\"Grupo Central NY\" New York. 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad.. 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes!",
+   "lang": "es",
+   "date": "2026-10-05T17:00:22Z",
+   "first_seen": "2026-10-06T13:20:56Z",
+   "image": "/assets/cache/ig/DeHsgonl9DC.webp",
+   "tags": [
+    "alcoholicosanónimos",
+    "laviña",
+    "aa",
+    "sobriedad",
+    "recuperación"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeHsgonl9DC",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeHsgonl9DC.webp",
+    "embed_url": "https://www.instagram.com/p/DeHsgonl9DC/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeHsgonl9DC/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Luis A., \"Central NY Group\" New York. 📣 Send us your best pictures than …",
+     "es": "De Luis A., -\"Grupo Central NY\" New York . 📣 Envíanos tus mejores fotografías que…"
+    },
+    "summary": {
+     "en": "From Luis A., \"Central NY Group\" New York. 📣 Send us your best photos that reflect the joy of living, serenity and other themes of sobriety.. 📣 Please: ➡️ Include your name, the initial of your last name ➡️ Indica where photo was taken, location ➡️ Send your photos to: social@aagrapevine.org Don't let us send your best images!",
+     "es": "De Luis A., -\"Grupo Central NY\" New York. 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad.. 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes!"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-05T17:00:22Z"
+  },
+  {
+   "id": "ig:DeHsgiOF7aF",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeHsgiOF7aF/",
+   "title": "From Michelle H., - \"Monthly bonfire meeting\" Winters, CA",
+   "summary": "From Michelle H., - \"Monthly bonfire meeting\" Winters, CA GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+   "lang": "en",
+   "date": "2026-10-05T17:00:20Z",
+   "first_seen": "2026-10-06T13:20:56Z",
+   "image": "/assets/cache/ig/DeHsgiOF7aF.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeHsgiOF7aF",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeHsgiOF7aF.webp",
+    "embed_url": "https://www.instagram.com/p/DeHsgiOF7aF/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeHsgiOF7aF/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Michelle H., - \"Monthly bonfire meeting\" Winters, CA",
+     "es": "De Michelle H., - \"Mensil reunión de fogatas\" Winters, CA"
+    },
+    "summary": {
+     "en": "From Michelle H., - \"Monthly bonfire meeting\" Winters, CA GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+     "es": "¡De Michelle H., - \"Mesly bonfire meeting\" Winters, CA Grapevine Instagram concurso de fotos! Envíenos sus fotos a social@aagrapevine.org ➡️ Por favor incluya su nombre y su última inicial, y su ubicación. Las fotos ➡️ deben ser protegidas por el anonimato (no poses de cara completa o imágenes identificables de las personas.) ¡Esperando ver sus imágenes! El concurso está en curso."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-05T17:00:20Z"
+  },
   {
    "id": "ig:DeHMGIfANDj",
    "source": "instagram",
@@ -158,7 +385,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 40,
+    "views": 119,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1189,7 +1416,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 203,
+    "views": 218,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2574,7 +2801,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 344,
+    "views": 358,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3289,7 +3516,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 293,
+    "views": 296,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -6375,7 +6602,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-22T11:30:17Z"
   },
   {
@@ -6419,7 +6646,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-22T11:30:15Z"
   },
   {
@@ -6447,7 +6674,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 349,
+    "views": 351,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -6717,7 +6944,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 291,
+    "views": 294,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7211,7 +7438,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 344,
+    "views": 347,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7448,7 +7675,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 316,
+    "views": 318,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7546,7 +7773,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 398,
+    "views": 405,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7687,7 +7914,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 337,
+    "views": 340,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7785,7 +8012,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 340,
+    "views": 342,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7856,384 +8083,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-09-04T04:15:00Z"
-  },
-  {
-   "id": "lv:2026-09:acerca-del-alcoholismo",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/acerca-del-alcoholismo",
-   "title": "Acerca del alcoholismo",
-   "summary": "El alcohol y la salud: riesgos, beneficios y controversias",
-   "lang": "es",
-   "date": "2026-09-01",
-   "first_seen": "2026-09-23T16:34:47Z",
-   "image": "/assets/cache/articles/6c7853fac70f89ca.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Septiembre / Octubre 2026",
-    "issue_key": "2026-09",
-    "issue_date": "2026-09-01",
-    "issue_theme": "Servicio en AA",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/septiembre-octubre-2026",
-    "topic": "Servicio en AA",
-    "section": "En cada edición",
-    "author": null,
-    "author_location": null,
-    "subtitle": "El alcohol y la salud: riesgos, beneficios y controversias",
-    "teaser": "Brindar por la salud es una tradición común. Pero también puede ser contraproducente: el alcohol que se consume en muchos brindis puede, de hecho, perjudicarla.",
-    "free": false,
-    "online_exclusive": false,
-    "department": true,
-    "geo": {
-     "scope": "unknown",
-     "city": null,
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": null,
-     "label_es": null
-    },
-    "pub_date": "2026-09-01"
-   },
-   "i18n": {
-    "title": {
-     "en": "About Alcoholism",
-     "es": "Acerca del alcoholismo"
-    },
-    "summary": {
-     "en": "Alcohol and health: risks, benefits and disputes",
-     "es": "El alcohol y la salud: riesgos, beneficios y controversias"
-    },
-    "section": {
-     "en": "In Every Edition",
-     "es": "En cada edición"
-    },
-    "topic": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_theme": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_label": {
-     "en": "September / October 2026",
-     "es": "Septiembre / Octubre 2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-01T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-09:alcohol-y-violencia",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/alcohol-y-violencia",
-   "title": "Alcohol y violencia",
-   "summary": "Cuando bebía, perdía completamente el control y llegué a maltratar a mi pareja físicamente bajo los efectos del alcohol.",
-   "lang": "es",
-   "date": "2026-09-01",
-   "first_seen": "2026-09-23T16:34:47Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-08/p56-2248344956.jpg?itok=6la9FHDy",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Septiembre / Octubre 2026",
-    "issue_key": "2026-09",
-    "issue_date": "2026-09-01",
-    "issue_theme": "Servicio en AA",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/septiembre-octubre-2026",
-    "topic": "Servicio en AA",
-    "section": "Recaídas",
-    "author": "Eddie C.",
-    "author_location": "San José, California",
-    "subtitle": null,
-    "teaser": "Cuando bebía, perdía completamente el control y llegué a maltratar a mi pareja físicamente bajo los efectos del alcohol.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "San José",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "San José, California",
-     "label_es": "San José, California"
-    },
-    "pub_date": "2026-09-01"
-   },
-   "i18n": {
-    "title": {
-     "en": "Alcohol and Violence",
-     "es": "Alcohol y violencia"
-    },
-    "summary": {
-     "en": "When I drank, I completely lost control and I got to physically batter my partner under the effects of alcohol.",
-     "es": "Cuando bebía, perdía completamente el control y llegué a maltratar a mi pareja físicamente bajo los efectos del alcohol."
-    },
-    "section": {
-     "en": "Relapses",
-     "es": "Recaídas"
-    },
-    "topic": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_theme": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_label": {
-     "en": "September / October 2026",
-     "es": "Septiembre / Octubre 2026"
-    },
-    "author_location": {
-     "en": "San José, California",
-     "es": "San José, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-01T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-09:atados-por-la-misma-enfermedad",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/atados-por-la-misma-enfermedad",
-   "title": "Atados por la misma enfermedad",
-   "summary": "Durante años, el alcoholismo ocupó el lugar que correspondía a la familia y a los sueños",
-   "lang": "es",
-   "date": "2026-09-01",
-   "first_seen": "2026-09-23T16:34:47Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-08/p50-2198845859.jpg?itok=LmxqwJH5",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Septiembre / Octubre 2026",
-    "issue_key": "2026-09",
-    "issue_date": "2026-09-01",
-    "issue_theme": "Servicio en AA",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/septiembre-octubre-2026",
-    "topic": "Servicio en AA",
-    "section": "Familia",
-    "author": "Noemi",
-    "author_location": "Santa Ana, California",
-    "subtitle": "Durante años, el alcoholismo ocupó el lugar que correspondía a la familia y a los sueños",
-    "teaser": "Soy Noemí, una alcohólica derrotada. Llegué a un grupo de AA pidiendo ayuda, después de haber fracasado en los intentos de dejar de beber por mis propios medios.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Santa Ana",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Santa Ana, California",
-     "label_es": "Santa Ana, California"
-    },
-    "pub_date": "2026-09-01"
-   },
-   "i18n": {
-    "title": {
-     "en": "Bound by the Same Illness",
-     "es": "Atados por la misma enfermedad"
-    },
-    "summary": {
-     "en": "For years, alcoholism occupied the place of family and dreams",
-     "es": "Durante años, el alcoholismo ocupó el lugar que correspondía a la familia y a los sueños"
-    },
-    "section": {
-     "en": "Family",
-     "es": "Familia"
-    },
-    "topic": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_theme": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_label": {
-     "en": "September / October 2026",
-     "es": "Septiembre / Octubre 2026"
-    },
-    "author_location": {
-     "en": "Santa Ana, California",
-     "es": "Santa Ana, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-01T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-09:carta-de-bienvenida",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/carta-de-bienvenida",
-   "title": "Bienvenida",
-   "summary": "La recuperación nos regala mucho más que la sobriedad.",
-   "lang": "es",
-   "date": "2026-09-01",
-   "first_seen": "2026-09-23T16:34:47Z",
-   "image": "/assets/cache/articles/5f6983cc446a5d6a.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Septiembre / Octubre 2026",
-    "issue_key": "2026-09",
-    "issue_date": "2026-09-01",
-    "issue_theme": "Servicio en AA",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/septiembre-octubre-2026",
-    "topic": "Servicio en AA",
-    "section": "En cada edición",
-    "author": null,
-    "author_location": null,
-    "subtitle": null,
-    "teaser": "La recuperación nos regala mucho más que la sobriedad.",
-    "free": false,
-    "online_exclusive": false,
-    "department": true,
-    "geo": {
-     "scope": "unknown",
-     "city": null,
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": null,
-     "label_es": null
-    },
-    "pub_date": "2026-09-01"
-   },
-   "i18n": {
-    "title": {
-     "en": "Welcome",
-     "es": "Bienvenida"
-    },
-    "summary": {
-     "en": "The recovery gives us much more than the sobriety.",
-     "es": "La recuperación nos regala mucho más que la sobriedad."
-    },
-    "section": {
-     "en": "In Every Edition",
-     "es": "En cada edición"
-    },
-    "topic": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_theme": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_label": {
-     "en": "September / October 2026",
-     "es": "Septiembre / Octubre 2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-01T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-09:cartas-del-lector",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/cartas-del-lector",
-   "title": "Cartas del lector",
-   "summary": "Enfermedad espiritual Fort Worth, Texas",
-   "lang": "es",
-   "date": "2026-09-01",
-   "first_seen": "2026-09-23T16:34:47Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-08/P5-1398962864.jpg?itok=iIG4MU82",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Septiembre / Octubre 2026",
-    "issue_key": "2026-09",
-    "issue_date": "2026-09-01",
-    "issue_theme": "Servicio en AA",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/septiembre-octubre-2026",
-    "topic": "Servicio en AA",
-    "section": "En cada edición",
-    "author": null,
-    "author_location": null,
-    "subtitle": null,
-    "teaser": "Enfermedad espiritual Fort Worth, Texas",
-    "free": false,
-    "online_exclusive": false,
-    "department": true,
-    "geo": {
-     "scope": "unknown",
-     "city": null,
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": null,
-     "label_es": null
-    },
-    "pub_date": "2026-09-01"
-   },
-   "i18n": {
-    "title": {
-     "en": "Letters From the Reader",
-     "es": "Cartas del lector"
-    },
-    "summary": {
-     "en": "Spiritual Disease Fort Worth, Texas",
-     "es": "Enfermedad espiritual Fort Worth, Texas"
-    },
-    "section": {
-     "en": "In Every Edition",
-     "es": "En cada edición"
-    },
-    "topic": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_theme": {
-     "en": "AA Service",
-     "es": "Servicio en AA"
-    },
-    "issue_label": {
-     "en": "September / October 2026",
-     "es": "Septiembre / Octubre 2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-01T12:00:00Z"
   }
  ]
 }
