@@ -1,11 +1,13 @@
 /* Committee pages (Meetings, Events, Documents, Photos, Bulletin).
    Loaded with `defer` after app.js and BEFORE Alpine, so the Alpine
    components below are registered in time (alpine:init).
-   No build step, no dependencies besides window.GV (app.js), Alpine and —
+   No build step, no dependencies besides window.GV (app.js), window.GVTime
+   (central-time.js: the time-zone math, loaded before app.js), Alpine and —
    on /photos/ only — GLightbox (self-hosted, MIT). */
 (function () {
   "use strict";
   var GV = window.GV || {};
+  var T = window.GVTime || null;
   var LANG = GV.lang || document.documentElement.lang || "en";
   var LOCALE = LANG === "es" ? "es-US" : "en-US";
   var TZ = (window.SITE && window.SITE.tz) || "America/Chicago";
@@ -25,13 +27,19 @@
   function fmt(d, opts, tz) {
     try { return meridiem(new Intl.DateTimeFormat(LOCALE, Object.assign({ timeZone: tz || TZ }, opts)).format(d)); } catch (e) { return ""; }
   }
+  // A start and an end time with the zone: "7:00 – 8:00 PM CDT"; one that ends after midnight (the visitor's own
+  // midnight, for "Your time") "7:00 PM – 1:00 AM CST", never Intl's numeric dates (GVTime.timeRange, the build's
+  // clockRange). opts: more Intl options for each end ({ weekday: "short" }).
   function range(a, b, opts, tz) {
+    if (T) return meridiem(T.timeRange(a, b, LOCALE, tz || TZ, opts));
     try {
-      var f = new Intl.DateTimeFormat(LOCALE, Object.assign({ timeZone: tz || TZ }, opts));
+      var f = new Intl.DateTimeFormat(LOCALE, Object.assign({ timeZone: tz || TZ, hour: "numeric", minute: "2-digit", timeZoneName: "short" }, opts));
       return meridiem(f.formatRange ? f.formatRange(a, b) : f.format(a) + " – " + f.format(b));
     } catch (e) { return ""; }
   }
   function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  // text for an HTML attribute (the lightbox's labels)
+  function escAttr(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function utcStamp(d) { return new Date(d).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); }
   function ymdCompact(s) { return String(s).slice(0, 10).replace(/-/g, ""); }
   function ymdAdd(s, n) {
@@ -66,46 +74,12 @@
     };
   };
 
-  // RFC 5545 TEXT escaping + 75-octet line folding (UTF-8 safe)
-  function icsEsc(s) { return String(s == null ? "" : s).replace(/\r\n?/g, "\n").replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n"); }
-  function icsFold(line) {
-    var enc = window.TextEncoder ? new TextEncoder() : null;
-    var bytes = function (s) { return enc ? enc.encode(s).length : unescape(encodeURIComponent(s)).length; };
-    if (bytes(line) <= 75) return line;
-    var out = [], cur = "", n = 0, limit = 75;
-    Array.from(line).forEach(function (ch) {
-      var b = bytes(ch);
-      if (n + b > limit) { out.push(cur); cur = ""; n = 0; limit = 74; }
-      cur += ch; n += b;
-    });
-    if (cur) out.push(cur);
-    return out.join("\r\n ");
-  }
-
-  // ev.allDay: start / end are "YYYY-MM-DD" and end is the LAST day; the file gets DATE values with the
-  // exclusive DTEND (the day after), like /events.ics. ev.tentative → STATUS:TENTATIVE.
+  // One event as a calendar file: the browser's one .ics writer, app.js GV.ics / GV.icsText (the UID kept, a
+  // SEQUENCE that is higher in every newer file, STATUS:TENTATIVE for ev.tentative). ev.allDay: start / end are
+  // "YYYY-MM-DD" and end is the LAST day; the file gets DATE values with the exclusive DTEND (the day after),
+  // like /events.ics.
   CM.downloadIcs = function (ev) {
-    var L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//NETA 65 Grapevine La Vina Committee//Event//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", "BEGIN:VEVENT",
-      "UID:" + (ev.uid || utcStamp(ev.start) + "@neta65-gvlv"), "DTSTAMP:" + utcStamp(new Date())];
-    if (ev.allDay) {
-      L.push("DTSTART;VALUE=DATE:" + ymdCompact(ev.start), "DTEND;VALUE=DATE:" + ymdCompact(ymdAdd(ev.end || ev.start, 1)), "TRANSP:TRANSPARENT");
-    } else {
-      L.push("DTSTART:" + utcStamp(ev.start), "DTEND:" + utcStamp(ev.end || ev.start));
-    }
-    L.push("SUMMARY:" + icsEsc(ev.title));
-    if (ev.description) L.push("DESCRIPTION:" + icsEsc(ev.description));
-    if (ev.location) L.push("LOCATION:" + icsEsc(ev.location));
-    if (ev.url) L.push("URL:" + ev.url);
-    L.push("STATUS:" + (ev.tentative ? "TENTATIVE" : "CONFIRMED"));
-    L.push("END:VEVENT", "END:VCALENDAR");
-    var text = L.map(icsFold).join("\r\n") + "\r\n";
-    var blob = new Blob([text], { type: "text/calendar;charset=utf-8" });
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = (ev.filename || "event") + ".ics";
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+    if (GV.ics) GV.ics(ev);
   };
 
   /* ---------------- Alpine components ---------------- */
@@ -137,7 +111,7 @@
           if (isNaN(start)) return;
           this._start = start; this._end = end; this._ymd = nx ? nx.ymd : chicagoYmd(start);
           this.dateLabel = cap(fmt(start, { weekday: "long", month: "long", day: "numeric", year: "numeric" }));
-          this.timeLabel = range(start, end, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+          this.timeLabel = range(start, end);
           // One line for the hero: "Wednesday, October 21 · 7:00 PM CDT" (same as the build's whenLabel)
           this.whenLabel = cap(fmt(start, { weekday: "long", month: "long", day: "numeric" })) + " · " + fmt(start, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
           this.tile = {
@@ -151,7 +125,7 @@
             var local = Intl.DateTimeFormat().resolvedOptions().timeZone;
             var probe = { hour: "numeric", minute: "numeric", day: "numeric" };
             if (local && fmt(start, probe, local) !== fmt(start, probe, TZ)) {
-              var lr = range(start, end, { weekday: "short", hour: "numeric", minute: "2-digit", timeZoneName: "short" }, local);
+              var lr = range(start, end, { weekday: "short" }, local);
               this.localLabel = String(i18n.yourTime || "{time}").replace("{time}", lr);
             }
           } catch (e) {}
@@ -163,7 +137,8 @@
           var now = Date.now();
           if (this._end && now >= this._end.getTime()) this.compute(); // meeting over → roll to the next one
           var st = this._start.getTime(), diff = st - now;
-          this.phase = now >= st ? "live" : diff <= 15 * 60000 ? "soon" : "upcoming";
+          // (live until its end: a meeting that could not be rolled on — no GVTime — is not "live" for ever)
+          this.phase = now >= st ? (this._end && now >= this._end.getTime() ? "upcoming" : "live") : diff <= 15 * 60000 ? "soon" : "upcoming";
           this.joinText = this.phase === "live" ? i18n.live : this.phase === "soon" ? i18n.soon : i18n.join;
           diff = Math.max(0, diff);
           this.d = Math.floor(diff / 864e5); this.h = Math.floor((diff % 864e5) / 36e5);
@@ -182,13 +157,18 @@
       };
     });
 
-    /* /events/ filter chips + "show every monthly meeting" toggle */
+    /* /events/ filter chips + "show every monthly meeting" toggle. An event whose time passes while the page is
+       open is hidden by expire() (below), which then says so ("cm:expired"): the chips are counted again and
+       `tick` moves on, so every list, month heading and month chip (show / monthVisible) and the "Showing N
+       events" line are worked out again — they read only Alpine's own state, which no hidden card changes. */
     Alpine.data("cmEvents", function () {
       return {
-        filter: "all", showAll: false, labels: { many: "{n}", one: "{n}" },
+        filter: "all", showAll: false, labels: { many: "{n}", one: "{n}" }, tick: 0,
         init: function () {
+          var self = this;
           this.labels = countLabels(this.$root);
           this.recount();
+          window.addEventListener("cm:expired", function () { self.tick++; self.recount(); });
           // x-show now owns what is hidden: drop the first-paint rule (committee.css [data-dflt-hidden])
           this.$nextTick(function () { document.documentElement.classList.add("cm-ev-ready"); });
           try {
@@ -228,6 +208,7 @@
           });
         },
         show: function (el) {
+          void this.tick; // (read: worked out again after expire())
           if (el.hasAttribute("data-cm-expired")) return false;
           // a later date of a monthly series (its first date lists it): only with "Show every monthly date"
           if (el.hasAttribute("data-later") && !this.showAll) return false;
@@ -598,14 +579,17 @@
     }, { once: true });
   }
   function expire() {
-    var now = Date.now();
+    var now = Date.now(), hid = 0;
     document.querySelectorAll("[data-cm-expire]").forEach(function (el) {
       var t = Date.parse(el.getAttribute("data-cm-expire"));
       if (!t || t > now || el.hasAttribute("data-cm-expired")) return;
       if (holdsFocus(el)) { afterFocus(el); return; }
       el.setAttribute("data-cm-expired", "");
       el.hidden = true;
+      hid++;
     });
+    // /events/' chips and "Showing N events" are counted again (cmEvents)
+    if (hid) { try { window.dispatchEvent(new CustomEvent("cm:expired", { detail: hid })); } catch (e) { /* very old browser */ } }
     document.querySelectorAll("[data-cm-max]").forEach(function (list) {
       var max = Number(list.getAttribute("data-cm-max")) || 6, i = 0;
       Array.prototype.forEach.call(list.children, function (li) {
@@ -621,38 +605,21 @@
      The page is built daily, but the meeting is weekly: roll the date forward
      in the browser, say "Live now" during the meeting, and add the visitor's
      own time when they are outside Central time.
-     <p data-cm-weekly="ISO" data-cm-weekly-tz="America/New_York" data-cm-weekly-at="12:00">…
+     <p data-cm-weekly="ISO" data-cm-weekly-tz="America/New_York" data-cm-weekly-at="12:00" data-cm-weekly-len="60">…
      <span data-cm-weekly-label data-live="…">…
-     <span data-cm-weekly-date>…<span data-cm-weekly-local data-tpl="Your time: {time}" hidden> */
+     <span data-cm-weekly-date>…<span data-cm-weekly-local data-tpl="Your time: {time}" hidden>
+     data-cm-weekly-len (minutes): the date line gives the end too — "Wednesday, October 7 · 11:00 AM – 12:00 PM CDT". */
 
-  // Wall-clock parts of an instant (ms) in a time zone; null for an unknown zone.
-  function zoneParts(ms, tz) {
-    try {
-      var p = {};
-      new Intl.DateTimeFormat("en-US", { timeZone: tz, hourCycle: "h23", year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" })
-        .formatToParts(new Date(ms)).forEach(function (x) { if (x.type !== "literal") p[x.type] = Number(x.value); });
-      return isNaN(p.year) ? null : { y: p.year, mo: p.month - 1, d: p.day, h: p.hour % 24, mi: p.minute, s: p.second };
-    } catch (e) { return null; }
-  }
-  // A wall-clock date + time in a zone → the real instant (ms).
-  function zoneInstant(y, mo, d, h, mi, tz) {
-    var guess = Date.UTC(y, mo, d, h, mi);
-    function offsetAt(ms) {
-      var p = zoneParts(ms, tz);
-      return Date.UTC(p.y, p.mo, p.d, p.h, p.mi, p.s) - Math.floor(ms / 1000) * 1000;
-    }
-    return guess - offsetAt(guess - offsetAt(guess)); // 2nd pass: right even on a DST-change day
-  }
   // Next start of a weekly meeting at a fixed local time, stepping calendar weeks in the
   // host's zone: Noon Eastern stays 11 AM Central across daylight-saving changes
-  // (same as nextWeeklyStart in eleventy/filters/committee.js).
+  // (same as nextWeeklyStart in eleventy/filters/committee.js; the zone math: GVTime).
   function nextWeekly(t, now, tz, at, live) {
-    var p = zoneParts(t, tz);
-    if (!p) { tz = TZ; at = ""; p = zoneParts(t, tz); } // unknown zone name → Central, keeping t's clock time
+    var p = T && T.zoneParts(t, tz);
+    if (!p && T) { tz = TZ; at = ""; p = T.zoneParts(t, tz); } // unknown zone name → Central, keeping t's clock time
     if (!p) { while (t + live < now) t += 7 * 864e5; return t; } // no Intl time zones at all
     var m = /^(\d{1,2}):(\d{2})$/.exec(String(at || "").trim());
     var h = m ? Number(m[1]) : p.h, mi = m ? Number(m[2]) : p.mi;
-    for (var w = 1; t + live < now && w < 5000; w++) t = zoneInstant(p.y, p.mo, p.d + 7 * w, h, mi, tz);
+    for (var w = 1; t + live < now && w < 5000; w++) t = T.zoneInstant(p.y, p.mo, p.d + 7 * w, h, mi, tz);
     return t;
   }
 
@@ -679,7 +646,9 @@
       var dt = box.querySelector("[data-cm-weekly-date]");
       // data-cm-weekly-short (the /meetings/ hero card, a narrow column): "Wed, Sep 30 · 11:00 AM CDT"
       var short = box.hasAttribute("data-cm-weekly-short");
-      if (dt && !before) dt.textContent = cap(fmt(d, short ? { weekday: "short", month: "short", day: "numeric" } : { weekday: "long", month: "long", day: "numeric" })) + " · " + fmt(d, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+      var len = Number(box.getAttribute("data-cm-weekly-len")) || 0;
+      var when = len > 0 ? range(d, new Date(t + len * 60000)) : fmt(d, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+      if (dt && !before) dt.textContent = cap(fmt(d, short ? { weekday: "short", month: "short", day: "numeric" } : { weekday: "long", month: "long", day: "numeric" })) + " · " + when;
       var loc = box.querySelector("[data-cm-weekly-local]");
       if (loc) {
         try {
@@ -698,7 +667,8 @@
   function initLightbox() {
     if (typeof window.GLightbox !== "function" || !document.querySelector(".glightbox-cm")) return;
     var lab = document.getElementById("cm-lb-i18n");
-    var L = function (k, d) { return (lab && lab.getAttribute("data-" + k)) || d; };
+    // (the labels are text: escaped, so a quote or "<" in a translation can never break the markup)
+    var L = function (k, d) { return escAttr((lab && lab.getAttribute("data-" + k)) || d); };
     var html = '<div id="glightbox-body" class="glightbox-container cm-lightbox" tabindex="-1" role="dialog" aria-modal="true" aria-label="' + L("label", "Photos") + '">' +
       '<div class="gloader visible"></div><div class="goverlay"></div><div class="gcontainer">' +
       '<div id="glightbox-slider" class="gslider"></div>' +

@@ -6,7 +6,9 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import * as yaml from "js-yaml";
 import markdownIt from "markdown-it";
+import { setZone, zoneInstant } from "./eleventy/central-time.js";
 
 const require = createRequire(import.meta.url);
 const md = markdownIt({ html: false, linkify: true, breaks: true });
@@ -118,7 +120,18 @@ md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
   }
   return self.renderToken(tokens, idx, options);
 };
-const TZ = "America/Chicago";
+// The site's time zone — config/site.yml site.timezone (America/Chicago; a name that is not a time zone, or no
+// settings file, keeps that). Every date the build writes is in it: fmtDate, the © year, toDate's times without
+// a zone, and the shared helper eleventy/central-time.js (set here, so src/_data/meeting.js, the area filters
+// and the browser's copy — window.SITE.tz — all use the one zone). Area filters import it: { TZ }.
+function siteTimezone() {
+  try {
+    return ((yaml.load(fs.readFileSync("config/site.yml", "utf8")) || {}).site || {}).timezone;
+  } catch {
+    return "";
+  }
+}
+export const TZ = setZone(siteTimezone());
 const LOCALES = { en: "en-US", es: "es-US" };
 const LUCIDE_DIR = path.join(path.dirname(require.resolve("lucide-static/package.json")), "icons");
 const iconCache = new Map();
@@ -166,10 +179,35 @@ function pickLang(item, field, lang) {
 /* ------------------------------------------------------------------ */
 /*  Dates                                                              */
 /* ------------------------------------------------------------------ */
+/** A value from the data or a template → a Date (null when it is not one):
+      "2026-10-21"           that day, at noon UTC — the same calendar day in Central time (and anywhere in the
+                             Americas), so a date-only value never prints as the day before;
+      "2026-10" / "2026"     that month / year, the same way (its 1st / January 1, at noon UTC) — not midnight
+                             UTC, which is still the month before in Central time ("2026-10" printed "September");
+      "2026-10-21T19:00", "2026-10-21 19:00:00"  a date and time without a zone: Central wall-clock time (TZ),
+                             whatever zone the computer that builds the site is in;
+      an instant with its zone ("…Z", "…-05:00"), a Date, ms → that instant. An invalid one → null.
+    (Every filter that reads a date goes through here: fmtDate, isoDate, rfc822, isRecent, year, sortByDate and
+    the area filters' helpers.toDate.) */
 function toDate(v) {
-  if (!v) return null;
-  if (v instanceof Date) return v;
-  if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v)) return new Date(v + "T12:00:00Z"); // date-only: noon UTC avoids TZ day shift
+  if (!v || typeof v === "boolean") return null;
+  if (v instanceof Date) return isNaN(v) ? null : v;
+  if (typeof v === "string") {
+    const s = v.trim();
+    let m = /^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(s);
+    if (m) {
+      const y = Number(m[1]), mo = Number(m[2] || 1), d = Number(m[3] || 1);
+      const day = new Date(Date.UTC(y, mo - 1, d, 12));
+      return day.getUTCMonth() === mo - 1 && day.getUTCDate() === d ? day : null;
+    }
+    m = /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,3})\d*)?)?$/.exec(s);
+    if (m) {
+      const [y, mo, d, h, mi] = m.slice(1, 6).map(Number);
+      if (mo < 1 || mo > 12 || d < 1 || d > 31 || h > 23 || mi > 59) return null;
+      const ms = zoneInstant(y, mo - 1, d, h, mi, TZ) + Number(m[6] || 0) * 1000 + Number((m[7] || "").padEnd(3, "0"));
+      return Number.isFinite(ms) ? new Date(ms) : null;
+    }
+  }
   const d = new Date(v);
   return isNaN(d) ? null : d;
 }

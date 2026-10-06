@@ -13,10 +13,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+// the site's time zone: config/site.yml site.timezone (America/Chicago)
+import { TZ } from "../../eleventy.config.js";
 
 const require = createRequire(import.meta.url);
 const EMPTY = !!process.env.READ_EMPTY;
-const TZ = "America/Chicago";
 const LOCALES = { en: "en-US", es: "es-US" };
 
 /* Titles that are really link labels, not titles ("Read", "Leer más"…). */

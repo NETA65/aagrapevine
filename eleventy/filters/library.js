@@ -36,6 +36,7 @@
 import { openSync, readSync, closeSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { scriptJson } from "../script-json.js";
+import { TZ } from "../../eleventy.config.js"; // the site's time zone (config/site.yml site.timezone)
 import { eventTone } from "./event-tone.js"; // the colour rule: a booth's search words (booth, literature table)
 import { issueName } from "./read.js"; // La Viña's issue as every page names it ("May–June 2027")
 import orientationData from "../../src/_data/orientation.js"; // GVR / RLV 101 lessons (config/orientation.yml)
@@ -170,7 +171,7 @@ function langHint(name) {
 
 // Calendar day in the Area's time zone (the rest of the site formats dates in Central time):
 // an episode published 2026-09-21T04:15Z is "September 20" everywhere.
-const DAY_FMT = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit" });
+const DAY_FMT = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" });
 function ymd(helpers, v) {
   if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v)) return v; // already a plain date
   const d = helpers.toDate(v);
@@ -802,7 +803,7 @@ export function searchIndex(db, nav, lang, helpers, site) {
 
   /* ---- editorial themes (calls for stories) — only the ones still open, like /contribute/ ---- */
   safely("editorial", () => {
-    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Chicago" }).format(new Date()); // YYYY-MM-DD in Central time
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(new Date()); // YYYY-MM-DD in Central time
     for (const it of db.editorial?.items || []) {
       if (!ok(it)) continue;
       const ex = it.extra || {};
@@ -931,7 +932,7 @@ export function searchIndex(db, nav, lang, helpers, site) {
 
   /* ---- Committee: the bulletin's posts (expired ones are hidden on the page, so skip them) ---- */
   safely("announcements", () => {
-    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Chicago" }).format(new Date()); // YYYY-MM-DD in Central time
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(new Date()); // YYYY-MM-DD in Central time
     const list = typeof committee.announcementList === "function"
       ? committee.announcementList(db.announcements?.items || [])
       : (db.announcements?.items || []).filter((it) => ok(it) && !(it.extra?.expires && String(it.extra.expires).slice(0, 10) < today));

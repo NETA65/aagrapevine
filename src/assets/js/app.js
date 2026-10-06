@@ -139,19 +139,26 @@
     if (cur) out.push(cur);
     return out.join("\r\n ");
   };
+  // The same UID as the calendar feed (/events.ics) gives the event, and a SEQUENCE that is higher in every newer
+  // file — GVTime.icsSequence: the minutes since 2026 when the file is made (the feed counts the same way) — so
+  // adding an event again after its time or place changed moves it (a calendar app keeps the version whose
+  // SEQUENCE is highest). ev.tentative → STATUS:TENTATIVE (details not final yet), else CONFIRMED.
   GV.icsText = function (ev) {
     function stamp(d) { return new Date(d).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); }
     function day(d) { return (typeof d === "string" ? d : new Date(d).toISOString()).slice(0, 10); }
     function ymd(d) { return day(d).replace(/-/g, ""); }
     function nextDay(d) { var t = new Date(day(d) + "T12:00:00Z"); t.setUTCDate(t.getUTCDate() + 1); return t.toISOString().slice(0, 10); }
+    var now = Date.now(), T = window.GVTime;
+    var seq = T ? T.icsSequence(now) : Math.max(0, Math.floor((now - Date.UTC(2026, 0, 1)) / 60000));
     var L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//NETA 65 Grapevine La Vina Committee//Event//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", "BEGIN:VEVENT",
-      "UID:" + String(ev.uid || stamp(ev.start) + "@neta65-gvlv").replace(/[\r\n]/g, ""), "DTSTAMP:" + stamp(new Date())];
+      "UID:" + String(ev.uid || stamp(ev.start) + "@neta65-gvlv").replace(/[\r\n]/g, ""), "DTSTAMP:" + stamp(now), "SEQUENCE:" + seq];
     if (ev.allDay) L.push("DTSTART;VALUE=DATE:" + ymd(ev.start), "DTEND;VALUE=DATE:" + ymd(nextDay(ev.end || ev.start)), "TRANSP:TRANSPARENT");
     else L.push("DTSTART:" + stamp(ev.start), "DTEND:" + stamp(ev.end || ev.start));
     L.push("SUMMARY:" + GV.icsEsc(ev.title));
     if (ev.description) L.push("DESCRIPTION:" + GV.icsEsc(ev.description));
     if (ev.location) L.push("LOCATION:" + GV.icsEsc(ev.location));
     if (ev.url) L.push("URL:" + String(ev.url).replace(/[\s]/g, ""));
+    L.push("STATUS:" + (ev.tentative ? "TENTATIVE" : "CONFIRMED"));
     L.push("END:VEVENT", "END:VCALENDAR");
     return L.map(GV.icsFold).join("\r\n") + "\r\n";
   };
@@ -162,40 +169,51 @@
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800);
   };
 
-  /* Next occurrence of an "nth weekday of month" meeting, in America/Chicago.
-     Same rule as the build (src/_data/meeting.js): a month without a 5th <weekday> is skipped,
-     and the search starts one month back so an evening meeting on the last day of a month
-     (already the next month in UTC) is still found while it is in progress. */
+  /* Next occurrence of an "nth weekday of month" meeting, in Central time (window.SITE.tz).
+     Same rule and the same code as the build (src/_data/meeting.js: central-time.js ruleDate, window.GVTime
+     here): a month without a 5th <weekday> is skipped, a missing end means one hour, the offset comes from the
+     wall clock Intl gives (no "shortOffset", which iOS 15.3 and older lack — and no guessed −6 hours: the
+     summer meeting stays at 7 PM) and is checked again on the day the clocks change. The search starts one
+     month back so an evening meeting on the last day of a month (already the next month in UTC) is still found
+     while it is in progress. Without GVTime (its script did not load): null — the page keeps the build's date. */
   GV.nextMeeting = function (rule) {
     // rule: {weekday:3, n:3, start:"19:00", end:"20:00", skip:["2026-12-16"]}  (n: 1-5, or -1 = last)
-    function chicagoOffset(d) {
-      try {
-        var p = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", timeZoneName: "shortOffset" }).formatToParts(d);
-        var tz = (p.find(function (x) { return x.type === "timeZoneName"; }) || {}).value || "GMT-6";
-        var m = tz.match(/GMT([+-]\d+)/); return m ? Number(m[1]) * 60 : -360;
-      } catch (e) { return -360; }
-    }
-    function at(y, mo, day, hhmm) {
-      var hm = String(hhmm || "19:00").split(":");
-      var g = new Date(Date.UTC(y, mo, day, Number(hm[0]), Number(hm[1] || 0)));
-      return new Date(g.getTime() - chicagoOffset(g) * 60000);
-    }
-    var now = new Date(), skip = rule.skip || [], n = Number(rule.n);
+    var T = window.GVTime;
+    if (!T || !rule) return null;
+    var now = Date.now(), p = T.zoneParts(now, TZ);
+    if (!p) return null;
     for (var i = -1; i < 15; i++) {
-      var base = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + i, 1));
-      var y = base.getUTCFullYear(), mo = base.getUTCMonth();
-      var first = new Date(Date.UTC(y, mo, 1)).getUTCDay();
-      var last = new Date(Date.UTC(y, mo + 1, 0));
-      var day;
-      if (n === -1) day = last.getUTCDate() - ((last.getUTCDay() - rule.weekday + 7) % 7);
-      else day = 1 + ((rule.weekday - first + 7) % 7) + (n - 1) * 7;
-      if (day > last.getUTCDate()) continue; // no 5th <weekday> this month
-      var ymd = y + "-" + String(mo + 1).padStart(2, "0") + "-" + String(day).padStart(2, "0");
-      if (skip.indexOf(ymd) !== -1) continue;
-      var end = at(y, mo, day, rule.end || rule.start);
-      if (end > now) return { start: at(y, mo, day, rule.start), end: end, ymd: ymd };
+      var d = T.ruleDate(p.y, p.mo + i, rule, TZ);
+      if (d && d.end > now) return { start: new Date(d.start), end: new Date(d.end), ymd: d.ymd };
     }
     return null;
+  };
+
+  /* "Next committee meeting" lines on pages without the countdown (/gvr/, /about/): the build writes the next
+     meeting of its day; once that one is over this rolls the line on to the next date (GV.nextMeeting) — also
+     in a copy saved for offline use. Runs when the page is ready, every minute and when it is shown again.
+       <span data-gv-meeting='{"weekday":3,"n":3,"start":"19:00","end":"20:00","skip":[]}' data-at="<start ISO>"
+             data-tpl="Next meeting: {date} at {time}" data-date="long">…</span>
+     {date}: data-date "long" (Wednesday, October 21, 2026) or "medium" (October 21, 2026) — fmtDate's styles;
+     {time}: 7:00 PM CDT. A <time> element gets the new datetime too. → how many lines it changed */
+  GV.meetingLines = function (root) {
+    var changed = 0;
+    Array.prototype.forEach.call((root || document).querySelectorAll("[data-gv-meeting]"), function (el) {
+      var rule = null;
+      try { rule = JSON.parse(el.getAttribute("data-gv-meeting") || "null"); } catch (e) { rule = null; }
+      var n = rule ? GV.nextMeeting(rule) : null;
+      if (!n || n.start.toISOString() === el.getAttribute("data-at")) return;
+      var long = el.getAttribute("data-date") === "long";
+      var date = GV.fmtDate(n.start, long ? { weekday: "long", month: "long", day: "numeric", year: "numeric" } : { month: "long", day: "numeric", year: "numeric" });
+      if (long && LANG === "es") date = date.charAt(0).toUpperCase() + date.slice(1);
+      var time = GV.fmtDate(n.start, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+      if (!date || !time) return;
+      el.textContent = String(el.getAttribute("data-tpl") || "{date}").replace("{date}", date).replace("{time}", time);
+      el.setAttribute("data-at", n.start.toISOString());
+      if (el.tagName === "TIME") el.setAttribute("datetime", n.start.toISOString());
+      changed++;
+    });
+    return changed;
   };
 
   /* ---------------- things whose time has passed — or come (GV.expire) ----------------
@@ -870,6 +888,13 @@
       setInterval(function () { GV.expire(); }, 60000);
       document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") GV.expire(); });
       window.addEventListener("pageshow", function (e) { if (e.persisted) GV.expire(); });
+    }
+    // The next committee meeting's lines (GV.meetingLines): the same moments
+    if (document.querySelector("[data-gv-meeting]")) {
+      GV.meetingLines();
+      setInterval(function () { GV.meetingLines(); }, 60000);
+      document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") GV.meetingLines(); });
+      window.addEventListener("pageshow", function (e) { if (e.persisted) GV.meetingLines(); });
     }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", enhance); else enhance();

@@ -41,7 +41,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import * as yaml from "js-yaml";
-import { monthlyRule } from "../../eleventy.config.js";
+import { monthlyRule, TZ } from "../../eleventy.config.js";
 import { normalizeEvents, meetingDates, recurrenceText, chicagoDayEndMs, announcementList, driveInfo, weeklyOpenAll } from "./committee.js";
 import { editorialFor, issueLabel } from "./read.js";
 import { monthModel, monthLabel, nowDate, chicagoYmd, issueTheme, addMonths } from "./monthly.js";
@@ -50,7 +50,6 @@ import { qrSvg, issueLabelOf } from "./community.js";
 import { eventTone } from "./event-tone.js";
 import { axPhone } from "./access.js";
 
-const TZ = "America/Chicago";
 // The repository (the deck folder, the icons, data/site/shop.json): Eleventy and the tests run from its root.
 const ROOT = process.cwd();
 

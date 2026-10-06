@@ -1,8 +1,10 @@
 // Calendar feeds: /events.ics (English) and /es/events.ics (Spanish).
 //
 // Valid iCalendar (RFC 5545): CRLF line endings, lines folded at 75 octets,
-// TEXT escaping, stable UIDs, DTSTAMP, UTC times for timed events and
-// DATE values for all-day events (so no VTIMEZONE is needed).
+// TEXT escaping, stable UIDs, DTSTAMP, a SEQUENCE that is higher in every newer
+// file (the minutes since 2026 at the build: a calendar app takes a changed time or
+// place — committee.js buildIcs), UTC times for timed events and DATE values for
+// all-day events (so no VTIMEZONE is needed).
 //
 // Contents: the monthly committee meetings (computed from config/site.yml,
 // with the Zoom link), Drive flyer events, manual events, the Texas GV/LV

@@ -12,10 +12,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
-import { monthlyRule } from "../../eleventy.config.js";
+import { monthlyRule, TZ } from "../../eleventy.config.js";
+// The site's one Central-time helper (the browser runs the same code: /assets/js/central-time.js)
+import { isZone, zoneParts, zoneInstant, ymdOf, ruleDate, timeRange, icsSequence, offsetMinutes } from "../central-time.js";
 
 const require = createRequire(import.meta.url);
-export const TZ = "America/Chicago";
+export { TZ }; // config/site.yml site.timezone (America/Chicago)
 const LOCALES = { en: "en-US", es: "es-US" };
 const EMPTY = !!process.env.COMMITTEE_EMPTY;
 
@@ -49,29 +51,16 @@ export function slugify(s, max = 60) {
     .slice(0, max).replace(/-+$/, "") || "item";
 }
 
-// Offset (minutes) of America/Chicago from UTC at a given instant.
-function chicagoOffsetMinutes(date) {
-  try {
-    const f = new Intl.DateTimeFormat("en-US", { timeZone: TZ, timeZoneName: "shortOffset" });
-    const tz = f.formatToParts(date).find((p) => p.type === "timeZoneName")?.value || "GMT-6";
-    const m = tz.match(/GMT([+-]\d+)(?::(\d+))?/);
-    return m ? Number(m[1]) * 60 + Math.sign(Number(m[1])) * Number(m[2] || 0) : -360;
-  } catch {
-    return -360;
-  }
-}
-
-// A wall-clock time in Chicago → the real instant (Date).
+// A wall-clock time in Chicago → the real instant (Date) — eleventy/central-time.js, right on the days the
+// clocks change too.
 function atChicago(y, mo, d, hhmm = "00:00") {
   const [h, mi] = String(hhmm).split(":").map(Number);
-  const guess = new Date(Date.UTC(y, mo, d, h || 0, mi || 0));
-  return new Date(guess.getTime() - chicagoOffsetMinutes(guess) * 60000);
+  return new Date(zoneInstant(y, mo, d, h || 0, mi || 0, TZ));
 }
 
 // "YYYY-MM-DD" of an instant, as seen in Chicago.
 function chicagoYmd(date) {
-  const p = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(date);
-  return p; // en-CA formats as YYYY-MM-DD
+  return ymdOf(date instanceof Date ? date.getTime() : Number(date), TZ);
 }
 
 function ymdAddDays(ymd, n) {
@@ -144,37 +133,9 @@ export function eventEndMs(it) {
   return sp ? sp.endMs : NaN;
 }
 
-// Any IANA time zone (the Grapevine Weekly Open is hosted in Eastern time).
-const zoneFmts = new Map();
-function zoneFmt(tz) {
-  if (!zoneFmts.has(tz)) {
-    let f = null;
-    try {
-      if (tz) f = new Intl.DateTimeFormat("en-US", { timeZone: tz, hourCycle: "h23", year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" });
-    } catch {
-      f = null; // unknown zone name
-    }
-    zoneFmts.set(tz, f);
-  }
-  return zoneFmts.get(tz);
-}
-// The zone itself when it is a real IANA name, else Central.
-const validZone = (tz) => (tz && zoneFmt(String(tz)) ? String(tz) : TZ);
-// Wall-clock parts of an instant (ms) in a zone.
-function zoneParts(ms, tz) {
-  const p = {};
-  for (const x of zoneFmt(tz).formatToParts(new Date(ms))) if (x.type !== "literal") p[x.type] = Number(x.value);
-  return { y: p.year, mo: p.month - 1, d: p.day, h: p.hour % 24, mi: p.minute, s: p.second };
-}
-// A wall-clock date + time in a zone → the real instant (ms). Month/day may overflow (Date.UTC rolls them).
-function zoneInstant(y, mo, d, h, mi, tz) {
-  const guess = Date.UTC(y, mo, d, h, mi);
-  const offsetAt = (ms) => {
-    const p = zoneParts(ms, tz);
-    return Date.UTC(p.y, p.mo, p.d, p.h, p.mi, p.s) - Math.floor(ms / 1000) * 1000;
-  };
-  return guess - offsetAt(guess - offsetAt(guess)); // 2nd pass: right even on a DST-change day
-}
+// Any IANA time zone (the Grapevine Weekly Open is hosted in Eastern time): the zone itself when it is a real
+// name, else Central. (zoneParts / zoneInstant: eleventy/central-time.js)
+const validZone = (tz) => (tz && isZone(String(tz)) ? String(tz) : TZ);
 
 /**
  * A weekly meeting at a fixed local time (e.g. Noon Eastern): its first start at or after
@@ -189,6 +150,7 @@ export function nextWeeklyStart(firstMs, nowMs, tz = TZ, hhmm = "", liveMs = 75 
     hhmm = ""; // a local time in an unknown zone means nothing in Central: keep firstMs's clock time
   }
   const p = zoneParts(firstMs, tz);
+  if (!p) return firstMs;
   const m = /^(\d{1,2}):(\d{2})$/.exec(String(hhmm || "").trim());
   const h = m ? Number(m[1]) : p.h, mi = m ? Number(m[2]) : p.mi;
   let ms = firstMs;
@@ -221,6 +183,13 @@ function fmtRange(a, b, lang, opts) {
   } catch {
     return "";
   }
+}
+
+// "7:00 – 8:00 PM CDT"; an event that ends after midnight "7:00 PM – 1:00 AM CST" (not Intl's "12/31/2026,
+// 7:00 PM – 1/1/2027, 1:00 AM"): central-time.js timeRange, in Central time. opts: { weekday: "short" } …
+export function clockRange(a, b, lang = "en", opts) {
+  const s = timeRange(a, b, LOCALES[lang] || "en-US", TZ, opts);
+  return lang === "es" ? H.esMeridiem(s) : s;
 }
 
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
@@ -270,17 +239,6 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 /* ------------------------------------------------------------------ */
 const WD = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 };
 
-function nthWeekday(year, month, weekday, n) {
-  if (n === -1) {
-    const last = new Date(Date.UTC(year, month + 1, 0));
-    return last.getUTCDate() - ((last.getUTCDay() - weekday + 7) % 7);
-  }
-  const first = new Date(Date.UTC(year, month, 1)).getUTCDay();
-  const day = 1 + ((weekday - first + 7) % 7) + (n - 1) * 7;
-  const dim = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
-  return day <= dim ? day : null;
-}
-
 // config/site.yml `meeting` as every page reads it: eleventy.config.js monthlyRule, the reading of
 // scripts/sync/meeting.py meeting_rule and src/_data/meeting.js — "7:00 PM", "7pm" or 19 → "19:00" (never
 // 7 AM or midnight), "sábado" → Saturday, a week it cannot read ("third") → the 3rd (never a missing
@@ -315,19 +273,13 @@ export function meetingDates(cfg = {}, monthsBack = 3, monthsAhead = 12) {
   cfg = meetingCfg(cfg);
   const weekday = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
   const n = Number(cfg.week_of_month || 3);
-  const skip = new Set(skipDates(cfg));
+  // (the countdown's rule: eleventy/central-time.js ruleDate, as src/_data/meeting.js and app.js GV.nextMeeting)
+  const rule = { weekday, n, start: meetingStart(cfg), end: meetingEnd(cfg), skip: skipDates(cfg) };
   const now = new Date();
   const out = [];
   for (let i = -monthsBack; i <= monthsAhead; i++) {
-    const base = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + i, 1));
-    const y = base.getUTCFullYear(), mo = base.getUTCMonth();
-    const d = nthWeekday(y, mo, weekday, n);
-    if (!d) continue;
-    const ymd = `${y}-${String(mo + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-    if (skip.has(ymd)) continue;
-    const start = atChicago(y, mo, d, meetingStart(cfg));
-    const end = atChicago(y, mo, d, meetingEnd(cfg));
-    out.push({ ymd, start: start.toISOString(), end: (end > start ? end : new Date(start.getTime() + 3600e3)).toISOString() });
+    const d = ruleDate(now.getUTCFullYear(), now.getUTCMonth() + i, rule, TZ);
+    if (d) out.push({ ymd: d.ymd, start: new Date(d.start).toISOString(), end: new Date(d.end).toISOString() });
   }
   return out;
 }
@@ -618,7 +570,7 @@ function shapeEvent(it, site, lang, now, descOverride) {
       // "Fri, Mar 19, 6:00 PM CDT – Sun, Mar 21, 12:00 PM CDT": the times are in the range itself
       rangeLabel = cap(fmtRange(start, end, lang, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" }));
       dateLabel = cap(fmtRange(start, end, lang, { weekday: "long", month: "long", day: "numeric", year: "numeric" }));
-    } else if (span.hasEnd) timeLabel = fmtRange(start, end, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+    } else if (span.hasEnd) timeLabel = clockRange(start, end, lang);
     // no end in the data: the start alone, as on the home page and the monthly toolkit — never the hour the
     // calendars assume presented as its end
     else timeLabel = fmt(start, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
@@ -779,6 +731,10 @@ export function icsFold(line) {
 export function buildIcs(events, o = {}) {
   const now = o.now || new Date();
   const stamp = utcStamp(now);
+  // The same UID as before and a SEQUENCE that is higher in every newer file (central-time.js icsSequence: the
+  // minutes since 2026 when it was made) — a calendar app takes a changed time or place instead of keeping the
+  // old one (it ignores a version whose SEQUENCE is not higher than the one it has).
+  const seq = icsSequence(now);
   const L = [];
   const push = (s) => L.push(icsFold(s));
   push("BEGIN:VCALENDAR");
@@ -817,7 +773,7 @@ export function buildIcs(events, o = {}) {
     push("CATEGORIES:" + icsEscape(o.categoryLabel ? o.categoryLabel(ev) : ev.group));
     // TENTATIVE: details not final yet (content/events `tentative: true`); every other event is CONFIRMED.
     push("STATUS:" + (ev.tentative ? "TENTATIVE" : "CONFIRMED"));
-    push("SEQUENCE:0");
+    push("SEQUENCE:" + seq);
     push("END:VEVENT");
   }
   push("END:VCALENDAR");
@@ -1137,6 +1093,8 @@ export function weeklyOpen(wo, lang = "en", now = new Date()) {
       tz, at, // for the browser's own roll-forward (committee.js)
       date: cap(fmt(d, lang, { weekday: "long", month: "long", day: "numeric" })),
       time: fmt(d, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
+      // with its end (WEEKLY_OPEN_MS): "11:00 AM – 12:00 PM CDT" — the /meetings/ cards and their calendar files
+      range: clockRange(d, new Date(d.getTime() + WEEKLY_OPEN_MS), lang),
     };
   }
   // A meeting that has not started yet (La Viña's, from extra.starts = "2026-11-05"): its first
@@ -1153,7 +1111,11 @@ export function weeklyOpen(wo, lang = "en", now = new Date()) {
       // "Thursday, November 5, 2026" / "jueves 5 de noviembre de 2026" (no comma after the weekday in Spanish)
       let long = fmt(d, lang, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
       if (lang === "es") long = long.replace(/^([^\d,]+),\s*/, "$1 ");
-      starts = { iso: d.toISOString(), date: lang === "es" ? long : cap(long), time: fmt(d, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" }) };
+      starts = {
+        iso: d.toISOString(), date: lang === "es" ? long : cap(long),
+        time: fmt(d, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
+        range: clockRange(d, new Date(ms + WEEKLY_OPEN_MS), lang),
+      };
     }
   }
   const isLv = wo.source === "lavina" || wo.id === "weekly_open_lv";
@@ -1188,6 +1150,107 @@ export function weeklyOpenAll(items, lang = "en", now = new Date()) {
     .map((it) => weeklyOpen(it, lang, now)).filter(Boolean);
   const rank = (w) => (w.lang === lang ? 0 : 1);
   return list.map((w, i) => ({ w, i })).sort((a, b) => rank(a.w) - rank(b.w) || a.i - b.i).map((o) => o.w);
+}
+
+// A weekly open meeting lasts an hour (no end time is published for either; the site's rule for a time without
+// an end, EVENT_NO_END_MS) — its end on the /meetings/ cards and in its calendar files. (The cards still say "Live
+// now" for 75 minutes: a meeting can run over.)
+export const WEEKLY_OPEN_MS = EVENT_NO_END_MS;
+const ICS_DAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+
+/**
+ * "Add to calendar" for a weekly open meeting (/meetings/#weekly-open; a weeklyOpen() object): every week at its
+ * own clock time in its own zone (Noon Eastern), from its next date — or its first one (La Viña's, from
+ * extra.starts) — for an hour; the Zoom link, meeting ID and passcode in the text.
+ *   → { key ("gv" | "lv"), ics: the page's calendar file (/meetings/weekly-open-gv.ics, /es/…: its text is
+ *     weeklyIcs, written by src/pages/meetings-weekly-ics.11ty.js), gcal: Google Calendar's "add" link with the
+ *     weekly repeat } — null without a date. (Outlook.com's link cannot repeat an event: the file is for Outlook.)
+ */
+export function weeklyCalendar(w, site, lang = "en") {
+  if (!w || !w.next) return null;
+  const tz = validZone(w.next.tz);
+  const startMs = Date.parse((w.starts || w.next).iso);
+  const a = zoneParts(startMs, tz), b = zoneParts(startMs + WEEKLY_OPEN_MS, tz);
+  if (!a || !b) return null;
+  const key = w.isLv ? "lv" : "gv";
+  const local = (p) => `${p.y}${pad2(p.mo + 1)}${pad2(p.d)}T${pad2(p.h)}${pad2(p.mi)}00`;
+  const rrule = `RRULE:FREQ=WEEKLY;BYDAY=${ICS_DAYS[new Date(Date.UTC(a.y, a.mo, a.d)).getUTCDay()]}`;
+  const page = siteAbs(site, localPath("/meetings/", lang)) + "#weekly-open";
+  const lines = [w.isLv ? w.summary : t("committee.weekly.gv_text", lang)];
+  if (w.zoomUrl) lines.push("", `${t("committee.meeting.cal_join", lang)}: ${w.zoomUrl}`);
+  if (w.zoomId) lines.push(`${t("committee.meeting.id", lang)}: ${w.zoomId}`);
+  if (w.passcode) lines.push(`${t("committee.meeting.passcode", lang)}: ${w.passcode}`);
+  lines.push("", `${t("committee.cal.details", lang)}: ${page}`);
+  const title = w.title || t("committee.weekly.title", lang);
+  const description = lines.filter((s, i) => s || i > 0).join("\n").trim();
+  const q = (o) => Object.entries(o).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&");
+  return {
+    key, tz, startMs, title, description, page, rrule,
+    uid: `${String(w.id || "weekly-open").replace(/[^a-z0-9]+/gi, "-").toLowerCase()}${lang !== "en" ? "-" + lang : ""}@neta65-gvlv`,
+    dtstart: local(a), dtend: local(b), location: w.zoomUrl || "",
+    ics: localPath(`/meetings/weekly-open-${key}.ics`, lang),
+    gcal: "https://calendar.google.com/calendar/render?" + q({ action: "TEMPLATE", text: title, dates: `${local(a)}/${local(b)}`, ctz: tz, recur: rrule, details: description, location: w.zoomUrl || "" }),
+  };
+}
+const pad2 = (n) => String(n).padStart(2, "0");
+
+// The zone's rules as an iCalendar VTIMEZONE, so a calendar app reads "DTSTART;TZID=America/New_York:…" the same
+// everywhere (RFC 5545 wants one for every TZID): its offsets in the year of `ms` and the days its clocks change
+// there, written as yearly rules ("the 2nd Sunday of March at 2 AM"; a day in the last week of its month: the
+// last such weekday), from 1970. A zone without daylight-saving time: one offset.
+export function vtimezone(tz, ms) {
+  const p = zoneParts(ms, tz);
+  if (!p) return [];
+  const y = p.y, changes = [];
+  let prev = offsetMinutes(Date.UTC(y, 0, 1, 12), tz);
+  for (let day = 1; day <= 366; day++) {
+    const at = Date.UTC(y, 0, 1 + day, 12), off = offsetMinutes(at, tz);
+    if (off === prev) continue;
+    let lo = at - 864e5, hi = at; // the minute it changes
+    while (hi - lo > 60000) {
+      const mid = lo + Math.max(60000, Math.floor((hi - lo) / 120000) * 60000);
+      if (offsetMinutes(mid, tz) === prev) lo = mid; else hi = mid;
+    }
+    changes.push({ at: hi, from: prev, to: off });
+    prev = off;
+  }
+  const hm = (m) => `${m < 0 ? "-" : "+"}${pad2(Math.floor(Math.abs(m) / 60))}${pad2(Math.abs(m) % 60)}`;
+  const L = ["BEGIN:VTIMEZONE", "TZID:" + tz];
+  if (!changes.length) {
+    L.push("BEGIN:STANDARD", "DTSTART:19700101T000000", "TZOFFSETFROM:" + hm(prev), "TZOFFSETTO:" + hm(prev), "END:STANDARD");
+  }
+  for (const c of changes) {
+    const wall = new Date(c.at + c.from * 60000); // the clock just before it changes, as UTC fields
+    const mo = wall.getUTCMonth(), d = wall.getUTCDate(), wd = wall.getUTCDay();
+    const dim = new Date(Date.UTC(y, mo + 1, 0)).getUTCDate();
+    const n = d + 7 > dim ? -1 : Math.ceil(d / 7);
+    const d1970 = nthWeekday1970(mo, wd, n);
+    const kind = c.to > c.from ? "DAYLIGHT" : "STANDARD";
+    L.push(`BEGIN:${kind}`, `DTSTART:1970${pad2(mo + 1)}${pad2(d1970)}T${pad2(wall.getUTCHours())}${pad2(wall.getUTCMinutes())}00`,
+      "TZOFFSETFROM:" + hm(c.from), "TZOFFSETTO:" + hm(c.to), `RRULE:FREQ=YEARLY;BYMONTH=${mo + 1};BYDAY=${n}${ICS_DAYS[wd]}`, `END:${kind}`);
+  }
+  L.push("END:VTIMEZONE");
+  return L;
+}
+function nthWeekday1970(mo, wd, n) {
+  const dim = new Date(Date.UTC(1970, mo + 1, 0)).getUTCDate();
+  if (n === -1) return dim - ((new Date(Date.UTC(1970, mo, dim)).getUTCDay() - wd + 7) % 7);
+  return 1 + ((wd - new Date(Date.UTC(1970, mo, 1)).getUTCDay() + 7) % 7) + (n - 1) * 7;
+}
+
+/** A weekly open meeting's calendar file (weeklyCalendar → the text of /meetings/weekly-open-gv.ics …): one
+ *  event that repeats every week, in the meeting's own zone (DTSTART;TZID + its VTIMEZONE), the same UID in
+ *  every file of that language, SEQUENCE from the moment it was made (central-time.js icsSequence). */
+export function weeklyIcs(cal, now = new Date()) {
+  if (!cal) return "";
+  const L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//NETA 65 Grapevine La Vina Committee//Weekly open meeting//EN",
+    "CALSCALE:GREGORIAN", "METHOD:PUBLISH", ...vtimezone(cal.tz, cal.startMs), "BEGIN:VEVENT",
+    "UID:" + cal.uid, "DTSTAMP:" + utcStamp(now), "SEQUENCE:" + icsSequence(now),
+    `DTSTART;TZID=${cal.tz}:${cal.dtstart}`, `DTEND;TZID=${cal.tz}:${cal.dtend}`, cal.rrule,
+    "SUMMARY:" + icsEscape(cal.title), "DESCRIPTION:" + icsEscape(cal.description)];
+  if (cal.location) L.push("LOCATION:" + icsEscape(cal.location));
+  L.push("URL:" + cal.page, "STATUS:CONFIRMED", "TRANSP:OPAQUE", "END:VEVENT", "END:VCALENDAR");
+  return L.map(icsFold).join("\r\n") + "\r\n";
 }
 
 /* ------------------------------------------------------------------ */
@@ -1636,6 +1699,13 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("cmWeekly", (wo, lang) => weeklyOpen(wo, lang));
   // Both weekly open meetings (Grapevine Weekly Open + La Viña), the page language's first — /meetings/#weekly-open
   eleventyConfig.addFilter("cmWeeklyAll", (items, lang) => weeklyOpenAll(EMPTY ? [] : items, lang));
+  // A weekly open meeting's "Add to calendar": {% set wc = w | cmWeeklyCal(site, lang) %} → { gcal, ics } (weeklyCalendar)
+  eleventyConfig.addFilter("cmWeeklyCal", (w, site, lang) => weeklyCalendar(w, site, lang));
+  // "7:00 – 8:00 PM CDT" from two instants (an end after midnight: "7:00 PM – 1:00 AM CST") — clockRange
+  eleventyConfig.addFilter("cmTimeSpan", (start, end, lang) => {
+    const a = parseInstant(start), b = parseInstant(end);
+    return a ? clockRange(a, b || a, lang) : "";
+  });
   // Grapevine meetings in our Area and nearby (db.meetings) — /meetings/#grapevine-meetings
   eleventyConfig.addFilter("cmGvMeetings", (data, lang, site) => gvMeetings(data, lang, site));
   // Text for GLightbox's data-title / data-description. GLightbox puts those values into the

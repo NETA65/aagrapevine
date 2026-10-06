@@ -27,8 +27,9 @@
 
 // (monthly.js imports this file too: the cycle is safe, both only call each other's functions.)
 import { nowDate } from "./monthly.js";
+// the site's time zone: config/site.yml site.timezone (America/Chicago)
+import { TZ } from "../../eleventy.config.js";
 
-const TZ = "America/Chicago";
 const LOCALES = { en: "en-US", es: "es-US" };
 const MAG = { gv: "Grapevine", lv: "La Viña" };
 // The language each store writes its own texts in (plan-type descriptions, book titles).

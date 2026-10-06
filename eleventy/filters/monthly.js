@@ -56,7 +56,8 @@
 // (community.js imports this file too: the cycle is safe, both only call each other's functions.)
 import { qrSvg, issueLabel, issueInSentence, issueLabelOf } from "./community.js";
 import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList } from "./committee.js";
-import { monthlyRule } from "../../eleventy.config.js";
+import { monthlyRule, TZ } from "../../eleventy.config.js";
+import { wallInstant } from "../central-time.js";
 import { shopFromMonthly, money, shopPriceChangeIn, dayLabel } from "./shop.js";
 import { groupIssues, issueName } from "./read.js";
 
@@ -64,7 +65,7 @@ import { groupIssues, issueName } from "./read.js";
 // from a plain `node` script too (as report.js).
 let H = { translateKey: (k) => k };
 
-const TZ = "America/Chicago";
+// (TZ: config/site.yml site.timezone — America/Chicago — from eleventy.config.js)
 const LOC = { en: "en-US", es: "es-US" };
 const WINDOW = 13;
 const PAST_MONTHS = 3;
@@ -100,10 +101,23 @@ export function chicagoYmd(v) {
   const d = v instanceof Date ? v : new Date(v);
   return isNaN(d) ? "" : ymdFmt.format(d);
 }
+/** The build's clock: ONE moment per build — taken at the build's first call and given to every caller after it:
+ *  the month window (monthlyKeys, monthlyPages, monthlyPastPages), the month models and the live extras, the
+ *  digest, the district report, the booth, the shop, the presentations. Read afresh at each call, a build that ran
+ *  across midnight at the end of a month built October's pages from an October window but their models from a
+ *  November one: the 2026-10 page lost its pager and the window linked to a /monthly/2027-11/ that was never
+ *  built. Each build ends with endBuildClock (eleventy.after), so the next one — `npm start` rebuilds — takes its
+ *  own. MONTHLY_NOW=2026-12-15 (or an instant) fixes it for a preview build or a test. A copy each time: a caller
+ *  can never move it for the others. */
+let buildNow = null;
 export function nowDate() {
   const fixed = process.env.MONTHLY_NOW;
   if (fixed && /^\d{4}-\d{2}-\d{2}/.test(fixed)) return new Date(fixed.length === 10 ? fixed + "T12:00:00-05:00" : fixed);
-  return new Date();
+  if (buildNow === null) buildNow = Date.now();
+  return new Date(buildNow);
+}
+export function endBuildClock() {
+  buildNow = null;
 }
 export function addMonths(key, n) {
   const [y, m] = key.split("-").map(Number);
@@ -190,13 +204,11 @@ function nthWeekday(y, m0, weekday, n) {
   const day = 1 + ((weekday - first + 7) % 7) + (n - 1) * 7;
   return day <= new Date(Date.UTC(y, m0 + 1, 0)).getUTCDate() ? day : null;
 }
+// A Central wall-clock date and time → the instant (UTC ISO): the site's one helper, eleventy/central-time.js
+// (right on the days the clocks change; a time it cannot read is 19:00, the meeting's default)
 function chicagoInstant(ymd, hhmm) {
-  const [h, mi] = String(hhmm || "19:00").split(":").map(Number);
-  const [y, m, d] = ymd.split("-").map(Number);
-  const guess = new Date(Date.UTC(y, m - 1, d, h, mi || 0));
-  const tz = new Intl.DateTimeFormat("en-US", { timeZone: TZ, timeZoneName: "shortOffset" }).formatToParts(guess).find((p) => p.type === "timeZoneName")?.value || "GMT-6";
-  const off = Number((tz.match(/GMT([+-]\d+)/) || [0, -6])[1]);
-  return new Date(guess.getTime() - off * 3600e3).toISOString();
+  const ms = wallInstant(ymd, hhmm || "19:00", TZ);
+  return new Date(Number.isFinite(ms) ? ms : wallInstant(ymd, "19:00", TZ)).toISOString();
 }
 /** A month's date of a monthly rule in the shape of config/site.yml `meeting:` (the committee meeting, or a
  *  recurring event's rule) → { ymd, start, end } (UTC ISO), null on a skip date or when the month has no such
@@ -899,6 +911,9 @@ export function repGuides(pdfs, lang = "en") {
 
 export default function (eleventyConfig, helpers) {
   if (helpers && helpers.translateKey) H = { ...H, translateKey: helpers.translateKey };
+  // the build's one "now" (nowDate): taken by its first call, let go when the build is done — the next build
+  // (`npm start` rebuilds) takes its own
+  eleventyConfig.on("eleventy.after", endBuildClock);
   eleventyConfig.addGlobalData("monthlyKeys", () => windowKeys());
   eleventyConfig.addGlobalData("monthlyPages", () => {
     const keys = windowKeys();

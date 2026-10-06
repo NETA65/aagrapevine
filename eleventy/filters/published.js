@@ -24,13 +24,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import * as yaml from "js-yaml";
-import { safeUrl } from "../../eleventy.config.js";
+import { safeUrl, TZ } from "../../eleventy.config.js";
 import { scriptJson } from "../script-json.js";
 import { issueName, localizeIssueLabel } from "./read.js";
 
 const require = createRequire(import.meta.url);
 
-const TZ = "America/Chicago";
 const EMPTY = !!process.env.PW_EMPTY;
 /** Where a writer is from, in display order. "texas" here = Texas OUTSIDE Area 65. */
 export const PW_GROUPS = ["neta65", "texas", "other", "unknown"];

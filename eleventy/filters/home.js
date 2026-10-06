@@ -14,13 +14,14 @@ import path from "node:path";
 // The Library's own rules (which documents, which kit / type, which collections),
 // so the home page's quick links show the same numbers as /library/.
 import { libraryDocs, libraryCollections, docKitType, CATEGORIES, COLLECTIONS } from "./library.js";
-// The id of an event's card on /events/ (a monthly recurring event links there) and the end of a
-// Central-time day (an all-day event is upcoming through its last day).
-import { eventAnchor, eventEndMs, eventHost } from "./committee.js";
+// The id of an event's card on /events/ (a monthly recurring event links there), the end of a Central-time
+// day (an all-day event is upcoming through its last day) and the time range /events/ writes (clockRange).
+import { eventAnchor, eventEndMs, eventHost, clockRange } from "./committee.js";
 // The Texas writers archive's headline numbers, counted as /published/#archive counts them.
 import { pwArchiveTotals } from "./published.js";
+// the site's time zone: config/site.yml site.timezone (America/Chicago)
+import { TZ } from "../../eleventy.config.js";
 
-const TZ = "America/Chicago";
 const LOCALES = { en: "en-US", es: "es-US" };
 const DAY = 864e5;
 
@@ -453,8 +454,10 @@ export default function (eleventyConfig, helpers) {
       // An outside calendar that only gives a date: the time isn't listed (as on /events/), not "all day".
       when = translateKey(e && e.source === "calendar" ? "home.time_not_listed" : "home.all_day", lang);
     } else {
+      // "7:00 – 9:00 PM CDT"; one that ends after midnight "7:00 PM – 12:00 AM CST" (as on /events/: clockRange) —
+      // not Intl's "12/31/2026, 7:00 PM – 1/1/2027, 12:00 AM"
       const st = time(s), en = time(x.end);
-      when = en > st ? fr(st, en, { hour: "numeric", minute: "2-digit", timeZoneName: "short" }) : f(st, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+      when = en > st ? clockRange(st, en, lang) : f(st, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
     }
     const srDate = multiDay
       ? capital(fr(a, b, { weekday: "long", month: "long", day: "numeric", year: "numeric" }))
@@ -665,14 +668,11 @@ export default function (eleventyConfig, helpers) {
     return new Intl.NumberFormat(LOCALES[lang] || "en-US").format(v);
   });
 
-  /* "7:00 – 8:00 PM CDT" in Central time. */
+  /* "7:00 – 8:00 PM CDT" in Central time (an end after midnight: "7:00 PM – 1:00 AM CST" — clockRange, with the
+     site's Spanish "p. m.") */
   eleventyConfig.addFilter("homeTimeRange", (start, end, lang = "en") => {
     const s = toDate(start), e = toDate(end);
-    if (!s) return "";
-    const f = new Intl.DateTimeFormat(LOCALES[lang] || "en-US", { hour: "numeric", minute: "2-digit", timeZone: TZ, timeZoneName: "short" });
-    let out;
-    try { out = e && e > s ? f.formatRange(s, e) : f.format(s); } catch { out = f.format(s); }
-    return lang === "es" && helpers && helpers.esMeridiem ? helpers.esMeridiem(out) : out; // "p. m." like the rest of the site
+    return s ? clockRange(s, e && e > s ? e : s, lang) : "";
   });
 
   /* Weekday name (0 = Sunday) in the page language: "Wednesday" / "miércoles". */

@@ -9,7 +9,7 @@ import QRCode from "qrcode";
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
-import { safeUrl } from "../../eleventy.config.js";
+import { safeUrl, TZ } from "../../eleventy.config.js";
 // The monthly digest groups the committee's photos into the albums of /photos/ (the same anchors).
 import { ownLangs, chicagoDayEndMs, isPhotoItem, photoAlbumKey, photoAlbumSlugs } from "./committee.js";
 // The monthly digest names its months like /monthly/ (monthLabel), finds the committee meeting of the
@@ -21,7 +21,6 @@ import { shopPriceChangeIn, dayLabel } from "./shop.js";
 // An issue is "current" when /read/ shows it as the newest of its magazine (the page's own rule).
 import { groupIssues, issueName } from "./read.js";
 
-const TZ = "America/Chicago";
 const LOCALES = { en: "en-US", es: "es-US" };
 const DAY = 864e5;
 

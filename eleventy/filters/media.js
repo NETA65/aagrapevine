@@ -17,6 +17,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { scriptJson } from "../script-json.js";
+import { TZ } from "../../eleventy.config.js"; // the site's time zone (config/site.yml site.timezone)
 
 const require = createRequire(import.meta.url);
 
@@ -628,7 +629,7 @@ export default function (eleventyConfig, helpers) {
       card about one show (the Grapevine Weekly Open podcast on /listen/). */
   eleventyConfig.addFilter("mediaWeeklyDays", (items, lang = "en", source = "") => {
     const WD = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
     const parts = (items || [])
       .filter((it) => it && it.kind === "meeting" && it.status !== "gone" && (!source || it.source === source))
       .map((it, i) => ({ it, i, wd: WD.indexOf(String(it.extra?.weekday || "").toLowerCase()) }))

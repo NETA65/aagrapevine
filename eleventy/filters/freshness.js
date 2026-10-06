@@ -18,8 +18,9 @@
 
 // The end of a Central-time day, right across daylight saving (the same rule as /events/).
 import { chicagoDayEndMs } from "./committee.js";
+// the site's time zone: config/site.yml site.timezone (America/Chicago)
+import { TZ } from "../../eleventy.config.js";
 
-const TZ = "America/Chicago";
 const LOCALES = { en: "en-US", es: "es-US" };
 const isYmd = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
 const ms = (v) => { const t = Date.parse(v || ""); return Number.isNaN(t) ? null : t; };

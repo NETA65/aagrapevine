@@ -6,6 +6,8 @@
 // and the weekly open meetings (db.weekly_open via cmWeeklyAll); the dial-in numbers and the
 // callers' passcodes from `phone_access:` (config/site.yml).
 
+import { TZ } from "../../eleventy.config.js"; // the site's time zone (config/site.yml site.timezone)
+
 const digitsOf = (s) => String(s ?? "").replace(/\D+/g, "");
 // a title that already names its language: "La Viña Open Meeting (in Spanish)", "… (en inglés)"
 const LANG_NOTE = /\((?:in|en) (?:english|spanish|inglés|español)\)/i;
@@ -92,7 +94,7 @@ function startsLabel(starts, lang) {
   const d = starts && starts.iso ? new Date(starts.iso) : null;
   if (!d || Number.isNaN(d.getTime())) return "";
   try {
-    return new Intl.DateTimeFormat(lang === "es" ? "es-US" : "en-US", { month: "long", day: "numeric", timeZone: "America/Chicago" }).format(d);
+    return new Intl.DateTimeFormat(lang === "es" ? "es-US" : "en-US", { month: "long", day: "numeric", timeZone: TZ }).format(d);
   } catch (e) { return ""; }
 }
 

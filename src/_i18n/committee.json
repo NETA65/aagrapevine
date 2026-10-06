@@ -371,6 +371,10 @@
     "en": "Join on Zoom: Grapevine Weekly Open",
     "es": "Entrar por Zoom a Grapevine Weekly Open"
   },
+  "committee.weekly.cal_aria": {
+    "en": "Add to calendar: {name}, every week",
+    "es": "Agregar al calendario: {name}, cada semana"
+  },
   "committee.weekly.join_lv": {
     "en": "Join on Zoom: La Viña's open meeting",
     "es": "Entrar por Zoom a la reunión abierta de La Viña"

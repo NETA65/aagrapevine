@@ -161,7 +161,8 @@ pageScripts: ["/assets/js/read.js"]
                   {% elif s.id == "handbook" %}
                     {% for h in handbooks %}<a class="link tap-link" href="{{ h.url }}" target="_blank" rel="noopener" lang="{{ h.lang }}">{{ h | readPdfTitle(lang) }} ({{ "kind.pdf" | t(lang) | lower }})</a>{% else %}<a class="link tap-link" href="#kits">{{ "read.gvr.see_kits" | t(lang) }}</a>{% endfor %}
                   {% elif s.id == "meeting" %}
-                    <a class="link tap-link" href="{{ '/meetings/' | lurl(lang) }}#committee-meeting">{% if meeting.next %}{{ "read.gvr.next_meeting" | t(lang, {date: meeting.next.start | fmtDate(lang, "medium")}) }}{% else %}{{ "nav.meeting" | t(lang) }}{% endif %}</a>
+                    {#- data-gv-meeting: rolled on to the next date in the browser once this one is over (app.js GV.meetingLines) -#}
+                    <a class="link tap-link" href="{{ '/meetings/' | lurl(lang) }}#committee-meeting">{% if meeting.next %}<span data-gv-meeting="{{ meeting.rule | json }}" data-at="{{ meeting.next.start }}" data-tpl="{{ 'read.gvr.next_meeting' | t(lang) }}" data-date="medium">{{ "read.gvr.next_meeting" | t(lang, {date: meeting.next.start | fmtDate(lang, "medium")}) }}</span>{% else %}{{ "nav.meeting" | t(lang) }}{% endif %}</a>
                   {% elif s.id == "table" %}
                     <a class="link tap-link" href="{{ '/shop/' | lurl(lang) }}#cat-title">{{ "read.subs.cat_title" | t(lang) }}</a>
                     <a class="link tap-link" href="{{ '/library/' | lurl(lang) }}?col={{ 'rlv' if lang == 'es' else 'gvr' }}-kit">{{ "read.gvr.g_flyers" | t(lang) }}</a>
@@ -194,10 +195,12 @@ pageScripts: ["/assets/js/read.js"]
           <h3 class="card-h"><span>{% icon "video", "size-5" %}</span>{{ "read.gvr.help_title" | t(lang) }}</h3>
           <p class="mt-2 text-sm leading-relaxed text-muted">{{ "read.gvr.help_text" | t(lang) }}</p>
           {% if meeting.next %}
+          {#- the next meeting of the build's day, rolled on in the browser once it is over (app.js GV.meetingLines) -#}
+          {%- set mRule = meeting.rule | json %}
           <p class="mt-4 rounded-xl bg-surface-2 p-3 text-sm">
             <span class="eyebrow block">{{ "read.gvr.next_label" | t(lang) }}</span>
-            <time class="mt-0.5 block font-semibold text-ink" datetime="{{ meeting.next.start }}">{{ meeting.next.start | fmtDate(lang, "long") }}</time>
-            <span class="text-muted">{{ meeting.next.start | fmtDate(lang, "time") }} · {{ site.meeting.platform }}</span>
+            <time class="mt-0.5 block font-semibold text-ink" datetime="{{ meeting.next.start }}" data-gv-meeting="{{ mRule }}" data-at="{{ meeting.next.start }}" data-tpl="{date}" data-date="long">{{ meeting.next.start | fmtDate(lang, "long") }}</time>
+            <span class="text-muted" data-gv-meeting="{{ mRule }}" data-at="{{ meeting.next.start }}" data-tpl="{time} · {{ site.meeting.platform }}">{{ meeting.next.start | fmtDate(lang, "time") }} · {{ site.meeting.platform }}</span>
           </p>
           {% endif %}
           <a class="btn-primary mt-4" href="{{ '/meetings/' | lurl(lang) }}">{{ "read.gvr.help_btn" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>

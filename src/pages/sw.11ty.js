@@ -88,6 +88,9 @@ export function render(data) {
   const required = [a(`assets/css/main.css?v=${v}`), a(`assets/js/app.js?v=${v}`), a(`assets/js/pwa.js?v=${v}`), offline.en, offline.es];
   const shell = [
     ...required,
+    // the time-zone math (window.GVTime): a saved page rolls the next meeting on with it — optional (without it the
+    // pages keep the dates they were built with)
+    a(`assets/js/central-time.js?v=${v}`),
     a(`assets/js/install-core.js?v=${v}`),
     a(`assets/js/hero-canvas.js?v=${v}`),
     a(`assets/vendor/alpine.min.js?v=${v}`),
