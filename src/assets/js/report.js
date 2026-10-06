@@ -8,8 +8,10 @@
    areas/report.css prints only the report).
    Drafts: localStorage, per month and report language ("gv-report:YYYY-MM:en"), plus the
    "Your details" fields ("gv-report:profile") and the report language ("gv-report:lang").
-   Only the CHANGES are stored, so a section nobody edited always shows the latest data. Storage
-   may be missing (private windows): every access is wrapped, and the page works without it.
+   Only the CHANGES are stored, so a section nobody edited always shows the latest data. A new month
+   starts fresh, and offers last month's draft as its starting point (findPrev: the visitor's own
+   sections, choices and words; the data sections are the new month's). Storage may be missing
+   (private windows): every access is wrapped, and the page works without it.
    Without JavaScript the page shows the whole report as text (.rp-nojs). */
 (function () {
   "use strict";
@@ -21,6 +23,7 @@
   var BOM = String.fromCharCode(0xfeff);
   var NBSP = String.fromCharCode(0xa0);
   var WJ = String.fromCharCode(0x2060);   // word joiner: no line break there
+  var OWN_TEXT = ["asks", "notes"];       // the sections that are the visitor's own words (last month's draft keeps them)
 
   /* ---------------- small helpers ---------------- */
   function load(k) { try { var s = localStorage.getItem(k); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
@@ -39,11 +42,22 @@
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
   function slug(s) { return clean(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 24); }
-  // XML 1.0 can't hold most control characters: drop them (tabs and line breaks stay).
+  // Only the characters XML 1.0 allows reach the Word file (Word refuses to open a file with any other): tab, line
+  // breaks, U+0020–U+D7FF, U+E000–U+FFFD and the pairs of surrogates that make a character above U+FFFF. Dropped:
+  // the other control characters, U+FFFE / U+FFFF (they come along when text is pasted from some documents) and a
+  // lone surrogate.
   function xmlText(s) {
     var out = "";
     s = String(s);
-    for (var i = 0; i < s.length; i++) { var c = s.charCodeAt(i); if (c >= 32 || c === 9 || c === 10 || c === 13) out += s.charAt(i); }
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charCodeAt(i);
+      if (c >= 0xd800 && c <= 0xdbff) {
+        var n = s.charCodeAt(i + 1);
+        if (n >= 0xdc00 && n <= 0xdfff) { out += s.charAt(i) + s.charAt(i + 1); i++; }
+        continue;
+      }
+      if (c === 9 || c === 10 || c === 13 || (c >= 0x20 && c <= 0xd7ff) || (c >= 0xe000 && c <= 0xfffd)) out += s.charAt(i);
+    }
     return out.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
@@ -314,6 +328,7 @@
         msg: "",
         waLong: false,
         full: false,                // phones: the preview unfolded
+        prev: null,                 // "Start from last month's draft": { month: "YYYY-MM", label } (findPrev)
         canShare: !!navigator.share,
         _saveT: 0, _msgT: 0, _pending: false,
 
@@ -332,6 +347,7 @@
           if (lg === "en" || lg === "es") this.rl = lg;
           this.prune();
           this.d = this.loadDraft(this.rl);
+          this.prev = this.findPrev(this.rl);
           var self = this;
           // Leaving the page within the save delay still keeps the last keystrokes.
           var flush = function () { if (self._pending) self.saveNow(); };
@@ -339,20 +355,24 @@
           document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flush(); });
           // An edit in another tab (same device) shows up here too.
           window.addEventListener("storage", function (e) {
-            if (e.key === self.key(self.rl)) self.d = self.loadDraft(self.rl);
+            if (e.key === self.key(self.rl)) { self.d = self.loadDraft(self.rl); self.prev = self.findPrev(self.rl); }
           });
         },
 
-        /* A section whose text changes at a set moment (eleventy/filters/report.js: the shop section from the day
-           an announced price change takes effect — section.after = { at: ISO instant, text }): by this device's
-           clock, the text it has from that moment on — a page built, or saved for offline use, the day before
-           is right on the day. A section the visitor edited keeps their own words (only changes are stored). */
+        /* A section whose text changes at set moments (eleventy/filters/report.js: the shop section when a Book of
+           the Month offer ends or starts and from the day an announced price change takes effect — section.steps =
+           [{ at: ISO instant, text }, …] in time order; an older page's single section.after = { at, text } counts
+           as one step): by this device's clock, the text of the last moment passed — a page built, or saved for
+           offline use, days before is right on the day, and never quotes an offer that has ended. A section the
+           visitor edited keeps their own words (only changes are stored). */
         swapTexts: function () {
           var now = Date.now(), D = this.D;
           Object.keys(D.langs || {}).forEach(function (l) {
             (D.langs[l].sections || []).forEach(function (s) {
-              var a = s.after;
-              if (a && typeof a.text === "string" && /^\d{4}-\d{2}-\d{2}T/.test(String(a.at || "")) && Date.parse(a.at) <= now) s.text = a.text;
+              var steps = Array.isArray(s.steps) ? s.steps : s.after ? [s.after] : [];
+              steps.forEach(function (a) {
+                if (a && typeof a.text === "string" && /^\d{4}-\d{2}-\d{2}T/.test(String(a.at || "")) && Date.parse(a.at) <= now) s.text = a.text;
+              });
             });
           });
         },
@@ -361,9 +381,10 @@
         key: function (lang) { return PREFIX + this.D.month + ":" + lang; },
         ids: function () { return this.D.langs[this.rl].sections.map(function (s) { return s.id; }); },
         blank: function () { return { order: this.ids(), off: {}, text: {}, titles: {}, custom: [], meet: [] }; },
-        loadDraft: function (lang) {
+        loadDraft: function (lang) { return this.parseDraft(lang, load(this.key(lang))); },
+        // A stored draft (x) checked against this month's sections; nothing usable → a blank draft.
+        parseDraft: function (lang, x) {
           var b = { order: this.D.langs[lang].sections.map(function (s) { return s.id; }), off: {}, text: {}, titles: {}, custom: [], meet: [] };
-          var x = load(this.key(lang));
           if (!x || typeof x !== "object") return b;
           var defaults = b.order.slice();
           (Array.isArray(x.custom) ? x.custom : []).forEach(function (c) {
@@ -388,6 +409,58 @@
           b.meet = (Array.isArray(x.meet) ? x.meet : []).filter(function (id) { return opts.indexOf(id) !== -1; });
           return b;
         },
+        /* "Start from last month's draft": a new month starts from the latest data; when this month has no draft
+           yet (in the report language) and an earlier month has one on this device (the newest of the last three:
+           older ones are pruned), the editor offers it as the starting point. What carries over is the visitor's
+           own: their sections (custom), the order, the sections left out, the titles they changed, the counties
+           picked, and the texts of the sections that are their own words ("asks", "notes"); every section made
+           from the site's data starts from this month's. The offer goes once this month's draft exists. */
+        findPrev: function (lang) {
+          if (this.hasOwnWork(load(this.key(lang)), lang)) return null;
+          var months = [], m, best = "";
+          try {
+            for (var i = 0; i < localStorage.length; i++) {
+              var k = localStorage.key(i);
+              m = k && /^gv-report:(\d{4}-\d{2}):(en|es)$/.exec(k);
+              if (m && m[2] === lang && m[1] < this.D.month) months.push(m[1]);
+            }
+          } catch (e) { return null; }
+          // the newest month whose draft has something to carry over
+          months.sort().reverse();
+          for (var j = 0; j < months.length && !best; j++) if (this.hasOwnWork(load(PREFIX + months[j] + ":" + lang), lang, true)) best = months[j];
+          if (!best) return null;
+          var label = best;
+          try { label = new Intl.DateTimeFormat(this.L === "es" ? "es-US" : "en-US", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(best + "-15T12:00:00Z")); } catch (e) { /* the key */ }
+          return { month: best, label: label };
+        },
+        // Anything of the visitor's own in a stored draft: a section of their own, a county picked, a section left out,
+        // a title or text changed, or the sections in another order (a draft saved with none of it — "Your details"
+        // typed in, a change undone — is not a draft to offer, nor one that hides the offer). carried: only what
+        // "Start from last month's draft" carries over counts (of the texts, the visitor's own sections' only).
+        hasOwnWork: function (x, lang, carried) {
+          if (!x || typeof x !== "object") return false;
+          var b = this.parseDraft(lang, x), ids = this.D.langs[lang].sections.map(function (s) { return s.id; });
+          var texts = Object.keys(b.text).filter(function (id) { return !carried || OWN_TEXT.indexOf(id) !== -1; });
+          return b.custom.length > 0 || b.meet.length > 0 || Object.keys(b.off).length > 0 || Object.keys(b.titles).length > 0 ||
+            texts.length > 0 || b.order.join() !== ids.join();
+        },
+        prevText: function () { return this.prev ? fmt(this.ui.prev_text, { month: this.prev.label }) : ""; },
+        prevBtn: function () { return this.prev ? fmt(this.ui.prev_btn, { month: this.prev.label }) : ""; },
+        startFromPrev: function () {
+          var p = this.prev, x = p ? load(PREFIX + p.month + ":" + this.rl) : null;
+          this.prev = null;
+          if (!x || typeof x !== "object") return;
+          var own = {};
+          OWN_TEXT.forEach(function (id) { if (x.text && typeof x.text[id] === "string") own[id] = x.text[id]; });
+          this.d = this.parseDraft(this.rl, { order: x.order, off: x.off, titles: x.titles, custom: x.custom, meet: x.meet, text: own });
+          this.open = {};
+          this.active = "";
+          this.saveNow();
+          this.flash(fmt(this.ui.prev_done, { month: p.label }));
+          // the keyboard goes on to the sections (the offer is gone)
+          var self = this;
+          this.$nextTick(function () { var b = self.$root.querySelector("[data-rp-edit]"); if (b) b.focus(); });
+        },
         // Drafts older than three months are removed.
         prune: function () {
           try {
@@ -401,6 +474,7 @@
         },
         touch: function () {
           var self = this;
+          this.prev = null;           // this month's own draft from now on
           this._pending = true;
           clearTimeout(this._saveT);
           this._saveT = setTimeout(function () { self.saveNow(); }, 350);
@@ -547,6 +621,7 @@
           this.open = {};
           this.active = "";
           store(this.key(this.rl), null);
+          this.prev = this.findPrev(this.rl);
           this.saveState = "idle";
           GV.announce && GV.announce(this.ui.reset_all_done);
           this.flash(this.ui.reset_all_done);
@@ -557,6 +632,7 @@
           this.rl = l;
           store(PREFIX + "lang", l);
           this.d = this.loadDraft(l);
+          this.prev = this.findPrev(l);
           this.open = {};
           this.active = "";
           this.waLong = false;

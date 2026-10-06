@@ -15,6 +15,13 @@ keeps it true between builds.
   * Message   — the month as a WhatsApp / e-mail text (monthMessage), one language or both.
   * Templates / Browser — the pages' structure and the browser code's contract (read as text).
   * RealData  — every month of the window, both languages, from the repository's own data.
+  * MachineThemes — a machine-translated theme is marked as one (the model's machine / orig, the message's
+                original words and note, the pages' marks); Spanish words in the middle of a line.
+  * MonthCalendar — "Add this month's dates to my calendar": the month's .ics file (monthIcs) — RFC 5545
+                as /events.ics writes it, the same UIDs, the story deadlines as all-day entries.
+  * PastMonths — the 12 months before keep a redirect page for printed posters' QR codes, out of the sitemap.
+  * HubPosters / Print — the hub shows the months in miniature (no full poster); the poster's print page
+                is named, never the whole site's.
 
 The Model, Now, IssueLinks, Message and RealData checks run the JavaScript with Node.js (tests/nodejs.py,
 I18N_STRICT=1) and are skipped without Node.js or the site's npm packages.
@@ -264,7 +271,7 @@ class Model(unittest.TestCase):
         self.assertEqual(en["gv"]["url"], "https://example.com/issue/gv-2026-10")
         # La Viña's September / October issue, from its stories (issues[] only has November / December now) — named
         # from its key in the site's one style for La Viña's issues (the stories' own label is "September / October")
-        self.assertEqual(en["lv"], {"key": "2026-09", "theme": "Service in AA", "themeLang": "en",
+        self.assertEqual(en["lv"], {"key": "2026-09", "theme": "Service in AA", "themeLang": "en", "machine": False, "orig": "",
                                     "label": "September–October 2026", "url": "https://example.com/issue/lv-2026-09", "cover": ""})
         self.assertEqual((es["lv"]["theme"], es["lv"]["themeLang"], es["lv"]["label"]), ("Servicio en AA", "es", "Septiembre–Octubre 2026"))
 
@@ -314,9 +321,9 @@ class Now(unittest.TestCase):
     def test_the_next_issues_already_online(self):
         en, es = self.r["a"]["nw"]["en"]["outNext"], self.r["a"]["nw"]["es"]["outNext"]
         self.assertEqual(en, [
-            {"pub": "gv", "theme": "Classic Grapevine", "issue": "November 2026", "monthKey": "2026-11",
+            {"pub": "gv", "theme": "Classic Grapevine", "machine": False, "issue": "November 2026", "monthKey": "2026-11",
              "monthLabel": "November 2026", "monthUrl": "/monthly/2026-11/"},
-            {"pub": "lv", "theme": "A sober Christmas", "issue": "November–December 2026", "monthKey": "2026-11",
+            {"pub": "lv", "theme": "A sober Christmas", "machine": False, "issue": "November–December 2026", "monthKey": "2026-11",
              "monthLabel": "November 2026", "monthUrl": "/monthly/2026-11/"}])
         self.assertEqual([o["pub"] for o in es], ["lv", "gv"])
         self.assertEqual(es[0]["issue"], "noviembre–diciembre de 2026")
@@ -565,8 +572,8 @@ class LaVinaThemes(unittest.TestCase):
         self.assertEqual(self.r["dec"]["mm"]["en"]["lv"]["theme"], "A sober Christmas")
         # January 2027: nothing synced yet — the yearly themes name it (Spanish until it has English words)
         jan_en, jan_es = self.r["jan"]["mm"]["en"]["lv"], self.r["jan"]["mm"]["es"]["lv"]
-        self.assertEqual(jan_en, {"key": "2027-01", "theme": "Nuevos", "themeLang": "es", "label": "January–February 2027",
-                                  "url": "", "cover": ""})
+        self.assertEqual(jan_en, {"key": "2027-01", "theme": "Nuevos", "themeLang": "es", "machine": False, "orig": "",
+                                  "label": "January–February 2027", "url": "", "cover": ""})
         self.assertEqual((jan_es["theme"], jan_es["themeLang"], jan_es["label"]), ("Nuevos", "es", "Enero–Febrero 2027"))
 
     def test_the_message(self):
@@ -579,7 +586,8 @@ class LaVinaThemes(unittest.TestCase):
         es = self.r["oct"]["msg"]["es:whatsapp"].replace(" ", " ")
         lv_es = es.index("• 17 de octubre — “Recaídas” (La Viña, edición de mayo–junio de 2027)")
         self.assertLess(lv_es, es.index("• La Viña — sin fecha límite:"))
-        self.assertLess(es.index("• La Viña — sin fecha límite:"), es.index("(Grapevine, edición de junio de 2027)"))   # La Viña first
+        # La Viña first; Grapevine's line says its stories go in English
+        self.assertLess(es.index("• La Viña — sin fecha límite:"), es.index("(Grapevine, en inglés, edición de junio de 2027)"))
 
     def test_the_templates_show_them(self):
         month = (ROOT / "src" / "pages" / "monthly-month.njk").read_text(encoding="utf-8")
@@ -719,6 +727,290 @@ out(res);
                 for text in r["msgs"]:
                     self.assertGreaterEqual(len(text), 300)
                     self.assertNotRegex(text, r"\{|undefined|NaN|\b(monthly|report|community|committee)\.[a-z_]+")
+
+
+# ------------------------------------------------------------------ machine-translated themes, words mid-sentence
+def mt_db() -> dict:
+    """The October data set with the Spanish words of Grapevine's themes marked as machine translations (the data's
+    `machine`: the October issue's stories, the June 2027 issue's call for stories)."""
+    db = full_db()
+    for st in db["articles"]["items"]:
+        if st["extra"]["publication"] == "gv":
+            st["machine"] = ["es"]
+    for it in db["editorial"]["items"]:
+        if it["id"] == "ed:gv:2027-06":
+            it["machine"] = ["es"]
+    return db
+
+
+class MachineThemes(unittest.TestCase):
+    """P4-11: the Spanish toolkit marks a machine-translated theme as one, the site's way: the model knows it (machine)
+    and Grapevine's own English words (orig, themeEn); the message gives the original words and ends with the
+    monthly digest's note; the pages mark it (the icon; the original in italics with /read/'s note); the Spanish
+    Grapevine deadline line says the stories go in English; "Los jueves …" goes on in lower case after a dash."""
+
+    def setUp(self):
+        if not getattr(MachineThemes, "_r", None):
+            MachineThemes._r = run(self, [("a", NOW_A, "2026-10")], mt_db())["a"]
+        self.r = MachineThemes._r
+        self.s = i18n_all()
+
+    def test_the_model(self):
+        es, en = self.r["mm"]["es"], self.r["mm"]["en"]
+        self.assertEqual((es["gv"]["theme"], es["gv"]["machine"], es["gv"]["orig"]), ("Soledad", True, "Loneliness"))
+        self.assertEqual((en["gv"]["theme"], en["gv"]["machine"], en["gv"]["orig"]), ("Loneliness", False, ""))
+        dl = {d["id"]: d for d in es["deadlines"]}
+        self.assertEqual((dl["ed:gv:2027-06"]["theme"], dl["ed:gv:2027-06"]["machine"], dl["ed:gv:2027-06"]["themeEn"]),
+                         ("Sobriedad emocional", True, "Emotional Sobriety"))
+        self.assertFalse(dl["ed:gv:2027-07"]["machine"])
+
+    def test_the_message(self):
+        es = self.r["msg"]["es:whatsapp"].replace("\u00a0", " ")
+        note = self.s["monthly.msg_machine"]
+        self.assertIn("• Grapevine, octubre de 2026 (en inglés): “Soledad” — 3 historias · 1 gratis para leer\n  “Loneliness”\n", es)
+        self.assertIn("• 15 de octubre — “Sobriedad emocional / Emotional Sobriety” (Grapevine, en inglés, edición de junio de 2027)", es)
+        self.assertIn("• 1 de noviembre — “Prison Issue” (Grapevine, en inglés, edición de julio de 2027)", es)
+        self.assertIn(f"\n{note['es']}\n\n🖼️ ", es)                                   # the note, above the footer
+        bi = self.r["msg"]["es+en:email"].replace("\u00a0", " ")
+        self.assertEqual(bi.count("“Loneliness”"), 1, "the other language's line is the original: said once")
+        self.assertIn(f"{note['es']} / {note['en']}", bi)
+        for variant in ("en:whatsapp", "en:email"):
+            self.assertNotIn(note["en"], self.r["msg"][variant], "the English words are Grapevine's own")
+        # without the data's `machine`: no note (the October data set as the other tests read it)
+        plain = run(self, [("a", NOW_A, "2026-10")])["a"]["msg"]["es:whatsapp"]
+        self.assertNotIn(note["es"], plain)
+        self.assertNotIn("  “Loneliness”", plain)
+
+    def test_words_in_the_middle_of_a_line(self):
+        es = self.r["msg"]["es:whatsapp"].replace("\u00a0", " ")
+        self.assertIn("• Grapevine Weekly Open AA Meeting — los miércoles a las 11:00 a. m. (hora del Centro), por Zoom", es)
+        self.assertNotIn("— Los ", es)
+        r = run_js(self, """
+            const M = await imp("eleventy/filters/monthly.js");
+            out(input.map(([s, l]) => M.midSentence(s, l)));""",
+                   data=[["Los jueves a las 11:00 a. m.", "es"], ["Jueves, 11:00 a. m.", "es"], ["La Viña los jueves", "es"],
+                         ["AA en línea", "es"], ["Thursdays at 11:00 AM", "en"], ["", "es"], ["cada jueves", "es"]])
+        self.assertEqual(r, ["los jueves a las 11:00 a. m.", "jueves, 11:00 a. m.", "La Viña los jueves", "AA en línea",
+                             "Thursdays at 11:00 AM", "", "cada jueves"])
+
+    def test_the_pages_mark_it(self):
+        month = (ROOT / "src" / "pages" / "monthly-month.njk").read_text(encoding="utf-8")
+        hub = (ROOT / "src" / "pages" / "monthly.njk").read_text(encoding="utf-8")
+        macros = (ROOT / "src" / "_includes" / "macros" / "monthly.njk").read_text(encoding="utf-8")
+        # the mark (contribute.njk's: the icon, "Auto-translated" for screen readers) and /read/'s note and italics
+        for page in (month, hub):
+            self.assertIn('{%- set mtMark -%}<span class="auto-note align-middle"', page)
+            self.assertIn('<span class="sr-only">{{ "common.auto_translated" | t(lang) }}</span>', page)
+        self.assertIn('"read.mt_note_en" if lang == "es" else "read.mt_note_es"', month)
+        self.assertIn('{{ mp.orig(x, lang, "es" if p == "lv" else "en") }}', month)               # In the magazines
+        self.assertIn("{% if m.gv.machine %} {{ mtMark | safe }}{% endif %}", month)              # the tips' subtitle
+        self.assertIn("{{ mp.orig({ machine: d.machine", month)                                  # Grapevine's deadlines
+        self.assertIn("{% if o.machine %} {{ mtMark | safe }}{% endif %}", month)                 # the next issue online
+        for needle in ('{{ mp.orig(m.gv, lang, "en") }}', '{{ mp.orig(m.lv, lang, "es") }}', "mt: d.machine",
+                       "{% if c.mt %} {{ mtMark | safe }}{% endif %}", "{% if pm.gv.machine %} {{ mtMark | safe }}{% endif %}",
+                       "{% if nm.gv and nm.gv.machine %} {{ mtMark | safe }}{% endif %}"):
+            self.assertIn(needle, hub)
+        # the Spanish poster: the original words in italics and the note once
+        self.assertIn('<p class="mp-orig mp-orig--theme" lang="en">{{ m.gv.orig }}</p>', macros)
+        self.assertIn('<span class="mp-orig" lang="en">{{ d.themeEn }}</span>', macros)
+        self.assertIn('<p class="mp-mtnote">{{ "read.mt_note_en" | t(lang) }}</p>', macros)
+
+
+# ------------------------------------------------------------------ "Add this month's dates to my calendar"
+ICS_JS = r"""
+const M = await imp("eleventy/filters/monthly.js");
+const C = await imp("eleventy/filters/committee.js");
+const { db, site, carry } = input;
+const now = new Date(input.now);
+const res = {};
+for (const [key, lang] of input.runs) {
+  const m = M.monthModel(key, db, carry, site, lang, now);
+  res[`${key}:${lang}`] = { ics: M.monthIcs(m, db, site, lang, now), path: M.icsPath(key, lang), url: m.icsUrl };
+}
+// /events.ics as the site writes it: the same events, the same UIDs
+res.events = C.buildIcs(C.normalizeEvents(db.events.items, site, "en", { monthsBack: 3, monthsAhead: 12, now }), { lang: "en", now, name: "x" });
+if (input.filter) res.filter = filters.mpIcs(input.filter, db, carry, site, "en");
+out(res);
+"""
+
+
+def unfold(ics: str) -> list[str]:
+    out: list[str] = []
+    for line in ics.split("\r\n"):
+        if line.startswith(" ") and out:
+            out[-1] += line[1:]
+        else:
+            out.append(line)
+    return out
+
+
+def vevents(ics: str) -> list[dict]:
+    evs, cur = [], None
+    for line in unfold(ics):
+        if line == "BEGIN:VEVENT":
+            cur = {}
+        elif line == "END:VEVENT":
+            evs.append(cur)
+            cur = None
+        elif cur is not None and ":" in line:
+            k, v = line.split(":", 1)
+            cur[k] = v
+    return evs
+
+
+class MonthCalendar(unittest.TestCase):
+    """F-4: each month page links a calendar file of its dates (src/pages/monthly-ics.11ty.js, at icsPath): the month's
+    date rows as /events.ics writes them — the same UIDs (a calendar with both keeps one copy), the committee meeting
+    with its details —, this month only what is not over, and the story deadlines as all-day entries; valid RFC 5545
+    (CRLF, lines folded at 75 octets, TEXT escaped)."""
+
+    def setUp(self):
+        db = full_db()
+        db["events"]["items"].append(event("ev:qa", "2026-11-07T15:00:00Z", "2026-11-07T17:00:00Z", "Workshop; Q&A, open",
+                                           url="https://neta65.org/event/qa", extra={"city": "Plano"}))
+        site = dict(SITE, url="https://example.org/site")
+        self.r = run_js(self, ICS_JS, data={"db": db, "site": site, "carry": CARRY, "now": NOW_A, "filter": "2026-10",
+                                            "runs": [["2026-10", "en"], ["2026-10", "es"], ["2026-11", "en"]]},
+                        env={"MONTHLY_NOW": NOW_A})
+
+    def test_a_valid_calendar(self):
+        for name in ("2026-10:en", "2026-10:es", "2026-11:en"):
+            ics = self.r[name]["ics"]
+            with self.subTest(file=name):
+                self.assertTrue(ics.startswith("BEGIN:VCALENDAR\r\nVERSION:2.0\r\n") and ics.endswith("END:VCALENDAR\r\n"))
+                self.assertNotIn("\n", ics.replace("\r\n", ""), "CRLF line ends only")
+                for line in ics.split("\r\n"):
+                    self.assertLessEqual(len(line.encode("utf-8")), 75, line)
+                lines = unfold(ics)
+                self.assertEqual(lines.count("BEGIN:VEVENT"), lines.count("END:VEVENT"))
+                for ev in vevents(ics):
+                    self.assertTrue(ev["UID"].endswith("@neta65-gvlv") and ev.get("DTSTAMP") and ev.get("SUMMARY"))
+        self.assertIn("SUMMARY:Workshop\\; Q&A\\, open", unfold(self.r["2026-11:en"]["ics"]))
+
+    def test_the_months_dates_and_deadlines(self):
+        evs = {e["UID"]: e for e in vevents(self.r["2026-10:en"]["ics"])}
+        site_uids = {e["UID"] for e in vevents(self.r["events"])}
+        dated = [u for u in evs if not u.startswith("deadline-")]
+        self.assertEqual(sorted(dated), sorted(u for u in dated if u in site_uids), "the same UIDs as /events.ics")
+        self.assertNotIn("ev-ws-oct3@neta65-gvlv", evs)                     # October 3: over at build time
+        for uid in ("ev-talk@neta65-gvlv", "ev-committee-2026-10-21@neta65-gvlv", "ev-feed@neta65-gvlv", "ev-assembly@neta65-gvlv"):
+            self.assertIn(uid, evs)
+        self.assertEqual(evs["ev-committee-2026-10-21@neta65-gvlv"]["DTSTART"], "20261022T000000Z")
+        self.assertEqual((evs["ev-assembly@neta65-gvlv"]["DTSTART;VALUE=DATE"], evs["ev-assembly@neta65-gvlv"]["DTEND;VALUE=DATE"]),
+                         ("20261030", "20261102"))
+        dl = evs["deadline-ed-gv-2027-06@neta65-gvlv"]
+        self.assertEqual((dl["DTSTART;VALUE=DATE"], dl["DTEND;VALUE=DATE"], dl["TRANSP"]), ("20261015", "20261016", "TRANSPARENT"))
+        self.assertEqual(dl["SUMMARY"], "Story deadline: “Emotional Sobriety” — Grapevine")
+        self.assertIn("https://example.org/site/contribute/#deadlines", dl["DESCRIPTION"])
+        self.assertEqual(dl["CATEGORIES"], "Story deadlines")
+        self.assertIn("deadline-ed-gv-2027-07@neta65-gvlv", evs)            # due November 1: on October's page too
+        cal = unfold(self.r["2026-10:en"]["ics"])
+        self.assertIn("X-WR-CALNAME:NETA 65 Grapevine & La Viña — October 2026", cal)
+        # Spanish: its own words and UIDs (as /es/events.ics)
+        es = {e["UID"]: e for e in vevents(self.r["2026-10:es"]["ics"])}
+        self.assertIn("ev-committee-2026-10-21-es@neta65-gvlv", es)
+        self.assertEqual(es["deadline-ed-gv-2027-06-es@neta65-gvlv"]["SUMMARY"],
+                         "Fecha límite para historias: “Sobriedad emocional” — Grapevine (en inglés)")
+        self.assertIn("X-WR-CALNAME:La Viña y Grapevine de NETA 65 — octubre de 2026", unfold(self.r["2026-10:es"]["ics"]))
+        # a later month: every date (the booth of November and its committee meeting, worked out from the rule)
+        nov = {e["UID"] for e in vevents(self.r["2026-11:en"]["ics"])}
+        self.assertTrue({"ev-rec-2026-11-14@neta65-gvlv", "ev-committee-2026-11-18@neta65-gvlv", "ev-qa@neta65-gvlv"} <= nov, nov)
+
+    def test_where_the_file_is(self):
+        self.assertEqual((self.r["2026-10:en"]["path"], self.r["2026-10:es"]["path"]),
+                         ("/monthly/2026-10/neta65-grapevine-2026-10-en.ics", "/es/monthly/2026-10/neta65-grapevine-2026-10-es.ics"))
+        self.assertEqual(self.r["2026-10:en"]["url"], self.r["2026-10:en"]["path"])
+        strip = lambda s: re.sub(r"DTSTAMP:\d+T\d+Z", "", s)
+        self.assertEqual(strip(self.r["filter"]), strip(self.r["2026-10:en"]["ics"]), "the page's filter writes the same file")
+        page = (ROOT / "src" / "pages" / "monthly-ics.11ty.js").read_text(encoding="utf-8")
+        self.assertIn('pagination: { data: "monthlyPages"', page)
+        self.assertIn("permalink: (data) => icsPath(data.mpage.key, data.mpage.lang)", page)
+        self.assertIn("eleventyExcludeFromCollections: true", page)       # not a page: out of the sitemap
+        month = (ROOT / "src" / "pages" / "monthly-month.njk").read_text(encoding="utf-8")
+        self.assertIn('href="{{ m.icsUrl }}" type="text/calendar"', month)
+        self.assertIn('"monthly.ics_link" | t(lang, { month: m.monthName })', month)
+
+
+class LaterMonthSeries(unittest.TestCase):
+    """F-4: a later month's date of a monthly series, worked out from its rule (events.json lists only its next dates),
+    is in that month's calendar file too — written from the series' own record."""
+
+    def test_the_booth_in_april(self):
+        rule_db = RuleBuiltDates().db()
+        site = {"url": "https://example.org/site", "meeting": RuleBuiltDates.MEETING, "recurring_events": [RuleBuiltDates.BOOTH]}
+        r = run_js(self, ICS_JS, data={"db": rule_db, "site": site, "carry": {}, "now": NOW_A, "runs": [["2027-04", "en"]]})
+        evs = {e["UID"]: e for e in vevents(r["2027-04:en"]["ics"])}
+        booth = evs["ev-recurring-citywide-dallas-2027-04-10@neta65-gvlv"]
+        self.assertEqual((booth["DTSTART"], booth["DTEND"], booth["SUMMARY"]), ("20270410T220000Z", "20270411T010000Z", "GV/LV booth at CityWide Dallas"))
+        self.assertIn("ev-committee-2027-04-21@neta65-gvlv", evs)
+
+
+# ------------------------------------------------------------------ printed posters' QR codes: 12 months back
+class PastMonths(unittest.TestCase):
+    """F-5: a poster printed for a month stays on a corkboard: its QR code (the month's page) keeps working for the 12
+    months before this one — each a small page that sends the reader to /monthly/ — and those pages stay out of the
+    sitemap, the feeds and the search index (out of the collections)."""
+
+    def test_twelve_months_of_redirect_pages(self):
+        r = run_js(self, """
+            const M = await imp("eleventy/filters/monthly.js");
+            const globals = {};
+            const cfg = new Proxy({}, { get(_t, name) { return name === "addGlobalData" ? (n, fn) => { globals[n] = fn; } : () => {}; } });
+            M.default(cfg, { translateKey: (k) => k });
+            out({ past: globals.monthlyPastPages(), keys: globals.monthlyKeys() });""", env={"MONTHLY_NOW": NOW_A})
+        past = r["past"]
+        self.assertEqual(len(past), 24)
+        en = [p["key"] for p in past if p["lang"] == "en"]
+        self.assertEqual(en, ["2026-09", "2026-08", "2026-07", "2026-06", "2026-05", "2026-04", "2026-03", "2026-02", "2026-01",
+                              "2025-12", "2025-11", "2025-10"])
+        self.assertEqual(sorted(p["key"] for p in past if p["lang"] == "es"), sorted(en))
+        self.assertFalse(set(en) & set(r["keys"]), "never a month the window has a page for")
+        self.assertEqual(r["keys"][0], "2026-10")
+        page = (ROOT / "src" / "pages" / "monthly-past.njk").read_text(encoding="utf-8")
+        for needle in ("pagination: { data: monthlyPastPages", "sitemap: false", "eleventyExcludeFromCollections: true",
+                       '<meta name="robots" content="noindex">'):
+            self.assertIn(needle, page)
+        self.assertIn("if (p.data?.sitemap === false) continue;", (ROOT / "src" / "pages" / "sitemap.11ty.js").read_text(encoding="utf-8"))
+
+
+# ------------------------------------------------------------------ the hub's posters, printing
+class HubPosters(unittest.TestCase):
+    """P5-8: the hub no longer carries 14 full posters (~200 KB of its ~380 KB): this month (the hero, the "This
+    month" card) and the coming months show a miniature (posterMini: the design and one theme, a few KB, no dates,
+    deadlines or QR code), each a link to its month's page where the poster itself is. No script involved: the
+    page shows the same with or without JavaScript."""
+
+    def test_the_hub_shows_miniatures(self):
+        hub = (ROOT / "src" / "pages" / "monthly.njk").read_text(encoding="utf-8")
+        self.assertEqual(hub.count("mp.posterMini("), 3)
+        self.assertNotIn("mp.poster(", hub)
+        macros = (ROOT / "src" / "_includes" / "macros" / "monthly.njk").read_text(encoding="utf-8")
+        mini = macros[macros.index("{% macro posterMini"):]
+        mini = mini[:mini.index("{% endmacro %}")]
+        for heavy in ("mpQr", "foot(", "dates(", "story(", "botm(", "<h2", "<h3", " id="):
+            self.assertNotIn(heavy, mini, heavy)
+        self.assertIn("{{ deco(m.design) }}", mini)
+        self.assertIn('class="mp-poster mp-mini mp-mini--{{ m.layout }} mp-d-{{ m.design }}"', mini)
+        css = (ROOT / "src" / "assets" / "css" / "areas" / "monthly.css").read_text(encoding="utf-8")
+        for layout in ("editorial", "ticket", "split", "cork", "cover", "notebook"):
+            self.assertIn(f".mp-mini--{layout} ", css, layout)
+        js = (ROOT / "src" / "assets" / "js" / "monthly.js").read_text(encoding="utf-8")
+        self.assertIn('".mp-stage:not(.mp-stage--thumb) [data-mp-poster]"', js)       # only a month page's poster is fitted
+        self.assertNotIn("data-mp-poster", mini)
+
+
+class Print(unittest.TestCase):
+    """P4-9: the poster's print rule is a named page (mp-letter) on the poster itself; no stylesheet has an unnamed
+    @page, which would set the paper and margins of every page the site prints (all area files are in every page's
+    stylesheet)."""
+
+    def test_named_pages_only(self):
+        for f in sorted((ROOT / "src" / "assets" / "css").rglob("*.css")):
+            with self.subTest(file=f.name):
+                self.assertNotRegex(f.read_text(encoding="utf-8"), r"@page\s*\{", "an unnamed @page")
+        css = (ROOT / "src" / "assets" / "css" / "areas" / "monthly.css").read_text(encoding="utf-8")
+        self.assertIn("@page mp-letter { size: letter; margin: 0.35in; }", css)
+        self.assertIn("body.mp-page .mp-stage { page: mp-letter;", css)
 
 
 if __name__ == "__main__":

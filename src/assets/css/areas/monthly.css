@@ -6,7 +6,8 @@
       scaled to fit its box with tan(atan2()) (monthly.js sets --mp-s where that is unsupported)
    3. Six layouts: editorial · ticket · split · cork · cover · notebook
    4. Twelve designs (palette + motif), keyed by calendar month
-   5. Print: only the poster, fitted to one US Letter page
+   5. Print: only the poster, fitted to one US Letter page (its own named page, mp-letter)
+   6. The hub's posters in miniature (posterMini)
    ===================================================================== */
 
 /* ---------- 1. Page chrome ---------- */
@@ -177,6 +178,11 @@
 .mp-dl--compact .mp-dl-theme { display: block; font-family: var(--font-sans); font-size: 1.1em; line-height: 1.2; }
 .mp-dl--compact .mp-dl-due { display: block; margin-top: 1px; color: var(--p-muted); }
 .mp-gvdl { margin-top: 10px; }
+/* A machine-translated Grapevine theme on the Spanish poster: Grapevine's own English words in italics under it,
+   and the site's note once ("… originals in italics") */
+.mp-orig { display: block; margin-top: 1px; font-size: 0.86em; font-style: italic; line-height: 1.2; color: var(--p-muted); }
+.mp-orig--theme { margin-top: 6px !important; font-size: 0.9em; }
+.mp-mtnote { margin-top: 10px !important; font-size: 0.72em; font-style: italic; line-height: 1.25; color: var(--p-muted); }
 .mp-send { margin-top: 10px !important; font-size: 0.84em; font-weight: 600; color: var(--p-muted); overflow-wrap: anywhere; }
 .mp-send--lv { font-weight: 500; }
 .mp-topics li { position: relative; padding-left: 1.1em; margin-top: 4px; font-family: var(--font-display); font-size: 1.12em; font-weight: 600; line-height: 1.15; }
@@ -431,16 +437,18 @@
 .mp-d-chalk .mp-m3 { width: 50px; height: 50px; right: 40px; top: 190px; }
 .mp-d-chalk .mp-m4 { width: 80px; height: 80px; right: 70px; bottom: 220px; transform: rotate(-30deg); }
 
-/* ---------- 5. Print: the poster only, on one US Letter page ---------- */
+/* ---------- 5. Print: the poster only, on one US Letter page ----------
+   A named page (as community.css cm-letter, report.css rp-letter): this file is part of every page's
+   stylesheet, and an unnamed @page would set the paper and margins of every page the site prints. */
+@page mp-letter { size: letter; margin: 0.35in; }
 @media print {
-  @page { size: letter; margin: 0.35in; }
   html:root:has(body.mp-page) { background: #fff !important; }
   body.mp-page { background: #fff !important; }
   body.mp-page > :not(main), body.mp-page main > :not(.mp-print-root), body.mp-page .mp-no-print { display: none !important; }
   body.mp-page .mp-print-root { margin: 0 !important; padding: 0 !important; max-width: none !important; }
   body.mp-page .mp-layout { display: block !important; }
   body.mp-page .mp-poster-col { position: static !important; max-width: none !important; }
-  body.mp-page .mp-stage { width: 7.5in !important; margin: 0 auto !important; }
+  body.mp-page .mp-stage { page: mp-letter; width: 7.5in !important; margin: 0 auto !important; }
   body.mp-page .mp-fit { box-shadow: none !important; border-radius: 0 !important; break-inside: avoid; }
 }
 
@@ -461,6 +469,55 @@
   :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .mp-now { grid-template-columns: minmax(0, 1fr); }
   :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .mp-now-poster { display: none; }
 }
+/* ---------- 6. The hub's posters in miniature (macros/monthly.njk posterMini) ----------
+   The same 1080 × 1350 canvas, palette and motif as the month's poster, scaled the same way; only the masthead
+   and the issue's theme, in type large enough to read at a fifth of the size. The masthead sits on the layout's
+   own ground: the editorial rule, the ticket, the split's side colour, the cork's pinned card, the cover's
+   masthead band, the notebook's ruled page. */
+.mp-mini { justify-content: space-between; gap: 48px; padding: 80px 76px 88px; font-size: 32px; }
+.mp-mini .mp-mini-head { --mp-w: 860px; --mp-max: 250px; }
+.mp-mini .mp-kicker { font-size: 0.95em; }
+.mp-mini .mp-month { margin-top: 14px !important; }
+.mp-mini .mp-year { display: block; margin: 12px 0 0; font-size: 0.42em; }
+.mp-mini .mp-tag { margin-top: 18px !important; font-size: 1.3em; }
+.mp-mini-mag { display: flex; flex-direction: column; gap: 16px; }
+.mp-mini .mp-mini-mag .mp-sub { margin: 0 !important; font-size: 0.95em; }
+.mp-mini .mp-theme { font-size: 3.4em; line-height: 1.04; overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+/* editorial: the masthead over a heavy rule, the theme on the design's card */
+.mp-mini--editorial .mp-mini-head { padding-bottom: 40px; border-bottom: 8px solid var(--p-ink); }
+.mp-mini--editorial .mp-mini-mag { padding: 44px 48px; border-radius: 28px; background: var(--p-card); color: var(--p-card-ink); --p-muted: var(--p-card-muted); }
+/* ticket: one admission ticket — the masthead on it, the theme on its stub below the perforation */
+.mp-mini--ticket { gap: 0; padding: 70px 64px; }
+.mp-mini--ticket .mp-mini-head, .mp-mini--ticket .mp-mini-mag { background: var(--p-card); color: var(--p-card-ink); --p-ink: var(--p-card-ink); --p-muted: var(--p-card-muted); }
+.mp-mini--ticket .mp-mini-head { padding: 60px 56px 48px; border-radius: 30px 30px 0 0; }
+.mp-mini--ticket .mp-kicker::before { content: "★ "; }
+.mp-mini--ticket .mp-mini-mag { flex: 1; justify-content: center; padding: 44px 56px 56px; border-top: 5px dashed var(--p-line); border-radius: 0 0 30px 30px; background: var(--p-stub); }
+/* split: the masthead on the side colour, the theme on the paper */
+.mp-mini--split { gap: 0; padding: 0; }
+.mp-mini--split .mp-mini-head { padding: 80px 76px 64px; background: var(--p-side); color: var(--p-side-ink);
+  --p-accent: var(--p-side-accent); --p-muted: var(--p-side-muted); --p-head: var(--p-side-ink); --p-year: var(--p-side-accent); }
+.mp-mini--split .mp-mini-mag { flex: 1; justify-content: center; padding: 56px 76px 80px; }
+/* cork: the masthead on a pinned card with tape, the theme on a sticky note */
+.mp-mini--cork { padding: 92px 70px 96px; }
+.mp-mini--cork .mp-mini-head { padding: 48px 52px 44px; background: var(--p-card); color: var(--p-card-ink); --p-muted: var(--p-card-muted); transform: rotate(-1.4deg); box-shadow: 0 14px 28px -12px rgb(0 0 0 / 0.5); }
+.mp-mini--cork .mp-mini-head::before, .mp-mini--cork .mp-mini-head::after { content: ""; position: absolute; top: -18px; width: 140px; height: 42px; background: rgb(255 255 255 / 0.55); box-shadow: 0 1px 2px rgb(0 0 0 / 0.12); }
+.mp-mini--cork .mp-mini-head::before { left: 34px; transform: rotate(-6deg); }
+.mp-mini--cork .mp-mini-head::after { right: 34px; transform: rotate(5deg); }
+.mp-mini--cork .mp-mini-mag { padding: 44px 48px; background: var(--p-sticky); color: #2a2418; --p-muted: #4d4535; --p-accent: #9a3412; transform: rotate(1.2deg); box-shadow: 0 14px 24px -12px rgb(0 0 0 / 0.5); }
+/* cover: the masthead band, the theme as the cover story */
+.mp-mini--cover { gap: 0; padding: 0; }
+.mp-mini--cover .mp-mini-head { padding: 72px 76px 60px; background: var(--p-mast); color: var(--p-mast-ink);
+  --p-accent: var(--p-mast-accent); --p-muted: var(--p-mast-muted); --p-head: var(--p-mast-ink); --p-year: var(--p-mast-accent); }
+.mp-mini--cover .mp-mini-mag { flex: 1; justify-content: center; padding: 56px 76px 80px; border-bottom: 56px solid var(--p-strip); }
+.mp-mini--cover .mp-theme { color: var(--p-accent); }
+/* notebook: hand-lettered on the ruled page (the binder holes on the left) */
+.mp-mini--notebook { padding: 84px 70px 88px 150px; }
+.mp-mini--notebook.mp-d-chalk { padding: 64px 52px 64px 126px; }
+.mp-mini--notebook .mp-month { font-style: italic; font-weight: 700; line-height: 1.02; }
+.mp-mini--notebook .mp-year { font-style: normal; font-weight: 600; }
+.mp-mini--notebook .mp-theme { font-style: italic; text-decoration: underline wavy var(--p-accent2); text-decoration-thickness: 3px; text-underline-offset: 14px; }
+
 /* Month pages' hero aside (monthly-month.njk): two portrait covers grow with the 26rem column from
    1536px — keep that card at 23rem there so it stays within the hero's 480px. */
 @media (width >= 96rem) {

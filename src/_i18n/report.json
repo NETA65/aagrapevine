@@ -1,6 +1,11 @@
 {
   "report.settings_title": { "en": "Your details", "es": "Tus datos" },
-  "report.settings_note": { "en": "They fill in the blanks in [brackets]. Your changes are saved on this device only, for {month} and for each language — next month starts fresh with the new data.", "es": "Completan los espacios entre [corchetes]. Tus cambios se guardan solo en este dispositivo, para {month} y para cada idioma — el mes que viene empieza de nuevo con los datos nuevos." },
+  "report.settings_note": { "en": "They fill in the blanks in [brackets]. Your changes are saved on this device only, for {month} and for each language — next month starts fresh with the new data, and offers this month's draft as a starting point.", "es": "Completan los espacios entre [corchetes]. Tus cambios se guardan solo en este dispositivo, para {month} y para cada idioma — el mes que viene empieza de nuevo con los datos nuevos y te ofrece el borrador de este mes como punto de partida." },
+  "report.prev_title": { "en": "Start from last month's draft?", "es": "¿Empezar con el borrador del mes pasado?" },
+  "report.prev_text": { "en": "You worked on a {month} report on this device. Starting from it brings back your own sections and notes, the order, the sections you left out and the counties you picked. The sections made from the site's data show this month's news.", "es": "Trabajaste en un informe de {month} en este dispositivo. Si empiezas con él, vuelven tus secciones y notas, el orden, las secciones que dejaste fuera y los condados que elegiste. Las secciones hechas con los datos del sitio muestran las novedades de este mes." },
+  "report.prev_btn": { "en": "Start from my {month} draft", "es": "Empezar con mi borrador de {month}" },
+  "report.prev_done": { "en": "Started from your {month} draft — the sections made from the site's data show this month's news", "es": "Empezaste con tu borrador de {month}: las secciones hechas con los datos del sitio muestran las novedades de este mes" },
+  "report.mt_note": { "en": "(Some titles were translated automatically.)", "es": "(Algunos títulos se tradujeron automáticamente.)" },
   "report.f_district": { "en": "District number", "es": "Número de distrito" },
   "report.f_name": { "en": "Your name", "es": "Tu nombre" },
   "report.f_name_hint": { "en": "First name and last initial (anonymity)", "es": "Nombre de pila e inicial del apellido (anonimato)" },

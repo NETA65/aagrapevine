@@ -37,9 +37,10 @@
 //   live extras    db.quote, db.whatsnew, db.announcements, db.instagram, db.meetings, db.shop,
 //                  db.audio_project (monthNow)
 //
-// Globals:   monthlyPages  [{ key: "YYYY-MM", lang }]  → pagination for the per-month pages
+// Globals:   monthlyPages  [{ key: "YYYY-MM", lang }]  → pagination for the per-month pages (and their
+//                                                         calendar files, src/pages/monthly-ics.11ty.js)
 //            monthlyKeys   ["YYYY-MM", …]              (13 keys, current month first)
-//            monthlyPastPages [{ key, lang, label }]   the 3 months before: redirect stubs to /monthly/
+//            monthlyPastPages [{ key, lang, label }]   the 12 months before: redirect stubs to /monthly/
 // Filters:   mpMonths(db, carry, site, lang)            → [model, …] for the whole window
 //            mpMonth(key, db, carry, site, lang)        → one model
 //            mpNow(db, site, lang)                      → the current month's live extras (monthNow)
@@ -49,13 +50,14 @@
 //                                                         (monthMessage; langs ["en"] or ["en", "es"])
 //            mpQr(url, label)                           → QR code SVG (qrSvg from community.js)
 //            mpGuides(pdfs, lang)                       → the GVR / RLV guides in the Library (repGuides)
+//            mpIcs(key, db, carry, site, lang)          → the month's dates as an iCalendar file (monthIcs)
 // Everything is built once per build and language (the hub and 26 month pages share it).
 // Dev/test:  MONTHLY_NOW=2026-12-15 (or an instant: 2026-10-22T06:00:00Z) fixes "now" — the window,
 //            the "over" marks, the next committee meeting and the live extras.
 
 // (community.js imports this file too: the cycle is safe, both only call each other's functions.)
 import { qrSvg, issueLabel, issueInSentence, issueLabelOf } from "./community.js";
-import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList } from "./committee.js";
+import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs } from "./committee.js";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
 import { wallInstant } from "../central-time.js";
 import { shopFromMonthly, money, shopPriceChangeIn, dayLabel } from "./shop.js";
@@ -68,7 +70,8 @@ let H = { translateKey: (k) => k };
 // (TZ: config/site.yml site.timezone — America/Chicago — from eleventy.config.js)
 const LOC = { en: "en-US", es: "es-US" };
 const WINDOW = 13;
-const PAST_MONTHS = 3;
+// A printed poster stays on a corkboard for months: its QR code (the month's page) keeps working for a year.
+const PAST_MONTHS = 12;
 const WD = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 };
 
 // 12 poster designs keyed by calendar month; 6 structurally different layouts, each used twice
@@ -253,6 +256,14 @@ export function hook(summary, max = 110) {
   return pick.length > max ? pick.slice(0, max).replace(/\s+\S*$/, "") + "…" : pick;
 }
 const slug = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+/** Words that begin a sentence in the data, inside a sentence: in Spanish the first word goes lower case ("— Los
+ *  jueves a las 11:00 a. m." → "— los jueves …") unless it is a name ("La Viña …": the next word is capitalized
+ *  too) or an acronym ("AA …"). English keeps its capitals (its weekdays are names). */
+export function midSentence(s, lang) {
+  const v = String(s ?? "");
+  if (lang !== "es" || !/^\p{Lu}\p{Ll}*(?![\p{L}\d])/u.test(v) || /^\S+\s+\p{Lu}/u.test(v)) return v;
+  return v.charAt(0).toLowerCase() + v.slice(1);
+}
 
 /* ------------------------------------------------------------------ */
 /*  The month model                                                    */
@@ -296,6 +307,8 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
  *   online    it can be joined online (an online link, or "Zoom" as its place): without a city the row,
  *             the poster and the message say "Online" there
  * extra: { kind: "committee" | "recurring" | "event", … }
+ * (src, not enumerable: the event record the row is made from — the month's calendar file writes it as
+ * /events.ics does, monthIcs)
  */
 function dateRow(e, L, ctx, extra = {}) {
   const d = eventDays(e);
@@ -306,7 +319,7 @@ function dateRow(e, L, ctx, extra = {}) {
   const href = extra.kind === "committee" ? "/meetings/#committee-meeting" : e.url || "/events/";
   const title = tr(e, "title", L);
   const city = clean(ex.city);
-  return {
+  return Object.defineProperty({
     id: e.id, title, url: e.url || "", href, external: /^https?:/.test(href), category: e.category || "",
     ymd: d.start, endYmd: d.end, chip: chip(shownDay, L), dayLabel: shortDate(shownDay, L, ctx.year), day: longDay(d.start, L),
     endDay: d.end !== d.start ? longDay(d.end, L) : "",
@@ -316,7 +329,7 @@ function dateRow(e, L, ctx, extra = {}) {
     online: !!ex.online || !!ex.online_url || /zoom/i.test(ex.location || ""),
     host: ex.host === "lv" || ex.host === "gv" ? ex.host : "",
     tentative: !!ex.tentative, overAt, past: !!overAt && Date.parse(overAt) <= ctx.nowMs, ...extra,
-  };
+  }, "src", { value: e });
 }
 
 /** A month's committee meeting as a date row: its events.json record, else the site.meeting rule
@@ -340,14 +353,17 @@ const storyPub = (a) => (a && a.extra && a.extra.publication) || (a && a.categor
 const storiesOf = (db) => ((db.articles && db.articles.items) || [])
   .filter((a) => a && a.kind === "article" && a.status !== "gone" && a.extra && a.extra.issue_key);
 
-/* An issue's theme and where it came from ("issue" | "stories" | "calendar"): see issueTheme. */
+/* An issue's theme and where it came from ("issue" | "stories" | "calendar"): see issueTheme. machine: the theme
+   in this language is a machine translation (a Grapevine theme in Spanish, a La Viña theme in English) — the item's
+   `machine` languages, and only when the words shown are this language's own (not the original as a fallback). */
 function themeOf(db, pub, key, L) {
   const meta = ((db.articles && db.articles.issues) || []).find((i) => i && i.publication === pub && i.key === key) || null;
   const own = meta ? clean(tr(meta, "theme", L)) : "";
-  if (own) return { text: own, themes: [own], from: "issue", machine: L === "es" && (meta.machine || []).includes("es") };
+  if (own) return { text: own, themes: [own], from: "issue", machine: !!clean(meta.i18n && meta.i18n.theme && meta.i18n.theme[L]) && (meta.machine || []).includes(L) };
   const first = storiesOf(db).find((a) => storyPub(a) === pub && a.extra.issue_key === key);
-  const told = first ? clean((first.i18n && first.i18n.issue_theme && first.i18n.issue_theme[L]) || first.extra.issue_theme) : "";
-  if (told) return { text: told, themes: [told], from: "stories", machine: L === "es" && (first.machine || []).includes("es") };
+  const toldL = first ? clean(first.i18n && first.i18n.issue_theme && first.i18n.issue_theme[L]) : "";
+  const told = toldL || (first ? clean(first.extra.issue_theme) : "");
+  if (told) return { text: told, themes: [told], from: "stories", machine: !!toldL && (first.machine || []).includes(L) };
   // the magazine's own call for stories: Grapevine's editorial calendar, La Viña's yearly themes (a La Viña theme
   // is Spanish: on the English pages its translation, marked machine when it is one — as a Grapevine one in Spanish)
   const themed = ((db.editorial && db.editorial.items) || []).filter((i) => i && i.extra && i.extra.publication === pub && i.extra.issue_key === key);
@@ -378,12 +394,16 @@ export function issueTheme(db, pub, key, lang) {
    the site's one name for a La Viña issue, from its key (read.js issueName: "September–October 2026" /
    "Septiembre–Octubre 2026", as /contribute/, Home and the presentations write it); the data's own label only
    without a key. themeLang: the language the theme is in ("es" on an English page while a theme has no English
-   words yet). */
+   words yet); machine: the theme is a machine translation (themeOf) — the pages mark it as one. */
 function lvIssueOf(db, key, L) {
   const meta = ((db.articles && db.articles.issues) || []).find((i) => i && i.publication === "lv" && i.key && (i.key === key || addMonths(i.key, 1) === key)) || null;
   const lvTheme = (k) => {
-    const theme = issueTheme(db, "lv", k, L);
-    return { theme, themeLang: L === "en" && theme && theme === issueTheme(db, "lv", k, "es") ? "es" : L };
+    const th = themeOf(db, "lv", k, L);
+    const theme = th.text;
+    const themeLang = L === "en" && theme && theme === issueTheme(db, "lv", k, "es") ? "es" : L;
+    const machine = !!theme && themeLang === L && th.machine;
+    // orig: the theme in La Viña's own Spanish words, beside a machine translation (the pages, the poster)
+    return { theme, themeLang, machine, orig: machine ? issueTheme(db, "lv", k, "es") : "" };
   };
   if (meta) return { key: meta.key, ...lvTheme(meta.key), label: issueName(meta.key, "lv", L) || tr(meta, "label", L), url: meta.url || "", cover: meta.cover || "" };
   const lvStories = storiesOf(db).filter((a) => storyPub(a) === "lv");
@@ -440,7 +460,8 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
     key, theme: gvTheme.text, themes: gvTheme.themes, label: monthLabel(key, L),
     summary: gvTheme.from === "issue" ? tr(gvIssue, "description", L) : tr(themed[0], "summary", L),
     url: (gvIssue && gvIssue.url) || (gvStory && gvStory.extra.issue_url) || "", cover: gvIssue ? gvIssue.cover || "" : "",
-    machine: gvTheme.machine,
+    // a machine translation (a Spanish page): marked as one, with the theme in Grapevine's own English words (orig)
+    machine: gvTheme.machine, orig: gvTheme.machine ? themeOf(db, "gv", key, "en").text : "",
   } : null;
 
   /* La Viña's bimonthly issue that covers this month (lvIssueOf) */
@@ -500,7 +521,11 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
       if (!topics.includes(it)) topics.push(it);
     }
   }
-  const lvTopicList = topics.map((i) => ({ id: i.id, es: tr(i, "title", "es"), text: tr(i, "title", L) }));
+  // text: the topic in the page language (machine: a machine translation of La Viña's Spanish words)
+  const lvTopicList = topics.map((i) => {
+    const text = tr(i, "title", L), es = tr(i, "title", "es");
+    return { id: i.id, es, text, machine: L !== "es" && text !== es && (i.machine || []).includes(L) };
+  });
 
   /* Book of the Month offers whose window overlaps the month; overAt = midnight Central after its last day */
   const botm = (((db.shop && db.shop.botm) || []).filter((b) => b && b.ends && (!b.starts || b.starts <= last) && b.ends >= first))
@@ -602,6 +627,8 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
     url, absUrl: String(site.url || "").replace(/\/$/, "") + url,
     prev: addMonths(key, -1), next: addMonths(key, 1),
     fileName: `neta65-grapevine-${key}-${L}.png`,
+    // "Add this month's dates to my calendar": the month's calendar file beside its page (monthIcs, icsPath)
+    icsUrl: icsPath(key, L),
     slug: slug(key),
   };
 }
@@ -623,8 +650,8 @@ const msOf = (v) => (isYmd(v) ? Date.parse(v + "T12:00:00Z") : Date.parse(v));
  *                  thisMonth } or null. (Not src/_data/meeting.js: that one ignores MONTHLY_NOW.)
  *   outNext        an issue already online before its month (the district report's rule: articles.json
  *                  issues[] newer than this month's Grapevine key / than the La Viña issue covering this
- *                  month) → [{ pub, theme, issue (inside a sentence), monthKey, monthLabel, monthUrl (its
- *                  toolkit, "" outside the window) }], the page language's magazine first
+ *                  month) → [{ pub, theme, machine (a machine translation), issue (inside a sentence), monthKey,
+ *                  monthLabel, monthUrl (its toolkit, "" outside the window) }], the page language's magazine first
  *   quote          true when the home page shows a daily quote (homeDailyQuotes: of the last 2 days, with
  *                  its text and link) — the toolkit points there, never repeats it
  *   instagram      [{ username, url }] the page language's magazine first
@@ -666,7 +693,9 @@ export function monthNow(db = {}, site = {}, lang = "en", now = nowDate()) {
     const label = own || (pub === "gv" ? monthLabel(i.key, L) : clean(i.label) || i.key);
     // La Viña's issue by the site's one name for it (issueName), like its issue and deadlines on these pages
     const issue = (pub === "lv" && issueName(i.key, "lv", L, true)) || issueInSentence(label, L);
-    outNext.push({ pub, theme, issue, monthKey: i.key, monthLabel: monthLabel(i.key, L), monthUrl: keys.includes(i.key) ? `/monthly/${i.key}/` : "" });
+    // machine: the theme is a machine translation (the page marks it, as the month's own themes — themeOf's rule)
+    const machine = !!clean(i.i18n && i.i18n.theme && i.i18n.theme[L]) && (i.machine || []).includes(L);
+    outNext.push({ pub, theme, machine, issue, monthKey: i.key, monthLabel: monthLabel(i.key, L), monthUrl: keys.includes(i.key) ? `/monthly/${i.key}/` : "" });
   }
 
   const since2 = ymdMinus(today, 2);
@@ -748,6 +777,9 @@ export function monthIssueLinks(db = {}, m = {}) {
  * next committee meeting, the Grapevine meetings count, the subscription price) only on the current
  * month; a later month gives its whole plan. Links go to the site in the first language. Sections with
  * nothing to say are left out. The poster says the same things; this is its text version.
+ * A theme that is a machine translation (a Grapevine theme in Spanish, a La Viña one in English) comes with the
+ * magazine's own words — on the next line, or "translation / original" in a deadline — and the message ends with
+ * the site's note that some titles were translated automatically (as the monthly digest's e-mail does).
  */
 export function monthMessage(ctx, langs, style, site, t) {
   const Ls = (Array.isArray(langs) ? langs : [langs]).map((l) => (l === "es" ? "es" : "en"));
@@ -766,6 +798,7 @@ export function monthMessage(ctx, langs, style, site, t) {
   const base = String((site && site.url) || "").replace(/\/+$/, "");
   const url = (p) => base + (main === "es" ? "/es" : "") + p;
   const out = [];
+  let mt = false;     // a machine-translated title was written: the note above the footer
 
   // Masthead: "Grapevine & La Viña · NETA 65 — October 2026" + the tagline
   const title = `${both("monthly.kicker")} — ${uniq(Ls.map((l) => mm[l].title)).join(" / ")}`;
@@ -781,7 +814,11 @@ export function monthMessage(ctx, langs, style, site, t) {
     let line = t(p === "gv" ? "report.i_gv" : "report.i_lv", main, { issue, theme: x.theme });
     if (v && v.count) line += ` — ${t(v.count === 1 ? "read.n_stories_one" : "read.n_stories", main, { n: v.count })}${v.free ? ` · ${t("community.wn.free_n", main, { n: v.free })}` : ""}`;
     magLines.push(`${bullet} ${line}`);
-    for (const l of Ls.slice(1)) { const o = mm[l][p]; if (o && o.theme && o.theme !== x.theme) magLines.push(`  “${o.theme}”`); }
+    const others = Ls.slice(1).map((l) => mm[l][p]).filter((o) => o && o.theme && o.theme !== x.theme);
+    for (const o of others) magLines.push(`  “${o.theme}”`);
+    // one language: a machine translation's original words (the magazine's own) under it
+    if (!others.length && x.machine && x.orig && x.orig !== x.theme) magLines.push(`  “${x.orig}”`);
+    if (x.machine || others.some((o) => o.machine)) mt = true;
   }
   if (magLines.length) {
     out.push(head(both("monthly.issues_title"), "📖"), ...magLines);
@@ -835,7 +872,8 @@ export function monthMessage(ctx, langs, style, site, t) {
   const g = cur ? nw.gvm : null;
   if (weekly.length || g) {
     out.push(head(both("monthly.every_week"), "🔁"));
-    for (const w of weekly) out.push(`${bullet} ${t("report.o_line", main, { title: w.title, when: w.when })}${w.startsLabel ? ` — ${t("report.o_starts", main, { date: w.startsLabel })}` : ""}`);
+    // "— los jueves a las 11:00 a. m.": the data's "Los jueves …" goes on in lower case after the dash (midSentence)
+    for (const w of weekly) out.push(`${bullet} ${t("report.o_line", main, { title: w.title, when: midSentence(w.when, main) })}${w.startsLabel ? ` — ${t("report.o_starts", main, { date: w.startsLabel })}` : ""}`);
     if (weekly.length) out.push(`  ${t("report.o_more", main, { url: url("/meetings/#weekly-open") })}`);
     if (g) {
       const ours = t(g.inArea === 1 ? "committee.gvm.count_one" : "committee.gvm.count", main, { n: g.inArea });
@@ -855,8 +893,12 @@ export function monthMessage(ctx, langs, style, site, t) {
   const lvTopics = m.lvTopics || [];
   if (deadlines.length || lvDeadlines.length || lvTopics.length || phones.length) {
     out.push(head(both("monthly.msg_stories"), "✍️"));
+    // a theme in each language ("Diversión en sobriedad / Fun in Sobriety"); a machine translation with Grapevine's
+    // own words after it in one language too
     const gvLines = deadlines.map((d) => {
-      const themes = uniq(Ls.map((l) => ((mm[l].deadlines || []).find((x) => x.id === d.id) || {}).theme));
+      const rows = Ls.map((l) => (mm[l].deadlines || []).find((x) => x.id === d.id) || {});
+      if (rows.some((x) => x.machine)) mt = true;
+      const themes = uniq([...rows.map((x) => x.theme), d.machine ? d.themeEn : ""]);
       return `${bullet} ${t("monthly.msg_deadline", main, { date: d.dueLabel, theme: themes.join(" / "), issue: d.issueLabel })}`;
     });
     const lvLines = lvDeadlines.map((d) => `${bullet} ${t("monthly.msg_deadline_lv", main, { date: d.dueLabel, theme: d.theme, issue: d.issueLabel })}`);
@@ -887,7 +929,9 @@ export function monthMessage(ctx, langs, style, site, t) {
   }
   if (offers.length || (cur && nw.subsFrom) || m.price) out.push("");
 
-  // 🖼️ The month's toolkit page (its poster is there)
+  // the site's note on machine translation (the monthly digest's words), then 🖼️ the month's toolkit page (its
+  // poster is there)
+  if (mt) out.push(both("monthly.msg_machine"), "");
   out.push(`${wa ? "🖼️ " : ""}${t("monthly.msg_footer", main, { month: m.monthName, url: url(`/monthly/${m.key}/`) })}`);
   return out.join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
 }
@@ -907,6 +951,71 @@ export function repGuides(pdfs, lang = "en") {
   if (gv) out.push({ pub: "gv", title: gv.title, url: gv.url, lang: gv.lang || "en" });
   if (lv) out.push({ pub: "lv", title: lv.title, url: lv.url, lang: lv.lang || "es" });
   return lang === "es" ? out.reverse() : out;
+}
+
+/** Where a month's calendar file is (src/pages/monthly-ics.11ty.js writes it there, m.icsUrl links it): beside the
+ *  month's page, named for the month and language — the name a computer saves it under —
+ *  "/monthly/2026-10/neta65-grapevine-2026-10-en.ics", "/es/monthly/2026-10/neta65-grapevine-2026-10-es.ics". */
+export function icsPath(key, lang) {
+  const L = lang === "es" ? "es" : "en";
+  return `${L === "es" ? "/es" : ""}/monthly/${key}/neta65-grapevine-${key}-${L}.ics`;
+}
+
+/** The site's calendar events (committee.js normalizeEvents, as /events.ics has them) by id, for monthIcs: the
+ *  window's months, and the month before. */
+export function monthIcsEvents(db = {}, site = {}, lang = "en", now = nowDate()) {
+  const items = (db.events && db.events.items) || [];
+  return new Map(normalizeEvents(items, site, lang === "es" ? "es" : "en", { monthsBack: 1, monthsAhead: WINDOW, now }).map((e) => [e.id, e]));
+}
+
+/**
+ * "Add this month's dates to my calendar": a month's dates as an iCalendar file — one static file per month and
+ * language beside the month's page (src/pages/monthly-ics.11ty.js, at icsPath), linked from the page's Dates card
+ * (m.icsUrl), so it needs no script and opens straight in a phone's calendar.
+ *   events     the month's date rows (m.dates: the committee meeting, the monthly series, the other events — this
+ *              month only the ones not over yet, as in its message), written exactly as /events.ics writes them
+ *              (committee.js normalizeEvents + buildIcs: the same UID, description, Zoom details and link — a
+ *              calendar that has both keeps one copy; a later month's date of a series, worked out from its rule,
+ *              is written from the same record)
+ *   deadlines  the story deadlines the page lists (Grapevine's, La Viña's), each an all-day entry on its day:
+ *              "Story deadline: “Fun in Sobriety” — Grapevine", its issue and how to send a story (/contribute/)
+ * The calendar's name is the month's ("NETA 65 Grapevine & La Viña — October 2026"). RFC 5545 as buildIcs
+ * writes it: CRLF line ends, lines folded at 75 octets, TEXT escaped, UTC times, DATE values for all-day entries.
+ * (SEQUENCE and DTSTAMP are buildIcs's, as in /events.ics.)
+ */
+export function monthIcs(m, db = {}, site = {}, lang = "en", now = nowDate(), normalized = null) {
+  const L = lang === "es" ? "es" : "en";
+  const t = (k, v) => H.translateKey(k, L, v);
+  const abs = (p) => String(site.url || "").replace(/\/+$/, "") + (L === "es" ? "/es" : "") + p;
+  const opt = { monthsBack: 1, monthsAhead: WINDOW, now };
+  // (normalized: the site's calendar events of this language, when the caller already has them — monthIcsEvents)
+  const all = normalized || monthIcsEvents(db, site, L, now);
+  const events = [];
+  for (const d of m.dates || []) {
+    if (m.isCurrent && d.past) continue;
+    // a date the site's calendar lists; else (a later month's date of a series, worked out from its rule) its record
+    const ev = all.get(d.id) || (d.kind !== "committee" && d.src ? normalizeEvents([d.src], site, L, opt).find((e) => e.id === d.id) : null);
+    if (ev) events.push(ev);
+  }
+  const contribute = abs("/contribute/#deadlines");
+  // (a machine-translated theme with Grapevine's own words after it, as in the month's message)
+  const deadline = (d, pub) => ({
+    uid: `deadline-${slug(d.id)}`, group: "deadline", allDay: true, startYmd: d.due, endYmd: d.due,
+    title: t("monthly.ics_deadline", { theme: d.machine && d.themeEn && d.themeEn !== d.theme ? `${d.theme} / ${d.themeEn}` : d.theme,
+      pub: t(pub === "lv" ? "monthly.lv_spanish" : "monthly.gv_english") }),
+    calDescription: `${t("monthly.for_issue", { issue: d.issueLabel })}.\n\n${t("monthly.msg_how", { url: contribute })}`,
+    calLocation: "", detailsUrl: contribute, tentative: false,
+  });
+  const dls = [...(m.deadlines || []).map((d) => deadline(d, "gv")), ...(m.lvDeadlines || []).map((d) => deadline(d, "lv"))];
+  const list = [...events, ...dls].sort((a, b) => (a.allDay ? Date.parse(a.startYmd + "T12:00:00Z") : a.startMs)
+    - (b.allDay ? Date.parse(b.startYmd + "T12:00:00Z") : b.startMs) || String(a.title).localeCompare(String(b.title)));
+  return buildIcs(list, {
+    lang: L, now,
+    name: t("monthly.ics_name", { month: m.label }),
+    description: t("monthly.ics_desc", { month: m.label, url: abs(`/monthly/${m.key}/`) }),
+    url: abs(`/monthly/${m.key}/`),
+    categoryLabel: (ev) => t(ev.group === "deadline" ? "monthly.ics_cat_deadline" : `committee.events.group.${ev.group}`),
+  });
 }
 
 export default function (eleventyConfig, helpers) {
@@ -977,4 +1086,14 @@ export default function (eleventyConfig, helpers) {
   });
   eleventyConfig.addFilter("mpQr", (url, label = "") => qrSvg(url, { label, cls: "mp-qr-svg", margin: 2 }));
   eleventyConfig.addFilter("mpGuides", (pdfs, lang) => repGuides(pdfs, lang));
+  // A month's calendar file (src/pages/monthly-ics.11ty.js): this.mpIcs(key, db, carry, site, lang) — the site's
+  // calendar events worked out once per language and build (the 26 files share them)
+  let icsEvents = new Map();
+  eleventyConfig.on("eleventy.before", () => { icsEvents = new Map(); });
+  eleventyConfig.addFilter("mpIcs", (key, db, carry, site, lang) => {
+    const L = lang === "es" ? "es" : "en";
+    const now = nowDate();
+    if (!icsEvents.has(L)) icsEvents.set(L, monthIcsEvents(db || {}, site || {}, L, now));
+    return monthIcs(model(key, db, carry, site, L), db || {}, site || {}, L, now, icsEvents.get(L));
+  });
 }

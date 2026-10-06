@@ -86,6 +86,10 @@
 .rp-hint { margin-top: 0.375rem; font-size: 0.75rem; line-height: 1.45; color: var(--c-muted); }
 .rp-select { appearance: auto; padding-right: 0.75rem; }
 .rp-note { margin-top: 1rem; max-width: 72ch; font-size: 0.8rem; line-height: 1.5; color: var(--c-muted); }
+/* "Start from last month's draft?" — a new month with no draft yet, while last month's is on this device */
+.rp-prev { margin-top: 1rem; max-width: 72ch; padding: 0.875rem 1rem; border: 1px solid var(--c-lv); border-radius: 0.75rem; background: var(--c-lv-soft); }
+.rp-prev-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--c-ink); }
+.rp-prev-text { margin: 0.25rem 0 0.75rem; font-size: 0.85rem; line-height: 1.5; color: var(--c-muted); }
 
 /* ---------- 4. The section list ---------- */
 .rp-list { overflow: hidden; }

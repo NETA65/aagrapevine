@@ -11,6 +11,15 @@ words it, src/assets/js/report.js lets each GVR / RLV edit it.
               placeholder left unfilled.
   * Editor  — the page's editor (src/assets/js/report.js) keeps a visitor's choices across visits: a
               section switched off (one of their own too) stays out of the report.
+  * DatedOffers — the shop section never quotes a Book of the Month offer outside its days: the text
+              at each later moment (`steps`: an offer starts or ends, a price change takes effect, its
+              notice ends), fixed dates; the editor shows the step of its own clock.
+  * MachineTitles — a machine-translated theme has the magazine's own words after it and the section
+              says some titles were translated automatically.
+  * WordFile — the .docx is a valid ZIP of well-formed XML whatever the text holds (U+FFFE, U+FFFF,
+              control characters, a lone surrogate are left out; an emoji stays).
+  * LastMonthsDraft — a new month offers last month's draft on this device as its starting point and
+              carries over only the visitor's own parts.
 
 The Model, Real and Editor checks run the JavaScript with Node.js (tests/nodejs.py) and are skipped
 without Node.js (Model and Real: or the site's npm packages).
@@ -19,17 +28,24 @@ without Node.js (Model and Real: or the site's npm packages).
 """
 from __future__ import annotations
 
+import base64
+import io
 import json
 import re
 import sys
 import unittest
+import xml.etree.ElementTree as ET
+import zipfile
 from pathlib import Path
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from nodejs import run_js  # noqa: E402
 
 STRINGS = ROOT / "src" / "_i18n" / "report.json"
+SITE_LINKS = yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8"))["links"]
 SECTION_IDS = ["header", "committee", "issues", "deadlines", "shop", "events", "writers", "meetings", "weekly",
                "resources", "asks", "notes"]
 SITE_URL = "https://example.org/site"
@@ -267,6 +283,14 @@ class Model(unittest.TestCase):
             with self.subTest(lang=lang, section="shop"):
                 self.assertIn(self.s["report.s_title"][lang], S["shop"])
                 self.assertIn(f"{base}/shop/", S["shop"])
+                # Carry the Message: La Viña's own Spanish page on the Spanish report (config/site.yml links)
+                links = SITE_LINKS
+                self.assertIn(links["lleva_el_mensaje"] if lang == "es" else links["carry_the_message"], S["shop"])
+                self.assertNotIn(links["carry_the_message"] if lang == "es" else links["lleva_el_mensaje"], S["shop"])
+            with self.subTest(lang=lang, section="weekly: in the middle of a line"):
+                # the data's "Los miércoles …" goes on in lower case after the dash; English keeps its capital
+                self.assertIn("— los miércoles a las 11:00 a. m. (hora del Centro), por Zoom" if lang == "es"
+                              else "— Wednesdays at 11:00 AM Central, on Zoom", S["weekly"].replace(" ", " "))
             with self.subTest(lang=lang, section="events"):
                 self.assertIn(self.tr("report.e_intro", lang, n=45), S["events"])
                 self.assertIn("Grapevine Writing Workshop" if lang == "en" else "Taller de escritura de Grapevine", S["events"])
@@ -433,6 +457,258 @@ class Editor(unittest.TestCase):
         self.assertEqual(r["after"], [False, False, False, False, 1])     # still out of the text copied, sent, printed
         self.assertEqual(r["again"], [True, True])
         self.assertTrue(r["reopened"])
+
+
+# ------------------------------------------------------------------ the shop section's dated offers
+def offer(oid: str, pub: str, title: str, starts: str, ends: str) -> dict:
+    return {"id": oid, "pub": pub, "title": title, "url": f"https://example.com/{oid}", "lang": "es" if pub == "lv" else "en",
+            "price": 14.99, "sale_price": 11.99, "discount_pct": 20, "starts": starts, "ends": ends, "read": "2026-10-01"}
+
+
+DATED_SHOP = {
+    "botm": [offer("botm:gv:oct", "gv", "No Matter What", "2026-09-15", "2026-10-14"),
+             offer("botm:gv:nov", "gv", "Into Action", "2026-10-15", "2026-11-14")],      # not on offer yet on October 5
+    "subscriptions": [{"pub": "gv", "region": "us", "plans": [{"type": "print", "term_months": 12, "price": 36.0}]}],
+    "price_changes": [{"key": "2027-01", "announced": "2026-10-01", "effective": "2027-01-01", "notice_until": "2027-01-31",
+                       "at": {"announced": "2026-10-01T05:00:00Z", "effective": "2027-01-01T06:00:00Z", "notice_end": "2027-02-01T06:00:00Z"},
+                       "yearly": [{"pub": "gv", "type": "print", "new": 39.0, "now": 36.0, "after": 39.0}], "books_more": 2.0}],
+}
+DATED_JS = """
+const R = await imp("eleventy/filters/report.js");
+const res = {};
+for (const now of input.nows) {
+  const model = R.reportModel({ shop: input.shop }, {}, { ways: [], tips: {}, wayById: {} }, { url: "https://example.org/site", links: {} }, new Date(now));
+  res[now] = Object.fromEntries(["en", "es"].map((l) => [l, model.langs[l].sections.find((s) => s.id === "shop")]));
+}
+out(res);
+"""
+
+
+class DatedOffers(unittest.TestCase):
+    """P3-13: a Book of the Month offer is dated data (its starts / ends days, Central time): the report's shop section
+    quotes it only while it runs — in the text of the build's day and in every later text (`steps`) the editor
+    switches to, so the text "from January 1" (the announced price change) never quotes an offer that ended in
+    October."""
+
+    def test_offers_only_while_they_run(self):
+        r = run_js(self, DATED_JS, data={"shop": DATED_SHOP, "nows": ["2026-10-05T17:00:00Z", "2026-10-20T17:00:00Z"]})
+        oct5 = r["2026-10-05T17:00:00Z"]["en"]
+        self.assertIn("No Matter What", oct5["text"])
+        self.assertNotIn("Into Action", oct5["text"], "not on offer until October 15")
+        steps = [(s["at"], s["text"]) for s in oct5["steps"]]
+        # the moments the words change at: the October offer is over and November's starts (00:00 Central, October
+        # 15), November's is over (00:00 after November 14), the new prices (January 1), the end of their notice
+        self.assertEqual([a for a, _ in steps], ["2026-10-15T05:00:00.000Z", "2026-11-15T06:00:00.000Z",
+                                                  "2027-01-01T06:00:00.000Z", "2027-02-01T06:00:00.000Z"])
+        texts = dict(steps)
+        self.assertNotIn("No Matter What", texts["2026-10-15T05:00:00.000Z"])
+        self.assertIn("Into Action", texts["2026-10-15T05:00:00.000Z"])
+        for at in ("2026-11-15T06:00:00.000Z", "2027-01-01T06:00:00.000Z", "2027-02-01T06:00:00.000Z"):
+            with self.subTest(at=at):
+                self.assertNotIn("No Matter What", texts[at])
+                self.assertNotIn("Into Action", texts[at])
+                self.assertNotIn("Book of the Month", texts[at])
+        self.assertIn("New prices since January 1, 2027", texts["2027-01-01T06:00:00.000Z"])
+        self.assertNotIn("New prices", texts["2027-02-01T06:00:00.000Z"])
+        # the Spanish report: the same moments, but only where its words change ("Nuevos precios desde el 1 de enero"
+        # reads the same before and after the day)
+        es_steps = r["2026-10-05T17:00:00Z"]["es"]["steps"]
+        self.assertEqual([s["at"] for s in es_steps], ["2026-10-15T05:00:00.000Z", "2026-11-15T06:00:00.000Z", "2027-02-01T06:00:00.000Z"])
+        self.assertTrue(all("No Matter What" not in s["text"] for s in es_steps))
+        # built later in October: November's offer in the text itself, October's nowhere
+        oct20 = r["2026-10-20T17:00:00Z"]["en"]
+        self.assertIn("Into Action", oct20["text"])
+        self.assertTrue(all("No Matter What" not in s["text"] for s in [oct20] + oct20["steps"]))
+
+
+# ------------------------------------------------------------------ machine-translated titles
+MT_JS = """
+const R = await imp("eleventy/filters/report.js");
+const model = R.reportModel(input.db, {}, { ways: [], tips: {}, wayById: {} }, { url: "https://example.org/site", links: {} }, new Date(input.now));
+out(Object.fromEntries(["en", "es"].map((l) => [l, Object.fromEntries(model.langs[l].sections.map((s) => [s.id, s.text]))])));
+"""
+
+
+class MachineTitles(unittest.TestCase):
+    """P4-11: a theme that is a machine translation (a Grapevine theme in Spanish — the data's `machine`) has the
+    magazine's own words after it in brackets, and its section ends with the note that some titles were translated
+    automatically; a theme in its own language gets neither."""
+
+    def test_the_issues_and_deadlines(self):
+        db = full_db()
+        db["articles"]["issues"][0]["machine"] = ["es"]                         # "Soledad": a machine translation
+        db["editorial"]["items"][0]["machine"] = ["es"]                         # "Diversión en sobriedad" too
+        r = run_js(self, MT_JS, data={"db": db, "now": NOW})
+        s = strings()
+        es, en = r["es"], r["en"]
+        self.assertIn("“Soledad” (“Loneliness”)", es["issues"])
+        self.assertIn(s["report.mt_note"]["es"], es["issues"])
+        self.assertIn("“Diversión en sobriedad” (“Fun in Sobriety”)", es["deadlines"])
+        self.assertIn(s["report.mt_note"]["es"], es["deadlines"])
+        self.assertIn("“Loneliness”", en["issues"])
+        self.assertNotIn("(“", en["issues"])
+        self.assertNotIn(s["report.mt_note"]["en"], en["issues"])
+        # without the data's `machine`: no note (the words may be the magazine's own translation)
+        plain = run_js(self, MT_JS, data={"db": full_db(), "now": NOW})
+        self.assertNotIn(s["report.mt_note"]["es"], plain["es"]["issues"])
+        self.assertNotIn("(“Loneliness”)", plain["es"]["issues"])
+
+
+# ------------------------------------------------------------------ the editor: Word file, last month's draft, timed texts
+# The editor in a vm context (as EDITOR above) with a model of five sections, a store that can be filled
+# beforehand (input.store), a fixed clock (input.now) and a captured download (the Blob the page would save).
+EDITOR2 = r"""
+import vm from "node:vm";
+const lang = (L) => ({
+  month: L === "es" ? "octubre de 2026" : "October 2026",
+  sections: ["header", "committee", "shop", "asks", "notes"].map((id) => ({ id, title: id + " (" + L + ")",
+    text: id === "header" ? "District [##] report" : id === "notes" ? "" : "Text of " + id,
+    ...(id === "shop" && input.steps ? { steps: input.steps } : {}) })),
+  tokens: { district: "[##]", name: "[name]", role: "[role]", group: "[group]" }, roles: { gvr: "GVR" },
+  custom: "My section", paste: "(paste)", meet: { pick: "Meetings in {where}:", none: "none", more: "more" },
+});
+const D = { v: 1, month: "2026-10", langs: { en: lang("en"), es: lang("es") }, meetings: { options: [] } };
+const UI = { prev_text: "You worked on a {month} report", prev_btn: "Start from my {month} draft", prev_done: "Started from {month}", downloaded: "{file}" };
+const store = new Map(Object.entries(input.store || {}).map(([k, v]) => [k, JSON.stringify(v)]));
+const nowMs = Date.parse(input.now || "2026-10-05T17:00:00Z");
+class FakeDate extends Date { constructor(...a) { if (a.length) super(...a); else super(nowMs); } static now() { return nowMs; } }
+let saved = null;
+const boot = (pageLang = "en") => {
+  const docL = {};
+  const ctx = {
+    console, JSON, Math, Date: FakeDate, Intl, Object, Array, String, Number, Promise, Blob, TextEncoder,
+    URL: { createObjectURL: (b) => { saved = b; return "blob:report"; }, revokeObjectURL() {} },
+    setTimeout: (fn, ms) => { const t = setTimeout(fn, ms); t.unref?.(); return t; }, clearTimeout,
+    localStorage: { getItem: (k) => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); },
+                    removeItem: (k) => { store.delete(k); }, get length() { return store.size; }, key: (i) => [...store.keys()][i] ?? null },
+    navigator: {}, GV: {}, addEventListener() {},
+    document: { addEventListener: (t, fn) => { (docL[t] ||= []).push(fn); }, querySelector: () => null,
+                createElement: () => ({ click() {}, remove() {}, setAttribute() {}, style: {} }), body: { appendChild() {} },
+                getElementById: (id) => (id === "rp-data" ? { textContent: JSON.stringify(D) } : id === "rp-ui" ? { textContent: JSON.stringify(UI) } : null) },
+  };
+  ctx.window = ctx;
+  vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync("src/assets/js/report.js", "utf8"), ctx, { filename: "report.js" });
+  let factory = null;
+  ctx.Alpine = { data: (name, fn) => { if (name === "rpEditor") factory = fn; } };
+  for (const fn of docL["alpine:init"] || []) fn();
+  const a = factory(pageLang);
+  a.$nextTick = (fn) => fn && fn();
+  a.$refs = {};
+  a.$root = { querySelector: () => null, querySelectorAll: () => [] };
+  a.init();
+  return a;
+};
+const docxBytes = async () => Buffer.from(await saved.arrayBuffer()).toString("base64");
+"""
+
+
+class WordFile(unittest.TestCase):
+    """P8-5: the report's Word file (.docx: WordprocessingML in a stored ZIP, written in the browser) opens whatever
+    the visitor typed or pasted: every part is well-formed XML 1.0 — U+FFFE, U+FFFF, other control characters and a
+    lone surrogate are left out; a tab, line breaks and a character above U+FFFF (an emoji) stay."""
+
+    def test_xml_invalid_characters_are_left_out(self):
+        nasty = "Notes￾ here￿ \u0001\u0008\u000b\u001f done \ud800 lone \udc00 also 😀 pair\tand tab"
+        r = run_js(self, EDITOR2 + r"""
+          const a = boot();
+          a.setText("notes", input.text);
+          a.setTitle("committee", "Committee ￿ meeting");
+          a.prof.district = "12￾";
+          a.download("docx");
+          out({ b64: await docxBytes(), plain: a.plain() });""", data={"text": nasty}, needs_modules=False)
+        z = zipfile.ZipFile(io.BytesIO(base64.b64decode(r["b64"])))
+        self.assertIsNone(z.testzip())                                        # every part's CRC is right
+        self.assertEqual(sorted(z.namelist()), sorted(["[Content_Types].xml", "_rels/.rels", "docProps/core.xml", "word/document.xml",
+                                                       "word/styles.xml", "word/_rels/document.xml.rels"]))
+        for name in z.namelist():
+            with self.subTest(part=name):
+                data = z.read(name).decode("utf-8")
+                ET.fromstring(data)                                           # well-formed XML (a strict parser)
+                self.assertNotRegex(data, "[￾￿\u0000-\u0008\u000b\u000c\u000e-\u001f]")
+        doc = z.read("word/document.xml").decode("utf-8")
+        text = "".join(t.text or "" for t in ET.fromstring(doc).iter("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t"))
+        self.assertIn("Notes here", text)
+        self.assertIn(" done  lone  also 😀 pair\tand tab", text)
+        self.assertIn("Committee  meeting", text)
+        self.assertIn("￾", r["plain"], "the text itself keeps what was typed — only the Word file leaves it out")
+
+
+class LastMonthsDraft(unittest.TestCase):
+    """F-9: "Start from last month's draft". A new month starts from the latest data; while this month has no draft
+    of its own (in the report language) and an earlier month's is on this device, the editor offers it. Starting
+    from it carries over the visitor's own parts — their sections, the order, the sections left out, changed
+    titles, the counties picked, the texts of the sections that are their own words ("asks", "notes") — and the
+    sections made from the site's data show this month's."""
+
+    SEPT = {"order": ["header", "custom-1", "committee", "shop", "asks", "notes"], "off": {"shop": True},
+            "text": {"committee": "September's meeting text", "asks": "Every group: a GVR by November", "notes": "My own notes"},
+            "titles": {"notes": "Our district"}, "custom": [{"id": "custom-1", "title": "District news", "text": "Two new GVRs"}], "meet": []}
+
+    def run_editor(self, store: dict, script: str):
+        return run_js(self, EDITOR2 + script, data={"store": store}, needs_modules=False)
+
+    def test_the_offer_and_what_it_carries_over(self):
+        r = self.run_editor({"gv-report:2026-09:en": self.SEPT, "gv-report:2026-08:en": {"custom": [{"id": "custom-1", "title": "Old", "text": "x"}]}}, r"""
+          let a = boot();
+          const offered = a.prev && [a.prev.month, a.prev.label, a.prevText(), a.prevBtn()];
+          a.startFromPrev();
+          const d = JSON.parse(JSON.stringify(a.d));
+          const after = [a.prev, a.textOf("committee"), a.textOf("asks"), a.textOf("notes"), a.titleOf("notes"), a.isOn("shop"),
+                         a.plain().includes("Two new GVRs"), a.ui && a.msg];
+          const again = boot();
+          out({ offered, d, after, againPrev: again.prev, stored: JSON.parse(store.get("gv-report:2026-10:en")) });""")
+        self.assertEqual(r["offered"], ["2026-09", "September 2026", "You worked on a September 2026 report", "Start from my September 2026 draft"])
+        p, committee, asks, notes, notes_title, shop_on, custom_in, msg = r["after"]
+        self.assertIsNone(p)                                                   # the offer is gone
+        self.assertEqual(committee, "Text of committee", "a section made from the site's data: this month's")
+        self.assertEqual((asks, notes, notes_title), ("Every group: a GVR by November", "My own notes", "Our district"))
+        self.assertFalse(shop_on)                                              # left out last month: left out now
+        self.assertTrue(custom_in)
+        self.assertEqual(msg, "Started from September 2026")
+        self.assertEqual(r["d"]["order"], ["header", "custom-1", "committee", "shop", "asks", "notes"])
+        self.assertEqual(r["stored"]["text"], {"asks": "Every group: a GVR by November", "notes": "My own notes"})
+        self.assertIsNone(r["againPrev"], "this month has its own draft now")
+
+    def test_when_it_is_not_offered(self):
+        r = self.run_editor({
+            # only a data section edited last month (nothing that would carry over); this month blank but saved
+            # (typing "Your details" saves it): the offer of an older month with own work still shows
+            "gv-report:2026-09:en": {"order": ["header", "committee", "shop", "asks", "notes"], "text": {"committee": "edited"}},
+            "gv-report:2026-08:en": {"custom": [{"id": "custom-1", "title": "Mine", "text": "x"}]},
+            "gv-report:2026-10:en": {"order": ["header", "committee", "shop", "asks", "notes"], "off": {}, "text": {}},
+            "gv-report:2026-06:en": {"custom": [{"id": "custom-1", "title": "Too old", "text": "x"}]},   # pruned: 4 months
+            "gv-report:2026-09:es": {"custom": [{"id": "custom-1", "title": "Spanish one", "text": "x"}]},
+        }, r"""
+          const a = boot();
+          const first = a.prev && a.prev.month;
+          a.setText("asks", "This month's own words");        // editing this month: the offer goes
+          const afterEdit = a.prev;
+          a.saveNow();
+          const reopened = boot().prev;
+          a.setLang("es");                                    // the Spanish report: its own drafts
+          const es = a.prev && a.prev.month;
+          out({ first, afterEdit, reopened, es, pruned: store.has("gv-report:2026-06:en") });""")
+        self.assertEqual(r["first"], "2026-08", "September's draft has nothing to carry over; August's has")
+        self.assertIsNone(r["afterEdit"])
+        self.assertIsNone(r["reopened"])
+        self.assertEqual(r["es"], "2026-09")
+        self.assertFalse(r["pruned"])
+
+
+class TimedTexts(unittest.TestCase):
+    """The editor shows the text of the last moment passed by its own clock (section.steps), and still reads an
+    older page's single `after` (see tests/test_price_changes.py)."""
+
+    STEPS = [{"at": "2026-10-15T05:00:00.000Z", "text": "after the offer"}, {"at": "2027-01-01T06:00:00.000Z", "text": "new prices"}]
+
+    def test_the_text_of_the_moment(self):
+        got = {}
+        for now in ("2026-10-15T04:59:59Z", "2026-10-15T05:00:00Z", "2026-12-31T12:00:00Z", "2027-01-01T06:00:00Z"):
+            r = run_js(self, EDITOR2 + 'out(boot().textOf("shop"));', data={"steps": self.STEPS, "now": now}, needs_modules=False)
+            got[now] = r
+        self.assertEqual(got, {"2026-10-15T04:59:59Z": "Text of shop", "2026-10-15T05:00:00Z": "after the offer",
+                               "2026-12-31T12:00:00Z": "after the offer", "2027-01-01T06:00:00Z": "new prices"})
 
 
 if __name__ == "__main__":

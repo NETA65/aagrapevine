@@ -9,7 +9,20 @@
     Every month has its own design (m.design, keyed by calendar month) built on one of six
     layouts (m.layout): editorial · ticket · split · cork · cover · notebook. Poster colors are
     fixed (never dark-mode inverted). The Spanish poster leads with La Viña.
+    A Grapevine theme machine-translated into Spanish (m.gv.machine, a deadline's machine) shows
+    Grapevine's own English words in italics under it, and the poster says so once, as /read/ does
+    ("read.mt_note_en": titles translated automatically from English — originals in italics).
+    The hub shows each month in miniature (posterMini: the design and the theme, no dates or QR).
     ========================================================================= -#}
+
+{#- On the pages (not the poster), under a machine-translated theme: the magazine's own words in italics after the
+    site's translation icon ("Auto-translated:" for screen readers), /read/'s way. x: m.gv / m.lv (machine, orig);
+    origLang: the magazine's language. -#}
+{% macro orig(x, lang, origLang) %}
+{%- if x and x.machine and x.orig -%}
+<p class="mt-1 flex items-center gap-1 text-xs italic text-muted" title="{{ 'common.auto_translated' | t(lang) }} — {{ 'common.auto_translated_help' | t(lang) }}">{% icon "languages", "size-3 shrink-0" %}<span class="sr-only">{{ "common.auto_translated" | t(lang) }}:</span><span lang="{{ origLang }}">{{ x.orig }}</span></p>
+{%- endif -%}
+{% endmacro %}
 
 {% macro head(m, lang, tid) %}
 <header class="mp-head">
@@ -45,11 +58,13 @@
     <p class="mp-sub">{{ "monthly.gv_english" | t(lang) }}</p>
     <ul class="mp-dl mp-dl--compact">
       {% for d in m.deadlines %}
-      <li><strong class="mp-dl-theme">{{ d.theme }}</strong> <span class="mp-dl-due">{{ "monthly.for_issue" | t(lang, { issue: d.issueLabel }) }} · {{ "monthly.due" | t(lang, { date: d.dueLabel }) }}</span></li>
+      <li><strong class="mp-dl-theme">{{ d.theme }}</strong>{% if d.machine and d.themeEn and d.themeEn != d.theme %} <span class="mp-orig" lang="en">{{ d.themeEn }}</span>{% endif %} <span class="mp-dl-due">{{ "monthly.for_issue" | t(lang, { issue: d.issueLabel }) }} · {{ "monthly.due" | t(lang, { date: d.dueLabel }) }}</span></li>
       {% endfor %}
     </ul>
   </div>
   {% endif %}
+  {#- machine-translated Grapevine titles on this poster (its theme, its deadlines): the site's note, once -#}
+  {% if (m.gv and m.gv.machine and m.gv.orig) or (m.deadlines | selectattr("machine") | length) %}<p class="mp-mtnote">{{ "read.mt_note_en" | t(lang) }}</p>{% endif %}
 </section>
 {%- else %}
 <section class="mp-b mp-story">
@@ -82,6 +97,7 @@
   {% endif %}
   <h3 class="mp-h">{% icon "book-open-text", "mp-i" %}<span>{{ "monthly.in_gv" | t(lang, { month: m.monthName }) }}</span></h3>
   <p class="mp-theme">{{ m.gv.theme if m.gv else ("monthly.no_issue" | t(lang)) }}</p>
+  {% if m.gv and m.gv.machine and m.gv.orig %}<p class="mp-orig mp-orig--theme" lang="en">{{ m.gv.orig }}</p>{% endif %}
   {% if m.tips.length %}
   <p class="mp-sub">{{ "monthly.put_to_work" | t(lang) }}</p>
   <ul class="mp-tips">
@@ -204,6 +220,33 @@
 {%- elif design == "chalk" %}
   {% icon "apple", "mp-m mp-m1" %}{% icon "star", "mp-m mp-m3" %}
 {%- endif %}
+</div>
+{% endmacro %}
+
+{#- A month's poster in miniature: the hub's pictures of the months (this month in the hero and the "This month"
+    card, the coming months in "A poster for every month"), each a link to the month's page, where the poster
+    itself is. The same 1080 × 1350 canvas, palette and motif (m.design), with the masthead and the issue's theme
+    in large type (readable at a thumbnail's size) and no dates, deadlines or QR code: a few KB where a full poster
+    is ~15 KB, so the hub no longer carries 14 of them. One theme: the page language's magazine's (La Viña on
+    Spanish pages), else the other's in that magazine's own words — never a machine translation in the picture.
+    No headings or ids: it is a picture (the link around it says where it goes). -#}
+{% macro posterMini(m, lang) %}
+{%- set mags = [["lv", m.lv], ["gv", m.gv]] if lang == "es" else [["gv", m.gv], ["lv", m.lv]] -%}
+{%- set pick = [] -%}
+{%- for g in mags %}{% if g[1] and g[1].theme and not pick.length %}{% set _n = pick.push(g) %}{% endif %}{% endfor -%}
+<div class="mp-poster mp-mini mp-mini--{{ m.layout }} mp-d-{{ m.design }}" style="--mp-nlen: {{ m.name.length }}" lang="{{ lang }}">
+  {{ deco(m.design) }}
+  <div class="mp-mini-head">
+    <p class="mp-kicker">{{ "monthly.kicker" | t(lang) }}</p>
+    <p class="mp-month"><span class="mp-mname">{{ m.name }}</span> <span class="mp-year">{{ m.year }}</span></p>
+    <p class="mp-tag">{{ "monthly.tagline" | t(lang) }}</p>
+  </div>
+  {%- if pick.length %}
+  {%- set p = pick[0][0] -%}{%- set x = pick[0][1] -%}
+  {%- set mt = x.machine and x.orig -%}
+  <p class="mp-mini-mag"><span class="mp-sub">{{ ("monthly.in_lv" | t(lang)) if p == "lv" else ("monthly.in_gv" | t(lang, { month: m.monthName })) }}</span>
+    <span class="mp-theme"{% if mt %} lang="{{ 'es' if p == 'lv' else 'en' }}"{% elif x.themeLang and x.themeLang != lang %} lang="{{ x.themeLang }}"{% endif %}>{{ x.orig if mt else x.theme }}</span></p>
+  {%- endif %}
 </div>
 {% endmacro %}
 

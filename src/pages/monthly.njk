@@ -22,7 +22,11 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
     its intro points to this month as a message and to last month's Monthly digest (/digest/: for a
     group chat or e-mail), which point back.
     This page is the canonical home of the district guide
-    "how each month's magazine can be useful in carrying the message" (config/carry.yml). -#}
+    "how each month's magazine can be useful in carrying the message" (config/carry.yml).
+    The months' pictures here are posters in miniature (macros/monthly.njk posterMini: the design and the
+    theme, a few KB each), each linking to its month's page — the poster itself is there, never on this page.
+    A machine-translated theme carries the site's mark (the icon, "Auto-translated" for screen readers; under
+    a magazine box, its own words in italics, as /read/ shows them). -#}
 {% import "macros/ui.njk" as ui with context %}
 {% import "macros/monthly.njk" as mp with context %}
 {%- set months = db | mpMonths(carry, site, lang) -%}
@@ -32,6 +36,8 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
 {%- set nx = db | mpNow(site, lang) -%}
 {%- set monthUrl = ('/monthly/' + m.key + '/') | lurl(lang) -%}
 
+{#- the site's mark after a machine-translated theme (contribute.njk's): an icon, its words for screen readers -#}
+{%- set mtMark -%}<span class="auto-note align-middle" title="{{ 'common.auto_translated' | t(lang) }} — {{ 'common.auto_translated_help' | t(lang) }}">{% icon "languages", "size-3" %}<span class="sr-only">{{ "common.auto_translated" | t(lang) }}</span></span>{%- endset -%}
 {#- The hero's right-hand card (the shared hero aside): this month's poster, linking to its month page.
     It MOVES there from the "This month" card: while the card is in the hero (≥1024px at 100 % text)
     monthly.css hides the card's own poster column (.mp-now-poster) — never two copies; on smaller
@@ -40,7 +46,7 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
 {%- if slot == "side" %}
   {% call ui.heroAside("monthly.hero_poster" | t(lang, { month: m.label }), lang, { id: "mp-aside-title", icon: "image", href: monthUrl, linkLabel: "monthly.hero_open" | t(lang), class: "mp-hero-aside" }) %}
     {#- the poster is a second way to the same page for the pointer (the heading's link is the one tab stop) -#}
-    <a class="mp-hero-poster" href="{{ monthUrl }}" tabindex="-1" aria-hidden="true"><span class="mp-stage mp-stage--thumb" inert><span class="mp-fit">{{ mp.poster(m, lang, site, "hero") }}</span></span></a>
+    <a class="mp-hero-poster" href="{{ monthUrl }}" tabindex="-1" aria-hidden="true"><span class="mp-stage mp-stage--thumb" inert><span class="mp-fit">{{ mp.posterMini(m, lang) }}</span></span></a>
   {% endcall %}
 {%- else %}
 <div class="hero-actions">
@@ -76,6 +82,7 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
             <div class="mp-now-mag rounded-xl bg-gv-soft p-4">
               <p class="text-xs font-semibold uppercase tracking-wider text-gv-strong">{{ "monthly.in_gv" | t(lang, { month: m.monthName }) }}</p>
               <p class="mt-1 font-display text-xl font-semibold text-ink">{{ m.gv.theme if m.gv else ("monthly.no_issue" | t(lang)) }}</p>
+              {{ mp.orig(m.gv, lang, "en") }}
             </div>
             {% endset %}
             {% set lvBox %}
@@ -83,6 +90,7 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
             <div class="mp-now-mag rounded-xl bg-lv-soft p-4">
               <p class="text-xs font-semibold uppercase tracking-wider text-lv-strong">{{ "monthly.in_lv" | t(lang) }} · {{ m.lv.label }}</p>
               <p class="mt-1 font-display text-xl font-semibold text-ink"{% if m.lv.themeLang and m.lv.themeLang != lang %} lang="{{ m.lv.themeLang }}"{% endif %}>{{ m.lv.theme }}</p>
+              {{ mp.orig(m.lv, lang, "es") }}
             </div>
             {% endif %}
             {% endset %}
@@ -96,12 +104,12 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
               with it. -#}
           {%- set chips = [] -%}
           {%- set dlPubs = [[m.lvDeadlines, "badge-lv"], [m.deadlines, "badge-gv"]] if lang == "es" else [[m.deadlines, "badge-gv"], [m.lvDeadlines, "badge-lv"]] -%}
-          {%- for p in dlPubs %}{% for d in p[0] %}{% if d.due and d.due.startsWith(m.key) %}{% set _n = chips.push({ cls: p[1], icon: "pen-line", text: d.theme, lang: d.themeLang or "", tail: " · " + d.dueLabel, over: d.overAt }) %}{% endif %}{% endfor %}{% endfor -%}
+          {%- for p in dlPubs %}{% for d in p[0] %}{% if d.due and d.due.startsWith(m.key) %}{% set _n = chips.push({ cls: p[1], icon: "pen-line", text: d.theme, lang: d.themeLang or "", mt: d.machine, tail: " · " + d.dueLabel, over: d.overAt }) %}{% endif %}{% endfor %}{% endfor -%}
           {%- for d in m.dates %}{% if d.kind != "event" and not d.past %}{% set _n = chips.push({ cls: "badge ev-badge ev-tone-" + (d | eventTone), icon: ("video" if d.kind == "committee" else "repeat"), text: (("monthly.committee" | t(lang)) if d.kind == "committee" else d.title) + " · " + d.dayLabel, over: d.overAt }) %}{% endif %}{% endfor -%}
           {%- if nx.nextCommittee and not nx.nextCommittee.thisMonth %}{% set _n = chips.push({ cls: "badge ev-badge ev-tone-committee", icon: "video", text: ("monthly.next_meeting" | t(lang)) + " · " + nx.nextCommittee.dayLabel, over: nx.nextCommittee.overAt }) %}{% endif -%}
           {% if chips.length %}
           <ul class="mt-5 flex flex-wrap gap-2" role="list" aria-label="{{ 'monthly.dates' | t(lang) }}" data-mp-chips>
-            {% for c in chips %}<li class="{{ c.cls }}" data-mp-chip data-mp-over="{{ c.over }}">{% icon c.icon, "size-3" %} {% if c.lang and c.lang != lang %}<span lang="{{ c.lang }}">{{ c.text }}</span>{% else %}{{ c.text }}{% endif %}{{ c.tail }}</li>{% endfor %}
+            {% for c in chips %}<li class="{{ c.cls }}" data-mp-chip data-mp-over="{{ c.over }}">{% icon c.icon, "size-3" %} {% if c.lang and c.lang != lang %}<span lang="{{ c.lang }}">{{ c.text }}</span>{% else %}{{ c.text }}{% endif %}{% if c.mt %} {{ mtMark | safe }}{% endif %}{{ c.tail }}</li>{% endfor %}
           </ul>
           {% endif %}
 
@@ -117,12 +125,12 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
           <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
             <a class="btn-primary" href="{{ monthUrl }}">{% icon "calendar-heart", "size-4" %} {{ "monthly.open_toolkit" | t(lang, { month: m.monthName }) }}</a>
             <a class="tap-link inline-flex items-center gap-1.5 text-sm font-semibold text-gv no-underline hover:underline" href="{{ monthUrl }}#mp-message">{% icon "message-circle", "size-4 shrink-0" %} {{ "monthly.msg_link" | t(lang) }}</a>
-            {% if nm %}<a class="tap-link inline-flex items-center gap-1.5 text-sm font-semibold text-gv no-underline hover:underline" href="{{ ('/monthly/' + nm.key + '/') | lurl(lang) }}">{{ "monthly.next_link" | t(lang, { theme: (nm.gv.theme if nm.gv else nm.title) }) }} {% icon "arrow-right", "size-4 shrink-0" %}</a>{% endif %}
+            {% if nm %}<a class="tap-link inline-flex items-center gap-1.5 text-sm font-semibold text-gv no-underline hover:underline" href="{{ ('/monthly/' + nm.key + '/') | lurl(lang) }}">{{ "monthly.next_link" | t(lang, { theme: (nm.gv.theme if nm.gv else nm.title) }) }}{% if nm.gv and nm.gv.machine %} {{ mtMark | safe }}{% endif %} {% icon "arrow-right", "size-4 shrink-0" %}</a>{% endif %}
           </div>
         </div>
       </div>
       <a class="mp-now-poster group" href="{{ monthUrl }}">
-        <span class="mp-stage mp-stage--thumb" aria-hidden="true" inert><span class="mp-fit">{{ mp.poster(m, lang, site, "now") }}</span></span>
+        <span class="mp-stage mp-stage--thumb" aria-hidden="true" inert><span class="mp-fit">{{ mp.posterMini(m, lang) }}</span></span>
         <span class="mt-3 inline-flex min-h-11 items-center gap-1.5 font-semibold text-gv group-hover:underline">{{ "monthly.open_month" | t(lang, { month: m.label }) }} {% icon "arrow-right", "size-4" %}</span>
       </a>
     </div>
@@ -209,6 +217,13 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
           </fieldset>
         </div>
         <p class="rp-note">{{ "report.settings_note" | t(lang, { month: rp.langs[lang].month }) }}</p>
+        {#- A new month with no draft yet: last month's draft on this device as the starting point (report.js findPrev /
+            startFromPrev — the visitor's own sections, choices and words; the data sections are this month's) -#}
+        <div class="rp-prev" x-show="prev" x-cloak role="group" aria-labelledby="rp-prev-title">
+          <p id="rp-prev-title" class="rp-prev-title">{% icon "history", "size-4 shrink-0" %} {{ "report.prev_title" | t(lang) }}</p>
+          <p class="rp-prev-text" x-text="prevText()"></p>
+          <button type="button" class="btn-secondary btn-sm" data-rp-prev @click="startFromPrev()">{% icon "copy-plus", "size-4" %} <span x-text="prevBtn()"></span></button>
+        </div>
       </div>
 
       {#- ---- The sections: include, reorder, edit, add your own ---- -#}
@@ -355,15 +370,15 @@ pageScripts: ["/assets/js/monthly.js", "/assets/js/report.js"]
   <div class="container-page">
     {{ ui.sectionHead("monthly.all_posters" | t(lang), "monthly.all_posters_sub" | t(lang), "", "", "image", { eyebrow: "monthly.posters_eyebrow" | t(lang), tone: "text-grape", id: "mp-all-title", lang: lang }) }}
     <ul class="mp-grid" role="list">
-      {#- this month is featured above; the grid holds the coming months -#}
+      {#- this month is featured above; the grid holds the coming months, each in miniature (posterMini) -#}
       {% for pm in months %}{% if not pm.isCurrent %}
       <li>
         <a class="mp-thumb group" href="{{ ('/monthly/' + pm.key + '/') | lurl(lang) }}">
-          <span class="mp-stage mp-stage--thumb" aria-hidden="true" inert><span class="mp-fit">{{ mp.poster(pm, lang, site, "g") }}</span></span>
+          <span class="mp-stage mp-stage--thumb" aria-hidden="true" inert><span class="mp-fit">{{ mp.posterMini(pm, lang) }}</span></span>
           <span class="mp-thumb-label">
             <span class="font-semibold text-ink group-hover:text-gv group-hover:underline">{{ pm.title }}</span>
           </span>
-          {% if pm.gv %}<span class="block text-sm text-muted">{{ pm.gv.theme }}</span>{% endif %}
+          {% if pm.gv %}<span class="block text-sm text-muted">{{ pm.gv.theme }}{% if pm.gv.machine %} {{ mtMark | safe }}{% endif %}</span>{% endif %}
         </a>
       </li>
       {% endif %}{% endfor %}

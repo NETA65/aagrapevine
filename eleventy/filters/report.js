@@ -26,8 +26,8 @@
 // Dev/test: MONTHLY_NOW=2026-12-15 fixes "today" (as for the posters).
 import { eventWhen, eventWhere, writersPick, spotlightOf, spotlightHomeDays, writerName, issueLabelOf, issueInSentence, itemIssueName } from "./community.js";
 import { issueName } from "./read.js";
-import { digestShop, weeklyOpenAll, gvMeetings, eventEndMs } from "./committee.js";
-import { monthModel, nowDate, chicagoYmd, shortDate, timeRange, monthLabel } from "./monthly.js";
+import { digestShop, weeklyOpenAll, gvMeetings, eventEndMs, chicagoDayEndMs } from "./committee.js";
+import { monthModel, nowDate, chicagoYmd, shortDate, timeRange, monthLabel, midSentence } from "./monthly.js";
 import { botmPriceState, shopPlanPrice, shopNextChange, shopPriceChangeIn, dayLabel } from "./shop.js";
 import { scriptJson } from "../script-json.js";
 
@@ -49,6 +49,9 @@ const t = (key, lang, vars) => H.translateKey(key, lang, vars);
 const clean = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 const lcFirst = (s) => (s ? s.charAt(0).toLowerCase() + s.slice(1) : s);
+const isYmd = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
+/** "2026-10-15" → "2026-10-14" */
+const dayBefore = (ymd) => new Date(Date.parse(ymd + "T12:00:00Z") - DAY).toISOString().slice(0, 10);
 const list = (items, lang) => {
   const a = items.filter(Boolean);
   try { return new Intl.ListFormat(LOC[lang] || "en-US", { style: "long", type: "conjunction" }).format(a); } catch { return a.join(", "); }
@@ -104,20 +107,26 @@ export function upcomingEvents(db, now, days = EVENT_DAYS) {
 /*  Section 5: Book of the Month, subscriptions, price changes         */
 /* ------------------------------------------------------------------ */
 /**
- * The shop section's text in one state: "now" (the build's day) or "after" — from the day the next announced price
- * change (`next`, shop.js shopNextChange) takes effect. Prices only while they are current (eleventy/filters/shop.js):
- * a Book of the Month price read before a book price change in effect — or before `next`, in the "after" state — is
- * left out (its percent stays), and a 1-year plan shows its announced price while the store data still has the old
- * one (shopPlanPrice). An announced change is passed on to the district in AA Grapevine's own list — the 1-year
- * prices it names and the books — under "New prices from …" before its day and "New prices since …" from it
- * through its notice_until (never "the prices above are the new ones": the lowest price above may be a plan the
- * announcement does not name, like a monthly one).
+ * The shop section's text as it stands at the moment `at` (the build's "now", or a later moment it changes at —
+ * shopSteps): in the "now" state, or "after" from the day the next announced price change (`next`, shop.js
+ * shopNextChange) takes effect. Book of the Month offers only while they run (dated data: from their `starts` day
+ * through their `ends` day, Central time — an offer that has ended by `at` is never quoted). Prices only while they
+ * are current (eleventy/filters/shop.js): a Book of the Month price read before a book price change in effect — or
+ * before `next`, in the "after" state — is left out (its percent stays), and a 1-year plan shows its announced price
+ * while the store data still has the old one (shopPlanPrice). An announced change is passed on to the district in AA
+ * Grapevine's own list — the 1-year prices it names and the books — under "New prices from …" before its day and
+ * "New prices since …" from it through its notice_until (never "the prices above are the new ones": the lowest
+ * price above may be a plan the announcement does not name, like a monthly one).
  */
-function shopSection(L, T, ctx, state, next = null) {
-  const { db, site, now, abs } = ctx;
+function shopSection(L, T, ctx, at, next = null) {
+  const { db, site, abs } = ctx;
+  const now = at;
+  const state = next && now.getTime() >= Date.parse(next.at.effective) ? "after" : "now";
   const out = [];
   const shop = db.shop || {};
+  const day = chicagoYmd(now);
   const bm = digestShop(shop, L, new Date(now));
+  bm.offers = bm.offers.filter((o) => !isYmd(o.raw && o.raw.starts) || o.raw.starts <= day);
   if (bm.offers.length) {
     const same = bm.offers.every((o) => o.pct === bm.offers[0].pct && o.endsLabel === bm.offers[0].endsLabel);
     out.push(same && bm.offers[0].pct && bm.offers[0].endsLabel ? T("b_title", { pct: bm.offers[0].pct, date: bm.offers[0].endsLabel }) : T("b_title_plain"));
@@ -146,8 +155,9 @@ function shopSection(L, T, ctx, state, next = null) {
     if (bits.length) subs.push(`• ${pub === "lv" ? "La Viña" : "Grapevine"}: ${bits.join(" · ")}`);
   }
   if (subs.length) out.push(T("s_title"), ...subs);
-  // the announced change to pass on (shopPriceChangeIn: the build's day; the "after" state: from `next`'s day)
-  const hit = state === "after" ? (next ? { kind: "after", c: next } : null) : shopPriceChangeIn(shop, chicagoYmd(now));
+  // the announced change to pass on (shopPriceChangeIn on the day of `at`: "before" from its announcement, "after"
+  // from its day through its notice_until)
+  const hit = shopPriceChangeIn(shop, day);
   if (hit) {
     out.push(T(hit.kind === "before" ? "pc_before" : "pc_after", { date: dayLabel(hit.c.effective, L) }));
     for (const pub of order) {
@@ -157,9 +167,39 @@ function shopSection(L, T, ctx, state, next = null) {
     if (Number(hit.c.books_more) > 0) out.push(`• ${T("pc_books", { amount: money(hit.c.books_more, L) })}`);
   }
   out.push(T("s_group"));
-  if (site.links && site.links.carry_the_message) out.push(T("s_ctm", { url: site.links.carry_the_message }));
+  // Carry the Message: La Viña's own page ("Lleva el Mensaje", in Spanish) on a Spanish report, as on /es/shop/
+  const links = site.links || {};
+  const ctm = (L === "es" && links.lleva_el_mensaje) || links.carry_the_message;
+  if (ctm) out.push(T("s_ctm", { url: ctm }));
   out.push(T("s_more", { url: abs("/shop/") }));
   return out.join("\n");
+}
+
+/** The moments after `now` the shop section's text changes at, as [{ at: ISO instant, text }] in time order (the
+ *  browser editor shows the last one passed — report.js swapTexts): a Book of the Month offer starts (midnight
+ *  Central at its first day) or ends (midnight after its last day), an announced price change takes effect or its
+ *  notice ends (shop.json price_changes at.effective / at.notice_end). Only moments that change the text; at most 8. */
+function shopSteps(L, T, ctx, first) {
+  const shop = ctx.db.shop || {};
+  const nowMs = ctx.now.getTime();
+  const next = shopNextChange(shop, ctx.now);
+  const marks = new Set();
+  for (const b of Array.isArray(shop.botm) ? shop.botm : []) {
+    if (b && isYmd(b.ends)) marks.add(chicagoDayEndMs(b.ends));
+    if (b && isYmd(b.starts)) marks.add(chicagoDayEndMs(dayBefore(b.starts)));
+  }
+  for (const c of Array.isArray(shop.price_changes) ? shop.price_changes : []) {
+    for (const k of ["effective", "notice_end"]) if (c && c.at && c.at[k]) marks.add(Date.parse(c.at[k]));
+  }
+  const steps = [];
+  let last = first;
+  for (const ms of [...marks].filter((x) => Number.isFinite(x) && x > nowMs).sort((a, b) => a - b)) {
+    const text = shopSection(L, T, ctx, new Date(ms), next);
+    if (text !== last) steps.push({ at: new Date(ms).toISOString(), text });
+    last = text;
+    if (steps.length >= 8) break;
+  }
+  return steps;
 }
 
 /* ------------------------------------------------------------------ */
@@ -172,7 +212,7 @@ function sectionsFor(L, ctx) {
   const year = key.slice(0, 4);
   const m = monthModel(key, db, carry, site, L, now);
   const S = {};
-  const A = {};      // a section's text from a set moment on: { at, text } (shopSection)
+  const A = {};      // a section's texts from later moments on: [{ at, text }] (shopSteps)
 
   /* 1. Header — the blanks are filled by the editor's "Your details" fields */
   S.header = [
@@ -197,33 +237,48 @@ function sectionsFor(L, ctx) {
     S.committee = out.join("\n");
   }
 
-  /* 3. This month's issues + "put it to work" tips + the month's poster page */
+  /* 3. This month's issues + "put it to work" tips + the month's poster page. A theme that is a machine translation
+        (a Grapevine theme in Spanish, a La Viña one in English) has the magazine's own words after it in brackets,
+        as the deadlines below, and the section says some titles were translated automatically (mt_note). */
   {
     const out = [];
-    const gvLine = m.gv ? T("i_gv", { issue: m.gv.label, theme: m.gv.theme }) : "";
+    let mt = false;
+    const orig = (x) => (x && x.machine && x.orig && x.orig !== x.theme ? ` (“${x.orig}”)` : "");
+    const gvLine = m.gv ? T("i_gv", { issue: m.gv.label, theme: m.gv.theme }) + orig(m.gv) : "";
     // La Viña's issue by the site's one name for it ("September–October 2026" / "septiembre–octubre de 2026":
     // read.js issueName), as the toolkit, /contribute/, Home and the digest write it
-    const lvLine = m.lv && m.lv.theme ? T("i_lv", { issue: issueName(m.lv.key, "lv", L, true) || m.lv.label, theme: m.lv.theme }) : "";
+    const lvLine = m.lv && m.lv.theme ? T("i_lv", { issue: issueName(m.lv.key, "lv", L, true) || m.lv.label, theme: m.lv.theme }) + orig(m.lv) : "";
+    if ((gvLine && m.gv.machine) || (lvLine && m.lv.machine)) mt = true;
     // On a Spanish report La Viña comes first (the site's rule wherever both magazines appear).
     for (const l of L === "es" ? [lvLine, gvLine] : [gvLine, lvLine]) if (l) out.push(l);
     // A newer issue is already on the web (the October Grapevine appears in late September).
     const issues = (db.articles && db.articles.issues) || [];
     const newer = (pub, after) => issues.filter((i) => i && i.publication === pub && i.key && i.key > after).sort((a, b) => a.key.localeCompare(b.key))[0];
+    // its theme in the report's language; a machine translation with the magazine's own words in brackets (the
+    // string's “ ” sit around {theme}: “Soledad” (“Loneliness”))
+    const newTheme = (i) => {
+      const here = clean(H.pickLang(i, "theme", L) || i.theme);
+      const own = clean(i.theme);
+      const machine = !!here && here !== own && (i.machine || []).includes(L);
+      if (machine) mt = true;
+      return machine && own ? `${here}” (“${own}` : here;
+    };
     const outLines = [];
     const gvNew = newer("gv", key);
     if (gvNew) {
-      const theme = clean(H.pickLang(gvNew, "theme", L) || gvNew.theme);
+      const theme = newTheme(gvNew);
       if (theme) outLines.push(T("i_out_gv", { issue: issueInSentence(clean((gvNew.i18n && gvNew.i18n.label && gvNew.i18n.label[L]) || monthLabel(gvNew.key, L)), L), theme }));
     }
     const lvNew = m.lv ? newer("lv", m.lv.key) : null;
     if (lvNew) {
-      const theme = clean(H.pickLang(lvNew, "theme", L) || lvNew.theme);
+      const theme = newTheme(lvNew);
       const label = clean((lvNew.i18n && lvNew.i18n.label && lvNew.i18n.label[L]) || lvNew.label || lvNew.key);
       if (theme) outLines.push(T("i_out_lv", { issue: issueName(lvNew.key, "lv", L, true) || issueInSentence(label, L), theme }));
     }
     if (L === "es") outLines.reverse();
     out.push(...outLines);
     if (!out.length) out.push(T("i_none", { url: abs("/read/") }));
+    if (mt) out.push(T("mt_note"));
     if (m.tips.length) {
       out.push(T("i_tips"));
       for (const tp of m.tips.slice(0, 3)) out.push(`• ${tp.title}: ${tp.text}`);
@@ -232,9 +287,13 @@ function sectionsFor(L, ctx) {
     S.issues = out.join("\n");
   }
 
-  /* 4. Story deadlines: the next 3 Grapevine themes, the next 2 La Viña themes, La Viña's topics, record by phone */
+  /* 4. Story deadlines: the next 3 Grapevine themes, the next 2 La Viña themes, La Viña's topics, record by phone.
+        A machine-translated title (the data's `machine` languages): the section says some titles were translated
+        automatically (mt_note), under the lists. */
   {
     const out = [];
+    let mt = false;
+    const isMt = (d) => (d.machine || []).includes(L);
     const open = (pub) => ((db.editorial && db.editorial.items) || [])
       .filter((e) => e && e.status !== "gone" && e.extra && e.extra.publication === pub && e.extra.deadline && e.extra.deadline >= today
         && (pub === "gv" || e.extra.issue_key))
@@ -247,6 +306,7 @@ function sectionsFor(L, ctx) {
         const own = clean(d.title);
         const here = clean(H.pickLang(d, "title", L)) || own;
         const theme = `“${here}”${own && here !== own ? ` (“${own}”)` : ""}`; // “Diversión en sobriedad” (“Fun in Sobriety”)
+        if (here !== own && isMt(d)) mt = true;
         const issue = d.extra.issue_key ? monthLabel(d.extra.issue_key, L) : issueInSentence(issueLabelOf(d, L), L);
         gvBlock.push(`• ${T("d_line", { theme, issue, date: shortDate(d.extra.deadline, L, year) })}`);
       }
@@ -262,14 +322,17 @@ function sectionsFor(L, ctx) {
         const own = clean(H.pickLang(d, "title", "es")) || clean(d.title);
         const here = L === "es" ? own : clean(H.pickLang(d, "title", L)) || own;
         const theme = `“${own}”${here !== own ? gloss(here) : ""}`;          // “Recaídas” (Relapses)
+        if (here !== own && isMt(d)) mt = true;
         lvBlock.push(`• ${T("d_line", { theme, issue: itemIssueName(d, L, true), date: shortDate(d.extra.deadline, L, year) })}`);
       }
     }
     if (m.lvTopics.length) {
       lvBlock.push(T("d_lv"));
       for (const tp of m.lvTopics) lvBlock.push(`• “${tp.es}”${L !== "es" && tp.text && tp.text !== tp.es ? gloss(tp.text) : ""}`);
+      if (m.lvTopics.some((tp) => tp.machine)) mt = true;
     }
     out.push(...(L === "es" ? [...lvBlock, ...gvBlock] : [...gvBlock, ...lvBlock]));
+    if (mt) out.push(T("mt_note"));
     const ap = db.audio_project || {};
     const phones = [];
     if (ap.gv && ap.gv.phone) {
@@ -285,15 +348,13 @@ function sectionsFor(L, ctx) {
   }
 
   /* 5. Book of the Month + the lowest subscription prices + home group + Carry the Message (+ a price change AA
-        Grapevine announced: shopSection). When one is still ahead, the section also gets the text it has from
-        that day on (`after`: the browser editor switches to it at midnight Central — report.js swapTexts). */
+        Grapevine announced: shopSection). The section also gets the texts it has from each later moment its
+        words change at — an offer ends or starts, a price change takes effect or its notice ends (`steps`,
+        shopSteps: the browser editor switches at that moment, midnight Central — report.js swapTexts). */
   {
-    const next = shopNextChange(db.shop || {}, now);
-    S.shop = shopSection(L, T, ctx, "now");
-    if (next) {
-      const after = shopSection(L, T, ctx, "after", next);
-      if (after !== S.shop) A.shop = { at: next.at.effective, text: after };
-    }
+    S.shop = shopSection(L, T, ctx, now, shopNextChange(db.shop || {}, now));
+    const steps = shopSteps(L, T, ctx, S.shop);
+    if (steps.length) A.shop = steps;
   }
   /* 6. Upcoming events (the next 45 days; a monthly series once, with "every month") */
   {
@@ -351,7 +412,8 @@ function sectionsFor(L, ctx) {
       out.push(T("o_intro"));
       for (const w of wos) {
         const starts = w.starts ? ` — ${T("o_starts", { date: w.starts.date })}` : "";
-        out.push(`• ${T("o_line", { title: clean(w.title), when: clean(w.when) })}${starts}`);
+        // "— los jueves a las 11:00 a. m.": the data's "Los jueves …" goes on in lower case after the dash
+        out.push(`• ${T("o_line", { title: clean(w.title), when: midSentence(clean(w.when), L) })}${starts}`);
       }
       out.push(T("o_more", { url: abs("/meetings/") + "#weekly-open" }));
     }
@@ -388,7 +450,7 @@ function sectionsFor(L, ctx) {
   S.asks = T("a_default");
   S.notes = "";
 
-  return SECTION_IDS.map((id) => ({ id, title: T(`s.${id}`), text: S[id] || "", ...(A[id] ? { after: A[id] } : {}) }));
+  return SECTION_IDS.map((id) => ({ id, title: T(`s.${id}`), text: S[id] || "", ...(A[id] ? { steps: A[id] } : {}) }));
 }
 
 /* ------------------------------------------------------------------ */
@@ -516,7 +578,8 @@ export const reportText = (model, lang) => composeText(((model && model.langs &&
 // The editor's own strings, in the page language (report.js reads them from the JSON).
 const UI_KEYS = ["saved_idle", "saved", "not_saved", "move_up", "move_down", "moved", "include", "included", "excluded", "reset_done", "removed", "added",
   "reset_all_confirm", "reset_all_done", "lang_done", "blanks", "blanks_one", "blanks_none", "read_time", "read_time_one",
-  "copied_text", "copied_html", "copied_plain", "copy_failed", "downloaded", "mail_long", "opening", "wa_copied", "text_hint", "header_hint", "n_placeholder"];
+  "copied_text", "copied_html", "copied_plain", "copy_failed", "downloaded", "mail_long", "opening", "wa_copied", "text_hint", "header_hint", "n_placeholder",
+  "prev_text", "prev_btn", "prev_done"];
 export function uiStrings(lang) {
   const o = Object.fromEntries(UI_KEYS.map((k) => [k, t(`report.${k}`, lang)]));
   o.lang_en = t("community.lang_name_en", lang);

@@ -30,7 +30,12 @@ eleventyComputed:
     One home per fact — this page links there: the hub (/monthly/) of the 10 ways; /shop/#botm of the
     prices; /events/ and /meetings/#committee-meeting of the events' details and the Zoom link;
     /contribute/ of how to send a story; /read/ of the stories (an issue's highlights are the monthly
-    digest's, the month they came out). -#}
+    digest's, the month they came out).
+    The Dates card links the month's calendar file ("Add October's dates to my calendar": m.icsUrl, written
+    by src/pages/monthly-ics.11ty.js — the dates and the story deadlines, no script needed).
+    A machine-translated theme (a Grapevine theme on the Spanish page, a La Viña one on the English page) carries
+    the site's mark: the magazine's own words in italics under it with the translation icon, and the note
+    "Titles translated automatically … — originals in italics" (/read/'s), or the icon alone inside a line. -#}
 {% import "macros/ui.njk" as ui with context %}
 {% import "macros/monthly.njk" as mp with context %}
 {%- set m = mpage.key | mpMonth(db, carry, site, lang) -%}
@@ -45,6 +50,10 @@ eleventyComputed:
 {%- set botmShown = [] -%}
 {%- for b in m.botm %}{% if not (m.isCurrent and b.past) %}{% set _n = botmShown.push(b) %}{% endif %}{% endfor -%}
 {%- set gvmLive = nx.gvm if nx else null -%}
+{#- the site's mark after a machine-translated theme inside a line (contribute.njk's): the icon, its words for
+    screen readers; and the note under a list with originals in italics (read.njk's) -#}
+{%- set mtMark -%}<span class="auto-note align-middle" title="{{ 'common.auto_translated' | t(lang) }} — {{ 'common.auto_translated_help' | t(lang) }}">{% icon "languages", "size-3" %}<span class="sr-only">{{ "common.auto_translated" | t(lang) }}</span></span>{%- endset -%}
+{%- set mtNote -%}<p class="auto-note mt-3">{% icon "languages", "size-3" %} {{ ("read.mt_note_en" if lang == "es" else "read.mt_note_es") | t(lang) }}</p>{%- endset -%}
 
 {#- Eyebrow: "Monthly toolkit", or "Monthly toolkit · This month" for the current month.
     The hero's right-hand card (the shared hero aside, from 1024px): the covers of that month's issues when
@@ -178,6 +187,7 @@ eleventyComputed:
           <p class="eyebrow {{ 'text-lv' if p == 'lv' else 'text-gv' }}">{% if p == "lv" %}{{ "monthly.in_lv" | t(lang) }} · {{ x.label if x else v.label }}{% else %}{{ "monthly.in_gv" | t(lang, { month: m.monthName }) }}{% endif %}</p>
           {#- La Viña's theme of an issue not out yet may have no English words yet: its language is marked -#}
           <h4 id="mp-mag-{{ p }}" class="h-card mt-1 text-xl"{% if x and x.theme and x.themeLang and x.themeLang != lang %} lang="{{ x.themeLang }}"{% endif %}>{{ (x.theme if x else "") or (v.theme if v else "") or ("monthly.no_issue" | t(lang)) }}</h4>
+          {{ mp.orig(x, lang, "es" if p == "lv" else "en") }}
           {% if v and v.count %}
           <p class="meta-row mt-1 text-sm text-muted">
             <span>{{ ("read.n_stories_one" if v.count == 1 else "read.n_stories") | t(lang, { n: v.count }) }}</span>
@@ -194,8 +204,10 @@ eleventyComputed:
         </section>
         {% endif %}
         {% endfor %}
+        {%- set mtIssues = (m.gv and m.gv.machine and m.gv.orig) or (m.lv and m.lv.machine and m.lv.orig) -%}
+        {% if mtIssues %}{{ mtNote | safe }}{% endif %}
         {% if nx %}{% for o in nx.outNext %}
-        <p class="panel-muted mt-4 p-4! text-sm leading-relaxed">{{ ("report.i_out_lv" if o.pub == "lv" else "report.i_out_gv") | t(lang, { issue: o.issue, theme: o.theme }) }}{% if o.monthUrl %} <a class="link tap-link gap-1 font-semibold" href="{{ o.monthUrl | lurl(lang) }}">{{ "monthly.open_month" | t(lang, { month: o.monthLabel }) }}<span aria-hidden="true"> →</span></a>{% endif %}</p>
+        <p class="panel-muted mt-4 p-4! text-sm leading-relaxed">{{ ("report.i_out_lv" if o.pub == "lv" else "report.i_out_gv") | t(lang, { issue: o.issue, theme: o.theme }) }}{% if o.machine %} {{ mtMark | safe }}{% endif %}{% if o.monthUrl %} <a class="link tap-link gap-1 font-semibold" href="{{ o.monthUrl | lurl(lang) }}">{{ "monthly.open_month" | t(lang, { month: o.monthLabel }) }}<span aria-hidden="true"> →</span></a>{% endif %}</p>
         {% endfor %}{% endif %}
       </section>
 
@@ -204,7 +216,7 @@ eleventyComputed:
       {% if m.tips.length %}
       <section id="mp-tips" class="card card-pad" aria-labelledby="mp-tips-title">
         <h3 id="mp-tips-title" class="card-h"><span class="text-lv">{% icon "lightbulb", "size-5" %}</span>{{ "monthly.put_to_work" | t(lang) }}</h3>
-        {% if m.gv %}<p class="mt-1 text-sm text-muted">{{ "monthly.tips_sub" | t(lang, { month: m.monthName, theme: m.gv.theme }) }}</p>{% endif %}
+        {% if m.gv %}<p class="mt-1 text-sm text-muted">{{ "monthly.tips_sub" | t(lang, { month: m.monthName, theme: m.gv.theme }) }}{% if m.gv.machine %} {{ mtMark | safe }}{% endif %}</p>{% endif %}
         <ul class="mp-tiplist mt-4" role="list">
           {% for tp in m.tips %}
           <li><span class="mp-tipicon">{% icon tp.icon, "size-5" %}</span><span class="min-w-0"><strong class="block text-ink">{{ tp.title }}</strong><span class="text-sm text-muted">{{ tp.text }}</span></span></li>
@@ -251,6 +263,14 @@ eleventyComputed:
           <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-sm font-semibold text-ink">{% icon "history", "size-4 shrink-0 text-muted" %} {{ "monthly.earlier" | t(lang, { month: m.monthName, n: earlier.length }) }}</summary>
           <ul class="divide-y divide-line border-t border-line px-3" role="list">{% for d in earlier %}{{ dateRow(d) }}{% endfor %}</ul>
         </details>
+        {% endif %}
+        {#- "Add October's dates to my calendar": the month's calendar file (a static file beside this page: the
+            dates above and the story deadlines; opens in a phone's calendar, no script) -#}
+        {% if upcoming.length or m.deadlines.length or m.lvDeadlines.length %}
+        <div class="mt-4 rounded-xl bg-surface-2 p-3">
+          <a class="link tap-link inline-flex items-center gap-1.5 text-sm font-semibold" href="{{ m.icsUrl }}" type="text/calendar">{% icon "calendar-plus", "size-4 shrink-0" %} {{ "monthly.ics_link" | t(lang, { month: m.monthName }) }}</a>
+          <p class="mt-0.5 text-xs leading-relaxed text-muted">{{ "monthly.ics_note" | t(lang) }}</p>
+        </div>
         {% endif %}
         {#- the same "link + arrow" footer as the other cards -#}
         <p class="mt-3 flex flex-wrap gap-x-6">
@@ -319,10 +339,12 @@ eleventyComputed:
           {% for d in m.deadlines %}
           <li class="py-3">
             <p class="font-display text-lg font-semibold text-ink">{{ d.theme }}</p>
+            {{ mp.orig({ machine: d.machine, orig: d.themeEn if d.themeEn != d.theme else "" }, lang, "en") }}
             <p class="mt-0.5 text-sm font-semibold text-gv">{{ "monthly.for_issue" | t(lang, { issue: d.issueLabel }) }} — {{ "monthly.due" | t(lang, { date: d.dueLong }) }}</p>
           </li>
           {% endfor %}
         </ul>
+        {% if m.deadlines | selectattr("machine") | length %}{{ mtNote | safe }}{% endif %}
         {% else %}
         <p class="mt-2 text-sm text-muted">{{ "monthly.no_deadlines" | t(lang) }}</p>
         {% endif %}

@@ -1,8 +1,8 @@
 ---
-# A month that has left /monthly/'s window (the 3 months before this one): a tiny stand-alone page
-# that sends the visitor to /monthly/ (this month's toolkit and poster), so the QR code on a printed
-# poster and a shared link keep working. Same pattern as subscribe-redirect.njk: noindex + canonical,
-# out of the sitemap, the search index and page lists.
+# A month that has left /monthly/'s window (the 12 months before this one — a printed poster stays on a
+# corkboard for months): a tiny stand-alone page that sends the visitor to /monthly/ (this month's toolkit
+# and poster), so the QR code on a printed poster and a shared link keep working. Same pattern as
+# subscribe-redirect.njk: noindex + canonical, out of the sitemap, the feeds, the search index and page lists.
 pagination: { data: monthlyPastPages, size: 1, alias: past }
 permalink: "{{ '/' if past.lang == 'en' else '/es/' }}monthly/{{ past.key }}/index.html"
 layout: false

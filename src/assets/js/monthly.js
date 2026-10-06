@@ -45,9 +45,8 @@
      block still fits its column — busy months (many events, long Spanish titles) step down,
      quiet months step up, so no poster is left with a half-empty page. Binary search, ~8 layouts,
      done on a hidden copy one step per task (the page never freezes, the visible poster changes
-     once) and only for the full-size poster of a month page: the hub's thumbnails keep the CSS size
-     (by density), like without JS — fitting 13 of them froze a phone for seconds. The PNG and the
-     print use this DOM. */
+     once) and only for the full-size poster of a month page (the hub shows the months in miniature —
+     macros/monthly.njk posterMini, never fitted). The PNG and the print use this DOM. */
   var BLOCKS = ".mp-b, .mp-foot, .mp-head, .mp-row, .mp-col, .mp-body, .mp-board, .mp-cover, .mp-strip, .mp-page, .mp-main, .mp-stub, .mp-side, .mp-content, .mp-top";
   // Layout boxes in poster px (offset* ignore the scale and the tilted cork cards' rotation).
   function box(el, p) {

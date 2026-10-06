@@ -678,7 +678,12 @@ out({ before: boot("2027-01-01T05:59:59Z"), after: boot("2027-01-01T06:00:00Z") 
 
 class Report(unittest.TestCase):
     """The GV/LV report's "Book of the Month and subscriptions" (eleventy/filters/report.js shopSection): the new
-    prices to pass on to the district before the day, the section's text from the day (`after`)."""
+    prices to pass on to the district before the day, the section's texts from each later moment (`steps`): the
+    day the prices change, the day the Book of the Month offer is over, the end of the notice."""
+
+    @staticmethod
+    def steps(section: dict) -> dict:
+        return {s["at"].replace(".000Z", "Z"): s["text"] for s in section.get("steps", [])}
 
     def test_the_shop_section(self):
         runs = [["dec", "2026-12-15T18:00:00Z", shop_doc("2026-12-15T18:00:00Z", PLANS + [botm("2026-12-15")])],
@@ -689,21 +694,30 @@ class Report(unittest.TestCase):
         self.assertIn("• Grapevine: $36.00 a year in print · digital from $2.99 a month", dec["text"])
         self.assertIn("New prices from January 1, 2027, as announced by AA Grapevine:\n• Grapevine, 1 year: print $39.00, digital $34.00\n"
                       "• La Viña, 1 year: print $19.50, digital $17.00\n• Grapevine and La Viña books: $2.00 more each", dec["text"])
-        self.assertEqual(dec["after"]["at"], E_AT)
-        self.assertIn("• Grapevine: $39.00 a year in print", dec["after"]["text"])
-        self.assertIn("• Grapevine: “No Matter What”\n", dec["after"]["text"], "from the day: the book without its old prices")
+        # from the day (00:00 Central, January 1); then the offer's end (00:00 after January 14); then the notice's end
+        steps = self.steps(dec)
+        self.assertEqual(list(steps), [E_AT, "2027-01-15T06:00:00Z", N_AT])
+        after = steps[E_AT]
+        self.assertIn("• Grapevine: $39.00 a year in print", after)
+        self.assertIn("• Grapevine: “No Matter What”\n", after, "from the day: the book without its old prices")
         # from the day: AA Grapevine's own list again — never "the prices above are the new ones" (the lowest price
         # above is the monthly digital plan, which the letter does not name)
         self.assertIn("New prices since January 1, 2027, as announced by AA Grapevine:\n• Grapevine, 1 year: print $39.00, digital $34.00\n"
-                      "• La Viña, 1 year: print $19.50, digital $17.00\n• Grapevine and La Viña books: $2.00 more each", dec["after"]["text"])
-        self.assertNotIn("prices above", dec["after"]["text"])
+                      "• La Viña, 1 year: print $19.50, digital $17.00\n• Grapevine and La Viña books: $2.00 more each", after)
+        self.assertNotIn("prices above", after)
+        self.assertNotIn("No Matter What", steps["2027-01-15T06:00:00Z"], "the offer ended on January 14: never quoted after it")
+        self.assertIn("New prices since January 1, 2027", steps["2027-01-15T06:00:00Z"])
+        self.assertNotIn("New prices since", steps[N_AT], "the notice is over")
+        self.assertIn("• Grapevine: $39.00 a year in print", steps[N_AT])
         self.assertIn("Nuevos precios desde el 1 de enero de 2027, según el anuncio de AA Grapevine:\n• La Viña, 1 año: impresa $19.50, digital $17.00",
                       r["dec"]["es"]["text"])
+        es_after = self.steps(r["dec"]["es"])[E_AT]
         self.assertIn("Nuevos precios desde el 1 de enero de 2027, según el anuncio de AA Grapevine:\n• La Viña, 1 año: impresa $19.50, digital $17.00\n"
-                      "• Grapevine, 1 año: impresa $39.00, digital $34.00", r["dec"]["es"]["after"]["text"])
-        self.assertNotIn("de arriba", r["dec"]["es"]["after"]["text"])
+                      "• Grapevine, 1 año: impresa $39.00, digital $34.00", es_after)
+        self.assertNotIn("de arriba", es_after)
         jan = r["jan"]["en"]
         self.assertNotIn("after", jan)
+        self.assertEqual(list(self.steps(jan)), ["2027-01-15T06:00:00Z", N_AT])   # the offer's end, the notice's end
         self.assertIn("• Grapevine: $39.00 a year in print", jan["text"])
         self.assertIn("New prices since January 1, 2027, as announced by AA Grapevine:\n• Grapevine, 1 year: print $39.00, digital $34.00", jan["text"])
         self.assertNotIn("$14.99", jan["text"])
