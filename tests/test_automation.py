@@ -184,9 +184,10 @@ class Publishing(unittest.TestCase):
         self.assertLess(names.index("Remember that these tests passed"), names.index("Save the pass for the next runs"))
         self.assertTrue(step(tests, "Save the pass for the next runs")["continue-on-error"])
 
-    def test_the_fingerprint_leaves_out_only_the_bots_data(self):
-        # the daily data commits (data/raw, data/site, data/state, the translation cache, the thumbnails) keep it; a
-        # change of the code, the settings, the content, the tests or the workflow makes a new one
+    def test_the_fingerprint_leaves_out_the_bots_data_and_the_committees_files(self):
+        # the daily data commits (data/raw, data/site, data/state, the translation cache, the thumbnails) and the
+        # committee's content/ and config/ keep it (a slip there never stops publishing; the Code check reports it);
+        # a change of the code, the tests or the workflow makes a new one
         if not shutil.which("git"):
             self.skipTest("needs git")
         bash = bash_path()
@@ -223,15 +224,19 @@ class Publishing(unittest.TestCase):
         self.assertRegex(first["commit"], r"^[0-9a-f]{40}$")
         for files in ({"data/site/quote.json": '{"items": []}\n'}, {"data/raw/quote.json": "{}\n"},
                       {"data/state/sources-seen.json": "{}\n"}, {"data/translations/cache.json": "{}\n"},
-                      {"src/assets/cache/a.webp": "x"}):
-            with self.subTest(bot=list(files)[0]):
+                      {"src/assets/cache/a.webp": "x"}, {"config/site.yml": "a: 2\n"},
+                      {"content/bulletin/x.md": "x\n"}, {"content/events/2027-01-10-x.md": "x\n"},
+                      {"config/presentations/x.yml": "a: 1\n"}):
+            with self.subTest(same_code=list(files)[0]):
                 got = commit(files)
-                self.assertEqual(got["fingerprint"], first["fingerprint"], "the bot's own data: the same code")
+                self.assertEqual(got["fingerprint"], first["fingerprint"],
+                                 "the bot's data or the committee's files: the same code")
                 self.assertNotEqual(got["commit"], first["commit"])
         last = first["fingerprint"]
-        for files in ({"scripts/a.py": "b\n"}, {"config/site.yml": "a: 2\n"}, {"data/geo/texas_places.json": "[1]\n"},
-                      {"content/bulletin/x.md": "x\n"}, {"tests/test_x.py": "x\n"}, {".github/workflows/u.yml": "x\n"},
-                      {"src/pages/index.njk": "y\n"}, {"data/translations/overrides.yml": "a: b\n"}):
+        for files in ({"scripts/a.py": "b\n"}, {"data/geo/texas_places.json": "[1]\n"},
+                      {"tests/test_x.py": "x\n"}, {".github/workflows/u.yml": "x\n"},
+                      {"src/pages/index.njk": "y\n"}, {"data/translations/overrides.yml": "a: b\n"},
+                      {"src/_i18n/home.json": "{}\n"}):
             with self.subTest(person=list(files)[0]):
                 got = commit(files)
                 self.assertNotEqual(got["fingerprint"], last)
@@ -243,9 +248,15 @@ class GateTests(unittest.TestCase):
     def test_every_data_test_is_there(self):
         # a renamed test would silently come back into the gate: each id must name a test of tests/
         suite, left = G.gate_suite()
-        self.assertEqual(sorted(left), sorted(G.DATA_TESTS))
+        self.assertTrue(set(G.DATA_TESTS) <= set(left))
+        for prefix in G.CONTENT_TESTS:                      # each names at least one test of tests/
+            self.assertTrue(any(i.startswith(prefix) for i in left), prefix)
+        self.assertTrue(all(G.left_to_the_code_check(i) for i in left))
         ids = {t.id() for t in G.each_test(suite)}
-        self.assertFalse(ids & set(G.DATA_TESTS))
+        self.assertFalse(ids & set(left))
+        self.assertFalse([i for i in ids if G.left_to_the_code_check(i)])
+        for why in G.CONTENT_TESTS.values():
+            self.assertTrue(why.strip())
         self.assertGreater(len(ids), 1000, "the Code check's tests")
         self.assertIn("test_automation.GateTests.test_every_data_test_is_there", ids)
         for why in G.DATA_TESTS.values():
@@ -288,7 +299,8 @@ class GateTests(unittest.TestCase):
         code, _log, summary = self.run_main(folder, {"test_one.One.test_data": "the day's data"})
         self.assertEqual(code, 0)
         self.assertIn("All 1 tests passed", summary)
-        self.assertIn("Left to the Code check (they judge the day's synced data, not the code): 1.", summary)
+        self.assertIn("Left to the Code check (they judge the day's synced data or the committee's own files, not the "
+                      "code): 1.", summary)
 
     def test_no_test_found_is_no_pass(self):
         # an empty (or unreadable) tests/ folder must not publish as "all 0 tests passed"

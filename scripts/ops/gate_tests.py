@@ -7,10 +7,14 @@ answer can change between two runs without anybody's commit (a video gone from t
 from another calendar), and a day's data must never keep the site from updating. The Code check still runs them.
 A test belongs there only when it reads the synced data AND expects something of it that the data alone can
 break; a test of the code on that data (whatever the data says, the page must match it) stays in the gate.
+The tests in CONTENT_TESTS are left out too: they judge the committee's own files (content/, config/ — an event
+date without its year, a booth.csv row, an archive export, a setting nobody reads). The sync and the build already
+leave out what they cannot read, so such a slip must never keep the whole site — the morning's new day and quote
+included — from updating; the Code check goes red on the push that made it and tells whoever made it.
 
-The job runs this only for code and content it has not passed yet (its fingerprint of everything in git but the
-bot's own data is remembered in GitHub's Actions cache): the daily data runs — the same code — publish without
-running the tests again.
+The job runs this only for code it has not passed yet (its fingerprint of everything in git but the bot's own data
+and the committee's content/ and config/ is remembered in GitHub's Actions cache): the daily data runs and the
+committee's content and settings changes — the same code — publish without running the tests again.
 
     python -m scripts.ops.gate_tests        # exit 0: every test passed (or was skipped), 1: one failed (or none found)
 
@@ -39,6 +43,27 @@ DATA_TESTS: dict[str, str] = {
         "the day's weekly open meetings, Book of the Month and story lines in the presentations' live slides",
 }
 
+# test id prefix (a class, or one test) → which of the committee's files it judges
+CONTENT_TESTS: dict[str, str] = {
+    "test_content_events.ContentEvents.":
+        "every event file in content/events (a date without its year, an offset that is not Central time …)",
+    "test_booth_csv.Real.":
+        "content/booth/booth.csv, the booth display's list the committee edits",
+    "test_writers_archive.RealFiles.":
+        "the owner's archive exports in content/archive",
+    "test_settings_used.SettingsAreRead.test_every_setting_in_site_yml_is_read":
+        "config/site.yml: a setting the committee added that no code reads yet",
+    "test_settings_used.SettingsAreRead.test_every_setting_in_the_other_settings_files_is_read":
+        "the other files in config/: a setting the committee added that no code reads yet",
+    "test_settings_used.SettingsAreRead.test_the_lists_of_exceptions_are_current":
+        "the settings check's exception lists against the settings the committee keeps in config/",
+}
+
+
+def left_to_the_code_check(test_id: str) -> bool:
+    """True for the tests the gate leaves to the Code check: DATA_TESTS and CONTENT_TESTS."""
+    return test_id in DATA_TESTS or any(test_id.startswith(p) for p in CONTENT_TESTS)
+
 
 def each_test(suite: unittest.TestSuite) -> Iterator[unittest.TestCase]:
     """Every test of a (nested) suite, in order."""
@@ -50,13 +75,13 @@ def each_test(suite: unittest.TestSuite) -> Iterator[unittest.TestCase]:
 
 
 def gate_suite(start: Path | None = None) -> tuple[unittest.TestSuite, list[str]]:
-    """The tests of `start` (default: tests/; discovered as the Code check does) → (the suite without DATA_TESTS,
-    the ids left out)."""
+    """The tests of `start` (default: tests/; discovered as the Code check does) → (the suite without DATA_TESTS and
+    CONTENT_TESTS, the ids left out)."""
     start = start or TESTS
     found = unittest.TestLoader().discover(str(start), top_level_dir=str(start))
     keep, left = unittest.TestSuite(), []
     for t in each_test(found):
-        if t.id() in DATA_TESTS:
+        if left_to_the_code_check(t.id()):
             left.append(t.id())
         else:
             keep.addTest(t)
@@ -81,7 +106,8 @@ def summary(result: unittest.TestResult, left: list[str]) -> str:
     else:
         lines.append(f"All {result.testsRun} tests passed ({skipped} skipped) — the website may be published.")
     if left:
-        lines += ["", f"Left to the Code check (they judge the day's synced data, not the code): {len(left)}."]
+        lines += ["", f"Left to the Code check (they judge the day's synced data or the committee's own files, not "
+                      f"the code): {len(left)}."]
     return "\n".join(lines) + "\n"
 
 
@@ -91,8 +117,8 @@ def main(argv: list[str] | None = None) -> int:
     a = ap.parse_args(argv)
     sys.path.insert(0, str(ROOT))
     suite, left = gate_suite()
-    print(f"Running {suite.countTestCases()} tests ({len(left)} left to the Code check: they judge the day's data).",
-          flush=True)
+    print(f"Running {suite.countTestCases()} tests ({len(left)} left to the Code check: they judge the day's data "
+          "or the committee's own files).", flush=True)
     result = unittest.TextTestRunner(stream=sys.stderr, verbosity=2 if a.verbose else 1).run(suite)
     text = summary(result, left)
     path = os.environ.get("GITHUB_STEP_SUMMARY")

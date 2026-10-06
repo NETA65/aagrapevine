@@ -135,6 +135,7 @@ on:
       - "!docs/**"
       - "!tests/**"
       - "!LICENSE"
+      - "!NOTICE"
       - "!.github/**"
       - ".github/workflows/update.yml"      # editing this file re-runs it
 
@@ -1215,6 +1216,7 @@ jobs:
           PATH_PREFIX: ${{ steps.addr.outputs.path_prefix }}
           SITE_URL: ${{ steps.addr.outputs.site_url }}
           I18N_STRICT: "1"
+          BUILD_WARNINGS: ${{ runner.temp }}/build-warnings.txt
         run: |
           set -euo pipefail
           find _site -path '*/monthly/*/share.png' -delete
@@ -1270,14 +1272,16 @@ jobs:
   # change that breaks them never goes live: the "publish" job waits for this one, and the site keeps the version
   # before. On the very commit the build job builds, at the same time as the build (about 3 to 4 minutes, setup
   # included, while the build takes about as long), so it adds little or nothing to a run — and only when the code
-  # or the content is new to it: everything in git but the bot's own data (data/raw, data/site, data/state, the
-  # translation cache, src/assets/cache) has a fingerprint, and a fingerprint whose tests passed once is remembered
-  # in GitHub's Actions cache. The daily data runs (the morning refresh, the midday, evening and nightly updates)
-  # change none of it, so they skip the tests (a few seconds) and the morning refresh is live as soon as before;
-  # a person's change — code, settings or content — is tested first. If the remembered pass is gone (a cache
-  # unused for 7 days is deleted), the tests simply run again. A few tests that judge the day's synced data rather
-  # than the code are left to the Code check (scripts/ops/gate_tests.py, DATA_TESTS): a day's data must never keep
-  # the site from updating.
+  # is new to it: everything in git but the bot's own data (data/raw, data/site, data/state, the translation cache,
+  # src/assets/cache) and the committee's content/ and config/ has a fingerprint, and a fingerprint whose tests
+  # passed once is remembered in GitHub's Actions cache. The daily data runs (the morning refresh, the midday,
+  # evening and nightly updates) and the committee's content and settings changes leave it as it is, so they skip
+  # the tests (a few seconds) and the morning refresh is live as soon as before; a change of the code — scripts,
+  # templates, texts, tests, this workflow — is tested first. If the remembered pass is gone (a cache unused for
+  # 7 days is deleted), the tests simply run again. Tests that judge the day's synced data or the committee's own
+  # files rather than the code are left to the Code check (scripts/ops/gate_tests.py, DATA_TESTS and
+  # CONTENT_TESTS): a day's data or a slip in content/ or config/ (which the sync and the build leave out) must
+  # never keep the site — the morning's new day and quote included — from updating; the Code check reports it.
   tests:
     name: Test the code before publishing
     needs: sync
@@ -1295,14 +1299,14 @@ jobs:
           ref: ${{ needs.sync.outputs.commit || 'main' }}
           persist-credentials: false
 
-      # Everything in git but the bot's own files: the code, the settings and the content people edit (the
-      # tests themselves and this workflow included — a change to the gate is tested too).
+      # Everything in git but the bot's own files and the committee's content/ and config/: the code (the tests
+      # themselves and this workflow included — a change to the gate is tested too).
       - name: Fingerprint the code and the content
         id: code
         run: |
           set -euo pipefail
           fp="$(git ls-files -s -z -- . ':!data/raw' ':!data/site' ':!data/state' ':!data/translations/cache.json' \
-                ':!src/assets/cache' | sha256sum | cut -c1-40)"
+                ':!src/assets/cache' ':!content' ':!config' | sha256sum | cut -c1-40)"
           {
             echo "commit=$(git rev-parse HEAD)"
             echo "fingerprint=${fp}"
