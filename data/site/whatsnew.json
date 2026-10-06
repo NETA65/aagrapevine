@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-06T13:28:38Z",
+ "updated": "2026-10-06T18:18:54Z",
  "fixture": false,
  "items": [
   {
@@ -6470,7 +6470,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-22T18:00:17Z"
   },
   {
@@ -6514,7 +6514,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-22T15:00:26Z"
   },
   {
@@ -6558,7 +6558,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-22T15:00:26Z"
   },
   {
