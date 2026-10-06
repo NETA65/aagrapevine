@@ -520,6 +520,21 @@ class DatedOffers(unittest.TestCase):
         self.assertIn("Into Action", oct20["text"])
         self.assertTrue(all("No Matter What" not in s["text"] for s in [oct20] + oct20["steps"]))
 
+    def test_a_price_change_announced_later(self):
+        # a change whose announcement is still ahead: its "New prices from …" list starts on the day it is announced
+        shop = json.loads(json.dumps(DATED_SHOP))
+        shop["price_changes"][0].update(announced="2026-11-02")
+        shop["price_changes"][0]["at"]["announced"] = "2026-11-02T06:00:00Z"   # midnight CST (DST ended November 1)
+        r = run_js(self, DATED_JS, data={"shop": shop, "nows": ["2026-10-05T17:00:00Z"]})
+        en = r["2026-10-05T17:00:00Z"]["en"]
+        self.assertNotIn("New prices", en["text"])
+        texts = {s["at"]: s["text"] for s in en["steps"]}
+        self.assertEqual(list(texts), ["2026-10-15T05:00:00.000Z", "2026-11-02T06:00:00.000Z", "2026-11-15T06:00:00.000Z",
+                                       "2027-01-01T06:00:00.000Z", "2027-02-01T06:00:00.000Z"])
+        self.assertNotIn("New prices", texts["2026-10-15T05:00:00.000Z"])
+        self.assertIn("New prices from January 1, 2027", texts["2026-11-02T06:00:00.000Z"])
+        self.assertIn("Into Action", texts["2026-11-02T06:00:00.000Z"])
+
 
 # ------------------------------------------------------------------ machine-translated titles
 MT_JS = """
@@ -609,12 +624,12 @@ class WordFile(unittest.TestCase):
     lone surrogate are left out; a tab, line breaks and a character above U+FFFF (an emoji) stay."""
 
     def test_xml_invalid_characters_are_left_out(self):
-        nasty = "Notes￾ here￿ \u0001\u0008\u000b\u001f done \ud800 lone \udc00 also 😀 pair\tand tab"
+        nasty = "Notes\ufffe here\uffff \u0001\u0008\u000b\u001f done \ud800 lone \udc00 also 😀 pair\tand tab"
         r = run_js(self, EDITOR2 + r"""
           const a = boot();
           a.setText("notes", input.text);
-          a.setTitle("committee", "Committee ￿ meeting");
-          a.prof.district = "12￾";
+          a.setTitle("committee", "Committee \uffff meeting");
+          a.prof.district = "12\ufffe";
           a.download("docx");
           out({ b64: await docxBytes(), plain: a.plain() });""", data={"text": nasty}, needs_modules=False)
         z = zipfile.ZipFile(io.BytesIO(base64.b64decode(r["b64"])))
@@ -625,13 +640,13 @@ class WordFile(unittest.TestCase):
             with self.subTest(part=name):
                 data = z.read(name).decode("utf-8")
                 ET.fromstring(data)                                           # well-formed XML (a strict parser)
-                self.assertNotRegex(data, "[￾￿\u0000-\u0008\u000b\u000c\u000e-\u001f]")
+                self.assertNotRegex(data, "[\ufffe\uffff\u0000-\u0008\u000b\u000c\u000e-\u001f]")
         doc = z.read("word/document.xml").decode("utf-8")
         text = "".join(t.text or "" for t in ET.fromstring(doc).iter("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t"))
         self.assertIn("Notes here", text)
         self.assertIn(" done  lone  also 😀 pair\tand tab", text)
         self.assertIn("Committee  meeting", text)
-        self.assertIn("￾", r["plain"], "the text itself keeps what was typed — only the Word file leaves it out")
+        self.assertIn("\ufffe", r["plain"], "the text itself keeps what was typed — only the Word file leaves it out")
 
 
 class LastMonthsDraft(unittest.TestCase):

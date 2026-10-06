@@ -793,6 +793,31 @@ class MachineThemes(unittest.TestCase):
         self.assertEqual(r, ["los jueves a las 11:00 a. m.", "jueves, 11:00 a. m.", "La Viña los jueves", "AA en línea",
                              "Thursdays at 11:00 AM", "", "cada jueves"])
 
+    def test_a_title_left_untranslated_is_not_marked(self):
+        # The data's `machine` on Spanish words that are the English ones ("Classic Grapevine" left in English, as in
+        # the real editorial calendar): no mark, no original beside it, no note — /read/'s rule (read.js tr)
+        db = full_db()
+        for it in db["editorial"]["items"]:
+            if it["id"] == "ed:gv:2027-07":
+                it.update(machine=["es"], i18n={"title": {"en": "Prison Issue", "es": "Prison Issue"}})
+        db["editorial"]["items"].append(item("ed:gv:2026-12", "topic", title="Classic Grapevine", source="grapevine", machine=["es"],
+                                             extra={"publication": "gv", "issue_key": "2026-12", "deadline": "2026-07-01"},
+                                             i18n={"title": {"en": "Classic Grapevine", "es": "Classic Grapevine"}}))
+        nov = next(i for i in db["articles"]["issues"] if i["id"] == "gv:2026-11")
+        nov.update(machine=["es"], i18n={**nov["i18n"], "theme": {"en": "Classic Grapevine", "es": "Classic Grapevine"}})
+        r = run(self, [("oct", NOW_A, "2026-10"), ("nov", NOW_A, "2026-11"), ("dec", NOW_A, "2026-12")], db)
+        es = r["oct"]["mm"]["es"]
+        self.assertFalse({d["id"]: d for d in es["deadlines"]}["ed:gv:2027-07"]["machine"])
+        self.assertFalse(next(o for o in r["oct"]["nw"]["es"]["outNext"] if o["pub"] == "gv")["machine"])
+        for name in ("nov", "dec"):
+            with self.subTest(month=name):
+                gv = r[name]["mm"]["es"]["gv"]
+                self.assertEqual((gv["theme"], gv["machine"], gv["orig"]), ("Classic Grapevine", False, ""))
+        for name in ("oct", "nov", "dec"):
+            msg = r[name]["msg"]["es:whatsapp"]
+            self.assertNotIn(self.s["monthly.msg_machine"]["es"], msg, name)
+            self.assertNotIn("Prison Issue / Prison Issue", msg)
+
     def test_the_pages_mark_it(self):
         month = (ROOT / "src" / "pages" / "monthly-month.njk").read_text(encoding="utf-8")
         hub = (ROOT / "src" / "pages" / "monthly.njk").read_text(encoding="utf-8")

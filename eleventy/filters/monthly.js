@@ -355,20 +355,21 @@ const storiesOf = (db) => ((db.articles && db.articles.items) || [])
 
 /* An issue's theme and where it came from ("issue" | "stories" | "calendar"): see issueTheme. machine: the theme
    in this language is a machine translation (a Grapevine theme in Spanish, a La Viña theme in English) — the item's
-   `machine` languages, and only when the words shown are this language's own (not the original as a fallback). */
+   `machine` languages, and only when the words shown are this language's own (not the original as a fallback) and
+   differ from the original (a title left in English, "Classic Grapevine", is no translation: /read/'s rule, read.js tr). */
 function themeOf(db, pub, key, L) {
   const meta = ((db.articles && db.articles.issues) || []).find((i) => i && i.publication === pub && i.key === key) || null;
   const own = meta ? clean(tr(meta, "theme", L)) : "";
-  if (own) return { text: own, themes: [own], from: "issue", machine: !!clean(meta.i18n && meta.i18n.theme && meta.i18n.theme[L]) && (meta.machine || []).includes(L) };
+  if (own) return { text: own, themes: [own], from: "issue", machine: !!clean(meta.i18n && meta.i18n.theme && meta.i18n.theme[L]) && own !== clean(meta.theme) && (meta.machine || []).includes(L) };
   const first = storiesOf(db).find((a) => storyPub(a) === pub && a.extra.issue_key === key);
   const toldL = first ? clean(first.i18n && first.i18n.issue_theme && first.i18n.issue_theme[L]) : "";
   const told = toldL || (first ? clean(first.extra.issue_theme) : "");
-  if (told) return { text: told, themes: [told], from: "stories", machine: !!toldL && (first.machine || []).includes(L) };
+  if (told) return { text: told, themes: [told], from: "stories", machine: !!toldL && toldL !== clean(first.extra.issue_theme) && (first.machine || []).includes(L) };
   // the magazine's own call for stories: Grapevine's editorial calendar, La Viña's yearly themes (a La Viña theme
   // is Spanish: on the English pages its translation, marked machine when it is one — as a Grapevine one in Spanish)
   const themed = ((db.editorial && db.editorial.items) || []).filter((i) => i && i.extra && i.extra.publication === pub && i.extra.issue_key === key);
   const themes = themed.map((i) => clean(tr(i, "title", L))).filter(Boolean);
-  if (themes.length) return { text: themes.join(" / "), themes, from: "calendar", machine: themed.some((i) => i.lang !== L && (i.machine || []).includes(L)) };
+  if (themes.length) return { text: themes.join(" / "), themes, from: "calendar", machine: themed.some((i) => i.lang !== L && (i.machine || []).includes(L) && clean(tr(i, "title", L)) !== clean(i.title)) };
   return { text: "", themes: [], from: "", machine: false };
 }
 
@@ -485,7 +486,7 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
       due: i.extra.deadline, dueLabel: shortDate(i.extra.deadline, L, year), dueLong: shortDate(i.extra.deadline, L, "0"),
       overAt: iso(chicagoDayEndMs(i.extra.deadline)),
       submitUrl: i.extra.submit_url || "", guidelinesUrl: i.extra.guidelines_url || "",
-      machine: L === "es" && (i.machine || []).includes("es"),
+      machine: L === "es" && (i.machine || []).includes("es") && clean(tr(i, "title", L)) !== clean(i.title),
     }));
 
   /* La Viña's story deadlines in the same days (its yearly themes document: dated topics with an issue_key). The
@@ -694,7 +695,7 @@ export function monthNow(db = {}, site = {}, lang = "en", now = nowDate()) {
     // La Viña's issue by the site's one name for it (issueName), like its issue and deadlines on these pages
     const issue = (pub === "lv" && issueName(i.key, "lv", L, true)) || issueInSentence(label, L);
     // machine: the theme is a machine translation (the page marks it, as the month's own themes — themeOf's rule)
-    const machine = !!clean(i.i18n && i.i18n.theme && i.i18n.theme[L]) && (i.machine || []).includes(L);
+    const machine = !!clean(i.i18n && i.i18n.theme && i.i18n.theme[L]) && theme !== clean(i.theme) && (i.machine || []).includes(L);
     outNext.push({ pub, theme, machine, issue, monthKey: i.key, monthLabel: monthLabel(i.key, L), monthUrl: keys.includes(i.key) ? `/monthly/${i.key}/` : "" });
   }
 

@@ -177,8 +177,9 @@ function shopSection(L, T, ctx, at, next = null) {
 
 /** The moments after `now` the shop section's text changes at, as [{ at: ISO instant, text }] in time order (the
  *  browser editor shows the last one passed — report.js swapTexts): a Book of the Month offer starts (midnight
- *  Central at its first day) or ends (midnight after its last day), an announced price change takes effect or its
- *  notice ends (shop.json price_changes at.effective / at.notice_end). Only moments that change the text; at most 8. */
+ *  Central at its first day) or ends (midnight after its last day), a price change is announced, takes effect or its
+ *  notice ends (shop.json price_changes at.announced / at.effective / at.notice_end). Only moments that change the
+ *  text; at most 8. */
 function shopSteps(L, T, ctx, first) {
   const shop = ctx.db.shop || {};
   const nowMs = ctx.now.getTime();
@@ -189,7 +190,7 @@ function shopSteps(L, T, ctx, first) {
     if (b && isYmd(b.starts)) marks.add(chicagoDayEndMs(dayBefore(b.starts)));
   }
   for (const c of Array.isArray(shop.price_changes) ? shop.price_changes : []) {
-    for (const k of ["effective", "notice_end"]) if (c && c.at && c.at[k]) marks.add(Date.parse(c.at[k]));
+    for (const k of ["announced", "effective", "notice_end"]) if (c && c.at && c.at[k]) marks.add(Date.parse(c.at[k]));
   }
   const steps = [];
   let last = first;
@@ -349,8 +350,8 @@ function sectionsFor(L, ctx) {
 
   /* 5. Book of the Month + the lowest subscription prices + home group + Carry the Message (+ a price change AA
         Grapevine announced: shopSection). The section also gets the texts it has from each later moment its
-        words change at — an offer ends or starts, a price change takes effect or its notice ends (`steps`,
-        shopSteps: the browser editor switches at that moment, midnight Central — report.js swapTexts). */
+        words change at — an offer ends or starts, a price change is announced, takes effect or its notice ends
+        (`steps`, shopSteps: the browser editor switches at that moment, midnight Central — report.js swapTexts). */
   {
     S.shop = shopSection(L, T, ctx, now, shopNextChange(db.shop || {}, now));
     const steps = shopSteps(L, T, ctx, S.shop);
