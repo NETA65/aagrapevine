@@ -32,6 +32,7 @@ Files you put on Google Drive are a different subject: see [The Drive panel fold
    - [3.14 The committee meeting](#314-the-committee-meeting)
    - [3.15 GV/LV event calendars](#315-gvlv-event-calendars)
    - [3.16 The Texas writers archive (content/archive)](#316-the-texas-writers-archive-contentarchive)
+   - [3.17 Safety nets: a bad day at a source](#317-safety-nets-a-bad-day-at-a-source)
 4. [What happens next (which run, how long)](#4-what-happens-next-which-run-how-long)
 5. [Where it shows on the website](#5-where-it-shows-on-the-website)
 6. [Going further: change the code](#6-going-further-change-the-code)
@@ -66,19 +67,22 @@ monthly digest e-mail, search, the booth display on the About page, and the heal
 
 Most days there is **nothing to do**. When you want to check or change something:
 
-1. **Check that it works.** Open `/status/`. Each source has a row with a badge: **OK**, **Delayed**
-   (it worked, but not in the last 3 days), **Failed** (the last try failed; everything found before
-   stays on the site) or **Not run yet**.
+1. **Check that it works.** Open `/status/`. Each source has a row with a badge: **OK**, **On hold** (it
+   suddenly found far fewer items; the missing ones stay until the next update confirms it,
+   [3.17](#317-safety-nets-a-bad-day-at-a-source)), **Delayed** (it worked, but not in the last 3 days),
+   **Failed** (the last try failed; everything found before stays on the site) or **Not run yet**.
 2. **Find the source** in the table in [3.0](#30-all-sources-at-a-glance). It names the setting that
    controls it.
 3. **Edit on GitHub.** Open the file on github.com, click the pencil, change the value, click
    **Commit changes**. The MKP715 GitHub login on the owner's PC can do this (it has write access).
    Only *secrets* and repository *settings* need the **NETA65** admin account.
-4. **Wait for the right run.** Most changes show in 10–20 minutes: the quick run your save starts also runs
-   the sources whose own settings you changed. Changes to the magazine stories, the shop and the document
-   search wait for the next **full update** (it usually starts about 5–7 AM Central). The table in
-   [4](#4-what-happens-next-which-run-how-long) says which. Don't want to wait? **Actions → Website update
-   → Run workflow**, leave every box empty, click the green **Run workflow** (up to about an hour).
+4. **Wait for the right run.** Most changes are on the site about 5 minutes after you save (the quick run your
+   save starts tests the code first, then publishes; allow up to 10 more minutes before every visitor sees it):
+   that run also runs the sources whose own settings you changed. Changes to the magazine stories, the shop and
+   the document search wait for the next **full update** (it usually starts about 6–8 AM Central, 5–7 in winter).
+   The table in [4](#4-what-happens-next-which-run-how-long) says which. Don't want to wait? **Actions → Website
+   update → Run workflow**, leave every box empty, click the green **Run workflow** (usually 10 to 15 minutes; at
+   the very most a little over 2 hours, when the document search and translation use their whole time).
 5. **A title is translated badly?** Add the exact original text and your translation to
    `data/translations/overrides.yml` (see [Translations](translations.md)). It shows after the quick
    rebuild that saving the file starts.
@@ -194,7 +198,8 @@ full run fills in the details later that day.
 
 **Dates.** A story is dated the 1st of its issue month. Magazines go online *before* the cover month
 (October is online in mid-September); while the issue date is still in the future, the story is dated
-the day the robot first saw it.
+the day the robot first saw it, as a Central-time day (since October 2026; before, a story first seen after
+about 7 PM Central got the next day).
 
 **Where it shows**
 
@@ -311,13 +316,21 @@ the same county list for its "Our Area" group ([3.13](#313-grapevine-meetings-fr
 **What it reads.** [`scripts/sync/crawl.py`](../scripts/sync/crawl.py) walks www.aagrapevine.org and
 www.aalavina.org page by page: 5 seconds between pages, robots.txt obeyed, in a 40-minute box each
 day, and it carries on the next day where it stopped (`data/state/crawl-state.json`). Pages are taken
-in this order: the daily "hub" pages (resource pages, home pages, news), pages never visited, pages the
-sitemap says changed, new event pages, then pages not visited for `recheck_days`.
+in this order: the daily "hub" pages (resource pages, home pages, news: `HUB_PATHS` and `KIT_PAGES` in
+`crawl_rules.py`), pages never visited (and pages waiting for a second 404, below), pages the sitemap says
+changed, new event pages, then pages not visited for `recheck_days`.
 
 About 30 % of the time goes to documents: each new one is downloaded once for its page count, title,
-language and a small picture of page 1. The robot never visits login, cart, search, paywalled story or
+language and a small picture of page 1. Since October 2026 each document is read in a separate process
+(`python -m scripts.sync.crawl_pdf --analyze`) with a time limit of 60 seconds (`PARSE_TIMEOUT_S`) and, on
+GitHub's Linux computers, 2 GB of memory (`PARSE_MEMORY_MB`): a file that crashes or hangs the reader is skipped
+for 2, 4, 8, 16, then 30 days, and the run goes on. The robot never visits login, cart, search, paywalled story or
 podcast pages, never reads a document's author metadata (anonymity), and records a document **only when
 the file itself is on an official host**.
+
+**A document's date** is the day of its file's `Last-Modified` (or, for a new file, the day it was first seen), as
+a Central-time day: a file uploaded on the evening of the 31st into that month's folder is dated the 31st, not
+the 1st of the next month.
 
 **Settings:**
 
@@ -384,6 +397,31 @@ the GVR kit, tagged *news*, with a page-1 picture in `src/assets/cache/pdf/`.
 **How often.** Full daily update only (time-boxed). The first full pass finished in September 2026
 (3,434 pages). Progress is on the **PDF crawl** line of each run summary, never on the public pages.
 
+**On a bad day at the magazine sites** (since October 2026; details in
+[3.17](#317-safety-nets-a-bad-day-at-a-source)):
+
+- A hub or kit page is due **every day, whatever it last answered**; one that fails is tried again at every run
+  (after 12 hours, `HUB_RETRY_H`), never pushed days away. While one fails, the run summary's *Notes* say "N main
+  page(s) of the magazine sites did not load: aagrapevine.org/gvr-resources (404 since 2026-10-06) — checked again
+  every day" (`data/raw/pdfs.json` → `hub_problems`).
+- **One 404 no longer re-files a kit.** A page that answered before keeps its document links through a first
+  404/410; they are dropped only after a second one at least 24 hours later (`GONE_CONFIRM_H`). (Tried on the real
+  state: one 404 from `/gvr-resources` used to re-file all 49 GVR kit documents and orphan 46 of them.)
+- **Another site that does not answer** (aa.org, aaws.widen.net) is asked a second time; only a second miss counts
+  as down for the run, and its other documents simply wait for the next run, with no strike. A document whose
+  host has not answered for 4+ tries over 30+ days is still retired, as before.
+- **robots.txt** that answers with an error (5xx, 429) or not at all closes that site for 10 minutes, as the
+  robots.txt standard (RFC 9309) asks; the magazine sites' pages and documents are then left untouched for the
+  next run (*Notes*: "robots.txt of www.aagrapevine.org did not answer properly (HTTP 503): its pages were left
+  for the next run"). A document robots.txt forbids is never "unreachable": it keeps its last known size and date
+  and is asked again after 30 days.
+- **Housekeeping:** each run forgets junk addresses and pages gone (404/410/400) for 90 days (`PRUNE_GONE_DAYS`)
+  that are not in the sitemap and that no page linked meanwhile. Hubs are never forgotten. (On the state of
+  6 October 2026 the first such run forgets 18 pages, all junk addresses such as `/site-search`.)
+
+The run's log (step *Sync sources and translate*) sums this up in the crawl's lines `pages pruned`, `first 404s
+(links kept)`, `PDF checks left for the next run` and `PDF reader failures`.
+
 **Where it shows.** `/library/` · `/es/library/` (30 cards, the rest load from `/library-index.json`;
 filters by source, type, language and year; collections: GVR kit, RLV kit, catalogs, flyers, news,
 committee reports), the home page *Library* row (the 6 newest), `/shop/#catalogs` and the order forms,
@@ -402,6 +440,7 @@ committee reports), the home page *Library* row (the 6 newest), `/shop/#catalogs
 | Hide every document of one site | remove that host from `library.official_hosts` | quick rebuild after saving |
 | Hide one document | code change, see [6.2](#62-hide-one-item-everywhere) | next build |
 | Check a page every day | add its path to `HUB_PATHS` in `crawl_rules.py` | next full run |
+| A hub or kit page moved (*Notes*: "… main page(s) of the magazine sites did not load …" for days) | put the new path in `HUB_PATHS` / `KIT_PAGES` in `crawl_rules.py` (code) | next full run |
 | Never visit a part of a site | add a pattern to `SKIP_PATH_PATTERNS` in `crawl_rules.py` | next full run |
 
 A real `TITLE_OVERRIDES` line (the file name exactly as in the address, decoded):
@@ -520,8 +559,10 @@ episode and its `extra`), `show_meta`, `discover`; display
 - Once a week: the complete video list with *yt-dlp*.
 - A deleted or private video is confirmed only after a complete listing.
 - YouTube often blocks *yt-dlp* from GitHub's computers. Then only the RSS feeds are read. That is a
-  **Note** in the run summary, never a failure (on October 2, 2026: "details stopped: … Sign in to confirm you're
-  not a bot").
+  **Note** in the run summary (and on `/status/`), never a failure. Since October 2026 it is said plainly, once:
+  "details stopped: YouTube answered with a bot check (“confirm you’re not a bot”) — nothing is wrong on our side;
+  videos keep their last known details" (a rate limit: "… with a rate limit (too many requests) …"; the weekly full
+  listing: "listing stopped: … the last good list is kept").
 
 **Settings:**
 
@@ -645,6 +686,7 @@ sources:
     anonymous: true          # false = only the official API + content/instagram.yml
     keep_per_account: 130    # newest posts kept per account (about 65 days)
     enrich_per_run: 25       # post look-ups per daily run
+    recheck_per_run: 5       # posts no longer listed, looked up again per daily run (removal check)
     graph_version: "v21.0"   # version of the official API
     rsshub_instances: []     # optional RSSHub mirrors to try
 ```
@@ -655,6 +697,7 @@ sources:
 | `anonymous` | `true`: the robot may read Instagram's public pages. `false`: no visit to Instagram at all except the official API — with no token, only your list appears. (Setting `IG_ANONYMOUS=0` in the workflow does the same.) |
 | `keep_per_account` | Older posts and their pictures are deleted. Keep at least ~62 days' worth: the monthly digest of a month stays on `/digest/` all through the next one. |
 | `enrich_per_run` | How many single posts may be looked up per run. |
+| `recheck_per_run` | How many posts that dropped out of the accounts' listing are looked up again per full run, to see whether Instagram still shows them (below). Default 5; `0` switches the removal check off. |
 | `graph_version` | The official API's version (`IG_GRAPH_VERSION` in the workflow wins). |
 | `rsshub_instances` | Public RSSHub mirrors to try; empty = skipped. |
 
@@ -667,8 +710,22 @@ account (*Settings → Secrets and variables → Actions → New repository secr
 graph.facebook.com and never written in the logs. An expired token shows as a Note even on a day the
 embed page still worked.
 
+**A post Instagram no longer shows leaves the site** (since October 2026; anonymity: a member may have taken
+it down). Each full update looks up again, through the post's public embed, up to `recheck_per_run` (5) automatic
+posts that are no longer in the accounts' listing: first a post already found missing once, then a post that
+vanished while older ones are still listed, then the post checked longest ago. A post that answers "not there"
+(an empty embed, or 404/410) **twice, at least 12 hours apart** (`GONE_CONFIRM_HOURS`), is removed with its
+picture. An answer only counts when a post embed worked after it in the same run (otherwise one control request
+goes to the newest listed post): a login wall or a block decides nothing, and a warning says so ("removal
+re-check: N post(s) showed no usable embed, but no post embed worked after that (a login wall or a block?) —
+nothing was decided"). A refusal (429, 401, 403, a login redirect), a network error or the time budget stops the
+check for that run ("removal re-check stopped: …"). Posts you list by hand in `content/instagram.yml` are never
+re-checked (the file decides), and with `anonymous: false` there is no check. What it did is in
+`data/raw/instagram.json` → `stats.removal` (`checked`, `missing`, `removed`), the marks in `removal`.
+
 **How often.** The full daily update (an 8-minute budget), your list included — and the quick run of a save that
-changed `content/instagram.yml` or `sources.instagram` in `config/site.yml`.
+changed `content/instagram.yml` or `sources.instagram` in `config/site.yml` (without the post look-ups and the
+removal check: `--no-enrich`).
 
 > Note: saving `content/instagram.yml` starts a quick rebuild that **also reads Instagram and your list**
 > (`scripts/ops/push_modules.py`), so a post you add appears a few minutes later. That run skips the look-ups of
@@ -958,8 +1015,11 @@ section in [`docs/OPERATIONS.md`](../docs/OPERATIONS.md).
 **What it reads.** The two magazines' home pages, one request each (none if an earlier part of the
 same run already read them). On each page, the block `#quote-of-the-day`: its heading ("Grapevine Daily
 Quote October 2" / "Cita Diaria con La Viña Octubre 2"), the quote, who said it and where it comes
-from, and the magazine's own e-mail sign-up link. The year is worked out around today (Central time);
-a heading without a date counts as today.
+from, and the magazine's own e-mail sign-up link. A heading has no year, so the year is chosen inside a window
+from 365 days ago (`PAST_DAYS`) up to tomorrow (Central time): "January 2" read on 5 October 2026 is
+2026-01-02 (a past day, never next year's), and "January 1" read on 31 December is tomorrow. A heading without a
+date counts as today. A heading whose date is outside that window is not used: the quote counts as today's, with
+a warning ("gv: the heading “…” gives no day from … to … — the quote was taken as today's (…)").
 
 **Settings:**
 
@@ -975,8 +1035,8 @@ sources:
 
 **How often.** **Every run**. The morning refresh reads it right after the bulletin, so with the
 morning alarm set up both quotes are usually on the site by 5:30 AM Central. If a magazine is late, the
-Morning check asks again every 10 minutes from 4:00 to 7:00 AM (see
-[Automation and troubleshooting](automation-and-troubleshooting.md)).
+Morning check asks again every 10 minutes from 2:00 to 7:00 AM (the magazines usually publish the new quote
+about 2 AM Central; see [Automation and troubleshooting §4.4](automation-and-troubleshooting.md#44-morning-check-new-day-by-530-am)).
 
 **The quotes of October 2, 2026** (`data/site/quote.json`):
 
@@ -1001,6 +1061,17 @@ or search.
 **Change it.** Nothing to override: each quote is shown exactly as published, in its own language,
 never translated. If a magazine moves its quote to another page, change `quote_page`. A page that
 falls back to an older quote never replaces a newer one already on the site.
+
+**A stuck quote can no longer happen** (since October 2026). Before, a stale or mistyped heading could be read
+as a day months ahead and stay "the newest quote" until the calendar caught up. Now a stored quote dated after
+tomorrow is dropped and the newest one left is shown. The source's warnings (in the run summary's *Notes* and on
+`/status/`, and inside the error when the run failed) say what happened, for example:
+
+| Warning | Meaning |
+|---|---|
+| `gv: dropped the stored quote of 2027-01-02 — a day after tomorrow (2026-10-07, Central time)` | a quote kept from an earlier run was dated in the future: removed |
+| `gv: the page shows the quote of 2026-10-01 (“Grapevine Daily Quote October 1”) but the one of 2026-10-05 is already known — kept the newer` | the page went back to an older quote |
+| `gv: the page shows the quote of … (“…”) — over 14 days old: a stale page or a mistyped heading? It shows until a newer one comes` | nothing newer is known (a first run): it shows |
 
 **Code pointers.** [`scripts/sync/quote.py`](../scripts/sync/quote.py) → `parse_quote`, `entry`,
 `collect`, `build_site` (copies only the fields in `SITE_KEYS`); display `eleventy/filters/home.js` →
@@ -1066,7 +1137,10 @@ issues are named the way the magazine does: May 2027 → "Mayo / Junio 2027".
 
 **What is kept.** The issue on sale, the one before it, and every later one. A part that suddenly finds
 fewer than 40 % of yesterday's themes (when it had 6 or more) is not believed: the previous themes stay
-and the source is marked failed ("only N themes found (had M) — kept the previous …").
+and the source is marked failed ("only N themes found (had M) — kept the previous …"). A part that was read
+well is taken field by field as the page gives it now: since October 2026 a deadline, a deadline text or a
+prompt the page no longer gives disappears from the site too (it used to stay); only the day the theme was first
+seen is kept.
 
 **Real data (October 2, 2026):** 44 themes — 17 Grapevine, 8 dated La Viña themes, 19 La Viña suggestions. For
 example `ed:gv:2027-12:remote-communities` "Remote Communities" (December 2027, stories due May 1, 2027)
@@ -1105,6 +1179,17 @@ Read as (checked with `parse_page`): Zoom ID "871 2036 8287", passcode "238047",
 time "Noon Eastern" → **11 AM Central**, plus the next meeting date. If one detail is missing one day,
 yesterday's is kept. If the page cannot be read at all, the previous details stay and the source is
 marked failed.
+
+**The passcode** (`find_passcode`, since October 2026) is the first word after "password", "passcode",
+"contraseña" or "código de acceso" that holds a digit, so "This meeting is password protected; the passcode is
+238047" gives 238047, not "protected". A passcode of letters only still works, unless it is an ordinary word of
+the sentence (`PASS_WORDS`: protected, required, below …).
+
+> **The Zoom passcodes are public.** The passcodes of the weekly open meetings (and of the committee meeting, from
+> `config/site.yml`) are printed on the site (`/meetings/`), in its calendar files and in the presentations. That is normal for
+> open AA meetings, which anyone may attend. It means the hosts should keep Zoom's own protection on: the
+> **waiting room**, or host controls such as removing a participant and locking the meeting
+> ([Settings §3.2](settings.md#32-meeting--the-committee-meeting)).
 
 #### Change La Viña's weekly open meeting
 
@@ -1288,6 +1373,16 @@ not a meeting list (not JSON)"); their earlier meetings were kept.
 `spotlight.neta65_counties` or `data/geo/texas_places.json`. An office that fails keeps its previous meetings (a Note);
 the source is marked failed only when no office at all could be read.
 
+**Bot checks** (since October 2026). Some offices' sites answer robots with a challenge page meant for browsers
+(HTTP 202 from SiteGround or Amazon's bot protection, Cloudflare's "Just a moment…"). That is said plainly, once:
+"Northwest Texas Area 66: nwta66.org answered with a bot check (HTTP 202) — nothing is wrong on our side; the last
+good list is kept" (in the run summary's *Notes* and on `/status/`). Nothing to do; the site never tries to get
+around it. (nwta66.org has answered this way since 3 October 2026.) A challenge is no longer mistaken for a refused
+key either.
+
+**Meetings past midnight.** A meeting whose end is earlier than its start (`23:00`–`00:30`) ends the next morning
+when it lasts at most 3 hours; an end that would make it longer is dropped, as before.
+
 **Where it shows.** `/meetings/#grapevine-meetings` · `/es/meetings/#grapevine-meetings` — their one
 home: our Area first, then each nearby region in your order, with filters for place, day, in person /
 online and "include nearby areas". One line on the home page, `/monthly/`, the GV/LV report, the
@@ -1323,13 +1418,14 @@ meeting:
   weekday: "wednesday"
   start: "19:00"            # 24 h, Central time
   end: "20:00"
-  platform: "Zoom"
+  platform: "Zoom"          # the pages' words: "Join on Zoom", "Monthly on Zoom" (left out: Zoom)
   zoom_url: "…"             # the whole official Zoom link (as in config/site.yml)
   meeting_id: "…"
   passcode: "…"
   chair_title: "Grapevine / La Viña Chair"
   chair_email: "grapevine@neta65.org"
-  note: "All AA members are welcome to attend. No registration required."
+  note: "All AA members are welcome to attend. No registration required."      # who may come
+  note_es: "Todos los miembros de AA pueden asistir. No hace falta registrarse."
   skip_dates: []            # e.g. ["2026-12-16"] — dates that do not happen
 ```
 
@@ -1346,6 +1442,7 @@ meeting:
 | `start: "19.30"` | 7:30 PM |
 | `start: "noon"` or `"25:00"` | 7:00 PM (the default) |
 | `end` missing, or not after `start` (e.g. `"18:00"`) | one hour after the start |
+| `end` earlier than `start`, at most 12 hours later (`start: "22:00"`, `end: "01:00"`) | in the site data (`events.json`: the Events page, `/events.ics`) the next morning, 1:00 AM, since October 2026; the meeting pages, which work the dates out themselves, still show one hour, so keep the committee meeting within one day |
 | `skip_dates: ["2026-12-16"]` | the December meeting is left out |
 | `skip_dates: ["2026-12-17"]` | ignored + Settings problem: skip date "2026-12-17" is not the 3rd Wednesday of its month — ignored (that month's is 2026-12-16) |
 | `skip_dates: ["Dec 16"]` | ignored + Settings problem: skip date "Dec 16" is not a date like "2027-01-09" — ignored |
@@ -1354,8 +1451,14 @@ meeting:
 > browser, and both must agree. Monthly events under `recurring_events:` are forgiving ("Saturdays",
 > "2nd", "second", "last" all work there): see [Flyers and events](flyers-and-events.md).
 
-With the settings of October 2026 the next meetings are **Oct 21, Nov 18 and Dec 16, 2026, 7–8 PM Central**. If you
-change `note:` without adding a `note_es:`, the Spanish note is machine-translated.
+With the settings of October 2026 the next meetings are **Oct 21, Nov 18 and Dec 16, 2026, 7–8 PM Central**.
+
+**`platform` and `note`** (since October 2026 both are used): `platform` is the name the pages give the meeting place
+("Join on Zoom", "Monthly on Zoom", "on Zoom" in the calendar entries, the share kit, the presentations' closing
+slide), Zoom when left out; the dial-in section and the weekly open meetings always say Zoom (Zoom's own). `note` /
+`note_es` is who may come: the first sentence of *Who can come* on `/meetings/` and the end of the meeting's calendar
+descriptions (`/events.ics`, the Google and Outlook links, the home page's "add to calendar"). Change both together:
+without `note_es`, the Spanish pages show the English note (the Events page's entries get a machine translation).
 
 **When.** The quick rebuild after you save: the dates are rebuilt in every run, and the pages compute
 them too.
@@ -1380,6 +1483,19 @@ AA Grapevine runs one event calendar for both magazines. In the full daily updat
 sitemap) and keeps Texas events and Spanish-language online events for `/events/`. It is covered with
 the other events in [Flyers and events](flyers-and-events.md). Its row on `/status/` is "GV/LV event
 calendars".
+
+Since October 2026:
+
+- **"In Texas"** uses the curated lists of `scripts/sync/geo.py`: a state written in the address wins; then Texas,
+  Tejas or TX in the place or the title; then any other state, province or country named there (Florida, Georgia,
+  Chile …) means not Texas (street names such as "Florida Ave" do not count); a city alone counts only when it is on
+  geo.py's short lists of unmistakable Texas cities (`NETA65_BARE`, `TEXAS_BARE`: Dallas, Fort Worth, Houston,
+  Plano …), never a name other states share (Gainesville, Greenville, Midland, Odessa, Denton, San Antonio). So
+  "Hilton University of Florida Conference Center, Gainesville" is no longer a Texas event.
+- **A date without a clock time is an all-day event** (it used to show as starting at midnight), and an end at
+  midnight makes the day before its last day.
+- **A long event stays listed until its last day**: an event that started up to 31 days ago (`LONG_EVENT_DAYS`)
+  is kept while it runs (events longer than two days used to vanish while still running).
 
 ---
 
@@ -1409,6 +1525,45 @@ guide: [Writers archive](writers-archive.md).
 
 ---
 
+### 3.17 Safety nets: a bad day at a source
+
+A source that fails keeps everything it found before ([6.1](#61-how-the-pieces-fit)). Some bad days look like
+success, though: a Google Drive folder view that comes back empty, a page that answers with nothing, a data file
+damaged by a hand edit. Since October 2026 these safety nets keep such a day from wiping or hiding content:
+
+| Safety net | What sets it off | What the site does | Where you see it |
+|---|---|---|---|
+| **The mass-drop hold** (every source but the six below) | a source that worked suddenly finds **no items** where it had some, or **less than half** of them once it had 10 or more (`DROP_GUARD_MIN`) | keeps the missing items for one more run, while new items still come in. The next run that still misses the same items removes them; a run that finds them again ends the hold. So a real removal is one run late | **On hold** on `/status/`: "The last update did not find {n} items that were here before. To be safe, they stay on the site until the next update confirms they are gone.", with *On hold since*; `held` in `data/raw/<source>.json` and `status.json` |
+| **Drive: a folder that suddenly looks empty** | a folder (or the whole A65_GV) that held files lists none | keeps its files and waits: the next update that finds it empty again removes them (its id waits in `data/raw/drive.json` → `empty_folders`) | On hold; *Notes*: "1 folder(s) looked empty although they held files on the last update — their 12 file(s) stay on the site until the next update confirms it", then "1 folder(s) looked empty again — their 12 file(s) were removed" |
+| **A damaged data file** | `data/raw/<source>.json` cannot be read (a hand edit, a bad merge) | every build keeps what the last build made of that source; when the source runs, it sets the file aside (`.corrupt-<time>`) and starts afresh | **Failed** on `/status/`: "data/raw/<source>.json could not be read (…) — the site keeps what the last build had for it …" ([Automation §9.2](automation-and-troubleshooting.md#92-resetting-something-on-purpose)) |
+| **The document search** | a hub or kit page that does not answer properly; one 404; another site that does not answer; a robots.txt that answers with an error; a document that crashes the reader | hubs are checked again at every run; one 404 keeps a page's documents; another site is asked twice; robots.txt trouble leaves the pages for the next run; the reader runs apart, with time and memory limits ([3.3](#33-the-document-library-the-crawler)) | *Notes* ("… main page(s) of the magazine sites did not load …"); the crawl's lines in the run's log |
+| **Instagram: a post taken down** | a post that left the listing answers "not there" twice, 12 hours apart | removes it with its picture; a login wall or a block decides nothing ([3.6](#36-instagram-posts-and-posts-you-add-by-hand)) | `data/raw/instagram.json` → `stats.removal` |
+| **The daily quote: a strange heading** | a heading whose date is more than a year back or after tomorrow; a stored quote dated after tomorrow | the heading's date is not used (the quote counts as today's); the future quote is dropped ([3.9](#39-daily-quotes)) | *Notes* and `/status/` |
+| **A bot check instead of the page** | a meeting list (HTTP 202, "Just a moment…") or YouTube ("confirm you're not a bot") | says so plainly and keeps the last good list ([3.5](#35-youtube-videos), [3.13](#313-grapevine-meetings-from-the-intergroup-lists)) | *Notes*: "… answered with a bot check … — nothing is wrong on our side …" |
+| **The translation memory** | `data/translations/cache.json` cannot be read; a downloaded model with the wrong checksum | the file is set aside as `cache.json.bad-<UTC time>` (git still has the old one); the model is not installed ([Translations](translations.md)) | *Settings problems (translations)* in the run summary; the *Machine translation* card on `/status/` |
+
+**The six sources the hold leaves alone** (`DROP_GUARD_EXEMPT` in [`scripts/sync/common.py`](../scripts/sync/common.py),
+each with its reason): the bulletin and the events files (`announcements`, `manual_events`: a removal is the
+committee's own edit), the GV/LV event calendars (`events_external`: past events leave the list, often several at
+once), the editorial themes (`editorial`: their own guard, 40 % above), Instagram (`instagram`: a bad listing never
+drops posts; they leave only on purpose) and the writers archive (`writers_archive`: its own guard,
+`min_rows_ratio`). A source switched off in the settings (`meetings.enabled: false`) is never held either.
+
+> **Good to know:** a big removal of your own is held too. Delete 20 of the 35 files of the Drive panel folder at
+> once and the next update finds less than half: the 20 stay on the site, marked **On hold**, and leave with the
+> update after that. Nothing to do; or press *Run workflow* (**skip_crawl**) a second time to confirm it at once.
+
+**Where in the code:** `save_raw` and `is_mass_drop` in `scripts/sync/common.py` (with `DROP_GUARD_MIN` and
+`DROP_GUARD_EXEMPT`); `scripts/sync/drive.py` and `drive_listing.py` (a folder that looks empty: `empty_folders`);
+`carry_unreadable` in `scripts/sync/build_data.py`; the crawler's `page_priority`, `_page_gone`, `prune` and
+`hub_report` in `crawl.py` and `analyze_pdf_isolated` in `crawl_pdf.py`; `PoliteSession` (robots.txt) in
+`common.py`; `removal_sweep` in `instagram.py`; `heading_window` in `quote.py`; `BotCheck` in `meetings.py` and
+`bot_check_note` in `youtube.py`; `TranslationCache` in `translate.py`. Tests: `tests/test_sync_safety.py`,
+`tests/test_crawl_safety.py`, `tests/test_instagram.py`, `tests/test_quote.py`, `tests/test_meetings.py`,
+`tests/test_youtube.py`.
+
+---
+
 ## 4. What happens next (which run, how long)
 
 Nothing "watches" the magazine sites: the robot reads them when a run starts. A run of the **Website update**
@@ -1416,12 +1571,12 @@ workflow (*Actions* tab on GitHub) can start in five ways:
 
 | Run | Started by | Usually | Reads | Until it is live |
 |---|---|---|---|---|
-| **Nightly full update** | GitHub's schedule, set for 1:17 AM Central (12:17 AM in winter). It is set **4 hours early on purpose**: GitHub starts this repository's timed runs 4–6 hours late. | starts about 5–7 AM Central | every source, plus up to 40 minutes of document search | up to about an hour (on October 2, 2026, with little left for the document search, about 10 minutes) |
+| **Nightly full update** | GitHub's schedule, set for 07:17 UTC: 2:17 AM Central (1:17 AM in winter). It is set **4 hours early on purpose**: GitHub starts this repository's timed runs 4–6 hours late. | starts about 6–8 AM Central (5–7 in winter) | every source, plus up to 40 minutes of document search | usually 10 to 15 minutes (the document search, with little left to do, takes about 3); at the very most a little over 2 hours |
 | **Midday refresh** (quick) | GitHub's schedule, set for 7:07 AM Central (6:07 AM in winter), also 4 hours early | about 11 AM–1 PM Central | Google Drive, the bulletin and event files, podcasts, the writers archive files, the daily quote | a few minutes |
 | **Evening refresh** (quick) | GitHub's schedule, set for 3:07 PM Central (2:07 PM in winter), also 4 hours early | about 7–9 PM Central | the same as the midday refresh | a few minutes |
-| **Quick rebuild after you save** | saving a file in `config/`, `content/`, `src/`, the code, `data/geo/`, `overrides.yml` or `glossary.yml` | right away | the same as the midday refresh, **plus** the sources only the full update reads whose own input you changed (YouTube, Instagram, editorial themes, weekly open meetings, record your story, Grapevine meetings, GV/LV event calendars — never the magazine stories, the shop or the document search) | the run takes a few minutes (about 2 on October 2, 2026); allow 10–20 minutes before every copy of the page shows it |
+| **Quick rebuild after you save** | saving a file in `config/`, `content/`, `src/`, the code, `data/geo/`, `overrides.yml` or `glossary.yml` | right away | the same as the midday refresh, **plus** the sources only the full update reads whose own input you changed (YouTube, Instagram, editorial themes, weekly open meetings, record your story, Grapevine meetings, GV/LV event calendars — never the magazine stories, the shop or the document search) | about 5 minutes: the run tests the code before it publishes ([Automation §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)); allow up to 10 more minutes before every copy of the page shows it |
 | **Morning refresh** | the Morning check (the 4:30 AM alarm, plus GitHub's hourly backstop) | before 5:30 AM Central | Drive (5 minutes at most), the bulletin, then the daily quote, then podcasts and the writers archive files; on the **1st** also the magazines' current-issue pages and the shop; on the **15th** the shop | about 3 minutes |
-| **By hand** | *Actions → Website update → Run workflow* (your MKP715 login can do this) | when you click | all boxes empty = a full run; **skip_crawl** = quick; **morning** = morning | full: up to about an hour; quick: a few minutes |
+| **By hand** | *Actions → Website update → Run workflow* (your MKP715 login can do this) | when you click | all boxes empty = a full run; **skip_crawl** = quick; **morning** = morning | full: usually 10 to 15 minutes; quick: about 2 minutes |
 
 On the 1st of the month — and after a day GitHub skipped — the Morning check also starts the full update.
 
@@ -1523,8 +1678,11 @@ Rules worth knowing:
 
 - **Nothing is lost on a bad day.** `merge_items` in `scripts/sync/common.py` keeps every item ever
   found and its first-seen date, and a field that is empty today keeps yesterday's value. (A few
-  modules trim on purpose: Instagram keeps the newest 130 posts per account, the editorial themes keep
-  their window of issues, and the shop's list is replaced by each good read.)
+  modules trim on purpose: Instagram keeps the newest 130 posts per account and removes a post Instagram
+  no longer shows, the editorial themes keep their window of issues, and the shop's list is replaced by each
+  good read.) A run that says "ok" but suddenly finds far fewer items is not believed the first time
+  (`save_raw`'s mass-drop hold), and an unreadable raw file keeps the last build's data
+  ([3.17](#317-safety-nets-a-bad-day-at-a-source)).
 - **A broken source never stops the others.** `run_module` marks its raw file `ok: false` with the
   error; the old items stay.
 - **The robot owns `data/raw`, `data/site`, `data/state`, `data/translations/cache.json` and
@@ -1727,16 +1885,21 @@ should list the new source.
 
 | Source | Tests |
 |---|---|
-| Magazine stories, writer's place | `test_spotlight.py`, `test_sync_pipeline.py` |
-| Document Library | `test_library_curation.py`, `test_crawl_media.py`, `test_sync_pipeline.py` |
-| Podcasts, Instagram, weekly open meetings | `test_sync_pipeline.py` |
-| YouTube | `test_crawl_media.py`, `test_sync_pipeline.py` |
+| Magazine stories, writer's place | `test_spotlight.py`, `test_sync_pipeline.py`, `test_articles_pages.py` (saved pages) |
+| Document Library | `test_library_curation.py`, `test_crawl_media.py`, `test_crawl_safety.py`, `test_sync_pipeline.py` |
+| Podcasts | `test_sync_pipeline.py` |
+| Instagram | `test_instagram.py` (saved pages, the removal check), `test_sync_pipeline.py` |
+| Weekly open meetings | `test_weekly_open.py` (saved pages), `test_sync_pipeline.py` |
+| YouTube | `test_youtube.py`, `test_crawl_media.py`, `test_sync_pipeline.py` |
+| GV/LV event calendars | `test_events_external.py` (saved pages) |
+| The safety nets (mass-drop hold, unreadable files, Drive) | `test_sync_safety.py` |
+| Dates read from names and texts | `test_source_dates.py` |
 | Shop, price changes | `test_shop.py`, `test_price_changes.py` |
 | Daily quote | `test_quote.py`, `test_morning.py`, `test_run_wiring.py` |
 | Editorial themes | `test_editorial.py` |
 | Record your story | `test_audio_project.py` |
 | Grapevine meetings | `test_meetings.py` |
-| Committee meeting | `test_build_times.py`, `test_recurring_events.py`, `test_events_feeds.py` |
+| Committee meeting | `test_build_times.py`, `test_meeting_rule.py`, `test_recurring_events.py`, `test_events_feeds.py`, `test_central_time.py` |
 | Texas writers archive | `test_writers_archive.py`, `test_published_archive.py` |
 | What a push also runs | `test_push_modules.py` |
 
@@ -1762,11 +1925,14 @@ should list the new source.
 | What you see | Likely cause | What to do |
 |---|---|---|
 | A source shows **Failed** for a day | the site was down, slow, or turned the robot away | Nothing: its old items stay and the next run tries again. After 7 days the issue opens. |
+| A source shows **On hold** | it suddenly found far fewer items (or a Drive folder looked empty) | Nothing: the next update removes the missing items if they are really gone, or ends the hold ([3.17](#317-safety-nets-a-bad-day-at-a-source)). To confirm a removal of your own at once, run the update again. |
 | A source shows **Delayed** | it has not succeeded for 3+ days — often only quick runs happened | *Actions*: check that the full daily run ran; run it by hand (all boxes empty). |
 | My settings change did not show | that source is read only by the full run (the magazine stories, the shop, the document search); or the save's run could not compare `config/site.yml` with its earlier copy (a blue notice *Push run* says so) | See the table in [4](#4-what-happens-next-which-run-how-long); wait, or run the workflow by hand. |
 | Nothing ran after I saved | the commit message contained `[skip ci]`, or the file is under `data/` or `docs/` | Save a small change again with a plain message. |
 | Red ✗ right after editing `config/site.yml` | a YAML typo (indentation, a missing quote) | The red step shows the line. Fix it, or undo the edit from the file's *History*. The live site keeps its last version meanwhile. |
-| YouTube Note "details stopped: … Sign in to confirm you're not a bot" | YouTube blocks the detail tool on GitHub's computers | Nothing: the feeds keep the list current. |
+| YouTube Note "details stopped: YouTube answered with a bot check …" (before October 2026: "… Sign in to confirm you're not a bot") | YouTube blocks the detail tool on GitHub's computers | Nothing: the feeds keep the list current. |
+| Instagram: "removal re-check: N post(s) showed no usable embed, but no post embed worked after that (a login wall or a block?) — nothing was decided" or "removal re-check stopped: …" | Instagram turned the robot away during the removal check | Nothing: no post is removed on such a day; the next full run checks again ([3.6](#36-instagram-posts-and-posts-you-add-by-hand)). |
+| An Instagram post left the site | Instagram no longer shows it (deleted, archived or private): two "not there" answers 12 hours apart | Expected, and wanted: the site follows the accounts (a post may have been taken down for someone's anonymity). `data/raw/instagram.json` → `stats.removal.removed` names it. |
 | Instagram failed: "No new posts for @… (…). Posts already on the site are kept." | Instagram refused the public pages that day | Usually temporary. For good: the official API secrets ([3.6](#36-instagram-posts-and-posts-you-add-by-hand)). |
 | "No posts fetched … the automatic check is switched off (sources.instagram.anonymous: false) and IG_ACCESS_TOKEN / IG_BUSINESS_ID are not set." | `anonymous: false` without the secrets | Add the secrets (NETA65 account) or set `anonymous: true`; list posts by hand meanwhile. |
 | A post added to `content/instagram.yml` is missing | the save's run is still going, Instagram turned the robot away in that run, or the entry has a mistake | Look at the run; check **Notes** for "no Instagram post link found" or "YAML error"; otherwise the next full run reads the list again. |
@@ -1786,13 +1952,17 @@ should list the new source.
 | La Viña's weekly open card disappeared | `day`, `time` or `timezone` not understood, or `enabled: false` | Fix the block ([3.11](#311-weekly-open-meetings)); the run's log names the problem. |
 | Weekly open: "fetch failed: https://www.aagrapevine.org/grapevine-weekly-open" | the page is down or moved | Wait a day; if it lasts, change `sources.grapevine.weekly_open`. |
 | Grapevine meetings Note "… did not answer" or "not JSON" | one office's list could not be read | Nothing; its meetings stay. A Note "the key from … was not accepted" (or "no key was accepted for its meeting list …") → the office has a new key ([3.13](#313-grapevine-meetings-from-the-intergroup-lists)). |
+| Grapevine meetings Note "… answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept" | that office's site shows browsers a challenge page | Nothing; its meetings stay ([3.13](#313-grapevine-meetings-from-the-intergroup-lists)). |
+| Document Library Note "N main page(s) of the magazine sites did not load: … (404 since …) — checked again every day" | a hub or kit page of the document search did not answer properly | Nothing for a few days (its documents stay). If it lasts, open the page: if it moved, update `HUB_PATHS` / `KIT_PAGES` in `crawl_rules.py` ([3.3](#33-the-document-library-the-crawler)). |
+| Document Library Note "robots.txt of www.aagrapevine.org did not answer properly (…): its pages were left for the next run" | the magazine site's robots.txt answered with an error | Nothing, unless it repeats for days. |
 | Today's quote is missing at 5:30 AM | the magazine published late, or the morning alarm did not ring | The Morning check asks until 7 AM; the card shows "Yesterday" meanwhile. See [Automation and troubleshooting](automation-and-troubleshooting.md). |
 | Quote: "gv: no quote of the day on https://…" | the home page changed | Check `quote_page`; tell whoever helps with the code if it lasts. |
+| Quote Note "gv: dropped the stored quote of … — a day after tomorrow …", "… is already known — kept the newer" or "… over 14 days old …" | a stale or mistyped heading on the magazine's page | Nothing: the site shows the newest believable quote ([3.9](#39-daily-quotes)). |
 | Podcasts failed with "<key>: …" | one show's feed did not answer | The other shows still update; check that show's `feed`. |
 | **New podcast feeds found** in the summary | a magazine site links a show that is not in your settings | Add a block if you want it ([3.4](#34-podcasts)); otherwise ignore it. |
 | The Library looks small | normal: each official document once | Check the **PDF crawl** line; if every known page is crawled, it is complete. |
 | A document has a poor title | its link text and file name say little | `TITLE_OVERRIDES`, or `overrides.yml` for one language ([3.3](#33-the-document-library-the-crawler)). |
-| `/status/` says `data/raw/<x>.json` "was unreadable" | someone edited a robot file by hand | Restore the file from its history on GitHub to keep the first-seen dates. |
+| `/status/` says `data/raw/<x>.json` "could not be read" or "was unreadable" | someone edited a robot file by hand (or a merge broke it) | Restore the file from its history on GitHub to keep the first-seen dates; the site keeps that source's last good data meanwhile ([3.17](#317-safety-nets-a-bad-day-at-a-source)). |
 
 ---
 

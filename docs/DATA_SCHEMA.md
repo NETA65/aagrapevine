@@ -9,9 +9,13 @@
         └──► data/translations/cache.json  (+ overrides.yml wins)
 ```
 
-* `data/raw/*.json` — written ONLY by the matching sync module. Cumulative: items are
-  never dropped just because a source hiccuped; they get `last_seen` updates and may be
-  marked `"status": "gone"` when confirmed deleted.
+* `data/raw/*.json` — written ONLY by the matching sync module. Cumulative: a run that fails
+  (`ok: false`) keeps every item; items get `last_seen` updates and may be marked `"status": "gone"` when
+  confirmed deleted. A run that says ok decides what stays, with one safety net since October 2026: a sudden
+  drop (no live items where there were some, or fewer than half once there were 10 or more) is held back for
+  one run (`held`, §1) except for the sources in `common.DROP_GUARD_EXEMPT`. Smaller drops, and the modules
+  that trim on purpose (Instagram's newest `keep_per_account` posts, the editorial window, past events of other sites),
+  remove items at once.
 * `data/site/*.json` — written ONLY by `build_data.py`. Templates read ONLY these.
 * All timestamps are ISO-8601 strings. Dates without time: `YYYY-MM-DD`.
   Datetimes: UTC `YYYY-MM-DDTHH:MM:SSZ`.
@@ -26,10 +30,37 @@
   "first_harvest": "2026-09-01T10:17:00Z", // first successful read of this source; never moves
   "ok": true,                          // false if this run failed (items kept from before)
   "error": null,                       // short message when ok=false
-  "stats": { "fetched": 15, "new": 2 },// free-form counters shown on /status/
+  "held": { … },                       // only while a sudden drop is held back (below)
+  "changes": { "added": 2, "removed": 0, "held": 0 },   // what this run changed (below)
+  "stats": { "fetched": 15, "new": 2 },// free-form counters; stats.warnings is shown on /status/
   "items": [ Item, ... ]
 }
 ```
+
+**`changes`** (every envelope since October 2026, written by `common.save_raw`): this run's live items (status not
+`gone`) `added` and `removed`, and `held` = items kept although this run did not find them; plus `confirmed` (an ISO
+time, the `held.since` of the hold) only on the run that accepted a held drop — the same items missing again, or a
+module removing items it had kept back (Drive: a folder found empty twice).
+
+**`held`** — the mass-drop guard. When a source says ok but its live items fall to zero (from any size) or lose more
+than half once the previous list held at least `DROP_GUARD_MIN` = 10, `save_raw` puts the missing items back next
+to this run's (new items still come in) and writes `held` = `{since, kept, previous, found, drop, examples[, ids]}`:
+since when, how many kept, the counts before and found, `drop: true` (the guard put them back; `ids` = theirs, in
+the raw file only) or `false` (the module kept them itself and named them `unconfirmed`: Drive's empty folders), and
+up to 5 titles. The next ok run that still misses the held `ids` removes them (`changes.confirmed`); items that
+vanish only on that run are judged as a new drop; a run that finds them again ends the hold; a failed run keeps
+it as it was. An item this run marked `gone` that the guard puts back is put back as it was before, not listed
+twice. Not guarded: the sources in `common.DROP_GUARD_EXEMPT` (announcements, manual_events, events_external, editorial, instagram,
+writers_archive — the reason for each is in the code) and a source switched off (`stats.disabled`, e.g.
+`meetings.enabled: false`); a module may pass `save_raw(…, drop_guard=True|False)`. `status.json` `sources[]`
+copies `changes` and `held` (without `ids`; `null` when none); `/status/` shows a held source as **On hold**.
+
+**An unreadable raw file** (a hand edit or a bad merge): `build_data` keeps what the last build made of that source
+(`carry_unreadable`) and its `status.json` row says "data/raw/<source>.json could not be read (…) — the site keeps
+what the last build had for it until the file is fixed (restore it from the git history) or this source's next
+update rebuilds it". When the module itself runs, `common.load_raw` moves the file aside as
+`<source>.json.corrupt-<time>` (git-ignored) and the module starts from an empty list, `ok: false` once, with a
+message that ends "restore the file from the git history to keep older items and first-seen dates".
 
 `attempted` also moves in `pdfs.json` on a full update that leaves the crawl out because
 `sources.crawler.minutes_per_run` is 0 (`run_all._note_paused_crawl` writes only that key; not when the file says
@@ -40,7 +71,7 @@ file has none). `build_data.py` uses it to tell the launch-day back catalog from
 *is_new / What's New* in §3); the oldest `first_seen` cannot do that because it moves forward when a
 source drops old items.
 
-Source file names: `drive.json`, `youtube.json`, `podcasts.json`, `instagram.json`,
+Source file names (and `manual_events.json`, the `content/events` files): `drive.json`, `youtube.json`, `podcasts.json`, `instagram.json`,
 `articles.json`, `pdfs.json`, `events_external.json`, `editorial.json`,
 `weekly_open.json`, `announcements.json`, `shop.json`, `meetings.json`, `quote.json`, `audio_project.json`,
 `writers_archive.json` (its items have their own shape — §2, *writers_archive.json*).
@@ -798,7 +829,9 @@ Site file:
       "ok": true,            // true = last run fine · false = last run failed (older data kept) · null = never ran
       "updated": "…",        // last SUCCESSFUL run
       "attempted": "…",      // last run, successful or not
-      "count": 528, "new_7d": 3, "error": null, "stats": { /* the module's own counters */ } }
+      "count": 528, "new_7d": 3, "error": null, "stats": { /* the module's own counters */ },
+      "changes": { "added": 3, "removed": 0, "held": 0 },   // the raw envelope's (§1); null when none
+      "held": null }       // the raw envelope's hold without its ids (§1): /status/ "On hold"; null when none
   ],
   "scheduled": [            // bulletin posts whose `publish` day is still to come (build_announcements): soonest
                             // first, at most 20 — not on the site yet; listed in the Actions run summary
@@ -821,7 +854,10 @@ Site file:
              "updated": "…", "attempted": "…" },   // the crawler's page counters: for the run summary / maintainers
   "translations": { "cached": 1620, "engine": "argos1.0-ct2/v6", "model_enabled": true,
                     "translated_this_run": 0, "from_cache": 1620, "pending": 0, "rejected_by_guard": 0,
-                    "seconds": 0.1, "model_seconds": 0.0, "texts_per_second": null, "glossary_entries": 162 },
+                    "seconds": 0.1, "model_seconds": 0.0, "texts_per_second": null, "glossary_entries": 162,
+                    "problems": [] },   // since October 2026: an unreadable cache.json moved aside
+                                        // (cache.json.bad-<UTC time>), a model refused for its SHA-256 —
+                                        // also problems.translations; /status/ shows a calm line + the text
   "counts": { "videos": 528, "episodes": 295, "…": 0, "whatsnew": 150 },
   "spotlight": { "today": "2026-09-23", "home_days": 60, "list_days": [60, 90],
                  "counts": { "60": { "neta65": 2, "texas": 8, "all": 100 }, "90": { … } }, "items": 156 },
@@ -841,7 +877,7 @@ Site file:
                            // `location_es` still saying "Lugar por anunciarse" next to a real `location` …);
                            // "translations": data/translations/glossary.yml or overrides.yml could not be read
                            // (a YAML typo) — the cache is used as it is, and new texts stay in their original
-                           // language until the file is fixed
+                           // language until the file is fixed; also the translation memory or a model (above)
   "feeds": [               // the optional outside calendars (config sources.ics_feeds) — NOT content sources:
     { "key": "neta-65-workshops", "url": "https://neta65.org/events/category/workshop/list/?ical=1",
       "label": "NETA 65 workshops", "label_es": "Talleres de NETA 65",
@@ -872,6 +908,17 @@ content/events file whose title, `title_es`, `kind` or `tags` say "assembly" / "
 is past; `price-change:<key>` — a config/site.yml `price_changes` block whose `notice_until` has passed may be
 removed (once the stores show the new prices). `due` = the date the reminder is about ("YYYY-MM-DD", or "YYYY-MM").
 `counts` also has `writers_archive` (the stories of writers_archive.json).
+Since October 2026 `/status/` also shows each source's `stats.warnings` (any state) in a folded *Notes from the last
+update (n) — for the site maintainer* box, as raw English text (on `/es/status/` its caption says so). Drive's
+`stats` there count what is not published instead of naming it: `loose_skipped`, `unreadable_folders`,
+`depth_limited`, `unconfirmed_folders` are numbers, `skipped_panels` a list of panel numbers (the names are only in
+the run's log). The `expenses-panel` reminder is obsolete now that the Tracker works the panels out itself (it
+still fires when the last `panels` entry of `config/expenses.yml` ends within 90 days).
+`updated` of `announcements.json`, `events.json`, `whatsnew.json`, `spotlight.json` and `writers_archive.json` (and
+of `shop`, `meetings`, `audio_project`, `quote` before their source first worked) means "when this file's content
+last changed" since October 2026 (`build_data.stamped`): a build that changes nothing else in it keeps the last
+build's value. `status.json` `generated` / `updated` still mark every build, so a data commit still happens every
+run.
 `feeds` is kept apart from `sources` on purpose: the /status/ page explains each feed in plain words
 ("Other calendars we read"), and the Actions run summary lists them as information only, so a feed that
 a site's bot protection blocks never counts as failed and never opens the "A content source has stopped
@@ -1045,7 +1092,7 @@ kept per visitor is `localStorage["gv-orientation-v1"]` = `{ v: 1, done: [lesson
 Scanned from the real `data/raw/*.json` and `data/site/*.json` (2026-09-23). "→ i18n" = the
 field also gets `i18n.<name> = {en, es}` in the site file.
 
-### Raw envelope extras (besides `source updated attempted ok error stats items`)
+### Raw envelope extras (besides `source updated attempted ok error held changes stats items first_harvest`)
 
 | raw file | extra top-level keys |
 |---|---|
@@ -1053,11 +1100,12 @@ field also gets `i18n.<name> = {en, es}` in the site file.
 | `writers_archive.json` | `parser_version`, `files` {gv/lv: {`name`, `name_date`, `sha256` (of the text with LF line ends, no BOM — the same on the owner's PC and in git), `rows`, `texas_rows`, `first_year`, `imported_at`}} — §2 *writers_archive.json* |
 | `podcasts.json` | `shows` [{`key`, `name`, `title`, `feed`, `description`, `image`, `language`, `web`, `apple`, `spotify`, `amazon`, `episodes`}], `discovery` (weekly feed discovery) |
 | `youtube.json` | `playlists` [{`id`, `title`, `lang` (en/es/und), `count`, `channel_id`, `url`}], `backfilled_at`, `detail_fails` {video id: per-video detail failures — 3 → not asked again; a bot check, captcha, rate limit or time-out is not counted}, `channel_ids` |
-| `instagram.json` | `profiles` {gv/lv: {`username`, `name`, `full_name`, `url`, `followers`, `posts`, `owner_id`, `checked`, `avatar`}} |
-| `pdfs.json` | `crawl` {`known_pages`, `crawled_pages`, `pdfs`, `last_run_pages`}; crawler counters are in `stats` |
+| `instagram.json` | `profiles` {gv/lv: {`username`, `name`, `full_name`, `url`, `followers`, `posts`, `owner_id`, `checked`, `avatar`}}; `removal` {shortcode: {`checked`, `missing`}} — the removal sweep's marks (since October 2026: a post no longer listed is looked up again; two "not there" answers ≥ 12 h apart remove it with its picture); `stats.removal` {`checked`, `missing` [ ], `removed` [ ]} |
+| `pdfs.json` | `crawl` {`known_pages`, `crawled_pages`, `pdfs`, `last_run_pages`}; `hub_problems` [{`url`, `status`, `since`}] (since October 2026; always written, `[]` when all is well) — the hub / kit pages (`HUB_PATHS` order) asked for this run that gave no readable page: `status` an HTTP code (404, 410, 503 …) or a word (`"no-response"`, `"login"`, `"offsite"`, `"not-html"`, `"robots"`, `"too many redirects"`, `"read: <ExceptionName>"`), `since` the UTC start of the failing streak (a 304 or a page reused from the run's memo counts as fine); crawler counters are in `stats`, with `stats.pruned_pages` (pages forgotten this run) and, when there are problems, `stats.warnings` ("N main page(s) of the magazine sites did not load: aagrapevine.org/gvr-resources (404 since 2026-10-06) — checked again every day"; "robots.txt of www.aagrapevine.org did not answer properly (HTTP 503): its pages were left for the next run") |
+| `drive.json` | `empty_folders` {folder id: since} (since October 2026): folders (or the root) that listed empty although they held files — their files are kept (`held`, `drop: false`) until the next run finds the folder empty again (then they go: `changes.confirmed`) or lists them again |
 | `events_external.json` | `cache`, `sitemap` (module bookkeeping — not used by the site) |
-| `meetings.json` | `feeds` [{`id`, `name`, `url`, `lang`, `ok`, `count`, `method` (feed/page), `key_from` (secret/config/key_source — never the key), `error`, `note`, `updated`, `attempted`}], `type_labels` {code: {en, es}}. Items: `mtg:<hash>` (kind `meeting`, `title` = name, `url` = the meeting's page; `extra` = `day`, `time`, `end_time`, `location`, `address`, `street`, `zip`, `city`, `county`, `state`, `lat`, `lng`, `approximate`, `region`, `district`, `types`, `attendance`, `in_area`, `sources`) |
-| `quote.json` | `history` {gv/lv: [{`pub`, `lang`, `date`, `heading`, `text`, `attribution`, `source`, `source_lang`, `url`, `signup_url`, `seen` (the UTC time that day's quote was first read; kept on later reads; null in an entry written before these times were kept — it never gets one)}]} — the last 14 days, newest first, one per day (raw only: the guard against a page going back to an older quote, and the times behind `status.json` → `quote_days`; never shown as such). Items: `quote:<pub>:<date>` (kind `quote`, `title` = the official heading, `url` = the page anchor; `extra` = `pub`, `text`, `attribution`, `source`, `source_lang`, `signup_url`, `date_label`, `date_from_heading`, `block` (teaser/embed/anchor), `node`) |
+| `meetings.json` | `feeds` [{`id`, `name`, `url`, `lang`, `ok`, `count`, `method` (feed/page), `key_from` (secret/config/key_source — never the key), `error` (a bot check since October 2026: "<host> answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept", the office's previous meetings kept; `stats.warnings` prefixes the office's name), `note`, `updated`, `attempted`}], `type_labels` {code: {en, es}}. `extra.end_time` may be earlier than `time` when the meeting runs past midnight and lasts at most 3 h (`MEETING_OVERNIGHT_HOURS`; `23:00`–`00:30`); a longer one is dropped as before. Items: `mtg:<hash>` (kind `meeting`, `title` = name, `url` = the meeting's page; `extra` = `day`, `time`, `end_time`, `location`, `address`, `street`, `zip`, `city`, `county`, `state`, `lat`, `lng`, `approximate`, `region`, `district`, `types`, `attendance`, `in_area`, `sources`) |
+| `quote.json` | `history` {gv/lv: [{`pub`, `lang`, `date`, `heading`, `text`, `attribution`, `source`, `source_lang`, `url`, `signup_url`, `seen` (the UTC time that day's quote was first read; kept on later reads; null in an entry written before these times were kept — it never gets one)}]} — the last 14 days, newest first, one per day (raw only: the guard against a page going back to an older quote, and the times behind `status.json` → `quote_days`; never shown as such). Since October 2026 a heading's date is taken only inside `heading_window` (365 days back to tomorrow, Central); an entry or item dated after tomorrow is dropped, and `stats.warnings` says what happened ("gv: dropped the stored quote of …", "… is already known — kept the newer", "… — over 14 days old …"). Items: `quote:<pub>:<date>` (kind `quote`, `title` = the official heading, `url` = the page anchor; `extra` = `pub`, `text`, `attribution`, `source`, `source_lang`, `signup_url`, `date_label`, `date_from_heading`, `block` (teaser/embed/anchor), `node`) |
 | `shop.json` | `bulk_discounts` {`source_url`, `tiers`, `note` {en?, es?}}, `types` {gv/lv: {print/digital/complete: {`text`, `lang`, `url`}}}, `listings` [{`pub`, `region`, `url`}], `types_checked` (ISO; type descriptions are re-read every 30 days), `specialty_checked` (ISO; specialty pages are re-read every 7 days), `price_memory` {effective day: {`sub:…` item id: price, `botm:<pub>:<sku>`: regular price}} — for each announced price change (`config/site.yml` price_changes), the 1-year prices it affects (and, when it changes the book prices, each Book of the Month's regular price, by its book) as the reads BEFORE its day found them: each read until the day before updates the prices it found — a plan or book it did not find keeps its last price, and changes on the same day share one memory —, frozen from the day on (with the clock after the reads, so a run that started before midnight never files a later price as "before"); build_data compares later reads with it (`scripts/sync/price_changes.py` `remember` / `resolve` / `book_stale`); the memory of a change no longer in the settings is kept 400 days after its day (a typo that makes the block unreadable never loses it), then dropped. Items: `botm:gv` / `botm:lv` (kind `botm`; `extra` = `pub`, `page_url`, `price`, `sale_price`, `discount_pct`, `currency`, `sku`, `starts`, `ends`, `month`, `month_label`, `offer_text`, `product_name`, `image_src`, `read` (the day these prices were read, Central; an offer kept from an earlier read keeps its day)), `sub:<pub>:<region>:<sku>` (kind `subscription`; `extra` = `pub`, `region`, `listing_url`, `type`, `term_months`, `price`, `currency`, `sku`, `volume`, `position`, `image_src`) and `special:<pub>:<sku>` (kind `specialty`, `summary` = the short description; `extra` = `pub`, `type` (cards / planner / calendar / holiday / other), `price`, `currency`, `sku`, `volume`, `trilingual`, `pack`, `page_url`, `position`, `image_src`, `missing_since` (a seasonal item the stores no longer show, YYYY-MM-DD)). `stats.specialty_out_of_season` lists those ids on every run |
 
 `articles.json` → `archive_state` — the archive listings (aagrapevine.org/archive, aalavina.org/archivo):
@@ -1187,7 +1235,8 @@ calendar feed keeps them for subscribers):
   day before when it is exactly midnight). A timed event: its `end` (a date as its end: midnight after that
   day). A timed event without an end — or with one that cannot be read or is not after its start — lasts one
   hour (`EVENT_NO_END_MS`: the hour the calendars give it, and what `meeting:` and `recurring_events:`
-  assume); its card shows the start time alone.
+  assume — except, since October 2026, an end earlier than the start and at most 12 hours later, which the
+  sync reads as the next morning, `meeting.overnight`); its card shows the start time alone.
 * **Outside calendars** (`sources.ics_feeds`): one item per VEVENT (RRULE expanded without the dates EXDATE deletes or a RECURRENCE-ID VEVENT moves or cancels; UNTIL in any form; CANCELLED left out), id
   `ev:ics:<hash of UID + start>`, `source: "calendar"`, `category` = the feed's `category:` (`neta65` or `ics`
   → shown with the NETA 65 events; `gv-calendar` / `lv-calendar` → with the GV/LV calendars), `url` = the
@@ -1287,8 +1336,29 @@ on every run. A PDF record:
 | `gone_since` | when it became `gone`. A gone PDF that a page still links is checked again every 7 days during its first 60 days as gone, then every 30 days (`GONE_RECHECK_DAYS`); a good answer brings it back (`status: ok`, both fields removed) |
 | `vanished_at` / `recheck` | no page links it any more (→ one check: deleted?) / a gone PDF is linked again (→ check: back?) |
 | `hint`, `fresh` | the link is not a `*.pdf` address (the check must confirm it is a PDF) / it appeared on a page crawled before, so `first_seen` ≈ its publish date |
-| `head` | last check: `status`, `size`, `type`, `last_modified`, `final_url`, `checked_at`; after an error or HTML answer (404/410, 5xx, a web page where the file was) `size` and `last_modified` stay the file's last known ones, so an error page never re-dates the PDF; after no answer at all also `error: "unreachable"`, `fails`, `next_try` (2, 4, 8 … ≤ 60 days) and `unreachable_since` (first of those failures). A PDF on another site (`external`) whose host has not answered for 30+ days after 4+ tries becomes `gone` (`UNREACHABLE_GONE`); files on the two magazine sites never do |
-| `details` | from the one-time download: `checked_at`, `title` (PDF metadata; the author is never read), `pages`, `chars`, `text_lang`, `page_langs` (language of each of the first 2 pages: `en`/`es`/`fr`, or `null` when a page has < 200 characters of text or no clear language — two different languages make the file `multilingual`), `heading` (a title-like line from the top of page 1), `thumb`; on failure `error`, `final` (do not retry), `attempts`, `next_try` |
+| `head` | last check: `status`, `size`, `type`, `last_modified`, `final_url`, `checked_at`; `error: "robots"` + `next_try` (30 days) when robots.txt forbids the file (since October 2026: the last known size and date kept, never a strike, never gone); after an error or HTML answer (404/410, 5xx, a web page where the file was) `size` and `last_modified` stay the file's last known ones, so an error page never re-dates the PDF; after no answer at all also `error: "unreachable"`, `fails`, `next_try` (2, 4, 8 … ≤ 60 days) and `unreachable_since` (first of those failures) — since October 2026 only after the host was asked twice; while a host is down for the run its other PDFs are re-queued with no record (`pdfs_requeued`). A PDF on another site (`external`) whose host has not answered for 30+ days after 4+ tries becomes `gone` (`UNREACHABLE_GONE`); files on the two magazine sites never do |
+| `details` | from the one-time download: `checked_at`, `title` (PDF metadata; the author is never read), `pages`, `chars`, `text_lang`, `page_langs` (language of each of the first 2 pages: `en`/`es`/`fr`, or `null` when a page has < 200 characters of text or no clear language — two different languages make the file `multilingual`), `heading` (a title-like line from the top of page 1), `thumb`; on failure `error`, `final` (do not retry), `attempts`, `next_try`. Since October 2026 the file is read in a child process (`crawl_pdf.analyze_pdf_isolated`, 60 s, 2 GB on Linux) and the attempt is written first (`error: "parse: interrupted"`, kept only if the run died while reading); other errors: `"robots"`, `"parse: no result after N s"`, `"parse: crashed (out of memory)"`, `"parse: crashed (exit code N)"`, `"parse: no result"` — each retried after 2, 4, 8, 16, then 30 days |
+
+A page record (`pages` {url: …}) — since October 2026 also: `gone_strike_at` (the first 404/410 of a page that
+answered 200 before: its PDF links are kept until a second 404/410 at least 24 h later, `GONE_CONFIRM_H`, and the
+page is checked again the next day), `error_since` (UTC start of the current streak of answers that were not a
+readable page — 5xx, no answer, a 404 strike or a confirmed 404/410/400, login, offsite, not-html, robots),
+`last_error` (now for all of those, not only 5xx), `linked_at` (gone pages only: when a crawled page last linked it,
+refreshed at most weekly); a 200 or 304 clears them. A hub or kit page is due every day whatever it answered (a
+failing one after `HUB_RETRY_H` = 12 h). `prune()` forgets, at the start of every crawl run, pages the crawl rules
+reject (junk addresses) and pages gone (404/410/400) for `PRUNE_GONE_DAYS` = 90 (counted from `error_since`, else
+`crawled_at`) that are not in the sitemap and have no newer `linked_at`; hubs, sitemap pages and working pages
+never. `runs[]` entries may carry `pruned_junk`, `pruned_gone`, `parse_failed`, `pdfs_requeued` and
+`robots_unavailable`. A PDF's site date is the Central-time day of its `Last-Modified` (or, for a fresh file, of
+`first_seen`) — a file uploaded on the evening of the 31st into that month's folder is dated the 31st.
+
+### Push bookkeeping — `data/state/sources-seen.json`
+Since October 2026: `{"commit": "<sha>", "by": "push" | "full update", "recorded": "<UTC time>"}` — the last
+commit the sources that only the full update reads (`FULL_ONLY`) ran with. Written only by *Website update*
+(`python -m scripts.ops.push_modules --record <sha> --by …`, after a sync step that ended well) and carried by the
+data commit; a push run compares its files from that commit (`push_modules`, see docs/OPERATIONS.md *Push to
+`main`*), so a push whose own run GitHub replaced in the queue is not forgotten. Never edit it by hand; a missing
+or unknown commit only means a push counts its own changes.
 
 ### Translation rules that affect what you see
 * Brand names are never translated (glossary `keep`: Grapevine, La Viña, Dear Grapevine, AA Grapevine,

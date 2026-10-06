@@ -729,6 +729,15 @@ still come every 12 and 30. None of the shuffle rules apply. Today's CSV is sort
 quizzes one after the other: it is meant for a hand-ordered show (a numbered Drive folder, a CSV you arranged). Use
 Shuffle otherwise.
 
+**The next slide is loaded ahead** (since October 2026). 1.5 seconds after a slide starts, the player works out the
+slide that comes next (the pick is seeded by the show's state, so it knows) and loads its picture; on the booth's
+own screen (not in "Preview here") it also starts loading the next video or sound file, except while a clip is
+playing. The next slide then shows at once, without a fade-in from a blank frame. A picture or clip that fails to
+load ahead (a venue's Wi-Fi filter blocking Google's pictures, for example) is left out **before** it would show,
+for 10 minutes like any failed file, and the slide picked instead starts loading at once. Nothing is loaded ahead
+while the Data saver is on and the device is online. (A clip that ends exactly at its time limit now moves the show
+on once; before, it could skip the next slide at once.)
+
 ### 5.7 How long a slide stays
 
 | Slide | Time (Normal pace) |
@@ -1177,8 +1186,9 @@ booth.max_file_mb)*.
 ### 7.8 The offline copies of Drive files
 
 The booth plays offline, so every site update also saves a copy of the booth folder's pictures, videos and sound
-files **with the website** (at `/about/booth/media/`, never in Git). The Website update run's **Build & publish
-website** job does it, just before it builds the site (`scripts/build/booth-media.mjs`):
+files **with the website** (at `/about/booth/media/`, never in Git). The Website update run's **Build website** job
+(called *Build & publish website* before October 2026) does it, just before it builds the site
+(`scripts/build/booth-media.mjs`):
 
 1. It brings back the files the last runs saved (GitHub keeps them in its Actions cache between runs), deletes the
    ones no longer in the folder, and downloads only what is new or changed — a photo or poster as Google's
@@ -1189,6 +1199,11 @@ website** job does it, just before it builds the site (`scripts/build/booth-medi
    unchanged one never is.
 3. The show's file points each slide at its saved copy; a device that saves the show for offline then keeps those
    files too ([9.1](#91-how-the-offline-copy-is-made)).
+4. **Pictures only as pictures** (since October 2026): a photo or poster copy is kept only when its bytes are a
+   JPEG, PNG, WebP, GIF or AVIF picture, whatever type Google's answer claims, and its name ends in what the bytes
+   are. Anything else (an SVG, for example) is not saved: "the answer is not a picture (…): the booth keeps JPEG,
+   PNG, WebP, GIF and AVIF pictures". A copy an earlier run kept as `.svg` or `.bmp` is deleted and downloaded
+   again.
 
 **Limits** (`config/site.yml` → `booth:`):
 
@@ -1284,8 +1299,8 @@ short guide, [content/booth/README.md](../content/booth/README.md), says the sam
 4. **Commit changes…** → a short message ("booth: a quiz about the 1949 masthead") → **Commit directly to the main
    branch** → **Commit changes**.
 5. Two runs start by themselves: **Code check (tests and test build)** (it checks every row; a green ✓ or a red
-   ✗ in a few minutes) and **Website update** (a quick run: the site is updated about 2 minutes after it starts,
-   GitHub Pages may take a few minutes more to show it).
+   ✗ in a few minutes) and **Website update** (a quick run that tests the change first: the site is updated about
+   5 minutes after it starts, and only if the tests pass; GitHub Pages may take a few minutes more to show it).
 6. A booth that is playing online picks the change up within half an hour, at its next slide; any other booth gets
    it the next time its About page is opened (or reloaded) with internet. To see it at once: open (or reload) the
    About page → **Settings** → **Slides** → search the new row → **Show now**.
@@ -1705,7 +1720,7 @@ You see it in four places:
    (`test_no_problem_at_all` in `tests/test_booth_csv.py`) prints every line. GitHub e-mails the person who
    pushed, when that person has its failure e-mails switched on
    ([Automation and troubleshooting §8.3](automation-and-troubleshooting.md#83-who-gets-githubs-run-failed-e-mails)).
-2. **The build** (the Website update run → **Build & publish website** → **Build the website**): a warning
+2. **The build** (the Website update run → **Build website** → **Build the website**): a warning
    `[booth] 1 problem(s) — left out of the booth display:` followed by the lines (CSV rows, Drive files, settings;
    live items are listed only in the player).
 3. **The player**: Settings → **Slides** → **Files and rows the show couldn't use**, in the page's language.
@@ -1939,7 +1954,7 @@ You never need this section to run the booth or to add content. It is for changi
 Drive: panel folder/booth/…  ── the sync (scripts/sync/drive.py reads every name with booth_names.py) ──▶ data/raw/drive.json
                                   └─ scripts/sync/build_data.py build_booth ──▶ data/site/booth.json  (the Drive files, in git)
 
-Website update, job "Build & publish website":
+Website update, job "Build website":
   scripts/build/booth-media.mjs ── downloads the copies ──▶ .cache/booth-media/files + manifest.json  (Actions cache, never git)
   Eleventy:
     src/_data/booth.js  (loadBooth: content/booth/booth.csv checked, data/site/booth.json + the manifest,

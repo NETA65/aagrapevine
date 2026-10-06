@@ -30,6 +30,19 @@ time. An end before the start, or a time of day when `start:` has none, is liste
 the file's last good version stays on the site. A start written in Spanish words keeps its time too:
 `start: sábado 14 de marzo de 2027, 7:00 p. m.`
 
+**Always the whole date, with its year.** `start:` and `end:` must be whole dates (`2027-01-10`, `January 10,
+2027`, `10 de enero de 2027`, with or without a time). A date without a year (`January 10`, `10 de enero`, a year
+in two digits such as `"3/19/27"`), without a day (`March 2027`), or a time alone (`"19:00"`, or an unquoted
+`19:00`, which YAML reads as the number 1140) leaves the event out — its last good version stays — and the run
+summary (and the Status page's notes for "Events added by hand") give a line ready to copy:
+`start: “January 10” has no year — the event is left out until it does: write the whole date (start: 2027-01-10)`.
+A UTC offset that is not Central time's on that day (`-05:00` from the second Sunday of March to the first
+Sunday of November, `-06:00` the rest of the year) still shows the event, at the moment it names, and is listed
+too — or leave the offset out: a time without one is Central time. A date in numbers only follows the file's
+`lang:` (Spanish: day first, `05-10-2026` is October 5); `2027-10-05` can only be read one way. The **Code check**
+reads every file here the same way (`tests/test_content_events.py`) and goes red, naming the file and what to
+change, so a slip shows minutes after you save it.
+
 **Your own translation (optional).** The site translates the title and the
 description into the other language automatically, and marks them
 "auto-translated". To write them yourself, add `title_es` and `summary_es` to a
@@ -67,6 +80,10 @@ end: 2027-03-21
 
 The Events page shows the range ("Fri, Mar 19 – Sun, Mar 21, 2027"), the event
 stays listed until the end of its last day, and calendars show it on all three days.
+A range in one line works too: `start: March 19 - 21, 2027` (or `del 19 al 21 de marzo de 2027`,
+`2027-03-19 - 2027-03-21`) is all day from the first day, and its last day is the end unless `end:` says
+otherwise. A file with no `start:` whose name holds a range (`Assembly March 19 - 21, 2027.md`) gets that
+range.
 
 ## Details not final yet: `tentative: true`
 
@@ -85,7 +102,7 @@ as *tentative*.
 **When the details are final**, edit the file: put the real place in `location`
 (and delete `location_es`, unless the Spanish needs other words), fix the dates
 or times if they changed, update the description (and `summary_es`), and
-**delete the `tentative: true` line**. The next update (a few minutes after you
+**delete the `tentative: true` line**. The next update (about 5 minutes after you
 save) shows it as confirmed on the site; subscribed calendars follow the next
 time they refresh.
 

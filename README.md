@@ -97,8 +97,9 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   citas de hoy), o la pestaña **Actions** en GitHub.
   **Actualizar ya:** GitHub → **Actions** → **Website update** → **Run workflow**. **Poner ya la cita de
   hoy:** **Actions** → **Morning check (new day by 5:30 AM)** → **Run workflow** (solo hace lo que falta:
-  desde las 4 a. m., hora del Centro, si la revista ya publicó la cita, la trae; si no, lo dice; si otra
-  actualización está en curso, primero la espera).
+  desde las 2 a. m., hora del Centro, si la revista ya publicó la cita, la trae; si no, lo dice; si otra
+  actualización está en curso, primero la espera). Un cambio guardado en GitHub se publica en unos 5 minutos:
+  antes se pasan las pruebas del código, y si fallan, el sitio sigue con la versión anterior.
 
 Las instrucciones detalladas están abajo (en inglés); puede usar el traductor de su navegador.
 
@@ -157,12 +158,16 @@ backstop starts the Morning check whenever GitHub gets to it — often hours lat
 The **full update** (every source, the PDF search) runs every night on GitHub's own schedule, and two short
 runs, the **midday refresh** and the **evening refresh**, bring the day's Drive files, bulletin posts, podcasts
 and archive files during the day. GitHub starts timed runs 4 to 6 hours late (sometimes 8), so all three are
-scheduled about 4 hours early — 1:17 AM, 7:07 AM and 3:07 PM Central (an hour earlier in winter) — and usually
-start around 5 to 7 AM, 11 AM to 1 PM and 7 to 9 PM (summer times). Only the nightly one is a full update: any other schedule is
-a quick refresh. On the 1st of the month, and after a day GitHub skipped, the Morning check also starts the full
-update — even when today's quotes were already on the site. The site also updates within a few minutes whenever
-someone saves a change to the settings or content (a page may take up to about 10 more minutes to show it
-everywhere); when the change is to a source only the full update reads (an Instagram post listed by hand, a
+scheduled about 4 hours early — 2:17 AM, 7:07 AM and 3:07 PM Central in summer (CDT; an hour earlier in winter,
+CST: 1:17 AM, 6:07 AM, 2:07 PM) — and usually start around 6 to 8 AM, 11 AM to 1 PM and 7 to 9 PM (summer times).
+The nightly one is set so that it is never running at 4:30 AM, when the morning alarm starts the morning refresh.
+Only the nightly one is a full update: any other schedule is a quick refresh. A full update usually takes 10 to 15
+minutes (at the very most a little over 2 hours, when the PDF search and the translations use all their time). On
+the 1st of the month, and after a day GitHub skipped, the Morning check also starts the full update — even when
+today's quotes were already on the site. The site also updates about 5 minutes after someone saves a change to the
+settings or content (a page may take up to about 10 more minutes to show it everywhere): that run **tests the code
+first** and publishes only when the tests pass, so a change that breaks something never goes live (the site keeps
+the version before). When the change is to a source only the full update reads (an Instagram post listed by hand, a
 YouTube channel, La Viña's weekly open meeting, the meeting lists …), that save's run reads that source too.
 In the **Actions** tab each run's title says what it is: "Nightly full update (GitHub schedule)", "Midday
 refresh (GitHub schedule)", "Evening refresh (GitHub schedule)", "Morning refresh: new day and daily quote",
@@ -229,10 +234,14 @@ What the newer pages do:
   live now: a date is marked "Over" as soon as it ends, even between updates, and the next update moves it
   under "Earlier in …"; once the month's committee meeting is over, the next one; a newer issue that is
   already out; and "Keep up all month" (the daily quote, What's New, the bulletin, Instagram, subscriptions).
-  `/monthly/`'s "This month" card drops a date once it is over and shows the next committee meeting. A page
-  left open after the month ends says so and links the new month. Its QR code opens that month's page; the
-  three previous months' addresses forward to `/monthly/`. The same page holds the **GV/LV report** for
-  district meetings (`/monthly/#report`, see section 4); the old `/districts/` address forwards there.
+  Each month's Dates card also offers **"Add <Month>'s dates to my calendar"**: one calendar file
+  (`/monthly/2026-10/neta65-grapevine-2026-10-en.ics`, Spanish `…/es/monthly/2026-10/…-es.ics`) with the month's
+  committee meeting, events and story deadlines. `/monthly/` shows each month as a small poster (the full poster,
+  with dates and QR code, is on the month's own page); its "This month" card drops a date once it is over and
+  shows the next committee meeting. A page left open after the month ends says so and links the new month. Its QR
+  code opens that month's page; the **12 previous months'** addresses forward to `/monthly/` (since October 2026,
+  so a poster on a corkboard keeps working for a year). The same page holds the **GV/LV report** for district
+  meetings (`/monthly/#report`, see section 4); the old `/districts/` address forwards there.
 - **Monthly digest** (`/digest/`) — everything from last month on one page (the *September 2026 digest* all
   through October): bulletin posts, the events that took place, the committee's files and photo albums added
   that month, the magazines' new stories, writers from Area 65 & Texas, podcasts, videos, the magazines'
@@ -253,7 +262,8 @@ What the newer pages do:
   `#weekly-open` included): the committee meeting (`#committee-meeting`), the **Grapevine meetings** of local
   groups (`#grapevine-meetings`: our Area first, then each nearby area — filters for place, day, in person /
   online and "include nearby areas"; each card links to the meeting's page on the office's site, which has the
-  joining details and any changes), and the weekly open meetings (`#weekly-open`).
+  joining details and any changes), and the weekly open meetings (`#weekly-open`: each has **Add to calendar**, a
+  weekly repeating entry for Google Calendar or as a calendar file for Apple and Outlook).
 - **Districts** page: removed. Its one piece of its own, the GV/LV report, lives at `/monthly/#report`
   (found in the site search by "district" / "report", "distrito" / "informe"); `/districts/` forwards there.
 - **La Viña's weekly open meeting**: `/meetings/#weekly-open` shows both public weekly meetings (Grapevine on
@@ -392,8 +402,8 @@ All settings live in **one file**: [`config/site.yml`](config/site.yml). To edit
 2. Change the value after the colon. **Keep the spaces at the start of each line exactly as they are**
    (YAML uses indentation), and keep quotes around text that has them.
 3. Click **Commit changes…** → **Commit changes**.
-4. The site rebuilds automatically in **a few minutes** (watch it in the **Actions** tab; a page may take
-   up to about 10 more minutes to show the change everywhere).
+4. The site rebuilds automatically in **about 5 minutes**: the tests run first, then it publishes (watch it in
+   the **Actions** tab; a page may take up to about 10 more minutes to show the change everywhere).
 
 Common changes:
 
@@ -405,6 +415,7 @@ Common changes:
 | Something La Viña or Grapevine holds every month (La Viña's workshop on Zoom) | `recurring_events:` with `host: "lv"`, `online_url`, `meeting_id`, `flyer_match` — see [below](#something-la-viña-or-grapevine-holds-every-month-host-online-only-its-flyer) |
 | Skip one month of it | `recurring_events:` → that event's `skip_dates: ["2026-12-12"]` |
 | Zoom link, meeting ID, passcode | `meeting:` → `zoom_url`, `meeting_id`, `passcode` |
+| Who may come (the first line of *Who can come* on Meetings, and the end of the calendar text); where it is held | `meeting:` → `note` and `note_es` (write both); `platform` (the pages say "Join on Zoom": left out, Zoom) |
 | Joining our Zoom meetings by phone (dial-in numbers, the committee's phone passcode) | `phone_access:` — see [below](#joining-our-meetings-by-phone) |
 | Contact e-mail | `site:` → `contact_email` and `meeting:` → `chair_email` |
 | Which Drive panels are shown | `drive:` → `min_panel` |
@@ -561,6 +572,13 @@ come from `meeting:` and the weekly open meetings; `phone_access:` in `config/si
 Joining by phone only works while the host's Zoom settings allow it (Zoom: "Allow participants to join
 by telephone").
 
+**The passcodes are public, on purpose.** The committee meeting's and the weekly open meetings' meeting IDs and
+passcodes are printed on `/meetings/`, in the calendar files, on the QR poster and in the presentations, for
+anyone to read. That is normal for open AA meetings, which anyone may attend. It means each meeting's host should
+keep Zoom's own protection on: the **waiting room**, or the host controls (admit people, remove a participant,
+lock the meeting once it has started). Changing the passcode protects nothing: the site shows the new one at its
+next update.
+
 ### When Grapevine announces new prices
 
 Every price on the site is read from the official stores, so the site follows a price change by itself once
@@ -619,7 +637,11 @@ and subscriptions, events of the next 45 days, published writers from our Area, 
 county picker), the weekly open meetings, new service documents and sign-up links, the Area's asks and the
 member's own notes. Each GVR / RLV can switch sections on and off, reorder and edit them, add their own, and
 copy the result (plain text for WhatsApp, or formatted for e-mail / Word), send it by WhatsApp or e-mail,
-download it (Word .docx or .txt) or print it (`src/assets/js/report.js`). WhatsApp is one tap at any
+download it (Word .docx or .txt) or print it (`src/assets/js/report.js`). When a new month starts, the editor
+offers **"Start from last month's draft?"**: it brings back the GVR's own sections, their order, the sections left
+out, changed titles, the counties picked and the *Action items* and *My notes* texts (the sections built from the
+site's data start fresh). The Book of the Month offer shows only while it runs, and the shop section's text changes
+by itself at midnight Central when an offer starts or ends or a price change is announced, takes effect or ends. WhatsApp is one tap at any
 length: a short report opens in WhatsApp already written; a full one goes through the phone's share sheet,
 or (on a computer) is copied while WhatsApp opens, ready to paste into a chat. Their changes stay in their own
 browser only, per month and language; nothing is sent anywhere. Without JavaScript the page shows the whole
@@ -646,7 +668,7 @@ translation you want:
 Add names that must never be translated under `keep:` (for example a group's name) and AA terms
 that always need the same translation under `terms:`. Instructions are at the top of that file.
 
-Saving either file rebuilds the site in a few minutes. If a file has a typo, the **Website update** run
+Saving either file rebuilds the site in about 5 minutes. If a file has a typo, the **Website update** run
 summary lists it under *Settings problems*: the translations already made stay, and new titles wait in their
 original language until the file is fixed.
 
@@ -674,6 +696,13 @@ happen every month ([`recurring_events:`](#add-a-recurring-event)).
 **Events over several days** (the Area assemblies): write only dates, `start: 2027-03-19` and
 `end: 2027-03-21` (the last day). The site shows the range ("Fri, Mar 19 – Sun, Mar 21, 2027") and
 keeps the event listed until its last day is over.
+
+**Always write the whole date, with its year.** A `start:` or `end:` without a year (`January 10`), without a day
+(`March 2027`) or a time alone (`19:00`) is not guessed any more: the event is left out (its last good version
+stays) and the run summary lists it under **Event files to fix**, with a line to copy, for example `start:
+2027-01-10`. A time written with a UTC offset that is not Central time's on that day still shows, and is listed
+too. The Code check tests every file in `content/events` the same way (`tests/test_content_events.py`), so a
+mistake shows as a red ✗ right after you save it.
 
 **Details not final yet** (a date is set, the venue is not): add `tentative: true` (or `yes` / `sí`)
 and, for the place, `location: "Venue to be announced"` with `location_es: "Lugar por anunciarse"`.
@@ -745,8 +774,11 @@ After that, nothing needs changing here: the next daily update reads it, and the
      the daily quote, Google Drive, the bulletin and the podcasts (on the 1st also the new magazine issues,
      on the 1st and the 15th the Book of the Month), published in about 3 minutes. Ticked, it wins over
      the two fields above.
-4. Click the green **Run workflow** button. A normal run takes about an hour in total (the PDF
-   search waits 5 seconds between pages, as the sites ask); a 300-minute catch-up about 6 hours.
+4. Click the green **Run workflow** button. A full run usually takes 10 to 15 minutes (the PDF search waits 5
+   seconds between pages, as the sites ask, but it has little left to do), at the very most a little over 2 hours
+   when the PDF search and the translations use all their time; a quick refresh about 2 minutes; a 300-minute
+   catch-up about 6 hours. When the code or content changed since the tests last passed, the run also tests it
+   before it publishes (a few more minutes).
    You can close the page — it runs on GitHub's computers. The run's title in the list says which kind it is:
    "Full update (started by hand)", "Full update without the document search (started by hand)" (`0` minutes),
    "Quick refresh (started by hand)" or "Morning refresh: new day and daily quote".
@@ -755,7 +787,7 @@ Saving any settings or content file starts a quick update automatically — no n
 
 **Put today's quote up now:** **Actions → Morning check (new day by 5:30 AM) → Run workflow**. It only does
 what is missing: when the site does not have today's update yet, it starts the morning refresh; when only a
-magazine's quote is missing, it asks that magazine (from 4 AM Central — earlier, the 4:30 alarm does it —,
+magazine's quote is missing, it asks that magazine (from 2 AM Central, when the magazines usually publish it,
 every 10 minutes until 7 AM, once after that) and brings the quote as soon as it is out; otherwise it ends
 in a few seconds. When another update is already running (on the 1st, the full daily update), it waits for
 that one first — it reads the quote too — and then brings only what is still missing. Tick **check_only**
@@ -769,7 +801,9 @@ saved (nothing has to be fetched again), but the website is only republished by 
 ## 8. Is everything working?
 
 - **The site's Status page** — <https://neta65.github.io/aagrapevine/status/> shows, for every source,
-  when it last updated, how many items it has and any problem, plus a small **Document library** panel
+  when it last updated, how many items it has and any problem (a source **On hold** suddenly found far fewer
+  items: they stay on the site until the next update confirms they are really gone; under a source, *Notes from
+  the last update* holds its small hiccups, for the site maintainer), plus a small **Document library** panel
   (how many documents have a preview, last update). How far the PDF search has got (pages known ·
   crawled) is in each run's summary on the **Actions** tab (the **PDF crawl** line) and in
   `data/site/status.json` → `crawl` — the public page does not describe the crawl.
@@ -804,7 +838,9 @@ saved (nothing has to be fetched again), but the website is only republished by 
   **Code check** run also appears next to **Website update**. It builds a test copy of the site and
   runs the automatic tests; nothing is published. A red ✗ there means that change broke something:
   undo it from the file's **History** (or send the run to whoever helps with the website). The live
-  site keeps working either way.
+  site keeps working either way: **Website update** runs the same tests before it publishes, and a change that
+  fails them is not published (its run is red, *"Tests failed — not published"*; the site keeps the version
+  before).
 - **E-mail when a run fails:** GitHub → your picture → Settings → Notifications → *Actions* →
   "Only notify for failed workflows". **Good to know:** e-mails about the *timed* runs go to the
   person who last switched each workflow on (or last changed its schedule). To make sure they come to
@@ -820,6 +856,10 @@ saved (nothing has to be fetched again), but the website is only republished by 
   **Custom → Issues**). The issue closes by itself once the source works again. The optional
   **other calendars** (`ics_feeds:`) never open this issue: the Status page explains them under
   *Other calendars we read*, and the run summary lists them as information only.
+- **An issue when the update itself keeps failing:** GitHub's failure e-mail for a timed run goes only to whoever
+  last switched the workflow on, and the Morning check's runs e-mail nobody, so when two of them fail in a row the
+  site opens **"The website update keeps failing"**,
+  naming the failing part and what to do. It closes by itself after the next run that works.
 
 It is normal for **one** source to fail now and then (Instagram in particular sometimes refuses
 robots). Nothing is lost: the previous items stay on the site and the next run tries again.
@@ -846,6 +886,12 @@ public ones and even at this tiny volume. The committee can choose how strict to
 With `anonymous: false` and no token, only the posts you list in `content/instagram.yml` appear
 (paste each post's link; add a `caption:` line, because the site will not visit Instagram to fetch
 the caption or picture). Instructions are at the top of that file.
+
+**A post taken down leaves the site too** (since October 2026, for anonymity). Each nightly update looks up again
+a few posts that are no longer in an account's list (`sources.instagram.recheck_per_run`, 5): a post Instagram no
+longer shows (deleted, archived or made private) is removed, with its picture, after two such answers at least
+12 hours apart. A day when Instagram turns the site away decides nothing. Posts you listed by hand are never
+removed this way.
 
 ---
 
@@ -967,12 +1013,15 @@ without anyone lifting a finger.
    and nothing is sent.
 5. To send one right away, run it again with *Preview only* **unticked**. A manual send goes at once (with the
    data there is — it does not wait for the update) and counts as that month's e-mail, so the scheduled tries
-   then skip it. Like a scheduled try, it sends nothing when nothing was new that month.
+   then skip it. Like a scheduled try, it sends nothing when nothing was new that month. A month that already went
+   out is **not sent twice**: the run only shows *"Already sent"*. To send it again on purpose, tick **force** as
+   well (the run is titled "SEND AGAIN (forced, started by hand)").
 6. If a run ever fails with **"It MAY have been sent"**, the connection broke while the e-mail was being
-   handed over. The month is marked as done, so the later scheduled tries do not send it again: check the
-   Google Group (or a district's inbox), and only if it did not arrive send it with **Run workflow**
-   (*Preview only* unticked). Other failures (wrong password, server not reachable, e-mail refused) send
-   nothing; the next try sends it.
+   handed over. The month is marked as done, so the later tries do not send it again: check the Google Group (or
+   a district's inbox), and only if it did not arrive send it with **Run workflow** (*Preview only* unticked,
+   **force** ticked). If a run was cut off while sending, every later try shows a yellow *"Digest send not
+   confirmed"* and sends nothing by itself: check the same way. Other failures (wrong password, server not
+   reachable, e-mail refused) send nothing; the next try sends it.
 
 How many stories each magazine issue shows and how many items each list shows before "and N more" are
 set in `config/site.yml` → `digest:` (`highlights`, `per_section`). If nothing was new last month, no
@@ -1192,8 +1241,10 @@ For a later move, follow
   **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest** and **Weekly link check** (a
   switched-off Morning check also turns the morning alarm away: 422).
 - **Dependabot pull requests.** Once a month GitHub may open a pull request titled
-  `chore(actions)…` or `chore(deps)…` that updates the building blocks. A few minutes later the
-  **Code check** has built the website with the update and run the tests: **merge only if the pull request
+  `chore(actions)…` (the workflows' building blocks) or `chore(deps)…` (the site tools, and since October 2026 a
+  new **major** version of a Python package: every run already installs the newest minor and patch releases,
+  `requirements.txt` caps each package below its next major version, and `yt-dlp` has no cap). A few minutes later
+  the **Code check** has built the website with the update and run the tests: **merge only if the pull request
   shows a green ✓**. If it shows a red ✗, leave it open (or close it) — the live site is not
   affected. After merging, glance at the next **Website update** run; if it is red, open the merged
   pull request and click **Revert**.
@@ -1208,7 +1259,9 @@ For a later move, follow
 - **Repository size** grows slowly (data files and small preview pictures). That is expected; see
   [docs/OPERATIONS.md](docs/OPERATIONS.md#repository-size) if it ever passes about 1 GB.
 - **Daily data commits** by `github-actions[bot]` ("chore(data): daily content sync …" — a full update, nightly or
-  started by hand —, "… morning refresh with the daily quote …", "… midday refresh …", "… evening refresh …",
+  started by hand —, "… morning refresh with the daily quotes of Oct 6 …" (or "… with the Grapevine quote of
+  Oct 6 and the La Viña quote of Oct 5 …", or just "… morning refresh …" when no quote is new), "… midday
+  refresh …", "… evening refresh …",
   "… quick refresh …", "… content sync after settings/content change …"; with "+ writers archive" before the date
   when that run took a new archive file in) are normal.
 - **Renew the morning alarm's key once a year**, about a week before the date in your calendar (on that
@@ -1232,12 +1285,15 @@ For a later move, follow
 | What you see | Likely cause | What to do |
 |---|---|---|
 | The site did not change today | The run failed, is still running, or the schedule was paused | **Actions** tab: open the latest **Website update** run. If the workflow shows "disabled", click **Enable workflow**. Then **Run workflow**. |
-| Today's quote is not on the site at 5:30 AM | The morning alarm is not set up or failed; the magazine had not published it yet; or the morning refresh failed | **Actions → Morning check (new day by 5:30 AM)**: the day's run says which (a yellow "late at the source" note says when the magazine was last asked — the site shows yesterday's quote, labelled "Yesterday", until an update brings the new one). No run at 4:30 AM: check the alarm (cron-job.org's e-mail or the job's *History*). To bring it now: **Morning check (new day by 5:30 AM) → Run workflow** — from 4 AM Central it asks the magazine and brings the quote if it is out (earlier, the 4:30 alarm does it). If an update is already running — on the 1st, the full daily update — it waits for that run first (it reads the quote too) and then brings whatever it did not. |
+| Today's quote is not on the site at 5:30 AM | The morning alarm is not set up or failed; the magazine had not published it yet; or the morning refresh failed | **Actions → Morning check (new day by 5:30 AM)**: the day's run says which (a yellow "late at the source" note says when the magazine was last asked — the site shows yesterday's quote, labelled "Yesterday", until an update brings the new one). No run at 4:30 AM: check the alarm (cron-job.org's e-mail or the job's *History*). To bring it now: **Morning check (new day by 5:30 AM) → Run workflow** — from 2 AM Central it asks the magazine and brings the quote if it is out. If an update is already running — on the 1st, the full daily update — it waits for that run first (it reads the quote too) and then brings whatever it did not. |
 | cron-job.org e-mails that the alarm failed (401, 403, 404 or 422) | The key expired or was deleted (401), its *Actions* permission is not *Read and write* (403), the address changed (404), or the request body is wrong (422) | See [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended) → *If cron-job.org e-mails a failure*. Until it is fixed the site still updates, later in the day. |
 | Many **Morning check** runs in the Actions tab | Normal: GitHub's schedule starts it every hour from the afternoon through the night | Nothing to do: the runs that found nothing to do are deleted after a day. |
 | A bulletin post with `publish:` / "(from …)" is not on the site | Its day has not come yet (Central time), or its date could not be read | The **Website update** run summary lists it under *Scheduled bulletin posts*, or under *Bulletin files to fix* with the reason. |
 | One phone or computer shows an old page, or a page looks unstyled after an update | A copy the browser kept (the site works offline) | Reload the page; if the small "Updated" notice shows, choose **Reload**. Still wrong: close every tab of the site and open it again. Last resort on that device: browser settings → site data for the site → clear (its saved pages go too). |
 | Red ✗ right after editing a settings file | A typo in the YAML (usually indentation or a missing quote) | Open the failed run → the red step shows the line. Fix the file, or undo your change from the file's **History**. The live site is unaffected. |
+| Red ✗ with *"Tests failed — not published"* | A change broke the automatic tests, so it was not published (the live site keeps the version before) | The run summary's *Tests before publishing* lists the failing tests. Fix the change or undo it; the next run publishes. [how-to/automation-and-troubleshooting.md §14.10](how-to/automation-and-troubleshooting.md#1410-tests-failed--not-published) |
+| An issue "The website update keeps failing" appeared | Two timed (or Morning check) runs in a row failed | Open the issue: it names the failing part and links the run. It closes itself after the next run that works. |
+| Status page: a source says **On hold** | It suddenly found far fewer items (or a Drive folder looked empty), so the missing ones stay until the next update confirms it | Nothing to do: the next update removes them if they are really gone. A big removal of your own (many Drive files at once) leaves the site one update later. |
 | A Drive file does not appear | Wrong folder, folder not public, name contains `PRIVATE`, it is a spreadsheet, or the update hasn't run yet | Check the file is inside the current Panel folder and the root folder is shared "Anyone with the link". Wait for the next run or run it manually. |
 | A flyer did not become an event | No date at the start of the name, it is not in *flyers*, or the name is the phone's own (IMG_…, WhatsApp Image …, Screenshot …) | Rename it like `2027-03-14 Title 9am @ Place.pdf`. |
 | A bulletin post did not appear | Not in the *bulletin* folder, or its `(until …)` date passed | Move/rename it; it must be a Google Doc, .txt, .md or .docx. |
@@ -1252,7 +1308,7 @@ For a later move, follow
 | An issue "A content source has stopped updating" appeared | One source has not updated for 7 days (the site keeps its older items) | Open the issue: it names the source, the error and what to check (for Google Drive: is the folder still shared "Anyone with the link"?). It closes itself when the source works again. |
 | Yellow ⚠ "Translation models missing" or "Translation is not working" | The free translation models could not be downloaded (their website was down or moved) | New titles stay in their original language; nothing else is affected. If it lasts more than a few days, send the run's log to whoever helps with the website. |
 | Run fails at "Publish to GitHub Pages" with *environment protection* | The `github-pages` environment only allows certain branches | **Settings → Environments → github-pages** → allow the `main` branch. |
-| The monthly e-mail did not arrive | Secrets missing, wrong app password, nothing new last month, or it is still waiting for the month's first full update (it goes out on the 1st from 7 AM Central once the site has updated — at the latest from noon on the 3rd) | Open the latest **Monthly e-mail digest** run: its summary says exactly which ("waiting for the data" means a later try sends it). Gmail needs an **app password**. To send it now, run it with *Preview only* unticked. |
+| The monthly e-mail did not arrive | Secrets missing, wrong app password, nothing new last month, or it is still waiting for the month's first full update (it goes out on the 1st from 7 AM Central once the site has updated — at the latest from noon on the 3rd) | Open the latest **Monthly e-mail digest** run: its summary says exactly which ("waiting for the data" means a later try sends it; "Digest send not confirmed" means a send was cut off: check the group). Gmail needs an **app password**. To send it now, run it with *Preview only* unticked (and **force** ticked if the month was marked as sent). |
 | Someone installed the site, but it opens in the browser (a small Chrome badge on its icon, or it opens in Safari) | It was added as a shortcut or a bookmark, not as the app | Send them `/offline/#steps`: on Android, remove the icon and choose **Install** (not "Create shortcut"); on iPhone, remove it and add it again with **Open as Web App** on. |
 | An issue "Broken links found by the weekly check" appeared | A link in the settings or in a `content/` file moved | Open the issue; fix the address in `config/site.yml` or the `content/` file. It closes itself when fixed. |
 | A new archive file in `content/archive` is not on `/published/#archive` | Its name is not understood or carries an older date, it is not a `.csv` file (an `.xlsx` export, for example), or it was not used (a missing column, far fewer rows than the file before) | The **Website update** run summary's *Writers archive* lines say which (**CSV file to fix**); the older rows stay on the site meanwhile. See [how-to/writers-archive.md](how-to/writers-archive.md). |
@@ -1379,7 +1435,11 @@ visitor's own device; nothing is sent anywhere.
   idea before a trip. On a weak signal the save keeps going as long as pages keep arriving; only 45
   seconds without a page saved counts as a failure ("Try again with a better signal"). The page open
   during the very first visit is kept too, with its own styles and
-  scripts. Offline, kept pages open normally under a small "You're offline" notice; any other
+  scripts. "Save key pages" also asks the browser to **keep** them (persistent storage): the result line then says
+  "This browser will keep them until you remove them." or "This browser may still remove them when the device is
+  short of space. Installing the site as an app helps keep them." Saved pages not opened for a week are fetched
+  again in the background when the site is opened with a connection (one at a time, at most every 6 hours; a page
+  that is gone keeps its saved copy). Offline, kept pages open normally under a small "You're offline" notice; any other
   page shows the Saved pages & app page (`/offline/`, also "See saved pages" in the menu) in its place,
   saying "You're offline — this page isn't saved on this device yet" above the list of saved pages, and
   reloads itself when the connection is back. That stand-in keeps up with the daily content (the **Join
@@ -1399,7 +1459,8 @@ every visit), so a new deploy shows on the next page view. Styles and scripts ca
 address (`main.css?v=…`: a fingerprint of the site's code, `src/_data/build.js`), so a new page never
 runs with old styles. When the code changes, browsers install the new service worker in the background:
 open tabs and the installed app show **Updated — A new version of the site is ready · Reload**
-(Reload in one of them applies it; in the others, Reload then simply reloads the page);
+(Reload in one of them applies it, at once even on a weak signal: the open tabs' pages are refreshed afterwards,
+in the background; in the other tabs, Reload then simply reloads the page);
 otherwise it takes over the next time the site is opened after all its tabs were closed. The daily
 content update does not change the code fingerprint, so it never triggers that prompt or a new
 download of the styles and scripts. The offline stand-in (Saved pages & app), which carries that content,
@@ -1441,7 +1502,8 @@ first visit in Chrome: DevTools → Application → Storage → **Clear site dat
 The **Tracker** (Committee menu, <https://neta65.github.io/aagrapevine/tracker/>) is a GVR's, RLV's or
 committee chair's own record of what their service costs and gives: miles, purchases, gift
 subscriptions, literature given away and reimbursements. It lives only in that browser — nothing is
-uploaded — so it asks for a backup now and then (**Back up now**: one file with the receipt photos).
+uploaded — so it asks for a backup now and then (**Back up now**: one `.zip` file with the receipt photos).
+This describes Tracker 1.2.0 (October 2026).
 
 **What to tell your GVRs**
 
@@ -1473,12 +1535,36 @@ uploaded — so it asks for a backup now and then (**Back up now**: one file wit
   as a GVR's own expense report: the money by category, the miles by service activity (with the trips),
   the mileage total and the **total cost of service**; every entry if wanted (dates, hotel and
   confirmation, route, role, trips, one-way and total miles); literature given away and subscriptions
-  bought, counted; who covers it (self-supported, asked back, received, still owed). *Prepared for* and a
+  bought, counted; who covers it (self-supported, asked back, received, still owed). The periods offered include
+  the **service panels**, worked out by themselves (Area 65's two-year terms start on January 1 of an odd year:
+  Panel 75 is 2025–2026, Panel 77 2027–2028), so nothing needs adding every two years. *Prepared for* and a
   note at the top ("This is a record, not a request for payment") are kept with the settings. People's
   names and the notes appear only when ticked. **Print or save as a document**, or **Download CSV** for a
   treasurer's spreadsheet. On screen, a table that has no room for all its columns (a phone, a tablet,
   larger text) puts its dates, routes and roles under the words, the amount always in sight; paper gets
   every column.
+- **Who owes you** (Summary) and **Owed to you** count everything **up to the end** of the period shown: a
+  hotel asked back in December and repaid in January shows "Even" in January's views ("Where things stand at the
+  end of the period: …").
+- **Backups** (Settings → Data → Export): **Full backup (.zip)** — `service-expenses-backup-YYYY-MM-DD.zip`
+  (Spanish `gastos-de-servicio-respaldo-YYYY-MM-DD.zip`) holds `backup.json` and one picture file per receipt photo,
+  so any unzip program opens it; **Back up without photos (.json)** —
+  `service-expenses-backup-no-photos-YYYY-MM-DD.json`, small enough to e-mail (the photos stay on this device);
+  and **Export CSV (all)**. Before saving it shows the size ("Full backup: about X, n receipt photos. Without
+  photos: about Y."); above about 18 MB it says the full backup is too big to send by e-mail (most e-mail allows
+  about 25 MB), and **Back up now** asks: Cancel, Without photos, or Save the full backup.
+- **Restore** (Settings → Data → Import): a `.zip` backup, any `.json` backup of any size (the old 80 MB limit is
+  gone; older backups with the photos inside still restore), or a backup that was unpacked: choose its
+  `backup.json` together with its photos (zipped again with Windows' or a Mac's own "compress" works too). The
+  preview counts any photo that is missing, and the photos come back one by one ("Restoring the receipt photos: n
+  of total…"). Restoring a backup without photos keeps this device's photos.
+- **Import a spreadsheet:** a CSV (also Excel's "Unicode text", which is UTF-16), or an Excel workbook (`.xlsx`:
+  its first sheet; Chrome or Edge 103+, Firefox 113+, Safari 16.4+). An old `.xls` gets a message to save it as
+  `.xlsx` or CSV.
+- **Safer:** fixing a typo in an imported entry keeps the details its form does not show (nights, quantity, item,
+  attendees …); leaving the page with unsaved changes in the form asks "Leave site?"; if the browser's stored
+  Tracker data ever cannot be read, it is set aside unchanged and a notice offers **Download it** and **Remove it**
+  (nothing new is saved over it).
 
 **For maintainers**
 
@@ -1486,17 +1572,20 @@ uploaded — so it asks for a backup now and then (**Back up now**: one file wit
 |---|---|
 | `src/pages/tracker.njk` | the page: hero, the five views (Entries · Summary · Giveaways · Requests · Settings), the add / edit dialog, the privacy promises |
 | `src/assets/js/expenses-core.js` | `window.GVX`, no DOM: the data model, the money math, summaries, subscriptions and the calendar file, the service report, CSV and backups. Its header comment is the **contract**: CSV columns are never renamed or reordered, a new one goes at the end (1.1.0 added `activity, activity_label, role, trips, no_miles, ref`), and files written before still import as they did |
-| `src/assets/js/expenses.js` | the Alpine app `xpApp`: storage (localStorage + IndexedDB photos), the views, the form, print and downloads |
-| `config/expenses.yml` | the defaults every visitor starts from (categories, who pays, payment methods, service activities, mileage rates, panels, reminder days). A built-in id is permanent: see its header |
+| `src/assets/js/expenses-files.js` | `window.GVF` (Tracker 1.2.0), no DOM: the `.zip` backups (writing, and reading with a CRC check), `.xlsx` sheets, large `.json` backups read in slices |
+| `src/assets/js/expenses.js` | the Alpine app `xpApp`: storage (localStorage + IndexedDB photos; the keys `gv-expenses:v1`, `…:undo` for photos a pending undo still needs, `…:unreadable-YYYY-MM-DD` for a stored copy that could not be read), the views, the form, print and downloads |
+| `config/expenses.yml` | the defaults every visitor starts from (categories, who pays, payment methods, service activities, mileage rates, reminder days; `panels` only overrides or adds to the panels the Tracker works out itself). A built-in id is permanent: see its header |
 | `src/_i18n/expenses.json`, `src/assets/css/areas/expenses.css` | the words (English and Spanish) and the look, print included |
-| `tests/test_expenses_core.py`, `test_expenses_app.py`, `test_expenses_page.py` | the logic (a GVR's 2026 report rebuilt number for number — modeled on a real one, its names, references and distances invented: a public repository holds no one's booking numbers or home; `tests/fixtures/expenses/`: files written before 1.1.0 must import identically), the screen in Node.js, the page and its strings |
+| `tests/test_expenses_core.py`, `test_expenses_app.py`, `test_expenses_files.py`, `test_expenses_page.py` | the logic (a GVR's 2026 report rebuilt number for number — modeled on a real one, its names, references and distances invented: a public repository holds no one's booking numbers or home; `tests/fixtures/expenses/`: files written before 1.1.0 must import identically), the screen in Node.js, the page and its strings |
 
 ---
 
 ## 17. Credits and licenses
 
-This project is free software under the **GNU GPL v3** (see [LICENSE](LICENSE)). It is built
-entirely from open-source tools — thank you to their authors:
+This project's **code** is free software under the **GNU GPL v3** (see [LICENSE](LICENSE)). The license does not
+cover the content the site shows or keeps a copy of (stories' titles and teasers, quotes, covers and pictures,
+documents, flyers, photos, event details): that belongs to its owners, as the [NOTICE](NOTICE) file says. It is
+built entirely from open-source tools — thank you to their authors:
 
 **Website**
 
@@ -1528,8 +1617,9 @@ entirely from open-source tools — thank you to their authors:
 | [python-dateutil](https://github.com/dateutil/dateutil), [PyYAML](https://pyyaml.org/), [icalendar](https://github.com/collective/icalendar) | Dates, settings, calendars | Apache-2.0/BSD, MIT, BSD-2 |
 
 **Automation:** [GitHub Actions](https://docs.github.com/actions) (`actions/checkout`, `setup-python`,
-`setup-node`, `cache`, `configure-pages`, `upload-pages-artifact`, `deploy-pages`, `upload-artifact` — MIT),
-[lychee](https://github.com/lycheeverse/lychee) link checker (MIT / Apache-2.0), Dependabot.
+`setup-node`, `cache`, `configure-pages`, `upload-pages-artifact`, `deploy-pages`, `upload-artifact`,
+`download-artifact` — MIT), [lychee](https://github.com/lycheeverse/lychee) link checker (MIT / Apache-2.0; its
+action pinned to a commit), Dependabot.
 
 *AA Grapevine®, La Viña® and their content are the property of AA Grapevine, Inc. This committee
 website links to the official sources and is not affiliated with or endorsed by AA Grapevine, Inc.

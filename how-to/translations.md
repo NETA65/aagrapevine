@@ -88,8 +88,9 @@ Say the podcast episode "Bottle to Throttle [Season 5, Episode 8]" shows on `/es
 
    (Both lines are already in the file: they show the pattern. Add your own text the same way, once.)
 4. Click **Commit changes…** → commit to `main`.
-5. Wait for the **Website update** run (GitHub → **Actions**). About 10–20 minutes later the other-language
-   page shows your words. The "Auto-translated" pill goes away only when **every** machine-made part of the item
+5. Wait for the **Website update** run (GitHub → **Actions**). About 5 minutes later (the run tests the change
+   first; allow up to 10 more minutes before every visitor sees it, so 10–20 minutes is a safe guess) the
+   other-language page shows your words. The "Auto-translated" pill goes away only when **every** machine-made part of the item
    is covered. This episode keeps it: its title has a "[Season …]" tail (a part fix) and its summary is still
    machine-made (see [Whole text or part of it](#whole-text-or-part-of-it)).
 
@@ -738,14 +739,20 @@ English → Spanish, 406 Spanish → English), about 0.8 MB.
 - An entry is used only when its engine version is the current one (`ENGINE_VERSION` in `translate.py`) and its
   original is exactly the text.
 - The robot saves the file at the end of every run (even when a later step failed) and commits it. Unused entries are
-  removed only after a complete, healthy run with nothing waiting.
+  removed only after a complete, healthy run with nothing waiting. Since October 2026 a Settings problem (a skip
+  date, a monthly event, a calendar feed, a price change, a `content/events` slip) no longer holds that clean-up back;
+  an unreadable raw data file, or an unreadable `glossary.yml` / `overrides.yml`, still does.
 
 > **Never edit `cache.json` by hand.**
 > - Saving it alone does not rebuild the site (the robot's data files never start a run).
 > - A hand-edited line still counts as a machine translation (the pill stays).
 > - The robot's copy wins when both changed.
-> - A JSON typo makes the whole memory unreadable: the next run starts a new, empty one and translates everything
->   again (40 minutes per run, over several runs).
+> - A JSON typo makes the whole memory unreadable. Since October 2026 the next run does not overwrite it: it moves
+>   the file aside as `cache.json.bad-<UTC time>` (on GitHub's computer only; git still has the last good file),
+>   starts a new, empty memory and reports it (the run summary's **Settings problems**, *translations*, and a line
+>   on the `/status/` translation card). Restore the file from its git history to keep the old translations;
+>   otherwise everything is translated again (40 minutes per run, over several runs). If the file cannot even be
+>   moved aside, it is left untouched and nothing new is translated that run.
 >
 > To redo **one** text, add an override. To redo **everything**, see [6.5](#65-re-translate-everything).
 
@@ -981,8 +988,9 @@ daily quote, then rebuilds
 quick sources. It translates for up to 40 minutes, commits the data (commit message
 `chore(data): content sync after settings/content change …`), builds the site with `I18N_STRICT=1` and publishes it.
 
-- Usually **10–20 minutes** from your commit to the live page. A glossary change that redoes many texts takes longer;
-  what does not fit is finished by the next runs.
+- Usually **about 5 minutes** from your commit to the live page (the run tests the change before it publishes), plus
+  up to 10 minutes before every visitor sees it. A glossary change that redoes many texts takes longer; what does not
+  fit is finished by the next runs.
 - Runs never overlap: a second commit made meanwhile waits its turn, then runs.
 - Every other run (the morning refresh, the midday and evening refreshes, the nightly full update) also applies your
   fixes. The morning refresh gives new translations only 5 minutes, so it may leave texts waiting. (The nightly,
@@ -1042,10 +1050,20 @@ committee's own posts and events (repo files, recurring events) whose other lang
 
 `/status/` (`/es/status/`) has a **Machine translation** card: how many translations are saved, how many texts are
 still waiting ("they are translated on the next update"), how many machine translations looked wrong and were not
-used, and how many glossary entries there are.
+used, and how many glossary entries there are. Since October 2026, when the translation memory could not be read or
+a model was refused (below), it also says calmly "The last update could not translate everything as usual, so some
+new texts may stay in their original language for now. Everything translated before stays as it is.", with the raw
+message under it.
 
 > **Note:** `/status/` does not show a YAML typo in `overrides.yml` or `glossary.yml`. Only the Actions run summary
 > does (**Settings problems**).
+
+**A model that is not the expected one is refused** (since October 2026). Each downloaded translation model is
+checked against its SHA-256 fingerprint (`MODEL_SHA256` in `scripts/sync/translate.py`). One that does not match is
+**not installed** (it used to be installed with a warning): that direction stays untranslated, the reason shows under
+**Settings problems** (*translations*) and on `/status/`, and `python -m scripts.sync.translate --download` prints it
+next to `MISSING`. If the model's publisher really uploaded a new file, check it and put its fingerprint in
+`MODEL_SHA256`.
 
 ---
 

@@ -33,8 +33,9 @@ Come to our committee meeting on the third Wednesday of the month.
   name (`welcome-new-GVRs.md` → "Welcome new GVRs").
 - **Date:** the `date:` line; without one, the date the file name starts with
   (`2027-01-10-…`), else its `publish:` day (below), else the day the post first
-  appears on the site. The date is what the post shows; it does not decide when
-  the post goes up.
+  appears on the site (its Central-time day). The date is what the post shows; it does not decide when
+  the post goes up. A date written in numbers only follows the post's language: in a Spanish post
+  `05-10-2026` is 5 October; `2026-10-05` can only be read one way.
 
 ## A header for more options
 

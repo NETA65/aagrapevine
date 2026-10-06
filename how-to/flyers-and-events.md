@@ -140,12 +140,17 @@ So the pattern to teach is:
 | `03-14-2027`, `3.14.2027` | Mar 14 2027 | **month first** (U.S. order) |
 | `March 14, 2027`, `Mar 14 2027`, `Sept. 14th, 2027` | Mar 14 2027 / Sep 14 2027 | English month words |
 | `14 de marzo de 2027`, `14 marzo 2027`, `14 mar 2027` | Mar 14 2027 | Spanish month words (`ene`, `abr`, `ago`, `dic`, `setiembre` work too) |
-| `14-03-2027` | **no date → no event** | day first is not understood (there is no month 14) |
-| `05-10-2026` | **May 10 2026** | month first: a Spanish "5 de octubre" silently becomes May 10 |
+| `14-03-2027` | **Mar 14 2027** | a first number over 12 can only be the day: day first (since October 2026; before, no date) |
+| `Taller 05-10-2026`, `Informe de La Viña 05-10-2026` | **Oct 5 2026** | a name in Spanish (or French) reads a numbers-only date **day first** (since October 2026) |
+| `Writing Workshop 05-10-2026` | **May 10 2026** | a name in English reads it month first |
+| `Report 05-10-2026`, `Workshop 05-10-2026`, `La Viña Report 05-10-2026` | **May 10 2026**, with a note | a name whose language is unclear (a word or two) reads month first, and the run summary's *Notes* (and `/status/`) say: `2027-2028_Panel77_GVLV/flyers/Report 05-10-2026.pdf: “Report 05-10-2026”: “05-10-2026” could be May 10 or October 5, 2026 — read as May 10 (month first). Write the date year-month-day (2026-05-10 or 2026-10-05) to be sure`. The magazine names Grapevine, AA Grapevine and La Viña do not count when the language is decided |
+| `March 14 - 16, 2027`, `14 al 16 de marzo de 2027`, `2027-03-14 - 2027-03-16` | **Mar 14 2027** | a range of days: a flyer event takes its **first** day (a flyer cannot hold an end date: for the whole range, write a file, [6](#6-write-an-event-by-hand-contentevents)) |
+| `Session 2 - 4 March 2027` | **Mar 4 2027**, title "Session 2" | a number right after a counting word (district / distrito, panel, group / grupo, step / paso, session / sesión, week / semana, part / parte, # …) is not the first day of a range |
 | `March 2027`, `marzo de 2027` | month only → **no event** | see [5.3](#53-month-only-names) |
 | `2027-02-30` | **no date → no event** | an impossible date is skipped |
 
-Only years 2000–2099 count. A year alone (`2027`) or a range (`2026-2027`) is not a date.
+Only years 2000–2099 count. A year alone (`2027`) or a range of years (`2026-2027`) is not a date. To be sure,
+always write the date **year-month-day** (`2027-03-14`): it can only be read one way.
 
 > **Note:** the site's help texts say "date at the start". The code finds a date **anywhere** in the name
 > (`Writing Workshop 2027-03-14.pdf` works). Still put it first: the protection against phone-camera names
@@ -173,7 +178,7 @@ means an **all-day** event.
 | `8pm-midnight` | 8 PM – 12 AM (next day) | "midnight" / "medianoche" in a range |
 | `19:00`, `19h00`, `19:00 hrs` | 7:00 PM | 24-hour clock needs minutes |
 | `10:00-12:00`, `18h00 a 20h00` | 10 AM–12 PM, 6–8 PM | 24-hour ranges |
-| `8pm-1am` | 8 PM → 1 AM **the next morning** | an end before the start is the next day |
+| `8pm-1am` | 8 PM → 1 AM **the next morning** | an end before the start is the next day; the card says "8:00 PM – 1:00 AM CDT" |
 | `7pm-7pm` | 7 PM, **no end** | an end equal to the start is dropped |
 | `a las 7 pm`, `at 7pm` | 7:00 PM | |
 
@@ -463,8 +468,8 @@ everything a flyer name cannot. The repository's own help is
 3. Name it `<date>-<short-name>.md`, for example `2027-04-17-gv-writing-workshop-garland.md`
    (lower case, dashes, date first).
 4. Paste a template from below and change the values.
-5. **Commit changes** (to `main`). The site updates a few minutes later (a page may take up to about 10
-   more minutes to show it everywhere) — [10](#10-what-happens-next-and-how-long-it-takes).
+5. **Commit changes** (to `main`). The site updates about 5 minutes later (the run tests the change first; a page
+   may take up to about 10 more minutes to show it everywhere) — [10](#10-what-happens-next-and-how-long-it-takes).
 
 The file is public as soon as you commit it — comments included. Put the hosting group in the text, never
 a member's full name or phone number.
@@ -510,7 +515,7 @@ Visit our table at the assembly.
 | Field (also accepted) | Values | When missing | Effect and where it shows |
 |---|---|---|---|
 | `title` | text — quote it if it contains `: ` | from the file name ("Gv lv booth") | card title, home card, calendars, search, toolkit, digest; machine-translated unless `title_es` / `title_en` |
-| `start` (`date`) | see [6.5](#65-start-and-end-every-form) | a date in the file name (all day); none → **error** | the day and time everywhere |
+| `start` (`date`) | a **whole** date with its year, with or without a time, or a range of days — see [6.5](#65-start-and-end-every-form) | a date in the file name (all day; a range in the name, `Assembly March 19 - 21, 2027.md`, gives the start and the end); none → **error** | the day and time everywhere |
 | `end` | a date (the **last** day), a date-time, or a clock time | the event counts as **one hour**; the card shows the start only | time range or date range, calendar end, when the card disappears |
 | `location` | an address, a group, or "Venue to be announced" / "TBA" / "Lugar por anunciarse" | no place line | place line with a map pin, calendar LOCATION, home card, search, toolkit (its city); **never machine-translated** |
 | `location_es` / `location_en` | the place in the other language | a "to be announced" place gets the site's own words in the other language | the other-language page |
@@ -538,16 +543,36 @@ Verified results (Central time, CDT in March):
 | `start: 2027-03-14T19:00:00-05:00` + `end: 21:00` | 7–9 PM | 7:00 – 9:00 PM CDT |
 | `start: 2027-03-14T19:00:00` + `end: 2027-03-14 21:00` | read in Central (summer/winter handled) | 7:00 – 9:00 PM CDT |
 | `start: 2027-03-14 19:00` + `end: 9 PM` | 7–9 PM | 7:00 – 9:00 PM CDT |
-| `start: 2027-03-14T20:00:00` + `end: 1 AM` | 8 PM – 1 AM **next morning** | 3/14/2027, 8:00 PM CDT – 3/15/2027, 1:00 AM CDT (the dates are added because it runs past midnight) |
+| `start: 2027-03-14T20:00:00` + `end: 1 AM` | 8 PM – 1 AM **next morning** | 8:00 PM – 1:00 AM CDT (since October 2026; before, the dates were added: "3/14/2027, 8:00 PM CDT – 3/15/2027, 1:00 AM CDT") |
 | `start: March 14, 2027 9:00 AM` (no end) | 9 AM, one hour in calendars | 9:00 AM CDT |
 | `start: sábado 14 de marzo de 2027, 7:00 p. m.` + `end: "9:00 PM"` | 7–9 PM | 7:00 – 9:00 PM CDT |
 | `start: 14 de marzo de 2027 de 7 a 9 p. m.` | all day (a Spanish range is not guessed) | All day |
 | `start: 2027-03-19` + `end: 2027-03-21` | three days | Fri, Mar 19 – Sun, Mar 21, 2027 · 3 days |
+| `start: March 19 - 21, 2027` (or `del 19 al 21 de marzo de 2027`, `2027-03-19 - 2027-03-21`) | three days, all day (an `end:` line wins over the range's last day) | Fri, Mar 19 – Sun, Mar 21, 2027 · 3 days |
+| `start: "05-10-2026"` in a file with `lang: es` | October 5, 2026 (numbers-only dates follow the file's language: Spanish day first) | All day |
 | `date: 2027-06-01` | all day | All day |
 
+**Since October 2026 a date must be whole.** These are no longer guessed: the event is left out (its last good
+version stays) and listed under **Event files to fix**, with a line ready to copy:
+
+| Written | Message (after `events/<file name>: `) |
+|---|---|
+| `start: January 10` or `start: 10 de enero` (no year) | `start: “January 10” has no year — the event is left out until it does: write the whole date (start: 2027-01-10)` |
+| `start: "3/19/27"` (a year in two digits), `start: March 19 - 21` (a range without its year) | `start: “3/19/27” has no year written in full — the event is left out until it does: write the whole date (start: 2027-03-19)` |
+| `start: March 2027` (no day), `start: "2027"` (a year alone) | `… has no day — write the whole date (start: 2027-MM-DD)` |
+| `start: "19:00"`, or a weekday alone | a time or a day without its date: left out |
+| `start: 19:00` (no quotes: YAML reads it as the number 1140) | `start: 19:00 is a time of day without its date`: left out |
+| a year before 2000 or after 2099 | left out |
+
+A time written **with a UTC offset that is not Central time's** on that day still shows, at the moment it names,
+and is listed so you can fix it: `start: 2027-01-10T19:00:00-05:00 — -05:00 is not Central time's UTC offset on
+2027-01-10 (-06:00), so the event shows at 6:00 PM Central time. If 19:00 is Central time, write start:
+2027-01-10T19:00:00-06:00`. Central time is −05:00 from the second Sunday of March to the first Sunday of
+November, −06:00 the rest of the year.
+
 > **Leave the UTC offset out.** The real files write `-05:00` in September/October and `-06:00` in
-> November. A wrong offset moves the time by an hour. `start: 2027-03-14T19:00:00` (no offset) is read as
-> Central time with daylight saving done for you.
+> November. A wrong offset moves the time by an hour (and is now listed under **Event files to fix**).
+> `start: 2027-03-14T19:00:00` (no offset) is read as Central time with daylight saving done for you.
 >
 > An unquoted `end: 21:00` is fine (YAML turns it into a number; the site reads it back as 21:00).
 
@@ -836,6 +861,7 @@ good version stays.
 | no closing `---` | `the header has no closing --- line (add a line with just --- below the header)` |
 | a header line that is not `name: value` | `the header between the --- lines is not valid (line N): … put the whole value in quotes …` |
 | `host: District 91` | `host: “District 91” must be neta (our committee), lv (La Viña) or gv (Grapevine) — shown as ours (NETA 65); the group that hosts it goes in the description` — the event **still shows**, as ours |
+| a date without its year or day, a time alone, a two-digit year, a wrong UTC offset | see [6.5](#65-start-and-end-every-form) |
 | a `.txt` or `.docx` in the folder | `ignored — only files ending in .md are read (rename it to end in .md)` |
 | two files whose names differ only in capitals, spaces or punctuation (`Spring.md`, `spring.md`) | `duplicate name` — the second one is skipped |
 
@@ -849,9 +875,14 @@ Two slips are fixed for you and reported under **Settings problems** instead:
 A title with `: ` and no quotes (`title: Reminder: Assembly Saturday`) is **not** an error: the header is
 then read line by line and the title is kept as written.
 
-> **Note:** `content/events/README.md` says such problems are "listed on the Status page". In fact the
-> `/status/` page only shows the source row "Events added by hand" (count and last update). The messages
-> themselves are in the Actions run summary and in `data/site/status.json`.
+> **Note:** since October 2026 the same lines are also on `/status/`, in the folded *Notes from the last update*
+> under the row "Events added by hand" (in English, for the site maintainer), as well as in the Actions run
+> summary and in `data/site/status.json`.
+
+**The Code check tests every file too** (`tests/test_content_events.py`, since October 2026): each real file in
+`content/events/` is read exactly as the update reads it, and the check turns red, naming the file and what to
+change, when a year is missing, an offset is not Central time's, or the end is not after the start. So a slip
+shows as a red ✗ minutes after you save it, and the *Website update* run of that save does not publish it.
 
 ---
 
@@ -907,7 +938,7 @@ recurring_events:
 | `week_of_month` | `1`–`5`, or `-1` for the last; also `"2nd"`, `"second"`, `"segundo"`, `"2.º"`, `"last"`, `"último"` | missing or unreadable → **skipped** | which week. A month without a 5th one is simply left out. |
 | `weekday` | `saturday`, `Saturday`, `Saturdays`, `sábado`, `Sábados`, `miercoles` … | unreadable → **skipped** | which day |
 | `start` | `"17:00"`, `"5:00 PM"`, `5pm`, `17`, or unquoted `17:00` — Central time | missing → **skipped** | start |
-| `end` | the same forms | unreadable or not after the start → **one hour** + a note | end |
+| `end` | the same forms | unreadable or not after the start → **one hour** + a note. Since October 2026 an end earlier than the start and at most 12 hours later (`"22:00"`–`"01:00"`) is the next morning on `/events/` and in the calendar files, with no note (the `/monthly/` posters still show one hour) | end |
 | `location` | an address; the city is read from `…, City, TX` | — (an online series has none) | place |
 | `city`, `state` | override the city and state read from `location` | — | toolkit and duplicate matching |
 | `url` | `https://…` (a `www.…` address gets `https://`) | not an address → left out + note; none → the event links to its own card on `/events/` | title link, **Event details** button |
@@ -1018,20 +1049,28 @@ Block 3 still shows (with the fixes applied); block 4 is skipped. The rest of th
 Nobody edits these here. The **full daily run** reads the official calendars of aagrapevine.org and
 aalavina.org (through aagrapevine.org's sitemap) and keeps only events that are:
 
-- **in Texas** (the state, "Texas" / "Tejas", or a known Texas city), or
+- **in Texas**, or
 - **online and in Spanish** (on La Viña's calendar or written in Spanish).
+
+"In Texas" uses the curated lists of [`scripts/sync/geo.py`](../scripts/sync/geo.py) (since October 2026): a state
+written in the address wins; then Texas, Tejas or TX in the place or the title; then another state, province or
+country named there (Florida, Georgia, Chile …) means not Texas (a street such as "Florida Ave" does not count);
+a city alone counts only when it is on geo.py's short lists of unmistakable Texas cities (`NETA65_BARE`,
+`TEXAS_BARE`: Dallas, Fort Worth, Houston, Plano, Tyler …). Gainesville, Greenville, Midland, Odessa, Denton and San
+Antonio are not on them (other states have them too), so "Hilton University of Florida Conference Center,
+Gainesville" is not a Texas event. A Texas event that names neither TX nor Texas nor such a city is left out.
 
 | What | How it shows |
 |---|---|
 | Filter chip | **GV & LV calendars** · badge "Grapevine calendar" / "La Viña calendar" |
-| A listing with a date but no time | "Time not listed — see event details" (never "All day") |
+| A listing with a date but no time | "Time not listed — see event details" (never "All day"). Since October 2026 this also covers a time that is only the calendar's placeholder (Drupal's 12:00 UTC, or midnight with no clock time on the page), and an end at midnight makes the day before the last day |
 | Title | as listed, machine-translated into the other language; fix one in `overrides.yml` (real example: the "XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS …" gathering) |
 | Description | e-mails, phone numbers and web addresses are removed for privacy; a description with fewer than 5 words left is dropped |
-| After it ends | it leaves the data the next day — so it is never under **Past events** or in the monthly digest |
+| After it ends | it leaves the data the next day — so it is never under **Past events** or in the monthly digest. An event over several days stays until its **last** day (one that started up to 31 days ago, `LONG_EVENT_DAYS`) |
 | A listing of an event we already show | dropped: ours wins ([9](#9-when-the-same-event-comes-from-two-places)) |
 
-The window is two days back to about 18 months ahead; at most 60 new event pages are read per run, and known
-upcoming pages are re-checked every 14 days. These events change only after a **full** run (not after a
+The window is two days back (31 days for an event still running) to about 18 months ahead; at most 60 new event
+pages are read per run, and known upcoming pages are re-checked every 14 days. These events change only after a **full** run (not after a
 push or a quick run). The reader is [`scripts/sync/events_external.py`](../scripts/sync/events_external.py);
 more in [Automatic sources](automatic-sources.md).
 
@@ -1129,9 +1168,9 @@ the sources, rebuilds `data/site/events.json`, builds the pages and publishes th
 
 | You changed | What picks it up | Live after about |
 |---|---|---|
-| A `content/events` file or `config/site.yml`, committed on GitHub | The commit starts a **quick** run at once (Drive, the bulletin and event files in `content/`, podcasts, the writers archive files, the daily quote — and the whole event list is rebuilt) | a few minutes (a page may take up to about 10 more minutes to show it everywhere) |
+| A `content/events` file or `config/site.yml`, committed on GitHub | The commit starts a **quick** run at once (Drive, the bulletin and event files in `content/`, podcasts, the writers archive files, the daily quote — and the whole event list is rebuilt), which tests the change before it publishes | about 5 minutes (a page may take up to about 10 more minutes to show it everywhere) |
 | A flyer on the Drive | **Not** a commit, so nothing starts. The next run that reads the Drive: the **morning refresh** (on the site by about 5:30 AM Central), the **midday** and **evening** refreshes, the **nightly full** update, any commit to content or settings, or a run you start | the next refresh (the same day when uploaded in the morning or afternoon, else the next morning) — or a few minutes after a run you start |
-| `data/translations/overrides.yml` | a quick run, like a content edit | a few minutes |
+| `data/translations/overrides.yml` | a quick run, like a content edit | about 5 minutes |
 | (Grapevine's / La Viña's calendars) | the **nightly full** update (and a commit that changes `sources.grapevine.base` or `sources.lavina.base`) | the next day |
 | (an extra `.ics` feed) | any run, but each feed is asked at most about once every 20 hours | up to a day |
 
@@ -1139,7 +1178,7 @@ the sources, rebuilds `data/site/events.json`, builds the pages and publishes th
 **skip_crawl** (a quick refresh) → **Run workflow**. The MKP715 login (write access) can do this.
 
 GitHub starts its scheduled runs late (often 4–6 hours), so all three schedules are deliberately set about 4 hours
-early: the nightly full update usually starts around 5–7 AM Central, the midday refresh around 11 AM–1 PM and the
+early: the nightly full update usually starts around 6–8 AM Central, the midday refresh around 11 AM–1 PM and the
 evening refresh around 7–9 PM Central (an hour earlier in winter).
 The morning refresh is started separately so the new day is on the site by 5:30 AM. Details:
 [Automation and troubleshooting](automation-and-troubleshooting.md).
@@ -1153,7 +1192,8 @@ A few more timings:
   follow later changes.
 - **Code check (tests and test build)** (`.github/workflows/check.yml`) also runs after a content or
   settings commit: it builds the site and runs the tests. A red ✗ there means something in that
-  change is broken — undo or fix the change (the live site keeps working either way).
+  change is broken — undo or fix the change. The live site keeps working either way: *Website update* runs the
+  same tests before it publishes, so the broken change is not published.
 
 ---
 
@@ -1165,8 +1205,10 @@ A few more timings:
 |---|---|---|---|---|
 | **Events page** | [/events/](https://neta65.github.io/aagrapevine/events/) | [/es/events/](https://neta65.github.io/aagrapevine/es/events/) | every upcoming event, grouped by month; **Past events** (the 12 newest one-off events) | filter chips: All · Committee meetings · NETA 65 events · GV & LV calendars; `?filter=neta` works; a **Save the date** card for the next assembly |
 | **Home page**, "Upcoming events" | [/](https://neta65.github.io/aagrapevine/) | [/es/](https://neta65.github.io/aagrapevine/es/) | up to 4 (3 on a phone). The next committee meeting is in the top card instead. The next date of each series **we** hold always keeps a place; the rest go to the soonest one-off events | the title links to: a series → its card on `/events/`; otherwise the event's `url`, else its flyer, else its online link — so a **flyer event opens the Drive flyer** |
-| **Calendar files** | [/events.ics](https://neta65.github.io/aagrapevine/events.ics) | [/es/events.ics](https://neta65.github.io/aagrapevine/es/events.ics) | all of `/events/` incl. committee meetings (3 months back to 12 ahead); events that ended more than 90 days ago are dropped | subscribe from the card **Subscribe to calendar** on `/events/#subscribe` (Google, Apple, Outlook) |
+| **Calendar files** | [/events.ics](https://neta65.github.io/aagrapevine/events.ics) | [/es/events.ics](https://neta65.github.io/aagrapevine/es/events.ics) | all of `/events/` incl. committee meetings (3 months back to 12 ahead); events that ended more than 90 days ago are dropped | subscribe from the card **Subscribe to calendar** on `/events/#subscribe` (Google, Apple, Outlook); `/events/` also names the file in its page head (`<link rel="alternate" type="text/calendar">`), so calendar apps can find it |
 | **Add to calendar** button | on each card | | that one event | Google Calendar, Outlook.com, or an Apple / Outlook `.ics` file |
+| **Share** button, and the event's share page | `/events/<card>/` | `/es/events/<card>/` | every event of `/events/` but the committee meeting, past ones too while they are in the data (since October 2026) | the Share button sends the event's own small page: in WhatsApp, Facebook and other link previews it shows the event's title, day, place and **flyer**, then sends the visitor on to the card on `/events/`. Not in the search or the sitemap. When the event has left the data, the address still lands on `/events/` (the 404 page sends it on). The committee meeting's cards share `/events/#<card>` |
+| **The month's calendar file** | `/monthly/2027-03/` → "Add March's dates to my calendar" | `/es/monthly/2027-03/` | the month's committee meeting, events and series dates (for the current month, those not over yet) and the story deadlines (since October 2026) | `/monthly/2027-03/neta65-grapevine-2027-03-en.ics` (`…-es.ics` under `/es/`); the same `UID`s as `/events.ics`, so a calendar that has both shows each event once |
 | **Monthly toolkit** | [/monthly/](https://neta65.github.io/aagrapevine/monthly/), `/monthly/2027-03/` | `/es/monthly/` | every event of the month (series dates worked out from the rule, also for later months) | day or range, time + "Central" / "(hora del Centro)", the **city** when the title does not name it, "Online", "Details to be confirmed", "Over" once past |
 | **District report** (text on `/monthly/`) | | | the next 45 days, at most 10, a series once ("every month") | "details to be confirmed" for tentative events |
 | **Monthly digest** + its e-mail | [/digest/](https://neta65.github.io/aagrapevine/digest/) | `/es/digest/` | the events that **took place** in the month covered, plus that month's committee meeting (GV/LV calendar listings are not there: they leave the data the day after they end) | days only; listed, never counted as news; see [E-mail and alerts](email-and-alerts.md) |
@@ -1193,7 +1235,7 @@ A few more timings:
 | Language pill (EN / ES / FR) | the event's language differs from the page and the committee did not write that language by hand |
 | Title — a link only when `url` is a real page other than the flyer | `title` / `title_es`; `url` |
 | Date range line | an event over several days |
-| Time line: "2:00 – 5:00 PM CDT", "9:00 AM CDT" (no end), "All day", "3 days", "Time not listed — see event details" | start, end |
+| Time line: "2:00 – 5:00 PM CDT", "8:00 PM – 1:00 AM CDT" (past midnight), "9:00 AM CDT" (no end), "All day", "3 days", "Time not listed — see event details" | start, end (on the night the clocks change, the zone is shown at both ends: "7:00 PM CDT – 1:30 AM CST") |
 | Place with a map pin, or "to be announced" in italics with an hourglass | `location` (`location_es`) |
 | "Online on Zoom" / "Online" | `online_url`, or a place such as "Zoom" |
 | "Meeting ID …" | `meeting_id` |
@@ -1201,7 +1243,7 @@ A few more timings:
 | Repeat line + "Then …" | a series |
 | Description (formatted) or a 3-line teaser | the text below the header; a series' `summary` |
 | "Auto-translated" | the shown text is a machine translation |
-| Buttons | **Join online** (`online_url`) · **Add to calendar** · **View flyer** (`flyer`) · **Event details** (an outside `url`, no flyer) · **Share** |
+| Buttons | **Join online** (`online_url`) · **Add to calendar** · **View flyer** (`flyer`) · **Event details** (an outside `url`, no flyer) · **Share** (the event's share page, 11.1) |
 | Picture beside the card | the flyer (or `image:`) |
 
 ### 11.3 What goes into the calendar files
@@ -1216,7 +1258,8 @@ A few more timings:
 | `URL` | the event's own page; else its card on `/events/`; for a dated flyer, the Drive flyer |
 | `ATTACH` | the flyer link |
 | `CATEGORIES` | Committee meeting · NETA 65 event · Grapevine / La Viña calendar |
-| `STATUS` | `TENTATIVE` or `CONFIRMED` |
+| `STATUS` | `TENTATIVE` or `CONFIRMED` (also in a single event's **Add to calendar** file, since October 2026) |
+| `SEQUENCE` | the minutes since 2026-01-01 UTC when the file was made (since October 2026): it grows with every new file, so a calendar app that already has the event takes a changed time instead of keeping the old one |
 
 Example — the flyer `2027-03-14 Spring Assembly booth 9am @ Tyler Civic Center.pdf` becomes (shortened):
 
@@ -1244,7 +1287,9 @@ END:VEVENT
 | With a start and **no end** | **one hour** after the start (calendars also give it one hour) |
 
 After that, a one-off event moves to **Past events** (only the 12 newest are kept) and stays in the
-calendar files for about 90 days. Series dates and committee meetings never show under Past events.
+calendar files for about 90 days. Series dates and committee meetings never show under Past events. An event that
+ends while `/events/` is open leaves the page, its filter chips' counts and the "Showing N events" line at once
+(since October 2026).
 
 ---
 
@@ -1598,6 +1643,9 @@ python -m unittest discover -s tests                 # everything (what Code che
 python -m unittest tests.test_events_feeds -v        # flyers, content/events, feeds, calendar files
 python -m unittest tests.test_recurring_events -v    # recurring_events:, La Viña's workshop, the digest
 python -m unittest tests.test_event_tone -v          # card colours and badges
+python -m unittest tests.test_content_events -v      # every real content/events file: year, offset, end after start
+python -m unittest tests.test_source_dates -v        # dates read from names and headers (day first, ranges, notes)
+python -m unittest tests.test_events_external -v     # the GV/LV calendars, from saved pages
 python -m unittest tests.test_i18n_keys -v           # every label has English and Spanish
 python -m scripts.sync.announcements --dry-run       # prints how each content/events file is read (no files written)
 ```
@@ -1623,8 +1671,12 @@ build passed.
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| A flyer did not become an event | no date in the name; a day-first date (`14-03-2027`); a month only; a phone/camera name; not in the Panel folder's `flyers`; the next update has not run yet | rename it `2027-03-14 Title 9am @ Place.pdf`; check it is under `2027-2028_Panel77_GVLV/flyers`; start a run ([10](#10-what-happens-next-and-how-long-it-takes)) |
-| The event is on the wrong day | month-first reading (`05-10-2026` is May 10) | write `2026-10-05` |
+| A flyer did not become an event | no date in the name; a month only; a phone/camera name; not in the Panel folder's `flyers`; the next update has not run yet | rename it `2027-03-14 Title 9am @ Place.pdf`; check it is under `2027-2028_Panel77_GVLV/flyers`; start a run ([10](#10-what-happens-next-and-how-long-it-takes)) |
+| The event is on the wrong day | a numbers-only date read the other way (`Report 05-10-2026` is May 10; `Taller 05-10-2026` is October 5); *Notes* says "could be May 10 or October 5" | write `2026-10-05` |
+| **Event files to fix**: "… has no year — the event is left out until it does" (or "has no day", "has no year written in full") | a `start:` / `end:` that is not a whole date | write the whole date, as the line shows (`start: 2027-01-10`) |
+| **Event files to fix**: "… is not Central time's UTC offset on …" | a wrong `-05:00` / `-06:00` | leave the offset out, or use the one the line gives |
+| A three-day flyer shows on one day only | a flyer event takes the first day of a range | write a `content/events` file with `start:` and `end:` |
+| A GV/LV calendar event in Texas is missing | it names neither TX nor Texas, and its city is not on geo.py's lists | nothing to do here; a `content/events` file can show it |
 | The time is an hour off | a wrong `-05:00` / `-06:00` in a file; a zone word not recognised (`MT`, small letters `et`) | leave the offset out; write `(Eastern)`, `(Mountain)`, `hora del Este` |
 | The event shows "All day" but the flyer has a time | the time was in `(until …)`, or written `noon`, `9-11`, `19h` | write `12 noon`, `9-11am`, `19:00` outside brackets |
 | The card disappears an hour after it starts | no end time | add the end (`9-11am` in the name; `end:` in a file) |

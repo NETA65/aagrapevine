@@ -1,9 +1,9 @@
 # Automation and troubleshooting
 
 How the website keeps itself up to date with GitHub Actions. This guide covers what starts each automatic
-run, how to start one yourself, how to read what a run reports, the website's Status page, the two issues the
-robot opens by itself, the `data/` folder, how to run everything on a PC, the size limits, and how to recover
-when something goes wrong.
+run, how to start one yourself, the tests a run passes before it publishes, how to read what a run reports, the
+website's Status page, the three issues the robot opens by itself, the `data/` folder, how to run everything on a
+PC, the size limits, and how to recover when something goes wrong.
 
 You do not need to be a programmer. You need a GitHub login with access to
 [NETA65/aagrapevine](https://github.com/NETA65/aagrapevine) and, for section 11, a Windows PC.
@@ -17,7 +17,7 @@ You do not need to be a programmer. You need a GitHub login with access to
 5. [Run a workflow by hand](#5-run-a-workflow-by-hand)
 6. [Read a run](#6-read-a-run)
 7. [Where it shows on the website: the Status page](#7-where-it-shows-on-the-website-the-status-page)
-8. [The two automatic issues and the failure e-mails](#8-the-two-automatic-issues-and-the-failure-e-mails)
+8. [The three automatic issues and the failure e-mails](#8-the-three-automatic-issues-and-the-failure-e-mails)
 9. [The data folder and what the robot commits](#9-the-data-folder-and-what-the-robot-commits)
 10. [Who can do what: MKP715 and NETA65](#10-who-can-do-what-mkp715-and-neta65)
 11. [Run the sync, the build and the tests on a PC](#11-run-the-sync-the-build-and-the-tests-on-a-pc)
@@ -33,9 +33,9 @@ You do not need to be a programmer. You need a GitHub login with access to
 ## 1. What this is
 
 Nobody edits the website's pages by hand. Five **GitHub Actions workflows** (small programs that run on
-GitHub's computers) fetch new content, translate it, save the results in this repository, build the pages and
-publish them on GitHub Pages. They run on a timetable, whenever someone saves a settings or content file, and
-whenever someone presses **Run workflow**.
+GitHub's computers) fetch new content, translate it, save the results in this repository, build the pages, test
+the code and publish the pages on GitHub Pages. They run on a timetable, whenever someone saves a settings or
+content file, and whenever someone presses **Run workflow**.
 
 Where you see the automation at work:
 
@@ -43,7 +43,7 @@ Where you see the automation at work:
 |---|---|
 | GitHub → **Actions** tab: <https://github.com/NETA65/aagrapevine/actions> | Every run, with a green ✓ or a red ✗ and a summary of what it did |
 | The website's **Status page**: <https://neta65.github.io/aagrapevine/status/> (Spanish: <https://neta65.github.io/aagrapevine/es/status/>) | When each content source last updated, and when the daily quotes came in |
-| GitHub → **Issues** tab | Two issues the robot opens and closes by itself (section 8) |
+| GitHub → **Issues** tab | Three issues the robot opens and closes by itself (section 8) |
 | The footer of every page | "Last updated …" = the time of the last build |
 | The badge at the top of the [README](../README.md) | Green when the last *Website update* run succeeded |
 | Your inbox | GitHub's e-mail when a run fails (section 8.3) |
@@ -58,7 +58,8 @@ The big picture:
  magazine sites, podcasts, ───┘      2. translate + assemble   ──► data/site/*.json
  YouTube, Instagram, …               3. the robot commits data/ back to the repository
                                      4. build: Eleventy (src/) ──► _site/
-                                     5. publish ──► https://neta65.github.io/aagrapevine/
+                                        and, at the same time, the tests (when the code or content changed)
+                                     5. publish, only if both worked ──► https://neta65.github.io/aagrapevine/
 ```
 
 ---
@@ -72,8 +73,9 @@ The big picture:
 2. In the left list, click **Website update**.
 3. Click **Run workflow** (right side). Leave *Use workflow from* on `main`. Tick **skip_crawl**. Click the
    green **Run workflow** button.
-4. Wait about **2 minutes** until the run shows a green ✓ (refresh the page). GitHub Pages may take up to about
-   **10 more minutes** to show the change to every visitor.
+4. Wait about **2 minutes** until the run shows a green ✓ (refresh the page; about 5 minutes if the code or
+   content changed since the tests last passed, because they then run first: 4.8). GitHub Pages may take up to
+   about **10 more minutes** to show the change to every visitor.
 5. Open <https://neta65.github.io/aagrapevine/status/>: *Site last published* now says "… minutes ago".
 
 This "quick" run (listed as **Quick refresh (started by hand)**) reads Google Drive, `content/bulletin`,
@@ -85,12 +87,16 @@ empty instead (about 10 to 15 minutes; listed as **Full update (started by hand)
 
 1. **Actions** tab: the newest *Website update* run has a green ✓.
 2. **Status page**: it says **16/16 sources up to date** (Spanish: *16/16 fuentes al día*).
-3. **Issues** tab: there is no open issue called **"A content source has stopped updating"**.
+3. **Issues** tab: there is no open issue called **"A content source has stopped updating"** or **"The website
+   update keeps failing"**.
 
 If all three are fine, there is nothing to do, even when a run shows a yellow ⚠ titled with a source's name:
-that source had a bad day, and the site kept its older items. A yellow ⚠ titled *Settings problem …*,
-*Event files to fix*, *Bulletin files to fix* or *Booth folder file to fix*, or a **CSV file to fix** line under
-*Writers archive* in the run summary, is different: one of your files needs a fix (section 14).
+that source had a bad day, and the site kept its older items. The same goes for a source marked **On hold** on
+the Status page: it suddenly found far fewer items, so the site keeps the missing ones until the next update
+confirms they are gone (7.1). A yellow ⚠ titled *Settings problem …*, *Event files to fix*, *Bulletin files to
+fix* or *Booth folder file to fix*, or a **CSV file to fix** line under *Writers archive* in the run summary, is
+different: one of your files needs a fix (section 14). So is a red ✗ with **Tests failed — not published**: a
+change broke the tests, and the live site keeps the version before it (14.10).
 
 ---
 
@@ -98,20 +104,20 @@ that source had a bad day, and the site kept its older items. A yellow ⚠ title
 
 | You do this | What starts by itself | Live after about |
 |---|---|---|
-| Save a file in `config/`, `content/`, `src/`, `scripts/` or `eleventy/` on github.com (or push it from a PC) | a **quick** *Website update* run, plus a *Code check* | 2 minutes, plus up to 10 minutes of Pages caching (a few changes wait for the full update: see the note in 4.3) |
-| Put a new export in `content/archive/` | the same; the run reads the new file | about 3 minutes (+ caching) — [Writers archive](writers-archive.md) |
-| Save `data/translations/overrides.yml` or `data/translations/glossary.yml` | the same | 2 minutes (+ caching) |
-| Save `data/geo/texas_places.json` (the Texas places list) | the same, and the quick run also reads the meeting lists again | 2 to 3 minutes (+ caching) |
+| Save a file in `config/`, `content/`, `src/`, `scripts/` or `eleventy/` on github.com (or push it from a PC) | a **quick** *Website update* run, whose tests run before it publishes (4.8), plus a *Code check* | about 5 minutes, plus up to 10 minutes of Pages caching (a few changes wait for the full update: see the note in 4.3) |
+| Put a new export in `content/archive/` | the same; the run reads the new file | about 5 minutes (+ caching) — [Writers archive](writers-archive.md) |
+| Save `data/translations/overrides.yml` or `data/translations/glossary.yml` | the same | about 5 minutes (+ caching) |
+| Save `data/geo/texas_places.json` (the Texas places list) | the same, and the quick run also reads the meeting lists again | about 5 minutes (+ caching) |
 | Put a file in the Drive panel folder (`A65_GV` › `2027-2028_Panel77_GVLV` › …) | **nothing**: nothing watches Drive | the next run that reads Drive (below), or 2 minutes after you press *Run workflow* with **skip_crawl** |
-| Edit `README.md`, `docs/`, `how-to/`, a `content/**/README.md` or a test | no website run (a test file or a `content/**/README.md` starts only a *Code check*) | GitHub shows the new text at once; the website does not change |
+| Edit `README.md`, `docs/`, `how-to/`, a `content/**/README.md` or a test | no website run (a test file or a `content/**/README.md` starts only a *Code check*) | GitHub shows the new text at once; the website does not change. (The next *Website update* run tests the code once more, because its fingerprint changed: 4.8) |
 | Edit a file in `data/raw`, `data/site` or `data/state` | nothing | the next scheduled run (and see section 9 before you do this) |
-| Edit `.github/workflows/update.yml` | a quick *Website update* + a *Code check* | 2 minutes |
+| Edit `.github/workflows/update.yml` | a quick *Website update* + a *Code check* | about 5 minutes |
 | Edit any other workflow file | only a *Code check* | the new schedule counts from its next firing |
 
 **The runs that read Google Drive** (every mode reads it):
 
 - the **morning refresh**, started by the Morning check (with the morning alarm: about 4:30 AM Central);
-- the **nightly full update** (scheduled; GitHub usually starts it around 5 to 7 AM Central);
+- the **nightly full update** (scheduled; GitHub usually starts it around 6 to 8 AM Central);
 - the **midday refresh** (scheduled, quick; usually around 11 AM to 1 PM Central);
 - the **evening refresh** (scheduled, quick; usually around 7 to 9 PM Central);
 - every quick run after someone saves a watched file;
@@ -120,7 +126,13 @@ that source had a bad day, and the site kept its older items. A yellow ⚠ title
 (The times are for summer, CDT; in winter each timed run starts about an hour earlier on the Central clock, 4.1.)
 
 Times measured on 2 October 2026: a quick run took 1.4 to 2.2 minutes from start to published, the full run 10
-to 14 minutes, a morning refresh 2 minutes.
+to 14 minutes, a morning refresh 2 minutes. Since October 2026 a run whose code or content is new to the tests
+also waits for them before it publishes (4.8): `update.yml` reckons about 3 to 4 minutes, setup included, and they
+run while the site is built, so a save now goes live in about 5 minutes. The runs that only bring new data (the
+morning, midday and evening refreshes, the nightly update, a *Run workflow*) skip them and keep the times above.
+At the very most a full update takes a little over 2 hours: its sync step's time box is 130 minutes (4.2), and it
+gets near that only when the document search uses its whole 40 minutes and translation its whole 40 (a big
+catch-up after weeks of new titles, or a lost crawl state).
 
 ---
 
@@ -130,15 +142,17 @@ All five live in [`.github/workflows/`](../.github/workflows/). Their names in t
 
 | Name in the Actions tab | File | Starts on | What it does | Typical length | Leaves behind |
 |---|---|---|---|---|---|
-| **Website update** | [`update.yml`](../.github/workflows/update.yml) | 3 schedules (the nightly full update, the midday and evening refreshes), a push to a watched file, *Run workflow*, the Morning check | sync → translate → commit the data → build → publish; then reports sources that stopped updating | quick 2 min; full 10–15 min (time box 2 h 10 min); a 300-minute PDF crawl about 6 h | a data commit, the new website, a run summary, maybe an issue |
+| **Website update** | [`update.yml`](../.github/workflows/update.yml) | 3 schedules (the nightly full update, the midday and evening refreshes), a push to a watched file, *Run workflow*, the Morning check | sync → translate → commit the data → build, and test the code at the same time → publish only when both worked; then reports sources that stopped updating and updates that keep failing | data-only runs: quick 2 min, full 10–15 min (time box 2 h 10 min), a 300-minute PDF crawl about 6 h; a save of code or content about 5 min (the tests) | a data commit, the new website, a run summary, maybe an issue |
 | **Morning check (new day by 5:30 AM)** | [`morning.yml`](../.github/workflows/morning.yml) | an hourly backstop through the night, the morning alarm, *Run workflow* | makes sure the new day and both daily quotes are on the site by 5:30 AM Central | a few seconds when there is nothing to do | a run summary; its no-op runs are deleted a day later |
-| **Code check (tests and test build)** | [`check.yml`](../.github/workflows/check.yml) | every pull request; a push that changes code, settings, content or a workflow; *Run workflow* | a strict test build + the Python tests + an e-mail dry run. Publishes nothing | 2–3 min | a ✓ or ✗ on the commit or pull request |
-| **Monthly e-mail digest** | [`monthly-digest.yml`](../.github/workflows/monthly-digest.yml) | 5 tries a day on the 1st–3rd; *Run workflow* | e-mails last month's bilingual digest. **Off until NETA65 adds the e-mail secrets** | seconds | the e-mail; a `digest-sent-YYYY-MM` marker; a `digest-preview` download |
-| **Weekly link check** | [`link-check.yml`](../.github/workflows/link-check.yml) | Sundays; *Run workflow* | checks every link on the built site and the official links in the settings | up to 45 min | a summary; maybe the issue "Broken links found by the weekly check" |
+| **Code check (tests and test build)** | [`check.yml`](../.github/workflows/check.yml) | every pull request; a push that changes code, settings, content or a workflow; *Run workflow* | a strict test build + the Python tests + an e-mail dry run. Publishes nothing | a few minutes | a ✓ or ✗ on the commit or pull request |
+| **Monthly e-mail digest** | [`monthly-digest.yml`](../.github/workflows/monthly-digest.yml) | 5 tries a day on the 1st–3rd; *Run workflow* | e-mails last month's bilingual digest, once. **Off until NETA65 adds the e-mail secrets** | seconds | the e-mail; the month's markers `digest-sending-YYYY-MM`, `digest-sent-YYYY-MM` or `digest-unsent-YYYY-MM`; a `digest-preview` download |
+| **Weekly link check** | [`link-check.yml`](../.github/workflows/link-check.yml) | Sundays; *Run workflow* | checks every link on the built site and the official links in the settings (job *Check links*), then keeps the issue (job *Report broken links (the issue)*) | up to 45 min | a summary; the `link-check-report` download (7 days); maybe the issue "Broken links found by the weekly check" |
 
 Plus **Dependabot** ([`.github/dependabot.yml`](../.github/dependabot.yml)): once a month it may open a pull
-request titled `chore(actions)…` or `chore(deps)…` that updates the building blocks. The Code check tests it.
-Merge it only when it shows a green ✓.
+request that updates the building blocks: `chore(actions)…` for the workflows' actions, `chore(deps)…` for the
+site tools (npm: minor and patch versions) and for the Python packages (pip: only a **new major version**, one
+grouped pull request; every run already installs the newest minor and patch releases, and `yt-dlp` has no cap,
+so it is left out). The Code check tests it. Merge it only when it shows a green ✓.
 
 ### 4.1 The timetable is set 4 hours early on purpose
 
@@ -151,14 +165,19 @@ the hour.
 > (all but the weekly link check's), so the Code check goes red if one changes without its test (section 13.1
 > shows how to move one safely).
 
-Real example: on 2 October 2026 the `17 6 * * *` run started at 12:36 UTC (7:36 AM CDT, 6 h 19 min late), and the
-midday refresh, then set for `7 8 * * *` (08:07 UTC), at 14:42 UTC (9:42 AM CDT). That refresh landed in the
-morning, and no timed run refreshed the site from then until the next night, so the midday refresh moved to
-`7 12 * * *` and an evening refresh, `7 20 * * *`, was added.
+Real example: on 2 October 2026 the nightly full update, then set for `17 6 * * *` (06:17 UTC), started at 12:36 UTC
+(7:36 AM CDT, 6 h 19 min late), and the midday refresh, then set for `7 8 * * *` (08:07 UTC), at 14:42 UTC (9:42 AM
+CDT). That refresh landed in the morning, and no timed run refreshed the site from then until the next night, so
+the midday refresh moved to `7 12 * * *` and an evening refresh, `7 20 * * *`, was added. In October 2026 the
+nightly moved an hour later, to `17 7 * * *`: at 06:17 UTC, a run 4 hours late would start at 4:17 AM CST in winter,
+right when the morning alarm starts the morning refresh, which would then have to wait behind it (one update at
+a time) past the 5:30 goal. At 07:17 UTC a run GitHub starts on time is finished long before 4:30 AM, and one 4
+or more hours late starts after the morning refresh is live, in summer and in winter
+(`test_the_nightly_full_update_keeps_clear_of_the_morning_alarm` checks both).
 
 | Schedule (UTC) | Workflow | On time, summer (CDT) | On time, winter (CST) | Usually really starts (CDT) | What it does |
 |---|---|---|---|---|---|
-| `17 6 * * *` | Website update, **nightly full update** | 1:17 AM | 12:17 AM | ~5–7 AM | every source + the PDF search |
+| `17 7 * * *` | Website update, **nightly full update** | 2:17 AM | 1:17 AM | ~6–8 AM | every source + the PDF search |
 | `7 12 * * *` | Website update, **midday refresh** (quick) | 7:07 AM | 6:07 AM | ~11 AM–1 PM | Drive, bulletin, events files, podcasts, daily quote, writers archive files |
 | `7 20 * * *` | Website update, **evening refresh** (quick) | 3:07 PM | 2:07 PM | ~7–9 PM | the same as the midday refresh |
 | `25 0-11,21-23 * * *` | Morning check (new day by 5:30 AM), **backstop** | :25 past every hour, 4:25 PM–6:25 AM | 3:25 PM–5:25 AM | late firings land in the early morning; on-time ones find the work done | checks the live site, starts a morning refresh if needed |
@@ -167,11 +186,12 @@ morning, and no timed run refreshed the site from then until the next night, so 
 | outside GitHub | the **morning alarm** at cron-job.org → Morning check (new day by 5:30 AM) | 4:30 AM America/Chicago, **on time** | same | within seconds | the only sure way to the 5:30 AM goal ([README → 10 d](../README.md#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)) |
 
 CDT = UTC−5 (until 1 November 2026), CST = UTC−6. GitHub's timetable ignores daylight saving, so in winter
-every timed run is one hour earlier in Central time (the midday refresh then usually starts around 10 AM to noon,
-the evening one around 6 to 8 PM). The morning alarm is not a GitHub schedule: leave it at 4:30.
+every timed run is one hour earlier in Central time (the nightly update then usually starts around 5 to 7 AM, the
+midday refresh around 10 AM to noon, the evening one around 6 to 8 PM). The morning alarm is not a GitHub
+schedule: leave it at 4:30.
 
-**Only `17 6 * * *` is a full run.** The step *Decide what to sync* compares the schedule that started the run
-(`github.event.schedule`) with `FULL_CRON="17 6 * * *"`: that one is the full update, and **every other schedule** —
+**Only `17 7 * * *` is a full run.** The step *Decide what to sync* compares the schedule that started the run
+(`github.event.schedule`) with `FULL_CRON="17 7 * * *"`: that one is the full update, and **every other schedule** —
 the midday and evening refreshes, and any `cron:` line added later — is a quick run. So a new schedule can never
 start a long document search by mistake.
 
@@ -181,22 +201,29 @@ The step *Decide what to sync* (in the first job, after the set-up steps) picks 
 
 | Mode | Started by | Reads | Translation box | Step box | Typical | Data commit message |
 |---|---|---|---|---|---|---|
-| **morning** | the Morning check, or **morning** ticked | Google Drive (5-minute box), `content/bulletin` + `content/events`, the daily quote (right after the bulletin), the podcasts, the writers archive files. On the 1st also the new magazine issues and the shop; on the 15th the shop (Book of the Month) | 5 min | 20 min | ~2 min | `chore(data): morning refresh with the daily quote 2026-10-02 [skip ci]` |
-| **quick** | a push to a watched file; **skip_crawl** ticked; every schedule but `17 6 * * *` (the midday `7 12 * * *` and the evening `7 20 * * *` refresh) | Google Drive, `content/bulletin` + `content/events`, the podcasts (no feed discovery), the writers archive files (`content/archive`), the daily quote — and, for a push, the sources only the full update reads whose own input the push changed (below) | 40 min | 90 min | ~2 min | push: `chore(data): content sync after settings/content change 2026-10-02 [skip ci]`; midday: `chore(data): midday refresh …`; evening: `chore(data): evening refresh …`; by hand: `chore(data): quick refresh …` |
-| **full** | the `17 6 * * *` schedule; *Run workflow* with no box ticked; the Morning check on the 1st or after 30 hours without one | every source: the 14 sync modules plus the PDF search (`crawl`), time-boxed by `crawl_minutes` (normally 40; `0` skips it) | 40 min (10 on a 300-minute crawl) | 130 min with a 40-minute crawl (at most 345) | ~10–15 min | `chore(data): daily content sync 2026-10-02 [skip ci]` |
+| **morning** | the Morning check, or **morning** ticked | Google Drive (5-minute box), `content/bulletin` + `content/events`, the daily quote (right after the bulletin), the podcasts, the writers archive files. On the 1st also the new magazine issues and the shop; on the 15th the shop (Book of the Month) | 5 min | 20 min | ~2 min | `chore(data): morning refresh with the daily quotes of Oct 6 2026-10-06 [skip ci]` (each magazine whose quote changed, by the quote's own day: `… with the Grapevine quote of Oct 6 and the La Viña quote of Oct 5 2026-10-06 [skip ci]`; no new quote: `chore(data): morning refresh 2026-10-06 [skip ci]`) |
+| **quick** | a push to a watched file; **skip_crawl** ticked; every schedule but `17 7 * * *` (the midday `7 12 * * *` and the evening `7 20 * * *` refresh) | Google Drive, `content/bulletin` + `content/events`, the podcasts (no feed discovery), the writers archive files (`content/archive`), the daily quote — and, for a push, the sources only the full update reads whose own input the push changed (below) | 40 min | 90 min | ~2 min | push: `chore(data): content sync after settings/content change 2026-10-02 [skip ci]`; midday: `chore(data): midday refresh …`; evening: `chore(data): evening refresh …`; by hand: `chore(data): quick refresh …` |
+| **full** | the `17 7 * * *` schedule; *Run workflow* with no box ticked; the Morning check on the 1st or after 30 hours without one | every source: the 14 sync modules plus the PDF search (`crawl`), time-boxed by `crawl_minutes` (normally 40; `0` skips it) | 40 min (10 on a 300-minute crawl) | 130 min with a 40-minute crawl (at most 345) | ~10–15 min | `chore(data): daily content sync 2026-10-02 [skip ci]` |
 
-The date in the message is the Central date, and always the end of the message, before `[skip ci]`. A run that took
-a new writers archive file in says so just before the date: `chore(data): content sync after settings/content
-change + writers archive 2026-11-05 [skip ci]` ([Writers archive §6.2](writers-archive.md#62-the-data-commit)).
+The date in the message is the run's Central date, and always the end of the message, before `[skip ci]` (the
+morning refresh names its quotes by their own day before it: the step compares each magazine's quote in
+`data/site/quote.json` with the last commit's). A run that took a new writers archive file in says so just before
+the date: `chore(data): content sync after settings/content change + writers archive 2026-11-05 [skip ci]`
+([Writers archive §6.2](writers-archive.md#62-the-data-commit)).
 
 **A push also runs the sources whose input it changed.** A quick run does not read the sources only the full update
 reads, so a push used to show an edit of, say, `content/instagram.yml` only after the next night. Now *Decide what
 to sync* runs [`scripts/ops/push_modules.py`](../scripts/ops/push_modules.py) for every push: it asks git which files
-differ between the commit the push started from and its last commit (`git diff --name-only --no-renames`, as
-GitHub's own `paths:` filter sees the push; the run's checkout has only the newest commit, so a commit it lacks is
-fetched first, one commit deep — GitHub's event file for a run lists no files) and, for `config/site.yml`, at which
-settings changed (it compares the file with its copy from the commit before the push), and hands
-`run_all --quick --also …` the sources to add:
+differ between the last commit those sources ran with and the push's last commit (`git diff --name-only
+--no-renames`; the run's checkout has only the newest commit, so a commit it lacks is fetched first, one commit
+deep — GitHub's event file for a run lists no files) and, for `config/site.yml`, which settings changed (it
+compares the file with its copy from that same earlier commit), and hands `run_all --quick --also …` the sources
+to add. "The last commit those sources ran with" is kept in `data/state/sources-seen.json` (`{commit, by,
+recorded}`): the step *Remember the commit the full-update sources ran with* writes it after a full update (the
+commit it checked out) and after a push run (the push's last commit), each time only when the sync step ended
+well. So a push whose own run GitHub replaced in the queue (only one run waits, below) still gets its sources run
+by the next push's run. Without that file, or when git cannot fetch its commit, the comparison starts from the
+commit the push started from, as GitHub's own `paths:` filter sees the push.
 
 | The push changed | Also runs |
 |---|---|
@@ -213,12 +240,15 @@ settings changed (it compares the file with its copy from the commit before the 
 Never added: the document search, the magazine stories and the store (`crawl`, `articles`, `shop`: many polite
 requests to the magazine sites; they run every night). Settings only the site data or the pages read need nothing:
 every run rebuilds those. The plan step's log says, for example, `Files this push changed: 2 (git diff
-1a2b3c4..5d6e7f8).` and `Also run for this push: instagram (content/instagram.yml); meetings
-(data/geo/texas_places.json)`, and the run summary adds the line **Also run for this push**. If git cannot compare
-the two commits (a brand-new branch, a commit that cannot be fetched), the files an event file lists are used
-instead, and a blue notice *Push run* says so; with none — the usual case for a run's event file — nothing is added,
-and the notice says that. If only the earlier copy of `config/site.yml` cannot be read, nothing is added for it, with
-the same kind of notice. Those sources then show the change after the next full update.
+1a2b3c4..5d6e7f8, from the last commit the full-update sources ran with (data/state/sources-seen.json)).` and `Also
+run for this push: instagram (content/instagram.yml); meetings (data/geo/texas_places.json)`, and the run summary
+adds the line **Also run for this push**. When `sources-seen.json` could not be used, a blue notice *Push run* says
+"Could not compare this push with the last commit the sources only the full update reads ran with
+(data/state/sources-seen.json) — … —, so only its own changes count." If git cannot compare the two commits at all
+(a brand-new branch, a commit that cannot be fetched), the files an event file lists are used instead, and a notice
+says so; with none — the usual case for a run's event file — nothing is added, and the notice says that. If only
+the earlier copy of `config/site.yml` cannot be read, nothing is added for it, with the same kind of notice. Those
+sources then show the change after the next full update.
 These runs do not count as a full update: `run_all` passes `build_data --keep-full-update` in every quick and morning
 run, so `status.json` → `full_update` (and the Morning check's view of "the last full update") moves only with a
 full run.
@@ -227,17 +257,27 @@ full run.
 waits for the current one. GitHub keeps only **one** waiting run: a newer waiting run replaces the older one,
 which then shows as grey "cancelled". Nothing is lost, because the run that starts reads the newest commit.
 
-**What the three jobs do (in every mode):**
+**What the five jobs do (in every mode):**
 
 1. **Sync content + translate**: installs Python 3.12, restores the translation models from the Actions cache
    (about 175 MB), decides the mode (*Decide what to sync*), runs `python -m scripts.sync.run_all` with `--morning`,
    `--quick` (for a push maybe `--quick --also instagram,meetings`) or `--crawl-minutes N` in the step **Sync sources
-   and translate**, commits the data, writes the run summary.
-2. **Build & publish website**: runs even when the sync failed (the site then shows the last good data), but not
-   when a person cancelled the run. It checks out `main` again (so the fresh data commit is included), saves the
-   booth display's photos and videos for offline play (below), builds with Eleventy in strict mode, checks that the
-   English and Spanish home pages and the stylesheet exist, and publishes. Its time limit is 35 minutes.
-3. **Report sources that stopped updating**: opens, updates or closes the issue in section 8.1.
+   and translate**, remembers the commit the full-update sources ran with (above), commits the data, writes the run
+   summary. Its output `commit` is the data commit it pushed (or, with nothing to commit, the commit it checked
+   out): the next two jobs check out exactly that commit.
+2. **Build website** (job id `build-deploy`; it was called *Build & publish website* until October 2026): runs even
+   when the sync failed (the site then shows the last good data), but not when a person cancelled the run. It
+   checks out the sync job's commit, saves the booth display's photos and videos for offline play (below), builds
+   with Eleventy in strict mode, checks that the English and Spanish home pages and the stylesheet exist, and
+   uploads the site for publishing. Its time limit is 35 minutes.
+3. **Test the code before publishing** (job id `tests`): at the same time as the build, on the same commit, the
+   offline tests, when the code or content is new to them (4.8). Time limit 20 minutes.
+4. **Publish to GitHub Pages** (job id `publish`): only when the build **and** the tests succeeded, and only after
+   it checked that both used the very same commit (otherwise it stops with *Not published*: "The website was built
+   from … but the tests ran on … (a change arrived between the two) — nothing was published; the next run
+   publishes."). Time limit 15 minutes.
+5. **Report sources that stopped updating, and updates that keep failing**: opens, updates or closes the issues
+   in sections 8.1 and 8.4. It never fails the run.
 
 **The booth display's media** (the build job, between *Install site tools* and *Build the website*). The booth on
 the About page plays offline, so the Drive booth folder's photos, videos and sound files are published with the
@@ -248,7 +288,7 @@ next:
 |---|---|
 | *Work out the booth display's settings fingerprint* | a fingerprint of `data/site/booth.json` and of the **`booth:` section** of `config/site.yml` only (its size limits), so an unrelated edit of the settings file no longer saves the whole folder again under a new key. A settings file that is not readable YAML is fingerprinted whole; this step never stops a deploy |
 | *Restore the booth display's media (saved between runs)* | `actions/cache/restore` brings back the folder: the newest copy saved for this fingerprint (key `booth-media-v1-<fingerprint>-…`), else the newest copy of any (`booth-media-v1-`) |
-| *Download the booth display's photos and videos (Drive booth folder)* | `node scripts/build/booth-media.mjs`: keeps what is already saved, deletes what left the folder, downloads the rest (a photo as Google's 1920-pixel picture, a video or sound file whole) within `booth.max_file_mb` (95) and `booth.max_total_mb` (400) of `config/site.yml`, and writes `.cache/booth-media/manifest.json`. Downloads stop by the 15th minute (the step allows 20); what is left waits for the next run. `continue-on-error`: it never stops the deploy |
+| *Download the booth display's photos and videos (Drive booth folder)* | `node scripts/build/booth-media.mjs`: keeps what is already saved, deletes what left the folder, downloads the rest (a photo as Google's 1920-pixel picture, a video or sound file whole) within `booth.max_file_mb` (95) and `booth.max_total_mb` (400) of `config/site.yml`, and writes `.cache/booth-media/manifest.json`. A picture is kept only when its bytes are a JPEG, PNG, WebP, GIF or AVIF picture, whatever type the answer claims, and it is named by what its bytes are; anything else (an SVG, for example) is listed as skipped: "the answer is not a picture (…): the booth keeps JPEG, PNG, WebP, GIF and AVIF pictures". (A picture an earlier run kept as `.svg` or `.bmp` is deleted and downloaded again.) Downloads stop by the 15th minute (the step allows 20); what is left waits for the next run. `continue-on-error`: it never stops the deploy |
 | *Work out the booth display's media cache key* | the same fingerprint plus one of the saved files' names and sizes (no key when nothing is saved) |
 | *Save the booth display's media for the next run (only when this run changed it)* | `actions/cache/save` with that key, before the build, so a build that fails later keeps the downloads (5 minutes, `continue-on-error`) |
 
@@ -307,9 +347,11 @@ It puts the new day and both daily quotes on the site by the goal in `config/sit
 2. A *Website update* run already waiting or running → it follows that run first instead of queueing another.
 3. The site does not have today's build → it starts *Website update* in **morning** mode, follows it, then
    reads the live site until the new build shows.
-4. Today's build is up but a magazine's quote is not out yet → from 4:00 to 7:00 AM it asks only that
-   magazine's home page every 10 minutes (a check that starts after 7:00 AM asks once), and refreshes again
-   once the quote is out (at most 3 refreshes per check; nothing new after 170 minutes).
+4. Today's build is up but a magazine's quote is not out yet → from 2:00 to 7:00 AM Central (the magazines
+   usually publish the new day's quote about 2 AM; `WINDOW_BEFORE`, 3 h 30 min before the 5:30 goal) it asks only
+   that magazine's home page every 10 minutes (a check that starts after 7:00 AM asks once), and refreshes again
+   once the quote is out (at most 3 refreshes per check; nothing new after 170 minutes, so a check that begins at
+   2:00 asks until 4:50, and the alarm's check at 4:30 waits for it, then asks until 7:00).
 5. On the 1st of the month, or after 30 hours without a full run, it also starts the **full** update (listed as
    "Full update (started by the Morning check)"), but not while a *Website update* run waits, or runs (any run
    but a morning refresh: it may be a full one), and not again within 12 hours of a full update already started by
@@ -344,9 +386,13 @@ pull request keeps GitHub's own title (the commit message, the pull request's ti
 "Code check (started by hand)". Besides code, settings, content and workflows, a change of `data/geo/**` (the
 Texas places list the place tests read) starts it too.
 
-- A red ✗ on a push means **that change broke something**: fix it or undo it. The live site keeps working.
+- A red ✗ on a push means **that change broke something**: fix it or undo it. The live site keeps working:
+  *Website update* runs the same tests before it publishes (4.8), so the same change is not published either.
 - On a pull request (for example Dependabot's), a red ✗ means: do not merge.
 - A newer push cancels a check that is still running, so grey "cancelled" Code check runs are normal.
+
+The Code check runs **every** test. *Website update*'s own tests leave out the few that judge the day's synced
+data rather than the code (`DATA_TESTS`, 4.8): those turn only the Code check red.
 
 ### 4.6 Monthly e-mail digest (short version)
 
@@ -357,7 +403,16 @@ Texas places list the place tests read) starts it too.
   Gmail that means `smtp.gmail.com`, port 587 and a 16-letter app password.
 - **Preview** (anyone with write access, no secrets needed): *Actions → Monthly e-mail digest → Run workflow*,
   keep **Preview only** ticked → the run's **Artifacts** → `digest-preview` (`digest.html` + `digest.txt`).
-- **Careful:** unticking *Preview only* sends at once to everyone in `DIGEST_TO`, with no "already sent" check.
+- **Send it now:** untick *Preview only*. It sends at once to everyone in `DIGEST_TO`, unless that month was
+  already sent: then nothing goes out and a yellow ⚠ *Already sent* says so. To send a month **again**, tick
+  **force** too (the run is titled "Monthly e-mail digest: SEND AGAIN (forced, started by hand)"). With both
+  *Preview only* and *force* ticked, it is only a preview.
+- **Sent once, even on a bad day.** Every send first reads the month's markers (artifacts kept 40 days):
+  `digest-sending-YYYY-MM` is uploaded just **before** the e-mail is handed to the mail server,
+  `digest-sent-YYYY-MM` after it went (or when nothing was new), `digest-unsent-YYYY-MM` when the server took
+  nothing (the next try sends). A "sending" marker with no later marker from its run (the run was cancelled or
+  broke off in between, so the e-mail **may** have gone) is never sent again by itself: each try shows the yellow
+  ⚠ *Digest send not confirmed* with the run's link. Check the group; if it did not arrive, send it with *force*.
 
 Everything else (secrets, recipients, wording, test sends) is in [E-mail and alerts](email-and-alerts.md).
 
@@ -370,6 +425,37 @@ limit robots),
 then checks the official links in `config/site.yml` (`links:`, `site.area_website`, `site.committee_page`,
 each podcast's `web:`) one by one with the site's polite robot. A broken link **never turns it red** (only a
 site build that fails would); it keeps one issue instead (8.2).
+
+Since October 2026 it is two jobs: **Check links** (it may only read the repository; it runs lychee and the
+official-links check and keeps their reports as the download `link-check-report`, 7 days) and **Report broken
+links (the issue)** (the only one allowed to write issues; it runs no outside code and only reads that download).
+lychee's action, the one action from outside GitHub in the workflows, is pinned to an exact commit:
+`lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0`. Dependabot's monthly
+`chore(actions)` pull request moves the commit and its `# v…` note together; a test checks that every outside
+action is pinned this way.
+
+### 4.8 The tests before publishing
+
+Since October 2026 *Website update* never publishes code that fails the tests. Its job **Test the code before
+publishing** runs `python -m scripts.ops.gate_tests` ([`scripts/ops/gate_tests.py`](../scripts/ops/gate_tests.py)):
+every offline test of `tests/`, the same ones the Code check runs, at the same time as the build and on the very
+same commit. The job **Publish to GitHub Pages** waits for both. A change that breaks a test therefore never goes
+live; the site keeps the version before it.
+
+| Question | Answer |
+|---|---|
+| Which tests? | all of `tests/` except the few listed in `DATA_TESTS` in `gate_tests.py` (4 today: the booth CSV's videos and episodes, the colours of the day's events, the sections of the day's bulletin posts, the presentations' live values). They judge the day's synced data rather than the code, and a day's data must never keep the site from updating; the Code check still runs them. The tests that need the translation models skip themselves, as in the Code check |
+| When do they run? | only when the code or the content is **new to them**. The job takes a fingerprint of every file in git except the robot's own (`data/raw`, `data/site`, `data/state`, `data/translations/cache.json`, `src/assets/cache`) and remembers a pass in the Actions cache (`tests-passed-v1-<fingerprint>`) |
+| And the daily runs? | the morning, midday and evening refreshes and the nightly update change only the robot's files, so they find the pass and skip the tests in a few seconds, with the summary line "The tests passed already for this code and content (only the bot's data changed since) — not run again." |
+| What makes them run? | any commit of yours: code, settings, content, translation fixes, and also a test or a guide (they are in git too). The run of that save tests it; after a commit that starts no run (a guide, a test), the next run tests once. If GitHub has deleted the remembered pass (a cache unused for 7 days), they simply run again |
+| How long? | `update.yml` reckons about 3 to 4 minutes on GitHub, setup included, about as long as the build; on the owner's PC the whole suite takes about 4 minutes |
+| What does the summary say? | a section **Tests before publishing**: "All N tests passed (M skipped) — the website may be published." and "Left to the Code check (they judge the day's synced data, not the code): 4." |
+| And when one fails? | "**N of M tests failed — the website was NOT published** (the live site keeps the version before). Fix the change that broke them, or undo it; the next run publishes." with the failing tests, and the red annotation *Tests failed — not published*. The data commit was made as usual. What to do: 14.10 |
+
+If a test fails because of the day's synced data rather than anybody's change (it would fail on the Code check of
+the same commit too, and keep failing with no new commit), add its id to `DATA_TESTS` in `gate_tests.py`, with a
+line saying what it judges: the gate then leaves it to the Code check. Tested by `tests/test_automation.py`
+(classes `Publishing`, `GateTests`).
 
 ---
 
@@ -394,9 +480,10 @@ Actions**.
 | Put today's quote up | *Morning check (new day by 5:30 AM)*, no boxes | does only what is missing | seconds to a few minutes |
 | See what the Morning check would do | *Morning check (new day by 5:30 AM)*, tick **check_only** | it looks and reports, starts nothing | seconds |
 | The same refresh the Morning check starts | *Website update*, tick **morning** | morning refresh | ~2 min |
-| Run the tests and a test build | *Code check (tests and test build)* | ✓ or ✗ | ~2–3 min |
+| Run the tests and a test build | *Code check (tests and test build)* | ✓ or ✗ | a few minutes |
 | Preview the monthly e-mail | *Monthly e-mail digest*, keep **Preview only**, `month` empty or e.g. `2026-09` | the `digest-preview` download | ~1 min |
-| Send the monthly e-mail now | *Monthly e-mail digest*, untick **Preview only** | sends at once, no guard (see 4.6) | ~1 min |
+| Send the monthly e-mail now | *Monthly e-mail digest*, untick **Preview only** | sends at once, unless that month was already sent (⚠ *Already sent*) or a send of it was not confirmed (4.6) | ~1 min |
+| Send a month's e-mail **again** | *Monthly e-mail digest*, untick **Preview only**, tick **force** | sends it a second time to everyone (check the group first) | ~1 min |
 | Check the links now | *Weekly link check* | summary + issue | up to 45 min |
 
 Why start long crawls in the morning: the Morning check follows a running *Website update* run for up to 170
@@ -432,9 +519,9 @@ quote" (whatever else the form says); **skip_crawl** ticked → "Quick refresh (
 | To… | Do this | Good to know |
 |---|---|---|
 | **Stop** a run | open it → **Cancel workflow** | what it fetched so far is still committed (the commit step always runs); the site is published by the next run |
-| **Re-run** a failed run | open it → **Re-run jobs** → *Re-run failed jobs* | for *Website update* it uses the files `main` has **now**: re-running an old run never publishes old content |
+| **Re-run** a failed run | open it → **Re-run jobs** → *Re-run failed jobs* (or *Re-run all jobs*) | for *Website update*, *Re-run all jobs* starts from the files `main` has **now**; *Re-run failed jobs* builds, tests and publishes the commit that run's sync job saved (since October 2026 both jobs check out that commit). On a run of today that is what you want; on an old run, use *Run workflow* (or *Re-run all jobs*) instead, so no old content is published |
 | **Roll the website back** | revert the commits first (section 14.9), then run *Website update* | — |
-| **Delete** an old run | the run's **⋯** menu → *Delete workflow run* | deleting a *Monthly e-mail digest* run also deletes its `digest-sent` marker (see [E-mail and alerts](email-and-alerts.md)) |
+| **Delete** an old run | the run's **⋯** menu → *Delete workflow run* | deleting a *Monthly e-mail digest* run also deletes its `digest-sending`, `digest-sent` or `digest-unsent` marker, so the next try could send that month again (see [E-mail and alerts](email-and-alerts.md)) |
 
 ### 5.3 From a command line (optional)
 
@@ -446,6 +533,7 @@ gh workflow run update.yml -R NETA65/aagrapevine -f crawl_minutes=120
 gh workflow run update.yml -R NETA65/aagrapevine -f morning=true
 gh workflow run morning.yml -R NETA65/aagrapevine -f check_only=true
 gh workflow run monthly-digest.yml -R NETA65/aagrapevine -f preview_only=true -f month=2026-09
+gh workflow run monthly-digest.yml -R NETA65/aagrapevine -f preview_only=false -f force=true   # send again
 gh workflow run check.yml -R NETA65/aagrapevine
 ```
 
@@ -472,7 +560,7 @@ each workflow file). A run started by a push keeps GitHub's own title, the commi
 
 | Workflow | Run | Title in the Actions list |
 |---|---|---|
-| Website update | the `17 6 * * *` schedule | **Nightly full update (GitHub schedule)** |
+| Website update | the `17 7 * * *` schedule | **Nightly full update (GitHub schedule)** |
 | | the `7 12 * * *` schedule (and any other schedule but the two named here) | **Midday refresh (GitHub schedule)** |
 | | the `7 20 * * *` schedule | **Evening refresh (GitHub schedule)** |
 | | the Morning check's refresh, or **morning** ticked by hand | **Morning refresh: new day and daily quote** |
@@ -487,6 +575,7 @@ each workflow file). A run started by a push keeps GitHub's own title, the commi
 | Monthly e-mail digest | its schedule | **Monthly e-mail digest (GitHub schedule)** |
 | | *Run workflow*, **Preview only** ticked | **Monthly e-mail digest: preview only** |
 | | *Run workflow*, **Preview only** unticked | **Monthly e-mail digest: SEND NOW (started by hand)** |
+| | *Run workflow*, **Preview only** unticked, **force** ticked | **Monthly e-mail digest: SEND AGAIN (forced, started by hand)** |
 | Weekly link check | its Sunday schedule | **Weekly link check (GitHub schedule)** |
 | | *Run workflow* | **Weekly link check (started by hand)** |
 | Code check (tests and test build) | *Run workflow* | **Code check (started by hand)** |
@@ -502,8 +591,9 @@ as it was when they ran.
 Click a run. The **Summary** page shows, from top to bottom:
 
 1. how it started (for example "Triggered via push", "Triggered via schedule"), the status and the duration;
-2. the jobs as boxes (for *Website update*: *Sync content + translate* → *Build & publish website* and
-   *Report sources that stopped updating*); the publish box shows the website address;
+2. the jobs as boxes (for *Website update*: *Sync content + translate* → *Build website* and *Test the code
+   before publishing* side by side → *Publish to GitHub Pages*, and *Report sources that stopped updating, and
+   updates that keep failing*); the publish box shows the website address;
 3. **Annotations**: every yellow ⚠ warning, blue ℹ notice and red ✗ error, most with a title;
 4. each job's **summary** (the tables in 6.3);
 5. **Artifacts** (downloads), for example `digest-preview`.
@@ -526,9 +616,9 @@ visitor's own time zone, except its daily-quote times, which are Central.
 | 5 | **PDF crawl** | pages known · crawled · PDFs · pages this run | crawled far below known (see [Automatic sources](automatic-sources.md)) |
 | 6 | **Translations** | cached · new this run · waiting for the next run | ⚠ "Translation is not working" (14.2) |
 | 7 | **Writers archive** | the archive files in use (name, rows, rows by Texas writers), the stories on the site and how many are by Area 65 writers; "New archive file used: …" in the run that took a file in (also a blue ℹ); a **CSV file to fix** line when a file was not used; the module's warnings (an older copy that may be deleted …) | a CSV file to fix ([Writers archive §10](writers-archive.md#10-the-safety-checks-and-what-to-do)) |
-| 8 | **Notes** | small problems of sources that still updated (the writers archive's are in its own block) | only if the same note repeats for a week |
+| 8 | **Notes** | small problems of sources that still updated (the writers archive's are in its own block), at most two per source, for example a meeting list or YouTube answering with a bot check, main pages of the magazine sites that did not load (below), a Drive folder that suddenly looked empty, a date in a Drive file name that could be read two ways | only if the same note repeats for a week (the hub note: see below) |
 | 9 | **Other calendars (optional, informational)** | outside calendars (`sources.ics_feeds`): working, blocked, not answering; *Check:* lines | never counts as a failure |
-| 10 | **Settings problems** | a part of `config/site.yml`, a translation file or a `content/events` file (for example a venue that is "to be announced" in one language only) that was skipped or corrected, with the reason | fix the file and save it again |
+| 10 | **Settings problems** | a part of `config/site.yml`, a translation file or a `content/events` file (for example a venue that is "to be announced" in one language only) that was skipped or corrected, with the reason; also (as *translations*) a translation memory that could not be read and was set aside, or a downloaded translation model that was refused because its checksum is not the expected one | fix the file and save it again; for the translation memory or a model, see [Translations](translations.md) |
 | 11 | **Bulletin files to fix** / **Event files to fix** | a file in `content/bulletin` or `content/events` that could not be read, or that links a picture or document not saved next to it (at most 10 each) | fix the file and save it again |
 | 12 | **Booth folder files the booth display can't show** | each file of the Drive booth folder that can never be shown (`data/site/booth.json` → `problems`: its type, a note with no text, `(from …)` after `(until …)`), with what to do (at most 30; the first 10 also as ⚠ *Booth folder file to fix*) | rename, convert or replace the file in Drive ([The Drive panel folder §3.6](drive-panel-folder.md#36-the-booth-folder-new)) |
 | 13 | **Scheduled bulletin posts** | posts waiting for their `publish:` day (or a Drive bulletin doc's "(from …)" day) | — |
@@ -537,6 +627,17 @@ visitor's own time zone, except its daily-quote times, which are Central.
 | 16 | **Not updating for 7+ days** | the sources behind the issue in 8.1 | follow the issue |
 | 17 | **Booth display (copies for offline)** | from the build job: the booth files saved for offline, their size and the limits, how many were downloaded, kept and removed; then a "Not saved: …" line per file, with why (the first 10 also as ⚠ *Booth display: a file was not saved for offline*) | a "Not saved" line that repeats day after day (14) |
 | 18 | **Website: N pages, M MB** | from the build job | above 900 MB (section 12) |
+| 19 | **Tests before publishing** | from the tests job: "All N tests passed …", or "The tests passed already for this code and content … — not run again.", or "**N of M tests failed — the website was NOT published**" with the failing tests (4.8) | a failure: 14.10 |
+
+**Main pages of the magazine sites that did not load.** The document search checks its hub and kit pages
+(`HUB_PATHS` and `KIT_PAGES` in [`scripts/sync/crawl_rules.py`](../scripts/sync/crawl_rules.py), such as
+`/gvr-resources`) every day. When one does not give a readable page, *Notes* says, for example, "Document library
+(Grapevine, La Viña and AA): 1 main page(s) of the magazine sites did not load: aagrapevine.org/gvr-resources (404 since 2026-10-06) —
+checked again every day". Its documents stay on the site meanwhile (one 404 never drops them: a second one at
+least a day later does). If the note repeats for days, open that page on the magazine's site: if it moved, put
+the new path in `HUB_PATHS` / `KIT_PAGES`. A second possible note, "robots.txt of www.aagrapevine.org did not
+answer properly (HTTP 503): its pages were left for the next run", needs nothing unless it repeats
+([Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source)).
 
 **"Not checked for N days."** Every source is tried at least once a day (by the nightly full update). A source
 that still works (its last try was fine) but that **no run has even tried for 3 days** shows **NOT CHECKED** in the
@@ -609,6 +710,11 @@ and one annotation of its own: ℹ *Scheduled bulletin posts*: "1 post(s) will a
 day — the first on 2027-01-01 (see the run summary)." (The real runs that day also showed GitHub's own notice
 that `ubuntu-latest` moves to Ubuntu 26 from October 19, 2026; see 13.8.) Everything here is fine: no PROBLEM
 row, the notes are small, the blocked calendar is informational, and the scheduled post is waiting for its day.
+(Since October 2026 a bot check is said plainly instead of YouTube's raw error: "YouTube videos: details stopped:
+YouTube answered with a bot check (“confirm you’re not a bot”) — nothing is wrong on our side; videos keep their
+last known details", and a meeting list that answers with one, as nwta66.org has since 3 October 2026: "Grapevine
+meetings (our Area and nearby): Northwest Texas Area 66: nwta66.org answered with a bot check (HTTP 202) — nothing
+is wrong on our side; the last good list is kept".)
 Runs since the archive was added also have the **Writers archive** block right after *Translations*; the one the
 files of 4 October 2026 give is shown in [Writers archive §6.1](writers-archive.md#61-the-run-summarys-writers-archive-lines).
 
@@ -640,7 +746,7 @@ ignore the wrong skip date. The *report* job then opens the issue in 8.1. What t
 |---|---|
 | Morning check (new day by 5:30 AM) | "## Morning check — Friday, October 2 (Central time)", a ✅ / ⚠ / ❌ headline, then a table: New day (built at), Grapevine quote, La Viña quote, the Website update run it started or followed, what started the check, how, the full daily update |
 | Code check (tests and test build) | "**Website:** N pages, M MB — builds fine with this change." from the job *Test build of the website* (the test results are in the *Python tests (offline)* job's log) |
-| Monthly e-mail digest | "E-mail digest is not set up — nothing to do. (This is normal.)", "Not the time for the monthly digest (Central time: day 1, hour 3) — nothing to do.", "The 2026-09 digest was already sent — nothing to do.", "E-mail digest preview (not sent)" with the subject and the counts, "E-mail digest: waiting for the data", "Nothing new in September 2026 — no e-mail sent.", or "E-mail digest sent" with the subject and the number of recipients |
+| Monthly e-mail digest | "E-mail digest is not set up — nothing to do. (This is normal.)", "Not the time for the monthly digest (Central time: day 1, hour 3) — nothing to do.", "The 2026-09 digest was already sent — nothing to do.", "E-mail digest preview (not sent)" with the subject and the counts, "E-mail digest: waiting for the data", "Nothing new in September 2026 — no e-mail sent.", or "E-mail digest sent" with the subject and the number of recipients; after a send that broke off, "A send of the 2026-09 digest was started (…) but never confirmed — the e-mail MAY have gone out. …" (⚠ *Digest send not confirmed*); after a refused send, ✗ *The digest was not sent* ("The mail server took nothing … — the next try sends it.") |
 | Weekly link check | lychee's link report, then "## Official links in config/site.yml" with "N OK · N broken · N could not be checked" |
 
 ---
@@ -659,11 +765,11 @@ into the badges).
 |---|---|
 | **At a glance** | "15/15 sources up to date" and "1 optional calendar unavailable" (16/16 since the Texas writers archive joined the sources); when something failed: "N/16 sources had a problem on the last run" (a "Delayed" source does not count as failed) |
 | Three numbers | *Site last published* (the build time), *Items tracked* (1,372), *Found in the last 7 days* (65). Since the Texas writers archive joined, its rows count in both: in *Found in the last 7 days* all of them for the week after its first import, later only the stories a newer archive file adds |
-| **Sources** | one row per source: a badge, "5 hours ago · 20 items · +14 this week" |
+| **Sources** | one row per source: a badge, "5 hours ago · 20 items · +14 this week"; a source on hold also says what was not found and since when; a source with notes from the last update has a folded *Notes from the last update (n) — for the site maintainer* (since October 2026; below) |
 | Daily quote row | "The October 2, 2026 quotes came in at 2:05 AM CDT. Goal: on the site by 5:30 AM CDT every day." |
 | **Other calendars** (*Optional*, folded) | each outside calendar: Working / Can't be read right now / Not answering / Not updated yet |
 | **Document library** | "92 documents · all with a first-page preview" |
-| **Machine translation** | 1,919 translations saved; folded *Technical details*: "… To correct a translation, edit data/translations/overrides.yml; the correction is used from the next update on."; below it, open: "258 glossary terms keep names like Grapevine, La Viña and GVR exactly as they are." (plus a line for texts still waiting, when there are any) |
+| **Machine translation** | 1,919 translations saved; folded *Technical details*: "… To correct a translation, edit data/translations/overrides.yml; the correction is used from the next update on."; below it, open: "258 glossary terms keep names like Grapevine, La Viña and GVR exactly as they are." (plus a line for texts still waiting, when there are any, and, when the translation memory or a model had a problem, "The last update could not translate everything as usual, so some new texts may stay in their original language for now. Everything translated before stays as it is." with the raw message) |
 | **How an update works** | four steps: Start, New content, Translate, Publish |
 | *Technical details (for the site maintainer)* (folded) | "Behind the scenes" with the **Open GitHub Actions** button, and "Daily quote — the last 7 mornings" (On time / Late / Not yet / Did not come in) |
 
@@ -672,6 +778,7 @@ The badges always pair an icon with a word:
 | Badge (English / Spanish) | Rule |
 |---|---|
 | **OK** / *Al día* | the last run of that source worked |
+| **On hold** / *En espera* | the last run worked but suddenly found far fewer items than before (none at all, or less than half once it had 10 or more), or a Drive folder that held files suddenly looked empty. Not believed the first time: the missing items stay on the site, and the row says "The last update did not find {n} items that were here before. To be safe, they stay on the site until the next update confirms they are gone." with *On hold since*. The next run that still misses them removes them; one that finds them again ends the hold ([Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source)) |
 | **Delayed** / *Retrasado* | it worked, but the last success is more than **3 days** old when the page was built: "No successful update in {n} days" |
 | **Failed** / *Falló* | the last run failed; the row says calmly: "The last update couldn't refresh this source. Nothing was lost — everything it found before stays on the site, and the next update tries again." After 3 days it adds "No successful update in {n} days — if this continues, the site maintainer can check the details below.", plus the raw English error under *Technical details (for the site maintainer)* |
 | **Not run yet** / *Aún sin ejecutar* | the source never ran (only on a brand-new copy) |
@@ -679,6 +786,12 @@ The badges always pair an icon with a word:
 A source with nothing in it gets a hint instead of a bare 0. For example, an empty Drive says "Nothing uploaded
 yet — files placed in the Panel 77 (2027–2028) folder on Google Drive show up on the site after the next
 update."
+
+**Notes from the last update.** Since October 2026 each source's small problems (its `stats.warnings`, the same
+lines as the run summary's *Notes*) are on the page too, whatever its badge: a folded box *Notes from the last
+update (n) — for the site maintainer* (Spanish: *Notas de la última actualización (n): para quien mantiene el
+sitio*) under the source's row. The notes are shown in English as the update wrote them; on `/es/status/` the
+caption says so.
 
 > **Note:** the Status page uses friendlier source names than the run summary. Examples: run summary "Google
 > Drive (committee uploads)" = page "Committee Google Drive" (*Google Drive del comité*); "Bulletin
@@ -699,8 +812,11 @@ Two things to remember:
 - "Updated … ago" lines on several pages.
 - The home page's daily quote card: until the new quote arrives, it shows the last one labelled "Yesterday".
 - Every publish rebuilds every page, including the feeds `/feed.xml` and `/es/feed.xml`, the calendar files
-  `/events.ics` and `/es/events.ics`, and the search indexes `/search-index.json` and `/es/search-index.json`.
-  They are all as fresh as the last successful publish.
+  `/events.ics` and `/es/events.ics` (and, since October 2026, each month's
+  `/monthly/YYYY-MM/neta65-grapevine-YYYY-MM-en.ics` and `/es/monthly/YYYY-MM/neta65-grapevine-YYYY-MM-es.ics`,
+  and the two weekly open meetings' `/meetings/weekly-open-gv.ics` and `/meetings/weekly-open-lv.ics`, also under
+  `/es/meetings/`), the share pages of the events (`/events/<card>/`, `/es/events/<card>/`), and the search
+  indexes `/search-index.json` and `/es/search-index.json`. They are all as fresh as the last successful publish.
 
 ### 7.3 `/build.json`: the note the Morning check reads
 
@@ -722,7 +838,7 @@ counts the day as done when `day`, `quotes.gv` and `quotes.lv` are all today. Th
 
 ---
 
-## 8. The two automatic issues and the failure e-mails
+## 8. The three automatic issues and the failure e-mails
 
 GitHub e-mails a new issue (and new comments) to everyone who **watches** the repository. On the repository
 page, click **Watch** → **All Activity** (or **Custom** → tick **Issues**), once for each login that should get
@@ -782,7 +898,7 @@ GitHub, not this repository, sends these. Its rules:
 | a push | the person who pushed |
 | *Run workflow* | the person who clicked |
 | the morning alarm | the owner of the alarm's key (NETA65) |
-| the robot (the Morning check's refreshes) | nobody; that is why the Morning check fails itself when its refresh fails |
+| the robot (the Morning check's refreshes) | nobody; that is why the Morning check fails itself when its refresh fails, and why two failed *Website update* runs in a row open the issue in 8.4 |
 
 Each person also needs the e-mails switched on: profile picture → **Settings** → **Notifications** → *System* →
 **Actions** → **Email**, and tick **Only notify for failed workflows**.
@@ -796,6 +912,35 @@ Each person also needs the e-mails switched on: profile picture → **Settings**
 A green run with yellow ⚠ never sends an e-mail. Neither does a failing source: that is what the issue in 8.1
 is for.
 
+### 8.4 "The website update keeps failing"
+
+Since October 2026, kept by the same *report* job of *Website update* (its second step, *Open, update or close the
+issue about failing updates*). It covers the runs no person started: those GitHub's schedule starts (the nightly
+update, the midday and evening refreshes — GitHub e-mails their failure only to whoever last switched the workflow
+on, [Email and alerts §3.16](email-and-alerts.md#316-githubs-run-failed-e-mails)) and those the Morning check starts
+(the robot — GitHub e-mails nobody about them).
+
+- **Opens** when such a run fails right after another *Website update* run that failed. One failure alone can be a
+  passing hiccup, so it opens no issue. A run GitHub replaced in the queue, or one somebody cancelled, does not
+  count as the run before; a job that ran out of time counts as a failure. A run a person started never opens it:
+  GitHub e-mails that person (8.3).
+- **Updates** its text silently after each later failure ("The website update has failed N times in a row"). It
+  adds a comment, which GitHub e-mails, only when another job starts failing: "Now also failing: …".
+- **Closes itself** after the next run in which every job worked: "The website update works again: this run
+  published the site (link). Closing automatically."
+
+Its text names the job that failed, with what to do:
+
+| Job | The issue says |
+|---|---|
+| *Sync content + translate* | the site data could not be built, or the data commit could not be saved; the site was still published with the data it had (if the other jobs worked) |
+| *Test the code before publishing* | a change broke the tests, so nothing was published; the run summary lists the failing tests: fix the change or undo it (14.10) |
+| *Build website* | the website could not be built (often a text missing from `src/_i18n` after an edit): fix the change or undo it (14.4) |
+| *Publish to GitHub Pages* | GitHub Pages did not take the new version, usually GitHub's own trouble: **Re-run failed jobs**, or wait for the next run |
+
+The live site stays as it was published last. The Morning check still reports a morning that did not reach the
+site (14.7).
+
 ---
 
 ## 9. The data folder and what the robot commits
@@ -806,15 +951,17 @@ The repository is the database: every run's results are committed, so the histor
 |---|---|---|---|
 | `data/raw/<source>.json` (16 files: announcements, articles, audio_project, drive, editorial, events_external, instagram, manual_events, meetings, pdfs, podcasts, quote, shop, weekly_open, writers_archive, youtube), 1.9 MB before the writers archive was added | only the matching sync module | **no** | everything a source ever found: `{source, updated, attempted, first_harvest, ok, error, stats, items}` (`writers_archive.json`: the Texas rows of the archive files in `content/archive`, replaced on every run) |
 | `data/site/*.json` (19 files: announcements, articles, audio_project, booth, drive, editorial, episodes, events, instagram, meetings, pdfs, quote, shop, spotlight, status, videos, weekly_open, whatsnew, writers_archive), 3.5 MB before the writers archive was added | only `scripts/sync/build_data.py` | **no** | what the pages read, with translations added (`booth.json`, the booth display's Drive files, has none) |
-| `data/state/crawl-state.json` (1.4 MB), `data/state/ics_feeds.json` | the PDF crawler; `build_data.py` | no | the PDF search's progress; the last answer of each outside calendar |
+| `data/state/crawl-state.json` (1.4 MB), `data/state/ics_feeds.json`, `data/state/sources-seen.json` | the PDF crawler; `build_data.py`; the step *Remember the commit the full-update sources ran with* | no | the PDF search's progress; the last answer of each outside calendar; the last commit the sources only the full update reads ran with (4.2) |
 | `data/translations/cache.json` (0.8 MB) | the translator | no | every translation made so far (one per line) |
 | `data/translations/overrides.yml`, `glossary.yml` | **people** | **yes** | your translation fixes; saving one rebuilds the site ([Translations](translations.md)) |
 | `data/geo/texas_places.json` | people, rarely (`python -m scripts.dev.build_texas_gazetteer`) | rarely | Texas town → county, for the published writers (the recent stories and the Texas writers archive) and the Meetings page's "Our Area"; saving it starts a quick run that also reads the meeting lists again, and a Code check |
 
 In `data/raw`: `updated` moves only when a run worked, `attempted` on every try (and `pdfs.json`'s also on each
 full update while the document search is paused, `minutes_per_run: 0`), and `ok: false` + `error` mark a failed run
-(the older items are kept). `data/site/status.json` is the health report behind the Status
-page and the run summary.
+(the older items are kept). Since October 2026 every raw file also says what the run changed, `changes` (items
+added, removed, held back), and, while a sudden drop is not believed yet, `held` (since when, how many, a few of
+their titles: the Status page's **On hold**, 7.1). `data/site/status.json` is the health report behind the Status
+page and the run summary. The fields: [docs/DATA_SCHEMA.md](../docs/DATA_SCHEMA.md).
 
 The booth display's saved photos and videos are not in `data/` and never in Git: the build job keeps them in
 `.cache/booth-media/`, saved in the Actions cache between runs (section 4.2), and publishes them with the site. Its
@@ -841,8 +988,8 @@ files, including `data/state/crawl-state.json` and a new Instagram thumbnail in 
 
 Never committed (git ignores them): `.cache/models/` (the translation models, kept in the Actions cache),
 `.cache/booth-media/` (the booth display's saved photos and videos, kept in the Actions cache too),
-`node_modules/`, `_site/`, `.tmp/`, `.venv/`, `__pycache__/`, `*.tmp`, `*.part`, `*.corrupt-*`, `.env` files,
-`*.pem`, `client_secret*.json`. Drive files are never copied into the repository: the site links Google's own
+`node_modules/`, `_site/`, `.tmp/`, `.venv/`, `__pycache__/`, `*.tmp`, `*.part`, `*.corrupt-*` and `*.bad-*` (copies
+of an unreadable raw file or translation memory, set aside: 9.2), `.env` files, `*.pem`, `client_secret*.json`. Drive files are never copied into the repository: the site links Google's own
 viewers and thumbnails (the booth display's copies are published with the site, never committed).
 
 ### 9.2 Resetting something on purpose
@@ -867,10 +1014,18 @@ press *Run workflow* afterwards.
 > count from the day the site first saw them, so after deleting `data/raw/manual_events.json` every upcoming
 > one shows "New" again for 14 days (a bulletin post follows its own date).
 
-> **Note:** a raw file broken by a hand edit is not overwritten. The next run renames it
-> `<source>.json.corrupt-<time>`, rebuilds that source from scratch and marks it failed once, with a message on
-> the Status page that ends "restore the file from the git history to keep older items and first-seen dates".
-> The `*.corrupt-*` copy is git-ignored, so on GitHub it is not kept: restore the file from the history.
+> **Note:** a raw file broken by a hand edit (or a bad merge) is not overwritten, and since October 2026 it no
+> longer empties its part of the site. Until its source runs again, every build keeps what the last build made of
+> it in `data/site` (whole files such as `videos.json`, or that source's items in `announcements.json`,
+> `events.json` and `whatsnew.json`), and its Status page row says "Failed" with "data/raw/<source>.json could not
+> be read (…) — the site keeps what the last build had for it until the file is fixed (restore it from the git
+> history) or this source's next update rebuilds it". When the source itself runs, it renames the file
+> `<source>.json.corrupt-<time>`, rebuilds that source from scratch and marks it failed once, with a message that
+> ends "restore the file from the git history to keep older items and first-seen dates" (a source that collects
+> over time, such as YouTube or the Library, then shrinks on the site until the file is restored). The
+> `*.corrupt-*` copy is git-ignored, so on GitHub it is not kept: restore the file from the history. An unreadable
+> translation memory (`data/translations/cache.json`) is set aside the same way, as `cache.json.bad-<time>`
+> ([Translations](translations.md)).
 
 ---
 
@@ -1005,14 +1160,22 @@ python -m unittest discover -s tests -v                                # the sam
 python -m unittest tests.test_morning -v                               # one file
 python -m unittest tests.test_morning.UpdateWorkflow -v                # one class
 python -m unittest tests.test_morning.UpdateWorkflow.test_plan_step -v # one test
+python -m scripts.ops.gate_tests                                       # the tests Website update runs before it publishes (4.8)
 ```
 
-On the owner's PC on 2 October 2026 the whole suite printed `Ran 1167 tests in 125.758s` and
-`OK (skipped=24)`: about 2 minutes. Skipped is fine: tests that need the translation models, a fresh local
-build, Node.js (`npm ci`) or Git Bash tools skip themselves when those are missing.
+On the owner's PC on 6 October 2026 the whole suite printed `Ran 2010 tests in 254.251s` and `OK (skipped=30)`:
+about 4 minutes. Skipped is fine: tests that need the translation models or a fresh local build skip themselves.
+Two things to know on Windows:
 
-> **Note:** a test run leaves a small `_site\assets\css\main.css` behind (one test builds the events page in
-> memory, which also runs the stylesheet step). `_site/` is git-ignored; ignore it or delete it.
+- Without `node_modules` (no `npm ci`), about 55 tests that run the site's own JavaScript skip silently: run
+  `npm ci` once before you trust a green result.
+- Run the suite in **Git Bash** (or with Git's `usrin` folder on the `PATH`). About 40 tests run workflow steps
+  with `bash` and its tools; from a plain PowerShell window they fail with `date: command not found`, which says
+  nothing about the code.
+
+`gate_tests` prints the same results and, at the end, the lines it would write to the run summary ("All N tests
+passed (M skipped) — the website may be published." and how many it left to the Code check); its exit code is 0
+when every test passed, 1 when one failed or none was found.
 
 ### 11.5 Look at pages in a real browser (Playwright with Edge)
 
@@ -1067,7 +1230,7 @@ python -m scripts.ops.morning_check --check-only --site https://neta65.github.io
 ```
 
 The second one reads the live `/build.json` and says what the Morning check would do (no token needed; it asks
-a magazine's page, once, only when today's build is up but that quote is late, and only from 4:00 AM Central).
+a magazine's page, once, only when today's build is up but that quote is late, and only from 2:00 AM Central).
 Real output on the evening of 2 October 2026 (the lines it prints between its first line and the summary):
 
 ```text
@@ -1093,8 +1256,8 @@ How: It was already there — no morning refresh needed.
 | The published website | about 10 MB compressed (the Pages upload of 2 October 2026), plus the booth display's saved media: at most `booth.max_total_mb` (400 MB; never more than 800, whatever the setting says) | **GitHub Pages: 1 GB**; the deploy warns above 900 MB | "**Website:** N pages, M MB" in every Website update and Code check summary; the booth's part in "**Booth display (copies for offline)**" |
 | One file in git | — | GitHub warns above 50 MB and refuses above 100 MB | the push fails |
 | One job | — | GitHub stops any job after **6 hours** (hence the 300-minute crawl cap) | the run fails at the timeout |
-| Actions caches (translation models ~175 MB, the booth display's media up to 400 MB, pip, npm, link checker) | — | 10 GB per repository; a cache unused for 7 days is removed (the daily runs keep the models and the booth media alive) | *Actions* → *Caches* |
-| Downloads ("artifacts") | `digest-sent-YYYY-MM` kept 40 days, `digest-preview` 14 days, the Pages upload 1 day | — | a run's *Artifacts* |
+| Actions caches (translation models ~175 MB, the booth display's media up to 400 MB, pip, npm, link checker, the tests' remembered passes `tests-passed-v1-…`, a few bytes each) | — | 10 GB per repository; a cache unused for 7 days is removed (the daily runs keep the models, the booth media and the newest pass alive) | *Actions* → *Caches* |
+| Downloads ("artifacts") | the digest's markers `digest-sending-YYYY-MM`, `digest-sent-YYYY-MM`, `digest-unsent-YYYY-MM` kept 40 days, `digest-preview` 14 days, `link-check-report` 7 days, the Pages upload 1 day | — | a run's *Artifacts* |
 
 GitHub's own published limits for Pages also include a soft 100 GB of traffic a month and a 10-minute limit
 per deployment; this site is far from both. Actions minutes are free and unlimited for a **public** repository,
@@ -1121,7 +1284,7 @@ Where the timetables are:
 
 | Workflow | File and search text | Test that pins it |
 |---|---|---|
-| Website update, nightly full update | `.github/workflows/update.yml`: `- cron: "17 6 * * *"`, **and** `FULL_CRON="17 6 * * *"` (step *Decide what to sync*), **and** `github.event.schedule == '17 6 * * *'` (the `run-name:` line) | `tests/test_morning.py` → `UpdateWorkflow.test_the_three_schedules_4_hours_early`, `test_plan_step`; `tests/test_run_wiring.py` → `Schedule.FULL_CRON` (`test_the_strings_agree`); `tests/test_run_names.py` → `UpdateTitles` |
+| Website update, nightly full update | `.github/workflows/update.yml`: `- cron: "17 7 * * *"`, **and** `FULL_CRON="17 7 * * *"` (step *Decide what to sync*), **and** `github.event.schedule == '17 7 * * *'` (the `run-name:` line) | `tests/test_morning.py` → `UpdateWorkflow.test_the_three_schedules_4_hours_early`, `test_the_nightly_full_update_keeps_clear_of_the_morning_alarm`, `test_plan_step`; `tests/test_run_wiring.py` → `Schedule.FULL_CRON` (`test_the_strings_agree`); `tests/test_run_names.py` → `UpdateTitles` |
 | Website update, midday refresh | `update.yml`: `- cron: "7 12 * * *"` only (and a comment) — the plan step, the title and the commit message treat it as "any other schedule" | `UpdateWorkflow.test_the_three_schedules_4_hours_early`; `Schedule.MIDDAY_CRON` (`test_the_strings_agree` checks that the plan step, the title and the commit step do not use it) |
 | Website update, evening refresh | `update.yml`: `- cron: "7 20 * * *"`, **and** `github.event.schedule == '7 20 * * *'` (the `run-name:` line), **and** `"${SCHEDULE:-}" = "7 20 * * *"` (step *Commit refreshed data*) | the same, plus `Schedule.EVENING_CRON`, `UpdateWorkflow.test_commit_messages`, `tests/test_run_names.py` |
 | Morning check (new day by 5:30 AM) | `.github/workflows/morning.yml`, `- cron: "25 0-11,21-23 * * *"` | `MorningWorkflow.test_schedule_is_plain_utc_off_the_hour_through_the_night` |
@@ -1133,8 +1296,11 @@ time)**, so in summer simply "wanted hour + 1". In winter the same line runs one
 
 The nightly and the evening strings are each written in three places in `update.yml` (comments aside);
 `Schedule.test_the_strings_agree` checks that every copy agrees, so change them together. `test_the_three_schedules_4_hours_early` also checks that
-each schedule, 4 to 6 hours late, lands in its part of the Central day (the windows `(4, 7)`, `(10, 13)` and
-`(18, 21)`, in hours): change the window too when a run moves to another part of the day.
+each schedule, 4 to 6 hours late, lands in its part of the Central day, in summer and in winter (the windows
+`(5, 8)`, `(10, 13)` and `(18, 21)`, in hours): change the window too when a run moves to another part of the day.
+Moving the nightly also meets `test_the_nightly_full_update_keeps_clear_of_the_morning_alarm`: on time (a run of up to
+2 hours) it must end before 4:30 AM Central, and 4, 5, 6 or 8 hours late it must start at least 30 minutes after it,
+on a CDT day and on a CST day.
 
 Example: let the evening refresh aim for about 8–10 PM Central instead of 7–9 PM (20 − 4 + 5 = 21):
 
@@ -1149,9 +1315,9 @@ Example: let the evening refresh aim for about 8–10 PM Central instead of 7–
 
 ```python
 # tests/test_morning.py → class UpdateWorkflow → test_the_three_schedules_4_hours_early
-        self.assertEqual(self.on["schedule"], [{"cron": "17 6 * * *"}, {"cron": "7 12 * * *"}, {"cron": "7 21 * * *"}])
-        for cron in ("17 6 * * *", "7 12 * * *", "7 21 * * *"):
-        for s, (lo, hi) in zip(self.on["schedule"], ((4, 7), (10, 13), (19, 22))):
+        self.assertEqual(self.on["schedule"], [{"cron": "17 7 * * *"}, {"cron": "7 12 * * *"}, {"cron": "7 21 * * *"}])
+        for cron in ("17 7 * * *", "7 12 * * *", "7 21 * * *"):
+        for s, (lo, hi) in zip(self.on["schedule"], ((5, 8), (10, 13), (19, 22))):
 # tests/test_morning.py → test_commit_messages: each "7 20 * * *" becomes "7 21 * * *"
 
 # tests/test_run_wiring.py → class Schedule
@@ -1251,6 +1417,10 @@ In `.github/workflows/update.yml`:
   source without an entry gets the general advice; a source that was not checked gets the `UNCHECKED` text.
 - **The title:** job `report` → search `TITLE = "A content source has stopped updating"`. If you change it, close
   the old issue by hand: the job finds its issue by the exact title.
+- **The other issue of the same job,** "The website update keeps failing" (8.4), is its second step, *Open, update
+  or close the issue about failing updates*: `TITLE`, the advice per job (`HINTS`, keys `sync`, `tests`, `build`,
+  `publish`) and which runs count (`FAILED`, `unattended`). Tested by `tests/test_automation.py` → class
+  `FailingUpdates`, which runs the step against a stand-in for GitHub.
 
 ```python
 # update.yml → job report → step "Open, update or close the report issue"
@@ -1309,7 +1479,7 @@ both languages). The badge is worked out when the page is built. Test: the full 
 | the daily PDF search length (0 pauses it) | `config/site.yml` → `sources:` → `crawler:` → `minutes_per_run` ([Settings](settings.md)) | no code change |
 | the time boxes (translation, step) | `update.yml` → step *Decide what to sync* → `translate=$(( 345 - minutes - 30 - 5 ))`; morning: `translate=5`, `budget=20` | `tests/test_morning.py` → `UpdateWorkflow.test_plan_step` |
 | the morning goal (5:30 AM) | `config/site.yml` → `site:` → `morning_goal: "05:30"`, and the "5:30 AM" in `morning.yml`'s `name:` line | `tests/test_run_names.py` checks that the two agree; the alarm time itself is set at cron-job.org |
-| how the Morning check waits and asks | `scripts/ops/morning_check.py` → `WINDOW_BEFORE`, `POLL_EVERY`, `FOLLOW_MAX`, `MAX_RUNS`, `GUARD_MAX = timedelta(minutes=170)` | `MorningWorkflow.test_update_job` checks that `GUARD_MAX + FOLLOW_MAX + LIVE_MAX` + 10 minutes fit the 240-minute job |
+| how the Morning check waits and asks | `scripts/ops/morning_check.py` → `WINDOW_BEFORE` (3 h 30 min before the goal: 2:00 AM), `WINDOW_AFTER`, `POLL_EVERY`, `FOLLOW_MAX`, `MAX_RUNS`, `GUARD_MAX = timedelta(minutes=170)` | `MorningWorkflow.test_update_job` checks that `GUARD_MAX + FOLLOW_MAX + LIVE_MAX` + 10 minutes fit the 240-minute job |
 | what the robot commits | `update.yml` → step *Commit refreshed data* → `for p in data/raw data/site data/state …` | — |
 | the build checks (and, in `update.yml` only, the 900 MB warning) | `update.yml` and `check.yml` → step *Check the build* | `UpdateWorkflow.test_build_json_is_checked` |
 | the booth display's media: size limits, download time | `config/site.yml` → `booth:` → `max_file_mb`, `max_total_mb` ([Settings](settings.md)); the 15 minutes of downloads: `BOOTH_MEDIA_MINUTES` in `scripts/build/booth-media.mjs`, inside the step's `timeout-minutes: 20` and the build job's 35 | `tests/test_booth_media.py` |
@@ -1322,11 +1492,14 @@ both languages). The badge is worked out when the page is built. Test: the full 
 | the booth media cache key | `update.yml` → step *Work out the booth display's settings fingerprint* | `UpdateWorkflow.test_the_booth_medias_cache_key_reads_only_the_booth_settings` |
 | the writers archive's cut-off guard | `config/site.yml` → `writers_archive:` → `min_rows_ratio` ([Writers archive §10.1](writers-archive.md#101-the-cut-off-guard-and-min_rows_ratio)) | no code change |
 | the Python or Node version | `python-version: "3.12"` / `node-version: 22` in each workflow | the Code check |
+| which tests *Website update* leaves to the Code check | `scripts/ops/gate_tests.py` → `DATA_TESTS` (a test id, as `python -m unittest` names it, and what it judges) (4.8) | `tests/test_automation.py` → `GateTests.test_every_data_test_is_there` |
+| what the tests' fingerprint leaves out | `update.yml` → job `tests` → step *Fingerprint the code and the content* (the `':!data/raw'` … list) | `tests/test_automation.py` → `Publishing.test_the_fingerprint_leaves_out_only_the_bots_data` |
+| the monthly digest's markers and its **force** box | `monthly-digest.yml` → step *Is it time, and is the e-mail digest set up?*; `scripts/notify/send_digest.py` → `--prepare`, `--send-prepared` | `tests/test_send_digest.py` |
 
 ### 13.8 Pin the runner's Ubuntu version (only if GitHub's update breaks a run)
 
-Every job says `runs-on: ubuntu-latest` (10 jobs: 3 in `update.yml`, 3 in `morning.yml`, 2 in `check.yml`, 1
-each in `monthly-digest.yml` and `link-check.yml`). GitHub moves `ubuntu-latest` to a newer Ubuntu from time to
+Every job says `runs-on: ubuntu-latest` (13 jobs: 5 in `update.yml`, 3 in `morning.yml`, 2 in `check.yml`, 2 in
+`link-check.yml`, 1 in `monthly-digest.yml`). GitHub moves `ubuntu-latest` to a newer Ubuntu from time to
 time and announces it as a notice on the runs (in autumn 2026: "The ubuntu-latest label will migrate to
 Ubuntu 26 beginning October 19, 2026"). If runs start failing right after
 such a move (for example Python 3.12 cannot be set up, or a `date` command behaves differently), pin the old one:
@@ -1355,7 +1528,7 @@ Status page row, maybe the e-mail). Follow
 | The **run summary** | the tables of section 6.3, including *Settings problems* and the *files to fix* |
 | The **log** of the red step | the exact error lines (copy the last 20 when you ask for help) |
 | The **Status page** | per source: Failed or Delayed, with the raw error under *Technical details (for the site maintainer)* |
-| **Issues** | a source failing for 7+ days; broken links |
+| **Issues** | a source failing for 7+ days; broken links; timed runs that fail twice in a row |
 | **E-mail** | GitHub's "run failed" e-mails (8.3); cron-job.org's e-mails about the morning alarm |
 
 ### Symptom → cause → fix
@@ -1364,6 +1537,9 @@ Status page row, maybe the e-mail). Follow
 |---|---|---|
 | The site did not change | the run failed, is still running or waiting; the workflow is disabled; the file you saved does not rebuild (docs, `data/`); GitHub Pages' cache; the browser's offline copy | open the newest *Website update* run; *Enable workflow* if it says disabled (14.8); *Run workflow* with **skip_crawl**; wait 10 minutes; reload the page (if a small "Updated" notice appears, choose **Reload**) |
 | A yellow ⚠ titled with a source's name | that source failed this run; its older items stay on the site | nothing for a day or two; then 14.1 |
+| Status page: a source **On hold** | it suddenly found far fewer items (or a Drive folder looked empty); the missing ones stay on the site until the next update confirms the drop | nothing: the next update removes them if they are really gone, or ends the hold ([Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source)) |
+| *Notes*: "N main page(s) of the magazine sites did not load: … (404 since …) — checked again every day" | a hub or kit page of the document search did not answer properly; its documents stay | if it repeats for days, open the page; if it moved, update `HUB_PATHS` / `KIT_PAGES` in `scripts/sync/crawl_rules.py` (6.3) |
+| *Notes*: "… answered with a bot check … — nothing is wrong on our side" | another website (a meeting list, YouTube) turned the robot away; the last good copy is kept | nothing; it usually passes |
 | A yellow ⚠ "not checked for N days — no run has got to it since …" (**NOT CHECKED** in the summary) | no run has tried that source for 3 days or more: the nightly full update stops before it (it failed or ran out of time), or does not run (disabled, skipped) | open the latest "Nightly full update" run and its red or timed-out step; *Enable workflow* if needed (14.8); *Run workflow* with every box empty. From 7 days the issue in 8.1 lists it |
 | **CSV file to fix** under *Writers archive* in the summary | a new archive file in `content/archive` was not used (a missing column, far fewer rows than before, unreadable); the older rows stay on the site, and the file used before, if it is still in the folder, "stays in use until" the new one is fixed | [Writers archive §10](writers-archive.md#10-the-safety-checks-and-what-to-do) |
 | **Reminders** in the summary | a dated fact kept by hand runs out soon (monthly tips, a panel, skip dates, the next assemblies, an old price-change block) | edit the file the line names before its date (6.3); the site keeps working meanwhile |
@@ -1376,10 +1552,14 @@ Status page row, maybe the e-mail). Follow
 | ⚠ "Settings problem (translations)" | a YAML typo in `overrides.yml` or `glossary.yml`; new translations pause | 14.3 c |
 | Red ✗ at *Build the website* with `Missing i18n key: …` | a button or heading text is missing in `src/_i18n/` | add the key in both languages ([Translations](translations.md)); the live site is unaffected |
 | Red ✗ at *Read GitHub Pages settings*; the site shows "404 — There isn't a GitHub Pages site here" | Pages is not set to deploy from GitHub Actions | **NETA65**: *Settings → Pages → Source: GitHub Actions*, then *Run workflow* |
-| Red ✗ at *Publish to GitHub Pages* mentioning environment protection | the `github-pages` environment does not allow `main` | **NETA65**: *Settings → Environments → github-pages* → allow `main` |
+| Red ✗ at the job *Publish to GitHub Pages* mentioning environment protection | the `github-pages` environment does not allow `main` | **NETA65**: *Settings → Environments → github-pages* → allow `main` |
 | Red ✗ at *Commit refreshed data* | another push five times in a row, or branch protection | 14.5 |
 | Red ✗ at *Install Python packages* (sync job) | the Python package service had a hiccup, or a just-released package version does not install (`requirements.txt` lets packages move up within their major version, yt-dlp without any limit) | **Re-run failed jobs** later; if it repeats, the log names the package: send it to whoever helps with the website. The site is still published with the last data |
 | Red ✗ on *Code check* | the change you pushed broke the build or a test | 14.6 |
+| Red ✗ *Tests failed — not published* on *Website update* (job *Test the code before publishing*) | a change broke the tests; the site was not published and keeps the version before | 14.10 |
+| Red ✗ *Not published*: "The website was built from … but the tests ran on … (a change arrived between the two)" | a push arrived between the build and the tests | nothing: the next run publishes (or *Run workflow* with **skip_crawl**) |
+| Issue "The website update keeps failing" | two timed or Morning-check runs failed in a row | open the run it links and the job it names (8.4); it closes itself after the next run that works |
+| ⚠ *Digest send not confirmed* on *Monthly e-mail digest* | a send broke off between "being sent" and "sent", so the e-mail may have gone | check the group; if it did not arrive, *Run workflow* with *Preview only* unticked and **force** ticked (4.6) |
 | Red ✗ on *Morning check*, or no quote at 5:30 AM | the morning refresh failed, the alarm did not fire, or the magazine was late | 14.7 |
 | No timed runs for a day or more | the workflow is disabled, or GitHub skipped a firing | 14.8 |
 | A grey "cancelled" run nobody cancelled | a newer run took its place in the queue | nothing |
@@ -1388,7 +1568,7 @@ Status page row, maybe the e-mail). Follow
 | Issue "Broken links found by the weekly check" | a link in the settings or in `content/` moved | fix the address in `config/site.yml` or the `content/` file; it closes itself (8.2) |
 | ⚠ "build.json is missing — the Morning check cannot see this build." | `src/pages/build-info.11ty.js` was broken by a change | fix or undo the change; the Code check fails on the same thing |
 | ⚠ "The site is N MB — GitHub Pages allows 1 GB." | something big ended up in the site | section 12: big files belong on Drive |
-| Status page: a source "Failed" with "data/raw/….json was unreadable …" | a hand edit broke a raw data file | restore that file from the history (9.2) |
+| Status page: a source "Failed" with "data/raw/….json could not be read …" or "… was unreadable …" | a hand edit (or a bad merge) broke a raw data file; the site keeps that source's last good data meanwhile | restore that file from the history (9.2) |
 | An item or its button is missing on the site, though the source has it | the build repaired or hid a link it could not use | open the *Build the website* step's log and search for `[links]`: each line names the item and the bad link; fix it where it comes from (the Drive file, the `content/` file, the setting) |
 | A notice on every run about `ubuntu-latest` moving to a newer Ubuntu | GitHub's own announcement | nothing, unless runs start failing after the move (13.8) |
 | The Status page still shows a problem you fixed | it shows the last *published* build; sources that only the full run reads update with the next full run (unless your push changed their input: then its run read them, 4.2) | *Run workflow* with every box empty |
@@ -1410,8 +1590,12 @@ Status page row, maybe the e-mail). Follow
    - **A magazine site** (articles, editorial, shop, quote …): the site may be down, or it changed its layout and
      the module needs a code fix. Look on a PC, without writing anything: `python -m scripts.sync.articles --dry-run`
      (any module name works the same way).
-   - **YouTube** "Sign in to confirm you're not a bot" (in *Notes*): YouTube pushing back on the listing tool.
-     `yt-dlp` is updated by every run (`requirements.txt` does not cap it); it usually passes.
+   - **YouTube** "details stopped: YouTube answered with a bot check (“confirm you’re not a bot”) — nothing is
+     wrong on our side; videos keep their last known details" (in *Notes*; before October 2026 the raw "Sign in to
+     confirm you're not a bot"): YouTube pushing back on the listing tool. `yt-dlp` is updated by every run
+     (`requirements.txt` does not cap it); it usually passes.
+   - **A meeting list** "… answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list
+     is kept" (in *Notes*; nwta66.org, since 3 October 2026): that office's earlier meetings stay; nothing to do.
    - **An outside calendar** "blocked by the site's bot protection" (neta65.org, HTTP 403): informational only.
      Add those events by hand in `content/events` ([Flyers and events](flyers-and-events.md)).
 4. To try again at once: *Run workflow* (every box empty for sources only the full run reads; **skip_crawl** is
@@ -1487,8 +1671,8 @@ fixed. See [Translations](translations.md).
 
 ### 14.4 A failed deploy
 
-The job *Build & publish website* is red. The data commit already happened, and the live site keeps its previous
-version. Look at which step failed:
+The job *Build website* (called *Build & publish website* before October 2026) or *Publish to GitHub Pages* is red.
+The data commit already happened, and the live site keeps its previous version. Look at which step failed:
 
 | Step | Typical message | Fix |
 |---|---|---|
@@ -1496,10 +1680,12 @@ version. Look at which step failed:
 | *Read GitHub Pages settings* | Pages is not enabled for GitHub Actions | **NETA65**: *Settings → Pages → Source: GitHub Actions* |
 | *Build the website* | `YAMLException …` / `Missing i18n key: …` / a template error with a file name and line | 14.3; add the missing text; or undo the last code change |
 | *Check the build* | `_site/index.html is missing — the build did not produce a home page.`, `_site/es/index.html is missing — the Spanish site was not built.` or `The stylesheet was not built.` | undo the last code change and look at the build log |
-| *Publish to GitHub Pages* | environment protection, or a GitHub hiccup | **NETA65** allows `main` in *Settings → Environments → github-pages*; or **Re-run failed jobs** later |
+| *The tests passed on the commit that was built* (job *Publish to GitHub Pages*) | `Not published: The website was built from … but the tests ran on … (a change arrived between the two)` | nothing: the next run publishes |
+| *Publish to GitHub Pages* (job *Publish to GitHub Pages*) | environment protection, or a GitHub hiccup | **NETA65** allows `main` in *Settings → Environments → github-pages*; or **Re-run failed jobs** later |
 
-After the fix, push it (that starts a quick run that publishes), or press **Re-run failed jobs** (it builds from
-`main` as it is now).
+After the fix, push it (that starts a quick run that publishes), or press **Re-run failed jobs** (it builds the
+same commit the run's sync job named: for a fix, push it instead). A red job *Test the code before publishing*
+is 14.10.
 
 The booth display's download and cache-save steps (section 4.2) never turn the job red: they may fail on their own
 (`continue-on-error`), and the site is then published without the copies that run could not make.
@@ -1523,7 +1709,9 @@ The booth display's download and cache-save steps (section 4.2) never turn the j
 2. In the test log, search for `FAIL:` or `ERROR:`. The line names the test, for example
    `FAIL: test_plan_step (tests.test_morning.UpdateWorkflow.test_plan_step)`, followed by what was expected.
 3. Run that one test on a PC: `python -m unittest tests.test_morning.UpdateWorkflow.test_plan_step -v`.
-4. Fix it or undo the change (14.9). The live site keeps working meanwhile.
+4. Fix it or undo the change (14.9). The live site keeps working meanwhile, and since October 2026 the
+   *Website update* run of the same push did not publish the change either (14.10), unless the failing test is
+   one of the few it leaves to the Code check (`DATA_TESTS`, 4.8).
 
 On a Dependabot pull request, a red ✗ simply means: do not merge it.
 
@@ -1557,9 +1745,35 @@ On a Dependabot pull request, a red ✗ simply means: do not merge it.
 - **Undo your own commit:** GitHub Desktop → *History* → right-click the commit → *Revert Changes in Commit* →
   *Push origin*. On a PC with Git: `git revert <sha>` then `git push`. On github.com: open the file → *History*
   → open the earlier version → copy it → edit the current file → paste → *Commit changes*.
-- **Old content back on the website:** re-running an old *Website update* run does **not** do it; it publishes
-  what `main` has now. Revert the commits first, then run *Website update*.
+- **Old content back on the website:** revert the commits first, then run *Website update*. Do not count on
+  re-running an old run: *Re-run all jobs* publishes what `main` has now, and *Re-run failed jobs* the commit that
+  old run had saved, with that day's data (5.2).
 - **A bad data commit:** `git revert <sha>`, push, then *Run workflow* (pushes to `data/` start no run).
+
+### 14.10 Tests failed — not published
+
+**Signs:** *Website update* is red; its job **Test the code before publishing** has the red annotation *Tests
+failed — not published* ("Some tests failed (or none was found), so this run does not publish the website (the live
+site keeps the version before). See the run summary."); the job *Publish to GitHub Pages* was skipped; the run
+summary's **Tests before publishing** section lists the failing tests. Usually the *Code check* of the same push is
+red too.
+
+**What it means:** a change since the tests last passed broke something. The data commit was still made, but
+nothing was published: the live site shows the version before that change, and every later run stays unpublished
+until the tests pass again (the daily runs with them: they test the same code).
+
+**What to do:**
+
+1. Open the job's log and search for `FAIL:` or `ERROR:`: each names the test and what was expected (as in 14.6).
+2. Fix the change, or undo it (14.9). The run of that save tests again and publishes when they pass.
+3. In a hurry and not sure which change it was: undo the most recent commit of code, settings or content. The site
+   then publishes the version before it, with that day's data.
+4. A test that fails because of the day's synced data, not because of a change (it fails on every run, with no new
+   commit, and the Code check of the last change was green): add its id to `DATA_TESTS` in
+   [`scripts/ops/gate_tests.py`](../scripts/ops/gate_tests.py) (4.8). The Code check still runs it.
+
+"**No tests were found — the website was NOT published** … the tests/ folder could not be read." means the job
+could not even load the tests (a broken `tests/` folder): fix or undo the last change to it.
 
 ---
 
@@ -1599,7 +1813,7 @@ leaked password or token must be revoked and replaced, not just squashed away.
 - **One change at a time,** then watch the *Code check*. Run the tests on a PC before bigger changes.
 - **Keep the timetables 4 hours early,** keep `[skip ci]` out of your own commit messages, and do the
   NETA65 *Disable → Enable* step after any schedule change (8.3).
-- **Watch the repository** (8), so the two automatic issues reach a person.
+- **Watch the repository** (8), so the three automatic issues reach a person.
 
 ---
 
@@ -1618,7 +1832,8 @@ leaked password or token must be revoked and replaced, not just squashed away.
   [link-check.yml](../.github/workflows/link-check.yml) · [dependabot.yml](../.github/dependabot.yml)
 - The scripts: [run_all.py](../scripts/sync/run_all.py) · [common.py](../scripts/sync/common.py) ·
   [build_data.py](../scripts/sync/build_data.py) · [morning_check.py](../scripts/ops/morning_check.py) ·
-  [push_modules.py](../scripts/ops/push_modules.py) · [send_digest.py](../scripts/notify/send_digest.py)
+  [push_modules.py](../scripts/ops/push_modules.py) · [gate_tests.py](../scripts/ops/gate_tests.py) ·
+  [send_digest.py](../scripts/notify/send_digest.py)
 - The website side: [status.njk](../src/pages/status.njk) · [build-info.11ty.js](../src/pages/build-info.11ty.js)
 - Background: [README → 7. Running the update right now](../README.md#7-running-the-update-right-now) ·
   [README → 8. Is everything working?](../README.md#8-is-everything-working) ·

@@ -24,8 +24,8 @@ guide — the player's settings, using it at a table, what to do when something 
   (or Google Sheets / LibreOffice) and save it as **CSV UTF-8** (Excel: *File → Save As → CSV UTF-8 (Comma
   delimited)*), then upload it in place of the old one. Plain "CSV" in Excel loses ñ and é.
 * Excel may turn dates into `3/1/2027`: format the `from` and `until` columns as **Text** and write `2027-03-01`.
-* After the commit, the site rebuilds itself in **a few minutes** (a page may take up to about 10 more minutes to show
-  it everywhere); a booth that is running picks up the new rows within half an hour, at the next slide.
+* After the commit, the site rebuilds itself in **about 5 minutes** (the tests run first; a page may take up to about
+  10 more minutes to show it everywhere); a booth that is running picks up the new rows within half an hour, at the next slide.
 * **The check:** every commit runs the workflow *Code check (tests and test build)* (GitHub → Actions). A red ✗
   names the row and the mistake — `booth.csv row 14 (quiz-12): correct "4": there are only 3 choices`. A row with a
   mistake is simply left out of the show (the rest plays), and the player lists it under *Settings → Slides*. On a

@@ -320,15 +320,17 @@ Nothing is written.
 
 | You do this | What starts by itself | On the website after about |
 |---|---|---|
-| Push a new or changed file in `content/archive/` | a **quick** *Website update* run (the push's own run) and a *Code check* | 3 minutes, plus up to about 10 minutes of GitHub Pages caching |
+| Push a new or changed file in `content/archive/` | a **quick** *Website update* run (the push's own run) and a *Code check* | about 5 minutes, plus up to about 10 minutes of GitHub Pages caching |
 | Nothing | every later run reads the folder again: the **morning refresh**, the **midday** and **evening refreshes**, the **nightly full update** and every push | — (the files' rows stay as they are; newly captured Texas stories still join, section 8) |
 | Edit `content/archive/README.md` | only a *Code check* | nothing on the website |
-| Change `spotlight.neta65_counties` in `config/site.yml` | the push's quick run | 3 minutes: every writer's place is read again (section 7) |
+| Change `spotlight.neta65_counties` in `config/site.yml` | the push's quick run | about 5 minutes: every writer's place is read again (section 7) |
 
 The push's run is a quick run (Drive, the bulletin, the podcasts, the writers archive files, the daily quote, then
-the site data and the build). Quick runs took about 2 minutes in early October 2026; reading both archive files adds
-a few seconds. The new stories' titles and subtitles are translated within the run's time box, the rest later
-(section 11). An export that adds a few stories keeps the run at about 3 minutes; a file that brings many stories
+the site data and the build, and, since October 2026, the tests before it publishes: a push of an archive file
+changes the content, so the tests run, at the same time as the build). Quick runs took about 2 minutes in early
+October 2026 before the tests; reading both archive files adds a few seconds. The new stories' titles and subtitles
+are translated within the run's time box, the rest later (section 11). An export that adds a few stories keeps the
+run at about 5 minutes; a file that brings many stories
 new to the site — above all the very first import, more than 1,200 titles and their subtitles — makes the run translate
 longer (up to its 40-minute translation box) before it publishes, so the archive appears later. Only one
 *Website update* run works at a time: when another is going (in the morning, the full update), yours waits for it.
@@ -590,7 +592,7 @@ yet) goes on to its newest older file that passes, and the error's end then says
   "check the newest file in content/archive: it must keep the archive's columns, and a file much smaller than the one
   used before is not used (the run summary's "CSV file to fix" line says which). The archive already on the site
   stays meanwhile." It closes by itself once a file is used again
-  ([E-mail and alerts §3.17](email-and-alerts.md#317-the-two-automatic-issues)).
+  ([E-mail and alerts §3.17](email-and-alerts.md#317-the-three-automatic-issues)).
 
 ### 10.1 The cut-off guard and `min_rows_ratio`
 

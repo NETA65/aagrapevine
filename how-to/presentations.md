@@ -1272,8 +1272,8 @@ other update of that run held back too: new Drive files, bulletin posts, the day
 same way until the file is fixed. So fix it, or undo it (the file's **History** on GitHub → the commit before →
 copy the old version back), soon.
 
-Where to read the problem: **Actions** → the failed "Website update" run → the job "Build & publish website" → the
-step "Build the website". Look for a line like
+Where to read the problem: **Actions** → the failed "Website update" run → the job "Build website" (called "Build &
+publish website" before October 2026) → the step "Build the website". Look for a line like
 
 ```text
 [presentations] config/presentations: 1 problem(s):
@@ -1499,7 +1499,7 @@ See [Automation and troubleshooting](automation-and-troubleshooting.md) for sett
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| "Website update" fails at "Build & publish website"; the site did not change at all | a deck problem stops the strict build | Open the step "Build the website", read the `[presentations] …` lines, fix the file (or undo it from its History). GitHub also e-mails a "run failed" notice to whoever pushed the change. |
+| "Website update" fails at "Build website"; the site did not change at all | a deck problem stops the strict build | Open the step "Build the website", read the `[presentations] …` lines, fix the file (or undo it from its History). GitHub also e-mails a "run failed" notice to whoever pushed the change. |
 | `not valid YAML: …` with a line and a column | a missing quote, a tab, a line indented wrongly, an unquoted text that starts with `{` or holds `: ` | Look at that line and the one above it ([3.2](#32-yaml-rules-that-matter-in-these-files)). |
 | `… left out — the player cannot use it (an id, its slides and a first version are needed)` | the file name is not a valid id (capitals, spaces), or `slides:` / `presets:` is empty. On GitHub the build stops, as for any problem; in a PC build without `I18N_STRICT` the card is simply missing | Rename the file in lowercase with dashes, or restore the lists. |
 | Code check is red, "Website update" is green | a test failed; the build is fine. Often: the agenda's written times ([3.16 F](#f-change-a-slides-length)), a new `{live:…}` key missing from the README or the sample deck ([6.3](#63-example-add-a-new-fact-livemeeting_platform)), a new deck not in `DECKS` | Open the job "Python tests (offline)"; the failing test says what is wrong. |

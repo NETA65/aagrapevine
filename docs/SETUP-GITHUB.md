@@ -60,7 +60,7 @@ anyway, and no secrets are stored in the files.
 1. **Settings** → **Actions** → **General**.
 2. **Actions permissions:** choose **Allow all actions and reusable workflows** (usually already
    selected). *(If your organization restricts this, allow at least GitHub's own actions and
-   `lycheeverse/lychee-action`.)*
+   `lycheeverse/lychee-action` — the weekly link check uses it, pinned to one exact version by its commit.)*
 3. **Workflow permissions:** leave it as it is (the default, read-only, is best). Each workflow
    asks for exactly the access it needs — for example, the daily update asks for permission to
    save its data — so nothing has to be widened here.
@@ -112,7 +112,10 @@ You can close the browser. What happens:
 | Part | Time | What it does |
 |---|---|---|
 | *Sync content + translate* | ~1–1½ hours (up to ~6 hours with `300`) | Fetches every source, downloads the free translation models (~175 MB, only the first time), translates new titles, commits the data |
-| *Build & publish website* | ~3 minutes | Builds the site and publishes it on GitHub Pages |
+| *Build website* | ~3 minutes | Builds the site |
+| *Test the code before publishing* | ~3–4 minutes, at the same time as the build | Runs the code's tests; the site is published only when they pass (later runs skip them in seconds while the code and the content have not changed) |
+| *Publish to GitHub Pages* | ~1 minute | Publishes the site built from that same commit |
+| *Report sources that stopped updating, and updates that keep failing* | seconds | Opens or closes the two automatic issues of Step 8 |
 
 The run is listed in the Actions tab as **Full update (started by hand)**.
 
@@ -124,7 +127,7 @@ refreshes only Google Drive, the bulletin, the podcasts, the daily quote and the
 
 ## Step 7 — Check the result
 
-1. When the run shows a green ✓, open it: under **Build & publish website** GitHub shows the
+1. When the run shows a green ✓, open it: under **Publish to GitHub Pages** GitHub shows the
    website address. Also visible in **Settings → Pages** ("Your site is live at …").
 2. Open the site. Check the English and Spanish versions (`…/es/`).
 3. Open **`…/status/`** on the site: every source should show a recent date. How far the PDF search
@@ -167,7 +170,11 @@ original language meanwhile.
 GitHub then e-mails you if a scheduled update fails. One source having a bad day is *not* a
 failure — the site simply keeps that source's previous items. If the **same** source has not
 updated for **7 days**, the update opens one issue, **"A content source has stopped updating"**,
-that says what to check; it closes itself when the source works again.
+that says what to check; it closes itself when the source works again. A failed timed run e-mails
+only the person of point 3, and a run the Morning check starts e-mails nobody, so when two such runs
+fail **in a row** the update opens a second issue, **"The website update keeps failing"**, naming
+the part that failed; it closes itself after the next run that works. A change that fails the tests is never published — the site
+stays as it was until the change is fixed.
 
 ---
 

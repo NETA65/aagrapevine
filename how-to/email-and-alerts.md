@@ -37,8 +37,9 @@ Every other e-mail around the site comes from **GitHub** or from **cron-job.org*
 |---|---|---|---|
 | **Monthly digest** (bilingual, HTML + plain text) | `send_digest.py` over SMTP, started by `monthly-digest.yml` | the `DIGEST_TO` secret | NETA65 adds the secrets ([2](#2-quick-start-switch-on-the-monthly-e-mail)) |
 | **"Run failed" e-mails** | GitHub | for timed runs, whoever last switched each workflow on or last changed its `cron:` line; for a button press, whoever pressed it | [3.16](#316-githubs-run-failed-e-mails) |
-| Issue **"A content source has stopped updating"** | `update.yml`, job *Report sources that stopped updating* | people who **watch** the repository | [3.17](#317-the-two-automatic-issues) |
-| Issue **"Broken links found by the weekly check"** | `link-check.yml` | people who watch the repository | [3.17](#317-the-two-automatic-issues) |
+| Issue **"A content source has stopped updating"** | `update.yml`, job *Report sources that stopped updating, and updates that keep failing* | people who **watch** the repository | [3.17](#317-the-three-automatic-issues) |
+| Issue **"The website update keeps failing"** | the same job of `update.yml` (since October 2026) | people who watch the repository | [3.17](#317-the-three-automatic-issues) |
+| Issue **"Broken links found by the weekly check"** | `link-check.yml` | people who watch the repository | [3.17](#317-the-three-automatic-issues) |
 | **Morning alarm failures** | cron-job.org | the cron-job.org account | [3.18](#318-the-morning-alarm-cron-joborg) |
 
 > **State at the time of writing (October 2026):** the digest is **off**, because the secrets it needs are not there
@@ -78,8 +79,8 @@ secrets.
    for the other three timed workflows ([3.16](#316-githubs-run-failed-e-mails)).
 6. **Done.** From now on the e-mail goes out by itself on the **1st** of each month, from **7 AM Central**. If the
    data is not ready, it goes out later, and at the latest from **noon on the 3rd**. To send last month's e-mail
-   right away, run the workflow **once** with **Preview only** unticked ([3.12](#312-send-a-month-by-hand)).
-   Every press sends the e-mail again.
+   right away, run the workflow **once** with **Preview only** unticked ([3.12](#312-send-a-month-by-hand)). A month
+   is sent only once: pressing it again only says *"Already sent"*, unless you also tick **force**.
 
 **What you will see:** after the next 1st, the run under **Actions → Monthly e-mail digest** has the summary heading
 *"E-mail digest sent"*. Below it are the subject (*"Grapevine / La Viña — October 2026 digest · Resumen de octubre de
@@ -108,8 +109,8 @@ keeps a copy in the sending account's **Sent** folder.
 
 | File | What it does |
 |---|---|
-| [`.github/workflows/monthly-digest.yml`](../.github/workflows/monthly-digest.yml) | The timer (five tries a day on the 1st to the 3rd), the on/off test, the "send only once" marker and the **Run workflow** form (*Preview only*, *month*). |
-| [`scripts/notify/send_digest.py`](../scripts/notify/send_digest.py) | Builds the e-mail from the site's data files, in HTML and plain text and in both languages, then sends it over SMTP. It uses Python's standard library only, so the job needs neither Node.js nor the sync tools. |
+| [`.github/workflows/monthly-digest.yml`](../.github/workflows/monthly-digest.yml) | The timer (five tries a day on the 1st to the 3rd), the on/off test, the "send only once" markers and the **Run workflow** form (*Preview only*, *month*, *force*). |
+| [`scripts/notify/send_digest.py`](../scripts/notify/send_digest.py) | Builds the e-mail from the site's data files, in HTML and plain text and in both languages, then sends it over SMTP. On GitHub it works in two halves: `--prepare` builds the e-mail and saves it, and `--send-prepared` hands that same e-mail to the server, once. It uses Python's standard library only, so the job needs neither Node.js nor the sync tools. |
 | [`config/site.yml`](../config/site.yml) | The `site:` keys (title, committee name, reply address, site address) and the `digest:` keys (rows per list, stories per magazine issue). See [3.8](#38-settings-in-configsiteyml-that-change-the-e-mail). |
 | `data/site/*.json` | What goes into the e-mail. The daily update writes these files, so the e-mail never visits Drive or the magazines itself. |
 | [`src/pages/digest.njk`](../src/pages/digest.njk) + [`eleventy/filters/community.js`](../eleventy/filters/community.js) (`buildMonthlyDigest`) | The same edition as a web page. Both sides must pick the same items, and a test checks that they do. |
@@ -318,9 +319,18 @@ send. The meaning of every other key is in [Settings](settings.md).
 2. **A check in Central time.** A try goes on only on **Central** days 1 to 3, and only from **7 AM Central**.
    Earlier or later it ends with *"Not the time for the monthly digest (Central time: day 2, hour 5) — nothing to
    do."*
-3. **Only once a month.** After a send, the run saves a small file called `digest-sent-YYYY-MM` (a GitHub
-   "artifact", kept 40 days). It also saves one when there was nothing new, and when the e-mail *may* have gone out.
-   Later tries find the file and stop: *"The 2026-09 digest was already sent — nothing to do."*
+3. **Only once a month.** Every send first reads the month's **markers**, small files the runs save as GitHub
+   "artifacts", kept 40 days:
+   - `digest-sending-YYYY-MM`, saved just **before** the e-mail is handed to the mail server;
+   - `digest-sent-YYYY-MM`, saved after the send (also when there was nothing new, and when the e-mail *may* have
+     gone out);
+   - `digest-unsent-YYYY-MM`, saved when the server took nothing (the next try sends).
+
+   A try that finds a "sent" marker stops: *"The 2026-09 digest was already sent — nothing to do."* A "sending"
+   marker whose run left no "unsent" marker after it (the run was cancelled, ran out of time or lost its connection
+   between the two, so the e-mail **may** have gone) is never sent again by itself: every try then shows the yellow
+   ⚠️ *Digest send not confirmed* with the run's link, and a person decides ([3.12](#312-send-a-month-by-hand)).
+   Since October 2026 this holds for a send started by hand too: only the **force** box skips it.
 4. **It waits for the month's last items.** Before sending, it checks that every source it reads has been tried
    **after midnight Central on the 1st**. The sources are `announcements`, `manual_events`, `drive`, `articles`,
    `pdfs`, `youtube`, `podcasts` and `instagram`. In practice this means it waits for the month's first **full**
@@ -349,18 +359,18 @@ after that.
 
 1. The 08:07 UTC try starts at about 8:07 AM CDT. It is day 1 and past 7 AM, and there is no marker file yet.
 2. The full update, which the Morning check started early, has already tried every source after midnight.
-3. So the try sends the **September 2026 digest** and saves `digest-sent-2026-09`.
+3. So the try saves `digest-sending-2026-09`, sends the **September 2026 digest** and saves `digest-sent-2026-09`.
 4. The 11:07 try finds the marker: *"The 2026-09 digest was already sent — nothing to do."*
 
 If YouTube had last been tried at 5:21 PM on September 30, the first try would end with *"Digest waits"*, and a later
 try would send the e-mail once YouTube had been read.
 
-> **Note: two ways to send the same month twice.**
-> 1. A **manual send has no guard at all**. Every press of **Run workflow** with *Preview only* unticked sends
->    again, even for a month that was already sent.
-> 2. The marker file belongs to the run that sent the e-mail. If someone **deletes that run** during the 1st to
->    the 3rd (while tidying old runs, for example), the marker goes with it, and the next try sends again. After the
->    3rd, deleting old runs is harmless.
+> **Note: the ways to send the same month twice.**
+> 1. **force** ticked (with *Preview only* unticked) sends again, on purpose. Nothing else does: since October
+>    2026 a send by hand checks the markers like a scheduled try (before, it had no guard at all).
+> 2. The markers belong to the run that saved them. If someone **deletes that run** during the 1st to the 3rd (while
+>    tidying old runs, for example), its markers go with it, and the next try sends again. After the 3rd, deleting
+>    old runs is harmless.
 
 > **Note:** GitHub sometimes skips timed runs entirely. With 15 tries in all that rarely matters, but if every try of
 > the 1st to the 3rd is skipped or fails, nothing goes out that month by itself. Send it by hand
@@ -446,7 +456,8 @@ refused.
 
 1. Temporarily set the `DIGEST_TO` secret to **your own** address.
 2. Run the workflow with *Preview only* unticked and an **old** month in the month box, for example `2026-08`. Only
-   that old month is then marked as sent (`digest-sent-2026-08`).
+   that old month is then marked as sent (`digest-sent-2026-08`). If that month was sent before, tick **force** too,
+   or it only says *"Already sent"*.
 3. **Put the real `DIGEST_TO` back** before the 1st.
 
 Never test this way with last month during the 1st to the 3rd: the test would mark that month as sent, and the
@@ -461,21 +472,31 @@ digest: SEND NOW (started by hand)"**, so a send is easy to tell from a preview 
 What a manual send does:
 
 - It sends **at once, with the data there is**, without waiting for the update.
-- It skips the day, hour and marker checks.
-- Afterwards it marks the month as sent, so the scheduled tries skip that month.
+- It skips the day and hour checks, but **not the markers** (since October 2026): a month already sent is not sent
+  again (a yellow ⚠️ *Already sent*: *"The 2026-09 digest was already sent, so nothing was sent now. To send it a
+  second time, run this workflow again with "force" ticked."*), and a month whose send was not confirmed is not
+  sent either (⚠️ *Digest send not confirmed*).
+- Like every send, it saves the "sending" marker first and the "sent" marker afterwards, so the scheduled tries
+  skip that month.
 - When nothing was new that month, it sends nothing but still marks the month.
+
+**Send a month again (force).** Tick **force** as well as unticking *Preview only*. The run is listed as **"Monthly
+e-mail digest: SEND AGAIN (forced, started by hand)"** and skips the marker check: every district gets the e-mail a
+second time, so check the group first. With *Preview only* **and** *force* ticked, it is only a preview.
 
 | Situation | What to do |
 |---|---|
 | The secrets were added on the 1st, 2nd or 3rd | Nothing, as long as a try is still to come: a later scheduled try sends last month's digest. If they were added on the 3rd after its last try (usually in the evening), run it by hand. |
 | The secrets were added later, for example on October 10 | Run it by hand with the month box empty, and September goes out now. October then goes out by itself on November 1 to 3. |
 | GitHub skipped every try of the 1st to the 3rd | Run it by hand with the month box empty. |
-| A run went red with *"The digest MAY have been sent"* | **First** check the group and the sending account's Sent folder. Only if the e-mail is not there, send it by hand. |
-| A resend after a mistake | A resend goes to **everyone** again, so only do it if really needed. |
+| A run went red with *"The digest MAY have been sent"* | **First** check the group and the sending account's Sent folder. Only if the e-mail is not there, send it by hand with **force** ticked (the month is marked as sent). |
+| Every try shows ⚠️ *Digest send not confirmed* | A send broke off between the "sending" and the "sent" marker. Check the group. If the e-mail arrived, nothing needs doing (the yellow note is harmless, GitHub e-mails nobody about it, and it stops after the 3rd). If it did not, send it with **force**. |
+| A resend after a mistake | Tick **force**. A resend goes to **everyone** again, so only do it if really needed. |
 | You want this month's digest early | It cannot be sent: *"Not sent: October 2026 is not over yet — its digest can be sent from 2026-11-01. For a look at it now, run it with Preview only ticked."* |
 
 With the GitHub command-line tool, a manual send is
-`gh workflow run monthly-digest.yml -R NETA65/aagrapevine -f preview_only=false -f month=2026-09`.
+`gh workflow run monthly-digest.yml -R NETA65/aagrapevine -f preview_only=false -f month=2026-09` (add
+`-f force=true` to send it again).
 
 ### 3.13 What is in the e-mail
 
@@ -569,14 +590,19 @@ Pictures load from the live site.
 ### 3.14 Every result a digest run can show
 
 Each run's title in the Actions list says what it is, from the same input as the run itself: **"Monthly e-mail digest
-(GitHub schedule)"** for a scheduled try, **"Monthly e-mail digest: preview only"** for a preview, and **"Monthly
-e-mail digest: SEND NOW (started by hand)"** for a send by hand.
+(GitHub schedule)"** for a scheduled try, **"Monthly e-mail digest: preview only"** for a preview, **"Monthly
+e-mail digest: SEND NOW (started by hand)"** for a send by hand, and **"Monthly e-mail digest: SEND AGAIN (forced,
+started by hand)"** for a send with **force** ticked.
 
 The message appears on the run page (**Actions → Monthly e-mail digest → the run**): in the summary, as a notice (ℹ️),
-a warning (⚠️) or an error (❌), and in the log of the step that wrote it. The first four rows below come from the
-step *"Is it time, and is the e-mail digest set up?"*, all the others from *"Build (and send) the digest"*. The run's
-own job is *"Build & send the digest"*. The e-mail digest **never** shows on the [/status/](https://neta65.github.io/aagrapevine/status/)
-page.
+a warning (⚠️) or an error (❌), and in the log of the step that wrote it. The rows down to *"Digest send not
+confirmed"* come from the step *"Is it time, and is the e-mail digest set up?"*. Since October 2026 the rest comes
+from *"Build the digest (and decide whether to send it)"* (`send_digest --prepare` or `--dry-run`: previews,
+"nothing new", "waits", the month and data checks) and, for a real send, from *"Send the digest"*
+(`send_digest --send-prepared`: everything about the mail server). Between the two, *"Mark the month as being sent"*
+saves the "sending" marker; after them, *"Mark the month as sent"* or *"Mark this try as not sent"*. The run's own job
+is *"Build & send the digest"*. The e-mail digest **never** shows on the
+[/status/](https://neta65.github.io/aagrapevine/status/) page.
 
 | What the run says | Exit code | Colour | Month marked as sent? | Next scheduled try | What to do |
 |---|---|---|---|---|---|
@@ -584,11 +610,14 @@ page.
 | *"Not the time for the monthly digest (Central time: day N, hour N) — nothing to do."* | — | green | — | — | Nothing. |
 | *"The 2026-09 digest was already sent — nothing to do."* | — | green | yes (earlier) | skips | Nothing. |
 | ⚠️ *"Digest not sent yet: Could not check whether the 2026-09 digest was already sent (the GitHub API did not answer) — nothing was sent; the next try checks again."* | — | green | no | checks again | Nothing (a GitHub hiccup). |
+| ⚠️ *"Already sent: The 2026-09 digest was already sent, so nothing was sent now. To send it a second time, run this workflow again with "force" ticked."* (a send by hand) | — | green | yes (earlier) | skips | Nothing, or tick **force** to send it again ([3.12](#312-send-a-month-by-hand)). |
+| ⚠️ *"Digest send not confirmed: A send of the 2026-09 digest was started (…run link…) but never confirmed — the e-mail MAY have gone out. Nothing is sent again by itself: check the group (or the mailbox); if it did not arrive, run this workflow with Preview only unticked and "force" ticked."* | — | green | — (a "sending" marker) | the same note | Check the group; send with **force** only if it did not arrive. |
 | *"E-mail digest preview (not sent)"* | 0 | green | no | — | Download **digest-preview**. |
 | *"E-mail digest sent"*, then the subject and *"Recipients: 1 · new items in September 2026: 153 …"* | 0 | green | **yes** | skips | Check that the group received it. |
 | The same, plus in the log only *"WARNING: 1 recipient(s) were refused by the mail server"* (several addresses in `DIGEST_TO`, and the server refused some of them) | 0 | green | **yes** | skips | The others got it. Fix the refused address in `DIGEST_TO`. |
 | *"Nothing new in September 2026 — no e-mail sent."* | 0 | green | **yes** | skips | Nothing. |
 | ℹ️ *"Digest waits"* + *"E-mail digest: waiting for the data — Waiting for youtube, … to be updated since September 2026 ended …"* | 3 | green | no | sends once the data is fresh, or anyway from noon on the 3rd | Nothing. |
+| ❌ *"The digest was not sent: The mail server took nothing (see the log above) — the next try sends it."*, with one of the five *"Sending FAILED: …"* lines below in the log of *"Send the digest"* | 1 | **red** | no ("unsent") | tries again | As below. |
 | *"Sending FAILED: The mail server rejected the username/password. For Gmail you need an App Password …"* | 1 | **red** | no | tries again | Make a new app password and update `SMTP_PASSWORD`. |
 | *"Sending FAILED: Could not reach the mail server smtp.gmial.com:587: …"* (after 3 tries, 10 and 20 seconds apart) | 1 | **red** | no | tries again | Fix `SMTP_SERVER` or `SMTP_PORT`. |
 | *"Sending FAILED: The mail server does not offer STARTTLS; refusing to send the password unencrypted …"* | 1 | **red** | no | fails again | Use port 587 (STARTTLS) or 465 (SSL). |
@@ -598,7 +627,7 @@ page.
 | Log only: *"e-mail is not configured (missing: DIGEST_TO) …"* | 2 | **red** | no | the same again | Separate the addresses with commas ([3.6](#36-who-receives-it)). |
 | *"Stopped: the month '2026-9' is not a YYYY-MM month like 2026-09 …"* | 2 | **red** | no | — | Type the month as `2026-09`, or leave the box empty. |
 | *"Not sent: October 2026 is not over yet — its digest can be sent from 2026-11-01 …"* | 2 | **red** | no | — | Preview it instead, or wait. |
-| ❌ *"The digest MAY have been sent"* + *"Sending FAILED — it MAY have been sent: The connection failed while the e-mail was being handed over …"* | 4 | **red** | **yes** | skips | Check the group and the Sent folder. Send by hand only if it is missing. |
+| ❌ *"The digest MAY have been sent: The connection broke while the e-mail was being handed over. The month is marked as done so no later try sends it again. Check the group; if it did not arrive, send it with Run workflow (Preview only unticked, force ticked)."* + *"Sending FAILED — it MAY have been sent: …"* | 4 | **red** | **yes** | skips | Check the group and the Sent folder. Send with **force** only if it is missing. |
 
 Why exit 4 exists: connecting and logging in are tried up to 3 times, but the message itself is handed to the server
 **once**. If the line breaks at that moment, the server may already have the e-mail, and another try could send the
@@ -608,7 +637,12 @@ A **red** run sends GitHub's failure e-mail ([3.16](#316-githubs-run-failed-e-ma
 whoever last switched the workflow on; for a manual run, to whoever pressed the button.
 
 > Note: the "not configured" result (exit 2, `DIGEST_TO` without a valid address) writes nothing to the run summary.
-> Open the log of *"Build (and send) the digest"* to read it.
+> Open the log of *"Build the digest (and decide whether to send it)"* to read it.
+
+The exit codes of `--send-prepared` (the step *"Send the digest"*): **0** sent, **4** it may have been sent, **1**
+not sent (the server took nothing), **2** the mail settings are missing. A run stopped between *"Mark the month as
+being sent"* and the marker after the send (cancelled, out of time) leaves only the "sending" marker: the next tries
+then say *"Digest send not confirmed"* (above).
 
 ### 3.15 Change the password or the recipients, or stop the e-mail
 
@@ -646,7 +680,7 @@ started the run:
 | the **Run workflow** button | whoever pressed it |
 | a **push** (saving a file) | whoever pushed |
 | the **morning alarm** (cron-job.org) | the owner of the alarm's key ([3.18](#318-the-morning-alarm-cron-joborg)) |
-| the site itself (the Morning check's refreshes, the bot) | **nobody**. That is why the Morning check fails *itself* when a morning goes wrong. |
+| the site itself (the Morning check's refreshes, the bot) | **nobody**. That is why the Morning check fails *itself* when a morning goes wrong, and why the issue *"The website update keeps failing"* exists ([3.17](#317-the-three-automatic-issues)). |
 
 The four **timed** workflows are **Website update**, **Morning check (new day by 5:30 AM)** (its hourly
 backstop), **Monthly e-mail digest** and **Weekly link check**. Their schedules were last pushed from the MKP715
@@ -668,7 +702,7 @@ What you would be e-mailed about (details in [Automation and troubleshooting](au
 
 | Workflow | Goes red when… | The live site meanwhile |
 |---|---|---|
-| Website update | building the site data failed, the data commit could not be saved, or the build or deploy failed | keeps the last good version |
+| Website update | building the site data failed, the data commit could not be saved, the tests failed (*"Tests failed — not published"*), or the build or deploy failed | keeps the last good version |
 | Morning check (new day by 5:30 AM) | today's update did not reach the site: *"❌ Today's update did not reach the site."* plus the error *"Morning update failed"* | keeps yesterday's day and quote |
 | Monthly e-mail digest | a send failed, the month box was mistyped, or the e-mail *may* have been sent ([3.14](#314-every-result-a-digest-run-can-show)) | unaffected |
 | Weekly link check | only when the site itself fails to build for the check. Broken links never turn it red: it reports them through an issue. | unaffected |
@@ -676,14 +710,15 @@ What you would be e-mailed about (details in [Automation and troubleshooting](au
 
 A **yellow ⚠** note, for example one source having a bad day, never sends an e-mail. Only red runs do.
 
-### 3.17 The two automatic issues
+### 3.17 The three automatic issues
 
-Two workflows keep **one** GitHub issue each. GitHub e-mails new issues and new comments to everyone who **watches**
-the repository.
+Two workflows keep three GitHub issues, one of each title. GitHub e-mails new issues and new comments to everyone who
+**watches** the repository.
 
 | Issue title (exact) | Opened by | When | While it is open | It closes |
 |---|---|---|---|---|
-| **A content source has stopped updating** | Website update, job *"Report sources that stopped updating"* | a source has failed, with no success for **7 days or more** (or never worked), or no run has even tried a working source for 7 days ("not checked"). The optional outside calendars never count. | Its text is updated silently after every run. A **comment**, which means an e-mail, is added only when a **new** source starts failing. | by itself: *"Every content source is updating again (…). Closing automatically."* |
+| **A content source has stopped updating** | Website update, job *"Report sources that stopped updating, and updates that keep failing"* | a source has failed, with no success for **7 days or more** (or never worked), or no run has even tried a working source for 7 days ("not checked"). The optional outside calendars never count. | Its text is updated silently after every run. A **comment**, which means an e-mail, is added only when a **new** source starts failing. | by itself: *"Every content source is updating again (…). Closing automatically."* |
+| **The website update keeps failing** (since October 2026) | the same job, its second step | a Website update run that **nobody started by hand** (GitHub's schedule, or the Morning check) fails right after another failed run. A run a person started never opens it: GitHub e-mails that person. | *"The website update has failed N times in a row"*, updated silently after each failure; a **comment** only when another job starts failing (*"Now also failing: …"*). It names the failing job and what to do. | by itself, after the next run in which every job worked: *"The website update works again: this run published the site (…). Closing automatically."* |
 | **Broken links found by the weekly check** | Weekly link check, on Sundays (cron `40 8 * * 0` = 08:40 UTC, 4 hours early on purpose) | the check finds a broken link, or a link in `config/site.yml` no longer answers | a **new comment every Sunday** while problems remain | by itself: *"All links look good now (…). Closing automatically."* |
 
 This is what the first issue looks like, as the code writes it (example values):
@@ -704,6 +739,11 @@ Status page · Latest run · Troubleshooting
 This issue is updated after every Website update run and closes by itself once every source works again.
 ```
 
+The second issue exists because nobody gets GitHub's failure e-mail for the robot's runs, and a timed run's reaches
+only whoever last switched the workflow on ([3.16](#316-githubs-run-failed-e-mails)): two failures in a row of the
+nightly update or the morning refresh could otherwise go unseen. Details:
+[Automation and troubleshooting §8.4](automation-and-troubleshooting.md#84-the-website-update-keeps-failing).
+
 **Get these e-mails.** Both accounts can do this:
 
 1. Open the repository page and press **Watch** (top right). Choose **All Activity**, or **Custom** with **Issues**
@@ -722,7 +762,8 @@ other website may have changed or be down. Send this issue to whoever helps with
 
 **Change them.** In [`update.yml`](../.github/workflows/update.yml), the report job holds the title (`TITLE = "A
 content source has stopped updating"`), the advice for each source (`HINTS`, which today covers `drive`,
-`instagram` and `writers_archive`) and the "not checked" advice (`UNCHECKED`). The 7 days are `STALE_DAYS = 7`, in
+`instagram` and `writers_archive`) and the "not checked" advice (`UNCHECKED`); its second step holds the other
+issue's title (`TITLE = "The website update keeps failing"`) and its advice per job (`HINTS`). The 7 days are `STALE_DAYS = 7`, in
 the sync job's *"Write run summary"* step. That step also writes the
 run summary's line *"Not updating for 7+ days"*, so change the README's promise too. In
 [`link-check.yml`](../.github/workflows/link-check.yml) the title is `ISSUE_TITLE`. The bot finds its open issue by
@@ -806,9 +847,9 @@ paste it into a repository file, an issue or an e-mail.
 |---|---|---|
 | Add or update a **secret** (NETA65) | nothing at once | at the next digest run: a scheduled try on the 1st to the 3rd, or **Run workflow** |
 | **Run workflow** with *Preview only* ticked | Monthly e-mail digest, preview | about 1 to 2 minutes, then **digest-preview** is on the run page |
-| **Run workflow** with *Preview only* unticked | Monthly e-mail digest, sends at once | about 1 to 2 minutes for the run, plus a few minutes for the group to deliver it |
+| **Run workflow** with *Preview only* unticked | Monthly e-mail digest, sends at once (unless that month was already sent: then tick **force** too) | about 1 to 2 minutes for the run, plus a few minutes for the group to deliver it |
 | Nothing (the 1st of the month) | the scheduled tries | usually the **morning of the 1st** (Central), once the month's first full update has run; at the latest from noon on the 3rd |
-| Edit `digest:` or `site:` in `config/site.yml` | a quick **Website update** and a **Code check** (started by the push) | [/digest/](https://neta65.github.io/aagrapevine/digest/) in about 10 to 20 minutes; the e-mail the next time it is built |
+| Edit `digest:` or `site:` in `config/site.yml` | a quick **Website update** (it tests the change before it publishes) and a **Code check** (started by the push) | [/digest/](https://neta65.github.io/aagrapevine/digest/) in about 5 minutes, up to 15 before every visitor sees it; the e-mail the next time it is built |
 | Edit `scripts/notify/send_digest.py` | a **Code check** (all tests plus a preview build) and a quick Website update | the next preview or send uses it straight away |
 | Edit `.github/workflows/monthly-digest.yml` | a **Code check** only | the next run. **If you changed the `cron:` line, the failure e-mails now come to you**, so the NETA65 Disable → Enable step must be done again. |
 | Add content (Drive, bulletin, events) during the month | the daily updates | in **next month's** e-mail; on [/whats-new/](https://neta65.github.io/aagrapevine/whats-new/) right after the next update |
@@ -836,7 +877,7 @@ by hand after adding it (tick *skip_crawl* for a run of a few minutes), before m
 | The home page's daily quote ([/](https://neta65.github.io/aagrapevine/) and [/es/](https://neta65.github.io/aagrapevine/es/)) | A *"Get it by e-mail"* link (*"Recíbela por correo"*) to the magazine's **own** daily-quote sign-up. The magazines send those e-mails, not this site. |
 | [/feed.xml](https://neta65.github.io/aagrapevine/feed.xml), [/es/feed.xml](https://neta65.github.io/aagrapevine/es/feed.xml), [/events.ics](https://neta65.github.io/aagrapevine/events.ics), [/es/events.ics](https://neta65.github.io/aagrapevine/es/events.ics) | Ways to follow the site without e-mail: a news feed and a calendar. |
 | **Actions → Monthly e-mail digest → a run** | Whether the e-mail was sent, previewed, waiting or failed ([3.14](#314-every-result-a-digest-run-can-show)). |
-| **Issues** tab | The two automatic issues ([3.17](#317-the-two-automatic-issues)). |
+| **Issues** tab | The three automatic issues ([3.17](#317-the-three-automatic-issues)). |
 | [/status/](https://neta65.github.io/aagrapevine/status/) | **Not** the e-mail. It shows the sources and the daily quote only. |
 
 > Tip: until the e-mail is switched on, the chair can open [/digest/](https://neta65.github.io/aagrapevine/digest/),
@@ -879,10 +920,13 @@ change.
 | `def connect(` / `def send(` | **The sending**: SMTP, encryption (465 = SSL, otherwise STARTTLS is required), login, 3 tries, and handing the message over once |
 | `def waiting_for(` | The "wait for the data" rule |
 | `def main(` | The command-line options, the order of the checks and the exit codes |
+| `def send_prepared(` / `PREPARED` | The second half of a send on GitHub: `--prepare DIR` saves `message.eml` and `envelope.json` (nothing when nothing is new), and `--send-prepared DIR` hands that same e-mail to the server once (exit 0 sent, 4 it may have been sent, 1 not sent, 2 the mail settings are missing) |
 
 The workflow file [`monthly-digest.yml`](../.github/workflows/monthly-digest.yml) holds the schedule
 (`cron: "7 8,11,14,17,20 1-3 * *"`). Its step *"Is it time, and is the e-mail digest set up?"* holds the 7 AM rule
-(`"$hour" -lt 7`), the on/off test (`if [ -z "$SMTP_SERVER" ]`), the marker check and the noon-on-the-3rd rule.
+(`"$hour" -lt 7`), the on/off test (`if [ -z "$SMTP_SERVER" ]`), the marker check (skipped only with **force**) and the
+noon-on-the-3rd rule. The steps after it build the e-mail (*"Build the digest (and decide whether to send it)"*),
+save the "sending" marker, send it, and save the "sent" or "unsent" marker.
 
 ### 6.2 What to edit for each change
 
@@ -1064,8 +1108,9 @@ def send_gmail_api(msg: MIMEMultipart, recipients: list[str]) -> None:
 
 3. At the start of `def send(`, choose the method:
    `if os.environ.get("GMAIL_REFRESH_TOKEN", "").strip(): return send_gmail_api(msg, recipients)`.
-4. In `def main(`, the line that starts `missing = [k for k in ("SMTP_SERVER", …` must accept the three Gmail secrets
-   instead of the SMTP ones. Otherwise the run stops with "not configured" (exit 2).
+4. In `def send_prepared(` and in `def main(`, the lines with `missing = … ("SMTP_SERVER", "SMTP_USERNAME",
+   "SMTP_PASSWORD")` must accept the three Gmail secrets instead of the SMTP ones. Otherwise the run stops with
+   "not configured" (exit 2).
 5. One side effect: with several recipients, the **To:** line holds the committee's own address, so that address
    would also receive a copy through the API. With SMTP it does not.
 
@@ -1074,7 +1119,8 @@ def send_gmail_api(msg: MIMEMultipart, recipients: list[str]) -> None:
 - In the first step, change the on/off test (search for `if [ -z "$SMTP_SERVER" ]`) so that `DIGEST_TO` plus the
   Gmail secrets also count as "set up". Add `GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}` to that step's
   `env:`.
-- In the step *"Build (and send) the digest"*, add all three secrets to `env:`.
+- In the step *"Send the digest"* (since October 2026 the e-mail is built in *"Build the digest (and decide whether
+  to send it)"* and sent in that next step, `send_digest --send-prepared`), add all three secrets to `env:`.
 
 **Tests and documents:**
 
@@ -1112,15 +1158,15 @@ The main test groups in `tests/test_send_digest.py` are:
 | `MonthArgument` | a mistyped month stops the run, and a month that is not over is not sent |
 | `Freshness` | the wait for the data |
 | `SendFailure` | the exit codes 1 and 4 |
-| `WorkflowSchedule` | the exact cron line, the guard and the marker file |
+| `WorkflowSchedule` | the exact cron line, the guard, the markers (sending, sent, unsent), **force**, and each step's conditions and order |
 | `RealData` | the preview command works on the repository's real data |
 
 ---
 
 ## 7. Troubleshooting
 
-**Where problems are reported:** the digest run's page, in its summary, annotations and the log of *"Build (and send)
-the digest"*; GitHub's failure e-mail for red runs; the **Issues** tab; cron-job.org's e-mails and the job's
+**Where problems are reported:** the digest run's page, in its summary, annotations and the logs of *"Build the
+digest (and decide whether to send it)"* and *"Send the digest"*; GitHub's failure e-mail for red runs; the **Issues** tab; cron-job.org's e-mails and the job's
 **History**. The digest is never on `/status/`.
 
 | Symptom | Likely cause | Fix |
@@ -1136,8 +1182,11 @@ the digest"*; GitHub's failure e-mail for red runs; the **Issues** tab; cron-job
 | Green: *"Digest waits"* / *"waiting for the data"* | The month's first full update has not finished yet. | Nothing to do: a later try sends it, and from noon Central on the 3rd it goes out anyway. |
 | Green: *"Nothing new in September 2026 — no e-mail sent."* | Nothing was added that month. Events alone do not count. | Nothing to do. If that is wrong, check the sources on `/status/`: a stopped source has no new items. |
 | Green *"sent"*, but nobody received it | The Google Group held the message (moderation) or refused the sender (posting permissions), or spam filters took it. | Check the group's pending messages and settings ([3.6](#36-who-receives-it)), the sending account's **Sent** folder, and the bounce messages in its inbox. |
-| Red: ❌ *"The digest MAY have been sent"* | The connection broke while the e-mail was being handed over. The month is marked as done. | Check the group and the Sent folder. Send by hand ([3.12](#312-send-a-month-by-hand)) **only** if it is missing. |
-| The districts got the e-mail **twice** | Someone pressed **Run workflow** with *Preview only* unticked (there is no guard), someone deleted the sending run during the 1st to the 3rd, or a leaked alarm key was used. | See the note in [3.9](#39-when-it-goes-out-the-schedule-and-its-safety-rules). Preview before any manual send, and keep the alarm key private. |
+| Red: ❌ *"The digest MAY have been sent"* | The connection broke while the e-mail was being handed over. The month is marked as done. | Check the group and the Sent folder. Send by hand with **force** ([3.12](#312-send-a-month-by-hand)) **only** if it is missing. |
+| Red: ❌ *"The digest was not sent"* | The mail server took nothing (a wrong password, server or address: the *"Sending FAILED"* line in the log of *"Send the digest"* says which). | Fix the cause; the next try sends it ([3.14](#314-every-result-a-digest-run-can-show)). |
+| Yellow ⚠️ *"Digest send not confirmed"* on every try | A send was cut off (cancelled, out of time) between *"Mark the month as being sent"* and the marker after the send, so the e-mail may have gone. Nothing is sent again by itself. | Check the group. If it arrived, nothing to do. If not, **Run workflow** with *Preview only* unticked and **force** ticked. |
+| Yellow ⚠️ *"Already sent"* after **Run workflow** | That month went out already. | Nothing, or tick **force** to send it again. |
+| The districts got the e-mail **twice** | Someone sent it again with **force**, someone deleted the sending run during the 1st to the 3rd, or a leaked alarm key was used. | See the note in [3.9](#39-when-it-goes-out-the-schedule-and-its-safety-rules). Preview before any manual send, and keep the alarm key private. |
 | No digest run at all on the 1st to the 3rd | GitHub skipped the timed runs, or the workflow is disabled (for example by the 60-day rule). | **Actions → Monthly e-mail digest**: press **Enable workflow** if it shows as disabled, then send by hand. |
 | The e-mail shows the Gmail address as **From**, not `grapevine@neta65.org` | That is normal with a Gmail account. Gmail replaces a From address that is not the account or a verified alias. | Replies still go to `grapevine@neta65.org` (the Reply-To). To send **from** a neta65.org address, see [3.5](#35-send-from-the-neta65org-mailbox-or-another-mail-host). |
 | The **To:** line shows the committee's own address | Several addresses are in `DIGEST_TO`. They are given only to the mail server. | Nothing to do. Nobody sees the other addresses. |
@@ -1145,7 +1194,7 @@ the digest"*; GitHub's failure e-mail for red runs; the **Issues** tab; cron-job
 | A bulletin post is missing from the e-mail | It was counted in another month (the month it was **added** to the site), or it **expired** before the e-mail was built. A post that expires on the last day of the month is left out of the e-mail built on the 1st to the 3rd. | Let `expires` / "(until …)" run past the 3rd of the next month ([Bulletin](bulletin.md)). |
 | An event is missing from "Events in …" | It started in another month, or it never reached the events data. | [Flyers and events](flyers-and-events.md) |
 | Red runs keep e-mailing **MKP715**, and NETA65 gets nothing | The timed workflows were last switched on from MKP715. | Do the owner step in [3.16](#316-githubs-run-failed-e-mails) as NETA65. |
-| Nobody was told about *"A content source has stopped updating"* | Nobody watches the repository, or watching e-mails are off. | Press **Watch → All Activity**, and tick **Settings → Notifications → Watching → Email** ([3.17](#317-the-two-automatic-issues)). |
+| Nobody was told about *"A content source has stopped updating"* or *"The website update keeps failing"* | Nobody watches the repository, or watching e-mails are off. | Press **Watch → All Activity**, and tick **Settings → Notifications → Watching → Email** ([3.17](#317-the-three-automatic-issues)). |
 | A *"Broken links found by the weekly check"* comment arrives every Sunday | A link in `config/site.yml` or in a `content/` file is broken. | Fix the address. The issue closes by itself after a clean Sunday. |
 | cron-job.org reports 401, 403, 404 or 422 | The key expired, its permission is wrong, the URL is wrong, or the body is wrong (or the Morning check is off). | See the table in [3.18](#318-the-morning-alarm-cron-joborg). |
 

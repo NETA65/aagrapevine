@@ -1,0 +1,50 @@
+NOTICE
+
+NETA 65 Grapevine / La Viña Committee website
+https://neta65.github.io/aagrapevine/  ·  https://github.com/NETA65/aagrapevine
+
+
+1. What the license covers
+
+The GNU General Public License, version 3 (the file LICENSE) covers this project's own code
+only: the sync scripts (scripts/), the build (eleventy/, eleventy.config.js), the page
+templates, styles and scripts the committee wrote (src/), the tests (tests/), the workflows
+(.github/) and the committee's own guides (README.md, docs/, how-to/).
+
+The open-source tools the website is built with (Eleventy, Tailwind CSS, Alpine.js, MiniSearch,
+the fonts, the Python packages …) keep their own licenses; README.md, section 17 ("Credits and
+licenses"), lists them.
+
+
+2. What the license does not cover: the content
+
+The license gives no rights to the content the website shows, links to or keeps copies of. That
+content belongs to its owners. For example:
+
+- the material of AA Grapevine and La Viña — story titles and the publishers' own teasers, the
+  daily quotes, magazine and book covers, store pages and prices, podcast episodes, videos,
+  Instagram posts and their pictures, documents from aagrapevine.org and aalavina.org — belongs
+  to AA Grapevine, Inc.;
+- A.A. literature and the documents of aa.org belong to Alcoholics Anonymous World Services, Inc.;
+- the Northeast Texas Area's logo (src/assets/img/logo-*.png) belongs to NETA 65;
+- flyers, photos, reports, slides, event details and meeting details belong to whoever made
+  them: the committee, NETA 65, its districts and groups, the intergroups and central offices,
+  and the other organizers whose calendars and meeting lists the site reads.
+
+The same goes for the copies kept in this repository: the pictures in src/assets/cache/, the
+titles, teasers and other texts saved in data/ (and their machine translations), the two
+archive exports in content/archive/, and everything the site reads from the committee's
+Google Drive folder.
+
+The website shows this material with credit to its source and a link back to it, and it never
+copies a magazine story. This notice grants no permission to use any of that material, and it
+does not claim that any permission exists. To reuse it, ask its owner.
+
+
+3. Names and trademarks
+
+AA Grapevine® and La Viña® are trademarks of AA Grapevine, Inc.; Alcoholics Anonymous® and
+A.A.® are trademarks of Alcoholics Anonymous World Services, Inc. YouTube,
+Instagram, Spotify, Zoom, Google, WhatsApp and the other services named on the website are
+trademarks of their owners. This committee website is not affiliated with, or endorsed by,
+AA Grapevine, Inc. or Alcoholics Anonymous World Services, Inc.

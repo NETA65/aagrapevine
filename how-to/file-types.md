@@ -358,7 +358,9 @@ What the Word reader keeps and loses (the same in `bulletin` and `booth`):
 - **a `.docx` bigger than 3 MB is not read at all** (usually because pictures were pasted into it): the site
   downloads only the first 3 MB of a text file (`MAX_TEXT_DOWNLOAD` in drive.py), and a cut Word file cannot be
   opened — the post keeps only its headline (or its last good text), and in the booth the message becomes a
-  problem, "no text to show" (unless an earlier run read its text, which is then kept). Keep pictures out of Word
+  problem, "no text to show" (unless an earlier run read its text, which is then kept). Since October 2026 a `.docx`
+  with more than 500 parts inside, or one that would unpack to more than 25 MB, is not read either (`MAX_DOCX_ENTRIES`,
+  `MAX_DOCX_UNZIPPED`), and a `.txt` or `.md` longer than 3 MB is read up to 3 MB. Keep pictures out of Word
   files meant for the bulletin or the booth.
 
 | File | What you get |
@@ -695,18 +697,20 @@ A folder is never an item itself; it decides where its files go:
 - **Only the first folder below the panel folder decides the category** — its name, in English or Spanish, as a
   whole word; the word that comes first wins (`Fotos del taller` is photos, `Taller de fotos` is workshops). The
   full list of folder words is in [The Drive panel folder](drive-panel-folder.md#35-the-category-folders).
-- **Sub-folders** are read down to 6 levels below the panel folder (deeper ones are skipped and named in
-  `stats.depth_limited`). In `photos` each sub-folder is its own album ("2027 / Spring Assembly" for
+- **Sub-folders** are read down to 6 levels below the panel folder (deeper ones are skipped, counted in
+  `stats.depth_limited` and named in the run's log). In `photos` each sub-folder is its own album ("2027 / Spring Assembly" for
   `photos/2027/Spring Assembly/`); in `booth` each sub-folder is a collection; in a folder of your own everything
   stays in one tab and one album; elsewhere sub-folders change nothing.
 - A folder whose name contains `PRIVATE`, `PRIVADO`, `(Responses)`, `(Respuestas)` or `wrong size` is skipped
   **with everything in it**.
 - A folder whose sharing was changed cannot be read: its files stay on the site as they were (nothing is deleted
   by accident) and the run summary notes "1 folder(s) could not be read — check their sharing settings".
+- A folder that held files and suddenly lists none is not believed the first time: its files stay until the next
+  update finds it empty again (**On hold** on `/status/`; since October 2026).
 - A folder with 500 or more entries gets the note "… has N entries — add a GOOGLE_API_KEY secret (or split the
   folder) so none are missed": the public folder view may not list them all.
-- Folders sitting loose in A65_GV (outside a panel folder) are ignored; their names are listed in
-  `stats.loose_skipped` of the public `data/raw/drive.json`.
+- Folders sitting loose in A65_GV (outside a panel folder) are ignored; since October 2026 they are only counted in
+  `stats.loose_skipped` of the public `data/raw/drive.json` (their names: the run's log).
 - Empty folders are fine.
 
 ### 4.16 Any other type
@@ -987,10 +991,11 @@ The name is all the site reads for most files, so it is worth a few seconds. Gen
 1. **Nothing happens at upload time** — nothing watches the Drive.
 2. **The next run that reads the Drive picks the file up.** Every kind of *Website update* run reads it: the
    morning refresh (about 4:30 AM Central with the morning alarm), the nightly full update (GitHub usually starts it
-   between 5 and 7 AM Central), the midday refresh (around 11 AM to 1 PM Central) and the evening refresh (around 7
+   between 6 and 8 AM Central, 5 and 7 in winter), the midday refresh (around 11 AM to 1 PM Central) and the evening refresh (around 7
    to 9 PM Central), the quick run after anyone saves a settings or content file, and any run you start yourself
    (**Run workflow**, tick **skip_crawl**). A quick run
-   publishes in about 2 minutes; GitHub Pages may then serve the old page for up to 10 more minutes. Details:
+   publishes in about 2 minutes (about 5 when it also tests a change of code or content); GitHub Pages may then
+   serve the old page for up to 10 more minutes. Details:
    [Automation and troubleshooting §3](automation-and-troubleshooting.md#3-what-happens-next-how-fast-a-change-goes-live).
 3. **In that run**, depending on the type:
 
@@ -1191,7 +1196,8 @@ the set-up).
    bulletin posts** and, from the publishing job, **Booth display (copies for offline)**.
 2. `/status/` (`/es/status/`): the Drive row — state, number of files, last good check.
 3. `data/raw/drive.json` on GitHub → `stats`: `by_kind`, `by_category`, `excluded_by_reason` (why files were left
-   out — reasons only, never names), `loose_skipped`, `unreadable_folders`, `depth_limited`, `warnings`,
+   out — reasons only, never names), the counts `loose_skipped`, `unreadable_folders`, `depth_limited`,
+   `unconfirmed_folders` (names only in the run's log), `warnings`,
    `announcements` and `booth_texts` (text downloads), `forms` (open and closed checks).
 4. For the booth: `data/site/booth.json` → `problems`, and the player's **Settings → Slides** tab (**Ajustes →
    Diapositivas**), which also names the files the build left out (a word the booth never shows, a video or sound

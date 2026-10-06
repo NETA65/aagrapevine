@@ -213,9 +213,10 @@ These forms work in a file name and inside `(until …)` / `(from …)`. The yea
 |---|---|
 | `2027-01-10`, `2027.01.10`, `2027_01_10`, `2027 01 10`, `2027-1-5` | January 10, 2027 (January 5 for the last one) |
 | `20270110` | January 10, 2027 |
-| `01-10-2027`, `01/10/2027`, `1.10.2027` | January 10, 2027 — **month first** (US order) |
-| `01/02/2027` | **January 2**, 2027 — also in a Spanish name where you meant February 1 |
-| `14-03-2027` | nothing (there is no month 14) |
+| `01-10-2027`, `01/10/2027`, `1.10.2027` in an English name | January 10, 2027 — **month first** (US order) |
+| the same in a Spanish name (`01-10-2027 Asamblea de otoño`) | **October 1**, 2027 — **day first** (since October 2026) |
+| `01/02/2027` with no words to tell the language (a short name, or alone inside `(hasta …)`) | **January 2**, 2027 (month first), and the run summary's *Notes* say it "could be January 2 or February 1, 2027" |
+| `14-03-2027` | March 14, 2027: a first number over 12 can only be the day (since October 2026; before, nothing) |
 | `Jan 10 2027`, `January 10, 2027`, `Jan. 10th, 2027`, `Sept 5 2027` | that day |
 | `10 de enero de 2027`, `10 enero 2027`, `el 1 de febrero de 2027` | that day |
 | `January 2027`, `enero de 2027` | **the 1st** of that month |
@@ -256,6 +257,7 @@ These forms work in a file name and inside `(until …)` / `(from …)`. The yea
 | `October 5, 2027 Fall Assembly` | Fall Assembly | Oct 5, 2027 | – | – | – |
 | `5 de octubre de 2027 Asamblea de otoño` | Asamblea de otoño | Oct 5, 2027 | – | – | – |
 | `10-05-2027 Fall Assembly.txt` | Fall Assembly | **Oct 5**, 2027 (month first) | – | – | – |
+| `10-05-2027 Asamblea de otoño.txt` | Asamblea de otoño | **May 10**, 2027 (a Spanish name: day first) | – | – | – |
 | `March 2027 Newsletter.md` | March 2027 Newsletter | Mar 1, 2027 | – | – | – |
 | `Welcome_new_GVRs.txt` | Welcome new GVRs | Drive's date | – | – | – |
 | `GV_LV booth volunteers` | GV/LV booth volunteers | Drive's date | – | – | – |
@@ -352,7 +354,8 @@ it is a note for you; the site ignores it.
 > `expires:` and `publish:`.
 
 **Date forms** for `date:`, `publish:` and `expires:`: `2027-01-10`, `2027-1-5`, `March 5, 2027`,
-`5 de marzo de 2027`, `03/05/2027` (= March 5: month first), `2027.03.05`, `20270305`, and `March 2027`
+`5 de marzo de 2027`, `03/05/2027` (= March 5 in a post written in English; since October 2026 = **May 3** in a post
+written in Spanish: a date in numbers only follows the post's language), `2027.03.05`, `20270305`, and `March 2027`
 (= **March 1**). For `expires:` always write the last day itself: `expires: 2027-03-31`, not `expires: March 2027`.
 
 **When to put a value in double quotes:**
@@ -407,8 +410,9 @@ shows `"date": null` there; the real run gives it the day it first appears.
 | `hash.md` | `title: #1 priority for GVRs`, then `# Heading in the text` | **Heading in the text** |
 
 **Date shown** — the first that exists: `date:` → a date anywhere in the file name (`welcome-2027-02-14.md` works) →
-`publish:` → the day the site first saw the file. That last one is counted in UTC, so a file first seen late in the
-evening (Central) can get the next day's date. Give important posts a date.
+`publish:` → the day the site first saw the file. Since October 2026 that last one is the Central-time day (before,
+it was counted in UTC, so a file first seen late in the evening got the next day's date). Give important posts a
+date.
 
 The date is a label and the sort order. It does **not** decide when the post goes up (that is `publish:`) or
 comes down (`expires:`).
@@ -1112,7 +1116,7 @@ and the copy rule in `eleventy.config.js` (search `bulletin/files`). Keep both l
 | | The file is not open to "anyone with the link" (Drive sent a sign-in page) | Fix the file's sharing; the run log says "Drive returned an HTML page instead of the file" |
 | An edit to a Drive doc does not show | The text is fetched again only when Drive's "last modified" changes, at most 40 docs per run | Wait for the next update, or start one |
 | The headline still shows `(until Feb 1)`, and the post never comes down | No year, so it is not a date | Write `(until 2027-02-01)` |
-| The post came down on the wrong day | `01/02/2027` means January 2 (month first); `(until March 2027)` means March 1 | Write `YYYY-MM-DD` |
+| The post came down on the wrong day | `(until 01/02/2027)` means January 2 (month first; *Notes* says "could be January 2 or February 1"); `(until March 2027)` means March 1 | Write `YYYY-MM-DD` |
 | A scheduled post is not there on its day | It goes up with that day's first update (by about 5:30 AM Central) | Is it still under Scheduled bulletin posts? Then its day has not come in Central time. A Drive name whose `(until …)` is before its `(from …)` never shows, without a warning |
 | A GitHub post does not show up | The file has a mistake | Run summary → **Bulletin files to fix** names it, e.g. `the header has no closing --- line …` |
 | | Its name starts with `_` or `README`, or does not end in `.md` | Rename it (`_draft.md` → `2027-01-10-welcome.md`) |

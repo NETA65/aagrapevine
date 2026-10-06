@@ -382,9 +382,10 @@ year's file name, or the link disappears. Code: [monthly.njk](../src/pages/month
 | `forms/Volunteer sign-up sheet.pdf` | a Document card in the Sign-ups tab (Preview / Open / Download) |
 
 Real case: today a sign-up form and its "(Responses)" sheet sit in the **A65_GV root**, outside the panel folder.
-The site shows neither (the form is a "loose" file, the sheet a spreadsheet), and the form's **name** is written in
-the public file `data/raw/drive.json` (`stats.loose_skipped`). To publish such a form, move it into the panel's
-`forms/`; move the responses sheet somewhere private.
+The site shows neither (the form is a "loose" file, the sheet a spreadsheet). Since October 2026 the public file
+`data/raw/drive.json` only **counts** such loose files (`stats.loose_skipped`); their names are written only in the
+run's log (step *Sync sources and translate*), which is public too while GitHub keeps it. To publish such a form,
+move it into the panel's `forms/`; move the responses sheet somewhere private.
 
 ### 4.7 `photos/` — photo albums
 
@@ -601,10 +602,10 @@ folder in **every** run of the GitHub workflow **Website update** — quick runs
 | Run | When | Your file is live |
 |---|---|---|
 | Morning refresh | every morning, started by the "Morning check", so the new day is on the site by 5:30 AM Central | about 3 minutes after it starts |
-| Nightly full update | GitHub's schedule. It is set 4 hours early on purpose, because GitHub usually starts it 4–6 hours late (so about 5–7 AM Central) | when the run ends — about an hour (it also searches the magazines' sites for PDFs) |
+| Nightly full update | GitHub's schedule. It is set 4 hours early on purpose, because GitHub usually starts it 4–6 hours late (so about 6–8 AM Central, 5–7 in winter) | when the run ends — usually 10 to 15 minutes (it also searches the magazines' sites for PDFs; at the very most a little over 2 hours) |
 | Midday refresh (quick) | GitHub's schedule, about 11 AM–1 PM Central | a few minutes |
 | Evening refresh (quick) | GitHub's schedule, about 7–9 PM Central | a few minutes |
-| After any edit pushed to `main` (settings, content, code, translation fixes — not documentation or tests) | right away (a quick refresh) | a few minutes |
+| After any edit pushed to `main` (settings, content, code, translation fixes — not documentation or tests) | right away (a quick refresh, which tests the change first) | about 5 minutes |
 | By hand | GitHub → **Actions** → **Website update** → **Run workflow** → tick **skip_crawl** → green **Run workflow** | a few minutes |
 
 So without doing anything, a file uploaded in the morning is normally on the site after the midday refresh, one
@@ -855,7 +856,8 @@ real Drive: `python -m scripts.sync.drive --dry-run` (prints the stats and three
 2. `/status/` (`/es/status/`): the row "Google Drive (committee uploads)".
 3. The public file `data/raw/drive.json` on GitHub: search it for your file name. Its `stats` part near the top
    (before the list of items) shows `by_category`, `albums`, `excluded_by_reason` (only reasons — never the names
-   of excluded files), `loose_skipped`, `unreadable_folders`, `depth_limited` and `warnings`. `data/site/drive.json` shows the title, translations and
+   of excluded files), the counts `loose_skipped`, `unreadable_folders`, `depth_limited` and `unconfirmed_folders`
+   (the names behind them are only in the run's log), and `warnings`. `data/site/drive.json` shows the title, translations and
    `is_new` the site uses.
 4. On an empty Portfolio or Photos page, the members' box says "We checked the committee's Google Drive on &lt;date&gt; —
    nothing here yet." or "The last check of the committee's Google Drive had a problem — the last good check was on
@@ -865,10 +867,11 @@ real Drive: `python -m scripts.sync.drive --dry-run` (prints the stats and three
 | Symptom | Cause | Fix |
 |---|---|---|
 | My file is not on the site | no update has run since the upload | run Website update by hand (§5) |
-| … still not there after a run | the file is outside the panel folder (A65_GV root, or an older panel) | move it into 2027-2028_Panel77_GVLV; `stats.loose_skipped` / `skipped_panels` name what was skipped |
+| … still not there after a run | the file is outside the panel folder (A65_GV root, or an older panel) | move it into 2027-2028_Panel77_GVLV; `stats.loose_skipped` counts the loose files and `skipped_panels` lists the older panels (the names: the run's log, "outside the panel folders (not published): …") |
 | … still not there | the name contains PRIVATE, PRIVADO, (Responses), (Respuestas) or "wrong size", or it is a spreadsheet / CSV | rename it, or save it as PDF; `stats.excluded_by_reason` counts it |
-| … still not there | its folder could not be read | run summary Notes, `stats.unreadable_folders`; share the folder "Anyone with the link — Viewer" |
-| … still not there | more than 6 folder levels below the panel folder | move it up; `stats.depth_limited` |
+| … still not there | its folder could not be read | run summary Notes; the run's log ("folder … unreadable: …"); share the folder "Anyone with the link — Viewer" |
+| … still not there | more than 6 folder levels below the panel folder | move it up; the run's log ("folders deeper than 6 levels (not read): …") |
+| A file you deleted is still there, and `/status/` says the Drive is **On hold** | the update found far fewer files than before (or a folder looked empty) and keeps them one more update, in case it was a Google hiccup | nothing: the next update removes it ([Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source)) |
 | It is in a tab named after the folder, not in Reports / Meeting notes … | the folder name has no category word (`Agendas`, `Training`, `Slideshow` …) | rename the folder (`Meeting Notes and Agendas`) or add the word (§7.1) |
 | The date is wrong, or the file jumped to the top | no date in the name: the "last modified" date is used, and editing changes it; or the date was not read (`17-02-2027`, `2027-01`, a year alone), or read the American way (`05-03-2027` = May 3) | start the name with `YYYY-MM-DD` |
 | No "New" badge, not in What's New, not on the home tiles | the name dates it more than 14 days back | expected; the digest still counts it. Leave the date out if it should show as new |

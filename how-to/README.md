@@ -63,7 +63,8 @@ What the committee places, and where:
                       2. translate + assemble (English ⇄ Spanish) ► data/site/*.json
                       3. the robot commits data/ back to the repository
                       4. build: Eleventy (src/ + config/ + data/site/) ► the pages
-                      5. publish on GitHub Pages
+                         and, at the same time, the tests (when the code or content changed)
+                      5. publish on GitHub Pages, only if the build and the tests worked
                                                   │
                                                   ▼
                  https://neta65.github.io/aagrapevine/  and  …/aagrapevine/es/
@@ -84,8 +85,11 @@ In words:
 5. **Build.** Eleventy turns the page templates (`src/`), the settings (`config/`) and the data (`data/site/`)
    into the website, every page in English and in Spanish. Some repository files are read only here: the booth's
    CSV, the web presentations, the other settings files in `config/` and the button words.
-6. **Publish.** The new site goes to GitHub Pages. If one source failed, the site is still published, with the
-   last good data for that source.
+6. **Test and publish.** When the code or the content changed since the tests last passed (a save of yours, not the
+   robot's daily data), the offline tests run while the site is built, and the site is published only if they pass:
+   a change that breaks something never goes live, and the site keeps the version before it. Then the new site goes
+   to GitHub Pages. If one source failed, the site is still published, with the last good data for that source; a
+   source that suddenly finds far fewer items is not believed the first time (**On hold** on the Status page).
 
 The whole chain, step by step: [Automation and troubleshooting](automation-and-troubleshooting.md).
 
@@ -95,18 +99,20 @@ The whole chain, step by step: [Automation and troubleshooting](automation-and-t
 
 | You do this | What starts by itself | On the website after about |
 |---|---|---|
-| Save a settings, content or code file on github.com: `config/`, `content/` (events, bulletin posts, the booth CSV, the archive files in `content/archive/`), `data/translations/overrides.yml` or `glossary.yml`, `data/geo/`, `src/` … | a **quick** Website update run, and a *Code check* that tests the change | **2 minutes**, plus up to about 10 minutes before every visitor sees it |
+| Save a settings, content or code file on github.com: `config/`, `content/` (events, bulletin posts, the booth CSV, the archive files in `content/archive/`), `data/translations/overrides.yml` or `glossary.yml`, `data/geo/`, `src/` … | a **quick** Website update run, which tests the change before it publishes, and a *Code check* | **about 5 minutes**, plus up to about 10 minutes before every visitor sees it |
 | Put, rename or delete a file in the Drive panel folder | **nothing**: nothing watches the Drive | the **next run that reads the Drive**: every run does. During the day that is the midday refresh (it usually starts around 11 AM to 1 PM Central) or the evening refresh (around 7 to 9 PM); overnight, the full update and the morning refresh (with the morning alarm, the new day is on the site by 5:30 AM). Or a few minutes after you start a run yourself (below) |
-| Nothing (a magazine, YouTube, Instagram or a store publishes something new) | the **nightly full update** (GitHub usually starts it about 5 to 7 AM Central) | after the next full update (the podcasts and the daily quotes are read by every run) |
-| Change what a source only the full update reads looks at: `content/instagram.yml`, a YouTube channel, La Viña's weekly open meeting, the meeting lists, the Area 65 counties (for the Meetings page) … | the quick run of your save **also runs those sources** ([Automation and troubleshooting §4.2](automation-and-troubleshooting.md#42-website-update-and-its-three-modes)) | **2 to 3 minutes**. Only the magazine stories (`magazine_hub`), the shop's pages and the document search (`crawler`) wait for the next full update |
+| Nothing (a magazine, YouTube, Instagram or a store publishes something new) | the **nightly full update** (GitHub usually starts it about 6 to 8 AM Central, 5 to 7 in winter) | after the next full update (the podcasts and the daily quotes are read by every run) |
+| Change what a source only the full update reads looks at: `content/instagram.yml`, a YouTube channel, La Viña's weekly open meeting, the meeting lists, the Area 65 counties (for the Meetings page) … | the quick run of your save **also runs those sources** ([Automation and troubleshooting §4.2](automation-and-troubleshooting.md#42-website-update-and-its-three-modes)) | **about 5 minutes**. Only the magazine stories (`magazine_hub`), the shop's pages and the document search (`crawler`) wait for the next full update |
 | Edit a guide in `how-to/`, the `README.md` or `docs/` | nothing on the website | GitHub shows the new text at once; the website does not change |
 | Any change the booth display shows | — | a booth that is playing online takes the new show within half an hour, at its next slide |
 
 **Start a run yourself** (any login with write access): GitHub → **Actions** → **Website update** → **Run
 workflow** → tick **skip_crawl** → green **Run workflow**. About 2 minutes later the site is published with the
-newest Drive files, bulletin posts, events, podcasts, daily quotes and archive files. The run is listed as "Quick
-refresh (started by hand)". Leave every box empty for a full update of every source (usually 10 to 15 minutes;
-"Full update (started by hand)"). Then open the website's **Status page**,
+newest Drive files, bulletin posts, events, podcasts, daily quotes and archive files (about 5 if the code changed
+since the tests last passed: they run first). The run is listed as "Quick refresh (started by hand)". Leave every
+box empty for a full update of every source (usually 10 to 15 minutes; at the very most a little over 2 hours, when
+the document search and translation use all their time; "Full update (started by hand)"). Then open the website's
+**Status page**,
 <https://neta65.github.io/aagrapevine/status/>: *Site last published* says when.
 
 > **The timetables are set 4 hours early on purpose.** GitHub starts this repository's timed runs 4 to 6 hours
@@ -146,6 +152,9 @@ refresh (started by hand)". Leave every box empty for a full update of every sou
 | fix an event that shows twice | [Flyers and events §9](flyers-and-events.md#9-when-the-same-event-comes-from-two-places) |
 | fix an event's translated title | [Flyers and events §12](flyers-and-events.md#12-fix-a-translated-event-title) |
 | change the committee meeting's day, time or Zoom details, or skip one meeting | [Settings §3.2](settings.md#32-meeting--the-committee-meeting) |
+| say who may come to the committee meeting, or name another platform than Zoom | [Settings §3.2](settings.md#32-meeting--the-committee-meeting) (`note`, `note_es`, `platform`) |
+| make sure a `content/events` file is read right (a whole date with its year, the right UTC offset) | [Flyers and events §6](flyers-and-events.md#6-write-an-event-by-hand-contentevents) |
+| share one event with its flyer in the link preview (WhatsApp, Facebook) | [Flyers and events §11.1](flyers-and-events.md#111-every-place) (the event share pages) |
 
 ### The bulletin
 
@@ -198,6 +207,7 @@ refresh (started by hand)". Leave every box empty for a full update of every sou
 | I want to… | Read |
 |---|---|
 | send the monthly e-mail (the digest) | [E-mail and alerts §2](email-and-alerts.md#2-quick-start-switch-on-the-monthly-e-mail) |
+| send a month's e-mail again, or answer *"Digest send not confirmed"* | [E-mail and alerts §3.12](email-and-alerts.md#312-send-a-month-by-hand) (the **force** box) |
 | find "the Gmail API code" | there is none. The digest is sent over plain **SMTP** with an app password, by [`scripts/notify/send_digest.py`](../scripts/notify/send_digest.py); [E-mail and alerts](email-and-alerts.md) explains it, and its [§6.6](email-and-alerts.md#66-if-you-want-the-gmail-api-oauth-instead) says what the Gmail API would need |
 | see the e-mail before it goes out | [E-mail and alerts §3.10](email-and-alerts.md#310-preview-it-no-secrets-needed) |
 | change who receives it, or stop it | [E-mail and alerts §3.6](email-and-alerts.md#36-who-receives-it) and [§3.15](email-and-alerts.md#315-change-the-password-or-the-recipients-or-stop-the-e-mail) |
@@ -209,6 +219,7 @@ refresh (started by hand)". Leave every box empty for a full update of every sou
 | I want to… | Read |
 |---|---|
 | see everything the site reads by itself, and the setting behind each source | [Automatic sources §3.0](automatic-sources.md#30-all-sources-at-a-glance) |
+| understand **On hold** on the Status page, or what keeps a bad day at a source from wiping content | [Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source) |
 | add an Instagram post the robot missed | [Automatic sources §3.6](automatic-sources.md#36-instagram-posts-and-posts-you-add-by-hand) |
 | add a podcast or a YouTube channel | [Automatic sources §3.4](automatic-sources.md#34-podcasts) and [§3.5](automatic-sources.md#35-youtube-videos) |
 | hide one story, document, video, episode or post everywhere | [Automatic sources §6.2](automatic-sources.md#62-hide-one-item-everywhere) (a small code change: there is no setting for it) |
@@ -221,6 +232,7 @@ refresh (started by hand)". Leave every box empty for a full update of every sou
 | change something I see on a page | [Pages and code §2](pages-and-code.md#2-quick-start-change-something-you-see-on-a-page) |
 | find the file behind a page | [Pages and code §5](pages-and-code.md#5-every-page-address-template-data-script-style) |
 | change a colour | [Pages and code §12.2](pages-and-code.md#122-change-a-colour) |
+| give a page area its own stylesheet, or use an icon | [Pages and code §10.4](pages-and-code.md#104-the-area-files-srcassetscssareascss) and [§12.10](pages-and-code.md#1210-add-an-icon) |
 | add, move or rename a menu item | [Pages and code §12.3](pages-and-code.md#123-add-move-or-rename-a-menu-item) |
 | add a new page | [Pages and code §12.4](pages-and-code.md#124-add-a-new-page-end-to-end) |
 | run the site on my own computer | [Pages and code §3](pages-and-code.md#3-run-the-site-on-your-own-computer) |
@@ -232,11 +244,13 @@ refresh (started by hand)". Leave every box empty for a full update of every sou
 | make the website update right now | [Automation and troubleshooting §2](automation-and-troubleshooting.md#make-the-website-update-right-now) |
 | check that everything is healthy | [Automation and troubleshooting §2](automation-and-troubleshooting.md#check-that-everything-is-healthy-2-minutes) |
 | understand a failed run (a red ✗ or a yellow ⚠) | [Automation and troubleshooting §6](automation-and-troubleshooting.md#6-read-a-run) and [§14](automation-and-troubleshooting.md#14-troubleshooting) |
+| understand *"Tests failed — not published"*, or why a save did not go live | [Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing) and [§14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published) |
 | know what a run's title in the Actions list means ("Nightly full update", "Midday refresh" …) | [Automation and troubleshooting §6.1](automation-and-troubleshooting.md#61-the-list-of-runs) |
 | understand "not checked for N days" or a **Reminders** line in the run summary | [Automation and troubleshooting §6.3](automation-and-troubleshooting.md#63-the-website-update-summary-section-by-section) |
 | fix a typo that stopped a settings file | [Automation and troubleshooting §14.3](automation-and-troubleshooting.md#143-a-yaml-typo) |
 | undo a change, or roll the website back | [Automation and troubleshooting §14.9](automation-and-troubleshooting.md#149-undo-a-change-or-roll-the-website-back) |
 | answer the issue "A content source has stopped updating" | [Automation and troubleshooting §8.1](automation-and-troubleshooting.md#81-a-content-source-has-stopped-updating) |
+| answer the issue "The website update keeps failing" | [Automation and troubleshooting §8.4](automation-and-troubleshooting.md#84-the-website-update-keeps-failing) |
 | run the sync, the build and the tests on a PC | [Automation and troubleshooting §11](automation-and-troubleshooting.md#11-run-the-sync-the-build-and-the-tests-on-a-pc) |
 | move a schedule (and keep it 4 hours early) | [Automation and troubleshooting §13.1](automation-and-troubleshooting.md#131-move-a-schedule-and-keep-the-4-hour-early-rule) |
 
@@ -261,10 +275,10 @@ practice and AA principles → see also.
 | [presentations.md](presentations.md) | the four web presentations on the GVR / RLV 101 page (`config/presentations/`): editing slides, facts that stay current, versions, printing |
 | [settings.md](settings.md) | `config/site.yml` section by section, and the other settings files, with examples and where each setting shows |
 | [translations.md](translations.md) | English and Spanish: fix a machine translation, one word everywhere, the words on buttons and headings, your own Spanish for a post or an event |
-| [email-and-alerts.md](email-and-alerts.md) | the monthly digest e-mail (SMTP, its secrets, previews, recipients), GitHub's "run failed" e-mails, the two automatic issues, the morning alarm |
+| [email-and-alerts.md](email-and-alerts.md) | the monthly digest e-mail (SMTP, its secrets, previews, recipients, sending once or again), GitHub's "run failed" e-mails, the three automatic issues, the morning alarm |
 | [automatic-sources.md](automatic-sources.md) | what the site reads by itself (magazines, documents, podcasts, YouTube, Instagram, the shop, quotes, themes, meetings), its settings, and how to add or hide |
 | [pages-and-code.md](pages-and-code.md) | a map of every page (address → template → data → script → style) and recipes: change a text, a colour, a menu; add a page |
-| [automation-and-troubleshooting.md](automation-and-troubleshooting.md) | the GitHub Actions workflows and their timetable, running one by hand, reading a run, the Status page, working on a PC, recovering from problems |
+| [automation-and-troubleshooting.md](automation-and-troubleshooting.md) | the GitHub Actions workflows and their timetable, the tests before publishing, running one by hand, reading a run, the Status page, working on a PC, recovering from problems |
 
 ---
 
@@ -318,7 +332,10 @@ Each guide ends with the principles for its own files. These apply to all of the
   cartoons, and none of their audio or video files, in the Drive folder: link to the official video or episode
   instead. A.A. World Services texts are quoted word for word with their credit line, and Grapevine and La Viña
   material is paraphrased rather than quoted ([Booth display §8.11](booth.md#811-aa-rules-for-the-content) has the
-  details and the exceptions). Share only material the committee made, or has permission to use.
+  details and the exceptions). Share only material the committee made, or has permission to use. The repository's
+  GPL license covers its **code** only: the content it shows or keeps a copy of (stories' titles and teasers,
+  quotes, covers and pictures, documents, flyers, photos, event details) belongs to its owners, as the
+  [NOTICE](../NOTICE) file says.
 - **Official sources only.** Facts from aa.org, aagrapevine.org, aalavina.org and AA literature; documents only
   from the official websites; only the official accounts and channels.
 - **Both languages.** Every new word on a page gets its English and its Spanish. A machine translation is marked
@@ -338,7 +355,11 @@ Each guide ends with the principles for its own files. These apply to all of the
 | **commit** | one saved change in the repository (on github.com: **Commit changes**) |
 | **`main`** | the repository's main branch: what is on `main` is what gets published |
 | **workflow, run** | a GitHub Actions program, and one time it ran (the **Actions** tab). **Website update** is the one that builds the site |
-| **quick run, full run, morning refresh** | the three modes of Website update: Drive, posts, events, podcasts, the daily quotes and the archive files (about 2 minutes); every source (10 to 15 minutes); the early-morning run the Morning check starts |
+| **quick run, full run, morning refresh** | the three modes of Website update: Drive, posts, events, podcasts, the daily quotes and the archive files (about 2 minutes; about 5 when it tests a change of yours); every source (usually 10 to 15 minutes); the early-morning run the Morning check starts |
+| **tests before publishing** | since October 2026, Website update runs the offline tests (the Code check's) on every new version of the code or content, and publishes only when they pass. The daily data runs skip them: their code passed already ([Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)) |
+| **On hold** | a badge on the Status page: a source suddenly found far fewer items than before, so the missing ones stay on the site until the next update confirms they are gone ([Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source)) |
+| **bot check** | a page another website shows instead of the real one to keep robots out ("Just a moment…", "confirm you're not a bot"); the run summary says so plainly and the site keeps the last good copy |
+| **Central time** | the committee's clock, America/Chicago: CDT = UTC−5 in summer (until 1 November 2026, again from 14 March 2027), CST = UTC−6 in winter. GitHub's timetables are in UTC |
 | **run names** | the title of each run in the Actions list says its kind: *Nightly full update (GitHub schedule)* (the only timed full run), *Midday refresh* and *Evening refresh (GitHub schedule)* (quick), *Morning refresh: new day and daily quote* (the Morning check's), *Quick refresh*, *Full update* or *Full update without the document search (started by hand)*, *Full update (started by the Morning check)*; a push's run carries its commit message. The other workflows: *Morning check (…)*, *Monthly e-mail digest (…)*, *Weekly link check (…)*, *Code check (started by hand)* |
 | **Texas writers archive** | the list "Texas writers through the years" on `/published/#archive`, made from the two archive files in `content/archive/` and the stories the site captures ([Writers archive](writers-archive.md)) |
 | **the robot** | GitHub Actions' own account, `github-actions[bot]`, which commits the `data/` files |
@@ -359,6 +380,8 @@ Each guide ends with the principles for its own files. These apply to all of the
 - [docs/OPERATIONS.md](../docs/OPERATIONS.md): the technical runbook: the workflows, the sync modules, running
   locally, adding a new source.
 - [docs/DATA_SCHEMA.md](../docs/DATA_SCHEMA.md): the data files between the sync and the pages, field by field.
+- [NOTICE](../NOTICE): what the GPL license covers (the code) and what it does not (the content, which belongs to
+  its owners).
 - Short guides next to the files they describe: [content/events/README.md](../content/events/README.md),
   [content/bulletin/README.md](../content/bulletin/README.md) (every option in one file:
   [content/bulletin/_example.md](../content/bulletin/_example.md)),

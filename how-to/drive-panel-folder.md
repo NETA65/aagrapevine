@@ -205,7 +205,8 @@ that starts an e-mail to the committee.
 | Change | What the next run does | Where you see it |
 |---|---|---|
 | A65_GV is no longer "Anyone with the link" (or `drive.root_folder_id` names a folder that does not exist or is not public) | reads nothing and **keeps every item as it was** — the site does not empty itself (an id of another *public* folder is different: no panel folder is found there, and every Drive file leaves the site — [§3.3](#33-how-a-panel-folder-is-recognised)) | `/status/`: the Drive row shows a problem. Run summary: **PROBLEM** "root folder unreadable: … — is it shared as 'Anyone with the link'?" After 7 days of failures the issue "A content source has stopped updating" opens |
-| One folder inside answers with a sign-in page, a "request access" page or an error | keeps the files of that folder (and of its sub-folders) as they were | run summary **Notes**: "1 folder(s) could not be read — check their sharing settings"; `data/raw/drive.json` → `stats.unreadable_folders` names the folder and the reason |
+| One folder inside answers with a sign-in page, a "request access" page or an error | keeps the files of that folder (and of its sub-folders) as they were | run summary **Notes**: "1 folder(s) could not be read — check their sharing settings"; `data/raw/drive.json` → `stats.unreadable_folders` counts them, and the run's log (step *Sync sources and translate*: "folder … unreadable: …") names each folder and the reason |
+| A folder that held files (or the whole A65_GV) suddenly lists **nothing** | not believed the first time (since October 2026): its files stay, marked **On hold** on `/status/`, and its id waits in `data/raw/drive.json` → `empty_folders`. The next update that finds it empty again removes them | **Notes**: "1 folder(s) looked empty although they held files on the last update — their 12 file(s) stay on the site until the next update confirms it", then "1 folder(s) looked empty again — their 12 file(s) were removed" |
 | One file cannot be opened by the public (its own sharing was changed) | it stays listed if the folder view lists it, but its picture cannot load (the card then shows its icon tile instead), and a bulletin post's or booth message's text cannot be downloaded (the last good text is kept) | the page itself; the Actions log ("could not download text", "Drive returned an HTML page instead of the file") |
 
 ### 3.3 How a panel folder is recognised
@@ -215,8 +216,8 @@ The rules (code: `crawl()` and `panel_label()` in drive.py; settings in `config/
 1. Only folders **directly inside A65_GV** are tested. A panel-looking folder deeper down is an ordinary folder.
 2. The name must contain **Panel** followed by the number — spaces may stand between them, nothing else.
    Capitals do not matter. (The setting is `panel_folder_pattern: "Panel\\s*(\\d+)"`.)
-3. The number must be **`min_panel` (77) or higher**. Older panels are skipped and only their folder names are
-   noted (`stats.skipped_panels`).
+3. The number must be **`min_panel` (77) or higher**. Older panels are skipped and only their panel numbers are
+   noted (`stats.skipped_panels`, a list such as `[75, 76]`).
 4. **Every** folder that passes is read. Two or three panels at once are fine.
 5. The label comes from a year pair in the name (`2027-2028`, also with `_`, `/`, `–` or a space between the
    years), else from AA's numbering (panel N serves 1950+N to 1951+N).
@@ -255,13 +256,14 @@ Every item remembers its panel: the data gets `panel: 77`, the label "Panel 77 (
 ### 3.4 Loose folders and files outside a panel
 
 Anything that sits directly in A65_GV and is not a panel folder is **loose**: a folder such as `flyers`, a PDF, a
-Google Form. Loose things are **ignored**, and their names are noted in `data/raw/drive.json` →
-`stats.loose_skipped` (the first 30). Today that list is the six old folders and the Google Form
-"40th Annual Gathering of Eagles - Grapevine Table Signup".
+Google Form. Loose things are **ignored**, and only **counted** in `data/raw/drive.json` → `stats.loose_skipped`
+(since October 2026: the names of files in A65_GV can be private, and that file is public). Their names (the first
+30) are only in the run's log, step *Sync sources and translate*: "outside the panel folders (not published): …".
+(The Actions logs of a public repository can be read by anyone while GitHub keeps them, about 90 days.)
 
 | Setting `include_loose_folders:` | What happens to a loose folder or file |
 |---|---|
-| `false` (today, recommended) | ignored, named in `stats.loose_skipped` |
+| `false` (today, recommended) | ignored, counted in `stats.loose_skipped` |
 | `true` | read like a category folder that belongs to no panel: `A65_GV/flyers/x.pdf` is a flyer, `A65_GV/Old stuff/x.pdf` an "other" file, a loose file is filed by its type ([§3.5](#35-the-category-folders)). These items have no panel; with panel files beside them, each Portfolio tab groups them under "Other files" / "Otros archivos" |
 
 For a one-off look on a PC, `python -m scripts.sync.drive --include-loose --dry-run` does the same without changing
@@ -509,6 +511,22 @@ Accepted forms — tried in this order; the first form that matches wins:
 Month words: English names and short forms (jan … dec, sept), Spanish names (enero … diciembre, setiembre) and the
 short forms ene, abr, ago, dic; any capitals. Years 2000 to 2099 only.
 
+Since October 2026 also:
+
+| # | Form | Examples |
+|---|---|---|
+| 7 | a range of days: the file is dated its **first** day | `March 14 - 16, 2027`, `March 30 - April 2, 2027`, `14 al 16 de marzo de 2027`, `30 de marzo al 2 de abril de 2027`, `2027-03-14 - 2027-03-16` (all March 14, 2027 or March 30) |
+
+**A date written in numbers only** (form 3) is read like this:
+
+| In the name | Read as | Why |
+|---|---|---|
+| `14-03-2027`, `14.03.2027` | March 14, 2027 | a first number over 12 can only be the day (before October 2026: no date) |
+| `Informe del comité 05-03-2027`, `Taller 05-03-2027` | March 5, 2027 | a name in Spanish (or French) reads it **day first** (a single word such as `Informe` is not enough to tell: below) |
+| `Committee meeting minutes 05-03-2027` | May 3, 2027 | a name in English reads it month first (US order) |
+| `Report 05-03-2027`, `La Viña Report 05-03-2027` | May 3, 2027, **with a note** | a name whose language is unclear (a word or two) reads it month first, and the run summary's *Notes* (and `/status/`) name the file: `2027-2028_Panel77_GVLV/reports/Report 05-03-2027.pdf: “Report 05-03-2027”: “05-03-2027” could be May 3 or March 5, 2027 — read as May 3 (month first). Write the date year-month-day (2027-05-03 or 2027-03-05) to be sure`. The magazine names Grapevine, AA Grapevine and La Viña do not count when the language is decided |
+| `Session 2 - 4 March 2027` | March 4, 2027, title "Session 2" | a number right after a counting word (district / distrito, panel, group / grupo, step / paso, session / sesión, week / semana, part / parte, # …) is not the first day of a range |
+
 Not read as a date (the text stays in the title):
 
 | In the name | Why |
@@ -516,7 +534,6 @@ Not read as a date (the text stays in the title):
 | `Report 2027` | a year alone |
 | `2026-2027 calendar` | a year range |
 | `2027-01 Newsletter` | year and month in digits |
-| `14-03-2027`, `14.03.2027` | day first: there is no month 14 |
 | `2027/03/14` | slashes are not read with the year first |
 | `3-14-27` | a two-digit year |
 | `2027-02-30` | a day that does not exist |
@@ -524,7 +541,8 @@ Not read as a date (the text stays in the title):
 
 Traps (each checked with the real code):
 
-- **US order.** `05-03-2027` is **May 3**, not March 5. Write `2027-03-05`.
+- **Numbers only.** `05-03-2027` can be May 3 or March 5: the name's language decides (above). Write `2027-03-05` and
+  there is nothing to decide.
 - **Two dates in one name.** The form higher in the table wins, wherever it stands:
   `Pricing Update - Effective January 1, 2027 - 2026-10-01.pdf` is dated October 1, 2026 (form 1 beats form 4), and
   "Effective January 1, 2027" stays in the title. Put the date you mean first, as `YYYY-MM-DD`.
@@ -737,7 +755,13 @@ or upload a new version, and the site recognises it by that id.
 - with the API key, a folder the key cannot see is not mistaken for an empty folder (the key checks the folder
   first);
 - the run stopped early on its time or folder budget — the folders it did not reach are kept;
-- the whole Drive step crashed — the last good list is kept and the Drive row on `/status/` shows the problem.
+- the whole Drive step crashed — the last good list is kept and the Drive row on `/status/` shows the problem;
+- a folder that held files (or the whole A65_GV) suddenly lists nothing — its files stay until the next update finds
+  it empty again ([§3.2](#32-sharing-anyone-with-the-link-is-required));
+- the run finds **less than half** of the files it had (or none) — the missing ones are kept one more run, marked
+  **On hold** on `/status/`, and the next update that still misses them removes them (the mass-drop hold,
+  [Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source)). So a big clean-up of your
+  own (deleting 20 of 35 files at once) leaves the site one update later; run the update twice to see it at once.
 
 One file the site cannot make sense of is skipped and logged ("skipping …" in the Actions log) and stays off the
 site; the others still go up. Each run's counts are in `data/raw/drive.json` → `stats.new`, `stats.removed`, `stats.kept_unverified`.
@@ -755,13 +779,15 @@ site; the others still go up. Each run's counts are in `data/raw/drive.json` →
 | Time to list the Drive | 15 minutes (the morning refresh: 5) | as above |
 | Bulletin and booth texts downloaded per run | 40 in all — bulletin posts first; an unchanged file's text is reused, not downloaded again | the rest keep their old text until the next run |
 | One bulletin text | 12,000 characters (a download is read up to 3 MB) | cut at the end of a line, with "…" |
+| A `.docx` bulletin or booth text | at most 500 parts inside and 25 MB unpacked (`MAX_DOCX_ENTRIES`, `MAX_DOCX_UNZIPPED`); a `.docx` cut off at 3 MB is not read either | not read: the post keeps its last good text |
 | One booth message | 1,200 characters | cut with "…" |
 | Files per folder with the API key | 1,000 per page, up to 50 pages | far beyond any committee folder |
 | "New" badge | 14 days | |
 | What's New / RSS | the newest 150 / 100 entries | older entries fall off |
 | Home "Shared by the committee" | the 6 newest committee files | |
 
-(Code: `BIG_FOLDER_WARN`, `MAX_ANNOUNCEMENT_FETCHES`, `MAX_BODY_CHARS`, `MAX_TEXT_DOWNLOAD` and the `--max-depth`,
+(Code: `BIG_FOLDER_WARN`, `MAX_ANNOUNCEMENT_FETCHES`, `MAX_BODY_CHARS`, `MAX_TEXT_DOWNLOAD`, `MAX_DOCX_ENTRIES`,
+`MAX_DOCX_UNZIPPED` and the `--max-depth`,
 `--max-minutes`, `--max-folders` options in drive.py; `MORNING_ARGS` in run_all.py; `TEXT_MAX` in booth_names.py;
 `NEW_DAYS` and `WHATSNEW_MAX` in build_data.py.) How big a booth file may be for its offline copy is set under
 `booth:` in `config/site.yml` ([Booth display](booth.md)).
@@ -810,10 +836,10 @@ watches Drive. Every run of **Website update** reads the Drive — the quick run
 | Run | When | Drive time box | Your change is live |
 |---|---|---|---|
 | Morning refresh | started by the Morning check when today's update is not on the site yet (with the morning alarm: about 4:30 AM Central) | 5 minutes | about 2–3 minutes after it starts |
-| Nightly full update | GitHub's schedule, set 4 hours early on purpose; GitHub usually starts it around 5–7 AM Central | 15 minutes | when the run ends, about 10–15 minutes |
+| Nightly full update | GitHub's schedule, set 4 hours early on purpose; GitHub usually starts it around 6–8 AM Central (5–7 in winter) | 15 minutes | when the run ends, usually about 10–15 minutes |
 | Midday refresh (quick) | GitHub's schedule; usually starts around 11 AM–1 PM Central | 15 minutes | about 2 minutes |
 | Evening refresh (quick) | GitHub's schedule; usually starts around 7–9 PM Central | 15 minutes | about 2 minutes |
-| After a push to `main` (settings, content, code, translation fixes — not documentation or tests) | right away (a quick run) | 15 minutes | about 2 minutes |
+| After a push to `main` (settings, content, code, translation fixes — not documentation or tests) | right away (a quick run) | 15 minutes | about 5 minutes (the tests run before it publishes) |
 | By hand | GitHub → **Actions** → **Website update** → **Run workflow**: tick **skip_crawl** for a quick run (about 2 minutes); leave everything empty for a full run (10–15 minutes) | 15 minutes | as said |
 
 GitHub Pages may take up to about 10 more minutes to show the new pages to every visitor. The scheduled runs fall
@@ -896,7 +922,7 @@ was added (`/digest/`, and the e-mail when it is switched on).
 | 17 | `Archive/2025 Panel 75 summary.pdf` | an "other" file | tab "Archive" (`/portfolio/#docs-folder-archive`, the same name on the Spanish page); Library type "Other"; the digest e-mail labels the row "Files" |
 | 18 | `2027-03-14 Spring Assembly.pdf` (directly in the panel folder) | an "other" file, March 14, 2027 | tab **Other** (`/portfolio/#docs-folder-other`; Spanish page: **Otros**, `#docs-folder-otros`) |
 | 19 | `reports/PRIVATE budget.pdf` | nothing | never on the website — only counted in `stats.excluded_by_reason` — but still openable in Drive |
-| 20 | `A65_GV/flyers/2027-03-14 Spring Assembly.pdf` (in the root, outside the panel folder) | nothing | ignored; the folder name `flyers` is listed in `stats.loose_skipped` |
+| 20 | `A65_GV/flyers/2027-03-14 Spring Assembly.pdf` (in the root, outside the panel folder) | nothing | ignored; counted in `stats.loose_skipped` (the folder name `flyers` is only in the run's log) |
 
 ### 5.3 Pages that link one file by its name
 
@@ -942,16 +968,20 @@ Reading the run summary, section by section:
 |---|---|
 | `mode` | `"html"` (the public folder view, today), `"api"` (the API key), `"html (api failed)"` |
 | `root`, `panels`, `panel_folders` | the root folder's name; the panel folders found, with their labels and ids |
-| `include_loose`, `loose_skipped`, `skipped_panels` | the loose setting; the loose names skipped (first 30); the older panels skipped |
+| `include_loose`, `loose_skipped`, `skipped_panels` | the loose setting; how many loose folders and files were skipped (a count; their names are only in the run's log); the numbers of the older panels skipped |
 | `folders`, `files`, `fetched` | folders read; files in the list (bulletin posts, booth files and closed forms included); files listed in this run |
 | `new`, `removed`, `kept_unverified` | this run's arrivals, removals, and files kept because their folder could not be read |
 | `by_category`, `by_kind`, `albums` | counts per folder kind, per file kind, per album |
 | `events_from_flyers` | how many flyers carry an event date |
 | `excluded`, `excluded_by_reason` | never-published files: the count and the reasons (never the names) |
-| `unreadable_folders`, `depth_limited` | folders that could not be read (with the reason); folders deeper than 6 levels |
+| `unreadable_folders`, `depth_limited`, `unconfirmed_folders` | how many folders could not be read, were deeper than 6 levels, or looked empty although they held files (counts since October 2026; the run's log names them) |
 | `shortcuts_resolved` | shortcuts looked up in this run |
 | `announcements`, `booth_texts`, `forms` | text downloads (fetched, reused, file only, deferred, failed); the booth messages' downloads (only when there are any); form checks (open, closed, members-only, unknown) |
 | `requests`, `truncated`, `warnings` | requests made; whether the run stopped early; the notes the run summary shows |
+
+Next to `stats`: `empty_folders` (`{folder id: since}`, the folders that looked empty and wait for a second look),
+and, as in every raw file, `changes` (added, removed, held) and, while files are kept back, `held`
+([docs/DATA_SCHEMA.md](../docs/DATA_SCHEMA.md)).
 
 `data/site/drive.json` holds the files as the pages use them (titles in both languages, "New" flags), without
 bulletin posts, closed forms and booth files; `data/site/booth.json` holds the booth display's files and problems;
@@ -1037,7 +1067,9 @@ python -c "from scripts.sync.drive import category_for; print(category_for('Foto
 # photos
 
 python -c "from scripts.sync.common import date_from_text; print(date_from_text('Report 05-03-2027'))"
-# ('2027-05-03', 'Report')        US order: May 3
+# ('2027-05-03', 'Report')        a name of unclear language: month first, May 3 (and a note)
+python -c "from scripts.sync.common import date_from_text; print(date_from_text('Taller 05-03-2027'))"
+# ('2027-03-05', 'Taller')        a Spanish name: day first, March 5
 
 python -c "from scripts.sync.booth_names import parse_booth_name; print(parse_booth_name('GV EN Welcome (first) (15s).png', 'image/png', ['booth']))"
 # {'kind': 'poster', 'pub': 'gv', 'langs': ['en'], 'title': 'Welcome', 'caption': True, 'order': None, 'seconds': 15, …
@@ -1212,7 +1244,9 @@ The ones closest to this page: `tests/test_sync_pipeline.py` (the Drive: private
 for a hidden folder, unresolved shortcuts), `tests/test_booth_names.py` and `tests/test_booth_sync.py` (the booth
 names; booth files kept out of every other file), `tests/test_bulletin.py` (the bulletin folder names),
 `tests/test_i18n_keys.py` (words in both languages), `tests/test_send_digest.py` and `tests/test_digest_parity.py`
-(the digest page and the e-mail must pick the same items; the second needs Node.js, else it is skipped). More: [Automation and troubleshooting §11.4](automation-and-troubleshooting.md#114-run-the-tests).
+(the digest page and the e-mail must pick the same items; the second needs Node.js, else it is skipped),
+`tests/test_sync_safety.py` (a folder that looks empty, the mass-drop hold, the counts in `stats`) and
+`tests/test_source_dates.py` (dates in names: day first, ranges, the notes). More: [Automation and troubleshooting §11.4](automation-and-troubleshooting.md#114-run-the-tests).
 
 ---
 
@@ -1228,8 +1262,9 @@ names; booth files kept out of every other file), `tests/test_bulletin.py` (the 
    check.
 3. **`data/raw/drive.json`** on GitHub: search it for your file name (each item keeps the original name in
    `extra.name`, with its `category`, `kind`, `title` and `date`). Its `stats` near the top: `loose_skipped`,
-   `skipped_panels`, `excluded_by_reason`, `unreadable_folders`, `depth_limited`, `warnings`
-   ([§5.4](#54-behind-the-scenes-the-run-summary-and-the-data-files)).
+   `skipped_panels`, `excluded_by_reason`, `unreadable_folders`, `depth_limited`, `unconfirmed_folders` (counts),
+   `warnings` ([§5.4](#54-behind-the-scenes-the-run-summary-and-the-data-files)). The names behind the counts are
+   in the run's log (step *Sync sources and translate*).
 4. **The page itself.** On an empty Portfolio, Photos or Bulletin page (on Events: when it lists no upcoming
    "NETA 65 events"), the **For committee members** box says "We checked the committee's Google Drive on &lt;date&gt; — nothing
    here yet." — or, after a failed check, "The last check of the committee's Google Drive had a problem — the last
@@ -1244,12 +1279,13 @@ names; booth files kept out of every other file), `tests/test_bulletin.py` (the 
 2. **Did that run read the Drive?** The Drive row says OK. **PROBLEM** "root folder unreadable …" → the sharing of
    A65_GV ([§3.2](#32-sharing-anyone-with-the-link-is-required)).
 3. **Is the file inside a panel folder?** Its path must be A65_GV › 2027-2028_Panel77_GVLV › (a folder) › the file.
-   The A65_GV root and older panel folders are skipped (`stats.loose_skipped`, `stats.skipped_panels`).
+   The A65_GV root and older panel folders are skipped (counted in `stats.loose_skipped`; `stats.skipped_panels`).
 4. **Is it never published?** Its name — or the name of a folder above it — contains `PRIVATE`, `PRIVADO`,
    `(Responses)`, `(Respuestas)` or `wrong size`, or it is a spreadsheet, CSV or TSV ([§3.10](#310-what-is-never-published)).
    `stats.excluded_by_reason` counts it (never by name).
-5. **Could its folder be read?** `stats.unreadable_folders` and the run summary's Notes. Is it more than 6 folder
-   levels deep? `stats.depth_limited`.
+5. **Could its folder be read?** The run summary's Notes, and in the run's log "folder … unreadable: …". Is it more
+   than 6 folder levels deep? The log's "folders deeper than 6 levels (not read): …". (`stats.unreadable_folders`
+   and `stats.depth_limited` count them.)
 6. **Is it in `data/raw/drive.json`?** If it is, the Drive part worked: look at its `category`, `kind`, `title`
    and `date` there.
 7. **Are you looking in the right place?** The folder decides the page ([§3.5](#35-the-category-folders),
@@ -1272,12 +1308,13 @@ names; booth files kept out of every other file), `tests/test_bulletin.py` (the 
 | Nothing new from Drive for days; `/status/` shows a problem for the Drive | A65_GV is no longer "Anyone with the link", or `drive.root_folder_id` changed | share A65_GV "Anyone with the link — Viewer"; meanwhile the site keeps the last good list |
 | Every Drive file vanished at once | the panel folder was renamed so it no longer matches, moved into another folder, or `min_panel` was raised; Notes: "no Panel folder >= 77 found in the root folder" | rename or move it back ([§3.3](#33-how-a-panel-folder-is-recognised)); the files return at the next run |
 | Every file shows twice | a second folder with the panel's name in A65_GV (a backup, an old copy) | delete it or move it out of A65_GV |
-| New uploads in one folder never show, and deleted ones stay | that folder cannot be read; Notes: "N folder(s) could not be read — check their sharing settings" | give it the same sharing as A65_GV; `stats.unreadable_folders` names it |
+| New uploads in one folder never show, and deleted ones stay | that folder cannot be read; Notes: "N folder(s) could not be read — check their sharing settings" | give it the same sharing as A65_GV; the run's log names the folder ("folder … unreadable: …") |
+| Files you deleted are still on the site, and `/status/` says the Drive is **On hold** | the update found far fewer files (or an empty folder) and keeps them one more update, in case it was Google's hiccup | nothing: the next update removes them (or run the update again now) |
 | The file sits in a tab named after its folder, not in Reports or Meeting notes | the folder name has no category word (`Agendas`, `Training` …) | rename the folder (`Meeting Notes and Agendas`) or add the word ([§6.6](#66-other-changes-and-where-to-make-them)) |
 | Pictures of the booth are not on `/photos/` | their folder's first category word is a booth word (`Booth photos`), so they feed the booth display only | put them in `photos/`, e.g. `photos/2027 Booth at CityWide/` |
 | A booth file never plays | it is a problem (the run summary's "Booth folder files the booth display can't show", `data/site/booth.json` → `problems`); its caption or note says a word the booth never shows, or it is a video or sound file the deploy could not save for offline play (both named in the player's Settings → Slides); it is switched off (`(off)`, a name starting with `_` or `~`); its `(from …)` day has not come or its `(until …)` day is over; or the player's settings leave out its language, magazine or collection | [§3.6](#36-the-booth-folder-new); the player's settings: [Booth display](booth.md) |
 | A booth picture marked `(x3)` comes up no more often than the others | with only a few pictures and videos, each one already comes back as often as the show's rules let it | nothing to fix: the mark counts once the show has more of them (online, or a bigger folder) |
-| The date is wrong, or the file jumped to the top | no date in the name (the "last modified" date is used, and editing changes it), a date the site does not read (`14-03-2027`, `2027-01`), or US order (`05-03-2027` = May 3) | start the name with `YYYY-MM-DD` ([§3.8](#38-dates-in-file-names)) |
+| The date is wrong, or the file jumped to the top | no date in the name (the "last modified" date is used, and editing changes it), a date the site does not read (`2027-01`), or a numbers-only date read the other way (`Report 05-03-2027` = May 3; *Notes* says "could be May 3 or March 5") | start the name with `YYYY-MM-DD` ([§3.8](#38-dates-in-file-names)) |
 | Two cards look exactly alike | the date was taken out of both titles | add a word, or use "February 2027 …" ([§3.9](#39-titles-from-file-name-to-title)) |
 | An icon tile instead of the picture | the file is not public, Drive has not made its preview yet, or an unusual format | check the sharing; wait a day; save the picture as JPG or PNG |
 | A shortcut is a plain "Document" card, without a picture or **Sign up** | without the API key the type comes from the shortcut's name; or Drive did not resolve it | put the file itself in the folder ([§3.11](#311-shortcuts)) |
@@ -1296,7 +1333,10 @@ Problems that belong to one folder kind are in its own guide: [Flyers and events
 | "root folder unreadable: &lt;reason&gt; — is it shared as 'Anyone with the link'?" | run summary (**PROBLEM**, yellow warning "previous items kept"); `/status/` | share A65_GV "Anyone with the link — Viewer"; check `drive.root_folder_id` |
 | "drive.root_folder_id is not set in config/site.yml" | the same | put the folder id back in `config/site.yml` |
 | "no Panel folder >= 77 found in the root folder" | Notes | a panel folder was renamed, moved or not created yet ([§3.3](#33-how-a-panel-folder-is-recognised)) |
-| "N folder(s) could not be read — check their sharing settings" | Notes | `stats.unreadable_folders` names each folder and why: "not shared publicly (Google asks to sign in)", "not found or not shared publicly (HTTP 404)", "request access page", "unexpected page (not a public folder, or Drive changed its markup)", "network error (no response)" |
+| "N folder(s) could not be read — check their sharing settings" | Notes | the run's log names each folder and why ("folder … unreadable: …"): "not shared publicly (Google asks to sign in)", "not found or not shared publicly (HTTP 404)", "request access page", "unexpected page (not a public folder, or Drive changed its markup)", "network error (no response)" |
+| "N folder(s) looked empty although they held files on the last update — their M file(s) stay on the site until the next update confirms it" | Notes; **On hold** on `/status/` | nothing, if you emptied it: the next update removes the files. If you did not, check the folder in Drive |
+| "N folder(s) looked empty again — their M file(s) were removed" | Notes | the files left the site, as the folder is empty |
+| "<path>: “…”: “05-10-2026” could be May 10 or October 5, 2026 — read as May 10 (month first). Write the date year-month-day … to be sure" | Notes; `/status/` | rename the file with the date as `YYYY-MM-DD` ([§3.8](#38-dates-in-file-names)) |
 | "&lt;folder&gt; has N entries — add a GOOGLE_API_KEY secret (or split the folder) so none are missed" | Notes | split the folder into sub-folders, or ask NETA65 to add the key ([§3.15](#315-the-optional-google_api_key)) |
 | "stopped early (time/folder budget); N folder(s) left for the next run" | Notes | nothing, unless it repeats for a week; their files are kept meanwhile |
 | "Drive API error (used the public view instead): &lt;message&gt;" | Notes; `stats.mode` = `"html (api failed)"` | check the key in Google Cloud (Drive API enabled, key restricted to it) — a NETA65 task |

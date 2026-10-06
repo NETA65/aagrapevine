@@ -23,9 +23,10 @@ them on github.com, and saving a file rebuilds the site by itself.
 | [`config/presentations/*.yml`](../config/presentations/README.md) | The four web presentations | Website build only (see [presentations.md](presentations.md)) |
 | [`content/instagram.yml`](../content/instagram.yml) | Instagram posts to add by hand (usually empty) | The daily sync (Instagram) only |
 
-Most changes are live within **a few minutes** (the push runs of early October 2026 took about 2 minutes;
-the file's own header says "about 10–20 minutes", a safe upper bound). A few wait for the next full daily
-update (section 4).
+Most changes are live within **about 5 minutes**: the push run of your save tests the code before it publishes
+(since October 2026; before, the push runs took about 2 minutes). The file's own header says "about 10–20
+minutes", a safe upper bound that includes up to 10 minutes before every visitor sees the change. A few wait for
+the next full daily update (section 4).
 Section 5 lists, page by page, which settings show where.
 
 **Page addresses in this guide** are relative to the site address, https://neta65.github.io/aagrapevine/.
@@ -49,9 +50,9 @@ Example: there is no committee meeting in December 2026.
 4. Click **Commit changes…**, write a short message (for example
    `settings: no committee meeting in December 2026`), keep **Commit directly to the main branch**, and
    click **Commit changes**.
-5. Open the **Actions** tab. Two runs start: **Website update** (rebuilds and publishes the site) and
-   **Code check (tests and test build)**. When Website update shows a green check, the new site is published.
-   A browser may show the old page for up to about 10 more minutes; reload it.
+5. Open the **Actions** tab. Two runs start: **Website update** (tests the change, rebuilds and publishes the
+   site) and **Code check (tests and test build)**. When Website update shows a green check, the new site is
+   published. A browser may show the old page for up to about 10 more minutes; reload it.
 6. Check the result: open `/meetings/` and `/es/meetings/`. December 16 is gone from "Upcoming dates"
    ("Próximas fechas"), and
    also from the home page, `/events/`, the calendar feeds, the monthly toolkit and the presentations.
@@ -111,12 +112,15 @@ happens and where it shows. Examples marked "checked" were run through the site'
 | `area` / `area_es` | `"Northeast Texas Area 65"` / `"Área 65 del Noreste de Texas"` | `/about/`: the small heading above "Our committee" (#committee) and the text of the Area website link (#contact). |
 | `url` | `"https://neta65.github.io/aagrapevine"` | The site's full address for feeds, QR codes, share links, calendar files, presentations and e-mail links. **On GitHub the build uses the address GitHub Pages reports instead**, so a renamed repository or a custom domain is picked up by itself. This value is used by a build on a computer, by the sync scripts, and by the e-mail when that lookup fails. A custom domain is set by NETA65 (admin): see README §12. |
 | `repository` | `"https://github.com/NETA65/aagrapevine"` | `/status/`: the **Actions** button and the "how to add an event" link. On GitHub the repository the build runs in wins. |
-| `timezone` | `"America/Chicago"` | **Do not change.** The sync scripts, the pages' live scripts (countdowns, "today" checks) and `/build.json` (what the Morning check reads) use it, but the page templates always use Central time, so another value would make the data, the pages and the live scripts disagree by hours. |
+| `timezone` | `"America/Chicago"` | **Keep it.** The sync scripts, the build (since October 2026: `TZ` in `eleventy.config.js`, used by the page templates and the shared time module `eleventy/central-time.js`), the pages' live scripts (`window.SITE.tz`: countdowns, "today" checks) and `/build.json` (what the Morning check reads) use it; a name that is not a time zone, or none, means America/Chicago everywhere. But a few browser scripts (the booth display, the presentations, the offline worker, the Published page) still assume Central time, and so do the workflows' schedules, the morning goal and the data commits' dates, so another value would make them disagree by hours. |
 | `morning_goal` | `"05:30"` | The time (Central, 24-hour) by which the Morning check wants the new day and both daily quotes on the site. `/status/` compares each morning with it. `"5:30"` and `"5:30 AM"` work too; an unreadable value means 05:30. It does **not** move any schedule or the morning alarm ([automation-and-troubleshooting.md](automation-and-troubleshooting.md)). The workflow's name in the Actions list, *Morning check (new day by 5:30 AM)*, says this time too: after a change, also change that `name:` in `.github/workflows/morning.yml` (and in `tests/test_run_names.py`, which pins it). |
-| `default_lang`, `languages` | `"en"`, `["en", "es"]` | **Not read by any code.** The two languages are fixed in `src/_data/languages.js`. |
 | `contact_email` | `"grapevine@neta65.org"` | The footer's mail button on every page; the About page contact buttons; the Accessibility feedback button; the "ask for access" buttons on `/bulletin/`, `/events/`, `/photos/`, `/portfolio/`, `/library/`; "Questions? Write to the committee" under the Grapevine meetings list on `/meetings/`; "Email the committee" on `/published/`; the `/share/` poster; the 404 page; the RSS feed; the GV/LV report; `{live:email}` in the presentations; the monthly e-mail's footer and Reply-To. Also used when `meeting: chair_email` is empty. |
 | `area_website` | `"https://neta65.org"` | The footer button (it shows the host name, "neta65.org") and the About page link. Checked by the weekly link check. |
 | `committee_page` | `"https://neta65.org/trusted-servants/grapevine-la-vina/"` | `/about/#committee`: the "Our page on neta65.org" link. Checked by the weekly link check. |
+
+> **Removed in October 2026:** `default_lang` and `languages`. No code read them: the two languages are built into
+> the site (`src/_data/languages.js` and the `/es/` addresses). A copy of the file that still has them works the
+> same.
 
 Examples:
 
@@ -204,14 +208,14 @@ built, so they stay right even on a day the daily sync fails.
 | `week_of_month` | `3` | `1`–`5`, or `-1` for the last one (`"3"` in quotes works). `5` = only months that have a fifth one. **Words such as `"third"` or `"2nd"` are not read here**: the meeting silently stays on the 3rd. |
 | `weekday` | `"wednesday"` | An English or Spanish day name, any capitals, with or without the accent: `Wednesday`, `miércoles`, `miercoles`, `jueves`, `sábado`. **Plurals (`"Wednesdays"`) and short forms (`"Wed"`) are not read here**: silently Wednesday. |
 | `start` | `"19:00"` | Central time. `"19:00"`, `"7:00 PM"`, `"7pm"`, `"7 p.m."`, `19`, `"19h00"`, `"19.30"` all work. Unreadable (`"noon"`, `"25:00"`, `"13pm"`): 19:00. |
-| `end` | `"20:00"` | Same forms. Missing, unreadable or not after the start: one hour after the start. |
-| `platform` | `"Zoom"` | Shown as the place: the home card, the `/events/` cards and calendar files, "Online on Zoom" on the `/share/` poster, `/gvr/`. |
+| `end` | `"20:00"` | Same forms. Missing, unreadable or not after the start: one hour after the start. (An end earlier than the start and at most 12 hours later, such as `"22:00"`–`"01:00"`, is read as the next morning by the site data since October 2026, but the meeting pages still show one hour: keep the meeting within one day.) |
+| `platform` | `"Zoom"` | What the pages call the place, since October 2026 in every sentence about the committee meeting: "Join on Zoom", "Monthly on Zoom", "on Zoom" in the calendar text, the meta description, how to join, the share kit's announcement, the presentations' closing slide, the home card, `/events/`, the `/share/` poster, `/gvr/`. Left out (or empty): Zoom. The phone dial-in section and the two weekly open meetings always say Zoom: those are Zoom's own. |
 | `zoom_url` | the full Zoom link | Every **Join** button (home, `/meetings/`, `/events/`), "Copy Zoom link", the calendar description. Copy the whole link from Zoom: its `pwd=` part is a token, not the passcode. |
 | `meeting_id` | `"949 476 7497"` | `/meetings/` "How to join" (its Copy button copies the digits only), the poster, the calendar text, the tap-to-call links on `/accessibility/#phone`. A test requires 9–11 digits. |
 | `passcode` | `"neta65"` | `/meetings/`, the poster, the calendar text. A passcode with letters means phone callers need a numbers-only one: see [3.8](#38-phone_access--joining-by-phone). |
 | `chair_title` / `chair_title_es` | `"Grapevine / La Viña Chair"` / `"Coordinador(a) de Grapevine / La Viña"` | The heading of the chair card on `/meetings/`. |
 | `chair_email` | `"grapevine@neta65.org"` | The "Email the chair" button and the address on the chair card of `/meetings/`; the chair's address on `/gvr/`; "Write to the chair" on `/digest/` and `/whats-new/` (to ask for the monthly e-mail); "Email the chair" (for the phone passcode) on `/accessibility/#phone`. Empty: `site.contact_email`. |
-| `note` (and `note_es`) | "All AA members are welcome …" | **Shows on no page** (see the note below). |
+| `note` / `note_es` | "All AA members are welcome to attend. No registration required." / "Todos los miembros de AA pueden asistir. No hace falta registrarse." | Who may come, in a line (since October 2026): the first sentence of the *Who can come* card on `/meetings/` (`note_es` on `/es/meetings/`) and the end of the meeting's calendar descriptions (`/events.ics`, the Google and Outlook links, the home page's add-to-calendar). Write both: without `note_es` the Spanish pages show the English line (the entries in `data/site/events.json` get a machine translation). |
 | `skip_dates` | `[]` | Meeting days that do not happen, `["YYYY-MM-DD", …]`. Only that month's real meeting day counts; any other date is ignored and reported. |
 
 Examples (checked; "today" = October 2, 2026):
@@ -224,7 +228,7 @@ Examples (checked; "today" = October 2, 2026):
 | `skip_dates: ["2026-12-17"]` | Nothing is skipped. Run summary: *config/site.yml meeting: skip date “2026-12-17” is not the 3rd Wednesday of its month — ignored (that month's is 2026-12-16)* |
 | `weekday: "jueves"`, `week_of_month: 2`, `start: "18:00"`, no `end` | Every 2nd Thursday, 6:00–7:00 PM: Oct 8, Nov 12, Dec 10. |
 | `week_of_month: -1`, `weekday: "monday"` | The last Monday: Oct 26, Nov 30, Dec 28. |
-| `start: "7pm"`, `end: "6pm"` | 7:00–8:00 PM (the end is not after the start, so one hour). |
+| `start: "7pm"`, `end: "6pm"` | 7:00–8:00 PM (the end is not after the start, and 23 hours later is no overnight end: one hour). |
 | `weekday: "Thursdays"`, `week_of_month: "second"` | **Still the 3rd Wednesday**, with no Settings problem: neither value can be read here. |
 
 Where the meeting shows:
@@ -240,10 +244,16 @@ Where the meeting shows:
   the presentations (`{live:meeting_next}`, `meeting_rule`, `meeting_time`, `meeting_zoom_id`,
   `meeting_passcode`, `meeting_phone`). (The search lists the Meetings page, not each meeting.)
 
-> **Note — `note` shows on no page.** It only goes into the summary of the meeting's entries in the data
-> file `data/site/events.json`. The visible "All AA members are welcome …" texts are in
-> `src/_i18n/committee.json` (`committee.meeting.who_title`, `who_text`, `cal_desc`), and the calendar text
-> there says "on Zoom" whatever `platform` says. To change those words, see [translations.md](translations.md).
+> **Note — the rest of the words are the site's own.** After `note`, the *Who can come* card goes on with
+> `committee.meeting.who_text` in `src/_i18n/committee.json`, and the calendar text starts with
+> `committee.meeting.cal_desc` ("… committee meeting on {platform}."). To change those words, see
+> [translations.md](translations.md).
+
+> **The passcode is public.** `meeting_id` and `passcode` are printed on `/meetings/`, in the calendar files, on the
+> `/share/` poster and in the presentations, for anyone to read, and so are the weekly open meetings' passcodes. That
+> is normal for an open AA meeting, which anyone may attend. It means the host should keep Zoom's own protection on:
+> the **waiting room**, or the host controls (admit people, remove a participant, lock the meeting once it has
+> started). Changing the passcode is not a protection: the site publishes the new one at its next build.
 
 > **Before you change the day or the time:** three of the four presentations (`committee-meeting.yml`,
 > `orientation-workshop.yml`, `information-workshop.yml`) also say "Every 3rd Wednesday", "second Saturday
@@ -431,7 +441,7 @@ store and the document search. What each source fetches, and how to hide or pin 
 | `crawler` | `hosts`, `user_agent`, `minutes_per_run`, `recheck_days`, `pdf_details_per_run`, `pdf_max_mb` | The search for documents for `/library/` | The next full run |
 | `youtube` | `channels`: `id`, `handle`, `name` | `/watch/`, home, the digest, the About videos | The push run (the channels' feeds; the complete listing of older videos: a full run, once a week) |
 | `podcasts` | `key`, `feed`, `name`, `web`, `apple`, `spotify`, `amazon` | `/listen/` episodes and app buttons | The push run (looking for new feeds: full runs only) |
-| `instagram` | `accounts`, `anonymous`, `keep_per_account`, `enrich_per_run`, `graph_version`, `rsshub_instances` | `/instagram/`, the home card, What's New, the digest | The push run (without the look-ups of each post's own page, which wait for the next full run) |
+| `instagram` | `accounts`, `anonymous`, `keep_per_account`, `enrich_per_run`, `recheck_per_run`, `graph_version`, `rsshub_instances` | `/instagram/`, the home card, What's New, the digest | The push run (without the look-ups of each post's own page and the removal check, which wait for the next full run) |
 | `ics_feeds` | `url`, `label` / `label_es`, `category`, `key` | Other websites' calendars on `/events/` | The push run, but each calendar is asked at most once in about 20 hours |
 
 Worth knowing:
@@ -452,6 +462,10 @@ Worth knowing:
 - `instagram.keep_per_account` must stay at least 124 (a test: the digest needs about 62 days of posts).
   `anonymous: false` = only the official API (secrets `IG_ACCESS_TOKEN`, `IG_BUSINESS_ID`, added by NETA65)
   plus `content/instagram.yml`.
+- `instagram.recheck_per_run` (5, since October 2026): how many posts that left the accounts' listing each full
+  run looks up again; a post Instagram no longer shows (deleted, archived, private) leaves the site after two such
+  look-ups at least 12 hours apart. `0` switches the check off. Details:
+  [automatic-sources.md §3.6](automatic-sources.md#36-instagram-posts-and-posts-you-add-by-hand).
 - `sources.grapevine.gvr_resources` is **not read** by any code (the pages use `links.gvr_resources`).
 
 **Other calendars (`ics_feeds`).** Today there is one:
@@ -631,8 +645,8 @@ these addresses in config/site.yml" in the issue "Broken links found by the week
 |---|---|
 | `gv_home`, `lv_home` | The footer's "official sites" (La Viña first on `/es/`), About, `/read/`, the organizer of a Grapevine or La Viña event |
 | `gv_subscribe`, `lv_subscribe`, `gv_store`, `lv_store` | `/shop/` |
-| `carry_the_message` | The `/shop/#carry` button (both languages), the GV/LV report, the orientation "subscriptions" session |
-| `lleva_el_mensaje` | Only the orientation "subscriptions" session (see the note below) |
+| `carry_the_message` | The `/shop/#carry` button and the GV/LV report on English pages, the orientation "subscriptions" session |
+| `lleva_el_mensaje` | Its Spanish twin (La Viña's page): the `/es/shop/#carry` button, the Spanish GV/LV report, the orientation "subscriptions" session |
 | `gv_share_story`, `gv_audio_project`, `gv_photo_contest`, `lv_share_story`, `gv_contribute`, `gv_guidelines`, `lv_guidelines` | `/contribute/` (the two guidelines also in the orientation "stories" session) |
 | `gvr_register`, `rlv_register` | `/gvr/`, the home page's service band, the GV/LV report, the orientation "role" session |
 | `gvr_resources`, `rlv_resources` | The `/gvr/` kits, the `/monthly/` guides, `/shop/`; `gvr_resources` also on `/contribute/` |
@@ -643,16 +657,20 @@ these addresses in config/site.yml" in the issue "Broken links found by the week
 | `youtube_channel` | `/watch/` (subscribe) and the home page |
 | `aa_org`, `aa_org_es` | About (the `_es` one on `/es/about/`), the orientation "traditions" session |
 | `asl_playlist`, `aa_big_book`, `aa_twelve_and_twelve`, `aa_accessibility_resources`, `aa_access_email` | `/accessibility/`: the ASL, audio and large-print sections (both languages). Tests pin their form (a YouTube playlist; https://www.aa.org/…; an @aa.org address) |
-| `aa_twelve_and_twelve_es` | Not used by any page (see the note below), but a test requires it (https://www.aa.org/es/…) |
+| `aa_twelve_and_twelve_es` | Its Spanish twin: the Twelve and Twelve audio card on `/es/accessibility/` (the ASL list keeps aa.org's English page). A test requires https://www.aa.org/es/… |
 | `gv_email_editorial`, `lv_email_editorial`, `gv_mail`, `lv_mail` | `/contribute/` (how to send a story); the two e-mail addresses also on `/monthly/` |
 | `support_phone_us`, `support_phone_es`, `support_phone_intl` (and `support_phone_intl_es` on `/es/`) | `/shop/#help` |
-| `sobriety_calculator`, `instagram_gv`, `instagram_lv` | Not used by any page (still link-checked) |
-| `lv_record_story` (not in the file) | Optional: La Viña's "record your story" link on `/contribute/`; default `sources.lavina.base` + `/graba-tu-historia` |
 
-> **Note — two comments promise more than the code does.** The comment above `lleva_el_mensaje` says the
-> Spanish pages and the Spanish report use it; they use `carry_the_message` in both languages. The comment
-> above `aa_twelve_and_twelve_es` says the Spanish page's audio uses it; `/es/accessibility/` links the
-> English page. Making either work is a template change ([section 6](#6-going-further-change-the-code)).
+> **Spanish twins (since October 2026).** Where a template reads a link through the `langLink` filter
+> (`eleventy.config.js`, `LINK_TWINS`), a Spanish page shows the link's twin when the file has one: a key named
+> `<name>_es`, or `lleva_el_mensaje` for `carry_the_message`. Today: the Carry the Message button and the help
+> phones on `/es/shop/`, and the audio card on `/es/accessibility/`. `about.njk` (`aa_org_es`) and `offline.njk`
+> (`app_help_*_es`) pick their twins in the template itself. A test (`tests/test_site_links.py`) checks that every
+> key under `links:` is used by some page and that every link a template reads exists.
+
+> **Removed in October 2026:** `sobriety_calculator`, `instagram_gv` and `instagram_lv` (no page used them), and
+> the `lv_record_story` the `/contribute/` template looked for: La Viña's *Graba tu historia* link there now comes
+> from `sources.lavina.record_story` (3.6), the same page the sync reads.
 
 Example (a page that moved):
 
@@ -661,8 +679,8 @@ Example (a page that moved):
 ```
 → After the push run, `/contribute/`, `/es/contribute/` and the orientation "stories" session link the new
 address, and the next weekly link check tests it. A `<key>_es` next to a key gives the Spanish page its own
-address only where the template asks for one (`support_phone_intl_es` does). A brand-new key shows nowhere
-until a template uses it, but the link check starts testing it at once.
+address only where the template reads the link with `langLink` (or `pick`), as above. A brand-new key shows
+nowhere until a template uses it, and `tests/test_site_links.py` turns the Code check red until one does.
 
 ### 3.12 `library:` — official documents only
 
@@ -775,7 +793,7 @@ This file gives the lists everyone starts with.
 | `activities` | `id`, `name` `{en, es}`: the service report's sections, in this order. |
 | `rates`, `default_rate` | Each rate: `id`, `name` `{en, es}` and `rate` as text with up to 3 decimals (`"0.14"`), or `""` for the visitor to fill in. `default_rate` is a rate id (today `irs_charity`). |
 | `defaults` | `funder`, `method`, `round_trip`. |
-| `panels` | `{id, from, to}` dates, `from` not after `to`: the period filter ("Panel 77": 2027-01-01 to 2028-12-31). |
+| `panels` | `{id, from, to}` dates, `from` not after `to`. Since October 2026 (Tracker 1.2.0) the Tracker works the panels out by itself: Area 65's terms start on January 1 of an odd year, and Panel N starts in 1950 + N (Panel 75: 2025–2026, Panel 77: 2027–2028, Panel 79: 2029–2030). The period filters and the report offer the current panel, the panel of every year that has an entry, and every panel listed here. An entry here only changes a panel's dates or adds one: **nothing needs adding every two years**. Today it lists Panel 75 and Panel 77. |
 | `renewal_days`, `backup_reminder_days` | Whole days, 1–365 (today 60 and 30). |
 
 Example — a new category:
@@ -925,21 +943,25 @@ only Code check):
 
 - **Website update, the push run** — a *quick* run: it reads the committee's Drive, the bulletin, the
   podcasts, the writers archive files and the two daily quotes, rebuilds the data, builds the whole site from the
-  current files and publishes it. Usually **a few minutes** (about 2 in early October 2026). When the save changed
+  current files, runs the tests on them (at the same time as the build) and publishes the site only when they pass
+  ([automation-and-troubleshooting.md §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)).
+  Usually **about 5 minutes** (before the tests, about 2). When the save changed
   a setting that a source of the full daily run reads (YouTube, Instagram, the editorial themes, the weekly open
   meetings, the story lines, the meeting lists, the event calendars), that source runs in the same push run
   (`scripts/ops/push_modules.py` compares `config/site.yml` with its copy from before the save; the run summary
   says **Also run for this push**). It is listed in the Actions tab under your commit message.
 - **Code check (tests and test build)** — the tests and a strict test build. It publishes nothing; a red ✗ there
-  means a test disagrees with the change ([section 7](#7-troubleshooting)).
+  means a test disagrees with the change ([section 7](#7-troubleshooting)), and then the push run did not publish
+  it either.
 
 Only one Website update run works at a time. If another one is still going when you save (for example the
 full daily update, in the morning), the push run waits for it to finish, so the change shows that much
 later.
 
 The rest — the magazine stories, the store's pages and the document search — waits for the **full daily
-update** ("Nightly full update" in the Actions tab). GitHub's schedule asks for it at 06:17 UTC — deliberately 4
-hours early, because GitHub starts timed runs 4–6 hours late — so it usually starts about 5–7 AM Central. The
+update** ("Nightly full update" in the Actions tab). GitHub's schedule asks for it at 07:17 UTC (2:17 AM CDT,
+1:17 AM CST) — deliberately 4 hours early, because GitHub starts timed runs 4–6 hours late — so it usually starts
+about 6–8 AM Central (5–7 AM in winter). The
 document search may use up to 40 minutes of it (`sources: crawler: minutes_per_run`), plus up to 40 for
 translations; in early October 2026, with every page already found, full updates took
 10–15 minutes. On the 1st of the month, and when no full update has run for 30 hours, the Morning check
@@ -976,13 +998,13 @@ search (faster). Write access is enough (MKP715).
 |---|---|
 | Every page: browser tab, footer | `site: title`, `committee` (©), `area_website` and `contact_email` (footer buttons); `links: gv_home`, `lv_home` |
 | Home `/`, `/es/` | `meeting:` (next-meeting card, Join); `recurring_events:` ("Upcoming events"); `spotlight: home_days`; `links: gvr_register`, `rlv_register`, `youtube_channel`; `lavina_weekly_open:`; `sources: grapevine / lavina: quote_page` (the two daily quotes) |
-| `/meetings/` | `meeting:` (#committee-meeting); `lavina_weekly_open:` and `links: weekly_open` (#weekly-open); `meetings:` and `spotlight: neta65_counties` (#grapevine-meetings); `contact_email` (the question button under the Grapevine meetings) |
+| `/meetings/` | `meeting:` (#committee-meeting, with `platform` and `note` / `note_es` in *Who can come*); `lavina_weekly_open:` and `links: weekly_open` (#weekly-open); `meetings:` and `spotlight: neta65_counties` (#grapevine-meetings); `contact_email` (the question button under the Grapevine meetings) |
 | `/events/`, `/events.ics`, `/es/events.ics` | `meeting:`, `recurring_events:`, `sources: ics_feeds`; `site: committee` (the meeting's title); `contact_email` |
-| `/accessibility/` | `phone_access:` and the meeting IDs (#phone); `links: asl_playlist`, `aa_big_book`, `aa_twelve_and_twelve`, `aa_accessibility_resources`, `aa_access_email`; `contact_email` (#feedback); `meeting: chair_email` ("Email the chair" for the phone passcode) |
+| `/accessibility/` | `phone_access:` and the meeting IDs (#phone); `links: asl_playlist`, `aa_big_book`, `aa_twelve_and_twelve` (`aa_twelve_and_twelve_es` on `/es/`), `aa_accessibility_resources`, `aa_access_email`; `contact_email` (#feedback); `meeting: chair_email` ("Email the chair" for the phone passcode) |
 | `/listen/`, `/watch/` | `site: listen`, `watch`; `links: gv_apps`, `lv_apps`, `podcasts_page`, `youtube_channel`; `sources: podcasts`, `youtube` |
 | `/about/` | `site: area`, `committee_page`, `area_website`, `contact_email`, `about_videos`; `links: gv_home`, `lv_home`, `aa_org`; `config/history.yml` (#history); the next meeting date; `booth:` (#booth, the booth display's starting settings and the size of its offline copy; its live slides use `meeting:`, `recurring_events:`, `lavina_weekly_open:`, `price_changes:`, `site: committee` and `about_videos` too) |
-| `/shop/` | `price_changes:` (#price-changes); `links:` (stores, subscriptions, `carry_the_message`, support phones); `sources: grapevine / lavina` (Book of the Month, prices, specialty items) |
-| `/contribute/` | `links:` (share a story, guidelines, e-mails, mail); `sources: lavina` (themes, record your story), `sources: grapevine: audio_project` |
+| `/shop/` | `price_changes:` (#price-changes); `links:` (stores, subscriptions, `carry_the_message` / `lleva_el_mensaje` on `/es/`, support phones); `sources: grapevine / lavina` (Book of the Month, prices, specialty items) |
+| `/contribute/` | `links:` (share a story, guidelines, e-mails, mail); `sources: lavina` (themes, record your story: `record_story`), `sources: grapevine: audio_project` |
 | `/gvr/` | `links: gvr_register`, `rlv_register`, `gvr_resources`, `rlv_resources`; `meeting:` (date, time, platform, chair e-mail); the orientation's total minutes |
 | `/monthly/`, `/monthly/YYYY-MM/` | `config/carry.yml`; `meeting:`; `recurring_events:`; `price_changes:`; `links: gvr_resources`, `rlv_resources`, editorial e-mails |
 | `/digest/` and the monthly e-mail | `digest:`; `site: title`, `committee`, `contact_email`; `meeting: chair_email` (the page's "Write to the chair") |
@@ -1004,10 +1026,12 @@ search (faster). Write access is enough (MKP715).
 ### How a setting reaches a page
 
 - **The website build.** [`src/_data/site.js`](../src/_data/site.js) reads `config/site.yml` and hands the
-  templates `site`: every key of `site:`, plus `meeting`, `recurring_events`, `drive`, `sources`, `links`,
-  `phone_access`, `digest` and `lavina_weekly_open` (search for `meeting: cfg.meeting`). **Not** handed
-  over: `price_changes`, `meetings`, `spotlight`, `library` — they reach the pages only through the synced
-  data files. On GitHub, `url` and `repository` are replaced (search for `process.env.SITE_URL`).
+  templates `site`: every key of `site:`, plus `meeting` (with `platform`, Zoom when left out), `recurring_events`,
+  `drive`, `sources`, `links`, `phone_access`, `digest`, `lavina_weekly_open`, and since October 2026 `meetings`
+  and `spotlight` (so `/meetings/` still lists each office's site when `data/site/meetings.json` is missing).
+  **Not** handed over: `price_changes`, `library` — they reach the pages only through the synced data files. On
+  GitHub, `url` and `repository` are replaced (search for `process.env.SITE_URL`), and `timezone` is always a
+  real zone (`TZ` from `eleventy.config.js`: America/Chicago when the setting is not one).
 - **The `pick` filter** ([`eleventy.config.js`](../eleventy.config.js), search for `addFilter("pick"`):
   `site | pick(lang, "title")` gives `title_es` on Spanish pages when it exists, else `title`. So a
   `<key>_es` next to any key works wherever a template reads it with `pick`.
@@ -1083,7 +1107,7 @@ The sync scripts read it with `load_config().get("notice") or {}`.
 | A 41st history milestone | Change the 40 in `tests/test_history.py` (search for `len(self.ms), 40`) |
 | A 7th orientation session | Change the 6 in `tests/test_orientation.py` (search for `len(self.lessons), 6`) |
 | A fifth presentation | `DECKS` in `tests/test_presentations.py`, and the four names in `tests/test_presentations_core.py` (search for `"writing-workshop", "committee-meeting"}`) |
-| `lleva_el_mensaje` on the Spanish shop | The `/shop/#carry` button in `src/pages/shop.njk` (search for `L.carry_the_message`) and `eleventy/filters/report.js` |
+| A Spanish twin for another link | Give the link a `<name>_es` in `links:` and read it in the template with `langLink` (for example `site.links | langLink("aa_big_book", lang)`; see `src/pages/shop.njk`, search for `langLink`); a twin with another name goes in `LINK_TWINS` in `eleventy.config.js` |
 | What the monthly e-mail says, or who gets it | [email-and-alerts.md](email-and-alerts.md) (`scripts/notify/send_digest.py`) |
 
 ### Tests
@@ -1105,6 +1129,7 @@ Tests that pin values in the settings files (a change that breaks one turns Code
 | `tests/test_read_media_asides.py` | `site: listen: sidebar_short` and `watch: hero_video` exist and have 11 characters |
 | `tests/test_accessibility.py` | `phone_access:` at least 3 U.S. numbers written `+1` and 10 digits, one with 346, each with a city; phone passcodes digits or empty; `meeting_id` and `lavina_weekly_open: zoom_id` 9–11 digits; the form of the accessibility links (`asl_playlist`, `aa_big_book`, `aa_twelve_and_twelve`, `aa_twelve_and_twelve_es`, `aa_accessibility_resources`, `aa_access_email`) |
 | `tests/test_pwa_install.py` | `links: app_help_*` on support.apple.com / support.google.com, the Spanish ones with `/es-mx/` and `hl=es-419` |
+| `tests/test_site_links.py` | Every key under `links:` is used by some page (a `_es` twin counts with its link), every link a template reads exists, the removed settings stay removed, `meeting: platform` is `"Zoom"` and `note` and `note_es` are both set |
 | `tests/test_price_changes.py` | The real `price_changes:` blocks have no problems |
 | `tests/test_sync_pipeline.py` | `sources: instagram: keep_per_account` at least 124 |
 | `tests/test_meetings.py` | Exactly `aadallas` and `fortworthaa` carry `feed_obf`; no key in plain text |
@@ -1162,7 +1187,8 @@ Where problems show up:
 | "Ask the chair for the phone passcode" | `committee: phone_passcode` is empty and the passcode has letters | Paste the digits from the host's Zoom invitation. |
 | The digest page and the e-mail list different numbers of items | A decimal in `digest:` | Use whole numbers. |
 | A `booth:` setting changed nothing | A value the build cannot read (a language other than `en`, `es`, `both`, `alternate`; `sound` not true or false; an event name over 80 characters or not a text; a limit that is not a number), or a booth that keeps its own change of that setting | The build log's `[booth]` lines and the player's Settings → Slides name the value; on the booth, Settings → Share & reset → **Reset the settings**. |
-| A page still shows the old link after changing it | That page does not use the key (see the unused keys and the note in [3.11](#311-links--official-links-used-across-the-site)) | A template change is needed ([section 6](#6-going-further-change-the-code)). |
+| A page still shows the old link after changing it | That page does not use the key, or it is a Spanish page that shows the link's `_es` twin ([3.11](#311-links--official-links-used-across-the-site)) | Change the twin too; otherwise a template change is needed ([section 6](#6-going-further-change-the-code)). |
+| Code check red after adding a key to `links:` | `tests/test_site_links.py`: no page uses the new key yet | Use it in a template in the same commit, or leave it out. |
 | The run is green but the page looks old | The browser's or GitHub Pages' cache | Wait about 10 minutes and reload. |
 
 ---
