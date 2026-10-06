@@ -544,7 +544,8 @@ class BuiltPages(unittest.TestCase):
             self.assertEqual(len(links), 1, url)
             self.assertIn(f'href="{ics}"', links[0])
             self.assertIn(f'title="{name}"', links[0])
-        self.assertNotIn("text/calendar", p["/meetings/"])
+        # /meetings/ offers its weekly meetings as downloads, not as a calendar feed of the page
+        self.assertNotIn('<link rel="alternate" type="text/calendar"', p["/meetings/"])
 
     def test_cards_share_their_page(self):
         p = self.built()

@@ -1169,7 +1169,8 @@ export function weeklyCalendar(w, site, lang = "en") {
   const rrule = `RRULE:FREQ=WEEKLY;BYDAY=${ICS_DAYS[new Date(Date.UTC(a.y, a.mo, a.d)).getUTCDay()]}`;
   const page = siteAbs(site, localPath("/meetings/", lang)) + "#weekly-open";
   const lines = [w.isLv ? w.summary : t("committee.weekly.gv_text", lang)];
-  if (w.zoomUrl) lines.push("", `${t("committee.meeting.cal_join", lang)}: ${w.zoomUrl}`);
+  // the weekly open meetings are Zoom meetings (their join button names Zoom too)
+  if (w.zoomUrl) lines.push("", `${t("committee.meeting.cal_join", lang, { platform: "Zoom" })}: ${w.zoomUrl}`);
   if (w.zoomId) lines.push(`${t("committee.meeting.id", lang)}: ${w.zoomId}`);
   if (w.passcode) lines.push(`${t("committee.meeting.passcode", lang)}: ${w.passcode}`);
   lines.push("", `${t("committee.cal.details", lang)}: ${page}`);

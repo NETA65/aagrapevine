@@ -509,7 +509,8 @@ class BuildClock(unittest.TestCase):
         self.assertNotIn("2027-11", one["models"], "never a link to a month page that is not built")
         self.assertEqual(one["first"], {"key": "2026-10", "prev": False, "next": True}, "October keeps its pager")
         self.assertEqual(one["last"], {"key": "2027-10", "next": False})
-        self.assertEqual(one["past"], ["2026-09", "2026-08", "2026-07"])
+        # the past months that keep a small redirect page (monthly.js PAST_MONTHS = 12): 2026-09 back to 2025-10
+        self.assertEqual(one["past"], [f"{2026 - (i > 8)}-{(8 - i) % 12 + 1:02d}" for i in range(12)])
         self.assertEqual(one["now"], "2026-11-01T04:59:59.900Z", "the build's one moment")
         # the next build takes its own moment: November now
         self.assertEqual(two["keys"][0], "2026-11")
