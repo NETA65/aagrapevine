@@ -187,6 +187,12 @@ _CAPITAL_WORD = r"[A-ZÁÉÍÓÚÑÜ0-9][\w'’.]*"
 _NAMED_PLACE = re.compile(rf"\b(?:[Gg]rupo|GRUPO)\s+(?:{_LINK}\s+)*{_CAPITAL_WORD}"
                           rf"(?:\s+(?:{_LINK}\s+)*{_CAPITAL_WORD})*"
                           rf"|\b(?:El|La|Las|Los|Del)\s+[A-ZÁÉÍÓÚÑÜ][\w'’.]*")
+# Words that also tell a name is Spanish — for the order of a numbers-only date only (detect_lang's own lists, which
+# give the items' language, stay as they are): what a Spanish flyer's or post's name starts with, and the days of the
+# week ("Aniversario 05-10-2026 - Grupo Nueva Vida" is 5 October, the group's name left out).
+_ES_NAME_WORDS = frozenset("""aniversario asamblea foro retiro encuentro congreso junta convivencia maratón desayuno
+cena boletín aviso anuncio informe mensual abierta abierto jornada seminario conferencia sesión inscripciones lunes
+martes miércoles jueves viernes sábado domingo""".split())
 
 # Notes about dates that could be read two ways, for callers that pass no `notes` list (drive.py's names): the
 # module that saves the source takes them with take_date_notes() into its stats["warnings"] (→ /status/).
@@ -214,8 +220,9 @@ def take_date_notes() -> list[str]:
 def _text_lang(text: str, lang: str | None) -> str:
     """The language a numbers-only date in `text` is written in: the caller's when it knows it, else the
     language of the words around the date — the magazines' names, a time zone's letters and the places named
-    left out (_PUB_NAMES, _ZONE_LETTERS, _AT_PLACE, _NAMED_PLACE) — and only when they clearly tell: Spanish or
-    English words alone, or two more of one than of the other ("Taller …" → "es", "Writing Workshop …" → "en");
+    left out (_PUB_NAMES, _ZONE_LETTERS, _AT_PLACE, _NAMED_PLACE; _ES_NAME_WORDS count as Spanish too) — and only
+    when they clearly tell: Spanish or English words alone, or two more of one than of the other ("Taller …" →
+    "es", "Writing Workshop …" → "en");
     "und" otherwise ("La Viña Report …", "Sober Workshop … - Grupo X": read month first, with a note)."""
     if lang:
         return lang[:2].lower()
@@ -223,7 +230,9 @@ def _text_lang(text: str, lang: str | None) -> str:
 
     def place(m: re.Match) -> str:     # (only a date or punctuation before it: the name's subject — kept)
         return m[0] if not t[: m.start()].strip(" -–—_.,·|:;([0123456789/") else " "
-    es, en, _fr = _lang_scores(_NAMED_PLACE.sub(place, t))
+    words = _NAMED_PLACE.sub(place, t)
+    es, en, _fr = _lang_scores(words)
+    es += sum(1 for w in re.findall(r"[a-záéíóúüñ]+", clean_text(words).lower()) if w in _ES_NAME_WORDS)
     if es > en and (not en or es - en >= 2):
         return "es"
     if en > es and (not es or en - es >= 2):

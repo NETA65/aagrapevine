@@ -736,8 +736,8 @@ class WholeBuilds(TempRaw):
 
     def test_a_missing_raw_file_keeps_the_last_builds_items(self):
         """Review of round 7: a raw file deleted by a merge or a clean-up deployed an empty section, did not stop the
-        cache pruning, and /status/ said "not run yet". The last build's items stay until the source's next update
-        writes the file again; a source that never had items starts empty, as before."""
+        cache pruning, and /status/ said "not run yet". The last build's items stay until an update of the source
+        works; a source that never had items starts empty, as before."""
         self.sources()
         one = self.build()
         (self.raw / "youtube.json").unlink()
@@ -749,8 +749,8 @@ class WholeBuilds(TempRaw):
         self.assertEqual((rows["youtube"]["ok"], rows["youtube"]["count"], rows["youtube"]["updated"]),
                          (False, 2, "2026-10-06T06:00:00Z"))
         self.assertEqual(rows["youtube"]["error"], "data/raw/youtube.json is missing — the site keeps the last build's "
-                                                   "items until this source's next update writes the file again (or "
-                                                   "restore it from git)")
+                                                   "items until an update of this source works (or restore the file "
+                                                   "from git)")
         self.assertEqual((rows["podcasts"]["ok"], rows["podcasts"]["error"]), (None, "not run yet"), "never had items")
         self.assertEqual(self.cached(), 1, "the cache is not pruned while a source's texts are not asked for")
         ctx = B.Ctx(offline=True)
@@ -764,6 +764,53 @@ class WholeBuilds(TempRaw):
         four = self.build(at="2026-10-07T12:00:00Z")
         self.assertEqual([i["id"] for i in four["videos"]["items"]], [video["id"]])
         self.assertTrue(next(r for r in four["status"]["sources"] if r["source"] == "youtube")["ok"])
+
+    def test_a_missing_raw_file_whose_next_update_fails_keeps_the_last_builds_items(self):
+        """Check of the round-7 fix: the source's next update after the file went missing FAILED and wrote the file
+        again with nothing in it (run_module's failure mark, or the module's own ok=false save) — the section went
+        empty after all, and /status/ lost the last success. Still missing its data: the last build's items stay
+        until an update works."""
+        from scripts.sync import run_all as R
+        self.sources()
+        one = self.build()
+        (self.raw / "youtube.json").unlink()
+        self.build(at="2026-10-06T18:00:00Z")
+        crash = mock.Mock(main=mock.Mock(side_effect=RuntimeError("YouTube answered nothing")))
+        with mock.patch.object(R.importlib, "import_module", return_value=crash):
+            row = R.run_source("youtube", [])
+        self.assertEqual(row["status"], "failed")
+        self.assertEqual((self.env("youtube")["items"], self.env("youtube")["updated"]), ([], None))
+        self.cache_with_unused_entry()
+        two = self.build(at="2026-10-07T06:00:00Z")
+        self.assertEqual(two["videos"], one["videos"])
+        self.assertTrue({"yt:1", "yt:2"} <= {i["id"] for i in two["whatsnew"]["items"]})
+        r = next(r for r in two["status"]["sources"] if r["source"] == "youtube")
+        self.assertEqual((r["ok"], r["count"], r["updated"]), (False, 2, "2026-10-06T06:00:00Z"))
+        self.assertEqual(r["error"], "data/raw/youtube.json went missing and this source's update since did not work "
+                                     "(RuntimeError: YouTube answered nothing) — the site keeps the last build's items "
+                                     "until one works (or restore the file from git)")
+        self.assertEqual(self.cached(), 1, "not pruned")
+        ctx = B.Ctx(offline=True)
+        ctx.load_raw(two["status"])
+        self.assertEqual(B.prune_blockers(ctx, None), ["data/raw/youtube.json holds nothing since it went missing"])
+        # the module's own failed save with nothing (RSS and yt-dlp both failed): the same
+        self.save("youtube", [], ok=False, error="no feed answered", at="2026-10-07T07:00:00Z")
+        three = self.build(at="2026-10-07T12:00:00Z")
+        self.assertEqual(three["videos"], one["videos"])
+        r = next(r for r in three["status"]["sources"] if r["source"] == "youtube")
+        self.assertEqual((r["ok"], r["count"], r["updated"]), (False, 2, "2026-10-06T06:00:00Z"))
+        self.assertIn("(no feed answered)", r["error"])
+        # an update that works — even one that finds nothing (a reset of a source that has nothing now) — decides
+        self.save("youtube", [], at="2026-10-08T06:00:00Z")
+        four = self.build(at="2026-10-08T07:00:00Z")
+        self.assertEqual(four["videos"]["items"], [])
+        r = next(r for r in four["status"]["sources"] if r["source"] == "youtube")
+        self.assertEqual((r["ok"], r["count"], r["error"]), (True, 0, None))
+        # a source that never had items and fails on its first update: failed, nothing kept, its own error (as before)
+        self.save("podcasts", [], ok=False, error="no feed configured")
+        five = self.build(at="2026-10-08T08:00:00Z")
+        r = next(r for r in five["status"]["sources"] if r["source"] == "podcasts")
+        self.assertEqual((r["ok"], r["count"], r["error"]), (False, 0, "no feed configured"))
 
     def test_sample_data_is_not_kept_for_a_missing_file(self):
         self.out.mkdir(parents=True)

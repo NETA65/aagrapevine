@@ -391,7 +391,8 @@ class NamesThatAreNotSpanish(unittest.TestCase):
                 self.assertEqual(self.read(name), (want, 0))
 
     def test_a_name_whose_own_words_do_not_tell_is_noted(self):
-        for name in ("Workshop 03-04-2027 7pm ET", "Workshop 03-04-2027 El Paso", "Panel 77 - 03-04-2027 - Grupo X"):
+        for name in ("Workshop 03-04-2027 7pm ET", "Workshop 03-04-2027 El Paso", "Panel 77 - 03-04-2027 - Grupo X",
+                     "Anniversary 03-04-2027 Grupo Nueva Vida"):
             with self.subTest(name=name):
                 self.assertEqual(self.read(name), ("2027-03-04", 1))     # month first, as in the US — and said
 
@@ -399,7 +400,11 @@ class NamesThatAreNotSpanish(unittest.TestCase):
         for name in ("Taller 05-10-2026", "Taller 05-10-2026 - Grupo Solo por Hoy", "05-10-2026 - Taller de escritura",
                      "Taller de escritura 05-10-2026 12 p. m. hora del Este", "Grupo de Escritura 05-10-2026",
                      "05-10-2026 Grupo Solo por Hoy, Aniversario", "Reunión de La Junta 05-10-2026",
-                     "Informe de La Viña 05-10-2026"):
+                     "Informe de La Viña 05-10-2026",
+                     # (check of the fix: a Spanish name whose only Spanish word but the group's name is what the
+                     # event is — read month first, with a note, once the group's name was left out)
+                     "Aniversario 05-10-2026 - Grupo Nueva Vida", "Aniversario Grupo Nueva Vida 05-10-2026",
+                     "Asamblea 05-10-2026", "Retiro espiritual 05-10-2026", "Sábado 05-10-2026 Taller"):
             with self.subTest(name=name):
                 self.assertEqual(self.read(name), ("2026-10-05", 0))
 
