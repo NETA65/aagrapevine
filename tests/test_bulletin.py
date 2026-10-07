@@ -105,6 +105,15 @@ class NoHeader(Folder):
         self.assertEqual((by["2027-02-03-spring-assembly"]["title"], by["2027-02-03-spring-assembly"]["date"]),
                          ("Spring Assembly", "2027-02-03"))
 
+    def test_a_post_first_seen_in_the_evening_is_that_days(self):
+        # first seen at 9:30 PM Central on October 6, already October 7 in UTC: the post is October 6's (the clock
+        # pinned — the test above runs at whatever time it is)
+        self.write("no-date.md", "Just text, no header, no heading.")
+        with mock.patch.object(common, "now_iso", return_value="2026-10-07T02:30:00Z"):
+            env = self.run_sync()
+        it = next(i for i in env["items"] if i["extra"]["slug"] == "no-date")
+        self.assertEqual((it["first_seen"], it["date"]), ("2026-10-07T02:30:00Z", "2026-10-06"))
+
     def test_a_header_title_is_not_repeated_by_the_text(self):
         it = self.parse("botm.md", "---\ntitle: Book of the Month is here\n---\n# Book of the Month is here\n\nOn sale now.")
         self.assertEqual(it["extra"]["body_md"], "On sale now.")

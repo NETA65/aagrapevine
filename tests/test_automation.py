@@ -335,9 +335,10 @@ class GateTests(unittest.TestCase):
         self.assertIn("**2 of 3 tests failed — the website was NOT published**", summary)
         self.assertIn("- `test_one.One.test_b`\n", summary)
         self.assertIn("- `test_one.One.test_c`\n", summary)
-        self.assertIn("None of them read the committee's own files (content/, config/, the glossary or the overrides) "
-                      "or the documentation: a change to the code broke them. Fix the change, or undo it; the next run "
-                      "publishes (a fix made in tests/ starts one too).", summary)
+        self.assertIn("None of them was seen reading the committee's own files (content/, config/, the glossary or the "
+                      "overrides) or the documentation (Python's own reads are seen, not the site's JavaScript's): most "
+                      "likely a change to the code broke them. Fix the change, or undo it; the next run publishes (a fix "
+                      "made in tests/ starts one too).", summary)
         self.assertIn("::error title=Tests failed — not published::", log)
 
     def test_a_failing_test_that_read_the_committees_files_is_named(self):
@@ -364,10 +365,42 @@ class GateTests(unittest.TestCase):
         self.assertIn("- `test_one.One.test_a` — it read the committee's files: config/site.yml\n", summary)
         self.assertIn("- `test_one.One.test_b`\n", summary)
         self.assertIn("- `test_two.Two.test_d` — it read the committee's files: how-to/settings.md\n", summary)
-        self.assertIn("2 of them read the committee's own files or the documentation: an edit there since the tests "
-                      "last passed (the Code check went red on it) can be what they found", summary)
-        self.assertIn("(scripts/ops/gate_tests.py, CONTENT_TESTS)", summary)
+        self.assertIn("2 of them read the committee's own files or the documentation (named above). If one of those was "
+                      "edited since the tests last passed (the Code check went red on that push), the edit can be what "
+                      "they found, not a change to the code: fix the file — or, when the test judges that file rather "
+                      "than the code, leave the test to the Code check alone (list it in CONTENT_TESTS, "
+                      "scripts/ops/gate_tests.py, or give it data of its own). Otherwise, and for the others: fix the "
+                      "change that broke them, or undo it. The next run publishes.", summary)
         self.assertNotIn("None of them", summary)
+
+    def test_a_set_up_or_a_subtest_that_read_them_is_named_too(self):
+        # a class's set-up that failed, and a subtest, are marked by what their class / test read
+        root = Path(tempfile.mkdtemp(prefix="gv-gate-root-"))
+        self.addCleanup(shutil.rmtree, root, True)
+        (root / "content").mkdir()
+        (root / "content" / "x.md").write_text("x\n", encoding="utf-8")
+        content = (root / "content" / "x.md").as_posix()
+        folder = self.make("    def test_a(self):\n"
+                           f"        open({content!r}, encoding='utf-8').read()\n"
+                           "        for n in (1, 2):\n            with self.subTest(n=n):\n                self.assertEqual(n, 1)\n")
+        (folder / "test_three.py").write_text(
+            "import unittest\n\nclass Three(unittest.TestCase):\n    @classmethod\n    def setUpClass(cls):\n"
+            f"        open({content!r}, encoding='utf-8').read()\n        raise RuntimeError('the file')\n\n"
+            "    def test_e(self):\n        pass\n", encoding="utf-8")
+        with mock.patch.object(G, "ROOT", root):
+            code, _log, summary = self.run_main(folder)
+        sys.modules.pop("test_three", None)
+        self.assertEqual(code, 1)
+        self.assertIn("- `test_one.One.test_a (n=2)` — it read the committee's files: content/x.md\n", summary)
+        self.assertIn("- `setUpClass (test_three.Three)` — it read the committee's files: content/x.md\n", summary)
+        self.assertIn("2 of them read the committee's own files", summary)
+
+    def test_the_name_unittest_loads(self):
+        for test_id, want in (("test_x.C.test_a", "test_x.C.test_a"), ("test_x.C.test_a (lang='en')", "test_x.C.test_a"),
+                              ("setUpClass (test_x.C)", "test_x.C"), ("tearDownClass (test_x.C)", "test_x.C"),
+                              ("setUpModule (test_x)", "test_x"), ("unittest.loader._FailedTest.test_x", "test_x")):
+            with self.subTest(test_id=test_id):
+                self.assertEqual(G.runnable(test_id), want)
 
     def test_the_committees_files(self):
         root = G.ROOT
@@ -425,8 +458,8 @@ try:
     res = unittest.TextTestRunner(stream=io.StringIO(), verbosity=0).run(suite)
     bad = [[t.id(), tb] for t, tb in res.failures + res.errors] + [[t.id(), "passed, but expected to fail"] for t in res.unexpectedSuccesses]
     doc = {"run": res.testsRun, "bad": bad}
-except BaseException as e:  # noqa: BLE001 — a module that cannot even be loaded is a failure too
-    doc = {"run": 0, "bad": [[" ".join(names), f"{type(e).__name__}: {e}"]]}
+except BaseException as e:  # noqa: BLE001 — a module that cannot even be loaded is a failure too (of each name)
+    doc = {"run": 0, "bad": [[n, f"{type(e).__name__}: {e}"] for n in names]}
 with open(out, "w", encoding="utf-8") as f:
     json.dump(doc, f)
 """
@@ -450,7 +483,7 @@ class GateLists(unittest.TestCase):
         from collections import Counter
         import committee_edits as CE
         suite, _left = G.gate_suite()
-        count = Counter(t.id().split(".")[0] for t in G.each_test(suite))
+        count = Counter(type(t).__module__ for t in G.each_test(suite))     # (a package's too: "browser.test_…")
         modules = sorted(count, key=lambda m: (-count[m], m))           # the big ones first: the copies stay busy
         tmp = Path(tempfile.mkdtemp(prefix="gv-gate-lists-"))
         (tmp / "results").mkdir()
@@ -466,8 +499,9 @@ class GateLists(unittest.TestCase):
                 copies.append(copy)
             # the edits were made (each kind at least once)
             for kind in ("content/events", "content/bulletin", "content/booth", "content/archive", "config/site.yml",
-                         "config/history.yml", "data/translations/glossary.yml", "data/translations/overrides.yml",
-                         "README.md deleted", "how-to/ deleted"):
+                         "config/history.yml", "config/presentations/", "config/orientation.yml", "config/expenses.yml",
+                         "data/translations/glossary.yml", "data/translations/overrides.yml", "README.md deleted",
+                         "how-to/ deleted"):
                 self.assertTrue(any(d.startswith(kind) for d in done), kind)
             free: queue.Queue = queue.Queue()
             for copy in copies:
@@ -493,10 +527,16 @@ class GateLists(unittest.TestCase):
             bad = [b for res in results for b in res["bad"]]
             # a test that fails without the edits too (here, in the repository itself) is broken anyway — the suite
             # says so on its own; only the ones the edits break are this test's business
+            # (each failing test, class or module by the name unittest loads — a set-up that failed is its class's or
+            # module's, G.runnable —, one module at a time: one that cannot even be imported spoils no other's answer)
             if bad:
-                again = run(json.dumps(sorted({b[0].split(" ")[0] for b in bad})), ROOT)
-                anyway = {b[0].split(" ")[0] for b in again["bad"]}
-                bad = [b for b in bad if b[0].split(" ")[0] not in anyway]
+                by_module: dict[str, set[str]] = {}
+                for b in bad:
+                    name = G.runnable(b[0])
+                    by_module.setdefault(name.split(".")[0], set()).add(name)
+                anyway = {G.runnable(b[0]) for names in by_module.values()
+                          for b in run(json.dumps(sorted(names)), ROOT)["bad"]}
+                bad = [b for b in bad if G.runnable(b[0]) not in anyway]
         finally:
             for copy in copies:
                 CE.remove_copy(copy)

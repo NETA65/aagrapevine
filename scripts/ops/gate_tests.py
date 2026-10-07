@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import sys
 import unittest
 from collections.abc import Iterator
@@ -128,16 +129,24 @@ CONTENT_TESTS: dict[str, str] = {
         "config/orientation.yml: six sessions, their lengths, questions, placeholders, wording and links",
     "test_orientation.OrientationFactsTest.":
         "config/orientation.yml: the facts the sessions teach",
+    "test_orientation.OrientationStringsTest.test_aa_wording_of_the_sessions":
+        "config/orientation.yml: no classroom word in the sessions' texts",
     "test_history.HistoryFileTest.":
         "config/history.yml: the milestones complete, oldest first, their wording and the official links",
     "test_expenses_page.Config.":
         "config/expenses.yml: ids, types, the standard categories, the default rate",
+    "test_expenses_page.Strings.test_the_settings_tones_and_icons_have_their_words":
+        "config/expenses.yml: each tone and icon of the settings has its words in src/_i18n/expenses.json",
     "test_presentations.PresentationFiles.test_every_deck":
         "config/presentations: every deck passes the checker",
     "test_presentations.PresentationFiles.test_the_four_decks":
         "config/presentations: the four decks, each with its own order",
     "test_presentations_core.RealDecks.":
         "config/presentations: every text of every slide of the decks",
+    "test_orientation.HubBuild.test_no_fact_twice_on_a_card":
+        "config/presentations: a deck's card says its length and versions in its head only, not in its texts",
+    "test_orientation.HubBuild.test_la_vina_first_in_spanish":
+        "config/presentations: a deck card's Spanish names La Viña first",
     "test_presentations_build.Facts.test_the_readme_lists_every_fallback":
         "config/presentations/README.md (the deck writers' guide): every {live:…} key with its fallback",
     # ---- data/translations: the glossary and the overrides
@@ -166,6 +175,18 @@ COMMITTEE_FILES = ("content/", "config/", "data/translations/glossary.yml", "dat
 def left_to_the_code_check(test_id: str) -> bool:
     """True for the tests the gate leaves to the Code check: DATA_TESTS, CONTENT_TESTS and LIST_CHECKS."""
     return test_id in DATA_TESTS or any(test_id.startswith(p) for p in (*CONTENT_TESTS, *LIST_CHECKS))
+
+
+def runnable(test_id: str) -> str:
+    """The name unittest loads for a test id as a run reports it: a subtest's test ("m.C.test_x (lang='en')" →
+    "m.C.test_x"), the class or module whose set-up failed ("setUpClass (m.C)" → "m.C", "setUpModule (m)" → "m"), the
+    module that could not be imported ("unittest.loader._FailedTest.m" → "m")."""
+    hook = re.fullmatch(r"(?:setUpClass|tearDownClass|setUpModule|tearDownModule) \(([\w.]+)\)", test_id)
+    if hook:
+        return hook.group(1)
+    if test_id.startswith("unittest.loader._FailedTest."):
+        return test_id[len("unittest.loader._FailedTest."):]
+    return test_id.split(" ")[0]
 
 
 def committee_file(path) -> str | None:
@@ -200,7 +221,9 @@ class Reads:
         self.by_module: dict[str, set[str]] = {}
 
     def of(self, test_id: str) -> list[str]:
-        return sorted(self.by_test.get(test_id, set()) | self.by_module.get(test_id.split(".")[0], set()))
+        name = runnable(test_id)                 # (a subtest, or a set-up that failed: its test, class or module)
+        tests = {f for t, files in self.by_test.items() if t == name or t.startswith(name + ".") for f in files}
+        return sorted(tests | self.by_module.get(name.split(".")[0], set()))
 
 
 _READS: Reads | None = None       # the run being recorded (the hook below stays installed: hooks cannot be removed)
@@ -298,15 +321,17 @@ def summary(result: unittest.TestResult, left: list[str], reads: Reads | None = 
             lines.append(f"- … and {len(bad) - 30} more")
         lines.append("")
         if not marked:
-            lines.append("None of them read the committee's own files (content/, config/, the glossary or the "
-                         "overrides) or the documentation: a change to the code broke them. Fix the change, or undo "
-                         "it; the next run publishes (a fix made in tests/ starts one too).")
+            lines.append("None of them was seen reading the committee's own files (content/, config/, the glossary or "
+                         "the overrides) or the documentation (Python's own reads are seen, not the site's JavaScript's): "
+                         "most likely a change to the code broke them. Fix the change, or undo it; the next run "
+                         "publishes (a fix made in tests/ starts one too).")
         else:
-            lines.append(f"{len(marked)} of them read the committee's own files or the documentation: an edit there "
-                         "since the tests last passed (the Code check went red on it) can be what they found, not a "
-                         "change to the code. Such a test judges those files and belongs to the Code check alone "
-                         "(scripts/ops/gate_tests.py, CONTENT_TESTS): leave it there, or fix the file. The others: "
-                         "fix the change that broke them, or undo it; the next run publishes.")
+            lines.append(f"{len(marked)} of them read the committee's own files or the documentation (named above). If "
+                         "one of those was edited since the tests last passed (the Code check went red on that push), "
+                         "the edit can be what they found, not a change to the code: fix the file — or, when the test "
+                         "judges that file rather than the code, leave the test to the Code check alone (list it in "
+                         "CONTENT_TESTS, scripts/ops/gate_tests.py, or give it data of its own). Otherwise, and for the "
+                         "others: fix the change that broke them, or undo it. The next run publishes.")
     elif not result.testsRun:
         # (as `python -m unittest` since Python 3.12: no test found is no pass)
         lines.append("**No tests were found — the website was NOT published** (the live site keeps the version "

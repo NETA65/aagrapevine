@@ -829,9 +829,13 @@ class Json(unittest.TestCase):
             for k in ("at", "notice_from", "notice_until"):
                 self.assertRegex(d["change"][k], ISO)
 
+        # (the committee meeting as config/site.yml gives it — the committee's settings, whatever they say: the dates
+        # it skips are not in the year, the link is its own)
+        meeting = SITE.get("meeting") or {}
+        skipped = len(meeting.get("skip_dates") or [])
         for d in [s["data"] for j in self.json.values() for s in j["slides"] if s.get("kind") == "meeting"]:
             self.assertEqual(list(d), ["rows", "limit", "rule", "time", "zoom_id", "passcode", "url", "page"])
-            self.assertGreaterEqual(len(d["rows"]), 12, "the rule gives a year of dates")
+            self.assertGreaterEqual(len(d["rows"]), 12 - skipped, "the rule gives a year of dates")
             for r in d["rows"]:
                 self.assertEqual(list(r), ["start", "end", "label"])
                 self.assertRegex(r["start"], ISO)
@@ -839,7 +843,7 @@ class Json(unittest.TestCase):
                 self.assertLess(r["start"], r["end"])
                 self.assertRegex(r["label"], r"^\w+day, \w+ \d{1,2}, \d{4}$")
             self.assertRegex(d["rule"], r"^Every ")
-            self.assertTrue(d["url"].startswith("https://") and "zoom.us" in d["url"])
+            self.assertEqual(d["url"], str(meeting.get("zoom_url") or ""))
             on_site(d["page"])
         limits = sorted(s["data"]["limit"] for j in self.json.values() for s in j["slides"] if s.get("kind") == "meeting")
         self.assertEqual(limits, [3, 12], "limit 3, and 12 = the year")

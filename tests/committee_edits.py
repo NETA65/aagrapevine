@@ -132,7 +132,15 @@ def apply_committee_edits(root: Path) -> list[str]:
 
     # ------------------------------------------------------------------ content/booth, content/archive, instagram.yml
     booth = root / "content" / "booth" / "booth.csv"
-    if booth.is_file():
+    if booth.is_file():                                         # a question taken out, another one switched off
+        lines = booth.read_text(encoding="utf-8-sig").splitlines(keepends=True)
+        first = next((i for i, ln in enumerate(lines[1:], 1)
+                      if ln.strip() and not ln.startswith("#") and ln.count('"') % 2 == 0), None)
+        if first is not None:
+            del lines[first]
+            text = re.sub(r"^([a-z][^,\n]*),yes,", r"\1,no,", "".join(lines), count=1, flags=re.M)
+            booth.write_text(text, encoding="utf-8-sig", newline="")
+            did(True, "content/booth/booth.csv: a row deleted, another switched off")
         with booth.open("a", encoding="utf-8", newline="") as f:
             f.write("quiz-new-tag-row,yes,quiz,gv,brand-new-tag,,,,,,,A new question?,Yes|No,1,,Yes.,,,"
                     "¿Una pregunta nueva?,Sí|No,,Sí.,,,,,,,\n")
@@ -155,6 +163,20 @@ def apply_committee_edits(root: Path) -> list[str]:
             (r'^(  note:\s*)"[^"]*"', r'\1"Everyone is welcome."', 1, "meeting.note"),
             (r'^(  note_es:\s*)"[^"]*"', r'\1"Todos son bienvenidos."', 1, "meeting.note_es"),
             (r'^(  start:\s*)"19:00"', r'\1"18:30"', 1, "meeting.start"),
+            (r'^(  end:\s*)"20:00"', r'\1"20:15"', 1, "meeting.end"),
+            (r'^(  week_of_month:\s*)\d', r"\g<1>2", 1, "meeting.week_of_month: the committee meets in another week"),
+            (r'^(  weekday:\s*)"wednesday"', r'\1"thursday"', 1, "meeting.weekday: … and on another day"),
+            (r'^(  skip_dates:\s*)\[\]', r'\1["2026-12-10"]', 1, "meeting.skip_dates: a holiday skipped"),
+            (r'^(  zoom_url:\s*)"[^"]*"', r'\1"https://us06web.zoom.us/j/81234567890?pwd=bmV3bGluaw"', 1,
+             "meeting.zoom_url: a new Zoom meeting"),
+            (r'^(  meeting_id:\s*)"[^"]*"', r'\1"812 3456 7890"', 1, "meeting.meeting_id"),
+            (r'^(  passcode:\s*)"[^"]*"', r'\1"grape2027"', 1, "meeting.passcode"),
+            (r'^(  committee:\s*)"[^"]*"', r'\1"NETA 65 Grapevine and La Viña Committee"', 1, "site.committee reworded"),
+            (r'^(  contact_email:\s*)"[^"]*"', r'\1"gvlv-chair@neta65.org"', 1, "site.contact_email"),
+            (r'^(  gv_store:\s*)"[^"]*"', r'\1"https://store.aagrapevine.org/"', 1, "links.gv_store: the store moved"),
+            (r'^(    start:\s*)"17:00"', r'\1"17:30"', 1, "recurring_events: the booth starts half an hour later"),
+            (r'^(    skip_dates:\s*)\[\]', r'\1["2026-12-12"]', 1, "recurring_events: a month with no booth"),
+            (r"^(    months_ahead:\s*)\d+", r"\g<1>4", 1, "recurring_events: fewer dates listed ahead"),
             (r'^(  morning_goal:\s*)"[^"]*"', r'\1"06:00"', 1, "site.morning_goal"),
             (r"^  (?:listen|watch):\n(?:    .*\n)+", "", 0, "the /listen/ and /watch/ videos deleted (to hide them)"),
             (r'^(    title_es:\s*)"Taller Mensual y Virtual de La Viña"', r'\1"Taller Mensual de La Viña"', 1,
@@ -188,6 +210,30 @@ def apply_committee_edits(root: Path) -> list[str]:
         r"\1  - id: banners\n    type: expense\n    template: general\n    icon: shapes\n    color: slate\n"
         r'    label: { en: "Banners", es: "Pancartas" }' "\n", count=1)),
         "config/expenses.yml: a category added")
+    did(_edit(root / "config" / "expenses.yml", _sub(r"^(icons: \[)", r"\1flag, ", count=1)),
+        "config/expenses.yml: an icon added to the picker's set")
+    did(_edit(root / "config" / "carry.yml", lambda t: t.rstrip("\n") + (
+        '\n  "2028-01":   # a new month\n    - way: newcomer\n      text:\n        en: "A new tip."\n'
+        '        es: "Un consejo nuevo."\n')),
+        "config/carry.yml: a month of tips added")
+
+    # ------------------------------------------------------------------ config/presentations, config/orientation.yml
+    # (the deck writers' guide, config/presentations/README.md; the sessions' notes in config/orientation.yml): a deck
+    # made longer, and the slips the deck and wording checks report — a card that says its length again, Spanish
+    # that names Grapevine first, a classroom word
+    for p in sorted((root / "config" / "presentations").glob("*.yml")):
+        name = f"config/presentations/{p.name}"
+        did(_edit(p, _sub(r"^(minutes:\s*)(\d+)", lambda m: m.group(1) + str(int(m.group(2)) + 15), count=1)),
+            f"{name}: the deck takes 15 minutes more")
+        did(_edit(p, _sub(r'^(  summary:\n    en: ")', r"\1In about an hour: ", count=1)),
+            f"{name}: the card's summary says its length again (a slip)")
+        did(_edit(p, _sub(r'^(  audience:\n    en: "[^"\n]*"\n    es: ")', r"\1Grapevine y La Viña: ", count=1)),
+            f"{name}: the card's Spanish names Grapevine first (a slip)")
+    orientation = root / "config" / "orientation.yml"
+    did(_edit(orientation, _sub(r"^(lessons:\n(?:.*\n)*?\s+minutes:\s*)(\d+)", lambda m: m.group(1) + str(int(m.group(2)) + 1),
+                                count=1)), "config/orientation.yml: a session takes a minute more")
+    did(_edit(orientation, _sub(r'^(lessons:\n(?:.*\n)*?\s+en: ")', r"\1We teach: ", count=1)),
+        "config/orientation.yml: a session's English with a classroom word (a slip)")
 
     # ------------------------------------------------------------------ the translations the committee writes
     tr = root / "data" / "translations"

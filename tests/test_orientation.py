@@ -203,18 +203,26 @@ class OrientationStringsTest(unittest.TestCase):
                 self.assertIsNone(BANNED.search(v["en"]) or BANNED.search(v["es"]))
 
     def test_aa_wording(self):
-        """Every visitor-facing text of GVR / RLV 101 (its strings and its session data), the other strings
-        that name it, and the GVR / RLV corner's own strings."""
+        """Every visitor-facing text of GVR / RLV 101's strings, the other strings that name it, and the GVR / RLV
+        corner's own strings (its session data, the committee's config/orientation.yml: the next test)."""
         texts = [(f"orientation.json {k}", v[lang]) for k, v in json.loads(I18N.read_text(encoding="utf-8")).items()
                  for lang in ("en", "es")]
-        texts += [(f"orientation.yml {w}", p[lang]) for w, p in pairs(yaml.safe_load(FILE.read_text(encoding="utf-8")))
-                  for lang in ("en", "es")]
         others = {}
         for name in ("common", "access", "pwa", "read"):
             others.update(json.loads((ROOT / "src" / "_i18n" / f"{name}.json").read_text(encoding="utf-8")))
         texts += [(k, v[lang]) for k, v in others.items() for lang in ("en", "es")
                   if k.startswith(("read.gvr.", "nav.orientation")) or "101" in v["en"]]
         self.assertGreater(len(texts), 400)
+        for where, s in texts:
+            with self.subTest(where=where):
+                self.assertIsNone(CLASSROOM.search(s), s)
+
+    def test_aa_wording_of_the_sessions(self):
+        # config/orientation.yml as the committee keeps it — left to the Code check (scripts/ops/gate_tests.py
+        # CONTENT_TESTS: a classroom word there must never keep the site from updating)
+        texts = [(f"orientation.yml {w}", p[lang]) for w, p in pairs(yaml.safe_load(FILE.read_text(encoding="utf-8")))
+                 for lang in ("en", "es")]
+        self.assertGreater(len(texts), 100)
         for where, s in texts:
             with self.subTest(where=where):
                 self.assertIsNone(CLASSROOM.search(s), s)
@@ -520,7 +528,8 @@ class HubBuild(unittest.TestCase):
 
     def test_no_fact_twice_on_a_card(self):
         """A card says its length and versions in its head and what stays current in its chips — its summary and
-        "Who it's for" don't say them again (the four decks' `card` texts)."""
+        "Who it's for" don't say them again (the four decks' `card` texts: the deck writers' words in config/presentations
+        — left to the Code check, scripts/ops/gate_tests.py CONTENT_TESTS)."""
         again = re.compile(r"(?i)\b\d+\s*(?:-\s*)?(?:minutes?|minutos?|hours?|horas?)\b|\ban hour\b|\buna hora\b|"
                            r"stays? current|se mantienen? al día|version|versión")
         for d in self.decks("real"):
@@ -530,7 +539,8 @@ class HubBuild(unittest.TestCase):
                         self.assertIsNone(again.search(d["card"][k][lang]), d["card"][k][lang])
 
     def test_la_vina_first_in_spanish(self):
-        """Spanish running text names La Viña first (proper names such as "Comité de Grapevine y La Viña" aside)."""
+        """Spanish running text names La Viña first (proper names such as "Comité de Grapevine y La Viña" aside) — the
+        deck writers' words in config/presentations, left to the Code check (scripts/ops/gate_tests.py CONTENT_TESTS)."""
         for d in self.decks("real"):
             for k in ("summary", "audience"):
                 with self.subTest(deck=d["id"], text=k):
@@ -639,11 +649,16 @@ class HubBuild(unittest.TestCase):
         self.assertEqual(len(self.pages[("real", "en")].select(".hero-stats .hero-stat")), 4)
 
     def test_facilitators_hear_of_the_orientation_workshop(self):
+        # its length as the deck gives it (config/presentations, the deck writers' file: 90 minutes today)
+        ow = next((d for d in self.decks("real") if d["id"] == "orientation-workshop"), None)
         for lang in ("en", "es"):
             with self.subTest(lang=lang):
                 fac = self.pages[("real", lang)].select_one("#facilitators")
+                if ow is None:                                  # (the deck gone: no word of it)
+                    self.assertFalse(fac.select(".o101-fac-pres"))
+                    continue
                 self.assertTrue(fac.select('a[href="#pres-orientation-workshop"]'))
-                self.assertIn("90", fac.select_one(".o101-fac-pres").get_text(" "))
+                self.assertRegex(fac.select_one(".o101-fac-pres").get_text(" "), rf"\b{ow['minutes']} (?:minutes|minutos)\b")
                 self.assertFalse(self.pages[("sample", lang)].select_one("#facilitators").select(".o101-fac-pres"))
 
     def test_portfolio_links_the_web_presentations(self):

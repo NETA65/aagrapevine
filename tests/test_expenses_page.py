@@ -107,7 +107,7 @@ class Strings(unittest.TestCase):
             self.assertIn(k, common, k)
 
     def test_keys_built_from_lists_exist(self):
-        cfg = config()
+        # (the tones the page draws, areas/expenses.css; the settings' own tones and icons: the next test)
         need = []
         for t in TYPES:
             need += [f"type.{t}", f"type_add.{t}", f"type_hint.{t}", f"field.description_{t}", f"form.description_ph_{t}",
@@ -122,8 +122,7 @@ class Strings(unittest.TestCase):
         need += [f"repaid.{r}" for r in ["owed", "repaid", "forgiven"]]
         need += [f"kind.{k}" for k in FUNDER_KINDS] + [f"tpl.{t}" for t in TEMPLATES]
         need += [f"cf_type.{c}" for c in ["text", "number", "date", "yesno", "choice"]]
-        need += [f"tone.{t}" for t in cfg.get("tones", TONES)]
-        need += ["icon." + i.replace("-", "_") for i in cfg.get("icons", [])]
+        need += [f"tone.{t}" for t in TONES]
         need += [f"tab.{v}" for v in ["entries", "summary", "giveaways", "requests", "settings"]]
         need += [f"set.{s}" for s in ["data", "profile", "categories", "funders", "methods", "activities", "mileage", "budgets", "fields", "reminders"]]
         # a settings tab with a shorter word of its own (setTabs `tab`), and the dialog's name for a trip with no miles
@@ -140,6 +139,14 @@ class Strings(unittest.TestCase):
         need += [f"field.quantity_{t}" for t in ["books", "printing", "giveaway", "stock"]]
         missing = sorted(k for k in need if "expenses." + k not in self.s)
         self.assertEqual(missing, [])
+
+    def test_the_settings_tones_and_icons_have_their_words(self):
+        # config/expenses.yml as the committee keeps it (an icon added to the picker's set needs its words in
+        # src/_i18n/expenses.json) — left to the Code check (scripts/ops/gate_tests.py CONTENT_TESTS)
+        cfg = config()
+        need = [f"tone.{t}" for t in cfg.get("tones", TONES)] + ["icon." + i.replace("-", "_") for i in cfg.get("icons", [])]
+        self.assertGreater(len(need), 20)
+        self.assertEqual(sorted(k for k in need if "expenses." + k not in self.s), [])
 
     def test_every_core_message_exists(self):
         if not CORE.exists():
