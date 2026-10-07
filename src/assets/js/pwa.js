@@ -825,7 +825,8 @@
     if (!st || typeof st.persist !== "function") return Promise.resolve(null);
     try { return Promise.resolve(st.persist()).then(function (p) { return !!p; }, function () { return null; }); } catch (e) { return Promise.resolve(null); }
   }
-  /* "May still remove them" — and what helps, on this device: inside the installed app, nothing more (it is the app);
+  /* "May still remove them" — and what helps, on this device: inside the installed app, nothing more (it is the app),
+     nor in a browser that can't install one (install-core.js canInstall: Firefox on a computer, an app's own browser);
      on iPhone and iPad (and a Mac's Safari, "Add to Dock") an installed app keeps a storage of its own, so the pages
      saved here are not in it — they are saved again from the app (install-core.js says which device); elsewhere the
      app shares the browser's storage, and a save from the app asks again (Chrome and Edge say yes to an installed
@@ -834,7 +835,7 @@
     if (kept === true) return T("This browser will keep them until you remove them.", "Este navegador las conservará hasta que las borres.");
     if (kept !== false) return "";
     var may = T("This browser may still remove them when the device is short of space.", "Este navegador aún puede borrarlas si al dispositivo le falta espacio.");
-    if (state.installed) return may;
+    if (state.installed || (dev && !dev.canInstall)) return may;
     if (dev && (dev.os === "ios" || dev.os === "ipados" || dev.browser === "safari")) {
       return may + " " + T("On this device an installed app keeps its own copy: install the site as an app, then open it and save the pages there to keep them.",
         "En este dispositivo, una app instalada guarda su propia copia: instala el sitio como app, ábrela y guarda las páginas allí para conservarlas.");

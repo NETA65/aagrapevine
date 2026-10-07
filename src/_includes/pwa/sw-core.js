@@ -420,7 +420,9 @@ function refreshSaved() {
       await saved.put(req.url, copy);
       fresh += 1;
     }
-    if (fresh) await pruneSavedAssets();
+    // (stopped by a save: left to it — it is keeping pages and their new files right now, and a prune meanwhile could
+    // drop a file it has just kept for a page not yet put back)
+    if (fresh && !over()) await pruneSavedAssets();
   })().finally(() => { savedRound = null; if (roundStop === stop) roundStop = null; });
   return savedRound;
 }

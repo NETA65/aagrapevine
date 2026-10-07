@@ -244,6 +244,8 @@ function world({ v = "t1", store: kept = null } = {}) {
     settled: () => Promise.resolve(vm.runInContext("settling", ctx)),
     // the worker's clock moves on
     skew(ms) { ctx.__skew += ms; },
+    // a line run inside the worker (a test watching one of its functions)
+    run: (src) => vm.runInContext(src, ctx),
   };
 }
 
@@ -592,6 +594,25 @@ const copyOf = (w, p) => marker({ body: new TextDecoder().decode(w.store.get("gv
   const n = (p) => k.fetched.slice(from).filter((u) => u === ORIGIN + B + p).length;
   R.lock = { fetched: { home: n(""), meetings: n("meetings/"), shop: n("shop/") }, during,
              copies: ["", "meetings/", "shop/"].map((p) => copyOf(k, p)), done: save.replies[save.replies.length - 1].type };
+}
+
+/* ---------------- a round stopped by a save leaves the pruning of the saved files to it ---------------- */
+{
+  const k = await savedWeekAgo(["", "meetings/", "shop/"]);
+  let release = null, reached = null;
+  const onMeetings = new Promise((r) => { reached = r; });
+  k.page(B + "meetings/", { body: html("meetings", "NEW"), wait: new Promise((r) => { release = r; }) });   // slow
+  k.hooks.onFetch = (u) => { if (u === ORIGIN + B + "meetings/") reached(); };
+  k.run("globalThis.__prunes = 0; { const prune = pruneSavedAssets; pruneSavedAssets = () => { __prunes += 1; return prune(); }; }");
+  await k.request(B + "accessibility/", { navigate: true });
+  const round = k.send({ type: "HOW_SERVED", saver: false });
+  await onMeetings;                                                     // home refreshed; the round is on meetings/ …
+  const save = k.send({ type: "SAVE", lang: "en" });                    // … when "Save key pages" is tapped
+  release();
+  await save.settled;
+  await round.settled;
+  R.stoppedPrune = { prunes: k.run("__prunes"), copies: ["", "meetings/", "shop/"].map((p) => copyOf(k, p)),
+                     done: save.replies[save.replies.length - 1].type };
 }
 
 /* ---------------- a page removed while the round runs stays removed ---------------- */
@@ -1092,10 +1113,18 @@ R.persist = { yes: await saveWith("en", true), no: await saveWith("es", false), 
 const IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1";
 const IPAD = "Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1";
 const ANDROID = "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36";
+const MAC_SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15";
+const EDGE = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0";
+const FIREFOX = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0";
+const FACEBOOK = "Mozilla/5.0 (Linux; Android 14; Pixel 8 Build/AP2A; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/129.0.0.0 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/480.0.0.0;]";
 const lastSaid = async (lang, device) => (await saveWith(lang, false, false, device)).said[1];
 R.persistNo = { iphone: await lastSaid("en", { ua: IPHONE }), iphoneEs: await lastSaid("es", { ua: IPHONE }), ipad: await lastSaid("en", { ua: IPAD }),
                 android: await lastSaid("en", { ua: ANDROID }), androidEs: await lastSaid("es", { ua: ANDROID }),
-                iphoneApp: await lastSaid("en", { ua: IPHONE, app: true }), androidApp: await lastSaid("es", { ua: ANDROID, app: true }) };
+                iphoneApp: await lastSaid("en", { ua: IPHONE, app: true }), androidApp: await lastSaid("es", { ua: ANDROID, app: true }),
+                // a Mac's Safari ("Add to Dock": an app with its own storage too); Edge on a computer (it shares the
+                // browser's); browsers that can't install one: Firefox on a computer, an app's own browser (Facebook)
+                mac: await lastSaid("en", { ua: MAC_SAFARI }), edge: await lastSaid("en", { ua: EDGE }),
+                firefox: await lastSaid("en", { ua: FIREFOX }), facebookEs: await lastSaid("es", { ua: FACEBOOK }) };
 
 /* ---------------- each page tells the worker whether Data saver is on (its round over the saved pages waits for it) ---- */
 const howServed = async (o) => { const p = boot(o); await p.tick(0); return p.posted.filter((x) => x.msg.type === "HOW_SERVED").map((x) => x.msg); };
@@ -1329,6 +1358,15 @@ class Updates(unittest.TestCase):
         r = self.r["lock"]
         self.assertEqual(r["fetched"], {"home": 2, "meetings": 1, "shop": 1})   # home: the round's (let go), the save's
         self.assertEqual(r["during"], ["accessibility/"])
+        self.assertEqual(r["copies"], ["NEW", "NEW", "NEW"])
+        self.assertEqual(r["done"], "SAVE_DONE")
+
+    def test_a_round_stopped_by_a_save_leaves_the_pruning_to_it(self):
+        # the round had refreshed a page when the save stopped it: it doesn't prune the saved pages' files then — the
+        # save is keeping pages and their new files at that moment (a file kept for a page not yet put back would go);
+        # the save prunes once, at its end
+        r = self.r["stoppedPrune"]
+        self.assertEqual(r["prunes"], 1)
         self.assertEqual(r["copies"], ["NEW", "NEW", "NEW"])
         self.assertEqual(r["done"], "SAVE_DONE")
 
@@ -1730,6 +1768,11 @@ class ThePage(unittest.TestCase):
         self.assertEqual(r["androidEs"], may_es + " Instalar el sitio como app y volver a guardarlas desde la app ayuda a conservarlas.")
         self.assertEqual(r["iphoneApp"], may_en)
         self.assertEqual(r["androidApp"], may_es)
+        self.assertEqual(r["mac"], may_en + own_en)
+        self.assertEqual(r["edge"], may_en + " Installing the site as an app and saving them again from the app helps keep them.")
+        # a browser that can't install the site (install-core.js canInstall): no word about an app
+        self.assertEqual(r["firefox"], may_en)
+        self.assertEqual(r["facebookEs"], may_es)
 
     def test_each_page_tells_the_worker_whether_data_saver_is_on(self):
         # the worker's weekly round over the saved pages waits for this word (sw-core.js refreshSaved): with Data saver

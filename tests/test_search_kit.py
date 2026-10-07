@@ -213,6 +213,13 @@ EXACT_ES = [
     {"t": "Mi primer paso"}, {"t": "Stephanie's Birthday"}, {"t": "Stephen at the Booth"}, {"t": "Steps to Freedom"},
     {"t": "Reuniones en el parque"}, {"t": "Meetings in the Park"}, {"t": "Meet the Editors"},
 ]
+# Forms of a word on the dictionary's lines (no longer reached by prefix or near spelling): the other language's
+# "sponsorship" / "sponsored" for "padrino", "relapsed" for "recaída", "spiritually", "recover"; "bebía" / "bebido"
+FORMS_EN = [
+    {"t": "Sponsorship in practice"}, {"t": "Sponsored at last"}, {"t": "Relapsed and back"}, {"t": "Spiritually fit"},
+    {"t": "I recover daily"}, {"t": "Mi padrino"},
+]
+FORMS_ES = [{"t": "Bebía todos los días"}, {"t": "Nunca había bebido tanto"}, {"t": "Ya no bebo"}]
 
 
 class OtherLanguageExact(unittest.TestCase):
@@ -231,8 +238,11 @@ const en = kit("en", input.en), es = kit("es", input.es);
 const q = {};
 for (const w of ["prison", "sponsor", "story", "convention", "woman", "cárcel"]) q["en:" + w] = en.find(w);
 for (const w of ["historia", "paso", "reunión", "meeting"]) q["es:" + w] = es.find(w);
+const fen = kit("en", input.formsEn), fes = kit("es", input.formsEs);
+for (const w of ["padrino", "recaída", "espiritualidad", "recuperación"]) q["forms:" + w] = fen.find(w);
+q["forms:drinking"] = fes.find("drinking");
 out(q);
-""", data={"en": EXACT_EN, "es": EXACT_ES}, needs_modules=False)
+""", data={"en": EXACT_EN, "es": EXACT_ES, "formsEn": FORMS_EN, "formsEs": FORMS_ES}, needs_modules=False)
         self.r = OtherLanguageExact.r
 
     def found(self, key: str) -> tuple[list, list]:
@@ -262,6 +272,18 @@ out(q);
                 self.assertEqual(self.r[key]["titles"], got + other)              # the words typed first
         # ("convention" typed: "convención" is a near spelling of the word typed itself — found as before)
         self.assertEqual(set(self.r["en:convention"]["titles"]), {"Convention Memories", "Convención de Texas"})
+
+    def test_a_form_on_the_dictionarys_line_is_found(self):
+        # the forms the exact matching no longer reaches by prefix or near spelling are words of their own on their line
+        for key, direct, alt in (("forms:padrino", ["Mi padrino"], {"Sponsorship in practice", "Sponsored at last"}),
+                                 ("forms:recaída", [], {"Relapsed and back"}),
+                                 ("forms:espiritualidad", [], {"Spiritually fit"}),
+                                 ("forms:recuperación", [], {"I recover daily"}),
+                                 ("forms:drinking", [], {"Bebía todos los días", "Nunca había bebido tanto"})):
+            with self.subTest(query=key):
+                got, other = self.found(key)
+                self.assertEqual(got, direct)
+                self.assertEqual(set(other), alt)
 
     def test_the_words_typed_keep_prefix_and_fuzzy(self):
         # "cárcel" typed on the English page: its own word as before (light fuzzy finds "cartel", as it always has) —
