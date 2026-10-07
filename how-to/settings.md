@@ -23,10 +23,10 @@ them on github.com, and saving a file rebuilds the site by itself.
 | [`config/presentations/*.yml`](../config/presentations/README.md) | The four web presentations | Website build only (see [presentations.md](presentations.md)) |
 | [`content/instagram.yml`](../content/instagram.yml) | Instagram posts to add by hand (usually empty) | The daily sync (Instagram) only |
 
-Most changes are live within **about 5 minutes**: the push run of your save tests the code before it publishes
-(since October 2026; before, the push runs took about 2 minutes). The file's own header says "about 10–20
-minutes", a safe upper bound that includes up to 10 minutes before every visitor sees the change. A few wait for
-the next full daily update (section 4).
+Most changes are live within **about 3 minutes**: the push run of your save does not run the tests again (they test
+the code, and your settings are not code), and since October 2026 its build also makes the monthly posters' share
+pictures, about a minute. The file's own header says "about 10–20 minutes", a safe upper bound that includes up to
+10 minutes before every visitor sees the change. A few wait for the next full daily update (section 4).
 Section 5 lists, page by page, which settings show where.
 
 **Page addresses in this guide** are relative to the site address, https://neta65.github.io/aagrapevine/.
@@ -50,9 +50,9 @@ Example: there is no committee meeting in December 2026.
 4. Click **Commit changes…**, write a short message (for example
    `settings: no committee meeting in December 2026`), keep **Commit directly to the main branch**, and
    click **Commit changes**.
-5. Open the **Actions** tab. Two runs start: **Website update** (tests the change, rebuilds and publishes the
-   site) and **Code check (tests and test build)**. When Website update shows a green check, the new site is
-   published. A browser may show the old page for up to about 10 more minutes; reload it.
+5. Open the **Actions** tab. Two runs start: **Website update** (rebuilds and publishes the site) and **Code
+   check (tests and test build)** (tests your file; about 10 minutes). When Website update shows a green check, the
+   new site is published. A browser may show the old page for up to about 10 more minutes; reload it.
 6. Check the result: open `/meetings/` and `/es/meetings/`. December 16 is gone from "Upcoming dates"
    ("Próximas fechas"), and
    also from the home page, `/events/`, the calendar feeds, the monthly toolkit and the presentations.
@@ -171,11 +171,11 @@ this video is the newest one**, because the newest is already the first block of
 to YouTube. Once the video is listed, the card takes the list's title and links to the videos below.
 
 > **Note:** the file says "Delete these lines to hide it". The page does hide the card, but the tests
-> `test_config_has_the_short` and `test_featured_video_from_config` in `tests/test_read_media_asides.py`
+> `Listen.test_config_has_the_short` and `Watch.test_config_has_the_video` in `tests/test_read_media_asides.py`
 > expect both ids (exactly 11 characters). Deleting them, or a 10- or 12-character id, turns **Code check**
-> red, and since October 2026 **Website update** does not publish the change either (it runs the same tests
-> first: *Tests failed — not published*; the live site keeps the version before). Change the test in the same
-> commit if you really want the card gone.
+> red. **Website update** still publishes the change: these tests judge your settings, not the code, so it leaves
+> them to the Code check (`CONTENT_TESTS` in `scripts/ops/gate_tests.py`, since October 2026). Change the test in a
+> later commit if you really want the card gone, so the Code check is green again.
 
 ```yaml
   about_videos:
@@ -210,8 +210,8 @@ built, so they stay right even on a day the daily sync fails.
 | `week_of_month` | `3` | `1`–`5`, or `-1` for the last one (`"3"` in quotes works). `5` = only months that have a fifth one. **Words such as `"third"` or `"2nd"` are not read here**: the meeting silently stays on the 3rd. |
 | `weekday` | `"wednesday"` | An English or Spanish day name, any capitals, with or without the accent: `Wednesday`, `miércoles`, `miercoles`, `jueves`, `sábado`. **Plurals (`"Wednesdays"`) and short forms (`"Wed"`) are not read here**: silently Wednesday. |
 | `start` | `"19:00"` | Central time. `"19:00"`, `"7:00 PM"`, `"7pm"`, `"7 p.m."`, `19`, `"19h00"`, `"19.30"` all work. Unreadable (`"noon"`, `"25:00"`, `"13pm"`): 19:00. |
-| `end` | `"20:00"` | Same forms. Missing, unreadable or not after the start: one hour after the start. (An end earlier than the start and at most 12 hours later, such as `"22:00"`–`"01:00"`, is read as the next morning by the sync since October 2026, in `data/site/events.json`; but the pages and the calendar files work the committee meeting's dates out from this block themselves and still show one hour: keep the meeting within one day.) |
-| `platform` | `"Zoom"` | What the pages call the place, since October 2026 in every sentence about the committee meeting: "Join on Zoom", "Monthly on Zoom", "on Zoom" in the calendar text, the meta description, how to join, the share kit's announcement, the presentations' closing slide, the home card, `/events/`, the `/share/` poster, `/gvr/`. Left out (or empty): Zoom. The phone dial-in section and the two weekly open meetings always say Zoom: those are Zoom's own. |
+| `end` | `"20:00"` | Same forms. Missing or unreadable: one hour after the start. An end earlier on the clock than the start and at most 12 hours later, such as `"22:00"`–`"01:00"`, is the **next morning** everywhere since October 2026: the sync, every page ("10:00 PM – 1:00 AM CDT"), the calendar files, both countdowns (the home page's and the one on `/meetings/`) and the e-mail digest. An end further back (`"19:00"`–`"08:00"`), or the same as the start, still gives one hour. |
+| `platform` | `"Zoom"` | What the pages call the place, since October 2026 in every sentence about the committee meeting: "Join on Zoom", "Monthly on Zoom", "on Zoom" in the calendar text, the meta description, how to join, the share kit's announcement, the presentations' closing slide, the home card, `/events/`, the `/share/` poster, `/gvr/`, the GV/LV report's committee-meeting lines. Left out (or empty): Zoom. The phone dial-in section and the two weekly open meetings always say Zoom: those are Zoom's own. |
 | `zoom_url` | the full Zoom link | Every **Join** button (home, `/meetings/`, `/events/`), "Copy Zoom link", the calendar description. Copy the whole link from Zoom: its `pwd=` part is a token, not the passcode. |
 | `meeting_id` | `"949 476 7497"` | `/meetings/` "How to join" (its Copy button copies the digits only), the poster, the calendar text, the tap-to-call links on `/accessibility/#phone`. A test requires 9–11 digits. |
 | `passcode` | `"neta65"` | `/meetings/`, the poster, the calendar text. A passcode with letters means phone callers need a numbers-only one: see [3.8](#38-phone_access--joining-by-phone). |
@@ -299,7 +299,7 @@ series of ours does). A monthly event is never "New" and never in What's New or 
 | `summary` / `summary_es` | Optional. The card shows three lines: keep it to about 100 characters. |
 | `week_of_month` | `1`–`5` or `-1`; here words work too: `"2nd"`, `"second"`, `"segundo"`, `"last"`, `"último"`. |
 | `weekday` | English or Spanish; plurals work (`"Saturdays"`, `"sábados"`); short forms (`"Sat"`) do not. |
-| `start` / `end` | Central time, the same forms as the meeting. An end that is missing or not after the start: one hour. |
+| `start` / `end` | Central time, the same forms as the meeting. An end that is missing or not after the start: one hour — except, as for the meeting, an end at most 12 hours later on the next morning (`"22:00"`–`"01:00"`), which every page, calendar file and the e-mail show as the next morning (since October 2026). |
 | `location` | The address. No `location` but an `online_url`: an online-only event ("Online on Zoom", no map). |
 | `url` | The "Event details" link. Must start with `https://` or `http://` (a `www.` address gets `https://` added), otherwise it is left out. |
 | `online_url`, `meeting_id` | The "Join online" link and the Zoom ID shown on the card and in the calendars. |
@@ -890,8 +890,9 @@ Two kinds of checks:
   must be 1–3*), a bad or repeated `id`, an unknown `example`, `minutes` outside 3–12, a link without
   `href`, `link` or `url` (or a `url` that does not start with https://), or a `panel: starts` that is not
   `"YYYY-MM"`.
-- **The build works, but a test fails** (`tests/test_orientation.py`: Code check red, and since October 2026
-  Website update does not publish either, *Tests failed — not published*): not exactly 6 sessions; `minutes`
+- **The build works, but a test fails** (`tests/test_orientation.py`: Code check red; Website update still
+  publishes, because it leaves the tests that judge this file to the Code check — fix the file soon): not exactly
+  6 sessions; `minutes`
   outside 5–8 (so `minutes: 10` builds but fails the test); a summary over 110 characters (English) or 135
   (Spanish); a title over 32; a point over 240; the right answer always in the same place; an unknown
   placeholder; a banned word; a link that does not resolve (`link` must be a key in `links:`, `url` must
@@ -946,16 +947,20 @@ only Code check):
 
 - **Website update, the push run** — a *quick* run: it reads the committee's Drive, the bulletin, the
   podcasts, the writers archive files and the two daily quotes, rebuilds the data, builds the whole site from the
-  current files, runs the tests on them (at the same time as the build) and publishes the site only when they pass
+  current files and publishes it. The tests before publishing do not run again for a settings file: they test the
+  code, and since October 2026 the committee's files are not part of the code's fingerprint
   ([automation-and-troubleshooting.md §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)).
-  Usually **about 5 minutes** (before the tests, about 2). When the save changed
+  Usually **about 3 minutes** (the posters' share pictures take about one of them). When the save changed
   a setting that a source of the full daily run reads (YouTube, Instagram, the editorial themes, the weekly open
   meetings, the story lines, the meeting lists, the event calendars), that source runs in the same push run
   (`scripts/ops/push_modules.py` compares `config/site.yml` with its copy from before the save; the run summary
   says **Also run for this push**). It is listed in the Actions tab under your commit message.
-- **Code check (tests and test build)** — the tests and a strict test build. It publishes nothing; a red ✗ there
-  means a test disagrees with the change ([section 7](#7-troubleshooting)), and then the push run did not publish
-  it either.
+- **Code check (tests and test build)** — every test, a strict test build and the browser checks (about 10
+  minutes). It publishes nothing; a red ✗ there means a test disagrees with the change
+  ([section 7](#7-troubleshooting)). The push run has published it all the same, leaving out what the build
+  could not use: fix the file soon. (What the build itself refuses — a `config/site.yml` YAML cannot read, a
+  mistake in `carry.yml`, `orientation.yml`, `history.yml`, `expenses.yml` or a deck that stops the build — is
+  not published: the site stays as it was until it is fixed.)
 
 Only one Website update run works at a time. If another one is still going when you save (for example the
 full daily update, in the morning), the push run waits for it to finish, so the change shows that much
@@ -1123,16 +1128,29 @@ Run them on a computer that has the project set up, from the repository folder:
 ```
 (With another Python that has `requirements.txt` installed: `python -m unittest discover -s tests`.) Or
 simply commit and read **Code check** on GitHub, which runs the same command. To see the strict build on a
-computer, set `$env:I18N_STRICT = "1"` before `npx @11ty/eleventy`.
+computer, set `$env:I18N_STRICT = "1"` (missing texts, and the mistakes above that stop the build) and
+`$env:STRICT_BUILD = "1"` (a missing icon, a page missing from the sitemap, a link in the data that had to be
+repaired or hidden — what fails the Code check's build since October 2026) before `npx @11ty/eleventy`.
 
-Tests that pin values in the settings files (a change that breaks one turns Code check red):
+**Every setting must be read by some code** (since October 2026, `tests/test_settings_used.py`). Every key in
+`config/site.yml`, `expenses.yml`, `carry.yml`, `history.yml` and `orientation.yml` must be read by the sync, the
+build or a page, or the Code check goes red ("settings … that no code reads"): a key added by mistake, misspelled,
+or one that no longer does anything. A Spanish twin `<name>_es` counts when `<name>` is read; the keys that are
+names rather than settings (the region names under `meetings: feeds: region_types`, the months of `carry.yml`
+`tips`) are listed in the test with their reasons. The other way round, every setting the pages, the build or the
+sync read must be there, or be read with a default: deleting `meeting: platform` is fine (Zoom), deleting a link a
+page reads is not. These parts judge your files, so only the Code check runs them; *Website update* publishes.
+
+Tests that pin values in the settings files. Since October 2026 they are all left to the Code check
+(`CONTENT_TESTS` in `scripts/ops/gate_tests.py`): a change that breaks one turns **Code check** red, and *Website
+update* still publishes it:
 
 | Test file | What it expects |
 |---|---|
 | `tests/test_read_media_asides.py` | `site: listen: sidebar_short` and `watch: hero_video` exist and have 11 characters |
 | `tests/test_accessibility.py` | `phone_access:` at least 3 U.S. numbers written `+1` and 10 digits, one with 346, each with a city; phone passcodes digits or empty; `meeting_id` and `lavina_weekly_open: zoom_id` 9–11 digits; the form of the accessibility links (`asl_playlist`, `aa_big_book`, `aa_twelve_and_twelve`, `aa_twelve_and_twelve_es`, `aa_accessibility_resources`, `aa_access_email`) |
 | `tests/test_pwa_install.py` | `links: app_help_*` on support.apple.com / support.google.com, the Spanish ones with `/es-mx/` and `hl=es-419` |
-| `tests/test_site_links.py` | Every key under `links:` is used by some page (a `_es` twin counts with its link), every link a template reads exists, the removed settings stay removed, `meeting: platform` is `"Zoom"` and `note` and `note_es` are both set |
+| `tests/test_site_links.py` | Every key under `links:` is used by some page (a `_es` twin counts with its link), every link a template reads exists, the removed settings stay removed, La Viña's monthly workshop is called by its one name. (`meeting: platform` may be left out or changed: since October 2026 no test pins "Zoom" or a `note`) |
 | `tests/test_price_changes.py` | The real `price_changes:` blocks have no problems |
 | `tests/test_sync_pipeline.py` | `sources: instagram: keep_per_account` at least 124 |
 | `tests/test_meetings.py` | Exactly `aadallas` and `fortworthaa` carry `feed_obf`; no key in plain text |
@@ -1162,12 +1180,14 @@ Where problems show up:
 - **A red ✗ on Website update**: the build stopped and the site stays as it was. Open the run, then the
   failed step ("Build the website"; for a YAML slip in `config/site.yml` also "Sync sources and translate"): the
   error names the file and the problem.
-- **A red ✗ on Code check, and on Website update with *Tests failed — not published***: a test disagrees with the
-  change, so since October 2026 the site was not published (it keeps the version before, and no later run
-  publishes until the test passes). Open the Code check's job "Python tests (offline)" (or the job *Test the code
-  before publishing*) and look for the `FAIL:` or `ERROR:` lines
+- **A red ✗ on Code check alone**, after you saved a settings file: a test disagrees with the change. The site
+  was still published (since October 2026 the tests that judge the settings files run only in the Code check:
+  `CONTENT_TESTS`), without what the build could not use. Open the Code check's job "Python tests (offline)" and
+  look for the `FAIL:` or `ERROR:` lines; fix the file (or the test, if the change was meant) soon.
+- **A red ✗ on Website update with *Tests failed — not published***: a change of the **code** broke the tests;
+  the site keeps the version before
   ([automation-and-troubleshooting.md §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)).
-  Only the few tests listed in `DATA_TESTS` turn the Code check alone red.
+  A settings file alone never causes it.
 - **Notes** in the run summary: small problems of a source that still updated (for example
   `content/instagram.yml`).
 - **The log** of the step "Sync sources and translate": the only place where mistakes in `lavina_weekly_open:` and
@@ -1189,6 +1209,8 @@ Where problems show up:
 | No flyer link on the La Viña weekly open card, or no letter link in the price notice | The page's pattern does not ignore accents | Write both letters: `vi[nñ]a`, `actualizaci[oó]n`. |
 | Code check red after deleting the `listen:` or `watch:` lines | A test expects both ids | Put them back, or change the test. |
 | Code check red after adding a milestone or a session | The counts 40 and 6 are pinned | Change the test in the same commit. |
+| Code check red with "settings … that no code reads" | `tests/test_settings_used.py`: a key no code reads (misspelled, or one that does nothing) | Fix its name, or delete it; Website update published the rest meanwhile. |
+| Code check red at "Build the website (as for GitHub Pages)" with `STRICT_BUILD: N build warning(s)` | A build warning: often a link written in `content/events` or `content/bulletin` that had to be hidden, an icon name that does not exist, or a page missing from the sitemap | Fix what the listed line names; Website update published the site (its summary lists the same line under **Build warnings**). |
 | Tracker users still see the old mileage rate | Rates are kept in each browser | They change it in the Tracker's Settings → Mileage. |
 | A dial-in number is missing on `/accessibility/#phone`, and Code check is red | Not a U.S. number | Only U.S. numbers are shown; write each one as `+1` and 10 digits. |
 | "Ask the chair for the phone passcode" | `committee: phone_passcode` is empty and the passcode has letters | Paste the digits from the host's Zoom invitation. |

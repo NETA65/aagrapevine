@@ -749,8 +749,8 @@ English → Spanish, 406 Spanish → English), about 0.8 MB.
 > - The robot's copy wins when both changed.
 > - A JSON typo makes the whole memory unreadable. Since October 2026 the next run does not overwrite it: it moves
 >   the file aside as `cache.json.bad-<UTC time>` (on GitHub's computer only; git still has the last good file),
->   starts a new, empty memory and reports it (the run summary's **Settings problems**, *translations*, and a line
->   on the `/status/` translation card). Restore the file from its git history to keep the old translations;
+>   starts a new, empty memory and reports it (the run summary's **Translation problems**, and a line on the
+>   `/status/` translation card). Restore the file from its git history to keep the old translations;
 >   otherwise everything is translated again (40 minutes per run, over several runs). If the file cannot even be
 >   moved aside, it is left untouched and nothing new is translated that run.
 >
@@ -988,9 +988,10 @@ daily quote, then rebuilds
 quick sources. It translates for up to 40 minutes, commits the data (commit message
 `chore(data): content sync after settings/content change …`), builds the site with `I18N_STRICT=1` and publishes it.
 
-- Usually **about 5 minutes** from your commit to the live page (the run tests the change before it publishes), plus
-  up to 10 minutes before every visitor sees it. A glossary change that redoes many texts takes longer; what does not
-  fit is finished by the next runs.
+- Usually **about 3 minutes** from your commit to the live page (the run does not test again: since October 2026 the
+  glossary and the overrides are the committee's files, not code), plus up to 10 minutes before every visitor sees
+  it. A change of the strings in `src/_i18n/` is code: its run tests it first, about 5 minutes. A glossary change
+  that redoes many texts takes longer; what does not fit is finished by the next runs.
 - Runs never overlap: a second commit made meanwhile waits its turn, then runs.
 - Every other run (the morning refresh, the midday and evening refreshes, the nightly full update) also applies your
   fixes. The morning refresh gives new translations only 5 minutes, so it may leave texts waiting. (The nightly,
@@ -1008,9 +1009,11 @@ GitHub → **Actions** → **Website update** → the newest run → **Summary**
   settings file; the live site stays as it was.
 
 The **Code check** run shows a red ✗ when a test fails (a malformed entry, a missing language, different
-placeholders, a pinned wording). Since October 2026 Website update runs the same tests before it publishes, so its
-run is red too (*Tests failed — not published*): the site keeps the version before, and no later run publishes until
-the file is fixed ([Automation and troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)).
+placeholders, a pinned wording). For `glossary.yml` and `overrides.yml` that is all: *Website update* leaves the
+tests that judge those files to the Code check (`CONTENT_TESTS`, since October 2026) and publishes, so a translation
+problem never stops the site from updating — fix the file soon. A failing test after a change of the **strings in
+`src/_i18n/`** (code) does stop that change: Website update is red with *Tests failed — not published* and the site
+keeps the version before ([Automation and troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)).
 
 ---
 
@@ -1062,9 +1065,11 @@ message under it.
 
 **A model that is not the expected one is refused** (since October 2026). Each downloaded translation model is
 checked against its SHA-256 fingerprint (`MODEL_SHA256` in `scripts/sync/translate.py`). One that does not match is
-**not installed** (it used to be installed with a warning): that direction stays untranslated, the reason shows under
-**Settings problems** (*translations*) and on `/status/`, and `python -m scripts.sync.translate --download` prints it
-next to `MISSING`. If the model's publisher really uploaded a new file, check it and put its fingerprint in
+**not installed** (it used to be installed with a warning): that direction stays untranslated, the reason shows on
+`/status/` and in the run summary — since October 2026 under its own heading, **Translation problems**, with a
+yellow ⚠ *Translation problem* (a model whose download failed is listed there too, and simply tried again by the next
+run; an unreadable translation memory set aside as well) — and `python -m scripts.sync.translate --download` prints
+it next to `MISSING`. If the model's publisher really uploaded a new file, check it and put its fingerprint in
 `MODEL_SHA256`.
 
 ---

@@ -215,7 +215,8 @@ These forms work in a file name and inside `(until …)` / `(from …)`. The yea
 | `20270110` | January 10, 2027 |
 | `01-10-2027`, `01/10/2027`, `1.10.2027` in an English name | January 10, 2027 — **month first** (US order) |
 | the same in a Spanish name (`01-10-2027 Asamblea de otoño`) | **October 1**, 2027 — **day first** (since October 2026) |
-| `01/02/2027` with no words to tell the language (a short name, or alone inside `(hasta …)`) | **January 2**, 2027 (month first), and the run summary's *Notes* say it "could be January 2 or February 1, 2027" |
+| `01/02/2027` after a Spanish word in brackets: `(hasta 01/02/2027)`, `(vence …)`, `(desde …)`, `(publicar …)` | **February 1**, 2027 — **day first**, with no note (since October 2026: the bracket's word decides) |
+| `01/02/2027` with no words to tell the language (a short name, or after an English word: `(until …)`, `(expires …)`, `(from …)`, `(publish …)`) | **January 2**, 2027 (month first), and the run summary's *Notes* say it "could be January 2 or February 1, 2027" |
 | `14-03-2027` | March 14, 2027: a first number over 12 can only be the day (since October 2026; before, nothing) |
 | `Jan 10 2027`, `January 10, 2027`, `Jan. 10th, 2027`, `Sept 5 2027` | that day |
 | `10 de enero de 2027`, `10 enero 2027`, `el 1 de febrero de 2027` | that day |
@@ -243,7 +244,8 @@ These forms work in a file name and inside `(until …)` / `(from …)`. The yea
 | `Notice (until Feb 1)` | **Notice (until Feb 1)** | Drive's date | – | never (no year) | – |
 | `Notice (until further notice)` | Notice (until further notice) | Drive's date | – | never | – |
 | `Notice (until March 2027)` | Notice | Drive's date | – | **Mar 1**, 2027 | – |
-| `Aviso (hasta 01/02/2027)` | Aviso | Drive's date | – | **Jan 2**, 2027 | – |
+| `Aviso (hasta 01/02/2027)` | Aviso | Drive's date | – | **Feb 1**, 2027 (day first after `hasta`; since October 2026) | – |
+| `Aviso de la junta (hasta 05-11-2026)` | Aviso de la junta | Drive's date | – | **Nov 5**, 2026 | – |
 | `Spring Assembly sign-ups (from 2027-02-01)` | Spring Assembly sign-ups | Feb 1, 2027 | – | – | Feb 1, 2027 |
 | `Inscripciones (desde 2027-02-01)` · `Inscripciones (publicar: 2027-02-01)` | Inscripciones | Feb 1, 2027 | – | – | Feb 1, 2027 |
 | `2027-01-20 Sign-ups open (from 2027-02-01)` | Sign-ups open | Jan 20, 2027 | – | – | Feb 1, 2027 |
@@ -335,7 +337,7 @@ it is a note for you; the site ignores it.
 | Header line | What you can write | If you leave it out | What it does and where it shows |
 |---|---|---|---|
 | `title:` | text | the first line if it is a heading, else the first `# ` heading, else the file name | the headline everywhere |
-| `date:` | a date (forms below) | a date in the file name, else the `publish:` day, else the day the post first appears | the date printed on the post; the order of the lists (newest first); the "New" badge and What's New |
+| `date:` | a date (forms below) | a date in the file name, else the `publish:` day, else the day the post first appears (its Central-time day: a post first seen at 9:30 PM CDT keeps that evening's date) | the date printed on the post; the order of the lists (newest first); the "New" badge and What's New |
 | `publish:` | a date | on the site as soon as it is saved | keeps the post out of every page until that day (Central time); meanwhile the run summary lists it under "Scheduled bulletin posts" |
 | `expires:` | a date | never comes down | shown through that day, gone after it; "until …" shows under the date |
 | `pinned:` | `true` `yes` `y` `on` `1` `sí` `si` (any capitals) = pinned; anything else = not | not pinned | first on the bulletin, on the home page and in the digest; "Pinned" / "Destacado" badge |
@@ -384,7 +386,7 @@ version stays until you fix it. The run summary (section 7) lists the line, star
 On a PC with the repository (and Python with the packages of `requirements.txt`) you can check the posts before you
 push: `python -m scripts.sync.announcements --dry-run`, run in the repository folder, prints every post as the site
 reads it (and the `content/events/` files too), plus the problem list, and writes nothing. A post without a date
-shows `"date": null` there; the real run gives it the day it first appears.
+shows `"date": null` there; the real run gives it the day it first appears, in Central time.
 
 ### 3.9 GitHub: how the headline and the date are chosen
 

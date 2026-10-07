@@ -257,9 +257,10 @@ Every item remembers its panel: the data gets `panel: 77`, the label "Panel 77 (
 
 Anything that sits directly in A65_GV and is not a panel folder is **loose**: a folder such as `flyers`, a PDF, a
 Google Form. Loose things are **ignored**, and only **counted** in `data/raw/drive.json` → `stats.loose_skipped`
-(since October 2026: the names of files in A65_GV can be private, and that file is public). Their names (the first
-30) are only in the run's log, step *Sync sources and translate*: "outside the panel folders (not published): …".
-(The Actions logs of a public repository can be read by anyone while GitHub keeps them, about 90 days.)
+(since October 2026: the names of files in A65_GV can be private, and that file is public). The run's log, step
+*Sync sources and translate*, counts them too and names none: "N entries outside the panel folders (not
+published)" — the Actions logs of a public repository can be read by anyone while GitHub keeps them, about 90 days.
+To see which ones they are, open A65_GV in Drive.
 
 | Setting `include_loose_folders:` | What happens to a loose folder or file |
 |---|---|
@@ -395,7 +396,7 @@ its header lists every option):
 | `(x2)` … `(x5)`, `(2x)`, `(×3)` | shown 2 to 5 times as often (a bigger number counts as 5) — among many slides. With only a few pictures and videos it makes little difference: each one already comes back as often as the show's rules let it (no slide comes back until many others have shown) |
 | `(rare)` `(sometimes)` `(poco)` `(a veces)` | shown half as often — the same limit with only a few pictures and videos |
 | `(first)` `(primero)` `(primera)` | shown first when the show starts (and again after the settings change) |
-| `(from 2027-03-01)` `(desde …)` · `(until 2027-03-15)` `(hasta …)` | only from / until that day, both days included, Central time (also `starting`, `a partir de`; `till`, `through`, `vence`). Any date form of [§3.8](#38-dates-in-file-names) works, with a year from 2000 to 2099 (`(until 1999-12-31)` stays in the caption, and so does a day without its year, `(until March 15)`); a month alone means its first day (from) or its last day (until). After its until-day the file leaves `booth.json` |
+| `(from 2027-03-01)` `(desde …)` · `(until 2027-03-15)` `(hasta …)` | only from / until that day, both days included, Central time (also `starting`, `a partir de`; `till`, `through`, `vence`). Any date form of [§3.8](#38-dates-in-file-names) works, with a year from 2000 to 2099 (`(until 1999-12-31)` stays in the caption, and so does a day without its year, `(until March 15)`); a month alone means its first day (from) or its last day (until). A numbers-only date follows the bracket's word: day first after `hasta`, `vence`, `desde`, `a partir de` (`(hasta 05-11-2026)` = November 5), month first after an English word (since October 2026). After its until-day the file leaves `booth.json` |
 | `(no caption)` `(no text)` `(no title)` `(sin texto)` `(sin título)` | no caption; a message without its heading |
 | `(off)` `(apagado)` `(draft)` `(borrador)` — or a name that starts with `_` or `~` | kept in Drive, never shown (not even listed as a problem) |
 
@@ -501,7 +502,7 @@ Accepted forms — tried in this order; the first form that matches wins:
 
 | # | Form | Examples (all March 14, 2027 unless noted) |
 |---|---|---|
-| 1 | year-month-day with `-` `.` `_` or a space; a one-digit month or day is fine | `2027-03-14`, `2027.03.14`, `2027_03_14`, `2027 03 14`, `2027-3-4` (March 4) |
+| 1 | year-month-day with `-` `.` `_` or a space — the same mark twice (since October 2026); a one-digit month or day is fine | `2027-03-14`, `2027.03.14`, `2027_03_14`, `2027 03 14`, `2027-3-4` (March 4) |
 | 2 | eight digits, year-month-day | `20270314` |
 | 3 | month-day-year, **US order**, with `-` or `.` (or `/` in a name typed in Drive, such as a Google Doc's — computers do not allow `/` in file names) | `03-14-2027`, `3-14-2027`, `03.14.2027`, `3/14/2027` |
 | 4 | month name, day, year — "st/nd/rd/th" and the comma optional | `March 14, 2027`, `Mar 14 2027`, `Mar. 14th, 2027`, `Sept 5 2027` (September 5), `Setiembre 5 2027` |
@@ -515,16 +516,26 @@ Since October 2026 also:
 
 | # | Form | Examples |
 |---|---|---|
-| 7 | a range of days: the file is dated its **first** day | `March 14 - 16, 2027`, `March 30 - April 2, 2027`, `14 al 16 de marzo de 2027`, `30 de marzo al 2 de abril de 2027`, `2027-03-14 - 2027-03-16` (all March 14, 2027 or March 30) |
+| 7 | a range of days: the file is dated its **first** day (a flyer in `flyers/` becomes one event over all its days: [Flyers and events §4.3](flyers-and-events.md#43-dates)) | `March 14 - 16, 2027`, `March 30 - April 2, 2027`, `14 al 16 de marzo de 2027`, `30 de marzo al 2 de abril de 2027`, `2027-03-14 - 2027-03-16` (all March 14, 2027 or March 30) |
+| 8 | a Spanish first of the month as an ordinal | `1° de marzo de 2027`, `1º`, `1.º`, `1ro`, `primero de marzo de 2027` (March 1, 2027 — a whole date, not a month alone) |
 
 **A date written in numbers only** (form 3) is read like this:
 
 | In the name | Read as | Why |
 |---|---|---|
 | `14-03-2027`, `14.03.2027` | March 14, 2027 | a first number over 12 can only be the day (before October 2026: no date) |
-| `Informe del comité 05-03-2027`, `Taller 05-03-2027` | March 5, 2027 | a name in Spanish (or French) reads it **day first** (a single word such as `Informe` is not enough to tell: below) |
+| `Informe del comité 05-03-2027`, `Taller 05-03-2027` | March 5, 2027 | a name in **Spanish** reads it **day first** (only Spanish does) |
 | `Committee meeting minutes 05-03-2027` | May 3, 2027 | a name in English reads it month first (US order) |
-| `Report 05-03-2027`, `La Viña Report 05-03-2027` | May 3, 2027, **with a note** | a name whose language is unclear (a word or two) reads it month first, and the run summary's *Notes* (and `/status/`) name the file: `2027-2028_Panel77_GVLV/reports/Report 05-03-2027.pdf: “Report 05-03-2027”: “05-03-2027” could be May 3 or March 5, 2027 — read as May 3 (month first). Write the date year-month-day (2027-05-03 or 2027-03-05) to be sure`. The magazine names Grapevine, AA Grapevine and La Viña do not count when the language is decided |
+| `Report 05-03-2027`, `La Viña Report 05-03-2027` | May 3, 2027, **with a note** | a name whose language is unclear reads it month first, and the run summary's *Notes* (and `/status/`) name the file: `2027-2028_Panel77_GVLV/reports/Report 05-03-2027.pdf: “Report 05-03-2027”: “05-03-2027” could be May 3 or March 5, 2027 — read as May 3 (month first). Write the date year-month-day (2027-05-03 or 2027-03-05) to be sure` |
+
+How the language is judged (since October 2026): only the name's own title words count. The magazine names
+(Grapevine, AA Grapevine, La Viña), capital time-zone letters (`ET`, `EST`, `CST` …), everything after `@` and a
+group or town name that does not start the name (`Grupo Progreso Latino`, `El Paso`, `Del Rio`) are left out; the
+name is Spanish or English only when its words are all that language, or at least two more of them are. Words such
+as *aniversario, asamblea, taller, informe, aviso, boletín* and the weekdays count as Spanish
+([Flyers and events §4.3](flyers-and-events.md#43-dates) has the whole list). So `Aniversario 05-10-2026 - Grupo
+Nueva Vida` is October 5, and `03-04-2027 Writing Workshop 7pm ET @ Tyler` is March 4, with no note. Inside
+`(until …)` / `(hasta …)` brackets the bracket's word decides instead ([§3.6](#36-the-booth-folder-new)).
 | `Session 2 - 4 March 2027` | March 4, 2027, title "Session 2" | a number right after a counting word (district / distrito, panel, group / grupo, step / paso, session / sesión, week / semana, part / parte, # …) is not the first day of a range |
 
 Not read as a date (the text stays in the title):
@@ -835,12 +846,12 @@ watches Drive. Every run of **Website update** reads the Drive — the quick run
 
 | Run | When | Drive time box | Your change is live |
 |---|---|---|---|
-| Morning refresh | started by the Morning check when today's update is not on the site yet (with the morning alarm: about 4:30 AM Central) | 5 minutes | about 2–3 minutes after it starts |
+| Morning refresh | started by the Morning check when today's update is not on the site yet (with the morning alarm: about 4:30 AM Central) | 5 minutes | about 3 minutes after it starts |
 | Nightly full update | GitHub's schedule, set 4 hours early on purpose; GitHub usually starts it around 6–8 AM Central (5–7 in winter) | 15 minutes | when the run ends, usually about 10–15 minutes |
-| Midday refresh (quick) | GitHub's schedule; usually starts around 11 AM–1 PM Central | 15 minutes | about 2 minutes |
-| Evening refresh (quick) | GitHub's schedule; usually starts around 7–9 PM Central | 15 minutes | about 2 minutes |
-| After a push to `main` (settings, content, code, translation fixes — not documentation or tests) | right away (a quick run) | 15 minutes | about 5 minutes (the tests run before it publishes) |
-| By hand | GitHub → **Actions** → **Website update** → **Run workflow**: tick **skip_crawl** for a quick run (about 2 minutes); leave everything empty for a full run (10–15 minutes) | 15 minutes | as said |
+| Midday refresh (quick) | GitHub's schedule; usually starts around 11 AM–1 PM Central | 15 minutes | about 3 minutes |
+| Evening refresh (quick) | GitHub's schedule; usually starts around 7–9 PM Central | 15 minutes | about 3 minutes |
+| After a push to `main` (settings, content, code, tests, translation fixes — not documentation) | right away (a quick run) | 15 minutes | about 3 minutes (about 5 when it tests a change of the code before it publishes) |
+| By hand | GitHub → **Actions** → **Website update** → **Run workflow**: tick **skip_crawl** for a quick run (about 3 minutes); leave everything empty for a full run (10–15 minutes) | 15 minutes | as said |
 
 GitHub Pages may take up to about 10 more minutes to show the new pages to every visitor. The scheduled runs fall
 in the early morning, around midday and in the evening (Central; an hour earlier in winter), so **a file uploaded
@@ -922,7 +933,7 @@ was added (`/digest/`, and the e-mail when it is switched on).
 | 17 | `Archive/2025 Panel 75 summary.pdf` | an "other" file | tab "Archive" (`/portfolio/#docs-folder-archive`, the same name on the Spanish page); Library type "Other"; the digest e-mail labels the row "Files" |
 | 18 | `2027-03-14 Spring Assembly.pdf` (directly in the panel folder) | an "other" file, March 14, 2027 | tab **Other** (`/portfolio/#docs-folder-other`; Spanish page: **Otros**, `#docs-folder-otros`) |
 | 19 | `reports/PRIVATE budget.pdf` | nothing | never on the website — only counted in `stats.excluded_by_reason` — but still openable in Drive |
-| 20 | `A65_GV/flyers/2027-03-14 Spring Assembly.pdf` (in the root, outside the panel folder) | nothing | ignored; counted in `stats.loose_skipped` (the folder name `flyers` is only in the run's log) |
+| 20 | `A65_GV/flyers/2027-03-14 Spring Assembly.pdf` (in the root, outside the panel folder) | nothing | ignored; counted in `stats.loose_skipped` (since October 2026 the run's log counts it too, without its name) |
 
 ### 5.3 Pages that link one file by its name
 
@@ -968,13 +979,13 @@ Reading the run summary, section by section:
 |---|---|
 | `mode` | `"html"` (the public folder view, today), `"api"` (the API key), `"html (api failed)"` |
 | `root`, `panels`, `panel_folders` | the root folder's name; the panel folders found, with their labels and ids |
-| `include_loose`, `loose_skipped`, `skipped_panels` | the loose setting; how many loose folders and files were skipped (a count; their names are only in the run's log); the numbers of the older panels skipped |
+| `include_loose`, `loose_skipped`, `skipped_panels` | the loose setting; how many loose folders and files were skipped (a count; since October 2026 the run's log gives only the count too); the numbers of the older panels skipped |
 | `folders`, `files`, `fetched` | folders read; files in the list (bulletin posts, booth files and closed forms included); files listed in this run |
 | `new`, `removed`, `kept_unverified` | this run's arrivals, removals, and files kept because their folder could not be read |
 | `by_category`, `by_kind`, `albums` | counts per folder kind, per file kind, per album |
 | `events_from_flyers` | how many flyers carry an event date |
 | `excluded`, `excluded_by_reason` | never-published files: the count and the reasons (never the names) |
-| `unreadable_folders`, `depth_limited`, `unconfirmed_folders` | how many folders could not be read, were deeper than 6 levels, or looked empty although they held files (counts since October 2026; the run's log names them) |
+| `unreadable_folders`, `depth_limited`, `unconfirmed_folders` | how many folders could not be read, were deeper than 6 levels (`--max-depth`), or looked empty although they held files (counts since October 2026; the run's log counts them too and names no folder that is not published: an unreadable folder appears as "a folder in <the folder above it> could not be read (https://drive.google.com/drive/folders/<id>)") |
 | `shortcuts_resolved` | shortcuts looked up in this run |
 | `announcements`, `booth_texts`, `forms` | text downloads (fetched, reused, file only, deferred, failed); the booth messages' downloads (only when there are any); form checks (open, closed, members-only, unknown) |
 | `requests`, `truncated`, `warnings` | requests made; whether the run stopped early; the notes the run summary shows |
@@ -1333,7 +1344,7 @@ Problems that belong to one folder kind are in its own guide: [Flyers and events
 | "root folder unreadable: &lt;reason&gt; — is it shared as 'Anyone with the link'?" | run summary (**PROBLEM**, yellow warning "previous items kept"); `/status/` | share A65_GV "Anyone with the link — Viewer"; check `drive.root_folder_id` |
 | "drive.root_folder_id is not set in config/site.yml" | the same | put the folder id back in `config/site.yml` |
 | "no Panel folder >= 77 found in the root folder" | Notes | a panel folder was renamed, moved or not created yet ([§3.3](#33-how-a-panel-folder-is-recognised)) |
-| "N folder(s) could not be read — check their sharing settings" | Notes | the run's log names each folder and why ("folder … unreadable: …"): "not shared publicly (Google asks to sign in)", "not found or not shared publicly (HTTP 404)", "request access page", "unexpected page (not a public folder, or Drive changed its markup)", "network error (no response)" |
+| "N folder(s) could not be read — check their sharing settings" | Notes | the run's log gives each one by the folder above it and its Drive address, never its name (since October 2026), and why: "a folder in 2027-2028_Panel77_GVLV/photos could not be read (https://drive.google.com/drive/folders/<id>): …" — open the address to see which folder it is. The reasons: "not shared publicly (Google asks to sign in)", "not found or not shared publicly (HTTP 404)", "request access page", "unexpected page (not a public folder, or Drive changed its markup)", "network error (no response)" |
 | "N folder(s) looked empty although they held files on the last update — their M file(s) stay on the site until the next update confirms it" | Notes; **On hold** on `/status/` | nothing, if you emptied it: the next update removes the files. If you did not, check the folder in Drive |
 | "N folder(s) looked empty again — their M file(s) were removed" | Notes | the files left the site, as the folder is empty |
 | "<path>: “…”: “05-10-2026” could be May 10 or October 5, 2026 — read as May 10 (month first). Write the date year-month-day … to be sure" | Notes; `/status/` | rename the file with the date as `YYYY-MM-DD` ([§3.8](#38-dates-in-file-names)) |

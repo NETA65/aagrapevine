@@ -165,10 +165,13 @@ time it is done long before, and with GitHub's usual delay (4 hours or more) it 
 Only the nightly one is a full update: any other schedule is a quick refresh. A full update usually takes 10 to 15
 minutes (at the very most a little over 2 hours, when the PDF search and the translations use all their time). On
 the 1st of the month, and after a day GitHub skipped, the Morning check also starts the full update — even when
-today's quotes were already on the site. The site also updates about 5 minutes after someone saves a change to the
-settings or content (a page may take up to about 10 more minutes to show it everywhere): that run **tests the code
-first** and publishes only when the tests pass, so a change that breaks something never goes live (the site keeps
-the version before). When the change is to a source only the full update reads (an Instagram post listed by hand, a
+today's quotes were already on the site. The site also updates about 3 minutes after someone saves a change to the
+settings or content (a page may take up to about 10 more minutes to show it everywhere). A change to the **code**
+takes about 5: that run **tests the code first** and publishes only when the tests pass, so a change that breaks
+something never goes live (the site keeps the version before). A slip in the content or the settings does not stop
+the site from updating: the update leaves out what it cannot read, and the *Code check* goes red on that save. (Only
+what the build itself refuses stops it, as before: a settings file that cannot be read at all, or a mistake in one
+of the files it checks — a presentation deck, `config/orientation.yml`, `carry.yml`, `history.yml`, `expenses.yml`.) When the change is to a source only the full update reads (an Instagram post listed by hand, a
 YouTube channel, La Viña's weekly open meeting, the meeting lists …), that save's run reads that source too.
 In the **Actions** tab each run's title says what it is: "Nightly full update (GitHub schedule)", "Midday
 refresh (GitHub schedule)", "Evening refresh (GitHub schedule)", "Morning refresh: new day and daily quote",
@@ -241,7 +244,12 @@ What the newer pages do:
   with dates and QR code, is on the month's own page); its "This month" card drops a date once it is over and
   shows the next committee meeting. A page left open after the month ends says so and links the new month. Its QR
   code opens that month's page; the **12 previous months'** addresses forward to `/monthly/` (since October 2026,
-  so a poster on a corkboard keeps working for a year). The same page holds the **GV/LV report** for district
+  so a poster on a corkboard keeps working for a year). Shared on WhatsApp, Facebook or in a text message, a
+  month's page shows the top of its poster as the link's picture (since October 2026; made by every update — the
+  committee's card on a day it could not be made). Facebook also keeps a page's preview for a few days: to refresh a
+  month already shared, paste its address into Facebook's **Sharing Debugger** and press **Scrape Again**. On the
+  Spanish poster the note "Títulos traducidos automáticamente del inglés — originales en cursiva" sits beside the
+  italic originals it explains, once. The same page holds the **GV/LV report** for district
   meetings (`/monthly/#report`, see section 4); the old `/districts/` address forwards there.
 - **Monthly digest** (`/digest/`) — everything from last month on one page (the *September 2026 digest* all
   through October): bulletin posts, the events that took place, the committee's files and photo albums added
@@ -403,8 +411,9 @@ All settings live in **one file**: [`config/site.yml`](config/site.yml). To edit
 2. Change the value after the colon. **Keep the spaces at the start of each line exactly as they are**
    (YAML uses indentation), and keep quotes around text that has them.
 3. Click **Commit changes…** → **Commit changes**.
-4. The site rebuilds automatically in **about 5 minutes**: the tests run first, then it publishes (watch it in
-   the **Actions** tab; a page may take up to about 10 more minutes to show the change everywhere).
+4. The site rebuilds automatically in **about 3 minutes** (watch it in the **Actions** tab; a page may take up
+   to about 10 more minutes to show the change everywhere). The *Code check* tests your change meanwhile, in about
+   10 minutes: a red ✗ there means a slip to fix (the site was published without the part it could not use).
 
 Common changes:
 
@@ -639,7 +648,8 @@ county picker), the weekly open meetings, new service documents and sign-up link
 member's own notes. Each GVR / RLV can switch sections on and off, reorder and edit them, add their own, and
 copy the result (plain text for WhatsApp, or formatted for e-mail / Word), send it by WhatsApp or e-mail,
 download it (Word .docx or .txt) or print it (`src/assets/js/report.js`). When a new month starts, the editor
-offers **"Start from last month's draft?"**: it brings back the GVR's own sections, their order, the sections left
+offers **"Start from last month's draft?"** (for an older draft it names the month: "Start from your August 2026
+draft?"): it brings back the GVR's own sections, their order, the sections left
 out, changed titles, the counties picked and the *Action items* and *My notes* texts (the sections built from the
 site's data start fresh). The Book of the Month offer shows only while it runs, and the shop section's text changes
 by itself at midnight Central when an offer starts or ends or a price change is announced, takes effect or ends. WhatsApp is one tap at any
@@ -669,7 +679,7 @@ translation you want:
 Add names that must never be translated under `keep:` (for example a group's name) and AA terms
 that always need the same translation under `terms:`. Instructions are at the top of that file.
 
-Saving either file rebuilds the site in about 5 minutes. If a file has a typo, the **Website update** run
+Saving either file rebuilds the site in about 3 minutes. If a file has a typo, the **Website update** run
 summary lists it under *Settings problems*: the translations already made stay, and new titles wait in their
 original language until the file is fixed.
 
@@ -699,12 +709,12 @@ happen every month ([`recurring_events:`](#add-a-recurring-event)).
 keeps the event listed until its last day is over.
 
 **Always write the whole date, with its year.** A `start:` or `end:` without a year (`January 10`), without a day
-(`March 2027`) or a time alone (`19:00`) is not guessed any more: the event is left out (its last good version
-stays) and the run summary lists it under **Event files to fix**, with a line to copy, for example `start:
-2027-01-10`. A time written with a UTC offset that is not Central time's on that day still shows, and is listed
-too. The Code check tests every file in `content/events` the same way (`tests/test_content_events.py`), so a
-mistake shows as a red ✗ right after you save it — and since *Website update* runs the same tests before it
-publishes, **nothing is published until the file is fixed** (the site keeps the version before).
+(`March 2027`, `marzo de 2027`) or a time alone (`19:00`) is not guessed any more: the event is left out (its last
+good version stays) and the run summary lists it under **Event files to fix**, with a line to copy, for example
+`start: 2027-01-10`. A time written with a UTC offset that is not Central time's on that day still shows, and is
+listed too. The Code check tests every file in `content/events` the same way (`tests/test_content_events.py`), so
+a mistake shows as a red ✗ on the Code check of your save. *Website update* still publishes the rest of the site
+(it leaves the tests of the committee's own files to the Code check): fix the file soon.
 
 **Details not final yet** (a date is set, the venue is not): add `tentative: true` (or `yes` / `sí`)
 and, for the place, `location: "Venue to be announced"` with `location_es: "Lugar por anunciarse"`.
@@ -778,9 +788,9 @@ After that, nothing needs changing here: the next daily update reads it, and the
      the two fields above.
 4. Click the green **Run workflow** button. A full run usually takes 10 to 15 minutes (the PDF search waits 5
    seconds between pages, as the sites ask, but it has little left to do), at the very most a little over 2 hours
-   when the PDF search and the translations use all their time; a quick refresh about 2 minutes; a 300-minute
-   catch-up about 6 hours. When the code or content changed since the tests last passed, the run also tests it
-   before it publishes (a few more minutes).
+   when the PDF search and the translations use all their time; a quick refresh about 3 minutes; a 300-minute
+   catch-up about 6 hours. When the code changed since the tests last passed, the run also tests it before it
+   publishes (a few more minutes).
    You can close the page — it runs on GitHub's computers. The run's title in the list says which kind it is:
    "Full update (started by hand)", "Full update without the document search (started by hand)" (`0` minutes),
    "Quick refresh (started by hand)" or "Morning refresh: new day and daily quote".
@@ -837,12 +847,13 @@ saved (nothing has to be fetched again), but the website is only republished by 
   tried for 3 days, **NOT CHECKED** ("not checked for N days").
 - **The badge** at the top of this page is green when the last update succeeded.
 - **"Code check (tests and test build)" runs:** when a settings, content or code file is saved, a
-  **Code check** run also appears next to **Website update**. It builds a test copy of the site and
-  runs the automatic tests; nothing is published. A red ✗ there means that change broke something:
-  undo it from the file's **History** (or send the run to whoever helps with the website). The live
-  site keeps working either way: **Website update** runs the same tests before it publishes, and a change that
-  fails them is not published (its run is red, *"Tests failed — not published"*; the site keeps the version
-  before).
+  **Code check** run also appears next to **Website update** (about 10 minutes). It builds a test copy of
+  the site, opens it in a real browser and runs every automatic test; nothing is published. A red ✗ there
+  means that change broke something: fix it, or undo it from the file's **History** (or send the run to whoever
+  helps with the website). The live site keeps working either way. A change to the **code** that fails the tests
+  is not published: **Website update** runs them before it publishes (its run is red, *"Tests failed — not
+  published"*; the site keeps the version before). A slip in a settings or content file is published without the
+  part that could not be read (the run summary names it), and only the Code check goes red.
 - **E-mail when a run fails:** GitHub → your picture → Settings → Notifications → *Actions* →
   "Only notify for failed workflows". **Good to know:** e-mails about the *timed* runs go to the
   person who last switched each workflow on (or last changed its schedule). To make sure they come to
@@ -1245,9 +1256,10 @@ For a later move, follow
 - **Dependabot pull requests.** Once a month GitHub may open a pull request titled
   `chore(actions)…` (the workflows' building blocks) or `chore(deps)…` (the site tools, and since October 2026 a
   new **major** version of a Python package: every run already installs the newest minor and patch releases,
-  `requirements.txt` caps each package below its next major version, and `yt-dlp` has no cap). A few minutes later
-  the **Code check** has built the website with the update and run the tests: **merge only if the pull request
-  shows a green ✓**. If it shows a red ✗, leave it open (or close it) — the live site is not
+  `requirements.txt` caps each package below its next major version, and `yt-dlp` has no cap; also each newer
+  `playwright`, pinned in `scripts/ops/requirements-browser.txt` for the browser checks and the posters' share
+  pictures). About 10 minutes later the **Code check** has built the website with the update, opened it in a real
+  browser and run the tests: **merge only if the pull request shows a green ✓**. If it shows a red ✗, leave it open (or close it) — the live site is not
   affected. After merging, glance at the next **Website update** run; if it is red, open the merged
   pull request and click **Revert**.
 - **Who gets the failure e-mails.** E-mails about the timed runs — Website update, the hourly backstop of
@@ -1293,7 +1305,7 @@ For a later move, follow
 | A bulletin post with `publish:` / "(from …)" is not on the site | Its day has not come yet (Central time), or its date could not be read | The **Website update** run summary lists it under *Scheduled bulletin posts*, or under *Bulletin files to fix* with the reason. |
 | One phone or computer shows an old page, or a page looks unstyled after an update | A copy the browser kept (the site works offline) | Reload the page; if the small "Updated" notice shows, choose **Reload**. Still wrong: close every tab of the site and open it again. Last resort on that device: browser settings → site data for the site → clear (its saved pages go too). |
 | Red ✗ right after editing a settings file | A typo in the YAML (usually indentation or a missing quote) | Open the failed run → the red step shows the line. Fix the file, or undo your change from the file's **History**. The live site is unaffected. |
-| Red ✗ with *"Tests failed — not published"* | A change broke the automatic tests, so it was not published (the live site keeps the version before) | The run summary's *Tests before publishing* lists the failing tests. Fix the change or undo it; the next run publishes. [how-to/automation-and-troubleshooting.md §14.10](how-to/automation-and-troubleshooting.md#1410-tests-failed--not-published) |
+| Red ✗ with *"Tests failed — not published"* | A change to the code broke the automatic tests, so it was not published (the live site keeps the version before) | The run summary's *Tests before publishing* lists the failing tests, and which of them read the committee's own files. Fix the change or undo it; the next run publishes. [how-to/automation-and-troubleshooting.md §14.10](how-to/automation-and-troubleshooting.md#1410-tests-failed--not-published) |
 | An issue "The website update keeps failing" appeared | Two timed (or Morning check) runs in a row failed | Open the issue: it names the failing part and links the run. It closes itself after the next run that works. |
 | Status page: a source says **On hold** | It suddenly found far fewer items (or a Drive folder looked empty), so the missing ones stay until the next update confirms it | Nothing to do: the next update removes them if they are really gone. A big removal of your own (many Drive files at once) leaves the site one update later. |
 | A Drive file does not appear | Wrong folder, folder not public, name contains `PRIVATE`, it is a spreadsheet, or the update hasn't run yet | Check the file is inside the current Panel folder and the root folder is shared "Anyone with the link". Wait for the next run or run it manually. |
@@ -1313,7 +1325,8 @@ For a later move, follow
 | The monthly e-mail did not arrive | Secrets missing, wrong app password, nothing new last month, or it is still waiting for the month's first full update (it goes out on the 1st from 7 AM Central once the site has updated — at the latest from noon on the 3rd) | Open the latest **Monthly e-mail digest** run: its summary says exactly which ("waiting for the data" means a later try sends it; "Digest send not confirmed" means a send was cut off: check the group). Gmail needs an **app password**. To send it now, run it with *Preview only* unticked (and **force** ticked if the month was marked as sent). |
 | Someone installed the site, but it opens in the browser (a small Chrome badge on its icon, or it opens in Safari) | It was added as a shortcut or a bookmark, not as the app | Send them `/offline/#steps`: on Android, remove the icon and choose **Install** (not "Create shortcut"); on iPhone, remove it and add it again with **Open as Web App** on. |
 | An issue "Broken links found by the weekly check" appeared | A link in the settings or in a `content/` file moved | Open the issue; fix the address in `config/site.yml` or the `content/` file. It closes itself when fixed. |
-| A new archive file in `content/archive` is not on `/published/#archive` | Its name is not understood or carries an older date, it is not a `.csv` file (an `.xlsx` export, for example), or it was not used (a missing column, far fewer rows than the file before) | The **Website update** run summary's *Writers archive* lines say which (**CSV file to fix**); the older rows stay on the site meanwhile. A file with a missing column, or one that cannot be read, also fails the tests, so the run is red (*Tests failed — not published*) and nothing is published until the file is fixed or deleted. See [how-to/writers-archive.md](how-to/writers-archive.md). |
+| A new archive file in `content/archive` is not on `/published/#archive` | Its name is not understood or carries an older date, it is not a `.csv` file (an `.xlsx` export, for example), or it was not used (a missing column, far fewer rows than the file before) | The **Website update** run summary's *Writers archive* lines say which (**CSV file to fix**); the older rows stay on the site meanwhile. A file with a missing column, or one that cannot be read, also turns the **Code check** red; *Website update* still publishes (it leaves the tests of the committee's own files to the Code check). See [how-to/writers-archive.md](how-to/writers-archive.md). |
+| Red ✗ on **Code check** only, after saving a settings or content file | A slip in that file (a date without its year, a bad booth row, a setting no code reads …) | The Code check's log names the file and what to change; the site was published without the part it could not read. Fix the file soon. |
 
 Still stuck? Open the failed run, click the red step, copy the last 20 lines, and send them to
 whoever helps with the website (or open an **Issue** in this repository).
@@ -1439,9 +1452,20 @@ visitor's own device; nothing is sent anywhere.
   during the very first visit is kept too, with its own styles and
   scripts. "Save key pages" also asks the browser to **keep** them (persistent storage): the result line then says
   "This browser will keep them until you remove them." or "This browser may still remove them when the device is
-  short of space. Installing the site as an app helps keep them." Saved pages not opened for a week are fetched
-  again in the background when the site is opened with a connection (one at a time, at most every 6 hours; a page
-  that is gone keeps its saved copy). Offline, kept pages open normally under a small "You're offline" notice; any other
+  short of space." followed, since October 2026, by what helps on that device: on an iPhone, an iPad or Safari on
+  a Mac "On this device an installed app keeps its own copy: install the site as an app, then open it and save the
+  pages there to keep them."; on other phones and computers "Installing the site as an app and saving them again
+  from the app helps keep them."; inside the installed app, and in a browser that cannot install the site (Firefox
+  on a computer, the browser inside Facebook or Instagram), nothing more. Saved pages not opened for a week are
+  fetched again in the background when the site is opened with a connection (one at a time, at most every 6 hours;
+  a page that is gone keeps its saved copy) — but never while Data saver is on (the visitor's choice in the Aa
+  menu, or *Automatic* with the browser's data saver or a 2G connection: then saved pages are refreshed only when
+  opened online or saved again), and never beside "Save key pages" or the booth display's save (a save stops a
+  running round, and a page the save removed, such as last month's toolkit, is not put back). A month's toolkit page
+  saved for offline keeps its own calendar file too, so its **Add … to my calendar** button works offline (the big
+  `/events.ics` feeds are never kept). A page opened online but not saved keeps its own area stylesheet (the
+  monthly toolkit's, the booth's, the Tracker's …) offline after a code update too: the new service worker carries
+  the old version's stylesheets over (nothing is downloaded for it). Offline, kept pages open normally under a small "You're offline" notice; any other
   page shows the Saved pages & app page (`/offline/`, also "See saved pages" in the menu) in its place,
   saying "You're offline — this page isn't saved on this device yet" above the list of saved pages, and
   reloads itself when the connection is back. That stand-in keeps up with the daily content (the **Join
@@ -1453,7 +1477,8 @@ visitor's own device; nothing is sent anywhere.
 - **Data saver** (Aa menu: Off / On / Automatic — automatic follows the browser's own data saver and a
   2G connection; while offline its effects are always on): the hero art stays still, pictures are not downloaded
   (grey tiles), YouTube previews become **Load video (uses data)** buttons, podcast episodes show their
-  download size (e.g. "70.1 MB") before you press play, and nothing is fetched ahead of time.
+  download size (e.g. "70.1 MB") before you press play, and nothing is fetched ahead of time — not even the
+  weekly background refresh of saved pages (since October 2026).
   **Show images** (in the small notice, or the Aa menu) brings the pictures back on that page.
 
 **How updates arrive.** With a connection, pages always come from the site (checked with the site on
@@ -1554,19 +1579,44 @@ This describes Tracker 1.2.0 (October 2026).
   `service-expenses-backup-no-photos-YYYY-MM-DD.json`, small enough to e-mail (the photos stay on this device);
   and **Export CSV (all)**. Before saving it shows the size ("Full backup: about X, n receipt photos. Without
   photos: about Y."); above about 18 MB it says the full backup is too big to send by e-mail (most e-mail allows
-  about 25 MB), and **Back up now** asks: Cancel, Without photos, or Save the full backup.
+  about 25 MB), and **Back up now** asks: Cancel, Without photos, or Save the full backup. Since October 2026 a full
+  backup reads each receipt photo first: a photo this browser can no longer read (its stored file is gone) is left
+  out and the rest is still backed up, and the message names it — "Downloaded … — without 1 receipt photo this
+  browser couldn't read: Big Book · Sep 27." (at most 3 names). Settings → Data → Export then lists those entries
+  under the buttons ("Not in the last full backup — this browser couldn't read these receipt photos. If you still
+  have the receipt, open the entry and choose its photo again:") until the next full backup. A backup that fails all
+  the same gives its own reason (too big for one `.zip`, for example) or says "The full backup couldn't be made. Back
+  up without photos instead (Settings → Data): it keeps every entry and setting." *Last backup* is stamped even
+  when photos were left out. ("The photos stay on this device" holds for the entries the browser stored: while it
+  is not storing entries — storage full or blocked — a photo added meanwhile is in the full backup only.)
 - **Restore** (Settings → Data → Import): a `.zip` backup, any `.json` backup of any size (the old 80 MB limit is
   gone; older backups with the photos inside still restore), or a backup that was unpacked: choose its
   `backup.json` together with its photos (zipped again with Windows' or a Mac's own "compress" works too). The
   preview counts any photo that is missing, and the photos come back one by one ("Restoring the receipt photos: n
-  of total…"). Restoring a backup without photos keeps this device's photos.
+  of total…"). Restoring a backup without photos keeps this device's photos. Photos that could not be restored (a
+  damaged `.zip` entry, storage that refuses) are said once when the photos are done: in the message ("Receipt photos
+  that couldn't be restored: N.", read out by screen readers), or to screen readers alone while an **Undo** is on
+  screen. A backup whose list names no photos (such as the repaired download of unreadable data, below) finds each
+  entry's photo by its file name, `<entry id>.jpg` (or `.png`, `.webp`, `.gif`), chosen with it or zipped with it.
 - **Import a spreadsheet:** a CSV (also Excel's "Unicode text", which is UTF-16), or an Excel workbook (`.xlsx`:
   its first sheet; Chrome or Edge 103+, Firefox 113+, Safari 16.4+). An old `.xls` gets a message to save it as
   `.xlsx` or CSV.
 - **Safer:** fixing a typo in an imported entry keeps the details its form does not show (nights, quantity, item,
-  attendees …); leaving the page with unsaved changes in the form asks "Leave site?"; if the browser's stored
-  Tracker data ever cannot be read, it is set aside unchanged and a notice offers **Download it** and **Remove it**
-  (nothing new is saved over it).
+  attendees …). Leaving the page asks "Leave site?" with unsaved changes in the form — and, since October 2026, also
+  while the browser is not keeping the entries (storage full or blocked, data saved by a newer version of the page,
+  unreadable data with no room to set it aside), until a save works again or a backup has everything: a full
+  backup always counts, a backup without photos only when no receipt photo exists in this tab alone, a CSV export
+  never. (A phone that closes a background tab by itself asks nothing.) If the browser's stored Tracker data ever
+  cannot be read, it is set aside unchanged and a notice offers **Download it** and **Remove it** (nothing new is
+  saved over it): **Download it** gives a `.zip` of that data as it was plus the receipt photos it names (`<entry
+  id>.jpg`), or the `.json` alone when it names none — repaired, it restores with those photos; **Remove it** says
+  how many photos go too ("…and its receipt photos (2 receipt photos)? … the download has its photos too"), and
+  after it the notice does not come back; **Erase everything** leaves that set-aside data and its photos in place.
+- **Two tabs:** an entry with a receipt photo, open in the edit form in one tab and deleted in another, is saved
+  again as itself — same id, its creation date, the details its form does not show and its photo, even after the
+  other tab's undo time ran out and deleted the photo (the open form keeps a copy). Meanwhile the form says "This
+  entry was deleted in another tab. Saving it adds it again." and counts as unsaved; the other tab's **Undo** stays
+  on screen.
 
 **For maintainers**
 
@@ -1575,7 +1625,7 @@ This describes Tracker 1.2.0 (October 2026).
 | `src/pages/tracker.njk` | the page: hero, the five views (Entries · Summary · Giveaways · Requests · Settings), the add / edit dialog, the privacy promises |
 | `src/assets/js/expenses-core.js` | `window.GVX`, no DOM: the data model, the money math, summaries, subscriptions and the calendar file, the service report, CSV and backups. Its header comment is the **contract**: CSV columns are never renamed or reordered, a new one goes at the end (1.1.0 added `activity, activity_label, role, trips, no_miles, ref`), and files written before still import as they did |
 | `src/assets/js/expenses-files.js` | `window.GVF` (Tracker 1.2.0), no DOM: the `.zip` backups (writing, and reading with a CRC check), `.xlsx` sheets, large `.json` backups read in slices |
-| `src/assets/js/expenses.js` | the Alpine app `xpApp`: storage (localStorage + IndexedDB photos; the keys `gv-expenses:v1`, `…:undo` for photos a pending undo still needs, `…:unreadable-YYYY-MM-DD` for a stored copy that could not be read), the views, the form, print and downloads |
+| `src/assets/js/expenses.js` | the Alpine app `xpApp`: storage (localStorage + IndexedDB photos; the keys `gv-expenses:v1`, `…:undo` for photos a pending undo still needs, `…:unreadable-YYYY-MM-DD` for a stored copy that could not be read; the entry open in the edit form also protects its photo — an in-memory copy, stored again on save when missing, and spared by `dropPhotos` / `cleanPhotos`), the views, the form, print and downloads |
 | `config/expenses.yml` | the defaults every visitor starts from (categories, who pays, payment methods, service activities, mileage rates, reminder days; `panels` only overrides or adds to the panels the Tracker works out itself). A built-in id is permanent: see its header |
 | `src/_i18n/expenses.json`, `src/assets/css/areas/expenses.css` | the words (English and Spanish) and the look, print included |
 | `tests/test_expenses_core.py`, `test_expenses_app.py`, `test_expenses_files.py`, `test_expenses_page.py` | the logic (a GVR's 2026 report rebuilt number for number — modeled on a real one, its names, references and distances invented: a public repository holds no one's booking numbers or home; `tests/fixtures/expenses/`: files written before 1.1.0 must import identically), the screen in Node.js, the page and its strings |

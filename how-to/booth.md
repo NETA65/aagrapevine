@@ -952,7 +952,10 @@ language code; both magazines is the default anyway).
 ([The Drive panel folder §3.8](drive-panel-folder.md#38-dates-in-file-names)): `2027-03-01`, `March 1, 2027`,
 `03/15/2027`, `15 March 2027`, `el 15 de marzo de 2027`, `2027.03.15`; a month alone means its first day for
 "from" and its last day for "until" (`(until March 2027)` → March 31). A date without its year (`(until March
-15)`) stays in the caption. A future "from" day is fine: the file is saved for offline at once and starts showing on
+15)`) stays in the caption. A date in numbers only follows the bracket's word (since October 2026): after a Spanish
+word — `(hasta …)`, `(vence …)`, `(desde …)`, `(a partir de …)` — it is read **day first** (`(hasta 05-11-2026)` →
+November 5, 2026), after an English one month first (`(until 05-11-2026)` → May 11), whatever the file's `ES` / `EN`
+code says. Safest: `2026-11-05`. A future "from" day is fine: the file is saved for offline at once and starts showing on
 its day, offline too.
 
 Several options may share one pair — `(first, 15s)`, `(GV EN)`, `(first x2)`, `(GV; ES; muted)` — but a pair that
@@ -1299,8 +1302,8 @@ short guide, [content/booth/README.md](../content/booth/README.md), says the sam
 4. **Commit changes…** → a short message ("booth: a quiz about the 1949 masthead") → **Commit directly to the main
    branch** → **Commit changes**.
 5. Two runs start by themselves: **Code check (tests and test build)** (it checks every row; a green ✓ or a red
-   ✗ in a few minutes) and **Website update** (a quick run that tests the change first: the site is updated about
-   5 minutes after it starts, and only if the tests pass; GitHub Pages may take a few minutes more to show it).
+   ✗ in about 10 minutes) and **Website update** (a quick run: the site is updated about 3 minutes after it starts —
+   it does not wait for the check of your rows; GitHub Pages may take a few minutes more to show it).
 6. A booth that is playing online picks the change up within half an hour, at its next slide; any other booth gets
    it the next time its About page is opened (or reloaded) with internet. To see it at once: open (or reload) the
    About page → **Settings** → **Slides** → search the new row → **Show now**.
@@ -1705,12 +1708,11 @@ Subscribe!" and "¡Descárgala ahora! ¡Luego suscríbete!" are left out of the 
 
 ### 8.10 How mistakes are reported
 
-A row with any mistake is **left out** of the show, and every other row still plays. But the test that checks the
-CSV fails, and since October 2026 *Website update* runs the same tests before it publishes: until the row is fixed
-(or the change undone), **no update is published** — the site, the booth's show included, keeps the version before
-the commit, and its run is red with *Tests failed — not published*
-([Automation and troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)). So fix
-a CSV mistake soon. Each mistake is one line, naming the row by its number as a spreadsheet shows it (the header is
+A row with any mistake is **left out** of the show, and every other row still plays. The test that checks the CSV
+fails, so the **Code check** of that commit is red. *Website update* still publishes: it tests the code before it
+publishes, and leaves the tests that judge the committee's own files — this one included — to the Code check
+(`CONTENT_TESTS`, [Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)).
+So the site goes live with the other rows; fix the mistake soon. Each mistake is one line, naming the row by its number as a spreadsheet shows it (the header is
 row 1; on GitHub that is the line number, as long as no cell above it holds a line break) and its id:
 
 ```text
@@ -1719,13 +1721,12 @@ booth.csv row 14 (quiz-12): correct "4": there are only 3 choices
 
 You see it in four places:
 
-1. **Code check** (GitHub → **Actions** → **Code check (tests and test build)**): a red ✗ a few minutes after
+1. **Code check** (GitHub → **Actions** → **Code check (tests and test build)**): a red ✗ about 10 minutes after
    the commit. Open the run → **Python tests (offline)** → **Run the tests**: the failing test
    (`test_no_problem_at_all` in `tests/test_booth_csv.py`) prints every line. GitHub e-mails the person who
    pushed, when that person has its failure e-mails switched on
    ([Automation and troubleshooting §8.3](automation-and-troubleshooting.md#83-who-gets-githubs-run-failed-e-mails)).
-   The *Website update* run of the same commit is red too, at its job **Test the code before publishing** (its
-   run summary's *Tests before publishing* lists the same test), and publishes nothing.
+   The *Website update* run of the same commit stays green: it does not run this test.
 2. **The build** (the Website update run → **Build website** → **Build the website**): a warning
    `[booth] 1 problem(s) — left out of the booth display:` followed by the lines (CSV rows, Drive files, settings;
    live items are listed only in the player).

@@ -63,7 +63,8 @@ What the committee places, and where:
                       2. translate + assemble (English ⇄ Spanish) ► data/site/*.json
                       3. the robot commits data/ back to the repository
                       4. build: Eleventy (src/ + config/ + data/site/) ► the pages
-                         and, at the same time, the tests (when the code or content changed)
+                         (+ the posters' share pictures), and at the same time
+                         the tests (only when the code changed)
                       5. publish on GitHub Pages, only if the build and the tests worked
                                                   │
                                                   ▼
@@ -85,10 +86,12 @@ In words:
 5. **Build.** Eleventy turns the page templates (`src/`), the settings (`config/`) and the data (`data/site/`)
    into the website, every page in English and in Spanish. Some repository files are read only here: the booth's
    CSV, the web presentations, the other settings files in `config/` and the button words.
-6. **Test and publish.** When the code or the content changed since the tests last passed (a save of yours, not the
-   robot's daily data), the offline tests run while the site is built, and the site is published only if they pass:
-   a change that breaks something never goes live, and the site keeps the version before it. Then the new site goes
-   to GitHub Pages. If one source failed, the site is still published, with the last good data for that source; a
+6. **Test and publish.** When the **code** changed since the tests last passed, the offline tests run while the
+   site is built, and the site is published only if they pass: a change of the code that breaks something never
+   goes live, and the site keeps the version before it. A save of content or settings, a translation fix and the
+   robot's daily data do not run them again: a slip there does not stop publishing (the run leaves out what it cannot
+   read, and the separate *Code check* goes red on your save; only what the build itself refuses stops it, such as a
+   settings file that cannot be read at all — [Settings](settings.md)). Then the new site goes to GitHub Pages. If one source failed, the site is still published, with the last good data for that source; a
    source that suddenly finds far fewer items is not believed the first time (**On hold** on the Status page).
 
 The whole chain, step by step: [Automation and troubleshooting](automation-and-troubleshooting.md).
@@ -99,15 +102,16 @@ The whole chain, step by step: [Automation and troubleshooting](automation-and-t
 
 | You do this | What starts by itself | On the website after about |
 |---|---|---|
-| Save a settings, content or code file on github.com: `config/`, `content/` (events, bulletin posts, the booth CSV, the archive files in `content/archive/`), `data/translations/overrides.yml` or `glossary.yml`, `data/geo/`, `src/` … | a **quick** Website update run, which tests the change before it publishes, and a *Code check* | **about 5 minutes**, plus up to about 10 minutes before every visitor sees it |
+| Save a settings or content file on github.com: `config/`, `content/` (events, bulletin posts, the booth CSV, the archive files in `content/archive/`), `data/translations/overrides.yml` or `glossary.yml` | a **quick** Website update run (it does not test again: these files are not code) and a *Code check* (about 10 minutes; a red ✗ there means a slip to fix in your file) | **about 3 minutes**, plus up to about 10 minutes before every visitor sees it |
+| Save a code file: `src/`, `scripts/`, `eleventy/`, `tests/`, `data/geo/` … | a **quick** Website update run, which tests the code before it publishes, and a *Code check* | **about 5 minutes** (+ the same 10) |
 | Put, rename or delete a file in the Drive panel folder | **nothing**: nothing watches the Drive | the **next run that reads the Drive**: every run does. During the day that is the midday refresh (it usually starts around 11 AM to 1 PM Central) or the evening refresh (around 7 to 9 PM); overnight, the full update and the morning refresh (with the morning alarm, the new day is on the site by 5:30 AM). Or a few minutes after you start a run yourself (below) |
 | Nothing (a magazine, YouTube, Instagram or a store publishes something new) | the **nightly full update** (GitHub usually starts it about 6 to 8 AM Central, 5 to 7 in winter) | after the next full update (the podcasts and the daily quotes are read by every run) |
-| Change what a source only the full update reads looks at: `content/instagram.yml`, a YouTube channel, La Viña's weekly open meeting, the meeting lists, the Area 65 counties (for the Meetings page) … | the quick run of your save **also runs those sources** ([Automation and troubleshooting §4.2](automation-and-troubleshooting.md#42-website-update-and-its-three-modes)) | **about 5 minutes**. Only the magazine stories (`magazine_hub`), the shop's pages and the document search (`crawler`) wait for the next full update |
+| Change what a source only the full update reads looks at: `content/instagram.yml`, a YouTube channel, La Viña's weekly open meeting, the meeting lists, the Area 65 counties (for the Meetings page) … | the quick run of your save **also runs those sources** ([Automation and troubleshooting §4.2](automation-and-troubleshooting.md#42-website-update-and-its-three-modes)) | **a few minutes**. Only the magazine stories (`magazine_hub`), the shop's pages and the document search (`crawler`) wait for the next full update |
 | Edit a guide in `how-to/`, the `README.md` or `docs/` | nothing on the website | GitHub shows the new text at once; the website does not change |
 | Any change the booth display shows | — | a booth that is playing online takes the new show within half an hour, at its next slide |
 
 **Start a run yourself** (any login with write access): GitHub → **Actions** → **Website update** → **Run
-workflow** → tick **skip_crawl** → green **Run workflow**. About 2 minutes later the site is published with the
+workflow** → tick **skip_crawl** → green **Run workflow**. About 3 minutes later the site is published with the
 newest Drive files, bulletin posts, events, podcasts, daily quotes and archive files (about 5 if the code changed
 since the tests last passed: they run first). The run is listed as "Quick refresh (started by hand)". Leave every
 box empty for a full update of every source (usually 10 to 15 minutes; at the very most a little over 2 hours, when
@@ -244,7 +248,7 @@ the document search and translation use all their time; "Full update (started by
 | make the website update right now | [Automation and troubleshooting §2](automation-and-troubleshooting.md#make-the-website-update-right-now) |
 | check that everything is healthy | [Automation and troubleshooting §2](automation-and-troubleshooting.md#check-that-everything-is-healthy-2-minutes) |
 | understand a failed run (a red ✗ or a yellow ⚠) | [Automation and troubleshooting §6](automation-and-troubleshooting.md#6-read-a-run) and [§14](automation-and-troubleshooting.md#14-troubleshooting) |
-| understand *"Tests failed — not published"*, or why a save did not go live | [Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing) and [§14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published) |
+| understand *"Tests failed — not published"*, a red Code check after a save of content, or why a save did not go live | [Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing) and [§14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published) |
 | know what a run's title in the Actions list means ("Nightly full update", "Midday refresh" …) | [Automation and troubleshooting §6.1](automation-and-troubleshooting.md#61-the-list-of-runs) |
 | understand "not checked for N days" or a **Reminders** line in the run summary | [Automation and troubleshooting §6.3](automation-and-troubleshooting.md#63-the-website-update-summary-section-by-section) |
 | fix a typo that stopped a settings file | [Automation and troubleshooting §14.3](automation-and-troubleshooting.md#143-a-yaml-typo) |
@@ -355,8 +359,10 @@ Each guide ends with the principles for its own files. These apply to all of the
 | **commit** | one saved change in the repository (on github.com: **Commit changes**) |
 | **`main`** | the repository's main branch: what is on `main` is what gets published |
 | **workflow, run** | a GitHub Actions program, and one time it ran (the **Actions** tab). **Website update** is the one that builds the site |
-| **quick run, full run, morning refresh** | the three modes of Website update: Drive, posts, events, podcasts, the daily quotes and the archive files (about 2 minutes; about 5 when it tests a change of yours); every source (usually 10 to 15 minutes); the early-morning run the Morning check starts |
-| **tests before publishing** | since October 2026, Website update runs the offline tests (the Code check's) on every new version of the code or content, and publishes only when they pass. The daily data runs skip them: their code passed already ([Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)) |
+| **quick run, full run, morning refresh** | the three modes of Website update: Drive, posts, events, podcasts, the daily quotes and the archive files (about 3 minutes; about 5 when it tests a change of the code); every source (usually 10 to 15 minutes); the early-morning run the Morning check starts |
+| **tests before publishing** | since October 2026, Website update runs the offline tests (the Code check's, but those that judge the day's data, the committee's files or the guides) on every new version of the **code**, and publishes only when they pass. The daily data runs and the saves of content or settings skip them: their code passed already, and a slip in the committee's files never stops publishing through the tests (the Code check reports it) ([Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)) |
+| **browser checks, build warnings** | since October 2026 the Code check also opens its test build in a real browser (focus ring, sticky bar, large text, offline update, script errors), and fails on a build warning (a missing icon, a page missing from the sitemap, a link in the data that had to be hidden); Website update only lists such warnings in its summary ([Automation and troubleshooting §4.5](automation-and-troubleshooting.md#45-code-check-tests-and-test-build)) |
+| **share pictures** | the picture a link preview shows when someone shares a month's toolkit page: the top of its poster, made by every Website update ([Automation and troubleshooting §4.2](automation-and-troubleshooting.md#42-website-update-and-its-three-modes)) |
 | **On hold** | a badge on the Status page: a source suddenly found far fewer items than before, so the missing ones stay on the site until the next update confirms they are gone ([Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source)) |
 | **bot check** | a page another website shows instead of the real one to keep robots out ("Just a moment…", "confirm you're not a bot"); the run summary says so plainly and the site keeps the last good copy |
 | **Central time** | the committee's clock, America/Chicago: CDT = UTC−5 in summer (until 1 November 2026, again from 14 March 2027), CST = UTC−6 in winter. GitHub's timetables are in UTC |
@@ -364,7 +370,7 @@ Each guide ends with the principles for its own files. These apply to all of the
 | **Texas writers archive** | the list "Texas writers through the years" on `/published/#archive`, made from the two archive files in `content/archive/` and the stories the site captures ([Writers archive](writers-archive.md)) |
 | **the robot** | GitHub Actions' own account, `github-actions[bot]`, which commits the `data/` files |
 | **run summary** | the report on a run's page: files to fix, sources with problems, what was published |
-| **Code check** | the workflow that tests every change (*Code check (tests and test build)* in the Actions list). A red ✗ means that change broke something; the live site keeps working, and Website update does not publish the change until the tests pass (*tests before publishing*, above) |
+| **Code check** | the workflow that tests every change (*Code check (tests and test build)* in the Actions list; about 10 minutes). A red ✗ means that change broke something; the live site keeps working. A change of the code is not published until the tests pass (*tests before publishing*, above); a slip in a settings or content file is published without the part that could not be read, so fix it soon |
 | **Status page** | `/status/` on the website: when the site was last published and how each source is doing |
 | **YAML** | the plain-text format of the settings files: `key: value`, indented with spaces |
 | **secret** | a password or key kept in the repository's Settings, never in a file. Only NETA65 can see the Secrets page |

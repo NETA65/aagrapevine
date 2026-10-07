@@ -131,8 +131,12 @@ use the address it prints. Run `npm ci` again after `package-lock.json` changes 
 | `$env:ONLY = "events"; npx @11ty/eleventy --serve` | Builds only the `src/pages/` files whose **name starts with** one of the words. `events` builds `events.njk` and `events-ics.11ty.js`; `"library,search"` builds both pages. Much faster, but links to the other pages say "not found". (`events` does not build the event share pages, `event-share.11ty.js`: write `event` for those too.) | You work on one page |
 | `$env:PATH_PREFIX = "/aagrapevine/"; npx @11ty/eleventy` | Builds with the GitHub Pages folder in every link, like the live site. With `--serve` the site then opens at <http://localhost:8080/aagrapevine/>. | You changed how links are written |
 | `$env:COMMITTEE_EMPTY = "1"` (also `HOME_EMPTY`, `LIB_EMPTY`, `READ_EMPTY`, `MEDIA_EMPTY`, `PW_EMPTY`) | Shows the committee pages (or the home page, Library, Read pages, media pages, Published writers) as if there were no content: the "nothing here yet" cards. | You change an empty state |
-| `$env:MONTHLY_NOW = "2026-11-01"` | Pretends today is that day for the monthly toolkit and the digest. | You preview next month |
+| `$env:MONTHLY_NOW = "2026-11-01"` | Pretends today is that day for the monthly toolkit and the digest (since October 2026 also for the committee meeting dates in the month calendar files, `/monthly/YYYY-MM/…ics`). The weekly open meetings' cards and calendar files and the decks' meeting rows keep the real clock. | You preview next month |
 | `$env:WRITERS_ARCHIVE = "tests/fixtures/writers_archive/site_sample.json"` | Builds the Texas writers archive on `/published/` from that file instead of `data/site/writers_archive.json` (the small test sample: about 20 stories of every kind; `src/_data/db.js`). | You work on the archive's look |
+| `$env:STRICT_BUILD = "1"` | Fails the build on any **build warning** (since October 2026, `eleventy/build-warnings.js`): a missing icon (`[icon]`, or `[community]` / `[media]` / `[read]` / `[published]` for a page's own icon set), a page missing from the sitemap (`[sitemap]`), a link in the data that had to be repaired or hidden (`[links]`). The end of the build lists them, each once with its count (`[icon] missing icon: x (×245)`). Off when empty or `0`, `false`, `no`, `off`. This is how the **Code check** builds. | Before you push a template, icon or page change |
+| `$env:BUILD_WARNINGS = ".tmp\warnings.txt"` | Writes the build's warnings to that file, one per line (empty: none). *Website update* uses it for its run summary. | You want the list without failing the build |
+| `$env:POSTER_SHARE = "1"` | The month pages (`/monthly/YYYY-MM/`) name `share.png` beside them as their link-preview picture; then `python -m scripts.ops.poster_share _site` makes those pictures (Playwright, [Automation and troubleshooting §4.2](automation-and-troubleshooting.md#42-website-update-and-its-three-modes)). Without it the pages keep the committee's card. | You work on the posters' share pictures |
+| `$env:SITE_DATA = "tests/fixtures/…"`, `$env:TRANSLATION_OVERRIDES = "…"` | Test switches: read every `data/site` file from that folder (`src/_data/db.js`), or the overrides the decks print beside La Viña's theme from that file (`eleventy/filters/presentations.js`), so a test never depends on the day's data or the committee's own words. | Tests only |
 
 > **Note:** `I18N_STRICT` (and the `…_EMPTY` switches) are on for **any** value, even `"0"`. To turn
 > one off, remove it: `Remove-Item Env:I18N_STRICT`.
@@ -287,7 +291,7 @@ search for its heading id.
 
 | Section (heading id) | English heading | What it shows | Filter |
 |---|---|---|---|
-| Hero (`homeHero`, `home-title`) | key `home.hero_title` | The welcome; `*words*` in that string show in gold italics. From 1024 px the next committee meeting card with a live countdown (`src/assets/js/home.js`). | `meeting.next` |
+| Hero (`homeHero`, `home-title`) | key `home.hero_title` | The welcome; `*words*` in that string show in gold italics. From 1024 px the next committee meeting card with a live countdown (`src/assets/js/home.js`). Once the built meeting is over, the browser rolls on to the next one and writes its time line with the site's own helper (`GVTime.timeRange`, since October 2026), the same words as the build: an overnight meeting reads "10:00 PM – 1:00 AM CDT", never two numeric dates. | `meeting.next` |
 | `quote-title` | Daily quote | Today's Grapevine and La Viña quotes (at most 2 days old) | `homeDailyQuotes` |
 | `ann-title` | From the committee | The 2 newest bulletin posts, pinned first; the whole post when it is at most 700 characters, else a teaser and "Read more" | `homeAnnouncements` |
 | `mag-title` | The latest from Grapevine & La Viña | Latest issues, "Write for the magazines" themes, the Shop teaser | `homeLatestIssue`, `homeThemes` |
@@ -332,7 +336,7 @@ paths that the page scripts complete (section 9, rule 5).
 | `/feed.xml`, `/es/feed.xml` | `feed.11ty.js` | RSS of What's New, newest 100 items | Feed readers; linked in the footer |
 | `/events.ics`, `/es/events.ics` | `events-ics.11ty.js` | The calendar feed: the events of `/events/`, except those that ended more than 90 days ago. Each entry keeps its `UID`; its `SEQUENCE` is the minutes since 2026-01-01 UTC when the file was made, so calendar apps take a changed time | Google / Apple / Outlook calendars; the `#subscribe` card on `/events/`; `/events/` names it in a `<link rel="alternate" type="text/calendar">` (front matter `calendarFeed`) |
 | `/monthly/YYYY-MM/neta65-grapevine-YYYY-MM-en.ics`, `/es/monthly/YYYY-MM/neta65-grapevine-YYYY-MM-es.ics` | `monthly-ics.11ty.js` (since October 2026) | One month's dates: the committee meeting, the events and series dates (the same `UID`s as `/events.ics`; for the current month only what is not over at build time) and the Grapevine and La Viña story deadlines as all-day entries | The month page's Dates card, "Add <Month>'s dates to my calendar" |
-| `/meetings/weekly-open-gv.ics`, `/meetings/weekly-open-lv.ics` (+ `/es/`) | `meetings-weekly-ics.11ty.js` (since October 2026) | A weekly repeating entry (`RRULE`) for each weekly open meeting, in its own zone with a `VTIMEZONE`, with the Zoom link, meeting ID and passcode | The "Add to calendar" menu on `/meetings/#weekly-open` (the Google link repeats weekly too; Outlook.com's add link cannot repeat, so Outlook uses the file) |
+| `/meetings/weekly-open-gv.ics`, `/meetings/weekly-open-lv.ics` (+ `/es/`) | `meetings-weekly-ics.11ty.js` (since October 2026) | A weekly repeating entry (`RRULE`) for each weekly open meeting, in its own zone with a `VTIMEZONE`, with the Zoom link, meeting ID and passcode. Each file is written at one moment of the build: its first date is the next meeting not over yet (as on the `/meetings/` cards, which roll on 75 minutes after a meeting starts), and `DTSTAMP` / `SEQUENCE` come from that same moment (the real build clock, not `MONTHLY_NOW`) | The "Add to calendar" menu on `/meetings/#weekly-open` (the Google link repeats weekly too; Outlook.com's add link cannot repeat, so Outlook uses the file) |
 | `/events/<card anchor>/` (+ `/es/`) | `event-share.11ty.js` (since October 2026) | A small page per event of `data/site/events.json` (not the committee meeting), past ones too while they are in the file: link-preview tags with the event's title, day, place and flyer (`og:image`), `noindex`, then on to the card on `/events/` (a script, and a plain link without JavaScript; no meta refresh, which Facebook would follow) | The **Share** buttons of the `/events/` cards, so WhatsApp and Facebook show the flyer. A share page whose event has left the data: the 404 page sends the visitor on to `/events/#<anchor>` |
 | `/assets/js/central-time.js` | `central-time.11ty.js` (since October 2026) | The browser's copy of `eleventy/central-time.js` (`window.GVTime`), made at build time | `app.js`, `committee.js`; loaded on every page before `app.js` |
 | `/search-index.json` (+ `/es/`) | `search-index.11ty.js` | Everything the site search can find | `search.js` on `/search/` |
@@ -479,7 +483,7 @@ comment at the top of `ui.njk` is the full manual, with rules and examples. The 
 | `memberHelp(lang, summary, opts)` | A closed "For committee members" how-to box | `{% call ui.memberHelp(lang, "How to add documents") %}…{% endcall %}` |
 | `pageEmpty(icon, title, text, opts)` | A page-level "nothing here yet" card | |
 | `emptyState(icon, title, text, ctaHref, ctaLabel)` | A small "no results" box inside a list | |
-| `sourceBadge`, `autoNote`, `tentativeBadge`, `langPill`, `itemCard` | Source badge, the "Auto-translated" note, "Details to be confirmed", the original-language pill, a generic content card | |
+| `sourceBadge`, `autoNote`, `tentativeBadge`, `langPill` | Source badge, the "Auto-translated" note, "Details to be confirmed", the original-language pill (`itemCard`, the old generic content card, was removed in October 2026: nothing used it) | |
 
 > **Rule (checked by `tests/test_hero_aside.py`):** a page that puts a card on the hero's right must
 > use `{% call(slot) ui.pageHero(…, { side: "below" }) %}` and test `slot == "side"`. A page without
@@ -523,12 +527,12 @@ Line numbers change, so search for the words in the middle column.
 | Part | Search for | What it does |
 |---|---|---|
 | Markdown for committee text | `markdownIt({ html: false, linkify: true, breaks: true })` | The `md` filter. HTML in a post is shown as text (a `<script>` can never run). A single line break becomes a line break. Tables get a sideways-scrolling box, pictures load lazily, links to site pages get `/es` on Spanish pages (`md.renderer.rules.link_open`). |
-| Time zone | `export const TZ = setZone(siteTimezone());` | Every date on the site is in `site.timezone` of `config/site.yml` (America/Chicago; a name that is not a time zone, or no settings file, keeps that). Since October 2026 the zone math is one shared module, `eleventy/central-time.js` (`zoneInstant`, `ruleDate`, `timeRange` …): the build, `src/_data/meeting.js`, the area filters (`import { TZ }`) and the browser's copy all use it. |
+| Time zone | `export const TZ = setZone(siteTimezone());` | Every date on the site is in `site.timezone` of `config/site.yml` (America/Chicago; a name that is not a time zone, or no settings file, keeps that). Since October 2026 the zone math is one shared module, `eleventy/central-time.js` (`zoneInstant`, `ruleDate`, `overnight`, `timeRange` …): the build, `src/_data/meeting.js`, the area filters (`import { TZ }`) and the browser's copy all use it. `timeRange` (behind `committee.js` `clockRange`, the cards' time lines and the browser's `GVTime.timeRange`) says the zone once only when both ends have the same one ("7:00 – 8:00 PM CDT"; on the night the clocks change "1:00 AM CST – 3:00 AM CDT", also on one day); an end on the next day up to 12 hours later (`OVERNIGHT_MAX_HOURS`) is a night ("8:00 PM – 1:00 AM CDT"), and a longer one names the day and date at both ends ("Fri, Oct 16, 7:00 PM – Sat, Oct 17, 12:00 PM CDT"), unless the caller passes its own `day`. |
 | Strings | `function loadI18n()`, `export function translateKey` | Merges every `src/_i18n/*.json` (alphabetical order) into one table. `{name}` placeholders. A missing key: the raw key, or a build error with `I18N_STRICT`. A missing language falls back to English. |
 | Synced text in the page language | `export function pickLang` | The `tx` filter: `item.i18n[field][lang]`, then `item[field + "_" + lang]`, then the translation into the item's own language, then the item's own words (`item.extra[field]`, else `item[field]`), and English only last (since October 2026; before, English came before the item's own words). |
 | Dates | `function toDate`, `function fmtDate` | The `fmtDate` styles (table in 7.2). `toDate` reads a bare `YYYY-MM-DD` at noon UTC so it never moves a day; `"2026-10"` and `"2026"` mean the 1st of that month / January 1 (they used to print as the month before); a date and time without a zone (`"2026-10-21T19:00"`) is read as Central time, whatever zone the computer that builds is in. |
 | Spanish times | `export function esMeridiem` | "7:00 p.m." → "7:00 p. m." (twin in `app.js`: `GV.esMeridiem`) |
-| Safe links | `export function safeUrl` | The `extUrl` filter; `src/_data/db.js` runs it on every link in the data. Keeps `http://…` and `https://…`, `mailto:`, `tel:`, `#…`, `/path`; repairs `www.x.org`, `zoom.us/j/1` and `//host/x` to `https://…`; anything else becomes `""` and the page hides the link. |
+| Safe links | `export function safeUrl` | The `extUrl` filter; `src/_data/db.js` runs it on every link in the data. Keeps `http://…` and `https://…`, `mailto:`, `tel:`, `#…`, `/path`; repairs `www.x.org`, `zoom.us/j/1` and `//host/x` to `https://…`; anything else becomes `""` and the page hides the link. In `db.js` a repair that only added the scheme is a plain `[links] note: …` log line; a value that had to be hidden, an item left out, or a repair that changed more is a `[links]` **build warning** (7.4). |
 | Our own links in a language, absolute links | `export function langPath`, `export function siteUrl`, `export function langLink` | The `lurl`, `siteUrl` and `langLink` filters (7.2, 9). `langPath` (`lurl`) gives a **file** (anything with an extension, or under `/assets/`) the `/es` prefix only when the build writes that file for Spanish (it learns the written addresses from Eleventy's `eleventy.contentMap` event): `/es/feed.xml`, `/es/events.ics`, the Spanish manifest and JSON indexes yes; a document or picture never. It and `siteUrl` leave `http(s):`, `mailto:`, `tel:`, `webcal:`, `//host` and `#…` alone; any other `scheme:` text stays an address on the site, so a stray `javascript:` never becomes a live link. `langLink` picks a `links:` entry's Spanish twin (`LINK_TWINS`) |
 | Share pictures | `export function shareImage` | The `shareImage` filter behind `ogImage` (6.1) |
 | Meeting rules | `export function hhmm`, `export function monthlyRule` | Read `meeting:` and `recurring_events:` of `config/site.yml` exactly like the Python sync ("7:00 PM", "7pm", "19h00", "sábado", "2nd", "último"…). |
@@ -571,7 +575,7 @@ Every result below was produced by the repo's own code.
 | `"Grapevine and La Viña prices change on January 1, 2027." \| excerpt(40)` | `Grapevine and La Viña prices change on…` (cut at a whole word; the default is 160 characters) |
 | `"https://www.neta65.org/x/" \| hostname` | `neta65.org` |
 | `1536000 \| fileSize` / `3725 \| duration` | `1.5 MB` / `1:02:05` |
-| List helpers | `where`, `whereNot`, `whereIncludes` (dotted keys like `"extra.past"`), `limit`, `offset`, `groupBy`, `countBy`, `pluck`, `uniq`, `sortByDate`, `upcoming`, `past`, `withinDays`, `isRecent` |
+| List helpers | `where`, `whereNot` (dotted keys like `"extra.past"`), `limit`, `offset`, `groupBy`, `pluck`, `uniq`, `keys`, `length`. (`whereIncludes`, `countBy`, `sortByDate`, `upcoming`, `past`, `withinDays` and `isRecent` were removed in October 2026: no page used them. Dates and "upcoming" are each area's own filter's work.) |
 
 ### 7.3 The area filter files: `eleventy/filters/*.js`
 
@@ -603,6 +607,32 @@ site's zone imports `TZ` from `eleventy.config.js` (and the zone math from `elev
 escapes `<`, `>` and `&` so no text can end the script early. In a template it is the filter
 `jsonScript` (registered in `library.js`): `{{ data | jsonScript | safe }}`.
 
+### 7.4 Unused code, settings nobody reads, and the build's warnings
+
+Three checks keep the code tidy (since October 2026; the Code check runs them):
+
+- **Nothing unused** (`tests/test_unused_code.py`): a filter or shortcode that no template, `.11ty.js` page or
+  test uses, a shared macro (`src/_includes/macros`) nobody calls, or an i18n key nothing reads fails the Code
+  check. An i18n key counts as read when it is written out, built from a written prefix
+  (`"shop.f_" + name`), or is `<a read key>_one`. When you stop using something, remove it **with** what only it
+  used (its helpers, its strings, its CSS). Every page that is not HTML (a `.json`, `.xml` or `.ics` page)
+  declares `layout: false`. One number with one home: how many magazine issues `/read/` writes into the page is
+  `SSR_ARCHIVE` in `eleventy/filters/read.js` (8); `/read-archive.json` starts right after them.
+- **Every setting read** (`tests/test_settings_used.py`, [Settings §6](settings.md#6-going-further-change-the-code)): every key
+  of `config/site.yml`, `expenses.yml`, `carry.yml`, `history.yml` and `orientation.yml` must be read by some
+  code, and every `site.…` a template, the build's JavaScript or the sync reads must exist or be read with a
+  default (`| default`, `||`, `??`, `.get(k, d)` …). A misspelled read (`site.meeting.platfrom`) fails it.
+- **The build's warnings** (`eleventy/build-warnings.js`): `buildWarning(kind, text)` prints a line such as
+  `[icon] missing icon: x` and remembers it. The `{% icon %}` shortcode and `committee.js`'s own icons (`[icon]`),
+  the area sprites (`[community]`, `[media]`, `[read]`, `[published]`), `sitemap.11ty.js` (`[sitemap] missing
+  page(s): …`) and `src/_data/db.js` (`[links]`: a link value in the data repaired beyond its scheme or hidden, an
+  item left out) use it. At the end of the build (`eleventy.after`, `finishBuild`) the list is summed up, each
+  warning once with its count: `STRICT_BUILD=1` fails the build (the Code check), `BUILD_WARNINGS=<file>` writes
+  the list (Website update's run summary), and on GitHub each is an annotation. A `[links] note:` (a link that only
+  lacked `https://`), the booth's `[booth]` notes ("not downloaded in this build"), the `[css]` sizes,
+  `[search-index]` and `[content]` lines are not build warnings. To add a warning of your own:
+  `import { buildWarning } from "../build-warnings.js"` and call it where the problem is found.
+
 ---
 
 ## 8. Global data (`src/_data`)
@@ -614,9 +644,9 @@ Each file's name is a variable in every template. Eleventy runs each file once p
 | `site` | `site.js` | `config/site.yml` | Everything under `site:` (`title`, `title_es`, `committee`, `contact_email`, `area_website`, `listen`, `watch`, `about_videos`, …) plus the top-level sections `meeting` (with `platform`, Zoom when left out), `recurring_events`, `drive`, `sources`, `links`, `phone_access`, `digest`, `lavina_weekly_open`, and since October 2026 `meetings` and `spotlight`. `url` is the public address (`SITE_URL` on GitHub, else `site.url`), `timezone` always a real zone (`TZ`), `built` the build time. |
 | `languages` | `languages.js` | | `["en", "es"]` |
 | `build` | `build.js` | the code files | `version` (a fingerprint of the code, the `?v=` on CSS and JS and the service-worker version), `commit`, `time` |
-| `db` | `db.js` | `data/site/<name>.json` for every name in its `FILES` list | `db.events`, `db.announcements`, `db.drive`, `db.articles`, `db.videos`, `db.status`, `db.writers_archive`, … A missing or broken file becomes `{ updated: null, items: [] }`. Every link is cleaned with `safeUrl`. `WRITERS_ARCHIVE=<file>` makes `db.writers_archive` read another file (section 5.5). |
+| `db` | `db.js` | `data/site/<name>.json` for every name in its `FILES` list | `db.events`, `db.announcements`, `db.drive`, `db.articles`, `db.videos`, `db.status`, `db.writers_archive`, … A missing or broken file becomes `{ updated: null, items: [] }`. Every link is cleaned with `safeUrl` (a repair or a hidden link is a `[links]` line, 7.4). `WRITERS_ARCHIVE=<file>` makes `db.writers_archive` read another file (section 5.5); `SITE_DATA=<folder>` reads every file from that folder instead of `data/site` (tests). |
 | `nav` | `nav.js` | | The menus (6.2) |
-| `meeting` | `meeting.js` | `config/site.yml` `meeting:` | The rule, the next meeting and the next 12 dates (default: third Wednesday, 7 PM, one hour) |
+| `meeting` | `meeting.js` | `config/site.yml` `meeting:` | The rule, the next meeting and the next 12 dates (default: third Wednesday, 7 PM, one hour; an end earlier on the clock and at most 12 hours later is the next morning, `central-time.js` `ruleDate`) |
 | `carry` | `carry.js` | `config/carry.yml` | "Put this issue to work" ideas for the monthly toolkit |
 | `orientation` | `orientation.js` | `config/orientation.yml` | The GVR / RLV 101 sessions |
 | `history` | `history.js` | `config/history.yml` | The timeline on `/about/#history` |
@@ -817,20 +847,20 @@ the pages can be read without JavaScript.
 | `app.js` | every page | `window.GV` helpers: `GV.url`, `GV.t`, `GV.copy`, `GV.share`, `GV.fmtDate` (its date formats are made once and kept), `GV.relative` (a plain date in browsers without relative dates, iOS 13), `GV.ics`, `GV.nextMeeting`, `GV.meetingLines` (the "Next committee meeting" lines of `/gvr/` and `/about/` roll on to the next date after a meeting, offline copies too), `GV.expire` (hides things whose time has passed between builds), `GV.prefs` and `GV.tts` (the "Aa" panel and read aloud); the header, menus, theme, language switch |
 | `install-core.js` | every page | Which phone and browser this is, and which install guide fits it |
 | `pwa.js` | every page | Registers the service worker, "Save key pages" (it also asks the browser to keep them: persistent storage, 13), offline and "Updated — reload" notices, Data saver; YouTube's privacy-enhanced mode (youtube-nocookie.com) for every video preview, phones included |
-| `hero-canvas.js` | every page | The animated grapevine art in the hero (the committee's original artwork) |
+| `hero-canvas.js` | every page | The animated grapevine art in the hero (the committee's original artwork). Since October 2026 it draws nothing, and does not animate, while the art is hidden in Windows High Contrast (forced colours), and switches back on when forced colours go off |
 | `home.js` | Home | The meeting countdown and the podcast player |
 | `committee.js` | Meetings, Events, Portfolio, Photos, Bulletin, Tracker | Event filters and calendar buttons (an event that ends while the page is open leaves the counts and chips too), the Drive preview window, photo albums (GLightbox), the committee pill bar, the meeting countdown on `/meetings/`, the weekly open meetings' next dates |
-| `community.js` | What's new, Digest, QR Post, Status, 404 | The What's New timeline ("Today" / "Yesterday"), the digest's ready-to-copy texts, the QR Post kit, the 404 search box |
+| `community.js` | What's new, Digest, QR Post, Status, 404 | The What's New timeline ("Today" / "Yesterday") and the room it keeps for its sticky filter bar so keyboard focus never hides under it (`--wn-bar-h`, measured again when the bar, the window or — since October 2026 — a reading setting changes: text size, relaxed spacing, the `gvlv:prefs` event, also from another tab), the digest's ready-to-copy texts, the QR Post kit, the 404 search box |
 | `read.js` | Read, Share your story, GVR / RLV corner | Older issues, "days left" countdowns, workshops that hide when over, the GVR first-steps checklist |
 | `shop.js` | Shop, Home | Offer countdowns, the subscription price table |
 | `media.js` | Listen, Watch, Instagram | The audio player, the video window, "Load more" |
 | `library.js` | Library | Search, filters and paging over `/library-index.json` ("Load more" moves keyboard focus to the first new card) |
-| `search.js` | Search, Library | The site search over `/search-index.json` (with the MiniSearch library). Since October 2026: **ñ is its own letter** ("año" no longer finds "anónimo"; "ano" and "vina" still find "año" and "Viña"), and AA's words are matched in the other language too (the `BILINGUAL` list: 57 English–Spanish pairs such as sobriety / sobriedad, meeting / reunión / junta, sponsor / padrino / madrina; edit that list to add terms; matches found only that way are listed after the direct ones) |
+| `search.js` | Search, Library | The site search over `/search-index.json` (with the MiniSearch library). Since October 2026: **ñ is its own letter** ("año" no longer finds "anónimo"; "ano" and "vina" still find "año" and "Viña"), and AA's words are matched in the other language too (the `BILINGUAL` list: 57 English–Spanish pairs such as sobriety / sobriedad, meeting / reunión / junta, sponsor / padrino / madrina; edit that list to add terms; matches found only that way are listed after the direct ones). The other language's words are matched **exactly** or in the plural (`-s`, `-es`, `-y` → `-ies`), never by prefix or near spelling (since October 2026: "prison" no longer brought up "Cartel" pages); the words typed keep prefix and light fuzzy matching. To make another form of a word findable across languages, add it to its line (forms added in October 2026: drink, recovered / recover, recuperado / recuperada, testimony, honest / honesto / honesta, enmienda, spiritual / espiritual / spiritually, woman / mujer, joven, anónima, sponsored / sponsorship, bebía / bebido, relapsed / recaía) |
 | `published.js` | Published writers | Filters (who, when, which magazine, search) for the whole page; tells the archive script each choice (`pw:state`, `pw:reset`) |
 | `published-archive.js` | Published writers | The Texas writers archive: decades, hometown chips, the rest of Texas from `/published/texas-archive.json`, "Show 40 more" (section 5.5) |
 | `monthly.js` | Monthly toolkit, month pages | The poster (download PNG, share, print), "over" dates |
 | `report.js` | Monthly toolkit (`#report`) | The district report editor |
-| `orientation.js` | GVR / RLV 101 | Progress, the review questions, printing |
+| `orientation.js` | GVR / RLV 101 | Progress, the review questions, printing; since October 2026 the meeting card of the sessions and the slide show's closing slide roll on to the next committee meeting once one is over (`GV.meetingLines`, as `/gvr/` and `/about/` do) |
 | `presentations-core.js`, `presentations.js` | GVR / RLV 101 | The presentation player (logic / screen) |
 | `booth-core.js`, `booth.js` | About us | The booth display: the logic (`window.GVB`: which slides may show now, which comes next, in which language and for how long) / the screen (the full-screen show, the visitors' bar, Settings, the offline copy) |
 | `expenses-core.js`, `expenses-files.js`, `expenses.js` | Tracker | The Tracker (logic / backup files / screen); everything stays in the visitor's browser. `expenses-files.js` (`window.GVF`, since Tracker 1.2.0) writes and reads the `.zip` backups and reads Excel `.xlsx` sheets (README → *The Tracker*) |
@@ -1194,15 +1224,29 @@ The site can be installed on a phone like an app, and it keeps working with a we
 - **What it does:** pages come from the network first (a saved copy only when offline, on a server
   error or after 4 seconds; the last 80 pages are kept). CSS, scripts, fonts and pictures come from
   the browser's copy and refresh in the background; files with `?v=` never change under the same
-  address. It never stores other sites, feeds or any `.ics` calendar file (the month and weekly ones
-  included).
+  address. It never stores other sites, feeds or any `.ics` calendar file — except, since October 2026, a month
+  page's own calendar file (`/monthly/YYYY-MM/….ics`), which is kept with that page when the page is saved for
+  offline use (`keepCalendars`; network first, that copy offline: `calendarFile`), so "Add <month>'s dates to my
+  calendar" works offline; a month not saved, the weekly files and `/events.ics` stay network only. The worker's
+  "this month" is the month in `site.timezone` (`CONFIG.tz`). On activation a new version copies the old static
+  cache's stylesheets into its own (`carryStyles`, nothing downloaded, within the 120-file static limit), so a page
+  opened online but not saved keeps its own area stylesheet (`monthly.css`, `booth.css` …) offline after an update;
+  its page scripts are not carried over.
 - **Saved pages stay fresh and kept** (since October 2026). "Save key pages" asks the browser to keep the site's
   storage (`navigator.storage.persist()`); the result line then adds "This browser will keep them until you remove
-  them." or "This browser may still remove them when the device is short of space. Installing the site as an app
-  helps keep them." (nothing in browsers without that question). And when a page opens online, saved pages not
-  opened for 7 days are fetched again in the background (`refreshSaved` in `sw-core.js`): one at a time, each
-  with its styles and scripts within 8 seconds (`SETTLE_TIMEOUT`), at most every 6 hours; the first failure ends
-  the round, and a page that is gone (404) keeps its saved copy.
+  them." or "This browser may still remove them when the device is short of space.", followed by what helps on that
+  device (`pwa.js` `keepNote`, with `install-core.js`): on iPhone, iPad and Safari on a Mac "On this device an
+  installed app keeps its own copy: install the site as an app, then open it and save the pages there to keep
+  them."; elsewhere "Installing the site as an app and saving them again from the app helps keep them."; inside the
+  installed app, and where the site cannot be installed (`canInstall` false), nothing more (nothing at all in
+  browsers without that question). And when a page opens online, saved pages not opened for 7 days are fetched
+  again in the background (`refreshSaved` in `sw-core.js`): one at a time, each with its styles and scripts within
+  8 seconds (`SETTLE_TIMEOUT`), at most every 6 hours; the first failure ends the round, and a page that is gone
+  (404) keeps its saved copy. The round starts only once the opened page tells the worker that Data saver is off
+  (`pwa.js` sends it with `HOW_SERVED`: the visitor's Aa choice, else the browser's Save-Data or a 2G connection; a
+  page that cannot say leaves it to the worker's own `dataSaver()` check), never while "Save key pages" or the
+  booth's `BOOTH_SAVE` runs (`holdRounds`: a save stops a running round, and none starts during it), and it never
+  puts back a page that was removed meanwhile.
 - **Updates:** the worker's version is `build.version`, a fingerprint of the code. A code change makes
   a new version: it installs in the background and visitors see "Updated — reload". Since October 2026 "Reload"
   no longer waits while the new version re-downloads the open tabs: that happens after it took over, in the
@@ -1227,15 +1271,16 @@ A commit to `main` (on github.com or `git push`) starts the workflows by itself:
 
 | You changed | Workflows that start | What they do |
 |---|---|---|
-| Templates, CSS, JS, strings or data files in `src/`, `eleventy/`, `eleventy.config.js`, `config/`, `content/`, `package.json` / `package-lock.json` | **Code check (tests and test build)** and **Website update** | Code check: a test build exactly like GitHub Pages (`I18N_STRICT=1`) and the Python tests; nothing is published. Website update: a quick content sync (Google Drive, the bulletin, podcasts, the writers archive files, the daily quote — plus any source only the full update reads whose own setting the push changed), then the build and, at the same time, the same tests (but the few that judge the day's data); it publishes only when both worked ([Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)). |
-| `data/translations/overrides.yml` or `glossary.yml`, `data/geo/texas_places.json` | both | the same |
-| Only `tests/` | Code check (tests and test build) | nothing is published |
+| Templates, CSS, JS, strings or data files in `src/`, `eleventy/`, `eleventy.config.js`, `package.json` / `package-lock.json`, `data/geo/texas_places.json` | **Code check (tests and test build)** and **Website update** | Code check: a test build exactly like GitHub Pages (`I18N_STRICT=1`) but stricter (`STRICT_BUILD=1`: a build warning fails it, 7.4), the browser checks on that build, and every Python test; nothing is published. Website update: a quick content sync (Google Drive, the bulletin, podcasts, the writers archive files, the daily quote — plus any source only the full update reads whose own setting the push changed), then the build and, at the same time, the tests of the code (all but those that judge the day's data, the committee's files or the documentation); it publishes only when both worked ([Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)). |
+| `config/`, `content/`, `data/translations/overrides.yml` or `glossary.yml` (the committee's files) | both | the same, but Website update does not run the tests again (the committee's files are not part of the code's fingerprint): a slip there turns only the Code check red, and the site is published without what it could not read |
+| Only `tests/` | both (since October 2026) | Website update tests the code and publishes: a fix made only in a test goes live at once |
 | Only Markdown documentation outside `src/` and `content/` (including this `how-to/` folder), or `docs/` | none | |
 
-- **How long:** the site is live **about 5 minutes** after the push (watch the run in the **Actions**
-  tab). A page may take up to about 10 more minutes to show the change everywhere.
-- **If the build or a test fails,** GitHub Pages keeps the previous site. Nothing half-built or untested goes
-  live.
+- **How long:** the site is live **about 5 minutes** after a push of code (about 3 for the committee's files;
+  watch the run in the **Actions** tab). A page may take up to about 10 more minutes to show the change
+  everywhere. The Code check takes about 10 minutes.
+- **If the build or a test of the code fails,** GitHub Pages keeps the previous site. Nothing half-built or
+  untested goes live.
 - **The daily runs** (the nightly full update, the midday and evening refreshes and the Morning check's morning
   refresh) also rebuild the site with the newest code. GitHub's schedules are set 4 hours early on
   purpose, because GitHub starts them late; see
@@ -1243,12 +1288,10 @@ A commit to `main` (on github.com or `git push`) starts the workflows by itself:
 - **Visitors' copies:** a code change (templates, `src/assets`, `eleventy/`, `eleventy.config.js`,
   `package-lock.json`) gives the CSS and JS a new `?v=` and the service worker a new version, so
   returning visitors get the new files ("Updated — reload" in the installed app). A change to strings,
-  settings or content does not change the version; pages are fetched fresh anyway.
-
-> **Note:** `docs/OPERATIONS.md` says the version fingerprint also covers `config/`. The code
-> (`src/_data/build.js`, the list `ROOTS`) hashes only `src/_includes`, `src/pages`, `src/assets`
-> (without `src/assets/cache`), `eleventy/`, `eleventy.config.js` and `package-lock.json`. Follow the
-> code: settings, strings (`src/_i18n`) and global data (`src/_data`) do not change the version.
+  settings or content does not change the version; pages are fetched fresh anyway. (The list is `ROOTS` in
+  `src/_data/build.js`: `src/_includes`, `src/pages`, `src/assets` without `src/assets/cache`, `eleventy/`,
+  `eleventy.config.js` and `package-lock.json`; settings, strings in `src/_i18n` and global data in `src/_data` do
+  not change the version.)
 
 **Where errors are reported:**
 
@@ -1258,14 +1301,23 @@ A commit to `main` (on github.com or `git push`) starts the workflows by itself:
   code before publishing**, its run summary section *Tests before publishing*; a deploy problem: job **Publish to
   GitHub Pages**). Before October 2026 the build job was called *Build & publish website*.
 - **Code check (tests and test build)** → the run → job **Test build of the website** → step **Build the website
-  (as for GitHub Pages)**; the tests are in the job **Python tests (offline)**.
-- The run summary: "**Website:** N pages, M MB" (Code check adds "— builds fine with this change").
+  (as for GitHub Pages)** (then *Check the build* and the browser checks, step *Browser checks (focus ring, sticky
+  bar, large text, offline update, script errors)*); the tests are in the job **Python tests (offline)**.
+- The run summary: "**Website:** N pages, M MB" (Code check adds "— builds fine with this change"); Website update
+  adds **Build warnings (N)** when there are some.
 - In the same log, the line `[css] booth.css 50 KB · expenses.css 45 KB · main.css 362 KB · …` (the stylesheets
   and their sizes; `[css] <file>:` with Tailwind's words when one failed, which stops the build).
-- Warnings that do not stop the build, in the same log: `[links] …` (a link in the data was repaired
-  or hidden), `[icon] missing icon: …`, `[sitemap] missing page(s): …`, `[search-index] …`,
-  `[content] could not read data/site/…`, `[booth] N problem(s) — left out of the booth display: …` (a row of
-  `content/booth/booth.csv`, a Drive booth file or a live item the booth display could not use).
+- **Build warnings** (7.4): `[links] …` (a link in the data had to be hidden, an item was left out, or a repair
+  changed more than the scheme), `[icon] missing icon: …`, the page sprites' `[community]`, `[media]`, `[read]`,
+  `[published]`, and `[sitemap] missing page(s): …`. In the **Code check** they **fail** the test build
+  (`STRICT_BUILD`): the step ends with `STRICT_BUILD: N build warning(s) — fix them (or build without
+  STRICT_BUILD):` and lists each, and each is a red annotation *Build warning*. In **Website update** they never
+  stop publishing: *Check the build* lists them under **Build warnings (N)** in the run summary (yellow
+  annotations).
+- Log lines that are not build warnings and never stop a build: `[links] note: …` (a link that only lacked
+  `https://`, repaired), `[search-index] …`, `[content] could not read data/site/…`, `[booth] N problem(s) — left
+  out of the booth display: …` (a row of `content/booth/booth.csv`, a Drive booth file or a live item the booth
+  display could not use) and the booth's "not downloaded in this build" notes.
 - `/status/` shows the **content sources**, not code problems.
 
 ---
@@ -1371,7 +1423,7 @@ models are skipped there). To run just the ones for your change:
 | Strings in `src/_i18n` | `tests.test_i18n_keys` (+ `tests.test_accessibility` for `comfort.*` or `access.*`); some tests check exact words, so run them all once |
 | Header, footer, menus | `tests.test_header_footer tests.test_bulletin tests.test_pwa_install tests.test_expenses_page` |
 | A card on the right of a hero | `tests.test_hero_aside` |
-| The service worker, the manifest, icons, the save list | `tests.test_pwa tests.test_pwa_worker tests.test_pwa_install` |
+| The service worker, the manifest, icons, the save list | `tests.test_pwa tests.test_pwa_worker tests.test_pwa_install` (`test_pwa_worker` also covers the Data saver gate of the weekly refresh, the save lock, the month calendar files and the stylesheets carried over an update) |
 | Events, the calendar feed, meeting times | `tests.test_events_feeds tests.test_recurring_events tests.test_build_times` |
 | Home page filters | `tests.test_home` |
 | Published writers and its Texas writers archive | `tests.test_published_archive tests.test_published_scripts tests.test_event_tone tests.test_spotlight` (the data side: `tests.test_writers_archive`) |
@@ -1383,7 +1435,11 @@ models are skipped there). To run just the ones for your change:
 | `links:` in `config/site.yml`, `langLink`, `lurl`, `siteUrl`, the share pages | `tests.test_site_links` |
 | The site search and the Library search (ñ, the other language) | `tests.test_search_kit` (fixtures in `tests/fixtures/search/`) |
 | `app.js` formats and dates, the slides' focus, the booth screen | `tests.test_app_formats tests.test_orientation_deck tests.test_booth_screen` |
-| The monthly toolkit, its calendar files and the district report | `tests.test_monthly tests.test_report` |
+| The monthly toolkit, its calendar files and the district report | `tests.test_monthly tests.test_report` (`test_monthly.PosterNote`: where the Spanish poster's machine-translation note sits) |
+| The posters' share pictures (`POSTER_SHARE`, `mpShareImage`, `?v=`) | `tests.test_poster_share` |
+| The build's warnings (`STRICT_BUILD`, `BUILD_WARNINGS`) | `tests.test_build_warnings` (it runs a real Eleventy build) |
+| A filter, shortcode, macro or i18n key you stopped using; a new setting | `tests.test_unused_code tests.test_settings_used` (7.4) |
+| What a page looks like in a real browser (focus ring, sticky bar, large text, offline update, script errors, the Tracker's photos across tabs) | the browser checks, `tests/browser` ([Automation and troubleshooting §11.5](automation-and-troubleshooting.md#115-look-at-pages-in-a-real-browser-playwright-with-edge)) |
 | Portfolio tiles | `tests.test_portfolio` |
 | Tracker | `tests.test_expenses_core tests.test_expenses_app tests.test_expenses_files tests.test_expenses_page` |
 | Presentations | `tests.test_presentations tests.test_presentations_core tests.test_presentations_build` |
@@ -1391,7 +1447,12 @@ models are skipped there). To run just the ones for your change:
 
 Each test file starts with a short description of what it checks. Read it when a test fails: it
 usually names the rule you broke. To run a page script without a browser, the tests use a small pretend page:
-`tests/fakedom.js` and `tests/fakedom.py`.
+`tests/fakedom.js` and `tests/fakedom.py`. A test whose expected dates depend on "today" pins its clock
+(`run_js(…, now="2026-10-06T15:00:00Z")` in `tests/nodejs.py`): *Website update* runs the tests of the code before
+it publishes, so a test that fails on a date nobody chose would stop publishing. A test that judges the
+committee's own files (`content/`, `config/`) or a guide belongs in `CONTENT_TESTS` of `scripts/ops/gate_tests.py`
+(the Code check alone runs it), or gets data of its own ([Automation and troubleshooting
+§4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)).
 
 ---
 
@@ -1414,7 +1475,11 @@ usually names the rule you broke. To run a page script without a browser, the te
 | Something looks wrong in dark mode | A fixed colour (`#hex`, `text-white`) where a token belongs | Use `var(--c-…)` or a token class (section 10.2) |
 | The new page is not in the menu, or the menu does not underline it | No entry in `nav.js`, or its `page` is not the template's `pageKey` | Add or fix the entry (section 6.2) |
 | The new page is not found by the site search | It is not in `nav.js` | Add it to `nav.js`, or to the site pages in `searchIndex` (`eleventy/filters/library.js`) |
-| The build log says `[icon] missing icon: …` | A misspelled icon name, or one with capitals or other signs | Use a lower-case name from lucide.dev, or add an SVG to `src/_includes/icons/` |
+| The build log says `[icon] missing icon: …` | A misspelled icon name, or one with capitals or other signs | Use a lower-case name from lucide.dev, or add an SVG to `src/_includes/icons/`. Since October 2026 it is a build warning: the **Code check** fails on it (7.4) |
+| **Code check** red at *Build the website (as for GitHub Pages)*: `STRICT_BUILD: N build warning(s)` | A build warning: a missing icon, a page missing from the sitemap, or a `[links]` line (a link in the data that had to be hidden or repaired beyond its `https://`) | Fix what each listed line names; for `[links]`, the link is in committed data (`content/events`, `content/bulletin`, a Drive name) — not necessarily in your push. Check on your computer with `$env:STRICT_BUILD = "1"; npx @11ty/eleventy` |
+| **Code check** red: `tests.test_unused_code` | A filter, shortcode, macro or i18n key nothing uses any more | Remove it, with what only it used (7.4) |
+| **Code check** red: `tests.test_settings_used` | A setting no code reads, or a template reading a setting that is not there (a typo such as `site.meeting.platfrom`) | Fix the name, read it with a default, or remove the setting (7.4) |
+| **Code check** red at *Browser checks …* | A browser check found a problem (a script error on a page, a focus ring too faint, a page scrolling sideways at large text …) or a page it opens is gone ("/<page> answered 404, not 200 — is it still part of the site?") | The step's log names the check and the page; for a renamed page change `MAIN_PAGES` / `LARGE_TEXT_PAGES` in `tests/browser/test_site_in_browser.py` |
 | The build stops with `[css] <file>: Tailwind failed …` | A mistake in that stylesheet or its area file | The lines above it are Tailwind's message; fix the file |
 | `tests.test_page_weight` fails: a page uses `gvb-` (or `xp-`, `mp-` …) classes without the area stylesheet | A page uses an area's classes but does not list `/assets/css/<area>.css` in `pageStyles` | Add it to the page's `pageStyles`, before any vendor stylesheet (10.4) |
 | Icons are missing in a downloaded poster or another copy made from the page | The copy took the small `<use>` icons without the page's sprite | Put the drawings back inline before copying, as `inlineIcons()` in `monthly.js` does (6.5) |

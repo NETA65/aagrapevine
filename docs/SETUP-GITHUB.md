@@ -112,8 +112,8 @@ You can close the browser. What happens:
 | Part | Time | What it does |
 |---|---|---|
 | *Sync content + translate* | ~1–1½ hours (up to ~6 hours with `300`) | Fetches every source, downloads the free translation models (~175 MB, only the first time), translates new titles, commits the data |
-| *Build website* | ~3 minutes | Builds the site |
-| *Test the code before publishing* | ~3–4 minutes, at the same time as the build | Runs the code's tests; the site is published only when they pass (later runs skip them in seconds while the code and the content have not changed) |
+| *Build website* | ~3–4 minutes | Builds the site, and makes the monthly posters' share pictures (about a minute) |
+| *Test the code before publishing* | ~3–4 minutes, at the same time as the build | Runs the code's tests; the site is published only when they pass (later runs skip them in seconds while the code has not changed — the daily data and the committee's content and settings do not count) |
 | *Publish to GitHub Pages* | ~1 minute | Publishes the site built from that same commit |
 | *Report sources that stopped updating, and updates that keep failing* | seconds | Opens or closes the two automatic issues of Step 8 |
 
@@ -173,8 +173,10 @@ updated for **7 days**, the update opens one issue, **"A content source has stop
 that says what to check; it closes itself when the source works again. A failed timed run e-mails
 only the person of point 3, and a run the Morning check starts e-mails nobody, so when two such runs
 fail **in a row** the update opens a second issue, **"The website update keeps failing"**, naming
-the part that failed; it closes itself after the next run that works. A change that fails the tests
-is never published — the site stays as it was until the change is fixed.
+the part that failed; it closes itself after the next run that works. A change of the code that fails
+the tests is never published — the site stays as it was until the change is fixed. A slip in the
+committee's own files (`content/`, `config/`) is published without the part that could not be read,
+and only the **Code check** goes red.
 
 ---
 

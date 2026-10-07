@@ -967,7 +967,7 @@ The name is all the site reads for most files, so it is worth a few seconds. Gen
 | Type | Name it like this | Why | Avoid |
 |---|---|---|---|
 | PDF, Word, Google Doc — documents | `2027-02-17 Minutes - February committee meeting.pdf` · `March 2027 Committee Meeting.pdf` | dated February 17 / March 1, 2027 (a month alone stays in the title) | "final", "v3" (they stay in the title); a phone photo of a page (it becomes an Image card — a PDF prints better) |
-| Any flyer (PDF, JPG, PNG, Google Drawing …) | `2027-03-14 Spring Assembly booth 9am @ Tyler Civic Center.pdf` · `2027-05-01 Workshop 7pm ET on Zoom.png` | the day makes an event; a time (`9am`, `9-11am`, `7pm ET`) and a place after `@` fill it in | a phone's own name (`IMG_20270314_…`): no event; two days in one name (`2027-03-19 to 2027-03-21 …` gives a one-day event with an odd title) — write a multi-day event in `content/events`; a dated name for a flyer that a `content/events` file already links (two events) |
+| Any flyer (PDF, JPG, PNG, Google Drawing …) | `2027-03-14 Spring Assembly booth 9am @ Tyler Civic Center.pdf` · `2027-05-01 Workshop 7pm ET on Zoom.png` | the day makes an event; a time (`9am`, `9-11am`, `7pm ET`) and a place after `@` fill it in; since October 2026 a range of days (`2027-03-19 - 2027-03-21 …`, `March 14 - 16, 2027 …`, `del 14 al 16 de mayo de 2027 …`) makes one event over those days | a phone's own name (`IMG_20270314_…`): no event; a dated name for a flyer that a `content/events` file already links (two events) |
 | Bulletin post (Google Doc, `.docx`, `.txt`, `.md`) | `2027-01-10 Welcome new GVRs` · `Assembly reminder (until 2027-03-15).md` · `New prices (from 2027-01-01).md` · `Welcome (pinned).txt` | the name is the headline; the markers pin, expire or schedule it (a date with its year) | `.markdown`, `.rtf`, `.odt`, `.doc` for a text post; `(until March 15)` without a year (not read) |
 | Slides | `Spring Assembly report.pptx` | the title on the Slides card | renaming the four web decks' PowerPoint files (their names are the decks' `drive_title`) |
 | Google Form | the form's own name: `Spring Assembly volunteers` | the card's title | removing "(Responses)" from the answers sheet's name |
@@ -994,7 +994,7 @@ The name is all the site reads for most files, so it is worth a few seconds. Gen
    between 6 and 8 AM Central, 5 and 7 in winter), the midday refresh (around 11 AM to 1 PM Central) and the evening refresh (around 7
    to 9 PM Central), the quick run after anyone saves a settings or content file, and any run you start yourself
    (**Run workflow**, tick **skip_crawl**). A quick run
-   publishes in about 2 minutes (about 5 when it also tests a change of code or content); GitHub Pages may then
+   publishes in about 3 minutes (about 5 when it also tests a change of the code); GitHub Pages may then
    serve the old page for up to 10 more minutes. Details:
    [Automation and troubleshooting §3](automation-and-troubleshooting.md#3-what-happens-next-how-fast-a-change-goes-live).
 3. **In that run**, depending on the type:
@@ -1197,7 +1197,8 @@ the set-up).
 2. `/status/` (`/es/status/`): the Drive row — state, number of files, last good check.
 3. `data/raw/drive.json` on GitHub → `stats`: `by_kind`, `by_category`, `excluded_by_reason` (why files were left
    out — reasons only, never names), the counts `loose_skipped`, `unreadable_folders`, `depth_limited`,
-   `unconfirmed_folders` (names only in the run's log), `warnings`,
+   `unconfirmed_folders` (counts only; since October 2026 the run's log names no file or folder that is not
+   published either), `warnings`,
    `announcements` and `booth_texts` (text downloads), `forms` (open and closed checks).
 4. For the booth: `data/site/booth.json` → `problems`, and the player's **Settings → Slides** tab (**Ajustes →
    Diapositivas**), which also names the files the build left out (a word the booth never shows, a video or sound

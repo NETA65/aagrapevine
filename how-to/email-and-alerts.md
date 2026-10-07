@@ -702,11 +702,10 @@ What you would be e-mailed about (details in [Automation and troubleshooting](au
 
 | Workflow | Goes red when… | The live site meanwhile |
 |---|---|---|
-| Website update | building the site data failed, the data commit could not be saved, the tests failed (*"Tests failed — not published"*), or the build or deploy failed | keeps the last good version |
-| Morning check (new day by 5:30 AM) | today's update did not reach the site: *"❌ Today's update did not reach the site."* plus the error *"Morning update failed"* | keeps yesterday's day and quote |
+| Website update | building the site data failed, the data commit could not be saved, a change of the code failed the tests (*"Tests failed — not published"*), or the build or deploy failed | keeps the last good version || Morning check (new day by 5:30 AM) | today's update did not reach the site: *"❌ Today's update did not reach the site."* plus the error *"Morning update failed"* | keeps yesterday's day and quote |
 | Monthly e-mail digest | a send failed, the month box was mistyped, or the e-mail *may* have been sent ([3.14](#314-every-result-a-digest-run-can-show)) | unaffected |
 | Weekly link check | only when the site itself fails to build for the check. Broken links never turn it red: it reports them through an issue. | unaffected |
-| Code check (tests and test build), after a push | a change broke the tests or the test build. GitHub e-mails the person who pushed. | unaffected |
+| Code check (tests and test build), after a push | a change broke the tests, the test build (a build warning too) or a browser check — also a slip in a settings or content file, which *Website update* publishes without the part it could not read. GitHub e-mails the person who pushed. | unaffected (or published without that part) |
 
 A **yellow ⚠** note, for example one source having a bad day, never sends an e-mail. Only red runs do.
 
@@ -849,7 +848,7 @@ paste it into a repository file, an issue or an e-mail.
 | **Run workflow** with *Preview only* ticked | Monthly e-mail digest, preview | about 1 to 2 minutes, then **digest-preview** is on the run page |
 | **Run workflow** with *Preview only* unticked | Monthly e-mail digest, sends at once (unless that month was already sent: then tick **force** too) | about 1 to 2 minutes for the run, plus a few minutes for the group to deliver it |
 | Nothing (the 1st of the month) | the scheduled tries | usually the **morning of the 1st** (Central), once the month's first full update has run; at the latest from noon on the 3rd |
-| Edit `digest:` or `site:` in `config/site.yml` | a quick **Website update** (it tests the change before it publishes) and a **Code check** (started by the push) | [/digest/](https://neta65.github.io/aagrapevine/digest/) in about 5 minutes, up to 15 before every visitor sees it; the e-mail the next time it is built |
+| Edit `digest:` or `site:` in `config/site.yml` | a quick **Website update** and a **Code check** (started by the push; it tests the change) | [/digest/](https://neta65.github.io/aagrapevine/digest/) in about 3 minutes, up to 13 before every visitor sees it; the e-mail the next time it is built |
 | Edit `scripts/notify/send_digest.py` | a **Code check** (all tests plus a preview build) and a quick Website update | the next preview or send uses it straight away |
 | Edit `.github/workflows/monthly-digest.yml` | a **Code check** only | the next run. **If you changed the `cron:` line, the failure e-mails now come to you**, so the NETA65 Disable → Enable step must be done again. |
 | Add content (Drive, bulletin, events) during the month | the daily updates | in **next month's** e-mail; on [/whats-new/](https://neta65.github.io/aagrapevine/whats-new/) right after the next update |

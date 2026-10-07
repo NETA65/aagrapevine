@@ -27,14 +27,13 @@ aalavina_archive_2026-11-05.csv        La Viña
 3. Commit and push (GitHub Desktop: **Commit to main**, then **Push origin**), or on github.com: **Add file →
    Upload files**, then delete the old file (**⋯ → Delete file**).
 
-The push starts an update by itself: about 5 minutes later the archive is on the site (the run tests the code
-before it publishes; later when the file brings many stories that are new to the site, as their titles are
-translated first). The run summary
+The push starts an update by itself: about 3 minutes later the archive is on the site (later when the file
+brings many stories that are new to the site, as their titles are translated first). The run summary
 (*Actions → Website update →* the run) says `New archive file used: …`; a line **CSV file to fix** means the
 file was not used (a missing column, or far fewer rows than the file before) and the older rows stay on the site.
-A file with a missing column, or one that cannot be read, also fails the tests the run makes before it publishes:
-then nothing is published (*Tests failed — not published*) until the file is fixed or deleted, so fix it the same
-day. A magazine you do not replace keeps its file. Keep the export as it was made (if you save it in Excel: **CSV UTF-8**).
+A file with a missing column, or one that cannot be read, also turns the *Code check* red
+(`test_the_headline_numbers`); *Website update* still publishes the rest (it leaves that test to the Code check),
+so fix or delete the file the same day. A magazine you do not replace keeps its file. Keep the export as it was made (if you save it in Excel: **CSV UTF-8**).
 
 Saving this README starts no *Website update* run (only the *Code check*).
 

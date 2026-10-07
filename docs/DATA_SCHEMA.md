@@ -45,26 +45,44 @@ module removing items it had kept back (Drive: a folder found empty twice).
 **`held`** — the mass-drop guard. When a source says ok but its live items fall to zero (from any size) or lose more
 than half once the previous list held at least `DROP_GUARD_MIN` = 10, `save_raw` puts the missing items back next
 to this run's (new items still come in) and writes `held` = `{since, kept, previous, found, drop, examples[, ids]}`:
-since when, how many kept, the counts before and found, `drop: true` (the guard put them back; `ids` = theirs, in
-the raw file only) or `false` (the module kept them itself and named them `unconfirmed`: Drive's empty folders), and
-up to 5 titles. The next ok run that still misses the held `ids` removes them (`changes.confirmed`); items that
-vanish only on that run are judged as a new drop; a run that finds them again ends the hold; a failed run keeps
-it as it was. An item this run marked `gone` that the guard puts back is put back as it was before, not listed
+since when, how many kept, the counts before and found, `drop: true` (the guard put them back; `ids` = **every** one
+of theirs, sorted, in the raw file only) or `false` (the module kept them itself and named them `unconfirmed`:
+Drive's empty folders), and up to 5 titles. The next ok run that still misses the held `ids` removes them
+(`changes.confirmed`); items that vanish only on that run are judged on their own, as a new drop (so a source that
+keeps losing a few more items each run is still confirmed the next run); a run that finds them again ends the
+hold; a failed run keeps it as it was — and, while a guard hold lasts, also puts back the held items its list
+misses or marks `gone` (`crawl.py` writes its list on a failed run too), with `changes.removed` 0, so only a run that
+works confirms the removal. (An envelope written before every id was stored, with `ids_total` larger than its `ids`
+list, is read safely: its stored ids are accepted and the rest judged as a new drop; a failed run then puts back
+every item it misses.) An item this run marked `gone` that the guard puts back is put back as it was before, not listed
 twice. Not guarded: the sources in `common.DROP_GUARD_EXEMPT` (announcements, manual_events, events_external, editorial, instagram,
 writers_archive — the reason for each is in the code) and a source switched off (`stats.disabled`, e.g.
 `meetings.enabled: false`); a module may pass `save_raw(…, drop_guard=True|False)`. `status.json` `sources[]`
 copies `changes` and `held` (without `ids`; `null` when none); `/status/` shows a held source as **On hold**.
 
-**An unreadable raw file** (a hand edit or a bad merge): `build_data` keeps what the last build made of that source
-(`carry_unreadable`) and its `status.json` row says "data/raw/<source>.json could not be read (…) — the site keeps
-what the last build had for it until the file is fixed (restore it from the git history) or this source's next
-update rebuilds it". When the module itself runs, `common.load_raw` moves the file aside as
-`<source>.json.corrupt-<time>` (git-ignored) and the module starts from an empty list, `ok: false` once, with a
-message that ends "restore the file from the git history to keep older items and first-seen dates".
+**An unreadable raw file** (a hand edit or a bad merge) is never rebuilt from scratch and never written over: since
+October 2026 `common.load_raw` raises `UnreadableRaw` and leaves the file exactly as it is (so `save_raw` refuses
+too), `run_all` does not run that source's module at all (its row is "failed"), and `build_data` keeps what the last
+build made of that source (`carry_unreadable`) until a person restores the file from git (or deletes it to read the
+source again from scratch). Its `status.json` row keeps the last values with `ok: false` and "data/raw/<source>.json
+cannot be read (<reason>) — restore it from git; the site keeps the last build's items" (`common.unreadable_message`;
+the run summary's module row says the same), and the translation cache is not pruned meanwhile.
+
+**A missing raw file** of a source the last build's `status.json` had items from (`count` > 0; a merge or a clean-up
+deleted it, or a person did to read the source again): since October 2026 the site keeps the last build's items the
+same way, the cache is not pruned ("data/raw/<x>.json is missing"), and the row keeps its count and dates with `ok:
+false` and "data/raw/<x>.json is missing — the site keeps the last build's items until an update of this source works
+(or restore the file from git)". If that source's next update fails, it writes the file again with `ok: false` and
+no items; the last build's items still stay, and the row says "data/raw/<x>.json went missing and this source's
+update since did not work (<error>) — the site keeps the last build's items until one works (or restore the file
+from git)". The first update that works, even one that finds nothing, ends it. A source with nothing before starts
+empty, "not run yet" (`ok: null`).
 
 `attempted` also moves in `pdfs.json` on a full update that leaves the crawl out because
-`sources.crawler.minutes_per_run` is 0 (`run_all._note_paused_crawl` writes only that key; not when the file says
-`ok: false`): the paused search counts as tried, so the run summary never calls it "not checked".
+`sources.crawler.minutes_per_run` is 0 (`run_all._note_paused_crawl`; not when the file says `ok: false`): the paused
+search counts as tried, so the run summary never calls it "not checked". With it go this run's own values, which the
+run summary reads as this run's: `changes` = `{added: 0, removed: 0, held: <the kept count of a hold still in
+force>}` and `hub_problems: []`; `updated`, `held`, the items and the stats stay as they were.
 
 `first_harvest` is written by `common.save_raw()` (seeded from the oldest `first_seen` when an older
 file has none). `build_data.py` uses it to tell the launch-day back catalog from real news (see
@@ -856,8 +874,10 @@ Site file:
                     "translated_this_run": 0, "from_cache": 1620, "pending": 0, "rejected_by_guard": 0,
                     "seconds": 0.1, "model_seconds": 0.0, "texts_per_second": null, "glossary_entries": 162,
                     "problems": [] },   // since October 2026: an unreadable cache.json moved aside
-                                        // (cache.json.bad-<UTC time>), a model refused for its SHA-256 —
-                                        // also problems.translations; /status/ shows a calm line + the text
+                                        // (cache.json.bad-<UTC time>), a model that could not be installed (a
+                                        // failed download, a SHA-256 that does not match) — also added to
+                                        // problems.translations; /status/ shows a calm line + the text; the
+                                        // run summary lists them under "Translation problems"
   "counts": { "videos": 528, "episodes": 295, "…": 0, "whatsnew": 150 },
   "spotlight": { "today": "2026-09-23", "home_days": 60, "list_days": [60, 90],
                  "counts": { "60": { "neta65": 2, "texas": 8, "all": 100 }, "90": { … } }, "items": 156 },
@@ -870,7 +890,9 @@ Site file:
   "reminders": [            // dated settings that run out soon (or did) — for the Actions run summary; [] when none
     { "id": "carry-tips", "file": "config/carry.yml", "due": "2028-01",
       "message": "config/carry.yml has monthly tips only through 2027-12; the /monthly/ pages look 12 months ahead — add tips for the next months." } ],
-  "problems": { },         // raw files that were missing/unreadable ("missing" = module never ran), and settings
+  "problems": { },         // raw files that were missing/unreadable ("missing" = module never ran; "missing:
+                           // data/raw/x.json (the last build had N item(s))" = gone while the site keeps its items, §1;
+                           // "unreadable: <reason>"), and settings
                            // build_data could not use: "meeting" (also a skip_dates value that is not a meeting
                            // day), "recurring_events", "ics_feeds", "price_changes" (text says what); and
                            // "content_events": slips in content/events files that were worked around (a
@@ -884,7 +906,10 @@ Site file:
       "category": "neta65", "group": "neta",       // where its events show on /events/ (neta | calendar)
       "state": "blocked",      // ok · blocked (the site's bot protection: HTTP 401/403/429, Cloudflare check) ·
                                // error (no answer, 404/500, not a calendar file) · never (not asked yet)
-      "http_status": 403, "error": "HTTP 403: the site's bot protection (Cloudflare …) turned the robot away",
+      "http_status": 403,      // since October 2026 the message is plain ("asked for fewer requests (HTTP 429)",
+                               // "refused the request (HTTP 401/403), as its bot protection does" are the others):
+      "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; the last good copy is kept",
+                               // (… "; there is no good copy of it yet" when none was ever read)
       "last_success": null,    // when a calendar file was last read (its copy is used while the feed fails)
       "last_attempt": "…",     // the last request (at most once a day, whether it worked or not)
       "checked_this_run": true, "from_copy": false,
@@ -900,8 +925,7 @@ Site file:
 `reminders` (build_data `reminders`, checked against the site's calendar day, Central; English, for whoever keeps
 the settings; each check reads its own file and a file that cannot be read is skipped, never a failed build):
 `carry-tips` — config/carry.yml has monthly `tips` only through a month before this month + 12 (the /monthly/ pages
-look that far ahead; `due` = the first month without tips); `expenses-panel` — the last `panels` entry of
-config/expenses.yml ends within 90 days or ended (`due` = its `to`); `orientation-panel` — the panel of
+look that far ahead; `due` = the first month without tips); `orientation-panel` — the panel of
 config/orientation.yml (`starts` + 24 months, or its `ends`) has ended; `skip-dates:<key>` — the last `skip_dates`
 day of a config/site.yml `recurring_events` entry is within 90 days or past; `neta65-assemblies` — the last
 content/events file whose title, `title_es`, `kind` or `tags` say "assembly" / "asamblea" starts within 60 days or
@@ -911,9 +935,11 @@ removed (once the stores show the new prices). `due` = the date the reminder is 
 Since October 2026 `/status/` also shows each source's `stats.warnings` (any state) in a folded *Notes from the last
 update (n) — for the site maintainer* box, as raw English text (on `/es/status/` its caption says so). Drive's
 `stats` there count what is not published instead of naming it: `loose_skipped`, `unreadable_folders`,
-`depth_limited`, `unconfirmed_folders` are numbers, `skipped_panels` a list of panel numbers (the names are only in
-the run's log). The `expenses-panel` reminder is obsolete now that the Tracker works the panels out itself (it
-still fires when the last `panels` entry of `config/expenses.yml` ends within 90 days).
+`depth_limited`, `unconfirmed_folders` are numbers, `skipped_panels` a list of panel numbers; since October 2026 the
+run's log counts them too and names no file or folder that is not published (an unreadable folder by the folder
+above it and its Drive address, a failed file by its folder and file id). There is no reminder for the Tracker's
+service panels (the `expenses-panel` one is gone since October 2026): the Tracker works them out itself
+(`servicePanels` in `src/assets/js/expenses-core.js`), and `panels:` in `config/expenses.yml` only overrides one.
 `updated` of `announcements.json`, `events.json`, `whatsnew.json`, `spotlight.json` and `writers_archive.json` (and
 of `shop`, `meetings`, `audio_project`, `quote` before their source first worked) means "when this file's content
 last changed" since October 2026 (`build_data.stamped`): a build that changes nothing else in it keeps the last
@@ -963,9 +989,17 @@ next 12 (`monthlyPages` → `/monthly/YYYY-MM/` × en/es; `mpMonths` / `mpMonth`
 `config/carry.yml` (the 10 ways, the "put it to work" tips), `db.events` (+ the committee meeting from
 `site.meeting` and recurring dates from `site.recurring_events` for months past `events.json`), `db.weekly_open`
 and `db.shop.botm`. The hub (`/monthly/`) is the canonical home of the 10 ways; each month page of that month's
-toolkit and poster (PNG 1080 × 1350, share, print on one Letter page). The 3 months before this one keep small
-redirect pages to `/monthly/` (`monthlyPastPages`, `src/pages/monthly-past.njk`), so a printed poster's QR code
-never lands on a 404. `MONTHLY_NOW=2026-12-15` (or an instant, `2026-10-22T06:00:00Z`) fixes "now" for testing.
+toolkit and poster (PNG 1080 × 1350, share, print on one Letter page). The 12 months before this one
+(`PAST_MONTHS`) keep small redirect pages to `/monthly/` (`monthlyPastPages`, `src/pages/monthly-past.njk`), so a
+printed poster's QR code never lands on a 404. `MONTHLY_NOW=2026-12-15` (or an instant, `2026-10-22T06:00:00Z`)
+fixes "now" for testing; since October 2026 it also moves the committee meeting dates in the month calendar files
+(`/monthly/YYYY-MM/…ics`: `committee.js` `meetingDates(cfg, back, ahead, now)`, the months counted in Central time,
+as `meeting.py` `upcoming_rule_dates` does — before, a preview far from today dropped the meeting from those files).
+The presentation decks' meeting rows (`presentations.js` `meetingInfo`) still use the real clock. A month page built
+with `POSTER_SHARE=1` (Website update) names `share.png?v=<8 hex>` beside it as its `og:image` / `twitter:image`
+(1200 × 630, alt "The {month} poster of the Grapevine & La Viña committee, NETA 65 — Carry the message", i18n
+`monthly.share_alt`); the version is a hash of the poster's HTML and the code version (`shareVersioned`), and
+`scripts/ops/poster_share.py` makes the picture. Without the flag the page keeps the committee's card.
 
 * **The plan and what is live now.** Every month page shows that month's plan (the poster, the issues' themes,
   the tips, deadlines, dates, weekly open meetings, Book of the Month) and the same month as a message for a group
@@ -1084,7 +1118,9 @@ kept per visitor is `localStorage["gv-orientation-v1"]` = `{ v: 1, done: [lesson
 * `{{ item.date | fmtDate(lang, "long") }}` — `short` / `long` / `month` / `iso` / `relative` / `time`
 * `{{ "/library/" | lurl(lang) }}` — language-prefixed URL (`/es/library/` for Spanish)
 * `{{ page.url | altLangUrl(lang) }}` — the same page in the other language
-* `{{ items | where("kind", "pdf") }}`, `| limit(6)`, `| sortByDate`, `| upcoming`, `| past`, `| groupBy("category")`, `| isRecent(14)`
+* `{{ items | where("kind", "pdf") }}`, `| whereNot("status", "gone")`, `| limit(6)`, `| groupBy("category")` (the
+  list helpers left since October 2026: `where`, `whereNot`, `limit`, `offset`, `groupBy`, `pluck`, `uniq`, `keys`,
+  `length` — dates and "upcoming" are each area's own filter's work, `eleventy/filters/*.js`)
 * `{% icon "calendar", "size-5" %}` — inline Lucide SVG icon
 
 ## 5. Extended fields (as built)
@@ -1100,11 +1136,11 @@ field also gets `i18n.<name> = {en, es}` in the site file.
 | `writers_archive.json` | `parser_version`, `files` {gv/lv: {`name`, `name_date`, `sha256` (of the text with LF line ends, no BOM — the same on the owner's PC and in git), `rows`, `texas_rows`, `first_year`, `imported_at`}} — §2 *writers_archive.json* |
 | `podcasts.json` | `shows` [{`key`, `name`, `title`, `feed`, `description`, `image`, `language`, `web`, `apple`, `spotify`, `amazon`, `episodes`}], `discovery` (weekly feed discovery) |
 | `youtube.json` | `playlists` [{`id`, `title`, `lang` (en/es/und), `count`, `channel_id`, `url`}], `backfilled_at`, `detail_fails` {video id: per-video detail failures — 3 → not asked again; a bot check, captcha, rate limit or time-out is not counted}, `channel_ids` |
-| `instagram.json` | `profiles` {gv/lv: {`username`, `name`, `full_name`, `url`, `followers`, `posts`, `owner_id`, `checked`, `avatar`}}; `removal` {shortcode: {`checked`, `missing`}} — the removal sweep's marks (since October 2026: a post no longer listed is looked up again; two "not there" answers ≥ 12 h apart remove it with its picture); `stats.removal` {`checked`, `missing` [ ], `removed` [ ]} |
-| `pdfs.json` | `crawl` {`known_pages`, `crawled_pages`, `pdfs`, `last_run_pages`}; `hub_problems` [{`url`, `status`, `since`}] (since October 2026; always written, `[]` when all is well) — the hub / kit pages (`HUB_PATHS` order) asked for this run that gave no readable page: `status` an HTTP code (404, 410, 503 …) or a word (`"no-response"`, `"login"`, `"offsite"`, `"not-html"`, `"robots"`, `"too many redirects"`, `"read: <ExceptionName>"`), `since` the UTC start of the failing streak (a 304 or a page reused from the run's memo counts as fine); crawler counters are in `stats`, with `stats.pruned_pages` (pages forgotten this run) and, when there are problems, `stats.warnings` ("N main page(s) of the magazine sites did not load: aagrapevine.org/gvr-resources (404 since 2026-10-06) — checked again every day"; "robots.txt of www.aagrapevine.org did not answer properly (HTTP 503): its pages were left for the next run") |
+| `instagram.json` | `profiles` {gv/lv: {`username`, `name`, `full_name`, `url`, `followers`, `posts`, `owner_id`, `checked`, `avatar`}}; `removal` {shortcode: {`checked`, `missing`}} — the removal sweep's marks (since October 2026: a post no longer listed is looked up again; two "not there" answers ≥ 12 h apart remove it with its picture — an answer counts only when an embed of a post of the same account and kind, post or Reel, worked after it in that run); `stats.removal` {`checked`, `missing` [ ], `removed` [ ]} |
+| `pdfs.json` | `crawl` {`known_pages`, `crawled_pages`, `pdfs`, `last_run_pages`}; `hub_problems` [{`url`, `status`, `since`}] (since October 2026; always written, `[]` when all is well) — the hub / kit pages (`HUB_PATHS` order) asked for this run that gave no readable page: `status` an HTTP code (404, 410, 503 …) or a word (`"no-response"`, `"login"`, `"offsite"`, `"not-html"`, `"robots"`, `"too many redirects"`, `"read: <ExceptionName>"`), `since` the UTC start of the failing streak (a 304 or a page reused from the run's memo counts as fine); crawler counters are in `stats`, with `stats.pruned_pages` (pages forgotten this run) and, when there are problems, `stats.warnings` ("N main page(s) of the magazine sites did not load: aagrapevine.org/gvr-resources (404 since 2026-10-06) — checked again every day"; "robots.txt of www.aagrapevine.org did not answer properly (HTTP 503): its pages were left for the next run"); a run in which that kept every due page unread is not ok (`crawl.run_verdict`, since October 2026): `ok: false` with "no page could be read: robots.txt of www.aagrapevine.org (HTTP 503) did not answer properly — site down?" (or the older "no page could be fetched (N errors) — site down?"), so `updated` keeps the last success; a paused search (`minutes_per_run: 0`) writes `hub_problems: []` with its fresh `attempted` (§1) |
 | `drive.json` | `empty_folders` {folder id: since} (since October 2026): folders (or the root) that listed empty although they held files — their files are kept (`held`, `drop: false`) until the next run finds the folder empty again (then they go: `changes.confirmed`) or lists them again |
 | `events_external.json` | `cache`, `sitemap` (module bookkeeping — not used by the site) |
-| `meetings.json` | `feeds` [{`id`, `name`, `url`, `lang`, `ok`, `count`, `method` (feed/page), `key_from` (secret/config/key_source — never the key), `error` (a bot check since October 2026: "<host> answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept", the office's previous meetings kept; `stats.warnings` prefixes the office's name), `note`, `updated`, `attempted`}], `type_labels` {code: {en, es}}. `extra.end_time` may be earlier than `time` when the meeting runs past midnight and lasts at most 3 h (`MEETING_OVERNIGHT_HOURS`; `23:00`–`00:30`); a longer one is dropped as before. Items: `mtg:<hash>` (kind `meeting`, `title` = name, `url` = the meeting's page; `extra` = `day`, `time`, `end_time`, `location`, `address`, `street`, `zip`, `city`, `county`, `state`, `lat`, `lng`, `approximate`, `region`, `district`, `types`, `attendance`, `in_area`, `sources`) |
+| `meetings.json` | `feeds` [{`id`, `name`, `url`, `lang`, `ok`, `count`, `method` (feed/page), `key_from` (secret/config/key_source — never the key), `error` (a bot check since October 2026: "<host> answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept", the office's previous meetings kept; a robots.txt that answered 5xx / 429 or nothing: "<host>'s robots.txt could not be checked (HTTP 503) — nothing was read; the last good list is kept" (or "(no answer)"; `RobotsUnavailable`), while "… robots.txt does not allow reading <path>" means only that its rules really refuse the page; `stats.warnings` prefixes the office's name), `note`, `updated`, `attempted`}], `type_labels` {code: {en, es}}. `extra.end_time` may be earlier than `time` when the meeting runs past midnight and lasts at most 3 h (`MEETING_OVERNIGHT_HOURS`; `23:00`–`00:30`); a longer one is dropped as before. Items: `mtg:<hash>` (kind `meeting`, `title` = name, `url` = the meeting's page; `extra` = `day`, `time`, `end_time`, `location`, `address`, `street`, `zip`, `city`, `county`, `state`, `lat`, `lng`, `approximate`, `region`, `district`, `types`, `attendance`, `in_area`, `sources`) |
 | `quote.json` | `history` {gv/lv: [{`pub`, `lang`, `date`, `heading`, `text`, `attribution`, `source`, `source_lang`, `url`, `signup_url`, `seen` (the UTC time that day's quote was first read; kept on later reads; null in an entry written before these times were kept — it never gets one)}]} — the last 14 days, newest first, one per day (raw only: the guard against a page going back to an older quote, and the times behind `status.json` → `quote_days`; never shown as such). Since October 2026 a heading's date is taken only inside `heading_window` (365 days back to tomorrow, Central); an entry or item dated after tomorrow is dropped, and `stats.warnings` says what happened ("gv: dropped the stored quote of …", "… is already known — kept the newer", "… — over 14 days old …"). Items: `quote:<pub>:<date>` (kind `quote`, `title` = the official heading, `url` = the page anchor; `extra` = `pub`, `text`, `attribution`, `source`, `source_lang`, `signup_url`, `date_label`, `date_from_heading`, `block` (teaser/embed/anchor), `node`) |
 | `shop.json` | `bulk_discounts` {`source_url`, `tiers`, `note` {en?, es?}}, `types` {gv/lv: {print/digital/complete: {`text`, `lang`, `url`}}}, `listings` [{`pub`, `region`, `url`}], `types_checked` (ISO; type descriptions are re-read every 30 days), `specialty_checked` (ISO; specialty pages are re-read every 7 days), `price_memory` {effective day: {`sub:…` item id: price, `botm:<pub>:<sku>`: regular price}} — for each announced price change (`config/site.yml` price_changes), the 1-year prices it affects (and, when it changes the book prices, each Book of the Month's regular price, by its book) as the reads BEFORE its day found them: each read until the day before updates the prices it found — a plan or book it did not find keeps its last price, and changes on the same day share one memory —, frozen from the day on (with the clock after the reads, so a run that started before midnight never files a later price as "before"); build_data compares later reads with it (`scripts/sync/price_changes.py` `remember` / `resolve` / `book_stale`); the memory of a change no longer in the settings is kept 400 days after its day (a typo that makes the block unreadable never loses it), then dropped. Items: `botm:gv` / `botm:lv` (kind `botm`; `extra` = `pub`, `page_url`, `price`, `sale_price`, `discount_pct`, `currency`, `sku`, `starts`, `ends`, `month`, `month_label`, `offer_text`, `product_name`, `image_src`, `read` (the day these prices were read, Central; an offer kept from an earlier read keeps its day)), `sub:<pub>:<region>:<sku>` (kind `subscription`; `extra` = `pub`, `region`, `listing_url`, `type`, `term_months`, `price`, `currency`, `sku`, `volume`, `position`, `image_src`) and `special:<pub>:<sku>` (kind `specialty`, `summary` = the short description; `extra` = `pub`, `type` (cards / planner / calendar / holiday / other), `price`, `currency`, `sku`, `volume`, `trilingual`, `pack`, `page_url`, `position`, `image_src`, `missing_since` (a seasonal item the stores no longer show, YYYY-MM-DD)). `stats.specialty_out_of_season` lists those ids on every run |
 
@@ -1156,7 +1192,7 @@ it is read once.
 | topic (`editorial`) | `publication`, `theme`, `evergreen`, and for dated themes `issue_key`, `issue_label`, `deadline`, `due_text`, `pdf_url`; Grapevine's also `submit_url`, `guidelines_url`; La Viña's (its yearly themes document — `pdf_url` and the item's `url`) also `submit_email` | `issue_label` (rules: La Viña's bimonthly from its two months); `theme` when it differs from the title |
 | meeting (`weekly_open`) | `zoom_id`, `zoom_url`, `passcode`, `day`, `time`, `time_central`, `sentence`, `weekday`, `start_local`, `timezone`, `next_start`, `url`, `player_url`; La Viña item (`weekly_open_lv`, §2): no `sentence`/`player_url`, plus `starts`, `source_note`, `own_i18n` | written by rules from weekday/start_local/timezone: `day` ("Wednesdays"/"Miércoles"), `time` ("Noon Eastern"/"mediodía (hora del Este)"), `time_central` ("11:00 AM Central"/"11:00 a. m. (hora del Centro)"), `when` ("Wednesdays at 11:00 AM Central"/"Los miércoles a las 11:00 a. m. (hora del Centro)" — capitalized for a line of its own; a sentence lower-cases the first letter), `sentence` (join line with Zoom ID + passcode). Machine-translated only if those fields are missing |
 | event (`events`) | common: `start`, `end`, `all_day`, `location`, `online_url`, `flyer_url`, `flyer_thumb`, `city`, `state`, `past`; `tentative` (`true` only: details to be confirmed), `location_tba` (`true` only: the place is not known yet — "Venue to be announced"; decided by the item's own `location`, by `location_es` / `location_en` only when there is no `location`). Committee: `meeting_id`, `passcode`, `recurring`. Recurring (category `recurring`, below): `recurring` (`true`), `series`, `rule`, `recurrence_label`, `host` (`neta` / `lv` / `gv`), `online` (it has an `online_url`), `platform` ("Zoom" …, else `null`), `meeting_id` (else `null`), `contact` (an e-mail address, else `null`). External calendar: `platform`, `online`, `scope`, `site`, `country`, `website`, `organizer`, `date_text`; a listing of a month a series skips also `series_of` (the series key), `host`, `online_url`, `meeting_id`, `contact`, `flyer_url`, `flyer_thumb` (from the series — build_data.series_moved_dates). Drive flyer: `drive_id`, `is_pdf`, `is_image`; a dated flyer of a recurring series on another day of the month also `host`, `online_url`, `online`, `platform`, `meeting_id`, `contact` (from the series). Manual: `body_md`, `slug`, `file`, `own_i18n`; `flyer_url` = the file's `flyer:` (a Drive copy, `https://drive.google.com/file/d/<id>/view`: the pages take its picture from the Drive by its id — committee.js `normalizeEvents` — so `flyer_thumb` stays null unless the file gives `image:`); `host` (`lv` / `gv` only: a file's `host:`), `meeting_id` (a file's `meeting_id:`); `also_in_feed` (the key of an .ics feed that lists the same event — also on a flyer, committee or recurring event) + `feed_match` (`url` / `online` / `title`); `also_on_calendar` (`lv-calendar` / `gv-calendar`: Grapevine's or La Viña's own calendar lists the same event — also on a flyer, committee or recurring event) + `calendar_match` (`url` / `online` / `title`). `host` on any event: `lv` / `gv` = La Viña's or Grapevine's own event that the committee shares — the pages show it with the Grapevine / La Viña calendars, in that magazine's colour (not to be confused with a document's `host`, a website). .ics feed (category `neta65` / `ics` / `gv-calendar` / `lv-calendar`, source `calendar`): `feed` (the feed's key), `uid` | committee meetings and recurring events (and a listing taken into a series: `series_of`): fixed human `title`/`summary` in both languages; recurring: `recurrence_label` (rules); manual: `body_md` (+ the file's own `title_es` / `summary_es`, never machine-translated); `location` (the file's `location_es` / `location_en`, or the site's own words for a place not known yet — never machine-translated) |
-| document / slides / photo / video_file / form (`drive`) | `file_id`, `mime`, `name`, `panel`, `panel_label`, `path`, `album`, `view_url`, `preview_url`, `download_url`, `thumb_url`, `image_url`, `is_image`, `is_video`, `is_pdf`, `file_type`, `folder_id`, `folder_url`, `folder_chain`, `modified_text`, `size_bytes`, `duration_sec`, `shortcut_id`, `generic_name`, flyers: `event_date`, `event_title`, `event_time`, `event_end_time`, `event_location`, `event_tz` (the IANA zone when the name gives one — "12 p. m. (hora del Este)"; else the time is Central) / `event_month` (camera / WhatsApp / screenshot names are no event), forms: `form_closed`, `form_signin_required`; raw only — the booth folder's files (category `booth`, never in a site item list): `booth`, `modified`, a message's `body_md` (§3 *booth.json*) | `album` (photos in a sub-folder) |
+| document / slides / photo / video_file / form (`drive`) | `file_id`, `mime`, `name`, `panel`, `panel_label`, `path`, `album`, `view_url`, `preview_url`, `download_url`, `thumb_url`, `image_url`, `is_image`, `is_video`, `is_pdf`, `file_type`, `folder_id`, `folder_url`, `folder_chain`, `modified_text`, `size_bytes`, `duration_sec`, `shortcut_id`, `generic_name`, flyers: `event_date`, `event_end_date` (since October 2026: the last day when the name gives a range of days — "Assembly March 14 - 16, 2027", "2027-03-19 - 2027-03-21 …", "Asamblea del 14 al 16 de mayo de 2027"; `events.json` `extra.end` is then that day, or that day's end time when the name gives one), `event_title`, `event_time`, `event_end_time`, `event_location`, `event_tz` (the IANA zone when the name gives one — "12 p. m. (hora del Este)"; else the time is Central) / `event_month` (camera / WhatsApp / screenshot names are no event; a month and year with no day — "March 2027", "marzo de 2027" — gives only `event_month`, while a Spanish first written "1° / 1º / 1.º / 1ro / primero de marzo de 2027" is a whole date), forms: `form_closed`, `form_signin_required`; raw only — the booth folder's files (category `booth`, never in a site item list): `booth`, `modified`, a message's `body_md` (§3 *booth.json*) | `album` (photos in a sub-folder) |
 | announcement (`announcements`: the bulletin's posts) | `body_md`, `expires`, `publish`, `pinned`, `slug`, `file` (`content/bulletin/<name>.md`), `link`, `own_i18n` | `body_md` (+ the file's own `title_es` / `summary_es`) |
 
 #### Recurring events (category `recurring`; build_data.recurring_events)

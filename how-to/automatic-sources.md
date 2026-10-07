@@ -76,9 +76,10 @@ Most days there is **nothing to do**. When you want to check or change something
 3. **Edit on GitHub.** Open the file on github.com, click the pencil, change the value, click
    **Commit changes**. The MKP715 GitHub login on the owner's PC can do this (it has write access).
    Only *secrets* and repository *settings* need the **NETA65** admin account.
-4. **Wait for the right run.** Most changes are on the site about 5 minutes after you save (the quick run your
-   save starts tests the code first, then publishes; allow up to 10 more minutes before every visitor sees it):
-   that run also runs the sources whose own settings you changed. Changes to the magazine stories, the shop and
+4. **Wait for the right run.** Most changes are on the site about 3 minutes after you save (the quick run your
+   save starts publishes without testing again — your settings are not code — and the *Code check* tests your file
+   meanwhile; allow up to 10 more minutes before every visitor sees it): that run also runs the sources whose own
+   settings you changed. Changes to the magazine stories, the shop and
    the document search wait for the next **full update** (it usually starts about 6–8 AM Central, 5–7 in winter).
    The table in [4](#4-what-happens-next-which-run-how-long) says which. Don't want to wait? **Actions → Website
    update → Run workflow**, leave every box empty, click the green **Run workflow** (usually 10 to 15 minutes; at
@@ -715,10 +716,14 @@ it down). Each full update looks up again, through the post's public embed, up t
 posts that are no longer in the accounts' listing: first a post already found missing once, then a post that
 vanished while older ones are still listed, then the post checked longest ago. A post that answers "not there"
 (an empty embed, or 404/410) **twice, at least 12 hours apart** (`GONE_CONFIRM_HOURS`), is removed with its
-picture. An answer only counts when a post embed worked after it in the same run (otherwise one control request
-goes to the newest listed post): a login wall or a block decides nothing, and a warning says so ("removal
-re-check: N post(s) showed no usable embed, but no post embed worked after that (a login wall or a block?) —
-nothing was decided"). A refusal (429, 401, 403, a login redirect), a network error or the time budget stops the
+picture. An answer only counts when an embed of a post of the **same account and the same kind** (a post or a
+Reel) worked after it in the same run, so one account's unusable embeds (a login wall, embedding turned off for
+that account) never remove the other account's posts. Without such proof yet, one control request per account and
+kind goes to that account's newest listed post of that kind — or, when none of that kind is listed (the listings
+never say which posts are Reels), to its newest listed post of any kind, so a deleted Reel still leaves the site —
+at most 4 a night. With nothing of that account listed today, nothing is decided, and a warning says so
+("removal re-check: N post(s) showed no usable embed, but no embed of a post of the same account worked after that
+(a login wall, a block, or embeds that do not work for that account?) — nothing was decided"). A refusal (429, 401, 403, a login redirect), a network error or the time budget stops the
 check for that run ("removal re-check stopped: …"). Posts you list by hand in `content/instagram.yml` are never
 re-checked (the file decides), and with `anonymous: false` there is no check. What it did is in
 `data/raw/instagram.json` → `stats.removal` (`checked`, `missing`, `removed`), the marks in `removal`.
@@ -761,7 +766,7 @@ Every form the file accepts (checked with the module's `load_manual` on a test c
 | `account: "@alcoholicosanonimos_lv"` | read as `lv` |
 | `account: xyz` | Note "unknown account 'xyz' (use gv or lv)" — the post is still added |
 | `- url: https://www.instagram.com/p/ABC/` | skipped, Note "instagram.yml entry 3: no Instagram post link found …" (a post code has 8–40 characters) |
-| a YAML mistake (wrong indent, missing quote) | Note "instagram.yml: YAML error — …"; the file is not read that run, so the posts you added before **leave the site** (unless the automatic check also read them that day) — they come back in the quick run of the save that fixes the file |
+| a YAML mistake (wrong indent, missing quote) | Note "content/instagram.yml line 5: YAML error — … — the 2 hand-listed post(s) of the last update are kept, pictures and all, until the file is fixed": since October 2026 the posts you listed before **stay** as they were (before, they left the site and lost their pictures); a post added in the broken save waits for the fix |
 
 The Notes appear in the run summary under **Notes**, next to "Instagram posts" — on days the Instagram
 source itself updated (on a day it failed, the summary shows only its **PROBLEM** row).
@@ -1442,7 +1447,7 @@ meeting:
 | `start: "19.30"` | 7:30 PM |
 | `start: "noon"` or `"25:00"` | 7:00 PM (the default) |
 | `end` missing, or not after `start` (e.g. `"18:00"`) | one hour after the start |
-| `end` earlier than `start`, at most 12 hours later (`start: "22:00"`, `end: "01:00"`) | the next morning, 1:00 AM, in the sync's data file `data/site/events.json` (since October 2026); but the pages and the calendar files (`/events/`, `/events.ics`, `/meetings/`, the home page …) work the committee meeting's dates out from this block themselves and still show one hour, so keep the committee meeting within one day |
+| `end` earlier than `start`, at most 12 hours later (`start: "22:00"`, `end: "01:00"`) | the next morning, 1:00 AM, everywhere since October 2026: the sync's `data/site/events.json`, every page (`/events/`, `/meetings/`, the home page, the monthly toolkit: "10:00 PM – 1:00 AM CDT"), the calendar files, both countdowns and the e-mail digest (every copy of the rule uses the same `overnight` test, `eleventy/central-time.js` for the pages) |
 | `skip_dates: ["2026-12-16"]` | the December meeting is left out |
 | `skip_dates: ["2026-12-17"]` | ignored + Settings problem: skip date "2026-12-17" is not the 3rd Wednesday of its month — ignored (that month's is 2026-12-16) |
 | `skip_dates: ["Dec 16"]` | ignored + Settings problem: skip date "Dec 16" is not a date like "2027-01-09" — ignored |
@@ -1497,6 +1502,12 @@ Since October 2026:
   midnight makes the day before its last day.
 - **A long event stays listed until its last day**: an event that started up to 31 days ago (`LONG_EVENT_DAYS`)
   is kept while it runs (events longer than two days used to vanish while still running).
+- **The written date of a page without structured data is read whole**, a range of days too ("October 2 - 4,
+  2026", "Oct. 30 – Nov. 1, 2026", "del 2 al 4 de octubre de 2026"), day first on aalavina.org. A date in numbers
+  only that could be read two ways is read the way that gives the first day in the page's own address
+  (`/get-involved/events/2026-10-02/…`); when neither reading does, the site's own order stands (La Viña: day first) and the run
+  summary's *Notes* (and `/status/`) say so: "lavina event <slug>: “10/05/2026” could be read two ways and neither
+  gives the date in the page's address (2026-10-02) — read as 2026-05-10. Check the event's date".
 
 ---
 
@@ -1534,14 +1545,16 @@ damaged by a hand edit. Since October 2026 these safety nets keep such a day fro
 
 | Safety net | What sets it off | What the site does | Where you see it |
 |---|---|---|---|
-| **The mass-drop hold** (every source but the six below) | a source that worked suddenly finds **no items** where it had some, or **less than half** of them once it had 10 or more (`DROP_GUARD_MIN`) | keeps the missing items for one more run, while new items still come in. The next run that still misses the same items removes them; a run that finds them again ends the hold. So a real removal is one run late | **On hold** on `/status/`: "The last update did not find {n} items that were here before. To be safe, they stay on the site until the next update confirms they are gone.", with *On hold since*; `held` in `data/raw/<source>.json` and `status.json` |
+| **The mass-drop hold** (every source but the six below) | a source that worked suddenly finds **no items** where it had some, or **less than half** of them once it had 10 or more (`DROP_GUARD_MIN`) | keeps the missing items for one more run, while new items still come in. The next run that still misses the same items removes them (every held item is remembered, so items lost only on that run are judged on their own); a run that finds them again ends the hold; a run that **fails** meanwhile changes nothing (since October 2026 it also puts back held items its own list misses) — only a run that works confirms. So a real removal is one run late | **On hold** on `/status/`: "The last update did not find {n} items that were here before. To be safe, they stay on the site until the next update confirms they are gone.", with *On hold since*; `held` in `data/raw/<source>.json` and `status.json` |
 | **Drive: a folder that suddenly looks empty** | a folder (or the whole A65_GV) that held files lists none | keeps its files and waits: the next update that finds it empty again removes them (its id waits in `data/raw/drive.json` → `empty_folders`) | On hold; *Notes*: "1 folder(s) looked empty although they held files on the last update — their 12 file(s) stay on the site until the next update confirms it", then "1 folder(s) looked empty again — their 12 file(s) were removed" |
-| **A damaged data file** | `data/raw/<source>.json` cannot be read (a hand edit, a bad merge) | every build keeps what the last build made of that source; when the source runs, it sets the file aside (`.corrupt-<time>`) and starts afresh | **Failed** on `/status/`: "data/raw/<source>.json could not be read (…) — the site keeps what the last build had for it …" ([Automation §9.2](automation-and-troubleshooting.md#92-resetting-something-on-purpose)) |
-| **The document search** | a hub or kit page that does not answer properly; one 404; another site that does not answer; a robots.txt that answers with an error; a document that crashes the reader | hubs are checked again at every run; one 404 keeps a page's documents; another site is asked twice; robots.txt trouble leaves the pages for the next run; the reader runs apart, with time and memory limits ([3.3](#33-the-document-library-the-crawler)) | *Notes* ("… main page(s) of the magazine sites did not load …"); the crawl's lines in the run's log |
-| **Instagram: a post taken down** | a post that left the listing answers "not there" twice, 12 hours apart | removes it with its picture; a login wall or a block decides nothing ([3.6](#36-instagram-posts-and-posts-you-add-by-hand)) | `data/raw/instagram.json` → `stats.removal` |
+| **A damaged data file** | `data/raw/<source>.json` cannot be read (a hand edit, a bad merge) | the file stays exactly as it is and that source **stops updating**: its module is not run, nothing is rebuilt or written over it, and every build keeps what the last build made of that source until a person restores the file from git (since October 2026; before, the source started afresh and lost its older items) | **Failed** on `/status/`: "data/raw/<source>.json cannot be read (…) — restore it from git; the site keeps the last build's items" ([Automation §9.2](automation-and-troubleshooting.md#92-resetting-something-on-purpose)) |
+| **A missing data file** | `data/raw/<source>.json` was deleted (a merge, or on purpose to read the source again) while the site had items from it | every build keeps the last build's items until an update of that source works (since October 2026) | **Failed**: "data/raw/<source>.json is missing — the site keeps the last build's items until an update of this source works (or restore the file from git)" |
+| **The document search** | a hub or kit page that does not answer properly; one 404; another site that does not answer; a robots.txt that answers with an error; a document that crashes the reader | hubs are checked again at every run; one 404 keeps a page's documents; another site is asked twice; robots.txt trouble leaves the pages for the next run — and when it kept the search from reading any page, the run counts as failed ("no page could be read: robots.txt of … did not answer properly — site down?"), so its last success stays and a week of it opens the issue; the reader runs apart, with time and memory limits ([3.3](#33-the-document-library-the-crawler)) | the run summary's *Main pages of the magazine sites that did not load*; *Notes*; the crawl's lines in the run's log |
+| **Instagram: a post taken down** | a post that left the listing answers "not there" twice, 12 hours apart | removes it with its picture; a login wall, a block, or embeds that do not work for one account or kind decide nothing — an answer needs a working embed of the same account and kind after it ([3.6](#36-instagram-posts-and-posts-you-add-by-hand)) | `data/raw/instagram.json` → `stats.removal` |
+| **Instagram: a mistake in your list** | `content/instagram.yml` cannot be read (a YAML mistake) | keeps the posts you listed before, pictures and all, until the file is fixed (since October 2026) | *Notes*: "content/instagram.yml line N: YAML error — …" |
 | **The daily quote: a strange heading** | a heading whose date is more than a year back or after tomorrow; a stored quote dated after tomorrow | the heading's date is not used (the quote counts as today's); the future quote is dropped ([3.9](#39-daily-quotes)) | *Notes* and `/status/` |
-| **A bot check instead of the page** | a meeting list (HTTP 202, "Just a moment…") or YouTube ("confirm you're not a bot") | says so plainly and keeps the last good list ([3.5](#35-youtube-videos), [3.13](#313-grapevine-meetings-from-the-intergroup-lists)) | *Notes*: "… answered with a bot check … — nothing is wrong on our side …" |
-| **The translation memory** | `data/translations/cache.json` cannot be read; a downloaded model with the wrong checksum | the file is set aside as `cache.json.bad-<UTC time>` (git still has the old one); the model is not installed ([Translations](translations.md)) | *Settings problems (translations)* in the run summary; the *Machine translation* card on `/status/` |
+| **A bot check instead of the page** | a meeting list (HTTP 202, "Just a moment…"), YouTube ("confirm you're not a bot"), an outside calendar (HTTP 403); a meeting list whose robots.txt answers with an error or nothing | says so plainly and keeps the last good list ([3.5](#35-youtube-videos), [3.13](#313-grapevine-meetings-from-the-intergroup-lists)); for robots.txt trouble nothing is asked at all | *Notes*: "… answered with a bot check … — nothing is wrong on our side …", "…'s robots.txt could not be checked (HTTP 503) — nothing was read; the last good list is kept" |
+| **The translation memory** | `data/translations/cache.json` cannot be read; a downloaded model with the wrong checksum, or one that could not be downloaded | the file is set aside as `cache.json.bad-<UTC time>` (git still has the old one); the model is not installed ([Translations](translations.md)) | *Translation problems* in the run summary (since October 2026 a heading of its own); the *Machine translation* card on `/status/` |
 
 **The six sources the hold leaves alone** (`DROP_GUARD_EXEMPT` in [`scripts/sync/common.py`](../scripts/sync/common.py),
 each with its reason): the bulletin and the events files (`announcements`, `manual_events`: a removal is the
@@ -1556,8 +1569,9 @@ drops posts; they leave only on purpose) and the writers archive (`writers_archi
 
 **Where in the code:** `save_raw` and `is_mass_drop` in `scripts/sync/common.py` (with `DROP_GUARD_MIN` and
 `DROP_GUARD_EXEMPT`); `scripts/sync/drive.py` and `drive_listing.py` (a folder that looks empty: `empty_folders`);
-`carry_unreadable` in `scripts/sync/build_data.py`; the crawler's `page_priority`, `_page_gone`, `prune` and
-`hub_report` in `crawl.py` and `analyze_pdf_isolated` in `crawl_pdf.py`; `PoliteSession` (robots.txt) in
+`UnreadableRaw` / `load_raw` in `common.py`, `run_source` in `run_all.py` and `carry_unreadable` / `Ctx.load_raw` in
+`scripts/sync/build_data.py`; the crawler's `page_priority`, `_page_gone`, `prune`, `hub_report` and `run_verdict`
+in `crawl.py` and `analyze_pdf_isolated` in `crawl_pdf.py`; `PoliteSession` (robots.txt) in
 `common.py`; `removal_sweep` in `instagram.py`; `heading_window` in `quote.py`; `BotCheck` in `meetings.py` and
 `bot_check_note` in `youtube.py`; `TranslationCache` in `translate.py`. Tests: `tests/test_sync_safety.py`,
 `tests/test_crawl_safety.py`, `tests/test_instagram.py`, `tests/test_quote.py`, `tests/test_meetings.py`,
@@ -1575,9 +1589,9 @@ workflow (*Actions* tab on GitHub) can start in five ways:
 | **Nightly full update** | GitHub's schedule, set for 07:17 UTC: 2:17 AM Central (1:17 AM in winter). It is set **4 hours early on purpose**: GitHub starts this repository's timed runs 4–6 hours late. | starts about 6–8 AM Central (5–7 in winter) | every source, plus up to 40 minutes of document search | usually 10 to 15 minutes (the document search, with little left to do, takes about 3); at the very most a little over 2 hours |
 | **Midday refresh** (quick) | GitHub's schedule, set for 7:07 AM Central (6:07 AM in winter), also 4 hours early | about 11 AM–1 PM Central | Google Drive, the bulletin and event files, podcasts, the writers archive files, the daily quote | a few minutes |
 | **Evening refresh** (quick) | GitHub's schedule, set for 3:07 PM Central (2:07 PM in winter), also 4 hours early | about 7–9 PM Central | the same as the midday refresh | a few minutes |
-| **Quick rebuild after you save** | saving a file in `config/`, `content/`, `src/`, the code, `data/geo/`, `overrides.yml` or `glossary.yml` | right away | the same as the midday refresh, **plus** the sources only the full update reads whose own input you changed (YouTube, Instagram, editorial themes, weekly open meetings, record your story, Grapevine meetings, GV/LV event calendars — never the magazine stories, the shop or the document search) | about 5 minutes: the run tests the code before it publishes ([Automation §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)); allow up to 10 more minutes before every copy of the page shows it |
+| **Quick rebuild after you save** | saving a file in `config/`, `content/`, `src/`, the code, `data/geo/`, `overrides.yml` or `glossary.yml` | right away | the same as the midday refresh, **plus** the sources only the full update reads whose own input you changed (YouTube, Instagram, editorial themes, weekly open meetings, record your story, Grapevine meetings, GV/LV event calendars — never the magazine stories, the shop or the document search) | about 3 minutes for settings and content; about 5 when the save changed the code, which the run tests before it publishes ([Automation §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)); allow up to 10 more minutes before every copy of the page shows it |
 | **Morning refresh** | the Morning check (the 4:30 AM alarm, plus GitHub's hourly backstop) | before 5:30 AM Central | Drive (5 minutes at most), the bulletin, then the daily quote, then podcasts and the writers archive files; on the **1st** also the magazines' current-issue pages and the shop; on the **15th** the shop | about 3 minutes |
-| **By hand** | *Actions → Website update → Run workflow* (your MKP715 login can do this) | when you click | all boxes empty = a full run; **skip_crawl** = quick; **morning** = morning | full: usually 10 to 15 minutes; quick: about 2 minutes |
+| **By hand** | *Actions → Website update → Run workflow* (your MKP715 login can do this) | when you click | all boxes empty = a full run; **skip_crawl** = quick; **morning** = morning | full: usually 10 to 15 minutes; quick: about 3 minutes |
 
 On the 1st of the month — and after a day GitHub skipped — the Morning check also starts the full update.
 
@@ -1932,7 +1946,8 @@ should list the new source.
 | Nothing ran after I saved | the commit message contained `[skip ci]`, or the file is under `data/` or `docs/` | Save a small change again with a plain message. |
 | Red ✗ right after editing `config/site.yml` | a YAML typo (indentation, a missing quote) | The red step shows the line. Fix it, or undo the edit from the file's *History*. The live site keeps its last version meanwhile. |
 | YouTube Note "details stopped: YouTube answered with a bot check …" (before October 2026: "… Sign in to confirm you're not a bot") | YouTube blocks the detail tool on GitHub's computers | Nothing: the feeds keep the list current. |
-| Instagram: "removal re-check: N post(s) showed no usable embed, but no post embed worked after that (a login wall or a block?) — nothing was decided" or "removal re-check stopped: …" | Instagram turned the robot away during the removal check | Nothing: no post is removed on such a day; the next full run checks again ([3.6](#36-instagram-posts-and-posts-you-add-by-hand)). |
+| Instagram: "removal re-check: N post(s) showed no usable embed, but no embed of a post of the same account worked after that (a login wall, a block, or embeds that do not work for that account?) — nothing was decided" or "removal re-check stopped: …" | Instagram turned the robot away during the removal check, or that account's embeds did not work, or nothing of that account was listed that day | Nothing: no post is removed on such a day; the next full run checks again ([3.6](#36-instagram-posts-and-posts-you-add-by-hand)). |
+| Instagram Note "content/instagram.yml line N: YAML error — … — the N hand-listed post(s) of the last update are kept …" | a mistake in your list (a wrong indent, a missing quote) | Fix the line it names and save; the posts you listed before stay meanwhile. |
 | An Instagram post left the site | Instagram no longer shows it (deleted, archived or private): two "not there" answers 12 hours apart | Expected, and wanted: the site follows the accounts (a post may have been taken down for someone's anonymity). `data/raw/instagram.json` → `stats.removal.removed` names it. |
 | Instagram failed: "No new posts for @… (…). Posts already on the site are kept." | Instagram refused the public pages that day | Usually temporary. For good: the official API secrets ([3.6](#36-instagram-posts-and-posts-you-add-by-hand)). |
 | "No posts fetched … the automatic check is switched off (sources.instagram.anonymous: false) and IG_ACCESS_TOKEN / IG_BUSINESS_ID are not set." | `anonymous: false` without the secrets | Add the secrets (NETA65 account) or set `anonymous: true`; list posts by hand meanwhile. |

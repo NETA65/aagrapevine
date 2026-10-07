@@ -31,8 +31,9 @@ the file's last good version stays on the site. A start written in Spanish words
 `start: sábado 14 de marzo de 2027, 7:00 p. m.`
 
 **Always the whole date, with its year.** `start:` and `end:` must be whole dates (`2027-01-10`, `January 10,
-2027`, `10 de enero de 2027`, with or without a time). A date without a year (`January 10`, `10 de enero`, a year
-in two digits such as `"3/19/27"`), without a day (`March 2027`), or a time alone (`"19:00"`, or an unquoted
+2027`, `10 de enero de 2027`, with or without a time; a Spanish first as `1° de marzo de 2027` or `primero de
+marzo de 2027` is a whole date too). A date without a year (`January 10`, `10 de enero`, a year in two digits
+such as `"3/19/27"`), without a day (`March 2027`, `marzo de 2027`), or a time alone (`"19:00"`, or an unquoted
 `19:00`, which YAML reads as the number 1140) leaves the event out — its last good version stays — and the run
 summary (and the Status page's notes for "Events added by hand") give a line ready to copy:
 `start: “January 10” has no year — the event is left out until it does: write the whole date (start: 2027-01-10)`.
@@ -41,9 +42,9 @@ Sunday of November, `-06:00` the rest of the year) still shows the event, at the
 too — or leave the offset out: a time without one is Central time. A date in numbers only follows the file's
 `lang:` (Spanish: day first, `05-10-2026` is October 5); `2027-10-05` can only be read one way. The **Code check**
 reads every file here the same way (`tests/test_content_events.py`) and goes red, naming the file and what to
-change, so a slip shows minutes after you save it. *Website update* runs the same test before it publishes, so
-until the file is fixed **nothing is published** (the site keeps the version before; the run says *Tests failed —
-not published*): fix it soon.
+change, so a slip shows on the push that made it. *Website update* still publishes: it leaves that test to the Code
+check (it tests the code, not your files), and the site goes live without the event it could not read (its last
+good version stays) — listed under **Event files to fix** in the run summary and on the Status page. Fix it soon.
 
 **Your own translation (optional).** The site translates the title and the
 description into the other language automatically, and marks them
@@ -104,7 +105,7 @@ as *tentative*.
 **When the details are final**, edit the file: put the real place in `location`
 (and delete `location_es`, unless the Spanish needs other words), fix the dates
 or times if they changed, update the description (and `summary_es`), and
-**delete the `tentative: true` line**. The next update (about 5 minutes after you
+**delete the `tentative: true` line**. The next update (about 3 minutes after you
 save) shows it as confirmed on the site; subscribed calendars follow the next
 time they refresh.
 

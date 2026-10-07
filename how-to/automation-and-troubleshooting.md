@@ -57,8 +57,8 @@ The big picture:
  (config/, content/, src/ …)  │      1. sync: scripts/sync/*.py ──► data/raw/<source>.json
  magazine sites, podcasts, ───┘      2. translate + assemble   ──► data/site/*.json
  YouTube, Instagram, …               3. the robot commits data/ back to the repository
-                                     4. build: Eleventy (src/) ──► _site/
-                                        and, at the same time, the tests (when the code or content changed)
+                                     4. build: Eleventy (src/) ──► _site/ (+ the posters' share pictures)
+                                        and, at the same time, the tests (only when the code changed)
                                      5. publish, only if both worked ──► https://neta65.github.io/aagrapevine/
 ```
 
@@ -73,9 +73,9 @@ The big picture:
 2. In the left list, click **Website update**.
 3. Click **Run workflow** (right side). Leave *Use workflow from* on `main`. Tick **skip_crawl**. Click the
    green **Run workflow** button.
-4. Wait about **2 minutes** until the run shows a green ✓ (refresh the page; about 5 minutes if the code or
-   content changed since the tests last passed, because they then run first: 4.8). GitHub Pages may take up to
-   about **10 more minutes** to show the change to every visitor.
+4. Wait about **3 minutes** until the run shows a green ✓ (refresh the page; about 5 minutes if the code changed
+   since the tests last passed, because they then run first: 4.8). GitHub Pages may take up to about **10 more
+   minutes** to show the change to every visitor.
 5. Open <https://neta65.github.io/aagrapevine/status/>: *Site last published* now says "… minutes ago".
 
 This "quick" run (listed as **Quick refresh (started by hand)**) reads Google Drive, `content/bulletin`,
@@ -96,7 +96,9 @@ the Status page: it suddenly found far fewer items, so the site keeps the missin
 confirms they are gone (7.1). A yellow ⚠ titled *Settings problem …*, *Event files to fix*, *Bulletin files to
 fix* or *Booth folder file to fix*, or a **CSV file to fix** line under *Writers archive* in the run summary, is
 different: one of your files needs a fix (section 14). So is a red ✗ with **Tests failed — not published**: a
-change broke the tests, and the live site keeps the version before it (14.10).
+change to the code broke the tests, and the live site keeps the version before it (14.10). A red ✗ on the *Code
+check* alone, after you saved a file in `content/` or `config/`, means a slip in that file: the site was still
+published, without the part it could not read (4.8).
 
 ---
 
@@ -104,12 +106,13 @@ change broke the tests, and the live site keeps the version before it (14.10).
 
 | You do this | What starts by itself | Live after about |
 |---|---|---|
-| Save a file in `config/`, `content/`, `src/`, `scripts/` or `eleventy/` on github.com (or push it from a PC) | a **quick** *Website update* run, whose tests run before it publishes (4.8), plus a *Code check* | about 5 minutes, plus up to 10 minutes of Pages caching (a few changes wait for the full update: see the note in 4.3) |
-| Put a new export in `content/archive/` | the same; the run reads the new file | about 5 minutes (+ caching) — [Writers archive](writers-archive.md) |
-| Save `data/translations/overrides.yml` or `data/translations/glossary.yml` | the same | about 5 minutes (+ caching) |
-| Save `data/geo/texas_places.json` (the Texas places list) | the same, and the quick run also reads the meeting lists again | about 5 minutes (+ caching) |
+| Save a file in `config/` or `content/` on github.com (or push it from a PC) | a **quick** *Website update* run (the tests are not run again: your files are not code, 4.8), plus a *Code check* | about 3 minutes, plus up to 10 minutes of Pages caching (a few changes wait for the full update: see the note in 4.3) |
+| Save a file of code: `src/`, `scripts/`, `eleventy/`, `tests/` … | a **quick** *Website update* run, whose tests run before it publishes (4.8), plus a *Code check* | about 5 minutes (+ caching) |
+| Put a new export in `content/archive/` | a quick run (no tests); it reads the new file | about 3 minutes (+ caching) — [Writers archive](writers-archive.md) |
+| Save `data/translations/overrides.yml` or `data/translations/glossary.yml` | the same | about 3 minutes (+ caching) |
+| Save `data/geo/texas_places.json` (the Texas places list) | a quick run that also reads the meeting lists again, and tests the code first (`data/geo` counts as code) | about 5 minutes (+ caching) |
 | Put a file in the Drive panel folder (`A65_GV` › `2027-2028_Panel77_GVLV` › …) | **nothing**: nothing watches Drive | the next run that reads Drive (below), or 2 minutes after you press *Run workflow* with **skip_crawl** |
-| Edit `README.md`, `docs/`, `how-to/`, a `content/**/README.md` or a test | no website run (a test file or a `content/**/README.md` starts only a *Code check*) | GitHub shows the new text at once; the website does not change. (The next *Website update* run tests the code once more, because its fingerprint changed: 4.8) |
+| Edit `README.md`, `docs/`, `how-to/` or a `content/**/README.md` | no website run (a `content/**/README.md` starts only a *Code check*) | GitHub shows the new text at once; the website does not change, and the tests are not run again (the documentation is not part of the code's fingerprint: 4.8) |
 | Edit a file in `data/raw`, `data/site` or `data/state` | nothing | the next scheduled run (and see section 9 before you do this) |
 | Edit `.github/workflows/update.yml` | a quick *Website update* + a *Code check* | about 5 minutes |
 | Edit any other workflow file | only a *Code check* | the new schedule counts from its next firing |
@@ -126,10 +129,12 @@ change broke the tests, and the live site keeps the version before it (14.10).
 (The times are for summer, CDT; in winter each timed run starts about an hour earlier on the Central clock, 4.1.)
 
 Times measured on 2 October 2026: a quick run took 1.4 to 2.2 minutes from start to published, the full run 10
-to 14 minutes, a morning refresh 2 minutes. Since October 2026 a run whose code or content is new to the tests
-also waits for them before it publishes (4.8): `update.yml` reckons about 3 to 4 minutes, setup included, and they
-run while the site is built, so a save now goes live in about 5 minutes. The runs that only bring new data (the
-morning, midday and evening refreshes, the nightly update, a *Run workflow*) skip them and keep the times above.
+to 14 minutes, a morning refresh 2 minutes. Since October 2026 every run's build also makes the monthly posters'
+share pictures (4.2), about a minute more, so a quick run or a morning refresh now publishes in about 3 minutes.
+A run whose **code** is new to the tests also waits for them before it publishes (4.8): `update.yml` reckons
+about 3 to 4 minutes, setup included, and they run while the site is built, so a change of code goes live in
+about 5 minutes. The runs that bring only new data (the morning, midday and evening refreshes, the nightly
+update, a *Run workflow*) and the saves of content, settings or translation fixes skip them.
 At the very most a full update takes a little over 2 hours: its sync step's time box is 130 minutes (4.2), and it
 gets near that only when the document search uses its whole 40 minutes and translation its whole 40 (a big
 catch-up after weeks of new titles, or a lost crawl state).
@@ -142,9 +147,9 @@ All five live in [`.github/workflows/`](../.github/workflows/). Their names in t
 
 | Name in the Actions tab | File | Starts on | What it does | Typical length | Leaves behind |
 |---|---|---|---|---|---|
-| **Website update** | [`update.yml`](../.github/workflows/update.yml) | 3 schedules (the nightly full update, the midday and evening refreshes), a push to a watched file, *Run workflow*, the Morning check | sync → translate → commit the data → build, and test the code at the same time → publish only when both worked; then reports sources that stopped updating and updates that keep failing | data-only runs: quick 2 min, full 10–15 min (time box 2 h 10 min), a 300-minute PDF crawl about 6 h; a save of code or content about 5 min (the tests) | a data commit, the new website, a run summary, maybe an issue |
+| **Website update** | [`update.yml`](../.github/workflows/update.yml) | 3 schedules (the nightly full update, the midday and evening refreshes), a push to a watched file, *Run workflow*, the Morning check | sync → translate → commit the data → build (with the posters' share pictures), and test the code at the same time → publish only when both worked; then reports sources that stopped updating and updates that keep failing | data-only runs and saves of content or settings: quick about 3 min, full 10–15 min (time box 2 h 10 min), a 300-minute PDF crawl about 6 h; a save of code about 5 min (the tests) | a data commit, the new website, a run summary, maybe an issue |
 | **Morning check (new day by 5:30 AM)** | [`morning.yml`](../.github/workflows/morning.yml) | an hourly backstop through the night, the morning alarm, *Run workflow* | makes sure the new day and both daily quotes are on the site by 5:30 AM Central | a few seconds when there is nothing to do | a run summary; its no-op runs are deleted a day later |
-| **Code check (tests and test build)** | [`check.yml`](../.github/workflows/check.yml) | every pull request; a push that changes code, settings, content or a workflow; *Run workflow* | a strict test build + the Python tests + an e-mail dry run. Publishes nothing | a few minutes | a ✓ or ✗ on the commit or pull request |
+| **Code check (tests and test build)** | [`check.yml`](../.github/workflows/check.yml) | every pull request; a push that changes code, settings, content or a workflow; *Run workflow* | a strict test build + the browser checks + every Python test + an e-mail dry run. Publishes nothing | about 10 minutes | a ✓ or ✗ on the commit or pull request |
 | **Monthly e-mail digest** | [`monthly-digest.yml`](../.github/workflows/monthly-digest.yml) | 5 tries a day on the 1st–3rd; *Run workflow* | e-mails last month's bilingual digest, once. **Off until NETA65 adds the e-mail secrets** | seconds | the e-mail; the month's markers `digest-sending-YYYY-MM`, `digest-sent-YYYY-MM` or `digest-unsent-YYYY-MM`; a `digest-preview` download |
 | **Weekly link check** | [`link-check.yml`](../.github/workflows/link-check.yml) | Sundays; *Run workflow* | checks every link on the built site and the official links in the settings (job *Check links*), then keeps the issue (job *Report broken links (the issue)*) | up to 45 min | a summary; the `link-check-report` download (7 days); maybe the issue "Broken links found by the weekly check" |
 
@@ -152,7 +157,10 @@ Plus **Dependabot** ([`.github/dependabot.yml`](../.github/dependabot.yml)): onc
 request that updates the building blocks: `chore(actions)…` for the workflows' actions, `chore(deps)…` for the
 site tools (npm: minor and patch versions) and for the Python packages (pip: only a **new major version**, one
 grouped pull request; every run already installs the newest minor and patch releases, and `yt-dlp` has no cap,
-so it is left out). The Code check tests it. Merge it only when it shows a green ✓.
+so it is left out). Since October 2026 there is one more pip entry, for `scripts/ops/requirements-browser.txt`: it
+allows only `playwright` (pinned there to an exact version for the browser checks and the posters' share pictures)
+and, once a month, opens a `chore(deps)` pull request for a newer release, minor and patch included, so the pin
+keeps up with the runners' Chrome (the Code check's browser checks run with it). The Code check tests it. Merge it only when it shows a green ✓.
 
 ### 4.1 The timetable is set 4 hours early on purpose
 
@@ -201,8 +209,8 @@ The step *Decide what to sync* (in the first job, after the set-up steps) picks 
 
 | Mode | Started by | Reads | Translation box | Step box | Typical | Data commit message |
 |---|---|---|---|---|---|---|
-| **morning** | the Morning check, or **morning** ticked | Google Drive (5-minute box), `content/bulletin` + `content/events`, the daily quote (right after the bulletin), the podcasts, the writers archive files. On the 1st also the new magazine issues and the shop; on the 15th the shop (Book of the Month) | 5 min | 20 min | ~2 min | `chore(data): morning refresh with the daily quotes of Oct 6 2026-10-06 [skip ci]` (each magazine whose quote changed, by the quote's own day: `… with the Grapevine quote of Oct 6 and the La Viña quote of Oct 5 2026-10-06 [skip ci]`; no new quote: `chore(data): morning refresh 2026-10-06 [skip ci]`) |
-| **quick** | a push to a watched file; **skip_crawl** ticked; every schedule but `17 7 * * *` (the midday `7 12 * * *` and the evening `7 20 * * *` refresh) | Google Drive, `content/bulletin` + `content/events`, the podcasts (no feed discovery), the writers archive files (`content/archive`), the daily quote — and, for a push, the sources only the full update reads whose own input the push changed (below) | 40 min | 90 min | ~2 min | push: `chore(data): content sync after settings/content change 2026-10-02 [skip ci]`; midday: `chore(data): midday refresh …`; evening: `chore(data): evening refresh …`; by hand: `chore(data): quick refresh …` |
+| **morning** | the Morning check, or **morning** ticked | Google Drive (5-minute box), `content/bulletin` + `content/events`, the daily quote (right after the bulletin), the podcasts, the writers archive files. On the 1st also the new magazine issues and the shop; on the 15th the shop (Book of the Month) | 5 min | 20 min | ~3 min | `chore(data): morning refresh with the daily quotes of Oct 6 2026-10-06 [skip ci]` (each magazine whose quote changed, by the quote's own day: `… with the Grapevine quote of Oct 6 and the La Viña quote of Oct 5 2026-10-06 [skip ci]`; no new quote: `chore(data): morning refresh 2026-10-06 [skip ci]`) |
+| **quick** | a push to a watched file; **skip_crawl** ticked; every schedule but `17 7 * * *` (the midday `7 12 * * *` and the evening `7 20 * * *` refresh) | Google Drive, `content/bulletin` + `content/events`, the podcasts (no feed discovery), the writers archive files (`content/archive`), the daily quote — and, for a push, the sources only the full update reads whose own input the push changed (below) | 40 min | 90 min | ~3 min (~5 when it tests a change of the code) | push: `chore(data): content sync after settings/content change 2026-10-02 [skip ci]`; midday: `chore(data): midday refresh …`; evening: `chore(data): evening refresh …`; by hand: `chore(data): quick refresh …` |
 | **full** | the `17 7 * * *` schedule; *Run workflow* with no box ticked; the Morning check on the 1st or after 30 hours without one | every source: the 14 sync modules plus the PDF search (`crawl`), time-boxed by `crawl_minutes` (normally 40; `0` skips it) | 40 min (10 on a 300-minute crawl) | 130 min with a 40-minute crawl (at most 345) | ~10–15 min | `chore(data): daily content sync 2026-10-02 [skip ci]` |
 
 The date in the message is the run's Central date, and always the end of the message, before `[skip ci]` (the
@@ -268,10 +276,11 @@ which then shows as grey "cancelled". Nothing is lost, because the run that star
 2. **Build website** (job id `build-deploy`; it was called *Build & publish website* until October 2026): runs even
    when the sync failed (the site then shows the last good data), but not when a person cancelled the run. It
    checks out the sync job's commit, saves the booth display's photos and videos for offline play (below), builds
-   with Eleventy in strict mode, checks that the English and Spanish home pages and the stylesheet exist, and
-   uploads the site for publishing. Its time limit is 35 minutes.
+   with Eleventy in strict mode (missing texts) and lists the build's warnings, makes the monthly posters' share
+   pictures (below), checks that the English and Spanish home pages and every stylesheet exist, and uploads the
+   site for publishing. Its time limit is 40 minutes (35 until October 2026).
 3. **Test the code before publishing** (job id `tests`): at the same time as the build, on the same commit, the
-   offline tests, when the code or content is new to them (4.8). Time limit 20 minutes.
+   offline tests, only when the code is new to them (4.8). Time limit 20 minutes.
 4. **Publish to GitHub Pages** (job id `publish`): only when the build **and** the tests succeeded, and only after
    it checked that both used the very same commit (otherwise it stops with *Not published*: "The website was built
    from … but the tests ran on … (a change arrived between the two) — nothing was published; the next run
@@ -296,6 +305,41 @@ A run that downloads new booth videos takes that much longer. The *Code check* d
 has no saved copies (the booth then shows its pictures from Google's copy and leaves videos out). Details:
 [Booth display](booth.md).
 
+**The monthly posters' share pictures** (since October 2026; the build job, right after *Build the website*). When
+someone shares a month's page (`/monthly/2026-11/`, `/es/monthly/2026-11/`) on WhatsApp, Facebook or in a text
+message, the preview shows the top of that month's poster instead of the committee's card. *Build the website*
+runs with `POSTER_SHARE: "1"`, so each month page names `share.png` beside it as its preview picture (`og:image`
+and `twitter:image`, 1200 × 630, `eleventy/filters/monthly.js` → `mpShareImage`); then:
+
+| Step | What it does |
+|---|---|
+| *Set up Python (for the posters' share pictures)* | Python 3.12; `continue-on-error` |
+| *Make the monthly posters' share pictures* | installs `scripts/ops/requirements-browser.txt` (Playwright, pinned) and runs `python -m scripts.ops.poster_share _site`: it opens each month page, English and Spanish, in the runner's own Google Chrome (headless; nothing else is downloaded) and saves the top of its poster as a 1200 × 630 PNG. About a minute in all; time limit 5 minutes; `continue-on-error`. The run summary says, for example, "**Share pictures of the monthly posters:** 26 (1200 × 630)." (13 month pages in each language in October 2026) |
+| *Build the website again without the share pictures (only when they could not be made)* | only when the step before did not succeed: deletes the pictures, builds the site again without `POSTER_SHARE` (the month pages then show the committee's card, as before) and posts a yellow ⚠ *Share pictures* ("… the month pages show the committee's card in link previews until the next run."). The summary then says "**Share pictures of the monthly posters:** not made (…)". A deploy is never stopped by the pictures |
+
+The picture's address carries a version, `…/share.png?v=1a2b3c4d`: the first 8 characters of a hash of the
+poster's HTML and of the site's code version (`shareVersioned` in `monthly.js`, the `mpShareVersion` transform). It
+changes when the month's dates, deadlines, themes or words change, or the site's styles, so a preview that keeps a
+picture by its address fetches the new one; an unchanged poster keeps its address. Local builds and the *Code
+check* build without `POSTER_SHARE` and keep the committee's card. To try it on a PC: build with
+`$env:POSTER_SHARE = "1"`, then `python -m scripts.ops.poster_share _site` (it needs Playwright, 11.5).
+
+> **Tip:** Facebook also keeps a page's own preview for a few days. To refresh a month page that was already
+> shared, paste its address into Facebook's **Sharing Debugger** (<https://developers.facebook.com/tools/debug/>)
+> and press **Scrape Again**.
+
+**The build's warnings** (since October 2026, `eleventy/build-warnings.js`). Some mistakes do not stop a build but
+leave something wrong on the site: a missing icon (`[icon] missing icon: …`, and `[community]`, `[media]`,
+`[read]` or `[published]` for an icon missing from a page's own icon set), a page missing from the sitemap
+(`[sitemap] missing page(s): …`), or a link in the site data that had to be repaired or hidden (`[links] …`, mostly
+a link written by hand in `content/events` or `content/bulletin`). *Website update* builds with `BUILD_WARNINGS`
+set: *Check the build* prints them and adds **Build warnings (N)** to the run summary ("published all the same;
+please fix them (the Code check fails on them)", the first 50), and each one is a yellow annotation. They **never
+stop publishing**. The *Code check* builds with `STRICT_BUILD: "1"` instead, so the same warnings turn it red
+(4.5). A warning printed on many pages is listed once with its count: `[icon] missing icon: x (×245)`. A link
+that only lacked its `https://` (`www.…`, `zoom.us/j/…`) works once repaired: it is a plain `[links] note: …` log
+line, not a warning. The booth display's "not downloaded in this build" notes are not build warnings either.
+
 ### 4.3 Which saved files start a run
 
 These were checked against GitHub's path rules (the last matching rule wins).
@@ -315,13 +359,15 @@ These were checked against GitHub's path rules (the last matching rule wins).
 | `src/pages/status.njk`, `src/_i18n/community.json`, a Markdown page in `src/pages/` | yes | yes |
 | `src/assets/cache/…` (thumbnails the robot downloads) | – | – |
 | `scripts/sync/drive.py`, `eleventy/filters/community.js`, `eleventy.config.js`, `package.json`, `requirements.txt` | yes | yes |
-| `tests/test_morning.py` | – | yes |
-| `README.md`, `docs/OPERATIONS.md`, `how-to/automation-and-troubleshooting.md`, `LICENSE` | – | – |
+| `tests/test_morning.py` (since October 2026: a test decides whether a run publishes, 4.8) | yes | yes |
+| `tests/README.md`, a `.md` file in `tests/fixtures/` | – | yes |
+| `README.md`, `docs/OPERATIONS.md`, `how-to/automation-and-troubleshooting.md`, `LICENSE`, `NOTICE` | – | – |
 | `.github/workflows/update.yml` | yes | yes |
 | `.github/workflows/check.yml`, `morning.yml`, `monthly-digest.yml`, `link-check.yml` | – | yes |
 | `.github/dependabot.yml` | – | – |
 
-In short: **settings, content and code rebuild the site; documentation and the robot's data files do not.**
+In short: **settings, content and code (the tests included) rebuild the site; documentation and the robot's data
+files do not.** Of the saves that rebuild it, only a change of the code runs the tests again first (4.8).
 Deleting or renaming a file counts as changing it.
 
 > **Note:** the quick run that a save starts reads Drive, `content/bulletin`, `content/events`, the podcasts, the
@@ -346,7 +392,11 @@ It puts the new day and both daily quotes on the site by the goal in `config/sit
 1. Today's build with today's Grapevine **and** La Viña quotes on the site → nothing to do (a few seconds).
 2. A *Website update* run already waiting or running → it follows that run first instead of queueing another.
 3. The site does not have today's build → it starts *Website update* in **morning** mode, follows it, then
-   reads the live site until the new build shows.
+   reads the live site until the new build shows. The morning refresh publishes in about 3 minutes; since October
+   2026 about one of them is the posters' share pictures (4.2), which are made on every run, this one included —
+   if they fail, the site is built a second time without them, which adds the length of one build. The tests
+   usually do not run (the code passed already, in the run of its own push), so they do not delay the morning;
+   while a change of the code fails them, the morning refresh does not publish either (14.10).
 4. Today's build is up but a magazine's quote is not out yet → from 2:00 to 7:00 AM Central (the magazines
    usually publish the new day's quote about 2 AM; `WINDOW_BEFORE`, 3 h 30 min before the 5:30 goal) it asks only
    that magazine's home page every 10 minutes (a check that starts after 7:00 AM asks once), and refreshes again
@@ -378,21 +428,53 @@ and its key are covered in [E-mail and alerts](email-and-alerts.md).
 ### 4.5 Code check (tests and test build)
 
 It builds a test copy of the site exactly like the deploy does (strict about missing button texts, and it
-**fails** when `/build.json` is missing), runs `python -m unittest discover -s tests -v` (the tests that need the
-translation models are skipped there), and checks that the monthly e-mail still builds
-(`send_digest --dry-run`, nothing is sent). Nothing is published. Its two jobs are **Test build of the website**
-(steps *Build the website (as for GitHub Pages)* and *Check the build*) and **Python tests (offline)**. A push or a
+**fails** when `/build.json` is missing), opens that copy in a real browser (the browser checks, below), runs
+`python -m unittest discover -s tests -v` (the tests that need the translation models are skipped there), and
+checks that the monthly e-mail still builds (`send_digest --dry-run`, nothing is sent). Nothing is published. Its
+two jobs run side by side: **Test build of the website** (steps *Build the website (as for GitHub Pages)*, *Check
+the build*, then *Set up Python (for the browser checks)*, *Install the browser checks' tools (Playwright, for the
+runner's Chrome)* and *Browser checks (focus ring, sticky bar, large text, offline update, script errors)*; time
+limit 20 minutes) and **Python tests (offline)** (about 10 minutes since October 2026, time limit 25). A push or a
 pull request keeps GitHub's own title (the commit message, the pull request's title); a run started by hand is
 "Code check (started by hand)". Besides code, settings, content and workflows, a change of `data/geo/**` (the
 Texas places list the place tests read) starts it too.
 
-- A red ✗ on a push means **that change broke something**: fix it or undo it. The live site keeps working:
-  *Website update* runs the same tests before it publishes (4.8), so the same change is not published either.
+- A red ✗ on a push means **that change broke something**: fix it or undo it. The live site keeps working. For a
+  change of the code, *Website update* runs the same tests before it publishes (4.8), so the change is not
+  published either. For a slip in `content/` or `config/` (a date without its year, a bad booth row, a setting
+  nobody reads), it **is** published, without the part the sync or the build could not use: only this check goes
+  red, so fix the file soon.
 - On a pull request (for example Dependabot's), a red ✗ means: do not merge.
 - A newer push cancels a check that is still running, so grey "cancelled" Code check runs are normal.
 
-The Code check runs **every** test. *Website update*'s own tests leave out the few that judge the day's synced
-data rather than the code (`DATA_TESTS`, 4.8): those turn only the Code check red.
+The Code check runs **every** test. *Website update*'s own tests leave out those that judge the day's synced data,
+the committee's own files or the documentation rather than the code (`DATA_TESTS`, `CONTENT_TESTS`, 4.8): those
+turn only the Code check red.
+
+**Stricter than the deploy: the build's warnings.** Its build runs with `STRICT_BUILD: "1"`, so a build warning (a
+missing icon, a page missing from the sitemap, a link in the data that had to be repaired or hidden: 4.2, *The
+build's warnings*) fails the step *Build the website (as for GitHub Pages)*. The log ends with `STRICT_BUILD: N build
+warning(s) — fix them (or build without STRICT_BUILD):` and the list, and each is a red annotation *Build warning*.
+Fix the icon's name, the page's sitemap setting, or the link where it comes from. A `[links]` warning comes from
+**committed data** — a link written in `content/events` or `content/bulletin`, or one the robot fetched — not
+necessarily from the push that turned the check red: search the log for `[links]`, which names the item and the
+link. *Website update* lists the same warnings in its summary and publishes anyway.
+
+**The browser checks** (since October 2026, [`tests/browser/`](../tests/browser/)). The offline tests cannot see a
+page drawn on a screen, so the test build is served the way GitHub Pages serves it
+([`scripts/ops/serve_site.mjs`](../scripts/ops/serve_site.mjs)) and opened in the runner's own Google Chrome
+(headless, through Python Playwright, pinned in `scripts/ops/requirements-browser.txt`; nothing else is downloaded,
+and the browser reaches no other site). They check that the header's focus ring stands out (at least 3 : 1 in
+light, dark, high contrast and high-contrast dark, at the top and scrolled); that What's New's sticky filter bar
+never hides the focused element (also after relaxed spacing is switched off); that no page scrolls sideways at
+360 px wide with 150 % text (Home, About, Published, Events and Meetings, English and Spanish); that a new
+version of the offline worker takes over in under 6 seconds while a tab's page is slow, and that a page opened
+before an update keeps its own stylesheet offline; that 25 main pages run without a script error in both
+languages; that two Tracker tabs keep a receipt photo when one deletes an entry the other is editing, and that
+closing a tab whose entries the browser would not store asks first; and that a poster's share picture can be made.
+About a minute and a half, setup included. Each checked page must answer 200: a page renamed or removed from the
+site fails with "/<page> answered 404, not 200 — is it still part of the site?", so change `MAIN_PAGES` /
+`LARGE_TEXT_PAGES` in `tests/browser/test_site_in_browser.py` with such a change. To run them on a PC: 11.5.
 
 ### 4.6 Monthly e-mail digest (short version)
 
@@ -436,26 +518,50 @@ action is pinned this way.
 
 ### 4.8 The tests before publishing
 
-Since October 2026 *Website update* never publishes code that fails the tests. Its job **Test the code before
+Since October 2026 *Website update* never publishes **code** that fails the tests. Its job **Test the code before
 publishing** runs `python -m scripts.ops.gate_tests` ([`scripts/ops/gate_tests.py`](../scripts/ops/gate_tests.py)):
-every offline test of `tests/`, the same ones the Code check runs, at the same time as the build and on the very
-same commit. The job **Publish to GitHub Pages** waits for both. A change that breaks a test therefore never goes
-live; the site keeps the version before it.
+the offline tests of `tests/` that test the code, the same ones the Code check runs, at the same time as the build
+and on the very same commit. The job **Publish to GitHub Pages** waits for both. A change of the code that breaks a
+test therefore never goes live; the site keeps the version before it.
+
+What the committee edits — `content/`, `config/`, `data/translations/glossary.yml` and `overrides.yml` — and the
+documentation never stop publishing this way, neither on their own push nor later, when somebody changes the code.
+A slip there (an event date without its year, a bad booth row, a broken glossary or overrides file, a deleted
+link, a setting nobody reads yet) turns only the **Code check** red, on the push that made it; *Website update*
+publishes, and the sync and the build leave out what they cannot read (the run summary's *files to fix* and
+*Settings problems* name it). The build itself still checks a few of the committee's files, which is not the
+tests' doing: a `config/site.yml` that YAML cannot read at all (14.3 a), and a mistake that `I18N_STRICT` turns into
+a build error in `config/carry.yml`, `orientation.yml`, `history.yml`, `expenses.yml` or a presentation deck, stop
+the build, so nothing is published until the file is fixed (the live site keeps the version before).
 
 | Question | Answer |
 |---|---|
-| Which tests? | all of `tests/` except the few listed in `DATA_TESTS` in `gate_tests.py` (4 today: the booth CSV's videos and episodes, the colours of the day's events, the sections of the day's bulletin posts, the presentations' live values). They judge the day's synced data rather than the code, and a day's data must never keep the site from updating; the Code check still runs them. The tests that need the translation models skip themselves, as in the Code check |
-| When do they run? | only when the code or the content is **new to them**. The job takes a fingerprint of every file in git except the robot's own (`data/raw`, `data/site`, `data/state`, `data/translations/cache.json`, `src/assets/cache`) and remembers a pass in the Actions cache (`tests-passed-v1-<fingerprint>`) |
-| And the daily runs? | the morning, midday and evening refreshes and the nightly update change only the robot's files, so they find the pass and skip the tests in a few seconds, with the summary line "The tests passed already for this code and content (only the bot's data changed since) — not run again." |
-| What makes them run? | any commit of yours: code, settings, content, translation fixes, and also a test or a guide (they are in git too). The run of that save tests it; after a commit that starts no run (a guide, a test), the next run tests once. If GitHub has deleted the remembered pass (a cache unused for 7 days), they simply run again |
-| How long? | `update.yml` reckons about 3 to 4 minutes on GitHub, setup included, about as long as the build; on the owner's PC the whole suite takes about 4 minutes |
-| What does the summary say? | a section **Tests before publishing**: "All N tests passed (M skipped) — the website may be published." and "Left to the Code check (they judge the day's synced data, not the code): 4." |
-| And when one fails? | "**N of M tests failed — the website was NOT published** (the live site keeps the version before). Fix the change that broke them, or undo it; the next run publishes." with the failing tests, and the red annotation *Tests failed — not published*. The data commit was made as usual. What to do: 14.10 |
+| Which tests? | all of `tests/` except those `gate_tests.py` leaves to the Code check (80 today: the run's first line says "Running N tests (80 left to the Code check: they judge the day's data, the committee's own files or the documentation)."): `DATA_TESTS` (4: the booth CSV's videos and episodes, the colours of the day's events, the sections of the day's bulletin posts, the presentations' live values — they judge the day's synced data), `CONTENT_TESTS` (about 50 entries, a class or a test each, with what it judges: the event files, the booth file, the archive exports, the bulletin's template, the settings files, the decks, the glossary and the overrides, and the documentation the tests read, such as `content/events/README.md` and `config/presentations/README.md`) and `LIST_CHECKS` (the guard below). The Code check still runs them all. The tests that need the translation models skip themselves, as in the Code check |
+| When do they run? | only when the **code** is new to them. The job's step *Fingerprint the code* takes a fingerprint of every file in git except the robot's own (`data/raw`, `data/site`, `data/state`, `data/translations/cache.json`, `src/assets/cache`), the committee's (`content/`, `config/`, `data/translations/glossary.yml`, `data/translations/overrides.yml`) and the documentation (`README.md` and the other `.md` files at the top, `docs/`, `how-to/`); its log says `Code fingerprint: …`. `data/geo`, the tests (their fixtures included), the workflows, `NOTICE`, `LICENSE` and the Markdown pages in `src/` stay in. A pass is remembered in the Actions cache (`tests-passed-v1-<fingerprint>`) |
+| And the daily runs, and your content? | the morning, midday and evening refreshes, the nightly update and every save of content, settings, translation fixes or a guide leave the fingerprint as it is, so they find the pass and skip the tests in a few seconds, with the summary line "The tests passed already for this code (content, settings and the bot's data may have changed since) — not run again." The log adds which run made that pass: `The pass: <time, UTC> run <run id> commit <commit>` |
+| What makes them run? | a commit of code: `scripts/`, `src/` (templates, scripts, styles, the texts in `src/_i18n`), `eleventy/`, `tests/`, the workflows, `package.json`, `requirements.txt`, `data/geo`. The run of that push tests it (a change made only in `tests/` starts a run too). Each run that finds the pass reads it back (a real restore of its one small file), which keeps it in the cache: GitHub deletes a cache nobody used for 7 days. If it is gone all the same, the tests simply run again |
+| How long? | `update.yml` reckons about 3 to 4 minutes on GitHub, setup included, about as long as the build |
+| What does the summary say? | a section **Tests before publishing**: "All N tests passed (M skipped) — the website may be published." and "Left to the Code check (they judge the day's synced data, the committee's own files or the documentation, not the code): 80." |
+| And when one fails? | "**N of M tests failed — the website was NOT published** (the live site keeps the version before). The failing tests (the job's log says why):", one line per test, with " — it read the committee's files: config/site.yml …" after a test that Python saw open one of them (or the documentation), then advice (14.10), and the red annotation *Tests failed — not published*. The data commit was made as usual |
+
+**Why the lists must be complete.** The committee's files are left out of the fingerprint, so a test the gate ran
+that judged one of them would not fail on the edit itself: it would fail later, on somebody's unrelated change of
+the code, and keep every run from publishing until that file was fixed. The guard
+`tests/test_automation.py` → `GateLists.test_no_gated_test_judges_the_committees_files` (with
+[`tests/committee_edits.py`](../tests/committee_edits.py)) prevents that: it copies the repository (up to 6 copies
+at once), makes committee-like edits and slips in each (events, bulletin posts, booth rows added, deleted or
+switched off, an archive export, many `config/site.yml` settings such as the meeting's day, time and link, the
+decks, orientation, expenses, monthly tips, history, the glossary and the overrides) and deletes the
+documentation, then runs every gated test again: each must still pass. It is a `LIST_CHECKS` entry, so only the
+Code check runs it (it takes a few minutes of the Code check's ten). When it fails, it names the test: give that
+test data of its own, or move the part that judges the committee's files into a test of its own listed in
+`CONTENT_TESTS`. A new kind of committee edit goes into `tests/committee_edits.py`.
 
 If a test fails because of the day's synced data rather than anybody's change (it would fail on the Code check of
 the same commit too, and keep failing with no new commit), add its id to `DATA_TESTS` in `gate_tests.py`, with a
-line saying what it judges: the gate then leaves it to the Code check. Tested by `tests/test_automation.py`
-(classes `Publishing`, `GateTests`).
+line saying what it judges: the gate then leaves it to the Code check. A test that judges a committee's file or a
+guide belongs in `CONTENT_TESTS` the same way. Tested by `tests/test_automation.py` (classes `Publishing`,
+`GateTests`, `GateLists`).
 
 ---
 
@@ -474,13 +580,13 @@ Actions**.
 
 | You want to… | Workflow and boxes | What happens | Time |
 |---|---|---|---|
-| Show a new Drive file, bulletin post, podcast or archive file now | *Website update*, tick **skip_crawl** | quick run, then publish ("Quick refresh (started by hand)") | ~2 min |
+| Show a new Drive file, bulletin post, podcast or archive file now | *Website update*, tick **skip_crawl** | quick run, then publish ("Quick refresh (started by hand)") | ~3 min |
 | Refresh everything, like the nightly full update | *Website update*, all boxes empty | full run with the 40-minute PDF search ("Full update (started by hand)") | ~10–15 min today |
 | A big PDF catch-up (only after the crawl's saved progress was lost) | *Website update*, `crawl_minutes` = `300` | full run with a 5-hour search | ~6 h; start it in the **morning**, never the evening |
 | Put today's quote up | *Morning check (new day by 5:30 AM)*, no boxes | does only what is missing | seconds to a few minutes |
 | See what the Morning check would do | *Morning check (new day by 5:30 AM)*, tick **check_only** | it looks and reports, starts nothing | seconds |
-| The same refresh the Morning check starts | *Website update*, tick **morning** | morning refresh | ~2 min |
-| Run the tests and a test build | *Code check (tests and test build)* | ✓ or ✗ | a few minutes |
+| The same refresh the Morning check starts | *Website update*, tick **morning** | morning refresh | ~3 min |
+| Run the tests, a test build and the browser checks | *Code check (tests and test build)* | ✓ or ✗ | ~10 min |
 | Preview the monthly e-mail | *Monthly e-mail digest*, keep **Preview only**, `month` empty or e.g. `2026-09` | the `digest-preview` download | ~1 min |
 | Send the monthly e-mail now | *Monthly e-mail digest*, untick **Preview only** | sends at once, unless that month was already sent (⚠ *Already sent*) or a send of it was not confirmed (4.6) | ~1 min |
 | Send a month's e-mail **again** | *Monthly e-mail digest*, untick **Preview only**, tick **force** | sends it a second time to everyone (check the group first) | ~1 min |
@@ -611,33 +717,45 @@ visitor's own time zone, except its daily-quote times, which are Central.
 |---|---|---|---|
 | 1 | **Full update**, **Quick refresh** or **Morning refresh** (the kind of run) | one row per source module: status (✅ ok, ⏭️ skipped, ⚠️ failed), seconds, items, new, a note; a **total** row ("all ok" or the failed names) | a ⚠️ row: see 14.1 |
 | 2 | **Content sources** | the 16 sources: Status **OK**, **NOT CHECKED** or **PROBLEM**, items, new in 7 days, last success (UTC), the problem | a PROBLEM for many days; a NOT CHECKED row (below) |
-| 3 | **Also run for this push** | only in a push's run that also ran sources the nightly update reads, and why: "instagram (content/instagram.yml); meetings (data/geo/texas_places.json)" (4.2) | — |
-| 4 | **Daily quote** | the day of each magazine's quote now on the site, e.g. "Grapevine Oct 2 · La Viña Oct 2" | — |
-| 5 | **PDF crawl** | pages known · crawled · PDFs · pages this run | crawled far below known (see [Automatic sources](automatic-sources.md)) |
-| 6 | **Translations** | cached · new this run · waiting for the next run | ⚠ "Translation is not working" (14.2) |
-| 7 | **Writers archive** | the archive files in use (name, rows, rows by Texas writers), the stories on the site and how many are by Area 65 writers; "New archive file used: …" in the run that took a file in (also a blue ℹ); a **CSV file to fix** line when a file was not used; the module's warnings (an older copy that may be deleted …) | a CSV file to fix ([Writers archive §10](writers-archive.md#10-the-safety-checks-and-what-to-do)) |
-| 8 | **Notes** | small problems of sources that still updated (the writers archive's are in its own block), at most two per source, for example a meeting list or YouTube answering with a bot check, main pages of the magazine sites that did not load (below), a Drive folder that suddenly looked empty, a date in a Drive file name that could be read two ways | only if the same note repeats for a week (the hub note: see below) |
-| 9 | **Other calendars (optional, informational)** | outside calendars (`sources.ics_feeds`): working, blocked, not answering; *Check:* lines | never counts as a failure |
-| 10 | **Settings problems** | a part of `config/site.yml`, a translation file or a `content/events` file (for example a venue that is "to be announced" in one language only) that was skipped or corrected, with the reason; also (as *translations*) a translation memory that could not be read and was set aside, or a downloaded translation model that was refused because its checksum is not the expected one | fix the file and save it again; for the translation memory or a model, see [Translations](translations.md) |
-| 11 | **Bulletin files to fix** / **Event files to fix** | a file in `content/bulletin` or `content/events` that could not be read, or that links a picture or document not saved next to it (at most 10 each) | fix the file and save it again |
-| 12 | **Booth folder files the booth display can't show** | each file of the Drive booth folder that can never be shown (`data/site/booth.json` → `problems`: its type, a note with no text, `(from …)` after `(until …)`), with what to do (at most 30; the first 10 also as ⚠ *Booth folder file to fix*) | rename, convert or replace the file in Drive ([The Drive panel folder §3.6](drive-panel-folder.md#36-the-booth-folder-new)) |
-| 13 | **Scheduled bulletin posts** | posts waiting for their `publish:` day (or a Drive bulletin doc's "(from …)" day) | — |
-| 14 | **New podcast feeds found** | a feed on the magazine sites the website does not show yet | add it under `sources.podcasts` if wanted |
-| 15 | **Reminders** | dated facts kept by hand that run out soon (below); nothing when none is due | edit the file it names before the date |
-| 16 | **Not updating for 7+ days** | the sources behind the issue in 8.1 | follow the issue |
-| 17 | **Booth display (copies for offline)** | from the build job: the booth files saved for offline, their size and the limits, how many were downloaded, kept and removed; then a "Not saved: …" line per file, with why (the first 10 also as ⚠ *Booth display: a file was not saved for offline*) | a "Not saved" line that repeats day after day (14) |
-| 18 | **Website: N pages, M MB** | from the build job | above 900 MB (section 12) |
-| 19 | **Tests before publishing** | from the tests job: "All N tests passed …", or "The tests passed already for this code and content … — not run again.", or "**N of M tests failed — the website was NOT published**" with the failing tests (4.8) | a failure: 14.10 |
+| 3 | **Sync health** (since October 2026) | a table *Source · Added · Removed · Held back*, only the rows with something to say: what each source added and removed in this run ("—" when this run did not read it), and items held back after a sudden drop: "**N held back** since … (found F of P): they stay on the site until the next run finds the same — e.g. …", for Drive's own empty-folder hold "**N kept** since … (found F of P): removed only when the next run confirms they are gone", and "removal confirmed (held back since …)" on the run that removes them. Each hold is also a yellow ⚠ *<source>: items held back* | nothing: a hold decides itself on the next run (7.1) |
+| 4 | **Main pages of the magazine sites that did not load** | only after a document search this run made that ended normally: each hub or kit page that failed, with its status and since when (below), plus a yellow ⚠ *Document search* | if the same page is listed for days (below) |
+| 5 | **Also run for this push** | only in a push's run that also ran sources the nightly update reads, and why: "instagram (content/instagram.yml); meetings (data/geo/texas_places.json)" (4.2) | — |
+| 6 | **Daily quote** | the day of each magazine's quote now on the site, e.g. "Grapevine Oct 2 · La Viña Oct 2" | — |
+| 7 | **PDF crawl** | pages known · crawled · PDFs · pages this run | crawled far below known (see [Automatic sources](automatic-sources.md)) |
+| 8 | **Translations** | cached · new this run · waiting for the next run | ⚠ "Translation is not working" (14.2) |
+| 9 | **Writers archive** | the archive files in use (name, rows, rows by Texas writers), the stories on the site and how many are by Area 65 writers; "New archive file used: …" in the run that took a file in (also a blue ℹ); a **CSV file to fix** line when a file was not used; the module's warnings (an older copy that may be deleted …) | a CSV file to fix ([Writers archive §10](writers-archive.md#10-the-safety-checks-and-what-to-do)) |
+| 10 | **Notes** | small problems of sources that still updated, at most two per source, for example a meeting list or YouTube answering with a bot check, a Drive folder that suddenly looked empty, a date in a Drive file name that could be read two ways. The writers archive's are in its own block, the bulletin's and the events' file problems only under their *files to fix* (since October 2026 not twice), and the main pages that did not load only in their own block (4) when this run searched | only if the same note repeats for a week |
+| 11 | **Other calendars (optional, informational)** | outside calendars (`sources.ics_feeds`): working, blocked, not answering; *Check:* lines | never counts as a failure |
+| 12 | **Settings problems** | a part of `config/site.yml`, a translation file or a `content/events` file (for example a venue that is "to be announced" in one language only) that was skipped or corrected, with the reason (a typo in the glossary or the overrides comes here as *translations*) | fix the file and save it again |
+| 13 | **Translation problems** (since October 2026) | a translation memory that could not be read and was set aside, or a translation model that could not be installed (its download failed, or its checksum is not the expected one), each also a yellow ⚠ *Translation problem*; new titles may stay in their original language meanwhile | a failed download: nothing, the next run tries again; a checksum that does not match: a person checks the new package first ([Translations](translations.md)) |
+| 14 | **Bulletin files to fix** / **Event files to fix** | a file in `content/bulletin` or `content/events` that could not be read, or that links a picture or document not saved next to it (at most 10 each) | fix the file and save it again |
+| 15 | **Booth folder files the booth display can't show** | each file of the Drive booth folder that can never be shown (`data/site/booth.json` → `problems`: its type, a note with no text, `(from …)` after `(until …)`), with what to do (at most 30; the first 10 also as ⚠ *Booth folder file to fix*) | rename, convert or replace the file in Drive ([The Drive panel folder §3.6](drive-panel-folder.md#36-the-booth-folder-new)) |
+| 16 | **Scheduled bulletin posts** | posts waiting for their `publish:` day (or a Drive bulletin doc's "(from …)" day) | — |
+| 17 | **New podcast feeds found** | a feed on the magazine sites the website does not show yet | add it under `sources.podcasts` if wanted |
+| 18 | **Reminders** | dated facts kept by hand that run out soon (below); nothing when none is due | edit the file it names before the date |
+| 19 | **Not updating for 7+ days** | the sources behind the issue in 8.1 | follow the issue |
+| 20 | **Booth display (copies for offline)** | from the build job: the booth files saved for offline, their size and the limits, how many were downloaded, kept and removed; then a "Not saved: …" line per file, with why (the first 10 also as ⚠ *Booth display: a file was not saved for offline*) | a "Not saved" line that repeats day after day (14) |
+| 21 | **Share pictures of the monthly posters** (since October 2026) | from the build job: "26 (1200 × 630)." or "not made (…) — the month pages show the committee's card." (4.2) | "not made" day after day: open the step *Make the monthly posters' share pictures* |
+| 22 | **Website: N pages, M MB** | from the build job | above 900 MB (section 12) |
+| 23 | **Build warnings (N)** (since October 2026) | from the build job, only when the build printed some: "published all the same; please fix them (the Code check fails on them)", then the first 50 (4.2, *The build's warnings*) | fix them: each names the icon, the page or the link |
+| 24 | **Tests before publishing** | from the tests job: "All N tests passed …", or "The tests passed already for this code (content, settings and the bot's data may have changed since) — not run again.", or "**N of M tests failed — the website was NOT published**" with the failing tests and which of them read the committee's files (4.8) | a failure: 14.10 |
 
 **Main pages of the magazine sites that did not load.** The document search checks its hub and kit pages
 (`HUB_PATHS` and `KIT_PAGES` in [`scripts/sync/crawl_rules.py`](../scripts/sync/crawl_rules.py), such as
-`/gvr-resources`) every day. When one does not give a readable page, *Notes* says, for example, "Document library
-(Grapevine, La Viña and AA): 1 main page(s) of the magazine sites did not load: aagrapevine.org/gvr-resources (404 since 2026-10-06) —
-checked again every day". Its documents stay on the site meanwhile (one 404 never drops them: a second one at
+`/gvr-resources`) every day. When one does not give a readable page, the run that searched lists it in its own
+block, **Main pages of the magazine sites that did not load** ("- aagrapevine.org/gvr-resources — 404 since
+2026-10-06 00:00 UTC"), with a yellow ⚠ *Document search*; a later run that did not search (a quick run, or a paused
+search) may still show the last search's line in *Notes*: "Document library (Grapevine, La Viña and AA): 1 main
+page(s) of the magazine sites did not load: aagrapevine.org/gvr-resources (404 since 2026-10-06) — checked again
+every day", and the Status page shows it as the source's note. Its documents stay on the site meanwhile (one 404 never drops them: a second one at
 least a day later does). If the note repeats for days, open that page on the magazine's site: if it moved, put
 the new path in `HUB_PATHS` / `KIT_PAGES`. A second possible note, "robots.txt of www.aagrapevine.org did not
 answer properly (HTTP 503): its pages were left for the next run", needs nothing unless it repeats
-([Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source)).
+([Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source)). When it kept the search
+from reading **any** page that run, the run counts as failed instead (since October 2026, `run_verdict` in
+`crawl.py`): the Document library row shows **PROBLEM** with "no page could be read: robots.txt of
+www.aagrapevine.org (HTTP 503) did not answer properly — site down?", its last success stays as it was, its
+documents stay, and after 7 days it goes into the issue of 8.1.
 
 **"Not checked for N days."** Every source is tried at least once a day (by the nightly full update). A source
 that still works (its last try was fine) but that **no run has even tried for 3 days** shows **NOT CHECKED** in the
@@ -648,8 +766,11 @@ running (disabled, or GitHub skipped it). From **7 days** it also goes into the 
 the latest "Nightly full update" run and look for the step that failed or ran out of time. The document search is
 never "not checked" while it is paused on purpose (`sources.crawler.minutes_per_run: 0`), nor in the days after it is
 switched back on: each full update during the pause counts as its try (`run_all` gives `data/raw/pdfs.json` a fresh
-`attempted`, and nothing else, and its row in the module table says "paused (sources.crawler.minutes_per_run: 0)").
-A source that never ran yet is not counted either.
+`attempted`, and its row in the module table says "paused (sources.crawler.minutes_per_run: 0)"). With it go this
+run's own values — nothing added or removed (only what a hold still keeps), and no main pages that did not load —
+so the summary of a paused run lists no document counts, no *Main pages …* block and no *Document search*
+warning; the last success, the documents and a hold stay as they were. A source that never ran yet is not counted
+either.
 
 **Reminders.** `build_data` checks a few dated facts the committee keeps by hand (`status.json` → `reminders`), in
 Central time, and the summary lists the ones that run out soon, each with its file (a blue ℹ *Reminders* counts
@@ -658,11 +779,14 @@ them). The site keeps working either way:
 | Reminder | When it shows | Example |
 |---|---|---|
 | monthly tips (`config/carry.yml`) | the last month with tips is less than 12 months ahead | "config/carry.yml has monthly tips only through 2027-12; the /monthly/ pages look 12 months ahead — add tips for the next months." |
-| the Tracker's panels (`config/expenses.yml`) | the last panel ends within 90 days, or ended | "… the last service panel (Panel 77) ends 2028-12-31 — add the next panel." Since Tracker 1.2.0 (October 2026) the Tracker works the panels out itself, so nothing needs adding: this line is harmless until the code drops it |
 | GVR / RLV 101 (`config/orientation.yml`) | the panel named there has ended | "config/orientation.yml still names Panel 77 (from 2027-01), which ended 2028-12-31 — update the panel." |
 | skip dates (`config/site.yml` → `recurring_events`) | an event's last skip date is within 90 days, or past | "… add next year's skip dates for lv-monthly-workshop." |
 | the NETA 65 assemblies (`content/events`) | the last assembly listed starts within 60 days, or is past | "content/events: the last NETA 65 assembly listed is on … — add the next NETA 65 assemblies." |
 | a price change (`config/site.yml` → `price_changes`) | its `notice_until` has passed | "… the price_changes block for … can be removed — its notice ended … (keep it until the stores show the new prices)." |
+
+The Tracker's service panels need no reminder: since Tracker 1.2.0 it works them out itself from the two-year
+rule (`servicePanels` in `src/assets/js/expenses-core.js`; `panels:` in `config/expenses.yml` only overrides one),
+so the old "add the next panel" line is gone (October 2026).
 
 Real example: the summary rebuilt from the data of 2 October 2026 (abridged; the seconds vary from run to run; the
 heading and the `writers_archive` row are as quick runs write them since the archive was added, with its numbers
@@ -745,7 +869,7 @@ ignore the wrong skip date. The *report* job then opens the issue in 8.1. What t
 | Workflow | Its summary says |
 |---|---|
 | Morning check (new day by 5:30 AM) | "## Morning check — Friday, October 2 (Central time)", a ✅ / ⚠ / ❌ headline, then a table: New day (built at), Grapevine quote, La Viña quote, the Website update run it started or followed, what started the check, how, the full daily update |
-| Code check (tests and test build) | "**Website:** N pages, M MB — builds fine with this change." from the job *Test build of the website* (the test results are in the *Python tests (offline)* job's log) |
+| Code check (tests and test build) | "**Website:** N pages, M MB — builds fine with this change." from the job *Test build of the website* (the browser checks' results are in that job's last step's log, the test results in the *Python tests (offline)* job's log; a build warning is a red annotation *Build warning*) |
 | Monthly e-mail digest | "E-mail digest is not set up — nothing to do. (This is normal.)", "Not the time for the monthly digest (Central time: day 1, hour 3) — nothing to do.", "The 2026-09 digest was already sent — nothing to do.", "E-mail digest preview (not sent)" with the subject and the counts, "E-mail digest: waiting for the data", "Nothing new in September 2026 — no e-mail sent.", or "E-mail digest sent" with the subject and the number of recipients; after a send that broke off, "A send of the 2026-09 digest was started (…) but never confirmed — the e-mail MAY have gone out. …" (⚠ *Digest send not confirmed*); after a refused send, ✗ *The digest was not sent* ("The mail server took nothing … — the next try sends it.") |
 | Weekly link check | lychee's link report, then "## Official links in config/site.yml" with "N OK · N broken · N could not be checked" |
 
@@ -781,7 +905,7 @@ The badges always pair an icon with a word:
 | **On hold** / *En espera* | the last run worked but suddenly found far fewer items than before (none at all, or less than half once it had 10 or more), or a Drive folder that held files suddenly looked empty. Not believed the first time: the missing items stay on the site, and the row says "The last update did not find {n} items that were here before. To be safe, they stay on the site until the next update confirms they are gone." with *On hold since*. The next run that still misses them removes them; one that finds them again ends the hold ([Automatic sources §3.17](automatic-sources.md#317-safety-nets-a-bad-day-at-a-source)) |
 | **Delayed** / *Retrasado* | it worked, but the last success is more than **3 days** old when the page was built: "No successful update in {n} days" |
 | **Failed** / *Falló* | the last run failed; the row says calmly: "The last update couldn't refresh this source. Nothing was lost — everything it found before stays on the site, and the next update tries again." After 3 days it adds "No successful update in {n} days — if this continues, the site maintainer can check the details below.", plus the raw English error under *Technical details (for the site maintainer)* |
-| **Not run yet** / *Aún sin ejecutar* | the source never ran (only on a brand-new copy) |
+| **Not run yet** / *Aún sin ejecutar* | the source never ran (only on a brand-new copy). A raw file deleted while its source had items on the site shows **Failed** instead, with "data/raw/<source>.json is missing — the site keeps the last build's items until an update of this source works (or restore the file from git)" (9.2) |
 
 A source with nothing in it gets a hint instead of a bare 0. For example, an empty Drive says "Nothing uploaded
 yet — files placed in the Panel 77 (2027–2028) folder on Google Drive show up on the site after the next
@@ -934,7 +1058,7 @@ Its text names the job that failed, with what to do:
 | Job | The issue says |
 |---|---|
 | *Sync content + translate* | the site data could not be built, or the data commit could not be saved; the site was still published with the data it had (if the other jobs worked) |
-| *Test the code before publishing* | a change broke the tests, so nothing was published; the run summary lists the failing tests: fix the change or undo it (14.10) |
+| *Test the code before publishing* | "a change to the code broke the tests, so nothing was published (the live site keeps the version before): the run summary lists the failing tests and says which of them read the committee's own files — fix the change or undo it (a fix in tests/ starts a run too)." (14.10) |
 | *Build website* | the website could not be built (often a text missing from `src/_i18n` after an edit): fix the change or undo it (14.4) |
 | *Publish to GitHub Pages* | GitHub Pages did not take the new version, usually GitHub's own trouble: **Re-run failed jobs**, or wait for the next run |
 
@@ -988,8 +1112,8 @@ files, including `data/state/crawl-state.json` and a new Instagram thumbnail in 
 
 Never committed (git ignores them): `.cache/models/` (the translation models, kept in the Actions cache),
 `.cache/booth-media/` (the booth display's saved photos and videos, kept in the Actions cache too),
-`node_modules/`, `_site/`, `.tmp/`, `.venv/`, `__pycache__/`, `*.tmp`, `*.part`, `*.corrupt-*` and `*.bad-*` (copies
-of an unreadable raw file or translation memory, set aside: 9.2), `.env` files, `*.pem`, `client_secret*.json`. Drive files are never copied into the repository: the site links Google's own
+`node_modules/`, `_site/`, `.tmp/`, `.venv/`, `__pycache__/`, `*.tmp`, `*.part`, `*.bad-*` (an unreadable
+translation memory, set aside: 9.2) and `*.corrupt-*` (raw files set aside before October 2026), `.env` files, `*.pem`, `client_secret*.json`. Drive files are never copied into the repository: the site links Google's own
 viewers and thumbnails (the booth display's copies are published with the site, never committed).
 
 ### 9.2 Resetting something on purpose
@@ -999,7 +1123,7 @@ press *Run workflow* afterwards.
 
 | Goal | Do this | Side effect |
 |---|---|---|
-| Re-read one source from scratch | delete `data/raw/<source>.json` | its `first_seen` dates are lost: for a week the Status page counts all its items as "found this week", and the next monthly e-mail can list them as added that month |
+| Re-read one source from scratch | delete `data/raw/<source>.json`, then *Run workflow* with every box empty (a full run, so the source is read again at once) | its `first_seen` dates are lost: for a week the Status page counts all its items as "found this week", and the next monthly e-mail can list them as added that month. Until an update of that source works, the site keeps the last build's items and the Status page shows it **Failed**: "data/raw/<source>.json is missing — the site keeps the last build's items until an update of this source works (or restore the file from git)"; if that update fails, "… went missing and this source's update since did not work (…) — the site keeps the last build's items until one works …" (since October 2026) |
 | Re-crawl both magazine sites | delete `data/state/crawl-state.json`, then run with `crawl_minutes` = `300` | about 6 hours; may need several runs |
 | Re-translate one text | add it to `data/translations/overrides.yml` | — (preferred) |
 | Re-translate everything | delete `data/translations/cache.json` (or raise `ENGINE_VERSION` in `scripts/sync/translate.py`) | many runs of translation work |
@@ -1014,18 +1138,18 @@ press *Run workflow* afterwards.
 > count from the day the site first saw them, so after deleting `data/raw/manual_events.json` every upcoming
 > one shows "New" again for 14 days (a bulletin post follows its own date).
 
-> **Note:** a raw file broken by a hand edit (or a bad merge) is not overwritten, and since October 2026 it no
-> longer empties its part of the site. Until its source runs again, every build keeps what the last build made of
-> it in `data/site` (whole files such as `videos.json`, or that source's items in `announcements.json`,
-> `events.json` and `whatsnew.json`), and its Status page row says "Failed" with "data/raw/<source>.json could not
-> be read (…) — the site keeps what the last build had for it until the file is fixed (restore it from the git
-> history) or this source's next update rebuilds it". When the source itself runs, it renames the file
-> `<source>.json.corrupt-<time>`, rebuilds that source from scratch and marks it failed once, with a message that
-> ends "restore the file from the git history to keep older items and first-seen dates" (a source that collects
-> over time, such as YouTube or the Library, then shrinks on the site until the file is restored). The
-> `*.corrupt-*` copy is git-ignored, so on GitHub it is not kept: restore the file from the history. An unreadable
-> translation memory (`data/translations/cache.json`) is set aside the same way, as `cache.json.bad-<time>`
-> ([Translations](translations.md)).
+> **Note:** a raw file broken by a hand edit (or a bad merge) is never overwritten, never rebuilt from scratch, and
+> since October 2026 it no longer empties its part of the site. The file stays exactly as it is, and that source
+> **stops updating** until a person restores it: `run_all` does not even run its module (its row in the module
+> table is "failed"), nothing is written over the file, and every build keeps what the last build made of it in
+> `data/site` (whole files such as `videos.json`, or that source's items in `announcements.json`, `events.json`
+> and `whatsnew.json`). Its Status page row says "Failed" with "data/raw/<source>.json cannot be read (…) —
+> restore it from git; the site keeps the last build's items". So restore the file from the history (GitHub:
+> the file → *History* → the last good version; on a PC: `git checkout <sha> -- data/raw/<source>.json`), or
+> delete it to read the source again from scratch (the table above). The translation cache is not pruned
+> meanwhile. (The `*.corrupt-*` line in `.gitignore` is left from before October 2026, when such a file was moved
+> aside and rebuilt.) An unreadable translation memory (`data/translations/cache.json`) is set aside as
+> `cache.json.bad-<time>` ([Translations](translations.md)).
 
 ---
 
@@ -1163,9 +1287,11 @@ python -m unittest tests.test_morning.UpdateWorkflow.test_plan_step -v # one tes
 python -m scripts.ops.gate_tests                                       # the tests Website update runs before it publishes (4.8)
 ```
 
-On the owner's PC on 6 October 2026 the whole suite printed `Ran 2010 tests in 254.251s` and `OK (skipped=30)`:
-about 4 minutes. Skipped is fine: tests that need the translation models or a fresh local build skip themselves.
-Two things to know on Windows:
+On the owner's PC on 6 October 2026 the whole suite printed `Ran 2169 tests in 542.147s` and `OK (skipped=31)`:
+about 9 minutes (the gate's list check, `GateLists`, 4.8, which runs every gated test again in copies of the
+repository, took about 2 of them on its own). Skipped is fine: tests that need the translation models
+or a fresh local build skip themselves, and so do the browser checks (below) unless you ask for them. Two things to
+know on Windows:
 
 - Without `node_modules` (no `npm ci`), about 55 tests that run the site's own JavaScript skip silently: run
   `npm ci` once before you trust a green result.
@@ -1177,13 +1303,24 @@ Two things to know on Windows:
 passed (M skipped) — the website may be published." and how many it left to the Code check); its exit code is 0
 when every test passed, 1 when one failed or none was found.
 
+**Tests that depend on the date.** A test whose expected dates come from code that reads "today" must pin its
+clock, or it starts failing on a date nobody chose — and the gate runs it before every publish of new code. The
+ways: `run_js(…, now="2026-10-06T15:00:00Z")` in [`tests/nodejs.py`](../tests/nodejs.py) (it stops Node's clock
+at that moment before any of the site's code is loaded), the Tracker harness's `make(…, { now })`, the page
+harness's `at`, or patching `common.now_iso` for the sync. Examples: `test_central_time.WeeklyOpen` (the weekly
+open meetings' calendar files), `test_monthly.MonthCalendarClock`, `test_expenses_app.ServiceReport` (the Tracker),
+the bulletin's post without a date (`test_bulletin`).
+
 ### 11.5 Look at pages in a real browser (Playwright with Edge)
 
 Optional, for checking how pages really look, on a phone-sized screen, with no JavaScript errors.
-Playwright is **not** in `requirements.txt` (the workflows do not need it):
+Playwright is **not** in `requirements.txt` (the sync does not need it). Since October 2026 the Code check's browser
+checks and the posters' share pictures install it from
+[`scripts/ops/requirements-browser.txt`](../scripts/ops/requirements-browser.txt), pinned to one version (with
+Pillow); install the same on a PC:
 
 ```powershell
-python -m pip install playwright      # into the .venv only
+python -m pip install -r scripts/ops/requirements-browser.txt      # into the .venv only
 ```
 
 Do **not** run `playwright install`: it downloads a separate Chromium (blocked on the owner's PC, and not needed).
@@ -1221,6 +1358,22 @@ errors: none` and the same for `/es/status/` (*Estado de la actualización*), an
 To see a page as it will look on another day (for example when new prices start), add
 `page.clock.set_fixed_time("2027-01-01T08:00:00-06:00")` before `page.goto(...)`. The page's own date logic
 then believes it is that time ([docs/OPERATIONS.md → When Grapevine announces new prices](../docs/OPERATIONS.md#when-grapevine-announces-new-prices)).
+
+**The Code check's browser checks on a PC** (4.5). They need the build, Node.js (they serve it with
+`scripts/ops/serve_site.mjs`), the packages above and Chrome or Edge. In Git Bash:
+
+```bash
+MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL='*' PATH_PREFIX=/aagrapevine/ npx @11ty/eleventy --output=_site   # a build as GitHub Pages gets it
+GV_BROWSER_SITE=_site GV_BROWSER_CHANNEL=msedge python -m unittest discover -s tests/browser -t tests -v
+```
+
+`GV_BROWSER_CHANNEL` picks `chrome`, `msedge` or `chromium` (without it: the first that starts, in that order);
+`GV_BROWSER_REQUIRED=1` makes a missing browser a failure instead of a skip (the Code check sets it);
+`GV_BROWSER_VERBOSE=1` prints the focus rings' measured contrasts. Without `GV_BROWSER_SITE` they are skipped, so
+the normal `python -m unittest discover -s tests` is unchanged. Under a minute with Edge on the owner's PC. The
+server stops with the Python process that started it, even when a check is stopped halfway. To serve a build by
+hand the same way: `node scripts/ops/serve_site.mjs _site --prefix /aagrapevine/` (it prints the address; Ctrl+C
+stops it).
 
 ### 11.6 Two more tools that only look
 
@@ -1482,18 +1635,22 @@ both languages). The badge is worked out when the page is built. Test: the full 
 | how the Morning check waits and asks | `scripts/ops/morning_check.py` → `WINDOW_BEFORE` (3 h 30 min before the goal: 2:00 AM), `WINDOW_AFTER`, `POLL_EVERY`, `FOLLOW_MAX`, `MAX_RUNS`, `GUARD_MAX = timedelta(minutes=170)` | `MorningWorkflow.test_update_job` checks that `GUARD_MAX + FOLLOW_MAX + LIVE_MAX` + 10 minutes fit the 240-minute job |
 | what the robot commits | `update.yml` → step *Commit refreshed data* → `for p in data/raw data/site data/state …` | — |
 | the build checks (and, in `update.yml` only, the 900 MB warning) | `update.yml` and `check.yml` → step *Check the build* | `UpdateWorkflow.test_build_json_is_checked` |
-| the booth display's media: size limits, download time | `config/site.yml` → `booth:` → `max_file_mb`, `max_total_mb` ([Settings](settings.md)); the 15 minutes of downloads: `BOOTH_MEDIA_MINUTES` in `scripts/build/booth-media.mjs`, inside the step's `timeout-minutes: 20` and the build job's 35 | `tests/test_booth_media.py` |
+| the booth display's media: size limits, download time | `config/site.yml` → `booth:` → `max_file_mb`, `max_total_mb` ([Settings](settings.md)); the 15 minutes of downloads: `BOOTH_MEDIA_MINUTES` in `scripts/build/booth-media.mjs`, inside the step's `timeout-minutes: 20` and the build job's 40 | `tests/test_booth_media.py` |
 | the websites the link check skips | `link-check.yml` → the `--exclude` lines | none |
 | the run titles | the `run-name:` line at the top of each workflow (`update.yml`'s first branch must stay `MORNING_TITLE` in `scripts/ops/morning_check.py`) | `tests/test_run_names.py` (it works out the title of every kind of run) |
 | a workflow's name in the Actions list | the `name:` line at the top of its file — never the file name, which the morning alarm, `morning_check.py`, the badge and the links use | `tests/test_run_names.py` → `OtherTitles.test_the_names_stay`; the guides name the workflows too |
 | which sources a push also runs | `scripts/ops/push_modules.py` → `SETTINGS` (the parts of `config/site.yml` each full-update-only source reads), `FILES` (the files they read) | `tests/test_push_modules.py`; `UpdateWorkflow.test_a_push_also_runs_the_sources_whose_input_it_changed` |
 | when "not checked" starts | `update.yml` → step *Write run summary* → `UNCHECKED_DAYS = 3` | `UpdateWorkflow.test_a_source_not_checked_for_days` |
-| the reminders of dated settings | `scripts/sync/build_data.py` → `REMINDER_CHECKS`, `CARRY_AHEAD_MONTHS` (12), `PANEL_REMINDER_DAYS` (90), `SKIP_DATES_REMINDER_DAYS` (90), `ASSEMBLY_REMINDER_DAYS` (60) | `tests/test_writers_archive.py` → `Reminders`; `UpdateWorkflow.test_reminders` |
+| the reminders of dated settings | `scripts/sync/build_data.py` → `REMINDER_CHECKS`, `CARRY_AHEAD_MONTHS` (12), `SKIP_DATES_REMINDER_DAYS` (90), `ASSEMBLY_REMINDER_DAYS` (60) | `tests/test_writers_archive.py` → `Reminders`; `UpdateWorkflow.test_reminders` |
 | the booth media cache key | `update.yml` → step *Work out the booth display's settings fingerprint* | `UpdateWorkflow.test_the_booth_medias_cache_key_reads_only_the_booth_settings` |
 | the writers archive's cut-off guard | `config/site.yml` → `writers_archive:` → `min_rows_ratio` ([Writers archive §10.1](writers-archive.md#101-the-cut-off-guard-and-min_rows_ratio)) | no code change |
 | the Python or Node version | `python-version: "3.12"` / `node-version: 22` in each workflow | the Code check |
-| which tests *Website update* leaves to the Code check | `scripts/ops/gate_tests.py` → `DATA_TESTS` (a test id, as `python -m unittest` names it, and what it judges) (4.8) | `tests/test_automation.py` → `GateTests.test_every_data_test_is_there` |
-| what the tests' fingerprint leaves out | `update.yml` → job `tests` → step *Fingerprint the code and the content* (the `':!data/raw'` … list) | `tests/test_automation.py` → `Publishing.test_the_fingerprint_leaves_out_only_the_bots_data` |
+| which tests *Website update* leaves to the Code check | `scripts/ops/gate_tests.py` → `DATA_TESTS` (a test id, as `python -m unittest` names it, and what it judges), `CONTENT_TESTS` (a class or test id prefix, and which committee file or guide it judges), `LIST_CHECKS`; `COMMITTEE_FILES` (the paths whose reads the failure summary names) (4.8) | `tests/test_automation.py` → `GateTests.test_every_data_test_is_there`, `GateLists.test_no_gated_test_judges_the_committees_files` |
+| the committee-like edits the guard makes | `tests/committee_edits.py` → `apply_committee_edits` | `GateLists` (4.8) |
+| what the tests' fingerprint leaves out | `update.yml` → job `tests` → step *Fingerprint the code* (the `':!data/raw'` … `':!how-to'` list) | `tests/test_automation.py` → `Publishing.test_the_fingerprint_leaves_out_the_bots_data_the_committees_files_and_the_docs` |
+| what turns the Code check's build red | `check.yml` → step *Build the website (as for GitHub Pages)* → `STRICT_BUILD: "1"`; the warnings themselves: `buildWarning(…)` calls (`eleventy/build-warnings.js`) | `tests/test_build_warnings.py` |
+| the pages the browser checks open | `tests/browser/test_site_in_browser.py` → `MAIN_PAGES`, `LARGE_TEXT_PAGES` | the Code check |
+| the posters' share pictures | `update.yml` → build job → `POSTER_SHARE: "1"` and the steps after *Build the website*; `scripts/ops/poster_share.py` (`WIDTH`, `HEIGHT`) | `tests/test_poster_share.py` |
 | the monthly digest's markers and its **force** box | `monthly-digest.yml` → step *Is it time, and is the e-mail digest set up?*; `scripts/notify/send_digest.py` → `--prepare`, `--send-prepared` | `tests/test_send_digest.py` |
 
 ### 13.8 Pin the runner's Ubuntu version (only if GitHub's update breaks a run)
@@ -1556,7 +1713,11 @@ Status page row, maybe the e-mail). Follow
 | Red ✗ at *Commit refreshed data* | another push five times in a row, or branch protection | 14.5 |
 | Red ✗ at *Install Python packages* (sync job) | the Python package service had a hiccup, or a just-released package version does not install (`requirements.txt` lets packages move up within their major version, yt-dlp without any limit) | **Re-run failed jobs** later; if it repeats, the log names the package: send it to whoever helps with the website. The site is still published with the last data |
 | Red ✗ on *Code check* | the change you pushed broke the build or a test | 14.6 |
-| Red ✗ *Tests failed — not published* on *Website update* (job *Test the code before publishing*) | a change broke the tests; the site was not published and keeps the version before | 14.10 |
+| Red ✗ on *Code check* after a save in `content/` or `config/`, while *Website update* is green | a slip in that file (a date without its year, a bad booth row, a setting no code reads …); the site was published without the part it could not read | fix the file (the failing test's message says how); 14.6 |
+| Red ✗ on *Code check* at *Build the website (as for GitHub Pages)* with `STRICT_BUILD: N build warning(s)` | a missing icon, a page missing from the sitemap, or a link in the data that had to be repaired or hidden (4.5) | fix what each line names; *Website update* still publishes |
+| **Build warnings (N)** in the *Website update* summary | the same warnings; never a reason the site was not published | fix them (4.2, *The build's warnings*) |
+| ⚠ *Share pictures*: "The monthly posters' share pictures could not be made …" | the runner's Chrome or Playwright failed in *Make the monthly posters' share pictures* | nothing for a day: the month pages show the committee's card until a run makes them (4.2) |
+| Red ✗ *Tests failed — not published* on *Website update* (job *Test the code before publishing*) | a change to the code broke the tests; the site was not published and keeps the version before | 14.10 |
 | Red ✗ *Not published*: "The website was built from … but the tests ran on … (a change arrived between the two)" | a push arrived between the build and the tests | nothing: the next run publishes (or *Run workflow* with **skip_crawl**) |
 | Issue "The website update keeps failing" | two timed or Morning-check runs failed in a row | open the run it links and the job it names (8.4); it closes itself after the next run that works |
 | ⚠ *Digest send not confirmed* on *Monthly e-mail digest* | a send broke off between "being sent" and "sent", so the e-mail may have gone | check the group; if it did not arrive, *Run workflow* with *Preview only* unticked and **force** ticked (4.6) |
@@ -1568,8 +1729,9 @@ Status page row, maybe the e-mail). Follow
 | Issue "Broken links found by the weekly check" | a link in the settings or in `content/` moved | fix the address in `config/site.yml` or the `content/` file; it closes itself (8.2) |
 | ⚠ "build.json is missing — the Morning check cannot see this build." | `src/pages/build-info.11ty.js` was broken by a change | fix or undo the change; the Code check fails on the same thing |
 | ⚠ "The site is N MB — GitHub Pages allows 1 GB." | something big ended up in the site | section 12: big files belong on Drive |
-| Status page: a source "Failed" with "data/raw/….json could not be read …" or "… was unreadable …" | a hand edit (or a bad merge) broke a raw data file; the site keeps that source's last good data meanwhile | restore that file from the history (9.2) |
-| An item or its button is missing on the site, though the source has it | the build repaired or hid a link it could not use | open the *Build the website* step's log and search for `[links]`: each line names the item and the bad link; fix it where it comes from (the Drive file, the `content/` file, the setting) |
+| Status page: a source "Failed" with "data/raw/….json cannot be read (…) — restore it from git; the site keeps the last build's items" | a hand edit (or a bad merge) broke a raw data file; that source stops updating, and the site keeps its last good data meanwhile | restore that file from the history (9.2) |
+| Status page: a source "Failed" with "data/raw/….json is missing — …" or "… went missing and this source's update since did not work …" | the raw file was deleted (on purpose to read the source again, or by a merge); the site keeps that source's last items | *Run workflow* with every box empty; it ends with the first update of that source that works, or restore the file (9.2) |
+| An item or its button is missing on the site, though the source has it | the build repaired or hid a link it could not use | open the *Build the website* step's log (or the summary's **Build warnings**) and search for `[links]`: each line names the item and the bad link; fix it where it comes from (the Drive file, the `content/` file, the setting). A `[links] note:` line is only a link that lacked its `https://` and works as repaired |
 | A notice on every run about `ubuntu-latest` moving to a newer Ubuntu | GitHub's own announcement | nothing, unless runs start failing after the move (13.8) |
 | The Status page still shows a problem you fixed | it shows the last *published* build; sources that only the full run reads update with the next full run (unless your push changed their input: then its run read them, 4.2) | *Run workflow* with every box empty |
 | The monthly e-mail did not arrive | it is off (no secrets), waiting for data, or nothing was new | [E-mail and alerts](email-and-alerts.md) |
@@ -1596,8 +1758,15 @@ Status page row, maybe the e-mail). Follow
      (`requirements.txt` does not cap it); it usually passes.
    - **A meeting list** "… answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list
      is kept" (in *Notes*; nwta66.org, since early October 2026): that office's earlier meetings stay; nothing to do.
-   - **An outside calendar** "blocked by the site's bot protection" (neta65.org, HTTP 403): informational only.
-     Add those events by hand in `content/events` ([Flyers and events](flyers-and-events.md)).
+     "…'s robots.txt could not be checked (HTTP 503) — nothing was read; the last good list is kept" (or "(no
+     answer)") means the office's site did not answer its robots.txt properly, so the robot asked for nothing:
+     nothing to do either. Only "… robots.txt does not allow reading …" means the site's rules really refuse the
+     page (since October 2026 the two are told apart).
+   - **An outside calendar** "blocked by the site's bot protection" (neta65.org, HTTP 403): informational only. Its
+     line on the Status page says it plainly: "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on
+     our side; the last good copy is kept" (also "asked for fewer requests (HTTP 429)" or "refused the request (HTTP
+     403), as its bot protection does"; "; there is no good copy of it yet" when there is none). Add those events by
+     hand in `content/events` ([Flyers and events](flyers-and-events.md)).
 4. To try again at once: *Run workflow* (every box empty for sources only the full run reads; **skip_crawl** is
    enough for Drive, the bulletin, the events files, the podcasts, the daily quote and the writers archive files).
 5. After 7 days the issue in 8.1 opens. Follow its advice, or send it to whoever helps with the website.
@@ -1679,7 +1848,7 @@ The data commit already happened, and the live site keeps its previous version. 
 | *Install site tools* | `npm ci` errors | a just-merged `chore(deps)` pull request (revert it, README → Housekeeping), or a short outage of the package service (**Re-run failed jobs** later) |
 | *Read GitHub Pages settings* | Pages is not enabled for GitHub Actions | **NETA65**: *Settings → Pages → Source: GitHub Actions* |
 | *Build the website* | `YAMLException …` / `Missing i18n key: …` / a template error with a file name and line | 14.3; add the missing text; or undo the last code change |
-| *Check the build* | `_site/index.html is missing — the build did not produce a home page.`, `_site/es/index.html is missing — the Spanish site was not built.` or `The stylesheet was not built.` | undo the last code change and look at the build log |
+| *Check the build* | `_site/index.html is missing — the build did not produce a home page.`, `_site/es/index.html is missing — the Spanish site was not built.` or `The stylesheet monthly.css was not built.` (every `.css` at the top of `src/assets/css` must be built) | undo the last code change and look at the build log |
 | *The tests passed on the commit that was built* (job *Publish to GitHub Pages*) | `Not published: The website was built from … but the tests ran on … (a change arrived between the two)` | nothing: the next run publishes |
 | *Publish to GitHub Pages* (job *Publish to GitHub Pages*) | environment protection, or a GitHub hiccup | **NETA65** allows `main` in *Settings → Environments → github-pages*; or **Re-run failed jobs** later |
 
@@ -1688,7 +1857,10 @@ same commit the run's sync job named: for a fix, push it instead). A red job *Te
 is 14.10.
 
 The booth display's download and cache-save steps (section 4.2) never turn the job red: they may fail on their own
-(`continue-on-error`), and the site is then published without the copies that run could not make.
+(`continue-on-error`), and the site is then published without the copies that run could not make. The same goes
+for the posters' share pictures: when *Make the monthly posters' share pictures* fails, the next step builds the
+site again without them and the run stays green, with the yellow ⚠ *Share pictures*. A build warning never turns
+this job red either (the Code check's build is the strict one, 4.5).
 
 ### 14.5 The data commit failed
 
@@ -1701,17 +1873,22 @@ The booth display's download and cache-save steps (section 4.2) never turn the j
 
 ### 14.6 Code check is red
 
-1. Open the run and see which job failed: *Test build of the website* (same causes as 14.4) or *Python tests
-   (offline)*. (After a new writers archive file, a red `test_the_headline_numbers` means the site would not use the
-   file — its message is the run summary's **CSV file to fix** text — or the file holds no rows by Texas writers or
-   no believable year; the exact numbers are pinned only for the files of 4 October 2026:
+1. Open the run and see which job failed: *Test build of the website* (same causes as 14.4; or its step *Build the
+   website (as for GitHub Pages)* ends with `STRICT_BUILD: N build warning(s)`: a build warning, 4.5; or a step
+   *Browser checks …* failed: its log names the check and the page) or *Python tests (offline)*. (After a new
+   writers archive file, a red `test_the_headline_numbers` means the site would not use the file — its message is
+   the run summary's **CSV file to fix** text — or the file holds no rows by Texas writers or no believable year;
+   the exact numbers are pinned only for the files of 4 October 2026:
    [Writers archive §6.3](writers-archive.md#63-the-code-check).)
 2. In the test log, search for `FAIL:` or `ERROR:`. The line names the test, for example
    `FAIL: test_plan_step (tests.test_morning.UpdateWorkflow.test_plan_step)`, followed by what was expected.
 3. Run that one test on a PC: `python -m unittest tests.test_morning.UpdateWorkflow.test_plan_step -v`.
-4. Fix it or undo the change (14.9). The live site keeps working meanwhile, and since October 2026 the
-   *Website update* run of the same push did not publish the change either (14.10), unless the failing test is
-   one of the few it leaves to the Code check (`DATA_TESTS`, 4.8).
+4. Fix it or undo the change (14.9). The live site keeps working meanwhile. For a change of the code, since
+   October 2026 the *Website update* run of the same push did not publish it either (14.10). A failing test that
+   *Website update* leaves to the Code check (`DATA_TESTS`, `CONTENT_TESTS`, 4.8) — the usual case after a save in
+   `content/` or `config/` — did not stop publishing: the site went live without the part the sync or the build
+   could not read, so fix the file soon. A failing `GateLists` test means a gated test judges the committee's files:
+   follow its message (4.8).
 
 On a Dependabot pull request, a red ✗ simply means: do not merge it.
 
@@ -1758,19 +1935,37 @@ site keeps the version before). See the run summary."); the job *Publish to GitH
 summary's **Tests before publishing** section lists the failing tests. Usually the *Code check* of the same push is
 red too.
 
-**What it means:** a change since the tests last passed broke something. The data commit was still made, but
-nothing was published: the live site shows the version before that change, and every later run stays unpublished
-until the tests pass again (the daily runs with them: they test the same code).
+**What it means:** a change of the code since the tests last passed broke something (only a change of the code
+runs them: 4.8). The data commit was still made, but nothing was published: the live site shows the version before
+that change, and every later run stays unpublished until the tests pass again (the daily runs with them: they test
+the same code).
+
+The summary says more. Its heading: "**N of M tests failed — the website was NOT published** (the live site keeps
+the version before). The failing tests (the job's log says why):", then each test, with " — it read the
+committee's files: config/site.yml …" after one that Python saw open the committee's files or a guide (the site's
+JavaScript, run by a test, is not seen). Then one of two lines:
+
+- "None of them was seen reading the committee's own files (content/, config/, the glossary or the overrides) or
+  the documentation (…): most likely a change to the code broke them. Fix the change, or undo it; the next run
+  publishes (a fix made in tests/ starts one too)."
+- "K of them read the committee's own files or the documentation (named above). If one of those was edited since
+  the tests last passed (the Code check went red on that push), the edit can be what they found, not a change to
+  the code: fix the file — or, when the test judges that file rather than the code, leave the test to the Code
+  check alone (list it in CONTENT_TESTS, scripts/ops/gate_tests.py, or give it data of its own). Otherwise, and for
+  the others: fix the change that broke them, or undo it. The next run publishes."
 
 **What to do:**
 
 1. Open the job's log and search for `FAIL:` or `ERROR:`: each names the test and what was expected (as in 14.6).
-2. Fix the change, or undo it (14.9). The run of that save tests again and publishes when they pass.
-3. In a hurry and not sure which change it was: undo the most recent commit of code, settings or content. The site
-   then publishes the version before it, with that day's data.
+2. Fix the change, or undo it (14.9). The run of that save tests again and publishes when they pass. A fix made
+   only in `tests/` starts a run too (since October 2026).
+3. In a hurry and not sure which change it was: undo the most recent commit of code. The site then publishes the
+   version before it, with that day's data.
 4. A test that fails because of the day's synced data, not because of a change (it fails on every run, with no new
    commit, and the Code check of the last change was green): add its id to `DATA_TESTS` in
-   [`scripts/ops/gate_tests.py`](../scripts/ops/gate_tests.py) (4.8). The Code check still runs it.
+   [`scripts/ops/gate_tests.py`](../scripts/ops/gate_tests.py) (4.8). One that fails because it judges a committee's
+   file or a guide (the summary names the file): add it to `CONTENT_TESTS` there, or give it data of its own. The
+   Code check still runs both; the guard `GateLists` should have caught the second kind already.
 
 "**No tests were found — the website was NOT published** … the tests/ folder could not be read." means the job
 could not even load the tests (a broken `tests/` folder): fix or undo the last change to it.

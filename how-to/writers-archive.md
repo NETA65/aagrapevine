@@ -320,17 +320,17 @@ Nothing is written.
 
 | You do this | What starts by itself | On the website after about |
 |---|---|---|
-| Push a new or changed file in `content/archive/` | a **quick** *Website update* run (the push's own run) and a *Code check* | about 5 minutes, plus up to about 10 minutes of GitHub Pages caching |
+| Push a new or changed file in `content/archive/` | a **quick** *Website update* run (the push's own run) and a *Code check* | about 3 minutes, plus up to about 10 minutes of GitHub Pages caching |
 | Nothing | every later run reads the folder again: the **morning refresh**, the **midday** and **evening refreshes**, the **nightly full update** and every push | — (the files' rows stay as they are; newly captured Texas stories still join, section 8) |
 | Edit `content/archive/README.md` | only a *Code check* | nothing on the website |
-| Change `spotlight.neta65_counties` in `config/site.yml` | the push's quick run | about 5 minutes: every writer's place is read again (section 7) |
+| Change `spotlight.neta65_counties` in `config/site.yml` | the push's quick run | about 3 minutes: every writer's place is read again (section 7) |
 
 The push's run is a quick run (Drive, the bulletin, the podcasts, the writers archive files, the daily quote, then
-the site data and the build, and, since October 2026, the tests before it publishes: a push of an archive file
-changes the content, so the tests run, at the same time as the build). Quick runs took about 2 minutes in early
-October 2026 before the tests; reading both archive files adds a few seconds. The new stories' titles and subtitles
-are translated within the run's time box, the rest later (section 11). An export that adds a few stories keeps the
-run at about 5 minutes; a file that brings many stories
+the site data and the build; the archive files are the committee's, not code, so it does not run the tests again —
+the *Code check* tests the files). Quick runs took about 2 minutes in early October 2026; since then the build also
+makes the monthly posters' share pictures, about a minute more; reading both archive files adds a few seconds. The
+new stories' titles and subtitles are translated within the run's time box, the rest later (section 11). An export
+that adds a few stories keeps the run at about 3 minutes; a file that brings many stories
 new to the site — above all the very first import, more than 1,200 titles and their subtitles — makes the run translate
 longer (up to its 40-minute translation box) before it publishes, so the archive appears later. Only one
 *Website update* run works at a time: when another is going (in the morning, the full update), yours waits for it.
@@ -557,13 +557,13 @@ screen in the address, `dec` included.
 ## 10. The safety checks, and what to do
 
 A new file is checked before it replaces the last one. A file that fails a check is **not used**: its magazine keeps
-the rows it had, and the source shows as failed. Nothing on the website breaks. But since October 2026 *Website
-update* runs the tests before it publishes, and `test_the_headline_numbers` (`tests/test_writers_archive.py`) reads
-the same folder: a new file with a missing column, or one that cannot be read, fails it (the cut-off guard is the one
-check it cannot repeat: it has no earlier file to compare with). Until such a file is fixed (or deleted), **no run
-publishes the site**, which keeps the version before (*Tests failed — not published*, [Automation and
-troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)). So fix a **CSV file to
-fix** the same day. If the file those rows came from is still in the folder, the run summary says it "stays in use until" the
+the rows it had, and the source shows as failed. Nothing on the website breaks. The *Code check* also goes red:
+`test_the_headline_numbers` (`tests/test_writers_archive.py`) reads the same folder, and a new file with a missing
+column, or one that cannot be read, fails it (the cut-off guard is the one check it cannot repeat: it has no earlier
+file to compare with). *Website update* still publishes: it leaves the tests that judge the committee's own files —
+this one included — to the Code check (since October 2026, `CONTENT_TESTS`,
+[Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)). Fix a
+**CSV file to fix** the same day all the same. If the file those rows came from is still in the folder, the run summary says it "stays in use until" the
 new one is fixed, never that it "may be deleted". Only a magazine's very first import (no rows and no file on record
 yet) goes on to its newest older file that passes, and the error's end then says so.
 
@@ -735,7 +735,7 @@ file in use for each magazine, `imported_at` = when it was taken in) and `stats`
 | A writer from Area 65 is listed with the rest of Texas | the place is misspelt, missing from the Census table, or its county is not on the list | check the place (section 7); add a county, a `TYPO_ALIASES` or an `EXTRA_PLACES` entry |
 | A story is missing | neither reading of its place is in Texas and **Texas Author?** is not `Yes`; its link is not on aagrapevine.org or aalavina.org; it was listed twice (kept once) | fix the row in the next export, or wait for the daily capture (section 8) |
 | A Grapevine title is English on the Spanish page | its translation is still waiting | wait a few runs; or `overrides.yml` (section 11) |
-| The Code check is red after a new export: `test_the_headline_numbers` (and, since October 2026, the *Website update* run too: *Tests failed — not published*) | the new file is one the site does not use (the test's message is the same text as the **CSV file to fix** line: a missing column, a file that cannot be read), or it holds no rows by Texas writers, no year at all, or a year before the magazine began | fix the file and push again, or delete it (section 10): until then **no run publishes** the site, which keeps the version before ([Automation and troubleshooting §14.10](automation-and-troubleshooting.md#1410-tests-failed--not-published)); the test pins exact numbers only for the files of 4 October 2026 (section 6.3) |
+| The Code check is red after a new export: `test_the_headline_numbers` (*Website update* stays green: it leaves this test to the Code check) | the new file is one the site does not use (the test's message is the same text as the **CSV file to fix** line: a missing column, a file that cannot be read), or it holds no rows by Texas writers, no year at all, or a year before the magazine began | fix the file and push again, or delete it (section 10); the site keeps the older rows meanwhile. The test pins exact numbers only for the files of 4 October 2026 (section 6.3) |
 | `/status/`: "Texas writers archive" **Failed** | a file was not used | the run summary's **CSV file to fix** line says why |
 | The issue "A content source has stopped updating" names the Texas writers archive | a file has not been usable for 7 days | follow its advice; it closes by itself |
 | "New in 7 days" for the archive is about 1,261, and "Found in the last 7 days" on `/status/` jumped | the first import: every row is new for a week (`first_seen`, section 6.1) | nothing: normal; it drops back after 7 days |

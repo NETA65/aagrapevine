@@ -24,13 +24,13 @@ guide — the player's settings, using it at a table, what to do when something 
   (or Google Sheets / LibreOffice) and save it as **CSV UTF-8** (Excel: *File → Save As → CSV UTF-8 (Comma
   delimited)*), then upload it in place of the old one. Plain "CSV" in Excel loses ñ and é.
 * Excel may turn dates into `3/1/2027`: format the `from` and `until` columns as **Text** and write `2027-03-01`.
-* After the commit, the site rebuilds itself in **about 5 minutes** (the tests run first; a page may take up to about
-  10 more minutes to show it everywhere); a booth that is running picks up the new rows within half an hour, at the next slide.
+* After the commit, the site rebuilds itself in **about 3 minutes** (a page may take up to about 10 more minutes to
+  show it everywhere); a booth that is running picks up the new rows within half an hour, at the next slide.
 * **The check:** every commit runs the workflow *Code check (tests and test build)* (GitHub → Actions). A red ✗
   names the row and the mistake — `booth.csv row 14 (quiz-12): correct "4": there are only 3 choices`. A row with a
-  mistake is left out of the show (the rest plays), and the player lists it under *Settings → Slides*. The same
-  test runs in *Website update* before it publishes, so until the row is fixed **nothing is published** (the site
-  keeps the version before; the run says *Tests failed — not published*): fix a mistake soon. On a computer:
+  mistake is left out of the show (the rest plays), and the player lists it under *Settings → Slides*. *Website
+  update* still publishes the file: it leaves the test of this file to the Code check (it tests the code, not your
+  files), so only the Code check goes red — fix a mistake soon. On a computer:
   `python tests/test_booth_csv.py content/booth/booth.csv` prints the same lines.
 
 ## The rows

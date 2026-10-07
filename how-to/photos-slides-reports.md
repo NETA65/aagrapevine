@@ -605,7 +605,7 @@ folder in **every** run of the GitHub workflow **Website update** — quick runs
 | Nightly full update | GitHub's schedule. It is set 4 hours early on purpose, because GitHub usually starts it 4–6 hours late (so about 6–8 AM Central, 5–7 in winter) | when the run ends — usually 10 to 15 minutes (it also searches the magazines' sites for PDFs; at the very most a little over 2 hours) |
 | Midday refresh (quick) | GitHub's schedule, about 11 AM–1 PM Central | a few minutes |
 | Evening refresh (quick) | GitHub's schedule, about 7–9 PM Central | a few minutes |
-| After any edit pushed to `main` (settings, content, code, translation fixes — not documentation or tests) | right away (a quick refresh, which tests the change first) | about 5 minutes |
+| After any edit pushed to `main` (settings, content, code, tests, translation fixes — not documentation) | right away (a quick refresh; it tests a change of the code first) | about 3 minutes (about 5 for a change of the code) |
 | By hand | GitHub → **Actions** → **Website update** → **Run workflow** → tick **skip_crawl** → green **Run workflow** | a few minutes |
 
 So without doing anything, a file uploaded in the morning is normally on the site after the midday refresh, one
@@ -857,7 +857,8 @@ real Drive: `python -m scripts.sync.drive --dry-run` (prints the stats and three
 3. The public file `data/raw/drive.json` on GitHub: search it for your file name. Its `stats` part near the top
    (before the list of items) shows `by_category`, `albums`, `excluded_by_reason` (only reasons — never the names
    of excluded files), the counts `loose_skipped`, `unreadable_folders`, `depth_limited` and `unconfirmed_folders`
-   (the names behind them are only in the run's log), and `warnings`. `data/site/drive.json` shows the title, translations and
+   (counts only: since October 2026 the run's log names no file or folder that is not published either — an
+   unreadable folder appears by the folder above it and its Drive address), and `warnings`. `data/site/drive.json` shows the title, translations and
    `is_new` the site uses.
 4. On an empty Portfolio or Photos page, the members' box says "We checked the committee's Google Drive on &lt;date&gt; —
    nothing here yet." or "The last check of the committee's Google Drive had a problem — the last good check was on
