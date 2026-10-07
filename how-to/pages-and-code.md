@@ -611,8 +611,8 @@ escapes `<`, `>` and `&` so no text can end the script early. In a template it i
 
 Three checks keep the code tidy (since October 2026; the Code check runs them):
 
-- **Nothing unused** (`tests/test_unused_code.py`): a filter or shortcode that no template, `.11ty.js` page or
-  test uses, a shared macro (`src/_includes/macros`) nobody calls, or an i18n key nothing reads fails the Code
+- **Nothing unused** (`tests/test_unused_code.py`): a filter or shortcode that no template or `.11ty.js` page
+  uses and no code looks up by name (`getFilter("…")`; a test does not count), a shared macro (`src/_includes/macros`) nobody calls, or an i18n key nothing reads fails the Code
   check. An i18n key counts as read when it is written out, built from a written prefix
   (`"shop.f_" + name`), or is `<a read key>_one`. When you stop using something, remove it **with** what only it
   used (its helpers, its strings, its CSS). Every page that is not HTML (a `.json`, `.xml` or `.ics` page)

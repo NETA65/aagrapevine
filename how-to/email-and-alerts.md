@@ -702,7 +702,8 @@ What you would be e-mailed about (details in [Automation and troubleshooting](au
 
 | Workflow | Goes red when… | The live site meanwhile |
 |---|---|---|
-| Website update | building the site data failed, the data commit could not be saved, a change of the code failed the tests (*"Tests failed — not published"*), or the build or deploy failed | keeps the last good version || Morning check (new day by 5:30 AM) | today's update did not reach the site: *"❌ Today's update did not reach the site."* plus the error *"Morning update failed"* | keeps yesterday's day and quote |
+| Website update | building the site data failed, the data commit could not be saved, a change of the code failed the tests (*"Tests failed — not published"*), or the build or deploy failed | keeps the last good version |
+| Morning check (new day by 5:30 AM) | today's update did not reach the site: *"❌ Today's update did not reach the site."* plus the error *"Morning update failed"* | keeps yesterday's day and quote |
 | Monthly e-mail digest | a send failed, the month box was mistyped, or the e-mail *may* have been sent ([3.14](#314-every-result-a-digest-run-can-show)) | unaffected |
 | Weekly link check | only when the site itself fails to build for the check. Broken links never turn it red: it reports them through an issue. | unaffected |
 | Code check (tests and test build), after a push | a change broke the tests, the test build (a build warning too) or a browser check — also a slip in a settings or content file, which *Website update* publishes without the part it could not read. GitHub e-mails the person who pushed. | unaffected (or published without that part) |

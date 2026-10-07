@@ -88,8 +88,9 @@ Say the podcast episode "Bottle to Throttle [Season 5, Episode 8]" shows on `/es
 
    (Both lines are already in the file: they show the pattern. Add your own text the same way, once.)
 4. Click **Commit changes…** → commit to `main`.
-5. Wait for the **Website update** run (GitHub → **Actions**). About 5 minutes later (the run tests the change
-   first; allow up to 10 more minutes before every visitor sees it, so 10–20 minutes is a safe guess) the
+5. Wait for the **Website update** run (GitHub → **Actions**). About 3 minutes later (the overrides are the committee's
+   file, not code, so the run does not test again; allow up to 10 more minutes before every visitor sees it, so
+   10–20 minutes is a safe guess) the
    other-language page shows your words. The "Auto-translated" pill goes away only when **every** machine-made part of the item
    is covered. This episode keeps it: its title has a "[Season …]" tail (a part fix) and its summary is still
    machine-made (see [Whole text or part of it](#whole-text-or-part-of-it)).

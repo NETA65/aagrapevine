@@ -579,7 +579,8 @@ version stays) and listed under **Event files to fix**, with a line ready to cop
 |---|---|
 | `start: January 10` or `start: 10 de enero` (no year) | `start: “January 10” has no year — the event is left out until it does: write the whole date (start: 2027-01-10)` |
 | `start: "3/19/27"` (a year in two digits), `start: March 19 - 21` (a range without its year) | `start: “3/19/27” has no year written in full — the event is left out until it does: write the whole date (start: 2027-03-19)` |
-| `start: March 2027` or `start: marzo de 2027` (no day; Spanish too since October 2026), `start: "2027"` (a year alone) | `… has no day — write the whole date (start: 2027-MM-DD)` (a Spanish first written `1° de marzo de 2027`, `1º`, `1ro` or `primero de marzo de 2027` is a whole date) || `start: "19:00"`, or a weekday alone | a time or a day without its date: left out |
+| `start: March 2027` or `start: marzo de 2027` (no day; Spanish too since October 2026), `start: "2027"` (a year alone) | `… has no day — write the whole date (start: 2027-MM-DD)` (a Spanish first written `1° de marzo de 2027`, `1º`, `1ro` or `primero de marzo de 2027` is a whole date) |
+| `start: "19:00"`, or a weekday alone | a time or a day without its date: left out |
 | `start: 19:00` (no quotes: YAML reads it as the number 1140) | `start: 19:00 is a time of day without its date`: left out |
 | a year before 2000 or after 2099 | left out |
 

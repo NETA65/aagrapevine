@@ -1978,7 +1978,8 @@ should list the new source.
 | **New podcast feeds found** in the summary | a magazine site links a show that is not in your settings | Add a block if you want it ([3.4](#34-podcasts)); otherwise ignore it. |
 | The Library looks small | normal: each official document once | Check the **PDF crawl** line; if every known page is crawled, it is complete. |
 | A document has a poor title | its link text and file name say little | `TITLE_OVERRIDES`, or `overrides.yml` for one language ([3.3](#33-the-document-library-the-crawler)). |
-| `/status/` says `data/raw/<x>.json` "could not be read" or "was unreadable" | someone edited a robot file by hand (or a merge broke it) | Restore the file from its history on GitHub to keep the first-seen dates; the site keeps that source's last good data meanwhile ([3.17](#317-safety-nets-a-bad-day-at-a-source)). |
+| `/status/` says `data/raw/<x>.json` "cannot be read (…) — restore it from git; the site keeps the last build's items" (before October 2026: "could not be read" or "was unreadable") | someone edited a robot file by hand (or a merge broke it) | Restore the file from its history on GitHub: since October 2026 that source **stops updating** until you do (nothing rebuilds or writes over the file); the site keeps that source's last good data meanwhile ([3.17](#317-safety-nets-a-bad-day-at-a-source)). |
+| `/status/` says `data/raw/<x>.json` "is missing — the site keeps the last build's items until an update of this source works …" | the file was deleted (on purpose, to read the source again, or by a merge) | Nothing, if you deleted it: start *Run workflow* with every box empty, and the first update of that source that works ends it. Otherwise restore the file from its history ([Automation and troubleshooting §9.2](automation-and-troubleshooting.md#92-resetting-something-on-purpose)). |
 
 ---
 

@@ -527,6 +527,7 @@ Since October 2026 also:
 | `Informe del comité 05-03-2027`, `Taller 05-03-2027` | March 5, 2027 | a name in **Spanish** reads it **day first** (only Spanish does) |
 | `Committee meeting minutes 05-03-2027` | May 3, 2027 | a name in English reads it month first (US order) |
 | `Report 05-03-2027`, `La Viña Report 05-03-2027` | May 3, 2027, **with a note** | a name whose language is unclear reads it month first, and the run summary's *Notes* (and `/status/`) name the file: `2027-2028_Panel77_GVLV/reports/Report 05-03-2027.pdf: “Report 05-03-2027”: “05-03-2027” could be May 3 or March 5, 2027 — read as May 3 (month first). Write the date year-month-day (2027-05-03 or 2027-03-05) to be sure` |
+| `Session 2 - 4 March 2027` | March 4, 2027, title "Session 2" | a number right after a counting word (district / distrito, panel, group / grupo, step / paso, session / sesión, week / semana, part / parte, # …) is not the first day of a range |
 
 How the language is judged (since October 2026): only the name's own title words count. The magazine names
 (Grapevine, AA Grapevine, La Viña), capital time-zone letters (`ET`, `EST`, `CST` …), everything after `@` and a
@@ -535,8 +536,8 @@ name is Spanish or English only when its words are all that language, or at leas
 as *aniversario, asamblea, taller, informe, aviso, boletín* and the weekdays count as Spanish
 ([Flyers and events §4.3](flyers-and-events.md#43-dates) has the whole list). So `Aniversario 05-10-2026 - Grupo
 Nueva Vida` is October 5, and `03-04-2027 Writing Workshop 7pm ET @ Tyler` is March 4, with no note. Inside
-`(until …)` / `(hasta …)` brackets the bracket's word decides instead ([§3.6](#36-the-booth-folder-new)).
-| `Session 2 - 4 March 2027` | March 4, 2027, title "Session 2" | a number right after a counting word (district / distrito, panel, group / grupo, step / paso, session / sesión, week / semana, part / parte, # …) is not the first day of a range |
+`(until …)` / `(hasta …)` brackets the bracket's word decides instead (the booth's files: [§3.6](#36-the-booth-folder-new);
+the bulletin's posts the same way).
 
 Not read as a date (the text stays in the title):
 

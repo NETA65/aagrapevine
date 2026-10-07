@@ -174,8 +174,8 @@ to YouTube. Once the video is listed, the card takes the list's title and links 
 > `Listen.test_config_has_the_short` and `Watch.test_config_has_the_video` in `tests/test_read_media_asides.py`
 > expect both ids (exactly 11 characters). Deleting them, or a 10- or 12-character id, turns **Code check**
 > red. **Website update** still publishes the change: these tests judge your settings, not the code, so it leaves
-> them to the Code check (`CONTENT_TESTS` in `scripts/ops/gate_tests.py`, since October 2026). Change the test in a
-> later commit if you really want the card gone, so the Code check is green again.
+> them to the Code check (`CONTENT_TESTS` in `scripts/ops/gate_tests.py`, since October 2026). If you really want the
+> card gone, change the test too (in the same commit, or the next), so the Code check is green again.
 
 ```yaml
   about_videos:
