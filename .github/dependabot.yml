@@ -58,6 +58,9 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    # Change requirements.txt only when a new release falls outside its range (">=x,<N": a new major version) —
+    # never just to raise the lowest version inside it (Dependabot's default does that).
+    versioning-strategy: increase-if-necessary
     groups:
       python-packages:
         patterns: ["*"]

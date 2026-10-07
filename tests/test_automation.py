@@ -802,6 +802,8 @@ class Dependabot(unittest.TestCase):
         self.assertEqual(set(self.updates), {"github-actions", "npm", "pip"})
         pip = self.updates["pip"]
         self.assertEqual((pip["directory"], pip["schedule"]["interval"]), ("/", "monthly"))
+        # only a release outside a range changes requirements.txt (never a raised floor inside it)
+        self.assertEqual(pip["versioning-strategy"], "increase-if-necessary")
         self.assertEqual(pip["groups"], {"python-packages": {"patterns": ["*"], "update-types": ["major"]}})
         self.assertIn({"dependency-name": "*", "update-types": ["version-update:semver-minor", "version-update:semver-patch"]},
                       pip["ignore"])
