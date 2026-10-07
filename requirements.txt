@@ -3,7 +3,7 @@
 # change how the package behaves) is only installed after someone raises the upper bound here —
 # Dependabot (.github/dependabot.yml) opens a pull request once a month when one is out.
 # yt-dlp is deliberately unbounded: it must keep up with YouTube changes.
-requests>=2.32,<3
+requests>=2.34.2,<3
 beautifulsoup4>=4.12,<5
 lxml>=5.2,<7
 protego>=0.3,<1         # robots.txt parser (Scrapy project) — honors Crawl-delay
