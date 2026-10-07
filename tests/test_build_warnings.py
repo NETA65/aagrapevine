@@ -115,28 +115,73 @@ class Sources(unittest.TestCase):
             archive.write_text(json.dumps({"updated": None, "items": [
                 {"id": "wa:bad", "kind": "article", "title": "Bad", "url": "javascript:alert(1)"},
                 {"id": "wa:www", "kind": "article", "title": "Repaired", "url": "www.example.org/story"},
+                {"id": "wa:zoom", "kind": "article", "title": "Zoom", "url": " zoom.us/j/123 ", "image": "//cdn.example.org/a.png"},
+                {"id": "wa:tab", "kind": "article", "title": "Tab", "url": "www.exam\tple.org/x"},
             ]}), encoding="utf-8")
             r = run_js(self, r"""
               const W = await imp("eleventy/build-warnings.js");
               const S = await imp("src/pages/sitemap.11ty.js");
               const D = await imp("src/_data/db.js");
-              const warn = console.warn; console.warn = () => {};
+              const warn = console.warn, log = console.log, logged = [];
+              console.warn = () => {}; console.log = (s) => logged.push(s);
               try {
                 S.render({ site: { url: "https://x.example/aagrapevine" }, collections: { all: [] } });
                 const sitemap = W.buildWarnings(); W.clearBuildWarnings();
                 const db = D.default();
-                out({ sitemap, links: W.buildWarnings(), kept: db.writers_archive.items.map((i) => i.url) });
-              } finally { console.warn = warn; }""", env={"ONLY": "", "WRITERS_ARCHIVE": str(archive)})
+                out({ sitemap, links: W.buildWarnings(), logged, kept: db.writers_archive.items.map((i) => [i.url, i.image || ""]),
+                      problems: db.status.link_problems.filter((p) => p.where.startsWith("writers_archive")).length });
+              } finally { console.warn = warn; console.log = log; }""",
+                       env={"ONLY": "", "WRITERS_ARCHIVE": str(archive), "SITE_DATA": str(tmp / "no-data")})   # (not the day's data)
         finally:
             shutil.rmtree(tmp, True)
         self.assertEqual(r["sitemap"], ["[sitemap] missing page(s): /, /es/, /whats-new/, /es/whats-new/, /published/, /es/published/, "
                                         "/read/, /es/read/, /monthly/, /es/monthly/, /digest/, /es/digest/, /offline/, /es/offline/"])
-        self.assertEqual(r["kept"], ["https://www.example.org/story"])
+        self.assertEqual(r["kept"], [["https://www.example.org/story", ""], ["https://zoom.us/j/123", "https://cdn.example.org/a.png"],
+                                     ["https://www.example.org/x", ""]])
+        # a value hidden, an item left out, a repair that changed more than the scheme: build warnings …
         self.assertEqual(r["links"][0], "[links] 3 link value(s) in data/site repaired or hidden:")
         self.assertEqual(r["links"][1:], [
             '[links] writers_archive.json wa:bad: url "javascript:alert(1)" is not a usable link — hidden',
-            '[links] writers_archive.json wa:www: url "www.example.org/story" → https://www.example.org/story',
+            '[links] writers_archive.json wa:tab: url "www.exam\\tple.org/x" → https://www.example.org/x',
             "[links] writers_archive.json wa:bad: left out — its link is not usable"])
+        # … a link that only lacked its https:// ("www.…", "zoom.us/j/…", "//host", as the committee's guides allow):
+        # a plain note, never a warning (a strict build passes) — still in db.status.link_problems
+        notes = [s for s in r["logged"] if str(s).startswith("[links]")]
+        self.assertEqual(notes, [
+            '[links] note: writers_archive.json wa:www: url "www.example.org/story" → https://www.example.org/story',
+            '[links] note: writers_archive.json wa:zoom: url " zoom.us/j/123 " → https://zoom.us/j/123',
+            '[links] note: writers_archive.json wa:zoom: image "//cdn.example.org/a.png" → https://cdn.example.org/a.png'])
+        self.assertEqual(r["problems"], 6)
+
+    def test_only_links_written_without_https_build_strictly(self):
+        """A build whose data holds only links that lacked their https:// (a bulletin post's `url: www.…`, as
+        how-to/bulletin.md allows) has no build warning: a strict build (the Code check) passes."""
+        tmp = Path(tempfile.mkdtemp(prefix="gv-build-warnings-"))
+        try:
+            archive = tmp / "writers_archive.json"
+            archive.write_text(json.dumps({"updated": None, "items": [
+                {"id": "ann:x", "kind": "article", "title": "Post", "url": "www.neta65.org/events", "image": "neta65.org/x.jpg"},
+            ]}), encoding="utf-8")
+            r = run_js(self, r"""
+              const W = await imp("eleventy/build-warnings.js");
+              const D = await imp("src/_data/db.js");
+              const warn = console.warn, log = console.log;
+              console.warn = () => {}; console.log = () => {};
+              try {
+                W.clearBuildWarnings();
+                const db = D.default();
+                const mine = W.buildWarnings().filter((w) => w.includes("writers_archive"));
+                let threw = null;
+                W.clearBuildWarnings();
+                for (const w of mine) W.buildWarning("x", w);
+                try { W.finishBuild({ STRICT_BUILD: "1" }); } catch (e) { threw = e.message; }
+                out({ mine, threw, kept: db.writers_archive.items.map((i) => [i.url, i.image]) });
+              } finally { console.warn = warn; console.log = log; }""",
+                       env={"ONLY": "", "WRITERS_ARCHIVE": str(archive), "SITE_DATA": str(tmp / "no-data")})
+        finally:
+            shutil.rmtree(tmp, True)
+        self.assertEqual(r["kept"], [["https://www.neta65.org/events", "https://neta65.org/x.jpg"]])
+        self.assertEqual((r["mine"], r["threw"]), ([], None))
 
     def test_the_committee_pages_own_icons(self):
         """committee.js draws icons in its own markup (a shortcode can't call the {% icon %} shortcode): an unknown
@@ -195,14 +240,16 @@ class Sources(unittest.TestCase):
 # ============================================================================ the real command line
 class CommandLine(unittest.TestCase):
     """`eleventy` as the workflows run it (only the sitemap page: ONLY=sitemap), with the booth's video and sound
-    files not downloaded (BOOTH_MANIFEST: none) — the Code check's expected notes."""
+    files not downloaded (BOOTH_MANIFEST: none) — the Code check's expected notes. The data is the test's own
+    (SITE_DATA), never the day's data/site: this tests the build, and a link the day's data needed repaired must not
+    fail it (the Code check's strict build of the real data says so)."""
 
-    def run_build(self, out: Path, **env_extra) -> subprocess.CompletedProcess:
+    def run_build(self, out: Path, data: Path, **env_extra) -> subprocess.CompletedProcess:
         if not node_path() or not (ROOT / "node_modules" / "@11ty" / "eleventy").is_dir():
             self.skipTest("Node.js or the site's npm packages are missing")
         env = {**os.environ, "PATH_PREFIX": "/aagrapevine/", "I18N_STRICT": "1", "ONLY": "sitemap", "NODE_NO_WARNINGS": "1",
                "BOOTH_DRIVE": BOOTH_FIX + "drive-booth.json", "BOOTH_MANIFEST": BOOTH_FIX + "no-such-manifest.json",
-               "GITHUB_ACTIONS": "", **env_extra}
+               "GITHUB_ACTIONS": "", "SITE_DATA": str(data), **env_extra}
         for k in ("STRICT_BUILD", "BUILD_WARNINGS", "WRITERS_ARCHIVE"):
             if k not in env_extra:
                 env.pop(k, None)
@@ -212,22 +259,32 @@ class CommandLine(unittest.TestCase):
     def test_strict_passes_with_the_expected_notes_and_fails_on_a_warning(self):
         tmp = Path(tempfile.mkdtemp(prefix="gv-cli-warnings-"))
         try:
-            ok = self.run_build(tmp / "a", STRICT_BUILD="1")
+            # links written without their https:// (a bulletin post's `url: www.…`, an event's `online_url:
+            # zoom.us/j/…`, as the committee's guides allow): repaired, a note — never a warning
+            data = tmp / "data"
+            data.mkdir()
+            (data / "events.json").write_text(json.dumps({"updated": None, "items": [
+                {"id": "ev:manual:2099-01-02-x", "kind": "event", "title": "X", "url": "www.neta65.org/events",
+                 "date": "2099-01-02T18:00:00Z", "extra": {"slug": "2099-01-02-x", "start": "2099-01-02T18:00:00Z",
+                                                          "online_url": "zoom.us/j/123456789"}}]}), encoding="utf-8")
+            ok = self.run_build(tmp / "a", data, STRICT_BUILD="1")
             self.assertEqual(ok.returncode, 0, ok.stderr[-3000:])
             self.assertIn("not downloaded in this build", ok.stdout + ok.stderr, "the booth's notes are there …")
+            self.assertIn('[links] note: events.json ev:manual:2099-01-02-x: url "www.neta65.org/events" → https://www.neta65.org/events',
+                          ok.stdout + ok.stderr)
             self.assertNotIn("STRICT_BUILD", ok.stdout + ok.stderr, "… and do not count")
             self.assertTrue((tmp / "a" / "sitemap.xml").is_file())
 
             archive = tmp / "writers_archive.json"
             archive.write_text(json.dumps({"updated": None, "items": [{"id": "wa:bad", "kind": "article", "title": "Bad", "url": "javascript:x"}]}),
                                encoding="utf-8")
-            bad = self.run_build(tmp / "b", STRICT_BUILD="1", WRITERS_ARCHIVE=str(archive))
+            bad = self.run_build(tmp / "b", data, STRICT_BUILD="1", WRITERS_ARCHIVE=str(archive))
             self.assertNotEqual(bad.returncode, 0, "a build warning fails a strict build")
             self.assertIn("STRICT_BUILD: 3 build warning(s)", bad.stdout + bad.stderr)
             self.assertIn("[links] writers_archive.json wa:bad: left out — its link is not usable", bad.stdout + bad.stderr)
 
             listed = tmp / "warnings.txt"
-            lenient = self.run_build(tmp / "c", WRITERS_ARCHIVE=str(archive), BUILD_WARNINGS=str(listed))
+            lenient = self.run_build(tmp / "c", data, WRITERS_ARCHIVE=str(archive), BUILD_WARNINGS=str(listed))
             self.assertEqual(lenient.returncode, 0, lenient.stderr[-3000:])
             self.assertEqual(listed.read_text(encoding="utf-8").splitlines(),
                              ["[links] 2 link value(s) in data/site repaired or hidden:",

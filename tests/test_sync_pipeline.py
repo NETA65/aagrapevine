@@ -568,12 +568,16 @@ class InstagramRetention(unittest.TestCase):
     accounts post about 2 a day (September 2026) — or P's Instagram count shrinks late in that month."""
 
     def test_the_setting_holds_two_months_of_posts(self):
+        # config/site.yml as the committee keeps it — left to the Code check (scripts/ops/gate_tests.py CONTENT_TESTS)
         from scripts.sync import instagram as I
         from scripts.sync.common import load_config
         cfg = (load_config().get("sources") or {}).get("instagram") or {}
-        keep = int(cfg.get("keep_per_account") or I.DEFAULT_KEEP_PER_ACCOUNT)
-        self.assertGreaterEqual(keep, 62 * 2)
-        self.assertGreaterEqual(I.DEFAULT_KEEP_PER_ACCOUNT, 62 * 2, "without the setting too")
+        self.assertGreaterEqual(int(cfg.get("keep_per_account") or I.DEFAULT_KEEP_PER_ACCOUNT), 62 * 2)
+
+    def test_the_default_holds_two_months_of_posts(self):
+        from scripts.sync import instagram as I
+        keep = I.DEFAULT_KEEP_PER_ACCOUNT
+        self.assertGreaterEqual(keep, 62 * 2, "without the setting")
         # two posts a day for 70 days on each account, plus a manual post: every post of the last 62 days stays
         start = datetime(2026, 8, 1, 15, 0, tzinfo=timezone.utc)
         items = [{"id": f"ig:{a}:{n}", "category": a, "date": iso(start + timedelta(hours=12 * n)), "extra": {"shortcode": f"{a}{n}"}}
@@ -1305,11 +1309,60 @@ class RunAllPausedCrawl(TempRaw):
 
     def test_a_paused_full_run_notes_only_the_try(self):
         table = self.run_all(0, "--crawl-minutes", "0")
-        self.assertEqual((self.raw / "pdfs.json").read_text(encoding="utf-8"),
-                         self.text.replace('"attempted": "2026-10-04T06:40:00Z"',
-                                           '"attempted": "2026-10-14T06:40:00Z"'))
+        # the try, and this run's own counts (it searched nothing; nothing held back); all else as it was
+        self.assertEqual(self.env("pdfs"), {**json.loads(self.text), "attempted": "2026-10-14T06:40:00Z",
+                                            "changes": {"added": 0, "removed": 0, "held": 0}, "hub_problems": []})
         self.assertEqual(self.env("pdfs")["updated"], "2026-10-04T06:40:00Z", "the last success stays")
         self.assertIn("paused (sources.crawler.minutes_per_run: 0)", table)
+
+    def test_the_run_summary_shows_nothing_of_the_last_search_as_this_runs(self):
+        """The last search added 3 documents, removed 1, held 2 back after a drop and found a magazine page that did
+        not load; the next nightly run, paused, writes its own values: its run summary ("Write run summary",
+        update.yml) lists no document counts, no magazine page and no "Document search" warning as this run's — the
+        hold, still in force, still shows."""
+        from scripts.sync import run_all as R
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        stamp = lambda d: d.strftime("%Y-%m-%dT%H:%M:%SZ")              # noqa: E731
+        held = {"since": stamp(now - timedelta(days=1)), "kept": 2, "previous": 40, "found": 38, "drop": True,
+                "examples": ["Old document"], "ids": ["pdf:a", "pdf:b"]}
+        hub = [{"url": "https://www.aagrapevine.org/gvr-resources", "status": 404, "since": stamp(now - timedelta(days=1))}]
+        last = {**json.loads(self.text), "updated": stamp(now - timedelta(days=1)), "attempted": stamp(now - timedelta(days=1)),
+                "changes": {"added": 3, "removed": 1, "held": 2}, "held": held, "hub_problems": hub}
+        (self.raw / "pdfs.json").write_text(json.dumps(last), encoding="utf-8")
+        started = now - timedelta(minutes=10)                           # this run started to sync
+        with mock.patch.object(R, "now_iso", return_value=stamp(now - timedelta(minutes=5))):
+            R._note_paused_crawl()
+        env = self.env("pdfs")
+        self.assertEqual((env["changes"], env["hub_problems"], env["held"], env["updated"]),
+                         ({"added": 0, "removed": 0, "held": 2}, [], held, last["updated"]))
+        # the run summary, on the status.json row build_data makes of it
+        import os
+        import subprocess
+        import yaml
+        wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
+        code = next(s for s in wf["jobs"]["sync"]["steps"] if s.get("name") == "Write run summary")["run"]
+        code = code.split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        work = self.tmp / "work"
+        (work / "data" / "site").mkdir(parents=True)
+        (work / "data" / "raw").mkdir(parents=True)
+        (work / "data" / "raw" / "pdfs.json").write_text(json.dumps(env), encoding="utf-8")
+        row = {"source": "pdfs", "label": "Document library", "ok": True, "updated": env["updated"],
+               "attempted": env["attempted"], "count": 1, "new_7d": 0, "error": None, "stats": {},
+               "changes": env["changes"], "held": {k: v for k, v in env["held"].items() if k != "ids"}}
+        (work / "data" / "site" / "status.json").write_text(json.dumps({"fixture": False, "sources": [row]}), encoding="utf-8")
+        (work / "script.py").write_text(code, encoding="utf-8")
+        run_env = {k: v for k, v in os.environ.items() if k not in ("ALSO", "ALSO_WHY")}
+        run_env.update(GITHUB_STEP_SUMMARY=str(work / "summary.md"), GITHUB_OUTPUT=str(work / "out.txt"),
+                       PYTHONIOENCODING="utf-8", PYTHONPATH=str(ROOT), DAILY_MINUTES="0", STARTED=stamp(started))
+        r = subprocess.run([sys.executable, str(work / "script.py")], cwd=work, env=run_env, capture_output=True,
+                           text=True, encoding="utf-8", timeout=60)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        summary = (work / "summary.md").read_text(encoding="utf-8")
+        self.assertNotIn("Main pages of the magazine sites", summary)
+        self.assertNotIn("gvr-resources", summary)
+        self.assertNotIn("title=Document search", r.stdout)
+        self.assertRegex(summary, r"\| Document library \| 0 \| 0 \| \*\*2 held back\*\* since ", "the hold, and no counts")
+        self.assertNotRegex(summary, r"\| Document library \| 3 \|")
 
     def test_nothing_else_notes_it(self):
         for setting, flags in ((40, ("--crawl-minutes", "0")),            # a 0-minute run by hand, the search on

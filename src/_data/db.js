@@ -7,8 +7,11 @@
 // "www.x.org" and "zoom.us/j/1" are repaired to https://…; unusable values become "" (the
 // templates hide empty links). An item whose own `url` is unusable points to its anchor on our
 // page (committee event / bulletin post) or is left out. Every repaired or dropped value is
-// written to the build log — a build warning (eleventy/build-warnings.js) — and listed in
-// db.status.link_problems [{where, field, value, fixed}].
+// written to the build log and listed in db.status.link_problems [{where, field, value, fixed}].
+// A value that had to be hidden, an item left out, or any other change is a build warning
+// (eleventy/build-warnings.js: the Code check fails on it). A repair that only adds the
+// forgotten "https://" (or "https:" before "//host") loses nothing — the link works, and the
+// committee's guides say such a link is fine — so it stays a plain log line ("[links] note: …").
 import fs from "node:fs";
 import path from "node:path";
 import { safeUrl } from "../../eleventy.config.js";
@@ -39,6 +42,9 @@ import { buildWarning } from "../../eleventy/build-warnings.js";
 // index. Without the file the archive is simply left out.
 // WRITERS_ARCHIVE=tests/fixtures/writers_archive/site_sample.json reads another file instead (the sample: tests, previews).
 const ARCHIVE_FILE = process.env.WRITERS_ARCHIVE || "";
+// SITE_DATA=<folder> reads every file from that folder instead of data/site (tests: a build that must not depend on
+// the day's data; a file missing there is an empty list, as here).
+const DATA_DIR = process.env.SITE_DATA || path.join("data", "site");
 const FILES = [
   "episodes", "videos", "instagram", "articles", "pdfs", "drive", "events",
   "announcements", "editorial", "weekly_open", "whatsnew", "status",
@@ -51,9 +57,17 @@ const FILES = [
 // extra.file (a repository path) and extra.link_texts do not match.
 const URL_KEY = /(?:^|_)(?:url|link|image|website|thumbs?|cover|avatar|feed|web|hub|apple|spotify|amazon|permalink)$/i;
 
+// The problems that are only a forgotten scheme (each problem object; see the header): a log line, not a warning.
+const schemeOnly = new WeakSet();
+
 function fixOne(value, field, where, problems) {
   const fixed = safeUrl(value);
-  if (fixed !== value.trim()) problems.push({ where, field, value: value.slice(0, 160), fixed });
+  const v = value.trim();
+  if (fixed !== v) {
+    const pr = { where, field, value: value.slice(0, 160), fixed };
+    if (fixed && (fixed === "https://" + v || fixed === "https:" + v)) schemeOnly.add(pr);
+    problems.push(pr);
+  }
   return fixed;
 }
 
@@ -76,7 +90,7 @@ export default function () {
   const out = {};
   const problems = [];
   for (const name of FILES) {
-    const p = name === "writers_archive" && ARCHIVE_FILE ? ARCHIVE_FILE : path.join("data", "site", `${name}.json`);
+    const p = name === "writers_archive" && ARCHIVE_FILE ? ARCHIVE_FILE : path.join(DATA_DIR, `${name}.json`);
     let data = { updated: null, items: [] };
     try {
       if (fs.existsSync(p)) data = JSON.parse(fs.readFileSync(p, "utf8"));
@@ -103,18 +117,23 @@ export default function () {
     });
     out[name] = data;
   }
-  // Build warnings (eleventy/build-warnings.js: the Code check fails on them; Website update lists them).
-  if (problems.length) buildWarning("links", `${problems.length} link value(s) in data/site repaired or hidden:`);
+  // Build warnings (eleventy/build-warnings.js: the Code check fails on them; Website update lists them) — all but
+  // the scheme-only repairs, which are plain log lines.
+  const warned = problems.filter((pr) => !schemeOnly.has(pr));
+  if (warned.length) buildWarning("links", `${warned.length} link value(s) in data/site repaired or hidden:`);
   // The same item is often in two files (events.json + whatsnew.json): log each value once.
-  const seen = new Set();
-  for (const pr of problems) {
-    const k = pr.field === "item" ? pr.where : pr.field + "\u0000" + pr.value;
-    if (seen.has(k)) continue;
-    seen.add(k);
-    if (seen.size > 25) { buildWarning("links", "… more in db.status.link_problems"); break; }
-    buildWarning("links", pr.field === "item" ? `${pr.where}: left out — its link is not usable`
-      : pr.fixed ? `${pr.where}: ${pr.field} ${JSON.stringify(pr.value)} → ${pr.fixed}`
-      : `${pr.where}: ${pr.field} ${JSON.stringify(pr.value)} is not a usable link — hidden`);
+  for (const [list, say] of [[warned, (line) => buildWarning("links", line)],
+                             [problems.filter((pr) => schemeOnly.has(pr)), (line) => console.log(`[links] note: ${line}`)]]) {
+    const seen = new Set();
+    for (const pr of list) {
+      const k = pr.field === "item" ? pr.where : pr.field + "\u0000" + pr.value;
+      if (seen.has(k)) continue;
+      seen.add(k);
+      if (seen.size > 25) { say("… more in db.status.link_problems"); break; }
+      say(pr.field === "item" ? `${pr.where}: left out — its link is not usable`
+        : pr.fixed ? `${pr.where}: ${pr.field} ${JSON.stringify(pr.value)} → ${pr.fixed}`
+        : `${pr.where}: ${pr.field} ${JSON.stringify(pr.value)} is not a usable link — hidden`);
+    }
   }
   out.status.link_problems = problems;
   return out;

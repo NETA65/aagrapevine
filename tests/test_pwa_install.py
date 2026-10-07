@@ -381,15 +381,20 @@ class Page(unittest.TestCase):
 
     def test_links_from_site_settings(self):
         p = self.page
-        links = yaml.safe_load(read("config", "site.yml"))["links"]
         for k in ("app_help_iphone", "app_help_iphone_es", "app_help_android", "app_help_android_es"):
             with self.subTest(link=k):
                 self.assertIn("ln." + k, p)
+        self.assertIn("[[ln.gv_apps, \"media.short_gv_app\", \"en\"], [ln.lv_apps, \"media.short_lv_app\", \"es\"]]", p)
+        self.assertIn('magApps | reverse if lang == "es"', p)                      # La Viña first on /es/offline/
+
+    def test_the_help_links_in_the_settings(self):
+        # config/site.yml as the committee keeps it — left to the Code check (scripts/ops/gate_tests.py CONTENT_TESTS)
+        links = yaml.safe_load(read("config", "site.yml"))["links"]
+        for k in ("app_help_iphone", "app_help_iphone_es", "app_help_android", "app_help_android_es"):
+            with self.subTest(link=k):
                 self.assertRegex(links[k], r"^https://support\.(apple|google)\.com/")
         self.assertIn("/es-mx/", links["app_help_iphone_es"])
         self.assertIn("hl=es-419", links["app_help_android_es"])
-        self.assertIn("[[ln.gv_apps, \"media.short_gv_app\", \"en\"], [ln.lv_apps, \"media.short_lv_app\", \"es\"]]", p)
-        self.assertIn('magApps | reverse if lang == "es"', p)                      # La Viña first on /es/offline/
 
     def test_shortcuts_named_as_in_the_manifest(self):
         manifest = read("src", "pages", "manifest.11ty.js")
@@ -1081,10 +1086,10 @@ class Wiring(unittest.TestCase):
         self.assertIn('badge.hidden = !(dev && !state.installed && dev.guide === d.getAttribute("data-pwa-guide"));', p)
         self.assertEqual(p.count("openGuide(dev.guide)"), 1)
 
-    def test_nothing_left_of_the_old_page(self):
-        # no link to /app/ anywhere: only its forwarding stub (and this file) name that address
+    @staticmethod
+    def links_to_the_old_page(*tops: str) -> list[str]:
         hits = []
-        for top in ("src", "eleventy", "config", "docs", "content", "scripts", "tests", ".github"):
+        for top in tops:
             for f in ROOT.joinpath(top).rglob("*"):
                 if not f.is_file() or f.suffix not in {".njk", ".js", ".mjs", ".json", ".yml", ".yaml", ".md", ".py", ".css", ".txt", ".html"}:
                     continue
@@ -1093,11 +1098,21 @@ class Wiring(unittest.TestCase):
                     continue
                 if re.search(r"/(es/)?app/", f.read_text(encoding="utf-8", errors="replace")):
                     hits.append(rel)
+        return hits
+
+    def test_nothing_left_of_the_old_page(self):
+        # no link to /app/ anywhere in the code: only its forwarding stub (and this file) name that address
+        self.assertEqual(self.links_to_the_old_page("src", "eleventy", "scripts", "tests", ".github"), [])
+        for part in ("footer.njk", "header.njk"):
+            self.assertNotIn("nav.app", read("src", "_includes", "partials", part))
+
+    def test_nothing_left_of_the_old_page_in_the_docs_settings_and_content(self):
+        # … nor in the documentation, the settings or the content (the committee's files and the docs — left to the
+        # Code check: scripts/ops/gate_tests.py CONTENT_TESTS)
+        hits = self.links_to_the_old_page("config", "docs", "content")
         if re.search(r"/(es/)?app/", read("README.md")):
             hits.append("README.md")
         self.assertEqual(hits, [])
-        for part in ("footer.njk", "header.njk"):
-            self.assertNotIn("nav.app", read("src", "_includes", "partials", part))
         self.assertNotIn("pwa-standalone", self.pwa + read("src", "assets", "css", "areas", "pwa.css"))   # it only hid the old links
 
 

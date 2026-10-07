@@ -61,6 +61,11 @@ DYNAMIC: dict[str, dict[str, str]] = {}
 SITE_SECTIONS = {"meeting", "recurring_events", "drive", "sources", "links", "phone_access", "digest",
                  "lavina_weekly_open", "meetings", "spotlight"}
 SITE_COMPUTED = {"built", "url", "repository", "timezone"}
+# Settings site.js always fills in, so the pages have them even when config/site.yml leaves them out (as its notes
+# allow): their path in `site` → what site.js gives.
+SITE_DEFAULTED = {
+    ("meeting", "platform"): 'config "meeting: platform" (leave out: Zoom) — site.js gives "Zoom" when it is missing',
+}
 # Not setting names: what JavaScript / Nunjucks ask of a value (a list's length, a text's methods …).
 NOT_KEYS = {"length", "startsWith", "endsWith", "slice", "indexOf", "replace", "split", "map", "filter", "find",
             "some", "every", "includes", "join", "trim", "toString", "concat", "forEach", "keys", "values",
@@ -134,8 +139,11 @@ def strip_js(src: str, blank: bool = False) -> str:
 
 
 def strip_njk(src: str) -> str:
-    """A template without its {# comments #} and <!-- comments -->."""
-    return re.sub(r"<!--.*?-->", " ", re.sub(r"\{#.*?#\}", " ", src, flags=re.S), flags=re.S)
+    """A template without its {# comments #} and <!-- comments --> (each one blanked, its lines kept: the line
+    numbers of what follows stay right)."""
+    def blank(m: re.Match) -> str:
+        return re.sub(r"[^\n]", " ", m.group(0))
+    return re.sub(r"<!--.*?-->", blank, re.sub(r"\{#.*?#\}", blank, src, flags=re.S), flags=re.S)
 
 
 def text_names(text: str) -> tuple[set[str], set[str]]:
@@ -260,8 +268,9 @@ def missing(cfg, segs: list[str]) -> str:
 
 
 def site_path(segs: list[str]) -> list[str] | None:
-    """A path in `site` (the pages' settings) → its path in config/site.yml (None: worked out by site.js)."""
-    if not segs or segs[0] in SITE_COMPUTED:
+    """A path in `site` (the pages' settings) → its path in config/site.yml (None: worked out or filled in by
+    site.js)."""
+    if not segs or segs[0] in SITE_COMPUTED or any(tuple(segs[:len(d)]) == d for d in SITE_DEFAULTED):
         return None
     return segs if segs[0] in SITE_SECTIONS else ["site"] + segs
 
@@ -479,6 +488,8 @@ class SettingsAreRead(unittest.TestCase):
                     self.assertTrue(why.strip(), "every exception says why")
 
     def test_a_made_up_setting_is_caught(self):
+        # (on top of what the committee's own file has unread today: that is the first test's, left to the Code check)
+        base = set(unread_settings(load("config/site.yml"), self.index, MAP_LIKE["config/site.yml"]))
         cfg = copy.deepcopy(load("config/site.yml"))
         cfg["site"]["made_up_setting"] = "x"
         cfg["links"]["sobriety_calculator"] = "https://example.org/calc"
@@ -486,21 +497,26 @@ class SettingsAreRead(unittest.TestCase):
         # (an entry of its own: the list may be empty the day the committee has no recurring event)
         cfg["recurring_events"] = list(cfg.get("recurring_events") or []) + [{"key": "x", "title": "x", "parking_note": "Lot B"}]
         cfg["links"]["gv_home_es"] = "https://example.org/es"          # the Spanish twin of a link that is read
-        unread = unread_settings(cfg, self.index, MAP_LIKE["config/site.yml"])
+        unread = [u for u in unread_settings(cfg, self.index, MAP_LIKE["config/site.yml"]) if u not in base]
         self.assertEqual(sorted(unread), sorted(["site.made_up_setting", "meeting.breakout_rooms", "recurring_events[].parking_note",
                                                  "links.sobriety_calculator"]))
         # … and a reader makes it go away; a comment that names it does not
         index = code_index(extra={"src/pages/x.njk": "{# site.made_up_setting #}<p>{{ site.made_up_setting }}</p>",
                                   "scripts/x.py": "# links sobriety_calculator\nx = 1\n"})
-        self.assertEqual(sorted(unread_settings(cfg, index, MAP_LIKE["config/site.yml"])),
+        self.assertEqual(sorted(u for u in unread_settings(cfg, index, MAP_LIKE["config/site.yml"]) if u not in base),
                          sorted(["meeting.breakout_rooms", "recurring_events[].parking_note", "links.sobriety_calculator"]))
         # a map whose keys are data: its keys are never "unread", its entries' own keys are checked
         carry = copy.deepcopy(load("config/carry.yml"))
+        carry_base = set(unread_settings(carry, self.index, MAP_LIKE["config/carry.yml"]))
         carry["tips"] = {**(carry.get("tips") or {}), "2099-01": [{"colour": "red"}]}
-        self.assertEqual(unread_settings(carry, self.index, MAP_LIKE["config/carry.yml"]), ["tips.2099-01[].colour"])
+        self.assertEqual([u for u in unread_settings(carry, self.index, MAP_LIKE["config/carry.yml"]) if u not in carry_base],
+                         ["tips.2099-01[].colour"])
 
 
 class ReadsExist(unittest.TestCase):
+    # The checks of the committee's config/site.yml as it is are left to the Code check (scripts/ops/gate_tests.py
+    # CONTENT_TESTS: a setting the committee deleted must never keep the site from updating); the proof that the
+    # check catches a misspelled read, on settings of its own, is a test of the code.
     cfg: dict | None = None
 
     @classmethod
@@ -554,6 +570,16 @@ class ReadsExist(unittest.TestCase):
         self.assertEqual(njk_missing(tpl, cfg), [(2, "site.links.lv_record_story", "links.lv_record_story"),
                                                 (3, "site.meeting.platfrom", "meeting.platfrom"),
                                                 (4, "site.links.gv_hom", "links.gv_hom")])
+        # a setting the committee may leave out because site.js fills it in (meeting.platform: Zoom) is no gap — in a
+        # template, through an alias, or in the build's JavaScript; a misspelled read still is; a comment of several
+        # lines keeps the line numbers of what follows
+        no_platform = {**cfg, "meeting": {"weekday": "wednesday"}}
+        tpl2 = ('{# a note\n   of two lines #}\n{% set m = site.meeting %}\n<p>{{ site.meeting.platform }}</p>\n'
+                '<p>{{ t("x", { platform: m.platform }) }} {{ m.platfrom }}</p>\n')
+        self.assertEqual(njk_missing(tpl2, no_platform), [(5, "site.meeting.platfrom", "meeting.platfrom")])
+        self.assertEqual(njk_missing(tpl2, cfg), [(5, "site.meeting.platfrom", "meeting.platfrom")])
+        self.assertEqual(js_missing("export const f = (site) => [site.meeting.platform, site.meeting.platfrom];\n", no_platform),
+                         [(1, "site.meeting.platfrom", "meeting.platfrom")])
         # the build's JavaScript
         js = ('export function f(site) {\n  const L = site.links || {};\n  return [site.meeting.platfrom, L.gv_hom,\n'
               '    site.meeting.platform, site.spotlight.home_dayz || 60, site.links?.nope, "site.tagline"];\n}\n'

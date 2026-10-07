@@ -1135,6 +1135,11 @@ def live_at(v, when: str) -> str:
     return val or v.get("fallback", "")
 
 
+# The hand-written English the facts lean on, as data/translations/overrides.yml writes it: the test's own words, so
+# the committee's file decides nothing here (its own entry: Facts.test_the_committees_english_for_la_vinas_theme).
+FACTS_OVERRIDES = '"La alegría de vivir": { en: "The Joy of Living" }\n'
+
+
 class Facts(unittest.TestCase):
     """The facts from made-up data at fixed clocks: before the price notice, during it, after the new prices start,
     after the notice; on a meeting night, during and after the meeting — and with no data at all."""
@@ -1146,14 +1151,27 @@ class Facts(unittest.TestCase):
     def setUp(self):
         node_ready(self)
         if Facts.r is None:
-            Facts.r = run_js(self, FACTS_JS, data={
-                "db": DB_X, "site": SITE_X, "carry": CARRY_X, "meeting": MEETING_X, "kinds": KINDS_X,
-                "clocks": {"september": "2099-09-15T17:00:00Z", "october": "2099-10-15T17:00:00Z",
-                           # the meeting night: 8:30 PM Central (the meeting ended at 8), then half past midnight
-                           "meeting_night": "2099-10-22T01:30:00Z", "after_midnight": "2099-10-22T05:30:00Z",
-                           "november": "2099-11-05T18:00:00Z", "december": "2099-12-10T18:00:00Z",
-                           "january": "2100-01-15T18:00:00Z", "march": "2100-03-01T18:00:00Z", "may": "2100-05-15T17:00:00Z"}})
+            tmp = Path(tempfile.mkdtemp(prefix="gv-facts-"))
+            try:
+                (tmp / "overrides.yml").write_text(FACTS_OVERRIDES, encoding="utf-8")
+                Facts.r = run_js(self, FACTS_JS, data={
+                    "db": DB_X, "site": SITE_X, "carry": CARRY_X, "meeting": MEETING_X, "kinds": KINDS_X,
+                    "clocks": {"september": "2099-09-15T17:00:00Z", "october": "2099-10-15T17:00:00Z",
+                               # the meeting night: 8:30 PM Central (the meeting ended at 8), then half past midnight
+                               "meeting_night": "2099-10-22T01:30:00Z", "after_midnight": "2099-10-22T05:30:00Z",
+                               "november": "2099-11-05T18:00:00Z", "december": "2099-12-10T18:00:00Z",
+                               "january": "2100-01-15T18:00:00Z", "march": "2100-03-01T18:00:00Z",
+                               "may": "2100-05-15T17:00:00Z"}},
+                    env={"TRANSLATION_OVERRIDES": str(tmp / "overrides.yml")})
+            finally:
+                shutil.rmtree(tmp, True)
         self.oct = self.r["october"]
+
+    def test_the_committees_english_for_la_vinas_theme(self):
+        # data/translations/overrides.yml as the committee keeps it gives the English the decks print beside the theme
+        # (the facts here use their own copy) — left to the Code check (scripts/ops/gate_tests.py CONTENT_TESTS)
+        overrides = yaml.safe_load((ROOT / "data" / "translations" / "overrides.yml").read_text(encoding="utf-8"))
+        self.assertEqual((overrides.get("La alegría de vivir") or {}).get("en"), "The Joy of Living", "the hand-written English")
 
     def test_prices_switch_while_a_change_is_ahead(self):
         live = self.oct["live"]
@@ -1429,9 +1447,7 @@ class Facts(unittest.TestCase):
                                                                              {"from": DEC1, "value": "Sober Holidays!"}],
                                             "until": JAN1, "fallback": "see aagrapevine.org"})
         # (the English words of a theme beside it when they are ours — "The Joy of Living" is written by hand in
-        # data/translations/overrides.yml —, never a machine's: "AA Service" is left out of the facts' text)
-        overrides = yaml.safe_load((ROOT / "data" / "translations" / "overrides.yml").read_text(encoding="utf-8"))
-        self.assertEqual((overrides.get("La alegría de vivir") or {}).get("en"), "The Joy of Living", "the hand-written English this leans on")
+        # overrides.yml, here FACTS_OVERRIDES —, never a machine's: "AA Service" is left out of the facts' text)
         joy = "November–December 2099 · La alegría de vivir (The Joy of Living)"
         self.assertEqual(live["lv_issue"], {"value": "September–October 2099 · Servicio en AA", "steps": [{"from": NOV1, "value": joy}],
                                             "until": JAN1, "fallback": "see aalavina.org"})

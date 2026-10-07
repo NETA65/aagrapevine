@@ -148,16 +148,23 @@ def crawl_paused(cfg: dict | None = None) -> bool:
 
 def _note_paused_crawl() -> None:
     """A full update that leaves the crawl out because the PDF search is paused still counts as having tried it:
-    data/raw/pdfs.json gets a fresh `attempted` (and nothing else — not `updated`, the last success /status/
-    shows; items, stats and the crawl summary stay), so the run summary never reports the paused search as "not
-    checked for N days" — neither during the pause nor on the first runs after it. A file that says ok=false
-    keeps its last try, and a missing or unreadable one is left alone."""
+    data/raw/pdfs.json gets a fresh `attempted`, so the run summary never reports the paused search as "not
+    checked for N days" — neither during the pause nor on the first runs after it. With it go this run's own
+    values, the ones the run summary reads as this run's (a source whose `attempted` is not older than the run's
+    start): `changes` — nothing added or removed, only the items a hold still keeps — and no `hub_problems` (the
+    last search's magazine pages that did not load: the next search finds them again). Nothing else moves — not
+    `updated`, the last success /status/ shows; items, stats, a hold (`held`) and the crawl summary stay. A file
+    that says ok=false keeps its last try, and a missing or unreadable one is left alone."""
     path = raw_path(RAW_NAME["crawl"])
     prev = read_json(path)                    # (never load_raw: it would move an unreadable file aside)
     if not isinstance(prev, dict) or prev.get("ok") is not True:
         return
+    held = prev.get("held") if isinstance(prev.get("held"), dict) else {}
+    kept = held.get("kept")
+    kept = kept if isinstance(kept, int) and not isinstance(kept, bool) and kept > 0 else 0
     try:
-        write_json(path, {**prev, "attempted": now_iso()})
+        write_json(path, {**prev, "attempted": now_iso(), "changes": {"added": 0, "removed": 0, "held": kept},
+                          "hub_problems": []})
     except Exception:  # noqa: BLE001 — never stops the run
         log.exception("could not note the paused PDF search in data/raw/%s.json", RAW_NAME["crawl"])
 

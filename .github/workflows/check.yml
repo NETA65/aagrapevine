@@ -13,8 +13,10 @@
 #  On a push, a red ✗ here means "something in that change is broken" —
 #  undo or fix the change (the live site keeps working either way:
 #  "Website update" runs the same tests before it publishes — all but
-#  the few that judge the day's synced data, scripts/ops/gate_tests.py —
-#  and publishes nothing until they pass).
+#  the ones that judge the day's synced data, the committee's own files
+#  or the documentation, scripts/ops/gate_tests.py — and publishes
+#  nothing until they pass; a slip in content/ or config/ turns only
+#  this check red, never stops the site from updating).
 #
 #  Rule of thumb (README → Housekeeping): merge a pull request only when
 #  it shows a green ✓.

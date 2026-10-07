@@ -187,8 +187,11 @@ class OneTapLinks(unittest.TestCase):
     """/accessibility/#phone "Call …" buttons (eleventy/filters/access.js oneTap / axPhone)."""
 
     def test_the_hash_is_escaped(self):
-        cfg = yaml.safe_load(read("config", "site.yml"))
-        site = {"meeting": cfg.get("meeting") or {}, "phone_access": cfg.get("phone_access") or {}}
+        # (settings of its own, in the form config/site.yml writes them: the committee's numbers are checked by Phone)
+        site = {"meeting": {"meeting_id": "949 476 7497", "passcode": "neta65"},
+                "phone_access": {"numbers": [{"number": "+1 346 248 7799", "city": "Houston"},
+                                             {"number": "+1 312 626 6799", "city": "Chicago"}],
+                                 "committee": {"phone_passcode": ""}, "weekly_open": {"phone_passcode": "238047"}}}
         weekly = [{"zoomDigits": "87120368287", "zoomId": "871 2036 8287", "passcode": "238047", "title": "Weekly Open"}]
         res = run_js(self, """
             const A = await imp("eleventy/filters/access.js");

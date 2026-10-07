@@ -149,16 +149,22 @@ class Table(unittest.TestCase):
         # many polite requests to the magazine sites each: they run every night
         self.assertFalse({"crawl", "articles", "shop"} & (set(P.SETTINGS) | set(P.FILES.values())))
 
-    def test_each_setting_is_in_config_and_read_by_its_module(self):
+    def test_each_setting_is_in_config(self):
+        # config/site.yml as the committee keeps it — left to the Code check (scripts/ops/gate_tests.py CONTENT_TESTS)
         cfg = yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8"))
+        for module, paths in P.SETTINGS.items():
+            for path in paths:
+                with self.subTest(module=module, setting=path):
+                    self.assertIsNotNone(P.value_at(cfg, path), "a setting config/site.yml has")
+        for path, module in P.FILES.items():
+            self.assertTrue((ROOT / path).exists(), path)
+
+    def test_each_setting_is_read_by_its_module(self):
         for module, paths in P.SETTINGS.items():
             src = (ROOT / "scripts" / "sync" / f"{module}.py").read_text(encoding="utf-8")
             for path in paths:
                 with self.subTest(module=module, setting=path):
-                    self.assertIsNotNone(P.value_at(cfg, path), "a setting config/site.yml has")
                     self.assertIn(path.rsplit(".", 1)[-1], src, "the module reads it")
-        for path, module in P.FILES.items():
-            self.assertTrue((ROOT / path).exists(), path)
         self.assertIn('MANUAL_FILE = CONTENT_DIR / "instagram.yml"', (ROOT / "scripts/sync/instagram.py").read_text(encoding="utf-8"))
         self.assertIn('"texas_places.json"', (ROOT / "scripts/sync/geo.py").read_text(encoding="utf-8"))
 

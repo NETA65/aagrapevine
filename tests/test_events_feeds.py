@@ -1467,7 +1467,10 @@ class OnlineAndHybridEvents(TempState):
                 # the examples: two dated names (events of their own) and one without a date (a linked flyer)
                 names = re.findall(r'<span role="cell" class="cm-naming-file">[\s\S]*?<code>([^<]+)</code>', help_)
                 self.assertEqual([bool(re.match(r"\d{4}-\d{2}-\d{2} ", n)) for n in names], [True, True, False], names)
-        # the README says the same: a flyer for a file here gets a name without a date
+
+    def test_the_readme_says_the_same(self):
+        # content/events/README.md (the documentation — left to the Code check): a flyer for a file here gets a name
+        # without a date
         readme = (ROOT / "content" / "events" / "README.md").read_text(encoding="utf-8")
         self.assertIn("with a name **without a date**", readme)
 

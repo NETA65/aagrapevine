@@ -60,9 +60,12 @@ class Listen(unittest.TestCase):
 
 
 class Watch(unittest.TestCase):
-    def test_featured_video_from_config(self):
+    def test_config_has_the_video(self):
+        # config/site.yml as the committee keeps it ("delete these lines to hide it") — left to the Code check
         cfg = yaml.safe_load(read("config", "site.yml"))["site"]
         self.assertRegex(str(cfg["watch"]["hero_video"]), r"^[\w-]{11}$")
+
+    def test_featured_video_from_config(self):
         src = read("src", "pages", "watch.njk")
         self.assertIn("site.watch.hero_video", src)
         self.assertIn("?type=short#videos", src)

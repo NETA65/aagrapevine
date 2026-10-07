@@ -97,7 +97,11 @@ class NoHeader(Folder):
         env = self.run_sync()
         by = {i["extra"]["slug"]: i for i in env["items"]}
         self.assertEqual(by["no-date"]["title"], "No date")
-        self.assertEqual(by["no-date"]["date"], by["no-date"]["first_seen"][:10])
+        # its day in Central time (first_seen is UTC: from 7 PM Central on, the UTC date is already the next day)
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+        seen = datetime.fromisoformat(by["no-date"]["first_seen"].replace("Z", "+00:00"))
+        self.assertEqual(by["no-date"]["date"], seen.astimezone(ZoneInfo("America/Chicago")).date().isoformat())
         self.assertEqual((by["2027-02-03-spring-assembly"]["title"], by["2027-02-03-spring-assembly"]["date"]),
                          ("Spring Assembly", "2027-02-03"))
 
@@ -193,8 +197,16 @@ class Attachments(Folder):
 
 
 class Place(unittest.TestCase):
-    def test_the_folder_its_help_and_the_example(self):
+    def test_the_folder(self):
         self.assertEqual(A.ANN_DIR, common.CONTENT_DIR / "bulletin")
+        # a file whose name starts with "_" (the folder's example) is never published
+        with tempfile.TemporaryDirectory() as d:
+            for name in ("_example.md", "2027-01-10-x.md", "README.md"):
+                Path(d, name).write_text("---\ntitle: X\n---\nx\n", encoding="utf-8")
+            self.assertEqual([p.name for p in A.content_files(Path(d))], ["2027-01-10-x.md"])
+
+    def test_the_folder_its_help_and_the_example(self):
+        # the committee's folder as it is (content/bulletin: its README and its example) — left to the Code check
         self.assertFalse((common.CONTENT_DIR / "announcements").exists())
         for name in ("README.md", "_example.md"):
             self.assertTrue((A.ANN_DIR / name).is_file(), name)

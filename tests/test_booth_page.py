@@ -163,20 +163,7 @@ class Strings(unittest.TestCase):
         self.assertIn('welcome: "Welcome! · {event}"', core)
         self.assertIn('welcome: "¡Bienvenidos! · {event}"', core)
 
-    def test_every_topic_has_its_words(self):
-        """Settings → Show lists the topics (the CSV's tags, and the live items' own) in the page's language:
-        booth.tag.<tag> (dashes as underscores) in both languages, listed for #gvb-config. A new tag in the CSV
-        needs its two words in src/_i18n/booth.json."""
-        import csv
-        used = set()
-        with CSV.open(encoding="utf-8-sig", newline="") as f:
-            for row in csv.DictReader(f):
-                if (row.get("id") or "").strip().startswith("#"):
-                    continue
-                used.update(t for t in re.split(r"[;,\s]+", (row.get("tags") or "").strip().lower()) if t)
-        for lit in re.findall(r"tags: \[([^\]]*)\]", read(FILTERS)):
-            used.update(re.findall(r'"([a-z0-9-]+)"', lit))
-        self.assertGreater(len(used), 20)
+    def topics_have_their_words(self, used: set[str]) -> None:
         page = set(macro_list("pageKeys"))
         for tag in sorted(used):
             key = "booth.tag." + tag.replace("-", "_")
@@ -190,6 +177,34 @@ class Strings(unittest.TestCase):
                 labels.setdefault((lang, v.get(lang)), []).append(tag)
         twice = {k: v for k, v in labels.items() if len(v) > 1}
         self.assertEqual(twice, {}, "two topics with the same words would show as two identical boxes")
+
+    @staticmethod
+    def code_topics() -> set[str]:
+        used = set()
+        for lit in re.findall(r"tags: \[([^\]]*)\]", read(FILTERS)):
+            used.update(re.findall(r'"([a-z0-9-]+)"', lit))
+        return used
+
+    def test_every_topic_has_its_words(self):
+        """Settings → Show lists the topics (the CSV's tags, and the live items' own) in the page's language:
+        booth.tag.<tag> (dashes as underscores) in both languages, listed for #gvb-config. Here the live items'
+        own (eleventy/filters/booth.js); the booth file's: the next test."""
+        used = self.code_topics()
+        self.assertGreater(len(used), 3)
+        self.topics_have_their_words(used)
+
+    def test_every_topic_of_the_booth_file_has_its_words(self):
+        """The tags of content/booth/booth.csv, the committee's file (a new tag in the CSV needs its two words in
+        src/_i18n/booth.json) — left to the Code check (scripts/ops/gate_tests.py CONTENT_TESTS)."""
+        import csv
+        used = set()
+        with CSV.open(encoding="utf-8-sig", newline="") as f:
+            for row in csv.DictReader(f):
+                if (row.get("id") or "").strip().startswith("#"):
+                    continue
+                used.update(t for t in re.split(r"[;,\s]+", (row.get("tags") or "").strip().lower()) if t)
+        self.assertGreater(len(used), 20)
+        self.topics_have_their_words(used | self.code_topics())
 
 
 class Wiring(unittest.TestCase):

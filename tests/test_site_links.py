@@ -71,7 +71,8 @@ class SpanishTwins(unittest.TestCase):
 
     def test_every_twin_in_the_settings_is_shown(self):
         """Each Spanish twin in config/site.yml is read by the pages: by langLink, or picked by hand where the
-        page already did (offline.njk's install help, about.njk's aa.org link)."""
+        page already did (offline.njk's install help, about.njk's aa.org link). (The committee's file as it is —
+        left to the Code check: scripts/ops/gate_tests.py CONTENT_TESTS; the pages' side: the next test.)"""
         links = CFG["links"]
         twins = {k for k in links if k.endswith("_es") and k[:-3] in links} | {"lleva_el_mensaje"}
         code = "\n".join(p.read_text(encoding="utf-8") for p in (ROOT / "src").rglob("*.njk"))
@@ -80,6 +81,8 @@ class SpanishTwins(unittest.TestCase):
             with self.subTest(link=twin):
                 self.assertTrue(re.search(r"langLink\(\s*['\"]" + base + r"['\"]", code) or "." + twin in code
                                 or re.search(r"langLink\(ph\[0\]", code) and base.startswith("support_phone"), twin)
+
+    def test_the_pages_show_the_twins(self):
         shop, access = read("src", "pages", "shop.njk"), read("src", "pages", "accessibility.njk")
         self.assertIn("L | langLink('carry_the_message', lang)", shop)
         self.assertNotIn("L.carry_the_message", shop)
@@ -223,15 +226,18 @@ class TemplateHelpers(unittest.TestCase):
 # --------------------------------------------------------------------------------------------- settings
 class Settings(unittest.TestCase):
     def test_settings_that_did_nothing_are_gone(self):
+        # config/site.yml as the committee keeps it — left to the Code check (scripts/ops/gate_tests.py CONTENT_TESTS)
         self.assertNotIn("default_lang", CFG["site"])
         self.assertNotIn("languages", CFG["site"])
         for k in ("sobriety_calculator", "instagram_gv", "instagram_lv"):
             self.assertNotIn(k, CFG["links"])
+        self.assertEqual(CFG["sources"]["lavina"]["record_story"], "/graba-tu-historia")
+
+    def test_the_contribute_page_reads_the_record_story_setting(self):
         contribute = read("src", "pages", "contribute.njk")
         self.assertNotIn("lv_record_story", contribute)
         # La Viña's "Graba tu historia" page: the one scripts/sync/audio_project.py reads
         self.assertIn("site.sources.lavina.record_story", contribute)
-        self.assertEqual(CFG["sources"]["lavina"]["record_story"], "/graba-tu-historia")
 
     def test_every_link_in_the_settings_is_used(self):
         links = CFG["links"]
@@ -262,9 +268,9 @@ class Settings(unittest.TestCase):
         self.assertEqual(missing, [])
 
     def test_meeting_platform_and_note(self):
-        m = CFG["meeting"]
-        self.assertEqual(m["platform"], "Zoom")
-        self.assertTrue(m["note"] and m["note_es"])
+        # the platform and the note are the committee's settings (config/site.yml meeting: platform may be left out
+        # — Zoom —, changed, and the notes left empty): the pages' texts take {platform} and never name Zoom
+        # themselves (what the pages say with other settings: the next tests)
         strings = {}
         for f in ("committee", "community", "home", "orientation", "read", "report"):
             strings.update(json.loads(read("src", "_i18n", f + ".json")))
@@ -329,7 +335,10 @@ class Settings(unittest.TestCase):
         self.assertEqual(r["meetings"]["area_label"], CFG["meetings"]["area_label"])
         self.assertEqual(len(r["meetings"]["feeds"]), len(CFG["meetings"]["feeds"]))
         self.assertEqual(r["spotlight"]["home_days"], CFG["spotlight"]["home_days"])
-        self.assertEqual((r["platform"], r["note"]), ("Zoom", CFG["meeting"]["note"]))
+        # the committee's own platform (Zoom when left out or blank) and note, whatever they are
+        meeting = CFG.get("meeting") or {}
+        self.assertEqual((r["platform"], r.get("note")),
+                         (str(meeting.get("platform") or "").strip() or "Zoom", meeting.get("note")))
         self.assertEqual(r["noPlatform"], {"weekday": "wednesday", "platform": "Zoom"})
         self.assertEqual(r["noMeeting"], {})                    # no meeting settings: still none (no rule of the pages')
         self.assertEqual(r["blank"], "Zoom")

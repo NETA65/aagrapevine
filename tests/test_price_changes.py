@@ -923,6 +923,14 @@ class Bulletin(unittest.TestCase):
 class DriveLetter(unittest.TestCase):
     """The letter in the Panel's notes folder: its name starts with the letter's own date."""
 
+    def setUp(self):
+        # the language of a name is told with the magazines' names left out (the glossary's keep list): the test's
+        # own list — data/translations/glossary.yml is the committee's, and a typo there must not decide this test
+        from scripts.sync import translate as T
+        p = mock.patch.object(T, "_NEUTRAL", T.Protector(T.Glossary({"keep": ["AA Grapevine", "Grapevine", "La Viña"]})))
+        p.start()
+        self.addCleanup(p.stop)
+
     def item(self, name: str) -> dict:
         e = Entry(id="1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p", name=name, mime="application/pdf", modified="2026-10-01")
         f = D.Found(entry=e, panel=D.Panel(77, "Panel 77 (2027–2028)", "p", "2027-2028_Panel77_GVLV"), path=["notes"], chain=["r", "p", "n"])

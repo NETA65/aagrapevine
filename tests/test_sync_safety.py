@@ -584,12 +584,19 @@ class WholeBuilds(TempRaw):
         self.cache = self.tmp / "cache.json"
         self.cfg = {**common.load_config(), "recurring_events": [], "meeting": {}}
         self.cfg["sources"] = {**(self.cfg.get("sources") or {}), "ics_feeds": []}
+        # the test's own glossary and overrides (data/translations' are the committee's: a typo there pauses the
+        # translations of a real run, which must not decide these tests)
+        self.glossary, self.overrides = self.tmp / "glossary.yml", self.tmp / "overrides.yml"
+        self.glossary.write_text("keep:\n  - AA Grapevine\n  - Grapevine\n  - La Viña\n", encoding="utf-8")
+        self.overrides.write_text("{}\n", encoding="utf-8")
 
     def build(self, *flags: str, at: str = T0, cfg: dict | None = None) -> dict:
         real = B.T.Translator
         conf = cfg or self.cfg
         with mock.patch.object(B, "load_config", lambda: conf), mock.patch.object(B, "STATE_DIR", self.tmp / "state"), \
                 mock.patch.object(B.T, "Translator", lambda **kw: real(cache_path=self.cache, use_model=False,
+                                                                       glossary_path=self.glossary,
+                                                                       overrides_path=self.overrides,
                                                                        models_dir=self.tmp / "models", download=False)), \
                 mock.patch.object(B.T, "_DEFAULT", None), mock.patch.object(B, "now_iso", return_value=at):
             self.assertEqual(B.main(["--out", str(self.out), "--offline", *flags]), 0)

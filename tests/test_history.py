@@ -89,28 +89,35 @@ class HistoryFileTest(unittest.TestCase):
 
 DATA_JS = """
 const mod = await imp("src/_data/history.js");
-const h = mod.default();
-let broken = null;
-if (input.tmp) {
-  process.chdir(input.tmp);
-  try { mod.default(); broken = "no error"; } catch (e) { broken = String(e.message || e); }
-}
+const here = process.cwd();
+process.chdir(input.dir);
+let h = null, broken = null;
+try { h = mod.default(); broken = "no error"; } catch (e) { broken = String(e.message || e); } finally { process.chdir(here); }
 out({ h, broken });
 """
+
+# The data file's input: milestones of the test's own, in config/history.yml's form (the committee's file is checked by
+# HistoryFileTest, left to the Code check; this tests the code, whatever the file holds): every type, every kind of
+# year, more than 12 milestones.
+YEARS = [("June 1944", "grapevine"), ("1948", "grapevine"), ("1957", "both"), ("1960", "grapevine"), ("1975", "lavina"),
+         ("Summer 1996", "lavina"), ("1998", "both"), ("2000", "grapevine"), ("2004", "lavina"), ("2010", "both"),
+         ("2015", "grapevine"), ("2018", "lavina"), ("2020", "both"), ("September 2023", "grapevine"), ("2025", "both")]
+SAMPLE = ('official:\n  grapevine: "https://www.aagrapevine.org/history-aa-grapevine"\n'
+          '  lavina: "https://www.aagrapevine.org/history-aa-lavina"\nmilestones:\n'
+          + "".join(f'  - year: "{y}"\n    type: {kind}\n    title: {{ en: " Milestone {i} ", es: "Hito {i}" }}\n'
+                    f'    desc: {{ en: "What happened.", es: "Lo que pasó." }}\n' for i, (y, kind) in enumerate(YEARS, 1)))
 
 
 class HistoryDataTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.ms = yaml.safe_load(FILE.read_text(encoding="utf-8"))["milestones"]
+        cls.ms = yaml.safe_load(SAMPLE)["milestones"]
 
-    def run_data(self, broken_yaml: str | None = None):
-        if broken_yaml is None:
-            return run_js(self, DATA_JS, data={"tmp": None})
+    def run_data(self, text: str = SAMPLE):
         with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "config").mkdir()
-            (Path(tmp) / "config" / "history.yml").write_text(broken_yaml, encoding="utf-8")
-            return run_js(self, DATA_JS, data={"tmp": tmp})
+            (Path(tmp) / "config" / "history.yml").write_text(text, encoding="utf-8")
+            return run_js(self, DATA_JS, data={"dir": tmp})
 
     def test_items_and_labels(self):
         h = self.run_data()["h"]

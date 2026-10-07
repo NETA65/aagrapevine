@@ -3,7 +3,8 @@
 //   [icon] / [community] / [media] / [read] / [published]  an icon that does not exist (or is not in its page's sprite);
 //   [sitemap]  a page the sitemap must list is missing (renamed, or left out by mistake);
 //   [links]    a link value in data/site that had to be repaired or hidden (src/_data/db.js — mostly a link
-//              written by hand in content/events or content/bulletin).
+//              written by hand in content/events or content/bulletin); a link that only lacked its "https://"
+//              ("www.…", "zoom.us/j/…") works once repaired and is a plain "[links] note:" line, not a warning.
 // buildWarning() prints each one, as before, and remembers it; at the end of the build eleventy.config.js
 // ("eleventy.after") sums them up, each once (an icon missing from the page layout is printed for every page:
 // "[icon] missing icon: x (×245)"):

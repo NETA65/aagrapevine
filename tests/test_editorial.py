@@ -240,7 +240,10 @@ class LinkFinder(unittest.TestCase):
         self.assertEqual(E.settings({"sources": {"lavina": {"base": LV}}})["lv_themes_page"], RESOURCES)
         self.assertEqual(E.settings({"sources": {"lavina": {"themes_page": "https://example.org/x"}}})["lv_themes_page"],
                          "https://example.org/x")
-        self.assertEqual(E.settings(E.load_config())["lv_themes_page"], RESOURCES)   # config/site.yml
+
+    def test_the_settings_name_la_vinas_resources_page(self):
+        # config/site.yml as the committee keeps it — left to the Code check (scripts/ops/gate_tests.py CONTENT_TESTS)
+        self.assertEqual(E.settings(E.load_config())["lv_themes_page"], RESOURCES)
 
 
 class Items(unittest.TestCase):

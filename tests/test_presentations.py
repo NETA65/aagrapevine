@@ -944,7 +944,8 @@ class PresentationFiles(unittest.TestCase):
         nums = published_phones()
         cfg = yaml.safe_load(SITE_YML.read_text(encoding="utf-8")) or {}
         for n in (cfg.get("phone_access") or {}).get("numbers") or []:
-            self.assertIn(phone_digits(n["number"]), nums, "Zoom's dial-in numbers")
+            if PHONE.fullmatch(str(n["number"]).strip()):         # (a U.S. number: what a deck could write)
+                self.assertIn(phone_digits(n["number"]), nums, "Zoom's dial-in numbers")
         intl = (cfg.get("links") or {}).get("support_phone_intl")
         if intl:
             self.assertIn(phone_digits(intl), nums, "anywhere in config/site.yml")

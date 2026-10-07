@@ -45,7 +45,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from nodejs import run_js  # noqa: E402
 
 STRINGS = ROOT / "src" / "_i18n" / "report.json"
-SITE_LINKS = yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8"))["links"]
+CFG = yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8"))
+SITE_LINKS = CFG["links"]
+# The committee meeting's platform as src/_data/site.js gives the pages (config/site.yml meeting.platform, the
+# committee's setting; Zoom when left out): the report says that one, whichever it is.
+PLATFORM = str((CFG.get("meeting") or {}).get("platform") or "").strip() or "Zoom"
 SECTION_IDS = ["header", "committee", "issues", "deadlines", "shop", "events", "writers", "meetings", "weekly",
                "resources", "asks", "notes"]
 SITE_URL = "https://example.org/site"
@@ -252,7 +256,7 @@ class Model(unittest.TestCase):
         for lang in ("en", "es"):
             with self.subTest(lang=lang):
                 S = {k: v["text"] for k, v in self.sections("full", lang).items()}
-                self.assertIn("Zoom", S["committee"])
+                self.assertIn(PLATFORM, S["committee"])
                 other = self.r["platform"][lang]
                 self.assertIn(self.tr("report.c_join", lang, url=SITE_URL + ("/es" if lang == "es" else "") + "/meetings/",
                                       platform="Google Meet"), other)
@@ -272,7 +276,7 @@ class Model(unittest.TestCase):
                                                                month="October 2026" if lang == "en" else "octubre de 2026")))
             with self.subTest(lang=lang, section="committee"):
                 self.assertIn("October 21" if lang == "en" else "21 de octubre", S["committee"])
-                self.assertIn(self.tr("report.c_join", lang, url=f"{base}/meetings/", platform="Zoom"), S["committee"])
+                self.assertIn(self.tr("report.c_join", lang, url=f"{base}/meetings/", platform=PLATFORM), S["committee"])
                 self.assertNotIn(self.s["report.c_none"][lang], S["committee"])
             with self.subTest(lang=lang, section="issues"):
                 self.assertIn("Loneliness" if lang == "en" else "Soledad", S["issues"])

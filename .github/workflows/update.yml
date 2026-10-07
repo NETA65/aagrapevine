@@ -10,8 +10,8 @@
 #    2. BUILD  – builds the website with Eleventy + Tailwind (and the
 #                monthly posters' share pictures), while the
 #                TESTS job runs the offline tests on the same commit
-#                (only when the code or the content changed since they
-#                last passed).
+#                (only when the code changed since they last passed:
+#                the committee's content and settings never stop it).
 #    3. DEPLOY – publishes it to GitHub Pages — only when the tests passed.
 #
 #  When it runs (each run's title in the Actions list says which kind):
@@ -114,7 +114,9 @@ on:
         default: false
 
   # Rebuild right away when someone edits settings, content, templates or
-  # code. The bot's own daily data commits never trigger this: they are
+  # code — the tests too: they decide whether a run publishes ("tests" job
+  # below), so a fix made only in tests/ is tested and published at once.
+  # The bot's own daily data commits never trigger this: they are
   # excluded below AND pushed with the built-in token, which by design
   # cannot start new workflow runs (so there is no loop).
   push:
@@ -133,7 +135,6 @@ on:
       - "data/translations/glossary.yml"    # …and so must a glossary change
       - "!src/assets/cache/**"              # thumbnails downloaded by the bot
       - "!docs/**"
-      - "!tests/**"
       - "!LICENSE"
       - "!NOTICE"
       - "!.github/**"
@@ -1272,16 +1273,21 @@ jobs:
   # change that breaks them never goes live: the "publish" job waits for this one, and the site keeps the version
   # before. On the very commit the build job builds, at the same time as the build (about 3 to 4 minutes, setup
   # included, while the build takes about as long), so it adds little or nothing to a run — and only when the code
-  # is new to it: everything in git but the bot's own data (data/raw, data/site, data/state, the translation cache,
-  # src/assets/cache) and the committee's content/ and config/ has a fingerprint, and a fingerprint whose tests
-  # passed once is remembered in GitHub's Actions cache. The daily data runs (the morning refresh, the midday,
-  # evening and nightly updates) and the committee's content and settings changes leave it as it is, so they skip
-  # the tests (a few seconds) and the morning refresh is live as soon as before; a change of the code — scripts,
-  # templates, texts, tests, this workflow — is tested first. If the remembered pass is gone (a cache unused for
-  # 7 days is deleted), the tests simply run again. Tests that judge the day's synced data or the committee's own
-  # files rather than the code are left to the Code check (scripts/ops/gate_tests.py, DATA_TESTS and
-  # CONTENT_TESTS): a day's data or a slip in content/ or config/ (which the sync and the build leave out) must
-  # never keep the site — the morning's new day and quote included — from updating; the Code check reports it.
+  # is new to it: the code has a fingerprint, and a fingerprint whose tests passed once is remembered in GitHub's
+  # Actions cache. The fingerprint is everything in git but the bot's own data (data/raw, data/site, data/state,
+  # the translation cache, src/assets/cache), the files the committee edits (content/, config/, the glossary and
+  # the overrides in data/translations/) and the documentation (README.md and the other *.md files at the top,
+  # docs/, how-to/). The daily data runs (the morning refresh, the midday, evening and nightly updates), the
+  # committee's content and settings changes and documentation edits leave it as it is, so they skip the tests
+  # (a few seconds) and the morning refresh is live as soon as before; a change of the code — scripts, templates,
+  # texts, tests, this workflow, data/geo — is tested first. Every run that finds the pass reads it back (a real
+  # restore of its one small file, not a mere lookup), which keeps it in the cache — GitHub deletes a cache unused
+  # for 7 days; if it is gone all the same, the tests simply run again. No test the gate runs may judge the day's
+  # synced data, the committee's files or the documentation: those are left to the Code check
+  # (scripts/ops/gate_tests.py, DATA_TESTS and CONTENT_TESTS — tests/test_automation.py checks the list is
+  # complete), so a day's data or an edit or a slip there (the sync and the build leave out what they cannot read)
+  # never keeps the site — the morning's new day and quote included — from updating, now or later, when somebody
+  # changes the code; the Code check goes red on the push that made the slip and tells whoever made it.
   tests:
     name: Test the code before publishing
     needs: sync
@@ -1299,27 +1305,33 @@ jobs:
           ref: ${{ needs.sync.outputs.commit || 'main' }}
           persist-credentials: false
 
-      # Everything in git but the bot's own files and the committee's content/ and config/: the code (the tests
-      # themselves and this workflow included — a change to the gate is tested too).
-      - name: Fingerprint the code and the content
+      # Everything in git but the bot's own files, the committee's files and the documentation: the code (the
+      # tests themselves and this workflow included — a change to the gate is tested too; data/geo, the Texas
+      # places list a script makes, too). ':(exclude,glob)*.md' leaves out the *.md files at the top only — a
+      # Markdown page in src/ is code.
+      - name: Fingerprint the code
         id: code
         run: |
           set -euo pipefail
           fp="$(git ls-files -s -z -- . ':!data/raw' ':!data/site' ':!data/state' ':!data/translations/cache.json' \
-                ':!src/assets/cache' ':!content' ':!config' | sha256sum | cut -c1-40)"
+                ':!src/assets/cache' ':!content' ':!config' ':!data/translations/glossary.yml' \
+                ':!data/translations/overrides.yml' ':(exclude,glob)*.md' ':!docs' ':!how-to' \
+                | sha256sum | cut -c1-40)"
           {
             echo "commit=$(git rev-parse HEAD)"
             echo "fingerprint=${fp}"
           } >> "$GITHUB_OUTPUT"
-          echo "Code and content fingerprint: ${fp}"
+          echo "Code fingerprint: ${fp}"
 
+      # A real restore (its one small file), not a lookup only: reading the pass back is what counts as using
+      # it, so the daily runs keep it in the cache (GitHub deletes a cache nobody used for 7 days, and the
+      # tests would run again unattended on unchanged code).
       - name: Were these tests passed already?
         id: passed
         uses: actions/cache/restore@v6
         with:
           path: .cache/tests-passed
           key: tests-passed-v1-${{ steps.code.outputs.fingerprint }}
-          lookup-only: true
 
       - name: Set up Python
         if: ${{ steps.passed.outputs.cache-hit != 'true' }}
@@ -1371,7 +1383,9 @@ jobs:
 
       - name: Say so when they were passed already
         if: ${{ steps.passed.outputs.cache-hit == 'true' }}
-        run: echo "The tests passed already for this code and content (only the bot's data changed since) — not run again." | tee -a "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo "The tests passed already for this code (content, settings and the bot's data may have changed since) — not run again." | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "The pass: $(cat .cache/tests-passed/passed.txt 2>/dev/null || echo '?')"
 
   # -------------------------------------------------------------------
   publish:
@@ -1547,8 +1561,9 @@ jobs:
           HINTS = {
               "sync": "the site data could not be built, or the data commit could not be saved — its log says which "
                       "step; the site was still published with the data it had (if the other jobs worked).",
-              "tests": "a change broke the tests, so nothing was published (the live site keeps the version before): "
-                       "the run summary lists the failing tests — fix the change or undo it.",
+              "tests": "a change to the code broke the tests, so nothing was published (the live site keeps the version "
+                       "before): the run summary lists the failing tests and says which of them read the committee's "
+                       "own files — fix the change or undo it (a fix in tests/ starts a run too).",
               "build": "the website could not be built (often a text missing from src/_i18n after an edit): fix the "
                        "change or undo it; the live site keeps the version before.",
               "publish": "GitHub Pages did not take the new version — usually GitHub's own trouble: open the run and "

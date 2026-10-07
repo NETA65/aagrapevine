@@ -1104,6 +1104,7 @@ const issueName = (pub, key) => (/^\d{4}-\d{2}$/.test(String(key || "")) ? issue
  * The English words data/translations/overrides.yml gives a text by hand ({ "original text": { en, es } } — scripts/
  * sync/translate.py Overrides, matched as it matches them: spaces collapsed, then without accents in any case), or
  * "". Overrides always win, and build_data never lists one in an item's `machine`. Read once per build process.
+ * TRANSLATION_OVERRIDES=<file> reads another file instead (tests: the committee's own words must not decide them).
  */
 let HAND = null;
 const handKey = (s) => String(s ?? "").normalize("NFC").replace(/\s+/g, " ").trim();
@@ -1113,7 +1114,8 @@ function handEnglish(text) {
     HAND = { exact: new Map(), loose: new Map() };
     let data = null;
     try {
-      data = yaml.load(fs.readFileSync(path.join(ROOT, "data", "translations", "overrides.yml"), "utf8"), { schema: DECK_SCHEMA });
+      const file = process.env.TRANSLATION_OVERRIDES || path.join(ROOT, "data", "translations", "overrides.yml");
+      data = yaml.load(fs.readFileSync(file, "utf8"), { schema: DECK_SCHEMA });
     } catch {
       data = null;
     }
