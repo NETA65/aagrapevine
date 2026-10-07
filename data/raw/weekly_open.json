@@ -1,9 +1,14 @@
 {
  "source": "weekly_open",
- "updated": "2026-10-06T13:23:04Z",
- "attempted": "2026-10-06T13:23:04Z",
+ "updated": "2026-10-07T14:38:28Z",
+ "attempted": "2026-10-07T14:38:28Z",
  "ok": true,
  "error": null,
+ "changes": {
+  "added": 0,
+  "removed": 0,
+  "held": 0
+ },
  "stats": {
   "found": [
    "zoom_id",

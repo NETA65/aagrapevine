@@ -1,7 +1,269 @@
 {
- "updated": "2026-10-07T06:54:56Z",
+ "updated": "2026-10-07T14:43:55Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DeMhgvov9lB",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMhgvov9lB/",
+   "title": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos…",
+   "summary": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información.",
+   "lang": "es",
+   "date": "2026-10-07T14:00:21Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMhgvov9lB.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMhgvov9lB",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DeMhgvov9lB.webp",
+    "embed_url": "https://www.instagram.com/p/DeMhgvov9lB/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMhgvov9lB/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Soon! La Viña will hold a virtual open meeting of AA with one coordinator and two …",
+     "es": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos…"
+    },
+    "summary": {
+     "en": "Soon! La Viña will hold a virtual open meeting of AA with one coordinator and two speakers. The poster will respect anonymity and will be available on the main platforms. Very soon more information.",
+     "es": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-07T14:00:21Z"
+  },
+  {
+   "id": "ig:DeMg_x2A8zs",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMg_x2A8zs/",
+   "title": "AA Grapevine on Instagram",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-07T13:55:54Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMg_x2A8zs.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMg_x2A8zs",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeMg_x2A8zs.webp",
+    "embed_url": "https://www.instagram.com/p/DeMg_x2A8zs/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMg_x2A8zs/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "AA Grapevine on Instagram",
+     "es": "AA Grapevine en Instagram"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-07T13:55:54Z"
+  },
+  {
+   "id": "ig:DeMghbFR3oI",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMghbFR3oI/",
+   "title": "La Viña en Instagram",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-07T13:51:54Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMghbFR3oI.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMghbFR3oI",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeMghbFR3oI.webp",
+    "embed_url": "https://www.instagram.com/p/DeMghbFR3oI/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMghbFR3oI/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña on Instagram",
+     "es": "La Viña en Instagram"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-10-07T13:51:54Z"
+  },
+  {
+   "id": "ig:DeMTwPXjMKc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMTwPXjMKc/",
+   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+   "lang": "en",
+   "date": "2026-10-07T12:00:14Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMTwPXjMKc.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMTwPXjMKc",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeMTwPXjMKc.webp",
+    "embed_url": "https://www.instagram.com/p/DeMTwPXjMKc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMTwPXjMKc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
+    },
+    "summary": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-07T12:00:14Z"
+  },
+  {
+   "id": "ig:DeMQUmZjL_1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMQUmZjL_1/",
+   "title": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía…",
+   "summary": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía están sin esperanza. Sea cual sea el costo o el sacrificio que suponga, pongámonos a mejorar nuestras comunicaciones con toda esta gente para que encuentren lo que hemos encontrado: una nueva vida de libertad bajo Dios”. \"“Una perspectiva del porvenir” BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am…",
+   "lang": "es",
+   "date": "2026-10-07T11:30:15Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMQUmZjL_1.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMQUmZjL_1",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeMQUmZjL_1.webp",
+    "embed_url": "https://www.instagram.com/p/DeMQUmZjL_1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMQUmZjL_1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Let’s remember the crowd of people who still suffer from alcoholism and that still …",
+     "es": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía…"
+    },
+    "summary": {
+     "en": "“Let us remember the multitude of people who still suffer from alcoholism and who are still hopeless. Whatever the cost or sacrifice it entails, let us begin to improve our communications with all these people to find what we have found: a new life of freedom under God.” \"A Perspective of the Future\" Bill W., co-founder of AA, February 1961 From I Am …",
+     "es": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía están sin esperanza. Sea cual sea el costo o el sacrificio que suponga, pongámonos a mejorar nuestras comunicaciones con toda esta gente para que encuentren lo que hemos encontrado: una nueva vida de libertad bajo Dios”. \"“Una perspectiva del porvenir” BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-07T11:30:15Z"
+  },
+  {
+   "id": "ig:DeMQUqWjINJ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMQUqWjINJ/",
+   "title": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty…",
+   "summary": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty and truth filter in, and begins to demand reality.” “It Takes What It Takes,” Pompano Beach, Florida, June 1978, Step By Step Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-07T11:30:15Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMQUqWjINJ.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMQUqWjINJ",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeMQUqWjINJ.webp",
+    "embed_url": "https://www.instagram.com/p/DeMQUqWjINJ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMQUqWjINJ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty…",
+     "es": "“Sobriedad hace cosas interesantes a la mente – lo aclara algunos, deja un poco de honestidad …"
+    },
+    "summary": {
+     "en": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty and truth filter in, and begins to demand reality.” “It Takes What It Takes,” Pompano Beach, Florida, June 1978, Step By Step Daily Quote at www.aagrapevine.org",
+     "es": "“Sobriedad hace cosas interesantes a la mente – lo aclara algunos, permite un poco de honestidad y verdad filtrar, y comienza a exigir la realidad.” “Toma lo que se necesita”, playa de Pompano, Florida, junio de 1978, paso a paso Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-07T11:30:15Z"
+  },
   {
    "id": "ev:flyer:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
    "source": "drive",
@@ -163,7 +425,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 102,
+    "views": 153,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -433,7 +695,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 119,
+    "views": 149,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1464,7 +1726,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 218,
+    "views": 239,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2849,7 +3111,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 358,
+    "views": 366,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3564,7 +3826,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 296,
+    "views": 298,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -4301,7 +4563,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:14Z"
   },
   {
@@ -4375,7 +4637,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -4453,7 +4715,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -4527,7 +4789,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -4601,7 +4863,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -4679,7 +4941,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -4757,7 +5019,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -4835,7 +5097,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -4916,7 +5178,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -4994,7 +5256,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5068,7 +5330,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5146,7 +5408,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5220,7 +5482,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5298,7 +5560,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5376,7 +5638,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5454,7 +5716,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5532,7 +5794,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5610,7 +5872,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5688,7 +5950,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5766,7 +6028,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5844,7 +6106,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -5922,7 +6184,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -6000,7 +6262,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -6078,7 +6340,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -6156,7 +6418,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -6234,7 +6496,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -6312,7 +6574,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -6386,7 +6648,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T12:00:00Z"
   },
   {
@@ -6430,7 +6692,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T11:30:15Z"
   },
   {
@@ -6474,7 +6736,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-23T11:30:14Z"
   },
   {
@@ -6722,7 +6984,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 351,
+    "views": 352,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -6992,7 +7254,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 294,
+    "views": 296,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7486,7 +7748,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 347,
+    "views": 350,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7723,7 +7985,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 318,
+    "views": 319,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7794,293 +8056,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-09-14T04:15:00Z"
-  },
-  {
-   "id": "yt:6WR99vkRTuI",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=6WR99vkRTuI",
-   "title": "Grapevine Weekly Open AA Meeting, September 9, 2026 [Season 2, Episode 11]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 9, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Beth and Mike, who share their experience…",
-   "lang": "en",
-   "date": "2026-09-11T04:32:53Z",
-   "first_seen": "2026-09-23T16:31:23Z",
-   "image": "https://i.ytimg.com/vi/6WR99vkRTuI/hqdefault.jpg",
-   "tags": [
-    "season-2",
-    "weekly-open",
-    "live"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "6WR99vkRTuI",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 3114,
-    "playlists": [
-     "Grapevine Weekly Open AA Meeting"
-    ],
-    "is_short": false,
-    "views": 405,
-    "is_live_recording": true,
-    "date_approx": false,
-    "season": 2,
-    "episode": 11
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, September 9, 2026 [Season 2, Episode 11]",
-     "es": "Grapevine Weekly Open AA Meeting, 9 de septiembre de 2026 [Temporada 2, Episodio 11]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 9, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Beth and Mike, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 9 de septiembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Jeff da la bienvenida a los oradores Beth y Mike, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-11T04:32:53Z"
-  },
-  {
-   "id": "pod:wo:286c9122af55",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/c41d9a23-cd93-436e-b2f3-fffd85a3b15e",
-   "title": "Grapevine Weekly Open AA Meeting, September 9, 2026 [Season 2, Episode 11]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 9, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Beth and Mike, who share their experience…",
-   "lang": "en",
-   "date": "2026-09-11T04:15:00Z",
-   "first_seen": "2026-09-23T17:23:49Z",
-   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
-   "tags": [
-    "season-2"
-   ],
-   "category": "wo",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/c41d9a23-cd93-436e-b2f3-fffd85a3b15e.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 74732246,
-    "duration_sec": 3114,
-    "season": 2,
-    "episode": 11,
-    "episode_type": "full",
-    "show": "wo",
-    "show_name": "Grapevine Weekly Open AA Meeting",
-    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "player_url": "https://player.captivate.fm/episode/c41d9a23-cd93-436e-b2f3-fffd85a3b15e",
-    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
-    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
-    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, September 9, 2026 [Season 2, Episode 11]",
-     "es": "Grapevine Weekly Open AA Meeting, 9 de septiembre de 2026 [Temporada 2, Episodio 11]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 9, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Beth and Mike, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 9 de septiembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Jeff da la bienvenida a los oradores Beth y Mike, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-11T04:15:00Z"
-  },
-  {
-   "id": "yt:63ebpEXyxVc",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=63ebpEXyxVc",
-   "title": "Date with higher power",
-   "summary": "ASL Grapevine night live recording - Topic: Date with higher power Transcript: https://docs.google.com/document/d/1dGt6EFdcCTW9Dyhj_XSY9YW3ReFWK5lXPePhLkSHJtw/edit?usp=sharing",
-   "lang": "en",
-   "date": "2026-09-08T13:29:56Z",
-   "first_seen": "2026-09-23T16:31:23Z",
-   "image": "https://i.ytimg.com/vi/63ebpEXyxVc/hqdefault.jpg",
-   "tags": [
-    "live",
-    "asl"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "63ebpEXyxVc",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 634,
-    "playlists": [
-     "American Sign Language"
-    ],
-    "is_short": false,
-    "views": 297,
-    "is_live_recording": true,
-    "date_approx": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Date with higher power",
-     "es": "Una cita con el Poder Superior"
-    },
-    "summary": {
-     "en": "ASL Grapevine night live recording - Topic: Date with higher power Transcript: https://docs.google.com/document/d/1dGt6EFdcCTW9Dyhj_XSY9YW3ReFWK5lXPePhLkSHJtw/edit?usp=sharing",
-     "es": "ASL Grapevine noche de grabación en vivo - Tema: Una cita con el Poder Superior Transcripción: https://docs.google.com/document/d/1dGt6EFdcCTW9Dyhj_XSY9YW3ReFWK5lXPePhLkSHJtw/edit?usp=sharing"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-08T13:29:56Z"
-  },
-  {
-   "id": "yt:hlXXUTSw8zk",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=hlXXUTSw8zk",
-   "title": "New Freedom [Season 11, Episode 10]",
-   "summary": "Allison felt like a late bloomer starting drinking at 14, her friends were already at it. She tells Don and Sam that her first drinks were part of her people pleasing tendencies, but she stayed lonely nonetheless. Later, friends told Allison she needed to get help, and recommended AA. At her first meeting Allison felt welcomed — the group made it a First Step meeting and asked her to come back…",
-   "lang": "en",
-   "date": "2026-09-07T04:28:41Z",
-   "first_seen": "2026-09-23T16:31:23Z",
-   "image": "https://i.ytimg.com/vi/hlXXUTSw8zk/hqdefault.jpg",
-   "tags": [
-    "season-11"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "hlXXUTSw8zk",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 1967,
-    "playlists": [
-     "AA Grapevine's Podcast"
-    ],
-    "is_short": false,
-    "views": 340,
-    "is_live_recording": false,
-    "date_approx": false,
-    "season": 11,
-    "episode": 10
-   },
-   "i18n": {
-    "title": {
-     "en": "New Freedom [Season 11, Episode 10]",
-     "es": "Nueva libertad [Temporada 11, Episodio 10]"
-    },
-    "summary": {
-     "en": "Allison felt like a late bloomer starting drinking at 14, her friends were already at it. She tells Don and Sam that her first drinks were part of her people pleasing tendencies, but she stayed lonely nonetheless. Later, friends told Allison she needed to get help, and recommended AA. At her first meeting Allison felt welcomed — the group made it a First Step meeting and asked her to come back…",
-     "es": "Allison se sentía como un floreciente que comenzaba a beber a los 14 años, sus amigos ya estaban en ello. Ella le dice a Don y Sam que sus primeros tragos eran parte de su gente tendencias agradables, pero se quedó sola sin embargo. Más tarde, amigos le dijeron a Allison que necesitaba ayuda, y recomendó AA. En su primera reunión, Allison sintió la bienvenida —el grupo lo hizo una reunión Primer Paso y le pidió que regresara …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-07T04:28:41Z"
-  },
-  {
-   "id": "pod:gv:beaef3cf8b96",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/a8a8ecbc-87d0-494c-a999-65290c72c51f",
-   "title": "New Freedom [Season 11, Episode 10]",
-   "summary": "Allison felt like a late bloomer starting drinking at 14, her friends were already at it. She tells Don and Sam that her first drinks were part of her people pleasing tendencies, but she stayed lonely nonetheless. Later, friends told Allison she needed to get help, and recommended AA. At her first meeting Allison felt welcomed — the group made it a First Step meeting and asked her to come back…",
-   "lang": "en",
-   "date": "2026-09-07T04:15:00Z",
-   "first_seen": "2026-09-23T16:27:02Z",
-   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
-   "tags": [
-    "season-11"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/a8a8ecbc-87d0-494c-a999-65290c72c51f.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 39338840,
-    "duration_sec": 1967,
-    "season": 11,
-    "episode": 10,
-    "episode_type": "full",
-    "show": "gv",
-    "show_name": "AA Grapevine's Podcast",
-    "link": "https://www.aagrapevine.org/podcast",
-    "player_url": "https://player.captivate.fm/episode/a8a8ecbc-87d0-494c-a999-65290c72c51f",
-    "show_web": "https://www.aagrapevine.org/podcasts",
-    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
-    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
-    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
-    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
-   },
-   "i18n": {
-    "title": {
-     "en": "New Freedom [Season 11, Episode 10]",
-     "es": "Nueva libertad [Temporada 11, Episodio 10]"
-    },
-    "summary": {
-     "en": "Allison felt like a late bloomer starting drinking at 14, her friends were already at it. She tells Don and Sam that her first drinks were part of her people pleasing tendencies, but she stayed lonely nonetheless. Later, friends told Allison she needed to get help, and recommended AA. At her first meeting Allison felt welcomed — the group made it a First Step meeting and asked her to come back…",
-     "es": "Allison se sentía como un floreciente que comenzaba a beber a los 14 años, sus amigos ya estaban en ello. Ella le dice a Don y Sam que sus primeros tragos eran parte de su gente tendencias agradables, pero se quedó sola sin embargo. Más tarde, amigos le dijeron a Allison que necesitaba ayuda, y recomendó AA. En su primera reunión, Allison sintió la bienvenida —el grupo lo hizo una reunión Primer Paso y le pidió que regresara …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-07T04:15:00Z"
-  },
-  {
-   "id": "yt:0C0zlJtGbzc",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=0C0zlJtGbzc",
-   "title": "Grapevine Weekly Open AA Meeting, September 2, 2026 [Season 2, Episode 10]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 2, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Ray and Dario, who share their experience…",
-   "lang": "en",
-   "date": "2026-09-04T04:32:29Z",
-   "first_seen": "2026-09-23T16:31:23Z",
-   "image": "https://i.ytimg.com/vi/0C0zlJtGbzc/hqdefault.jpg",
-   "tags": [
-    "season-2",
-    "weekly-open",
-    "live"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "0C0zlJtGbzc",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 3158,
-    "playlists": [
-     "Grapevine Weekly Open AA Meeting"
-    ],
-    "is_short": false,
-    "views": 342,
-    "is_live_recording": true,
-    "date_approx": false,
-    "season": 2,
-    "episode": 10
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, September 2, 2026 [Season 2, Episode 10]",
-     "es": "Grapevine Weekly Open AA Meeting, 2 de septiembre de 2026 [Temporada 2, Episodio 10]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 2, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Ray and Dario, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 2 de septiembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Jeff da la bienvenida a los oradores Ray y Dario, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-04T04:32:29Z"
   }
  ]
 }

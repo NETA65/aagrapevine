@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-06T13:22:34Z",
+ "updated": "2026-10-07T14:37:58Z",
  "fixture": false,
  "issues": [
   {
@@ -273,7 +273,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:whos-girl",
@@ -350,7 +350,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:when-loneliness-comes",
@@ -427,7 +427,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:watch-what-we-say",
@@ -504,7 +504,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:step-ten-rescue",
@@ -581,7 +581,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:sense-belonging",
@@ -658,7 +658,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:searching-trusting",
@@ -735,7 +735,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:right-door",
@@ -812,7 +812,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:reward-living-good-sober-life",
@@ -889,7 +889,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:purrrfect-solution",
@@ -966,7 +966,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:phone-full-numbers",
@@ -1043,7 +1043,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:no-greater-thrill",
@@ -1120,7 +1120,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:new-town",
@@ -1197,7 +1197,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:meetings-yukon-yellowstone",
@@ -1274,7 +1274,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:love-coffee-hot-donuts",
@@ -1351,7 +1351,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:letter-editor-october-2026",
@@ -1424,7 +1424,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:laughing-our-way-jail",
@@ -1501,7 +1501,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:it-takes-village",
@@ -1574,7 +1574,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:how-it-works",
@@ -1651,7 +1651,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:halloween-remember",
@@ -1731,7 +1731,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:funny-thing-happened-way-vancouver",
@@ -1808,7 +1808,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:feeling-lonely",
@@ -1885,7 +1885,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:fast-complicated-rewarding",
@@ -1962,7 +1962,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:discussion-topic",
@@ -2035,7 +2035,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:dear-grapevine-october-2026",
@@ -2108,7 +2108,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:day-our-friendship-began",
@@ -2185,7 +2185,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:aa-news-october-2026",
@@ -2258,7 +2258,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-09:una-comunidad-unica",

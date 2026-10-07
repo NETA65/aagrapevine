@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-07T05:07:47Z",
+ "updated": "2026-10-07T14:36:19Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16917,
-   "posts": 3923,
+   "posts": 3926,
    "owner_id": "48108439509",
-   "checked": "2026-10-07T05:07:44Z",
+   "checked": "2026-10-07T14:36:00Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,269 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2424,
-   "posts": 2956,
+   "posts": 2959,
    "owner_id": "48275839129",
-   "checked": "2026-10-07T05:07:47Z",
+   "checked": "2026-10-07T14:36:04Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DeMhgvov9lB",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMhgvov9lB/",
+   "title": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos…",
+   "summary": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información.",
+   "lang": "es",
+   "date": "2026-10-07T14:00:21Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMhgvov9lB.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMhgvov9lB",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DeMhgvov9lB.webp",
+    "embed_url": "https://www.instagram.com/p/DeMhgvov9lB/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMhgvov9lB/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Soon! La Viña will hold a virtual open meeting of AA with one coordinator and two …",
+     "es": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos…"
+    },
+    "summary": {
+     "en": "Soon! La Viña will hold a virtual open meeting of AA with one coordinator and two speakers. The poster will respect anonymity and will be available on the main platforms. Very soon more information.",
+     "es": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeMg_x2A8zs",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMg_x2A8zs/",
+   "title": "AA Grapevine on Instagram",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-07T13:55:54Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMg_x2A8zs.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMg_x2A8zs",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeMg_x2A8zs.webp",
+    "embed_url": "https://www.instagram.com/p/DeMg_x2A8zs/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMg_x2A8zs/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "AA Grapevine on Instagram",
+     "es": "AA Grapevine en Instagram"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeMghbFR3oI",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMghbFR3oI/",
+   "title": "La Viña en Instagram",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-07T13:51:54Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMghbFR3oI.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMghbFR3oI",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeMghbFR3oI.webp",
+    "embed_url": "https://www.instagram.com/p/DeMghbFR3oI/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMghbFR3oI/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña on Instagram",
+     "es": "La Viña en Instagram"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeMTwPXjMKc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMTwPXjMKc/",
+   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+   "lang": "en",
+   "date": "2026-10-07T12:00:14Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMTwPXjMKc.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMTwPXjMKc",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeMTwPXjMKc.webp",
+    "embed_url": "https://www.instagram.com/p/DeMTwPXjMKc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMTwPXjMKc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
+    },
+    "summary": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeMQUqWjINJ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMQUqWjINJ/",
+   "title": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty…",
+   "summary": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty and truth filter in, and begins to demand reality.” “It Takes What It Takes,” Pompano Beach, Florida, June 1978, Step By Step Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-07T11:30:15Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMQUqWjINJ.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMQUqWjINJ",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeMQUqWjINJ.webp",
+    "embed_url": "https://www.instagram.com/p/DeMQUqWjINJ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMQUqWjINJ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty…",
+     "es": "“Sobriedad hace cosas interesantes a la mente – lo aclara algunos, deja un poco de honestidad …"
+    },
+    "summary": {
+     "en": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty and truth filter in, and begins to demand reality.” “It Takes What It Takes,” Pompano Beach, Florida, June 1978, Step By Step Daily Quote at www.aagrapevine.org",
+     "es": "“Sobriedad hace cosas interesantes a la mente – lo aclara algunos, permite un poco de honestidad y verdad filtrar, y comienza a exigir la realidad.” “Toma lo que se necesita”, playa de Pompano, Florida, junio de 1978, paso a paso Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeMQUmZjL_1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeMQUmZjL_1/",
+   "title": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía…",
+   "summary": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía están sin esperanza. Sea cual sea el costo o el sacrificio que suponga, pongámonos a mejorar nuestras comunicaciones con toda esta gente para que encuentren lo que hemos encontrado: una nueva vida de libertad bajo Dios”. \"“Una perspectiva del porvenir” BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am…",
+   "lang": "es",
+   "date": "2026-10-07T11:30:15Z",
+   "first_seen": "2026-10-07T14:36:19Z",
+   "image": "/assets/cache/ig/DeMQUmZjL_1.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeMQUmZjL_1",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeMQUmZjL_1.webp",
+    "embed_url": "https://www.instagram.com/p/DeMQUmZjL_1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeMQUmZjL_1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Let’s remember the crowd of people who still suffer from alcoholism and that still …",
+     "es": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía…"
+    },
+    "summary": {
+     "en": "“Let us remember the multitude of people who still suffer from alcoholism and who are still hopeless. Whatever the cost or sacrifice it entails, let us begin to improve our communications with all these people to find what we have found: a new life of freedom under God.” \"A Perspective of the Future\" Bill W., co-founder of AA, February 1961 From I Am …",
+     "es": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía están sin esperanza. Sea cual sea el costo o el sacrificio que suponga, pongámonos a mejorar nuestras comunicaciones con toda esta gente para que encuentren lo que hemos encontrado: una nueva vida de libertad bajo Dios”. \"“Una perspectiva del porvenir” BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DeJrhtXF7XV",
    "source": "instagram",
@@ -2094,7 +2350,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdoNMTdFyaU",
@@ -2137,7 +2393,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdoNMQyF9Bf",
@@ -2180,7 +2436,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdmVCAoF2V4",

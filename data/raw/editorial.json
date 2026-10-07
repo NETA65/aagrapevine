@@ -1,9 +1,14 @@
 {
  "source": "editorial",
- "updated": "2026-10-06T13:22:59Z",
- "attempted": "2026-10-06T13:22:59Z",
+ "updated": "2026-10-07T14:38:23Z",
+ "attempted": "2026-10-07T14:38:23Z",
  "ok": true,
  "error": null,
+ "changes": {
+  "added": 0,
+  "removed": 0,
+  "held": 0
+ },
  "stats": {
   "gv": {
    "parsed": 26,

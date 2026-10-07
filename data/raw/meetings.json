@@ -1,13 +1,18 @@
 {
  "source": "meetings",
- "updated": "2026-10-06T13:25:26Z",
- "attempted": "2026-10-06T13:25:26Z",
+ "updated": "2026-10-07T14:40:47Z",
+ "attempted": "2026-10-07T14:40:47Z",
  "ok": true,
  "error": null,
+ "changes": {
+  "added": 0,
+  "removed": 0,
+  "held": 0
+ },
  "stats": {
   "offices": 8,
-  "offices_ok": 7,
-  "listed": 5125,
+  "offices_ok": 8,
+  "listed": 5899,
   "grapevine": 24,
   "meetings": 23,
   "in_area": 13,
@@ -16,10 +21,7 @@
   "incomplete": 0,
   "duplicates_merged": 1,
   "kept_from_before": 0,
-  "requests": 9,
-  "warnings": [
-   "Northwest Texas Area 66: feed: nwta66.org answered HTTP 202; page: nwta66.org answered HTTP 202"
-  ]
+  "requests": 8
  },
  "items": [
   {
@@ -1091,8 +1093,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-10-06T13:24:27Z",
-   "attempted": "2026-10-06T13:24:27Z",
+   "updated": "2026-10-07T14:39:55Z",
+   "attempted": "2026-10-07T14:39:55Z",
    "note": null
   },
   {
@@ -1105,8 +1107,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-10-06T13:24:27Z",
-   "attempted": "2026-10-06T13:24:27Z",
+   "updated": "2026-10-07T14:39:55Z",
+   "attempted": "2026-10-07T14:39:55Z",
    "note": null
   },
   {
@@ -1119,8 +1121,8 @@
    "method": "page",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-06T13:24:27Z",
-   "attempted": "2026-10-06T13:24:27Z",
+   "updated": "2026-10-07T14:39:55Z",
+   "attempted": "2026-10-07T14:39:55Z",
    "note": null
   },
   {
@@ -1133,8 +1135,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-06T13:24:27Z",
-   "attempted": "2026-10-06T13:24:27Z",
+   "updated": "2026-10-07T14:39:55Z",
+   "attempted": "2026-10-07T14:39:55Z",
    "note": null
   },
   {
@@ -1147,8 +1149,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-06T13:24:27Z",
-   "attempted": "2026-10-06T13:24:27Z",
+   "updated": "2026-10-07T14:39:55Z",
+   "attempted": "2026-10-07T14:39:55Z",
    "note": null
   },
   {
@@ -1161,8 +1163,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-06T13:24:27Z",
-   "attempted": "2026-10-06T13:24:27Z",
+   "updated": "2026-10-07T14:39:55Z",
+   "attempted": "2026-10-07T14:39:55Z",
    "note": null
   },
   {
@@ -1175,8 +1177,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-06T13:24:27Z",
-   "attempted": "2026-10-06T13:24:27Z",
+   "updated": "2026-10-07T14:39:55Z",
+   "attempted": "2026-10-07T14:39:55Z",
    "note": null
   },
   {
@@ -1184,13 +1186,14 @@
    "name": "Northwest Texas Area 66",
    "url": "https://nwta66.org",
    "lang": "en",
-   "ok": false,
+   "ok": true,
    "count": 0,
-   "method": null,
+   "method": "feed",
    "key_from": null,
-   "error": "feed: nwta66.org answered HTTP 202; page: nwta66.org answered HTTP 202",
-   "updated": "2026-10-03T11:45:46Z",
-   "attempted": "2026-10-06T13:24:27Z"
+   "error": null,
+   "updated": "2026-10-07T14:39:55Z",
+   "attempted": "2026-10-07T14:39:55Z",
+   "note": null
   }
  ],
  "type_labels": {

@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-07T05:08:06Z",
+ "updated": "2026-10-07T14:43:55Z",
  "fixture": false,
  "today": "2026-10-07",
  "home_days": 60,
@@ -247,7 +247,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-09:decisiones",
@@ -839,7 +839,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:sense-belonging",
@@ -916,7 +916,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:fast-complicated-rewarding",
@@ -993,7 +993,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:feeling-lonely",
@@ -1070,7 +1070,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:laughing-our-way-jail",
@@ -1147,7 +1147,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:love-coffee-hot-donuts",
@@ -1224,7 +1224,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:meetings-yukon-yellowstone",
@@ -1301,7 +1301,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:new-town",
@@ -1378,7 +1378,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:no-greater-thrill",
@@ -1455,7 +1455,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:phone-full-numbers",
@@ -1532,7 +1532,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:purrrfect-solution",
@@ -1609,7 +1609,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:searching-trusting",
@@ -1686,7 +1686,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:step-ten-rescue",
@@ -1763,7 +1763,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:day-our-friendship-began",
@@ -1840,7 +1840,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:reward-living-good-sober-life",
@@ -1917,7 +1917,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:right-door",
@@ -1994,7 +1994,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:how-it-works",
@@ -2071,7 +2071,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:watch-what-we-say",
@@ -2148,7 +2148,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:when-loneliness-comes",
@@ -2225,7 +2225,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:whos-girl",
@@ -2302,7 +2302,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-09:40-years-9-sponsors",
@@ -7607,7 +7607,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-09:necessary-work",
