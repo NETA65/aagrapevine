@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-06T13:20:56Z",
+ "updated": "2026-10-07T05:07:47Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16912,
+   "followers": 16917,
    "posts": 3923,
    "owner_id": "48108439509",
-   "checked": "2026-10-06T13:20:53Z",
+   "checked": "2026-10-07T05:07:44Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -21,7 +21,7 @@
    "followers": 2424,
    "posts": 2956,
    "owner_id": "48275839129",
-   "checked": "2026-10-06T13:20:55Z",
+   "checked": "2026-10-07T05:07:47Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },

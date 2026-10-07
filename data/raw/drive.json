@@ -1,9 +1,14 @@
 {
  "source": "drive",
- "updated": "2026-10-06T23:45:03Z",
- "attempted": "2026-10-06T23:45:03Z",
+ "updated": "2026-10-07T05:07:40Z",
+ "attempted": "2026-10-07T05:07:40Z",
  "ok": true,
  "error": null,
+ "changes": {
+  "added": 1,
+  "removed": 0,
+  "held": 0
+ },
  "stats": {
   "mode": "html",
   "root": "A65_GV",
@@ -19,25 +24,17 @@
    }
   ],
   "include_loose": false,
-  "loose_skipped": [
-   "flyers",
-   "notes",
-   "photos",
-   "reports",
-   "slides",
-   "workshops",
-   "40th Annual Gathering of Eagles - Grapevine Table Signup"
-  ],
+  "loose_skipped": 7,
   "skipped_panels": [],
   "folders": 11,
-  "files": 35,
-  "fetched": 35,
-  "new": 0,
+  "files": 36,
+  "fetched": 36,
+  "new": 1,
   "removed": 0,
   "kept_unverified": 0,
   "by_category": {
    "booth": 15,
-   "flyers": 10,
+   "flyers": 11,
    "slides": 4,
    "notes": 2,
    "reports": 2,
@@ -45,7 +42,7 @@
    "workshops": 1
   },
   "by_kind": {
-   "photo": 19,
+   "photo": 20,
    "document": 10,
    "slides": 4,
    "video_file": 1,
@@ -59,8 +56,9 @@
    "type application/vnd.google-apps.spreadsheet": 1,
    "name contains 'PRIVATE'": 1
   },
-  "unreadable_folders": [],
-  "depth_limited": [],
+  "unreadable_folders": 0,
+  "unconfirmed_folders": 0,
+  "depth_limited": 0,
   "shortcuts_resolved": 0,
   "announcements": {
    "reused": 1
@@ -74,6 +72,53 @@
   }
  },
  "items": [
+  {
+   "id": "drive:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/view",
+   "title": "Grapevine Committee Crash 11am-12pm @ Grand Prairie Group, 921 W Pioneer Pkwy Grand Prairie, TX 75052",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-06",
+   "first_seen": "2026-10-07T05:07:40Z",
+   "last_seen": "2026-10-07T05:07:40Z",
+   "image": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
+    "mime": "image/jpeg",
+    "name": "Grapevine Committee Crash 11am-12pm @ Grand Prairie Group, 921 W Pioneer Pkwy Grand Prairie, TX 75052.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/view",
+    "preview_url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "6:15 pm"
+   }
+  },
   {
    "id": "drive:1xv4RzqkSM81mxUrAAa0OH08tIME6BmwT",
    "source": "drive",

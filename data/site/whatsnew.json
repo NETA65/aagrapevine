@@ -1,7 +1,68 @@
 {
- "updated": "2026-10-06T23:45:26Z",
+ "updated": "2026-10-07T05:08:06Z",
  "fixture": false,
  "items": [
+  {
+   "id": "drive:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/view",
+   "title": "Grapevine Committee Crash 11am-12pm @ Grand Prairie Group, 921 W Pioneer Pkwy Grand Prairie, TX 75052",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-06",
+   "first_seen": "2026-10-07T05:07:40Z",
+   "image": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
+    "mime": "image/jpeg",
+    "name": "Grapevine Committee Crash 11am-12pm @ Grand Prairie Group, 921 W Pioneer Pkwy Grand Prairie, TX 75052.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/view",
+    "preview_url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "6:15 pm"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Committee Crash 11am-12pm @ Grand Prairie Group, 921 W Pioneer Pkwy Grand Prairie, TX 75052",
+     "es": "Grapevine comité estrella 11 a. m.-12 p. m. @ Grand Prairie grupo, 921 w pionero Pkwy Grand Prairie, TX 75052"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-06T12:00:00Z"
+  },
   {
    "id": "ig:DeJrhtXF7XV",
    "source": "instagram",
@@ -8033,56 +8094,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-09-04T04:32:29Z"
-  },
-  {
-   "id": "pod:wo:a2f0e2b4f4a8",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/e56bb2e5-7117-4d20-aa28-53720cfe1058",
-   "title": "Grapevine Weekly Open AA Meeting, September 2, 2026 [Season 2, Episode 10]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 2, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Ray and Dario, who share their experience…",
-   "lang": "en",
-   "date": "2026-09-04T04:15:00Z",
-   "first_seen": "2026-09-23T17:23:49Z",
-   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
-   "tags": [
-    "season-2"
-   ],
-   "category": "wo",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/e56bb2e5-7117-4d20-aa28-53720cfe1058.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 75790754,
-    "duration_sec": 3158,
-    "season": 2,
-    "episode": 10,
-    "episode_type": "full",
-    "show": "wo",
-    "show_name": "Grapevine Weekly Open AA Meeting",
-    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "player_url": "https://player.captivate.fm/episode/e56bb2e5-7117-4d20-aa28-53720cfe1058",
-    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
-    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
-    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, September 2, 2026 [Season 2, Episode 10]",
-     "es": "Grapevine Weekly Open AA Meeting, 2 de septiembre de 2026 [Temporada 2, Episodio 10]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 2, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Ray and Dario, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 2 de septiembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Jeff da la bienvenida a los oradores Ray y Dario, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-04T04:15:00Z"
   }
  ]
 }

@@ -1,9 +1,14 @@
 {
  "source": "instagram",
- "updated": "2026-10-06T13:20:56Z",
- "attempted": "2026-10-06T13:20:56Z",
+ "updated": "2026-10-07T05:07:47Z",
+ "attempted": "2026-10-07T05:07:47Z",
  "ok": true,
  "error": null,
+ "changes": {
+  "added": 0,
+  "removed": 0,
+  "held": 0
+ },
  "stats": {
   "strategy": {
    "gv": "profile_embed",
@@ -21,10 +26,9 @@
   },
   "fetched": 12,
   "manual": 0,
-  "thumbs_downloaded": 4,
   "pruned": 0,
   "thumbs_deleted": 0,
-  "new": 4,
+  "new": 0,
   "total": 71,
   "per_account": {
    "gv": 39,
@@ -2185,10 +2189,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16912,
+   "followers": 16917,
    "posts": 3923,
    "owner_id": "48108439509",
-   "checked": "2026-10-06T13:20:53Z",
+   "checked": "2026-10-07T05:07:44Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp",
    "_avatar_checked": "2026-10-01T07:19:58Z"
   },
@@ -2200,9 +2204,10 @@
    "followers": 2424,
    "posts": 2956,
    "owner_id": "48275839129",
-   "checked": "2026-10-06T13:20:55Z",
+   "checked": "2026-10-07T05:07:47Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp",
    "_avatar_checked": "2026-10-01T07:19:59Z"
   }
- }
+ },
+ "removal": {}
 }

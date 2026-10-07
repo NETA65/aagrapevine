@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-06T23:45:26Z",
- "updated": "2026-10-06T23:45:26Z",
+ "generated": "2026-10-07T05:08:07Z",
+ "updated": "2026-10-07T05:08:07Z",
  "fixture": false,
  "sources": [
   {
@@ -8,10 +8,10 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-10-06T23:45:03Z",
-   "attempted": "2026-10-06T23:45:03Z",
-   "count": 35,
-   "new_7d": 29,
+   "updated": "2026-10-07T05:07:40Z",
+   "attempted": "2026-10-07T05:07:40Z",
+   "count": 36,
+   "new_7d": 30,
    "error": null,
    "stats": {
     "mode": "html",
@@ -28,25 +28,17 @@
      }
     ],
     "include_loose": false,
-    "loose_skipped": [
-     "flyers",
-     "notes",
-     "photos",
-     "reports",
-     "slides",
-     "workshops",
-     "40th Annual Gathering of Eagles - Grapevine Table Signup"
-    ],
+    "loose_skipped": 7,
     "skipped_panels": [],
     "folders": 11,
-    "files": 35,
-    "fetched": 35,
-    "new": 0,
+    "files": 36,
+    "fetched": 36,
+    "new": 1,
     "removed": 0,
     "kept_unverified": 0,
     "by_category": {
      "booth": 15,
-     "flyers": 10,
+     "flyers": 11,
      "slides": 4,
      "notes": 2,
      "reports": 2,
@@ -54,7 +46,7 @@
      "workshops": 1
     },
     "by_kind": {
-     "photo": 19,
+     "photo": 20,
      "document": 10,
      "slides": 4,
      "video_file": 1,
@@ -68,8 +60,9 @@
      "type application/vnd.google-apps.spreadsheet": 1,
      "name contains 'PRIVATE'": 1
     },
-    "unreadable_folders": [],
-    "depth_limited": [],
+    "unreadable_folders": 0,
+    "unconfirmed_folders": 0,
+    "depth_limited": 0,
     "shortcuts_resolved": 0,
     "announcements": {
      "reused": 1
@@ -81,15 +74,21 @@
     "booth_texts": {
      "reused": 2
     }
-   }
+   },
+   "changes": {
+    "added": 1,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
   },
   {
    "source": "announcements",
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-10-06T23:45:03Z",
-   "attempted": "2026-10-06T23:45:03Z",
+   "updated": "2026-10-07T05:07:40Z",
+   "attempted": "2026-10-07T05:07:40Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -99,15 +98,21 @@
     "problems": 0,
     "errors": [],
     "active": 1
-   }
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
   },
   {
    "source": "manual_events",
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-10-06T23:45:03Z",
-   "attempted": "2026-10-06T23:45:03Z",
+   "updated": "2026-10-07T05:07:40Z",
+   "attempted": "2026-10-07T05:07:40Z",
    "count": 9,
    "new_7d": 0,
    "error": null,
@@ -116,7 +121,13 @@
     "new": 0,
     "problems": 0,
     "errors": []
-   }
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
   },
   {
    "source": "articles",
@@ -141,15 +152,17 @@
     "new": 0,
     "total": 228,
     "requests": 16
-   }
+   },
+   "changes": null,
+   "held": null
   },
   {
    "source": "writers_archive",
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-10-06T23:45:09Z",
-   "attempted": "2026-10-06T23:45:09Z",
+   "updated": "2026-10-07T05:07:50Z",
+   "attempted": "2026-10-07T05:07:50Z",
    "count": 1261,
    "new_7d": 1261,
    "error": null,
@@ -162,7 +175,13 @@
     "changed": false,
     "notes": [],
     "warnings": []
-   }
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
   },
   {
    "source": "editorial",
@@ -200,7 +219,9 @@
      "label": "Temas de LV 2026 y 2027"
     },
     "new": 0
-   }
+   },
+   "changes": null,
+   "held": null
   },
   {
    "source": "pdfs",
@@ -233,7 +254,9 @@
     "requests": 28,
     "queue_remaining": 0,
     "est_days_to_full": 0.0
-   }
+   },
+   "changes": null,
+   "held": null
   },
   {
    "source": "youtube",
@@ -271,15 +294,17 @@
     "warnings": [
      "details stopped: ERROR: [youtube] daNbma33_to: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --c"
     ]
-   }
+   },
+   "changes": null,
+   "held": null
   },
   {
    "source": "podcasts",
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-10-06T23:45:06Z",
-   "attempted": "2026-10-06T23:45:06Z",
+   "updated": "2026-10-07T05:07:43Z",
+   "attempted": "2026-10-07T05:07:43Z",
    "count": 299,
    "new_7d": 2,
    "error": null,
@@ -306,19 +331,25 @@
     "gone_checks": 0,
     "discovery_checked": "2026-10-01T07:18:55Z",
     "discovered_feeds": [],
-    "seconds": 2.7,
+    "seconds": 2.4,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
-   }
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
   },
   {
    "source": "instagram",
    "label": "Instagram posts",
    "label_es": "Publicaciones de Instagram",
    "ok": true,
-   "updated": "2026-10-06T13:20:56Z",
-   "attempted": "2026-10-06T13:20:56Z",
+   "updated": "2026-10-07T05:07:47Z",
+   "attempted": "2026-10-07T05:07:47Z",
    "count": 71,
    "new_7d": 28,
    "error": null,
@@ -339,10 +370,9 @@
     },
     "fetched": 12,
     "manual": 0,
-    "thumbs_downloaded": 4,
     "pruned": 0,
     "thumbs_deleted": 0,
-    "new": 4,
+    "new": 0,
     "total": 71,
     "per_account": {
      "gv": 39,
@@ -351,7 +381,13 @@
     "requests": 2,
     "anonymous": true,
     "graph_api": false
-   }
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
   },
   {
    "source": "weekly_open",
@@ -371,7 +407,9 @@
      "time"
     ],
     "missing": []
-   }
+   },
+   "changes": null,
+   "held": null
   },
   {
    "source": "events_external",
@@ -398,7 +436,9 @@
     "items": 2,
     "new": 0,
     "requests": 40
-   }
+   },
+   "changes": null,
+   "held": null
   },
   {
    "source": "shop",
@@ -418,7 +458,9 @@
     "specialty_refreshed": false,
     "requests": 12,
     "images_downloaded": 0
-   }
+   },
+   "changes": null,
+   "held": null
   },
   {
    "source": "audio_project",
@@ -437,7 +479,9 @@
      "lv"
     ],
     "requests": 3
-   }
+   },
+   "changes": null,
+   "held": null
   },
   {
    "source": "meetings",
@@ -465,15 +509,17 @@
     "warnings": [
      "Northwest Texas Area 66: feed: nwta66.org answered HTTP 202; page: nwta66.org answered HTTP 202"
     ]
-   }
+   },
+   "changes": null,
+   "held": null
   },
   {
    "source": "quote",
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-10-06T23:45:25Z",
-   "attempted": "2026-10-06T23:45:25Z",
+   "updated": "2026-10-07T05:08:05Z",
+   "attempted": "2026-10-07T05:08:05Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -481,9 +527,15 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-10-06",
+    "today": "2026-10-07",
     "new": 0
-   }
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
   }
  ],
  "scheduled": [
@@ -497,6 +549,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-10-07",
+    "goal_at": "2026-10-07T10:30:00Z",
+    "gv": null,
+    "lv": null
+   },
    {
     "day": "2026-10-06",
     "goal_at": "2026-10-06T10:30:00Z",
@@ -532,12 +590,6 @@
     "goal_at": "2026-10-01T10:30:00Z",
     "gv": "2026-10-01T07:15:16Z",
     "lv": "2026-10-01T07:15:26Z"
-   },
-   {
-    "day": "2026-09-30",
-    "goal_at": "2026-09-30T10:30:00Z",
-    "gv": "2026-09-30T09:45:42Z",
-    "lv": "2026-09-30T09:45:52Z"
    }
   ]
  },
@@ -560,17 +612,18 @@
   "updated": "2026-10-06T13:28:36Z"
  },
  "translations": {
-  "cached": 3816,
+  "cached": 3817,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 0,
+  "translated_this_run": 1,
   "from_cache": 3816,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.1,
-  "model_seconds": 0.0,
-  "texts_per_second": null,
-  "glossary_entries": 258
+  "seconds": 0.5,
+  "model_seconds": 0.3,
+  "texts_per_second": 1.9,
+  "glossary_entries": 258,
+  "problems": []
  },
  "counts": {
   "videos": 533,
@@ -578,7 +631,7 @@
   "instagram": 71,
   "articles": 228,
   "pdfs": 92,
-  "drive": 19,
+  "drive": 20,
   "editorial": 44,
   "weekly_open": 2,
   "announcements": 2,
@@ -602,10 +655,10 @@
    "group": "neta",
    "state": "blocked",
    "http_status": 403,
-   "error": "HTTP 403: the site's bot protection (Cloudflare “Just a moment…” check) turned the robot away",
+   "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
-   "last_attempt": "2026-10-06T09:07:33Z",
-   "checked_this_run": false,
+   "last_attempt": "2026-10-07T05:08:05Z",
+   "checked_this_run": true,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,
@@ -614,7 +667,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-10-06",
+  "today": "2026-10-07",
   "home_days": 60,
   "list_days": [
    60,
