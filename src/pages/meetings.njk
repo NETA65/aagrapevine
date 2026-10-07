@@ -679,7 +679,7 @@ pageScripts: ["/assets/js/committee.js"]
           </details>
           {% endif %}
           {% if not w.isLv %}<a class="btn-secondary" href="{{ '/listen/?show=wo#episodes' | lurl(lang) }}">{% icon "headphones", "size-4" %} {{ "committee.weekly.listen" | t(lang) }}</a>{% endif %}
-          {% if w.detailsUrl %}<a class="btn-ghost" href="{{ w.detailsUrl }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} {{ ("committee.weekly.details_" + key) | t(lang) | escape | replace(".org", "<wbr>.org") | safe }}</a>{% endif %}
+          {% if w.detailsUrl %}<a class="btn-ghost" href="{{ w.detailsUrl }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span>{{ ("committee.weekly.details_" + key) | t(lang) | escape | replace(r/(\S+)\.org/g, '<span class="inline-block">$1<wbr>.org</span>') | safe }}</span></a>{% endif %}
         </div>
         {#- La Viña's details come from its official flyer: the flyer itself, when it is on the committee's
             Drive (config/site.yml lavina_weekly_open.flyer_match → driveMatch; the Portfolio stays its home) -#}
@@ -719,7 +719,7 @@ pageScripts: ["/assets/js/committee.js"]
   {% else %}
   <div class="card card-pad flex flex-col items-start gap-3">
     <p class="text-sm leading-relaxed text-muted">{{ "committee.weekly.text" | t(lang) }}</p>
-    <a class="btn-secondary" href="{{ site.links.weekly_open }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} {{ "committee.weekly.details_gv" | t(lang) | escape | replace(".org", "<wbr>.org") | safe }}</a>
+    <a class="btn-secondary" href="{{ site.links.weekly_open }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span>{{ "committee.weekly.details_gv" | t(lang) | escape | replace(r/(\S+)\.org/g, '<span class="inline-block">$1<wbr>.org</span>') | safe }}</span></a>
   </div>
   {% endif %}
 </section>

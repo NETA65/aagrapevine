@@ -105,8 +105,11 @@ pageScripts: ["/assets/js/read.js"]
         {% if v.freeCount %}<div><dt class="text-[0.7rem] font-semibold uppercase tracking-wider text-white/80">{{ "read.stat_free" | t(lang) }}</dt><dd class="font-display text-3xl font-semibold">{{ v.freeCount }}</dd></div>{% endif %}
       </dl>
       {% endif %}
+      {#- (the web address moves onto a line of its own whole, and only when even that line is too narrow — a phone
+          at large text — breaks at its dot, "aagrapevine / .org", never "aagrapevine.or / g": an inline-block with a
+          <wbr>, in a span so it flows with the words — as /meetings/' "Details on aagrapevine.org") -#}
       <div class="mt-6 flex flex-wrap gap-2">
-        <a class="btn-light" href="{{ issueUrl }}" target="_blank" rel="noopener">{% icon "book-open", "size-4" %} {{ "read.read_on" | t(lang, {site: site_}) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+        <a class="btn-light" href="{{ issueUrl }}" target="_blank" rel="noopener">{% icon "book-open", "size-4" %} <span>{{ "read.read_on" | t(lang, {site: site_}) | escape | replace(r/(\S+)\.org/g, '<span class="inline-block">$1<wbr>.org</span>') | safe }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
       </div>
     </header>
 

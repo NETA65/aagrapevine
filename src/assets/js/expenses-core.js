@@ -43,8 +43,8 @@
    So marking a request "paid" settles it even when the check itself was not recorded, and a
    recorded check is never counted twice. A balance on a day (a period's end: range.to) takes each claim as
    it stood that day (statusOn, settledOn): one marked paid — or repaid — whose paid_date is after that day
-   was still open then, "submitted" (or "to_request" when it was asked for after that day too); with no
-   paid_date it counts as settled, as before.
+   was still open then, "submitted"; one asked for after that day (claim_date), paid or not, was still
+   "to_request" then; with no paid_date it counts as settled, as before.
 
    CSV CONTRACT (toCSV / parseCSV / planImport) — the file is the visitor's own, so it has everything
    we wrote (less any column deleted in a spreadsheet):
@@ -777,13 +777,16 @@
   function isClaimed(e) { return isMoney(e) && e.method !== DIRECT && CLAIMED.indexOf(e.claim_status) >= 0 && e.repaid !== "forgiven"; }
   // A claim as it stood at the end of the day `to` ("" or left out: as it is now — see MONEY OWED): settled when
   // marked paid or repaid on or before that day (a blank paid_date can't say: settled); one paid later was still
-  // asked for then ("submitted"), or not yet asked for when its claim_date is after that day too.
+  // asked for then ("submitted") — and one asked for later (its claim_date after that day, paid or still
+  // submitted) was not yet asked for ("to_request"), so marking it paid never moves it between the two.
   function settledOn(e, to) {
     return (e.claim_status === "paid" || e.repaid === "repaid") && (!to || !isISO(e.paid_date) || e.paid_date <= to);
   }
   function statusOn(e, to) {
-    if (e.claim_status !== "paid" || settledOn(e, to)) return e.claim_status;
-    return isISO(e.claim_date) && e.claim_date > to ? "to_request" : "submitted";
+    var s = e.claim_status;
+    if (!to || settledOn(e, to)) return s;
+    if (s === "paid") s = "submitted";
+    return s === "submitted" && isISO(e.claim_date) && e.claim_date > to ? "to_request" : s;
   }
   function subEnd(e) { return e && isISO(e.sub_start) && Number(e.sub_term) > 0 ? addMonths(e.sub_start, e.sub_term) : ""; }
   function inRange(e, o) {

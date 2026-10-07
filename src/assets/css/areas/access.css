@@ -387,7 +387,9 @@ html:root.tts-bar-on {
    room for its words: 0.75rem a side there, not 1.25rem, so a word that fits in the button stays whole (the
    meetings cards' "Agregar al / calendario" at 150 % on a 360px phone, which broke as "calendari / o"). A ghost
    button has no edge or fill to keep off its words: 0.25rem ("Detalles en / aagrapevine.org" whole; narrower
-   still, a web address breaks at its dot — meetings.njk "aagrapevine<wbr>.org") */
+   still, a web address breaks at its dot — meetings.njk / read.njk wrap it in an inline-block with a <wbr>, so it
+   moves onto a line of its own whole before it breaks there). The slimmer pills fit two buttons on a row more
+   often: a copy button that is a min-w-0 "text column" (main.css) keeps 12em, digest.njk [--text-col-min:12em] */
 @media (width < 30rem) {
   :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(main, footer, .gvlv-panel) :is(.btn, .btn-primary, .btn-secondary, .btn-ghost, .btn-lv, .btn-light, .btn-on-dark):not(.btn-sm):not(:is(.mp-poster, .cm-frame) *) { padding-inline: 0.75rem; }
   :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(main, footer, .gvlv-panel) .btn-ghost:not(.btn-sm):not(:is(.mp-poster, .cm-frame) *) { padding-inline: 0.25rem; }

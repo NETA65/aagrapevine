@@ -475,7 +475,23 @@ class Round7Polish(unittest.TestCase):
         self.assertLess(narrow.index("padding-inline: 0.75rem"), narrow.index("padding-inline: 0.25rem"))   # (the ghost's wins)
         self.assertIn("overflow-wrap: anywhere", narrow)                       # still the last resort for a word too long
         mt = read("src", "pages", "meetings.njk")
-        self.assertEqual(mt.count('| t(lang) | escape | replace(".org", "<wbr>.org") | safe }}'), 2)   # a web address breaks at its dot
+        # a web address breaks at its dot — only when even a line of its own is too narrow for it: an inline-block
+        # with a <wbr> (a bare <wbr> broke "Details on aagrapevine / .org" where "Details on / aagrapevine.org" fit),
+        # in a span, so it flows with the words (a bare inline-block would be a flex item of its own in the pill)
+        wrap = """<span>{{ %s | escape | replace(r/(\\S+)\\.org/g, '<span class="inline-block">$1<wbr>.org</span>') | safe }}</span>"""
+        self.assertIn(wrap % '("committee.weekly.details_" + key) | t(lang)', mt)
+        self.assertIn(wrap % '"committee.weekly.details_gv" | t(lang)', mt)
+        self.assertNotIn('replace(".org", "<wbr>.org")', mt)
+        rd = read("src", "pages", "read.njk")                                   # (/read/'s "Read on aagrapevine.org" too)
+        self.assertIn(wrap % '"read.read_on" | t(lang, {site: site_})', rd)
+        # the slimmer pills must not let a copy button squeeze in beside its neighbour: a min-w-0 button is a "text
+        # column" at 130 %+ (main.css: down to 7em) — /digest/'s "Copy for WhatsApp" broke as "WhatsA / pp" beside
+        # "More" at 150 % on a 390px phone; 12em keeps its words whole (and the monthly page's pair the same)
+        dg = read("src", "pages", "digest.njk")
+        self.assertIn('class="btn-primary min-w-0 grow basis-48 [--text-col-min:12em] lg:w-full"', dg)
+        mm = read("src", "pages", "monthly-month.njk")
+        self.assertEqual(mm.count("min-w-0 grow basis-48 [--text-col-min:12em]"), 2)
+        self.assertNotIn("min-w-0 grow basis-48\"", dg + mm)
 
     def test_the_pressed_chip_in_windows_high_contrast(self):
         css = read("src", "assets", "css", "main.css")

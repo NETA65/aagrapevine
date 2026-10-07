@@ -169,8 +169,10 @@ pageScripts: ["/assets/js/community.js"]
           </div>
           <p class="mt-2 text-xs leading-relaxed text-muted max-lg:hidden">{{ "community.digest.lang_bi_help" | t(lang) }}</p>
         </fieldset>
+        {#- [--text-col-min:12em]: at 130 %+ text the copy button keeps room for its words, or "More" moves
+            under it (main.css lets a min-w-0 column go down to 7em: "Copy for / WhatsA / pp" beside it) -#}
         <div class="mt-2 flex flex-wrap gap-2 lg:mt-5 lg:grid">
-          <button type="button" class="btn-primary min-w-0 grow basis-48 lg:w-full" data-copy-from="#digest-wa-one" :data-copy-from="src('wa')">{% icon "message-circle", "size-4" %} {{ "community.digest.copy_wa" | t(lang) }}</button>
+          <button type="button" class="btn-primary min-w-0 grow basis-48 [--text-col-min:12em] lg:w-full" data-copy-from="#digest-wa-one" :data-copy-from="src('wa')">{% icon "message-circle", "size-4" %} {{ "community.digest.copy_wa" | t(lang) }}</button>
           <button type="button" class="btn-secondary shrink-0 px-4 max-[21rem]:grow lg:hidden" x-cloak @click="more = !more" :aria-expanded="more.toString()" aria-controls="dg-more">{{ "community.digest.more" | t(lang) }}<span class="sr-only"> {{ "community.digest.more_sr" | t(lang) }}</span> {% icon "chevron-down", "size-4 transition" %}</button>
         </div>
         <div id="dg-more" class="cm-dg-more">

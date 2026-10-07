@@ -1914,8 +1914,10 @@ class OwedAtTheEnd(unittest.TestCase):
           const row = (E, range) => G.funderBalances(E, S, range).map((b) => [b.funder, b.to_request_cents, b.submitted_cents, b.paid_cents, b.settled_cents, b.balance_cents]);
           const owed = (E, range) => G.summary(E, S, range).owed_cents;
           const paidOnly = [hotel()], withCheck = [hotel(), check], noDate = [hotel({ paid_date: "" })];
-          // asked for after the period's end too: not yet asked for at its end
+          // asked for after the period's end too: not yet asked for at its end — paid or still waiting, so marking
+          // it paid in January never moves December's figure between "Not requested" and "Submitted"
           const lateAsk = [hotel({ date: "2025-12-12", claim_date: "2026-01-05" })];
+          const lateAskOpen = [hotel({ date: "2025-12-12", claim_date: "2026-01-05", claim_status: "submitted", paid_date: "" })];
           // a subscription bought for José, repaid on January 10
           const SJ = JSON.parse(JSON.stringify(S));
           SJ.funders.push({ id: "p_jose", kind: "person", name: "José R.", hidden: false, order: 9, builtin: false });
@@ -1925,12 +1927,15 @@ class OwedAtTheEnd(unittest.TestCase):
           out({ paid25: [row(paidOnly, { to: y25.to }), owed(paidOnly, y25)], paid26: [row(paidOnly, { to: y26.to }), owed(paidOnly, y26)],
                 check25: owed(withCheck, y25), check26: owed(withCheck, y26), all: owed(withCheck, {}),
                 noDate25: owed(noDate, y25), lateAsk25: row(lateAsk, { to: y25.to }),
+                lateAskOpen25: row(lateAskOpen, { to: y25.to }), lateAskOpenNow: row(lateAskOpen, {}),
                 people25: people(y25), people26: people(y26), status: hotel().claim_status });""")
         self.assertEqual(r["paid25"], [[["area", 0, 30000, 0, 0, -30000]], 30000])   # at the end of 2025 the Area still owed it: submitted
         self.assertEqual(r["paid26"], [[["area", 0, 0, 30000, 30000, 0]], 0])        # even, once paid
         self.assertEqual((r["check25"], r["check26"], r["all"]), (30000, 0, 0))     # the January check doesn't settle December
         self.assertEqual(r["noDate25"], 0)                                          # no paid date: settled, as before
         self.assertEqual(r["lateAsk25"], [["area", 30000, 0, 0, 0, -30000]])        # asked for in January: "to request" at December's end
+        self.assertEqual(r["lateAskOpen25"], r["lateAsk25"])                        # …the same before it was paid
+        self.assertEqual(r["lateAskOpenNow"], [["area", 0, 30000, 0, 0, -30000]])   # (as it is now: submitted)
         self.assertEqual(r["people25"], [["p_jose", 1500, ["s"]]])                  # José still owed it at the end of 2025
         self.assertEqual(r["people26"], [])
         self.assertEqual(r["status"], "paid", "the entry itself is never changed")

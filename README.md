@@ -1574,7 +1574,9 @@ This describes Tracker 1.2.0 (October 2026).
 - **Who owes you** (Summary) and **Owed to you** count everything **up to the end** of the period shown: a
   hotel asked back in December and repaid in January shows "Even" in January's views ("Where things stand at the
   end of the period: …"), and still "Owes you" in December's — also once the request is marked **Paid**, as its
-  paid date is in January (a request marked paid with no paid date counts as settled).
+  paid date is in January (a request marked paid with no paid date counts as settled). Its **Not requested** /
+  **Submitted** columns go by the request's date the same way: asked for in January, it is "Not requested" in
+  December's view, paid or not.
 - **Backups** (Settings → Data → Export): **Full backup (.zip)** — `service-expenses-backup-YYYY-MM-DD.zip`
   (Spanish `gastos-de-servicio-respaldo-YYYY-MM-DD.zip`) holds `backup.json` and one picture file per receipt photo,
   so any unzip program opens it; **Back up without photos (.json)** —
