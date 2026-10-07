@@ -49,6 +49,7 @@
   var PAGE = 100;              // rows per "Show more"
   var UNDO_MS = 10000;         // how long "Undo" stays after a delete (paused while the toast has the focus or the mouse)
   var UNDO_KEEP = 30 * 60000;  // …and how long its photos stay safe from another tab's clean-up (the toast can be held)
+  var KEEP_AGAIN_MS = 2000;    // a photo the form kept and saved again (keepPhoto) is looked at once more after this
   var MAX_PHOTO = 1600;        // longest side of a stored receipt photo (px)
   var BIG_BACKUP = 18 * 1048576;  // a full backup this big is too big for most e-mail (25 MB, encoded): the page says so
   var VIEWS = ["entries", "summary", "giveaways", "requests", "settings"];
@@ -462,8 +463,12 @@
             self.loadState();
             self.armLeave();
             if (!self.form) { if (!self.toastUndo) self.say(self.t("toast.other_tab")); return; }
-            var id = self.form.id, gone = self.formMode === "edit" && id && !S.state.entries.some(function (x) { return x.id === id; });
-            if (gone) { self.formMode = "add"; S.formGone = true; S.formSnap = ""; self.armLeave(); }
+            // (still gone at the next change there: the dialog keeps saying so; brought back — that tab's "Undo" —:
+            // an edit again)
+            var id = self.form.id, here = !!id && S.state.entries.some(function (x) { return x.id === id; });
+            var gone = (self.formMode === "edit" || S.formGone) && !!id && !here;
+            if (gone && !S.formGone) { self.formMode = "add"; S.formGone = true; S.formSnap = ""; self.armLeave(); }
+            else if (S.formGone && here) { self.formMode = "edit"; S.formGone = false; }
             self.dlgMsg = "";
             self.$nextTick(function () { self.dlgMsg = self.t(gone ? "form.deleted_elsewhere" : "toast.other_tab"); });
           });
@@ -575,12 +580,13 @@
             return self.confirm(msg, self.t("ask.damaged_remove_ok"), true);
           }).then(function (yes) {
             if (!yes) return;
-            var texts = lsKeys(ASIDE).map(lsGet), now = lsGet(KEY);
+            var texts = lsKeys(ASIDE).map(lsGet), now = lsGet(KEY), keep = S.state.entries.length || S.unsaved;
             lsKeys(ASIDE).forEach(lsDel);
-            if (self.lock === "unreadable") { self.lock = ""; lsDel(KEY); if (S.state.entries.length) self.save(); }
+            // (what was changed here meanwhile — entries, or a setting — is saved now)
+            if (self.lock === "unreadable") { self.lock = ""; lsDel(KEY); if (keep) self.save(); }
             // (nothing saved since it was set aside: the stored ledger is still that text — it goes too, or the
             // next visit would set it aside again)
-            else if (now && texts.indexOf(now) >= 0) { if (S.state.entries.length) self.save(); else lsDel(KEY); }
+            else if (now && texts.indexOf(now) >= 0) { if (keep) self.save(); else lsDel(KEY); }
             self.damaged = 0;
             self.say(self.t("toast.item_deleted"));
           });
@@ -1613,11 +1619,15 @@
             }, function () { /* unreadable */ });
           });
         },
-        // A kept photo (loadPhoto) stored again under its entry — only when nothing is stored there now.
-        keepPhoto: function (rec) {
+        /* A kept photo (loadPhoto) stored again under its entry — only when nothing is stored there now. Looked
+           at once more a moment later (again): the other tab may delete it just after this look, before it
+           sees this save (a tab's view of the stored ledger can lag a little) — then, while something here still
+           points to it. */
+        keepPhoto: function (rec, again) {
           var self = this;
           return photos.get(rec.id).then(function (have) {
             if (!have) return photos.put(rec).catch(function () { self.say(self.t("toast.photo_failed")); });
+            if (!again) setTimeout(function () { if (self.photoIds()[rec.id]) self.keepPhoto(rec, true); }, KEEP_AGAIN_MS);
           });
         },
         onPhoto: function (ev) {
@@ -2287,14 +2297,18 @@
             .then(function (receipts) { self.saveBackup(new Blob([S.X.toBackup(S.state, receipts)], { type: "application/json" }), "", ".json", left); });
         },
         /* The backup saved. It has everything this tab holds, also what the browser would not keep: closing
-           the tab no longer needs to ask (armLeave). left (a full backup): the photos it could not take
-           [{id} …] — said by name, in the message and under the backup buttons, until the next full backup. */
+           the tab no longer needs to ask (armLeave) — after the backup without photos, only when the ledger as
+           stored points to every photo (an entry's photo the browser kept while it did not keep the entry goes
+           at the next visit's clean-up: that backup does not have it). left (a full backup): the photos it
+           could not take [{id} …] — said by name, in the message and under the backup buttons, until the next
+           full backup. */
         saveBackup: function (blob, what, ext, left) {
           var self = this, name = this.t("data.file_base") + "-" + this.t("data.backup_word") + what + "-" + today() + ext;
           saveBlob(blob, name);
           this.stamp("lastBackup");
           this.save();
-          S.unsaved = false;
+          var kept = storedPhotoIds() || {};
+          if (left || !S.state.entries.some(function (e) { return e.receipt === "photo" && !kept[e.id]; })) S.unsaved = false;
           this.armLeave();
           if (left) this.bkLeft = left.map(function (x) { return { id: x.id, text: self.entryName(x.id) || x.id }; });
           var done = { file: name, size: this.sizeText(blob.size) };
@@ -2664,6 +2678,7 @@
             S.undo = null;
             S.unsaved = false;
             self.armLeave();
+            self.bkLeft = [];          // (the entries it named are gone)
             var st = S.X.emptyState(S.cfg);
             st.settings = S.X.mergeDefaults(S.cfg, st.settings || {});
             S.state = st;

@@ -1980,6 +1980,87 @@ class StoredDataSafety(unittest.TestCase):
         self.assertIn("(1 receipt photo)", r["asked5"])
         self.assertEqual(r["again"], [False, 0])
 
+    def test_the_form_keeps_saying_so_and_looks_at_the_photo_again(self):
+        # Tab A deletes the entry open in B's form, then changes something else: B's dialog still says the entry was
+        # deleted; A's "Undo" brings it back: an edit again. B saves; A, not having seen that save yet, deletes the
+        # photo just after B looked: B looks once more a moment later and stores it again — but not a photo B itself
+        # let go meanwhile ("Remove photo" in a second edit).
+        r = app(self, r"""
+          const fire = (w) => { for (const fn of w.listeners.storage || []) fn({ key: KEY }); };
+          const pair = async () => {
+            const photos = new Map(), shared = new Map(), a = make("en", null, null, { photos, store: shared });
+            add(a, "expense", { description: "Hotel", amount: "90", receipt: "photo" }, "lodging");
+            const id = a.a.E()[0].id;
+            photos.set(id, { id, type: "image/jpeg", blob: new Blob([new Uint8Array([0xff, 0xd8, 5])], { type: "image/jpeg" }) });
+            const b = make("en", null, null, { photos, store: shared });
+            b.a.openEdit(id); await tick();
+            b.a.form.description = "Hotel for the Fall Assembly";
+            a.a.remove([id]); await tick(); fire(b);
+            return { photos, a, b, id };
+          };
+          const one = await pair(), two = await pair(), { a, b, id, photos } = one;
+          add(a, "expense", { description: "Books", amount: "12" }, "books"); fire(b);
+          const still = [b.a.formMode, b.a.dlgMsg === b.a.t("form.deleted_elsewhere")];
+          a.a.undo(); await tick(); fire(b);
+          const back = [b.a.formMode, b.a.dlgMsg === b.a.t("toast.other_tab")];
+          b.a.saveForm(false); await tick();
+          const looked = photos.has(id);
+          photos.delete(id);                                            // A's late delete
+          two.b.a.saveForm(false); await tick();
+          two.a.a.finishUndo(); await tick();                          // (A's undo time over: nothing else keeps the photo)
+          two.b.a.openEdit(two.id); await tick(); two.b.a.removePhoto(); two.b.a.saveForm(false); await tick();
+          const letGo = two.photos.has(two.id);
+          await new Promise((res) => setTimeout(res, 2300)); await tick();
+          out({ still, back, looked, again: photos.has(id), entries: state(a).entries.map((e) => [e.id === id, e.receipt, e.description]),
+                letGo, after: two.photos.has(two.id), receipt: state(two.b).entries.map((e) => e.receipt) });""")
+        self.assertEqual(r["still"], ["add", True])
+        self.assertEqual(r["back"], ["edit", True])
+        self.assertTrue(r["looked"])
+        self.assertTrue(r["again"])                                            # stored again, a moment later
+        self.assertEqual(r["entries"], [[False, "none", "Books"], [True, "photo", "Hotel for the Fall Assembly"]])
+        self.assertEqual((r["letGo"], r["after"], r["receipt"]), (False, False, ["none"]))
+
+    def test_a_backup_without_photos_asks_on_while_a_photo_would_be_lost(self):
+        # The browser stops keeping the ledger (storage full): a new entry and its receipt photo are only in this tab (the
+        # photo in IndexedDB, which the next visit's clean-up deletes: no stored ledger points to it). "Back up without
+        # photos" does not have it, so closing still asks; a full backup has it: no more question. Without photos to
+        # lose, the backup without photos is enough. Removing unreadable data saves what was changed meanwhile (a
+        # setting too); "Erase everything" clears the list of photos the last backup left out.
+        r = app(self, r"""
+          const armed = (w) => (w.listeners.beforeunload || []).length;
+          const photos = new Map(), w = make("en", null, null, { photos });
+          add(w, "expense", { description: "Old", amount: "1", receipt: "photo" }, "books");
+          const old = w.a.E()[0].id;
+          photos.set(old, { id: old, type: "image/jpeg", blob: new Blob([new Uint8Array([0xff, 0xd8, 1])], { type: "image/jpeg" }) });
+          w.setFull(true);
+          add(w, "expense", { description: "Hotel", amount: "90", receipt: "photo" }, "lodging");
+          const hotel = w.a.E().find((e) => e.description === "Hotel").id;
+          photos.set(hotel, { id: hotel, type: "image/jpeg", blob: new Blob([new Uint8Array([0xff, 0xd8, 2])], { type: "image/jpeg" }) });
+          const s = [armed(w)];
+          await w.a.exportBackup("plain"); s.push(armed(w));
+          await w.a.exportBackup(); s.push(armed(w), w.downloads.at(-1).name.endsWith(".zip"));
+          const w2 = make("en", null, null, { full: true });                              // nothing with a photo
+          add(w2, "expense", { description: "Books", amount: "12", receipt: "paper" }, "books");
+          const s2 = [armed(w2)];
+          await w2.a.exportBackup("plain"); s2.push(armed(w2));
+          // unreadable data, no room to set it aside: a setting changed meanwhile is saved once it is removed
+          const w3 = make("en", { [KEY]: "{cut" }, null, { full: true }); w3.setFull(false);
+          w3.a.setProf("name", "Pat K.");
+          const s3 = [w3.a.lock, armed(w3)];
+          w3.a.damagedRemove(); await tick();
+          s3.push(w3.a.lock, armed(w3), w3.store.has(KEY) ? (state(w3).settings.profile || {}).name : null);
+          // the photos left out of the last full backup, then "Erase everything"
+          photos.get(old).blob.arrayBuffer = () => Promise.reject(new Error("NotReadableError"));
+          w.setFull(false);
+          await w.a.exportBackup();
+          const left = w.a.bkLeft.length;
+          w.a.eraseText = w.a.t("data.erase_word"); w.a.eraseAll(); await tick();
+          out({ s, s2, s3, left, erased: [w.a.bkLeft.length, w.a.E().length] });""")
+        self.assertEqual(r["s"], [1, 1, 0, True])
+        self.assertEqual(r["s2"], [1, 0])
+        self.assertEqual(r["s3"], ["unreadable", 1, "", 0, "Pat K."])
+        self.assertEqual((r["left"], r["erased"]), (1, [0, 0]))
+
 
 if __name__ == "__main__":
     unittest.main()
