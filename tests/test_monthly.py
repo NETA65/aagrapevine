@@ -17,6 +17,8 @@ keeps it true between builds.
   * RealData  — every month of the window, both languages, from the repository's own data.
   * MachineThemes — a machine-translated theme is marked as one (the model's machine / orig, the message's
                 original words and note, the pages' marks); Spanish words in the middle of a line.
+  * PosterNote — the Spanish poster's "translated automatically" note sits beside the italic originals it explains
+                (under Grapevine's deadlines, else under the theme), once — never under La Viña's own topics.
   * MonthCalendar — "Add this month's dates to my calendar": the month's .ics file (monthIcs) — RFC 5545
                 as /events.ics writes it, the same UIDs, the story deadlines as all-day entries.
   * PastMonths — the 12 months before keep a redirect page for printed posters' QR codes, out of the sitemap.
@@ -842,6 +844,98 @@ class MachineThemes(unittest.TestCase):
         self.assertIn('<p class="mp-orig mp-orig--theme" lang="en">{{ m.gv.orig }}</p>', macros)
         self.assertIn('<span class="mp-orig" lang="en">{{ d.themeEn }}</span>', macros)
         self.assertIn('<p class="mp-mtnote">{{ "read.mt_note_en" | t(lang) }}</p>', macros)
+
+
+# The poster itself (src/_includes/macros/monthly.njk poster), made by the build's own Eleventy and filters (no page of
+# src/pages: ONLY), for October 2026's Spanish model (mt_db: Grapevine's theme and one of its deadlines machine-
+# translated) and for variants of it.
+POSTER_NOTE_JS = r"""
+process.env.ONLY = "-none-";
+const M = await imp("eleventy/filters/monthly.js");
+const os = await import("node:os");
+const { Eleventy } = await import("@11ty/eleventy");
+const { db, site, carry } = input;
+const now = new Date(input.now);
+const es = M.monthModel("2026-10", db, carry, site, "es", now), en = M.monthModel("2026-10", db, carry, site, "en", now);
+const plain = (ds) => ds.map((d) => ({ ...d, machine: false }));
+const ownTheme = { ...es.gv, machine: false, orig: "" };
+const cases = {
+  themeOnly: { m: { ...es, deadlines: [] }, lang: "es" },                        // no Grapevine deadline this month
+  both: { m: es, lang: "es" },
+  themeAndOwnDeadlines: { m: { ...es, deadlines: plain(es.deadlines) }, lang: "es" },
+  deadlineOnly: { m: { ...es, gv: ownTheme }, lang: "es" },
+  none: { m: { ...es, gv: ownTheme, deadlines: plain(es.deadlines) }, lang: "es" },
+  english: { m: en, lang: "en" },
+};
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), "gv-poster-note-"));
+try {
+  const elev = new Eleventy("src", dir, { quietMode: true, configPath: "eleventy.config.js", config(cfg) {
+    for (const [name, c] of Object.entries(cases)) {
+      cfg.addTemplate(`mp-note-${name}.njk`, '{% import "macros/monthly.njk" as mp with context %}{{ mp.poster(m, lang, site, "t") }}',
+                      { ...c, layout: false, permalink: `/mp-note-${name}/index.html`, eleventyExcludeFromCollections: true, sitemap: false });
+    }
+  } });
+  const pages = await elev.toJSON();
+  out(Object.fromEntries(pages.filter((p) => /^\/mp-note-/.test(p.url || "")).map((p) => [p.url.slice(9, -1), p.content])));
+} finally {
+  fs.rmSync(dir, { recursive: true, force: true });
+}
+"""
+
+
+class PosterNote(unittest.TestCase):
+    """Round-7 review: the Spanish poster's "Títulos traducidos automáticamente del inglés — originales en cursiva" sat
+    under La Viña's own Spanish topics whenever the month had no Grapevine deadline (5 of the 13 Spanish posters, and
+    their share pictures). The note now goes beside the italic originals it explains — once."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.r = None
+
+    def setUp(self):
+        if PosterNote.r is None:
+            PosterNote.r = run_js(self, POSTER_NOTE_JS, data={"db": mt_db(), "site": SITE, "carry": CARRY, "now": NOW_A}, timeout=300)
+        self.r = PosterNote.r
+
+    @staticmethod
+    def notes(html: str) -> dict:
+        """Where the note is: {section: count} (mp-story, mp-issue …), and how many in the story's Grapevine block."""
+        out = {}
+        for kind, body in re.findall(r'<section class="mp-b (mp-[\w-]+)">(.*?)</section>', html, re.S):
+            n = body.count('<p class="mp-mtnote">')
+            if n:
+                out[kind] = out.get(kind, 0) + n
+        gvdl = re.search(r'<div class="mp-gvdl">(.*?)</div>', html, re.S)
+        out["in Grapevine's deadlines"] = gvdl.group(1).count('<p class="mp-mtnote">') if gvdl else 0
+        out["total"] = html.count('<p class="mp-mtnote">')
+        return out
+
+    def test_the_six_cases_built(self):
+        self.assertEqual(sorted(self.r), sorted(["themeOnly", "both", "themeAndOwnDeadlines", "deadlineOnly", "none", "english"]))
+        for name, html in self.r.items():
+            with self.subTest(case=name):
+                self.assertIn("data-mp-poster", html)
+
+    def test_under_the_theme_when_no_deadline_is_machine_translated(self):
+        for case in ("themeOnly", "themeAndOwnDeadlines"):
+            with self.subTest(case=case):
+                html = self.r[case]
+                self.assertEqual(self.notes(html), {"mp-issue": 1, "in Grapevine's deadlines": 0, "total": 1})
+                self.assertRegex(html, r'<p class="mp-orig mp-orig--theme" lang="en">Loneliness</p>\s*<p class="mp-mtnote">'
+                                       r'Títulos traducidos automáticamente del inglés — originales en cursiva</p>')
+        self.assertNotIn('<div class="mp-gvdl">', self.r["themeOnly"])
+
+    def test_under_grapevines_deadlines_when_one_is(self):
+        for case in ("both", "deadlineOnly"):
+            with self.subTest(case=case):
+                html = self.r[case]
+                self.assertEqual(self.notes(html), {"mp-story": 1, "in Grapevine's deadlines": 1, "total": 1})
+                self.assertIn('<span class="mp-orig" lang="en">Emotional Sobriety</span>', html)
+
+    def test_none_without_machine_translated_words(self):
+        for case in ("none", "english"):
+            with self.subTest(case=case):
+                self.assertEqual(self.notes(self.r[case])["total"], 0)
 
 
 # ------------------------------------------------------------------ "Add this month's dates to my calendar"

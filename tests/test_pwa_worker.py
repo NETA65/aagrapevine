@@ -31,14 +31,19 @@
                  the network with its range and is never kept; the show (/about/booth.json) is network
                  first, then the booth's copy, then the data cache's.
   * fresh      — saved pages not opened for a week are fetched again once a page opened online shows there
-                 is a signal: one at a time, the first that fails ends the round, at most every 6 hours; a
-                 page gone (404), or one whose new styles and scripts did not all come, keeps its copy (class
-                 Updates).
+                 is a signal — and says Data saver is off (HOW_SERVED; else the browser's Save-Data / 2G):
+                 one at a time, the first that fails ends the round, at most every 6 hours; a page gone (404),
+                 or one whose new styles and scripts did not all come, keeps its copy; a save stops a running
+                 round and none runs beside it; a page removed meanwhile stays removed (class Updates).
+  * versions   — a page kept (opened, not saved) keeps its own area stylesheet offline after new versions:
+                 the old static cache's stylesheets go on into the new one (class Updates).
   * the page   — pwa.js's side, run against a pretend page and worker: "Save key pages" gives up only
                  after 45 s without news from the worker (a weak signal saves slowly, not never), ignores
                  what a save it gave up on still says (a worker ready only by then gets no SAVE) and saves
                  again when asked, and asks the browser to keep the pages (navigator.storage.persist: its
-                 answer joins the result line, or follows it when it comes late); "Reload" applies a new
+                 answer joins the result line, or follows it when it comes late — with what helps on this
+                 device: an iPhone's installed app keeps its own copy); each page tells the worker whether
+                 Data saver is on (HOW_SERVED); "Reload" applies a new
                  version — or, applied already in another tab, just reloads; a YouTube preview is told to
                  keep youtube-nocookie.com before it starts (a click, Enter or Space).
 
@@ -64,19 +69,21 @@ import vm from "node:vm";
 const SW = await imp("src/pages/sw.11ty.js");
 const ORIGIN = "https://example.test";
 const B = "/aagrapevine/";
-const code = SW.render({
-  build: { version: "t1" },
+const build = (version) => SW.render({
+  build: { version },
   collections: { all: ["/", "/meetings/", "/monthly/", "/contribute/", "/shop/", "/accessibility/", "/orientation/",
                        "/orientation/magazines/"].map((url) => ({ url })) },
   orientation: { lessons: [{ id: "magazines" }] },
 });
+const code = build("t1");
 
 const html = (title, extra = "") => `<!doctype html><html><head><title>${title}</title>` +
   `<link rel="stylesheet" href="${B}assets/css/main.css?v=t1"><script src="${B}assets/js/app.js?v=t1"></script></head><body>${extra}</body></html>`;
 const marker = (res) => (res && res.body ? (/<body>(.*?)<\/body>/.exec(res.body) || [])[1] : res);   // which page answered
 
-function world() {
-  const store = new Map();
+// world({ v, store }): another version of the worker (v: "t2" …) on the same device — the caches `store` of an earlier one
+function world({ v = "t1", store: kept = null } = {}) {
+  const store = kept || new Map();
   // absolute URL → { status, body, ct, ranges (answers "Range: bytes=a-b" with 206), takes (ms the clock moves on
   // before it arrives), chunks + gap (a body arriving in parts, the clock moving on `gap` ms between them),
   // breaksOnce (the first download breaks off), wait (a promise: no answer before it resolves) }
@@ -167,6 +174,7 @@ function world() {
   const self = {
     addEventListener: (t, fn) => { handlers[t] = fn; },
     location: { origin: ORIGIN },
+    navigator: {},                // (a test sets navigator.connection: the browser's own data saver, 2G)
     registration: {},
     clients: { claim: async () => {}, matchAll: async () => wins.slice() },
     skipWaiting: () => { skipped = true; },
@@ -185,12 +193,12 @@ function world() {
   // the worker's clock (Date.now) runs __skew ms ahead: a download that "takes" minutes moves it on
   ctx.__skew = 0;
   vm.runInContext("{ const now = Date.now; Date.now = () => now() + __skew; }", ctx);
-  vm.runInContext(code, ctx);
+  vm.runInContext(v === "t1" ? code : build(v), ctx);
   const CONFIG = vm.runInContext("CONFIG", ctx);
   const until = async (waits) => { let n = -1; while (n !== waits.length) { n = waits.length; await Promise.allSettled(waits.slice()); } };
 
   return {
-    CONFIG, store, net, fetched, log, order, hooks, intervals, handlers, wins,
+    CONFIG, store, net, fetched, log, order, hooks, intervals, handlers, wins, self,
     set fast(v) { fast = v; },
     get skipped() { return skipped; },
     cache: (name) => caches.open(name),
@@ -424,6 +432,38 @@ out(R);
 # A new version taking over, and the saved pages kept fresh: their own worlds, same harness.
 UPDATE_JS = HARNESS_JS + r"""
 const kept = async (w, p) => ((await w.keys("gvlv-pages-v1")) || []).includes(ORIGIN + B + p);
+// a page opened online, then its script's word as it loads (pwa.js HOW_SERVED — saver: Data saver on; null: an older
+// script, which says nothing about it): what starts a round over the saved pages
+const opened = async (w, path, saver = false) => {
+  await w.request(path, { navigate: true });
+  return w.message(saver === null ? { type: "HOW_SERVED" } : { type: "HOW_SERVED", saver });
+};
+const rel = (u) => u.slice(ORIGIN.length + B.length) || "home";
+const aged = (w, pages, days) => {                                    // saved that many days ago
+  for (const p of pages) {
+    const e = w.store.get("gvlv-saved-v1").m.get(ORIGIN + B + p);
+    e.headers = e.headers.map(([n, v]) => [n, n === "x-gvlv-saved" ? new Date(Date.now() - days * 864e5).toISOString() : v]);
+  }
+};
+// a world whose pages were saved a week ago and have changed since; accessibility/: a page to open
+const savedWeekAgo = async (pages) => {
+  const w = world();
+  shellOnline(w);
+  await w.lifecycle("install");
+  for (const p of pages) w.page(B + p, { body: html(rel(ORIGIN + B + p), "OLD") });
+  await w.message({ type: "SAVE", lang: "en" });
+  aged(w, pages, 8);
+  for (const p of pages) w.page(B + p, { body: html(rel(ORIGIN + B + p), "NEW") });
+  w.page(B + "accessibility/", { body: html("Accessibility", "A11Y") });
+  return w;
+};
+const pagesAsked = async (w, go) => {
+  const from = w.fetched.length;
+  await go();
+  return w.fetched.slice(from).map(rel).filter((x) => !x.includes("assets/"));
+};
+const savedNow = async (w) => ((await w.keys("gvlv-saved-v1")) || []).map(rel);
+const copyOf = (w, p) => marker({ body: new TextDecoder().decode(w.store.get("gvlv-saved-v1").m.get(ORIGIN + B + p).body) });
 /* ---------------- "Reload" after an update: activation never waits for the open tabs ---------------- */
 {
   const u = world();
@@ -474,15 +514,15 @@ const kept = async (w, p) => ((await w.keys("gvlv-pages-v1")) || []).includes(OR
   age("", 8); age("meetings/", 8); age("monthly/", 9); age("contribute/", 2); age("shop/", 10);
   k.page(B + "meetings/", "offline");                                                              // the signal fails on it
   let from = k.fetched.length;
-  await k.request(B + "accessibility/", { navigate: true });                                       // a page opened online
+  await opened(k, B + "accessibility/");                                                            // a page opened online
   R.refresh = { weak: { copies: copies(), asked: asked(from) } };
   from = k.fetched.length;
-  await k.request(B + "accessibility/", { navigate: true });                                       // again soon: no new round
+  await opened(k, B + "accessibility/");                                                            // again soon: no new round
   R.refresh.soon = asked(from);
   k.page(B + "meetings/", { body: html("meetings", "NEW-meetings") });
   k.skew(7 * 3600e3);                                                                              // 7 hours later
   from = k.fetched.length;
-  await k.request(B + "accessibility/", { navigate: true });
+  await opened(k, B + "accessibility/");
   R.refresh.later = { copies: copies(), asked: asked(from) };
   R.refresh.stamped = Math.abs(Date.now() - Date.parse(entry("shop/").headers.find(([n]) => n === "x-gvlv-saved")[1])) < 60e3;   // (stamped now)
 }
@@ -505,13 +545,92 @@ const kept = async (w, p) => ((await w.keys("gvlv-pages-v1")) || []).includes(OR
   k.page(B + "shop/", { body: html("shop", "NEW-shop" + SCRIPT) });                    // … not reachable yet
   k.page(B + "meetings/", { body: html("meetings", "NEW-meetings") });
   k.page(B + "accessibility/", { body: html("Accessibility", "A11Y") });
-  await k.request(B + "accessibility/", { navigate: true });
+  await opened(k, B + "accessibility/");
   R.partial = { shop: copy("shop/"), meetings: copy("meetings/") };
   k.page(B + "assets/js/shop.js?v=t2", { body: "/* shop */", ct: "text/javascript" });   // there now
   k.skew(7 * 3600e3);
-  await k.request(B + "accessibility/", { navigate: true });
+  await opened(k, B + "accessibility/");
   R.partial.later = copy("shop/");
   R.partial.script = ((await k.keys("gvlv-saved-assets-v1")) || []).includes(ORIGIN + B + "assets/js/shop.js?v=t2");
+}
+
+/* ---------------- Data saver on: no round (the page's word; an older page's: the browser's) ---------------- */
+{
+  const k = await savedWeekAgo(["", "meetings/", "shop/"]);
+  const go = (saver) => pagesAsked(k, () => opened(k, B + "accessibility/", saver));
+  R.saver = { on: await go(true) };                                                   // the visitor's Data saver
+  k.self.navigator.connection = { saveData: true };                                   // the browser's own data saver …
+  R.saver.browser = await go(null);                                                   // … an older page's script says nothing
+  k.self.navigator.connection = { saveData: false, effectiveType: "2g" };
+  R.saver.slow = await go(null);
+  k.net.delete(ORIGIN + B + "accessibility/");
+  R.saver.offline = await go(false);                                                  // the stand-in answered: no signal
+  k.page(B + "accessibility/", { body: html("Accessibility", "A11Y") });
+  R.saver.unsaid = await pagesAsked(k, () => k.request(B + "accessibility/", { navigate: true }));   // no word yet
+  R.saver.off = await go(false);                     // off: the visitor's choice (over the browser's 2G) — the round
+  R.saver.copies = ["", "meetings/", "shop/"].map((p) => copyOf(k, p));
+}
+
+/* ---------------- a save stops a running round, and none starts beside it ---------------- */
+{
+  const k = await savedWeekAgo(["", "meetings/", "shop/"]);
+  let release = null, homes = 0;
+  const at = [];                                                                       // the round's, then the save's, on home
+  const onHome = [new Promise((r) => { at[0] = r; }), new Promise((r) => { at[1] = r; })];
+  k.page(B, { body: html("home", "NEW"), wait: new Promise((r) => { release = r; }) });          // a slow first page
+  k.hooks.onFetch = (u) => { if (u === ORIGIN + B && homes < 2) at[homes++](); };
+  await k.request(B + "accessibility/", { navigate: true });
+  const from = k.fetched.length;
+  const round = k.send({ type: "HOW_SERVED", saver: false });
+  await onHome[0];                                                                     // the round is on its first page …
+  const save = k.send({ type: "SAVE", lang: "en" });                                   // … when "Save key pages" is tapped
+  await onHome[1];
+  const during = await pagesAsked(k, () => opened(k, B + "accessibility/"));           // a page opened meanwhile: no round
+  release();
+  await save.settled;
+  await round.settled;
+  const n = (p) => k.fetched.slice(from).filter((u) => u === ORIGIN + B + p).length;
+  R.lock = { fetched: { home: n(""), meetings: n("meetings/"), shop: n("shop/") }, during,
+             copies: ["", "meetings/", "shop/"].map((p) => copyOf(k, p)), done: save.replies[save.replies.length - 1].type };
+}
+
+/* ---------------- a page removed while the round runs stays removed ---------------- */
+{
+  const k = await savedWeekAgo(["", "meetings/", "contribute/", "shop/"]);
+  const drop = (p) => k.store.get("gvlv-saved-v1").m.delete(ORIGIN + B + p);
+  // removed before the round reaches it (meetings/), and while it downloads (shop/)
+  k.hooks.onFetch = (u) => { if (u === ORIGIN + B) drop("meetings/"); if (u === ORIGIN + B + "shop/") drop("shop/"); };
+  R.removed = { asked: await pagesAsked(k, () => opened(k, B + "accessibility/")), saved: await savedNow(k) };
+}
+
+/* ---------------- a page kept (opened, not saved) keeps its own stylesheet offline after new versions ---------------- */
+{
+  const a = world();
+  shellOnline(a);
+  await a.lifecycle("install");
+  await a.lifecycle("activate");
+  const AREA = B + "assets/css/monthly.css?v=t1", JS = B + "assets/js/monthly.js?v=t1";
+  a.page(B + "monthly/2026-11/", { body: html("November", `<link rel="stylesheet" href="${AREA}"><script src="${JS}"></script>NOV`) });
+  a.page(AREA, { body: "/* monthly t1 */", ct: "text/css" });
+  a.page(JS, { body: "/* monthly */", ct: "text/javascript" });
+  await a.request(B + "monthly/2026-11/", { navigate: true });
+  await a.request(AREA);                                                               // (the page's files, as the
+  await a.request(JS);                                                                 //  browser asks for them)
+  R.carry = {};
+  let c = null;
+  for (const v of ["t2", "t3"]) {                                                      // two new versions on this device
+    c = world({ v, store: a.store });
+    shellOnline(c);
+    await c.lifecycle("install");
+    R.carry[v] = await c.lifecycle("activate");
+  }
+  // then the signal is gone (t3's network knows nothing but its app shell's addresses)
+  for (const u of [...c.net.keys()]) c.net.delete(u);
+  R.carry.page = marker(await c.request(B + "monthly/2026-11/", { navigate: true }));
+  R.carry.css = await c.request(AREA);
+  R.carry.main = (await c.request(B + "assets/css/main.css?v=t1")).body;
+  R.carry.caches = [...a.store.keys()].filter((n) => /^gvlv-(shell|static)-/.test(n)).sort();
+  R.carry.static = ((await c.keys("gvlv-static-t3")) || []).map((u) => u.slice(ORIGIN.length));
 }
 out(R);
 """
@@ -796,7 +915,9 @@ out(R);
 # controllerchange) }. The page is loaded; the worker registers at tick(0).
 PAGE_JS = r"""
 import vm from "node:vm";
-function boot({ lang = "en", waiting = null, installing = false, storage = undefined } = {}) {
+// ua: the device (install-core.js, window.GVInstall, then says which); app: running as the installed app; connection:
+// navigator.connection (the browser's own data saver, 2G)
+function boot({ lang = "en", waiting = null, installing = false, storage = undefined, ua = "", app = false, connection = undefined } = {}) {
   const clock = { now: Date.parse("2026-10-03T20:00:00Z") };
   let activate = () => {};
   let timers = [], seq = 0;
@@ -840,7 +961,8 @@ function boot({ lang = "en", waiting = null, installing = false, storage = undef
   const path = "/aagrapevine/" + (lang === "es" ? "es/" : "") + "meetings/";
   const ctx = {
     console, URL, Date: FakeDate, document, MessageChannel, MutationObserver,
-    navigator: { onLine: true, serviceWorker, userAgent: "", maxTouchPoints: 0, storage },
+    navigator: { onLine: true, serviceWorker, userAgent: ua, maxTouchPoints: /iPhone|iPad|Android/.test(ua) ? 5 : 0, storage, connection,
+                 standalone: app || undefined },
     location: { pathname: path, search: "", hash: "", href: "https://example.test" + path, reload: () => { reloads.n += 1; } },
     history: { state: null, replaceState() {} }, sessionStorage: store, localStorage: store, isSecureContext: true,
     caches: { has: () => Promise.resolve(false), open: () => Promise.resolve({ keys: () => Promise.resolve([]) }) },
@@ -853,6 +975,7 @@ function boot({ lang = "en", waiting = null, installing = false, storage = undef
   };
   ctx.window = ctx;
   vm.createContext(ctx);
+  if (ua) vm.runInContext(fs.readFileSync("src/assets/js/install-core.js", "utf8"), ctx, { filename: "install-core.js" });
   vm.runInContext(fs.readFileSync("src/assets/js/pwa.js", "utf8"), ctx, { filename: "pwa.js" });
   const flush = () => new Promise((r) => setImmediate(r));
   const tick = async (ms) => {
@@ -870,7 +993,8 @@ function boot({ lang = "en", waiting = null, installing = false, storage = undef
   };
   const button = (act) => ({ disabled: false, closest() { return this; }, hasAttribute: () => false, getAttribute: (n) => (n === "data-pwa-act" ? act : null) });
   const click = async (b) => { for (const fn of docL.click || []) fn({ target: b, preventDefault() {} }); await flush(); return b; };
-  return { announced, reloads, sw, tick, click, button, activate: () => activate(), saves: () => posted.filter((p) => p.msg.type === "SAVE"), docL };
+  return { announced, reloads, sw, tick, click, button, activate: () => activate(), saves: () => posted.filter((p) => p.msg.type === "SAVE"), docL,
+           posted };
 }
 const R = {};
 
@@ -948,10 +1072,10 @@ for (const [name, appliedElsewhere] of [["update", false], ["secondTab", true]])
 }
 
 /* ---------------- "Save key pages" asks the browser to keep them (navigator.storage.persist) ---------------- */
-const saveWith = async (lang, persist, late) => {
+const saveWith = async (lang, persist, late, device = {}) => {
   let answer = null, asked = 0;
   const storage = persist === undefined ? undefined : { persist: () => { asked += 1; return late ? new Promise((r) => { answer = () => r(persist); }) : Promise.resolve(persist); } };
-  const p = boot({ lang, storage });
+  const p = boot({ lang, storage, ...device });
   await p.tick(0);
   await p.click(p.button("save"));
   const port = p.saves()[0].port.peer;
@@ -964,6 +1088,19 @@ const saveWith = async (lang, persist, late) => {
 };
 R.persist = { yes: await saveWith("en", true), no: await saveWith("es", false), none: await saveWith("en", undefined),
               late: await saveWith("en", true, true) };
+// "no": what helps on this device — an iPhone's (or iPad's) installed app keeps a storage of its own
+const IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1";
+const IPAD = "Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1";
+const ANDROID = "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36";
+const lastSaid = async (lang, device) => (await saveWith(lang, false, false, device)).said[1];
+R.persistNo = { iphone: await lastSaid("en", { ua: IPHONE }), iphoneEs: await lastSaid("es", { ua: IPHONE }), ipad: await lastSaid("en", { ua: IPAD }),
+                android: await lastSaid("en", { ua: ANDROID }), androidEs: await lastSaid("es", { ua: ANDROID }),
+                iphoneApp: await lastSaid("en", { ua: IPHONE, app: true }), androidApp: await lastSaid("es", { ua: ANDROID, app: true }) };
+
+/* ---------------- each page tells the worker whether Data saver is on (its round over the saved pages waits for it) ---- */
+const howServed = async (o) => { const p = boot(o); await p.tick(0); return p.posted.filter((x) => x.msg.type === "HOW_SERVED").map((x) => x.msg); };
+R.howServed = { plain: await howServed({}), saveData: await howServed({ connection: { saveData: true } }),
+                slow: await howServed({ connection: { effectiveType: "2g" } }), fast: await howServed({ connection: { effectiveType: "4g", saveData: false } }) };
 
 /* ---------------- YouTube previews: the plain youtube-nocookie.com player on every page ---------------- */
 {
@@ -1174,6 +1311,44 @@ class Updates(unittest.TestCase):
         self.assertEqual(r["meetings"], "NEW-meetings")
         self.assertTrue(r["later"].startswith("NEW-shop"), r["later"])
         self.assertTrue(r["script"])
+
+    def test_no_round_with_data_saver_on(self):
+        # Round-7 review: the weekly round downloaded every saved page a week old (both languages: 32) with Data saver
+        # on. It now starts only once the page the site answered says Data saver is off (pwa.js HOW_SERVED); an older
+        # page's script says nothing — then the browser's own word (Save-Data, 2G); no word, or a stand-in: no round
+        r = self.r["saver"]
+        for case in ("on", "browser", "slow", "offline", "unsaid"):
+            with self.subTest(case=case):
+                self.assertEqual(r[case], ["accessibility/"])
+        self.assertEqual(r["off"], ["accessibility/", "home", "meetings/", "shop/"])   # the visitor's "off" (over 2G)
+        self.assertEqual(r["copies"], ["NEW", "NEW", "NEW"])
+
+    def test_a_save_stops_the_round_and_none_runs_beside_it(self):
+        # Round-7 review: the round and "Save key pages" downloaded the same pages side by side. The save lets the
+        # round's download go (the round ends), and a page opened while it saves starts no round
+        r = self.r["lock"]
+        self.assertEqual(r["fetched"], {"home": 2, "meetings": 1, "shop": 1})   # home: the round's (let go), the save's
+        self.assertEqual(r["during"], ["accessibility/"])
+        self.assertEqual(r["copies"], ["NEW", "NEW", "NEW"])
+        self.assertEqual(r["done"], "SAVE_DONE")
+
+    def test_a_page_removed_meanwhile_is_not_put_back(self):
+        # Round-7 review: a page removed while the round ran (last month's, by "Save key pages") came back seconds later
+        r = self.r["removed"]
+        self.assertEqual(r["asked"], ["accessibility/", "home", "contribute/", "shop/"])   # meetings/: gone before its turn
+        self.assertEqual(r["saved"], ["home", "contribute/"])                               # shop/: gone while it downloaded
+
+    def test_a_kept_pages_own_stylesheet_works_offline_after_new_versions(self):
+        # Round-7 review (P5-2): a page area's own stylesheet (monthly.css …) came with a page opened online into the
+        # static cache, which each new version replaced — offline, the page kept from before (not saved) lost its look.
+        # Its stylesheets now go on into each new version's static cache (scripts do not); main.css comes from the shell
+        r = self.r["carry"]
+        self.assertEqual((r["t2"], r["t3"]), (["fulfilled"], ["fulfilled"]))
+        self.assertTrue(r["page"].endswith("NOV"), r["page"])                             # the copy kept from t1
+        self.assertEqual((r["css"]["status"], r["css"]["body"]), (200, "/* monthly t1 */"))
+        self.assertEqual(r["main"], "/* " + B + "assets/css/main.css?v=t3 */")
+        self.assertEqual(r["caches"], ["gvlv-shell-t3", "gvlv-static-t3"])                 # the old versions' caches: gone
+        self.assertEqual(r["static"], [B + "assets/css/monthly.css?v=t1"])
 
 
 # A month page's calendar file (class MonthCalendar): its own world, same harness.
@@ -1530,11 +1705,39 @@ class ThePage(unittest.TestCase):
                                                          "Saved 9 pages. They open without a connection. This browser will keep them until you remove them."]})
         self.assertEqual(p["no"]["asked"], 1)
         self.assertEqual(p["no"]["said"][1], "Se guardaron 9 páginas. Se abren sin conexión. Este navegador aún puede borrarlas si al "
-                                             "dispositivo le falta espacio. Instalar el sitio como app ayuda a conservarlas.")
+                                             "dispositivo le falta espacio. Instalar el sitio como app y volver a guardarlas desde la "
+                                             "app ayuda a conservarlas.")
         self.assertEqual(p["none"], {"asked": 0, "said": ["Saving pages for offline use…", "Saved 9 pages. They open without a connection."]})
         # an answer that comes after the save is done (Firefox asks the visitor): said on its own, then
         self.assertEqual(p["late"]["said"], ["Saving pages for offline use…", "Saved 9 pages. They open without a connection.",
                                              "This browser will keep them until you remove them."])
+
+    def test_what_helps_keep_them_on_this_device(self):
+        # Round-7 review: "Installing the site as an app helps keep them" was wrong on iPhone and iPad — the app installed
+        # from the Home Screen keeps a storage of its own (the pages saved in Safari are not in it): there they are saved
+        # again from the app; on Android and computers the app asks again when they are saved from it; inside the app
+        # itself, nothing to install
+        may_en = "Saved 9 pages. They open without a connection. This browser may still remove them when the device is short of space."
+        may_es = "Se guardaron 9 páginas. Se abren sin conexión. Este navegador aún puede borrarlas si al dispositivo le falta espacio."
+        own_en = (" On this device an installed app keeps its own copy: install the site as an app, then open it and save the pages "
+                  "there to keep them.")
+        r = self.r["persistNo"]
+        self.assertEqual(r["iphone"], may_en + own_en)
+        self.assertEqual(r["ipad"], may_en + own_en)
+        self.assertEqual(r["iphoneEs"], may_es + " En este dispositivo, una app instalada guarda su propia copia: instala el sitio como "
+                                                 "app, ábrela y guarda las páginas allí para conservarlas.")
+        self.assertEqual(r["android"], may_en + " Installing the site as an app and saving them again from the app helps keep them.")
+        self.assertEqual(r["androidEs"], may_es + " Instalar el sitio como app y volver a guardarlas desde la app ayuda a conservarlas.")
+        self.assertEqual(r["iphoneApp"], may_en)
+        self.assertEqual(r["androidApp"], may_es)
+
+    def test_each_page_tells_the_worker_whether_data_saver_is_on(self):
+        # the worker's weekly round over the saved pages waits for this word (sw-core.js refreshSaved): with Data saver
+        # on — the visitor's choice, else the browser's own data saver or a 2G connection — nothing is fetched ahead
+        r = self.r["howServed"]
+        for name, saver in (("plain", False), ("saveData", True), ("slow", True), ("fast", False)):
+            with self.subTest(connection=name):
+                self.assertEqual(r[name], [{"type": "HOW_SERVED", "saver": saver}])
 
     def test_youtube_previews_keep_privacy_mode(self):
         # P5-6: lite-youtube switches to YouTube's full player (youtube.com) on phones and in Safari; pwa.js (on every

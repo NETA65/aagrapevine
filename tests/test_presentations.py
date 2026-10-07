@@ -957,6 +957,18 @@ class PresentationFiles(unittest.TestCase):
         self.assertEqual(phone_digits("+1 (346) 248-7799"), phone_digits("346.248.7799"))
         self.assertNotIn(phone_digits("214-555-0142"), nums)
 
+    def test_la_vinas_monthly_workshop_is_never_an_information_workshop(self):
+        # P7-6: one name for La Viña's monthly Zoom workshop, "Taller Mensual y Virtual de La Viña" (La Viña's monthly
+        # virtual workshop) — "an information workshop" is the committee's own workshop (information-workshop.yml)
+        said = re.compile(r"(?i)La Viña(?:'s)?(?: office)? (?:holds|hosts|has) an? information workshop")
+        for f in sorted(FOLDER.glob("*.yml")):
+            with self.subTest(deck=f.name):
+                self.assertNotRegex(f.read_text(encoding="utf-8"), said)
+        deck = yaml.safe_load((FOLDER / "orientation-workshop.yml").read_text(encoding="utf-8"))
+        glance = next(s for s in deck["slides"] if s.get("id") == "month-at-a-glance")
+        self.assertIn("its monthly virtual workshop in Spanish on Zoom, the {lang:es}Taller Mensual y Virtual de La Viña{/lang}",
+                      glance["notes"])
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1].endswith(".yml"):

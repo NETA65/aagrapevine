@@ -1,9 +1,11 @@
 """The monthly posters' share pictures and the browser tooling behind them and the browser checks — offline:
 
   * MonthPages      — the /monthly/YYYY-MM/ pages, built for real (Eleventy, only those pages): their preview picture
-                      (og:image, twitter:image) is their own share.png — 1200 × 630, with words in the page language —
-                      only in a build asked for it (POSTER_SHARE=1); every other build keeps the committee's card;
-  * Filter          — mpShareImage / sharePicturePath / posterShareOn (eleventy/filters/monthly.js);
+                      (og:image, twitter:image) is their own share.png — 1200 × 630, with words in the page language,
+                      ?v= from the poster — only in a build asked for it (POSTER_SHARE=1); every other build keeps the
+                      committee's card;
+  * Filter          — mpShareImage / sharePicturePath / posterShareOn / shareVersioned (eleventy/filters/monthly.js:
+                      the picture's address changes exactly when the poster or the code that draws it does);
   * PosterScript    — scripts/ops/poster_share.py: which pages want a picture, the PNG size check, and its exit
                       codes: 0 when every picture was made (or none is wanted), 1 — with none left behind — when one
                       could not be;
@@ -108,14 +110,19 @@ class MonthPages(unittest.TestCase):
                 self.assertTrue(page["meta"]["og:image"].endswith("/assets/img/" + card), page["meta"])
                 self.assertEqual((page["meta"]["og:image:width"], page["meta"]["og:image:height"]), ("1200", "630"))
                 self.assertNotIn("share.png", json.dumps(page["meta"]))
+        versions = set()
         for page in r["1"]:
             with self.subTest(build="POSTER_SHARE=1", page=page["url"]):
                 m = page["meta"]
-                self.assertRegex(m["og:image"], r"^https://[^\s\"]+/(?:es/)?monthly/\d{4}-\d{2}/share\.png$")
-                self.assertTrue(m["og:image"].endswith(page["url"] + "share.png"), "its own picture, beside the page")
+                # ?v=: from the poster (monthly.js shareVersioned) — a link preview that keeps a picture by its address
+                # fetches the new one once the poster changes
+                self.assertRegex(m["og:image"], r"^https://[^\s\"?]+/(?:es/)?monthly/\d{4}-\d{2}/share\.png\?v=[0-9a-f]{8}$")
+                self.assertTrue(m["og:image"].split("?")[0].endswith(page["url"] + "share.png"), "its own picture, beside the page")
                 self.assertEqual(m["twitter:image"], m["og:image"])
                 self.assertEqual((m["og:image:width"], m["og:image:height"]), ("1200", "630"))
                 self.assertEqual(m["twitter:image:alt"], m["og:image:alt"])
+                versions.add(m["og:image"].split("?v=")[1])
+        self.assertEqual(len(versions), len(r["1"]), "each poster its own version")
         # the words, in the page language (the month in lower case inside the Spanish sentence; escaped once)
         en = {p["url"]: p["meta"]["og:image:alt"] for p in r["1"]}
         oct_en = next(a for u, a in en.items() if u.startswith("/monthly/"))
@@ -146,6 +153,42 @@ out({ flags, none: M.posterShareOn({}), path: [M.sharePicturePath("2027-01", "en
                          "a site path (base.njk adds the address and the folder); only a month's key")
         self.assertEqual(r["off"], ["", "", ""])
 
+    def test_the_pictures_address_follows_the_poster(self):
+        # Round-7 review: the address never changed, so Facebook, Messenger, Slack… kept showing the first picture they
+        # fetched after the month's dates, deadlines or themes changed. shareVersioned (the mpShareVersion transform):
+        # ?v= from the poster's HTML and the code's version — a new address exactly when the picture can change
+        r = run_js(self, r"""
+const M = await imp("eleventy/filters/monthly.js");
+const page = (poster, code = "c0ffee1234", img = "https://example.org/site/es/monthly/2026-10/share.png") =>
+  `<html><head><link rel="stylesheet" href="/site/assets/css/main.css?v=${code}">` +
+  `<meta property="og:image" content="${img}"><meta property="og:image:width" content="1200">` +
+  `<meta name="twitter:image" content="${img}"></head><body><main><p>Nov 3</p>` +
+  (poster === null ? "" : `<article class="mp-poster mp-l-cork" lang="es" aria-labelledby="t" data-mp-poster><h2 id="t">Octubre</h2>${poster}</article>`) +
+  `<section>${poster === null ? "" : "toolkit"}</section></main></body></html>`;
+const ver = (html) => [...html.matchAll(/<meta (?:property|name)="(?:og|twitter):image" content="([^"]*)">/g)].map((m) => m[1]);
+const a = M.shareVersioned(page("<p>Oct 3 · Taller</p>"));
+out({
+  a: ver(a), same: ver(M.shareVersioned(page("<p>Oct 3 · Taller</p>"))),
+  moved: ver(M.shareVersioned(page("<p>Oct 10 · Taller</p>"))),             // an event moved: another picture
+  code: ver(M.shareVersioned(page("<p>Oct 3 · Taller</p>", "deadbeef00"))),  // the styles that draw it changed
+  again: ver(M.shareVersioned(a)),                                           // (once only)
+  noPoster: M.shareVersioned(page(null)) === page(null),
+  card: (() => { const h = page("<p>Oct 3</p>", "c0ffee1234", "https://example.org/site/assets/img/og-default-es.png?v=2"); return M.shareVersioned(h) === h; })(),
+  rest: a.replace(/share\.png\?v=[0-9a-f]{8}"/g, 'share.png"') === page("<p>Oct 3 · Taller</p>"),
+});
+""")
+        v = lambda urls: {u.split("?v=")[1] for u in urls}
+        self.assertEqual(len(r["a"]), 2)
+        self.assertRegex(r["a"][0], r"^https://example\.org/site/es/monthly/2026-10/share\.png\?v=[0-9a-f]{8}$")
+        self.assertEqual(r["a"][0], r["a"][1], "og:image and twitter:image: the same address")
+        self.assertEqual(r["same"], r["a"])                               # the same poster: the same address
+        self.assertNotEqual(v(r["moved"]), v(r["a"]))
+        self.assertNotEqual(v(r["code"]), v(r["a"]))
+        self.assertEqual(r["again"], r["a"])
+        self.assertTrue(r["noPoster"])
+        self.assertTrue(r["card"])                                        # the committee's card keeps its own ?v=2
+        self.assertTrue(r["rest"], "nothing else on the page changes")
+
 
 # ------------------------------------------------------------------------------------------------ the script
 def page(og: str) -> str:
@@ -157,7 +200,7 @@ class PosterScript(unittest.TestCase):
         self.site = Path(tempfile.mkdtemp(prefix="gv-share-site-"))
         self.addCleanup(shutil.rmtree, self.site, True)
         base = "https://neta65.github.io/aagrapevine"
-        for rel, og in (("monthly/2026-10/", f"{base}/monthly/2026-10/share.png"),
+        for rel, og in (("monthly/2026-10/", f"{base}/monthly/2026-10/share.png?v=0a1b2c3d"),   # (its version: any)
                         ("es/monthly/2026-10/", f"{base}/es/monthly/2026-10/share.png"),
                         ("monthly/2026-11/", f"{base}/monthly/2026-10/share.png"),       # another month's: not its own
                         ("monthly/2025-10/", f"{base}/assets/img/og-default.png?v=2"),   # a past month's redirect page

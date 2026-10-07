@@ -8,7 +8,8 @@
      - English + Spanish stop words ignored (so "libro de trabajo" works)
      - prefix + light fuzzy matching; AND first, falls back to OR ("partial")
      - AA's own words in the other language too (BILINGUAL: "sobriety" also finds
-       "sobriedad", "padrino" finds "sponsor"); those matches come after the others
+       "sobriedad", "padrino" finds "sponsor" — those words exactly, or in the plural: no
+       prefix or fuzzy matching on them); those matches come after the others
      - highlight(text, terms) → safe HTML with <mark> around matches
    The /search/ page part only runs when #site-search exists. Its search box sits in the
    block below the hero; #ss-layout (type filters + results) shows only while there is a
@@ -62,22 +63,24 @@
      A search on an English page for "sponsor" also finds the Spanish stories about a "padrino", and one for
      "reunión" finds the English "meeting" pages. Each line: English | Spanish, several words for one thing with
      "/" (a phrase of up to four words). A word typed in the plural is found too ("meetings", "reuniones").
+     The other language's words are looked for as written here or in the plural, nothing near them (exactForms):
+     a form of a word that matters ("woman", "recovered", "enmienda") is a word of its own on its line.
      Such matches rank after the ones on the words typed (ALT_BOOST, then ranked()). */
   var BILINGUAL = [
     "sobriety|sobriedad", "sober|sobrio/sobria", "meeting|reunión/junta", "sponsor|padrino/madrina",
     "sponsorship|apadrinamiento", "sponsee|ahijado/ahijada", "service|servicio", "general service|servicios generales",
     "step|paso", "tradition|tradición", "concept|concepto", "home group|grupo base", "group|grupo",
     "big book|libro grande", "newcomer|recién llegado/recién llegada/principiante", "alcoholic|alcohólico/alcohólica",
-    "alcoholism|alcoholismo", "drinking|beber/bebida", "recovery|recuperación", "unity|unidad",
-    "fellowship|comunidad/compañerismo", "higher power|poder superior", "god|dios", "prayer|oración",
-    "meditation|meditación", "serenity|serenidad", "anonymity|anonimato", "anonymous|anónimo/anónimos",
-    "story|historia/testimonio", "magazine|revista", "literature|literatura", "pamphlet|folleto", "book|libro",
+    "alcoholism|alcoholismo", "drinking/drink|beber/bebida", "recovery/recovered|recuperación/recuperado/recuperada",
+    "unity|unidad", "fellowship|comunidad/compañerismo", "higher power|poder superior", "god|dios", "prayer|oración",
+    "meditation|meditación", "serenity|serenidad", "anonymity|anonimato", "anonymous|anónimo/anónima/anónimos",
+    "story/testimony|historia/testimonio", "magazine|revista", "literature|literatura", "pamphlet|folleto", "book|libro",
     "convention|convención", "assembly|asamblea", "district|distrito", "delegate|delegado/delegada",
     "intergroup|intergrupo", "central office|oficina central", "gsr/general service representative|rsg/representante de servicios generales",
     "gvr/grapevine representative|rlv/representante de la viña", "hope|esperanza", "gratitude|gratitud",
-    "honesty|honestidad", "humility|humildad", "relapse|recaída", "amends|enmiendas/reparaciones",
-    "inventory|inventario", "anniversary|aniversario", "resentment|resentimiento", "spirituality|espiritualidad",
-    "women|mujeres", "young people/youth|jóvenes", "corrections/prison|correccionales/cárcel/prisión",
+    "honesty/honest|honestidad/honesto/honesta", "humility|humildad", "relapse|recaída", "amends|enmiendas/enmienda/reparaciones",
+    "inventory|inventario", "anniversary|aniversario", "resentment|resentimiento", "spirituality/spiritual|espiritualidad/espiritual",
+    "women/woman|mujeres/mujer", "young people/youth|jóvenes/joven", "corrections/prison|correccionales/cárcel/prisión",
     "workshop|taller", "subscription|suscripción", "one day at a time|un día a la vez",
   ];
   var ALT_BOOST = 0.5;
@@ -130,8 +133,17 @@
     }
     return any ? { words: words, groups: groups } : null;
   }
+  /* An other-language word as the dictionary writes it, or in the plural (-s, -es; -ies for a -y: "stories",
+     "pasos", "reuniones") — never as the start of a longer word or a near spelling: the visitor didn't type it and
+     couldn't tell why "cartel" (for "cárcel"), the name "Marina" (for "madrina") or "history" (for "historia")
+     matched. (The words typed keep the prefix and light fuzzy matching.) */
+  function exactForms(w) {
+    var out = [w, w + "s", w + "es"];
+    if (/[^aeiou]y$/.test(w)) out.push(w.slice(0, -1) + "ies");
+    return { combineWith: "OR", queries: out };
+  }
   // The query for MiniSearch: every group must match (combine: AND, or OR for "partial") — a group by its own
-  // words or by one of its other-language phrases, which counts for less (ALT_BOOST)
+  // words or by one of its other-language phrases (each word exactly: exactForms), which counts for less (ALT_BOOST)
   function treeOf(ex, combine) {
     var lower = function () { return ALT_BOOST; };
     return {
@@ -142,7 +154,7 @@
         return {
           combineWith: "OR",
           queries: [{ combineWith: "AND", queries: [own] }].concat(g.alts.map(function (a) {
-            return { combineWith: "AND", queries: [a.join(" ")], boostTerm: lower };
+            return { combineWith: "AND", queries: a.map(exactForms), prefix: false, fuzzy: false, boostTerm: lower };
           })),
         };
       }),

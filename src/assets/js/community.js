@@ -55,8 +55,11 @@
         /* The sticky filter bar's height while it covers the feed, as --wn-bar-h on <html>: html's
            scroll-padding-top adds it (community.css), so a link that gets keyboard focus — or a jump — never
            lands under the bar. Its chips may wrap onto a second row on a desktop, so it is measured, not
-           guessed; 0 while it covers nothing: a window under 40rem tall (it scrolls away) or the
-           three-column layout (it is the left column). */
+           guessed; 0 while it covers nothing: a window under 40rem tall (it scrolls away), the
+           three-column layout (it is the left column), or larger text / relaxed spacing from 64rem
+           (it stays in place: community.css). Measured again when its size changes, the window's, or
+           a reading setting ("gvlv:prefs": the Aa panel, another tab) — that one may make it sticky
+           or not at the same size. */
         watchBar: function () {
           var bar = this.$el.querySelector(".cm-chipbar"), feed = this.$el.querySelector(".cm-wn-feed");
           if (!bar || !feed) return;
@@ -69,6 +72,8 @@
           size();
           if (window.ResizeObserver) new ResizeObserver(size).observe(bar);
           window.addEventListener("resize", size);
+          // (a frame later: the new data-text / data-spacing styles have applied)
+          window.addEventListener("gvlv:prefs", function () { if (window.requestAnimationFrame) requestAnimationFrame(size); else size(); });
         },
         count: function (d) { return this.filter ? d.counts[this.filter] || 0 : d.total; },
         /* Day heading "7 updates": the day's ITEMS of the chosen type (a magazine issue

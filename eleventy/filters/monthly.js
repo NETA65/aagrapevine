@@ -56,6 +56,7 @@
 //            the "over" marks, the next committee meeting and the live extras.
 
 // (community.js imports this file too: the cycle is safe, both only call each other's functions.)
+import crypto from "node:crypto";
 import { qrSvg, issueLabel, issueInSentence, issueLabelOf } from "./community.js";
 import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs } from "./committee.js";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
@@ -972,6 +973,23 @@ export function sharePicturePath(key, lang) {
   return `${lang === "es" ? "/es" : ""}/monthly/${key}/share.png`;
 }
 
+/** A month page's HTML with a version in its share picture's address (og:image, twitter:image: "…/share.png?v=…") —
+ *  the first 8 hex characters of a hash of what the picture is drawn from: the page's poster (its HTML: the month's
+ *  words, dates, deadlines, themes, design) and the site's code version (the ?v= of its main.css: the styles, fonts and
+ *  templates that draw it). The link previews that keep a picture by its address (Facebook, Messenger, LinkedIn,
+ *  Slack…) fetch it again once the poster changes; an unchanged poster keeps its address. A page without a poster or
+ *  without a share picture is returned as it is. (The mpShareVersion transform, below; scripts/ops/poster_share.py
+ *  finds the pages by the address's path, whatever the ?v=.) */
+export function shareVersioned(html) {
+  const s = String(html == null ? "" : html);
+  if (!s.includes('/share.png"')) return s;
+  const poster = /<article\b[^>]*\bdata-mp-poster\b[\s\S]*?<\/article>/.exec(s);
+  if (!poster) return s;
+  const code = (/\/assets\/css\/main\.css\?v=([\w-]+)/.exec(s) || [])[1] || "";
+  const v = crypto.createHash("sha256").update(code + "\n" + poster[0]).digest("hex").slice(0, 8);
+  return s.replace(/(<meta (?:property="og:image"|name="twitter:image") content="[^"?]*\/monthly\/\d{4}-\d{2}\/share\.png)"/g, `$1?v=${v}"`);
+}
+
 /** Whether this build's month pages point at their share pictures: only when the build is asked to (POSTER_SHARE=1).
  *  The pictures are not made by the build: Website update (.github/workflows/update.yml) takes them with the
  *  runner's Chrome right after it (scripts/ops/poster_share.py), and builds the site again without POSTER_SHARE when
@@ -1109,6 +1127,11 @@ export default function (eleventyConfig, helpers) {
   // site path of its share.png in a build asked for it (POSTER_SHARE=1), else "" (the page keeps the committee's card)
   eleventyConfig.addFilter("mpShareImage", (key, lang) => (posterShareOn() && /^\d{4}-\d{2}$/.test(String(key || ""))
     ? sharePicturePath(String(key), lang) : ""));
+  // …and, once the page is made (its poster is in it), a version in that address: shareVersioned
+  eleventyConfig.addTransform("mpShareVersion", function (content) {
+    const out = (this.page && this.page.outputPath) || this.outputPath;
+    return typeof out === "string" && out.endsWith(".html") && typeof content === "string" ? shareVersioned(content) : content;
+  });
   eleventyConfig.addFilter("mpGuides", (pdfs, lang) => repGuides(pdfs, lang));
   // A month's calendar file (src/pages/monthly-ics.11ty.js): this.mpIcs(key, db, carry, site, lang) — the site's
   // calendar events worked out once per language and build (the 26 files share them)

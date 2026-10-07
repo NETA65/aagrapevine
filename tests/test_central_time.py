@@ -511,7 +511,8 @@ class BuildClock(unittest.TestCase):
           const M = await imp("eleventy/filters/monthly.js");
           const { translateKey } = await imp("eleventy.config.js");
           const gd = {}, fl = {}, on = {};
-          const cfg = { addGlobalData: (k, f) => { gd[k] = f; }, addFilter: (k, f) => { fl[k] = f; }, addShortcode() {}, on: (e, f) => { (on[e] ||= []).push(f); } };
+          const cfg = { addGlobalData: (k, f) => { gd[k] = f; }, addFilter: (k, f) => { fl[k] = f; }, addShortcode() {}, addTransform() {},
+                        on: (e, f) => { (on[e] ||= []).push(f); } };
           M.default(cfg, { translateKey });
           const build = () => {
             (on["eleventy.before"] || []).forEach((f) => f());

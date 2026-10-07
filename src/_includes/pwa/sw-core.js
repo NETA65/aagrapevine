@@ -15,7 +15,8 @@
    * pages (navigations): NETWORK FIRST, revalidated with the site (cache: "no-cache": not even the
      browser's HTTP cache can hand back an old page). Online, you always get the page from the site;
      the copy is kept (the last 80 pages, plus the ones saved with "Save key pages for offline" — a saved
-     page not opened for a week is fetched again in the background once there is a signal: refreshSaved).
+     page not opened for a week is fetched again in the background once there is a signal, unless Data saver
+     is on, never beside a save: refreshSaved).
      The saved copy is used only when the network fails, answers with a server error, or takes more than 4 s —
      then the page is told (pwa.js shows "Slow connection — this is a saved copy"). A page that is not
      saved → the offline page, in the language of the address. An address without its last slash
@@ -42,15 +43,17 @@
      FIRST, kept like the JSON indexes, and the booth's copy replaced too when there is one; offline,
      on a server error or after 6 s, the booth's copy (else the data cache's).
    Caches: gvlv-shell-<version> (app shell) and gvlv-static-<version> are replaced by each new
-   version; gvlv-pages-v1, gvlv-saved-v1, gvlv-saved-assets-v1, gvlv-img-v1 and gvlv-data-v1 are kept
-   across versions, so a site update never deletes what a visitor saved — including the styles and
-   scripts a saved page asks for (its old ?v= address): gvlv-saved-assets-v1 holds exactly the files
-   the saved pages use (pruneSavedAssets). gvlv-booth-v1 (the booth display's offline copy: its show,
-   photos, videos, posters) is kept across versions too and never trimmed — the booth's own list says
-   what goes (BOOTH_SAVE prune, BOOTH_CLEAR). activate deletes every other gvlv-* cache.
+   version (the old static cache's stylesheets go on into the new one: carryStyles); gvlv-pages-v1,
+   gvlv-saved-v1, gvlv-saved-assets-v1, gvlv-img-v1 and gvlv-data-v1 are kept across versions, so a site
+   update never deletes what a visitor saved — including the styles and scripts a saved page asks for (its old
+   ?v= address): gvlv-saved-assets-v1 holds exactly the files the saved pages use (pruneSavedAssets).
+   gvlv-booth-v1 (the booth display's offline copy: its show, photos, videos, posters) is kept across versions
+   too and never trimmed — the booth's own list says what goes (BOOTH_SAVE prune, BOOTH_CLEAR). activate deletes
+   every other gvlv-* cache.
    Only addresses inside the scope (the base path) are ever stored: other sites on the same origin
    (GitHub Pages projects) are never kept or listed.
-   Messages: from pwa.js — SAVE ("Save key pages for offline"), HOW_SERVED, VERSION, SKIP_WAITING; from
+   Messages: from pwa.js — SAVE ("Save key pages for offline"), HOW_SERVED (as each page loads: was it a saved copy?
+   — and whether Data saver is on, which the round over the saved pages waits for), VERSION, SKIP_WAITING; from
    booth.js — BOOTH_SAVE (save the About page and the booth's files for offline, with progress),
    BOOTH_STATUS (how much of a list is saved), BOOTH_CLEAR (remove the booth's copy), and SKIP_WAITING
    before its own save or removal while this version's worker still waits. Answers go back through the
@@ -104,6 +107,8 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
     const keep = new Set(Object.values(CACHE));
+    // (an older version's stylesheets go on into this version's static cache first: carryStyles)
+    await carryStyles(keep).catch(() => {});
     for (const name of await caches.keys()) if (name.startsWith(PREFIX) && !keep.has(name)) await caches.delete(name);
     // No navigation preload: its request would use the browser's HTTP cache (up to 10 minutes old on
     // GitHub Pages); page() asks the site itself instead.
@@ -115,6 +120,29 @@ self.addEventListener("activate", (event) => {
     settling = keepOpenTabs().catch(() => {}).finally(() => { settling = null; });
   })());
 });
+
+/* A page kept from an older version (gvlv-pages-v1: the last 80 opened, not saved) still asks for that version's
+   stylesheets, by their old ?v= address — and main.css is not all of them: a page area's own sheet (monthly.css,
+   booth.css, orientation.css, presentations.css, report.css, expenses.css: the page's pageStyles) came with the page
+   into the static cache, which goes with its version. (main.css?v=<old> is answered offline by this version's
+   main.css from the app shell: staleWhileRevalidate's last resort, any version of the same file.) So before an old
+   static cache goes, its stylesheets — only the site's own .css, a copy from cache to cache, nothing downloaded — go
+   into this version's, and on into the next version's after that: such a page opened offline after an update keeps
+   its look. They are the static cache's oldest entries, the first to go at its cap (LIMIT.static). */
+async function carryStyles(keep) {
+  const olds = (await caches.keys()).filter((n) => n.startsWith(PREFIX + "static-") && !keep.has(n));
+  if (!olds.length) return;
+  const into = await caches.open(CACHE.static);
+  for (const name of olds) {
+    const old = await caches.open(name);
+    for (const req of await old.keys()) {
+      if (!/\.css$/.test(new URL(req.url).pathname) || (await into.match(req))) continue;
+      const res = await old.match(req);
+      if (res) await into.put(req, res);
+    }
+  }
+  await trim("static");
+}
 
 /* The page(s) open while the worker takes over (a first visit) are kept too, with the styles and scripts they
    asked for — usually straight from the browser's HTTP cache, so this costs no extra data. (Those files loaded
@@ -143,16 +171,21 @@ async function keepOpenTabs() {
 }
 
 /* work(signal) with a time limit: past `ms` its downloads are let go (AbortController, where there is one) and
-   the promise fails — the work behind it is not waited for. */
-function within(ms, work) {
+   the promise fails — the work behind it is not waited for. The same when `stop` (an AbortSignal: the round over
+   the saved pages, let go when a save starts — refreshSaved) is let go. */
+function within(ms, work, stop) {
   const abort = typeof AbortController === "function" ? new AbortController() : null;
-  let timer = 0;
+  let timer = 0, drop = null;
   const job = Promise.resolve().then(() => work(abort ? abort.signal : undefined));
   job.catch(() => {});
   const late = new Promise((resolve, reject) => {
     timer = setTimeout(() => { if (abort) abort.abort(); reject(new Error("timeout")); }, ms);
+    if (stop) {
+      drop = () => { if (abort) abort.abort(); reject(new Error("stopped")); };
+      if (stop.aborted) drop(); else stop.addEventListener("abort", drop);
+    }
   });
-  return Promise.race([job, late]).finally(() => clearTimeout(timer));
+  return Promise.race([job, late]).finally(() => { clearTimeout(timer); if (drop) stop.removeEventListener("abort", drop); });
 }
 
 /* ------------------------------------------------------------------ routing */
@@ -266,8 +299,9 @@ async function page(event, url) {
     // language, checked once a day (not both: the offline page would be fetched twice).
     else if (isOfflinePage(key) && res.status === 200 && res.type === "basic" && isHtml(res)) event.waitUntil(keepOffline(key, res.clone()).catch(() => {}));
     if (res.ok && !isOfflinePage(key)) event.waitUntil(refreshOffline(url).catch(() => {}));
-    // (an answer from the site: there is a signal — saved pages not opened for a week are fetched again)
-    if (res.ok) event.waitUntil(refreshSaved().catch(() => {}));
+    // (an answer from the site: there is a signal — saved pages not opened for a week are fetched again, once the
+    // page has said whether Data saver is on: signalled)
+    if (res.ok) event.waitUntil(signalled(event).catch(() => {}));
     return res;
   })();
   let timer = 0;
@@ -314,27 +348,59 @@ function refreshOffline(url) {
    online shows there is a signal — one page at a time, each given SETTLE_TIMEOUT, and its styles and scripts
    (keepAssets) SETTLE_TIMEOUT more; the first that fails or is too slow ends the round (the signal is weak again:
    the next round tries). A page gone (404) or moved elsewhere keeps its copy as it is, and so does one whose files
-   did not all come (the old copy opens whole offline). Looked at most every 6 hours, one round at a time. */
+   did not all come (the old copy opens whole offline). Looked at most every 6 hours, one round at a time.
+   Never with Data saver on — nothing is fetched ahead of time then: the round starts only once the page the site
+   answered says Data saver is off (its HOW_SERVED, sent by pwa.js as it loads: the visitor's choice in the Aa panel,
+   else the browser's own data saver or a 2G connection, as the page shows it — app.js GV.prefs); a page that can't
+   say (an older version's script) or a browser that doesn't name the page: the connection's own word (dataSaver).
+   Never beside a save ("Save key pages", the booth's BOOTH_SAVE: `saving`): a save stops a running round (its
+   download is let go) and starts none while it runs — the save fetches those pages itself —, and a round never
+   puts back a page no longer saved (last month's page, removed by a save meanwhile). */
 const SAVED_REFRESH = 7 * 24 * 3600e3;
-let savedLooked = 0, savedRound = null;
+let savedLooked = 0, savedRound = null, saving = 0, roundStop = null;
+const signals = new Set(); // pages (client ids) the site itself answered: their HOW_SERVED may start a round
+function signalled(event) {
+  const id = event.resultingClientId || event.clientId;
+  if (!id) return dataSaver() ? Promise.resolve() : refreshSaved();
+  signals.add(id);
+  if (signals.size > 30) signals.delete(signals.values().next().value);
+  return Promise.resolve();
+}
+// The browser's own data saver (Save-Data) or a 2G connection — what turns the site's Data saver on by itself (app.js)
+function dataSaver() {
+  const c = self.navigator && self.navigator.connection;
+  return !!c && (c.saveData === true || /^(slow-2g|2g)$/.test(c.effectiveType || ""));
+}
+// A save starts: a running round is let go; none starts until the save is done (→ its end: call the answer)
+function holdRounds() {
+  saving += 1;
+  if (roundStop) roundStop.abort();
+  let done = false;
+  return () => { if (!done) { done = true; saving -= 1; } };
+}
 function refreshSaved() {
   if (savedRound) return savedRound;
-  if (Date.now() - savedLooked < REVALIDATE_AFTER) return Promise.resolve();
+  if (saving || Date.now() - savedLooked < REVALIDATE_AFTER) return Promise.resolve();
   savedLooked = Date.now();
+  const stop = typeof AbortController === "function" ? new AbortController() : null;
+  const over = () => saving > 0 || !!(stop && stop.signal.aborted);
+  roundStop = stop;
   savedRound = (async () => {
     if (!(await caches.has(CACHE.saved))) return;
     const saved = await caches.open(CACHE.saved);
     let fresh = 0;
     for (const req of await saved.keys()) {
+      if (over()) break;
       const have = await saved.match(req);
-      const at = Date.parse((have && have.headers.get("x-gvlv-saved")) || "") || 0;
+      if (!have) continue; // no longer saved (removed meanwhile)
+      const at = Date.parse(have.headers.get("x-gvlv-saved") || "") || 0;
       if (Date.now() - at < SAVED_REFRESH || !inScope(req.url)) continue;
       let copy;
       try {
         copy = await within(SETTLE_TIMEOUT, async (signal) => {
           const res = await fetch(req.url, { credentials: "same-origin", cache: "no-cache", signal });
           return keepable(res, req.url) && pageKey(res.url || req.url) === req.url ? stamp(res) : null;
-        });
+        }, stop && stop.signal);
       } catch (e) { break; }
       if (!copy) continue;
       // its styles and scripts (a new version's, after a deploy) within the time limit too — and the new copy only
@@ -346,14 +412,16 @@ function refreshSaved() {
           await keepAssets(html, req.url);
           await keepCalendars(html, req.url);
           return assetsKept(html, req.url);
-        });
+        }, stop && stop.signal);
       } catch (e) { break; }
       if (!whole) continue;
+      if (over()) break;
+      if (!(await saved.match(req))) continue; // removed while it downloaded: it stays removed
       await saved.put(req.url, copy);
       fresh += 1;
     }
     if (fresh) await pruneSavedAssets();
-  })().finally(() => { savedRound = null; });
+  })().finally(() => { savedRound = null; if (roundStop === stop) roundStop = null; });
   return savedRound;
 }
 
@@ -707,27 +775,32 @@ async function savePage(saved, tries, keys) {
 }
 
 async function savePages(lang, reply) {
-  const list = saveList(lang);
-  const saved = await caches.open(CACHE.saved);
-  await dropOldMonths(lang, saved).catch(() => {});
-  let done = 0, ok = 0, total = list.length;
-  const failed = [], keys = new Set();
-  reply({ type: "SAVE_PROGRESS", done, total });
-  for (const tries of list) {
-    const got = await savePage(saved, tries, keys);
-    const good = got === "saved", dup = got === "dup";
-    // no page for this month (yet) while the hub is saved anyway: not a failure, not counted
-    const noMonth = !good && tries.length === 1 && /\/monthly\/\d{4}-\d{2}\/$/.test(tries[0]) && CONFIG.save.includes("monthly/");
-    if (dup || noMonth) total -= 1;
-    else {
-      done += 1;
-      if (good) ok += 1; else failed.push(tries[0]);
-    }
+  const release = holdRounds(); // (no round over the saved pages meanwhile: this fetches them)
+  try {
+    const list = saveList(lang);
+    const saved = await caches.open(CACHE.saved);
+    await dropOldMonths(lang, saved).catch(() => {});
+    let done = 0, ok = 0, total = list.length;
+    const failed = [], keys = new Set();
     reply({ type: "SAVE_PROGRESS", done, total });
+    for (const tries of list) {
+      const got = await savePage(saved, tries, keys);
+      const good = got === "saved", dup = got === "dup";
+      // no page for this month (yet) while the hub is saved anyway: not a failure, not counted
+      const noMonth = !good && tries.length === 1 && /\/monthly\/\d{4}-\d{2}\/$/.test(tries[0]) && CONFIG.save.includes("monthly/");
+      if (dup || noMonth) total -= 1;
+      else {
+        done += 1;
+        if (good) ok += 1; else failed.push(tries[0]);
+      }
+      reply({ type: "SAVE_PROGRESS", done, total });
+    }
+    await saveFiles();
+    await pruneSavedAssets();
+    reply({ type: "SAVE_DONE", saved: ok, total, failed });
+  } finally {
+    release();
   }
-  await saveFiles();
-  await pruneSavedAssets();
-  reply({ type: "SAVE_DONE", saved: ok, total, failed });
 }
 
 /* The data files saved with the pages (CONFIG.files: the workshop presentations' JSON and the Texas writers
@@ -889,6 +962,7 @@ async function boothSave(job, reply) {
   const halt = () => end || (job.gen !== boothGen ? "stopped" : Date.now() > job.until ? "more" : "");
   const abort = typeof AbortController === "function" ? new AbortController() : null;
   boothAbort = abort;
+  const release = holdRounds(); // (it saves the About page: no round over the saved pages meanwhile)
   try {
     let shelf = null, cache = null;
     try { shelf = await caches.open(CACHE.saved); cache = await caches.open(CACHE.booth); } catch (e) { end = "error"; }
@@ -912,6 +986,7 @@ async function boothSave(job, reply) {
     /* a surprise: what was saved is still reported (BOOTH_DONE always comes) */
   } finally {
     if (boothAbort === abort) boothAbort = null;
+    release();
   }
   const why = end === "more" || end === "full" || end === "stopped" ? { [end]: true } : {};
   reply({ type: "BOOTH_DONE", saved, total, failed, bytes, ...why });
@@ -947,6 +1022,10 @@ self.addEventListener("message", (event) => {
     const s = id && served.has(id) ? served.get(id) : null;
     if (id) served.delete(id);
     reply({ type: "HOW_SERVED", copy: s !== null, savedAt: s || null, version: V });
+    // a page the site answered (signalled), Data saver off (`saver`: the page's word, pwa.js): the round over the
+    // saved pages (refreshSaved)
+    const saver = typeof d.saver === "boolean" ? d.saver : dataSaver();
+    if (id && signals.delete(id) && !saver) event.waitUntil(refreshSaved().catch(() => {}));
   } else if (d.type === "SAVE") event.waitUntil(savePages(d.lang === "es" ? "es" : "en", reply));
   else if (d.type === "VERSION") reply({ type: "VERSION", version: V });
   else if (d.type === "BOOTH_SAVE") {

@@ -208,6 +208,11 @@ ctx.Alpine = { data: (n, fn) => { reg[n] = fn; } };
 for (const fn of docL["alpine:init"] || []) fn();
 const comp = (bar, feed) => { const c = reg.whatsNew({}); c.$el = make(bar, feed); c.$root = { getAttribute: () => "{n}" }; return c; };
 const resize = () => { for (const fn of winL.resize || []) fn(); };
+// the next frame (requestAnimationFrame): run by hand — frame()
+const frames = [];
+ctx.requestAnimationFrame = (fn) => frames.push(fn);
+const frame = () => { while (frames.length) frames.shift()(); };
+const prefs = () => { for (const fn of winL["gvlv:prefs"] || []) fn({ detail: {} }); };   // a reading setting changed
 """ + script, data={"noRO": "noRO" in script}, needs_modules=False, timeout=60)
 
     def test_the_bar_height_while_it_covers_the_feed(self):
@@ -232,6 +237,24 @@ out({ one, two, short, back, observed: ro.el === bar, resizeListeners: (winL.res
         self.assertEqual(r["back"], "111px")
         self.assertTrue(r["observed"])
         self.assertEqual(r["resizeListeners"], 1)
+
+    def test_measured_again_when_a_reading_setting_changes(self):
+        # Round-7 review: from 64rem the bar stays in place at larger text or relaxed spacing, and is sticky otherwise —
+        # turning relaxed spacing off in the Aa panel made it sticky at the same size, so neither the ResizeObserver nor
+        # a window resize measured it again: --wn-bar-h stayed 0px and keyboard focus could land under the bar
+        r = self.run_bar(r"""
+const bar = box(80, 880, 64, 56, "static"), feed = box(80, 880, 140, 4000, "static");
+comp(bar, feed).watchBar();                       // relaxed spacing: the bar stays in place
+const relaxed = vars["--wn-bar-h"];
+bar.pos = "sticky";                               // relaxed spacing off: sticky, the same size (no resize)
+prefs();
+const sameFrame = vars["--wn-bar-h"];             // (measured once the new styles apply: the next frame)
+frame();
+const normal = vars["--wn-bar-h"];
+bar.pos = "static"; prefs(); frame();             // 130 % text: in place again
+out({ relaxed, sameFrame, normal, larger: vars["--wn-bar-h"], listeners: (winL["gvlv:prefs"] || []).length });
+""")
+        self.assertEqual(r, {"relaxed": "0px", "sameFrame": "0px", "normal": "56px", "larger": "0px", "listeners": 1})
 
     def test_nothing_to_leave_room_for(self):
         r = self.run_bar(r"""

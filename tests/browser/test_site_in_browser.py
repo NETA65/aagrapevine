@@ -6,11 +6,14 @@ round-7 review found that no offline test could see:
                         (solid header), in light, dark, high contrast and high contrast dark. Measured on the pixels:
                         the ring's band, focused against not focused (it was 1.45 : 1).
   * StickyBarFocus    — What's New's sticky filter bar never hides the element keyboard focus is on, tabbing forward
-                        and back, on a laptop and a phone (it hid 7 of them).
+                        and back, on a laptop and a phone (it hid 7 of them); the room left for it is measured again
+                        when relaxed spacing goes off (the bar turns sticky at the same size).
   * LargeTextPhone    — no page scrolls sideways on a 360-pixel phone at 150 % text: Home, About, Published, Events,
                         Meetings, in English and Spanish (About's booth steps did).
   * OfflineUpdate     — a new version of the offline worker takes over at once, even while an open tab's page is slow
                         to download again ("Reload" used to wait for every open tab: 12 s on a weak signal).
+  * OfflineAreaStyles — a page opened online (not saved), then a new version, then no signal: the page opens with its
+                        own stylesheet (the Monthly poster lost its look: its sheet went with the old version).
   * ScriptErrors      — the main pages, English and Spanish, run without a script error.
   * PosterPicture     — a month's poster share picture (scripts/ops/poster_share.py, made by Website update) can be
                         made with this browser: 1200 × 630.
@@ -297,6 +300,34 @@ class StickyBarFocus(unittest.TestCase):
                 self.assertGreater(stuck, 10, "the bar was stuck at the top while tabbing (else nothing was checked)")
                 self.assertEqual(hidden, [])
 
+    def test_measured_again_when_relaxed_spacing_goes_off(self):
+        # Round-7 review: from 64rem the bar stays in place with relaxed spacing and is sticky without it — at the same
+        # size, so nothing measured it again: the room left for it (--wn-bar-h) stayed 0px while it covered the feed
+        bar = """() => { const b = document.querySelector(".cm-chipbar");
+          return { position: getComputedStyle(b).position, height: Math.ceil(b.getBoundingClientRect().height),
+                   room: document.documentElement.style.getPropertyValue("--wn-bar-h") }; }"""
+        for lang in ("en", "es"):
+            with self.subTest(lang=lang):
+                ctx = new_context(1440, 900, lang=lang, prefs={"spacing": "relaxed"})
+                try:
+                    page = open_page(ctx, ("es/" if lang == "es" else "") + "whats-new/")
+                    before = page.evaluate(bar)
+                    self.assertEqual((before["position"], before["room"]), ("static", "0px"), before)
+                    page.evaluate("GV.prefs.set({ spacing: 'normal' })")            # what the Aa panel does
+                    try:                                                             # (measured a frame later)
+                        page.wait_for_function("() => { const b = document.querySelector('.cm-chipbar'); "
+                                               "return getComputedStyle(b).position === 'sticky' && "
+                                               "document.documentElement.style.getPropertyValue('--wn-bar-h') === "
+                                               "Math.ceil(b.getBoundingClientRect().height) + 'px'; }", timeout=3000)
+                    except Exception:  # (not measured: the assertions below say how)
+                        pass
+                    after = page.evaluate(bar)
+                    self.assertEqual(after["position"], "sticky", after)
+                    self.assertGreater(after["height"], 0)
+                    self.assertEqual(after["room"], f"{after['height']}px", after)
+                finally:
+                    ctx.close()
+
 
 # ----------------------------------------------------------------------------------------------- large text
 SIDEWAYS = """() => {
@@ -345,10 +376,17 @@ class LargeTextPhone(unittest.TestCase):
 
 # ----------------------------------------------------------------------------------------------- offline update
 WORKER_READY = "async () => { const r = await navigator.serviceWorker.ready; return !!(r.active && navigator.serviceWorker.controller); }"
+# The new version, installed and waiting — its own state "installed", not only the registration's `waiting` slot: the
+# browser hands the page the two as separate updates, and the slot can come first (the worker still "installing" for a
+# moment). An update() that found nothing new (the browser's own check after a navigation, still on the old file) is
+# asked again every 2 s. 30 s at most.
 NEW_VERSION_WAITING = """async () => {
   const reg = await navigator.serviceWorker.getRegistration();
-  await reg.update();
-  for (let i = 0; i < 300 && !reg.waiting; i++) await new Promise((r) => setTimeout(r, 100));
+  await reg.update().catch(() => {});
+  for (let i = 0; i < 300 && !(reg.waiting && reg.waiting.state === "installed"); i++) {
+    if (!reg.waiting && !reg.installing && i % 20 === 19) await reg.update().catch(() => {});
+    await new Promise((r) => setTimeout(r, 100));
+  }
   return reg.waiting ? reg.waiting.state : (reg.installing ? "still installing" : "none");
 }"""
 TAKE_OVER = """async () => {
@@ -397,6 +435,64 @@ class OfflineUpdate(unittest.TestCase):
             self.assertLess(time.monotonic() - t0, 5, "Reload opens the page at once")
             self.assertEqual(page.evaluate("navigator.serviceWorker.controller && navigator.serviceWorker.controller.scriptURL")
                              .split("/")[-1], "sw.js")
+        finally:
+            ctx.close()
+
+
+# A page's own stylesheet (pageStyles: monthly.css, booth.css …): { linked, rules (-1: can't be read), href }
+AREA_SHEET = """(name) => {
+  const s = [...document.styleSheets].find((x) => x.href && x.href.split("?")[0].endsWith("/assets/css/" + name + ".css"));
+  if (!s) return { linked: false, rules: 0, href: "" };
+  try { return { linked: true, rules: s.cssRules.length, href: s.href }; } catch (e) { return { linked: true, rules: -1, href: s.href }; }
+}"""
+IN_CACHE = "async (u) => !!(await caches.match(u))"
+CACHE_NAMES = "async () => (await caches.keys()).filter((n) => n.startsWith('gvlv-static-') || n.startsWith('gvlv-shell-')).sort()"
+
+
+class OfflineAreaStyles(unittest.TestCase):
+    """A page opened online (not saved), then a new version of the site, then no signal: the page opens from the worker's
+    copy WITH its own stylesheet (the round-7 review: the Monthly poster came out as a page-wide unstyled picture — the
+    stylesheet went with the old version's cache; the worker now carries an old version's stylesheets on)."""
+
+    def tearDown(self):
+        S["overrides"].unlink(missing_ok=True)
+
+    def test_a_page_opened_before_an_update_keeps_its_own_styles_offline(self):
+        prefix = S["server"].prefix
+        month = f"monthly/{poster_months()[0]}/"
+        sw = (S["site"] / "sw.js").read_text(encoding="utf-8")
+        m = re.search(r'"version": "([^"]+)"', sw)
+        self.assertIsNotNone(m, "sw.js names its version")
+        version = m.group(1)
+        newer = S["tmp"] / "sw-area-next.js"
+        newer.write_text(sw.replace(m.group(0), f'"version": "{version}-area"', 1), encoding="utf-8")
+        ctx = new_context(1280, 800, service_workers="allow")
+        try:
+            page = open_page(ctx, "")
+            page.wait_for_function(WORKER_READY, timeout=30_000)
+            page.wait_for_timeout(1500)                # (the first visit's own keeping of the open tab)
+            visit = open_page(ctx, month)              # opened online, not saved: the worker keeps it, and its stylesheet
+            online = visit.evaluate(AREA_SHEET, "monthly")
+            self.assertGreater(online["rules"], 100, online)
+            shape = visit.evaluate("getComputedStyle(document.querySelector('[data-mp-poster]')).display")
+            visit.wait_for_function(IN_CACHE, arg=url(month), timeout=10_000)
+            visit.wait_for_function(IN_CACHE, arg=online["href"], timeout=10_000)
+            visit.close()                              # (closed: not an open tab the new version keeps again)
+            S["overrides"].write_text(json.dumps({"files": {prefix + "sw.js": str(newer)}}), encoding="utf-8")
+            self.assertEqual(page.evaluate(NEW_VERSION_WAITING), "installed", "the new version installed and waits")
+            took = page.evaluate(TAKE_OVER)
+            self.assertEqual(took["state"], "activated", took)
+            # the old version's caches are gone: what answers below is the new version's
+            names = page.evaluate(CACHE_NAMES)
+            self.assertIn(f"gvlv-shell-{version}-area", names)
+            self.assertEqual([n for n in names if not n.endswith(f"-{version}-area")], [], names)
+            ctx.set_offline(True)
+            again = ctx.new_page()
+            answered(again.goto(url(month), wait_until="load", timeout=60_000), month)
+            offline = again.evaluate(AREA_SHEET, "monthly")
+            self.assertEqual(offline["href"], online["href"], "the copy kept before the update (its old ?v= address)")
+            self.assertEqual(offline["rules"], online["rules"], "its own stylesheet, offline after the update")
+            self.assertEqual(again.evaluate("getComputedStyle(document.querySelector('[data-mp-poster]')).display"), shape)
         finally:
             ctx.close()
 

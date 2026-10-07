@@ -196,6 +196,81 @@ out({
         self.assertEqual(self.r["none"]["alt"], [])
 
 
+# The round-7 review's examples (on the built index): the other language's words matched by prefix and fuzzy brought
+# in unrelated titles — "prison" put "QR Post" and "Monthly toolkit" (through "cartel", for "cárcel") at the top of
+# the search page's "Jump to a page"; "sponsor" found "Sober at 16" by its writer Marina (for "madrina").
+EXACT_EN = [
+    {"t": "Letters from Prison"}, {"t": "QR Post", "o": "Cartel QR"}, {"t": "Monthly toolkit", "o": "Kit del mes: cartel y carteles"},
+    {"t": "Desde la cárcel"}, {"t": "Correccionales y prisiones"},
+    {"t": "My Sponsor"}, {"t": "Sober at 16", "o": "Marina B."}, {"t": "Mi madrina"}, {"t": "Padrinos y ahijados"},
+    {"t": "A Story of Hope"}, {"t": "GV Plays: History of GV"}, {"t": "The Historian"}, {"t": "Victoria's Journey"},
+    {"t": "Historias de vida"}, {"t": "Mi testimonio"},
+    {"t": "Convention Memories"}, {"t": "Convinced", "o": "Convencido"}, {"t": "Convención de Texas"},
+    {"t": "Mujer y sobria"},
+]
+EXACT_ES = [
+    {"t": "Mi historia"}, {"t": "Tienda", "o": "Store"}, {"t": "Stories of Recovery"}, {"t": "A Story to Tell"},
+    {"t": "Mi primer paso"}, {"t": "Stephanie's Birthday"}, {"t": "Stephen at the Booth"}, {"t": "Steps to Freedom"},
+    {"t": "Reuniones en el parque"}, {"t": "Meetings in the Park"}, {"t": "Meet the Editors"},
+]
+
+
+class OtherLanguageExact(unittest.TestCase):
+    """F-6, round-7 review: the other language's words are looked for exactly (or in the plural) — never by prefix or
+    as a near spelling; the words typed still are."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.r = None
+
+    def setUp(self):
+        need_minisearch(self)
+        if OtherLanguageExact.r is None:
+            OtherLanguageExact.r = run_js(self, KIT_JS + r"""
+const en = kit("en", input.en), es = kit("es", input.es);
+const q = {};
+for (const w of ["prison", "sponsor", "story", "convention", "woman", "cárcel"]) q["en:" + w] = en.find(w);
+for (const w of ["historia", "paso", "reunión", "meeting"]) q["es:" + w] = es.find(w);
+out(q);
+""", data={"en": EXACT_EN, "es": EXACT_ES}, needs_modules=False)
+        self.r = OtherLanguageExact.r
+
+    def found(self, key: str) -> tuple[list, list]:
+        r = self.r[key]
+        return [t for t in r["titles"] if t not in r["alt"]], r["alt"]
+
+    def test_no_near_spelling_or_longer_word_of_the_other_language(self):
+        for key, never in (("en:prison", {"QR Post", "Monthly toolkit"}), ("en:sponsor", {"Sober at 16"}),
+                           ("en:story", {"GV Plays: History of GV", "The Historian", "Victoria's Journey"}),
+                           ("en:convention", {"Convinced"}), ("es:historia", {"Tienda"}),
+                           ("es:paso", {"Stephanie's Birthday", "Stephen at the Booth"}), ("es:reunión", {"Meet the Editors"})):
+            with self.subTest(query=key):
+                self.assertFalse(never & set(self.r[key]["titles"]), self.r[key]["titles"])
+
+    def test_the_other_languages_words_and_their_plurals_still_count_after_the_words_typed(self):
+        for key, direct, alt in (("en:prison", ["Letters from Prison"], {"Desde la cárcel", "Correccionales y prisiones"}),
+                                 ("en:sponsor", ["My Sponsor"], {"Mi madrina", "Padrinos y ahijados"}),
+                                 ("en:story", ["A Story of Hope"], {"Historias de vida", "Mi testimonio"}),
+                                 ("en:woman", [], {"Mujer y sobria"}),                          # (a form on the dictionary's line)
+                                 ("es:historia", ["Mi historia"], {"Stories of Recovery", "A Story to Tell"}),   # -y → -ies
+                                 ("es:paso", ["Mi primer paso"], {"Steps to Freedom"}),
+                                 ("es:reunión", ["Reuniones en el parque"], {"Meetings in the Park"})):
+            with self.subTest(query=key):
+                got, other = self.found(key)
+                self.assertEqual(got, direct)
+                self.assertEqual(set(other), alt)
+                self.assertEqual(self.r[key]["titles"], got + other)              # the words typed first
+        # ("convention" typed: "convención" is a near spelling of the word typed itself — found as before)
+        self.assertEqual(set(self.r["en:convention"]["titles"]), {"Convention Memories", "Convención de Texas"})
+
+    def test_the_words_typed_keep_prefix_and_fuzzy(self):
+        # "cárcel" typed on the English page: its own word as before (light fuzzy finds "cartel", as it always has) —
+        # the change is only on the dictionary's words
+        self.assertIn("QR Post", self.found("en:cárcel")[0])
+        self.assertIn("Desde la cárcel", self.found("en:cárcel")[0])
+        self.assertIn("Meetings in the Park", self.found("es:meeting")[0])               # its own word, by prefix too
+
+
 LIB_HTML = r"""
 <template id="lib-icons"><svg data-icon="file-text"><path d="M0"/></svg><svg data-icon="eye"><path d="M1"/></svg></template>
 <script type="application/json" id="lib-config">__CFG__</script>

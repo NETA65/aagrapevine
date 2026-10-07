@@ -14,6 +14,8 @@ eleventyComputed:
   # The share picture (base.njk og:image): the top of this month's poster, 1200 × 630 — share.png beside the page,
   # made by Website update after the build (scripts/ops/poster_share.py). Only a build with POSTER_SHARE=1 points at
   # it (mpShareImage, eleventy/filters/monthly.js); in any other the src is "" and the page keeps the committee's card.
+  # Its address gets a ?v= from the poster once the page is made (monthly.js shareVersioned), so link previews that
+  # keep a picture by its address fetch the new one when the poster changes.
   ogImage:
     src: "{{ mpage.key | mpShareImage(mpage.lang) }}"
     width: "1200"

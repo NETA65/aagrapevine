@@ -11,7 +11,8 @@
     fixed (never dark-mode inverted). The Spanish poster leads with La Viña.
     A Grapevine theme machine-translated into Spanish (m.gv.machine, a deadline's machine) shows
     Grapevine's own English words in italics under it, and the poster says so once, as /read/ does
-    ("read.mt_note_en": titles translated automatically from English — originals in italics).
+    ("read.mt_note_en": titles translated automatically from English — originals in italics) — next to
+    those words: under Grapevine's deadlines when one is machine-translated, else under the theme.
     The hub shows each month in miniature (posterMini: the design and the theme, no dates or QR).
     ========================================================================= -#}
 
@@ -61,10 +62,11 @@
       <li><strong class="mp-dl-theme">{{ d.theme }}</strong>{% if d.machine and d.themeEn and d.themeEn != d.theme %} <span class="mp-orig" lang="en">{{ d.themeEn }}</span>{% endif %} <span class="mp-dl-due">{{ "monthly.for_issue" | t(lang, { issue: d.issueLabel }) }} · {{ "monthly.due" | t(lang, { date: d.dueLabel }) }}</span></li>
       {% endfor %}
     </ul>
+    {#- machine-translated Grapevine titles on this poster: the site's note, once — here, under Grapevine's deadlines,
+        when one of them is (the theme's, if it is too, is covered by it); else under the theme (issue()) -#}
+    {% if m.deadlines | selectattr("machine") | length %}<p class="mp-mtnote">{{ "read.mt_note_en" | t(lang) }}</p>{% endif %}
   </div>
   {% endif %}
-  {#- machine-translated Grapevine titles on this poster (its theme, its deadlines): the site's note, once -#}
-  {% if (m.gv and m.gv.machine and m.gv.orig) or (m.deadlines | selectattr("machine") | length) %}<p class="mp-mtnote">{{ "read.mt_note_en" | t(lang) }}</p>{% endif %}
 </section>
 {%- else %}
 <section class="mp-b mp-story">
@@ -97,7 +99,11 @@
   {% endif %}
   <h3 class="mp-h">{% icon "book-open-text", "mp-i" %}<span>{{ "monthly.in_gv" | t(lang, { month: m.monthName }) }}</span></h3>
   <p class="mp-theme">{{ m.gv.theme if m.gv else ("monthly.no_issue" | t(lang)) }}</p>
-  {% if m.gv and m.gv.machine and m.gv.orig %}<p class="mp-orig mp-orig--theme" lang="en">{{ m.gv.orig }}</p>{% endif %}
+  {% if m.gv and m.gv.machine and m.gv.orig %}<p class="mp-orig mp-orig--theme" lang="en">{{ m.gv.orig }}</p>
+  {#- the site's note on the Spanish poster (story() has it under Grapevine's deadlines when one of them is machine-
+      translated too): beside the original words it explains, never under La Viña's own Spanish topics -#}
+  {% if lang == "es" and not (m.deadlines | selectattr("machine") | length) %}<p class="mp-mtnote">{{ "read.mt_note_en" | t(lang) }}</p>{% endif %}
+  {% endif %}
   {% if m.tips.length %}
   <p class="mp-sub">{{ "monthly.put_to_work" | t(lang) }}</p>
   <ul class="mp-tips">
