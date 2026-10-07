@@ -383,8 +383,14 @@ html:root.tts-bar-on {
   :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(main, footer, .gvlv-panel) :is(.btn, .btn-primary, .btn-secondary, .btn-ghost, .btn-lv, .btn-light, .btn-on-dark, .chip):not(:is(.mp-poster, .cm-frame) *) { hyphens: auto; }
 }
 /* …and on the narrowest phones (below 480px) a word too long for its button breaks inside the pill
-   rather than running out of it (the hyphenation dictionary is not on every device) */
+   rather than running out of it (the hyphenation dictionary is not on every device) — once the pill has made
+   room for its words: 0.75rem a side there, not 1.25rem, so a word that fits in the button stays whole (the
+   meetings cards' "Agregar al / calendario" at 150 % on a 360px phone, which broke as "calendari / o"). A ghost
+   button has no edge or fill to keep off its words: 0.25rem ("Detalles en / aagrapevine.org" whole; narrower
+   still, a web address breaks at its dot — meetings.njk "aagrapevine<wbr>.org") */
 @media (width < 30rem) {
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(main, footer, .gvlv-panel) :is(.btn, .btn-primary, .btn-secondary, .btn-ghost, .btn-lv, .btn-light, .btn-on-dark):not(.btn-sm):not(:is(.mp-poster, .cm-frame) *) { padding-inline: 0.75rem; }
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(main, footer, .gvlv-panel) .btn-ghost:not(.btn-sm):not(:is(.mp-poster, .cm-frame) *) { padding-inline: 0.25rem; }
   :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(main, footer, .gvlv-panel) :is(.btn, .btn-primary, .btn-secondary, .btn-ghost, .btn-lv, .btn-light, .btn-on-dark):not(:is(.mp-poster, .cm-frame) *),
   :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(main, footer, .gvlv-panel) :is(.btn, .btn-primary, .btn-secondary, .btn-ghost, .btn-lv, .btn-light, .btn-on-dark) * { overflow-wrap: anywhere; }
 }

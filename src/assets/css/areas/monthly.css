@@ -478,7 +478,9 @@
 .mp-mini .mp-mini-head { --mp-w: 860px; --mp-max: 250px; }
 .mp-mini .mp-kicker { font-size: 0.95em; }
 .mp-mini .mp-month { margin-top: 14px !important; }
-.mp-mini .mp-year { display: block; margin: 12px 0 0; font-size: 0.42em; }
+/* the year under the month's name clears its descenders (the p of April, the y of May, the g of August: the name's
+   line is 0.9 high, so they hang below it) — in em, as they grow with the name's size */
+.mp-mini .mp-year { display: block; margin: 0.5em 0 0; font-size: 0.42em; }
 .mp-mini .mp-tag { margin-top: 18px !important; font-size: 1.3em; }
 .mp-mini-mag { display: flex; flex-direction: column; gap: 16px; }
 .mp-mini .mp-mini-mag .mp-sub { margin: 0 !important; font-size: 0.95em; }

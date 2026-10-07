@@ -161,6 +161,12 @@
 @media (width < 40rem), (pointer: coarse) { .lib-view button { width: 2.75rem; height: 2.75rem; } } /* 44px touch targets */
 .lib-view button:hover { color: var(--c-ink); }
 .lib-view button[aria-pressed="true"] { background: var(--c-gv); color: var(--c-surface); }
+/* Windows High Contrast drops the fills that mark the chosen collection and view: the system's selected colours
+   (the chips: main.css) */
+@media (forced-colors: active) {
+  .lib-col[aria-pressed="true"] { outline: 3px solid Highlight; outline-offset: -1px; }
+  .lib-view button[aria-pressed="true"] { background: Highlight; color: HighlightText; forced-color-adjust: none; }
+}
 .lib-select { background-image: none; }
 
 /* active filter pills */

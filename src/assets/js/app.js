@@ -196,7 +196,10 @@
        <span data-gv-meeting='{"weekday":3,"n":3,"start":"19:00","end":"20:00","skip":[]}' data-at="<start ISO>"
              data-tpl="Next meeting: {date} at {time}" data-date="long">…</span>
      {date}: data-date "long" (Wednesday, October 21, 2026) or "medium" (October 21, 2026) — fmtDate's styles;
-     {time}: 7:00 PM CDT. A <time> element gets the new datetime too. → how many lines it changed */
+     {time}: 7:00 PM CDT. A <time> element gets the new datetime too. In Spanish a long date that opens the line
+     ("{date}": a line of its own) gets a capital, as fmtDate writes it ("Miércoles, 21 de octubre…"); one inside a
+     sentence ("Próxima reunión: {date} a las {time}") stays lower case — "miércoles", as the build's midSentence.
+     → how many lines it changed */
   GV.meetingLines = function (root) {
     var changed = 0;
     Array.prototype.forEach.call((root || document).querySelectorAll("[data-gv-meeting]"), function (el) {
@@ -204,12 +207,12 @@
       try { rule = JSON.parse(el.getAttribute("data-gv-meeting") || "null"); } catch (e) { rule = null; }
       var n = rule ? GV.nextMeeting(rule) : null;
       if (!n || n.start.toISOString() === el.getAttribute("data-at")) return;
-      var long = el.getAttribute("data-date") === "long";
+      var long = el.getAttribute("data-date") === "long", tpl = String(el.getAttribute("data-tpl") || "{date}");
       var date = GV.fmtDate(n.start, long ? { weekday: "long", month: "long", day: "numeric", year: "numeric" } : { month: "long", day: "numeric", year: "numeric" });
-      if (long && LANG === "es") date = date.charAt(0).toUpperCase() + date.slice(1);
+      if (long && LANG === "es") date = tpl.indexOf("{date}") === 0 ? date.charAt(0).toUpperCase() + date.slice(1) : date.charAt(0).toLowerCase() + date.slice(1);
       var time = GV.fmtDate(n.start, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
       if (!date || !time) return;
-      el.textContent = String(el.getAttribute("data-tpl") || "{date}").replace("{date}", date).replace("{time}", time);
+      el.textContent = tpl.replace("{date}", date).replace("{time}", time);
       el.setAttribute("data-at", n.start.toISOString());
       if (el.tagName === "TIME") el.setAttribute("datetime", n.start.toISOString());
       changed++;

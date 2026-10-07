@@ -171,6 +171,8 @@
 .xp-flags { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.25rem; margin-left: 0.4rem; vertical-align: 0.05em; font-weight: 400; }
 .xp-flags:not(:has(> :not([style*="display: none"]))) { display: none; }
 .xp-rc { display: inline-flex; align-items: center; color: var(--c-muted); }
+/* (a paperclip; a crossed-out picture for a photo that isn't on this device — expenses.js rcKey) */
+.xp-rc-i { display: inline-flex; }
 .xp-cat { display: inline-flex; align-items: center; gap: 0.375rem; max-width: 100%; padding: 0.125rem 0.625rem 0.125rem 0.4rem; border-radius: 9999px;
   background: var(--xt-soft, var(--c-surface-2)); color: var(--xt, var(--c-muted)); font-size: 0.75rem; font-weight: 600; line-height: 1.25rem; }
 .xp-cat > span:last-child { min-width: 0; overflow-wrap: anywhere; }
@@ -628,7 +630,10 @@
 .xp-moredet[open] .xp-chev { transform: rotate(180deg); }
 .xp-textarea { min-height: 5.5rem; padding-block: 0.625rem; resize: vertical; }
 .xp-mt-label { margin-top: 1.5rem; }
-.xp-ask { width: min(28rem, calc(100vw - 2rem)); padding: 1.25rem 1.25rem 1rem; border: 0; border-radius: 1rem; background: var(--c-surface); color: var(--c-ink);
+/* "Are you sure?" (Discard what you typed?, Erase everything?): centred like the add / edit dialog, on a phone
+   too, over it — the page's reset (margin: 0) would pin it to the top-left corner */
+.xp-ask { width: min(28rem, calc(100vw - 2rem)); max-width: none; max-height: calc(100dvh - 2rem); margin: auto; overflow: auto;
+  padding: 1.25rem 1.25rem 1rem; border: 0; border-radius: 1rem; background: var(--c-surface); color: var(--c-ink);
   box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.45); }
 .xp-ask > p { font-size: 1rem; line-height: 1.55; }
 .xp-ask-acts { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; margin-top: 1.25rem; }

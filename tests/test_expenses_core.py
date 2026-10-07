@@ -1902,6 +1902,39 @@ class OwedAtTheEnd(unittest.TestCase):
         self.assertEqual(r["within27"], [["district", 0, 30000, 30000]])   # the period alone: "you hold $300" — what the views no longer say
         self.assertEqual(r["received27"], 30000)               # (the period's own totals stay the period's)
 
+    def test_a_claim_marked_paid_after_the_periods_end_was_still_owed_then(self):
+        """Round 7 polish: a December claim marked paid (paid_date January 10) — with or without the check
+        recorded — is still owed at the end of December; settled in January's view; a blank paid_date can't say
+        when, so it stays settled (as before). A person's repaid purchase follows its paid_date too."""
+        r = core(self, r"""
+          const hotel = (extra) => N(Object.assign({ id: "h", type: "expense", date: "2025-12-12", category: "lodging", description: "Hotel December",
+                                                     amount_cents: 30000, funder: "area", claim_status: "paid", claim_date: "2025-12-15", paid_date: "2026-01-10" }, extra || {}));
+          const check = N({ id: "c", type: "received", date: "2026-01-10", category: "reimbursement", description: "Area check", amount_cents: 30000, funder: "area" });
+          const y25 = { from: "2025-01-01", to: "2025-12-31" }, y26 = { from: "2026-01-01", to: "2026-12-31" };
+          const row = (E, range) => G.funderBalances(E, S, range).map((b) => [b.funder, b.to_request_cents, b.submitted_cents, b.paid_cents, b.settled_cents, b.balance_cents]);
+          const owed = (E, range) => G.summary(E, S, range).owed_cents;
+          const paidOnly = [hotel()], withCheck = [hotel(), check], noDate = [hotel({ paid_date: "" })];
+          // asked for after the period's end too: not yet asked for at its end
+          const lateAsk = [hotel({ date: "2025-12-12", claim_date: "2026-01-05" })];
+          // a subscription bought for José, repaid on January 10
+          const SJ = JSON.parse(JSON.stringify(S));
+          SJ.funders.push({ id: "p_jose", kind: "person", name: "José R.", hidden: false, order: 9, builtin: false });
+          const sub = N({ id: "s", type: "expense", date: "2025-12-01", category: "subscriptions", description: "La Viña", amount_cents: 1500, funder: "p_jose",
+                          sub_kind: "helped", repaid: "repaid", claim_status: "paid", paid_date: "2026-01-10" }, SJ);
+          const people = (range) => G.peopleOwed([sub], SJ, { to: range.to }).map((p) => [p.funder, p.owed_cents, p.entries.map((e) => e.id)]);
+          out({ paid25: [row(paidOnly, { to: y25.to }), owed(paidOnly, y25)], paid26: [row(paidOnly, { to: y26.to }), owed(paidOnly, y26)],
+                check25: owed(withCheck, y25), check26: owed(withCheck, y26), all: owed(withCheck, {}),
+                noDate25: owed(noDate, y25), lateAsk25: row(lateAsk, { to: y25.to }),
+                people25: people(y25), people26: people(y26), status: hotel().claim_status });""")
+        self.assertEqual(r["paid25"], [[["area", 0, 30000, 0, 0, -30000]], 30000])   # at the end of 2025 the Area still owed it: submitted
+        self.assertEqual(r["paid26"], [[["area", 0, 0, 30000, 30000, 0]], 0])        # even, once paid
+        self.assertEqual((r["check25"], r["check26"], r["all"]), (30000, 0, 0))     # the January check doesn't settle December
+        self.assertEqual(r["noDate25"], 0)                                          # no paid date: settled, as before
+        self.assertEqual(r["lateAsk25"], [["area", 30000, 0, 0, 0, -30000]])        # asked for in January: "to request" at December's end
+        self.assertEqual(r["people25"], [["p_jose", 1500, ["s"]]])                  # José still owed it at the end of 2025
+        self.assertEqual(r["people26"], [])
+        self.assertEqual(r["status"], "paid", "the entry itself is never changed")
+
 
 class ServicePanels(unittest.TestCase):
     """P1-11 / F-17: Area 65's panels by the rule — two-year terms from January 1 of an odd year, Panel N starting

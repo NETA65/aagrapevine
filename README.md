@@ -1448,7 +1448,8 @@ visitor's own device; nothing is sent anywhere.
   Published writers (with the whole Texas writers archive), Accessibility and GVR / RLV 101, in the visitor's
   language, with their styles and scripts — a good
   idea before a trip. On a weak signal the save keeps going as long as pages keep arriving; only 45
-  seconds without a page saved counts as a failure ("Try again with a better signal"). The page open
+  seconds without a page saved counts as a failure ("Try again with a better signal"). Saved from `/offline/`
+  itself, its "Saved on this device" list shows the pages as soon as the save is done (no reload). The page open
   during the very first visit is kept too, with its own styles and
   scripts. "Save key pages" also asks the browser to **keep** them (persistent storage): the result line then says
   "This browser will keep them until you remove them." or "This browser may still remove them when the device is
@@ -1572,7 +1573,8 @@ This describes Tracker 1.2.0 (October 2026).
   every column.
 - **Who owes you** (Summary) and **Owed to you** count everything **up to the end** of the period shown: a
   hotel asked back in December and repaid in January shows "Even" in January's views ("Where things stand at the
-  end of the period: …").
+  end of the period: …"), and still "Owes you" in December's — also once the request is marked **Paid**, as its
+  paid date is in January (a request marked paid with no paid date counts as settled).
 - **Backups** (Settings → Data → Export): **Full backup (.zip)** — `service-expenses-backup-YYYY-MM-DD.zip`
   (Spanish `gastos-de-servicio-respaldo-YYYY-MM-DD.zip`) holds `backup.json` and one picture file per receipt photo,
   so any unzip program opens it; **Back up without photos (.json)** —
@@ -1593,11 +1595,14 @@ This describes Tracker 1.2.0 (October 2026).
   gone; older backups with the photos inside still restore), or a backup that was unpacked: choose its
   `backup.json` together with its photos (zipped again with Windows' or a Mac's own "compress" works too). The
   preview counts any photo that is missing, and the photos come back one by one ("Restoring the receipt photos: n
-  of total…"). Restoring a backup without photos keeps this device's photos. Photos that could not be restored (a
-  damaged `.zip` entry, storage that refuses) are said once when the photos are done: in the message ("Receipt photos
-  that couldn't be restored: N.", read out by screen readers), or to screen readers alone while an **Undo** is on
-  screen. A backup whose list names no photos (such as the repaired download of unreadable data, below) finds each
-  entry's photo by its file name, `<entry id>.jpg` (or `.png`, `.webp`, `.gif`), chosen with it or zipped with it.
+  of total…"). Restoring a backup without photos keeps this device's photos; an entry whose photo is not on this
+  device (it stayed on the one the backup came from) says **Photo not on this device** — in the list (a crossed-out
+  picture instead of the paper clip) and in its form, which says how to add the photo again. Photos that could not
+  be restored (a damaged `.zip` entry, storage that refuses) are said once when the photos are done: in the message
+  ("Receipt photos that couldn't be restored: N.", read out by screen readers), or to screen readers alone while an
+  **Undo** is on screen. A backup whose list names no photos (such as the repaired download of unreadable data,
+  below) finds each entry's photo by its file name, `<entry id>.jpg` (or `.png`, `.webp`, `.gif`), chosen with it or
+  zipped with it.
 - **Import a spreadsheet:** a CSV (also Excel's "Unicode text", which is UTF-16), or an Excel workbook (`.xlsx`:
   its first sheet; Chrome or Edge 103+, Firefox 113+, Safari 16.4+). An old `.xls` gets a message to save it as
   `.xlsx` or CSV.

@@ -219,13 +219,31 @@
       });
     });
   }
+  /* Which entries have their receipt photo stored here (photosHere: {entry id: 1}; null until the store has been
+     listed): every listing (photos.keys — once at start-up, and whenever the app lists them anyway) sets it, and
+     each photo stored or deleted here updates it — so the list and the form can say "Photo not on this device"
+     for an entry restored from a backup without photos without asking the store for each row. A store that can't
+     be read leaves it as it was (null: nothing is said to be missing). hereChanged: the app's redraw. */
+  var photosHere = null, hereChanged = function () {};
+  function markHere(id, on) {
+    if (!photosHere || !id) return;
+    if (on) photosHere[id] = 1; else delete photosHere[id];
+    hereChanged();
+  }
   var photos = {
     get: function (id) { return idbRun("readonly", function (s) { return s.get(id); }).catch(function () { return null; }); },
-    put: function (rec) { return idbRun("readwrite", function (s) { return s.put(rec); }); },
-    del: function (id) { return idbRun("readwrite", function (s) { return s.delete(id); }).catch(function () {}); },
+    put: function (rec) { return idbRun("readwrite", function (s) { return s.put(rec); }).then(function (r) { markHere(rec && rec.id, true); return r; }); },
+    del: function (id) { return idbRun("readwrite", function (s) { return s.delete(id); }).then(function () { markHere(id, false); }).catch(function () {}); },
     all: function () { return idbRun("readonly", function (s) { return s.getAll(); }).catch(function () { return []; }); },
-    keys: function () { return idbRun("readonly", function (s) { return s.getAllKeys(); }).catch(function () { return []; }); },
-    clear: function () { return idbRun("readwrite", function (s) { return s.clear(); }).catch(function () {}); },
+    keys: function () {
+      return idbRun("readonly", function (s) { return s.getAllKeys(); }).then(function (keys) {
+        photosHere = {};
+        (keys || []).forEach(function (k) { photosHere[k] = 1; });
+        hereChanged();
+        return keys;
+      }).catch(function () { return []; });
+    },
+    clear: function () { return idbRun("readwrite", function (s) { return s.clear(); }).then(function () { if (photosHere) { photosHere = {}; hereChanged(); } }).catch(function () {}); },
   };
   // A photo from the camera or the gallery → a JPEG no longer than MAX_PHOTO on its longest side.
   function shrinkPhoto(file) {
@@ -394,6 +412,7 @@
         formMore: false,
         photoUrl: "",
         photoBusy: false,
+        photoRev: 0,              // which photos are on this device changed (photosHere): the receipt labels redraw
         dlgMsg: "",               // the dialog's own status line (the page's toast is behind the modal)
         // Giveaways → Subscriptions: which ones the list shows ("" = all)
         subF: { status: "", kind: "" },
@@ -437,6 +456,9 @@
           if (this.view === "requests") this.rq.funder = this.rqBestFunder();
           this.fitList();
           this.checkStorage();
+          // which receipt photos are on this device: listed once (photosHere), then kept up to date as photos come and go
+          hereChanged = function () { self.photoRev++; };
+          photos.keys();
           this.ready = true;
           this.revealTab();     // the view reopened from the last visit, or asked for by the address
           // the address and the back button
@@ -462,6 +484,10 @@
             if (e.key !== KEY) return;
             self.loadState();
             self.armLeave();
+            // (the other tab may have stored or deleted a photo: photosHere — looked at again a moment later, as
+            // that tab stores a new photo while it saves its ledger, not before)
+            photos.keys();
+            setTimeout(function () { photos.keys(); }, KEEP_AGAIN_MS);
             if (!self.form) { if (!self.toastUndo) self.say(self.t("toast.other_tab")); return; }
             // (still gone at the next change there: the dialog keeps saying so; brought back — that tab's "Undo" —:
             // an edit again)
@@ -1655,6 +1681,17 @@
           this.armLeave();
           GV.announce && GV.announce(this.t("form.photo_removed"));
         },
+        /* A receipt photo the entry points to that is not on this device (restored from a backup without photos,
+           added on another device): photosHere, listed once — never a look per row. Unknown (not listed yet, or the
+           store can't be read): not said to be missing. */
+        photoAway: function (id) { this.photoRev; return !!id && !!photosHere && !photosHere[id]; },
+        // an entry's receipt in words: receipt.<kind>, or receipt.photo_away for a photo that isn't here
+        rcKey: function (r) { return "receipt." + (r.receipt === "photo" && this.photoAway(r.id) ? "photo_away" : r.receipt); },
+        // the form of an entry whose photo isn't here (and none chosen since): its Receipt says so, and how to add it
+        formPhotoAway: function () {
+          var f = this.form;
+          return !!f && f.receipt === "photo" && this.formMode === "edit" && !this.photoUrl && !this.photoBusy && S.photo !== "remove" && this.photoAway(f.id);
+        },
 
         /* ================= Summary ================= */
         sum: function () {
@@ -1722,13 +1759,15 @@
         },
         /* "Who owes you": each one's balance as it stands at the period's END — everything up to its last day
            counts, so a hotel claimed in December and paid back in January is even in January's view (the
-           period alone would say "you hold $300 of theirs"). Listed: whoever still owes or is owed then, or
-           had something in the period. */
+           period alone would say "you hold $300 of theirs"), and still owed in December's view once it is marked
+           paid (paid in January: GVX.funderBalances takes each claim as it stood then). Listed: whoever still owes
+           or is owed then, or had something in the period — a claim of theirs paid in it too (January's "Even"). */
         balances: function () {
           var self = this, r = this.range();
           return this.memo("bal", r.from + "|" + r.to, function () {
             var X = S.X, st = this.st(), upTo = { to: r.to }, active = {};
             (X.funderBalances(S.state.entries, st, { from: r.from, to: r.to }) || []).forEach(function (b) { if (b.claimed_cents || b.received_cents) active[b.funder] = 1; });
+            S.state.entries.forEach(function (e) { if (e.funder && e.paid_date && (!r.from || e.paid_date >= r.from) && (!r.to || e.paid_date <= r.to)) active[e.funder] = 1; });
             return (X.funderBalances(S.state.entries, st, upTo) || []).filter(function (b) {
               return !self.isSelf(b.funder) && (b.balance_cents || b.to_request_cents || b.submitted_cents || active[b.funder]);
             }).map(function (b) {

@@ -208,8 +208,10 @@ pageStyles: ["/assets/css/booth.css", "/assets/vendor/lite-yt-embed.css"]
     {{ ui.sectionHead("read.about.com_title" | t(lang), "read.about.com_p1" | t(lang), site.committee_page or "", "read.about.com_area_page" | t(lang), "users", { eyebrow: site | pick(lang, "area"), tone: "text-vine", id: "committee-title", lang: lang }) }}
     <div class="max-w-3xl">
       <p class="leading-relaxed text-muted">{{ "read.about.com_p2" | t(lang) }}</p>
-      {#- the next meeting of the build's day, rolled on in the browser once it is over (app.js GV.meetingLines) -#}
-      {% if meeting.next %}<p class="mt-3 flex gap-2 text-sm text-muted"><span class="mt-0.5 text-gv">{% icon "calendar-days", "size-4" %}</span><span data-gv-meeting="{{ meeting.rule | json }}" data-at="{{ meeting.next.start }}" data-tpl="{{ 'read.about.com_next' | t(lang) }}" data-date="long">{{ "read.about.com_next" | t(lang, {date: meeting.next.start | fmtDate(lang, "long"), time: meeting.next.start | fmtDate(lang, "time")}) }}</span></p>{% endif %}
+      {#- the next meeting of the build's day, rolled on in the browser once it is over (app.js GV.meetingLines); in
+          Spanish the weekday goes on in lower case after "Próxima reunión:" (midSentence — and app.js, as the date
+          is not at the start of data-tpl) -#}
+      {% if meeting.next %}<p class="mt-3 flex gap-2 text-sm text-muted"><span class="mt-0.5 text-gv">{% icon "calendar-days", "size-4" %}</span><span data-gv-meeting="{{ meeting.rule | json }}" data-at="{{ meeting.next.start }}" data-tpl="{{ 'read.about.com_next' | t(lang) }}" data-date="long">{{ "read.about.com_next" | t(lang, {date: meeting.next.start | fmtDate(lang, "long") | midSentence(lang), time: meeting.next.start | fmtDate(lang, "time")}) }}</span></p>{% endif %}
     </div>
     <div class="mt-8">
         <h3 class="eyebrow mb-3 font-sans">{{ "read.about.serve_title" | t(lang) }}</h3>

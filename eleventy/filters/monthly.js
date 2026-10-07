@@ -1101,6 +1101,10 @@ export default function (eleventyConfig, helpers) {
     if (!nowCache.has(L)) nowCache.set(L, monthNow(db || {}, site || {}, L, nowDate()));
     return nowCache.get(L);
   };
+  // A sentence's first word inside another sentence (midSentence): /about/'s "Próxima reunión: miércoles, 18 de
+  // noviembre…" — {{ meeting.next.start | fmtDate(lang, "long") | midSentence(lang) }} (app.js GV.meetingLines
+  // writes it the same way when it rolls the line on)
+  eleventyConfig.addFilter("midSentence", (s, lang) => midSentence(s, lang));
   eleventyConfig.addFilter("mpMonths", (db, carry, site, lang) => months(db, carry, site, lang));
   eleventyConfig.addFilter("mpMonth", (key, db, carry, site, lang) => model(key, db, carry, site, lang));
   // This month's live extras (the hub's "This month" card, the current month's page): {% set nx = db | mpNow(site, lang) %}

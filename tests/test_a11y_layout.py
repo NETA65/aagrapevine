@@ -22,6 +22,9 @@ browser checks — focus-ring contrast at the top of the page, a focused link un
                    Contrast; the digest's "also on YouTube" link is ≥ 24px tall; Instagram pictures don't repeat
                    the caption printed under them; the Texas archive rows render only near the screen
                    (content-visibility), all of them in print.
+  * Round 7      — the mini posters' year clears the month's descenders; on the narrowest phones at large text a
+                   button makes room for its words (a web address breaks at its dot); the pressed chip keeps its
+                   state in Windows High Contrast; the tracker's "Discard what you typed?" is centred.
 
     python -m unittest tests.test_a11y_layout -v        (or: python -m unittest discover -s tests)
 """
@@ -449,6 +452,49 @@ class Smaller(unittest.TestCase):
         self.assertIn(".pw-arc-row { content-visibility: auto; contain-intrinsic-block-size: auto 8.5rem; }", css)
         pr = css[css.index("@media print {"):]
         self.assertIn(".pw-arc-row { break-inside: avoid; content-visibility: visible; }", pr)
+
+
+class Round7Polish(unittest.TestCase):
+    """The round-7 browser testers' last small problems, as the CSS and templates keep them fixed (measured in Edge:
+    the year clear of the month's descenders on every mini poster, EN + ES; no word that fits broken in a button on
+    /es/meetings/ at 150 % on a 360px phone, no sideways scroll; the pressed chip in Windows High Contrast; the
+    tracker's "Discard what you typed?" centred)."""
+
+    def test_the_mini_posters_year_clears_the_descenders(self):
+        css = read("src", "assets", "css", "areas", "monthly.css")
+        # the name's line is 0.9 high: the p / y / g hang below it — the year's margin grows with the name (em)
+        self.assertIn(".mp-mini .mp-year { display: block; margin: 0.5em 0 0; font-size: 0.42em; }", css)
+        self.assertNotIn(".mp-mini .mp-year { display: block; margin: 12px 0 0;", css)
+
+    def test_buttons_make_room_for_their_words_on_a_narrow_phone(self):
+        css = read("src", "assets", "css", "areas", "access.css")
+        narrow = css[css.index("@media (width < 30rem) {\n  :root:is([data-text=\"130\"]"):]
+        narrow = narrow[:narrow.index("\n}")]
+        self.assertIn(":not(.btn-sm):not(:is(.mp-poster, .cm-frame) *) { padding-inline: 0.75rem; }", narrow)
+        self.assertIn(".btn-ghost:not(.btn-sm):not(:is(.mp-poster, .cm-frame) *) { padding-inline: 0.25rem; }", narrow)
+        self.assertLess(narrow.index("padding-inline: 0.75rem"), narrow.index("padding-inline: 0.25rem"))   # (the ghost's wins)
+        self.assertIn("overflow-wrap: anywhere", narrow)                       # still the last resort for a word too long
+        mt = read("src", "pages", "meetings.njk")
+        self.assertEqual(mt.count('| t(lang) | escape | replace(".org", "<wbr>.org") | safe }}'), 2)   # a web address breaks at its dot
+
+    def test_the_pressed_chip_in_windows_high_contrast(self):
+        css = read("src", "assets", "css", "main.css")
+        i = css.index(':root .chip:is([aria-pressed="true"], .is-active) {')
+        forced = css[css.rindex("@media (forced-colors: active) {", 0, i):]
+        forced = forced[:forced.index("\n}")]
+        self.assertIn(':root .chip:is([aria-pressed="true"], .is-active) { border-color: Highlight; background: Highlight; color: HighlightText; forced-color-adjust: none; }', forced)
+        self.assertIn(":is(.cm-chip-count, .cm-wn-count) { background: HighlightText; color: Highlight; }", forced)
+        lib = read("src", "assets", "css", "areas", "library.css")
+        lf = lib[lib.index("@media (forced-colors: active) {"):]
+        self.assertIn('.lib-col[aria-pressed="true"] { outline: 3px solid Highlight;', lf)
+        self.assertIn('.lib-view button[aria-pressed="true"] { background: Highlight; color: HighlightText;', lf)
+
+    def test_the_trackers_are_you_sure_is_centred(self):
+        css = read("src", "assets", "css", "areas", "expenses.css")
+        ask = css[css.index(".xp-ask {"):]
+        ask = ask[:ask.index("}")]
+        self.assertIn("margin: auto;", ask)                                    # (the page's reset set margin: 0 — top-left)
+        self.assertIn("max-height: calc(100dvh - 2rem)", ask)
 
 
 if __name__ == "__main__":

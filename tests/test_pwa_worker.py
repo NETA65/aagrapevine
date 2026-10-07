@@ -938,7 +938,9 @@ PAGE_JS = r"""
 import vm from "node:vm";
 // ua: the device (install-core.js, window.GVInstall, then says which); app: running as the installed app; connection:
 // navigator.connection (the browser's own data saver, 2G)
-function boot({ lang = "en", waiting = null, installing = false, storage = undefined, ua = "", app = false, connection = undefined } = {}) {
+// offline: the page is /offline/, with its "Saved on this device" box (saved: its parts — status, list, empty,
+// unsupported) over caches the test can fill (cached: a Map of cache name → [[url, title]])
+function boot({ lang = "en", waiting = null, installing = false, storage = undefined, ua = "", app = false, connection = undefined, offline = false } = {}) {
   const clock = { now: Date.parse("2026-10-03T20:00:00Z") };
   let activate = () => {};
   let timers = [], seq = 0;
@@ -968,9 +970,18 @@ function boot({ lang = "en", waiting = null, installing = false, storage = undef
   }
   const root = new El("html"), body = new El("body");
   root.lang = lang;
+  const saved = {}, cached = new Map();
+  let savedBox = null;
+  if (offline) {
+    savedBox = new El("div");
+    for (const k of ["status", "list", "empty", "unsupported"]) saved[k] = new El(k === "list" ? "div" : "p");
+    saved.status.textContent = "Loading…";
+    saved.empty.hidden = saved.unsupported.hidden = true;
+    savedBox.querySelector = (sel) => { const m = /^\[data-pwa-saved-(\w+)\]$/.exec(sel); return (m && saved[m[1]]) || null; };
+  }
   const document = { documentElement: root, body, readyState: "complete", hidden: false, visibilityState: "visible", activeElement: body,
-                     querySelector: () => null, querySelectorAll: () => [], getElementById: () => null, createElement: (t) => new El(t),
-                     addEventListener: on(docL) };
+                     querySelector: (sel) => (sel === "[data-pwa-saved]" ? savedBox : null), querySelectorAll: () => [], getElementById: () => null,
+                     createElement: (t) => new El(t), addEventListener: on(docL) };
   const active = { state: "activated", postMessage(msg, ports) { posted.push({ msg, port: ports && ports[0] }); } };
   const reg = { active, waiting, installing: null, addEventListener() {}, update: () => Promise.resolve() };
   // installing: a first visit — no worker in charge yet, `ready` waits until activate()
@@ -979,14 +990,18 @@ function boot({ lang = "en", waiting = null, installing = false, storage = undef
   class MessageChannel { constructor() { this.port1 = {}; this.port2 = { peer: this.port1 }; } }
   class MutationObserver { observe() {} disconnect() {} }
   const store = { getItem: () => null, setItem() {}, removeItem() {} };
-  const path = "/aagrapevine/" + (lang === "es" ? "es/" : "") + "meetings/";
+  const path = "/aagrapevine/" + (lang === "es" ? "es/" : "") + (offline ? "offline/" : "meetings/");
+  const cacheOf = (name) => ({
+    keys: () => Promise.resolve((cached.get(name) || []).map(([url]) => ({ url }))),
+    match: (k) => Promise.resolve({ headers: { get: (h) => (h === "x-gvlv-title" ? encodeURIComponent((cached.get(name) || []).find(([u]) => u === k.url)?.[1] || "") : null) } }),
+  });
   const ctx = {
     console, URL, Date: FakeDate, document, MessageChannel, MutationObserver,
     navigator: { onLine: true, serviceWorker, userAgent: ua, maxTouchPoints: /iPhone|iPad|Android/.test(ua) ? 5 : 0, storage, connection,
                  standalone: app || undefined },
     location: { pathname: path, search: "", hash: "", href: "https://example.test" + path, reload: () => { reloads.n += 1; } },
     history: { state: null, replaceState() {} }, sessionStorage: store, localStorage: store, isSecureContext: true,
-    caches: { has: () => Promise.resolve(false), open: () => Promise.resolve({ keys: () => Promise.resolve([]) }) },
+    caches: { has: (name) => Promise.resolve(cached.has(name)), open: (name) => Promise.resolve(cacheOf(name)) },
     GV: { announce: (m) => announced.push(m) }, SITE: { lang, base: "/aagrapevine/" },
     matchMedia: () => ({ matches: false }), requestAnimationFrame: () => 0, screen: { width: 390, height: 844 }, scrollY: 0,
     performance: { getEntriesByType: () => [] }, addEventListener: on(winL), removeEventListener() {},
@@ -1015,7 +1030,7 @@ function boot({ lang = "en", waiting = null, installing = false, storage = undef
   const button = (act) => ({ disabled: false, closest() { return this; }, hasAttribute: () => false, getAttribute: (n) => (n === "data-pwa-act" ? act : null) });
   const click = async (b) => { for (const fn of docL.click || []) fn({ target: b, preventDefault() {} }); await flush(); return b; };
   return { announced, reloads, sw, tick, click, button, activate: () => activate(), saves: () => posted.filter((p) => p.msg.type === "SAVE"), docL,
-           posted };
+           posted, saved, cached };
 }
 const R = {};
 
@@ -1144,6 +1159,27 @@ R.howServed = { plain: await howServed({}), saveData: await howServed({ connecti
   const other = { needsYTApi: true };
   for (const fn of p.docL.keydown || []) fn({ key: "a", target: { closest: (s) => (s === "lite-youtube" ? other : null) }, preventDefault() {} });
   R.youtube = { click: preview.needsYTApi, enter: keyed.needsYTApi, otherKey: other.needsYTApi };
+}
+
+/* ---------------- the offline page: "Saved on this device" is drawn again once a save made there is done ---------------- */
+for (const lang of ["en", "es"]) {
+  const p = boot({ lang, offline: true });
+  await p.tick(0);
+  const look = () => ({ status: [p.saved.status.hidden, p.saved.status.textContent], empty: p.saved.empty.hidden, list: p.saved.list.innerHTML });
+  const before = look();
+  await p.click(p.button("save"));
+  const port = p.saves()[0].port.peer;
+  const at = "https://example.test/aagrapevine/" + (lang === "es" ? "es/" : "");
+  p.cached.set("gvlv-saved-v1", [[at, "Home"], [at + "meetings/", "Meetings · NETA 65"]]);       // the worker saved two pages
+  port.onmessage({ data: { type: "SAVE_DONE", saved: 2, total: 2, failed: [] } });
+  await p.tick(0);
+  const after = look();
+  // the browser cleared the saved pages meanwhile, and a second save saves none: the list says nothing is saved again
+  p.cached.delete("gvlv-saved-v1");
+  await p.click(p.button("save"));
+  p.saves()[1].port.peer.onmessage({ data: { type: "SAVE_DONE", saved: 0, total: 2, failed: [] } });
+  await p.tick(0);
+  R["offlineList_" + lang] = { before, after, cleared: look(), said: p.announced.slice() };
 }
 out(R);
 """
@@ -1716,6 +1752,19 @@ class ThePage(unittest.TestCase):
         self.assertEqual(r["gaveUp"], [self.FAILED])
         self.assertEqual(r["saves"], 2)
         self.assertEqual(r["said"], [self.SAVING, self.FAILED, self.SAVING, "Se guardaron 14 de 15 páginas."])
+
+    def test_the_offline_pages_list_is_drawn_again_after_a_save(self):
+        # round 7 polish: on /offline/, "Save key pages for offline" done → "Saved on this device" lists them at once
+        # (it said "Nothing is saved on this device yet" until a reload); English and Spanish
+        for lang, n_open in (("en", "2 pages open without a connection."), ("es", "2 páginas se abren sin conexión.")):
+            r = self.r["offlineList_" + lang]
+            self.assertEqual(r["before"], {"status": [True, "Loading…"], "empty": False, "list": ""}, lang)   # nothing saved yet
+            self.assertEqual(r["after"]["status"], [False, n_open], lang)
+            self.assertTrue(r["after"]["empty"], lang)                                                       # "Nothing is saved…" hidden
+            self.assertIn("Meetings", r["after"]["list"])
+            self.assertIn("pwa-saved-link", r["after"]["list"])
+            self.assertEqual(r["cleared"], {"status": [True, n_open], "empty": False, "list": ""}, lang)   # none left: empty again
+            self.assertEqual(len(r["said"]), 4, r["said"])                                                    # (saving, saved — twice)
 
     def test_a_worker_ready_too_late_starts_no_save(self):
         # a first visit on a weak signal: the worker is still installing 45 s after the tap, so the page has said

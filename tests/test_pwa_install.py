@@ -1045,14 +1045,20 @@ class Wiring(unittest.TestCase):
         self.assertLess(keep.index("if (isFallback)"), keep.index("if (!location.hash) return;"))   # (never the other page's #fragment)
         self.assertIn("box.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING", keep)   # only a target below the list
         self.assertIn('t.scrollIntoView({ block: "start", behavior: "instant" })', keep)
-        self.assertEqual(lst.count("keepFragment();"), 3)                        # empty, listed, or the caches failed
+        # the list is drawn by drawSaved, which runs keepFragment once it is drawn: empty, listed, or the caches failed
+        self.assertIn("drawSaved(keepFragment);", lst)
+        draw = p[p.index("function drawSaved(done)"):p.index("\n  }\n", p.index("function drawSaved(done)"))]
+        self.assertEqual(draw.count("done();"), 3)
+        # …and again once a save made on the page is done (finish), so the list never contradicts "Saved 16 pages"
+        fin = p[p.index("function finish(d)"):p.index("navigator.serviceWorker.ready.then", p.index("function finish(d)"))]
+        self.assertIn("drawSaved();", fin)
 
     def test_forwarding_pages_are_not_listed(self):
         # the old addresses' forwarding pages (/meeting/, the old install page …) are kept by the worker, so an old
         # link still works offline, but the list leaves them out: the worker marks them (tests/test_pwa_worker.py)
         p = self.pwa
         self.assertIn('moved: !!(res && res.headers.get("x-gvlv-moved"))', p)
-        lst = p[p.index("function offlineList()"):p.index('box.addEventListener("click"', p.index("function offlineList()"))]
+        lst = p[p.index("function drawSaved(done)"):p.index("\n  }\n", p.index("function drawSaved(done)"))]
         self.assertIn("r = r.map(function (a) { return a.filter(function (e) { return !e.moved; }); });", lst)
         self.assertLess(lst.index("return !e.moved;"), lst.index("var savedUrls = {};"))
 

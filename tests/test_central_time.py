@@ -860,7 +860,9 @@ class MeetingLines(unittest.TestCase):
                 "Wednesday, November 18, 2026", "7:00 PM CST · Zoom"]
         self.assertEqual([plain(s) for s in r["after"]["text"]], want)
         self.assertEqual((r["after"]["datetime"], r["after"]["at"]), (nov, nov))
-        self.assertEqual([plain(s) for s in r["es"]["text"]], ["Próxima reunión: Miércoles, 18 de noviembre de 2026 a las 7:00 p. m. CST",
+        # (round 7 polish: inside the sentence, after "Próxima reunión:", the weekday is lower case; a line of its own
+        # — data-tpl "{date}" — keeps its capital, as the build writes both)
+        self.assertEqual([plain(s) for s in r["es"]["text"]], ["Próxima reunión: miércoles, 18 de noviembre de 2026 a las 7:00 p. m. CST",
                                                                "Próxima: 18 de noviembre de 2026", "Miércoles, 18 de noviembre de 2026",
                                                                "7:00 p. m. CST · Zoom"])
         self.assertEqual([plain(s) for s in r["oldIphone"]["text"]], want)
@@ -868,6 +870,19 @@ class MeetingLines(unittest.TestCase):
         self.assertEqual([plain(s) for s in r["later"]["text"]], want)
         self.assertEqual(r["later"]["datetime"], nov)
         self.assertEqual(r["noHelper"]["text"], ["built"] * 4, "without the helper the build's text stays")
+
+    def test_the_build_writes_the_weekday_in_lower_case_inside_the_sentence(self):
+        """Round 7 polish: /es/about/'s "Próxima reunión: miércoles, 18 de noviembre…" — the build's long date (a capital,
+        for a line of its own) goes on in lower case inside the sentence (midSentence); English keeps its capital."""
+        r = run_js(self, r"""
+          const d = "2026-11-18T19:00";
+          const line = (L) => filters.t("read.about.com_next", L, { date: filters.midSentence(filters.fmtDate(d, L, "long"), L), time: filters.fmtDate(d, L, "time") });
+          out({ es: line("es"), en: line("en"), alone: filters.fmtDate(d, "es", "long") });""")
+        self.assertEqual(plain(r["es"]), "Próxima reunión: miércoles, 18 de noviembre de 2026 a las 7:00 p. m. CST")
+        self.assertEqual(plain(r["en"]), "Next meeting: Wednesday, November 18, 2026 at 7:00 PM CST")
+        self.assertEqual(r["alone"], "Miércoles, 18 de noviembre de 2026", "a line of its own keeps the capital (/es/gvr/, /es/orientation/)")
+        about = (ROOT / "src" / "pages" / "about.njk").read_text(encoding="utf-8")
+        self.assertIn('"read.about.com_next" | t(lang, {date: meeting.next.start | fmtDate(lang, "long") | midSentence(lang)', about)
 
     def test_the_pages_carry_the_rule_and_a_saved_copy_keeps_the_helper(self):
         for page in ("gvr.njk", "about.njk"):

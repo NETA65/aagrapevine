@@ -315,7 +315,7 @@ pageStyles: ["/assets/css/expenses.css"]
                         <td class="xp-c-sel"><label class="xp-check"><input type="checkbox" :checked="isSel(r.id)" @change="toggleSel(r.id)"><span class="sr-only" x-text="t('list.select', { what: r.desc })"></span></label></td>
                         <td class="xp-c-date" x-text="r.date"></td>
                         <td class="xp-c-desc">
-                          <span class="xp-desc"><span x-text="r.desc"></span><span class="xp-flags"><span class="xp-rc" x-show="r.receipt !== 'none'" :title="t('receipt.' + r.receipt)">{% icon "paperclip", "size-3.5" %}<span class="sr-only" x-text="t('receipt.' + r.receipt)"></span></span><span class="badge-muted" x-show="r.direct">{{ "expenses.list.direct" | t(lang) }}</span><span class="badge-muted" x-show="r.example">{{ "expenses.list.example" | t(lang) }}</span></span></span>
+                          <span class="xp-desc"><span x-text="r.desc"></span><span class="xp-flags"><span class="xp-rc" x-show="r.receipt !== 'none'" :title="t(rcKey(r))"><span class="xp-rc-i" x-show="rcKey(r) !== 'receipt.photo_away'">{% icon "paperclip", "size-3.5" %}</span><span class="xp-rc-i" x-show="rcKey(r) === 'receipt.photo_away'" x-cloak>{% icon "image-off", "size-3.5" %}</span><span class="sr-only" x-text="t(rcKey(r))"></span></span><span class="badge-muted" x-show="r.direct">{{ "expenses.list.direct" | t(lang) }}</span><span class="badge-muted" x-show="r.example">{{ "expenses.list.example" | t(lang) }}</span></span></span>
                           <span class="xp-sub meta-row"><span class="xp-sub-cat" x-text="r.cat"></span><span class="xp-sub-fun" x-show="r.funder" x-text="r.funder"></span><span x-show="r.miles" x-text="r.miles"></span><span x-show="r.sub" x-text="r.sub"></span></span>
                         </td>
                         <td class="xp-c-cat"><span class="xp-cat" :class="r.tone"><span class="xp-cat-i" x-xp-icon="r.icon"></span><span x-text="r.cat"></span></span></td>
@@ -353,7 +353,7 @@ pageStyles: ["/assets/css/expenses.css"]
                         <span class="xp-status" x-show="r.status" :class="'is-' + r.status"><span x-xp-icon="r.statusIcon"></span><span x-text="r.statusText"></span></span>
                         <span class="badge-muted" x-show="r.example">{{ "expenses.list.example" | t(lang) }}</span>
                         <span class="badge-muted" x-show="r.direct">{{ "expenses.list.direct" | t(lang) }}</span>
-                        <span class="xp-rc" x-show="r.receipt !== 'none'">{% icon "paperclip", "size-3.5" %}<span class="sr-only" x-text="t('receipt.' + r.receipt)"></span></span>
+                        <span class="xp-rc" x-show="r.receipt !== 'none'" :title="t(rcKey(r))"><span class="xp-rc-i" x-show="rcKey(r) !== 'receipt.photo_away'">{% icon "paperclip", "size-3.5" %}</span><span class="xp-rc-i" x-show="rcKey(r) === 'receipt.photo_away'" x-cloak>{% icon "image-off", "size-3.5" %}</span><span class="sr-only" x-text="t(rcKey(r))"></span></span>
                         <span class="xp-amt" :class="'is-' + r.flow"><span x-show="r.flow === 'in'" aria-hidden="true">{% icon "arrow-down-left", "size-3.5" %}</span><span x-text="r.amount"></span></span>
                       </div>
                       <div class="xp-card-acts">
@@ -1919,7 +1919,8 @@ pageStyles: ["/assets/css/expenses.css"]
           <label class="xp-label" for="xp-f-receipt">{{ "expenses.field.receipt" | t(lang) }}</label>
           <div class="xp-receipt-row">
             <select id="xp-f-receipt" class="input xp-select" x-model="form.receipt">
-              {%- for r in ["none", "paper", "photo", "file"] %}<option value="{{ r }}">{{ ("expenses.receipt." + r) | t(lang) }}</option>{% endfor %}
+              {#- (an entry whose photo isn't on this device — restored from a backup without photos — says so: formPhotoAway) -#}
+              {%- for r in ["none", "paper", "photo", "file"] %}<option value="{{ r }}"{% if r == "photo" %} x-text="t(formPhotoAway() ? 'receipt.photo_away' : 'receipt.photo')"{% endif %}>{{ ("expenses.receipt." + r) | t(lang) }}</option>{% endfor %}
             </select>
             <label class="btn-secondary btn-sm xp-photo-btn" x-show="form.receipt === 'photo' && !photoUrl">
               <input type="file" class="sr-only" accept="image/*" @change="onPhoto($event)">
@@ -1930,7 +1931,8 @@ pageStyles: ["/assets/css/expenses.css"]
             <img :src="photoUrl || null" alt="{{ 'expenses.form.photo_alt' | t(lang) }}">
             <button type="button" class="btn-ghost btn-sm xp-danger" @click="removePhoto()">{% icon "trash-2", "size-4" %} {{ "expenses.form.photo_remove" | t(lang) }}</button>
           </div>
-          <p class="xp-hint" x-show="form.receipt === 'photo'">{{ "expenses.form.photo_hint" | t(lang) }}</p>
+          <p class="xp-hint" x-show="form.receipt === 'photo' && !formPhotoAway()">{{ "expenses.form.photo_hint" | t(lang) }}</p>
+          <p class="xp-hint" x-show="formPhotoAway()" x-cloak>{{ "expenses.form.photo_away" | t(lang) }}</p>
           <div class="xp-f mt-2" x-show="form.receipt === 'file'">
             <label class="xp-label" for="xp-f-receipt_ref">{{ "expenses.field.receipt_ref" | t(lang) }}</label>
             <input id="xp-f-receipt_ref" class="input" type="text" autocomplete="off" maxlength="120" x-model="form.receipt_ref" placeholder="{{ 'expenses.form.receipt_ref_ph' | t(lang) }}">

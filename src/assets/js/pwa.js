@@ -884,6 +884,7 @@
       }
       announce(state.lastSave);
       refreshCount();
+      drawSaved();          // (the offline page's "Saved on this device" list, redrawn with what was saved)
     }
     navigator.serviceWorker.ready.then(function (reg) {
       if (over) return;                    // (the worker came too late: given up, no save behind the visitor's back)
@@ -1114,8 +1115,7 @@
   function offlineList() {
     var box = document.querySelector("[data-pwa-saved]");
     if (!box) return;
-    var status = box.querySelector("[data-pwa-saved-status]"), list = box.querySelector("[data-pwa-saved-list]");
-    var empty = box.querySelector("[data-pwa-saved-empty]"), unsup = box.querySelector("[data-pwa-saved-unsupported]");
+    var status = box.querySelector("[data-pwa-saved-status]"), unsup = box.querySelector("[data-pwa-saved-unsupported]");
     if (!canSW) { if (status) status.hidden = true; if (unsup) unsup.hidden = false; return; }
     // The list fills in after the browser has scrolled to a #fragment below it — a guide or #steps (the
     // notice's "Show me how", a link someone sent) — and pushes it down, off the screen when many pages
@@ -1140,21 +1140,7 @@
       try { t.scrollIntoView({ block: "start", behavior: "instant" }); } catch (e) { t.scrollIntoView(true); }
     };
     if (dropped) window.addEventListener("load", keepFragment, { once: true });   // (a jump after the list was drawn, too)
-    Promise.all([readCache(SAVED_CACHE), readCache(PAGES_CACHE)]).then(function (r) {
-      // a forwarding page (an old address that sends the visitor on — the worker marks it) stays kept, so
-      // its link still works offline, but it is no page to list: it would lead back here, or elsewhere
-      r = r.map(function (a) { return a.filter(function (e) { return !e.moved; }); });
-      var mine = function (a) { return a.filter(function (e) { return isThisLang(e.url); }).concat(a.filter(function (e) { return !isThisLang(e.url); })); };
-      var savedUrls = {};
-      r[0].forEach(function (e) { savedUrls[e.url] = 1; });
-      var saved = mine(r[0]);
-      var recent = mine(r[1].filter(function (e) { return !savedUrls[e.url]; }).reverse()); // newest first
-      if (!saved.length && !recent.length) { if (status) status.hidden = true; if (empty) empty.hidden = false; keepFragment(); return; }
-      var n = saved.length + recent.length;
-      if (status) status.textContent = T(n === 1 ? "1 page opens without a connection." : n + " pages open without a connection.", n === 1 ? "1 página se abre sin conexión." : n + " páginas se abren sin conexión.");
-      list.innerHTML = listHtml(box.getAttribute("data-t-saved") || "", saved) + listHtml(box.getAttribute("data-t-recent") || "", recent);
-      keepFragment();
-    }).catch(function () { if (status) status.hidden = true; if (unsup) unsup.hidden = false; keepFragment(); });
+    drawSaved(keepFragment);
     box.addEventListener("click", function (e) {
       var b = e.target.closest("[data-pwa-more]");
       if (!b) return;
@@ -1164,6 +1150,41 @@
       b.remove();
       if (first) { var a = first.querySelector("a"); if (a) a.focus(); }
     });
+  }
+  /* The offline page's "Saved on this device" ([data-pwa-saved]) drawn from the two caches: as the page starts
+     (offlineList; then done(): keepFragment) and again when a save made on this page is over (savePages → finish),
+     so the list never says "Nothing is saved on this device yet" under "Saved 16 pages". Elsewhere: nothing. */
+  function drawSaved(done) {
+    var box = document.querySelector("[data-pwa-saved]");
+    if (!box || !canSW) return;
+    done = done || function () {};
+    var status = box.querySelector("[data-pwa-saved-status]"), list = box.querySelector("[data-pwa-saved-list]");
+    var empty = box.querySelector("[data-pwa-saved-empty]"), unsup = box.querySelector("[data-pwa-saved-unsupported]");
+    Promise.all([readCache(SAVED_CACHE), readCache(PAGES_CACHE)]).then(function (r) {
+      // a forwarding page (an old address that sends the visitor on — the worker marks it) stays kept, so
+      // its link still works offline, but it is no page to list: it would lead back here, or elsewhere
+      r = r.map(function (a) { return a.filter(function (e) { return !e.moved; }); });
+      var mine = function (a) { return a.filter(function (e) { return isThisLang(e.url); }).concat(a.filter(function (e) { return !isThisLang(e.url); })); };
+      var savedUrls = {};
+      r[0].forEach(function (e) { savedUrls[e.url] = 1; });
+      var saved = mine(r[0]);
+      var recent = mine(r[1].filter(function (e) { return !savedUrls[e.url]; }).reverse()); // newest first
+      if (!saved.length && !recent.length) {
+        if (status) status.hidden = true;
+        if (empty) empty.hidden = false;
+        if (list) list.innerHTML = "";
+        done();
+        return;
+      }
+      var n = saved.length + recent.length;
+      if (empty) empty.hidden = true;
+      if (status) {
+        status.hidden = false;
+        status.textContent = T(n === 1 ? "1 page opens without a connection." : n + " pages open without a connection.", n === 1 ? "1 página se abre sin conexión." : n + " páginas se abren sin conexión.");
+      }
+      list.innerHTML = listHtml(box.getAttribute("data-t-saved") || "", saved) + listHtml(box.getAttribute("data-t-recent") || "", recent);
+      done();
+    }).catch(function () { if (status) status.hidden = true; if (unsup) unsup.hidden = false; done(); });
   }
 
   /* ================================================================= Start ====================== */

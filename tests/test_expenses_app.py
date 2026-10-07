@@ -1264,6 +1264,71 @@ class Backups(unittest.TestCase):
         self.assertEqual(en["done"], [2, 0])
         self.assertEqual(r["es"]["preview"], en["preview"])
 
+    def test_a_photo_left_on_the_other_device_says_so(self):
+        # round 7 polish: device A's "Back up without photos (.json)" restored on device B — the entry whose photo is on A
+        # says "Photo not on this device" in the list and in its form (never "Photo on this device"), and how to add it
+        # again; once added here, it is on this device. The photo store is looked at once (getAllKeys) and kept up to
+        # date — never a look per row. On A itself, and where the store can't be read, nothing is said to be missing.
+        r = app(self, r"""
+          const res = {};
+          // the receipts store, counting its reads: the list's labels never read it per row
+          class Store extends Map { constructor() { super(); this.reads = { get: 0, keys: 0 }; } get(k) { this.reads.get++; return super.get(k); } keys() { this.reads.keys++; return super.keys(); } }
+          for (const lang of ["en", "es"]) {
+            const photosA = new Store(), a = make(lang, null, null, { photos: photosA });
+            add(a, "expense", { description: "Big Book for a newcomer", amount: "16", receipt: "photo", date: "2026-09-27" }, "books");
+            add(a, "expense", { description: "Twelve and Twelve", amount: "14", receipt: "paper", date: "2026-09-20" }, "books");
+            const [book, paper] = a.a.E();
+            photosA.set(book.id, { id: book.id, type: "image/jpeg", blob: new Blob([new Uint8Array([0xff, 0xd8, 9])], { type: "image/jpeg" }) });
+            await a.a.exportBackup("plain");
+            const plain = a.downloads.at(-1), text = await a.text(plain);
+            await a.a.exportBackup();
+            const full = a.downloads.at(-1);
+            const label = (w, e) => w.a.t(w.a.rcKey({ id: e.id, receipt: e.receipt }));
+            await a.a.cleanPhotos(); await tick();                         // (device A lists its store again: its photo is there)
+            const onA = label(a, book);
+            // device B: nothing in its photo store; the backup without photos restored
+            const photosB = new Store(), b = make(lang, null, null, { photos: photosB });
+            await tick();
+            await b.a.impFile(fileOf(plain.name, text));
+            await b.a.impApply(); await tick();
+            const rowsB = b.a.rows().map((x) => [x.desc, b.a.t(b.a.rcKey(x))]);
+            const readsBefore = { ...photosB.reads };
+            for (let i = 0; i < 50; i++) b.a.rows().forEach((x) => b.a.rcKey(x));          // drawn 50 times: no store reads
+            const readsAfter = { ...photosB.reads };
+            b.a.openEdit(book.id); await tick();
+            const form = { away: b.a.formPhotoAway(), hint: b.a.t("form.photo_away") };
+            b.a.formClosed(); await tick();
+            const paperForm = (b.a.openEdit(paper.id), b.a.formPhotoAway());
+            b.a.formClosed(); await tick();
+            // the full backup restored on B too: its photo is stored here (photos.put) — the label follows at once
+            await b.a.impFile(fileOf(full.name, a.blob(full)));
+            await b.a.impApply(); await tick();
+            const afterFull = [label(b, book), photosB.has(book.id)];
+            // a browser whose photo store can't be read (no IndexedDB): it can't tell, so nothing is said to be missing
+            const c = make(lang, null, null, {});
+            await c.a.impFile(fileOf(plain.name, text));
+            await c.a.impApply(); await tick();
+            res[lang] = { onA, rowsB, readsBefore, readsAfter, form, paperForm, afterFull, noStore: label(c, book), paper: label(b, paper) };
+          }
+          out(res);""")
+        en, es = r["en"], r["es"]
+        self.assertEqual(en["onA"], "Photo on this device")
+        self.assertEqual(en["rowsB"], [["Big Book for a newcomer", "Photo not on this device"], ["Twelve and Twelve", "Kept on paper"]])
+        self.assertEqual(es["rowsB"], [["Big Book for a newcomer", "La foto no está en este dispositivo"], ["Twelve and Twelve", "En papel"]])
+        self.assertEqual(en["readsAfter"], en["readsBefore"], "the labels never read the photo store")
+        self.assertEqual(en["form"]["away"], True)                         # the form's Receipt: "Photo not on this device"
+        self.assertIn("add its photo again", en["form"]["hint"])
+        self.assertIn("vuelve a agregar su foto", es["form"]["hint"])
+        self.assertFalse(en["paperForm"])
+        self.assertEqual(en["afterFull"], ["Photo on this device", True])
+        self.assertEqual(es["afterFull"], ["Foto en este dispositivo", True])
+        self.assertEqual(en["noStore"], "Photo on this device")           # can't tell: not said to be missing
+        self.assertEqual(en["paper"], "Kept on paper")
+        self.assertEqual(es["onA"], "Foto en este dispositivo")
+        page = (ROOT / "src" / "pages" / "tracker.njk").read_text(encoding="utf-8")
+        self.assertEqual(page.count('x-text="t(rcKey(r))"'), 2)           # the list's table and its cards
+        self.assertIn("formPhotoAway() ? 'receipt.photo_away' : 'receipt.photo'", page)
+
     def test_the_preview_says_one_entry_and_one_photo(self):
         # the restore preview counts with the tracker's singular/plural keys: "1 entry, 1 receipt photo", not
         # "1 entries, 1 photos" — and a backup without photos says so
@@ -1672,6 +1737,32 @@ class OwedAtThePeriodsEnd(unittest.TestCase):
         self.assertEqual(r["month"], r["year"])
         self.assertEqual(r["last"], [[["My district", "Owes you $300.00", "$0.00"]], "$300.00", 1])   # at the end of 2026 it was still owed
         self.assertEqual(r["all"], [[["My district", "Even", "$300.00"]], "$0.00", 2])
+
+    def test_a_december_claim_marked_paid_in_january(self):
+        """Round 7 polish: the claim itself marked Paid on January 10 (no check recorded, or one recorded on that day):
+        "Last year" still says the Area owes it — it was paid after that period's end — and "This year" is even."""
+        r = app(self, r"""
+          const views = (withCheck) => {
+            const w = make("en", null, null, { now: Date.UTC(2026, 9, 6, 17) });
+            add(w, "expense", { description: "Hotel December", amount: "300", funder: "area", claim_status: "paid", claim_date: "2025-12-15",
+                                paid_date: "2026-01-10", date: "2025-12-12" }, "lodging");
+            if (withCheck) add(w, "received", { description: "Area check", amount: "300", funder: "area", date: "2026-01-10" }, "reimbursement");
+            const view = (p) => { w.a.setPeriod(p); return [w.a.balances().map((b) => [b.name, b.submitted, b.balanceText]), w.a.stats().find((s) => s.id === "owed").value]; };
+            return { last: view("last_year"), year: view("this_year"), all: view("all"), stored: w.a.E().find((e) => e.type === "expense").claim_status };
+          };
+          const es = make("es", null, null, { now: Date.UTC(2026, 9, 6, 17) });
+          add(es, "expense", { description: "Hotel diciembre", amount: "300", funder: "area", claim_status: "paid", claim_date: "2025-12-15",
+                               paid_date: "2026-01-10", date: "2025-12-12" }, "lodging");
+          es.a.setPeriod("last_year");
+          out({ paid: views(false), check: views(true), es: es.a.balances().map((b) => b.balanceText) });""")
+        self.assertEqual(r["paid"]["last"], [[["Area 65 (NETA 65)", "$300.00", "Owes you $300.00"]], "$300.00"])
+        self.assertEqual(r["paid"]["year"], [[["Area 65 (NETA 65)", "$0.00", "Even"]], "$0.00"])
+        self.assertEqual(r["paid"]["all"], r["paid"]["year"])
+        self.assertEqual(r["paid"]["stored"], "paid")
+        self.assertEqual(r["check"]["last"], r["paid"]["last"], "a check recorded in January doesn't settle December either")
+        self.assertEqual(r["check"]["year"], r["paid"]["year"])
+        self.assertEqual(len(r["es"]), 1)
+        self.assertTrue(r["es"][0].startswith("Te debe ") and "300" in r["es"][0], r["es"])   # (not "A mano")
 
 
 class ServicePanelsInTheFilters(unittest.TestCase):

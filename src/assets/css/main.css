@@ -1112,6 +1112,15 @@ main > :not(script, template, dialog, style):not(:has(~ :not(script, template, d
   [aria-checked="true"] > .site-switch, .cm-switch:checked { border-color: Highlight; background: Highlight; forced-color-adjust: none; }
   [aria-checked="true"] > .site-switch::after, .cm-switch:checked::after { background: HighlightText; }
 }
+/* …and the pressed chip (.chip[aria-pressed="true"] — Events' "All / Committee meetings / …", About's history, the
+   library's and search's filters, Instagram's accounts): its blue fill is all that set it apart, so in Windows
+   High Contrast it takes the system's selected colours, its count pill the other way round (:root: over an area's
+   own pressed colour, such as La Viña's amber chip on /read/) */
+@media (forced-colors: active) {
+  :root .chip:is([aria-pressed="true"], .is-active) { border-color: Highlight; background: Highlight; color: HighlightText; forced-color-adjust: none; }
+  :root .chip:is([aria-pressed="true"], .is-active) > * { color: inherit; forced-color-adjust: none; }
+  :root .chip:is([aria-pressed="true"], .is-active) > :is(.cm-chip-count, .cm-wn-count) { background: HighlightText; color: Highlight; }
+}
 
 /* Print: the site header prints once at the top (logo + name), not fixed over the content */
 @media print {

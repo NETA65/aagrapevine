@@ -41,7 +41,10 @@
      received = money recorded as received FROM that funder
      balance  = max(received, settled) − claimed      (< 0: they owe you; > 0: you hold their money)
    So marking a request "paid" settles it even when the check itself was not recorded, and a
-   recorded check is never counted twice.
+   recorded check is never counted twice. A balance on a day (a period's end: range.to) takes each claim as
+   it stood that day (statusOn, settledOn): one marked paid — or repaid — whose paid_date is after that day
+   was still open then, "submitted" (or "to_request" when it was asked for after that day too); with no
+   paid_date it counts as settled, as before.
 
    CSV CONTRACT (toCSV / parseCSV / planImport) — the file is the visitor's own, so it has everything
    we wrote (less any column deleted in a spreadsheet):
@@ -772,6 +775,16 @@
     return isSelf(S, e.funder) || e.claim_status === "none" || e.claim_status === "denied";
   }
   function isClaimed(e) { return isMoney(e) && e.method !== DIRECT && CLAIMED.indexOf(e.claim_status) >= 0 && e.repaid !== "forgiven"; }
+  // A claim as it stood at the end of the day `to` ("" or left out: as it is now — see MONEY OWED): settled when
+  // marked paid or repaid on or before that day (a blank paid_date can't say: settled); one paid later was still
+  // asked for then ("submitted"), or not yet asked for when its claim_date is after that day too.
+  function settledOn(e, to) {
+    return (e.claim_status === "paid" || e.repaid === "repaid") && (!to || !isISO(e.paid_date) || e.paid_date <= to);
+  }
+  function statusOn(e, to) {
+    if (e.claim_status !== "paid" || settledOn(e, to)) return e.claim_status;
+    return isISO(e.claim_date) && e.claim_date > to ? "to_request" : "submitted";
+  }
   function subEnd(e) { return e && isISO(e.sub_start) && Number(e.sub_term) > 0 ? addMonths(e.sub_start, e.sub_term) : ""; }
   function inRange(e, o) {
     o = o || {};
@@ -804,7 +817,8 @@
      spent = expenses + mileage I paid (not "direct") = self (nobody pays it back) + claimable (asked
      back: to_request / submitted / paid); owed = what funders still owe at the period's END — a balance,
      so everything up to opts.to counts (funderBalances, peopleOwed): a hotel claimed in December and paid
-     back in January is settled in January's view, not money "you hold".
+     back in January is settled in January's view, not money "you hold" — and still owed in December's, even once
+     it is marked paid (its paid_date is after December: statusOn).
      by_category: [{id, cents, count, items (books, copies, subscriptions bought: itemsOf),
      giveaway_cents (the part bought to give away)}], the largest first. by_activity: per service
      activity, in the settings' order ("" = none, last): {id, count, cents (spent), miles,
@@ -874,10 +888,11 @@
   }
 
   /* Per funder (not "me"), in the settings' order: what was asked of them, by status, what they sent,
-     and the balance (see "MONEY OWED" at the top): < 0 they owe you, > 0 you hold their money. */
+     and the balance (see "MONEY OWED" at the top): < 0 they owe you, > 0 you hold their money. With range.to,
+     each claim counts as it stood at the end of that day (statusOn: paid after it = still submitted then). */
   function funderBalances(entries, settings, range) {
     var S = isObj(settings) ? settings : {};
-    var rows = {};
+    var rows = {}, to = range && isISO(range.to) ? range.to : "";
     var row = function (id) {
       if (!rows[id]) {
         var f = funderOf(S, id);
@@ -896,8 +911,8 @@
       if (e.claim_status === "denied") y.denied_cents += a;
       if (!isClaimed(e)) return;
       y.claimed_cents += a;
-      y[e.claim_status + "_cents"] += a;
-      if (e.claim_status === "paid" || e.repaid === "repaid") y.settled_cents += a;
+      y[statusOn(e, to) + "_cents"] += a;
+      if (settledOn(e, to)) y.settled_cents += a;
     });
     var order = arr(S.funders).slice().sort(byOrder).map(function (f) { return f.id; });
     return Object.keys(rows).sort(function (a, b) {
@@ -917,7 +932,7 @@
      entries = the ones still open (not repaid / forgiven), oldest first. */
   function peopleOwed(entries, settings, range) {
     var S = isObj(settings) ? settings : {};
-    var all = list(entries);
+    var all = list(entries), to = range && isISO(range.to) ? range.to : "";
     var people = {};
     all.forEach(function (e) {
       if (!e.funder || isSelf(S, e.funder)) return;
@@ -929,7 +944,7 @@
       if (isMoney(e) && e.sub_kind === "helped" && isSelf(S, e.funder) && e.person && e.repaid !== "forgiven" && inRange(e, range)) {
         var k = norm(e.person), g = byName[k] || (byName[k] = { funder: "", person: e.person, claimed_cents: 0, received_cents: 0, settled_cents: 0, open: [] });
         g.claimed_cents += e.amount_cents;
-        if (e.repaid === "repaid") g.settled_cents += e.amount_cents; else g.open.push(e);
+        if (e.repaid === "repaid" && settledOn(e, to)) g.settled_cents += e.amount_cents; else g.open.push(e);
       }
     });
     all.forEach(function (e) {
@@ -941,7 +956,7 @@
       var f = funderOf(S, b.funder);
       out.push({ funder: b.funder, person: f ? label(f.name) : b.funder, owed_cents: -b.balance_cents, claimed_cents: b.claimed_cents,
         received_cents: b.received_cents, settled_cents: b.settled_cents,
-        entries: all.filter(function (e) { return e.funder === b.funder && isClaimed(e) && e.repaid !== "repaid" && e.claim_status !== "paid" && inRange(e, range); }).sort(byDate) });
+        entries: all.filter(function (e) { return e.funder === b.funder && isClaimed(e) && !settledOn(e, to) && inRange(e, range); }).sort(byDate) });
     });
     Object.keys(byName).forEach(function (k) {
       var g = byName[k], owed = g.claimed_cents - Math.max(g.received_cents, g.settled_cents);
