@@ -1,0 +1,274 @@
+# =====================================================================
+#  Morning check (new day by 5:30 AM) — the new day and both daily
+#  quotes on the website by 5:30 AM Central (config/site.yml →
+#  site.morning_goal), every day.
+#
+#  GitHub starts timed ("scheduled") runs when it has room: since late
+#  August 2026 often 4 to 8 hours late, and a busy day can skip one
+#  (docs/OPERATIONS.md → Morning check). So the morning does not wait for
+#  Website update's own schedule. This small workflow reads the LIVE
+#  site's build.json (published with every build):
+#    · today's build with today's Grapevine AND La Viña quotes → nothing
+#      to do (a few seconds);
+#    · otherwise it starts Website update in MORNING mode (the new day's
+#      dates, the daily quote, Drive, the bulletin, podcasts — on the 1st
+#      also the new magazine issues, on the 1st and 15th the Book of the
+#      Month; about 3 minutes), follows it, reads the live site again and
+#      writes in the run summary when today's update went live. A magazine
+#      whose quote is not out yet is asked again every 10 minutes (one
+#      polite request), from 2 AM — 3½ hours before the goal; the magazines
+#      usually publish the new day's quote about then — until 90 minutes
+#      after the goal; a check that starts later asks it once. A Website update
+#      run already going (the full daily update, a long search) is
+#      followed first — a morning refresh would only wait behind it — and
+#      a refresh is started only for what that run did not bring.
+#    · on the 1st of the month — and when no full daily update has run for
+#      30 hours — it also starts the full daily update (also when today's
+#      update was already there);
+#    · its own runs that had nothing to do (today's update was already
+#      there, or it was too early to ask a magazine) are deleted a day
+#      later (job "tidy"), so the Actions tab shows the mornings that did
+#      something.
+#  What starts it (the first one does the work, the others find it done):
+#    · the MORNING ALARM (recommended): an outside alarm clock presses "Run
+#      workflow" at 4:30 AM Central — while GitHub runs late, the only
+#      sure way to 5:30 (README → "d) The morning alarm");
+#    · GitHub's schedule below — best effort, a backstop;
+#    · anyone: Actions → Morning check (new day by 5:30 AM) → Run
+#      workflow (it only does what is missing; tick "check_only" to just
+#      see what it would do).
+#  A red ✗ = today's update did NOT reach the site (GitHub e-mails whoever
+#  started the run — for the alarm, the owner of its key). Green with a
+#  yellow note = only a magazine's quote was late at the source (or the
+#  site had not shown a finished update yet).
+# =====================================================================
+# The name shown in the Actions sidebar, the "Run workflow" menu and GitHub's "Run failed: …" e-mails; its
+# "5:30 AM" is config/site.yml → site.morning_goal (change the two together — tests/test_run_names.py checks that
+# they agree, and pins this name). Nothing finds the workflow by it: the morning alarm
+# (…/actions/workflows/morning.yml/dispatches), the "tidy" job below, the tests and the docs' links use the FILE
+# name (morning.yml).
+name: Morning check (new day by 5:30 AM)
+# Each run's title says what started it: GitHub's schedule, "check_only" ticked, or who pressed Run workflow (the
+# morning alarm shows as the owner of its key). Folded (>-) into one line: every line at the same indentation.
+run-name: >-
+  ${{ github.event_name == 'schedule' && 'Morning check (GitHub schedule)'
+  || inputs.check_only && 'Morning check (look only)'
+  || format('Morning check (started by {0})', github.triggering_actor) }}
+
+on:
+  schedule:
+    # Plain UTC (no `timezone:` key): 25 past every hour from 21:25 to 11:25 UTC = 4:25 PM to 6:25 AM
+    # CDT (3:25 PM to 5:25 AM CST); never on the hour, GitHub's busiest minute. It begins 4 hours
+    # before the early-morning window because GitHub starts this repository's schedules 4 to 6
+    # (sometimes 8) hours late: an evening firing that is delayed lands in the window, while one that
+    # runs on time finds today's build already live and is a 5-second no-op (deleted the next day). It
+    # still ends at 11:25 UTC, so a day on which GitHub is on time is covered too. Every hour from 2 AM
+    # (when the check starts asking the magazines for a late quote) to 5 AM Central gets firings both
+    # on time and 4 to 6 hours late, in summer (CDT) and in winter (CST) — tests/test_morning.py checks
+    # it. None of them is guaranteed — hence the alarm.
+    - cron: "25 0-11,21-23 * * *"
+  workflow_dispatch:
+    # The alarm's request body is just {"ref":"main"}: no input is needed.
+    inputs:
+      check_only:
+        description: "Only look: say what is on the site and what would be done — start nothing"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# One check at a time: a second one waits, then finds the work done (a third replaces the waiting one).
+concurrency:
+  group: morning-check
+  cancel-in-progress: false
+
+env:
+  PYTHONIOENCODING: utf-8
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  # -------------------------------------------------------------------
+  look:
+    name: Is today's update already on the site?
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pages: read              # the site's public address (a custom domain included)
+    outputs:
+      done: ${{ steps.live.outputs.done }}
+      full: ${{ steps.live.outputs.full }}
+      site: ${{ steps.site.outputs.url }}
+    steps:
+      - name: Find the site's address
+        id: site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # The address GitHub Pages actually serves; if this fails, the next job uses site.url
+          # from config/site.yml.
+          url="$(gh api "repos/${GITHUB_REPOSITORY}/pages" --jq '.html_url' 2>/dev/null || true)"
+          echo "url=${url%/}" >> "$GITHUB_OUTPUT"
+          echo "Site address: ${url:-"(not known here — the next step looks closer)"}"
+
+      - name: Read the live site's build.json
+        id: live
+        env:
+          SITE: ${{ steps.site.outputs.url }}
+        run: |
+          # done — the SAME test as is_done() in scripts/ops/morning_check.py (keep the two equal): the
+          # build's Central day is today and both quotes are dated today. No answer → the next job looks
+          # closer.
+          # full — the SAME rule as full_run_reason() there (keep the two equal): the full daily update is
+          # due when build.json "full" (when the last one ran) is before midnight on the 1st of the month
+          # (Central), or more than 30 hours ago; not known → never. Then the next job runs even when
+          # today's update is there, and starts it.
+          # ?check=… keeps GitHub's cache from answering with an older copy.
+          set -uo pipefail
+          today="$(TZ=America/Chicago date +%F)"
+          info=""
+          if [ -n "$SITE" ]; then info="$(curl -fsS --max-time 20 --retry 2 "${SITE}/build.json?check=$(date +%s)" 2>/dev/null || true)"; fi
+          day="$(jq -r '.day // empty' <<<"$info" 2>/dev/null || true)"
+          gv="$(jq -r '.quotes.gv // empty' <<<"$info" 2>/dev/null || true)"
+          lv="$(jq -r '.quotes.lv // empty' <<<"$info" 2>/dev/null || true)"
+          last="$(jq -r '.full // empty' <<<"$info" 2>/dev/null || true)"
+          full=""
+          if [ -n "$last" ] && last_s="$(date -u -d "$last" +%s 2>/dev/null)"; then
+            now_s="$(date -u +%s)"
+            midnight_s="$(TZ=America/Chicago date -d "${today} 00:00" +%s)"
+            if [ "$(TZ=America/Chicago date +%d)" = "01" ] && [ "$last_s" -lt "$midnight_s" ]; then
+              full="the 1st of the month"
+            elif [ $((now_s - last_s)) -gt $((30 * 3600)) ]; then
+              full="no full update for $(((now_s - last_s) / 3600)) hours"
+            fi
+          fi
+          echo "full=${full}" >> "$GITHUB_OUTPUT"
+          if [ "$day" = "$today" ] && [ "$gv" = "$today" ] && [ "$lv" = "$today" ]; then
+            built="$(jq -r '.built // empty' <<<"$info" 2>/dev/null || true)"
+            at="$(TZ=America/Chicago date -d "$built" '+%-I:%M %p %Z' 2>/dev/null || echo "$built")"
+            echo "done=true" >> "$GITHUB_OUTPUT"
+            if [ -z "$full" ]; then
+              echo "Nothing to do: today's update (built ${at}, with today's Grapevine and La Viña quotes) is on the site." | tee -a "$GITHUB_STEP_SUMMARY"
+            else
+              echo "Today's update (built ${at}, with today's Grapevine and La Viña quotes) is on the site; the full daily update is due (${full}) — the next job starts it." | tee -a "$GITHUB_STEP_SUMMARY"
+            fi
+          else
+            echo "done=false" >> "$GITHUB_OUTPUT"
+            echo "Live site: day ${day:-?}, Grapevine quote ${gv:-?}, La Viña quote ${lv:-?} — today is ${today} (Central)."
+          fi
+
+  # -------------------------------------------------------------------
+  update:
+    # scripts/ops/morning_check.py (UPDATE_JOB) and the "tidy" job below find this job by its NAME —
+    # keep the three equal.
+    name: Put today's update on the site
+    needs: look
+    # when the site does not have today's update — also when the first job failed (it then said nothing):
+    # the script reads the live site itself — and when it has, but the full daily update is due
+    if: ${{ !cancelled() && (needs.look.outputs.done != 'true' || needs.look.outputs.full != '') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 240       # nothing new after 170 min (GUARD_MAX); a refresh it starts then takes ≤ 45 + 5 min
+    permissions:
+      actions: write           # start Website update (and the full daily update) and follow it
+      contents: read           # the scripts
+    steps:
+      - name: Check out the scripts
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          # A cache of its own (this file is part of the key): it holds only the five packages below, and
+          # must never stand in for the full one that update.yml, check.yml and link-check.yml share under
+          # requirements.txt's key (a cache, once saved, cannot be changed).
+          cache-dependency-path: |
+            requirements.txt
+            .github/workflows/morning.yml
+
+      - name: Install Python packages (the polite session and the quote reader)
+        run: |
+          set -euo pipefail
+          # Only what the Morning check imports (scripts/ops/morning_check.py → scripts/sync/quote.py and
+          # common.py), at the versions requirements.txt allows — not the update's translation, video
+          # and PDF tools, so a problem with one of those never stops the morning. tzdata: the time-zone
+          # data zoneinfo falls back to where the system has none (Linux runners have it; Windows does not).
+          grep -iE '^(requests|beautifulsoup4|lxml|protego|PyYAML)[<>=!~ ]' requirements.txt > "$RUNNER_TEMP/morning-requirements.txt"
+          python -m pip install --upgrade pip
+          python -m pip install -r "$RUNNER_TEMP/morning-requirements.txt" tzdata
+
+      - name: Start the morning update, follow it, check the live site
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SITE_URL: ${{ needs.look.outputs.site }}
+          CHECK_ONLY: ${{ inputs.check_only }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          set -euo pipefail
+          args=()
+          if [ "${CHECK_ONLY:-false}" = "true" ]; then args+=(--check-only); fi
+          python -m scripts.ops.morning_check "${args[@]}"
+
+      # The check started, followed and asked nothing (it wrote idle=true): today's update was already
+      # there, or it was too early to ask a magazine. The "tidy" job of a later check finds this step by
+      # its NAME (IDLE_STEP below — keep the two equal) and deletes the run a day from now.
+      - name: Nothing to do (deleted a day later)
+        if: ${{ steps.check.outputs.idle == 'true' }}
+        run: echo "Nothing was started, followed or asked — this run is deleted a day from now."
+
+  # -------------------------------------------------------------------
+  tidy:
+    # Keeps the Actions tab readable: deletes THIS workflow's own runs that had nothing to do — finished
+    # more than 24 hours ago, green, and their "Put today's update on the site" job skipped (the site
+    # already had today's update) or ended at its step "Nothing to do" (it started, followed and asked
+    # nothing). Never a failed run, never one that started or followed an update or asked a magazine, never
+    # another workflow's run; at most 50 a run. A problem here is only a notice.
+    name: Tidy up old runs that had nothing to do
+    needs: look
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write           # list this workflow's runs and delete the ones that did nothing
+    steps:
+      - name: Delete this workflow's no-op runs older than a day
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WORKFLOW_FILE: morning.yml
+          UPDATE_JOB: "Put today's update on the site"
+          IDLE_STEP: "Nothing to do (deleted a day later)"
+          MAX_DELETE: "50"
+        run: |
+          set -uo pipefail
+          err="${RUNNER_TEMP:-/tmp}/tidy-error.txt"
+          # the runs of the week before yesterday (older ones were tidied already, or are left alone)
+          cutoff="$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ)"
+          since="$(date -u -d '8 days ago' +%Y-%m-%dT%H:%M:%SZ)"
+          if ! runs="$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/${WORKFLOW_FILE}/runs?status=success&created=${since}..${cutoff}&per_page=100" 2>"$err")"; then
+            echo "::notice title=Tidy::Could not list the Morning check's runs, so none were deleted: $(head -c 200 "$err" | tr '\n' ' ')"
+            exit 0
+          fi
+          # green and finished, and created before the cutoff (checked here too, whatever the API returned)
+          ids="$(jq -r --arg cutoff "$cutoff" '.workflow_runs[]? | select(.status == "completed" and .conclusion == "success" and (.created_at // "") < $cutoff) | .id' <<<"$runs" 2>/dev/null || true)"
+          n=0
+          for id in $ids; do
+            if [ "$n" -ge "$MAX_DELETE" ]; then break; fi
+            if ! jobs="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${id}/jobs?per_page=30" 2>"$err")"; then
+              echo "::notice title=Tidy::Could not look at run ${id}, so it stays: $(head -c 200 "$err" | tr '\n' ' ')"
+              continue
+            fi
+            # a no-op: its update job is there, and was skipped (the site already had today's update) or
+            # ended at the step "Nothing to do" (it started, followed and asked nothing)
+            noop="$(jq -r --arg job "$UPDATE_JOB" --arg idle "$IDLE_STEP" '[.jobs[]? | select(.name == $job)] | length == 1 and (.[0].conclusion == "skipped" or ([.[0].steps[]? | select(.name == $idle and .conclusion == "success")] | length == 1))' <<<"$jobs" 2>/dev/null || echo false)"
+            if [ "$noop" != "true" ]; then continue; fi
+            if gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/runs/${id}" >/dev/null 2>&1; then
+              n=$((n + 1))
+            else
+              echo "::notice title=Tidy::Could not delete run ${id} — it stays."
+            fi
+          done
+          echo "Deleted ${n} Morning check run(s) older than a day that had nothing to do."

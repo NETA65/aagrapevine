@@ -1,0 +1,467 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}status/index.html"
+layout: layouts/base.njk
+pageKey: status
+titleKey: nav.status
+descKey: community.status.meta_desc
+pageScripts: ["/assets/js/community.js"]
+---
+{% import "macros/ui.njk" as ui with context %}
+{#- Transparency dashboard built from db.status (written by build_data.py after every run).
+    States: ok (vine) · failed (danger) · never run (muted); every state has an icon + label, never
+    colour alone. Order: the hero aside card (how many sources are up to date) · three numbers · the sources
+    (a table from 768px, compact rows on a phone) · the optional outside calendars (collapsed) · the
+    document library and translations · how an update works · the open-source credits ("Built with
+    open-source software", a tinted band, last).
+    A source "on hold" (status.json sources[].held) says how many items the last update did not find and
+    since when; a source's notes from the last update (sources[].stats.warnings) and translation problems
+    (translations.problems) are raw English text for the maintainer.
+    Maintainer-only words (a failed source's raw message, where the translation models run and the
+    overrides file, "Behind the scenes" with the one GitHub Actions button and the last 7 mornings of
+    the daily quote) live in the collapsed "Technical details (for the site maintainer)" disclosures
+    (details[data-tech]). Source-row hints are written for visitors: no repo paths.
+    The daily quote's row also says when today's two quotes came in — or which one has not yet — against
+    the goal (config site.morning_goal — the Morning check, .github/workflows/morning.yml, puts the new day
+    and the quote on the site by then): status.json quote_days → fsQuoteMornings (eleventy/filters/
+    freshness.js). "Came in" is when the update first read the quote; times are Central time with the zone
+    name there, and without it in the 7-morning rows (their subtitle says Central time, once). -#}
+{%- set sv = db.status | cmStatus -%}
+{%- set qm = db.status | fsQuoteMornings -%}
+{%- set total = sv.sources | length -%}
+{%- set feedsDown = sv.feeds | whereNot("state", "ok") | length -%}
+{%- set actionsUrl = site.repository + "/actions" -%}
+{#- how the committee adds an event by hand (content/events/README.md) — linked from a calendar we can't read -#}
+{%- set eventsHowtoUrl = site.repository + "/blob/main/content/events/README.md" -%}
+{#- Credits: the website stack + the translation models — [name, url, licence, key of community.status.cr_*] -#}
+{%- set credits = [
+  ["Eleventy", "https://www.11ty.dev", "MIT", "eleventy"],
+  ["Tailwind CSS", "https://tailwindcss.com", "MIT", "tailwind"],
+  ["Alpine.js", "https://alpinejs.dev", "MIT", "alpine"],
+  ["MiniSearch", "https://github.com/lucaong/minisearch", "MIT", "minisearch"],
+  ["GLightbox", "https://github.com/biati-digital/glightbox", "MIT", "glightbox"],
+  ["lite-youtube-embed", "https://github.com/paulirish/lite-youtube-embed", "Apache-2.0", "liteyt"],
+  ["Lucide", "https://lucide.dev", "ISC", "lucide"],
+  ["markdown-it", "https://github.com/markdown-it/markdown-it", "MIT", "markdownit"],
+  ["Fraunces", "https://github.com/undercasetype/Fraunces", "OFL-1.1", "fraunces"],
+  ["Inter", "https://rsms.me/inter/", "OFL-1.1", "inter"],
+  ["CTranslate2", "https://github.com/OpenNMT/CTranslate2", "MIT", "ct2"],
+  ["Argos Translate", "https://github.com/argosopentech/argos-translate", "MIT", "argos"],
+  ["OPUS-MT", "https://github.com/Helsinki-NLP/Opus-MT", "CC-BY-4.0", "opusmt"]
+] -%}
+{%- set srcIcons = { drive: "folder-open", articles: "newspaper", writers_archive: "library-big", pdfs: "file-text", youtube: "youtube", podcasts: "headphones", instagram: "instagram", editorial: "pen-line", events_external: "calendar-days", announcements: "megaphone", manual_events: "calendar-plus", weekly_open: "video", shop: "shopping-bag", meetings: "map-pin", audio_project: "mic", quote: "quote", translations: "languages" } -%}
+
+{#- A source's status badge (the same in the table and the phone rows). "On hold": the last update did not
+    find items that were there before (a sudden drop, or a Drive folder that suddenly looks empty — status.json
+    sources[].held, common.save_raw); they stay on the site until the next update confirms it (heldNote). -#}
+{% macro stateBadge(s) %}
+{%- if s.state == "ok" and s.held %}<span class="badge-muted">{% icon "hourglass", "size-3.5" %} {{ "community.status.state_held" | t(lang) }}</span>
+{%- elif s.state == "ok" and not s.stale %}<span class="badge-vine">{% icon "circle-check", "size-3.5" %} {{ "community.status.state_ok" | t(lang) }}</span>
+{%- elif s.state == "ok" and s.stale %}<span class="badge-muted" title="{{ 'community.status.stale_help' | t(lang, { n: s.ageDays }) }}">{% icon "clock", "size-3.5" %} {{ "community.status.state_stale" | t(lang) }}</span>
+{%- elif s.state == "failed" %}<span class="badge bg-danger text-white dark:text-paper">{% icon "circle-x", "size-3.5" %} {{ "community.status.state_failed" | t(lang) }}</span>
+{%- else %}<span class="badge-muted">{% icon "circle-dashed", "size-3.5" %} {{ "community.status.state_never" | t(lang) }}</span>{% endif -%}
+{% endmacro %}
+
+{#- Under "Daily quote" (the table and the phone rows): when today's two quotes came in — or the one that
+    has, naming the one that has not — then the goal -#}
+{% macro quoteLine(q) %}
+{%- if q.today.both %}{{ "freshness.quote_came" | t(lang, { date: q.today.day | fmtDate(lang, "medium"), time: q.today.both | fmtDate(lang, "time") }) }}
+{%- elif q.today.one %}{{ "freshness.quote_came_one" | t(lang, { pub_in: ("library.src." + q.today.one.pub) | t(lang), pub_out: ("library.src." + q.today.one.other) | t(lang), date: q.today.day | fmtDate(lang, "medium"), time: q.today.one.at | fmtDate(lang, "time") }) }}
+{%- else %}{{ "freshness.quote_missing" | t(lang, { date: q.today.day | fmtDate(lang, "medium") }) }}{% endif %}
+{%- if q.today.goal_at %} {{ "freshness.quote_goal" | t(lang, { time: q.today.goal_at | fmtDate(lang, "time") }) }}{% endif -%}
+{% endmacro %}
+
+{#- One magazine's morning in the 7-morning table: an icon AND words, never colour alone -#}
+{% macro quoteBadge(st) %}
+{%- if st == "on_time" %}<span class="badge-vine">{% icon "circle-check", "size-3.5" %} {{ "freshness.quote_on_time" | t(lang) }}</span>
+{%- elif st == "late" %}<span class="badge-muted">{% icon "clock", "size-3.5" %} {{ "freshness.quote_late" | t(lang) }}</span>
+{%- elif st == "waiting" %}<span class="badge-muted">{% icon "hourglass", "size-3.5" %} {{ "freshness.quote_waiting" | t(lang) }}</span>
+{%- else %}<span class="badge-muted">{% icon "circle-dashed", "size-3.5" %} {{ "freshness.quote_none" | t(lang) }}</span>{% endif -%}
+{% endmacro %}
+
+{#- A failed source: the calm explanation first; the raw message tucked away for the maintainer. The raw
+    messages come from the update as it wrote them (in English): a caption says so — on /es/status/, that
+    it is in English — and the <pre> carries lang="en". -#}
+{% macro failedNote(s) %}
+<p class="flex max-w-3xl gap-2 text-sm leading-relaxed text-ink">{% icon "info", "size-4 mt-0.5 shrink-0 text-danger" %}<span>{{ "community.status.failed_calm" | t(lang) }}{% if s.updated and s.ageDays >= 3 %} {{ "community.status.failed_repeat" | t(lang, { n: s.ageDays }) }}{% endif %}</span></p>
+{% if s.updated %}<p class="mt-1 pl-6 text-xs text-muted">{{ "community.status.last_ok" | t(lang) }}: <time datetime="{{ s.updated | isoDate }}" data-local-time>{{ s.updated | fmtDate(lang, "datetime") }}</time></p>{% endif %}
+{% if s.error %}
+<details class="cm-preview mt-2 ml-6 rounded-lg border border-line bg-surface" data-tech>
+  <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-xs font-semibold text-muted">{{ "community.status.tech_details" | t(lang) }}</summary>
+  <div class="border-t border-line p-3 text-xs text-ink">
+    <p class="text-muted">{{ "community.status.raw_message" | t(lang) }}</p>
+    <pre lang="en" class="mt-1 overflow-x-auto whitespace-pre-wrap font-mono">{{ s.error }}</pre>
+  </div>
+</details>
+{% endif %}
+{% endmacro %}
+
+{#- A source on hold (stateBadge): what was not found and since when — calm, for visitors -#}
+{% macro heldNote(s) %}
+<p class="flex max-w-3xl gap-2 text-sm leading-relaxed text-ink">{% icon "hourglass", "size-4 mt-0.5 shrink-0 text-muted" %}<span>{{ ("community.status.held_note_one" if s.held.kept == 1 else "community.status.held_note") | t(lang, { n: (s.held.kept or 0) | cmNum(lang) }) }}</span></p>
+{% if s.held.since %}<p class="mt-1 pl-6 text-xs text-muted">{{ "community.status.held_since" | t(lang) }}: <time datetime="{{ s.held.since | isoDate }}" data-local-time>{{ s.held.since | fmtDate(lang, "datetime") }}</time></p>{% endif %}
+{% endmacro %}
+
+{#- A source's notes from the last update (status.json sources[].stats.warnings: plain English strings, e.g. one
+    of several feeds did not answer) — tucked away for the maintainer, like a failed source's raw message -#}
+{% macro notesBlock(notes) %}
+<details class="cm-preview mt-2 ml-6 rounded-lg border border-line bg-surface" data-tech>
+  <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-xs font-semibold text-muted">{{ "community.status.notes_summary" | t(lang, { n: notes | length }) }}</summary>
+  <div class="border-t border-line p-3 text-xs text-ink">
+    <p class="text-muted">{{ "community.status.notes_caption" | t(lang) }}</p>
+    <ul lang="en" class="mt-1 list-disc space-y-1 pl-4 font-mono" role="list">{% for w in notes %}<li class="whitespace-pre-wrap break-words">{{ w }}</li>{% endfor %}</ul>
+  </div>
+</details>
+{% endmacro %}
+
+{#- The hero's right-hand card (the shared hero aside, ui.heroAsideStat): how many sources are up to
+    date — a status, not a button — with a link to the table. Inside the hero from 1024px; the first
+    card under it on smaller screens and at larger text ("below"), then the three numbers. -#}
+{%- if not total -%}
+  {%- set gState = "wait" -%}{%- set gValue = "—" -%}{%- set gLabel = "community.status.not_run" | t(lang) -%}{%- set gSr = gLabel -%}
+{%- elif sv.failedCount -%}
+  {%- set gState = "alert" -%}{%- set gValue = sv.failedCount ~ "/" ~ total -%}{%- set gLabel = "community.status.stat_failed" | t(lang) -%}
+  {%- set gSr = "community.status.some_failed" | t(lang, { n: sv.failedCount, total: total }) -%}
+{%- else -%}
+  {%- set gState = "ok" -%}{%- set gValue = sv.okCount ~ "/" ~ total -%}{%- set gLabel = "community.status.stat_ok" | t(lang) -%}
+  {%- set gSr = "community.status.pill_ok" | t(lang, { n: sv.okCount, total: total }) -%}
+{%- endif -%}
+{%- set gNote = (("community.status.pill_feeds_one" if feedsDown == 1 else "community.status.pill_feeds") | t(lang, { n: feedsDown })) if (total and not sv.failedCount and feedsDown) else "" -%}
+{% call(slot) ui.pageHero(lang, "nav.status" | t(lang), "community.status.hero_sub" | t(lang), "activity", "community.status.eyebrow" | t(lang), { side: "below" }) %}
+{%- if slot == "side" %}
+  {{ ui.heroAsideStat("community.status.glance" | t(lang), gValue, gLabel, lang, {
+       id: "status-glance-title", icon: "radio-tower", state: gState, sr: gSr, note: gNote,
+       href: "#src-title" if total else "", linkLabel: "community.status.see_sources" | t(lang) }) }}
+{%- endif %}
+{% endcall %}
+
+{#- ============ Three numbers (one card, tucked into the hero's faded edge) ============ -#}
+<section class="container-page page-overlap" aria-label="{{ 'nav.status' | t(lang) }}">
+  <dl class="card grid divide-y divide-line sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+    <div class="px-5 py-4 sm:px-6 sm:py-5">
+      <dt class="text-sm text-muted">{{ "community.status.kpi_build" | t(lang) }}</dt>
+      <dd class="mt-1 text-2xl font-semibold text-ink"><time datetime="{{ site.built }}" data-relative>{{ site.built | fmtDate(lang, "datetime") }}</time></dd>
+      <dd class="mt-0.5 text-xs text-muted"><time datetime="{{ site.built }}" data-local-time>{{ site.built | fmtDate(lang, "datetime") }}</time></dd>
+    </div>
+    <div class="px-5 py-4 sm:px-6 sm:py-5">
+      <dt class="text-sm text-muted">{{ "community.status.kpi_items" | t(lang) }}</dt>
+      <dd class="mt-1 text-2xl font-semibold text-ink">{{ sv.totalItems | cmNum(lang) }}</dd>
+    </div>
+    <div class="px-5 py-4 sm:px-6 sm:py-5">
+      <dt class="text-sm text-muted">{{ "community.status.kpi_new" | t(lang) }}</dt>
+      <dd class="mt-1 text-2xl font-semibold text-ink">{{ sv.found7d | cmNum(lang) }}</dd>
+      <dd class="mt-0.5 text-xs leading-snug text-muted">{{ ("community.status.found_help_all" if sv.allFound7d else "community.status.found_help") | t(lang) }}</dd>
+    </div>
+  </dl>
+</section>
+
+{#- ============ Sources + document library / translations ============
+    Below 1536px: the sources, then the two cards side by side (from 1024px). From 1536px the two
+    cards form a 30rem column next to the sources. -#}
+<section class="section container-page pt-10 sm:pt-12" aria-labelledby="src-title">
+  {{ ui.sectionHead("community.status.sources_title" | t(lang), "community.status.sources_sub" | t(lang), "", "", "radio-tower", { eyebrow: "community.status.sources_eyebrow" | t(lang), id: "src-title", lang: lang }) }}
+  <div class="cm-st-layout">
+  <div class="min-w-0">
+  {% if total %}
+  {#- From 768px: a table. When it is wider than its card (Spanish at 768px, larger text) the card
+      scrolls sideways — a named region that keyboard users can focus and scroll. -#}
+  <div class="card overflow-hidden max-md:hidden" role="region" aria-label="{{ 'community.status.table_aria' | t(lang) }}" tabindex="0">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-surface-2/70 text-xs uppercase tracking-wider text-muted">
+        <tr>
+          <th scope="col" class="px-5 py-3 font-semibold">{{ "community.status.col_source" | t(lang) }}</th>
+          <th scope="col" class="px-5 py-3 font-semibold">{{ "community.status.col_status" | t(lang) }}</th>
+          <th scope="col" class="px-5 py-3 font-semibold">{{ "community.status.col_updated" | t(lang) }}</th>
+          <th scope="col" class="px-5 py-3 text-right font-semibold">{{ "community.status.col_count" | t(lang) }}</th>
+          <th scope="col" class="px-5 py-3 text-right font-semibold">{{ "community.status.col_new" | t(lang) }}</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-line">
+        {% for s in sv.sources %}
+        {#- Our own wording when we have it; otherwise the pipeline's label (label_es in Spanish). -#}
+        {%- set label = ("community.status.src." + s.source) | cmTOr(lang, (s.label_es if lang == "es" and s.label_es else s.label) or s.source) -%}
+        <tr class="{{ 'bg-[color-mix(in_srgb,var(--c-danger)_6%,transparent)]' if s.state == 'failed' }}">
+          <th scope="row" class="px-5 py-4 font-semibold text-ink">
+            <span class="flex items-center gap-3">
+              <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-surface-2 text-muted">{% icon srcIcons[s.source] or "database", "size-4" %}</span>
+              <span class="min-w-0">
+                <span class="block">{{ label }}</span>
+                {% if s.hint %}<span class="mt-0.5 block max-w-md text-xs font-normal leading-snug text-muted">{{ ("community.status.hint." + s.hint) | t(lang, { panel: s.panel or ("community.status.hint.panel_generic" | t(lang)) }) }}</span>{% endif %}
+                {% if s.source == "quote" and qm %}<span class="mt-0.5 block max-w-md text-xs font-normal leading-snug text-muted">{{ quoteLine(qm) }}</span>{% endif %}
+              </span>
+            </span>
+          </th>
+          <td class="whitespace-nowrap px-5 py-4">{{ stateBadge(s) }}</td>
+          <td class="px-5 py-4">
+            {% if s.updated %}
+            <time class="block font-medium text-ink" datetime="{{ s.updated | isoDate }}" data-relative>{{ s.updated | fmtDate(lang, "datetime") }}</time>
+            <time class="block text-xs text-muted" datetime="{{ s.updated | isoDate }}" data-local-time>{{ s.updated | fmtDate(lang, "datetime") }}</time>
+            {% if s.stale %}<span class="mt-0.5 block text-xs text-muted">{{ "community.status.stale_help" | t(lang, { n: s.ageDays }) }}</span>{% endif %}
+            {% elif s.state == "failed" and s.attempted %}
+            <span class="block text-xs text-muted">{{ "community.status.last_try" | t(lang) }}</span>
+            <time class="block font-medium text-ink" datetime="{{ s.attempted | isoDate }}" data-local-time>{{ s.attempted | fmtDate(lang, "datetime") }}</time>
+            {% else %}<span class="text-muted">{{ "community.status.never_help" | t(lang) }}</span>{% endif %}
+          </td>
+          <td class="px-5 py-4 text-right tabular-nums text-ink">{{ (s.count or 0) | cmNum(lang) }}</td>
+          <td class="px-5 py-4 text-right tabular-nums">
+            {% if s.new_7d %}<span class="font-semibold text-vine">+{{ s.new_7d | cmNum(lang) }}</span>{% else %}<span class="text-muted">0</span>{% endif %}
+          </td>
+        </tr>
+        {%- set notes = s.stats.warnings if (s.stats and s.stats.warnings and s.stats.warnings is iterable and not (s.stats.warnings is string)) else [] %}
+        {% if s.state == "failed" %}
+        <tr class="bg-[color-mix(in_srgb,var(--c-danger)_6%,transparent)]">
+          <td colspan="5" class="px-5 pb-4 pt-0">{{ failedNote(s) }}{% if notes | length %}{{ notesBlock(notes) }}{% endif %}</td>
+        </tr>
+        {% elif (s.state == "ok" and s.held) or notes | length %}
+        <tr>
+          <td colspan="5" class="px-5 pb-4 pt-0">{% if s.state == "ok" and s.held %}{{ heldNote(s) }}{% endif %}{% if notes | length %}{{ notesBlock(notes) }}{% endif %}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {#- On a phone: compact rows — name + status on one line, the time and numbers as a second, muted line -#}
+  <ul class="card divide-y divide-line md:hidden" role="list">
+    {% for s in sv.sources %}
+    {%- set label = ("community.status.src." + s.source) | cmTOr(lang, (s.label_es if lang == "es" and s.label_es else s.label) or s.source) -%}
+    <li class="flex gap-3 px-4 py-3.5{{ ' bg-[color-mix(in_srgb,var(--c-danger)_6%,transparent)]' if s.state == 'failed' }}">
+      <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-surface-2 text-muted">{% icon srcIcons[s.source] or "database", "size-4" %}</span>
+      <div class="min-w-0 flex-1">
+        <p class="flex items-start justify-between gap-2"><span class="font-semibold leading-snug text-ink">{{ label }}</span><span class="shrink-0">{{ stateBadge(s) }}</span></p>
+        <p class="meta-row mt-0.5 text-xs text-muted">
+          {%- if s.updated %}<time datetime="{{ s.updated | isoDate }}" data-relative>{{ s.updated | fmtDate(lang, "datetime") }}</time>
+          {%- elif s.state == "failed" and s.attempted %}<span>{{ "community.status.last_try" | t(lang) }}: <time datetime="{{ s.attempted | isoDate }}" data-local-time>{{ s.attempted | fmtDate(lang, "datetime") }}</time></span>
+          {%- else %}<span>{{ "community.status.never_help" | t(lang) }}</span>{% endif %}
+          <span>{{ "community.status.n_items" | t(lang, { n: (s.count or 0) | cmNum(lang) }) }}</span>
+          {%- if s.new_7d %}<span class="font-semibold text-vine">{{ "community.status.n_new" | t(lang, { n: s.new_7d | cmNum(lang) }) }}</span>{% endif %}
+        </p>
+        {% if s.hint %}<p class="mt-1 text-xs leading-snug text-muted">{{ ("community.status.hint." + s.hint) | t(lang, { panel: s.panel or ("community.status.hint.panel_generic" | t(lang)) }) }}</p>{% endif %}
+        {% if s.source == "quote" and qm %}<p class="mt-1 text-xs leading-snug text-muted">{{ quoteLine(qm) }}</p>{% endif %}
+        {% if s.state == "failed" %}<div class="mt-2">{{ failedNote(s) }}</div>{% endif %}
+        {% if s.state == "ok" and s.held %}<div class="mt-2">{{ heldNote(s) }}</div>{% endif %}
+        {%- set notes = s.stats.warnings if (s.stats and s.stats.warnings and s.stats.warnings is iterable and not (s.stats.warnings is string)) else [] %}
+        {% if notes | length %}{{ notesBlock(notes) }}{% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  {{ ui.emptyState("circle-dashed", "community.status.no_sources_title" | t(lang), "community.status.no_sources_text" | t(lang)) }}
+  {% endif %}
+  <p class="mt-3 text-xs text-muted">{{ "community.status.local_time" | t(lang) }}{% if sv.generated %} · {{ "community.status.data_generated" | t(lang) }} <time datetime="{{ sv.generated | isoDate }}" data-local-time>{{ sv.generated | fmtDate(lang, "datetime") }}</time>{% endif %}</p>
+
+  {#- ============ Optional outside calendars (config/site.yml sources.ics_feeds), collapsed ============
+      Not content sources: a calendar we can't read is said in plain words (its events are added by
+      hand), never counted as "failed"; how to fix it is in its technical details. -#}
+  {% if sv.feeds | length %}
+  <details class="card group/feeds mt-8" aria-labelledby="feeds-title">
+    <summary class="flex min-h-14 cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-1 px-5 py-3 sm:px-6 [&::-webkit-details-marker]:hidden">
+      <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-surface-2 text-muted">{% icon "calendar-sync", "size-4" %}</span>
+      <span id="feeds-title" class="font-semibold text-ink">{{ "community.status.feeds_title" | t(lang) }}</span>
+      <span class="badge-muted">{{ "community.status.optional" | t(lang) }}</span>
+      {% if feedsDown %}<span class="text-sm text-muted">{{ ("community.status.pill_feeds_one" if feedsDown == 1 else "community.status.pill_feeds") | t(lang, { n: feedsDown }) }}</span>{% endif %}
+      {% icon "chevron-down", "size-5 ml-auto shrink-0 text-muted transition group-open/feeds:rotate-180" %}
+    </summary>
+    <div class="border-t border-line px-5 py-5 sm:px-6">
+      <p class="max-w-2xl text-sm leading-relaxed text-muted">{{ "community.status.feeds_sub" | t(lang) }}</p>
+      <ul class="mt-4 grid gap-4" role="list">
+        {% for f in sv.feeds %}
+        {%- set flabel = (f.label_es if lang == "es" and f.label_es else f.label) or f.host -%}
+        <li class="panel-muted">
+          <div class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+            <div class="min-w-0">
+              <h3 class="font-semibold text-ink">{{ flabel }}</h3>
+              <p class="mt-0.5 break-all font-mono text-xs text-muted">{{ f.url | cmShortUrl }}</p>
+            </div>
+            {% if f.state == "ok" %}<span class="badge-vine">{% icon "circle-check", "size-3.5" %} {{ "community.status.feed_state.ok" | t(lang) }}</span>
+            {% elif f.state == "blocked" %}<span class="badge-lv">{% icon "circle-slash", "size-3.5" %} {{ "community.status.feed_state.blocked" | t(lang) }}</span>
+            {% elif f.state == "error" %}<span class="badge-muted">{% icon "circle-x", "size-3.5" %} {{ "community.status.feed_state.error" | t(lang) }}</span>
+            {% else %}<span class="badge-muted">{% icon "circle-dashed", "size-3.5" %} {{ "community.status.feed_state.never" | t(lang) }}</span>{% endif %}
+          </div>
+          <p class="mt-3 flex max-w-3xl gap-2 text-sm leading-relaxed text-ink">{% icon "info", "size-4 mt-0.5 shrink-0 text-muted" %}<span>
+            {%- if f.state == "ok" %}{{ ("community.status.feed_ok_one" if f.events == 1 else "community.status.feed_ok") | t(lang, { n: f.events | cmNum(lang) }) }}{% if f.dups %} {{ "community.status.feed_dups" | t(lang, { n: f.dups | cmNum(lang) }) }}{% endif %}
+            {%- elif f.state == "blocked" %}{{ "community.status.feed_blocked" | t(lang, { host: f.host }) }} <a class="link" href="{{ eventsHowtoUrl }}" target="_blank" rel="noopener">{{ "community.status.feed_howto" | t(lang) }}</a>
+            {%- elif f.state == "error" %}{{ "community.status.feed_error" | t(lang) }}
+            {%- else %}{{ "community.status.feed_never" | t(lang) }}{% endif -%}
+            {%- if f.state != "ok" and f.last_success %} {{ "community.status.feed_copy" | t(lang, { date: f.last_success | fmtDate(lang, "medium"), n: f.events | cmNum(lang) }) }}{% endif -%}
+          </span></p>
+          <dl class="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-line pt-4 text-xs sm:grid-cols-4">
+            <div><dt class="text-muted">{{ "community.status.feed_checked" | t(lang) }}</dt><dd class="mt-0.5 font-medium text-ink">{% if f.last_attempt %}<time datetime="{{ f.last_attempt | isoDate }}" data-local-time>{{ f.last_attempt | fmtDate(lang, "datetime") }}</time>{% else %}—{% endif %}</dd></div>
+            <div><dt class="text-muted">{{ "community.status.feed_worked" | t(lang) }}</dt><dd class="mt-0.5 font-medium text-ink">{% if f.last_success %}<time datetime="{{ f.last_success | isoDate }}" data-local-time>{{ f.last_success | fmtDate(lang, "datetime") }}</time>{% else %}{{ "community.status.feed_worked_never" | t(lang) }}{% endif %}</dd></div>
+            <div><dt class="text-muted">{{ "community.status.feed_events" | t(lang) }}</dt><dd class="mt-0.5 font-medium tabular-nums text-ink">{{ f.events | cmNum(lang) }}</dd></div>
+            <div><dt class="text-muted">{{ "community.status.feed_http" | t(lang) }}</dt><dd class="mt-0.5 font-medium tabular-nums text-ink">{{ f.http or "—" }}</dd></div>
+          </dl>
+          {% if f.error or f.state == "blocked" %}
+          <details class="cm-preview mt-3 rounded-lg border border-line bg-surface" data-tech>
+            <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-xs font-semibold text-muted">{{ "community.status.tech_details" | t(lang) }}</summary>
+            <div class="border-t border-line p-3 text-xs leading-relaxed text-ink">
+              {% if f.state == "blocked" %}<p class="max-w-3xl">{{ "community.status.feed_fix" | t(lang) }}</p>{% endif %}
+              {% if f.error %}<p class="mt-2 text-muted">{{ "community.status.raw_message" | t(lang) }}</p><pre lang="en" class="mt-1 overflow-x-auto whitespace-pre-wrap font-mono">{{ f.error }}</pre>{% endif %}
+            </div>
+          </details>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </details>
+  {% endif %}
+  </div>
+
+  {#- ============ Document library + translations ============ -#}
+  <div class="cm-st-side grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]" role="group" aria-label="{{ 'community.status.crawl_title' | t(lang) }}">
+    <article class="card card-pad flex flex-col">
+      <h2 class="card-h"><span>{% icon "scan-search", "size-5" %}</span>{{ "community.status.crawl_title" | t(lang) }}</h2>
+      <p class="measure mt-2 text-sm leading-relaxed text-muted">{{ "community.status.crawl_sub" | t(lang) }}</p>
+      {% if sv.crawl.hasData %}
+      {#- Document facts only: how many, and how many have a first-page preview -#}
+      <p class="mt-6 text-4xl font-semibold tabular-nums text-ink">{{ sv.crawl.pdfs | cmNum(lang) }}</p>
+      <p class="text-sm text-muted">{{ "community.status.crawl_docs" | t(lang) }} · {{ ("community.status.crawl_prev_all" if sv.crawl.thumbs >= sv.crawl.pdfs else "community.status.crawl_prev") | t(lang, { n: sv.crawl.thumbs | cmNum(lang) }) }}</p>
+      {% if sv.crawl.updated %}<p class="mt-auto flex items-center gap-2 border-t border-line pt-4 text-xs leading-relaxed text-muted">{% icon "clock", "size-4 shrink-0" %} <span>{{ "community.status.crawl_last" | t(lang) }}: <time datetime="{{ sv.crawl.updated | isoDate }}" data-local-time>{{ sv.crawl.updated | fmtDate(lang, "datetime") }}</time></span></p>{% endif %}
+      {% else %}
+      <p class="mt-6 rounded-xl bg-surface-2 p-4 text-sm text-muted">{{ "community.status.crawl_empty" | t(lang) }}</p>
+      {% endif %}
+    </article>
+    <article class="card card-pad">
+      <h2 class="card-h"><span class="text-grape!">{% icon "languages", "size-5" %}</span>{{ "community.status.tr_title" | t(lang) }}</h2>
+      <p class="mt-4 text-4xl font-semibold tabular-nums text-ink">{{ sv.translations.cached | cmNum(lang) }}</p>
+      <p class="text-sm text-muted">{{ "community.status.tr_count" | t(lang) }}</p>
+      <p class="mt-4 text-sm leading-relaxed text-muted">{{ "community.status.tr_text" | t(lang) }}</p>
+      {#- where the models run and the overrides file: for the site maintainer only -#}
+      <details class="cm-preview mt-3 rounded-lg border border-line bg-surface" data-tech>
+        <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-xs font-semibold text-muted">{{ "community.status.tech_details" | t(lang) }}</summary>
+        <p class="border-t border-line p-3 text-xs leading-relaxed text-ink">{{ "community.status.tr_tech" | t(lang) }}</p>
+      </details>
+      {#- what kept translation from working fully on the last update (status.json translations.problems: an
+          unreadable saved-translations file, a model that could not be installed): a calm line, the raw
+          messages for the maintainer -#}
+      {%- set trProblems = db.status.translations.problems if (db.status and db.status.translations and db.status.translations.problems) else [] %}
+      {% if trProblems | length %}
+      <p class="mt-4 flex gap-2 text-sm leading-relaxed text-ink">{% icon "info", "size-4 mt-0.5 shrink-0 text-grape" %}<span>{{ "community.status.tr_problem" | t(lang) }}</span></p>
+      <details class="cm-preview mt-2 rounded-lg border border-line bg-surface" data-tech>
+        <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-xs font-semibold text-muted">{{ "community.status.tech_details" | t(lang) }}</summary>
+        <div class="border-t border-line p-3 text-xs text-ink">
+          <p class="text-muted">{{ "community.status.notes_caption" | t(lang) }}</p>
+          <ul lang="en" class="mt-1 list-disc space-y-1 pl-4 font-mono" role="list">{% for p in trProblems %}<li class="whitespace-pre-wrap break-words">{{ p }}</li>{% endfor %}</ul>
+        </div>
+      </details>
+      {% endif %}
+      {% if sv.translations.pending or sv.translations.rejected or sv.translations.glossary %}
+      <ul class="mt-4 space-y-2 border-t border-line pt-4 text-xs leading-relaxed text-muted" role="list">
+        {% if sv.translations.pending %}<li class="flex gap-2">{% icon "hourglass", "size-4 shrink-0 text-grape" %}<span>{{ ("community.status.tr_pending_one" if sv.translations.pending == 1 else "community.status.tr_pending") | t(lang, { n: sv.translations.pending | cmNum(lang) }) }}</span></li>{% endif %}
+        {% if sv.translations.rejected %}<li class="flex gap-2">{% icon "shield-check", "size-4 shrink-0 text-grape" %}<span>{{ ("community.status.tr_rejected_one" if sv.translations.rejected == 1 else "community.status.tr_rejected") | t(lang, { n: sv.translations.rejected | cmNum(lang) }) }}</span></li>{% endif %}
+        {% if sv.translations.glossary %}<li class="flex gap-2">{% icon "book-a", "size-4 shrink-0 text-grape" %}<span>{{ "community.status.tr_glossary" | t(lang, { n: sv.translations.glossary | cmNum(lang) }) }}</span></li>{% endif %}
+      </ul>
+      {% endif %}
+    </article>
+  </div>
+  </div>
+</section>
+
+{#- ============ How an update works + behind the scenes ============ -#}
+<section class="section container-page pt-0" aria-labelledby="sched-title">
+  {{ ui.sectionHead("community.status.sched_title" | t(lang), "community.status.sched_sub" | t(lang), "", "", "calendar-clock", { eyebrow: "community.status.sched_eyebrow" | t(lang), id: "sched-title", lang: lang }) }}
+  <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" role="list">
+    {% for k in ["1", "2", "3", "4"] %}
+    <li class="card card-pad">
+      <h3 class="h-card flex items-center gap-2.5"><span class="step-num" aria-hidden="true">{{ k }}</span>{{ ("community.status.sched_" + k + "_t") | t(lang) }}</h3>
+      <p class="mt-2 text-sm leading-relaxed text-muted">{{ ("community.status.sched_" + k + "_d") | t(lang) }}</p>
+    </li>
+    {% endfor %}
+  </ol>
+  {#- Behind the scenes (the run log + the GitHub Actions button, and the daily quote's last 7 mornings):
+      for the site maintainer only. The mornings are a table from 640px — in its own named, focusable
+      region that scrolls sideways if it is ever wider than the card (larger text) — and one short block
+      per day on a phone; each magazine's morning is a time and a badge with an icon AND words (never
+      colour alone). Short labels ("Tue, Sep 29", "5:52 AM": fsShortDay, fsClock); Central time is said
+      once, in the subtitle with the goal. -#}
+  <details class="cm-preview mt-6 rounded-lg border border-line bg-surface" data-tech>
+    <summary class="flex min-h-11 cursor-pointer items-center gap-2 px-3 text-xs font-semibold text-muted">{{ "community.status.tech_details" | t(lang) }}</summary>
+    <div class="border-t border-line p-3">
+      <div class="panel-muted flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 class="h-card">{{ "community.status.actions_title" | t(lang) }}</h3>
+          <p class="mt-1 max-w-2xl text-sm leading-relaxed text-muted">{{ "community.status.actions_text" | t(lang) }}</p>
+        </div>
+        <a class="btn-secondary shrink-0" href="{{ actionsUrl }}" target="_blank" rel="noopener">{% icon "git-branch", "size-4" %} {{ "community.status.actions_btn" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+      </div>
+      {% if qm %}
+      <div class="mt-5">
+        <h3 id="quote-days-title" class="h-card">{{ "freshness.quote_days_title" | t(lang) }}</h3>
+        {%- set goalClock = (qm.today.goal_at | fsClock(lang)) or qm.goal %}
+        <p class="mt-1 max-w-2xl text-sm leading-relaxed text-muted">{{ "freshness.quote_days_sub" | t(lang, { time: goalClock }) }}</p>
+        <div class="card mt-3 overflow-x-auto max-sm:hidden" role="region" tabindex="0" aria-labelledby="quote-days-title">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-surface-2/70 text-xs uppercase tracking-wider text-muted">
+              <tr>
+                <th scope="col" class="px-4 py-2.5 font-semibold">{{ "freshness.quote_col_day" | t(lang) }}</th>
+                <th scope="col" class="px-4 py-2.5 font-semibold">{{ "library.src.gv" | t(lang) }}</th>
+                <th scope="col" class="px-4 py-2.5 font-semibold"{% if lang != "es" %} lang="es"{% endif %}>{{ "library.src.lv" | t(lang) }}</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-line">
+              {% for d in qm.days %}
+              <tr>
+                <th scope="row" class="whitespace-nowrap px-4 py-3 font-semibold text-ink"><time datetime="{{ d.day }}">{{ d.day | fsShortDay(lang) }}</time></th>
+                {% for pub in ["gv", "lv"] %}
+                <td class="px-4 py-3">
+                  <span class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    {%- if d[pub] %}<time class="whitespace-nowrap tabular-nums text-ink" datetime="{{ d[pub] | isoDate }}">{{ d[pub] | fsClock(lang) }}</time>{% endif %}
+                    {{ quoteBadge(d[pub + "State"]) }}
+                  </span>
+                </td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {#- On a phone: one short block per day — the day, then each magazine's time and badge -#}
+        <ul class="card mt-3 divide-y divide-line sm:hidden" role="list">
+          {% for d in qm.days %}
+          <li class="px-4 py-3">
+            <p class="font-semibold text-ink"><time datetime="{{ d.day }}">{{ d.day | fsShortDay(lang) }}</time></p>
+            <dl class="mt-1.5 grid gap-1.5 text-sm">
+              {% for pub in ["gv", "lv"] %}
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <dt class="text-muted"{% if pub == "lv" and lang != "es" %} lang="es"{% endif %}>{{ ("library.src." + pub) | t(lang) }}</dt>
+                <dd class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  {%- if d[pub] %}<time class="whitespace-nowrap tabular-nums text-ink" datetime="{{ d[pub] | isoDate }}">{{ d[pub] | fsClock(lang) }}</time>{% endif %}
+                  {{ quoteBadge(d[pub + "State"]) }}
+                </dd>
+              </div>
+              {% endfor %}
+            </dl>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </details>
+</section>
+
+{#- ============ Built with open-source software (moved here from /about/) ============ -#}
+<section id="credits" class="section section-band" aria-labelledby="credits-title">
+  <div class="container-page">
+    {{ ui.sectionHead("community.status.credits_title" | t(lang), "community.status.credits_sub" | t(lang), "", "", "heart", { eyebrow: "community.status.credits_eyebrow" | t(lang), tone: "text-grape", id: "credits-title", lang: lang }) }}
+    {#- one list, split into two columns when it is wide (community.css .cm-st-credits) -#}
+    {%- set half = ((credits.length + 1) / 2) | round(0, "floor") %}
+    <div class="@container">
+      <ul class="cm-st-credits card overflow-hidden" style="--rows: {{ half }}">
+        {% for c in credits %}
+        <li class="{{ 'cm-st-credit-c1' if loop.index <= half }}{{ ' cm-st-credit-c2top' if loop.index == half + 1 }}">
+          <a class="group flex min-h-14 items-center gap-3 px-4 py-2.5 no-underline transition hover:bg-surface-2" href="{{ c[1] }}" target="_blank" rel="noopener">
+            <span class="min-w-0 flex-1">
+              <span class="block font-semibold text-ink group-hover:text-gv">{{ c[0] }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></span>
+              <span class="block text-xs text-muted">{{ ("community.status.cr_" + c[3]) | t(lang) }}</span>
+            </span>
+            <span class="badge-muted shrink-0 font-mono">{{ c[2] }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>

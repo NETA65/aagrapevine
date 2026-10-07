@@ -1,0 +1,5 @@
+/* /assets/css/booth.css — the booth display (areas/booth.css), only on the page that shows it: About
+   (pageStyles in src/pages/about.njk). One of the page-area stylesheets: see "Page-area styles" at the end of
+   main.css. @reference reads main.css (theme, variants, utilities for @apply) without writing any of it here. */
+@reference "./main.css";
+@import "./areas/booth.css";

@@ -1,0 +1,272 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}share/index.html"
+layout: layouts/base.njk
+pageKey: share
+titleKey: nav.share
+descKey: community.share.meta_desc
+bodyClass: "cm-page-share cm-print-light"
+pageScripts: ["/assets/js/community.js"]
+---
+{% import "macros/ui.njk" as ui with context %}
+{#- QR Post (the "Share the site" page, /share/): QR codes (generated at build from site.url — they update
+    themselves if the site ever moves), a letter-size poster and a table tent
+    (screen previews double as the print layout), and ready-made messages. The app icon sits above
+    every QR code (the site installs as an app) and the posters carry the committee's e-mail; the
+    poster also has the committee meeting, to the left of its code. -#}
+{%- set other = lang | otherLang -%}
+{%- set urls = { en: '/' | siteUrl(site), es: '/es/' | siteUrl(site), bi: '/' | siteUrl(site) } -%}
+{%- set pageUrl = '/' | lurl(lang) | siteUrl(site) -%}
+
+{#- Poster / tent copy for one variant: "en", "es" or "bi" (both). -#}
+{% macro pv(key, v) -%}
+{%- if v == "bi" -%}{{ key | t("en") }}{%- else -%}{{ key | t(v) }}{%- endif -%}
+{%- endmacro %}
+{#- One line of the poster's meeting block: the variant's language, or for "bi" the English with the
+    Spanish right under it -#}
+{% macro meetLine(v, en, es) -%}
+{%- if v == "bi" %}<span>{{ en }}</span><span class="cm-p-es" lang="es">{{ es }}</span>{% else %}<span>{{ es if v == "es" else en }}</span>{% endif -%}
+{%- endmacro %}
+{#- The committee meeting, to the LEFT of the poster's code: config/site.yml `meeting:` in the words of
+    /meetings/ — the monthly rule and the time (never a date: the poster stays on a wall for months),
+    the platform with the meeting ID and passcode, and who is welcome. -#}
+{% macro meetBlock(v) %}
+{%- set m = site.meeting -%}
+{%- set tKey = "community.share.p_meet_time" -%}
+<div class="cm-p-meet">
+  <p class="cm-p-meet-h">{{ meetLine(v, "committee.meetings.committee_title" | t("en"), "committee.meetings.committee_title" | t("es")) }}</p>
+  <ul class="cm-p-meet-list">
+    <li class="cm-p-meet-when">{% icon "calendar-days", "cm-p-ico" %}<span>{{ meetLine(v, m | cmRule("en"), m | cmRule("es")) }}</span></li>
+    <li>{% icon "clock-3", "cm-p-ico" %}<span>{{ meetLine(v, tKey | t("en", { time: m | cmTimeRange("en") }), tKey | t("es", { time: m | cmTimeRange("es") })) }}</span></li>
+    {% if m.platform %}<li>{% icon "video", "cm-p-ico" %}<span>{{ meetLine(v, "committee.events.online_on" | t("en", { platform: m.platform }), "committee.events.online_on" | t("es", { platform: m.platform })) }}</span></li>{% endif %}
+  </ul>
+  {% if m.meeting_id or m.passcode %}
+  <dl class="cm-p-meet-ids">
+    {% if m.meeting_id %}<div><dt>{{ meetLine(v, "committee.meeting.id" | t("en"), "committee.meeting.id" | t("es")) }}</dt><dd>{{ m.meeting_id }}</dd></div>{% endif %}
+    {% if m.passcode %}<div><dt>{{ meetLine(v, "committee.meeting.passcode" | t("en"), "committee.meeting.passcode" | t("es")) }}</dt><dd>{{ m.passcode }}</dd></div>{% endif %}
+  </dl>
+  {% endif %}
+  <p class="cm-p-meet-all">{% icon "heart-handshake", "cm-p-ico" %}<span>{{ meetLine(v, "committee.meeting.who_title" | t("en"), "committee.meeting.who_title" | t("es")) }}</span></p>
+</div>
+{% endmacro %}
+{% macro posterBody(v, urls) %}
+{%- set u = urls[v] -%}
+<div class="cm-p-band">
+  <span class="cm-p-logo"><img src="/assets/img/logo-wide.png" alt="NETA 65" width="128" height="63"></span>
+  <span class="cm-p-kicker">{{ pv("community.share.p_kicker", v) }}{% if v == "bi" %}<br><span lang="es">{{ "community.share.p_kicker" | t("es") }}</span>{% endif %}</span>
+  <span class="cm-p-title">Grapevine <em>&amp;</em> La Viña</span>
+</div>
+<div class="cm-p-main{{ ' is-bi' if v == 'bi' }}">
+  <p class="cm-p-head"{% if v != "bi" %} lang="{{ v }}"{% endif %}>{{ pv("community.share.p_head", v) }}</p>
+  {% if v == "bi" %}<p class="cm-p-head cm-p-alt" lang="es">{{ "community.share.p_head" | t("es") }}</p>
+  {% else %}<p class="cm-p-sub" lang="{{ v }}">{{ "community.share.p_sub" | t(v) }}</p>{% endif %}
+  {#- the committee meeting on the left, the code on the right -#}
+  <div class="cm-p-row">
+  {{ meetBlock(v) }}
+  <div class="cm-p-qrwrap">
+    {#- The app icon above the code says "this opens our site — which also installs as an app"; it is an
+        <img> (printed; a CSS background may be dropped by the print dialog). "bi": the Spanish under
+        the English. -#}
+    <p class="cm-p-app"><img src="/assets/img/app-icon-192.png" alt="" width="192" height="192"><span>
+      <span class="cm-p-scan">{{ pv("community.share.p_scan", v) }}{% if v == "bi" %}<span class="block" lang="es">{{ "community.share.p_scan" | t("es") }}</span>{% endif %}</span>
+      <span class="cm-p-appnote">{{ pv("community.share.p_app", v) }}{% if v == "bi" %}<span class="block" lang="es">{{ "community.share.p_app" | t("es") }}</span>{% endif %}</span>
+    </span></p>
+    <svg class="cm-p-qr" role="img" lang="{{ lang }}" aria-label="{{ 'community.share.qr_alt' | t(lang, { url: u }) }}"><use href="#qr-sym-{{ 'es' if v == 'es' else 'en' }}"></use></svg>
+    {#- a long address may break after a "/" (the column is as wide as the code) -#}
+    <p class="cm-p-url">{{ u | cmShortUrl | replace("/", "/<wbr>") | safe }}</p>
+  </div>
+  </div>
+</div>
+{#- Foot: what the site is and who runs it on the left, the committee's e-mail on the right -#}
+<div class="cm-p-foot">
+  <span class="cm-p-who">
+    <span class="cm-p-daily">{% icon "grapes", "cm-p-ico" %} {{ pv("community.share.p_daily", v) }}{% if v == "bi" %}<br><span lang="es">{{ "community.share.p_daily" | t("es") }}</span>{% endif %}</span>
+    <span>{{ pv("community.share.p_footer", v) }}</span>
+  </span>
+  <span class="cm-p-ask">
+    <span>{{ pv("community.share.p_questions", v) }}{% if v == "bi" %} · <span lang="es">{{ "community.share.p_questions" | t("es") }}</span>{% endif %}</span>
+    <strong>{% icon "mail", "cm-p-ico" %} {{ site.contact_email }}</strong>
+  </span>
+</div>
+{% endmacro %}
+{% macro tentHalf(v, urls) %}
+{%- set u = urls[v] -%}
+<div class="cm-t-code">
+  <span class="cm-t-app"><img src="/assets/img/app-icon-192.png" alt="" width="192" height="192"><span>{{ pv("community.share.p_app", v) }}{% if v == "bi" %}<br><span lang="es">{{ "community.share.p_app" | t("es") }}</span>{% endif %}</span></span>
+  <div class="cm-t-qr"><svg role="img" lang="{{ lang }}" aria-label="{{ 'community.share.qr_alt' | t(lang, { url: u }) }}"><use href="#qr-sym-{{ 'es' if v == 'es' else 'en' }}"></use></svg></div>
+</div>
+<div class="cm-t-text">
+  <span class="cm-t-top"><img src="/assets/img/logo-wide.png" alt="" width="128" height="63"> {{ pv("community.share.p_kicker", v) }}</span>
+  <span class="cm-t-title">Grapevine <em>&amp;</em> <span class="whitespace-nowrap">La Viña</span></span>
+  <span class="cm-t-head">{{ pv("community.share.p_head", v) }}</span>
+  {% if v == "bi" %}<span class="cm-t-head cm-p-alt" lang="es">{{ "community.share.p_head" | t("es") }}</span>{% endif %}
+  <span class="cm-t-scan">{{ pv("community.share.p_scan", v) }}{% if v == "bi" %} · <span lang="es">{{ "community.share.p_scan" | t("es") }}</span>{% endif %} → <strong>{{ u | cmShortUrl }}</strong></span>
+  <span class="cm-t-daily">{{ pv("community.share.p_daily", v) }}</span>
+  <span class="cm-t-ask">{{ pv("community.share.p_questions", v) }}{% if v == "bi" %} · <span lang="es">{{ "community.share.p_questions" | t("es") }}</span>{% endif %} <strong>{{ site.contact_email }}</strong></span>
+</div>
+{% endmacro %}
+
+{#- Hero: print a poster (the page's main task) + copy the site's address.
+    Its right-hand card (the shared hero aside, from 1024px): a miniature of the printable poster in the
+    page's language (the same markup the print uses, scaled — decorative) with "All versions" → #posters,
+    where the language switch, the table tent and the print buttons are. The site's QR code card right
+    below is not repeated as a card of its own. "hide": the hero button leads there on smaller screens. -#}
+{% call(slot) ui.pageHero(lang, "nav.share" | t(lang), "community.share.hero_sub" | t(lang), "qr-code", "community.share.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("community.share.aside_title" | t(lang), lang, { id: "share-aside-title", icon: "printer", href: "#posters", linkLabel: "community.share.aside_link" | t(lang), class: "cm-share-aside" }) %}
+    <a class="cm-share-mini" href="#posters" tabindex="-1" aria-hidden="true"><div class="cm-frame cm-frame-poster" inert><div class="cm-sheet cm-poster" lang="{{ lang }}">{{ posterBody(lang, urls) }}</div></div></a>
+    <p class="hero-aside-note">{{ "community.share.aside_caption" | t(lang) }}</p>
+  {% endcall %}
+{%- else %}
+<div class="hero-actions cm-hero-tight">
+  <a class="btn-light" href="#posters">{% icon "printer", "size-4" %} {{ "community.share.btn_poster" | t(lang) }}</a>
+  <button type="button" class="btn-on-dark" data-js-only data-copy="{{ pageUrl }}">{% icon "link", "size-4" %} {{ "community.share.copy_site" | t(lang) }}</button>
+</div>
+{%- endif %}
+{% endcall %}
+
+{#- Reusable QR symbols for the poster / tent previews -#}
+<svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false"><defs>{{ urls.en | cmQrSymbol("qr-sym-en") | safe }}{{ urls.es | cmQrSymbol("qr-sym-es") | safe }}</defs></svg>
+
+<div x-data="sharePage('{{ lang }}')">
+{#- ============ QR code + direct links ============
+    ≥1280px the direct links sit in a column next to the QR card. -#}
+<section class="container-page page-start cm-no-print" aria-labelledby="qr-title">
+  {{ ui.sectionHead("community.share.qr_title" | t(lang), "community.share.qr_sub" | t(lang), "", "", "qr-code", { eyebrow: "community.share.qr_eyebrow" | t(lang), id: "qr-title", lang: lang }) }}
+  <div class="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_24rem] xl:items-start 2xl:grid-cols-[minmax(0,1fr)_28rem]">
+    <div class="card overflow-hidden">
+      <div class="grid h-full grid-cols-1 md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
+        <div class="flex flex-col items-center justify-center gap-4 bg-surface-2 p-6 sm:p-8">
+          <div class="grid grid-cols-2 gap-1 rounded-full border border-line bg-surface p-1" role="radiogroup" aria-label="{{ 'community.share.qr_for' | t(lang) }}">
+            {% for l in ["en", "es"] %}
+            <label class="cm-seg"><input type="radio" name="qr-lang" class="sr-only" :checked="qrLang === '{{ l }}'" @change="qrLang = '{{ l }}'" {% if l == lang %}checked{% endif %}><span>{{ ("community.share.qr_" + l) | t(lang) }}</span></label>
+            {% endfor %}
+          </div>
+          <p class="-mb-1.5 flex items-center gap-2.5 text-sm font-semibold text-ink"><img src="/assets/img/app-icon-192.png" alt="" width="192" height="192" class="size-9 shrink-0 rounded-[0.6rem]" loading="lazy">{{ "community.share.p_app" | t(lang) }}</p>
+          {% for l in ["en", "es"] %}
+          <div id="qr-{{ l }}" class="w-full max-w-[15rem] rounded-2xl bg-white p-3 shadow-[var(--shadow-lift)] ring-1 ring-line" x-show="qrLang === '{{ l }}'"{% if l != lang %} x-cloak{% endif %}>
+            {{ urls[l] | qrSvg("community.share.qr_alt" | t(lang, { url: urls[l] }), "block h-auto w-full") | safe }}
+          </div>
+          {% endfor %}
+        </div>
+        <div class="flex flex-col p-6 sm:p-8">
+          {% for l in ["en", "es"] %}
+          {%- set svg = urls[l] | qrSvg("", "") -%}
+          <div x-show="qrLang === '{{ l }}'"{% if l != lang %} x-cloak{% endif %}>
+            <p class="eyebrow">{{ ("community.share.qr_" + l) | t(lang) }}</p>
+            <div class="mt-2 flex items-center gap-2 rounded-xl bg-surface-2 p-1.5 pl-4">
+              {% icon "link", "size-4 shrink-0 text-faint" %}
+              <a href="{{ urls[l] }}" class="tap-link min-w-0 flex-1 font-semibold text-gv no-underline [--text-col-min:12em] [overflow-wrap:anywhere] hover:underline" hreflang="{{ l }}">{%- set su = urls[l] | cmShortUrl -%}{%- set cut = su.indexOf("/") -%}{% if cut > 0 %}<span class="min-w-0 [overflow-wrap:anywhere]">{{ su.slice(0, cut + 1) }}<wbr><span class="whitespace-nowrap">{{ su.slice(cut + 1) }}</span></span>{% else %}{{ su }}{% endif %}</a>
+              <button type="button" class="btn-secondary btn-sm shrink-0" data-js-only data-copy="{{ urls[l] }}" aria-label="{{ 'community.copy_link' | t(lang) }}">{% icon "copy", "size-4" %}<span class="hidden sm:inline">{{ "community.copy_link" | t(lang) }}</span></button>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <a class="btn-primary btn-sm" href="{{ svg | cmSvgDataUri }}" download="neta65-grapevine-lavina-qr-{{ l }}.svg">{% icon "download", "size-4" %} {{ "community.share.dl_svg" | t(lang) }}</a>
+              <button type="button" class="btn-secondary btn-sm" data-js-only data-qr-png="#qr-{{ l }}" data-filename="neta65-grapevine-lavina-qr-{{ l }}.png">{% icon "image-down", "size-4" %} {{ "community.share.dl_png" | t(lang) }}</button>
+            </div>
+          </div>
+          {% endfor %}
+          <p class="mt-3 flex gap-2 text-xs leading-relaxed text-muted">{% icon "info", "size-4 shrink-0" %} {{ "community.share.dl_hint" | t(lang) }}</p>
+          {%- set shareText = "community.share.msg_short_text" | t(lang, { url: pageUrl }) -%}
+          <div class="mt-6 border-t border-line pt-5">
+            <p class="text-sm font-semibold text-ink">{{ "community.share.share_on" | t(lang) }}</p>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <a class="btn-secondary btn-sm" href="https://wa.me/?text={{ shareText | urlencode }}" target="_blank" rel="noopener">{% icon "message-circle", "size-4" %} WhatsApp<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+              <a class="btn-secondary btn-sm" href="https://www.facebook.com/sharer/sharer.php?u={{ pageUrl | urlencode }}" target="_blank" rel="noopener">{% icon "thumbs-up", "size-4" %} Facebook<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+              <a class="btn-secondary btn-sm" href="{{ '' | cmMailto('community.share.email_subject' | t(lang), shareText) }}">{% icon "mail", "size-4" %} {{ "community.share.email" | t(lang) }}</a>
+              <button type="button" class="btn-secondary btn-sm" data-js-only data-share="{{ pageUrl }}" data-share-title="{{ site | pick(lang, 'title') }} — NETA 65" data-share-text="{{ 'community.share.msg_short_text' | t(lang, { url: '' }) | trim }}">{% icon "share-2", "size-4" %} {{ "community.share.more" | t(lang) }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {#- Direct links: the page's path is shown; the full address is what gets copied -#}
+    <div class="card card-pad">
+      <h3 class="card-h"><span>{% icon "link", "size-5" %}</span>{{ "community.share.links_title" | t(lang) }}</h3>
+      <ul class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-1" role="list">
+      {% for k in [{ label: "community.share.link_home", path: "/" }, { label: "nav.whats_new", path: "/whats-new/" }, { label: "nav.meetings", path: "/meetings/" }, { label: "nav.gvr", path: "/gvr/" }, { label: "nav.published", path: "/published/" }, { label: "nav.digest", path: "/digest/" }, { label: "nav.monthly", path: "/monthly/" }] %}
+      {%- set rel = k.path | lurl(lang) -%}
+      {%- set abs = rel | siteUrl(site) -%}
+      <li class="flex items-center gap-2 rounded-xl bg-surface-2 p-1 pl-4">
+        <a class="flex min-h-11 min-w-0 flex-1 flex-col justify-center no-underline hover:text-gv" href="{{ rel }}">
+          <span class="block truncate text-sm font-semibold text-ink">{{ k.label | t(lang) }}</span>
+          <span class="block truncate text-xs text-muted">{{ ("/es" if lang == "es" else "") ~ k.path }}</span>
+        </a>
+        <button type="button" class="grid size-11 shrink-0 place-items-center rounded-full text-muted hover:bg-surface hover:text-gv" data-js-only data-copy="{{ abs }}" aria-label="{{ 'community.copy_link' | t(lang) }} — {{ k.label | t(lang) }}">{% icon "copy", "size-4" %}</button>
+      </li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+{#- ============ Poster + table tent (the previews ARE the print layout) ============ -#}
+<section id="posters" class="cm-print-root section section-band" aria-labelledby="posters-title">
+  <div class="container-page cm-print-flat">
+    {% call ui.sectionHead("community.share.print_title" | t(lang), "community.share.print_sub" | t(lang), "", "", "printer", { eyebrow: "community.share.print_eyebrow" | t(lang), id: "posters-title", class: "cm-no-print", lang: lang }) %}
+      <fieldset>
+        <legend class="mb-1.5 text-sm font-semibold text-ink">{{ "community.share.variant_label" | t(lang) }}</legend>
+        <div class="grid grid-cols-3 gap-1 rounded-full border border-line bg-surface p-1">
+          {% for v in ["en", "es", "bi"] %}
+          <label class="cm-seg"><input type="radio" name="poster-lang" class="sr-only" :checked="posterLang === '{{ v }}'" @change="posterLang = '{{ v }}'" {% if v == lang %}checked{% endif %}><span>{{ ("community.lang_name_" + v) | t(lang) if v != "bi" else "community.share.v_bi" | t(lang) }}</span></label>
+          {% endfor %}
+        </div>
+      </fieldset>
+    {% endcall %}
+    <p class="cm-no-print -mt-2 mb-8 flex max-w-2xl items-start gap-2 text-sm text-muted sm:-mt-4">{% icon "calendar-heart", "mt-0.5 size-4 shrink-0 text-grape" %}<span>{{ "community.share.monthly_hint" | t(lang) }} <a class="link font-semibold" href="{{ '/monthly/' | lurl(lang) }}">{{ "nav.monthly" | t(lang) }}</a></span></p>
+
+    <div class="cm-print-flat grid gap-8 lg:grid-cols-2 lg:gap-10">
+      <figure class="cm-print-flat m-0">
+        <div class="cm-frame cm-frame-poster" role="img" aria-label="{{ 'community.share.preview_aria' | t(lang) }} — {{ 'community.share.poster_title' | t(lang) }}">
+          {% for v in ["en", "es", "bi"] %}
+          <div class="cm-sheet cm-poster" lang="{{ 'es' if v == 'es' else 'en' }}" x-show="posterLang === '{{ v }}'"{% if v != lang %} x-cloak{% endif %}>{{ posterBody(v, urls) }}</div>
+          {% endfor %}
+        </div>
+        <figcaption class="cm-no-print mt-4 flex flex-wrap items-center justify-between gap-3">
+          <span class="max-w-sm text-sm text-muted"><strong class="text-ink">{{ "community.share.poster_title" | t(lang) }}.</strong> {{ "community.share.poster_sub" | t(lang) }}</span>
+          <button type="button" class="btn-primary" data-js-only @click="printVariant('poster')" onclick="if(!window.Alpine)window.print()">{% icon "printer", "size-4" %} {{ "community.share.print_poster" | t(lang) }}</button>
+        </figcaption>
+      </figure>
+      <figure class="cm-print-flat m-0">
+        <div class="cm-frame cm-frame-tent" role="img" aria-label="{{ 'community.share.preview_aria' | t(lang) }} — {{ 'community.share.tent_title' | t(lang) }}">
+          {% for v in ["en", "es", "bi"] %}
+          <div class="cm-sheet cm-tent" lang="{{ 'es' if v == 'es' else 'en' }}" x-show="posterLang === '{{ v }}'"{% if v != lang %} x-cloak{% endif %}>
+            <div class="cm-t-half cm-t-flip{{ ' cm-t-bi' if v == 'bi' }}">{{ tentHalf(v, urls) }}</div>
+            <div class="cm-t-fold"><span>✂ · {{ pv("community.share.fold", v) }}{% if v == "bi" %} · <span lang="es">{{ "community.share.fold" | t("es") }}</span>{% endif %}</span></div>
+            <div class="cm-t-half{{ ' cm-t-bi' if v == 'bi' }}">{{ tentHalf(v, urls) }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        <figcaption class="cm-no-print mt-4 flex flex-wrap items-center justify-between gap-3">
+          <span class="max-w-sm text-sm text-muted"><strong class="text-ink">{{ "community.share.tent_title" | t(lang) }}.</strong> {{ "community.share.tent_sub" | t(lang) }}</span>
+          <button type="button" class="btn-secondary" data-js-only @click="printVariant('tent')">{% icon "printer", "size-4" %} {{ "community.share.print_tent" | t(lang) }}</button>
+        </figcaption>
+      </figure>
+    </div>
+    <p class="cm-no-print mt-6 flex gap-2 text-xs text-muted">{% icon "info", "size-4 shrink-0" %} {{ "community.share.print_tip" | t(lang) }}</p>
+  </div>
+</section>
+
+{#- ============ Ready-made messages ============ -#}
+<section class="section container-page cm-no-print" aria-labelledby="msg-title">
+  {{ ui.sectionHead("community.share.messages_title" | t(lang), "community.share.messages_sub" | t(lang), "", "", "message-square-text", { eyebrow: "community.share.msg_eyebrow" | t(lang), id: "msg-title", lang: lang }) }}
+  <div class="grid gap-5 md:grid-cols-2">
+    {% for l in [lang, other] %}
+    {%- set u = urls[l] -%}
+    {#- one column per language; from 1536px each language's two messages side by side -#}
+    <div class="min-w-0 space-y-4 2xl:grid 2xl:grid-cols-2 2xl:items-start 2xl:gap-4 2xl:space-y-0" lang="{{ l }}">
+      <p class="eyebrow 2xl:col-span-2">{{ ("community.lang_name_" + l) | t(lang) }}</p>
+      {% for m in ["short", "long"] %}
+      <article class="card card-pad">
+        <div class="flex items-center justify-between gap-3">
+          <h3 class="text-sm font-semibold text-ink">{{ ("community.share.msg_" + m) | t(l) }}</h3>
+          <button type="button" class="btn-secondary btn-sm" data-js-only data-copy-from="#msg-{{ m }}-{{ l }}"{% if l != lang %} lang="{{ lang }}"{% endif %}>{% icon "copy", "size-4" %} {{ "common.copy" | t(lang) }}</button>
+        </div>
+        <p id="msg-{{ m }}-{{ l }}" class="mt-3 rounded-xl bg-surface-2 p-4 text-sm leading-relaxed text-ink">{{ ("community.share.msg_" + m + "_text") | t(l, { url: u, platform: site.meeting.platform or "Zoom" }) }}</p>
+      </article>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+
+</section>
+</div>

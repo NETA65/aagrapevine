@@ -1,0 +1,574 @@
+/* =====================================================================
+   "GVR / RLV 101" — /orientation/ (src/pages/orientation.njk) and the lesson pages
+   (orientation-lesson.njk), with src/_includes/macros/orientation.njk and assets/js/orientation.js.
+   Owner: the orientation area. Class prefix: o101- (the presentations' parts of the page: o101-pres-,
+   o101-pp-, o101-how-; the player itself — its pop-up and its printing — is areas/presentations.css).
+   1. Hub: welcome + progress + "On this page", keys, the miniatures, the facilitators' plan
+   1b. Presentations: the cards, "Print or save a copy", and "How presenting works" (a closed <details>)
+   2. Lesson: goal, key points, the live example (.o101-live--page), links, lesson list, self-check
+   3. The slide show (.o101-deck): a full-screen dialog with ONE fixed high-contrast palette (navy,
+      white, gold) in both site themes; a 16:9 stage whose type is sized in container units (--u = 1cqh),
+      so it reads the same at 1280 × 720 and on a 1920 × 1080 projector
+   4. Print: the hub prints the handout (one Letter sheet per lesson, named page "o101") — except while a
+      workshop presentation prints (html.gvp-printing: the player's own container, areas/presentations.css);
+      a lesson page prints without its lesson list and navigation
+   ===================================================================== */
+
+/* ---------- 1. Hub ---------- */
+.o101-welcome { display: grid; gap: 1.5rem; }
+@media (width >= 48rem) { .o101-welcome { grid-template-columns: minmax(0, 1fr) minmax(16rem, 20rem); align-items: center; gap: 2rem; } }
+@media (width >= 96rem) { .o101-welcome { grid-template-columns: minmax(0, 1fr) 24rem; } }
+.o101-progress { border-radius: 0.75rem; background: var(--c-surface-2); padding: 1rem 1.25rem; }
+.o101-bar { height: 0.5rem; border-radius: 999px; background: color-mix(in srgb, var(--c-line) 80%, var(--c-surface)); overflow: hidden; }
+.o101-bar > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--c-vine), var(--c-gv)); transition: width 0.35s ease; }
+
+/* The hero's right-hand card (orientation.njk, the shared hero aside): the progress box MOVES there from
+   the welcome card while the card is in the hero — the same condition as main.css "HERO ASIDE" (≥1024px,
+   100 % text, normal spacing); the welcome card then runs in one column. Elsewhere the aside is hidden. */
+@media (width >= 64rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-welcome { grid-template-columns: minmax(0, 1fr); }
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-welcome > .o101-progress { display: none; }
+}
+/* A session page (orientation-lesson.njk): its hero card (the quick review) carries the "n of 6 sessions
+   done on this device" line while it is in the hero — the same condition — so the session list beside
+   the session drops its own copy of that line there (it keeps its check marks). */
+@media (width >= 64rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-toc-progress { display: none; }
+}
+/* 1024–1279px: the hero's text column is ≈ 600px beside that card — two buttons only (the third — the
+   sessions' slide show, or without presentations the handout — is also in the "Present" band below) */
+@media (width >= 64rem) and (width < 80rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell .o101-hero-third { display: none; }
+}
+/* "On this page" (the page's parts as chips): the welcome card's last row, across both its columns */
+.o101-onpage { grid-column: 1 / -1; min-width: 0; padding-top: 1.25rem; border-top: 1px solid var(--c-line); }
+/* …one row that scrolls sideways below 1024px: a chip reached with Tab is scrolled wholly into view
+   (orientation.njk), and stops 2rem from either edge — clear of the row's fades (main.css chip-row) — with no
+   snapping, which pulled the fourth chip back under the right fade */
+@media (width < 64rem) { .o101-onpage .chip-row { scroll-padding-inline: 2rem; scroll-snap-type: none; } }
+/* six numbered dots, one per session (a check mark once done — orientation.js); each links to its session */
+.o101-dots { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-block: 0.75rem 0.625rem; }
+.o101-dot { position: relative; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 9999px;
+  border: 1.5px solid var(--ha-cta-line); background: var(--ha-cta-bg); color: var(--ha-ink);
+  font-weight: 600; font-variant-numeric: tabular-nums; text-decoration: none; transition: background-color 0.15s, border-color 0.15s; }
+.o101-dot:hover { border-color: var(--ha-cta-hover-line); background: var(--ha-cta-hover-bg); }
+.o101-dot.is-done { border-color: var(--ha-ok); background: var(--ha-ok); color: var(--ha-on-state); }
+.o101-dot-check { position: absolute; right: -0.2rem; bottom: -0.2rem; display: grid; place-items: center; width: 1.1rem; height: 1.1rem;
+  border-radius: 9999px; background: var(--ha-on-state); color: var(--ha-ok); box-shadow: 0 0 0 1.5px var(--ha-ok); }
+.o101-dot-check[hidden] { display: none; }
+
+/* Keyboard legend ("How presenting works": both slide shows' keys) */
+.o101-keys { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr)); gap: 0.625rem 1.25rem; }
+.o101-keys > div { display: flex; align-items: center; gap: 0.5rem; min-width: 0; }
+.o101-keys dt { display: flex; gap: 0.25rem; flex-shrink: 0; }
+.o101-keys dd { min-width: 0; font-size: 0.875rem; color: var(--c-muted); overflow-wrap: anywhere; }
+.o101-keys kbd { display: inline-grid; place-items: center; min-width: 1.75rem; height: 1.75rem; padding: 0 0.4rem; border: 1px solid var(--c-line); border-bottom-width: 2px;
+  border-radius: 0.4rem; background: var(--c-surface); color: var(--c-ink); font: 600 0.75rem/1 var(--font-sans); }
+/* Shown only when JavaScript is off (the slide show needs it) */
+.o101-nojs-only { display: none; }
+:root:not(.js) .o101-nojs-only { display: block; }
+
+/* The handout miniature: a tiny Letter page (decorative) */
+.o101-sheet-mini { display: grid; align-content: start; gap: 0.4rem; width: 8.5rem; aspect-ratio: 8.5 / 11; padding: 0.8rem 0.75rem;
+  border: 1px solid var(--c-line); border-radius: 0.5rem; background: var(--c-surface); box-shadow: var(--shadow-card); }
+.o101-sheet-mini > span { display: block; height: 0.3rem; border-radius: 99px; background: var(--c-line); }
+.o101-sheet-mini > .o101-sheet-mini-head { height: 0.2rem; background: var(--c-grape); opacity: 0.7; }
+.o101-sheet-mini > .o101-sheet-mini-title { height: 0.6rem; width: 70%; background: var(--c-ink); opacity: 0.75; margin-block: 0.15rem 0.2rem; }
+.o101-sheet-mini > .o101-sheet-mini-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem; height: 2.4rem; background: none; }
+.o101-sheet-mini-cols > span { border-radius: 0.2rem; background: var(--c-surface-2); }
+.o101-sheet-mini > .o101-sheet-mini-qr { width: 1.2rem; height: 1.2rem; justify-self: end; border-radius: 0.15rem; background:
+  repeating-conic-gradient(var(--c-ink) 0 25%, transparent 0 50%) 0 0 / 0.3rem 0.3rem; opacity: 0.6; }
+/* …and the slide show's: a tiny 16:9 slide in its own navy, gold and white (the same in both site themes) */
+.o101-slide-mini { display: grid; align-content: center; gap: 0.45rem; width: 12rem; max-width: 100%; aspect-ratio: 16 / 9; padding: 0.9rem 1rem;
+  border-radius: 0.5rem; background: radial-gradient(120% 120% at 100% 0%, #10305a 0%, #0a1a33 55%); box-shadow: var(--shadow-card); }
+.o101-slide-mini > span { display: block; height: 0.3rem; border-radius: 99px; }
+.o101-slide-mini > .o101-slide-mini-eyebrow { width: 35%; height: 0.2rem; background: #ffd79a; }
+.o101-slide-mini > .o101-slide-mini-title { width: 72%; height: 0.55rem; background: #fff; margin-bottom: 0.15rem; }
+.o101-slide-mini > .o101-slide-mini-point { display: grid; grid-template-columns: 0.45rem minmax(0, 1fr); align-items: center; gap: 0.35rem; height: auto; }
+.o101-slide-mini-point > span { display: block; height: 0.22rem; border-radius: 99px; background: rgb(255 255 255 / 0.45); }
+.o101-slide-mini-point > span:first-child { height: 0.45rem; border-radius: 99px; background: #ffd79a; }
+
+/* "Before you start" (the facilitators' checklist): two columns when each gets at least 14em of its text
+   (≈ 200px; at 150% text ≈ 300px) — by the list's own width, which beside the anonymity note from
+   1024px is narrow at larger text. Beside the note, at 130%+ the note is at most 45% of the row. */
+@media (width >= 40rem) { .o101-before-list { grid-template-columns: repeat(auto-fit, minmax(min(100%, max(14em, 45%)), 1fr)); } }
+@media (width >= 64rem) { :root:is([data-text="130"], [data-text="150"]) .o101-before { grid-template-columns: minmax(0, 1fr) minmax(0, min(24rem, 45%)); } }
+@media (width >= 96rem) { :root:is([data-text="130"], [data-text="150"]) .o101-before { grid-template-columns: minmax(0, 1fr) minmax(0, min(28rem, 45%)); } }
+
+/* The facilitators' plan: numbered steps */
+.o101-plan { display: grid; gap: 1.25rem 2rem; }
+@media (width >= 40rem) { .o101-plan { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (width >= 80rem) { .o101-plan { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.o101-plan > li { display: flex; gap: 0.875rem; }
+/* "A longer workshop?" (the Orientation Workshop presentation): icon tile · text · its button, which goes
+   under the text when the row has no room for it */
+.o101-fac-pres { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.25rem; }
+.o101-fac-pres > .min-w-0 { flex: 1 1 20rem; }
+
+/* ---------- 1b. Presentations (#presentations) and "How presenting works" (#presenting) ----------
+   One card per presentation (orientation.njk; the player's hooks are listed there): 1 column, 2 from 1024px,
+   4 from 1800px at 100 % text (a card is then ≈ 400px; at larger text never 4, and 1 on laptop screens at
+   130–150 %, below). Then "Reset all 4 to the original" (once there is something to reset), "Print or save a
+   copy", and at the end of the band "How presenting works", closed
+   (each box lays itself out by its OWN width — container queries in rem, so larger text gets the narrow
+   layout sooner). */
+/* without JavaScript: the one line under the section's head (the cards then show only their PowerPoint copy) */
+.o101-pres-nojs-line { display: flex; align-items: flex-start; gap: 0.5rem; margin: -0.25rem 0 1.25rem; max-width: 48rem;
+  font-size: 0.875rem; line-height: 1.5; color: var(--c-muted); }
+.o101-pres-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+@media (width >= 64rem) { .o101-pres-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* at 130 % text two columns from 1280px, at 150 % from 1440px (a card keeps ≈ 430px of 100 % text) */
+@media (64rem <= width < 80rem) { :root:is([data-text="130"], [data-text="150"]) .o101-pres-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (80rem <= width < 90rem) { :root[data-text="150"] .o101-pres-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (width >= 112.5rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-pres-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.o101-pres-card { display: flex; flex-direction: column; min-width: 0; padding: 1.25rem; }
+@media (width >= 40rem) { .o101-pres-card { padding: 1.5rem; } }
+/* icon tile · "About 60 minutes · 49 slides" (+ the other versions) · on /es/ "Presentación en inglés" */
+.o101-pres-head { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0.5rem 0.875rem; }
+.o101-pres-head > .min-w-0 { flex: 1 1 12rem; padding-top: 0.15rem; }
+/* Who it's for · Stays current (the live facts it keeps up to date) */
+.o101-pres-facts { display: grid; gap: 0.875rem; margin-top: 1rem; }
+.o101-pres-facts dt { display: flex; align-items: center; gap: 0.375rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--c-ink); }
+.o101-pres-facts dd { margin-top: 0.3rem; font-size: 0.875rem; line-height: 1.55; color: var(--c-muted); }
+.o101-pres-kinds { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+/* The card's foot, at the bottom of a row of cards: the status line the player fills, then the actions
+   (or, without JavaScript, the PowerPoint copy) under a hairline. The status line is ONE line of text: the
+   player writes its pieces side by side ("Changed on this device: …", " · ", "Last shown: slide 12 of 48",
+   " · ", "Resume"), and they wrap like a sentence — a flex row made each piece a squeezed column. */
+.o101-pres-foot { margin-top: auto; padding-top: 1.25rem; }
+.o101-pres-status { display: block; margin-bottom: 0.875rem; padding: 0.5rem 0.75rem; border-radius: 0.75rem;
+  background: var(--c-vine-soft); color: var(--c-ink); font-size: 0.8125rem; line-height: 1.45; }
+.o101-pres-status:empty { display: none; }
+.o101-pres-actions, .o101-pres-nojs { padding-top: 1rem; border-top: 1px solid var(--c-line); }
+.o101-pres-nojs { display: grid; justify-items: start; gap: 0.5rem; }
+/* Present · Customize · More (More at the end of its line, even when it wraps: its menu opens to the left,
+   inside the card) */
+.o101-pres-main { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.o101-pres-more { margin-left: auto; }
+.o101-pres-more > .cm-menu-panel { left: auto; right: 0; min-width: 15rem; max-width: min(20rem, calc(100vw - 2 * var(--gutter))); }
+.o101-pres-more > .cm-menu-panel > a > .icon:not(:first-child) { color: var(--c-muted); }
+/* …its PowerPoint copy: the name, and under it "Made in October 2026 · doesn't update" (a fixed copy) */
+.o101-pres-more > .cm-menu-panel > a.o101-pres-copy { padding-block: 0.45rem; line-height: 1.3; }
+.o101-pres-copy-note { display: block; margin-top: 0.1rem; font-size: 0.75rem; font-weight: 400; color: var(--c-muted); }
+/* phones: Present and Customize fill their line (the hero-actions rule) */
+@media (width < 40rem) { .o101-pres-main > a { flex: 1 1 auto; } }
+/* Print · Slides · With notes · Handout · Script — in plain sight, under the main buttons: the label on a line
+   of its own, the four buttons by the room the CARD gives them (a size container; rem, so larger text gets the
+   narrower layout sooner) — 4 in a row, 2 × 2 below 26rem, one under the other below 13.5rem (two "Diapositivas"
+   no longer fit side by side). Never 3 + 1: that left "Script" / "Guion" alone on a line, 1920px included. */
+.o101-pres-print { display: grid; gap: 0.5rem; margin-top: 0.75rem; container-type: inline-size; }
+.o101-pres-print-label { display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-muted); }
+.o101-pres-print-btns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; }
+.o101-pres-print-btns > .btn-sm { padding-inline: 0.5rem; }
+@container (width < 26rem) { .o101-pres-print-btns { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (width < 13.5rem) { .o101-pres-print-btns { grid-template-columns: minmax(0, 1fr); } }
+/* "Reset all 4 to the original", right under the cards: a block of its own (no line box around it), as wide as
+   its label. Hidden until this device has changed a presentation — the [hidden] rule is !important in the base
+   layer, so it wins over this display. */
+.o101-pres-resetall { display: flex; width: fit-content; max-width: 100%; margin-top: 1.25rem; }
+
+/* "Print or save a copy": a miniature of the printed page (it follows the chosen mode) beside the choices
+   (from 34rem of card), the choices' four modes in 1 / 2 / 4 columns by the room they have. A narrower card (a
+   phone) puts a smaller miniature beside the short text instead of over the choices (the card is a two-column
+   grid whose parts span both columns; there the body's two parts join the card's grid: display: contents). */
+.o101-pp { container-type: inline-size; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1rem; }
+.o101-pp > * { grid-column: 1 / -1; }
+.o101-pp-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin-top: 1.25rem; }
+@container (width >= 34rem) { .o101-pp-body { grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 1.75rem; } }
+@container (width < 34rem) {
+  .o101-pp > .o101-pp-intro { grid-column: 1; grid-row: 2; }
+  .o101-pp-body { display: contents; }
+  /* zoom, not a smaller --pp: the little page's lines and boxes are sized in rem, and only zoom shrinks them too */
+  .o101-pp-body > .o101-pp-mini { zoom: 0.55; grid-column: 2; grid-row: 2; align-self: start; margin-top: 0.9rem; }
+  .o101-pp-body > .o101-pp-form { grid-column: 1 / -1; margin-top: 1.25rem; }
+}
+/* the narrowest cards (a 320–360px phone, or larger text): the text gets the whole line, without the miniature */
+@container (width < 18rem) {
+  .o101-pp > .o101-pp-intro { grid-column: 1 / -1; }
+  .o101-pp-body > .o101-pp-mini { display: none; }
+}
+.o101-pp-form { min-width: 0; container-type: inline-size; }
+.o101-pp-label { display: block; margin-bottom: 0.4rem; font-size: 0.8rem; font-weight: 600; color: var(--c-ink); }
+.o101-pp-select { position: relative; max-width: 30rem; }
+.o101-pp-select select { appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 2.5rem; text-overflow: ellipsis; }
+.o101-pp-chev { position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--c-muted); }
+.o101-pp-modes { min-width: 0; margin: 1rem 0 0; padding: 0; border: 0; }
+.o101-pp-modes > legend { padding: 0; }
+.o101-pp-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+@container (width >= 24rem) { .o101-pp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (width >= 46rem) { .o101-pp-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.o101-pp-mode { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 0.15rem 0.6rem; min-height: 2.75rem;
+  padding: 0.6rem 0.75rem; border: 1px solid var(--c-line); border-radius: 0.75rem; background: var(--c-surface); cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s; }
+.o101-pp-mode:hover { border-color: var(--c-gv); }
+.o101-pp-mode > input { grid-row: span 2; width: 1.05rem; height: 1.05rem; margin: 0.12rem 0 0; accent-color: var(--c-gv); cursor: pointer; }
+.o101-pp-mode-t { font-size: 0.875rem; font-weight: 600; line-height: 1.3; color: var(--c-ink); }
+.o101-pp-mode-d { font-size: 0.75rem; line-height: 1.35; color: var(--c-muted); }
+.o101-pp-mode:has(input:checked) { border-color: var(--c-gv); background: var(--c-gv-soft); }
+@media (forced-colors: active) { .o101-pp-mode:has(input:checked) { outline: 3px solid Highlight; outline-offset: 1px; } }
+/* the miniature: a square stage with the page in it, upright or sideways (decorative; aria-hidden) — smaller
+   while the card is narrow (a phone), where it sits beside the short text (above) */
+.o101-pp-mini { --pp: 8.6rem; display: grid; place-items: center; width: calc(var(--pp) + 1.4rem); aspect-ratio: 1; border-radius: 0.875rem; background: var(--c-surface-2); }
+.o101-pp-page { display: none; gap: 0.3rem; align-content: start; padding: 0.5rem; border: 1px solid var(--c-line); border-radius: 0.3rem;
+  background: var(--c-surface); box-shadow: var(--shadow-card); }
+.o101-pp-page.is-slides { width: var(--pp); aspect-ratio: 11 / 8.5; align-content: center; }
+.o101-pp-page:not(.is-slides) { height: var(--pp); aspect-ratio: 8.5 / 11; }
+/* the page of the CHOSEN mode — CSS follows the checked radio, no script: Slides until another one is checked
+   (and where :has() is unknown) */
+.o101-pp-mini .is-slides { display: grid; }
+.o101-pp:has(.o101-pp-mode input:checked:not([value="slides"])) .o101-pp-mini .is-slides { display: none; }
+.o101-pp:has(.o101-pp-mode input[value="notes"]:checked) .o101-pp-mini .is-notes,
+.o101-pp:has(.o101-pp-mode input[value="handout"]:checked) .o101-pp-mini .is-handout,
+.o101-pp:has(.o101-pp-mode input[value="script"]:checked) .o101-pp-mini .is-script { display: grid; }
+.o101-pp-slide { display: grid; align-content: start; gap: 0.18rem; aspect-ratio: 16 / 9; padding: 0.3rem; border: 1px solid var(--c-line); border-radius: 0.15rem; }
+.o101-pp-slide > span { display: block; height: 0.14rem; border-radius: 99px; background: var(--c-line); }
+.o101-pp-slide > span:first-child { width: 55%; height: 0.24rem; margin-bottom: 0.1rem; background: var(--c-grape); opacity: 0.75; }
+/* the one big slide of "Slides": a little more of a slide in it (a tinted takeaway box at its foot) */
+.o101-pp-page.is-slides .o101-pp-slide { gap: 0.3rem; padding: 0.45rem; }
+.o101-pp-page.is-slides .o101-pp-slide::after { content: ""; margin-top: 0.2rem; height: 0.7rem; border-radius: 0.15rem; background: var(--c-grape-soft); }
+.o101-pp-line { display: block; height: 0.14rem; border-radius: 99px; background: var(--c-line); }
+.o101-pp-head { display: block; width: 50%; height: 0.24rem; margin-top: 0.15rem; border-radius: 99px; background: var(--c-ink); opacity: 0.6; }
+.o101-pp-row { display: grid; grid-template-columns: 46% minmax(0, 1fr); align-items: center; gap: 0.3rem; }
+.o101-pp-rules { height: 100%; min-height: 1rem; background: repeating-linear-gradient(to bottom, transparent 0 0.3rem, var(--c-line) 0.3rem 0.38rem); }
+/* without JavaScript: one line, then the PowerPoint copies to print from (the picker needs the script) */
+.o101-pp-nojs { display: grid; gap: 0.5rem; margin-top: 0.75rem; }
+.o101-pp-copies { display: grid; gap: 0.25rem 1.5rem; }
+@container (width >= 40rem) { .o101-pp-copies { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* each copy: a 44px-tall link — its title, and under it the month it was made ("doesn't update") */
+.o101-pp-copy { display: flex; align-items: flex-start; gap: 0.5rem; min-height: 2.75rem; padding-block: 0.3rem; color: var(--c-gv); text-decoration: none; }
+.o101-pp-copy > .icon { margin-top: 0.2rem; }
+.o101-pp-copy-t { font-size: 0.9375rem; font-weight: 600; line-height: 1.35; text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--c-gv) 30%, transparent); text-underline-offset: 2px; }   /* the site's "link" */
+.o101-pp-copy:hover .o101-pp-copy-t { text-decoration-color: var(--c-gv); }
+.o101-pp-copy-note { display: block; margin-top: 0.1rem; font-size: 0.75rem; line-height: 1.35; color: var(--c-muted); }
+
+/* "How presenting works": a closed <details> (its summary: a tile, the title and what is inside, a chevron);
+   open, a line for touch screens, the keys, then what to know — side by side when the box is wide */
+.o101-how { container-type: inline-size; min-width: 0; }
+.o101-how-sum { display: flex; align-items: center; gap: 0.875rem; min-height: 3.5rem; padding: 1rem 1.25rem; border-radius: var(--radius-card);
+  cursor: pointer; list-style: none; }
+.o101-how-sum::-webkit-details-marker { display: none; }
+@media (width >= 40rem) { .o101-how-sum { padding: 1.125rem 1.5rem; } }
+.o101-how-tile { display: grid; place-items: center; flex-shrink: 0; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem;
+  background: var(--c-grape-soft); color: var(--c-grape); }
+.o101-how-h { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; line-height: 1.25; color: var(--c-ink); text-wrap: balance; }
+@media (width >= 40rem) { .o101-how-h { font-size: 1.25rem; } }
+.o101-how-what { display: block; margin-top: 0.15rem; font-size: 0.8125rem; line-height: 1.45; color: var(--c-muted); }
+.o101-how-sum:hover .o101-how-h { color: var(--c-gv); }
+.o101-how-chev { color: var(--c-muted); transition: transform 0.2s; }
+.o101-how[open] .o101-how-chev { transform: rotate(180deg); }
+.o101-how-body { display: grid; gap: 1.25rem; padding: 1.25rem; border-top: 1px solid var(--c-line); }
+@media (width >= 40rem) { .o101-how-body { padding: 1.5rem; } }
+@container (width >= 60rem) { .o101-how-body { grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); align-items: start; gap: 1.25rem 2rem; } }
+.o101-how-touch { grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.875rem; line-height: 1.5; color: var(--c-ink); }
+.o101-how-touch > .icon { color: var(--c-grape); }
+/* the keys two by two even on a phone; wider columns across a wide box ("Home End first / last" on one
+   line); in the 24rem column beside the list, two of the legend's own 10rem */
+.o101-how-keys .o101-keys { grid-template-columns: repeat(auto-fill, minmax(min(8.25rem, 100%), 1fr)); }
+@container (36rem <= width < 60rem) { .o101-how-keys .o101-keys { grid-template-columns: repeat(auto-fill, minmax(min(11rem, 100%), 1fr)); } }
+@container (width >= 60rem) { .o101-how-keys .o101-keys { grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr)); } }
+.o101-how-list { display: grid; gap: 1rem 2rem; }
+@container (width >= 36rem) { .o101-how-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.o101-how-list > li { display: flex; gap: 0.75rem; min-width: 0; }
+.o101-how-icon { display: grid; place-items: center; flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 0.6rem; background: var(--c-grape-soft); color: var(--c-grape); }
+
+/* ---------- 2. Lesson page ---------- */
+.o101-goal { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; border-radius: var(--radius-card); background: var(--c-surface-2); }
+@media (width >= 40rem) { .o101-goal { padding: 1.5rem; } }
+@media (width < 24rem) { .o101-goal > :first-child { display: none; } } /* 320–383px: the goal gets the whole width */
+.o101-points { display: grid; gap: 1.5rem; }
+.o101-points > li { display: flex; gap: 0.875rem; }
+.o101-points > li .step-num { margin-top: 0.1rem; }
+.o101-points p { max-width: 68ch; }
+
+/* The live example (page variant) */
+.o101-live--page { margin-top: 1rem; }
+.o101-live--page .o101-live-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-muted); }
+.o101-live--page .o101-live-main { margin-top: 0.4rem; font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; line-height: 1.25; color: var(--c-ink); text-wrap: balance; }
+.o101-live--page .o101-live-sub { margin-top: 0.4rem; font-size: 0.9375rem; line-height: 1.5; color: var(--c-ink); }
+.o101-live--page .o101-live-extra { margin-top: 0.75rem; font-size: 0.875rem; line-height: 1.5; color: var(--c-muted); }
+.o101-live--page .o101-live-rows { margin-top: 0.5rem; display: grid; gap: 0.75rem; }
+.o101-live--page .o101-live-rows dt { font-size: 0.8125rem; font-weight: 600; color: var(--c-muted); }
+.o101-live--page .o101-live-rows dd { margin-top: 0.1rem; font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; line-height: 1.3; color: var(--c-ink); }
+.o101-live--page .o101-live-link { margin-top: 0.75rem; display: inline-flex; align-items: center; gap: 0.375rem; min-height: 2.75rem;
+  font-size: 0.875rem; font-weight: 600; color: var(--c-gv); text-decoration: none; }
+.o101-live--page .o101-live-link:hover { text-decoration: underline; }
+
+/* "Learn more" links: one column, two when the lesson column is 34rem wide (≈ from 600px, and from
+   1024px beside the lesson list). By the column's own width (.o101-lesson is a size container: the
+   template's @container), not the screen's, so at 130%+ text the links stay one column while the
+   column is narrow: rem in a container query is the page's text size. Same step as the "Try this" |
+   live example pair above them (@min-[34rem]:grid-cols-2). */
+.o101-links { display: grid; gap: 0.25rem 1.5rem; }
+@container (width >= 34rem) { .o101-links { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.625rem 1.5rem; } }
+
+/* The lesson list beside the lesson */
+.o101-toc { display: grid; gap: 0.125rem; }
+.o101-toc-link { display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; padding: 0.4rem 0.5rem; border-radius: 0.75rem;
+  font-size: 0.9rem; line-height: 1.3; color: var(--c-ink); text-decoration: none; transition: background-color 0.15s; }
+.o101-toc-link:hover { background: var(--c-surface-2); }
+.o101-toc-link.is-here { background: var(--c-gv-soft); font-weight: 600; }
+.o101-toc-n { display: grid; place-items: center; flex-shrink: 0; width: 1.75rem; height: 1.75rem; border-radius: 999px;
+  background: var(--c-surface-2); color: var(--c-muted); font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.o101-toc-link.is-here .o101-toc-n { background: var(--c-gv); color: var(--c-surface); }
+.is-done > .o101-toc-link .o101-toc-n { background: var(--c-vine-soft); color: var(--c-vine); }
+.o101-toc-min { flex-shrink: 0; font-size: 0.75rem; color: var(--c-muted); white-space: nowrap; }
+.o101-toc-done { display: grid; flex-shrink: 0; color: var(--c-vine); }
+/* Phones and tablets: the list is folded behind "All 6 lessons" (orientation.js; open without JavaScript) */
+@media (width < 64rem) {
+  :root.js [data-o101-toc]:not(.is-open) .o101-toc { display: none; }
+  [data-o101-toc].is-open [data-o101-toc-btn] .icon { transform: rotate(180deg); }
+}
+
+/* Self-check: the radio is visually replaced by the letter circle (it stays focusable; the focus
+   ring is drawn on the whole answer). Right = vine, wrong = danger, both with an icon + text
+   (.o101-q raises them above the :has(:checked) state). */
+.o101-q fieldset { margin: 0; padding: 0; border: 0; }
+/* width: a legend is sized to its content by default — at 150% text with relaxed spacing on a 320px
+   phone that is wider than its fieldset; it takes the fieldset's width and wraps instead */
+.o101-q-legend { padding: 0; width: 100%; max-width: 100%; }
+/* long Spanish words at 150% on a 320px phone break instead of pushing the answers out of the card */
+.o101-q-legend, .o101-opt > span { overflow-wrap: anywhere; }
+.o101-opts { display: grid; gap: 0.5rem; margin-top: 1rem; }
+.o101-opt { position: relative; display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; padding: 0.55rem 0.75rem;
+  border: 1px solid var(--c-line); border-radius: 0.75rem; background: var(--c-surface); cursor: pointer; line-height: 1.35;
+  font-size: 0.9375rem; color: var(--c-ink); transition: border-color 0.15s, background-color 0.15s; }
+.o101-opt:hover { border-color: var(--c-gv); }
+.o101-opt input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+.o101-opt:has(input:focus-visible) { outline: 3px solid var(--c-gv); outline-offset: 2px; }
+.o101-opt-letter { display: grid; place-items: center; flex-shrink: 0; width: 1.75rem; height: 1.75rem; border-radius: 999px;
+  border: 1.5px solid var(--c-faint); font-size: 0.8rem; font-weight: 700; color: var(--c-muted); }
+.o101-opt:has(input:checked) { border-color: var(--c-gv); background: var(--c-gv-soft); }
+.o101-opt:has(input:checked) .o101-opt-letter { border-color: var(--c-gv); background: var(--c-gv); color: var(--c-surface); }
+.o101-q .o101-opt.is-right { border-color: var(--c-vine); background: var(--c-vine-soft); }
+.o101-q .o101-opt.is-right .o101-opt-letter { border-color: var(--c-vine); background: var(--c-vine); color: var(--c-surface); }
+.o101-q .o101-opt.is-wrong { border-color: var(--c-danger); background: color-mix(in srgb, var(--c-danger) 7%, var(--c-surface)); }
+.o101-q .o101-opt.is-wrong .o101-opt-letter { border-color: var(--c-danger); background: var(--c-danger); color: var(--c-surface); }
+/* Windows High Contrast (forced colours drop fills): the chosen answer keeps a system outline and a filled letter */
+@media (forced-colors: active) {
+  .o101-opt:has(input:checked) { outline: 3px solid Highlight; outline-offset: 1px; }
+  .o101-opt:has(input:checked) .o101-opt-letter { forced-color-adjust: none; background: Highlight; color: HighlightText; border-color: Highlight; }
+}
+.o101-fb { display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 0.875rem; font-size: 0.875rem; line-height: 1.5; color: var(--c-ink); }
+.o101-fb:empty { display: none; }
+.o101-fb .icon { width: 1.1rem; height: 1.1rem; margin-top: 0.1rem; }
+.o101-fb.is-right .icon, .o101-fb.is-right strong { color: var(--c-vine); }
+.o101-fb.is-wrong .icon, .o101-fb.is-wrong strong { color: var(--c-danger); }
+.o101-q.is-right { border-color: color-mix(in srgb, var(--c-vine) 55%, var(--c-line)); }
+.o101-nojs { margin-top: 0.75rem; }
+:root.js .o101-nojs { display: none; }
+.o101-result { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; padding: 1rem 1.25rem; border-radius: var(--radius-card);
+  background: var(--c-vine-soft); color: var(--c-ink); font-weight: 600; }
+.o101-result:empty { display: none; }
+.o101-result .icon { color: var(--c-vine); }
+
+/* ---------- 3. The slide show ---------- */
+:root.o101-presenting, :root.o101-presenting body { overflow: hidden; }
+.o101-deck {
+  --d-bg: #0a1a33; --d-bg2: #10305a; --d-ink: #ffffff; --d-muted: #cfdbee; --d-gold: #ffd79a; --d-accent: #9ccbf5;
+  --d-green: #8fe0a0; --d-line: rgb(255 255 255 / 0.18);
+  position: fixed; inset: 0; z-index: 80; display: flex; flex-direction: column;
+  background: #050d1b; color: var(--d-ink); font-family: var(--font-sans); color-scheme: dark;
+}
+.o101-deck:focus { outline: none; }
+.o101-deck :focus-visible { outline: 3px solid var(--d-gold); outline-offset: 3px; }
+.o101-deck-progress { flex-shrink: 0; height: 4px; background: rgb(255 255 255 / 0.12); }
+.o101-deck-progress > span { display: block; width: 0; height: 100%; background: var(--d-gold); transition: width 0.3s ease; }
+.o101-deck-main { flex: 1; min-height: 0; display: grid; place-items: center; padding: 0.5rem; }
+/* The 16:9 stage fills the room left by the progress line (4px), the control bar (3.5rem) and the padding */
+.o101-stage { position: relative; width: min(100%, calc((100dvh - 4px - 3.5rem - 1rem) * 16 / 9)); aspect-ratio: 16 / 9;
+  /* the type unit: 1% of the stage height, times the Aa text size (--text-scale, main.css: 1 at 100%);
+     a portrait phone or a short window (a phone held sideways, a zoomed-in browser) switches to a
+     fluid stage with a rem floor, below */
+  --u: calc(1cqh * var(--text-scale, 1));
+  container-type: size; overflow: hidden; border-radius: 0.75rem; background: radial-gradient(120% 120% at 100% 0%, var(--d-bg2) 0%, var(--d-bg) 55%);
+  box-shadow: 0 20px 60px -20px rgb(0 0 0 / 0.8); touch-action: pan-y pinch-zoom; user-select: none; }
+.o101-slide { position: absolute; inset: 0; display: flex; padding: calc(7 * var(--u)) 7cqw; font-size: calc(3.6 * var(--u)); line-height: 1.35; }
+/* Larger text: a slide that no longer fits scrolls on its own (the arrow keys scroll it first: orientation.js);
+   the grape art then ends at the slide's edge, so it never adds a scroll of its own */
+:root:not([data-text="100"]) .o101-slide { overflow-y: auto; }
+:root:not([data-text="100"]) .o101-s-body { justify-content: safe center; }
+:root:not([data-text="100"]) .o101-s-art { bottom: calc(-7 * var(--u)); }
+/* …while the QR code keeps about its own size (bigger text needs no bigger code; the words get the room) */
+:root:not([data-text="100"]) .o101-s-qr-svg { width: min(calc(40 * var(--u)), 42cqh); height: min(calc(40 * var(--u)), 42cqh); }
+.o101-s-body { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; width: 100%; min-width: 0; }
+.o101-s-center { align-items: center; text-align: center; }
+.o101-s-art { position: absolute; z-index: 0; right: -2cqw; bottom: calc(-12 * var(--u)); height: calc(78 * var(--u)); width: auto; color: rgb(255 255 255 / 0.06); pointer-events: none; }
+.o101-s-center .o101-s-art { right: 50%; transform: translateX(50%); color: rgb(255 255 255 / 0.05); }
+.o101-s-eyebrow { font-size: calc(2.6 * var(--u)); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--d-gold); }
+.o101-s-display { margin-top: calc(2 * var(--u)); font-family: var(--font-display); font-size: calc(10.5 * var(--u)); font-weight: 600; line-height: 1.05; letter-spacing: -0.01em; text-wrap: balance; }
+.o101-s-display--sm { font-size: calc(8 * var(--u)); }
+.o101-s-h { margin-top: calc(1.6 * var(--u)); font-family: var(--font-display); font-size: calc(6.4 * var(--u)); font-weight: 600; line-height: 1.12; text-wrap: balance; }
+.o101-s-lead { margin-top: calc(3.5 * var(--u)); max-width: 70cqw; font-size: calc(4.4 * var(--u)); line-height: 1.35; color: var(--d-muted); text-wrap: balance; }
+.o101-s-meta { margin-top: calc(6 * var(--u)); font-size: calc(3 * var(--u)); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--d-gold); }
+.o101-s-n { display: grid; place-items: center; flex-shrink: 0; width: calc(6.6 * var(--u)); height: calc(6.6 * var(--u)); border-radius: 999px;
+  background: var(--d-gold); color: #0a1a33; font-size: calc(3.3 * var(--u)); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Agenda: two columns of three */
+.o101-s-agenda { margin-top: calc(6 * var(--u)); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column; gap: calc(4.5 * var(--u)) 6cqw; }
+.o101-s-agenda > li { display: flex; align-items: center; gap: 2cqw; font-size: calc(3.9 * var(--u)); line-height: 1.2; }
+.o101-s-agenda-t { min-width: 0; font-weight: 600; text-wrap: balance; }
+.o101-s-min { margin-left: auto; padding-left: 1.5cqw; font-size: calc(2.9 * var(--u)); color: var(--d-muted); white-space: nowrap; }
+
+/* A lesson's title slide */
+.o101-s-icon { display: block; width: calc(13 * var(--u)); height: calc(13 * var(--u)); margin-bottom: calc(4 * var(--u)); padding: calc(2.6 * var(--u)); border-radius: calc(3.2 * var(--u));
+  background: rgb(255 255 255 / 0.08); color: var(--d-gold); box-shadow: inset 0 0 0 1px var(--d-line); }
+.o101-s-goal { margin-top: calc(5 * var(--u)); max-width: 76cqw; font-size: calc(4.4 * var(--u)); line-height: 1.35; color: var(--d-muted); }
+.o101-s-goal-k { display: inline-block; margin-right: 1.2cqw; padding: calc(0.5 * var(--u)) calc(1.8 * var(--u)); border-radius: 999px; background: var(--d-gold); color: #0a1a33;
+  font-size: calc(2.5 * var(--u)); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; vertical-align: calc(0.6 * var(--u)); }
+
+/* Key points */
+.o101-s-points { margin-top: calc(4.2 * var(--u)); display: grid; gap: calc(3.8 * var(--u)); }
+.o101-s-points > li { display: flex; align-items: flex-start; gap: 2.4cqw; }
+.o101-s-points h3 { font-family: var(--font-sans); font-size: calc(4.4 * var(--u)); font-weight: 700; line-height: 1.2; }
+.o101-s-points p { margin-top: calc(0.8 * var(--u)); max-width: 80cqw; font-size: calc(3.45 * var(--u)); line-height: 1.36; color: var(--d-muted); }
+
+/* Try this + the live example */
+.o101-s-split { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: 5cqw; }
+.o101-s-text { margin-top: calc(2.6 * var(--u)); font-size: calc(4 * var(--u)); line-height: 1.38; }
+.o101-s-sub { margin-top: calc(5 * var(--u)); font-family: var(--font-sans); font-size: calc(2.5 * var(--u)); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--d-gold); }
+.o101-s-quote { font-family: var(--font-display); font-style: italic; }
+.o101-s-panel { padding: calc(4.4 * var(--u)) 3.4cqw; border-radius: calc(2.6 * var(--u)); background: rgb(255 255 255 / 0.07); box-shadow: inset 0 0 0 1px var(--d-line); }
+.o101-s-panel > .o101-s-sub { margin-top: 0; }
+.o101-live--slide .o101-live-label { margin-top: calc(2.4 * var(--u)); font-size: calc(2.8 * var(--u)); color: var(--d-muted); }
+.o101-live--slide .o101-live-main { margin-top: calc(1 * var(--u)); font-family: var(--font-display); font-size: calc(4.8 * var(--u)); font-weight: 600; line-height: 1.15; text-wrap: balance; }
+.o101-live--slide .o101-live-sub { margin-top: calc(1.4 * var(--u)); font-size: calc(3.2 * var(--u)); line-height: 1.35; color: var(--d-ink); }
+.o101-live--slide .o101-live-extra { margin-top: calc(2 * var(--u)); font-size: calc(2.9 * var(--u)); line-height: 1.35; color: var(--d-muted); }
+.o101-live--slide .o101-live-rows { margin-top: calc(2 * var(--u)); display: grid; gap: calc(2.4 * var(--u)); }
+.o101-live--slide .o101-live-rows dt { font-size: calc(2.7 * var(--u)); font-weight: 600; color: var(--d-gold); }
+.o101-live--slide .o101-live-rows dd { margin-top: calc(0.4 * var(--u)); font-family: var(--font-display); font-size: calc(4.6 * var(--u)); font-weight: 600; line-height: 1.15; }
+.o101-live--slide .o101-live-link { margin-top: calc(3 * var(--u)); display: inline-flex; align-items: center; gap: 0.8cqw; font-size: calc(3 * var(--u)); font-weight: 600;
+  color: var(--d-accent); text-decoration: underline; text-underline-offset: calc(0.4 * var(--u)); }
+.o101-live--slide .o101-live-link .icon { width: 1em; height: 1em; }
+.o101-live--slide .o101-live-extra a { color: var(--d-accent); font-weight: 600; }
+
+/* Self-check: ask the room, then show the answer */
+.o101-s-opts { margin-top: calc(5 * var(--u)); display: grid; gap: calc(2.4 * var(--u)); }
+.o101-s-opts > li { display: flex; align-items: center; gap: 2cqw; padding: calc(2 * var(--u)) 2.4cqw; border-radius: calc(2 * var(--u)); font-size: calc(4 * var(--u)); line-height: 1.25;
+  background: rgb(255 255 255 / 0.05); box-shadow: inset 0 0 0 2px var(--d-line); transition: opacity 0.2s, background-color 0.2s; }
+.o101-s-letter { display: grid; place-items: center; flex-shrink: 0; width: calc(6.4 * var(--u)); height: calc(6.4 * var(--u)); border-radius: 999px;
+  box-shadow: inset 0 0 0 2px var(--d-muted); font-size: calc(3.2 * var(--u)); font-weight: 700; }
+.o101-s-ok { display: block; flex-shrink: 0; width: calc(5.4 * var(--u)); height: calc(5.4 * var(--u)); margin-left: auto; color: var(--d-green); }
+.is-revealed .o101-s-opts > li[data-correct] { background: rgb(143 224 160 / 0.14); box-shadow: inset 0 0 0 3px var(--d-green); }
+.is-revealed .o101-s-opts > li[data-correct] .o101-s-letter { background: var(--d-green); color: #06210f; box-shadow: none; }
+.is-revealed .o101-s-opts > li:not([data-correct]) { opacity: 0.6; }
+.o101-s-reveal { margin-top: calc(4.4 * var(--u)); display: flex; flex-wrap: wrap; align-items: center; gap: calc(2.4 * var(--u)) 3cqw; }
+.o101-s-btn { display: inline-flex; align-items: center; gap: 1cqw; min-height: max(2.75rem, calc(7.4 * var(--u))); padding: calc(1.2 * var(--u)) 3.2cqw; border-radius: 999px;
+  background: var(--d-gold); color: #0a1a33; font-size: calc(3.1 * var(--u)); font-weight: 700; cursor: pointer; }
+.o101-s-btn:hover { background: #ffe4bb; }
+.o101-s-why { flex: 1 1 50cqw; font-size: calc(3.5 * var(--u)); line-height: 1.35; }
+
+/* Closing slide: next steps + the QR code */
+.o101-s-split--close { grid-template-columns: minmax(0, 1fr) auto; }
+.o101-s-close { margin-top: calc(4.4 * var(--u)); display: grid; gap: calc(2.8 * var(--u)); }
+.o101-s-close > li { display: grid; gap: calc(0.6 * var(--u)); padding-left: 2.4cqw; box-shadow: inset calc(0.5 * var(--u)) 0 0 var(--d-gold); }
+.o101-s-close strong { font-size: calc(3.9 * var(--u)); line-height: 1.2; }
+.o101-s-close span { font-size: calc(2.9 * var(--u)); color: var(--d-muted); overflow-wrap: anywhere; }
+.o101-s-qr { display: flex; flex-direction: column; align-items: center; gap: calc(2 * var(--u)); margin: 0; padding: calc(3.4 * var(--u)); border-radius: calc(2.6 * var(--u));
+  background: #fff; color: #0a1a33; text-align: center; }
+.o101-s-qr-svg { display: block; width: calc(40 * var(--u)); height: calc(40 * var(--u)); }
+.o101-s-qr figcaption strong { display: block; font-size: calc(3.2 * var(--u)); }
+.o101-s-qr figcaption span { display: block; max-width: calc(44 * var(--u)); margin-top: calc(0.6 * var(--u)); font-size: calc(2.3 * var(--u)); color: #1d2b44; }
+
+/* Entering a slide (only when motion is welcome) */
+@media (prefers-reduced-motion: no-preference) {
+  .o101-slide.is-in { animation: o101-in 0.26s ease-out both; }
+  .o101-slide.is-in-back { animation: o101-in-back 0.26s ease-out both; }
+}
+@keyframes o101-in { from { opacity: 0; transform: translateX(1.2%); } }
+@keyframes o101-in-back { from { opacity: 0; transform: translateX(-1.2%); } }
+
+/* The control bar */
+.o101-deck-bar { flex-shrink: 0; display: flex; align-items: center; gap: 0.5rem; height: 3.5rem;
+  /* (the safe areas are divided by the bar's zoom, below: they stay the size the phone needs) */
+  padding: 0 max(0.75rem, calc(env(safe-area-inset-right) / var(--deck-zoom, 1))) calc(env(safe-area-inset-bottom) / var(--deck-zoom, 1)) max(0.75rem, calc(env(safe-area-inset-left) / var(--deck-zoom, 1))); }
+.o101-deck-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-width: 2.75rem; min-height: 2.75rem; padding: 0 0.75rem;
+  border-radius: 999px; border: 1px solid rgb(255 255 255 / 0.22); background: rgb(255 255 255 / 0.08); color: #fff;
+  font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: background-color 0.15s; }
+.o101-deck-btn:hover { background: rgb(255 255 255 / 0.18); }
+.o101-deck-btn:disabled { opacity: 0.4; cursor: default; }
+.o101-deck-count { min-width: 4.5rem; text-align: center; font-size: 0.9rem; font-variant-numeric: tabular-nums; color: #dbe6f5; }
+@media (width < 30rem) {
+  .o101-deck-btn--text > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .o101-deck-count { min-width: 3.5rem; }
+}
+/* On a phone (upright below 768px, or sideways) the control bar keeps its 100% size at larger text,
+   like the header row (areas/access.css --chrome-zoom): its buttons are already 44px touch targets,
+   and at 130–150% the five controls no longer fit — Exit and Fullscreen went off the screen. The
+   slide itself still grows with the text size. */
+.o101-deck-bar { zoom: var(--deck-zoom, 1); }
+@media (width < 48rem), (height < 32rem) {
+  :root[data-text="115"] .o101-deck-bar { --deck-zoom: 0.8696; }
+  :root[data-text="130"] .o101-deck-bar { --deck-zoom: 0.7692; }
+  :root[data-text="150"] .o101-deck-bar { --deck-zoom: 0.6667; }
+}
+
+/* A phone held upright — or any short window (a phone held sideways, a browser zoomed to 200–400%):
+   the stage fills the screen (no 16:9 letterbox), the two-column slides stack, and a slide that is
+   still too long scrolls on its own. Type follows the width upright and the height sideways, never
+   below 0.3rem — so browser zoom and the Aa text size make it bigger (WCAG 1.4.4, 1.4.10). */
+@media (orientation: portrait) and (width < 48rem), (height < 32rem) {
+  .o101-deck-main { padding: 0.5rem; place-items: stretch; }
+  .o101-stage { --u: max(1.25cqw, 0.3rem); width: 100%; height: 100%; aspect-ratio: auto; }
+  .o101-slide { overflow-y: auto; padding: calc(7 * var(--u)) calc(6 * var(--u)); }
+  .o101-s-art { bottom: calc(-7 * var(--u)); }
+  .o101-s-body { justify-content: safe center; }
+  .o101-s-display { font-size: calc(8.5 * var(--u)); }
+  .o101-s-split, .o101-s-split--close { grid-template-columns: minmax(0, 1fr); align-items: start; align-content: safe center; gap: calc(6 * var(--u)); }
+  .o101-s-agenda { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row; gap: calc(3.5 * var(--u)); }
+  .o101-s-points p, .o101-s-goal, .o101-s-lead { max-width: none; }
+  .o101-s-qr { justify-self: center; }
+}
+@media (orientation: landscape) and (height < 32rem) {
+  .o101-stage { --u: max(1.25cqh, 0.3rem); }        /* sideways: 844 × 390 → body text ≈ 17px */
+  .o101-deck-bar { height: 2.75rem; }              /* the buttons are 2.75rem: a slimmer bar, more slide */
+}
+
+/* ---------- 4. Print ---------- */
+.o101-handout { display: none; }
+@page o101 { size: letter; margin: 0.45in 0.5in; }
+@media print {
+  /* paper is white in both site themes (color-scheme too: Chrome paints the page margins with it) */
+  html:has(body.o101-hub), body.o101-hub { background: #fff !important; color-scheme: light !important; }
+  /* the page prints as the handout (the browser's Print, "Print the handout") — not while the presentations'
+     player prints one of them: it puts gvp-printing on <html> for that and shows its own container
+     (src/assets/js/presentations.js, areas/presentations.css), so the handout stands aside then */
+  :root:not(.gvp-printing) body.o101-hub > :not(main), :root:not(.gvp-printing) body.o101-hub main > :not(.o101-handout) { display: none !important; }
+  :root:not(.gvp-printing) body.o101-hub main { padding: 0 !important; }
+  :root:not(.gvp-printing) body.o101-hub .o101-handout { display: block; }
+  .o101-sheet { page: o101; break-after: page; color: #000; font: 9.5pt/1.38 var(--font-sans); }
+  .o101-sheet:last-child { break-after: auto; }
+  .o101-sheet-head { display: flex; justify-content: space-between; gap: 12pt; padding-bottom: 4pt; border-bottom: 1.5pt solid #0a5fa8;
+    font-size: 7.5pt; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #333; }
+  .o101-sheet h2 { margin: 10pt 0 4pt; font-family: var(--font-display); font-size: 19pt; font-weight: 600; line-height: 1.15; color: #000; }
+  .o101-sheet h3 { margin: 9pt 0 3pt; font-family: var(--font-sans); font-size: 8pt; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #0a5fa8; }
+  .o101-sheet-goal { font-size: 10.5pt; }
+  .o101-sheet-points, .o101-sheet-qs { margin: 0; padding-left: 14pt; list-style: decimal; }
+  .o101-sheet-points > li + li, .o101-sheet-qs > li + li { margin-top: 3.5pt; }
+  .o101-sheet-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18pt; }
+  .o101-sheet-qs ul { margin: 2pt 0 0; padding: 0; list-style: none; }
+  .o101-sheet-qs ul li { display: flex; align-items: baseline; gap: 4pt; }
+  .o101-sheet-box { display: inline-block; flex-shrink: 0; width: 7pt; height: 7pt; border: 1pt solid #000; border-radius: 50%; }
+  .o101-sheet-answers { margin-top: 7pt; font-size: 7.5pt; color: #444; }
+  .o101-live--print .o101-live-label { font-weight: 700; }
+  .o101-live--print .o101-live-rows dt { font-weight: 700; }
+  .o101-live--print .o101-live-rows dd { margin: 0 0 3pt; }
+  .o101-live--print .o101-live-extra { margin-top: 2pt; color: #333; }
+  .o101-sheet-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 18pt; margin-top: 12pt; padding-top: 6pt;
+    border-top: 1pt solid #bbb; break-inside: avoid; }
+  .o101-sheet-foot ul { margin: 0; padding-left: 12pt; list-style: disc; font-size: 8pt; }
+  .o101-sheet-foot figure { margin: 0; flex-shrink: 0; text-align: center; font-size: 7pt; color: #333; }
+  .o101-sheet-qr { display: block; width: 1in; height: 1in; margin: 0 auto 3pt; }
+
+  /* A lesson page: the lesson and its self-check, without the lesson list, the controls and the page nav */
+  body.o101-page .sticky-aside, body.o101-page [data-o101-result], body.o101-page .o101-fb, body.o101-page .o101-live-link,
+  body.o101-page .gv-hero-body, body.o101-page main > nav.section, body.o101-page .o101-nojs { display: none !important; }
+  body.o101-page .section-head { break-after: avoid; }
+  body.o101-page .layout-aside { display: block !important; }
+  body.o101-page .o101-q, body.o101-page .o101-points > li { break-inside: avoid; }
+}

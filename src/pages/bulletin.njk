@@ -1,0 +1,185 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}bulletin/index.html"
+layout: layouts/base.njk
+pageKey: bulletin
+titleKey: nav.bulletin
+descKey: committee.ann.meta_desc
+pageScripts: ["/assets/js/committee.js"]
+---
+{#- The committee's bulletin (/bulletin/; it was /announcements/ — announcements-redirect.njk keeps that
+    address working): Google Docs in the Drive "bulletin" folder or content/bulletin/*.md (the data
+    keeps its old name: db.announcements, kind "announcement"). Pinned first, full body,
+    auto-translated, each with a deep-link anchor (#ann-… or the file's name) and share buttons.
+    Below the shared page hero and the committee sub-nav: the posts, one per row at every width (each
+    has the page's whole width — two side by side left a long post half as wide, without "In this
+    post", beside an empty column); with none, one solid card written for visitors. Then, collapsed,
+    "For committee members · Post to the bulletin" (ui.memberHelp, #how-to-post). The ways to keep up
+    (digest, RSS, calendar) are in the footer.
+    A post's text is whatever Markdown the chair wrote (scripts/sync/announcements.py tidies it):
+    `md({ h: 3, ids })` makes its "# …" headings h3 and down, under the post's own h2 title, each with
+    an id of its own (#<anchor>--<words>), and .cm-md (committee.css) styles all of it — tables in their
+    own sideways-scrolling box, quotes, code, pictures, long addresses that wrap.
+    After the text, the post's aside: "In this post" (its sections, when it has two or more: mdToc) and
+    its actions. A card with the width for it (every post from 1024px) shows the aside beside the text,
+    the two centred as one block and the aside sticky ("In this post" marks the section being read:
+    committee.js annToc); a narrower card (phones, tablets, larger text on a laptop) shows only the
+    actions, as a bar under the text — committee.css, "the bulletin".
+    The hero's right-hand card (the shared hero aside, "Coming up"): the next committee meeting and the
+    next event, linking to them. With no posts it is the page's first card on smaller screens and at
+    larger text too ("below"); with posts it is hidden there (they come first).
+    A post with an `expires` day hides itself once that day is over in Central time, between the daily
+    builds too (data-gv-expire: fsDayEnd, app.js GV.expire — never while a button in it has keyboard focus;
+    committee.js, also loaded here, leaves these attributes alone); when the last one has gone, the
+    "nothing posted" card shows instead (data-gv-expire-list → data-gv-expire-empty), and the sub-nav's
+    Bulletin count goes down with them (committeeNav: data-gv-expire-count). A post scheduled
+    for a later day (`publish:`, Drive "(from …)") is not in the data before its day at all (build_data). -#}
+{% import "macros/ui.njk" as ui with context %}
+{%- set anns = db.announcements.items | cmAnnouncements -%}
+{%- set pageAbs = page.url | siteUrl(site) -%}
+{%- set di = db.status | cmDriveInfo(site) -%}
+
+{%- set nm = site | cmNextMeeting(lang) -%}
+{%- set ne = (db.events.items | cmEvents(site, lang)) | where("past", false) | whereNot("committee", true) | first -%}
+{%- set neKind = (ne | eventTone) if ne else "" -%}
+{%- set toneOf = { gv: "gv", lv: "lv", committee: "grape", booth: "lv" } -%}
+{% call(slot) ui.pageHero(lang, "nav.bulletin" | t(lang), "committee.ann.hero_sub" | t(lang), "megaphone", "committee.ann.eyebrow" | t(lang), { side: ("hide" if anns | length else "below") }) %}
+{%- if slot == "side" %}
+  {%- if nm or ne %}
+  {% call ui.heroAside("committee.ann.meanwhile" | t(lang), lang, { id: "ann-aside-title", icon: "calendar-days", href: "/events/" | lurl(lang), linkLabel: "committee.ann.all_events" | t(lang) }) %}
+  <ul class="hero-aside-links" role="list">
+    {%- if nm %}
+    <li>{{ ui.heroAsideLink({ href: ("/meetings/" | lurl(lang)) + "#committee-meeting", label: "committee.events.stat_next_meeting" | t(lang), text: (nm.startIso | fmtDate(lang, "short")) + (" · " + nm.timeLabel if nm.timeLabel else ""), icon: "users", tone: "grape" }, lang) }}</li>
+    {%- endif %}
+    {%- if ne %}
+    <li>{{ ui.heroAsideLink({ href: ("/events/" | lurl(lang)) + "#" + ne.anchor, label: ne.title, text: ("committee.ann.next_event" | t(lang)) + " · " + (ne.rangeLabel if ne.multiDay else ((ne.startIso | fmtDate(lang, "short")) + (" · " + ne.timeLabel if ne.timeLabel else ""))), icon: "calendar-days", tone: toneOf[neKind] or "vine" }, lang) }}</li>
+    {%- endif %}
+  </ul>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
+  <div class="hero-actions">
+    <a class="btn-light" href="{{ '/digest/' | lurl(lang) }}">{% icon "mail-plus", "size-4" %} {{ "committee.ann.get_digest" | t(lang) }}</a>
+  </div>
+{%- endif %}
+{% endcall %}
+
+{% committeeNav lang, "bulletin", db %}
+
+<section class="container-page section pt-10 sm:pt-12" aria-label="{{ 'nav.bulletin' | t(lang) }}">
+  {% if anns | length %}
+  <ol class="cm-ann-list" data-gv-expire-list data-gv-expire-empty="#ann-empty">
+    {% for a in anns %}
+    {%- set title = a | tx("title", lang) -%}
+    {%- set body = a | tx("body_md", lang) or (a | tx("summary", lang)) -%}
+    {%- set when = a.date or a.first_seen -%}
+    {%- set annEnd = (a.extra.expires | fsDayEnd) if (a.extra and a.extra.expires) else "" -%}
+    {#- its sections for "In this post" (two or more — eleventy.config.js mdToc): the same options as its text
+        below, so each link finds its heading ("#<anchor>--why-it-matters"); the ids take the words of the
+        post's own language (idsFrom), so a section's link is the same on the English and the Spanish page -#}
+    {%- set original = (a.extra.body_md if a.extra) or a.summary -%}
+    {%- set toc = body | mdToc({ h: 3, ids: a._anchor, idsFrom: original }) -%}
+    <li class="min-w-0" data-gv-expire-item{% if annEnd %} data-gv-expire="{{ annEnd }}"{% endif %}>
+      <article id="{{ a._anchor }}" class="card cm-ann{{ ' is-pinned' if a._pinned }}" aria-labelledby="{{ a._anchor }}-h">
+        <div class="cm-ann-main">
+          <div class="flex flex-wrap items-center gap-2 text-sm">
+            {% if a._pinned %}<span class="badge-lv">{% icon "pin", "size-3" %} {{ "committee.ann.pinned" | t(lang) }}</span>{% endif %}
+            {% if a.is_new %}<span class="badge-new">{{ "common.new" | t(lang) }}</span>{% endif %}
+            <p class="meta-row text-muted">
+              {%- if when %}<time datetime="{{ when | isoDate }}">{{ when | fmtDate(lang, "long") }}</time>{% endif %}
+              {#- a meta-row item keeps the row's size (its "·" and hanging indent are 1.1em of it): the smaller words go inside -#}
+              {%- if a.extra and a.extra.expires %}<span><span class="text-xs text-faint">{{ "committee.ann.until" | t(lang, { date: (a.extra.expires | fmtDate(lang, "medium")) }) }}</span></span>{% endif %}
+            </p>
+          </div>
+          {#- a title the translation left as it was (rejected, or the same words) is in the post's own language -#}
+          <h2 id="{{ a._anchor }}-h" class="mt-3 font-display text-2xl font-semibold leading-tight text-ink sm:text-[1.75rem]"{% if a.lang and a.lang != lang and title == a.title %} lang="{{ a.lang }}"{% endif %}>
+            <a href="#{{ a._anchor }}" class="cm-anchor-link hover:text-gv">{{ title }}<span class="cm-hash" aria-hidden="true">#</span></a>
+          </h2>
+          {#- lang="…" only when the text shown IS the original: not machine-translated, not the committee's own
+              summary_es (its sections in "In this post" are in that language too) -#}
+          {%- set bodyLang = a.lang if (a.lang and a.lang != lang and not (a | machineFor(lang)) and body == original) else "" %}
+          <div class="prose-site cm-md mt-4 max-w-none"{% if bodyLang %} lang="{{ bodyLang }}"{% endif %}>
+            {{ body | md({ h: 3, lang: lang, name: title, ids: a._anchor, idsFrom: original }) | safe }}
+          </div>
+          {% if a | machineFor(lang) %}
+          <details class="cm-original mt-5">
+            <summary>{% icon "languages", "size-4" %} {{ "committee.ann.show_original" | t(lang) }} <span class="text-faint">· {{ ("lang." + a.lang) | t(lang) }}</span></summary>
+            <div class="prose-site cm-md mt-3 text-[0.95rem]" lang="{{ a.lang }}">
+              <p class="font-semibold">{{ a.title }}</p>
+              {{ original | md({ h: 3, lang: lang, name: a.title + " (" + (("lang." + a.lang) | t(lang)) + ")" }) | safe }}
+            </div>
+          </details>
+          {% endif %}
+        </div>
+        {#- The post's aside, after its text (the reading and Tab order at every width): "In this post" — its
+            sections — and its actions. A narrow card (phones, tablets) shows only the actions, as a bar
+            along the bottom of the card; a wide one (every post on a desktop: one per row) puts the aside
+            beside the text, sticky while the post scrolls by (committee.css .cm-ann-side). A <div>, not an
+            <aside>: inside the page's named section an aside is a landmark within a landmark (axe
+            landmark-complementary-is-top-level); the list is a nav named "In this post" + the title. -#}
+        <div class="cm-ann-side">
+          {%- if toc | length %}
+          <nav class="cm-ann-toc" aria-labelledby="{{ a._anchor }}-toc {{ a._anchor }}-h">
+            <p id="{{ a._anchor }}-toc" class="cm-ann-toc-h">{% icon "list", "size-4 shrink-0" %}<span>{{ "committee.ann.in_post" | t(lang) }}</span></p>
+            <ol class="cm-ann-toc-list" role="list"{% if bodyLang %} lang="{{ bodyLang }}"{% endif %}>
+              {%- for s in toc %}
+              <li><a href="#{{ s.id }}">{{ s.text }}</a></li>
+              {%- endfor %}
+            </ol>
+          </nav>
+          {%- endif %}
+          <div class="cm-ann-actions">
+            {#- A post whose whole text is shown above and came from a plain-text file on Drive (.md / .txt) needs no
+                "Open the document": Drive would only show the same words as raw text. A PDF, a picture, a Google
+                Doc or a .docx keeps the button (there the file itself, or its formatting, is the message). -#}
+            {%- set plainText = a.source == "drive" and a.extra and a.extra.body_md and (a.extra.file_type == "MD" or a.extra.file_type == "TXT" or a.extra.file_type == "MARKDOWN" or (a.extra.mime or "").startsWith("text/")) -%}
+            {%- set more = a.extra.link if (a.extra and a.extra.link) else (a.url if (a.source == "drive" and a.url and not plainText) else "") -%}
+            {%- set isDoc = a.source == "drive" and not (a.extra and a.extra.link) -%}
+            {%- set moreIcon = "file-text" if isDoc else "arrow-up-right" -%}
+            {#- `url:` may name a file saved next to the post (/bulletin/files/…, the same in both languages) -#}
+            {% if more %}<a class="btn-primary btn-sm" href="{{ more if more.startsWith('/bulletin/files/') else (more | lurl(lang)) }}"{% if more.startsWith("http") %} target="_blank" rel="noopener"{% endif %}>{% icon moreIcon, "size-4" %} {{ ("committee.ann.open_doc" if isDoc else "committee.ann.more_info") | t(lang) }}</a>{% endif %}
+            {{ ui.autoNote(a, lang) }}
+            <span class="cm-ann-gap"></span>
+            <button type="button" class="btn-ghost btn-sm cm-ann-copy" data-copy="{{ pageAbs }}#{{ a._anchor }}">{% icon "link", "size-4" %} {{ "common.copy_link" | t(lang) }}</button>
+            <button type="button" class="btn-secondary btn-sm" data-share="{{ pageAbs }}#{{ a._anchor }}" data-share-title="{{ title }}" data-share-text="{{ (a | tx('summary', lang)) | excerpt(140) }}">{% icon "share-2", "size-4" %} {{ "common.share" | t(lang) }}</button>
+          </div>
+        </div>
+      </article>
+    </li>
+    {% endfor %}
+  </ol>
+  {% endif %}
+  {#- Nothing posted: one solid card for visitors ("Coming up" — the next meeting and event — is the
+      hero's right-hand card, the first card under the hero on smaller screens). With posts it waits,
+      hidden, for the last of them to expire between two builds (GV.expire). -#}
+  <div id="ann-empty" class="cm-ann-empty is-solo"{% if anns | length %} hidden{% endif %}>
+    {{ ui.pageEmpty("megaphone", "committee.ann.empty_title" | t(lang), "committee.ann.empty_text" | t(lang), { id: "ann-empty-h" }) }}
+  </div>
+</section>
+
+{#- ---------- For committee members (collapsed): how to post to the bulletin ---------- -#}
+<div class="container-page">
+  {% call ui.memberHelp(lang, "committee.ann.how_title" | t(lang), { id: "how-to-post" }) %}
+  <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
+    <div>
+      <ol class="space-y-4">
+        {% for k in ["1", "2", "3", "4"] %}
+        <li class="flex gap-3.5">
+          <span class="step-num" aria-hidden="true">{{ k }}</span>
+          <p class="leading-relaxed text-muted">{{ ("committee.ann.how_" + k) | t(lang, { panel: (di.panel.label if di.panel else "Panel") }) }}</p>
+        </li>
+        {% endfor %}
+      </ol>
+      <div class="mt-6 flex flex-wrap gap-2.5">
+        {% if di.url %}<a class="btn-primary" href="{{ di.url }}" target="_blank" rel="noopener">{% icon "folder-open", "size-4" %} {{ "committee.drive.open_folder" | t(lang) }}</a>{% endif %}
+        <a class="btn-secondary" href="mailto:{{ site.contact_email }}?subject={{ 'committee.docs.mail_subject' | t(lang) | urlencode }}">{% icon "mail", "size-4" %} {{ "committee.docs.ask_access" | t(lang) }}</a>
+      </div>
+    </div>
+    <div class="panel-muted">
+      <p class="eyebrow">{{ "committee.ann.where" | t(lang) }}</p>
+      {% cmDrivePath lang, di, "bulletin", ("committee.ann.example_name" | t(lang)) %}
+      {% if not (anns | length) %}{% cmDriveChecked lang, di %}{% endif %}
+    </div>
+  </div>
+  {% endcall %}
+</div>

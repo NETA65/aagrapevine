@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- Test fixture: a Grapevine calendar event page in the site's own markup (the same Drupal fields and
+     JSON-LD as lv-event-longview.html). The event is made up from the review's example of an out-of-state
+     event that the old city list read as Texas: Gainesville, Florida. Contact details are fake. -->
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<link rel="canonical" href="https://www.aagrapevine.org/get-involved/events/2026-11-13/florida-state-convention" />
+<meta property="og:title" content="Florida State Convention" />
+<script type="application/ld+json">{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Event",
+            "url": "https://www.aagrapevine.org/get-involved/events/2026-11-13/florida-state-convention",
+            "name": "Florida State Convention",
+            "description": "Speakers, workshops and fellowship. Contact Pat at pat@example.org or (555) 010-0199.",
+            "startDate": "2026-11-13T07:00:00-0500",
+            "endDate": "2026-11-15T07:00:00-0500",
+            "location": {
+                "@type": "Place",
+                "name": "Hilton University of Florida Conference Center, Gainesville"
+            }
+        }
+    ]
+}</script>
+<title>Florida State Convention | AA Grapevine</title>
+</head>
+<body>
+<h1 class="page-title"><span class="field field--name-title field--type-string field--label-hidden">Florida State Convention</span>
+</h1>
+<main role="main" class="outer-wrapper">
+    <section id="content">
+       <div class="view-mode-full node--type-event">
+          <div class="content">
+        <div class="image-region">
+          <img src="/sites/default/files/2026-09/fl-convention-flyer.jpg" alt="Flyer">
+        </div>
+        <div class="main-region">
+  <div class="field field--name-field-daterange field--type-daterange field--label-inline">
+    <div class="field__label">Date</div>
+              <div class="field__item">November 13, 2026 - November 15, 2026</div>
+          </div>
+  <div class="field field--name-field-event-location field--type-string field--label-inline">
+    <div class="field__label">Location</div>
+              <div class="field__item">Hilton University of Florida Conference Center, Gainesville</div>
+          </div>
+  <div class="field field--name-field-website-url field--type-link field--label-inline">
+    <div class="field__label">Website</div>
+              <div class="field__item"><a href="https://convention.example.org/">https://convention.example.org/</a></div>
+          </div>
+            <div class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item"><p>Speakers, workshops and fellowship for the whole weekend. Hosted by Area 15 Florida.<br>
+Contact Pat at pat@example.org or (555) 010-0199.</p></div>
+        </div>
+      </div>
+      </div>
+    </section>
+</main>
+</body>
+</html>

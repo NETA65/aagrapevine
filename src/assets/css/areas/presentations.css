@@ -1,0 +1,778 @@
+/* =====================================================================
+   Workshop presentations — the player on /orientation/ (src/assets/js/presentations.js, the dialog shell in
+   src/_includes/macros/presentations.njk). Owner: the presentations area. Class prefix: gvp-.
+   1. The player: a full-screen dialog with a dark frame (progress line, stage, notes, control bar, menus,
+      notices, toast), the Customize drawer (light), the overview, the presenter view
+   2. The slides: ONE fixed, projector-safe palette (decks/kit.py — the site's light tokens; every text pairing
+      ≥ 4.5:1), in both site themes. A slide is a 1280 × 720 canvas in "logical px" (the PowerPoint grid:
+      13.333 × 7.5 in at 96 px/in), scaled to fit (transform); --u is one logical px, --t the type unit
+      (× --fit, the script's shrink-to-fit factor, × --ts, the reading settings' text size)
+   3. Reflowed slides: a phone held upright (or a very small window) gets the slide at its own width, type in
+      px from rem-sized units, one column, its own scrolling
+   4. Print (#gvp-print): html.gvp-printing hides everything else; the @page rules (named pages gvp-land /
+      gvp-port, with the deck's title in the page footer) come from the script
+   ===================================================================== */
+
+/* ---------- 1. The player ---------- */
+/* no page scroll behind the player, and a sideways swipe is never the browser's Back (overscroll navigation) */
+:root.gvp-open, :root.gvp-open body { overflow: hidden; overscroll-behavior: none; }
+.gvp {
+  --gold: #ffd79a; --chrome: #0b1220; --chrome-2: #111a2b; --chrome-line: rgb(255 255 255 / 0.16);
+  --bar-h: 3.5rem;
+  position: fixed; inset: 0; z-index: 90; display: flex; flex-direction: column;
+  background: var(--chrome); color: #fff; font-family: var(--font-sans); color-scheme: dark;
+}
+.gvp:focus { outline: none; }
+.gvp :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+/* a link on a (light) slide: the frame's gold would be about 1.3:1 there — the slide's deep blue (8:1 and more);
+   the navy title and closing slides keep the gold */
+.gvp-slide :focus-visible { outline-color: var(--gv-strong); }
+:is(.gvp-l-title, .gvp-l-closing) :focus-visible { outline-color: var(--gold, #ffd79a); }
+/* The script measures the slides and the control bar right after changing them (fitSlide, fitBar): nothing there
+   may move by a transition. Reduced motion (main.css: every transition 0.01ms, but still a transition) would
+   otherwise leave the old size to be read — the text dropped to its smallest, the bar zooming in and out. */
+.gvp-slide, .gvp-slide *, .gvp-slide *::before, .gvp-slide *::after, .gvp-bar, .gvp-stage, .gvp-canvas { transition-property: none; }
+.gvp button { font: inherit; cursor: pointer; }
+.gvp [hidden] { display: none !important; }
+.gvp-progress { flex: none; height: 4px; background: rgb(255 255 255 / 0.12); }
+.gvp-progress > span { display: block; width: 0; height: 100%; background: var(--gold); transition: width 0.3s ease; }
+
+/* a phone held upright: the title and Close on a row of their own */
+.gvp-top { display: none; flex: none; align-items: center; gap: 0.5rem; padding: 0 0.25rem 0 0.75rem; min-height: 3rem;
+  border-bottom: 1px solid var(--chrome-line); }
+.gvp-top-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.875rem; font-weight: 600; color: #dbe6f5; }
+.gvp-top-lang { font-weight: 400; color: #b9c6dc; }
+
+.gvp-body { position: relative; flex: 1; min-height: 0; display: flex; }
+.gvp-main { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.gvp-stagewrap { position: relative; flex: 1; min-height: 0; display: grid; place-items: center; padding: 8px; }
+/* a sideways swipe on the slide is the script's (next / previous slide), not the browser's: it keeps the up-down
+   scroll (a reflowed slide) and the pinch zoom; a wide table on a phone still scrolls sideways */
+.gvp-stagewrap, .gvp-stage, .gvp-stage > .gvp-canvas { touch-action: pan-y pinch-zoom; }
+.gvp-stage .gvp-s-tablewrap { touch-action: pan-x pan-y pinch-zoom; }
+.gvp-stage { position: relative; overflow: hidden; border-radius: 6px; background: #fff; box-shadow: 0 20px 60px -20px rgb(0 0 0 / 0.8); }
+.gvp-stage:has(> .gvp-loading) { background: transparent; box-shadow: none; }
+.gvp-stage > .gvp-canvas { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transform: scale(var(--k, 1)); transform-origin: 0 0; }
+.gvp-stage.is-reflow { width: 100%; height: 100%; border-radius: 10px; }
+.gvp-stage.is-reflow > .gvp-canvas { position: static; width: 100%; height: 100%; transform: none; overflow-y: auto; overscroll-behavior: contain; }
+.gvp-loading { display: grid; justify-items: center; gap: 1rem; max-width: 30rem; padding: 2rem 1rem; color: #dbe6f5; text-align: center; }
+.gvp-black { position: absolute; inset: 0; z-index: 4; background: #000; }
+.gvp-preview-tag { position: absolute; z-index: 3; top: 14px; left: 50%; transform: translateX(-50%); max-width: calc(100% - 2rem);
+  padding: 0.3rem 0.9rem; border-radius: 999px; background: var(--gold); color: #1d1a26; font-size: 0.8125rem; font-weight: 700; text-align: center; }
+.gvp-digits { position: absolute; z-index: 17; top: 1rem; right: 1rem; padding: 0.4rem 0.8rem; border-radius: 0.6rem; background: #000c; color: #fff; font-weight: 700; }
+
+/* speaker notes: under the stage (large type in the presenter view) */
+.gvp-notes { flex: none; height: 32%; min-height: 8rem; max-height: 46%; overflow: auto; padding: 0.7rem 1.25rem 1rem;
+  border-top: 1px solid var(--chrome-line); background: var(--chrome-2); color: #e8eef8;
+  font-size: calc(1.0625rem * var(--notes-size, 1)); line-height: 1.55; }
+.gvp-notes-h { font: 600 0.75rem/1.3 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+.gvp-notes-lang { margin-top: 0.15rem; font-size: 0.8125rem; color: #b9c6dc; }
+.gvp-notes-body { margin-top: 0.45rem; }
+.gvp-notes-body:focus-visible { outline-offset: 4px; }
+.gvp-note + .gvp-note { margin-top: 0.55em; }
+.gvp-note-label { color: var(--gold); font-weight: 700; }
+.gvp-vnote { margin-bottom: 0.75em; padding: 0.5em 0.8em; border-left: 4px solid var(--gold); border-radius: 0 0.4rem 0.4rem 0; background: rgb(255 215 154 / 0.14); }
+.gvp-timeline { margin-top: 0.8em !important; padding-top: 0.6em; border-top: 1px solid var(--chrome-line); color: #d8e7fb; }
+.gvp-nonotes { color: #b9c6dc; }
+.gvp-notes a { color: #9ccbf5; text-decoration: underline; }
+.gvp-notes .gvp-blank { color: #ffb47f; font-weight: 700; }
+
+/* the control bar */
+.gvp-bar { flex: none; display: flex; align-items: center; gap: 0.25rem; height: var(--bar-h);
+  padding: 0 max(0.5rem, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(0.5rem, env(safe-area-inset-left));
+  border-top: 1px solid var(--chrome-line); background: var(--chrome); }
+.gvp-btn { display: inline-flex; flex: none; align-items: center; justify-content: center; gap: 0.45rem; min-width: 2.75rem; min-height: 2.75rem;
+  padding: 0 0.6rem; border: 1px solid transparent; border-radius: 999px; background: transparent; color: #fff;
+  font-size: 0.875rem; font-weight: 600; white-space: nowrap; transition: background-color 0.15s; }
+.gvp-btn:hover { background: rgb(255 255 255 / 0.12); }
+.gvp-btn[aria-pressed="true"] { border-color: rgb(255 215 154 / 0.6); background: rgb(255 215 154 / 0.16); color: var(--gold); }
+.gvp-btn:disabled { opacity: 0.35; cursor: default; }
+.gvp-btn .icon { flex: none; }
+.gvp-count { flex: none; min-width: 4.25rem; text-align: center; font-size: 0.9rem; font-variant-numeric: tabular-nums; color: #dbe6f5; }
+.gvp-bar-title { flex: 1; min-width: 0; padding: 0 0.5rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.875rem; color: #b9c6dc; }
+/* the words beside the icons when there is room; below that the icon alone (its name stays for screen readers) */
+@media (width < 80rem) {
+  .gvp-btn--text > .gvp-btn-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+/* Presenter view, Print and Full screen go into "More" below 900px */
+.gvp-narrow { display: none; }
+@media (width < 56.25rem) {
+  .gvp-wide { display: none; }
+  .gvp-narrow { display: inline-flex; }
+}
+@media (width < 40rem) {
+  .gvp-top { display: flex; }
+  .gvp-bar-title { visibility: hidden; padding: 0; }
+  .gvp-count { min-width: 3.25rem; font-size: 0.8125rem; }
+  .gvp-bar { gap: 0; padding-inline: 0.25rem; }
+}
+@media (width >= 40rem) and (width < 56.25rem) {
+  .gvp-bar .gvp-btn--close { display: inline-flex; }
+}
+/* measured by the script (fitBar): a bar that would not fit drops its words, then moves buttons into More */
+.gvp-bar.is-compact .gvp-btn--text > .gvp-btn-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.gvp-bar.is-tight .gvp-wide { display: none; }
+.gvp-bar.is-tight .gvp-narrow { display: inline-flex; }
+@media (width >= 40rem) { .gvp-bar.is-tight .gvp-btn--close { display: inline-flex; } }
+/* a phone held sideways, a short window: a slimmer bar, more slide */
+@media (height < 31.25rem) {
+  .gvp { --bar-h: 3rem; }
+  .gvp-notes { min-height: 6rem; }
+}
+
+/* menus (Print · More) */
+.gvp-menuwrap { position: absolute; z-index: 25; min-width: 17rem; max-width: calc(100vw - 1rem); max-height: calc(100% - var(--bar-h) - 1rem); overflow-y: auto;
+  padding: 0.4rem; border-radius: 0.75rem; background: #fff; color: #1d1a26; box-shadow: 0 18px 50px -12px rgb(0 0 0 / 0.6); color-scheme: light; }
+.gvp-menuwrap :focus-visible { outline-color: #0a5fa8; }
+.gvp-menuitem { display: flex; align-items: flex-start; gap: 0.65rem; width: 100%; min-height: 2.75rem; padding: 0.55rem 0.7rem;
+  border: 0; border-radius: 0.5rem; background: none; color: inherit; text-align: left; }
+.gvp-menuitem:hover, .gvp-menuitem:focus-visible { background: #e5f0fa; }
+.gvp-menuitem > .icon { margin-top: 0.2rem; color: #0a5fa8; }
+.gvp-mi-t { display: block; font-size: 0.9rem; font-weight: 600; }
+.gvp-mi-d { display: block; font-size: 0.78rem; color: #57526a; }
+.gvp-menu-note { margin-top: 0.3rem; padding: 0.45rem 0.7rem 0.3rem; border-top: 1px solid #e6dfd2; font-size: 0.75rem; line-height: 1.45; color: #57526a; }
+
+/* notices over the stage, and the toast */
+.gvp-notice { position: absolute; z-index: 18; left: 50%; bottom: calc(var(--bar-h) + 1rem); transform: translateX(-50%); width: min(36rem, calc(100% - 2rem));
+  max-height: calc(100% - var(--bar-h) - 2rem); overflow-y: auto; overscroll-behavior: contain;
+  padding: 1rem 1.25rem; border: 1px solid rgb(255 255 255 / 0.22); border-radius: 1rem; background: #16233a; color: #fff;
+  box-shadow: 0 24px 60px -16px rgb(0 0 0 / 0.75); }
+.gvp-notice-h { font-size: 1.0625rem; font-weight: 700; }
+.gvp-notice-text { margin-top: 0.35rem; font-size: 0.9375rem; line-height: 1.5; color: #d6e2f3; }
+.gvp-notice-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+.gvp-toast { position: absolute; z-index: 30; left: 50%; bottom: calc(var(--bar-h) + 1rem); transform: translateX(-50%); display: flex; align-items: center; gap: 0.75rem;
+  width: max-content; max-width: calc(100% - 2rem); padding: 0.6rem 0.6rem 0.6rem 1rem; border-radius: 0.75rem;
+  background: #f4efe6; color: #1d1a26; box-shadow: 0 16px 40px -12px rgb(0 0 0 / 0.6); font-size: 0.9rem; color-scheme: light; }
+.gvp-toast :focus-visible { outline-color: #0a5fa8; }
+.gvp-toast--page { position: fixed; z-index: 70; bottom: max(1rem, env(safe-area-inset-bottom)); border: 1px solid var(--c-line); background: var(--c-surface); color: var(--c-ink);
+  box-shadow: var(--shadow-lift); color-scheme: normal; }
+.gvp-toast--page :focus-visible { outline-color: var(--c-gv); }
+.gvp-toast-btn { flex: none; min-height: 2.75rem; padding: 0 1rem; border: 0; border-radius: 999px; background: #0b2f55; color: #fff; font-weight: 700; }
+.gvp-toast--page .gvp-toast-btn { background: var(--c-gv); color: var(--c-surface); }
+/* a toast with nothing to say: still there (a live region is heard only when it exists before its words), unseen */
+.gvp-toast.is-idle { position: absolute; width: 1px; height: 1px; min-width: 0; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%);
+  white-space: nowrap; border: 0; box-shadow: none; }
+.gvp-toast--page.is-idle { position: fixed; }
+
+/* buttons inside the drawer, the notices and the panels */
+.gvp-pill { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 2.5rem; padding: 0 0.95rem;
+  border: 1px solid #cfc7b8; border-radius: 999px; background: #fff; color: #1d1a26; font-size: 0.875rem; font-weight: 600; text-align: center; }
+.gvp-pill:hover { border-color: #0a5fa8; }
+.gvp-pill--primary { border-color: #0b2f55; background: #0b2f55; color: #fff; }
+.gvp-pill--primary:hover { background: #07457c; }
+.gvp-pill--sm { min-height: 2.25rem; padding: 0 0.7rem; font-size: 0.8125rem; }
+.gvp-pill:disabled { opacity: 0.45; cursor: default; }
+/* a print being prepared (the deck's file, its fonts, the pages): the button that started it shows it — on the
+   page's cards and its "Print or save a copy" card too */
+.gvp-pill[aria-busy="true"], [data-pres-print][aria-busy="true"] { cursor: progress; opacity: 0.7; }
+[data-pres-print][aria-busy="true"] > .icon:first-child { animation: gvp-busy 1.2s ease-in-out infinite; }
+@keyframes gvp-busy { 50% { opacity: 0.35; } }
+.gvp-notice .gvp-pill, .gvp-loading .gvp-pill { border-color: rgb(255 255 255 / 0.35); background: rgb(255 255 255 / 0.08); color: #fff; }
+.gvp-notice .gvp-pill--primary { border-color: var(--gold); background: var(--gold); color: #1d1a26; }
+@media (pointer: coarse) { .gvp-pill, .gvp-pill--sm { min-height: 2.75rem; } }
+.gvp-iconbtn { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 0; border-radius: 999px; background: none; color: inherit; }
+.gvp-iconbtn:hover { background: rgb(0 0 0 / 0.06); }
+.gvp-iconbtn--dark:hover { background: rgb(255 255 255 / 0.12); }
+
+/* ---------- Customize: a drawer beside the stage (below it on a phone) ---------- */
+.gvp-drawer { flex: none; display: flex; flex-direction: column; width: min(30rem, 44vw); min-height: 0;
+  border-left: 1px solid #d9d2c4; background: #fff; color: #1d1a26; color-scheme: light; }
+.gvp-drawer :focus-visible { outline-color: #0a5fa8; }
+.gvp-drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.4rem 0.5rem 0.2rem 1rem; }
+.gvp-drawer-h { display: flex; align-items: center; gap: 0.5rem; font: 700 1.0625rem/1.2 var(--font-sans); letter-spacing: 0; }
+.gvp-tabs { display: flex; flex-wrap: wrap; gap: 0.3rem; padding: 0.3rem 0.75rem 0.6rem; border-bottom: 1px solid #e6dfd2; }
+.gvp-tab { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 2.25rem; padding: 0 0.7rem; border: 0; border-radius: 999px;
+  background: #f4efe6; color: #3f3a4f; font-size: 0.8125rem; font-weight: 600; }
+.gvp-tab:hover { background: #ebe4d6; }
+.gvp-tab[aria-selected="true"] { background: #0b2f55; color: #fff; }
+@media (pointer: coarse) { .gvp-tab { min-height: 2.75rem; } }
+.gvp-nostore { display: flex; align-items: flex-start; gap: 0.45rem; margin: 0; padding: 0.55rem 1rem; border-bottom: 1px solid #f3c9a8;
+  background: #fdeee3; color: #6b2a07; font-size: 0.8125rem; line-height: 1.4; }
+.gvp-nostore > .icon { flex: none; margin-top: 0.1rem; }
+.gvp-panels { position: relative; flex: 1; min-height: 0; }
+.gvp-panel { position: absolute; inset: 0; overflow-y: auto; padding: 0.9rem 1rem 2.5rem; font-size: 0.9375rem; line-height: 1.5; }
+.gvp-panel:focus-visible { outline-offset: -3px; }
+.gvp-ph { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.gvp-ph-h { font: 700 1rem/1.3 var(--font-sans); letter-spacing: 0; }
+.gvp-ph-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.gvp-ph-tools--end { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #e6dfd2; }
+.gvp-pp { margin-top: 0.5rem; color: #3f3a4f; }
+.gvp-pp--strong { font-weight: 600; color: #1d1a26; }
+.gvp-pp--muted { font-size: 0.8125rem; color: #57526a; }
+.gvp-privacy { margin-top: 1.25rem; padding-top: 0.75rem; border-top: 1px solid #e6dfd2; }
+.gvp-sec { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid #e6dfd2; }
+.gvp-sec:first-of-type { border-top: 0; padding-top: 0; }
+.gvp-sec-h { font: 700 0.9375rem/1.3 var(--font-sans); letter-spacing: 0; }
+.gvp-sec .gvp-pp + .gvp-pill, .gvp-sec .gvp-pp + .gvp-filelabel, .gvp-sec .gvp-ph-tools { margin-top: 0.6rem; }
+.gvp-filelabel { cursor: pointer; }
+input.sr-only:focus-visible + .gvp-filelabel { outline: 3px solid #0a5fa8; outline-offset: 2px; }
+.gvp-errors:not(:empty) { margin-top: 0.75rem; padding: 0.6rem 0.8rem; border-left: 4px solid #b42318; border-radius: 0 0.5rem 0.5rem 0; background: #fdecea; color: #1d1a26; font-size: 0.875rem; }
+.gvp-errors-h { font-weight: 700; color: #8a1a11; }
+.gvp-errors ul { margin: 0.25rem 0 0 1.1rem; list-style: disc; }
+
+/* Version */
+.gvp-radios { margin: 0.75rem 0 0; padding: 0; border: 0; display: grid; gap: 0.5rem; }
+.gvp-radio { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.7rem 0.8rem; border: 1px solid #d9d2c4; border-radius: 0.75rem; cursor: pointer; }
+.gvp-radio:has(input:checked) { border-color: #0a5fa8; background: #e5f0fa; }
+.gvp-radio input { flex: none; width: 1.15rem; height: 1.15rem; margin-top: 0.2rem; accent-color: #0b2f55; }
+.gvp-radio-words { display: grid; gap: 0.1rem; min-width: 0; }
+.gvp-radio-title { font-weight: 700; }
+.gvp-radio-sub { font-size: 0.8125rem; color: #3f3a4f; }
+.gvp-radio-note { font-size: 0.8125rem; color: #57526a; }
+
+/* Slides: the list (drag handle · number · title · switch; the selected row has its buttons) */
+.gvp-rows { list-style: none; margin: 0.75rem 0 0; padding: 0; display: grid; gap: 0.15rem; }
+.gvp-row { display: grid; grid-template-columns: 1.1rem 1.9rem minmax(0, 1fr) auto; align-items: center; column-gap: 0.4rem; padding: 0.15rem 0.25rem;
+  border-radius: 0.6rem; }
+.gvp-row > .gvp-handle { grid-column: 1; grid-row: 1; }
+.gvp-row > .gvp-row-n { grid-column: 2; grid-row: 1; }
+.gvp-row > .gvp-row-title { grid-column: 3; grid-row: 1; }
+.gvp-row > .gvp-switch { grid-column: 4; grid-row: 1; }
+.gvp-row > .gvp-badges, .gvp-row > .gvp-row-acts { grid-column: 3 / -1; }
+.gvp-row.is-current { background: #e5f0fa; }
+.gvp-row.is-dragging { opacity: 0.5; }
+.gvp-drop { height: 3px; margin: -1px 0; border-radius: 3px; background: #0a5fa8; list-style: none; }
+.gvp-handle { display: grid; place-items: center; height: 2.25rem; color: #8a8499; cursor: grab; touch-action: none; }
+.gvp-row-n { font-size: 0.8rem; font-variant-numeric: tabular-nums; text-align: right; color: #57526a; }
+.gvp-row-title { display: grid; gap: 0.05rem; min-height: 2.5rem; padding: 0.3rem 0.35rem; border: 0; border-radius: 0.45rem; background: none; color: inherit; text-align: left; }
+.gvp-row-title:hover { background: rgb(10 95 168 / 0.08); }
+.gvp-row-t { font-size: 0.875rem; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.gvp-row.is-off .gvp-row-t { color: #6e6980; font-weight: 500; }
+.gvp-row-sub { font-size: 0.75rem; line-height: 1.3; color: #6e6980; }
+@media (pointer: coarse) { .gvp-row-title { min-height: 2.75rem; } }
+.gvp-badges { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0 0.35rem 0.25rem; }
+.gvp-badge { display: inline-block; padding: 0.05rem 0.45rem; border-radius: 999px; background: #f4efe6; color: #4b4660; font-size: 0.6875rem; font-weight: 600; line-height: 1.6; }
+.gvp-badge.is-edited { background: #e5f0fa; color: #07457c; }
+.gvp-badge.is-yours { background: #e7f3e3; color: #245522; }
+.gvp-badge.is-updated { background: #fdeee3; color: #8f3207; }
+/* Edit: a field the version has words of its own for (the edit stays in this version) */
+.gvp-badge.is-version { margin-left: 0.15rem; background: #efe9f7; color: #4a2d7a; vertical-align: 0.06em; }
+.gvp-row-acts { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0.15rem 0.35rem 0.45rem; }
+.gvp-switch { display: grid; place-items: center; width: 3rem; height: 2.75rem; padding: 0; border: 0; border-radius: 999px; background: none; }
+.gvp-switch-track { position: relative; display: block; width: 2.6rem; height: 1.45rem; border-radius: 999px; background: #a19bb0; transition: background-color 0.15s; }
+.gvp-switch-track::after { content: ""; position: absolute; top: 0.18rem; left: 0.18rem; width: 1.09rem; height: 1.09rem; border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.3); transition: transform 0.15s; }
+.gvp-switch[aria-checked="true"] .gvp-switch-track { background: #2f6e2c; }
+.gvp-switch[aria-checked="true"] .gvp-switch-track::after { transform: translateX(1.15rem); }
+.gvp-switch:disabled { opacity: 0.4; cursor: default; }
+
+/* Edit: the form (a field per part of the slide) */
+.gvp-form { margin-top: 0.25rem; }
+.gvp-field { margin-top: 0.9rem; }
+.gvp-label { display: block; font-size: 0.8125rem; font-weight: 700; color: #1d1a26; }
+.gvp-hint { margin-top: 0.1rem; font-size: 0.75rem; line-height: 1.4; color: #57526a; }
+/* (the box's edge: 3.8:1 on the white drawer — the site's text boxes' --c-field, main.css) */
+.gvp-input { display: block; width: 100%; min-height: 2.5rem; margin-top: 0.3rem; padding: 0.45rem 0.65rem; border: 1px solid #857f95; border-radius: 0.5rem;
+  background: #fff; color: #1d1a26; font: inherit; font-size: 0.9375rem; line-height: 1.45; }
+.gvp-input::placeholder { color: #6e6980; }
+.gvp-input:focus { border-color: #0a5fa8; }
+.gvp-textarea { resize: vertical; min-height: 4.5rem; }
+@media (pointer: coarse) { .gvp-input { min-height: 2.75rem; font-size: 1rem; } }
+.gvp-fieldset { margin: 1rem 0 0; padding: 0; border: 0; }
+.gvp-subfields { margin-top: 0.6rem; padding: 0.15rem 0.75rem 0.75rem; border: 1px solid #e6dfd2; border-radius: 0.75rem; }
+.gvp-sublabel { margin-top: 0.5rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #57526a; }
+.gvp-agenda-rows { display: grid; gap: 0.4rem; margin: 0.5rem 0; }
+.gvp-agenda-row { display: grid; grid-template-columns: 5.5rem minmax(0, 1.3fr) minmax(0, 1fr) 2.75rem; gap: 0.3rem; align-items: center; }
+.gvp-agenda-row .gvp-input { margin-top: 0; }
+@media (width < 40rem) {
+  .gvp-agenda-row { grid-template-columns: 5rem minmax(0, 1fr) 2.75rem; }
+  .gvp-agenda-row > :nth-child(3) { grid-column: 1 / 3; grid-row: 2; }
+}
+.gvp-warn { margin-top: 0.75rem; padding: 0.7rem 0.85rem; border-left: 4px solid #b8430b; border-radius: 0 0.6rem 0.6rem 0; background: #fdeee3; }
+.gvp-warn--long { font-size: 0.875rem; line-height: 1.45; color: #6b2a07; }
+.gvp-warn-h { font-weight: 700; color: #8f3207; }
+.gvp-warn-acts { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.55rem; }
+
+/* Add a slide */
+.gvp-addgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr)); gap: 0.5rem; margin-top: 0.85rem; }
+.gvp-addbtn { display: flex; align-items: flex-start; gap: 0.6rem; min-height: 4rem; padding: 0.75rem; border: 1px solid #d9d2c4; border-radius: 0.75rem;
+  background: #fff; color: inherit; text-align: left; }
+.gvp-addbtn:hover { border-color: #0a5fa8; background: #f6faff; }
+.gvp-addbtn > span:first-child { margin-top: 0.15rem; color: #0a5fa8; }
+.gvp-addwords { display: grid; gap: 0.1rem; }
+.gvp-addtitle { font-weight: 700; }
+.gvp-adddesc { font-size: 0.8125rem; color: #57526a; }
+
+/* Your details: one group per slide */
+.gvp-group { margin-top: 0.6rem; border: 1px solid #e6dfd2; border-radius: 0.75rem; }
+.gvp-group-sum { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 0.75rem; min-height: 2.75rem;
+  padding: 0.55rem 0.8rem; cursor: pointer; font-weight: 700; font-size: 0.875rem; }
+.gvp-group-n { font-size: 0.75rem; font-weight: 600; color: #57526a; }
+.gvp-group[open] > .gvp-group-sum { border-bottom: 1px solid #e6dfd2; }
+.gvp-group > .gvp-field { margin: 0.75rem 0.8rem 0; }
+.gvp-group > .gvp-field:last-child { margin-bottom: 0.85rem; }
+
+/* Prepare: the facilitator's pages */
+.gvp-prep { margin-top: 0.75rem; padding: 0.75rem 0.85rem; border: 1px solid #e6dfd2; border-radius: 0.75rem; }
+.gvp-prep--part { border-color: #c9d9ec; background: #f6faff; }
+.gvp-prep-h { font: 700 0.9375rem/1.3 var(--font-sans); letter-spacing: 0; }
+.gvp-prep-notes { margin-top: 0.4rem; font-size: 0.875rem; line-height: 1.5; color: #3f3a4f; }
+.gvp-prep-notes .gvp-note + .gvp-note { margin-top: 0.4em; }
+.gvp-prep-notes .gvp-note-label { color: #0b2f55; }
+.gvp-prep-notes .gvp-vnote { margin-bottom: 0.5em; padding: 0.35em 0.6em; border-left: 3px solid #b8430b; background: #fdeee3; }
+.gvp-prep-notes a { color: #0a5fa8; text-decoration: underline; }
+.gvp-prep-notes .gvp-blank { color: #b8430b; font-weight: 700; }
+.gvp-prep .gvp-badges { padding: 0.3rem 0 0; }
+.gvp-prep-acts { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.6rem; }
+.gvp-checks { list-style: none; margin: 0.5rem 0 0; padding: 0; display: grid; gap: 0.15rem; }
+.gvp-checks > li.is-sub { padding-left: 1.6rem; }
+.gvp-check { display: flex; align-items: flex-start; gap: 0.55rem; min-height: 2.25rem; padding: 0.25rem 0; cursor: pointer; font-size: 0.875rem; }
+.gvp-check input { flex: none; width: 1.15rem; height: 1.15rem; margin-top: 0.15rem; accent-color: #2f6e2c; }
+.gvp-check input:checked + .gvp-check-t { color: #57526a; text-decoration: line-through; }
+.gvp-check .gvp-blank { color: #b8430b; font-weight: 700; }
+
+/* a phone (or a narrow window): the drawer under the stage, the slide still in sight above it */
+@media (width < 48rem) {
+  .gvp-body { flex-direction: column; }
+  .gvp:not([data-mode="presenter"]).has-drawer .gvp-main { flex: 0 0 38%; }
+  .gvp-drawer { flex: 1; width: auto; border-left: 0; border-top: 1px solid #d9d2c4; }
+  .gvp.has-drawer .gvp-notes { display: none; }
+}
+/* a very short window (a phone held sideways, a browser zoomed to 200–400 %): Customize takes the whole space and
+   scrolls as one (its head, tabs and panel together) — no tab row drawn over the control bar, no panel out of
+   reach. The live preview of the slide waits until Customize closes. */
+@media (height < 32rem) {
+  .gvp.has-drawer:not([data-mode="presenter"]) .gvp-main { display: none; }
+  .gvp.has-drawer .gvp-drawer { flex: 1; width: auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; border-left: 0; }
+  .gvp.has-drawer .gvp-panels { flex: none; }
+  .gvp.has-drawer .gvp-panel { position: static; overflow: visible; }
+}
+
+/* ---------- the overview: every slide of the version ---------- */
+.gvp-overview { position: absolute; z-index: 15; top: 4px; left: 0; right: 0; bottom: var(--bar-h); overflow-y: auto; padding: 0.75rem 1.25rem 2rem; background: var(--chrome); }
+.gvp-ov-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+.gvp-ov-h { display: flex; align-items: center; gap: 0.5rem; font: 700 1.0625rem/1.2 var(--font-sans); letter-spacing: 0; }
+.gvp-ov-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: 1rem; }
+.gvp-thumb { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: 8px; background: none; text-align: left; }
+.gvp-thumb-n { position: absolute; z-index: 1; right: 6px; bottom: 6px; min-width: 1.6rem; padding: 0.05rem 0.45rem; border-radius: 999px; background: rgb(11 18 32 / 0.85);
+  color: #fff; font-size: 0.75rem; font-weight: 700; text-align: center; }
+.gvp-thumb-box { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px rgb(255 255 255 / 0.12); }
+.gvp-thumb-box > .gvp-canvas { position: absolute; left: 0; top: 0; display: block; width: 1280px; height: 720px; transform: scale(var(--tk, 0.18)); transform-origin: 0 0; pointer-events: none; }
+.gvp-thumb:hover .gvp-thumb-box { box-shadow: 0 0 0 2px rgb(255 255 255 / 0.5); }
+.gvp-thumb[aria-current="true"] .gvp-thumb-box { box-shadow: 0 0 0 3px var(--gold); }
+.gvp-thumb:focus-visible { outline-offset: 4px; }
+
+/* ---------- the presenter view: this slide, the next one, the notes in large type, timer and clock ---------- */
+.gvp-pvbar { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.25rem; padding: 0.35rem 0.75rem;
+  border-bottom: 1px solid var(--chrome-line); background: var(--chrome-2); }
+.gvp-pv-timerbox { display: flex; align-items: center; gap: 0.15rem; }
+.gvp-pv-timer { min-width: 5ch; margin-right: 0.35rem; font: 700 1.75rem/1 var(--font-sans); font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.gvp-pv-pace { font-weight: 700; }
+.gvp-pv-pace.is-behind { color: #ffb47f; }
+.gvp-pv-pace.is-ahead { color: #9ccbf5; }
+.gvp-pv-pace.is-on { color: #8fe0a0; }
+.gvp-pv-clockbox { display: flex; align-items: center; gap: 0.4rem; margin-left: auto; font-size: 1.125rem; font-weight: 600; font-variant-numeric: tabular-nums; color: #dbe6f5; }
+.gvp-pv-size { display: flex; gap: 0.15rem; }
+.gvp[data-mode="presenter"] .gvp-main { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1.15fr) minmax(0, 1fr);
+  grid-template-areas: "stage next" "notes notes"; }
+.gvp[data-mode="presenter"] .gvp-stagewrap { grid-area: stage; }
+.gvp[data-mode="presenter"] .gvp-notes { grid-area: notes; height: auto; max-height: none; min-height: 0; font-size: calc(1.375rem * var(--notes-size, 1)); }
+.gvp-pvnext { grid-area: next; display: flex; flex-direction: column; gap: 0.5rem; min-height: 0; padding: 0.75rem 0.75rem 0.5rem 0.25rem; overflow: auto; }
+.gvp-pvnext-label { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; color: var(--gold); }
+.gvp-pvnext-stage { position: relative; flex: none; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 6px; background: #fff; }
+.gvp-pvnext-stage:empty { background: rgb(255 255 255 / 0.06); }
+.gvp-pvnext-stage > .gvp-canvas { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transform: scale(var(--k, 0.3)); transform-origin: 0 0; }
+.gvp-pv-plan { font-size: 0.95rem; line-height: 1.45; color: #dbe6f5; }
+@media (width < 48rem) {
+  .gvp[data-mode="presenter"] .gvp-main { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-areas: "stage" "next" "notes"; }
+  .gvp[data-mode="presenter"] .gvp-pvnext-stage { display: none; }
+  .gvp-pvnext { padding: 0.25rem 0.75rem; }
+}
+
+/* ---------- 2. The slides ---------- */
+.gvp-slide {
+  /* decks/kit.py's palette (the site's light tokens + the hero navy), the same in both site themes */
+  --navy: #0b2f55; --navy-glow: #0e3a69; --gv: #0a5fa8; --gv-strong: #07457c; --gv-soft: #e5f0fa; --gv-light: #a9d2f8;
+  --lv: #b8430b; --lv-strong: #8f3207; --lv-soft: #fdeee3; --lv-light: #ffc79e;
+  --grape: #5b2a86; --grape-soft: #f1e8f8; --grape-light: #dcc3f5; --vine: #2f6e2c; --vine-soft: #e7f3e3; --vine-light: #abe4a6;
+  --paper: #fbf8f2; --surface-2: #f4efe6; --ink: #1d1a26; --muted: #57526a; --faint: #6e6980; --line: #e6dfd2; --ice: #d2e8fc;
+  --fill-dark: #ffb47f;
+  --u: 1px;                                                  /* one logical px of the 1280 × 720 canvas */
+  --t: calc(var(--u) * var(--fit, 1) * var(--ts, 1));        /* the type unit: shrinks to fit, grows with Aa */
+  position: relative; display: flex; flex-direction: column; box-sizing: border-box; width: 100%; height: 100%; overflow: hidden;
+  padding: calc(40 * var(--u)) calc(72 * var(--u)) 0; background: var(--paper); color: var(--ink);
+  font-family: var(--font-sans); font-size: calc(32 * var(--t)); line-height: 1.22; text-align: left; letter-spacing: 0; color-scheme: light;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.gvp-slide *, .gvp-slide *::before, .gvp-slide *::after { box-sizing: border-box; }
+.gvp-slide :where(h2, h3, p, ul, ol, figure, blockquote, dl, dd) { margin: 0; }
+.gvp-a-gv { --acc: var(--gv); --acc-strong: var(--gv-strong); --acc-soft: var(--gv-soft); --acc-light: var(--gv-light); }
+.gvp-a-lv { --acc: var(--lv); --acc-strong: var(--lv-strong); --acc-soft: var(--lv-soft); --acc-light: var(--lv-light); }
+.gvp-a-vine { --acc: var(--vine); --acc-strong: var(--vine); --acc-soft: var(--vine-soft); --acc-light: var(--vine-light); }
+.gvp-a-grape { --acc: var(--grape); --acc-strong: var(--grape); --acc-soft: var(--grape-soft); --acc-light: var(--grape-light); }
+.gvp-a-navy { --acc: var(--navy); --acc-strong: var(--navy); --acc-soft: var(--gv-soft); --acc-light: var(--ice); }
+.gvp-slide a { color: var(--gv); text-decoration: underline; text-underline-offset: 0.12em; text-decoration-thickness: 0.06em; }
+.gvp-slide strong { font-weight: 700; }
+.gvp-blank { color: var(--lv); font-weight: 700; }
+.gvp-slide.is-scroll .gvp-s-fit { overflow-y: auto; }
+/* the area that must fit (the script shrinks --fit until it does, then lets it scroll) */
+.gvp-s-fit { position: relative; z-index: 1; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.gvp-s-head { flex: none; }
+.gvp-s-eyebrow { display: flex; align-items: flex-end; min-height: calc(36 * var(--u)); font-size: calc(20 * var(--t)); font-weight: 700; line-height: 1.15;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--acc); }
+.gvp-s-title { margin-top: calc(4 * var(--t)); font-family: var(--font-display); font-size: calc(48 * var(--t)); font-weight: 450; line-height: 1.08;
+  letter-spacing: -0.005em; color: var(--navy); text-wrap: balance; font-optical-sizing: auto; }
+.gvp-s-body { flex: 1 0 auto; display: flex; flex-direction: column; margin-top: calc(26 * var(--t)); }
+/* (a quotation sets its own margins: a short one is centred in the space under the title) */
+.gvp-s-body > :not(.gvp-s-takeaway, .gvp-s-source, .gvp-s-note, .gvp-s-intro, .gvp-s-quote) { margin-bottom: calc(18 * var(--t)); }
+.gvp-s-takeaway { margin-top: auto; padding: calc(17 * var(--t)) calc(28 * var(--u)); border-radius: calc(13 * var(--u)); background: var(--acc-soft);
+  color: var(--acc-strong); font-size: calc(28 * var(--t)); font-weight: 700; line-height: 1.25; }
+.gvp-s-source { margin-top: auto; padding-top: calc(8 * var(--t)); font-size: calc(17 * var(--t)); font-style: italic; line-height: 1.3; color: var(--faint); }
+.gvp-s-takeaway + .gvp-s-source { margin-top: 0; }
+.gvp-s-foot { flex: none; display: flex; align-items: center; justify-content: space-between; gap: calc(24 * var(--u)); height: calc(68 * var(--u));
+  font-size: calc(19 * var(--u) * var(--ts, 1)); line-height: 1.2; color: var(--muted); }
+.gvp-s-foottext { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gvp-s-pg { flex: none; font-variant-numeric: tabular-nums; }
+.gvp-s-subtitle { line-height: 1.25; }
+
+/* bullets (and every list on a slide) */
+.gvp-s-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: calc(13 * var(--t)); }
+.gvp-s-list > li { position: relative; padding-left: calc(40 * var(--t)); }
+.gvp-s-list > li::before { content: "•"; position: absolute; left: calc(5 * var(--t)); top: 0; color: var(--acc); font-weight: 700; }
+.gvp-s-list.is-numbered { counter-reset: gvp-n; }
+.gvp-s-list.is-numbered > li { counter-increment: gvp-n; padding-left: calc(46 * var(--t)); }
+.gvp-s-list.is-numbered > li::before { content: counter(gvp-n) "."; left: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.gvp-s-checklist > li::before { content: ""; top: 0.28em; left: calc(2 * var(--t)); width: 0.66em; height: 0.66em; border: calc(2.5 * var(--t)) solid var(--acc); border-radius: 0.12em; }
+/* a numbered checklist: the tick box, then its number */
+.gvp-s-list.is-numbered.gvp-s-checklist > li { padding-left: calc(84 * var(--t)); }
+.gvp-s-list.is-numbered.gvp-s-checklist > li::before { content: ""; left: calc(2 * var(--t)); font-weight: 400; }
+.gvp-s-list.is-numbered.gvp-s-checklist > li::after { content: counter(gvp-n) "."; position: absolute; left: calc(42 * var(--t)); top: 0; font-weight: 600;
+  font-variant-numeric: tabular-nums; color: var(--acc); }
+.gvp-s-sub { list-style: none; margin: calc(6 * var(--t)) 0 0; padding: 0; display: flex; flex-direction: column; gap: calc(4 * var(--t)); font-size: 0.84em; color: var(--muted); }
+.gvp-s-sub > li { position: relative; padding-left: calc(30 * var(--t)); }
+.gvp-s-sub > li::before { content: "–"; position: absolute; left: 0; }
+.gvp-s-text { display: flex; flex-direction: column; gap: calc(14 * var(--t)); }
+/* style "script": a read-aloud announcement — a card in the slide's tint, its instruction line (an all-bold
+   paragraph) in the slide's colour, the words in the serif, each ‹blank› in the fill-in orange (decks/kit.py's
+   script_box) */
+.gvp-s-text--script { flex: 1 0 auto; justify-content: center; gap: calc(12 * var(--t)); padding: calc(36 * var(--t)) calc(60 * var(--u));
+  border-radius: calc(15 * var(--u)); background: var(--acc-soft); }
+.gvp-s-text--script > p { font-family: var(--font-display); font-size: calc(34 * var(--t)); line-height: 1.42; color: var(--ink); }
+.gvp-s-text--script > p strong { font-weight: 700; }
+.gvp-s-text--script > .gvp-s-lead { font-family: var(--font-sans); font-size: calc(25 * var(--t)); line-height: 1.3; color: var(--acc-strong); }
+.gvp-s-mark { color: var(--lv); font-weight: 700; }                /* the blanks' orange: 4.6:1 or more on every tint */
+/* style "break": a pause — the message centred under the title, its first all-bold line large */
+.gvp-t-break .gvp-s-body { justify-content: center; }
+.gvp-s-text--break { flex: none; align-items: center; gap: calc(16 * var(--t)); text-align: center; font-size: calc(27 * var(--t));
+  line-height: 1.35; color: var(--muted); }
+.gvp-t-break .gvp-s-body > .gvp-s-text--break { margin-block: auto; }        /* (over the body's spacing rule) */
+.gvp-s-text--break > p { max-width: calc(980 * var(--u)); }
+.gvp-s-text--break > .gvp-s-lead { font-family: var(--font-display); font-size: calc(80 * var(--t)); font-weight: 450; line-height: 1.05; color: var(--navy); }
+.gvp-s-text--break > .gvp-s-lead strong { font-weight: inherit; }
+.gvp-s-text--break > .gvp-s-lead + p { font-size: calc(36 * var(--t)); color: var(--ink); }
+/* …and one whose title is the message ("Break: 10 minutes"): the title large in the slide's colour, the words just
+   under it, both in the middle of the slide */
+.gvp-t-break--title .gvp-s-fit { justify-content: center; text-align: center; }
+.gvp-t-break--title .gvp-s-title { font-size: calc(76 * var(--t)); line-height: 1.05; color: var(--acc-strong); }
+.gvp-t-break--title .gvp-s-body { flex: none; margin-top: calc(24 * var(--t)); }
+.gvp-t-break--title .gvp-s-body > .gvp-s-text--break { margin-block: 0; }
+
+/* title and closing: navy, two calm circles (kit.py's layout) */
+.gvp-l-title, .gvp-l-closing { padding: calc(60 * var(--u)) calc(72 * var(--u)); background: var(--navy); color: #fff; }
+.gvp-s-deco { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.gvp-s-deco::before, .gvp-s-deco::after { content: ""; position: absolute; border-radius: 50%; }
+.gvp-s-deco::before { left: calc(782 * var(--u)); top: calc(-130 * var(--u)); width: calc(662 * var(--u)); height: calc(662 * var(--u)); background: var(--navy-glow); }
+.gvp-s-deco::after { left: calc(1013 * var(--u)); top: calc(418 * var(--u)); width: calc(413 * var(--u)); height: calc(413 * var(--u)); background: rgb(10 95 168 / 0.3); }
+.gvp-l-title .gvp-s-fit, .gvp-l-closing .gvp-s-fit { justify-content: center; }
+.gvp-s-hero { max-width: calc(860 * var(--u)); }
+.gvp-l-title .gvp-s-eyebrow { min-height: 0; font-size: calc(22 * var(--t)); color: var(--gv-light); }
+.gvp-l-title .gvp-s-title, .gvp-l-closing .gvp-s-title { margin-top: calc(14 * var(--t)); font-size: calc(64 * var(--t)); line-height: 1.04; color: #fff; }
+.gvp-l-title .gvp-s-subtitle, .gvp-l-closing .gvp-s-subtitle { margin-top: calc(16 * var(--t)); font-size: calc(32 * var(--t)); color: var(--ice); }
+.gvp-s-lines { margin-top: calc(26 * var(--t)); display: grid; gap: calc(6 * var(--t)); font-size: calc(26 * var(--t)); line-height: 1.3; color: #fff; }
+.gvp-l-closing .gvp-s-lines { margin-top: calc(30 * var(--t)); }
+:is(.gvp-l-title, .gvp-l-closing) .gvp-blank { color: var(--fill-dark); }
+:is(.gvp-l-title, .gvp-l-closing) a { color: var(--gv-light); }
+.gvp-s-asof { position: absolute; z-index: 1; left: calc(72 * var(--u)); bottom: calc(32 * var(--u)); font-size: calc(19 * var(--u) * var(--ts, 1)); color: var(--gv-light); }
+.gvp-l-closing.has-qr .gvp-s-fit { flex-direction: row; align-items: center; justify-content: space-between; gap: calc(48 * var(--u)); }
+.gvp-l-closing.has-qr .gvp-s-hero { flex: 1; min-width: 0; }
+.gvp-s-qr { flex: none; display: grid; justify-items: center; gap: calc(10 * var(--u)); padding: calc(22 * var(--u)); border-radius: calc(16 * var(--u));
+  background: #fff; color: var(--navy); text-align: center; }
+.gvp-s-qr img { display: block; width: calc(264 * var(--u)); height: calc(264 * var(--u)); }
+.gvp-s-qr figcaption { max-width: calc(300 * var(--u)); font-size: calc(19 * var(--u)); font-weight: 700; overflow-wrap: anywhere; }
+
+/* a section: the part's number in a big circle on the part's tint (no footer) */
+.gvp-l-section { padding: 0 calc(72 * var(--u)); background: var(--acc-soft); }
+.gvp-l-section .gvp-s-fit { justify-content: center; }
+.gvp-s-sectionbox { display: flex; align-items: center; gap: calc(48 * var(--u)); padding-left: calc(20 * var(--u)); }
+.gvp-s-num { flex: none; display: grid; place-items: center; width: calc(192 * var(--u)); height: calc(192 * var(--u)); border-radius: 50%; background: var(--acc);
+  color: #fff; font-size: calc(76 * var(--u)); font-weight: 700; line-height: 1; font-variant-numeric: lining-nums; }
+.gvp-s-secwords { min-width: 0; }
+.gvp-l-section .gvp-s-title { margin-top: 0; font-size: calc(58 * var(--t)); }
+.gvp-l-section .gvp-s-subtitle { margin-top: calc(14 * var(--t)); font-size: calc(30 * var(--t)); color: var(--muted); }
+
+/* columns: tinted panels (Grapevine blue, La Viña red-orange …), numbered cards, or plain */
+.gvp-s-cols { display: grid; grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr)); gap: calc(26 * var(--u)); align-items: stretch; }
+.gvp-s-cols-1 { --n: 1; }
+.gvp-s-cols-3 { --n: 3; gap: calc(22 * var(--u)); }
+/* four: two rows of two wide cards (the decks' grid_cards), filling the space under the title */
+.gvp-s-cols-4 { --n: 2; flex: 1 0 auto; grid-auto-rows: 1fr; gap: calc(26 * var(--u)) calc(36 * var(--u)); }
+.gvp-s-col { min-width: 0; padding: calc(20 * var(--t)) calc(24 * var(--u)) calc(22 * var(--t)); border-radius: calc(15 * var(--u)); background: var(--acc-soft);
+  font-size: calc(27 * var(--t)); line-height: 1.25; }
+.gvp-s-cols-3 .gvp-s-col { padding-inline: calc(20 * var(--u)); font-size: calc(25 * var(--t)); }
+.gvp-s-cols-4 .gvp-s-col { padding-inline: calc(30 * var(--u)); }
+.gvp-s-cols--plain .gvp-s-col { padding: 0; background: none; }
+.gvp-s-colh { margin-bottom: calc(10 * var(--t)); font-family: var(--font-sans); font-size: calc(28 * var(--t)); font-weight: 700; line-height: 1.2; color: var(--acc); letter-spacing: 0; }
+.gvp-s-cols-3 .gvp-s-colh { font-size: calc(26 * var(--t)); }
+.gvp-s-colnum { font-size: calc(44 * var(--t)); font-weight: 700; line-height: 1; color: var(--acc-strong); }
+.gvp-s-colnum + .gvp-s-colh { margin-top: calc(6 * var(--t)); }
+/* a numbered card of a 2 × 2 grid: the number beside its heading and words (above them on three cards in a row), in
+   a column of the same width on every card, so the four headings line up whatever the digit (the number is set at 52:
+   any digit, A–F too, fits in 40 — Inter's widest digit is 0.68em); a wider one (10, W) widens its own card's column
+   rather than run into its heading */
+.gvp-s-cols-4 .gvp-s-col.has-num { display: grid; grid-template-columns: minmax(calc(40 * var(--t)), auto) minmax(0, 1fr); column-gap: calc(28 * var(--u));
+  align-content: start; }
+.gvp-s-cols-4 .gvp-s-col.has-num > .gvp-s-colnum { grid-row: 1 / span 4; font-size: calc(52 * var(--t)); }
+.gvp-s-cols-4 .gvp-s-col.has-num > :not(.gvp-s-colnum) { grid-column: 2; }
+.gvp-s-cols-4 .gvp-s-colnum + .gvp-s-colh { margin-top: 0; }
+.gvp-s-gloss { margin: calc(-6 * var(--t)) 0 calc(10 * var(--t)); font-size: 0.82em; font-style: italic; color: var(--muted); }
+.gvp-s-col .gvp-s-list { gap: calc(8 * var(--t)); }
+.gvp-s-col .gvp-s-list > li { padding-left: calc(28 * var(--t)); }
+.gvp-s-col .gvp-s-list > li::before { left: calc(4 * var(--t)); }
+/* a column of tick boxes (`checklist: true`: the revision handout): the box wider than a bullet, its words after it */
+.gvp-s-col .gvp-s-checklist > li { padding-left: calc(38 * var(--t)); }
+.gvp-s-col .gvp-s-checklist > li::before { left: calc(2 * var(--t)); }
+.gvp-s-col .gvp-s-text { gap: calc(8 * var(--t)); }
+/* "(auto-translated)" after an English gloss that is a machine translation */
+.gvp-auto { font-size: 0.78em; font-style: italic; color: var(--muted); white-space: nowrap; }
+
+/* tables: a navy header row (Grapevine / La Viña in their colours), banded rows */
+.gvp-s-tablewrap { min-width: 0; }
+.gvp-s-table { width: 100%; border-collapse: collapse; font-size: calc(25 * var(--t)); line-height: 1.22; }
+.gvp-s-table :is(th, td) { padding: calc(8 * var(--t)) calc(13 * var(--u)); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.gvp-s-table thead th { border-bottom: 0; background: var(--navy); color: #fff; font-weight: 700; }
+.gvp-s-table thead th.gvp-th-gv { background: var(--gv); }
+.gvp-s-table thead th.gvp-th-lv { background: var(--lv); }
+.gvp-s-table tbody tr { background: #fff; }
+.gvp-s-table tbody tr:nth-child(even) { background: var(--surface-2); }
+.gvp-s-table tbody th { font-weight: 700; }
+
+/* agenda / timeline: times in the accent colour */
+.gvp-s-agenda { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); font-size: calc(26 * var(--t)); }
+.gvp-s-agenda > li { display: grid; grid-template-columns: var(--tw, 4em) minmax(0, 1fr); gap: calc(20 * var(--u)); align-items: baseline; padding: calc(7 * var(--t)) 0;
+  border-bottom: 1px solid var(--line); }
+.gvp-s-time { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--acc); }
+.gvp-s-agd { display: block; margin-top: calc(2 * var(--t)); font-size: 0.85em; color: var(--muted); }
+.gvp-s-agenda.is-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(var(--rows, 8), auto); grid-auto-flow: column;
+  column-gap: calc(40 * var(--u)); font-size: calc(24 * var(--t)); }
+
+/* a quotation: the big quote mark, the words in the serif italic, centred in the space under the title; a long one
+   (the Preamble, read aloud by a member from the screen) large and upright beside a bar in the slide's colour, as
+   the decks set it (deck4's reading_slide) — readable from the back of a room */
+.gvp-s-quote { position: relative; margin: auto 0; padding-left: calc(120 * var(--u)); }
+.gvp-s-qmark { position: absolute; left: 0; top: calc(-34 * var(--t)); font-family: var(--font-display); font-size: calc(150 * var(--t)); line-height: 1; color: var(--acc); }
+.gvp-s-quote blockquote { margin: 0; font-family: var(--font-display); font-size: calc(38 * var(--t)); font-style: italic; line-height: 1.3; color: var(--ink); }
+.gvp-s-quote figcaption { margin-top: calc(20 * var(--t)); font-size: calc(22 * var(--t)); line-height: 1.3; color: var(--muted); }
+.gvp-s-quote.is-long { margin: 0 0 auto; padding-left: 0; }
+.gvp-s-quote.is-long blockquote { padding: calc(2 * var(--t)) 0 calc(4 * var(--t)) calc(40 * var(--u)); border-left: calc(7 * var(--u)) solid var(--acc);
+  font-size: calc(33 * var(--t)); font-style: normal; line-height: 1.32; }
+.gvp-s-quote.is-long figcaption { margin-top: calc(14 * var(--t)); padding-left: calc(47 * var(--u)); font-size: calc(19 * var(--t)); }
+
+/* an activity: numbered steps, a green time card (and what to bring) beside them */
+.gvp-slide.gvp-l-activity { --acc: var(--vine); --acc-strong: var(--vine); --acc-soft: var(--vine-soft); }
+.gvp-s-activity { flex: 1 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) calc(330 * var(--u)); gap: calc(40 * var(--u)); align-items: start; }
+.gvp-s-actmain { display: flex; flex-direction: column; gap: calc(20 * var(--t)); min-height: 100%; }
+.gvp-s-actmain .gvp-s-list { font-size: calc(28 * var(--t)); }
+.gvp-s-actmain .gvp-s-takeaway { margin-top: auto; color: var(--ink); font-size: calc(24 * var(--t)); font-weight: 400; }
+.gvp-s-timecard { padding: calc(22 * var(--t)) calc(24 * var(--u)); border-radius: calc(15 * var(--u)); background: var(--vine-soft); text-align: center; }
+.gvp-s-tc-n { font-size: calc(72 * var(--t)); font-weight: 700; line-height: 1; color: var(--vine); }
+.gvp-s-tc-u { font-size: calc(24 * var(--t)); color: var(--ink); }
+.gvp-s-tc-h { margin-top: calc(16 * var(--t)); font-size: calc(23 * var(--t)); font-weight: 700; color: var(--vine); text-align: left; }
+.gvp-s-timecard .gvp-s-list { margin-top: calc(6 * var(--t)); gap: calc(6 * var(--t)); font-size: calc(22 * var(--t)); text-align: left; }
+.gvp-s-timecard .gvp-s-list > li { padding-left: calc(24 * var(--t)); }
+
+/* questions: the soft lavender pause */
+.gvp-slide.gvp-l-qa { --acc: var(--grape); background: var(--grape-soft); }
+.gvp-l-qa .gvp-s-title { font-size: calc(56 * var(--t)); color: var(--grape); }
+.gvp-l-qa .gvp-s-body { margin-top: calc(32 * var(--t)); }
+.gvp-s-note { margin-top: auto; padding-top: calc(14 * var(--t)); font-size: calc(24 * var(--t)); font-style: italic; color: var(--muted); }
+
+/* resources: link cards, the address written out */
+.gvp-s-links { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(16 * var(--t)) calc(26 * var(--u)); }
+.gvp-s-links.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.gvp-s-linkcard { display: flex; flex-direction: column; gap: calc(3 * var(--t)); min-width: 0; padding: calc(14 * var(--t)) calc(22 * var(--u)); border: 1px solid var(--line);
+  border-radius: calc(12 * var(--u)); background: #fff; font-size: calc(24 * var(--t)); line-height: 1.25; }
+.gvp-s-lkurl { font-size: 0.9em; overflow-wrap: anywhere; }
+.gvp-s-lknote { font-size: 0.82em; color: var(--muted); }
+
+/* credits: the sources, smaller; the standard lines */
+.gvp-l-credits .gvp-s-body { font-size: calc(23 * var(--t)); }
+.gvp-l-credits .gvp-s-list { gap: calc(8 * var(--t)); }
+.gvp-l-credits .gvp-s-note { margin-top: calc(10 * var(--t)); padding-top: 0; font-size: calc(19 * var(--t)); font-style: normal; }
+
+/* a flow: boxes with arrows between them */
+.gvp-s-flow { list-style: none; margin: auto 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: calc(46 * var(--u)); }
+.gvp-s-step { position: relative; display: flex; flex-direction: column; gap: calc(8 * var(--t)); padding: calc(20 * var(--t)) calc(20 * var(--u)); border-radius: calc(15 * var(--u));
+  background: var(--acc-soft); font-size: calc(23 * var(--t)); line-height: 1.25; }
+.gvp-s-step > strong { font-size: 1.12em; color: var(--acc-strong); }
+.gvp-s-step + .gvp-s-step::before { content: "→"; position: absolute; left: calc(-37 * var(--u)); top: 50%; transform: translateY(-50%); font-size: calc(30 * var(--u)); font-weight: 700; color: var(--acc); }
+
+/* the site's facts (live slides) */
+.gvp-s-intro { margin-bottom: calc(18 * var(--t)); font-size: calc(26 * var(--t)); line-height: 1.3; }
+.gvp-live { font-size: calc(24 * var(--t)); line-height: 1.25; }
+.gvp-live-none { font-size: calc(26 * var(--t)); color: var(--muted); }
+.gvp-live-none--sub { margin-top: calc(10 * var(--t)); font-size: calc(22 * var(--t)); }
+.gvp-live-events { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(10 * var(--t)); }
+.gvp-live-events.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(22 * var(--u)); }
+.gvp-ev { padding: calc(9 * var(--t)) calc(18 * var(--u)); border-left: calc(6 * var(--u)) solid var(--acc); border-radius: 0 calc(10 * var(--u)) calc(10 * var(--u)) 0; background: #fff; }
+.gvp-ev-date { font-size: 0.85em; font-weight: 700; color: var(--acc-strong); }
+.gvp-ev-title { font-weight: 700; }
+.gvp-ev-title a { color: inherit; }
+.gvp-ev-place { font-size: 0.82em; color: var(--muted); }
+.gvp-live-prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(26 * var(--u)); }
+.gvp-price { padding: calc(18 * var(--t)) calc(24 * var(--u)); border-radius: calc(15 * var(--u)); background: var(--acc-soft); }
+.gvp-price .gvp-s-colh { margin-bottom: calc(2 * var(--t)); }
+.gvp-price-term { font-size: 0.82em; color: var(--muted); }
+.gvp-price dl { margin-top: calc(10 * var(--t)); display: grid; gap: calc(6 * var(--t)); }
+.gvp-price dl > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: calc(16 * var(--u)); align-items: baseline; }
+.gvp-price dt { font-weight: 600; }
+.gvp-price dd { text-align: right; font-size: 1.25em; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--acc-strong); }
+.gvp-price-then { display: block; font-size: 0.62em; font-weight: 600; color: var(--muted); }
+.gvp-live-note { margin-top: calc(14 * var(--t)); font-weight: 700; color: var(--lv-strong); }
+.gvp-live-facts { margin-bottom: calc(12 * var(--t)); font-size: calc(27 * var(--t)); font-weight: 700; }
+.gvp-live-dates { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(6 * var(--t)); }
+.gvp-live-dates.is-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: calc(24 * var(--u)); font-size: 0.86em; }
+.gvp-live-dates > li { padding: calc(6 * var(--t)) calc(14 * var(--u)); border-radius: calc(8 * var(--u)); background: #fff; }
+.gvp-live-dates > li.is-next { background: var(--acc-soft); color: var(--acc-strong); font-weight: 700; }
+.gvp-live-zoom { margin-top: calc(14 * var(--t)); color: var(--muted); }
+.gvp-live-theme { font-family: var(--font-display); font-size: 1.3em; line-height: 1.2; }
+.gvp-live-posts { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(10 * var(--t)); }
+.gvp-live-posts > li { display: grid; gap: calc(2 * var(--t)); padding: calc(10 * var(--t)) calc(18 * var(--u)); border-radius: calc(10 * var(--u)); background: #fff; }
+.gvp-live-posts a { font-weight: 700; color: var(--ink); }
+.gvp-live--qr { display: flex; justify-content: center; }
+.gvp-live--qr .gvp-s-qr { box-shadow: 0 0 0 1px var(--line); }
+.gvp-live-url { font-size: calc(18 * var(--u)); color: var(--muted); overflow-wrap: anywhere; }
+
+/* entering a slide (only when motion is welcome; html[data-motion="reduce"] stops it in main.css) */
+@media (prefers-reduced-motion: no-preference) {
+  .gvp-stage .gvp-slide.is-in { animation: gvp-in 0.24s ease-out both; }
+  .gvp-stage .gvp-slide.is-in-back { animation: gvp-in-back 0.24s ease-out both; }
+}
+@keyframes gvp-in { from { opacity: 0; transform: translateX(1%); } }
+@keyframes gvp-in-back { from { opacity: 0; transform: translateX(-1%); } }
+
+/* Windows High Contrast: the switches and the pressed buttons keep a visible state */
+@media (forced-colors: active) {
+  .gvp-switch-track { border: 1px solid ButtonText; }
+  .gvp-switch[aria-checked="true"] .gvp-switch-track::after { background: Highlight; forced-color-adjust: none; }
+  .gvp-btn[aria-pressed="true"], .gvp-tab[aria-selected="true"] { outline: 2px solid Highlight; }
+}
+
+/* ---------- 3. Reflowed slides (a phone held upright, a very small window) ---------- */
+.gvp-stage.is-reflow .gvp-slide { --u: 0.55px; height: auto; min-height: 100%; overflow: visible; padding: 20px 20px 0; }
+.gvp-stage.is-reflow .gvp-s-fit { overflow: visible; }
+.gvp-stage.is-reflow :is(.gvp-l-title, .gvp-l-closing) { padding: 28px 20px; }
+.gvp-stage.is-reflow .gvp-l-section { padding: 28px 20px; }
+.gvp-stage.is-reflow .gvp-s-eyebrow { min-height: 0; font-size: max(12.5px, calc(20 * var(--t))); }
+.gvp-stage.is-reflow :is(.gvp-s-source, .gvp-s-foot, .gvp-s-asof, .gvp-s-lknote, .gvp-ev-place) { font-size: max(12.5px, calc(17 * var(--t))); }
+.gvp-stage.is-reflow .gvp-s-foot { height: auto; padding: 14px 0 16px; }
+.gvp-stage.is-reflow .gvp-s-asof { position: static; margin-top: 20px; }
+.gvp-stage.is-reflow :is(.gvp-s-cols, .gvp-live-prices, .gvp-s-links.is-two, .gvp-s-activity, .gvp-live-events.is-two) { grid-template-columns: minmax(0, 1fr); }
+.gvp-stage.is-reflow .gvp-s-agenda.is-two { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row; }
+.gvp-stage.is-reflow .gvp-s-flow { grid-auto-flow: row; gap: 26px; }
+.gvp-stage.is-reflow .gvp-s-step + .gvp-s-step::before { content: "↓"; left: 50%; top: -24px; transform: translateX(-50%); }
+.gvp-stage.is-reflow .gvp-live-dates.is-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.gvp-stage.is-reflow .gvp-s-sectionbox { flex-direction: column; align-items: flex-start; gap: 18px; padding: 0; }
+.gvp-stage.is-reflow .gvp-s-num { width: 72px; height: 72px; font-size: 32px; }
+.gvp-stage.is-reflow .gvp-l-closing.has-qr .gvp-s-fit { flex-direction: column; align-items: flex-start; }
+.gvp-stage.is-reflow .gvp-s-qr img { width: 160px; height: 160px; }
+.gvp-stage.is-reflow .gvp-s-deco::before { left: 55%; }
+.gvp-stage.is-reflow .gvp-s-tablewrap { overflow-x: auto; }
+.gvp-stage.is-reflow .gvp-s-table { font-size: max(13px, calc(23 * var(--t))); }
+.gvp-stage.is-reflow .gvp-s-table :is(th, td) { padding-inline: 6px; overflow-wrap: break-word; hyphens: auto; }
+.gvp-stage.is-reflow .gvp-s-table col { width: auto !important; }
+.gvp-stage.is-reflow .gvp-s-quote { padding-left: 46px; }
+.gvp-stage.is-reflow .gvp-s-quote.is-long { padding-left: 0; }
+.gvp-stage.is-reflow .gvp-s-takeaway { margin-top: 10px; }
+.gvp-stage.is-reflow .gvp-s-cols-4 { flex: none; grid-auto-rows: auto; }
+.gvp-stage.is-reflow .gvp-s-text--script { padding: 18px; }
+.gvp-stage.is-reflow .gvp-s-text--break > .gvp-s-lead { font-size: max(30px, calc(80 * var(--t))); }
+
+/* ---------- the page around the player ---------- */
+.gvp-st-resume { font-weight: 600; text-decoration: underline; text-underline-offset: 0.15em; }
+
+/* ---------- 4. Print ---------- */
+/* laid out (off the screen, unseen) while the script prepares it, so the slides can be fitted before printing.
+   Each slide's canvas is a box of its own (contain): fitting one does not lay out the hundred others again. */
+.gvp-print { position: fixed; left: 0; top: 0; z-index: -1; width: 1280px; visibility: hidden; pointer-events: none; }
+.gvp-pp-slide, .gvp-ho-slide { position: relative; overflow: hidden; }
+.gvp-pp-slide > .gvp-canvas, .gvp-ho-slide > .gvp-canvas { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transform-origin: 0 0;
+  contain: layout size style; }
+.gvp-print--slides .gvp-pp-slide { width: 960px; height: 540px; }
+.gvp-print--slides .gvp-pp-slide > .gvp-canvas { transform: scale(0.75); }
+.gvp-print--notes .gvp-pp-slide { width: 576px; height: 324px; margin: 8px 0 14px; }
+.gvp-print--notes .gvp-pp-slide > .gvp-canvas { transform: scale(0.45); }
+/* the participants' handout: each slide 4.2 in wide (1280 × 0.315 = 403 px at 96 px to the inch) */
+.gvp-ho-slide { flex: none; width: 403px; height: 227px; }
+.gvp-ho-slide > .gvp-canvas { transform: scale(0.315); }
+@media print {
+  html.gvp-printing, html.gvp-printing body { height: auto !important; overflow: visible !important; background: #fff !important; color-scheme: light !important; }
+  html.gvp-printing body > :not(#gvp-print) { display: none !important; }
+  html.gvp-printing body > #gvp-print, html.gvp-printing body.o101-hub > #gvp-print { display: block !important; }
+  html.gvp-printing .gvp-print { position: static; z-index: auto; width: auto; visibility: visible; color: #000; font-family: var(--font-sans); }
+  .gvp-pp { break-after: page; break-inside: avoid; }
+  .gvp-pp:last-child { break-after: auto; }
+  .gvp-print--slides .gvp-pp { page: gvp-land; display: flex; justify-content: center; }
+  .gvp-print--notes .gvp-pp, .gvp-print--handout .gvp-pp, .gvp-print--script { page: gvp-port; }
+  /* Prepare's pages: landscape, as the decks' handout slides were, unless a page says `print: "portrait"` */
+  .gvp-print--pages .gvp-pp.is-land { page: gvp-land; }
+  .gvp-print--pages .gvp-pp.is-port { page: gvp-port; }
+  .gvp-print--notes .gvp-pp { break-inside: auto; }
+  .gvp-pp-slide, .gvp-ho-slide { break-inside: avoid; border: 1px solid #bbb; box-sizing: content-box; }
+  /* printer-friendly: white pages — the title slide keeps its navy, nothing else is filled */
+  .gvp-print .gvp-slide:not(.gvp-l-title) { background: #fff; }
+  .gvp-print .gvp-l-closing { color: var(--navy); }
+  .gvp-print .gvp-l-closing .gvp-s-deco { display: none; }
+  .gvp-print .gvp-l-closing :is(.gvp-s-title, .gvp-s-lines) { color: var(--navy); }
+  .gvp-print .gvp-l-closing .gvp-s-subtitle { color: var(--muted); }
+  .gvp-print .gvp-l-closing .gvp-blank { color: var(--lv); }
+  .gvp-print .gvp-l-closing .gvp-s-qr { box-shadow: 0 0 0 1px #bbb; }
+  .gvp-print .gvp-l-section { border-bottom: 10px solid var(--acc); }
+  .gvp-print .gvp-slide a { color: var(--gv); }
+  .gvp-pp-head { display: flex; justify-content: space-between; gap: 12pt; padding-bottom: 4pt; border-bottom: 1.5pt solid #0b2f55; font-size: 8pt; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase; color: #333; }
+  .gvp-pp-notes { font-size: 10.5pt; line-height: 1.45; color: #000; }
+  .gvp-pp-notes .gvp-note + .gvp-note { margin-top: 5pt; }
+  .gvp-pp-notes .gvp-note-label { color: #0b2f55; }
+  .gvp-pp-notes .gvp-vnote { margin-bottom: 6pt; padding: 4pt 7pt; border-left: 3pt solid #b8430b; background: #fdeee3; }
+  .gvp-pp-notes .gvp-timeline { margin-top: 7pt; padding-top: 5pt; border-top: 0.75pt solid #bbb; color: #000; font-weight: 600; }
+  .gvp-pp-notes .gvp-blank { color: #b8430b; font-weight: 700; }
+  .gvp-pp-notes a { color: #0a5fa8; }
+  /* three equal rows filling the sheet (9.6 in: within Letter's 9.85 in printable height, A4 keeps a little room),
+     each slide beside ruled lines down to the next one */
+  .gvp-print--handout .gvp-pp { display: grid; grid-template-rows: auto repeat(3, minmax(0, 1fr)); row-gap: 12pt; height: 9.6in; }
+  .gvp-ho-row { display: flex; gap: 18pt; align-items: stretch; min-height: 0; break-inside: avoid; }
+  .gvp-ho-lines { flex: 1; min-width: 0; background: repeating-linear-gradient(to bottom, transparent 0 calc(0.34in - 0.75pt), #9a9a9a calc(0.34in - 0.75pt) 0.34in);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .gvp-sc-head h1 { font-family: var(--font-display); font-size: 20pt; font-weight: 600; color: #0b2f55; }
+  .gvp-sc-head p { margin-top: 2pt; font-size: 9pt; color: #444; }
+  .gvp-sc-item { margin-top: 14pt; }
+  .gvp-sc-item h2 { margin: 0 0 4pt; font-family: var(--font-display); font-size: 13.5pt; font-weight: 600; color: #0b2f55; break-after: avoid; }
+  .gvp-sc-item .gvp-pp-notes { font-size: 10.5pt; }
+  /* a page fills its sheet — landscape 7.3 in (A4's printable height; Letter's is 7.6), portrait 9.6 in — and the
+     boxes to write in grow into it; a longer page goes on to the next sheet */
+  .gvp-print--pages .gvp-pp { display: flex; flex-direction: column; min-height: 7.3in; }
+  .gvp-print--pages .gvp-pp.is-port { min-height: 9.6in; }
+  .gvp-print--pages .gvp-slide--page { --u: 0.5px; flex: 1 0 auto; height: auto; min-height: 0; overflow: visible; padding: 0; background: #fff; }
+  /* a participants' handout: as large as the deck's slide printed across the sheet (1280 logical px over the
+     printable width: 0.74 px landscape, 0.54 px portrait), its panels down to the foot of the page */
+  .gvp-print--pages .gvp-pp.is-handout.is-land .gvp-slide--page { --u: 0.74px; }
+  .gvp-print--pages .gvp-pp.is-handout.is-port .gvp-slide--page { --u: 0.54px; }
+  .gvp-print--pages .gvp-pp.is-handout .gvp-s-cols { flex: 1 0 auto; }
+  .gvp-print--pages .gvp-slide--page .gvp-s-fit { overflow: visible; }
+  .gvp-print--pages .gvp-slide--page .gvp-s-title { font-weight: 600; }
+  /* a page participants write on (a handout: the story planner's cards, which grow down the page as its panels do):
+     room and lines under each prompt. A facilitator's page of cards (the chair's tips) prints as the slide shows it,
+     with no lines through its words and its notes under it */
+  .gvp-print--pages .gvp-pp.is-handout .gvp-s-cols--cards .gvp-s-col { min-height: 2.4in; border: 1pt solid #c9c3b6; background: #fff
+    repeating-linear-gradient(to bottom, transparent 0 calc(1.8em - 1px), #c9c3b6 calc(1.8em - 1px) 1.8em) 0 4.2em / 100% calc(100% - 4.2em) no-repeat; }
+  /* "My first line:" / "My title:": the words, then a line to write on (and a full line between them) */
+  .gvp-print--pages .gvp-s-takeaway--page { display: grid; gap: 0; margin-top: calc(20 * var(--t)); padding: 0; border-radius: 0; background: none;
+    color: var(--navy); font-size: calc(30 * var(--t)); line-height: 1.2; }
+  .gvp-s-tkline.is-write { display: flex; align-items: flex-end; gap: 8pt; min-height: 0.46in; }
+  .gvp-s-tkrule { flex: 1; border-bottom: 1pt solid #6e6980; }
+  .gvp-s-tkline.is-rule { display: block; min-height: 0.46in; border-bottom: 1pt solid #6e6980; }
+  /* a facilitator's page keeps its instructions (its notes) under it */
+  .gvp-pp-notes--page { margin-top: 12pt; padding-top: 7pt; border-top: 0.75pt solid #bbb; }
+}
+/* the participants' handout pages (Prepare → Print), as a page of text rather than a 16:9 slide */
+.gvp-slide--page { height: auto; }

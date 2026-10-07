@@ -1,0 +1,952 @@
+{
+ "updated": "2026-10-04T12:00:00Z",
+ "fixture": true,
+ "files": {
+  "gv": {
+   "name": "aagrapevine_archive_2026-10-04.csv",
+   "name_date": "2026-10-04",
+   "rows": 35942,
+   "texas_rows": 819,
+   "imported_at": "2026-10-04T12:00:00Z"
+  },
+  "lv": {
+   "name": "aalavina_archive_2026-10-04.csv",
+   "name_date": "2026-10-04",
+   "rows": 3607,
+   "texas_rows": 444,
+   "imported_at": "2026-10-04T12:00:00Z"
+  }
+ },
+ "since": {
+  "gv": 1944,
+  "lv": 1996
+ },
+ "counts": {
+  "neta65": {
+   "all": 13,
+   "gv": 10,
+   "lv": 3
+  },
+  "texas": {
+   "all": 21,
+   "gv": 16,
+   "lv": 5
+  }
+ },
+ "items": [
+  {
+   "id": "wa:fe1dbb084434",
+   "key": "https://www.aagrapevine.org/magazine/2026/oct/sample-front-steps",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/sample-front-steps",
+   "pub": "gv",
+   "lang": "en",
+   "title": "On the Front Steps",
+   "summary": "An old friend shows up at the right moment",
+   "i18n": {
+    "title": {
+     "en": "On the Front Steps",
+     "es": "En los escalones de la entrada"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "issue_key": "2026-10",
+   "issue_label": "October 2026",
+   "year": 2026,
+   "decade": 2020,
+   "theme": "Gratitude",
+   "writers": [
+    {
+     "name": "Pat L.",
+     "anonymous": false,
+     "place": "Longview, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Longview",
+      "county": "Gregg",
+      "counties": [
+       "Gregg",
+       "Harrison"
+      ],
+      "state": "Texas",
+      "label_en": "Longview, Texas",
+      "label_es": "Longview, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Gregg",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "capture"
+  },
+  {
+   "id": "wa:7e25dcd3ac81",
+   "key": "https://www.aagrapevine.org/magazine/2026/oct/sample-porch-light",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/sample-porch-light",
+   "pub": "gv",
+   "lang": "en",
+   "title": "The Porch Light",
+   "summary": "A neighbor keeps a light on, and a newcomer finds the way to a meeting",
+   "i18n": {
+    "title": {
+     "en": "The Porch Light",
+     "es": "La luz del porche"
+    },
+    "summary": {
+     "en": "A neighbor keeps a light on, and a newcomer finds the way to a meeting",
+     "es": "Una vecina deja una luz encendida y un recién llegado encuentra el camino a una reunión"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "issue_key": "2026-10",
+   "issue_label": "October 2026",
+   "year": 2026,
+   "decade": 2020,
+   "theme": "Gratitude",
+   "writers": [
+    {
+     "name": "Ann T.",
+     "anonymous": false,
+     "place": "Tyler, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Tyler",
+      "county": "Smith",
+      "counties": [
+       "Smith"
+      ],
+      "state": "Texas",
+      "label_en": "Tyler, Texas",
+      "label_es": "Tyler, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Smith",
+   "audio": true,
+   "online_exclusive": false,
+   "column": false,
+   "from": "both"
+  },
+  {
+   "id": "wa:cb55f5e79894",
+   "key": "https://www.aalavina.org/revista/septiembre-octubre-2026/sample-camino-nuevo",
+   "url": "https://www.aalavina.org/revista/septiembre-octubre-2026/sample-camino-nuevo",
+   "pub": "lv",
+   "lang": "es",
+   "title": "Un camino nuevo",
+   "summary": "Al servir en su grupo encontró un propósito",
+   "i18n": {
+    "title": {
+     "es": "Un camino nuevo",
+     "en": "A New Road"
+    },
+    "summary": {
+     "es": "Al servir en su grupo encontró un propósito",
+     "en": "Serving his group gave him a purpose"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "issue_key": "2026-09",
+   "issue_label": "Septiembre / Octubre 2026",
+   "year": 2026,
+   "decade": 2020,
+   "theme": "Servicio en AA",
+   "writers": [
+    {
+     "name": "Luis M.",
+     "anonymous": false,
+     "place": "Dallas, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Dallas",
+      "county": "Dallas",
+      "counties": [
+       "Collin",
+       "Dallas",
+       "Denton",
+       "Kaufman",
+       "Rockwall"
+      ],
+      "state": "Texas",
+      "label_en": "Dallas, Texas",
+      "label_es": "Dallas, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Dallas",
+   "audio": true,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:95a82b528cad",
+   "key": "https://www.aagrapevine.org/magazine/2026/aug/sample-quiet-highway",
+   "url": "https://www.aagrapevine.org/magazine/2026/aug/sample-quiet-highway",
+   "pub": "gv",
+   "lang": "en",
+   "title": "The Quiet Highway",
+   "summary": "A long drive home becomes a lesson in patience",
+   "issue_key": "2026-08",
+   "issue_label": "August 2026",
+   "year": 2026,
+   "decade": 2020,
+   "theme": "Grapevine Online Exclusives",
+   "writers": [
+    {
+     "name": "Rita P.",
+     "anonymous": false,
+     "place": "Houston, Texas",
+     "geo": {
+      "scope": "texas",
+      "city": "Houston",
+      "county": "Harris",
+      "counties": [
+       "Fort Bend",
+       "Harris",
+       "Montgomery"
+      ],
+      "state": "Texas",
+      "label_en": "Houston, Texas",
+      "label_es": "Houston, Texas"
+     }
+    }
+   ],
+   "scope": "texas",
+   "county": "Harris",
+   "audio": false,
+   "online_exclusive": true,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:886248cef6a5",
+   "key": "https://www.aalavina.org/revista/julio-agosto-2026/sample-frontera",
+   "url": "https://www.aalavina.org/revista/julio-agosto-2026/sample-frontera",
+   "pub": "lv",
+   "lang": "es",
+   "title": "En la frontera",
+   "summary": "Una historia de esperanza en la frontera",
+   "i18n": {
+    "title": {
+     "es": "En la frontera",
+     "en": "On the Border"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "issue_key": "2026-07",
+   "issue_label": "Julio / Agosto 2026",
+   "year": 2026,
+   "decade": 2020,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Elena R.",
+     "anonymous": false,
+     "place": "El Paso, Texas",
+     "geo": {
+      "scope": "texas",
+      "city": "El Paso",
+      "county": "El Paso",
+      "counties": [
+       "El Paso"
+      ],
+      "state": "Texas",
+      "label_en": "El Paso, Texas",
+      "label_es": "El Paso, Texas"
+     }
+    }
+   ],
+   "scope": "texas",
+   "county": "El Paso",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "capture"
+  },
+  {
+   "id": "wa:b6750d45b4a1",
+   "key": "https://www.aalavina.org/revista/marzo-abril-2025/sample-primer-dia",
+   "url": "https://www.aalavina.org/revista/marzo-abril-2025/sample-primer-dia",
+   "pub": "lv",
+   "lang": "es",
+   "title": "Mi primer día",
+   "summary": "Un recuerdo del primer día sin beber",
+   "issue_key": "2025-03",
+   "issue_label": "Marzo / Abril 2025",
+   "year": 2025,
+   "decade": 2020,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Anónimo",
+     "anonymous": true,
+     "place": "San Antonio, Texas",
+     "geo": {
+      "scope": "texas",
+      "city": "San Antonio",
+      "county": "Bexar",
+      "counties": [
+       "Bexar",
+       "Comal",
+       "Medina"
+      ],
+      "state": "Texas",
+      "label_en": "San Antonio, Texas",
+      "label_es": "San Antonio, Texas"
+     }
+    }
+   ],
+   "scope": "texas",
+   "county": "Bexar",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:4bc4d30fb634",
+   "key": "https://www.aagrapevine.org/magazine/2022/sep/sample-dear-grapevine-september-2022",
+   "url": "https://www.aagrapevine.org/magazine/2022/sep/sample-dear-grapevine-september-2022",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Dear Grapevine",
+   "summary": null,
+   "issue_key": "2022-09",
+   "issue_label": "September 2022",
+   "year": 2022,
+   "decade": 2020,
+   "theme": "Young & Sober",
+   "writers": [
+    {
+     "name": "Mike K.",
+     "anonymous": false,
+     "place": "Palestine, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Palestine",
+      "county": "Anderson",
+      "counties": [
+       "Anderson"
+      ],
+      "state": "Texas",
+      "label_en": "Palestine, Texas",
+      "label_es": "Palestine, Texas"
+     }
+    },
+    {
+     "name": "Jim O.",
+     "anonymous": false,
+     "place": "Texas",
+     "geo": {
+      "scope": "texas",
+      "city": null,
+      "county": null,
+      "counties": [],
+      "state": "Texas",
+      "label_en": "Texas",
+      "label_es": "Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Anderson",
+   "audio": false,
+   "online_exclusive": false,
+   "column": true,
+   "from": "csv"
+  },
+  {
+   "id": "wa:e4e42d78d052",
+   "key": "https://www.aagrapevine.org/magazine/2021/mar/sample-county-only",
+   "url": "https://www.aagrapevine.org/magazine/2021/mar/sample-county-only",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Back Roads",
+   "summary": null,
+   "issue_key": "2021-03",
+   "issue_label": "March 2021",
+   "year": 2021,
+   "decade": 2020,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Gus H.",
+     "anonymous": false,
+     "place": "Smith County, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": null,
+      "county": "Smith",
+      "counties": [
+       "Smith"
+      ],
+      "state": "Texas",
+      "label_en": "Smith County, Texas",
+      "label_es": "Condado de Smith, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Smith",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:183e1e15ef8d",
+   "key": "https://www.aagrapevine.org/magazine/2020/feb/sample-rose-garden",
+   "url": "https://www.aagrapevine.org/magazine/2020/feb/sample-rose-garden",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Faith & Hope’s <b>Rose</b> Garden",
+   "summary": "Roses, <i>weeds</i> & patience",
+   "issue_key": "2020-02",
+   "issue_label": "February 2020",
+   "year": 2020,
+   "decade": 2020,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Lou F.",
+     "anonymous": false,
+     "place": "Tyler, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Tyler",
+      "county": "Smith",
+      "counties": [
+       "Smith"
+      ],
+      "state": "Texas",
+      "label_en": "Tyler, Texas",
+      "label_es": "Tyler, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Smith",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:a693ef678ef6",
+   "key": "https://evil.example/not-a-story",
+   "url": "https://evil.example/not-a-story",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Not a Magazine Page",
+   "summary": null,
+   "issue_key": "2019-01",
+   "issue_label": "January 2019",
+   "year": 2019,
+   "decade": 2010,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Zed Z.",
+     "anonymous": false,
+     "place": "Dallas, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Dallas",
+      "county": "Dallas",
+      "counties": [
+       "Dallas"
+      ],
+      "state": "Texas",
+      "label_en": "Dallas, Texas",
+      "label_es": "Dallas, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Dallas",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:5cfae88ebf50",
+   "key": "https://www.aalavina.org/revista/septiembre-octubre-2016/sample-la-familia",
+   "url": "https://www.aalavina.org/revista/septiembre-octubre-2016/sample-la-familia",
+   "pub": "lv",
+   "lang": "es",
+   "title": "La familia",
+   "summary": null,
+   "issue_key": "2016-09",
+   "issue_label": "Septiembre / Octubre 2016",
+   "year": 2016,
+   "decade": 2010,
+   "theme": "La familia en AA",
+   "writers": [
+    {
+     "name": "Rosa G.",
+     "anonymous": false,
+     "place": "Garland, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Garland",
+      "county": "Dallas",
+      "counties": [
+       "Collin",
+       "Dallas",
+       "Rockwall"
+      ],
+      "state": "Texas",
+      "label_en": "Garland, Texas",
+      "label_es": "Garland, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Dallas",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:e63fdd551c9e",
+   "key": "https://www.aagrapevine.org/magazine/2010/may/sample-island-time",
+   "url": "https://www.aagrapevine.org/magazine/2010/may/sample-island-time",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Island Time",
+   "summary": null,
+   "issue_key": "2010-05",
+   "issue_label": "May 2010",
+   "year": 2010,
+   "decade": 2010,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Tom B.",
+     "anonymous": false,
+     "place": "Galveston, Texas",
+     "geo": {
+      "scope": "texas",
+      "city": "Galveston",
+      "county": "Galveston",
+      "counties": [
+       "Galveston"
+      ],
+      "state": "Texas",
+      "label_en": "Galveston, Texas",
+      "label_es": "Galveston, Texas"
+     }
+    }
+   ],
+   "scope": "texas",
+   "county": "Galveston",
+   "audio": true,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:2eb0e56cb927",
+   "key": "https://www.aagrapevine.org/magazine/2010/jan/sample-ham-on-wry",
+   "url": "https://www.aagrapevine.org/magazine/2010/jan/sample-ham-on-wry",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Ham on Wry",
+   "summary": null,
+   "issue_key": "2010-01",
+   "issue_label": "January 2010",
+   "year": 2010,
+   "decade": 2010,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Ken D.",
+     "anonymous": false,
+     "place": "Arlington, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Arlington",
+      "county": "Tarrant",
+      "counties": [
+       "Tarrant"
+      ],
+      "state": "Texas",
+      "label_en": "Arlington, Texas",
+      "label_es": "Arlington, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Tarrant",
+   "audio": false,
+   "online_exclusive": false,
+   "column": true,
+   "from": "csv"
+  },
+  {
+   "id": "wa:9ff03d258c09",
+   "key": "https://www.aalavina.org/revista/mayo-junio-2003/sample-esperanza",
+   "url": "https://www.aalavina.org/revista/mayo-junio-2003/sample-esperanza",
+   "pub": "lv",
+   "lang": "es",
+   "title": "Esperanza",
+   "summary": null,
+   "issue_key": "2003-05",
+   "issue_label": "Mayo / Junio 2003",
+   "year": 2003,
+   "decade": 2000,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Ana V.",
+     "anonymous": false,
+     "place": "Irving, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Irving",
+      "county": "Dallas",
+      "counties": [
+       "Dallas"
+      ],
+      "state": "Texas",
+      "label_en": "Irving, Texas",
+      "label_es": "Irving, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Dallas",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:db16bffa0a35",
+   "key": "https://www.aagrapevine.org/magazine/1999/dec/sample-new-year",
+   "url": "https://www.aagrapevine.org/magazine/1999/dec/sample-new-year",
+   "pub": "gv",
+   "lang": "en",
+   "title": "A New Year",
+   "summary": null,
+   "issue_key": "1999-12",
+   "issue_label": "December 1999",
+   "year": 1999,
+   "decade": 1990,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Deb D.",
+     "anonymous": false,
+     "place": "Austin, Texas",
+     "geo": {
+      "scope": "texas",
+      "city": "Austin",
+      "county": "Travis",
+      "counties": [
+       "Hays",
+       "Travis",
+       "Williamson"
+      ],
+      "state": "Texas",
+      "label_en": "Austin, Texas",
+      "label_es": "Austin, Texas"
+     }
+    }
+   ],
+   "scope": "texas",
+   "county": "Travis",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:f87ced21077e",
+   "key": "https://www.aagrapevine.org/magazine/1991/oct/sample-who-we-are",
+   "url": "https://www.aagrapevine.org/magazine/1991/oct/sample-who-we-are",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Who We Are",
+   "summary": "A member looks back on twenty years in the program",
+   "issue_key": "1991-10",
+   "issue_label": "October 1991",
+   "year": 1991,
+   "decade": 1990,
+   "theme": null,
+   "writers": [
+    {
+     "name": "John W.",
+     "anonymous": false,
+     "place": "Denton, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Denton",
+      "county": "Denton",
+      "counties": [
+       "Denton"
+      ],
+      "state": "Texas",
+      "label_en": "Denton, Texas",
+      "label_es": "Denton, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Denton",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:585c2e741e22",
+   "key": "https://www.aagrapevine.org/magazine/1985/jun/sample-gulf-breeze",
+   "url": "https://www.aagrapevine.org/magazine/1985/jun/sample-gulf-breeze",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Gulf Breeze",
+   "summary": null,
+   "issue_key": "1985-06",
+   "issue_label": "June 1985",
+   "year": 1985,
+   "decade": 1980,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Bob B.",
+     "anonymous": false,
+     "place": "Beaumont, Texas",
+     "geo": {
+      "scope": "texas",
+      "city": "Beaumont",
+      "county": "Jefferson",
+      "counties": [
+       "Jefferson"
+      ],
+      "state": "Texas",
+      "label_en": "Beaumont, Texas",
+      "label_es": "Beaumont, Texas"
+     }
+    }
+   ],
+   "scope": "texas",
+   "county": "Jefferson",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:ff1b964c2bbf",
+   "key": "https://www.aagrapevine.org/magazine/1985/apr/sample-spring-cleaning",
+   "url": "https://www.aagrapevine.org/magazine/1985/apr/sample-spring-cleaning",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Spring Cleaning",
+   "summary": null,
+   "issue_key": "1985-04",
+   "issue_label": "April 1985",
+   "year": 1985,
+   "decade": 1980,
+   "theme": null,
+   "writers": [
+    {
+     "name": "H.T.B.",
+     "anonymous": false,
+     "place": "Fort Worth, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Fort Worth",
+      "county": "Tarrant",
+      "counties": [
+       "Denton",
+       "Johnson",
+       "Parker",
+       "Tarrant",
+       "Wise"
+      ],
+      "state": "Texas",
+      "label_en": "Fort Worth, Texas",
+      "label_es": "Fort Worth, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Tarrant",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:094c35dadee6",
+   "key": "https://www.aagrapevine.org/magazine/1957/apr/sample-twelve-questions",
+   "url": "https://www.aagrapevine.org/magazine/1957/apr/sample-twelve-questions",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Twelve Questions",
+   "summary": "Questions for a daily inventory",
+   "issue_key": "1957-04",
+   "issue_label": "April 1957",
+   "year": 1957,
+   "decade": 1950,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Anonymous",
+     "anonymous": true,
+     "place": "Amarillo, Texas",
+     "geo": {
+      "scope": "texas",
+      "city": "Amarillo",
+      "county": "Potter",
+      "counties": [
+       "Potter",
+       "Randall"
+      ],
+      "state": "Texas",
+      "label_en": "Amarillo, Texas",
+      "label_es": "Amarillo, Texas"
+     }
+    }
+   ],
+   "scope": "texas",
+   "county": "Potter",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:0f84b36ed0c2",
+   "key": "https://www.aagrapevine.org/magazine/1948/feb/sample-first-group",
+   "url": "https://www.aagrapevine.org/magazine/1948/feb/sample-first-group",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Our First Group",
+   "summary": null,
+   "issue_key": "1948-02",
+   "issue_label": "February 1948",
+   "year": 1948,
+   "decade": 1940,
+   "theme": null,
+   "writers": [
+    {
+     "name": "E. M.",
+     "anonymous": false,
+     "place": "Wichita Falls, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Wichita Falls",
+      "county": "Wichita",
+      "counties": [
+       "Wichita"
+      ],
+      "state": "Texas",
+      "label_en": "Wichita Falls, Texas",
+      "label_es": "Wichita Falls, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Wichita",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:9014ffb20b51",
+   "key": "https://www.aagrapevine.org/magazine/magazine/sample-undated-letter",
+   "url": "https://www.aagrapevine.org/magazine/magazine/sample-undated-letter",
+   "pub": "gv",
+   "lang": "en",
+   "title": "A Letter Without a Date",
+   "summary": null,
+   "issue_key": null,
+   "issue_label": null,
+   "year": null,
+   "decade": null,
+   "theme": null,
+   "writers": [
+    {
+     "name": "Sam W.",
+     "anonymous": false,
+     "place": "Denton, Texas",
+     "geo": {
+      "scope": "neta65",
+      "city": "Denton",
+      "county": "Denton",
+      "counties": [
+       "Denton"
+      ],
+      "state": "Texas",
+      "label_en": "Denton, Texas",
+      "label_es": "Denton, Texas"
+     }
+    }
+   ],
+   "scope": "neta65",
+   "county": "Denton",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  },
+  {
+   "id": "wa:29552a6ef04e",
+   "key": "https://www.aagrapevine.org/magazine/magazine/sample-beginners-meeting",
+   "url": "https://www.aagrapevine.org/magazine/magazine/sample-beginners-meeting",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Beginner’s Meeting",
+   "summary": "Notes from a first meeting",
+   "issue_key": null,
+   "issue_label": null,
+   "year": null,
+   "decade": null,
+   "theme": null,
+   "writers": [
+    {
+     "name": "C.D.A.",
+     "anonymous": false,
+     "place": "Pearland, Texas",
+     "geo": {
+      "scope": "texas",
+      "city": "Pearland",
+      "county": "Brazoria",
+      "counties": [
+       "Brazoria",
+       "Fort Bend",
+       "Harris"
+      ],
+      "state": "Texas",
+      "label_en": "Pearland, Texas",
+      "label_es": "Pearland, Texas"
+     }
+    }
+   ],
+   "scope": "texas",
+   "county": "Brazoria",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "csv"
+  }
+ ]
+}

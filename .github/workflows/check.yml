@@ -1,0 +1,190 @@
+# =====================================================================
+#  Code check (tests and test build) — nothing is published.
+#
+#  Runs for every pull request (for example Dependabot's monthly
+#  "chore(deps)" and "chore(actions)" updates) AND for every push to
+#  main that changes code, templates, settings, content or a workflow.
+#  It builds the website exactly like the daily "Website update" does
+#  (strict about missing button/heading texts; the Morning check's
+#  build.json included), opens that build in a real browser (the browser
+#  checks, tests/browser) and runs the offline Python tests.
+#
+#  On a pull request, a broken update shows a red ✗ BEFORE it is merged.
+#  On a push, a red ✗ here means "something in that change is broken" —
+#  undo or fix the change (the live site keeps working either way:
+#  "Website update" runs the same tests before it publishes — all but
+#  the ones that judge the day's synced data, the committee's own files
+#  or the documentation, scripts/ops/gate_tests.py — and publishes
+#  nothing until they pass; a slip in content/ or config/ turns only
+#  this check red, never stops the site from updating).
+#
+#  Rule of thumb (README → Housekeeping): merge a pull request only when
+#  it shows a green ✓.
+# =====================================================================
+# The name shown in the Actions sidebar, the "Run workflow" menu, a commit's or pull request's checks and GitHub's
+# "Run failed: …" e-mails. Nothing finds the workflow by it: the tests and the docs' links use the FILE name
+# (check.yml); tests/test_run_names.py only pins this name (change it there too).
+name: Code check (tests and test build)
+# A push or a pull request keeps GitHub's own title (the commit's subject, the pull request's title).
+run-name: ${{ github.event_name == 'workflow_dispatch' && 'Code check (started by hand)' || '' }}
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    # Only changes that can break the build or the sync scripts. The bot's
+    # daily data commits never start this (they are pushed with the built-in
+    # token, which cannot start workflows).
+    paths:
+      - "scripts/**"
+      - "tests/**"
+      - "src/**"
+      - "!src/assets/cache/**"
+      - "eleventy/**"
+      - "eleventy.config.js"
+      - "config/**"
+      - "content/**"
+      - "data/geo/**"                 # the Texas places list (the place tests read it)
+      - "data/translations/overrides.yml"
+      - "data/translations/glossary.yml"
+      - "package.json"
+      - "package-lock.json"
+      - "requirements.txt"
+      # every workflow (the tests read them: the schedules, the morning mode, the Morning check)
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push to the same pull request (or branch) replaces the check that is running.
+concurrency:
+  group: check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  build:
+    # (not "Build the website": that is the name of Website update's own build step)
+    name: Test build of the website
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install site tools (Eleventy, Tailwind, …)
+        run: npm ci --no-audit --no-fund
+
+      - name: Build the website (as for GitHub Pages)
+        env:
+          # A project site lives in a folder named after the repository.
+          PATH_PREFIX: /${{ github.event.repository.name }}/
+          # Same as "Website update": a button or heading text missing from src/_i18n/ fails the build.
+          I18N_STRICT: "1"
+          # Stricter than "Website update": a build warning — a missing icon, a page missing from the sitemap, a
+          # link in the data that had to be repaired or hidden (eleventy/build-warnings.js) — fails this check.
+          # (The booth display's "not downloaded in this build" notes are expected here and do not count.)
+          STRICT_BUILD: "1"
+        run: npx @11ty/eleventy
+
+      - name: Check the build
+        run: |
+          set -euo pipefail
+          # Same checks as "Website update" → "Check the build".
+          test -s _site/index.html || { echo "::error::_site/index.html is missing — the build did not produce a home page."; exit 1; }
+          test -s _site/es/index.html || { echo "::error::_site/es/index.html is missing — the Spanish site was not built."; exit 1; }
+          # Every stylesheet: main.css and the page-area ones (booth, expenses, monthly, orientation, presentations,
+          # report …) — each .css at the top of src/assets/css is built to _site/assets/css/ under its own name.
+          for css in src/assets/css/*.css; do
+            test -s "_site/assets/css/${css##*/}" || { echo "::error::The stylesheet ${css##*/} was not built."; exit 1; }
+          done
+          # The Morning check (morning.yml) reads the live build.json: a change that loses it is caught here
+          # (Website update only warns, so that a deploy is never blocked by it).
+          test -s _site/build.json || { echo "::error::_site/build.json is missing — the Morning check could not see the site's builds."; exit 1; }
+          pages=$(find _site -name '*.html' | wc -l)
+          size=$(du -sm _site | cut -f1)
+          echo "Built ${pages} pages, ${size} MB."
+          echo "**Website:** ${pages} pages, ${size} MB — builds fine with this change." >> "$GITHUB_STEP_SUMMARY"
+
+      # The browser checks (tests/browser): this build, served the way GitHub Pages serves it, in the runner's own
+      # Google Chrome (headless, through Python Playwright — pinned in scripts/ops/requirements-browser.txt; nothing
+      # else is downloaded, and the browser reaches no other site). What the offline tests cannot see: the header's
+      # focus ring stands out (light, dark, high contrast), What's New's sticky filter bar never hides the focused
+      # element, no page scrolls sideways on a phone at 150 % text, a new version of the offline worker takes over
+      # without waiting for the open tabs, the main pages run without a script error, and a poster's share picture
+      # (made by Website update) can be made. About a minute and a half, setup included.
+      - name: Set up Python (for the browser checks)
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/ops/requirements-browser.txt
+
+      - name: Install the browser checks' tools (Playwright, for the runner's Chrome)
+        run: python -m pip install -r scripts/ops/requirements-browser.txt
+
+      - name: Browser checks (focus ring, sticky bar, large text, offline update, script errors)
+        timeout-minutes: 10
+        env:
+          GV_BROWSER_SITE: _site
+          GV_BROWSER_CHANNEL: chrome
+          # a browser that cannot start is a failure here, never a silent skip
+          GV_BROWSER_REQUIRED: "1"
+        run: python -m unittest discover -s tests/browser -t tests -v
+
+  tests:
+    name: Python tests (offline)
+    runs-on: ubuntu-latest
+    # about 10 minutes with the gate's list check (tests/test_automation.py GateLists: every gated test again in
+    # copies of the repository with committee-like edits); room for a slow runner
+    timeout-minutes: 25
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install Python packages
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      # A few tests run the site's own JavaScript (the district report, the offline worker, the
+      # website's copy of the monthly-digest rules — tests/nodejs.py); without Node.js and the
+      # site's packages they would be skipped.
+      - name: Set up Node.js (for the tests that run the site's JavaScript)
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install site tools
+        run: npm ci --no-audit --no-fund
+
+      - name: Run the tests
+        # The translation models are not downloaded here, so the tests that need them
+        # are skipped; everything else (text handling, content parsing, build rules) runs.
+        run: python -m unittest discover -s tests -v
+
+      - name: Check the e-mail digest still builds
+        # Standard library only; writes a preview into the runner's temp folder, sends nothing
+        # (and adds nothing to this run's summary).
+        run: GITHUB_STEP_SUMMARY="" python -m scripts.notify.send_digest --dry-run --out-dir "$RUNNER_TEMP/digest-preview"

@@ -1,0 +1,330 @@
+/* =====================================================================
+   Area styles — Read, Share Your Story, Subscribe, GVR/RLV Corner, About.
+   Owned by the "read" area. Templates use Tailwind utilities first; only
+   what utilities can't express lives here. Colors come from theme tokens
+   (var(--c-*)) so dark mode works; the dark "cover" panels keep white
+   text on a deep gradient in both themes.
+   ===================================================================== */
+
+/* ---------- Page hero (ui.pageHero with opts.class "read-hero") ----------
+   The hero buttons are the standard size on every page (44px tall, 14px text). On phones
+   the two magazine buttons would wrap onto a second row and push the hero past 28rem, so,
+   like the home page's hero: no icon and a little less side padding, which keeps them on one
+   row on a 390px phone in both languages (Subscribe's longer labels stack below ~414px; its
+   subtitle is kept short for that). Below 360px the eyebrow pill is left out (the title says
+   the same), so heroes whose buttons stack there stay within 28rem too. */
+@media (width < 40rem) {
+  .read-hero .hero-actions > :is(a, button) { padding-inline: 0.875rem; }
+  .read-hero .hero-actions > :is(a, button) > .icon { display: none; }
+}
+@media (width < 22.5rem) {
+  .read-hero .gv-hero-eyebrow { display: none; }
+}
+
+/* ---------- Read: the hero aside "What are Grapevine and La Viña?" (read.njk, ui.heroAside) ----------
+   The two magazines side by side — the tone tile (the shared .hero-aside-link-icon, so it follows the
+   card's colours in the hero and below it), the year each began over its name (DOM: name first, so
+   a screen reader says "Grapevine, since 1944") — then the one "Our history" link row. */
+.read-aside-mags { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+.read-aside-mags > li { display: flex; align-items: center; gap: 0.625rem; min-width: 0; }
+.read-aside-mag { display: flex; flex-direction: column-reverse; min-width: 0; }
+.read-aside-year { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 1.05; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; color: var(--ha-ink); }
+.read-aside-name { font-size: 0.8125rem; font-weight: 600; line-height: 1.3; color: var(--ha-muted); overflow-wrap: break-word; }
+/* a narrow card (a phone at 150 % text): one magazine per row, so no year or name ever breaks */
+@container (width < 17rem) { .read-aside-mags { grid-template-columns: minmax(0, 1fr); } }
+.hero-aside-body > .read-aside-mags { margin-top: 0.875rem; }
+.hero-aside-body > .read-aside-mags + .hero-aside-links { margin-top: 0.625rem; }
+/* At 1024–1279px, with the card inside the hero, the title column is about 600px wide and "Read
+   Grapevine & La Viña" takes two lines: the two hero numbers are left out there (they show from
+   1280px, and below 1024px), so the hero keeps its 480px. Same guard as main.css's in-hero rules. */
+@media (64rem <= width < 80rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell > .read-page-hero .hero-stats { display: none; }
+}
+
+/* ---------- Magazine "cover" panels (GV = navy/blue, LV = deep amber) ---------- */
+.read-cover--gv {
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgb(255 255 255 / 0.12), transparent 55%),
+    linear-gradient(155deg, #0f1730 0%, #0b3f73 52%, #0a5fa8 100%);
+}
+.read-cover--lv {
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgb(255 255 255 / 0.12), transparent 55%),
+    linear-gradient(155deg, #33130a 0%, #7a2a05 50%, #b0410b 100%);
+}
+.read-cover-art {
+  position: absolute; right: -2.75rem; bottom: -3rem; z-index: -1;
+  width: 14rem; height: auto; color: #fff; opacity: 0.1; transform: rotate(-14deg);
+  pointer-events: none;
+}
+
+/* Real magazine cover: a blurred, darkened copy fills the panel (so each issue
+   gets its own colors) and the sharp cover sits on top like a printed copy.
+   The dark overlay keeps white text at AA contrast whatever the cover colors. */
+.read-cover-blur {
+  position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; max-width: none;
+  object-fit: cover; transform: scale(1.35);
+  filter: blur(26px) saturate(1.25) brightness(0.62);
+  pointer-events: none; user-select: none;
+}
+.read-cover.has-cover::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, rgb(8 10 24 / 0.42) 0%, rgb(8 10 24 / 0.58) 55%, rgb(8 10 24 / 0.74) 100%);
+}
+/* The narrowest phones (below 360px): the issue's name ("September / October 2026") can't fit beside
+   the cover, so it goes under it instead of being cut off at the card's edge */
+@media (width < 22.5rem) { .read-cover.has-cover > .flex { flex-wrap: wrap; } }
+/* The magazine's name in a cover panel (Shop, About): the panel is a size container and the name is
+   sized by its width (cqi) — 1.5rem in a phone's card up to 1.875rem (from 1.25rem at 130%+ text) — so
+   "AA Grapevine" always fits beside the cover (Shop) or in the panel (About). In a panel narrower than
+   24rem the grapes icon is left out. The kicker is hyphenated in the page language. */
+.read-cover-head { container-type: inline-size; }
+.read-cover-title { font-size: clamp(1.5rem, 8cqi, 1.875rem); line-height: 1.15; }
+.read-cover-kicker { hyphens: auto; }
+@container (width < 24rem) { .read-cover-icon { display: none; } }
+:root:is([data-text="130"], [data-text="150"]) .read-cover-title { font-size: clamp(1.25rem, 11cqi, 1.875rem); }
+.read-cover-frame {
+  border-radius: 0.4rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 18px 40px -12px rgb(0 0 0 / 0.65), 0 0 0 1px rgb(255 255 255 / 0.14);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.read-cover-frame:hover { transform: translateY(-3px) rotate(-0.6deg); box-shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 26px 50px -14px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.22); }
+.read-cover-frame:focus-visible { outline-color: #fff; }
+
+/* ---------- Wide screens (Read page) ----------
+   Current issues: Grapevine and La Viña side by side from 1440px (each card then lays itself
+   out by its own width — container queries in read.njk). When the visitor filters to one
+   magazine (Alpine adds .is-single) that one takes the full width again. */
+.read-issues { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; align-items: start; }
+@media (width >= 90rem) {
+  .read-issues { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+  .read-issues.is-single { grid-template-columns: minmax(0, 1fr); }
+}
+/* Previous issues: one column, two from 1440px (an opened issue spans both columns) */
+.read-archive-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; align-items: start; }
+@media (width >= 90rem) { .read-archive-list { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: row dense; } }
+
+/* "See who from our Area got published" link card (Read + Share your story → /published/):
+   a soft vine glow in the corner and a thin three-color rule on top. */
+.read-spot {
+  background:
+    radial-gradient(85% 75% at 100% 0%, color-mix(in srgb, var(--c-vine) 12%, transparent), transparent 70%),
+    var(--c-surface);
+}
+.read-spot::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; pointer-events: none;
+  background: linear-gradient(90deg, var(--c-vine), var(--c-gv) 55%, var(--c-lv));
+}
+
+/* Table of contents: small group headings; phones show the first 6 stories until "Show all" is opened */
+.read-toc-head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem;
+  padding: 0.5rem 0.75rem 0.25rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+}
+@media (width < 40rem) {
+  .read-toc:not(:has(.read-more[open])) .read-sm-extra { display: none; }
+}
+
+/* Issue description beside the table of contents */
+.read-blurb { border-left: 3px solid var(--read-accent, var(--c-gv)); padding: 0.15rem 0 0.15rem 1rem; }
+
+/* "Subscriber story" — quiet, friendly, never alarming */
+.read-sub-badge {
+  display: inline-flex; align-items: center; gap: 0.25rem; border-radius: 999px;
+  padding: 0.05rem 0.55rem; font-size: 0.7rem; line-height: 1.25rem; font-weight: 600;
+  color: var(--c-muted); background: var(--c-surface-2); box-shadow: inset 0 0 0 1px var(--c-line);
+}
+
+/* Tiny cover in archive rows */
+.read-mini-cover {
+  width: 2.25rem; aspect-ratio: 7 / 10; height: auto; flex-shrink: 0; object-fit: cover;
+  border-radius: 0.2rem; box-shadow: 0 1px 2px rgb(0 0 0 / 0.2), 0 0 0 1px var(--c-line);
+}
+
+/* ---------- <details> disclosure widgets (archive issues, "show all", FAQ) ---------- */
+.read-past > summary,
+.read-more > summary,
+.read-faq > summary { list-style: none; }
+.read-past > summary::-webkit-details-marker,
+.read-more > summary::-webkit-details-marker,
+.read-faq > summary::-webkit-details-marker { display: none; }
+.read-past > summary:hover .read-past-bar { transform: scaleY(1.15); }
+.read-past-bar { width: 0.3rem; align-self: stretch; min-height: 2.25rem; border-radius: 999px; transition: transform 0.2s ease; }
+.read-past[open] { box-shadow: var(--shadow-lift); }
+/* an opened issue takes the whole row of the two-column archive (its stories get the width) */
+.read-past[open] { grid-column: 1 / -1; }
+
+/* La Viña chip uses the amber accent when active */
+.read-chip-lv[aria-pressed="true"] { background: var(--c-lv); border-color: var(--c-lv); }
+
+/* ---------- Editorial deadlines ---------- */
+.read-deadline-next { position: relative; overflow: hidden; }
+.read-deadline-next::after {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 0.35rem; background: var(--read-accent, var(--c-gv));
+}
+/* Share your story's closing call to action: soft Grapevine / La Viña glows on the surface */
+.read-cta {
+  background:
+    radial-gradient(70% 120% at 0% 0%, color-mix(in srgb, var(--c-gv) 12%, transparent), transparent 65%),
+    radial-gradient(70% 120% at 100% 100%, color-mix(in srgb, var(--c-lv) 12%, transparent), transparent 65%),
+    var(--c-surface);
+}
+/* Closed deadlines: muted text (still 4.5:1 contrast) + struck-through date — no opacity, which would fail contrast */
+.read-deadline-row.is-past, .read-deadline-row.is-past .text-ink { color: var(--c-muted); }
+.read-deadline-row.is-past .read-deadline-date { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+/* ---------- PDF placeholder "covers" (when no thumbnail was generated) ---------- */
+/* Position comes from utilities (absolute inset-0 / relative) — not set here so it never overrides them. */
+.read-pdf-ph {
+  display: grid; place-items: center; overflow: hidden;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--read-accent, var(--c-gv)) 16%, var(--c-surface)) 0%, var(--c-surface-2) 100%);
+  color: var(--read-accent, var(--c-gv));
+}
+.read-pdf-ph::before {
+  content: ""; position: absolute; inset: 0 0 auto auto; width: 22%; aspect-ratio: 1;
+  background: linear-gradient(225deg, var(--c-paper) 50%, color-mix(in srgb, var(--read-accent, var(--c-gv)) 22%, var(--c-surface)) 50%);
+}
+.read-accent-gv { --read-accent: var(--c-gv); }
+.read-accent-lv { --read-accent: var(--c-lv); }
+.read-accent-grape { --read-accent: var(--c-grape); }
+.read-accent-vine { --read-accent: var(--c-vine); }
+
+/* ---------- Share your story › "Next workshops" (#workshop band) ----------
+   One card a row; from 1280px the cards side by side (--n = how many: 1–3, from the template) — at
+   130%+ text from 1536px, where a card still has room for its date tile and a readable title. */
+.read-ws-list { grid-template-columns: minmax(0, 1fr); }
+@media (width >= 80rem) { :root:not([data-text="130"], [data-text="150"]) .read-ws-list { grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); } }
+@media (width >= 96rem) { .read-ws-list { grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); } }
+
+/* ---------- GVR checklist ----------
+   One column; two when the checklist card is at least 56rem wide (its @container), filled
+   column by column (--rows = half the steps) so the steps still read 1, 2, 3… downwards.
+   gvr.njk marks the first column (.read-check-c1) and the top of the second (.read-check-c2top). */
+.read-check-list { display: grid; grid-template-columns: minmax(0, 1fr); }
+.read-check-list > li + li { border-top: 1px solid var(--c-line); }
+@container (width >= 56rem) {
+  .read-check-list { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(var(--rows, 4), auto); grid-auto-flow: column; }
+  .read-check-list > li.read-check-c2top { border-top: 0; }
+  .read-check-list > li.read-check-c1 { border-right: 1px solid var(--c-line); }
+}
+.read-check { accent-color: var(--c-vine); width: 1.35rem; height: 1.35rem; flex-shrink: 0; cursor: pointer; }
+.read-check-row.is-done .read-check-label { color: var(--c-faint); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--c-faint) 60%, transparent); }
+/* the step's description and links line up with its title (checkbox 1.35rem + gap 0.75rem) */
+.read-check-body { padding: 0 0 0.25rem 2.1rem; }
+.read-progress { height: 0.5rem; border-radius: 999px; background: var(--c-surface-2); overflow: hidden; }
+.read-progress > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--c-vine), var(--c-gv)); transition: width 0.35s ease; }
+
+/* ---------- About #videos: our translation of the other language's video (a quiet surface-2 box, no border:
+   the translated title shows, the summary opens under it) ---------- */
+.read-vid-tr { border-radius: 0.75rem; background: var(--c-surface-2); }
+.read-vid-tr > summary { display: flex; align-items: flex-start; gap: 0.625rem; min-height: 2.75rem; padding: 0.75rem 1rem; cursor: pointer; list-style: none; border-radius: inherit; }
+.read-vid-tr > summary::-webkit-details-marker { display: none; }
+.read-vid-tr > summary:hover .text-ink { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- History of Grapevine & La Viña (About #history; config/history.yml → src/_data/history.js) ----------
+   Narrow: one rail on the left, the milestones in one column. When the timeline is at least 58rem wide
+   (its @container — so larger reading text keeps the one column longer): the rail in the middle and
+   the milestones taking turns left and right inside each decade, the right one a little lower so
+   the dots never meet. The turns are worked out per filter (side.<filter> → hs-*), so a filtered
+   decade still alternates.
+   Filters and "Show all" are two attributes on .read-hist that Alpine sets — data-f (all · gv · lv)
+   and data-open (0 · 1); the rules below do the rest, on screens with JavaScript only: without it,
+   and on paper, every milestone shows. Collapsed = the first 7 of the filter (narrow) or 12 (from
+   40rem): hx7-* / hx12-* mark the milestones past that, dx7-* / dx12-* a decade with none before
+   it, hn-* a decade with none in the filter, bn7-* / bn12-* the button when there is nothing more.
+   --tone is the publication's colour (gv · lv · vine = both magazines); its name is always in the
+   text too. Nothing moves: no scroll or reveal animations.
+   The three filter chips wrap (never a sideways scroll that hides the last one); in one column a
+   milestone is at most 46rem wide (a readable line at 150% text on a wide screen); in a very narrow
+   timeline (a 320px phone, or 150% text) the rail moves closer to the edge so the cards keep room. */
+.read-hist { --hist-rail: 0.75rem; --hist-pad: 2.25rem; --hist-gap: 5rem; container-type: inline-size; }
+.read-hist-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
+/* the publication's colour in its filter chip, ringed so it still shows on the pressed (blue) chip */
+.read-hist-dot { width: 0.625rem; height: 0.625rem; flex-shrink: 0; border-radius: 50%; box-shadow: 0 0 0 2px var(--c-surface); }
+.read-hist-decades { position: relative; display: grid; gap: 2rem; }
+.read-hist-decades::before {
+  content: ""; position: absolute; top: 0.75rem; bottom: 0; left: var(--hist-rail); width: 2px; margin-left: -1px; border-radius: 1px;
+  background: color-mix(in srgb, var(--c-muted) 35%, var(--c-line));
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+          mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+}
+.read-hist-dec { position: relative; display: flex; margin-bottom: 1rem; font-size: 1rem; }
+.read-hist-dec > span {
+  display: inline-flex; align-items: center; min-height: 1.875rem; padding: 0.15rem 0.85rem; border-radius: 999px;
+  background: var(--c-ink); color: var(--c-paper); font-weight: 600; letter-spacing: 0.01em; font-variant-numeric: tabular-nums;
+  box-shadow: 0 0 0 4px var(--c-paper);
+}
+.read-hist-list { display: grid; gap: 1rem; padding-left: var(--hist-pad); }
+.read-hist-item { --tone: var(--c-gv); position: relative; max-width: 46rem; }
+.read-hist-item[data-t="lavina"] { --tone: var(--c-lv); }
+.read-hist-item[data-t="both"] { --tone: var(--c-vine); }
+/* the dot on the rail (::after) and a short line to the card (::before) */
+.read-hist-item::before, .read-hist-item::after { content: ""; position: absolute; top: 1.45rem; left: calc(var(--hist-rail) - var(--hist-pad)); }
+.read-hist-item::before { width: calc(var(--hist-pad) - var(--hist-rail)); height: 2px; margin-top: -1px; background: color-mix(in srgb, var(--tone) 45%, transparent); }
+.read-hist-item::after { width: 0.875rem; height: 0.875rem; border-radius: 50%; background: var(--tone); box-shadow: 0 0 0 3px var(--c-paper); transform: translate(-50%, -50%); }
+.read-hist-card { padding: 1rem 1.125rem 1.125rem; box-shadow: inset 0 3px 0 var(--tone), var(--shadow-card); break-inside: avoid; }
+.read-hist-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.25rem 0.75rem; }
+.read-hist-when { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tone); }
+.read-hist-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; margin-top: 2rem; padding-left: var(--hist-pad); }
+.read-hist-more { width: 100%; }
+.read-hist-more > [data-l] { display: none; }
+.read-hist[data-open="0"][data-f="all"] .read-hist-more > [data-l="all"],
+.read-hist[data-open="0"][data-f="gv"] .read-hist-more > [data-l="gv"],
+.read-hist[data-open="0"][data-f="lv"] .read-hist-more > [data-l="lv"],
+.read-hist[data-open="1"] .read-hist-more > [data-l="less"] { display: inline; }
+.read-hist[data-open="1"] .read-hist-more > svg { rotate: 180deg; }
+/* phones: the three chips a little tighter so they stay on one line at 390px (EN and ES) — and at
+   360px too, where the colour dots step aside (the chips' words say which magazine anyway) */
+@container (width < 30rem) {
+  .read-hist-bar { gap: 0.375rem; }
+  .read-hist-bar > .chip { padding-inline: 0.625rem; }
+}
+@container (width < 22rem) { .read-hist-dot { display: none; } }
+@container (width < 20rem) {
+  .read-hist-decades, .read-hist-foot { --hist-rail: 0.5rem; --hist-pad: 1.5rem; }
+  .read-hist-card { padding-inline: 0.875rem; }
+}
+@container (width >= 40rem) {
+  .read-hist-more { width: auto; }
+}
+@container (width >= 58rem) {
+  .read-hist-bar { justify-content: center; }
+  .read-hist-decades::before { left: 50%; }
+  .read-hist-dec { justify-content: center; }
+  .read-hist-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--hist-gap); row-gap: 1.25rem; align-items: start; padding-left: 0; }
+  .read-hist-item { grid-column: 1; justify-self: end; width: min(100%, 40rem); }
+  .read-hist-item::before, .read-hist-item::after { left: auto; right: calc(var(--hist-gap) / -2); }
+  .read-hist-item::before { width: calc(var(--hist-gap) / 2); }
+  .read-hist-item::after { transform: translate(50%, -50%); }
+  :is(.read-hist[data-f="all"] .hs-all, .read-hist[data-f="gv"] .hs-gv, .read-hist[data-f="lv"] .hs-lv) { grid-column: 2; justify-self: start; margin-top: 2.75rem; }
+  :is(.read-hist[data-f="all"] .hs-all, .read-hist[data-f="gv"] .hs-gv, .read-hist[data-f="lv"] .hs-lv)::before,
+  :is(.read-hist[data-f="all"] .hs-all, .read-hist[data-f="gv"] .hs-gv, .read-hist[data-f="lv"] .hs-lv)::after { right: auto; left: calc(var(--hist-gap) / -2); }
+  :is(.read-hist[data-f="all"] .hs-all, .read-hist[data-f="gv"] .hs-gv, .read-hist[data-f="lv"] .hs-lv)::after { transform: translate(-50%, -50%); }
+  .read-hist-foot { align-items: center; padding-left: 0; text-align: center; }
+}
+@media screen {
+  :root.js .read-hist[data-f="gv"] :is(.read-hist-item[data-t="lavina"], .hn-gv),
+  :root.js .read-hist[data-f="lv"] :is(.read-hist-item[data-t="grapevine"], .hn-lv) { display: none; }
+  @container (width < 40rem) {
+    :root.js .read-hist[data-open="0"][data-f="all"] :is(.hx7-all, .dx7-all),
+    :root.js .read-hist[data-open="0"][data-f="gv"] :is(.hx7-gv, .dx7-gv),
+    :root.js .read-hist[data-open="0"][data-f="lv"] :is(.hx7-lv, .dx7-lv),
+    :root.js .read-hist[data-f="all"] .bn7-all, :root.js .read-hist[data-f="gv"] .bn7-gv, :root.js .read-hist[data-f="lv"] .bn7-lv { display: none; }
+  }
+  @container (width >= 40rem) {
+    :root.js .read-hist[data-open="0"][data-f="all"] :is(.hx12-all, .dx12-all),
+    :root.js .read-hist[data-open="0"][data-f="gv"] :is(.hx12-gv, .dx12-gv),
+    :root.js .read-hist[data-open="0"][data-f="lv"] :is(.hx12-lv, .dx12-lv),
+    :root.js .read-hist[data-f="all"] .bn12-all, :root.js .read-hist[data-f="gv"] .bn12-gv, :root.js .read-hist[data-f="lv"] .bn12-lv { display: none; }
+  }
+}
+@media print {
+  .read-hist-bar { display: none !important; }
+  .read-hist-card { box-shadow: inset 0 3px 0 var(--tone); }
+  /* browsers leave out backgrounds on paper: the decade label becomes dark text in an outline */
+  .read-hist-dec > span { background: none; color: var(--c-ink); box-shadow: none; border: 1px solid var(--c-line); }
+}
+
+/* Big number (deadlines, stats) uses tabular figures */
+.read-num { font-variant-numeric: tabular-nums; }

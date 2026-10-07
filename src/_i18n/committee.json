@@ -1,0 +1,1662 @@
+{
+  "committee.name": {
+    "en": "Grapevine / La Viña Committee",
+    "es": "Comité de Grapevine / La Viña"
+  },
+  "committee.meeting_title": {
+    "en": "{committee} Meeting",
+    "es": "Reunión del {committee}"
+  },
+  "committee.rule": {
+    "en": "Every {ord} {weekday} of the month",
+    "es": "Cada {ord} {weekday} del mes"
+  },
+  "committee.ord.1": {
+    "en": "first",
+    "es": "primer"
+  },
+  "committee.ord.2": {
+    "en": "second",
+    "es": "segundo"
+  },
+  "committee.ord.3": {
+    "en": "third",
+    "es": "tercer"
+  },
+  "committee.ord.4": {
+    "en": "fourth",
+    "es": "cuarto"
+  },
+  "committee.ord.5": {
+    "en": "fifth",
+    "es": "quinto"
+  },
+  "committee.ord.last": {
+    "en": "last",
+    "es": "último"
+  },
+  "committee.subnav.aria": {
+    "en": "Committee pages",
+    "es": "Páginas del comité"
+  },
+  "committee.subnav.meetings": {
+    "en": "Meetings",
+    "es": "Reuniones"
+  },
+  "committee.subnav.events": {
+    "en": "Events",
+    "es": "Eventos"
+  },
+  "committee.subnav.portfolio": {
+    "en": "Portfolio",
+    "es": "Portafolio"
+  },
+  "committee.subnav.photos": {
+    "en": "Photos",
+    "es": "Fotos"
+  },
+  "committee.subnav.bulletin": {
+    "en": "Bulletin",
+    "es": "Boletín"
+  },
+  "committee.subnav.tracker": {
+    "en": "Tracker",
+    "es": "Registro"
+  },
+  "committee.drive.open_folder": {
+    "en": "Open Drive folder",
+    "es": "Abrir carpeta de Drive"
+  },
+  "committee.drive.path_aria": {
+    "en": "Where the file goes on Google Drive",
+    "es": "Dónde va el archivo en Google Drive"
+  },
+  "committee.drive.checked_empty": {
+    "en": "We checked the committee's Google Drive on {date} — nothing here yet.",
+    "es": "Revisamos el Google Drive del comité el {date} — todavía no hay nada aquí."
+  },
+  "committee.drive.checked_problem": {
+    "en": "The last check of the committee's Google Drive had a problem — the last good check was on {date}.",
+    "es": "La última revisión del Google Drive del comité tuvo un problema — la última revisión correcta fue el {date}."
+  },
+  "committee.cal.details": {
+    "en": "Details",
+    "es": "Detalles"
+  },
+  "committee.cal.ics_file": {
+    "en": "Apple / Outlook (.ics file)",
+    "es": "Apple / Outlook (archivo .ics)"
+  },
+  "committee.preview.note": {
+    "en": "Preview provided by Google Drive. If it doesn't load, use “Open”.",
+    "es": "Vista previa de Google Drive. Si no carga, usa “Abrir”."
+  },
+  "committee.ics.name": {
+    "en": "NETA 65 Grapevine / La Viña — Events",
+    "es": "NETA 65 Grapevine / La Viña — Eventos"
+  },
+  "committee.ics.desc": {
+    "en": "Committee meetings, workshops, booths and Grapevine / La Viña events for Northeast Texas Area 65. Updates automatically.",
+    "es": "Reuniones del comité, talleres, mesas y eventos de Grapevine / La Viña del Área 65 del Noreste de Texas. Se actualiza automáticamente."
+  },
+  "committee.meeting.hero_sub": {
+    "en": "{rule} · {time} Central time, on {platform}.",
+    "es": "{rule} · {time}, hora del Centro, por {platform}."
+  },
+  "committee.meeting.next": {
+    "en": "Next meeting",
+    "es": "Próxima reunión"
+  },
+  "committee.meeting.starting_soon": {
+    "en": "Starting soon",
+    "es": "Ya casi empieza"
+  },
+  "committee.meeting.live_now": {
+    "en": "Live now",
+    "es": "En vivo ahora"
+  },
+  "committee.meeting.join": {
+    "en": "Join on {platform}",
+    "es": "Entrar por {platform}"
+  },
+  "committee.meeting.join_soon": {
+    "en": "Starting soon — join now",
+    "es": "Ya casi empieza — entra ahora"
+  },
+  "committee.meeting.join_live": {
+    "en": "We're live — join now",
+    "es": "Estamos en vivo — entra ahora"
+  },
+  "committee.meeting.your_time": {
+    "en": "Your time: {time}",
+    "es": "Tu hora: {time}"
+  },
+  "committee.meeting.join_hint": {
+    "en": "The {platform} room opens about 15 minutes before we start — this button turns green when we're live.",
+    "es": "La sala de {platform} se abre unos 15 minutos antes de empezar — este botón se pone verde cuando estamos en vivo."
+  },
+  "committee.meeting.no_next": {
+    "en": "The next meeting date will be posted soon.",
+    "es": "Pronto publicaremos la fecha de la próxima reunión."
+  },
+  "committee.meeting.how_to_join": {
+    "en": "How to join",
+    "es": "Cómo conectarte"
+  },
+  "committee.meeting.how_to_join_text": {
+    "en": "Use “Join on {platform}” in the next-meeting card, or type the meeting ID and passcode into the {platform} app.",
+    "es": "Usa “Entrar por {platform}” en la tarjeta de la próxima reunión, o escribe el ID de reunión y el código de acceso en la aplicación de {platform}."
+  },
+  "committee.meeting.id": {
+    "en": "Meeting ID",
+    "es": "ID de reunión"
+  },
+  "committee.meeting.passcode": {
+    "en": "Passcode",
+    "es": "Código de acceso"
+  },
+  "committee.meeting.cal_desc": {
+    "en": "Monthly NETA 65 Grapevine / La Viña committee meeting on {platform}.",
+    "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65 por {platform}."
+  },
+  "committee.meeting.cal_join": {
+    "en": "Join on {platform}",
+    "es": "Entrar por {platform}"
+  },
+  "committee.meeting.copy_id": {
+    "en": "Copy meeting ID",
+    "es": "Copiar ID de reunión"
+  },
+  "committee.meeting.copy_passcode": {
+    "en": "Copy passcode",
+    "es": "Copiar código de acceso"
+  },
+  "committee.meeting.copy_link": {
+    "en": "Copy {platform} link",
+    "es": "Copiar enlace de {platform}"
+  },
+  "committee.meeting.tip_early": {
+    "en": "Arrive a few minutes early to test your audio.",
+    "es": "Llega unos minutos antes para probar tu audio."
+  },
+  "committee.meeting.tip_phone": {
+    "en": "Works on a phone, tablet or computer — no {platform} account needed.",
+    "es": "Funciona en celular, tableta o computadora — no necesitas cuenta de {platform}."
+  },
+  "committee.meeting.tip_lang": {
+    "en": "English and Spanish speakers are welcome.",
+    "es": "Bienvenidos quienes hablan español e inglés."
+  },
+  "committee.meeting.next_dates": {
+    "en": "Upcoming dates",
+    "es": "Próximas fechas"
+  },
+  "committee.meeting.next_badge": {
+    "en": "Next",
+    "es": "Próxima"
+  },
+  "committee.meeting.subscribe_all": {
+    "en": "Get every meeting in your calendar",
+    "es": "Recibe todas las reuniones en tu calendario"
+  },
+  "committee.meeting.who_title": {
+    "en": "Everyone in AA is welcome",
+    "es": "Todos en AA son bienvenidos"
+  },
+  "committee.meeting.who_text": {
+    "en": "GVRs, RLVs, DCMs and anyone curious about Grapevine and La Viña service will find a place here.",
+    "es": "Los RLV, GVR, MCD y cualquier persona con curiosidad por el servicio de La Viña y Grapevine encontrará aquí su lugar."
+  },
+  "committee.meeting.who_gvr": {
+    "en": "GVRs",
+    "es": "GVR (representantes de Grapevine)"
+  },
+  "committee.meeting.who_rlv": {
+    "en": "RLVs",
+    "es": "RLV (representantes de La Viña)"
+  },
+  "committee.meeting.who_dcm": {
+    "en": "DCMs & district servants",
+    "es": "MCD y servidores de distrito"
+  },
+  "committee.meeting.who_members": {
+    "en": "Any AA member",
+    "es": "Cualquier miembro de AA"
+  },
+  "committee.meeting.contact_text": {
+    "en": "Want the agenda, need help with {platform}, or thinking about becoming a GVR or RLV? Write to our chair — we'd love to hear from you.",
+    "es": "¿Quieres la agenda, necesitas ayuda con {platform} o estás pensando en ser RLV o GVR? Escríbele a nuestro coordinador — nos encantará saber de ti."
+  },
+  "committee.meeting.agenda_link": {
+    "en": "Agendas and past reports in the Portfolio",
+    "es": "Agendas e informes anteriores en el Portafolio"
+  },
+  "committee.meeting.mail_subject": {
+    "en": "Grapevine / La Viña committee meeting",
+    "es": "Reunión del comité de Grapevine / La Viña"
+  },
+  "committee.meeting.write_chair": {
+    "en": "Email the chair",
+    "es": "Escribir al coordinador"
+  },
+  "committee.meeting.agenda_title": {
+    "en": "What happens at our committee meeting",
+    "es": "Qué pasa en nuestra reunión del comité"
+  },
+  "committee.meeting.agenda_sub": {
+    "en": "One friendly hour, once a month. Here's what to expect.",
+    "es": "Una hora amigable, una vez al mes. Esto es lo que puedes esperar."
+  },
+  "committee.meeting.step_welcome": {
+    "en": "Welcome & opening",
+    "es": "Bienvenida y apertura"
+  },
+  "committee.meeting.step_welcome_text": {
+    "en": "We usually open with a moment of silence and the Serenity Prayer, then introductions — people new to service are especially welcome.",
+    "es": "Normalmente abrimos con un momento de silencio y la Oración de la Serenidad, y luego nos presentamos — quienes son nuevos en el servicio son especialmente bienvenidos."
+  },
+  "committee.meeting.step_reports": {
+    "en": "District & group reports",
+    "es": "Informes de distritos y grupos"
+  },
+  "committee.meeting.step_reports_text": {
+    "en": "GVRs and RLVs share what's happening in their districts: new subscriptions, story drives, literature tables.",
+    "es": "Los RLV y GVR comparten lo que pasa en sus distritos: nuevas suscripciones, campañas de historias, mesas de literatura."
+  },
+  "committee.meeting.step_news": {
+    "en": "Grapevine & La Viña news",
+    "es": "Noticias de La Viña y Grapevine"
+  },
+  "committee.meeting.step_news_text": {
+    "en": "Upcoming issues, story themes and deadlines, new books, podcasts and apps.",
+    "es": "Próximos números, temas y fechas límite para historias, libros nuevos, podcasts y aplicaciones."
+  },
+  "committee.meeting.step_plan": {
+    "en": "Plan workshops & booths",
+    "es": "Planeamos talleres y mesas"
+  },
+  "committee.meeting.step_plan_text": {
+    "en": "We organize writing workshops, assembly booths and new ways to carry the message across the Area.",
+    "es": "Organizamos talleres de escritura, mesas en las asambleas y nuevas formas de llevar el mensaje por toda el Área."
+  },
+  "committee.meeting.step_questions": {
+    "en": "Questions & ideas",
+    "es": "Preguntas e ideas"
+  },
+  "committee.meeting.step_questions_text": {
+    "en": "Bring your questions — new GVRs and RLVs get practical help and resources.",
+    "es": "Trae tus preguntas — los nuevos RLV y GVR reciben ayuda práctica y recursos."
+  },
+  "committee.meeting.step_close": {
+    "en": "Close in about an hour",
+    "es": "Cerramos en más o menos una hora"
+  },
+  "committee.meeting.step_close_text": {
+    "en": "We close on time with the Responsibility Statement. Notes and slides are shared in our Portfolio.",
+    "es": "Cerramos a tiempo con la Declaración de la Responsabilidad. Las notas y presentaciones se comparten en nuestro Portafolio."
+  },
+  "committee.weekly.eyebrow": {
+    "en": "Also on Zoom · Open to everyone",
+    "es": "También por Zoom · Abierta a todos"
+  },
+  "committee.weekly.title": {
+    "en": "Grapevine Weekly Open AA Meeting",
+    "es": "Grapevine Weekly Open AA Meeting"
+  },
+  "committee.weekly.text": {
+    "en": "Not our committee meeting — an open AA meeting that AA Grapevine hosts every week on Zoom, with a host and two speakers. Anyone interested in AA is welcome, and each meeting is recorded for the Grapevine Weekly Open podcast.",
+    "es": "No es nuestra reunión del comité: es una reunión abierta de AA, en inglés, que AA Grapevine ofrece cada semana por Zoom, con un coordinador y dos oradores. Cualquier persona interesada en AA es bienvenida, y cada reunión se graba para el podcast Grapevine Weekly Open."
+  },
+  "committee.weekly.next": {
+    "en": "Next meeting:",
+    "es": "Próxima reunión:"
+  },
+  "committee.weekly.listen": {
+    "en": "Listen to past meetings",
+    "es": "Escuchar reuniones pasadas"
+  },
+  "committee.weekly.section_title": {
+    "en": "Weekly open meetings",
+    "es": "Reuniones abiertas semanales"
+  },
+  "committee.weekly.section_text": {
+    "en": "Not our committee meeting: open AA meetings that AA Grapevine and La Viña hold on Zoom every week. Anyone interested in AA is welcome, and each meeting is recorded as a podcast.",
+    "es": "No son reuniones de nuestro comité: son reuniones abiertas de AA que AA Grapevine y La Viña ofrecen cada semana por Zoom. Cualquier persona interesada en AA es bienvenida, y cada reunión se graba como podcast."
+  },
+  "committee.weekly.gv_text": {
+    "en": "A host and two speakers, every week. Each meeting is recorded for the Grapevine Weekly Open podcast.",
+    "es": "Un coordinador y dos oradores, cada semana. Cada reunión se graba para el podcast Grapevine Weekly Open."
+  },
+  "committee.weekly.lang_en": {
+    "en": "In English",
+    "es": "En inglés"
+  },
+  "committee.weekly.lang_es": {
+    "en": "In Spanish",
+    "es": "En español"
+  },
+  "committee.weekly.starts": {
+    "en": "Starts {date}",
+    "es": "Comienza el {date}"
+  },
+  "committee.weekly.closing": {
+    "en": "Let's keep extending this powerful lifeline together!",
+    "es": "¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
+  },
+  "committee.weekly.same_zoom": {
+    "en": "Both meetings use the same Zoom room",
+    "es": "Las dos reuniones usan la misma sala de Zoom"
+  },
+  "committee.weekly.same_zoom_sub": {
+    "en": "Join from either card, or type the meeting ID and passcode into the Zoom app.",
+    "es": "Entra desde cualquiera de las dos tarjetas, o escribe el ID de reunión y el código de acceso en la aplicación de Zoom."
+  },
+  "committee.weekly.copy_id_gv": {
+    "en": "Copy the Grapevine Weekly Open meeting ID",
+    "es": "Copiar el ID de la reunión Grapevine Weekly Open"
+  },
+  "committee.weekly.copy_passcode_gv": {
+    "en": "Copy the Grapevine Weekly Open passcode",
+    "es": "Copiar el código de acceso de Grapevine Weekly Open"
+  },
+  "committee.weekly.copy_id_lv": {
+    "en": "Copy the meeting ID of La Viña's open meeting",
+    "es": "Copiar el ID de la reunión abierta de La Viña"
+  },
+  "committee.weekly.copy_passcode_lv": {
+    "en": "Copy the passcode of La Viña's open meeting",
+    "es": "Copiar el código de acceso de la reunión abierta de La Viña"
+  },
+  "committee.weekly.join_gv": {
+    "en": "Join on Zoom: Grapevine Weekly Open",
+    "es": "Entrar por Zoom a Grapevine Weekly Open"
+  },
+  "committee.weekly.cal_aria": {
+    "en": "Add to calendar: {name}, every week",
+    "es": "Agregar al calendario: {name}, cada semana"
+  },
+  "committee.weekly.join_lv": {
+    "en": "Join on Zoom: La Viña's open meeting",
+    "es": "Entrar por Zoom a la reunión abierta de La Viña"
+  },
+  "committee.weekly.details_gv": {
+    "en": "Details on aagrapevine.org",
+    "es": "Detalles en aagrapevine.org"
+  },
+  "committee.weekly.details_lv": {
+    "en": "Details on aalavina.org",
+    "es": "Detalles en aalavina.org"
+  },
+  "committee.weekly.source_gv": {
+    "en": "Details from aagrapevine.org — we keep them updated regularly.",
+    "es": "Detalles de aagrapevine.org; los mantenemos actualizados con regularidad."
+  },
+  "committee.weekly.source_lv": {
+    "en": "Details from an official La Viña flyer shared with the committee.",
+    "es": "Detalles de un volante oficial de La Viña compartido con el comité."
+  },
+  "committee.sub.eyebrow": {
+    "en": "Calendar feed",
+    "es": "Calendario en línea"
+  },
+  "committee.sub.title": {
+    "en": "Subscribe to the calendar",
+    "es": "Suscríbete al calendario"
+  },
+  "committee.sub.text": {
+    "en": "Subscribe once and every committee meeting and event shows up in your phone or computer calendar.",
+    "es": "Suscríbete una vez y todas las reuniones y eventos del comité aparecerán en el calendario de tu celular o computadora."
+  },
+  "committee.sub.apple": {
+    "en": "Apple / iPhone",
+    "es": "Apple / iPhone"
+  },
+  "committee.sub.url_label": {
+    "en": "Calendar address (URL)",
+    "es": "Dirección del calendario (URL)"
+  },
+  "committee.sub.copy_aria": {
+    "en": "Copy calendar address",
+    "es": "Copiar dirección del calendario"
+  },
+  "committee.sub.url_help": {
+    "en": "Paste this address into any calendar app that can subscribe from a URL.",
+    "es": "Pega esta dirección en cualquier aplicación de calendario que permita suscribirse desde una URL."
+  },
+  "committee.sub.other_lang": {
+    "en": "Prefer Spanish titles?",
+    "es": "¿Prefieres los títulos en inglés?"
+  },
+  "committee.sub.howto_google": {
+    "en": "Set up in Google Calendar",
+    "es": "Configurar en Google Calendar"
+  },
+  "committee.sub.howto_google_text": {
+    "en": "On a computer, open Google Calendar → next to “Other calendars” click + → “From URL” → paste the address → “Add calendar”. Your phone gets it too.",
+    "es": "En una computadora, abre Google Calendar → junto a “Otros calendarios” haz clic en + → “Desde URL” → pega la dirección → “Agregar calendario”. También aparece en tu celular."
+  },
+  "committee.sub.howto_apple": {
+    "en": "Set up on iPhone, iPad or Mac",
+    "es": "Configurar en iPhone, iPad o Mac"
+  },
+  "committee.sub.howto_apple_text": {
+    "en": "Tap “Apple / iPhone” above, or go to Settings → Calendar → Accounts → Add Account → Other → Add Subscribed Calendar and paste the address.",
+    "es": "Toca “Apple / iPhone” arriba, o ve a Configuración → Calendario → Cuentas → Agregar cuenta → Otra → Agregar calendario suscrito y pega la dirección."
+  },
+  "committee.sub.howto_outlook": {
+    "en": "Set up in Outlook",
+    "es": "Configurar en Outlook"
+  },
+  "committee.sub.howto_outlook_text": {
+    "en": "In Outlook on the web: Add calendar → Subscribe from web → paste the address → Import. In Outlook for Windows: Add calendar → From Internet.",
+    "es": "En Outlook en la web: Agregar calendario → Suscribirse desde la web → pega la dirección → Importar. En Outlook para Windows: Agregar calendario → Desde Internet."
+  },
+  "committee.events.meta_desc": {
+    "en": "Upcoming NETA 65 Grapevine / La Viña events — committee meetings, workshops, assembly booths and other events in Texas. Subscribe to the calendar.",
+    "es": "Próximos eventos de Grapevine / La Viña de NETA 65: reuniones del comité, talleres, mesas en asambleas y eventos en Texas. Suscríbete al calendario."
+  },
+  "committee.events.eyebrow": {
+    "en": "Committee · Calendar",
+    "es": "Comité · Calendario"
+  },
+  "committee.events.hero_sub": {
+    "en": "Committee meetings, workshops, assembly booths and Grapevine & La Viña events in Texas, in one calendar.",
+    "es": "Reuniones del comité, talleres, mesas en asambleas y eventos de Grapevine y La Viña en Texas, en un solo calendario."
+  },
+  "committee.events.subscribe_btn": {
+    "en": "Subscribe to calendar",
+    "es": "Suscribirse al calendario"
+  },
+  "committee.events.stat_next_meeting": {
+    "en": "Next committee meeting",
+    "es": "Próxima reunión del comité"
+  },
+  "committee.events.list_eyebrow": {
+    "en": "What's coming up",
+    "es": "Lo que viene"
+  },
+  "committee.events.list_sub": {
+    "en": "Filter by kind or jump to a month — and add any event to your calendar.",
+    "es": "Filtra por tipo o salta a un mes, y agrega cualquier evento a tu calendario."
+  },
+  "committee.events.upcoming": {
+    "en": "Upcoming events",
+    "es": "Próximos eventos"
+  },
+  "committee.events.filter_aria": {
+    "en": "Filter events",
+    "es": "Filtrar eventos"
+  },
+  "committee.events.months_aria": {
+    "en": "Jump to a month",
+    "es": "Ir a un mes"
+  },
+  "committee.events.f_committee": {
+    "en": "Committee meetings",
+    "es": "Reuniones del comité"
+  },
+  "committee.events.f_neta": {
+    "en": "NETA 65 events",
+    "es": "Eventos de NETA 65"
+  },
+  "committee.events.f_calendar": {
+    "en": "GV & LV calendars",
+    "es": "Calendarios de GV y LV"
+  },
+  "committee.events.show_all_meetings": {
+    "en": "Show every monthly date",
+    "es": "Mostrar todas las fechas mensuales"
+  },
+  "committee.events.then_dates": {
+    "en": "Then {dates}…",
+    "es": "Después: {dates}…"
+  },
+  "committee.events.showing": {
+    "en": "Showing {n} events",
+    "es": "Mostrando {n} eventos"
+  },
+  "committee.events.showing_one": {
+    "en": "Showing 1 event",
+    "es": "Mostrando 1 evento"
+  },
+  "committee.events.pinned_next": {
+    "en": "Next committee meeting",
+    "es": "Próxima reunión del comité"
+  },
+  "committee.events.meeting_details": {
+    "en": "Meeting details",
+    "es": "Detalles de la reunión"
+  },
+  "committee.events.join_online": {
+    "en": "Join online",
+    "es": "Conectarse en línea"
+  },
+  "committee.events.view_flyer": {
+    "en": "View flyer",
+    "es": "Ver volante"
+  },
+  "committee.events.view_flyer_of": {
+    "en": "View flyer: {title}",
+    "es": "Ver volante: {title}"
+  },
+  "committee.events.cal_short": {
+    "en": "Calendar",
+    "es": "Calendario"
+  },
+  "committee.events.join_short": {
+    "en": "Join online",
+    "es": "Conectarse"
+  },
+  "committee.events.details_short": {
+    "en": "Details",
+    "es": "Detalles"
+  },
+  "committee.events.details": {
+    "en": "Event details",
+    "es": "Detalles del evento"
+  },
+  "committee.events.all_day": {
+    "en": "All day",
+    "es": "Todo el día"
+  },
+  "committee.events.time_not_listed": {
+    "en": "Time not listed — see event details",
+    "es": "Hora no indicada — ver detalles del evento"
+  },
+  "committee.events.online": {
+    "en": "Online",
+    "es": "En línea"
+  },
+  "committee.events.online_on": {
+    "en": "Online on {platform}",
+    "es": "En línea por {platform}"
+  },
+  "committee.events.flyer": {
+    "en": "Flyer",
+    "es": "Volante"
+  },
+  "committee.events.flyer_alt": {
+    "en": "Flyer: {title}",
+    "es": "Volante: {title}"
+  },
+  "committee.events.share_go": {
+    "en": "See this event on our Events page",
+    "es": "Ver este evento en nuestra página de eventos"
+  },
+  "committee.events.contact": {
+    "en": "Contact",
+    "es": "Contacto"
+  },
+  "committee.events.badge_gv": {
+    "en": "Grapevine calendar",
+    "es": "Calendario de Grapevine"
+  },
+  "committee.events.badge_lv": {
+    "en": "La Viña calendar",
+    "es": "Calendario de La Viña"
+  },
+  "committee.events.badge_recurring": {
+    "en": "Every month",
+    "es": "Cada mes"
+  },
+  "committee.events.kind.committee": {
+    "en": "Committee meeting",
+    "es": "Reunión del comité"
+  },
+  "committee.events.kind.gv": {
+    "en": "Grapevine",
+    "es": "Grapevine"
+  },
+  "committee.events.kind.lv": {
+    "en": "La Viña",
+    "es": "La Viña"
+  },
+  "committee.events.kind.booth": {
+    "en": "Literature booth",
+    "es": "Mesa de literatura"
+  },
+  "committee.events.kind.assembly": {
+    "en": "Area assembly",
+    "es": "Asamblea de Área"
+  },
+  "committee.events.kind.other": {
+    "en": "Other events",
+    "es": "Otros eventos"
+  },
+  "committee.events.kind.neta": {
+    "en": "NETA 65",
+    "es": "NETA 65"
+  },
+  "committee.events.kind.event": {
+    "en": "Event",
+    "es": "Evento"
+  },
+  "committee.events.legend": {
+    "en": "Color key",
+    "es": "Clave de colores"
+  },
+  "committee.events.tentative": {
+    "en": "Details to be confirmed",
+    "es": "Detalles por confirmar"
+  },
+  "committee.events.tentative_help": {
+    "en": "The date, place or times may still change. Check again closer to the day.",
+    "es": "La fecha, el lugar o el horario todavía pueden cambiar. Vuelve a revisar unos días antes."
+  },
+  "committee.events.n_days": {
+    "en": "{n} days",
+    "es": "{n} días"
+  },
+  "committee.events.group.committee": {
+    "en": "Committee meeting",
+    "es": "Reunión del comité"
+  },
+  "committee.events.group.neta": {
+    "en": "NETA 65 event",
+    "es": "Evento de NETA 65"
+  },
+  "committee.events.group.calendar": {
+    "en": "Grapevine / La Viña calendar",
+    "es": "Calendario de Grapevine / La Viña"
+  },
+  "committee.events.empty_neta_title": {
+    "en": "No NETA 65 events on the calendar yet",
+    "es": "Todavía no hay eventos de NETA 65 en el calendario"
+  },
+  "committee.events.empty_neta_text": {
+    "en": "Workshops, literature booths and other events the committee plans show up here, with their flyer.",
+    "es": "Aquí aparecen, con su volante, los talleres, las mesas de literatura y otros eventos que planea el comité."
+  },
+  "committee.events.how_link": {
+    "en": "How to add an event",
+    "es": "Cómo agregar un evento"
+  },
+  "committee.events.how_title": {
+    "en": "Add an event",
+    "es": "Agregar un evento"
+  },
+  "committee.events.how_new_q": {
+    "en": "A new event?",
+    "es": "¿Un evento nuevo?"
+  },
+  "committee.events.how_text": {
+    "en": "Put its flyer in the “flyers” folder of the current Panel on the committee's Google Drive, with the date at the start of the file name: the flyer makes the event. It shows up on this page after the next update — and in everyone's subscribed calendar.",
+    "es": "Pon su volante en la carpeta “flyers” (volantes) del Panel actual en el Google Drive del comité, con la fecha al inicio del nombre del archivo: el volante crea el evento. Aparece en esta página después de la próxima actualización, y también en los calendarios de todos los suscritos."
+  },
+  "committee.events.how_linked_q": {
+    "en": "Already on this page?",
+    "es": "¿Ya está en esta página?"
+  },
+  "committee.events.how_linked": {
+    "en": "An event written in a file of the site ({folder}, like the NETA 65 workshops) gets its flyer another way: put the flyer in the same folder with a name that does not start with a date, and link it in the event's file with a {line} line (the flyer's Drive link). A dated name would make a second event, and the event would be listed twice.",
+    "es": "Un evento escrito en un archivo del sitio ({folder}, como los talleres de NETA 65) recibe su volante de otra forma: pon el volante en la misma carpeta con un nombre que no empiece con una fecha, y enlázalo en el archivo del evento con una línea {line} (el enlace del volante en el Drive). Un nombre con fecha crearía un segundo evento, y el evento aparecería dos veces."
+  },
+  "committee.events.naming_aria": {
+    "en": "Flyer file names and the events they create",
+    "es": "Nombres de archivo de volantes y los eventos que crean"
+  },
+  "committee.events.naming_name": {
+    "en": "Name the flyer…",
+    "es": "Nombra el volante…"
+  },
+  "committee.events.naming_result": {
+    "en": "…and it shows up as",
+    "es": "…y aparece como"
+  },
+  "committee.events.naming_ex1": {
+    "en": "2027-03-14 Spring Assembly GV booth.pdf",
+    "es": "2027-03-14 Mesa de La Viña en la Asamblea de primavera.pdf"
+  },
+  "committee.events.naming_ex1_out": {
+    "en": "{date} · all day",
+    "es": "{date} · todo el día"
+  },
+  "committee.events.naming_ex2": {
+    "en": "2027-03-14 Writing workshop 9-11am @ Tyler Civic Center.pdf",
+    "es": "2027-03-14 Taller de escritura 9-11am @ Centro Cívico de Tyler.pdf"
+  },
+  "committee.events.naming_ex2_out": {
+    "en": "{date} · 9–11 AM · Tyler Civic Center",
+    "es": "{date} · 9–11 a. m. · Centro Cívico de Tyler"
+  },
+  "committee.events.naming_ex3": {
+    "en": "Writing workshop - Tyler.jpg",
+    "es": "Taller de escritura - Tyler.jpg"
+  },
+  "committee.events.naming_ex3_out": {
+    "en": "the flyer of an event already on this page, once its file links it",
+    "es": "el volante de un evento que ya está en esta página, cuando su archivo lo enlaza"
+  },
+  "committee.events.naming_tip": {
+    "en": "For a new event the date comes first, as year-month-day. A time (“9am”, “9-11am”) and a place after “@” are optional. Document and image flyers (JPG, PNG) both work.",
+    "es": "Para un evento nuevo, la fecha va primero, como año-mes-día. La hora (“9am”, “9-11am”) y el lugar después de “@” son opcionales. Sirven volantes en documento o en imagen (JPG, PNG)."
+  },
+  "committee.events.empty_cal_title": {
+    "en": "No Grapevine / La Viña calendar events in Texas right now",
+    "es": "Por ahora no hay eventos de Grapevine / La Viña en Texas"
+  },
+  "committee.events.empty_cal_text": {
+    "en": "Texas and online events from the official Grapevine and La Viña calendars show up here — we keep this list updated regularly.",
+    "es": "Aquí aparecen los eventos de Texas y en línea de los calendarios oficiales de Grapevine y La Viña; mantenemos esta lista actualizada con regularidad."
+  },
+  "committee.events.empty_cal_cta": {
+    "en": "See the official calendar",
+    "es": "Ver el calendario oficial"
+  },
+  "committee.events.past": {
+    "en": "Past events",
+    "es": "Eventos pasados"
+  },
+  "committee.events.sources_title": {
+    "en": "How events get here",
+    "es": "Cómo llegan los eventos aquí"
+  },
+  "committee.events.sources_sub": {
+    "en": "Everything on this calendar comes from three places.",
+    "es": "Todo lo que ves en este calendario viene de tres lugares."
+  },
+  "committee.events.src_meetings": {
+    "en": "Meetings & monthly events",
+    "es": "Reuniones y eventos mensuales"
+  },
+  "committee.events.src_meetings_text": {
+    "en": "Worked out from our monthly schedule: the committee meeting (with its {platform} link) and the things we do every month, like our literature booths.",
+    "es": "Salen de nuestro horario mensual: la reunión del comité (con su enlace de {platform}) y lo que hacemos cada mes, como nuestras mesas de literatura."
+  },
+  "committee.events.src_flyers": {
+    "en": "NETA 65 events",
+    "es": "Eventos de NETA 65"
+  },
+  "committee.events.src_flyers_text": {
+    "en": "Events the committee plans, with their flyer attached.",
+    "es": "Los eventos que planea el comité, con su volante incluido."
+  },
+  "committee.events.src_calendars": {
+    "en": "Grapevine & La Viña calendars",
+    "es": "Calendarios de Grapevine y La Viña"
+  },
+  "committee.events.src_calendars_text": {
+    "en": "Texas and online events from the official aagrapevine.org and aalavina.org calendars — we keep them updated regularly.",
+    "es": "Eventos de Texas y en línea de los calendarios oficiales de aagrapevine.org y aalavina.org; los mantenemos actualizados con regularidad."
+  },
+  "committee.events.aside_aria": {
+    "en": "About this calendar",
+    "es": "Sobre este calendario"
+  },
+  "committee.docs.meta_desc": {
+    "en": "The portfolio of the NETA 65 Grapevine / La Viña Committee: reports, meeting notes, slides, workshop materials and flyers from our Google Drive.",
+    "es": "El portafolio del Comité de Grapevine y La Viña de NETA 65: informes, notas de reuniones, presentaciones, materiales de talleres y volantes."
+  },
+  "committee.docs.moved_text": {
+    "en": "The committee's reports, notes, slides and workshop files are now in our Portfolio:",
+    "es": "Los informes, notas, presentaciones y materiales de talleres del comité ahora están en nuestro Portafolio:"
+  },
+  "committee.docs.eyebrow": {
+    "en": "Committee · Portfolio",
+    "es": "Comité · Portafolio"
+  },
+  "committee.docs.hero_sub": {
+    "en": "Reports, meeting notes, slides and workshop materials from the committee.",
+    "es": "Informes, notas, presentaciones y materiales de talleres del comité."
+  },
+  "committee.docs.how_btn": {
+    "en": "How to add documents",
+    "es": "Cómo agregar documentos"
+  },
+  "committee.docs.browse": {
+    "en": "Browse documents",
+    "es": "Ver documentos"
+  },
+  "committee.docs.stat_files": {
+    "en": "files",
+    "es": "archivos"
+  },
+  "committee.docs.stat_folders": {
+    "en": "categories",
+    "es": "categorías"
+  },
+  "committee.docs.stat_panel": {
+    "en": "panel",
+    "es": "panel"
+  },
+  "committee.docs.count": {
+    "en": "{n} files",
+    "es": "{n} archivos"
+  },
+  "committee.docs.count_one": {
+    "en": "1 file",
+    "es": "1 archivo"
+  },
+  "committee.docs.showing": {
+    "en": "{n} documents match",
+    "es": "{n} documentos coinciden"
+  },
+  "committee.docs.showing_one": {
+    "en": "1 document matches",
+    "es": "1 documento coincide"
+  },
+  "committee.docs.tabs_aria": {
+    "en": "Document categories",
+    "es": "Categorías de documentos"
+  },
+  "committee.docs.search_label": {
+    "en": "Search the portfolio",
+    "es": "Buscar en el portafolio"
+  },
+  "committee.docs.search_placeholder": {
+    "en": "Search documents…",
+    "es": "Buscar documentos…"
+  },
+  "committee.docs.empty_title": {
+    "en": "A fresh start for the new panel",
+    "es": "Un nuevo comienzo para el nuevo panel"
+  },
+  "committee.docs.empty_title_panel": {
+    "en": "A fresh start for {panel}",
+    "es": "Un nuevo comienzo para el {panel}"
+  },
+  "committee.docs.empty_text": {
+    "en": "The committee's files for this panel will show up here as they're shared.",
+    "es": "Los archivos del comité para este panel aparecerán aquí a medida que se compartan."
+  },
+  "committee.docs.empty_where": {
+    "en": "Where a file goes",
+    "es": "Dónde va cada archivo"
+  },
+  "committee.docs.empty_example": {
+    "en": "2027-02-17 Committee report.docx",
+    "es": "2027-02-17 Informe del comité.docx"
+  },
+  "committee.docs.browse_library": {
+    "en": "Browse the GV & LV library",
+    "es": "Explorar la biblioteca de GV y LV"
+  },
+  "committee.docs.added": {
+    "en": "Added {date}",
+    "es": "Agregado el {date}"
+  },
+  "committee.docs.sign_up": {
+    "en": "Sign up",
+    "es": "Inscribirse"
+  },
+  "committee.docs.open_aria": {
+    "en": "Open {title} in Google Drive",
+    "es": "Abrir {title} en Google Drive"
+  },
+  "committee.docs.download_aria": {
+    "en": "Download {title}",
+    "es": "Descargar {title}"
+  },
+  "committee.docs.present_web": {
+    "en": "Present on the web",
+    "es": "Presentar en la web"
+  },
+  "committee.docs.present_web_note": {
+    "en": "A fixed copy: the web version stays current and can be customized.",
+    "es": "Una copia fija: la versión web se mantiene al día y se puede personalizar."
+  },
+  "committee.docs.no_match": {
+    "en": "Try a different word, or choose “All”.",
+    "es": "Prueba con otra palabra o elige “Todo”."
+  },
+  "committee.docs.no_panel": {
+    "en": "Other files",
+    "es": "Otros archivos"
+  },
+  "committee.docs.how_title": {
+    "en": "How the committee adds documents",
+    "es": "Cómo agrega documentos el comité"
+  },
+  "committee.docs.how_1_title": {
+    "en": "Open the Panel folder.",
+    "es": "Abre la carpeta del Panel."
+  },
+  "committee.docs.how_1": {
+    "en": "In the committee's shared Google Drive, open the current Panel folder — right now that's {panel}.",
+    "es": "En el Google Drive compartido del comité, abre la carpeta del Panel actual — ahora es el {panel}."
+  },
+  "committee.docs.how_2_title": {
+    "en": "Drop the file into the right folder.",
+    "es": "Pon el archivo en la carpeta correcta."
+  },
+  "committee.docs.how_2": {
+    "en": "Documents, Word files, slides, photos or Google Forms all work. Tip: start the name with a date like “2027-01-15” to set its date.",
+    "es": "Sirven documentos, archivos de Word, presentaciones, fotos o formularios de Google. Consejo: empieza el nombre con una fecha como “2027-01-15” para fijar su fecha."
+  },
+  "committee.docs.how_3_title": {
+    "en": "That's it.",
+    "es": "¡Y listo!"
+  },
+  "committee.docs.how_3": {
+    "en": "It shows up here after the next update, with the title in English and Spanish.",
+    "es": "Aparece aquí después de la próxima actualización, con el título en español y en inglés."
+  },
+  "committee.docs.mail_subject": {
+    "en": "Access to the committee Drive folder",
+    "es": "Acceso a la carpeta de Drive del comité"
+  },
+  "committee.docs.ask_access": {
+    "en": "Ask for upload access",
+    "es": "Pedir acceso para subir"
+  },
+  "committee.docs.folders_title": {
+    "en": "Folder → where it shows up",
+    "es": "Carpeta → dónde aparece"
+  },
+  "committee.docs.goes_reports": {
+    "en": "Reports",
+    "es": "Informes"
+  },
+  "committee.docs.goes_notes": {
+    "en": "Meeting notes",
+    "es": "Notas"
+  },
+  "committee.docs.goes_slides": {
+    "en": "Slides",
+    "es": "Presentaciones"
+  },
+  "committee.docs.goes_workshops": {
+    "en": "Workshops",
+    "es": "Talleres"
+  },
+  "committee.docs.goes_flyers": {
+    "en": "Portfolio · Flyers (and Events, when the file name starts with a date)",
+    "es": "Portafolio · Volantes (y Eventos, si el nombre del archivo empieza con una fecha)"
+  },
+  "committee.docs.goes_forms": {
+    "en": "Sign-ups",
+    "es": "Inscripciones"
+  },
+  "committee.docs.goes_photos": {
+    "en": "Photos",
+    "es": "Fotos"
+  },
+  "committee.docs.goes_bulletin": {
+    "en": "Bulletin",
+    "es": "Boletín"
+  },
+  "committee.docs.folders_note": {
+    "en": "These are the folder names on our Drive; Spanish names (informes, notas, presentaciones, talleres, volantes, formularios, fotos, boletín) work too. Sub-folders are included, and any other folder shows up under its own name. Response spreadsheets and anything marked PRIVATE are left off this site — but anyone with the link can open the Drive folders, so keep private files out of them.",
+    "es": "Estos son los nombres de las carpetas en nuestro Drive; también funcionan en español (informes, notas, presentaciones, talleres, volantes, formularios, fotos, boletín). Se incluyen las subcarpetas, y cualquier otra carpeta aparece con su propio nombre. Las hojas de respuestas y todo lo marcado como PRIVADO no aparecen en este sitio, pero cualquiera con el enlace puede abrir las carpetas de Drive: no guardes allí archivos privados."
+  },
+  "committee.docs.cat.reports": {
+    "en": "Reports",
+    "es": "Informes"
+  },
+  "committee.docs.cat.reports_desc": {
+    "en": "Area and committee reports",
+    "es": "Informes del Área y del comité"
+  },
+  "committee.docs.cat.notes": {
+    "en": "Meeting notes",
+    "es": "Notas de reuniones"
+  },
+  "committee.docs.cat.notes_desc": {
+    "en": "Minutes and notes from committee meetings",
+    "es": "Actas y notas de las reuniones del comité"
+  },
+  "committee.docs.cat.slides": {
+    "en": "Slides",
+    "es": "Presentaciones"
+  },
+  "committee.docs.cat.slides_desc": {
+    "en": "Presentations shown at meetings and assemblies",
+    "es": "Presentaciones de reuniones y asambleas"
+  },
+  "committee.docs.cat.workshops": {
+    "en": "Workshops",
+    "es": "Talleres"
+  },
+  "committee.docs.cat.workshops_desc": {
+    "en": "Writing-workshop and GVR / RLV orientation materials",
+    "es": "Materiales de talleres de escritura y de orientación para RLV / GVR"
+  },
+  "committee.docs.cat.flyers": {
+    "en": "Flyers",
+    "es": "Volantes"
+  },
+  "committee.docs.cat.flyers_desc": {
+    "en": "Event flyers to print and share",
+    "es": "Volantes de eventos para imprimir y compartir"
+  },
+  "committee.docs.cat.forms": {
+    "en": "Sign-ups",
+    "es": "Inscripciones"
+  },
+  "committee.docs.cat.forms_desc": {
+    "en": "Forms to sign up for service, workshops and events",
+    "es": "Formularios para inscribirte en servicios, talleres y eventos"
+  },
+  "committee.docs.cat.other": {
+    "en": "Other",
+    "es": "Otros"
+  },
+  "committee.type.pdf": {
+    "en": "Document",
+    "es": "Documento"
+  },
+  "committee.type.slides": {
+    "en": "Slides",
+    "es": "Presentación"
+  },
+  "committee.type.doc": {
+    "en": "Document",
+    "es": "Documento"
+  },
+  "committee.type.video": {
+    "en": "Video",
+    "es": "Video"
+  },
+  "committee.type.image": {
+    "en": "Image",
+    "es": "Imagen"
+  },
+  "committee.type.form": {
+    "en": "Form",
+    "es": "Formulario"
+  },
+  "committee.photos.meta_desc": {
+    "en": "Photos from NETA 65 Grapevine / La Viña booths, workshops and service events — shared from the committee's Google Drive, with anonymity respected.",
+    "es": "Fotos de mesas, talleres y eventos de servicio de Grapevine / La Viña de NETA 65 — compartidas desde el Google Drive del comité, respetando el anonimato."
+  },
+  "committee.photos.eyebrow": {
+    "en": "Committee · Photos",
+    "es": "Comité · Fotos"
+  },
+  "committee.photos.hero_sub": {
+    "en": "Booths, literature tables, workshops and service in action — always protecting anonymity.",
+    "es": "Mesas, literatura, talleres y el servicio en acción, siempre protegiendo el anonimato."
+  },
+  "committee.photos.browse": {
+    "en": "Browse albums",
+    "es": "Ver álbumes"
+  },
+  "committee.photos.stat_albums": {
+    "en": "albums",
+    "es": "álbumes"
+  },
+  "committee.photos.stat_photos": {
+    "en": "photos",
+    "es": "fotos"
+  },
+  "committee.photos.stat_videos": {
+    "en": "videos",
+    "es": "videos"
+  },
+  "committee.photos.albums": {
+    "en": "Albums",
+    "es": "Álbumes"
+  },
+  "committee.photos.albums_sub": {
+    "en": "Each folder on our Drive becomes an album. Tap a photo to see it full-screen.",
+    "es": "Cada carpeta de nuestro Drive se convierte en un álbum. Toca una foto para verla en pantalla completa."
+  },
+  "committee.photos.count": {
+    "en": "{n} photos",
+    "es": "{n} fotos"
+  },
+  "committee.photos.count_one": {
+    "en": "1 photo",
+    "es": "1 foto"
+  },
+  "committee.photos.count_videos": {
+    "en": "{n} videos",
+    "es": "{n} videos"
+  },
+  "committee.photos.count_videos_one": {
+    "en": "1 video",
+    "es": "1 video"
+  },
+  "committee.photos.slideshow": {
+    "en": "Full screen",
+    "es": "Pantalla completa"
+  },
+  "committee.photos.back_to_albums": {
+    "en": "Back to albums",
+    "es": "Volver a los álbumes"
+  },
+  "committee.photos.open_photo": {
+    "en": "Open photo: {title}",
+    "es": "Abrir foto: {title}"
+  },
+  "committee.photos.open_video": {
+    "en": "Play video: {title}",
+    "es": "Reproducir video: {title}"
+  },
+  "committee.photos.show_all": {
+    "en": "Show all {n}",
+    "es": "Mostrar las {n}"
+  },
+  "committee.photos.prev": {
+    "en": "Previous photo",
+    "es": "Foto anterior"
+  },
+  "committee.photos.next": {
+    "en": "Next photo",
+    "es": "Foto siguiente"
+  },
+  "committee.photos.panel_album": {
+    "en": "{panel} — photos",
+    "es": "{panel} — fotos"
+  },
+  "committee.photos.untitled_album": {
+    "en": "Committee photos",
+    "es": "Fotos del comité"
+  },
+  "committee.photos.empty_title": {
+    "en": "Our photo albums are ready for the new panel",
+    "es": "Nuestros álbumes de fotos están listos para el nuevo panel"
+  },
+  "committee.photos.empty_text": {
+    "en": "New albums will show up here as the committee shares them.",
+    "es": "Los nuevos álbumes aparecerán aquí a medida que el comité los comparta."
+  },
+  "committee.photos.empty_where": {
+    "en": "Where photos go",
+    "es": "Dónde van las fotos"
+  },
+  "committee.photos.example_album": {
+    "en": "2027 Spring Assembly",
+    "es": "Asamblea de primavera 2027"
+  },
+  "committee.photos.see_instagram": {
+    "en": "See GV & LV on Instagram",
+    "es": "Ver GV y LV en Instagram"
+  },
+  "committee.photos.anon_title": {
+    "en": "Protecting anonymity",
+    "es": "Protegemos el anonimato"
+  },
+  "committee.photos.anon_eyebrow": {
+    "en": "Our Traditions",
+    "es": "Nuestras Tradiciones"
+  },
+  "committee.photos.anon_text": {
+    "en": "Anonymity is the spiritual foundation of all our Traditions. Please only upload photos where no faces of AA members can be identified — at any meeting, event or booth.",
+    "es": "El anonimato es la base espiritual de todas nuestras Tradiciones. Por favor, sube solo fotos en las que no se pueda identificar el rostro de ningún miembro de AA — en cualquier reunión, evento o mesa."
+  },
+  "committee.photos.ok_title": {
+    "en": "Great to share",
+    "es": "Se pueden compartir"
+  },
+  "committee.photos.ok_booths": {
+    "en": "Booths and displays",
+    "es": "Mesas y exhibidores"
+  },
+  "committee.photos.ok_literature": {
+    "en": "Literature and magazines",
+    "es": "Literatura y revistas"
+  },
+  "committee.photos.ok_venue": {
+    "en": "Venues, signs and decorations",
+    "es": "Lugares, letreros y decoraciones"
+  },
+  "committee.photos.never_title": {
+    "en": "Never share",
+    "es": "Nunca compartas"
+  },
+  "committee.photos.no_faces": {
+    "en": "Recognizable faces of AA members",
+    "es": "Rostros reconocibles de miembros de AA"
+  },
+  "committee.photos.no_names": {
+    "en": "Full names of members, on signs or name tags",
+    "es": "Nombres completos de miembros, en letreros o gafetes"
+  },
+  "committee.photos.how_title": {
+    "en": "How to add photos",
+    "es": "Cómo agregar fotos"
+  },
+  "committee.photos.how_1": {
+    "en": "On the committee's Google Drive, open the “photos” folder inside the current Panel folder — right now that's {panel}.",
+    "es": "En el Google Drive del comité, abre la carpeta “photos” (fotos) dentro de la carpeta del Panel actual — ahora es el {panel}."
+  },
+  "committee.photos.how_2": {
+    "en": "Create a sub-folder for the event (for example, “2027 Spring Assembly”) — it becomes the album name.",
+    "es": "Crea una subcarpeta para el evento (por ejemplo, “Asamblea de primavera 2027”) — será el nombre del álbum."
+  },
+  "committee.photos.how_3": {
+    "en": "Upload your photos or short videos. They show up here after the next update.",
+    "es": "Sube tus fotos o videos cortos. Aparecerán aquí después de la próxima actualización."
+  },
+  "committee.photos.mail_subject": {
+    "en": "Photos for the website",
+    "es": "Fotos para el sitio web"
+  },
+  "committee.ann.meta_desc": {
+    "en": "The NETA 65 Grapevine / La Viña Committee's bulletin: news and notices for groups, districts, GVRs and RLVs, in English and Spanish.",
+    "es": "El boletín del Comité de Grapevine / La Viña de NETA 65: noticias y avisos para grupos, distritos, RLV y GVR, en español y en inglés."
+  },
+  "committee.ann.eyebrow": {
+    "en": "Committee · News",
+    "es": "Comité · Noticias"
+  },
+  "committee.ann.hero_sub": {
+    "en": "News from the committee for groups, districts, GVRs and RLVs — in English and Spanish.",
+    "es": "Noticias del comité para grupos, distritos, RLV y GVR — en español y en inglés."
+  },
+  "committee.ann.get_digest": {
+    "en": "Get the monthly digest",
+    "es": "Recibir el resumen mensual"
+  },
+  "committee.ann.pinned": {
+    "en": "Pinned",
+    "es": "Destacado"
+  },
+  "committee.ann.until": {
+    "en": "until {date}",
+    "es": "hasta el {date}"
+  },
+  "committee.ann.show_original": {
+    "en": "Show original",
+    "es": "Ver el original"
+  },
+  "committee.ann.in_post": {
+    "en": "In this post",
+    "es": "En esta publicación"
+  },
+  "committee.ann.more_info": {
+    "en": "More information",
+    "es": "Más información"
+  },
+  "committee.ann.open_doc": {
+    "en": "Open the document",
+    "es": "Abrir el documento"
+  },
+  "committee.ann.empty_title": {
+    "en": "Nothing on the bulletin right now",
+    "es": "Por ahora no hay nada en el boletín"
+  },
+  "committee.ann.empty_text": {
+    "en": "When the committee has news — an orientation for new GVRs and RLVs, a workshop, a service opportunity — it will be posted here, in English and Spanish.",
+    "es": "Cuando el comité tenga noticias — una orientación para nuevos RLV y GVR, un taller, una oportunidad de servicio — se publicarán aquí, en español y en inglés."
+  },
+  "committee.ann.meanwhile": {
+    "en": "Coming up",
+    "es": "Lo que viene"
+  },
+  "committee.ann.all_events": {
+    "en": "All events",
+    "es": "Todos los eventos"
+  },
+  "committee.ann.next_event": {
+    "en": "Next event",
+    "es": "Próximo evento"
+  },
+  "committee.ann.how_title": {
+    "en": "Post to the bulletin",
+    "es": "Publicar en el boletín"
+  },
+  "committee.ann.where": {
+    "en": "Where it goes",
+    "es": "Dónde va"
+  },
+  "committee.ann.how_1": {
+    "en": "Write your notice as a Google Doc. Its name is the headline: start it with a date, like “2027-01-10”, to set the date.",
+    "es": "Escribe tu aviso en un documento de Google. Su nombre es el titular: empiézalo con una fecha, como “2027-01-10”, para fijar la fecha."
+  },
+  "committee.ann.how_2": {
+    "en": "Put it in the “bulletin” folder of the current Panel — right now that's {panel}.",
+    "es": "Ponlo en la carpeta “bulletin” (boletín) del Panel actual — ahora es el {panel}."
+  },
+  "committee.ann.how_3": {
+    "en": "Write in English or Spanish: it shows up on the bulletin after the next update, in both languages.",
+    "es": "Escribe en español o en inglés: aparecerá en el boletín después de la próxima actualización, en los dos idiomas."
+  },
+  "committee.ann.how_4": {
+    "en": "To have it appear on a later day, add “(from 2027-02-01)” to its name — it shows up that morning. “(until 2027-03-01)” takes it down after that day.",
+    "es": "Para que aparezca más adelante, agrega “(desde 2027-02-01)” a su nombre: aparecerá esa mañana. “(hasta 2027-03-01)” lo quita después de ese día."
+  },
+  "committee.ann.example_name": {
+    "en": "2027-01-10 Welcome new GVRs",
+    "es": "2027-01-10 Bienvenidos nuevos RLV"
+  },
+  "committee.ann.moved_text": {
+    "en": "The committee's announcements are now on our Bulletin:",
+    "es": "Los anuncios del comité ahora están en nuestro Boletín:"
+  },
+  "committee.meetings.meta_desc": {
+    "en": "Our committee's monthly {platform} meeting, AA groups in and near NETA 65 that read Grapevine or La Viña, and the weekly open meetings of both magazines.",
+    "es": "La reunión mensual del comité por {platform}, grupos de AA en NETA 65 y cerca que leen La Viña o Grapevine, y las reuniones abiertas semanales de ambas revistas."
+  },
+  "committee.meetings.eyebrow": {
+    "en": "Committee · Meetings",
+    "es": "Comité · Reuniones"
+  },
+  "committee.meetings.hero_sub": {
+    "en": "Our monthly committee meeting, AA groups near you that read Grapevine or La Viña, and weekly open meetings.",
+    "es": "Nuestra reunión mensual del comité, los grupos de AA cerca de ti que leen Grapevine o La Viña y las reuniones abiertas semanales."
+  },
+  "committee.meetings.jump_aria": {
+    "en": "On this page",
+    "es": "En esta página"
+  },
+  "committee.meetings.find_gv": {
+    "en": "Find a Grapevine meeting",
+    "es": "Busca una reunión de Grapevine"
+  },
+  "committee.meetings.jump_weekly": {
+    "en": "Weekly open meetings",
+    "es": "Reuniones abiertas semanales"
+  },
+  "committee.meetings.committee_eyebrow": {
+    "en": "The committee · Monthly on {platform}",
+    "es": "El comité · Cada mes por {platform}"
+  },
+  "committee.meetings.committee_title": {
+    "en": "Our committee meeting",
+    "es": "Nuestra reunión del comité"
+  },
+  "committee.meetings.moved_text": {
+    "en": "The committee meeting, the Grapevine meetings near you and the weekly open meetings are now on our Meetings page:",
+    "es": "La reunión del comité, las reuniones de Grapevine cerca de ti y las reuniones abiertas semanales ahora están en nuestra página Reuniones:"
+  },
+  "committee.gvm.eyebrow": {
+    "en": "AA groups in and near our Area",
+    "es": "Grupos de AA en nuestra Área y sus alrededores"
+  },
+  "committee.gvm.title": {
+    "en": "Grapevine meetings",
+    "es": "Reuniones de Grapevine"
+  },
+  "committee.gvm.what": {
+    "en": "A Grapevine meeting is an AA meeting that uses Grapevine or La Viña — the “Grapevine” (GR) type in the local meeting lists.",
+    "es": "Una reunión de Grapevine es una reunión de AA que usa Grapevine o La Viña: en las listas de reuniones locales tiene el tipo “Grapevine” (GR)."
+  },
+  "committee.gvm.no_spanish": {
+    "en": "No group on these lists meets in Spanish yet.",
+    "es": "Todavía ningún grupo de estas listas se reúne en español."
+  },
+  "committee.gvm.no_spanish_link": {
+    "en": "See La Viña's weekly open meeting",
+    "es": "Mira la reunión abierta semanal de La Viña"
+  },
+  "committee.gvm.times_note": {
+    "en": "Times are Central time. Meetings can change, so check the details on the office's site before you go.",
+    "es": "Los horarios están en hora del Centro. Las reuniones pueden cambiar: revisa los detalles en el sitio de la oficina antes de ir."
+  },
+  "committee.gvm.area_title": {
+    "en": "In our Area (NETA 65)",
+    "es": "En nuestra Área (NETA 65)"
+  },
+  "committee.gvm.area_none": {
+    "en": "No Grapevine meetings in our Area are listed right now.",
+    "es": "Por ahora no hay reuniones de Grapevine en la lista de nuestra Área."
+  },
+  "committee.gvm.area_other": {
+    "en": "Other places in our Area",
+    "es": "Otros lugares de nuestra Área"
+  },
+  "committee.gvm.nearby_title": {
+    "en": "Nearby areas",
+    "es": "Áreas cercanas"
+  },
+  "committee.gvm.nearby_sub": {
+    "en": "Outside Northeast Texas Area 65, but close by — for when you travel or live near the edge of our Area.",
+    "es": "Fuera del Área 65 del Noreste de Texas, pero cerca: por si viajas o vives cerca del límite de nuestra Área."
+  },
+  "committee.gvm.count": {
+    "en": "{n} meetings",
+    "es": "{n} reuniones"
+  },
+  "committee.gvm.count_one": {
+    "en": "1 meeting",
+    "es": "1 reunión"
+  },
+  "committee.gvm.groups": {
+    "en": "{n} groups",
+    "es": "{n} grupos"
+  },
+  "committee.gvm.groups_one": {
+    "en": "1 group",
+    "es": "1 grupo"
+  },
+  "committee.gvm.schedule": {
+    "en": "Every week · Central time",
+    "es": "Cada semana · hora del Centro"
+  },
+  "committee.gvm.every_day": {
+    "en": "Every day",
+    "es": "Todos los días"
+  },
+  "committee.gvm.day_range": {
+    "en": "{from} to {to}",
+    "es": "{from} a {to}"
+  },
+  "committee.gvm.meets_today": {
+    "en": "Meets today",
+    "es": "Se reúne hoy"
+  },
+  "committee.gvm.day_today": {
+    "en": "{day} (today)",
+    "es": "{day} (hoy)"
+  },
+  "committee.gvm.filters_aria": {
+    "en": "Filter the Grapevine meetings",
+    "es": "Filtrar las reuniones de Grapevine"
+  },
+  "committee.gvm.f_day": {
+    "en": "Day",
+    "es": "Día"
+  },
+  "committee.gvm.f_any_day": {
+    "en": "Any day",
+    "es": "Cualquier día"
+  },
+  "committee.gvm.f_where": {
+    "en": "City, county or group",
+    "es": "Ciudad, condado o grupo"
+  },
+  "committee.gvm.f_where_ph": {
+    "en": "e.g. Tyler, Tarrant, Richardson",
+    "es": "p. ej., Tyler, Tarrant, Richardson"
+  },
+  "committee.gvm.f_how": {
+    "en": "In person or online",
+    "es": "En persona o en línea"
+  },
+  "committee.gvm.f_how_any": {
+    "en": "Any",
+    "es": "Todas"
+  },
+  "committee.gvm.f_nearby": {
+    "en": "Include nearby areas",
+    "es": "Incluir áreas cercanas"
+  },
+  "committee.gvm.f_more": {
+    "en": "Filters",
+    "es": "Filtros"
+  },
+  "committee.gvm.show_all_n": {
+    "en": "Show all {n} groups",
+    "es": "Ver los {n} grupos"
+  },
+  "committee.gvm.nearby_show": {
+    "en": "Show nearby groups",
+    "es": "Ver grupos cercanos"
+  },
+  "committee.gvm.nearby_hide": {
+    "en": "Hide nearby groups",
+    "es": "Ocultar grupos cercanos"
+  },
+  "committee.gvm.f_reset": {
+    "en": "Clear filters",
+    "es": "Borrar filtros"
+  },
+  "committee.gvm.showing": {
+    "en": "Showing {n} of {total} meetings · {groups}",
+    "es": "Se muestran {n} de {total} reuniones · {groups}"
+  },
+  "committee.gvm.showing_one": {
+    "en": "Showing 1 of {total} meetings · {groups}",
+    "es": "Se muestra 1 de {total} reuniones · {groups}"
+  },
+  "committee.gvm.none": {
+    "en": "No meetings match these filters.",
+    "es": "Ninguna reunión coincide con estos filtros."
+  },
+  "committee.gvm.att_in_person": {
+    "en": "In person",
+    "es": "En persona"
+  },
+  "committee.gvm.att_online": {
+    "en": "Online",
+    "es": "En línea"
+  },
+  "committee.gvm.att_hybrid": {
+    "en": "In person and online",
+    "es": "En persona y en línea"
+  },
+  "committee.gvm.access": {
+    "en": "Wheelchair access",
+    "es": "Acceso para silla de ruedas"
+  },
+  "committee.gvm.directions": {
+    "en": "Directions",
+    "es": "Cómo llegar"
+  },
+  "committee.gvm.directions_aria": {
+    "en": "Directions to {name} (opens in a new tab)",
+    "es": "Cómo llegar a {name} (se abre en una pestaña nueva)"
+  },
+  "committee.gvm.details_aria": {
+    "en": "Details on {site}: {name} (opens in a new tab)",
+    "es": "Detalles en {site}: {name} (se abre en una pestaña nueva)"
+  },
+  "committee.gvm.details_btn": {
+    "en": "Details",
+    "es": "Detalles"
+  },
+  "committee.gvm.source_host": {
+    "en": "Source: {site}",
+    "es": "Fuente: {site}"
+  },
+  "committee.gvm.listed_by": {
+    "en": "Listed by {names}",
+    "es": "En la lista de {names}"
+  },
+  "committee.gvm.approx": {
+    "en": "Only the city is listed — see the details for the place.",
+    "es": "Solo aparece la ciudad: consulta los detalles para ver el lugar."
+  },
+  "committee.gvm.failed": {
+    "en": "We couldn't update {names} this time — their meetings are shown as of the last update.",
+    "es": "Esta vez no pudimos actualizar {names}; sus reuniones aparecen como estaban en la última actualización."
+  },
+  "committee.gvm.src_title": {
+    "en": "Where this list comes from",
+    "es": "De dónde viene esta lista"
+  },
+  "committee.gvm.from_lists": {
+    "en": "From the meeting lists of",
+    "es": "De las listas de reuniones de"
+  },
+  "committee.gvm.cta_title": {
+    "en": "Does your group read Grapevine or La Viña in its meetings?",
+    "es": "¿Tu grupo lee Grapevine o La Viña en sus reuniones?"
+  },
+  "committee.gvm.cta_text": {
+    "en": "Ask your intergroup or central office to add the Grapevine type to your meeting's listing — then it will show up here too.",
+    "es": "Pide a tu intergrupo u oficina central que agregue el tipo Grapevine a la información de tu reunión; así también aparecerá aquí."
+  },
+  "committee.gvm.cta_btn": {
+    "en": "Questions? Write to the committee",
+    "es": "¿Preguntas? Escribe al comité"
+  },
+  "committee.gvm.cta_subject": {
+    "en": "Grapevine meetings list",
+    "es": "Lista de reuniones de Grapevine"
+  },
+  "committee.gvm.empty_title": {
+    "en": "The Grapevine meetings list isn't available right now",
+    "es": "La lista de reuniones de Grapevine no está disponible por ahora"
+  },
+  "committee.gvm.empty_text": {
+    "en": "You can look for meetings with the Grapevine type on the websites of the intergroups and central offices:",
+    "es": "Puedes buscar reuniones con el tipo Grapevine en los sitios de los intergrupos y oficinas centrales:"
+  },
+  "committee.gvm.home_title": {
+    "en": "Grapevine meetings near you",
+    "es": "Reuniones de Grapevine cerca de ti"
+  },
+  "committee.gvm.home_text": {
+    "en": "{ours} every week in our Area, plus {nearby} in nearby areas",
+    "es": "{ours} cada semana en nuestra Área, y {nearby} en áreas cercanas"
+  },
+  "committee.gvm.home_text_area": {
+    "en": "{ours} every week in our Area",
+    "es": "{ours} cada semana en nuestra Área"
+  },
+  "committee.gvm.search_many": {
+    "en": "{place} · {n} meetings a week",
+    "es": "{place} · {n} reuniones por semana"
+  },
+  "committee.gvm.search_kw": {
+    "en": "grapevine meeting meetings group gr type in person near me local aa meeting where to find",
+    "es": "reunión reuniones de grapevine grupo tipo gr en persona cerca de mí reunión local de aa dónde encontrar"
+  },
+  "committee.meetings.aside_title": {
+    "en": "This week",
+    "es": "Esta semana"
+  },
+  "committee.meetings.aside_gv_week": {
+    "en": "{n} a week in and near our Area",
+    "es": "{n} por semana en nuestra Área y cerca"
+  },
+  "committee.meetings.aside_gv_today": {
+    "en": "Today: {n} meetings",
+    "es": "Hoy: {n} reuniones"
+  },
+  "committee.meetings.aside_gv_today_one": {
+    "en": "Today: 1 meeting",
+    "es": "Hoy: 1 reunión"
+  },
+  "committee.meetings.aside_gv_none": {
+    "en": "None today · {n} this week",
+    "es": "Ninguna hoy · {n} esta semana"
+  },
+  "committee.meetings.aside_wo_gv": {
+    "en": "Grapevine Weekly Open",
+    "es": "Grapevine Weekly Open (en inglés)"
+  },
+  "committee.meetings.aside_wo_lv": {
+    "en": "La Viña open meeting (in Spanish)",
+    "es": "Reunión abierta de La Viña"
+  },
+  "committee.meetings.aside_next": {
+    "en": "Next:",
+    "es": "Próxima:"
+  },
+  "committee.events.aside_title": {
+    "en": "Save the date",
+    "es": "Reserva la fecha"
+  },
+  "committee.events.aside_link": {
+    "en": "See details",
+    "es": "Ver detalles"
+  },
+  "committee.docs.aside_title": {
+    "en": "Latest upload",
+    "es": "Lo más reciente"
+  },
+  "committee.docs.aside_more": {
+    "en": "All in {cat}",
+    "es": "Todo en {cat}"
+  },
+  "committee.docs.aside_flyers": {
+    "en": "Flyers to share",
+    "es": "Volantes para compartir"
+  },
+  "committee.photos.aside_title": {
+    "en": "Next chance for photos",
+    "es": "Próxima ocasión para fotos"
+  },
+  "committee.photos.aside_lead": {
+    "en": "Coming up in NETA 65 — a chance to add photos to the albums.",
+    "es": "Lo que viene en NETA 65: una ocasión para sumar fotos a los álbumes."
+  },
+  "committee.photos.aside_none": {
+    "en": "No booths or workshops on the calendar right now.",
+    "es": "Por ahora no hay mesas ni talleres en el calendario."
+  }
+}

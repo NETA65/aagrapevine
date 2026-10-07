@@ -1,0 +1,867 @@
+# =====================================================================
+#  NETA 65 Grapevine / La Viña Committee — SITE SETTINGS
+#  This is the ONE file you edit for settings. Everything else
+#  (articles, PDFs, podcasts, videos, Instagram, Drive uploads,
+#  translations) updates itself every day via GitHub Actions.
+#
+#  Tip: edit right on github.com (pencil icon) → "Commit changes".
+#  The site rebuilds automatically in about 10–20 minutes.
+# =====================================================================
+
+site:
+  title: "Grapevine / La Viña"
+  title_es: "Grapevine / La Viña"
+  committee: "NETA 65 Grapevine & La Viña Committee"
+  committee_es: "Comité de Grapevine y La Viña de NETA 65"
+  area: "Northeast Texas Area 65"
+  area_es: "Área 65 del Noreste de Texas"
+  # Full public URL of the site (used in feeds, QR codes, share links).
+  # GitHub Pages default: https://<user>.github.io/<repo>/
+  # On GitHub the build uses the address Pages reports (so a rename or a custom domain is picked
+  # up by itself); this one is used by a build on a computer and when that lookup fails.
+  url: "https://neta65.github.io/aagrapevine"
+  # The GitHub repository (the Status page links to its Actions tab and to content/events/README.md).
+  # On GitHub the build uses the repository it runs in; this one is for a build on a computer.
+  repository: "https://github.com/NETA65/aagrapevine"
+  timezone: "America/Chicago"
+  # The Morning check (.github/workflows/morning.yml) puts the new day and both daily quotes on the
+  # site by this time (24 h, in `timezone`) every day; the Status page shows each morning against it.
+  # The morning alarm (README → “d) The morning alarm”) rings about an hour earlier. The workflow's
+  # name in the Actions list, "Morning check (new day by 5:30 AM)", says this time too: after a
+  # change, also change that `name:` in morning.yml (and in tests/test_run_names.py, which pins it).
+  morning_goal: "05:30"
+  contact_email: "grapevine@neta65.org"
+  area_website: "https://neta65.org"
+  committee_page: "https://neta65.org/trusted-servants/grapevine-la-vina/"
+  # /listen/ hero (the card on its right): an official AA Grapevine YouTube Short (the id is the last
+  # part of youtube.com/shorts/<id>), shown as a privacy-friendly vertical player next to the two app
+  # links. Delete these lines to hide it.
+  listen:
+    sidebar_short: "0uyVPlTcSeI"
+    sidebar_short_title: "Grapevine Get The App!"
+  # /watch/ hero (the card on its right): one official video or Short from the channel (the id is the
+  # last part of youtube.com/watch?v=<id> or youtube.com/shorts/<id>). Its title and summary come from
+  # the channel's video list; `hero_video_title` is used only if the video isn't in that list yet.
+  # Delete these lines to hide it.
+  watch:
+    hero_video: "_mjB6hXYHn4"
+    hero_video_title: "Victor E. is back"
+  # /about/#videos: AA Grapevine's two videos that introduce the magazines, each in its own card (the
+  # title, the video's own summary and its length come from the channel's video list; the page
+  # language's magazine goes first). `title` replaces a title the channel writes in capitals; `tr` is
+  # our own translation into the other language, shown under the original on the other-language page
+  # (without it, the automatic translation is used and marked as such). Delete an entry to hide it.
+  about_videos:
+    - id: "V3RzyHdgQCY"        # AA's Twelfth Step Tools: Grapevine and La Viña (English)
+      pub: gv
+      title: "AA’s Twelfth Step Tools: Grapevine and La Viña"
+      tr:
+        title: "Herramientas de AA para el Paso Doce: Grapevine y La Viña"
+        summary: "Una mirada a lo que son Grapevine y La Viña: su historia, su lugar en AA, sus plataformas y servicios, y las muchas formas en que los miembros de AA los usan para mantenerse sobrios y hacer el trabajo del Paso Doce para ayudar a otros alcohólicos, todo en 5 minutos."
+    - id: "Bqb1FP0lx1E"        # La Viña: Su historia y el impacto en la Comunidad Hispana de AA (Spanish)
+      pub: lv
+      tr:
+        title: "La Viña: its history and its impact on AA’s Hispanic community"
+        summary: "How La Viña, AA’s international magazine in Spanish — in print, digital and audio — has been a pillar of recovery and support for thousands of Spanish-speaking members around the world. Learn about its editorial policy, how to send in your story, and the many ways to connect with this AA tool."
+
+# ---------------------------------------------------------------------
+#  Committee meeting (next date + countdown are computed automatically)
+# ---------------------------------------------------------------------
+meeting:
+  # Recurrence: which weekday of the month (1-5, or -1 for "last").
+  week_of_month: 3
+  weekday: "wednesday"
+  start: "19:00"          # 24h, Central time
+  end: "20:00"
+  # Where it is held, as the pages name it: "Join on Zoom", "… on Zoom" (leave out: Zoom). The link, ID and
+  # passcode below are what people use to join; the dial-in numbers (phone_access) are Zoom's own.
+  platform: "Zoom"
+  # The official "ZOOM Link" from the committee page (neta65.org/trusted-servants/grapevine-la-vina/).
+  # Zoom's pwd= is an encoded token, not the passcode itself — copy the whole link from Zoom.
+  zoom_url: "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09"
+  meeting_id: "949 476 7497"
+  passcode: "neta65"
+  chair_title: "Grapevine / La Viña Chair"
+  chair_title_es: "Coordinador(a) de Grapevine / La Viña"
+  chair_email: "grapevine@neta65.org"
+  # Who may come, in a line: on /meetings/ ("Who can come") and in the meeting's calendar entries.
+  note: "All AA members are welcome to attend. No registration required."
+  note_es: "Todos los miembros de AA pueden asistir. No hace falta registrarse."
+  # Dates to skip (e.g. a holiday) — "YYYY-MM-DD"
+  skip_dates: []
+
+# ---------------------------------------------------------------------
+#  Recurring events — things the committee does EVERY MONTH (a booth,
+#  a workshop …). Each one shows on the Events page, the home page, the
+#  calendar feed, the monthly toolkit and the search, with the next dates
+#  worked out automatically (Central time, daylight saving included); the
+#  monthly digest lists a date once it has taken place.
+#
+#  To add one: copy the block that starts with "- key:" (keep the
+#  spaces at the start of each line), paste it below the last one and
+#  change the values. To stop one: delete its block.
+#  If a block has a mistake, the rest of the site still updates; the
+#  problem is listed in the Actions run summary (and in status.json).
+#
+#  Something Grapevine or La Viña holds themselves every month (not us)
+#  can be listed too — the second block is La Viña's monthly workshop:
+#  `host:` says who holds it, an online-only event gives `online_url`
+#  (and `meeting_id`) instead of `location`, `contact:` is the e-mail
+#  to write to, and `flyer_match:` finds its flyer on our Drive. A date
+#  that the Grapevine / La Viña calendars or an .ics feed list too shows
+#  once (ours); if one of them lists it on another day of the month, the
+#  run summary says which skip date to add.
+# ---------------------------------------------------------------------
+recurring_events:
+  - key: "citywide-dallas"         # short name: letters, numbers and dashes. Keep it the same
+                                   # once published (calendars use it to recognize the event)
+    title: "GV/LV booth at CityWide Dallas"
+    title_es: "Mesa de GV/LV en CityWide Dallas"
+    summary: "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV."
+    summary_es: "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
+    # When: which weekday of the month (1-5, or -1 for "the last one")
+    week_of_month: 2
+    weekday: "saturday"
+    start: "17:00"                 # 24-hour clock, Central time
+    end: "20:00"
+    location: "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220"
+    url: "https://citywidedallasaa.org"   # "Event details" link (optional)
+    months_ahead: 6                # how many upcoming dates to list on /events/ and in the calendar
+                                   # feed (the /monthly/ posters work out later months from this rule)
+    skip_dates: []                 # months with no booth, e.g. ["2026-12-12"] (that month's 2nd Saturday)
+
+  - key: "lv-monthly-workshop"     # La Viña's monthly workshop on Zoom — from its official Instagram flyer
+                                   # (@alcoholicosanonimos_lv, Mar 10, 2024) and its calendar on aalavina.org
+    # Its name as La Viña itself gives it, on its flyer and on Instagram (Sept. 22, 2026); the committee's
+    # decks use the same one. (Its calendar lists each date in short — "Taller mensual LV"; in 2024 it was
+    # the "Taller informativo mensual de La Viña", which flyer_match below still finds.)
+    title: "La Viña Monthly Virtual Workshop (in Spanish)"
+    title_es: "Taller Mensual y Virtual de La Viña"
+    # The card on /events/ shows 3 lines of the summary: keep each short (about 100 characters). The
+    # e-mail address goes in `contact:` below — its own line on the card, never cut off.
+    summary: "In Spanish, open to all: La Viña and Grapevine books, event news and General Service Office updates."
+    summary_es: "En español y abierto a todos: libros de La Viña y Grapevine, noticias de eventos y novedades de la OSG."
+    host: "lv"                     # who holds it: "neta" (our committee — the default when left out), "lv"
+                                   # (La Viña) or "gv" (Grapevine). "lv": it shows with the Grapevine / La Viña
+                                   # calendars and in La Viña's colour, never as a NETA 65 event
+    # When: the 4th Thursday. The flyer says "el último jueves de cada mes", but La Viña's own calendar
+    # (aalavina.org) has listed it on the FOURTH Thursday in months with five Thursdays too (Aug 22, 2024;
+    # Jan 23 and Oct 23, 2025; Jan 22 and Apr 23, 2026 — only May 29, 2025 was the 5th). If La Viña lists a
+    # month on another Thursday, the run summary says which skip date to add; -1 would be "the last Thursday".
+    week_of_month: 4
+    weekday: "thursday"
+    start: "14:00"                 # 3:00 PM Eastern, La Viña's own time = 2:00 PM Central
+    end: "15:00"                   # La Viña publishes no end time (its listings give the day only): one hour
+    online_url: "https://us06web.zoom.us/j/81595931777"   # the Zoom link: "Join online" (no location: online only)
+    meeting_id: "815 9593 1777"    # the Zoom meeting ID, shown on the card and in the calendars (optional)
+    contact: "lveditorial@aagrapevine.org"   # who to write to (optional, an e-mail address): a line on the card
+                                   # and in the calendars
+    # url: left out — La Viña has no page of its own for the workshop (each month gets a new dated listing
+    # on its calendar), so the event links to its card on our Events page.
+    flyer_match: "taller (informativo )?mensual( y virtual)? de la vi[nñ]a"   # its flyer on our Drive (optional):
+                                   # the newest file whose name matches (a regular expression, capitals ignored)
+                                   # is shown on every date; no match = no flyer. Change it if the flyer's
+                                   # name changes completely.
+    months_ahead: 6
+    skip_dates: ["2026-11-26", "2026-12-24", "2027-11-25", "2027-12-23"]
+                                   # Thanksgiving and Christmas week: La Viña held it the Thursday before (Nov 20
+                                   # and Dec 18, 2025; Nov 21 and Dec 19, 2024). Thanksgiving is ALWAYS the 4th
+                                   # Thursday of November, so add each year's (and December's, if La Viña moves
+                                   # it again) — the run summary only warns once La Viña's calendar lists the
+                                   # moved date, about 3 weeks ahead, and the /monthly/ posters work out months
+                                   # a year ahead from this rule. When its calendar lists a skipped month's
+                                   # date, the Events page shows it by itself, as that month's date.
+
+# ---------------------------------------------------------------------
+#  Price changes AA Grapevine announces — one block per announcement.
+#  Every price on the site comes from the official stores (read daily).
+#  A block here adds what the stores can't say yet:
+#   · from `announced` until `effective`: "Prices change on …" on /shop/
+#     (today's price → the new one), on the Book of the Month cards,
+#     in the monthly toolkit, the GV/LV report and the monthly e-mail;
+#   · from `effective` on: each 1-year plan in `yearly` shows its new
+#     price BY ITSELF — also while a store page still shows the old one
+#     (pages built or saved before the day switch at midnight Central).
+#     As soon as the store shows anything else after that day, the
+#     store's price wins. "New prices since …" shows until
+#     `notice_until`. Books: "$2.00 more" is said only before the day;
+#     after it the Book of the Month shows the store's own prices once
+#     the store shows the book's new price (or a new book starts).
+#  Only what the announcement names changes: the 2- and 3-year, monthly
+#  and Complete plans keep the stores' prices.
+#  To add the next one: copy the block (from "- key:" down), paste it
+#  under the last one and change the values. Leave a block in place
+#  until the stores show the new prices; after that it may be deleted.
+#  If a block has a mistake, the rest of the site still updates; the
+#  problem is listed in the Actions run summary (and in status.json).
+#  Bulletin posts about a change are written by hand (content/bulletin).
+# ---------------------------------------------------------------------
+price_changes:
+  - key: "2027-01"                 # short name: letters, numbers and dashes
+    effective: "2027-01-01"        # the day the new prices start (Central time)
+    announced: "2026-10-01"        # the day AA Grapevine announced them: the notice shows from this day
+    notice_until: "2027-01-31"     # the last day of the "New prices since …" notice
+    source: "AA Grapevine's letter to Intergroups and Central Offices, October 1, 2026"
+    source_es: "Carta de AA Grapevine a las oficinas intergrupales y centrales, 1 de octubre de 2026"
+    # AA Grapevine's notice on the committee's Google Drive (the letter, in notes): the newest Drive file whose
+    # title or file name matches this (a regular expression, capitals ignored) is linked as "AA Grapevine's
+    # notice". No match → no link. Change it if the file is renamed.
+    doc_match: "pricing update.*2027|actualizaci[oó]n de precios.*2027"
+    # The new prices of the 1-YEAR subscriptions, in U.S. dollars: gv = Grapevine, lv = La Viña;
+    # print / digital (complete too, when an announcement names it).
+    yearly:
+      gv: { print: 39.00, digital: 34.00 }
+      lv: { print: 19.50, digital: 17.00 }
+    books_more: 2.00               # every Grapevine and La Viña book costs this much more (leave out: no change)
+
+# ---------------------------------------------------------------------
+#  Google Drive — the committee's upload area
+#  Upload PDFs / photos / slides into the category folders inside your
+#  Panel folder. Sub-folders are followed automatically (a sub-folder
+#  inside "photos" becomes its own album).
+#
+#  Recognized category folder names (any capitalization; English or
+#  Spanish): reports/informes, notes/notas/minutes/actas,
+#  slides/presentaciones, flyers/volantes, photos/fotos,
+#  workshops/talleres, bulletin/boletín (announcements/anuncios work
+#  too), forms/formularios, booth/mesa (the booth display — see
+#  `booth:` below).
+#  Any other folder name shows up in the Library under its own name.
+#
+#  FLYERS → EVENTS: name a flyer with its date and it becomes an event.
+#  You can add a time and a place too:
+#    "2027-03-14 Spring Assembly GV booth.pdf"
+#    "2027-03-14 Spring Assembly booth 9am @ Tyler Civic Center.pdf"
+#  BULLETIN: put a Google Doc (or .txt/.docx) in "bulletin"; it becomes a
+#  post on the Bulletin page (/bulletin/) and the doc's name is the
+#  headline. Start the name with a date to set it:
+#  "2027-01-10 Welcome new GVRs". Add "(pinned)" / "(fijado)" to keep it
+#  on top, and "(until 2027-02-01)" / "(hasta 2027-02-01)" to hide it
+#  after that date. "(from 2027-02-01)" / "(desde 2027-02-01)" keeps it
+#  off the site until that day (it appears with that morning's update).
+#  PHOTOS: each sub-folder inside "photos" becomes an album. Please only
+#  upload photos where no AA member's face can be identified.
+# ---------------------------------------------------------------------
+drive:
+  # The shared "A65_GV" folder (must be "Anyone with the link: Viewer").
+  root_folder_id: "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1"
+  # Sub-folders whose name matches this pattern are PANEL folders.
+  panel_folder_pattern: "Panel\\s*(\\d+)"
+  # Only show panels this number or newer (older panels are ignored).
+  min_panel: 77
+  # Also include category folders that sit directly in the root
+  # (outside any Panel folder)? false = start clean with the new panel.
+  include_loose_folders: false
+  # Never publish these file types (response spreadsheets can contain
+  # personal info).
+  exclude_mime_contains: ["spreadsheet"]
+  # Exclude any file/folder whose name contains one of these (case-insensitive)
+  exclude_name_contains: ["(Responses)", "(Respuestas)", "PRIVATE", "PRIVADO", "wrong size"]
+  # Optional: a Google API key makes dates exact (else dates come from
+  # file names / first-seen). Set as GitHub secret GOOGLE_API_KEY.
+
+# ---------------------------------------------------------------------
+#  Booth display — the show that plays by itself on a screen at our
+#  table at assemblies and conventions (About page → "Booth display").
+#  Its pictures, videos and sound files come from the "booth" folder in
+#  your Panel folder on Drive (also "mesa", "kiosk", "display",
+#  "pantalla", "stand"); each sub-folder is a collection you can switch
+#  off in the player ("booth/Spring Assembly 2027/"). The file name says
+#  how each file is shown — magazine, language, title, options:
+#    "GV EN Welcome to our table (first) (15s).png"
+#    "LV ES Testimonio (0:05-1:45).mp4"   "IMG_2045.jpg" (no caption)
+#  (all the options: scripts/sync/booth_names.py). Quizzes, facts and
+#  quotes are in content/booth/booth.csv.
+#  Only photos of tables, displays and rooms — no faces or full names —
+#  and no Grapevine / La Viña logos, covers or artwork.
+#  Everything here is optional; each device can change its own settings.
+# ---------------------------------------------------------------------
+booth:
+  # A video or sound file bigger than this (MB) is not saved for
+  # offline use: it is skipped and listed in the run summary.
+  max_file_mb: 95
+  # At most this much (MB) of the booth folder is saved for offline use.
+  max_total_mb: 400
+  # The player's starting settings on every device:
+  defaults:
+    event_name: ""        # e.g. "NETA 65 Spring Assembly" (shown big at the top)
+    event_name_es: ""     # e.g. "Asamblea de Primavera de NETA 65" (blank = the English one)
+    language: "both"      # en | es | both | alternate
+    sound: false          # start with the sound on? (true / false)
+
+# ---------------------------------------------------------------------
+#  Content sources (checked daily)
+# ---------------------------------------------------------------------
+sources:
+  grapevine:
+    base: "https://www.aagrapevine.org"
+    magazine_hub: "/magazine"
+    contribute: "/contribute"
+    weekly_open: "/grapevine-weekly-open"
+    gvr_resources: "/gvr-resources"
+    # Official store pages read daily by scripts/sync/shop.py (→ data/site/shop.json):
+    # the Book of the Month offer, and the subscription prices per region. The region
+    # listings are found on the `subscriptions` page; these are the fallback.
+    botm: "/BOTM"
+    subscriptions: "/store/grapevine-subscriptions"
+    subscription_regions:
+      us: "/store/us-subscriptions"
+      ca: "/store/canada-subscriptions"
+      intl: "/store/international-subscriptions"
+    # Specialty items shown on /shop/#specialty (read weekly by scripts/sync/shop.py): product pages
+    # (title, price, picture, a short description, the pack size) or a category listing (its greeting
+    # cards, pocket planner, wall calendar and holiday cards). The "Specialty Items" listing (last) is
+    # a fallback: it adds any of those four that no product page gave — next season's holiday cards if
+    # the store gives them a new address. So deleting a product page's line only stops reading that
+    # page (the listing then shows the item, without its description); to stop SHOWING an item, name
+    # its kind under specialty_skip (cards, planner, calendar, holiday) — e.g. specialty_skip: [holiday].
+    # The holiday cards (a pack of 12, sold in season) may leave the store after the holidays: that is
+    # not an error — the card stays on /shop/ about two more weeks, then waits for next season by itself.
+    specialty:
+      - "/store/greeting-cards"
+      - "/store/annual-pocket-planner"
+      - "/store/annual-wall-calendar"
+      - "/store/holiday-greeting-cards-12-pack"
+      - "/store/specialty-items"
+    specialty_skip: []
+    # The Audio Project (members record a story by phone or send a recording), read daily by
+    # scripts/sync/audio_project.py (→ data/site/audio_project.json → /contribute/#record).
+    audio_project: "/audio-portal"
+    # The page with the "Grapevine Daily Quote" (#quote-of-the-day), read by scripts/sync/quote.py in
+    # every update — the morning refresh the Morning check starts (by 5:30 AM Central), the midday and
+    # evening refreshes and the nightly full update (→ data/site/quote.json → the home page card).
+    quote_page: "/"
+  lavina:
+    base: "https://www.aalavina.org"
+    magazine_hub: "/la-revista"
+    contribute: "/temas-sugeridos"
+    rlv_resources: "/recursos"
+    # La Viña's yearly themes ("Temas de la revista para 2027": each bimonthly issue's theme and the day to send
+    # a story by) are a document linked from this page — in January 2026 "Temas de LV 2026 y 2027". Read daily by
+    # scripts/sync/editorial.py (→ data/site/editorial.json → /contribute/#deadlines, /monthly/, the workshop
+    # presentations): the newest link to a document whose file name or text matches themes_link (a regular
+    # expression, capitals ignored; "_" in a file name counts as a space) and names a year. If La Viña moves or
+    # renames it, change these two lines — until then /status/ says the document was not found and the themes
+    # read last time stay on the site.
+    themes_page: "/recursos"
+    themes_link: "\\btemas\\b"
+    botm: "/libro-del-mes"
+    subscriptions: "/tienda/suscripciones"
+    subscription_regions:
+      us: "/US-suscripciones"
+      ca: "/tienda/canada-suscripciones"
+      intl: "/tienda/internacional-suscripciones"
+    # "Artículos especiales": the Tarjetas de Ocasión, the Agenda de Bolsillo and the Calendario Anual
+    # de Pared come ONLY from this listing (weekly, with the Grapevine ones above). The holiday cards
+    # ("¡Tarjetas de ocasión para las fiestas! Paquete de 12", in season) are read from their own page,
+    # for La Viña's description of them; the listing never adds them a second time (only if that page
+    # has moved: then the listing's card stands in for it, without the description). Deleting a line
+    # never hides one item (the listing has all four): name its kind under specialty_skip instead —
+    # the other store's item of that kind still shows (as on /shop/ when one store does not sell it).
+    specialty:
+      - "/tienda/articulos-especiales"
+      - "/tienda/tarjetas-de-ocasion-para-las-fiestas-paquete-de-12"
+    specialty_skip: []
+    # "Graba tu historia" (a story by phone or a recording by e-mail), read daily by
+    # scripts/sync/audio_project.py with its instructions page; the other three are only linked.
+    record_story: "/graba-tu-historia"
+    record_instructions: "/instrucciones-graba-tu-historia"
+    record_tips: "/consejos-de-grabacion"
+    record_topics: "/temas-sugeridos"
+    sample_audio: "/audio-de-muestra"
+    # The page with the "Cita Diaria con La Viña" (#quote-of-the-day) — scripts/sync/quote.py.
+    quote_page: "/"
+  crawler:
+    hosts: ["www.aagrapevine.org", "www.aalavina.org"]
+    user_agent: "NETA65-GrapevineCommitteeBot/2.0 (+https://github.com/NETA65/aagrapevine)"
+    # Minutes of crawling per daily run. The sites ask for 5 s between
+    # requests, so ~40 min ≈ 450 pages/day; the crawler resumes daily.
+    # 0 = pause the PDF search (everything else keeps updating).
+    minutes_per_run: 40
+    # Re-check each already-known page at most every N days.
+    recheck_days: 21
+    # Download new PDFs for title/page-count/thumbnail (per run cap).
+    pdf_details_per_run: 40
+    pdf_max_mb: 60        # the monthly GV News PDF is ~43 MB
+  youtube:
+    channels:
+      - id: "UCI9uFLJ__aXT3-At0PlPWUQ"
+        handle: "@AAGrapevine"
+        name: "AA Grapevine & La Viña"
+  podcasts:
+    - key: "gv"
+      name: "AA Grapevine's Podcast"
+      feed: "https://feeds.captivate.fm/aa-grapevine/"
+      apple: "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167"
+      spotify: "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q"
+      amazon: "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7"
+      web: "https://www.aagrapevine.org/podcasts"
+    - key: "wo"
+      name: "Grapevine Weekly Open AA Meeting"
+      feed: "https://feeds.captivate.fm/grapevine-weekly-open/"
+      web: "https://www.aagrapevine.org/grapevine-weekly-open"
+      apple: "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908"
+      spotify: "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF"
+      amazon: "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting"
+  instagram:
+    accounts:
+      - key: "gv"
+        username: "alcoholicsanonymous_gv"
+        name: "AA Grapevine"
+      - key: "lv"
+        username: "alcoholicosanonimos_lv"
+        name: "La Viña"
+    # Optional official API (most reliable, and the method Instagram's
+    # terms allow). Set GitHub secrets IG_ACCESS_TOKEN and IG_BUSINESS_ID
+    # to enable Business Discovery (steps in README).
+    # anonymous: true  → also read Instagram's public embed pages without
+    #   an API key (tiny volume, but Instagram's terms discourage automated
+    #   collection). Set to false to use ONLY the official API + the manual
+    #   list in content/instagram.yml.
+    anonymous: true
+    # Newest posts kept per account (older ones and their thumbnails are deleted). The monthly digest
+    # of a month is on /digest/ all through the next one, so this must hold about 62 days of posts:
+    # each account posts about 2 a day (September 2026), so 130 per account ≈ 65 days (thumbnails ~23 KB
+    # each).
+    keep_per_account: 130
+    enrich_per_run: 25       # max post look-ups per daily run
+    # Posts no longer in the profile listing that each daily run looks up again: a post Instagram
+    # no longer shows (deleted, archived or private) leaves the site after two such look-ups.
+    recheck_per_run: 5
+    graph_version: "v21.0"
+    # Optional public RSSHub mirrors to try (leave empty to skip).
+    rsshub_instances: []
+  # -------------------------------------------------------------------
+  #  Other calendars (optional) — public calendar files (.ics, "iCal")
+  #  whose events also show on the Events page. Each one needs:
+  #    url:       the calendar file's address (https:// or webcal://)
+  #    label:     its name on the Status page (label_es: in Spanish)
+  #    category:  where its events show on the Events page:
+  #               "neta65" = with the NETA 65 events (workshops,
+  #               assemblies …); "gv-calendar" / "lv-calendar" = with
+  #               the Grapevine / La Viña calendars.
+  #  The same event in a calendar AND on our Events page already
+  #  (content/events, a flyer, a monthly event or the meeting above)
+  #  shows ONCE (your content/events file wins, with your own Spanish).
+  #  These are extras: if one can't be read, the site keeps its last
+  #  good copy (or simply shows the events from content/events), the
+  #  Status page says why, and no "stopped updating" issue is opened.
+  #  The robot asks each calendar at most once a day.
+  # -------------------------------------------------------------------
+  ics_feeds:
+    # The NETA 65 workshop calendar (neta65.org/events/category/workshop/).
+    # NOTE: neta65.org is behind Cloudflare's "Just a moment…" bot check,
+    # which turns away every robot — ours too (the Status page shows
+    # "Blocked by the site's bot protection"). Nothing breaks, but until
+    # it is unblocked a workshop or assembly shows on the Events page
+    # only after someone adds it by hand to content/events.
+    # To get it working, ask the Area webmaster to let calendar requests
+    # through Cloudflare, for example with a WAF custom rule
+    # (Security → WAF → Custom rules → action "Skip") for requests whose
+    # query string contains "ical=1", or for the User-Agent in
+    # `crawler: user_agent` above. ("Allow verified bots" alone is not
+    # enough: our small robot is not on Cloudflare's verified list.)
+    # The robot then reads it again by itself — nothing to change here.
+    - url: "https://neta65.org/events/category/workshop/list/?ical=1"
+      label: "NETA 65 workshops"
+      label_es: "Talleres de NETA 65"
+      category: "neta65"
+
+# ---------------------------------------------------------------------
+#  La Viña's weekly open meeting (Spanish) — from an official La Viña
+#  flyer shared with the committee; there is no web page for it yet.
+#  scripts/sync/weekly_open.py publishes it as the SECOND item of
+#  data/site/weekly_open.json (id "weekly_open_lv"), after the Grapevine
+#  Weekly Open (Wednesdays), which is read from aagrapevine.org.
+#  Same Zoom room as the Grapevine Weekly Open. Times are written in the
+#  meeting's own time zone; the site shows them in Central time too.
+#  Delete this block (or set enabled: false) to take it off the site.
+# ---------------------------------------------------------------------
+lavina_weekly_open:
+  enabled: true
+  title_es: "Reunión Abierta de La Viña"     # "new" is shown only in its first month (badge)
+  title_en: "La Viña Open Meeting (in Spanish)"
+  day: "thursday"               # every week
+  time: "12:00"                 # 24h, in `timezone` (12 p. m. hora del Este = 11 a. m. Central)
+  timezone: "America/New_York"
+  starts: "2026-11-05"          # first meeting (a Thursday)
+  zoom_id: "871 2036 8287"
+  passcode: "238047"
+  summary_es: "Una reunión abierta virtual de AA en español, cada semana: dos miembros comparten su experiencia, fortaleza y esperanza. La reunión se graba para publicarse como pódcast. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
+  summary_en: "A weekly virtual open AA meeting in Spanish where two members share their experience, strength and hope. It is recorded to be published as a podcast. Let's keep extending this powerful lifeline together!"
+  url: ""                       # La Viña's page for the meeting, once there is one
+  source: "Official La Viña flyer (November 2026), shared with the committee"
+  # The flyer itself on the committee's Google Drive: the newest Drive file whose title or file name
+  # matches this (a regular expression, capitals ignored) gets a "See the flyer" link on the La Viña
+  # card at /meetings/#weekly-open. No match → no link. Change it if the flyer is renamed.
+  flyer_match: "reuni[oó]n abierta de la vi[nñ]a|la vi[nñ]a open meeting"
+
+# ---------------------------------------------------------------------
+#  Joining our Zoom meetings BY PHONE — the "Join by phone" part of the
+#  Accessibility page (/accessibility/#phone). No internet or app needed.
+#  numbers: Zoom's U.S. dial-in numbers, as printed in every Zoom
+#    invitation under "Dial by your location" (Zoom's help page says the
+#    numbers are in the invitation; zoom.us/zoomconference lists the
+#    countries). Any number reaches any meeting — the meeting ID picks it.
+#    They are regular long-distance numbers, not toll-free: the caller's
+#    phone plan rates apply. The first one is used for the tap-to-call
+#    buttons. city_es: the city name on the Spanish page (optional).
+#  The meeting IDs and passcodes are NOT repeated here: they come from
+#  `meeting:` above (the committee meeting) and from the weekly open
+#  meetings (data/site/weekly_open.json, `lavina_weekly_open:`).
+#  phone_passcode: what a CALLER types. When a meeting's passcode has
+#    letters (the committee's "neta65"), Zoom gives callers a different
+#    passcode made of numbers only: it is in the host's Zoom invitation
+#    (the digits after "*" in the "One tap mobile" line, or "Passcode:"
+#    under "Dial by your location"). Paste it here; until then the page
+#    says "Ask the chair for the phone passcode". Leave it "" for a
+#    numbers-only passcode (the weekly open meetings' 238047): callers
+#    type that same passcode.
+#  Joining by phone only works while the host's Zoom settings allow it.
+# ---------------------------------------------------------------------
+phone_access:
+  numbers:
+    - number: "+1 346 248 7799"
+      city: "Houston"
+    - number: "+1 312 626 6799"
+      city: "Chicago"
+    - number: "+1 646 558 8656"
+      city: "New York"
+      city_es: "Nueva York"
+    - number: "+1 301 715 8592"
+      city: "Washington DC"
+      city_es: "Washington D. C."
+  committee:
+    phone_passcode: ""
+  weekly_open:
+    phone_passcode: ""
+
+# ---------------------------------------------------------------------
+#  Grapevine meetings (Meetings page) — AA meetings whose meeting type
+#  includes "GR" (Grapevine), read once a day by scripts/sync/meetings.py
+#  from the public meeting lists of the offices below: the same eight
+#  lists the Rowlett Group's meetings page uses (github.com/NETA65/
+#  RowlettAA, meetings.html) — ours AND the ones next to our Area, so
+#  people can find every Grapevine meeting around them.
+#  Where a meeting shows: in "Our Area" when its city is in one of the
+#  Area 65 counties (spotlight.neta65_counties below; cities are matched
+#  with data/geo/texas_places.json); otherwise under its office's
+#  `region_label` (nearby). A Texas city that can't be matched counts as
+#  in our Area only when its office says `in_area: true`.
+#  The same meeting listed by two offices shows ONCE. Only public
+#  details are kept (name, day, time, place, meeting types, the link to
+#  the office's own meeting page) — never contacts, e-mails, phone
+#  numbers or online-meeting links (people follow the office's link).
+#  Each office is asked once a day; if one can't be read, its meetings
+#  from the last good day are kept and the Status page says so.
+#
+#  How each office is read (`methods`, tried in order):
+#    feed  its JSON meeting list (`feed`) — every meeting of the office;
+#    page  its public meeting-list page (`page`, default <site>/meetings/)
+#          filtered to Grapevine meetings. Used when the list can't be
+#          read, or instead of it: tyler-aa.org's robots.txt does not
+#          allow the /wp-admin/ address, so only its page is read.
+#
+#  Access keys: Dallas and Fort Worth answer the JSON list only with a
+#  key. The robot uses, in this order:
+#    1. a GitHub secret named like `key_env` (Settings → Secrets and
+#       variables → Actions), if the committee adds one;
+#    2. `feed_obf`: the full list address WITH its key, stored the same
+#       way the Rowlett Group's meetings.html stores it — written
+#       backwards, then base64. This only hides it from casual reading;
+#       it is NOT encryption. When an office gives out a new key, run
+#         python -m scripts.sync.meetings --obfuscate "<full address>"
+#       and paste the result here;
+#    3. the Rowlett Group's page itself (`key_source`, the JavaScript
+#       constant named `key_const`), if both of the above fail.
+#  A key is never written in plain text in this repository, the data
+#  files, the logs or on the website. Without any key, the office's
+#  public page is read instead (see `methods`).
+#  Per-office tweaks (as on the Rowlett page): `add_types` adds meeting
+#  types to every meeting of that office; `region_types` adds them to
+#  the meetings of one region ("S" = in Spanish).
+# ---------------------------------------------------------------------
+meetings:
+  enabled: true
+  type: "GR"                       # 12 Step Meeting List code for Grapevine meetings
+  area_label: { en: "Our Area (NETA 65)", es: "Nuestra Área (NETA 65)" }
+  key_source:
+    url: "https://raw.githubusercontent.com/NETA65/RowlettAA/main/meetings.html"
+    page: "https://github.com/NETA65/RowlettAA/blob/main/meetings.html"
+  # Order = order on the page: our Area's offices, then the nearby
+  # regions from the closest.
+  feeds:
+    - id: aadallas
+      name: "Dallas Intergroup"
+      site: "https://www.aadallas.org"
+      feed: "https://www.aadallas.org/wp-admin/admin-ajax.php?action=meetings"
+      methods: ["feed", "page"]
+      key_env: TSML_KEY_AADALLAS
+      feed_obf: "MThjOTJmNTg2YjZjNzkzZDdlYTZkZjVlMTk4ZDlmYTg9eWVrJnNnbml0ZWVtPW5vaXRjYT9waHAueGFqYS1uaW1kYS9uaW1kYS1wdy9ncm8uc2FsbGFkYWEud3d3Ly86c3B0dGg="
+      key_const: FEED_URL
+      lang: en
+      in_area: true
+      region_label: { en: "Dallas area", es: "Zona de Dallas" }
+    - id: fortworthaa
+      name: "Fort Worth AA Central Office"
+      site: "https://fortworthaa.org"
+      feed: "https://www.fortworthaa.org/wp-admin/admin-ajax.php?action=meetings"
+      methods: ["feed", "page"]
+      key_env: TSML_KEY_FORTWORTHAA
+      feed_obf: "ZmQ4ZWE4NTQxZjFkZjI4OGY3ZTdkZTUwNDYzMTA1OGE9eWVrJnNnbml0ZWVtPW5vaXRjYT9waHAueGFqYS1uaW1kYS9uaW1kYS1wdy9ncm8uYWFodHJvd3Ryb2Yud3d3Ly86c3B0dGg="
+      key_const: FEED_URL_FW
+      lang: en
+      in_area: true
+      region_label: { en: "Fort Worth area", es: "Zona de Fort Worth" }
+    - id: tyleraa
+      name: "AA Central Service Office, Tyler"
+      site: "https://www.tyler-aa.org"
+      page: "https://www.tyler-aa.org/meetings/"
+      methods: ["page"]              # its robots.txt does not allow /wp-admin/ (the JSON list)
+      lang: en
+      in_area: true
+      region_label: { en: "East Texas (Tyler)", es: "Este de Texas (Tyler)" }
+    - id: aaespanoldallas
+      name: "Alcohólicos Anónimos Dallas"
+      site: "https://alcoholicosanonimosdallas.org"
+      feed: "https://alcoholicosanonimosdallas.org/wp-admin/admin-ajax.php?action=meetings"
+      lang: es
+      in_area: true
+      add_types: ["S"]             # every meeting of this office is in Spanish
+      region_label: { en: "Dallas area (Spanish-speaking)", es: "Zona de Dallas (en español)" }
+    - id: district71
+      name: "District 71 AA"
+      site: "https://district71.org"
+      feed: "https://district71.org/wp-admin/admin-ajax.php?action=meetings"
+      lang: en
+      in_area: true                # Abilene — Taylor County is an Area 65 county
+      region_label: { en: "Abilene (District 71)", es: "Abilene (Distrito 71)" }
+    - id: arkansascentraloffice
+      name: "Arkansas Central Office"
+      site: "https://arkansascentraloffice.org"
+      feed: "https://arkansascentraloffice.org/wp-admin/admin-ajax.php?action=meetings"
+      lang: en
+      in_area: false
+      region_types: { "NWA Spanish Speaking GRPS": ["S"] }
+      region_label: { en: "Arkansas & the Fort Smith area", es: "Arkansas y la zona de Fort Smith" }
+    - id: okcintergroup
+      name: "OKC Intergroup"
+      site: "https://okcintergroup.org"
+      feed: "https://okcintergroup.org/wp-admin/admin-ajax.php?action=meetings"
+      lang: en
+      in_area: false
+      region_label: { en: "Oklahoma City area", es: "Zona de Oklahoma City" }
+    - id: nwta66
+      name: "Northwest Texas Area 66"
+      site: "https://nwta66.org"
+      feed: "https://nwta66.org/wp-admin/admin-ajax.php?action=meetings"
+      lang: en
+      in_area: false
+      region_label: { en: "Northwest Texas (Area 66)", es: "Noroeste de Texas (Área 66)" }
+
+# ---------------------------------------------------------------------
+#  Published-writers spotlight (home page + /published/ page)
+#  Grapevine and La Viña stories whose author lists a Texas location.
+#  Writers from Area 65 (the counties below) are always shown first,
+#  then the rest of Texas. Places are matched to counties with the U.S.
+#  Census place-by-county table (data/geo/texas_places.json).
+# ---------------------------------------------------------------------
+spotlight:
+  home_days: 60              # home page: stories published in the last N days
+  list_days: [60, 90]        # choices on the /published/ page (first = default)
+  default_scope: "neta65"    # /published/ default: neta65 | texas | all
+  # Area 65 counties — from the official NETA 65 district map
+  # (neta65.org/wp-content/uploads/2019/03/NETA65Map.jpg). Borderline counties
+  # NOT included (add them here if the Area map says otherwise):
+  # Brown, Mills, Coryell, Falls, Leon, Angelina, Stonewall.
+  neta65_counties:
+    # North (Red River) — Districts 03, 24, 22, 01
+    - Hardeman
+    - Wilbarger
+    - Wichita
+    - Clay
+    - Montague
+    - Cooke
+    - Grayson
+    - Fannin
+    - Lamar
+    - Red River
+    - Bowie
+    - Foard
+    - Knox
+    - Baylor
+    - Archer
+    - Young
+    # North Central / Metroplex — Districts 21, 74, 5x, 6x
+    - Jack
+    - Wise
+    - Denton
+    - Collin
+    - Hunt
+    - Rockwall
+    - Dallas
+    - Tarrant
+    - Parker
+    - Palo Pinto
+    - Kaufman
+    - Ellis
+    - Johnson
+    - Hood
+    - Somervell
+    # West Central — Districts 71, 73, 65
+    - Haskell
+    - Throckmorton
+    - Fisher
+    - Jones
+    - Shackelford
+    - Stephens
+    - Nolan
+    - Taylor
+    - Callahan
+    - Eastland
+    - Erath
+    - Comanche
+    - Hamilton
+    # Central — Districts 92, 91, 56, 09
+    - Bosque
+    - Hill
+    - McLennan
+    - Limestone
+    - Navarro
+    - Freestone
+    - Anderson
+    - Houston
+    # Northeast / East Texas — Districts 22, 01, 42, 41, 82
+    - Delta
+    - Hopkins
+    - Rains
+    - Franklin
+    - Titus
+    - Camp
+    - Morris
+    - Cass
+    - Marion
+    - Van Zandt
+    - Wood
+    - Upshur
+    - Gregg
+    - Harrison
+    - Smith
+    - Henderson
+    - Cherokee
+    - Rusk
+    - Panola
+    - Nacogdoches
+    - Shelby
+    - San Augustine
+    - Sabine
+
+# ---------------------------------------------------------------------
+#  Texas writers archive (the owner's CSV files in content/archive/ →
+#  /published/#archive): every Grapevine (since 1944) and La Viña (since
+#  1996) story by a writer from Texas, Area 65 first (the counties
+#  above). Put the newest export of each magazine's archive in that
+#  folder, with the day in the name: aagrapevine_archive_2026-11-05.csv,
+#  aalavina_archive_2026-11-05.csv — the newest name wins, older copies
+#  are named in the run summary and may be deleted. Every update reads
+#  the files again (a push of a new file shows it minutes later).
+# ---------------------------------------------------------------------
+writers_archive:
+  min_rows_ratio: 0.8   # a new file with fewer rows than 80 % of the file used before is not used (0 = always use the newest)
+
+# ---------------------------------------------------------------------
+#  Links used across the site (official, public)
+# ---------------------------------------------------------------------
+links:
+  gv_home: "https://www.aagrapevine.org"
+  lv_home: "https://www.aalavina.org"
+  gv_subscribe: "https://www.aagrapevine.org/store/grapevine-subscriptions"
+  lv_subscribe: "https://www.aalavina.org/suscripciones"
+  gv_store: "https://www.aagrapevine.org/store"
+  lv_store: "https://www.aalavina.org/tienda"
+  carry_the_message: "https://www.aagrapevine.org/carry-the-message"
+  # La Viña's own Carry the Message page (in Spanish): the Spanish pages and the Spanish report use it.
+  # (Every link with a Spanish twin works the same way: a "<name>_es" line, or this one for carry_the_message,
+  # is what the Spanish pages show — the `langLink` filter in eleventy.config.js.)
+  lleva_el_mensaje: "https://www.aalavina.org/lleva-el-mensaje"
+  gv_share_story: "https://www.aagrapevine.org/share"
+  gv_audio_project: "https://www.aagrapevine.org/audio-portal"
+  gv_photo_contest: "https://www.aagrapevine.org/photocontest"
+  lv_share_story: "https://www.aalavina.org/comparte"
+  gv_contribute: "https://www.aagrapevine.org/contribute"
+  gv_guidelines: "https://www.aagrapevine.org/guidelines-contributing-grapevine"
+  lv_guidelines: "https://www.aalavina.org/guia-para-contribuciones"
+  gvr_register: "https://www.aagrapevine.org/get-involved/become-grapevine-rep"
+  rlv_register: "https://www.aalavina.org/servicio/conviertete-en-rlv"
+  gvr_resources: "https://www.aagrapevine.org/gvr-resources"
+  rlv_resources: "https://www.aalavina.org/recursos"
+  gv_apps: "https://www.aagrapevine.org/apps"
+  lv_apps: "https://www.aalavina.org/aplicaciones"
+  # The install steps on Saved pages & app (/offline/#steps): the official help for adding a web app to
+  # the home screen — Apple's iPhone guide ("Open as Web App") and Chrome Help's "Use web apps" for
+  # Android, in English and in Spanish (the Spanish page links the _es one).
+  app_help_iphone: "https://support.apple.com/guide/iphone/open-as-web-app-iphea86e5236/ios"
+  app_help_iphone_es: "https://support.apple.com/es-mx/guide/iphone/iphea86e5236/ios"
+  app_help_android: "https://support.google.com/chrome/answer/9658361?hl=en&co=GENIE.Platform%3DAndroid"
+  app_help_android_es: "https://support.google.com/chrome/answer/9658361?hl=es-419&co=GENIE.Platform%3DAndroid"
+  weekly_open: "https://www.aagrapevine.org/grapevine-weekly-open"
+  podcasts_page: "https://www.aagrapevine.org/podcasts"
+  youtube_channel: "https://www.youtube.com/@AAGrapevine"
+  aa_org: "https://www.aa.org"
+  aa_org_es: "https://www.aa.org/es"
+  # Accessibility page (/accessibility/): the official ASL, audio and large-print resources,
+  # as listed in AA's "Accessibility Resources" service piece (GSO, October 2025).
+  asl_playlist: "https://www.youtube.com/playlist?list=PL32cyZpp2liBOcLY6M6rEh1qFL7MKSFI7"
+  aa_big_book: "https://www.aa.org/the-big-book"
+  aa_twelve_and_twelve: "https://www.aa.org/twelve-steps-twelve-traditions"
+  # the same page in Spanish, with each Step and Tradition read aloud in Spanish (the Spanish page's audio)
+  aa_twelve_and_twelve_es: "https://www.aa.org/es/twelve-steps-twelve-traditions"
+  aa_accessibility_resources: "https://www.aa.org/sites/default/files/literature/eng-accessibility-resources-1025.pdf"
+  aa_access_email: "access@aa.org"
+  # Story submissions, as given on the official guideline pages (gv_guidelines / lv_guidelines).
+  gv_email_editorial: "gveditorial@aagrapevine.org"
+  lv_email_editorial: "manuscritoslv@aagrapevine.org"
+  gv_mail: "Grapevine, Editorial Dept., 475 Riverside Drive, New York, NY 10115"
+  lv_mail: "La Viña, 475 Riverside Drive, New York, NY 10115"
+  support_phone_us: "(800) 631-6025"
+  support_phone_es: "(800) 640-8781"
+  # Calling from outside the U.S. (aagrapevine.org/apps): English desk, then the Spanish desk.
+  # The English page shows support_phone_intl, the Spanish page support_phone_intl_es.
+  support_phone_intl: "+1 (570) 567-0431"
+  support_phone_intl_es: "+1 (570) 567-0437"
+
+# ---------------------------------------------------------------------
+#  Library (/library/): official AA documents only
+#  A document is kept only when its FILE is on one of these hosts (a
+#  subdomain such as www. counts too). aaws.widen.net = the asset
+#  library of AA World Services. Documents found on other sites (e.g. a
+#  local event flyer linked from a Grapevine event page) are left out,
+#  and the crawler no longer records them (scripts/sync/crawl_rules.py).
+# ---------------------------------------------------------------------
+library:
+  official_hosts:
+    - aagrapevine.org
+    - aalavina.org
+    - aa.org
+    - aaws.widen.net
+
+# ---------------------------------------------------------------------
+#  Monthly digest — the /digest/ page and the optional monthly e-mail.
+#  One edition per month, named after the month it covers: everything
+#  that was new on the site LAST month (bulletin posts, events that took
+#  place, committee files and photos added that month, magazine stories,
+#  writers from Area 65 & Texas, podcasts, videos, Instagram posts,
+#  documents), plus one link to this month's toolkit page
+#  (/monthly/YYYY-MM/), where everything current lives.
+#  It is on /digest/ from the 1st; the e-mail goes out once, on the 1st
+#  from 7 AM Central after the site's first full update of the month
+#  (at the latest on the 3rd) (.github/workflows/monthly-digest.yml),
+#  and only if these GitHub secrets exist:
+#  SMTP_SERVER, SMTP_USERNAME, SMTP_PASSWORD, DIGEST_TO (SMTP_PORT is
+#  optional: 587) — DIGEST_TO can be a Google Group address that
+#  reaches all districts.
+#  A month with nothing new is not sent.
+# ---------------------------------------------------------------------
+digest:
+  highlights: 3        # stories shown for each magazine issue (the rest are one link away)
+  per_section: 5       # episodes, videos, documents … listed per section before "and N more"

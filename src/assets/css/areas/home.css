@@ -1,0 +1,624 @@
+/* =====================================================================
+   Area styles: HOME page (owned by the home page).
+   Only what Tailwind utilities can't express nicely lives here. Colors come
+   from the theme tokens (var(--c-*)) so dark mode works; the meeting card in
+   the hero and the service band are always dark, so they use fixed
+   white-on-navy values.
+   The hero itself is the shared ui.pageHero (main.css → "PAGE HERO"): same art,
+   gradient and height as every other page. Only home-specific parts are here.
+   ===================================================================== */
+
+/* ---------- 1. Hero (shared ui.pageHero) — home additions ---------- */
+/* The next-meeting card is the hero's right column from 1024px. Below that it is the
+   first block under the hero (.home-under), so the hero keeps its standard height. */
+@media (width < 64rem) { #homeHero .gv-hero-aside { display: none; } }
+/* Phones: keep the hero within the phone height (24–28rem) in English and Spanish — both
+   CTAs on one row (no icons, a little less padding), and no eyebrow pill: on phones it only
+   repeats the site name the header shows right above it ("Grapevine / La Viña"). */
+@media (width < 40rem) {
+  #homeHero .gv-hero-eyebrow { display: none; }
+  .home-hero-actions > a { padding-inline: 1rem; }
+  .home-hero-actions > a > .icon { display: none; }
+}
+
+/* Compact "next committee meeting" card (index.njk → meetingCard): heading, date, time,
+   a live countdown and the actions. Two looks: --hero (dark glass, in the hero) and
+   --page (a light card, below the hero on tablets and phones). */
+.home-meet { display: grid; gap: 0.875rem; }
+.home-meet-eyebrow {
+  font-family: var(--font-sans); font-size: 0.72rem; font-weight: 600; line-height: 1.35;
+  letter-spacing: 0.16em; text-transform: uppercase;
+}
+.home-meet-date {
+  margin-top: 0.375rem;
+  font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; line-height: 1.2;
+  letter-spacing: -0.01em; text-wrap: balance;
+}
+.home-meet-time { margin-top: 0.25rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.5rem; font-size: 0.9rem; line-height: 1.4; }
+.home-meet-rule { margin-top: 0.125rem; font-size: 0.85rem; line-height: 1.4; }
+.home-meet-count { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; }
+.home-count { border-radius: 0.875rem; padding: 0.45rem 0.25rem 0.4rem; text-align: center; }
+.home-count-n { display: block; font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.home-count-l { display: block; margin-top: 0.3rem; font-size: 0.62rem; font-weight: 600; line-height: 1.2; letter-spacing: 0.08em; text-transform: uppercase; }
+.home-meet-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.home-meet-actions > * { flex: 1 1 auto; }
+.home-meet-actions > .home-meet-join { flex-basis: 100%; }
+.home-meet-actions > .btn-sm { padding-inline: 0.75rem; }
+/* Narrow cards (phones, and the 19rem hero column at 1024–1279px): no decorative arrow on
+   "Details" and a little less padding, so "Add to calendar" / "Agregar al calendario" and
+   "Details" stay on one row — in the hero that keeps the standard 30rem hero height. */
+@media (width < 30rem), (64rem <= width < 80rem) {
+  .home-meet-actions > .btn-sm { padding-inline: 0.625rem; }
+  .home-meet-more > .icon { display: none; }
+}
+
+/* --hero: dark glass, so contrast holds over the bright string lights. Sized to fit the
+   hero's 30rem with room to spare (e.g. a two-line Spanish date: "Miércoles, 16 de septiembre"). */
+.home-meet--hero {
+  padding: 1.125rem 1.25rem;
+  border-radius: 1.5rem;
+  color: #fff;
+  background: linear-gradient(160deg, rgb(15 30 60 / 0.76), rgb(8 20 45 / 0.64));
+  border: 1px solid rgb(255 255 255 / 0.18);
+  box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.12);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  text-shadow: none;
+}
+.home-meet--hero .home-meet-eyebrow, .home-meet--hero .home-meet-time { color: rgb(255 255 255 / 0.9); }
+.home-meet--hero .home-count { background: rgb(255 255 255 / 0.08); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14); }
+.home-meet--hero .home-count-l { color: rgb(255 255 255 / 0.85); }
+@media (width >= 80rem) {
+  .home-meet--hero { padding: 1.5rem; }
+  .home-meet--hero .home-meet-date { font-size: 1.625rem; }
+  .home-meet--hero .home-count-n { font-size: 1.75rem; }
+}
+
+/* --page: light card under the hero (tablets and phones) */
+.home-meet--page .home-meet-eyebrow { color: var(--c-gv); }
+.home-meet--page .home-meet-date { color: var(--c-ink); }
+.home-meet--page .home-meet-time, .home-meet--page .home-meet-rule { color: var(--c-muted); }
+.home-meet--page .home-count { color: var(--c-gv); background: var(--c-gv-soft); }
+.home-meet--page .home-live-pill { color: var(--c-vine); background: var(--c-vine-soft); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c-vine) 40%, transparent); }
+.home-meet--page .home-live-pill::before { background: var(--c-vine); }
+@media (width >= 48rem) {
+  /* date + time on the left, countdown on the right, the actions underneath */
+  .home-meet--page { grid-template-columns: minmax(0, 1fr) minmax(17rem, 20rem); align-items: center; column-gap: 2rem; }
+  .home-meet--page .home-meet-actions { grid-column: 1 / -1; }
+  .home-meet--page .home-meet-actions > * { flex-grow: 0; }
+  .home-meet--page .home-meet-actions > .home-meet-join { flex-basis: auto; }
+}
+
+.home-live-pill {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  border-radius: 9999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.72rem; font-weight: 700;
+  background: rgb(74 222 128 / 0.18);
+  color: #bbf7d0;
+  box-shadow: inset 0 0 0 1px rgb(74 222 128 / 0.45);
+}
+.home-live-pill::before {
+  content: ""; width: 0.45rem; height: 0.45rem; border-radius: 9999px; background: #4ade80;
+  animation: home-pulse 1.6s ease-out infinite;
+}
+@keyframes home-pulse {
+  0% { box-shadow: 0 0 0 0 rgb(74 222 128 / 0.55); }
+  70% { box-shadow: 0 0 0 0.55rem rgb(74 222 128 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(74 222 128 / 0); }
+}
+
+/* ---------- 1b. Under the hero: meeting card (below 1024px) + site counters ---------- */
+.home-under-card { padding: 1.25rem; }
+@media (width >= 40rem) { .home-under-card { padding: 1.25rem 1.5rem; } }
+@media (width < 64rem) {
+  .home-under-meet + .home-under-stats { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--c-line); }
+}
+.home-under-stats { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 2rem; }
+/* Phones: no counters (the same sections are in the menu and further down the page) */
+@media (width < 40rem) { .home-under-stats { display: none; } }
+.home-under-label {
+  display: inline-flex; flex-basis: 100%; align-items: center; gap: 0.5rem;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-muted);
+}
+.home-under-label .icon { color: var(--c-vine); }
+@media (width >= 64rem) { .home-under-label { flex-basis: auto; } }
+.home-stats { flex: 1 1 0%; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem 1.5rem; }
+@media (width >= 48rem) { .home-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.home-stat {
+  display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem;
+  margin: -0.25rem; padding: 0.25rem; border-radius: 0.875rem;
+  text-decoration: none; transition: background-color 0.2s ease;
+}
+.home-stat:hover { background: var(--c-surface-2); }
+.home-stat-icon {
+  display: grid; place-items: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 0.75rem;
+  color: var(--tone); background: var(--tone-soft);
+}
+.home-stat-n { display: block; font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; line-height: 1.1; color: var(--c-ink); font-variant-numeric: tabular-nums; }
+.home-stat-l { display: block; font-size: 0.85rem; line-height: 1.3; color: var(--c-muted); }
+.home-stat:hover .home-stat-l { color: var(--c-ink); text-decoration: underline; }
+
+/* ---------- 1c. Daily quote: the second card of the page-overlap block (index.njk → .home-quote) ----------
+   The card's heading is an eyebrow in the Read tone (above the magazine names in the hierarchy).
+   Grapevine's and La Viña's quotes side by side from 1024px (a hairline between them), stacked with a
+   divider below that (on tablets two ~40-character columns of italic text read poorly). On phones
+   (< 640px, with JS) the second quote waits behind its button (.home-q-toggle; the card gets .is-open).
+   Each quote: the magazine's name (italic display, its tone) + its day, the quote with a tone bar on
+   its left (text + attribution + source), then the two links — right under the quote, so a short quote
+   next to a long one never leaves a blank band between its text and its links. */
+/* stacked cards: 20px apart (a gap, so a card hidden at some widths leaves no stray margin) */
+.home-under { display: flex; flex-direction: column; gap: 1.25rem; }
+.home-quote { padding: 1.25rem; }
+.home-quote-title {
+  display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-sans);
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-gv);
+}
+@media (width >= 40rem) { .home-quote { padding: 1.25rem 1.5rem 1.375rem; } }
+.home-quote-grid { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: 0.875rem; }
+.home-q { display: flex; flex-direction: column; min-width: 0; }
+.home-q.is-other { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--c-line); }
+.home-q-toggle { display: none; }
+.home-q-toggle .icon { transition: transform 0.15s; }
+.home-q-toggle[aria-expanded="true"] .icon { transform: rotate(180deg); }
+@media (width < 40rem) {
+  :root.js .home-q-toggle { display: inline-flex; justify-self: start; margin: 0.75rem 0 0 -0.625rem; }
+  :root.js .home-quote-grid:not(.is-open) .home-q.is-other { display: none; }
+}
+@media (width >= 64rem) {
+  .home-quote-grid:not(.is-single) { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; }
+  .home-quote-grid:not(.is-single) .home-q.is-other { position: relative; margin-top: 0; padding-top: 0; border-top: 0; }
+  .home-quote-grid:not(.is-single) .home-q.is-other::before {
+    content: ""; position: absolute; top: 0; bottom: 0; left: -1.5rem; border-left: 1px solid var(--c-line);
+  }
+}
+.home-q-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.75rem; }
+.home-q-mag { font-family: var(--font-display); font-size: 1.25rem; font-style: italic; font-weight: 600; line-height: 1.2; color: var(--tone); }
+.home-q-when { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.5rem; font-size: 0.8125rem; color: var(--c-muted); }
+.home-q-fig { margin-top: 0.625rem; padding-left: 1rem; border-left: 3px solid color-mix(in srgb, var(--tone) 55%, transparent); }
+.home-q-text, .home-q-by { max-width: 72ch; }
+.home-q-text p {
+  font-family: var(--font-display); font-size: 1rem; font-style: italic; line-height: 1.55; color: var(--c-ink);
+  text-wrap: pretty;
+}
+@media (width >= 40rem) { .home-q-text p { font-size: 1.0625rem; } }
+.home-q-by { margin-top: 0.5rem; font-size: 0.8125rem; line-height: 1.5; color: var(--c-muted); }
+.home-q-by cite { font-style: italic; }
+.home-q-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.125rem 1.25rem; padding-top: 0.75rem; font-size: 0.875rem; }
+.home-q-links a { display: inline-flex; align-items: center; gap: 0.375rem; }
+
+/* ---------- 2. Published writers spotlight ---------- */
+/* A soft vine / amber glow behind the section that fades out INSIDE it (the mask), so there is
+   no hard seam where the section meets its neighbours. */
+.home-spot { position: relative; isolation: isolate; }
+.home-spot::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(55% 60% at 100% 20%, color-mix(in srgb, var(--c-vine) 8%, transparent), transparent 65%),
+    radial-gradient(45% 55% at 0% 80%, color-mix(in srgb, var(--c-lv) 6%, transparent), transparent 65%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+          mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+}
+/* Phones: Area 65 cards stacked, then the Texas cards in a swipe row (the `rail` utility).
+   From 640px ONE grid holds both lists (display: contents): Area 65 cards span two columns,
+   and the Texas cards fill in around them (dense). Columns: 2 → 3 (1024px) → 4 (1360px) →
+   5 (1800px) — a step earlier than grid-cards' 4 at 1536px, so 1440px screens get 4 columns
+   (cards stay ≥ 300px wide: 301px at 1360, 320 at 1440, 341 at 1920). */
+.home-spot-grid { display: grid; gap: 1rem; }
+.home-spot-list--a65 { display: grid; gap: 1rem; }
+@media (width >= 40rem) {
+  .home-spot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: row dense; gap: 1.25rem; }
+  .home-spot-list { display: contents; }
+  .home-spot-item.is-featured, .home-spot-none { grid-column: span 2; }
+}
+@media (width >= 64rem) { .home-spot-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (width >= 85rem) { .home-spot-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (width >= 112.5rem) { .home-spot-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.home-spot-item { min-width: 0; }
+
+/* "See the full list" link card: closes the grid's last row, so no row ends in empty columns,
+   whatever the number of stories. Its width at 2 / 3 / 4 / 5 columns is data-f2…data-f5
+   (eleventy/filters/home.js homeSpotFill → index.njk; home.js redoes it in the browser);
+   0 = that row is already full, so no tile. data-full on the grid = the column counts at which
+   each Area 65 card takes a whole row (only when too few Texas cards are left to sit beside
+   them, which would leave gaps higher up). The ranges below MUST match the column counts above.
+   Phones: no card (the same link is in the section header). */
+.home-spot-fill { display: none; }
+@media (width >= 40rem) { .home-spot-fill { display: flex; min-width: 0; container-type: inline-size; } }
+@media (40rem <= width < 64rem) {
+  .home-spot-fill[data-f2="0"] { display: none; }
+}
+@media (64rem <= width < 85rem) {
+  .home-spot-fill[data-f3="0"] { display: none; }
+  .home-spot-fill[data-f3="2"] { grid-column: span 2; }
+  .home-spot-grid[data-full~="3"] .home-spot-item.is-featured { grid-column: 1 / -1; }
+  .home-spot-grid[data-full~="3"] .home-spot-card.is-featured .home-spot-media { width: min(38%, 30rem); }
+}
+@media (85rem <= width < 112.5rem) {
+  .home-spot-fill[data-f4="0"] { display: none; }
+  .home-spot-fill[data-f4="2"] { grid-column: span 2; }
+  .home-spot-fill[data-f4="3"] { grid-column: span 3; }
+  .home-spot-grid[data-full~="4"] .home-spot-item.is-featured { grid-column: 1 / -1; }
+  .home-spot-grid[data-full~="4"] .home-spot-card.is-featured .home-spot-media { width: min(38%, 30rem); }
+}
+@media (width >= 112.5rem) {
+  .home-spot-fill[data-f5="0"] { display: none; }
+  .home-spot-fill[data-f5="2"] { grid-column: span 2; }
+  .home-spot-fill[data-f5="3"] { grid-column: span 3; }
+  .home-spot-fill[data-f5="4"] { grid-column: span 4; }
+  .home-spot-grid[data-full~="5"] .home-spot-item.is-featured { grid-column: 1 / -1; }
+  .home-spot-grid[data-full~="5"] .home-spot-card.is-featured .home-spot-media { width: min(38%, 30rem); }
+}
+/* A compact link card (icon · text · arrow), centred in the row's height; the whole card is the link. */
+.home-spot-fill {
+  background:
+    radial-gradient(90% 70% at 100% 0%, color-mix(in srgb, var(--c-vine) 10%, transparent), transparent 70%),
+    color-mix(in srgb, var(--c-vine-soft) 45%, var(--c-surface));
+}
+.home-spot-fill-in { position: relative; display: flex; align-items: center; gap: 1rem; width: 100%; padding: 1.25rem 1.5rem; }
+/* a large, faint grape cluster fills the tile's corner (decoration: the card is often a whole row tall) */
+.home-spot-fill-art { position: absolute; right: -1.5rem; bottom: -2rem; width: min(55%, 14rem); height: auto; color: var(--c-vine); opacity: 0.1; transform: rotate(-12deg); pointer-events: none; }
+.home-spot-fill-icon {
+  display: grid; place-items: center; flex-shrink: 0;
+  width: 3rem; height: 3rem; border-radius: 1rem;
+  color: var(--c-vine); background: var(--c-vine-soft);
+}
+.home-spot-fill-text { flex: 1 1 0%; min-width: 0; max-width: 40rem; }
+.home-spot-fill-arrow { flex-shrink: 0; margin-left: auto; color: var(--c-vine); transition: transform 0.2s ease; }
+.home-spot-fill:hover .home-spot-fill-arrow { transform: translateX(2px); }
+
+.home-spot-card { flex-direction: column; }
+.home-spot-media { position: relative; flex-shrink: 0; aspect-ratio: 5 / 2; overflow: hidden; background: var(--tone-soft); }
+.is-featured .home-spot-media { aspect-ratio: 16 / 9; }
+@media (width < 40rem) { .is-featured .home-spot-media { aspect-ratio: 5 / 2; } } /* phones: a shorter picture */
+.home-spot-body { display: flex; flex: 1 1 auto; flex-direction: column; min-width: 0; padding: 1rem 1.125rem 1.125rem; }
+@media (width >= 40rem) {
+  /* Area 65: picture on the left, the story on the right */
+  .home-spot-card.is-featured { flex-direction: row; }
+  .home-spot-card.is-featured .home-spot-media { width: 38%; aspect-ratio: auto; min-height: 15rem; }
+  .home-spot-card.is-featured .home-spot-body { padding: 1.375rem 1.5rem 1.25rem; }
+}
+/* Area 65 writers: vine-green accent, a soft green wash and a ribbon on the picture */
+.home-spot-card.is-featured {
+  border-color: color-mix(in srgb, var(--c-vine) 45%, var(--c-line));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--c-vine-soft) 75%, var(--c-surface)) 0%, var(--c-surface) 60%);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c-vine) 22%, transparent), var(--shadow-card);
+}
+.home-spot-card.is-featured:hover, .home-spot-card.is-featured:focus-within {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c-vine) 35%, transparent), var(--shadow-lift);
+}
+.home-spot-ribbon {
+  position: absolute; left: 0.75rem; top: 0.75rem; z-index: 1;
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  border-radius: 9999px; padding: 0.3rem 0.75rem;
+  font-size: 0.72rem; font-weight: 700; line-height: 1.3;
+  color: #fff; background: var(--c-vine);
+  box-shadow: 0 4px 14px -4px rgb(0 0 0 / 0.45);
+}
+[data-theme="dark"] .home-spot-ribbon { color: var(--c-paper); }
+/* Writer monogram (initials as printed: "Victor R." → VR) */
+.home-spot-avatar {
+  display: grid; place-items: center; flex-shrink: 0;
+  width: 2.75rem; height: 2.75rem; border-radius: 9999px;
+  font-family: var(--font-display); font-size: 1rem; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--tone); background: var(--tone-soft);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--tone) 30%, transparent);
+}
+.is-featured .home-spot-avatar { width: 3.25rem; height: 3.25rem; font-size: 1.15rem; }
+.home-spot-writer { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; line-height: 1.25; color: var(--c-ink); overflow-wrap: anywhere; }
+.is-featured .home-spot-writer { font-size: 1.375rem; }
+.home-spot-place { margin-top: 0.15rem; display: flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; line-height: 1.35; color: var(--c-muted); }
+.home-spot-title { margin-top: 0.75rem; font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; line-height: 1.3; color: var(--c-ink); text-wrap: pretty; }
+.is-featured .home-spot-title { font-size: 1.35rem; }
+.home-spot-meta { margin-top: 0.4rem; display: flex; flex-wrap: wrap; gap: 0.2rem 0.4rem; font-size: 0.78rem; line-height: 1.4; color: var(--c-faint); }
+/* Footer line: place badge (Area 65 / Texas) · magazine · subscriber hint · auto-translated */
+.home-spot-foot { margin-top: auto; padding-top: 0.875rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem 0.625rem; font-size: 0.75rem; line-height: 1.4; color: var(--c-faint); }
+.home-spot-foot > .badge, .home-spot-foot > [class^="badge-"] { margin-right: -0.25rem; }
+/* "Texas" badge: neutral, with an amber lone star (Area 65 = vine green, GV = blue, LV = amber) */
+.home-badge-tx { background: var(--c-surface-2); color: var(--c-ink); box-shadow: inset 0 0 0 1px var(--c-line); }
+.home-badge-tx .icon { color: var(--c-lv); }
+.home-spot-count { font-size: 0.78rem; padding: 0.25rem 0.75rem; }
+/* No Area 65 story in the window (but Texas ones): a friendly note where the featured cards go */
+.home-spot-none {
+  display: flex; align-items: flex-start; gap: 1rem;
+  border: 1.5px dashed color-mix(in srgb, var(--c-vine) 45%, var(--c-line));
+  border-radius: var(--radius-card);
+  padding: 1.25rem 1.5rem;
+  background: color-mix(in srgb, var(--c-vine-soft) 55%, var(--c-surface));
+}
+/* No Texas story at all in the window */
+.home-spot-empty {
+  display: grid; align-items: center; gap: 1.25rem;
+  border: 1.5px dashed color-mix(in srgb, var(--c-vine) 45%, var(--c-line));
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  background:
+    radial-gradient(60% 90% at 100% 0%, color-mix(in srgb, var(--c-vine) 10%, transparent), transparent 70%),
+    var(--c-surface);
+}
+@media (width >= 48rem) {
+  .home-spot-empty { grid-template-columns: auto minmax(0, 1fr); gap: 1.25rem 2rem; padding: 2rem 2.5rem; }
+  .home-spot-empty > :last-child { grid-column: 2; }
+}
+@media (width >= 64rem) {
+  /* message in the middle, the two buttons stacked on the right */
+  .home-spot-empty { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .home-spot-empty > :last-child { grid-column: auto; flex-direction: column; align-items: stretch; }
+}
+
+/* ---------- Card rail (6. "New on YouTube") ---------- */
+/* Mobile: horizontal scroll-snap row that bleeds to the screen edges (all items).
+   ≥ 40rem: a grid that always shows FULL rows —
+   videos (.home-rail--videos, 5 cards): 2 × 2 · 4 × 1 from 1024px · 5 × 1 from 1800px. */
+.home-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(15.5rem, 78%);
+  gap: 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  margin-inline: calc(-1 * var(--gutter));
+  padding: 0.25rem var(--gutter) 1rem;
+}
+.home-rail-item { scroll-snap-align: start; min-width: 0; }
+@media (width >= 40rem) {
+  .home-rail {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    overflow: visible;
+    margin-inline: 0;
+    padding: 0;
+  }
+}
+@media (width >= 64rem) { .home-rail--videos { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (width >= 112.5rem) { .home-rail--videos { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+@media (40rem <= width < 112.5rem) { .home-rail--videos > .home-rail-item:nth-child(n+5) { display: none; } }
+
+/* Tone families used by tiles, date tiles, magazine heads, IG placeholders */
+.home-tone-gv { --tone: var(--c-gv); --tone-soft: var(--c-gv-soft); }
+.home-tone-lv { --tone: var(--c-lv); --tone-soft: var(--c-lv-soft); }
+.home-tone-grape { --tone: var(--c-grape); --tone-soft: var(--c-grape-soft); }
+.home-tone-vine { --tone: var(--c-vine); --tone-soft: var(--c-vine-soft); }
+
+/* Decorative tile for items without a picture (soft tone + dotted texture) */
+.home-tile {
+  color: var(--tone);
+  background-color: var(--tone-soft);
+  background-image:
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--tone) 16%, transparent) 1px, transparent 1.4px),
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--tone) 14%, transparent), transparent 60%);
+  background-size: 14px 14px, 100% 100%;
+}
+/* A little "paper sheet" for PDFs without a thumbnail */
+.home-sheet {
+  position: relative;
+  width: 3.4rem; height: 4.4rem;
+  border-radius: 0.35rem;
+  background:
+    linear-gradient(var(--tone), var(--tone)) 0.55rem 0.8rem / 55% 0.22rem no-repeat,
+    linear-gradient(color-mix(in srgb, var(--c-ink) 14%, transparent), color-mix(in srgb, var(--c-ink) 14%, transparent)) 0.55rem 1.4rem / 70% 0.16rem no-repeat,
+    linear-gradient(color-mix(in srgb, var(--c-ink) 14%, transparent), color-mix(in srgb, var(--c-ink) 14%, transparent)) 0.55rem 1.8rem / 62% 0.16rem no-repeat,
+    linear-gradient(color-mix(in srgb, var(--c-ink) 14%, transparent), color-mix(in srgb, var(--c-ink) 14%, transparent)) 0.55rem 2.2rem / 68% 0.16rem no-repeat,
+    linear-gradient(color-mix(in srgb, var(--c-ink) 14%, transparent), color-mix(in srgb, var(--c-ink) 14%, transparent)) 0.55rem 2.6rem / 48% 0.16rem no-repeat,
+    var(--c-surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 10px 22px -10px rgb(0 0 0 / 0.35);
+  transform: rotate(-4deg);
+  transition: transform 0.3s ease;
+}
+.group:hover .home-sheet { transform: rotate(0deg) translateY(-2px); }
+.home-sheet-tag {
+  position: absolute; right: -0.55rem; bottom: 0.55rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 0.3rem;
+  font: 700 0.62rem/1.4 var(--font-sans);
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: var(--tone);
+}
+[data-theme="dark"] .home-sheet-tag { color: var(--c-paper); }
+
+/* ---------- 4. The bulletin (its latest posts) ---------- */
+.home-ann::before {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 4px;
+  background: linear-gradient(to bottom, var(--c-vine), var(--c-gv));
+}
+/* Two posts are two cards a row from 1024px (index.njk: lg:grid-cols-2 when the build found two). Once one
+   has ended between builds (GV.expire hides it: app.js), the other takes the whole row, as a post alone
+   does after the next build. This file is not in a layer, so the rule wins over the utility; a browser
+   without :has() keeps the two columns. */
+@media (width >= 64rem) {
+  .home-ann-grid:not(:has(> article:not([hidden]) ~ article:not([hidden]))) { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- 5. Magazines ---------- */
+/* On screens at least 1536px wide AND 896px tall (the tall-2xl variant in main.css) the "Write for
+   the magazines" panel is a third column next to the two magazines, as tall as its own themes, and it
+   stays in view (below the fixed header) while the magazine columns scroll past. On shorter windows
+   it can't stick, so it stays the full-width row under both magazines — never a short column beside
+   an empty space. */
+@media (width >= 96rem) and (height >= 56rem) {
+  .home-mags.has-write { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(22rem, 0.72fr); }
+  .home-mags.has-write > .home-write { align-self: start; position: sticky; top: var(--sticky-top); }
+}
+/* This month in the Shop (the closing row of the magazines section): compact covers */
+.home-shop .shop-teaser-covers { padding: 0.25rem 0.375rem 0.25rem 0.125rem; }
+.home-shop .shop-teaser-covers img { width: 2.75rem; }
+/* (a size container: at larger text the magazine's name is sized by the column's width — access.css) */
+.home-mag-head {
+  container-type: inline-size;
+  color: var(--tone);
+  background:
+    radial-gradient(90% 120% at 100% 0%, color-mix(in srgb, var(--tone) 16%, transparent), transparent 60%),
+    var(--tone-soft);
+}
+.home-mag-head h3 { color: color-mix(in srgb, var(--tone) 85%, var(--c-ink)); }
+.home-mag-grapes {
+  position: absolute; right: 1rem; top: 0.75rem;
+  width: 7.5rem; height: 7.5rem;
+  opacity: 0.13;
+  transform: rotate(12deg);
+  pointer-events: none;
+}
+.home-mag-chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  max-width: 100%;
+  margin: 0 0.35rem 0.5rem 0;
+  vertical-align: middle;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  line-height: 1.35;
+}
+/* The real magazine cover (portrait, cached locally by the sync) */
+.home-mag-cover {
+  display: block;
+  width: 5.25rem;
+  aspect-ratio: 480 / 686;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  background: var(--tone-soft);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 14px 28px -12px rgb(0 0 0 / 0.45);
+  transform: rotate(3deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.home-mag-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.home-mag-cover:hover, .home-mag-cover:focus-visible { transform: rotate(0deg) translateY(-3px) scale(1.03); box-shadow: 0 2px 4px rgb(0 0 0 / 0.14), 0 22px 38px -14px rgb(0 0 0 / 0.5); }
+@media (width >= 40rem) { .home-mag-cover { width: 7.25rem; } }
+@media (48rem <= width < 64rem) { .home-mag-cover { width: 5.25rem; } } /* two magazines side by side on tablets */
+/* "Auto-translated from …" note above a magazine's story list */
+.home-mag-mt { background: color-mix(in srgb, var(--c-surface-2) 60%, transparent); }
+@media (width >= 80rem) { .home-mag-cover { width: 8rem; } }
+
+/* ---------- 6. Listen & watch ---------- */
+/* The episode card + "More episodes" (index.njk .home-lw): side by side from 1024px, the same height
+   (the grid stretches both). At 150% text below 1280px they stack, as the site's other main + side
+   pairs do there (main.css .layout-aside): side by side "More episodes" was about 16rem wide. */
+@media (64rem <= width < 80rem) { :root[data-text="150"] .home-lw { grid-template-columns: minmax(0, 1fr); } }
+.home-episode::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(70% 90% at 100% 0%, color-mix(in srgb, var(--c-grape) 10%, transparent), transparent 70%);
+}
+.home-audio { height: 3rem; border-radius: 9999px; }
+[data-theme="dark"] .home-audio { color-scheme: dark; }
+.home-play:hover, .home-play.is-playing { background: var(--c-grape); color: #fff; }
+[data-theme="dark"] .home-play:hover, [data-theme="dark"] .home-play.is-playing { color: var(--c-paper); }
+
+/* New on YouTube: the video is the card's picture (plays inline, privacy-enhanced) */
+lite-youtube.home-yt {
+  max-width: none;
+  width: 100%;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  overflow: hidden;
+}
+lite-youtube.home-yt::before { display: none; } /* title is shown under the video instead */
+lite-youtube.home-yt > .lyt-playbtn:focus-visible { outline: 3px solid #fff; outline-offset: -6px; }
+
+/* ---------- 7. Events: date tiles ---------- */
+.home-datetile {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 4.25rem; flex-shrink: 0;
+  padding: 0.55rem 0.25rem 0.5rem;
+  border-radius: 0.9rem;
+  color: var(--tone);
+  background: var(--tone-soft);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 22%, transparent);
+  line-height: 1;
+  text-align: center;
+  align-self: flex-start;
+}
+.home-datetile-month { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.home-datetile-day { margin-top: 0.2rem; font-family: var(--font-display); font-size: 1.9rem; font-weight: 600; }
+/* No opacity here: blending the tone into the soft tile drops the small text below 4.5:1. */
+.home-datetile-wd { margin-top: 0.25rem; font-size: 0.68rem; font-weight: 500; text-transform: capitalize; }
+/* A date RANGE (an event over several days: "MAR · 19–21 · Fri–Sun"): smaller figures so it fits. */
+.home-datetile.is-range .home-datetile-day { font-size: 1.25rem; white-space: nowrap; letter-spacing: -0.01em; }
+.home-datetile.is-range .home-datetile-month, .home-datetile.is-range .home-datetile-wd { white-space: nowrap; letter-spacing: 0.04em; }
+@media (width >= 40rem) {
+  .home-datetile { flex-direction: row; align-items: baseline; justify-content: flex-start; gap: 0.5rem; width: auto; align-self: flex-start; padding: 0.5rem 0.8rem; }
+  .home-datetile-day { margin-top: 0; font-size: 1.6rem; }
+  .home-datetile-wd { margin-top: 0; }
+  .home-datetile.is-range .home-datetile-day { font-size: 1.4rem; }
+}
+
+/* ---------- 8. Library band ---------- */
+/* Newest documents: 6 — 2 on phones, 3 × 2 from 640px, one row of 6 from 1280px (index.njk). */
+.home-lib {
+  background:
+    radial-gradient(60% 80% at 0% 0%, color-mix(in srgb, var(--c-gv) 7%, transparent), transparent 70%),
+    radial-gradient(50% 70% at 100% 100%, color-mix(in srgb, var(--c-lv) 6%, transparent), transparent 70%),
+    var(--c-surface-2);
+}
+/* Larger text (130%+) or relaxed spacing, 1024–1535px: the 26rem search column grows with the text
+   and would leave the quick links a narrow strip (one chip per line beside an empty corner) — the
+   search and the links stack instead, as on tablets. */
+@media (width >= 64rem) and (width < 96rem) {
+  :root:is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .home-lib-grid { grid-template-columns: minmax(0, 1fr); row-gap: 1.25rem; }
+}
+
+/* ---------- 9. Instagram ---------- */
+/* Phones: one row of square posts that swipes sideways (bleeds to the screen edges);
+   3 columns from 640px, 6 from 1024px. */
+.home-ig-grid {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 44%; gap: 0.75rem;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
+  margin-inline: calc(-1 * var(--gutter)); padding: 0.25rem var(--gutter) 0.75rem;
+}
+.home-ig-grid > li { scroll-snap-align: start; min-width: 0; }
+@media (width >= 40rem) {
+  .home-ig-grid { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; overflow: visible; margin-inline: 0; padding: 0; }
+}
+@media (width >= 64rem) { .home-ig-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.home-ig-ph {
+  color: var(--tone);
+  background:
+    radial-gradient(110% 80% at 100% 0%, color-mix(in srgb, var(--tone) 22%, transparent), transparent 65%),
+    radial-gradient(90% 70% at 0% 100%, color-mix(in srgb, var(--c-grape) 14%, transparent), transparent 70%),
+    var(--tone-soft);
+}
+.home-ig-meta { color: var(--tone); }
+.home-ig-meta.has-pic { color: #fff; background: linear-gradient(to top, rgb(10 8 20 / 0.72), rgb(10 8 20 / 0.35) 60%, transparent); }
+/* A cached picture that fails to load removes itself (onerror): then the tile shows the
+   text placeholder, so the bar follows the live page, not the build data. (Only the post
+   picture is a direct <img> child of .home-ig.) */
+.home-ig:not(:has(> img)) .home-ig-meta.has-pic { color: var(--tone); background: none; }
+.home-ig:not(:has(> img)) .home-ig-meta.has-pic > :first-child { visibility: hidden; } /* the placeholder already names the account */
+.home-ig:focus-visible { outline-offset: 3px; }
+/* Account avatar in the follow buttons (the Instagram icon shows if the image fails) */
+.home-ig-avatar { position: relative; display: grid; place-items: center; width: 1.5rem; height: 1.5rem; flex-shrink: 0; margin-left: -0.35rem; }
+.home-ig-avatar img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; border-radius: 9999px; object-fit: cover; box-shadow: 0 0 0 1px var(--c-line); }
+
+/* ---------- 10. Service band ---------- */
+.home-band { background: linear-gradient(135deg, #0f172a 0%, #0b2f55 50%, #025a94 100%); }
+.home-band::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(40% 60% at 90% 10%, rgb(142 108 201 / 0.28), transparent 70%),
+    radial-gradient(35% 55% at 5% 100%, rgb(245 154 91 / 0.18), transparent 70%);
+}
+.home-band-link {
+  background: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.home-band-link:hover { background: rgb(255 255 255 / 0.12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.28); transform: translateY(-1px); }
+.home-band-link:focus-visible { outline-color: #fff; }
+.home-band :focus-visible { outline-color: #fff; }
+/* Amber La Viña button that reads well on the dark band in both themes */
+.home-btn-amber { background: #f59a5b; color: #2a1606; }
+.home-btn-amber:hover { background: #f8b88a; }
+
+/* ---------- 7b. "Calendar on your phone" filler card ---------- */
+.home-cal-cta {
+  background:
+    radial-gradient(90% 70% at 100% 0%, color-mix(in srgb, var(--c-vine) 10%, transparent), transparent 70%),
+    var(--c-surface);
+  border-style: dashed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-live-pill::before { animation: none; }
+  .home-sheet, .home-mag-cover, .home-stat, .home-spot-fill-arrow { transition: none; }
+}

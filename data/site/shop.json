@@ -1,0 +1,1237 @@
+{
+ "updated": "2026-10-06T13:24:10Z",
+ "fixture": false,
+ "botm": [
+  {
+   "id": "botm:gv",
+   "pub": "gv",
+   "lang": "en",
+   "title": "No Matter What: Dealing With Adversity in Sobriety",
+   "url": "https://www.aagrapevine.org/store/no-matter-what-dealing-adversity-sobriety",
+   "page_url": "https://www.aagrapevine.org/BOTM",
+   "image": "/assets/cache/shop/657477448ef71903.webp",
+   "price": 14.99,
+   "sale_price": 11.99,
+   "discount_pct": 20,
+   "currency": "USD",
+   "sku": "GV31",
+   "starts": "2026-09-15",
+   "ends": "2026-10-14",
+   "month_label": "October",
+   "blurb": "All recovering alcoholics have had to deal with adversity throughout sobriety...a serious illness, an ugly divorce, the death of a child, the loss of a house to fire or to the bank. The stories in this book show how AA members use the tools of the program and embrace the Fellowship to deal with tough issues.",
+   "read": "2026-10-06",
+   "price_stale": false,
+   "i18n": {
+    "title": {
+     "en": "No Matter What: Dealing With Adversity in Sobriety",
+     "es": "Pase lo que pase: cómo enfrentar la adversidad en la sobriedad"
+    },
+    "blurb": {
+     "en": "All recovering alcoholics have had to deal with adversity throughout sobriety...a serious illness, an ugly divorce, the death of a child, the loss of a house to fire or to the bank. The stories in this book show how AA members use the tools of the program and embrace the Fellowship to deal with tough issues.",
+     "es": "Todos los alcohólicos en recuperación han tenido que enfrentar la adversidad durante su sobriedad… una enfermedad grave, un divorcio difícil, la muerte de un hijo, la pérdida de una casa por un incendio o a manos del banco. Las historias de este libro muestran cómo los miembros de AA usan las herramientas del programa y se apoyan en la Comunidad para enfrentar situaciones difíciles."
+    },
+    "month_label": {
+     "en": "October",
+     "es": "Octubre"
+    }
+   },
+   "machine": []
+  },
+  {
+   "id": "botm:lv",
+   "pub": "lv",
+   "lang": "es",
+   "title": "Frente a Frente: El apadrinamiento en acción",
+   "url": "https://www.aalavina.org/tienda/frente-frente",
+   "page_url": "https://www.aalavina.org/libro-del-mes",
+   "image": "/assets/cache/shop/48c9a3322a1186ce.webp",
+   "price": 14.99,
+   "sale_price": 11.99,
+   "discount_pct": 20,
+   "currency": "USD",
+   "sku": "SGV04",
+   "starts": "2026-08-15",
+   "ends": "2026-10-14",
+   "month_label": "Octubre",
+   "blurb": "Detrás de cada historia de recuperación suele haber alguien que extendió una mano y compartió su experiencia. En Frente a Frente, miembros de AA relatan cómo el apadrinamiento les brindó esperanza, fortaleció su sobriedad y les enseñó a confiar, a pedir ayuda y a llevar el mensaje a otros alcohólicos.",
+   "read": "2026-10-06",
+   "price_stale": false,
+   "i18n": {
+    "title": {
+     "en": "One on One: AA Sponsorship in Action",
+     "es": "Frente a Frente: El apadrinamiento en acción"
+    },
+    "blurb": {
+     "en": "Behind almost every recovery story is someone who reached out a hand and shared their experience. In Frente a Frente, AA members tell how sponsorship gave them hope, strengthened their sobriety and taught them to trust, to ask for help and to carry the message to other alcoholics.",
+     "es": "Detrás de cada historia de recuperación suele haber alguien que extendió una mano y compartió su experiencia. En Frente a Frente, miembros de AA relatan cómo el apadrinamiento les brindó esperanza, fortaleció su sobriedad y les enseñó a confiar, a pedir ayuda y a llevar el mensaje a otros alcohólicos."
+    },
+    "month_label": {
+     "en": "October",
+     "es": "Octubre"
+    }
+   },
+   "machine": []
+  }
+ ],
+ "bulk_discounts": {
+  "source_url": "https://www.aagrapevine.org/store/no-matter-what-dealing-adversity-sobriety",
+  "tiers": [
+   {
+    "min": 1,
+    "max": 4,
+    "off": 0.0
+   },
+   {
+    "min": 5,
+    "max": 9,
+    "off": 0.5
+   },
+   {
+    "min": 10,
+    "max": 19,
+    "off": 1.0
+   },
+   {
+    "min": 20,
+    "max": 29,
+    "off": 2.0
+   },
+   {
+    "min": 30,
+    "max": null,
+    "off": 3.0
+   }
+  ],
+  "note": {
+   "en": "These discounts apply exclusively to physical books. Subscriptions and gift certificates are not included.",
+   "es": "Esta oferta se aplica exclusivamente a libros físicos. No incluye suscripciones ni certificados de regalo."
+  }
+ },
+ "subscriptions": [
+  {
+   "pub": "gv",
+   "region": "us",
+   "url": "https://www.aagrapevine.org/store/us-subscriptions",
+   "plans": [
+    {
+     "type": "print",
+     "term_months": 12,
+     "title": "Grapevine Print Subscriptions: 1-Year",
+     "price": 36.0,
+     "currency": "USD",
+     "sku": "GVUS1",
+     "url": "https://www.aagrapevine.org/store/grapevine-print-subscriptions-1-year",
+     "image": "/assets/cache/shop/b863047b363d0518.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 35.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 35.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 34.0
+      }
+     ],
+     "change": {
+      "key": "2027-01",
+      "new": 39.0,
+      "stale": true
+     }
+    },
+    {
+     "type": "print",
+     "term_months": 24,
+     "title": "Grapevine Print Subscriptions: 2-Years",
+     "price": 68.0,
+     "currency": "USD",
+     "sku": "GVUS2",
+     "url": "https://www.aagrapevine.org/store/grapevine-print-subscriptions-2-years",
+     "image": "/assets/cache/shop/b863047b363d0518.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 67.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 67.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 66.0
+      }
+     ]
+    },
+    {
+     "type": "print",
+     "term_months": 36,
+     "title": "Grapevine Print Subscriptions: 3-Years",
+     "price": 90.0,
+     "currency": "USD",
+     "sku": "GVUS3",
+     "url": "https://www.aagrapevine.org/store/grapevine-print-subscriptions-3-years",
+     "image": "/assets/cache/shop/b863047b363d0518.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 89.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 89.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 88.0
+      }
+     ]
+    },
+    {
+     "type": "complete",
+     "term_months": 1,
+     "title": "Grapevine Complete Subscription: 1-Month",
+     "price": 6.0,
+     "currency": "USD",
+     "sku": "GVV1M",
+     "url": "https://www.aagrapevine.org/store/grapevine-complete-subscription-1-month",
+     "image": "/assets/cache/shop/7c0246762f596900.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 12,
+     "title": "Grapevine Complete Subscription: 1-Year",
+     "price": 56.0,
+     "currency": "USD",
+     "sku": "GVV1Y",
+     "url": "https://www.aagrapevine.org/store/grapevine-complete-subscription-1-year",
+     "image": "/assets/cache/shop/7c0246762f596900.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 24,
+     "title": "Grapevine Complete Subscription: 2-Years",
+     "price": 98.0,
+     "currency": "USD",
+     "sku": "GVV2Y",
+     "url": "https://www.aagrapevine.org/store/grapevine-complete-subscription-2-years",
+     "image": "/assets/cache/shop/7c0246762f596900.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 36,
+     "title": "Grapevine Complete Subscription: 3-Years",
+     "price": 130.0,
+     "currency": "USD",
+     "sku": "GVV3Y",
+     "url": "https://www.aagrapevine.org/store/grapevine-complete-subscription-3-years",
+     "image": "/assets/cache/shop/7c0246762f596900.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 1,
+     "title": "Grapevine Digital Subscription: 1-Month",
+     "price": 2.99,
+     "currency": "USD",
+     "sku": "GO1M",
+     "url": "https://www.aagrapevine.org/store/grapevine-digital-subscription-1-month",
+     "image": "/assets/cache/shop/7622944ef45fbb93.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 12,
+     "title": "Grapevine Digital Subscription: 1-Year",
+     "price": 29.99,
+     "currency": "USD",
+     "sku": "GO1Y",
+     "url": "https://www.aagrapevine.org/store/grapevine-digital-subscription-1-year",
+     "image": "/assets/cache/shop/7622944ef45fbb93.webp",
+     "volume": [],
+     "change": {
+      "key": "2027-01",
+      "new": 34.0,
+      "stale": true
+     }
+    },
+    {
+     "type": "digital",
+     "term_months": 24,
+     "title": "Grapevine Digital Subscription: 2-Year",
+     "price": 49.0,
+     "currency": "USD",
+     "sku": "GO2Y",
+     "url": "https://www.aagrapevine.org/store/grapevine-digital-subscription-2-year",
+     "image": "/assets/cache/shop/7622944ef45fbb93.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 36,
+     "title": "Grapevine Digital Subscription: 3-Year",
+     "price": 69.0,
+     "currency": "USD",
+     "sku": "GO3Y",
+     "url": "https://www.aagrapevine.org/store/grapevine-digital-subscription-3-year",
+     "image": "/assets/cache/shop/7622944ef45fbb93.webp",
+     "volume": []
+    }
+   ]
+  },
+  {
+   "pub": "gv",
+   "region": "ca",
+   "url": "https://www.aagrapevine.org/store/canada-subscriptions",
+   "plans": [
+    {
+     "type": "print",
+     "term_months": 12,
+     "title": "Canada: Grapevine Print Subscription: 1-Year",
+     "price": 36.0,
+     "currency": "USD",
+     "sku": "GVCAN1",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-print-subscription-1-year",
+     "image": "/assets/cache/shop/b863047b363d0518.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 35.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 35.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 34.0
+      }
+     ],
+     "change": {
+      "key": "2027-01",
+      "new": 39.0,
+      "stale": true
+     }
+    },
+    {
+     "type": "print",
+     "term_months": 24,
+     "title": "Canada: Grapevine Print Subscription: 2-Years",
+     "price": 68.0,
+     "currency": "USD",
+     "sku": "GVCAN2",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-print-subscription-2-years",
+     "image": "/assets/cache/shop/b863047b363d0518.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 67.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 67.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 66.0
+      }
+     ]
+    },
+    {
+     "type": "print",
+     "term_months": 36,
+     "title": "Canada: Grapevine Print Subscription: 3-Years",
+     "price": 90.0,
+     "currency": "USD",
+     "sku": "GVCAN3",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-print-subscription-3-years",
+     "image": "/assets/cache/shop/b863047b363d0518.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 89.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 89.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 88.0
+      }
+     ]
+    },
+    {
+     "type": "complete",
+     "term_months": 1,
+     "title": "Canada: Grapevine Complete Subscription: 1-Month",
+     "price": 6.0,
+     "currency": "USD",
+     "sku": "GVVCA1M",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-complete-subscription-1-month",
+     "image": "/assets/cache/shop/7c0246762f596900.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 12,
+     "title": "Canada: Grapevine Complete Subscription: 1-Year",
+     "price": 56.0,
+     "currency": "USD",
+     "sku": "GVVCAN",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-complete-subscription-1-year",
+     "image": "/assets/cache/shop/7c0246762f596900.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 24,
+     "title": "Canada: Grapevine Complete Subscription: 2-Years",
+     "price": 98.0,
+     "currency": "USD",
+     "sku": "GVVCA2",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-complete-subscription-2-years",
+     "image": "/assets/cache/shop/7c0246762f596900.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 36,
+     "title": "Canada: Grapevine Complete Subscription: 3-Years",
+     "price": 130.0,
+     "currency": "USD",
+     "sku": "GVVCA3",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-complete-subscription-3-years",
+     "image": "/assets/cache/shop/7c0246762f596900.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 1,
+     "title": "Canada: Grapevine Digital Subscription: 1-Month",
+     "price": 2.99,
+     "currency": "USD",
+     "sku": "GOCA1M",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-digital-subscription-1-month",
+     "image": "/assets/cache/shop/7622944ef45fbb93.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 12,
+     "title": "Canada: Grapevine Digital Subscription: 1-Year",
+     "price": 29.99,
+     "currency": "USD",
+     "sku": "GOCA1Y",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-digital-subscription-1-year",
+     "image": "/assets/cache/shop/7622944ef45fbb93.webp",
+     "volume": [],
+     "change": {
+      "key": "2027-01",
+      "new": 34.0,
+      "stale": true
+     }
+    },
+    {
+     "type": "digital",
+     "term_months": 24,
+     "title": "Canada: Grapevine Digital Subscription: 2-Year",
+     "price": 49.0,
+     "currency": "USD",
+     "sku": "GOCA2Y",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-digital-subscription-2-year",
+     "image": "/assets/cache/shop/7622944ef45fbb93.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 36,
+     "title": "Canada: Grapevine Digital Subscription: 3-Year",
+     "price": 69.0,
+     "currency": "USD",
+     "sku": "GOCA3Y",
+     "url": "https://www.aagrapevine.org/store/canada-grapevine-digital-subscription-3-year",
+     "image": "/assets/cache/shop/7622944ef45fbb93.webp",
+     "volume": []
+    }
+   ]
+  },
+  {
+   "pub": "gv",
+   "region": "intl",
+   "url": "https://www.aagrapevine.org/store/international-subscriptions",
+   "plans": [
+    {
+     "type": "digital",
+     "term_months": 1,
+     "title": "International: Grapevine Digital Subscription: 1-Month",
+     "price": 2.99,
+     "currency": "USD",
+     "sku": "GOINTL1M",
+     "url": "https://www.aagrapevine.org/store/international-grapevine-digital-subscription-1-month",
+     "image": "/assets/cache/shop/828da78c40d51e2c.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 12,
+     "title": "International: Grapevine Digital Subscription: 1-Year",
+     "price": 29.99,
+     "currency": "USD",
+     "sku": "GOINTL1",
+     "url": "https://www.aagrapevine.org/store/international-grapevine-digital-subscription-1-year",
+     "image": "/assets/cache/shop/828da78c40d51e2c.webp",
+     "volume": [],
+     "change": {
+      "key": "2027-01",
+      "new": 34.0,
+      "stale": true
+     }
+    },
+    {
+     "type": "digital",
+     "term_months": 24,
+     "title": "International: Grapevine Digital Subscription: 2-Year",
+     "price": 49.0,
+     "currency": "USD",
+     "sku": "GOINTL2",
+     "url": "https://www.aagrapevine.org/store/international-grapevine-digital-subscription-2-year",
+     "image": "/assets/cache/shop/828da78c40d51e2c.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 36,
+     "title": "International: Grapevine Digital Subscription: 3-Year",
+     "price": 69.0,
+     "currency": "USD",
+     "sku": "GOINTL3",
+     "url": "https://www.aagrapevine.org/store/international-grapevine-digital-subscription-3-year",
+     "image": "/assets/cache/shop/828da78c40d51e2c.webp",
+     "volume": []
+    }
+   ]
+  },
+  {
+   "pub": "lv",
+   "region": "us",
+   "url": "https://www.aalavina.org/US-suscripciones",
+   "plans": [
+    {
+     "type": "print",
+     "term_months": 12,
+     "title": "Suscripción revista impresa de La Viña: 1 Año",
+     "price": 18.0,
+     "currency": "USD",
+     "sku": "LVUS1",
+     "url": "https://www.aalavina.org/tienda/suscripcion-revista-impresa-de-la-vina-1-ano",
+     "image": "/assets/cache/shop/dff8fe476e868d1b.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 17.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 17.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 16.0
+      }
+     ],
+     "change": {
+      "key": "2027-01",
+      "new": 19.5,
+      "stale": true
+     }
+    },
+    {
+     "type": "print",
+     "term_months": 24,
+     "title": "Suscripción revista impresa de La Viña: 2 años",
+     "price": 34.0,
+     "currency": "USD",
+     "sku": "LVUS2",
+     "url": "https://www.aalavina.org/tienda/suscripcion-revista-impresa-de-la-vina-2-anos",
+     "image": "/assets/cache/shop/dff8fe476e868d1b.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 33.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 33.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 32.0
+      }
+     ]
+    },
+    {
+     "type": "print",
+     "term_months": 36,
+     "title": "Suscripción revista impresa de La Viña: 3 años",
+     "price": 45.0,
+     "currency": "USD",
+     "sku": "LVUS3",
+     "url": "https://www.aalavina.org/tienda/suscripcion-revista-impresa-de-la-vina-3-anos",
+     "image": "/assets/cache/shop/dff8fe476e868d1b.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 44.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 44.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 43.0
+      }
+     ]
+    },
+    {
+     "type": "complete",
+     "term_months": 1,
+     "title": "Suscripción completa a La Viña: 1 mes",
+     "price": 4.0,
+     "currency": "USD",
+     "sku": "LVV1M",
+     "url": "https://www.aalavina.org/tienda/suscripcion-completa-la-vina-1-mes",
+     "image": "/assets/cache/shop/a337de6501ef9fc7.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 12,
+     "title": "Suscripción completa a La Viña: 1 año",
+     "price": 28.0,
+     "currency": "USD",
+     "sku": "LVV1",
+     "url": "https://www.aalavina.org/tienda/suscripcion-completa-la-vina-1-ano",
+     "image": "/assets/cache/shop/a337de6501ef9fc7.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 24,
+     "title": "Suscripción completa a La Viña: 2 años",
+     "price": 49.0,
+     "currency": "USD",
+     "sku": "LVV2",
+     "url": "https://www.aalavina.org/tienda/suscripcion-completa-la-vina-2-anos",
+     "image": "/assets/cache/shop/a337de6501ef9fc7.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 36,
+     "title": "Suscripción completa a La Viña: 3 años",
+     "price": 65.0,
+     "currency": "USD",
+     "sku": "LVV3",
+     "url": "https://www.aalavina.org/tienda/suscripcion-completa-la-vina-3-anos",
+     "image": "/assets/cache/shop/a337de6501ef9fc7.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 1,
+     "title": "Suscripción Digital a La Viña: 1 mes",
+     "price": 2.99,
+     "currency": "USD",
+     "sku": "LO1M",
+     "url": "https://www.aalavina.org/tienda/suscripcion-digital-la-vina-1-mes",
+     "image": "/assets/cache/shop/22cfbba7bd5d3dc3.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 12,
+     "title": "Suscripción Digital a La Viña: 1 año",
+     "price": 14.99,
+     "currency": "USD",
+     "sku": "LO1A",
+     "url": "https://www.aalavina.org/tienda/suscripcion-digital-la-vina-1-ano",
+     "image": "/assets/cache/shop/22cfbba7bd5d3dc3.webp",
+     "volume": [],
+     "change": {
+      "key": "2027-01",
+      "new": 17.0,
+      "stale": true
+     }
+    },
+    {
+     "type": "digital",
+     "term_months": 24,
+     "title": "Suscripción Digital a La Viña: 2 años",
+     "price": 24.0,
+     "currency": "USD",
+     "sku": "LO2A",
+     "url": "https://www.aalavina.org/tienda/suscripcion-digital-la-vina-2-anos",
+     "image": "/assets/cache/shop/22cfbba7bd5d3dc3.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 36,
+     "title": "Suscripción Digital a La Viña: 3 años",
+     "price": 32.0,
+     "currency": "USD",
+     "sku": "LO3A",
+     "url": "https://www.aalavina.org/tienda/suscripcion-digital-la-vina-3-anos",
+     "image": "/assets/cache/shop/22cfbba7bd5d3dc3.webp",
+     "volume": []
+    }
+   ]
+  },
+  {
+   "pub": "lv",
+   "region": "ca",
+   "url": "https://www.aalavina.org/tienda/canada-suscripciones",
+   "plans": [
+    {
+     "type": "print",
+     "term_months": 12,
+     "title": "Canadá: Suscripción revista impresa de La Viña: 1 año",
+     "price": 18.0,
+     "currency": "USD",
+     "sku": "LVCN1",
+     "url": "https://www.aalavina.org/tienda/canada-suscribase-la-vina-por-1-ano",
+     "image": "/assets/cache/shop/dff8fe476e868d1b.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 17.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 17.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 16.0
+      }
+     ],
+     "change": {
+      "key": "2027-01",
+      "new": 19.5,
+      "stale": true
+     }
+    },
+    {
+     "type": "print",
+     "term_months": 24,
+     "title": "Canadá: Suscripción revista impresa de La Viña: 2 años",
+     "price": 34.0,
+     "currency": "USD",
+     "sku": "LVCN2",
+     "url": "https://www.aalavina.org/tienda/canada-suscribase-la-vina-por-2-anos",
+     "image": "/assets/cache/shop/dff8fe476e868d1b.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 33.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 33.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 32.0
+      }
+     ]
+    },
+    {
+     "type": "print",
+     "term_months": 36,
+     "title": "Canadá: Suscripción revista impresa de La Viña: 3 años",
+     "price": 45.0,
+     "currency": "USD",
+     "sku": "LVCN3",
+     "url": "https://www.aalavina.org/tienda/canada-suscribase-la-vina-por-3-anos",
+     "image": "/assets/cache/shop/dff8fe476e868d1b.webp",
+     "volume": [
+      {
+       "min": 2,
+       "max": 19,
+       "price": 44.5
+      },
+      {
+       "min": 20,
+       "max": 39,
+       "price": 44.0
+      },
+      {
+       "min": 40,
+       "max": null,
+       "price": 43.0
+      }
+     ]
+    },
+    {
+     "type": "complete",
+     "term_months": 1,
+     "title": "Canadá: Suscripción completa a La Viña: 1 mes",
+     "price": 4.0,
+     "currency": "USD",
+     "sku": "LVV1MCA",
+     "url": "https://www.aalavina.org/tienda/canada-suscripcion-completa-1-mes",
+     "image": "/assets/cache/shop/a337de6501ef9fc7.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 12,
+     "title": "Canadá: Suscripción completa a La Viña: 1 año",
+     "price": 28.0,
+     "currency": "USD",
+     "sku": "LVV1CA",
+     "url": "https://www.aalavina.org/tienda/canada-suscripcion-completa-1-ano",
+     "image": "/assets/cache/shop/a337de6501ef9fc7.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 24,
+     "title": "Canadá: Suscripción completa a La Viña: 2 años",
+     "price": 49.0,
+     "currency": "USD",
+     "sku": "LVV2CA",
+     "url": "https://www.aalavina.org/tienda/canada-suscripcion-completa-la-vina-2-anos",
+     "image": "/assets/cache/shop/a337de6501ef9fc7.webp",
+     "volume": []
+    },
+    {
+     "type": "complete",
+     "term_months": 36,
+     "title": "Canadá: Suscripción completa a La Viña: 3 años",
+     "price": 65.0,
+     "currency": "USD",
+     "sku": "LVV3CA",
+     "url": "https://www.aalavina.org/tienda/canada-suscripcion-completa-la-vina-3-anos",
+     "image": "/assets/cache/shop/a337de6501ef9fc7.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 1,
+     "title": "Canadá: Suscripción Digital a La Viña: 1 mes",
+     "price": 2.99,
+     "currency": "USD",
+     "sku": "LO1MCA",
+     "url": "https://www.aalavina.org/tienda/canada-suscripcion-digital-la-vina-1-mes",
+     "image": "/assets/cache/shop/22cfbba7bd5d3dc3.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 12,
+     "title": "Canadá: Suscripción Digital a La Viña: 1 año",
+     "price": 14.99,
+     "currency": "USD",
+     "sku": "LO1ACA",
+     "url": "https://www.aalavina.org/tienda/canada-suscripcion-digital-la-vina-1-ano",
+     "image": "/assets/cache/shop/22cfbba7bd5d3dc3.webp",
+     "volume": [],
+     "change": {
+      "key": "2027-01",
+      "new": 17.0,
+      "stale": true
+     }
+    },
+    {
+     "type": "digital",
+     "term_months": 24,
+     "title": "Canadá: Suscripción Digital a La Viña: 2 años",
+     "price": 24.0,
+     "currency": "USD",
+     "sku": "LO2ACA",
+     "url": "https://www.aalavina.org/tienda/canada-suscripcion-digital-la-vina-2-anos",
+     "image": "/assets/cache/shop/22cfbba7bd5d3dc3.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 36,
+     "title": "Canadá: Suscripción Digital a La Viña: 3 años",
+     "price": 32.0,
+     "currency": "USD",
+     "sku": "LO3ACA",
+     "url": "https://www.aalavina.org/tienda/canada-suscripcion-digital-la-vina-3-anos",
+     "image": "/assets/cache/shop/22cfbba7bd5d3dc3.webp",
+     "volume": []
+    }
+   ]
+  },
+  {
+   "pub": "lv",
+   "region": "intl",
+   "url": "https://www.aalavina.org/tienda/internacional-suscripciones",
+   "plans": [
+    {
+     "type": "digital",
+     "term_months": 1,
+     "title": "Internacional: Suscripción Digital a La Viña: 1 mes",
+     "price": 2.99,
+     "currency": "USD",
+     "sku": "LO1MINT",
+     "url": "https://www.aalavina.org/tienda/internacional-suscripcion-digital-la-vina-1-mes",
+     "image": "/assets/cache/shop/0c190b7624e92eba.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 12,
+     "title": "Internacional: Suscripción Digital a La Viña: 1 año",
+     "price": 14.99,
+     "currency": "USD",
+     "sku": "LO1AINT",
+     "url": "https://www.aalavina.org/tienda/internacional-suscripcion-digital-la-vina-1-ano",
+     "image": "/assets/cache/shop/0c190b7624e92eba.webp",
+     "volume": [],
+     "change": {
+      "key": "2027-01",
+      "new": 17.0,
+      "stale": true
+     }
+    },
+    {
+     "type": "digital",
+     "term_months": 24,
+     "title": "Internacional: Suscripción Digital a La Viña: 2 años",
+     "price": 24.0,
+     "currency": "USD",
+     "sku": "LO2AINT",
+     "url": "https://www.aalavina.org/tienda/internacional-suscripcion-digital-la-vina-2-anos",
+     "image": "/assets/cache/shop/0c190b7624e92eba.webp",
+     "volume": []
+    },
+    {
+     "type": "digital",
+     "term_months": 36,
+     "title": "Internacional: Suscripción Digital a La Viña: 3 años",
+     "price": 32.0,
+     "currency": "USD",
+     "sku": "LO3AINT",
+     "url": "https://www.aalavina.org/tienda/internacional-suscripcion-digital-la-vina-3-anos",
+     "image": "/assets/cache/shop/0c190b7624e92eba.webp",
+     "volume": []
+    }
+   ]
+  }
+ ],
+ "types": {
+  "gv": {
+   "print": {
+    "en": "Enjoy 12 Issues yearly. A Meeting Anytime.",
+    "es": "Disfrutar de 12 Temas anuales. Una reunión en cualquier momento."
+   },
+   "digital": {
+    "en": "Online access to both the Grapevine website and App.",
+    "es": "Acceso en línea tanto al sitio web de Grapevine como a la App."
+   },
+   "complete": {
+    "en": "Combines the Grapevine print magazine, complete online access to the website, archive and the App.",
+    "es": "Combina la revista de impresión Grapevine, acceso en línea completo al sitio web, archivo y la App."
+   }
+  },
+  "lv": {
+   "print": {
+    "es": "Disfruta de seis (6) ejemplares de la revista impresa de La Viña.",
+    "en": "Enjoy six (6) copies of the La Viña printed magazine."
+   },
+   "digital": {
+    "es": "Un año de acceso en línea tanto al sitio web como a la aplicación de La Viña.",
+    "en": "A year of online access to both the website and the La Viña application."
+   },
+   "complete": {
+    "es": "Combina la revista impresa con el acceso completo al sitio web, el archivo y la aplicación.",
+    "en": "It combines the printed journal with full access to the website, the file and the application."
+   }
+  }
+ },
+ "specialty": [
+  {
+   "id": "special:gv:GVGC01",
+   "pub": "gv",
+   "lang": "en",
+   "type": "cards",
+   "title": "Greeting cards",
+   "url": "https://www.aagrapevine.org/store/greeting-cards",
+   "image": "/assets/cache/shop/e4310a0bbdaaba1e.webp",
+   "price": 36.0,
+   "currency": "USD",
+   "sku": "GVGC01",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 34.8
+    }
+   ],
+   "trilingual": false,
+   "pack": 24,
+   "text": "Each card is beautifully illustrated with a cartoon about humorous moments in sobriety. All cartoons are conceived and drawn by AA members and were previously published in AA Grapevine.",
+   "page_url": "https://www.aagrapevine.org/store/greeting-cards"
+  },
+  {
+   "id": "special:gv:MS09",
+   "pub": "gv",
+   "lang": "en",
+   "type": "planner",
+   "title": "Annual Pocket Planner",
+   "url": "https://www.aagrapevine.org/store/annual-pocket-planner",
+   "image": "/assets/cache/shop/d10238ef27517935.webp",
+   "price": 6.0,
+   "currency": "USD",
+   "sku": "MS09",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 5.5
+    }
+   ],
+   "trilingual": true,
+   "pack": null,
+   "text": "A companion to the Wall Calendar, the Planner (annual) features a month-at-a-glance spread and quotations from the Calendar.",
+   "page_url": "https://www.aagrapevine.org/store/annual-pocket-planner"
+  },
+  {
+   "id": "special:gv:MS08",
+   "pub": "gv",
+   "lang": "en",
+   "type": "calendar",
+   "title": "Annual Wall Calendar",
+   "url": "https://www.aagrapevine.org/store/annual-wall-calendar",
+   "image": "/assets/cache/shop/f764e515dcc666ae.webp",
+   "price": 10.5,
+   "currency": "USD",
+   "sku": "MS08",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 10.0
+    }
+   ],
+   "trilingual": true,
+   "pack": null,
+   "text": "Full of beautiful color photographs shot by AA members, accompanied by brief inspiring quotes selected from published Grapevine articles.",
+   "page_url": "https://www.aagrapevine.org/store/annual-wall-calendar"
+  },
+  {
+   "id": "special:gv:GVGCH1",
+   "pub": "gv",
+   "lang": "en",
+   "type": "holiday",
+   "title": "Holiday Greeting Cards - 12 pack",
+   "url": "https://www.aagrapevine.org/store/holiday-greeting-cards-12-pack",
+   "image": "/assets/cache/shop/53fe8ebaaa5586cc.webp",
+   "price": 22.0,
+   "currency": "USD",
+   "sku": "GVGCH1",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 20.0
+    }
+   ],
+   "trilingual": false,
+   "pack": 12,
+   "text": "Two different cartoons illustrated by AA members! Each card is beautifully illustrated with a cartoon about humorous moments in sobriety.",
+   "page_url": "https://www.aagrapevine.org/store/holiday-greeting-cards-12-pack"
+  },
+  {
+   "id": "special:lv:LVGCH1",
+   "pub": "lv",
+   "lang": "es",
+   "type": "holiday",
+   "title": "¡Tarjetas de ocasión para las fiestas! Paquete de 12",
+   "url": "https://www.aalavina.org/tienda/tarjetas-de-ocasion-para-las-fiestas-paquete-de-12",
+   "image": "/assets/cache/shop/b3aee4f8e7e6f7da.webp",
+   "price": 22.0,
+   "currency": "USD",
+   "sku": "LVGCH1",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 20.0
+    }
+   ],
+   "trilingual": false,
+   "pack": 12,
+   "text": "¡Dos diseños diferentes, ilustrados por miembros de AA! Cada tarjeta está ilustrada con una caricatura que representa momentos divertidos de la sobriedad.",
+   "page_url": "https://www.aalavina.org/tienda/tarjetas-de-ocasion-para-las-fiestas-paquete-de-12"
+  },
+  {
+   "id": "special:lv:LVGC01",
+   "pub": "lv",
+   "lang": "es",
+   "type": "cards",
+   "title": "Tarjetas de Ocasión",
+   "url": "https://www.aalavina.org/tarjetas-de-ocasion",
+   "image": "/assets/cache/shop/d79f539ca26cfa33.webp",
+   "price": 36.0,
+   "currency": "USD",
+   "sku": "LVGC01",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 34.8
+    }
+   ],
+   "trilingual": false,
+   "pack": null,
+   "text": "",
+   "page_url": "https://www.aalavina.org/tienda/articulos-especiales"
+  },
+  {
+   "id": "special:lv:MS09LV",
+   "pub": "lv",
+   "lang": "es",
+   "type": "planner",
+   "title": "Agenda de Bolsillo",
+   "url": "https://www.aalavina.org/tienda/agenda-de-bolsillo",
+   "image": "/assets/cache/shop/bbd9ebbeaac136fc.webp",
+   "price": 6.0,
+   "currency": "USD",
+   "sku": "MS09LV",
+   "volume": [
+    {
+     "min": 10,
+     "max": null,
+     "price": 5.5
+    }
+   ],
+   "trilingual": false,
+   "pack": null,
+   "text": "",
+   "page_url": "https://www.aalavina.org/tienda/articulos-especiales"
+  },
+  {
+   "id": "special:lv:MS08LV",
+   "pub": "lv",
+   "lang": "es",
+   "type": "calendar",
+   "title": "Calendario Anual de Pared",
+   "url": "https://www.aalavina.org/tienda/calendario-anual-de-pared",
+   "image": "/assets/cache/shop/b3647bebf38db744.webp",
+   "price": 10.5,
+   "currency": "USD",
+   "sku": "MS08LV",
+   "volume": [
+    {
+     "min": 5,
+     "max": null,
+     "price": 10.0
+    }
+   ],
+   "trilingual": false,
+   "pack": null,
+   "text": "",
+   "page_url": "https://www.aalavina.org/tienda/articulos-especiales"
+  }
+ ],
+ "price_changes": [
+  {
+   "key": "2027-01",
+   "announced": "2026-10-01",
+   "effective": "2027-01-01",
+   "notice_until": "2027-01-31",
+   "at": {
+    "announced": "2026-10-01T05:00:00Z",
+    "effective": "2027-01-01T06:00:00Z",
+    "notice_end": "2027-02-01T06:00:00Z"
+   },
+   "source": {
+    "en": "AA Grapevine's letter to Intergroups and Central Offices, October 1, 2026",
+    "es": "Carta de AA Grapevine a las oficinas intergrupales y centrales, 1 de octubre de 2026"
+   },
+   "source_lang": {
+    "en": "en",
+    "es": "es"
+   },
+   "doc_match": "pricing update.*2027|actualizaci[oó]n de precios.*2027",
+   "books_more": 2.0,
+   "yearly": [
+    {
+     "pub": "gv",
+     "type": "print",
+     "new": 39.0,
+     "now": 36.0,
+     "after": 39.0
+    },
+    {
+     "pub": "gv",
+     "type": "digital",
+     "new": 34.0,
+     "now": 29.99,
+     "after": 34.0
+    },
+    {
+     "pub": "lv",
+     "type": "print",
+     "new": 19.5,
+     "now": 18.0,
+     "after": 19.5
+    },
+    {
+     "pub": "lv",
+     "type": "digital",
+     "new": 17.0,
+     "now": 14.99,
+     "after": 17.0
+    }
+   ]
+  }
+ ]
+}
