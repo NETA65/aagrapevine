@@ -146,7 +146,9 @@ jobs:
   tests:
     name: Python tests (offline)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # about 10 minutes with the gate's list check (tests/test_automation.py GateLists: every gated test again in
+    # copies of the repository with committee-like edits); room for a slow runner
+    timeout-minutes: 25
     steps:
       - name: Check out the code
         uses: actions/checkout@v7
