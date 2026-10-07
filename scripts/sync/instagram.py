@@ -54,10 +54,12 @@ REMOVED POSTS (a deleted, archived or now-private post leaves the site — anony
   embed is unusable (the generic page) or answers 404/410 — but only if the embed of a post of
   the SAME account and the same kind (a post or a Reel) DID work after that answer in the same
   run (one we enriched or re-checked, else one control request for the newest listed post of
-  that account and kind — none listed today: nothing is decided for it): a login wall or a
+  that account and kind — or, when none of that kind is listed, the account's newest listed post
+  of any kind: the listings do not say which posts are Reels, and every post's embed has the
+  same address, so a deleted Reel still leaves the site — anonymity first): a login wall or a
   block — also one that begins during the run — makes every embed unusable, and an account
-  that turned embedding off, or a kind of post whose embed page comes in another shape, makes
-  its own embeds unusable while the others work, so it proves nothing.
+  that turned embedding off makes its own embeds unusable while the others work, so it proves
+  nothing.
   429 / 401 / 403 / a redirect to the login page / no answer stop the re-check for the run
   and decide nothing. A post found "not there" twice, at least GONE_CONFIRM_HOURS apart, is
   removed with its thumbnail (stats.removal). Posts listed by hand are not re-checked (the
@@ -1154,14 +1156,17 @@ def removal_sweep(fx: Fetcher, prev_items: list[dict], records: dict[str, dict],
     # worked AFTER it: a login wall, or a block that began during the run, makes every embed unusable — and so
     # would an account that turned embedding off, or a kind of post whose embed page Instagram serves in another
     # shape, while the other account's posts work. Nothing proved that yet: ask the newest listed post of that
-    # account and kind (it surely exists); with none listed today, nothing is decided for those posts.
+    # account and kind — or, with none of that kind listed (the listings never say which posts are Reels), the
+    # account's newest listed post of any kind: every post's embed has the same address, and a deleted Reel must
+    # still leave the site (anonymity). With nothing of that account listed today, nothing is decided.
     unproved = {kinds[sc] for sc, miss in answers.items() if miss and miss > fx.last_ok.get(kinds[sc], 0)}
     for kind in sorted(unproved, key=lambda k: (str(k[0]), k[1])):
         if stopped is not None:
             break
         account, reel = kind
-        control = max(((d or "", sc) for sc, d in (listed.get(account) or {}).items()
-                       if embed_kind(records.get(sc) or {"account": account})[1] == reel), default=None)
+        mine = [(d or "", sc) for sc, d in (listed.get(account) or {}).items()]
+        control = max((x for x in mine if embed_kind(records.get(x[1]) or {"account": account})[1] == reel),
+                      default=None) or max(mine, default=None)
         if control:
             try:
                 fx.post_embed(control[1], kind)
@@ -1187,8 +1192,8 @@ def removal_sweep(fx: Fetcher, prev_items: list[dict], records: dict[str, dict],
     if undecided:
         stats.setdefault("warnings", []).append(
             f"removal re-check: {undecided} post(s) showed no usable embed, but no embed of a post of the same "
-            "account and kind (post or Reel) worked after that (a login wall, a block, or embeds that do not work for "
-            "that account or kind?) — nothing was decided")
+            "account worked after that (a login wall, a block, or embeds that do not work for that account?) — "
+            "nothing was decided")
     if gone:
         log.info("removed %d post(s) Instagram no longer shows: %s", len(gone), ", ".join(sorted(gone)))
     return gone

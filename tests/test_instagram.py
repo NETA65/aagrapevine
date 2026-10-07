@@ -290,8 +290,9 @@ class Removal(unittest.TestCase):
             gone = I.removal_sweep(fx, prev, records, listed, state, 5, stats)
         return gone, state, stats
 
-    def test_a_reel_is_proved_only_by_a_reel(self):
-        """…and the same kind of post: a Reel's embed page may come in another shape than a photo's."""
+    def test_a_reel_is_proved_by_a_reel_first_else_by_the_accounts_newest_post(self):
+        """The listings never say which posts are Reels: with no Reel listed, the account's newest post proves the
+        answer (every embed has the same address) — a deleted Reel must still leave the site."""
         acct = {"gv": {"name": "AA Grapevine", "username": USER}}
 
         def known(sc: str, reel: bool = False) -> dict:
@@ -301,11 +302,18 @@ class Removal(unittest.TestCase):
         prev = [known(VANISHED, reel=True), known(OLDER[0])]
         day = I.date_from_shortcode(LISTED[0])
         records = {LISTED[0]: I.new_post(LISTED[0], "gv", "profile_embed", date=day)}
-        gone, state, stats = self.sweep(FakeInstagram(gone={VANISHED}), prev, {"gv": {LISTED[0]: day}}, records)
-        self.assertEqual(gone, set())
-        self.assertNotIn("missing", state.get(VANISHED, {}), "a photo's embed that worked proves nothing about a Reel")
+        web = FakeInstagram(gone={VANISHED})
+        gone, state, stats = self.sweep(web, prev, {"gv": {LISTED[0]: day}}, records)
+        self.assertEqual(gone, set(), "one answer is not enough")
+        self.assertEqual(web.embeds[-1], LISTED[0], "no Reel listed: the account's newest post is the control")
+        self.assertIn("missing", state[VANISHED], "…and it proves the Reel's answer")
+        self.assertNotIn("warnings", stats)
+        # another account's posts prove nothing
+        gone, state, stats = self.sweep(FakeInstagram(gone={VANISHED}), prev, {"lv": {LISTED[0]: day}},
+                                        {LISTED[0]: I.new_post(LISTED[0], "lv", "profile_embed", date=day)})
+        self.assertNotIn("missing", state.get(VANISHED, {}))
         self.assertTrue(any("nothing was decided" in w for w in stats["warnings"]))
-        # a Reel listed today is asked as the control: now the answer counts
+        # a Reel listed today is the control first
         reel_day = I.date_from_shortcode(LISTED[1])
         records[LISTED[1]] = I.new_post(LISTED[1], "gv", "profile_embed", date=reel_day, is_reel=True)
         web = FakeInstagram(gone={VANISHED})
