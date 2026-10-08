@@ -1,7 +1,7 @@
 {
  "source": "youtube",
- "updated": "2026-10-07T14:35:58Z",
- "attempted": "2026-10-07T14:35:58Z",
+ "updated": "2026-10-08T14:41:11Z",
+ "attempted": "2026-10-08T14:41:11Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -14,15 +14,18 @@
   "rss_feeds": 35,
   "rss_failed": 0,
   "rss_404": 1,
-  "backfill": "not due (last 2026-10-01T07:19:19Z)",
+  "backfill_seconds": 25.4,
+  "listed": 533,
+  "backfill": "ok (533 listed in 25.4s)",
   "playlist_feeds": 31,
   "shorts_probes": 0,
-  "details_pending": 3,
+  "details_pending": 0,
   "details_fetched": 0,
-  "details_failed": 1,
+  "details_failed": 0,
+  "missing_from_listing": 0,
   "gone_checks": 0,
   "gone_marked": 0,
-  "fetched": 248,
+  "fetched": 533,
   "new": 0,
   "total": 533,
   "active": 533,
@@ -31,10 +34,7 @@
   "shorts": 18,
   "approx_dates": 1,
   "playlists": 31,
-  "seconds": 42.3,
-  "warnings": [
-   "details stopped: YouTube answered with a bot check (“confirm you’re not a bot”) — nothing is wrong on our side; videos keep their last known details"
-  ]
+  "seconds": 65.9
  },
  "items": [
   {
@@ -58,12 +58,12 @@
    "extra": {
     "video_id": "daNbma33_to",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 648,
     "playlists": [
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 153,
+    "views": 204,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -88,12 +88,12 @@
    "extra": {
     "video_id": "DQQmWy8khe0",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 1777,
     "playlists": [
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 149,
+    "views": 193,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -122,12 +122,12 @@
    "extra": {
     "video_id": "3IlmqK3taOo",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 3003,
     "playlists": [
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 239,
+    "views": 258,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -159,7 +159,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 366,
+    "views": 377,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -193,7 +193,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 298,
+    "views": 305,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -210,7 +210,7 @@
    "lang": "en",
    "date": "2026-09-21T16:00:07Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/BIjB93zE0sg/hqdefault.jpg",
    "tags": [
     "live",
@@ -226,7 +226,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 352,
+    "views": 356,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -241,7 +241,7 @@
    "lang": "en",
    "date": "2026-09-21T04:33:29Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/U-gKr5AhSqs/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -256,7 +256,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 296,
+    "views": 298,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -273,7 +273,7 @@
    "lang": "en",
    "date": "2026-09-18T04:31:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/1gFSGCFtko8/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -290,7 +290,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 350,
+    "views": 351,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -307,7 +307,7 @@
    "lang": "en",
    "date": "2026-09-14T04:29:14Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Y5MBMVFGFyg/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -322,7 +322,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 319,
+    "views": 320,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -339,7 +339,7 @@
    "lang": "en",
    "date": "2026-09-11T04:32:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6WR99vkRTuI/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -356,7 +356,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 406,
+    "views": 408,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -373,7 +373,7 @@
    "lang": "en",
    "date": "2026-09-08T13:29:56Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/63ebpEXyxVc/hqdefault.jpg",
    "tags": [
     "live",
@@ -389,7 +389,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 297,
+    "views": 300,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -404,7 +404,7 @@
    "lang": "en",
    "date": "2026-09-07T04:28:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/hlXXUTSw8zk/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -419,7 +419,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 342,
+    "views": 344,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -436,7 +436,7 @@
    "lang": "en",
    "date": "2026-09-04T04:32:29Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/0C0zlJtGbzc/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -453,7 +453,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 345,
+    "views": 347,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -470,7 +470,7 @@
    "lang": "en",
    "date": "2026-08-31T04:32:26Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/xA_tC0fNK3o/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -485,7 +485,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 479,
+    "views": 480,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -502,7 +502,7 @@
    "lang": "en",
    "date": "2026-08-28T04:32:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/DW8kELcyhJQ/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -519,7 +519,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 406,
+    "views": 410,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -536,7 +536,7 @@
    "lang": "en",
    "date": "2026-08-24T04:33:18Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/8xnI6sUazlI/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -551,7 +551,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 348,
+    "views": 351,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -568,7 +568,7 @@
    "lang": "en",
    "date": "2026-08-21T04:32:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HdUwL8B1T-Q/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -585,7 +585,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 210,
+    "views": 211,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -602,7 +602,7 @@
    "lang": "en",
    "date": "2026-08-17T16:00:16Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/QIOOBjMstDc/hqdefault.jpg",
    "tags": [
     "live",
@@ -618,7 +618,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 253,
+    "views": 254,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -633,7 +633,7 @@
    "lang": "en",
    "date": "2026-08-17T04:28:30Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/oMk0SFqB5kU/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -648,7 +648,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 229,
+    "views": 232,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -665,7 +665,7 @@
    "lang": "en",
    "date": "2026-08-14T04:33:15Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/gU2fVfAJh70/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -682,7 +682,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 241,
+    "views": 242,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -699,7 +699,7 @@
    "lang": "en",
    "date": "2026-08-10T04:33:43Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/EpxZJke8Q88/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -731,7 +731,7 @@
    "lang": "en",
    "date": "2026-08-07T04:32:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/OZg12-c-Jsk/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -765,7 +765,7 @@
    "lang": "en",
    "date": "2026-08-03T16:00:01Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/CDoVJKD0o8k/hqdefault.jpg",
    "tags": [
     "live",
@@ -796,7 +796,7 @@
    "lang": "en",
    "date": "2026-08-03T04:29:30Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/w3zdD7Pfw6A/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -828,7 +828,7 @@
    "lang": "en",
    "date": "2026-07-31T04:29:10Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/zUhR19N_oD0/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -845,7 +845,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 225,
+    "views": 226,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -862,7 +862,7 @@
    "lang": "en",
    "date": "2026-07-27T04:30:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-2lTjvBDhdk/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -894,7 +894,7 @@
    "lang": "en",
    "date": "2026-07-24T04:26:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/mWkHj0ExZCc/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -928,7 +928,7 @@
    "lang": "es",
    "date": "2026-07-20T17:56:25Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/FQVxIEBBAL8/hqdefault.jpg",
    "tags": [
     "short"
@@ -943,7 +943,7 @@
      "La Viña"
     ],
     "is_short": true,
-    "views": 257,
+    "views": 259,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -958,7 +958,7 @@
    "lang": "en",
    "date": "2026-07-20T16:00:25Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/pqoC4YW8pQo/hqdefault.jpg",
    "tags": [
     "live",
@@ -989,7 +989,7 @@
    "lang": "en",
    "date": "2026-07-20T04:26:16Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Ynb-hGVPfsY/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -1021,7 +1021,7 @@
    "lang": "en",
    "date": "2026-07-17T04:29:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/BKEC3PARl10/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -1055,7 +1055,7 @@
    "lang": "en",
    "date": "2026-07-13T04:30:31Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/2_HgJf4Oz_A/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -1070,7 +1070,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 276,
+    "views": 277,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1087,7 +1087,7 @@
    "lang": "en",
    "date": "2026-07-10T04:24:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/kfCZdFJmE_Y/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -1104,7 +1104,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 207,
+    "views": 208,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1121,7 +1121,7 @@
    "lang": "en",
    "date": "2026-07-06T04:28:59Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/vz7FumPPU2c/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -1153,7 +1153,7 @@
    "lang": "en",
    "date": "2026-07-03T04:26:55Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/K-W_mtHE1TM/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -1187,7 +1187,7 @@
    "lang": "en",
    "date": "2026-07-01T16:00:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/PSTdDfd10S8/hqdefault.jpg",
    "tags": [
     "live",
@@ -1218,7 +1218,7 @@
    "lang": "en",
    "date": "2026-06-29T04:27:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/icWlsGxB7PY/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -1250,7 +1250,7 @@
    "lang": "en",
    "date": "2026-06-26T04:36:12Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/rvV7b0itYFw/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -1284,7 +1284,7 @@
    "lang": "en",
    "date": "2026-06-22T17:14:23Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/aeBuhf4X5h8/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -1301,7 +1301,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 204,
+    "views": 206,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -1318,7 +1318,7 @@
    "lang": "en",
    "date": "2026-06-22T04:31:00Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ldak69Q_1yk/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -1350,7 +1350,7 @@
    "lang": "en",
    "date": "2026-06-15T16:00:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/tBn1Aq42IgI/hqdefault.jpg",
    "tags": [
     "live",
@@ -1381,7 +1381,7 @@
    "lang": "en",
    "date": "2026-06-15T04:30:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7Seo8kU1qVo/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -1413,7 +1413,7 @@
    "lang": "en",
    "date": "2026-06-12T04:34:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ePm1BhNPFSo/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -1447,7 +1447,7 @@
    "lang": "en",
    "date": "2026-06-08T04:42:07Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/sXNMsVNnQ1s/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -1479,7 +1479,7 @@
    "lang": "en",
    "date": "2026-06-05T04:30:13Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/wQiTb6JZgl8/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -1496,7 +1496,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 270,
+    "views": 273,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -1513,7 +1513,7 @@
    "lang": "en",
    "date": "2026-06-01T16:00:22Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/I66BDuyBGmw/hqdefault.jpg",
    "tags": [
     "asl"
@@ -1543,7 +1543,7 @@
    "lang": "en",
    "date": "2026-06-01T04:32:25Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HmczxJLGV5M/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -1571,7 +1571,7 @@
    "lang": "en",
    "date": "2026-05-29T04:29:19Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/cjT9-_EJfT4/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -1588,7 +1588,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 285,
+    "views": 287,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -1605,7 +1605,7 @@
    "lang": "en",
    "date": "2026-05-25T04:31:10Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4kHX6fljU-Y/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -1637,7 +1637,7 @@
    "lang": "en",
    "date": "2026-05-22T04:24:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/QsKJj1n-92w/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -1654,7 +1654,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 259,
+    "views": 262,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -1671,7 +1671,7 @@
    "lang": "en",
    "date": "2026-05-18T16:00:29Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/5dGyEaIz99k/hqdefault.jpg",
    "tags": [
     "asl"
@@ -1701,7 +1701,7 @@
    "lang": "en",
    "date": "2026-05-18T04:30:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/v0Yz9plY42Y/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -1733,7 +1733,7 @@
    "lang": "en",
    "date": "2026-05-15T04:27:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/KNe1xzbGKtU/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -1750,7 +1750,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 308,
+    "views": 311,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -1767,7 +1767,7 @@
    "lang": "en",
    "date": "2026-05-11T04:36:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Hv307-6D78g/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -1782,7 +1782,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 267,
+    "views": 268,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -1799,7 +1799,7 @@
    "lang": "en",
    "date": "2026-05-08T04:27:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/BzaAEhHoDjY/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -1833,7 +1833,7 @@
    "lang": "es",
    "date": "2026-05-05T20:35:01Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/jKSMF61aeqA/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -1861,7 +1861,7 @@
    "lang": "es",
    "date": "2026-05-05T20:34:57Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/x-Bf6BhvU1o/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -1874,7 +1874,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 150,
+    "views": 151,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -1889,7 +1889,7 @@
    "lang": "es",
    "date": "2026-05-05T20:34:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/biCC3KacOMo/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -1917,7 +1917,7 @@
    "lang": "es",
    "date": "2026-05-05T20:34:51Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/eCtJSimJACE/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -1945,7 +1945,7 @@
    "lang": "es",
    "date": "2026-05-05T20:34:46Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/_-ixXoDEQTQ/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -1973,7 +1973,7 @@
    "lang": "es",
    "date": "2026-05-05T20:34:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/nOCcjXCTrdQ/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -2001,7 +2001,7 @@
    "lang": "es",
    "date": "2026-05-05T20:34:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/1M1vPqY61Wo/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -2029,7 +2029,7 @@
    "lang": "es",
    "date": "2026-05-05T20:34:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Roi6xPNqJAY/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -2057,7 +2057,7 @@
    "lang": "es",
    "date": "2026-05-05T20:34:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/uzquYVO6Ej8/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -2085,7 +2085,7 @@
    "lang": "es",
    "date": "2026-05-05T20:34:24Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/oNl41jj6Gcw/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -2113,7 +2113,7 @@
    "lang": "en",
    "date": "2026-05-04T04:33:14Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/dISOp52MvvA/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2128,7 +2128,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 257,
+    "views": 259,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -2145,7 +2145,7 @@
    "lang": "en",
    "date": "2026-05-01T04:27:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4lsZTWSCpHI/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2162,7 +2162,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 311,
+    "views": 314,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2179,7 +2179,7 @@
    "lang": "en",
    "date": "2026-04-27T04:34:48Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/o-_e2lh8Ay0/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2211,7 +2211,7 @@
    "lang": "en",
    "date": "2026-04-24T04:34:05Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ZqDO7yRSMKQ/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2228,7 +2228,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 355,
+    "views": 361,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2245,7 +2245,7 @@
    "lang": "en",
    "date": "2026-04-20T04:37:29Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/964XZ14I8VY/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2260,7 +2260,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 355,
+    "views": 358,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -2277,7 +2277,7 @@
    "lang": "en",
    "date": "2026-04-17T13:41:07Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/CceBemfqWU4/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2294,7 +2294,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 323,
+    "views": 328,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2311,7 +2311,7 @@
    "lang": "en",
    "date": "2026-04-13T04:41:12Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/8pX26fhnom8/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2326,7 +2326,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 246,
+    "views": 247,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -2343,7 +2343,7 @@
    "lang": "en",
    "date": "2026-04-10T04:26:11Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/j6Iuy2LsR1A/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2360,7 +2360,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 520,
+    "views": 529,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2377,7 +2377,7 @@
    "lang": "en",
    "date": "2026-04-06T04:32:18Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-cNvLrJlUPg/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2392,7 +2392,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 351,
+    "views": 354,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -2409,7 +2409,7 @@
    "lang": "en",
    "date": "2026-04-03T04:28:58Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/fEewnjf4rew/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2443,7 +2443,7 @@
    "lang": "en",
    "date": "2026-03-30T04:24:12Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/gCDyTKMFItU/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2458,7 +2458,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 297,
+    "views": 299,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -2475,7 +2475,7 @@
    "lang": "en",
    "date": "2026-03-27T04:23:59Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Ejdz7tT-X0o/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2492,7 +2492,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 308,
+    "views": 309,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2509,7 +2509,7 @@
    "lang": "en",
    "date": "2026-03-23T04:39:20Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/aJ1plRRwimE/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2524,7 +2524,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 425,
+    "views": 431,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -2541,7 +2541,7 @@
    "lang": "en",
    "date": "2026-03-20T04:25:23Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/wzOGleEcq20/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2558,7 +2558,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 422,
+    "views": 426,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2575,7 +2575,7 @@
    "lang": "es",
    "date": "2026-03-17T13:39:07Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-dLMxbAnV_o/hqdefault.jpg",
    "tags": [
     "short"
@@ -2605,7 +2605,7 @@
    "lang": "en",
    "date": "2026-03-17T13:11:02Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/2cT_CxCheYw/hqdefault.jpg",
    "tags": [
     "short"
@@ -2635,7 +2635,7 @@
    "lang": "en",
    "date": "2026-03-16T04:28:56Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/A90dm68ejuQ/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2650,7 +2650,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 361,
+    "views": 363,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -2667,7 +2667,7 @@
    "lang": "en",
    "date": "2026-03-13T04:25:58Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Ni1NJ9BAAyU/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2684,7 +2684,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 369,
+    "views": 373,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2701,7 +2701,7 @@
    "lang": "en",
    "date": "2026-03-09T04:36:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/gSpKuP0Sh7c/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2733,7 +2733,7 @@
    "lang": "en",
    "date": "2026-03-06T05:24:57Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ciVn9sAZMoQ/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2750,7 +2750,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 493,
+    "views": 498,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2767,7 +2767,7 @@
    "lang": "en",
    "date": "2026-03-02T05:29:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/k7qVMY3i1WU/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2799,7 +2799,7 @@
    "lang": "en",
    "date": "2026-02-27T05:33:46Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/DMoToF0bF0c/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2816,7 +2816,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 482,
+    "views": 485,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2833,7 +2833,7 @@
    "lang": "en",
    "date": "2026-02-23T05:26:26Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/gE-o5nJfSkk/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2865,7 +2865,7 @@
    "lang": "en",
    "date": "2026-02-20T05:26:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/NZAUNn-9MtI/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2882,7 +2882,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 779,
+    "views": 783,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2899,7 +2899,7 @@
    "lang": "en",
    "date": "2026-02-16T05:41:23Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/XnCSgC3Sqg4/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -2914,7 +2914,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 365,
+    "views": 369,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -2931,7 +2931,7 @@
    "lang": "en",
    "date": "2026-02-13T05:26:28Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/eUFH8EBg3G4/hqdefault.jpg",
    "tags": [
     "season-1",
@@ -2948,7 +2948,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 985,
+    "views": 1000,
     "is_live_recording": true,
     "date_approx": false,
     "season": 1,
@@ -2965,7 +2965,7 @@
    "lang": "en",
    "date": "2026-02-10T18:08:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7DkD8KrQwPg/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -2980,7 +2980,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 559,
+    "views": 568,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -2997,7 +2997,7 @@
    "lang": "en",
    "date": "2026-02-09T05:29:15Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/jxlDJkAPrys/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -3029,7 +3029,7 @@
    "lang": "en",
    "date": "2026-02-02T05:25:30Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/JPpgwfiYRco/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -3044,7 +3044,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 382,
+    "views": 384,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -3061,7 +3061,7 @@
    "lang": "en",
    "date": "2026-01-27T16:10:59Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/0uyVPlTcSeI/hqdefault.jpg",
    "tags": [
     "short"
@@ -3089,7 +3089,7 @@
    "lang": "es",
    "date": "2026-01-26T13:10:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/aUxuYQfOfxk/hqdefault.jpg",
    "tags": [
     "short"
@@ -3117,7 +3117,7 @@
    "lang": "en",
    "date": "2026-01-26T13:08:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/V5Kv6LJObvc/hqdefault.jpg",
    "tags": [
     "short"
@@ -3130,7 +3130,7 @@
     "duration_sec": 65,
     "playlists": [],
     "is_short": true,
-    "views": 1455,
+    "views": 1457,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3145,7 +3145,7 @@
    "lang": "en",
    "date": "2026-01-26T06:23:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/C4Z9sNMxt7I/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -3160,7 +3160,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 344,
+    "views": 346,
     "is_live_recording": false,
     "date_approx": false,
     "season": 10,
@@ -3177,7 +3177,7 @@
    "lang": "en",
    "date": "2026-01-19T05:29:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4gb-W2cLUK0/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -3209,7 +3209,7 @@
    "lang": "en",
    "date": "2026-01-12T05:30:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7Y-IAqang6M/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -3241,7 +3241,7 @@
    "lang": "en",
    "date": "2026-01-05T05:31:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/cxFByQnrem0/hqdefault.jpg",
    "tags": [
     "season-10"
@@ -3273,7 +3273,7 @@
    "lang": "en",
    "date": "2025-12-29T05:28:43Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7AIvSOdHaF4/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -3286,7 +3286,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 371,
+    "views": 372,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3301,7 +3301,7 @@
    "lang": "en",
    "date": "2025-12-22T05:28:13Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/nal_V87jNWg/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -3333,7 +3333,7 @@
    "lang": "en",
    "date": "2025-12-15T05:30:27Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/h29xJWQDGRo/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -3348,7 +3348,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 334,
+    "views": 336,
     "is_live_recording": false,
     "date_approx": false,
     "season": 9,
@@ -3365,7 +3365,7 @@
    "lang": "en",
    "date": "2025-12-08T05:28:46Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/GkIWMhwlJjo/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -3397,7 +3397,7 @@
    "lang": "en",
    "date": "2025-12-01T05:26:30Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/5l74h_X6fQw/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -3429,7 +3429,7 @@
    "lang": "es",
    "date": "2025-11-29T21:41:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/wXV91OszSTs/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3457,7 +3457,7 @@
    "lang": "es",
    "date": "2025-11-29T21:41:04Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/sOl3LEVac4M/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3470,7 +3470,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 291,
+    "views": 293,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3485,7 +3485,7 @@
    "lang": "es",
    "date": "2025-11-29T21:41:00Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/qSTHIKiF96c/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3513,7 +3513,7 @@
    "lang": "es",
    "date": "2025-11-29T21:40:57Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/k1J3bteSIfU/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3541,7 +3541,7 @@
    "lang": "es",
    "date": "2025-11-29T21:40:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/g7usEmBeqGg/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3569,7 +3569,7 @@
    "lang": "es",
    "date": "2025-11-29T21:40:48Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Qs3VvQfbTZQ/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3597,7 +3597,7 @@
    "lang": "es",
    "date": "2025-11-29T21:40:43Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/NDU_GsyZ6aE/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3625,7 +3625,7 @@
    "lang": "es",
    "date": "2025-11-29T21:40:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Ke613G9Je2Q/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3653,7 +3653,7 @@
    "lang": "es",
    "date": "2025-11-29T21:40:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/JPkiNB63Q-s/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3681,7 +3681,7 @@
    "lang": "es",
    "date": "2025-11-29T21:40:31Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6xhP-kpgQ4M/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3709,7 +3709,7 @@
    "lang": "es",
    "date": "2025-11-29T21:40:27Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6ntjdmD5zAc/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3737,7 +3737,7 @@
    "lang": "es",
    "date": "2025-11-29T21:40:10Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6GUhOnoj-0A/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -3765,7 +3765,7 @@
    "lang": "en",
    "date": "2025-11-29T21:38:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/uP1c3vM9nSc/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -3793,7 +3793,7 @@
    "lang": "en",
    "date": "2025-11-29T21:38:48Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/_ZqRWbf4NKY/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -3821,7 +3821,7 @@
    "lang": "en",
    "date": "2025-11-29T21:38:45Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/UyvKX7e62dA/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -3849,7 +3849,7 @@
    "lang": "en",
    "date": "2025-11-29T21:38:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ICCAzlBUU0c/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -3877,7 +3877,7 @@
    "lang": "en",
    "date": "2025-11-29T21:38:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/FHZZhun4CnU/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -3890,7 +3890,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 128,
+    "views": 129,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3905,7 +3905,7 @@
    "lang": "en",
    "date": "2025-11-29T21:38:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6JwAWs0nlJ4/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -3933,7 +3933,7 @@
    "lang": "en",
    "date": "2025-11-24T05:28:31Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/qh_bN7c9PrA/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -3965,7 +3965,7 @@
    "lang": "es",
    "date": "2025-11-20T14:05:11Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/BKW0tzYb9d4/hqdefault.jpg",
    "tags": [
     "short"
@@ -3978,7 +3978,7 @@
     "duration_sec": 55,
     "playlists": [],
     "is_short": true,
-    "views": 1176,
+    "views": 1177,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3993,7 +3993,7 @@
    "lang": "en",
    "date": "2025-11-18T20:39:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/_mjB6hXYHn4/hqdefault.jpg",
    "tags": [
     "short"
@@ -4006,7 +4006,7 @@
     "duration_sec": 44,
     "playlists": [],
     "is_short": true,
-    "views": 1845,
+    "views": 1847,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -4021,7 +4021,7 @@
    "lang": "en",
    "date": "2025-11-17T05:31:13Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/YTq4u9QKD48/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4053,7 +4053,7 @@
    "lang": "en",
    "date": "2025-11-10T05:31:02Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/imuu3qb1QD8/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4085,7 +4085,7 @@
    "lang": "en",
    "date": "2025-11-03T05:28:26Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/pZmmXKHJrm8/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4117,7 +4117,7 @@
    "lang": "en",
    "date": "2025-10-27T04:26:00Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/x87fGzwcCEc/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4149,7 +4149,7 @@
    "lang": "en",
    "date": "2025-10-20T04:33:07Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/jXoB4SMh-hM/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4181,7 +4181,7 @@
    "lang": "en",
    "date": "2025-10-13T04:34:13Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/XrHz3bUg86A/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4196,7 +4196,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 354,
+    "views": 357,
     "is_live_recording": false,
     "date_approx": false,
     "season": 9,
@@ -4213,7 +4213,7 @@
    "lang": "en",
    "date": "2025-10-06T04:25:19Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/qx1bZalMgwo/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4228,7 +4228,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 316,
+    "views": 319,
     "is_live_recording": false,
     "date_approx": false,
     "season": 9,
@@ -4245,7 +4245,7 @@
    "lang": "en",
    "date": "2025-09-29T04:24:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/EQsMlveaAew/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4260,7 +4260,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 515,
+    "views": 520,
     "is_live_recording": false,
     "date_approx": false,
     "season": 9,
@@ -4277,7 +4277,7 @@
    "lang": "en",
    "date": "2025-09-22T04:29:43Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/KhgxvIKZc6U/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4292,7 +4292,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 334,
+    "views": 335,
     "is_live_recording": false,
     "date_approx": false,
     "season": 9,
@@ -4309,7 +4309,7 @@
    "lang": "en",
    "date": "2025-09-15T04:32:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/wof9jNZpcEE/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4341,7 +4341,7 @@
    "lang": "en",
    "date": "2025-09-08T04:30:22Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/MOO1UNIDg3A/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4373,7 +4373,7 @@
    "lang": "en",
    "date": "2025-09-01T04:28:27Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HymK6HweC80/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4405,7 +4405,7 @@
    "lang": "en",
    "date": "2025-08-25T04:32:58Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/D7bwFPFBNYo/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4420,7 +4420,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 357,
+    "views": 358,
     "is_live_recording": false,
     "date_approx": false,
     "season": 9,
@@ -4437,7 +4437,7 @@
    "lang": "en",
    "date": "2025-08-18T04:29:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/SwgfJ8udHFY/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4469,7 +4469,7 @@
    "lang": "en",
    "date": "2025-08-11T04:31:45Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/O4IPMwxf8TQ/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4501,7 +4501,7 @@
    "lang": "en",
    "date": "2025-08-04T04:37:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/SgPIoR4jdjA/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4533,7 +4533,7 @@
    "lang": "en",
    "date": "2025-07-28T04:59:12Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/RkBx7qjrMuU/hqdefault.jpg",
    "tags": [
     "season-9",
@@ -4549,7 +4549,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 736,
+    "views": 737,
     "is_live_recording": true,
     "date_approx": false,
     "season": 9,
@@ -4566,7 +4566,7 @@
    "lang": "en",
    "date": "2025-07-21T04:44:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/F0gNoAtAnB8/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4598,7 +4598,7 @@
    "lang": "en",
    "date": "2025-07-16T18:34:06Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/V3RzyHdgQCY/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -4609,7 +4609,7 @@
     "duration_sec": 316,
     "playlists": [],
     "is_short": false,
-    "views": 3900,
+    "views": 4000,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -4624,7 +4624,7 @@
    "lang": "en",
    "date": "2025-07-14T04:26:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Qn44mtoUtEI/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4656,7 +4656,7 @@
    "lang": "en",
    "date": "2025-07-07T04:36:46Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/YO0n7Tg2T9g/hqdefault.jpg",
    "tags": [
     "season-9"
@@ -4671,7 +4671,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 358,
+    "views": 359,
     "is_live_recording": false,
     "date_approx": false,
     "season": 9,
@@ -4688,7 +4688,7 @@
    "lang": "en",
    "date": "2025-06-30T04:30:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/SKqmgNIpKEk/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -4720,7 +4720,7 @@
    "lang": "en",
    "date": "2025-06-27T21:13:06Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/fxbKiHupDoU/hqdefault.jpg",
    "tags": [
     "asl"
@@ -4735,7 +4735,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 264,
+    "views": 269,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -4750,7 +4750,7 @@
    "lang": "en",
    "date": "2025-06-23T04:32:17Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/LHdgz_ZyCjw/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -4782,7 +4782,7 @@
    "lang": "en",
    "date": "2025-06-16T04:41:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/QCCDuYcOtkM/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -4814,7 +4814,7 @@
    "lang": "en",
    "date": "2025-06-09T04:25:12Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/DGUwgBSX3xM/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -4846,7 +4846,7 @@
    "lang": "en",
    "date": "2025-06-02T04:38:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/b1sjhMiLR1Y/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -4878,7 +4878,7 @@
    "lang": "en",
    "date": "2025-05-26T04:28:43Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/zjJv_ASe87o/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -4910,7 +4910,7 @@
    "lang": "en",
    "date": "2025-05-19T04:31:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/hZF_VeQUbbo/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -4942,7 +4942,7 @@
    "lang": "en",
    "date": "2025-05-12T04:21:00Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/KOASYfjdd-I/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -4974,7 +4974,7 @@
    "lang": "en",
    "date": "2025-05-05T04:39:07Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/E2KiqL3PTIc/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5006,7 +5006,7 @@
    "lang": "en",
    "date": "2025-04-28T04:22:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/9047x5pgXKQ/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5038,7 +5038,7 @@
    "lang": "en",
    "date": "2025-04-23T12:47:23Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/oZEaCx600j8/hqdefault.jpg",
    "tags": [
     "asl"
@@ -5053,7 +5053,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 430,
+    "views": 433,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -5068,7 +5068,7 @@
    "lang": "en",
    "date": "2025-04-21T04:24:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/f4oVpo9rTN8/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5100,7 +5100,7 @@
    "lang": "en",
    "date": "2025-04-14T04:32:03Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/PJHfplBME7w/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5115,7 +5115,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 308,
+    "views": 309,
     "is_live_recording": false,
     "date_approx": false,
     "season": 8,
@@ -5132,7 +5132,7 @@
    "lang": "en",
    "date": "2025-04-08T18:47:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/zswZeGcSbCk/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -5160,7 +5160,7 @@
    "lang": "en",
    "date": "2025-04-08T18:47:43Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/yJABzUhVlfo/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -5188,7 +5188,7 @@
    "lang": "en",
    "date": "2025-04-08T18:47:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/9FYkvCiRk2Q/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -5216,7 +5216,7 @@
    "lang": "en",
    "date": "2025-04-08T18:47:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/5eR6vKA_d1A/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -5244,7 +5244,7 @@
    "lang": "en",
    "date": "2025-04-08T18:47:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/0T7_j3_IcCc/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -5272,7 +5272,7 @@
    "lang": "en",
    "date": "2025-04-08T18:47:28Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/35rCoOazBfE/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -5300,7 +5300,7 @@
    "lang": "en",
    "date": "2025-04-07T04:40:45Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/A6VaTVYG0B8/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5332,7 +5332,7 @@
    "lang": "en",
    "date": "2025-04-01T19:28:36Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Rr2pOApIoW8/hqdefault.jpg",
    "tags": [
     "short"
@@ -5362,7 +5362,7 @@
    "lang": "es",
    "date": "2025-04-01T19:27:07Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/UR1B22n48xg/hqdefault.jpg",
    "tags": [
     "short"
@@ -5392,7 +5392,7 @@
    "lang": "en",
    "date": "2025-03-31T04:33:06Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Gs08ArLrgBk/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5424,7 +5424,7 @@
    "lang": "en",
    "date": "2025-03-24T04:36:23Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/hZPhYTq19dQ/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5456,7 +5456,7 @@
    "lang": "en",
    "date": "2025-03-17T04:36:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/GLpPWcbREbQ/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5488,7 +5488,7 @@
    "lang": "en",
    "date": "2025-03-10T04:32:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ac-yC7XFq7E/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5520,7 +5520,7 @@
    "lang": "en",
    "date": "2025-03-08T16:18:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/vr6NtVKxMTI/hqdefault.jpg",
    "tags": [
     "asl"
@@ -5550,7 +5550,7 @@
    "lang": "en",
    "date": "2025-02-28T15:42:20Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/B0D_hKgwAL8/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5582,7 +5582,7 @@
    "lang": "en",
    "date": "2025-02-25T14:10:17Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/tlhmFiW36Q0/hqdefault.jpg",
    "tags": [
     "asl"
@@ -5612,7 +5612,7 @@
    "lang": "en",
    "date": "2025-02-24T05:30:45Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/0XT0mt_98Zc/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5644,7 +5644,7 @@
    "lang": "en",
    "date": "2025-02-17T05:34:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/sYhCNoEbhG8/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5676,7 +5676,7 @@
    "lang": "en",
    "date": "2025-02-13T13:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HZjrfG1fzjM/hqdefault.jpg",
    "tags": [
     "asl"
@@ -5691,7 +5691,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 1600,
+    "views": 1700,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -5706,7 +5706,7 @@
    "lang": "en",
    "date": "2025-02-10T05:25:14Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/v4m6t0rMPcE/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5738,7 +5738,7 @@
    "lang": "en",
    "date": "2025-02-03T05:35:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/XnO-oD-5Sic/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5770,7 +5770,7 @@
    "lang": "en",
    "date": "2025-01-27T05:39:10Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Qtkw5vRvj0U/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5785,7 +5785,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 152,
+    "views": 154,
     "is_live_recording": false,
     "date_approx": false,
     "season": 8,
@@ -5802,7 +5802,7 @@
    "lang": "en",
    "date": "2025-01-20T05:35:59Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/YilPfvB111E/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5817,7 +5817,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 440,
+    "views": 443,
     "is_live_recording": false,
     "date_approx": false,
     "season": 8,
@@ -5834,7 +5834,7 @@
    "lang": "en",
    "date": "2025-01-16T14:32:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ScN9KChAsKs/hqdefault.jpg",
    "tags": [
     "asl"
@@ -5864,7 +5864,7 @@
    "lang": "en",
    "date": "2025-01-13T05:31:59Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/2JzApOfd3RY/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5879,7 +5879,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 523,
+    "views": 525,
     "is_live_recording": false,
     "date_approx": false,
     "season": 8,
@@ -5896,7 +5896,7 @@
    "lang": "en",
    "date": "2025-01-06T05:35:05Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/70lFlDvgRgg/hqdefault.jpg",
    "tags": [
     "season-8"
@@ -5911,7 +5911,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 543,
+    "views": 549,
     "is_live_recording": false,
     "date_approx": false,
     "season": 8,
@@ -5928,7 +5928,7 @@
    "lang": "en",
    "date": "2024-12-30T05:21:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/PiobSKSknDI/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -5943,7 +5943,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 331,
+    "views": 334,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -5960,7 +5960,7 @@
    "lang": "en",
    "date": "2024-12-23T05:21:09Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/uj6lVy1Foao/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -5975,7 +5975,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 526,
+    "views": 528,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -5992,7 +5992,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/vXSj-o5Oxrk/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6020,7 +6020,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/t7ADi7pOO4Y/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6048,7 +6048,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6CfEtfQMsio/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6076,7 +6076,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/sG8JuBn_t2Y/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6104,7 +6104,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/hDH706IbuTk/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6132,7 +6132,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/eqYo0I45axM/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6160,7 +6160,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/eVKc9Ja6QuU/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6188,7 +6188,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/O_LTzS4YIDA/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6216,7 +6216,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/I1CNfSw1qkQ/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6244,7 +6244,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/FNOLhKxHRO8/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6272,7 +6272,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/9Z_EKHZWyuM/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6300,7 +6300,7 @@
    "lang": "es",
    "date": "2024-12-16T19:20:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/1ntnf2eHRoI/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6328,7 +6328,7 @@
    "lang": "en",
    "date": "2024-12-16T13:46:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/XMgeNzP4XGE/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6343,7 +6343,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 309,
+    "views": 312,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -6360,7 +6360,7 @@
    "lang": "en",
    "date": "2024-12-09T05:43:43Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/yYq_1sfYKl8/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6375,7 +6375,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 362,
+    "views": 369,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -6392,7 +6392,7 @@
    "lang": "en",
    "date": "2024-12-02T05:27:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/mnKqDbaF9HI/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6407,7 +6407,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 436,
+    "views": 440,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -6424,7 +6424,7 @@
    "lang": "en",
    "date": "2024-11-25T05:25:51Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/puxy4JqIPKU/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6439,7 +6439,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 425,
+    "views": 430,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -6456,7 +6456,7 @@
    "lang": "en",
    "date": "2024-11-18T05:26:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/JK0Iydfnyws/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6471,7 +6471,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 429,
+    "views": 431,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -6488,7 +6488,7 @@
    "lang": "en",
    "date": "2024-11-11T05:37:14Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/dN1CJVZKkuQ/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6503,7 +6503,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 368,
+    "views": 372,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -6520,7 +6520,7 @@
    "lang": "en",
    "date": "2024-11-04T05:26:19Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/WklacGxV08c/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6535,7 +6535,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 383,
+    "views": 385,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -6552,7 +6552,7 @@
    "lang": "en",
    "date": "2024-10-28T04:24:36Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/8uDvp2_cytc/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6567,7 +6567,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 372,
+    "views": 374,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -6584,7 +6584,7 @@
    "lang": "en",
    "date": "2024-10-14T04:30:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/V2UT1C3NV9k/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6599,7 +6599,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 603,
+    "views": 608,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -6616,7 +6616,7 @@
    "lang": "es",
    "date": "2024-10-11T13:01:05Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/svtBcJVfXs0/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6644,7 +6644,7 @@
    "lang": "es",
    "date": "2024-10-11T13:00:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/cLcmtzg2Qy0/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6672,7 +6672,7 @@
    "lang": "es",
    "date": "2024-10-11T13:00:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/dD3UR3vPQ40/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6700,7 +6700,7 @@
    "lang": "es",
    "date": "2024-10-11T13:00:24Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/P0dYI06OiWk/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6728,7 +6728,7 @@
    "lang": "es",
    "date": "2024-10-11T13:00:24Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Cb9134k_WEo/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6756,7 +6756,7 @@
    "lang": "es",
    "date": "2024-10-11T13:00:15Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6pvmRd_16XA/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6784,7 +6784,7 @@
    "lang": "es",
    "date": "2024-10-11T13:00:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/8FNgR5U-KAo/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6812,7 +6812,7 @@
    "lang": "es",
    "date": "2024-10-11T13:00:06Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4KEuAzaN0uA/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6840,7 +6840,7 @@
    "lang": "es",
    "date": "2024-10-11T13:00:02Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/arT-yY0T1Zc/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -6868,7 +6868,7 @@
    "lang": "en",
    "date": "2024-10-07T04:27:13Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/BMftNZUVgcc/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6900,7 +6900,7 @@
    "lang": "en",
    "date": "2024-10-04T13:10:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/qumRXR2aC0Q/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -6915,7 +6915,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 159,
+    "views": 160,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -6932,7 +6932,7 @@
    "lang": "en",
    "date": "2024-10-03T14:05:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/fbePWr_Wb6M/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -6960,7 +6960,7 @@
    "lang": "en",
    "date": "2024-10-03T14:05:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/PF4lR0ehhcQ/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -6988,7 +6988,7 @@
    "lang": "en",
    "date": "2024-10-03T14:05:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HOco4EhLAQs/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7016,7 +7016,7 @@
    "lang": "en",
    "date": "2024-10-03T14:05:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/H0MLTdL7GWk/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7044,7 +7044,7 @@
    "lang": "en",
    "date": "2024-10-03T14:05:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/AN6rv9pnRJ8/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7072,7 +7072,7 @@
    "lang": "en",
    "date": "2024-10-03T14:05:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/990DzNT66qE/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7100,7 +7100,7 @@
    "lang": "en",
    "date": "2024-10-03T14:05:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/5qAs2XUiiN0/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7128,7 +7128,7 @@
    "lang": "en",
    "date": "2024-09-30T04:28:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/2AT6zF2WZm8/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -7143,7 +7143,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 323,
+    "views": 325,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -7160,7 +7160,7 @@
    "lang": "en",
    "date": "2024-09-23T04:34:24Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/_j5Gi8cKk-8/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -7175,7 +7175,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 351,
+    "views": 358,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -7192,7 +7192,7 @@
    "lang": "en",
    "date": "2024-09-19T19:20:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/A_0A1l0aut4/hqdefault.jpg",
    "tags": [
     "asl"
@@ -7222,7 +7222,7 @@
    "lang": "es",
    "date": "2024-09-19T17:22:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/GnkFSZMkdP0/hqdefault.jpg",
    "tags": [
     "short"
@@ -7252,7 +7252,7 @@
    "lang": "en",
    "date": "2024-09-19T17:22:03Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/DCw44sBSZK8/hqdefault.jpg",
    "tags": [
     "short"
@@ -7282,7 +7282,7 @@
    "lang": "en",
    "date": "2024-09-16T04:29:28Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/LhxD3FdD4Ho/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -7297,7 +7297,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 436,
+    "views": 438,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -7314,7 +7314,7 @@
    "lang": "en",
    "date": "2024-09-09T04:25:14Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/o0NEr_1OHEY/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -7329,7 +7329,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 602,
+    "views": 604,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -7346,7 +7346,7 @@
    "lang": "en",
    "date": "2024-09-02T05:00:55Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/D75Ebo_hN1E/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -7378,7 +7378,7 @@
    "lang": "en",
    "date": "2024-08-26T04:25:09Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/OTeufAx8roU/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -7410,7 +7410,7 @@
    "lang": "es",
    "date": "2024-08-21T20:26:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Bqb1FP0lx1E/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -7423,7 +7423,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 3823,
+    "views": 3829,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7438,7 +7438,7 @@
    "lang": "en",
    "date": "2024-08-19T04:34:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/wTW4U6w9niM/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -7470,7 +7470,7 @@
    "lang": "en",
    "date": "2024-08-14T19:43:26Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/h-prViCTdEo/hqdefault.jpg",
    "tags": [
     "asl"
@@ -7500,7 +7500,7 @@
    "lang": "es",
    "date": "2024-08-13T19:14:14Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/0-2jgNk2vms/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -7528,7 +7528,7 @@
    "lang": "es",
    "date": "2024-08-13T19:14:05Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/I8kxeotCF6c/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -7556,7 +7556,7 @@
    "lang": "es",
    "date": "2024-08-13T19:07:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/uFkybjLbgvk/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -7584,7 +7584,7 @@
    "lang": "es",
    "date": "2024-08-13T18:54:14Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Vv3lpekt5Ps/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -7597,7 +7597,7 @@
      "La familia y AA"
     ],
     "is_short": false,
-    "views": 170,
+    "views": 171,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7612,7 +7612,7 @@
    "lang": "es",
    "date": "2024-08-13T18:40:18Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/C8a-uBcM4NU/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -7640,7 +7640,7 @@
    "lang": "es",
    "date": "2024-08-13T18:35:05Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/b7KYWp4cdOU/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -7668,7 +7668,7 @@
    "lang": "es",
    "date": "2024-08-13T18:12:20Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HIAxk2drRl4/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -7681,7 +7681,7 @@
      "La familia y AA"
     ],
     "is_short": false,
-    "views": 388,
+    "views": 389,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7696,7 +7696,7 @@
    "lang": "en",
    "date": "2024-08-12T04:30:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/qwuUXdrjFjM/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -7728,7 +7728,7 @@
    "lang": "en",
    "date": "2024-08-06T14:02:00Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/XsJw44yyGyg/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7741,7 +7741,7 @@
      "The Grapevine YPAA World Tour: Kickoff at the 64th ICYPAA in Austin"
     ],
     "is_short": false,
-    "views": 285,
+    "views": 286,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7756,7 +7756,7 @@
    "lang": "en",
    "date": "2024-08-06T14:01:55Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7vC6Rxxfv1k/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7784,7 +7784,7 @@
    "lang": "en",
    "date": "2024-08-06T14:01:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/b9f_3EgBTz4/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7812,7 +7812,7 @@
    "lang": "es",
    "date": "2024-08-06T14:01:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Mdth1s8kuCc/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -7840,7 +7840,7 @@
    "lang": "en",
    "date": "2024-08-06T14:01:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/bQs29j4avaQ/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7868,7 +7868,7 @@
    "lang": "en",
    "date": "2024-08-06T14:01:28Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/v7IfnP4xg0E/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7896,7 +7896,7 @@
    "lang": "en",
    "date": "2024-08-06T14:01:23Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/8hturVp9sJg/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7924,7 +7924,7 @@
    "lang": "en",
    "date": "2024-08-06T14:01:19Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HADhhsriBp4/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7952,7 +7952,7 @@
    "lang": "en",
    "date": "2024-08-06T14:01:16Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/XAM0ViEvGzM/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -7980,7 +7980,7 @@
    "lang": "en",
    "date": "2024-08-06T14:01:12Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/U_am4FpQAXY/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -8008,7 +8008,7 @@
    "lang": "en",
    "date": "2024-08-05T05:03:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/BX-CorW2JCM/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -8040,7 +8040,7 @@
    "lang": "en",
    "date": "2024-07-29T04:38:45Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/f_n_93cWtKY/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -8072,7 +8072,7 @@
    "lang": "en",
    "date": "2024-07-22T04:32:10Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/GNSyiZyRDAo/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -8104,7 +8104,7 @@
    "lang": "en",
    "date": "2024-07-15T04:29:16Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Tu7--g5Re7I/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -8136,7 +8136,7 @@
    "lang": "en",
    "date": "2024-07-11T22:31:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/x8QyF-hT0n0/hqdefault.jpg",
    "tags": [
     "asl"
@@ -8166,7 +8166,7 @@
    "lang": "en",
    "date": "2024-07-08T04:41:54Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/WJ1Hn-bt-AM/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -8198,7 +8198,7 @@
    "lang": "en",
    "date": "2024-07-01T17:56:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/1NREzlfftnM/hqdefault.jpg",
    "tags": [
     "asl"
@@ -8228,7 +8228,7 @@
    "lang": "en",
    "date": "2024-07-01T17:56:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4tXWts3Dzxc/hqdefault.jpg",
    "tags": [
     "asl"
@@ -8258,7 +8258,7 @@
    "lang": "en",
    "date": "2024-07-01T17:56:31Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/mKuECogGrrA/hqdefault.jpg",
    "tags": [
     "asl"
@@ -8273,7 +8273,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 3630,
+    "views": 3631,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -8288,7 +8288,7 @@
    "lang": "en",
    "date": "2024-07-01T04:26:46Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/vix_kvy8tSE/hqdefault.jpg",
    "tags": [
     "season-7"
@@ -8303,7 +8303,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 343,
+    "views": 344,
     "is_live_recording": false,
     "date_approx": false,
     "season": 7,
@@ -8320,7 +8320,7 @@
    "lang": "en",
    "date": "2024-06-24T04:32:22Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/hm3aPsFEGxs/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8335,7 +8335,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 334,
+    "views": 335,
     "is_live_recording": false,
     "date_approx": false,
     "season": 6,
@@ -8352,7 +8352,7 @@
    "lang": "en",
    "date": "2024-06-17T04:33:30Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/3CT5vdQLWrk/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8384,7 +8384,7 @@
    "lang": "es",
    "date": "2024-06-14T19:00:19Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/XiiaMOElISs/hqdefault.jpg",
    "tags": [
     "short"
@@ -8414,7 +8414,7 @@
    "lang": "en",
    "date": "2024-06-14T19:00:13Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/EbjToSvMr_o/hqdefault.jpg",
    "tags": [
     "short"
@@ -8444,7 +8444,7 @@
    "lang": "en",
    "date": "2024-06-10T04:37:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/fPcAFX53tzw/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8459,7 +8459,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 356,
+    "views": 357,
     "is_live_recording": false,
     "date_approx": false,
     "season": 6,
@@ -8476,7 +8476,7 @@
    "lang": "en",
    "date": "2024-06-03T04:34:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/9QFcGTDYIT8/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8508,7 +8508,7 @@
    "lang": "en",
    "date": "2024-05-27T05:06:16Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/IvJTOz1_h2E/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8540,7 +8540,7 @@
    "lang": "en",
    "date": "2024-05-20T04:33:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/1mrf-y-iImg/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8572,7 +8572,7 @@
    "lang": "en",
    "date": "2024-05-13T04:49:30Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/fdKWlJT6M1s/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8604,7 +8604,7 @@
    "lang": "en",
    "date": "2024-05-06T04:30:07Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/YcgtzeXOJ8k/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8619,7 +8619,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 398,
+    "views": 399,
     "is_live_recording": false,
     "date_approx": false,
     "season": 6,
@@ -8636,7 +8636,7 @@
    "lang": "en",
    "date": "2024-04-29T04:30:27Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/XDp4TH8bnZg/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8651,7 +8651,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 353,
+    "views": 354,
     "is_live_recording": false,
     "date_approx": false,
     "season": 6,
@@ -8668,7 +8668,7 @@
    "lang": "en",
    "date": "2024-04-22T04:32:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/e3crzmEoJQ4/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8700,7 +8700,7 @@
    "lang": "en",
    "date": "2024-04-15T04:33:36Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/mbRFguoXu3I/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8715,7 +8715,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 856,
+    "views": 858,
     "is_live_recording": false,
     "date_approx": false,
     "season": 6,
@@ -8732,7 +8732,7 @@
    "lang": "en",
    "date": "2024-04-08T04:29:16Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/kjbfgVpYnAc/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8764,7 +8764,7 @@
    "lang": "en",
    "date": "2024-04-01T04:28:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/eNOgJJqfkYc/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8796,7 +8796,7 @@
    "lang": "en",
    "date": "2024-03-25T04:34:15Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/2WsXnWC8X7c/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8828,7 +8828,7 @@
    "lang": "en",
    "date": "2024-03-18T04:25:19Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/qKyCyS6Y3WA/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8860,7 +8860,7 @@
    "lang": "en",
    "date": "2024-03-11T04:24:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6lHgxXDyJuk/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8892,7 +8892,7 @@
    "lang": "en",
    "date": "2024-03-04T05:30:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/FP1cut3iaVc/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8924,7 +8924,7 @@
    "lang": "en",
    "date": "2024-02-26T05:31:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/zFwtLBuLaWU/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8956,7 +8956,7 @@
    "lang": "en",
    "date": "2024-02-19T05:32:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/i0glGEWC21U/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -8988,7 +8988,7 @@
    "lang": "en",
    "date": "2024-02-12T05:30:05Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/fgkkka6j76U/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -9020,7 +9020,7 @@
    "lang": "en",
    "date": "2024-02-06T17:00:46Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ws_e71-N2eI/hqdefault.jpg",
    "tags": [
     "short"
@@ -9050,7 +9050,7 @@
    "lang": "es",
    "date": "2024-02-06T17:00:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/voISL22_4Zg/hqdefault.jpg",
    "tags": [
     "short"
@@ -9065,7 +9065,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 466,
+    "views": 467,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -9080,7 +9080,7 @@
    "lang": "en",
    "date": "2024-02-05T05:27:20Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/K_D4vVYb7Ao/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -9112,7 +9112,7 @@
    "lang": "en",
    "date": "2024-01-29T05:34:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/VhjRuryG5_U/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -9144,7 +9144,7 @@
    "lang": "en",
    "date": "2024-01-22T05:23:09Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/yDQSS9VEF1I/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -9176,7 +9176,7 @@
    "lang": "en",
    "date": "2024-01-17T21:37:07Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6w0jk__3HGs/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -9204,7 +9204,7 @@
    "lang": "en",
    "date": "2024-01-17T21:36:23Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/WLy7JnjUuSs/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -9232,7 +9232,7 @@
    "lang": "en",
    "date": "2024-01-17T21:35:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6U6y5quSiC8/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -9260,7 +9260,7 @@
    "lang": "en",
    "date": "2024-01-17T21:34:56Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/_SMCc6Oh4w8/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -9288,7 +9288,7 @@
    "lang": "en",
    "date": "2024-01-17T21:34:13Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/3pgFEpiQMGc/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -9316,7 +9316,7 @@
    "lang": "en",
    "date": "2024-01-17T21:33:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/BS4KrgK3Fxw/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -9329,7 +9329,7 @@
      "Blessed"
     ],
     "is_short": false,
-    "views": 695,
+    "views": 696,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -9344,7 +9344,7 @@
    "lang": "en",
    "date": "2024-01-17T21:33:14Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/1LbvC4heGVE/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -9372,7 +9372,7 @@
    "lang": "en",
    "date": "2024-01-15T05:32:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/UV1IQllH76g/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -9404,7 +9404,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:55Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/r7nb6h7wFsM/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9419,7 +9419,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 68,
+    "views": 70,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -9436,7 +9436,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:55Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/zuBsjYv4-aQ/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9468,7 +9468,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:54Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/k5NoBriAyHI/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9483,7 +9483,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 48,
+    "views": 49,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -9500,7 +9500,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:54Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/uQm587SneSM/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9515,7 +9515,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 86,
+    "views": 87,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -9532,7 +9532,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:54Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/SHjxLXO6vNU/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9564,7 +9564,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:54Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/wS2sGVD3jMk/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9596,7 +9596,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:54Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/zh3F-Kty5jo/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9611,7 +9611,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 190,
+    "views": 194,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -9628,7 +9628,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:54Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/PoXEMghs79A/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9643,7 +9643,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 480,
+    "views": 488,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -9660,7 +9660,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/zOS16jfH_hw/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -9692,7 +9692,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/0eNiZKBDuD4/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -9724,7 +9724,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HLZ4HO41gC8/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -9756,7 +9756,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/chUCYOzDcTk/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -9771,7 +9771,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 55,
+    "views": 56,
     "is_live_recording": false,
     "date_approx": false,
     "season": 2,
@@ -9788,7 +9788,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Vpmk9pz5l9M/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -9803,7 +9803,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 68,
+    "views": 69,
     "is_live_recording": false,
     "date_approx": false,
     "season": 2,
@@ -9820,7 +9820,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/V0oTKMfdPUc/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9835,7 +9835,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 58,
+    "views": 59,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -9852,7 +9852,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/8-zdevwie8I/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9867,7 +9867,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 145,
+    "views": 147,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -9884,7 +9884,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/TL8XAsIVuto/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9899,7 +9899,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 526,
+    "views": 540,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -9916,7 +9916,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4vqcgJ-bVkA/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9931,7 +9931,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 55,
+    "views": 56,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -9948,7 +9948,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/zbXM27pm-kY/hqdefault.jpg",
    "tags": [
     "season-1"
@@ -9963,7 +9963,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 55,
+    "views": 56,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -9980,7 +9980,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/njRPXDlogxE/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10012,7 +10012,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/fNcl8fF0CKQ/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10044,7 +10044,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/szaPxqMvZYw/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10059,7 +10059,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 43,
+    "views": 44,
     "is_live_recording": false,
     "date_approx": false,
     "season": 2,
@@ -10076,7 +10076,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/kHAT8kgeRVE/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10091,7 +10091,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 246,
+    "views": 248,
     "is_live_recording": false,
     "date_approx": false,
     "season": 2,
@@ -10108,7 +10108,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/XB0Ejjzte7A/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10140,7 +10140,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/DEYat-Z-Xh8/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -10168,7 +10168,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/x97MzUB79n4/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10200,7 +10200,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/5oGKl9hv5Hs/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10232,7 +10232,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/DwQoyFwzmuU/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10247,7 +10247,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 177,
+    "views": 179,
     "is_live_recording": false,
     "date_approx": false,
     "season": 2,
@@ -10264,7 +10264,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/AK6xE1wm5eY/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10296,7 +10296,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/R_xqBczT31c/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10328,7 +10328,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/gaejByGHgbo/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10360,7 +10360,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/TvLlBam9H50/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10392,7 +10392,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/9H8t06v7eQA/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10424,7 +10424,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/B5wLx2Z92sk/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10439,7 +10439,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 32,
+    "views": 33,
     "is_live_recording": false,
     "date_approx": false,
     "season": 2,
@@ -10456,7 +10456,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Ta8ln1C7EWg/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10488,7 +10488,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/yVTMoRS_7oI/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10520,7 +10520,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ygxbgykGZBI/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10552,7 +10552,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7THK-WuLwc8/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10584,7 +10584,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/UbrruARIOBI/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10616,7 +10616,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/C3ulelPvSrw/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -10631,7 +10631,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 13,
+    "views": 14,
     "is_live_recording": false,
     "date_approx": false,
     "season": 3,
@@ -10648,7 +10648,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/08G0c8vVBY0/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -10663,7 +10663,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 24,
+    "views": 31,
     "is_live_recording": false,
     "date_approx": false,
     "season": 3,
@@ -10680,7 +10680,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/TT_gGjXzVl8/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -10695,7 +10695,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 19,
+    "views": 21,
     "is_live_recording": false,
     "date_approx": false,
     "season": 3,
@@ -10712,7 +10712,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-pbQjjONGZQ/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -10727,7 +10727,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 29,
+    "views": 33,
     "is_live_recording": false,
     "date_approx": false,
     "season": 3,
@@ -10744,7 +10744,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/uE-erDenAq8/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -10776,7 +10776,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/m3vwKyryFcE/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -10791,7 +10791,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 508,
+    "views": 518,
     "is_live_recording": false,
     "date_approx": false,
     "season": 3,
@@ -10808,7 +10808,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Il5Gn0JtlXg/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -10840,7 +10840,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/AVmyZkRsego/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -10872,7 +10872,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/x1Oyg4fwV08/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -10904,7 +10904,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/krL93n2DIC8/hqdefault.jpg",
    "tags": [
     "season-2"
@@ -10936,7 +10936,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:43Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/aMNEMAwa6zM/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -10968,7 +10968,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/qbwS7Lq_2a0/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11000,7 +11000,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/za2YYc5-VUg/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11032,7 +11032,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/vLm0T04gLt8/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11064,7 +11064,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/D22-or4QzEI/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11096,7 +11096,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/eM21Hs5yaHg/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11128,7 +11128,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/pEIBJCK4WiQ/hqdefault.jpg",
    "tags": [
     "season-3",
@@ -11161,7 +11161,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6g6VHRhwOQE/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11193,7 +11193,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-oP03w0Crns/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11208,7 +11208,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 18,
+    "views": 19,
     "is_live_recording": false,
     "date_approx": false,
     "season": 3,
@@ -11225,7 +11225,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/BNgCHFsF6JQ/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11257,7 +11257,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/2SAgRFxxvaU/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11272,7 +11272,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 96,
+    "views": 98,
     "is_live_recording": false,
     "date_approx": false,
     "season": 4,
@@ -11289,7 +11289,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/JAoajWfS-dg/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11321,7 +11321,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ecORAOv6Huc/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11353,7 +11353,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/TSzj8CBi6TI/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11385,7 +11385,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7PuYoL_QBGc/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11400,7 +11400,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 83,
+    "views": 86,
     "is_live_recording": false,
     "date_approx": false,
     "season": 3,
@@ -11417,7 +11417,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/yJ4o2YFi3QU/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11449,7 +11449,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/kiPAXg58FZc/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11481,7 +11481,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/y80m-AaEYnc/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11513,7 +11513,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/09qVnsRnZUM/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11545,7 +11545,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/5zmYEVjxDk0/hqdefault.jpg",
    "tags": [
     "season-3"
@@ -11577,7 +11577,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/qNtcPPNeK40/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11609,7 +11609,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7D-11e2BFN0/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11641,7 +11641,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/bSTHk7ha2c8/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11673,7 +11673,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/0onXItnEyug/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11705,7 +11705,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/DoykC14YkTU/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11737,7 +11737,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/kSUor6kCXqM/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11769,7 +11769,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6ioB9ia1AeU/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11801,7 +11801,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/WjRi9I-Zn1I/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11833,7 +11833,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/kFh0Lnb4Xfs/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11865,7 +11865,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:37Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4dVbHwaINkc/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -11897,7 +11897,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/RyXlbjDlFZU/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -11929,7 +11929,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/h7SWh2fN-Jc/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -11961,7 +11961,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/CFUy7Vdn8eo/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -11993,7 +11993,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/JQcEaYT8gXU/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12025,7 +12025,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/bKwUSLGzQtM/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12057,7 +12057,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/naBo_osYbC0/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12089,7 +12089,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Ew_I8dm0o0c/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12121,7 +12121,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/qIHw50lpXso/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12153,7 +12153,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/mvwjnWIRqFQ/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12185,7 +12185,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6Gb6rB3slgk/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12217,7 +12217,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/47kwMu6WB4g/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -12249,7 +12249,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/LL9sCArvs4E/hqdefault.jpg",
    "tags": [
     "season-6"
@@ -12281,7 +12281,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/xHSp2UIvoVU/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12296,7 +12296,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 147,
+    "views": 148,
     "is_live_recording": false,
     "date_approx": false,
     "season": 5,
@@ -12313,7 +12313,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/UO-48DBj2fc/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12345,7 +12345,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/tblUZD8bW8E/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12377,7 +12377,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/F-W2X9cV7Ng/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12392,7 +12392,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 62,
+    "views": 63,
     "is_live_recording": false,
     "date_approx": false,
     "season": 5,
@@ -12409,7 +12409,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/fpaqQx2OWTE/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12441,7 +12441,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/_1utMfXsAlk/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12473,7 +12473,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:33Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Rc9aVCX_4Kw/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12505,7 +12505,7 @@
    "lang": "en",
    "date": "2024-01-12T14:33:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/TdAJktdAcWs/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12537,7 +12537,7 @@
    "lang": "en",
    "date": "2024-01-11T13:41:00Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-iuolnq7LPQ/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12569,7 +12569,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:54Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ekZItzDngNc/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12601,7 +12601,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/QdZ6_yC6ZZs/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12633,7 +12633,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/A4_o-R2JVFs/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12665,7 +12665,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Q2JGiALN4rA/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12697,7 +12697,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6N5LFDr6jpQ/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12729,7 +12729,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:30Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/FZlnGx-jr7k/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12761,7 +12761,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:26Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4q5JEyB0KIY/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12793,7 +12793,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:19Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/oxDr2rsLJbw/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -12821,7 +12821,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:15Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/OVMypDQJXGg/hqdefault.jpg",
    "tags": [
     "season-4"
@@ -12836,7 +12836,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 55,
+    "views": 56,
     "is_live_recording": false,
     "date_approx": false,
     "season": 4,
@@ -12853,7 +12853,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/hDGAdqCibT8/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12885,7 +12885,7 @@
    "lang": "en",
    "date": "2024-01-11T13:40:03Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4u_STiIvbyw/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12900,7 +12900,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 32,
+    "views": 33,
     "is_live_recording": false,
     "date_approx": false,
     "season": 5,
@@ -12917,7 +12917,7 @@
    "lang": "en",
    "date": "2024-01-11T13:39:58Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/NUYvOfWN8sk/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12949,7 +12949,7 @@
    "lang": "en",
    "date": "2024-01-11T13:39:55Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/dAlsK3igyzA/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -12981,7 +12981,7 @@
    "lang": "en",
    "date": "2024-01-11T13:39:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/aW2HAW9WXM0/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -13013,7 +13013,7 @@
    "lang": "en",
    "date": "2024-01-11T13:39:45Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/VMRnigNPGKk/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -13045,7 +13045,7 @@
    "lang": "en",
    "date": "2024-01-11T13:39:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/hhnjT8mqMVM/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -13077,7 +13077,7 @@
    "lang": "en",
    "date": "2024-01-11T13:38:25Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/K5dhiazI5zw/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -13109,7 +13109,7 @@
    "lang": "en",
    "date": "2024-01-11T13:38:17Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/dWsNIol7ukw/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -13141,7 +13141,7 @@
    "lang": "en",
    "date": "2024-01-11T13:38:10Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/KFHJOn3W340/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -13173,7 +13173,7 @@
    "lang": "en",
    "date": "2024-01-11T13:38:06Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/hW0sSmAazqc/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -13205,7 +13205,7 @@
    "lang": "en",
    "date": "2024-01-11T13:38:02Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/hXJyuRimRjM/hqdefault.jpg",
    "tags": [
     "season-5"
@@ -13237,7 +13237,7 @@
    "lang": "es",
    "date": "2023-11-22T17:51:28Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/G1K5JaiKLYk/hqdefault.jpg",
    "tags": [
     "short"
@@ -13252,7 +13252,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 563,
+    "views": 565,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13267,7 +13267,7 @@
    "lang": "en",
    "date": "2023-11-22T17:46:26Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/NWesIbTn6fw/hqdefault.jpg",
    "tags": [
     "short"
@@ -13297,7 +13297,7 @@
    "lang": "es",
    "date": "2023-09-01T05:59:30Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ALhzJN6HhsQ/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -13325,7 +13325,7 @@
    "lang": "en",
    "date": "2023-09-01T05:57:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/gOC7HK0pIVE/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13353,7 +13353,7 @@
    "lang": "en",
    "date": "2023-04-22T00:20:18Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-PcdfSIobPY/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13381,7 +13381,7 @@
    "lang": "en",
    "date": "2023-04-22T00:19:28Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ZKIvO0nRCxU/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13409,7 +13409,7 @@
    "lang": "en",
    "date": "2023-04-22T00:18:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7z6x3lC3Ods/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13437,7 +13437,7 @@
    "lang": "en",
    "date": "2023-04-22T00:17:31Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/mcG-oy6AJZw/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13465,7 +13465,7 @@
    "lang": "en",
    "date": "2023-04-22T00:15:36Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7yXf87a7pH0/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13493,7 +13493,7 @@
    "lang": "en",
    "date": "2023-04-22T00:14:45Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/zOgmNpd5pDA/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13521,7 +13521,7 @@
    "lang": "en",
    "date": "2023-04-22T00:13:55Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/M985gNEGlHU/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13549,7 +13549,7 @@
    "lang": "en",
    "date": "2023-01-12T20:59:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HuDw337XKSE/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13577,7 +13577,7 @@
    "lang": "en",
    "date": "2023-01-12T20:59:12Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7z2MeQkzKs0/hqdefault.jpg",
    "tags": [
     "live"
@@ -13607,7 +13607,7 @@
    "lang": "en",
    "date": "2023-01-12T20:58:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HuevnMFwRzM/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13635,7 +13635,7 @@
    "lang": "en",
    "date": "2023-01-12T20:55:02Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/ar8tC214RRA/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13663,7 +13663,7 @@
    "lang": "en",
    "date": "2023-01-12T20:45:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/EltCn5WCJa0/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13691,7 +13691,7 @@
    "lang": "en",
    "date": "2023-01-12T20:45:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/MpTjBabBGFg/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13719,7 +13719,7 @@
    "lang": "en",
    "date": "2022-12-01T21:07:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/wGYEj2Fb_QU/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13747,7 +13747,7 @@
    "lang": "en",
    "date": "2022-12-01T21:05:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/FYj6nnU3dxI/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13775,7 +13775,7 @@
    "lang": "en",
    "date": "2022-12-01T21:02:04Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HM1p8oq5FwI/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13803,7 +13803,7 @@
    "lang": "en",
    "date": "2022-12-01T20:55:20Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/HBmTinbBrHY/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13831,7 +13831,7 @@
    "lang": "en",
    "date": "2022-12-01T20:54:08Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/nAqtz1qlnDs/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13859,7 +13859,7 @@
    "lang": "en",
    "date": "2022-12-01T20:51:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6ebd-BUQN6o/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13887,7 +13887,7 @@
    "lang": "en",
    "date": "2022-12-01T20:39:59Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/R3tzAJCSj2Q/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -13915,7 +13915,7 @@
    "lang": "es",
    "date": "2021-12-10T16:41:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/K2JLkXtaLJM/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -13929,7 +13929,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 1718,
+    "views": 1719,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13944,7 +13944,7 @@
    "lang": "es",
    "date": "2021-12-10T16:39:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/vDyPK_xJAlg/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -13973,7 +13973,7 @@
    "lang": "es",
    "date": "2021-12-10T16:36:19Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/uNEicWpc4lE/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -13987,7 +13987,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 616,
+    "views": 617,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14002,7 +14002,7 @@
    "lang": "es",
    "date": "2021-12-10T16:35:04Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/u2-N8GW-NSw/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14031,7 +14031,7 @@
    "lang": "es",
    "date": "2021-12-10T16:30:36Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/AokFUqW2yL0/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14060,7 +14060,7 @@
    "lang": "es",
    "date": "2021-12-10T16:27:58Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/v7c1tpb0zmY/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14089,7 +14089,7 @@
    "lang": "es",
    "date": "2021-12-10T16:24:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/R1mQ5TkHoTU/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14103,7 +14103,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 1457,
+    "views": 1461,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14118,7 +14118,7 @@
    "lang": "es",
    "date": "2021-12-10T15:55:28Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/pr43JRpkuvk/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14147,7 +14147,7 @@
    "lang": "es",
    "date": "2021-12-10T15:49:36Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/vSBGoZEqI2Y/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14176,7 +14176,7 @@
    "lang": "es",
    "date": "2021-12-10T15:45:06Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/uVoIJEsySDU/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14205,7 +14205,7 @@
    "lang": "en",
    "date": "2021-11-13T01:51:04Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/UsO-FjBpYKc/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14233,7 +14233,7 @@
    "lang": "en",
    "date": "2021-11-13T01:48:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/yrvFf9WGkYg/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14261,7 +14261,7 @@
    "lang": "en",
    "date": "2021-11-13T01:45:49Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/YkBZNTbhIdg/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14289,7 +14289,7 @@
    "lang": "en",
    "date": "2021-11-13T01:44:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Yph3-dvVtt4/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14317,7 +14317,7 @@
    "lang": "en",
    "date": "2021-11-13T01:38:16Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/qXfP8ApfTjw/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14345,7 +14345,7 @@
    "lang": "en",
    "date": "2021-11-13T01:35:10Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/VqVEQTztbnA/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14373,7 +14373,7 @@
    "lang": "en",
    "date": "2021-11-13T01:29:54Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/jPoe6wBheeg/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14401,7 +14401,7 @@
    "lang": "en",
    "date": "2021-11-13T01:26:55Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/arLRiRBBFHM/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14429,7 +14429,7 @@
    "lang": "en",
    "date": "2021-04-05T17:35:24Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/SGaTMJ4ZKJM/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14457,7 +14457,7 @@
    "lang": "es",
    "date": "2021-04-05T17:33:44Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/WOyyA31JQL0/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14485,7 +14485,7 @@
    "lang": "en",
    "date": "2020-11-18T19:12:10Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/gVo1jgdsDSo/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14498,7 +14498,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 6471,
+    "views": 6476,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14513,7 +14513,7 @@
    "lang": "en",
    "date": "2020-11-18T19:10:45Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/aDHzHhg0Elg/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14541,7 +14541,7 @@
    "lang": "en",
    "date": "2020-11-18T18:59:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Bft5qYaPcmg/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14569,7 +14569,7 @@
    "lang": "en",
    "date": "2020-11-18T18:58:19Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/inhyPnsr6GU/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14597,7 +14597,7 @@
    "lang": "en",
    "date": "2020-11-18T18:56:17Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/cQcJxKOqZaA/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14610,7 +14610,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 2742,
+    "views": 2747,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14625,7 +14625,7 @@
    "lang": "en",
    "date": "2020-11-18T18:51:30Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/EpGOrld6nSc/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14653,7 +14653,7 @@
    "lang": "en",
    "date": "2020-11-18T18:47:09Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/EAx9eX4LdOI/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14666,7 +14666,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 1940,
+    "views": 1941,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14681,7 +14681,7 @@
    "lang": "en",
    "date": "2020-09-24",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/7x-1w_Gx9rQ/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14707,7 +14707,7 @@
    "lang": "es",
    "date": "2020-08-28T20:25:41Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/YMfX4kHh3nA/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14735,7 +14735,7 @@
    "lang": "es",
    "date": "2020-08-28T20:23:36Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/XE3bKZkA9Kc/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14763,7 +14763,7 @@
    "lang": "es",
    "date": "2020-08-28T20:21:39Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/eYd0jpODSyg/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14791,7 +14791,7 @@
    "lang": "es",
    "date": "2020-08-28T20:18:38Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/S_Fa46uJDLo/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14819,7 +14819,7 @@
    "lang": "es",
    "date": "2020-08-28T20:13:28Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-r8vFCh8JjM/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14847,7 +14847,7 @@
    "lang": "es",
    "date": "2020-08-28T20:08:13Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/q82cFDIn2Tg/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -14875,7 +14875,7 @@
    "lang": "en",
    "date": "2020-08-04T23:02:40Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/YXLs4S1-xsU/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14903,7 +14903,7 @@
    "lang": "en",
    "date": "2020-08-04T23:02:23Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4fmc3qZRLrg/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14931,7 +14931,7 @@
    "lang": "en",
    "date": "2020-08-04T23:02:06Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/glDSY4xE4f4/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14959,7 +14959,7 @@
    "lang": "en",
    "date": "2020-08-04T23:01:47Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/88VnSnkhKSE/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -14987,7 +14987,7 @@
    "lang": "en",
    "date": "2020-08-04T23:01:30Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Tr736faDC9k/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15000,7 +15000,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 1294,
+    "views": 1295,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15015,7 +15015,7 @@
    "lang": "en",
    "date": "2020-08-04T23:01:10Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/BidpcGO2Bdc/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15043,7 +15043,7 @@
    "lang": "en",
    "date": "2020-08-04T23:00:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/1K5_BsKoANg/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15056,7 +15056,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 1419,
+    "views": 1420,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15071,7 +15071,7 @@
    "lang": "en",
    "date": "2020-08-04T23:00:12Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/isulCDau0wk/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15084,7 +15084,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 6351,
+    "views": 6355,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15099,7 +15099,7 @@
    "lang": "es",
    "date": "2020-08-03T20:40:18Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-srLLoeZfQg/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15125,7 +15125,7 @@
    "lang": "es",
    "date": "2020-07-01T17:31:22Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/FrcD_j4pok4/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15153,7 +15153,7 @@
    "lang": "es",
    "date": "2020-07-01T17:26:34Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/lBfHb_cf-XI/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15181,7 +15181,7 @@
    "lang": "es",
    "date": "2020-07-01T17:11:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/i1XlhPRyxAE/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15209,7 +15209,7 @@
    "lang": "es",
    "date": "2020-07-01T17:08:43Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/mSRBtWnu388/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15237,7 +15237,7 @@
    "lang": "es",
    "date": "2020-07-01T17:06:42Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/CNLa_z-glKs/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15265,7 +15265,7 @@
    "lang": "es",
    "date": "2020-07-01T16:58:45Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/QQxpDmtWPVg/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15293,7 +15293,7 @@
    "lang": "en",
    "date": "2020-04-13T16:46:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/IPJQfdR5Pak/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15306,7 +15306,7 @@
      "Zoom \"How to\" Instructionals"
     ],
     "is_short": false,
-    "views": 4479,
+    "views": 4481,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15321,7 +15321,7 @@
    "lang": "es",
    "date": "2020-04-09T18:05:32Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-mH7kvtsOyU/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15349,7 +15349,7 @@
    "lang": "es",
    "date": "2020-04-09T18:05:31Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/xFu6hAFOGVQ/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15377,7 +15377,7 @@
    "lang": "es",
    "date": "2020-04-09T18:05:31Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/q1kON-IPX6c/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15405,7 +15405,7 @@
    "lang": "es",
    "date": "2020-04-09T18:05:31Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/RIzgaib0T90/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15433,7 +15433,7 @@
    "lang": "es",
    "date": "2020-04-09T18:05:31Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/H3nAKsdw-n0/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15446,7 +15446,7 @@
      "Audios de La Viña del 2019"
     ],
     "is_short": false,
-    "views": 10483,
+    "views": 10485,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15461,7 +15461,7 @@
    "lang": "es",
    "date": "2020-04-09T18:05:31Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/0aQxu8F-jPA/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15489,7 +15489,7 @@
    "lang": "en",
    "date": "2020-03-19T16:22:36Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/e1xvHnYCwHk/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15517,7 +15517,7 @@
    "lang": "es",
    "date": "2020-02-19T21:18:57Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/4qb3ok1xiF4/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15531,7 +15531,7 @@
      "CTM"
     ],
     "is_short": false,
-    "views": 6902,
+    "views": 6906,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15546,7 +15546,7 @@
    "lang": "en",
    "date": "2020-02-07T21:26:01Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/Okua-0S0v5c/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15559,7 +15559,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 825,
+    "views": 828,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15574,7 +15574,7 @@
    "lang": "en",
    "date": "2020-02-07T21:26:01Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/6m7FOAO1N2E/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15602,7 +15602,7 @@
    "lang": "en",
    "date": "2020-02-07T21:26:01Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/-uLgVKEcazY/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15615,7 +15615,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 4773,
+    "views": 4774,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15630,7 +15630,7 @@
    "lang": "en",
    "date": "2020-01-31T21:55:13Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/V55DUDvlsCQ/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15643,7 +15643,7 @@
      "CTM"
     ],
     "is_short": false,
-    "views": 14634,
+    "views": 14639,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15658,7 +15658,7 @@
    "lang": "en",
    "date": "2020-01-29T22:45:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/UgO2ERM3ysc/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15686,7 +15686,7 @@
    "lang": "en",
    "date": "2020-01-29T22:45:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/IRvt31q3zZ0/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15714,7 +15714,7 @@
    "lang": "en",
    "date": "2020-01-29T22:45:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/DvqEmaYkYHY/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15727,7 +15727,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 2901,
+    "views": 2903,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15742,7 +15742,7 @@
    "lang": "en",
    "date": "2020-01-29T22:45:21Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/5zI6NCv3io4/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15770,7 +15770,7 @@
    "lang": "es",
    "date": "2020-01-29T21:53:59Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/wV_9uHDCUow/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -15799,7 +15799,7 @@
    "lang": "en",
    "date": "2020-01-27T21:07:35Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/A9_01Vqt4LQ/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15827,7 +15827,7 @@
    "lang": "en",
    "date": "2019-11-06T17:03:50Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/aDPJMKlDL5E/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15853,7 +15853,7 @@
    "lang": "en",
    "date": "2019-11-05T20:36:25Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/PbQq7sQ6358/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15879,7 +15879,7 @@
    "lang": "en",
    "date": "2019-10-31T20:49:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/z0LTOzRaXe8/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15907,7 +15907,7 @@
    "lang": "en",
    "date": "2019-10-31T20:49:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/hysQm-TSXOY/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15935,7 +15935,7 @@
    "lang": "en",
    "date": "2019-10-31T20:49:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/dKLaM6dXg_U/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15948,7 +15948,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 885,
+    "views": 886,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15963,7 +15963,7 @@
    "lang": "en",
    "date": "2019-10-31T20:49:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/bkDne0_kyZ8/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -15991,7 +15991,7 @@
    "lang": "en",
    "date": "2019-10-31T20:49:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/OAYSb5AwnSw/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -16004,7 +16004,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 3801,
+    "views": 3802,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16019,7 +16019,7 @@
    "lang": "en",
    "date": "2019-10-31T20:49:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/EfRqtFiXZlA/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -16032,7 +16032,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 3161,
+    "views": 3162,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16047,7 +16047,7 @@
    "lang": "en",
    "date": "2019-10-31T20:49:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/5p_JtgeGIVM/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -16075,7 +16075,7 @@
    "lang": "en",
    "date": "2019-10-31T20:49:53Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/0maeGVBwXyE/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -16088,7 +16088,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 6842,
+    "views": 6843,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16103,7 +16103,7 @@
    "lang": "en",
    "date": "2019-10-09T16:53:36Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/NkvUzcEMyyA/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -16129,7 +16129,7 @@
    "lang": "en",
    "date": "2019-07-09T20:27:09Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/tLWOddnv4GY/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -16157,7 +16157,7 @@
    "lang": "es",
    "date": "2019-07-09T20:26:52Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/vri5d6uL7Js/hqdefault.jpg",
    "tags": [],
    "category": "lv",
@@ -16185,7 +16185,7 @@
    "lang": "en",
    "date": "2018-05-02T15:59:56Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/QigTuObYKT0/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -16211,7 +16211,7 @@
    "lang": "en",
    "date": "2018-04-23T21:31:36Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/xC1r3IoCh34/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -16237,7 +16237,7 @@
    "lang": "en",
    "date": "2018-04-23T21:31:11Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/IpL6lGf9ZPs/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -16263,7 +16263,7 @@
    "lang": "en",
    "date": "2018-04-23T21:25:56Z",
    "first_seen": "2026-09-23T16:31:23Z",
-   "last_seen": "2026-10-01T07:19:54Z",
+   "last_seen": "2026-10-08T14:41:11Z",
    "image": "https://i.ytimg.com/vi/K6Oe1tviYHA/hqdefault.jpg",
    "tags": [],
    "category": "gv",
@@ -16281,7 +16281,7 @@
   }
  ],
  "first_harvest": "2026-09-23T16:31:23Z",
- "backfilled_at": "2026-10-01T07:19:19Z",
+ "backfilled_at": "2026-10-08T14:40:35Z",
  "playlists": [
   {
    "id": "PL32cyZpp2liCb8EXdMK47WtgrVtgf7PmW",
@@ -16295,7 +16295,7 @@
    "id": "PL32cyZpp2liBJo_5EY1huEiM1lxjFnqBJ",
    "title": "Grapevine Weekly Open AA Meeting",
    "lang": "en",
-   "count": 34,
+   "count": 35,
    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
    "url": "https://www.youtube.com/playlist?list=PL32cyZpp2liBJo_5EY1huEiM1lxjFnqBJ"
   },
@@ -16367,7 +16367,7 @@
    "id": "PL32cyZpp2liBOcLY6M6rEh1qFL7MKSFI7",
    "title": "American Sign Language",
    "lang": "und",
-   "count": 21,
+   "count": 22,
    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
    "url": "https://www.youtube.com/playlist?list=PL32cyZpp2liBOcLY6M6rEh1qFL7MKSFI7"
   },
@@ -16383,7 +16383,7 @@
    "id": "PL32cyZpp2liATl4raiWYN1v51F_CPqQDq",
    "title": "AA Grapevine's Podcast",
    "lang": "en",
-   "count": 262,
+   "count": 263,
    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
    "url": "https://www.youtube.com/playlist?list=PL32cyZpp2liATl4raiWYN1v51F_CPqQDq"
   },

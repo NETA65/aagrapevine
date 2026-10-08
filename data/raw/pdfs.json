@@ -1,7 +1,7 @@
 {
  "source": "pdfs",
- "updated": "2026-10-07T14:43:52Z",
- "attempted": "2026-10-07T14:43:52Z",
+ "updated": "2026-10-08T14:49:24Z",
+ "attempted": "2026-10-08T14:49:24Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -18,17 +18,17 @@
   "pdfs_gone": 12,
   "pdfs_with_details": 129,
   "pdfs_with_thumbs": 129,
-  "last_run_pages": 27,
-  "fetched": 27,
-  "reused": 13,
+  "last_run_pages": 26,
+  "fetched": 26,
+  "reused": 16,
   "new": 0,
   "not_modified": 0,
   "page_errors": 0,
   "discovered": 0,
   "details": 0,
-  "heads": 0,
-  "requests": 29,
-  "pruned_pages": 18,
+  "heads": 12,
+  "requests": 38,
+  "pruned_pages": 0,
   "queue_remaining": 0,
   "est_days_to_full": 0.0
  },
@@ -554,7 +554,7 @@
    "lang": "en",
    "date": "2026-09-15",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/3b4f20f9a3f0fb61.webp",
    "tags": [
     "news"
@@ -593,7 +593,7 @@
    "lang": "en",
    "date": "2026-08-21",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/88072b05c7ae4cc1.webp",
    "tags": [
     "order-form"
@@ -634,7 +634,7 @@
    "lang": "en",
    "date": "2026-08-21",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/84ae8ef99f47d8a7.webp",
    "tags": [
     "order-form"
@@ -675,7 +675,7 @@
    "lang": "es",
    "date": "2026-08-21",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/c7df47b41d9f194c.webp",
    "tags": [
     "order-form"
@@ -716,7 +716,7 @@
    "lang": "es",
    "date": "2026-08-21",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/0c63e49cdbc729d3.webp",
    "tags": [
     "order-form"
@@ -757,7 +757,7 @@
    "lang": "en",
    "date": "2026-08-21",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/06fd84448557aa9a.webp",
    "tags": [
     "order-form"
@@ -798,7 +798,7 @@
    "lang": "es",
    "date": "2026-08-21",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/9f66a1263a2a43f4.webp",
    "tags": [
     "order-form"
@@ -839,7 +839,7 @@
    "lang": "es",
    "date": "2026-08-21",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/4471bb184aff6f77.webp",
    "tags": [
     "order-form"
@@ -880,7 +880,7 @@
    "lang": "es",
    "date": "2026-08-14",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/06d9980f7a14d442.webp",
    "tags": [
     "news"
@@ -919,7 +919,7 @@
    "lang": "en",
    "date": "2026-03-31",
    "first_seen": "2026-09-23T16:35:10Z",
-   "last_seen": "2026-09-30T15:53:37Z",
+   "last_seen": "2026-10-08T14:48:22Z",
    "image": "/assets/cache/pdf/783531d417d6ddc5.webp",
    "tags": [],
    "category": "news",
@@ -956,7 +956,7 @@
    "lang": "en",
    "date": "2026-03-31",
    "first_seen": "2026-09-23T16:32:30Z",
-   "last_seen": "2026-09-30T15:52:17Z",
+   "last_seen": "2026-10-08T14:47:12Z",
    "image": "/assets/cache/pdf/66ca3ec18987b396.webp",
    "tags": [],
    "category": "news",
@@ -993,7 +993,7 @@
    "lang": "en",
    "date": "2026-03-31",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/07004da3dd1298c0.webp",
    "tags": [
     "workbook"
@@ -1034,7 +1034,7 @@
    "lang": "en",
    "date": "2026-02-27",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/1a2d0bbff1d2dc48.webp",
    "tags": [
     "postcard"
@@ -1075,7 +1075,7 @@
    "lang": "es",
    "date": "2026-02-27",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/36f8cbc11009653c.webp",
    "tags": [
     "postcard"
@@ -1116,7 +1116,7 @@
    "lang": "en",
    "date": "2026-02-27",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/52ad1c5c67364cb8.webp",
    "tags": [
     "postcard"
@@ -1157,7 +1157,7 @@
    "lang": "en",
    "date": "2026-02-18",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/dc071bae68b2b5dd.webp",
    "tags": [
     "guidelines"
@@ -1198,7 +1198,7 @@
    "lang": "en",
    "date": "2026-02-18",
    "first_seen": "2026-09-23T16:33:01Z",
-   "last_seen": "2026-09-30T15:52:59Z",
+   "last_seen": "2026-10-08T14:47:58Z",
    "image": "/assets/cache/pdf/37b867242f163ec5.webp",
    "tags": [],
    "category": "guidelines",
@@ -1239,7 +1239,7 @@
    "lang": "en",
    "date": "2026-02-02",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:07Z",
+   "last_seen": "2026-10-08T14:47:02Z",
    "image": "/assets/cache/pdf/43a3c9f07b2123be.webp",
    "tags": [
     "catalog"
@@ -1286,7 +1286,7 @@
    "lang": "es",
    "date": "2026-02-02",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:32Z",
+   "last_seen": "2026-10-08T14:48:17Z",
    "image": "/assets/cache/pdf/deec20bb607cdcaf.webp",
    "tags": [
     "catalog"
@@ -1333,7 +1333,7 @@
    "lang": "en",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/b99b60bb25069613.webp",
    "tags": [
     "postcard"
@@ -1374,7 +1374,7 @@
    "lang": "en",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/98c45b8072b5ede0.webp",
    "tags": [
     "postcard"
@@ -1415,7 +1415,7 @@
    "lang": "en",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/7756943c8098052a.webp",
    "tags": [
     "postcard"
@@ -1456,7 +1456,7 @@
    "lang": "en",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/47ce67b100b6b5f8.webp",
    "tags": [
     "postcard"
@@ -1497,7 +1497,7 @@
    "lang": "en",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/16ff103a8e560017.webp",
    "tags": [
     "postcard"
@@ -1538,7 +1538,7 @@
    "lang": "es",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/12db76ab9b4b8251.webp",
    "tags": [
     "postcard"
@@ -1579,7 +1579,7 @@
    "lang": "en",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/87268e522aca4eab.webp",
    "tags": [
     "postcard"
@@ -1620,7 +1620,7 @@
    "lang": "en",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/1a63c437e130b50d.webp",
    "tags": [
     "postcard"
@@ -1661,7 +1661,7 @@
    "lang": "es",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/629a8e1ad1b9c754.webp",
    "tags": [
     "postcard"
@@ -1702,7 +1702,7 @@
    "lang": "es",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/452a10c9aa242ac3.webp",
    "tags": [
     "postcard"
@@ -1743,7 +1743,7 @@
    "lang": "es",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/80459bad57a90a23.webp",
    "tags": [
     "postcard"
@@ -1784,7 +1784,7 @@
    "lang": "es",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/b9252fa7f9be49a7.webp",
    "tags": [
     "postcard"
@@ -1825,7 +1825,7 @@
    "lang": "es",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/c09c5d737ba0be65.webp",
    "tags": [
     "postcard"
@@ -1866,7 +1866,7 @@
    "lang": "es",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/6698f4ea422e98b3.webp",
    "tags": [
     "postcard"
@@ -1907,7 +1907,7 @@
    "lang": "en",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/3577a6c0d35346d7.webp",
    "tags": [
     "postcard"
@@ -1948,7 +1948,7 @@
    "lang": "en",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/8b41cec5a51021d0.webp",
    "tags": [
     "postcard"
@@ -1989,7 +1989,7 @@
    "lang": "es",
    "date": "2026-01-08",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/6204f8818b748ca1.webp",
    "tags": [
     "postcard"
@@ -2030,7 +2030,7 @@
    "lang": "es",
    "date": "2026-01-07",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:59Z",
+   "last_seen": "2026-10-08T14:48:55Z",
    "image": "/assets/cache/pdf/deb7b50edbf6c7db.webp",
    "tags": [
     "guidelines"
@@ -2075,7 +2075,7 @@
    "lang": "es",
    "date": "2025-09-24",
    "first_seen": "2026-09-23T16:35:10Z",
-   "last_seen": "2026-09-30T15:53:37Z",
+   "last_seen": "2026-10-08T14:48:22Z",
    "image": "/assets/cache/pdf/ad5be4309243763e.webp",
    "tags": [],
    "category": "news",
@@ -2112,7 +2112,7 @@
    "lang": "en",
    "date": "2025-09-24",
    "first_seen": "2026-09-23T16:32:30Z",
-   "last_seen": "2026-09-30T15:52:17Z",
+   "last_seen": "2026-10-08T14:47:12Z",
    "image": "/assets/cache/pdf/f308af095e816425.webp",
    "tags": [],
    "category": "news",
@@ -2151,7 +2151,7 @@
    "lang": "es",
    "date": "2025-07-30",
    "first_seen": "2026-09-23T16:35:43Z",
-   "last_seen": "2026-09-30T15:53:59Z",
+   "last_seen": "2026-10-08T14:48:55Z",
    "image": "/assets/cache/pdf/85cd0d1585f6f70f.webp",
    "tags": [],
    "category": "other",
@@ -2188,7 +2188,7 @@
    "lang": "es",
    "date": "2025-07-01",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/97e5716146777c2e.webp",
    "tags": [
     "service"
@@ -2229,7 +2229,7 @@
    "lang": "en",
    "date": "2025-03-25",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/15b1c7506bc8dce6.webp",
    "tags": [
     "service"
@@ -2270,7 +2270,7 @@
    "lang": "es",
    "date": "2025-03-25",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/663b07196b3c4bd8.webp",
    "tags": [
     "service"
@@ -2311,7 +2311,7 @@
    "lang": "en",
    "date": "2025-03-25",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/860bfed83754f64e.webp",
    "tags": [
     "service"
@@ -2352,7 +2352,7 @@
    "lang": "es",
    "date": "2025-03-25",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/12b4c45b814370c3.webp",
    "tags": [
     "service"
@@ -2393,7 +2393,7 @@
    "lang": "es",
    "date": "2025-01-03",
    "first_seen": "2026-09-23T16:35:33Z",
-   "last_seen": "2026-09-30T15:53:54Z",
+   "last_seen": "2026-10-08T14:48:50Z",
    "image": "/assets/cache/pdf/ef200fc9a6933af3.webp",
    "tags": [],
    "category": "service",
@@ -2469,7 +2469,7 @@
    "lang": "en",
    "date": "2024-12-04",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/b71a6351d37761a9.webp",
    "tags": [
     "literature"
@@ -2510,7 +2510,7 @@
    "lang": "es",
    "date": "2024-10-10",
    "first_seen": "2026-09-23T16:35:16Z",
-   "last_seen": "2026-09-30T15:53:43Z",
+   "last_seen": "2026-10-08T14:48:28Z",
    "image": "/assets/cache/pdf/80b857c93aa4d9e6.webp",
    "tags": [],
    "category": "news",
@@ -2584,7 +2584,7 @@
    "lang": "en",
    "date": "2024-08-08",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/3fef49e6cff7a752.webp",
    "tags": [
     "service"
@@ -2662,7 +2662,7 @@
    "lang": "en",
    "date": "2024-05-24",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/214314cd41d9a6b6.webp",
    "tags": [
     "order-form"
@@ -2703,7 +2703,7 @@
    "lang": "es",
    "date": "2024-05-24",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/90ad5e6b55e380ff.webp",
    "tags": [
     "order-form"
@@ -2744,7 +2744,7 @@
    "lang": "en",
    "date": "2024-05-24",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/84bb6e16ff0bd9f4.webp",
    "tags": [
     "order-form"
@@ -2785,7 +2785,7 @@
    "lang": "en",
    "date": "2024-05-24",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/1accaa943f341a91.webp",
    "tags": [
     "order-form"
@@ -2826,7 +2826,7 @@
    "lang": "en",
    "date": "2024-05-15",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/ed3575afc692fc24.webp",
    "tags": [
     "postcard"
@@ -2867,7 +2867,7 @@
    "lang": "en",
    "date": "2024-05-02",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/aadedeffd40e0a09.webp",
    "tags": [
     "postcard"
@@ -2908,7 +2908,7 @@
    "lang": "es",
    "date": "2024-05-02",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/c829fed91a19125b.webp",
    "tags": [
     "postcard"
@@ -2949,7 +2949,7 @@
    "lang": "en",
    "date": "2024-05-02",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/4e6c7d14474e90d9.webp",
    "tags": [
     "postcard"
@@ -2990,7 +2990,7 @@
    "lang": "en",
    "date": "2024-02-16",
    "first_seen": "2026-09-23T16:32:46Z",
-   "last_seen": "2026-09-30T15:52:29Z",
+   "last_seen": "2026-10-08T14:47:24Z",
    "image": "/assets/cache/pdf/513a3f70ac4443b3.webp",
    "tags": [],
    "category": "news",
@@ -3027,7 +3027,7 @@
    "lang": "en",
    "date": "2023-09-19",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/958990011a8f5319.webp",
    "tags": [
     "postcard"
@@ -3068,7 +3068,7 @@
    "lang": "es",
    "date": "2023-09-19",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/86fd6990d74af1fd.webp",
    "tags": [
     "postcard"
@@ -3109,7 +3109,7 @@
    "lang": "en",
    "date": "2023-09-14",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/6b1252c90bd4e838.webp",
    "tags": [
     "postcard"
@@ -3150,7 +3150,7 @@
    "lang": "es",
    "date": "2023-09-14",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/00c278e47d5dae77.webp",
    "tags": [
     "postcard"
@@ -3191,7 +3191,7 @@
    "lang": "es",
    "date": "2023-09-05",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/9372f4b133057e9a.webp",
    "tags": [
     "postcard"
@@ -3232,7 +3232,7 @@
    "lang": "es",
    "date": "2023-06-06",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/7a460ec6a9327fa4.webp",
    "tags": [
     "workbook"
@@ -3273,7 +3273,7 @@
    "lang": "en",
    "date": "2023-03-23",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/499d34a9edf44200.webp",
    "tags": [
     "postcard"
@@ -3352,7 +3352,7 @@
    "lang": "en",
    "date": "2023-02-17",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/9bccc7e53e894592.webp",
    "tags": [
     "guidelines"
@@ -3393,7 +3393,7 @@
    "lang": "en",
    "date": "2023-02-17",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/1c273b52faf9d65e.webp",
    "tags": [
     "guidelines"
@@ -3508,7 +3508,7 @@
    "lang": "es",
    "date": "2022-11-02",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/7103cfa7646a1b7f.webp",
    "tags": [
     "postcard"
@@ -3549,7 +3549,7 @@
    "lang": "en",
    "date": "2022-11-02",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/1a714a5eb3cd28bc.webp",
    "tags": [
     "postcard"
@@ -3590,7 +3590,7 @@
    "lang": "es",
    "date": "2022-11-02",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/975d663513555e7c.webp",
    "tags": [
     "postcard"
@@ -3631,7 +3631,7 @@
    "lang": "en",
    "date": "2022-11-02",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/371d7cd3445ff793.webp",
    "tags": [
     "postcard"
@@ -3711,7 +3711,7 @@
    "lang": "en",
    "date": "2022-09-12",
    "first_seen": "2026-09-23T16:32:24Z",
-   "last_seen": "2026-09-30T15:52:12Z",
+   "last_seen": "2026-10-08T14:47:07Z",
    "image": "/assets/cache/pdf/21b819b85a9ebac0.webp",
    "tags": [],
    "category": "news",
@@ -3748,7 +3748,7 @@
    "lang": "es",
    "date": "2022-08-29",
    "first_seen": "2026-09-23T16:32:24Z",
-   "last_seen": "2026-09-30T15:53:49Z",
+   "last_seen": "2026-10-08T14:48:45Z",
    "image": "/assets/cache/pdf/dc164744bb1fd3ec.webp",
    "tags": [],
    "category": "news",
@@ -3791,7 +3791,7 @@
    "lang": "en",
    "date": "2022-08-29",
    "first_seen": "2026-09-23T16:35:27Z",
-   "last_seen": "2026-09-30T15:53:49Z",
+   "last_seen": "2026-10-08T14:48:45Z",
    "image": "/assets/cache/pdf/068112ae483f537b.webp",
    "tags": [],
    "category": "news",
@@ -3830,7 +3830,7 @@
    "lang": "en",
    "date": "2022-08-29",
    "first_seen": "2026-09-23T16:32:24Z",
-   "last_seen": "2026-09-30T15:53:49Z",
+   "last_seen": "2026-10-08T14:48:45Z",
    "image": "/assets/cache/pdf/e988c419172afc49.webp",
    "tags": [],
    "category": "news",
@@ -3953,7 +3953,7 @@
    "lang": "en",
    "date": "2022-06-15",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/ab7ca00ffa486ebf.webp",
    "tags": [
     "literature"
@@ -4070,7 +4070,7 @@
    "lang": "en",
    "date": "2021-12-03",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/2eeff7852f12d30e.webp",
    "tags": [
     "postcard"
@@ -4111,7 +4111,7 @@
    "lang": "en",
    "date": "2021-12-03",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/cebb6e0c52899b61.webp",
    "tags": [
     "postcard"
@@ -4152,7 +4152,7 @@
    "lang": "es",
    "date": "2021-12-03",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/edab663272243e45.webp",
    "tags": [
     "postcard"
@@ -4268,7 +4268,7 @@
    "lang": "en",
    "date": "2021-08-04",
    "first_seen": "2026-09-23T16:32:40Z",
-   "last_seen": "2026-09-30T15:52:23Z",
+   "last_seen": "2026-10-08T14:47:18Z",
    "image": "/assets/cache/pdf/e6269ba5c7e98311.webp",
    "tags": [],
    "category": "news",
@@ -4312,7 +4312,7 @@
    "lang": "en",
    "date": "2021-08-04",
    "first_seen": "2026-09-23T16:32:40Z",
-   "last_seen": "2026-09-30T15:52:23Z",
+   "last_seen": "2026-10-08T14:47:18Z",
    "image": "/assets/cache/pdf/9a31506105fb5aae.webp",
    "tags": [],
    "category": "news",
@@ -4356,7 +4356,7 @@
    "lang": "en",
    "date": "2021-08-04",
    "first_seen": "2026-09-23T16:32:40Z",
-   "last_seen": "2026-09-30T15:52:23Z",
+   "last_seen": "2026-10-08T14:47:18Z",
    "image": "/assets/cache/pdf/bc77b83a78872b55.webp",
    "tags": [],
    "category": "news",
@@ -4532,7 +4532,7 @@
    "lang": "en",
    "date": "2021-05-24",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/017d9a73c5ea8409.webp",
    "tags": [
     "literature"
@@ -4573,7 +4573,7 @@
    "lang": "en",
    "date": "2021-05-24",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/ee332f3a2bdcec06.webp",
    "tags": [
     "literature"
@@ -4735,7 +4735,7 @@
    "lang": "es",
    "date": "2021-01-21",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/4ba168777b90fd13.webp",
    "tags": [],
    "category": "rlv",
@@ -4774,7 +4774,7 @@
    "lang": "en",
    "date": "2021-01-21",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/7ce9ca1221d8d320.webp",
    "tags": [],
    "category": "gvr",
@@ -4813,7 +4813,7 @@
    "lang": "es",
    "date": "2021-01-21",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/ac1914fe80d6cf42.webp",
    "tags": [],
    "category": "rlv",
@@ -4852,7 +4852,7 @@
    "lang": "en",
    "date": "2021-01-21",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/2f5e68ed2e67f5dd.webp",
    "tags": [],
    "category": "gvr",
@@ -4891,7 +4891,7 @@
    "lang": "es",
    "date": "2021-01-21",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/13eb77d3afffc849.webp",
    "tags": [],
    "category": "rlv",
@@ -4930,7 +4930,7 @@
    "lang": "es",
    "date": "2020-09-08",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/c94db17d31dc0a56.webp",
    "tags": [
     "postcard"
@@ -4971,7 +4971,7 @@
    "lang": "es",
    "date": "2020-09-08",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/9ecaa2e1cb4af858.webp",
    "tags": [
     "postcard"
@@ -5012,7 +5012,7 @@
    "lang": "es",
    "date": "2020-08-26",
    "first_seen": "2026-09-23T16:36:08Z",
-   "last_seen": "2026-09-30T15:54:14Z",
+   "last_seen": "2026-10-08T14:49:11Z",
    "image": "/assets/cache/pdf/22c088624056db20.webp",
    "tags": [],
    "category": "order-form",
@@ -5049,7 +5049,7 @@
    "lang": "es",
    "date": "2020-08-26",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/d961c93a40c5f271.webp",
    "tags": [],
    "category": "rlv",
@@ -5088,7 +5088,7 @@
    "lang": "es",
    "date": "2020-08-26",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/b4bd767eade4bc5e.webp",
    "tags": [
     "postcard"
@@ -5129,7 +5129,7 @@
    "lang": "es",
    "date": "2020-08-26",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/16e3868989b530cb.webp",
    "tags": [
     "guidelines"
@@ -5170,7 +5170,7 @@
    "lang": "es",
    "date": "2020-08-26",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/028c038c4067cd57.webp",
    "tags": [
     "guidelines"
@@ -5215,7 +5215,7 @@
    "lang": "es",
    "date": "2020-08-26",
    "first_seen": "2026-09-23T16:34:39Z",
-   "last_seen": "2026-09-30T15:53:26Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/4d7d701d03240dc8.webp",
    "tags": [
     "guidelines"
@@ -5256,7 +5256,7 @@
    "lang": "en",
    "date": "2020-08-24",
    "first_seen": "2026-09-23T16:33:01Z",
-   "last_seen": "2026-09-30T15:52:39Z",
+   "last_seen": "2026-10-08T14:47:34Z",
    "image": "/assets/cache/pdf/11cb4e58801d547f.webp",
    "tags": [],
    "category": "other",
@@ -5334,7 +5334,7 @@
    "lang": "en",
    "date": "2020-01-01",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/1f9a03e84f7a06fe.webp",
    "tags": [
     "guidelines"
@@ -5379,7 +5379,7 @@
    "lang": "en",
    "date": "2020-01-01",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/0a860da72f01ed5a.webp",
    "tags": [
     "guidelines"
@@ -5424,7 +5424,7 @@
    "lang": "en",
    "date": "2020-01-01",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/d7d42e5ceff06185.webp",
    "tags": [
     "postcard"
@@ -5465,7 +5465,7 @@
    "lang": "en",
    "date": "2020-01-01",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/eed64d52e6de7e37.webp",
    "tags": [
     "postcard"
@@ -5506,7 +5506,7 @@
    "lang": "en",
    "date": "2020-01-01",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/92f1ed7b303abd4a.webp",
    "tags": [
     "postcard"
@@ -5547,7 +5547,7 @@
    "lang": "en",
    "date": "2020-01-01",
    "first_seen": "2026-09-23T16:31:37Z",
-   "last_seen": "2026-09-30T15:53:21Z",
+   "last_seen": "2026-10-08T14:48:12Z",
    "image": "/assets/cache/pdf/ecd56494be6a1af5.webp",
    "tags": [],
    "category": "other",
@@ -5594,7 +5594,7 @@
    "lang": "en",
    "date": "2020-01-01",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/d8d096df517b9dfd.webp",
    "tags": [],
    "category": "gvr",
@@ -5633,7 +5633,7 @@
    "lang": "en",
    "date": "2020-01-01",
    "first_seen": "2026-09-23T16:31:53Z",
-   "last_seen": "2026-09-30T15:52:02Z",
+   "last_seen": "2026-10-08T14:46:57Z",
    "image": "/assets/cache/pdf/91f7799a1976ce4a.webp",
    "tags": [],
    "category": "gvr",
@@ -5799,7 +5799,7 @@
   "known_pages": 3435,
   "crawled_pages": 3435,
   "pdfs": 130,
-  "last_run_pages": 27
+  "last_run_pages": 26
  },
  "hub_problems": []
 }

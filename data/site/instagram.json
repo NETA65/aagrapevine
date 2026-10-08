@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-07T14:36:19Z",
+ "updated": "2026-10-08T14:41:32Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16917,
-   "posts": 3926,
+   "followers": 16916,
+   "posts": 3928,
    "owner_id": "48108439509",
-   "checked": "2026-10-07T14:36:00Z",
+   "checked": "2026-10-08T14:41:13Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,186 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2424,
-   "posts": 2959,
+   "followers": 2422,
+   "posts": 2961,
    "owner_id": "48275839129",
-   "checked": "2026-10-07T14:36:04Z",
+   "checked": "2026-10-08T14:41:16Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DeO1HexjHK2",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeO1HexjHK2/",
+   "title": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my…",
+   "summary": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my Fourth Step, an old-timer suggested I list the names of those against whom I held resentments, followed by two or three sentences describing what they had done to earn my displeasure. Then, after putting the list aside for a day, I was to cross off each person’s name and replace it with my own.” “Mirror…",
+   "lang": "en",
+   "date": "2026-10-08T11:30:14Z",
+   "first_seen": "2026-10-08T14:41:31Z",
+   "image": "/assets/cache/ig/DeO1HexjHK2.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeO1HexjHK2",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeO1HexjHK2.webp",
+    "embed_url": "https://www.instagram.com/p/DeO1HexjHK2/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeO1HexjHK2/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my…",
+     "es": "“A veces tomar el inventario de alguien más puede ser muy beneficioso. Cuando estaba haciendo mi …"
+    },
+    "summary": {
+     "en": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my Fourth Step, an old-timer suggested I list the names of those against whom I held resentments, followed by two or three sentences describing what they had done to earn my displeasure. Then, after putting the list aside for a day, I was to cross off each person’s name and replace it with my own.” “Mirror…",
+     "es": "“A veces tomar el inventario de alguien más puede ser muy beneficioso. Cuando estaba haciendo mi Cuarto Paso, un veterano sugirió que enumerara los nombres de aquellos contra quienes mantuve resentimientos, seguido de dos o tres frases que describían lo que habían hecho para ganar mi descontento. Luego, después de dejar la lista a un lado por un día, yo iba a cruzar el nombre de cada persona y reemplazarla por mi propio.” “Mirror …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeO1HeJDJa6",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeO1HeJDJa6/",
+   "title": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos…",
+   "summary": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos en la posición de tener que admitirlo”. \"“Nunca debajo de la alfombra” ENERO DE 1967 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-08T11:30:14Z",
+   "first_seen": "2026-10-08T14:41:31Z",
+   "image": "/assets/cache/ig/DeO1HeJDJa6.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeO1HeJDJa6",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeO1HeJDJa6.webp",
+    "embed_url": "https://www.instagram.com/p/DeO1HeJDJa6/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeO1HeJDJa6/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The more I am willing to accept when I am wrong, I find myself less and less …",
+     "es": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos…"
+    },
+    "summary": {
+     "en": "“The more willing I am to accept when I am wrong, I find myself less and less in the position of having to admit it.” \"Never under the carpet\" January 1967 AA Grapevine Daily Quote in www.aalavina.org",
+     "es": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos en la posición de tener que admitirlo”. \"“Nunca debajo de la alfombra” ENERO DE 1967 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeNAYsljOml",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeNAYsljOml/",
+   "title": "Humor septiembre/octubre 2026",
+   "summary": "Humor septiembre/octubre 2026 “¿Has visto el jardín de ese vecino de enfrente? ¡Qué desastre!” —Mike G., Ontario, Canadá. Grapevine, marzo de 2026 Fuente: Revista Grapevine, enero 2026. www.aalavina.org/revista/mayo-junio-2026/humor-mayojunio-2026",
+   "lang": "es",
+   "date": "2026-10-07T18:30:17Z",
+   "first_seen": "2026-10-08T14:41:31Z",
+   "image": "/assets/cache/ig/DeNAYsljOml.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeNAYsljOml",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeNAYsljOml.webp",
+    "embed_url": "https://www.instagram.com/p/DeNAYsljOml/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeNAYsljOml/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Humor September / October 2026",
+     "es": "Humor septiembre/octubre 2026"
+    },
+    "summary": {
+     "en": "Humor September / October 2026 “Have you seen that neighbor’s garden across the street? What a disaster!” -Mike G., Ontario, Canada. Grapevine, March 2026 Source: Grapevine, January 2026. www.aalavina.org/revista/mayo-junio-2026/humor-mayojunio-2026",
+     "es": "Humor septiembre/octubre 2026 “¿Has visto el jardín de ese vecino de enfrente? ¡Qué desastre!” —Mike G., Ontario, Canadá. Grapevine, marzo de 2026 Fuente: Revista Grapevine, enero 2026. www.aalavina.org/revista/mayo-junio-2026/humor-mayojunio-2026"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeNAYtXjHk1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeNAYtXjHk1/",
+   "title": "At Wit's End of October 2026",
+   "summary": "At Wit's End of October 2026 “Dave, I hear you say you’re at the jumping off place. But I don’t think that’s what they had in mind.” —James N., New Zealand Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
+   "lang": "en",
+   "date": "2026-10-07T18:30:13Z",
+   "first_seen": "2026-10-08T14:41:31Z",
+   "image": "/assets/cache/ig/DeNAYtXjHk1.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeNAYtXjHk1",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeNAYtXjHk1.webp",
+    "embed_url": "https://www.instagram.com/p/DeNAYtXjHk1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeNAYtXjHk1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "At Wit's End of October 2026",
+     "es": "At Wit's End de octubre de 2026"
+    },
+    "summary": {
+     "en": "At Wit's End of October 2026 “Dave, I hear you say you’re at the jumping off place. But I don’t think that’s what they had in mind.” —James N., New Zealand Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
+     "es": "At Wit's End de octubre de 2026 “Dave, oigo que dices que estás en el lugar saltando. Pero no creo que eso sea lo que tenían en mente.” —James N., Nueva Zelanda Flexiona tu hueso gracioso Si una gran capción se mete en la mente cuando miras nuestras siguientes imágenes de dibujos animados. www.aagrapevine.org/submit-caption"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DeMhgvov9lB",
    "source": "instagram",
@@ -2264,7 +2436,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdrCh86F-sD",
@@ -2307,7 +2479,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdoQoCVF20S",

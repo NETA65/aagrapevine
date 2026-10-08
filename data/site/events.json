@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-07T06:54:56Z",
+ "updated": "2026-10-08T14:49:26Z",
  "fixture": false,
  "items": [
   {
@@ -60,7 +60,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:recurring:citywide-dallas:2026-10-10",
@@ -179,7 +179,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:committee:2026-10-21",
@@ -344,7 +344,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:flyer:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
@@ -451,7 +451,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:recurring:citywide-dallas:2026-11-14",
@@ -1195,7 +1195,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:recurring:lv-monthly-workshop:2027-03-25",
@@ -1574,7 +1574,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:committee:2027-07-21",
@@ -1776,7 +1776,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:manual:2026-10-03-gv-writing-workshop-arlington",

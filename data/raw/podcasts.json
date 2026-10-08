@@ -1,7 +1,7 @@
 {
  "source": "podcasts",
- "updated": "2026-10-08T07:31:56Z",
- "attempted": "2026-10-08T07:31:56Z",
+ "updated": "2026-10-08T14:40:05Z",
+ "attempted": "2026-10-08T14:40:05Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -30,9 +30,9 @@
   },
   "missing_from_feed": 0,
   "gone_checks": 0,
-  "discovery_checked": "2026-10-01T07:18:55Z",
+  "discovery_checked": "2026-10-08T14:40:05Z",
   "discovered_feeds": [],
-  "seconds": 2.6,
+  "seconds": 41.8,
   "artwork": 3,
   "artwork_missing": 0,
   "artwork_removed": 0
@@ -10837,7 +10837,7 @@
   }
  ],
  "discovery": {
-  "checked_at": "2026-10-01T07:18:55Z",
+  "checked_at": "2026-10-08T14:40:05Z",
   "pages_checked": 5,
   "feeds": []
  }

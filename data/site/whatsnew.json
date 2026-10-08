@@ -1,7 +1,183 @@
 {
- "updated": "2026-10-07T14:43:55Z",
+ "updated": "2026-10-08T14:49:26Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DeO1HeJDJa6",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeO1HeJDJa6/",
+   "title": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos…",
+   "summary": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos en la posición de tener que admitirlo”. \"“Nunca debajo de la alfombra” ENERO DE 1967 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-08T11:30:14Z",
+   "first_seen": "2026-10-08T14:41:31Z",
+   "image": "/assets/cache/ig/DeO1HeJDJa6.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeO1HeJDJa6",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeO1HeJDJa6.webp",
+    "embed_url": "https://www.instagram.com/p/DeO1HeJDJa6/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeO1HeJDJa6/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The more I am willing to accept when I am wrong, I find myself less and less …",
+     "es": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos…"
+    },
+    "summary": {
+     "en": "“The more willing I am to accept when I am wrong, I find myself less and less in the position of having to admit it.” \"Never under the carpet\" January 1967 AA Grapevine Daily Quote in www.aalavina.org",
+     "es": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos en la posición de tener que admitirlo”. \"“Nunca debajo de la alfombra” ENERO DE 1967 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-08T11:30:14Z"
+  },
+  {
+   "id": "ig:DeO1HexjHK2",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeO1HexjHK2/",
+   "title": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my…",
+   "summary": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my Fourth Step, an old-timer suggested I list the names of those against whom I held resentments, followed by two or three sentences describing what they had done to earn my displeasure. Then, after putting the list aside for a day, I was to cross off each person’s name and replace it with my own.” “Mirror…",
+   "lang": "en",
+   "date": "2026-10-08T11:30:14Z",
+   "first_seen": "2026-10-08T14:41:31Z",
+   "image": "/assets/cache/ig/DeO1HexjHK2.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeO1HexjHK2",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeO1HexjHK2.webp",
+    "embed_url": "https://www.instagram.com/p/DeO1HexjHK2/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeO1HexjHK2/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my…",
+     "es": "“A veces tomar el inventario de alguien más puede ser muy beneficioso. Cuando estaba haciendo mi …"
+    },
+    "summary": {
+     "en": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my Fourth Step, an old-timer suggested I list the names of those against whom I held resentments, followed by two or three sentences describing what they had done to earn my displeasure. Then, after putting the list aside for a day, I was to cross off each person’s name and replace it with my own.” “Mirror…",
+     "es": "“A veces tomar el inventario de alguien más puede ser muy beneficioso. Cuando estaba haciendo mi Cuarto Paso, un veterano sugirió que enumerara los nombres de aquellos contra quienes mantuve resentimientos, seguido de dos o tres frases que describían lo que habían hecho para ganar mi descontento. Luego, después de dejar la lista a un lado por un día, yo iba a cruzar el nombre de cada persona y reemplazarla por mi propio.” “Mirror …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-08T11:30:14Z"
+  },
+  {
+   "id": "ig:DeNAYsljOml",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeNAYsljOml/",
+   "title": "Humor septiembre/octubre 2026",
+   "summary": "Humor septiembre/octubre 2026 “¿Has visto el jardín de ese vecino de enfrente? ¡Qué desastre!” —Mike G., Ontario, Canadá. Grapevine, marzo de 2026 Fuente: Revista Grapevine, enero 2026. www.aalavina.org/revista/mayo-junio-2026/humor-mayojunio-2026",
+   "lang": "es",
+   "date": "2026-10-07T18:30:17Z",
+   "first_seen": "2026-10-08T14:41:31Z",
+   "image": "/assets/cache/ig/DeNAYsljOml.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeNAYsljOml",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeNAYsljOml.webp",
+    "embed_url": "https://www.instagram.com/p/DeNAYsljOml/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeNAYsljOml/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Humor September / October 2026",
+     "es": "Humor septiembre/octubre 2026"
+    },
+    "summary": {
+     "en": "Humor September / October 2026 “Have you seen that neighbor’s garden across the street? What a disaster!” -Mike G., Ontario, Canada. Grapevine, March 2026 Source: Grapevine, January 2026. www.aalavina.org/revista/mayo-junio-2026/humor-mayojunio-2026",
+     "es": "Humor septiembre/octubre 2026 “¿Has visto el jardín de ese vecino de enfrente? ¡Qué desastre!” —Mike G., Ontario, Canadá. Grapevine, marzo de 2026 Fuente: Revista Grapevine, enero 2026. www.aalavina.org/revista/mayo-junio-2026/humor-mayojunio-2026"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-07T18:30:17Z"
+  },
+  {
+   "id": "ig:DeNAYtXjHk1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeNAYtXjHk1/",
+   "title": "At Wit's End of October 2026",
+   "summary": "At Wit's End of October 2026 “Dave, I hear you say you’re at the jumping off place. But I don’t think that’s what they had in mind.” —James N., New Zealand Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
+   "lang": "en",
+   "date": "2026-10-07T18:30:13Z",
+   "first_seen": "2026-10-08T14:41:31Z",
+   "image": "/assets/cache/ig/DeNAYtXjHk1.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeNAYtXjHk1",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeNAYtXjHk1.webp",
+    "embed_url": "https://www.instagram.com/p/DeNAYtXjHk1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeNAYtXjHk1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "At Wit's End of October 2026",
+     "es": "At Wit's End de octubre de 2026"
+    },
+    "summary": {
+     "en": "At Wit's End of October 2026 “Dave, I hear you say you’re at the jumping off place. But I don’t think that’s what they had in mind.” —James N., New Zealand Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
+     "es": "At Wit's End de octubre de 2026 “Dave, oigo que dices que estás en el lugar saltando. Pero no creo que eso sea lo que tenían en mente.” —James N., Nueva Zelanda Flexiona tu hueso gracioso Si una gran capción se mete en la mente cuando miras nuestras siguientes imágenes de dibujos animados. www.aagrapevine.org/submit-caption"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-07T18:30:13Z"
+  },
   {
    "id": "ig:DeMhgvov9lB",
    "source": "instagram",
@@ -420,12 +596,12 @@
    "extra": {
     "video_id": "daNbma33_to",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 648,
     "playlists": [
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 153,
+    "views": 204,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -690,12 +866,12 @@
    "extra": {
     "video_id": "DQQmWy8khe0",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 1777,
     "playlists": [
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 149,
+    "views": 193,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1721,12 +1897,12 @@
    "extra": {
     "video_id": "3IlmqK3taOo",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 3003,
     "playlists": [
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 239,
+    "views": 258,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -3111,7 +3287,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 366,
+    "views": 377,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3826,7 +4002,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 298,
+    "views": 305,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -4027,7 +4203,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-24T13:54:51Z"
   },
   {
@@ -4071,7 +4247,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-24T13:54:49Z"
   },
   {
@@ -4132,7 +4308,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-24T11:10:08Z"
   },
   {
@@ -4193,7 +4369,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-24T11:10:08Z"
   },
   {
@@ -4254,7 +4430,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-24T11:10:08Z"
   },
   {
@@ -4315,7 +4491,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-24T11:10:08Z"
   },
   {
@@ -4377,7 +4553,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-24T11:10:08Z"
   },
   {
@@ -4448,7 +4624,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-24T11:10:08Z"
   },
   {
@@ -4519,7 +4695,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-24T11:10:08Z"
   },
   {
@@ -6984,7 +7160,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 352,
+    "views": 356,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -7254,7 +7430,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 296,
+    "views": 298,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7748,7 +7924,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 350,
+    "views": 351,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7863,199 +8039,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-09-15T21:00:03Z"
-  },
-  {
-   "id": "ig:DdUoENjoyuP",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdUoENjoyuP/",
-   "title": "The October Issue of Grapevine Is Here!",
-   "summary": "The October Issue of Grapevine Is Here! October’s special section is about “Loneliness.” AA members share touching, helpful stories about dealing with a common feeling that’s rarely discussed. Visit www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-15T21:00:02Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdUoENjoyuP.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdUoENjoyuP",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdUoENjoyuP.webp",
-    "embed_url": "https://www.instagram.com/p/DdUoENjoyuP/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdUoENjoyuP/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_html",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "The October Issue of Grapevine Is Here!",
-     "es": "¡El número de octubre de Grapevine está aquí!"
-    },
-    "summary": {
-     "en": "The October Issue of Grapevine Is Here! October’s special section is about “Loneliness.” AA members share touching, helpful stories about dealing with a common feeling that’s rarely discussed. Visit www.aagrapevine.org",
-     "es": "¡El número de octubre de Grapevine está aquí! La sección especial de octubre es sobre “Soledad”. Los miembros de AA comparten historias conmovedoras y útiles sobre tratar con un sentimiento común que rara vez se discute. Visita www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-15T21:00:02Z"
-  },
-  {
-   "id": "pdf:3b4f20f9a3f0",
-   "source": "crawl",
-   "kind": "pdf",
-   "url": "https://www.aagrapevine.org/sites/default/files/2026-09/GV_News_October-2026.pdf",
-   "title": "GV News October 2026",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-09-15",
-   "first_seen": "2026-09-23T16:31:53Z",
-   "image": "/assets/cache/pdf/3b4f20f9a3f0fb61.webp",
-   "tags": [
-    "news"
-   ],
-   "category": "gvr",
-   "status": "ok",
-   "extra": {
-    "host": "www.aagrapevine.org",
-    "file_url": "https://www.aagrapevine.org/sites/default/files/2026-09/GV_News_October-2026.pdf",
-    "filename": "GV_News_October-2026.pdf",
-    "size_bytes": 43044296,
-    "pages": 4,
-    "thumb": "/assets/cache/pdf/3b4f20f9a3f0fb61.webp",
-    "referrers": [
-     {
-      "url": "https://www.aagrapevine.org/gvr-resources",
-      "title": "GVR Resources"
-     }
-    ],
-    "upload_month": "2026-09",
-    "link_texts": [],
-    "event_date": null,
-    "doc_lang": "en",
-    "section": "GVR Resources",
-    "external": false,
-    "orphan": false
-   },
-   "i18n": {
-    "title": {
-     "en": "GV News October 2026",
-     "es": "Noticias GV octubre de 2026"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-15T12:00:00Z"
-  },
-  {
-   "id": "yt:Y5MBMVFGFyg",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=Y5MBMVFGFyg",
-   "title": "Endless Bottles [Season 11, Episode 11]",
-   "summary": "Tiombe found sobriety at a young age and was blessed to find a group of caring young people who helped her. They were the type who if you couldn't read the Big Book, they'd read it to you. She tells Olis and Don about learning that she not only had to give up drinking, but also the lifestyle she'd built to survive. Tiombe also talks about being a seeker through meditation. In the feature Using…",
-   "lang": "en",
-   "date": "2026-09-14T04:29:14Z",
-   "first_seen": "2026-09-23T16:31:23Z",
-   "image": "https://i.ytimg.com/vi/Y5MBMVFGFyg/hqdefault.jpg",
-   "tags": [
-    "season-11"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "Y5MBMVFGFyg",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 1941,
-    "playlists": [
-     "AA Grapevine's Podcast"
-    ],
-    "is_short": false,
-    "views": 319,
-    "is_live_recording": false,
-    "date_approx": false,
-    "season": 11,
-    "episode": 11
-   },
-   "i18n": {
-    "title": {
-     "en": "Endless Bottles [Season 11, Episode 11]",
-     "es": "Botellas sin fin [Temporada 11, Episodio 11]"
-    },
-    "summary": {
-     "en": "Tiombe found sobriety at a young age and was blessed to find a group of caring young people who helped her. They were the type who if you couldn't read the Big Book, they'd read it to you. She tells Olis and Don about learning that she not only had to give up drinking, but also the lifestyle she'd built to survive. Tiombe also talks about being a seeker through meditation. In the feature Using…",
-     "es": "Tiombe encontró sobriedad a una edad joven y fue bendecido para encontrar un grupo de jóvenes que la ayudaron. Eran del tipo que si no pudieras leer el Libro Grande, te lo leerían. Le cuenta a Olis y Don sobre el aprendizaje de que no sólo tuvo que dejar de beber, sino también el estilo de vida que había construido para sobrevivir. Tiombe también habla de ser un buscador a través de la meditación. En la función Utilizando …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-14T04:29:14Z"
-  },
-  {
-   "id": "pod:gv:df302cf24e3d",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/b4cf7287-31f0-4ea4-8220-8f57bec2cafa",
-   "title": "Endless Bottles [Season 11, Episode 11]",
-   "summary": "Tiombe found sobriety at a young age and was blessed to find a group of caring young people who helped her. They were the type who if you couldn't read the Big Book, they'd read it to you. She tells Olis and Don about learning that she not only had to give up drinking, but also the lifestyle she'd built to survive. Tiombe also talks about being a seeker through meditation. In the feature Using…",
-   "lang": "en",
-   "date": "2026-09-14T04:15:00Z",
-   "first_seen": "2026-09-23T16:27:02Z",
-   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
-   "tags": [
-    "season-11"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/b4cf7287-31f0-4ea4-8220-8f57bec2cafa.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 38804898,
-    "duration_sec": 1940,
-    "season": 11,
-    "episode": 11,
-    "episode_type": "full",
-    "show": "gv",
-    "show_name": "AA Grapevine's Podcast",
-    "link": "https://www.aagrapevine.org/podcast",
-    "player_url": "https://player.captivate.fm/episode/b4cf7287-31f0-4ea4-8220-8f57bec2cafa",
-    "show_web": "https://www.aagrapevine.org/podcasts",
-    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
-    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
-    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
-    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
-   },
-   "i18n": {
-    "title": {
-     "en": "Endless Bottles [Season 11, Episode 11]",
-     "es": "Botellas sin fin [Temporada 11, Episodio 11]"
-    },
-    "summary": {
-     "en": "Tiombe found sobriety at a young age and was blessed to find a group of caring young people who helped her. They were the type who if you couldn't read the Big Book, they'd read it to you. She tells Olis and Don about learning that she not only had to give up drinking, but also the lifestyle she'd built to survive. Tiombe also talks about being a seeker through meditation. In the feature Using…",
-     "es": "Tiombe encontró sobriedad a una edad joven y fue bendecido para encontrar un grupo de jóvenes que la ayudaron. Eran del tipo que si no pudieras leer el Libro Grande, te lo leerían. Le cuenta a Olis y Don sobre el aprendizaje de que no sólo tuvo que dejar de beber, sino también el estilo de vida que había construido para sobrevivir. Tiombe también habla de ser un buscador a través de la meditación. En la función Utilizando …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-14T04:15:00Z"
   }
  ]
 }
