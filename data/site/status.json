@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-08T00:08:29Z",
- "updated": "2026-10-08T00:08:29Z",
+ "generated": "2026-10-08T07:32:03Z",
+ "updated": "2026-10-08T07:32:03Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-10-08T00:08:06Z",
-   "attempted": "2026-10-08T00:08:06Z",
+   "updated": "2026-10-08T07:31:38Z",
+   "attempted": "2026-10-08T07:31:38Z",
    "count": 36,
    "new_7d": 29,
    "error": null,
@@ -87,8 +87,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-10-08T00:08:06Z",
-   "attempted": "2026-10-08T00:08:06Z",
+   "updated": "2026-10-08T07:31:38Z",
+   "attempted": "2026-10-08T07:31:38Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -111,8 +111,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-10-08T00:08:06Z",
-   "attempted": "2026-10-08T00:08:06Z",
+   "updated": "2026-10-08T07:31:38Z",
+   "attempted": "2026-10-08T07:31:38Z",
    "count": 9,
    "new_7d": 0,
    "error": null,
@@ -165,8 +165,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-10-08T00:08:12Z",
-   "attempted": "2026-10-08T00:08:12Z",
+   "updated": "2026-10-08T07:32:01Z",
+   "attempted": "2026-10-08T07:32:01Z",
    "count": 1261,
    "new_7d": 1261,
    "error": null,
@@ -320,8 +320,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-10-08T00:08:08Z",
-   "attempted": "2026-10-08T00:08:08Z",
+   "updated": "2026-10-08T07:31:56Z",
+   "attempted": "2026-10-08T07:31:56Z",
    "count": 299,
    "new_7d": 2,
    "error": null,
@@ -348,7 +348,7 @@
     "gone_checks": 0,
     "discovery_checked": "2026-10-01T07:18:55Z",
     "discovered_feeds": [],
-    "seconds": 2.4,
+    "seconds": 2.6,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -558,8 +558,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-10-08T00:08:28Z",
-   "attempted": "2026-10-08T00:08:28Z",
+   "updated": "2026-10-08T07:31:54Z",
+   "attempted": "2026-10-08T07:31:54Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -567,12 +567,12 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-10-07",
-    "new": 0
+    "today": "2026-10-08",
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -589,6 +589,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-10-08",
+    "goal_at": "2026-10-08T10:30:00Z",
+    "gv": "2026-10-08T07:31:43Z",
+    "lv": "2026-10-08T07:31:54Z"
+   },
    {
     "day": "2026-10-07",
     "goal_at": "2026-10-07T10:30:00Z",
@@ -624,12 +630,6 @@
     "goal_at": "2026-10-02T10:30:00Z",
     "gv": "2026-10-02T07:05:36Z",
     "lv": "2026-10-02T07:05:47Z"
-   },
-   {
-    "day": "2026-10-01",
-    "goal_at": "2026-10-01T10:30:00Z",
-    "gv": "2026-10-01T07:15:16Z",
-    "lv": "2026-10-01T07:15:26Z"
    }
   ]
  },
@@ -659,7 +659,7 @@
   "from_cache": 3825,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.1,
+  "seconds": 0.2,
   "model_seconds": 0.0,
   "texts_per_second": null,
   "glossary_entries": 260,
@@ -697,8 +697,8 @@
    "http_status": 403,
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
-   "last_attempt": "2026-10-07T05:08:05Z",
-   "checked_this_run": false,
+   "last_attempt": "2026-10-08T07:32:01Z",
+   "checked_this_run": true,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,
@@ -707,7 +707,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-10-07",
+  "today": "2026-10-08",
   "home_days": 60,
   "list_days": [
    60,

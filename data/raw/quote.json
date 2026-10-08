@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-10-08T00:08:28Z",
- "attempted": "2026-10-08T00:08:28Z",
+ "updated": "2026-10-08T07:31:54Z",
+ "attempted": "2026-10-08T07:31:54Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-07",
-  "new": 0
+  "today": "2026-10-08",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-07",
+   "id": "quote:gv:2026-10-08",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 7",
+   "title": "Grapevine Daily Quote October 8",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-07",
-   "first_seen": "2026-10-07T06:54:54Z",
-   "last_seen": "2026-10-07T06:54:54Z",
+   "date": "2026-10-08",
+   "first_seen": "2026-10-08T07:31:54Z",
+   "last_seen": "2026-10-08T07:31:54Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty and truth filter in, and begins to demand reality.",
-    "attribution": "“It Takes What It Takes,” Pompano Beach, Florida, June 1978, Step By Step",
+    "text": "Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my Fourth Step, an old-timer suggested I list the names of those against whom I held resentments, followed by two or three sentences describing what they had done to earn my displeasure. Then, after putting the list aside for a day, I was to cross off each person’s name and replace it with my own.",
+    "attribution": "“Mirror, Mirror, On the Wall,” Renton, Washington, October 1987, Step By Step",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 7",
+    "date_label": "October 8",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84275"
+    "node": "node-84276"
    }
   },
   {
-   "id": "quote:lv:2026-10-07",
+   "id": "quote:lv:2026-10-08",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 7",
+   "title": "Cita Diaria con La Viña Octubre 8",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-07",
-   "first_seen": "2026-10-07T06:54:54Z",
-   "last_seen": "2026-10-07T06:54:54Z",
+   "date": "2026-10-08",
+   "first_seen": "2026-10-08T07:31:54Z",
+   "last_seen": "2026-10-08T07:31:54Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía están sin esperanza. Sea cual sea el costo o el sacrificio que suponga, pongámonos a mejorar nuestras comunicaciones con toda esta gente para que encuentren lo que hemos encontrado: una nueva vida de libertad bajo Dios.",
-    "attribution": "“Una perspectiva del porvenir”. BILL W., COFUNDADOR DE AA, FEBRERO DE 1961",
-    "source": "I Am Responsible",
-    "source_lang": "en",
+    "text": "Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos en la posición de tener que admitirlo.",
+    "attribution": "“Nunca debajo de la alfombra”. ENERO DE 1967. Del AA Grapevine",
+    "source": "",
+    "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "7 de octubre",
+    "date_label": "8 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84281"
+    "node": "node-84282"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-08",
+    "heading": "Grapevine Daily Quote October 8",
+    "text": "Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my Fourth Step, an old-timer suggested I list the names of those against whom I held resentments, followed by two or three sentences describing what they had done to earn my displeasure. Then, after putting the list aside for a day, I was to cross off each person’s name and replace it with my own.",
+    "attribution": "“Mirror, Mirror, On the Wall,” Renton, Washington, October 1987, Step By Step",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-08T07:31:43Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -244,6 +257,19 @@
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-08",
+    "heading": "Cita Diaria con La Viña Octubre 8",
+    "text": "Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos en la posición de tener que admitirlo.",
+    "attribution": "“Nunca debajo de la alfombra”. ENERO DE 1967. Del AA Grapevine",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-08T07:31:54Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
