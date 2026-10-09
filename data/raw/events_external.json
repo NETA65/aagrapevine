@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-10-08T14:46:46Z",
- "attempted": "2026-10-08T14:46:46Z",
+ "updated": "2026-10-09T14:33:04Z",
+ "attempted": "2026-10-09T14:33:04Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,7 +15,7 @@
   "upcoming_urls": 17,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 10,
+  "refreshed": 3,
   "failed": 0,
   "pending": 0,
   "cached": 18,
@@ -23,7 +23,7 @@
   "online_es": 1,
   "items": 2,
   "new": 0,
-  "requests": 54
+  "requests": 53
  },
  "items": [
   {
@@ -329,7 +329,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-12-04/14th-chiang-mai-roundup-2026": {
-   "at": "2026-09-23T16:43:48Z",
+   "at": "2026-10-09T14:32:53Z",
    "ev": {
     "title": "14th Chiang Mai Roundup 2026",
     "date_text": "December 4, 2026 - December 6, 2026",
@@ -338,18 +338,18 @@
     "all_day": true,
     "location_raw": "Chiang Mai, Thailand",
     "website": "https://www.aathailand.org",
+    "lang": "en",
     "location": "Chiang Mai, Thailand",
     "city": "Chiang Mai",
     "country": "Thailand",
     "online": false,
-    "texas": false,
-    "lang": "en"
+    "texas": false
    },
    "http": 200,
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2027-03-19/southern-maryland-roundup": {
-   "at": "2026-09-23T16:43:55Z",
+   "at": "2026-10-09T14:32:58Z",
    "ev": {
     "title": "Southern Maryland Roundup",
     "date_text": "March 19, 2027 - March 21, 2027",
@@ -358,19 +358,19 @@
     "all_day": true,
     "location_raw": "Annapolis, Maryland",
     "website": "https://www.southernmarylandroundup.org/",
+    "lang": "en",
     "location": "Annapolis, Maryland",
     "city": "Annapolis",
     "state": "MD",
     "country": "USA",
     "online": false,
-    "texas": false,
-    "lang": "en"
+    "texas": false
    },
    "http": 200,
    "fails": 0
   },
   "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico": {
-   "at": "2026-09-23T16:43:55Z",
+   "at": "2026-10-09T14:33:04Z",
    "ev": {
     "title": "14.a Convención Nacional 11, 12 y 13 de junio de 2027 Ciudad de México «AA una luz de esperanza»",
     "date_text": "Junio 11, 2027 - Junio 13, 2027",
@@ -380,11 +380,11 @@
     "location_raw": "Estadio Ciudad de México",
     "website": "https://convencion.aamexico.mx/",
     "summary": "Teléfonos , , Lada sin costo: Ext. 128",
+    "lang": "es",
     "location": "Estadio Ciudad de México",
     "city": "Estadio Ciudad de México",
     "online": false,
-    "texas": false,
-    "lang": "es"
+    "texas": false
    },
    "http": 200,
    "fails": 0
@@ -467,14 +467,14 @@
  "sitemap": {
   "pages": {
    "https://www.aagrapevine.org/sitemap.xml?page=1": {
-    "lastmod": "2026-10-07T11:43:32-05:00",
+    "lastmod": "2026-10-08T20:41:31-05:00",
     "events": [],
-    "fetched": "2026-10-08T14:45:45Z",
+    "fetched": "2026-10-09T14:32:42Z",
     "urls_total": 2000,
     "events_total": 2000
    },
    "https://www.aagrapevine.org/sitemap.xml?page=2": {
-    "lastmod": "2026-10-07T11:43:32-05:00",
+    "lastmod": "2026-10-08T20:41:31-05:00",
     "events": [
      "https://www.aagrapevine.org/get-involved/events/2026-09-11/2026-national-technology-workshop",
      "https://www.aagrapevine.org/get-involved/events/2026-09-11/20th-santa-clarita-valley-convention",
@@ -499,7 +499,7 @@
      "https://www.aalavina.org/get-involved/events/2027-05-28/xxiv-encuentro-hispano-de-aa-del-estado-de-kansas-sede-topeka",
      "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico"
     ],
-    "fetched": "2026-10-08T14:45:50Z",
+    "fetched": "2026-10-09T14:32:47Z",
     "urls_total": 1091,
     "events_total": 943
    }

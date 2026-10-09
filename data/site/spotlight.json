@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T07:30:27Z",
+ "updated": "2026-10-09T14:35:49Z",
  "fixture": false,
  "today": "2026-10-09",
  "home_days": 60,
@@ -12,12 +12,12 @@
   "60": {
    "neta65": 1,
    "texas": 5,
-   "all": 74
+   "all": 76
   },
   "90": {
    "neta65": 2,
    "texas": 8,
-   "all": 104
+   "all": 106
   }
  },
  "items": [
@@ -696,6 +696,75 @@
    "is_new": true
   },
   {
+   "id": "gv:2026-10:applying-aa-life",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/applying-aa-life",
+   "title": "Applying AA to Life",
+   "summary": "It works if you work it",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-09T14:29:06Z",
+   "image": "/assets/cache/articles/cdf8fd1203f32d74.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "D.D.",
+    "author_location": "Largo, Fla.",
+    "subtitle": "It works if you work it",
+    "teaser": "I was in the Air Force in Germany when I joined AA. Things there were much different than you might find here.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Largo",
+     "county": null,
+     "counties": [],
+     "state": "FL",
+     "country": "US",
+     "label_en": "Largo, Florida",
+     "label_es": "Largo, Florida"
+    },
+    "pub_date": "2026-10-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Applying AA to Life",
+     "es": "Aplicando AA a la vida"
+    },
+    "summary": {
+     "en": "It works if you work it",
+     "es": "Funciona si lo trabajas"
+    },
+    "issue_theme": {
+     "en": "Loneliness",
+     "es": "Soledad"
+    },
+    "issue_label": {
+     "en": "October 2026",
+     "es": "Octubre 2026"
+    },
+    "author_location": {
+     "en": "Largo, Florida",
+     "es": "Largo, Florida"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
    "id": "gv:2026-10:standing-sunlight",
    "source": "grapevine",
    "kind": "article",
@@ -757,6 +826,75 @@
     "author_location": {
      "en": "Glenmont, New York",
      "es": "Glenmont, Nueva York"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-10:tornado",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/tornado",
+   "title": "The Tornado",
+   "summary": "At long last, shelter from the storm",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-09T14:29:06Z",
+   "image": "/assets/cache/articles/c26e6c1ea0213f49.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "Kristen P.",
+    "author_location": "Laguna Beach, Calif.",
+    "subtitle": "At long last, shelter from the storm",
+    "teaser": "Now that I’m in recovery, the memories come back, sometimes slowly, sometimes like a wave that crashes out of nowhere.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Laguna Beach",
+     "county": null,
+     "counties": [],
+     "state": "CA",
+     "country": "US",
+     "label_en": "Laguna Beach, California",
+     "label_es": "Laguna Beach, California"
+    },
+    "pub_date": "2026-10-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "The Tornado",
+     "es": "El Tornado"
+    },
+    "summary": {
+     "en": "At long last, shelter from the storm",
+     "es": "Por fin, refugio de la tormenta"
+    },
+    "issue_theme": {
+     "en": "Loneliness",
+     "es": "Soledad"
+    },
+    "issue_label": {
+     "en": "October 2026",
+     "es": "Octubre 2026"
+    },
+    "author_location": {
+     "en": "Laguna Beach, California",
+     "es": "Laguna Beach, California"
     }
    },
    "machine": [

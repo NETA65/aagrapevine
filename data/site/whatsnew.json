@@ -1,7 +1,143 @@
 {
- "updated": "2026-10-09T07:30:27Z",
+ "updated": "2026-10-09T14:35:49Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DeRZ6Xclylr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeRZ6Xclylr/",
+   "title": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que…",
+   "summary": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que sentiría al estar con Dios”. \"“El proceso de paz” GOLD RIVER, CALIFORNIA, DICIEMBRE DE 1996 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-09T11:30:17Z",
+   "first_seen": "2026-10-09T14:27:03Z",
+   "image": "/assets/cache/ig/DeRZ6Xclylr.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeRZ6Xclylr",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeRZ6Xclylr.webp",
+    "embed_url": "https://www.instagram.com/p/DeRZ6Xclylr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeRZ6Xclylr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I think the peace given to me by the Tenth Step, if it is well implemented, is equal to what …",
+     "es": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que…"
+    },
+    "summary": {
+     "en": "“I think the peace given to me by the Tenth Step, if it is well implemented, is the same as what I would feel as being with God.” \"The Peace Process\" gold river, California, December 1996 From AA Grapevine\" Daily Quote in www.aalavina.org",
+     "es": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que sentiría al estar con Dios”. \"“El proceso de paz” GOLD RIVER, CALIFORNIA, DICIEMBRE DE 1996 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-09T11:30:17Z"
+  },
+  {
+   "id": "ig:DeRZ6P6l4nY",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeRZ6P6l4nY/",
+   "title": "“So long as there is the slightest interest in sobriety, the most unmoral, the most…",
+   "summary": "“So long as there is the slightest interest in sobriety, the most unmoral, the most antisocial, the most critical alcoholic may gather about him a few kindred spirits and announce to us that a new Alcoholics Anonymous group has been formed. Anti-God, anti-medicine, anti-our recovery program, even anti-each other – these rampant individuals are still an AA group if they think so!” AA Co-Founder…",
+   "lang": "en",
+   "date": "2026-10-09T11:30:15Z",
+   "first_seen": "2026-10-09T14:27:03Z",
+   "image": "/assets/cache/ig/DeRZ6P6l4nY.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeRZ6P6l4nY",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeRZ6P6l4nY.webp",
+    "embed_url": "https://www.instagram.com/p/DeRZ6P6l4nY/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeRZ6P6l4nY/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“So long as there is the slightest interest in sobriety, the most unmoral, the most…",
+     "es": "“Mientras haya el más mínimo interés en sobriedad, el más inmoral, el más …"
+    },
+    "summary": {
+     "en": "“So long as there is the slightest interest in sobriety, the most unmoral, the most antisocial, the most critical alcoholic may gather about him a few kindred spirits and announce to us that a new Alcoholics Anonymous group has been formed. Anti-God, anti-medicine, anti-our recovery program, even anti-each other – these rampant individuals are still an AA group if they think so!” AA Co-Founder…",
+     "es": "“Mientras haya el menor interés en sobriedad, el más inmoral, el más antisocial, el alcohólico más crítico puede reunirse con él unos cuantos espíritus amistosos y anunciarnos que se ha formado un nuevo grupo Alcohólicos Anónimos. ¡Anti-Dios, anti-medicina, anti-nuestro programa de recuperación, incluso anti-cada otro – estos individuos rampantes son todavía un grupo AA si lo creen!” AA Cofundador …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-09T11:30:15Z"
+  },
+  {
+   "id": "yt:CyjwTw116Ec",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=CyjwTw116Ec",
+   "title": "Grapevine Weekly Open AA Meeting, October 7, 2026 [Season 2, Episode 15]",
+   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 7, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Christopher and Olis, who share their experience…",
+   "lang": "en",
+   "date": "2026-10-09T04:48:48Z",
+   "first_seen": "2026-10-09T14:26:43Z",
+   "image": "https://i.ytimg.com/vi/CyjwTw116Ec/hqdefault.jpg",
+   "tags": [
+    "season-2",
+    "weekly-open",
+    "live"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "CyjwTw116Ec",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "Grapevine Weekly Open AA Meeting"
+    ],
+    "is_short": false,
+    "views": 36,
+    "is_live_recording": true,
+    "date_approx": false,
+    "season": 2,
+    "episode": 15
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Weekly Open AA Meeting, October 7, 2026 [Season 2, Episode 15]",
+     "es": "Grapevine Weekly Open AA Meeting, 7 de octubre de 2026 [Temporada 2, Episodio 15]"
+    },
+    "summary": {
+     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 7, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Christopher and Olis, who share their experience…",
+     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 7 de octubre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Don da la bienvenida a los oradores Christopher y Olis, que comparten su experiencia …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-09T04:48:48Z"
+  },
   {
    "id": "pod:wo:0a54fa5dff79",
    "source": "podcast",
@@ -651,7 +787,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 204,
+    "views": 219,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -921,7 +1057,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 193,
+    "views": 228,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1952,7 +2088,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 258,
+    "views": 279,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2778,6 +2914,76 @@
    "wn_date": "2026-10-01T12:00:00Z"
   },
   {
+   "id": "gv:2026-10:applying-aa-life",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/applying-aa-life",
+   "title": "Applying AA to Life",
+   "summary": "It works if you work it",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-09T14:29:06Z",
+   "image": "/assets/cache/articles/cdf8fd1203f32d74.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "D.D.",
+    "author_location": "Largo, Fla.",
+    "subtitle": "It works if you work it",
+    "teaser": "I was in the Air Force in Germany when I joined AA. Things there were much different than you might find here.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Largo",
+     "county": null,
+     "counties": [],
+     "state": "FL",
+     "country": "US",
+     "label_en": "Largo, Florida",
+     "label_es": "Largo, Florida"
+    },
+    "pub_date": "2026-10-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Applying AA to Life",
+     "es": "Aplicando AA a la vida"
+    },
+    "summary": {
+     "en": "It works if you work it",
+     "es": "Funciona si lo trabajas"
+    },
+    "issue_theme": {
+     "en": "Loneliness",
+     "es": "Soledad"
+    },
+    "issue_label": {
+     "en": "October 2026",
+     "es": "Octubre 2026"
+    },
+    "author_location": {
+     "en": "Largo, Florida",
+     "es": "Largo, Florida"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-01T12:00:00Z"
+  },
+  {
    "id": "gv:2026-10:standing-sunlight",
    "source": "grapevine",
    "kind": "article",
@@ -2909,6 +3115,76 @@
     "author_location": {
      "en": "Walnut Creek, California",
      "es": "Walnut Creek, California"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-01T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-10:tornado",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/tornado",
+   "title": "The Tornado",
+   "summary": "At long last, shelter from the storm",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-09T14:29:06Z",
+   "image": "/assets/cache/articles/c26e6c1ea0213f49.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "Kristen P.",
+    "author_location": "Laguna Beach, Calif.",
+    "subtitle": "At long last, shelter from the storm",
+    "teaser": "Now that I’m in recovery, the memories come back, sometimes slowly, sometimes like a wave that crashes out of nowhere.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Laguna Beach",
+     "county": null,
+     "counties": [],
+     "state": "CA",
+     "country": "US",
+     "label_en": "Laguna Beach, California",
+     "label_es": "Laguna Beach, California"
+    },
+    "pub_date": "2026-10-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "The Tornado",
+     "es": "El Tornado"
+    },
+    "summary": {
+     "en": "At long last, shelter from the storm",
+     "es": "Por fin, refugio de la tormenta"
+    },
+    "issue_theme": {
+     "en": "Loneliness",
+     "es": "Soledad"
+    },
+    "issue_label": {
+     "en": "October 2026",
+     "es": "Octubre 2026"
+    },
+    "author_location": {
+     "en": "Laguna Beach, California",
+     "es": "Laguna Beach, California"
     }
    },
    "machine": [
@@ -3337,7 +3613,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 377,
+    "views": 385,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3817,7 +4093,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-25T12:00:00Z"
   },
   {
@@ -3876,7 +4152,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-25T12:00:00Z"
   },
   {
@@ -3935,7 +4211,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-25T12:00:00Z"
   },
   {
@@ -3979,7 +4255,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-25T11:30:15Z"
   },
   {
@@ -4023,7 +4299,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-25T11:30:15Z"
   },
   {
@@ -4052,7 +4328,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 305,
+    "views": 309,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7149,7 +7425,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 356,
+    "views": 357,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -7419,7 +7695,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 298,
+    "views": 300,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7798,236 +8074,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-09-19T15:00:02Z"
-  },
-  {
-   "id": "ig:DdeSDBpFuxK",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdeSDBpFuxK/",
-   "title": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre…",
-   "summary": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre las 9:00 a. m. y las 5:30 p. m. EST por los siguientes números: Español: (800) 640-8781 (EE.UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (internacional) Francés: (212) 870-3456 Para todas las consultas relacionadas con las suscripciones, incluidas nuevas…",
-   "lang": "es",
-   "date": "2026-09-19T15:00:02Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdeSDBpFuxK.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdeSDBpFuxK",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdeSDBpFuxK.webp",
-    "embed_url": "https://www.instagram.com/p/DdeSDBpFuxK/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdeSDBpFuxK/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_html",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "We're here to help! Contact Customer Service Monday through Friday between …",
-     "es": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre…"
-    },
-    "summary": {
-     "en": "We're here to help! Contact Customer Service from Monday to Friday between 9:00 a.m. and 5:30 p.m. EST for the following numbers: Spanish: (800) 640-8781 (USA) / +1 (570) 567-0437 (International) English: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (international) French: (212) 870-3456 For all subscription-related queries, including new …",
-     "es": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre las 9:00 a. m. y las 5:30 p. m. EST por los siguientes números: Español: (800) 640-8781 (EE.UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (internacional) Francés: (212) 870-3456 Para todas las consultas relacionadas con las suscripciones, incluidas nuevas…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-19T15:00:02Z"
-  },
-  {
-   "id": "ig:Ddd6A-CDiwt",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Ddd6A-CDiwt/",
-   "title": "“La visión es la esencia misma de la prudencia”.",
-   "summary": "“La visión es la esencia misma de la prudencia”. \"“El liderazgo en AA: siempre una necesidad vital” BILL W., COFUNDADOR DE AA, ABRIL DE 1959 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-09-19T11:30:03Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/Ddd6A-CDiwt.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Ddd6A-CDiwt",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Ddd6A-CDiwt.webp",
-    "embed_url": "https://www.instagram.com/p/Ddd6A-CDiwt/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Ddd6A-CDiwt/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_html",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“The vision is the very essence of prudence.”",
-     "es": "“La visión es la esencia misma de la prudencia”."
-    },
-    "summary": {
-     "en": "“The vision is the very essence of prudence.” \"The leadership in AA: always a vital need\" Bill W., co-founder of AA, April 1959 Language of the Heart\" Daily Quote in www.aalavina.org",
-     "es": "“La visión es la esencia misma de la prudencia”. \"“El liderazgo en AA: siempre una necesidad vital” BILL W., COFUNDADOR DE AA, ABRIL DE 1959 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-19T11:30:03Z"
-  },
-  {
-   "id": "yt:1gFSGCFtko8",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=1gFSGCFtko8",
-   "title": "Grapevine Weekly Open AA Meeting, September 16, 2026 [Season 2, Episode 12]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 16, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers John and Dan, who share their experience…",
-   "lang": "en",
-   "date": "2026-09-18T04:31:52Z",
-   "first_seen": "2026-09-23T16:31:23Z",
-   "image": "https://i.ytimg.com/vi/1gFSGCFtko8/hqdefault.jpg",
-   "tags": [
-    "season-2",
-    "weekly-open",
-    "live"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "1gFSGCFtko8",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 3338,
-    "playlists": [
-     "Grapevine Weekly Open AA Meeting"
-    ],
-    "is_short": false,
-    "views": 351,
-    "is_live_recording": true,
-    "date_approx": false,
-    "season": 2,
-    "episode": 12
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, September 16, 2026 [Season 2, Episode 12]",
-     "es": "Grapevine Weekly Open AA Meeting, 16 de septiembre de 2026 [Temporada 2, Episodio 12]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 16, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers John and Dan, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 16 de septiembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Jeff da la bienvenida a los oradores John y Dan, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-18T04:31:52Z"
-  },
-  {
-   "id": "pod:wo:c65d42dc2021",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/ce4e69bc-af9b-4aab-8b2e-f450a5bd87a9",
-   "title": "Grapevine Weekly Open AA Meeting, September 16, 2026 [Season 2, Episode 12]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 16, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers John and Dan, who share their experience…",
-   "lang": "en",
-   "date": "2026-09-18T04:15:00Z",
-   "first_seen": "2026-09-23T17:23:49Z",
-   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
-   "tags": [
-    "season-2"
-   ],
-   "category": "wo",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/ce4e69bc-af9b-4aab-8b2e-f450a5bd87a9.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 80118999,
-    "duration_sec": 3338,
-    "season": 2,
-    "episode": 12,
-    "episode_type": "full",
-    "show": "wo",
-    "show_name": "Grapevine Weekly Open AA Meeting",
-    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "player_url": "https://player.captivate.fm/episode/ce4e69bc-af9b-4aab-8b2e-f450a5bd87a9",
-    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
-    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
-    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, September 16, 2026 [Season 2, Episode 12]",
-     "es": "Grapevine Weekly Open AA Meeting, 16 de septiembre de 2026 [Temporada 2, Episodio 12]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 16, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers John and Dan, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 16 de septiembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Jeff da la bienvenida a los oradores John y Dan, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-18T04:15:00Z"
-  },
-  {
-   "id": "ig:DdUoETiownm",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdUoETiownm/",
-   "title": "La edición de septiembre/octubre de La Viña: Servicio en AA",
-   "summary": "La edición de septiembre/octubre de La Viña: Servicio en AA La recuperación nos regala mucho más que la sobriedad. Nos ofrece la oportunidad de reconstruir relaciones, descubrir un nuevo propósito y recuperar la alegría de vivir. En esta edición, miembros de AA comparten cómo la acción puede transformar nuestras vidas, fortalecer nuestra sobriedad y reafirmar el propósito de llevar el mensaje a…",
-   "lang": "es",
-   "date": "2026-09-15T21:00:03Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdUoETiownm.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdUoETiownm",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdUoETiownm.webp",
-    "embed_url": "https://www.instagram.com/p/DdUoETiownm/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdUoETiownm/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_html",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "The September/October edition of La Viña: Service in AA",
-     "es": "La edición de septiembre/octubre de La Viña: Servicio en AA"
-    },
-    "summary": {
-     "en": "The September/October edition of La Viña: AA Service The recovery gives us much more than the sobriety. It offers us the opportunity to rebuild relationships, discover a new purpose and recover the joy of living. In this edition, members of AA share how action can transform our lives, strengthen our sobriety and reaffirm the purpose of bringing the message to …",
-     "es": "La edición de septiembre/octubre de La Viña: Servicio en AA La recuperación nos regala mucho más que la sobriedad. Nos ofrece la oportunidad de reconstruir relaciones, descubrir un nuevo propósito y recuperar la alegría de vivir. En esta edición, miembros de AA comparten cómo la acción puede transformar nuestras vidas, fortalecer nuestra sobriedad y reafirmar el propósito de llevar el mensaje a…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-09-15T21:00:03Z"
   }
  ]
 }

@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-08T14:41:32Z",
+ "updated": "2026-10-09T14:27:03Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16916,
-   "posts": 3928,
+   "followers": 16917,
+   "posts": 3929,
    "owner_id": "48108439509",
-   "checked": "2026-10-08T14:41:13Z",
+   "checked": "2026-10-09T14:26:45Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,100 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2422,
-   "posts": 2961,
+   "followers": 2421,
+   "posts": 2962,
    "owner_id": "48275839129",
-   "checked": "2026-10-08T14:41:16Z",
+   "checked": "2026-10-09T14:26:48Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DeRZ6Xclylr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeRZ6Xclylr/",
+   "title": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que…",
+   "summary": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que sentiría al estar con Dios”. \"“El proceso de paz” GOLD RIVER, CALIFORNIA, DICIEMBRE DE 1996 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-09T11:30:17Z",
+   "first_seen": "2026-10-09T14:27:03Z",
+   "image": "/assets/cache/ig/DeRZ6Xclylr.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeRZ6Xclylr",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeRZ6Xclylr.webp",
+    "embed_url": "https://www.instagram.com/p/DeRZ6Xclylr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeRZ6Xclylr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I think the peace given to me by the Tenth Step, if it is well implemented, is equal to what …",
+     "es": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que…"
+    },
+    "summary": {
+     "en": "“I think the peace given to me by the Tenth Step, if it is well implemented, is the same as what I would feel as being with God.” \"The Peace Process\" gold river, California, December 1996 From AA Grapevine\" Daily Quote in www.aalavina.org",
+     "es": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que sentiría al estar con Dios”. \"“El proceso de paz” GOLD RIVER, CALIFORNIA, DICIEMBRE DE 1996 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeRZ6P6l4nY",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeRZ6P6l4nY/",
+   "title": "“So long as there is the slightest interest in sobriety, the most unmoral, the most…",
+   "summary": "“So long as there is the slightest interest in sobriety, the most unmoral, the most antisocial, the most critical alcoholic may gather about him a few kindred spirits and announce to us that a new Alcoholics Anonymous group has been formed. Anti-God, anti-medicine, anti-our recovery program, even anti-each other – these rampant individuals are still an AA group if they think so!” AA Co-Founder…",
+   "lang": "en",
+   "date": "2026-10-09T11:30:15Z",
+   "first_seen": "2026-10-09T14:27:03Z",
+   "image": "/assets/cache/ig/DeRZ6P6l4nY.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeRZ6P6l4nY",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeRZ6P6l4nY.webp",
+    "embed_url": "https://www.instagram.com/p/DeRZ6P6l4nY/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeRZ6P6l4nY/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“So long as there is the slightest interest in sobriety, the most unmoral, the most…",
+     "es": "“Mientras haya el más mínimo interés en sobriedad, el más inmoral, el más …"
+    },
+    "summary": {
+     "en": "“So long as there is the slightest interest in sobriety, the most unmoral, the most antisocial, the most critical alcoholic may gather about him a few kindred spirits and announce to us that a new Alcoholics Anonymous group has been formed. Anti-God, anti-medicine, anti-our recovery program, even anti-each other – these rampant individuals are still an AA group if they think so!” AA Co-Founder…",
+     "es": "“Mientras haya el menor interés en sobriedad, el más inmoral, el más antisocial, el alcohólico más crítico puede reunirse con él unos cuantos espíritus amistosos y anunciarnos que se ha formado un nuevo grupo Alcohólicos Anónimos. ¡Anti-Dios, anti-medicina, anti-nuestro programa de recuperación, incluso anti-cada otro – estos individuos rampantes son todavía un grupo AA si lo creen!” AA Cofundador …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DeO1HexjHK2",
    "source": "instagram",
@@ -2264,7 +2350,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdtWyC6Fyfe",
@@ -2307,7 +2393,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DdrKBZ_l5JQ",

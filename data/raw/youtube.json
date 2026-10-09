@@ -1,11 +1,11 @@
 {
  "source": "youtube",
- "updated": "2026-10-08T14:41:11Z",
- "attempted": "2026-10-08T14:41:11Z",
+ "updated": "2026-10-09T14:26:43Z",
+ "attempted": "2026-10-09T14:26:43Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 1,
   "removed": 0,
   "held": 0
  },
@@ -14,29 +14,63 @@
   "rss_feeds": 35,
   "rss_failed": 0,
   "rss_404": 1,
-  "backfill_seconds": 25.4,
-  "listed": 533,
-  "backfill": "ok (533 listed in 25.4s)",
+  "backfill": "not due (last 2026-10-08T14:40:35Z)",
   "playlist_feeds": 31,
   "shorts_probes": 0,
-  "details_pending": 0,
+  "details_pending": 1,
   "details_fetched": 0,
-  "details_failed": 0,
-  "missing_from_listing": 0,
+  "details_failed": 1,
   "gone_checks": 0,
   "gone_marked": 0,
-  "fetched": 533,
-  "new": 0,
-  "total": 533,
-  "active": 533,
+  "fetched": 248,
+  "new": 1,
+  "total": 534,
+  "active": 534,
   "gone": 0,
   "spanish": 95,
   "shorts": 18,
   "approx_dates": 1,
   "playlists": 31,
-  "seconds": 65.9
+  "seconds": 42.9,
+  "warnings": [
+   "details stopped: YouTube answered with a bot check (“confirm you’re not a bot”) — nothing is wrong on our side; videos keep their last known details"
+  ]
  },
  "items": [
+  {
+   "id": "yt:CyjwTw116Ec",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=CyjwTw116Ec",
+   "title": "Grapevine Weekly Open AA Meeting, October 7, 2026 [Season 2, Episode 15]",
+   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 7, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Christopher and Olis, who share their experience…",
+   "lang": "en",
+   "date": "2026-10-09T04:48:48Z",
+   "first_seen": "2026-10-09T14:26:43Z",
+   "last_seen": "2026-10-09T14:26:43Z",
+   "image": "https://i.ytimg.com/vi/CyjwTw116Ec/hqdefault.jpg",
+   "tags": [
+    "season-2",
+    "weekly-open",
+    "live"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "CyjwTw116Ec",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "Grapevine Weekly Open AA Meeting"
+    ],
+    "is_short": false,
+    "views": 36,
+    "is_live_recording": true,
+    "date_approx": false,
+    "season": 2,
+    "episode": 15
+   }
+  },
   {
    "id": "yt:daNbma33_to",
    "source": "youtube",
@@ -63,7 +97,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 204,
+    "views": 219,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -93,7 +127,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 193,
+    "views": 228,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -110,7 +144,7 @@
    "lang": "en",
    "date": "2026-10-02T04:37:45Z",
    "first_seen": "2026-10-02T12:38:01Z",
-   "last_seen": "2026-10-02T12:38:01Z",
+   "last_seen": "2026-10-09T14:26:43Z",
    "image": "https://i.ytimg.com/vi/3IlmqK3taOo/hqdefault.jpg",
    "tags": [
     "season-2",
@@ -127,7 +161,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 258,
+    "views": 279,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -159,7 +193,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 377,
+    "views": 385,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -193,7 +227,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 305,
+    "views": 309,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -226,7 +260,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 356,
+    "views": 357,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -256,7 +290,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 298,
+    "views": 300,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -290,7 +324,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 351,
+    "views": 353,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -322,7 +356,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 320,
+    "views": 321,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -356,7 +390,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 408,
+    "views": 415,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -389,7 +423,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 300,
+    "views": 302,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -419,7 +453,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 344,
+    "views": 348,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -453,7 +487,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 347,
+    "views": 349,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -485,7 +519,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 480,
+    "views": 483,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -519,7 +553,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 410,
+    "views": 413,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -551,7 +585,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 351,
+    "views": 352,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -585,7 +619,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 211,
+    "views": 213,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -648,7 +682,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 232,
+    "views": 233,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -682,7 +716,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 242,
+    "views": 243,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -748,7 +782,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 238,
+    "views": 239,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -845,7 +879,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 226,
+    "views": 227,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -911,7 +945,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 265,
+    "views": 268,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -943,7 +977,7 @@
      "La Viña"
     ],
     "is_short": true,
-    "views": 259,
+    "views": 260,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -1038,7 +1072,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 237,
+    "views": 238,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1104,7 +1138,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 208,
+    "views": 209,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1170,7 +1204,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 265,
+    "views": 266,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1846,7 +1880,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 280,
+    "views": 281,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -1874,7 +1908,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 151,
+    "views": 152,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -1902,7 +1936,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 136,
+    "views": 137,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -1930,7 +1964,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 83,
+    "views": 84,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -1958,7 +1992,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 97,
+    "views": 98,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -1986,7 +2020,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 83,
+    "views": 84,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -2014,7 +2048,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 80,
+    "views": 81,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -2042,7 +2076,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 48,
+    "views": 49,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -2070,7 +2104,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 49,
+    "views": 50,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -2098,7 +2132,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 71,
+    "views": 72,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -2590,7 +2624,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 524,
+    "views": 528,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -2620,7 +2654,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 391,
+    "views": 394,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3074,7 +3108,7 @@
     "duration_sec": 128,
     "playlists": [],
     "is_short": true,
-    "views": 3441,
+    "views": 3448,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3102,7 +3136,7 @@
     "duration_sec": 66,
     "playlists": [],
     "is_short": true,
-    "views": 747,
+    "views": 749,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3130,7 +3164,7 @@
     "duration_sec": 65,
     "playlists": [],
     "is_short": true,
-    "views": 1457,
+    "views": 1458,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3442,7 +3476,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 221,
+    "views": 223,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3470,7 +3504,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 293,
+    "views": 294,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3498,7 +3532,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 84,
+    "views": 85,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3526,7 +3560,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 50,
+    "views": 51,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3554,7 +3588,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 106,
+    "views": 107,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3582,7 +3616,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 54,
+    "views": 55,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3610,7 +3644,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 78,
+    "views": 79,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3638,7 +3672,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 34,
+    "views": 35,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3666,7 +3700,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 42,
+    "views": 43,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3694,7 +3728,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 35,
+    "views": 36,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3722,7 +3756,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 40,
+    "views": 41,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3750,7 +3784,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 32,
+    "views": 33,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3778,7 +3812,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 375,
+    "views": 378,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3806,7 +3840,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 183,
+    "views": 185,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3834,7 +3868,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 142,
+    "views": 145,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3862,7 +3896,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 131,
+    "views": 132,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3890,7 +3924,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 129,
+    "views": 130,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3918,7 +3952,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 168,
+    "views": 169,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3978,7 +4012,7 @@
     "duration_sec": 55,
     "playlists": [],
     "is_short": true,
-    "views": 1177,
+    "views": 1179,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -4006,7 +4040,7 @@
     "duration_sec": 44,
     "playlists": [],
     "is_short": true,
-    "views": 1847,
+    "views": 1852,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -5145,7 +5179,7 @@
      "International Voices: \"Stories from ICYPAA and EURYPAA.”"
     ],
     "is_short": false,
-    "views": 213,
+    "views": 214,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -5173,7 +5207,7 @@
      "International Voices: \"Stories from ICYPAA and EURYPAA.”"
     ],
     "is_short": false,
-    "views": 499,
+    "views": 502,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -5201,7 +5235,7 @@
      "International Voices: \"Stories from ICYPAA and EURYPAA.”"
     ],
     "is_short": false,
-    "views": 235,
+    "views": 236,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -5229,7 +5263,7 @@
      "International Voices: \"Stories from ICYPAA and EURYPAA.”"
     ],
     "is_short": false,
-    "views": 189,
+    "views": 190,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -5257,7 +5291,7 @@
      "International Voices: \"Stories from ICYPAA and EURYPAA.”"
     ],
     "is_short": false,
-    "views": 134,
+    "views": 136,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -5285,7 +5319,7 @@
      "International Voices: \"Stories from ICYPAA and EURYPAA.”"
     ],
     "is_short": false,
-    "views": 304,
+    "views": 305,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -5347,7 +5381,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 866,
+    "views": 867,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6005,7 +6039,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 198,
+    "views": 199,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6033,7 +6067,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 105,
+    "views": 106,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6061,7 +6095,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 185,
+    "views": 186,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6089,7 +6123,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 102,
+    "views": 103,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6117,7 +6151,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 108,
+    "views": 109,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6145,7 +6179,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 94,
+    "views": 95,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6173,7 +6207,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 547,
+    "views": 548,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6201,7 +6235,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 108,
+    "views": 109,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6229,7 +6263,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 168,
+    "views": 170,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6257,7 +6291,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 234,
+    "views": 235,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6285,7 +6319,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 166,
+    "views": 167,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6313,7 +6347,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 585,
+    "views": 586,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6629,7 +6663,7 @@
      "ESPERANZA Y RECUPERACIÓN"
     ],
     "is_short": false,
-    "views": 227,
+    "views": 228,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6657,7 +6691,7 @@
      "ESPERANZA Y RECUPERACIÓN"
     ],
     "is_short": false,
-    "views": 194,
+    "views": 195,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6685,7 +6719,7 @@
      "ESPERANZA Y RECUPERACIÓN"
     ],
     "is_short": false,
-    "views": 106,
+    "views": 107,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6713,7 +6747,7 @@
      "ESPERANZA Y RECUPERACIÓN"
     ],
     "is_short": false,
-    "views": 296,
+    "views": 297,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6741,7 +6775,7 @@
      "ESPERANZA Y RECUPERACIÓN"
     ],
     "is_short": false,
-    "views": 521,
+    "views": 522,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6769,7 +6803,7 @@
      "ESPERANZA Y RECUPERACIÓN"
     ],
     "is_short": false,
-    "views": 120,
+    "views": 121,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6797,7 +6831,7 @@
      "ESPERANZA Y RECUPERACIÓN"
     ],
     "is_short": false,
-    "views": 159,
+    "views": 160,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6825,7 +6859,7 @@
      "ESPERANZA Y RECUPERACIÓN"
     ],
     "is_short": false,
-    "views": 65,
+    "views": 66,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6853,7 +6887,7 @@
      "ESPERANZA Y RECUPERACIÓN"
     ],
     "is_short": false,
-    "views": 118,
+    "views": 119,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6945,7 +6979,7 @@
      "Sober Women"
     ],
     "is_short": false,
-    "views": 313,
+    "views": 314,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -6973,7 +7007,7 @@
      "Sober Women"
     ],
     "is_short": false,
-    "views": 431,
+    "views": 432,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7001,7 +7035,7 @@
      "Sober Women"
     ],
     "is_short": false,
-    "views": 447,
+    "views": 448,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7029,7 +7063,7 @@
      "Sober Women"
     ],
     "is_short": false,
-    "views": 375,
+    "views": 376,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7057,7 +7091,7 @@
      "Sober Women"
     ],
     "is_short": false,
-    "views": 274,
+    "views": 276,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7085,7 +7119,7 @@
      "Sober Women"
     ],
     "is_short": false,
-    "views": 345,
+    "views": 346,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7113,7 +7147,7 @@
      "Sober Women"
     ],
     "is_short": false,
-    "views": 827,
+    "views": 828,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7423,7 +7457,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 3829,
+    "views": 3832,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -9189,7 +9223,7 @@
      "Blessed"
     ],
     "is_short": false,
-    "views": 788,
+    "views": 789,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -9217,7 +9251,7 @@
      "Blessed"
     ],
     "is_short": false,
-    "views": 388,
+    "views": 389,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -9245,7 +9279,7 @@
      "Blessed"
     ],
     "is_short": false,
-    "views": 307,
+    "views": 308,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -9273,7 +9307,7 @@
      "Blessed"
     ],
     "is_short": false,
-    "views": 347,
+    "views": 348,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -9301,7 +9335,7 @@
      "Blessed"
     ],
     "is_short": false,
-    "views": 1395,
+    "views": 1396,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -9329,7 +9363,7 @@
      "Blessed"
     ],
     "is_short": false,
-    "views": 696,
+    "views": 697,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -9357,7 +9391,7 @@
      "Blessed"
     ],
     "is_short": false,
-    "views": 348,
+    "views": 349,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13282,7 +13316,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 1260,
+    "views": 1261,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13338,7 +13372,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": false,
-    "views": 3614,
+    "views": 3616,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13366,7 +13400,7 @@
      "Voices of Men in AA"
     ],
     "is_short": false,
-    "views": 2454,
+    "views": 2455,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13394,7 +13428,7 @@
      "Voices of Men in AA"
     ],
     "is_short": false,
-    "views": 925,
+    "views": 926,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13422,7 +13456,7 @@
      "Voices of Men in AA"
     ],
     "is_short": false,
-    "views": 922,
+    "views": 923,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13450,7 +13484,7 @@
      "Voices of Men in AA"
     ],
     "is_short": false,
-    "views": 701,
+    "views": 702,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13478,7 +13512,7 @@
      "Voices of Men in AA"
     ],
     "is_short": false,
-    "views": 1076,
+    "views": 1077,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13506,7 +13540,7 @@
      "Voices of Men in AA"
     ],
     "is_short": false,
-    "views": 887,
+    "views": 888,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13534,7 +13568,7 @@
      "Voices of Men in AA"
     ],
     "is_short": false,
-    "views": 872,
+    "views": 873,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13562,7 +13596,7 @@
      "Willingness"
     ],
     "is_short": false,
-    "views": 2128,
+    "views": 2129,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13592,7 +13626,7 @@
      "Willingness"
     ],
     "is_short": false,
-    "views": 1150,
+    "views": 1151,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -13620,7 +13654,7 @@
      "Willingness"
     ],
     "is_short": false,
-    "views": 803,
+    "views": 804,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13648,7 +13682,7 @@
      "Willingness"
     ],
     "is_short": false,
-    "views": 818,
+    "views": 819,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13676,7 +13710,7 @@
      "Willingness"
     ],
     "is_short": false,
-    "views": 945,
+    "views": 946,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13704,7 +13738,7 @@
      "Willingness"
     ],
     "is_short": false,
-    "views": 853,
+    "views": 854,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13732,7 +13766,7 @@
      "Coming in"
     ],
     "is_short": false,
-    "views": 913,
+    "views": 914,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13760,7 +13794,7 @@
      "Coming in"
     ],
     "is_short": false,
-    "views": 1011,
+    "views": 1012,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13788,7 +13822,7 @@
      "Coming in"
     ],
     "is_short": false,
-    "views": 616,
+    "views": 617,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13816,7 +13850,7 @@
      "Coming in"
     ],
     "is_short": false,
-    "views": 1098,
+    "views": 1099,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13844,7 +13878,7 @@
      "Coming in"
     ],
     "is_short": false,
-    "views": 1307,
+    "views": 1308,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13872,7 +13906,7 @@
      "Coming in"
     ],
     "is_short": false,
-    "views": 511,
+    "views": 512,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13900,7 +13934,7 @@
      "Coming in"
     ],
     "is_short": false,
-    "views": 434,
+    "views": 435,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13929,7 +13963,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 1719,
+    "views": 1721,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13958,7 +13992,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 932,
+    "views": 934,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13987,7 +14021,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 617,
+    "views": 619,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14016,7 +14050,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 573,
+    "views": 575,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14045,7 +14079,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 543,
+    "views": 545,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14074,7 +14108,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 482,
+    "views": 484,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14103,7 +14137,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 1461,
+    "views": 1465,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14132,7 +14166,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 462,
+    "views": 464,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14161,7 +14195,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 454,
+    "views": 456,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14190,7 +14224,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 578,
+    "views": 580,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14218,7 +14252,7 @@
      "A New Life"
     ],
     "is_short": false,
-    "views": 1026,
+    "views": 1027,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14246,7 +14280,7 @@
      "A New Life"
     ],
     "is_short": false,
-    "views": 1055,
+    "views": 1056,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14274,7 +14308,7 @@
      "A New Life"
     ],
     "is_short": false,
-    "views": 1569,
+    "views": 1570,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14302,7 +14336,7 @@
      "A New Life"
     ],
     "is_short": false,
-    "views": 1158,
+    "views": 1159,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14330,7 +14364,7 @@
      "A New Life"
     ],
     "is_short": false,
-    "views": 940,
+    "views": 941,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14358,7 +14392,7 @@
      "A New Life"
     ],
     "is_short": false,
-    "views": 923,
+    "views": 924,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14386,7 +14420,7 @@
      "A New Life"
     ],
     "is_short": false,
-    "views": 1130,
+    "views": 1131,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14414,7 +14448,7 @@
      "A New Life"
     ],
     "is_short": false,
-    "views": 1545,
+    "views": 1546,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14442,7 +14476,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 931,
+    "views": 932,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14470,7 +14504,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 1841,
+    "views": 1842,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14498,7 +14532,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 6476,
+    "views": 6480,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14526,7 +14560,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 2696,
+    "views": 2697,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14554,7 +14588,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 1234,
+    "views": 1235,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14582,7 +14616,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 1254,
+    "views": 1255,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14610,7 +14644,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 2747,
+    "views": 2753,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14638,7 +14672,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 2306,
+    "views": 2308,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14666,7 +14700,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 1941,
+    "views": 1942,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14720,7 +14754,7 @@
      "Audios de La Viña del 2017"
     ],
     "is_short": false,
-    "views": 840,
+    "views": 841,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14748,7 +14782,7 @@
      "Audios de La Viña del 2017"
     ],
     "is_short": false,
-    "views": 463,
+    "views": 464,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14776,7 +14810,7 @@
      "Audios de La Viña del 2017"
     ],
     "is_short": false,
-    "views": 398,
+    "views": 399,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14804,7 +14838,7 @@
      "Audios de La Viña del 2017"
     ],
     "is_short": false,
-    "views": 415,
+    "views": 416,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14832,7 +14866,7 @@
      "Audios de La Viña del 2017"
     ],
     "is_short": false,
-    "views": 367,
+    "views": 368,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14860,7 +14894,7 @@
      "Audios de La Viña del 2017"
     ],
     "is_short": false,
-    "views": 304,
+    "views": 305,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14888,7 +14922,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 2156,
+    "views": 2157,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14916,7 +14950,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 2064,
+    "views": 2065,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14944,7 +14978,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 2715,
+    "views": 2716,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14972,7 +15006,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 2429,
+    "views": 2430,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15000,7 +15034,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 1295,
+    "views": 1296,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15028,7 +15062,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 1026,
+    "views": 1027,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15056,7 +15090,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 1420,
+    "views": 1421,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15084,7 +15118,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 6355,
+    "views": 6357,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15138,7 +15172,7 @@
      "Audios de La Viña del 2018"
     ],
     "is_short": false,
-    "views": 291,
+    "views": 292,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15166,7 +15200,7 @@
      "Audios de La Viña del 2018"
     ],
     "is_short": false,
-    "views": 199,
+    "views": 200,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15194,7 +15228,7 @@
      "Audios de La Viña del 2018"
     ],
     "is_short": false,
-    "views": 302,
+    "views": 303,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15222,7 +15256,7 @@
      "Audios de La Viña del 2018"
     ],
     "is_short": false,
-    "views": 328,
+    "views": 329,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15250,7 +15284,7 @@
      "Audios de La Viña del 2018"
     ],
     "is_short": false,
-    "views": 286,
+    "views": 287,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15278,7 +15312,7 @@
      "Audios de La Viña del 2018"
     ],
     "is_short": false,
-    "views": 531,
+    "views": 532,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15306,7 +15340,7 @@
      "Zoom \"How to\" Instructionals"
     ],
     "is_short": false,
-    "views": 4481,
+    "views": 4482,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15334,7 +15368,7 @@
      "Audios de La Viña del 2019"
     ],
     "is_short": false,
-    "views": 1069,
+    "views": 1070,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15362,7 +15396,7 @@
      "Audios de La Viña del 2019"
     ],
     "is_short": false,
-    "views": 784,
+    "views": 785,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15390,7 +15424,7 @@
      "Audios de La Viña del 2019"
     ],
     "is_short": false,
-    "views": 2147,
+    "views": 2148,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15418,7 +15452,7 @@
      "Audios de La Viña del 2019"
     ],
     "is_short": false,
-    "views": 990,
+    "views": 991,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15446,7 +15480,7 @@
      "Audios de La Viña del 2019"
     ],
     "is_short": false,
-    "views": 10485,
+    "views": 10486,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15474,7 +15508,7 @@
      "Audios de La Viña del 2019"
     ],
     "is_short": false,
-    "views": 1023,
+    "views": 1024,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15502,7 +15536,7 @@
      "Zoom \"How to\" Instructionals"
     ],
     "is_short": false,
-    "views": 10062,
+    "views": 10063,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15531,7 +15565,7 @@
      "CTM"
     ],
     "is_short": false,
-    "views": 6906,
+    "views": 6910,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15559,7 +15593,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 828,
+    "views": 829,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15587,7 +15621,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 703,
+    "views": 704,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15615,7 +15649,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 4774,
+    "views": 4778,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15643,7 +15677,7 @@
      "CTM"
     ],
     "is_short": false,
-    "views": 14639,
+    "views": 14642,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15671,7 +15705,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 980,
+    "views": 981,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15699,7 +15733,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 767,
+    "views": 768,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15727,7 +15761,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 2903,
+    "views": 2904,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15755,7 +15789,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 1990,
+    "views": 1991,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15784,7 +15818,7 @@
      "GVR/RLV"
     ],
     "is_short": false,
-    "views": 1497,
+    "views": 1499,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15812,7 +15846,7 @@
      "GVR/RLV"
     ],
     "is_short": false,
-    "views": 1611,
+    "views": 1612,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15892,7 +15926,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 1499,
+    "views": 1500,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15920,7 +15954,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 1070,
+    "views": 1071,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15948,7 +15982,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 886,
+    "views": 887,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15976,7 +16010,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 3045,
+    "views": 3046,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16004,7 +16038,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 3802,
+    "views": 3803,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16060,7 +16094,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 635,
+    "views": 636,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16088,7 +16122,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 6843,
+    "views": 6844,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16142,7 +16176,7 @@
      "75 YEAR TOOLKITS"
     ],
     "is_short": false,
-    "views": 5766,
+    "views": 5767,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16170,7 +16204,7 @@
      "75 YEAR TOOLKITS"
     ],
     "is_short": false,
-    "views": 3848,
+    "views": 3849,
     "is_live_recording": false,
     "date_approx": false
    }

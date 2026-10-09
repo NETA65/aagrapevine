@@ -1,7 +1,7 @@
 {
  "source": "meetings",
- "updated": "2026-10-08T14:45:40Z",
- "attempted": "2026-10-08T14:45:40Z",
+ "updated": "2026-10-09T14:32:37Z",
+ "attempted": "2026-10-09T14:32:37Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -11,8 +11,8 @@
  },
  "stats": {
   "offices": 8,
-  "offices_ok": 7,
-  "listed": 5132,
+  "offices_ok": 8,
+  "listed": 5907,
   "grapevine": 24,
   "meetings": 23,
   "in_area": 13,
@@ -21,10 +21,7 @@
   "incomplete": 0,
   "duplicates_merged": 1,
   "kept_from_before": 0,
-  "requests": 9,
-  "warnings": [
-   "Northwest Texas Area 66: nwta66.org answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept"
-  ]
+  "requests": 8
  },
  "items": [
   {
@@ -37,7 +34,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -82,7 +79,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "A",
@@ -129,7 +126,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -174,7 +171,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -219,7 +216,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "C",
@@ -264,7 +261,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "D",
@@ -311,7 +308,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "CF",
@@ -358,7 +355,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "C",
@@ -403,7 +400,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -448,7 +445,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "C",
@@ -495,7 +492,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "C",
@@ -542,7 +539,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -587,7 +584,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -632,7 +629,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "C",
@@ -679,7 +676,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -724,7 +721,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -769,7 +766,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -814,7 +811,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -861,7 +858,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "C",
@@ -907,7 +904,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "C",
@@ -958,7 +955,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "C",
@@ -1003,7 +1000,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -1048,7 +1045,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-02T12:42:44Z",
+   "last_seen": "2026-10-09T14:32:37Z",
    "image": null,
    "tags": [
     "GR",
@@ -1096,8 +1093,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-10-08T14:44:45Z",
-   "attempted": "2026-10-08T14:44:45Z",
+   "updated": "2026-10-09T14:31:43Z",
+   "attempted": "2026-10-09T14:31:43Z",
    "note": null
   },
   {
@@ -1110,8 +1107,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-10-08T14:44:45Z",
-   "attempted": "2026-10-08T14:44:45Z",
+   "updated": "2026-10-09T14:31:43Z",
+   "attempted": "2026-10-09T14:31:43Z",
    "note": null
   },
   {
@@ -1124,8 +1121,8 @@
    "method": "page",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-08T14:44:45Z",
-   "attempted": "2026-10-08T14:44:45Z",
+   "updated": "2026-10-09T14:31:43Z",
+   "attempted": "2026-10-09T14:31:43Z",
    "note": null
   },
   {
@@ -1138,8 +1135,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-08T14:44:45Z",
-   "attempted": "2026-10-08T14:44:45Z",
+   "updated": "2026-10-09T14:31:43Z",
+   "attempted": "2026-10-09T14:31:43Z",
    "note": null
   },
   {
@@ -1152,8 +1149,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-08T14:44:45Z",
-   "attempted": "2026-10-08T14:44:45Z",
+   "updated": "2026-10-09T14:31:43Z",
+   "attempted": "2026-10-09T14:31:43Z",
    "note": null
   },
   {
@@ -1166,8 +1163,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-08T14:44:45Z",
-   "attempted": "2026-10-08T14:44:45Z",
+   "updated": "2026-10-09T14:31:43Z",
+   "attempted": "2026-10-09T14:31:43Z",
    "note": null
   },
   {
@@ -1180,8 +1177,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-08T14:44:45Z",
-   "attempted": "2026-10-08T14:44:45Z",
+   "updated": "2026-10-09T14:31:43Z",
+   "attempted": "2026-10-09T14:31:43Z",
    "note": null
   },
   {
@@ -1189,13 +1186,14 @@
    "name": "Northwest Texas Area 66",
    "url": "https://nwta66.org",
    "lang": "en",
-   "ok": false,
+   "ok": true,
    "count": 0,
-   "method": null,
+   "method": "feed",
    "key_from": null,
-   "error": "nwta66.org answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept",
-   "updated": "2026-10-07T14:39:55Z",
-   "attempted": "2026-10-08T14:44:45Z"
+   "error": null,
+   "updated": "2026-10-09T14:31:43Z",
+   "attempted": "2026-10-09T14:31:43Z",
+   "note": null
   }
  ],
  "type_labels": {
