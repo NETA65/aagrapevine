@@ -1,7 +1,57 @@
 {
- "updated": "2026-10-08T18:49:29Z",
+ "updated": "2026-10-09T07:30:27Z",
  "fixture": false,
  "items": [
+  {
+   "id": "pod:wo:0a54fa5dff79",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/d0617256-3d71-4850-8a82-2158ccf2c370",
+   "title": "Grapevine Weekly Open AA Meeting, October 7, 2026 [Season 2, Episode 15]",
+   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 7, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Christopher and Olis, who share their experience…",
+   "lang": "en",
+   "date": "2026-10-09T04:15:00Z",
+   "first_seen": "2026-10-09T07:30:20Z",
+   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
+   "tags": [
+    "season-2"
+   ],
+   "category": "wo",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/d0617256-3d71-4850-8a82-2158ccf2c370.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 77117788,
+    "duration_sec": 3213,
+    "season": 2,
+    "episode": 15,
+    "episode_type": "full",
+    "show": "wo",
+    "show_name": "Grapevine Weekly Open AA Meeting",
+    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
+    "player_url": "https://player.captivate.fm/episode/d0617256-3d71-4850-8a82-2158ccf2c370",
+    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
+    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
+    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
+    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Weekly Open AA Meeting, October 7, 2026 [Season 2, Episode 15]",
+     "es": "Grapevine Weekly Open AA Meeting, 7 de octubre de 2026 [Temporada 2, Episodio 15]"
+    },
+    "summary": {
+     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 7, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Christopher and Olis, who share their experience…",
+     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 7 de octubre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Don da la bienvenida a los oradores Christopher y Olis, que comparten su experiencia …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-09T04:15:00Z"
+  },
   {
    "id": "ig:DeO1HeJDJa6",
    "source": "instagram",
@@ -4021,7 +4071,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-25T04:31:03Z"
   },
   {
@@ -4071,7 +4121,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-09-25T04:15:00Z"
   },
   {
@@ -4249,67 +4299,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-09-24T13:54:49Z"
-  },
-  {
-   "id": "ev:manual:2026-10-07-lv-writing-workshop-mansfield",
-   "source": "committee",
-   "kind": "event",
-   "url": "https://neta65.org/event/la-vina-writing-workshop-3/",
-   "title": "La Viña Writing Workshop (in Spanish) — Mansfield",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
-   "lang": "en",
-   "date": "2026-10-08T01:00:00Z",
-   "first_seen": "2026-09-24T11:10:08Z",
-   "image": null,
-   "tags": [
-    "workshop",
-    "la-vina"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-10-08T01:00:00Z",
-    "end": "2026-10-08T03:00:00Z",
-    "all_day": false,
-    "location": "Grupo 7 Defectos y 7 Virtudes, 287 Frontage Road, Mansfield, TX 76063",
-    "online_url": null,
-    "flyer_url": "https://drive.google.com/file/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj/view",
-    "flyer_thumb": null,
-    "city": "Mansfield",
-    "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
-    "slug": "2026-10-07-lv-writing-workshop-mansfield",
-    "file": "content/events/2026-10-07-lv-writing-workshop-mansfield.md",
-    "own_i18n": {
-     "title": {
-      "es": "Taller de Escritura de La Viña — Mansfield"
-     },
-     "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
-     },
-     "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop (in Spanish) — Mansfield",
-     "es": "Taller de Escritura de La Viña — Mansfield"
-    },
-    "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
-    },
-    "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-09-24T11:10:08Z"
   },
   {
    "id": "ev:manual:2026-10-17-lv-recording-workshop-duncanville",

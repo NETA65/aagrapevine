@@ -1,67 +1,7 @@
 {
- "updated": "2026-10-08T14:49:26Z",
+ "updated": "2026-10-09T07:30:27Z",
  "fixture": false,
  "items": [
-  {
-   "id": "ev:manual:2026-10-07-lv-writing-workshop-mansfield",
-   "source": "committee",
-   "kind": "event",
-   "url": "https://neta65.org/event/la-vina-writing-workshop-3/",
-   "title": "La Viña Writing Workshop (in Spanish) — Mansfield",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
-   "lang": "en",
-   "date": "2026-10-08T01:00:00Z",
-   "first_seen": "2026-09-24T11:10:08Z",
-   "image": null,
-   "tags": [
-    "workshop",
-    "la-vina"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-10-08T01:00:00Z",
-    "end": "2026-10-08T03:00:00Z",
-    "all_day": false,
-    "location": "Grupo 7 Defectos y 7 Virtudes, 287 Frontage Road, Mansfield, TX 76063",
-    "online_url": null,
-    "flyer_url": "https://drive.google.com/file/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj/view",
-    "flyer_thumb": null,
-    "city": "Mansfield",
-    "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
-    "slug": "2026-10-07-lv-writing-workshop-mansfield",
-    "file": "content/events/2026-10-07-lv-writing-workshop-mansfield.md",
-    "own_i18n": {
-     "title": {
-      "es": "Taller de Escritura de La Viña — Mansfield"
-     },
-     "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
-     },
-     "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop (in Spanish) — Mansfield",
-     "es": "Taller de Escritura de La Viña — Mansfield"
-    },
-    "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
-    },
-    "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
   {
    "id": "ev:recurring:citywide-dallas:2026-10-10",
    "source": "committee",
@@ -1773,6 +1713,66 @@
     "location": {
      "en": "Venue to be announced",
      "es": "Lugar por anunciarse"
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:manual:2026-10-07-lv-writing-workshop-mansfield",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://neta65.org/event/la-vina-writing-workshop-3/",
+   "title": "La Viña Writing Workshop (in Spanish) — Mansfield",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
+   "lang": "en",
+   "date": "2026-10-08T01:00:00Z",
+   "first_seen": "2026-09-24T11:10:08Z",
+   "image": null,
+   "tags": [
+    "workshop",
+    "la-vina"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-10-08T01:00:00Z",
+    "end": "2026-10-08T03:00:00Z",
+    "all_day": false,
+    "location": "Grupo 7 Defectos y 7 Virtudes, 287 Frontage Road, Mansfield, TX 76063",
+    "online_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj/view",
+    "flyer_thumb": null,
+    "city": "Mansfield",
+    "state": "TX",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
+    "slug": "2026-10-07-lv-writing-workshop-mansfield",
+    "file": "content/events/2026-10-07-lv-writing-workshop-mansfield.md",
+    "own_i18n": {
+     "title": {
+      "es": "Taller de Escritura de La Viña — Mansfield"
+     },
+     "summary": {
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
+     },
+     "body_md": {
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
+     }
+    },
+    "past": true
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Writing Workshop (in Spanish) — Mansfield",
+     "es": "Taller de Escritura de La Viña — Mansfield"
+    },
+    "summary": {
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
+    },
+    "body_md": {
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo 7 Defectos y 7 Virtudes in Mansfield.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo 7 Defectos y 7 Virtudes de Mansfield."
     }
    },
    "machine": [],
