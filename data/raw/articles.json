@@ -1,27 +1,27 @@
 {
  "source": "articles",
- "updated": "2026-10-09T14:29:06Z",
- "attempted": "2026-10-09T14:29:06Z",
+ "updated": "2026-10-10T13:52:19Z",
+ "attempted": "2026-10-10T13:52:19Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 2,
+  "added": 0,
   "removed": 0,
   "held": 0
  },
  "stats": {
   "hub_articles": 56,
-  "details_fetched": 2,
+  "details_fetched": 0,
   "details_failed": 0,
-  "thumbs": 2,
+  "thumbs": 0,
   "archive_pages": 14,
-  "archive_new": 2,
-  "details_pending": 2,
+  "archive_new": 0,
+  "details_pending": 0,
   "byline_pending": 0,
   "details_left": 0,
-  "new": 2,
+  "new": 0,
   "total": 230,
-  "requests": 20
+  "requests": 16
  },
  "items": [
   {
@@ -7626,7 +7626,7 @@
    "key": "2026-10",
    "publication": "gv",
    "hub": "https://www.aagrapevine.org/magazine",
-   "seen": "2026-10-09T14:27:11Z",
+   "seen": "2026-10-10T13:50:45Z",
    "cover": "/assets/cache/articles/4af15bfa155b69a0.webp"
   },
   "lv:2026-09": {
@@ -7638,7 +7638,7 @@
    "key": "2026-09",
    "publication": "lv",
    "hub": "https://www.aalavina.org/la-revista",
-   "seen": "2026-10-09T14:27:21Z",
+   "seen": "2026-10-10T13:50:59Z",
    "cover": "/assets/cache/articles/5f6983cc446a5d6a.webp"
   }
  },
@@ -7664,15 +7664,15 @@
  },
  "archive_state": {
   "gv": {
-   "last_run": "2026-10-09T14:28:01Z",
+   "last_run": "2026-10-10T13:51:38Z",
    "pages_last_run": 7,
-   "new_last_run": 2,
+   "new_last_run": 0,
    "oldest_seen": "2026-08",
    "backfilled": "2026-09-23T23:07:47Z",
    "backfill_days": 120
   },
   "lv": {
-   "last_run": "2026-10-09T14:28:43Z",
+   "last_run": "2026-10-10T13:52:19Z",
    "pages_last_run": 7,
    "new_last_run": 0,
    "oldest_seen": "2026-05",

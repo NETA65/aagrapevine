@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T14:27:03Z",
+ "updated": "2026-10-10T13:50:40Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16917,
-   "posts": 3929,
+   "followers": 16920,
+   "posts": 3933,
    "owner_id": "48108439509",
-   "checked": "2026-10-09T14:26:45Z",
+   "checked": "2026-10-10T13:50:20Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,272 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2421,
-   "posts": 2962,
+   "followers": 2422,
+   "posts": 2964,
    "owner_id": "48275839129",
-   "checked": "2026-10-09T14:26:48Z",
+   "checked": "2026-10-10T13:50:24Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DeT-tLljDOq",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeT-tLljDOq/",
+   "title": "“Tengo una forma de vivir que llena todos los vacíos que alguna vez sentí”.",
+   "summary": "“Tengo una forma de vivir que llena todos los vacíos que alguna vez sentí”. \"“Prestarle atención a los sentimientos de los demás” GRANTS, NUEVO MÉXICO, JULIO DE 1980 De Young & Sober\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-10T11:30:15Z",
+   "first_seen": "2026-10-10T13:50:40Z",
+   "image": "/assets/cache/ig/DeT-tLljDOq.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeT-tLljDOq",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeT-tLljDOq.webp",
+    "embed_url": "https://www.instagram.com/p/DeT-tLljDOq/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeT-tLljDOq/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I have a way of living that fills all the voids I ever felt.”",
+     "es": "“Tengo una forma de vivir que llena todos los vacíos que alguna vez sentí”."
+    },
+    "summary": {
+     "en": "“I have a way of living that fills all the voids I ever felt.” \"To pay attention to the feelings of others\" GRANTS, NEW MEXICO, JULY 1980 De Young and Sovereign Daily Quote in www.aalavina.org",
+     "es": "“Tengo una forma de vivir que llena todos los vacíos que alguna vez sentí”. \"“Prestarle atención a los sentimientos de los demás” GRANTS, NUEVO MÉXICO, JULIO DE 1980 De Young & Sober\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeT-tKZjMTi",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeT-tKZjMTi/",
+   "title": "“When I go to a meeting today, I no longer have the delusion that I am supporting a good…",
+   "summary": "“When I go to a meeting today, I no longer have the delusion that I am supporting a good cause. I need AA; AA did quite well without me during my ten years of self-exile. I go to AA meetings today to hear and see how God is working. When I share at a meeting, it is not to try and ‘help’ those poor wretches, it is because I need their help and guidance.” “Garden Hose Sobriety,” El Paso, Texas…",
+   "lang": "en",
+   "date": "2026-10-10T11:30:14Z",
+   "first_seen": "2026-10-10T13:50:40Z",
+   "image": "/assets/cache/ig/DeT-tKZjMTi.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeT-tKZjMTi",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeT-tKZjMTi.webp",
+    "embed_url": "https://www.instagram.com/p/DeT-tKZjMTi/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeT-tKZjMTi/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“When I go to a meeting today, I no longer have the delusion that I am supporting a good…",
+     "es": "“Cuando voy a una reunión de hoy, ya no tengo la ilusión de que estoy apoyando un buen …"
+    },
+    "summary": {
+     "en": "“When I go to a meeting today, I no longer have the delusion that I am supporting a good cause. I need AA; AA did quite well without me during my ten years of self-exile. I go to AA meetings today to hear and see how God is working. When I share at a meeting, it is not to try and ‘help’ those poor wretches, it is because I need their help and guidance.” “Garden Hose Sobriety,” El Paso, Texas…",
+     "es": "“Cuando voy a una reunión de hoy, ya no tengo el engaño de que estoy apoyando una buena causa. Necesito AA; AA hizo bastante bien sin mí durante mis diez años de auto-exilio. Hoy voy a las reuniones de AA para escuchar y ver cómo Dios está trabajando. Cuando comparto en una reunión, no es tratar de \"ayudar\" a esos pobres desgraciados, es porque necesito su ayuda y orientación.\" “Garden manguera sobriedad”, el Paso, Texas …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeSpnvXJxm6",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeSpnvXJxm6/",
+   "title": "We’re at the Alabama/Northwest Florida Area Assembly this weekend.",
+   "summary": "We’re at the Alabama/Northwest Florida Area Assembly this weekend.",
+   "lang": "en",
+   "date": "2026-10-09T23:07:45Z",
+   "first_seen": "2026-10-10T13:50:40Z",
+   "image": "/assets/cache/ig/DeSpnvXJxm6.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeSpnvXJxm6",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeSpnvXJxm6.webp",
+    "embed_url": "https://www.instagram.com/p/DeSpnvXJxm6/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeSpnvXJxm6/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We’re at the Alabama/Northwest Florida Area Assembly this weekend.",
+     "es": "Estamos en el Alabama/Northwest Florida Asamblea de Área este fin de semana."
+    },
+    "summary": {
+     "en": "We’re at the Alabama/Northwest Florida Area Assembly this weekend.",
+     "es": "Estamos en el Alabama/Northwest Florida Asamblea de Área este fin de semana."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeSD1cqpBBA",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeSD1cqpBBA/",
+   "title": "This week, from the October 7 , 2026 open meeting, leader Don welcomes speakers…",
+   "summary": "This week, from the October 7 , 2026 open meeting, leader Don welcomes speakers Christopher and Olis.",
+   "lang": "en",
+   "date": "2026-10-09T17:38:49Z",
+   "first_seen": "2026-10-10T13:50:40Z",
+   "image": "/assets/cache/ig/DeSD1cqpBBA.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeSD1cqpBBA",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeSD1cqpBBA.webp",
+    "embed_url": "https://www.instagram.com/p/DeSD1cqpBBA/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeSD1cqpBBA/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "This week, from the October 7 , 2026 open meeting, leader Don welcomes speakers…",
+     "es": "Esta semana, desde la 7 de octubre , 2026 reunión abierta, el líder Don da la bienvenida a los oradores …"
+    },
+    "summary": {
+     "en": "This week, from the October 7 , 2026 open meeting, leader Don welcomes speakers Christopher and Olis.",
+     "es": "Esta semana, desde el 7 de octubre , 2026 reunión abierta, el líder Don da la bienvenida a los oradores Christopher y Olis."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeSBpfBpO-y",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeSBpfBpO-y/",
+   "title": "Starting in November, a La Viña Spanish language weekly online open meeting and podcast.",
+   "summary": "Starting in November, a La Viña Spanish language weekly online open meeting and podcast.",
+   "lang": "en",
+   "date": "2026-10-09T17:20:04Z",
+   "first_seen": "2026-10-10T13:50:40Z",
+   "image": "/assets/cache/ig/DeSBpfBpO-y.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeSBpfBpO-y",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeSBpfBpO-y.webp",
+    "embed_url": "https://www.instagram.com/p/DeSBpfBpO-y/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeSBpfBpO-y/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Starting in November, a La Viña Spanish language weekly online open meeting and podcast.",
+     "es": "A partir de noviembre, un idioma español La Viña semanal de reunión abierta en línea y podcast."
+    },
+    "summary": {
+     "en": "Starting in November, a La Viña Spanish language weekly online open meeting and podcast.",
+     "es": "A partir de noviembre, un idioma español La Viña semanal de reunión abierta en línea y podcast."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeSA8RBuGuH",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeSA8RBuGuH/",
+   "title": "A partir de noviembre, una reunión abierta semanal en línea y un pódcast de La Viña.",
+   "summary": "A partir de noviembre, una reunión abierta semanal en línea y un pódcast de La Viña.",
+   "lang": "es",
+   "date": "2026-10-09T17:16:00Z",
+   "first_seen": "2026-10-10T13:50:40Z",
+   "image": "/assets/cache/ig/DeSA8RBuGuH.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeSA8RBuGuH",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeSA8RBuGuH.webp",
+    "embed_url": "https://www.instagram.com/p/DeSA8RBuGuH/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeSA8RBuGuH/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Starting in November, an open weekly online meeting and a La Viña poster.",
+     "es": "A partir de noviembre, una reunión abierta semanal en línea y un pódcast de La Viña."
+    },
+    "summary": {
+     "en": "Starting in November, an open weekly online meeting and a La Viña poster.",
+     "es": "A partir de noviembre, una reunión abierta semanal en línea y un pódcast de La Viña."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DeRZ6Xclylr",
    "source": "instagram",
@@ -2178,7 +2436,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Ddv7lABFw1z",
@@ -2221,7 +2479,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Ddtu0JsFzEt",

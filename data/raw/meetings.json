@@ -1,7 +1,7 @@
 {
  "source": "meetings",
- "updated": "2026-10-09T14:32:37Z",
- "attempted": "2026-10-09T14:32:37Z",
+ "updated": "2026-10-10T13:55:04Z",
+ "attempted": "2026-10-10T13:55:04Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -12,7 +12,7 @@
  "stats": {
   "offices": 8,
   "offices_ok": 8,
-  "listed": 5907,
+  "listed": 5910,
   "grapevine": 24,
   "meetings": 23,
   "in_area": 13,
@@ -1093,8 +1093,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-10-09T14:31:43Z",
-   "attempted": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
+   "attempted": "2026-10-10T13:54:11Z",
    "note": null
   },
   {
@@ -1107,8 +1107,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-10-09T14:31:43Z",
-   "attempted": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
+   "attempted": "2026-10-10T13:54:11Z",
    "note": null
   },
   {
@@ -1121,8 +1121,8 @@
    "method": "page",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-09T14:31:43Z",
-   "attempted": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
+   "attempted": "2026-10-10T13:54:11Z",
    "note": null
   },
   {
@@ -1135,8 +1135,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-09T14:31:43Z",
-   "attempted": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
+   "attempted": "2026-10-10T13:54:11Z",
    "note": null
   },
   {
@@ -1149,8 +1149,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-09T14:31:43Z",
-   "attempted": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
+   "attempted": "2026-10-10T13:54:11Z",
    "note": null
   },
   {
@@ -1163,8 +1163,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-09T14:31:43Z",
-   "attempted": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
+   "attempted": "2026-10-10T13:54:11Z",
    "note": null
   },
   {
@@ -1177,8 +1177,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-09T14:31:43Z",
-   "attempted": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
+   "attempted": "2026-10-10T13:54:11Z",
    "note": null
   },
   {
@@ -1191,8 +1191,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-09T14:31:43Z",
-   "attempted": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
+   "attempted": "2026-10-10T13:54:11Z",
    "note": null
   }
  ],

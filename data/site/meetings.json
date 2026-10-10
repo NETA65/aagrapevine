@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T14:32:37Z",
+ "updated": "2026-10-10T13:55:04Z",
  "fixture": false,
  "type": "GR",
  "sources": [
@@ -13,7 +13,7 @@
     "es": "Zona de Dallas"
    },
    "ok": true,
-   "updated": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
    "count": 5,
    "error": null
   },
@@ -27,7 +27,7 @@
     "es": "Zona de Fort Worth"
    },
    "ok": true,
-   "updated": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
    "count": 5,
    "error": null
   },
@@ -41,7 +41,7 @@
     "es": "Este de Texas (Tyler)"
    },
    "ok": true,
-   "updated": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
    "count": 3,
    "error": null
   },
@@ -55,7 +55,7 @@
     "es": "Zona de Dallas (en español)"
    },
    "ok": true,
-   "updated": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
    "count": 0,
    "error": null
   },
@@ -69,7 +69,7 @@
     "es": "Abilene (Distrito 71)"
    },
    "ok": true,
-   "updated": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
    "count": 1,
    "error": null
   },
@@ -83,7 +83,7 @@
     "es": "Arkansas y la zona de Fort Smith"
    },
    "ok": true,
-   "updated": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
    "count": 2,
    "error": null
   },
@@ -97,7 +97,7 @@
     "es": "Zona de Oklahoma City"
    },
    "ok": true,
-   "updated": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
    "count": 8,
    "error": null
   },
@@ -111,7 +111,7 @@
     "es": "Noroeste de Texas (Área 66)"
    },
    "ok": true,
-   "updated": "2026-10-09T14:31:43Z",
+   "updated": "2026-10-10T13:54:11Z",
    "count": 0,
    "error": null
   }

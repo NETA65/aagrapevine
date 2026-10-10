@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-10-09T14:33:04Z",
- "attempted": "2026-10-09T14:33:04Z",
+ "updated": "2026-10-10T13:55:14Z",
+ "attempted": "2026-10-10T13:55:14Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,15 +15,15 @@
   "upcoming_urls": 17,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 3,
+  "refreshed": 0,
   "failed": 0,
   "pending": 0,
-  "cached": 18,
+  "cached": 17,
   "texas": 1,
   "online_es": 1,
   "items": 2,
   "new": 0,
-  "requests": 53
+  "requests": 39
  },
  "items": [
   {
@@ -36,7 +36,7 @@
    "lang": "es",
    "date": "2027-01-29",
    "first_seen": "2026-10-02T22:31:32Z",
-   "last_seen": "2026-10-02T22:31:32Z",
+   "last_seen": "2026-10-10T13:55:14Z",
    "image": null,
    "tags": [
     "texas"
@@ -74,7 +74,7 @@
    "lang": "es",
    "date": "2026-10-22",
    "first_seen": "2026-10-02T22:31:32Z",
-   "last_seen": "2026-10-02T22:31:32Z",
+   "last_seen": "2026-10-10T13:55:14Z",
    "image": null,
    "tags": [
     "online"
@@ -105,25 +105,6 @@
  ],
  "first_harvest": "2026-09-23T16:43:55Z",
  "cache": {
-  "https://www.aagrapevine.org/get-involved/events/2026-10-02/79th-powell-river-rally-2026": {
-   "at": "2026-09-23T16:42:55Z",
-   "ev": {
-    "title": "79th Powell River Rally 2026",
-    "date_text": "October 2, 2026 - October 4, 2026",
-    "start": "2026-10-02",
-    "end": "2026-10-04",
-    "all_day": true,
-    "location_raw": "Powell River, British Columbia, Canada",
-    "location": "Powell River, British Columbia, Canada",
-    "city": "British Columbia",
-    "country": "Canada",
-    "online": false,
-    "texas": false,
-    "lang": "en"
-   },
-   "http": 200,
-   "fails": 0
-  },
   "https://www.aagrapevine.org/get-involved/events/2026-10-23/38th-northeast-woman-woman-conference": {
    "at": "2026-10-08T14:45:55Z",
    "ev": {
@@ -467,14 +448,14 @@
  "sitemap": {
   "pages": {
    "https://www.aagrapevine.org/sitemap.xml?page=1": {
-    "lastmod": "2026-10-08T20:41:31-05:00",
+    "lastmod": "2026-10-10T07:37:26-05:00",
     "events": [],
-    "fetched": "2026-10-09T14:32:42Z",
+    "fetched": "2026-10-10T13:55:09Z",
     "urls_total": 2000,
     "events_total": 2000
    },
    "https://www.aagrapevine.org/sitemap.xml?page=2": {
-    "lastmod": "2026-10-08T20:41:31-05:00",
+    "lastmod": "2026-10-10T07:37:26-05:00",
     "events": [
      "https://www.aagrapevine.org/get-involved/events/2026-09-11/2026-national-technology-workshop",
      "https://www.aagrapevine.org/get-involved/events/2026-09-11/20th-santa-clarita-valley-convention",
@@ -499,7 +480,7 @@
      "https://www.aalavina.org/get-involved/events/2027-05-28/xxiv-encuentro-hispano-de-aa-del-estado-de-kansas-sede-topeka",
      "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico"
     ],
-    "fetched": "2026-10-09T14:32:47Z",
+    "fetched": "2026-10-10T13:55:14Z",
     "urls_total": 1091,
     "events_total": 943
    }
