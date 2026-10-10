@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-10-09T23:59:19Z",
- "attempted": "2026-10-09T23:59:19Z",
+ "updated": "2026-10-10T07:17:07Z",
+ "attempted": "2026-10-10T07:17:07Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-09",
-  "new": 0
+  "today": "2026-10-10",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-09",
+   "id": "quote:gv:2026-10-10",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 9",
+   "title": "Grapevine Daily Quote October 10",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-09",
-   "first_seen": "2026-10-09T07:30:15Z",
-   "last_seen": "2026-10-09T07:30:15Z",
+   "date": "2026-10-10",
+   "first_seen": "2026-10-10T07:17:07Z",
+   "last_seen": "2026-10-10T07:17:07Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "So long as there is the slightest interest in sobriety, the most unmoral, the most antisocial, the most critical alcoholic may gather about him a few kindred spirits and announce to us that a new Alcoholics Anonymous group has been formed. Anti-God, anti-medicine, anti-our recovery program, even anti-each other – these rampant individuals are still an AA group if they think so!",
-    "attribution": "AA Co-Founder, Bill W., July 1946, “The Individual in Relation to AA as a Group”, The Language of the Heart",
+    "text": "When I go to a meeting today, I no longer have the delusion that I am supporting a good cause. I need AA; AA did quite well without me during my ten years of self-exile. I go to AA meetings today to hear and see how God is working. When I share at a meeting, it is not to try and ‘help’ those poor wretches, it is because I need their help and guidance.",
+    "attribution": "“Garden Hose Sobriety,” El Paso, Texas, October 2006, Voices of Long-Term Sobriety",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 9",
+    "date_label": "October 10",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84277"
+    "node": "node-84278"
    }
   },
   {
-   "id": "quote:lv:2026-10-09",
+   "id": "quote:lv:2026-10-10",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 9",
+   "title": "Cita Diaria con La Viña Octubre 10",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-09",
-   "first_seen": "2026-10-09T07:30:15Z",
-   "last_seen": "2026-10-09T07:30:15Z",
+   "date": "2026-10-10",
+   "first_seen": "2026-10-10T07:17:07Z",
+   "last_seen": "2026-10-10T07:17:07Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que sentiría al estar con Dios.",
-    "attribution": "“El proceso de paz”. GOLD RIVER, CALIFORNIA, DICIEMBRE DE 1996. Del AA Grapevine",
-    "source": "",
-    "source_lang": null,
+    "text": "Tengo una forma de vivir que llena todos los vacíos que alguna vez sentí.",
+    "attribution": "“Prestarle atención a los sentimientos de los demás”. GRANTS, NUEVO MÉXICO, JULIO DE 1980",
+    "source": "Young & Sober",
+    "source_lang": "en",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "9 de octubre",
+    "date_label": "10 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84283"
+    "node": "node-84284"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-10",
+    "heading": "Grapevine Daily Quote October 10",
+    "text": "When I go to a meeting today, I no longer have the delusion that I am supporting a good cause. I need AA; AA did quite well without me during my ten years of self-exile. I go to AA meetings today to hear and see how God is working. When I share at a meeting, it is not to try and ‘help’ those poor wretches, it is because I need their help and guidance.",
+    "attribution": "“Garden Hose Sobriety,” El Paso, Texas, October 2006, Voices of Long-Term Sobriety",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-10T07:16:57Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -243,21 +256,22 @@
     "source_lang": "en",
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-09-26",
-    "heading": "Grapevine Daily Quote September 26",
-    "text": "Spiritual growth and experiences are not limited to orthodox believers in a deity, any more than the disease of alcoholism is limited to skid-row bums.",
-    "attribution": "Casper, Wyo., September 1969",
-    "source": "“Is ‘Agnostic’ a Nasty Word?”, AA Grapevine",
-    "source_lang": "en",
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-10",
+    "heading": "Cita Diaria con La Viña Octubre 10",
+    "text": "Tengo una forma de vivir que llena todos los vacíos que alguna vez sentí.",
+    "attribution": "“Prestarle atención a los sentimientos de los demás”. GRANTS, NUEVO MÉXICO, JULIO DE 1980",
+    "source": "Young & Sober",
+    "source_lang": "en",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-10T07:17:07Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -422,18 +436,6 @@
     "attribution": "“La fuente de la juventud”. NELSON, NUEVO HAMPSHIRE, AGOSTO DE 1998",
     "source": "Young & Sober",
     "source_lang": "en",
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-09-26",
-    "heading": "Cita Diaria con La Viña Septiembre 26",
-    "text": "Alcohol en latín se dice spiritus y se usa la misma palabra para denominar la más sublime experiencia religiosa y el veneno más depravador. Por lo tanto, la fórmula útil será: spiritus contra spiritum.",
-    "attribution": "“La correspondencia de Bill W. con Carl Jung”. DR. C. G. JUNG, ENERO DE 1963",
-    "source": "El lenguaje del corazón",
-    "source_lang": "es",
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1"
    }
