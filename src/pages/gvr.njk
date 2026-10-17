@@ -1,0 +1,459 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}gvr/index.html"
+layout: layouts/base.njk
+pageKey: gvr
+titleKey: nav.gvr
+descKey: read.gvr.meta_desc
+pageScripts: ["/assets/vendor/lite-yt-embed.js", "/assets/js/read.js"]
+pageStyles: ["/assets/vendor/lite-yt-embed.css"]
+---
+{#- GVR / RLV CORNER — the group representative's home: what the service position is (never "job"; with GVR / RLV
+    101 and the Tracker, side by side when there is room), a first-steps checklist (saved in the browser), the
+    official GVR and RLV resource kits (#kits: the handbooks and one button per kit to its collection in the
+    Library — the kits' one home — with the Library's own counts), ideas for the home group (and under them one
+    row: the booth's question of the day, macros/question.njk, and the About page's two videos about the
+    magazines, macros/media.njk magVideo — hence lite-youtube in pageScripts / pageStyles), "Pass it on"
+    (#pass-it-on: words for finding, welcoming and handing over a rep, and their two printouts at the end of the
+    page) and next steps. Flow (docs: ui.njk): hero → page nav → the position → first steps (band) → resource
+    kits → ideas (+ Did you know? | the two videos) → pass it on → next steps. -#}
+{% import "macros/ui.njk" as ui with context %}
+{% import "macros/question.njk" as question with context %}
+{% import "macros/media.njk" as media with context %}
+{%- set L = site.links -%}
+{%- set gvHandbook = (db.pdfs | readPdfsMatching("\\bhandbook\\b|gvr handbook", 1))[0] -%}
+{%- set lvHandbook = (db.pdfs | readPdfsMatching("manual del representante|manual del rlv|\\bmanual\\b", 1))[0] -%}
+{%- set handbooks = ([lvHandbook, gvHandbook] if lang == "es" else [gvHandbook, lvHandbook]) | select -%}
+{%- set kitOrder = ["rlv", "gvr"] if lang == "es" else ["gvr", "rlv"] -%}
+{#- The two kits live in the Library (their one home: search, filters, previews); the counts come from
+    the same collections the Library and Home show (libCollections), so the numbers match -#}
+{%- set libCols = (db | libDocs(lang)) | libCollections(lang) -%}
+{%- set kitN = { gvr: ((libCols | where("key", "gvr-kit") | first) or {}).count or 0, rlv: ((libCols | where("key", "rlv-kit") | first) or {}).count or 0 } -%}
+
+{#- Hero: the two registrations (the page-language magazine first). The in-page jumps live in the
+    page nav below, so the hero has no jump buttons. The kit counts are shown once, in each kit's
+    header. "read-hero" (read.css) keeps both buttons on one row on a 390px phone. -#}
+{#- The hero's right-hand card (the shared hero aside): what to announce at the group this month — the
+    Grapevine and La Viña themes (the page language's magazine first) — with "Monthly toolkit" → /monthly/,
+    their one home (posters, tips, dates). Nothing on this page shows them. "below": the first card under
+    the hero on smaller screens and at larger text (time-sensitive). No theme known → no card. -#}
+{%- set gm = (db | mpMonths(carry, site, lang))[0] -%}
+{% call(slot) ui.pageHero(lang, "nav.gvr" | t(lang), "read.gvr.subtitle" | t(lang), "badge-check", "read.gvr.eyebrow" | t(lang), { class: "read-hero", side: "below" }) %}
+{%- if slot == "side" %}
+  {%- if gm and (gm.gv or gm.lv) %}
+  {% call ui.heroAside("read.gvr.aside_title" | t(lang), lang, { id: "gvr-aside-title", icon: "megaphone", href: "/monthly/" | lurl(lang), linkLabel: "nav.monthly" | t(lang), class: "gvr-aside" }) %}
+    <ul class="grid gap-3" role="list">
+      {%- for p in (["lv", "gv"] if lang == "es" else ["gv", "lv"]) %}{% set iss = gm[p] %}{% if iss %}
+      <li class="flex items-center gap-3">
+        <span class="hero-aside-link-icon is-{{ p }}" aria-hidden="true">{% icon "grapes", "size-4" %}</span>
+        <span class="min-w-0">
+          <span class="hero-aside-note block">{{ ("monthly.in_gv" | t(lang, { month: gm.monthName })) if p == "gv" else (("monthly.in_lv" | t(lang)) ~ " · " ~ iss.label) }}</span>
+          <span class="hero-aside-title block">{{ iss.theme }}</span>
+        </span>
+      </li>
+      {%- endif %}{% endfor %}
+    </ul>
+  {% endcall %}
+  {%- endif %}
+{%- else %}
+  <div class="hero-actions">
+    <a class="btn-light" href="{{ L.rlv_register if lang == 'es' else L.gvr_register }}" target="_blank" rel="noopener">{% icon "user-plus", "size-4" %} {{ ("read.gvr.register_rlv" if lang == "es" else "read.gvr.register_gvr") | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+    <a class="btn-on-dark" href="{{ L.gvr_register if lang == 'es' else L.rlv_register }}" target="_blank" rel="noopener">{% icon "user-plus", "size-4" %} {{ ("read.gvr.register_gvr" if lang == "es" else "read.gvr.register_rlv") | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+  </div>
+{%- endif %}
+{% endcall %}
+
+<div class="container-page page-overlap">{{ ui.pageNav([
+  { href: "#position", label: "read.gvr.nav_job" | t(lang), icon: "hand-heart" },
+  { href: "#steps", label: "read.gvr.nav_steps" | t(lang), icon: "list-checks" },
+  { href: "#kits", label: "read.gvr.see_kits" | t(lang), icon: "folder-open" },
+  { href: "#ideas", label: "read.gvr.nav_ideas" | t(lang), icon: "lightbulb" },
+  { href: "#pass-it-on", label: "read.gvr.nav_pass" | t(lang), icon: "handshake" },
+  { href: "#next", label: "common.next_steps" | t(lang), icon: "compass" }
+], lang) }}</div>
+
+{#- ---------- The service position (#job: this section's older address, kept working) ---------- -#}
+<section id="position" class="section container-page pt-10 sm:pt-12" aria-labelledby="position-title">
+  <span id="job" aria-hidden="true"></span>
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] lg:gap-10 2xl:gap-14">
+    <div>
+      {{ ui.sectionHead("read.gvr.job_title" | t(lang), "read.gvr.job_text" | t(lang), "", "", "hand-heart", { eyebrow: "read.gvr.job_eyebrow" | t(lang), tone: "text-vine", id: "position-title", lang: lang }) }}
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div class="panel-muted p-4! sm:p-4!">
+          <p class="font-display text-lg font-semibold text-gv">GVR</p>
+          <p class="mt-1 text-sm text-muted">{{ "read.gvr.gvr_def" | t(lang) }}</p>
+        </div>
+        <div class="panel-muted p-4! sm:p-4!">
+          <p class="font-display text-lg font-semibold text-lv">RLV</p>
+          <p class="mt-1 text-sm text-muted">{{ "read.gvr.rlv_def" | t(lang) }}</p>
+        </div>
+      </div>
+      <p class="mt-5 flex items-start gap-2 text-sm leading-relaxed text-muted">{% icon "users-round", "mt-0.5 size-4 shrink-0 text-vine" %}<span><strong class="text-ink">{{ "read.gvr.who_t" | t(lang) }}</strong> {{ "read.gvr.who" | t(lang) }}</span></p>
+      {#- Two link cards: GVR / RLV 101 (/orientation/), the sessions for new representatives — the first stop for
+          someone new — and the Tracker (/tracker/): miles, literature, gifts and reimbursements, kept on the device —
+          the one link to it from the corner (its home is the Committee menu). Side by side when this column has room
+          for both (@container, from 29rem: about 1220px and wider at 100 % text, 1440px at 115 %), each then a card
+          like the duty cards beside it — icon and arrow on top, eyebrow, title, text —, so the column ends about
+          where they do; in a narrow column (1024px, a phone, larger text) one under the other, each a row: icon ·
+          words · arrow. -#}
+      <div class="@container mt-6">
+        <ul class="grid grid-cols-1 gap-4 @min-[29rem]:grid-cols-2" role="list">
+          <li class="card card-link group relative grid grid-cols-[auto_minmax(0,1fr)_auto] content-start items-start gap-x-4 p-5 @min-[29rem]:grid-cols-[minmax(0,1fr)_auto] @min-[29rem]:gap-y-3">
+            <span class="grid size-11 place-items-center rounded-xl bg-grape-soft text-grape">{% icon "sprout", "size-5" %}</span>
+            <div class="min-w-0 @min-[29rem]:col-span-2 @min-[29rem]:row-start-2">
+              <p class="eyebrow text-grape">{{ "orientation.gvr_eyebrow" | t(lang) }}</p>
+              <h3 class="h-card mt-1"><a class="no-underline after:absolute after:inset-0 after:rounded-[var(--radius-card)] group-hover:text-gv" href="{{ '/orientation/' | lurl(lang) }}">{{ "orientation.gvr_title" | t(lang) }}</a></h3>
+              <p class="mt-1 text-sm leading-relaxed text-muted">{{ "orientation.gvr_text" | t(lang, { min: orientation.totalMinutes }) }}</p>
+            </div>
+            {% icon "arrow-right", "mt-1 size-5 shrink-0 justify-self-end text-gv transition group-hover:translate-x-0.5 @min-[29rem]:col-start-2 @min-[29rem]:row-start-1 @min-[29rem]:mt-3" %}
+          </li>
+          <li class="card card-link group relative grid grid-cols-[auto_minmax(0,1fr)_auto] content-start items-start gap-x-4 p-5 @min-[29rem]:grid-cols-[minmax(0,1fr)_auto] @min-[29rem]:gap-y-3">
+            <span class="grid size-11 place-items-center rounded-xl bg-vine-soft text-vine">{% icon "receipt", "size-5" %}</span>
+            <div class="min-w-0 @min-[29rem]:col-span-2 @min-[29rem]:row-start-2">
+              <p class="eyebrow text-vine">{{ "expenses.gvr_eyebrow" | t(lang) }}</p>
+              <h3 class="h-card mt-1"><a class="no-underline after:absolute after:inset-0 after:rounded-[var(--radius-card)] group-hover:text-gv" href="{{ '/tracker/' | lurl(lang) }}">{{ "nav.expenses" | t(lang) }}</a></h3>
+              <p class="mt-1 text-sm leading-relaxed text-muted">{{ "expenses.gvr_text" | t(lang) }}</p>
+            </div>
+            {% icon "arrow-right", "mt-1 size-5 shrink-0 justify-self-end text-gv transition group-hover:translate-x-0.5 @min-[29rem]:col-start-2 @min-[29rem]:row-start-1 @min-[29rem]:mt-3" %}
+          </li>
+        </ul>
+      </div>
+    </div>
+    {#- the six duty cards: two columns at most (three, on the widest screens, left them far shorter than the left column) -#}
+    <div class="@container">
+    <ul class="grid grid-cols-1 gap-4 @md:grid-cols-2" role="list">
+      {% for d in [["library", "bg-gv-soft text-gv"], ["megaphone", "bg-lv-soft text-lv"], ["gift", "bg-vine-soft text-vine"], ["pen-line", "bg-grape-soft text-grape"], ["map", "bg-gv-soft text-gv"], ["languages", "bg-lv-soft text-lv"]] %}
+      <li class="card card-pad">
+        <span class="grid size-11 place-items-center rounded-xl {{ d[1] }}">{% icon d[0], "size-5" %}</span>
+        <h3 class="h-card mt-3">{{ ("read.gvr.d" + loop.index + "_t") | t(lang) }}</h3>
+        <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("read.gvr.d" + loop.index) | t(lang) }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+    </div>
+  </div>
+</section>
+
+{#- ---------- First steps checklist (a band) ---------- -#}
+{%- set steps = [
+  { id: "register", icon: "user-plus" },
+  { id: "handbook", icon: "book-marked" },
+  { id: "meeting", icon: "video" },
+  { id: "table", icon: "library" },
+  { id: "announce", icon: "megaphone" },
+  { id: "subscribe", icon: "gift" },
+  { id: "updates", icon: "rss" },
+  { id: "district", icon: "map" }
+] -%}
+<section id="steps" class="section section-band" aria-labelledby="steps-title">
+  <div class="container-page">
+    {{ ui.sectionHead("read.gvr.steps_title" | t(lang), "read.gvr.steps_sub" | t(lang), "", "", "list-checks", { eyebrow: "read.gvr.steps_eyebrow" | t(lang), tone: "text-vine", id: "steps-title", lang: lang }) }}
+    <div class="layout-aside">
+      <div class="card @container overflow-hidden" x-data="gvrChecklist('gvr-checklist-v1', {{ steps.length }})">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line px-5 py-4 sm:px-6">
+          <div class="read-progress min-w-[8rem] flex-1" role="progressbar" aria-valuemin="0" aria-valuemax="{{ steps.length }}" aria-valuenow="0" :aria-valuenow="count()" aria-label="{{ 'read.gvr.progress_label' | t(lang) }}"><span style="width:0%" :style="'width:' + pct() + '%'"></span></div>
+          <p class="read-num shrink-0 text-sm font-semibold text-ink" aria-live="polite" data-t="{{ 'read.gvr.progress' | t(lang) }}" x-text="$el.dataset.t.replace('{n}', count()).replace('{total}', total)">{{ "read.gvr.progress" | t(lang, {n: 0, total: steps.length}) }}</p>
+          <button type="button" class="btn-ghost btn-sm -my-1 text-muted" x-show="count() > 0" x-cloak @click="reset()">{% icon "rotate-ccw", "size-4" %} {{ "read.gvr.reset" | t(lang) }}</button>
+          <p class="basis-full text-sm font-semibold text-vine" x-show="count() === total" x-cloak>{% icon "party-popper", "size-4 inline -mt-0.5" %} {{ "read.gvr.all_done" | t(lang) }}</p>
+        </div>
+        {#- Two columns when the card is wide (read.css .read-check-list): steps read DOWN each
+            column (1–4, then 5–8), the same order as the list itself. The checkbox and the step's
+            title are one label (a 44px target); the description and links sit under the title. -#}
+        {%- set half = ((steps.length + 1) / 2) | round(0, "floor") -%}
+        <ol class="read-check-list" style="--rows: {{ half }}">
+          {% for s in steps %}
+          <li class="read-check-row flex items-start gap-3 px-5 py-3 transition sm:px-6{{ " read-check-c1" if loop.index <= half }}{{ " read-check-c2top" if loop.index == half + 1 }}" :class="{ 'is-done': isDone('{{ s.id }}') }">
+            <div class="min-w-0 flex-1">
+              <label class="read-check-label flex min-h-11 cursor-pointer items-center gap-3 font-semibold text-ink">
+                <input type="checkbox" class="read-check" :checked="isDone('{{ s.id }}')" @change="toggle('{{ s.id }}')">
+                <span>{{ ("read.gvr.s_" + s.id + "_t") | t(lang) }}</span>
+              </label>
+              <div class="read-check-body">
+                {#- (s_meeting names where the committee meets: config/site.yml meeting.platform) -#}
+                <p class="text-sm leading-relaxed text-muted">{{ ("read.gvr.s_" + s.id) | t(lang, { platform: site.meeting.platform or "Zoom" }) }}</p>
+                <p class="mt-1 flex flex-wrap gap-x-4 text-sm">
+                  {% if s.id == "register" %}
+                    {% for k in (["rlv", "gvr"] if lang == "es" else ["gvr", "rlv"]) %}
+                    <a class="link tap-link" href="{{ L.rlv_register if k == 'rlv' else L.gvr_register }}" target="_blank" rel="noopener">{{ ("read.gvr.register_" + k) | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+                    {% endfor %}
+                  {% elif s.id == "handbook" %}
+                    {% for h in handbooks %}<a class="link tap-link" href="{{ h.url }}" target="_blank" rel="noopener" lang="{{ h.lang }}">{{ h | readPdfTitle(lang) }} ({{ "kind.pdf" | t(lang) | lower }})</a>{% else %}<a class="link tap-link" href="#kits">{{ "read.gvr.see_kits" | t(lang) }}</a>{% endfor %}
+                  {% elif s.id == "meeting" %}
+                    {#- data-gv-meeting: rolled on to the next date in the browser once this one is over (app.js GV.meetingLines) -#}
+                    <a class="link tap-link" href="{{ '/meetings/' | lurl(lang) }}#committee-meeting">{% if meeting.next %}<span data-gv-meeting="{{ meeting.rule | json }}" data-at="{{ meeting.next.start }}" data-tpl="{{ 'read.gvr.next_meeting' | t(lang) }}" data-date="medium">{{ "read.gvr.next_meeting" | t(lang, {date: meeting.next.start | fmtDate(lang, "medium")}) }}</span>{% else %}{{ "nav.meeting" | t(lang) }}{% endif %}</a>
+                  {% elif s.id == "table" %}
+                    <a class="link tap-link" href="{{ '/shop/' | lurl(lang) }}#cat-title">{{ "read.subs.cat_title" | t(lang) }}</a>
+                    <a class="link tap-link" href="{{ '/library/' | lurl(lang) }}?col={{ 'rlv' if lang == 'es' else 'gvr' }}-kit">{{ "read.gvr.g_flyers" | t(lang) }}</a>
+                  {% elif s.id == "announce" %}
+                    <a class="link tap-link" href="{{ '/read/' | lurl(lang) }}">{{ "read.gvr.current_issues" | t(lang) }}</a>
+                    <a class="link tap-link" href="{{ '/contribute/' | lurl(lang) }}#deadlines">{{ "read.contrib.deadlines_title" | t(lang) }}</a>
+                    <a class="link tap-link" href="{{ '/monthly/' | lurl(lang) }}">{{ "nav.monthly" | t(lang) }}</a>
+                  {% elif s.id == "subscribe" %}
+                    <a class="link tap-link" href="{{ '/shop/' | lurl(lang) }}#carry">{{ "read.subs.ctm_eyebrow" | t(lang) }}</a>
+                  {% elif s.id == "updates" %}
+                    <a class="link tap-link" href="{{ '/digest/' | lurl(lang) }}">{{ "nav.digest" | t(lang) }}</a>
+                    <a class="link tap-link" href="{{ '/feed.xml' | lurl(lang) }}">{{ "feeds.rss" | t(lang) }}</a>
+                  {% elif s.id == "district" %}
+                    <a class="link tap-link" href="{{ '/monthly/' | lurl(lang) }}#report">{{ "community.report.hero_btn" | t(lang) }}</a>
+                    <a class="link tap-link" href="{{ '/share/' | lurl(lang) }}">{{ "nav.share" | t(lang) }}</a>
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+            <span class="mt-3 hidden text-muted sm:block" aria-hidden="true">{% icon s.icon, "size-5" %}</span>
+          </li>
+          {% endfor %}
+        </ol>
+        <p class="border-t border-line bg-surface-2 px-5 py-3 text-xs text-muted sm:px-6">{% icon "lock", "size-3 inline -mt-0.5" %} {{ "read.gvr.saved_note" | t(lang) }}</p>
+      </div>
+
+      {#- A short companion for the checklist: sticks beside it from 1024px (sticky-aside). A <div>: an <aside>
+          in this named section was a landmark within a landmark; its cards' headings name them. -#}
+      <div class="sticky-aside space-y-5">
+        <div class="card card-pad">
+          <h3 class="card-h"><span>{% icon "video", "size-5" %}</span>{{ "read.gvr.help_title" | t(lang) }}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted">{{ "read.gvr.help_text" | t(lang) }}</p>
+          {% if meeting.next %}
+          {#- the next meeting of the build's day, rolled on in the browser once it is over (app.js GV.meetingLines) -#}
+          {%- set mRule = meeting.rule | json %}
+          <p class="mt-4 rounded-xl bg-surface-2 p-3 text-sm">
+            <span class="eyebrow block">{{ "read.gvr.next_label" | t(lang) }}</span>
+            <time class="mt-0.5 block font-semibold text-ink" datetime="{{ meeting.next.start }}" data-gv-meeting="{{ mRule }}" data-at="{{ meeting.next.start }}" data-tpl="{date}" data-date="long">{{ meeting.next.start | fmtDate(lang, "long") }}</time>
+            <span class="text-muted" data-gv-meeting="{{ mRule }}" data-at="{{ meeting.next.start }}" data-tpl="{time} · {{ site.meeting.platform }}">{{ meeting.next.start | fmtDate(lang, "time") }} · {{ site.meeting.platform }}</span>
+          </p>
+          {% endif %}
+          <a class="btn-primary mt-4" href="{{ '/meetings/' | lurl(lang) }}">{{ "read.gvr.help_btn" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
+        </div>
+        <div class="card card-pad">
+          <h3 class="card-h"><span>{% icon "mail", "size-5" %}</span>{{ "read.gvr.contact_title" | t(lang) }}</h3>
+          <p class="mt-2 text-sm text-muted">{{ "read.gvr.contact_text" | t(lang) }}</p>
+          <a class="link tap-link mt-1 break-all" href="mailto:{{ site.meeting.chair_email or site.contact_email }}">{{ site.meeting.chair_email or site.contact_email }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{#- ---------- Official resource kits: a pointer to the Library ----------
+    The handbook(s) first, then one button per kit (the page-language magazine's first) to its
+    collection in the Library (/library/?col=gvr-kit · rlv-kit), with the same count the Library
+    shows; a kit with no files has no button. The official resource pages close the card. -#}
+<section class="section container-page" id="kits" aria-labelledby="kits-title">
+  {{ ui.sectionHead("read.gvr.kits_title" | t(lang), "read.gvr.kits_sub" | t(lang), "", "", "folder-open", { eyebrow: "read.gvr.kits_eyebrow" | t(lang), id: "kits-title", lang: lang }) }}
+  {% if kitN.gvr or kitN.rlv or handbooks | length %}
+  <div class="card card-pad @container">
+    {#- wide card: the handbook(s) | the Library pointer + the kit buttons; narrow: one column -#}
+    <div class="grid gap-6{{ ' @3xl:grid-cols-2 @3xl:gap-10' if handbooks | length }}">
+      {% if handbooks | length %}
+      <div class="min-w-0">
+        <p class="eyebrow">{{ "read.gvr.kits_handbook" | t(lang) }}</p>
+        <ul class="mt-1.5 space-y-0.5" role="list">
+          {% for h in handbooks %}
+          <li><a class="link tap-link inline-flex items-start gap-2 font-semibold" href="{{ h.url }}" target="_blank" rel="noopener"><span class="mt-0.5 shrink-0 {{ 'text-lv' if h.lang == 'es' else 'text-gv' }}">{% icon "book-marked", "size-4" %}</span><span class="min-w-0 hyphens-auto [overflow-wrap:anywhere]"><span lang="{{ h.lang }}">{{ h | readPdfTitle(lang) }}</span> <span class="font-normal text-muted">({{ "kind.pdf" | t(lang) | lower }})</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></span></a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <div class="min-w-0">
+        <p class="max-w-2xl text-sm leading-relaxed text-muted">{{ "read.gvr.kits_library" | t(lang) }}</p>
+        {% if kitN.gvr or kitN.rlv %}
+        <div class="mt-4 grid grid-cols-1 gap-2.5 min-[26rem]:flex min-[26rem]:flex-wrap">
+          {% for k in kitOrder %}{% if kitN[k] %}
+          <a class="{{ 'btn-lv' if k == 'rlv' else 'btn-primary' }}" href="{{ '/library/' | lurl(lang) }}?col={{ k }}-kit">{% icon "badge-check", "size-4" %} {{ ("read.gvr.browse_" + k) | t(lang, { n: kitN[k] }) }}</a>
+          {% endif %}{% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <p class="mt-5 flex flex-wrap gap-x-5 gap-y-1 border-t border-line pt-4 text-sm">
+      {% for k in kitOrder %}
+      <a class="link tap-link inline-flex items-center gap-1.5" href="{{ L.rlv_resources if k == 'rlv' else L.gvr_resources }}" target="_blank" rel="noopener">{{ ("read.subs.all_rlv" if k == "rlv" else "read.subs.all_gvr") | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span>{% icon "arrow-up-right", "size-4 shrink-0" %}</a>
+      {% endfor %}
+    </p>
+  </div>
+  {% else %}
+    {{ ui.emptyState("folder-open", "read.gvr.kits_empty" | t(lang), "read.gvr.kits_empty_text" | t(lang), L.gvr_resources, "read.gvr.kit_gvr" | t(lang)) }}
+    <p class="mt-3 text-center text-sm"><a class="link tap-link" href="{{ L.rlv_resources }}" target="_blank" rel="noopener">{{ "read.gvr.kit_rlv" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
+  {% endif %}
+</section>
+
+{#- ---------- Ideas for the home group ---------- -#}
+<section id="ideas" class="section container-page pt-0" aria-labelledby="ideas-title">
+  {{ ui.sectionHead("read.gvr.ideas_title" | t(lang), "read.gvr.ideas_sub" | t(lang), "", "", "lightbulb", { eyebrow: "read.gvr.ideas_eyebrow" | t(lang), tone: "text-lv", id: "ideas-title", lang: lang }) }}
+  <ul class="grid-cards-fit [--cards-min:15rem] [--cards-max:3] min-[1800px]:[--cards-max:6]" role="list">
+    {#- [icon, colors, page, anchor on that page]: each idea opens the section it talks about -#}
+    {% for i in [["library", "bg-gv-soft text-gv", "/shop/", "#cat-title"], ["clipboard-list", "bg-lv-soft text-lv", "/shop/", "#forms-title"], ["gift", "bg-vine-soft text-vine", "/shop/", "#carry"], ["pen-line", "bg-grape-soft text-grape", "/contribute/", "#workshop"], ["headphones", "bg-grape-soft text-grape", "/listen/", ""], ["list-checks", "bg-gv-soft text-gv", "/monthly/", "#ways"]] %}
+    <li class="card card-link card-pad group relative flex flex-col">
+      <span class="grid size-11 place-items-center rounded-xl {{ i[1] }}">{% icon i[0], "size-5" %}</span>
+      <h3 class="h-card mt-3"><a class="no-underline after:absolute after:inset-0 after:rounded-[var(--radius-card)] hover:text-gv" href="{{ i[2] | lurl(lang) }}{{ i[3] }}">{{ ("read.gvr.i" + loop.index + "_t") | t(lang) }}</a></h3>
+      <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("read.gvr.i" + loop.index) | t(lang) }}</p>
+      <span class="mt-auto inline-flex items-center gap-1.5 pt-3 text-sm font-semibold text-gv" aria-hidden="true">{{ ("read.gvr.i" + loop.index + "_cta") | t(lang) }} {% icon "arrow-right", "size-4 transition group-hover:translate-x-0.5" %}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {#- One row under the ideas (read.css .read-dyk-row): the booth's question of the day — something to share in the
+      group's announcements (macros/question.njk; it needs JavaScript and a question: without either there is no
+      card) — and, beside it, the About page's two videos (#videos: config/site.yml about_videos, the page language's
+      magazine first) to play at a meeting (the "Podcast & video" idea above), compact (macros/media.njk magVideo),
+      with a link to their full cards on About. A wrapping flex row, not a fixed grid: side by side when the row
+      has room for both halves (33.5rem each: from about 1180px at 100 % text, 1360px at 115 %), stretched to one
+      height — the question in the middle of its card's spare height —, else one under the other, each the whole
+      row (narrower screens, larger text); with no question card the videos take the whole row. The heading
+      gives no number — "A short video …" for one, "Short videos …" for more (readAboutVideos drops an entry with
+      no title). Neither is printed. A <div>, not a <section>: a region inside this named section would be a
+      landmark within a landmark; its h3 names it. -#}
+  {%- set vids = site.about_videos | readAboutVideos(db.videos, lang) %}
+  <div class="read-dyk-row mt-6">
+    {{ question.daily(lang, { id: "gvr-dyk", sub: "booth.dyk.sub_gvr" | t(lang) }) }}
+    {%- if vids | length %}
+    <div class="card card-pad read-vid-c-card print:hidden">
+      <div class="flex items-start gap-3">
+        <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-grape-soft text-grape">{% icon "circle-play", "size-5" %}</span>
+        <div class="min-w-0 flex-1">
+          <h3 id="gvr-vids-title" class="h-card">{{ ("read.gvr.vid_title_one" if vids | length == 1 else "read.gvr.vid_title") | t(lang) }}</h3>
+          <p class="mt-1 text-sm leading-relaxed text-muted">{{ "read.gvr.vid_sub" | t(lang) }} <a class="link whitespace-nowrap" href="{{ '/about/' | lurl(lang) }}#videos">{{ "read.gvr.vid_more" | t(lang) }}</a></p>
+        </div>
+      </div>
+      <div class="read-vid-c-box mt-4">
+        <ul class="read-vid-c-list" role="list">
+          {% for v in vids %}<li class="min-w-0">{{ media.magVideo(v, lang, { compact: true, h: 4 }) }}</li>{% endfor %}
+        </ul>
+      </div>
+    </div>
+    {%- endif %}
+  </div>
+</section>
+
+{#- ---------- Pass it on: the three moments of a rep's term ----------
+    (1) the group is looking for a rep: a one-minute announcement for the business meeting (Copy, Share where the
+    device has it, and a printed half-sheet with the QR code of this page); (2) a new rep said yes: a welcome message
+    with the first steps — both registrations (the page-language magazine first), the next committee meeting (rolled
+    on in the browser once it is over: app.js GV.meetingLines), GVR / RLV 101 and #steps; (3) a rep rotates out: a
+    handover sheet to print and fill in by hand, and a ready-made e-mail to each office (mailto: the visitor's own
+    mail app sends it — nothing goes through this site). No names anywhere: the texts invite, the group conscience
+    decides (Tradition 4) — "service position", never "job". The messages are shown as they are copied (read.css
+    .read-pass-msg keeps their lines); read.js gvrPass copies, shares and prints them. Two magazine offices'
+    addresses: config/site.yml links.gvr_office_email / rlv_office_email. -#}
+{%- set gvrAbs = ('/gvr/' | lurl(lang)) | siteUrl(site) -%}
+{%- set regOrder = ["rlv", "gvr"] if lang == "es" else ["gvr", "rlv"] -%}
+{%- set committeeName = site | pick(lang, "committee") -%}
+{%- set platform = site.meeting.platform or "Zoom" -%}
+{%- set chairMail = site.meeting.chair_email or site.contact_email -%}
+{%- set meetingsAbs = ('/meetings/' | lurl(lang)) | siteUrl(site) -%}
+<section id="pass-it-on" class="section container-page pt-0" aria-labelledby="pass-title" x-data="gvrPass">
+  {{ ui.sectionHead("read.gvr.pass_title" | t(lang), "read.gvr.pass_sub" | t(lang), "", "", "handshake", { eyebrow: "read.gvr.pass_eyebrow" | t(lang), tone: "text-vine", id: "pass-title", lang: lang }) }}
+  <ol class="grid-cards-fit [--cards-min:19rem] [--cards-max:3]" role="list">
+    {#- (1) find -#}
+    <li class="card card-pad flex flex-col" aria-labelledby="pass-find-t">
+      <p class="flex items-center gap-3"><span class="step-num" aria-hidden="true">1</span><span class="eyebrow">{{ "read.gvr.pass_find_eyebrow" | t(lang) }}</span></p>
+      <h3 id="pass-find-t" class="h-card mt-3">{{ "read.gvr.pass_find_t" | t(lang) }}</h3>
+      <p class="mt-1 text-sm leading-relaxed text-muted">{{ "read.gvr.pass_find" | t(lang) }}</p>
+      <div class="read-pass-msg mt-4" x-ref="announce">{{ "read.gvr.pass_announce" | t(lang, { committee: committeeName, platform: platform, url: gvrAbs }) }}</div>
+      <div class="mt-auto flex flex-wrap gap-2 pt-4" data-js-only>
+        <button type="button" class="btn-secondary btn-sm" @click="copy('announce', $el)">{% icon "copy", "size-4" %} {{ "common.copy" | t(lang) }}</button>
+        <button type="button" class="btn-secondary btn-sm" x-show="canShare" x-cloak @click="share('announce', $el)">{% icon "share-2", "size-4" %} {{ "common.share" | t(lang) }}</button>
+        <button type="button" class="btn-secondary btn-sm" @click="print('announce')">{% icon "printer", "size-4" %} {{ "read.gvr.pass_print_half" | t(lang) }}</button>
+      </div>
+      <p class="mt-2 text-xs text-muted" data-js-only>{{ "read.gvr.pass_half_note" | t(lang) }}</p>
+    </li>
+    {#- (2) welcome -#}
+    <li class="card card-pad flex flex-col" aria-labelledby="pass-welcome-t">
+      <p class="flex items-center gap-3"><span class="step-num" aria-hidden="true">2</span><span class="eyebrow">{{ "read.gvr.pass_welcome_eyebrow" | t(lang) }}</span></p>
+      <h3 id="pass-welcome-t" class="h-card mt-3">{{ "read.gvr.pass_welcome_t" | t(lang) }}</h3>
+      <p class="mt-1 text-sm leading-relaxed text-muted">{{ "read.gvr.pass_welcome" | t(lang) }}</p>
+      {#- (the message's lines are its text: trimBlocks drops the line break right after a {% %} tag, so each line
+          break here follows a {{ }} — {{ "" }} where nothing else is printed) -#}
+      <div class="read-pass-msg mt-4" x-ref="welcome">{{ "read.gvr.pass_w_hello" | t(lang) }}{% for k in regOrder %}{{ "" }}
+• {{ ("read.gvr.pass_w_reg_" + k) | t(lang, { url: L.rlv_register if k == "rlv" else L.gvr_register }) }}{% endfor %}{{ "" }}
+• {% if meeting.next %}<span data-gv-meeting="{{ meeting.rule | json }}" data-at="{{ meeting.next.start }}" data-date="long"
+        data-tpl="{{ 'read.gvr.pass_w_meeting' | t(lang, { date: '{date}', time: '{time}', platform: platform, url: meetingsAbs }) }}">{{ "read.gvr.pass_w_meeting" | t(lang, { date: meeting.next.start | fmtDate(lang, "long") | midSentence(lang), time: meeting.next.start | fmtDate(lang, "time"), platform: platform, url: meetingsAbs }) }}</span>{% else %}{{ "read.gvr.pass_w_meeting_rule" | t(lang, { when: "committee.meeting.hero_sub" | t(lang, { rule: site.meeting | cmRule(lang), time: site.meeting | cmTimeRange(lang), platform: platform }), url: meetingsAbs }) }}{% endif %}{{ "" }}
+• {{ "read.gvr.pass_w_101" | t(lang, { url: ('/orientation/' | lurl(lang)) | siteUrl(site) }) }}
+• {{ "read.gvr.pass_w_steps" | t(lang, { url: gvrAbs + "#steps" }) }}
+
+{{ "read.gvr.pass_w_close" | t(lang, { email: chairMail }) }}</div>
+      <div class="mt-auto flex flex-wrap gap-2 pt-4" data-js-only>
+        <button type="button" class="btn-secondary btn-sm" @click="copy('welcome', $el)">{% icon "copy", "size-4" %} {{ "common.copy" | t(lang) }}</button>
+        <button type="button" class="btn-secondary btn-sm" x-show="canShare" x-cloak @click="share('welcome', $el)">{% icon "share-2", "size-4" %} {{ "common.share" | t(lang) }}</button>
+      </div>
+    </li>
+    {#- (3) hand over -#}
+    <li class="card card-pad flex flex-col" aria-labelledby="pass-hand-t">
+      <p class="flex items-center gap-3"><span class="step-num" aria-hidden="true">3</span><span class="eyebrow">{{ "read.gvr.pass_hand_eyebrow" | t(lang) }}</span></p>
+      <h3 id="pass-hand-t" class="h-card mt-3">{{ "read.gvr.pass_hand_t" | t(lang) }}</h3>
+      <p class="mt-1 text-sm leading-relaxed text-muted">{{ "read.gvr.pass_hand" | t(lang) }}</p>
+      <ul class="mt-4 space-y-2 text-sm leading-relaxed text-ink" role="list">
+        {% for i in [1, 2, 3, 4] %}<li class="flex gap-2"><span class="mt-0.5 text-vine">{% icon "circle-check", "size-4" %}</span><span>{{ ("read.gvr.pass_hand_" + i) | t(lang) }}</span></li>{% endfor %}
+      </ul>
+      <p class="mt-4" data-js-only><button type="button" class="btn-secondary btn-sm" @click="print('handover')">{% icon "printer", "size-4" %} {{ "read.gvr.pass_print_hand" | t(lang) }}</button></p>
+      <p class="mt-3 text-sm"><a class="link tap-link" href="{{ '/tracker/' | lurl(lang) }}#giveaways">{{ "read.gvr.pass_tracker" | t(lang) }}</a></p>
+      <div class="mt-auto pt-4">
+        <p class="text-sm font-semibold text-ink">{{ "read.gvr.pass_tell" | t(lang) }}</p>
+        <div class="mt-2 flex flex-wrap gap-2">
+          {% for k in regOrder %}
+          {%- set mailTo = L.rlv_office_email if k == "rlv" else L.gvr_office_email -%}
+          {%- set mailVars = { area: site | pick(lang, "area"), url: L.rlv_register if k == "rlv" else L.gvr_register } -%}
+          <a class="btn-secondary btn-sm" href="mailto:{{ mailTo }}?subject={{ ('read.gvr.pass_mail_' + k + '_subject') | t(lang) | urlencode }}&amp;body={{ ('read.gvr.pass_mail_' + k + '_body') | t(lang, mailVars) | urlencode }}">{% icon "mail", "size-4" %} {{ ("read.gvr.pass_tell_" + k) | t(lang) }}</a>
+          {%- endfor %}
+        </div>
+        <p class="mt-2 text-xs text-muted">{{ "read.gvr.pass_tell_note" | t(lang) }}</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+{#- ---------- Next steps (closing block): only pages the checklist and ideas do not link ---------- -#}
+<section id="next" class="section container-page pt-0" aria-labelledby="next-title">
+  {{ ui.sectionHead("read.gvr.connect_title" | t(lang), "read.gvr.connect_sub" | t(lang), "", "", "compass", { eyebrow: "common.next_steps" | t(lang), id: "next-title", lang: lang }) }}
+  {{ ui.nextSteps([
+    { href: "/events/" | lurl(lang), title: "nav.events" | t(lang), text: "nav.events_desc" | t(lang), cta: "read.gvr.ns_events_cta" | t(lang), icon: "calendar-days", tone: "vine" },
+    { href: "/whats-new/" | lurl(lang), title: "nav.whats_new" | t(lang), text: "read.gvr.c_new" | t(lang), cta: "read.gvr.ns_new_cta" | t(lang), icon: "sparkles", tone: "grape" },
+    { href: "/library/" | lurl(lang), title: "nav.library" | t(lang), text: "read.gvr.ns_library" | t(lang), cta: "read.gvr.ns_library_cta" | t(lang), icon: "library", tone: "gv" },
+    { href: "/published/" | lurl(lang), title: "nav.published" | t(lang), text: "nav.published_desc" | t(lang), cta: "read.gvr.ns_published_cta" | t(lang), icon: "award", tone: "lv" }
+  ], lang) }}
+</section>
+
+{#- ================= Pass it on: the two printouts (print only) =================
+    "Print a half-sheet" / "Print the handover sheet" (read.js gvrPass.print) put data-print="gvr-announce" /
+    "gvr-handover" on <html> while printing: then only that sheet goes on paper (read.css "Pass it on"); the
+    browser's own Print prints the page without them. On a Letter page: the announcement twice (cut along the
+    dashed line) and the handover sheet, to fill in by hand — no names on either. The QR code (this page) is drawn
+    once and used three times. -#}
+<div class="read-pass-print">
+  <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false"><defs>{{ gvrAbs | cmQrSymbol("gvr-pass-qr") | safe }}</defs></svg>
+  <div class="read-pass-sheet" data-sheet="announce">
+    {% for n in [1, 2] %}
+    <article class="read-pass-half">
+      <p class="read-pass-head"><span>{{ committeeName }}</span><span>{{ "nav.gvr" | t(lang) }}</span></p>
+      <h2>{{ "read.gvr.pass_find_t" | t(lang) }}</h2>
+      <p class="read-pass-body">{{ "read.gvr.pass_announce" | t(lang, { committee: committeeName, platform: platform, url: gvrAbs }) }}</p>
+      <div class="read-pass-foot">
+        <svg class="read-pass-qr" aria-hidden="true"><use href="#gvr-pass-qr"></use></svg>
+        <p><strong>{{ "read.gvr.pass_qr" | t(lang) }}</strong><br>{{ gvrAbs | replace("https://", "") }}</p>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  <div class="read-pass-sheet" data-sheet="handover">
+    <p class="read-pass-head"><span>{{ committeeName }}</span><span>{{ "nav.gvr" | t(lang) }}</span></p>
+    <h2>{{ "read.gvr.hs_title" | t(lang) }}</h2>
+    <p class="read-pass-lead">{{ "read.gvr.hs_lead" | t(lang) }}</p>
+    <dl class="read-pass-fields">
+      <div><dt>{{ "read.gvr.hs_group" | t(lang) }}</dt><dd class="read-pass-line"></dd></div>
+      <div><dt>{{ "read.gvr.hs_mags" | t(lang) }}</dt><dd>{% for p in (["lv", "gv"] if lang == "es" else ["gv", "lv"]) %}<span class="read-pass-box"></span> {{ "La Viña" if p == "lv" else "AA Grapevine" }} &nbsp; {% endfor %}{{ "read.gvr.hs_copies" | t(lang) }} <span class="read-pass-blank"></span></dd></div>
+      <div><dt>{{ "read.gvr.hs_subs" | t(lang) }}</dt><dd class="read-pass-line"></dd></div>
+      <div><dt>{{ "read.gvr.hs_where" | t(lang) }}</dt><dd class="read-pass-line"></dd></div>
+      <div><dt>{{ "read.gvr.hs_forms" | t(lang, { url: (gvrAbs + "#kits") | replace("https://", "") }) }}</dt><dd class="read-pass-line"></dd></div>
+      <div><dt>{{ "read.gvr.hs_district" | t(lang) }}</dt><dd class="read-pass-line"></dd></div>
+      <div><dt>{{ "read.gvr.hs_committee" | t(lang) }}</dt><dd>{{ "committee.meeting.hero_sub" | t(lang, { rule: site.meeting | cmRule(lang), time: site.meeting | cmTimeRange(lang), platform: platform }) }} {{ meetingsAbs | replace("https://", "") }}</dd></div>
+      <div><dt>{{ "read.gvr.hs_register" | t(lang) }}</dt><dd>{% for k in regOrder %}{{ "La Viña" if k == "rlv" else "Grapevine" }}: {{ (L.rlv_register if k == "rlv" else L.gvr_register) | replace("https://", "") | replace("www.", "") }}{% if loop.first %}<br>{% endif %}{% endfor %}</dd></div>
+      <div><dt>{{ "read.gvr.hs_tell" | t(lang) }}</dt><dd>
+        {%- for k in regOrder %}<span class="read-pass-box"></span> {{ "La Viña" if k == "rlv" else "Grapevine" }}: {{ L.rlv_office_email if k == "rlv" else L.gvr_office_email }} &nbsp; {% endfor -%}
+        <span class="read-pass-box"></span> {{ "read.gvr.hs_tell_committee" | t(lang) }}: {{ chairMail }} &nbsp; <span class="read-pass-box"></span> {{ "read.gvr.hs_tell_district" | t(lang) }}</dd></div>
+      <div><dt>{{ "read.gvr.hs_notes" | t(lang) }}</dt><dd class="read-pass-line"></dd><dd class="read-pass-line"></dd><dd class="read-pass-line"></dd></div>
+    </dl>
+    <div class="read-pass-foot">
+      <svg class="read-pass-qr" aria-hidden="true"><use href="#gvr-pass-qr"></use></svg>
+      <p><strong>{{ "read.gvr.hs_qr" | t(lang) }}</strong><br>{{ gvrAbs | replace("https://", "") }}<br>{{ "read.gvr.hs_tracker" | t(lang, { url: (('/tracker/' | lurl(lang)) | siteUrl(site)) | replace("https://", "") }) }}</p>
+    </div>
+  </div>
+</div>

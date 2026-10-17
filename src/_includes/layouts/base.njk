@@ -1,0 +1,301 @@
+{#- Base layout. Every page sets in front matter:
+      lang (via pagination alias), pageKey, titleKey (i18n key) or title, descKey/description,
+      optional: pageScripts [..], pageStyles [..], bodyClass, noHero,
+      ogImage (the page's own share picture: an address, or { src, width, height, alt } — see below),
+      calendarFeed (the address of a calendar file the page offers: "/events.ics"),
+      titleTail (what follows the page's own name and " · " in the tab title, instead of the site's name:
+        a GVR / RLV 101 session's "GVR / RLV 101 — NETA 65"),
+      noindex: true (kept out of search results — see below; give it sitemap: false too),
+      ldType (the page's kind for search engines: AboutPage, CollectionPage, SearchResultsPage — WebPage when
+        unset), ldFaq ({ prefix, count }: the page shows that many questions and answers, i18n prefix + n + "_q"
+        / "_a" — /contribute/), both read by the structured data at the end of this file
+    Every page starts with the shared hero, ui.pageHero (macros/ui.njk): the header is
+    transparent over it and turns solid on scroll. hero-canvas.js (the animated grapevine art
+    in that hero) is loaded here for every page — pages don't list it in pageScripts. -#}
+{%- set L = lang or "en" -%}
+{%- set pageTitle = (titleKey | t(L)) if titleKey else (title or "") -%}
+{%- set siteTitle = site | pick(L, "title") -%}
+{#- home: "Grapevine / La Viña — NETA 65 Committee" (the tagline would say Grapevine & La Viña twice).
+    A page's `titleTail` replaces the site's name after the " · " (a session: "The GVR / RLV service position
+    · GVR / RLV 101 — NETA 65", short enough for a search result). The " · " stays in every title: the offline
+    page's stand-in (offline.njk) keeps what follows it. -#}
+{%- set fullTitle = (pageTitle + " · " + (titleTail or (siteTitle + " — NETA 65"))) if (pageTitle and pageKey != "home") else (siteTitle + " — " + ("site.home_title_tail" | t(L))) -%}
+{#- (a description may name where the committee meets: {platform}, config/site.yml meeting.platform) -#}
+{%- set desc = (descKey | t(L, { platform: site.meeting.platform or "Zoom" })) if descKey else (description or ("site.description" | t(L))) -%}
+{%- set alt = page.url | altLangUrl(L) -%}
+<!doctype html>
+<html lang="{{ L }}" data-theme="light" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>
+    // Reading & display settings before the first paint (the "Aa" panel, app.js GV.prefs):
+    // localStorage "gvlv-prefs" = {text: 100|115|130|150, spacing: "normal"|"relaxed",
+    // contrast: "normal"|"high", motion: "auto"|"reduce", saver: "off"|"on"|"auto"} → data-text,
+    // data-spacing, data-contrast, data-motion and data-saver on <html> (main.css reacts to them).
+    // data-saver is "on" for saver "on", or for "auto" (the default) when the browser asks to save
+    // data, the connection is 2G or the device is offline. Blocked storage or bad JSON → the
+    // defaults; the page works either way.
+    (function (d) {
+      var p = {};
+      try { p = JSON.parse(localStorage.getItem("gvlv-prefs") || "{}") || {}; } catch (e) {}
+      var c = navigator.connection || {}, txt = String(p.text);
+      d.setAttribute("data-text", /^(115|130|150)$/.test(txt) ? txt : "100");
+      d.setAttribute("data-spacing", p.spacing === "relaxed" ? "relaxed" : "normal");
+      d.setAttribute("data-contrast", p.contrast === "high" ? "high" : "normal");
+      d.setAttribute("data-motion", p.motion === "reduce" ? "reduce" : "auto");
+      d.setAttribute("data-saver", p.saver === "on" || (p.saver !== "off" && (c.saveData === true || /^(slow-2g|2g)$/.test(c.effectiveType || "") || navigator.onLine === false)) ? "on" : "off");
+      // The body font, early (a preload competes with the stylesheet, so only this one: the display
+      // font has a measured fallback, main.css — except on the home page, whose big hero title in
+      // Fraunces would still move a little when it arrives). Not with Data saver on: the site then
+      // uses the fallback faces and the device's own fonts (areas/pwa.css).
+      if (d.getAttribute("data-saver") !== "on") {
+        ["{{ '/assets/fonts/inter-latin-wght-normal.woff2' | url }}"{% if pageKey == "home" %}, "{{ '/assets/fonts/fraunces-latin-opsz-normal.woff2' | url }}"{% endif %}].forEach(function (href) {
+          var f = document.createElement("link");
+          f.rel = "preload"; f.as = "font"; f.type = "font/woff2"; f.crossOrigin = "anonymous"; f.href = href;
+          document.head.appendChild(f);
+        });
+      }
+    })(document.documentElement);
+  </script>
+  <title>{{ fullTitle }}</title>
+  <meta name="description" content="{{ desc }}">
+  {%- if pageKey == "404" %}
+  {#- "Page not found" is served for every missing address; fetched directly as /404.html it
+      answers 200, so keep it out of search results and don't claim a canonical URL for it.
+      (The offline page, /offline/, is a page like the others — "Saved pages & app", with the
+      steps to install the site —, so it is indexed with its canonical and hreflang links: the
+      service worker's stand-in copy of it, shown for a page not saved yet, only ever exists on a
+      visitor's device, where no search engine reads it.) #}
+  <meta name="robots" content="noindex">
+  {%- else %}
+  <link rel="canonical" href="{{ page.url | siteUrl(site) }}">
+  {#- A page with `noindex: true` (the Update status page: the build's own figures, new on every update) stays
+      out of search results — and out of the sitemap with its `sitemap: false`. It keeps its canonical (its own
+      address, so the ?query copies of it count as the same page) but has no hreflang links: they pair pages
+      for search results, and this one is in none (the event share pages do the same). Nothing else changes for
+      visitors; pwa.js only skips its install notice on such a page. #}
+  {% if noindex %}
+  <meta name="robots" content="noindex">
+  {% else %}
+  <link rel="alternate" hreflang="{{ L }}" href="{{ page.url | siteUrl(site) }}">
+  <link rel="alternate" hreflang="{{ L | otherLang }}" href="{{ alt | siteUrl(site) }}">
+  <link rel="alternate" hreflang="x-default" href="{{ (alt if L == 'es' else page.url) | siteUrl(site) }}">
+  {#- Indexing is the default (no "index, follow"); this only lets search results show the page's share
+      picture large (1200 px wide, Google Discover too) and its text and videos without a length limit. Never
+      "noindex" here: pwa.js reads any robots "noindex" as a page kept out of search. #}
+  <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  {#- Search engines' ownership checks by meta tag, on the home page (both languages) while the setting is
+      filled in: config/site.yml site.search_engines (Bing Webmaster Tools, Yandex Webmaster). Google's is a
+      file of its own (src/pages/google-site-verification.11ty.js). #}
+  {% if pageKey == "home" and site.search_engines %}
+  {% if site.search_engines.bing_verification %}
+  <meta name="msvalidate.01" content="{{ site.search_engines.bing_verification }}">
+  {% endif %}
+  {% if site.search_engines.yandex_verification %}
+  <meta name="yandex-verification" content="{{ site.search_engines.yandex_verification }}">
+  {% endif %}
+  {% endif %}
+  {% endif %}
+  {%- endif %}
+  <link rel="alternate" type="application/rss+xml" title="{{ 'feeds.rss_title' | t(L) }}" href="{{ '/feed.xml' | lurl(L) }}">
+  {#- The site's search as a search engine of the browser's own ("Add search engine", a keyword in the address
+      bar): src/pages/opensearch.11ty.js, the page language's file (/es/opensearch.xml on /es/) — it searches in
+      that language (/es/search/?q=…). #}
+  <link rel="search" type="application/opensearchdescription+xml" title="{{ 'site.search_engine_name' | t(L) }}" href="{{ '/opensearch.xml' | lurl(L) }}">
+  {#- A page that offers a calendar file (calendarFeed: the Events page's "/events.ics") names it here, so calendar
+      apps and browsers find it: the page language's file (/es/events.ics on /es/). -#}
+  {%- if calendarFeed %}
+  <link rel="alternate" type="text/calendar" title="{{ 'committee.ics.name' | t(L) }}" href="{{ calendarFeed | lurl(L) }}">
+  {%- endif %}
+  {#- Installable app (src/pages/manifest.11ty.js, sw.11ty.js, assets/js/pwa.js): the manifest of the
+      page's language; address-bar colour = --c-gv-strong (light) / --c-paper (dark) — pwa.js keeps
+      both metas on the site's own theme choice; iPhone/iPad home-screen name and icon. #}
+  <link rel="manifest" href="{{ '/manifest.webmanifest' | lurl(L) }}">
+  <meta name="theme-color" content="#07457c" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121019" media="(prefers-color-scheme: dark)">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="GV/LV 65">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ siteTitle }} — NETA 65">
+  <meta property="og:title" content="{{ fullTitle }}">
+  <meta property="og:description" content="{{ desc }}">
+  {%- if pageKey != "404" %}
+  <meta property="og:url" content="{{ page.url | siteUrl(site) }}">
+  {%- endif %}
+  {#- the share picture: the page's own — `ogImage` in its data, an address or { src, width, height, alt }, used
+      when it is a picture the previews show (PNG, JPEG, GIF, WebP: shareImage in eleventy.config.js), with its
+      size and words when the page gives them — else the committee's card in the page language (1200 × 630).
+      ?v=2: the card shows the site's address — a new ?v when it changes makes the apps that keep an
+      old copy of a preview (WhatsApp, Facebook, Slack…) fetch the new one.
+      og:image:type when the file name says it (image/png …; a Drive flyer's or YouTube's address does not) -#}
+  {%- set shareImg = ogImage | shareImage(site) -%}
+  {%- if shareImg %}
+  <meta property="og:image" content="{{ shareImg.url }}">
+  {%- if shareImg.type %}
+  <meta property="og:image:type" content="{{ shareImg.type }}">
+  {%- endif %}
+  {%- if shareImg.width %}
+  <meta property="og:image:width" content="{{ shareImg.width }}">
+  <meta property="og:image:height" content="{{ shareImg.height }}">
+  {%- endif %}
+  {%- if shareImg.alt %}
+  <meta property="og:image:alt" content="{{ shareImg.alt }}">
+  {%- endif %}
+  {%- else %}
+  {%- set shareImg = { url: ('/assets/img/og-default-es.png?v=2' if L == 'es' else '/assets/img/og-default.png?v=2') | siteUrl(site), alt: siteTitle + " — " + ('site.tagline' | t(L)), width: 1200, height: 630, type: "image/png" } -%}
+  <meta property="og:image" content="{{ shareImg.url }}">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ shareImg.alt }}">
+  {%- endif %}
+  <meta property="og:locale" content="{{ 'es_US' if L == 'es' else 'en_US' }}">
+  <meta property="og:locale:alternate" content="{{ 'en_US' if L == 'es' else 'es_US' }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ fullTitle }}">
+  <meta name="twitter:description" content="{{ desc }}">
+  <meta name="twitter:image" content="{{ shareImg.url }}">
+  {%- if shareImg.alt %}
+  <meta name="twitter:image:alt" content="{{ shareImg.alt }}">
+  {%- endif %}
+  {#- favicon.ico holds a 16px picture only: no sizes="any" (Chrome would prefer it over the 32px PNG on 2x screens) -#}
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/logo-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/logo-192x192.png">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon-180.png">
+  <script>
+    // Theme before paint (no flash): saved choice ("gvlv-theme", our own key: neta65.github.io is one
+    // origin shared by every Pages project, so a bare "theme" there belongs to another project) → OS
+    // preference. Only "dark" / "light" are ever applied.
+    // html.js: JS is on, so CSS can draw JS-folded blocks (digest tools, report box, kit groups)
+    // folded from the first paint.
+    document.documentElement.classList.add("js");
+    (function () {
+      var ok = function (v) { return v === "dark" || v === "light"; }, t = null;
+      try { t = localStorage.getItem("gvlv-theme"); } catch (e) {}
+      if (!ok(t)) { try { t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } catch (e) { t = "light"; } }
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+    window.SITE = { lang: "{{ L }}", base: "{{ '/' | url }}", tz: "{{ site.timezone }}" };
+    // A part of the page that changes at a set moment (macros/ui.njk ui.when: data-gv-when with data-gv-from /
+    // data-gv-expire — the price an announced change brings at midnight Central, "New prices since …") is set
+    // right while the page loads, before the first paint: a page built — or saved for offline use — before
+    // that moment and opened after it never shows the old state first, so nothing moves. app.js GV.expire does
+    // the same once the page is ready, every minute and when it is shown again (a page left open over the
+    // moment swaps then: a one-time reflow where the two states differ in height).
+    (function () {
+      if (!window.MutationObserver) return;
+      var AT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})$/, now = Date.now();
+      var past = function (v) { v = String(v || "").trim(); return AT.test(v) && Date.parse(v) <= now; };
+      var mo = new MutationObserver(function (records) {
+        for (var i = 0; i < records.length; i++) {
+          for (var j = 0; j < records[i].addedNodes.length; j++) {
+            var el = records[i].addedNodes[j];
+            if (el.nodeType !== 1 || !el.hasAttribute("data-gv-when")) continue;
+            if (past(el.getAttribute("data-gv-expire"))) { el.hidden = true; el.setAttribute("data-gv-expired", ""); }
+            else if (el.hidden && past(el.getAttribute("data-gv-from"))) { el.hidden = false; el.setAttribute("data-gv-started", ""); }
+          }
+        }
+      });
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+      document.addEventListener("DOMContentLoaded", function () { mo.disconnect(); });
+    })();
+  </script>
+  {#- ?v= = build.version (src/_data/build.js, a fingerprint of the site's code): new styles and
+      scripts get a new address, so no cache (browser or service worker) pairs a page with old ones.
+      pageStyles come after main.css: first the page's area stylesheet(s) (/assets/css/booth.css …, the end
+      of main.css: "Page-area styles"), then a vendor one (lite-youtube, the lightbox). #}
+  <link rel="stylesheet" href="/assets/css/main.css?v={{ build.version }}">
+  {%- for s in pageStyles %}
+  <link rel="stylesheet" href="{{ s }}{{ '&' if '?' in s else '?' }}v={{ build.version }}">
+  {%- endfor %}
+</head>
+<body class="min-h-screen flex flex-col {{ bodyClass }}">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-lg focus:bg-gv focus:px-4 focus:py-2 focus:text-white">{{ "a11y.skip" | t(L) }}</a>
+
+  {% include "partials/header.njk" %}
+  {% include "partials/lang-banner.njk" ignore missing %}
+
+  <main id="main" class="flex-1" tabindex="-1">
+    {{ content | safe }}
+  </main>
+
+  {% include "partials/footer.njk" %}
+
+  {#- Structured data (schema.org) for search engines and the AI search tools that read it: ONE graph on every page
+      that search engines may show — never on the 404 page or a `noindex` one (the forwarding stubs and the event
+      share pages have no layout, so none either). It comes after the page and its footer: a page's own block (the
+      Events page's events) stays the first one on the page.
+      · Organization …/#committee and WebSite …/#website: the SAME two nodes on every page in both languages, so
+        engines see one committee and one site — the English names (the Spanish one as alternateName), the site's
+        root as url, the footer's English words as description (one @id never says two different things). sameAs:
+        only the Area's page about this committee (site.committee_page) — never the magazines' Instagram or
+        YouTube: those are AA Grapevine's and La Viña's own accounts. No SearchAction (Google ended that search box).
+      · WebPage …<page>#webpage: the page's own kind (`ldType`, WebPage when unset), name, description, language and
+        share picture; the About page's main subject is the committee.
+      · BreadcrumbList (every page but the home page), in the page language: Home → the menu page it sits under
+        when it is not that page itself (src/_data/nav.js: a GVR / RLV 101 session → GVR / RLV 101, a month →
+        Monthly toolkit) → the page.
+      · FAQPage (`ldFaq`: /contribute/): the questions and answers the page shows, from the same strings.
+      No dates (an update every few hours would claim changes that never happened), no people's names.
+      `ldOmit` is never set: a value "… or ldOmit" that is empty leaves its key out (JSON drops what is undefined). -#}
+  {%- if pageKey != "404" and not noindex %}
+  {%- set ldRoot = '/' | siteUrl(site) -%}
+  {%- set ldPage = page.url | siteUrl(site) -%}
+  {%- set ldNav = [] -%}
+  {%- for it in nav.primary.concat(nav.footer) %}{% for n in [it].concat(it.children or []) %}{% if n.page and n.page == pageKey %}{% set _n = ldNav.push(n) %}{% endif %}{% endfor %}{% endfor -%}
+  {%- set ldCrumbs = [] -%}
+  {%- if pageKey != "home" %}
+  {%- set _n = ldCrumbs.push({ "name": "nav.home" | t(L), "item": ('/' | lurl(L)) | siteUrl(site) }) -%}
+  {%- if ldNav.length and (ldNav[0].url | lurl(L)) != page.url %}{% set _n = ldCrumbs.push({ "name": ldNav[0].key | t(L), "item": (ldNav[0].url | lurl(L)) | siteUrl(site) }) %}{% endif -%}
+  {%- set _n = ldCrumbs.push({ "name": pageTitle or siteTitle }) -%}
+  {%- endif %}
+  {%- set ldGraph = [
+    { "@type": "Organization", "@id": ldRoot + "#committee", "name": site.committee, "alternateName": site.committee_es or ldOmit, "url": ldRoot,
+      "logo": { "@type": "ImageObject", "url": "/assets/img/app-icon-512.png" | siteUrl(site), "width": 512, "height": 512 },
+      "description": "footer.about" | t("en"), "email": site.contact_email or ldOmit, "sameAs": ([site.committee_page] if site.committee_page else ldOmit),
+      "knowsLanguage": ["en", "es"],
+      "parentOrganization": { "@type": "Organization", "name": site.area, "alternateName": "NETA 65", "url": site.area_website or ldOmit } },
+    { "@type": "WebSite", "@id": ldRoot + "#website", "url": ldRoot, "name": site.title, "alternateName": "GV/LV 65", "inLanguage": ["en-US", "es-US"],
+      "publisher": { "@id": ldRoot + "#committee" } },
+    { "@type": ldType or "WebPage", "@id": ldPage + "#webpage", "url": ldPage, "name": pageTitle or siteTitle, "description": desc,
+      "inLanguage": "es-US" if L == "es" else "en-US", "isPartOf": { "@id": ldRoot + "#website" }, "publisher": { "@id": ldRoot + "#committee" },
+      "primaryImageOfPage": { "@type": "ImageObject", "url": shareImg.url, "width": shareImg.width or ldOmit, "height": shareImg.height or ldOmit },
+      "breadcrumb": ({ "@id": ldPage + "#breadcrumb" } if ldCrumbs.length else ldOmit),
+      "mainEntity": ({ "@id": ldRoot + "#committee" } if ldType == "AboutPage" else ldOmit) }
+  ] -%}
+  {%- if ldCrumbs.length %}
+  {%- set ldItems = [] -%}
+  {#- (the page itself, last, has no "item": search engines take the page they read) -#}
+  {%- for c in ldCrumbs %}{% set _n = ldItems.push({ "@type": "ListItem", "position": loop.index, "name": c.name, "item": c.item }) %}{% endfor -%}
+  {%- set _n = ldGraph.push({ "@type": "BreadcrumbList", "@id": ldPage + "#breadcrumb", "itemListElement": ldItems }) -%}
+  {%- endif %}
+  {%- if ldFaq %}
+  {%- set ldQs = [] -%}
+  {%- for n in range(1, ldFaq.count + 1) %}{% set _n = ldQs.push({ "@type": "Question", "name": (ldFaq.prefix + n + "_q") | t(L) | striptags,
+    "acceptedAnswer": { "@type": "Answer", "text": (ldFaq.prefix + n + "_a") | t(L) | striptags } }) %}{% endfor -%}
+  {%- set _n = ldGraph.push({ "@type": "FAQPage", "@id": ldPage + "#faq", "isPartOf": { "@id": ldPage + "#webpage" },
+    "inLanguage": "es-US" if L == "es" else "en-US", "mainEntity": ldQs }) -%}
+  {%- endif %}
+  <script type="application/ld+json">{{ { "@context": "https://schema.org", "@graph": ldGraph } | jsonScript | safe }}</script>
+  {%- endif %}
+
+  {#- central-time.js: the site's time-zone math (window.GVTime, the same code the build uses:
+      eleventy/central-time.js → src/pages/central-time.11ty.js) — right before app.js and committee.js. #}
+  <script src="/assets/js/central-time.js?v={{ build.version }}" defer></script>
+  <script src="/assets/js/app.js?v={{ build.version }}" defer></script>
+  {#- install-core.js: which phone and browser, the /offline/ guide for it and the install notice's
+      rules (window.GVInstall) — right before pwa.js, which draws them (without it: plain links to
+      the steps, /offline/#steps). #}
+  <script src="/assets/js/install-core.js?v={{ build.version }}" defer></script>
+  <script src="/assets/js/pwa.js?v={{ build.version }}" defer></script>
+  <script src="/assets/js/hero-canvas.js?v={{ build.version }}" defer></script>
+  {%- for s in pageScripts %}{% if s != "/assets/js/hero-canvas.js" %}
+  <script src="{{ s }}{{ '&' if '?' in s else '?' }}v={{ build.version }}" defer></script>
+  {%- endif %}{% endfor %}
+  <script src="/assets/vendor/alpine.min.js?v={{ build.version }}" defer></script>
+</body>
+</html>

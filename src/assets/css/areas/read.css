@@ -1,0 +1,482 @@
+/* =====================================================================
+   Area styles — Read, Share Your Story, Subscribe, GVR/RLV Corner, About.
+   Owned by the "read" area. Templates use Tailwind utilities first; only
+   what utilities can't express lives here. Colors come from theme tokens
+   (var(--c-*)) so dark mode works; the dark "cover" panels keep white
+   text on a deep gradient in both themes.
+   ===================================================================== */
+
+/* ---------- Page hero (ui.pageHero with opts.class "read-hero") ----------
+   The hero buttons are the standard size on every page (44px tall, 14px text). On phones
+   the two magazine buttons would wrap onto a second row and push the hero past 28rem, so,
+   like the home page's hero: no icon and a little less side padding, which keeps them on one
+   row on a 390px phone in both languages (Subscribe's longer labels stack below ~414px; its
+   subtitle is kept short for that). Below 360px the eyebrow pill is left out (the title says
+   the same), so heroes whose buttons stack there stay within 28rem too. */
+@media (width < 40rem) {
+  .read-hero .hero-actions > :is(a, button) { padding-inline: 0.875rem; }
+  .read-hero .hero-actions > :is(a, button) > .icon { display: none; }
+}
+@media (width < 22.5rem) {
+  .read-hero .gv-hero-eyebrow { display: none; }
+}
+
+/* ---------- Read: the hero aside "What are Grapevine and La Viña?" (read.njk, ui.heroAside) ----------
+   The two magazines side by side — the tone tile (the shared .hero-aside-link-icon, so it follows the
+   card's colours in the hero and below it), the year each began over its name (DOM: name first, so
+   a screen reader says "Grapevine, since 1944") — then the one "Our history" link row. */
+.read-aside-mags { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+.read-aside-mags > li { display: flex; align-items: center; gap: 0.625rem; min-width: 0; }
+.read-aside-mag { display: flex; flex-direction: column-reverse; min-width: 0; }
+.read-aside-year { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 1.05; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; color: var(--ha-ink); }
+.read-aside-name { font-size: 0.8125rem; font-weight: 600; line-height: 1.3; color: var(--ha-muted); overflow-wrap: break-word; }
+/* a narrow card (a phone at 150 % text): one magazine per row, so no year or name ever breaks */
+@container (width < 17rem) { .read-aside-mags { grid-template-columns: minmax(0, 1fr); } }
+.hero-aside-body > .read-aside-mags { margin-top: 0.875rem; }
+.hero-aside-body > .read-aside-mags + .hero-aside-links { margin-top: 0.625rem; }
+/* At 1024–1279px, with the card inside the hero, the title column is about 600px wide and "Read
+   Grapevine & La Viña" takes two lines: the two hero numbers are left out there (they show from
+   1280px, and below 1024px), so the hero keeps its 480px. Same guard as main.css's in-hero rules. */
+@media (64rem <= width < 80rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .gv-hero-shell > .read-page-hero .hero-stats { display: none; }
+}
+
+/* ---------- Magazine "cover" panels (GV = navy/blue, LV = deep amber) ---------- */
+.read-cover--gv {
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgb(255 255 255 / 0.12), transparent 55%),
+    linear-gradient(155deg, #0f1730 0%, #0b3f73 52%, #0a5fa8 100%);
+}
+.read-cover--lv {
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgb(255 255 255 / 0.12), transparent 55%),
+    linear-gradient(155deg, #33130a 0%, #7a2a05 50%, #b0410b 100%);
+}
+.read-cover-art {
+  position: absolute; right: -2.75rem; bottom: -3rem; z-index: -1;
+  width: 14rem; height: auto; color: #fff; opacity: 0.1; transform: rotate(-14deg);
+  pointer-events: none;
+}
+
+/* Real magazine cover: a blurred, darkened copy fills the panel (so each issue
+   gets its own colors) and the sharp cover sits on top like a printed copy.
+   The dark overlay keeps white text at AA contrast whatever the cover colors. */
+.read-cover-blur {
+  position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; max-width: none;
+  object-fit: cover; transform: scale(1.35);
+  filter: blur(26px) saturate(1.25) brightness(0.62);
+  pointer-events: none; user-select: none;
+}
+.read-cover.has-cover::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, rgb(8 10 24 / 0.42) 0%, rgb(8 10 24 / 0.58) 55%, rgb(8 10 24 / 0.74) 100%);
+}
+/* No cover yet (the sync reads it off the editor's letter the night an issue goes up): a drawn cover
+   (read.njk issueFeature) in the same 7:10 frame — the magazine's name over the grapes on a frosted panel
+   of the card's own tone. Its insides are sized by the frame's width (cqi: it is a size container), so it
+   scales with the frame from the phone's 7.25rem to the wide card's 14rem, and with the larger-text
+   setting (the frame is in rem). Decoration only: no link, so not .read-cover-frame's hover lift (its
+   resting shadow and corners, copied). */
+.read-cover-drawn {
+  container-type: inline-size;
+  display: flex; flex-direction: column; align-items: center;
+  aspect-ratio: 7 / 10; overflow: hidden; border-radius: 0.4rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 18px 40px -12px rgb(0 0 0 / 0.65), 0 0 0 1px rgb(255 255 255 / 0.14);
+  background:
+    radial-gradient(90% 60% at 50% 100%, rgb(255 255 255 / 0.16), transparent 70%),
+    linear-gradient(170deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.07) 55%, rgb(0 0 0 / 0.1));
+}
+.read-cover-drawn-mast {
+  margin-top: 11cqi; padding-bottom: 4cqi; border-bottom: 1px solid rgb(255 255 255 / 0.35);
+  font-size: 17cqi; line-height: 1; white-space: nowrap; letter-spacing: -0.01em;
+}
+.read-cover-drawn-art { width: 80cqi; height: auto; margin-top: auto; margin-bottom: -4cqi; color: #fff; opacity: 0.38; }
+/* The narrowest phones (below 360px): the issue's name ("September / October 2026") can't fit beside
+   the cover (or the drawn one), so it goes under it instead of being cut off at the card's edge */
+@media (width < 22.5rem) { .read-cover:is(.has-cover, .has-drawn-cover) > .flex { flex-wrap: wrap; } }
+/* The magazine's name in a cover panel (Shop, About): the panel is a size container and the name is
+   sized by its width (cqi) — 1.5rem in a phone's card up to 1.875rem (from 1.25rem at 130%+ text) — so
+   "AA Grapevine" always fits beside the cover (Shop) or in the panel (About). In a panel narrower than
+   24rem the grapes icon is left out. The kicker is hyphenated in the page language. */
+.read-cover-head { container-type: inline-size; }
+.read-cover-title { font-size: clamp(1.5rem, 8cqi, 1.875rem); line-height: 1.15; }
+.read-cover-kicker { hyphens: auto; }
+@container (width < 24rem) { .read-cover-icon { display: none; } }
+:root:is([data-text="130"], [data-text="150"]) .read-cover-title { font-size: clamp(1.25rem, 11cqi, 1.875rem); }
+.read-cover-frame {
+  border-radius: 0.4rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 18px 40px -12px rgb(0 0 0 / 0.65), 0 0 0 1px rgb(255 255 255 / 0.14);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.read-cover-frame:hover { transform: translateY(-3px) rotate(-0.6deg); box-shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 26px 50px -14px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.22); }
+.read-cover-frame:focus-visible { outline-color: #fff; }
+
+/* ---------- Wide screens (Read page) ----------
+   Current issues: Grapevine and La Viña side by side from 1440px (each card then lays itself
+   out by its own width — container queries in read.njk). When the visitor filters to one
+   magazine (Alpine adds .is-single) that one takes the full width again.
+   Side by side, the two cards end on one line — never a short card beside blank space (La Viña's
+   blurb and the translation notes make its card longer): each card stretches to the row, its inner
+   grid (.read-issue-in) gives the extra height to the story list — a second row of 1fr below the
+   cover panel; when the panel sits beside the list there is one row, stretched as before — and the
+   "Show all N stories" rows sit level at the bottom. Once one of them is opened, the other card's
+   stays under its own list (not pushed down to the bottom of the long open card). */
+.read-issues { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; align-items: start; }
+@media (width >= 90rem) {
+  .read-issues { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+  .read-issues.is-single { grid-template-columns: minmax(0, 1fr); }
+  .read-issues:not(.is-single) { align-items: stretch; }
+  .read-issues:not(.is-single) > .read-issue { display: flex; flex-direction: column; }
+  .read-issues:not(.is-single) .read-issue-in { flex: 1 1 auto; grid-template-rows: auto; grid-auto-rows: 1fr; }
+  .read-issues:not(.is-single) .read-issue-body,
+  .read-issues:not(.is-single) .read-toc { display: flex; flex-direction: column; }
+  .read-issues:not(.is-single) .read-toc { flex: 1 1 auto; }
+  .read-issues:not(.is-single):not(:has(.read-more[open])) .read-more { margin-top: auto; padding-top: 0.25rem; }
+}
+/* Previous issues: one column, two from 1440px (an opened issue spans both columns) */
+.read-archive-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; align-items: start; }
+@media (width >= 90rem) { .read-archive-list { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: row dense; } }
+
+/* "See who from our Area got published" link card (Read + Share your story → /published/):
+   a soft vine glow in the corner and a thin three-color rule on top. */
+.read-spot {
+  background:
+    radial-gradient(85% 75% at 100% 0%, color-mix(in srgb, var(--c-vine) 12%, transparent), transparent 70%),
+    var(--c-surface);
+}
+.read-spot::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; pointer-events: none;
+  background: linear-gradient(90deg, var(--c-vine), var(--c-gv) 55%, var(--c-lv));
+}
+
+/* Table of contents: small group headings; phones show the first 6 stories until "Show all" is opened */
+.read-toc-head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem;
+  padding: 0.5rem 0.75rem 0.25rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+}
+@media (width < 40rem) {
+  .read-toc:not(:has(.read-more[open])) .read-sm-extra { display: none; }
+}
+/* A story: its link, and beside it (never inside it) a small Share button — 44px, at the title's height */
+.read-article { display: flex; align-items: flex-start; }
+.read-share {
+  display: inline-grid; place-items: center; flex-shrink: 0; min-width: 2.75rem; min-height: 2.75rem; margin-top: 0.15rem;
+  border-radius: 999px; color: var(--c-faint); font-size: 0.75rem; font-weight: 600; white-space: nowrap;
+}
+.read-share:hover { color: var(--c-gv); background: var(--c-surface-2); }
+
+/* Issue description beside the table of contents */
+.read-blurb { border-left: 3px solid var(--read-accent, var(--c-gv)); padding: 0.15rem 0 0.15rem 1rem; }
+
+/* "Subscriber story" — quiet, friendly, never alarming */
+.read-sub-badge {
+  display: inline-flex; align-items: center; gap: 0.25rem; border-radius: 999px;
+  padding: 0.05rem 0.55rem; font-size: 0.7rem; line-height: 1.25rem; font-weight: 600;
+  color: var(--c-muted); background: var(--c-surface-2); box-shadow: inset 0 0 0 1px var(--c-line);
+}
+
+/* Tiny cover in archive rows */
+.read-mini-cover {
+  width: 2.25rem; aspect-ratio: 7 / 10; height: auto; flex-shrink: 0; object-fit: cover;
+  border-radius: 0.2rem; box-shadow: 0 1px 2px rgb(0 0 0 / 0.2), 0 0 0 1px var(--c-line);
+}
+
+/* ---------- <details> disclosure widgets (archive issues, "show all", FAQ) ---------- */
+.read-past > summary,
+.read-more > summary,
+.read-faq > summary { list-style: none; }
+.read-past > summary::-webkit-details-marker,
+.read-more > summary::-webkit-details-marker,
+.read-faq > summary::-webkit-details-marker { display: none; }
+.read-past > summary:hover .read-past-bar { transform: scaleY(1.15); }
+.read-past-bar { width: 0.3rem; align-self: stretch; min-height: 2.25rem; border-radius: 999px; transition: transform 0.2s ease; }
+.read-past[open] { box-shadow: var(--shadow-lift); }
+/* an opened issue takes the whole row of the two-column archive (its stories get the width) */
+.read-past[open] { grid-column: 1 / -1; }
+
+/* La Viña chip uses the amber accent when active */
+.read-chip-lv[aria-pressed="true"] { background: var(--c-lv); border-color: var(--c-lv); }
+
+/* ---------- Editorial deadlines ---------- */
+.read-deadline-next { position: relative; overflow: hidden; }
+.read-deadline-next::after {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 0.35rem; background: var(--read-accent, var(--c-gv));
+}
+/* Share your story's closing call to action: soft Grapevine / La Viña glows on the surface */
+.read-cta {
+  background:
+    radial-gradient(70% 120% at 0% 0%, color-mix(in srgb, var(--c-gv) 12%, transparent), transparent 65%),
+    radial-gradient(70% 120% at 100% 100%, color-mix(in srgb, var(--c-lv) 12%, transparent), transparent 65%),
+    var(--c-surface);
+}
+/* Closed deadlines: muted text (still 4.5:1 contrast) + struck-through date — no opacity, which would fail contrast */
+.read-deadline-row.is-past, .read-deadline-row.is-past .text-ink { color: var(--c-muted); }
+.read-deadline-row.is-past .read-deadline-date { text-decoration: line-through; text-decoration-thickness: 1px; }
+/* "Add to my calendar" under a deadline (contribute.njk dlCalMenu): its menu opens in the row and pushes what is
+   below down — the deadline cards clip what sticks out (overflow: hidden) —, never wider than the row; gone once the
+   deadline has passed (read.js marks the row) */
+.ct-dl-cal > .cm-menu-panel { position: static; width: fit-content; min-width: 0; max-width: 100%; margin-top: 0.25rem; box-shadow: none; }
+.read-deadline-row.is-past .ct-dl-cal { display: none; }
+
+/* ---------- PDF placeholder "covers" (when no thumbnail was generated) ---------- */
+/* Position comes from utilities (absolute inset-0 / relative) — not set here so it never overrides them. */
+.read-pdf-ph {
+  display: grid; place-items: center; overflow: hidden;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--read-accent, var(--c-gv)) 16%, var(--c-surface)) 0%, var(--c-surface-2) 100%);
+  color: var(--read-accent, var(--c-gv));
+}
+.read-pdf-ph::before {
+  content: ""; position: absolute; inset: 0 0 auto auto; width: 22%; aspect-ratio: 1;
+  background: linear-gradient(225deg, var(--c-paper) 50%, color-mix(in srgb, var(--read-accent, var(--c-gv)) 22%, var(--c-surface)) 50%);
+}
+.read-accent-gv { --read-accent: var(--c-gv); }
+.read-accent-lv { --read-accent: var(--c-lv); }
+.read-accent-grape { --read-accent: var(--c-grape); }
+.read-accent-vine { --read-accent: var(--c-vine); }
+
+/* ---------- Share your story › "Next workshops" (#workshop band) ----------
+   One card a row; from 1280px the cards side by side (--n = how many: 1–3, from the template) — at
+   130%+ text from 1536px, where a card still has room for its date tile and a readable title. */
+.read-ws-list { grid-template-columns: minmax(0, 1fr); }
+@media (width >= 80rem) { :root:not([data-text="130"], [data-text="150"]) .read-ws-list { grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); } }
+@media (width >= 96rem) { .read-ws-list { grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); } }
+
+/* ---------- GVR checklist ----------
+   One column; two when the checklist card is at least 56rem wide (its @container), filled
+   column by column (--rows = half the steps) so the steps still read 1, 2, 3… downwards.
+   gvr.njk marks the first column (.read-check-c1) and the top of the second (.read-check-c2top). */
+.read-check-list { display: grid; grid-template-columns: minmax(0, 1fr); }
+.read-check-list > li + li { border-top: 1px solid var(--c-line); }
+@container (width >= 56rem) {
+  .read-check-list { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(var(--rows, 4), auto); grid-auto-flow: column; }
+  .read-check-list > li.read-check-c2top { border-top: 0; }
+  .read-check-list > li.read-check-c1 { border-right: 1px solid var(--c-line); }
+}
+.read-check { accent-color: var(--c-vine); width: 1.35rem; height: 1.35rem; flex-shrink: 0; cursor: pointer; }
+.read-check-row.is-done .read-check-label { color: var(--c-faint); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--c-faint) 60%, transparent); }
+/* the step's description and links line up with its title (checkbox 1.35rem + gap 0.75rem) */
+.read-check-body { padding: 0 0 0.25rem 2.1rem; }
+.read-progress { height: 0.5rem; border-radius: 999px; background: var(--c-surface-2); overflow: hidden; }
+.read-progress > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--c-vine), var(--c-gv)); transition: width 0.35s ease; }
+
+/* ---------- About #videos: our translation of the other language's video (a quiet surface-2 box, no border:
+   the translated title shows, the summary opens under it) ---------- */
+.read-vid-tr { border-radius: 0.75rem; background: var(--c-surface-2); }
+.read-vid-tr > summary { display: flex; align-items: flex-start; gap: 0.625rem; min-height: 2.75rem; padding: 0.75rem 1rem; cursor: pointer; list-style: none; border-radius: inherit; }
+.read-vid-tr > summary::-webkit-details-marker { display: none; }
+.read-vid-tr > summary:hover .text-ink { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- The same two videos, compact, on the GVR / RLV corner (gvr.njk #ideas; macros/media.njk magVideo with
+   { compact: true }) ----------
+   One row with "Did you know?" (.read-dyk-row): a wrapping flex row whose halves are at least 33.5rem — side by side
+   when both fit (the row 68.5rem: from about 1180px at 100 % text, 1360px at 115 %, 1540px at 130 %), stretched to
+   one height, else one under the other, each the whole row; when the question card is hidden (no JavaScript, no
+   question) the videos take the whole row instead of leaving half of it blank. 33.5rem = the list's 30rem two-up
+   step + the card's padding and border: beside the question the two videos are always side by side, never one per
+   row in a tall half. (Not the .flex utility: main.css's larger-text rules would make each half flex: 1 1 0%.)
+   Beside the videos the question card is taller than its words until it is answered: a column whose question block
+   sits in the middle of the spare height (margin-block: auto; the column's 1rem gap is the block's mt-4), and grows
+   into it once answered. One under the other (or on About) the card is just as tall as its words, as before.
+   The videos' list (.read-vid-c-box, an @container) by its own width: under 30rem one video per row — the player
+   above its words, or beside them from 24rem; from 30rem two side by side, each player above its words (a half row
+   at 1180–1600px, the whole row at 768px); from 48rem two side by side, each player beside its words (the whole row
+   at 1024–1179px, a half row at 1920px). One video only (an about_videos entry with no title is dropped): it takes
+   the whole list, the player beside its words (no more than 22rem wide), never half a list with a blank half.
+   rem widths: at larger text everything steps back sooner. The player is lite-youtube's 16:9 box (media.css
+   .media-lyt; its corners: inherit). */
+.read-dyk-row { display: flex; flex-wrap: wrap; align-items: stretch; gap: 1.5rem; }
+.read-dyk-row > * { flex: 1 1 33.5rem; min-width: 0; }
+.read-dyk-row > .read-dyk:only-child { max-width: 48rem; }   /* no videos configured: the question card as it was */
+@media screen {   /* (screen only: on paper the card stays hidden — print:hidden is a utility this unlayered display would beat) */
+  .read-dyk-row > .read-dyk { display: flex; flex-direction: column; row-gap: 1rem; }
+  .read-dyk-row > .read-dyk > .mt-4 { margin-block: auto; }
+}
+.read-vid-c-box { container-type: inline-size; }
+.read-vid-c-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+.read-vid-c { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 0.75rem; }
+.read-vid-c-player { overflow: hidden; border-radius: 0.75rem; background: var(--c-surface-2); }
+/* keyboard focus on a play button: the site's ring around the whole picture as well (media.css's white ring inside
+   the picture is faint on a light preview) */
+.read-vid-c-player:has(.lyt-playbtn:focus-visible) { outline: 3px solid var(--c-gv); outline-offset: 2px; }
+.read-vid-c-title { margin-top: 0.5rem; font-family: var(--font-display); font-size: 1rem; font-weight: 600; line-height: 1.35;
+  color: var(--c-ink); text-wrap: balance; overflow-wrap: break-word; }
+@container (width >= 24rem) { .read-vid-c { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); gap: 1rem; } }
+@container (width >= 30rem) {
+  .read-vid-c-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .read-vid-c { grid-template-columns: minmax(0, 1fr); gap: 0.75rem; }
+  .read-vid-c-list:has(> li:only-child) { grid-template-columns: minmax(0, 1fr); }
+  .read-vid-c-list:has(> li:only-child) .read-vid-c { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); gap: 1rem; }
+}
+@container (width >= 48rem) {
+  .read-vid-c { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); gap: 1rem; }
+  .read-vid-c-list:has(> li:only-child) .read-vid-c { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); }
+}
+
+/* ---------- History of Grapevine & La Viña (About #history; config/history.yml → src/_data/history.js) ----------
+   Narrow: one rail on the left, the milestones in one column. When the timeline is at least 58rem wide
+   (its @container — so larger reading text keeps the one column longer): the rail in the middle and
+   the milestones taking turns left and right inside each decade, the right one a little lower so
+   the dots never meet. The turns are worked out per filter (side.<filter> → hs-*), so a filtered
+   decade still alternates.
+   Filters and "Show all" are two attributes on .read-hist that Alpine sets — data-f (all · gv · lv)
+   and data-open (0 · 1); the rules below do the rest, on screens with JavaScript only: without it,
+   and on paper, every milestone shows. Collapsed = the first 7 of the filter (narrow) or 12 (from
+   40rem): hx7-* / hx12-* mark the milestones past that, dx7-* / dx12-* a decade with none before
+   it, hn-* a decade with none in the filter, bn7-* / bn12-* the button when there is nothing more.
+   --tone is the publication's colour (gv · lv · vine = both magazines); its name is always in the
+   text too. Nothing moves: no scroll or reveal animations.
+   The three filter chips wrap (never a sideways scroll that hides the last one); in one column a
+   milestone is at most 46rem wide (a readable line at 150% text on a wide screen); in a very narrow
+   timeline (a 320px phone, or 150% text) the rail moves closer to the edge so the cards keep room. */
+.read-hist { --hist-rail: 0.75rem; --hist-pad: 2.25rem; --hist-gap: 5rem; container-type: inline-size; }
+.read-hist-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
+/* the publication's colour in its filter chip, ringed so it still shows on the pressed (blue) chip */
+.read-hist-dot { width: 0.625rem; height: 0.625rem; flex-shrink: 0; border-radius: 50%; box-shadow: 0 0 0 2px var(--c-surface); }
+.read-hist-decades { position: relative; display: grid; gap: 2rem; }
+.read-hist-decades::before {
+  content: ""; position: absolute; top: 0.75rem; bottom: 0; left: var(--hist-rail); width: 2px; margin-left: -1px; border-radius: 1px;
+  background: color-mix(in srgb, var(--c-muted) 35%, var(--c-line));
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+          mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+}
+.read-hist-dec { position: relative; display: flex; margin-bottom: 1rem; font-size: 1rem; }
+.read-hist-dec > span {
+  display: inline-flex; align-items: center; min-height: 1.875rem; padding: 0.15rem 0.85rem; border-radius: 999px;
+  background: var(--c-ink); color: var(--c-paper); font-weight: 600; letter-spacing: 0.01em; font-variant-numeric: tabular-nums;
+  box-shadow: 0 0 0 4px var(--c-paper);
+}
+.read-hist-list { display: grid; gap: 1rem; padding-left: var(--hist-pad); }
+.read-hist-item { --tone: var(--c-gv); position: relative; max-width: 46rem; }
+.read-hist-item[data-t="lavina"] { --tone: var(--c-lv); }
+.read-hist-item[data-t="both"] { --tone: var(--c-vine); }
+/* the dot on the rail (::after) and a short line to the card (::before) */
+.read-hist-item::before, .read-hist-item::after { content: ""; position: absolute; top: 1.45rem; left: calc(var(--hist-rail) - var(--hist-pad)); }
+.read-hist-item::before { width: calc(var(--hist-pad) - var(--hist-rail)); height: 2px; margin-top: -1px; background: color-mix(in srgb, var(--tone) 45%, transparent); }
+.read-hist-item::after { width: 0.875rem; height: 0.875rem; border-radius: 50%; background: var(--tone); box-shadow: 0 0 0 3px var(--c-paper); transform: translate(-50%, -50%); }
+.read-hist-card { padding: 1rem 1.125rem 1.125rem; box-shadow: inset 0 3px 0 var(--tone), var(--shadow-card); break-inside: avoid; }
+.read-hist-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.25rem 0.75rem; }
+.read-hist-when { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tone); }
+.read-hist-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; margin-top: 2rem; padding-left: var(--hist-pad); }
+.read-hist-more { width: 100%; }
+.read-hist-more > [data-l] { display: none; }
+.read-hist[data-open="0"][data-f="all"] .read-hist-more > [data-l="all"],
+.read-hist[data-open="0"][data-f="gv"] .read-hist-more > [data-l="gv"],
+.read-hist[data-open="0"][data-f="lv"] .read-hist-more > [data-l="lv"],
+.read-hist[data-open="1"] .read-hist-more > [data-l="less"] { display: inline; }
+.read-hist[data-open="1"] .read-hist-more > svg { rotate: 180deg; }
+/* phones: the three chips a little tighter so they stay on one line at 390px (EN and ES) — and at
+   360px too, where the colour dots step aside (the chips' words say which magazine anyway) */
+@container (width < 30rem) {
+  .read-hist-bar { gap: 0.375rem; }
+  .read-hist-bar > .chip { padding-inline: 0.625rem; }
+}
+@container (width < 22rem) { .read-hist-dot { display: none; } }
+@container (width < 20rem) {
+  .read-hist-decades, .read-hist-foot { --hist-rail: 0.5rem; --hist-pad: 1.5rem; }
+  .read-hist-card { padding-inline: 0.875rem; }
+}
+@container (width >= 40rem) {
+  .read-hist-more { width: auto; }
+}
+@container (width >= 58rem) {
+  .read-hist-bar { justify-content: center; }
+  .read-hist-decades::before { left: 50%; }
+  .read-hist-dec { justify-content: center; }
+  .read-hist-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--hist-gap); row-gap: 1.25rem; align-items: start; padding-left: 0; }
+  .read-hist-item { grid-column: 1; justify-self: end; width: min(100%, 40rem); }
+  .read-hist-item::before, .read-hist-item::after { left: auto; right: calc(var(--hist-gap) / -2); }
+  .read-hist-item::before { width: calc(var(--hist-gap) / 2); }
+  .read-hist-item::after { transform: translate(50%, -50%); }
+  :is(.read-hist[data-f="all"] .hs-all, .read-hist[data-f="gv"] .hs-gv, .read-hist[data-f="lv"] .hs-lv) { grid-column: 2; justify-self: start; margin-top: 2.75rem; }
+  :is(.read-hist[data-f="all"] .hs-all, .read-hist[data-f="gv"] .hs-gv, .read-hist[data-f="lv"] .hs-lv)::before,
+  :is(.read-hist[data-f="all"] .hs-all, .read-hist[data-f="gv"] .hs-gv, .read-hist[data-f="lv"] .hs-lv)::after { right: auto; left: calc(var(--hist-gap) / -2); }
+  :is(.read-hist[data-f="all"] .hs-all, .read-hist[data-f="gv"] .hs-gv, .read-hist[data-f="lv"] .hs-lv)::after { transform: translate(-50%, -50%); }
+  .read-hist-foot { align-items: center; padding-left: 0; text-align: center; }
+}
+@media screen {
+  :root.js .read-hist[data-f="gv"] :is(.read-hist-item[data-t="lavina"], .hn-gv),
+  :root.js .read-hist[data-f="lv"] :is(.read-hist-item[data-t="grapevine"], .hn-lv) { display: none; }
+  @container (width < 40rem) {
+    :root.js .read-hist[data-open="0"][data-f="all"] :is(.hx7-all, .dx7-all),
+    :root.js .read-hist[data-open="0"][data-f="gv"] :is(.hx7-gv, .dx7-gv),
+    :root.js .read-hist[data-open="0"][data-f="lv"] :is(.hx7-lv, .dx7-lv),
+    :root.js .read-hist[data-f="all"] .bn7-all, :root.js .read-hist[data-f="gv"] .bn7-gv, :root.js .read-hist[data-f="lv"] .bn7-lv { display: none; }
+  }
+  @container (width >= 40rem) {
+    :root.js .read-hist[data-open="0"][data-f="all"] :is(.hx12-all, .dx12-all),
+    :root.js .read-hist[data-open="0"][data-f="gv"] :is(.hx12-gv, .dx12-gv),
+    :root.js .read-hist[data-open="0"][data-f="lv"] :is(.hx12-lv, .dx12-lv),
+    :root.js .read-hist[data-f="all"] .bn12-all, :root.js .read-hist[data-f="gv"] .bn12-gv, :root.js .read-hist[data-f="lv"] .bn12-lv { display: none; }
+  }
+}
+@media print {
+  .read-hist-bar { display: none !important; }
+  .read-hist-card { box-shadow: inset 0 3px 0 var(--tone); }
+  /* browsers leave out backgrounds on paper: the decade label becomes dark text in an outline */
+  .read-hist-dec > span { background: none; color: var(--c-ink); box-shadow: none; border: 1px solid var(--c-line); }
+}
+
+/* Big number (deadlines, stats) uses tabular figures */
+.read-num { font-variant-numeric: tabular-nums; }
+
+/* ---------- "Did you know? / ¿Sabías que…?" (macros/question.njk: About, /gvr/) ----------
+   The booth's question of the day. The answers are full-width buttons (44px at least, the text wraps); once
+   answered they stay readable at full contrast (aria-disabled, not disabled) and the right one — and the
+   visitor's, when it was another — is marked with a colour AND an icon with words (sr-only), as GVR / RLV 101's
+   review questions are. The answer below gets the keyboard (tabindex -1): its focus ring shows where it is. */
+.read-dyk-q { margin-top: 0.5rem; font-weight: 600; line-height: 1.45; color: var(--c-ink); overflow-wrap: anywhere; text-wrap: pretty; }
+.read-dyk-opts { display: grid; gap: 0.5rem; margin-top: 0.875rem; }
+.read-dyk-opt { display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 2.75rem; padding: 0.55rem 0.875rem;
+  border: 1px solid var(--c-field); border-radius: 0.75rem; background: var(--c-surface); color: var(--c-ink); text-align: start;
+  font-size: 0.9375rem; line-height: 1.35; overflow-wrap: anywhere; cursor: pointer; transition: border-color 0.15s, background-color 0.15s; }
+.read-dyk-opt:hover:not([aria-disabled="true"]) { border-color: var(--c-gv); background: var(--c-gv-soft); }
+.read-dyk-opt[aria-disabled="true"] { cursor: default; }
+.read-dyk-opt.is-right { border-color: var(--c-vine); background: var(--c-vine-soft); }
+.read-dyk-opt.is-wrong { border-color: var(--c-danger); background: color-mix(in srgb, var(--c-danger) 7%, var(--c-surface)); }
+.read-dyk-mark { display: grid; place-items: center; flex-shrink: 0; }
+.read-dyk-opt.is-right .read-dyk-mark { color: var(--c-vine); }
+.read-dyk-opt.is-wrong .read-dyk-mark { color: var(--c-danger); }
+@media (forced-colors: active) {
+  .read-dyk-opt.is-right, .read-dyk-opt.is-wrong { outline: 2px solid Highlight; outline-offset: 1px; }
+}
+.read-dyk-fb { margin-top: 1rem; padding: 0.875rem 1rem; border-radius: 0.75rem; background: var(--c-surface-2); }
+.read-dyk-verdict { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--c-ink); }
+.read-dyk-verdict.is-right .icon { color: var(--c-vine); }
+.read-dyk-verdict.is-wrong .icon { color: var(--c-gv); }
+
+/* ---------- GVR / RLV corner: "Pass it on" (gvr.njk #pass-it-on) ----------
+   Each message in a box that reads as it is copied: white-space: pre-line keeps its lines (read.js gvrPass copies
+   the same lines); long addresses break instead of widening a phone's card. The two printouts are print-only
+   sheets at the end of the page: the buttons put data-print="gvr-announce" / "gvr-handover" on <html> while
+   printing, and only that sheet goes on paper (a Letter page: the announcement twice, to cut in half, or the
+   handover sheet with lines to fill in by hand); the browser's own Print prints the page without them. */
+.read-pass-msg { white-space: pre-line; overflow-wrap: anywhere; padding: 0.875rem 1rem; border-radius: 0.75rem;
+  border-inline-start: 3px solid var(--c-vine); background: var(--c-surface-2); color: var(--c-ink); font-size: 0.875rem; line-height: 1.55; }
+.read-pass-print, .read-pass-sheet { display: none; }
+@page read-pass { size: letter portrait; margin: 0.5in; }
+@media print {
+  :root[data-print|="gvr"] body > :not(main), :root[data-print|="gvr"] main > :not(.read-pass-print) { display: none !important; }
+  :root[data-print|="gvr"] main { padding: 0 !important; }
+  :root[data-print|="gvr"] .read-pass-print { display: block; }
+  :root[data-print="gvr-announce"] .read-pass-sheet[data-sheet="announce"],
+  :root[data-print="gvr-handover"] .read-pass-sheet[data-sheet="handover"] { display: block; }
+  .read-pass-sheet { page: read-pass; color: #000; font: 11pt/1.45 var(--font-sans); }
+  .read-pass-sheet h2 { margin: 6pt 0 6pt; font-family: var(--font-display); font-size: 19pt; font-weight: 600; line-height: 1.15; color: #000; }
+  .read-pass-head { display: flex; justify-content: space-between; gap: 12pt; padding-bottom: 4pt; border-bottom: 1.5pt solid #2f6e2c;
+    font-size: 8pt; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #333; }
+  .read-pass-half { display: flex; flex-direction: column; height: 4.7in; overflow: hidden; break-inside: avoid; }
+  .read-pass-half + .read-pass-half { margin-top: 0.3in; padding-top: 0.3in; border-top: 1pt dashed #777; }
+  .read-pass-body { font-size: 12pt; line-height: 1.5; }
+  .read-pass-foot { display: flex; align-items: center; gap: 12pt; margin-top: auto; padding-top: 8pt; font-size: 9pt; color: #222; break-inside: avoid; }
+  .read-pass-qr { display: block; flex-shrink: 0; width: 1.05in; height: 1.05in; }
+  .read-pass-lead { margin-bottom: 8pt; font-size: 10pt; color: #333; }
+  .read-pass-fields { margin: 0; }
+  .read-pass-fields > div { padding: 5pt 0 3pt; break-inside: avoid; }
+  .read-pass-fields dt { font-size: 9.5pt; font-weight: 700; color: #000; }
+  .read-pass-fields dd { margin: 2pt 0 0; font-size: 10pt; }
+  .read-pass-line { height: 21pt; border-bottom: 0.75pt solid #999; }
+  .read-pass-box { display: inline-block; width: 9pt; height: 9pt; margin-inline-end: 2pt; border: 1pt solid #000; vertical-align: -1pt; }
+  .read-pass-blank { display: inline-block; width: 1in; border-bottom: 0.75pt solid #999; }
+  .read-pass-sheet[data-sheet="handover"] .read-pass-foot { margin-top: 10pt; border-top: 1pt solid #bbb; }
+}

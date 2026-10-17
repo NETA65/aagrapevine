@@ -1,0 +1,26 @@
+---
+permalink: /robots.txt
+layout: false
+eleventyExcludeFromCollections: true
+---
+{#- Crawlers read robots.txt ONLY at the root of an address (RFC 9309; Google: "crawlers don't
+    check for robots.txt files in subdirectories"). This site is a GitHub Pages PROJECT site
+    (https://neta65.github.io/aagrapevine/), so this file is published at
+    /aagrapevine/robots.txt and no search engine ever reads it. The file that counts is
+    https://neta65.github.io/robots.txt, and only the NETA65 account's own user-site
+    repository, NETA65/neta65.github.io, can publish it: its ready-to-upload files are in
+    docs/user-site/, the owner's steps in README → "Search engines", and the Weekly link check
+    reads it every Sunday (scripts/ops/root_robots.py). Until that repository exists the root
+    answers 404, which means "crawl everything": the site is crawled anyway, only the Sitemap
+    line below goes unseen (so the sitemap is also submitted by hand in Google Search Console
+    and Bing Webmaster Tools — same README section).
+    This file becomes the live one only with a custom domain (README §12, "Using your own
+    address"): then it IS the root file. So keep it as it is — everything allowed, no Disallow
+    lines (Google needs the CSS, scripts and JSON files to show the pages), and the sitemap.
+    The Sitemap line needs an absolute URL: site.url comes from config/site.yml (or the
+    SITE_URL the GitHub Action sets). Without one it is left out. -#}
+User-agent: *
+Allow: /
+{% if site.url %}
+Sitemap: {{ site.url }}/sitemap.xml
+{% endif %}

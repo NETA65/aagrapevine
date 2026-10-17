@@ -1,0 +1,1633 @@
+# GVR and RLV Orientation Workshop — the web presentation on /orientation/ ("Workshop presentations").
+#
+# Converted from the committee's PowerPoint deck (built 2026-10-01 by aagrapevine-ops\decks\deck1_gvr-orientation.py;
+# its copy is in the Drive folder 2027-2028_Panel77_GVLV\slides\): every slide in the same order, with the same words
+# on the slide and in the notes. Only what the web player does differently was adapted:
+#  · facts that change — the committee meeting's time, Zoom ID and passcode, La Viña's monthly workshop, the weekly
+#    open meetings, the prices, this month's issues and themes, the story deadlines, the assemblies, the site's own
+#    address — are {live:…} tokens or `live` slides, so they stay current by themselves (the site is rebuilt every
+#    day). A fact the site's data may lack (La Viña's next deadline, a Book of the Month between offers …) then says
+#    where to look ("see aalavina.org for La Viña's themes"), so the words around it are written to read well
+#    either way ("La Viña: …", never a label left with nothing after it);
+#  · the deck's [fill-ins] are the presenter's blanks, {fill:…} (Customize → Your details). The title slide shows the
+#    presenter's service position, never a name; a first name appears only in the presenter's own notes (AA's
+#    anonymity: a presenter is a service position);
+#  · each TIME line became `minutes` (the player writes the TIME line for the version being shown), and each
+#    "CUT TO 60" line is a `version_notes` of the 60-minute version (`short`), which leaves out the slides its plan
+#    skips. Where a left-out slide asked for one sentence to be said instead, that sentence is also in the version
+#    note of the slide just before it, so the presenter still sees it;
+#  · what the 60-minute version says differently is written for it: a slide's own text in that version is its
+#    `version_fields.short` (the agenda's title and rows, the welcome's break, the scenario activity), and a line of
+#    the notes only one version needs starts with {only:short} or {not:short} (the opening's "about ninety minutes",
+#    a TRANSITION to a slide that version leaves out);
+#  · the two hidden slides are facilitator pages (Customize → Prepare), never projected; PowerPoint steps in the notes
+#    now say what to do in the player, naming its controls with {ui:…} ("{ui:customize} → {ui:your_details}"), so
+#    the Spanish page names them in Spanish;
+#  · a few words the site's wording rules leave out ("job", "of course", "limited time", "hurry") are reworded;
+#  · the facts the site keeps are its {live:…} keys where the deck typed them: both Books of the Month (botm,
+#    botm_lv), the two story lines' numbers (gv_audio_phone, lv_audio_phone), the weekly open meetings
+#    (gv_open_meeting, lv_open_meeting, open_meeting_zoom) and the next assembly (assembly_next);
+#  · the 60-minute version's times follow the deck's 60-minute plan (`version_minutes.short`, see the versions);
+#  · colours: a part's colour is its section slide's `accent`; a slide the PowerPoint drew in another colour has
+#    that colour as its own `accent` (the Q&A's grape, the activities' green, La Viña's orange …). The two sample
+#    announcements are read-aloud cards (`style: "script"`) and the break a pause slide (`style: "break"`), as in
+#    the PowerPoint. Spanish words in the English slides and notes are marked {lang:es}…{/lang} (the Spanish sample,
+#    the Spanish Preamble and Responsibility Statement, La Viña's names for things), so a screen reader reads them in
+#    Spanish. No slide of the deck was printed for the participants, so none is a `handout`.
+#
+# Check it: .venv\Scripts\python.exe tests\test_presentations.py config\presentations\orientation-workshop.yml
+
+id: "orientation-workshop"
+order: 1
+lang: "en"
+title: "GVR and RLV Orientation Workshop"
+short: "Orientation Workshop"
+eyebrow: "Welcome"
+footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
+minutes: 90
+icon: "compass"
+tone: "vine"
+drive_title: "GVR and RLV Orientation Workshop"
+
+card:
+  title:
+    en: "GVR and RLV Orientation Workshop"
+    es: "Taller de orientación para RLV y GVR"
+  summary:
+    en: "The two magazines and how they pay their way, what a GVR or RLV does each month, a one-minute announcement to practice, and the committee's tools and people to ask, with a break."
+    es: "Las dos revistas y cómo se mantienen, lo que hace un RLV o un GVR cada mes, un anuncio de un minuto para practicar, y las herramientas del comité y a quién preguntar, con un descanso."
+  audience:
+    en: "New and returning GVRs and RLVs, and any GSR, DCM or member curious about this service: at an Area or district workshop, on Zoom or in person."
+    es: "RLV y GVR nuevos o que regresan, y cualquier RSG, MCD o miembro a quien le interese este servicio: en un taller del Área o del distrito, por Zoom o en persona."
+
+# The versions (Customize → Version). The 60-minute one is the deck's hidden "For facilitators: the 60-minute
+# version" plan: no break, introductions in the chat, no pair practice, no breakout rooms, and these slides left out.
+# Its slides' `version_minutes.short` follow the plan's times, so its agenda and TIME lines match the plan (0:05,
+# 0:18, 0:27, 0:33, 0:40, 0:49, 0:55): the opening, Part 7 and the closing take the times of the PowerPoint's "CUT TO
+# 60" lines (5, 6 and about 5 minutes); Parts 1–2 keep their full minutes (13, as the plan says). For Parts 3–6 the plan kept
+# about the full workshop's lengths (9, 6, 7, 9 minutes) although it skips slides there, so their remaining slides
+# get proportionally more time (room for questions). The TIME line is the one timing of a slide (owner, 2026-10-02):
+# the "CUT TO 60" lines say what to keep, shorten or skip, without the PowerPoint's minute counts, which added up to
+# about 45 minutes, not to the plan's 60.
+presets:
+  - id: "full"
+    label: { en: "Full workshop (about 90 minutes)", es: "Taller completo (unos 90 minutos)" }
+    minutes: 90
+  - id: "short"
+    label: { en: "60-minute version", es: "Versión de 60 minutos" }
+    minutes: 60
+    hide: ["milestones", "is-and-isnt", "practice", "helping-subscribe", "break", "record", "where-to-send", "tracker",
+           "coming-up", "words", "scenarios-d-f"]
+    note:
+      en: "For example, at a district meeting: no break, introductions in the chat, no pair practice and no breakout rooms. Leaves out the milestones, “is and isn't”, “Helping a member subscribe”, recording, “Where to send a story”, the tracker, “Coming up”, “Words that help” and the second scenario slide. The agenda and the times in the notes follow the deck's 60-minute plan, which leaves each part a few minutes for questions; each slide's notes show its “CUT TO 60” line: what to keep, shorten or skip."
+      es: "Por ejemplo, en una reunión de distrito: sin descanso, presentaciones en el chat, sin práctica en parejas y sin salas para grupos pequeños. Deja fuera los hitos, “is and isn't”, “Helping a member subscribe”, grabar tu historia, “Where to send a story”, el registro de gastos, “Coming up”, “Words that help” y la segunda diapositiva de casos. La agenda y los tiempos de las notas siguen el plan de 60 minutos de la presentación, que deja a cada parte unos minutos para preguntas; las notas de cada diapositiva muestran su línea “CUT TO 60”: qué mantener, acortar u omitir."
+
+# The presenter's blanks (Customize → Your details; kept on their own device). An empty one shows on the slide as an
+# orange [hint], as the deck's [fill-ins] did. presenter and first_name are shared by all four presentations.
+fillins:
+  - key: "date"
+    label: { en: "Date", es: "Fecha" }
+    hint: "Month DD, YYYY"
+  - key: "place"
+    label: { en: "Place, or Zoom", es: "Lugar o Zoom" }
+    hint: "Zoom or venue"
+  - key: "presenter"
+    label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
+    hint: "Service position"
+    default: "Area 65 Grapevine / La Viña Chair"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre de pila (solo en tus notas)" }
+    hint: "first name"
+    shared: true
+    notes_only: true
+  - key: "district_day"
+    label: { en: "Your district's meeting day (“Your month at a glance”)", es: "Día de la reunión de tu distrito (“Your month at a glance”)" }
+    hint: "District's day"
+  - key: "month_event"
+    label: { en: "This month's event (“This month at a glance”)", es: "El evento de este mes (“This month at a glance”)" }
+    hint: "Workshop, booth or assembly: date and place"
+  - key: "break_end"
+    label: { en: "When the break ends (clock time)", es: "Hora en que termina el descanso" }
+    hint: "time"
+  - key: "district_workshop"
+    label: { en: "A workshop in your district (“Coming up”)", es: "Un taller en tu distrito (“Coming up”)" }
+    hint: "Date · a workshop in your district: place and time"
+
+slides:
+
+  # ── Opening (0:00–0:08) ──────────────────────────────────────────────────────────────────────────────────────────
+  # pptx 1. On the deck's title slide the presenter line was "[First name, last initial] · [service position]": here
+  # the service position only (the name stays in the notes). Its "Last updated: October 2026 (prices from January 1,
+  # 2027)" line is left out: the player shows "Current as of <date>", and the prices switch by themselves.
+  - id: "title"
+    layout: "title"
+    eyebrow: "NETA 65 · Grapevine & La Viña Committee"
+    title: "GVR and RLV Orientation Workshop"
+    subtitle: "Carrying the message with Grapevine and La Viña in your home group"
+    lines: ["{fill:presenter} · {live:panel}", "{fill:date} · {fill:place}"]
+    minutes: 0.75
+    version_minutes: { short: 0.5 }
+    # The opening's length is said per version: about ninety minutes with a break, or about an hour without one.
+    notes: |
+      SAY: Welcome, everyone, and thank you for being here. My name is {fill:first_name}, I'm an alcoholic, and I serve as {fill:presenter}. This workshop is for new and returning GVRs and RLVs, and for any GSR, DCM or member who is curious about this service.
+      {not:short} SAY: We have about ninety minutes together, with a ten-minute break in the middle, and you'll leave with a few simple tools you can use at your home group next week.
+      {only:short} SAY: We have about an hour together, without a break, and you'll leave with a few simple tools you can use at your home group next week.
+      DO (before people arrive): open the slides in {ui:presenter_view}, test audio and screen sharing, open the chat, and ask one volunteer to keep time and another to watch the chat and the raised hands. Have this month's Grapevine and La Viña within reach to hold up. Start on time; latecomers can catch up.
+      FOR FACILITATORS: {ui:customize} → {ui:prepare} holds the 'before you present' checklist and the 60-minute plan. Every item in square brackets, on the slides and in these notes, is a fill-in: {ui:customize} → {ui:your_details}. These notes are written so any trusted servant can present the workshop.
+    version_notes:
+      short: "CUT TO 60: keep this slide."
+
+  # pptx 2. The 60-minute version has no break, so its last item only says the slides are shared afterward (its own
+  # list, `version_fields.short.items`: change both lists together).
+  - id: "welcome"
+    layout: "bullets"
+    eyebrow: "Welcome"
+    title: "Welcome! A few housekeeping notes"
+    items:
+      - "**Anonymity:** who you see here and what you hear here, let it stay here"
+      - "**Please take no photos, screenshots or recordings** of anyone"
+      - "Rename yourself: first name and last initial · group · district · service position"
+      - "Cameras are optional; please stay muted unless you're speaking"
+      - "Questions: raise your hand or use the chat, in English or Spanish"
+      - "A 10-minute break about halfway; the slides are shared afterward"
+    version_fields:
+      short:
+        items:
+          - "**Anonymity:** who you see here and what you hear here, let it stay here"
+          - "**Please take no photos, screenshots or recordings** of anyone"
+          - "Rename yourself: first name and last initial · group · district · service position"
+          - "Cameras are optional; please stay muted unless you're speaking"
+          - "Questions: raise your hand or use the chat, in English or Spanish"
+          - "The slides are shared afterward"
+    takeaway: "Presented by the NETA 65 Grapevine & La Viña Committee. This is not an official AA Grapevine, Inc. presentation."
+    minutes: 2
+    version_minutes: { short: 1.5 }
+    notes: |
+      SAY: A few things so we can all relax and take part. First, anonymity. Some of us are new to service, and some of us are private about being in AA, so please take no photos, no screenshots and no recordings of the people here, on Zoom or in the room. We are not recording this workshop. If you want to keep a slide, don't worry: the slides will be shared afterward, and there are no names or faces in them.
+      SAY: On Zoom, please rename yourself with your first name and last initial, your group, your district and your service position, so we know who's here. Cameras are optional. Stay muted unless you're speaking, and use the raised hand or the chat for questions. Spanish speakers, you're welcome to ask in Spanish; someone will help.
+      SAY: One more thing. This workshop is put together by our Area committee. It is not an official AA Grapevine, Inc. presentation, and it doesn't speak for AA as a whole. We'll share experience and point you to the official sources for everything else.
+      DO: Show how to rename (Participants, then More, then Rename). In a room, ask people to silence phones and not to photograph the room or the people in it.
+      TIP: If someone takes a screenshot, a gentle general reminder to the whole room is enough. Never single anyone out.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 3. The Preamble word for word (the 2021 wording), with AA Grapevine's credit line under it.
+  - id: "preamble"
+    layout: "quote"
+    eyebrow: "Opening"
+    title: "A moment of silence, then the Preamble"
+    quote: |
+      Alcoholics Anonymous® is a fellowship of people who share their experience, strength and hope with each other that they may solve their common problem and help others to recover from alcoholism.
+
+      The only requirement for membership is a desire to stop drinking. There are no dues or fees for A.A. membership; we are self-supporting through our own contributions.
+
+      A.A. is not allied with any sect, denomination, politics, organization or institution; does not wish to engage in any controversy; neither endorses nor opposes any causes.
+
+      Our primary purpose is to stay sober and help other alcoholics to achieve sobriety.
+    credit: "Copyright © by AA Grapevine, Inc.; reprinted with permission."
+    minutes: 1
+    version_minutes: { short: 0.5 }
+    notes: |
+      SAY: Let's open with a moment of silence, followed by the AA Preamble.
+      DO: Pause for about ten seconds of silence. Then read the Preamble slowly, or invite a volunteer to read it. If an RLV would like to read it in Spanish as well, use the Spanish text below, word for word.
+      SPANISH PREAMBLE (Libro de trabajo de La Viña, 2023, p. 2): '{lang:es}Alcohólicos Anónimos es una comunidad de personas que comparten su mutua experiencia, fortaleza y esperanza para resolver su problema común y ayudar a otros a recuperarse del alcoholismo. El único requisito para ser miembro de AA es el deseo de dejar la bebida. Para ser miembro de AA no se pagan derechos de admisión ni cuotas; nos mantenemos con nuestras propias contribuciones. AA no está afiliada a ninguna secta, religión, partido político, organización o institución alguna, no desea intervenir en controversias, no respalda ni se opone a ninguna causa. Nuestro objetivo primordial es mantenernos sobrios y ayudar a otros alcohólicos a alcanzar el estado de sobriedad.{/lang}' {lang:es}Copyright © The AA Grapevine, Inc., reimpreso con permiso.{/lang}
+      SAY (after the reading): The Preamble first appeared in the Grapevine in June 1947. A Grapevine editor wrote it, drawing on the Foreword to the Big Book. So it is a fitting way to open a workshop about our meeting in print.
+      TIP: Show the Preamble word for word and keep the credit line under it; it is AA Grapevine's copyright. This is the current wording ('a fellowship of people'), revised by the 2021 General Service Conference. If your committee usually opens with the Serenity Prayer instead, follow the committee's custom and skip the reading.
+    version_notes:
+      short: "CUT TO 60: keep the moment of silence; read the Preamble only if time allows."
+
+  # pptx 4. A lavender pause slide in the PowerPoint (kit.py's qa() is grape), in the opening's blue.
+  - id: "introductions"
+    layout: "qa"
+    accent: "grape"
+    title: "Let's meet each other"
+    prompts:
+      - "Your first name, home group and district"
+      - "Your service position: GVR, RLV, GSR, DCM, or just curious?"
+      - "Is this your first Grapevine / La Viña workshop?"
+      - "One thing you'd like to take home today"
+    note: "On Zoom, answer in the chat; in a room, a sentence each is plenty."
+    minutes: 2.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Let's find out who's here. In the chat, or out loud if we're a small group, tell us your first name, your home group and district, your service position, whether this is your first Grapevine or La Viña workshop, and one thing you'd like to take home today.
+      DO: With more than about 12 people, use the chat only and read a few answers aloud. With a small group, go around once and keep it to one sentence each. Ask the chat volunteer to note what people want to take home, so you can come back to it during Questions and answers.
+      ASK (optional, if on time): Who is serving as a GVR or RLV for the very first time? Welcome! Who has served before? Thank you for coming back; please share your experience as we go.
+      TIP: Notice who serves La Viña, and invite them to add their experience when we reach the Spanish-language tools.
+    version_notes:
+      short: "CUT TO 60: do introductions in the chat only, while you show the next slide."
+
+  # pptx 5. The deck's numbered cards: the number leads each heading.
+  - id: "why-we-are-here"
+    layout: "columns"
+    style: "cards"
+    eyebrow: "Welcome"
+    title: "Why we are here"
+    columns:
+      - heading: "1 · Know the magazines"
+        text: "What Grapevine and La Viña are, and how they pay their way."
+      - heading: "2 · Know the service position"
+        text: "What a GVR or RLV does each month."
+      - heading: "3 · Leave with tools"
+        text: "A one-minute announcement, our website, and people to ask."
+    takeaway: "We share experience, not rules: your group conscience decides."
+    minutes: 1
+    version_minutes: { short: 0.75 }
+    notes: |
+      SAY: Here's why we're here today. First, so you know the magazines: what they are, who publishes them, and how they pay their way. Second, so you know the service position: what a GVR or RLV actually does, month by month, and how you fit with your district and our Area. And third, so you leave with tools you can use next week: a one-minute announcement, the committee's website, and the service positions you can call on when you're stuck.
+      SAY: Everything you'll hear today is shared experience. None of it is a rule. Our leaders are trusted servants who don't govern, and every group is autonomous. So when you hear an idea you like, take it home and offer it to your group conscience. The group decides.
+      ASK (optional, if on time): Looking at these three, which one matters most to you today? (Take one or two answers.)
+      TRANSITION: Here's how we'll spend our time.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 6. Each row's time is worked out from the version being shown (`from`: the slide where that part starts);
+  # a row whose slides are all left out (the break, in the 60-minute version) is left out too. The 60-minute version
+  # has its own title and rows (`version_fields.short`): about 60 minutes, and its last part one or two scenarios for
+  # the whole room instead of small groups (its times are the plan's; `from` works them out the same way). Change a
+  # row's words in both lists.
+  - id: "plan"
+    layout: "agenda"
+    eyebrow: "Welcome"
+    title: "Today's plan (about 90 minutes)"
+    items:
+      - { time: "0:00", title: "Welcome, housekeeping and introductions", from: "title" }
+      - { time: "0:08", title: "Grapevine and La Viña basics, and the GVR / RLV service position", from: "part-1" }
+      - { time: "0:24", title: "A rep's month and your one-minute announcement", from: "part-3" }
+      - { time: "0:36", title: "The literature table, subscriptions and gifts", from: "part-4" }
+      - { time: "0:42", title: "Break (10 minutes)", from: "break" }
+      - { time: "0:52", title: "Stories, audio and digital tools", from: "part-5" }
+      - { time: "0:59", title: "The committee's website, your district and the Area, money", from: "part-6" }
+      - { time: "1:08", title: "Questions, scenarios in small groups, and closing", from: "part-7" }
+    version_fields:
+      short:
+        title: "Today's plan (about 60 minutes)"
+        items:
+          - { time: "0:00", title: "Welcome, housekeeping and introductions", from: "title" }
+          - { time: "0:05", title: "Grapevine and La Viña basics, and the GVR / RLV service position", from: "part-1" }
+          - { time: "0:18", title: "A rep's month and your one-minute announcement", from: "part-3" }
+          - { time: "0:27", title: "The literature table, subscriptions and gifts", from: "part-4" }
+          - { time: "0:33", title: "Stories, audio and digital tools", from: "part-5" }
+          - { time: "0:40", title: "The committee's website, your district and the Area, money", from: "part-6" }
+          - { time: "0:49", title: "Questions, scenarios as a whole room, and closing", from: "part-7" }
+    minutes: 0.75
+    notes: |
+      {not:short} SAY: Here's the plan. We'll start with the basics about the two magazines, then talk about the service position itself and what a typical month looks like, including a one-minute announcement you can give at your group. After a short look at the literature table and subscriptions, we'll take a ten-minute break. In the second half we'll cover stories and audio, the digital tools, the committee's website, how you connect with your district and the Area, and money. We'll finish with common questions, a short exercise in small groups, your questions, and the Responsibility Statement.
+      {only:short} SAY: Here's the plan. We'll start with the basics about the two magazines, then talk about the service position itself and what a typical month looks like, including a one-minute announcement you can give at your group. After a short look at the literature table and subscriptions, we'll cover stories and audio, the digital tools, the committee's website, how you connect with your district and the Area, and money. We'll finish with common questions, a short exercise all together, your questions, and the Responsibility Statement.
+      DO: The times are minutes from the start (h:mm). If you prefer clock times, replace them before you present ({ui:customize} → {ui:edit}).
+      {not:short} DO: The TIME lines in these notes add up to about 87 minutes, which leaves about three minutes for the optional questions (ASK) and for running over. Ask the timekeeper to give you a quiet signal at the break and ten minutes before the end.
+      {only:short} DO: The TIME lines in these notes add up to about 60 minutes, with no break: the plan leaves each part a few minutes for questions. Ask the timekeeper to give you a quiet signal ten minutes before the end.
+    version_notes:
+      short: "CUT TO 60: say: 'We'll go a bit faster today and skip the break.' Don't show the 60-minute plan ({ui:customize} → {ui:prepare}): it lists what you're skipping."
+
+  # ── Part 1 · Grapevine and La Viña basics (0:08–0:16) ────────────────────────────────────────────────────────────
+  # pptx 7
+  - id: "part-1"
+    layout: "section"
+    number: 1
+    accent: "gv"
+    title: "Grapevine and La Viña basics"
+    subtitle: "AA's meeting in print, in English and in Spanish"
+    minutes: 0.25
+    notes: |
+      SAY: Let's start with the basics: what the two magazines are, where they came from, who publishes them and how they pay their way. Some of you have read them for years; for others this is new. Both are fine.
+      DO: Hold up this month's Grapevine and the current La Viña if you have them.
+    version_notes:
+      short: "CUT TO 60: keep (it marks the part), but don't linger."
+
+  # pptx 8
+  - id: "two-magazines"
+    layout: "columns"
+    style: "panels"
+    title: "Two magazines, one message"
+    columns:
+      - heading: "Grapevine"
+        accent: "gv"
+        items:
+          - "Monthly, in English, since **June 1944**"
+          - "Print, digital, app and audio"
+          - "Stories by AA members around the world"
+          - "[www.aagrapevine.org](https://www.aagrapevine.org)"
+      - heading: "La Viña"
+        accent: "lv"
+        items:
+          - "Every two months in Spanish, since **1996**"
+          - "Print, digital, app and audio"
+          - "Original stories in Spanish, plus some translated from Grapevine"
+          - "[www.aalavina.org](https://www.aalavina.org)"
+    source: "Sources: aa.org/aa-grapevine-la-vina · P-52 (2026), pp. 4–10"
+    minutes: 1.5
+    notes: |
+      SAY: There are two magazines and one message. Grapevine comes out every month in English and has since June 1944. La Viña comes out every two months, six issues a year, in Spanish, and has since 1996. Both come in print, digital, in the apps, and as audio. La Viña isn't simply a translation: most of its stories are written in Spanish by Spanish-speaking members, with some pieces translated from Grapevine.
+      SAY: A detail people like: the print Grapevine has no staples. It went staple-free so it could go into prisons that don't allow staples. La Viña has a perfect binding, like a small book.
+      SAY: Both are published by the same nonprofit, AA Grapevine, Inc., and AA calls them the international journals of Alcoholics Anonymous. You may also hear of La Vigne, in French: that one is published by a local committee in Quebec, not by AA Grapevine.
+      ASK (optional, if on time): Show of hands, or in the chat: who reads Grapevine? La Viña? Both?
+      SOURCE: aa.org/aa-grapevine-la-vina; P-52 (2026), pp. 4, 6, 10; aagrapevine.org/evolution-magazine; M-39, p. 57.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 9
+  - id: "meeting-in-print"
+    layout: "bullets"
+    title: "Our meeting in print"
+    items:
+      - "**June 1944:** the first issue went to all AA groups and to members overseas"
+      - "Their letters ran each month, and they called it their _meeting in print_"
+      - "Written by members: experience, strength and hope, in their own words"
+      - "Many voices, not AA policy: each story is one member's experience"
+    takeaway: "That's why a story makes such a good topic for a meeting."
+    source: "Sources: aagrapevine.org/history-aa-grapevine · P-52 (2026), pp. 3, 13 (paraphrased)"
+    minutes: 1.5
+    notes: |
+      SAY: Why do we call it our meeting in print? The very first issue, in June 1944, was sent to every AA group, about three hundred of them back then, and to every AA member known to be serving overseas in the armed forces. Each month a full page printed letters from those members, and they started calling the Grapevine their meeting in print. Both magazines still carry the phrase on their covers.
+      SAY: Almost every story is written by an AA member, sharing experience, strength and hope the way we do at a meeting. And just like a meeting, you'll hear many voices. A story is one member's experience. It isn't AA policy, and publishing it doesn't mean AA endorses it. That's exactly why stories make such good discussion topics.
+      ASK (optional, if on time): Has a Grapevine or La Viña story ever stayed with you? (Take one short share.)
+      TIP: Keep shares to about a minute; there's a lot ahead.
+      SOURCE: aagrapevine.org/history-aa-grapevine; P-52, pp. 3, 9, 13; Grapevine's Statement of Purpose (paraphrased; the magazines' own words are copyrighted).
+    version_notes:
+      short: "CUT TO 60: skip the question."
+
+  # pptx 10 (left out of the 60-minute version)
+  - id: "milestones"
+    layout: "table"
+    title: "A few milestones"
+    rows:
+      - ["1944", "First issue, started by six AA members in the New York area"]
+      - ["1946", "Bill W. first sets out the Traditions in a Grapevine article"]
+      - ["1947", "The AA Preamble first appears in the Grapevine"]
+      - ["1986", "The Conference recognizes it as _the international journal of AA_"]
+      - ["1996", "La Viña's first issue"]
+      - ["2018–23", "YouTube channel (2018), podcast and Instagram (2021), apps (2023)"]
+      - ["2026", "Grapevine Weekly Open AA Meeting begins; La Viña turns 30"]
+    widths: [1.5, 10.3]
+    first_col_bold: true
+    source: "Sources: aagrapevine.org/history-aa-grapevine and /history-aa-lavina · P-52 (2026), pp. 5–10 · M-39"
+    minutes: 1
+    notes: |
+      SAY: A few milestones, just to show how woven into AA these magazines are. Six members in the New York area, four women and two men, started the Grapevine in 1944 with Bill W.'s blessing. In 1946 Bill first set out what became the Twelve Traditions in a Grapevine article. The Preamble we read today first appeared in the Grapevine in 1947.
+      SAY: In 1986 the General Service Conference recognized Grapevine as the international journal of Alcoholics Anonymous, and that recognition extends to La Viña. La Viña's first issue came out in 1996, and it celebrated its thirtieth anniversary in 2026. In recent years the magazines added a YouTube channel, a podcast, Instagram and apps, and since February 2026 Grapevine has hosted a weekly open AA meeting on Zoom.
+      TIP: Use only these milestones. Some older timelines, including our own site's About page, list dates that could not be verified. If someone asks about one that isn't here, say you'll check the official history at aagrapevine.org.
+      SOURCE: aagrapevine.org/history-aa-grapevine and /history-aa-lavina; P-52, pp. 5-10; M-39, p. 54; The A.A. Service Manual, 2024-2026, p. 170.
+    version_notes:
+      short: "CUT TO 60: skip this slide."
+
+  # pptx 11
+  - id: "who-publishes"
+    layout: "bullets"
+    title: "Who publishes them"
+    items:
+      - "**AA Grapevine, Inc.** publishes both, with its own board, staff and finances"
+      - "It is one of the General Service Board's two operating entities; the other is A.A. World Services, Inc."
+      - "The editorial staff are sober AA members, and the editor decides what is published"
+      - "The General Service Conference has a Committee on Grapevine and La Viña"
+      - "Not “Conference-approved”: the Conference recognizes Grapevine as the international journal of AA (1986), and this extends to La Viña"
+    source: "Sources: The A.A. Service Manual, 2024–2026, pp. 79–85 · P-52 (2026), pp. 6–8"
+    minutes: 1.5
+    notes: |
+      SAY: Who publishes them? AA Grapevine, Inc. It is one of the two operating entities of AA's General Service Board; the other is A.A. World Services, which publishes the Big Book and our pamphlets. Grapevine has its own board, its own small staff in New York, and its own finances, separate from the General Service Office.
+      SAY: The people on the editorial side who decide on content are sober AA members. The Conference has a committee for Grapevine and La Viña, and some of Grapevine's directors and staff are voting members of the Conference. But the Conference doesn't review each issue before it's printed; AA's Conference Charter protects the editor's right to accept or reject material.
+      SAY: You'll sometimes hear that Grapevine is Conference-approved. Strictly speaking it isn't: a monthly magazine can't go through the yearly approval process. Instead, in 1986 the Conference recognized Grapevine as the international journal of Alcoholics Anonymous, and that recognition extends to La Viña. That's the wording to use.
+      ASK (optional, if on time): Any questions so far about how the magazines fit into AA?
+      SOURCE: The A.A. Service Manual, 2024-2026 Edition, pp. 79-85; P-52, pp. 6-8.
+    version_notes:
+      short: "CUT TO 60: keep only the last bullet (the 'Conference-approved' wording)."
+
+  # pptx 12
+  - id: "pay-their-way"
+    layout: "bullets"
+    title: "How they pay their way"
+    items:
+      - "Grapevine accepts **no contributions** from groups or members, and **no advertising**"
+      - "It is supported by the sale of subscriptions, books and other items"
+      - "Groups support it by buying the magazines and using them in Twelfth Step work"
+      - "La Viña is not yet self-supporting: the General Service Board covers the difference, as a service to the Fellowship"
+    takeaway: "A subscription isn't a donation: it's the meeting in print, put to work."
+    source: "Sources: Service Manual, p. 66 · F-3 (June 2026), pp. 12–13 · aa.org/aa-grapevine-la-vina"
+    minutes: 1.5
+    notes: |
+      SAY: This is the part people most often get wrong, so let's be clear. AA Grapevine does not accept contributions, not from groups and not from members, and it carries no advertising. It pays its way by selling subscriptions, books and other items. So the way a group supports Grapevine is by buying the magazines and actually using them in its Twelfth Step work.
+      SAY: La Viña is a little different. It hasn't yet reached enough readers to cover its costs, so the General Service Board covers the difference as a service to the Fellowship, the way the Conference recommended in 2001. Spanish-speaking groups and members help most by reading it, sharing it and writing for it.
+      SAY: So please never pass a basket 'for Grapevine', and never call a purchase a 'contribution to Grapevine'. We'll come back to money, and to who pays for what, later in the workshop.
+      SOURCE: The A.A. Service Manual, 2024-2026, p. 66; F-3 Self-Support (June 2026), pp. 12-13; aa.org/aa-grapevine-la-vina (FAQ); M-39, pp. 55-56; RLV Manual (2025), p. 10.
+      TRANSITION: So who carries all this to the group? That's you.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # ── Part 2 · The GVR and RLV service position (0:16–0:24) ────────────────────────────────────────────────────────
+  # pptx 13
+  - id: "part-2"
+    layout: "section"
+    number: 2
+    accent: "lv"
+    title: "The GVR and RLV service position"
+    subtitle: "The link between your group and the meeting in print"
+    minutes: 0.25
+    notes: |
+      SAY: Now let's talk about you: the service position of Grapevine representative, GVR, and {lang:es}Representante de La Viña{/lang}, RLV. What it is, how you're chosen, how you register, and how you connect with your district and our Area.
+    version_notes:
+      short: "CUT TO 60: keep, quickly."
+
+  # pptx 14. A.A.W.S. literature: word for word, with its credit line.
+  - id: "the-link"
+    layout: "quote"
+    title: "The link between your group and the magazines"
+    quote: "GVRs and RLVs, as they are known, are the link between the group and the AA Grapevine office. A.A. members become Grapevine or La Viña reps by volunteering or being elected to the position by their group."
+    credit: "Reprinted from _The A.A. Service Manual_, 2024–2026 Edition, p. 83, with permission of Alcoholics Anonymous World Services, Inc."
+    minutes: 1
+    notes: |
+      SAY: Here's how AA's Service Manual describes us. (Read the quotation aloud.)
+      SAY: Two words stand out for me: link, and group. You're the link that keeps the meeting in print alive at your home group, and it's your group that chooses you. GVR stands for Grapevine Representative; RLV stands for {lang:es}Representante de La Viña{/lang}. Some members serve both magazines and call themselves GVR/RLV.
+      SAY: The same page says the hope is that each group would have a GVR and a subscription to at least one of the magazines. That's a hope, not a requirement: each group decides for itself. The Conference has hoped for a GVR in every group since the 1960s and 70s.
+      TIP: Keep the quotation word for word, with its credit line; it's A.A.W.S. literature.
+      SOURCE: The A.A. Service Manual, 2024-2026, pp. 83-84; M-39, pp. 52-53.
+    version_notes:
+      short: "CUT TO 60: keep; read the quote, skip the commentary."
+
+  # pptx 15
+  - id: "what-a-rep-does"
+    layout: "bullets"
+    title: "What a GVR or RLV does"
+    items:
+      - "Announce each new issue and what's inside it"
+      - "Keep the magazines visible: a table, back issues, catalogs and postcards"
+      - "Invite members to write or record their stories, and to send photos and jokes"
+      - "Share new books, podcasts, videos and services"
+      - "Help members and the group subscribe, and point them to customer service"
+      - "Suggest ways to use the magazines in Twelfth Step work"
+    takeaway: "Ideas to choose from, not duties: each group takes what fits."
+    source: "Sources: aagrapevine.org (become a GVR) · aalavina.org ({lang:es}conviértete en RLV{/lang}) · paraphrased"
+    minutes: 1.5
+    notes: |
+      SAY: What does a GVR or RLV actually do? Mostly small, steady things. You announce each new issue and what's in it. You keep the magazines where people can see them. You invite members to write or record their stories, and remind them the magazines also welcome photos of meeting rooms and jokes. You pass on news: new books, podcast episodes, videos. You help members, and the group if it wishes, to subscribe, and you know where to send someone with an order problem. And you suggest ways the group can use the magazines to carry the message: a copy for a newcomer, a subscription for a treatment center or a jail, a story as a meeting topic.
+      SAY: Grapevine itself reminds reps that its ideas aren't orders. Some groups will be less interested than others, and that is their right in AA. Pick one or two of these, do them well, and add more when you're ready.
+      ASK (optional, if on time): Which one of these could you start at your group this month?
+      SOURCE: aagrapevine.org/get-involved/become-grapevine-rep; aalavina.org/servicio/conviertete-en-rlv; GVR Workbook (2026), p. 24; RLV Manual (2025), p. 6 (paraphrased).
+    version_notes:
+      short: "CUT TO 60: keep; skip the question."
+
+  # pptx 16
+  - id: "chosen"
+    layout: "bullets"
+    title: "Chosen by your group conscience"
+    items:
+      - "Your group elects its GVR or RLV, or accepts a volunteer"
+      - "The group decides the term; two years is common"
+      - "Some members serve both magazines, as a GVR/RLV"
+      - "Work alongside your GSR: share your plans and coordinate your reports"
+      - "When you rotate out, tell the office, and pass your notes to the next rep"
+    takeaway: "Rotation keeps the service fresh, and keeps the records current."
+    source: "Sources: Service Manual, pp. 83–84 · RLV Manual (2025), pp. 6–7 · P-52, pp. 11–12"
+    minutes: 1.5
+    notes: |
+      SAY: You're chosen by your group conscience. Some groups hold an election at the business meeting; others gratefully accept a volunteer. The group decides how long you serve. Two years is common, and many groups line the term up with the rest of their service positions, but it's the group's call.
+      SAY: Your GSR is your closest partner. Many groups have both a GSR and a GVR or RLV, and it works best when you coordinate: who reports what, and when. When your term ends, let the Grapevine or La Viña office know, so their list of reps stays current, and hand your notes and supplies to the next person. That's rotation.
+      ASK (optional, if on time): If you've served before, what would you tell a brand-new GVR in one sentence? (Take one answer.)
+      SOURCE: The A.A. Service Manual, 2024-2026, pp. 83-84; GVR Workbook (2026), p. 24; RLV Manual (2025), pp. 6-7; P-52, pp. 11-12.
+    version_notes:
+      short: "CUT TO 60: keep; no question."
+
+  # pptx 17
+  - id: "registering"
+    layout: "resources"
+    title: "Registering: a good first step"
+    links:
+      - label: "Register as a GVR (Grapevine)"
+        url: "https://www.aagrapevine.org/get-involved/become-grapevine-rep"
+        note: "You'll receive the Digital Grapevine Kit and the monthly email for reps"
+      - label: "Register as an RLV (La Viña)"
+        url: "https://www.aalavina.org/servicio/conviertete-en-rlv"
+        note: "Free resources, including the RLV manual, at aalavina.org/recursos"
+      - label: "Questions about registering or your kit"
+        url: "gvrc@aagrapevine.org"
+        note: "AA Grapevine's contact for group reps"
+    minutes: 1
+    notes: |
+      SAY: Your first step, if you'd like, is to register. It's a short online form. When you register as a GVR, Grapevine sends you its digital kit for reps, and you'll get the monthly email with news to announce. La Viña's resources for RLVs, including the RLV manual, are free to download, and a registered RLV receives a complimentary copy of La Viña for a year, to use in the service position. If you're stuck, write to the address at the bottom; that's Grapevine's office for reps.
+      DO: If time allows, open one of the forms on screen so people can see how short it is. Don't fill it in on screen with anyone's details.
+      TIP: The office asks for your own contact information; that's how it reaches you. The magazines protect it and never print it. Registering is your choice, not a requirement.
+      SOURCE: aagrapevine.org/get-involved/become-grapevine-rep; aalavina.org/servicio/conviertete-en-rlv; aagrapevine.org/gvr-resources; aalavina.org/recursos; RLV Manual (2025), p. 7.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 18. The deck's numbered cards. In the 60-minute version the next slide is left out; its "say the takeaway
+  # in one sentence on the previous slide" is in this slide's version note too, so the presenter sees it here.
+  - id: "how-you-connect"
+    layout: "columns"
+    style: "cards"
+    title: "How you connect: group, district, Area"
+    columns:
+      - heading: "1 · Your group"
+        text: "Report at business meetings; the group conscience decides."
+      - heading: "2 · Your district"
+        text: "If your district invites GV/LV reports, give a short one."
+      - heading: "3 · The Area committee"
+        text: "Monthly on Zoom. Every AA member is welcome."
+      - heading: "4 · The magazine offices"
+        text: "Register, ask questions, order, and send stories."
+    takeaway: "Your GSR and DCM are your closest partners: keep them in the loop."
+    minutes: 1.5
+    notes: |
+      SAY: Here's how you fit. First, your group: you report at the business meeting, and the group conscience decides what to buy, display or give away. Second, your district: each district organizes its Grapevine and La Viña service its own way. Some have a district GV/LV rep or a whole committee, Spanish-speaking districts often have their own La Viña committee, and in others the GSRs share the news. If your district invites GV/LV reports, give a short one; your DCM can tell you how it works.
+      SAY: Third, the Area: our NETA 65 Grapevine and La Viña Committee meets every third Wednesday on Zoom, and every AA member is welcome. The Area chair works with the districts and carries news both ways. Fourth, the magazine offices in New York, AA Grapevine, Inc., where you register, ask questions, order, and send stories.
+      ASK (optional, if on time): Does your district have a GV/LV rep or committee? Who would you go to with a question? (Take one or two answers; note districts without one.)
+      TIP: Voting at Area assemblies follows the Area's Policies and Procedures. If someone asks, point them to the Area Secretary rather than answering from memory.
+      SOURCE: GVR Workbook (2026), pp. 34, 46-49; neta65.org/trusted-servants/grapevine-la-vina; Panel 75 committee reports.
+    version_notes:
+      short: "CUT TO 60: keep; skip the question. The next slide, “What the service position is, and isn't”, is left out of this version: say its takeaway here, in one sentence: “Attraction rather than promotion: we inform and invite (Tradition Eleven).”"
+
+  # pptx 19 (left out of the 60-minute version). The deck's "A sales job" is "Selling" here, and "It isn't a sales
+  # job" is "It isn't selling": the site never calls GVR / RLV service, or what it isn't, a "job".
+  - id: "is-and-isnt"
+    layout: "columns"
+    style: "panels"
+    title: "What the service position is, and isn't"
+    columns:
+      - heading: "It is"
+        accent: "lv"
+        items:
+          - "Your group's link to the magazines"
+          - "Sharing your own experience"
+          - "Information for the group conscience"
+          - "A doorway to wider service"
+      - heading: "It isn't"
+        accent: "grape"
+        items:
+          - "Selling: no quotas, no pressure"
+          - "Handling money, unless the group asks you to"
+          - "Deciding for the group"
+          - "Something you do alone"
+    takeaway: "Attraction rather than promotion: we inform and invite (Tradition Eleven)."
+    minutes: 1.5
+    notes: |
+      SAY: Let me sum up the service position this way. It is a link. It is sharing your own experience with the magazines: 'this story helped me'. It is bringing information to your group conscience so the group can decide. And for many of us it's a doorway into wider service; GVRs often go on to serve their district, the Area, or other committees such as Corrections, Treatment, PI or CPC.
+      SAY: It isn't selling. Back in 1960 the Conference asked for an 'informative attitude' in Grapevine presentations rather than a 'hard sell', and that still holds: no quotas, no guilt, no pressure. It isn't handling the group's money, unless your group asks you to. It isn't making decisions for the group. And it isn't something you have to do alone: your district and our committee are here.
+      ASK (optional, if on time): Which word on the right surprised you, if any?
+      SOURCE: M-39, p. 52 (1960 Advisory Action); P-52, p. 12; Tradition Eleven.
+      TRANSITION: Now let's look at what a month of this service actually looks like.
+    version_notes:
+      short: "CUT TO 60: skip this slide; say the takeaway in one sentence on the previous slide."
+
+  # ── Part 3 · A rep's month (0:24–0:36) ───────────────────────────────────────────────────────────────────────────
+  # pptx 20
+  - id: "part-3"
+    layout: "section"
+    number: 3
+    accent: "vine"
+    title: "A rep's month"
+    subtitle: "The rhythm that repeats, and your one-minute announcement"
+    minutes: 0.25
+    notes: |
+      SAY: The good news about this service position is that it has a rhythm. Once you know the handful of dates that come around every month, the rest is easy.
+      {not:short} SAY: Then we'll put it to work in a one-minute announcement, and you'll practice one.
+      {only:short} SAY: Then we'll put it to work in a one-minute announcement.
+    version_notes:
+      short: "CUT TO 60: keep, quickly."
+
+  # pptx 21. The committee meeting's time and La Viña's workshop time and Zoom ID come from the site (config/site.yml)
+  # in the notes; "for a limited time" (the Book of the Month) reads "for a set time": the site describes, never sells.
+  # The table itself is the deck's (the rhythm, not dates), so its source line keeps the deck's "as of October 2026".
+  - id: "month-at-a-glance"
+    layout: "table"
+    title: "Your month at a glance"
+    header: ["When", "What happens", "Your part"]
+    rows:
+      - ["Around the 1st", "New issue; monthly digest", "Hold up the issue"]
+      - ["The 1st", "Grapevine story deadline", "Name the next theme"]
+      - ["Mid-month", "Book of the Month", "Mention this month's book"]
+      - ["3rd Wednesday", "Area committee meeting (Zoom)", "Come and ask questions"]
+      - ["{fill:district_day}", "District meeting", "Ask your DCM if there's a GV/LV report"]
+      - ["Usually the 4th Thursday", "La Viña's monthly workshop", "Invite Spanish speakers"]
+    widths: [3.75, 4.45, 3.63]
+    first_col_bold: true
+    source: "Sources: aagrapevine.org · aalavina.org/calendario-de-eventos · the Monthly toolkit · as of October 2026"
+    minutes: 2
+    version_minutes: { short: 2.5 }
+    notes: |
+      SAY: Here's the rhythm of a month. Around the first, there's a new issue to hold up. Grapevine comes every month; La Viña every two months. On the first, our committee's website also puts out the monthly digest and refreshes the Monthly toolkit, so your news is ready for you. The first of the month is also Grapevine's story deadline: each month the editors close one theme, several months before that issue's cover date.
+      SAY: Around the middle of the month, the Book of the Month changes: each store features one older title at a discount for a set time. Grapevine's changes every month; La Viña's sometimes runs for two months. On the third Wednesday, our Area committee meets on Zoom, {live:meeting_time}. Then there's your district meeting: ask your DCM whether the district takes a GV/LV report, and who gives it. And usually on the fourth Thursday, La Viña's office holds its monthly virtual workshop in Spanish on Zoom, the {lang:es}Taller Mensual y Virtual de La Viña{/lang}, {live:lv_workshop_time}: Zoom ID {live:lv_workshop_zoom_id}.
+      SAY: Don't forget your own group's business meeting: that's where you report, and where any proposal of yours goes to the group conscience.
+      TIP: La Viña's workshop is usually on the fourth Thursday; La Viña's own calendar has kept the fourth Thursday even in months with five Thursdays. In November and December La Viña has held it on the Thursday before Thanksgiving and before Christmas. It starts at 3:00 p.m. Eastern, La Viña's own time; La Viña publishes no end time, so we list it as one hour. Check the date at aalavina.org/calendario-de-eventos each month before you announce it.
+      UPDATE: if you're presenting to a single district, replace the district-day fill-in with its real meeting day: {ui:customize} → {ui:your_details}.
+      SOURCE: the committee website ({live:site}/meetings/ and /monthly/); aagrapevine.org/contribute; aagrapevine.org/BOTM and aalavina.org/libro-del-mes (offer dates as of October 2026); La Viña News, Sept.-Oct. 2026, p. 3; aalavina.org/calendario-de-eventos.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 22. Grapevine's and La Viña's own weekly meetings (not the committee's). Their days, times and Zoom room are
+  # the site's, as /meetings/#weekly-open shows them (gv_open_meeting, lv_open_meeting, open_meeting_zoom): the
+  # Reunión Abierta reads "starting Nov. 5, 2026" until that day and "since Nov. 5, 2026" from it, never "since"
+  # before it began. "Same Zoom room and passcode" is the deck's: if La Viña's room ever differs, open_meeting_zoom
+  # names both rooms and that line must change. The notes' "La Viña's flyer gave November fifth, 2026, as its first
+  # meeting" is in their SOURCE line now: the slide and the SAY give that date themselves. A Grapevine | La Viña pair
+  # in blue and orange in the PowerPoint, with no green of Part 3: Grapevine's blue (its eyebrow).
+  - id: "weekly-open"
+    layout: "columns"
+    style: "panels"
+    accent: "gv"
+    title: "Every week: open AA meetings on Zoom"
+    columns:
+      - heading: "Grapevine Weekly Open"
+        accent: "gv"
+        items:
+          - "**{live:gv_open_meeting}**"
+          - "A host and two speakers; recorded as a podcast"
+          - "{live:open_meeting_zoom}"
+          - "Open to anyone interested in AA"
+      - heading: "{lang:es}Reunión Abierta de La Viña{/lang}"
+        accent: "lv"
+        items:
+          - "**{live:lv_open_meeting}**"
+          - "In Spanish (check aalavina.org)"
+          - "Same Zoom room and passcode"
+          - "Two members share; recorded as a podcast"
+    source: "Sources: aagrapevine.org/grapevine-weekly-open · La Viña's official flyer, October 2026 · {live:site}/meetings/"
+    minutes: 1
+    notes: |
+      SAY: Every week there's something you can invite people to. Grapevine hosts a weekly open AA meeting on Zoom — {live:gv_open_meeting} — with a host and two speakers. It's recorded and published as a podcast, and anyone interested in AA is welcome. It began in February 2026.
+      SAY: La Viña has its own weekly open meeting in Spanish, the {lang:es}Reunión Abierta de La Viña{/lang} — {live:lv_open_meeting} — in the same Zoom room, with two members sharing each week.
+      SAY: These aren't our committee meeting, and they aren't business meetings: they're open AA meetings. They're a lovely thing to mention to a homebound member, a newcomer, or anyone who can't get to a meeting at midday.
+      TIP: Before you announce the {lang:es}Reunión Abierta{/lang}, check its day and time at aalavina.org and on our site's meetings page ({live:site}/meetings/#weekly-open). For members without internet, the phone dial-in steps are on our site's accessibility page ({live:site}/accessibility/#phone).
+      SOURCE: aagrapevine.org/grapevine-weekly-open (read Oct. 2026); official La Viña flyer '{lang:es}Nueva reunión abierta de La Viña{/lang}', which gave November 5, 2026, as its first meeting.
+    version_notes:
+      short: "CUT TO 60: mention in one sentence and move on."
+
+  # pptx 23. The deck's fill-ins become the site's own facts, filled in when the slide is shown: this month's issues
+  # and themes, the next story deadlines, the Books of the Month (the deck's "[Grapevine title] · [La Viña title],
+  # until [date]": each title until its offer ends), the next committee meeting and La Viña workshop. The
+  # event stays the presenter's choice (Customize → Your details). The deck's "AS OF OCTOBER 2026 the slide would
+  # read: …" example is left out of the notes: the slide now shows the current facts by itself.
+  # A fact the site does not know at the moment (La Viña's next deadline before its themes are read, a Book of the
+  # Month between two offers …) says where to look instead, so each magazine's fact follows its own name and a colon
+  # ("La Viña: see aalavina.org for La Viña's themes"), and the facts of a row are separated by " · ". La Viña's
+  # workshop is "Next date listed" (the information workshop words it the same way), then "(Nov./Dec.: check
+  # aalavina.org)": in November and December La Viña has moved it, and lists the new date only a few weeks ahead. A
+  # no-break space keeps "La Viña" in these rows on one line.
+  - id: "this-month"
+    layout: "table"
+    title: "This month at a glance: {live:month}"
+    rows:
+      - ["Grapevine", "{live:gv_issue}"]
+      - ["La Viña", "{live:lv_issue}"]
+      - ["Story deadlines", "Grapevine: {live:next_deadline_gv} · La Viña: {live:next_deadline_lv}"]
+      - ["Book of the Month", "Grapevine: {live:botm} · La Viña: {live:botm_lv}"]
+      - ["Committee meeting", "{live:meeting_next} · {live:meeting_time} · Zoom {live:meeting_zoom_id}"]
+      - ["La Viña workshop", "Next date listed: {live:lv_workshop_next} (Nov./Dec.: check aalavina.org) · {live:lv_workshop_time} · Zoom {live:lv_workshop_zoom_id}"]
+      - ["Events", "{fill:month_event}"]
+    widths: [3.0, 8.8]
+    first_col_bold: true
+    minutes: 1.5
+    version_minutes: { short: 1.75 }
+    notes: |
+      UPDATE BEFORE EACH WORKSHOP: the issues and themes, the story deadlines, the Book of the Month and the meeting dates on this slide fill in by themselves from the committee website's Monthly toolkit ({live:site}/monthly/); fill in the event yourself ({ui:customize} → {ui:your_details}) from the Events page (/events/). La Viña's workshop date: check it at aalavina.org/calendario-de-eventos (usually the 4th Thursday; in November and December La Viña has held it the Thursday before Thanksgiving and Christmas).
+      SAY: Here's what's happening right now, this month. (Read the slide in about a minute: the two issues and their themes, the next story deadlines, the Book of the Month, and the dates.) You don't need to write any of this down: it's all on the committee website's Monthly toolkit, and it updates itself.
+      TIP: Each Book of the Month is on the slide until its offer ends (usually the 14th); between two offers the slide sends people to the magazine's own page instead. The same goes for a story deadline or an issue the committee website doesn't know yet.
+    version_notes:
+      short: "CUT TO 60: keep; this is the slide people use most."
+
+  # pptx 24
+  - id: "announcement"
+    layout: "bullets"
+    numbered: true
+    title: "Your one-minute announcement"
+    items:
+      - "Hold up the current issue"
+      - "Say the theme in one sentence"
+      - "Mention one story you liked, in your own words"
+      - "Give one date: the next story deadline or an event"
+      - "Say where to find it: the table, the QR card, the store"
+      - "Keep it short, and rotate the topic each month"
+    takeaway: "Share your experience, then invite. No pressure, no sales pitch."
+    source: "Source: the GVR Workbook (2026), p. 33, in our own words"
+    minutes: 1
+    version_minutes: { short: 1.25 }
+    notes: |
+      SAY: Now let's turn all that into an announcement. Most groups give the GVR or RLV a minute or two during announcements, and that's plenty. Hold up the issue, because people remember what they see. Say the theme in one sentence. Mention one story that stayed with you, in your own words: don't read the story out, just tell us why it mattered. Give one date, like the next story deadline or an event. Say where to find it. And sit down.
+      SAY: Next month, rotate: one month the issue, another month a new book or a podcast episode, another month a writing deadline or Carry the Message. That keeps it fresh, and nobody tunes out.
+      TIP: Your experience is the most attractive thing you can share: 'this story helped me this week'. The committee website's Monthly toolkit ({live:site}/monthly/) has this month's themes and dates ready to read.
+      SOURCE: GVR Workbook (2026), pp. 33 and 40 (paraphrased); committee's 2026 'GV/LV Rep Report' checklist.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 25. The ‹blanks› are not fill-ins: they stay blank for the practice. The PowerPoint sets the sample in a
+  # Grapevine-blue card (script_box(accent="gv")), inside Part 3's green: a read-aloud card (`style: "script"`: a
+  # tinted card, serif text, the ‹blanks› in orange) in Grapevine's blue, its own `accent` (which also colours this
+  # slide's eyebrow; the PowerPoint's stayed green).
+  - id: "sample-gv"
+    layout: "text"
+    style: "script"
+    accent: "gv"
+    title: "A sample announcement (Grapevine)"
+    body: |
+      **Fill in the blanks, then say it in your own words:**
+
+      “Hi, I'm **‹first name›**, your GVR. This month's Grapevine is about **‹theme›**. One story that stayed with me was about **‹one sentence, in your own words›**. If you'd like to write for an upcoming issue, the next theme is **‹theme›**, and stories are due **‹date›**. Copies are on the literature table, and the QR card shows how to subscribe or give one as a gift. Thanks for letting me serve.”
+    minutes: 1
+    version_minutes: { short: 1.25 }
+    notes: |
+      SAY: Here's a sample. I'll read it the way I'd say it at my home group. (Read it in under a minute, filling in this month's real theme and one story you liked.)
+      SAY: Notice what's in it: who I am, the theme, one story in my own words, one date, where to find it, and thank you. Notice what isn't in it: prices, pressure, or reading the whole story aloud.
+      TIP: When you fill in 'one story', say why it mattered to you, in one sentence. Don't photocopy or post the story itself; the stories are copyrighted. Lend the issue or share the link instead.
+    version_notes:
+      short: "CUT TO 60: keep; read the sample once."
+
+  # pptx 26. The sample stays in Spanish, as in the deck. Its notes said "in Spanish, of course": "naturally" here
+  # ("course" is one of the classroom words the site leaves out). In the 60-minute version the practice (next slide)
+  # is left out; its "Say: …" is in this slide's version note too.
+  # La Viña's orange, as in the PowerPoint (d.custom(accent="lv") and an orange script card): a read-aloud card
+  # (`style: "script"`). Only the sample itself is Spanish ({lang:es}…{/lang}: the PowerPoint set that box as es-US);
+  # the title, the bold line above the sample and the notes are English, so the slide is not `lang: "es"`.
+  - id: "sample-lv"
+    layout: "text"
+    style: "script"
+    accent: "lv"
+    title: "A sample announcement (La Viña, in Spanish)"
+    body: |
+      **RLVs announce in Spanish: fill in the blanks, then say it in your own words.**
+
+      {lang:es}“Hola, soy **‹nombre›**, su RLV. La nueva edición de La Viña trae el tema **‹tema›**. Una historia que me llegó fue sobre **‹una frase, en tus propias palabras›**. Si alguien quiere escribir para una próxima edición, el tema es **‹tema›** y la fecha límite es el **‹fecha›**. Hay ejemplares en la mesa de literatura, y la tarjeta con el código QR muestra cómo suscribirse o regalar una suscripción. Gracias por dejarme servir.”{/lang}
+    minutes: 0.75
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: RLVs give their announcement in Spanish, naturally. Here's the same sample in Spanish. (Invite an RLV in the room to read it aloud, if someone is willing; otherwise read it yourself or just point to it.)
+      SAY (English summary for the room): 'Hello, I'm your RLV. The new La Viña's theme is ... One story that touched me was about ... If anyone would like to write, the next theme is ... and the deadline is ... Copies are on the literature table, and the QR card shows how to subscribe or give a subscription. Thanks for letting me serve.'
+      TIP: La Viña comes out every two months, so an RLV has news every other month. In the months between, announce La Viña's open topics (aalavina.org/temas-sugeridos), the weekly {lang:es}Reunión Abierta{/lang}, the app, or La Viña's monthly virtual workshop.
+    version_notes:
+      short: "CUT TO 60: show it for a few seconds and say RLVs use the same pattern in Spanish. The practice is left out of this version; say: 'Try it at your next meeting and tell us how it went at the committee meeting.'"
+
+  # pptx 27 (left out of the 60-minute version). The deck's TIME line also split the five minutes: kept as TIMING.
+  - id: "practice"
+    layout: "activity"
+    eyebrow: "Activity"
+    title: "Practice: your one-minute announcement"
+    steps:
+      - "Pair up (on Zoom: breakout rooms of two or three)"
+      - "Fill in the sample with this month's theme, or a story you know"
+      - "Each person gives it once, in a minute or less"
+      - "Your partner names one thing that worked"
+    duration: 5
+    materials: ["The sample script", "This month's issue or the app", "A timer"]
+    takeaway: "**Share back:** What made it easy to listen to?"
+    minutes: 5
+    notes: |
+      SAY: Let's practice. Pair up with someone you don't know yet. Fill in the sample with this month's theme or any story you remember, then each of you gives it once, in a minute or less. Your partner tells you one thing that worked. Just one, and only kind things. You'll have about three minutes.
+      DO: On Zoom, open breakout rooms of two or three for 3 minutes, with a 30-second warning. Put the sample script in the chat first, so people have it in their room. Send RLVs and Spanish speakers together if they'd like to practice in Spanish. In a room, just turn to a neighbor.
+      ASK (when everyone is back): What made an announcement easy to listen to? (Take two or three answers. Usually: short, personal, one date, the issue held up.)
+      TIP: If someone is nervous, remind them that reading the sample word for word is a perfectly good first announcement.
+      TIMING: 1 minute to pair up or open the breakout rooms, 3 in pairs, 1 to share back.
+      TRANSITION: Your announcement points people to the literature table, so let's set one up.
+    version_notes:
+      short: "CUT TO 60: skip the practice. Say: 'Try it at your next meeting and tell us how it went at the committee meeting.'"
+
+  # ── Part 4 · At your group: the table and subscriptions (0:36–0:42), then the break (0:42–0:52) ────────────────
+  # pptx 28
+  - id: "part-4"
+    layout: "section"
+    number: 4
+    accent: "gv"
+    title: "At your group: the table and subscriptions"
+    subtitle: "Making the magazines easy to find, borrow and give"
+    minutes: 0.25
+    notes: |
+      SAY: Your announcement sends people somewhere: to the literature table, and to the ways they can read, subscribe or give. Let's look at both, and at how money is handled, which is always the group's decision.
+    version_notes:
+      short: "CUT TO 60: keep, quickly."
+
+  # pptx 29
+  - id: "literature-table"
+    layout: "columns"
+    style: "panels"
+    title: "Setting up a literature table"
+    columns:
+      - heading: "Set it up"
+        accent: "gv"
+        items:
+          - "Current Grapevine and La Viña, face up"
+          - "Back issues sorted by theme"
+          - "A lending box, with a first-names-only sign-out sheet"
+          - "Refreshed every month, kept tidy"
+      - heading: "What to bring"
+        accent: "vine"
+        items:
+          - "Catalogs and order forms"
+          - "Free postcards from the rep kits"
+          - "The committee's QR table card"
+          - "A few back issues for newcomers"
+    takeaway: "Photograph the table, never the people."
+    minutes: 1.5
+    version_minutes: { short: 1.75 }
+    notes: |
+      SAY: A good literature table is small, current and tidy. Put this month's Grapevine and the current La Viña face up, where people walk past. Sort older issues by theme, so a member can find one about sponsorship, the Steps or the holidays. A lending box works well: members borrow an issue and bring it back, or pass it on. A simple sign-out sheet with first names only is plenty.
+      SAY: Bring catalogs and order forms, and the free postcards from the official rep kits: the apps, the podcast, YouTube, Carry the Message. Our committee website has a QR table card that sends people to subscriptions and free resources. And keep a few back issues to give a newcomer.
+      SAY: If you take a picture of your table to share with the district, photograph the table, never the people.
+      TIP: The rep kits are at aagrapevine.org/gvr-resources and aalavina.org/recursos; our site gathers them at /gvr/#kits. For a large event, AA Grapevine can send free printed materials: write to gvrc@aagrapevine.org with your name, Area, service position, the event's name, date and expected attendance, and allow four to six weeks.
+      ASK (optional, if on time): What's one thing on your group's table today? What's missing?
+      SOURCE: the committee website's GVR / RLV 101, session 3 ({live:site}/orientation/); GV News, Oct. 2026, p. 4; GVR Workbook (2026), p. 24.
+    version_notes:
+      short: "CUT TO 60: keep; skip the question."
+
+  # pptx 30
+  - id: "money-at-the-table"
+    layout: "bullets"
+    title: "Money at the table: as your group decides"
+    items:
+      - "The group conscience decides whether anything is sold at the table, and how"
+      - "Many groups sell nothing: members order from the official stores themselves"
+      - "If your group does handle money: keep a written record, give receipts, report back"
+      - "Group money goes through the treasurer, the way your group's guidelines say"
+      - "Never a basket “for Grapevine”: Grapevine accepts no contributions"
+    takeaway: "Order books for the group only after the group has approved the expense."
+    source: "Sources: GVR Workbook (2026), pp. 26–27, 39 · RLV Manual (2025), p. 15 · in our own words"
+    minutes: 1.5
+    version_minutes: { short: 1.75 }
+    notes: |
+      SAY: Money at the table is always the group's decision. Some groups sell nothing at all: the table is for reading and borrowing, and members order directly from the official stores. Others keep a few books or back issues for sale. Either way, before you handle any money, ask your group conscience how it wants this done.
+      SAY: If your group does ask you to handle money, keep it simple and transparent: a written record, a receipt for every purchase, and a short report back to the group. Group money goes through the treasurer, the way your group's own guidelines say. And please don't buy books for the group and hope to be paid back: bring the proposal to the business meeting first.
+      SAY: One thing we never do is pass a basket 'for Grapevine'. Grapevine doesn't accept contributions. Buying and using the magazines is how we support them.
+      TIP: At Area assemblies and conventions, the literature table follows the Area's own guidelines. The Area's Policies and Procedures (section 4.9 in the copy we have) limit it to Conference-approved literature, Grapevine and La Viña materials, and Guidelines. Check the current wording with the Area before you rely on it.
+      SOURCE: GVR Workbook (2026), pp. 26-27 and 39; RLV Manual (2025), p. 15; Service Manual, p. 66 (all paraphrased).
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 31. The deck's numbered cards. The prices said in the notes are the ones in effect on the day shown (they
+  # switch by themselves on January 1, 2027); {live:price_change_note} says so while the notice is current, and is
+  # empty after it. Each price follows its own label ("Grapevine in print, $36.00"), so a price the site cannot read
+  # says "see the Shop page" in a sentence that still reads. "they're on the next slide too" is only for the versions
+  # that show the next slide. "never use a price as a reason to hurry" reads "never use a price to rush anyone".
+  - id: "four-ways"
+    layout: "columns"
+    style: "cards"
+    title: "Four ways to subscribe or give"
+    columns:
+      - heading: "1 · For yourself"
+        text: "Print, digital (web and app) or Complete."
+      - heading: "2 · For your group"
+        text: "A group expense, if the group conscience agrees."
+      - heading: "3 · As a gift"
+        text: "For a sponsee, a newcomer or an anniversary."
+      - heading: "4 · Carry the Message"
+        text: "The office sends it to an alcoholic in need."
+    takeaway: "Prices change: check the official stores or our /shop/ page."
+    minutes: 1.5
+    version_minutes: { short: 2.25 }
+    notes: |
+      SAY: There are four ways to put the magazines in more hands. One, for yourself: print, digital, which covers the website and the app, or Complete, which bundles print and digital. Two, for your group: the group conscience can choose a subscription for the literature table. AA's pamphlet on self-support lists Grapevine literature among a group's ordinary expenses, next to rent and AA literature, so it's paid from the basket like any other group expense.
+      SAY: Three, as a gift, for a sponsee, a newcomer, or a sobriety anniversary; there are gift certificates too. And four, Carry the Message: you buy a gift certificate for someone you don't know, and the Grapevine or La Viña office assigns it to an alcoholic in need, for example someone in a prison, a treatment center or a hospital, or someone who is homebound. A group or district can buy several together.
+      SAY: Prices change, so the official stores and our committee's Shop page always have the up-to-date list. For a year, AA Grapevine's prices are: Grapevine in print, {live:price_gv_print}; digital, {live:price_gv_digital}; La Viña in print, {live:price_lv_print}; digital, {live:price_lv_digital}. {live:price_change_note}
+      {not:short} SAY: The yearly prices are on the next slide too.
+      TIP: Present these as options. The group conscience decides; members decide for themselves. Never pressure anyone to buy, and never use a price to rush anyone.
+      SOURCE: F-3 Self-Support (June 2026), pp. 7, 12-13; aagrapevine.org/carry-the-message; aalavina.org/lleva-el-mensaje; P-52, pp. 10-11. Prices: AA Grapevine's letter to intergroups and central offices, October 1, 2026.
+    version_notes:
+      short: "CUT TO 60: keep. The next slide is skipped in the 60-minute version, so say the yearly prices here."
+
+  # pptx 32 (left out of the 60-minute version). The deck's "Yearly prices from January 1, 2027" were AA Grapevine's
+  # new prices; here the slide shows the yearly prices in effect on the day it is shown, and they switch to the new
+  # ones by themselves on January 1, 2027. Its "IF YOU PRESENT BEFORE JANUARY 1, 2027" note said the 2026 prices still
+  # applied until then: the slide now shows them itself, so that note says how the prices switch. "for a limited time"
+  # (the Book of the Month) reads "for a set time".
+  - id: "helping-subscribe"
+    layout: "bullets"
+    title: "Helping a member subscribe, or fix an order"
+    items:
+      - "Official stores: [www.aagrapevine.org/store](https://www.aagrapevine.org/store) · [www.aalavina.org/tienda](https://www.aalavina.org/tienda)"
+      - text: "**Yearly prices** (AA Grapevine) · every plan: our /shop/ page"
+        items:
+          - "Grapevine print: {live:price_gv_print}, digital: {live:price_gv_digital} · La Viña print: {live:price_lv_print}, digital: {live:price_lv_digital}"
+      - "Subscriptions arrive in plain packaging, with no mention of AA"
+      - text: "Renewals, address changes, problems: customer service"
+        items:
+          - "(800) 631-6025, or (800) 640-8781 in Spanish"
+      - "By email: customerservice@aagrapevine.org · preguntas@aagrapevine.org"
+      - text: "Book of the Month: one title at a discount for a set time"
+        items:
+          - "[www.aagrapevine.org/BOTM](https://www.aagrapevine.org/BOTM) · [www.aalavina.org/libro-del-mes](https://www.aalavina.org/libro-del-mes)"
+    source: "Sources: aagrapevine.org/contact-us · aalavina.org"
+    minutes: 1.25
+    notes: |
+      SAY: When a member wants to subscribe, send them to the official store: aagrapevine.org for Grapevine, aalavina.org for La Viña. Something members new to AA appreciate: subscriptions come in plain packaging, with no mention of AA on the envelope.
+      SAY: These are the yearly prices I just gave you, AA Grapevine's current ones. {live:price_change_note} For any other plan, such as Complete or two or three years, our committee's Shop page has the up-to-date list.
+      PRICE CHANGES: the prices on the slide are the ones in effect on the day you present; when AA Grapevine announces new ones, they switch by themselves on the day they start. Say a change as plain information, never as pressure to subscribe.
+      SAY: For renewals, address changes or a missing issue, customer service helps: there's an English line and a Spanish line, and an email address for each. You don't need to solve order problems yourself; just know where to send people.
+      SAY: And around the middle of the month, each store features one older title at a discount for a set time: the Book of the Month. Grapevine's changes every month; La Viña's sometimes runs longer. It's a nice, light thing to mention in an announcement.
+      TIP: Don't collect members' payment details or order for them unless your group asks you to. If you do help with a group order, keep copies of the forms and payments.
+      SOURCE: aagrapevine.org/contact-us; GVR Workbook (2026), p. 32; RLV Manual (2025), pp. 10 and 15; aagrapevine.org/BOTM; aalavina.org/libro-del-mes. Prices: AA Grapevine's letter to intergroups and central offices, October 1, 2026; it says nothing about 2- or 3-year, Complete or monthly plans, so don't guess at those.
+      TRANSITION: Let's take a break.
+    version_notes:
+      short: "CUT TO 60: skip this slide; the resources slide at the end has customer service, and the yearly prices are in the notes of the previous slide."
+
+  # pptx 33 (left out of the 60-minute version: no break). A lavender pause slide in the PowerPoint (kit.py's qa():
+  # grape), in Part 4's blue: a pause slide here (`style: "break"`: its title centred, the note just under it).
+  - id: "break"
+    layout: "text"
+    style: "break"
+    accent: "grape"
+    title: "Break: 10 minutes"
+    body: "We start again at **{fill:break_end}**. Stretch, refill, and please keep the room free of photos."
+    minutes: 10
+    notes: |
+      SAY: Let's take a ten-minute break. We'll start again at {fill:break_end}. If you're on Zoom, you can stay in the room; turn off your camera if you like. Please keep the room free of photos and screenshots while we stretch.
+      DO: Start a visible timer. Leave this slide up. On Zoom, you can play nothing, or put the committee website's address in the chat. Do not play Grapevine audio from the deck; if you want music or a story during the break, play it live from the official site.
+      TIP: Use the break to check the chat for questions you missed, and to see whether you are on time. If you're running late, the 'CUT TO 60' notes show what to shorten: {ui:customize} → {ui:version} → the 60-minute version.
+    version_notes:
+      short: "CUT TO 60: no break; or a short stretch."
+
+  # ── Part 5 · Stories, audio and digital tools (0:52–0:59) ────────────────────────────────────────────────────────
+  # pptx 34
+  - id: "part-5"
+    layout: "section"
+    number: 5
+    accent: "lv"
+    title: "Stories, audio and digital tools"
+    subtitle: "Inviting members to write, and the free ways to read and listen"
+    minutes: 0.25
+    # (the 60-minute version has no break to come back from, and leaves out recording and where to send a story)
+    notes: |
+      {not:short} SAY: Welcome back. In this part: how to encourage members to write or record their stories, where those stories go, and the digital tools, most of them free, that you can point people to.
+      {only:short} SAY: In this part: how to encourage members to write their stories, the themes and deadlines, and the digital tools, most of them free, that you can point people to.
+      {not:short} DO: Check that everyone is back, and restart the timer for the second half.
+    version_notes:
+      short: "CUT TO 60: keep, quickly."
+
+  # pptx 35
+  - id: "encouraging"
+    layout: "bullets"
+    title: "Encouraging members to write"
+    items:
+      - "Written by members: no experience needed; the editors fix the spelling"
+      - "Tell one experience, the way you'd share it at your home group"
+      - "Grapevine: about 300 to 1,800 words · La Viña: 5–6 double-spaced pages"
+      - "Neither prints poems, song lyrics, tributes or previously published work"
+      - "Each writer sends their own story: never send someone's story for them"
+    takeaway: "Jokes and photos of empty meeting rooms are welcome too."
+    source: "Sources: the Grapevine and La Viña guidelines for contributors · Service Manual, p. 85"
+    minutes: 1.5
+    version_minutes: { short: 2.5 }
+    notes: |
+      SAY: Every story in these magazines was written by a member like us, and the magazines depend on it: they can't pay for articles, so they need as many voices as possible. AA's Service Manual encourages members to send articles even if they think their grammar and spelling aren't perfect. The editors take care of that. If you've written a Fourth Step or a long email, you can write a story.
+      SAY: The best stories tell one experience, the way you'd share it at your home group: what happened, what you did, how it changed you. Grapevine suggests about 300 to 1,800 words; La Viña suggests five or six double-spaced typed pages. Neither magazine prints poems, song lyrics or tributes to individuals, or anything already published elsewhere.
+      SAY: One important point for us as reps: we invite, but each member sends their own story, with their own contact details. Never send someone's story for them. And remind writers that the magazines also want photos of meeting rooms, with no people in them, and jokes.
+      TIP: A story that misses its theme's deadline can still be used in a later issue. Grapevine contacts writers only when a story is selected; La Viña acknowledges every submission. Never promise anyone that their story will be published.
+      SOURCE: aagrapevine.org/guidelines-contributing-grapevine; aalavina.org/guia-para-contribuciones; The A.A. Service Manual, 2024-2026, p. 85; GVR Workbook (2026), pp. 42-43 (paraphrased).
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 36. The deck's two columns of deadlines (Grapevine: stories due · La Viña: stories due (fecha límite)) are
+  # the site's live list (data/site/editorial.json, as on /contribute/#deadlines): the next deadlines on the day the
+  # slide is shown, La Viña's themes in Spanish with their English gloss — the next three of EACH magazine
+  # (`limit_each`), as the deck showed both, so Grapevine's monthly deadlines never push La Viña's off the slide. Its
+  # "Later issues / Later themes: see …" lines are the two addresses in the source line. In the 60-minute version the
+  # next slide (recording) is left out; its one sentence is in this slide's version note too. The PowerPoint drew this
+  # Grapevine | La Viña pair in blue and orange, under a blue eyebrow, inside Part 5's orange: Grapevine's blue, as
+  # its own `accent`. The notes name each magazine's next deadline after a label, so "see aalavina.org for La Viña's
+  # themes" (while the site has none of La Viña's dates) reads too; the Hispanos Veteranos tip is for the weeks that
+  # theme is on the slide.
+  - id: "deadlines"
+    layout: "live"
+    kind: "deadlines"
+    options: { pub: "both", limit: 6, limit_each: 3 }
+    accent: "gv"
+    title: "Themes and deadlines"
+    intro: "Grapevine and La Viña: stories due ({lang:es}fecha límite{/lang})."
+    source: "Sources: aagrapevine.org/contribute · aalavina.org/recursos · live list: {live:site}/contribute/"
+    minutes: 1
+    version_minutes: { short: 1.75 }
+    notes: |
+      SAY: Here are the next themes and deadlines. Grapevine closes a theme on the first of each month, several months ahead of the issue. Grapevine's next deadline: {live:next_deadline_gv}. La Viña publishes six themes a year, each with its own date. La Viña's next deadline: {live:next_deadline_lv}.
+      SAY: Both magazines also take stories on open topics any time. La Viña lists them at aalavina.org/temas-sugeridos, and Grapevine is always looking for stories on Steps Four through Twelve and on every Tradition.
+      TIP: If {lang:es}Hispanos Veteranos en AA{/lang} (Hispanic Veterans in AA) is on the slide: '{lang:es}veteranos{/lang}' can mean long-time members (La Viña's {lang:es}Veteranos{/lang} section is for old-timers) or military veterans, and La Viña's themes list gives only the title. Say 'Hispanic veterans', which keeps both, and check La Viña's own description before you explain this theme.
+      STAYS CURRENT: this slide shows the next three deadlines of each magazine from the live list at {live:site}/contribute/#deadlines, which has a countdown for each; a deadline that has passed drops off by itself. Grapevine's November 2027 issue is Classic Grapevine (stories from the archive), so it has no deadline. In October 2026, Grapevine's 2028 calendar and La Viña's 2028 themes were not yet published; expect them early in 2027.
+      SOURCE: aagrapevine.org/contribute and the 2026-27 Editorial Calendar; {lang:es}Temas de LV 2027{/lang} (aalavina.org/recursos).
+    version_notes:
+      short: "CUT TO 60: point to the slide and to /contribute/#deadlines. Recording (the next slide) is left out of this version; one sentence: 'You can also record your story by phone; the steps are on our site.'"
+
+  # pptx 37 (left out of the 60-minute version). The two story lines' numbers, as the deck printed them, come from the
+  # site's data ({live:gv_audio_phone}, {live:lv_audio_phone}: the numbers its Share your story page, /contribute/
+  # #record, reads from the magazines' own pages), so they follow the site when a number changes. The PowerPoint drew
+  # this Grapevine | La Viña pair (eyebrow and takeaway) in Grapevine's blue, inside Part 5's orange: its own `accent`.
+  # La Viña's e-mail for a recorded file is the address the committee gives for La Viña stories,
+  # manuscritoslv@aagrapevine.org (the owner, 2026-10-02), where the deck had lveditorial@ (the contact of La Viña's
+  # monthly workshop).
+  - id: "record"
+    layout: "columns"
+    style: "panels"
+    accent: "gv"
+    title: "Not a writer? Record your story"
+    columns:
+      - heading: "Grapevine Audio Project"
+        accent: "gv"
+        items:
+          - "6 to 8 minutes, one topic, as you'd share it in a meeting"
+          - "Call **{live:gv_audio_phone}** and follow the prompts"
+          - "Or email a WAV or MP3 file to webcoord@aagrapevine.org"
+      - heading: "La Viña: {lang:es}Graba tu historia{/lang}"
+        accent: "lv"
+        items:
+          - "“Record your story”: up to 7 minutes"
+          - "Call **{live:lv_audio_phone}** and press 1"
+          - "Or email a WAV or MP3 file to manuscritoslv@aagrapevine.org"
+    takeaway: "Neither magazine collects recordings of speakers at AA meetings or events."
+    minutes: 1.5
+    notes: |
+      SAY: Some members would rather talk than write, and that's fine. Grapevine's Audio Project takes short recorded stories, six to eight minutes on one topic, told the way you'd share in a meeting: making amends, finding your first sponsor. Call the number, press 1 to hear tips and record after the tone, press pound when you're done, 1 to save, and 2 to give Grapevine permission to use it. Or record on your phone and email the file. Accepted stories are published on Grapevine's YouTube channel.
+      SAY: La Viña's '{lang:es}Graba tu historia{/lang}' takes recordings of up to seven minutes. Call, press 1, begin as you would in a meeting, give your name and phone number, and read the permission statement printed on La Viña's instructions page. Long-distance charges may apply. Or email a recording. Recorded stories go through the same editorial process as written ones.
+      SAY: One thing neither magazine does: collect recordings of speakers at AA meetings or events. Please don't record a meeting and send it in.
+      TIP: Call both lines yourself before you announce them; if one doesn't answer, give the email option only. Instructions: aagrapevine.org/audio-portal and aalavina.org/graba-tu-historia; our site has the steps at /contribute/#record.
+      SOURCE: aagrapevine.org/audio-portal and aalavina.org/graba-tu-historia (read Oct. 2026); M-39, p. 57.
+    version_notes:
+      short: "CUT TO 60: one sentence: 'You can also record your story by phone; the steps are on our site.' Skip the slide."
+
+  # pptx 38 (left out of the 60-minute version). La Viña's e-mail is the address the committee gives for stories,
+  # manuscritoslv@aagrapevine.org (the owner, 2026-10-02; config/site.yml links.lv_email_editorial, as /contribute/
+  # shows it), where the deck had lveditorial@, which the committee gives only as the contact of La Viña's monthly
+  # workshop; the notes' TIP says so.
+  - id: "where-to-send"
+    layout: "resources"
+    title: "Where to send a story"
+    links:
+      - label: "Grapevine: share your story"
+        url: "https://www.aagrapevine.org/submit-your-story"
+        note: "Or email gveditorial@aagrapevine.org. Read Grapevine's guidelines first."
+      - label: "La Viña: share your story ({lang:es}comparte tu historia{/lang})"
+        url: "https://www.aalavina.org/comparte"
+        note: "Or email manuscritoslv@aagrapevine.org. Read La Viña's guidelines ({lang:es}pautas{/lang}) first."
+      - label: "Both magazines' guidelines, themes and phone steps"
+        url: "/contribute/"
+        note: "The committee's Share your story page links to everything"
+    minutes: 1
+    notes: |
+      SAY: Here's where stories go. For Grapevine, the online form is easiest, or email the editorial address. For La Viña, use the web form or email manuscritoslv@aagrapevine.org. Each magazine's guidelines are short and worth reading together before anyone sends a story.
+      SAY: About anonymity: the writer gives their full name and contact details to the office, so the editors can reach them, but the magazine protects them in print. On Grapevine's form you choose how your name appears: initials only, first name and last initial, or Anonymous, usually with your city. In the story itself, use first names only, or none, for sponsors, family and friends.
+      TIP: Mailing addresses, if a member prefers paper: Grapevine, Editorial Dept., 475 Riverside Drive, New York, NY 10115; La Viña, 475 Riverside Drive, Suite 1100, New York, NY 10115. Keep a copy; manuscripts aren't returned. Send each story one way only, not by both the website and email.
+      TIP: For La Viña, the committee gives manuscritoslv@aagrapevine.org; La Viña's web form, aalavina.org/comparte, works too. The other address you may see, lveditorial@aagrapevine.org, is the contact for La Viña's monthly virtual workshop.
+      SOURCE: aagrapevine.org/submit-your-story; aagrapevine.org/guidelines-contributing-grapevine; aalavina.org/comparte; aalavina.org/guia-para-contribuciones; the committee website's Share your story page ({live:site}/contribute/); La Viña News, Sept.-Oct. 2026; M-39, p. 53 (1974).
+    version_notes:
+      short: "CUT TO 60: skip; these links are on the committee site's /contribute/ page."
+
+  # pptx 39. Written by hand (the magazines' tools, not the site's facts), so its source line keeps the deck's "as of
+  # October 2026".
+  - id: "digital-tools"
+    layout: "table"
+    title: "Digital tools, most of them free"
+    header: ["Tool", "What it is, and where to find it"]
+    rows:
+      - ["Apps", "Free to download; reading the magazine needs a subscription"]
+      - ["Daily Quote", "A daily quote from a published story: home pages, apps, email"]
+      - ["Podcasts", "Member interviews and the Weekly Open: aagrapevine.org/podcasts"]
+      - ["YouTube", "@AAGrapevine: audio stories, service videos, ASL videos"]
+      - ["Instagram", "@alcoholicsanonymous_gv · @alcoholicosanonimos_lv"]
+    widths: [2.3, 9.5]
+    first_col_bold: true
+    source: "Sources: aagrapevine.org/apps and /podcasts · P-52, pp. 9–10 · as of October 2026"
+    minutes: 1.5
+    version_minutes: { short: 2.5 }
+    notes: |
+      SAY: Many members don't know how much is free. The Grapevine and La Viña apps are free to download, and the Daily Quote and a sobriety calculator are free inside them; reading the magazine in the app needs a digital or Complete subscription. The Daily Quote, in Spanish the {lang:es}Cita Diaria{/lang}, is a short quote from a published story, every day, on each magazine's home page or by email.
+      SAY: Grapevine's podcast, the Half-Hour Variety Hour, is a weekly 'meeting after the meeting' conversation with a member, and the Weekly Open meeting is published as a podcast too. The YouTube channel, AA Grapevine and La Viña, has members' audio stories, service videos and videos in American Sign Language. Both magazines are on Instagram, and La Viña also runs an information channel on WhatsApp.
+      SAY: These are a gentle first step for members who don't subscribe yet, and a wonderful way for members who are homebound, far from meetings, deaf or hard of hearing to stay connected.
+      TIP: You can play a podcast clip or a video at a meeting, live from the official site or the app, if your group agrees. Don't download and repost audio or video.
+      SOURCE: aagrapevine.org/apps; aagrapevine.org/podcasts; youtube.com/@AAGrapevine; GSO's Accessibility Resources (Oct. 2025); La Viña News, Sept.-Oct. 2026; P-52, pp. 9-10.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # ── Part 6 · Your toolbox and your support (0:59–1:08) ───────────────────────────────────────────────────────────
+  # pptx 40
+  - id: "part-6"
+    layout: "section"
+    number: 6
+    accent: "vine"
+    title: "Your toolbox and your support"
+    subtitle: "Our website, your district and the Area, and money"
+    minutes: 0.25
+    notes: |
+      SAY: You don't have to build any of this yourself. Our committee keeps a website with ready-made tools for GVRs and RLVs, and your district and the Area are there to help. Then we'll talk plainly about money: who pays for what.
+    version_notes:
+      short: "CUT TO 60: keep, quickly."
+
+  # pptx 41. Part 6's green, as its eyebrow in the PowerPoint (kit.py draws every table's takeaway in Grapevine blue,
+  # whatever the part; that is not carried over, here or on "Who usually pays for what").
+  - id: "website"
+    layout: "table"
+    title: "The committee's website: tools for your month"
+    header: ["Page", "What it gives you"]
+    rows:
+      - ["/gvr/", "GVR / RLV corner: first steps and the official kits"]
+      - ["/orientation/", "GVR / RLV 101: six short sessions and a handout"]
+      - ["/monthly/", "Monthly toolkit: issues, dates, 10 ways to use an issue, a ready GV/LV report, posters"]
+      - ["/digest/", "Monthly digest: last month's news, ready to share"]
+    widths: [2.5, 9.3]
+    first_col_bold: true
+    takeaway: "Start at {live:site}, in English and in Spanish (/es/)."
+    minutes: 1.5
+    version_minutes: { short: 2 }
+    notes: |
+      SAY: Here's our committee's website, and the four pages a GVR or RLV uses most. The GVR/RLV corner explains the service position, has a first-steps checklist that remembers your progress on your own device, and links to the official kits. GVR/RLV 101 has six short sessions, five to eight minutes each, with review questions and a printable handout; it's a good refresher after today, and a district can use it for its own orientation.
+      SAY: The Monthly toolkit is the page I'd bookmark. It has this month's issues and themes, the dates, ten ways to put an issue to work, from a newcomer's first copy to a doctor's waiting room, a ready-made GV/LV report for your district meeting that you can edit and copy, and a poster for the month. The monthly digest gathers everything new from last month, ready to paste into your district's group chat or an email.
+      DO: If you have time and a connection, open the Monthly toolkit live for 30 seconds and show the report builder.
+      TIP: Every page has a Spanish version under /es/, so RLVs can share the Spanish pages directly.
+      SOURCE: the committee website ({live:site}/gvr/, /orientation/, /monthly/ and /digest/), October 2026.
+    version_notes:
+      short: "CUT TO 60: keep; no live demo."
+
+  # pptx 42. In the 60-minute version the next slide (the tracker) is left out; its one sentence is in this slide's
+  # version note too, and "which I'll show you next" is only said where the tracker follows.
+  - id: "more-tools"
+    layout: "table"
+    title: "More tools: your table, your calendar, your records"
+    header: ["Page", "What it gives you"]
+    rows:
+      - ["/share/", "QR codes, printable posters and table tents that point to the site"]
+      - ["/events/", "Workshops, booths and meetings, with a calendar feed"]
+      - ["/contribute/", "Themes, deadlines, how to submit or record, workshops"]
+      - ["/shop/", "Current prices, Carry the Message, order forms and catalogs"]
+      - ["/tracker/", "An expense and giveaway tracker, kept only on your own device"]
+    widths: [2.5, 9.3]
+    first_col_bold: true
+    minutes: 1
+    version_minutes: { short: 1.5 }
+    notes: |
+      SAY: A few more. The Share page has QR codes, a printable poster and a fold-over table tent for your literature table; the QR code always leads to the latest content, so you print it once. The Events page lists committee meetings, workshops and booths, and you can subscribe to it in your phone's calendar. Share your story has the themes and deadlines with countdowns, how to submit, how to record by phone, and how to host a writing workshop. The Shop page always has the current prices, Carry the Message, order forms and catalogs.
+      {not:short} SAY: And the tracker, which I'll show you next.
+      TIP: If your district has a website or a newsletter, the Share page also has a ready-made announcement you can copy.
+      SOURCE: the committee website ({live:site}/share/, /events/, /contribute/, /shop/ and /tracker/), October 2026.
+    version_notes:
+      short: "CUT TO 60: keep. The tracker (the next slide) is left out of this version; one sentence: 'Keep every receipt; the tracker on our site helps.'"
+
+  # pptx 43 (left out of the 60-minute version). The notes' "it's your job to back it up" reads "it's up to you to
+  # back it up" (the site's wording rules leave "job" out).
+  - id: "tracker"
+    layout: "bullets"
+    title: "The expense & giveaway tracker"
+    items:
+      - "Log miles, literature, subscriptions, giveaways and reimbursements"
+      - "Add a photo of each receipt to its entry"
+      - "It stays on your own device: back up, or export a spreadsheet file, now and then"
+      - "Mark what's been reimbursed, and hand over the record your treasurer asks for"
+    takeaway: "Keep every receipt, paper and photo: whoever reimburses you will ask for it."
+    source: "Source: {live:site}/tracker/ · entries stay on your device"
+    minutes: 1.5
+    notes: |
+      SAY: Service sometimes costs money: miles to the district meeting, literature to give away, a gift subscription, a hotel at an assembly. The tracker on our website helps you keep it straight. You log each expense, mileage or giveaway, add a photo of the receipt, and note who will pay it back: your group, your district, the Area, or nobody, if you choose to cover it yourself as your own contribution.
+      SAY: Everything stays on your own phone or computer. Nothing is uploaded, which also means it's up to you to back it up or export a spreadsheet file now and then. When a reimbursement comes in, mark it as paid.
+      SAY: Most important of all: keep every receipt, on paper or as a photo. Whoever reimburses you, the group, the district or the Area, will ask for it, and good records protect you and the treasurer alike.
+      TIP: Reimbursement rules, like mileage rates and what needs approval ahead of time, are set by each group, district and the Area. Ask before you spend.
+      SOURCE: the committee website's tracker page ({live:site}/tracker/), October 2026.
+    version_notes:
+      short: "CUT TO 60: one sentence: 'Keep every receipt; the tracker on our site helps.' Skip."
+
+  # pptx 44. The committee meeting's time, Zoom ID and passcode come from the site (config/site.yml → meeting). In
+  # the 60-minute version the next slide ("Coming up") is left out; its one sentence is in this slide's version note,
+  # with the next assembly from the site's events ({live:assembly_next}).
+  - id: "district-and-area"
+    layout: "columns"
+    style: "cards"
+    title: "Working with your district and the Area"
+    columns:
+      - heading: "Your district"
+        items:
+          - "Ask your DCM how GV/LV news reaches the district"
+          - "Plan a workshop together"
+      - heading: "The Area committee"
+        items:
+          - "3rd Wednesday, {live:meeting_time}"
+          - "Zoom {live:meeting_zoom_id}"
+          - "Passcode: {live:meeting_passcode}"
+          - "Every AA member welcome"
+      - heading: "Workshops and tables"
+        items:
+          - "Writing and information workshops"
+          - "Our table at assemblies and CityWide Dallas"
+    takeaway: "Questions or a workshop? Write to {live:email}"
+    minutes: 1.5
+    version_minutes: { short: 2 }
+    notes: |
+      SAY: Here's how to stay connected. In your district, ask your DCM how Grapevine and La Viña news reaches the district meeting. If your district takes a GV/LV report, the ready-made report on our Monthly toolkit does most of the work: choose the sections your district wants, add one thing your group did, and read it in two minutes. If your district would like a writing workshop or an information workshop, plan it with your DCM; our committee is glad to help.
+      SAY: Our Area committee meets every third Wednesday, {live:meeting_time}, on Zoom. The meeting ID and passcode are on the slide and on our website. Every AA member is welcome, no registration needed. We open with a moment of silence, hear from districts and groups, share Grapevine and La Viña news, plan workshops and tables, and close on time with the Responsibility Statement.
+      SAY: And we keep a Grapevine and La Viña table at Area assemblies and at CityWide Dallas on the second Saturday of each month. Volunteers are always welcome; it's a lovely, easy way to serve.
+      TIP: For callers without internet, Zoom's phone numbers are on our /accessibility/#phone page; the committee meeting needs a numbers-only phone passcode, which the chair can give you.
+      SOURCE: the committee website ({live:site}/meetings/ and /events/); neta65.org/trusted-servants/grapevine-la-vina; Panel 75 committee reports.
+    version_notes:
+      short: "CUT TO 60: keep. 'Coming up' (the next slide) is left out of this version: mention the next assembly in one sentence. The next assembly: {live:assembly_next}."
+
+  # pptx 45 (left out of the 60-minute version). The deck's table of dates "as of October 2026": the committee
+  # meeting and the booth (two monthly rules), the three 2027 assemblies (two of them tentative) and "[Date] [A
+  # workshop in your district]". The rules stay above the list, the assemblies are the site's live list of NETA 65's
+  # assemblies (the events filter "assemblies": the next three on the day it is shown, "to be confirmed" while the
+  # Events page says so), and the district workshop stays the presenter's blank. (A list of all of NETA 65's events
+  # would fill up with the booth's monthly Saturdays, already the rule above it, and push the assemblies off.)
+  - id: "coming-up"
+    layout: "live"
+    kind: "events"
+    options: { filter: "assemblies", limit: 3 }
+    title: "Coming up"
+    # (the booth's hours written as the committee meeting's time is, kept on one line by no-break spaces,  ,
+    # and a word joiner, U+2060, after the dash: a line may still break after an en dash before a no-break space)
+    intro: "Every 3rd Wednesday: Area GV/LV committee on Zoom, {live:meeting_time} · Every 2nd Saturday: GV/LV booth at CityWide Dallas, 5:00 –⁠ 8:00 PM"
+    takeaway: "In your district: {fill:district_workshop}"
+    minutes: 0.75
+    notes: |
+      SAY: A few dates to keep in mind. Our committee meets every third Wednesday, and our booth is at CityWide Dallas every second Saturday from five to eight. The Area holds three assemblies a year. The next one: {live:assembly_next}. (Add any workshop coming up in the districts in the room.)
+      UPDATE BEFORE EACH WORKSHOP: the assemblies on this slide come by themselves from the committee's events page ({live:site}/events/), which also lists the Area's workshops. Check an assembly date that is still to be confirmed on neta65.org, and fill in a workshop in your district: {ui:customize} → {ui:your_details}.
+      TIP: CityWide Dallas meets at Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220 (a potluck at 5:30, the speaker at 7:00). Give the venue as an address only.
+      SOURCE: the committee's events page ({live:site}/events/), October 2026; neta65.org.
+    version_notes:
+      short: "CUT TO 60: skip; mention the next assembly in one sentence."
+
+  # pptx 46. A.A.W.S. literature: word for word, with its credit line.
+  - id: "seventh-tradition"
+    layout: "quote"
+    title: "Money and the Seventh Tradition"
+    quote: "AA Grapevine, Inc. is not set up to take contributions from groups or individuals. Groups and individual members support the Grapevine by purchasing Grapevine and La Viña subscriptions and other Grapevine publications and using them in their Twelfth Step work."
+    credit: "Reprinted from _Self-Support: Where Money and Spirituality Mix_ (F-3), p. 12, with permission of Alcoholics Anonymous World Services, Inc."
+    minutes: 1
+    version_minutes: { short: 1.5 }
+    notes: |
+      SAY: Let's talk about money plainly, because it's where good intentions most often go wrong. This is from AA's pamphlet on self-support, updated in June 2026. (Read the quotation.)
+      SAY: So AA Grapevine is set up differently from the rest of our service structure. Our Seventh Tradition contributions support the group, district, Area and GSO. Grapevine takes no contributions: it pays its way through the magazines, books and other items we buy and use, and the General Service Board covers La Viña's shortfall. The same pamphlet, when it lists a group's basic expenses such as rent, refreshments and AA literature, includes Grapevine literature. A group subscription is an ordinary group expense, paid from the Seventh Tradition basket like the others, when the group conscience chooses it. The pamphlet also suggests groups consider subscriptions, gift certificates, books, or the Carry the Message project when they discuss how to use their funds.
+      TIP: In 2026 the Conference was asked to consider letting Grapevine accept contributions. It made no change; instead, this answer in F-3 was revised. Don't present contributions to Grapevine as something coming.
+      SOURCE: F-3 (June 2026), pp. 7, 12-13; M-39 (2026); Service Manual, p. 66.
+    version_notes:
+      short: "CUT TO 60: keep; read the quote only."
+
+  # pptx 47. The treasurer's prices are the ones in effect on the day shown (see "Four ways to subscribe or give").
+  # In the 60-minute version the next slide ("Words that help") is left out; its instruction is in this version note.
+  - id: "who-pays"
+    layout: "table"
+    title: "Who usually pays for what"
+    header: ["What", "Usually paid by"]
+    rows:
+      - ["A group subscription", "The group, if its group conscience agrees"]
+      - ["Your own subscription", "You, if you wish; it's never required"]
+      - ["Gifts and Carry the Message", "Whoever chooses to give"]
+      - ["District workshops, supplies", "The district, under its own guidelines"]
+      - ["Area tables and travel", "The Area, under its budget and guidelines"]
+    widths: [5.2, 6.6]
+    first_col_bold: true
+    takeaway: "Ask before you spend, keep the receipt, and report back."
+    minutes: 1.25
+    version_minutes: { short: 1.75 }
+    notes: |
+      SAY: Here's the usual pattern, but your group, district and Area each decide their own. A group subscription and magazines for the table come from the group's treasury, when the group conscience agrees. Your own subscription is yours, and it's never a requirement for this service. Gifts and Carry the Message certificates are paid by whoever chooses to give: a member, a group, or a district by its own decision.
+      SAY: District workshops and supplies follow the district's own budget and guidelines; Area tables, materials and committee travel follow the Area's. For large events, AA Grapevine's office can send free printed materials if you ask early.
+      SAY: Three habits keep everyone comfortable: ask before you spend, keep the receipt, and report back. Trusted servants don't govern; the group, district and Area decide.
+      TIP: For a group treasurer planning the budget, AA Grapevine's yearly prices: Grapevine in print, {live:price_gv_print}; digital, {live:price_gv_digital}; La Viña in print, {live:price_lv_print}; digital, {live:price_lv_digital}. {live:price_change_note} Other plans and the up-to-date list are on the official stores and our /shop/ page; don't quote other prices from memory. Never ask businesses or anyone outside AA for money, prizes or discounts (Tradition Seven).
+      SOURCE: F-3 (June 2026), pp. 7, 12-13; GVR Workbook (2026), pp. 26-27, 39; GV News, Oct. 2026, p. 4.
+    version_notes:
+      short: "CUT TO 60: keep. 'Words that help' (the next slide) is left out of this version: fold its main point in here."
+
+  # pptx 48 (left out of the 60-minute version)
+  - id: "words"
+    layout: "columns"
+    style: "panels"
+    title: "Words that help, and words to avoid"
+    columns:
+      - heading: "Say"
+        accent: "vine"
+        items:
+          - "“A group subscription is a group expense”"
+          - "“Buying and using the magazines supports them”"
+          - "“A Carry the Message gift certificate”"
+          - "“The Conference recognizes it as AA's international journal”"
+          - "“You might bring it to your group conscience”"
+      - heading: "Avoid"
+        accent: "grape"
+        items:
+          - "“A donation to Grapevine”"
+          - "“Pass the basket for Grapevine”"
+          - "“Conference-approved Grapevine”"
+          - "“Every group must subscribe”"
+          - "“Sell subscriptions”, “quota”, “pitch”"
+    minutes: 0.75
+    notes: |
+      SAY: Words matter, so here's a short list. Say 'a group subscription is a group expense', not 'a donation to Grapevine'. Say 'buying and using the magazines supports them', and never pass a basket for Grapevine. Say 'a Carry the Message gift certificate'. Say the Conference recognizes Grapevine as AA's international journal, rather than calling it Conference-approved literature.
+      SAY: And watch for pressure words. 'Every group must subscribe' isn't true: each group is autonomous. 'Selling subscriptions', 'quotas' and 'pitches' belong to business, not to Twelfth Step work. 'You might', 'consider', 'bring it to your group conscience' carry the same message with an open hand.
+      ASK (optional, if on time): Which of these have you heard at a meeting? (Take one answer, kindly.)
+      SOURCE: F-3 (June 2026); The A.A. Service Manual, 2024-2026, p. 85; M-39, p. 52; the committee website's wording rules in GVR / RLV 101 ({live:site}/orientation/).
+      TRANSITION: Let's put it all together with some common questions.
+    version_notes:
+      short: "CUT TO 60: skip; fold the main point into the previous slide."
+
+  # ── Part 7 · Putting it together (1:08–1:27, then about 3 minutes to spare) ────────────────────────────────────
+  # pptx 49
+  - id: "part-7"
+    layout: "section"
+    number: 7
+    accent: "grape"
+    title: "Putting it together"
+    subtitle: "Common questions, a short exercise, and your questions"
+    minutes: 0.25
+    # (the 60-minute version talks the scenarios through as a whole room: no small groups)
+    notes: |
+      {not:short} SAY: We're in the home stretch. Let's go through the questions new GVRs and RLVs ask most often, then try a few real-life situations in small groups, and then it's your turn to ask anything.
+      {only:short} SAY: We're in the home stretch. Let's go through the questions new GVRs and RLVs ask most often, then think through a real-life situation or two together, and then it's your turn to ask anything.
+    version_notes:
+      short: "CUT TO 60: keep, quickly."
+
+  # pptx 50
+  - id: "faq-money"
+    layout: "bullets"
+    title: "Questions we often hear: money and the magazines"
+    items:
+      - text: "**Can our group send a contribution to Grapevine?**"
+        items: ["No. Buy and use the magazines, or give Carry the Message gifts."]
+      - text: "**Can I photocopy a story for our meeting?**"
+        items: ["No. The stories are copyrighted: lend the issue or share the link."]
+      - text: "**Do I need my own subscription?**"
+        items: ["No. Many reps find it helps; the group's copy is a good start."]
+      - text: "**Where do order problems go?**"
+        items: ["Customer service: (800) 631-6025, or (800) 640-8781 in Spanish."]
+    minutes: 1.5
+    version_minutes: { short: 0.75 }
+    notes: |
+      SAY: Here are the questions we hear most about money and the magazines. (Read each question, pause a beat to let the room answer in their heads, then give the answer.)
+      SAY: Can our group send a contribution to Grapevine? No. Grapevine is set up not to take contributions. A group supports it by buying the magazines and using them, and by giving gift or Carry the Message certificates if it wishes. Can I photocopy a story? No: the stories belong to AA Grapevine, Inc. Lend the issue, share the link, or play the audio from the official site or app. Do I need my own subscription to serve? No. It helps to read each issue, and many reps do subscribe, but the group's copy and the free podcasts and videos are a fine start. Order problems go to customer service; you don't have to fix them yourself.
+      ASK (optional, if on time): What other money questions have you been asked at your group?
+      SOURCE: Service Manual, p. 66; F-3 (June 2026), pp. 12-13; aagrapevine.org copyright and reprint policy; aagrapevine.org/contact-us.
+    version_notes:
+      short: "CUT TO 60: keep; answer quickly, no question."
+
+  # pptx 51
+  - id: "faq-service"
+    layout: "bullets"
+    title: "Questions we often hear: the service position"
+    items:
+      - text: "**Our group voted no on a subscription. Now what?**"
+        items: ["That's the group's right (Tradition Four). Keep sharing the free tools, and ask again another year."]
+      - text: "**Can I post photos of our table or our workshop?**"
+        items: ["The table, yes, with nobody in it. No faces and no full names."]
+      - text: "**How long do I serve?**"
+        items: ["As long as your group decides; two years is common."]
+      - text: "**Who can come to the committee meeting?**"
+        items: ["Any AA member. No registration needed."]
+    minutes: 1.5
+    version_minutes: { short: 0.75 }
+    notes: |
+      SAY: And a few about the service position. Our group voted no on a subscription: now what? That's the group's right, and Grapevine itself reminds reps of it. Keep announcing the stories and the free tools, lend your own copy, and bring it back another year if it feels right. No pressure.
+      SAY: Can I post photos? Of the table, yes, with nobody in it. AA's pamphlet on anonymity treats public web pages and social media like press, radio and film: no full names and no recognizable faces of members. How long do I serve? As your group decides; two years is common. Who can come to the committee meeting? Any AA member, no registration.
+      ASK (optional, if on time): What's one question you were afraid to ask? (Take one.)
+      SOURCE: GVR Workbook (2026), p. 52; P-47 (Sept. 2026), pp. 10-12; Service Manual, p. 83; the committee website's meetings page ({live:site}/meetings/).
+    version_notes:
+      short: "CUT TO 60: keep; answer quickly, no question."
+
+  # pptx 52. The deck's TIME line also split the nine minutes: kept as TIMING. Green, as every activity in the
+  # PowerPoint (kit.py's activity(): accent="vine"), inside Part 7's grape. In the 60-minute version: 4 minutes, one
+  # or two scenarios discussed by the whole room (its "CUT TO 60" line), so that version has its own title, steps,
+  # time card and materials (`version_fields.short`) and its own lines of the notes ({only:short}): no groups, no
+  # breakout rooms, and only the first scenario slide.
+  - id: "scenarios"
+    layout: "activity"
+    eyebrow: "Activity"
+    accent: "vine"
+    title: "Scenarios in small groups"
+    steps:
+      - "Form groups of three or four (on Zoom: breakout rooms)"
+      - "Each group takes one scenario from the next two slides"
+      - "What would you do? Which Tradition helps?"
+      - "Choose someone to share back in one minute"
+    duration: 9
+    materials: ["The scenario slides", "One volunteer to report back"]
+    takeaway: "**Share back:** What would you suggest to your group?"
+    version_fields:
+      short:
+        title: "Scenarios for the whole room"
+        steps:
+          - "Read one or two scenarios from the next slide together"
+          - "What would you do? Which Tradition helps?"
+          - "Anyone can answer, in a sentence or two"
+        duration: 4
+        materials: ["The scenario slide"]
+        takeaway: "What would you suggest to your group?"
+    minutes: 9
+    version_minutes: { short: 4 }
+    notes: |
+      {not:short} SAY: Let's practice with some real-life situations. In groups of three or four, take one scenario. Talk about what you would do, and which Tradition or principle helps. Pick someone to share back your answer in one minute. You'll have about four minutes in your groups.
+      {only:short} SAY: Let's practice with a real-life situation or two, all together. I'll read a scenario; think about what you would do, and which Tradition or principle helps. Anyone can answer, in a sentence or two.
+      {not:short} DO: Show the next two slides first so everyone sees all six scenarios. Assign scenarios by letter (A to F), one per group; with more than six groups, repeat letters. On Zoom, put the six scenarios in the chat before opening breakout rooms of three or four for 4 minutes, with a 1-minute warning. In a room, groups can turn their chairs.
+      {not:short} DO (share back, about 4 minutes): hear from three groups, a minute each, then go through the remaining scenarios yourself, using the possible answers in the notes of the scenario slides.
+      {only:short} DO: Show the next slide, read scenario A or B aloud, and take two or three answers from the room or the chat. Then give the possible answer from that slide's notes.
+      TIP: There's rarely one right answer. Steer toward the principles: the group decides, anonymity, attraction rather than promotion, self-support.
+      {not:short} TIMING: 1 minute to form groups or open the breakout rooms, 4 in groups, 4 to share back: hear from three groups, then go through the remaining answers yourself.
+    version_notes:
+      short: "CUT TO 60: no breakout rooms. Pick one or two scenarios and discuss them as a whole room."
+
+  # pptx 53. The deck's TIME line: "shown during the activity" (its time is the activity's); the player needs a
+  # length for every slide shown, so it has the smallest one, and the deck's words stay as TIMING. The PowerPoint
+  # draws its eyebrow and takeaway in its first card's colour (blue; cards blue, orange, green): its own `accent`.
+  - id: "scenarios-a-c"
+    layout: "columns"
+    style: "cards"
+    eyebrow: "Activity"
+    accent: "gv"
+    title: "Scenarios A to C"
+    columns:
+      - heading: "A · The treasurer"
+        accent: "gv"
+        text: "“Can we add Grapevine to our list of contributions, like GSO?”"
+      - heading: "B · The photo"
+        accent: "lv"
+        text: "A member wants to post a photo of your table, with everyone smiling behind it."
+      - heading: "C · The vote"
+        accent: "vine"
+        text: "Your group voted no on a group subscription."
+    takeaway: "What would you do? Which Tradition or principle helps?"
+    minutes: 0.25
+    notes: |
+      {not:short} POSSIBLE ANSWERS (share after the groups report):
+      {only:short} POSSIBLE ANSWERS (share after the room has answered):
+      A. Grapevine doesn't accept contributions, from groups or members. A group subscription is an ordinary group expense, so the group can budget for one, or for Carry the Message certificates, if its group conscience agrees. Bring both options to the business meeting. (Service Manual, p. 66; F-3, pp. 7 and 12-13; Tradition Seven.)
+      B. Photograph the table with nobody in it. Full-face photos of members posted publicly break anonymity even without names, and that includes social media and group chats people outside AA can see. Offer to take the picture of the table instead. (P-47, pp. 10-11; Traditions Eleven and Twelve.)
+      C. That's the group's right (Tradition Four). Keep the magazines visible with your own copy or back issues, announce the free tools, invite members to write, and offer the idea again another year. No pressure and no guilt.
+      TIMING: shown during the activity.
+    version_notes:
+      short: "CUT TO 60: use scenario A or B only."
+
+  # pptx 54 (left out of the 60-minute version). Its TIME line: as on the slide before. Its eyebrow and takeaway are
+  # its first card's orange in the PowerPoint (cards orange, grape, blue): its own `accent`. Answer D gives the
+  # Reunión Abierta's day and time from the site ({live:lv_open_meeting}), as "Every week: open AA meetings on Zoom"
+  # does, where the deck said "on Thursdays": "starting Nov. 5, 2026" until that day, then "since".
+  - id: "scenarios-d-f"
+    layout: "columns"
+    style: "cards"
+    eyebrow: "Activity"
+    accent: "lv"
+    title: "Scenarios D to F"
+    columns:
+      - heading: "D · The newcomer"
+        accent: "lv"
+        text: "A Spanish-speaking newcomer picks up a Grapevine at your English-speaking meeting."
+      - heading: "E · The poem"
+        accent: "grape"
+        text: "A member has written a poem and wants to send it to the magazine."
+      - heading: "F · The assembly table"
+        accent: "gv"
+        text: "Your district asks you to run the table at an assembly, including sales."
+    takeaway: "What would you do? Which Tradition or principle helps?"
+    minutes: 0.25
+    notes: |
+      POSSIBLE ANSWERS (share after the groups report):
+      D. Tell them about La Viña, AA's magazine in Spanish, and give them a copy if you have one. Mention the La Viña app and the {lang:es}Reunión Abierta de La Viña{/lang} — {live:lv_open_meeting} — and offer to connect them with an RLV or a Spanish-speaking meeting through your local AA office. Welcome comes first.
+      E. Neither magazine publishes poems, song lyrics or tributes. Thank them, and invite them to write the experience behind the poem as a story, to send a letter or a joke, or to record their story by phone. A writing workshop is a great next step.
+      F. Ask first what the district's and the Area's guidelines say: what may be displayed and sold, who handles the money, and how it's reported. Keep a written record, give receipts, keep the table's money separate from your own, and hand it over as the guidelines say. Consider asking a second trusted servant to count with you. The tracker helps with your own expenses.
+      TIMING: shown during the activity.
+    version_notes:
+      short: "CUT TO 60: skip this slide unless a group asks."
+
+  # pptx 55
+  - id: "questions"
+    layout: "qa"
+    title: "Questions & answers"
+    prompts:
+      - "What questions do you have about the service position?"
+      - "What has worked at your group?"
+      - "What would help you most this month?"
+    note: "Please keep shares short so everyone has a turn."
+    minutes: 4
+    version_minutes: { short: 3 }
+    notes: |
+      SAY: Now it's your turn. Questions, experience, ideas: all welcome. If we run out of time, write to the committee and we'll answer every question.
+      DO: Ask the chat volunteer to read questions from the chat. Come back to the things people wanted to take home, from the introductions. Keep each share to about a minute. If you don't know an answer, say so, write it down, and promise to follow up by email (use BCC when you write to a list of reps).
+      TIP: If a question touches an outside issue, such as treatment, medication or politics, gently say AA has no opinion on outside issues, and come back to the magazines.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 56. The committee website is the site itself ("/"); the customer-service card had no link in the deck, and a
+  # card needs one here: AA Grapevine's contact page, where those numbers come from. Grapevine's blue in the
+  # PowerPoint (its contact cards' helper defaults to accent="gv"), inside Part 7's grape: its own `accent`.
+  - id: "resources"
+    layout: "resources"
+    eyebrow: "Resources"
+    accent: "gv"
+    title: "Resources and contacts"
+    links:
+      - label: "Committee website"
+        url: "/"
+      - label: "Committee email"
+        url: "grapevine@neta65.org"
+      - label: "NETA 65 Area website"
+        url: "https://neta65.org"
+      - label: "AA's page on the magazines (GSO)"
+        url: "https://www.aa.org/aa-grapevine-la-vina"
+      - label: "Grapevine resources for reps"
+        url: "https://www.aagrapevine.org/gvr-resources"
+      - label: "La Viña resources for RLVs"
+        url: "https://www.aalavina.org/recursos"
+      - label: "Help for group reps (AA Grapevine)"
+        url: "gvrc@aagrapevine.org"
+      - label: "Customer service: (800) 631-6025"
+        url: "https://www.aagrapevine.org/contact-us"
+        note: "In Spanish: (800) 640-8781"
+    minutes: 1
+    version_minutes: { short: 0.5 }
+    notes: |
+      SAY: Everything we talked about is on this slide. The slides will be shared after the workshop, so you don't need to copy anything now. If you remember only one address, make it our committee's website: it links to all the others. Our committee email reaches the chair with any question. On the Area website, our committee's page is under Trusted Servants. AA's page on the magazines is from the General Service Office.
+      SAY: For the magazines' own help: Grapevine's resources for reps have the Workbook, the handbook, flyers and order forms; La Viña's {lang:es}Recursos{/lang} page has the RLV Manual, the themes and order forms; Grapevine's office for group reps answers questions about registering and the rep kit; and customer service handles orders, renewals and address changes, in English and in Spanish (by email: customerservice@aagrapevine.org).
+      DO: Before presenting, click each link to check it still works.
+      TIP: The contacts here are service addresses only. Never add a member's personal phone number or email to these slides: this presentation is published online.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 57. Every credit line as in the deck; the trademark line and the "local service use" disclaimer as its note.
+  # The PowerPoint's credits are Grapevine blue (kit.py's credits()), whatever the part: its own `accent`.
+  - id: "credits"
+    layout: "credits"
+    eyebrow: "Resources"
+    accent: "gv"
+    title: "Credits & sources"
+    sources:
+      - "_The A.A. Service Manual_, 2024–2026 Edition, pp. 66, 79–85"
+      - "_AA Grapevine and La Viña: Our Meetings in Print_ (P-52), 2026"
+      - "_Self-Support: Where Money and Spirituality Mix_ (F-3), June 2026"
+      - "_Anonymity — Our Spiritual Foundation_ (P-47), Sept. 2026, and M-39 _Advisory Actions_"
+      - "aagrapevine.org and aalavina.org (rep resources, guidelines, audio, stores), October 2026"
+      - "Responsibility Statement: written for the 1965 International Convention, Toronto"
+    note: |
+      A.A.W.S. quotations are reprinted with permission of Alcoholics Anonymous World Services, Inc. The AA Preamble: Copyright © by AA Grapevine, Inc.; reprinted with permission.
+      Grapevine and La Viña are trademarks of AA Grapevine, Inc. The names are used only to identify the magazines; no logos, covers or artwork are reproduced.
+      This presentation was prepared by the NETA 65 Grapevine & La Viña Committee for local service use. It is not AA Conference-approved literature and does not speak for AA as a whole or for AA Grapevine, Inc.
+    minutes: 0.25
+    notes: |
+      SAY: These are the sources for today's facts. Every quotation is credited, and everything else is in our own words. This workshop is a local service piece from our Area committee: it isn't Conference-approved literature, and it doesn't speak for AA as a whole or for AA Grapevine, Inc.
+      TIP: Page numbers refer to the 2024-2026 Service Manual. A new edition is coming; check the page numbers when it's out. No Grapevine or La Viña logos, covers or artwork are used in this presentation, on purpose.
+    version_notes:
+      short: "CUT TO 60: show for a few seconds."
+
+  # pptx 58. The Responsibility Statement, word for word, with its credit line as on the slide.
+  - id: "responsibility"
+    layout: "quote"
+    eyebrow: "Closing"
+    title: "Let's close together"
+    quote: "I am responsible. When anyone, anywhere, reaches out for help, I want the hand of A.A. always to be there. And for that: I am responsible."
+    credit: "— Responsibility Statement, written for the 1965 International Convention, Toronto"
+    minutes: 1
+    notes: |
+      SAY: Thank you all for your attention, your questions and your service. Let's close together with the Responsibility Statement. (Invite everyone to unmute and say it together, or read it slowly yourself.)
+      SAY (after): Every magazine you put in someone's hands is part of that hand of AA. Thank you for being the link.
+      TIP: Use these exact words; older committee slides had them slightly wrong. RLVs may know it in Spanish: '{lang:es}Yo soy responsable. Cuando cualquiera, dondequiera, extienda su mano pidiendo ayuda, quiero que la mano de AA siempre esté allí. Y de esto: yo soy responsable.{/lang}' ({lang:es}Manual del RLV{/lang}, 2025.)
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # pptx 59. The meeting's time and the committee's address and e-mail come from the site (config/site.yml).
+  - id: "thank-you"
+    layout: "closing"
+    title: "Thank you for your service"
+    message: "Our committee meets every 3rd Wednesday, {live:meeting_time}, on Zoom. Every AA member is welcome."
+    lines: ["NETA 65 Grapevine & La Viña Committee", "{live:email}", "{live:site}"]
+    minutes: 0.5
+    notes: |
+      SAY: Thank you for coming, and for your service to your group. If you haven't registered yet, you might do it this week; come to our committee meeting on the third Wednesday if you can; and try your one-minute announcement at your next meeting. We'd love to hear how it went.
+      DO: Leave this slide up while people leave. Share the slides afterward by the usual channel (BCC if by email). Take a picture of the room only if it's empty.
+      DO (after the workshop): note questions you promised to answer, and send the answers within a week.
+    version_notes:
+      short: "CUT TO 60: keep."
+
+  # ── For facilitators (the deck's two hidden slides): Customize → Prepare, never projected ──────────────────────
+  # pptx 60. The checklist, for the web: what stays current by itself and what the presenter still fills in or
+  # checks. Left out: the PowerPoint steps (searching the file for "[" to find the fill-ins, "it doesn't show in
+  # Slide Show") and the fixed slide numbers, now {slide:…} (the number in the version being shown), one after each
+  # slide's name, so a slide the version leaves out reads "(not in this version)" in its place. The story lines'
+  # numbers come from the site's data, as on "Not a writer? Record your story".
+  - id: "before-you-present"
+    layout: "bullets"
+    checklist: true
+    facilitator: true
+    eyebrow: "Facilitator"
+    accent: "navy"
+    title: "For facilitators: before you present"
+    items:
+      - "Fill every item in square brackets, on the slides and in the notes: {ui:customize} → {ui:your_details}"
+      - "Look over “This month” ({slide:this-month}), “Themes and deadlines” ({slide:deadlines}) and “Coming up” ({slide:coming-up}): they stay current by themselves"
+      - "Check La Viña's workshop date and the {lang:es}Reunión Abierta{/lang} on aalavina.org"
+      - "Call both story lines to test them: {live:gv_audio_phone} and {live:lv_audio_phone}"
+      - "Bring: current issues, catalogs, postcards, order forms, the QR table card"
+      - "Line up a timekeeper, a chat watcher and a Spanish-speaking helper"
+      - "Keep names out of the slides and notes: this presentation is published online"
+    notes: |
+      This page is never projected: it's in {ui:customize} → {ui:prepare} (the ticks stay on this device). It's the checklist for whoever presents the workshop.
+      FILL-INS: {ui:customize} → {ui:your_details} lists each one; one left empty shows on the slide as an orange [blank], and the player lists those before you present. The ‹blanks› in the two sample announcements are not fill-ins: they stay blank for the practice.
+      STAYS CURRENT BY ITSELF (from the committee website, rebuilt every day): the committee meeting's next date, time, Zoom ID and passcode; La Viña's next monthly workshop, its time and Zoom ID; the weekly open meetings' days, times and Zoom room; this month's issues and themes, the next story deadlines and both Books of the Month; the two story lines' numbers; the next assemblies; and the yearly prices, the ones in effect on the day you present (a price change AA Grapevine has announced switches in on its day). When the committee website has nothing to show for one of them (La Viña's themes not read yet, a Book of the Month between offers), the slide says where to look instead.
+      WHERE TO CHECK: the committee website's Monthly toolkit (/monthly/) and Events (/events/); aagrapevine.org/contribute; aalavina.org/calendario-de-eventos; neta65.org for assembly dates. Prices: only AA Grapevine's yearly prices, on 'Helping a member subscribe'; for anything else, send people to the official stores or /shop/.
+      ANONYMITY: this presentation is published on the committee's public website, notes included, and its PowerPoint copy in the committee's public Drive folder. Use service titles and the committee email only; no full names, faces, personal phone numbers or personal emails.
+      CHECK EACH TIME: La Viña's monthly workshop, usually the 4th Thursday, {live:lv_workshop_time}; in November and December La Viña has held it the Thursday before Thanksgiving and Christmas (aalavina.org/calendario-de-eventos); the {lang:es}Reunión Abierta{/lang}'s day and time (aalavina.org); both story lines: call them yourself, and if one doesn't answer, give the email option only; the Summer and Fall 2027 assembly dates (neta65.org), which were tentative in October 2026.
+      AREA GUIDANCE: the Area's own suggestions for GV/LV reps are linked on neta65.org's Grapevine / La Viña page. Where they differ from this presentation, follow the Area's guidance and your district's practice.
+
+  # pptx 61. The 60-minute plan, with its own times, written out: the 60-minute version's `version_minutes.short`
+  # add up to them (no `from`: on this page they must stay the plan's whatever version is chosen). Change a slide's
+  # short time and this plan together. Its PowerPoint tip (hide the skipped slides, right-click → Hide Slide) is the
+  # 60-minute version here.
+  - id: "sixty-minute-plan"
+    layout: "agenda"
+    facilitator: true
+    eyebrow: "Facilitator"
+    accent: "navy"
+    title: "For facilitators: the 60-minute version"
+    items:
+      - { time: "0:00", title: "Welcome and housekeeping; introductions in the chat" }
+      - { time: "0:05", title: "Basics and the service position (skip milestones and 'is and isn't')" }
+      - { time: "0:18", title: "A rep's month and the sample announcement (no practice)" }
+      - { time: "0:27", title: "Table and subscriptions (skip 'Helping a member subscribe')" }
+      - { time: "0:33", title: "Stories and digital tools (skip recording and 'Where to send')" }
+      - { time: "0:40", title: "Website, district and Area, money (skip the tracker, 'Coming up' and 'Words')" }
+      - { time: "0:49", title: "FAQ, and one scenario discussed by the whole room" }
+      - { time: "0:55", title: "Questions, resources and the Responsibility Statement" }
+    notes: |
+      This page is never projected: it's in {ui:customize} → {ui:prepare}. It's the plan for a 60-minute version, for example at a district meeting: {ui:customize} → {ui:version} → the 60-minute version. In that version, every slide's notes show a 'CUT TO 60' line saying what to keep, shorten or skip, and the TIME lines follow this plan.
+      IN SHORT: no break; introductions in the chat; skip the milestones, 'is and isn't', 'Helping a member subscribe', recording, 'Where to send a story', the tracker, 'Coming up', 'Words that help' and the second scenario slide; no pair practice and no breakout rooms. Keep the moment of silence, the money slides and the Responsibility Statement.
+      TIP: {ui:customize} → {ui:version} → the 60-minute version leaves the skipped slides out for that session; choose the full workshop again afterward.

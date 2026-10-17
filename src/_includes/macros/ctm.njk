@@ -1,0 +1,87 @@
+{#- =========================================================================
+    Carry the Message · Lleva el Mensaje — for anyone who wants to help financially. Import with:
+      {% import "macros/ctm.njk" as ctm with context %}
+
+    The two official programs, both linked wherever one is: AA Grapevine's Carry the Message (in English,
+    config/site.yml links.carry_the_message) and La Viña's Lleva el Mensaje (in Spanish, links.lleva_el_mensaje),
+    the page language's first. Both work the same way (their own pages, read October 2026): a member or a group
+    buys a "Carry the Message" gift certificate in the magazine's official store, and the office gives it to an
+    alcoholic in need (an alcoholic in prison is their example); the buyer's details are not linked to that
+    subscription. It is a purchase from the publisher, AA Grapevine, Inc. — never a donation (Grapevine and La Viña
+    take none), and our committee collects no money: the words say both, plainly, with no appeal (common.json ctm.*).
+
+    ctm.links(lang, opts) — the two programs' buttons: btn-primary (Grapevine) and btn-lv (La Viña), two lines each
+      (the program's name in its own language, then the magazine and its site), each opening a new tab (said to a
+      screen reader); the one in the other language has lang + hreflang and a small "In English" / "En español"
+      tag written in its own language. Side by side and equally wide while each gets 16rem, else one under the
+      other, full width (areas/shop.css .ctm-links) — never a lopsided pair. A link with no address in the
+      settings is left out. opts: class (on the list). Used by the card below and by the Shop's #carry band.
+    ctm.card(lang, opts) — the compact card: a gift tile, the eyebrow "Carry the Message · Lleva el Mensaje" (the
+      page language's name first), "Want to help financially?", two sentences, a small note, then ctm.links. A
+      wide card (container ≥ 56rem) puts the buttons in a column on the right; narrower, under the words. It takes
+      a whole row wherever it goes. About shows it in "Our committee" (level 3) and the 404 page under its popular
+      pages (level 2). opts: id (the card's id, default "ctm"; its heading's is id + "-h") · level (2, default,
+      or 3) · class · both (true: the title, the words and the note in the other language too, under a line,
+      smaller and muted, with lang on them — beside them, a line between, in a card 100rem wide or more. Only on
+      the 404 page: GitHub Pages answers EVERY missing address, a broken /es/… link too, with the root /404.html,
+      so a Spanish speaker sees "¿Quieres ayudar económicamente? / Nuestro comité no recibe dinero" there;
+      404.njk's script after the card also puts La Viña's button first on an /es/… address — each <li> says its
+      program's language in data-ctm).
+    Tests: tests/test_r14_ctm.py (the pages, both languages) and tests/browser/test_r14_ctm_browser.py (the layout).
+    ========================================================================= -#}
+
+{% macro links(lang, opts=null) %}
+{%- set o = opts or {} -%}
+{%- set L = site.links or {} -%}
+{%- set gv = { lang: "en", href: L.carry_the_message, mag: "AA Grapevine", cls: "btn-primary" } -%}
+{%- set lv = { lang: "es", href: L.lleva_el_mensaje, mag: "La Viña", cls: "btn-lv" } -%}
+{%- set progs = [lv, gv] if lang == "es" else [gv, lv] -%}
+<ul class="ctm-links{{ (' ' ~ o.class) if o.class }}" role="list">
+  {%- for p in progs %}{% if p.href %}
+  {%- set away = p.lang != lang %}
+  <li data-ctm="{{ p.lang }}"><a class="{{ p.cls }} ctm-btn" href="{{ p.href }}" target="_blank" rel="noopener"{% if away %} hreflang="{{ p.lang }}"{% endif %}>
+    <span class="min-w-0 flex-1">
+      <span class="ctm-btn-name"><span{% if away %} lang="{{ p.lang }}"{% endif %}>{{ "read.subs.ctm_eyebrow" | t(p.lang) }}</span>{% if away %} <span class="ctm-btn-tag" lang="{{ p.lang }}">{{ "ctm.in_lang" | t(p.lang) }}</span>{% endif %}</span>
+      <span class="ctm-btn-sub"{% if p.lang == "es" and lang != "es" %} lang="es"{% endif %}>{{ p.mag }} · {{ p.href | hostname }}</span>
+    </span>
+    {% icon "external-link", "size-4 shrink-0" %}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span>
+  </a></li>
+  {%- endif %}{% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro card(lang, opts=null) %}
+{%- set o = opts or {} -%}
+{%- set cid = o.id or "ctm" -%}
+{%- set tag = "h3" if o.level == 3 else "h2" -%}
+{%- set other = lang | otherLang -%}
+<section id="{{ cid }}" class="ctm-card card card-pad @container{{ (' ' ~ o.class) if o.class }}" aria-labelledby="{{ cid }}-h">
+  <div class="grid grid-cols-1 items-center gap-x-10 gap-y-5 @4xl:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+    <div class="flex min-w-0 items-start gap-4">
+      {#- the gift tile: left out in a card narrower than 24rem (a phone), so the words keep the width -#}
+      <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-lv-soft text-lv @max-[24rem]:hidden" aria-hidden="true">{% icon "gift", "size-5" %}</span>
+      <div class="min-w-0">
+        <p class="eyebrow text-lv">{{ "read.subs.ctm_eyebrow" | t(lang) }} · <span lang="{{ other }}">{{ "read.subs.ctm_eyebrow" | t(other) }}</span></p>
+        <div class="grid gap-x-8 @min-[100rem]:grid-cols-2">
+          <div class="min-w-0">
+            <{{ tag }} id="{{ cid }}-h" class="mt-1 font-display text-xl font-semibold leading-snug text-ink text-balance sm:text-2xl">{{ "ctm.title" | t(lang) }}</{{ tag }}>
+            <p class="mt-2 max-w-[62ch] leading-relaxed text-muted">{{ "ctm.text" | t(lang) }}</p>
+            <p class="mt-3 flex max-w-[62ch] gap-2 text-sm leading-relaxed text-muted"><span class="mt-0.5 shrink-0 text-faint">{% icon "info", "size-4" %}</span><span>{{ "ctm.note" | t(lang) }}</span></p>
+          </div>
+          {%- if o.both %}
+          {#- the same words in the other language (opts.both — the 404 page): under a line, a smaller title (not a
+              heading: one card, one heading) and the words and the note as one muted paragraph. In a card at least
+              100rem wide (a 1920px screen at normal text) beside the page language's words, a line between them,
+              so the card does not stand twice as tall beside its buttons -#}
+          <div class="ctm-other mt-4 min-w-0 max-w-[62ch] border-t border-line pt-4 @min-[100rem]:mt-1.5 @min-[100rem]:border-t-0 @min-[100rem]:border-s @min-[100rem]:ps-8 @min-[100rem]:pt-0" lang="{{ other }}">
+            <p class="font-display text-lg font-semibold leading-snug text-ink text-balance">{{ "ctm.title" | t(other) }}</p>
+            <p class="mt-1 text-sm leading-relaxed text-muted">{{ "ctm.text" | t(other) }} {{ "ctm.note" | t(other) }}</p>
+          </div>
+          {%- endif %}
+        </div>
+      </div>
+    </div>
+    {{ links(lang) }}
+  </div>
+</section>
+{% endmacro %}

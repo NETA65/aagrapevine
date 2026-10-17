@@ -1,0 +1,759 @@
+{
+ "generated": "2026-10-17T00:39:04Z",
+ "updated": "2026-10-17T00:39:04Z",
+ "fixture": false,
+ "sources": [
+  {
+   "source": "drive",
+   "label": "Google Drive (committee uploads)",
+   "label_es": "Google Drive (archivos del comité)",
+   "ok": true,
+   "updated": "2026-10-17T00:30:24Z",
+   "attempted": "2026-10-17T00:30:24Z",
+   "count": 36,
+   "new_7d": 0,
+   "error": null,
+   "stats": {
+    "mode": "html",
+    "root": "A65_GV",
+    "panels": [
+     "Panel 77 (2027–2028)"
+    ],
+    "panel_folders": [
+     {
+      "panel": 77,
+      "label": "Panel 77 (2027–2028)",
+      "name": "2027-2028_Panel77_GVLV",
+      "id": "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0"
+     }
+    ],
+    "include_loose": false,
+    "loose_skipped": 7,
+    "skipped_panels": [],
+    "folders": 11,
+    "files": 36,
+    "fetched": 36,
+    "new": 0,
+    "removed": 0,
+    "kept_unverified": 0,
+    "by_category": {
+     "booth": 15,
+     "flyers": 11,
+     "slides": 4,
+     "notes": 2,
+     "reports": 2,
+     "announcements": 1,
+     "workshops": 1
+    },
+    "by_kind": {
+     "photo": 20,
+     "document": 10,
+     "slides": 4,
+     "video_file": 1,
+     "announcement": 1
+    },
+    "albums": {},
+    "events_from_flyers": 1,
+    "excluded": 3,
+    "excluded_by_reason": {
+     "type text/csv": 1,
+     "type application/vnd.google-apps.spreadsheet": 1,
+     "name contains 'PRIVATE'": 1
+    },
+    "unreadable_folders": 0,
+    "unconfirmed_folders": 0,
+    "depth_limited": 0,
+    "shortcuts_resolved": 0,
+    "announcements": {
+     "reused": 1
+    },
+    "forms": {},
+    "requests": 11,
+    "truncated": false,
+    "warnings": [],
+    "booth_texts": {
+     "reused": 2
+    }
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "announcements",
+   "label": "Bulletin (content/bulletin)",
+   "label_es": "Boletín (content/bulletin)",
+   "ok": true,
+   "updated": "2026-10-17T00:30:24Z",
+   "attempted": "2026-10-17T00:30:24Z",
+   "count": 2,
+   "new_7d": 0,
+   "error": null,
+   "stats": {
+    "files": 2,
+    "new": 0,
+    "problems": 0,
+    "errors": [],
+    "active": 1
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "manual_events",
+   "label": "Events (content/events)",
+   "label_es": "Eventos (content/events)",
+   "ok": true,
+   "updated": "2026-10-17T00:30:24Z",
+   "attempted": "2026-10-17T00:30:24Z",
+   "count": 10,
+   "new_7d": 1,
+   "error": null,
+   "stats": {
+    "files": 10,
+    "new": 0,
+    "problems": 0,
+    "errors": []
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "articles",
+   "label": "Grapevine & La Viña articles",
+   "label_es": "Artículos de Grapevine y La Viña",
+   "ok": true,
+   "updated": "2026-10-17T00:34:59Z",
+   "attempted": "2026-10-17T00:34:59Z",
+   "count": 289,
+   "new_7d": 59,
+   "error": null,
+   "stats": {
+    "hub_articles": 57,
+    "details_fetched": 15,
+    "details_failed": 0,
+    "thumbs": 6,
+    "archive_pages": 13,
+    "archive_new": 0,
+    "covers": 1,
+    "details_pending": 15,
+    "byline_pending": 0,
+    "details_left": 0,
+    "new": 0,
+    "total": 289,
+    "requests": 36
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "writers_archive",
+   "label": "Texas writers archive (content/archive)",
+   "label_es": "Archivo de escritores de Texas (content/archive)",
+   "ok": true,
+   "updated": "2026-10-17T00:38:56Z",
+   "attempted": "2026-10-17T00:38:56Z",
+   "count": 1261,
+   "new_7d": 0,
+   "error": null,
+   "stats": {
+    "files": "aagrapevine_archive_2026-10-04.csv, aalavina_archive_2026-10-04.csv",
+    "rows": 39549,
+    "texas": 1261,
+    "neta65": 376,
+    "new": 0,
+    "changed": false,
+    "notes": [],
+    "warnings": []
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "editorial",
+   "label": "Editorial themes (upcoming issues)",
+   "label_es": "Temas editoriales (próximos números)",
+   "ok": true,
+   "updated": "2026-10-17T00:35:23Z",
+   "attempted": "2026-10-17T00:35:23Z",
+   "count": 52,
+   "new_7d": 8,
+   "error": null,
+   "stats": {
+    "gv": {
+     "parsed": 34,
+     "kept": 25,
+     "with_deadline": 15,
+     "open": 7,
+     "topics": 8
+    },
+    "lv": {
+     "parsed": 19,
+     "kept": 19,
+     "with_deadline": 0,
+     "open": 0
+    },
+    "lv_themes": {
+     "parsed": 12,
+     "kept": 8,
+     "with_deadline": 8,
+     "open": 4,
+     "years": [
+      2026,
+      2027
+     ],
+     "document": "https://www.aalavina.org/sites/default/files/2026-01/Temas_de_LV_2027_2026.pdf",
+     "label": "Temas de LV 2026 y 2027"
+    },
+    "new": 0
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "pdfs",
+   "label": "Document library (Grapevine, La Viña and AA)",
+   "label_es": "Biblioteca de documentos (La Viña, Grapevine y AA)",
+   "ok": true,
+   "updated": "2026-10-16T12:55:22Z",
+   "attempted": "2026-10-16T12:55:22Z",
+   "count": 96,
+   "new_7d": 4,
+   "error": null,
+   "stats": {
+    "known_pages": 3440,
+    "crawled_pages": 3440,
+    "never_crawled": 0,
+    "never_crawled_events": 0,
+    "pdfs": 134,
+    "pdfs_gone": 12,
+    "pdfs_with_details": 133,
+    "pdfs_with_thumbs": 133,
+    "last_run_pages": 132,
+    "fetched": 132,
+    "reused": 18,
+    "new": 1,
+    "not_modified": 0,
+    "page_errors": 0,
+    "discovered": 0,
+    "details": 1,
+    "heads": 13,
+    "requests": 146,
+    "pruned_pages": 0,
+    "queue_remaining": 0,
+    "est_days_to_full": 0.0
+   },
+   "changes": {
+    "added": 1,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "youtube",
+   "label": "YouTube videos",
+   "label_es": "Videos de YouTube",
+   "ok": true,
+   "updated": "2026-10-17T00:31:11Z",
+   "attempted": "2026-10-17T00:31:11Z",
+   "count": 536,
+   "new_7d": 2,
+   "error": null,
+   "stats": {
+    "channels": 1,
+    "rss_feeds": 35,
+    "rss_failed": 30,
+    "rss_404": 32,
+    "backfill": "not due (last 2026-10-16T12:32:13Z)",
+    "playlist_feeds": 31,
+    "shorts_probes": 0,
+    "details_pending": 0,
+    "details_fetched": 0,
+    "details_failed": 0,
+    "gone_checks": 0,
+    "gone_marked": 0,
+    "fetched": 28,
+    "new": 0,
+    "total": 536,
+    "active": 536,
+    "gone": 0,
+    "spanish": 95,
+    "shorts": 18,
+    "approx_dates": 1,
+    "playlists": 31,
+    "seconds": 44.0,
+    "warnings": [
+     "YouTube RSS unavailable (32/35 feeds answered 404) — no fresh listing this run"
+    ]
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "podcasts",
+   "label": "Podcasts",
+   "label_es": "Pódcasts",
+   "ok": true,
+   "updated": "2026-10-17T00:30:27Z",
+   "attempted": "2026-10-17T00:30:27Z",
+   "count": 302,
+   "new_7d": 2,
+   "error": null,
+   "stats": {
+    "fetched": 302,
+    "new": 0,
+    "total": 302,
+    "active": 302,
+    "gone": 0,
+    "spanish": 0,
+    "shows": {
+     "gv": {
+      "ok": true,
+      "episodes": 265,
+      "latest": "2026-10-12T04:15:00Z"
+     },
+     "wo": {
+      "ok": true,
+      "episodes": 37,
+      "latest": "2026-10-16T04:15:00Z"
+     }
+    },
+    "missing_from_feed": 0,
+    "gone_checks": 0,
+    "discovery_checked": "2026-10-16T12:31:47Z",
+    "discovered_feeds": [],
+    "seconds": 2.7,
+    "artwork": 3,
+    "artwork_missing": 0,
+    "artwork_removed": 0
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "instagram",
+   "label": "Instagram posts",
+   "label_es": "Publicaciones de Instagram",
+   "ok": true,
+   "updated": "2026-10-17T00:31:29Z",
+   "attempted": "2026-10-17T00:31:29Z",
+   "count": 108,
+   "new_7d": 25,
+   "error": null,
+   "stats": {
+    "strategy": {
+     "gv": "profile_embed",
+     "lv": "profile_embed"
+    },
+    "attempts": {
+     "gv": [
+      "graph_api: skipped — not configured (optional GitHub secrets IG_ACCESS_TOKEN + IG_BUSINESS_ID)",
+      "profile_embed: 6 posts"
+     ],
+     "lv": [
+      "graph_api: skipped — not configured (optional GitHub secrets IG_ACCESS_TOKEN + IG_BUSINESS_ID)",
+      "profile_embed: 6 posts"
+     ]
+    },
+    "fetched": 12,
+    "manual": 0,
+    "removal": {
+     "checked": 5,
+     "missing": [],
+     "removed": []
+    },
+    "pruned": 0,
+    "thumbs_deleted": 0,
+    "new": 0,
+    "total": 108,
+    "per_account": {
+     "gv": 60,
+     "lv": 48
+    },
+    "requests": 7,
+    "anonymous": true,
+    "graph_api": false
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "weekly_open",
+   "label": "Grapevine Weekly Open meeting",
+   "label_es": "Reunión Grapevine Weekly Open",
+   "ok": true,
+   "updated": "2026-10-17T00:35:28Z",
+   "attempted": "2026-10-17T00:35:28Z",
+   "count": 2,
+   "new_7d": 0,
+   "error": null,
+   "stats": {
+    "found": [
+     "zoom_id",
+     "passcode",
+     "day",
+     "time"
+    ],
+    "missing": []
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "events_external",
+   "label": "GV/LV event calendars",
+   "label_es": "Calendarios de eventos de GV/LV",
+   "ok": true,
+   "updated": "2026-10-17T00:38:52Z",
+   "attempted": "2026-10-17T00:38:52Z",
+   "count": 2,
+   "new_7d": 0,
+   "error": null,
+   "stats": {
+    "discovery": "sitemap",
+    "discovery_complete": true,
+    "upcoming_urls": 19,
+    "kept_from_cache": 0,
+    "fetched": 0,
+    "refreshed": 3,
+    "failed": 0,
+    "pending": 0,
+    "cached": 19,
+    "texas": 1,
+    "online_es": 1,
+    "items": 2,
+    "new": 0,
+    "requests": 68
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "shop",
+   "label": "Book of the Month, prices & specialty items",
+   "label_es": "Libro del mes, precios y artículos especiales",
+   "ok": true,
+   "updated": "2026-10-17T00:37:22Z",
+   "attempted": "2026-10-17T00:37:22Z",
+   "count": 62,
+   "new_7d": 0,
+   "error": null,
+   "stats": {
+    "botm": 2,
+    "plans": 52,
+    "specialty": 8,
+    "types_refreshed": false,
+    "specialty_refreshed": true,
+    "requests": 20,
+    "images_downloaded": 0
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "audio_project",
+   "label": "Record your story by phone (Grapevine & La Viña)",
+   "label_es": "Graba tu historia por teléfono (La Viña y Grapevine)",
+   "ok": true,
+   "updated": "2026-10-17T00:37:38Z",
+   "attempted": "2026-10-17T00:37:38Z",
+   "count": 2,
+   "new_7d": 0,
+   "error": null,
+   "stats": {
+    "parts": 2,
+    "fresh": [
+     "gv",
+     "lv"
+    ],
+    "requests": 3
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "meetings",
+   "label": "Grapevine meetings (our Area and nearby)",
+   "label_es": "Reuniones de Grapevine (nuestra Área y cercanas)",
+   "ok": true,
+   "updated": "2026-10-17T00:38:34Z",
+   "attempted": "2026-10-17T00:38:34Z",
+   "count": 23,
+   "new_7d": 0,
+   "error": null,
+   "stats": {
+    "offices": 8,
+    "offices_ok": 7,
+    "listed": 5133,
+    "grapevine": 24,
+    "meetings": 23,
+    "in_area": 13,
+    "nearby": 10,
+    "inactive": 0,
+    "incomplete": 0,
+    "duplicates_merged": 1,
+    "kept_from_before": 0,
+    "requests": 9,
+    "warnings": [
+     "Northwest Texas Area 66: nwta66.org answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept"
+    ]
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  },
+  {
+   "source": "quote",
+   "label": "Daily quote",
+   "label_es": "Cita del día",
+   "ok": true,
+   "updated": "2026-10-17T00:39:02Z",
+   "attempted": "2026-10-17T00:39:02Z",
+   "count": 2,
+   "new_7d": 2,
+   "error": null,
+   "stats": {
+    "fetched": 2,
+    "parsed": 2,
+    "requests": 2,
+    "today": "2026-10-16",
+    "new": 0
+   },
+   "changes": {
+    "added": 0,
+    "removed": 0,
+    "held": 0
+   },
+   "held": null
+  }
+ ],
+ "scheduled": [
+  {
+   "publish": "2027-01-01",
+   "title": "New Grapevine and La Viña prices are now in effect",
+   "source": "committee",
+   "file": "content/bulletin/2027-01-01-new-prices-in-effect.md"
+  }
+ ],
+ "quote_days": {
+  "goal": "05:30",
+  "days": [
+   {
+    "day": "2026-10-16",
+    "goal_at": "2026-10-16T10:30:00Z",
+    "gv": "2026-10-16T09:56:47Z",
+    "lv": "2026-10-16T09:56:57Z"
+   },
+   {
+    "day": "2026-10-15",
+    "goal_at": "2026-10-15T10:30:00Z",
+    "gv": "2026-10-15T10:04:15Z",
+    "lv": "2026-10-15T10:04:26Z"
+   },
+   {
+    "day": "2026-10-14",
+    "goal_at": "2026-10-14T10:30:00Z",
+    "gv": "2026-10-14T07:12:31Z",
+    "lv": "2026-10-14T07:12:41Z"
+   },
+   {
+    "day": "2026-10-13",
+    "goal_at": "2026-10-13T10:30:00Z",
+    "gv": "2026-10-13T09:14:03Z",
+    "lv": "2026-10-13T09:14:13Z"
+   },
+   {
+    "day": "2026-10-12",
+    "goal_at": "2026-10-12T10:30:00Z",
+    "gv": "2026-10-12T07:28:29Z",
+    "lv": "2026-10-12T07:28:39Z"
+   },
+   {
+    "day": "2026-10-11",
+    "goal_at": "2026-10-11T10:30:00Z",
+    "gv": "2026-10-11T10:04:16Z",
+    "lv": "2026-10-11T10:04:30Z"
+   },
+   {
+    "day": "2026-10-10",
+    "goal_at": "2026-10-10T10:30:00Z",
+    "gv": "2026-10-10T07:16:57Z",
+    "lv": "2026-10-10T07:17:07Z"
+   }
+  ]
+ },
+ "full_update": "2026-10-17T00:38:52Z",
+ "crawl": {
+  "attempted": "2026-10-16T12:55:22Z",
+  "crawled_pages": 3440,
+  "est_days_to_full": 0.0,
+  "known_pages": 3440,
+  "last_run_pages": 132,
+  "never_crawled": 0,
+  "never_crawled_events": 0,
+  "new": 1,
+  "page_errors": 0,
+  "pdfs": 96,
+  "pdfs_gone": 12,
+  "pdfs_with_details": 133,
+  "pdfs_with_thumbs": 96,
+  "queue_remaining": 0,
+  "updated": "2026-10-16T12:55:22Z"
+ },
+ "translations": {
+  "cached": 4010,
+  "engine": "argos1.0-ct2/v6",
+  "model_enabled": true,
+  "translated_this_run": 8,
+  "from_cache": 4002,
+  "pending": 0,
+  "rejected_by_guard": 0,
+  "seconds": 1.1,
+  "model_seconds": 0.7,
+  "texts_per_second": 7.2,
+  "glossary_entries": 260,
+  "problems": []
+ },
+ "counts": {
+  "videos": 536,
+  "episodes": 302,
+  "instagram": 108,
+  "articles": 289,
+  "pdfs": 96,
+  "drive": 20,
+  "editorial": 52,
+  "weekly_open": 2,
+  "announcements": 2,
+  "events": 42,
+  "whatsnew": 150,
+  "shop": 62,
+  "writers_archive": 1267,
+  "meetings": 23,
+  "audio_project": 2,
+  "quote": 2,
+  "booth": 14
+ },
+ "problems": {},
+ "feeds": [
+  {
+   "key": "neta-65-workshops",
+   "url": "https://neta65.org/events/category/workshop/list/?ical=1",
+   "label": "NETA 65 workshops",
+   "label_es": "Talleres de NETA 65",
+   "category": "neta65",
+   "group": "neta",
+   "state": "blocked",
+   "http_status": 403,
+   "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
+   "last_success": null,
+   "last_attempt": "2026-10-16T09:57:05Z",
+   "checked_this_run": false,
+   "from_copy": false,
+   "events_count": 0,
+   "duplicates": 0,
+   "notes": []
+  }
+ ],
+ "items": [],
+ "spotlight": {
+  "today": "2026-10-16",
+  "home_days": 60,
+  "list_days": [
+   60,
+   90
+  ],
+  "counts": {
+   "60": {
+    "neta65": 4,
+    "texas": 11,
+    "all": 122
+   },
+   "90": {
+    "neta65": 5,
+    "texas": 14,
+    "all": 152
+   }
+  },
+  "items": 152
+ },
+ "writers_archive": {
+  "files": {
+   "gv": {
+    "name": "aagrapevine_archive_2026-10-04.csv",
+    "name_date": "2026-10-04",
+    "rows": 35942,
+    "texas_rows": 819,
+    "imported_at": "2026-10-05T01:28:59Z"
+   },
+   "lv": {
+    "name": "aalavina_archive_2026-10-04.csv",
+    "name_date": "2026-10-04",
+    "rows": 3607,
+    "texas_rows": 444,
+    "imported_at": "2026-10-05T01:28:59Z"
+   }
+  },
+  "items": 1267,
+  "neta65": 379,
+  "texas": 1267,
+  "csv_only": 1245,
+  "capture_only": 6,
+  "both": 16
+ },
+ "reminders": []
+}

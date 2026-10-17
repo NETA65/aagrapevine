@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!-- Test fixture: a La Viña calendar event page in the site's own markup — an online workshop at a time of
+     day (7:00–8:30 PM Central), whose location is only its Zoom link. Made up; the Zoom room is fake. -->
+<html lang="es" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<script type="application/ld+json">{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Event",
+            "url": "https://www.aalavina.org/get-involved/events/2026-10-22/taller-mensual-lv",
+            "name": "Taller mensual LV",
+            "startDate": "2026-10-22T19:00:00-0500",
+            "endDate": "2026-10-22T20:30:00-0500",
+            "location": {"@type": "Place", "name": "https://us06web.zoom.us/j/12345678901"}
+        }
+    ]
+}</script>
+<title>Taller mensual LV | AA La Viña</title>
+</head>
+<body>
+<h1 class="page-title"><span class="field field--name-title field--type-string field--label-hidden">Taller mensual LV</span></h1>
+<main role="main" class="outer-wrapper">
+       <div class="view-mode-full node--type-event">
+          <div class="content">
+        <div class="image-region"></div>
+        <div class="main-region">
+  <div class="field field--name-field-daterange field--type-daterange field--label-inline">
+    <div class="field__label">Fecha</div>
+              <div class="field__item">Octubre 22, 2026 7:00pm - 8:30pm</div>
+          </div>
+  <div class="field field--name-field-event-location field--type-string field--label-inline">
+    <div class="field__label">Ubicación</div>
+              <div class="field__item">https://us06web.zoom.us/j/12345678901</div>
+          </div>
+            <div class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item"><p>Taller informativo mensual de La Viña: cómo compartir tu historia con la revista y cómo funciona la suscripción. Anfitriones: comité de La Viña.<br>
+Información: comite@example.org · Tel: 555-010-0123</p></div>
+        </div>
+      </div>
+      </div>
+</main>
+</body>
+</html>

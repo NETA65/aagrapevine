@@ -1,0 +1,46 @@
+---
+# The old /app/ address (and /es/app/) → the steps to install the site as an app, now on Saved pages &
+# app (/offline/#steps). A tiny stand-alone page (the same pattern as expenses-redirect.njk): JavaScript
+# keeps the #anchor — a guide's (#android, #iphone, #in-app …: the same ids) — and any ?query; with no
+# anchor, and without JavaScript (the meta refresh), it goes to #steps, where the old page's steps are.
+# noindex + canonical point search engines at /offline/, and the stub is kept out of the sitemap, the
+# search index and page lists.
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}app/index.html"
+layout: false
+sitemap: false
+eleventyExcludeFromCollections: true
+---
+{%- set target = "/offline/" | lurl(lang) -%}
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+{#- the base plugin does not rewrite script text, so the url filter adds the path prefix -#}
+<script>location.replace({{ (target | url) | dump | safe }} + location.search + (location.hash || "#steps"));</script>
+<meta http-equiv="refresh" content="0; url={{ target }}#steps">{#- the HTML base plugin adds the path prefix here -#}
+<meta name="robots" content="noindex">
+<link rel="canonical" href="{{ target | siteUrl(site) }}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<title>{{ "nav.offline" | t(lang) }} · {{ site | pick(lang, "title") }}</title>
+<style>
+  :root { color-scheme: light dark; --paper: #fbf8f2; --ink: #1d1a26; --muted: #57526a; --link: #0a5fa8; }
+  @media (prefers-color-scheme: dark) { :root { --paper: #121019; --ink: #eeeaf6; --muted: #b3adc4; --link: #8cc2f2; } }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 16px; box-sizing: border-box;
+         font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--paper); color: var(--ink); }
+  main { max-width: 34rem; text-align: center; overflow-wrap: anywhere; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-size: 1.6rem; margin: 0 0 .5rem; }
+  p { margin: .5rem 0; color: var(--muted); }
+  a { color: var(--link); font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>{{ "read.subs.moved_title" | t(lang) }}</h1>
+  <p>{{ "pwa.app.moved_text" | t(lang) }}</p>
+  <p><a id="go" href="{{ target }}#steps">{{ "nav.offline" | t(lang) }} →</a></p>
+</main>
+<script>if (location.hash) document.getElementById("go").hash = location.hash;</script>
+</body>
+</html>

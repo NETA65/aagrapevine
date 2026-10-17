@@ -1,0 +1,115 @@
+{#- =========================================================================
+    Media-area macros (Listen, Watch, Instagram). Import with:
+      {% import "macros/media.njk" as media with context %}
+
+    media.shareBlock(lang, id, text, announcement, shareUrl, shareTitle, shareText="")
+      The closing "Tell your group" block of every media page: ONE title
+      ("media.share_title"), ONE tone (grape) — a megaphone tile, a line for GVRs/RLVs,
+      the announcement to read out or paste (with a Copy button) and "Share this page".
+      It is the page's last block: the footer's own top margin is the gap below it.
+        {{ media.shareBlock(lang, "listen-share-title", "media.share_listen_text" | t(lang), announcement,
+             page.url | siteUrl(site), "media.listen_share_title" | t(lang), "media.listen_sub" | t(lang)) }}
+
+    media.magVideo(v, lang, opts=null)
+      One of AA Grapevine's videos about the magazines (config/site.yml about_videos → the readAboutVideos filter,
+      eleventy/filters/read.js: id, isLv, lang, title, summary, url, seconds, tr), on About (#videos) and on the
+      GVR / RLV corner (/gvr/ #ideas). Its player is lite-youtube, privacy-enhanced: only the preview picture loads
+      until it is played, and with Data saver not even that (pwa.js "Load video (uses data)"). THE PAGE MUST LOAD
+      lite-youtube — pageScripts: ["/assets/vendor/lite-yt-embed.js", …], pageStyles: ["/assets/vendor/lite-yt-embed.css"].
+      The magazine, the video's language and length, its title in its own language (lang="…" on the other-language
+      page) and, there, our translation (v.tr).
+        {{ media.magVideo(v, lang) }}                              About: the full card — player · badges · title ·
+                                                                   summary · our translation (its title, the summary
+                                                                   one tap away) · "Watch on YouTube": six parts, the
+                                                                   rows of about.njk's subgrid from 1024px
+        {{ media.magVideo(v, lang, { compact: true, h: 4 }) }}     /gvr/: player · badges · title, and on the
+                                                                   other-language page our translated title, small —
+                                                                   no summary, no button (read.css .read-vid-c: the
+                                                                   player above its words or beside them, by the
+                                                                   width of its list); not printed
+      opts: compact, h (the title's heading level: 3, or 4 inside a card with its own h3). One card per video and page
+      (its title's id is vid-<id>-h).
+    ========================================================================= -#}
+{% macro shareBlock(lang, id, text, announcement, shareUrl, shareTitle, shareText="") %}
+<section class="container-page" aria-labelledby="{{ id }}">
+  <div class="card media-anywhere media-share p-6 sm:p-8">
+    <span class="grid size-14 place-items-center rounded-2xl bg-grape-soft text-grape">{% icon "megaphone", "size-7" %}</span>
+    <div>
+      <h2 id="{{ id }}" class="h-section">{{ "media.share_title" | t(lang) }}</h2>
+      <p class="measure mt-2 text-muted">{{ text }}</p>
+    </div>
+    <div class="media-share-quote">
+      <blockquote class="rounded-2xl border border-line bg-surface p-4 font-display text-lg leading-snug text-ink [overflow-wrap:anywhere]">{{ announcement }}</blockquote>
+      <div class="mt-4 grid grid-cols-1 gap-2 min-[25rem]:flex min-[25rem]:flex-wrap sm:gap-3">
+        <button type="button" class="btn-primary btn-sm" data-js-only data-copy="{{ announcement }}">{% icon "copy", "size-4" %} {{ "media.copy_announcement" | t(lang) }}</button>
+        <button type="button" class="btn-secondary btn-sm" data-js-only data-share="{{ shareUrl }}" data-share-title="{{ shareTitle }}"{% if shareText %} data-share-text="{{ shareText }}"{% endif %}>{% icon "share-2", "size-4" %} {{ "media.share_page" | t(lang) }}</button>
+      </div>
+    </div>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro magVideo(v, lang, opts=null) %}
+{%- set o = opts or {} -%}
+{%- set hx = "h" ~ (o.h or 3) -%}
+{%- set play = ("media.play" | t(lang)) ~ ": " ~ v.title -%}
+{%- set other = v.lang != lang -%}
+{%- set player -%}
+        <lite-youtube videoid="{{ v.id }}" class="media-lyt" params="rel=0&amp;playsinline=1&amp;hl={{ lang }}"
+                      style="background-image: url('{{ v.id | ytThumb('hqdefault') }}');" playlabel="{{ play }}">
+          <a href="{{ v.url }}" class="lyt-playbtn" title="{{ play }}" target="_blank" rel="noopener"><span class="lyt-visually-hidden">{{ play }}</span></a>
+        </lite-youtube>
+{%- endset -%}
+{%- set badges -%}
+        <span class="{{ 'badge-lv' if v.isLv else 'badge-gv' }}">{% icon "grapes", "size-3" %} {{ "La Viña" if v.isLv else "Grapevine" }}</span>
+        <span class="badge-muted">{% icon "languages", "size-3" %} {{ ("committee.weekly.lang_" + v.lang) | t(lang) }}</span>
+        {%- if v.seconds %}
+        <span class="inline-flex items-center gap-1 text-sm text-muted">{% icon "clock-3", "size-3.5 shrink-0" %}<span class="sr-only">{{ "read.about.vid_length" | t(lang) }}:</span> {{ v.seconds | mediaMinutes }}</span>
+        {%- endif %}
+{%- endset -%}
+{%- if o.compact %}
+    <article class="read-vid-c min-w-0 print:hidden" aria-labelledby="vid-{{ v.id }}-h">
+      <div class="read-vid-c-player">
+{{ player | safe }}
+      </div>
+      <div class="min-w-0">
+        <p class="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+{{ badges | safe }}
+        </p>
+        <{{ hx }} id="vid-{{ v.id }}-h" class="read-vid-c-title"{% if other %} lang="{{ v.lang }}"{% endif %}>{{ v.title }}</{{ hx }}>
+        {#- our translated title (the other-language page only), small under the original -#}
+        {%- if v.tr and v.tr.title %}
+        <p class="mt-1 flex items-start gap-1.5 text-sm leading-snug text-muted">{% icon "languages", "mt-0.5 size-3.5 shrink-0 text-grape" %}<span class="min-w-0"><span class="sr-only">{{ "read.about.vid_tr" | t(lang) }}: </span>{{ v.tr.title }}{% if v.tr.machine %} <span class="auto-note" title="{{ 'common.auto_translated_help' | t(lang) }}">{{ "common.auto_translated" | t(lang) }}</span>{% endif %}</span></p>
+        {%- endif %}
+      </div>
+    </article>
+{%- else %}
+    <article class="card read-vid flex min-w-0 flex-col overflow-hidden lg:row-span-6 lg:grid lg:grid-rows-subgrid" aria-labelledby="vid-{{ v.id }}-h">
+      <div class="read-vid-player">
+{{ player | safe }}
+      </div>
+      <p class="flex flex-wrap items-center gap-x-2 gap-y-1.5 px-5 pt-5 sm:px-6">
+{{ badges | safe }}
+      </p>
+      <{{ hx }} id="vid-{{ v.id }}-h" class="h-card mt-3 px-5 text-balance sm:px-6"{% if other %} lang="{{ v.lang }}"{% endif %}>{{ v.title }}</{{ hx }}>
+      <div class="px-5 sm:px-6">{% if v.summary %}<p class="mt-2 leading-relaxed text-muted"{% if other %} lang="{{ v.lang }}"{% endif %}>{{ v.summary }}</p>{% endif %}</div>
+      {#- our translation (the other-language page only): the translated title shows, the summary opens under it -#}
+      <div class="px-5 sm:px-6">
+        {%- if v.tr and (v.tr.title or v.tr.summary) %}
+        <details class="read-vid-tr group/tr mt-4">
+          <summary>
+            {% icon "languages", "size-4 mt-0.5 shrink-0 text-grape" %}
+            <span class="min-w-0 flex-1"><span class="eyebrow block">{{ "read.about.vid_tr" | t(lang) }}</span>{% if v.tr.title %}<span class="mt-0.5 block font-semibold leading-snug text-ink">{{ v.tr.title }}</span>{% endif %}</span>
+            {% icon "chevron-down", "size-4 mt-0.5 shrink-0 text-muted transition group-open/tr:rotate-180" %}
+          </summary>
+          <div class="px-4 pb-4">
+            {% if v.tr.summary %}<p class="text-sm leading-relaxed text-muted">{{ v.tr.summary }}</p>{% endif %}
+            {% if v.tr.machine %}<p class="mt-2"><span class="auto-note" title="{{ 'common.auto_translated_help' | t(lang) }}">{% icon "languages", "size-3" %} {{ "common.auto_translated" | t(lang) }}</span></p>{% endif %}
+          </div>
+        </details>
+        {%- endif %}
+      </div>
+      <p class="mt-auto px-5 pt-5 pb-5 sm:px-6 sm:pb-6"><a class="btn-secondary btn-sm" href="{{ v.url }}" target="_blank" rel="noopener">{% icon "youtube", "size-4" %} {{ "media.watch_on_yt" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
+    </article>
+{%- endif %}
+{% endmacro %}

@@ -1,0 +1,39 @@
+# robots.txt for https://neta65.github.io/ - the NETA65 account's GitHub Pages address.
+#
+# What it is: the file search engines read before they visit any page under this address.
+# They read it ONLY here, at the root of the address (never in a folder), so these lines
+# cover every NETA65 site published under it: /aagrapevine/ (the Grapevine / La Viña
+# committee site), /GV_Booth/, /Archives_Booth/ and any other public NETA65 repository
+# that uses GitHub Pages.
+#
+# Where it lives: the top folder of the repository NETA65/neta65.github.io. The master
+# copy is docs/user-site/robots.txt in NETA65/aagrapevine; the steps are in that
+# repository's README, section "Search engines". Every Sunday its Weekly link check reads
+# this file and reports in its issue if it ever keeps Google or Bing out of the site or
+# loses the Sitemap line.
+#
+# Everything may be crawled. Keep it that way: never add "Disallow: /" - it would hide
+# every NETA65 site from Google, Bing and every other search engine. No other Disallow
+# lines either: search engines need the sites' styles, scripts and data files to show
+# the pages.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://neta65.github.io/aagrapevine/sitemap.xml
+
+# ------------------------------------------------------------------------------------
+# OPTIONAL - the owner's choice, OFF as delivered. To turn it on, delete the "# " at the
+# start of the six lines from "User-agent: GPTBot" to "Disallow: /" (nothing else).
+# It asks the crawlers that collect pages to TRAIN AI models to stay away from every
+# NETA65 site under this address. Search engines (Googlebot, Bingbot) and the crawlers
+# behind AI search answers (OAI-SearchBot for ChatGPT search, Claude-SearchBot,
+# PerplexityBot) stay allowed, so the sites still show in search results and in AI
+# answers that link to them. The Grapevine and La Viña magazines' own websites
+# (aagrapevine.org, aalavina.org) keep GPTBot out the same way.
+# User-agent: GPTBot
+# User-agent: ClaudeBot
+# User-agent: Google-Extended
+# User-agent: CCBot
+# User-agent: Applebot-Extended
+# Disallow: /
