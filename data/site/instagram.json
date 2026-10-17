@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-17T00:31:29Z",
+ "updated": "2026-10-17T11:41:25Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16924,
-   "posts": 3944,
+   "posts": 3945,
    "owner_id": "48108439509",
-   "checked": "2026-10-17T00:31:13Z",
+   "checked": "2026-10-17T11:41:08Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,99 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2421,
-   "posts": 2972,
+   "posts": 2973,
    "owner_id": "48275839129",
-   "checked": "2026-10-17T00:31:16Z",
+   "checked": "2026-10-17T11:41:11Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DemARUxjcu8",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DemARUxjcu8/",
+   "title": "“I make a conscious effort to keep it simple, because the simpler I make it, the happier…",
+   "summary": "“I make a conscious effort to keep it simple, because the simpler I make it, the happier I become.” “An English Gentleman,” Clevedon, Somerset, December 1999, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-17T11:30:15Z",
+   "first_seen": "2026-10-17T11:41:25Z",
+   "image": "/assets/cache/ig/DemARUxjcu8.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DemARUxjcu8",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DemARUxjcu8.webp",
+    "embed_url": "https://www.instagram.com/p/DemARUxjcu8/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DemARUxjcu8/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I make a conscious effort to keep it simple, because the simpler I make it, the happier…",
+     "es": "“Hago un esfuerzo consciente para mantenerlo simple, porque lo más simple que hago, el más feliz …"
+    },
+    "summary": {
+     "en": "“I make a conscious effort to keep it simple, because the simpler I make it, the happier I become.” “An English Gentleman,” Clevedon, Somerset, December 1999, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“Hago un esfuerzo consciente para mantenerlo sencillo, porque cuanto más simple lo hago, más feliz me vuelvo.” “Un caballero inglés”, Clevedon, Somerset, diciembre de 1999, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DemARUYjVzZ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DemARUYjVzZ/",
+   "title": "“Al aplicar los principios del programa, me gané mi libertad —la libertad de ser quien…",
+   "summary": "“Al aplicar los principios del programa, me gané mi libertad —la libertad de ser quien verdaderamente soy, de gustarme como soy, de convertirme en lo que mi Poder Superior me tenga deparado, un día a la vez; de tener la clase de vida con la que me sienta más a gusto, de amar y de reír—”. \"“Antes que nada, alcohólico” TOLEDO, OHIO, SEPTIEMBRE DE 1982 De In Our Own Words\" Cita Diaria en…",
+   "lang": "es",
+   "date": "2026-10-17T11:30:14Z",
+   "first_seen": "2026-10-17T11:41:25Z",
+   "image": "/assets/cache/ig/DemARUYjVzZ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DemARUYjVzZ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DemARUYjVzZ.webp",
+    "embed_url": "https://www.instagram.com/p/DemARUYjVzZ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DemARUYjVzZ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“In applying the principles of the program, I earned my freedom—the freedom to be who …",
+     "es": "“Al aplicar los principios del programa, me gané mi libertad —la libertad de ser quien…"
+    },
+    "summary": {
+     "en": "“By applying the principles of the program, I earned my freedom—the freedom to be who I truly am, to like myself as I am, to become what my Higher Power has left me, One Day at a Time; to have the kind of life that I feel most comfortable with, to love and to laugh with.” \"Before nothing, alcoholic\" TOLEDO, OHIO, SEPTEMBER 1982 From In Our Own Words Daily Quote in …",
+     "es": "“Al aplicar los principios del programa, me gané mi libertad —la libertad de ser quien verdaderamente soy, de gustarme como soy, de convertirme en lo que mi Poder Superior me tenga deparado, un día a la vez; de tener la clase de vida con la que me sienta más a gusto, de amar y de reír—”. \"“Antes que nada, alcohólico” TOLEDO, OHIO, SEPTIEMBRE DE 1982 De In Our Own Words\" Cita Diaria en…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DejeZPBgZ4H",
    "source": "instagram",
@@ -2264,7 +2350,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeB9JEilxio",
@@ -2307,7 +2393,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Dd_kdS2Ri0d",

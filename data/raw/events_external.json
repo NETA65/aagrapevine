@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-10-17T00:38:52Z",
- "attempted": "2026-10-17T00:38:52Z",
+ "updated": "2026-10-17T11:45:42Z",
+ "attempted": "2026-10-17T11:45:42Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,7 +15,7 @@
   "upcoming_urls": 19,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 3,
+  "refreshed": 0,
   "failed": 0,
   "pending": 0,
   "cached": 19,
@@ -23,7 +23,7 @@
   "online_es": 1,
   "items": 2,
   "new": 0,
-  "requests": 68
+  "requests": 36
  },
  "items": [
   {
