@@ -1,7 +1,7 @@
 {
  "source": "quote",
- "updated": "2026-10-17T22:12:36Z",
- "attempted": "2026-10-17T22:12:36Z",
+ "updated": "2026-10-18T06:04:05Z",
+ "attempted": "2026-10-18T06:04:05Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -13,7 +13,7 @@
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-17",
+  "today": "2026-10-18",
   "new": 0
  },
  "items": [
@@ -245,19 +245,6 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-05T09:08:06Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-04",
-    "heading": "Grapevine Daily Quote October 4",
-    "text": "My life and the lives of those around me do, in fact, form their own parts in a symphony of interaction.",
-    "attribution": "“A New Way of Looking at Life,” Columbus, Ohio, April 1981, Voices of Long-Term Sobriety",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-04T11:24:09Z"
    }
   ],
   "lv": [
@@ -429,19 +416,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-05T09:08:16Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-04",
-    "heading": "Cita Diaria con La Viña Octubre 4",
-    "text": "Dejemos que los problemas de hoy se circunscriban al presente.",
-    "attribution": "“Destilación del espíritu”. INDIANÁPOLIS, INDIANA, AGOSTO DE 1982. Del AA Grapevine",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-04T11:24:19Z"
    }
   ]
  }
