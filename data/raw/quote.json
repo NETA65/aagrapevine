@@ -1,12 +1,12 @@
 {
  "source": "quote",
- "updated": "2026-10-18T06:04:05Z",
- "attempted": "2026-10-18T06:04:05Z",
+ "updated": "2026-10-18T11:23:33Z",
+ "attempted": "2026-10-18T11:23:33Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
@@ -14,69 +14,82 @@
   "parsed": 2,
   "requests": 2,
   "today": "2026-10-18",
-  "new": 0
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-17",
+   "id": "quote:gv:2026-10-18",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 17",
+   "title": "Grapevine Daily Quote October 18",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-17",
-   "first_seen": "2026-10-17T09:29:56Z",
-   "last_seen": "2026-10-17T09:29:56Z",
+   "date": "2026-10-18",
+   "first_seen": "2026-10-18T11:23:33Z",
+   "last_seen": "2026-10-18T11:23:33Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "I make a conscious effort to keep it simple, because the simpler I make it, the happier I become.",
-    "attribution": "“An English Gentleman,” Clevedon, Somerset, December 1999, Voices of Long-Term Sobriety",
+    "text": "As an individual I am so small I’m almost totally meaningless in the universe; it’s almost as if I didn’t exist. But not quite ... As small as I am, I’m not totally meaningless.",
+    "attribution": "“The Real Thing,” New York, New York, February 2001, Voices of Long-Term Sobriety",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 17",
+    "date_label": "October 18",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84350"
+    "node": "node-84351"
    }
   },
   {
-   "id": "quote:lv:2026-10-17",
+   "id": "quote:lv:2026-10-18",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 17",
+   "title": "Cita Diaria con La Viña Octubre 18",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-17",
-   "first_seen": "2026-10-17T09:29:56Z",
-   "last_seen": "2026-10-17T09:29:56Z",
+   "date": "2026-10-18",
+   "first_seen": "2026-10-18T11:23:33Z",
+   "last_seen": "2026-10-18T11:23:33Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "Al aplicar los principios del programa, me gané mi libertad —la libertad de ser quien verdaderamente soy, de gustarme como soy, de convertirme en lo que mi Poder Superior me tenga deparado, un día a la vez; de tener la clase de vida con la que me sienta más a gusto, de amar y de reír—.",
-    "attribution": "“Antes que nada, alcohólico”. TOLEDO, OHIO, SEPTIEMBRE DE 1982",
-    "source": "In Our Own Words",
+    "text": "Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas en que las aplicamos a nosotros mismos, a AA en su totalidad y a nuestras relaciones con el mundo que nos rodea. Podemos seguir perfeccionando ‘la práctica de estos principios en todos nuestros asuntos’.",
+    "attribution": "“Una perspectiva del porvenir”. BILL W., COFUNDADOR DE AA, FEBRERO DE 1961",
+    "source": "I Am Responsible",
     "source_lang": "en",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "17 de octubre",
+    "date_label": "18 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84359"
+    "node": "node-84360"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-18",
+    "heading": "Grapevine Daily Quote October 18",
+    "text": "As an individual I am so small I’m almost totally meaningless in the universe; it’s almost as if I didn’t exist. But not quite ... As small as I am, I’m not totally meaningless.",
+    "attribution": "“The Real Thing,” New York, New York, February 2001, Voices of Long-Term Sobriety",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-18T11:23:23Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -248,6 +261,19 @@
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-18",
+    "heading": "Cita Diaria con La Viña Octubre 18",
+    "text": "Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas en que las aplicamos a nosotros mismos, a AA en su totalidad y a nuestras relaciones con el mundo que nos rodea. Podemos seguir perfeccionando ‘la práctica de estos principios en todos nuestros asuntos’.",
+    "attribution": "“Una perspectiva del porvenir”. BILL W., COFUNDADOR DE AA, FEBRERO DE 1961",
+    "source": "I Am Responsible",
+    "source_lang": "en",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-18T11:23:33Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
