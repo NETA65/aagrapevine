@@ -1,7 +1,7 @@
 {
  "source": "drive",
- "updated": "2026-10-18T11:23:17Z",
- "attempted": "2026-10-18T11:23:17Z",
+ "updated": "2026-10-18T12:06:16Z",
+ "attempted": "2026-10-18T12:06:16Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -61,10 +61,10 @@
   "depth_limited": 0,
   "shortcuts_resolved": 0,
   "announcements": {
-   "fetched": 1
+   "reused": 1
   },
   "forms": {},
-  "requests": 12,
+  "requests": 11,
   "truncated": false,
   "warnings": [],
   "booth_texts": {

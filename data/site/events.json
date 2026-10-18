@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-16T22:46:00Z",
+ "updated": "2026-10-18T12:16:46Z",
  "fixture": false,
  "items": [
   {
@@ -599,6 +599,58 @@
    },
    "machine": [],
    "is_new": false
+  },
+  {
+   "id": "ev:gvcal:10b73392e7d8",
+   "source": "calendar",
+   "kind": "event",
+   "url": "https://www.aagrapevine.org/get-involved/events/2027-01-08/64th-seta-convention",
+   "title": "64th SETA Convention",
+   "summary": "",
+   "lang": "en",
+   "date": "2027-01-08",
+   "first_seen": "2026-10-18T12:13:47Z",
+   "image": null,
+   "tags": [
+    "texas"
+   ],
+   "category": "gv-calendar",
+   "status": "ok",
+   "extra": {
+    "start": "2027-01-08",
+    "end": "2027-01-10",
+    "all_day": true,
+    "location": "League City, Texas",
+    "city": "League City",
+    "state": "TX",
+    "country": "USA",
+    "region": null,
+    "online_url": null,
+    "platform": null,
+    "website": "https://setaconvention.org/",
+    "organizer": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "scope": "texas",
+    "online": false,
+    "site": "grapevine",
+    "date_text": "January 8, 2027 - January 10, 2027",
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "64th SETA Convention",
+     "es": "64.º Convenio SETA"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
   },
   {
    "id": "ev:recurring:citywide-dallas:2027-01-09",

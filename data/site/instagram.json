@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-17T11:41:25Z",
+ "updated": "2026-10-18T12:07:19Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16924,
-   "posts": 3945,
+   "followers": 16935,
+   "posts": 3949,
    "owner_id": "48108439509",
-   "checked": "2026-10-17T11:41:08Z",
+   "checked": "2026-10-18T12:07:01Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,271 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2421,
-   "posts": 2973,
+   "posts": 2975,
    "owner_id": "48275839129",
-   "checked": "2026-10-17T11:41:11Z",
+   "checked": "2026-10-18T12:07:04Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DeolEKMF5Ag",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeolEKMF5Ag/",
+   "title": "“Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas…",
+   "summary": "“Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas en que las aplicamos a nosotros mismos, a AA en su totalidad y a nuestras relaciones con el mundo que nos rodea. Podemos seguir perfeccionando ‘la práctica de estos principios en todos nuestros asuntos’”. \"“Una perspectiva del porvenir” BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am Responsible\" Cita…",
+   "lang": "es",
+   "date": "2026-10-18T11:30:15Z",
+   "first_seen": "2026-10-18T12:07:19Z",
+   "image": "/assets/cache/ig/DeolEKMF5Ag.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeolEKMF5Ag",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeolEKMF5Ag.webp",
+    "embed_url": "https://www.instagram.com/p/DeolEKMF5Ag/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeolEKMF5Ag/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Although we do not have to modify our truths, we can certainly improve the … forms",
+     "es": "“Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas…"
+    },
+    "summary": {
+     "en": "“Although we do not have to modify our truths, we can certainly improve the ways in which we apply them to ourselves, to AA in its entirety and to our relations with the world around us. We can continue to perfect ‘the practice of these principles in all our affairs’.” \"A Perspective of the Future\" BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am Responsible...",
+     "es": "“Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas en que las aplicamos a nosotros mismos, a AA en su totalidad y a nuestras relaciones con el mundo que nos rodea. Podemos seguir perfeccionando ‘la práctica de estos principios en todos nuestros asuntos’”. \"“Una perspectiva del porvenir” BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am Responsible\" Cita…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeolEMEF4Bu",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeolEMEF4Bu/",
+   "title": "“As an individual I am so small I’m almost totally meaningless in the universe; it’s…",
+   "summary": "“As an individual I am so small I’m almost totally meaningless in the universe; it’s almost as if I didn’t exist. But not quite ... As small as I am, I’m not totally meaningless.” “The Real Thing,” New York, New York, February 2001, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-18T11:30:14Z",
+   "first_seen": "2026-10-18T12:07:19Z",
+   "image": "/assets/cache/ig/DeolEMEF4Bu.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeolEMEF4Bu",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DeolEMEF4Bu.webp",
+    "embed_url": "https://www.instagram.com/p/DeolEMEF4Bu/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeolEMEF4Bu/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“As an individual I am so small I’m almost totally meaningless in the universe; it’s…",
+     "es": "“Como individuo soy tan pequeño que casi sin sentido en el universo; es …"
+    },
+    "summary": {
+     "en": "“As an individual I am so small I’m almost totally meaningless in the universe; it’s almost as if I didn’t exist. But not quite ... As small as I am, I’m not totally meaningless.” “The Real Thing,” New York, New York, February 2001, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“Como individuo soy tan pequeño que casi sin sentido en el universo; es casi como si no existiera. Pero no muy... Tan pequeño como yo, no soy totalmente sin sentido.” “Lo Real”, Nueva York, Nueva York, febrero de 2001, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DemYUG8Fz_L",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DemYUG8Fz_L/",
+   "title": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General…",
+   "summary": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General Service Office. �www.aagrapevine.org/important-updates",
+   "lang": "en",
+   "date": "2026-10-17T15:00:21Z",
+   "first_seen": "2026-10-18T12:07:19Z",
+   "image": "/assets/cache/ig/DemYUG8Fz_L.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DemYUG8Fz_L",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DemYUG8Fz_L.webp",
+    "embed_url": "https://www.instagram.com/p/DemYUG8Fz_L/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DemYUG8Fz_L/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General…",
+     "es": "Manténgase actualizado con actualizaciones importantes de AA Grapevine, AA La Viña, y el General …"
+    },
+    "summary": {
+     "en": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General Service Office. �www.aagrapevine.org/important-updates",
+     "es": "Manténgase actualizado con actualizaciones importantes de AA Grapevine, AA La Viña, y la Oficina de Servicios Generales. �www.aagrapevine.org/important-updates"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DemYT-3F1hx",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DemYT-3F1hx/",
+   "title": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina…",
+   "summary": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina de Servicios Generales. www.aalavina.org/actualizaciones-importantes",
+   "lang": "es",
+   "date": "2026-10-17T15:00:19Z",
+   "first_seen": "2026-10-18T12:07:19Z",
+   "image": "/assets/cache/ig/DemYT-3F1hx.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DemYT-3F1hx",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DemYT-3F1hx.webp",
+    "embed_url": "https://www.instagram.com/p/DemYT-3F1hx/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DemYT-3F1hx/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Stay up to date with important news from AA Grapevine, AA La Viña and the … Office",
+     "es": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina…"
+    },
+    "summary": {
+     "en": "Stay up to date with important news from AA Grapevine, AA La Viña and General Service Office. www.aalavina.org/actualizaciones-importantes",
+     "es": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina de Servicios Generales. www.aalavina.org/actualizaciones-importantes"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DemTxXaIFaa",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DemTxXaIFaa/",
+   "title": "We’re at the 63rd Annual Georgia State Prepaid Convention. Come see us.",
+   "summary": "We’re at the 63rd Annual Georgia State Prepaid Convention. Come see us.",
+   "lang": "en",
+   "date": "2026-10-17T14:20:25Z",
+   "first_seen": "2026-10-18T12:07:19Z",
+   "image": "/assets/cache/ig/DemTxXaIFaa.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DemTxXaIFaa",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DemTxXaIFaa.webp",
+    "embed_url": "https://www.instagram.com/p/DemTxXaIFaa/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DemTxXaIFaa/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We’re at the 63rd Annual Georgia State Prepaid Convention. Come see us.",
+     "es": "Estamos en la 63.ª Convención anual de prepago del estado de Georgia. Ven a vernos."
+    },
+    "summary": {
+     "en": "We’re at the 63rd Annual Georgia State Prepaid Convention. Come see us.",
+     "es": "Estamos en la 63.ª Convención anual de prepago del estado de Georgia. Ven a vernos."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DemTKRtoMSE",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DemTKRtoMSE/",
+   "title": "Coming in December",
+   "summary": "Coming in December",
+   "lang": "en",
+   "date": "2026-10-17T14:15:05Z",
+   "first_seen": "2026-10-18T12:07:19Z",
+   "image": "/assets/cache/ig/DemTKRtoMSE.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DemTKRtoMSE",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DemTKRtoMSE.webp",
+    "embed_url": "https://www.instagram.com/p/DemTKRtoMSE/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DemTKRtoMSE/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Coming in December",
+     "es": "Llegando en diciembre"
+    },
+    "summary": {
+     "en": "Coming in December",
+     "es": "Llegando en diciembre"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DemARUxjcu8",
    "source": "instagram",
@@ -2178,7 +2436,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeEh8BJF5nf",
@@ -2221,7 +2479,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeDYj3kMg0l",

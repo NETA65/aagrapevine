@@ -1,7 +1,7 @@
 {
  "source": "meetings",
- "updated": "2026-10-17T11:45:41Z",
- "attempted": "2026-10-17T11:45:41Z",
+ "updated": "2026-10-18T12:13:31Z",
+ "attempted": "2026-10-18T12:13:31Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -11,17 +11,20 @@
  },
  "stats": {
   "offices": 8,
-  "offices_ok": 8,
-  "listed": 5907,
-  "grapevine": 24,
+  "offices_ok": 7,
+  "listed": 4911,
+  "grapevine": 16,
   "meetings": 23,
   "in_area": 13,
   "nearby": 10,
   "inactive": 0,
   "incomplete": 0,
   "duplicates_merged": 1,
-  "kept_from_before": 0,
-  "requests": 8
+  "kept_from_before": 8,
+  "requests": 7,
+  "warnings": [
+   "OKC Intergroup: okcintergroup.org's robots.txt could not be checked (no answer) — nothing was read; the last good list is kept"
+  ]
  },
  "items": [
   {
@@ -1093,8 +1096,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-10-17T11:44:47Z",
-   "attempted": "2026-10-17T11:44:47Z",
+   "updated": "2026-10-18T12:10:37Z",
+   "attempted": "2026-10-18T12:10:37Z",
    "note": null
   },
   {
@@ -1107,8 +1110,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-10-17T11:44:47Z",
-   "attempted": "2026-10-17T11:44:47Z",
+   "updated": "2026-10-18T12:10:37Z",
+   "attempted": "2026-10-18T12:10:37Z",
    "note": null
   },
   {
@@ -1121,8 +1124,8 @@
    "method": "page",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-17T11:44:47Z",
-   "attempted": "2026-10-17T11:44:47Z",
+   "updated": "2026-10-18T12:10:37Z",
+   "attempted": "2026-10-18T12:10:37Z",
    "note": null
   },
   {
@@ -1135,8 +1138,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-17T11:44:47Z",
-   "attempted": "2026-10-17T11:44:47Z",
+   "updated": "2026-10-18T12:10:37Z",
+   "attempted": "2026-10-18T12:10:37Z",
    "note": null
   },
   {
@@ -1149,8 +1152,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-17T11:44:47Z",
-   "attempted": "2026-10-17T11:44:47Z",
+   "updated": "2026-10-18T12:10:37Z",
+   "attempted": "2026-10-18T12:10:37Z",
    "note": null
   },
   {
@@ -1163,8 +1166,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-17T11:44:47Z",
-   "attempted": "2026-10-17T11:44:47Z",
+   "updated": "2026-10-18T12:10:37Z",
+   "attempted": "2026-10-18T12:10:37Z",
    "note": null
   },
   {
@@ -1172,14 +1175,13 @@
    "name": "OKC Intergroup",
    "url": "https://okcintergroup.org",
    "lang": "en",
-   "ok": true,
+   "ok": false,
    "count": 8,
-   "method": "feed",
+   "method": null,
    "key_from": null,
-   "error": null,
+   "error": "okcintergroup.org's robots.txt could not be checked (no answer) — nothing was read; the last good list is kept",
    "updated": "2026-10-17T11:44:47Z",
-   "attempted": "2026-10-17T11:44:47Z",
-   "note": null
+   "attempted": "2026-10-18T12:10:37Z"
   },
   {
    "id": "nwta66",
@@ -1191,8 +1193,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-10-17T11:44:47Z",
-   "attempted": "2026-10-17T11:44:47Z",
+   "updated": "2026-10-18T12:10:37Z",
+   "attempted": "2026-10-18T12:10:37Z",
    "note": null
   }
  ],

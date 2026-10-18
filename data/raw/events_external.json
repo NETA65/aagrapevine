@@ -1,29 +1,29 @@
 {
  "source": "events_external",
- "updated": "2026-10-17T11:45:42Z",
- "attempted": "2026-10-17T11:45:42Z",
+ "updated": "2026-10-18T12:13:47Z",
+ "attempted": "2026-10-18T12:13:47Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 1,
   "removed": 0,
   "held": 0
  },
  "stats": {
   "discovery": "sitemap",
   "discovery_complete": true,
-  "upcoming_urls": 19,
+  "upcoming_urls": 20,
   "kept_from_cache": 0,
-  "fetched": 0,
+  "fetched": 1,
   "refreshed": 0,
   "failed": 0,
   "pending": 0,
-  "cached": 19,
-  "texas": 1,
+  "cached": 20,
+  "texas": 2,
   "online_es": 1,
-  "items": 2,
-  "new": 0,
-  "requests": 36
+  "items": 3,
+  "new": 1,
+  "requests": 39
  },
  "items": [
   {
@@ -36,7 +36,7 @@
    "lang": "es",
    "date": "2027-01-29",
    "first_seen": "2026-10-02T22:31:32Z",
-   "last_seen": "2026-10-10T13:55:14Z",
+   "last_seen": "2026-10-18T12:13:47Z",
    "image": null,
    "tags": [
     "texas"
@@ -65,6 +65,44 @@
    }
   },
   {
+   "id": "ev:gvcal:10b73392e7d8",
+   "source": "calendar",
+   "kind": "event",
+   "url": "https://www.aagrapevine.org/get-involved/events/2027-01-08/64th-seta-convention",
+   "title": "64th SETA Convention",
+   "summary": "",
+   "lang": "en",
+   "date": "2027-01-08",
+   "first_seen": "2026-10-18T12:13:47Z",
+   "last_seen": "2026-10-18T12:13:47Z",
+   "image": null,
+   "tags": [
+    "texas"
+   ],
+   "category": "gv-calendar",
+   "status": "ok",
+   "extra": {
+    "start": "2027-01-08",
+    "end": "2027-01-10",
+    "all_day": true,
+    "location": "League City, Texas",
+    "city": "League City",
+    "state": "TX",
+    "country": "USA",
+    "region": null,
+    "online_url": null,
+    "platform": null,
+    "website": "https://setaconvention.org/",
+    "organizer": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "scope": "texas",
+    "online": false,
+    "site": "grapevine",
+    "date_text": "January 8, 2027 - January 10, 2027"
+   }
+  },
+  {
    "id": "ev:lvcal:b3690e94832f",
    "source": "calendar",
    "kind": "event",
@@ -74,7 +112,7 @@
    "lang": "es",
    "date": "2026-10-22",
    "first_seen": "2026-10-02T22:31:32Z",
-   "last_seen": "2026-10-10T13:55:14Z",
+   "last_seen": "2026-10-18T12:13:47Z",
    "image": null,
    "tags": [
     "online"
@@ -484,19 +522,40 @@
    },
    "http": 200,
    "fails": 0
+  },
+  "https://www.aagrapevine.org/get-involved/events/2027-01-08/64th-seta-convention": {
+   "at": "2026-10-18T12:13:47Z",
+   "ev": {
+    "title": "64th SETA Convention",
+    "date_text": "January 8, 2027 - January 10, 2027",
+    "start": "2027-01-08",
+    "end": "2027-01-10",
+    "all_day": true,
+    "location_raw": "League City, Texas",
+    "website": "https://setaconvention.org/",
+    "lang": "en",
+    "location": "League City, Texas",
+    "city": "League City",
+    "state": "TX",
+    "country": "USA",
+    "online": false,
+    "texas": true
+   },
+   "http": 200,
+   "fails": 0
   }
  },
  "sitemap": {
   "pages": {
    "https://www.aagrapevine.org/sitemap.xml?page=1": {
-    "lastmod": "2026-10-16T04:32:44-05:00",
+    "lastmod": "2026-10-17T14:37:22-05:00",
     "events": [],
-    "fetched": "2026-10-16T12:41:42Z",
+    "fetched": "2026-10-18T12:13:36Z",
     "urls_total": 2000,
     "events_total": 2000
    },
    "https://www.aagrapevine.org/sitemap.xml?page=2": {
-    "lastmod": "2026-10-16T04:32:44-05:00",
+    "lastmod": "2026-10-17T14:37:22-05:00",
     "events": [
      "https://www.aagrapevine.org/get-involved/events/2026-09-18/9th-keys-serenity-roundup",
      "https://www.aagrapevine.org/get-involved/events/2026-10-02/79th-powell-river-rally-2026",
@@ -509,6 +568,7 @@
      "https://www.aagrapevine.org/get-involved/events/2026-11-20/37th-mchenrys-soberfest",
      "https://www.aagrapevine.org/get-involved/events/2026-11-27/36th-gratitude-roundup",
      "https://www.aagrapevine.org/get-involved/events/2026-12-04/14th-chiang-mai-roundup-2026",
+     "https://www.aagrapevine.org/get-involved/events/2027-01-08/64th-seta-convention",
      "https://www.aagrapevine.org/get-involved/events/2027-01-29/47th-hilton-head-midwinter-conference",
      "https://www.aagrapevine.org/get-involved/events/2027-02-19/meeting-paradise-2027",
      "https://www.aagrapevine.org/get-involved/events/2027-03-19/southern-maryland-roundup",
@@ -521,9 +581,9 @@
      "https://www.aalavina.org/get-involved/events/2027-05-28/xxiv-encuentro-hispano-de-aa-del-estado-de-kansas-sede-topeka",
      "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico"
     ],
-    "fetched": "2026-10-16T12:41:47Z",
-    "urls_total": 1096,
-    "events_total": 945
+    "fetched": "2026-10-18T12:13:42Z",
+    "urls_total": 1097,
+    "events_total": 946
    }
   }
  }
