@@ -1,7 +1,7 @@
 {
  "source": "quote",
- "updated": "2026-10-18T22:23:52Z",
- "attempted": "2026-10-18T22:23:52Z",
+ "updated": "2026-10-19T06:21:18Z",
+ "attempted": "2026-10-19T06:21:18Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -13,7 +13,7 @@
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-18",
+  "today": "2026-10-19",
   "new": 0
  },
  "items": [
@@ -245,19 +245,6 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-06T09:07:15Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-05",
-    "heading": "Grapevine Daily Quote October 5",
-    "text": "The phrase ‘God as we understand him’ is perhaps the most important expression to be found in our whole AA vocabulary. Within the compass of these five significant words there can be included every kind and degree of faith, together with the positive assurance that each of us may choose his own.",
-    "attribution": "AA Co-Founder, Bill W., April 1961, “God As We Understand Him: The Dilemma of No Faith”, The Language of the Heart",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-05T09:08:06Z"
    }
   ],
   "lv": [
@@ -429,19 +416,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-06T09:07:26Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-05",
-    "heading": "Cita Diaria con La Viña Octubre 5",
-    "text": "La vida no ha sido un lecho de rosas, pero gracias a AA, ya no tengo que vivir con miedo. Duermo por la noche. Tengo un propósito en la vida.",
-    "attribution": "“Buscado”. MANKATO, MINNESOTA, MAYO DE 1997",
-    "source": "Young & Sober",
-    "source_lang": "en",
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-05T09:08:16Z"
    }
   ]
  }

@@ -1,26 +1,26 @@
 {
  "source": "podcasts",
- "updated": "2026-10-18T22:23:32Z",
- "attempted": "2026-10-18T22:23:32Z",
+ "updated": "2026-10-19T06:21:20Z",
+ "attempted": "2026-10-19T06:21:20Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 1,
   "removed": 0,
   "held": 0
  },
  "stats": {
-  "fetched": 302,
-  "new": 0,
-  "total": 302,
-  "active": 302,
+  "fetched": 303,
+  "new": 1,
+  "total": 303,
+  "active": 303,
   "gone": 0,
   "spanish": 0,
   "shows": {
    "gv": {
     "ok": true,
-    "episodes": 265,
-    "latest": "2026-10-12T04:15:00Z"
+    "episodes": 266,
+    "latest": "2026-10-19T04:15:00Z"
    },
    "wo": {
     "ok": true,
@@ -32,12 +32,48 @@
   "gone_checks": 0,
   "discovery_checked": "2026-10-16T12:31:47Z",
   "discovered_feeds": [],
-  "seconds": 2.7,
+  "seconds": 2.2,
   "artwork": 3,
   "artwork_missing": 0,
   "artwork_removed": 0
  },
  "items": [
+  {
+   "id": "pod:gv:bafcd93ea243",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/ad7f091e-e0f9-47f3-8cb9-b78229ad6e9f",
+   "title": "Planting Seeds [Season 11, Episode 16]",
+   "summary": "Rito tells Don and Sam that he played the blame game in prison — everyone else was at fault for him being locked up. He did go to AA meetings while doing time because they had coffee and donuts, and that's where the seeds of recovery were planted. Now 34 years sober, Rito tries to plant the seeds of recovery in others, in prison and outside the walls. Even if the seeds don't take root, Rito stays…",
+   "lang": "en",
+   "date": "2026-10-19T04:15:00Z",
+   "first_seen": "2026-10-19T06:21:20Z",
+   "last_seen": "2026-10-19T06:21:20Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/ad7f091e-e0f9-47f3-8cb9-b78229ad6e9f.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 47894465,
+    "duration_sec": 2395,
+    "season": 11,
+    "episode": 16,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/ad7f091e-e0f9-47f3-8cb9-b78229ad6e9f",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   }
+  },
   {
    "id": "pod:wo:68d6ac14f97d",
    "source": "podcast",
@@ -10925,7 +10961,7 @@
    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
-   "episodes": 265,
+   "episodes": 266,
    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
   },
   {

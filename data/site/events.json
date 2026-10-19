@@ -1,67 +1,7 @@
 {
- "updated": "2026-10-18T12:16:46Z",
+ "updated": "2026-10-19T06:21:29Z",
  "fixture": false,
  "items": [
-  {
-   "id": "ev:manual:2026-10-17-lv-recording-workshop-duncanville",
-   "source": "committee",
-   "kind": "event",
-   "url": "https://neta65.org/event/lv-recording-workshop/",
-   "title": "La Viña Recording Workshop (in Spanish) — Duncanville",
-   "summary": "A Spanish-language workshop on recording your story for La Viña, hosted by Grupo Progreso Latino in Duncanville.",
-   "lang": "en",
-   "date": "2026-10-18T00:00:00Z",
-   "first_seen": "2026-09-24T11:10:08Z",
-   "image": null,
-   "tags": [
-    "workshop",
-    "la-vina"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-10-18T00:00:00Z",
-    "end": "2026-10-18T02:00:00Z",
-    "all_day": false,
-    "location": "Grupo Progreso Latino, 101 East Camp Wisdom Rd., Duncanville, TX 75116",
-    "online_url": null,
-    "flyer_url": "https://drive.google.com/file/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH/view",
-    "flyer_thumb": null,
-    "city": "Duncanville",
-    "state": "TX",
-    "body_md": "A Spanish-language workshop on recording your story for La Viña, hosted by Grupo Progreso Latino in Duncanville.",
-    "slug": "2026-10-17-lv-recording-workshop-duncanville",
-    "file": "content/events/2026-10-17-lv-recording-workshop-duncanville.md",
-    "own_i18n": {
-     "title": {
-      "es": "Taller de Grabación de La Viña — Duncanville"
-     },
-     "summary": {
-      "es": "Taller en español para aprender a grabar tu historia para La Viña, en el Grupo Progreso Latino de Duncanville."
-     },
-     "body_md": {
-      "es": "Taller en español para aprender a grabar tu historia para La Viña, en el Grupo Progreso Latino de Duncanville."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Recording Workshop (in Spanish) — Duncanville",
-     "es": "Taller de Grabación de La Viña — Duncanville"
-    },
-    "summary": {
-     "en": "A Spanish-language workshop on recording your story for La Viña, hosted by Grupo Progreso Latino in Duncanville.",
-     "es": "Taller en español para aprender a grabar tu historia para La Viña, en el Grupo Progreso Latino de Duncanville."
-    },
-    "body_md": {
-     "en": "A Spanish-language workshop on recording your story for La Viña, hosted by Grupo Progreso Latino in Duncanville.",
-     "es": "Taller en español para aprender a grabar tu historia para La Viña, en el Grupo Progreso Latino de Duncanville."
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
   {
    "id": "ev:manual:2026-10-18-neta65-fall-acm-plano",
    "source": "committee",
@@ -1825,6 +1765,66 @@
     "location": {
      "en": "Venue to be announced",
      "es": "Lugar por anunciarse"
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:manual:2026-10-17-lv-recording-workshop-duncanville",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://neta65.org/event/lv-recording-workshop/",
+   "title": "La Viña Recording Workshop (in Spanish) — Duncanville",
+   "summary": "A Spanish-language workshop on recording your story for La Viña, hosted by Grupo Progreso Latino in Duncanville.",
+   "lang": "en",
+   "date": "2026-10-18T00:00:00Z",
+   "first_seen": "2026-09-24T11:10:08Z",
+   "image": null,
+   "tags": [
+    "workshop",
+    "la-vina"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-10-18T00:00:00Z",
+    "end": "2026-10-18T02:00:00Z",
+    "all_day": false,
+    "location": "Grupo Progreso Latino, 101 East Camp Wisdom Rd., Duncanville, TX 75116",
+    "online_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH/view",
+    "flyer_thumb": null,
+    "city": "Duncanville",
+    "state": "TX",
+    "body_md": "A Spanish-language workshop on recording your story for La Viña, hosted by Grupo Progreso Latino in Duncanville.",
+    "slug": "2026-10-17-lv-recording-workshop-duncanville",
+    "file": "content/events/2026-10-17-lv-recording-workshop-duncanville.md",
+    "own_i18n": {
+     "title": {
+      "es": "Taller de Grabación de La Viña — Duncanville"
+     },
+     "summary": {
+      "es": "Taller en español para aprender a grabar tu historia para La Viña, en el Grupo Progreso Latino de Duncanville."
+     },
+     "body_md": {
+      "es": "Taller en español para aprender a grabar tu historia para La Viña, en el Grupo Progreso Latino de Duncanville."
+     }
+    },
+    "past": true
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Recording Workshop (in Spanish) — Duncanville",
+     "es": "Taller de Grabación de La Viña — Duncanville"
+    },
+    "summary": {
+     "en": "A Spanish-language workshop on recording your story for La Viña, hosted by Grupo Progreso Latino in Duncanville.",
+     "es": "Taller en español para aprender a grabar tu historia para La Viña, en el Grupo Progreso Latino de Duncanville."
+    },
+    "body_md": {
+     "en": "A Spanish-language workshop on recording your story for La Viña, hosted by Grupo Progreso Latino in Duncanville.",
+     "es": "Taller en español para aprender a grabar tu historia para La Viña, en el Grupo Progreso Latino de Duncanville."
     }
    },
    "machine": [],
