@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-19T06:21:29Z",
- "updated": "2026-10-19T06:21:29Z",
+ "generated": "2026-10-19T12:22:58Z",
+ "updated": "2026-10-19T12:22:58Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-10-19T06:21:03Z",
-   "attempted": "2026-10-19T06:21:03Z",
+   "updated": "2026-10-19T12:22:33Z",
+   "attempted": "2026-10-19T12:22:33Z",
    "count": 36,
    "new_7d": 0,
    "error": null,
@@ -65,7 +65,7 @@
     "depth_limited": 0,
     "shortcuts_resolved": 0,
     "announcements": {
-     "fetched": 1
+     "reused": 1
     },
     "forms": {},
     "requests": 12,
@@ -87,8 +87,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-10-19T06:21:03Z",
-   "attempted": "2026-10-19T06:21:03Z",
+   "updated": "2026-10-19T12:22:33Z",
+   "attempted": "2026-10-19T12:22:33Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -111,8 +111,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-10-19T06:21:03Z",
-   "attempted": "2026-10-19T06:21:03Z",
+   "updated": "2026-10-19T12:22:33Z",
+   "attempted": "2026-10-19T12:22:33Z",
    "count": 10,
    "new_7d": 1,
    "error": null,
@@ -166,8 +166,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-10-19T06:21:26Z",
-   "attempted": "2026-10-19T06:21:26Z",
+   "updated": "2026-10-19T12:22:57Z",
+   "attempted": "2026-10-19T12:22:57Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -319,14 +319,14 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-10-19T06:21:20Z",
-   "attempted": "2026-10-19T06:21:20Z",
+   "updated": "2026-10-19T12:22:51Z",
+   "attempted": "2026-10-19T12:22:51Z",
    "count": 303,
-   "new_7d": 3,
+   "new_7d": 2,
    "error": null,
    "stats": {
     "fetched": 303,
-    "new": 1,
+    "new": 0,
     "total": 303,
     "active": 303,
     "gone": 0,
@@ -347,13 +347,13 @@
     "gone_checks": 0,
     "discovery_checked": "2026-10-16T12:31:47Z",
     "discovered_feeds": [],
-    "seconds": 2.2,
+    "seconds": 2.4,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
    },
    "changes": {
-    "added": 1,
+    "added": 0,
     "removed": 0,
     "held": 0
    },
@@ -560,8 +560,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-10-19T06:21:18Z",
-   "attempted": "2026-10-19T06:21:18Z",
+   "updated": "2026-10-19T12:22:48Z",
+   "attempted": "2026-10-19T12:22:48Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -570,11 +570,11 @@
     "parsed": 2,
     "requests": 2,
     "today": "2026-10-19",
-    "new": 0
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -594,8 +594,8 @@
    {
     "day": "2026-10-19",
     "goal_at": "2026-10-19T10:30:00Z",
-    "gv": null,
-    "lv": null
+    "gv": "2026-10-19T12:22:38Z",
+    "lv": "2026-10-19T12:22:48Z"
    },
    {
     "day": "2026-10-18",
@@ -654,16 +654,16 @@
   "updated": "2026-10-18T12:16:42Z"
  },
  "translations": {
-  "cached": 4029,
+  "cached": 4028,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 3,
-  "from_cache": 4025,
+  "translated_this_run": 0,
+  "from_cache": 4028,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 1.4,
-  "model_seconds": 0.7,
-  "texts_per_second": 2.2,
+  "seconds": 0.2,
+  "model_seconds": 0.0,
+  "texts_per_second": null,
   "glossary_entries": 260,
   "problems": []
  },
@@ -700,7 +700,7 @@
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
    "last_attempt": "2026-10-19T06:21:26Z",
-   "checked_this_run": true,
+   "checked_this_run": false,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,

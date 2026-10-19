@@ -1,12 +1,12 @@
 {
  "source": "quote",
- "updated": "2026-10-19T06:21:18Z",
- "attempted": "2026-10-19T06:21:18Z",
+ "updated": "2026-10-19T12:22:48Z",
+ "attempted": "2026-10-19T12:22:48Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
@@ -14,69 +14,82 @@
   "parsed": 2,
   "requests": 2,
   "today": "2026-10-19",
-  "new": 0
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-18",
+   "id": "quote:gv:2026-10-19",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 18",
+   "title": "Grapevine Daily Quote October 19",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-18",
-   "first_seen": "2026-10-18T11:23:33Z",
-   "last_seen": "2026-10-18T11:23:33Z",
+   "date": "2026-10-19",
+   "first_seen": "2026-10-19T12:22:48Z",
+   "last_seen": "2026-10-19T12:22:48Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "As an individual I am so small I’m almost totally meaningless in the universe; it’s almost as if I didn’t exist. But not quite ... As small as I am, I’m not totally meaningless.",
-    "attribution": "“The Real Thing,” New York, New York, February 2001, Voices of Long-Term Sobriety",
+    "text": "We found that each of us had to make willing sacrifices ... for the common welfare.",
+    "attribution": "AA Co-Founder, Bill W., January 1955, “Why Alcoholics Anonymous Is Anonymous”, The Language of the Heart",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 18",
+    "date_label": "October 19",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84351"
+    "node": "node-84352"
    }
   },
   {
-   "id": "quote:lv:2026-10-18",
+   "id": "quote:lv:2026-10-19",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 18",
+   "title": "Cita Diaria con La Viña Octubre 19",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-18",
-   "first_seen": "2026-10-18T11:23:33Z",
-   "last_seen": "2026-10-18T11:23:33Z",
+   "date": "2026-10-19",
+   "first_seen": "2026-10-19T12:22:48Z",
+   "last_seen": "2026-10-19T12:22:48Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas en que las aplicamos a nosotros mismos, a AA en su totalidad y a nuestras relaciones con el mundo que nos rodea. Podemos seguir perfeccionando ‘la práctica de estos principios en todos nuestros asuntos’.",
-    "attribution": "“Una perspectiva del porvenir”. BILL W., COFUNDADOR DE AA, FEBRERO DE 1961",
-    "source": "I Am Responsible",
-    "source_lang": "en",
+    "text": "El sentido de comunidad en AA es único. De un día para el otro, se entablan lazos que llevaría años lograr en cualquier otro sitio. Nadie necesita máscaras. Todas las barreras están abajo. Los que toda su vida se sintieron fuera de lugar ahora saben que, realmente, pertenecen. De sentir que un enorme lastre pesa sobre sus vidas pasan a navegar libremente, de repente y a toda vela.",
+    "attribution": "\"Quizás haya sido el momento...\", Lois W., esposa de Bill W., cofundador de AA, febrero de 1950. Del libro Lo mejor del Grapevine, Volumen II",
+    "source": "",
+    "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "18 de octubre",
+    "date_label": "19 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84360"
+    "node": "node-84361"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-19",
+    "heading": "Grapevine Daily Quote October 19",
+    "text": "We found that each of us had to make willing sacrifices ... for the common welfare.",
+    "attribution": "AA Co-Founder, Bill W., January 1955, “Why Alcoholics Anonymous Is Anonymous”, The Language of the Heart",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-19T12:22:38Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -248,6 +261,19 @@
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-19",
+    "heading": "Cita Diaria con La Viña Octubre 19",
+    "text": "El sentido de comunidad en AA es único. De un día para el otro, se entablan lazos que llevaría años lograr en cualquier otro sitio. Nadie necesita máscaras. Todas las barreras están abajo. Los que toda su vida se sintieron fuera de lugar ahora saben que, realmente, pertenecen. De sentir que un enorme lastre pesa sobre sus vidas pasan a navegar libremente, de repente y a toda vela.",
+    "attribution": "\"Quizás haya sido el momento...\", Lois W., esposa de Bill W., cofundador de AA, febrero de 1950. Del libro Lo mejor del Grapevine, Volumen II",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-19T12:22:48Z"
+   },
    {
     "pub": "lv",
     "lang": "es",

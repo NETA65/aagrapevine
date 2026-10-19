@@ -1,7 +1,7 @@
 {
  "source": "drive",
- "updated": "2026-10-19T06:21:03Z",
- "attempted": "2026-10-19T06:21:03Z",
+ "updated": "2026-10-19T12:22:33Z",
+ "attempted": "2026-10-19T12:22:33Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -61,7 +61,7 @@
   "depth_limited": 0,
   "shortcuts_resolved": 0,
   "announcements": {
-   "fetched": 1
+   "reused": 1
   },
   "forms": {},
   "requests": 12,
