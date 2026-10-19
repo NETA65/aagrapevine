@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-19T18:42:09Z",
+ "updated": "2026-10-19T23:33:29Z",
  "fixture": false,
  "items": [
   {
@@ -789,67 +789,6 @@
    ],
    "is_new": true,
    "wn_date": "2026-10-17T11:30:14Z"
-  },
-  {
-   "id": "ev:manual:2026-10-18-neta65-fall-acm-plano",
-   "source": "committee",
-   "kind": "event",
-   "url": "/events/#2026-10-18-neta65-fall-acm-plano",
-   "title": "Fall ACM",
-   "summary": "NETA 65's fall Area Committee Meeting (ACM), hosted by the ODAAT Group in Plano.",
-   "lang": "en",
-   "date": "2026-10-18T18:00:00Z",
-   "first_seen": "2026-10-16T20:52:28Z",
-   "image": null,
-   "tags": [
-    "neta65",
-    "acm"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-10-18T18:00:00Z",
-    "end": "2026-10-18T22:00:00Z",
-    "all_day": false,
-    "location": "ODAAT Group, 2109 W. Parker Rd #728, Plano, TX 75023",
-    "online_url": null,
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "city": "Plano",
-    "state": "TX",
-    "body_md": "NETA 65's fall Area Committee Meeting (ACM), hosted by the ODAAT Group in Plano.",
-    "slug": "2026-10-18-neta65-fall-acm-plano",
-    "file": "content/events/2026-10-18-neta65-fall-acm-plano.md",
-    "own_i18n": {
-     "title": {
-      "es": "ACM de Otoño"
-     },
-     "summary": {
-      "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), en el ODAAT Group de Plano."
-     },
-     "body_md": {
-      "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), en el ODAAT Group de Plano."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Fall ACM",
-     "es": "ACM de Otoño"
-    },
-    "summary": {
-     "en": "NETA 65's fall Area Committee Meeting (ACM), hosted by the ODAAT Group in Plano.",
-     "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), en el ODAAT Group de Plano."
-    },
-    "body_md": {
-     "en": "NETA 65's fall Area Committee Meeting (ACM), hosted by the ODAAT Group in Plano.",
-     "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), en el ODAAT Group de Plano."
-    }
-   },
-   "machine": [],
-   "is_new": true,
-   "wn_date": "2026-10-16T20:52:28Z"
   },
   {
    "id": "gv:2026-11:150-days",
@@ -7572,7 +7511,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-05T18:46:11Z"
   },
   {
@@ -8741,6 +8680,50 @@
    "machine": [],
    "is_new": false,
    "wn_date": "2026-10-02T12:00:00Z"
+  },
+  {
+   "id": "ig:Dd_YWRTF0WK",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dd_YWRTF0WK/",
+   "title": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que…",
+   "summary": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que me dieron implicó mucho más que palabras. Se trató de palabras seguidas de acciones”. \"“¿A qué reunión irás mañana?” SANTA ROSA, CALIFORNIA, NOVIEMBRE DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-02T11:30:17Z",
+   "first_seen": "2026-10-02T12:38:07Z",
+   "image": "/assets/cache/ig/Dd_YWRTF0WK.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dd_YWRTF0WK",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dd_YWRTF0WK.webp",
+    "embed_url": "https://www.instagram.com/p/Dd_YWRTF0WK/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dd_YWRTF0WK/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“My recovery depends on many people extending a hand to me. Welcome that …",
+     "es": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que…"
+    },
+    "summary": {
+     "en": "“My recovery depends on many people extending a hand to me. The welcome they gave me involved much more than words. These were words followed by actions.” \"What meeting will you go to tomorrow?\" Santa Rosa, California, November 1999 from I am Responsible\" Daily Quote in www.aalavina.org",
+     "es": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que me dieron implicó mucho más que palabras. Se trató de palabras seguidas de acciones”. \"“¿A qué reunión irás mañana?” SANTA ROSA, CALIFORNIA, NOVIEMBRE DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": false,
+   "wn_date": "2026-10-02T11:30:17Z"
   }
  ]
 }
