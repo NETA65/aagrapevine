@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-18T12:13:31Z",
+ "updated": "2026-10-19T14:50:48Z",
  "fixture": false,
  "type": "GR",
  "sources": [
@@ -13,7 +13,7 @@
     "es": "Zona de Dallas"
    },
    "ok": true,
-   "updated": "2026-10-18T12:10:37Z",
+   "updated": "2026-10-19T14:49:47Z",
    "count": 5,
    "error": null
   },
@@ -27,7 +27,7 @@
     "es": "Zona de Fort Worth"
    },
    "ok": true,
-   "updated": "2026-10-18T12:10:37Z",
+   "updated": "2026-10-19T14:49:47Z",
    "count": 5,
    "error": null
   },
@@ -41,7 +41,7 @@
     "es": "Este de Texas (Tyler)"
    },
    "ok": true,
-   "updated": "2026-10-18T12:10:37Z",
+   "updated": "2026-10-19T14:49:47Z",
    "count": 3,
    "error": null
   },
@@ -55,7 +55,7 @@
     "es": "Zona de Dallas (en español)"
    },
    "ok": true,
-   "updated": "2026-10-18T12:10:37Z",
+   "updated": "2026-10-19T14:49:47Z",
    "count": 0,
    "error": null
   },
@@ -69,7 +69,7 @@
     "es": "Abilene (Distrito 71)"
    },
    "ok": true,
-   "updated": "2026-10-18T12:10:37Z",
+   "updated": "2026-10-19T14:49:47Z",
    "count": 1,
    "error": null
   },
@@ -83,7 +83,7 @@
     "es": "Arkansas y la zona de Fort Smith"
    },
    "ok": true,
-   "updated": "2026-10-18T12:10:37Z",
+   "updated": "2026-10-19T14:49:47Z",
    "count": 2,
    "error": null
   },
@@ -96,10 +96,10 @@
     "en": "Oklahoma City area",
     "es": "Zona de Oklahoma City"
    },
-   "ok": false,
-   "updated": "2026-10-17T11:44:47Z",
+   "ok": true,
+   "updated": "2026-10-19T14:49:47Z",
    "count": 8,
-   "error": "okcintergroup.org's robots.txt could not be checked (no answer) — nothing was read; the last good list is kept"
+   "error": null
   },
   {
    "id": "nwta66",
@@ -111,7 +111,7 @@
     "es": "Noroeste de Texas (Área 66)"
    },
    "ok": true,
-   "updated": "2026-10-18T12:10:37Z",
+   "updated": "2026-10-19T14:49:47Z",
    "count": 0,
    "error": null
   }

@@ -1,11 +1,11 @@
 {
  "source": "events_external",
- "updated": "2026-10-18T12:13:47Z",
- "attempted": "2026-10-18T12:13:47Z",
+ "updated": "2026-10-19T14:50:59Z",
+ "attempted": "2026-10-19T14:50:59Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 1,
+  "added": 0,
   "removed": 0,
   "held": 0
  },
@@ -14,7 +14,7 @@
   "discovery_complete": true,
   "upcoming_urls": 20,
   "kept_from_cache": 0,
-  "fetched": 1,
+  "fetched": 0,
   "refreshed": 0,
   "failed": 0,
   "pending": 0,
@@ -22,8 +22,8 @@
   "texas": 2,
   "online_es": 1,
   "items": 3,
-  "new": 1,
-  "requests": 39
+  "new": 0,
+  "requests": 38
  },
  "items": [
   {
@@ -548,14 +548,14 @@
  "sitemap": {
   "pages": {
    "https://www.aagrapevine.org/sitemap.xml?page=1": {
-    "lastmod": "2026-10-17T14:37:22-05:00",
+    "lastmod": "2026-10-19T04:34:34-05:00",
     "events": [],
-    "fetched": "2026-10-18T12:13:36Z",
+    "fetched": "2026-10-19T14:50:54Z",
     "urls_total": 2000,
     "events_total": 2000
    },
    "https://www.aagrapevine.org/sitemap.xml?page=2": {
-    "lastmod": "2026-10-17T14:37:22-05:00",
+    "lastmod": "2026-10-19T04:34:34-05:00",
     "events": [
      "https://www.aagrapevine.org/get-involved/events/2026-09-18/9th-keys-serenity-roundup",
      "https://www.aagrapevine.org/get-involved/events/2026-10-02/79th-powell-river-rally-2026",
@@ -581,7 +581,7 @@
      "https://www.aalavina.org/get-involved/events/2027-05-28/xxiv-encuentro-hispano-de-aa-del-estado-de-kansas-sede-topeka",
      "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico"
     ],
-    "fetched": "2026-10-18T12:13:42Z",
+    "fetched": "2026-10-19T14:50:59Z",
     "urls_total": 1097,
     "events_total": 946
    }

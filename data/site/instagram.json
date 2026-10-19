@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-18T12:07:19Z",
+ "updated": "2026-10-19T14:46:23Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16935,
-   "posts": 3949,
+   "followers": 16940,
+   "posts": 3952,
    "owner_id": "48108439509",
-   "checked": "2026-10-18T12:07:01Z",
+   "checked": "2026-10-19T14:46:04Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,229 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2421,
-   "posts": 2975,
+   "followers": 2420,
+   "posts": 2977,
    "owner_id": "48275839129",
-   "checked": "2026-10-18T12:07:04Z",
+   "checked": "2026-10-19T14:46:07Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DerPdIZAfpL",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DerPdIZAfpL/",
+   "title": "Planting Seeds. Featuring “A Newcomer Asks,” “Using the Traditions in Our Lives,” and…",
+   "summary": "Planting Seeds. Featuring “A Newcomer Asks,” “Using the Traditions in Our Lives,” and “Listener Feedback.”",
+   "lang": "en",
+   "date": "2026-10-19T12:23:03Z",
+   "first_seen": "2026-10-19T14:46:23Z",
+   "image": "/assets/cache/ig/DerPdIZAfpL.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DerPdIZAfpL",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DerPdIZAfpL.webp",
+    "embed_url": "https://www.instagram.com/p/DerPdIZAfpL/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DerPdIZAfpL/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Planting Seeds. Featuring “A Newcomer Asks,” “Using the Traditions in Our Lives,” and…",
+     "es": "Plantando semillas. Con “un recién llegado pregunta”, “utilizando las tradiciones en nuestras vidas” y …"
+    },
+    "summary": {
+     "en": "Planting Seeds. Featuring “A Newcomer Asks,” “Using the Traditions in Our Lives,” and “Listener Feedback.”",
+     "es": "Plantando semillas. Con “un recién llegado pregunta”, “utilizando las tradiciones en nuestras vidas” y “Comentarios de los oyentes”."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DerJ3B7F1Pw",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DerJ3B7F1Pw/",
+   "title": "\"We found that each of us had to make willing sacrifices ... for the common welfare.\"",
+   "summary": "\"We found that each of us had to make willing sacrifices ... for the common welfare.\" AA Co-Founder, Bill W., January 1955, “Why Alcoholics Anonymous Is Anonymous”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-19T11:30:14Z",
+   "first_seen": "2026-10-19T14:46:23Z",
+   "image": "/assets/cache/ig/DerJ3B7F1Pw.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DerJ3B7F1Pw",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DerJ3B7F1Pw.webp",
+    "embed_url": "https://www.instagram.com/p/DerJ3B7F1Pw/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DerJ3B7F1Pw/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "\"We found that each of us had to make willing sacrifices ... for the common welfare.\"",
+     "es": "\"Encontramos que cada uno de nosotros tenía que hacer sacrificios dispuestos... por el bienestar común\"."
+    },
+    "summary": {
+     "en": "\"We found that each of us had to make willing sacrifices ... for the common welfare.\" AA Co-Founder, Bill W., January 1955, “Why Alcoholics Anonymous Is Anonymous”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "\"Encontramos que cada uno de nosotros tenía que hacer sacrificios dispuestos... por el bienestar común\". AA cofundador, Bill W., enero de 1955, “por qué Alcohólicos Anónimos es anónimo”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DerJ3B5l3mu",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DerJ3B5l3mu/",
+   "title": "\"“El sentido de comunidad en AA es único. De un día para el otro, se entablan",
+   "summary": "\"“El sentido de comunidad en AA es único. De un día para el otro, se entablan lazos que llevaría años lograr en cualquier otro sitio. Nadie necesita máscaras. Todas las barreras están abajo. Los que toda su vida se sintieron fuera de lugar ahora saben que, realmente, pertenecen. De sentir que un enorme lastre pesa sobre sus vidas pasan a navegar libremente, de repente y a toda vela”.\" \"Quizás…",
+   "lang": "es",
+   "date": "2026-10-19T11:30:14Z",
+   "first_seen": "2026-10-19T14:46:23Z",
+   "image": "/assets/cache/ig/DerJ3B5l3mu.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DerJ3B5l3mu",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DerJ3B5l3mu.webp",
+    "embed_url": "https://www.instagram.com/p/DerJ3B5l3mu/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DerJ3B5l3mu/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "\"The sense of community in AA is unique. From one day to the other, they go in",
+     "es": "\"“El sentido de comunidad en AA es único. De un día para el otro, se entablan"
+    },
+    "summary": {
+     "en": "\"The sense of community in AA is unique. From one day to the other, bonds that would take years to achieve anywhere else. No one needs masks. All the barriers are down. Those who all of their lives felt out of place now know that they really belong. To feel that a huge ballast weighs on their lives they pass freely, all of a sudden and all sails.\" \"Perhaps …",
+     "es": "\"“El sentido de comunidad en AA es único. De un día para el otro, se entablan lazos que llevaría años lograr en cualquier otro sitio. Nadie necesita máscaras. Todas las barreras están abajo. Los que toda su vida se sintieron fuera de lugar ahora saben que, realmente, pertenecen. De sentir que un enorme lastre pesa sobre sus vidas pasan a navegar libremente, de repente y a toda vela”.\" \"Quizás…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Deo9IuyvoGb",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Deo9IuyvoGb/",
+   "title": "Noviembre: ¡20% de descuento!",
+   "summary": "Noviembre: ¡20% de descuento! El lenguaje del corazón: los escritos de Bill W. para el Grapevine En este volumen están todos los artículos de Bill Grapevine, incluyendo sus primeros pensamientos sobre las Tradiciones, la crónica de sus batallas contra la depresión crónica, su orgullo espiritual, y los recuerdos de una noche entera de tragos con Ebby, además de una vívida descripción de cómo llegó…",
+   "lang": "es",
+   "date": "2026-10-18T15:00:11Z",
+   "first_seen": "2026-10-19T14:46:23Z",
+   "image": "/assets/cache/ig/Deo9IuyvoGb.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Deo9IuyvoGb",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/Deo9IuyvoGb.webp",
+    "embed_url": "https://www.instagram.com/p/Deo9IuyvoGb/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Deo9IuyvoGb/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "November: 20% discount!",
+     "es": "Noviembre: ¡20% de descuento!"
+    },
+    "summary": {
+     "en": "November: 20% discount! Language of the Heart: Bill W. writings for Grapevine In this volume are all Bill Grapevine articles, including their first thoughts on Traditions, the chronicle of their battles against chronic depression, their spiritual pride, and the memories of an entire night of drinks with Ebby, in addition to a vivid description of how … came",
+     "es": "Noviembre: ¡20% de descuento! El lenguaje del corazón: los escritos de Bill W. para el Grapevine En este volumen están todos los artículos de Bill Grapevine, incluyendo sus primeros pensamientos sobre las Tradiciones, la crónica de sus batallas contra la depresión crónica, su orgullo espiritual, y los recuerdos de una noche entera de tragos con Ebby, además de una vívida descripción de cómo llegó…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Deo9IrRyxuO",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Deo9IrRyxuO/",
+   "title": "November 20% off",
+   "summary": "November 20% off: The Language of The Heart: Bill W.'s Grapevine Writings All The book contains Bill’s first thoughts about AA’s Twelve Traditions, his battles with depression and spiritual pride, memories of an all-night drinking spree with his dear friend Ebby, and a vivid description of how he came to organize the Twelve Steps of AA. Great for meetings and AA history buffs. Offer good for this…",
+   "lang": "en",
+   "date": "2026-10-18T15:00:05Z",
+   "first_seen": "2026-10-19T14:46:23Z",
+   "image": "/assets/cache/ig/Deo9IrRyxuO.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Deo9IrRyxuO",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/Deo9IrRyxuO.webp",
+    "embed_url": "https://www.instagram.com/p/Deo9IrRyxuO/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Deo9IrRyxuO/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "November 20% off",
+     "es": "20% de descuento"
+    },
+    "summary": {
+     "en": "November 20% off: The Language of The Heart: Bill W.'s Grapevine Writings All The book contains Bill’s first thoughts about AA’s Twelve Traditions, his battles with depression and spiritual pride, memories of an all-night drinking spree with his dear friend Ebby, and a vivid description of how he came to organize the Twelve Steps of AA. Great for meetings and AA history buffs. Offer good for this…",
+     "es": "Noviembre 20% de descuento: El lenguaje del corazón: Bill W. de Grapevine Escritos Todo El libro contiene los primeros pensamientos de Bill sobre Doce Tradiciones de AA sus batallas con depresión y orgullo espiritual, recuerdos de una brisa bebedora de toda la noche con su querido amigo Ebby, y una descripción vívida de cómo llegó a organizar los Doce Pasos de AA. Ideal para reuniones y buffs de historia AA. Oferta buena para este …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DeolEKMF5Ag",
    "source": "instagram",

@@ -1,7 +1,185 @@
 {
- "updated": "2026-10-19T12:22:58Z",
+ "updated": "2026-10-19T14:53:51Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DerPdIZAfpL",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DerPdIZAfpL/",
+   "title": "Planting Seeds. Featuring “A Newcomer Asks,” “Using the Traditions in Our Lives,” and…",
+   "summary": "Planting Seeds. Featuring “A Newcomer Asks,” “Using the Traditions in Our Lives,” and “Listener Feedback.”",
+   "lang": "en",
+   "date": "2026-10-19T12:23:03Z",
+   "first_seen": "2026-10-19T14:46:23Z",
+   "image": "/assets/cache/ig/DerPdIZAfpL.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DerPdIZAfpL",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DerPdIZAfpL.webp",
+    "embed_url": "https://www.instagram.com/p/DerPdIZAfpL/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DerPdIZAfpL/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Planting Seeds. Featuring “A Newcomer Asks,” “Using the Traditions in Our Lives,” and…",
+     "es": "Plantando semillas. Con “un recién llegado pregunta”, “utilizando las tradiciones en nuestras vidas” y …"
+    },
+    "summary": {
+     "en": "Planting Seeds. Featuring “A Newcomer Asks,” “Using the Traditions in Our Lives,” and “Listener Feedback.”",
+     "es": "Plantando semillas. Con “un recién llegado pregunta”, “utilizando las tradiciones en nuestras vidas” y “Comentarios de los oyentes”."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-19T12:23:03Z"
+  },
+  {
+   "id": "ig:DerJ3B5l3mu",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DerJ3B5l3mu/",
+   "title": "\"“El sentido de comunidad en AA es único. De un día para el otro, se entablan",
+   "summary": "\"“El sentido de comunidad en AA es único. De un día para el otro, se entablan lazos que llevaría años lograr en cualquier otro sitio. Nadie necesita máscaras. Todas las barreras están abajo. Los que toda su vida se sintieron fuera de lugar ahora saben que, realmente, pertenecen. De sentir que un enorme lastre pesa sobre sus vidas pasan a navegar libremente, de repente y a toda vela”.\" \"Quizás…",
+   "lang": "es",
+   "date": "2026-10-19T11:30:14Z",
+   "first_seen": "2026-10-19T14:46:23Z",
+   "image": "/assets/cache/ig/DerJ3B5l3mu.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DerJ3B5l3mu",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DerJ3B5l3mu.webp",
+    "embed_url": "https://www.instagram.com/p/DerJ3B5l3mu/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DerJ3B5l3mu/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "\"The sense of community in AA is unique. From one day to the other, they go in",
+     "es": "\"“El sentido de comunidad en AA es único. De un día para el otro, se entablan"
+    },
+    "summary": {
+     "en": "\"The sense of community in AA is unique. From one day to the other, bonds that would take years to achieve anywhere else. No one needs masks. All the barriers are down. Those who all of their lives felt out of place now know that they really belong. To feel that a huge ballast weighs on their lives they pass freely, all of a sudden and all sails.\" \"Perhaps …",
+     "es": "\"“El sentido de comunidad en AA es único. De un día para el otro, se entablan lazos que llevaría años lograr en cualquier otro sitio. Nadie necesita máscaras. Todas las barreras están abajo. Los que toda su vida se sintieron fuera de lugar ahora saben que, realmente, pertenecen. De sentir que un enorme lastre pesa sobre sus vidas pasan a navegar libremente, de repente y a toda vela”.\" \"Quizás…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-19T11:30:14Z"
+  },
+  {
+   "id": "ig:DerJ3B7F1Pw",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DerJ3B7F1Pw/",
+   "title": "\"We found that each of us had to make willing sacrifices ... for the common welfare.\"",
+   "summary": "\"We found that each of us had to make willing sacrifices ... for the common welfare.\" AA Co-Founder, Bill W., January 1955, “Why Alcoholics Anonymous Is Anonymous”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-19T11:30:14Z",
+   "first_seen": "2026-10-19T14:46:23Z",
+   "image": "/assets/cache/ig/DerJ3B7F1Pw.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DerJ3B7F1Pw",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DerJ3B7F1Pw.webp",
+    "embed_url": "https://www.instagram.com/p/DerJ3B7F1Pw/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DerJ3B7F1Pw/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "\"We found that each of us had to make willing sacrifices ... for the common welfare.\"",
+     "es": "\"Encontramos que cada uno de nosotros tenía que hacer sacrificios dispuestos... por el bienestar común\"."
+    },
+    "summary": {
+     "en": "\"We found that each of us had to make willing sacrifices ... for the common welfare.\" AA Co-Founder, Bill W., January 1955, “Why Alcoholics Anonymous Is Anonymous”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "\"Encontramos que cada uno de nosotros tenía que hacer sacrificios dispuestos... por el bienestar común\". AA cofundador, Bill W., enero de 1955, “por qué Alcohólicos Anónimos es anónimo”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-19T11:30:14Z"
+  },
+  {
+   "id": "yt:KG-GvHyp63E",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=KG-GvHyp63E",
+   "title": "Planting Seeds [Season 11, Episode 16]",
+   "summary": "Rito tells Don and Sam that he played the blame game in prison — everyone else was at fault for him being locked up. He did go to AA meetings while doing time because they had coffee and donuts, and that's where the seeds of recovery were planted. Now 34 years sober, Rito tries to plant the seeds of recovery in others, in prison and outside the walls. Even if the seeds don't take root, Rito stays…",
+   "lang": "en",
+   "date": "2026-10-19T04:33:07Z",
+   "first_seen": "2026-10-19T14:46:04Z",
+   "image": "https://i.ytimg.com/vi/KG-GvHyp63E/hqdefault.jpg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "KG-GvHyp63E",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "AA Grapevine's Podcast"
+    ],
+    "is_short": false,
+    "views": 68,
+    "is_live_recording": false,
+    "date_approx": false,
+    "season": 11,
+    "episode": 16
+   },
+   "i18n": {
+    "title": {
+     "en": "Planting Seeds [Season 11, Episode 16]",
+     "es": "Plantar semillas [Temporada 11, Episodio 16]"
+    },
+    "summary": {
+     "en": "Rito tells Don and Sam that he played the blame game in prison — everyone else was at fault for him being locked up. He did go to AA meetings while doing time because they had coffee and donuts, and that's where the seeds of recovery were planted. Now 34 years sober, Rito tries to plant the seeds of recovery in others, in prison and outside the walls. Even if the seeds don't take root, Rito stays…",
+     "es": "Rito le dice a Don y Sam que jugó el juego de la culpa en la cárcel — todo el mundo tenía la culpa de que estuviera encerrado. Él fue a las reuniones de AA mientras hacía tiempo porque tenían café y donuts, y ahí es donde se plantaron las semillas de la recuperación. Ahora 34 años sobrio, Rito trata de plantar las semillas de recuperación en otros, en prisión y fuera de las paredes. Incluso si las semillas no tienen raíz, Rito permanece …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-19T04:33:07Z"
+  },
   {
    "id": "pod:gv:bafcd93ea243",
    "source": "podcast",
@@ -51,6 +229,94 @@
    ],
    "is_new": true,
    "wn_date": "2026-10-19T04:15:00Z"
+  },
+  {
+   "id": "ig:Deo9IuyvoGb",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Deo9IuyvoGb/",
+   "title": "Noviembre: ¡20% de descuento!",
+   "summary": "Noviembre: ¡20% de descuento! El lenguaje del corazón: los escritos de Bill W. para el Grapevine En este volumen están todos los artículos de Bill Grapevine, incluyendo sus primeros pensamientos sobre las Tradiciones, la crónica de sus batallas contra la depresión crónica, su orgullo espiritual, y los recuerdos de una noche entera de tragos con Ebby, además de una vívida descripción de cómo llegó…",
+   "lang": "es",
+   "date": "2026-10-18T15:00:11Z",
+   "first_seen": "2026-10-19T14:46:23Z",
+   "image": "/assets/cache/ig/Deo9IuyvoGb.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Deo9IuyvoGb",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/Deo9IuyvoGb.webp",
+    "embed_url": "https://www.instagram.com/p/Deo9IuyvoGb/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Deo9IuyvoGb/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "November: 20% discount!",
+     "es": "Noviembre: ¡20% de descuento!"
+    },
+    "summary": {
+     "en": "November: 20% discount! Language of the Heart: Bill W. writings for Grapevine In this volume are all Bill Grapevine articles, including their first thoughts on Traditions, the chronicle of their battles against chronic depression, their spiritual pride, and the memories of an entire night of drinks with Ebby, in addition to a vivid description of how … came",
+     "es": "Noviembre: ¡20% de descuento! El lenguaje del corazón: los escritos de Bill W. para el Grapevine En este volumen están todos los artículos de Bill Grapevine, incluyendo sus primeros pensamientos sobre las Tradiciones, la crónica de sus batallas contra la depresión crónica, su orgullo espiritual, y los recuerdos de una noche entera de tragos con Ebby, además de una vívida descripción de cómo llegó…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-18T15:00:11Z"
+  },
+  {
+   "id": "ig:Deo9IrRyxuO",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Deo9IrRyxuO/",
+   "title": "November 20% off",
+   "summary": "November 20% off: The Language of The Heart: Bill W.'s Grapevine Writings All The book contains Bill’s first thoughts about AA’s Twelve Traditions, his battles with depression and spiritual pride, memories of an all-night drinking spree with his dear friend Ebby, and a vivid description of how he came to organize the Twelve Steps of AA. Great for meetings and AA history buffs. Offer good for this…",
+   "lang": "en",
+   "date": "2026-10-18T15:00:05Z",
+   "first_seen": "2026-10-19T14:46:23Z",
+   "image": "/assets/cache/ig/Deo9IrRyxuO.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Deo9IrRyxuO",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/Deo9IrRyxuO.webp",
+    "embed_url": "https://www.instagram.com/p/Deo9IrRyxuO/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Deo9IrRyxuO/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "November 20% off",
+     "es": "20% de descuento"
+    },
+    "summary": {
+     "en": "November 20% off: The Language of The Heart: Bill W.'s Grapevine Writings All The book contains Bill’s first thoughts about AA’s Twelve Traditions, his battles with depression and spiritual pride, memories of an all-night drinking spree with his dear friend Ebby, and a vivid description of how he came to organize the Twelve Steps of AA. Great for meetings and AA history buffs. Offer good for this…",
+     "es": "Noviembre 20% de descuento: El lenguaje del corazón: Bill W. de Grapevine Escritos Todo El libro contiene los primeros pensamientos de Bill sobre Doce Tradiciones de AA sus batallas con depresión y orgullo espiritual, recuerdos de una brisa bebedora de toda la noche con su querido amigo Ebby, y una descripción vívida de cómo llegó a organizar los Doce Pasos de AA. Ideal para reuniones y buffs de historia AA. Oferta buena para este …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-18T15:00:05Z"
   },
   {
    "id": "ev:gvcal:10b73392e7d8",
@@ -148,7 +414,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1Ka4i255epTjiLcbGVzasZR4Xq7cZZ7G7"
     ],
-    "modified_text": "6:38 pm",
+    "modified_text": "Oct 18",
     "body_md": "A living list of simple ways members, groups and districts can support Grapevine and La Viña and carry the message. Take what works for your group, and share what works at the next committee meeting so everyone can learn from it.\n\n# Why it matters\n\n- **A meeting in print, every day.** Grapevine and La Viña reach millions of people through the magazines, the Daily Quote, the podcast, magazine content on prison and treatment tablets, and ASL videos for deaf and hard-of-hearing members.\n- **Most of it is free.** Subscriptions pay for all of it, so every subscription keeps the free services going.\n- **The 183 Challenge.** If every area added about 183 subscriptions (print, app or online), Grapevine would be fully self-supporting. That is fewer people than come to most area assemblies.\n- **La Viña needs its readers.** La Viña is not yet self-supporting. Spanish-speaking members and groups make the biggest difference by subscribing, sharing it and writing for it.\n\n# What groups can do\n\n- **Subscribe as a group.** A group subscription is Seventh Tradition support, and many treasurers don't know it is an option. If even one group in ten subscribed, it would make a big difference.\n- **Welcome newcomers.** Give a subscription along with the Big Book. A digital subscription costs less than 10 cents a day ([current prices](/shop/)).\n- **Carry the Message.** A group can send subscriptions to correctional facilities, treatment centers and professionals who work with alcoholics ([how it works](https://www.aagrapevine.org/carry-the-message)).\n- **Put it in the budget.** Include a Carry the Message subscription in the group's regular spending, next to rent, coffee, literature and contributions to the district, area and GSO.\n- **Share the free resources.** Put a one-page handout on the literature table with links to the Grapevine app, the [podcast](/listen/), the Daily Quote sign-up, Instagram and YouTube. Many members don't know these exist.\n\n# At meetings\n\n- **Mention it in your share.** Not a pitch, just experience: \"I read something in Grapevine this week that really hit home…\"\n- **Make a 30-second announcement.** \"Grapevine reaches millions of people through daily quotes, podcasts and prison tablets, mostly for free. A subscription helps keep the lights on for all of it.\" Anyone can say it.\n- **Set out QR table cards.** A card on the literature table that links to the subscription page works every week without an announcement ([QR posters](/share/)).\n- **Hold a \"meeting after the meeting.\"** Once a month, for 15 minutes after a regular meeting, read a story, play a podcast clip or show a short video. People subscribe to what they have experienced.\n- **Invite an \"I got sober reading this\" minute.** Once a month, a member shares one minute about a Grapevine or La Viña story that helped them.\n- **Use the coffee comparison at business meetings.** A digital subscription costs less than one fancy coffee a month.\n\n# One on one\n\n- **Sponsor to sponsee.** A gift subscription is a meeting that never closes, especially for someone in a rural area, working odd hours or unable to get to meetings.\n- **Share the podcast.** It is free Twelfth Step work: one text, one link.\n- **Share the Daily Quote.** Signing up is free, and it takes ten seconds to read. Share it in your group's text chain ([today's quote](/#quote-title)).\n- **Mark anniversaries.** Give a year of Grapevine or La Viña with, or instead of, a chip.\n- **Give in Gratitude Month.** In November, ask: \"What are you grateful for? Give someone a reason to be grateful every day for a year.\" A group can set a goal, such as five gift subscriptions.\n\n# Online\n\n- **Ask for a follow.** It takes five seconds: \"If you're on Instagram, follow Grapevine and La Viña\" ([our Instagram page](/instagram/)).\n- **Reach young people.** Bring the app, the podcast, Instagram and the Daily Quote to YPAA events and meetings near campuses. They don't need to be sold on technology; they need to know the content exists.\n\n# Beyond the meeting room\n\n- **Give a \"Grapevine Minute\" at the district meeting.** Three minutes, one story and a sign-up sheet or QR card, in front of every GSR.\n- **Set up an intergroup or central office display.** Current issues, a tablet with the podcast or app, and sign-up cards where members already come for literature and chips.\n- **Add it to H&I visit kits.** Leave a current issue alongside the Big Book.\n- **Build a bridge from treatment and corrections.** A group-funded subscription waiting for someone leaving treatment or a correctional facility means the message follows them home.\n- **Work with the professional community (CPC).** Include a current issue with other A.A. literature for doctors, counselors, social workers and clergy.\n- **Read it, then pass it.** Read one print copy at the meeting, then leave it in a waiting room, a laundromat or a break room.\n\n# Every month\n\nThe [Monthly toolkit](/monthly/) has this month's issues, the story deadlines and more ways to put them to work. Talk with your GVR or RLV, bring one idea to your next business meeting, and share what works at the [committee meeting](/meetings/#committee-meeting).",
     "pinned": false
    },
@@ -5156,7 +5422,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 149,
+    "views": 202,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -5992,7 +6258,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 307,
+    "views": 318,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -6618,7 +6884,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 288,
+    "views": 294,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7289,7 +7555,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 288,
+    "views": 292,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -7559,7 +7825,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 314,
+    "views": 320,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8475,280 +8741,6 @@
    "machine": [],
    "is_new": false,
    "wn_date": "2026-10-02T12:00:00Z"
-  },
-  {
-   "id": "ig:Dd_YWRTF0WK",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd_YWRTF0WK/",
-   "title": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que…",
-   "summary": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que me dieron implicó mucho más que palabras. Se trató de palabras seguidas de acciones”. \"“¿A qué reunión irás mañana?” SANTA ROSA, CALIFORNIA, NOVIEMBRE DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-02T11:30:17Z",
-   "first_seen": "2026-10-02T12:38:07Z",
-   "image": "/assets/cache/ig/Dd_YWRTF0WK.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd_YWRTF0WK",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd_YWRTF0WK.webp",
-    "embed_url": "https://www.instagram.com/p/Dd_YWRTF0WK/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd_YWRTF0WK/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“My recovery depends on many people extending a hand to me. Welcome that …",
-     "es": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que…"
-    },
-    "summary": {
-     "en": "“My recovery depends on many people extending a hand to me. The welcome they gave me involved much more than words. These were words followed by actions.” \"What meeting will you go to tomorrow?\" Santa Rosa, California, November 1999 from I am Responsible\" Daily Quote in www.aalavina.org",
-     "es": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que me dieron implicó mucho más que palabras. Se trató de palabras seguidas de acciones”. \"“¿A qué reunión irás mañana?” SANTA ROSA, CALIFORNIA, NOVIEMBRE DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-02T11:30:17Z"
-  },
-  {
-   "id": "ig:Dd_YWPhlxqs",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd_YWPhlxqs/",
-   "title": "“In the life of each AA member, there still lurks a tyrant. His name is alcohol.”",
-   "summary": "“In the life of each AA member, there still lurks a tyrant. His name is alcohol.” AA Co-Founder, Bill W., July 1946, “The Individual in Relation to AA as a Group”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-02T11:30:15Z",
-   "first_seen": "2026-10-02T12:38:07Z",
-   "image": "/assets/cache/ig/Dd_YWPhlxqs.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd_YWPhlxqs",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd_YWPhlxqs.webp",
-    "embed_url": "https://www.instagram.com/p/Dd_YWPhlxqs/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd_YWPhlxqs/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“In the life of each AA member, there still lurks a tyrant. His name is alcohol.”",
-     "es": "“En la vida de cada miembro de AA, todavía hay un tirano. Su nombre es alcohol.”"
-    },
-    "summary": {
-     "en": "“In the life of each AA member, there still lurks a tyrant. His name is alcohol.” AA Co-Founder, Bill W., July 1946, “The Individual in Relation to AA as a Group”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-     "es": "“En la vida de cada miembro de AA, todavía hay un tirano. Su nombre es alcohol.” AA cofundador, Bill W., julio de 1946, “el individuo en relación con AA como grupo”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-02T11:30:15Z"
-  },
-  {
-   "id": "yt:3IlmqK3taOo",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=3IlmqK3taOo",
-   "title": "Grapevine Weekly Open AA Meeting, September 30, 2026 [Season 2, Episode 14]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 30, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Eileen and Marcheta, who share their experience…",
-   "lang": "en",
-   "date": "2026-10-02T04:37:45Z",
-   "first_seen": "2026-10-02T12:38:01Z",
-   "image": "https://i.ytimg.com/vi/3IlmqK3taOo/hqdefault.jpg",
-   "tags": [
-    "season-2",
-    "weekly-open",
-    "live"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "3IlmqK3taOo",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 3003,
-    "playlists": [
-     "Grapevine Weekly Open AA Meeting"
-    ],
-    "is_short": false,
-    "views": 309,
-    "is_live_recording": true,
-    "date_approx": false,
-    "season": 2,
-    "episode": 14
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, September 30, 2026 [Season 2, Episode 14]",
-     "es": "Grapevine Weekly Open AA Meeting, 30 de septiembre de 2026 [Temporada 2, Episodio 14]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 30, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Eileen and Marcheta, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 30 de septiembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Jeff da la bienvenida a los oradores Eileen y Marcheta, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-02T04:37:45Z"
-  },
-  {
-   "id": "pod:wo:7574d90d16ee",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/13d63a24-e307-41db-9661-fd110bcbe413",
-   "title": "Grapevine Weekly Open AA Meeting, September 30, 2026 [Season 2, Episode 14]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 30, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Eileen and Marcheta, who share their experience…",
-   "lang": "en",
-   "date": "2026-10-02T04:15:00Z",
-   "first_seen": "2026-10-02T04:55:26Z",
-   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
-   "tags": [
-    "season-2"
-   ],
-   "category": "wo",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/13d63a24-e307-41db-9661-fd110bcbe413.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 72063638,
-    "duration_sec": 3002,
-    "season": 2,
-    "episode": 14,
-    "episode_type": "full",
-    "show": "wo",
-    "show_name": "Grapevine Weekly Open AA Meeting",
-    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "player_url": "https://player.captivate.fm/episode/13d63a24-e307-41db-9661-fd110bcbe413",
-    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
-    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
-    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, September 30, 2026 [Season 2, Episode 14]",
-     "es": "Grapevine Weekly Open AA Meeting, 30 de septiembre de 2026 [Temporada 2, Episodio 14]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on September 30, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Jeff welcomes speakers Eileen and Marcheta, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 30 de septiembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Jeff da la bienvenida a los oradores Eileen y Marcheta, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-02T04:15:00Z"
-  },
-  {
-   "id": "ig:Dd9Qu_1F7p7",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd9Qu_1F7p7/",
-   "title": "Holiday Greeting Cards - 12 pack",
-   "summary": "Holiday Greeting Cards - 12 pack Two different cartoons illustrated by AA members! Each card is beautifully illustrated with a cartoon about humorous moments in sobriety. All cartoons are conceived and drawn by AA members and were previously published in AA Grapevine. Perfect for giving to a sponsor, sponsee or a fellow member to celebrate a sober anniversary or any occasion. To learn more…",
-   "lang": "en",
-   "date": "2026-10-01T15:45:15Z",
-   "first_seen": "2026-10-02T12:38:07Z",
-   "image": "/assets/cache/ig/Dd9Qu_1F7p7.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd9Qu_1F7p7",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd9Qu_1F7p7.webp",
-    "embed_url": "https://www.instagram.com/p/Dd9Qu_1F7p7/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd9Qu_1F7p7/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Holiday Greeting Cards - 12 pack",
-     "es": "Tarjetas de felicitación de fiestas - 12 pack"
-    },
-    "summary": {
-     "en": "Holiday Greeting Cards - 12 pack Two different cartoons illustrated by AA members! Each card is beautifully illustrated with a cartoon about humorous moments in sobriety. All cartoons are conceived and drawn by AA members and were previously published in AA Grapevine. Perfect for giving to a sponsor, sponsee or a fellow member to celebrate a sober anniversary or any occasion. To learn more…",
-     "es": "¡Tarjetas de felicitación de fiestas - 12 pack Dos dibujos animados diferentes ilustrados por los miembros de AA! Cada tarjeta está bellamente ilustrada con un dibujo animado sobre momentos humorísticos en sobriedad. Todas las caricaturas son concebidas y dibujadas por los miembros de AA y fueron publicadas previamente en AA Grapevine. Perfecto para dar a un padrino, ahijado o a un compañero para celebrar un aniversario sobrio o cualquier ocasión. Para aprender más …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-01T15:45:15Z"
-  },
-  {
-   "id": "ig:Dd9QvAqFxG7",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd9QvAqFxG7/",
-   "title": "¡Tarjetas de ocasión para las fiestas! Paquete de 12",
-   "summary": "¡Tarjetas de ocasión para las fiestas! Paquete de 12 ¡Dos diseños diferentes, ilustrados por miembros de AA! Cada tarjeta está ilustrada con una caricatura que representa momentos divertidos de la sobriedad. Todas las caricaturas fueron creadas por miembros de AA y publicadas anteriormente en La Viña. Son perfectas para regalar a un padrino, ahijado o compañero de AA, para celebrar un aniversario…",
-   "lang": "es",
-   "date": "2026-10-01T15:45:15Z",
-   "first_seen": "2026-10-02T12:38:07Z",
-   "image": "/assets/cache/ig/Dd9QvAqFxG7.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd9QvAqFxG7",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd9QvAqFxG7.webp",
-    "embed_url": "https://www.instagram.com/p/Dd9QvAqFxG7/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd9QvAqFxG7/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "The occasional cards for the holidays! Package of 12",
-     "es": "¡Tarjetas de ocasión para las fiestas! Paquete de 12"
-    },
-    "summary": {
-     "en": "The occasional cards for the holidays! Package of 12 Two different designs, illustrated by members of AA! Each card is illustrated with a cartoon that represents fun moments of the sobriety. All caricatures were created by members of AA and previously published in La Viña. They are perfect to give to a sponsor, sponsee or AA partner to celebrate an … anniversary.",
-     "es": "¡Tarjetas de ocasión para las fiestas! Paquete de 12 ¡Dos diseños diferentes, ilustrados por miembros de AA! Cada tarjeta está ilustrada con una caricatura que representa momentos divertidos de la sobriedad. Todas las caricaturas fueron creadas por miembros de AA y publicadas anteriormente en La Viña. Son perfectas para regalar a un padrino, ahijado o compañero de AA, para celebrar un aniversario…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-01T15:45:15Z"
   }
  ]
 }
