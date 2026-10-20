@@ -1,12 +1,12 @@
 {
  "source": "quote",
- "updated": "2026-10-20T06:08:29Z",
- "attempted": "2026-10-20T06:08:29Z",
+ "updated": "2026-10-20T11:51:33Z",
+ "attempted": "2026-10-20T11:51:33Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
@@ -14,69 +14,82 @@
   "parsed": 2,
   "requests": 2,
   "today": "2026-10-20",
-  "new": 0
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-19",
+   "id": "quote:gv:2026-10-20",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 19",
+   "title": "Grapevine Daily Quote October 20",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-19",
-   "first_seen": "2026-10-19T12:22:48Z",
-   "last_seen": "2026-10-19T12:22:48Z",
+   "date": "2026-10-20",
+   "first_seen": "2026-10-20T11:51:33Z",
+   "last_seen": "2026-10-20T11:51:33Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "We found that each of us had to make willing sacrifices ... for the common welfare.",
-    "attribution": "AA Co-Founder, Bill W., January 1955, “Why Alcoholics Anonymous Is Anonymous”, The Language of the Heart",
+    "text": "The spirit of AA has been with me ... for better or for worse, for richer or for poorer, in sickness and in health.",
+    "attribution": "“Absolutely Richard,” Santa Cruz, California, April 1998, Voices of Long-Term Sobriety",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 19",
+    "date_label": "October 20",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84352"
+    "node": "node-84353"
    }
   },
   {
-   "id": "quote:lv:2026-10-19",
+   "id": "quote:lv:2026-10-20",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 19",
+   "title": "Cita Diaria con La Viña Octubre 20",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-19",
-   "first_seen": "2026-10-19T12:22:48Z",
-   "last_seen": "2026-10-19T12:22:48Z",
+   "date": "2026-10-20",
+   "first_seen": "2026-10-20T11:51:33Z",
+   "last_seen": "2026-10-20T11:51:33Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "El sentido de comunidad en AA es único. De un día para el otro, se entablan lazos que llevaría años lograr en cualquier otro sitio. Nadie necesita máscaras. Todas las barreras están abajo. Los que toda su vida se sintieron fuera de lugar ahora saben que, realmente, pertenecen. De sentir que un enorme lastre pesa sobre sus vidas pasan a navegar libremente, de repente y a toda vela.",
-    "attribution": "\"Quizás haya sido el momento...\", Lois W., esposa de Bill W., cofundador de AA, febrero de 1950. Del libro Lo mejor del Grapevine, Volumen II",
+    "text": "Mantener la mente abierta es difícil si la boca también lo está.",
+    "attribution": "“Destilación del espíritu”. INDIANÁPOLIS, INDIANA, AGOSTO DE 1982. Del AA Grapevine",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "19 de octubre",
+    "date_label": "20 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84361"
+    "node": "node-84362"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-20",
+    "heading": "Grapevine Daily Quote October 20",
+    "text": "The spirit of AA has been with me ... for better or for worse, for richer or for poorer, in sickness and in health.",
+    "attribution": "“Absolutely Richard,” Santa Cruz, California, April 1998, Voices of Long-Term Sobriety",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-20T11:51:23Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -248,6 +261,19 @@
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-20",
+    "heading": "Cita Diaria con La Viña Octubre 20",
+    "text": "Mantener la mente abierta es difícil si la boca también lo está.",
+    "attribution": "“Destilación del espíritu”. INDIANÁPOLIS, INDIANA, AGOSTO DE 1982. Del AA Grapevine",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-20T11:51:33Z"
+   },
    {
     "pub": "lv",
     "lang": "es",

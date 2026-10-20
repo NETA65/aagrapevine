@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-20T06:08:39Z",
- "updated": "2026-10-20T06:08:39Z",
+ "generated": "2026-10-20T11:51:42Z",
+ "updated": "2026-10-20T11:51:42Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-10-20T06:08:14Z",
-   "attempted": "2026-10-20T06:08:14Z",
+   "updated": "2026-10-20T11:51:18Z",
+   "attempted": "2026-10-20T11:51:18Z",
    "count": 36,
    "new_7d": 0,
    "error": null,
@@ -87,8 +87,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-10-20T06:08:14Z",
-   "attempted": "2026-10-20T06:08:14Z",
+   "updated": "2026-10-20T11:51:18Z",
+   "attempted": "2026-10-20T11:51:18Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -111,8 +111,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-10-20T06:08:14Z",
-   "attempted": "2026-10-20T06:08:14Z",
+   "updated": "2026-10-20T11:51:18Z",
+   "attempted": "2026-10-20T11:51:18Z",
    "count": 10,
    "new_7d": 1,
    "error": null,
@@ -166,8 +166,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-10-20T06:08:37Z",
-   "attempted": "2026-10-20T06:08:37Z",
+   "updated": "2026-10-20T11:51:40Z",
+   "attempted": "2026-10-20T11:51:40Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -322,8 +322,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-10-20T06:08:32Z",
-   "attempted": "2026-10-20T06:08:32Z",
+   "updated": "2026-10-20T11:51:36Z",
+   "attempted": "2026-10-20T11:51:36Z",
    "count": 303,
    "new_7d": 2,
    "error": null,
@@ -350,7 +350,7 @@
     "gone_checks": 0,
     "discovery_checked": "2026-10-16T12:31:47Z",
     "discovered_feeds": [],
-    "seconds": 2.3,
+    "seconds": 2.5,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -560,8 +560,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-10-20T06:08:29Z",
-   "attempted": "2026-10-20T06:08:29Z",
+   "updated": "2026-10-20T11:51:33Z",
+   "attempted": "2026-10-20T11:51:33Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -570,11 +570,11 @@
     "parsed": 2,
     "requests": 2,
     "today": "2026-10-20",
-    "new": 0
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -594,8 +594,8 @@
    {
     "day": "2026-10-20",
     "goal_at": "2026-10-20T10:30:00Z",
-    "gv": null,
-    "lv": null
+    "gv": "2026-10-20T11:51:23Z",
+    "lv": "2026-10-20T11:51:33Z"
    },
    {
     "day": "2026-10-19",
@@ -700,7 +700,7 @@
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
    "last_attempt": "2026-10-20T06:08:37Z",
-   "checked_this_run": true,
+   "checked_this_run": false,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,
