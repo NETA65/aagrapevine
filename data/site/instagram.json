@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-19T14:46:23Z",
+ "updated": "2026-10-20T12:48:33Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16940,
-   "posts": 3952,
+   "posts": 3954,
    "owner_id": "48108439509",
-   "checked": "2026-10-19T14:46:04Z",
+   "checked": "2026-10-20T12:48:16Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,191 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2420,
-   "posts": 2977,
+   "posts": 2979,
    "owner_id": "48275839129",
-   "checked": "2026-10-19T14:46:07Z",
+   "checked": "2026-10-20T12:48:19Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:Detup87FzKQ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Detup87FzKQ/",
+   "title": "“Mantener la mente abierta es difícil si la boca también lo está”.",
+   "summary": "“Mantener la mente abierta es difícil si la boca también lo está”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-20T11:30:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Detup87FzKQ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Detup87FzKQ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Detup87FzKQ.webp",
+    "embed_url": "https://www.instagram.com/p/Detup87FzKQ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Detup87FzKQ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Keeping open mind is difficult if the mouth is too.”",
+     "es": "“Mantener la mente abierta es difícil si la boca también lo está”."
+    },
+    "summary": {
+     "en": "“Keeping open mind is difficult if the mouth is too.” Indianápolis, Indiana, August 1982 AA Grapevine Daily Quote in www.aalavina.org",
+     "es": "“Mantener la mente abierta es difícil si la boca también lo está”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Detup7GFy91",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Detup7GFy91/",
+   "title": "“The spirit of AA has been with me ... for better or for worse, for richer or for…",
+   "summary": "“The spirit of AA has been with me ... for better or for worse, for richer or for poorer, in sickness and in health.” “Absolutely Richard,” Santa Cruz, California, April 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-20T11:30:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Detup7GFy91.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Detup7GFy91",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Detup7GFy91.webp",
+    "embed_url": "https://www.instagram.com/p/Detup7GFy91/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Detup7GFy91/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The spirit of AA has been with me ... for better or for worse, for richer or for…",
+     "es": "“El espíritu de AA ha estado conmigo... para mejor o para peor, para más rico o para …"
+    },
+    "summary": {
+     "en": "“The spirit of AA has been with me ... for better or for worse, for richer or for poorer, in sickness and in health.” “Absolutely Richard,” Santa Cruz, California, April 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“El espíritu de AA ha estado conmigo... para bien o para mal, para más rico o para más pobre, en enfermedad y en salud”. “Absolutamente Richard,” Santa Cruz, California, abril de 1998, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Derh5O8l7Ms",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Derh5O8l7Ms/",
+   "title": "De Juan M., -\"Aniversario del grupo unidad 39 años\" . 📣 Envíanos tus mejores fotografías…",
+   "summary": "De Juan M., -\"Aniversario del grupo unidad 39 años\". 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad.. 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes!",
+   "lang": "es",
+   "date": "2026-10-19T15:00:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Derh5O8l7Ms.webp",
+   "tags": [
+    "alcoholicosanónimos",
+    "laviña",
+    "aa",
+    "sobriedad",
+    "recuperación"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Derh5O8l7Ms",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Derh5O8l7Ms.webp",
+    "embed_url": "https://www.instagram.com/p/Derh5O8l7Ms/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Derh5O8l7Ms/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Juan M., \"Anniversary of the unit group 39 years\" . 📣 Send us your best … pictures",
+     "es": "De Juan M., -\"Aniversario del grupo unidad 39 años\" . 📣 Envíanos tus mejores fotografías…"
+    },
+    "summary": {
+     "en": "From Juan M., \"Anniversary of the unit group 39 years.\" 📣 Send us your best photos that reflect the joy of living, serenity and other themes of sobriety.. 📣 Please: ➡️ Include your name, the initial of your last name ➡️ Indica where photo was taken, location ➡️ Send your photos to: social@aagrapevine.org Don't let us send your best images!",
+     "es": "De Juan M., -\"Aniversario del grupo unidad 39 años\". 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad.. 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes!"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Derh5HJF8Pr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Derh5HJF8Pr/",
+   "title": "From Nadja F., - \"GV/LV Committee new T-shirts! NETA 65 - Northeast Texas Area 65…",
+   "summary": "From Nadja F., - \"GV/LV Committee new T-shirts! NETA 65 - Northeast Texas Area 65 Committee Meeting\" Dallas TX. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is…",
+   "lang": "en",
+   "date": "2026-10-19T15:00:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Derh5HJF8Pr.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Derh5HJF8Pr",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Derh5HJF8Pr.webp",
+    "embed_url": "https://www.instagram.com/p/Derh5HJF8Pr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Derh5HJF8Pr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Nadja F., - \"GV/LV Committee new T-shirts! NETA 65 - Northeast Texas Area 65…",
+     "es": "De Nadja F., - \"¡Comité de GV/LV nuevas camisetas! NETA 65 - Área 65 del Noreste de Texas …"
+    },
+    "summary": {
+     "en": "From Nadja F., - \"GV/LV Committee new T-shirts! NETA 65 - Northeast Texas Area 65 Committee Meeting\" Dallas TX. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is…",
+     "es": "¡De Nadja F., - \"Comité de GV/LV camisetas nuevas! NETA 65 - Reunión del comité Área 65 del Noreste de Texas\" Dallas TX. ¡Grapevine Instagram concurso de fotos! Envíenos sus fotos a social@aagrapevine.org ➡️ Por favor incluya su nombre y su última inicial, y su ubicación. ➡️ Las fotos deben ser protegidas por el anonimato (no poses de cara completa o imágenes identificables de las personas.) ¡Esperando ver sus imágenes! El concurso es …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DerPdIZAfpL",
    "source": "instagram",

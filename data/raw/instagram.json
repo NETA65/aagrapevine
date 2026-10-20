@@ -1,11 +1,11 @@
 {
  "source": "instagram",
- "updated": "2026-10-19T14:46:23Z",
- "attempted": "2026-10-19T14:46:23Z",
+ "updated": "2026-10-20T12:48:33Z",
+ "attempted": "2026-10-20T12:48:33Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 5,
+  "added": 4,
   "removed": 0,
   "held": 0
  },
@@ -31,20 +31,146 @@
    "missing": [],
    "removed": []
   },
-  "thumbs_downloaded": 5,
+  "thumbs_downloaded": 4,
   "pruned": 0,
   "thumbs_deleted": 0,
-  "new": 5,
-  "total": 121,
+  "new": 4,
+  "total": 125,
   "per_account": {
-   "gv": 68,
-   "lv": 53
+   "gv": 70,
+   "lv": 55
   },
   "requests": 7,
   "anonymous": true,
   "graph_api": false
  },
  "items": [
+  {
+   "id": "ig:Detup7GFy91",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Detup7GFy91/",
+   "title": "“The spirit of AA has been with me ... for better or for worse, for richer or for…",
+   "summary": "“The spirit of AA has been with me ... for better or for worse, for richer or for poorer, in sickness and in health.” “Absolutely Richard,” Santa Cruz, California, April 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-20T11:30:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "last_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Detup7GFy91.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Detup7GFy91",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Detup7GFy91.webp",
+    "embed_url": "https://www.instagram.com/p/Detup7GFy91/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Detup7GFy91/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:Detup87FzKQ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Detup87FzKQ/",
+   "title": "“Mantener la mente abierta es difícil si la boca también lo está”.",
+   "summary": "“Mantener la mente abierta es difícil si la boca también lo está”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-20T11:30:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "last_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Detup87FzKQ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Detup87FzKQ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Detup87FzKQ.webp",
+    "embed_url": "https://www.instagram.com/p/Detup87FzKQ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Detup87FzKQ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:Derh5HJF8Pr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Derh5HJF8Pr/",
+   "title": "From Nadja F., - \"GV/LV Committee new T-shirts! NETA 65 - Northeast Texas Area 65…",
+   "summary": "From Nadja F., - \"GV/LV Committee new T-shirts! NETA 65 - Northeast Texas Area 65 Committee Meeting\" Dallas TX. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is…",
+   "lang": "en",
+   "date": "2026-10-19T15:00:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "last_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Derh5HJF8Pr.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Derh5HJF8Pr",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Derh5HJF8Pr.webp",
+    "embed_url": "https://www.instagram.com/p/Derh5HJF8Pr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Derh5HJF8Pr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:Derh5O8l7Ms",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Derh5O8l7Ms/",
+   "title": "De Juan M., -\"Aniversario del grupo unidad 39 años\" . 📣 Envíanos tus mejores fotografías…",
+   "summary": "De Juan M., -\"Aniversario del grupo unidad 39 años\" . 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad. . 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes! #alcoholicosanónimos #LaViña #AA…",
+   "lang": "es",
+   "date": "2026-10-19T15:00:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "last_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Derh5O8l7Ms.webp",
+   "tags": [
+    "alcoholicosanónimos",
+    "laviña",
+    "aa",
+    "sobriedad",
+    "recuperación"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Derh5O8l7Ms",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Derh5O8l7Ms.webp",
+    "embed_url": "https://www.instagram.com/p/Derh5O8l7Ms/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Derh5O8l7Ms/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
   {
    "id": "ig:DerPdIZAfpL",
    "source": "instagram",
@@ -3696,9 +3822,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16940,
-   "posts": 3952,
+   "posts": 3954,
    "owner_id": "48108439509",
-   "checked": "2026-10-19T14:46:04Z",
+   "checked": "2026-10-20T12:48:16Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp",
    "_avatar_checked": "2026-10-16T12:33:09Z"
   },
@@ -3708,9 +3834,9 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2420,
-   "posts": 2977,
+   "posts": 2979,
    "owner_id": "48275839129",
-   "checked": "2026-10-19T14:46:07Z",
+   "checked": "2026-10-20T12:48:19Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp",
    "_avatar_checked": "2026-10-16T12:33:09Z"
   }
@@ -3925,6 +4051,21 @@
   },
   "DeJrhq7F5Ek": {
    "checked": "2026-10-19T14:46:07Z"
+  },
+  "DeJrhtXF7XV": {
+   "checked": "2026-10-20T12:48:19Z"
+  },
+  "DeMQUqWjINJ": {
+   "checked": "2026-10-20T12:48:19Z"
+  },
+  "DeMQUmZjL_1": {
+   "checked": "2026-10-20T12:48:19Z"
+  },
+  "DeMTwPXjMKc": {
+   "checked": "2026-10-20T12:48:19Z"
+  },
+  "DeMghbFR3oI": {
+   "checked": "2026-10-20T12:48:19Z"
   }
  }
 }

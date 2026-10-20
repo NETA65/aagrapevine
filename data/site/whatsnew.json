@@ -1,7 +1,234 @@
 {
- "updated": "2026-10-20T11:51:41Z",
+ "updated": "2026-10-20T12:55:33Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:Detup7GFy91",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Detup7GFy91/",
+   "title": "“The spirit of AA has been with me ... for better or for worse, for richer or for…",
+   "summary": "“The spirit of AA has been with me ... for better or for worse, for richer or for poorer, in sickness and in health.” “Absolutely Richard,” Santa Cruz, California, April 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-20T11:30:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Detup7GFy91.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Detup7GFy91",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Detup7GFy91.webp",
+    "embed_url": "https://www.instagram.com/p/Detup7GFy91/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Detup7GFy91/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The spirit of AA has been with me ... for better or for worse, for richer or for…",
+     "es": "“El espíritu de AA ha estado conmigo... para mejor o para peor, para más rico o para …"
+    },
+    "summary": {
+     "en": "“The spirit of AA has been with me ... for better or for worse, for richer or for poorer, in sickness and in health.” “Absolutely Richard,” Santa Cruz, California, April 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“El espíritu de AA ha estado conmigo... para bien o para mal, para más rico o para más pobre, en enfermedad y en salud”. “Absolutamente Richard,” Santa Cruz, California, abril de 1998, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-20T11:30:14Z"
+  },
+  {
+   "id": "ig:Detup87FzKQ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Detup87FzKQ/",
+   "title": "“Mantener la mente abierta es difícil si la boca también lo está”.",
+   "summary": "“Mantener la mente abierta es difícil si la boca también lo está”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-20T11:30:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Detup87FzKQ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Detup87FzKQ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Detup87FzKQ.webp",
+    "embed_url": "https://www.instagram.com/p/Detup87FzKQ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Detup87FzKQ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Keeping open mind is difficult if the mouth is too.”",
+     "es": "“Mantener la mente abierta es difícil si la boca también lo está”."
+    },
+    "summary": {
+     "en": "“Keeping open mind is difficult if the mouth is too.” Indianápolis, Indiana, August 1982 AA Grapevine Daily Quote in www.aalavina.org",
+     "es": "“Mantener la mente abierta es difícil si la boca también lo está”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-20T11:30:14Z"
+  },
+  {
+   "id": "yt:GhzyIQKhsEw",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=GhzyIQKhsEw",
+   "title": "“Self Confidence or Faith”",
+   "summary": "ASL Grapevine night live recording Topic: “Self Confidence or Faith” Transcript: https://docs.google.com/document/d/1Mydg748nQULtRAhJY1jL3ANCXg6ussvy/edit?usp=sharing&ouid=100589345886168598535&rtpof=true&sd=true",
+   "lang": "en",
+   "date": "2026-10-19T16:00:11Z",
+   "first_seen": "2026-10-20T12:48:15Z",
+   "image": "https://i.ytimg.com/vi/GhzyIQKhsEw/hqdefault.jpg",
+   "tags": [
+    "live",
+    "asl"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "GhzyIQKhsEw",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "American Sign Language"
+    ],
+    "is_short": false,
+    "views": 76,
+    "is_live_recording": true,
+    "date_approx": false
+   },
+   "i18n": {
+    "title": {
+     "en": "“Self Confidence or Faith”",
+     "es": "\"Autoconfianza o fe\""
+    },
+    "summary": {
+     "en": "ASL Grapevine night live recording Topic: “Self Confidence or Faith” Transcript: https://docs.google.com/document/d/1Mydg748nQULtRAhJY1jL3ANCXg6ussvy/edit?usp=sharing&ouid=100589345886168598535&rtpof=true&sd=true",
+     "es": "ASL Grapevine noche de grabación en vivo Tema: “Confianza o fe” Transcripción: https://docs.google.com/document/d/1Mydg748nQULtRAhJY1jL3ANCXg6ussvy/edit?usp=sharing&ouid=100589345886168598535&rtpof=true&sd=true"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-19T16:00:11Z"
+  },
+  {
+   "id": "ig:Derh5HJF8Pr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Derh5HJF8Pr/",
+   "title": "From Nadja F., - \"GV/LV Committee new T-shirts! NETA 65 - Northeast Texas Area 65…",
+   "summary": "From Nadja F., - \"GV/LV Committee new T-shirts! NETA 65 - Northeast Texas Area 65 Committee Meeting\" Dallas TX. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is…",
+   "lang": "en",
+   "date": "2026-10-19T15:00:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Derh5HJF8Pr.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Derh5HJF8Pr",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Derh5HJF8Pr.webp",
+    "embed_url": "https://www.instagram.com/p/Derh5HJF8Pr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Derh5HJF8Pr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Nadja F., - \"GV/LV Committee new T-shirts! NETA 65 - Northeast Texas Area 65…",
+     "es": "De Nadja F., - \"¡Comité de GV/LV nuevas camisetas! NETA 65 - Área 65 del Noreste de Texas …"
+    },
+    "summary": {
+     "en": "From Nadja F., - \"GV/LV Committee new T-shirts! NETA 65 - Northeast Texas Area 65 Committee Meeting\" Dallas TX. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is…",
+     "es": "¡De Nadja F., - \"Comité de GV/LV camisetas nuevas! NETA 65 - Reunión del comité Área 65 del Noreste de Texas\" Dallas TX. ¡Grapevine Instagram concurso de fotos! Envíenos sus fotos a social@aagrapevine.org ➡️ Por favor incluya su nombre y su última inicial, y su ubicación. ➡️ Las fotos deben ser protegidas por el anonimato (no poses de cara completa o imágenes identificables de las personas.) ¡Esperando ver sus imágenes! El concurso es …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-19T15:00:14Z"
+  },
+  {
+   "id": "ig:Derh5O8l7Ms",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Derh5O8l7Ms/",
+   "title": "De Juan M., -\"Aniversario del grupo unidad 39 años\" . 📣 Envíanos tus mejores fotografías…",
+   "summary": "De Juan M., -\"Aniversario del grupo unidad 39 años\". 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad.. 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes!",
+   "lang": "es",
+   "date": "2026-10-19T15:00:14Z",
+   "first_seen": "2026-10-20T12:48:33Z",
+   "image": "/assets/cache/ig/Derh5O8l7Ms.webp",
+   "tags": [
+    "alcoholicosanónimos",
+    "laviña",
+    "aa",
+    "sobriedad",
+    "recuperación"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Derh5O8l7Ms",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Derh5O8l7Ms.webp",
+    "embed_url": "https://www.instagram.com/p/Derh5O8l7Ms/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Derh5O8l7Ms/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Juan M., \"Anniversary of the unit group 39 years\" . 📣 Send us your best … pictures",
+     "es": "De Juan M., -\"Aniversario del grupo unidad 39 años\" . 📣 Envíanos tus mejores fotografías…"
+    },
+    "summary": {
+     "en": "From Juan M., \"Anniversary of the unit group 39 years.\" 📣 Send us your best photos that reflect the joy of living, serenity and other themes of sobriety.. 📣 Please: ➡️ Include your name, the initial of your last name ➡️ Indica where photo was taken, location ➡️ Send your photos to: social@aagrapevine.org Don't let us send your best images!",
+     "es": "De Juan M., -\"Aniversario del grupo unidad 39 años\". 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad.. 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes!"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-19T15:00:14Z"
+  },
   {
    "id": "ig:DerPdIZAfpL",
    "source": "instagram",
@@ -158,7 +385,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 68,
+    "views": 142,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -5361,7 +5588,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 202,
+    "views": 215,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -6197,7 +6424,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 318,
+    "views": 326,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -6823,7 +7050,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 294,
+    "views": 298,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7494,7 +7721,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 292,
+    "views": 299,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -8444,286 +8671,6 @@
    "machine": [],
    "is_new": false,
    "wn_date": "2026-10-02T12:00:00Z"
-  },
-  {
-   "id": "drive:1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN/view",
-   "title": "Taller de Escritura de La Viña - Grupo Libro Grande, Tyler",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-10-02",
-   "first_seen": "2026-10-02T14:42:43Z",
-   "image": "https://lh3.googleusercontent.com/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN",
-    "mime": "image/jpeg",
-    "name": "Taller de Escritura de La Viña - Grupo Libro Grande, Tyler.jpg",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN/view",
-    "preview_url": "https://drive.google.com/file/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "JPEG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Oct 2"
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop - Grupo Libro Grande, Tyler",
-     "es": "Taller de Escritura de La Viña - Grupo Libro Grande, Tyler"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-02T12:00:00Z"
-  },
-  {
-   "id": "drive:1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j/view",
-   "title": "Taller de Escritura de La Viña - Grupo La Nueva Esperanza, Fort Worth",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-10-02",
-   "first_seen": "2026-10-02T14:42:43Z",
-   "image": "https://lh3.googleusercontent.com/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j",
-    "mime": "image/jpeg",
-    "name": "Taller de Escritura de La Viña - Grupo La Nueva Esperanza, Fort Worth.jpg",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j/view",
-    "preview_url": "https://drive.google.com/file/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1iib2vqUCFpZ-T2oj_EDJU96mSt3P8k0j=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "JPEG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Oct 2"
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop - Grupo La Nueva Esperanza, Fort Worth",
-     "es": "Taller de Escritura de La Viña - Grupo La Nueva Esperanza, Fort Worth"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-02T12:00:00Z"
-  },
-  {
-   "id": "drive:1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/view",
-   "title": "Grapevine Writing Workshop - Primary Purpose Group, Arlington",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-10-02",
-   "first_seen": "2026-10-02T14:42:43Z",
-   "image": "https://lh3.googleusercontent.com/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu",
-    "mime": "image/png",
-    "name": "Grapevine Writing Workshop - Primary Purpose Group, Arlington.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/view",
-    "preview_url": "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Oct 2"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Writing Workshop - Primary Purpose Group, Arlington",
-     "es": "Taller de Escritura de Grapevine - Primary Purpose Group, Arlington"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-02T12:00:00Z"
-  },
-  {
-   "id": "drive:1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj/view",
-   "title": "Taller de Escritura de La Viña - Grupo 7 Defectos y 7 Virtudes, Mansfield",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-10-02",
-   "first_seen": "2026-10-02T14:42:43Z",
-   "image": "https://lh3.googleusercontent.com/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj",
-    "mime": "image/jpeg",
-    "name": "Taller de Escritura de La Viña - Grupo 7 Defectos y 7 Virtudes, Mansfield.jpg",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj/view",
-    "preview_url": "https://drive.google.com/file/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1w5NfXJshkEVBmNXK-nMdmEUxqrbDgDQj=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "JPEG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Oct 2"
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop - Grupo 7 Defectos y 7 Virtudes, Mansfield",
-     "es": "Taller de Escritura de La Viña - Grupo 7 Defectos y 7 Virtudes, Mansfield"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-02T12:00:00Z"
-  },
-  {
-   "id": "ig:Dd_YWRTF0WK",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd_YWRTF0WK/",
-   "title": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que…",
-   "summary": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que me dieron implicó mucho más que palabras. Se trató de palabras seguidas de acciones”. \"“¿A qué reunión irás mañana?” SANTA ROSA, CALIFORNIA, NOVIEMBRE DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-02T11:30:17Z",
-   "first_seen": "2026-10-02T12:38:07Z",
-   "image": "/assets/cache/ig/Dd_YWRTF0WK.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd_YWRTF0WK",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd_YWRTF0WK.webp",
-    "embed_url": "https://www.instagram.com/p/Dd_YWRTF0WK/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd_YWRTF0WK/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“My recovery depends on many people extending a hand to me. Welcome that …",
-     "es": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que…"
-    },
-    "summary": {
-     "en": "“My recovery depends on many people extending a hand to me. The welcome they gave me involved much more than words. These were words followed by actions.” \"What meeting will you go to tomorrow?\" Santa Rosa, California, November 1999 from I am Responsible\" Daily Quote in www.aalavina.org",
-     "es": "“Mi recuperación depende de que muchas personas me extiendan una mano. La bienvenida que me dieron implicó mucho más que palabras. Se trató de palabras seguidas de acciones”. \"“¿A qué reunión irás mañana?” SANTA ROSA, CALIFORNIA, NOVIEMBRE DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-02T11:30:17Z"
   }
  ]
 }
