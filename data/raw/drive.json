@@ -1,11 +1,11 @@
 {
  "source": "drive",
- "updated": "2026-10-21T23:11:46Z",
- "attempted": "2026-10-21T23:11:46Z",
+ "updated": "2026-10-21T23:46:43Z",
+ "attempted": "2026-10-21T23:46:43Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 1,
   "removed": 0,
   "held": 0
  },
@@ -27,23 +27,23 @@
   "loose_skipped": 7,
   "skipped_panels": [],
   "folders": 11,
-  "files": 36,
-  "fetched": 36,
-  "new": 0,
+  "files": 37,
+  "fetched": 37,
+  "new": 1,
   "removed": 0,
   "kept_unverified": 0,
   "by_category": {
    "booth": 15,
    "flyers": 11,
    "slides": 4,
+   "reports": 3,
    "notes": 2,
-   "reports": 2,
    "announcements": 1,
    "workshops": 1
   },
   "by_kind": {
    "photo": 20,
-   "document": 10,
+   "document": 11,
    "slides": 4,
    "announcement": 1,
    "video_file": 1
@@ -2008,6 +2008,53 @@
      "1F-JX93b8nDV3tqx97bYxev2OJpv-XnNt"
     ],
     "modified_text": "Sep 25"
+   }
+  },
+  {
+   "id": "drive:1j2in2mpHaCtAXOT3AiHB3qgQF1i6EnJ1",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/1j2in2mpHaCtAXOT3AiHB3qgQF1i6EnJ1/view",
+   "title": "La Viña Task Force Meeting Notes",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-09-23",
+   "first_seen": "2026-10-21T23:46:43Z",
+   "last_seen": "2026-10-21T23:46:43Z",
+   "image": "https://lh3.googleusercontent.com/d/1j2in2mpHaCtAXOT3AiHB3qgQF1i6EnJ1=w600",
+   "tags": [
+    "panel-77",
+    "pdf"
+   ],
+   "category": "reports",
+   "status": "ok",
+   "extra": {
+    "file_id": "1j2in2mpHaCtAXOT3AiHB3qgQF1i6EnJ1",
+    "mime": "application/pdf",
+    "name": "2026-09-23 La Viña Task Force Meeting Notes.pdf",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "reports"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1j2in2mpHaCtAXOT3AiHB3qgQF1i6EnJ1/view",
+    "preview_url": "https://drive.google.com/file/d/1j2in2mpHaCtAXOT3AiHB3qgQF1i6EnJ1/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1j2in2mpHaCtAXOT3AiHB3qgQF1i6EnJ1",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1j2in2mpHaCtAXOT3AiHB3qgQF1i6EnJ1=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": true,
+    "file_type": "PDF",
+    "folder_id": "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_url": "https://drive.google.com/drive/folders/1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r"
+    ],
+    "modified_text": "4:44 pm"
    }
   },
   {
