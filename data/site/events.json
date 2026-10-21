@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-19T23:33:29Z",
+ "updated": "2026-10-21T10:19:08Z",
  "fixture": false,
  "items": [
   {
@@ -212,7 +212,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:manual:2026-11-07-lv-information-workshop-longview",

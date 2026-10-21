@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-10-20T23:08:11Z",
- "attempted": "2026-10-20T23:08:11Z",
+ "updated": "2026-10-21T10:18:59Z",
+ "attempted": "2026-10-21T10:18:59Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-20",
-  "new": 0
+  "today": "2026-10-21",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-20",
+   "id": "quote:gv:2026-10-21",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 20",
+   "title": "Grapevine Daily Quote October 21",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-20",
-   "first_seen": "2026-10-20T11:51:33Z",
-   "last_seen": "2026-10-20T11:51:33Z",
+   "date": "2026-10-21",
+   "first_seen": "2026-10-21T10:18:59Z",
+   "last_seen": "2026-10-21T10:18:59Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "The spirit of AA has been with me ... for better or for worse, for richer or for poorer, in sickness and in health.",
-    "attribution": "“Absolutely Richard,” Santa Cruz, California, April 1998, Voices of Long-Term Sobriety",
+    "text": "The deception of others is nearly always rooted in the deception of ourselves.",
+    "attribution": "AA Co-Founder, Bill W., August 1961, “This Matter of Honesty”, The Language of the Heart",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 20",
+    "date_label": "October 21",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84353"
+    "node": "node-84354"
    }
   },
   {
-   "id": "quote:lv:2026-10-20",
+   "id": "quote:lv:2026-10-21",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 20",
+   "title": "Cita Diaria con La Viña Octubre 21",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-20",
-   "first_seen": "2026-10-20T11:51:33Z",
-   "last_seen": "2026-10-20T11:51:33Z",
+   "date": "2026-10-21",
+   "first_seen": "2026-10-21T10:18:59Z",
+   "last_seen": "2026-10-21T10:18:59Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "Mantener la mente abierta es difícil si la boca también lo está.",
+    "text": "Quejarse no es un paso de acción.",
     "attribution": "“Destilación del espíritu”. INDIANÁPOLIS, INDIANA, AGOSTO DE 1982. Del AA Grapevine",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "20 de octubre",
+    "date_label": "21 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84362"
+    "node": "node-84363"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-21",
+    "heading": "Grapevine Daily Quote October 21",
+    "text": "The deception of others is nearly always rooted in the deception of ourselves.",
+    "attribution": "AA Co-Founder, Bill W., August 1961, “This Matter of Honesty”, The Language of the Heart",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-21T10:18:49Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-08T07:31:43Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-07",
-    "heading": "Grapevine Daily Quote October 7",
-    "text": "Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty and truth filter in, and begins to demand reality.",
-    "attribution": "“It Takes What It Takes,” Pompano Beach, Florida, June 1978, Step By Step",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-07T06:54:43Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-21",
+    "heading": "Cita Diaria con La Viña Octubre 21",
+    "text": "Quejarse no es un paso de acción.",
+    "attribution": "“Destilación del espíritu”. INDIANÁPOLIS, INDIANA, AGOSTO DE 1982. Del AA Grapevine",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-21T10:18:59Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-08T07:31:54Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-07",
-    "heading": "Cita Diaria con La Viña Octubre 7",
-    "text": "Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía están sin esperanza. Sea cual sea el costo o el sacrificio que suponga, pongámonos a mejorar nuestras comunicaciones con toda esta gente para que encuentren lo que hemos encontrado: una nueva vida de libertad bajo Dios.",
-    "attribution": "“Una perspectiva del porvenir”. BILL W., COFUNDADOR DE AA, FEBRERO DE 1961",
-    "source": "I Am Responsible",
-    "source_lang": "en",
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-07T06:54:54Z"
    }
   ]
  }

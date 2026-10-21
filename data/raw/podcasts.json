@@ -1,7 +1,7 @@
 {
  "source": "podcasts",
- "updated": "2026-10-20T23:07:50Z",
- "attempted": "2026-10-20T23:07:50Z",
+ "updated": "2026-10-21T10:19:01Z",
+ "attempted": "2026-10-21T10:19:01Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -32,7 +32,7 @@
   "gone_checks": 0,
   "discovery_checked": "2026-10-16T12:31:47Z",
   "discovered_feeds": [],
-  "seconds": 2.6,
+  "seconds": 2.3,
   "artwork": 3,
   "artwork_missing": 0,
   "artwork_removed": 0
