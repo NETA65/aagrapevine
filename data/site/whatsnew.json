@@ -1,7 +1,183 @@
 {
- "updated": "2026-10-21T10:19:08Z",
+ "updated": "2026-10-21T13:10:53Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DewTcznDckq",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DewTcznDckq/",
+   "title": "“Quejarse no es un paso de acción”.",
+   "summary": "“Quejarse no es un paso de acción”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-21T11:30:16Z",
+   "first_seen": "2026-10-21T13:00:52Z",
+   "image": "/assets/cache/ig/DewTcznDckq.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DewTcznDckq",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DewTcznDckq.webp",
+    "embed_url": "https://www.instagram.com/p/DewTcznDckq/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DewTcznDckq/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“To complain is not a step of action.”",
+     "es": "“Quejarse no es un paso de acción”."
+    },
+    "summary": {
+     "en": "“To complain is not a step of action.” Indianápolis, Indiana, August 1982 AA Grapevine Daily Quote in www.aalavina.org",
+     "es": "“Quejarse no es un paso de acción”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-21T11:30:16Z"
+  },
+  {
+   "id": "ig:DewTc02DffK",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DewTc02DffK/",
+   "title": "“The deception of others is nearly always rooted in the deception of ourselves.”",
+   "summary": "“The deception of others is nearly always rooted in the deception of ourselves.” AA Co-Founder, Bill W., August 1961, “This Matter of Honesty”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-21T11:30:15Z",
+   "first_seen": "2026-10-21T13:00:52Z",
+   "image": "/assets/cache/ig/DewTc02DffK.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DewTc02DffK",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DewTc02DffK.webp",
+    "embed_url": "https://www.instagram.com/p/DewTc02DffK/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DewTc02DffK/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The deception of others is nearly always rooted in the deception of ourselves.”",
+     "es": "“El engaño de los demás está casi siempre arraigado en el engaño de nosotros mismos”."
+    },
+    "summary": {
+     "en": "“The deception of others is nearly always rooted in the deception of ourselves.” AA Co-Founder, Bill W., August 1961, “This Matter of Honesty”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "“El engaño de los demás está casi siempre arraigado en el engaño de nosotros mismos”. AA cofundador, Bill W., agosto de 1961, “este asunto de honestidad”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-21T11:30:15Z"
+  },
+  {
+   "id": "ig:DeuGuAgmrsA",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeuGuAgmrsA/",
+   "title": "The November GV News!",
+   "summary": "The November GV News! Letter to Grapevine and La Viña Reps: GRAPEVINE NEWS! To read what’s new for November, visit www.aagrapevine.org/gvr-resources Sign up to receive Grapevine emails at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-20T15:00:31Z",
+   "first_seen": "2026-10-21T13:00:52Z",
+   "image": "/assets/cache/ig/DeuGuAgmrsA.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeuGuAgmrsA",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DeuGuAgmrsA.webp",
+    "embed_url": "https://www.instagram.com/p/DeuGuAgmrsA/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeuGuAgmrsA/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The November GV News!",
+     "es": "¡Noticias GV de noviembre!"
+    },
+    "summary": {
+     "en": "The November GV News! Letter to Grapevine and La Viña Reps: GRAPEVINE NEWS! To read what’s new for November, visit www.aagrapevine.org/gvr-resources Sign up to receive Grapevine emails at www.aagrapevine.org",
+     "es": "¡Noticias GV de noviembre! ¡Carta a Grapevine y La Viña Reps: Grapevine NEWS! Para leer lo nuevo para noviembre, visite www.aagrapevine.org/gvr-resources Inscríbase para recibir correos electrónicos Grapevine en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-20T15:00:31Z"
+  },
+  {
+   "id": "ig:DeuGtQiCc4j",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeuGtQiCc4j/",
+   "title": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades…",
+   "summary": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades de Noviembre/Diciembre, visite www.aalavina.org/recursos Suscríbase para recibir correos electrónicos de La Viña en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-20T15:00:24Z",
+   "first_seen": "2026-10-21T13:00:52Z",
+   "image": "/assets/cache/ig/DeuGtQiCc4j.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeuGtQiCc4j",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DeuGtQiCc4j.webp",
+    "embed_url": "https://www.instagram.com/p/DeuGtQiCc4j/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeuGtQiCc4j/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Letter to the representatives of La Viña: News from La Viña! To read the news …",
+     "es": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades…"
+    },
+    "summary": {
+     "en": "Letter to the representatives of La Viña: News from La Viña! To read the latest news from November/December, visit www.aalavina.org/recursos Subscribe to receive emails from La Viña in www.aalavina.org",
+     "es": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades de Noviembre/Diciembre, visite www.aalavina.org/recursos Suscríbase para recibir correos electrónicos de La Viña en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-20T15:00:24Z"
+  },
   {
    "id": "ig:Detup7GFy91",
    "source": "instagram",
@@ -115,7 +291,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 76,
+    "views": 107,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -385,7 +561,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 142,
+    "views": 185,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -5588,7 +5764,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 215,
+    "views": 230,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -6424,7 +6600,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 326,
+    "views": 330,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7050,7 +7226,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 298,
+    "views": 305,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7469,7 +7645,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-07T12:00:14Z"
   },
   {
@@ -7513,7 +7689,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-07T11:30:15Z"
   },
   {
@@ -7557,7 +7733,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-07T11:30:15Z"
   },
   {
@@ -7721,7 +7897,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 299,
+    "views": 305,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -7991,7 +8167,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 320,
+    "views": 321,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8458,219 +8634,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-03T11:30:15Z"
-  },
-  {
-   "id": "ev:lvcal:38bd9dd925aa",
-   "source": "calendar",
-   "kind": "event",
-   "url": "https://www.aalavina.org/get-involved/events/2027-01-29/xlii-reunion-de-aa-zona-norte-de-texas-aa-un-camino-la-vida",
-   "title": "XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )",
-   "summary": "",
-   "lang": "es",
-   "date": "2027-01-29",
-   "first_seen": "2026-10-02T22:31:32Z",
-   "image": null,
-   "tags": [
-    "texas"
-   ],
-   "category": "lv-calendar",
-   "status": "ok",
-   "extra": {
-    "start": "2027-01-29",
-    "end": "2027-01-31",
-    "all_day": true,
-    "location": "Maude Cobb . Convenció center LONGVIEW TX 75604",
-    "city": null,
-    "state": null,
-    "country": null,
-    "region": null,
-    "online_url": null,
-    "platform": null,
-    "website": null,
-    "organizer": null,
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "scope": "texas",
-    "online": false,
-    "site": "lavina",
-    "date_text": "Enero 29, 2027 - Enero 31, 2027",
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "XLII North Texas Zone A.A. Gathering (A.A. A Way of Life)",
-     "es": "XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-02T22:31:32Z"
-  },
-  {
-   "id": "ig:Dd_kdS2Ri0d",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd_kdS2Ri0d/",
-   "title": "This week Jeff welcomes Eileen and Marcheta. Season 2, Episode 14.",
-   "summary": "This week Jeff welcomes Eileen and Marcheta. Season 2, Episode 14.",
-   "lang": "en",
-   "date": "2026-10-02T13:18:56Z",
-   "first_seen": "2026-10-02T22:21:06Z",
-   "image": "/assets/cache/ig/Dd_kdS2Ri0d.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd_kdS2Ri0d",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd_kdS2Ri0d.webp",
-    "embed_url": "https://www.instagram.com/p/Dd_kdS2Ri0d/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd_kdS2Ri0d/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "This week Jeff welcomes Eileen and Marcheta. Season 2, Episode 14.",
-     "es": "Esta semana Jeff da la bienvenida a Eileen y Marcheta. Temporada 2, Episodio 14."
-    },
-    "summary": {
-     "en": "This week Jeff welcomes Eileen and Marcheta. Season 2, Episode 14.",
-     "es": "Esta semana Jeff da la bienvenida a Eileen y Marcheta. Temporada 2, Episodio 14."
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-02T13:18:56Z"
-  },
-  {
-   "id": "drive:1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf/view",
-   "title": "Taller de Información de La Viña - Grupo Solo por Hoy, Longview",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-10-02",
-   "first_seen": "2026-10-02T14:42:43Z",
-   "image": "https://lh3.googleusercontent.com/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf",
-    "mime": "image/jpeg",
-    "name": "Taller de Información de La Viña - Grupo Solo por Hoy, Longview.jpg",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf/view",
-    "preview_url": "https://drive.google.com/file/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "JPEG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Oct 2"
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Information Workshop - Grupo Solo por Hoy, Longview",
-     "es": "Taller de Información de La Viña - Grupo Solo por Hoy, Longview"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-02T12:00:00Z"
-  },
-  {
-   "id": "drive:1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH/view",
-   "title": "Taller de Audio de La Viña - Grupo Progreso Latino, Duncanville",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-10-02",
-   "first_seen": "2026-10-02T14:42:43Z",
-   "image": "https://lh3.googleusercontent.com/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH",
-    "mime": "image/png",
-    "name": "Taller de Audio de La Viña - Grupo Progreso Latino, Duncanville.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH/view",
-    "preview_url": "https://drive.google.com/file/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1TXlPGaUB6ExTctdVSIJxxa8VTTomvFoH=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Oct 2"
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Audio Workshop - Grupo Progreso Latino, Duncanville",
-     "es": "Taller de Audio de La Viña - Grupo Progreso Latino, Duncanville"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-02T12:00:00Z"
   }
  ]
 }

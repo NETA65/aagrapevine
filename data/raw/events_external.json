@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-10-20T12:52:48Z",
- "attempted": "2026-10-20T12:52:48Z",
+ "updated": "2026-10-21T13:08:01Z",
+ "attempted": "2026-10-21T13:08:01Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,7 +15,7 @@
   "upcoming_urls": 20,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 0,
+  "refreshed": 1,
   "failed": 0,
   "pending": 0,
   "cached": 20,
@@ -23,7 +23,7 @@
   "online_es": 1,
   "items": 3,
   "new": 0,
-  "requests": 36
+  "requests": 39
  },
  "items": [
   {
@@ -462,7 +462,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2027-01-29/47th-hilton-head-midwinter-conference": {
-   "at": "2026-10-06T13:25:42Z",
+   "at": "2026-10-21T13:08:01Z",
    "ev": {
     "title": "47th Hilton Head Midwinter Conference",
     "date_text": "January 29, 2027 - January 31, 2027",
@@ -548,16 +548,15 @@
  "sitemap": {
   "pages": {
    "https://www.aagrapevine.org/sitemap.xml?page=1": {
-    "lastmod": "2026-10-19T04:34:34-05:00",
+    "lastmod": "2026-10-20T16:41:35-05:00",
     "events": [],
-    "fetched": "2026-10-19T14:50:54Z",
+    "fetched": "2026-10-21T13:07:51Z",
     "urls_total": 2000,
     "events_total": 2000
    },
    "https://www.aagrapevine.org/sitemap.xml?page=2": {
-    "lastmod": "2026-10-19T04:34:34-05:00",
+    "lastmod": "2026-10-20T16:41:35-05:00",
     "events": [
-     "https://www.aagrapevine.org/get-involved/events/2026-09-18/9th-keys-serenity-roundup",
      "https://www.aagrapevine.org/get-involved/events/2026-10-02/79th-powell-river-rally-2026",
      "https://www.aagrapevine.org/get-involved/events/2026-10-23/38th-northeast-woman-woman-conference",
      "https://www.aagrapevine.org/get-involved/events/2026-11-06/79th-tri-state-convention-0",
@@ -581,7 +580,7 @@
      "https://www.aalavina.org/get-involved/events/2027-05-28/xxiv-encuentro-hispano-de-aa-del-estado-de-kansas-sede-topeka",
      "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico"
     ],
-    "fetched": "2026-10-19T14:50:59Z",
+    "fetched": "2026-10-21T13:07:56Z",
     "urls_total": 1097,
     "events_total": 946
    }

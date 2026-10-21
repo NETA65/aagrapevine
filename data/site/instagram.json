@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-20T12:48:33Z",
+ "updated": "2026-10-21T13:00:52Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16940,
-   "posts": 3954,
+   "followers": 16943,
+   "posts": 3956,
    "owner_id": "48108439509",
-   "checked": "2026-10-20T12:48:16Z",
+   "checked": "2026-10-21T13:00:34Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,185 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2420,
-   "posts": 2979,
+   "posts": 2981,
    "owner_id": "48275839129",
-   "checked": "2026-10-20T12:48:19Z",
+   "checked": "2026-10-21T13:00:37Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DewTcznDckq",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DewTcznDckq/",
+   "title": "“Quejarse no es un paso de acción”.",
+   "summary": "“Quejarse no es un paso de acción”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-21T11:30:16Z",
+   "first_seen": "2026-10-21T13:00:52Z",
+   "image": "/assets/cache/ig/DewTcznDckq.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DewTcznDckq",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DewTcznDckq.webp",
+    "embed_url": "https://www.instagram.com/p/DewTcznDckq/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DewTcznDckq/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“To complain is not a step of action.”",
+     "es": "“Quejarse no es un paso de acción”."
+    },
+    "summary": {
+     "en": "“To complain is not a step of action.” Indianápolis, Indiana, August 1982 AA Grapevine Daily Quote in www.aalavina.org",
+     "es": "“Quejarse no es un paso de acción”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DewTc02DffK",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DewTc02DffK/",
+   "title": "“The deception of others is nearly always rooted in the deception of ourselves.”",
+   "summary": "“The deception of others is nearly always rooted in the deception of ourselves.” AA Co-Founder, Bill W., August 1961, “This Matter of Honesty”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-21T11:30:15Z",
+   "first_seen": "2026-10-21T13:00:52Z",
+   "image": "/assets/cache/ig/DewTc02DffK.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DewTc02DffK",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DewTc02DffK.webp",
+    "embed_url": "https://www.instagram.com/p/DewTc02DffK/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DewTc02DffK/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The deception of others is nearly always rooted in the deception of ourselves.”",
+     "es": "“El engaño de los demás está casi siempre arraigado en el engaño de nosotros mismos”."
+    },
+    "summary": {
+     "en": "“The deception of others is nearly always rooted in the deception of ourselves.” AA Co-Founder, Bill W., August 1961, “This Matter of Honesty”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "“El engaño de los demás está casi siempre arraigado en el engaño de nosotros mismos”. AA cofundador, Bill W., agosto de 1961, “este asunto de honestidad”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeuGuAgmrsA",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeuGuAgmrsA/",
+   "title": "The November GV News!",
+   "summary": "The November GV News! Letter to Grapevine and La Viña Reps: GRAPEVINE NEWS! To read what’s new for November, visit www.aagrapevine.org/gvr-resources Sign up to receive Grapevine emails at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-20T15:00:31Z",
+   "first_seen": "2026-10-21T13:00:52Z",
+   "image": "/assets/cache/ig/DeuGuAgmrsA.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeuGuAgmrsA",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DeuGuAgmrsA.webp",
+    "embed_url": "https://www.instagram.com/p/DeuGuAgmrsA/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeuGuAgmrsA/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The November GV News!",
+     "es": "¡Noticias GV de noviembre!"
+    },
+    "summary": {
+     "en": "The November GV News! Letter to Grapevine and La Viña Reps: GRAPEVINE NEWS! To read what’s new for November, visit www.aagrapevine.org/gvr-resources Sign up to receive Grapevine emails at www.aagrapevine.org",
+     "es": "¡Noticias GV de noviembre! ¡Carta a Grapevine y La Viña Reps: Grapevine NEWS! Para leer lo nuevo para noviembre, visite www.aagrapevine.org/gvr-resources Inscríbase para recibir correos electrónicos Grapevine en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DeuGtQiCc4j",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DeuGtQiCc4j/",
+   "title": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades…",
+   "summary": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades de Noviembre/Diciembre, visite www.aalavina.org/recursos Suscríbase para recibir correos electrónicos de La Viña en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-20T15:00:24Z",
+   "first_seen": "2026-10-21T13:00:52Z",
+   "image": "/assets/cache/ig/DeuGtQiCc4j.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DeuGtQiCc4j",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DeuGtQiCc4j.webp",
+    "embed_url": "https://www.instagram.com/p/DeuGtQiCc4j/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DeuGtQiCc4j/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Letter to the representatives of La Viña: News from La Viña! To read the news …",
+     "es": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades…"
+    },
+    "summary": {
+     "en": "Letter to the representatives of La Viña: News from La Viña! To read the latest news from November/December, visit www.aalavina.org/recursos Subscribe to receive emails from La Viña in www.aalavina.org",
+     "es": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades de Noviembre/Diciembre, visite www.aalavina.org/recursos Suscríbase para recibir correos electrónicos de La Viña en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:Detup87FzKQ",
    "source": "instagram",
@@ -2264,7 +2436,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeMQUqWjINJ",
@@ -2307,7 +2479,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeMQUmZjL_1",
@@ -2350,7 +2522,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeJrhtXF7XV",
