@@ -1,51 +1,7 @@
 {
- "updated": "2026-10-21T23:12:08Z",
+ "updated": "2026-10-22T05:03:34Z",
  "fixture": false,
  "items": [
-  {
-   "id": "ev:committee:2026-10-21",
-   "source": "committee",
-   "kind": "event",
-   "url": "/meetings/",
-   "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-   "lang": "en",
-   "date": "2026-10-22T00:00:00Z",
-   "first_seen": null,
-   "image": null,
-   "tags": [
-    "committee"
-   ],
-   "category": "committee",
-   "status": "ok",
-   "extra": {
-    "start": "2026-10-22T00:00:00Z",
-    "end": "2026-10-22T01:00:00Z",
-    "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "city": null,
-    "state": null,
-    "recurring": true,
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "NETA 65 Grapevine & La Viña Committee Meeting",
-     "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
-    },
-    "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
   {
    "id": "ev:recurring:lv-monthly-workshop:2026-10-22",
    "source": "committee",
@@ -1705,6 +1661,50 @@
     "location": {
      "en": "Venue to be announced",
      "es": "Lugar por anunciarse"
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:committee:2027-10-20",
+   "source": "committee",
+   "kind": "event",
+   "url": "/meetings/",
+   "title": "NETA 65 Grapevine & La Viña Committee Meeting",
+   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "lang": "en",
+   "date": "2027-10-21T00:00:00Z",
+   "first_seen": null,
+   "image": null,
+   "tags": [
+    "committee"
+   ],
+   "category": "committee",
+   "status": "ok",
+   "extra": {
+    "start": "2027-10-21T00:00:00Z",
+    "end": "2027-10-21T01:00:00Z",
+    "all_day": false,
+    "location": "Zoom",
+    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
+    "meeting_id": "949 476 7497",
+    "passcode": "neta65",
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "recurring": true,
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "NETA 65 Grapevine & La Viña Committee Meeting",
+     "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
+    },
+    "summary": {
+     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
     }
    },
    "machine": [],
