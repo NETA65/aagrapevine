@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T13:02:24Z",
+ "updated": "2026-10-22T13:04:39Z",
  "fixture": false,
  "issues": [
   {
@@ -4680,6 +4680,144 @@
     "author_location": {
      "en": "Glenmont, New York",
      "es": "Glenmont, Nueva York"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": false
+  },
+  {
+   "id": "gv:2026-10:power-gratitude",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/power-gratitude",
+   "title": "The Power of Gratitude",
+   "summary": "AA has shown her the life-enhancing power of gratitude",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-22T13:04:39Z",
+   "image": "/assets/cache/articles/c067ade3365fdd54.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "Crystal B.",
+    "author_location": "Charleston, S.C.",
+    "subtitle": "AA has shown her the life-enhancing power of gratitude",
+    "teaser": "Gratitude, a simple yet profoundly powerful emotion, possesses the capacity to transform our lives and relationships.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Charleston",
+     "county": null,
+     "counties": [],
+     "state": "SC",
+     "country": "US",
+     "label_en": "Charleston, South Carolina",
+     "label_es": "Charleston, Carolina del Sur"
+    },
+    "pub_date": "2026-10-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "The Power of Gratitude",
+     "es": "El poder de la gratitud"
+    },
+    "summary": {
+     "en": "AA has shown her the life-enhancing power of gratitude",
+     "es": "AA le ha mostrado el poder que mejora la vida de la gratitud"
+    },
+    "issue_theme": {
+     "en": "Loneliness",
+     "es": "Soledad"
+    },
+    "issue_label": {
+     "en": "October 2026",
+     "es": "Octubre 2026"
+    },
+    "author_location": {
+     "en": "Charleston, South Carolina",
+     "es": "Charleston, Carolina del Sur"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": false
+  },
+  {
+   "id": "gv:2026-10:message-sunset",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/message-sunset",
+   "title": "Message in a Sunset",
+   "summary": "A last message from his mother keeps his sobriety on track",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-22T13:04:39Z",
+   "image": "/assets/cache/articles/de7ad39c7662bc0f.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "Liam F.",
+    "author_location": "Philadelphia, Pa.",
+    "subtitle": "A last message from his mother keeps his sobriety on track",
+    "teaser": "In September of 2024 my mother was suddenly hospitalized with pneumonia. She had been declining from a hard to diagnose set of symptoms that included some form of early onset dementia.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Philadelphia",
+     "county": null,
+     "counties": [],
+     "state": "PA",
+     "country": "US",
+     "label_en": "Philadelphia, Pennsylvania",
+     "label_es": "Philadelphia, Pensilvania"
+    },
+    "pub_date": "2026-10-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Message in a Sunset",
+     "es": "Mensaje en una puesta de sol"
+    },
+    "summary": {
+     "en": "A last message from his mother keeps his sobriety on track",
+     "es": "Un último mensaje de su madre mantiene su sobriedad en el camino"
+    },
+    "issue_theme": {
+     "en": "Loneliness",
+     "es": "Soledad"
+    },
+    "issue_label": {
+     "en": "October 2026",
+     "es": "Octubre 2026"
+    },
+    "author_location": {
+     "en": "Philadelphia, Pennsylvania",
+     "es": "Philadelphia, Pensilvania"
     }
    },
    "machine": [

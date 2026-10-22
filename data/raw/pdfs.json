@@ -1,7 +1,7 @@
 {
  "source": "pdfs",
- "updated": "2026-10-21T13:10:51Z",
- "attempted": "2026-10-21T13:10:51Z",
+ "updated": "2026-10-22T13:10:42Z",
+ "attempted": "2026-10-22T13:10:42Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -43,7 +43,7 @@
    "lang": "es",
    "date": "2026-10-15",
    "first_seen": "2026-10-15T12:53:43Z",
-   "last_seen": "2026-10-15T12:53:43Z",
+   "last_seen": "2026-10-22T13:09:23Z",
    "image": "/assets/cache/pdf/a1246e5674cd1445.webp",
    "tags": [
     "news"
@@ -163,7 +163,7 @@
    "lang": "es",
    "date": "2026-10-14",
    "first_seen": "2026-10-15T12:54:33Z",
-   "last_seen": "2026-10-15T12:54:33Z",
+   "last_seen": "2026-10-22T13:09:58Z",
    "image": "/assets/cache/pdf/d528fc1822c713ba.webp",
    "tags": [],
    "category": "other",

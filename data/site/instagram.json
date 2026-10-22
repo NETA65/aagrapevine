@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T13:00:52Z",
+ "updated": "2026-10-22T13:02:42Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16943,
-   "posts": 3956,
+   "posts": 3958,
    "owner_id": "48108439509",
-   "checked": "2026-10-21T13:00:34Z",
+   "checked": "2026-10-22T13:02:24Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,229 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2420,
-   "posts": 2981,
+   "followers": 2419,
+   "posts": 2984,
    "owner_id": "48275839129",
-   "checked": "2026-10-21T13:00:37Z",
+   "checked": "2026-10-22T13:02:27Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:Dey4PwaDdfm",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dey4PwaDdfm/",
+   "title": "“Me dijeron que, a veces, un buen padrino o madrina altera la comodidad y acomoda las…",
+   "summary": "“Me dijeron que, a veces, un buen padrino o madrina altera la comodidad y acomoda las alteraciones”. \"“El regalo del tiempo” DOVER, PENSILVANIA, JUNIO DE 1991 De In Our Own Words\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-22T11:30:15Z",
+   "first_seen": "2026-10-22T13:02:42Z",
+   "image": "/assets/cache/ig/Dey4PwaDdfm.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dey4PwaDdfm",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dey4PwaDdfm.webp",
+    "embed_url": "https://www.instagram.com/p/Dey4PwaDdfm/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dey4PwaDdfm/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“They told me that sometimes a good sponsor or sponsor alters comfort and accommodates the …",
+     "es": "“Me dijeron que, a veces, un buen padrino o madrina altera la comodidad y acomoda las…"
+    },
+    "summary": {
+     "en": "“They told me that sometimes a good sponsor or sponsor alters comfort and accommodates alterations.” \"The Gift of Time\" DOVER, PENSILVANIA, JUNE 1991 From In Our Own Words Daily Quote in www.aalavina.org",
+     "es": "“Me dijeron que, a veces, un buen padrino o madrina altera la comodidad y acomoda las alteraciones”. \"“El regalo del tiempo” DOVER, PENSILVANIA, JUNIO DE 1991 De In Our Own Words\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dey4PvWjRuh",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dey4PvWjRuh/",
+   "title": "“Truth is to inner space what sunshine is to a garden.”",
+   "summary": "“Truth is to inner space what sunshine is to a garden.” “Truth,” Key West, Florida, August 1973, Best of the Grapevine, Volume 1 Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-22T11:30:15Z",
+   "first_seen": "2026-10-22T13:02:42Z",
+   "image": "/assets/cache/ig/Dey4PvWjRuh.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dey4PvWjRuh",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dey4PvWjRuh.webp",
+    "embed_url": "https://www.instagram.com/p/Dey4PvWjRuh/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dey4PvWjRuh/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Truth is to inner space what sunshine is to a garden.”",
+     "es": "“La verdad es en el espacio interior lo que el sol es para un jardín.”"
+    },
+    "summary": {
+     "en": "“Truth is to inner space what sunshine is to a garden.” “Truth,” Key West, Florida, August 1973, Best of the Grapevine, Volume 1 Daily Quote at www.aagrapevine.org",
+     "es": "“La verdad es en el espacio interior lo que el sol es para un jardín.” “Verdad,” llave oeste, Florida, agosto de 1973, mejor del Grapevine, volumen 1 Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DexN0JlDhyO",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DexN0JlDhyO/",
+   "title": "¡Taller Mensual y Virtual de La Viña!",
+   "summary": "¡Taller Mensual y Virtual de La Viña! ¡Únete a nosotros! El próximo taller será el jueves 22 de octubre de 2026 a las 3:00 p.m. (EST). ID de la reunión Zoom: 815 9593 1777 Para obtener más información, por favor escribe a lveditorial@aagrapevine.org",
+   "lang": "es",
+   "date": "2026-10-21T20:00:14Z",
+   "first_seen": "2026-10-22T13:02:42Z",
+   "image": "/assets/cache/ig/DexN0JlDhyO.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DexN0JlDhyO",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DexN0JlDhyO.webp",
+    "embed_url": "https://www.instagram.com/p/DexN0JlDhyO/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DexN0JlDhyO/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Monthly and Virtual Workshop!",
+     "es": "¡Taller Mensual y Virtual de La Viña!"
+    },
+    "summary": {
+     "en": "La Viña Monthly and Virtual Workshop! Join us! The next workshop will be on Thursday October 22, 2026 at 3:00 p.m. (EST). Meeting ID Zoom: 815 9593 1777 For more information, please write to lveditorial@aagrapevine.org",
+     "es": "¡Taller Mensual y Virtual de La Viña! ¡Únete a nosotros! El próximo taller será el jueves 22 de octubre de 2026 a las 3:00 p.m. (EST). ID de la reunión Zoom: 815 9593 1777 Para obtener más información, por favor escribe a lveditorial@aagrapevine.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DewhTx7RbH_",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DewhTx7RbH_/",
+   "title": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos…",
+   "summary": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información.",
+   "lang": "es",
+   "date": "2026-10-21T13:31:32Z",
+   "first_seen": "2026-10-22T13:02:42Z",
+   "image": "/assets/cache/ig/DewhTx7RbH_.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DewhTx7RbH_",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DewhTx7RbH_.webp",
+    "embed_url": "https://www.instagram.com/p/DewhTx7RbH_/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DewhTx7RbH_/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Soon! La Viña will hold a virtual open meeting of AA with one coordinator and two …",
+     "es": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos…"
+    },
+    "summary": {
+     "en": "Soon! La Viña will hold a virtual open meeting of AA with one coordinator and two speakers. The poster will respect anonymity and will be available on the main platforms. Very soon more information.",
+     "es": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DewhNVqjeSy",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DewhNVqjeSy/",
+   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+   "lang": "en",
+   "date": "2026-10-21T13:30:28Z",
+   "first_seen": "2026-10-22T13:02:42Z",
+   "image": "/assets/cache/ig/DewhNVqjeSy.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DewhNVqjeSy",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DewhNVqjeSy.webp",
+    "embed_url": "https://www.instagram.com/p/DewhNVqjeSy/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DewhNVqjeSy/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
+    },
+    "summary": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DewTcznDckq",
    "source": "instagram",
@@ -2137,7 +2352,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeO1HeJDJa6",
@@ -2180,7 +2395,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeNAYsljOml",

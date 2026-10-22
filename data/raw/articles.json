@@ -1,28 +1,28 @@
 {
  "source": "articles",
- "updated": "2026-10-21T13:02:24Z",
- "attempted": "2026-10-21T13:02:24Z",
+ "updated": "2026-10-22T13:04:39Z",
+ "attempted": "2026-10-22T13:04:39Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 2,
   "removed": 0,
   "held": 0
  },
  "stats": {
   "hub_articles": 57,
-  "details_fetched": 0,
+  "details_fetched": 2,
   "details_failed": 0,
-  "thumbs": 0,
+  "thumbs": 2,
   "archive_pages": 13,
-  "archive_new": 0,
+  "archive_new": 2,
   "covers": 0,
-  "details_pending": 0,
+  "details_pending": 2,
   "byline_pending": 0,
   "details_left": 0,
-  "new": 0,
-  "total": 289,
-  "requests": 15
+  "new": 2,
+  "total": 291,
+  "requests": 19
  },
  "items": [
   {
@@ -2099,6 +2099,72 @@
     "author_location": "Melbourne, Fla.",
     "subtitle": "His service leads him to write a timeless Grapevine story",
     "teaser": "It’s funny how service commitments just fall into my lap. I sign up for one and it branches off in so many other directions.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false
+   }
+  },
+  {
+   "id": "gv:2026-10:power-gratitude",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/power-gratitude",
+   "title": "The Power of Gratitude",
+   "summary": "AA has shown her the life-enhancing power of gratitude",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-22T13:04:39Z",
+   "last_seen": "2026-10-22T13:04:39Z",
+   "image": "/assets/cache/articles/c067ade3365fdd54.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "Crystal B.",
+    "author_location": "Charleston, S.C.",
+    "subtitle": "AA has shown her the life-enhancing power of gratitude",
+    "teaser": "Gratitude, a simple yet profoundly powerful emotion, possesses the capacity to transform our lives and relationships.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false
+   }
+  },
+  {
+   "id": "gv:2026-10:message-sunset",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/message-sunset",
+   "title": "Message in a Sunset",
+   "summary": "A last message from his mother keeps his sobriety on track",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-22T13:04:39Z",
+   "last_seen": "2026-10-22T13:04:39Z",
+   "image": "/assets/cache/articles/de7ad39c7662bc0f.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "Liam F.",
+    "author_location": "Philadelphia, Pa.",
+    "subtitle": "A last message from his mother keeps his sobriety on track",
+    "teaser": "In September of 2024 my mother was suddenly hospitalized with pneumonia. She had been declining from a hard to diagnose set of symptoms that included some form of early onset dementia.",
     "free": false,
     "online_exclusive": true,
     "department": false
@@ -9574,7 +9640,7 @@
    "key": "2026-11",
    "publication": "gv",
    "hub": "https://www.aagrapevine.org/magazine",
-   "seen": "2026-10-21T13:01:00Z",
+   "seen": "2026-10-22T13:02:47Z",
    "cover": "/assets/cache/articles/bfc7d6fa631e6757.webp"
   },
   "lv:2026-11": {
@@ -9586,7 +9652,7 @@
    "key": "2026-11",
    "publication": "lv",
    "hub": "https://www.aalavina.org/la-revista",
-   "seen": "2026-10-21T13:01:11Z",
+   "seen": "2026-10-22T13:02:58Z",
    "cover": "/assets/cache/articles/f516ec1fbfd667f4.webp"
   },
   "gv:2026-10": {
@@ -9648,15 +9714,15 @@
  },
  "archive_state": {
   "gv": {
-   "last_run": "2026-10-21T13:01:48Z",
+   "last_run": "2026-10-22T13:03:39Z",
    "pages_last_run": 7,
-   "new_last_run": 0,
+   "new_last_run": 2,
    "oldest_seen": "2026-09",
    "backfilled": "2026-09-23T23:07:47Z",
    "backfill_days": 120
   },
   "lv": {
-   "last_run": "2026-10-21T13:02:24Z",
+   "last_run": "2026-10-22T13:04:17Z",
    "pages_last_run": 6,
    "new_last_run": 0,
    "oldest_seen": "2026-07",
