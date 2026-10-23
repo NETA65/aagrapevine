@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T23:15:11Z",
+ "updated": "2026-10-23T12:51:16Z",
  "fixture": false,
  "items": [
   {
@@ -42,8 +42,6 @@
     "platform": "Zoom",
     "meeting_id": "815 9593 1777",
     "contact": "lveditorial@aagrapevine.org",
-    "also_on_calendar": "lv-calendar",
-    "calendar_match": "online",
     "past": false
    },
    "i18n": {

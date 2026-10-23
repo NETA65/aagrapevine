@@ -1,12 +1,12 @@
 {
  "source": "events_external",
- "updated": "2026-10-22T13:07:48Z",
- "attempted": "2026-10-22T13:07:48Z",
+ "updated": "2026-10-23T12:48:00Z",
+ "attempted": "2026-10-23T12:48:00Z",
  "ok": true,
  "error": null,
  "changes": {
   "added": 0,
-  "removed": 0,
+  "removed": 1,
   "held": 0
  },
  "stats": {
@@ -15,15 +15,15 @@
   "upcoming_urls": 20,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 0,
+  "refreshed": 10,
   "failed": 0,
   "pending": 0,
   "cached": 20,
   "texas": 2,
-  "online_es": 1,
-  "items": 3,
+  "online_es": 0,
+  "items": 2,
   "new": 0,
-  "requests": 42
+  "requests": 51
  },
  "items": [
   {
@@ -101,50 +101,12 @@
     "site": "grapevine",
     "date_text": "January 8, 2027 - January 10, 2027"
    }
-  },
-  {
-   "id": "ev:lvcal:b3690e94832f",
-   "source": "calendar",
-   "kind": "event",
-   "url": "https://www.aalavina.org/get-involved/events/2026-10-22/taller-mensual-lv",
-   "title": "Taller mensual LV",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-10-22",
-   "first_seen": "2026-10-02T22:31:32Z",
-   "last_seen": "2026-10-18T12:13:47Z",
-   "image": null,
-   "tags": [
-    "online"
-   ],
-   "category": "lv-calendar",
-   "status": "ok",
-   "extra": {
-    "start": "2026-10-22",
-    "end": null,
-    "all_day": true,
-    "location": "Zoom",
-    "city": null,
-    "state": null,
-    "country": null,
-    "region": null,
-    "online_url": "https://us06web.zoom.us/j/81595931777",
-    "platform": "Zoom",
-    "website": null,
-    "organizer": null,
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "scope": "online",
-    "online": true,
-    "site": "lavina",
-    "date_text": "Octubre 22, 2026"
-   }
   }
  ],
  "first_harvest": "2026-09-23T16:43:55Z",
  "cache": {
   "https://www.aagrapevine.org/get-involved/events/2026-10-23/38th-northeast-woman-woman-conference": {
-   "at": "2026-10-08T14:45:55Z",
+   "at": "2026-10-23T12:47:12Z",
    "ev": {
     "title": "38th Northeast Woman to Woman Conference",
     "date_text": "October 23, 2026 - October 25, 2026",
@@ -165,7 +127,7 @@
    "fails": 0
   },
   "https://www.aalavina.org/get-involved/events/2026-10-23/24-convencion-hispana-del-estado-de-wisconsin": {
-   "at": "2026-10-08T14:46:01Z",
+   "at": "2026-10-23T12:47:18Z",
    "ev": {
     "title": "24 Convencion Hispana del Estado de Wisconsin",
     "date_text": "Octubre 23, 2026 - Octubre 25, 2026",
@@ -185,7 +147,7 @@
    "fails": 0
   },
   "https://www.aalavina.org/get-involved/events/2026-10-30/iii-convencion-hispana-de-aa-del-estado-de-alabama": {
-   "at": "2026-10-08T14:46:07Z",
+   "at": "2026-10-23T12:47:23Z",
    "ev": {
     "title": "III Convención Hispana de AA del Estado de Alabama",
     "date_text": "Octubre 30, 2026 - Noviembre 1, 2026",
@@ -205,7 +167,7 @@
    "fails": 0
   },
   "https://www.aalavina.org/get-involved/events/2026-10-30/iii-convencion-hispana-del-estado-de-alabama": {
-   "at": "2026-10-08T14:46:13Z",
+   "at": "2026-10-23T12:47:29Z",
    "ev": {
     "title": "III Convención Hispana del estado de Alabama",
     "date_text": "Octubre 30, 2026 - Noviembre 1, 2026",
@@ -223,7 +185,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-06/79th-tri-state-convention-0": {
-   "at": "2026-10-08T14:46:18Z",
+   "at": "2026-10-23T12:47:35Z",
    "ev": {
     "title": "79th Tri-State Convention",
     "date_text": "November 6, 2026 - November 8, 2026",
@@ -244,7 +206,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-06/85th-laurel-highlands-conference": {
-   "at": "2026-10-08T14:46:24Z",
+   "at": "2026-10-23T12:47:40Z",
    "ev": {
     "title": "85th Laurel Highlands Conference",
     "date_text": "November 6, 2026 - November 8, 2026",
@@ -265,7 +227,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-13/36th-vancouver-roundup": {
-   "at": "2026-10-08T14:46:29Z",
+   "at": "2026-10-23T12:47:45Z",
    "ev": {
     "title": "36th Vancouver RoundUp",
     "date_text": "November 13, 2026 - November 15, 2026",
@@ -286,7 +248,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-13/international-secular-conference-phoenix-2026": {
-   "at": "2026-10-08T14:46:35Z",
+   "at": "2026-10-23T12:47:50Z",
    "ev": {
     "title": "International Secular Conference Phoenix 2026",
     "date_text": "November 13, 2026 - November 15, 2026",
@@ -307,7 +269,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-20/37th-mchenrys-soberfest": {
-   "at": "2026-10-08T14:46:41Z",
+   "at": "2026-10-23T12:47:55Z",
    "ev": {
     "title": "37th McHenry's Soberfest",
     "date_text": "November 20, 2026 - November 22, 2026",
@@ -328,7 +290,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-27/36th-gratitude-roundup": {
-   "at": "2026-10-08T14:46:46Z",
+   "at": "2026-10-23T12:48:00Z",
    "ev": {
     "title": "36th Gratitude Roundup",
     "date_text": "November 27, 2026 - November 29, 2026",

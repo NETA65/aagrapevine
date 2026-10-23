@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T13:02:42Z",
+ "updated": "2026-10-23T12:43:07Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16943,
-   "posts": 3958,
+   "posts": 3961,
    "owner_id": "48108439509",
-   "checked": "2026-10-22T13:02:24Z",
+   "checked": "2026-10-23T12:42:47Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,228 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2419,
-   "posts": 2984,
+   "posts": 2986,
    "owner_id": "48275839129",
-   "checked": "2026-10-22T13:02:27Z",
+   "checked": "2026-10-23T12:42:50Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:De1dClCjWPr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De1dClCjWPr/",
+   "title": "“Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento…",
+   "summary": "“Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento de alcohólico’. En verdad, es tan solo la naturaleza humana… Algunas peculiaridades emocionales y mentales se consideran síntomas del alcoholismo únicamente porque las tienen los alcohólicos, pero esas mismas características se observan también en quienes no lo son. De hecho, son síntomas de humanidad”. \"“Las…",
+   "lang": "es",
+   "date": "2026-10-23T11:30:20Z",
+   "first_seen": "2026-10-23T12:43:07Z",
+   "image": "/assets/cache/ig/De1dClCjWPr.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De1dClCjWPr",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De1dClCjWPr.webp",
+    "embed_url": "https://www.instagram.com/p/De1dClCjWPr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De1dClCjWPr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“There is a tendency to classify everything an alcoholic does as ‘… behavior",
+     "es": "“Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento…"
+    },
+    "summary": {
+     "en": "“There is a tendency to classify everything that an alcoholic does as ‘alcoholic behavior’. Actually, it's just human nature … Some emotional and mental peculiarities are considered to be symptoms of alcoholism only because they have alcoholics, but these same characteristics are also observed in those who are not. In fact, they are symptoms of humanity.” \"The …",
+     "es": "“Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento de alcohólico’. En verdad, es tan solo la naturaleza humana… Algunas peculiaridades emocionales y mentales se consideran síntomas del alcoholismo únicamente porque las tienen los alcohólicos, pero esas mismas características se observan también en quienes no lo son. De hecho, son síntomas de humanidad”. \"“Las…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De1dCpIjQSb",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De1dCpIjQSb/",
+   "title": "“I was relieved to learn that I didn’t have to believe, only be willing to believe. This…",
+   "summary": "“I was relieved to learn that I didn’t have to believe, only be willing to believe. This I could do.” “From Make-Believe to Belief,” Charleston, West Virginia, June 1981, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-23T11:30:16Z",
+   "first_seen": "2026-10-23T12:43:07Z",
+   "image": "/assets/cache/ig/De1dCpIjQSb.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De1dCpIjQSb",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De1dCpIjQSb.webp",
+    "embed_url": "https://www.instagram.com/p/De1dCpIjQSb/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De1dCpIjQSb/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I was relieved to learn that I didn’t have to believe, only be willing to believe. This…",
+     "es": "“Me sentí aliviado de aprender que no tenía que creer, sólo estaba dispuesto a creer. Este …"
+    },
+    "summary": {
+     "en": "“I was relieved to learn that I didn’t have to believe, only be willing to believe. This I could do.” “From Make-Believe to Belief,” Charleston, West Virginia, June 1981, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“Me aliviaba saber que no tenía que creer, sólo estaba dispuesto a creer. Esto podría hacer. “De creer a creer”, Charleston, Virginia Occidental, junio de 1981, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De1ciZyg92U",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De1ciZyg92U/",
+   "title": "This week Don welcomes Kenneth and Liz.",
+   "summary": "This week Don welcomes Kenneth and Liz.",
+   "lang": "en",
+   "date": "2026-10-23T11:28:42Z",
+   "first_seen": "2026-10-23T12:43:07Z",
+   "image": "/assets/cache/ig/De1ciZyg92U.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De1ciZyg92U",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De1ciZyg92U.webp",
+    "embed_url": "https://www.instagram.com/p/De1ciZyg92U/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De1ciZyg92U/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "This week Don welcomes Kenneth and Liz.",
+     "es": "Esta semana Don da la bienvenida a Kenneth y Liz."
+    },
+    "summary": {
+     "en": "This week Don welcomes Kenneth and Liz.",
+     "es": "Esta semana Don da la bienvenida a Kenneth y Liz."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DezQXalP5_a",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DezQXalP5_a/",
+   "title": "Calendario anual de pared de La Viña",
+   "summary": "Calendario anual de pared de La Viña Lleno de hermosas fotografías tomadas por miembros de AA, acompañadas de citas inspiradoras en inglés, español y francés seleccionadas de historias de Grapevine. Para adquirir tu calendario visita: www.aalavina.org/tienda",
+   "lang": "es",
+   "date": "2026-10-22T15:00:11Z",
+   "first_seen": "2026-10-23T12:43:07Z",
+   "image": "/assets/cache/ig/DezQXalP5_a.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DezQXalP5_a",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DezQXalP5_a.webp",
+    "embed_url": "https://www.instagram.com/p/DezQXalP5_a/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DezQXalP5_a/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña annual wall calendar",
+     "es": "Calendario anual de pared de La Viña"
+    },
+    "summary": {
+     "en": "La Viña annual wall calendar Filled with beautiful photographs taken by members of AA, accompanied by quotes inspired by English, Spanish and French selected from Grapevine stories. To purchase your calendar visit: www.aalavina.org/tienda",
+     "es": "Calendario anual de pared de La Viña Lleno de hermosas fotografías tomadas por miembros de AA, acompañadas de citas inspiradoras en inglés, español y francés seleccionadas de historias de Grapevine. Para adquirir tu calendario visita: www.aalavina.org/tienda"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DezQX9WydDC",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DezQX9WydDC/",
+   "title": "AA Grapevine Wall Calendar!",
+   "summary": "AA Grapevine Wall Calendar! Full of beautiful photos shot by AA members, accompanied by inspiring quotes in English, Spanish, and French selected from Grapevine stories. To purchase, visit: www.aagrapevine.org/store",
+   "lang": "en",
+   "date": "2026-10-22T15:00:10Z",
+   "first_seen": "2026-10-23T12:43:07Z",
+   "image": "/assets/cache/ig/DezQX9WydDC.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DezQX9WydDC",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DezQX9WydDC.webp",
+    "embed_url": "https://www.instagram.com/p/DezQX9WydDC/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DezQX9WydDC/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "AA Grapevine Wall Calendar!",
+     "es": "¡AA Grapevine calendario de pared!"
+    },
+    "summary": {
+     "en": "AA Grapevine Wall Calendar! Full of beautiful photos shot by AA members, accompanied by inspiring quotes in English, Spanish, and French selected from Grapevine stories. To purchase, visit: www.aagrapevine.org/store",
+     "es": "¡AA Grapevine calendario de pared! Llena de fotos hermosas tomadas por miembros de AA, acompañadas de citas inspiradoras en inglés, español y francés seleccionados de historias Grapevine. Para comprar, visite: www.aagrapevine.org/store"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:Dey4PwaDdfm",
    "source": "instagram",
@@ -2266,7 +2481,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeRZ6P6l4nY",
@@ -2309,7 +2524,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeO1HexjHK2",
