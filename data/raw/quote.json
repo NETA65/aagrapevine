@@ -1,7 +1,7 @@
 {
  "source": "quote",
- "updated": "2026-10-22T23:15:11Z",
- "attempted": "2026-10-22T23:15:11Z",
+ "updated": "2026-10-23T05:03:41Z",
+ "attempted": "2026-10-23T05:03:41Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -13,7 +13,7 @@
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-22",
+  "today": "2026-10-23",
   "new": 0
  },
  "items": [
@@ -245,19 +245,6 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-10T07:16:57Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-09",
-    "heading": "Grapevine Daily Quote October 9",
-    "text": "So long as there is the slightest interest in sobriety, the most unmoral, the most antisocial, the most critical alcoholic may gather about him a few kindred spirits and announce to us that a new Alcoholics Anonymous group has been formed. Anti-God, anti-medicine, anti-our recovery program, even anti-each other – these rampant individuals are still an AA group if they think so!",
-    "attribution": "AA Co-Founder, Bill W., July 1946, “The Individual in Relation to AA as a Group”, The Language of the Heart",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-09T07:30:05Z"
    }
   ],
   "lv": [
@@ -429,19 +416,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-10T07:17:07Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-09",
-    "heading": "Cita Diaria con La Viña Octubre 9",
-    "text": "Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que sentiría al estar con Dios.",
-    "attribution": "“El proceso de paz”. GOLD RIVER, CALIFORNIA, DICIEMBRE DE 1996. Del AA Grapevine",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-09T07:30:15Z"
    }
   ]
  }
