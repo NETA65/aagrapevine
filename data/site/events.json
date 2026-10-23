@@ -1,66 +1,7 @@
 {
- "updated": "2026-10-23T12:51:16Z",
+ "updated": "2026-10-23T23:03:53Z",
  "fixture": false,
  "items": [
-  {
-   "id": "ev:recurring:lv-monthly-workshop:2026-10-22",
-   "source": "committee",
-   "kind": "event",
-   "url": "/events/",
-   "title": "La Viña Monthly Virtual Workshop (in Spanish)",
-   "summary": "In Spanish, open to all: La Viña and Grapevine books, event news and General Service Office updates.",
-   "lang": "en",
-   "date": "2026-10-22T19:00:00Z",
-   "first_seen": null,
-   "image": null,
-   "tags": [
-    "recurring"
-   ],
-   "category": "recurring",
-   "status": "ok",
-   "extra": {
-    "start": "2026-10-22T19:00:00Z",
-    "end": "2026-10-22T20:00:00Z",
-    "all_day": false,
-    "location": null,
-    "online_url": "https://us06web.zoom.us/j/81595931777",
-    "flyer_url": "https://drive.google.com/file/d/16Tm35F7P7ynir3lH03wZBWmVE0MllVuR/view",
-    "flyer_thumb": "https://lh3.googleusercontent.com/d/16Tm35F7P7ynir3lH03wZBWmVE0MllVuR=w600",
-    "city": null,
-    "state": null,
-    "recurring": true,
-    "series": "lv-monthly-workshop",
-    "rule": {
-     "week_of_month": 4,
-     "weekday": "thursday",
-     "start": "14:00",
-     "end": "15:00"
-    },
-    "recurrence_label": "Every fourth Thursday of the month · 2:00 – 3:00 PM",
-    "host": "lv",
-    "online": true,
-    "platform": "Zoom",
-    "meeting_id": "815 9593 1777",
-    "contact": "lveditorial@aagrapevine.org",
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Monthly Virtual Workshop (in Spanish)",
-     "es": "Taller Mensual y Virtual de La Viña"
-    },
-    "summary": {
-     "en": "In Spanish, open to all: La Viña and Grapevine books, event news and General Service Office updates.",
-     "es": "En español y abierto a todos: libros de La Viña y Grapevine, noticias de eventos y novedades de la OSG."
-    },
-    "recurrence_label": {
-     "en": "Every fourth Thursday of the month · 2:00 – 3:00 PM",
-     "es": "Cada cuarto jueves del mes · 2:00–3:00 p. m."
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
   {
    "id": "ev:manual:2026-10-26-lv-writing-workshop-tyler",
    "source": "committee",
@@ -1762,6 +1703,65 @@
     "summary": {
      "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
      "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:recurring:lv-monthly-workshop:2026-10-22",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/",
+   "title": "La Viña Monthly Virtual Workshop (in Spanish)",
+   "summary": "In Spanish, open to all: La Viña and Grapevine books, event news and General Service Office updates.",
+   "lang": "en",
+   "date": "2026-10-22T19:00:00Z",
+   "first_seen": null,
+   "image": null,
+   "tags": [
+    "recurring"
+   ],
+   "category": "recurring",
+   "status": "ok",
+   "extra": {
+    "start": "2026-10-22T19:00:00Z",
+    "end": "2026-10-22T20:00:00Z",
+    "all_day": false,
+    "location": null,
+    "online_url": "https://us06web.zoom.us/j/81595931777",
+    "flyer_url": "https://drive.google.com/file/d/16Tm35F7P7ynir3lH03wZBWmVE0MllVuR/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/16Tm35F7P7ynir3lH03wZBWmVE0MllVuR=w600",
+    "city": null,
+    "state": null,
+    "recurring": true,
+    "series": "lv-monthly-workshop",
+    "rule": {
+     "week_of_month": 4,
+     "weekday": "thursday",
+     "start": "14:00",
+     "end": "15:00"
+    },
+    "recurrence_label": "Every fourth Thursday of the month · 2:00 – 3:00 PM",
+    "host": "lv",
+    "online": true,
+    "platform": "Zoom",
+    "meeting_id": "815 9593 1777",
+    "contact": "lveditorial@aagrapevine.org",
+    "past": true
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Monthly Virtual Workshop (in Spanish)",
+     "es": "Taller Mensual y Virtual de La Viña"
+    },
+    "summary": {
+     "en": "In Spanish, open to all: La Viña and Grapevine books, event news and General Service Office updates.",
+     "es": "En español y abierto a todos: libros de La Viña y Grapevine, noticias de eventos y novedades de la OSG."
+    },
+    "recurrence_label": {
+     "en": "Every fourth Thursday of the month · 2:00 – 3:00 PM",
+     "es": "Cada cuarto jueves del mes · 2:00–3:00 p. m."
     }
    },
    "machine": [],
