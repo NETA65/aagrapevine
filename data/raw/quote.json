@@ -1,12 +1,12 @@
 {
  "source": "quote",
- "updated": "2026-10-23T05:03:41Z",
- "attempted": "2026-10-23T05:03:41Z",
+ "updated": "2026-10-23T10:14:12Z",
+ "attempted": "2026-10-23T10:14:12Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
@@ -14,69 +14,82 @@
   "parsed": 2,
   "requests": 2,
   "today": "2026-10-23",
-  "new": 0
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-22",
+   "id": "quote:gv:2026-10-23",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 22",
+   "title": "Grapevine Daily Quote October 23",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-22",
-   "first_seen": "2026-10-22T10:19:54Z",
-   "last_seen": "2026-10-22T10:19:54Z",
+   "date": "2026-10-23",
+   "first_seen": "2026-10-23T10:14:12Z",
+   "last_seen": "2026-10-23T10:14:12Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "Truth is to inner space what sunshine is to a garden.",
-    "attribution": "“Truth,” Key West, Florida, August 1973, Best of the Grapevine, Volume 1",
+    "text": "I was relieved to learn that I didn’t have to believe, only be willing to believe. This I could do.",
+    "attribution": "“From Make-Believe to Belief,” Charleston, West Virginia, June 1981, Voices of Long-Term Sobriety",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 22",
+    "date_label": "October 23",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84429"
+    "node": "node-84430"
    }
   },
   {
-   "id": "quote:lv:2026-10-22",
+   "id": "quote:lv:2026-10-23",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 22",
+   "title": "Cita Diaria con La Viña Octubre 23",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-22",
-   "first_seen": "2026-10-22T10:19:54Z",
-   "last_seen": "2026-10-22T10:19:54Z",
+   "date": "2026-10-23",
+   "first_seen": "2026-10-23T10:14:12Z",
+   "last_seen": "2026-10-23T10:14:12Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "Me dijeron que, a veces, un buen padrino o madrina altera la comodidad y acomoda las alteraciones.",
-    "attribution": "“El regalo del tiempo”. DOVER, PENSILVANIA, JUNIO DE 1991",
-    "source": "In Our Own Words",
-    "source_lang": "en",
+    "text": "Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento de alcohólico’. En verdad, es tan solo la naturaleza humana… Algunas peculiaridades emocionales y mentales se consideran síntomas del alcoholismo únicamente porque las tienen los alcohólicos, pero esas mismas características se observan también en quienes no lo son. De hecho, son síntomas de humanidad.",
+    "attribution": "“Las recaídas y la naturaleza humana”. DR. WILLIAM DUNCAN SILKWORTH, ENERO DE 1947",
+    "source": "Lo mejor del Grapevine, Volumen I",
+    "source_lang": "es",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "22 de octubre",
+    "date_label": "23 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84434"
+    "node": "node-84435"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-23",
+    "heading": "Grapevine Daily Quote October 23",
+    "text": "I was relieved to learn that I didn’t have to believe, only be willing to believe. This I could do.",
+    "attribution": "“From Make-Believe to Belief,” Charleston, West Virginia, June 1981, Voices of Long-Term Sobriety",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-23T10:14:02Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -248,6 +261,19 @@
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-23",
+    "heading": "Cita Diaria con La Viña Octubre 23",
+    "text": "Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento de alcohólico’. En verdad, es tan solo la naturaleza humana… Algunas peculiaridades emocionales y mentales se consideran síntomas del alcoholismo únicamente porque las tienen los alcohólicos, pero esas mismas características se observan también en quienes no lo son. De hecho, son síntomas de humanidad.",
+    "attribution": "“Las recaídas y la naturaleza humana”. DR. WILLIAM DUNCAN SILKWORTH, ENERO DE 1947",
+    "source": "Lo mejor del Grapevine, Volumen I",
+    "source_lang": "es",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-23T10:14:12Z"
+   },
    {
     "pub": "lv",
     "lang": "es",

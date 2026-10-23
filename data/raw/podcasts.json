@@ -1,17 +1,17 @@
 {
  "source": "podcasts",
- "updated": "2026-10-23T05:03:43Z",
- "attempted": "2026-10-23T05:03:43Z",
+ "updated": "2026-10-23T10:14:15Z",
+ "attempted": "2026-10-23T10:14:15Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 1,
+  "added": 0,
   "removed": 0,
   "held": 0
  },
  "stats": {
   "fetched": 304,
-  "new": 1,
+  "new": 0,
   "total": 304,
   "active": 304,
   "gone": 0,
@@ -32,7 +32,7 @@
   "gone_checks": 0,
   "discovery_checked": "2026-10-16T12:31:47Z",
   "discovered_feeds": [],
-  "seconds": 2.3,
+  "seconds": 2.7,
   "artwork": 3,
   "artwork_missing": 0,
   "artwork_removed": 0
@@ -120,7 +120,7 @@
    "lang": "en",
    "date": "2026-10-16T04:15:00Z",
    "first_seen": "2026-10-16T09:57:00Z",
-   "last_seen": "2026-10-16T09:57:00Z",
+   "last_seen": "2026-10-23T10:14:15Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -192,7 +192,7 @@
    "lang": "en",
    "date": "2026-10-09T04:15:00Z",
    "first_seen": "2026-10-09T07:30:20Z",
-   "last_seen": "2026-10-16T09:57:00Z",
+   "last_seen": "2026-10-23T10:14:15Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -264,7 +264,7 @@
    "lang": "en",
    "date": "2026-10-02T04:15:00Z",
    "first_seen": "2026-10-02T04:55:26Z",
-   "last_seen": "2026-10-16T09:57:00Z",
+   "last_seen": "2026-10-23T10:14:15Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"

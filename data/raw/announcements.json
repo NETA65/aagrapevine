@@ -1,7 +1,7 @@
 {
  "source": "announcements",
- "updated": "2026-10-23T05:03:25Z",
- "attempted": "2026-10-23T05:03:25Z",
+ "updated": "2026-10-23T10:13:56Z",
+ "attempted": "2026-10-23T10:13:56Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -27,7 +27,7 @@
    "lang": "en",
    "date": "2027-01-01",
    "first_seen": "2026-10-02T04:55:24Z",
-   "last_seen": "2026-10-16T09:56:42Z",
+   "last_seen": "2026-10-23T10:13:56Z",
    "image": null,
    "tags": [
     "prices",
@@ -67,7 +67,7 @@
    "lang": "en",
    "date": "2026-10-01",
    "first_seen": "2026-10-02T04:55:24Z",
-   "last_seen": "2026-10-16T09:56:42Z",
+   "last_seen": "2026-10-23T10:13:56Z",
    "image": null,
    "tags": [
     "prices",
