@@ -1,11 +1,11 @@
 {
  "source": "drive",
- "updated": "2026-10-24T09:37:57Z",
- "attempted": "2026-10-24T09:37:57Z",
+ "updated": "2026-10-24T12:04:04Z",
+ "attempted": "2026-10-24T12:04:04Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 1,
+  "added": 0,
   "removed": 0,
   "held": 0
  },
@@ -29,7 +29,7 @@
   "folders": 11,
   "files": 38,
   "fetched": 38,
-  "new": 1,
+  "new": 0,
   "removed": 0,
   "kept_unverified": 0,
   "by_category": {
@@ -61,11 +61,10 @@
   "depth_limited": 0,
   "shortcuts_resolved": 0,
   "announcements": {
-   "fetched": 1,
-   "reused": 1
+   "reused": 2
   },
   "forms": {},
-  "requests": 12,
+  "requests": 11,
   "truncated": false,
   "warnings": [],
   "booth_texts": {

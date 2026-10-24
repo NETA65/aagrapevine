@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-23T12:43:07Z",
+ "updated": "2026-10-24T12:05:07Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16943,
-   "posts": 3961,
+   "followers": 16942,
+   "posts": 3963,
    "owner_id": "48108439509",
-   "checked": "2026-10-23T12:42:47Z",
+   "checked": "2026-10-24T12:04:49Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,143 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2419,
-   "posts": 2986,
+   "followers": 2420,
+   "posts": 2987,
    "owner_id": "48275839129",
-   "checked": "2026-10-23T12:42:50Z",
+   "checked": "2026-10-24T12:04:52Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:De4B1cwF7TM",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De4B1cwF7TM/",
+   "title": "“Nos dimos cuenta de que, sin tener comités de servicios, cesaríamos de funcionar y, tal…",
+   "summary": "“Nos dimos cuenta de que, sin tener comités de servicios, cesaríamos de funcionar y, tal vez, nos desintegraríamos. Efectivamente, tendríamos que organizar los servicios para que AA se mantenga simple”. \"“Los servicios hacen funcionar a AA” BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1951 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-24T11:30:14Z",
+   "first_seen": "2026-10-24T12:05:07Z",
+   "image": "/assets/cache/ig/De4B1cwF7TM.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De4B1cwF7TM",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De4B1cwF7TM.webp",
+    "embed_url": "https://www.instagram.com/p/De4B1cwF7TM/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De4B1cwF7TM/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We realized that, without having service committees, we would cease to operate and, such …",
+     "es": "“Nos dimos cuenta de que, sin tener comités de servicios, cesaríamos de funcionar y, tal…"
+    },
+    "summary": {
+     "en": "“We realized that, without having service committees, we would cease to operate and, perhaps, disintegrate. Indeed, we would have to organize the services so that AA stays simple.” \"Services run AA\" Bill W., AA co-founder, November 1951 Language of the Heart\" Daily Quote in www.aalavina.org",
+     "es": "“Nos dimos cuenta de que, sin tener comités de servicios, cesaríamos de funcionar y, tal vez, nos desintegraríamos. Efectivamente, tendríamos que organizar los servicios para que AA se mantenga simple”. \"“Los servicios hacen funcionar a AA” BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1951 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De4B1blF5QL",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De4B1blF5QL/",
+   "title": "“Some people think God made life just for happiness, but I find myself unable to share…",
+   "summary": "“Some people think God made life just for happiness, but I find myself unable to share that view. I think he made life for growth and that he permits pain as the touchstone of it all. Happiness -- at the very least, satisfaction -- is a byproduct of really trying to grow. And seasons of real joy are but the occasional byproducts of the process. Which, in eternity, will be the eventual…",
+   "lang": "en",
+   "date": "2026-10-24T11:30:14Z",
+   "first_seen": "2026-10-24T12:05:07Z",
+   "image": "/assets/cache/ig/De4B1blF5QL.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De4B1blF5QL",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De4B1blF5QL.webp",
+    "embed_url": "https://www.instagram.com/p/De4B1blF5QL/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De4B1blF5QL/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Some people think God made life just for happiness, but I find myself unable to share…",
+     "es": "“Algunas personas creen que Dios hizo la vida sólo por la felicidad, pero me encuentro incapaz de compartir …"
+    },
+    "summary": {
+     "en": "“Some people think God made life just for happiness, but I find myself unable to share that view. I think he made life for growth and that he permits pain as the touchstone of it all. Happiness -- at the very least, satisfaction -- is a byproduct of really trying to grow. And seasons of real joy are but the occasional byproducts of the process. Which, in eternity, will be the eventual…",
+     "es": "“Algunas personas creen que Dios hizo la vida sólo por la felicidad, pero me encuentro incapaz de compartir esa visión. Creo que hizo vida para el crecimiento y que permite el dolor como la piedra táctil de todo. La felicidad -- por lo menos, la satisfacción -- es un subproducto de realmente tratar de crecer. Y las estaciones de verdadera alegría son sólo los subproductos ocasionales del proceso. Que, en la eternidad, será el eventual …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De3BeoJjFUs",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De3BeoJjFUs/",
+   "title": "Area 79 Assembly Port Alberni BC. Hosted by District 6. They made handmade cushions for…",
+   "summary": "Area 79 Assembly Port Alberni BC. Hosted by District 6. They made handmade cushions for people to keep because the chairs are hard. October 23-25",
+   "lang": "en",
+   "date": "2026-10-24T02:07:40Z",
+   "first_seen": "2026-10-24T12:05:07Z",
+   "image": "/assets/cache/ig/De3BeoJjFUs.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De3BeoJjFUs",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/De3BeoJjFUs.webp",
+    "embed_url": "https://www.instagram.com/p/De3BeoJjFUs/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De3BeoJjFUs/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Area 79 Assembly Port Alberni BC. Hosted by District 6. They made handmade cushions for…",
+     "es": "Asamblea del Área 79 Port Alberni BC. Alojado por el Distrito 6. Hicieron cojines hechos a mano para …"
+    },
+    "summary": {
+     "en": "Area 79 Assembly Port Alberni BC. Hosted by District 6. They made handmade cushions for people to keep because the chairs are hard. October 23-25",
+     "es": "Asamblea del Área 79 Port Alberni BC. Alojado por el Distrito 6. Hicieron cojines hechos a mano para que la gente guardara porque las sillas son duras. 23–25 de octubre"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:De1dClCjWPr",
    "source": "instagram",
@@ -2223,7 +2352,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeT-tKZjMTi",
@@ -2266,7 +2395,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeSpnvXJxm6",
