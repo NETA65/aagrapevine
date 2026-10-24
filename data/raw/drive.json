@@ -1,12 +1,12 @@
 {
  "source": "drive",
- "updated": "2026-10-24T12:04:04Z",
- "attempted": "2026-10-24T12:04:04Z",
+ "updated": "2026-10-24T15:51:29Z",
+ "attempted": "2026-10-24T15:51:29Z",
  "ok": true,
  "error": null,
  "changes": {
   "added": 0,
-  "removed": 0,
+  "removed": 1,
   "held": 0
  },
  "stats": {
@@ -24,28 +24,28 @@
    }
   ],
   "include_loose": false,
-  "loose_skipped": 7,
+  "loose_skipped": 8,
   "skipped_panels": [],
   "folders": 11,
-  "files": 38,
-  "fetched": 38,
+  "files": 37,
+  "fetched": 37,
   "new": 0,
-  "removed": 0,
+  "removed": 1,
   "kept_unverified": 0,
   "by_category": {
    "booth": 15,
    "flyers": 11,
    "slides": 4,
    "reports": 3,
-   "announcements": 2,
    "notes": 2,
+   "announcements": 1,
    "workshops": 1
   },
   "by_kind": {
    "photo": 20,
    "document": 11,
    "slides": 4,
-   "announcement": 2,
+   "announcement": 1,
    "video_file": 1
   },
   "albums": {},
@@ -61,7 +61,7 @@
   "depth_limited": 0,
   "shortcuts_resolved": 0,
   "announcements": {
-   "reused": 2
+   "reused": 1
   },
   "forms": {},
   "requests": 11,
@@ -72,55 +72,6 @@
   }
  },
  "items": [
-  {
-   "id": "drive:1uRZML32bx45k7p0JDwuHmltuQjs7zAWs",
-   "source": "drive",
-   "kind": "announcement",
-   "url": "https://drive.google.com/file/d/1uRZML32bx45k7p0JDwuHmltuQjs7zAWs/view",
-   "title": "Notes Draft La Viña Task Force",
-   "summary": "La Viña Task Force — Rough Report to the Fellowship Covering the meetings of September 23, 2026 and October 22, 2026 Prepared October 23, 2026 About this report This report brings together what was shared at the first two La Viña Task Force meetings, so groups, districts, and areas can stay informed about what is happening and how they can help. September 23 meeting: based on the minutes taken by…",
-   "lang": "en",
-   "date": "2026-10-23",
-   "first_seen": "2026-10-24T09:37:57Z",
-   "last_seen": "2026-10-24T09:37:57Z",
-   "image": null,
-   "tags": [
-    "panel-77",
-    "md"
-   ],
-   "category": "announcements",
-   "status": "ok",
-   "extra": {
-    "file_id": "1uRZML32bx45k7p0JDwuHmltuQjs7zAWs",
-    "mime": "text/markdown",
-    "name": "Notes Draft La Viña Task Force.md",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "bulletin"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1uRZML32bx45k7p0JDwuHmltuQjs7zAWs/view",
-    "preview_url": "https://drive.google.com/file/d/1uRZML32bx45k7p0JDwuHmltuQjs7zAWs/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1uRZML32bx45k7p0JDwuHmltuQjs7zAWs",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1uRZML32bx45k7p0JDwuHmltuQjs7zAWs=w600",
-    "image_url": null,
-    "is_image": false,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "MD",
-    "folder_id": "1Ka4i255epTjiLcbGVzasZR4Xq7cZZ7G7",
-    "folder_url": "https://drive.google.com/drive/folders/1Ka4i255epTjiLcbGVzasZR4Xq7cZZ7G7",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1Ka4i255epTjiLcbGVzasZR4Xq7cZZ7G7"
-    ],
-    "modified_text": "6:55 pm",
-    "body_md": "# La Viña Task Force — Rough Report to the Fellowship\n\n**Covering the meetings of September 23, 2026 and October 22, 2026**\n*Prepared October 23, 2026*\n\n---\n\n## About this report\n\nThis report brings together what was shared at the first two La Viña Task Force meetings, so groups, districts, and areas can stay informed about what is happening and how they can help.\n\n- **September 23 meeting:** based on the minutes taken by Veronica, with much gratitude for that service.\n- **October 22 meeting:** based on the agenda sent before the meeting and on notes compiled afterward from the meeting recording. These are **not official minutes**. Names and area numbers were captured from the recording, and corrections are welcome.\n\nIn keeping with our Tradition of anonymity, members are identified by first name and area only.\n\n---\n\n## At a glance\n\n- **Print subscriptions to La Viña are down.** They fell from 7,434 in July 2025 to 6,011 in July 2026, about 1,400 fewer subscribers. Over the last 18 months, subscriptions have fallen from a post-pandemic high of about 7,500 to about 6,000.\n- **The overall picture is not all bad.** Book sales are up 33%, and the decline has not negatively affected the five-year plan.\n- **The biggest problems members reported** are magazines that never arrive, renewal notices that never reach the reader (especially for raffle prizes, gifts, and bulk orders), difficulty ordering, and customer service follow-up.\n- **La Viña has apologized** for past delivery problems, made process improvements (forms, bulk shipping, Spanish-speaking customer service staff), and asked the fellowship to give La Viña another try.\n- **Members are already acting.** They have run WhatsApp surveys, taken updates to Hispanic districts, attended assemblies, and placed test orders.\n- **Next steps** include state-by-state subscription data, a review of customer service call logs, a proposed customer service pledge to the AA Grapevine, Inc. Board, and a wider next meeting that includes DCMCs from Spanish-speaking districts.\n\n---\n\n## Contents\n\n1. [What is the La Viña Task Force?](#1-what-is-the-la-viña-task-force)\n2. [The numbers](#2-the-numbers)\n3. [Meeting 1 — September 23, 2026](#3-meeting-1--september-23-2026)\n4. [Meeting 2 — October 22, 2026](#4-meeting-2--october-22-2026)\n5. [Common themes from both meetings](#5-common-themes-from-both-meetings)\n6. [Ideas and suggestions raised](#6-ideas-and-suggestions-raised)\n7. [Follow-up: what happened since September 23](#7-follow-up-what-happened-since-september-23)\n8. [Action items](#8-action-items)\n9. [Open questions](#9-open-questions)\n10. [Resources: La Viña order forms](#10-resources-la-viña-order-forms)\n11. [How you can help](#11-how-you-can-help)\n12. [Questions to bring to your group](#12-questions-to-bring-to-your-group)\n13. [Next meeting](#13-next-meeting)\n\n---\n\n## 1. What is the La Viña Task Force?\n\nThe task force is an outreach effort of the AA Grapevine Board's ad hoc outreach committee. Its purpose is to understand why La Viña print subscriptions have declined, find the barriers members and groups are running into, and work toward solutions, so that La Viña can better carry the message to Spanish-speaking alcoholics.\n\nParticipants so far have included board directors, trustees, delegates, past delegates, Grapevine/La Viña representatives, and area and district committee members.\n\nThe spirit of the work, as described at the first meeting:\n\n- The meeting is **not for telling others what to do**. It is a place to share information, hear what members are seeing at the grassroots level, and learn how the task force can help with resources.\n- It is meant to be **two-way communication** between the fellowship and Grapevine/La Viña.\n- It is all in support of our **primary purpose**: working in unity to carry the message to the alcoholic who still suffers.\n- The long-term goal is for **La Viña to be self-supporting**, and the task force believes this can be done.\n\n---\n\n## 2. The numbers\n\n### Print subscriptions (presented by Teddy, September 23)\n\n| | July 2025 | July 2026 | Change |\n|---|---:|---:|---:|\n| La Viña print subscriptions | 7,434 | 6,011 | −1,423 (about −19%)\\* |\n\n\\* *The September 23 minutes list this decline as 24%. Based on the two figures, the drop works out to about 19%. (7,434 is about 24% higher than 6,011, which may be where that figure came from.)*\n\nOn October 22, the decline was described as a drop from a **post-pandemic high of about 7,500 to about 6,000 over the last 18 months**.\n\n### The wider picture (September 23)\n\n- **Book sales are up 33%.**\n- **Gross margin of 2,800**, which was described as a 40% increase.\n- **Grapevine showed a 13.4% improvement.**\n- The subscription decline **has not negatively affected the five-year plan.**\n\n### Member poll results (October 22)\n\nMary Beth (Area 77) ran a short WhatsApp poll of Spanish-speaking members across the area. Among **non-subscribers**:\n\n| Response | Share |\n|---|---:|\n| Reported **no** customer service problems | 84% |\n| **Didn't know about** La Viña | 30% |\n| Said **price** is a barrier | 22% |\n| Found the **subscription process too difficult** | 14% |\n\nThis suggests that in at least some areas, **awareness may matter as much as customer service**.\n\n---\n\n## 3. Meeting 1 — September 23, 2026\n\n**Format:** Zoom, 6:00 PM Central\n**Minutes:** Veronica\n\n| # | Agenda item | Led by |\n|---|---|---|\n| 1 | Welcome | Teddy |\n| 2 | Purpose of the meeting | Fredy |\n| 3 | Data trends | Teddy |\n| 4 | Customer service and reputation | Veronica |\n| 5 | Sharing session (90-second shares) | Paola |\n| 6 | Wrap-up and next steps | Fredy |\n\n### 3.1 Welcome (Teddy)\n\nTeddy explained that later meetings may include a larger group, and stressed that the meeting was not for telling anyone what to do. It was a chance to share information, hear what participants are seeing at the grassroots level, and let the task force know how it can help with resources, all in support of our primary purpose of working in unity to carry the message. The task force wants to understand the trends members are seeing.\n\n### 3.2 Purpose of the meeting (Fredy)\n\nFredy said the purpose was to **identify the underlying causes and conditions** behind La Viña subscriptions not being renewed, find the barriers, and work toward next steps and solutions. The task force decided its first contact would be with **delegates and Grapevine/La Viña representatives**. Fredy described this as an effort at two-way communication to help La Viña subscriptions and to get the message to the still-suffering alcoholic.\n\n### 3.3 Data trends (Teddy)\n\nTeddy reviewed the subscription and financial figures shown in [Section 2](#2-the-numbers).\n\n### 3.4 Customer service and reputation (Veronica)\n\nVeronica acknowledged **past problems with magazines not being delivered** and apologized for those negative experiences. La Viña is listening to the fellowship's experiences and has put process improvements in place. Veronica **humbly asked for the opportunity to give La Viña another try**, especially for those who had a bad experience, so La Viña can show it is committed to making things right. There will always be room to improve, and La Viña will keep listening.\n\n**Improvements already in place, in three areas:**\n\n1. **Subscription forms.** Paper and digital forms must be filled out correctly, and members should use the **updated form**.\n2. **Fulfillment and bulk shipping.** The postal service had been opening bulk mail, which may have caused delivery problems. Bulk orders are now **wrapped so the postal service cannot unwrap them**.\n3. **Customer service.** Customer service meets regularly with Dawin, and **two Spanish-speaking customer service employees** are available.\n\n**Request to the fellowship:** If you have a customer service problem, **please call customer service**. A log is kept of every problem, which helps La Viña see patterns and fix them.\n\n### 3.5 Sharing session (Paola, facilitator)\n\nEach participant had about 90 seconds to share. Shares are listed in the order they were recorded. Where the name or area was not recorded, it is marked \"—\".\n\n| Member | Area | What was shared |\n|---|:---:|---|\n| Rudy | 93 | Customer service issue: the magazine is still not received at times. |\n| Jose | 6 | Magazines not arriving. Asked how many subscriptions are being renewed. Gave an example: when someone wins a subscription in a raffle, the renewal notice isn't sent to the winner. |\n| — | — | Suggested more encouragement for La Viña at Conference, especially where La Viña isn't currently present. Encourage La Viña workshops and service activities. States with more experience could mentor states with less. |\n| — | — | Asked for a copy of the correct, current form and for how-to videos. |\n| Nick | 5 | Renewals aren't coming. Eighty subscriptions were not received. Customer service said they would talk to a supervisor but never called back. |\n| — | — | Deliveries aren't arriving. They buy in bulk to give out, and when a subscription expires, there's no email or renewal notice. |\n| Heather | 68 | Has funding for La Viña. After switching the La Viña website from English to Spanish to order, the **order can't be completed**. A gift certificate purchase went to the buyer instead of the person receiving the gift. |\n| Chitra | 6 | Forms were being filled out incorrectly. Will talk to the area to raise awareness on completing them correctly. |\n| Jeannie | — | An order submitted in May had still not arrived. Customer service said to give it more time. Asked: **when a form is filled out correctly, how long does fulfillment take?** |\n| Adrian | 8 | La Viña videos are hard to find because you have to scroll through English videos. Their organization needs improvement. |\n| Francine | 9 | We need to make clear that **having the app does not mean you're subscribed**. You still have to subscribe separately. |\n| Brian | 76 | Requested a breakdown of La Viña subscriptions by area. Teddy noted the Conference report breaks this down by state. |\n| Mark | — | Will meet with the DCM about the importance of filling the La Viña chair. It's hard to find people to serve, and grassroots work is important. |\n| Claudio | 7 | Will use a survey to learn where the area stands. Believes some members don't know how to renew. Books are raffled often, and a raffled magazine may not come with subscription information. |\n| Cesar | 9 | Asked whether the trend data Teddy shared could be published in the magazine, and how La Viña is covering 12-step work. |\n| Melvin | 93 | Customer service issues. There is a communication gap: customer service reps get different information from Sonia than from Grapevine staff. |\n| Amanda | 68 | Also requested data by state. Asked whether **FedEx** could be used for delivery. Noted that La Viña is used a lot in raffles. |\n| Lisa | 15 | Will ask the fellowship to give La Viña another chance, since process improvements are now in place. |\n| Don | 50 | There are Spanish-speaking members in the district but only one Spanish-speaking meeting. Attended to learn. |\n| Lori | 14 | Will relay the message at the area's October assembly. Noted there are divisions among Spanish speakers who come from different areas, and isn't sure whether this affects the trend. Looking forward to the updated form and the next meeting. |\n| Sue | 48 | Has a few groups and is taking Spanish literature into prisons. |\n| Jane | 15 | Spanish speakers aren't attending assembly meetings, possibly because someone was deported. Doesn't know how to reach out to encourage them to come. |\n| Ursula | 9 | Asked that **one of the task force members subscribe to La Viña** to experience firsthand how long delivery takes. |\n| Elias | 7 | Suggested that areas where La Viña subscriptions are doing well work with other areas. Also noted that raffle winners don't get a renewal notice, and renewal isn't automatic. |\n| Nadja | 75 | Issues with delivery and customer service. Raffles create renewal problems. |\n\n…",
-    "pinned": false
-   }
-  },
   {
    "id": "drive:18Tn2g_NxZokd8rmD9xq5pnMPatA5JSNW",
    "source": "drive",
