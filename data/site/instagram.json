@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-24T12:05:07Z",
+ "updated": "2026-10-25T12:38:39Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16942,
-   "posts": 3963,
+   "followers": 16941,
+   "posts": 3965,
    "owner_id": "48108439509",
-   "checked": "2026-10-24T12:04:49Z",
+   "checked": "2026-10-25T12:38:21Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,185 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2420,
-   "posts": 2987,
+   "posts": 2989,
    "owner_id": "48275839129",
-   "checked": "2026-10-24T12:04:52Z",
+   "checked": "2026-10-25T12:38:24Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:De6moYvjS1p",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De6moYvjS1p/",
+   "title": "“I need to constantly inch forward in AA, closer to the center, to avoid being thrown…",
+   "summary": "“I need to constantly inch forward in AA, closer to the center, to avoid being thrown from the spinning wheel that is my life.” “Centrifugal Force,” New York, New York, April 2004, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-25T11:30:15Z",
+   "first_seen": "2026-10-25T12:38:39Z",
+   "image": "/assets/cache/ig/De6moYvjS1p.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De6moYvjS1p",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De6moYvjS1p.webp",
+    "embed_url": "https://www.instagram.com/p/De6moYvjS1p/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De6moYvjS1p/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I need to constantly inch forward in AA, closer to the center, to avoid being thrown…",
+     "es": "“Necesito avanzar constantemente en AA, más cerca del centro, para evitar ser lanzado …"
+    },
+    "summary": {
+     "en": "“I need to constantly inch forward in AA, closer to the center, to avoid being thrown from the spinning wheel that is my life.” “Centrifugal Force,” New York, New York, April 2004, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Necesito avanzar constantemente en AA, más cerca del centro, para evitar ser arrojado de la rueda giratoria que es mi vida.” “Fuerza centrífuga”, Nueva York, abril de 2004, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De6moYrjRE7",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De6moYrjRE7/",
+   "title": "“Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero…",
+   "summary": "“Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero no podíamos deshacernos del alcohol mientras no hiciéramos otros sacrificios. Teníamos que renunciar a la petulancia y al razonamiento farsante. Teníamos que echar por la ventana la autojustificación, la auto conmiseración y la ira. Teníamos que abandonar el alocado concurso por ganar prestigio personal y…",
+   "lang": "es",
+   "date": "2026-10-25T11:30:15Z",
+   "first_seen": "2026-10-25T12:38:39Z",
+   "image": "/assets/cache/ig/De6moYrjRE7.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De6moYrjRE7",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De6moYrjRE7.webp",
+    "embed_url": "https://www.instagram.com/p/De6moYrjRE7/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De6moYrjRE7/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“First, we sacrifice alcohol. We had to; if not, he would have killed us. But …",
+     "es": "“Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero…"
+    },
+    "summary": {
+     "en": "“First, we sacrifice alcohol. We had to; if not, he would have killed us. But we couldn't get rid of alcohol while we didn't make other sacrifices. We had to give up petulancy and far-reaching reasoning. We had to throw out the window self-justification, self-confession and anger. We had to leave the crazy competition for winning personal prestige and …",
+     "es": "“Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero no podíamos deshacernos del alcohol mientras no hiciéramos otros sacrificios. Teníamos que renunciar a la petulancia y al razonamiento farsante. Teníamos que echar por la ventana la autojustificación, la auto conmiseración y la ira. Teníamos que abandonar el alocado concurso por ganar prestigio personal y…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De4Z3kml5s5",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De4Z3kml5s5/",
+   "title": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre…",
+   "summary": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre las 9:00 a. m. y las 5:30 p. m. EST por los siguientes números: Español: (800) 640-8781 (EE.UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (internacional) Francés: (212) 870-3456 Para todas las consultas relacionadas con las suscripciones, incluidas nuevas…",
+   "lang": "es",
+   "date": "2026-10-24T15:00:16Z",
+   "first_seen": "2026-10-25T12:38:39Z",
+   "image": "/assets/cache/ig/De4Z3kml5s5.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De4Z3kml5s5",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De4Z3kml5s5.webp",
+    "embed_url": "https://www.instagram.com/p/De4Z3kml5s5/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De4Z3kml5s5/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We're here to help! Contact Customer Service Monday through Friday between …",
+     "es": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre…"
+    },
+    "summary": {
+     "en": "We're here to help! Contact Customer Service from Monday to Friday between 9:00 a.m. and 5:30 p.m. EST for the following numbers: Spanish: (800) 640-8781 (USA) / +1 (570) 567-0437 (International) English: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (international) French: (212) 870-3456 For all subscription-related queries, including new …",
+     "es": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre las 9:00 a. m. y las 5:30 p. m. EST por los siguientes números: Español: (800) 640-8781 (EE.UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (internacional) Francés: (212) 870-3456 Para todas las consultas relacionadas con las suscripciones, incluidas nuevas…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De4Z3oQFyLH",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De4Z3oQFyLH/",
+   "title": "We are here to help! Please contact Customer Service Monday through Friday between 9:00…",
+   "summary": "We are here to help! Please contact Customer Service Monday through Friday between 9:00 a.m. and 5:30 p.m. EST at the following numbers: English: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Spanish: (800) 640-8781 (U.S.) / +1 (570) 567-0437 (International) French: (212) 870-3456 For all subscription-related inquiries, including new subscriptions, address changes, and other…",
+   "lang": "en",
+   "date": "2026-10-24T15:00:14Z",
+   "first_seen": "2026-10-25T12:38:39Z",
+   "image": "/assets/cache/ig/De4Z3oQFyLH.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De4Z3oQFyLH",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De4Z3oQFyLH.webp",
+    "embed_url": "https://www.instagram.com/p/De4Z3oQFyLH/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De4Z3oQFyLH/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We are here to help! Please contact Customer Service Monday through Friday between 9:00…",
+     "es": "¡Estamos aquí para ayudar! Por favor contacte al Servicio de Atención al Cliente de lunes a viernes entre 9:00 …"
+    },
+    "summary": {
+     "en": "We are here to help! Please contact Customer Service Monday through Friday between 9:00 a.m. and 5:30 p.m. EST at the following numbers: English: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Spanish: (800) 640-8781 (U.S.) / +1 (570) 567-0437 (International) French: (212) 870-3456 For all subscription-related inquiries, including new subscriptions, address changes, and other…",
+     "es": "¡Estamos aquí para ayudar! Póngase en contacto con el Servicio al Cliente de lunes a viernes entre 9:00 a. m. y 5:30 p. m. EST en los siguientes números: Inglés: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (Internacional) Español: (800) 640-8781 (U.S.) / +1 (570) 567-0437 (International) Francés: (212) 870-3456 Para todas las consultas relacionadas con la suscripción, incluyendo nuevas suscripciones, cambios de dirección y otros …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:De4B1cwF7TM",
    "source": "instagram",
@@ -2266,7 +2438,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeWjgBJjADC",
@@ -2309,7 +2481,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeT-tLljDOq",

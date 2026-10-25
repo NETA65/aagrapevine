@@ -1,11 +1,11 @@
 {
  "source": "instagram",
- "updated": "2026-10-24T12:05:07Z",
- "attempted": "2026-10-24T12:05:07Z",
+ "updated": "2026-10-25T12:38:39Z",
+ "attempted": "2026-10-25T12:38:39Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 3,
+  "added": 4,
   "removed": 0,
   "held": 0
  },
@@ -31,20 +31,140 @@
    "missing": [],
    "removed": []
   },
-  "thumbs_downloaded": 3,
+  "thumbs_downloaded": 4,
   "pruned": 0,
   "thumbs_deleted": 0,
-  "new": 3,
-  "total": 142,
+  "new": 4,
+  "total": 146,
   "per_account": {
-   "gv": 79,
-   "lv": 63
+   "gv": 81,
+   "lv": 65
   },
   "requests": 7,
   "anonymous": true,
   "graph_api": false
  },
  "items": [
+  {
+   "id": "ig:De6moYvjS1p",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De6moYvjS1p/",
+   "title": "“I need to constantly inch forward in AA, closer to the center, to avoid being thrown…",
+   "summary": "“I need to constantly inch forward in AA, closer to the center, to avoid being thrown from the spinning wheel that is my life.” “Centrifugal Force,” New York, New York, April 2004, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-25T11:30:15Z",
+   "first_seen": "2026-10-25T12:38:39Z",
+   "last_seen": "2026-10-25T12:38:39Z",
+   "image": "/assets/cache/ig/De6moYvjS1p.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De6moYvjS1p",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De6moYvjS1p.webp",
+    "embed_url": "https://www.instagram.com/p/De6moYvjS1p/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De6moYvjS1p/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:De6moYrjRE7",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De6moYrjRE7/",
+   "title": "“Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero…",
+   "summary": "“Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero no podíamos deshacernos del alcohol mientras no hiciéramos otros sacrificios. Teníamos que renunciar a la petulancia y al razonamiento farsante. Teníamos que echar por la ventana la autojustificación, la auto conmiseración y la ira. Teníamos que abandonar el alocado concurso por ganar prestigio personal y…",
+   "lang": "es",
+   "date": "2026-10-25T11:30:15Z",
+   "first_seen": "2026-10-25T12:38:39Z",
+   "last_seen": "2026-10-25T12:38:39Z",
+   "image": "/assets/cache/ig/De6moYrjRE7.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De6moYrjRE7",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De6moYrjRE7.webp",
+    "embed_url": "https://www.instagram.com/p/De6moYrjRE7/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De6moYrjRE7/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:De4Z3kml5s5",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De4Z3kml5s5/",
+   "title": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre…",
+   "summary": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre las 9:00 a. m. y las 5:30 p. m. EST por los siguientes números: Español: (800) 640-8781 (EE.UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (internacional) Francés: (212) 870-3456 Para todas las consultas relacionadas con las suscripciones, incluidas nuevas…",
+   "lang": "es",
+   "date": "2026-10-24T15:00:16Z",
+   "first_seen": "2026-10-25T12:38:39Z",
+   "last_seen": "2026-10-25T12:38:39Z",
+   "image": "/assets/cache/ig/De4Z3kml5s5.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De4Z3kml5s5",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De4Z3kml5s5.webp",
+    "embed_url": "https://www.instagram.com/p/De4Z3kml5s5/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De4Z3kml5s5/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:De4Z3oQFyLH",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De4Z3oQFyLH/",
+   "title": "We are here to help! Please contact Customer Service Monday through Friday between 9:00…",
+   "summary": "We are here to help! Please contact Customer Service Monday through Friday between 9:00 a.m. and 5:30 p.m. EST at the following numbers: English: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Spanish: (800) 640-8781 (U.S.) / +1 (570) 567-0437 (International) French: (212) 870-3456 For all subscription-related inquiries, including new subscriptions, address changes, and other…",
+   "lang": "en",
+   "date": "2026-10-24T15:00:14Z",
+   "first_seen": "2026-10-25T12:38:39Z",
+   "last_seen": "2026-10-25T12:38:39Z",
+   "image": "/assets/cache/ig/De4Z3oQFyLH.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De4Z3oQFyLH",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De4Z3oQFyLH.webp",
+    "embed_url": "https://www.instagram.com/p/De4Z3oQFyLH/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De4Z3oQFyLH/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
   {
    "id": "ig:De4B1blF5QL",
    "source": "instagram",
@@ -4331,10 +4451,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16942,
-   "posts": 3963,
+   "followers": 16941,
+   "posts": 3965,
    "owner_id": "48108439509",
-   "checked": "2026-10-24T12:04:49Z",
+   "checked": "2026-10-25T12:38:21Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp",
    "_avatar_checked": "2026-10-23T12:43:07Z"
   },
@@ -4344,9 +4464,9 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2420,
-   "posts": 2987,
+   "posts": 2989,
    "owner_id": "48275839129",
-   "checked": "2026-10-24T12:04:52Z",
+   "checked": "2026-10-25T12:38:24Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp",
    "_avatar_checked": "2026-10-23T12:43:07Z"
   }
@@ -4383,13 +4503,13 @@
    "checked": "2026-10-23T12:42:50Z"
   },
   "DdhkB_AOd9a": {
-   "checked": "2026-10-09T14:26:48Z"
+   "checked": "2026-10-25T12:38:24Z"
   },
   "Ddi-lbMg3Of": {
-   "checked": "2026-10-09T14:26:48Z"
+   "checked": "2026-10-25T12:38:24Z"
   },
   "DdjDml1HNtr": {
-   "checked": "2026-10-09T14:26:48Z"
+   "checked": "2026-10-25T12:38:24Z"
   },
   "DdjDmnFnGVU": {
    "checked": "2026-10-24T12:04:52Z"
@@ -4600,6 +4720,12 @@
   },
   "DeRZ6Xclylr": {
    "checked": "2026-10-24T12:04:52Z"
+  },
+  "DeSA8RBuGuH": {
+   "checked": "2026-10-25T12:38:24Z"
+  },
+  "DeSBpfBpO-y": {
+   "checked": "2026-10-25T12:38:24Z"
   }
  }
 }

@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-10-24T12:10:17Z",
- "attempted": "2026-10-24T12:10:17Z",
+ "updated": "2026-10-25T12:43:21Z",
+ "attempted": "2026-10-25T12:43:21Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -12,10 +12,10 @@
  "stats": {
   "discovery": "sitemap",
   "discovery_complete": true,
-  "upcoming_urls": 20,
+  "upcoming_urls": 19,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 3,
+  "refreshed": 0,
   "failed": 0,
   "pending": 0,
   "cached": 20,
@@ -23,7 +23,7 @@
   "online_es": 0,
   "items": 2,
   "new": 0,
-  "requests": 47
+  "requests": 42
  },
  "items": [
   {
@@ -36,7 +36,7 @@
    "lang": "es",
    "date": "2027-01-29",
    "first_seen": "2026-10-02T22:31:32Z",
-   "last_seen": "2026-10-18T12:13:47Z",
+   "last_seen": "2026-10-25T12:43:21Z",
    "image": null,
    "tags": [
     "texas"
@@ -74,7 +74,7 @@
    "lang": "en",
    "date": "2027-01-08",
    "first_seen": "2026-10-18T12:13:47Z",
-   "last_seen": "2026-10-18T12:13:47Z",
+   "last_seen": "2026-10-25T12:43:21Z",
    "image": null,
    "tags": [
     "texas"
