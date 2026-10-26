@@ -1,7 +1,355 @@
 {
- "updated": "2026-10-26T14:33:01Z",
+ "updated": "2026-10-26T14:35:30Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ev:manual:2026-11-10-neta65-delegate-town-hall",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://neta65.org/event/delegate-conference-connect-town-hall-2/",
+   "title": "Delegate — Conference Connect Town Hall",
+   "summary": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org. Zoom meeting ID 445 571 1924, passcode 051617.",
+   "lang": "en",
+   "date": "2026-11-11T01:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "delegate",
+    "town-hall"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-11-11T01:00:00Z",
+    "end": "2026-11-11T02:00:00Z",
+    "all_day": false,
+    "location": null,
+    "online_url": "https://us02web.zoom.us/j/4455711924?pwd=RDF0MTYweXFEdG5uT1hITGlsSHczUT09&omn=88181840080",
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org.\n\nZoom meeting ID 445 571 1924, passcode 051617.",
+    "slug": "2026-11-10-neta65-delegate-town-hall",
+    "file": "content/events/2026-11-10-neta65-delegate-town-hall.md",
+    "meeting_id": "445 571 1924",
+    "own_i18n": {
+     "title": {
+      "es": "Reunión Informativa de la Delegada — Conference Connect"
+     },
+     "summary": {
+      "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
+     },
+     "body_md": {
+      "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
+     }
+    },
+    "platform": "Zoom",
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Delegate — Conference Connect Town Hall",
+     "es": "Reunión Informativa de la Delegada — Conference Connect"
+    },
+    "summary": {
+     "en": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org. Zoom meeting ID 445 571 1924, passcode 051617.",
+     "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
+    },
+    "body_md": {
+     "en": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org.\n\nZoom meeting ID 445 571 1924, passcode 051617.",
+     "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-10-26T14:35:09Z"
+  },
+  {
+   "id": "ev:manual:2027-02-21-neta65-winter-acm",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/#2027-02-21-neta65-winter-acm",
+   "title": "Winter ACM 2027",
+   "summary": "NETA 65's winter Area Committee Meeting (ACM). The host group and the venue will be announced.",
+   "lang": "en",
+   "date": "2027-02-21T19:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "acm",
+    "panel-77"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2027-02-21T19:00:00Z",
+    "end": "2027-02-21T23:00:00Z",
+    "all_day": false,
+    "location": "Venue to be announced",
+    "online_url": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "NETA 65's winter Area Committee Meeting (ACM). The host group and the venue will be announced.",
+    "slug": "2027-02-21-neta65-winter-acm",
+    "file": "content/events/2027-02-21-neta65-winter-acm.md",
+    "tentative": true,
+    "own_i18n": {
+     "title": {
+      "es": "ACM de Invierno 2027"
+     },
+     "summary": {
+      "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM). El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "body_md": {
+      "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM). El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "location": {
+      "es": "Lugar por anunciarse"
+     }
+    },
+    "location_tba": true,
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Winter ACM 2027",
+     "es": "ACM de Invierno 2027"
+    },
+    "summary": {
+     "en": "NETA 65's winter Area Committee Meeting (ACM). The host group and the venue will be announced.",
+     "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM). El grupo anfitrión y el lugar se anunciarán más adelante."
+    },
+    "body_md": {
+     "en": "NETA 65's winter Area Committee Meeting (ACM). The host group and the venue will be announced.",
+     "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM). El grupo anfitrión y el lugar se anunciarán más adelante."
+    },
+    "location": {
+     "en": "Venue to be announced",
+     "es": "Lugar por anunciarse"
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-10-26T14:35:09Z"
+  },
+  {
+   "id": "ev:manual:2027-04-11-neta65-spring-acm",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/#2027-04-11-neta65-spring-acm",
+   "title": "Spring ACM 2027",
+   "summary": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
+   "lang": "en",
+   "date": "2027-04-11T18:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "acm",
+    "panel-77"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2027-04-11T18:00:00Z",
+    "end": "2027-04-11T22:00:00Z",
+    "all_day": false,
+    "location": "Venue to be announced",
+    "online_url": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
+    "slug": "2027-04-11-neta65-spring-acm",
+    "file": "content/events/2027-04-11-neta65-spring-acm.md",
+    "tentative": true,
+    "own_i18n": {
+     "title": {
+      "es": "ACM de Primavera 2027"
+     },
+     "summary": {
+      "es": "La reunión de primavera del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Primavera. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "body_md": {
+      "es": "La reunión de primavera del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Primavera. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "location": {
+      "es": "Lugar por anunciarse"
+     }
+    },
+    "location_tba": true,
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Spring ACM 2027",
+     "es": "ACM de Primavera 2027"
+    },
+    "summary": {
+     "en": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
+     "es": "La reunión de primavera del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Primavera. El grupo anfitrión y el lugar se anunciarán más adelante."
+    },
+    "body_md": {
+     "en": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
+     "es": "La reunión de primavera del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Primavera. El grupo anfitrión y el lugar se anunciarán más adelante."
+    },
+    "location": {
+     "en": "Venue to be announced",
+     "es": "Lugar por anunciarse"
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-10-26T14:35:09Z"
+  },
+  {
+   "id": "ev:manual:2027-07-18-neta65-summer-acm",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/#2027-07-18-neta65-summer-acm",
+   "title": "Summer ACM 2027",
+   "summary": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
+   "lang": "en",
+   "date": "2027-07-18T18:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "acm",
+    "panel-77"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2027-07-18T18:00:00Z",
+    "end": "2027-07-18T22:00:00Z",
+    "all_day": false,
+    "location": "Venue to be announced",
+    "online_url": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
+    "slug": "2027-07-18-neta65-summer-acm",
+    "file": "content/events/2027-07-18-neta65-summer-acm.md",
+    "tentative": true,
+    "own_i18n": {
+     "title": {
+      "es": "ACM de Verano 2027"
+     },
+     "summary": {
+      "es": "La reunión de verano del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Verano. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "body_md": {
+      "es": "La reunión de verano del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Verano. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "location": {
+      "es": "Lugar por anunciarse"
+     }
+    },
+    "location_tba": true,
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Summer ACM 2027",
+     "es": "ACM de Verano 2027"
+    },
+    "summary": {
+     "en": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
+     "es": "La reunión de verano del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Verano. El grupo anfitrión y el lugar se anunciarán más adelante."
+    },
+    "body_md": {
+     "en": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
+     "es": "La reunión de verano del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Verano. El grupo anfitrión y el lugar se anunciarán más adelante."
+    },
+    "location": {
+     "en": "Venue to be announced",
+     "es": "Lugar por anunciarse"
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-10-26T14:35:09Z"
+  },
+  {
+   "id": "ev:manual:2027-10-10-neta65-fall-acm",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/#2027-10-10-neta65-fall-acm",
+   "title": "Fall ACM 2027",
+   "summary": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
+   "lang": "en",
+   "date": "2027-10-10T18:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "acm",
+    "panel-77"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2027-10-10T18:00:00Z",
+    "end": "2027-10-10T22:00:00Z",
+    "all_day": false,
+    "location": "Venue to be announced",
+    "online_url": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
+    "slug": "2027-10-10-neta65-fall-acm",
+    "file": "content/events/2027-10-10-neta65-fall-acm.md",
+    "tentative": true,
+    "own_i18n": {
+     "title": {
+      "es": "ACM de Otoño 2027"
+     },
+     "summary": {
+      "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Otoño. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "body_md": {
+      "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Otoño. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "location": {
+      "es": "Lugar por anunciarse"
+     }
+    },
+    "location_tba": true,
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Fall ACM 2027",
+     "es": "ACM de Otoño 2027"
+    },
+    "summary": {
+     "en": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
+     "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Otoño. El grupo anfitrión y el lugar se anunciarán más adelante."
+    },
+    "body_md": {
+     "en": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
+     "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Otoño. El grupo anfitrión y el lugar se anunciarán más adelante."
+    },
+    "location": {
+     "en": "Venue to be announced",
+     "es": "Lugar por anunciarse"
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-10-26T14:35:09Z"
+  },
   {
    "id": "ig:De9LbMcjfh1",
    "source": "instagram",
@@ -8409,232 +8757,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-09T04:48:48Z"
-  },
-  {
-   "id": "pod:wo:0a54fa5dff79",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/d0617256-3d71-4850-8a82-2158ccf2c370",
-   "title": "Grapevine Weekly Open AA Meeting, October 7, 2026 [Season 2, Episode 15]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 7, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Christopher and Olis, who share their experience…",
-   "lang": "en",
-   "date": "2026-10-09T04:15:00Z",
-   "first_seen": "2026-10-09T07:30:20Z",
-   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
-   "tags": [
-    "season-2"
-   ],
-   "category": "wo",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/d0617256-3d71-4850-8a82-2158ccf2c370.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 77117788,
-    "duration_sec": 3213,
-    "season": 2,
-    "episode": 15,
-    "episode_type": "full",
-    "show": "wo",
-    "show_name": "Grapevine Weekly Open AA Meeting",
-    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "player_url": "https://player.captivate.fm/episode/d0617256-3d71-4850-8a82-2158ccf2c370",
-    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
-    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
-    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, October 7, 2026 [Season 2, Episode 15]",
-     "es": "Grapevine Weekly Open AA Meeting, 7 de octubre de 2026 [Temporada 2, Episodio 15]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 7, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Christopher and Olis, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 7 de octubre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Don da la bienvenida a los oradores Christopher y Olis, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-09T04:15:00Z"
-  },
-  {
-   "id": "ig:DeO1HeJDJa6",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeO1HeJDJa6/",
-   "title": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos…",
-   "summary": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos en la posición de tener que admitirlo”. \"“Nunca debajo de la alfombra” ENERO DE 1967 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-08T11:30:14Z",
-   "first_seen": "2026-10-08T14:41:31Z",
-   "image": "/assets/cache/ig/DeO1HeJDJa6.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeO1HeJDJa6",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeO1HeJDJa6.webp",
-    "embed_url": "https://www.instagram.com/p/DeO1HeJDJa6/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeO1HeJDJa6/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“The more I am willing to accept when I am wrong, I find myself less and less …",
-     "es": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos…"
-    },
-    "summary": {
-     "en": "“The more willing I am to accept when I am wrong, I find myself less and less in the position of having to admit it.” \"Never under the carpet\" January 1967 AA Grapevine Daily Quote in www.aalavina.org",
-     "es": "“Mientras más dispuesto estoy a aceptar cuando me equivoco, me encuentro cada vez menos en la posición de tener que admitirlo”. \"“Nunca debajo de la alfombra” ENERO DE 1967 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-08T11:30:14Z"
-  },
-  {
-   "id": "ig:DeO1HexjHK2",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeO1HexjHK2/",
-   "title": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my…",
-   "summary": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my Fourth Step, an old-timer suggested I list the names of those against whom I held resentments, followed by two or three sentences describing what they had done to earn my displeasure. Then, after putting the list aside for a day, I was to cross off each person’s name and replace it with my own.” “Mirror…",
-   "lang": "en",
-   "date": "2026-10-08T11:30:14Z",
-   "first_seen": "2026-10-08T14:41:31Z",
-   "image": "/assets/cache/ig/DeO1HexjHK2.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeO1HexjHK2",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeO1HexjHK2.webp",
-    "embed_url": "https://www.instagram.com/p/DeO1HexjHK2/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeO1HexjHK2/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my…",
-     "es": "“A veces tomar el inventario de alguien más puede ser muy beneficioso. Cuando estaba haciendo mi …"
-    },
-    "summary": {
-     "en": "“Sometimes taking somebody else’s inventory can be most beneficial. When I was doing my Fourth Step, an old-timer suggested I list the names of those against whom I held resentments, followed by two or three sentences describing what they had done to earn my displeasure. Then, after putting the list aside for a day, I was to cross off each person’s name and replace it with my own.” “Mirror…",
-     "es": "“A veces tomar el inventario de alguien más puede ser muy beneficioso. Cuando estaba haciendo mi Cuarto Paso, un veterano sugirió que enumerara los nombres de aquellos contra quienes mantuve resentimientos, seguido de dos o tres frases que describían lo que habían hecho para ganar mi descontento. Luego, después de dejar la lista a un lado por un día, yo iba a cruzar el nombre de cada persona y reemplazarla por mi propio.” “Mirror …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-08T11:30:14Z"
-  },
-  {
-   "id": "ig:DeNAYsljOml",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeNAYsljOml/",
-   "title": "Humor septiembre/octubre 2026",
-   "summary": "Humor septiembre/octubre 2026 “¿Has visto el jardín de ese vecino de enfrente? ¡Qué desastre!” —Mike G., Ontario, Canadá. Grapevine, marzo de 2026 Fuente: Revista Grapevine, enero 2026. www.aalavina.org/revista/mayo-junio-2026/humor-mayojunio-2026",
-   "lang": "es",
-   "date": "2026-10-07T18:30:17Z",
-   "first_seen": "2026-10-08T14:41:31Z",
-   "image": "/assets/cache/ig/DeNAYsljOml.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeNAYsljOml",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeNAYsljOml.webp",
-    "embed_url": "https://www.instagram.com/p/DeNAYsljOml/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeNAYsljOml/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Humor September / October 2026",
-     "es": "Humor septiembre/octubre 2026"
-    },
-    "summary": {
-     "en": "Humor September / October 2026 “Have you seen that neighbor’s garden across the street? What a disaster!” -Mike G., Ontario, Canada. Grapevine, March 2026 Source: Grapevine, January 2026. www.aalavina.org/revista/mayo-junio-2026/humor-mayojunio-2026",
-     "es": "Humor septiembre/octubre 2026 “¿Has visto el jardín de ese vecino de enfrente? ¡Qué desastre!” —Mike G., Ontario, Canadá. Grapevine, marzo de 2026 Fuente: Revista Grapevine, enero 2026. www.aalavina.org/revista/mayo-junio-2026/humor-mayojunio-2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-07T18:30:17Z"
-  },
-  {
-   "id": "ig:DeNAYtXjHk1",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeNAYtXjHk1/",
-   "title": "At Wit's End of October 2026",
-   "summary": "At Wit's End of October 2026 “Dave, I hear you say you’re at the jumping off place. But I don’t think that’s what they had in mind.” —James N., New Zealand Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
-   "lang": "en",
-   "date": "2026-10-07T18:30:13Z",
-   "first_seen": "2026-10-08T14:41:31Z",
-   "image": "/assets/cache/ig/DeNAYtXjHk1.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeNAYtXjHk1",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeNAYtXjHk1.webp",
-    "embed_url": "https://www.instagram.com/p/DeNAYtXjHk1/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeNAYtXjHk1/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "At Wit's End of October 2026",
-     "es": "At Wit's End de octubre de 2026"
-    },
-    "summary": {
-     "en": "At Wit's End of October 2026 “Dave, I hear you say you’re at the jumping off place. But I don’t think that’s what they had in mind.” —James N., New Zealand Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
-     "es": "At Wit's End de octubre de 2026 “Dave, oigo que dices que estás en el lugar saltando. Pero no creo que eso sea lo que tenían en mente.” —James N., Nueva Zelanda Flexiona tu hueso gracioso Si una gran capción se mete en la mente cuando miras nuestras siguientes imágenes de dibujos animados. www.aagrapevine.org/submit-caption"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-07T18:30:13Z"
   }
  ]
 }

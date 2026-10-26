@@ -1,28 +1,77 @@
 {
  "source": "manual_events",
- "updated": "2026-10-26T14:23:08Z",
- "attempted": "2026-10-26T14:23:08Z",
+ "updated": "2026-10-26T14:35:09Z",
+ "attempted": "2026-10-26T14:35:09Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 5,
   "removed": 0,
   "held": 0
  },
  "stats": {
-  "files": 10,
-  "new": 0,
+  "files": 15,
+  "new": 5,
   "problems": 0,
   "errors": []
  },
  "items": [
+  {
+   "id": "ev:manual:2027-10-10-neta65-fall-acm",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/#2027-10-10-neta65-fall-acm",
+   "title": "Fall ACM 2027",
+   "summary": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
+   "lang": "en",
+   "date": "2027-10-10T18:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "last_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "acm",
+    "panel-77"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2027-10-10T18:00:00Z",
+    "end": "2027-10-10T22:00:00Z",
+    "all_day": false,
+    "location": "Venue to be announced",
+    "online_url": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
+    "slug": "2027-10-10-neta65-fall-acm",
+    "file": "content/events/2027-10-10-neta65-fall-acm.md",
+    "tentative": true,
+    "own_i18n": {
+     "title": {
+      "es": "ACM de Otoño 2027"
+     },
+     "summary": {
+      "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Otoño. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "body_md": {
+      "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Otoño. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "location": {
+      "es": "Lugar por anunciarse"
+     }
+    }
+   }
+  },
   {
    "id": "ev:manual:2027-09-17-neta65-fall-assembly",
    "source": "committee",
    "kind": "event",
    "url": "/events/#2027-09-17-neta65-fall-assembly",
    "title": "NETA 65 Fall Assembly 2027",
-   "summary": "Area 65 assembly (Panel 77). Host districts, venue and format are still to be confirmed.",
+   "summary": "Area 65 assembly (Panel 77) at the DoubleTree by Hilton Fort Worth South. The assembly is all day Saturday and Sunday morning (8 AM to 12 PM). There is no activity at the hotel on Friday night, though the host districts may hold something at a nearby group (to be confirmed). District 64 has confirmed as co-host; District 62 has put off its discussion until its November district meeting.",
    "lang": "en",
    "date": "2027-09-17",
    "first_seen": "2026-09-24T11:10:08Z",
@@ -39,13 +88,13 @@
     "start": "2027-09-17",
     "end": "2027-09-19",
     "all_day": true,
-    "location": "Venue to be announced",
+    "location": "DoubleTree by Hilton Fort Worth South Hotel & Conference Center, 100 Altamesa Blvd East, Fort Worth, TX 76134",
     "online_url": null,
     "flyer_url": null,
     "flyer_thumb": null,
-    "city": null,
-    "state": null,
-    "body_md": "Area 65 assembly (Panel 77). Host districts, venue and format are still to be confirmed.",
+    "city": "Fort Worth",
+    "state": "TX",
+    "body_md": "Area 65 assembly (Panel 77) at the DoubleTree by Hilton Fort Worth South. The assembly is all day Saturday and Sunday morning (8 AM to 12 PM). There is no activity at the hotel on Friday night, though the host districts may hold something at a nearby group (to be confirmed). District 64 has confirmed as co-host; District 62 has put off its discussion until its November district meeting.",
     "slug": "2027-09-17-neta65-fall-assembly",
     "file": "content/events/2027-09-17-neta65-fall-assembly.md",
     "tentative": true,
@@ -54,10 +103,56 @@
       "es": "Asamblea de Otoño 2027 de NETA 65"
      },
      "summary": {
-      "es": "Asamblea del Área 65 (Panel 77). Los distritos anfitriones, el lugar y el formato se confirmarán más adelante."
+      "es": "Asamblea del Área 65 (Panel 77), en el DoubleTree by Hilton Fort Worth South. Será todo el sábado y la mañana del domingo (de 8 a. m. a 12 p. m.). El viernes por la noche no habrá actividad en el hotel; los distritos anfitriones podrían organizar algo en un grupo cercano. El Distrito 64 confirmó que será coanfitrión; el Distrito 62 aplazó el tema hasta su reunión distrital de noviembre."
      },
      "body_md": {
-      "es": "Asamblea del Área 65 (Panel 77). Los distritos anfitriones, el lugar y el formato se confirmarán más adelante."
+      "es": "Asamblea del Área 65 (Panel 77), en el DoubleTree by Hilton Fort Worth South. Será todo el sábado y la mañana del domingo (de 8 a. m. a 12 p. m.). El viernes por la noche no habrá actividad en el hotel; los distritos anfitriones podrían organizar algo en un grupo cercano. El Distrito 64 confirmó que será coanfitrión; el Distrito 62 aplazó el tema hasta su reunión distrital de noviembre."
+     }
+    }
+   }
+  },
+  {
+   "id": "ev:manual:2027-07-18-neta65-summer-acm",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/#2027-07-18-neta65-summer-acm",
+   "title": "Summer ACM 2027",
+   "summary": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
+   "lang": "en",
+   "date": "2027-07-18T18:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "last_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "acm",
+    "panel-77"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2027-07-18T18:00:00Z",
+    "end": "2027-07-18T22:00:00Z",
+    "all_day": false,
+    "location": "Venue to be announced",
+    "online_url": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
+    "slug": "2027-07-18-neta65-summer-acm",
+    "file": "content/events/2027-07-18-neta65-summer-acm.md",
+    "tentative": true,
+    "own_i18n": {
+     "title": {
+      "es": "ACM de Verano 2027"
+     },
+     "summary": {
+      "es": "La reunión de verano del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Verano. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "body_md": {
+      "es": "La reunión de verano del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Verano. El grupo anfitrión y el lugar se anunciarán más adelante."
      },
      "location": {
       "es": "Lugar por anunciarse"
@@ -115,6 +210,55 @@
    }
   },
   {
+   "id": "ev:manual:2027-04-11-neta65-spring-acm",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/#2027-04-11-neta65-spring-acm",
+   "title": "Spring ACM 2027",
+   "summary": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
+   "lang": "en",
+   "date": "2027-04-11T18:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "last_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "acm",
+    "panel-77"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2027-04-11T18:00:00Z",
+    "end": "2027-04-11T22:00:00Z",
+    "all_day": false,
+    "location": "Venue to be announced",
+    "online_url": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
+    "slug": "2027-04-11-neta65-spring-acm",
+    "file": "content/events/2027-04-11-neta65-spring-acm.md",
+    "tentative": true,
+    "own_i18n": {
+     "title": {
+      "es": "ACM de Primavera 2027"
+     },
+     "summary": {
+      "es": "La reunión de primavera del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Primavera. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "body_md": {
+      "es": "La reunión de primavera del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Primavera. El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "location": {
+      "es": "Lugar por anunciarse"
+     }
+    }
+   }
+  },
+  {
    "id": "ev:manual:2027-03-19-neta65-spring-assembly",
    "source": "committee",
    "kind": "event",
@@ -155,6 +299,101 @@
      },
      "body_md": {
       "es": "Asamblea del Área 65 (Panel 77), coorganizada por los Distritos 53 y 55, en el DoubleTree by Hilton Hotel Dallas Near the Galleria."
+     }
+    }
+   }
+  },
+  {
+   "id": "ev:manual:2027-02-21-neta65-winter-acm",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/#2027-02-21-neta65-winter-acm",
+   "title": "Winter ACM 2027",
+   "summary": "NETA 65's winter Area Committee Meeting (ACM). The host group and the venue will be announced.",
+   "lang": "en",
+   "date": "2027-02-21T19:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "last_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "acm",
+    "panel-77"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2027-02-21T19:00:00Z",
+    "end": "2027-02-21T23:00:00Z",
+    "all_day": false,
+    "location": "Venue to be announced",
+    "online_url": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "NETA 65's winter Area Committee Meeting (ACM). The host group and the venue will be announced.",
+    "slug": "2027-02-21-neta65-winter-acm",
+    "file": "content/events/2027-02-21-neta65-winter-acm.md",
+    "tentative": true,
+    "own_i18n": {
+     "title": {
+      "es": "ACM de Invierno 2027"
+     },
+     "summary": {
+      "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM). El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "body_md": {
+      "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM). El grupo anfitrión y el lugar se anunciarán más adelante."
+     },
+     "location": {
+      "es": "Lugar por anunciarse"
+     }
+    }
+   }
+  },
+  {
+   "id": "ev:manual:2026-11-10-neta65-delegate-town-hall",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://neta65.org/event/delegate-conference-connect-town-hall-2/",
+   "title": "Delegate — Conference Connect Town Hall",
+   "summary": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org. Zoom meeting ID 445 571 1924, passcode 051617.",
+   "lang": "en",
+   "date": "2026-11-11T01:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "last_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "delegate",
+    "town-hall"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-11-11T01:00:00Z",
+    "end": "2026-11-11T02:00:00Z",
+    "all_day": false,
+    "location": null,
+    "online_url": "https://us02web.zoom.us/j/4455711924?pwd=RDF0MTYweXFEdG5uT1hITGlsSHczUT09&omn=88181840080",
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org.\n\nZoom meeting ID 445 571 1924, passcode 051617.",
+    "slug": "2026-11-10-neta65-delegate-town-hall",
+    "file": "content/events/2026-11-10-neta65-delegate-town-hall.md",
+    "meeting_id": "445 571 1924",
+    "own_i18n": {
+     "title": {
+      "es": "Reunión Informativa de la Delegada — Conference Connect"
+     },
+     "summary": {
+      "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
+     },
+     "body_md": {
+      "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
      }
     }
    }
