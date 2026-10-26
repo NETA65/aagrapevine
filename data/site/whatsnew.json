@@ -1,7 +1,57 @@
 {
- "updated": "2026-10-25T16:06:24Z",
+ "updated": "2026-10-26T06:25:57Z",
  "fixture": false,
  "items": [
+  {
+   "id": "pod:gv:887fc754f895",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/728dfd76-3da9-4467-8ed3-6273077e5081",
+   "title": "AA Gatherings [Season 11, Episode 17]",
+   "summary": "Don and Olis discuss the many types of AA gatherings, including assemblies, conferences, conventions, forums, workshops. Don describes his recent experience at the Southeast Regional Forum, and he interviews several participants including Jennifer, Kim, Kyle and Sonia. Sam visits the National AA Technology Workshop in Concord, CA, and demonstrates how we put the AA Grapevine Half Hour Variety…",
+   "lang": "en",
+   "date": "2026-10-26T04:15:00Z",
+   "first_seen": "2026-10-26T06:25:49Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/728dfd76-3da9-4467-8ed3-6273077e5081.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 47826024,
+    "duration_sec": 2391,
+    "season": 11,
+    "episode": 17,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/728dfd76-3da9-4467-8ed3-6273077e5081",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "AA Gatherings [Season 11, Episode 17]",
+     "es": "Reuniones AA [Temporada 11, Episodio 17]"
+    },
+    "summary": {
+     "en": "Don and Olis discuss the many types of AA gatherings, including assemblies, conferences, conventions, forums, workshops. Don describes his recent experience at the Southeast Regional Forum, and he interviews several participants including Jennifer, Kim, Kyle and Sonia. Sam visits the National AA Technology Workshop in Concord, CA, and demonstrates how we put the AA Grapevine Half Hour Variety…",
+     "es": "Don y Olis discuten los muchos tipos de reuniones AA, incluyendo asambleas, conferencias, convenciones, foros, talleres. Don describe su experiencia reciente en el Foro Regional del Sudeste, y entrevista a varios participantes incluyendo Jennifer, Kim, Kyle y Sonia. Sam visita el Taller Nacional de Tecnología AA en Concord, CA, y demuestra cómo ponemos el AA Grapevine Variedad de media hora …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-26T04:15:00Z"
+  },
   {
    "id": "ig:De6moYrjRE7",
    "source": "instagram",
@@ -7465,7 +7515,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-12T04:50:59Z"
   },
   {
@@ -7515,7 +7565,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-12T04:15:00Z"
   },
   {
@@ -8581,54 +8631,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-07T11:30:15Z"
-  },
-  {
-   "id": "ev:flyer:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
-   "source": "drive",
-   "kind": "event",
-   "url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/view",
-   "title": "Grapevine Committee Crash",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-10-31T16:00:00Z",
-   "first_seen": "2026-10-07T05:07:40Z",
-   "image": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "flyer",
-   "status": "ok",
-   "extra": {
-    "start": "2026-10-31T16:00:00Z",
-    "end": "2026-10-31T18:00:00Z",
-    "all_day": false,
-    "location": "Grand Prairie Group, 921 W Pioneer Pkwy, Grand Prairie, TX 75052",
-    "online_url": null,
-    "flyer_url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/view",
-    "flyer_thumb": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w600",
-    "city": "Grand Prairie",
-    "state": "TX",
-    "drive_id": "drive:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
-    "is_pdf": false,
-    "is_image": true,
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Committee Crash",
-     "es": "Visita del Comité de Grapevine"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-07T05:07:40Z"
   }
  ]
 }

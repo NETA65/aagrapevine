@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-25T22:28:27Z",
+ "updated": "2026-10-26T06:25:49Z",
  "fixture": false,
  "shows": [
   {
@@ -14,7 +14,7 @@
    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
-   "episodes": 266,
+   "episodes": 267,
    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp",
    "i18n": {
     "title": {
@@ -62,6 +62,55 @@
   }
  ],
  "items": [
+  {
+   "id": "pod:gv:887fc754f895",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/728dfd76-3da9-4467-8ed3-6273077e5081",
+   "title": "AA Gatherings [Season 11, Episode 17]",
+   "summary": "Don and Olis discuss the many types of AA gatherings, including assemblies, conferences, conventions, forums, workshops. Don describes his recent experience at the Southeast Regional Forum, and he interviews several participants including Jennifer, Kim, Kyle and Sonia. Sam visits the National AA Technology Workshop in Concord, CA, and demonstrates how we put the AA Grapevine Half Hour Variety…",
+   "lang": "en",
+   "date": "2026-10-26T04:15:00Z",
+   "first_seen": "2026-10-26T06:25:49Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/728dfd76-3da9-4467-8ed3-6273077e5081.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 47826024,
+    "duration_sec": 2391,
+    "season": 11,
+    "episode": 17,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/728dfd76-3da9-4467-8ed3-6273077e5081",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "AA Gatherings [Season 11, Episode 17]",
+     "es": "Reuniones AA [Temporada 11, Episodio 17]"
+    },
+    "summary": {
+     "en": "Don and Olis discuss the many types of AA gatherings, including assemblies, conferences, conventions, forums, workshops. Don describes his recent experience at the Southeast Regional Forum, and he interviews several participants including Jennifer, Kim, Kyle and Sonia. Sam visits the National AA Technology Workshop in Concord, CA, and demonstrates how we put the AA Grapevine Half Hour Variety…",
+     "es": "Don y Olis discuten los muchos tipos de reuniones AA, incluyendo asambleas, conferencias, convenciones, foros, talleres. Don describe su experiencia reciente en el Foro Regional del Sudeste, y entrevista a varios participantes incluyendo Jennifer, Kim, Kyle y Sonia. Sam visita el Taller Nacional de Tecnología AA en Concord, CA, y demuestra cómo ponemos el AA Grapevine Variedad de media hora …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "pod:wo:79d55209238b",
    "source": "podcast",
@@ -256,7 +305,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "pod:wo:0a54fa5dff79",

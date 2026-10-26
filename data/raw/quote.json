@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-10-25T22:28:46Z",
- "attempted": "2026-10-25T22:28:46Z",
+ "updated": "2026-10-26T06:25:47Z",
+ "attempted": "2026-10-26T06:25:47Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-25",
-  "new": 0
+  "today": "2026-10-26",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-25",
+   "id": "quote:gv:2026-10-26",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 25",
+   "title": "Grapevine Daily Quote October 26",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-25",
-   "first_seen": "2026-10-25T06:16:54Z",
-   "last_seen": "2026-10-25T06:16:54Z",
+   "date": "2026-10-26",
+   "first_seen": "2026-10-26T06:25:47Z",
+   "last_seen": "2026-10-26T06:25:47Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "I need to constantly inch forward in AA, closer to the center, to avoid being thrown from the spinning wheel that is my life.",
-    "attribution": "“Centrifugal Force,” New York, New York, April 2004, AA Grapevine",
+    "text": "I was attracted to AA because it excluded no one, and I am grateful for the lessons I’ve learned over the years: that we stop fighting anyone or anything; that it is the details of what I do that make me who I am; that my perception of life is ever-changing and evolving; that the basic ‘suggestions’ I heard when I entered the Fellowship have been a continuous part of my life; that as long as I stay an active member of AA, more will be revealed.",
+    "attribution": "“More Will Be Revealed,” Portland, Oregon, October 1998, Voices of Long-Term Sobriety",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 25",
+    "date_label": "October 26",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84432"
+    "node": "node-84433"
    }
   },
   {
-   "id": "quote:lv:2026-10-25",
+   "id": "quote:lv:2026-10-26",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 25",
+   "title": "Cita Diaria con La Viña Octubre 26",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-25",
-   "first_seen": "2026-10-25T06:16:54Z",
-   "last_seen": "2026-10-25T06:16:54Z",
+   "date": "2026-10-26",
+   "first_seen": "2026-10-26T06:25:47Z",
+   "last_seen": "2026-10-26T06:25:47Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero no podíamos deshacernos del alcohol mientras no hiciéramos otros sacrificios. Teníamos que renunciar a la petulancia y al razonamiento farsante. Teníamos que echar por la ventana la autojustificación, la auto conmiseración y la ira. Teníamos que abandonar el alocado concurso por ganar prestigio personal y grandes cantidades de dinero. Teníamos que asumir personalmente la responsabilidad de nuestra lamentable situación y dejar de culpar a otros por ella.",
-    "attribution": "“Por qué Alcohólicos Anónimos es anónimo”. BILL W., COFUNDADOR DE AA, ENERO DE 1955",
-    "source": "El lenguaje del corazón",
+    "text": "Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí.",
+    "attribution": "“Juntos podemos”, Martinsville, VIRGINIA OCCIDENTAL, ENERO DE 1990",
+    "source": "Lo mejor del Grapevine, Volumen II",
     "source_lang": "es",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "25 de octubre",
+    "date_label": "26 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84437"
+    "node": "node-84438"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-26",
+    "heading": "Grapevine Daily Quote October 26",
+    "text": "I was attracted to AA because it excluded no one, and I am grateful for the lessons I’ve learned over the years: that we stop fighting anyone or anything; that it is the details of what I do that make me who I am; that my perception of life is ever-changing and evolving; that the basic ‘suggestions’ I heard when I entered the Fellowship have been a continuous part of my life; that as long as I stay an active member of AA, more will be revealed.",
+    "attribution": "“More Will Be Revealed,” Portland, Oregon, October 1998, Voices of Long-Term Sobriety",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-26T06:25:36Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-13T09:14:03Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-12",
-    "heading": "Grapevine Daily Quote October 12",
-    "text": "An old-timer once told me that he believed that AA was a great leveler: When you’re up high, your friends help bring you down a little bit. When you’re down low, they help bring you up a little bit.",
-    "attribution": "“The Real Thing,” New York, New York, February 2001, Voices of Long-Term Sobriety",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-12T07:28:29Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-26",
+    "heading": "Cita Diaria con La Viña Octubre 26",
+    "text": "Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí.",
+    "attribution": "“Juntos podemos”, Martinsville, VIRGINIA OCCIDENTAL, ENERO DE 1990",
+    "source": "Lo mejor del Grapevine, Volumen II",
+    "source_lang": "es",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-26T06:25:47Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-13T09:14:13Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-12",
-    "heading": "Cita Diaria con La Viña Octubre 12",
-    "text": "Un plan o una idea excelente puede proponerse por cualquiera, de cualquier parte. Por consecuencia, el buen liderazgo con frecuencia descarta sus propios planes predilectos para adoptar otros mejores, y atribuye el mérito a quien le corresponde.",
-    "attribution": "“El liderazgo en AA: siempre una necesidad vital”. BILL W., COFUNDADOR DE AA, ABRIL DE 1959",
-    "source": "El lenguaje del corazón",
-    "source_lang": "es",
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-12T07:28:39Z"
    }
   ]
  }
