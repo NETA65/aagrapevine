@@ -1288,7 +1288,7 @@ slides:
     notes: |
       NOT PRESENTED: a reference for the chair.
       HOW THESE ARE WORKED OUT: the committee meets on the third Wednesday of every month, 7 to 8 p.m. Central, and the CityWide Dallas booth is on the second Saturday, 5 to 8 p.m. The dates follow those rules and stay current by themselves. If the committee skips or moves a meeting (for example, around a holiday), tell whoever looks after the website, so the dates here, on the slides and the website's countdown stay right.
-      ASSEMBLIES: the next one: {live:assembly_next}. As of October 2026, the Spring Assembly (March 19 to 21, 2027, in Dallas) was set; the Summer Assembly (June 25 to 27) and the Fall Assembly (September 17 to 19) were still to be confirmed, with venues to be announced. Check neta65.org before you announce them. The next page names the next assembly above the CityWide booth dates and the Area's other events, as the committee's /events/ page shows them.
+      ASSEMBLIES: the next one: {live:assembly_next}. As of October 2026, the Spring Assembly (March 19 to 21, 2027, in Dallas) was set; the Fall Assembly (September 17 to 19) had its venue in Fort Worth, with the host districts still to be confirmed; the Summer Assembly (June 25 to 27, hosted by District 91) still had no venue. The Area Committee Meetings (ACMs) are on February 21, 2027, and then on the Sunday three weeks after each assembly, 1 to 5 p.m. Check neta65.org before you announce them. The next page names the next assembly above the CityWide booth dates and the Area's other events, as the committee's /events/ page shows them.
       TIP: The committee's /events/ page has a calendar feed you can subscribe to, so these dates appear in your own calendar.
 
   - id: "events-ahead"
@@ -1301,7 +1301,7 @@ slides:
     options: { filter: "neta", limit: 12, series: "all" }
     notes: |
       NOT PRESENTED: a reference for the chair. The same rules as the previous page: the committee meets on the third Wednesday, and the CityWide booth is on the second Saturday. This list fills in by itself from the committee's /events/ page, every booth Saturday included (the 'Coming up' slide shows the booth once, at its next date), and the line above it names the next NETA 65 assembly.
-      FALL ASSEMBLY: September 17 to 19, 2027, was still to be confirmed in October 2026, with the venue to be announced. Check neta65.org before you announce it.
+      FALL ASSEMBLY: September 17 to 19, 2027, at the DoubleTree by Hilton Fort Worth South (the Convention Chair's report at the Fall ACM, October 18, 2026): all day Saturday and Sunday morning, nothing at the hotel on Friday night. In October 2026 the host districts were still to be confirmed (District 64 yes; District 62 had put off its discussion until its November meeting). Check neta65.org before you announce it.
       HOLIDAYS: if the committee decides to skip or move the November or December meeting, tell whoever looks after the website, so the dates here, on the slides and the website's countdown stay right. La Viña's monthly workshop is usually on the fourth Thursday, but in November and December La Viña has held it on the Thursday before Thanksgiving and before Christmas (November 20 and December 18 in 2025). Check La Viña's events calendar (aalavina.org/calendario-de-eventos) each month before you announce a date.
 
   # The deadline tables (as of October 2026) → the deadlines from the site's data (an issue with two themes,
