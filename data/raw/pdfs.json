@@ -1,12 +1,12 @@
 {
  "source": "pdfs",
- "updated": "2026-10-25T12:47:51Z",
- "attempted": "2026-10-25T12:47:51Z",
+ "updated": "2026-10-26T14:32:57Z",
+ "attempted": "2026-10-26T14:32:57Z",
  "ok": true,
  "error": null,
  "changes": {
   "added": 0,
-  "removed": 0,
+  "removed": 1,
   "held": 0
  },
  "stats": {
@@ -14,8 +14,8 @@
   "crawled_pages": 3441,
   "never_crawled": 0,
   "never_crawled_events": 0,
-  "pdfs": 134,
-  "pdfs_gone": 12,
+  "pdfs": 133,
+  "pdfs_gone": 13,
   "pdfs_with_details": 133,
   "pdfs_with_thumbs": 133,
   "last_run_pages": 27,
@@ -25,7 +25,7 @@
   "not_modified": 0,
   "page_errors": 0,
   "discovered": 0,
-  "details": 0,
+  "details": 1,
   "heads": 20,
   "requests": 49,
   "pruned_pages": 0,
@@ -519,7 +519,7 @@
     "event"
    ],
    "category": "flyer",
-   "status": "ok",
+   "status": "gone",
    "extra": {
     "host": "www.aataiwan.com",
     "file_url": "http://www.aataiwan.com/lighthouse-group/wp-content/uploads/sites/2/2012/07/Roundup-flyer-final-2017.pdf",
@@ -5937,7 +5937,7 @@
  "crawl": {
   "known_pages": 3441,
   "crawled_pages": 3441,
-  "pdfs": 134,
+  "pdfs": 133,
   "last_run_pages": 27
  },
  "hub_problems": []

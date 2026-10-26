@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-25T12:38:39Z",
+ "updated": "2026-10-26T14:24:10Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16941,
-   "posts": 3965,
+   "followers": 16946,
+   "posts": 3968,
    "owner_id": "48108439509",
-   "checked": "2026-10-25T12:38:21Z",
+   "checked": "2026-10-26T14:23:52Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,229 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2420,
-   "posts": 2989,
+   "followers": 2422,
+   "posts": 2991,
    "owner_id": "48275839129",
-   "checked": "2026-10-25T12:38:24Z",
+   "checked": "2026-10-26T14:23:55Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:De9LbMcjfh1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De9LbMcjfh1/",
+   "title": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”.",
+   "summary": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”. “Juntos podemos”, Martinsville, VIRGINIA OCCIDENTAL, ENERO DE 1990. De Lo mejor del Grapevine, Volumen II Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-26T11:30:15Z",
+   "first_seen": "2026-10-26T14:24:10Z",
+   "image": "/assets/cache/ig/De9LbMcjfh1.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De9LbMcjfh1",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De9LbMcjfh1.webp",
+    "embed_url": "https://www.instagram.com/p/De9LbMcjfh1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De9LbMcjfh1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Speaking about what bothers me helps me to applaud the power it has over me.”",
+     "es": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”."
+    },
+    "summary": {
+     "en": "“Speaking about what bothers me helps me to applaud the power it has over me.” “Together we can”, Martinsville, West Virginia, January 1990. Best of the Grapevine, Volume II Daily Quote in www.aalavina.org",
+     "es": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”. “Juntos podemos”, Martinsville, VIRGINIA OCCIDENTAL, ENERO DE 1990. De Lo mejor del Grapevine, Volumen II Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De9LbN9DR-M",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De9LbN9DR-M/",
+   "title": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons…",
+   "summary": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons I’ve learned over the years: that we stop fighting anyone or anything; that it is the details of what I do that make me who I am; that my perception of life is ever-changing and evolving; that the basic ‘suggestions’ I heard when I entered the Fellowship have been a continuous part of my life; that as long as I…",
+   "lang": "en",
+   "date": "2026-10-26T11:30:14Z",
+   "first_seen": "2026-10-26T14:24:10Z",
+   "image": "/assets/cache/ig/De9LbN9DR-M.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De9LbN9DR-M",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De9LbN9DR-M.webp",
+    "embed_url": "https://www.instagram.com/p/De9LbN9DR-M/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De9LbN9DR-M/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons…",
+     "es": "“Me atrajo a AA porque no excluyó a nadie, y estoy agradecido por las lecciones …"
+    },
+    "summary": {
+     "en": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons I’ve learned over the years: that we stop fighting anyone or anything; that it is the details of what I do that make me who I am; that my perception of life is ever-changing and evolving; that the basic ‘suggestions’ I heard when I entered the Fellowship have been a continuous part of my life; that as long as I…",
+     "es": "“Me atraía AA porque no excluía a nadie, y estoy agradecido por las lecciones que he aprendido a lo largo de los años: que dejemos de luchar contra cualquiera o cualquier cosa; que son los detalles de lo que hago que me hacen quien soy; que mi percepción de la vida es siempre cambiante y evolucionado; que las ‘sugerencias’ básicas que escuché cuando entré la Comunidad han sido una parte continua de mi vida; que mientras I …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De9HiSMgXPS",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De9HiSMgXPS/",
+   "title": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology…",
+   "summary": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology Workshop.",
+   "lang": "en",
+   "date": "2026-10-26T11:00:04Z",
+   "first_seen": "2026-10-26T14:24:10Z",
+   "image": "/assets/cache/ig/De9HiSMgXPS.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De9HiSMgXPS",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De9HiSMgXPS.webp",
+    "embed_url": "https://www.instagram.com/p/De9HiSMgXPS/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De9HiSMgXPS/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology…",
+     "es": "Don reportes del Foro Regional del Sudeste y Sam visitan la Tecnología AA nacional …"
+    },
+    "summary": {
+     "en": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology Workshop.",
+     "es": "Don reports from the Foro Regional del Sudeste and Sam visits the National AA Technology Workshop."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De6-qavDemq",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De6-qavDemq/",
+   "title": "Comparte la experiencia, fortaleza y esperanza del programa de AA.",
+   "summary": "Comparte la experiencia, fortaleza y esperanza del programa de AA. Por tiempo limitado, adquiere una suscripción regular a la revista de AA La Viña y añade suscripciones de regalo adicionales por solo $8 cada una: ¡un descuento del 50% sobre el precio habitual! Como escribió Bill W., cofundador de AA, en junio de 1959: «Cada número de la revista ofrece una visión mensual del pensamiento, el…",
+   "lang": "es",
+   "date": "2026-10-25T15:00:32Z",
+   "first_seen": "2026-10-26T14:24:10Z",
+   "image": "/assets/cache/ig/De6-qavDemq.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De6-qavDemq",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De6-qavDemq.webp",
+    "embed_url": "https://www.instagram.com/p/De6-qavDemq/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De6-qavDemq/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Share the experience, strength and hope of the AA program.",
+     "es": "Comparte la experiencia, fortaleza y esperanza del programa de AA."
+    },
+    "summary": {
+     "en": "Share the experience, strength and hope of the AA program. For limited time, you get a regular subscription to AA La Viña magazine and add additional gift subscriptions for only $8 each: a 50% discount on the usual price! As Bill W., co-founder of AA, June 1959 wrote: \"Each issue of the magazine offers a monthly vision of thought, the …",
+     "es": "Comparte la experiencia, fortaleza y esperanza del programa de AA. Por tiempo limitado, adquiere una suscripción regular a la revista de AA La Viña y añade suscripciones de regalo adicionales por solo $8 cada una: ¡un descuento del 50% sobre el precio habitual! Como escribió Bill W., cofundador de AA, en junio de 1959: «Cada número de la revista ofrece una visión mensual del pensamiento, el…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De6-qbSDbyo",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De6-qbSDbyo/",
+   "title": "Share the experience, strength, and hope of the AA program.",
+   "summary": "Share the experience, strength, and hope of the AA program. For a limited time, purchase a regular AA Grapevine magazine subscription and add extra gift subscriptions for just $16 each—that’s 55% off the regular price! As AA co-founder Bill W. wrote in June 1959: \"Each issue of the AA Grapevine offers a monthly vision of the worldwide thought, feeling, and activity of our fellowship. It is our…",
+   "lang": "en",
+   "date": "2026-10-25T15:00:15Z",
+   "first_seen": "2026-10-26T14:24:10Z",
+   "image": "/assets/cache/ig/De6-qbSDbyo.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De6-qbSDbyo",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De6-qbSDbyo.webp",
+    "embed_url": "https://www.instagram.com/p/De6-qbSDbyo/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De6-qbSDbyo/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Share the experience, strength, and hope of the AA program.",
+     "es": "Comparte la experiencia, fortaleza y esperanza del programa AA."
+    },
+    "summary": {
+     "en": "Share the experience, strength, and hope of the AA program. For a limited time, purchase a regular AA Grapevine magazine subscription and add extra gift subscriptions for just $16 each—that’s 55% off the regular price! As AA co-founder Bill W. wrote in June 1959: \"Each issue of the AA Grapevine offers a monthly vision of the worldwide thought, feeling, and activity of our fellowship. It is our…",
+     "es": "Comparte la experiencia, fortaleza y esperanza del programa AA. Por un tiempo limitado, comprar una suscripción regular de la revista AA Grapevine y añadir suscripciones de regalo adicionales para sólo $16 cada uno, ¡eso es el 55% de descuento del precio regular! Como escribió AA cofundador Bill W. en junio de 1959: \"Cada número del AA Grapevine ofrece una visión mensual del pensamiento, el sentimiento y la actividad mundial de nuestro compañerismo. Es nuestro …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:De6moYvjS1p",
    "source": "instagram",
@@ -2223,7 +2438,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeZIS7pDJBn",
@@ -2266,7 +2481,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeZIS5pDA5z",
@@ -2309,7 +2524,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeW7iK0jAxB",

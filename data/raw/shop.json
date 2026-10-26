@@ -1,7 +1,7 @@
 {
  "source": "shop",
- "updated": "2026-10-25T12:42:11Z",
- "attempted": "2026-10-25T12:42:11Z",
+ "updated": "2026-10-26T14:27:11Z",
+ "attempted": "2026-10-26T14:27:11Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -13,9 +13,9 @@
   "botm": 2,
   "plans": 52,
   "specialty": 8,
-  "types_refreshed": true,
+  "types_refreshed": false,
   "specialty_refreshed": false,
-  "requests": 18,
+  "requests": 12,
   "images_downloaded": 0
  },
  "items": [
@@ -49,7 +49,7 @@
     "offer_text": "Offer good for this title: OCT. 15 thru NOV. 14 Only.",
     "product_name": "Language of the Heart (Softcover)",
     "image_src": "https://www.aagrapevine.org/sites/default/files/styles/product_feature_image/public/product-images/2023-01/LOH-sofandhardCover-Icon.png?itok=Eu17DYM5",
-    "read": "2026-10-25"
+    "read": "2026-10-26"
    }
   },
   {
@@ -82,7 +82,7 @@
     "offer_text": "Oferta válida del 15 de OCTUBRE al 14 de DICIEMbre",
     "product_name": "El Lenguaje del Corazón",
     "image_src": "https://www.aalavina.org/sites/default/files/styles/product_feature_image/public/product-images/2022-11/Icon-lenguaje-del-corazon.png?itok=phQJDwuy",
-    "read": "2026-10-25"
+    "read": "2026-10-26"
    }
   },
   {

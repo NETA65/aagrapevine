@@ -1,7 +1,185 @@
 {
- "updated": "2026-10-26T06:25:57Z",
+ "updated": "2026-10-26T14:33:01Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:De9LbMcjfh1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De9LbMcjfh1/",
+   "title": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”.",
+   "summary": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”. “Juntos podemos”, Martinsville, VIRGINIA OCCIDENTAL, ENERO DE 1990. De Lo mejor del Grapevine, Volumen II Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-26T11:30:15Z",
+   "first_seen": "2026-10-26T14:24:10Z",
+   "image": "/assets/cache/ig/De9LbMcjfh1.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De9LbMcjfh1",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De9LbMcjfh1.webp",
+    "embed_url": "https://www.instagram.com/p/De9LbMcjfh1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De9LbMcjfh1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Speaking about what bothers me helps me to applaud the power it has over me.”",
+     "es": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”."
+    },
+    "summary": {
+     "en": "“Speaking about what bothers me helps me to applaud the power it has over me.” “Together we can”, Martinsville, West Virginia, January 1990. Best of the Grapevine, Volume II Daily Quote in www.aalavina.org",
+     "es": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”. “Juntos podemos”, Martinsville, VIRGINIA OCCIDENTAL, ENERO DE 1990. De Lo mejor del Grapevine, Volumen II Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-26T11:30:15Z"
+  },
+  {
+   "id": "ig:De9LbN9DR-M",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De9LbN9DR-M/",
+   "title": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons…",
+   "summary": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons I’ve learned over the years: that we stop fighting anyone or anything; that it is the details of what I do that make me who I am; that my perception of life is ever-changing and evolving; that the basic ‘suggestions’ I heard when I entered the Fellowship have been a continuous part of my life; that as long as I…",
+   "lang": "en",
+   "date": "2026-10-26T11:30:14Z",
+   "first_seen": "2026-10-26T14:24:10Z",
+   "image": "/assets/cache/ig/De9LbN9DR-M.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De9LbN9DR-M",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De9LbN9DR-M.webp",
+    "embed_url": "https://www.instagram.com/p/De9LbN9DR-M/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De9LbN9DR-M/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons…",
+     "es": "“Me atrajo a AA porque no excluyó a nadie, y estoy agradecido por las lecciones …"
+    },
+    "summary": {
+     "en": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons I’ve learned over the years: that we stop fighting anyone or anything; that it is the details of what I do that make me who I am; that my perception of life is ever-changing and evolving; that the basic ‘suggestions’ I heard when I entered the Fellowship have been a continuous part of my life; that as long as I…",
+     "es": "“Me atraía AA porque no excluía a nadie, y estoy agradecido por las lecciones que he aprendido a lo largo de los años: que dejemos de luchar contra cualquiera o cualquier cosa; que son los detalles de lo que hago que me hacen quien soy; que mi percepción de la vida es siempre cambiante y evolucionado; que las ‘sugerencias’ básicas que escuché cuando entré la Comunidad han sido una parte continua de mi vida; que mientras I …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-26T11:30:14Z"
+  },
+  {
+   "id": "ig:De9HiSMgXPS",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De9HiSMgXPS/",
+   "title": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology…",
+   "summary": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology Workshop.",
+   "lang": "en",
+   "date": "2026-10-26T11:00:04Z",
+   "first_seen": "2026-10-26T14:24:10Z",
+   "image": "/assets/cache/ig/De9HiSMgXPS.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De9HiSMgXPS",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De9HiSMgXPS.webp",
+    "embed_url": "https://www.instagram.com/p/De9HiSMgXPS/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De9HiSMgXPS/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology…",
+     "es": "Don reportes del Foro Regional del Sudeste y Sam visitan la Tecnología AA nacional …"
+    },
+    "summary": {
+     "en": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology Workshop.",
+     "es": "Don reports from the Foro Regional del Sudeste and Sam visits the National AA Technology Workshop."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-26T11:00:04Z"
+  },
+  {
+   "id": "yt:hduNr1E0gWE",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=hduNr1E0gWE",
+   "title": "AA Gatherings [Season 11, Episode 17]",
+   "summary": "Don and Olis discuss the many types of AA gatherings, including assemblies, conferences, conventions, forums, workshops. Don describes his recent experience at the Southeast Regional Forum, and he interviews several participants including Jennifer, Kim, Kyle and Sonia. Sam visits the National AA Technology Workshop in Concord, CA, and demonstrates how we put the AA Grapevine Half Hour Variety…",
+   "lang": "en",
+   "date": "2026-10-26T04:28:19Z",
+   "first_seen": "2026-10-26T14:23:51Z",
+   "image": "https://i.ytimg.com/vi/hduNr1E0gWE/hqdefault.jpg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "hduNr1E0gWE",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "AA Grapevine's Podcast"
+    ],
+    "is_short": false,
+    "views": 32,
+    "is_live_recording": false,
+    "date_approx": false,
+    "season": 11,
+    "episode": 17
+   },
+   "i18n": {
+    "title": {
+     "en": "AA Gatherings [Season 11, Episode 17]",
+     "es": "Reuniones AA [Temporada 11, Episodio 17]"
+    },
+    "summary": {
+     "en": "Don and Olis discuss the many types of AA gatherings, including assemblies, conferences, conventions, forums, workshops. Don describes his recent experience at the Southeast Regional Forum, and he interviews several participants including Jennifer, Kim, Kyle and Sonia. Sam visits the National AA Technology Workshop in Concord, CA, and demonstrates how we put the AA Grapevine Half Hour Variety…",
+     "es": "Don y Olis discuten los muchos tipos de reuniones AA, incluyendo asambleas, conferencias, convenciones, foros, talleres. Don describe su experiencia reciente en el Foro Regional del Sudeste, y entrevista a varios participantes incluyendo Jennifer, Kim, Kyle y Sonia. Sam visita el Taller Nacional de Tecnología AA en Concord, CA, y demuestra cómo ponemos el AA Grapevine Variedad de media hora …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-26T04:28:19Z"
+  },
   {
    "id": "pod:gv:887fc754f895",
    "source": "podcast",
@@ -51,6 +229,94 @@
    ],
    "is_new": true,
    "wn_date": "2026-10-26T04:15:00Z"
+  },
+  {
+   "id": "ig:De6-qavDemq",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De6-qavDemq/",
+   "title": "Comparte la experiencia, fortaleza y esperanza del programa de AA.",
+   "summary": "Comparte la experiencia, fortaleza y esperanza del programa de AA. Por tiempo limitado, adquiere una suscripción regular a la revista de AA La Viña y añade suscripciones de regalo adicionales por solo $8 cada una: ¡un descuento del 50% sobre el precio habitual! Como escribió Bill W., cofundador de AA, en junio de 1959: «Cada número de la revista ofrece una visión mensual del pensamiento, el…",
+   "lang": "es",
+   "date": "2026-10-25T15:00:32Z",
+   "first_seen": "2026-10-26T14:24:10Z",
+   "image": "/assets/cache/ig/De6-qavDemq.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De6-qavDemq",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De6-qavDemq.webp",
+    "embed_url": "https://www.instagram.com/p/De6-qavDemq/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De6-qavDemq/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Share the experience, strength and hope of the AA program.",
+     "es": "Comparte la experiencia, fortaleza y esperanza del programa de AA."
+    },
+    "summary": {
+     "en": "Share the experience, strength and hope of the AA program. For limited time, you get a regular subscription to AA La Viña magazine and add additional gift subscriptions for only $8 each: a 50% discount on the usual price! As Bill W., co-founder of AA, June 1959 wrote: \"Each issue of the magazine offers a monthly vision of thought, the …",
+     "es": "Comparte la experiencia, fortaleza y esperanza del programa de AA. Por tiempo limitado, adquiere una suscripción regular a la revista de AA La Viña y añade suscripciones de regalo adicionales por solo $8 cada una: ¡un descuento del 50% sobre el precio habitual! Como escribió Bill W., cofundador de AA, en junio de 1959: «Cada número de la revista ofrece una visión mensual del pensamiento, el…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-25T15:00:32Z"
+  },
+  {
+   "id": "ig:De6-qbSDbyo",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De6-qbSDbyo/",
+   "title": "Share the experience, strength, and hope of the AA program.",
+   "summary": "Share the experience, strength, and hope of the AA program. For a limited time, purchase a regular AA Grapevine magazine subscription and add extra gift subscriptions for just $16 each—that’s 55% off the regular price! As AA co-founder Bill W. wrote in June 1959: \"Each issue of the AA Grapevine offers a monthly vision of the worldwide thought, feeling, and activity of our fellowship. It is our…",
+   "lang": "en",
+   "date": "2026-10-25T15:00:15Z",
+   "first_seen": "2026-10-26T14:24:10Z",
+   "image": "/assets/cache/ig/De6-qbSDbyo.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De6-qbSDbyo",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De6-qbSDbyo.webp",
+    "embed_url": "https://www.instagram.com/p/De6-qbSDbyo/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De6-qbSDbyo/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Share the experience, strength, and hope of the AA program.",
+     "es": "Comparte la experiencia, fortaleza y esperanza del programa AA."
+    },
+    "summary": {
+     "en": "Share the experience, strength, and hope of the AA program. For a limited time, purchase a regular AA Grapevine magazine subscription and add extra gift subscriptions for just $16 each—that’s 55% off the regular price! As AA co-founder Bill W. wrote in June 1959: \"Each issue of the AA Grapevine offers a monthly vision of the worldwide thought, feeling, and activity of our fellowship. It is our…",
+     "es": "Comparte la experiencia, fortaleza y esperanza del programa AA. Por un tiempo limitado, comprar una suscripción regular de la revista AA Grapevine y añadir suscripciones de regalo adicionales para sólo $16 cada uno, ¡eso es el 55% de descuento del precio regular! Como escribió AA cofundador Bill W. en junio de 1959: \"Cada número del AA Grapevine ofrece una visión mensual del pensamiento, el sentimiento y la actividad mundial de nuestro compañerismo. Es nuestro …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-25T15:00:15Z"
   },
   {
    "id": "ig:De6moYrjRE7",
@@ -518,7 +784,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 151,
+    "views": 195,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1187,7 +1453,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 165,
+    "views": 178,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1457,7 +1723,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 263,
+    "views": 281,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -6660,7 +6926,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 265,
+    "views": 270,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7381,7 +7647,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-12T12:32:12Z"
   },
   {
@@ -7425,7 +7691,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-12T11:30:14Z"
   },
   {
@@ -7469,7 +7735,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-12T11:30:14Z"
   },
   {
@@ -7496,7 +7762,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 349,
+    "views": 356,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8122,7 +8388,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 320,
+    "views": 322,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8369,268 +8635,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-07T18:30:13Z"
-  },
-  {
-   "id": "ig:DeMhgvov9lB",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeMhgvov9lB/",
-   "title": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos…",
-   "summary": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información.",
-   "lang": "es",
-   "date": "2026-10-07T14:00:21Z",
-   "first_seen": "2026-10-07T14:36:19Z",
-   "image": "/assets/cache/ig/DeMhgvov9lB.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeMhgvov9lB",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "video",
-    "thumb": "/assets/cache/ig/DeMhgvov9lB.webp",
-    "embed_url": "https://www.instagram.com/p/DeMhgvov9lB/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeMhgvov9lB/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Soon! La Viña will hold a virtual open meeting of AA with one coordinator and two …",
-     "es": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos…"
-    },
-    "summary": {
-     "en": "Soon! La Viña will hold a virtual open meeting of AA with one coordinator and two speakers. The poster will respect anonymity and will be available on the main platforms. Very soon more information.",
-     "es": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información."
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-07T14:00:21Z"
-  },
-  {
-   "id": "ig:DeMg_x2A8zs",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeMg_x2A8zs/",
-   "title": "AA Grapevine on Instagram",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-10-07T13:55:54Z",
-   "first_seen": "2026-10-07T14:36:19Z",
-   "image": "/assets/cache/ig/DeMg_x2A8zs.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeMg_x2A8zs",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeMg_x2A8zs.webp",
-    "embed_url": "https://www.instagram.com/p/DeMg_x2A8zs/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeMg_x2A8zs/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "AA Grapevine on Instagram",
-     "es": "AA Grapevine en Instagram"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-07T13:55:54Z"
-  },
-  {
-   "id": "ig:DeMghbFR3oI",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeMghbFR3oI/",
-   "title": "La Viña en Instagram",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-10-07T13:51:54Z",
-   "first_seen": "2026-10-07T14:36:19Z",
-   "image": "/assets/cache/ig/DeMghbFR3oI.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeMghbFR3oI",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeMghbFR3oI.webp",
-    "embed_url": "https://www.instagram.com/p/DeMghbFR3oI/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeMghbFR3oI/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña on Instagram",
-     "es": "La Viña en Instagram"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-07T13:51:54Z"
-  },
-  {
-   "id": "ig:DeMTwPXjMKc",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeMTwPXjMKc/",
-   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-   "lang": "en",
-   "date": "2026-10-07T12:00:14Z",
-   "first_seen": "2026-10-07T14:36:19Z",
-   "image": "/assets/cache/ig/DeMTwPXjMKc.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeMTwPXjMKc",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeMTwPXjMKc.webp",
-    "embed_url": "https://www.instagram.com/p/DeMTwPXjMKc/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeMTwPXjMKc/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
-    },
-    "summary": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-07T12:00:14Z"
-  },
-  {
-   "id": "ig:DeMQUmZjL_1",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeMQUmZjL_1/",
-   "title": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía…",
-   "summary": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía están sin esperanza. Sea cual sea el costo o el sacrificio que suponga, pongámonos a mejorar nuestras comunicaciones con toda esta gente para que encuentren lo que hemos encontrado: una nueva vida de libertad bajo Dios”. \"“Una perspectiva del porvenir” BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am…",
-   "lang": "es",
-   "date": "2026-10-07T11:30:15Z",
-   "first_seen": "2026-10-07T14:36:19Z",
-   "image": "/assets/cache/ig/DeMQUmZjL_1.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeMQUmZjL_1",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeMQUmZjL_1.webp",
-    "embed_url": "https://www.instagram.com/p/DeMQUmZjL_1/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeMQUmZjL_1/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Let’s remember the crowd of people who still suffer from alcoholism and that still …",
-     "es": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía…"
-    },
-    "summary": {
-     "en": "“Let us remember the multitude of people who still suffer from alcoholism and who are still hopeless. Whatever the cost or sacrifice it entails, let us begin to improve our communications with all these people to find what we have found: a new life of freedom under God.” \"A Perspective of the Future\" Bill W., co-founder of AA, February 1961 From I Am …",
-     "es": "“Recordemos la multitud de personas que todavía sufren del alcoholismo y que todavía están sin esperanza. Sea cual sea el costo o el sacrificio que suponga, pongámonos a mejorar nuestras comunicaciones con toda esta gente para que encuentren lo que hemos encontrado: una nueva vida de libertad bajo Dios”. \"“Una perspectiva del porvenir” BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-07T11:30:15Z"
-  },
-  {
-   "id": "ig:DeMQUqWjINJ",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeMQUqWjINJ/",
-   "title": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty…",
-   "summary": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty and truth filter in, and begins to demand reality.” “It Takes What It Takes,” Pompano Beach, Florida, June 1978, Step By Step Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-07T11:30:15Z",
-   "first_seen": "2026-10-07T14:36:19Z",
-   "image": "/assets/cache/ig/DeMQUqWjINJ.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeMQUqWjINJ",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeMQUqWjINJ.webp",
-    "embed_url": "https://www.instagram.com/p/DeMQUqWjINJ/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeMQUqWjINJ/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty…",
-     "es": "“Sobriedad hace cosas interesantes a la mente – lo aclara algunos, deja un poco de honestidad …"
-    },
-    "summary": {
-     "en": "“Sobriety does interesting things to the mind – clears it up some, lets a bit of honesty and truth filter in, and begins to demand reality.” “It Takes What It Takes,” Pompano Beach, Florida, June 1978, Step By Step Daily Quote at www.aagrapevine.org",
-     "es": "“Sobriedad hace cosas interesantes a la mente – lo aclara algunos, permite un poco de honestidad y verdad filtrar, y comienza a exigir la realidad.” “Toma lo que se necesita”, playa de Pompano, Florida, junio de 1978, paso a paso Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-07T11:30:15Z"
   }
  ]
 }
