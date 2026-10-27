@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-26T23:46:02Z",
- "updated": "2026-10-26T23:46:02Z",
+ "generated": "2026-10-27T06:16:10Z",
+ "updated": "2026-10-27T06:16:10Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-10-26T23:45:39Z",
-   "attempted": "2026-10-26T23:45:39Z",
+   "updated": "2026-10-27T06:15:45Z",
+   "attempted": "2026-10-27T06:15:45Z",
    "count": 37,
    "new_7d": 1,
    "error": null,
@@ -87,8 +87,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-10-26T23:45:39Z",
-   "attempted": "2026-10-26T23:45:39Z",
+   "updated": "2026-10-27T06:15:45Z",
+   "attempted": "2026-10-27T06:15:45Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -111,19 +111,19 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-10-26T23:45:39Z",
-   "attempted": "2026-10-26T23:45:39Z",
-   "count": 15,
-   "new_7d": 5,
+   "updated": "2026-10-27T06:15:45Z",
+   "attempted": "2026-10-27T06:15:45Z",
+   "count": 17,
+   "new_7d": 7,
    "error": null,
    "stats": {
-    "files": 15,
-    "new": 0,
+    "files": 17,
+    "new": 2,
     "problems": 0,
     "errors": []
    },
    "changes": {
-    "added": 0,
+    "added": 2,
     "removed": 0,
     "held": 0
    },
@@ -166,8 +166,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-10-26T23:45:45Z",
-   "attempted": "2026-10-26T23:45:45Z",
+   "updated": "2026-10-27T06:15:53Z",
+   "attempted": "2026-10-27T06:15:53Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -322,8 +322,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-10-26T23:45:42Z",
-   "attempted": "2026-10-26T23:45:42Z",
+   "updated": "2026-10-27T06:15:47Z",
+   "attempted": "2026-10-27T06:15:47Z",
    "count": 305,
    "new_7d": 2,
    "error": null,
@@ -350,7 +350,7 @@
     "gone_checks": 0,
     "discovery_checked": "2026-10-23T12:41:40Z",
     "discovered_feeds": [],
-    "seconds": 2.4,
+    "seconds": 2.2,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -560,8 +560,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-10-26T23:46:00Z",
-   "attempted": "2026-10-26T23:46:00Z",
+   "updated": "2026-10-27T06:16:08Z",
+   "attempted": "2026-10-27T06:16:08Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -569,12 +569,12 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-10-26",
-    "new": 0
+    "today": "2026-10-27",
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -591,6 +591,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-10-27",
+    "goal_at": "2026-10-27T10:30:00Z",
+    "gv": "2026-10-27T06:15:58Z",
+    "lv": "2026-10-27T06:16:08Z"
+   },
    {
     "day": "2026-10-26",
     "goal_at": "2026-10-26T10:30:00Z",
@@ -626,12 +632,6 @@
     "goal_at": "2026-10-21T10:30:00Z",
     "gv": "2026-10-21T10:18:49Z",
     "lv": "2026-10-21T10:18:59Z"
-   },
-   {
-    "day": "2026-10-20",
-    "goal_at": "2026-10-20T10:30:00Z",
-    "gv": "2026-10-20T11:51:23Z",
-    "lv": "2026-10-20T11:51:33Z"
    }
   ]
  },
@@ -661,7 +661,7 @@
   "from_cache": 4098,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.1,
+  "seconds": 0.2,
   "model_seconds": 0.0,
   "texts_per_second": null,
   "glossary_entries": 260,
@@ -677,7 +677,7 @@
   "editorial": 52,
   "weekly_open": 2,
   "announcements": 2,
-  "events": 48,
+  "events": 50,
   "whatsnew": 150,
   "shop": 62,
   "writers_archive": 1267,
@@ -699,8 +699,8 @@
    "http_status": 403,
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
-   "last_attempt": "2026-10-26T06:25:55Z",
-   "checked_this_run": false,
+   "last_attempt": "2026-10-27T06:16:08Z",
+   "checked_this_run": true,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,
@@ -709,7 +709,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-10-26",
+  "today": "2026-10-27",
   "home_days": 60,
   "list_days": [
    60,

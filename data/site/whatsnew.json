@@ -1,7 +1,129 @@
 {
- "updated": "2026-10-26T14:35:30Z",
+ "updated": "2026-10-27T06:16:09Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ev:manual:2026-11-28-lv-writing-workshop-garland",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/#2026-11-28-lv-writing-workshop-garland",
+   "title": "La Viña Writing Workshop (in Spanish) — Garland",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+   "lang": "en",
+   "date": "2026-11-29T01:00:00Z",
+   "first_seen": "2026-10-27T06:15:45Z",
+   "image": null,
+   "tags": [
+    "workshop",
+    "la-vina"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-11-29T01:00:00Z",
+    "end": "2026-11-29T03:00:00Z",
+    "all_day": false,
+    "location": "Grupo Volver a Vivir, 2913 S. Fifth St., Garland, TX 75041",
+    "online_url": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": "Garland",
+    "state": "TX",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+    "slug": "2026-11-28-lv-writing-workshop-garland",
+    "file": "content/events/2026-11-28-lv-writing-workshop-garland.md",
+    "own_i18n": {
+     "title": {
+      "es": "Taller de Escritura de La Viña — Garland"
+     },
+     "summary": {
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+     },
+     "body_md": {
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+     }
+    },
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Writing Workshop (in Spanish) — Garland",
+     "es": "Taller de Escritura de La Viña — Garland"
+    },
+    "summary": {
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+    },
+    "body_md": {
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-10-27T06:15:45Z"
+  },
+  {
+   "id": "ev:manual:2026-12-12-lv-writing-workshop-fort-worth",
+   "source": "committee",
+   "kind": "event",
+   "url": "/events/#2026-12-12-lv-writing-workshop-fort-worth",
+   "title": "La Viña Writing Workshop (in Spanish) — Fort Worth",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
+   "lang": "en",
+   "date": "2026-12-13T01:00:00Z",
+   "first_seen": "2026-10-27T06:15:45Z",
+   "image": null,
+   "tags": [
+    "workshop",
+    "la-vina"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-12-13T01:00:00Z",
+    "end": "2026-12-13T03:00:00Z",
+    "all_day": false,
+    "location": "Grupo Nueve Horizonte, 3302 N Main St, Fort Worth, TX 76106",
+    "online_url": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": "Fort Worth",
+    "state": "TX",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
+    "slug": "2026-12-12-lv-writing-workshop-fort-worth",
+    "file": "content/events/2026-12-12-lv-writing-workshop-fort-worth.md",
+    "own_i18n": {
+     "title": {
+      "es": "Taller de Escritura de La Viña — Fort Worth"
+     },
+     "summary": {
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+     },
+     "body_md": {
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+     }
+    },
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Writing Workshop (in Spanish) — Fort Worth",
+     "es": "Taller de Escritura de La Viña — Fort Worth"
+    },
+    "summary": {
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+    },
+    "body_md": {
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-10-27T06:15:45Z"
+  },
   {
    "id": "ev:manual:2026-11-10-neta65-delegate-town-hall",
    "source": "committee",
@@ -8665,98 +8787,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-09T11:30:17Z"
-  },
-  {
-   "id": "ig:DeRZ6P6l4nY",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeRZ6P6l4nY/",
-   "title": "“So long as there is the slightest interest in sobriety, the most unmoral, the most…",
-   "summary": "“So long as there is the slightest interest in sobriety, the most unmoral, the most antisocial, the most critical alcoholic may gather about him a few kindred spirits and announce to us that a new Alcoholics Anonymous group has been formed. Anti-God, anti-medicine, anti-our recovery program, even anti-each other – these rampant individuals are still an AA group if they think so!” AA Co-Founder…",
-   "lang": "en",
-   "date": "2026-10-09T11:30:15Z",
-   "first_seen": "2026-10-09T14:27:03Z",
-   "image": "/assets/cache/ig/DeRZ6P6l4nY.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeRZ6P6l4nY",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeRZ6P6l4nY.webp",
-    "embed_url": "https://www.instagram.com/p/DeRZ6P6l4nY/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeRZ6P6l4nY/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“So long as there is the slightest interest in sobriety, the most unmoral, the most…",
-     "es": "“Mientras haya el más mínimo interés en sobriedad, el más inmoral, el más …"
-    },
-    "summary": {
-     "en": "“So long as there is the slightest interest in sobriety, the most unmoral, the most antisocial, the most critical alcoholic may gather about him a few kindred spirits and announce to us that a new Alcoholics Anonymous group has been formed. Anti-God, anti-medicine, anti-our recovery program, even anti-each other – these rampant individuals are still an AA group if they think so!” AA Co-Founder…",
-     "es": "“Mientras haya el menor interés en sobriedad, el más inmoral, el más antisocial, el alcohólico más crítico puede reunirse con él unos cuantos espíritus amistosos y anunciarnos que se ha formado un nuevo grupo Alcohólicos Anónimos. ¡Anti-Dios, anti-medicina, anti-nuestro programa de recuperación, incluso anti-cada otro – estos individuos rampantes son todavía un grupo AA si lo creen!” AA Cofundador …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-09T11:30:15Z"
-  },
-  {
-   "id": "yt:CyjwTw116Ec",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=CyjwTw116Ec",
-   "title": "Grapevine Weekly Open AA Meeting, October 7, 2026 [Season 2, Episode 15]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 7, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Christopher and Olis, who share their experience…",
-   "lang": "en",
-   "date": "2026-10-09T04:48:48Z",
-   "first_seen": "2026-10-09T14:26:43Z",
-   "image": "https://i.ytimg.com/vi/CyjwTw116Ec/hqdefault.jpg",
-   "tags": [
-    "season-2",
-    "weekly-open",
-    "live"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "CyjwTw116Ec",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 3213,
-    "playlists": [
-     "Grapevine Weekly Open AA Meeting"
-    ],
-    "is_short": false,
-    "views": 322,
-    "is_live_recording": true,
-    "date_approx": false,
-    "season": 2,
-    "episode": 15
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, October 7, 2026 [Season 2, Episode 15]",
-     "es": "Grapevine Weekly Open AA Meeting, 7 de octubre de 2026 [Temporada 2, Episodio 15]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 7, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Christopher and Olis, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 7 de octubre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Don da la bienvenida a los oradores Christopher y Olis, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-09T04:48:48Z"
   }
  ]
 }

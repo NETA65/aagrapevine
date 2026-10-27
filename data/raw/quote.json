@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-10-26T23:46:00Z",
- "attempted": "2026-10-26T23:46:00Z",
+ "updated": "2026-10-27T06:16:08Z",
+ "attempted": "2026-10-27T06:16:08Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-26",
-  "new": 0
+  "today": "2026-10-27",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-26",
+   "id": "quote:gv:2026-10-27",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 26",
+   "title": "Grapevine Daily Quote Octubre 27",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-26",
-   "first_seen": "2026-10-26T06:25:47Z",
-   "last_seen": "2026-10-26T06:25:47Z",
+   "date": "2026-10-27",
+   "first_seen": "2026-10-27T06:16:08Z",
+   "last_seen": "2026-10-27T06:16:08Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "I was attracted to AA because it excluded no one, and I am grateful for the lessons I’ve learned over the years: that we stop fighting anyone or anything; that it is the details of what I do that make me who I am; that my perception of life is ever-changing and evolving; that the basic ‘suggestions’ I heard when I entered the Fellowship have been a continuous part of my life; that as long as I stay an active member of AA, more will be revealed.",
-    "attribution": "“More Will Be Revealed,” Portland, Oregon, October 1998, Voices of Long-Term Sobriety",
+    "text": "There are always the constructive critics, our friends indeed. We should never fail to give them a careful hearing.",
+    "attribution": "AA Co-Founder, Bill W., April 1959, “Leadership in AA: Ever a Vital Need”, The Language of the Heart",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 26",
+    "date_label": "October 27",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84433"
+    "node": "node-84444"
    }
   },
   {
-   "id": "quote:lv:2026-10-26",
+   "id": "quote:lv:2026-10-27",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 26",
+   "title": "Cita Diaria con La Viña Octubre 27",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-26",
-   "first_seen": "2026-10-26T06:25:47Z",
-   "last_seen": "2026-10-26T06:25:47Z",
+   "date": "2026-10-27",
+   "first_seen": "2026-10-27T06:16:08Z",
+   "last_seen": "2026-10-27T06:16:08Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí.",
-    "attribution": "“Juntos podemos”, Martinsville, VIRGINIA OCCIDENTAL, ENERO DE 1990",
-    "source": "Lo mejor del Grapevine, Volumen II",
+    "text": "Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido grupo de apoyo; sólo debo llamarlos.",
+    "attribution": "“Una larga caída”. ARLINGTON, TEXAS, JULIO DE 1994",
+    "source": "Lo mejor del Grapevine, Volumen III",
     "source_lang": "es",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "26 de octubre",
+    "date_label": "27 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84438"
+    "node": "node-84447"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-27",
+    "heading": "Grapevine Daily Quote Octubre 27",
+    "text": "There are always the constructive critics, our friends indeed. We should never fail to give them a careful hearing.",
+    "attribution": "AA Co-Founder, Bill W., April 1959, “Leadership in AA: Ever a Vital Need”, The Language of the Heart",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-27T06:15:58Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-14T07:12:31Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-13",
-    "heading": "Grapevine Daily Quote October 13",
-    "text": "My soul remained a mystery until my Higher Power settled inside me, appearing to me as a very real feeling of love and caring. Kindness slowly took precedence, and I became comfortable with the idea that I didn’t need a drink.",
-    "attribution": "“From Rags to Riches,” Cornwall, Ontario, January 2005, Voices of Long-Term Sobriety",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-13T09:14:03Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-27",
+    "heading": "Cita Diaria con La Viña Octubre 27",
+    "text": "Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido grupo de apoyo; sólo debo llamarlos.",
+    "attribution": "“Una larga caída”. ARLINGTON, TEXAS, JULIO DE 1994",
+    "source": "Lo mejor del Grapevine, Volumen III",
+    "source_lang": "es",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-27T06:16:08Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-14T07:12:41Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-13",
-    "heading": "Cita Diaria con La Viña Octubre 13",
-    "text": "Lo que brindé con más frecuencia a AA mediante mi grupo base, lo recibo multiplicado con paz mental.",
-    "attribution": "“La clave para ser parte”. MANCHESTER, NUEVO HAMPSHIRE, SEPTIEMBRE DE 2000",
-    "source": "I Am Responsible",
-    "source_lang": "en",
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-13T09:14:13Z"
    }
   ]
  }
