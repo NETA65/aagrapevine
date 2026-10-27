@@ -1,7 +1,7 @@
 {
  "source": "shop",
- "updated": "2026-10-26T14:27:11Z",
- "attempted": "2026-10-26T14:27:11Z",
+ "updated": "2026-10-27T13:24:36Z",
+ "attempted": "2026-10-27T13:24:36Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -49,7 +49,7 @@
     "offer_text": "Offer good for this title: OCT. 15 thru NOV. 14 Only.",
     "product_name": "Language of the Heart (Softcover)",
     "image_src": "https://www.aagrapevine.org/sites/default/files/styles/product_feature_image/public/product-images/2023-01/LOH-sofandhardCover-Icon.png?itok=Eu17DYM5",
-    "read": "2026-10-26"
+    "read": "2026-10-27"
    }
   },
   {
@@ -82,7 +82,7 @@
     "offer_text": "Oferta válida del 15 de OCTUBRE al 14 de DICIEMbre",
     "product_name": "El Lenguaje del Corazón",
     "image_src": "https://www.aalavina.org/sites/default/files/styles/product_feature_image/public/product-images/2022-11/Icon-lenguaje-del-corazon.png?itok=phQJDwuy",
-    "read": "2026-10-26"
+    "read": "2026-10-27"
    }
   },
   {
@@ -165,7 +165,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-10-19T14:49:31Z",
+   "last_seen": "2026-10-27T13:24:36Z",
    "image": "/assets/cache/shop/e4310a0bbdaaba1e.webp",
    "tags": [],
    "category": "specialty",
@@ -200,7 +200,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-10-19T14:49:31Z",
+   "last_seen": "2026-10-27T13:24:36Z",
    "image": "/assets/cache/shop/d10238ef27517935.webp",
    "tags": [],
    "category": "specialty",
@@ -234,7 +234,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-10-19T14:49:31Z",
+   "last_seen": "2026-10-27T13:24:36Z",
    "image": "/assets/cache/shop/f764e515dcc666ae.webp",
    "tags": [],
    "category": "specialty",
@@ -268,7 +268,7 @@
    "lang": "es",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-10-19T14:49:31Z",
+   "last_seen": "2026-10-27T13:24:36Z",
    "image": "/assets/cache/shop/d79f539ca26cfa33.webp",
    "tags": [],
    "category": "specialty",
@@ -302,7 +302,7 @@
    "lang": "es",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-10-19T14:49:31Z",
+   "last_seen": "2026-10-27T13:24:36Z",
    "image": "/assets/cache/shop/bbd9ebbeaac136fc.webp",
    "tags": [],
    "category": "specialty",
@@ -336,7 +336,7 @@
    "lang": "es",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-10-19T14:49:31Z",
+   "last_seen": "2026-10-27T13:24:36Z",
    "image": "/assets/cache/shop/b3647bebf38db744.webp",
    "tags": [],
    "category": "specialty",

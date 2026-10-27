@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-26T14:24:10Z",
+ "updated": "2026-10-27T13:21:34Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16946,
-   "posts": 3968,
+   "posts": 3969,
    "owner_id": "48108439509",
-   "checked": "2026-10-26T14:23:52Z",
+   "checked": "2026-10-27T13:21:16Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,100 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2422,
-   "posts": 2991,
+   "followers": 2423,
+   "posts": 2992,
    "owner_id": "48275839129",
-   "checked": "2026-10-26T14:23:55Z",
+   "checked": "2026-10-27T13:21:19Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:De_wOH8jVeC",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De_wOH8jVeC/",
+   "title": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido…",
+   "summary": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido grupo de apoyo; sólo debo llamarlos”. \"“Una larga caída” ARLINGTON, TEXAS, JULIO DE 1994 De Lo mejor del Grapevine, Volumen III \" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-27T11:30:15Z",
+   "first_seen": "2026-10-27T13:21:34Z",
+   "image": "/assets/cache/ig/De_wOH8jVeC.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De_wOH8jVeC",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De_wOH8jVeC.webp",
+    "embed_url": "https://www.instagram.com/p/De_wOH8jVeC/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De_wOH8jVeC/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I am learning to be a mother, friend, grandmother and sister. My friends are for me a united …",
+     "es": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido…"
+    },
+    "summary": {
+     "en": "“I am learning to be a mother, friend, grandmother and sister. My friends are for me a united support group; I must only call them.” \"A Long Fall\" ARLINGTON, TEXAS, JULY 1994 Best of the Grapevine, Volume III \"Daily Quote in www.aalavina.org",
+     "es": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido grupo de apoyo; sólo debo llamarlos”. \"“Una larga caída” ARLINGTON, TEXAS, JULIO DE 1994 De Lo mejor del Grapevine, Volumen III \" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:De_wOGujUKO",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De_wOGujUKO/",
+   "title": "\"There are always the constructive critics, our friends indeed. We should never fail to…",
+   "summary": "\"There are always the constructive critics, our friends indeed. We should never fail to give them a careful hearing.\" AA Co-Founder, Bill W., April 1959, “Leadership in AA: Ever a Vital Need”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-27T11:30:15Z",
+   "first_seen": "2026-10-27T13:21:34Z",
+   "image": "/assets/cache/ig/De_wOGujUKO.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De_wOGujUKO",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De_wOGujUKO.webp",
+    "embed_url": "https://www.instagram.com/p/De_wOGujUKO/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De_wOGujUKO/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "\"There are always the constructive critics, our friends indeed. We should never fail to…",
+     "es": "\"Siempre hay los críticos constructivos, nuestros amigos de hecho. Nunca deberíamos fallar en …"
+    },
+    "summary": {
+     "en": "\"There are always the constructive critics, our friends indeed. We should never fail to give them a careful hearing.\" AA Co-Founder, Bill W., April 1959, “Leadership in AA: Ever a Vital Need”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "\"Siempre hay los críticos constructivos, nuestros amigos de hecho. Nunca debemos dejar de darles una audiencia cuidadosa.\" AA cofundador, Bill W., abril de 1959, “Leadership in AA: Ever a Vital Need”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:De9LbMcjfh1",
    "source": "instagram",
@@ -2352,7 +2438,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DebtFyXl7-L",
@@ -2395,7 +2481,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeZPKFUgWFJ",

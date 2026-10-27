@@ -1,7 +1,95 @@
 {
- "updated": "2026-10-27T06:16:09Z",
+ "updated": "2026-10-27T13:30:19Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:De_wOGujUKO",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De_wOGujUKO/",
+   "title": "\"There are always the constructive critics, our friends indeed. We should never fail to…",
+   "summary": "\"There are always the constructive critics, our friends indeed. We should never fail to give them a careful hearing.\" AA Co-Founder, Bill W., April 1959, “Leadership in AA: Ever a Vital Need”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-27T11:30:15Z",
+   "first_seen": "2026-10-27T13:21:34Z",
+   "image": "/assets/cache/ig/De_wOGujUKO.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De_wOGujUKO",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De_wOGujUKO.webp",
+    "embed_url": "https://www.instagram.com/p/De_wOGujUKO/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De_wOGujUKO/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "\"There are always the constructive critics, our friends indeed. We should never fail to…",
+     "es": "\"Siempre hay los críticos constructivos, nuestros amigos de hecho. Nunca deberíamos fallar en …"
+    },
+    "summary": {
+     "en": "\"There are always the constructive critics, our friends indeed. We should never fail to give them a careful hearing.\" AA Co-Founder, Bill W., April 1959, “Leadership in AA: Ever a Vital Need”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "\"Siempre hay los críticos constructivos, nuestros amigos de hecho. Nunca debemos dejar de darles una audiencia cuidadosa.\" AA cofundador, Bill W., abril de 1959, “Leadership in AA: Ever a Vital Need”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-27T11:30:15Z"
+  },
+  {
+   "id": "ig:De_wOH8jVeC",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/De_wOH8jVeC/",
+   "title": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido…",
+   "summary": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido grupo de apoyo; sólo debo llamarlos”. \"“Una larga caída” ARLINGTON, TEXAS, JULIO DE 1994 De Lo mejor del Grapevine, Volumen III \" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-27T11:30:15Z",
+   "first_seen": "2026-10-27T13:21:34Z",
+   "image": "/assets/cache/ig/De_wOH8jVeC.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "De_wOH8jVeC",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/De_wOH8jVeC.webp",
+    "embed_url": "https://www.instagram.com/p/De_wOH8jVeC/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/De_wOH8jVeC/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I am learning to be a mother, friend, grandmother and sister. My friends are for me a united …",
+     "es": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido…"
+    },
+    "summary": {
+     "en": "“I am learning to be a mother, friend, grandmother and sister. My friends are for me a united support group; I must only call them.” \"A Long Fall\" ARLINGTON, TEXAS, JULY 1994 Best of the Grapevine, Volume III \"Daily Quote in www.aalavina.org",
+     "es": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido grupo de apoyo; sólo debo llamarlos”. \"“Una larga caída” ARLINGTON, TEXAS, JULIO DE 1994 De Lo mejor del Grapevine, Volumen III \" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-27T11:30:15Z"
+  },
   {
    "id": "ev:manual:2026-11-28-lv-writing-workshop-garland",
    "source": "committee",
@@ -628,7 +716,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 32,
+    "views": 101,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1254,7 +1342,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 195,
+    "views": 212,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1923,7 +2011,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 178,
+    "views": 184,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -2193,7 +2281,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 281,
+    "views": 282,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7396,7 +7484,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 270,
+    "views": 274,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8029,7 +8117,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-13T11:30:14Z"
   },
   {
@@ -8073,7 +8161,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-13T11:30:14Z"
   },
   {
@@ -8232,7 +8320,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 356,
+    "views": 360,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8699,94 +8787,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-09T17:20:04Z"
-  },
-  {
-   "id": "ig:DeSA8RBuGuH",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeSA8RBuGuH/",
-   "title": "A partir de noviembre, una reunión abierta semanal en línea y un pódcast de La Viña.",
-   "summary": "A partir de noviembre, una reunión abierta semanal en línea y un pódcast de La Viña.",
-   "lang": "es",
-   "date": "2026-10-09T17:16:00Z",
-   "first_seen": "2026-10-10T13:50:40Z",
-   "image": "/assets/cache/ig/DeSA8RBuGuH.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeSA8RBuGuH",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeSA8RBuGuH.webp",
-    "embed_url": "https://www.instagram.com/p/DeSA8RBuGuH/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeSA8RBuGuH/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Starting in November, an open weekly online meeting and a La Viña poster.",
-     "es": "A partir de noviembre, una reunión abierta semanal en línea y un pódcast de La Viña."
-    },
-    "summary": {
-     "en": "Starting in November, an open weekly online meeting and a La Viña poster.",
-     "es": "A partir de noviembre, una reunión abierta semanal en línea y un pódcast de La Viña."
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-09T17:16:00Z"
-  },
-  {
-   "id": "ig:DeRZ6Xclylr",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeRZ6Xclylr/",
-   "title": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que…",
-   "summary": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que sentiría al estar con Dios”. \"“El proceso de paz” GOLD RIVER, CALIFORNIA, DICIEMBRE DE 1996 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-09T11:30:17Z",
-   "first_seen": "2026-10-09T14:27:03Z",
-   "image": "/assets/cache/ig/DeRZ6Xclylr.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeRZ6Xclylr",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeRZ6Xclylr.webp",
-    "embed_url": "https://www.instagram.com/p/DeRZ6Xclylr/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeRZ6Xclylr/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“I think the peace given to me by the Tenth Step, if it is well implemented, is equal to what …",
-     "es": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que…"
-    },
-    "summary": {
-     "en": "“I think the peace given to me by the Tenth Step, if it is well implemented, is the same as what I would feel as being with God.” \"The Peace Process\" gold river, California, December 1996 From AA Grapevine\" Daily Quote in www.aalavina.org",
-     "es": "“Creo que la paz que me da el Décimo Paso, si está bien implementado, es igual a lo que sentiría al estar con Dios”. \"“El proceso de paz” GOLD RIVER, CALIFORNIA, DICIEMBRE DE 1996 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-09T11:30:17Z"
   }
  ]
 }
