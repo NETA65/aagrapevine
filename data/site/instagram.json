@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-27T13:21:34Z",
+ "updated": "2026-10-28T14:06:42Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16946,
-   "posts": 3969,
+   "followers": 16956,
+   "posts": 3972,
    "owner_id": "48108439509",
-   "checked": "2026-10-27T13:21:16Z",
+   "checked": "2026-10-28T14:06:24Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,228 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2423,
-   "posts": 2992,
+   "posts": 2994,
    "owner_id": "48275839129",
-   "checked": "2026-10-27T13:21:19Z",
+   "checked": "2026-10-28T14:06:26Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfCYcpnjVeP",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfCYcpnjVeP/",
+   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+   "lang": "en",
+   "date": "2026-10-28T12:00:15Z",
+   "first_seen": "2026-10-28T14:06:42Z",
+   "image": "/assets/cache/ig/DfCYcpnjVeP.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfCYcpnjVeP",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfCYcpnjVeP.webp",
+    "embed_url": "https://www.instagram.com/p/DfCYcpnjVeP/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfCYcpnjVeP/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
+    },
+    "summary": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfCVA_hjUtr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfCVA_hjUtr/",
+   "title": "“Cuando amamos, vemos en los demás lo que querríamos ver en nosotros mismos”.",
+   "summary": "“Cuando amamos, vemos en los demás lo que querríamos ver en nosotros mismos”. \"“Amor” NORTH HOLLYWOOD, CALIFORNIA, SEPTIEMBRE DE 1988 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-28T11:30:15Z",
+   "first_seen": "2026-10-28T14:06:42Z",
+   "image": "/assets/cache/ig/DfCVA_hjUtr.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfCVA_hjUtr",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfCVA_hjUtr.webp",
+    "embed_url": "https://www.instagram.com/p/DfCVA_hjUtr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfCVA_hjUtr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“When we love, we see in others what we would want to see in ourselves.”",
+     "es": "“Cuando amamos, vemos en los demás lo que querríamos ver en nosotros mismos”."
+    },
+    "summary": {
+     "en": "“When we love, we see in others what we would want to see in ourselves.” \"Amor\" NORTH HOLLYWOOD, CALIFORNIA, SEPTEMBER 1988 Best of Grapevine, Volume III\" Daily Quote in www.aalavina.org",
+     "es": "“Cuando amamos, vemos en los demás lo que querríamos ver en nosotros mismos”. \"“Amor” NORTH HOLLYWOOD, CALIFORNIA, SEPTIEMBRE DE 1988 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfCVA_2jS3t",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfCVA_2jS3t/",
+   "title": "“Serenity and peace of mind are a direct result of accepting our lives as they are at…",
+   "summary": "“Serenity and peace of mind are a direct result of accepting our lives as they are at this moment, and all the money in the world cannot purchase this kind of peace.” “From Rags to Riches,” Cornwall, Ontario, January 2005, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-28T11:30:15Z",
+   "first_seen": "2026-10-28T14:06:42Z",
+   "image": "/assets/cache/ig/DfCVA_2jS3t.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfCVA_2jS3t",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfCVA_2jS3t.webp",
+    "embed_url": "https://www.instagram.com/p/DfCVA_2jS3t/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfCVA_2jS3t/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Serenity and peace of mind are a direct result of accepting our lives as they are at…",
+     "es": "“La serenidad y la paz mental son un resultado directo de aceptar nuestras vidas como están en …"
+    },
+    "summary": {
+     "en": "“Serenity and peace of mind are a direct result of accepting our lives as they are at this moment, and all the money in the world cannot purchase this kind of peace.” “From Rags to Riches,” Cornwall, Ontario, January 2005, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“La serenidad y la paz mental son un resultado directo de aceptar nuestras vidas como están en este momento, y todo el dinero en el mundo no puede comprar este tipo de paz”. “De trapos a riquezas”, Cornwall, Ontario, enero de 2005, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfAITLDDS-J",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfAITLDDS-J/",
+   "title": "From the article “Getting the Help We Need\", October 2026 issue.",
+   "summary": "From the article “Getting the Help We Need\", October 2026 issue. To read more, visit www.aagrapevine.org/magazine",
+   "lang": "en",
+   "date": "2026-10-27T15:00:40Z",
+   "first_seen": "2026-10-28T14:06:42Z",
+   "image": "/assets/cache/ig/DfAITLDDS-J.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfAITLDDS-J",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfAITLDDS-J.webp",
+    "embed_url": "https://www.instagram.com/p/DfAITLDDS-J/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfAITLDDS-J/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From the article “Getting the Help We Need\", October 2026 issue.",
+     "es": "Desde el artículo “Conseguir la ayuda que necesitamos”, edición de octubre de 2026."
+    },
+    "summary": {
+     "en": "From the article “Getting the Help We Need\", October 2026 issue. To read more, visit www.aagrapevine.org/magazine",
+     "es": "Desde el artículo “Conseguir la ayuda que necesitamos”, edición de octubre de 2026. Para leer más, visite www.aagrapevine.org/magazine"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfAITC9DS8g",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfAITC9DS8g/",
+   "title": "Del artículo “Un alto precio\", edición de noviembre/diciembre de 2026.",
+   "summary": "Del artículo “Un alto precio\", edición de noviembre/diciembre de 2026. Para leer más, visite www.aalavina.org/revista",
+   "lang": "es",
+   "date": "2026-10-27T15:00:39Z",
+   "first_seen": "2026-10-28T14:06:42Z",
+   "image": "/assets/cache/ig/DfAITC9DS8g.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfAITC9DS8g",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfAITC9DS8g.webp",
+    "embed_url": "https://www.instagram.com/p/DfAITC9DS8g/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfAITC9DS8g/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From the article “A High Price”, November / December 2026 edition.",
+     "es": "Del artículo “Un alto precio\", edición de noviembre/diciembre de 2026."
+    },
+    "summary": {
+     "en": "From the article “A High Price”, November / December 2026 edition. To read more, visit www.aalavina.org/revista",
+     "es": "Del artículo “Un alto precio\", edición de noviembre/diciembre de 2026. Para leer más, visite www.aalavina.org/revista"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:De_wOH8jVeC",
    "source": "instagram",
@@ -2309,7 +2524,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeeR4sPDeyU",
@@ -2352,7 +2567,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeeR4rdDVpY",
@@ -2395,7 +2610,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DebtFyZDdWT",
