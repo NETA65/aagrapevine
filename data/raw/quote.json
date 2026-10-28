@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-10-27T23:43:18Z",
- "attempted": "2026-10-27T23:43:18Z",
+ "updated": "2026-10-28T06:55:48Z",
+ "attempted": "2026-10-28T06:55:48Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-27",
-  "new": 0
+  "today": "2026-10-28",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-27",
+   "id": "quote:gv:2026-10-28",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote Octubre 27",
+   "title": "Grapevine Daily Quote October 28",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-27",
-   "first_seen": "2026-10-27T06:16:08Z",
-   "last_seen": "2026-10-27T06:16:08Z",
+   "date": "2026-10-28",
+   "first_seen": "2026-10-28T06:55:48Z",
+   "last_seen": "2026-10-28T06:55:48Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "There are always the constructive critics, our friends indeed. We should never fail to give them a careful hearing.",
-    "attribution": "AA Co-Founder, Bill W., April 1959, “Leadership in AA: Ever a Vital Need”, The Language of the Heart",
+    "text": "Serenity and peace of mind are a direct result of accepting our lives as they are at this moment, and all the money in the world cannot purchase this kind of peace.",
+    "attribution": "“From Rags to Riches,” Cornwall, Ontario, January 2005, Voices of Long-Term Sobriety",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 27",
+    "date_label": "October 28",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84444"
+    "node": "node-84445"
    }
   },
   {
-   "id": "quote:lv:2026-10-27",
+   "id": "quote:lv:2026-10-28",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 27",
+   "title": "Cita Diaria con La Viña Octubre 28",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-27",
-   "first_seen": "2026-10-27T06:16:08Z",
-   "last_seen": "2026-10-27T06:16:08Z",
+   "date": "2026-10-28",
+   "first_seen": "2026-10-28T06:55:48Z",
+   "last_seen": "2026-10-28T06:55:48Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido grupo de apoyo; sólo debo llamarlos.",
-    "attribution": "“Una larga caída”. ARLINGTON, TEXAS, JULIO DE 1994",
+    "text": "Cuando amamos, vemos en los demás lo que querríamos ver en nosotros mismos.",
+    "attribution": "“Amor”. NORTH HOLLYWOOD, CALIFORNIA, SEPTIEMBRE DE 1988",
     "source": "Lo mejor del Grapevine, Volumen III",
     "source_lang": "es",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "27 de octubre",
+    "date_label": "28 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84447"
+    "node": "node-84448"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-28",
+    "heading": "Grapevine Daily Quote October 28",
+    "text": "Serenity and peace of mind are a direct result of accepting our lives as they are at this moment, and all the money in the world cannot purchase this kind of peace.",
+    "attribution": "“From Rags to Riches,” Cornwall, Ontario, January 2005, Voices of Long-Term Sobriety",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-28T06:55:38Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-15T10:04:15Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-14",
-    "heading": "Grapevine Daily Quote October 14",
-    "text": "Those severe growing pains which invariably follow any radical departure from AA Tradition can be absolutely relied upon to bring an erring group back into line. An AA group need not be coerced by any human government over and above its own members. Their own experience, plus AA opinion in surrounding groups, plus God’s prompting in their group conscience would be sufficient.",
-    "attribution": "AA Co-Founder, Bill W., March 1948, “Tradition Four”, The Language of the Heart",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-14T07:12:31Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-28",
+    "heading": "Cita Diaria con La Viña Octubre 28",
+    "text": "Cuando amamos, vemos en los demás lo que querríamos ver en nosotros mismos.",
+    "attribution": "“Amor”. NORTH HOLLYWOOD, CALIFORNIA, SEPTIEMBRE DE 1988",
+    "source": "Lo mejor del Grapevine, Volumen III",
+    "source_lang": "es",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-28T06:55:48Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-15T10:04:26Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-14",
-    "heading": "Cita Diaria con La Viña Octubre 14",
-    "text": "Alimenta tu fe y no tus dudas.",
-    "attribution": "“Destilación del espíritu”. INDIANÁPOLIS, INDIANA, AGOSTO DE 1982. Del AA Grapevine",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-14T07:12:41Z"
    }
   ]
  }

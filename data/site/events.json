@@ -1,67 +1,7 @@
 {
- "updated": "2026-10-27T06:16:09Z",
+ "updated": "2026-10-28T06:55:58Z",
  "fixture": false,
  "items": [
-  {
-   "id": "ev:manual:2026-10-26-lv-writing-workshop-tyler",
-   "source": "committee",
-   "kind": "event",
-   "url": "https://neta65.org/event/la-vina-writing-workshop-4/",
-   "title": "La Viña Writing Workshop (in Spanish) — Tyler",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Libro Grande in Tyler.",
-   "lang": "en",
-   "date": "2026-10-27T00:00:00Z",
-   "first_seen": "2026-09-24T11:10:08Z",
-   "image": null,
-   "tags": [
-    "workshop",
-    "la-vina"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-10-27T00:00:00Z",
-    "end": "2026-10-27T02:00:00Z",
-    "all_day": false,
-    "location": "Grupo Libro Grande, 623 West Bow, Tyler, TX 75702",
-    "online_url": null,
-    "flyer_url": "https://drive.google.com/file/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN/view",
-    "flyer_thumb": null,
-    "city": "Tyler",
-    "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Libro Grande in Tyler.",
-    "slug": "2026-10-26-lv-writing-workshop-tyler",
-    "file": "content/events/2026-10-26-lv-writing-workshop-tyler.md",
-    "own_i18n": {
-     "title": {
-      "es": "Taller de Escritura de La Viña — Tyler"
-     },
-     "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Libro Grande de Tyler."
-     },
-     "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Libro Grande de Tyler."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop (in Spanish) — Tyler",
-     "es": "Taller de Escritura de La Viña — Tyler"
-    },
-    "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Libro Grande in Tyler.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Libro Grande de Tyler."
-    },
-    "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Libro Grande in Tyler.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Libro Grande de Tyler."
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
   {
    "id": "ev:flyer:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
    "source": "drive",
@@ -2158,6 +2098,66 @@
     "summary": {
      "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
      "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:manual:2026-10-26-lv-writing-workshop-tyler",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://neta65.org/event/la-vina-writing-workshop-4/",
+   "title": "La Viña Writing Workshop (in Spanish) — Tyler",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Libro Grande in Tyler.",
+   "lang": "en",
+   "date": "2026-10-27T00:00:00Z",
+   "first_seen": "2026-09-24T11:10:08Z",
+   "image": null,
+   "tags": [
+    "workshop",
+    "la-vina"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-10-27T00:00:00Z",
+    "end": "2026-10-27T02:00:00Z",
+    "all_day": false,
+    "location": "Grupo Libro Grande, 623 West Bow, Tyler, TX 75702",
+    "online_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1gghtYzCE6Dl_IQ5_7yLueZviIK_nZqwN/view",
+    "flyer_thumb": null,
+    "city": "Tyler",
+    "state": "TX",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Libro Grande in Tyler.",
+    "slug": "2026-10-26-lv-writing-workshop-tyler",
+    "file": "content/events/2026-10-26-lv-writing-workshop-tyler.md",
+    "own_i18n": {
+     "title": {
+      "es": "Taller de Escritura de La Viña — Tyler"
+     },
+     "summary": {
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Libro Grande de Tyler."
+     },
+     "body_md": {
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Libro Grande de Tyler."
+     }
+    },
+    "past": true
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Writing Workshop (in Spanish) — Tyler",
+     "es": "Taller de Escritura de La Viña — Tyler"
+    },
+    "summary": {
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Libro Grande in Tyler.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Libro Grande de Tyler."
+    },
+    "body_md": {
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Libro Grande in Tyler.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Libro Grande de Tyler."
     }
    },
    "machine": [],
