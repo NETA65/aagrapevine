@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-28T14:06:42Z",
+ "updated": "2026-10-29T14:28:23Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16956,
-   "posts": 3972,
+   "posts": 3973,
    "owner_id": "48108439509",
-   "checked": "2026-10-28T14:06:24Z",
+   "checked": "2026-10-29T14:28:06Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,99 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2423,
-   "posts": 2994,
+   "posts": 2995,
    "owner_id": "48275839129",
-   "checked": "2026-10-28T14:06:26Z",
+   "checked": "2026-10-29T14:28:09Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfE5z2WDW0Z",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfE5z2WDW0Z/",
+   "title": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of…",
+   "summary": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of having love, offering love, and expressing a love appropriate to each relation of life.” AA Co-Founder, Bill W., January 1958, “The Next Frontier: Emotional Sobriety”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-29T11:30:15Z",
+   "first_seen": "2026-10-29T14:28:23Z",
+   "image": "/assets/cache/ig/DfE5z2WDW0Z.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfE5z2WDW0Z",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfE5z2WDW0Z.webp",
+    "embed_url": "https://www.instagram.com/p/DfE5z2WDW0Z/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfE5z2WDW0Z/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of…",
+     "es": "“Las satisfacciones emocionales e instintivas, vi, eran realmente los dividendos extras de …"
+    },
+    "summary": {
+     "en": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of having love, offering love, and expressing a love appropriate to each relation of life.” AA Co-Founder, Bill W., January 1958, “The Next Frontier: Emotional Sobriety”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "“Las satisfacciones emocionales e instintivas, he visto, eran realmente los dividendos extras de tener amor, ofrecer amor y expresar un amor apropiado a cada relación de la vida.” AA cofundador, Bill W., enero de 1958, “la próxima frontera: Sobriedad emocional”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfE5z1fjVQP",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfE5z1fjVQP/",
+   "title": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi…",
+   "summary": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi desconocimiento”. \"“Doctorado en alcoholismo” GREENSBORO, CAROLINA DEL NORTE, FEBRERO DE 1987 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-29T11:30:14Z",
+   "first_seen": "2026-10-29T14:28:23Z",
+   "image": "/assets/cache/ig/DfE5z1fjVQP.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfE5z1fjVQP",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfE5z1fjVQP.webp",
+    "embed_url": "https://www.instagram.com/p/DfE5z1fjVQP/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfE5z1fjVQP/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The pride I felt for my intelligence prevented me from seeing the magnitude of my …",
+     "es": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi…"
+    },
+    "summary": {
+     "en": "“The pride I felt for my intelligence prevented me from seeing the magnitude of my ignorance.” \"Doctorate in Alcoholism\" GREENSBORO, CAROLINA DEL NORTE, FEBRUARY 1987 Of The Best of Grapevine, Volume III\" Daily Quote in www.aalavina.org",
+     "es": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi desconocimiento”. \"“Doctorado en alcoholismo” GREENSBORO, CAROLINA DEL NORTE, FEBRERO DE 1987 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfCYcpnjVeP",
    "source": "instagram",
@@ -2438,7 +2524,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Deg2rh1DZ9g",
@@ -2481,7 +2567,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeeVUakDUKu",

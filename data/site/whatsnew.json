@@ -1,7 +1,95 @@
 {
- "updated": "2026-10-28T14:16:06Z",
+ "updated": "2026-10-29T14:37:29Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DfE5z2WDW0Z",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfE5z2WDW0Z/",
+   "title": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of…",
+   "summary": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of having love, offering love, and expressing a love appropriate to each relation of life.” AA Co-Founder, Bill W., January 1958, “The Next Frontier: Emotional Sobriety”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-29T11:30:15Z",
+   "first_seen": "2026-10-29T14:28:23Z",
+   "image": "/assets/cache/ig/DfE5z2WDW0Z.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfE5z2WDW0Z",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfE5z2WDW0Z.webp",
+    "embed_url": "https://www.instagram.com/p/DfE5z2WDW0Z/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfE5z2WDW0Z/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of…",
+     "es": "“Las satisfacciones emocionales e instintivas, vi, eran realmente los dividendos extras de …"
+    },
+    "summary": {
+     "en": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of having love, offering love, and expressing a love appropriate to each relation of life.” AA Co-Founder, Bill W., January 1958, “The Next Frontier: Emotional Sobriety”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "“Las satisfacciones emocionales e instintivas, he visto, eran realmente los dividendos extras de tener amor, ofrecer amor y expresar un amor apropiado a cada relación de la vida.” AA cofundador, Bill W., enero de 1958, “la próxima frontera: Sobriedad emocional”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-29T11:30:15Z"
+  },
+  {
+   "id": "ig:DfE5z1fjVQP",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfE5z1fjVQP/",
+   "title": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi…",
+   "summary": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi desconocimiento”. \"“Doctorado en alcoholismo” GREENSBORO, CAROLINA DEL NORTE, FEBRERO DE 1987 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-29T11:30:14Z",
+   "first_seen": "2026-10-29T14:28:23Z",
+   "image": "/assets/cache/ig/DfE5z1fjVQP.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfE5z1fjVQP",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfE5z1fjVQP.webp",
+    "embed_url": "https://www.instagram.com/p/DfE5z1fjVQP/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfE5z1fjVQP/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The pride I felt for my intelligence prevented me from seeing the magnitude of my …",
+     "es": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi…"
+    },
+    "summary": {
+     "en": "“The pride I felt for my intelligence prevented me from seeing the magnitude of my ignorance.” \"Doctorate in Alcoholism\" GREENSBORO, CAROLINA DEL NORTE, FEBRUARY 1987 Of The Best of Grapevine, Volume III\" Daily Quote in www.aalavina.org",
+     "es": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi desconocimiento”. \"“Doctorado en alcoholismo” GREENSBORO, CAROLINA DEL NORTE, FEBRERO DE 1987 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-29T11:30:14Z"
+  },
   {
    "id": "ig:DfCYcpnjVeP",
    "source": "instagram",
@@ -936,7 +1024,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 165,
+    "views": 190,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1562,7 +1650,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 235,
+    "views": 254,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2231,7 +2319,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 190,
+    "views": 197,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -2501,7 +2589,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 292,
+    "views": 297,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7704,7 +7792,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 281,
+    "views": 288,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7913,7 +8001,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-15T12:00:00Z"
   },
   {
@@ -7967,7 +8055,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-15T12:00:00Z"
   },
   {
@@ -8011,7 +8099,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-15T11:30:15Z"
   },
   {
@@ -8055,7 +8143,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-15T11:30:14Z"
   },
   {
@@ -8540,7 +8628,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 362,
+    "views": 367,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8699,94 +8787,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-11T15:00:13Z"
-  },
-  {
-   "id": "ig:DeWjgBJjADC",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeWjgBJjADC/",
-   "title": "“AA is a caring community ... of people who understand how others can be trapped in deep…",
-   "summary": "“AA is a caring community ... of people who understand how others can be trapped in deep loneliness and despair.” “Why I Keep Coming Back,” Toledo, Ohio, May 2001, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-11T11:30:14Z",
-   "first_seen": "2026-10-11T14:09:39Z",
-   "image": "/assets/cache/ig/DeWjgBJjADC.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeWjgBJjADC",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeWjgBJjADC.webp",
-    "embed_url": "https://www.instagram.com/p/DeWjgBJjADC/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeWjgBJjADC/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“AA is a caring community ... of people who understand how others can be trapped in deep…",
-     "es": "“AA es una comunidad cariñosa... de personas que entienden cómo otros pueden estar atrapados en el profundo …"
-    },
-    "summary": {
-     "en": "“AA is a caring community ... of people who understand how others can be trapped in deep loneliness and despair.” “Why I Keep Coming Back,” Toledo, Ohio, May 2001, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
-     "es": "“AA es una comunidad cariñosa... de personas que entienden cómo otros pueden estar atrapados en una profunda soledad y desesperación”. “Por qué sigo regresando”, Toledo, Ohio, mayo de 2001, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-11T11:30:14Z"
-  },
-  {
-   "id": "ig:DeWjgDBjPU3",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeWjgDBjPU3/",
-   "title": "“En AA, nadie es más importante que los demás, ni precisamos que así sea. Nuestra…",
-   "summary": "“En AA, nadie es más importante que los demás, ni precisamos que así sea. Nuestra organización no precisa títulos ni edificios grandiosos. La experiencia nos enseñó que la simplicidad es esencial a fin de preservar nuestra sobriedad y para ayudar a quienes lo necesitan”. \"“Los fundamentos en retrospectiva” DR. BOB, COFUNDADOR DE AA, SEPTIEMBRE DE 1948 De Spiritual Awakenings \" Cita Diaria en…",
-   "lang": "es",
-   "date": "2026-10-11T11:30:14Z",
-   "first_seen": "2026-10-11T14:09:39Z",
-   "image": "/assets/cache/ig/DeWjgDBjPU3.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeWjgDBjPU3",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeWjgDBjPU3.webp",
-    "embed_url": "https://www.instagram.com/p/DeWjgDBjPU3/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeWjgDBjPU3/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“In AA, no one is more important than the others, nor do we need to do so. Our …",
-     "es": "“En AA, nadie es más importante que los demás, ni precisamos que así sea. Nuestra…"
-    },
-    "summary": {
-     "en": "“In AA, no one is more important than the others, nor do we need to do so. Our organization does not require great titles or buildings. Experience taught us that simplicity is essential in order to preserve our sobriety and to help those who need it.” \"The Basics in Retrospective\" Dr. Bob, co-founder of AA, September 1948 De Spiritual Awakenings Daily Quote in …",
-     "es": "“En AA, nadie es más importante que los demás, ni precisamos que así sea. Nuestra organización no precisa títulos ni edificios grandiosos. La experiencia nos enseñó que la simplicidad es esencial a fin de preservar nuestra sobriedad y para ayudar a quienes lo necesitan”. \"“Los fundamentos en retrospectiva” DR. BOB, COFUNDADOR DE AA, SEPTIEMBRE DE 1948 De Spiritual Awakenings \" Cita Diaria en…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-11T11:30:14Z"
   }
  ]
 }

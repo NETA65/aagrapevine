@@ -1,28 +1,28 @@
 {
  "source": "articles",
- "updated": "2026-10-28T14:08:09Z",
- "attempted": "2026-10-28T14:08:09Z",
+ "updated": "2026-10-29T14:30:10Z",
+ "attempted": "2026-10-29T14:30:10Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 2,
   "removed": 0,
   "held": 0
  },
  "stats": {
   "hub_articles": 57,
-  "details_fetched": 0,
+  "details_fetched": 2,
   "details_failed": 0,
-  "thumbs": 0,
+  "thumbs": 2,
   "archive_pages": 13,
-  "archive_new": 0,
+  "archive_new": 2,
   "covers": 0,
-  "details_pending": 0,
+  "details_pending": 2,
   "byline_pending": 0,
   "details_left": 0,
-  "new": 0,
-  "total": 291,
-  "requests": 15
+  "new": 2,
+  "total": 293,
+  "requests": 19
  },
  "items": [
   {
@@ -2165,6 +2165,72 @@
     "author_location": "Philadelphia, Pa.",
     "subtitle": "A last message from his mother keeps his sobriety on track",
     "teaser": "In September of 2024 my mother was suddenly hospitalized with pneumonia. She had been declining from a hard to diagnose set of symptoms that included some form of early onset dementia.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false
+   }
+  },
+  {
+   "id": "gv:2026-10:carrying-message-not-person",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/carrying-message-not-person",
+   "title": "Carrying the Message, Not the Person",
+   "summary": "Setting boundaries is an essential part of sobriety",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-29T14:30:10Z",
+   "last_seen": "2026-10-29T14:30:10Z",
+   "image": "/assets/cache/articles/b471dce83927794d.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "J.B.",
+    "author_location": "Milwaukee, Wis.",
+    "subtitle": "Setting boundaries is an essential part of sobriety",
+    "teaser": "It started out a beautiful winter day. The bitter cold had passed, and temperatures were back to double digits.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false
+   }
+  },
+  {
+   "id": "gv:2026-10:alive-and-sober-indiana",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/alive-and-sober-indiana",
+   "title": "Alive and Sober in Indiana",
+   "summary": "The thing she wanted to do most when she got sober? Learn how to read",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-29T14:30:10Z",
+   "last_seen": "2026-10-29T14:30:10Z",
+   "image": "/assets/cache/articles/651c1d4c01c0d601.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "C.R.",
+    "author_location": "Terre Haute, Ind.",
+    "subtitle": "The thing she wanted to do most when she got sober? Learn how to read",
+    "teaser": "I was brought up in an alcoholic home where all types of abuse were normal. I learned that if people don’t act right, you beat them up. Hurt people, hurt people, as the saying goes.",
     "free": false,
     "online_exclusive": true,
     "department": false
@@ -9640,7 +9706,7 @@
    "key": "2026-11",
    "publication": "gv",
    "hub": "https://www.aagrapevine.org/magazine",
-   "seen": "2026-10-28T14:06:48Z",
+   "seen": "2026-10-29T14:28:29Z",
    "cover": "/assets/cache/articles/bfc7d6fa631e6757.webp"
   },
   "lv:2026-11": {
@@ -9652,7 +9718,7 @@
    "key": "2026-11",
    "publication": "lv",
    "hub": "https://www.aalavina.org/la-revista",
-   "seen": "2026-10-28T14:06:58Z",
+   "seen": "2026-10-29T14:28:39Z",
    "cover": "/assets/cache/articles/f516ec1fbfd667f4.webp"
   },
   "gv:2026-10": {
@@ -9714,15 +9780,15 @@
  },
  "archive_state": {
   "gv": {
-   "last_run": "2026-10-28T14:07:38Z",
+   "last_run": "2026-10-29T14:29:14Z",
    "pages_last_run": 7,
-   "new_last_run": 0,
+   "new_last_run": 2,
    "oldest_seen": "2026-09",
    "backfilled": "2026-09-23T23:07:47Z",
    "backfill_days": 120
   },
   "lv": {
-   "last_run": "2026-10-28T14:08:09Z",
+   "last_run": "2026-10-29T14:29:49Z",
    "pages_last_run": 6,
    "new_last_run": 0,
    "oldest_seen": "2026-07",

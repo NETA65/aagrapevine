@@ -1,12 +1,12 @@
 {
  "source": "quote",
- "updated": "2026-10-29T06:51:19Z",
- "attempted": "2026-10-29T06:51:19Z",
+ "updated": "2026-10-29T14:33:11Z",
+ "attempted": "2026-10-29T14:33:11Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 2,
-  "removed": 2,
+  "added": 0,
+  "removed": 0,
   "held": 0
  },
  "stats": {
@@ -14,7 +14,7 @@
   "parsed": 2,
   "requests": 2,
   "today": "2026-10-29",
-  "new": 2
+  "new": 0
  },
  "items": [
   {

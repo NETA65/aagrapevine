@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-10-28T14:10:47Z",
- "attempted": "2026-10-28T14:10:47Z",
+ "updated": "2026-10-29T14:33:00Z",
+ "attempted": "2026-10-29T14:33:00Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,7 +15,7 @@
   "upcoming_urls": 17,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 0,
+  "refreshed": 1,
   "failed": 0,
   "pending": 0,
   "cached": 20,
@@ -23,7 +23,7 @@
   "online_es": 0,
   "items": 2,
   "new": 0,
-  "requests": 36
+  "requests": 41
  },
  "items": [
   {
@@ -445,7 +445,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-13/42nd-annual-wichita-fall-roundup-0": {
-   "at": "2026-10-15T12:52:06Z",
+   "at": "2026-10-29T14:33:00Z",
    "ev": {
     "title": "42nd Annual Wichita Fall Roundup",
     "date_text": "November 13, 2026 - November 14, 2026",

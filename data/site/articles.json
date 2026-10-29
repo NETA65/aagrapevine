@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-28T14:08:09Z",
+ "updated": "2026-10-29T14:30:10Z",
  "fixture": false,
  "issues": [
   {
@@ -4895,6 +4895,75 @@
    "is_new": false
   },
   {
+   "id": "gv:2026-10:carrying-message-not-person",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/carrying-message-not-person",
+   "title": "Carrying the Message, Not the Person",
+   "summary": "Setting boundaries is an essential part of sobriety",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-29T14:30:10Z",
+   "image": "/assets/cache/articles/b471dce83927794d.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "J.B.",
+    "author_location": "Milwaukee, Wis.",
+    "subtitle": "Setting boundaries is an essential part of sobriety",
+    "teaser": "It started out a beautiful winter day. The bitter cold had passed, and temperatures were back to double digits.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Milwaukee",
+     "county": null,
+     "counties": [],
+     "state": "WI",
+     "country": "US",
+     "label_en": "Milwaukee, Wisconsin",
+     "label_es": "Milwaukee, Wisconsin"
+    },
+    "pub_date": "2026-10-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Carrying the Message, Not the Person",
+     "es": "Llevando el mensaje, no la persona"
+    },
+    "summary": {
+     "en": "Setting boundaries is an essential part of sobriety",
+     "es": "Establecer límites es una parte esencial de sobriedad"
+    },
+    "issue_theme": {
+     "en": "Loneliness",
+     "es": "Soledad"
+    },
+    "issue_label": {
+     "en": "October 2026",
+     "es": "Octubre 2026"
+    },
+    "author_location": {
+     "en": "Milwaukee, Wisconsin",
+     "es": "Milwaukee, Wisconsin"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": false
+  },
+  {
    "id": "gv:2026-10:big-leroy",
    "source": "grapevine",
    "kind": "article",
@@ -5025,6 +5094,75 @@
     "author_location": {
      "en": "Largo, Florida",
      "es": "Largo, Florida"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": false
+  },
+  {
+   "id": "gv:2026-10:alive-and-sober-indiana",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/oct/alive-and-sober-indiana",
+   "title": "Alive and Sober in Indiana",
+   "summary": "The thing she wanted to do most when she got sober? Learn how to read",
+   "lang": "en",
+   "date": "2026-10-01",
+   "first_seen": "2026-10-29T14:30:10Z",
+   "image": "/assets/cache/articles/651c1d4c01c0d601.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "October 2026",
+    "issue_key": "2026-10",
+    "issue_date": "2026-10-01",
+    "issue_theme": "Loneliness",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/october-2026",
+    "topic": null,
+    "section": null,
+    "author": "C.R.",
+    "author_location": "Terre Haute, Ind.",
+    "subtitle": "The thing she wanted to do most when she got sober? Learn how to read",
+    "teaser": "I was brought up in an alcoholic home where all types of abuse were normal. I learned that if people don’t act right, you beat them up. Hurt people, hurt people, as the saying goes.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Terre Haute",
+     "county": null,
+     "counties": [],
+     "state": "IN",
+     "country": "US",
+     "label_en": "Terre Haute, Indiana",
+     "label_es": "Terre Haute, Indiana"
+    },
+    "pub_date": "2026-10-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Alive and Sober in Indiana",
+     "es": "Vivo y sobrio en Indiana"
+    },
+    "summary": {
+     "en": "The thing she wanted to do most when she got sober? Learn how to read",
+     "es": "¿La cosa que más quería hacer cuando estaba sobria? Aprender a leer"
+    },
+    "issue_theme": {
+     "en": "Loneliness",
+     "es": "Soledad"
+    },
+    "issue_label": {
+     "en": "October 2026",
+     "es": "Octubre 2026"
+    },
+    "author_location": {
+     "en": "Terre Haute, Indiana",
+     "es": "Terre Haute, Indiana"
     }
    },
    "machine": [
