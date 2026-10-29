@@ -1,7 +1,7 @@
 {
  "source": "manual_events",
- "updated": "2026-10-29T14:27:21Z",
- "attempted": "2026-10-29T14:27:21Z",
+ "updated": "2026-10-29T18:25:31Z",
+ "attempted": "2026-10-29T18:25:31Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -75,7 +75,7 @@
    "lang": "en",
    "date": "2027-09-17",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-22T17:05:27Z",
+   "last_seen": "2026-10-29T18:25:31Z",
    "image": null,
    "tags": [
     "assembly",
@@ -170,7 +170,7 @@
    "lang": "en",
    "date": "2027-06-25",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-22T17:05:27Z",
+   "last_seen": "2026-10-29T18:25:31Z",
    "image": null,
    "tags": [
     "assembly",
@@ -268,7 +268,7 @@
    "lang": "en",
    "date": "2027-03-19",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-22T17:05:27Z",
+   "last_seen": "2026-10-29T18:25:31Z",
    "image": null,
    "tags": [
     "assembly",
@@ -496,7 +496,7 @@
    "lang": "en",
    "date": "2026-11-08T01:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-22T17:05:27Z",
+   "last_seen": "2026-10-29T18:25:31Z",
    "image": null,
    "tags": [
     "workshop",
@@ -540,7 +540,7 @@
    "lang": "en",
    "date": "2026-10-27T00:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-22T17:05:27Z",
+   "last_seen": "2026-10-29T18:25:31Z",
    "image": null,
    "tags": [
     "workshop",
@@ -628,7 +628,7 @@
    "lang": "en",
    "date": "2026-10-18T00:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-22T17:05:27Z",
+   "last_seen": "2026-10-29T18:25:31Z",
    "image": null,
    "tags": [
     "workshop",
@@ -672,7 +672,7 @@
    "lang": "en",
    "date": "2026-10-08T01:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-22T17:05:27Z",
+   "last_seen": "2026-10-29T18:25:31Z",
    "image": null,
    "tags": [
     "workshop",
@@ -716,7 +716,7 @@
    "lang": "en",
    "date": "2026-10-03T19:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-22T17:05:27Z",
+   "last_seen": "2026-10-29T18:25:31Z",
    "image": null,
    "tags": [
     "workshop",
@@ -762,7 +762,7 @@
    "lang": "en",
    "date": "2026-09-27T00:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-22T17:05:27Z",
+   "last_seen": "2026-10-29T18:25:31Z",
    "image": null,
    "tags": [
     "workshop",
