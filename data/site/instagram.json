@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-29T14:28:23Z",
+ "updated": "2026-10-30T14:20:42Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16956,
-   "posts": 3973,
+   "followers": 16957,
+   "posts": 3977,
    "owner_id": "48108439509",
-   "checked": "2026-10-29T14:28:06Z",
+   "checked": "2026-10-30T14:20:22Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,272 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2423,
-   "posts": 2995,
+   "followers": 2422,
+   "posts": 2997,
    "owner_id": "48275839129",
-   "checked": "2026-10-29T14:28:09Z",
+   "checked": "2026-10-30T14:20:24Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfHxaWCgr1P",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfHxaWCgr1P/",
+   "title": "As described by Nate on this week’s Grapevine Weekly Open AA Meeting podcast. Find it…",
+   "summary": "As described by Nate on this week’s Grapevine Weekly Open AA Meeting podcast. Find it wherever you get your podcasts, or at aagrapevine.org/podcasts 🍇💜",
+   "lang": "en",
+   "date": "2026-10-30T14:16:36Z",
+   "first_seen": "2026-10-30T14:20:41Z",
+   "image": "/assets/cache/ig/DfHxaWCgr1P.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfHxaWCgr1P",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfHxaWCgr1P.webp",
+    "embed_url": "https://www.instagram.com/p/DfHxaWCgr1P/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfHxaWCgr1P/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "As described by Nate on this week’s Grapevine Weekly Open AA Meeting podcast. Find it…",
+     "es": "Como describió Nate en el podcast Grapevine Weekly Open AA Meeting de esta semana. Encuéntrelo …"
+    },
+    "summary": {
+     "en": "As described by Nate on this week’s Grapevine Weekly Open AA Meeting podcast. Find it wherever you get your podcasts, or at aagrapevine.org/podcasts 🍇💜",
+     "es": "Como describió Nate en el podcast Grapevine Weekly Open AA Meeting de esta semana. Encuéntrelo donde quiera que consiga sus podcasts, o en aagrapevine.org/podcasts 🍇💜"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfHemvRl5Jn",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfHemvRl5Jn/",
+   "title": "“La verdad no es un arma para ser usada a la ligera ... Cuando me piden mi opinión o un…",
+   "summary": "“La verdad no es un arma para ser usada a la ligera ... Cuando me piden mi opinión o un consejo, hago lo mejor que puedo con la mayor gentileza, comprensión y tolerancia posibles”. \"“La verdad” CAYO HUESO, FLORIDA, AGOSTO DE 1973 De Lo mejor del Grapevine, Volumen I\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-30T11:30:18Z",
+   "first_seen": "2026-10-30T14:20:41Z",
+   "image": "/assets/cache/ig/DfHemvRl5Jn.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfHemvRl5Jn",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfHemvRl5Jn.webp",
+    "embed_url": "https://www.instagram.com/p/DfHemvRl5Jn/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfHemvRl5Jn/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The truth is not a weapon to be used lightly... When I'm asked for my opinion or an …",
+     "es": "“La verdad no es un arma para ser usada a la ligera ... Cuando me piden mi opinión o un…"
+    },
+    "summary": {
+     "en": "“The truth is not a weapon to be used lightly... When you ask me for my opinion or advice, I do my best with the utmost kindness, understanding and tolerance possible.” \"The Truth\" Cayo bone, Florida, August 1973 From the Best of the Grapevine, Volume I\" Daily Quote in www.aalavina.org",
+     "es": "“La verdad no es un arma para ser usada a la ligera ... Cuando me piden mi opinión o un consejo, hago lo mejor que puedo con la mayor gentileza, comprensión y tolerancia posibles”. \"“La verdad” CAYO HUESO, FLORIDA, AGOSTO DE 1973 De Lo mejor del Grapevine, Volumen I\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfHemxMF5Zg",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfHemxMF5Zg/",
+   "title": "“When I look into the eyes of the person next to me and ask, ‘How are you?’, I will take…",
+   "summary": "“When I look into the eyes of the person next to me and ask, ‘How are you?’, I will take the time to listen. I want to keep in mind that at any given time, each of us may need the same love and support as someone who is attending their first meeting.” “Taking the Time to Listen,” Jacksonville Beach, Florida, December 1997, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-30T11:30:15Z",
+   "first_seen": "2026-10-30T14:20:41Z",
+   "image": "/assets/cache/ig/DfHemxMF5Zg.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfHemxMF5Zg",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfHemxMF5Zg.webp",
+    "embed_url": "https://www.instagram.com/p/DfHemxMF5Zg/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfHemxMF5Zg/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“When I look into the eyes of the person next to me and ask, ‘How are you?’, I will take…",
+     "es": "“Cuando miro a los ojos de la persona que está a mi lado y pregunte, ‘¿Cómo estás?’, tomaré …"
+    },
+    "summary": {
+     "en": "“When I look into the eyes of the person next to me and ask, ‘How are you?’, I will take the time to listen. I want to keep in mind that at any given time, each of us may need the same love and support as someone who is attending their first meeting.” “Taking the Time to Listen,” Jacksonville Beach, Florida, December 1997, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“Cuando miro a los ojos de la persona que está a mi lado y pregunte, ‘¿Cómo estás?’, tomaré el tiempo para escuchar. Quiero tener en cuenta que en cualquier momento dado, cada uno de nosotros puede necesitar el mismo amor y apoyo que alguien que está asistiendo a su primera reunión.” “Tomando el tiempo para escuchar”, la playa de Jacksonville, Florida, diciembre de 1997, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfHUeVNg1x4",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfHUeVNg1x4/",
+   "title": "This week Don welcomes speakers Nate and Debbi.",
+   "summary": "This week Don welcomes speakers Nate and Debbi.",
+   "lang": "en",
+   "date": "2026-10-30T10:02:36Z",
+   "first_seen": "2026-10-30T14:20:41Z",
+   "image": "/assets/cache/ig/DfHUeVNg1x4.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfHUeVNg1x4",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfHUeVNg1x4.webp",
+    "embed_url": "https://www.instagram.com/p/DfHUeVNg1x4/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfHUeVNg1x4/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "This week Don welcomes speakers Nate and Debbi.",
+     "es": "Esta semana Don da la bienvenida a los oradores Nate y Debbi."
+    },
+    "summary": {
+     "en": "This week Don welcomes speakers Nate and Debbi.",
+     "es": "Esta semana Don da la bienvenida a los oradores Nate y Debbi."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfFR19wjQ4S",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfFR19wjQ4S/",
+   "title": "Serenity Prayer - November issue",
+   "summary": "Serenity Prayer - November issue www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-29T15:00:14Z",
+   "first_seen": "2026-10-30T14:20:41Z",
+   "image": "/assets/cache/ig/DfFR19wjQ4S.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfFR19wjQ4S",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfFR19wjQ4S.webp",
+    "embed_url": "https://www.instagram.com/p/DfFR19wjQ4S/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfFR19wjQ4S/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Serenity Prayer - November issue",
+     "es": "Serenity Prayer - Cuestión de noviembre"
+    },
+    "summary": {
+     "en": "Serenity Prayer - November issue www.aagrapevine.org",
+     "es": "Serenity Prayer - Número de noviembre www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfFR15tjXfn",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfFR15tjXfn/",
+   "title": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026",
+   "summary": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026 www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-29T15:00:14Z",
+   "first_seen": "2026-10-30T14:20:41Z",
+   "image": "/assets/cache/ig/DfFR15tjXfn.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfFR15tjXfn",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfFR15tjXfn.webp",
+    "embed_url": "https://www.instagram.com/p/DfFR15tjXfn/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfFR15tjXfn/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Serenity Prayer - November / December 2026 Edition",
+     "es": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026"
+    },
+    "summary": {
+     "en": "Serenity Prayer - November / December 2026 www.aalavina.org Edition",
+     "es": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026 www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfE5z2WDW0Z",
    "source": "instagram",
@@ -2309,7 +2567,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Dejbef4jdQ4",
@@ -2352,7 +2610,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DejbedvjQhf",
@@ -2395,7 +2653,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Deh36cjjZSU",

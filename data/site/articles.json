@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-29T14:30:10Z",
+ "updated": "2026-10-30T14:22:01Z",
  "fixture": false,
  "issues": [
   {
@@ -199,7 +199,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:un-recorrido-divino",
@@ -276,7 +276,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:un-alto-precio",
@@ -353,7 +353,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:tema-de-discusion",
@@ -426,7 +426,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:se-encendieron-las-luces",
@@ -503,7 +503,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:repitiendo-la-historia",
@@ -582,7 +582,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:primeras-fiestas",
@@ -659,7 +659,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:orientacion-divina",
@@ -736,7 +736,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:nueva-mision",
@@ -813,7 +813,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:noticias",
@@ -886,7 +886,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:nochebuena-sobria",
@@ -963,7 +963,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:no-bebo-gracias",
@@ -1040,7 +1040,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:mi-voz-mi-historia",
@@ -1117,7 +1117,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:mensaje-navideno",
@@ -1190,7 +1190,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:maestria-en-emborrachamiento",
@@ -1267,7 +1267,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:las-recompensas-de-la-oracion",
@@ -1344,7 +1344,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:la-ultima-borrachera",
@@ -1421,7 +1421,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:la-oveja-negra",
@@ -1498,7 +1498,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:la-luz-de-la-sobriedad",
@@ -1581,7 +1581,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:inolvidable-momento",
@@ -1658,7 +1658,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:humor-noviembrediciembre-2026",
@@ -1731,7 +1731,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:fiesta-espiritual",
@@ -1808,7 +1808,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:encontrando-claridad",
@@ -1885,7 +1885,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:en-la-calle",
@@ -1962,7 +1962,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:dias-festivos-sobrios",
@@ -2039,7 +2039,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:cartas-del-lector",
@@ -2112,7 +2112,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:carta-de-bienvenida",
@@ -2185,7 +2185,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:anonimo-o-incognito",
@@ -2262,7 +2262,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:ano-de-oro",
@@ -2341,7 +2341,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "lv:2026-11:acerca-del-alcoholismo",
@@ -2414,7 +2414,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:you-never-know",
@@ -2491,7 +2491,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:world-away",
@@ -2568,7 +2568,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:wits-end",
@@ -2641,7 +2641,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:what-your-concern",
@@ -2720,7 +2720,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:walking-through-it",
@@ -2797,7 +2797,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:unforgettable-weekend",
@@ -2874,7 +2874,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:peeling-healing",
@@ -2951,7 +2951,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:one-sunflower-time",
@@ -3028,7 +3028,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:me-dude",
@@ -3105,7 +3105,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:matter-life-death",
@@ -3182,7 +3182,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:lost-found",
@@ -3259,7 +3259,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:living-proof",
@@ -3336,7 +3336,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:letter-editor-november-2026",
@@ -3409,7 +3409,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:learning-pray",
@@ -3486,7 +3486,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:keeping-it-green",
@@ -3563,7 +3563,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:just-way-i-am",
@@ -3640,7 +3640,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:grapevines-first-anniversary",
@@ -3717,7 +3717,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:getting-help-we-need",
@@ -3796,7 +3796,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:dying-get-sober",
@@ -3873,7 +3873,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:discussion-topic",
@@ -3946,7 +3946,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:dear-grapevine",
@@ -4019,7 +4019,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:dating-what-i-learned",
@@ -4096,7 +4096,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:dad-i-found",
@@ -4178,7 +4178,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:clubhouse-drunks-worlds-first",
@@ -4251,7 +4251,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:break-or-not-break",
@@ -4328,7 +4328,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:alcoholism-large",
@@ -4401,7 +4401,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-11:150-days",
@@ -4478,7 +4478,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "gv:2026-10:tornado",

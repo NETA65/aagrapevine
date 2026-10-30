@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-10-29T14:33:00Z",
- "attempted": "2026-10-29T14:33:00Z",
+ "updated": "2026-10-30T14:24:53Z",
+ "attempted": "2026-10-30T14:24:53Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -18,12 +18,12 @@
   "refreshed": 1,
   "failed": 0,
   "pending": 0,
-  "cached": 20,
+  "cached": 19,
   "texas": 2,
   "online_es": 0,
   "items": 2,
   "new": 0,
-  "requests": 41
+  "requests": 42
  },
  "items": [
   {
@@ -370,24 +370,6 @@
    "http": 200,
    "fails": 0
   },
-  "https://www.aalavina.org/get-involved/events/2026-10-22/taller-mensual-lv": {
-   "at": "2026-10-17T00:38:40Z",
-   "ev": {
-    "title": "Taller mensual LV",
-    "date_text": "Octubre 22, 2026",
-    "start": "2026-10-22",
-    "all_day": true,
-    "location_raw": "https://us06web.zoom.us/j/81595931777",
-    "lang": "es",
-    "location": "Zoom",
-    "online_url": "https://us06web.zoom.us/j/81595931777",
-    "platform": "Zoom",
-    "online": true,
-    "texas": false
-   },
-   "http": 200,
-   "fails": 0
-  },
   "https://www.aalavina.org/get-involved/events/2027-01-29/xlii-reunion-de-aa-zona-norte-de-texas-aa-un-camino-la-vida": {
    "at": "2026-10-17T00:38:46Z",
    "ev": {
@@ -466,7 +448,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2027-02-19/meeting-paradise-2027": {
-   "at": "2026-10-16T12:41:52Z",
+   "at": "2026-10-30T14:24:53Z",
    "ev": {
     "title": "Meeting in Paradise 2027",
     "date_text": "February 19, 2027 - February 21, 2027",
