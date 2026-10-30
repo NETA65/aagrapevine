@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-10-29T23:55:03Z",
- "attempted": "2026-10-29T23:55:03Z",
+ "updated": "2026-10-30T07:17:27Z",
+ "attempted": "2026-10-30T07:17:27Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-29",
-  "new": 0
+  "today": "2026-10-30",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-29",
+   "id": "quote:gv:2026-10-30",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 29",
+   "title": "Grapevine Daily Quote October 30",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-29",
-   "first_seen": "2026-10-29T06:51:19Z",
-   "last_seen": "2026-10-29T06:51:19Z",
+   "date": "2026-10-30",
+   "first_seen": "2026-10-30T07:17:27Z",
+   "last_seen": "2026-10-30T07:17:27Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "Emotional and instinctual satisfactions, I saw, were really the extra dividends of having love, offering love, and expressing a love appropriate to each relation of life.",
-    "attribution": "AA Co-Founder, Bill W., January 1958, “The Next Frontier: Emotional Sobriety”, The Language of the Heart",
+    "text": "When I look into the eyes of the person next to me and ask, ‘How are you?’, I will take the time to listen. I want to keep in mind that at any given time, each of us may need the same love and support as someone who is attending their first meeting.",
+    "attribution": "“Taking the Time to Listen,” Jacksonville Beach, Florida, December 1997, Voices of Long-Term Sobriety",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 29",
+    "date_label": "October 30",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84446"
+    "node": "node-84457"
    }
   },
   {
-   "id": "quote:lv:2026-10-29",
+   "id": "quote:lv:2026-10-30",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 29",
+   "title": "Cita Diaria con La Viña Octubre 30",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-29",
-   "first_seen": "2026-10-29T06:51:19Z",
-   "last_seen": "2026-10-29T06:51:19Z",
+   "date": "2026-10-30",
+   "first_seen": "2026-10-30T07:17:27Z",
+   "last_seen": "2026-10-30T07:17:27Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi desconocimiento.",
-    "attribution": "“Doctorado en alcoholismo”. GREENSBORO, CAROLINA DEL NORTE, FEBRERO DE 1987",
-    "source": "Lo mejor del Grapevine, Volumen III",
+    "text": "La verdad no es un arma para ser usada a la ligera ... Cuando me piden mi opinión o un consejo, hago lo mejor que puedo con la mayor gentileza, comprensión y tolerancia posibles.",
+    "attribution": "“La verdad”. CAYO HUESO, FLORIDA, AGOSTO DE 1973",
+    "source": "Lo mejor del Grapevine, Volumen I",
     "source_lang": "es",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "29 de octubre",
+    "date_label": "30 de octubre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84449"
+    "node": "node-84453"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-10-30",
+    "heading": "Grapevine Daily Quote October 30",
+    "text": "When I look into the eyes of the person next to me and ask, ‘How are you?’, I will take the time to listen. I want to keep in mind that at any given time, each of us may need the same love and support as someone who is attending their first meeting.",
+    "attribution": "“Taking the Time to Listen,” Jacksonville Beach, Florida, December 1997, Voices of Long-Term Sobriety",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-10-30T07:17:17Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-17T09:29:45Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-16",
-    "heading": "Grapevine Daily Quote October 16",
-    "text": "My sponsor ... gave me some good advice. ‘Take the words success and failure out of your vocabulary. Replace them with honesty and effort.’",
-    "attribution": "“Win Or Lose,” Escondido, California, August 2001, Emotional Sobriety: The Next Frontier",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-16T09:56:47Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-10-30",
+    "heading": "Cita Diaria con La Viña Octubre 30",
+    "text": "La verdad no es un arma para ser usada a la ligera ... Cuando me piden mi opinión o un consejo, hago lo mejor que puedo con la mayor gentileza, comprensión y tolerancia posibles.",
+    "attribution": "“La verdad”. CAYO HUESO, FLORIDA, AGOSTO DE 1973",
+    "source": "Lo mejor del Grapevine, Volumen I",
+    "source_lang": "es",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-10-30T07:17:27Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-17T09:29:56Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-16",
-    "heading": "Cita Diaria con La Viña Octubre 16",
-    "text": "No se ayuda a alguien tratando de impresionarlo; lo impresionas al tratar de ayudarlo.",
-    "attribution": "“Destilación del espíritu”. INDIANÁPOLIS, INDIANA, AGOSTO DE 1982. Del AA Grapevine",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-16T09:56:57Z"
    }
   ]
  }

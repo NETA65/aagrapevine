@@ -1,7 +1,57 @@
 {
- "updated": "2026-10-29T23:55:04Z",
+ "updated": "2026-10-30T07:17:34Z",
  "fixture": false,
  "items": [
+  {
+   "id": "pod:wo:8f2aa46749e6",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/b07a2e7a-b228-47e4-95dc-c9e0b700399d",
+   "title": "Grapevine Weekly Open AA Meeting, October 28, 2026 [Season 2, Episode 18]",
+   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 28, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Nate and Debbi, who share their experience…",
+   "lang": "en",
+   "date": "2026-10-30T04:15:00Z",
+   "first_seen": "2026-10-30T07:17:30Z",
+   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
+   "tags": [
+    "season-2"
+   ],
+   "category": "wo",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/b07a2e7a-b228-47e4-95dc-c9e0b700399d.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 79783354,
+    "duration_sec": 3324,
+    "season": 2,
+    "episode": 18,
+    "episode_type": "full",
+    "show": "wo",
+    "show_name": "Grapevine Weekly Open AA Meeting",
+    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
+    "player_url": "https://player.captivate.fm/episode/b07a2e7a-b228-47e4-95dc-c9e0b700399d",
+    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
+    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
+    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
+    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Weekly Open AA Meeting, October 28, 2026 [Season 2, Episode 18]",
+     "es": "Grapevine Weekly Open AA Meeting, 28 de octubre de 2026 [Temporada 2, Episodio 18]"
+    },
+    "summary": {
+     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 28, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Nate and Debbi, who share their experience…",
+     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 28 de octubre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Don da la bienvenida a los oradores Nate y Debbi, que comparten su experiencia …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-30T04:15:00Z"
+  },
   {
    "id": "ig:DfE5z2WDW0Z",
    "source": "instagram",
@@ -7811,7 +7861,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-16T04:32:58Z"
   },
   {
@@ -7861,7 +7911,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-16T04:15:00Z"
   },
   {
@@ -8743,50 +8793,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-11T15:00:15Z"
-  },
-  {
-   "id": "ig:DeW7iGUjEov",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeW7iGUjEov/",
-   "title": "Grapevine Rep",
-   "summary": "Grapevine Rep Resources Page Access and download free Grapevine materials to support your service. Find the GV News file, subscription forms, the Representative Handbook, the Grapevine Workbook, submission guidelines, the latest postcards, and other complimentary display tools, all in one place. Visit: www.aagrapevine.org/gvr-resources",
-   "lang": "en",
-   "date": "2026-10-11T15:00:13Z",
-   "first_seen": "2026-10-12T16:49:28Z",
-   "image": "/assets/cache/ig/DeW7iGUjEov.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeW7iGUjEov",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeW7iGUjEov.webp",
-    "embed_url": "https://www.instagram.com/p/DeW7iGUjEov/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeW7iGUjEov/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Rep",
-     "es": "Remuneración Grapevine"
-    },
-    "summary": {
-     "en": "Grapevine Rep Resources Page Access and download free Grapevine materials to support your service. Find the GV News file, subscription forms, the Representative Handbook, the Grapevine Workbook, submission guidelines, the latest postcards, and other complimentary display tools, all in one place. Visit: www.aagrapevine.org/gvr-resources",
-     "es": "Grapevine Rep Resources Page Access and download free Grapevine materials to support your service. Encuentre el archivo GV News, formularios de suscripción, el Manual de Representantes, el Grapevine Workbook, las directrices de presentación, las últimas postales y otras herramientas de visualización gratuitas, todo en un solo lugar. Visita: www.aagrapevine.org/gvr-resources"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-11T15:00:13Z"
   }
  ]
 }

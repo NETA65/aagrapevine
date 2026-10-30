@@ -1,19 +1,19 @@
 {
  "source": "podcasts",
- "updated": "2026-10-29T23:54:44Z",
- "attempted": "2026-10-29T23:54:44Z",
+ "updated": "2026-10-30T07:17:30Z",
+ "attempted": "2026-10-30T07:17:30Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 1,
   "removed": 0,
   "held": 0
  },
  "stats": {
-  "fetched": 305,
-  "new": 0,
-  "total": 305,
-  "active": 305,
+  "fetched": 306,
+  "new": 1,
+  "total": 306,
+  "active": 306,
   "gone": 0,
   "spanish": 0,
   "shows": {
@@ -24,20 +24,56 @@
    },
    "wo": {
     "ok": true,
-    "episodes": 38,
-    "latest": "2026-10-23T04:15:00Z"
+    "episodes": 39,
+    "latest": "2026-10-30T04:15:00Z"
    }
   },
   "missing_from_feed": 0,
   "gone_checks": 0,
   "discovery_checked": "2026-10-23T12:41:40Z",
   "discovered_feeds": [],
-  "seconds": 2.5,
+  "seconds": 2.7,
   "artwork": 3,
   "artwork_missing": 0,
   "artwork_removed": 0
  },
  "items": [
+  {
+   "id": "pod:wo:8f2aa46749e6",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/b07a2e7a-b228-47e4-95dc-c9e0b700399d",
+   "title": "Grapevine Weekly Open AA Meeting, October 28, 2026 [Season 2 Episode 18]",
+   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 28, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Nate and Debbi, who share their experience…",
+   "lang": "en",
+   "date": "2026-10-30T04:15:00Z",
+   "first_seen": "2026-10-30T07:17:30Z",
+   "last_seen": "2026-10-30T07:17:30Z",
+   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
+   "tags": [
+    "season-2"
+   ],
+   "category": "wo",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/b07a2e7a-b228-47e4-95dc-c9e0b700399d.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 79783354,
+    "duration_sec": 3324,
+    "season": 2,
+    "episode": 18,
+    "episode_type": "full",
+    "show": "wo",
+    "show_name": "Grapevine Weekly Open AA Meeting",
+    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
+    "player_url": "https://player.captivate.fm/episode/b07a2e7a-b228-47e4-95dc-c9e0b700399d",
+    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
+    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
+    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
+    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+   }
+  },
   {
    "id": "pod:gv:887fc754f895",
    "source": "podcast",
@@ -84,7 +120,7 @@
    "lang": "en",
    "date": "2026-10-23T04:15:00Z",
    "first_seen": "2026-10-23T05:03:43Z",
-   "last_seen": "2026-10-23T05:03:43Z",
+   "last_seen": "2026-10-30T07:17:30Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -2458,7 +2494,7 @@
    "title": "Grapevine Weekly Open AA Meeting, March 4, 2026 [Season 1, Episode 5]",
    "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on March 4, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting will be recorded and distributed as a podcast. This week Julie and Robert share their experience, strength and hope as they describe their…",
    "lang": "en",
-   "date": "2026-03-06T04:15:00Z",
+   "date": "2026-03-06T05:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
    "last_seen": "2026-10-29T14:27:23Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
@@ -2530,7 +2566,7 @@
    "title": "Grapevine Weekly Open AA Meeting, February 25, 2026 [Season 1, Episode 4]",
    "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on February 25, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting will be recorded and distributed as a podcast. This week Liz and Scott share their experience, strength and hope as they describe their…",
    "lang": "en",
-   "date": "2026-02-27T04:15:00Z",
+   "date": "2026-02-27T05:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
    "last_seen": "2026-10-29T14:27:23Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
@@ -2602,7 +2638,7 @@
    "title": "Grapevine Weekly Open AA Meeting, February 18, 2026 [Season 1, Episode 3]",
    "summary": "In this podcast from the AA Grapevine, you'll hear a recording of Grapevine's open AA meeting, held on February 18, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting will be recorded and distributed as a podcast. This week Becca and Matt share their experience, strength and hope as they describe…",
    "lang": "en",
-   "date": "2026-02-20T04:15:00Z",
+   "date": "2026-02-20T05:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
    "last_seen": "2026-10-29T14:27:23Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
@@ -2674,7 +2710,7 @@
    "title": "Grapevine Weekly Open AA Meeting, February 11, 2026 [Season 1, Episode 2]",
    "summary": "In this podcast from the AA Grapevine, you'll hear a recording of Grapevine's open AA meeting, held on February 11, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting will be recorded and distributed as a podcast. This week Kelley and Jon share their experience, strength and hope as they describe…",
    "lang": "en",
-   "date": "2026-02-13T04:15:00Z",
+   "date": "2026-02-13T05:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
    "last_seen": "2026-10-29T14:27:23Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
@@ -2746,7 +2782,7 @@
    "title": "Introducing The Grapevine Open AA Meeting [Season 1, Episode 1]",
    "summary": "In this new podcast from the AA Grapevine, you'll hear a recording of Grapevine's first open AA meeting, held on February 4, 2026. We will meet every Wednesday at Noon Eastern and hope that you will join us. Each meeting will be recorded and distributed as a podcast. This week Vera and Anthony share their experience, strength and hope as they describe their recovery from alcoholism. While we…",
    "lang": "en",
-   "date": "2026-02-06T04:15:00Z",
+   "date": "2026-02-06T05:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
    "last_seen": "2026-10-29T14:27:23Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
@@ -11048,7 +11084,7 @@
    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-   "episodes": 38,
+   "episodes": 39,
    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
   }
  ],
