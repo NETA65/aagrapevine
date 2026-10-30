@@ -1,7 +1,7 @@
 {
  "source": "podcasts",
- "updated": "2026-10-30T14:19:13Z",
- "attempted": "2026-10-30T14:19:13Z",
+ "updated": "2026-10-30T17:58:28Z",
+ "attempted": "2026-10-30T17:58:28Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -32,7 +32,7 @@
   "gone_checks": 0,
   "discovery_checked": "2026-10-30T14:19:13Z",
   "discovered_feeds": [],
-  "seconds": 42.3,
+  "seconds": 2.4,
   "artwork": 3,
   "artwork_missing": 0,
   "artwork_removed": 0
@@ -408,7 +408,7 @@
    "lang": "en",
    "date": "2026-09-25T04:15:00Z",
    "first_seen": "2026-09-25T07:13:24Z",
-   "last_seen": "2026-10-23T16:59:35Z",
+   "last_seen": "2026-10-30T17:58:28Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
