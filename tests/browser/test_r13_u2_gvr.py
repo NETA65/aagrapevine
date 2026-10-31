@@ -194,7 +194,9 @@ class VideosBesideQuestion(unittest.TestCase):
         errors: list[str] = []
         try:
             page, before = self.ideas(ctx, "en", errors)
-            page.locator("#ideas .read-dyk .read-dyk-opt").first.click()
+            # answer what the day's question offers: a choice (quiz, true or false) or, for a fill-in-the-blank (no
+            # choices: the day's first question changes with the data — 2026-10-31's was one), "Show the answer"
+            page.locator("#ideas .read-dyk .read-dyk-opt:visible, #ideas .read-dyk p[x-show*='fill']:visible > button").first.click()
             page.wait_for_selector("#ideas .read-dyk .read-dyk-fb", state="visible", timeout=5000)
             page.wait_for_timeout(200)
             r = page.evaluate(IDEAS)
