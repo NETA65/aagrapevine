@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-10-30T14:24:53Z",
- "attempted": "2026-10-30T14:24:53Z",
+ "updated": "2026-10-31T13:49:28Z",
+ "attempted": "2026-10-31T13:49:28Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,15 +15,15 @@
   "upcoming_urls": 17,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 1,
+  "refreshed": 2,
   "failed": 0,
   "pending": 0,
-  "cached": 19,
+  "cached": 17,
   "texas": 2,
   "online_es": 0,
   "items": 2,
   "new": 0,
-  "requests": 42
+  "requests": 46
  },
  "items": [
   {
@@ -105,47 +105,6 @@
  ],
  "first_harvest": "2026-09-23T16:43:55Z",
  "cache": {
-  "https://www.aagrapevine.org/get-involved/events/2026-10-23/38th-northeast-woman-woman-conference": {
-   "at": "2026-10-23T12:47:12Z",
-   "ev": {
-    "title": "38th Northeast Woman to Woman Conference",
-    "date_text": "October 23, 2026 - October 25, 2026",
-    "start": "2026-10-23",
-    "end": "2026-10-25",
-    "all_day": true,
-    "location_raw": "Wilmington, Delaware",
-    "website": "https://newoman2womandeleware.regfox.com/38-th-annual-northeast-woman-to-woman-conference-2026",
-    "lang": "en",
-    "location": "Wilmington, Delaware",
-    "city": "Wilmington",
-    "state": "DE",
-    "country": "USA",
-    "online": false,
-    "texas": false
-   },
-   "http": 200,
-   "fails": 0
-  },
-  "https://www.aalavina.org/get-involved/events/2026-10-23/24-convencion-hispana-del-estado-de-wisconsin": {
-   "at": "2026-10-23T12:47:18Z",
-   "ev": {
-    "title": "24 Convencion Hispana del Estado de Wisconsin",
-    "date_text": "Octubre 23, 2026 - Octubre 25, 2026",
-    "start": "2026-10-23",
-    "end": "2026-10-25",
-    "all_day": true,
-    "location_raw": "6362 South 13th Street, Oak Creek, WI 53154",
-    "lang": "es",
-    "location": "6362 South 13th Street, Oak Creek, WI 53154",
-    "city": "Oak Creek",
-    "state": "WI",
-    "country": "USA",
-    "online": false,
-    "texas": false
-   },
-   "http": 200,
-   "fails": 0
-  },
   "https://www.aalavina.org/get-involved/events/2026-10-30/iii-convencion-hispana-de-aa-del-estado-de-alabama": {
    "at": "2026-10-23T12:47:23Z",
    "ev": {
@@ -371,7 +330,7 @@
    "fails": 0
   },
   "https://www.aalavina.org/get-involved/events/2027-01-29/xlii-reunion-de-aa-zona-norte-de-texas-aa-un-camino-la-vida": {
-   "at": "2026-10-17T00:38:46Z",
+   "at": "2026-10-31T13:49:23Z",
    "ev": {
     "title": "XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )",
     "date_text": "Enero 29, 2027 - Enero 31, 2027",
@@ -388,7 +347,7 @@
    "fails": 0
   },
   "https://www.aalavina.org/get-involved/events/2027-05-28/xxiv-encuentro-hispano-de-aa-del-estado-de-kansas-sede-topeka": {
-   "at": "2026-10-17T00:38:52Z",
+   "at": "2026-10-31T13:49:28Z",
    "ev": {
     "title": "XXIV Encuentro Hispano de AA del estado de Kansas sede Topeka",
     "date_text": "Mayo 28, 2027 - Mayo 30, 2027",

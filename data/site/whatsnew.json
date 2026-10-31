@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-31T11:54:15Z",
+ "updated": "2026-10-31T13:52:10Z",
  "fixture": false,
  "items": [
   {
@@ -60,6 +60,182 @@
    "machine": [],
    "is_new": true,
    "wn_date": "2026-10-31T12:00:00Z"
+  },
+  {
+   "id": "ig:DfKDZm5F0bN",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfKDZm5F0bN/",
+   "title": "“Todos sabemos de quién es el inventario que hacemos en AA, ¿verdad?”.",
+   "summary": "“Todos sabemos de quién es el inventario que hacemos en AA, ¿verdad?”. \"“Décima Tradición” NUEVA YORK, NUEVA YORK, MAYO DE 1971 De Lo mejor del Grapevine, Volumen I\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-31T11:30:15Z",
+   "first_seen": "2026-10-31T13:44:26Z",
+   "image": "/assets/cache/ig/DfKDZm5F0bN.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfKDZm5F0bN",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfKDZm5F0bN.webp",
+    "embed_url": "https://www.instagram.com/p/DfKDZm5F0bN/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfKDZm5F0bN/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We all know who AA inventory is, right?”",
+     "es": "“Todos sabemos de quién es el inventario que hacemos en AA, ¿verdad?”."
+    },
+    "summary": {
+     "en": "“We all know who AA inventory is, right?” \"Décima Tradition\" NEW YORK, NEW YORK, MAY 1971 Best of the Grapevine, Volume I\" Daily Quote in www.aalavina.org",
+     "es": "“Todos sabemos de quién es el inventario que hacemos en AA, ¿verdad?”. \"“Décima Tradición” NUEVA YORK, NUEVA YORK, MAYO DE 1971 De Lo mejor del Grapevine, Volumen I\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-31T11:30:15Z"
+  },
+  {
+   "id": "ig:DfKDZlSl-zh",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfKDZlSl-zh/",
+   "title": "“Every recovery, though it may go unnoticed, improves the world in some way.”",
+   "summary": "“Every recovery, though it may go unnoticed, improves the world in some way.” “Why I Keep Coming Back,” Toledo, Ohio, May 2001, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-31T11:30:14Z",
+   "first_seen": "2026-10-31T13:44:26Z",
+   "image": "/assets/cache/ig/DfKDZlSl-zh.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfKDZlSl-zh",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfKDZlSl-zh.webp",
+    "embed_url": "https://www.instagram.com/p/DfKDZlSl-zh/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfKDZlSl-zh/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Every recovery, though it may go unnoticed, improves the world in some way.”",
+     "es": "“Cada recuperación, aunque puede pasar desapercibida, mejora el mundo de alguna manera”."
+    },
+    "summary": {
+     "en": "“Every recovery, though it may go unnoticed, improves the world in some way.” “Why I Keep Coming Back,” Toledo, Ohio, May 2001, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“Cada recuperación, aunque puede pasar desapercibida, mejora el mundo de alguna manera”. “Por qué sigo regresando”, Toledo, Ohio, mayo de 2001, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-31T11:30:14Z"
+  },
+  {
+   "id": "ig:DfI2-iJu3-8",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfI2-iJu3-8/",
+   "title": "Antonio L. del grupo: “Santa Cruz” festejó su primer aniversario en A.A.",
+   "summary": "Antonio L. del grupo: “Santa Cruz” festejó su primer aniversario en A.A. dando testimonio de que Alcohólicos Anónimos sí funciona. Santa Cruz, CA.",
+   "lang": "es",
+   "date": "2026-10-31T00:22:39Z",
+   "first_seen": "2026-10-31T13:44:26Z",
+   "image": "/assets/cache/ig/DfI2-iJu3-8.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfI2-iJu3-8",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfI2-iJu3-8.webp",
+    "embed_url": "https://www.instagram.com/p/DfI2-iJu3-8/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfI2-iJu3-8/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Antonio L. of the group: “Santa Cruz” celebrated its first anniversary in A.A.",
+     "es": "Antonio L. del grupo: “Santa Cruz” festejó su primer aniversario en A.A."
+    },
+    "summary": {
+     "en": "Antonio L. of the group: “Santa Cruz” celebrated his first anniversary in A.A. testifying that Alcoholics Anonymous does work. Holy Cross, CA.",
+     "es": "Antonio L. del grupo: “Santa Cruz” festejó su primer aniversario en A.A. dando testimonio de que Alcohólicos Anónimos sí funciona. Santa Cruz, CA."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-31T00:22:39Z"
+  },
+  {
+   "id": "ig:DfI20rGOTpu",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfI20rGOTpu/",
+   "title": "Este fin de semana empieza la II Convención Hispana de Arkansas de AA, organizada por el…",
+   "summary": "Este fin de semana empieza la II Convención Hispana de Arkansas de AA, organizada por el Distrito 13 en Little Rock Arkansas.",
+   "lang": "es",
+   "date": "2026-10-31T00:21:32Z",
+   "first_seen": "2026-10-31T13:44:26Z",
+   "image": "/assets/cache/ig/DfI20rGOTpu.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfI20rGOTpu",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfI20rGOTpu.webp",
+    "embed_url": "https://www.instagram.com/p/DfI20rGOTpu/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfI20rGOTpu/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "This weekend begins the II AA Arkansas Hispanic Convention, organized by the …",
+     "es": "Este fin de semana empieza la II Convención Hispana de Arkansas de AA, organizada por el…"
+    },
+    "summary": {
+     "en": "Este fin de semana empieza la II Convención Hispana de Arkansas de AA, organizada por el Distrito 13 en Little Rock Arkansas.",
+     "es": "Este fin de semana empieza la II Convención Hispana de Arkansas de AA, organizada por el Distrito 13 en Little Rock Arkansas."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-10-31T00:21:32Z"
   },
   {
    "id": "ig:DfHxaWCgr1P",
@@ -262,7 +438,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 31,
+    "views": 113,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1442,7 +1618,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 212,
+    "views": 225,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2068,7 +2244,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 267,
+    "views": 275,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2737,7 +2913,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 199,
+    "views": 203,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3007,7 +3183,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 300,
+    "views": 301,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8210,7 +8386,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 292,
+    "views": 295,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8607,200 +8783,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-14T12:00:14Z"
-  },
-  {
-   "id": "pdf:34cb24c28897",
-   "source": "crawl",
-   "kind": "pdf",
-   "url": "https://www.aalavina.org/sites/default/files/2026-10/La-Vina-busca-voluntarios-EAB-2027.pdf",
-   "title": "Junta Asesora Editorial de La Viña 2027",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-10-14",
-   "first_seen": "2026-10-15T12:54:04Z",
-   "image": "/assets/cache/pdf/34cb24c2889778ea.webp",
-   "tags": [],
-   "category": "news",
-   "status": "ok",
-   "extra": {
-    "host": "www.aalavina.org",
-    "file_url": "https://www.aalavina.org/sites/default/files/2026-10/La-Vina-busca-voluntarios-EAB-2027.pdf",
-    "filename": "La-Vina-busca-voluntarios-EAB-2027.pdf",
-    "size_bytes": 306390,
-    "pages": 3,
-    "thumb": "/assets/cache/pdf/34cb24c2889778ea.webp",
-    "referrers": [
-     {
-      "url": "https://www.aalavina.org/actualizaciones-importantes",
-      "title": "Actualizaciones Importantes"
-     }
-    ],
-    "upload_month": "2026-10",
-    "link_texts": [
-     "Junta Asesora Editorial de La Viña 2027"
-    ],
-    "event_date": null,
-    "doc_lang": "es",
-    "multilingual": null,
-    "section": "ACTUALIZACIONES IMPORTANTES",
-    "external": false,
-    "orphan": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Editorial Advisory Board of La Viña 2027",
-     "es": "Junta Asesora Editorial de La Viña 2027"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-14T12:00:00Z"
-  },
-  {
-   "id": "pdf:d528fc1822c7",
-   "source": "crawl",
-   "kind": "pdf",
-   "url": "https://www.aalavina.org/sites/default/files/2026-10/2026-10-Junta_Asesora_Editorial-LV_.pdf",
-   "title": "2026-10 Junta Asesora Editorial-LV",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-10-14",
-   "first_seen": "2026-10-15T12:54:33Z",
-   "image": "/assets/cache/pdf/d528fc1822c713ba.webp",
-   "tags": [],
-   "category": "other",
-   "status": "ok",
-   "extra": {
-    "host": "www.aalavina.org",
-    "file_url": "https://www.aalavina.org/sites/default/files/2026-10/2026-10-Junta_Asesora_Editorial-LV_.pdf",
-    "filename": "2026-10-Junta_Asesora_Editorial-LV_.pdf",
-    "size_bytes": 948958,
-    "pages": 3,
-    "thumb": "/assets/cache/pdf/d528fc1822c713ba.webp",
-    "referrers": [
-     {
-      "url": "https://www.aalavina.org/servicio",
-      "title": "Servicio"
-     }
-    ],
-    "upload_month": "2026-10",
-    "link_texts": [],
-    "event_date": null,
-    "doc_lang": "es",
-    "multilingual": null,
-    "section": "Servicio",
-    "external": false,
-    "orphan": false
-   },
-   "i18n": {
-    "title": {
-     "en": "2026-10 Editorial Advisory Board-LV",
-     "es": "2026-10 Junta Asesora Editorial-LV"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-14T12:00:00Z"
-  },
-  {
-   "id": "ig:DeeR4rdDVpY",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeeR4rdDVpY/",
-   "title": "“Those severe growing pains which invariably follow any radical departure from AA…",
-   "summary": "“Those severe growing pains which invariably follow any radical departure from AA Tradition can be absolutely relied upon to bring an erring group back into line. An AA group need not be coerced by any human government over and above its own members. Their own experience, plus AA opinion in surrounding groups, plus God’s prompting in their group conscience would be sufficient.” AA Co-Founder…",
-   "lang": "en",
-   "date": "2026-10-14T11:30:14Z",
-   "first_seen": "2026-10-14T12:57:06Z",
-   "image": "/assets/cache/ig/DeeR4rdDVpY.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeeR4rdDVpY",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeeR4rdDVpY.webp",
-    "embed_url": "https://www.instagram.com/p/DeeR4rdDVpY/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeeR4rdDVpY/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Those severe growing pains which invariably follow any radical departure from AA…",
-     "es": "“Esos graves dolores de crecimiento que invariablemente siguen cualquier salida radical de AA …"
-    },
-    "summary": {
-     "en": "“Those severe growing pains which invariably follow any radical departure from AA Tradition can be absolutely relied upon to bring an erring group back into line. An AA group need not be coerced by any human government over and above its own members. Their own experience, plus AA opinion in surrounding groups, plus God’s prompting in their group conscience would be sufficient.” AA Co-Founder…",
-     "es": "“Los dolores de crecimiento severos que invariablemente siguen cualquier salida radical de la Tradición AA pueden ser absolutamente confiados para traer a un grupo errante de vuelta a la línea. Un grupo AA no necesita ser coaccionado por ningún gobierno humano por encima de sus propios miembros. Su propia experiencia, además de la opinión AA en los grupos circundantes, más el impulso de Dios en su conciencia de grupo sería suficiente.” AA cofundador …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-14T11:30:14Z"
-  },
-  {
-   "id": "ig:DeeR4sPDeyU",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeeR4sPDeyU/",
-   "title": "“Alimenta tu fe y no tus dudas”.",
-   "summary": "“Alimenta tu fe y no tus dudas”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-14T11:30:14Z",
-   "first_seen": "2026-10-14T12:57:06Z",
-   "image": "/assets/cache/ig/DeeR4sPDeyU.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeeR4sPDeyU",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeeR4sPDeyU.webp",
-    "embed_url": "https://www.instagram.com/p/DeeR4sPDeyU/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeeR4sPDeyU/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Feed your faith and not your doubts.”",
-     "es": "“Alimenta tu fe y no tus dudas”."
-    },
-    "summary": {
-     "en": "“Feed your faith and not your doubts.” Indianápolis, Indiana, August 1982 AA Grapevine Daily Quote in www.aalavina.org",
-     "es": "“Alimenta tu fe y no tus dudas”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-14T11:30:14Z"
   }
  ]
 }

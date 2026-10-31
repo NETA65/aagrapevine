@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-30T14:20:42Z",
+ "updated": "2026-10-31T13:44:26Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16957,
-   "posts": 3977,
+   "followers": 16959,
+   "posts": 3978,
    "owner_id": "48108439509",
-   "checked": "2026-10-30T14:20:22Z",
+   "checked": "2026-10-31T13:44:08Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,186 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2422,
-   "posts": 2997,
+   "followers": 2425,
+   "posts": 3000,
    "owner_id": "48275839129",
-   "checked": "2026-10-30T14:20:24Z",
+   "checked": "2026-10-31T13:44:11Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfKDZm5F0bN",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfKDZm5F0bN/",
+   "title": "“Todos sabemos de quién es el inventario que hacemos en AA, ¿verdad?”.",
+   "summary": "“Todos sabemos de quién es el inventario que hacemos en AA, ¿verdad?”. \"“Décima Tradición” NUEVA YORK, NUEVA YORK, MAYO DE 1971 De Lo mejor del Grapevine, Volumen I\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-10-31T11:30:15Z",
+   "first_seen": "2026-10-31T13:44:26Z",
+   "image": "/assets/cache/ig/DfKDZm5F0bN.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfKDZm5F0bN",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfKDZm5F0bN.webp",
+    "embed_url": "https://www.instagram.com/p/DfKDZm5F0bN/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfKDZm5F0bN/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We all know who AA inventory is, right?”",
+     "es": "“Todos sabemos de quién es el inventario que hacemos en AA, ¿verdad?”."
+    },
+    "summary": {
+     "en": "“We all know who AA inventory is, right?” \"Décima Tradition\" NEW YORK, NEW YORK, MAY 1971 Best of the Grapevine, Volume I\" Daily Quote in www.aalavina.org",
+     "es": "“Todos sabemos de quién es el inventario que hacemos en AA, ¿verdad?”. \"“Décima Tradición” NUEVA YORK, NUEVA YORK, MAYO DE 1971 De Lo mejor del Grapevine, Volumen I\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfKDZlSl-zh",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfKDZlSl-zh/",
+   "title": "“Every recovery, though it may go unnoticed, improves the world in some way.”",
+   "summary": "“Every recovery, though it may go unnoticed, improves the world in some way.” “Why I Keep Coming Back,” Toledo, Ohio, May 2001, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-10-31T11:30:14Z",
+   "first_seen": "2026-10-31T13:44:26Z",
+   "image": "/assets/cache/ig/DfKDZlSl-zh.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfKDZlSl-zh",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfKDZlSl-zh.webp",
+    "embed_url": "https://www.instagram.com/p/DfKDZlSl-zh/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfKDZlSl-zh/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Every recovery, though it may go unnoticed, improves the world in some way.”",
+     "es": "“Cada recuperación, aunque puede pasar desapercibida, mejora el mundo de alguna manera”."
+    },
+    "summary": {
+     "en": "“Every recovery, though it may go unnoticed, improves the world in some way.” “Why I Keep Coming Back,” Toledo, Ohio, May 2001, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
+     "es": "“Cada recuperación, aunque puede pasar desapercibida, mejora el mundo de alguna manera”. “Por qué sigo regresando”, Toledo, Ohio, mayo de 2001, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfI2-iJu3-8",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfI2-iJu3-8/",
+   "title": "Antonio L. del grupo: “Santa Cruz” festejó su primer aniversario en A.A.",
+   "summary": "Antonio L. del grupo: “Santa Cruz” festejó su primer aniversario en A.A. dando testimonio de que Alcohólicos Anónimos sí funciona. Santa Cruz, CA.",
+   "lang": "es",
+   "date": "2026-10-31T00:22:39Z",
+   "first_seen": "2026-10-31T13:44:26Z",
+   "image": "/assets/cache/ig/DfI2-iJu3-8.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfI2-iJu3-8",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfI2-iJu3-8.webp",
+    "embed_url": "https://www.instagram.com/p/DfI2-iJu3-8/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfI2-iJu3-8/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Antonio L. of the group: “Santa Cruz” celebrated its first anniversary in A.A.",
+     "es": "Antonio L. del grupo: “Santa Cruz” festejó su primer aniversario en A.A."
+    },
+    "summary": {
+     "en": "Antonio L. of the group: “Santa Cruz” celebrated his first anniversary in A.A. testifying that Alcoholics Anonymous does work. Holy Cross, CA.",
+     "es": "Antonio L. del grupo: “Santa Cruz” festejó su primer aniversario en A.A. dando testimonio de que Alcohólicos Anónimos sí funciona. Santa Cruz, CA."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfI20rGOTpu",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfI20rGOTpu/",
+   "title": "Este fin de semana empieza la II Convención Hispana de Arkansas de AA, organizada por el…",
+   "summary": "Este fin de semana empieza la II Convención Hispana de Arkansas de AA, organizada por el Distrito 13 en Little Rock Arkansas.",
+   "lang": "es",
+   "date": "2026-10-31T00:21:32Z",
+   "first_seen": "2026-10-31T13:44:26Z",
+   "image": "/assets/cache/ig/DfI20rGOTpu.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfI20rGOTpu",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfI20rGOTpu.webp",
+    "embed_url": "https://www.instagram.com/p/DfI20rGOTpu/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfI20rGOTpu/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "This weekend begins the II AA Arkansas Hispanic Convention, organized by the …",
+     "es": "Este fin de semana empieza la II Convención Hispana de Arkansas de AA, organizada por el…"
+    },
+    "summary": {
+     "en": "Este fin de semana empieza la II Convención Hispana de Arkansas de AA, organizada por el Distrito 13 en Little Rock Arkansas.",
+     "es": "Este fin de semana empieza la II Convención Hispana de Arkansas de AA, organizada por el Distrito 13 en Little Rock Arkansas."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfHxaWCgr1P",
    "source": "instagram",
