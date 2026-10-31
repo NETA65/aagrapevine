@@ -629,7 +629,8 @@
     if (!h) announceUpdate();
   }).observe(root, { attributes: true, attributeFilter: ["class"] });
 
-  /* Something else has the visitor's attention: the language banner, the podcast player, the
+  /* Something else has the visitor's attention: the language banner (shown on 3 pages at most when left
+     alone, partials/lang-banner.njk — so the notice gets its turn after it), the podcast player, the
      read-aloud bar, the top notice, the story recorder recording (recorder.js), a new version waiting,
      the Aa panel, the phone menu (app.js locks
      the page's scrolling while it is open), a dialog or a photo, or focus in a text field. */

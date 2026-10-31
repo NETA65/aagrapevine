@@ -158,6 +158,9 @@ class Worker(unittest.TestCase):
     def test_navigations_are_network_first_and_revalidated(self):
         self.assertIn('fetch(new Request(event.request, { cache: "no-cache" }))', self.core)
         self.assertRegex(self.core, r"const NAV_TIMEOUT = 4000;")
+        # no saved copy and no answer at all by then: the offline page (a connection that hangs)
+        self.assertRegex(self.core, r"const NAV_GIVEUP = 15000;")
+        self.assertIn("setTimeout(resolve, NAV_GIVEUP - NAV_TIMEOUT, null)", self.core)
 
     def test_update_waits_for_the_visitor(self):
         install = self.core[self.core.index('addEventListener("install"'):self.core.index('addEventListener("activate"')]
@@ -187,6 +190,16 @@ class Worker(unittest.TestCase):
         # install-core.js is in the shell but optional: without it pwa.js links to the steps (/offline/#steps)
         self.assertIn("a(`assets/js/install-core.js?v=${v}`)", self.tpl)
         self.assertNotIn("install-core", re.search(r"const required = \[(.*?)\];", self.tpl, re.S).group(1))
+
+    def test_the_shell_keeps_every_latin_font(self):
+        # the normal AND italic faces main.css loads (a saved page's italics offline); the latin-ext files are left out
+        # on purpose — unicode-range fetches them only for rare letters, and every Spanish one is in latin
+        css = read("src", "assets", "css", "main.css")
+        fonts = sorted(set(re.findall(r'url\("\.\./fonts/([a-z0-9-]+\.woff2)"\)', css)) - {f for f in re.findall(r"[a-z0-9-]+-latin-ext-[a-z0-9-]+\.woff2", css)})
+        self.assertEqual(len(fonts), 4, fonts)
+        shell = re.search(r"const shell = \[(.*?)\];", self.tpl, re.S).group(1)
+        for f in fonts:
+            self.assertIn(f'a("assets/fonts/{f}")', shell)
 
 
 if __name__ == "__main__":

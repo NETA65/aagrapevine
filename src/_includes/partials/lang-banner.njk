@@ -5,7 +5,11 @@
     crawlers never see it. Dismissing it — or switching language any other
     way — is remembered in localStorage ("gv-lang-banner"); a switch the page
     stopped (the story recorder's "Leave this page?" answered "stay": the click's
-    defaultPrevented) is not. The copy is in the
+    defaultPrevented) is not. Left alone, it is offered on SHOWS_CAP pages and then
+    steps aside for good (the count: localStorage "gv-lang-banner-n"): while it is up,
+    the "Install this site as an app" notice waits (pwa.js busy()), and a visitor whose
+    phone is set to the other language would otherwise never be offered the app.
+    The copy is in the
     SUGGESTED language, so it reads naturally to the person it is meant for.
     Sits ABOVE the podcast mini-player: media.js sets --player-h (px) on <html>
     while the player is visible (see .cm-lang-banner in areas/community.css).
@@ -34,7 +38,7 @@
   // Registered inline (this partial is on every page; community.js is not).
   document.addEventListener("alpine:init", function () {
     window.Alpine.data("langBanner", function (pageLang) {
-      var KEY = "gv-lang-banner";
+      var KEY = "gv-lang-banner", SHOWS = "gv-lang-banner-n", SHOWS_CAP = 3;
       function store(v) { try { localStorage.setItem(KEY, v); } catch (e) { /* storage blocked */ } }
       return {
         show: false,
@@ -53,9 +57,12 @@
               root.style.removeProperty("--banner-h");
             }
           });
+          var shown = 0;
           try {
             if (localStorage.getItem(KEY)) return;          // dismissed or switched before
+            shown = parseInt(localStorage.getItem(SHOWS), 10) || 0;
           } catch (e) { return; }                          // can't remember a dismissal → don't nag
+          if (shown >= SHOWS_CAP) return;                  // offered on SHOWS_CAP pages and left alone: it steps aside
           if (navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview|facebookexternalhit/i.test(navigator.userAgent || "")) return;
           var prefs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ""];
           var first = String(prefs[0] || "").toLowerCase().slice(0, 2);
@@ -65,7 +72,10 @@
           document.addEventListener("click", function (e) {
             if (!e.defaultPrevented && e.target.closest && e.target.closest("[data-lang-switch]")) store("switched");
           });
-          if (suggest) setTimeout(function () { self.show = true; }, 1200);
+          if (suggest) setTimeout(function () {
+            self.show = true;
+            try { localStorage.setItem(SHOWS, String(shown + 1)); } catch (e) { /* storage blocked */ }
+          }, 1200);
         },
         dismiss: function () { this.show = false; store("dismissed"); },
       };

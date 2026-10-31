@@ -1,7 +1,12 @@
 // /manifest.webmanifest (English) and /es/manifest.webmanifest (Spanish) — what makes the site
 // installable ("Install app" / "Add to Home Screen"). base.njk links the one of the page's language.
 // Both describe the SAME app (same id and scope: the site's base path), so it is installed once;
-// the Spanish one opens on /es/ and has Spanish shortcuts.
+// the Spanish one opens on /es/ and has Spanish shortcuts. Because the id is shared, Chrome, Edge and
+// Samsung Internet take the installed app's start page and shortcuts from the manifest of the last page
+// of the site they checked (Android: at most once a day, a page opened in the app) — a shared link to the
+// other language can switch the app's language. iPhones keep what they had when it was added. (Two ids
+// would break the apps already installed from /es/, and one start page for both would open every new
+// iPhone install from /es/ in English: Home Screen apps there don't share Safari's storage.)
 // Colours come from the design tokens (main.css): theme = --c-gv-strong (light), background =
 // --c-paper (light). Icons: src/assets/img/app-icon-*.png, drawn by scripts/dev/make_app_icons.py
 // ("any": rounded square; "maskable": full bleed with the mark inside the 80 % safe circle).

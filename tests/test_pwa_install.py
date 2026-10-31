@@ -106,6 +106,8 @@ class Strings(unittest.TestCase):
         "pwa.app.ios_1_27": ("Page Menu", "Menú de página"),
         "pwa.app.ios_2": ("Add to Home Screen", "Agregar a Inicio"),
         "pwa.app.ios_3": ("Open as Web App", "Abrir como app web"),
+        # (the menu's place in words, not a corner: Chrome can put the address bar, and the menu, at the bottom)
+        "pwa.app.android_1": ("at the right of the address bar", "a la derecha de la barra de direcciones"),
         "pwa.app.android_2": ("Install and create shortcut", "Instalar y crear acceso directo"),
         "pwa.app.android_3": ("Create shortcut", "Crear acceso directo"),
         "pwa.app.other_firefox": ("Add app to Home screen", "Agregar app a la pantalla de inicio"),
@@ -113,7 +115,7 @@ class Strings(unittest.TestCase):
 
     def test_every_key_in_both_languages(self):
         keys = app_keys()
-        self.assertEqual(len(keys), 74)
+        self.assertEqual(len(keys), 75)
         for key, v in keys.items():
             with self.subTest(key=key):
                 self.assertTrue((v.get("en") or "").strip())
@@ -656,6 +658,7 @@ UAS = [
     ["Snapchat iOS", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Mobile/15E148 Snapchat/12.72.0.39 (like Safari/8617.2.4.10.8, panda)", {}, "in-app", "", "Snapchat"],
     ["LinkedIn iOS", "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 {useragents: [LinkedInApp]/9.30.1753", {}, "in-app", "", "LinkedIn"],
     ["X iOS", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/602.3.12 (KHTML, like Gecko) Mobile/14D27 Twitter for iPhone", {}, "in-app", "", "X"],
+    ["X Android wv", "Mozilla/5.0 (Linux; Android 13; SM-A536U Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.0.0 Mobile Safari/537.36 TwitterAndroid", {}, "in-app", "", "X"],
     ["Pinterest iOS", "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [Pinterest/iOS]", {}, "in-app", "", "Pinterest"],
     ["LINE iOS", "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Safari Line/14.10.0", {}, "in-app", "", "LINE"],
     ["Generic iOS WKWebView", "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148", {}, "in-app", "", ""],

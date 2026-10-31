@@ -5,6 +5,8 @@ page in a Spanish-first browser, and the other way round), its script run in Nod
   * remembered — switching language (the banner's own link, or the header's language switch: [data-lang-switch])
                  is remembered in localStorage "gv-lang-banner" ("switched"), and so is closing it ("dismissed"):
                  the suggestion is not offered again
+  * left alone — offered on 3 pages, then it steps aside for good ("gv-lang-banner-n" counts them): while it is up,
+                 the install notice waits (pwa.js busy())
   * not taken  — a switch the page stopped is not a switch: the story recorder's "Leave this page?" (recorder.js
                  askLeave, a capture listener that calls preventDefault when the visitor chooses to stay) keeps
                  them on the page with an unsaved take — the suggestion stays (r10 nav:F7: it was remembered as
@@ -30,12 +32,14 @@ PARTIAL = ROOT / "src" / "_includes" / "partials" / "lang-banner.njk"
 # language switch and the banner's link; input.click: the link's @click, run as Alpine runs it (the component's data and
 # $event in scope). stay: the story recorder's leave question is answered "stay" (it stops the click: preventDefault).
 BANNER_JS = PAGE_JS + r"""
-function banner({ stay = false } = {}) {
+function banner({ stay = false, storage = null } = {}) {
+  const globals = { navigator: { language: "es-MX", languages: ["es-MX", "es", "en"] } };
+  if (storage) globals.localStorage = storage;                                   // one device's storage, page after page
   const p = page({ html: '<header><a id="switch" href="/aagrapevine/es/contribute/" data-lang-switch>ES</a></header>' +
                          '<div id="banner"><a id="cta" href="/aagrapevine/es/contribute/" data-lang-switch>Ver en español</a>' +
                          '<button type="button" id="close">x</button></div>',
                    url: "https://example.test/aagrapevine/contribute/",
-                   globals: { navigator: { language: "es-MX", languages: ["es-MX", "es", "en"] } } });
+                   globals });
   const made = {};
   p.win.Alpine = { data: (name, fn) => { made[name] = fn; } };
   vm.runInContext(input.script, p.win, { filename: "lang-banner.njk" });
@@ -65,6 +69,18 @@ for (const stay of [true, false]) {
   await p.tick(1300);
   c.dismiss();
   R.closed = { show: c.show, kept: kept() };
+}
+{
+  // left alone (neither switched nor closed), page after page on the same device
+  const m = new Map();
+  const storage = { getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => { m.set(k, String(v)); }, removeItem: (k) => { m.delete(k); } };
+  const views = [];
+  for (let i = 0; i < 5; i++) {
+    const { p, c } = banner({ storage });
+    await p.tick(1300);
+    views.push(c.show);
+  }
+  R.alone = { views, count: storage.getItem("gv-lang-banner-n"), kept: storage.getItem("gv-lang-banner") };
 }
 out(R);
 """
@@ -99,6 +115,11 @@ class Banner(unittest.TestCase):
 
     def test_closing_it_is_remembered(self):
         self.assertEqual(self.r["closed"], {"show": False, "kept": "dismissed"})
+
+    def test_left_alone_it_steps_aside_after_three_pages(self):
+        # while it is up the "Install this site as an app" notice waits (pwa.js busy()): a visitor whose phone is set
+        # to the other language and who never answers the banner would never be offered the app (2026-10-31)
+        self.assertEqual(self.r["alone"], {"views": [True, True, True, False, False], "count": "3", "kept": None})
 
 
 if __name__ == "__main__":

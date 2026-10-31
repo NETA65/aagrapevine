@@ -1823,6 +1823,7 @@ For a later move, follow
 | Run fails at "Publish to GitHub Pages" with *environment protection* | The `github-pages` environment only allows certain branches | **Settings → Environments → github-pages** → allow the `main` branch. |
 | The monthly e-mail did not arrive | Secrets missing, wrong app password, nothing new last month, or it is still waiting for the month's first full update (it goes out on the 1st from 7 AM Central once the site has updated — at the latest from noon on the 3rd) | Open the latest **Monthly e-mail digest** run: its summary says exactly which ("waiting for the data" means a later try sends it; "Digest send not confirmed" means a send was cut off: check the group). Gmail needs an **app password**. To send it now, run it with *Preview only* unticked (and **force** ticked if the month was marked as sent). |
 | Someone installed the site, but it opens in the browser (a small Chrome badge on its icon, or it opens in Safari) | It was added as a shortcut or a bookmark, not as the app | Send them `/offline/#steps`: on Android, remove the icon and choose **Install** (not "Create shortcut"); on iPhone, remove it and add it again with **Open as Web App** on. |
+| A member says the site won't install as an app on their phone | The link was opened inside another app (WhatsApp, Facebook …); an iPhone has no Install button (it is **Share** → **Add to Home Screen**); the phone blocks new icons (Xiaomi, Redmi, POCO: the browser's **Home screen shortcuts** permission); the app is on the phone already; or their phone is set to the other language and they never answered the "View in English / Ver en español" suggestion (the install notice waits for it — 3 pages at most) | Send them `/offline/#steps`: it opens the guide for their phone and browser, with these cases in its tips. Then the checklist in [Install the app, offline use and Data saver](#install-the-app-offline-use-and-data-saver) → *If it won't install*. |
 | A member's recording on *Share your story* is gone, or a take says **Not saved on this device yet** | Recorded in a private tab that was then closed (on an iPhone, also one left in the background long enough for iOS to clear it: the take then says "The browser removed this take from this device …" if the page had no copy of it); recorded in Safari and looked for in the Home Screen app (or the other way round), or in Facebook's or Instagram's own browser; Safari removed it after 7 days of using Safari without tapping anything on the site; or the device is out of room (the box under *Your takes* says so). Until mid-October 2026 a link from an iPhone's Private tab also lost it | Open the page where the take was made. Right after a good take, **Download the MP3** (iPhone: **Save to Files**) or send it: a copy outside the browser is the only one the browser can't remove. With **Not saved on this device yet**, stay on the page, delete takes you don't need or free up space, then **Try again**. Ask the member to open **Having trouble? Check this device** (at the bottom of the recorder) and send you the report (**Copy the report** or **Email it to the committee**). Details: [The story recorder](#the-story-recorder-share-your-story). |
 | *New since your last visit* never shows on What's New | A first visit on that device, a private tab, site data blocked or cleared (Safari may clear it after 7 days of using Safari without tapping anything on the site), or nothing new since the last visit | Nothing to fix: it is remembered per device and per browser. On an iPhone the Home Screen app and Safari each keep their own. |
 | A video starts without captions although **Video captions** is On (Aa panel) | YouTube decides in the end: some phones' players ignore the request, and a video may have no captions in the page's language | Use the video's own **CC** button (the steps are on the Accessibility page). |
@@ -1945,7 +1946,19 @@ visitor's own device; nothing is sent anywhere.
     WhatsApp opens a link either in the phone's browser (install right away) or in its own window; in its
     own window the page says "You're reading this inside WhatsApp" and shows the same steps.
 
-  The app is called **GV/LV 65**. It opens in its own window, in the language it was installed from, and
+  - **If it won't install**, ask three things: which phone, which browser, and was the link opened inside
+    another app (WhatsApp, Facebook …)? Inside another app: open it in the phone's browser first (the page
+    shows how). Tapped **Install** and no icon appeared: look in the phone's list of apps; on Xiaomi,
+    Redmi and POCO phones (and some others) the browser first needs the **Home screen shortcuts**
+    permission in the phone's settings (Xiaomi: under the browser's **Other permissions**). The browser's
+    menu offers to **open** the app instead of installing it: it is on the phone already. Still a small
+    Chrome logo after **Install**: keep it, it works too. The Android guides
+    on `/offline/#steps` say the same. And a phone set to the other language sees the "View in English /
+    Ver en español" suggestion first: the install notice waits until it is answered, or until it has been
+    shown on 3 pages.
+
+  The app is called **GV/LV 65**. It opens in its own window, in the language it was installed from (on
+  Android and computers, a shared link to the other language can switch it: see the manifest row below), and
   has shortcuts to Meetings, Monthly toolkit and GVR / RLV 101 (touch and hold the icon on Android). Once
   it is installed, the Aa menu says "The app is on this device" (where the browser can tell); inside the
   app the install links go away and *Saved pages & app* says "You're using the app" (the guides stay
@@ -2026,7 +2039,7 @@ that page is opened.
 
 | File | What it does |
 |---|---|
-| `src/pages/manifest.11ty.js` | `/manifest.webmanifest` and `/es/manifest.webmanifest`: name, icons, colours, shortcuts (Meetings, Monthly toolkit, GVR / RLV 101); both the same app (id and scope = the site's base path; the Spanish one opens on `/es/`), each naming both as `related_applications`, so Chrome on Android can tell a tab the app is installed |
+| `src/pages/manifest.11ty.js` | `/manifest.webmanifest` and `/es/manifest.webmanifest`: name, icons, colours, shortcuts (Meetings, Monthly toolkit, GVR / RLV 101); both the same app (id and scope = the site's base path; the Spanish one opens on `/es/`), each naming both as `related_applications`, so Chrome on Android can tell a tab the app is installed. With one id, Chrome, Edge and Samsung Internet take the installed app's start page and shortcuts from the manifest of the last page they checked (on Android at most once a day): a shared link to the other language can switch the app's language. iPhones keep the language they were added in. Kept on purpose — the header comment says why |
 | `src/pages/sw.11ty.js` + `src/_includes/pwa/sw-core.js` | `/sw.js`: the cache rules are in the header comment of `sw-core.js`; the pages "Save key pages" keeps are the `save` list in `sw.11ty.js` (Accessibility and GVR 101 join it automatically once those pages exist) |
 | `src/assets/js/pwa.js`, `src/assets/css/areas/pwa.css` | registration and updates, the "Offline & app" part of the Aa menu (with its install row), the notices (the install notice too), the live parts of `/offline/` (its hero, the saved pages, the install steps), and everything Data saver does |
 | `src/assets/js/install-core.js` | which phone and browser this is (from its user agent — Android tablets asking for desktop sites included), which guide and which Safari step fit it, the name of the app a page is open inside, and the install notice's rules (`RULES`: page views, 20 s, quiet days, limits). Pure functions, tested with real user agents by `tests/test_pwa_install.py` |
@@ -2044,6 +2057,22 @@ Every September (a new iOS) and after big Chrome releases:
 After such a change, check on real phones: Android Chrome (the notice's **Install** puts the app in the
 app drawer), a Samsung phone, an iPhone on the current iOS, and a `/offline/#steps` link tapped in a WhatsApp group
 (on both, whether it opens in the browser or in WhatsApp's own window).
+
+**If a release ever breaks pages for visitors.** A new worker waits until the visitor taps **Reload** in the
+"Updated" notice or closes every tab and the app, so a broken one can linger on phones. Fix the bug and, in
+the same commit:
+1. in `src/_includes/pwa/sw-core.js`, add `self.skipWaiting();` as the first line **inside** the existing
+   `self.addEventListener("install", …)` (not as a second install listener: the worker tests' pretend browser
+   keeps one listener per event, and 18 of them would fail). `activate` already calls `clients.claim()` and keeps
+   saved pages, the booth display's copy and the recorder's encoder, so the fixed worker takes over on the next
+   page visitors open, without a tap;
+2. turn round the two tests that guard the visitor's choice, or **Website update** won't publish: in
+   `tests/test_pwa.py` `test_update_waits_for_the_visitor`, `assertNotIn("skipWaiting", install)` →
+   `assertIn`; in `tests/test_pwa_worker.py` `test_install`, `assertFalse(self.r["skippedOnInstall"])` →
+   `assertTrue`.
+
+In the next release, take the line out and turn both tests back. Browsers check `/sw.js`, past their HTTP
+cache, whenever a page of the site is opened.
 
 The worker only handles GET requests to this site: it never stores anything from other sites (YouTube,
 podcast audio, aagrapevine.org, aalavina.org, Google Drive) and never touches forms. Caches: the app

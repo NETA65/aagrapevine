@@ -19,7 +19,9 @@
      is on, never beside a save: refreshSaved).
      The saved copy is used only when the network fails, answers with a server error, or takes more than 4 s —
      then the page is told (pwa.js shows "Slow connection — this is a saved copy"). A page that is not
-     saved → the offline page, in the language of the address. An address without its last slash
+     saved → the offline page, in the language of the address — also when the site has not even started
+     to answer after 15 s (NAV_GIVEUP: a connection that hangs); the page, if it comes later, is kept for
+     "Try again". An address without its last slash
      ("…/es", "…/es/meetings": typed, or printed on a poster) is the same page as with it. GitHub
      Pages' "page not found" (404) is passed through and never kept.
      The offline pages (in the app shell, the stand-in above) carry the daily content — the "Join by
@@ -79,6 +81,11 @@ const CACHE = {
 };
 const LIMIT = { static: 120, pages: 80, img: 200, data: 24 };
 const NAV_TIMEOUT = 4000;
+// …and with no saved copy, how long a page may take to START answering before the offline page is shown instead (a
+// connection that hangs — signal bars but no data — would otherwise leave the screen blank for half a minute or
+// more). fetch() settles when the headers arrive, so a page that is only slowly downloading is never cut off; on
+// slow 2G the first byte alone can take 8–10 s, hence the margin.
+const NAV_GIVEUP = 15000;
 const DATA_TIMEOUT = 6000;
 const REVALIDATE_AFTER = 6 * 3600e3;
 const BOOTH = CONFIG.booth; // { media: "about/booth/media/", json: "about/booth.json" } (from the base)
@@ -309,7 +316,7 @@ async function page(event, url) {
     if (res.ok) event.waitUntil(signalled(event).catch(() => {}));
     return res;
   })();
-  let timer = 0;
+  let timer = 0, giveUp = 0;
   const slow = new Promise((resolve) => { timer = setTimeout(resolve, NAV_TIMEOUT, null); });
   try {
     const res = await Promise.race([network, slow]);
@@ -322,9 +329,16 @@ async function page(event, url) {
     // in the background and replaces the copy, so "Try again" gets the new one.
     const copy = await savedCopy(key);
     if (copy) { event.waitUntil(network.catch(() => {})); return answeredFromCopy(event, copy); }
-    return await network;
+    // No copy: wait on until NAV_GIVEUP, then the offline page in the address's language (its "Try again"
+    // reloads). The page goes on loading meanwhile and is kept when it comes (keepPage), so "Try again" finds it.
+    const late = await Promise.race([network, new Promise((resolve) => { giveUp = setTimeout(resolve, NAV_GIVEUP - NAV_TIMEOUT, null); })]);
+    clearTimeout(giveUp);
+    if (late) return late;
+    event.waitUntil(network.catch(() => {}));
+    return offlinePage(url);
   } catch (err) {
     clearTimeout(timer);
+    clearTimeout(giveUp);
     const copy = await savedCopy(key);
     return copy ? answeredFromCopy(event, copy) : offlinePage(url);
   }

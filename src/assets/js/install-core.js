@@ -95,7 +95,7 @@
     ["TikTok", /musical_ly|Bytedance|\bTikTok\b/i],
     ["Snapchat", /\bSnapchat\b/],
     ["LinkedIn", /\bLinkedInApp\b/],
-    ["X", /\bTwitter\b/],
+    ["X", /\bTwitter(?:Android)?\b/],   // "Twitter for iPhone"; Android: "… Mobile Safari/537.36 TwitterAndroid"
     ["Pinterest", /\bPinterest\b/],
     ["Reddit", /\bReddit\//],
     ["LINE", /\bLine\//],

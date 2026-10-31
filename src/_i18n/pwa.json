@@ -143,7 +143,7 @@
     "en": "On iOS 16.3 or earlier only Safari can do this: open this page in Safari.",
     "es": "En iOS 16.3 o anterior solo Safari puede hacerlo: abre esta página en Safari."
   },
-  "pwa.app.android_1": { "en": "Tap Chrome's **More** menu (three dots) at the top right.", "es": "Toca el menú **Más** de Chrome (tres puntos), arriba a la derecha." },
+  "pwa.app.android_1": { "en": "Tap Chrome's **More** menu (three dots) at the right of the address bar.", "es": "Toca el menú **Más** de Chrome (tres puntos), a la derecha de la barra de direcciones." },
   "pwa.app.android_2": {
     "en": "Tap **Install and create shortcut** (on older versions: **Install app** or **Add to Home screen**).",
     "es": "Toca **Instalar y crear acceso directo** (en versiones anteriores: **Instalar aplicación** o **Agregar a la pantalla principal**)."
@@ -153,8 +153,12 @@
     "es": "Elige **Instalar**, no «Crear acceso directo»: los accesos directos se abren en Chrome."
   },
   "pwa.app.android_fix": {
-    "en": "Already have an icon with a small Chrome logo? That's a shortcut: remove it and choose **Install** instead.",
-    "es": "¿Ya tienes un ícono con un pequeño logo de Chrome? Es un acceso directo: quítalo y elige **Instalar**."
+    "en": "Already have an icon with a small Chrome logo? That's a shortcut: remove it and choose **Install** instead. Still a Chrome logo after **Install**? Try once more on Wi-Fi or a good signal; if it comes back, keep it: it works too.",
+    "es": "¿Ya tienes un ícono con un pequeño logo de Chrome? Es un acceso directo: quítalo y elige **Instalar**. ¿Sigue el logo de Chrome después de **Instalar**? Inténtalo otra vez con Wi-Fi o buena señal; si vuelve a salir, consérvalo: también funciona."
+  },
+  "pwa.app.android_no_icon": {
+    "en": "Tapped **Install** or **Add** and no icon appeared? Look in your list of apps first. Not there? Some phones (Xiaomi, Redmi, POCO and others) let a browser add icons only with permission: in **Settings**, open **Apps**, then your browser (on Xiaomi, Redmi and POCO: **Other permissions**), and allow **Home screen shortcuts** (the name varies by phone). Then try again. Does the browser's menu offer to **open** the app instead of installing it? Then it's already on this phone.",
+    "es": "¿Tocaste **Instalar** o **Agregar** (o **Añadir**) y no apareció ningún ícono? Busca primero en tu lista de apps. ¿No está? Algunos teléfonos (Xiaomi, Redmi, POCO y otros) solo dejan que el navegador agregue íconos con permiso: en **Ajustes** (o **Configuración**), abre **Aplicaciones**, luego tu navegador (en Xiaomi, Redmi y POCO: **Otros permisos**), y permite **Accesos directos en la pantalla de inicio** (el nombre cambia según el teléfono). Luego inténtalo otra vez. ¿El menú del navegador ofrece **abrir** la app en vez de instalarla? Entonces ya está en este teléfono."
   },
   "pwa.app.android_from_app": {
     "en": "Opened this page from Gmail or another app? First tap the menu (three dots) and **Open in Chrome**.",

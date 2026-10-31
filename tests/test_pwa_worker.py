@@ -188,7 +188,8 @@ function world({ v = "t1", store: kept = null } = {}) {
   }
   const ctx = vm.createContext({
     self, caches, fetch, Request: WorkerRequest, Response, Headers, URL, console, TransformStream, AbortController,
-    setTimeout: (fn, ms, ...a) => (fast ? (queueMicrotask(() => fn(...a)), 0) : setTimeout(fn, ms, ...a)),
+    // (fast: every timer at once; a number: only the timers of up to that many ms — the longer ones keep real time)
+    setTimeout: (fn, ms, ...a) => (fast === true || (typeof fast === "number" && ms <= fast) ? (queueMicrotask(() => fn(...a)), 0) : setTimeout(fn, ms, ...a)),
     clearTimeout: (t) => { if (t) clearTimeout(t); },
     setInterval: (fn, ms) => { intervalId += 1; intervals.set(intervalId, { fn, ms }); return intervalId; },
     clearInterval: (id) => { intervals.delete(id); },
@@ -324,6 +325,24 @@ WORLD_JS = HARNESS_JS + r"""
   w.page(B + "meetings/", "hang");                                                                        // a weak signal: no answer in time
   w.fast = true;
   R.slow = await w.request(B + "meetings/", { navigate: true, settle: false });
+  w.fast = false;
+  // a connection that hangs (signal bars, no data) and a page never saved: the offline page in the address's language once
+  // NAV_GIVEUP has passed, not a blank screen for as long as the phone waits — and the page, when it does come, is kept,
+  // so "Try again" finds it (the worker's timers run at once here; the page comes a moment after the answer)
+  let late;
+  w.page(B + "es/orientation/", { body: html("Orientación", "LATE"), wait: new Promise((r) => { late = r; }) });
+  w.fast = true;
+  setTimeout(() => late(), 30);
+  R.hangNew = await w.request(B + "es/orientation/", { navigate: true });
+  w.fast = false;
+  R.hangNewKept = (await w.keys("gvlv-pages-v1")).includes(ORIGIN + B + "es/orientation/");
+  // …but a page never saved that comes after the 4 s and before NAV_GIVEUP is shown itself, not the offline page
+  // (the 4 s timer runs at once here, the give-up timer on the real clock; the page comes a moment later)
+  let later;
+  w.page(B + "es/contribute/", { body: html("Contribuir", "LATER"), wait: new Promise((r) => { later = r; }) });
+  w.fast = 4000;
+  setTimeout(() => later(), 30);
+  R.lateNew = await w.request(B + "es/contribute/", { navigate: true });
   w.fast = false;
 
   /* ---------------- other requests ---------------- */
@@ -1342,6 +1361,12 @@ class Worker(unittest.TestCase):
         self.assertNotIn(ORIGIN + B + "nope/", r["keptAfter404"])
         # no answer in time → the copy
         self.assertIn("ONLINE", r["slow"]["body"])
+        # no answer in time and no copy → the offline page once NAV_GIVEUP has passed (not a blank wait); the page,
+        # when it does come, is kept for "Try again"
+        self.assertIn("OFFLINE-ES", r["hangNew"]["body"])
+        self.assertTrue(r["hangNewKept"])
+        # …while a page that starts answering between the 4 s and NAV_GIVEUP is shown itself
+        self.assertIn("LATER", r["lateNew"]["body"])
 
     def test_forwarding_pages_are_kept_and_marked(self):
         # an old address's forwarding page (its meta refresh sends the visitor on: /meeting/, the old install page …)

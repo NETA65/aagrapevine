@@ -155,7 +155,8 @@ Every page template is built twice, once per language in [`src/_data/languages.j
   page in the other language, and keep the `#anchor` and `?query` (so `/bulletin/#ann-x` → `/es/bulletin/#ann-x`).
 - A visitor whose browser prefers the other language sees a small card after about a second:
   **¿Prefieres español? · Ver en español** (or **Prefer English? · View in English**). Once dismissed, or once the
-  visitor switched language, it never comes back on that browser.
+  visitor switched language, it never comes back on that browser — nor after it has been shown on 3 pages and left
+  alone (while it is up, the "Install this site as an app" notice waits).
 - A link to one of our own pages inside a post or an event description (`[podcast](/listen/)`) opens the Spanish page
   (`/es/listen/`) when it is clicked on a Spanish page. Links to files (`/bulletin/files/flyer.pdf`, `/feed.xml`) and
   outside sites are left as they are.

@@ -5,7 +5,7 @@
 //   base      the site's base path ("/aagrapevine/" on GitHub Pages, "/" on a custom domain)
 //   tz        the site's time zone (config/site.yml site.timezone, as src/_data/site.js checked it): the worker
 //             has no window.SITE, and "this month's page" ({month} below) is the month there
-//   shell     what is saved on install: styles, scripts, the two main fonts, the logo and app icons,
+//   shell     what is saved on install: styles, scripts, the two main fonts and their italics, the logo and app icons,
 //             and the two offline pages (/offline/, /es/offline/ — "Saved pages & app", also the
 //             stand-in for a page not saved; the worker keeps them up to date with the daily content,
 //             which doesn't change the version: sw-core.js refreshOffline); `required` is the part
@@ -99,6 +99,9 @@ export function render(data) {
     a(`assets/vendor/alpine.min.js?v=${v}`),
     a("assets/fonts/inter-latin-wght-normal.woff2"),
     a("assets/fonts/fraunces-latin-opsz-normal.woff2"),
+    // …and their italics (main.css: quotes, the Monthly pages), so a saved page's italic text keeps its face offline
+    a("assets/fonts/inter-latin-wght-italic.woff2"),
+    a("assets/fonts/fraunces-latin-opsz-italic.woff2"),
     a("assets/img/logo-wide.png"),
     a("assets/img/logo-32x32.png"),
     a("assets/img/app-icon-192.png"),

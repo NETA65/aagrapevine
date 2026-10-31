@@ -1378,7 +1378,7 @@ the presentations' `prev`, Home's use of `gv:audio:pos` / `gv:audio:last`, and t
 |---|---|---|
 | every page (`base.njk`, `app.js`) | `gvlv-theme` | `"dark"` \| `"light"` |
 | every page, the Aa panel | `gvlv-prefs` | `{ text: 100\|115\|130\|150, spacing, contrast, motion, saver, rate: "slower"\|"normal"\|"faster" (read aloud: 0.8 / 1 / 1.2 × the voice's speed), captions: "off"\|"on" (YouTube players start with captions in the page language: `GV.ytCaptions()`) }` — only `text` … `saver` are applied before the first paint |
-| every page (`partials/lang-banner.njk`) | `gv-lang-banner` | `"dismissed"` or `"switched"`: the language suggestion is not shown again |
+| every page (`partials/lang-banner.njk`) | `gv-lang-banner`, `gv-lang-banner-n` | `"dismissed"` or `"switched"`: the language suggestion is not shown again; how many pages it was shown on (a number) — left alone, it steps aside after 3, so the install notice, which waits while it is up, gets its turn |
 | every page (`pwa.js`, `install-core.js`) | `gvlv-app`; sessionStorage `gvlv-pwa-hide` | the install notice's record `{ v, views, shown, no, quiet, app, done }` (numbers and times only); notices closed in this tab |
 | Home, Listen (`home.js`, `media.js`) | `gv:audio:pos`, `gv:audio:last`, `gv:audio:rate` | `{ <episode id>: [seconds (-1 = finished), saved at] }` (150 at most); the last episode played (for "Continue listening"); the speed (0.75 – 2) |
 | What's New (`whats-new.njk`, `community.js`) | `gv-wn-seen` | `{ upto: the newest entry's data-seen second shown here, last: when What's New was last open (ms), base: the visit before, { upto, at }, or null }` — a gap of 30 minutes starts a new visit; "Forget my last visit" deletes it |
