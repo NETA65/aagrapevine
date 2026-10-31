@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-30T23:38:41Z",
- "updated": "2026-10-30T23:38:41Z",
+ "generated": "2026-10-31T07:06:26Z",
+ "updated": "2026-10-31T07:06:26Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-10-30T23:38:15Z",
-   "attempted": "2026-10-30T23:38:15Z",
+   "updated": "2026-10-31T07:06:00Z",
+   "attempted": "2026-10-31T07:06:00Z",
    "count": 37,
    "new_7d": 0,
    "error": null,
@@ -87,8 +87,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-10-30T23:38:16Z",
-   "attempted": "2026-10-30T23:38:16Z",
+   "updated": "2026-10-31T07:06:00Z",
+   "attempted": "2026-10-31T07:06:00Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -111,8 +111,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-10-30T23:38:16Z",
-   "attempted": "2026-10-30T23:38:16Z",
+   "updated": "2026-10-31T07:06:00Z",
+   "attempted": "2026-10-31T07:06:00Z",
    "count": 17,
    "new_7d": 7,
    "error": null,
@@ -166,8 +166,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-10-30T23:38:24Z",
-   "attempted": "2026-10-30T23:38:24Z",
+   "updated": "2026-10-31T07:06:24Z",
+   "attempted": "2026-10-31T07:06:24Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -322,8 +322,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-10-30T23:38:18Z",
-   "attempted": "2026-10-30T23:38:18Z",
+   "updated": "2026-10-31T07:06:18Z",
+   "attempted": "2026-10-31T07:06:18Z",
    "count": 306,
    "new_7d": 2,
    "error": null,
@@ -350,7 +350,7 @@
     "gone_checks": 0,
     "discovery_checked": "2026-10-30T14:19:13Z",
     "discovered_feeds": [],
-    "seconds": 2.7,
+    "seconds": 2.6,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -560,8 +560,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-10-30T23:38:39Z",
-   "attempted": "2026-10-30T23:38:39Z",
+   "updated": "2026-10-31T07:06:15Z",
+   "attempted": "2026-10-31T07:06:15Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -569,12 +569,12 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-10-30",
-    "new": 0
+    "today": "2026-10-31",
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -591,6 +591,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-10-31",
+    "goal_at": "2026-10-31T10:30:00Z",
+    "gv": "2026-10-31T07:06:05Z",
+    "lv": "2026-10-31T07:06:15Z"
+   },
    {
     "day": "2026-10-30",
     "goal_at": "2026-10-30T10:30:00Z",
@@ -626,12 +632,6 @@
     "goal_at": "2026-10-25T10:30:00Z",
     "gv": "2026-10-25T06:16:42Z",
     "lv": "2026-10-25T06:16:54Z"
-   },
-   {
-    "day": "2026-10-24",
-    "goal_at": "2026-10-24T10:30:00Z",
-    "gv": "2026-10-24T09:38:03Z",
-    "lv": "2026-10-24T09:38:13Z"
    }
   ]
  },
@@ -699,8 +699,8 @@
    "http_status": 403,
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
-   "last_attempt": "2026-10-30T07:17:33Z",
-   "checked_this_run": false,
+   "last_attempt": "2026-10-31T07:06:24Z",
+   "checked_this_run": true,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,
@@ -709,7 +709,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-10-30",
+  "today": "2026-10-31",
   "home_days": 60,
   "list_days": [
    60,
@@ -722,12 +722,12 @@
     "all": 126
    },
    "90": {
-    "neta65": 5,
-    "texas": 14,
-    "all": 156
+    "neta65": 4,
+    "texas": 11,
+    "all": 126
    }
   },
-  "items": 156
+  "items": 126
  },
  "writers_archive": {
   "files": {
