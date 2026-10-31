@@ -1,7 +1,66 @@
 {
- "updated": "2026-10-30T14:28:08Z",
+ "updated": "2026-10-31T09:26:38Z",
  "fixture": false,
  "items": [
+  {
+   "id": "drive:1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i/view",
+   "title": "Taller de Escritura de La Viña - Grupo Nuevo Horizonte, Fort Worth",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-31",
+   "first_seen": "2026-10-31T09:26:15Z",
+   "image": "https://lh3.googleusercontent.com/d/1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i",
+    "mime": "image/png",
+    "name": "Taller de Escritura de La Viña - Grupo Nuevo Horizonte, Fort Worth.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i/view",
+    "preview_url": "https://drive.google.com/file/d/1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "1:02 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Writing Workshop - Grupo Nuevo Horizonte, Fort Worth",
+     "es": "Taller de Escritura de La Viña - Grupo Nuevo Horizonte, Fort Worth"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-10-31T12:00:00Z"
+  },
   {
    "id": "ig:DfHxaWCgr1P",
    "source": "instagram",
@@ -824,7 +883,7 @@
    "kind": "event",
    "url": "/events/#2026-12-12-lv-writing-workshop-fort-worth",
    "title": "La Viña Writing Workshop (in Spanish) — Fort Worth",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
    "lang": "en",
    "date": "2026-12-13T01:00:00Z",
    "first_seen": "2026-10-27T06:15:45Z",
@@ -839,13 +898,13 @@
     "start": "2026-12-13T01:00:00Z",
     "end": "2026-12-13T03:00:00Z",
     "all_day": false,
-    "location": "Grupo Nueve Horizonte, 3302 N Main St, Fort Worth, TX 76106",
+    "location": "Grupo Nuevo Horizonte, 3302 N Main St, Fort Worth, TX 76106",
     "online_url": null,
-    "flyer_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i/view",
     "flyer_thumb": null,
     "city": "Fort Worth",
     "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
     "slug": "2026-12-12-lv-writing-workshop-fort-worth",
     "file": "content/events/2026-12-12-lv-writing-workshop-fort-worth.md",
     "own_i18n": {
@@ -853,10 +912,10 @@
       "es": "Taller de Escritura de La Viña — Fort Worth"
      },
      "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      },
      "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      }
     },
     "past": false
@@ -867,12 +926,12 @@
      "es": "Taller de Escritura de La Viña — Fort Worth"
     },
     "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
     },
     "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
     }
    },
    "machine": [],
@@ -8742,50 +8801,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-14T11:30:14Z"
-  },
-  {
-   "id": "ig:DebtFyXl7-L",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DebtFyXl7-L/",
-   "title": "“Lo que brindé con más frecuencia a AA mediante mi grupo base, lo recibo multiplicado…",
-   "summary": "“Lo que brindé con más frecuencia a AA mediante mi grupo base, lo recibo multiplicado con paz mental”. \"“La clave para ser parte” MANCHESTER, NUEVO HAMPSHIRE, SEPTIEMBRE DE 2000 De I Am Responsible\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-13T11:30:14Z",
-   "first_seen": "2026-10-13T15:08:50Z",
-   "image": "/assets/cache/ig/DebtFyXl7-L.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DebtFyXl7-L",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DebtFyXl7-L.webp",
-    "embed_url": "https://www.instagram.com/p/DebtFyXl7-L/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DebtFyXl7-L/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“What I gave more often to AA through my home group, I receive it multiplied …",
-     "es": "“Lo que brindé con más frecuencia a AA mediante mi grupo base, lo recibo multiplicado…"
-    },
-    "summary": {
-     "en": "“What I most frequently gave to AA through my home group, I receive it multiplied with mental peace.” \"The Key to Be Part\" MANCHESTER, NEW HAMPSHIRE, SEPTEMBER 2000 From I Am Responsible Daily Quote in www.aalavina.org",
-     "es": "“Lo que brindé con más frecuencia a AA mediante mi grupo base, lo recibo multiplicado con paz mental”. \"“La clave para ser parte” MANCHESTER, NUEVO HAMPSHIRE, SEPTIEMBRE DE 2000 De I Am Responsible\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-13T11:30:14Z"
   }
  ]
 }

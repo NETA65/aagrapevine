@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-28T06:55:58Z",
+ "updated": "2026-10-31T09:26:38Z",
  "fixture": false,
  "items": [
   {
@@ -400,7 +400,7 @@
    "kind": "event",
    "url": "/events/#2026-12-12-lv-writing-workshop-fort-worth",
    "title": "La Viña Writing Workshop (in Spanish) — Fort Worth",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
    "lang": "en",
    "date": "2026-12-13T01:00:00Z",
    "first_seen": "2026-10-27T06:15:45Z",
@@ -415,13 +415,13 @@
     "start": "2026-12-13T01:00:00Z",
     "end": "2026-12-13T03:00:00Z",
     "all_day": false,
-    "location": "Grupo Nueve Horizonte, 3302 N Main St, Fort Worth, TX 76106",
+    "location": "Grupo Nuevo Horizonte, 3302 N Main St, Fort Worth, TX 76106",
     "online_url": null,
-    "flyer_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i/view",
     "flyer_thumb": null,
     "city": "Fort Worth",
     "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
     "slug": "2026-12-12-lv-writing-workshop-fort-worth",
     "file": "content/events/2026-12-12-lv-writing-workshop-fort-worth.md",
     "own_i18n": {
@@ -429,10 +429,10 @@
       "es": "Taller de Escritura de La Viña — Fort Worth"
      },
      "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      },
      "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      }
     },
     "past": false
@@ -443,12 +443,12 @@
      "es": "Taller de Escritura de La Viña — Fort Worth"
     },
     "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
     },
     "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nueve Horizonte in Fort Worth.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nueve Horizonte de Fort Worth."
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
     }
    },
    "machine": [],
