@@ -1,54 +1,7 @@
 {
- "updated": "2026-11-01T14:28:29Z",
+ "updated": "2026-11-01T23:29:18Z",
  "fixture": false,
  "items": [
-  {
-   "id": "ev:flyer:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
-   "source": "drive",
-   "kind": "event",
-   "url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/view",
-   "title": "Grapevine Committee Crash",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-10-31T16:00:00Z",
-   "first_seen": "2026-10-07T05:07:40Z",
-   "image": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "flyer",
-   "status": "ok",
-   "extra": {
-    "start": "2026-10-31T16:00:00Z",
-    "end": "2026-10-31T18:00:00Z",
-    "all_day": false,
-    "location": "Grand Prairie Group, 921 W Pioneer Pkwy, Grand Prairie, TX 75052",
-    "online_url": null,
-    "flyer_url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/view",
-    "flyer_thumb": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w600",
-    "city": "Grand Prairie",
-    "state": "TX",
-    "drive_id": "drive:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
-    "is_pdf": false,
-    "is_image": true,
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Committee Crash",
-     "es": "Visita del Comité de Grapevine"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
   {
    "id": "ev:manual:2026-11-07-lv-information-workshop-longview",
    "source": "committee",
@@ -923,9 +876,9 @@
    "kind": "event",
    "url": "/events/#2027-02-21-neta65-winter-acm",
    "title": "Winter ACM 2027",
-   "summary": "NETA 65's winter Area Committee Meeting (ACM). The host group and the venue will be announced.",
+   "summary": "NETA 65's winter Area Committee Meeting (ACM), at the Mid-Cities Group in Hurst.",
    "lang": "en",
-   "date": "2027-02-21T19:00:00Z",
+   "date": "2027-02-21T18:00:00Z",
    "first_seen": "2026-10-26T14:35:09Z",
    "image": null,
    "tags": [
@@ -936,34 +889,29 @@
    "category": "manual",
    "status": "ok",
    "extra": {
-    "start": "2027-02-21T19:00:00Z",
+    "start": "2027-02-21T18:00:00Z",
     "end": "2027-02-21T23:00:00Z",
     "all_day": false,
-    "location": "Venue to be announced",
+    "location": "Mid-Cities Group, 300 West Pipeline Rd, Hurst, TX 76053",
     "online_url": null,
     "flyer_url": null,
     "flyer_thumb": null,
-    "city": null,
-    "state": null,
-    "body_md": "NETA 65's winter Area Committee Meeting (ACM). The host group and the venue will be announced.",
+    "city": "Hurst",
+    "state": "TX",
+    "body_md": "NETA 65's winter Area Committee Meeting (ACM), at the Mid-Cities Group in Hurst.",
     "slug": "2027-02-21-neta65-winter-acm",
     "file": "content/events/2027-02-21-neta65-winter-acm.md",
-    "tentative": true,
     "own_i18n": {
      "title": {
       "es": "ACM de Invierno 2027"
      },
      "summary": {
-      "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM). El grupo anfitrión y el lugar se anunciarán más adelante."
+      "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM), en el Mid-Cities Group de Hurst."
      },
      "body_md": {
-      "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM). El grupo anfitrión y el lugar se anunciarán más adelante."
-     },
-     "location": {
-      "es": "Lugar por anunciarse"
+      "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM), en el Mid-Cities Group de Hurst."
      }
     },
-    "location_tba": true,
     "past": false
    },
    "i18n": {
@@ -972,16 +920,12 @@
      "es": "ACM de Invierno 2027"
     },
     "summary": {
-     "en": "NETA 65's winter Area Committee Meeting (ACM). The host group and the venue will be announced.",
-     "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM). El grupo anfitrión y el lugar se anunciarán más adelante."
+     "en": "NETA 65's winter Area Committee Meeting (ACM), at the Mid-Cities Group in Hurst.",
+     "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM), en el Mid-Cities Group de Hurst."
     },
     "body_md": {
-     "en": "NETA 65's winter Area Committee Meeting (ACM). The host group and the venue will be announced.",
-     "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM). El grupo anfitrión y el lugar se anunciarán más adelante."
-    },
-    "location": {
-     "en": "Venue to be announced",
-     "es": "Lugar por anunciarse"
+     "en": "NETA 65's winter Area Committee Meeting (ACM), at the Mid-Cities Group in Hurst.",
+     "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM), en el Mid-Cities Group de Hurst."
     }
    },
    "machine": [],
@@ -1153,7 +1097,7 @@
    "id": "ev:manual:2027-03-19-neta65-spring-assembly",
    "source": "committee",
    "kind": "event",
-   "url": "/events/#2027-03-19-neta65-spring-assembly",
+   "url": "https://neta65.org/event/spring-assembly/",
    "title": "NETA 65 Spring Assembly 2027",
    "summary": "Area 65 assembly (Panel 77), co-hosted by Districts 53 and 55, at the DoubleTree by Hilton Hotel Dallas Near the Galleria.",
    "lang": "en",
@@ -1336,7 +1280,7 @@
    "title": "Spring ACM 2027",
    "summary": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
    "lang": "en",
-   "date": "2027-04-11T18:00:00Z",
+   "date": "2027-04-11T17:00:00Z",
    "first_seen": "2026-10-26T14:35:09Z",
    "image": null,
    "tags": [
@@ -1347,7 +1291,7 @@
    "category": "manual",
    "status": "ok",
    "extra": {
-    "start": "2027-04-11T18:00:00Z",
+    "start": "2027-04-11T17:00:00Z",
     "end": "2027-04-11T22:00:00Z",
     "all_day": false,
     "location": "Venue to be announced",
@@ -1711,7 +1655,7 @@
    "id": "ev:manual:2027-06-25-neta65-summer-assembly",
    "source": "committee",
    "kind": "event",
-   "url": "/events/#2027-06-25-neta65-summer-assembly",
+   "url": "https://neta65.org/event/summer-assembly-delegates-report-back/",
    "title": "NETA 65 Summer Assembly 2027",
    "summary": "Area 65 assembly (Panel 77), hosted by District 91. The venue will be announced soon.",
    "lang": "en",
@@ -1785,7 +1729,7 @@
    "title": "Summer ACM 2027",
    "summary": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
    "lang": "en",
-   "date": "2027-07-18T18:00:00Z",
+   "date": "2027-07-18T17:00:00Z",
    "first_seen": "2026-10-26T14:35:09Z",
    "image": null,
    "tags": [
@@ -1796,7 +1740,7 @@
    "category": "manual",
    "status": "ok",
    "extra": {
-    "start": "2027-07-18T18:00:00Z",
+    "start": "2027-07-18T17:00:00Z",
     "end": "2027-07-18T22:00:00Z",
     "all_day": false,
     "location": "Venue to be announced",
@@ -1983,8 +1927,8 @@
    "id": "ev:manual:2027-09-17-neta65-fall-assembly",
    "source": "committee",
    "kind": "event",
-   "url": "/events/#2027-09-17-neta65-fall-assembly",
-   "title": "NETA 65 Fall Assembly 2027",
+   "url": "https://neta65.org/event/fall-assembly-service-workshop-assembly/",
+   "title": "NETA 65 Fall Assembly & Service Workshop 2027",
    "summary": "Area 65 assembly (Panel 77) at the DoubleTree by Hilton Fort Worth South. The assembly is all day Saturday and Sunday morning (8 AM to 12 PM). There is no activity at the hotel on Friday night, though the host districts may hold something at a nearby group (to be confirmed). District 64 has confirmed as co-host; District 62 has put off its discussion until its November district meeting.",
    "lang": "en",
    "date": "2027-09-17",
@@ -2013,7 +1957,7 @@
     "tentative": true,
     "own_i18n": {
      "title": {
-      "es": "Asamblea de Otoño 2027 de NETA 65"
+      "es": "Asamblea de Otoño y Taller de Servicio 2027 de NETA 65"
      },
      "summary": {
       "es": "Asamblea del Área 65 (Panel 77), en el DoubleTree by Hilton Fort Worth South. Será todo el sábado y la mañana del domingo (de 8 a. m. a 12 p. m.). El viernes por la noche no habrá actividad en el hotel; los distritos anfitriones podrían organizar algo en un grupo cercano. El Distrito 64 confirmó que será coanfitrión; el Distrito 62 aplazó el tema hasta su reunión distrital de noviembre."
@@ -2026,8 +1970,8 @@
    },
    "i18n": {
     "title": {
-     "en": "NETA 65 Fall Assembly 2027",
-     "es": "Asamblea de Otoño 2027 de NETA 65"
+     "en": "NETA 65 Fall Assembly & Service Workshop 2027",
+     "es": "Asamblea de Otoño y Taller de Servicio 2027 de NETA 65"
     },
     "summary": {
      "en": "Area 65 assembly (Panel 77) at the DoubleTree by Hilton Fort Worth South. The assembly is all day Saturday and Sunday morning (8 AM to 12 PM). There is no activity at the hotel on Friday night, though the host districts may hold something at a nearby group (to be confirmed). District 64 has confirmed as co-host; District 62 has put off its discussion until its November district meeting.",
@@ -2049,7 +1993,7 @@
    "title": "Fall ACM 2027",
    "summary": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
    "lang": "en",
-   "date": "2027-10-10T18:00:00Z",
+   "date": "2027-10-10T17:00:00Z",
    "first_seen": "2026-10-26T14:35:09Z",
    "image": null,
    "tags": [
@@ -2060,7 +2004,7 @@
    "category": "manual",
    "status": "ok",
    "extra": {
-    "start": "2027-10-10T18:00:00Z",
+    "start": "2027-10-10T17:00:00Z",
     "end": "2027-10-10T22:00:00Z",
     "all_day": false,
     "location": "Venue to be announced",
@@ -2153,6 +2097,53 @@
     }
    },
    "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:flyer:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
+   "source": "drive",
+   "kind": "event",
+   "url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/view",
+   "title": "Grapevine Committee Crash",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-31T16:00:00Z",
+   "first_seen": "2026-10-07T05:07:40Z",
+   "image": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyer",
+   "status": "ok",
+   "extra": {
+    "start": "2026-10-31T16:00:00Z",
+    "end": "2026-10-31T18:00:00Z",
+    "all_day": false,
+    "location": "Grand Prairie Group, 921 W Pioneer Pkwy, Grand Prairie, TX 75052",
+    "online_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG=w600",
+    "city": "Grand Prairie",
+    "state": "TX",
+    "drive_id": "drive:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
+    "is_pdf": false,
+    "is_image": true,
+    "past": true
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Committee Crash",
+     "es": "Visita del Comité de Grapevine"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
    "is_new": false
   },
   {
