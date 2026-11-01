@@ -1,19 +1,19 @@
 {
  "source": "editorial",
- "updated": "2026-10-31T13:46:17Z",
- "attempted": "2026-10-31T13:46:17Z",
+ "updated": "2026-11-01T06:32:36Z",
+ "attempted": "2026-11-01T06:32:36Z",
  "ok": true,
  "error": null,
  "changes": {
   "added": 0,
-  "removed": 0,
+  "removed": 1,
   "held": 0
  },
  "stats": {
   "gv": {
    "parsed": 34,
-   "kept": 25,
-   "with_deadline": 15,
+   "kept": 24,
+   "with_deadline": 14,
    "open": 7,
    "topics": 8
   },
@@ -1268,34 +1268,6 @@
     "due_text": "3 de abril del 2026",
     "pdf_url": "https://www.aalavina.org/sites/default/files/2026-01/Temas_de_LV_2027_2026.pdf",
     "submit_email": "manuscritoslv@aagrapevine.org"
-   }
-  },
-  {
-   "id": "ed:gv:2026-10:dealing-with-loneliness",
-   "source": "grapevine",
-   "kind": "topic",
-   "url": "https://www.aagrapevine.org/contribute",
-   "title": "Dealing with Loneliness",
-   "summary": "Members don’t often share about loneliness. How do you deal with it in sobriety? What was your experience with loneliness when you were still drinking? What’s it like now? What are the tools you use to combat loneliness and to reach out for help and fellowship.",
-   "lang": "en",
-   "date": "2026-03-01",
-   "first_seen": "2026-09-23T16:30:40Z",
-   "last_seen": "2026-10-30T14:22:24Z",
-   "image": null,
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "October 2026",
-    "issue_key": "2026-10",
-    "deadline": "2026-03-01",
-    "theme": "Dealing with Loneliness",
-    "evergreen": false,
-    "due_text": "March 1, 2026",
-    "pdf_url": "https://www.aagrapevine.org/sites/default/files/2026-02/Editorial_Calendar_GV_2026_27.pdf",
-    "submit_url": "https://www.aagrapevine.org/submit-your-story",
-    "guidelines_url": "https://www.aagrapevine.org/guidelines-contributing-grapevine"
    }
   },
   {

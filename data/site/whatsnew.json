@@ -1,7 +1,102 @@
 {
- "updated": "2026-10-31T17:14:25Z",
+ "updated": "2026-11-01T06:35:39Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ev:lvcal:b0eaaca178cb",
+   "source": "calendar",
+   "kind": "event",
+   "url": "https://www.aalavina.org/get-involved/events/2026-11-21/taller-de-la-vina-grapevine",
+   "title": "Taller de La Viña-Grapevine",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-21",
+   "first_seen": "2026-11-01T06:35:15Z",
+   "image": null,
+   "tags": [
+    "online"
+   ],
+   "category": "lv-calendar",
+   "status": "ok",
+   "extra": {
+    "start": "2026-11-21",
+    "end": null,
+    "all_day": true,
+    "location": "Híbrido: Zoom / Magnolia Center Church of Christ, Riverside, CA",
+    "city": "Riverside",
+    "state": "CA",
+    "country": "USA",
+    "region": null,
+    "online_url": null,
+    "platform": "Zoom",
+    "website": null,
+    "organizer": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "scope": "online",
+    "online": true,
+    "site": "lavina",
+    "date_text": "Noviembre 21, 2026",
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña-Grapevine Workshop",
+     "es": "Taller de La Viña-Grapevine"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-01T06:35:15Z"
+  },
+  {
+   "id": "ig:DfLKDSDG4Xo",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfLKDSDG4Xo/",
+   "title": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera…",
+   "summary": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera y Donde Quiera” en Phoenix, AZ Area 03.",
+   "lang": "es",
+   "date": "2026-10-31T21:47:23Z",
+   "first_seen": "2026-11-01T06:30:41Z",
+   "image": "/assets/cache/ig/DfLKDSDG4Xo.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfLKDSDG4Xo",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DfLKDSDG4Xo.webp",
+    "embed_url": "https://www.instagram.com/p/DfLKDSDG4Xo/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfLKDSDG4Xo/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera…",
+     "es": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera…"
+    },
+    "summary": {
+     "en": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera y Donde Quiera” en Phoenix, AZ Area 03.",
+     "es": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera y Donde Quiera” en Phoenix, AZ Area 03."
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-10-31T21:47:23Z"
+  },
   {
    "id": "drive:1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i",
    "source": "drive",
@@ -438,7 +533,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 113,
+    "views": 138,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1618,7 +1713,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 225,
+    "views": 234,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2244,7 +2339,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 275,
+    "views": 279,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2913,7 +3008,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 203,
+    "views": 206,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3183,7 +3278,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 301,
+    "views": 303,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8386,7 +8481,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 295,
+    "views": 299,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8695,94 +8790,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-15T11:30:15Z"
-  },
-  {
-   "id": "ig:Deg2rh1DZ9g",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Deg2rh1DZ9g/",
-   "title": "“Sponsorship is a bridge to trusting the human race, the very race we once resigned…",
-   "summary": "“Sponsorship is a bridge to trusting the human race, the very race we once resigned from. In learning to trust, we are strengthening our sobriety.” “A Means to a Beginning,” Grand Island Nebraska, February 1984, AA Grapevine Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-15T11:30:14Z",
-   "first_seen": "2026-10-15T12:46:57Z",
-   "image": "/assets/cache/ig/Deg2rh1DZ9g.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Deg2rh1DZ9g",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Deg2rh1DZ9g.webp",
-    "embed_url": "https://www.instagram.com/p/Deg2rh1DZ9g/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Deg2rh1DZ9g/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Sponsorship is a bridge to trusting the human race, the very race we once resigned…",
-     "es": "“Padrinazgo es un puente para confiar en la raza humana, la misma raza que dimitimos una vez …"
-    },
-    "summary": {
-     "en": "“Sponsorship is a bridge to trusting the human race, the very race we once resigned from. In learning to trust, we are strengthening our sobriety.” “A Means to a Beginning,” Grand Island Nebraska, February 1984, AA Grapevine Daily Quote at www.aagrapevine.org",
-     "es": "“Padrinazgo es un puente para confiar en la raza humana, la misma raza de la que dimitimos. Al aprender a confiar, estamos fortaleciendo nuestro sobriedad”. “Un medio para un comienzo”, Gran Isla Nebraska, febrero de 1984, AA Grapevine Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-15T11:30:14Z"
-  },
-  {
-   "id": "ig:DeeVUakDUKu",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeeVUakDUKu/",
-   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-   "lang": "en",
-   "date": "2026-10-14T12:00:14Z",
-   "first_seen": "2026-10-14T12:57:06Z",
-   "image": "/assets/cache/ig/DeeVUakDUKu.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeeVUakDUKu",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeeVUakDUKu.webp",
-    "embed_url": "https://www.instagram.com/p/DeeVUakDUKu/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeeVUakDUKu/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
-    },
-    "summary": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-14T12:00:14Z"
   }
  ]
 }

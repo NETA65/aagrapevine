@@ -1,11 +1,11 @@
 {
  "source": "instagram",
- "updated": "2026-10-31T13:44:26Z",
- "attempted": "2026-10-31T13:44:26Z",
+ "updated": "2026-11-01T06:30:41Z",
+ "attempted": "2026-11-01T06:30:41Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 4,
+  "added": 1,
   "removed": 0,
   "held": 0
  },
@@ -31,20 +31,50 @@
    "missing": [],
    "removed": []
   },
-  "thumbs_downloaded": 4,
+  "thumbs_downloaded": 1,
   "pruned": 0,
   "thumbs_deleted": 0,
-  "new": 4,
-  "total": 170,
+  "new": 1,
+  "total": 171,
   "per_account": {
    "gv": 94,
-   "lv": 76
+   "lv": 77
   },
   "requests": 7,
   "anonymous": true,
   "graph_api": false
  },
  "items": [
+  {
+   "id": "ig:DfLKDSDG4Xo",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfLKDSDG4Xo/",
+   "title": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera…",
+   "summary": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera y Donde Quiera” en Phoenix, AZ Area 03.",
+   "lang": "es",
+   "date": "2026-10-31T21:47:23Z",
+   "first_seen": "2026-11-01T06:30:41Z",
+   "last_seen": "2026-11-01T06:30:41Z",
+   "image": "/assets/cache/ig/DfLKDSDG4Xo.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfLKDSDG4Xo",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DfLKDSDG4Xo.webp",
+    "embed_url": "https://www.instagram.com/p/DfLKDSDG4Xo/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfLKDSDG4Xo/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
   {
    "id": "ig:DfKDZm5F0bN",
    "source": "instagram",
@@ -5174,7 +5204,7 @@
    "followers": 16959,
    "posts": 3978,
    "owner_id": "48108439509",
-   "checked": "2026-10-31T13:44:08Z",
+   "checked": "2026-11-01T06:30:25Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp",
    "_avatar_checked": "2026-10-30T14:20:41Z"
   },
@@ -5184,9 +5214,9 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2425,
-   "posts": 3000,
+   "posts": 3001,
    "owner_id": "48275839129",
-   "checked": "2026-10-31T13:44:11Z",
+   "checked": "2026-11-01T06:30:28Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp",
    "_avatar_checked": "2026-10-30T14:20:42Z"
   }
@@ -5283,13 +5313,13 @@
    "checked": "2026-10-30T14:20:24Z"
   },
   "Ddtu0IQl4Ys": {
-   "checked": "2026-10-13T15:08:35Z"
+   "checked": "2026-11-01T06:30:28Z"
   },
   "Ddtu0JsFzEt": {
-   "checked": "2026-10-13T15:08:35Z"
+   "checked": "2026-11-01T06:30:28Z"
   },
   "Ddv7lABFw1z": {
-   "checked": "2026-10-13T15:08:35Z"
+   "checked": "2026-11-01T06:30:28Z"
   },
   "Ddv7k9OF7rC": {
    "checked": "2026-10-31T13:44:11Z"
@@ -5485,6 +5515,12 @@
   },
   "DebtFyXl7-L": {
    "checked": "2026-10-31T13:44:11Z"
+  },
+  "DeeR4sPDeyU": {
+   "checked": "2026-11-01T06:30:28Z"
+  },
+  "DeeR4rdDVpY": {
+   "checked": "2026-11-01T06:30:28Z"
   }
  }
 }

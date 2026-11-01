@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-31T13:44:26Z",
+ "updated": "2026-11-01T06:30:41Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -10,7 +10,7 @@
    "followers": 16959,
    "posts": 3978,
    "owner_id": "48108439509",
-   "checked": "2026-10-31T13:44:08Z",
+   "checked": "2026-11-01T06:30:25Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,54 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2425,
-   "posts": 3000,
+   "posts": 3001,
    "owner_id": "48275839129",
-   "checked": "2026-10-31T13:44:11Z",
+   "checked": "2026-11-01T06:30:28Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfLKDSDG4Xo",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfLKDSDG4Xo/",
+   "title": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera…",
+   "summary": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera y Donde Quiera” en Phoenix, AZ Area 03.",
+   "lang": "es",
+   "date": "2026-10-31T21:47:23Z",
+   "first_seen": "2026-11-01T06:30:41Z",
+   "image": "/assets/cache/ig/DfLKDSDG4Xo.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfLKDSDG4Xo",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DfLKDSDG4Xo.webp",
+    "embed_url": "https://www.instagram.com/p/DfLKDSDG4Xo/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfLKDSDG4Xo/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera…",
+     "es": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera…"
+    },
+    "summary": {
+     "en": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera y Donde Quiera” en Phoenix, AZ Area 03.",
+     "es": "La Viña esta presente este fin de semana en el XIII Congreso Hispano “Cuando Cualquiera y Donde Quiera” en Phoenix, AZ Area 03."
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
   {
    "id": "ig:DfKDZm5F0bN",
    "source": "instagram",

@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-31T09:26:38Z",
+ "updated": "2026-11-01T06:35:39Z",
  "fixture": false,
  "items": [
   {
@@ -274,6 +274,58 @@
    },
    "machine": [],
    "is_new": false
+  },
+  {
+   "id": "ev:lvcal:b0eaaca178cb",
+   "source": "calendar",
+   "kind": "event",
+   "url": "https://www.aalavina.org/get-involved/events/2026-11-21/taller-de-la-vina-grapevine",
+   "title": "Taller de La Viña-Grapevine",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-21",
+   "first_seen": "2026-11-01T06:35:15Z",
+   "image": null,
+   "tags": [
+    "online"
+   ],
+   "category": "lv-calendar",
+   "status": "ok",
+   "extra": {
+    "start": "2026-11-21",
+    "end": null,
+    "all_day": true,
+    "location": "Híbrido: Zoom / Magnolia Center Church of Christ, Riverside, CA",
+    "city": "Riverside",
+    "state": "CA",
+    "country": "USA",
+    "region": null,
+    "online_url": null,
+    "platform": "Zoom",
+    "website": null,
+    "organizer": null,
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "scope": "online",
+    "online": true,
+    "site": "lavina",
+    "date_text": "Noviembre 21, 2026",
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña-Grapevine Workshop",
+     "es": "Taller de La Viña-Grapevine"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
   },
   {
    "id": "ev:manual:2026-11-28-lv-writing-workshop-garland",

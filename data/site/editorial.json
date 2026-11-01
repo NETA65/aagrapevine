@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-31T13:46:17Z",
+ "updated": "2026-11-01T06:32:36Z",
  "fixture": false,
  "items": [
   {
@@ -1940,51 +1940,6 @@
     }
    },
    "machine": [],
-   "is_new": false
-  },
-  {
-   "id": "ed:gv:2026-10:dealing-with-loneliness",
-   "source": "grapevine",
-   "kind": "topic",
-   "url": "https://www.aagrapevine.org/contribute",
-   "title": "Dealing with Loneliness",
-   "summary": "Members don’t often share about loneliness. How do you deal with it in sobriety? What was your experience with loneliness when you were still drinking? What’s it like now? What are the tools you use to combat loneliness and to reach out for help and fellowship.",
-   "lang": "en",
-   "date": "2026-03-01",
-   "first_seen": "2026-09-23T16:30:40Z",
-   "image": null,
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "October 2026",
-    "issue_key": "2026-10",
-    "deadline": "2026-03-01",
-    "theme": "Dealing with Loneliness",
-    "evergreen": false,
-    "due_text": "March 1, 2026",
-    "pdf_url": "https://www.aagrapevine.org/sites/default/files/2026-02/Editorial_Calendar_GV_2026_27.pdf",
-    "submit_url": "https://www.aagrapevine.org/submit-your-story",
-    "guidelines_url": "https://www.aagrapevine.org/guidelines-contributing-grapevine"
-   },
-   "i18n": {
-    "title": {
-     "en": "Dealing with Loneliness",
-     "es": "Tratar con la soledad"
-    },
-    "summary": {
-     "en": "Members don’t often share about loneliness. How do you deal with it in sobriety? What was your experience with loneliness when you were still drinking? What’s it like now? What are the tools you use to combat loneliness and to reach out for help and fellowship.",
-     "es": "Los miembros no suelen compartir sobre la soledad. ¿Cómo lidiar con eso en sobriedad? ¿Cuál fue tu experiencia con la soledad cuando aún estabas bebiendo? ¿Cómo es ahora? ¿Cuáles son las herramientas que utiliza para combatir la soledad y para llegar a la ayuda y compañerismo?"
-    },
-    "issue_label": {
-     "en": "October 2026",
-     "es": "Octubre 2026"
-    }
-   },
-   "machine": [
-    "es"
-   ],
    "is_new": false
   },
   {
