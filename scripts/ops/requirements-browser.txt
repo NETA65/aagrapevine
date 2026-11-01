@@ -5,7 +5,7 @@
 # Playwright drives the Google Chrome that GitHub's runners already have (nothing else is downloaded). Its version
 # is pinned, so the checks behave the same every run; Dependabot (.github/dependabot.yml) proposes each new release
 # once a month, and the Code check runs the browser checks with it before it is merged.
-playwright==1.63.0
+playwright==1.64.1
 # the browser checks' picture comparisons (the same cap as requirements.txt)
 Pillow>=10.4,<13
 # the browser checks read the settings (config/site.yml) and share helpers with the offline tests, which read YAML
