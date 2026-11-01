@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-10-31T23:17:46Z",
- "attempted": "2026-10-31T23:17:46Z",
+ "updated": "2026-11-01T06:25:30Z",
+ "attempted": "2026-11-01T06:25:30Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-10-31",
-  "new": 0
+  "today": "2026-11-01",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-10-31",
+   "id": "quote:gv:2026-11-01",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote October 31",
+   "title": "Grapevine Daily Quote November 1",
    "summary": "",
    "lang": "en",
-   "date": "2026-10-31",
-   "first_seen": "2026-10-31T07:06:15Z",
-   "last_seen": "2026-10-31T07:06:15Z",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-01T06:25:30Z",
+   "last_seen": "2026-11-01T06:25:30Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "Every recovery, though it may go unnoticed, improves the world in some way.",
-    "attribution": "“Why I Keep Coming Back,” Toledo, Ohio, May 2001, Voices of Long-Term Sobriety",
+    "text": "The actual experience of turning myself inside out for the first time in the presence of an AA member left me drained and numb; but when feeling started to come back, I found that I had changed. For the first time in my AA experience, I could feel the sunshine of God’s love on my wounds, and true peace of mind.",
+    "attribution": "“Finding Self-Forgiveness,” Memphis, Tennessee, October 1977, Step By Step: Real AAs, Real Recovery",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "October 31",
+    "date_label": "November 1",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84458"
+    "node": "node-84459"
    }
   },
   {
-   "id": "quote:lv:2026-10-31",
+   "id": "quote:lv:2026-11-01",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Octubre 31",
+   "title": "Cita Diaria con La Viña Noviembre 1",
    "summary": "",
    "lang": "es",
-   "date": "2026-10-31",
-   "first_seen": "2026-10-31T07:06:15Z",
-   "last_seen": "2026-10-31T07:06:15Z",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-01T06:25:30Z",
+   "last_seen": "2026-11-01T06:25:30Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "Todos sabemos de quién es el inventario que hacemos en AA, ¿verdad?",
-    "attribution": "“Décima Tradición”. NUEVA YORK, NUEVA YORK, MAYO DE 1971",
-    "source": "Lo mejor del Grapevine, Volumen I",
-    "source_lang": "es",
+    "text": "No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene algo que ver con el eslogan ‘Sigue viniendo, pase lo que pase’.",
+    "attribution": "“Sigue viniendo, pase lo que pase”. SALT LAKE CITY, UTAH, NOVIEMBRE DE 2000",
+    "source": "In Our Own Words",
+    "source_lang": "en",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "31 de octubre",
+    "date_label": "1 de noviembre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84454"
+    "node": "node-84455"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-11-01",
+    "heading": "Grapevine Daily Quote November 1",
+    "text": "The actual experience of turning myself inside out for the first time in the presence of an AA member left me drained and numb; but when feeling started to come back, I found that I had changed. For the first time in my AA experience, I could feel the sunshine of God’s love on my wounds, and true peace of mind.",
+    "attribution": "“Finding Self-Forgiveness,” Memphis, Tennessee, October 1977, Step By Step: Real AAs, Real Recovery",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-11-01T06:25:20Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-19T12:22:38Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-18",
-    "heading": "Grapevine Daily Quote October 18",
-    "text": "As an individual I am so small I’m almost totally meaningless in the universe; it’s almost as if I didn’t exist. But not quite ... As small as I am, I’m not totally meaningless.",
-    "attribution": "“The Real Thing,” New York, New York, February 2001, Voices of Long-Term Sobriety",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-18T11:23:23Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-11-01",
+    "heading": "Cita Diaria con La Viña Noviembre 1",
+    "text": "No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene algo que ver con el eslogan ‘Sigue viniendo, pase lo que pase’.",
+    "attribution": "“Sigue viniendo, pase lo que pase”. SALT LAKE CITY, UTAH, NOVIEMBRE DE 2000",
+    "source": "In Our Own Words",
+    "source_lang": "en",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-11-01T06:25:30Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-19T12:22:48Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-18",
-    "heading": "Cita Diaria con La Viña Octubre 18",
-    "text": "Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas en que las aplicamos a nosotros mismos, a AA en su totalidad y a nuestras relaciones con el mundo que nos rodea. Podemos seguir perfeccionando ‘la práctica de estos principios en todos nuestros asuntos’.",
-    "attribution": "“Una perspectiva del porvenir”. BILL W., COFUNDADOR DE AA, FEBRERO DE 1961",
-    "source": "I Am Responsible",
-    "source_lang": "en",
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-18T11:23:33Z"
    }
   ]
  }
