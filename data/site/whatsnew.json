@@ -1,7 +1,95 @@
 {
- "updated": "2026-11-01T06:35:39Z",
+ "updated": "2026-11-01T14:28:29Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DfMvD6FDQC3",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfMvD6FDQC3/",
+   "title": "“The actual experience of turning myself inside out for the first time in the presence…",
+   "summary": "“The actual experience of turning myself inside out for the first time in the presence of an AA member left me drained and numb; but when feeling started to come back, I found that I had changed. For the first time in my AA experience, I could feel the sunshine of God’s love on my wounds, and true peace of mind.” “Finding Self-Forgiveness,” Memphis, Tennessee, October 1977, Step By Step: Real…",
+   "lang": "en",
+   "date": "2026-11-01T12:30:15Z",
+   "first_seen": "2026-11-01T14:21:38Z",
+   "image": "/assets/cache/ig/DfMvD6FDQC3.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfMvD6FDQC3",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfMvD6FDQC3.webp",
+    "embed_url": "https://www.instagram.com/p/DfMvD6FDQC3/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfMvD6FDQC3/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The actual experience of turning myself inside out for the first time in the presence…",
+     "es": "“La experiencia real de convertirme dentro por primera vez en la presencia …"
+    },
+    "summary": {
+     "en": "“The actual experience of turning myself inside out for the first time in the presence of an AA member left me drained and numb; but when feeling started to come back, I found that I had changed. For the first time in my AA experience, I could feel the sunshine of God’s love on my wounds, and true peace of mind.” “Finding Self-Forgiveness,” Memphis, Tennessee, October 1977, Step By Step: Real…",
+     "es": "“La experiencia real de entregarme por primera vez en presencia de un miembro de AA me dejó drenado y entumecido; pero cuando el sentimiento empezó a regresar, encontré que había cambiado. Por primera vez en mi experiencia AA, pude sentir el sol del amor de Dios sobre mis heridas, y la verdadera paz mental.” “Encontrando la auto-pergilidad”, Memphis, Tennessee, octubre de 1977, paso a paso: Real …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-01T12:30:15Z"
+  },
+  {
+   "id": "ig:DfMvD75jbvc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfMvD75jbvc/",
+   "title": "“No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene…",
+   "summary": "“No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene algo que ver con el eslogan ‘Sigue viniendo, pase lo que pase’”. \"“Sigue viniendo, pase lo que pase” SALT LAKE CITY, UTAH, NOVIEMBRE DE 2000 De In Our Own Words\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-01T12:30:15Z",
+   "first_seen": "2026-11-01T14:21:38Z",
+   "image": "/assets/cache/ig/DfMvD75jbvc.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfMvD75jbvc",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfMvD75jbvc.webp",
+    "embed_url": "https://www.instagram.com/p/DfMvD75jbvc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfMvD75jbvc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I have no idea how I got that far or what kept me sober. I guess he has …",
+     "es": "“No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene…"
+    },
+    "summary": {
+     "en": "“I have no idea how I got that far or what kept me sober. I guess it has something to do with the slogan 'Keep coming, whatever happens'. \"Keep coming, whatever happens\" jumps lake city, Utah, November 2000 From In Our Own Words Daily Quote in www.aalavina.org",
+     "es": "“No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene algo que ver con el eslogan ‘Sigue viniendo, pase lo que pase’”. \"“Sigue viniendo, pase lo que pase” SALT LAKE CITY, UTAH, NOVIEMBRE DE 2000 De In Our Own Words\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-01T12:30:15Z"
+  },
   {
    "id": "ev:lvcal:b0eaaca178cb",
    "source": "calendar",
@@ -140,7 +228,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
     ],
-    "modified_text": "1:02 am"
+    "modified_text": "Oct 31"
    },
    "i18n": {
     "title": {
@@ -533,7 +621,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 138,
+    "views": 146,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1713,7 +1801,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 234,
+    "views": 235,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2339,7 +2427,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 279,
+    "views": 282,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -3008,7 +3096,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 206,
+    "views": 208,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3278,7 +3366,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 303,
+    "views": 307,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3488,7 +3576,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-18T12:13:47Z"
   },
   {
@@ -3555,7 +3643,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-18T12:00:00Z"
   },
   {
@@ -3599,7 +3687,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-18T11:30:15Z"
   },
   {
@@ -3643,7 +3731,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-18T11:30:14Z"
   },
   {
@@ -8481,7 +8569,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 299,
+    "views": 301,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8692,104 +8780,6 @@
    "machine": [],
    "is_new": false,
    "wn_date": "2026-10-15T12:00:00Z"
-  },
-  {
-   "id": "pdf:eb32beb4146e",
-   "source": "crawl",
-   "kind": "pdf",
-   "url": "https://www.aagrapevine.org/sites/default/files/2026-10/GV_News_November-2026.pdf",
-   "title": "GV News November 2026",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-10-15",
-   "first_seen": "2026-10-16T12:42:02Z",
-   "image": "/assets/cache/pdf/eb32beb4146e5096.webp",
-   "tags": [
-    "news"
-   ],
-   "category": "gvr",
-   "status": "ok",
-   "extra": {
-    "host": "www.aagrapevine.org",
-    "file_url": "https://www.aagrapevine.org/sites/default/files/2026-10/GV_News_November-2026.pdf",
-    "filename": "GV_News_November-2026.pdf",
-    "size_bytes": 14470843,
-    "pages": 4,
-    "thumb": "/assets/cache/pdf/eb32beb4146e5096.webp",
-    "referrers": [
-     {
-      "url": "https://www.aagrapevine.org/gvr-resources",
-      "title": "GVR Resources"
-     }
-    ],
-    "upload_month": "2026-10",
-    "link_texts": [],
-    "event_date": null,
-    "doc_lang": "en",
-    "multilingual": null,
-    "section": "GVR Resources",
-    "external": false,
-    "orphan": false
-   },
-   "i18n": {
-    "title": {
-     "en": "GV News November 2026",
-     "es": "Noticias GV noviembre de 2026"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-15T12:00:00Z"
-  },
-  {
-   "id": "ig:Deg2rpZDc12",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Deg2rpZDc12/",
-   "title": "“Mientras esté dispuesto a hacer lo que me corresponde en el momento que sea y abandonar…",
-   "summary": "“Mientras esté dispuesto a hacer lo que me corresponde en el momento que sea y abandonar la lucha por controlar los resultados de mis acciones, estaré siguiendo el camino que dispuso mi Poder Superior, llámese Dios, buena y ordenada dirección, alma, fuerza vital o cualquier otra cosa”. \"“Una sensación extraordinaria” THOMPSON, PENSILVANIA, MARZO DE 1997 Del AA Grapevine\" De I Am Responsible\" Cita…",
-   "lang": "es",
-   "date": "2026-10-15T11:30:15Z",
-   "first_seen": "2026-10-15T12:46:57Z",
-   "image": "/assets/cache/ig/Deg2rpZDc12.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Deg2rpZDc12",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Deg2rpZDc12.webp",
-    "embed_url": "https://www.instagram.com/p/Deg2rpZDc12/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Deg2rpZDc12/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“While I’m willing to do what I have to do at any time and leave …",
-     "es": "“Mientras esté dispuesto a hacer lo que me corresponde en el momento que sea y abandonar…"
-    },
-    "summary": {
-     "en": "“As long as I am willing to do what is right to me at the moment I am and to abandon the struggle to control the results of my actions, I will be following the path that my Higher Power arranged, call God, good and ordained direction, soul, life force or anything else.” \"An extraordinary sensation\" THOMPSON, PENSILVANIA, MARCH 1997 From AA Grapevine\" From I Am Responsible",
-     "es": "“Mientras esté dispuesto a hacer lo que me corresponde en el momento que sea y abandonar la lucha por controlar los resultados de mis acciones, estaré siguiendo el camino que dispuso mi Poder Superior, llámese Dios, buena y ordenada dirección, alma, fuerza vital o cualquier otra cosa”. \"“Una sensación extraordinaria” THOMPSON, PENSILVANIA, MARZO DE 1997 Del AA Grapevine\" De I Am Responsible\" Cita…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-15T11:30:15Z"
   }
  ]
 }

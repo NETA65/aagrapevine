@@ -1,11 +1,11 @@
 {
  "source": "events_external",
- "updated": "2026-11-01T06:35:15Z",
- "attempted": "2026-11-01T06:35:15Z",
+ "updated": "2026-11-01T14:25:45Z",
+ "attempted": "2026-11-01T14:25:45Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 1,
+  "added": 0,
   "removed": 0,
   "held": 0
  },
@@ -14,16 +14,16 @@
   "discovery_complete": true,
   "upcoming_urls": 19,
   "kept_from_cache": 0,
-  "fetched": 2,
-  "refreshed": 0,
+  "fetched": 0,
+  "refreshed": 1,
   "failed": 0,
   "pending": 0,
   "cached": 19,
   "texas": 2,
   "online_es": 1,
   "items": 3,
-  "new": 1,
-  "requests": 40
+  "new": 0,
+  "requests": 37
  },
  "items": [
   {
@@ -36,7 +36,7 @@
    "lang": "es",
    "date": "2027-01-29",
    "first_seen": "2026-10-02T22:31:32Z",
-   "last_seen": "2026-10-25T12:43:21Z",
+   "last_seen": "2026-11-01T14:25:45Z",
    "image": null,
    "tags": [
     "texas"
@@ -74,7 +74,7 @@
    "lang": "en",
    "date": "2027-01-08",
    "first_seen": "2026-10-18T12:13:47Z",
-   "last_seen": "2026-10-25T12:43:21Z",
+   "last_seen": "2026-11-01T14:25:45Z",
    "image": null,
    "tags": [
     "texas"
@@ -465,7 +465,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2027-01-08/64th-seta-convention": {
-   "at": "2026-10-18T12:13:47Z",
+   "at": "2026-11-01T14:25:45Z",
    "ev": {
     "title": "64th SETA Convention",
     "date_text": "January 8, 2027 - January 10, 2027",

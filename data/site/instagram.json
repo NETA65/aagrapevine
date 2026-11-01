@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-01T06:30:41Z",
+ "updated": "2026-11-01T14:21:38Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16959,
-   "posts": 3978,
+   "posts": 3979,
    "owner_id": "48108439509",
-   "checked": "2026-11-01T06:30:25Z",
+   "checked": "2026-11-01T14:21:21Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,99 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2425,
-   "posts": 3001,
+   "posts": 3002,
    "owner_id": "48275839129",
-   "checked": "2026-11-01T06:30:28Z",
+   "checked": "2026-11-01T14:21:24Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfMvD75jbvc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfMvD75jbvc/",
+   "title": "“No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene…",
+   "summary": "“No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene algo que ver con el eslogan ‘Sigue viniendo, pase lo que pase’”. \"“Sigue viniendo, pase lo que pase” SALT LAKE CITY, UTAH, NOVIEMBRE DE 2000 De In Our Own Words\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-01T12:30:15Z",
+   "first_seen": "2026-11-01T14:21:38Z",
+   "image": "/assets/cache/ig/DfMvD75jbvc.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfMvD75jbvc",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfMvD75jbvc.webp",
+    "embed_url": "https://www.instagram.com/p/DfMvD75jbvc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfMvD75jbvc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I have no idea how I got that far or what kept me sober. I guess he has …",
+     "es": "“No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene…"
+    },
+    "summary": {
+     "en": "“I have no idea how I got that far or what kept me sober. I guess it has something to do with the slogan 'Keep coming, whatever happens'. \"Keep coming, whatever happens\" jumps lake city, Utah, November 2000 From In Our Own Words Daily Quote in www.aalavina.org",
+     "es": "“No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene algo que ver con el eslogan ‘Sigue viniendo, pase lo que pase’”. \"“Sigue viniendo, pase lo que pase” SALT LAKE CITY, UTAH, NOVIEMBRE DE 2000 De In Our Own Words\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfMvD6FDQC3",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfMvD6FDQC3/",
+   "title": "“The actual experience of turning myself inside out for the first time in the presence…",
+   "summary": "“The actual experience of turning myself inside out for the first time in the presence of an AA member left me drained and numb; but when feeling started to come back, I found that I had changed. For the first time in my AA experience, I could feel the sunshine of God’s love on my wounds, and true peace of mind.” “Finding Self-Forgiveness,” Memphis, Tennessee, October 1977, Step By Step: Real…",
+   "lang": "en",
+   "date": "2026-11-01T12:30:15Z",
+   "first_seen": "2026-11-01T14:21:38Z",
+   "image": "/assets/cache/ig/DfMvD6FDQC3.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfMvD6FDQC3",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfMvD6FDQC3.webp",
+    "embed_url": "https://www.instagram.com/p/DfMvD6FDQC3/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfMvD6FDQC3/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The actual experience of turning myself inside out for the first time in the presence…",
+     "es": "“La experiencia real de convertirme dentro por primera vez en la presencia …"
+    },
+    "summary": {
+     "en": "“The actual experience of turning myself inside out for the first time in the presence of an AA member left me drained and numb; but when feeling started to come back, I found that I had changed. For the first time in my AA experience, I could feel the sunshine of God’s love on my wounds, and true peace of mind.” “Finding Self-Forgiveness,” Memphis, Tennessee, October 1977, Step By Step: Real…",
+     "es": "“La experiencia real de entregarme por primera vez en presencia de un miembro de AA me dejó drenado y entumecido; pero cuando el sentimiento empezó a regresar, encontré que había cambiado. Por primera vez en mi experiencia AA, pude sentir el sol del amor de Dios sobre mis heridas, y la verdadera paz mental.” “Encontrando la auto-pergilidad”, Memphis, Tennessee, octubre de 1977, paso a paso: Real …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfLKDSDG4Xo",
    "source": "instagram",
@@ -2436,7 +2522,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeolEMEF4Bu",
@@ -2479,7 +2565,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DemYUG8Fz_L",

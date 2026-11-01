@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-01T06:35:39Z",
+ "updated": "2026-11-01T14:28:29Z",
  "fixture": false,
  "items": [
   {
@@ -600,7 +600,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:recurring:citywide-dallas:2027-01-09",
