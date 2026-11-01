@@ -4,6 +4,7 @@ title_es: "Asamblea de Primavera 2027 de NETA 65"
 start: 2027-03-19
 end: 2027-03-21
 location: "DoubleTree by Hilton Hotel Dallas Near the Galleria, 4099 Valley View Ln, Dallas, TX 75244"
+url: "https://neta65.org/event/spring-assembly/"
 tags: [assembly, neta65, panel-77]
 lang: en
 summary_es: "Asamblea del Área 65 (Panel 77), coorganizada por los Distritos 53 y 55, en el DoubleTree by Hilton Hotel Dallas Near the Galleria."

@@ -1,10 +1,12 @@
 ---
-title: "NETA 65 Fall Assembly 2027"
-title_es: "Asamblea de Otoño 2027 de NETA 65"
+title: "NETA 65 Fall Assembly & Service Workshop 2027"
+title_es: "Asamblea de Otoño y Taller de Servicio 2027 de NETA 65"
 start: 2027-09-17
 end: 2027-09-19
+# name and dates from the Area's list of 2027 assemblies and ACMs (2026-11-01)
 # venue from the Convention Chair's report at the Fall ACM, 2026-10-18 (Convention_Fall ACM Report_10-18-2026_ENG_ESP.pdf on the Area's Drive)
 location: "DoubleTree by Hilton Fort Worth South Hotel & Conference Center, 100 Altamesa Blvd East, Fort Worth, TX 76134"
+url: "https://neta65.org/event/fall-assembly-service-workshop-assembly/"
 tentative: true            # District 62 has not decided yet whether to co-host; the Saturday times are not out yet
 tags: [assembly, neta65, panel-77]
 lang: en

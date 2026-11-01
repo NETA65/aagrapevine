@@ -5,6 +5,7 @@ start: 2027-06-25
 end: 2027-06-27
 location: "Venue to be announced"
 location_es: "Lugar por anunciarse"
+url: "https://neta65.org/event/summer-assembly-delegates-report-back/"
 tentative: true
 tags: [assembly, neta65, panel-77]
 lang: en
