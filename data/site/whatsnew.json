@@ -1,7 +1,57 @@
 {
- "updated": "2026-11-01T23:29:18Z",
+ "updated": "2026-11-02T07:47:23Z",
  "fixture": false,
  "items": [
+  {
+   "id": "pod:gv:9fddf4bc9fc1",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/ea1cc138-e4f1-4fe6-8eca-2b56a8b75215",
+   "title": "Victim or Victorious? [Season 11, Episode 18]",
+   "summary": "Beth tells Olis and Sam that in her drinking years impending doom became the norm. Trips to jail didn't scare her, she just blamed everyone else. In AA she learned not to believe everything she thinks and to watch her thinking. Beth wonders why she sometimes believes that God is going to drop her, when God has never dropped her. Steve shares his love for the Grapevine Daily Quote. You can find…",
+   "lang": "en",
+   "date": "2026-11-02T05:15:00Z",
+   "first_seen": "2026-11-02T07:47:16Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/ea1cc138-e4f1-4fe6-8eca-2b56a8b75215.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 33013551,
+    "duration_sec": 1651,
+    "season": 11,
+    "episode": 18,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/ea1cc138-e4f1-4fe6-8eca-2b56a8b75215",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "Victim or Victorious? [Season 11, Episode 18]",
+     "es": "¿Víctima o victoria? [Temporada 11, Episodio 18]"
+    },
+    "summary": {
+     "en": "Beth tells Olis and Sam that in her drinking years impending doom became the norm. Trips to jail didn't scare her, she just blamed everyone else. In AA she learned not to believe everything she thinks and to watch her thinking. Beth wonders why she sometimes believes that God is going to drop her, when God has never dropped her. Steve shares his love for the Grapevine Daily Quote. You can find…",
+     "es": "Beth le dice a Olis y a Sam que en sus años de beber la muerte inminente se convirtió en la norma. Los viajes a la cárcel no la asustaron, ella culpó a todos los demás. En AA aprendió a no creer todo lo que piensa y a ver su pensamiento. Beth se pregunta por qué a veces cree que Dios va a dejarla, cuando Dios nunca la ha dejado. Steve comparte su amor por el Grapevine Cita diaria. Usted puede encontrar …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-02T05:15:00Z"
+  },
   {
    "id": "ig:DfMvD6FDQC3",
    "source": "instagram",
@@ -3376,7 +3426,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-19T04:33:07Z"
   },
   {
@@ -3426,7 +3476,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-19T04:15:00Z"
   },
   {
@@ -8719,58 +8769,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-15T21:00:15Z"
-  },
-  {
-   "id": "pdf:a1246e5674cd",
-   "source": "crawl",
-   "kind": "pdf",
-   "url": "https://www.aalavina.org/sites/default/files/2026-10/LV_News_Nov-Dec%202026.pdf",
-   "title": "LV News Nov-Dec 2026",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-10-15",
-   "first_seen": "2026-10-15T12:53:43Z",
-   "image": "/assets/cache/pdf/a1246e5674cd1445.webp",
-   "tags": [
-    "news"
-   ],
-   "category": "rlv",
-   "status": "ok",
-   "extra": {
-    "host": "www.aalavina.org",
-    "file_url": "https://www.aalavina.org/sites/default/files/2026-10/LV_News_Nov-Dec%202026.pdf",
-    "filename": "LV_News_Nov-Dec 2026.pdf",
-    "size_bytes": 6137568,
-    "pages": 3,
-    "thumb": "/assets/cache/pdf/a1246e5674cd1445.webp",
-    "referrers": [
-     {
-      "url": "https://www.aalavina.org/recursos",
-      "title": "Recursos La Viña"
-     }
-    ],
-    "upload_month": "2026-10",
-    "link_texts": [],
-    "event_date": null,
-    "doc_lang": "es",
-    "multilingual": null,
-    "section": "Recursos La Viña",
-    "external": false,
-    "orphan": false
-   },
-   "i18n": {
-    "title": {
-     "en": "LV News Nov-Dec 2026",
-     "es": "LV News Nov-Dec 2026"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-15T12:00:00Z"
   }
  ]
 }

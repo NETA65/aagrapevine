@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-02T01:53:07Z",
+ "updated": "2026-11-02T07:47:16Z",
  "fixture": false,
  "shows": [
   {
@@ -14,7 +14,7 @@
    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
-   "episodes": 267,
+   "episodes": 268,
    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp",
    "i18n": {
     "title": {
@@ -62,6 +62,55 @@
   }
  ],
  "items": [
+  {
+   "id": "pod:gv:9fddf4bc9fc1",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/ea1cc138-e4f1-4fe6-8eca-2b56a8b75215",
+   "title": "Victim or Victorious? [Season 11, Episode 18]",
+   "summary": "Beth tells Olis and Sam that in her drinking years impending doom became the norm. Trips to jail didn't scare her, she just blamed everyone else. In AA she learned not to believe everything she thinks and to watch her thinking. Beth wonders why she sometimes believes that God is going to drop her, when God has never dropped her. Steve shares his love for the Grapevine Daily Quote. You can find…",
+   "lang": "en",
+   "date": "2026-11-02T05:15:00Z",
+   "first_seen": "2026-11-02T07:47:16Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/ea1cc138-e4f1-4fe6-8eca-2b56a8b75215.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 33013551,
+    "duration_sec": 1651,
+    "season": 11,
+    "episode": 18,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/ea1cc138-e4f1-4fe6-8eca-2b56a8b75215",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "Victim or Victorious? [Season 11, Episode 18]",
+     "es": "¿Víctima o victoria? [Temporada 11, Episodio 18]"
+    },
+    "summary": {
+     "en": "Beth tells Olis and Sam that in her drinking years impending doom became the norm. Trips to jail didn't scare her, she just blamed everyone else. In AA she learned not to believe everything she thinks and to watch her thinking. Beth wonders why she sometimes believes that God is going to drop her, when God has never dropped her. Steve shares his love for the Grapevine Daily Quote. You can find…",
+     "es": "Beth le dice a Olis y a Sam que en sus años de beber la muerte inminente se convirtió en la norma. Los viajes a la cárcel no la asustaron, ella culpó a todos los demás. En AA aprendió a no creer todo lo que piensa y a ver su pensamiento. Beth se pregunta por qué a veces cree que Dios va a dejarla, cuando Dios nunca la ha dejado. Steve comparte su amor por el Grapevine Cita diaria. Usted puede encontrar …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "pod:wo:8f2aa46749e6",
    "source": "podcast",
@@ -256,7 +305,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "pod:wo:68d6ac14f97d",
@@ -3451,7 +3500,7 @@
    "title": "Just Like Dad [Season 10, Episode 9]",
    "summary": "Geoff, whose article appears in the March 2026 issue of Grapevine Magazine, shares with Don and Sam about starting drinking early, and though this behavior got him in trouble, he was always eager for the next time he could drink. Geoff says that college didn't work because he was always at the bar. He describes how his alcoholism talked to him, and how sponsorship saved him when he was going down…",
    "lang": "en",
-   "date": "2026-03-02T04:15:00Z",
+   "date": "2026-03-02T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -3549,7 +3598,7 @@
    "title": "Embrace Who I Am [Season 10, Episode 8]",
    "summary": "Courtney joins Olis and Sam and tells them about shying away from drinking as a teen, but then taking to it around her graduation from high school. With the progression, it got to the point where she couldn't function without alcohol. As a member of AA she values her sponsor because she does not always trust what she thinks. We hear Listener Feedback from Charlie. In a new feature, Language of…",
    "lang": "en",
-   "date": "2026-02-23T04:15:00Z",
+   "date": "2026-02-23T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -3647,7 +3696,7 @@
    "title": "Progression and Obsession [Season 10, Episode 7]",
    "summary": "Sean tells Don and Sam about getting sober at 15, never having had a legal drink. Sean's early exposure to AA was through a rehab. He remembers going to a meeting which was just the leader and the other folks from his rehab. He was impressed when the leader said he was serving in the role because he didn't want to drink. There's a History Snippet with Mily, and Martina shares her love for…",
    "lang": "en",
-   "date": "2026-02-16T04:15:00Z",
+   "date": "2026-02-16T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -3745,7 +3794,7 @@
    "title": "Mustard Seed [Season 10, Episode 6]",
    "summary": "Deb tells Don and Sam about being a blackout drinker at an early age. Over the years she became hopeless, not knowing about a way out. A suicide attempt brought Deb to a hospital and that brought her to AA. In AA she found a modicum of hope that kept her coming. After many years of sobriety, Deb's life now is filled with service to alcoholics in many forms. Check out Grapevine's Instagram for a…",
    "lang": "en",
-   "date": "2026-02-09T04:15:00Z",
+   "date": "2026-02-09T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -3843,7 +3892,7 @@
    "title": "We Can Stay Sober Through Anything [Season 10, Episode 5]",
    "summary": "Susie tells Olis and Don about coming into AA as a young person. She was a tough girl in the back of the room, fighting the program, until someone asked, \"how is your way working? After several years of sobriety and building a life, she hit a difficult depression. Now she's learned to take good care of herself and not try to do too much. Gary shares about his affinity for Grapevine. While we…",
    "lang": "en",
-   "date": "2026-02-02T04:15:00Z",
+   "date": "2026-02-02T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -3892,7 +3941,7 @@
    "title": "God!? Fine, I'll Try It [Season 10, Episode 4]",
    "summary": "Martha joins Olis and Don and shares about getting sober at the height of party season. Martha's home group recently shut down, and she describes what she's looking for in home group as she visits many different meetings. Martha shares her gratitude that her husband and daughter give her support in her service work. In the Ask it Basket Jay asks about getting sober in later years. Mike shares in…",
    "lang": "en",
-   "date": "2026-01-26T04:15:00Z",
+   "date": "2026-01-26T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -3941,7 +3990,7 @@
    "title": "Hell on Earth [Season 10, Episode 3]",
    "summary": "Nora tells Olis and Don about the insane thinking that started the second she picked up a drink. It got so bad that Nora would bring a water bottle filled with vodka to the bar so she wouldn't have to wait as long to get drunk. Her bottom came when Nora could no longer get drunk. She came to AA through a side window, but stuck around even though she couldn't figure out what making coffee had to…",
    "lang": "en",
-   "date": "2026-01-19T04:15:00Z",
+   "date": "2026-01-19T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -3990,7 +4039,7 @@
    "title": "I Saw Smiles and Lights in Eyes [Season 10, Episode 2]",
    "summary": "Rick first came to AA supporting a friend mandated to attend. He didn't think himself an alcoholic, but read some literature and heard from some members and eventually understood his own problem. The Second and Third Steps came easy, but the Fourth presented a problem until he heard \"it's just a list.\" Don and Sam introduce a new podcast feature, Using the Traditions in Our Lives, and Suzy and…",
    "lang": "en",
-   "date": "2026-01-12T04:15:00Z",
+   "date": "2026-01-12T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -4039,7 +4088,7 @@
    "title": "Like an Old Boxer [Season 10, Episode 1]",
    "summary": "Greg, whose article \"A Well-Made Bed\" appears in the January 2025 issue of Grapevine magazine, tells Don and Olis about getting to AA with the help of a patient twelfth stepper. Greg shares a bit of history about the beginnings of his home group — the Princeton Alternative Group in New Jersey. We learn Greg's take on the secret to being \"cool,\" and one difference between alcoholics and…",
    "lang": "en",
-   "date": "2026-01-05T04:15:00Z",
+   "date": "2026-01-05T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -4088,7 +4137,7 @@
    "title": "Learning to Identify [Season 9, Episode 26]",
    "summary": "Felicia tells Olis and Sam that when she was in legal trouble her attorney recommended AA. He wasn't the first to say she needed help, but he was the first one she heard. Felicia says she came into AA comparing herself to others, but with the help of experienced members she learned how to identify and not compare. Her service life began on a hospitals and institutions committee and she found…",
    "lang": "en",
-   "date": "2025-12-29T04:15:00Z",
+   "date": "2025-12-29T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -4137,7 +4186,7 @@
    "title": "The Only Requirement [Season 9, Episode 25]",
    "summary": "Mike says that having \"just one more\" not only brought him to a place he never thought he'd be, but also opened his mind for getting help. Mike tells Olis and Sam how his first meeting had smoking, gross couches and uncomfortable folding chairs — just what he needed. He's grateful for the gift of desperation. We hear Listener Feedback from Nevada about her love for the Grapevine podcast. While we…",
    "lang": "en",
-   "date": "2025-12-22T04:15:00Z",
+   "date": "2025-12-22T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -4186,7 +4235,7 @@
    "title": "Move Toward Love [Season 9, Episode 24]",
    "summary": "Danica talks to Olis and Sam about when she was an active drinker how easy it was to forget the consequences of alcohol. Early on as a sober AA member she recalls noticing how others took their service commitments very seriously, and she decided to do the same thing. When faced with a dilemma, she got a suggestion from her sponsor to seek out the experience of other AA members and that helped her…",
    "lang": "en",
-   "date": "2025-12-15T04:15:00Z",
+   "date": "2025-12-15T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -4235,7 +4284,7 @@
    "title": "Don't Should on Yourself [Season 9, Episode 23]",
    "summary": "Antonio shares with Olis and Sam that alcohol worked for him — until it worked against him. In sobriety Antonio learned to really show up as a father-figure for his niece. He's also learned to remember that his core thoughts about himself are not real. In #Heardinameeting Aaron shares from his collection he keeps in a journal. Darlene shares about her support for Grapevine. While we provide the…",
    "lang": "en",
-   "date": "2025-12-08T04:15:00Z",
+   "date": "2025-12-08T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -4284,7 +4333,7 @@
    "title": "All Our Affairs [Season 9, Episode 22]",
    "summary": "Steve, whose letter \"Happy New Year\" appears in the December 2025 issue of Grapevine, tells Don and Sam about detoxing in the rooms of AA. Steve used AA principles to not drink while he survived a serious illness. Now he uses that experience to help others, offering hope. We play the article \"Remedy for a Lonely Holiday,\" also from the December issue. The audio for all magazine stories is…",
    "lang": "en",
-   "date": "2025-12-01T04:15:00Z",
+   "date": "2025-12-01T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -4333,7 +4382,7 @@
    "title": "I Didn't Think I Had Anything to Give [Season 9, Episode 21]",
    "summary": "In a special \"Corrections\" episode, podcast editor Bob joins Don as a host. Olis, Bob and Don hold a quiz about the top 5 ways to stay sober during the holidays. This week's guest, Suzy, tells Bob and Don about going to prison as a sober member of AA. She learned from members of her group that she had an opportunity to help others while incarcerated. Suzy tells of her experience with service in…",
    "lang": "en",
-   "date": "2025-11-24T04:15:00Z",
+   "date": "2025-11-24T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -4382,7 +4431,7 @@
    "title": "Anyone, Anywhere [Season 9, Episode 20]",
    "summary": "David tells Don and Sam about coming into AA in 1986. He was struck by being told to keep coming back — no one had invited him back anywhere for years. The men in the group took him to multiple meetings a day, and stayed with him constantly; David explains why. David learned that going through tough times gives us wisdom to help others. The three discuss a question in A Newcomer Asks . Nikki…",
    "lang": "en",
-   "date": "2025-11-17T04:15:00Z",
+   "date": "2025-11-17T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -4431,7 +4480,7 @@
    "title": "Growing Up in AA [Season 9, Episode 19]",
    "summary": "Lizz talks to Olis and Sam about coming in to AA at an early age and sticking around even though she did not always feel welcome. Lizz also talks about getting through a traumatic time while staying close to AA, staying sober and finding the outside help she needs. The team discuss two Grapevine Daily Quotes . In The News we hear from AA World Services Treasurer John W. about Gratitude Month. On…",
    "lang": "en",
-   "date": "2025-11-10T04:15:00Z",
+   "date": "2025-11-10T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -4480,7 +4529,7 @@
    "title": "Learning to Trust [Season 9, Episode 18]",
    "summary": "Sarah, whose article appears in the November 2025 issue of Grapevine Magazine, tells Olis and Don about being a daily blackout drinker. She tried to control her drinking but learned that if you need to control, you're out of control. Sarah felt a special welcome in AA, and now tries to make the next new person feel welcomed as well. Mike shares his love for Grapevine. While we provide the podcast…",
    "lang": "en",
-   "date": "2025-11-03T04:15:00Z",
+   "date": "2025-11-03T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6195,7 +6244,7 @@
    "title": "Welcome Home, Mary [Season 8, Episode 9]",
    "summary": "Mary, whose story appears in the March issue of Grapevine Magazine, shares that she got serious about AA when alcohol stopped working for her. She tells Don and Sam that once she surrendered her Higher Power gave her a fish-eye lens view of what she needed to do. Our roving reporter Olis visits the AA International Women's Conference in San Diego and we hear sharing from Tracy, Brenda, Paige…",
    "lang": "en",
-   "date": "2025-03-03T04:15:00Z",
+   "date": "2025-03-03T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6244,7 +6293,7 @@
    "title": "If I'd Just Taken Suggestions [Season 8, Episode 8]",
    "summary": "Cindy spent a long time dry in AA meetings while not working the Steps, and it wasn't always pleasant. She wonders now how she did not go out. Eventually, she tells Don and Sam, she had enough and reached out for help with working the AA program of recovery. In the Ask it Basket Madeline wonders if it's OK for a newcomer to bring a friend for support to a meeting, and Jim has a question about…",
    "lang": "en",
-   "date": "2025-02-24T04:15:00Z",
+   "date": "2025-02-24T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6293,7 +6342,7 @@
    "title": "Whatever is Asked of Me [Season 8, Episode 7]",
    "summary": "Don and Sam start us off with a conversation about the difference between \"rigorous honesty\" and \"brutal honesty.\" Jeff joins the discussion saying that his first exposure to AA was through his father and his AA friends. Jeff tried AA for a couple years but struggled with the ideas of a higher power and with sponsorship. With the help of a past teacher he met up with at a meeting, Jeff learned…",
    "lang": "en",
-   "date": "2025-02-17T04:15:00Z",
+   "date": "2025-02-17T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6342,7 +6391,7 @@
    "title": "A Beautiful Light Inside [Season 8, Episode 6]",
    "summary": "Theresa began AA with gratitude for the Traditions, finding she could be herself in the fellowship without concern. An early AA friend helped her see that she belonged. Theresa does service in hospitals, women's treatment centers and in half-way houses. She says her recovery is a repeating process of discovering, uncovering and discarding, and that she needs to be an AA member all the time—not…",
    "lang": "en",
-   "date": "2025-02-10T04:15:00Z",
+   "date": "2025-02-10T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6391,7 +6440,7 @@
    "title": "Brighter Days [Season 8, Episode 5]",
    "summary": "Michelle, whose article appears in the February 2025 issue of Grapevine, talks to Olis and Don about her awakening of not wanting to drink anymore. Among other things, Michelle talks about the successful logistics of her hybrid home group, about healing her relationship with her daughter, and about writing for the Grapevine. While we provide the podcast at no charge, we do have expenses…",
    "lang": "en",
-   "date": "2025-02-03T04:15:00Z",
+   "date": "2025-02-03T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6440,7 +6489,7 @@
    "title": "From The Southeast Regional Forum [Season 8, Episode 4]",
    "summary": "Our roving reporter Don visits the Southeast Regional Forum and interviews several trusted servants at the event, including past delegate Kenneth, the Regional Forum Coordinator at the General Service Office, Eileen, Regional Trustee Tom, and the General Manager at the GSO, Bob. There's also Listener Feedback from Paul, Bill, Alex and Roman. While we provide the podcast at no charge, we do have…",
    "lang": "en",
-   "date": "2025-01-27T04:15:00Z",
+   "date": "2025-01-27T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6489,7 +6538,7 @@
    "title": "They Let Me In [Season 8, Episode 3]",
    "summary": "Wilson talks to Sam and Olis about a financial windfall that did not fill the hole in his soul. It wasn't until he found AA that he found himself through the Steps. Wilson tells a touching story of hardcore AA guys helping him prepare for his little girl's birthday party. Olis and Sam talk about the Bridging the Gap program, and there's an update from Patrick C. on the International Convention in…",
    "lang": "en",
-   "date": "2025-01-20T04:15:00Z",
+   "date": "2025-01-20T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6538,7 +6587,7 @@
    "title": "Any Length [Season 8, Episode 2]",
    "summary": "Donna talks to Olis and Don about getting sober in a therapeutic community, and doing service now bringing Big Book workshops to AA members. In a Blast From the Past , Bill W. talks about the Three Legacies of AA in a talk from 1954 in Fort Worth, TX. Misha from the Public Information Desk at the General Service Office talks to Don about the new AAWS podcast \"Our Primary Purpose,\" which premiers…",
    "lang": "en",
-   "date": "2025-01-13T04:15:00Z",
+   "date": "2025-01-13T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6587,7 +6636,7 @@
    "title": "Just the Right Time [Season 8, Episode 1]",
    "summary": "Happy New Year and welcome to Season 8 of the AA Grapevine Half Hour Variety Hour. Shirley, whose article appears in the January issue of Grapevine magazine, shares with Don and Sam about being in a place where either suicide, murder or a mental institution were coming soon. Instead, she found an AA meeting and a new life. In the News we learn about a new podcast from the General Service Office…",
    "lang": "en",
-   "date": "2025-01-06T04:15:00Z",
+   "date": "2025-01-06T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6636,7 +6685,7 @@
    "title": "Perfectly On Time [Season 7, Episode 28]",
    "summary": "Kelley tells Olis and Sam that she first came to AA when the alcohol no longer made her feel better. She struggled at first and had to admit that she'd not been completely sober. When Kelley got honest with her sponsor and group, she was welcomed with open arms. There's an Ask it Basket question from Joe, and Listener Feedback from Brian, Jack, Jerimiah, and Pat. While we provide the podcast at…",
    "lang": "en",
-   "date": "2024-12-30T04:15:00Z",
+   "date": "2024-12-30T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6685,7 +6734,7 @@
    "title": "Such a Drastic Difference [Season 7, Episode 27]",
    "summary": "Growing up in traumatic circumstances, Anthony would see TV shows and wonder — where is that world? He tells Don and Olis how he found a new and better world through AA members, sponsorship and working the steps. While we provide the podcast at no charge, we do have expenses. Grapevine is the only AA entity that does not accept contributions, so to support the AA Grapevine Podcast, please…",
    "lang": "en",
-   "date": "2024-12-23T04:15:00Z",
+   "date": "2024-12-23T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6734,7 +6783,7 @@
    "title": "The Online Intergroup of Alcoholics Anonymous [Season 7, Episode 26]",
    "summary": "Susan talks to Don and Sam about her recovery and her service work with the Online Intergoup of Alcoholics Anonymous. Patrick from the International Convention Desk at the General Service Office gives an update on the 2025 International Convention happening in Vancouver, BC in July. There's two Ask it Basket Questions from Madeline, and Jack sent in a joke for Wit's End. While we provide the…",
    "lang": "en",
-   "date": "2024-12-16T12:30:00Z",
+   "date": "2024-12-16T13:30:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6783,7 +6832,7 @@
    "title": "How Could a Monk Be a Drunk? [Season 7, Episode 25]",
    "summary": "Luke tells Don and Sam that he found AA because he saw the light — in his empty refrigerator. Even though he was a man of God, the first step for Luke was a portal into the world of spirit. This weeks feature is #heardinameeting, and our Wit's End joke came from Jack. While we provide the podcast at no charge, we do have expenses. Grapevine is the only AA entity that does not accept…",
    "lang": "en",
-   "date": "2024-12-09T04:15:00Z",
+   "date": "2024-12-09T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6832,7 +6881,7 @@
    "title": "How I Made it Through the Holidays [Season 7, Episode 24]",
    "summary": "Lisa, whose article appears in the December 2024 issue of Grapevine, talks to Don and Olis about starting AA in early December and staying sober through the holidays. As a wife, mother, daughter and sister she's learned to put sobriety first. There's listener feedback from Ryan and Shari too. The AA Grapevine Podcast reached a milestone this week—exceeding one million downloads. Thank you…",
    "lang": "en",
-   "date": "2024-12-02T04:15:00Z",
+   "date": "2024-12-02T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6881,7 +6930,7 @@
    "title": "Message of Hope: National Corrections Conference [Season 7, Episode 23]",
    "summary": "This week our roving reporter, Bob, travels to the National Corrections Conference in North Carolina. Bob interviews Angel, Morris, Tammy, Ronald, Jessica and James about their work in corrections and their experience, strength and hope as AA members. Bob and Don talk about the experience of the conference and let listeners know how they can help members behind the walls—including how to…",
    "lang": "en",
-   "date": "2024-11-25T04:15:00Z",
+   "date": "2024-11-25T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6930,7 +6979,7 @@
    "title": "Standing with Integrity [Season 7, Episode 22]",
    "summary": "This episode starts out with \"Sober Don\" hosting Sobriety Squabble a game of guessing top answers to the question \"what are the best ways to stay sober during the holidays?\" — as we surveyed answers from Area Grapevine Chairs and Alternate Chairs. There's a report in from Alan, whose area was devastated by a recent hurricane, on how AA is continuing to help alcoholics. Olis and Sam interview…",
    "lang": "en",
-   "date": "2024-11-18T04:15:00Z",
+   "date": "2024-11-18T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -6979,7 +7028,7 @@
    "title": "Traditions Improve Life [Season 7, Episode 21]",
    "summary": "Lindsey and Kent talk about the AA Traditions with Don and Olis, and how applying the Traditions to their everyday lives makes everything better. We share more information about the new Plain Language Big Book and the Grapevine and La Viña apps. While we provide the podcast at no charge, we do have expenses. Grapevine is the only AA entity that does not accept contributions, so to support the AA…",
    "lang": "en",
-   "date": "2024-11-11T04:15:00Z",
+   "date": "2024-11-11T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -7028,7 +7077,7 @@
    "title": "I Hear the Message [Season 7, Episode 20]",
    "summary": "Mack, whose article appears in the November issue of Grapevine, tells Don and Sam about the important ways other AA's help him hear the message of Alcoholics Anonymous. Rainer, the GSO staff member on the Literature Desk also talks to Don and Sam about the just-published Plain Language Big Book A Tool for Reading Alcoholics Anonymous. Check out Don's first-step artwork on Grapevine's Instagam…",
    "lang": "en",
-   "date": "2024-11-04T04:15:00Z",
+   "date": "2024-11-04T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -8792,7 +8841,7 @@
    "title": "Building Unity [Season 6, Episode 10]",
    "summary": "Nadja, who's article appears in the March issue of Grapevine, discusses her journey to AA and her work in bringing Spanish-speaking and English-speaking members together. Paz, the Chair of the AA Grapevine Board, talks about La Viña magazine and connecting with the Spanish-speaking community. In a bonus section, Aaron talks about his Big-Book-quote tattoo and his gratitude for an upcoming…",
    "lang": "en",
-   "date": "2024-03-04T04:15:00Z",
+   "date": "2024-03-04T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -8841,7 +8890,7 @@
    "title": "Definitely a Tosspot [Season 6, Episode 9]",
    "summary": "Cindy tells Don and Sam that while early on she admitted powerlessness, deep inside she had the thought that some day, some how she could drink again. Eventually she did have a relapse. It took more, she needed to admit at her inner-most self that she was an alcoholic. The three also discuss honest and being useful even during hardship. \"Stump the Thumper\" is this week's feature. While we provide…",
    "lang": "en",
-   "date": "2024-02-26T04:15:00Z",
+   "date": "2024-02-26T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -8890,7 +8939,7 @@
    "title": "I Wanted to Get the Heat Off [Season 6, Episode 8]",
    "summary": "Sam and Don talk to Debbie, who serves as Secretary for Area 51. Debbie tells about coming to AA as the result of strong suggestions from her probation officer, her treatment counselor and various law enforcement officials. She feels that her service in jails and prisons keeps her out of jail. Also, Sam and Olis discuss the 2022 Membership survey. While we provide the podcast at no charge, we do…",
    "lang": "en",
-   "date": "2024-02-19T04:15:00Z",
+   "date": "2024-02-19T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -8939,7 +8988,7 @@
    "title": "The First Miracle [Season 6, Episode 7]",
    "summary": "In this episode we get to learn a bit about how the podcast is put together as Don and Sam talk shop with Bob S., a Grapevine podcast editor. The three go on to talk about coming into AA, observing others' growth as they work the program, and the healing and strengthening of relationships as we make Ninth Step amends. There's a great question from Sarah in the \"Ask it Basket\", and in a \"Blast…",
    "lang": "en",
-   "date": "2024-02-12T04:15:00Z",
+   "date": "2024-02-12T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -8988,7 +9037,7 @@
    "title": "All I Had to Do was Surrender [Season 6, Episode 6]",
    "summary": "Lisa, who's story appears in the February issue of Grapevine magazine, shares with Don and Sam about how not putting sobriety first led to a relapse. Lisa goes on to describe how God places people in her life when she needs them, or when they need her. While we provide the podcast at no charge, we do have expenses. Grapevine is the only AA entity that does not accept contributions, so to support…",
    "lang": "en",
-   "date": "2024-02-05T04:15:00Z",
+   "date": "2024-02-05T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9037,7 +9086,7 @@
    "title": "Sober Since Disco [Season 6, Episode 5]",
    "summary": "Joe talks to Sam and Olis about being secular in a spiritual program. There's listener feedback from Penny on the different types of AA meetings, and Aaron writes in about his favorite line from the Big Book, which is tattooed on his forearm. While we provide the podcast at no charge, we do have expenses. Grapevine is the only AA entity that does not accept contributions, so to support the AA…",
    "lang": "en",
-   "date": "2024-01-29T04:15:00Z",
+   "date": "2024-01-29T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9086,7 +9135,7 @@
    "title": "I Found God in the Psych Ward [Season 6, Episode 4]",
    "summary": "Sloan discusses finally surrendering and being relieved of the exhausting efforts to control her drinking. On the \"Listener Feedback Line\" we hear from Gerry and Lisa. In a special added section at the end, Sloan discusses with Don and Olis how the Steps have helped her heal from sexual abuse (this section may be difficult for some listeners). While we provide the podcast at no charge, we do have…",
    "lang": "en",
-   "date": "2024-01-22T04:15:00Z",
+   "date": "2024-01-22T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9135,7 +9184,7 @@
    "title": "We Will Need to Work the Steps [Season 6, Episode 3]",
    "summary": "Ted joins Don and Sam and talks about finding AA very similar in the many areas he's visited and lived. Ted got good guidance from his first sponsor, suggesting he give AA 90 days before he made a decision to stay or go. The three also discuss the immense power of Step work. Ted talks about a meeting he attends where an AA Grapevine Podcast is played and discussed. In this week's feature, the…",
    "lang": "en",
-   "date": "2024-01-15T04:15:00Z",
+   "date": "2024-01-15T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9184,7 +9233,7 @@
    "title": "Life Saving Humility [Season 6, Episode 2]",
    "summary": "Crystal shares with Sam and Olis about the humbling experience of reading the Big Book outloud with her sponsor, and how learning humility led to good relationships, improved self esteem and a newfound ability to not hold others to unreasonable expectations. In a Blast From the Past we hear from pioneer AA member Sybil of Laguna Beach, CA, from a talk she gave in 1980. While we provide the…",
    "lang": "en",
-   "date": "2024-01-08T04:15:00Z",
+   "date": "2024-01-08T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9233,7 +9282,7 @@
    "title": "Little Surrenders [Season 6, Episode 1]",
    "summary": "Happy New Year to all. In this episode Bill the Shirt talks with Don and Olis about his article in the January 2024 issue of Grapevine magazine. We learn how during his first encounter with a member of AA he found the first person ever who felt like he did. Bill learned that every drink, every mistake, and every regret had to happen in order for him to be low enough to accept the help of AA…",
    "lang": "en",
-   "date": "2024-01-01T04:15:00Z",
+   "date": "2024-01-01T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9282,7 +9331,7 @@
    "title": "Modeling Sobriety for Other Alcoholics [Season 5, Episode 26]",
    "summary": "Negini talks to Don and Sam about AA in different cultures and different languages, and how international online meetings have enhanced her sobriety. Tracy calls in with gratitude for the podcast. While we provide the podcast at no charge, we do have expenses. Grapevine is the only AA entity that does not accept contributions, so to support the AA Grapevine Podcast, please subscribe to Grapevine…",
    "lang": "en",
-   "date": "2023-12-25T04:15:00Z",
+   "date": "2023-12-25T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9331,7 +9380,7 @@
    "title": "Rocketed into Fourth Dimension [Season 5, Episode 25]",
    "summary": "Gerry, who serves on the Trustees Literature Committee, shares about the call for stories for various literature being revised. Gerry, Don and Sam also discuss feeling different coming into AA, and how they found a sense of belonging. The three also answer an Ask-it-Basket question from Stephanie, and talk about the different types of AA meetings. While we provide the podcast at no charge, we do…",
    "lang": "en",
-   "date": "2023-12-18T04:15:00Z",
+   "date": "2023-12-18T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9380,7 +9429,7 @@
    "title": "Hot Topic: AA Burnout [Season 5, Episode 24]",
    "summary": "Based on a letter from Roxanne, Helen, Sam and Olis discuss the importance of service in AA and the equally important practice of maintaining balance between family, work and AA. While we provide the podcast at no charge, we do have expenses. Grapevine is the only AA entity that does not accept contributions, so to support the AA Grapevine Podcast, please subscribe to Grapevine Magazine in print…",
    "lang": "en",
-   "date": "2023-12-11T04:15:00Z",
+   "date": "2023-12-11T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9429,7 +9478,7 @@
    "title": "Willing to Believe? [Season 5, Episode 23]",
    "summary": "Mike L., the Interim Chair of the General Service Board, shares about his service role and about his recovery from alcoholism. A print interview with Mike also appears in the December issue of Grapevine magazine. In \"Listener Feedback\" Spencer has a question about the Big Book, and Tim shares gratitude for the sharing of one of our podcast guests. While we provide the podcast at no charge, we do…",
    "lang": "en",
-   "date": "2023-12-04T04:15:00Z",
+   "date": "2023-12-04T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9478,7 +9527,7 @@
    "title": "Spiritus Contra Spiritum [Season 5, Episode 22]",
    "summary": "Olis joins the rotation as a host of Grapevine's weekly podcast. Don and Olis speak with Julia from Berlin, Germany about International AA and translating the spiritual message. Julia also talks about her search for God, Spirit versus spirits, and creating the fellowship she craved. Stay tuned after sign off for a brief song. While we provide the podcast at no charge, we do have expenses…",
    "lang": "en",
-   "date": "2023-11-27T04:15:00Z",
+   "date": "2023-11-27T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9527,7 +9576,7 @@
    "title": "Out of Answers [Season 5, Episode 21]",
    "summary": "Sam talks about learning to refocus in different types of meetings. Will joins Don and Sam for a discussion about connecting to AA, reaching out to others, and building a sober community. In an Ask it Basket segment, Felix asks about the phrase \"Take it Easy\" in the Twelve and Twelve. In Listener Feedback Madeline calls in on her fourth anniversary to express gratitude, and Steve wants to know…",
    "lang": "en",
-   "date": "2023-11-20T04:15:00Z",
+   "date": "2023-11-20T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9576,7 +9625,7 @@
    "title": "Stick with the Winners [Season 5, Episode 20]",
    "summary": "Reilly from Oregon talks about getting sober as a young woman in AA, going from riding motorcycles to quilting, and her current service as a Regional Trustee. Reilly, Don and Sam discuss the advantages of no longer fighting anyone or anything and staying out of controversy. Don describes his visit to the GSO Archives, and there's a feature on the Grapevine Daily Quote. While we provide the…",
    "lang": "en",
-   "date": "2023-11-13T04:15:00Z",
+   "date": "2023-11-13T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -9625,7 +9674,7 @@
    "title": "A Dream is a Promise You Give Yourself [Season 5, Episode 19]",
    "summary": "\"Liz the Lawyer,\" whose article appears in the November issue of Grapevine magazine, shares with Don and Sam about her struggles to admit her alcoholism, but then finding support and love from the \"finest people on the planet.\" The three then talk through Grapevine's 12 Tips for a Joyous Holiday Season. While we provide the podcast at no charge, we do have expenses. Grapevine is the only AA…",
    "lang": "en",
-   "date": "2023-11-06T04:15:00Z",
+   "date": "2023-11-06T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11340,7 +11389,7 @@
    "title": "Confessions of a Spreadsheet-Loving Nerd [Season 4, Episode 10]",
    "summary": "Christina S., whose story appears in the March issue of Grapevine magazine, shares with Don and Sam about finding her niche in AA service. She shares about watching the miracle of recover happen in her family and about her own spiritual awakening while working the 9th Step. Don and Sam discuss helping a newcomer, and the importance of being open and connected to other AA members and to God. While…",
    "lang": "en",
-   "date": "2023-03-06T04:15:00Z",
+   "date": "2023-03-06T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11389,7 +11438,7 @@
    "title": "The God of Our Experience [Season 4, Episode 9]",
    "summary": "Rev. Ward Ewing, a Class A Trustee Emeritus (non-alcoholic), talks with Don and Sam about how his work with Alcoholics Anonymous changed him and changed his ministry. Peter from Long Island, NY submits an \"Ask it Basket\" question and a joke; and Jerry from British Columbia gives feedback on the AA Grapevine Podcast. While we provide the podcast at no charge, we do have expenses. Grapevine is the…",
    "lang": "en",
-   "date": "2023-02-27T04:15:00Z",
+   "date": "2023-02-27T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11438,7 +11487,7 @@
    "title": "A Nudge from the Judge [Season 4, Episode 8]",
    "summary": "Allie C. talks to Don and Sam about how a forced drying out period during a court program helped the fog lift, which helped her denial to lift too. In AA, Allie met a group of people who just wanted to help her, but didn't want anything in return. Allie also talks about the value of having a sponsor and the rewards of being a sponsor. There's a bonus segment at the end of this podcast where…",
    "lang": "en",
-   "date": "2023-02-20T04:15:00Z",
+   "date": "2023-02-20T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11487,7 +11536,7 @@
    "title": "Showing Up [Season 4, Episode 7]",
    "summary": "Lauren shares with Don and Sam about searching out live meetings again, and her gratitude for the tools to summon Steps 1, 2 and 3 when necessary. Lauren also shares info about the upcoming Pacific Region Alcoholics Anonymous Service Assembly. In a \"Blast From the Past\" Teddy R. shares from a talk in 1956. While we provide the podcast at no charge, we do have expenses. To support the AA Grapevine…",
    "lang": "en",
-   "date": "2023-02-13T04:15:00Z",
+   "date": "2023-02-13T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11536,7 +11585,7 @@
    "title": "Learning to Feel [Season 4, Episode 6]",
    "summary": "Laura S., whose article appears in the February 2023 issue of Grapevine magazine, shares with Don and Sam about learning about AA in high school, the freedom to be who she is, and using the whole AA toolkit to lead a good life. While we provide the podcast at no charge, we do have expenses. To support the AA Grapevine Podcast, please subscribe to the magazine or purchase books or other items at…",
    "lang": "en",
-   "date": "2023-02-06T04:15:00Z",
+   "date": "2023-02-06T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11585,7 +11634,7 @@
    "title": "It's Not Rocket Surgery [Season 4, Episode 5]",
    "summary": "Don and San talk to Geoff S., the Southern Regional Trustee for the General Service Board of Australia. Geoff talks about carrying the message in a proactive way, and how service helps him to stay sober and happy. Australia AA is celebrating its 80th anniversary in 2025. While we provide the podcast at no charge, we do have expenses. To support the AA Grapevine Podcast, please subscribe to the…",
    "lang": "en",
-   "date": "2023-01-30T04:15:00Z",
+   "date": "2023-01-30T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11634,7 +11683,7 @@
    "title": "Young and Sober [Season 4, Episode 4]",
    "summary": "Bobby and Charlene share about getting sober in AA as young people, obstacles they faced and finding fun and laughter. They discuss service at the group level, getting active in Young People in AA, and involvement in general service. Don and Sam share letters from the mailbag. While we provide the podcast at no charge, we do have expenses. To support the AA Grapevine Podcast, please subscribe to…",
    "lang": "en",
-   "date": "2023-01-23T04:15:00Z",
+   "date": "2023-01-23T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11683,7 +11732,7 @@
    "title": "Sometimes Slowly [Season 4, Episode 3]",
    "summary": "Greg T. talks to Don and Sam about how alcohol stopped working for him and how AA made his life worth living again. Greg relates how the Steps helped him find his authentic self. \"Stump the Thumper\" is this week's special feature. While we provide the podcast at no charge, we do have expenses. To support the AA Grapevine Podcast, please subscribe to the magazine or purchase books or other items…",
    "lang": "en",
-   "date": "2023-01-16T04:15:00Z",
+   "date": "2023-01-16T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11732,7 +11781,7 @@
    "title": "The World Service Meeting [Season 4, Episode 2]",
    "summary": "General Service Board Trustee-at-Large Trish L. and GSO Staff Member Racy J. share with Don and Sam about their personal recoveries and their recent participation in the AA World Service Meeting. While we provide the podcast at no charge, we do have expenses. To support the AA Grapevine Podcast, please subscribe to the magazine or purchase books or other items at aagrapevine.org/store",
    "lang": "en",
-   "date": "2023-01-09T04:15:00Z",
+   "date": "2023-01-09T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11781,7 +11830,7 @@
    "title": "This Beautiful Truth [Season 4, Episode 1]",
    "summary": "Reem, whose story appears in the January 2023 issue of Grapevine magazine, talks with Don and Sam about breaking through 10 years of denial by learning the 24-hour plan and \"fake it till you make it.\" While we provide the podcast at no charge, we do have expenses. To support the AA Grapevine Podcast, please subscribe to the magazine or purchase books or other items at aagrapevine.org/store",
    "lang": "en",
-   "date": "2023-01-02T04:15:00Z",
+   "date": "2023-01-02T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11830,7 +11879,7 @@
    "title": "North Stars in AA [Season 3, Episode 27]",
    "summary": "Dennis talks to Don and Sam about living the illusion of controlled drinking, while getting beaten by hard drinking. Dennis describes North Stars in AA,—people who have experienced what he is going through and who give assurance that all will work out. In the Ask-It-Basket, Victor M. wants to know the difference between a \"character defect\" and a \"shortcoming.\" Dennis, Don and Sam share their…",
    "lang": "en",
-   "date": "2022-12-26T04:15:00Z",
+   "date": "2022-12-26T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11879,7 +11928,7 @@
    "title": "A Fork in the Road: Accept Help or Die [Season 3, Episode 26]",
    "summary": "Casey from Victoria, BC talks to Don and Sam about getting into trouble when he tries to step into God's realm of control. He relates how finding opportunities for service, in AA and in his everyday life, keep him sane. Casey tells a funny story about owning his own breathalyzer. While we provide the podcast at no charge, we do have expenses. To support the AA Grapevine Podcast, please subscribe…",
    "lang": "en",
-   "date": "2022-12-19T04:15:00Z",
+   "date": "2022-12-19T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11928,7 +11977,7 @@
    "title": "The Meeting Guide App [Season 3, Episode 25]",
    "summary": "Sam and Don talk to Josh R., about the development of the Meeting Guide App, technology in AA, and about recovery from alcoholism. While we provide the podcast at no charge, it is not free to produce. To support the AA Grapevine Podcast, please subscribe to the magazine or purchase books or other items at aagrapevine.org/store",
    "lang": "en",
-   "date": "2022-12-12T04:15:00Z",
+   "date": "2022-12-12T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -11977,7 +12026,7 @@
    "title": "What Can I Bring to the Occassion? [Season 3, Episode 24]",
    "summary": "Jack, whose story \"100 Beards\" appears in the December issue of Grapevine, describes how he stays sober on the road with little opportunity for meetings, and how giving by playing Santa fills his spirit. Karen talks about dealing with expectations, connecting with others in recovery, and becoming the Chairperson of her inner-voice committee. While we provide the podcast at no charge, it is not…",
    "lang": "en",
-   "date": "2022-12-05T04:15:00Z",
+   "date": "2022-12-05T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -12026,7 +12075,7 @@
    "title": "\"Help\" is a Complete Sentence [Season 3, Episode 23]",
    "summary": "Peg M. from Washington, DC shares that she did not have a one devastating bottom, but a series of small bottoms that piled up. Destructive drinking and destructive behavior brought her to AA. In a \"Blast from the Past\" Bill W. shares about AA's singleness of purpose, in a talk from 1957. While we provide the podcast at no charge, it is not free to produce. To support the AA Grapevine Podcast…",
    "lang": "en",
-   "date": "2022-11-28T04:15:00Z",
+   "date": "2022-11-28T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -12075,7 +12124,7 @@
    "title": "I Didn't Want to be an Alcoholic [Season 3, Episode 22]",
    "summary": "Don and Sam share tips for staying sober through the holidays. Claudette K. from Tacoma, WA shares about the importance of \"the meeting after the meeting\" where she learned how to socialize without alcohol. A new feature, the \"Ask it Basket,\" includes some AA history about how the basket came to be. While we provide the podcast at no charge, it is not free to produce. To support the AA Grapevine…",
    "lang": "en",
-   "date": "2022-11-21T04:15:00Z",
+   "date": "2022-11-21T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -12124,7 +12173,7 @@
    "title": "Grateful Instead of Hateful [Season 3, Episode 21]",
    "summary": "Don K. tells the incredible story of his journey through the Steps with his sponsor, which led him to forgiveness and a place of gratitude and peace. Our own Don M. visits the General Service Office in New York and talks to several AA special workers. While we provide the podcast at no charge, it is not free to produce. To support the AA Grapevine Podcast, please subscribe to the magazine or…",
    "lang": "en",
-   "date": "2022-11-14T04:15:00Z",
+   "date": "2022-11-14T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -12173,7 +12222,7 @@
    "title": "One Breath at a Time [Season 3, Episode 20]",
    "summary": "David S., author of an article on the 11th Step in the November issue of Grapevine, shares with Don and Sam. While we provide the podcast at no charge, it is not free to produce. To support the AA Grapevine Podcast, please subscribe to the magazine or purchase books or other items at store.aagrapevine.org.",
    "lang": "en",
-   "date": "2022-11-07T05:00:00Z",
+   "date": "2022-11-07T06:00:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -13937,7 +13986,7 @@
    "title": "In the Right Place [Season 2, Episode 10]",
    "summary": "Peter A. shares with Don and Sam about the changes in his attitudes and actions as a sober member of AA. Peter's story, \"In the Right Place\" appears in the March 2022 issue of Grapevine.",
    "lang": "en",
-   "date": "2022-03-07T04:15:00Z",
+   "date": "2022-03-07T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -13986,7 +14035,7 @@
    "title": "Alcohol in the House [Season 2, Episode 9]",
    "summary": "Susan Ida B. from Toronto shares with Don and Sam about the early days of getting sober and the rewards of sobriety. \"Ask the Oldtimer\" is this weeks special feature.",
    "lang": "en",
-   "date": "2022-02-28T04:15:00Z",
+   "date": "2022-02-28T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14035,7 +14084,7 @@
    "title": "I Got My Life Back [Season 2, Episode 8]",
    "summary": "Becca discusses overcoming shame in AA with Don and Sam. In a special feature, #Heardinameeting, the three discuss \"AA meetings filling members' tanks,\" \"funny individual solutions,\" and that \"everything can look like a failure in the middle.\"",
    "lang": "en",
-   "date": "2022-02-21T04:15:00Z",
+   "date": "2022-02-21T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14084,7 +14133,7 @@
    "title": "Allergy and Obsession [Season 2, Episode 7]",
    "summary": "Billy N. talks with Don and Sam about General Service, helping newcomers understand alcoholism, and the importance of a home group.",
    "lang": "en",
-   "date": "2022-02-14T04:15:00Z",
+   "date": "2022-02-14T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14133,7 +14182,7 @@
    "title": "Sweet Rescue [Season 2, Episode 6]",
    "summary": "Jules V. talks to Don and Sam about his article in the February 2022 issue of Grapevine magazine.",
    "lang": "en",
-   "date": "2022-02-07T04:15:00Z",
+   "date": "2022-02-07T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14182,7 +14231,7 @@
    "title": "Serenity in Calamity [Season 2, Episode 5]",
    "summary": "Georgi F. talks to Don and Sam about staying sober during an extended serious illness.",
    "lang": "en",
-   "date": "2022-01-31T04:15:00Z",
+   "date": "2022-01-31T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14231,7 +14280,7 @@
    "title": "Real Alcoholic? [Season 2, Episode 4]",
    "summary": "Chris B. discusses his 45 years of sobriety with Don and Sam and answers an \"Ask the Old-Timer\" question from a listener. In a \"Blast from the Past\" Father Martin talks amusingly about how you might know if you're an alcoholic.",
    "lang": "en",
-   "date": "2022-01-24T04:15:00Z",
+   "date": "2022-01-24T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14280,7 +14329,7 @@
    "title": "No Matter What [Season 2, Episode 3]",
    "summary": "Dorothy shares with Don and Sam about coming back to AA with a new-found enthusiasm for recovery. A new feature, #heardinameeting, premiers.",
    "lang": "en",
-   "date": "2022-01-17T04:15:00Z",
+   "date": "2022-01-17T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14329,7 +14378,7 @@
    "title": "Connections in the AA Fellowship [Season 2, Episode 2]",
    "summary": "Elliott B. talks to Don and Sam about wisdom, action, and the power of fellowship.",
    "lang": "en",
-   "date": "2022-01-10T04:15:00Z",
+   "date": "2022-01-10T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14378,7 +14427,7 @@
    "title": "Right in the Middle [Season 2, Episode 1]",
    "summary": "Don and Sam talk to Peggy, whose story is featured in the January 2022 issue of Grapevine.",
    "lang": "en",
-   "date": "2022-01-03T04:15:00Z",
+   "date": "2022-01-03T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14427,7 +14476,7 @@
    "title": "\"We Think Not!\" [Season 1, Episode 13]",
    "summary": "Members discuss group chant traditions they like and dislike. A head-to-head stump-the-thumper contest.",
    "lang": "en",
-   "date": "2021-12-27T04:15:00Z",
+   "date": "2021-12-27T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14476,7 +14525,7 @@
    "title": "To Thine Own Self Be True [Season 1, Episode 12]",
    "summary": "Alison talks to Don and Sam about getting sober as a young person, and navigating common stumbling blocks. Charlie asks the old-timer \"how do I handle friends who don't believe I am an alcoholic?\"",
    "lang": "en",
-   "date": "2021-12-20T04:15:00Z",
+   "date": "2021-12-20T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14525,7 +14574,7 @@
    "title": "Too Smart to Get Sober [Season 1, Episode 11]",
    "summary": "Don and Sam talk to Coree about getting sober at 24 years old. In A Blast From the Past Bill W. shares a funny story at a talk he gave in 1960.",
    "lang": "en",
-   "date": "2021-12-13T04:15:00Z",
+   "date": "2021-12-13T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14574,7 +14623,7 @@
    "title": "Getting Connected [Season 1, Episode 10]",
    "summary": "Paula D. talks to Don and Sam about helping two elderly AA members connect with AA meetings during the height of the Covid 19 pandemic. Paula's story appears in the December 2021 issue of Grapevine. She also shares two key actions to being published in the Grapevine.",
    "lang": "en",
-   "date": "2021-12-06T04:15:00Z",
+   "date": "2021-12-06T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14623,7 +14672,7 @@
    "title": "Miracles Across Time Zones [Season 1, Episode 9]",
    "summary": "Don and Sam interview Terrie and her friend from the Australian Outback, Jennie, about the wonders of sobriety.",
    "lang": "en",
-   "date": "2021-11-29T04:15:00Z",
+   "date": "2021-11-29T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14672,7 +14721,7 @@
    "title": "What's in a Name?—The Ashville Wharf Rats [Season 1, Episode 8]",
    "summary": "Don and Sam interview Chris C. about maintaining sober traction in slippery situations.",
    "lang": "en",
-   "date": "2021-11-22T04:15:00Z",
+   "date": "2021-11-22T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14721,7 +14770,7 @@
    "title": "Completely Whipped [Season 1, Episode 7]",
    "summary": "Don and Sam interview Phillip from North Carolina about moving from fear to trust in AA.",
    "lang": "en",
-   "date": "2021-11-15T04:15:00Z",
+   "date": "2021-11-15T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
@@ -14770,7 +14819,7 @@
    "title": "Getting Comfortable with the Second Step [Season 1, Episode 6]",
    "summary": "Don and Sam talk to Cindy from Virginia about her early struggles with a higher power. Special feature \"Hashtag Heard in a Meeting\" debuts in this episode.",
    "lang": "en",
-   "date": "2021-11-08T04:15:00Z",
+   "date": "2021-11-08T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [

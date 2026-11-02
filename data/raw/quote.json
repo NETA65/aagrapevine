@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-11-02T01:53:27Z",
- "attempted": "2026-11-02T01:53:27Z",
+ "updated": "2026-11-02T07:47:13Z",
+ "attempted": "2026-11-02T07:47:13Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-11-01",
-  "new": 0
+  "today": "2026-11-02",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-11-01",
+   "id": "quote:gv:2026-11-02",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote November 1",
+   "title": "Grapevine Daily Quote November 2",
    "summary": "",
    "lang": "en",
-   "date": "2026-11-01",
-   "first_seen": "2026-11-01T06:25:30Z",
-   "last_seen": "2026-11-01T06:25:30Z",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-02T07:47:13Z",
+   "last_seen": "2026-11-02T07:47:13Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "The actual experience of turning myself inside out for the first time in the presence of an AA member left me drained and numb; but when feeling started to come back, I found that I had changed. For the first time in my AA experience, I could feel the sunshine of God’s love on my wounds, and true peace of mind.",
-    "attribution": "“Finding Self-Forgiveness,” Memphis, Tennessee, October 1977, Step By Step: Real AAs, Real Recovery",
+    "text": "I cannot adequately describe how light I feel since I took the Fifth Step, and how soundly I sleep.",
+    "attribution": "“A 5,000-Mile Discussion,” Secunderabad, India, December 1982, Step By Step: Real AAs, Real Recovery",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "November 1",
+    "date_label": "November 2",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84459"
+    "node": "node-84460"
    }
   },
   {
-   "id": "quote:lv:2026-11-01",
+   "id": "quote:lv:2026-11-02",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Noviembre 1",
+   "title": "Cita Diaria con La Viña Noviembre 2",
    "summary": "",
    "lang": "es",
-   "date": "2026-11-01",
-   "first_seen": "2026-11-01T06:25:30Z",
-   "last_seen": "2026-11-01T06:25:30Z",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-02T07:47:13Z",
+   "last_seen": "2026-11-02T07:47:13Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "No tengo idea de cómo llegué tan lejos o qué me mantuvo sobrio. Yo supongo que tiene algo que ver con el eslogan ‘Sigue viniendo, pase lo que pase’.",
-    "attribution": "“Sigue viniendo, pase lo que pase”. SALT LAKE CITY, UTAH, NOVIEMBRE DE 2000",
-    "source": "In Our Own Words",
-    "source_lang": "en",
+    "text": "Ya no puedo usar la enfermedad del alcoholismo como una excusa. Ahora bien, si no pongo mi recuperación al servicio de otros, volveré a enfermarme.",
+    "attribution": "“El servicio es la razón”. WINNIPEG, MANITOBA, JUNIO DE 1979",
+    "source": "Lo mejor del Grapevine, Volumen II",
+    "source_lang": "es",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "1 de noviembre",
+    "date_label": "2 de noviembre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84455"
+    "node": "node-84456"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-11-02",
+    "heading": "Grapevine Daily Quote November 2",
+    "text": "I cannot adequately describe how light I feel since I took the Fifth Step, and how soundly I sleep.",
+    "attribution": "“A 5,000-Mile Discussion,” Secunderabad, India, December 1982, Step By Step: Real AAs, Real Recovery",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-11-02T07:47:03Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-20T11:51:23Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-19",
-    "heading": "Grapevine Daily Quote October 19",
-    "text": "We found that each of us had to make willing sacrifices ... for the common welfare.",
-    "attribution": "AA Co-Founder, Bill W., January 1955, “Why Alcoholics Anonymous Is Anonymous”, The Language of the Heart",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-19T12:22:38Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-11-02",
+    "heading": "Cita Diaria con La Viña Noviembre 2",
+    "text": "Ya no puedo usar la enfermedad del alcoholismo como una excusa. Ahora bien, si no pongo mi recuperación al servicio de otros, volveré a enfermarme.",
+    "attribution": "“El servicio es la razón”. WINNIPEG, MANITOBA, JUNIO DE 1979",
+    "source": "Lo mejor del Grapevine, Volumen II",
+    "source_lang": "es",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-11-02T07:47:13Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-20T11:51:33Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-19",
-    "heading": "Cita Diaria con La Viña Octubre 19",
-    "text": "El sentido de comunidad en AA es único. De un día para el otro, se entablan lazos que llevaría años lograr en cualquier otro sitio. Nadie necesita máscaras. Todas las barreras están abajo. Los que toda su vida se sintieron fuera de lugar ahora saben que, realmente, pertenecen. De sentir que un enorme lastre pesa sobre sus vidas pasan a navegar libremente, de repente y a toda vela.",
-    "attribution": "\"Quizás haya sido el momento...\", Lois W., esposa de Bill W., cofundador de AA, febrero de 1950. Del libro Lo mejor del Grapevine, Volumen II",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-19T12:22:48Z"
    }
   ]
  }
