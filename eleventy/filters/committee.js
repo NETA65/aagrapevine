@@ -962,6 +962,9 @@ function seriesUrl(v, sitePath = false) {
 }
 // build_data._MEETING_ID: letters, digits, spaces, dots and dashes ("815 9593 1777", "rva-tmst-vdb")
 const SERIES_MEETING_ID = /^[A-Za-z0-9](?:[A-Za-z0-9 .-]{1,38})[A-Za-z0-9]$/;
+// a title that already names its language: "La Viña Monthly Virtual Workshop (in Spanish)", "Reunión de Grapevine
+// (en inglés)" (access.js LANG_NOTE)
+const SAYS_LANG = /\((?:in|en) (?:english|spanish|inglés|español)\)/i;
 
 /**
  * One of our monthly series (config/site.yml `recurring_events:` — the Grapevine Meeting) worked out from the
@@ -974,7 +977,9 @@ const SERIES_MEETING_ID = /^[A-Za-z0-9](?:[A-Za-z0-9 .-]{1,38})[A-Za-z0-9]$/;
  *   → { key, title, summary, starts, rule (the countdown's: cmRuleObj), recurrence ("Every first Wednesday of the
  *       month · 7:00 – 8:00 PM Central time"), recurrenceDay ("Every first Wednesday of the month"), time ("7:00 –
  *       8:00 PM"), end ("8:00 PM"), join (meetingJoin: platform, url, meeting code …), contact, flyerMatch, uidPrefix
- *       ("ev-recurring-grapevine-meeting-"), next (the next date's event), dates (the next `n`) }
+ *       ("ev-recurring-grapevine-meeting-"), next (the next date's event), dates (the next `n`), saysLang (its
+ *       title names its language already — "Reunión de Grapevine (en inglés)": a page adds no "En inglés" of its
+ *       own) }
  *   or null: no such series, or no date to come.
  */
 export function seriesNext(site, key, lang = "en", items = [], opt = {}) {
@@ -1014,7 +1019,7 @@ export function seriesNext(site, key, lang = "en", items = [], opt = {}) {
   const next = dates[0];
   const day = next.uid.endsWith(next.startYmd) ? next.uid.slice(0, -next.startYmd.length) : "";
   return {
-    key, title: next.title, summary: next.summary, starts: sp.starts || "",
+    key, title: next.title, summary: next.summary, starts: sp.starts || "", saysLang: SAYS_LANG.test(next.title),
     rule: { weekday: WD[rule.weekday.toLowerCase()] ?? 3, n: rule.week_of_month, start: rule.start, end: rule.end, skip: skipDates(sp), ...(sp.starts ? { starts: sp.starts } : {}) },
     recurrence: recurrenceText(rule, lang), recurrenceDay: recurrenceText(rule, lang).split(" · ")[0], time: meetingTimeRange(sp, lang),
     end: clockLabel(rule.end, lang),

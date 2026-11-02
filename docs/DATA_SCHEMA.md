@@ -1546,7 +1546,7 @@ calendar feed keeps them for subscribers):
   ```json
   "id": "ev:recurring:grapevine-meeting:2026-12-02",     // its first date (`starts`): none before it
   "url": "/meetings/#grapevine-meeting",                 // a page of this site: the pages add /es/ and the address
-  "title": "Grapevine Meeting",                 // es: "Reunión de Grapevine"
+  "title": "Grapevine Meeting",                 // es: "Reunión de Grapevine (en inglés)"
   "extra": { "start": "2026-12-03T01:00:00Z", "end": "2026-12-03T02:00:00Z",   // 7:00–8:00 PM CST
              "location": null, "city": null, "state": null,
              "online_url": "https://meet.google.com/rva-tmst-vdb", "online": true, "platform": "Google Meet",

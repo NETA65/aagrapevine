@@ -31,9 +31,9 @@ pageScripts: ["/assets/js/community.js"]
     /meetings/ — the monthly rule and the time (never a date: the poster stays on a wall for months),
     the platform with the meeting code (or a Zoom ID and passcode), and who is welcome. Our Grapevine Meeting
     (recurring_events `grapevine-meeting`, committee.js cmSeriesNext) under it in two lines — its name, "In
-    English" (the Spanish poster says "En inglés" too), its rule and time —, when it meets in the same room: the
-    one platform line and the one meeting code are then both meetings'. Not on the bilingual poster: every line
-    twice leaves no room for it there (the poster is one printed page). -#}
+    English" (unless its title says so already: "Reunión de Grapevine (en inglés)"), its rule and time —, when it
+    meets in the same room: the one platform line and the one meeting code are then both meetings'. Not on the
+    bilingual poster: every line twice leaves no room for it there (the poster is one printed page). -#}
 {% macro meetBlock(v) %}
 {%- set m = site.meeting -%}
 {%- set tKey = "community.share.p_meet_time" -%}
@@ -54,8 +54,10 @@ pageScripts: ["/assets/js/community.js"]
     {% if not gm %}{{ onLine | safe }}{% endif %}
   </ul>
   {% if gm %}
+  {%- set gmEn = gE.title if gE.saysLang else gE.title + " · " + ("committee.weekly.lang_en" | t("en")) -%}
+  {%- set gmEs = gS.title if gS.saysLang else gS.title + " · " + ("committee.weekly.lang_en" | t("es")) %}
   <ul class="cm-p-meet-list">
-    <li class="cm-p-meet-when">{% icon "book-open-text", "cm-p-ico" %}<span>{{ meetLine(v, gE.title + " · " + ("committee.weekly.lang_en" | t("en")), gS.title + " · " + ("committee.weekly.lang_en" | t("es"))) }}</span></li>
+    <li class="cm-p-meet-when">{% icon "book-open-text", "cm-p-ico" %}<span>{{ meetLine(v, gmEn, gmEs) }}</span></li>
     <li>{% icon "calendar-days", "cm-p-ico" %}<span>{{ meetLine(v, gE.recurrenceDay + " · " + gE.time, gS.recurrenceDay + " · " + gS.time) }}</span></li>
     {{ onLine | safe }}
   </ul>

@@ -49,7 +49,7 @@ ROOM = "https://meet.google.com/abc-defg-hij"
 GVM_ENTRY = """
   - key: "grapevine-meeting"
     title: "Grapevine Meeting"
-    title_es: "Reunión de Grapevine"
+    title_es: "Reunión de Grapevine (en inglés)"
     summary: "Online AA meeting in English: we read a story from AA Grapevine and share on its topic."
     summary_es: "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine y compartimos sobre su tema."
     week_of_month: 1
@@ -595,6 +595,8 @@ class SharedRoom(Untranslated):
         self.assertEqual((notes, n, moved["title"]), ([], 1, "Grapevine Meeting"))
         # …but not on the committee meeting's own day, whatever its title
         self.assertEqual(self.run_with([listing("2027-01-20", "Grapevine Meeting")]), ([], 0))
+        # a Spanish listing without the series' "(en inglés)" names it too (title_tokens leaves the language out)
+        self.assertEqual(self.run_with([listing("2027-01-13", "Reunión de Grapevine")], skip=["2027-01-06"])[1], 1)
 
     def test_a_room_of_its_own_is_as_before(self):
         # the committee meeting elsewhere (Zoom): any listing in the series' room is the series, as for La Viña's
@@ -664,7 +666,7 @@ class RealSettings(unittest.TestCase):
         self.assertEqual((sp["online_url"], sp["meeting_id"], sp["platform"], sp["host"], sp["location"], sp["url"]),
                          (self.meeting["online_url"], self.meeting["meeting_id"], "Google Meet", "neta", None,
                           "/meetings/#grapevine-meeting"))
-        self.assertEqual(sp["title"], ("Grapevine Meeting", "Reunión de Grapevine"))
+        self.assertEqual(sp["title"], ("Grapevine Meeting", "Reunión de Grapevine (en inglés)"))
         self.assertFalse([p for p in self.problems if "grapevine-meeting" in p], self.problems)
         self.assertNotRegex(json.dumps(self.cfg, ensure_ascii=False, default=str), r"(?i)hosted by")
 

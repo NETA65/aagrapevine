@@ -156,7 +156,9 @@ class SeriesFromTheSettings(Untranslated):
         self.assertEqual((en["join"]["platform"], en["join"]["url"], en["join"]["idLabel"], en["join"]["copyId"], en["join"]["dialIn"]),
                          ("Google Meet", ROOM, "Meeting code", "abc-defg-hij", False))
         self.assertEqual((en["contact"], en["next"]["details"]), ("grapevine@example.org", "https://example.org/gv/meetings/#grapevine-meeting"))
-        self.assertEqual(got["es"]["title"], "Reunión de Grapevine")
+        self.assertEqual(got["es"]["title"], "Reunión de Grapevine (en inglés)")
+        # the Spanish title names its language: the pages add no "En inglés" of their own
+        self.assertEqual((en["saysLang"], got["es"]["saysLang"]), (False, True))
         self.assertIn("Meeting code: abc-defg-hij", en["next"]["desc"])
         self.assertIn("Every first Wednesday of the month · 7:00 – 8:00 PM Central time", plain(en["next"]["desc"]))
 
@@ -433,9 +435,10 @@ class BuiltPages(Untranslated):
                 self.assertIn(f'data-copy="{ROOM}"', sec)
                 self.assertNotIn("Grapevine meetings", words)
         es = text(part(self.pages(NOV26)["/es/meetings/"], 'aria-labelledby="grapevine-meeting-h"', "</section>"))
-        for s in ("Reunión de Grapevine", "Nuestra reunión mensual en línea · En inglés", "La Declaración de Propósito de AA Grapevine",
+        for s in ("Nuestra reunión mensual en línea Reunión de Grapevine (en inglés)", "La Declaración de Propósito de AA Grapevine",
                   "A las 8:00 p. m. cerramos a tiempo.", "Código de la reunión abc-defg-hij", "Primera reunión"):
             self.assertIn(s, es)
+        self.assertNotIn("En inglés", es, "the title says it: the eyebrow does not again")
 
     # ------------------------------------------------------------------ the home page
     def test_the_home_card(self):
@@ -507,7 +510,8 @@ class BuiltPages(Untranslated):
                 v = {s[1]: text(s[2]) for s in sheets}
                 self.assertIn("Grapevine Meeting · In English", v["en"])
                 self.assertIn("Every first Wednesday of the month · 7:00 – 8:00 PM", v["en"])
-                self.assertIn("Reunión de Grapevine · En inglés", v["es"])
+                self.assertIn("Reunión de Grapevine (en inglés)", v["es"])
+                self.assertNotIn("En inglés", v["es"], "the title says it: never twice")
                 self.assertIn("Cada primer miércoles del mes · 7:00–8:00 p. m.", v["es"])
                 self.assertNotIn("Grapevine Meeting", v["bi"])        # no room on the bilingual poster
                 for k in v:

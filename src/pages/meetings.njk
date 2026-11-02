@@ -430,7 +430,8 @@ pageScripts: ["/assets/js/committee.js"]
     one twice keeps one entry), what happens (the AA Grapevine Statement of Purpose is named, never quoted:
     the reader reads it from the current issue), how to join (the same Google Meet room as the committee
     meeting: said so), the next dates and its flyer (`flyer_match`, from the Drive's flyers/ folder). Never
-    "Grapevine meetings": that is the list of AA groups below. The series' `url:` points here. -#}
+    "Grapevine meetings": that is the list of AA groups below. The series' `url:` points here. Its eyebrow says
+    "In English" unless its title does already ("Reunión de Grapevine (en inglés)"). -#}
 {%- set gm = site | cmSeriesNext("grapevine-meeting", lang, db.events.items) -%}
 {% if gm %}
 {%- set gmAbs = gm.next.detailsUrl -%}
@@ -449,7 +450,8 @@ pageScripts: ["/assets/js/committee.js"]
 <section class="container-page section pt-0" aria-labelledby="grapevine-meeting-h">
   <div id="grapevine-meeting">
   {{ ui.sectionHead(gm.title, gm.summary | escape, "", "", "book-open-text",
-    { eyebrow: "committee.gvmeeting.eyebrow" | t(lang), id: "grapevine-meeting-h", lang: lang }) }}
+    { eyebrow: ("committee.gvmeeting.eyebrow" | t(lang)) + ("" if gm.saysLang else " · " + ("committee.weekly.lang_en" | t(lang))),
+      id: "grapevine-meeting-h", lang: lang }) }}
   </div>
   {#- From 1024px (committee.css .cm-series-board): countdown | what happens  ·  the next dates | how to join;
       from 1280px what happens and how to join take two of the three columns -#}

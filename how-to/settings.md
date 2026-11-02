@@ -423,7 +423,7 @@ December 2, 2026, in the committee meeting's Google Meet room:
 ```yaml
   - key: "grapevine-meeting"
     title: "Grapevine Meeting"
-    title_es: "Reunión de Grapevine"
+    title_es: "Reunión de Grapevine (en inglés)"
     summary: "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome."
     summary_es: "Reunión de AA en línea, en inglés: …"
     week_of_month: 1

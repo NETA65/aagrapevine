@@ -1807,8 +1807,9 @@ _ONLINE_WORDS = {"online", "linea", "virtual"}
 
 def _names_series(sp: dict, ev: dict) -> bool:
     """A listing's title names the series: nearly the same words as its title in either language (shared / all ≥
-    0.75; "(online)" / "(en línea)" aside). Every word counts here, "Grapevine" and "committee" too: "Grapevine
-    Meeting" is the Grapevine Meeting, the "Grapevine & La Viña Committee Meeting" is not."""
+    0.75; "(online)" / "(en línea)" aside, and "(en inglés)": title_tokens drops the language words). Every word
+    counts here, "Grapevine" and "committee" too: "Grapevine Meeting" is the Grapevine Meeting, the "Grapevine & La
+    Viña Committee Meeting" is not."""
     for a in sp["title"]:
         ta = title_tokens(a) - _ONLINE_WORDS
         for b in _event_titles(ev):
