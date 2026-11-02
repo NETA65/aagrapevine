@@ -378,7 +378,7 @@ def paperwork_problems(d: dict, fill_keys: dict, idset: set, by_id: dict) -> lis
     if not isinstance(pw, dict):
         return ["paperwork: a mapping"]
     for k in pw:
-        if k not in ("agenda_slide", *PAPER_TEXTS, "next_month"):
+        if k not in ("agenda_slide", "speaker_slide", *PAPER_TEXTS, "next_month"):
             out.append(f"paperwork: unknown field {k!r}")
     if not any(k in pw for k in PAPER_TEXTS):
         out.append(f"paperwork: at least one text ({', '.join(PAPER_TEXTS)})")
@@ -388,6 +388,9 @@ def paperwork_problems(d: dict, fill_keys: dict, idset: set, by_id: dict) -> lis
             out.append(f"paperwork.agenda_slide: no slide {a!r}")
         elif not isinstance(by_id.get(a), dict) or by_id[a].get("layout") != "agenda":
             out.append(f"paperwork.agenda_slide: {a!r} is not an agenda slide")
+    # the guest speaker's slide: a version that leaves it out (no guest speaker tonight) has no speaker lines either
+    if "speaker_slide" in pw and (not isinstance(pw["speaker_slide"], str) or pw["speaker_slide"] not in idset):
+        out.append(f"paperwork.speaker_slide: no slide {pw['speaker_slide']!r}")
     fills = d.get("fillins") if isinstance(d.get("fillins"), list) else []
     shared = {f["key"] for f in fills if isinstance(f, dict) and f.get("shared") is True and isinstance(f.get("key"), str)}
     for name in PAPER_TEXTS:

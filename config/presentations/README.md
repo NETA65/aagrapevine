@@ -332,8 +332,9 @@ Grapevine Meeting's own slides.
 In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda e-mail, the reminder, the draft
 minutes), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` are the
 guest speaker of the meeting the text is for — so are the speaker keys in the agenda's rows there — and a line whose
-`{paper:…}` facts are all empty (a meeting with no guest speaker) is left out. The minutes name the speaker by
-service position only.
+`{paper:…}` facts are all empty (a meeting with no guest speaker) is left out. So is every speaker line in a version
+that leaves out the slide `paperwork: speaker_slide:` names (the committee meeting's "No guest speaker", for a
+speaker who can't come). The minutes name the speaker by service position only.
 
 Write a meeting code or a Zoom meeting ID as `{live:meeting_code}` (or its older name `{live:meeting_zoom_id}`),
 never as digits: the checker takes digits for a phone number.

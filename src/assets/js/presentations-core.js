@@ -1546,7 +1546,7 @@
 
   /* ------------------------------------------------------------------ the chair's paperwork
      A deck's `paperwork` (the committee meeting's Customize → Agenda & minutes; eleventy/filters/presentations.js
-     shapePaper, the deck JSON's `paperwork`): { agenda_slide, agenda | reminder | minutes: { subject, body },
+     shapePaper, the deck JSON's `paperwork`): { agenda_slide, speaker_slide, agenda | reminder | minutes: { subject, body },
      next_month: { actions, old_business, minutes_month, clear: [keys], untick: [slide ids] }, meetings: [{ ymd,
      start, end, label, label_es, month, speaker?: { name, position, topic } }], time_es, committee_es }. The texts are plain text in the deck's language,
      made from the presenter's blanks and the day's facts: never sent anywhere from here (the player copies them, or
@@ -1604,7 +1604,7 @@
    * notes_only blank never shows), then:
    *   · a line whose blanks are ALL empty is left out — the text never shows an empty "[hint]" (a blank left empty
    *     beside a filled one still shows as "[hint]", so the chair sees it) — and so is a line whose {paper:…} facts
-   *     are all empty (the guest speaker of a meeting that has none);
+   *     are all empty (the guest speaker of a meeting that has none, or of a version without the speaker's slide);
    *   · the speaker facts ({live:speaker_name}, _position, _topic, _line), also in the agenda's rows, are those of
    *     the meeting the text is for ({paper:speaker} …): "to be announced" for a meeting with none listed;
    *   · a paragraph that had blanks and is left with none of those lines, and nothing but its first line (a heading
@@ -1625,6 +1625,10 @@
     // of the day ({live:speaker_…}, the agenda's rows too) say that meeting's, not tonight's: after "Start next month"
     // on a meeting night the agenda is already next month's
     var sp = row && isMap(row.speaker) && isStr(row.speaker.name) && row.speaker.name ? row.speaker : null;
+    // …and none when the chosen version leaves out the guest speaker's slide (the speaker can't come: "No guest
+    // speaker"), whatever the site still lists: the texts then agree with the agenda's rows
+    var spSlide = cur && isStr(pw.speaker_slide) && pw.speaker_slide ? cur.byId[pw.speaker_slide] : null;
+    if (spSlide && !spSlide.shown) sp = null;
     var spText = function (k) { return sp && isStr(sp[k]) ? sp[k] : ""; };
     var live = Object.assign({}, cur ? cur.live : liveValues(deck.live, now), {
       speaker_name: spText("name") || EN.paper_tba, speaker_position: spText("position") || EN.paper_tba,

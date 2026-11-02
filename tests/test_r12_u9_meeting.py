@@ -135,6 +135,7 @@ class CheckerTwins(unittest.TestCase):
 
     BROKEN = {
         "agenda_slide": "opening",
+        "speaker_slide": "missing",
         "extra": 1,
         "agenda": {
             "subject": "Agenda {paper:agenda}\nsecond line",
@@ -152,6 +153,7 @@ class CheckerTwins(unittest.TestCase):
     EXPECTED = [
         "paperwork: unknown field 'extra'",
         "paperwork.agenda_slide: 'opening' is not an agenda slide",
+        "paperwork.speaker_slide: no slide 'missing'",
         "paperwork.agenda.subject: one line",
         "paperwork.agenda.subject: {paper:agenda} goes on a line of its own (in a body)",
         "paperwork.agenda.body: {fill:first_name} is notes_only (never in the paperwork)",
@@ -266,7 +268,7 @@ class RealDeck(unittest.TestCase):
 
     def test_what_start_next_month_clears_and_keeps(self):
         r = deck_js(self, "out(D.paperwork);")
-        self.assertEqual(r["agenda_slide"], "agenda")
+        self.assertEqual((r["agenda_slide"], r["speaker_slide"]), ("agenda", "speaker-intro"))
         nm = r["next_month"]
         self.assertEqual((nm["actions"], nm["old_business"], nm["minutes_month"], nm["untick"]),
                          (["action_1", "action_2", "action_3", "action_4"], ["old_1", "old_2", "old_3", "old_4"], "minutes_month", ["week-before"]))
@@ -303,7 +305,7 @@ class Build(unittest.TestCase):
         self.assertIn("p. m., hora del Centro", pw["time_es"])
         self.assertEqual(pw["committee_es"], "Comité de Grapevine y La Viña de NETA 65", "config/site.yml site.committee_es")
         self.assertEqual(r["noName"], "", "none set: the player says the committee's name in its own words")
-        self.assertEqual(pw["agenda_slide"], "agenda")
+        self.assertEqual((pw["agenda_slide"], pw["speaker_slide"]), ("agenda", "guest-speaker"))
         self.assertIn("{paper:agenda}", pw["agenda"]["body"], "tokens stay: the player fills them")
         self.assertIn("{paper:committee_es}", pw["reminder"]["body"])
         nm = pw["next_month"]
@@ -333,6 +335,7 @@ class Texts(unittest.TestCase):
                 out({ week: texts(st, input.week), during: texts(st, input.during), after: texts(st, input.after),
                       emptyWeek: texts(empty, input.week), topic: version("topic", input.week).agenda.text,
                       noSpeaker: version("no-speaker", input.week).agenda.text, started: texts(started, input.after),
+                      noSpeakerWeek: version("no-speaker", input.week), noSpeakerAfter: version("no-speaker", input.after),
                       dec: texts(st, input.dec), decNoSpeaker: version("no-speaker", input.dec) });""",
                 fill=FILL, week=WEEK_BEFORE, during=DURING, after=AFTER, dec=DEC_BEFORE)
         return Texts.r
@@ -395,6 +398,11 @@ class Texts(unittest.TestCase):
         self.assertIn("\n7:02  Guest speaker: to be announced\n", r["dec"]["agenda"]["text"])
         self.assertNotIn("Guest speaker", r["decNoSpeaker"]["agenda"]["text"], "the version without a speaker: none at all")
         self.assertNotIn("Guest speaker", r["decNoSpeaker"]["reminder"]["text"])
+        # a speaker who can't come: the version 'No guest speaker' names none, though the site still lists one
+        for w, at in (("agenda", "noSpeakerWeek"), ("reminder", "noSpeakerWeek"), ("minutes", "noSpeakerAfter")):
+            self.assertNotIn("Guest speaker", r[at][w]["text"], w)
+            self.assertNotIn("Rick W.", r[at][w]["text"], w)
+            self.assertNotIn("Twelfth Step", r[at][w]["text"], w)
 
     def test_an_empty_version_never_shows_an_empty_blank(self):
         t = self.run_texts()["emptyWeek"]["agenda"]["text"]
@@ -555,6 +563,22 @@ class Sample(unittest.TestCase):
         self.assertIn("Old business\n- Flyers: [status]", r["t"]["minutes"]["text"])
         self.assertEqual(r["fill"], {"old_1_item": "Print them", "minutes_month": "October 2026"})
         self.assertEqual(r["checks"], {})
+
+    def test_a_version_without_the_speakers_slide_names_no_speaker(self):
+        """paperwork.speaker_slide: the version that leaves out the guest speaker's slide (the short meeting) has no
+        speaker lines in any text, though the site lists a speaker; the full one names them."""
+        r = deck_js(self, """
+            const st = G.emptyState();
+            const short = JSON.parse(JSON.stringify(st));
+            G.deckState(short, D.id).preset = "short";
+            out({ full: texts(st, input.week), short: texts(short, input.week), shortAfter: texts(short, input.after) });""",
+            **SAMPLE, week=WEEK_BEFORE, after=AFTER)
+        self.assertIn("\nGuest speaker: Rick W. — Past delegate, Area 65 (Panel 73), on Grapevine as a Twelfth Step tool\n",
+                      r["full"]["agenda"]["text"])
+        for w, t in (("agenda", r["short"]["agenda"]["text"]), ("minutes", r["shortAfter"]["minutes"]["text"])):
+            self.assertNotIn("Guest speaker", t, w)
+            self.assertNotIn("Rick W.", t, w)
+        self.assertIn("Meeting of Wednesday, October 21, 2026.", r["shortAfter"]["minutes"]["text"], "the rest stays")
 
     def test_each_text_is_for_its_meeting(self):
         """The agenda and the reminder: the next meeting, until it ENDS; the minutes: the last one that has begun."""

@@ -1318,8 +1318,9 @@ document, named with the meeting's date ("Monthly Committee Meeting – Draft mi
 
 A line whose details are all blank is left out, and so is a heading left with nothing under it ("Old business"
 with no items), so a text never shows empty orange blanks. The guest speaker's lines are left out for a meeting with
-no speaker listed (December 16, 2026). A detail left empty beside a filled one shows in
-[brackets], so you notice it.
+no speaker listed (December 16, 2026), and in the version "No guest speaker" (a speaker who can't come: the texts
+then agree with that version's agenda, even before the website's list is changed). A detail left empty beside a
+filled one shows in [brackets], so you notice it.
 
 **Start next month**, at the bottom of the tab, is pressed after the meeting, once the minutes are drafted. You
 tick what to carry (tonight's action items come ticked; old business still open comes unticked), up to 4 items:
@@ -1361,6 +1362,7 @@ above `paperwork:` in the file sums up the rules below:
 | Field | What it is |
 |---|---|
 | `agenda_slide` | the id of the `agenda` slide whose rows `{paper:agenda}` lists (`"agenda"`) |
+| `speaker_slide` | the id of the guest speaker's first slide (`"speaker-intro"`): in a version that leaves it out ("No guest speaker", for a speaker who can't come) the texts name no speaker, whatever `meeting: speakers:` still says |
 | `agenda`, `reminder`, `minutes` | each `{ subject: "…", body: \| … }`: plain text, in English like the slides; the subject on one line |
 | `next_month` | what Start next month does: `actions` (rows of blanks named `<row>_what`, `_who`, `_when`), `old_business` (rows `<row>_item`, `_status`), `minutes_month` (the blank set to the month of the meeting held), `clear` (the blanks it clears; `chair_*` = every blank whose name starts with `chair_`; never a blank shared by every deck), `untick` (checklist pages it unticks) |
 

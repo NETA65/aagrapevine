@@ -340,13 +340,16 @@ fillins:
 #   that meeting's speaker too, even on the evening the agenda is already next month's).
 # A line whose blanks are all empty is left out, and so is a heading left with nothing under it ("Old business"
 # with no items): the text never shows an empty [hint]. A line with no blank always stays — except a speaker line
-# for a meeting with no guest speaker (December 16, 2026), which is left out too.
+# for a meeting with no guest speaker (December 16, 2026), which is left out too, and so is every speaker line in a
+# version that leaves out the guest speaker's slide (`speaker_slide`: "No guest speaker", for a speaker who can't
+# come), whatever the site's list still says.
 # The link and the meeting code are public (our flyers, the Meetings page): they go in every text. There is no
 # number to call: the meeting's Google Meet room has no phone dial-in.
 # The minutes follow the deck's rule: service positions and counts only, never names or an attendance list (the
 # guest speaker by their service position too).
 paperwork:
   agenda_slide: "agenda"
+  speaker_slide: "speaker-intro"
   agenda:
     subject: "Agenda: Grapevine and La Viña Committee meeting, {paper:meeting}"
     body: |
@@ -589,7 +592,7 @@ slides:
     notes: |
       SAY: It's my pleasure to introduce tonight's guest speaker, {live:speaker_name}: {live:speaker_position}. The topic tonight: {live:speaker_topic}. (Add the two or three sentences of introduction the speaker sent you.) Welcome, and thank you for being with us.
       SAY: Our guest will share for about 20 minutes, and then we'll have time for your questions. Please hold them until then; you can type them in the chat as they come to you.
-      IF THE SPEAKER CAN'T COME: choose the version 'No guest speaker' ({ui:customize} → {ui:version}). The run summary reminds you, about six weeks ahead, of a speaker who hasn't confirmed yet.
+      IF THE SPEAKER CAN'T COME: choose the version 'No guest speaker' ({ui:customize} → {ui:version}): its agenda, and the texts in {ui:customize} → {ui:paperwork}, then name no speaker. The run summary reminds you, about six weeks ahead, of a speaker who hasn't confirmed yet.
       IF NO SPEAKER IS LISTED (the slide says 'to be announced'): type tonight's speaker on these slides for tonight only ({ui:customize} → {ui:edit}: it stays on this device), and tell whoever looks after the website; or choose the version 'No guest speaker'.
       ANONYMITY: on the slide, in the chat and in the minutes, a first name and last initial at most, with the speaker's service position; never their last name, e-mail address or phone number.
 

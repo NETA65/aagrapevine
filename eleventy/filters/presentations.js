@@ -440,12 +440,16 @@ function paperworkProblems(d, fillKeys, idset, byId) {
   if (!has(d, "paperwork")) return out;
   const pw = d.paperwork;
   if (!isMap(pw)) return ["paperwork: a mapping"];
-  for (const k of Object.keys(pw)) if (!["agenda_slide", ...PAPER_TEXTS, "next_month"].includes(k)) out.push(`paperwork: unknown field ${repr(k)}`);
+  for (const k of Object.keys(pw)) if (!["agenda_slide", "speaker_slide", ...PAPER_TEXTS, "next_month"].includes(k)) out.push(`paperwork: unknown field ${repr(k)}`);
   if (!PAPER_TEXTS.some((k) => has(pw, k))) out.push(`paperwork: at least one text (${PAPER_TEXTS.join(", ")})`);
   if (has(pw, "agenda_slide")) {
     const a = pw.agenda_slide;
     if (!isStr(a) || !idset.has(a)) out.push(`paperwork.agenda_slide: no slide ${repr(a)}`);
     else if (!byId.get(a) || byId.get(a).layout !== "agenda") out.push(`paperwork.agenda_slide: ${repr(a)} is not an agenda slide`);
+  }
+  // the guest speaker's slide: a version that leaves it out (no guest speaker tonight) has no speaker lines either
+  if (has(pw, "speaker_slide") && (!isStr(pw.speaker_slide) || !idset.has(pw.speaker_slide))) {
+    out.push(`paperwork.speaker_slide: no slide ${repr(pw.speaker_slide)}`);
   }
   const shared = new Set((Array.isArray(d.fillins) ? d.fillins : []).filter((f) => isMap(f) && f.shared === true && isStr(f.key)).map((f) => f.key));
   for (const name of PAPER_TEXTS) {
@@ -868,7 +872,8 @@ export const priceNoticeOn = (shop, now) => !!shopPriceChangeIn(shop || {}, chic
 /**
  * A deck's `paperwork:` block for the player (null without one): its texts as written (tokens stay: the player
  * fills them with the presenter's details and the day's facts), the agenda slide whose rows the agenda e-mail
- * lists, and "Start next month" with every blank it clears named (a "chair_*" pattern → chair_since, chair_area …;
+ * lists, the guest speaker's slide (a version without it names no speaker), and "Start next month" with every blank
+ * it clears named (a "chair_*" pattern → chair_since, chair_area …;
  * never a blank shared by every presentation). What the checker refused is left out.
  */
 function shapePaper(d, fillins, ids) {
@@ -876,7 +881,8 @@ function shapePaper(d, fillins, ids) {
   if (!isMap(pw)) return null;
   const keys = fillins.map((f) => f.key);
   const shared = new Set(fillins.filter((f) => f.shared).map((f) => f.key));
-  const out = { agenda_slide: isStr(pw.agenda_slide) && ids.has(pw.agenda_slide) ? pw.agenda_slide : "" };
+  const out = { agenda_slide: isStr(pw.agenda_slide) && ids.has(pw.agenda_slide) ? pw.agenda_slide : "",
+    speaker_slide: isStr(pw.speaker_slide) && ids.has(pw.speaker_slide) ? pw.speaker_slide : "" };
   for (const name of PAPER_TEXTS) {
     const t = pw[name];
     out[name] = isMap(t) && isStr(t.subject) && isStr(t.body) ? { subject: t.subject.trim(), body: t.body.replace(/\s+$/, "") } : null;
