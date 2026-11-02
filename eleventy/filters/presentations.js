@@ -1203,7 +1203,7 @@ function ruleAndTime(line) {
 
 /** The committee meeting: its dates from today on, within about a year (src/_data/meeting.js, and committee.js
  *  meetingDates — the same rule — for a meeting earlier today, which the site's list drops once it has ended), its
- *  rule, time and Zoom details (config/site.yml `meeting:`). A meeting day stays in the list until midnight Central
+ *  rule, time and how to join it (config/site.yml `meeting:`). A meeting day stays in the list until midnight Central
  *  after it (`over`): during AND after tonight's meeting, the meeting's day is still tonight's (meeting_day), while
  *  the next meeting (meeting_next) is next month's from the moment tonight's ends (`end`). Without the settings,
  *  nothing: the pages' own fallback rule (the third Wednesday) is not a fact to put on a slide. */
@@ -1219,7 +1219,8 @@ const meetingInfo = (c) => c.once("meeting", () => {
     .sort((a, b) => a.start.localeCompare(b.start))
     .slice(0, MAX_ROWS);
   const rt = ruleAndTime(recurrenceText(monthlyRule(m), "en"));
-  return { rows, rule: rt.rule, time: oneLine(rt.time), zoom_id: nb(clean(m.meeting_id)), passcode: clean(m.passcode), url: String(m.zoom_url || "") };
+  // (the link: config/site.yml meeting.online_url — an older zoom_url still counts, as site.js reads it)
+  return { rows, rule: rt.rule, time: oneLine(rt.time), zoom_id: nb(clean(m.meeting_id)), passcode: clean(m.passcode), url: String(m.online_url || m.zoom_url || "") };
 });
 
 /** The committee meetings the chair's paperwork can be for (deckJson's `paperwork.meetings`): every one from the

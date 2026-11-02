@@ -410,12 +410,24 @@ export function hhmm(v, fallback = "") {
   return h >= 0 && h <= 23 && mi >= 0 && mi <= 59 ? `${String(h).padStart(2, "0")}:${String(mi).padStart(2, "0")}` : fallback;
 }
 
+/** A date from the settings → "YYYY-MM-DD", else "" (= meeting.py ymd_text): an unquoted YAML date (a Date object)
+    or the text of a real day ("2027-01-20"; never "2027-02-30" or "soon"). */
+export function ymdText(v) {
+  if (v instanceof Date) return Number.isNaN(v.getTime()) ? "" : v.toISOString().slice(0, 10);
+  const s = typeof v === "string" ? v.trim() : "";
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return "";
+  const [y, m, d] = s.split("-").map(Number);
+  const day = new Date(Date.UTC(y, m - 1, d));
+  return day.getUTCFullYear() === y && day.getUTCMonth() === m - 1 && day.getUTCDate() === d ? s : "";
+}
+
 /** A monthly rule with canonical values: weekday "saturday", week_of_month 1–5 / -1, start / end "HH:MM" (the
     end as used: one hour after the start when missing, unreadable or not after it — 23:59 at most —, except an
     overnight end, which stays: "22:00"–"01:00" ends at 1 AM the next morning, central-time.js overnight), skip_dates
-    a list of "YYYY-MM-DD". forgiving = a recurring event (plurals "Saturdays", words "second" / "2nd" /
-    "último", its key slugified as build_data.recurring_specs does); otherwise the committee meeting
-    (meeting_rule: a day name, a whole number). Anything else in the entry (title, platform, zoom_url …) is
+    a list of "YYYY-MM-DD", starts (the first date: no date before it) "YYYY-MM-DD" — left out when it is not a
+    date, as meeting.py ymd_text reads it. forgiving = a recurring event (plurals "Saturdays", words "second" /
+    "2nd" / "último", its key slugified as build_data.recurring_specs does); otherwise the committee meeting
+    (meeting_rule: a day name, a whole number). Anything else in the entry (title, platform, online_url …) is
     kept as it is; a value already canonical stays the same, so reading a rule twice changes nothing. */
 export function monthlyRule(o, forgiving = false) {
   if (!o || typeof o !== "object" || Array.isArray(o)) return o;
@@ -457,6 +469,12 @@ export function monthlyRule(o, forgiving = false) {
     const sk = o.skip_dates;
     out.skip_dates = (Array.isArray(sk) ? sk : sk === null || sk === undefined || sk === "" ? [] : [sk])
       .map((d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d ?? "").trim()));
+  }
+  // The first date (an unquoted YAML date arrives as a Date object); one that is not a real date ("2027-02-30",
+  // "soon") counts for nothing, as in the sync (meeting.check_starts notes it)
+  if ("starts" in o) {
+    const s = ymdText(o.starts);
+    if (s) out.starts = s; else delete out.starts;
   }
   if (forgiving) {
     // the key as build_data.recurring_specs makes it (common.slugify: ASCII, dashes, lower case, 32

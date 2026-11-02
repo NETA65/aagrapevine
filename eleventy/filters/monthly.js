@@ -12,7 +12,7 @@
 //     over), the next issue when it is already online, and one-line pointers to the daily quote, What's
 //     New, the Bulletin, Instagram, the Grapevine meetings count and the subscription price.
 // The Monthly digest (/digest/, community.js) recaps LAST month; everything current lives here — as a
-// link when another page is its one home (the Zoom details on /meetings/#committee-meeting, prices on
+// link when another page is its one home (the joining details on /meetings/#committee-meeting, prices on
 // /shop/, how to send a story on /contribute/, the quote itself on the home page). No list is on both:
 // an issue's highlight stories are the digest's; the toolkit shows the themes and story counts and
 // links to /read/.
@@ -59,7 +59,7 @@
 // (community.js imports this file too: the cycle is safe, both only call each other's functions.)
 import crypto from "node:crypto";
 import { qrSvg, issueLabel, issueInSentence, issueLabelOf } from "./community.js";
-import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs, calendarLinks } from "./committee.js";
+import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs, calendarLinks, meetingJoin } from "./committee.js";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
 import { overnight, wallInstant } from "../central-time.js";
 import { shopFromMonthly, money, shopPriceChangeIn, dayLabel } from "./shop.js";
@@ -217,11 +217,12 @@ function chicagoInstant(ymd, hhmm) {
   return new Date(Number.isFinite(ms) ? ms : wallInstant(ymd, "19:00", TZ)).toISOString();
 }
 /** A month's date of a monthly rule in the shape of config/site.yml `meeting:` (the committee meeting, or a
- *  recurring event's rule) → { ymd, start, end } (UTC ISO), null on a skip date or when the month has no such
- *  day. Read the way scripts/sync/meeting.py reads it (eleventy.config.js monthlyRule): "5pm", "7:00 PM",
- *  "sábado", "third" … never stop the build or move the time by 12 hours, an end that is missing or not
- *  after the start makes it one hour long (MonthlyRule.span) — as on /events/ and /meetings/ — and an overnight
- *  end ("22:00"–"01:00", central-time.js overnight) is the next morning. */
+ *  recurring event's rule) → { ymd, start, end } (UTC ISO), null on a skip date, before its first date (`starts`:
+ *  the Grapevine Meeting's 2026-12-02) or when the month has no such day. Read the way scripts/sync/meeting.py
+ *  reads it (eleventy.config.js monthlyRule): "5pm", "7:00 PM", "sábado", "third" … never stop the build or move
+ *  the time by 12 hours, an end that is missing or not after the start makes it one hour long (MonthlyRule.span)
+ *  — as on /events/ and /meetings/ — and an overnight end ("22:00"–"01:00", central-time.js overnight) is the
+ *  next morning. */
 export function meetingByRule(key, meeting = {}) {
   const rule = monthlyRule(meeting && typeof meeting === "object" ? meeting : {});
   const wd = WD[String(rule.weekday || "wednesday").toLowerCase()] ?? 3;
@@ -231,7 +232,7 @@ export function meetingByRule(key, meeting = {}) {
   if (!d) return null;
   const ymd = `${key}-${pad(d)}`;
   const skip = new Set(rule.skip_dates || []);
-  if (skip.has(ymd)) return null;
+  if (skip.has(ymd) || (rule.starts && ymd < rule.starts)) return null;
   const endDay = overnight(rule.start || "19:00", rule.end || "20:00") ? ymdPlus(ymd, 1) : ymd;
   return { ymd, start: chicagoInstant(ymd, rule.start || "19:00"), end: chicagoInstant(endDay, rule.end || "20:00") };
 }
@@ -300,7 +301,7 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
  *             the instant /events/ and the home page write too) — the browser marks it "Over" then
  *             (src/assets/js/monthly.js); past = overAt ≤ now (an instant, not a day)
  *   href      where its title links: the committee meeting → /meetings/#committee-meeting (the one home
- *             of its Zoom details); anything else → its own page (url) or /events/. A monthly series
+ *             of its joining details); anything else → its own page (url) or /events/. A monthly series
  *             keeps its own link: its later dates are folded on /events/, where an anchor could land on
  *             a hidden card. external = another site.
  *   category  the data's category (eventTone keeps the Grapevine / La Viña calendars' colours)
@@ -343,12 +344,13 @@ function committeeRow(events, key, site, L, ctx) {
   let ev = events.find((e) => e.id && String(e.id).startsWith(`ev:committee:${key}-`));
   if (!ev) {
     const r = meetingByRule(key, site.meeting || {});
-    if (r) ev = { id: `ev:committee:${r.ymd}`, kind: "event", url: "/meetings/", title: "", extra: { start: r.start, end: r.end, location: "Zoom", online: true } };
+    // (where it is held: the settings' platform — committee.js meetingJoin, "Zoom" only when it is left out)
+    if (r) ev = { id: `ev:committee:${r.ymd}`, kind: "event", url: "/meetings/", title: "", extra: { start: r.start, end: r.end, location: meetingJoin(site.meeting).platform, online: true } };
   }
   if (!ev) return null;
   const row = dateRow(ev, L, ctx, { kind: "committee" });
   row.title = "";
-  row.platform = (site.meeting && site.meeting.platform) || "Zoom";
+  row.platform = meetingJoin(site.meeting).platform;
   return row;
 }
 
@@ -613,9 +615,9 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
     const tpl = series[series.length - 1];
     // the rule as build_data understood it (extra.rule: week_of_month 1–5 / -1, English weekday, "HH:MM"
     // start and the end as used — "Saturdays", "2nd", "5 PM" or no end all read as the sync read them);
-    // only skip_dates come from the settings
+    // only skip_dates and the first date (`starts`: no month before it) come from the settings
     const rule = (tpl.extra && tpl.extra.rule) || sp;
-    const r = meetingByRule(key, { week_of_month: rule.week_of_month, weekday: rule.weekday, start: rule.start, end: rule.end, skip_dates: sp.skip_dates || [] });
+    const r = meetingByRule(key, { week_of_month: rule.week_of_month, weekday: rule.weekday, start: rule.start, end: rule.end, skip_dates: sp.skip_dates || [], starts: sp.starts || "" });
     if (!r) continue;
     recIn.push({ ...tpl, id: `ev:recurring:${sp.key}:${r.ymd}`, date: r.start, extra: { ...tpl.extra, start: r.start, end: r.end } });
   }
@@ -909,7 +911,7 @@ export function monthMessage(ctx, langs, style, site, t) {
     for (const l of Ls.slice(1)) { const o = (mm[l].dates || []).find((x) => x.id === d.id); if (o && o.title && o.title !== d.title) out.push(`  ${o.title}`); }
   }
   if (!rows.length) out.push(both(cur && (m.dates || []).length ? "monthly.no_more_dates" : "monthly.no_dates"));
-  // … written like the rows above: "Next committee meeting: Wed, Nov 18 · 7–8 PM Central — Zoom" (in the
+  // … written like the rows above: "Next committee meeting: Wed, Nov 18 · 7–8 PM Central — Google Meet" (in the
   // middle of a line, after the colon, Spanish goes on in lower case: "Próxima reunión del comité: mié, 18 …")
   const nc = cur && nw ? nw.nextCommittee : null;
   if (nc && !nc.thisMonth) {

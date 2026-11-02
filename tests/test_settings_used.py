@@ -73,6 +73,8 @@ SITE_COMPUTED = {"built", "url", "repository", "timezone"}
 # allow): their path in `site` → what site.js gives.
 SITE_DEFAULTED = {
     ("meeting", "platform"): 'config "meeting: platform" (leave out: Zoom) — site.js gives "Zoom" when it is missing',
+    ("meeting", "online_url"): 'config "meeting: online_url" (an older zoom_url still counts) — site.js gives one of them, '
+                               'or "" without either',
 }
 # Not setting names: what JavaScript / Nunjucks ask of a value (a list's length, a text's methods …).
 NOT_KEYS = {"length", "startsWith", "endsWith", "slice", "indexOf", "replace", "split", "map", "filter", "find",

@@ -63,8 +63,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {#- Compact "next committee meeting" card with a live countdown (home.js → homeMeeting).
     v = "hero": dark glass, in the hero's right column (1024px and up);
     v = "page": light card right below the hero (below 1024px). Only one of the two is
-    ever displayed, so each has its own heading id. Meeting ID and passcode are on /meetings/
-    ("Details"); the Zoom link carries the passcode. -#}
+    ever displayed, so each has its own heading id. The meeting code is on /meetings/ ("Details");
+    the link (site.meeting.online_url) is all it takes to join. -#}
 {% macro meetingCard(v, L, meeting, mt) %}
 {%- set dark = v == "hero" -%}
 {%- set tid = "home-meeting-title" if dark else "home-meeting-title-2" -%}
@@ -73,7 +73,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {%- set mNote = mt | pick(L, "note") -%}
 <div class="home-meet home-meet--{{ v }}" role="group" aria-labelledby="{{ tid }}"
      x-data="homeMeeting" data-rule="{{ meeting.rule | json }}" data-start="{{ meeting.next.start }}" data-end="{{ meeting.next.end }}"
-     data-cal-title="{{ 'home.meeting_cal_title' | t(L) }}" data-cal-desc="{{ 'home.meeting_cal_desc' | t(L, pf) }}{{ (' ' + mNote) if mNote }} {{ mt.zoom_url }}" data-cal-loc="{{ mt.zoom_url }}">
+     data-cal-title="{{ 'home.meeting_cal_title' | t(L) }}" data-cal-desc="{{ 'home.meeting_cal_desc' | t(L, pf) }}{{ (' ' + mNote) if mNote }} {{ mt.online_url }}" data-cal-loc="{{ mt.online_url }}">
   <div class="home-meet-info">
     <div class="flex flex-wrap items-center justify-between gap-2">
       <h2 id="{{ tid }}" class="home-meet-eyebrow">{{ "home.meeting_eyebrow" | t(L) }}</h2>
@@ -94,7 +94,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     {% endfor %}
   </div>
   <div class="home-meet-actions">
-    <a class="{{ 'btn-light' if dark else 'btn-primary' }} home-meet-join" href="{{ mt.zoom_url }}" target="_blank" rel="noopener">{% icon "video", "size-4" %} {{ "home.meeting_join" | t(L, pf) }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
+    <a class="{{ 'btn-light' if dark else 'btn-primary' }} home-meet-join" href="{{ mt.online_url }}" target="_blank" rel="noopener">{% icon "video", "size-4" %} {{ "home.meeting_join" | t(L, pf) }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
     <button type="button" class="{{ 'btn-on-dark' if dark else 'btn-secondary' }} btn-sm" x-show="ready" x-cloak @click="addToCalendar()" title="{{ 'common.add_to_calendar' | t(L) }}">{% icon "calendar-plus", "size-4" %} {{ "home.meeting_add_cal" | t(L) }}</button>
     <a class="{{ 'btn-on-dark' if dark else 'btn-secondary' }} btn-sm home-meet-more" href="{{ '/meetings/' | lurl(L) }}">{{ "home.meeting_details_short" | t(L) }} {% icon "arrow-right", "size-3.5" %}<span class="sr-only"> — {{ "home.meeting_eyebrow" | t(L) }}</span></a>
   </div>

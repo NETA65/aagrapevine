@@ -63,7 +63,7 @@ import path from "node:path";
 import vm from "node:vm";
 import { monthlyRule } from "../../eleventy.config.js";
 import { qrSvg } from "./community.js";
-import { normalizeEvents, chicagoDayEndMs, announcementList, weeklyOpenAll, meetingTitle, recurrenceText } from "./committee.js";
+import { normalizeEvents, chicagoDayEndMs, announcementList, weeklyOpenAll, meetingTitle, recurrenceText, meetingIdKey } from "./committee.js";
 import { editorialFor, issueName, aboutVideos } from "./read.js";
 import { nowDate, chicagoYmd } from "./monthly.js";
 import { shopBotm, shopPlanPrice, shopNextChange, money, dayLabel } from "./shop.js";
@@ -1572,7 +1572,7 @@ function liveMeetings(c) {
         title: meetingTitle(c.site, lang),
         when: recurrenceText(rule, lang),
         note: [t("committee.events.online_on", lang, { platform: oneLine(m.platform) || "Zoom" }),
-          m.meeting_id ? `${t("committee.meeting.id", lang)} ${oneLine(m.meeting_id)}` : ""].filter(Boolean).join(" · "),
+          m.meeting_id ? `${t(meetingIdKey(m.meeting_id), lang)} ${oneLine(m.meeting_id)}` : ""].filter(Boolean).join(" · "),
         pub: "both",
       });
     }

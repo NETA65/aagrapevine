@@ -33,10 +33,11 @@
                                  13 hours, is a slip of the pen → false; "19:00"–"20:00" → false). "HH:MM" or [h, mi];
                                  the rule of scripts/sync/meeting.py overnight()
      ruleDate(y, mo, rule, tz)   a monthly meeting's date in a month: rule { weekday 0–6, n, start "HH:MM", end,
-                                 skip ["YYYY-MM-DD"] } (the countdown's shape: src/_data/meeting.js `rule`,
-                                 committee.js cmRuleObj) → { ymd, start, end } (ms) or null (no such day, a
-                                 skipped date). An overnight end is on the next day ("22:00"–"01:00" ends at 1 AM
-                                 the next morning); no end, or one not after the start: one hour (the site's rule)
+                                 skip ["YYYY-MM-DD"], starts "YYYY-MM-DD" (optional: the first date) } (the
+                                 countdown's shape: src/_data/meeting.js `rule`, committee.js cmRuleObj) → { ymd,
+                                 start, end } (ms) or null (no such day, a skipped date, a date before `starts`).
+                                 An overnight end is on the next day ("22:00"–"01:00" ends at 1 AM the next
+                                 morning); no end, or one not after the start: one hour (the site's rule)
      timeRange(a, b, locale, tz, opts)  "7:00 – 8:00 PM CDT" (Intl formatRange); a time that ends after midnight
                                  "7:00 PM – 1:00 AM CST" — never the numeric dates Intl writes into a range over two
                                  days ("12/31/2026, 7:00 PM – 1/1/2027, 12:00 AM"); one that runs into the next day
@@ -193,6 +194,7 @@ function ruleDate(y, mo, rule, tz) {
   if (!day) return null;
   var ymd = y + "-" + pad(mo + 1) + "-" + pad(day), skip = rule.skip || [];
   for (var i = 0; i < skip.length; i++) if (String(skip[i]).slice(0, 10) === ymd) return null;
+  if (rule.starts && ymd < String(rule.starts).slice(0, 10)) return null;    // before the first date
   var s = clock(rule.start) || [19, 0], e = clock(rule.end);
   var start = zoneInstant(y, mo, day, s[0], s[1], tz);
   if (isNaN(start)) return null;

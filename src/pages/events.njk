@@ -192,7 +192,7 @@ calendarFeed: "/events.ics"
         <p class="mt-1 text-xs text-white/65" x-show="localLabel" x-text="localLabel" x-cloak></p>
       </div>
       <div class="cm-pinned-actions">
-        <a href="{{ m.zoom_url }}" target="_blank" rel="noopener" class="btn-light btn-sm" :class="phase !== 'upcoming' && 'cm-join-live'">{% icon "video", "size-4" %} <span x-text="joinText">{{ "committee.meeting.join" | t(lang, pf) }}</span></a>
+        <a href="{{ m.online_url }}" target="_blank" rel="noopener" class="btn-light btn-sm" :class="phase !== 'upcoming' && 'cm-join-live'">{% icon "video", "size-4" %} <span x-text="joinText">{{ "committee.meeting.join" | t(lang, pf) }}</span></a>
         <details class="cm-menu">
           <summary class="btn-on-dark btn-sm">{% icon "calendar-plus", "size-4" %} {{ "common.add_to_calendar" | t(lang) }}</summary>
           <div class="cm-menu-panel cm-menu-right">
@@ -253,10 +253,11 @@ calendarFeed: "/events.ics"
               {% if ev.location and ev.locationTba %}<li class="inline-flex items-center gap-1.5 italic">{% icon "hourglass", "size-4 text-faint" %} {{ ev.location }}</li>
               {% elif ev.location %}<li class="inline-flex items-center gap-1.5">{% set locIcon = "video" if ev.committee else "map-pin" %}{% icon locIcon, "size-4 text-faint" %} {{ ev.location }}</li>{% endif %}
               {% if ev.isOnline %}<li class="inline-flex items-center gap-1.5">{% icon "video", "size-4 text-faint" %} {{ ("committee.events.online_on" | t(lang, { platform: ev.platform })) if ev.platform else ("committee.events.online" | t(lang)) }}</li>{% endif %}
-              {#- the meeting ID to type into the Zoom app (recurring_events `meeting_id:`); "Join online" opens the link.
+              {#- the meeting ID or code to type into the meeting app (recurring_events `meeting_id:` — "Meeting code" for
+                  a Google Meet code: ev.meetingIdKey); "Join online" opens the link.
                   inline-block: with larger text on a phone (where no-wrap is lifted) the number moves to the next
                   line in one piece instead of breaking after "815" -#}
-              {% if ev.meetingId %}<li class="inline-flex items-center gap-1.5">{% icon "hash", "size-4 text-faint" %} <span>{{ "committee.meeting.id" | t(lang) }} <span class="inline-block whitespace-nowrap font-mono font-medium text-ink" translate="no">{{ ev.meetingId }}</span></span></li>{% endif %}
+              {% if ev.meetingId %}<li class="inline-flex items-center gap-1.5">{% icon "hash", "size-4 text-faint" %} <span>{{ ev.meetingIdKey | t(lang) }} <span class="inline-block whitespace-nowrap font-mono font-medium text-ink" translate="no">{{ ev.meetingId }}</span></span></li>{% endif %}
               {#- who to write to (recurring_events `contact:`): a line of its own, so the address never hides in the
                   3 lines the card shows of the summary; tap-link: 44px tall on phones; @<wbr> lets a long address
                   wrap after the "@" with larger text (it is checked to be a plain e-mail address: committee.js) -#}

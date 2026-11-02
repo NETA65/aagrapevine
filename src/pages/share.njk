@@ -29,7 +29,7 @@ pageScripts: ["/assets/js/community.js"]
 {%- endmacro %}
 {#- The committee meeting, to the LEFT of the poster's code: config/site.yml `meeting:` in the words of
     /meetings/ — the monthly rule and the time (never a date: the poster stays on a wall for months),
-    the platform with the meeting ID and passcode, and who is welcome. -#}
+    the platform with the meeting code (or a Zoom ID and passcode), and who is welcome. -#}
 {% macro meetBlock(v) %}
 {%- set m = site.meeting -%}
 {%- set tKey = "community.share.p_meet_time" -%}
@@ -40,10 +40,13 @@ pageScripts: ["/assets/js/community.js"]
     <li>{% icon "clock-3", "cm-p-ico" %}<span>{{ meetLine(v, tKey | t("en", { time: m | cmTimeRange("en") }), tKey | t("es", { time: m | cmTimeRange("es") })) }}</span></li>
     {% if m.platform %}<li>{% icon "video", "cm-p-ico" %}<span>{{ meetLine(v, "committee.events.online_on" | t("en", { platform: m.platform }), "committee.events.online_on" | t("es", { platform: m.platform })) }}</span></li>{% endif %}
   </ul>
-  {% if m.meeting_id or m.passcode %}
+  {#- how to join: the meeting code — "Meeting code" for a Google Meet code, "Meeting ID" for a Zoom ID — and a
+      passcode when there is one (committee.js meetingJoin) -#}
+  {%- set join = m | cmJoin -%}
+  {% if join.id or join.passcode %}
   <dl class="cm-p-meet-ids">
-    {% if m.meeting_id %}<div><dt>{{ meetLine(v, "committee.meeting.id" | t("en"), "committee.meeting.id" | t("es")) }}</dt><dd>{{ m.meeting_id }}</dd></div>{% endif %}
-    {% if m.passcode %}<div><dt>{{ meetLine(v, "committee.meeting.passcode" | t("en"), "committee.meeting.passcode" | t("es")) }}</dt><dd>{{ m.passcode }}</dd></div>{% endif %}
+    {% if join.id %}<div><dt>{{ meetLine(v, join.idKey | t("en"), join.idKey | t("es")) }}</dt><dd>{{ join.id }}</dd></div>{% endif %}
+    {% if join.passcode %}<div><dt>{{ meetLine(v, "committee.meeting.passcode" | t("en"), "committee.meeting.passcode" | t("es")) }}</dt><dd>{{ join.passcode }}</dd></div>{% endif %}
   </dl>
   {% endif %}
   <p class="cm-p-meet-all">{% icon "heart-handshake", "cm-p-ico" %}<span>{{ meetLine(v, "committee.meeting.who_title" | t("en"), "committee.meeting.who_title" | t("es")) }}</span></p>

@@ -283,7 +283,8 @@ class Settings(unittest.TestCase):
         for f in ("committee", "community", "home", "orientation", "read", "report"):
             strings.update(json.loads(read("src", "_i18n", f + ".json")))
         keys = ["committee.meeting.hero_sub", "committee.meeting.join", "committee.meeting.join_hint",
-                "committee.meeting.how_to_join_text", "committee.meeting.cal_desc", "committee.meeting.cal_join",
+                "committee.meeting.how_to_join_text", "committee.meeting.how_to_join_text_code",
+                "committee.meeting.cal_desc", "committee.meeting.cal_join",
                 "committee.meeting.copy_link", "committee.meeting.tip_phone", "committee.meeting.contact_text",
                 "committee.meetings.committee_eyebrow", "committee.meetings.meta_desc", "home.meeting_join",
                 "home.meeting_cal_desc", "orientation.live_meeting_sub", "orientation.ns_meeting_cta", "read.gvr.s_meeting",
@@ -320,6 +321,41 @@ class Settings(unittest.TestCase):
         self.assertEqual(r["plain"], "Monthly NETA 65 Grapevine / La Viña committee meeting on Zoom.")
         self.assertTrue(r["noEs"].endswith("Open to every AA member."))       # as every _es setting: English then
 
+    def test_the_link_and_the_meeting_code(self):
+        """The link to join is `online_url` (an older `zoom_url` still counts); what people type into the app is
+        labelled "Meeting code" when it has letters (a Google Meet code, copied as written) and "Meeting ID" for a Zoom
+        ID (its digits copied; callers can dial in) — committee.js meetingJoin, in the calendars too."""
+        meet = {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00", "platform": "Google Meet",
+                "online_url": "https://meet.google.com/abc-defg-hij", "zoom_url": "https://us02web.zoom.us/j/9494767497",
+                "meeting_id": "abc-defg-hij"}
+        zoom = {"week_of_month": 3, "weekday": "wednesday", "zoom_url": "https://us02web.zoom.us/j/9494767497",
+                "meeting_id": "949 476 7497", "passcode": "neta65"}
+        r = run_js(self, """
+            const C = await imp("eleventy/filters/committee.js");
+            const one = (meeting, lang) => C.normalizeEvents([], { url: "https://example.org/gv", meeting }, lang,
+              { monthsBack: 0, monthsAhead: 2 }).find((e) => e.committee);
+            out({ meet: [C.meetingJoin(input.meet, "en"), C.meetingJoin(input.meet, "es")], zoom: C.meetingJoin(input.zoom, "en"),
+                  none: C.meetingJoin({}, "en"), meetCal: one(input.meet, "en"), zoomCal: one(input.zoom, "es"),
+                  keys: [C.meetingIdKey("rva-tmst-vdb"), C.meetingIdKey("815 9593 1777"), C.meetingIdKey("")] });
+        """, data={"meet": meet, "zoom": zoom})
+        self.assertEqual(r["meet"][0], {"platform": "Google Meet", "url": "https://meet.google.com/abc-defg-hij",
+                                        "id": "abc-defg-hij", "idKey": "committee.meeting.code", "idLabel": "Meeting code",
+                                        "copyId": "abc-defg-hij", "passcode": "", "dialIn": False})
+        self.assertEqual(r["meet"][1]["idLabel"], "Código de la reunión")
+        self.assertEqual(r["zoom"], {"platform": "Zoom", "url": "https://us02web.zoom.us/j/9494767497", "id": "949 476 7497",
+                                     "idKey": "committee.meeting.id", "idLabel": "Meeting ID", "copyId": "9494767497",
+                                     "passcode": "neta65", "dialIn": True})
+        self.assertEqual(r["none"], {"platform": "Zoom", "url": "", "id": "", "idKey": "committee.meeting.id", "idLabel": "",
+                                     "copyId": "", "passcode": "", "dialIn": False})
+        self.assertEqual(r["keys"], ["committee.meeting.code", "committee.meeting.id", "committee.meeting.id"])
+        desc = r["meetCal"]["calDescription"]
+        self.assertIn("Join on Google Meet: https://meet.google.com/abc-defg-hij\nMeeting code: abc-defg-hij", desc)
+        self.assertNotIn("zoom.us", desc)
+        self.assertNotIn("Passcode", desc)
+        self.assertEqual((r["meetCal"]["online"], r["meetCal"]["calLocation"]), ("https://meet.google.com/abc-defg-hij",) * 2)
+        self.assertIn("Entrar por Zoom: https://us02web.zoom.us/j/9494767497\nID de reunión: 949 476 7497\n"
+                      "Código de acceso: neta65", r["zoomCal"]["calDescription"])
+
     def test_site_data(self):
         r = run_js(self, r"""
             const os = await import("node:os");
@@ -338,6 +374,9 @@ class Settings(unittest.TestCase):
               noPlatform: runIn("meeting:\n  weekday: wednesday\n").meeting,
               noMeeting: runIn("site:\n  title: x\n").meeting,
               blank: runIn("meeting:\n  platform: '  '\n").meeting.platform,
+              online: real.meeting.online_url,
+              oldKey: runIn("meeting:\n  zoom_url: https://us02web.zoom.us/j/123456789\n").meeting.online_url,
+              bothKeys: runIn("meeting:\n  online_url: https://meet.google.com/abc-defg-hij\n  zoom_url: https://zoom.us/j/1\n").meeting.online_url,
             });
         """)
         self.assertEqual(r["meetings"]["area_label"], CFG["meetings"]["area_label"])
@@ -347,9 +386,13 @@ class Settings(unittest.TestCase):
         meeting = CFG.get("meeting") or {}
         self.assertEqual((r["platform"], r.get("note")),
                          (str(meeting.get("platform") or "").strip() or "Zoom", meeting.get("note")))
-        self.assertEqual(r["noPlatform"], {"weekday": "wednesday", "platform": "Zoom"})
+        self.assertEqual(r["noPlatform"], {"weekday": "wednesday", "platform": "Zoom", "online_url": ""})
         self.assertEqual(r["noMeeting"], {})                    # no meeting settings: still none (no rule of the pages')
         self.assertEqual(r["blank"], "Zoom")
+        # the link to join: online_url — an older zoom_url still counts (the pages read online_url only)
+        self.assertEqual(r["online"], str(meeting.get("online_url") or meeting.get("zoom_url") or "").strip())
+        self.assertEqual(r["oldKey"], "https://us02web.zoom.us/j/123456789")
+        self.assertEqual(r["bothKeys"], "https://meet.google.com/abc-defg-hij")
 
     def test_meetings_without_their_data_name_the_offices(self):
         r = run_js(self, """

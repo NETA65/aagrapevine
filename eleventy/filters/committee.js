@@ -9,9 +9,9 @@
 // Dev helper: COMMITTEE_EMPTY=1 npx @11ty/eleventy …  renders every committee
 // page as if the Drive / events / bulletin data were empty (launch state).
 
-import { monthlyRule, TZ, siteUrl, shareImage, langPath } from "../../eleventy.config.js";
+import { monthlyRule, hhmm, ymdText, TZ, siteUrl, shareImage, langPath } from "../../eleventy.config.js";
 // The site's one Central-time helper (the browser runs the same code: /assets/js/central-time.js)
-import { isZone, zoneParts, zoneInstant, ymdOf, overnight, ruleDate, timeRange, icsSequence, icsAlarm, offsetMinutes } from "../central-time.js";
+import { isZone, zoneParts, zoneInstant, ymdOf, nthWeekday, overnight, ruleDate, timeRange, icsSequence, icsAlarm, offsetMinutes } from "../central-time.js";
 import { iconSvg } from "../icons.js";
 import { buildWarning } from "../build-warnings.js";
 // the kind of an event (an Area assembly …): who holds it, for search engines (eventLd)
@@ -280,8 +280,9 @@ export function meetingDates(cfg = {}, monthsBack = 3, monthsAhead = 12, now = n
   cfg = meetingCfg(cfg);
   const weekday = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
   const n = Number(cfg.week_of_month || 3);
-  // (the countdown's rule: eleventy/central-time.js ruleDate, as src/_data/meeting.js and app.js GV.nextMeeting)
-  const rule = { weekday, n, start: meetingStart(cfg), end: meetingEnd(cfg), skip: skipDates(cfg) };
+  // (the countdown's rule: eleventy/central-time.js ruleDate, as src/_data/meeting.js and app.js GV.nextMeeting;
+  // `starts`, a first date, when the rule has one — no date before it)
+  const rule = { weekday, n, start: meetingStart(cfg), end: meetingEnd(cfg), skip: skipDates(cfg), starts: cfg.starts || "" };
   let ms = now instanceof Date ? now.getTime() : Number(now);
   if (!Number.isFinite(ms)) ms = Date.now();
   // (its month in Central time: the last evening of a month is already the next month in UTC)
@@ -321,7 +322,7 @@ function meetingTimeRange(cfg = {}, lang = "en") {
 // rule into extra.rule in the shape of `meeting:`): "Every second Saturday of the month · 5:00 – 8:00 PM
 // Central time" / "Cada segundo sábado del mes · 5:00–8:00 p. m., hora del Centro" — the words and clock
 // format of the committee meeting's own line on /meetings/ ("Every third Wednesday of the month · 7:00 –
-// 8:00 PM Central time, on Zoom"). Empty when the rule cannot be read (the caller then uses the data's
+// 8:00 PM Central time, on Google Meet"). Empty when the rule cannot be read (the caller then uses the data's
 // recurrence_label, given its zone the same way: withZone).
 export function recurrenceText(rule, lang = "en") {
   if (!rule || typeof rule !== "object") return "";
@@ -366,21 +367,173 @@ export function meetingTitle(site, lang = "en") {
   return t("committee.meeting_title", lang, { committee: name });
 }
 
-// The meeting in a line for calendars and its card: "Monthly … committee meeting on Zoom." and who may come
-// (config/site.yml meeting.platform — Zoom when left out — and meeting.note / note_es).
-function meetingSummary(site, lang) {
-  const m = site?.meeting || {};
-  const note = String((lang !== "en" && m[`note_${lang}`]) || m.note || "").replace(/\s+/g, " ").trim();
-  return [t("committee.meeting.cal_desc", lang, { platform: String(m.platform || "").trim() || "Zoom" }), note].filter(Boolean).join(" ");
+// A setting as one line of text ("" for nothing, a list, a block or a yes / no) — meeting.py _line.
+const oneLine = (v) => (v === null || v === undefined || typeof v === "object" || typeof v === "boolean" ? "" : String(v).replace(/\s+/g, " ").trim());
+
+// The label of what people type into the meeting app: "Meeting code" for one with letters (a Google Meet code,
+// "rva-tmst-vdb"), else "Meeting ID" (a Zoom ID, "949 476 7497") — its i18n key.
+export function meetingIdKey(id) {
+  return /[a-z]/i.test(String(id ?? "")) ? "committee.meeting.code" : "committee.meeting.id";
 }
 
-// Plain-text description used in calendars (Google / Outlook / .ics).
-function meetingDescription(site, lang, pageUrl) {
+/**
+ * How to join one of our meetings (config/site.yml `meeting:`): THE reading every page, calendar and deck uses —
+ *   platform  where it is held, in the pages' words ("Google Meet"; "Zoom" when left out, as site.js gives it)
+ *   url       the link (`online_url`; an older `zoom_url` still counts)
+ *   id        what people type into the app: a Google Meet code ("rva-tmst-vdb") or a Zoom ID ("949 476 7497")
+ *   idKey, idLabel  its label's i18n key and words: "Meeting code" for a code with letters, "Meeting ID" for digits
+ *   copyId    what a Copy button copies: a code as it is written, a Zoom ID's digits
+ *   passcode  "" without one (Google Meet has none)
+ *   dialIn    callers can dial in with the ID (a Zoom ID: /accessibility/#phone, access.js); a Google Meet room on
+ *             a personal account has no number to call
+ */
+export function meetingJoin(m, lang = "en") {
+  const x = m && typeof m === "object" ? m : {};
+  const id = oneLine(x.meeting_id);
+  const idKey = meetingIdKey(id);
+  const digits = id.replace(/\D+/g, "");
+  return {
+    platform: oneLine(x.platform) || "Zoom", url: oneLine(x.online_url) || oneLine(x.zoom_url), id, idKey,
+    idLabel: id ? t(idKey, lang) : "", copyId: idKey === "committee.meeting.code" ? id : digits,
+    passcode: oneLine(x.passcode), dialIn: idKey === "committee.meeting.id" && !!digits,
+  };
+}
+
+// A guest speaker's name as the site may show it: a first name (one to three words: "Rick", "Mary Jo") and the
+// last initial ("W.") — anonymity: never a full last name. The same pattern as scripts/sync/meeting.py SPEAKER_NAME.
+const FIRST_NAME = "[A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÖØ-öø-ÿ'’-]*";
+const SPEAKER_NAME = new RegExp(`^${FIRST_NAME}(?: ${FIRST_NAME}){0,2} [A-ZÀ-ÖØ-Þ]\\.$`);
+const ORD_SHORT = { 1: "1st", 2: "2nd", 3: "3rd", 4: "4th", 5: "5th", "-1": "last" };     // (the chair's notes)
+const DAY_NAMES_EN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+// config/site.yml `meeting:` → its speakers and the chair's notes, read once per settings object (every page and
+// both languages read the same `site.meeting`, so each note is logged once). The notes are the chair's to act on —
+// the sync puts the same ones in the run summary (status.json problems.meeting) — so they are a plain log line, never
+// a build warning: a slip in the committee's settings never fails a build (scripts/ops/gate_tests.py).
+const speakerReads = new WeakMap();
+function readSpeakers(m) {
+  const x = m && typeof m === "object" ? m : {};
+  if (speakerReads.has(x)) return speakerReads.get(x);
+  const cfg = meetingCfg(x);
+  const weekday = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
+  const n = Number(cfg.week_of_month || 3);
+  const skip = new Set(skipDates(cfg));
+  const nth = `${ORD_SHORT[n]} ${DAY_NAMES_EN[weekday]}`;
+  const list = [];
+  const notes = [];
+  let raw = x.speakers;
+  if (raw && typeof raw === "object" && !Array.isArray(raw) && !(raw instanceof Date)) raw = [raw];   // one, without "- "
+  if (raw === null || raw === undefined || raw === "" || (Array.isArray(raw) && !raw.length)) raw = [];
+  else if (!Array.isArray(raw)) {
+    notes.push("speakers: not understood — it must be a list, each speaker starting with “- date:”");
+    raw = [];
+  }
+  const byDay = new Map();
+  raw.forEach((e, i) => {
+    if (!e || typeof e !== "object" || Array.isArray(e) || e instanceof Date) {
+      notes.push(`speakers entry ${i + 1}: not understood (its settings must be indented under “- date:”) — left out`);
+      return;
+    }
+    const name = oneLine(e.name);
+    const who = name ? `speaker “${name}”` : `speakers entry ${i + 1}`;
+    const ymd = ymdText(e.date);
+    if (!ymd) return void notes.push(`${who}: date “${oneLine(e.date)}” is not a date like "2027-01-20" — left out`);
+    const [y, mo, d] = ymd.split("-").map(Number);
+    const day = nthWeekday(y, mo - 1, weekday, n);
+    if (day !== d) {
+      return void notes.push(`${who}: ${ymd} is not the ${nth} of its month — left out (`
+        + (day ? `that month's meeting is ${y}-${pad2(mo)}-${pad2(day)})` : `that month has no ${nth})`));
+    }
+    if (skip.has(ymd)) return void notes.push(`${who}: ${ymd} is one of the skip_dates (no meeting that day) — left out`);
+    if (!SPEAKER_NAME.test(name)) return void notes.push(`${who} (${ymd}): the name must be a first name and a last initial, like "Rick W." — left out`);
+    if (byDay.has(ymd)) return void notes.push(`${who}: ${ymd} has a speaker already (“${byDay.get(ymd).name}”) — left out`);
+    const pos = [oneLine(e.position), oneLine(e.position_es)];
+    const top = [oneLine(e.topic), oneLine(e.topic_es)];
+    if (!top[0] && !top[1]) notes.push(`${who} (${ymd}): no topic — shown without one`);
+    byDay.set(ymd, { ymd, name, position: { en: pos[0] || pos[1], es: pos[1] || pos[0] }, topic: { en: top[0] || top[1], es: top[1] || top[0] }, confirmed: e.confirmed === true });
+  });
+  list.push(...[...byDay.values()].sort((a, b) => a.ymd.localeCompare(b.ymd)));
+  // the guest speaker's part ends by `speaker_until` (between the meeting's start and end: meeting.py speaker_until)
+  let until = "";
+  if (x.speaker_until !== null && x.speaker_until !== undefined && x.speaker_until !== "") {
+    const u = hhmm(x.speaker_until), s = hhmmMinutes(meetingStart(cfg)), e = hhmmMinutes(meetingEnd(cfg));
+    if (u && hhmmMinutes(u) > s && hhmmMinutes(u) < (e > s ? e : 24 * 60)) until = u;
+    else notes.push(`speaker_until “${String(x.speaker_until)}” is not a time between the meeting's start and end — not shown`);
+  }
+  for (const note of notes) console.log(`[meeting] note: config/site.yml meeting: ${note}`);
+  const read = { list, until, notes };
+  speakerReads.set(x, read);
+  return read;
+}
+
+/**
+ * The committee meeting's guest speakers (config/site.yml `meeting: speakers:`), soonest first: [{ ymd, name,
+ * position: { en, es }, topic: { en, es }, confirmed }] — a language left out has the other one's words. Every
+ * speaker of the list is shown, but one that would be wrong to show is left out, with a note (meetingSpeakerNotes:
+ * the same notes as the sync's, scripts/sync/meeting.py meeting_speakers, which puts them in the run summary): a date
+ * that is not a date, not a meeting day by the rule or one of the skip_dates, a name that is not a first name and a
+ * last initial ("Rick W."), a second speaker for one date; one without a topic is shown without it. `confirmed` is
+ * for the chair (the run summary's reminder, the decks' notes): never shown on a page or in a calendar.
+ */
+export function meetingSpeakers(m) {
+  return readSpeakers(m).list;
+}
+
+/** The chair's notes about the speakers and speaker_until (["speaker “Jeannie Smith” (2027-02-17): the name must be
+ *  …"]), word for word the sync's (meeting.py meeting_speakers + speaker_until); [] when all is well. */
+export function meetingSpeakerNotes(m) {
+  return [...readSpeakers(m).notes];
+}
+
+/** The guest speaker of one meeting (its "YYYY-MM-DD") in a language → { ymd, name, position, topic }, or null (no
+ *  speaker that day: Dec 16, 2026). Never `confirmed`. */
+export function meetingSpeaker(m, ymd, lang = "en") {
+  const s = readSpeakers(m).list.find((x) => x.ymd === String(ymd || "").slice(0, 10));
+  return s ? { ymd: s.ymd, name: s.name, position: s.position[lang] || s.position.en, topic: s.topic[lang] || s.topic.en } : null;
+}
+
+/** When the guest speaker's part ends ("19:30", config/site.yml meeting.speaker_until), "" when it is not set (or not
+ *  between the meeting's start and end); committee business follows until the meeting's end. */
+export function meetingSpeakerUntil(m) {
+  return readSpeakers(m).until;
+}
+
+// "7:30 PM" / "7:30 p. m." of an "HH:MM" (Central wall clock)
+const clockLabel = (s, lang) => fmt(atChicago(2026, 0, 21, s), lang, { hour: "numeric", minute: "2-digit" });
+
+// "The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM." — "" without speaker_until
+function speakerUntilLine(m, lang) {
+  const until = meetingSpeakerUntil(m);
+  return until ? t("committee.meeting.speaker_until", lang, { until: clockLabel(until, lang), end: clockLabel(meetingEnd(meetingCfg(m)), lang) }) : "";
+}
+
+// The meeting in a line for calendars and its card: "Monthly … committee meeting on Google Meet." and who may come
+// (config/site.yml meeting.platform — Zoom when left out — and meeting.note / note_es); with `ymd`, that meeting's
+// guest speaker and topic and when the speaker's part ends (the words of build_data.speaker_sentences).
+function meetingSummary(site, lang, ymd) {
+  const m = site?.meeting || {};
+  const note = String((lang !== "en" && m[`note_${lang}`]) || m.note || "").replace(/\s+/g, " ").trim();
+  const sp = ymd ? meetingSpeaker(m, ymd, lang) : null;
+  const speaker = sp ? [t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.topic ? ` — “${sp.topic}”.` : "."), speakerUntilLine(m, lang)] : [];
+  return [t("committee.meeting.cal_desc", lang, { platform: meetingJoin(m, lang).platform }), note, ...speaker].filter(Boolean).join(" ");
+}
+
+// Plain-text description used in calendars (Google / Outlook / .ics): the summary, that meeting's guest speaker
+// (`ymd`: who, their service, the topic, until when) and how to join — never the speaker in the alarm (its title).
+function meetingDescription(site, lang, pageUrl, ymd) {
   const m = site.meeting || {};
+  const j = meetingJoin(m, lang);
   const lines = [meetingSummary(site, lang)];
-  if (m.zoom_url) lines.push("", `${t("committee.meeting.cal_join", lang, { platform: String(m.platform || "").trim() || "Zoom" })}: ${m.zoom_url}`);
-  if (m.meeting_id) lines.push(`${t("committee.meeting.id", lang)}: ${m.meeting_id}`);
-  if (m.passcode) lines.push(`${t("committee.meeting.passcode", lang)}: ${m.passcode}`);
+  const sp = ymd ? meetingSpeaker(m, ymd, lang) : null;
+  if (sp) {
+    lines.push("", t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.position ? ` — ${sp.position}` : ""));
+    if (sp.topic) lines.push(t("committee.meeting.speaker_topic", lang, { topic: sp.topic }));
+    const until = speakerUntilLine(m, lang);
+    if (until) lines.push(until);
+  }
+  if (j.url) lines.push("", `${t("committee.meeting.cal_join", lang, { platform: j.platform })}: ${j.url}`);
+  if (j.id) lines.push(`${j.idLabel}: ${j.id}`);
+  if (j.passcode) lines.push(`${t("committee.meeting.passcode", lang)}: ${j.passcode}`);
   if (pageUrl) lines.push("", `${t("committee.cal.details", lang)}: ${pageUrl}`);
   return lines.join("\n");
 }
@@ -493,16 +646,24 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
   // 1) Committee meetings — always computed from config/site.yml, so the
   //    calendar is right even if the daily data sync failed.
   //    (Titles/summaries are fixed human text — never machine translation.)
+  //    Each date with its own guest speaker (meetingSpeaker: extra.speaker, its summary and calendar text); the
+  //    title, the times and the calendar uid (ev-committee-<ymd>) stay the same with or without one. Its flyer is
+  //    the one the sync found for that date on the Drive (events.json: meeting.flyer_match), when it has one.
   const mTitle = meetingTitle(site, lang);
+  const join = meetingJoin(m, lang);
+  const synced = new Map((items || []).filter((it) => it && it.category === "committee" && it.extra).map((it) => [it.id, it.extra]));
   for (const d of meetingDates(m, opt.monthsBack ?? 3, opt.monthsAhead ?? 12, new Date(now))) {
     const id = `ev:committee:${d.ymd}`;
     seen.add(id);
+    const speaker = meetingSpeaker(m, d.ymd, lang);
+    const fx = synced.get(id) || {};
     out.push(shapeEvent({
       id, source: "committee", kind: "event", category: "committee", lang: "en",
-      url: "/meetings/", title: mTitle, summary: meetingSummary(site, lang),
+      url: "/meetings/", title: mTitle, summary: meetingSummary(site, lang, d.ymd),
       date: d.start, is_new: false, _i18nTitle: true,
-      extra: { start: d.start, end: d.end, all_day: false, location: m.platform || "Zoom", online_url: m.zoom_url || null },
-    }, site, lang, now, meetingDescription(site, lang, meetingPage)));
+      extra: { start: d.start, end: d.end, all_day: false, location: join.platform, online_url: join.url || null,
+        flyer_url: fx.flyer_url || null, flyer_thumb: fx.flyer_thumb || null, ...(speaker ? { speaker } : {}) },
+    }, site, lang, now, meetingDescription(site, lang, meetingPage, d.ymd)));
   }
 
   // 2) Everything else (Drive flyers, manual events, TX GV/LV calendar, .ics feeds)
@@ -623,10 +784,17 @@ function shapeEvent(it, site, lang, now, descOverride) {
     location = "";
   }
   const isOnline = !committee && !!(online || x.online === true || platform);
-  // The meeting ID people type into the Zoom app (config/site.yml recurring_events `meeting_id:`, La Viña's
-  // monthly workshop): a line on the card and in the calendars' description. (The committee meeting's own ID
-  // is on /meetings/ and in its calendar text — meetingDescription.)
+  // The meeting ID or code people type into the meeting app (config/site.yml recurring_events `meeting_id:` — La
+  // Viña's monthly workshop's Zoom ID, the Grapevine Meeting's Google Meet code): a line on the card and in the
+  // calendars' description, "Meeting code" for a code with letters (meetingIdKey). (The committee meeting's own is
+  // on /meetings/ and in its calendar text — meetingDescription.)
   const meetingId = committee ? "" : String(x.meeting_id || "").trim();
+  const meetingIdLabelKey = meetingIdKey(meetingId);
+  // A committee meeting's guest speaker (normalizeEvents: meetingSpeaker; an events.json date outside its window:
+  // the sync's extra.speaker, in both languages) → { name, position, topic } for the cards, else null
+  const sp = committee && x.speaker && typeof x.speaker === "object" && x.speaker.name ? x.speaker : null;
+  const inLang = (v) => (v && typeof v === "object" ? String(v[lang] || v.en || "") : String(v || ""));
+  const speaker = sp ? { name: String(sp.name), position: inLang(sp.position), topic: inLang(sp.topic) } : null;
   // Who to write to about it (recurring_events `contact:` — La Viña's workshop: lveditorial@aagrapevine.org): a line
   // of its own on the card, never only inside the summary (the card shows 3 lines of it), and a line in the
   // calendars' description. A plain e-mail address only (build_data checks the same shape): it becomes a mailto: link.
@@ -658,7 +826,7 @@ function shapeEvent(it, site, lang, now, descOverride) {
     if (recurrence) descLines.push(recurrence);
     if (locationTba) descLines.push(location);
     if (online) descLines.push("", `${platform ? t("committee.events.online_on", lang, { platform }) : t("committee.events.online", lang)}: ${online}`);
-    if (meetingId) descLines.push(...(online ? [] : [""]), `${t("committee.meeting.id", lang)}: ${meetingId}`);
+    if (meetingId) descLines.push(...(online ? [] : [""]), `${t(meetingIdLabelKey, lang)}: ${meetingId}`);
     if (contact) descLines.push(`${t("committee.events.contact", lang)}: ${contact}`);
     if (flyerView) descLines.push(`${t("committee.events.flyer", lang)}: ${flyerView}`);
     // Date-only outside event: the calendar shows it as all-day, so the note says the time was not listed.
@@ -674,7 +842,9 @@ function shapeEvent(it, site, lang, now, descOverride) {
     uid: slugify(String(it.id).replace(/:/g, "-"), 90),
     group, committee, category: it.category || "", source: it.source || "",
     // "lv" / "gv": La Viña's or Grapevine's own event (eventHost) — its colour, the organizer for search engines
-    host: eventHost(it), meetingId, contact,
+    host: eventHost(it), meetingId, meetingIdKey: meetingIdLabelKey, contact,
+    // a committee meeting's guest speaker { name, position, topic } (cards only: never JSON-LD, never the alarm)
+    speaker,
     // recurrence: "Every second Saturday of the month · 5:00 – 8:00 PM Central time" (calendars, search);
     // the card, which already shows the time, uses only the day part: "Every second Saturday of the month".
     recurring, series: recurring ? String(x.series || "") : "", recurrence, recurrenceDay: recurrence.split(" · ")[0], ownWords,
@@ -715,12 +885,12 @@ function shapeEvent(it, site, lang, now, descOverride) {
 // What /events/ (and /es/events/) tell search engines about its events: one schema.org Event per upcoming event
 // held at a place (events.njk writes them as the page's FIRST <script type="application/ld+json">). Google lists
 // only events at a physical place with a postal address that the public may attend (its Event rules, updated
-// 2026-09-08), so an online-only event — the committee meeting's monthly dates (members only, on Zoom), La Viña's
-// workshop on Zoom — gets none: it could only count as an error. The page, the .ics files and the share pages
-// still show it. A hybrid event (a place AND an online link) is "Mixed", with its place only: Google reads no
-// VirtualLocation, and its link would only have been this page.
-// Only facts the data has, and no personal names: no performer (speakers' names — anonymity), no offers (there
-// are no tickets).
+// 2026-09-08), so an online-only event — the committee meeting's monthly dates (members only, on Google Meet), our
+// Grapevine Meeting (Google Meet), La Viña's workshop on Zoom — gets none: it could only count as an error. The
+// page, the .ics files and the share pages still show it. A hybrid event (a place AND an online link) is "Mixed",
+// with its place only: Google reads no VirtualLocation, and its link would only have been this page.
+// Only facts the data has, and no personal names: no performer (speakers' names — anonymity: a committee meeting's
+// guest speaker never reaches it), no offers (there are no tickets).
 
 const US_STATES = new Set(("AL AK AZ AR CA CO CT DC DE FL GA HI IA ID IL IN KS KY LA MA MD ME MI MN MO MS MT NC ND "
   + "NE NH NJ NM NV NY OH OK OR PA PR RI SC SD TN TX UT VA VT WA WI WV WY").split(" "));
@@ -814,10 +984,11 @@ export function eventPlace(text, extra = {}) {
 
 // A summary as one plain line for search engines: no HTML (its few common entities read), single spaces, at most
 // `n` characters (cut at a word, "…" — as the share pages cut theirs) — and without its sentences that say how to
-// join online (a meeting ID, a passcode, a Zoom link: "…join on Zoom (meeting ID 949 476 7497, passcode …)."). The
-// page shows them to people; a copy made for machines only helps those who look for meetings to disrupt.
+// join online (a meeting ID or code, a passcode, a Zoom or Google Meet link: "…join on Zoom (meeting ID 949 476
+// 7497, passcode …).", "…on Google Meet: meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb)."). The page shows
+// them to people; a copy made for machines only helps those who look for meetings to disrupt.
 const PLAIN_ENTITIES = { "&nbsp;": " ", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&lt;": "<", "&gt;": ">", "&amp;": "&" };
-const JOIN_DETAILS = /meeting\s*id|pass\s*code|password|\bpwd=|zoom\.us\/|id de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
+const JOIN_DETAILS = /meeting\s*id|meeting\s*code|pass\s*code|password|\bpwd=|zoom\.us\/|meet\.google\.com\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
 function plainLine(s, n = 300) {
   const t = String(s ?? "").replace(/<[^>]*>/g, " ").replace(/&(?:nbsp|quot|#39|apos|lt|gt|amp);/g, (e) => PLAIN_ENTITIES[e])
     .replace(/\s+/g, " ").trim()
@@ -1935,7 +2106,9 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("cmAnnouncements", (items) => announcementList(EMPTY ? [] : items));
   eleventyConfig.addFilter("cmRule", (cfg, lang) => meetingRuleText(cfg, lang));
   eleventyConfig.addFilter("cmTimeRange", (cfg, lang) => meetingTimeRange(cfg, lang));
-  eleventyConfig.addFilter("cmDigits", (s) => String(s || "").replace(/\D+/g, ""));
+  // How to join the committee meeting — {{ site.meeting | cmJoin(lang) }} → { platform, url, id, idKey, idLabel
+  // ("Meeting code" for a Google Meet code, "Meeting ID" for a Zoom ID), copyId, passcode, dialIn } (meetingJoin)
+  eleventyConfig.addFilter("cmJoin", (m, lang) => meetingJoin(m, lang));
   eleventyConfig.addFilter("cmWebcal", (u) => String(u || "").replace(/^https?:\/\//, "webcal://"));
   // Both weekly open meetings (Grapevine Weekly Open + La Viña), the page language's first — /meetings/#weekly-open
   eleventyConfig.addFilter("cmWeeklyAll", (items, lang) => weeklyOpenAll(EMPTY ? [] : items, lang));
@@ -2023,7 +2196,8 @@ export default function (eleventyConfig, helpers) {
   });
 
   // Rule for the client-side countdown (same shape as GV.nextMeeting expects)
-  // (a missing end = a 1-hour meeting, like everywhere else — see meetingEnd)
+  // (a missing end = a 1-hour meeting, like everywhere else — see meetingEnd; a first date `starts` when the rule
+  // has one — a recurring_events entry's, the Grapevine Meeting's)
   eleventyConfig.addFilter("cmRuleObj", (cfg) => {
     cfg = meetingCfg(cfg);
     return {
@@ -2032,6 +2206,7 @@ export default function (eleventyConfig, helpers) {
       start: meetingStart(cfg),
       end: meetingEnd(cfg),
       skip: skipDates(cfg),
+      ...(cfg.starts ? { starts: cfg.starts } : {}),
     };
   });
 

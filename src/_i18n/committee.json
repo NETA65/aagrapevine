@@ -155,6 +155,10 @@
     "en": "Use “Join on {platform}” in the next-meeting card, or type the meeting ID and passcode into the {platform} app.",
     "es": "Usa “Entrar por {platform}” en la tarjeta de la próxima reunión, o escribe el ID de reunión y el código de acceso en la aplicación de {platform}."
   },
+  "committee.meeting.how_to_join_text_code": {
+    "en": "Use “Join on {platform}” in the next-meeting card, or type the meeting code into the {platform} app.",
+    "es": "Usa “Entrar por {platform}” en la tarjeta de la próxima reunión, o escribe el código de la reunión en la aplicación de {platform}."
+  },
   "committee.meeting.id": {
     "en": "Meeting ID",
     "es": "ID de reunión"
@@ -178,6 +182,26 @@
   "committee.meeting.copy_passcode": {
     "en": "Copy passcode",
     "es": "Copiar código de acceso"
+  },
+  "committee.meeting.code": {
+    "en": "Meeting code",
+    "es": "Código de la reunión"
+  },
+  "committee.meeting.copy_code": {
+    "en": "Copy meeting code",
+    "es": "Copiar el código de la reunión"
+  },
+  "committee.meeting.speaker": {
+    "en": "Guest speaker: {name}",
+    "es": "Orador(a) invitado(a): {name}"
+  },
+  "committee.meeting.speaker_topic": {
+    "en": "Topic: “{topic}”",
+    "es": "Tema: “{topic}”"
+  },
+  "committee.meeting.speaker_until": {
+    "en": "The guest speaker's part ends by {until}; committee business follows until {end}.",
+    "es": "La charla de la persona invitada termina a más tardar a las {until}; luego, hasta las {end}, siguen los asuntos del comité."
   },
   "committee.meeting.copy_link": {
     "en": "Copy {platform} link",

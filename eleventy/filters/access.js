@@ -1,5 +1,5 @@
 // Area filters: access — the Accessibility page (src/pages/accessibility.njk).
-//   axPhone(site, weekly, lang)  joining our Zoom meetings by phone (/accessibility/#phone)
+//   axPhone(site, weekly, lang)  joining the Zoom meetings by phone (/accessibility/#phone)
 //   axAudioTypes(shop, lang)     what the official stores' subscription descriptions say about audio
 //   axAslPlaylist(videos, site, lang)  AA Grapevine's American Sign Language playlist on YouTube
 // Nothing here copies meeting details: the IDs and passcodes come from `meeting:` (config/site.yml)
@@ -56,12 +56,17 @@ export function axPhone(site, weekly, lang = "en", t = (k) => k) {
   const first = numbers[0];
   const meetings = [];
   const m = (site && site.meeting) || {};
-  const cDigits = digitsOf(m.meeting_id);
+  // the committee meeting only while callers can dial in: a Zoom ID (digits); a Google Meet code ("rva-tmst-vdb",
+  // letters) has no number to call — the rule of committee.js meetingJoin (dialIn), not imported: this module needs
+  // none of the build's packages
+  const id = String(m.meeting_id ?? "").trim();
+  const cDigits = /[a-z]/i.test(id) ? "" : digitsOf(id);
   if (cDigits) {
-    const pass = phonePasscode(pa.committee?.phone_passcode, m.passcode);
+    const passcode = String(m.passcode ?? "").trim();
+    const pass = phonePasscode(pa.committee?.phone_passcode, passcode);
     meetings.push({
-      key: "committee", titles: [t("nav.meeting")], notes: [""], starts: [""], id: String(m.meeting_id), digits: cDigits, pass,
-      askChair: !pass && !!String(m.passcode || "").trim(), details: "/meetings/#committee-meeting",
+      key: "committee", titles: [t("nav.meeting")], notes: [""], starts: [""], id, digits: cDigits, pass,
+      askChair: !pass && !!passcode, details: "/meetings/#committee-meeting",
       call: first ? oneTap(first.tel, cDigits, pass) : "", callCity: first ? first.city : "",
     });
   }
