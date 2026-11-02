@@ -79,7 +79,8 @@ anyway, and no secrets are stored in the files.
    (no slash at the end). Pages shows the exact address after the first deploy (Step 7). Also check
    `repository:` (for example `https://github.com/NETA65/aagrapevine`) and the address at the end of
    `sources:` → `crawler:` → `user_agent`.
-3. Check the committee meeting, Zoom details and `contact_email`.
+3. Check the committee meeting (`meeting:`: its Google Meet link and code, the guest speakers), the Grapevine
+   Meeting under `recurring_events:` and `contact_email`.
 4. Check `drive:` → `root_folder_id` is the committee's shared folder, and that the folder is shared
    as **Anyone with the link — Viewer** (in Google Drive: right-click the folder → **Share** →
    *General access*).
