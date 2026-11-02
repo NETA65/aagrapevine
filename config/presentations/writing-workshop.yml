@@ -62,7 +62,7 @@ footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
 minutes: 115            # the deck's full plan: 115 minutes in a two-hour slot (its timing page)
 icon: "pen-line"
 tone: "lv"
-drive_title: "Grapevine and La Viña Writing Workshop"
+# drive_title: "Grapevine and La Viña Writing Workshop" — put back once the copy with the Google Meet details is on the Drive
 
 card:
   title:

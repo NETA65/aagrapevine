@@ -4,8 +4,9 @@
 #  From January 2027 each meeting opens with a guest speaker: the talk and questions, done by 7:30 p.m.; then the
 #  committee's business until 8:00.
 #
-#  Made from the committee's PowerPoint deck of 2026-10-01 (the copy in the Panel 77 slides folder, linked from
-#  the card as "PowerPoint copy"): every slide, with the same words on the slide and in the notes. Only what the
+#  Made from the committee's PowerPoint deck of 2026-10-01 (the copy in the Panel 77 slides folder, still with the
+#  Zoom room: the card links it as "PowerPoint copy" again once a copy with the Google Meet details replaces it,
+#  `drive_title` below): every slide, with the same words on the slide and in the notes. Only what the
 #  web player does differently was changed, and in November 2026 the move to Google Meet and the guest speakers:
 #   · the orange [fill-ins] are {fill:…} blanks (Customize → Your details; kept on the chair's own device);
 #   · the facts that change come from the site's data: {live:…} (the meeting dates: tonight's on the title
@@ -46,7 +47,7 @@ footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
 minutes: 60
 icon: "users"
 tone: "grape"
-drive_title: "Grapevine and La Viña Monthly Committee Meeting"
+# drive_title: "Grapevine and La Viña Monthly Committee Meeting" — put back once the copy with the Google Meet details is on the Drive
 card:
   title:
     en: "Grapevine and La Viña Monthly Committee Meeting"
