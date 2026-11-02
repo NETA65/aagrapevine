@@ -567,8 +567,8 @@ Everything else (secrets, recipients, wording, test sends) is in [E-mail and ale
 
 On Sundays (and by hand) it builds the site, checks every link on every page with
 [lychee](https://github.com/lycheeverse/lychee) (2 requests at a time per website, 1 second apart; it skips
-aagrapevine.org, aalavina.org, YouTube, Instagram, Google, Zoom and podcast, social and shopping sites, which
-limit robots),
+aagrapevine.org, aalavina.org, YouTube, Instagram, Google (our meetings' Google Meet link among them), Zoom and
+podcast, social and shopping sites, which limit robots),
 then checks the official links in `config/site.yml` (`links:`, `site.area_website`, `site.committee_page`,
 each podcast's `web:`) one by one with the site's polite robot. Then it reads the robots.txt at the root of the
 site's address, https://neta65.github.io/robots.txt (`scripts/ops/root_robots.py`, step *Check the root robots.txt

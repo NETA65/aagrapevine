@@ -950,7 +950,8 @@ matching file wins, in any folder unless a folder is named):
 | Monthly toolkit `/monthly/` | "Full editorial calendar" | the title or file name contains "editorial calendar" or "calendario editorial" | [monthly.njk](../src/pages/monthly.njk) |
 | Shop `/shop/` (price-change notice) | "Read AA Grapevine's notice" | matches `price_changes[].doc_match` | [config/site.yml](../config/site.yml) |
 | GVR / RLV 101 `/orientation/` and the Portfolio | "PowerPoint copy", "Present on the web" | the title equals a deck's `drive_title` | [config/presentations/](../config/presentations/README.md) |
-| Events: a monthly event's dates | the flyer of each date | `recurring_events[].flyer_match` | [config/site.yml](../config/site.yml) ([Flyers and events §5](flyers-and-events.md#5-use-a-flyer-without-a-date)) |
+| Events: a monthly event's dates | the flyer of each date | `recurring_events[].flyer_match` (our Grapevine Meeting: "Grapevine Meeting - flyer") | [config/site.yml](../config/site.yml) ([Flyers and events §5](flyers-and-events.md#5-use-a-flyer-without-a-date)) |
+| Events: the committee meeting's dates | the flyer of each date, `flyers/` only | `meeting.flyer_match`: "Committee Meeting - flyer" for every date, "January 2027 Committee Meeting - guest speaker" for that month's | [config/site.yml](../config/site.yml) ([Settings §3.2](settings.md#the-meetings-flyers-flyer_match)) |
 | Events written on GitHub | **View flyer** | the `flyer:` line holds the file's Drive link | `content/events/*.md` |
 
 More about each: [Photos, slides, reports … §6](photos-slides-reports.md#6-where-it-shows-on-the-website),
