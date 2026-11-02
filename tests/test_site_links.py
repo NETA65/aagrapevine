@@ -690,9 +690,9 @@ class BuiltPages(unittest.TestCase):
             self.assertNotIn("{platform}", html)
         en, es = p["/meetings/"], p["/es/meetings/"]
         for s in ("Join on Google Meet", "The committee · Monthly on Google Meet", "Central time, on Google Meet.",
-                  "Copy Google Meet link", "no Google Meet account needed", "Open to every AA member. GVRs, RLVs, DCMs"):
+                  "Copy Google Meet link", "on a phone or tablet, use the Google Meet app", "Open to every AA member. GVRs, RLVs, DCMs"):
             self.assertIn(s, en)
-        self.assertRegex(en, r'<meta name="description" content="Our committee&#39;s monthly Google Meet meeting')
+        self.assertRegex(en, r'<meta name="description" content="Our committee meeting and online Grapevine Meeting on Google Meet')
         for s in ("Entrar por Google Meet", "El comité · Cada mes por Google Meet", "Abierta a todo miembro de AA. Los RLV, GVR"):
             self.assertIn(s, es)
         # the weekly open meetings are Grapevine's and La Viña's own, on Zoom

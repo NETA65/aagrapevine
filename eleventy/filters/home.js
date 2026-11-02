@@ -341,8 +341,9 @@ export default function (eleventyConfig, helpers) {
 
   /* Upcoming events for the home page, shown by date. The very next committee meeting is already
      in the hero, so it is skipped. The NEXT date of every monthly recurring event WE hold (config/site.yml
-     `recurring_events:`, e.g. the booth at CityWide Dallas) always keeps a place — even when several
-     one-off events come sooner — and only its next date (one series never fills several places).
+     `recurring_events:`, e.g. the booth at CityWide Dallas, our online Grapevine Meeting) always keeps a
+     place — even when several one-off events come sooner — and only its next date (one series never fills
+     several places).
      A series La Viña or Grapevine holds themselves (`host: lv` / `gv`: La Viña's monthly workshop on
      Zoom) keeps no place of its own: its next date competes by date like a one-off event, so it never
      pushes off one of our workshops that comes sooner (it is theirs, shown with the GV & LV calendars).
