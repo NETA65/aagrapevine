@@ -705,6 +705,11 @@ class Json(unittest.TestCase):
         self.assertEqual(plain(live["meeting_zoom_id"]), SITE["meeting"]["meeting_id"])
         self.assertNotIn(" ", live["meeting_zoom_id"])
         self.assertEqual(live["meeting_passcode"], str(SITE["meeting"].get("passcode") or ""))    # (Google Meet: none)
+        self.assertEqual(plain(live["meeting_code"]), SITE["meeting"]["meeting_id"])
+        self.assertEqual(live["meeting_platform"], SITE["meeting"].get("platform") or "Zoom")
+        url = SITE["meeting"].get("online_url") or SITE["meeting"].get("zoom_url") or ""
+        self.assertEqual(value("meeting_url"), url)
+        self.assertEqual(value("meeting_link"), re.sub(r"^https?://", "", url).rstrip("/"))
         self.assertTrue(plain(live["meeting_time"]).endswith(" Central time"))
         self.assertNotIn("\u2009", live["meeting_time"], "the time range is never cut at its dash")
         # no break on either side of the dash (a word joiner after it), nor before PM
@@ -843,7 +848,7 @@ class Json(unittest.TestCase):
         meeting = SITE.get("meeting") or {}
         skipped = len(meeting.get("skip_dates") or [])
         for d in [s["data"] for j in self.json.values() for s in j["slides"] if s.get("kind") == "meeting"]:
-            self.assertEqual(list(d), ["rows", "limit", "rule", "time", "zoom_id", "passcode", "url", "page"])
+            self.assertEqual(list(d), ["rows", "limit", "rule", "time", "platform", "link", "code", "zoom_id", "passcode", "url", "page"])
             self.assertGreaterEqual(len(d["rows"]), 12 - skipped, "the rule gives a year of dates")
             for r in d["rows"]:
                 self.assertEqual(list(r), ["start", "end", "label"])
@@ -853,6 +858,8 @@ class Json(unittest.TestCase):
                 self.assertRegex(r["label"], r"^\w+day, \w+ \d{1,2}, \d{4}$")
             self.assertRegex(d["rule"], r"^Every ")
             self.assertEqual(d["url"], str(meeting.get("online_url") or meeting.get("zoom_url") or ""))
+            self.assertEqual((d["platform"], plain(d["code"])), (meeting.get("platform") or "Zoom", str(meeting.get("meeting_id") or "")))
+            self.assertNotIn("speaker", json.dumps(d["rows"]), "the dates only: the speakers are the slides' facts")
             on_site(d["page"])
         limits = sorted(s["data"]["limit"] for j in self.json.values() for s in j["slides"] if s.get("kind") == "meeting")
         self.assertEqual(limits, [3, 12], "limit 3, and 12 = the year")
@@ -950,6 +957,19 @@ SITE_X = {
     "phone_access": {"numbers": [{"number": "+1 346 248 7799", "city": "Houston"}, {"number": "+1 312 626 6799", "city": "Chicago"}],
                      "committee": {"phone_passcode": ""}},
 }
+# The same meeting on Google Meet (no passcode, no number to call), with its guest speakers: October's confirmed and
+# sharing slides, November's not confirmed yet, December none — and one the site must leave out (a full last name)
+MEET_X = {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00", "platform": "Google Meet",
+          "online_url": "https://meet.google.com/rva-tmst-vdb", "meeting_id": "rva-tmst-vdb", "speaker_until": "19:30",
+          "speakers": [
+              {"date": "2099-10-21", "name": "Rick W.", "confirmed": True, "slides": True,
+               "position": "Past delegate, Area 65 (Panel 73)", "topic": "Grapevine as a Twelfth Step tool"},
+              {"date": "2099-11-18", "name": "Jeannie M.", "confirmed": False,
+               "position": "Past delegate, Area 4 (Panel 73)", "topic": "Public Information"},
+              {"date": "2099-12-16", "name": "Greg Gonzales", "confirmed": True, "position": "Delegate", "topic": "Anonymity"},
+          ]}
+# Our Grapevine Meeting (config/site.yml recurring_events: grapevine-meeting), as the sync lists it in events.json
+GM_RULE = {"week_of_month": 1, "weekday": "wednesday", "start": "19:00", "end": "20:00"}
 PLAN = lambda typ, price, new=None: {  # noqa: E731
     "type": typ, "term_months": 12, "price": price, "url": "https://www.aagrapevine.org/store/x", "currency": "USD",
     **({"change": {"key": "2100-01", "new": new, "stale": True}} if new else {})}
@@ -1099,6 +1119,12 @@ res.more = {
   phonePass: oct(input.db, { ...input.site, phone_access: { ...input.site.phone_access, committee: { phone_passcode: "4417092" } } }),
   digitsPass: oct(input.db, { ...input.site, meeting: { ...input.site.meeting, passcode: "238047" } }),
   noNumbers: oct(input.db, { ...input.site, phone_access: {} }),
+  meet: oct(input.db, { ...input.site, meeting: input.meet }),
+  meetNight: P.liveFacts({ db: input.db, site: { ...input.site, meeting: input.meet }, carry: input.carry, meeting: input.meeting,
+                           now: new Date("2099-10-22T01:30:00Z") }),
+  meetData: P.liveData("meeting", {}, { db: input.db, site: { ...input.site, meeting: input.meet }, meeting: input.meeting,
+                                        now: new Date("2099-10-15T17:00:00Z") }),
+  gm: oct({ ...input.db, events: { items: [...input.db.events.items, ...input.gm] } }, input.site),
   twoRooms: oct({ ...input.db, weekly_open: { items: input.db.weekly_open.items.map(lvRoom) } }, input.site),
 };
 // more deadlines than a slide carries: 23 issues of one theme, then one issue of two themes (the 24th and 25th rows),
@@ -1168,7 +1194,14 @@ class Facts(unittest.TestCase):
             try:
                 (tmp / "overrides.yml").write_text(FACTS_OVERRIDES, encoding="utf-8")
                 Facts.r = run_js(self, FACTS_JS, data={
-                    "db": DB_X, "site": SITE_X, "carry": CARRY_X, "meeting": MEETING_X, "kinds": KINDS_X,
+                    "db": DB_X, "site": SITE_X, "carry": CARRY_X, "meeting": MEETING_X, "kinds": KINDS_X, "meet": MEET_X,
+                    "gm": [ev(f"ev:recurring:grapevine-meeting:{d}", "Grapevine Meeting (online)", start, end, category="recurring",
+                              recurring=True, series="grapevine-meeting", rule=GM_RULE, online=True, platform="Google Meet",
+                              online_url="https://meet.google.com/rva-tmst-vdb", meeting_id="rva-tmst-vdb",
+                              url="/meetings/#grapevine-meeting")
+                           for d, start, end in (("2099-11-04", "2099-11-05T01:00:00Z", "2099-11-05T02:00:00Z"),
+                                                 ("2099-12-02", "2099-12-03T01:00:00Z", "2099-12-03T02:00:00Z"),
+                                                 ("2100-01-06", "2100-01-07T01:00:00Z", "2100-01-07T02:00:00Z"))],
                     "clocks": {"september": "2099-09-15T17:00:00Z", "october": "2099-10-15T17:00:00Z",
                                # the meeting night: 8:30 PM Central (the meeting ended at 8), then half past midnight
                                "meeting_night": "2099-10-22T01:30:00Z", "after_midnight": "2099-10-22T05:30:00Z",
@@ -1318,6 +1351,62 @@ class Facts(unittest.TestCase):
         self.assertEqual(more["noNumbers"]["meeting_phone_passcode"], "", "empty by design")
         # the magazines' story lines (db.audio_project — /contribute/#record)
         self.assertEqual((live["gv_audio_phone"], live["lv_audio_phone"]), ("(559) 726-1216", "(559) 670-1601"))
+
+    def test_the_meeting_on_google_meet_and_its_guest_speakers(self):
+        """How to join a Google Meet room (the link, written out and in full, its code; no passcode, no number to call)
+        and each date's guest speaker, switching at midnight Central after the meeting, as the meeting's day does —
+        "to be announced" for a date with none listed; the chair's notes alone say whether a speaker shares slides
+        and has confirmed."""
+        live, night = self.r["more"]["meet"], self.r["more"]["meetNight"]
+        self.assertEqual((live["meeting_platform"], live["meeting_link"], live["meeting_url"], live["meeting_code"]),
+                         ("Google Meet", "meet.google.com/rva-tmst-vdb", "https://meet.google.com/rva-tmst-vdb", "rva-tmst-vdb"))
+        self.assertEqual((live["meeting_zoom_id"], live["meeting_passcode"], live["meeting_phone_passcode"]), ("rva-tmst-vdb", "", ""),
+                         "the older name of the code; no passcode")
+        self.assertEqual(live["meeting_phone"], {"value": "", "fallback": "see the Accessibility page"}, "no number to call")
+        d = self.r["more"]["meetData"]
+        self.assertEqual((d["platform"], d["link"], d["code"], d["passcode"], d["url"]),
+                         ("Google Meet", "meet.google.com/rva-tmst-vdb", "rva-tmst-vdb", "", "https://meet.google.com/rva-tmst-vdb"))
+        tba = "to be announced"
+        at = lambda k, when: live_at(live[k], when)  # noqa: E731
+        before = "2099-10-21T23:00:00.000Z"
+        self.assertEqual([at("speaker_name", t) for t in (before, OCT21_OVER, NOV18_OVER, DEC16_OVER)], ["Rick W.", "Jeannie M.", tba, tba],
+                         "a speaker whose name is not a first name and a last initial is left out")
+        self.assertEqual(at("speaker_position", before), "Past delegate, Area 65 (Panel 73)")
+        self.assertEqual(at("speaker_topic", OCT21_OVER), "Public Information")
+        self.assertEqual(at("speaker_line", before), "Rick W. — Past delegate, Area 65 (Panel 73)")
+        self.assertEqual(live["speaker_name"]["steps"][0]["from"], OCT21_OVER, "with the meeting's day, at midnight after it")
+        # next month's (the "Next meeting" slide, shown during tonight's): November's, then none
+        self.assertEqual(at("speaker_after", before), "Jeannie M. — “Public Information”")
+        self.assertEqual(at("speaker_after", OCT21_OVER), tba)
+        # during AND after tonight's meeting, until midnight: tonight's speaker
+        self.assertEqual(live_at(night["speaker_name"], "2099-10-22T01:30:00.000Z"), "Rick W.")
+        # the chair's notes: slides, and whether the speaker has confirmed
+        self.assertEqual(at("speaker_slides", before),
+                         "Tonight's guest speaker shares slides: at the sound check, make sure they can share their screen.")
+        self.assertTrue(at("speaker_slides", OCT21_OVER).startswith("No slides are listed for tonight's guest speaker"))
+        self.assertEqual([at("speaker_confirmed", t) for t in (before, OCT21_OVER, NOV18_OVER)],
+                         ["yes", "not yet, by the committee's list", "no guest speaker is listed for tonight"])
+        # the settings of a Zoom meeting with no speakers: where to look, never a name made up
+        for k in ("speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after"):
+            self.assertEqual(self.oct["live"][k], {"value": "", "fallback": tba}, k)
+
+    def test_our_grapevine_meeting(self):
+        """Our Grapevine Meeting (recurring_events: grapevine-meeting), as /events/ lists it: the next one until it
+        ends; the meeting's day until midnight Central after it, and the one after that; its time and its link."""
+        live = self.r["more"]["gm"]
+        nov4, dec2, jan6 = "Wednesday, November 4, 2099", "Wednesday, December 2, 2099", "Wednesday, January 6, 2100"
+        self.assertEqual(live["grapevine_meeting_next"], {"value": nov4, "steps": [{"from": "2099-11-05T02:00:00.000Z", "value": dec2},
+                                                                                    {"from": "2099-12-03T02:00:00.000Z", "value": jan6}],
+                                                          "until": "2100-01-07T02:00:00.000Z", "fallback": "see the Events page"})
+        self.assertEqual(live["grapevine_meeting_day"]["steps"][0], {"from": "2099-11-05T06:00:00.000Z", "value": dec2}, "midnight Central")
+        self.assertEqual(live["grapevine_meeting_after"], {"value": dec2, "steps": [{"from": "2099-11-05T06:00:00.000Z", "value": jan6}],
+                                                           "until": "2099-12-03T06:00:00.000Z", "fallback": "see the Events page"})
+        self.assertEqual(plain(live["grapevine_meeting_time"]), "7:00 – 8:00 PM Central time")
+        self.assertEqual(live["grapevine_meeting_link"], "meet.google.com/rva-tmst-vdb")
+        # none listed: where to look
+        for k in ("grapevine_meeting_next", "grapevine_meeting_day", "grapevine_meeting_after", "grapevine_meeting_link"):
+            self.assertEqual(self.oct["live"][k], {"value": "", "fallback": "see the Events page"}, k)
+        self.assertEqual(self.oct["live"]["grapevine_meeting_time"], "")
 
     def test_deadlines(self):
         d = self.oct["kinds"]["deadlines"]

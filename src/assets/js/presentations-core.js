@@ -21,7 +21,7 @@
 
    THE PRESENTER'S VERSION — localStorage["gv-presentations-v1"] (presentations.js reads and writes it; never sent
    anywhere):
-     { v: 1, shared: { fill: { key: "text" } },                      the blanks marked `shared` (all four decks)
+     { v: 1, shared: { fill: { key: "text" } },                      the blanks marked `shared` (every deck)
        decks: { <deck id>: { preset: "<version id>",                 Customize → Version ("" = the first, the full one)
          hidden: [ids], shown: [ids],                                 turned off / on, on top of the version
          order: null | [ids],                                         moved slides (null = the deck's order)
@@ -125,6 +125,8 @@
     zoom_id: "Zoom ID",
     passcode: "Passcode",
     meeting_id: "Meeting ID",
+    // a Google Meet code (one with letters: "rva-tmst-vdb"), as the site labels it
+    meeting_code: "Meeting code",
     contact: "Contact",
     gv: "Grapevine",
     lv: "La Viña",
@@ -161,6 +163,8 @@
     // the deck's file has none (config/site.yml site.committee_es); an action item carried to old business
     paper_none: "see the Meetings page",
     paper_none_es: "consulta la página de reuniones del comité",
+    // a guest speaker the site doesn't list yet (the speaker facts of the meeting a text is for)
+    paper_tba: "to be announced",
     paper_committee_es: "Comité de Grapevine y La Viña",
     carry_who_when: "{what} ({who}, by {when})",
     carry_who: "{what} ({who})",
@@ -1532,7 +1536,7 @@
     if (before) state.decks[id] = normDeck(before);
     else delete state.decks[id];
   }
-  /** "Reset all four": everything, the shared blanks too. → the whole previous state, for Undo. */
+  /** "Reset all": every deck, the shared blanks too. → the whole previous state, for Undo. */
   function resetAll(state) {
     var before = copy(state);
     state.decks = {};
@@ -1544,11 +1548,12 @@
      A deck's `paperwork` (the committee meeting's Customize → Agenda & minutes; eleventy/filters/presentations.js
      shapePaper, the deck JSON's `paperwork`): { agenda_slide, agenda | reminder | minutes: { subject, body },
      next_month: { actions, old_business, minutes_month, clear: [keys], untick: [slide ids] }, meetings: [{ ymd,
-     start, end, label, label_es, month }], time_es, committee_es }. The texts are plain text in the deck's language,
+     start, end, label, label_es, month, speaker?: { name, position, topic } }], time_es, committee_es }. The texts are plain text in the deck's language,
      made from the presenter's blanks and the day's facts: never sent anywhere from here (the player copies them, or
      opens them in the presenter's own e-mail app with no address filled in). */
   // a paperwork text's own facts ({paper:…}): the meeting the text is for, its month, the meeting after it, the
-  // agenda's rows (a line of its own), that date and the meeting's time in Spanish, the committee's Spanish name
+  // agenda's rows (a line of its own), that date and the meeting's time in Spanish, the committee's Spanish name,
+  // that meeting's guest speaker (name and service position, position, topic: "" without one)
   var PAPER_RE = /\{paper:([a-z_]+)\}/g;
   var LANG_MARK = /\{lang:[a-z]{2}\}|\{\/lang\}/g;
   function paperOf(deck) { return deck && isMap(deck.paperwork) ? deck.paperwork : null; }
@@ -1598,7 +1603,10 @@
    * lang }], meeting: row | null } (null when the deck has no such text). Its tokens are filled as on a slide (a
    * notes_only blank never shows), then:
    *   · a line whose blanks are ALL empty is left out — the text never shows an empty "[hint]" (a blank left empty
-   *     beside a filled one still shows as "[hint]", so the chair sees it);
+   *     beside a filled one still shows as "[hint]", so the chair sees it) — and so is a line whose {paper:…} facts
+   *     are all empty (the guest speaker of a meeting that has none);
+   *   · the speaker facts ({live:speaker_name}, _position, _topic, _line), also in the agenda's rows, are those of
+   *     the meeting the text is for ({paper:speaker} …): "to be announced" for a meeting with none listed;
    *   · a paragraph that had blanks and is left with none of those lines, and nothing but its first line (a heading
    *     like "Old business"), is left out too;
    *   · {lang:es}…{/lang} marks go (a paragraph all in Spanish is a block with lang "es": the player marks it).
@@ -1613,11 +1621,23 @@
     var m = paperMeetings(deck, ds, now);
     var row = which === "minutes" ? m.held : m.next;
     var aft = which === "minutes" ? m.heldAfter : m.nextAfter;
-    var ctx = { deck: deck, state: state, live: cur ? cur.live : liveValues(deck.live, now), cur: cur || null, where: "slide" };
+    // that meeting's guest speaker (its row's `speaker`; none: "", and its lines are left out) — and the speaker facts
+    // of the day ({live:speaker_…}, the agenda's rows too) say that meeting's, not tonight's: after "Start next month"
+    // on a meeting night the agenda is already next month's
+    var sp = row && isMap(row.speaker) && isStr(row.speaker.name) && row.speaker.name ? row.speaker : null;
+    var spText = function (k) { return sp && isStr(sp[k]) ? sp[k] : ""; };
+    var live = Object.assign({}, cur ? cur.live : liveValues(deck.live, now), {
+      speaker_name: spText("name") || EN.paper_tba, speaker_position: spText("position") || EN.paper_tba,
+      speaker_topic: spText("topic") || EN.paper_tba,
+      speaker_line: sp ? [spText("name"), spText("position")].filter(Boolean).join(" — ") : EN.paper_tba,
+    });
+    var ctx = { deck: deck, state: state, live: live, cur: cur || null, where: "slide" };
     var vals = {
       meeting: row ? row.label : EN.paper_none, month: row ? row.month : EN.paper_none, after: aft ? aft.label : EN.paper_none,
       meeting_es: row && row.label_es ? row.label_es : EN.paper_none_es, time_es: isStr(pw.time_es) ? pw.time_es : "",
       committee_es: isStr(pw.committee_es) && pw.committee_es.trim() ? pw.committee_es.trim() : EN.paper_committee_es,
+      speaker: sp ? [spText("name"), spText("position")].filter(Boolean).join(" — ") : "",
+      speaker_position: spText("position"), speaker_topic: spText("topic"),
     };
     var agenda = null;      // worked out once, when a text asks for it
     var defs = fillDefs(deck);
@@ -1633,6 +1653,9 @@
       var keys = fillsIn(l).filter(function (k) { return defs[k]; });
       var empty = function (k) { return defs[k].notes_only || !fillValue(deck, state, k); };
       if (!keepEmpty && keys.length && keys.every(empty)) return null;
+      // (and a line whose own facts are all empty: "Guest speaker: …" for a meeting with none)
+      var papers = (l.match(PAPER_RE) || []).map(function (t) { return t.slice(7, -1); }).filter(function (k) { return has(vals, k); });
+      if (!keepEmpty && papers.length && papers.every(function (k) { return !vals[k]; })) return null;
       var lang = /^\s*\{lang:([a-z]{2})\}.*\{\/lang\}\s*$/.exec(l);
       var s = l.replace(PAPER_RE, function (all, k) {
         return has(vals, k) ? String(vals[k]).replace(PRIVATE, "").replace(/[{}]/g, "") : all;

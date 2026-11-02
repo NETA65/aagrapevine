@@ -128,6 +128,8 @@ meeting:
       position_es: "Ex delegado del Área 65 Noreste de Texas (Panel 73); ex coordinador del Comité de la Conferencia sobre Grapevine y La Viña"
       topic: "Grapevine as a Twelfth Step tool: how it helps new Grapevine representatives and carries the message in Public Information, Cooperation with the Professional Community, Corrections and Treatment"
       topic_es: "Grapevine como herramienta del Paso Doce: cómo ayuda a los nuevos representantes de Grapevine y lleva el mensaje en Información Pública, Cooperación con la Comunidad Profesional, Correccionales y Tratamiento"
+      slides: true                 # the speaker shares slides (their screen): the chair's notes say to check it at
+                                   # the sound check — never shown on a page
     - date: "2027-02-17"
       name: "Jeannie M."
       confirmed: true
