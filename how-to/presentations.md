@@ -134,7 +134,7 @@ month, which start off).
 
 **The committee meeting from January 2027.** Its first version, "With a guest speaker", is the hour as the
 committee now holds it: the opening (moment of silence, Serenity Prayer), four "Guest speaker" slides (the
-introduction at about 7:02, the talk of about 20 minutes, questions from about 7:22, the thanks: done by 7:30), then
+introduction, the talk of about 20 minutes from about 7:02, questions from about 7:22, the thanks: done by 7:30), then
 the committee's business from 7:30 to 8:00, opened by the Preamble, each part shorter. The speaker's name, service
 position and topic come from `config/site.yml` → `meeting: speakers:` (the same list as `/meetings/`) and switch at
 midnight after each meeting; a date with no speaker listed says "to be announced". "No guest speaker" is the

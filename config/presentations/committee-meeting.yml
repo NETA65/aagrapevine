@@ -517,8 +517,10 @@ slides:
       TIP: This presentation, the slides AND these notes, is public on the committee's website. What you type in {ui:customize} stays on this device and is never sent anywhere, but it is shown on screen at the meeting and goes with any copy you save and share. Use service positions, not names, and keep internal figures out of it. Anything that must stay private goes in your own Drive, never in the shared A65_GV folders: PRIVATE in a name only hides a file from the website, not from Drive.
 
   # The welcome names tonight's plan: the guest speaker until 7:30, then the business (the versions without a
-  # speaker keep the welcome of before: their own `items`). On Google Meet a member's name is their Google
-  # account's (a signed-in member can't rename themselves in the call), so the introductions go in the chat.
+  # speaker keep the welcome of before: their own `items`, and the housekeeping said in full, which their minute
+  # has room for; with a speaker it is one sentence, the rest being on the slide). On Google Meet a member's name
+  # is their Google account's (a signed-in member can't rename themselves in the call), so the introductions go
+  # in the chat.
   - id: "welcome"
     layout: "bullets"
     title: "Welcome to the committee meeting"
@@ -548,11 +550,12 @@ slides:
     minutes: 0.5
     version_minutes: { no-speaker: 1, topic: 1 }
     notes: |
-      {not:no-speaker,topic} TIP (timekeeping): about 30 seconds for the welcome and 30 for the prayer: the guest speaker starts at about 7:02.
+      {not:no-speaker,topic} TIP (timekeeping): about 30 seconds for the welcome, 30 for the prayer and a minute for the introduction: the guest speaker starts at about 7:02. So tonight the housekeeping is one sentence: the rest is on the screen.
       SAY: Good evening, and welcome to the monthly meeting of the NETA 65 Grapevine and La Viña Committee. My name is {fill:first_name}, and I'm grateful to serve as {fill:presenter}. Whether you're a GVR, an RLV, a district chair, a DCM, a GSR, or simply curious about the magazines, you're welcome here.
       {not:no-speaker,topic} SAY: Tonight we open with our guest speaker: the talk and your questions, done by 7:30. Then the committee's business until eight.
-      A few housekeeping notes so the hour runs smoothly. If you haven't yet, please type your first name, district and service position in the chat: on Google Meet your name is the one your Google account shows. Cameras are up to you. Please stay muted unless you're speaking, and use the chat or the raise-hand button when you'd like a turn. Out of respect for everyone's anonymity, please don't take photos or screenshots while people are on camera, and please don't record. We aren't recording tonight either.
-      One more thing: this is our Area committee's meeting. We share what we learn from AA Grapevine and La Viña, but we don't speak for them, and this isn't an official AA Grapevine, Inc. presentation.
+      {not:no-speaker,topic} SAY: The housekeeping is on the screen: your first name, district and service position in the chat, please, and no photos, screenshots or recordings. We aren't recording tonight either.
+      {only:no-speaker,topic} A few housekeeping notes so the hour runs smoothly. If you haven't yet, please type your first name, district and service position in the chat: on Google Meet your name is the one your Google account shows. Cameras are up to you. Please stay muted unless you're speaking, and use the chat or the raise-hand button when you'd like a turn. Out of respect for everyone's anonymity, please don't take photos or screenshots while people are on camera, and please don't record. We aren't recording tonight either.
+      {only:no-speaker,topic} One more thing: this is our Area committee's meeting. We share what we learn from AA Grapevine and La Viña, but we don't speak for them, and this isn't an official AA Grapevine, Inc. presentation.
       DO: Before you say 'we aren't recording', make sure nobody is recording. If Spanish-speaking members are present, ask a bilingual volunteer ahead of time to give a short summary in the chat, and post the key links in both languages.
       TRANSITION: Let's begin the way we always do.
 
@@ -577,8 +580,9 @@ slides:
 
   # ------------------------------------------------------------------ GUEST SPEAKER (7:02 – 7:30)
   # From January 2027 each meeting opens with a guest speaker (config/site.yml `meeting: speakers:`: a first name
-  # and last initial, the service position and the topic, as /meetings/ lists them): introduced at about 7:02, the
-  # talk (about 20 minutes), questions from about 7:22, thanked and done by 7:30. These four slides have an eyebrow
+  # and last initial, the service position and the topic, as /meetings/ lists them): introduced right after the
+  # prayer (a minute), the talk from about 7:02 (about 20 minutes), questions from about 7:22 (6½ minutes),
+  # thanked and done by 7:30. These four slides have an eyebrow
   # of their own, so the parts after them keep their numbers in every version; the versions without a speaker
   # leave them out. Their facts are tonight's speaker's until midnight Central after the meeting (as the meeting's
   # day on the title slide), and next month's speaker is that of the meeting after it; a night with none listed
@@ -593,12 +597,13 @@ slides:
       - "{live:speaker_position}"
       - "Topic: {live:speaker_topic}"
     takeaway: "About 20 minutes of sharing, then your questions: we finish with our guest by 7:30."
-    minutes: 0.5
+    minutes: 1
     notes: |
+      TIP (timekeeping): about a minute, with the two or three sentences the speaker sent you: the talk starts at about 7:02.
       SAY: It's my pleasure to introduce tonight's guest speaker, {live:speaker_name}: {live:speaker_position}. The topic tonight: {live:speaker_topic}. (Add the two or three sentences of introduction the speaker sent you.) Welcome, and thank you for being with us.
       SAY: Our guest will share for about 20 minutes, and then we'll have time for your questions. Please hold them until then; you can type them in the chat as they come to you.
       IF THE SPEAKER CAN'T COME: choose the version 'No guest speaker' ({ui:customize} → {ui:version}): its agenda, and the texts in {ui:customize} → {ui:paperwork}, then name no speaker. The run summary reminds you, about six weeks ahead, of a speaker who hasn't confirmed yet.
-      IF NO SPEAKER IS LISTED (the slide says 'to be announced'): type tonight's speaker on these slides for tonight only ({ui:customize} → {ui:edit}: it stays on this device), and tell whoever looks after the website; or choose the version 'No guest speaker'.
+      IF NO SPEAKER IS LISTED (the slide says 'to be announced'): type tonight's speaker on these slides ({ui:customize} → {ui:edit}), and tell whoever looks after the website; or choose the version 'No guest speaker'. What you type stays on this device, in every later month too, until you reset it: after the meeting, reset each slide you changed ({ui:customize} → {ui:edit} → 'Reset this slide to the original'), and next month's speaker fills in by itself again.
       ANONYMITY: on the slide, in the chat and in the minutes, a first name and last initial at most, with the speaker's service position; never their last name, e-mail address or phone number.
 
   # The talk: a pause card with the speaker and the topic, up while they share (or under their own slides).
@@ -626,9 +631,9 @@ slides:
       - "One short question each, so more of us can ask"
       - "About tonight's topic and the speaker's experience in service"
     note: "We finish with our guest by 7:30."
-    minutes: 7
+    minutes: 6.5
     notes: |
-      TIP (timekeeping): about 7 minutes, from about 7:22. At about 7:28, say 'time for one last question': our guest is thanked and done by 7:30, whatever is left.
+      TIP (timekeeping): about 6½ minutes, from about 7:22. At about 7:28, say 'time for one last question': our guest is thanked and done by 7:30, whatever is left.
       SAY: Thank you. We have a few minutes for your questions. Please raise your hand, or type your question in the chat and I'll read it out. One short question each, please, so more people can ask.
       DO: Read the questions from the chat aloud, without the name the chat shows. Take hands first from people who haven't spoken yet. If a question needs a long answer, ask the speaker whether they'd answer it later through the committee's address, grapevine@neta65.org.
       TIP: Keep it to the speaker's experience and the topic. If a question drifts into outside issues, gently bring it back to how we carry the message.
