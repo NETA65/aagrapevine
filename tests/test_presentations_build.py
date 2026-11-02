@@ -1125,6 +1125,9 @@ res.more = {
   meetData: P.liveData("meeting", {}, { db: input.db, site: { ...input.site, meeting: input.meet }, meeting: input.meeting,
                                         now: new Date("2099-10-15T17:00:00Z") }),
   gm: oct({ ...input.db, events: { items: [...input.db.events.items, ...input.gm] } }, input.site),
+  // a build at 9 PM Central on November 4, after that night's Grapevine Meeting ended
+  gmNight: P.liveFacts({ db: { ...input.db, events: { items: [...input.db.events.items, ...input.gm] } }, site: input.site, carry: input.carry,
+                         meeting: input.meeting, now: new Date("2099-11-05T03:00:00Z") }),
   twoRooms: oct({ ...input.db, weekly_open: { items: input.db.weekly_open.items.map(lvRoom) } }, input.site),
 };
 // more deadlines than a slide carries: 23 issues of one theme, then one issue of two themes (the 24th and 25th rows),
@@ -1408,6 +1411,13 @@ class Facts(unittest.TestCase):
         self.assertEqual(live["grapevine_meeting_day"]["steps"][0], {"from": "2099-11-05T06:00:00.000Z", "value": dec2}, "midnight Central")
         self.assertEqual(live["grapevine_meeting_after"], {"value": dec2, "steps": [{"from": "2099-11-05T06:00:00.000Z", "value": jan6}],
                                                            "until": "2099-12-03T06:00:00.000Z", "fallback": "see the Events page"})
+        # built after tonight's meeting ended (an evening run): its own slides keep tonight's day until midnight, and the
+        # one after it is next month's — never skipping it; the next one moved on when it ended
+        night = self.r["more"]["gmNight"]
+        late = "2099-11-05T03:30:00.000Z"
+        self.assertEqual((live_at(night["grapevine_meeting_day"], late), live_at(night["grapevine_meeting_after"], late)), (nov4, dec2))
+        self.assertEqual(night["grapevine_meeting_day"]["steps"][0], {"from": "2099-11-05T06:00:00.000Z", "value": dec2})
+        self.assertEqual(live_at(night["grapevine_meeting_next"], late), dec2)
         self.assertEqual(plain(live["grapevine_meeting_time"]), "7:00 – 8:00 PM Central time")
         self.assertEqual(live["grapevine_meeting_link"], "meet.google.com/rva-tmst-vdb")
         # none listed: where to look

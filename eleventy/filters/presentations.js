@@ -1340,7 +1340,12 @@ const lvWorkshop = (c) => c.once("lv-workshop", () => {
 const GRAPEVINE_MEETING = "grapevine-meeting";
 const grapevineMeeting = (c) => c.once("grapevine-meeting", () => {
   const s = seriesInfo(c, GRAPEVINE_MEETING, (e) => e.series === GRAPEVINE_MEETING && !e.host);
-  return { ...s, time: oneLine(s.time) };
+  // `days`, for its own slides: tonight's too once it has ended (the site's list drops it; events.json keeps it,
+  // past) — its day stays tonight's until midnight Central after it, as meetingInfo keeps the committee meeting's
+  const tonight = normalizeEvents((c.db.events && c.db.events.items) || [], c.site, "en", { monthsBack: 0, monthsAhead: 0, now: c.now })
+    .filter((e) => e.past && !e.committee && ((e.recurring && e.series === GRAPEVINE_MEETING && !e.host) || e.seriesOf === GRAPEVINE_MEETING)
+      && chicagoDayEndMs(e.startYmd) > c.nowMs);
+  return { ...s, days: [...tonight, ...s.dates], time: oneLine(s.time) };
 });
 
 /** An issue's name on the slides, one style for both magazines (read.js issueLabel, as /contribute/ writes them):
@@ -1668,13 +1673,14 @@ export function liveFacts(ctx) {
   out.lv_workshop_zoom_id = lv.first ? nb(lv.first.meetingId) : "";
 
   // Our Grapevine Meeting (the first Wednesday, in the committee meeting's room), as /events/ lists it: the next one
-  // until it ends; for its own deck, the meeting's day until midnight Central after it and the one after that
-  // (moving on together, as the committee meeting's day and the meeting after it do), and its time
+  // until it ends; for its own deck, the meeting's day until midnight Central after it — also when the build ran
+  // after tonight's had ended (gm.days) — and the one after that (moving on together, as the committee meeting's day
+  // and the meeting after it do), and its time
   const gm = grapevineMeeting(c);
   const gmOver = (e) => iso(chicagoDayEndMs(e.startYmd));
   out.grapevine_meeting_next = run(gm.dates.map((e) => ({ value: e.dateLabel, end: iso(e.endMs) })), FALLBACKS.grapevine_meeting_next);
-  out.grapevine_meeting_day = run(gm.dates.map((e) => ({ value: e.dateLabel, end: gmOver(e) })), FALLBACKS.grapevine_meeting_day);
-  out.grapevine_meeting_after = run(gm.dates.slice(1).map((e, i) => ({ value: e.dateLabel, end: gmOver(gm.dates[i]) })), FALLBACKS.grapevine_meeting_after);
+  out.grapevine_meeting_day = run(gm.days.map((e) => ({ value: e.dateLabel, end: gmOver(e) })), FALLBACKS.grapevine_meeting_day);
+  out.grapevine_meeting_after = run(gm.days.slice(1).map((e, i) => ({ value: e.dateLabel, end: gmOver(gm.days[i]) })), FALLBACKS.grapevine_meeting_after);
   out.grapevine_meeting_time = gm.time;
   out.grapevine_meeting_link = fact(gm.first ? String(gm.first.online || "").replace(/^https?:\/\//, "").replace(/\/$/, "") : "", [], null,
     FALLBACKS.grapevine_meeting_link);
