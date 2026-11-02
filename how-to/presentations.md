@@ -1,6 +1,6 @@
-# Presentations: the four web slide decks on /orientation/
+# Presentations: the five web slide decks on /orientation/
 
-This guide is about the four presentations on the GVR / RLV 101 page: the files in
+This guide is about the five presentations on the GVR / RLV 101 page: the files in
 [`config/presentations/`](../config/presentations/), how to edit them, and what each change does on the website.
 The committee's own deck-writing guide is [`config/presentations/README.md`](../config/presentations/README.md).
 Read it too. This guide repeats its rules where you need them, adds what the code really does, and shows where to
@@ -25,8 +25,9 @@ change the code.
 
 ## 1. What this is
 
-The GVR / RLV 101 page has a "Presentations" section with four cards: three workshops and the committee's monthly
-meeting. Each card is made from **one YAML text file** in `config/presentations/`. Every build turns each file into
+The GVR / RLV 101 page has a "Presentations" section with five cards: three workshops and our two monthly meetings,
+the committee meeting (third Wednesday) and the Grapevine Meeting (first Wednesday), both on Google Meet. Each card
+is made from **one YAML text file** in `config/presentations/`. Every build turns each file into
 a slide show that opens in a pop-up player, with speaker notes, a presenter view, shorter versions, four ways to
 print, and facts that stay current by themselves (meeting dates, story deadlines, prices, events). Presenters can
 make their own version of a deck; it stays on their own device. The committee meeting's deck also makes the
@@ -37,7 +38,7 @@ chair's monthly paperwork: the agenda e-mail, a reminder and the draft minutes, 
 
 | What | English | Spanish |
 |---|---|---|
-| The four cards | `/orientation/#presentations` | `/es/orientation/#presentations` |
+| The five cards | `/orientation/#presentations` | `/es/orientation/#presentations` |
 | One card | `/orientation/#pres-information-workshop` | `/es/orientation/#pres-information-workshop` |
 | Open a deck straight away | `/orientation/?present=information-workshop` | `/es/orientation/?present=information-workshop` |
 | The file the player reads | `/orientation/presentations/information-workshop.json` (one file per deck, the same for both languages) | — |
@@ -70,7 +71,7 @@ Nothing in this guide needs the NETA65 admin account.
 This is the most common edit: fix a word, a sentence or a title.
 
 1. On GitHub, open the folder `config/presentations/` and click the file of the presentation
-   (the four files are listed in [3.1](#31-the-four-files)).
+   (the five files are listed in [3.1](#31-the-five-files)).
 2. Click the pencil icon (**Edit this file**).
 3. Click inside the text and press **Ctrl+F**. Type a few words you see on the slide; the title is easiest.
 4. Change the text **between the double quotes**. Do not change the slide's `id:` line, and keep the spaces at the
@@ -116,18 +117,39 @@ with the slide's number and id. If you edit on GitHub only, the same check runs 
 
 ## 3. Full reference with examples
 
-### 3.1 The four files
+### 3.1 The five files
 
 | File | Card title (English / Spanish) | `order` | `minutes` | `tone` (card colour) | `icon` | Slides in the file / on the card | Versions |
 |---|---|---|---|---|---|---|---|
 | `orientation-workshop.yml` | GVR and RLV Orientation Workshop / Taller de orientación para RLV y GVR | 1 | 90 | `vine` (green) | `compass` | 61 / 59 | `full` (90), `short` (60) |
 | `information-workshop.yml` | Grapevine and La Viña Information Workshop / Taller informativo de Grapevine y La Viña | 2 | 60 | `gv` (blue) | `book-open` | 53 / 49 | `full` (60), `late` (48), `visit` (20) |
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop / Taller de escritura de Grapevine y La Viña | 3 | 115 | `lv` (orange) | `pen-line` | 59 / 48 | `full` (115), `short` (84) |
-| `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 43 / 29 | `full` (60), `topic` (60) |
+| `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 47 / 32 | `full` (60: with a guest speaker), `no-speaker` (60), `topic` (60) |
+| `grapevine-meeting.yml` | Grapevine Meeting (online) / Reunión de Grapevine (en línea) | 5 | 60 | `gv` (blue) | `book-heart` | 17 / 14 | `full` (60) |
 
 The number on the card ("About 90 minutes · 59 slides") counts the slides of the full version **on the day of the
 build**: facilitator pages, slides that start switched off and slides outside their dates are not counted. That is
-why the committee meeting shows 29 of its 43 slides (13 pages for the chair and one slide that starts off).
+why the committee meeting shows 32 of its 47 slides (13 pages for the chair, and the sharing and the topic of the
+month, which start off).
+
+**The committee meeting from January 2027.** Its first version, "With a guest speaker", is the hour as the
+committee now holds it: the opening (moment of silence, Serenity Prayer), four "Guest speaker" slides (the
+introduction at about 7:02, the talk of about 20 minutes, questions from about 7:22, the thanks: done by 7:30), then
+the committee's business from 7:30 to 8:00, opened by the Preamble, each part shorter. The speaker's name, service
+position and topic come from `config/site.yml` → `meeting: speakers:` (the same list as `/meetings/`) and switch at
+midnight after each meeting; a date with no speaker listed says "to be announced". "No guest speaker" is the
+committee's business for the whole hour, as before (December 16, 2026, or a month whose speaker can't come), and
+"No guest speaker, with a topic of the month" adds the topic: both give each slide its time of before
+(`version_minutes`) and the agenda its rows of before (`version_fields`). The slide ids stayed the same.
+
+**The Grapevine Meeting** (first Wednesday, 7–8 PM Central, from December 2, 2026) is an English-language AA meeting:
+the Serenity Prayer, the AA Grapevine Statement of Purpose in place of the Preamble, a story from AA Grapevine read
+aloud, sharing on its topic, the Seventh Tradition (no basket: the meeting has no expenses, and AA Grapevine, Inc.
+takes no contributions), announcements and the Responsibility Statement. The Statement of Purpose and the story are
+AA Grapevine's words: the slides name them and the readers read them from their own copy; neither is ever put on a
+slide (the site never quotes Grapevine material; with AA Grapevine's written permission, licensing@aagrapevine.org,
+the Statement of Purpose could become a `quote` slide with their credit line). Its dates come from
+`recurring_events:` → `grapevine-meeting`, as `/events/` lists them.
 
 Also in the folder: `README.md`, the committee's writing guide (saving it does not rebuild the site). Two sample
 decks are in [`tests/fixtures/presentations/`](../tests/fixtures/presentations/): `sample-workshop.yml` uses every
@@ -354,7 +376,7 @@ fillins:
 | `label` | `en` and `es` | The field's name in Customize → Your details (in the page's language). |
 | `hint` | required | What an empty blank shows on the slide, in orange brackets: `[Month DD, YYYY]`. |
 | `default` | text (optional) | What the slide says while the blank is empty, instead of the orange hint. |
-| `shared` | `true` / `false` | One answer for every deck whose blank has the same key and is shared (today `presenter` and `first_name`, in all four). |
+| `shared` | `true` / `false` | One answer for every deck whose blank has the same key and is shared (today `presenter` and `first_name`, in all five). |
 | `notes_only` | `true` / `false` | The answer may appear only in the speaker notes, never on a slide. On a slide the checker refuses it: `{fill:first_name} is notes_only (never on a slide)`. |
 
 Before the show starts, the player warns "3 of your details are still blank" and offers **Fill them in** or
@@ -517,7 +539,7 @@ A read-aloud card (`text`, `style: "script"`):
     body: |
       **Read it in your own words:**
 
-      “Hi, I'm ‹first name›, the GVR for ‹group›. The committee meets {live:meeting_rule}, {live:meeting_time}, on Zoom, and every AA member is welcome. Next meeting: {live:meeting_next}.”
+      “Hi, I'm ‹first name›, the GVR for ‹group›. The committee meets {live:meeting_rule}, {live:meeting_time}, on {live:meeting_platform}, and every AA member is welcome. Next meeting: {live:meeting_next}.”
     minutes: 1
     notes: |
       SAY: Here's a short announcement you can give at a district meeting. Fill in your first name and your group, and say it in your own words. The meeting's date fills in by itself, so it is always the next one.
@@ -648,9 +670,18 @@ those show exactly what you type.
 | `meeting_month` | October 2026 | same | "Monthly" |
 | `meeting_rule` | every third Wednesday of the month | same | — |
 | `meeting_time` | 7:00 – 8:00 PM Central time | same | — |
-| `meeting_zoom_id`, `meeting_passcode` | the committee meeting's Zoom ID and passcode | same (`meeting_id`, `passcode`) | — |
-| `meeting_phone` | +1 346 248 7799 (Houston) | `config/site.yml` → `phone_access: numbers` (the first one) | "see the Accessibility page" |
-| `meeting_phone_passcode` | (empty today) | `phone_access: committee: phone_passcode` (or the meeting's passcode when it is numbers only) | — (empty) |
+| `meeting_platform` | Google Meet | same (`platform`; Zoom when left out) | — |
+| `meeting_link` / `meeting_url` | meet.google.com/rva-tmst-vdb / https://meet.google.com/rva-tmst-vdb (for an e-mail) | same (`online_url`; an older `zoom_url`) | "see the Meetings page" |
+| `meeting_code` | rva-tmst-vdb (a Zoom ID, kept on one line, for a Zoom meeting) | same (`meeting_id`) | — |
+| `meeting_zoom_id`, `meeting_passcode` | the older names: the meeting code, and a passcode (empty on Google Meet) | same (`meeting_id`, `passcode`) | — |
+| `meeting_phone` | (empty: a Google Meet room has no number to call) | `config/site.yml` → `phone_access: numbers` (the first one), for a Zoom meeting | "see the Accessibility page" |
+| `meeting_phone_passcode` | (empty) | `phone_access: committee: phone_passcode` (or the meeting's passcode when it is numbers only) | — (empty) |
+| `speaker_name`, `speaker_position`, `speaker_topic` | Rick W. / Past delegate, Area 65 Northeast Texas (Panel 73); … / Grapevine as a Twelfth Step tool: … — `meeting_day`'s guest speaker | `meeting: speakers:` (as `/meetings/` lists them) | "to be announced" |
+| `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … | same | "to be announced" |
+| `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — `meeting_after`'s speaker | same | "to be announced" |
+| `speaker_slides`, `speaker_confirmed` | the chair's notes only: "Tonight's guest speaker shares slides: …" (`slides: true`); yes / not yet, by the committee's list (`confirmed:`) | same | a sentence of their own (the README's table) |
+| `grapevine_meeting_next`, `grapevine_meeting_day`, `grapevine_meeting_after` | Wednesday, December 2, 2026 / the same / Wednesday, January 6, 2027 | `recurring_events:` → `grapevine-meeting`, as `/events/` lists it | "see the Events page" |
+| `grapevine_meeting_time`, `grapevine_meeting_link` | 7:00 – 8:00 PM Central time · meet.google.com/rva-tmst-vdb | same | — · "see the Events page" |
 | `lv_workshop_next` | Thursday, October 22, 2026 | the `recurring_events:` entry with `host: lv` | "see La Viña's events calendar at aalavina.org" |
 | `lv_workshop_time`, `lv_workshop_zoom_id` | 2:00 – 3:00 PM Central time (3:00 PM Eastern) · its Zoom ID | same | — |
 | `price_gv_print`, `price_gv_digital`, `price_lv_print`, `price_lv_digital` | $36.00, $29.99, $18.00, $14.99, then $39.00, $34.00, $19.50, $17.00 from January 1, 2027 | the Shop's data, and `config/site.yml` → `price_changes:` | "see the Shop page" |
@@ -669,7 +700,9 @@ those show exactly what you type.
 
 When each one moves on: `meeting_next` when the meeting **ends** (8 PM Central on a meeting night it already names
 next month's); `meeting_day`, `meeting_month` and `meeting_after` together at **midnight** Central after the meeting
-day; the month, the year and the issues at midnight Central on the 1st; a price at midnight Central on its day; a
+day, and the guest speaker keys with them (`speaker_after` with `meeting_after`); the Grapevine Meeting's like the
+committee meeting's (`grapevine_meeting_next` when it ends, `grapevine_meeting_day` and `grapevine_meeting_after` at
+midnight); the month, the year and the issues at midnight Central on the 1st; a price at midnight Central on its day; a
 deadline once its day is over; a Book of the Month when its offer ends (it then says where to look, until a build has
 the next book); an assembly once it is over.
 
@@ -682,12 +715,14 @@ night that names two different meetings.
 **Write your sentence so the "nothing to say" words fit too.** "Next meeting: {live:meeting_next}" reads well both
 as "Next meeting: Wednesday, October 21, 2026" and as "Next meeting: see the Meetings page".
 
-**Zoom IDs and phone numbers.** Write `{live:meeting_zoom_id}`, `{live:meeting_phone}`, `{live:gv_audio_phone}` …
-rather than digits, so a change in `config/site.yml` (or on the magazines' pages) reaches every deck by itself.
+**Meeting links, codes and phone numbers.** Write `{live:meeting_link}`, `{live:meeting_code}`,
+`{live:gv_audio_phone}` … rather than typing them, so a change in `config/site.yml` (or on the magazines' pages)
+reaches every deck by itself.
 
 > **Note:** `README.md` says the checker "takes digits for a phone number". It does, but every number written
-> anywhere in `config/site.yml` counts as one the site publishes, so the committee's own Zoom ID typed as digits
-> passes. Another meeting's ten-digit ID does not: `a personal-looking phone number '883 555 0199' (a Zoom meeting
+> anywhere in `config/site.yml` counts as one the site publishes, so a Zoom ID written there, typed as digits,
+> passes (a Google Meet code has letters: the checker never takes it for a number). Another meeting's ten-digit ID
+> does not: `a personal-looking phone number '883 555 0199' (a Zoom meeting
 > ID? write {live:meeting_zoom_id} / {live:lv_workshop_zoom_id}; …)`.
 
 > **Note:** `panel` comes from the Drive's Panel folder names, not from `config/orientation.yml`. When the committee
@@ -704,7 +739,7 @@ A live slide shows a list or a box of facts from the site's data. `intro` is a s
 
 | `kind` | What it shows | `options` (default) |
 |---|---|---|
-| `meeting` | the committee's next meeting dates, the rule, the time, the Zoom ID and passcode | `limit` (3; 12 = a year) |
+| `meeting` | the committee's next meeting dates, the rule, the time, and how to join: the Google Meet link and its meeting code (a Zoom meeting: its ID and passcode) | `limit` (3; 12 = a year) |
 | `lv-workshop` | La Viña's next monthly virtual workshops, the time, the Zoom ID, the contact | `limit` (3) |
 | `events` | the next events of `/events/`, never the committee meetings. A monthly event (the CityWide booth) takes one row, its next date. A hybrid event shows its place AND "Online on Zoom"; an event whose details are not final says "Details to be confirmed" | `limit` (5); `filter`: `all`, `workshops` (a title with workshop / taller), `neta` (NETA 65's own events: the committee's flyers and events, the booth, the Area's calendar, and any other calendar feed in `sources: ics_feeds:` that has no category), `calendar` (Grapevine's and La Viña's calendars, and the events they host), `assemblies` (NETA 65's assemblies); `series: "all"` (every date of a monthly event) |
 | `deadlines` | the next story deadlines: date, issue, theme | `pub`: `gv`, `lv` or `both` (both); `limit` (6); `limit_each` (with `both`: this many of each magazine) |
@@ -1039,15 +1074,18 @@ After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursda
 
 | File, slide | Typed by hand |
 |---|---|
-| `orientation-workshop.yml`, `coming-up` (its `intro`) | "Every 3rd Wednesday: Area GV/LV committee on Zoom, {live:meeting_time} · Every 2nd Saturday: GV/LV booth at CityWide Dallas, 5:00 – 8:00 PM" |
-| `orientation-workshop.yml`, `month-at-a-glance` | the rows "3rd Wednesday" and "Usually the 4th Thursday" |
-| `orientation-workshop.yml`, `district-and-area` | "3rd Wednesday, {live:meeting_time}" |
-| `orientation-workshop.yml`, `thank-you` | "Our committee meets every 3rd Wednesday, {live:meeting_time}, on Zoom." |
-| `committee-meeting.yml`, `next-meeting` and `open-meetings` | "Every 3rd Wednesday · …" and "Usually the 4th Thursday, …"; in the notes "third Wednesday", "at seven", "second Saturday … from 5 to 8 p.m." |
+| `orientation-workshop.yml`, `coming-up` (its `intro`) | "Every 1st Wednesday: our Grapevine Meeting · Every 3rd Wednesday: Area GV/LV committee, both on Google Meet, {live:meeting_time} · Every 2nd Saturday: GV/LV booth at CityWide Dallas, 5:30 – 7:30 PM" |
+| `orientation-workshop.yml`, `month-at-a-glance` | the rows "1st Wednesday", "3rd Wednesday" and "Usually the 4th Thursday" |
+| `orientation-workshop.yml`, `district-and-area` | "3rd Wednesday, {live:meeting_time}", "1st Wednesday: our Grapevine Meeting, online" |
+| `orientation-workshop.yml`, `thank-you` | "Our committee meets every 3rd Wednesday, {live:meeting_time}, on Google Meet." |
+| `committee-meeting.yml`, `next-meeting`, `open-meetings`, `coming-up` | "Every 3rd Wednesday · …" and "Usually the 4th Thursday, …"; in the notes "third Wednesday", "at seven", "second Saturday … from 5:30 to 7:30 p.m.", "first Wednesday" |
+| `committee-meeting.yml`, the guest speaker's slides, `welcome`, `agenda` | the evening's plan: 7:02, 7:22, "done by 7:30", 7:30 to 8:00 (and the agenda's typed times) |
+| `grapevine-meeting.yml`, `announcements` | "every 2nd Saturday, 5:30 to 7:30 PM, Lovers Lane United Methodist Church"; in the notes "first Wednesday", "third Wednesday", "at seven" |
 | `information-workshop.yml`, `lv-workshop` | "Usually the **4th Thursday**", and "fourth Thursday" in its notes |
 
 Where the sentence allows it, use the fact instead: "Our committee meets {live:meeting_rule}, {live:meeting_time},
-on Zoom." reads "Our committee meets every third Wednesday of the month, 7:00 – 8:00 PM Central time, on Zoom."
+on {live:meeting_platform}." reads "Our committee meets every third Wednesday of the month, 7:00 – 8:00 PM Central
+time, on Google Meet."
 
 > **Note:** the booth's hours in the `coming-up` intro contain invisible characters (no-break spaces and a word
 > joiner after the dash) that keep "5:00 – 8:00 PM" on one line. If you retype them, the line may break after the
@@ -1180,9 +1218,9 @@ a prepared version to the next presenter.
 |---|---|---|
 | One slide | Customize → Edit → Reset this slide to the original | that slide's edits (in every version) |
 | One deck | the card's **More → Reset to the original**, or Customize → Save & share | that deck's version, switches, order, edits, added slides, its own details and ticks (the shared details, like the service position, stay) |
-| All four | **Reset all 4 to the original**, under the cards (it appears only once something was changed on this device) | everything, the shared details too |
+| All of them | **Reset all 5 to the original**, under the cards (it appears only once something was changed on this device) | everything, the shared details too |
 
-Resetting a deck or all four asks first. Every reset then offers **Undo** for 10 seconds.
+Resetting a deck or all of them asks first. Every reset then offers **Undo** for 10 seconds.
 
 If the browser cannot store anything (some private windows), the player says once: "This browser isn't keeping your
 changes … To keep them, save your version (Save & share)."
@@ -1191,7 +1229,7 @@ changes … To keep them, save your version (Save & share)."
 
 - A deck opened once online also opens offline: the browser keeps a copy of its JSON file (the site's offline
   helper fetches it "network first", and uses the copy without a connection or after 6 seconds).
-- **Save key pages for offline** (in the Aa menu) keeps `/orientation/` and all four decks, even ones never opened.
+- **Save key pages for offline** (in the Aa menu) keeps `/orientation/` and all five decks, even ones never opened.
 - The facts in a kept copy still move on by the viewer's clock (the next meeting after tonight's, the new prices on
   their day), for as far ahead as the build knew. Past that, a fact says where to look ("see the Meetings page").
 - A copy built more than 14 days earlier gets a notice once per visit: "The dates in this copy are from
@@ -1260,14 +1298,15 @@ id. If your words are there, the build has them.
 Since October 2026 the **Grapevine and La Viña Monthly Committee Meeting** deck has one more tab in Customize:
 **Agenda & minutes** (Spanish page: **Agenda y acta**). The three workshops do not have it. It makes the chair's
 monthly texts from what is already typed in **Customize → Your details** (chair's report, old and new business,
-the order of the districts, action items …) and from the site's own facts (the meeting's date and time, the Zoom
-meeting ID and passcode, Zoom's phone number, the committee's e-mail).
+the order of the districts, action items …) and from the site's own facts (the meeting's date and time, its guest
+speaker, the Google Meet link and its code, the committee's e-mail).
 
 | Text | For which meeting | What is in it |
 |---|---|---|
-| **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date, time, Zoom and phone details; the agenda's times, from the agenda slide in the version you chose; last month's minutes; old and new business; the order of the district reports; the Zoom / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
-| **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, Zoom and phone details in English, then a paragraph in Spanish (the date and time in Spanish, the Zoom ID and passcode, "La reunión es en inglés", all AA members welcome) |
-| **Draft minutes** (*Borrador del acta*) | the **last meeting held**, from the moment it starts | "DRAFT, for the committee's approval at its next meeting. Service positions and counts only: no names, phone numbers or email addresses, and no attendance list."; the chair and the minutes-taker by service position; "Attended: about ___ members (by district: ___)"; every part of the meeting with what you typed (old business with its status, new business with "Decision: ___", the action items as what · who · by when); the next meeting |
+| **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date and time; that meeting's guest speaker and topic; the Google Meet link and its code; the agenda's times, from the agenda slide in the version you chose (its speaker row names that meeting's speaker); last month's minutes; old and new business; the order of the district reports; the "your name in the chat" / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
+| **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, "La reunión es en inglés", all AA members welcome) |
+| **Draft minutes** (*Borrador del acta*) | the **last meeting held**, from the moment it starts | "DRAFT, for the committee's approval at its next meeting. Service positions and counts only: no names, phone numbers or email addresses, and no attendance list."; the chair and the minutes-taker by service position; "Attended: about ___ members (by district: ___)"; the opening, the guest speaker by service position and topic
+(never by name), the Preamble opening the business; every part of the meeting with what you typed (old business with its status, new business with "Decision: ___", the action items as what · who · by when); the next meeting |
 
 Each text has **Copy**, **Copy the subject** and **Open in my e-mail**. Open in my e-mail opens your own e-mail app
 with the subject and the text and **no address**: put every address in BCC. A long text (the agenda, the minutes)
@@ -1277,7 +1316,8 @@ copy it and paste it into a new e-mail. The minutes also have **Print**; the pri
 document, named with the meeting's date ("Monthly Committee Meeting – Draft minutes – 2026-10-21").
 
 A line whose details are all blank is left out, and so is a heading left with nothing under it ("Old business"
-with no items), so a text never shows empty orange blanks. A detail left empty beside a filled one shows in
+with no items), so a text never shows empty orange blanks. The guest speaker's lines are left out for a meeting with
+no speaker listed (December 16, 2026). A detail left empty beside a filled one shows in
 [brackets], so you notice it.
 
 **Start next month**, at the bottom of the tab, is pressed after the meeting, once the minutes are drafted. You
@@ -1290,7 +1330,7 @@ the deck has four old-business lines. It asks first. Then:
   the stories mentioned, more news, the topic of the month, what was spent, "since we last met", old and new
   business, volunteers, action items;
 - what stays from month to month is **kept**: the presenter, the order of the districts, the treasurer's budget and
-  reimbursement process, the phone passcode (the tab lists them);
+  reimbursement process (the tab lists them);
 - the **minutes' month** becomes the month of the meeting just held, and the **week-before checklist** (Customize
   → Prepare) is unticked;
 - the agenda and the reminder move on to the **next meeting date** at once, even if pressed before 8 PM on the
@@ -1321,20 +1361,23 @@ above `paperwork:` in the file sums up the rules below:
 |---|---|
 | `agenda_slide` | the id of the `agenda` slide whose rows `{paper:agenda}` lists (`"agenda"`) |
 | `agenda`, `reminder`, `minutes` | each `{ subject: "…", body: \| … }`: plain text, in English like the slides; the subject on one line |
-| `next_month` | what Start next month does: `actions` (rows of blanks named `<row>_what`, `_who`, `_when`), `old_business` (rows `<row>_item`, `_status`), `minutes_month` (the blank set to the month of the meeting held), `clear` (the blanks it clears; `chair_*` = every blank whose name starts with `chair_`; never a blank shared by the four decks), `untick` (checklist pages it unticks) |
+| `next_month` | what Start next month does: `actions` (rows of blanks named `<row>_what`, `_who`, `_when`), `old_business` (rows `<row>_item`, `_status`), `minutes_month` (the blank set to the month of the meeting held), `clear` (the blanks it clears; `chair_*` = every blank whose name starts with `chair_`; never a blank shared by every deck), `untick` (checklist pages it unticks) |
 
 Inside the texts: `{fill:…}` (never a `notes_only` blank), `{live:…}`, `{lang:es}…{/lang}` (a paragraph in
 Spanish), and the paperwork's own facts: `{paper:meeting}` (the date of the meeting the text is for), `{paper:month}`,
 `{paper:after}` (the meeting after it), `{paper:agenda}` (the agenda's rows, on a line of its own),
-`{paper:meeting_es}` and `{paper:time_es}` (that date and the time in Spanish) and `{paper:committee_es}` (the
-committee's name as the Spanish pages give it: `site: committee_es` in `config/site.yml`). No `**bold**` and no
+`{paper:meeting_es}` and `{paper:time_es}` (that date and the time in Spanish), `{paper:committee_es}` (the
+committee's name as the Spanish pages give it: `site: committee_es` in `config/site.yml`), and that meeting's guest
+speaker: `{paper:speaker}` (name and service position), `{paper:speaker_position}` (the minutes: never a name) and
+`{paper:speaker_topic}` — empty for a meeting with none, and a line whose `{paper:…}` facts are all empty is left
+out. In the paperwork the speaker keys `{live:speaker_…}` (the agenda's rows) are that meeting's too. No `**bold**` and no
 `[label](link)`: an e-mail is plain text, so write an address as it is (better: `{live:email}`). The slides' rules
 apply too (anonymity, wording, no personal phone numbers or e-mail addresses). Real messages:
 
 ```text
 committee-meeting.yml: paperwork.reminder.body: {fill:first_name} is notes_only (never in the paperwork)
 committee-meeting.yml: paperwork.agenda.body: {paper:agenda} goes on a line of its own (in a body)
-committee-meeting.yml: paperwork.next_month.clear: 'presenter' is shared by all four presentations (never cleared)
+committee-meeting.yml: paperwork.next_month.clear: 'presenter' is shared by every presentation (never cleared)
 ```
 
 A paperwork problem is a deck problem: it stops the build like any other ([4](#4-what-happens-after-you-save)). The
@@ -1414,17 +1457,17 @@ calendar, the weekly open meetings, the story lines), a change there shows up af
 
 | Where | English | Spanish | What |
 |---|---|---|---|
-| GVR / RLV 101, "Presentations" | `/orientation/#presentations` | `/es/orientation/#presentations` | the four cards, by `order`: icon in the deck's `tone`, "About 60 minutes · 49 slides", the "Also:" line, title, summary, "Who it's for", the "Stays current" chips, the device's status line, the buttons |
+| GVR / RLV 101, "Presentations" | `/orientation/#presentations` | `/es/orientation/#presentations` | the five cards, by `order`: icon in the deck's `tone`, "About 60 minutes · 49 slides", the "Also:" line, title, summary, "Who it's for", the "Stays current" chips, the device's status line, the buttons |
 | One card | `/orientation/#pres-<id>` | `/es/orientation/#pres-<id>` | — |
 | The player | `/orientation/?present=<id>` (+ `&mode=…`, `#slide-N`) | `/es/orientation/?present=<id>` | the slides (English), the notes, Customize, presenter view; on `/es/` the controls are Spanish |
 | "Print or save a copy" | under the cards | same | the four print modes for any deck |
-| "Reset all 4 to the original" | under the cards, only after a change on that device | same | — |
+| "Reset all 5 to the original" | under the cards, only after a change on that device | same | — |
 | "How presenting works" | `/orientation/#presenting` | `/es/orientation/#presenting` | keys, presenter view, versions, details, privacy, saving, offline, reset |
-| The hero | the "Committee presentations" button and the "4 presentations" figure | "Presentaciones del comité" | — |
+| The hero | the "Committee presentations" button and the "5 presentations" figure | "Presentaciones del comité" | — |
 | "A longer workshop?" | `/orientation/#facilitators` | `/es/orientation/#facilitators` | a card that names the orientation workshop's length (90 minutes, or 60) and links to its card |
 | Portfolio | `/portfolio/`, the PowerPoint copy's card | `/es/portfolio/` | "Present on the web" → `/orientation/?present=<id>`, with "A fixed copy: the web version stays current and can be customized." |
 | The data file | `/orientation/presentations/<id>.json` | the same file | [3.21](#321-the-json-file) |
-| Offline | kept by "Save key pages for offline" | same | the four JSON files |
+| Offline | kept by "Save key pages for offline" | same | the five JSON files |
 
 **Not shown in**: the site search (it finds the GVR / RLV 101 page, never a deck or its slides), What's New, the RSS feed, the calendar feed (`/events.ics`), the monthly digest
 e-mail, `/status/` and the Actions run summary. (The PowerPoint copies are Drive files: they appear on
@@ -1490,59 +1533,64 @@ In the browser:
 | [`config/presentations/README.md`](../config/presentations/README.md) | `\| Key \| Example \|` | the table of `{live:…}` keys: a test reads it |
 | [`tests/fixtures/presentations/sample-workshop.yml`](../tests/fixtures/presentations/sample-workshop.yml) | — | the main sample deck: a test wants it to use every layout, every live kind and every `{live:…}` key |
 
-### 6.3 Example: add a new fact, `{live:meeting_platform}`
+### 6.3 Example: add a new fact, `{live:meeting_note}`
 
-Goal: a deck can write "on {live:meeting_platform}" and get "Zoom", from `platform:` under `meeting:` in
-`config/site.yml`, so a change of platform reaches every deck. Six places, in one commit:
+Goal: a deck can write "{live:meeting_note}" and get "All AA members are welcome to attend. No registration
+required.", from `note:` under `meeting:` in `config/site.yml`, so a change there reaches every deck. (The keys of
+November 2026, `meeting_platform`, `meeting_link` and the guest speakers', were added the same way.) Six places, in
+one commit:
 
-1. **`eleventy/filters/presentations.js`**, search `export const LIVE_KEYS`, add the key after `"meeting_passcode"`:
+1. **`eleventy/filters/presentations.js`**, search `export const LIVE_KEYS`, add the key after `"meeting_time"`:
 
    ```js
-     "meeting_passcode", "meeting_platform", "meeting_phone", "meeting_phone_passcode",
+     "meeting_next", "meeting_day", "meeting_after", "meeting_month", "meeting_rule", "meeting_time", "meeting_note",
    ```
 
-2. **Same file, function `liveFacts`**, search `out.meeting_passcode = mt.passcode;` and add a line under it:
+2. **Same file, function `liveFacts`**, search `out.meeting_time = mt.time;` and add a line under it:
 
    ```js
-     out.meeting_platform = clean(c.site.meeting && c.site.meeting.platform);   // "Zoom" (config/site.yml meeting: platform)
+     out.meeting_note = clean(c.site.meeting && c.site.meeting.note);   // config/site.yml meeting: note
    ```
 
    (`clean` is the file's own helper: it gives "" when the setting is missing.) If the fact needs words for an empty
    value, add them to `FALLBACKS` (search `export const FALLBACKS`); this one does not.
 
-3. **`tests/test_presentations.py`**, search `LIVE_KEYS = {`, add `"meeting_platform"` to the set.
+3. **`tests/test_presentations.py`**, search `LIVE_KEYS = {`, add `"meeting_note"` to the set.
 4. **`config/presentations/README.md`**, the table of keys: add a row. The last column is "—" (no fallback), or the
    fallback in quotes; the test `test_the_readme_lists_every_fallback` compares it with `FALLBACKS`.
 
    ```text
-   | `meeting_platform` | Zoom — the committee meeting's platform (`config/site.yml`, `meeting:`) | — |
+   | `meeting_note` | All AA members are welcome to attend. No registration required. (`config/site.yml`, `meeting: note:`) | — |
    ```
 
-5. **`tests/fixtures/presentations/sample-workshop.yml`**: use `{live:meeting_platform}` in one text (for example
+5. **`tests/fixtures/presentations/sample-workshop.yml`**: use `{live:meeting_note}` in one text (for example
    in the notes of its meeting slide). The test `test_the_main_sample_uses_everything` wants every key used there.
-6. **Use it in a deck**: `intro: "We meet {live:meeting_rule}, {live:meeting_time}, on {live:meeting_platform}."`
+6. **Use it in a deck**: `takeaway: "{live:meeting_note}"`.
 
 Nothing changes in the player: it fills in any key it finds in the JSON's `live` map. Because the key starts with
 `meeting_`, a deck that uses it gets the "Committee meeting dates" chip (`KIND_OF_KEY`). Then run the tests
 ([6.8](#68-tests)).
 
-### 6.4 Example: a fifth presentation
+### 6.4 Example: another presentation
+
+The fifth, the Grapevine Meeting (`grapevine-meeting.yml`, November 2026), was added this way.
 
 1. Copy a deck (the small sample `tests/fixtures/presentations/sample-meeting.yml` is a good start) to
-   `config/presentations/<new-id>.yml`. Set `id: "<new-id>"`, a new `order` (5), the titles, the card in both
+   `config/presentations/<new-id>.yml`. Set `id: "<new-id>"`, a new `order` (6), the titles, the card in both
    languages, the versions and the slides. Keep the line "Not an official AA Grapevine, Inc. presentation".
 2. Run the checker on it.
-3. **`tests/test_presentations.py`**: add the id to `DECKS = (`. In `test_the_four_decks`, the line with
-   `"each deck has its own order"` expects 4 different orders: change the 4 to 5.
+3. **`tests/test_presentations.py`**: add the id to `DECKS = (` (`test_the_decks` wants exactly these files, each
+   with its own `order`).
 4. **`tests/test_presentations_core.py`**: search `{"orientation-workshop", "information-workshop",
-   "writing-workshop", "committee-meeting"}` and add the id.
-5. **`src/_i18n/presentations.json`**: four texts say "four" or "4": `pres.details_shared`, `pres.reset_all_note`,
-   `pres.reset_all_confirm`, `pres.reset_all_done` (English and Spanish). `tests/test_presentations_core.py` checks
-   the exact words of `pres.reset_all_note` (search `Reset all 4 to the original`): change it there too.
-6. **`config/presentations/README.md`**: add the file to the table at the top.
+   "writing-workshop", "committee-meeting",` and add the id.
+5. **`config/presentations/README.md`**: add the file to the table at the top; and `scripts/ops/gate_tests.py`
+   names how many decks there are ("the five decks").
 
-What follows by itself: the fifth card, its JSON file, "5 presentations" in the hero, "Reset all 5 to the
-original", the offline copy, and (with a `drive_title`) the PowerPoint link and the Portfolio button.
+What follows by itself: the new card, its JSON file, the number of presentations in the hero and in "Reset all N to
+the original" (the player counts the decks: `pres.reset_all_note`, `_confirm` and `_done` take `{n}`), the shared
+details ("Shared by every presentation"), the offline copy, and (with a `drive_title`) the PowerPoint link and the
+Portfolio button. Check the cards' layout at a few widths: the grid of `src/assets/css/areas/orientation.css`
+(`.o101-pres-grid`) draws them two by two, or four in a row on a wide screen.
 
 ### 6.5 Example: change what a fact says when it has nothing to say
 
@@ -1584,13 +1632,13 @@ See [Pages and code](pages-and-code.md) for the i18n files in general.
 | Command (from the repository folder) | What it checks |
 |---|---|
 | `.venv\Scripts\python.exe tests\test_presentations.py config\presentations\writing-workshop.yml` | one deck, with readable messages |
-| `.venv\Scripts\python.exe -m unittest tests.test_presentations -v` | the four decks (exactly these four files, each with its own `order`), and the checker itself |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations -v` | the five decks (exactly these files, each with its own `order`), and the checker itself |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_build -v` | the build side: the JavaScript checker gives the same lines as the Python one; the sample decks use everything; the JSON's shape; the facts at fixed dates; the README lists every fallback (builds the sample decks in a temporary folder) |
-| `.venv\Scripts\python.exe -m unittest tests.test_presentations_core -v` | the player's logic: facts switching on time, versions, the clock and the agenda, tokens, presenters' versions, "my version" files, Reset; and the four real decks (every text shows, the numbering, the full version's agenda times, each version's length) |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations_core -v` | the player's logic: facts switching on time, versions, the clock and the agenda, tokens, presenters' versions, "my version" files, Reset; and the five real decks (every text shows, the numbering, the full version's agenda times, each version's length) |
 | `.venv\Scripts\python.exe -m unittest tests.test_r12_u9_meeting -v` | the chair's paperwork: the two checkers on a `paperwork:` block, the meetings in the JSON, the texts and Start next month on the sample deck, its Undo; and the committee's own block (`RealDeck`, `Texts`, `NextMonth`: the Code check only). In a real browser: `MeetingPaperwork` (`tests/browser/test_r12_u9_meeting_browser.py`) |
 | `python -m unittest discover -s tests` | everything (what Code check runs) |
 
-The `_core` tests need Node.js; the `_build` tests and the four-real-decks test of `_core` also need the site's tools
+The `_core` tests need Node.js; the `_build` tests and the real-decks test of `_core` also need the site's tools
 (`npm ci`). Without them those tests are skipped, not failed.
 
 ### 6.9 Look at the result on the PC
@@ -1664,7 +1712,7 @@ See [Automation and troubleshooting](automation-and-troubleshooting.md).
 - **Public by default.** Everything in the Drive folder is public, the PowerPoint copies in
   `2027-2028_Panel77_GVLV/slides` included, and so are the decks and their notes on the site.
 - **Keep slide ids** once a deck is on the site; presenters' own versions depend on them.
-- **Let facts be facts.** Use `{live:…}` keys for dates, times, prices, phone numbers and Zoom IDs, and write the
+- **Let facts be facts.** Use `{live:…}` keys for dates, times, prices, phone numbers, meeting links and codes, and write the
   sentence so the "nothing to say" words fit too.
 - **Check before you publish.** Run the checker, or use a pull request and merge on a green ✓. A deck mistake on
   `main` holds back every update of the site until it is fixed.
@@ -1693,6 +1741,7 @@ See [Automation and troubleshooting](automation-and-troubleshooting.md).
   [`information-workshop.yml`](../config/presentations/information-workshop.yml),
   [`writing-workshop.yml`](../config/presentations/writing-workshop.yml),
   [`committee-meeting.yml`](../config/presentations/committee-meeting.yml),
+  [`grapevine-meeting.yml`](../config/presentations/grapevine-meeting.yml),
   [`tests/fixtures/presentations/`](../tests/fixtures/presentations/),
   [`tests/test_presentations.py`](../tests/test_presentations.py),
   [`src/_data/presentations.js`](../src/_data/presentations.js),
