@@ -125,7 +125,7 @@ with the slide's number and id. If you edit on GitHub only, the same check runs 
 | `information-workshop.yml` | Grapevine and La Viña Information Workshop / Taller informativo de Grapevine y La Viña | 2 | 60 | `gv` (blue) | `book-open` | 53 / 49 | `full` (60), `late` (48), `visit` (20) |
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop / Taller de escritura de Grapevine y La Viña | 3 | 115 | `lv` (orange) | `pen-line` | 59 / 48 | `full` (115), `short` (84) |
 | `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 47 / 32 | `full` (60: with a guest speaker), `no-speaker` (60), `topic` (60) |
-| `grapevine-meeting.yml` | Grapevine Meeting (online) / Reunión de Grapevine (en línea) | 5 | 60 | `gv` (blue) | `book-heart` | 17 / 14 | `full` (60) |
+| `grapevine-meeting.yml` | Grapevine Meeting / Reunión de Grapevine | 5 | 60 | `gv` (blue) | `book-heart` | 17 / 14 | `full` (60) |
 
 The number on the card ("About 90 minutes · 59 slides") counts the slides of the full version **on the day of the
 build**: facilitator pages, slides that start switched off and slides outside their dates are not counted. That is
@@ -679,7 +679,7 @@ those show exactly what you type.
 | `speaker_name`, `speaker_position`, `speaker_topic` | Rick W. / Past delegate, Area 65 Northeast Texas (Panel 73); … / Grapevine as a Twelfth Step tool: … — `meeting_day`'s guest speaker | `meeting: speakers:` (as `/meetings/` lists them) | "to be announced" |
 | `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … | same | "to be announced" |
 | `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — `meeting_after`'s speaker | same | "to be announced" |
-| `speaker_slides`, `speaker_confirmed` | the chair's notes only: "Tonight's guest speaker shares slides: …" (`slides: true`); yes / not yet, by the committee's list (`confirmed:`) | same | a sentence of their own (the README's table) |
+| `speaker_slides` | the chair's notes only: "Tonight's guest speaker shares slides: …" (`slides: true`). Whether a speaker has confirmed (`confirmed:`) never reaches a deck: the notes are public; the run summary reminds the chair | same | a sentence of their own (the README's table) |
 | `grapevine_meeting_next`, `grapevine_meeting_day`, `grapevine_meeting_after` | Wednesday, December 2, 2026 / the same / Wednesday, January 6, 2027 | `recurring_events:` → `grapevine-meeting`, as `/events/` lists it | "see the Events page" |
 | `grapevine_meeting_time`, `grapevine_meeting_link` | 7:00 – 8:00 PM Central time · meet.google.com/rva-tmst-vdb | same | — · "see the Events page" |
 | `lv_workshop_next` | Thursday, October 22, 2026 | the `recurring_events:` entry with `host: lv` | "see La Viña's events calendar at aalavina.org" |

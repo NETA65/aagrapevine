@@ -290,7 +290,6 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … — the name and the position | "to be announced" |
 | `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — the guest speaker of `meeting_after`'s meeting (next month's, on a slide shown during the meeting) | "to be announced" |
 | `speaker_slides` | for the chair's notes: "Tonight's guest speaker shares slides: …" (the speaker's `slides: true`) | "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too." |
-| `speaker_confirmed` | for the chair's notes: yes · not yet, by the committee's list | "no guest speaker is listed for tonight" |
 | `grapevine_meeting_next` | Wednesday, December 2, 2026 — our Grapevine Meeting, the next one until it ends | "see the Events page" |
 | `grapevine_meeting_day` | Wednesday, December 2, 2026 — its own date until midnight Central after it (its title slide) | "see the Events page" |
 | `grapevine_meeting_after` | Wednesday, January 6, 2027 — the one after `grapevine_meeting_day`, moving on with it | "see the Events page" |

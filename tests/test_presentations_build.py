@@ -1195,7 +1195,7 @@ class Facts(unittest.TestCase):
                 (tmp / "overrides.yml").write_text(FACTS_OVERRIDES, encoding="utf-8")
                 Facts.r = run_js(self, FACTS_JS, data={
                     "db": DB_X, "site": SITE_X, "carry": CARRY_X, "meeting": MEETING_X, "kinds": KINDS_X, "meet": MEET_X,
-                    "gm": [ev(f"ev:recurring:grapevine-meeting:{d}", "Grapevine Meeting (online)", start, end, category="recurring",
+                    "gm": [ev(f"ev:recurring:grapevine-meeting:{d}", "Grapevine Meeting", start, end, category="recurring",
                               recurring=True, series="grapevine-meeting", rule=GM_RULE, online=True, platform="Google Meet",
                               online_url="https://meet.google.com/rva-tmst-vdb", meeting_id="rva-tmst-vdb",
                               url="/meetings/#grapevine-meeting")
@@ -1380,12 +1380,12 @@ class Facts(unittest.TestCase):
         self.assertEqual(at("speaker_after", OCT21_OVER), tba)
         # during AND after tonight's meeting, until midnight: tonight's speaker
         self.assertEqual(live_at(night["speaker_name"], "2099-10-22T01:30:00.000Z"), "Rick W.")
-        # the chair's notes: slides, and whether the speaker has confirmed
+        # the chair's notes: whether the speaker shares slides (never whether they have confirmed: the notes are public)
         self.assertEqual(at("speaker_slides", before),
                          "Tonight's guest speaker shares slides: at the sound check, make sure they can share their screen.")
         self.assertTrue(at("speaker_slides", OCT21_OVER).startswith("No slides are listed for tonight's guest speaker"))
-        self.assertEqual([at("speaker_confirmed", t) for t in (before, OCT21_OVER, NOV18_OVER)],
-                         ["yes", "not yet, by the committee's list", "no guest speaker is listed for tonight"])
+        self.assertNotIn("speaker_confirmed", self.oct["live"])
+        self.assertNotIn("confirmed", json.dumps(self.oct.get("paperwork", {})))
         # the settings of a Zoom meeting with no speakers: where to look, never a name made up
         for k in ("speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after"):
             self.assertEqual(self.oct["live"][k], {"value": "", "fallback": tba}, k)

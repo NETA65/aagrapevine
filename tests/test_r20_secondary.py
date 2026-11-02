@@ -49,7 +49,7 @@ MEETING = {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": 
            "online_url": ROOM, "meeting_id": CODE, "chair_email": "chair@example.org", "speaker_until": "19:30",
            "note": "All AA members are welcome to attend.", "note_es": "Todos los miembros de AA pueden asistir.",
            "skip_dates": [], "speakers": SPEAKERS}
-GVM = {"key": "grapevine-meeting", "title": "Grapevine Meeting (online)", "title_es": "Reunión de Grapevine (en línea)",
+GVM = {"key": "grapevine-meeting", "title": "Grapevine Meeting", "title_es": "Reunión de Grapevine",
        "week_of_month": 1, "weekday": "wednesday", "start": "19:00", "end": "20:00", "starts": "2026-12-02",
        "online_url": ROOM, "meeting_id": CODE, "url": "/meetings/#grapevine-meeting", "months_ahead": 6, "skip_dates": []}
 LV_WS = {"key": "lv-monthly-workshop", "title": "La Viña Monthly Virtual Workshop (in Spanish)", "title_es": "Taller Mensual y Virtual de La Viña",
@@ -65,7 +65,7 @@ SITE = {"url": "https://neta65.github.io/aagrapevine", "committee": "NETA 65 Gra
 
 def gvm_event(ymd: str, start: str, end: str) -> dict:
     """A date of the Grapevine Meeting as the sync writes it in events.json (category recurring, ours, online only)."""
-    return BB.event(f"ev:recurring:grapevine-meeting:{ymd}", "Grapevine Meeting (online)", "Reunión de Grapevine (en línea)",
+    return BB.event(f"ev:recurring:grapevine-meeting:{ymd}", "Grapevine Meeting", "Reunión de Grapevine",
                     start, end, "recurring", online_url=ROOM, platform="Google Meet", recurring=True, series="grapevine-meeting",
                     host="neta", meeting_id=CODE)
 
@@ -94,8 +94,8 @@ out({
         # Zoom) or the CityWide booth (a place)
         self.assertEqual(r["meet"]["online"], [{"platform": "Google Meet", "items": [
             {"key": "committee", "title": "Committee meeting", "details": "/meetings/#committee-meeting"},
-            {"key": "grapevine-meeting", "title": "Grapevine Meeting (online)", "details": "/meetings/#grapevine-meeting"}]}])
-        self.assertEqual(r["meetEs"][0]["items"][1]["title"], "Reunión de Grapevine (en línea)")
+            {"key": "grapevine-meeting", "title": "Grapevine Meeting", "details": "/meetings/#grapevine-meeting"}]}])
+        self.assertEqual(r["meetEs"][0]["items"][1]["title"], "Reunión de Grapevine")
         # back on Zoom with a meeting ID: the committee meeting has its call button again, and nothing is "online only"
         self.assertEqual([m["key"] for m in r["zoom"]["meetings"]], ["committee", "weekly-87120368287"])
         self.assertEqual(r["zoom"]["online"], [])
@@ -157,7 +157,7 @@ class Booth(unittest.TestCase):
         m = r["jan"]["meetings"]
         rows = m["en"]["rows"]
         self.assertEqual([x["title"] for x in rows], ["NETA 65 Grapevine & La Viña Committee Meeting", "Grapevine Weekly Open AA Meeting",
-                                                      "La Viña Open Meeting (in Spanish)", "Grapevine Meeting (online)",
+                                                      "La Viña Open Meeting (in Spanish)", "Grapevine Meeting",
                                                       "La Viña Monthly Virtual Workshop (in Spanish)"])
         # the committee meeting: where, its meeting code (never "Meeting ID" for a code) and the next date's speaker
         self.assertEqual(rows[0]["note"], f"Online on Google Meet · Meeting code {CODE} · Guest speaker on Jan 20: Ann B.")
@@ -168,10 +168,10 @@ class Booth(unittest.TestCase):
         self.assertIn("February 3, 2027", gvm["when"])
         self.assertEqual((gvm["note"], gvm["pub"]), (f"Online on Google Meet · Meeting code {CODE}", "both"))
         self.assertGreater(gvm["ends_ts"], gvm["starts_ts"])
-        self.assertEqual(m["es"]["rows"][3]["title"], "Reunión de Grapevine (en línea)")
+        self.assertEqual(m["es"]["rows"][3]["title"], "Reunión de Grapevine")
         # never a row of "Coming up": the next four events are the others
         titles = [x["title"] for x in r["jan"]["events"]["en"]["rows"]]
-        self.assertNotIn("Grapevine Meeting (online)", titles)
+        self.assertNotIn("Grapevine Meeting", titles)
         self.assertIn("Grapevine Writing Workshop — Plano", titles)
         # December 16, 2026 has no guest speaker: no speaker in the note; the Grapevine Meeting's next date is Jan 6
         dec = r["dec"]["meetings"]["en"]["rows"]
@@ -230,7 +230,7 @@ class Monthly(unittest.TestCase):
                                                              "topic": "How the Conference works"})
         self.assertEqual(jan["committee"]["es"]["speaker"]["topic"], "Cómo trabaja la Conferencia")
         self.assertEqual(jan["committee"]["en"]["platform"], "Google Meet")
-        self.assertIn(["recurring", "2027-01-06", "Grapevine Meeting (online)"], jan["dates"])
+        self.assertIn(["recurring", "2027-01-06", "Grapevine Meeting"], jan["dates"])
         lines = jan["msg"].split("\n")
         i = next(n for n, x in enumerate(lines) if "Committee meeting (Google Meet)" in x)
         self.assertEqual(lines[i + 1], "  Guest speaker: Ann B. — “How the Conference works”")
@@ -245,7 +245,7 @@ class Monthly(unittest.TestCase):
         self.assertIn("• Next committee meeting: Wed, Jan 20 · 7–8 PM Central — Google Meet\n  Guest speaker: Ann B. — “How the Conference works”",
                       dec["msg"])
         # November 2026: the Grapevine Meeting is not there yet (its first date is December 2)
-        self.assertNotIn("Grapevine Meeting (online)", [x[2] for x in r["2026-11"]["dates"]])
+        self.assertNotIn("Grapevine Meeting", [x[2] for x in r["2026-11"]["dates"]])
 
     def test_a_poster_never_leaves_out_the_committee_meeting(self):
         # one more date a month (the Grapevine Meeting): a busy month's poster shows one date fewer, and the one it
@@ -308,10 +308,10 @@ class Report(unittest.TestCase):
         self.assertIn("terminan a más tardar a las 7:30 p. m.; luego, los asuntos del comité hasta las 8:00 p. m.", es)
         self.assertIn("How to join on Google Meet, the link and the meeting code: https://neta65.github.io/aagrapevine/meetings/", en)
         self.assertNotIn("meeting ID and passcode", en)
-        self.assertIn("Grapevine Meeting (online): every first Wednesday of the month · 7:00 – 8:00 PM Central time, on Google Meet. "
+        self.assertIn("Grapevine Meeting: every first Wednesday of the month · 7:00 – 8:00 PM Central time, on Google Meet. "
                       "Every AA member is welcome: https://neta65.github.io/aagrapevine/meetings/#grapevine-meeting", en)
         self.assertNotIn("The first one", en, "January: the Grapevine Meeting has begun")
-        self.assertIn("Reunión de Grapevine (en línea): cada primer miércoles del mes", es)
+        self.assertIn("Reunión de Grapevine: cada primer miércoles del mes", es)
         self.assertNotIn("Zoom", en + es)
         # late November: December 16 has no speaker; the Grapevine Meeting's first date is ahead
         d = nb(r["dec"]["en"])
@@ -346,7 +346,7 @@ class Digest(SD.DigestCase):
                 e["extra"]["speaker"] = {"name": "Ann B.", "position": {"en": "Past delegate", "es": "Ex delegada"},
                                          "topic": {"en": "How the Conference works", "es": "Cómo trabaja la Conferencia"}}
         held = SD.event("ev:recurring:grapevine-meeting:2026-09-02", "2026-09-03T00:00:00Z", "2026-09-03T01:00:00Z",
-                        "Grapevine Meeting (online)", "recurring", series="grapevine-meeting", online_url=ROOM, host="neta")
+                        "Grapevine Meeting", "recurring", series="grapevine-meeting", online_url=ROOM, host="neta")
         held["url"] = ""
         self.write("events", {"items": events + [held]})
         data = D.collect(SD.OCT1)

@@ -967,8 +967,8 @@ recurring_events:
     skip_dates: ["2026-11-26", "2026-12-24", "2027-11-25", "2027-12-23"]
 
   - key: "grapevine-meeting"
-    title: "Grapevine Meeting (online)"
-    title_es: "Reunión de Grapevine (en línea)"
+    title: "Grapevine Meeting"
+    title_es: "Reunión de Grapevine"
     summary: "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome."
     summary_es: "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine, …"
     week_of_month: 1

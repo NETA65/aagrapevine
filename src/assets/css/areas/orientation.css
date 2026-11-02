@@ -117,11 +117,14 @@
   font-size: 0.875rem; line-height: 1.5; color: var(--c-muted); }
 .o101-pres-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
 @media (width >= 64rem) { .o101-pres-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* five decks: in two columns the odd last card takes the row (2 + 2 + 1), never a card beside a blank */
+.o101-pres-grid > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 /* at 130 % text two columns from 1280px, at 150 % from 1440px (a card keeps ≈ 430px of 100 % text) */
 @media (64rem <= width < 80rem) { :root:is([data-text="130"], [data-text="150"]) .o101-pres-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (80rem <= width < 90rem) { :root[data-text="150"] .o101-pres-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (width >= 112.5rem) {
-  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-pres-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-pres-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-pres-grid > :last-child:nth-child(odd) { grid-column: auto; }
 }
 .o101-pres-card { display: flex; flex-direction: column; min-width: 0; padding: 1.25rem; }
 @media (width >= 40rem) { .o101-pres-card { padding: 1.5rem; } }

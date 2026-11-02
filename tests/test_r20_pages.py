@@ -150,13 +150,13 @@ class SeriesFromTheSettings(Untranslated):
                 self.assertEqual(mine["next"]["ics"]["uid"], "ev-recurring-grapevine-meeting-2026-12-02" + ("-es" if lang == "es" else "")
                                  + "@neta65-gvlv")
         en = got["en"]
-        self.assertEqual((en["title"], en["starts"], en["rule"]), ("Grapevine Meeting (online)", "2026-12-02",
+        self.assertEqual((en["title"], en["starts"], en["rule"]), ("Grapevine Meeting", "2026-12-02",
                          {"weekday": 3, "n": 1, "start": "19:00", "end": "20:00", "skip": [], "starts": "2026-12-02"}))
         self.assertEqual((en["recurrenceDay"], plain(en["time"]), plain(en["end"])), ("Every first Wednesday of the month", "7:00 – 8:00 PM", "8:00 PM"))
         self.assertEqual((en["join"]["platform"], en["join"]["url"], en["join"]["idLabel"], en["join"]["copyId"], en["join"]["dialIn"]),
                          ("Google Meet", ROOM, "Meeting code", "abc-defg-hij", False))
         self.assertEqual((en["contact"], en["next"]["details"]), ("grapevine@example.org", "https://example.org/gv/meetings/#grapevine-meeting"))
-        self.assertEqual(got["es"]["title"], "Reunión de Grapevine (en línea)")
+        self.assertEqual(got["es"]["title"], "Reunión de Grapevine")
         self.assertIn("Meeting code: abc-defg-hij", en["next"]["desc"])
         self.assertIn("Every first Wednesday of the month · 7:00 – 8:00 PM Central time", plain(en["next"]["desc"]))
 
@@ -223,7 +223,7 @@ class Countdowns(unittest.TestCase):
     def test_a_series_countdown_gives_the_feeds_uid_and_says_first_meeting(self):
         r = run_js(self, DOM + r"""
           const cfg = { rule: { weekday: 3, n: 1, start: "19:00", end: "20:00", skip: [], starts: "2026-12-02" }, start: "2026-12-03T01:00:00.000Z",
-                        end: "2026-12-03T02:00:00.000Z", title: "Grapevine Meeting (online)", description: "GVM TEXT",
+                        end: "2026-12-03T02:00:00.000Z", title: "Grapevine Meeting", description: "GVM TEXT",
                         uid: "ev-recurring-grapevine-meeting-", file: "grapevine-meeting-", first: "2026-12-02", i18n: { join: "Join" } };
           const p = page([], { files: ["time", "src/assets/js/app.js", "src/assets/js/committee.js"], alpine: true, at: "2026-11-26T18:00:00Z" });
           p.ready();
@@ -422,7 +422,7 @@ class BuiltPages(Untranslated):
                 self.assertIn("Meeting code: abc-defg-hij", cfg["description"])
                 words = text(sec)
                 self.assertIn(date, words)
-                for s in ("Grapevine Meeting (online)", "Our monthly online meeting · In English", "The AA Grapevine Statement of Purpose",
+                for s in ("Grapevine Meeting", "Our monthly online meeting · In English", "The AA Grapevine Statement of Purpose",
                           "in place of the AA Preamble", "A story from the current Grapevine", "Sharing on its topic",
                           "We close on time, at 8:00 PM.", "Meeting code abc-defg-hij", "Join on Google Meet",
                           "The same Google Meet room as our committee meeting."):
@@ -433,7 +433,7 @@ class BuiltPages(Untranslated):
                 self.assertIn(f'data-copy="{ROOM}"', sec)
                 self.assertNotIn("Grapevine meetings", words)
         es = text(part(self.pages(NOV26)["/es/meetings/"], 'aria-labelledby="grapevine-meeting-h"', "</section>"))
-        for s in ("Reunión de Grapevine (en línea)", "Nuestra reunión mensual en línea · En inglés", "La Declaración de Propósito de AA Grapevine",
+        for s in ("Reunión de Grapevine", "Nuestra reunión mensual en línea · En inglés", "La Declaración de Propósito de AA Grapevine",
                   "A las 8:00 p. m. cerramos a tiempo.", "Código de la reunión abc-defg-hij", "Primera reunión"):
             self.assertIn(s, es)
 
@@ -458,7 +458,7 @@ class BuiltPages(Untranslated):
         p = self.pages(NOV26)
         home = part(p["/"], 'aria-labelledby="events-title"', "</section>")
         card = part(home, "<article", "</article>")
-        self.assertIn("Grapevine Meeting (online)", text(card))
+        self.assertIn("Grapevine Meeting", text(card))
         self.assertIn("ev-tone-other", card)
         self.assertEqual(text(part(card, '<span class="badge ev-badge"', "</span>")), "NETA 65")
         self.assertIn("#i-video", part(card, '<span class="badge ev-badge"', "</span>"))
@@ -505,11 +505,11 @@ class BuiltPages(Untranslated):
             with self.subTest(url=url):
                 self.assertEqual([s[1] for s in sheets], ["en", "es", "bi"])
                 v = {s[1]: text(s[2]) for s in sheets}
-                self.assertIn("Grapevine Meeting (online) · In English", v["en"])
+                self.assertIn("Grapevine Meeting · In English", v["en"])
                 self.assertIn("Every first Wednesday of the month · 7:00 – 8:00 PM", v["en"])
-                self.assertIn("Reunión de Grapevine (en línea) · En inglés", v["es"])
+                self.assertIn("Reunión de Grapevine · En inglés", v["es"])
                 self.assertIn("Cada primer miércoles del mes · 7:00–8:00 p. m.", v["es"])
-                self.assertNotIn("Grapevine Meeting (online)", v["bi"])        # no room on the bilingual poster
+                self.assertNotIn("Grapevine Meeting", v["bi"])        # no room on the bilingual poster
                 for k in v:
                     self.assertIn("abc-defg-hij", v[k])
                     self.assertNotRegex(v[k], r"(?i)passcode|meeting id\b|ID de reunión")

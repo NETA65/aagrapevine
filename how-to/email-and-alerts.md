@@ -585,7 +585,7 @@ the date in its file name, but it is in the **September** edition because the si
 The Spanish half repeats everything in Spanish (*"BOLETÍN (1)"*, *"Reunión del comité — mié, 16 de sept · Zoom"*),
 with links to `/es/` pages. From the December 2026 edition the committee meeting's row says *"· Google Meet"*, and
 each Grapevine Meeting that took place has a row of its own, linking to its section on Meetings, never to the
-Google Meet room: *"Grapevine Meeting (online) — Wed, Dec 2 · Online"*.
+Google Meet room: *"Grapevine Meeting — Wed, Dec 2 · Online"*.
 
 The **HTML part** is a 600-pixel card. It has a dark-blue masthead with the committee logo and the line *"Grapevine /
 La Viña · Monthly digest"*, then a strip saying *"English first · Versión en español más abajo"*. Each section has a

@@ -297,8 +297,8 @@ recurring_events:
 
   - key: "grapevine-meeting"       # our monthly online AA meeting (host: ours, the default)
     # Never call it "Grapevine meetings": that is the list of AA groups that read Grapevine (/meetings/).
-    title: "Grapevine Meeting (online)"
-    title_es: "Reunión de Grapevine (en línea)"
+    title: "Grapevine Meeting"
+    title_es: "Reunión de Grapevine"
     summary: "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome."
     summary_es: "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine, nuestra reunión impresa, y compartimos sobre su tema. Todos los miembros de AA son bienvenidos."
     week_of_month: 1

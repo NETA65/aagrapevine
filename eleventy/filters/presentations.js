@@ -84,7 +84,7 @@ export const LIVE_KEYS = [
   "site", "site_url", "email", "panel", "as_of", "month", "year",
   "meeting_next", "meeting_day", "meeting_after", "meeting_month", "meeting_rule", "meeting_time", "meeting_platform",
   "meeting_link", "meeting_url", "meeting_code", "meeting_zoom_id", "meeting_passcode", "meeting_phone", "meeting_phone_passcode",
-  "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after", "speaker_slides", "speaker_confirmed",
+  "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after", "speaker_slides",
   "grapevine_meeting_next", "grapevine_meeting_day", "grapevine_meeting_after", "grapevine_meeting_time",
   "grapevine_meeting_link", "lv_workshop_next", "lv_workshop_time", "lv_workshop_zoom_id",
   "price_gv_print", "price_gv_digital", "price_lv_print", "price_lv_digital", "price_change_note", "price_change_date",
@@ -1149,7 +1149,6 @@ export const FALLBACKS = {
   speaker_line: "to be announced",
   speaker_after: "to be announced",
   speaker_slides: "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too.",
-  speaker_confirmed: "no guest speaker is listed for tonight",
   grapevine_meeting_next: "see the Events page",
   grapevine_meeting_day: "see the Events page",
   grapevine_meeting_after: "see the Events page",
@@ -1224,14 +1223,15 @@ function ruleAndTime(line) {
 }
 
 /** The committee meeting's guest speakers (config/site.yml meeting.speakers, as committee.js meetingSpeakers reads
- *  them: the list /meetings/ shows) → Map "YYYY-MM-DD" → { name, position, topic (English), confirmed, slides }.
- *  `confirmed` and `slides` (the speaker shares slides: their screen at the sound check) are for the chair's notes,
- *  never a slide: `slides` is the entry's own `slides: true` (the entry of that date and name). */
+ *  them: the list /meetings/ shows) → Map "YYYY-MM-DD" → { name, position, topic (English), slides }.
+ *  `slides` (the speaker shares slides: their screen at the sound check) is for the chair's notes, never a slide:
+ *  the entry's own `slides: true` (the entry of that date and name). Whether a speaker has confirmed never reaches
+ *  a deck: the notes are public; the run summary reminds the chair instead (build_data _speaker_reminders). */
 function speakersOf(m) {
   const raw = Array.isArray(m.speakers) ? m.speakers : isMap(m.speakers) ? [m.speakers] : [];
   const entry = (s) => raw.find((e) => isMap(e) && ymdText(e.date) === s.ymd && clean(e.name) === s.name);
   return new Map(meetingSpeakers(m).map((s) => [s.ymd, {
-    name: s.name, position: s.position.en, topic: s.topic.en, confirmed: s.confirmed === true, slides: (entry(s) || {}).slides === true,
+    name: s.name, position: s.position.en, topic: s.topic.en, slides: (entry(s) || {}).slides === true,
   }]));
 }
 
@@ -1633,8 +1633,7 @@ export function liveFacts(ctx) {
   // The guest speaker of the meeting's day (meeting_day's meeting, until midnight Central after it: during AND after
   // tonight's meeting it is tonight's), and of the meeting after it (speaker_after, with meeting_after): the speakers
   // /meetings/ lists. A date with none listed (December 16, 2026) says its fallback, "to be announced". The chair's
-  // notes only: whether the speaker shares slides (check their screen sharing at the sound check) and whether the
-  // committee's list says they have confirmed.
+  // notes only: whether the speaker shares slides (check their screen sharing at the sound check).
   const bySpeaker = (key, f) => run(mt.rows.map((r) => ({ value: r.speaker ? f(r.speaker) : "", end: r.over })), FALLBACKS[key]);
   out.speaker_name = bySpeaker("speaker_name", (s) => s.name);
   out.speaker_position = bySpeaker("speaker_position", (s) => s.position);
@@ -1645,7 +1644,6 @@ export function liveFacts(ctx) {
   const nextOne = (s) => (s ? s.name + (s.topic ? ` — “${s.topic}”` : "") : "");
   out.speaker_after = run(mt.rows.slice(1).map((r, i) => ({ value: nextOne(r.speaker), end: mt.rows[i].over })), FALLBACKS.speaker_after);
   out.speaker_slides = bySpeaker("speaker_slides", (s) => (s.slides ? "Tonight's guest speaker shares slides: at the sound check, make sure they can share their screen." : ""));
-  out.speaker_confirmed = bySpeaker("speaker_confirmed", (s) => (s.confirmed ? "yes" : "not yet, by the committee's list"));
 
   // joining it by phone, as /accessibility/#phone gives it (access.js axPhone: config/site.yml phone_access + the
   // meeting's ID): Zoom's first dial-in number and its city — "+1 346 248 7799 (Houston)" — and what a caller types

@@ -872,8 +872,8 @@ meeting's Google Meet room:
 
 ```yaml
   - key: "grapevine-meeting"
-    title: "Grapevine Meeting (online)"
-    title_es: "Reunión de Grapevine (en línea)"
+    title: "Grapevine Meeting"
+    title_es: "Reunión de Grapevine"
     summary: "Online AA meeting in English: …"
     summary_es: "Reunión de AA en línea, en inglés: …"
     week_of_month: 1

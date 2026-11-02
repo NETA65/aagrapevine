@@ -93,8 +93,8 @@
   "orientation.pres_eyebrow": { "en": "Ready to present", "es": "Listas para presentar" },
   "orientation.pres_title": { "en": "Presentations", "es": "Presentaciones" },
   "orientation.pres_sub": {
-    "en": "The committee's workshops and its monthly meeting, for a projector or a video call, with speaker notes. Meeting dates, story deadlines and prices stay current by themselves.",
-    "es": "Los talleres del comité y su reunión mensual, para un proyector o una videollamada, con notas para quien presenta. Las diapositivas están en inglés; las fechas de las reuniones, las fechas límite y los precios se mantienen al día solos."
+    "en": "The committee's workshops and its two monthly meetings, for a projector or a video call, with speaker notes. Meeting dates, guest speakers, story deadlines and prices stay current by themselves.",
+    "es": "Los talleres del comité y sus dos reuniones mensuales, para un proyector o una videollamada, con notas para quien presenta. Las diapositivas están en inglés; las fechas de las reuniones, los oradores invitados, las fechas límite y los precios se mantienen al día solos."
   },
   "orientation.pres_minutes": { "en": "About {n} minutes", "es": "Unos {n} minutos" },
   "orientation.pres_hours": { "en": "About {n} hours", "es": "Unas {n} horas" },

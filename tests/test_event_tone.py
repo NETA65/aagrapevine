@@ -72,10 +72,10 @@ CASES: list[tuple[dict, str]] = [
     ({"title": "District 12 Pre-Assembly"}, "assembly"),
     # 5. a monthly meeting of ours (recurring_events, no host of theirs — the Grapevine Meeting): never the colour of
     #    an event AA Grapevine holds, whatever its name says — on a data item, a /events/ event and a monthly date row
-    ({"category": "recurring", "title": "Grapevine Meeting (online)", "extra": {"host": "neta", "series": "grapevine-meeting"}}, "other"),
-    ({"category": "recurring", "title": "Reunión de Grapevine (en línea)"}, "other"),
-    ({"recurring": True, "category": "recurring", "host": "", "title": "Grapevine Meeting (online)"}, "other"),
-    ({"kind": "recurring", "host": "", "title": "Reunión de Grapevine (en línea)"}, "other"),
+    ({"category": "recurring", "title": "Grapevine Meeting", "extra": {"host": "neta", "series": "grapevine-meeting"}}, "other"),
+    ({"category": "recurring", "title": "Reunión de Grapevine"}, "other"),
+    ({"recurring": True, "category": "recurring", "host": "", "title": "Grapevine Meeting"}, "other"),
+    ({"kind": "recurring", "host": "", "title": "Reunión de Grapevine"}, "other"),
     ({"category": "recurring", "title": "Grapevine Meeting", "extra": {"host": "gv"}}, "gv"),       # theirs: rule 2
     ({"category": "gv-calendar", "title": "Grapevine Weekly Open AA Meeting"}, "gv"),             # not a series of ours
     ({"category": "manual", "title": "Grapevine meeting night"}, "gv"),                            # a one-off: by title

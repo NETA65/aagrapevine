@@ -589,7 +589,7 @@ slides:
     notes: |
       SAY: It's my pleasure to introduce tonight's guest speaker, {live:speaker_name}: {live:speaker_position}. The topic tonight: {live:speaker_topic}. (Add the two or three sentences of introduction the speaker sent you.) Welcome, and thank you for being with us.
       SAY: Our guest will share for about 20 minutes, and then we'll have time for your questions. Please hold them until then; you can type them in the chat as they come to you.
-      CONFIRMED: {live:speaker_confirmed}. A speaker who hasn't confirmed yet gets a note the week before; if they can't come, choose the version 'No guest speaker' ({ui:customize} → {ui:version}).
+      IF THE SPEAKER CAN'T COME: choose the version 'No guest speaker' ({ui:customize} → {ui:version}). The run summary reminds you, about six weeks ahead, of a speaker who hasn't confirmed yet.
       IF NO SPEAKER IS LISTED (the slide says 'to be announced'): type tonight's speaker on these slides for tonight only ({ui:customize} → {ui:edit}: it stays on this device), and tell whoever looks after the website; or choose the version 'No guest speaker'.
       ANONYMITY: on the slide, in the chat and in the minutes, a first name and last initial at most, with the speaker's service position; never their last name, e-mail address or phone number.
 
