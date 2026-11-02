@@ -36,7 +36,7 @@ LIVE_KEYS = {
     "site", "site_url", "email", "panel", "as_of", "month", "year",
     "meeting_next", "meeting_day", "meeting_after", "meeting_month", "meeting_rule", "meeting_time", "meeting_platform",
     "meeting_link", "meeting_url", "meeting_code", "meeting_zoom_id", "meeting_passcode", "meeting_phone", "meeting_phone_passcode",
-    "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after", "speaker_slides",
+    "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_note", "speaker_after", "speaker_slides",
     "grapevine_meeting_next", "grapevine_meeting_day", "grapevine_meeting_after", "grapevine_meeting_time",
     "grapevine_meeting_link", "lv_workshop_next", "lv_workshop_time", "lv_workshop_zoom_id",
     "price_gv_print", "price_gv_digital", "price_lv_print", "price_lv_digital", "price_change_note", "price_change_date",
@@ -111,7 +111,7 @@ HTML = re.compile(r"<[A-Za-z/!]")
 # next month" (numbered rows of blanks: <row>_what / _who / _when for an action item, <row>_item / _status for old
 # business)
 PAPER_KEYS = ("meeting", "month", "after", "agenda", "meeting_es", "time_es", "committee_es", "speaker", "speaker_position",
-              "speaker_topic")
+              "speaker_topic", "speaker_es", "speaker_topic_es")
 PAPER_TEXTS = ("agenda", "reminder", "minutes")
 PAPER_ROWS = {"actions": ("what", "who", "when"), "old_business": ("item", "status")}
 PAPER_TAG = re.compile(r"\{paper:([^}]*)\}")
@@ -378,7 +378,7 @@ def paperwork_problems(d: dict, fill_keys: dict, idset: set, by_id: dict) -> lis
     if not isinstance(pw, dict):
         return ["paperwork: a mapping"]
     for k in pw:
-        if k not in ("agenda_slide", *PAPER_TEXTS, "next_month"):
+        if k not in ("agenda_slide", "speaker_slide", *PAPER_TEXTS, "next_month"):
             out.append(f"paperwork: unknown field {k!r}")
     if not any(k in pw for k in PAPER_TEXTS):
         out.append(f"paperwork: at least one text ({', '.join(PAPER_TEXTS)})")
@@ -388,6 +388,9 @@ def paperwork_problems(d: dict, fill_keys: dict, idset: set, by_id: dict) -> lis
             out.append(f"paperwork.agenda_slide: no slide {a!r}")
         elif not isinstance(by_id.get(a), dict) or by_id[a].get("layout") != "agenda":
             out.append(f"paperwork.agenda_slide: {a!r} is not an agenda slide")
+    # the guest speaker's slide: a version that leaves it out (no guest speaker tonight) has no speaker lines either
+    if "speaker_slide" in pw and (not isinstance(pw["speaker_slide"], str) or pw["speaker_slide"] not in idset):
+        out.append(f"paperwork.speaker_slide: no slide {pw['speaker_slide']!r}")
     fills = d.get("fillins") if isinstance(d.get("fillins"), list) else []
     shared = {f["key"] for f in fills if isinstance(f, dict) and f.get("shared") is True and isinstance(f.get("key"), str)}
     for name in PAPER_TEXTS:

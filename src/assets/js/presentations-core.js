@@ -1546,14 +1546,15 @@
 
   /* ------------------------------------------------------------------ the chair's paperwork
      A deck's `paperwork` (the committee meeting's Customize → Agenda & minutes; eleventy/filters/presentations.js
-     shapePaper, the deck JSON's `paperwork`): { agenda_slide, agenda | reminder | minutes: { subject, body },
+     shapePaper, the deck JSON's `paperwork`): { agenda_slide, speaker_slide, agenda | reminder | minutes: { subject, body },
      next_month: { actions, old_business, minutes_month, clear: [keys], untick: [slide ids] }, meetings: [{ ymd,
-     start, end, label, label_es, month, speaker?: { name, position, topic } }], time_es, committee_es }. The texts are plain text in the deck's language,
+     start, end, label, label_es, month, speaker?: { name, position, topic, position_es, topic_es } }], time_es, committee_es }. The texts are plain text in the deck's language,
      made from the presenter's blanks and the day's facts: never sent anywhere from here (the player copies them, or
      opens them in the presenter's own e-mail app with no address filled in). */
   // a paperwork text's own facts ({paper:…}): the meeting the text is for, its month, the meeting after it, the
   // agenda's rows (a line of its own), that date and the meeting's time in Spanish, the committee's Spanish name,
-  // that meeting's guest speaker (name and service position, position, topic: "" without one)
+  // that meeting's guest speaker (name and service position, position, topic, and in Spanish the name and position,
+  // and the topic: "" without one)
   var PAPER_RE = /\{paper:([a-z_]+)\}/g;
   var LANG_MARK = /\{lang:[a-z]{2}\}|\{\/lang\}/g;
   function paperOf(deck) { return deck && isMap(deck.paperwork) ? deck.paperwork : null; }
@@ -1604,7 +1605,7 @@
    * notes_only blank never shows), then:
    *   · a line whose blanks are ALL empty is left out — the text never shows an empty "[hint]" (a blank left empty
    *     beside a filled one still shows as "[hint]", so the chair sees it) — and so is a line whose {paper:…} facts
-   *     are all empty (the guest speaker of a meeting that has none);
+   *     are all empty (the guest speaker of a meeting that has none, or of a version without the speaker's slide);
    *   · the speaker facts ({live:speaker_name}, _position, _topic, _line), also in the agenda's rows, are those of
    *     the meeting the text is for ({paper:speaker} …): "to be announced" for a meeting with none listed;
    *   · a paragraph that had blanks and is left with none of those lines, and nothing but its first line (a heading
@@ -1625,6 +1626,10 @@
     // of the day ({live:speaker_…}, the agenda's rows too) say that meeting's, not tonight's: after "Start next month"
     // on a meeting night the agenda is already next month's
     var sp = row && isMap(row.speaker) && isStr(row.speaker.name) && row.speaker.name ? row.speaker : null;
+    // …and none when the chosen version leaves out the guest speaker's slide (the speaker can't come: "No guest
+    // speaker"), whatever the site still lists: the texts then agree with the agenda's rows
+    var spSlide = cur && isStr(pw.speaker_slide) && pw.speaker_slide ? cur.byId[pw.speaker_slide] : null;
+    if (spSlide && !spSlide.shown) sp = null;
     var spText = function (k) { return sp && isStr(sp[k]) ? sp[k] : ""; };
     var live = Object.assign({}, cur ? cur.live : liveValues(deck.live, now), {
       speaker_name: spText("name") || EN.paper_tba, speaker_position: spText("position") || EN.paper_tba,
@@ -1638,6 +1643,9 @@
       committee_es: isStr(pw.committee_es) && pw.committee_es.trim() ? pw.committee_es.trim() : EN.paper_committee_es,
       speaker: sp ? [spText("name"), spText("position")].filter(Boolean).join(" — ") : "",
       speaker_position: spText("position"), speaker_topic: spText("topic"),
+      // (for a Spanish paragraph: the Spanish position and topic, or the English when there is none)
+      speaker_es: sp ? [spText("name"), spText("position_es") || spText("position")].filter(Boolean).join(" — ") : "",
+      speaker_topic_es: spText("topic_es") || spText("topic"),
     };
     var agenda = null;      // worked out once, when a text asks for it
     var defs = fillDefs(deck);

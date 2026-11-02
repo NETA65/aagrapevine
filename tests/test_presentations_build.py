@@ -966,7 +966,7 @@ MEET_X = {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "
                "position": "Past delegate, Area 65 (Panel 73)", "topic": "Grapevine as a Twelfth Step tool"},
               {"date": "2099-11-18", "name": "Jeannie M.", "confirmed": False,
                "position": "Past delegate, Area 4 (Panel 73)", "topic": "Public Information"},
-              {"date": "2099-12-16", "name": "Greg Gonzales", "confirmed": True, "position": "Delegate", "topic": "Anonymity"},
+              {"date": "2099-12-16", "name": "Pat Example", "confirmed": True, "position": "Delegate", "topic": "Anonymity"},
           ]}
 # Our Grapevine Meeting (config/site.yml recurring_events: grapevine-meeting), as the sync lists it in events.json
 GM_RULE = {"week_of_month": 1, "weekday": "wednesday", "start": "19:00", "end": "20:00"}
@@ -1125,6 +1125,9 @@ res.more = {
   meetData: P.liveData("meeting", {}, { db: input.db, site: { ...input.site, meeting: input.meet }, meeting: input.meeting,
                                         now: new Date("2099-10-15T17:00:00Z") }),
   gm: oct({ ...input.db, events: { items: [...input.db.events.items, ...input.gm] } }, input.site),
+  // a build at 9 PM Central on November 4, after that night's Grapevine Meeting ended
+  gmNight: P.liveFacts({ db: { ...input.db, events: { items: [...input.db.events.items, ...input.gm] } }, site: input.site, carry: input.carry,
+                         meeting: input.meeting, now: new Date("2099-11-05T03:00:00Z") }),
   twoRooms: oct({ ...input.db, weekly_open: { items: input.db.weekly_open.items.map(lvRoom) } }, input.site),
 };
 // more deadlines than a slide carries: 23 issues of one theme, then one issue of two themes (the 24th and 25th rows),
@@ -1375,6 +1378,12 @@ class Facts(unittest.TestCase):
         self.assertEqual(at("speaker_topic", OCT21_OVER), "Public Information")
         self.assertEqual(at("speaker_line", before), "Rick W. — Past delegate, Area 65 (Panel 73)")
         self.assertEqual(live["speaker_name"]["steps"][0]["from"], OCT21_OVER, "with the meeting's day, at midnight after it")
+        # on another meeting's slides (the Grapevine Meeting's announcements): the speaker, or that the meeting has
+        # none — never "to be announced" for a meeting with no speaker listed (December's); that only once the
+        # build's dates run out
+        self.assertEqual([at("speaker_note", t) for t in (before, OCT21_OVER, NOV18_OVER)],
+                         ["guest speaker: Rick W.", "guest speaker: Jeannie M.", "no guest speaker this month"])
+        self.assertEqual(live_at(live["speaker_note"], live["speaker_note"]["until"]), "guest speaker: to be announced")
         # next month's (the "Next meeting" slide, shown during tonight's): November's, then none
         self.assertEqual(at("speaker_after", before), "Jeannie M. — “Public Information”")
         self.assertEqual(at("speaker_after", OCT21_OVER), tba)
@@ -1389,6 +1398,7 @@ class Facts(unittest.TestCase):
         # the settings of a Zoom meeting with no speakers: where to look, never a name made up
         for k in ("speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after"):
             self.assertEqual(self.oct["live"][k], {"value": "", "fallback": tba}, k)
+        self.assertEqual(live_at(self.oct["live"]["speaker_note"], "2099-10-15T17:00:00.000Z"), "no guest speaker this month")
 
     def test_our_grapevine_meeting(self):
         """Our Grapevine Meeting (recurring_events: grapevine-meeting), as /events/ lists it: the next one until it
@@ -1401,6 +1411,13 @@ class Facts(unittest.TestCase):
         self.assertEqual(live["grapevine_meeting_day"]["steps"][0], {"from": "2099-11-05T06:00:00.000Z", "value": dec2}, "midnight Central")
         self.assertEqual(live["grapevine_meeting_after"], {"value": dec2, "steps": [{"from": "2099-11-05T06:00:00.000Z", "value": jan6}],
                                                            "until": "2099-12-03T06:00:00.000Z", "fallback": "see the Events page"})
+        # built after tonight's meeting ended (an evening run): its own slides keep tonight's day until midnight, and the
+        # one after it is next month's — never skipping it; the next one moved on when it ended
+        night = self.r["more"]["gmNight"]
+        late = "2099-11-05T03:30:00.000Z"
+        self.assertEqual((live_at(night["grapevine_meeting_day"], late), live_at(night["grapevine_meeting_after"], late)), (nov4, dec2))
+        self.assertEqual(night["grapevine_meeting_day"]["steps"][0], {"from": "2099-11-05T06:00:00.000Z", "value": dec2})
+        self.assertEqual(live_at(night["grapevine_meeting_next"], late), dec2)
         self.assertEqual(plain(live["grapevine_meeting_time"]), "7:00 – 8:00 PM Central time")
         self.assertEqual(live["grapevine_meeting_link"], "meet.google.com/rva-tmst-vdb")
         # none listed: where to look

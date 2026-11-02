@@ -52,7 +52,9 @@ More detail in [section 5](#5-where-it-shows-on-the-website).
   `config/orientation.yml`. See [Settings](settings.md).
 - The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides` are separate, fixed snapshots,
   made on October 1, 2026. Changing a YAML file never changes them, and changing them never changes the web decks.
-  The card links to them as "PowerPoint copy".
+  A card links its copy as "PowerPoint copy" through its `drive_title`. The four copies of October 2026 still give
+  the committee's old Zoom room, so no deck sets one until copies with the Google Meet details are on the Drive (the
+  line stays in each file as a comment, to put back then).
 - The booth display on `/about/#booth` is a different thing: a show that plays by itself at the committee's table,
   made from `content/booth/booth.csv`, the Drive booth folder and the site's live data (some of the same live facts:
   events, themes, prices, meetings). See [Booth display](booth.md).
@@ -134,7 +136,7 @@ month, which start off).
 
 **The committee meeting from January 2027.** Its first version, "With a guest speaker", is the hour as the
 committee now holds it: the opening (moment of silence, Serenity Prayer), four "Guest speaker" slides (the
-introduction at about 7:02, the talk of about 20 minutes, questions from about 7:22, the thanks: done by 7:30), then
+introduction, the talk of about 20 minutes from about 7:02, questions from about 7:22, the thanks: done by 7:30), then
 the committee's business from 7:30 to 8:00, opened by the Preamble, each part shorter. The speaker's name, service
 position and topic come from `config/site.yml` → `meeting: speakers:` (the same list as `/meetings/`) and switch at
 midnight after each meeting; a date with no speaker listed says "to be announced". "No guest speaker" is the
@@ -678,6 +680,7 @@ those show exactly what you type.
 | `meeting_phone_passcode` | (empty) | `phone_access: committee: phone_passcode` (or the meeting's passcode when it is numbers only) | — (empty) |
 | `speaker_name`, `speaker_position`, `speaker_topic` | Rick W. / Past delegate, Area 65 Northeast Texas (Panel 73); … / Grapevine as a Twelfth Step tool: … — `meeting_day`'s guest speaker | `meeting: speakers:` (as `/meetings/` lists them) | "to be announced" |
 | `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … | same | "to be announced" |
+| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with none listed (December 16, 2026): the Grapevine Meeting's announcements, with `meeting_day` | same | "guest speaker: to be announced" |
 | `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — `meeting_after`'s speaker | same | "to be announced" |
 | `speaker_slides` | the chair's notes only: "Tonight's guest speaker shares slides: …" (`slides: true`). Whether a speaker has confirmed (`confirmed:`) never reaches a deck: the notes are public; the run summary reminds the chair | same | a sentence of their own (the README's table) |
 | `grapevine_meeting_next`, `grapevine_meeting_day`, `grapevine_meeting_after` | Wednesday, December 2, 2026 / the same / Wednesday, January 6, 2027 | `recurring_events:` → `grapevine-meeting`, as `/events/` lists it | "see the Events page" |
@@ -1069,7 +1072,7 @@ them, but update them as well so the record stays true.
 
 The `{live:…}` facts follow `config/site.yml` by themselves (`meeting:` for the committee, `recurring_events:` for
 the booth and La Viña's workshop; see [Settings](settings.md)). But some sentences in the decks were typed by hand.
-After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursday`, `5:00`, `five`, `seven` and
+After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursday`, `5:30`, `five`, `seven` and
 `p.m.`, and fix what you find, in the slides and in the notes. Real examples:
 
 | File, slide | Typed by hand |
@@ -1088,7 +1091,7 @@ on {live:meeting_platform}." reads "Our committee meets every third Wednesday of
 time, on Google Meet."
 
 > **Note:** the booth's hours in the `coming-up` intro contain invisible characters (no-break spaces and a word
-> joiner after the dash) that keep "5:00 – 8:00 PM" on one line. If you retype them, the line may break after the
+> joiner after the dash) that keep "5:30 – 7:30 PM" on one line. If you retype them, the line may break after the
 > dash on a narrow screen; that is all.
 
 #### H. A new PowerPoint copy, a new panel
@@ -1296,15 +1299,15 @@ id. If your words are there, the build has them.
 ### 3.22 The chair's paperwork (Agenda & minutes)
 
 Since October 2026 the **Grapevine and La Viña Monthly Committee Meeting** deck has one more tab in Customize:
-**Agenda & minutes** (Spanish page: **Agenda y acta**). The three workshops do not have it. It makes the chair's
-monthly texts from what is already typed in **Customize → Your details** (chair's report, old and new business,
-the order of the districts, action items …) and from the site's own facts (the meeting's date and time, its guest
-speaker, the Google Meet link and its code, the committee's e-mail).
+**Agenda & minutes** (Spanish page: **Agenda y acta**). The three workshops and the Grapevine Meeting do not have
+it. It makes the chair's monthly texts from what is already typed in **Customize → Your details** (chair's report,
+old and new business, the order of the districts, action items …) and from the site's own facts (the meeting's date
+and time, its guest speaker, the Google Meet link and its code, the committee's e-mail).
 
 | Text | For which meeting | What is in it |
 |---|---|---|
 | **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date and time; that meeting's guest speaker and topic; the Google Meet link and its code; the agenda's times, from the agenda slide in the version you chose (its speaker row names that meeting's speaker); last month's minutes; old and new business; the order of the district reports; the "your name in the chat" / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
-| **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, "La reunión es en inglés", all AA members welcome) |
+| **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, the guest speaker and topic in Spanish, "La reunión es en inglés", all AA members welcome) |
 | **Draft minutes** (*Borrador del acta*) | the **last meeting held**, from the moment it starts | "DRAFT, for the committee's approval at its next meeting. Service positions and counts only: no names, phone numbers or email addresses, and no attendance list."; the chair and the minutes-taker by service position; "Attended: about ___ members (by district: ___)"; the opening, the guest speaker by service position and topic
 (never by name), the Preamble opening the business; every part of the meeting with what you typed (old business with its status, new business with "Decision: ___", the action items as what · who · by when); the next meeting |
 
@@ -1317,8 +1320,9 @@ document, named with the meeting's date ("Monthly Committee Meeting – Draft mi
 
 A line whose details are all blank is left out, and so is a heading left with nothing under it ("Old business"
 with no items), so a text never shows empty orange blanks. The guest speaker's lines are left out for a meeting with
-no speaker listed (December 16, 2026). A detail left empty beside a filled one shows in
-[brackets], so you notice it.
+no speaker listed (December 16, 2026), and in the version "No guest speaker" (a speaker who can't come: the texts
+then agree with that version's agenda, even before the website's list is changed). A detail left empty beside a
+filled one shows in [brackets], so you notice it.
 
 **Start next month**, at the bottom of the tab, is pressed after the meeting, once the minutes are drafted. You
 tick what to carry (tonight's action items come ticked; old business still open comes unticked), up to 4 items:
@@ -1360,6 +1364,7 @@ above `paperwork:` in the file sums up the rules below:
 | Field | What it is |
 |---|---|
 | `agenda_slide` | the id of the `agenda` slide whose rows `{paper:agenda}` lists (`"agenda"`) |
+| `speaker_slide` | the id of the guest speaker's first slide (`"speaker-intro"`): in a version that leaves it out ("No guest speaker", for a speaker who can't come) the texts name no speaker, whatever `meeting: speakers:` still says |
 | `agenda`, `reminder`, `minutes` | each `{ subject: "…", body: \| … }`: plain text, in English like the slides; the subject on one line |
 | `next_month` | what Start next month does: `actions` (rows of blanks named `<row>_what`, `_who`, `_when`), `old_business` (rows `<row>_item`, `_status`), `minutes_month` (the blank set to the month of the meeting held), `clear` (the blanks it clears; `chair_*` = every blank whose name starts with `chair_`; never a blank shared by every deck), `untick` (checklist pages it unticks) |
 
@@ -1368,11 +1373,13 @@ Spanish), and the paperwork's own facts: `{paper:meeting}` (the date of the meet
 `{paper:after}` (the meeting after it), `{paper:agenda}` (the agenda's rows, on a line of its own),
 `{paper:meeting_es}` and `{paper:time_es}` (that date and the time in Spanish), `{paper:committee_es}` (the
 committee's name as the Spanish pages give it: `site: committee_es` in `config/site.yml`), and that meeting's guest
-speaker: `{paper:speaker}` (name and service position), `{paper:speaker_position}` (the minutes: never a name) and
-`{paper:speaker_topic}` — empty for a meeting with none, and a line whose `{paper:…}` facts are all empty is left
-out. In the paperwork the speaker keys `{live:speaker_…}` (the agenda's rows) are that meeting's too. No `**bold**` and no
-`[label](link)`: an e-mail is plain text, so write an address as it is (better: `{live:email}`). The slides' rules
-apply too (anonymity, wording, no personal phone numbers or e-mail addresses). Real messages:
+speaker: `{paper:speaker}` (name and service position), `{paper:speaker_position}` (the minutes: never a name),
+`{paper:speaker_topic}`, and for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the
+position and topic in Spanish, `position_es` / `topic_es`, as `/es/meetings/` gives them) — empty for a meeting
+with none, and a line whose `{paper:…}` facts are all empty is left out. In the paperwork the speaker keys
+`{live:speaker_…}` (the agenda's rows) are that meeting's too. No `**bold**` and no `[label](link)`: an e-mail is
+plain text, so write an address as it is (better: `{live:email}`). The slides' rules apply too (anonymity, wording,
+no personal phone numbers or e-mail addresses). Real messages:
 
 ```text
 committee-meeting.yml: paperwork.reminder.body: {fill:first_name} is notes_only (never in the paperwork)
@@ -1590,7 +1597,8 @@ What follows by itself: the new card, its JSON file, the number of presentations
 the original" (the player counts the decks: `pres.reset_all_note`, `_confirm` and `_done` take `{n}`), the shared
 details ("Shared by every presentation"), the offline copy, and (with a `drive_title`) the PowerPoint link and the
 Portfolio button. Check the cards' layout at a few widths: the grid of `src/assets/css/areas/orientation.css`
-(`.o101-pres-grid`) draws them two by two, or four in a row on a wide screen.
+(`.o101-pres-grid`) draws them one per row, then two in a row from 1024px (an odd last card takes the whole row),
+and three in a row on the widest screens (from 1800px at 100 % text).
 
 ### 6.5 Example: change what a fact says when it has nothing to say
 
@@ -1672,7 +1680,7 @@ See [Automation and troubleshooting](automation-and-troubleshooting.md) for sett
 | An orange `[hint]` on a slide | an empty blank | The presenter fills it in (Customize → Your details), or the committee gives the blank a `default`. |
 | A fact says "see the Meetings page" (or similar) | no data for it, or a kept copy older than the dates the build knew | Check the setting it comes from ([3.9](#39-facts-that-stay-current-live)); open the page online. |
 | "The dates in this copy are from …" | the deck file kept for offline use is more than 14 days old | Open `/orientation/` online once. |
-| No "PowerPoint copy" link, no "Present on the web" button | `drive_title` is not exactly the Drive file's title (a month and year in the file name stay in its title), or the file is not in the panel folder or not shared | Compare the title shown on `/portfolio/` with `drive_title`. |
+| No "PowerPoint copy" link, no "Present on the web" button | the deck's `drive_title:` is still a comment (expected until the copies with the Google Meet details are on the Drive), `drive_title` is not exactly the Drive file's title (a month and year in the file name stay in its title), or the file is not in the panel folder or not shared | Put the line back once the new copy is up; compare the title shown on `/portfolio/` with `drive_title`. |
 | A slide is missing from the show | the version's `hide`, `starts_off`, its dates, `when: "price_notice"`, a facilitator page, or the presenter turned it off | Customize → Slides shows its badge ("Not today", "Facilitator" …); **Show all** turns the switches back on. |
 | "This version has no slides. Turn some on in Customize → Slides." | the presenter turned every slide off | Customize → Slides → Show all, or Reset to the original. |
 | On `/es/`, the notes say "Customize" instead of "Personalizar" | the notes typed the button's name | Write `{ui:customize}`. |
@@ -1681,8 +1689,8 @@ See [Automation and troubleshooting](automation-and-troubleshooting.md) for sett
 | The presenter view did not open | the browser blocked the second window | Allow pop-ups for the site, or use "Presenter mode in this window". |
 | "Changed since you edited it" on a slide | the committee changed a slide the presenter had edited | Use the new version, or Keep mine. |
 | The card shows fewer slides than the file has | facilitator pages, slides that start off and slides outside their dates are not counted | Nothing to fix. |
-| "Reset all 4 to the original" is not there | nothing was changed on this device yet | Expected: it appears after the first change. |
-| No **Agenda & minutes** tab in Customize | only a deck with a `paperwork:` block has it: today the committee meeting | Expected for the three workshops ([3.22](#322-the-chairs-paperwork-agenda--minutes)). |
+| "Reset all 5 to the original" is not there | nothing was changed on this device yet | Expected: it appears after the first change. |
+| No **Agenda & minutes** tab in Customize | only a deck with a `paperwork:` block has it: today the committee meeting | Expected for the three workshops and the Grapevine Meeting ([3.22](#322-the-chairs-paperwork-agenda--minutes)). |
 | **Open in my e-mail** opened an e-mail that says "(Paste the text here: it's on your clipboard.)" | the text is too long for an e-mail link, so it was copied instead | Click in the e-mail, paste (Ctrl+V, or a long press on a phone), put every address in BCC. |
 | The draft minutes say "You started next month on …" and show next month's details | Start next month was pressed before the minutes were drafted | Undo "Start next month" (in the tab, until the next meeting begins), draft the minutes, then start next month again. |
 

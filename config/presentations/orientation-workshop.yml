@@ -47,7 +47,7 @@ footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
 minutes: 90
 icon: "compass"
 tone: "vine"
-drive_title: "GVR and RLV Orientation Workshop"
+# drive_title: "GVR and RLV Orientation Workshop" — put back once the copy with the Google Meet details is on the Drive
 
 card:
   title:
@@ -83,7 +83,7 @@ presets:
       es: "Por ejemplo, en una reunión de distrito: sin descanso, presentaciones en el chat, sin práctica en parejas y sin salas para grupos pequeños. Deja fuera los hitos, “is and isn't”, “Helping a member subscribe”, grabar tu historia, “Where to send a story”, el registro de gastos, “Coming up”, “Words that help” y la segunda diapositiva de casos. La agenda y los tiempos de las notas siguen el plan de 60 minutos de la presentación, que deja a cada parte unos minutos para preguntas; las notas de cada diapositiva muestran su línea “CUT TO 60”: qué mantener, acortar u omitir."
 
 # The presenter's blanks (Customize → Your details; kept on their own device). An empty one shows on the slide as an
-# orange [hint], as the deck's [fill-ins] did. presenter and first_name are shared by all four presentations.
+# orange [hint], as the deck's [fill-ins] did. presenter and first_name are shared by every presentation.
 fillins:
   - key: "date"
     label: { en: "Date", es: "Fecha" }
@@ -928,7 +928,7 @@ slides:
     notes: |
       SAY: Let's take a ten-minute break. We'll start again at {fill:break_end}. If you're online, you can stay in the meeting; turn off your camera if you like. Please keep the room free of photos and screenshots while we stretch.
       DO: Start a visible timer. Leave this slide up. Online, you can play nothing, or put the committee website's address in the chat. Do not play Grapevine audio from the deck; if you want music or a story during the break, play it live from the official site.
-      ONLINE ON GOOGLE MEET: on a free Google account, Meet ends a call of three or more people after 60 minutes. For a workshop this long, start the call from an account without that limit, or end it at the break and start it again, on the same link, for the second part.
+      ONLINE ON GOOGLE MEET: on a free Google account, Meet ends a call of three or more people after 60 minutes. For a workshop this long, use a Meet link whose owner's account has a plan without that limit, or end the call at the break and start it again, on the same link, for the second part.
       TIP: Use the break to check the chat for questions you missed, and to see whether you are on time. If you're running late, the 'CUT TO 60' notes show what to shorten: {ui:customize} → {ui:version} → the 60-minute version.
     version_notes:
       short: "CUT TO 60: no break; or a short stretch."

@@ -284,12 +284,18 @@ the second one stays in the title).
 
 #### The four deck copies
 
-The site has four **web presentations** on GVR / RLV 101 (`/orientation/#presentations`), written in
+The site has five **web presentations** on GVR / RLV 101 (`/orientation/#presentations`), written in
 [config/presentations/](../config/presentations/README.md). The four `.pptx` files in `slides/` are fixed PowerPoint
-copies of them, made on October 1, 2026. The site links each copy to its web presentation **by the copy's title**:
-the title must be exactly the deck's `drive_title`.
+copies of four of them (the Grapevine Meeting has none), made on October 1, 2026. The site links each copy to its web
+presentation **by the copy's title**: the title must be exactly the deck's `drive_title`.
 
-| File in `slides/` today | `drive_title` is set in | The web presentation |
+> **For now, no copy is linked.** The copies of October 1, 2026 were made before the move to Google Meet: they still
+> give the committee's old Zoom room, passcode and phone number. So the four decks' `drive_title:` lines are
+> comments until copies with the Google Meet details replace them (Drive's **Manage versions**, below): put each
+> line back then. Until they are replaced or moved out of `slides/`, the old files are still listed on the
+> Portfolio's Slides tab and in the Library, without "Present on the web".
+
+| File in `slides/` today | `drive_title` is set in (as a comment, for now) | The web presentation |
 |---|---|---|
 | `GVR and RLV Orientation Workshop.pptx` | `config/presentations/orientation-workshop.yml` | `/orientation/?present=orientation-workshop` |
 | `Grapevine and La Viña Information Workshop.pptx` | `config/presentations/information-workshop.yml` | `/orientation/?present=information-workshop` |
@@ -903,7 +909,7 @@ real Drive: `python -m scripts.sync.drive --dry-run` (prints the stats and three
 | A grey tile or an icon instead of the picture | the file is not public (sharing changed), Drive has not made its preview yet, or an unusual format | check the sharing; wait a day; save the picture as JPG |
 | A video does not play | Drive is still processing it, or it is not public | wait; check the sharing |
 | A sign-up form disappeared | it stopped accepting responses | turn "Accepting responses" back on; it returns at the next update |
-| "Present on the web" or "PowerPoint copy" is gone | the deck file was renamed ("v2", other capitals) | rename it back to the exact `drive_title`, or change `drive_title` in `config/presentations/<id>.yml` |
+| "Present on the web" or "PowerPoint copy" is gone | the deck's `drive_title:` is a comment (expected until the copies with the Google Meet details are up: [4.4](#44-slides--presentations-and-the-four-deck-copies)), or the deck file was renamed ("v2", other capitals) | put the line back once the new copy is up; rename the file back to the exact `drive_title`, or change `drive_title` in `config/presentations/<id>.yml` |
 | "Full editorial calendar" is gone from `/monthly/` | the file name lost "editorial calendar" / "calendario editorial" | rename the file |
 | A PDF in `photos/` is not on the Portfolio | `photos/` is for pictures and videos only | move it to the right folder |
 | Run summary note "&lt;path&gt; has N entries — add a GOOGLE_API_KEY secret (or split the folder) so none are missed" | 500+ files in one folder; the public folder view may not list them all | split the album, or ask the NETA65 admin to add the `GOOGLE_API_KEY` secret (README §10a) |

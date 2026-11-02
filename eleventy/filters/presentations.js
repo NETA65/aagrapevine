@@ -84,7 +84,7 @@ export const LIVE_KEYS = [
   "site", "site_url", "email", "panel", "as_of", "month", "year",
   "meeting_next", "meeting_day", "meeting_after", "meeting_month", "meeting_rule", "meeting_time", "meeting_platform",
   "meeting_link", "meeting_url", "meeting_code", "meeting_zoom_id", "meeting_passcode", "meeting_phone", "meeting_phone_passcode",
-  "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after", "speaker_slides",
+  "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_note", "speaker_after", "speaker_slides",
   "grapevine_meeting_next", "grapevine_meeting_day", "grapevine_meeting_after", "grapevine_meeting_time",
   "grapevine_meeting_link", "lv_workshop_next", "lv_workshop_time", "lv_workshop_zoom_id",
   "price_gv_print", "price_gv_digital", "price_lv_print", "price_lv_digital", "price_change_note", "price_change_date",
@@ -163,11 +163,12 @@ const HTML = /<[A-Za-z/!]/;
 // texts (plain text, in the deck's language), their own facts {paper:…} (the meeting a text is for, its month, the
 // meeting after it, the agenda's rows, the date and time in Spanish for a Spanish paragraph, the committee's name as
 // the Spanish pages give it — config/site.yml site.committee_es —, that meeting's guest speaker: name and service
-// position, position alone, topic — empty without one, and a line whose {paper:…} facts are all empty is left out)
+// position, position alone, topic, and the name and position, and the topic, in Spanish for a Spanish paragraph —
+// empty without one, and a line whose {paper:…} facts are all empty is left out)
 // and "Start next month" (numbered rows of blanks: <row>_what / _who / _when for an action item, <row>_item /
 // _status for old business). presentations-core.js paperText / startNextMonth use them.
 export const PAPER_KEYS = ["meeting", "month", "after", "agenda", "meeting_es", "time_es", "committee_es", "speaker",
-  "speaker_position", "speaker_topic"];
+  "speaker_position", "speaker_topic", "speaker_es", "speaker_topic_es"];
 const PAPER_TEXTS = ["agenda", "reminder", "minutes"];
 const PAPER_ROWS = { actions: ["what", "who", "when"], old_business: ["item", "status"] };
 const PAPER_TAG = /\{paper:([^}]*)\}/g;
@@ -440,12 +441,16 @@ function paperworkProblems(d, fillKeys, idset, byId) {
   if (!has(d, "paperwork")) return out;
   const pw = d.paperwork;
   if (!isMap(pw)) return ["paperwork: a mapping"];
-  for (const k of Object.keys(pw)) if (!["agenda_slide", ...PAPER_TEXTS, "next_month"].includes(k)) out.push(`paperwork: unknown field ${repr(k)}`);
+  for (const k of Object.keys(pw)) if (!["agenda_slide", "speaker_slide", ...PAPER_TEXTS, "next_month"].includes(k)) out.push(`paperwork: unknown field ${repr(k)}`);
   if (!PAPER_TEXTS.some((k) => has(pw, k))) out.push(`paperwork: at least one text (${PAPER_TEXTS.join(", ")})`);
   if (has(pw, "agenda_slide")) {
     const a = pw.agenda_slide;
     if (!isStr(a) || !idset.has(a)) out.push(`paperwork.agenda_slide: no slide ${repr(a)}`);
     else if (!byId.get(a) || byId.get(a).layout !== "agenda") out.push(`paperwork.agenda_slide: ${repr(a)} is not an agenda slide`);
+  }
+  // the guest speaker's slide: a version that leaves it out (no guest speaker tonight) has no speaker lines either
+  if (has(pw, "speaker_slide") && (!isStr(pw.speaker_slide) || !idset.has(pw.speaker_slide))) {
+    out.push(`paperwork.speaker_slide: no slide ${repr(pw.speaker_slide)}`);
   }
   const shared = new Set((Array.isArray(d.fillins) ? d.fillins : []).filter((f) => isMap(f) && f.shared === true && isStr(f.key)).map((f) => f.key));
   for (const name of PAPER_TEXTS) {
@@ -868,15 +873,17 @@ export const priceNoticeOn = (shop, now) => !!shopPriceChangeIn(shop || {}, chic
 /**
  * A deck's `paperwork:` block for the player (null without one): its texts as written (tokens stay: the player
  * fills them with the presenter's details and the day's facts), the agenda slide whose rows the agenda e-mail
- * lists, and "Start next month" with every blank it clears named (a "chair_*" pattern → chair_since, chair_area …;
- * never a blank shared by every presentation). What the checker refused is left out.
+ * lists, the guest speaker's slide (a version without it names no speaker), and "Start next month" with every blank
+ * it clears named (a "chair_*" pattern → chair_since, chair_area …; never a blank shared by every presentation).
+ * What the checker refused is left out.
  */
 function shapePaper(d, fillins, ids) {
   const pw = d.paperwork;
   if (!isMap(pw)) return null;
   const keys = fillins.map((f) => f.key);
   const shared = new Set(fillins.filter((f) => f.shared).map((f) => f.key));
-  const out = { agenda_slide: isStr(pw.agenda_slide) && ids.has(pw.agenda_slide) ? pw.agenda_slide : "" };
+  const out = { agenda_slide: isStr(pw.agenda_slide) && ids.has(pw.agenda_slide) ? pw.agenda_slide : "",
+    speaker_slide: isStr(pw.speaker_slide) && ids.has(pw.speaker_slide) ? pw.speaker_slide : "" };
   for (const name of PAPER_TEXTS) {
     const t = pw[name];
     out[name] = isMap(t) && isStr(t.subject) && isStr(t.body) ? { subject: t.subject.trim(), body: t.body.replace(/\s+$/, "") } : null;
@@ -1147,6 +1154,7 @@ export const FALLBACKS = {
   speaker_position: "to be announced",
   speaker_topic: "to be announced",
   speaker_line: "to be announced",
+  speaker_note: "guest speaker: to be announced",
   speaker_after: "to be announced",
   speaker_slides: "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too.",
   grapevine_meeting_next: "see the Events page",
@@ -1223,7 +1231,8 @@ function ruleAndTime(line) {
 }
 
 /** The committee meeting's guest speakers (config/site.yml meeting.speakers, as committee.js meetingSpeakers reads
- *  them: the list /meetings/ shows) → Map "YYYY-MM-DD" → { name, position, topic (English), slides }.
+ *  them: the list /meetings/ shows) → Map "YYYY-MM-DD" → { name, position, topic (English), position_es, topic_es
+ *  (as /es/meetings/ gives them: the English when there is no Spanish), slides }.
  *  `slides` (the speaker shares slides: their screen at the sound check) is for the chair's notes, never a slide:
  *  the entry's own `slides: true` (the entry of that date and name). Whether a speaker has confirmed never reaches
  *  a deck: the notes are public; the run summary reminds the chair instead (build_data _speaker_reminders). */
@@ -1231,7 +1240,8 @@ function speakersOf(m) {
   const raw = Array.isArray(m.speakers) ? m.speakers : isMap(m.speakers) ? [m.speakers] : [];
   const entry = (s) => raw.find((e) => isMap(e) && ymdText(e.date) === s.ymd && clean(e.name) === s.name);
   return new Map(meetingSpeakers(m).map((s) => [s.ymd, {
-    name: s.name, position: s.position.en, topic: s.topic.en, slides: (entry(s) || {}).slides === true,
+    name: s.name, position: s.position.en, topic: s.topic.en, position_es: s.position.es, topic_es: s.topic.es,
+    slides: (entry(s) || {}).slides === true,
   }]));
 }
 
@@ -1270,7 +1280,8 @@ const meetingInfo = (c) => c.once("meeting", () => {
  *  an agenda is for (the next one) and the one minutes are for (the last one held), also in a copy opened weeks
  *  later. Each row: ymd, start, end, its date in English ("Wednesday, October 21, 2026") and in Spanish, inside a
  *  sentence ("miércoles, 21 de octubre de 2026"), its month ("October 2026") and, when it has one, its guest
- *  speaker (`speaker`: name, service position and topic, in English). `time_es`: the meeting's time in the site's
+ *  speaker (`speaker`: name, service position and topic, in English, and the position and topic in Spanish for a
+ *  Spanish paragraph: position_es, topic_es). `time_es`: the meeting's time in the site's
  *  Spanish words ("7:00–8:00 p. m., hora del Centro") for a Spanish paragraph. */
 const paperMeetings = (c) => c.once("paper-meetings", () => {
   const m = c.site.meeting && typeof c.site.meeting === "object" ? c.site.meeting : {};
@@ -1286,7 +1297,8 @@ const paperMeetings = (c) => c.once("paper-meetings", () => {
       return { ymd: x.ymd, start: instantIso(x.start), end: instantIso(x.end), label: H.fmtDate(x.start, "en", "long"),
         label_es: es ? es.charAt(0).toLocaleLowerCase("es") + es.slice(1) : "", month: monthLabel(x.ymd.slice(0, 7), "en"),
         // that meeting's guest speaker, for {paper:speaker…} (never `confirmed` or `slides`: the paperwork goes out)
-        ...(sp ? { speaker: { name: sp.name, position: sp.position, topic: sp.topic } } : {}) };
+        ...(sp ? { speaker: { name: sp.name, position: sp.position, topic: sp.topic, position_es: sp.position_es,
+          topic_es: sp.topic_es } } : {}) };
     })
     .filter((x) => x.start && Date.parse(x.start) <= c.nowMs + HORIZON_MS)
     .sort((a, b) => a.start.localeCompare(b.start))
@@ -1339,7 +1351,12 @@ const lvWorkshop = (c) => c.once("lv-workshop", () => {
 const GRAPEVINE_MEETING = "grapevine-meeting";
 const grapevineMeeting = (c) => c.once("grapevine-meeting", () => {
   const s = seriesInfo(c, GRAPEVINE_MEETING, (e) => e.series === GRAPEVINE_MEETING && !e.host);
-  return { ...s, time: oneLine(s.time) };
+  // `days`, for its own slides: tonight's too once it has ended (the site's list drops it; events.json keeps it,
+  // past) — its day stays tonight's until midnight Central after it, as meetingInfo keeps the committee meeting's
+  const tonight = normalizeEvents((c.db.events && c.db.events.items) || [], c.site, "en", { monthsBack: 0, monthsAhead: 0, now: c.now })
+    .filter((e) => e.past && !e.committee && ((e.recurring && e.series === GRAPEVINE_MEETING && !e.host) || e.seriesOf === GRAPEVINE_MEETING)
+      && chicagoDayEndMs(e.startYmd) > c.nowMs);
+  return { ...s, days: [...tonight, ...s.dates], time: oneLine(s.time) };
 });
 
 /** An issue's name on the slides, one style for both magazines (read.js issueLabel, as /contribute/ writes them):
@@ -1640,6 +1657,11 @@ export function liveFacts(ctx) {
   out.speaker_topic = bySpeaker("speaker_topic", (s) => s.topic);
   // "Rick W. — Past delegate, Area 65 …" (as the calendars' text gives the speaker)
   out.speaker_line = bySpeaker("speaker_line", (s) => [s.name, s.position].filter(Boolean).join(" — "));
+  // "guest speaker: Rick W.", or "no guest speaker this month" for a meeting with none listed (December 16, 2026:
+  // none by design) — a phrase for another meeting's slides (the Grapevine Meeting's announcements); its fallback
+  // only once the build's dates run out
+  out.speaker_note = run(mt.rows.map((r) => ({ value: r.speaker ? `guest speaker: ${r.speaker.name}` : "no guest speaker this month", end: r.over })),
+    FALLBACKS.speaker_note);
   // "Jeannie M. — “Grapevine and La Viña as Public Information tools”" (as the meeting's summary gives them)
   const nextOne = (s) => (s ? s.name + (s.topic ? ` — “${s.topic}”` : "") : "");
   out.speaker_after = run(mt.rows.slice(1).map((r, i) => ({ value: nextOne(r.speaker), end: mt.rows[i].over })), FALLBACKS.speaker_after);
@@ -1662,13 +1684,14 @@ export function liveFacts(ctx) {
   out.lv_workshop_zoom_id = lv.first ? nb(lv.first.meetingId) : "";
 
   // Our Grapevine Meeting (the first Wednesday, in the committee meeting's room), as /events/ lists it: the next one
-  // until it ends; for its own deck, the meeting's day until midnight Central after it and the one after that
-  // (moving on together, as the committee meeting's day and the meeting after it do), and its time
+  // until it ends; for its own deck, the meeting's day until midnight Central after it — also when the build ran
+  // after tonight's had ended (gm.days) — and the one after that (moving on together, as the committee meeting's day
+  // and the meeting after it do), and its time
   const gm = grapevineMeeting(c);
   const gmOver = (e) => iso(chicagoDayEndMs(e.startYmd));
   out.grapevine_meeting_next = run(gm.dates.map((e) => ({ value: e.dateLabel, end: iso(e.endMs) })), FALLBACKS.grapevine_meeting_next);
-  out.grapevine_meeting_day = run(gm.dates.map((e) => ({ value: e.dateLabel, end: gmOver(e) })), FALLBACKS.grapevine_meeting_day);
-  out.grapevine_meeting_after = run(gm.dates.slice(1).map((e, i) => ({ value: e.dateLabel, end: gmOver(gm.dates[i]) })), FALLBACKS.grapevine_meeting_after);
+  out.grapevine_meeting_day = run(gm.days.map((e) => ({ value: e.dateLabel, end: gmOver(e) })), FALLBACKS.grapevine_meeting_day);
+  out.grapevine_meeting_after = run(gm.days.slice(1).map((e, i) => ({ value: e.dateLabel, end: gmOver(gm.days[i]) })), FALLBACKS.grapevine_meeting_after);
   out.grapevine_meeting_time = gm.time;
   out.grapevine_meeting_link = fact(gm.first ? String(gm.first.online || "").replace(/^https?:\/\//, "").replace(/\/$/, "") : "", [], null,
     FALLBACKS.grapevine_meeting_link);

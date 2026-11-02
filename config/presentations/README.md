@@ -17,10 +17,12 @@ view, versions, printing, and the presenter's own changes kept on their own devi
 The content of the presentations stays in **English**. On the Spanish page the buttons and the cards are in
 Spanish, and each presentation is marked "(en inglés)".
 
-**The PowerPoint copies are separate.** The `.pptx` files in the committee's Drive folder (`slides`, listed on
-the Portfolio page) are snapshots made on October 1, 2026. Changing a file here does not change them, and changing
-them does not change the presentations on the site. The card's "PowerPoint copy" link opens the Drive file whose
-title is the presentation's `drive_title`.
+**The PowerPoint copies are separate.** The four `.pptx` files in the committee's Drive folder (`slides`, listed on
+the Portfolio page) are snapshots made on October 1, 2026, before the move to Google Meet: they still give the
+committee's old Zoom room, passcode and phone number. Changing a file here does not change them, and changing them
+does not change the presentations on the site. The card's "PowerPoint copy" link opens the Drive file whose title
+is the presentation's `drive_title` — so, until copies with the Google Meet details are on the Drive, no deck sets
+one (each file keeps its line as a comment, to put back then) and no card offers the old copies.
 
 ## What stays current by itself
 
@@ -37,7 +39,8 @@ data, the same facts the other pages show:
 - each meeting's guest speaker (`config/site.yml`, `meeting: speakers:`, as the Meetings page lists them): a first
   name and last initial, the service position and the topic — tonight's, moving on with the meeting's own date, and
   next month's, with the meeting after it. A date with no speaker listed says "to be announced". Whether a speaker
-  has confirmed, and shares slides (`slides: true`), is only for the chair's notes;
+  shares slides (`slides: true`) is only for the chair's notes; whether they have confirmed never reaches a deck
+  (the notes are public): the run summary reminds the chair;
 - our Grapevine Meeting on the first Wednesday (`config/site.yml`, `recurring_events:`, `grapevine-meeting`, as the
   Events page lists it): its next dates, its own date for its slides, its time and its link;
 - La Viña's monthly virtual workshop: its next dates, time and Zoom ID;
@@ -288,6 +291,7 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `speaker_position` | Past delegate, Area 65 Northeast Texas (Panel 73); … — their service position | "to be announced" |
 | `speaker_topic` | Grapevine as a Twelfth Step tool: … — the topic | "to be announced" |
 | `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … — the name and the position | "to be announced" |
+| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with no speaker listed (December 16, 2026): for another meeting's slides (the Grapevine Meeting's announcements), with `meeting_day` | "guest speaker: to be announced" |
 | `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — the guest speaker of `meeting_after`'s meeting (next month's, on a slide shown during the meeting) | "to be announced" |
 | `speaker_slides` | for the chair's notes: "Tonight's guest speaker shares slides: …" (the speaker's `slides: true`) | "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too." |
 | `grapevine_meeting_next` | Wednesday, December 2, 2026 — our Grapevine Meeting, the next one until it ends | "see the Events page" |
@@ -324,15 +328,18 @@ committee meeting's title slide: "{live:meeting_month} meeting" over "{live:meet
 "Next meeting: {live:meeting_after}" on a slide shown during the meeting), and `meeting_next` on its own, for "the next
 meeting" in a workshop ("Next meeting: {live:meeting_next}"). Never mix them: "the {live:meeting_month} meeting on
 {live:meeting_next}" names two different meetings between 8 PM and midnight. The guest speaker keys go the same way:
-`speaker_name`, `speaker_position`, `speaker_topic`, `speaker_line` with `meeting_day` (tonight's speaker),
-`speaker_after` with `meeting_after` (next month's); and `grapevine_meeting_day` with `grapevine_meeting_after` on the
-Grapevine Meeting's own slides.
+`speaker_name`, `speaker_position`, `speaker_topic`, `speaker_line`, `speaker_note` with `meeting_day` (tonight's
+speaker), `speaker_after` with `meeting_after` (next month's); and `grapevine_meeting_day` with
+`grapevine_meeting_after` on the Grapevine Meeting's own slides.
 
 In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda e-mail, the reminder, the draft
-minutes), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` are the
-guest speaker of the meeting the text is for — so are the speaker keys in the agenda's rows there — and a line whose
-`{paper:…}` facts are all empty (a meeting with no guest speaker) is left out. The minutes name the speaker by
-service position only.
+minutes), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` — and
+for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the position and topic in Spanish, as
+the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for, and so are the speaker
+keys in the agenda's rows there. A line whose `{paper:…}` facts are all empty (a meeting with no guest speaker) is
+left out. So is every speaker line in a version that leaves out the slide `paperwork: speaker_slide:` names (the
+committee meeting's "No guest speaker", for a speaker who can't come). The minutes name the speaker by service
+position only.
 
 Write a meeting code or a Zoom meeting ID as `{live:meeting_code}` (or its older name `{live:meeting_zoom_id}`),
 never as digits: the checker takes digits for a phone number.

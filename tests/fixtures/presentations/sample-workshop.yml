@@ -332,7 +332,7 @@ slides:
       TIP: No internet? Anyone can join by phone: call {live:meeting_phone}, enter the meeting ID, then the phone passcode {live:meeting_phone_passcode} (when it's blank here, ask the chair).
       TIP: On a meeting night, the next meeting above is next month's as soon as tonight's meeting ends. The committee's own slides keep tonight's until midnight: the {live:meeting_month} meeting on {live:meeting_day}, and after it {live:meeting_after}.
       TIP (a room on another platform): on {live:meeting_platform}, the link is {live:meeting_link} ({live:meeting_url} in an e-mail) and the meeting code {live:meeting_code}.
-      TIP (guest speakers): tonight's, {live:speaker_line}, on '{live:speaker_topic}' ({live:speaker_name}: {live:speaker_position}); next month's, {live:speaker_after}. For the chair only: {live:speaker_slides}
+      TIP (guest speakers): tonight's, {live:speaker_line}, on '{live:speaker_topic}' ({live:speaker_name}: {live:speaker_position}); next month's, {live:speaker_after}. On another meeting's slides: our committee's next meeting, {live:meeting_day}, {live:speaker_note}. For the chair only: {live:speaker_slides}
       TIP (our Grapevine Meeting, on the first Wednesday): the next one, {live:grapevine_meeting_next}, {live:grapevine_meeting_time}, on {live:grapevine_meeting_link}; its own slides say {live:grapevine_meeting_day}, then {live:grapevine_meeting_after}.
       DO: Point to the dates on the slide; they always show the next ones.
       TRANSITION: La Viña holds a monthly meeting of its own.
