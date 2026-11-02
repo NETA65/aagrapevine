@@ -6,8 +6,10 @@
 #     outbound links such as district websites.
 #     High-volume hosts are skipped on purpose: aagrapevine.org /
 #     aalavina.org (thousands of PDF links — the daily crawler already
-#     tracks those politely, 5 s apart), YouTube, Instagram, Google Drive,
-#     podcast hosts and Zoom (they rate-limit robots).
+#     tracks those politely, 5 s apart), YouTube, Instagram, Google (the
+#     Drive, and our meetings' Google Meet link: meet.google.com), podcast
+#     hosts and Zoom (they rate-limit robots, or answer them with a page
+#     that proves nothing about the link).
 #  2. Checks the official links in config/site.yml one by one with the
 #     site's polite bot (honors robots.txt and the 5-second crawl delay),
 #     so a moved Grapevine / La Viña page is noticed.
@@ -162,8 +164,10 @@ jobs:
           for p in (cfg.get("sources") or {}).get("podcasts") or []:
               if str(p.get("web", "")).startswith("http"):
                   urls.add(p["web"])
-          # These block robots or need a login — a 4xx from them says nothing.
-          skip_hosts = ("instagram.com", "youtube.com", "spotify.com", "amazon.com", "apple.com", "zoom.us")
+          # These block robots or need a login — a 4xx from them says nothing (a Google Meet room answers a robot
+          # with its "unsupported browser" page, whatever the room).
+          skip_hosts = ("instagram.com", "youtube.com", "spotify.com", "amazon.com", "apple.com", "zoom.us",
+                        "meet.google.com")
 
           bot = shared_session()
           broken, blocked, ok = [], [], 0
