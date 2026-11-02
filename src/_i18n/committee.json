@@ -175,6 +175,10 @@
     "en": "Monthly NETA 65 Grapevine / La Viña committee meeting on {platform}.",
     "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65 por {platform}."
   },
+  "committee.meeting.cal_desc_online": {
+    "en": "Monthly NETA 65 Grapevine / La Viña committee meeting, online.",
+    "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65, en línea."
+  },
   "committee.meeting.cal_join": {
     "en": "Join on {platform}",
     "es": "Entrar por {platform}"

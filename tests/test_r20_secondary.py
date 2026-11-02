@@ -9,6 +9,9 @@ meeting's guest speakers (settings written here, fixed clocks):
                 the Grapevine Meeting never takes a row of "Coming up";
   * Monthly   — the committee row's guest speaker on the page's row, the poster and the month's message (the topic in
                 each language); none on a date without one (Dec 16, 2026);
+  * Held      — a committee meeting that is over was held "Online" (Nov 18, 2026 was still on Zoom): no platform,
+                link or meeting code in the calendar feeds or on the toolkit's row; the next one (Dec 16) on
+                Google Meet;
   * Report    — the district report: the next meeting's guest speaker and until when, "the link and the meeting code",
                 the Grapevine Meeting with its first date; the Area report: the Google Meet link and code without a
                 passcode, the speaker under "Next committee meeting", past meetings "online" (never a platform);
@@ -274,6 +277,58 @@ class Monthly(unittest.TestCase):
         self.assertIn("nc.speaker", page)
         self.assertIn('{% if d.speaker %} · {{ "monthly.speaker" | t(lang, { name: d.speaker.name }) }}{% endif %}', poster)
         self.assertNotIn("Zoom link", page)
+
+
+HELD_JS = r"""
+const C = await imp("eleventy/filters/committee.js");
+const M = await imp("eleventy/filters/monthly.js");
+const now = new Date(input.now);
+const unfold = (s) => s.replace(/\r\n[ \t]/g, "");
+const res = {};
+for (const lang of ["en", "es"]) {
+  const evs = C.normalizeEvents([], input.site, lang, { monthsBack: 3, monthsAhead: 12, now });
+  const ics = unfold(C.buildIcs(evs, { lang, now, name: "Events", url: "https://example.org/events/", categoryLabel: () => "" }));
+  const pick = (ymd) => {
+    const e = evs.find((x) => x.id === `ev:committee:${ymd}`);
+    const uid = `UID:ev-committee-${ymd}${lang === "es" ? "-es" : ""}@neta65-gvlv`;
+    const i = ics.indexOf(uid);
+    return { place: e.location, summary: e.summary, desc: e.calDescription, calLocation: e.calLocation, past: e.past,
+             links: [e.gcal, e.outlook].join(" "), ics: i < 0 ? "" : ics.slice(ics.lastIndexOf("BEGIN:VEVENT", i), ics.indexOf("END:VEVENT", i)) };
+  };
+  const rows = (key) => Object.fromEntries(M.monthModel(key, { events: { items: [] } }, {}, input.site, lang, now).dates
+    .filter((d) => d.kind === "committee").map((d) => [d.ymd, d.platform]));
+  res[lang] = { nov: pick("2026-11-18"), dec: pick("2026-12-16"), rows: { ...rows("2026-11"), ...rows("2026-12") },
+                next: M.monthNow({ events: { items: [] } }, input.site, lang, now).nextCommittee.platform };
+}
+out(res);
+"""
+
+
+class Held(unittest.TestCase):
+    """At a fixed clock (Nov 27, 2026, the day after the merge): the Nov 18 meeting, held on Zoom, is in the
+    calendar feeds and on the November toolkit as held "Online" — no platform, link or meeting code; Dec 16 on
+    Google Meet."""
+
+    def test_a_meeting_that_is_over_was_held_online(self):
+        r = run_js(self, HELD_JS, data={"site": SITE, "now": "2026-11-27T18:00:00Z"}, now="2026-11-27T18:00:00Z")
+        for lang, online in (("en", "Online"), ("es", "En línea")):
+            nov, dec = r[lang]["nov"], r[lang]["dec"]
+            with self.subTest(lang=lang):
+                self.assertTrue(nov["past"])
+                self.assertEqual((nov["place"], nov["calLocation"]), (online, online))
+                self.assertTrue(nov["ics"], "the feed keeps the meeting that is over")
+                self.assertIn("LOCATION:" + online, nov["ics"])
+                for text in (nov["summary"], nov["desc"], nov["ics"], nov["links"]):
+                    self.assertNotRegex(text, r"(?i)google(?:%20| )meet|zoom|meet\.google|" + CODE)
+                self.assertIn("committee meeting, online." if lang == "en" else "de NETA 65, en línea.", nov["summary"])
+                # the next meeting: on Google Meet, its link and code
+                self.assertEqual((dec["place"], dec["calLocation"]), ("Google Meet", ROOM))
+                self.assertIn(f"{ROOM}", dec["desc"])
+                self.assertIn(CODE, dec["ics"])
+                self.assertIn("Google Meet", dec["summary"])
+                # the toolkit: "Online" for the row that is over (committeeRow: no platform), Google Meet next
+                self.assertEqual(r[lang]["rows"], {"2026-11-18": "", "2026-12-16": "Google Meet"})
+                self.assertEqual(r[lang]["next"], "Google Meet")
 
 
 REPORT_JS = r"""

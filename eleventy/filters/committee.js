@@ -509,22 +509,26 @@ function speakerUntilLine(m, lang) {
 
 // The meeting in a line for calendars and its card: "Monthly … committee meeting on Google Meet." and who may come
 // (config/site.yml meeting.platform — Zoom when left out — and meeting.note / note_es); with `ymd`, that meeting's
-// guest speaker and topic and when the speaker's part ends (the words of build_data.speaker_sentences).
-function meetingSummary(site, lang, ymd) {
+// guest speaker and topic and when the speaker's part ends (the words of build_data.speaker_sentences). A meeting
+// that is `over` was held "online", never on a platform: the move to Google Meet changed it for the dates before
+// (the digest and the Area report say "online" too).
+function meetingSummary(site, lang, ymd, over = false) {
   const m = site?.meeting || {};
   const note = String((lang !== "en" && m[`note_${lang}`]) || m.note || "").replace(/\s+/g, " ").trim();
   const sp = ymd ? meetingSpeaker(m, ymd, lang) : null;
   // (no period after a name alone: it ends in its initial's — "Rick W.")
   const speaker = sp ? [t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.topic ? ` — “${sp.topic}”.` : ""), speakerUntilLine(m, lang)] : [];
-  return [t("committee.meeting.cal_desc", lang, { platform: meetingJoin(m, lang).platform }), note, ...speaker].filter(Boolean).join(" ");
+  const line = over ? t("committee.meeting.cal_desc_online", lang) : t("committee.meeting.cal_desc", lang, { platform: meetingJoin(m, lang).platform });
+  return [line, note, ...speaker].filter(Boolean).join(" ");
 }
 
 // Plain-text description used in calendars (Google / Outlook / .ics): the summary, that meeting's guest speaker
 // (`ymd`: who, their service, the topic, until when) and how to join — never the speaker in the alarm (its title).
-function meetingDescription(site, lang, pageUrl, ymd) {
+// A meeting that is `over`: no link, meeting code or passcode (its room may have been another).
+function meetingDescription(site, lang, pageUrl, ymd, over = false) {
   const m = site.meeting || {};
-  const j = meetingJoin(m, lang);
-  const lines = [meetingSummary(site, lang)];
+  const j = over ? {} : meetingJoin(m, lang);
+  const lines = [meetingSummary(site, lang, "", over)];
   const sp = ymd ? meetingSpeaker(m, ymd, lang) : null;
   if (sp) {
     lines.push("", t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.position ? ` — ${sp.position}` : ""));
@@ -687,18 +691,22 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
   const mTitle = meetingTitle(site, lang);
   const join = meetingJoin(m, lang);
   const synced = new Map((items || []).filter((it) => it && it.category === "committee" && it.extra).map((it) => [it.id, it.extra]));
+  //    A date that is over (the calendar files keep 90 days) was held "Online", with no link or meeting code: the
+  //    move to Google Meet changed the platform for the dates before it.
   for (const d of meetingDates(m, opt.monthsBack ?? 3, opt.monthsAhead ?? 12, new Date(now))) {
     const id = `ev:committee:${d.ymd}`;
     seen.add(id);
     const speaker = meetingSpeaker(m, d.ymd, lang);
     const fx = synced.get(id) || {};
+    const over = Date.parse(d.end) <= now;
     out.push(shapeEvent({
       id, source: "committee", kind: "event", category: "committee", lang: "en",
-      url: "/meetings/", title: mTitle, summary: meetingSummary(site, lang, d.ymd),
+      url: "/meetings/", title: mTitle, summary: meetingSummary(site, lang, d.ymd, over),
       date: d.start, is_new: false, _i18nTitle: true,
-      extra: { start: d.start, end: d.end, all_day: false, location: join.platform, online_url: join.url || null,
+      extra: { start: d.start, end: d.end, all_day: false, location: over ? t("committee.events.online", lang) : join.platform,
+        online_url: over ? null : join.url || null,
         flyer_url: fx.flyer_url || null, flyer_thumb: fx.flyer_thumb || null, ...(speaker ? { speaker } : {}) },
-    }, site, lang, now, meetingDescription(site, lang, meetingPage, d.ymd)));
+    }, site, lang, now, meetingDescription(site, lang, meetingPage, d.ymd, over)));
   }
 
   // 2) Everything else (Drive flyers, manual events, TX GV/LV calendar, .ics feeds)
