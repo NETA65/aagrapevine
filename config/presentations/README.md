@@ -328,17 +328,18 @@ committee meeting's title slide: "{live:meeting_month} meeting" over "{live:meet
 "Next meeting: {live:meeting_after}" on a slide shown during the meeting), and `meeting_next` on its own, for "the next
 meeting" in a workshop ("Next meeting: {live:meeting_next}"). Never mix them: "the {live:meeting_month} meeting on
 {live:meeting_next}" names two different meetings between 8 PM and midnight. The guest speaker keys go the same way:
-`speaker_name`, `speaker_position`, `speaker_topic`, `speaker_line`, `speaker_note` with `meeting_day` (tonight's speaker),
-`speaker_after` with `meeting_after` (next month's); and `grapevine_meeting_day` with `grapevine_meeting_after` on the
-Grapevine Meeting's own slides.
+`speaker_name`, `speaker_position`, `speaker_topic`, `speaker_line`, `speaker_note` with `meeting_day` (tonight's
+speaker), `speaker_after` with `meeting_after` (next month's); and `grapevine_meeting_day` with
+`grapevine_meeting_after` on the Grapevine Meeting's own slides.
 
 In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda e-mail, the reminder, the draft
 minutes), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` — and
 for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the position and topic in Spanish, as
-the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for — so are the speaker keys in the agenda's rows there — and a line whose
-`{paper:…}` facts are all empty (a meeting with no guest speaker) is left out. So is every speaker line in a version
-that leaves out the slide `paperwork: speaker_slide:` names (the committee meeting's "No guest speaker", for a
-speaker who can't come). The minutes name the speaker by service position only.
+the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for, and so are the speaker
+keys in the agenda's rows there. A line whose `{paper:…}` facts are all empty (a meeting with no guest speaker) is
+left out. So is every speaker line in a version that leaves out the slide `paperwork: speaker_slide:` names (the
+committee meeting's "No guest speaker", for a speaker who can't come). The minutes name the speaker by service
+position only.
 
 Write a meeting code or a Zoom meeting ID as `{live:meeting_code}` (or its older name `{live:meeting_zoom_id}`),
 never as digits: the checker takes digits for a phone number.

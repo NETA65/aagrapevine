@@ -1375,10 +1375,11 @@ Spanish), and the paperwork's own facts: `{paper:meeting}` (the date of the meet
 committee's name as the Spanish pages give it: `site: committee_es` in `config/site.yml`), and that meeting's guest
 speaker: `{paper:speaker}` (name and service position), `{paper:speaker_position}` (the minutes: never a name),
 `{paper:speaker_topic}`, and for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the
-position and topic in Spanish, `position_es` / `topic_es`, as `/es/meetings/` gives them) — empty for a meeting with none, and a line whose `{paper:…}` facts are all empty is left
-out. In the paperwork the speaker keys `{live:speaker_…}` (the agenda's rows) are that meeting's too. No `**bold**` and no
-`[label](link)`: an e-mail is plain text, so write an address as it is (better: `{live:email}`). The slides' rules
-apply too (anonymity, wording, no personal phone numbers or e-mail addresses). Real messages:
+position and topic in Spanish, `position_es` / `topic_es`, as `/es/meetings/` gives them) — empty for a meeting
+with none, and a line whose `{paper:…}` facts are all empty is left out. In the paperwork the speaker keys
+`{live:speaker_…}` (the agenda's rows) are that meeting's too. No `**bold**` and no `[label](link)`: an e-mail is
+plain text, so write an address as it is (better: `{live:email}`). The slides' rules apply too (anonymity, wording,
+no personal phone numbers or e-mail addresses). Real messages:
 
 ```text
 committee-meeting.yml: paperwork.reminder.body: {fill:first_name} is notes_only (never in the paperwork)

@@ -583,11 +583,10 @@ slides:
   # From January 2027 each meeting opens with a guest speaker (config/site.yml `meeting: speakers:`: a first name
   # and last initial, the service position and the topic, as /meetings/ lists them): introduced right after the
   # prayer (a minute), the talk from about 7:02 (about 20 minutes), questions from about 7:22 (6½ minutes),
-  # thanked and done by 7:30. These four slides have an eyebrow
-  # of their own, so the parts after them keep their numbers in every version; the versions without a speaker
-  # leave them out. Their facts are tonight's speaker's until midnight Central after the meeting (as the meeting's
-  # day on the title slide), and next month's speaker is that of the meeting after it; a night with none listed
-  # says "to be announced".
+  # thanked and done by 7:30. These four slides have an eyebrow of their own, so the parts after them keep their
+  # numbers in every version; the versions without a speaker leave them out. Their facts are tonight's speaker's
+  # until midnight Central after the meeting (as the meeting's day on the title slide), and next month's speaker is
+  # that of the meeting after it; a night with none listed says "to be announced".
   - id: "speaker-intro"
     layout: "bullets"
     eyebrow: "Guest speaker"

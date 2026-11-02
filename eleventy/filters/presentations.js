@@ -874,8 +874,8 @@ export const priceNoticeOn = (shop, now) => !!shopPriceChangeIn(shop || {}, chic
  * A deck's `paperwork:` block for the player (null without one): its texts as written (tokens stay: the player
  * fills them with the presenter's details and the day's facts), the agenda slide whose rows the agenda e-mail
  * lists, the guest speaker's slide (a version without it names no speaker), and "Start next month" with every blank
- * it clears named (a "chair_*" pattern → chair_since, chair_area …;
- * never a blank shared by every presentation). What the checker refused is left out.
+ * it clears named (a "chair_*" pattern → chair_since, chair_area …; never a blank shared by every presentation).
+ * What the checker refused is left out.
  */
 function shapePaper(d, fillins, ids) {
   const pw = d.paperwork;

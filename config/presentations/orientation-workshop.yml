@@ -83,7 +83,7 @@ presets:
       es: "Por ejemplo, en una reunión de distrito: sin descanso, presentaciones en el chat, sin práctica en parejas y sin salas para grupos pequeños. Deja fuera los hitos, “is and isn't”, “Helping a member subscribe”, grabar tu historia, “Where to send a story”, el registro de gastos, “Coming up”, “Words that help” y la segunda diapositiva de casos. La agenda y los tiempos de las notas siguen el plan de 60 minutos de la presentación, que deja a cada parte unos minutos para preguntas; las notas de cada diapositiva muestran su línea “CUT TO 60”: qué mantener, acortar u omitir."
 
 # The presenter's blanks (Customize → Your details; kept on their own device). An empty one shows on the slide as an
-# orange [hint], as the deck's [fill-ins] did. presenter and first_name are shared by all four presentations.
+# orange [hint], as the deck's [fill-ins] did. presenter and first_name are shared by every presentation.
 fillins:
   - key: "date"
     label: { en: "Date", es: "Fecha" }
