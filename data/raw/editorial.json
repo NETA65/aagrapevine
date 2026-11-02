@@ -1,7 +1,7 @@
 {
  "source": "editorial",
- "updated": "2026-11-01T14:23:19Z",
- "attempted": "2026-11-01T14:23:19Z",
+ "updated": "2026-11-02T17:14:25Z",
+ "attempted": "2026-11-02T17:14:25Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -14,7 +14,7 @@
    "parsed": 34,
    "kept": 24,
    "with_deadline": 14,
-   "open": 7,
+   "open": 6,
    "topics": 8
   },
   "lv": {

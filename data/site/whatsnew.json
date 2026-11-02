@@ -1,7 +1,230 @@
 {
- "updated": "2026-11-02T07:47:23Z",
+ "updated": "2026-11-02T17:19:29Z",
  "fixture": false,
  "items": [
+  {
+   "id": "yt:VHhrECglokQ",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=VHhrECglokQ",
+   "title": "Sober Insurance",
+   "summary": "ASL Grapevine night live recording Topic: Sober Insurance It’s easier to stay sober when people build and maintain a reliable support system before a crisis occurs. Regular AA attendance, fellowship, prayer, and helping others provided me with essential support during profound personal losses and helped me resist relapse. Transcript…",
+   "lang": "en",
+   "date": "2026-11-02T17:00:13Z",
+   "first_seen": "2026-11-02T17:12:19Z",
+   "image": "https://i.ytimg.com/vi/VHhrECglokQ/hqdefault.jpg",
+   "tags": [
+    "live",
+    "asl"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "VHhrECglokQ",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "American Sign Language"
+    ],
+    "is_short": false,
+    "views": 4,
+    "is_live_recording": true,
+    "date_approx": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Sober Insurance",
+     "es": "Seguro de sobriedad"
+    },
+    "summary": {
+     "en": "ASL Grapevine night live recording Topic: Sober Insurance It’s easier to stay sober when people build and maintain a reliable support system before a crisis occurs. Regular AA attendance, fellowship, prayer, and helping others provided me with essential support during profound personal losses and helped me resist relapse. Transcript…",
+     "es": "ASL Grapevine noche de grabación en vivo Tema: Seguro Sobero Es más fácil permanecer sobrio cuando la gente construye y mantiene un sistema de soporte confiable antes de que ocurra una crisis. La asistencia regular AA, compañerismo, la oración y ayudar a otros me proporcionaron apoyo esencial durante profundas pérdidas personales y me ayudaron a resistir la recaída. Transcripción …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-02T17:00:13Z"
+  },
+  {
+   "id": "ig:DfPT2wZlz1i",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfPT2wZlz1i/",
+   "title": "“Ya no puedo usar la enfermedad del alcoholismo como una excusa. Ahora bien, si no pongo…",
+   "summary": "“Ya no puedo usar la enfermedad del alcoholismo como una excusa. Ahora bien, si no pongo mi recuperación al servicio de otros, volveré a enfermarme”. \"“El servicio es la razón” WINNIPEG, MANITOBA, JUNIO DE 1979 De Lo mejor del Grapevine, Volumen II\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-02T12:30:15Z",
+   "first_seen": "2026-11-02T17:12:38Z",
+   "image": "/assets/cache/ig/DfPT2wZlz1i.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfPT2wZlz1i",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfPT2wZlz1i.webp",
+    "embed_url": "https://www.instagram.com/p/DfPT2wZlz1i/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfPT2wZlz1i/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I can’t use alcoholism as an excuse anymore. Now, if I don't put …",
+     "es": "“Ya no puedo usar la enfermedad del alcoholismo como una excusa. Ahora bien, si no pongo…"
+    },
+    "summary": {
+     "en": "“I can’t use alcoholism as an excuse anymore. Now, if I don't put my recovery at the service of others, I'll get sick again.\" \"The service is the reason\" winnipeg, manitoba, June 1979 Top of the Grapevine, Volume II\" Daily Quote in www.aalavina.org",
+     "es": "“Ya no puedo usar la enfermedad del alcoholismo como una excusa. Ahora bien, si no pongo mi recuperación al servicio de otros, volveré a enfermarme”. \"“El servicio es la razón” WINNIPEG, MANITOBA, JUNIO DE 1979 De Lo mejor del Grapevine, Volumen II\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-02T12:30:15Z"
+  },
+  {
+   "id": "ig:DfPT2yVFzW9",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfPT2yVFzW9/",
+   "title": "“I cannot adequately describe how light I feel since I took the Fifth Step, and how…",
+   "summary": "“I cannot adequately describe how light I feel since I took the Fifth Step, and how soundly I sleep.” “A 5,000-Mile Discussion,” Secunderabad, India, December 1982, Step By Step: Real AAs, Real Recovery Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-02T12:30:14Z",
+   "first_seen": "2026-11-02T17:12:38Z",
+   "image": "/assets/cache/ig/DfPT2yVFzW9.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfPT2yVFzW9",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfPT2yVFzW9.webp",
+    "embed_url": "https://www.instagram.com/p/DfPT2yVFzW9/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfPT2yVFzW9/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I cannot adequately describe how light I feel since I took the Fifth Step, and how…",
+     "es": "“No puedo describir adecuadamente cómo me siento desde que tomé el Quinto Paso, y cómo …"
+    },
+    "summary": {
+     "en": "“I cannot adequately describe how light I feel since I took the Fifth Step, and how soundly I sleep.” “A 5,000-Mile Discussion,” Secunderabad, India, December 1982, Step By Step: Real AAs, Real Recovery Daily Quote at www.aagrapevine.org",
+     "es": "“No puedo describir adecuadamente lo ligero que siento desde que tomé el Quinto Paso, y lo sana que duermo.” “Una discusión de 5.000 millas”, Secunderabad, India, diciembre de 1982, paso a paso: Real Aas, recuperación Real Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-02T12:30:14Z"
+  },
+  {
+   "id": "ig:DfPPvDnAWJ7",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfPPvDnAWJ7/",
+   "title": "Victim or Victorious? Olis and Sam welcome Beth.",
+   "summary": "Victim or Victorious? Olis and Sam welcome Beth.",
+   "lang": "en",
+   "date": "2026-11-02T11:56:31Z",
+   "first_seen": "2026-11-02T17:12:38Z",
+   "image": "/assets/cache/ig/DfPPvDnAWJ7.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfPPvDnAWJ7",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfPPvDnAWJ7.webp",
+    "embed_url": "https://www.instagram.com/p/DfPPvDnAWJ7/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfPPvDnAWJ7/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Victim or Victorious? Olis and Sam welcome Beth.",
+     "es": "¿Víctima o victoria? Olis y Sam dan la bienvenida a Beth."
+    },
+    "summary": {
+     "en": "Victim or Victorious? Olis and Sam welcome Beth.",
+     "es": "¿Víctima o victoria? Olis y Sam dan la bienvenida a Beth."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-02T11:56:31Z"
+  },
+  {
+   "id": "yt:ymmqPVVe2K8",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=ymmqPVVe2K8",
+   "title": "Victim or Victorious? [Season 11, Episode 18]",
+   "summary": "Beth tells Olis and Sam that in her drinking years impending doom became the norm. Trips to jail didn't scare her, she just blamed everyone else. In AA she learned not to believe everything she thinks and to watch her thinking. Beth wonders why she sometimes believes that God is going to drop her, when God has never dropped her. Steve shares his love for the Grapevine Daily Quote. You can find…",
+   "lang": "en",
+   "date": "2026-11-02T05:28:43Z",
+   "first_seen": "2026-11-02T17:12:19Z",
+   "image": "https://i.ytimg.com/vi/ymmqPVVe2K8/hqdefault.jpg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "ymmqPVVe2K8",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "AA Grapevine's Podcast"
+    ],
+    "is_short": false,
+    "views": 48,
+    "is_live_recording": false,
+    "date_approx": false,
+    "season": 11,
+    "episode": 18
+   },
+   "i18n": {
+    "title": {
+     "en": "Victim or Victorious? [Season 11, Episode 18]",
+     "es": "¿Víctima o victoria? [Temporada 11, Episodio 18]"
+    },
+    "summary": {
+     "en": "Beth tells Olis and Sam that in her drinking years impending doom became the norm. Trips to jail didn't scare her, she just blamed everyone else. In AA she learned not to believe everything she thinks and to watch her thinking. Beth wonders why she sometimes believes that God is going to drop her, when God has never dropped her. Steve shares his love for the Grapevine Daily Quote. You can find…",
+     "es": "Beth le dice a Olis y a Sam que en sus años de beber la muerte inminente se convirtió en la norma. Los viajes a la cárcel no la asustaron, ella culpó a todos los demás. En AA aprendió a no creer todo lo que piensa y a ver su pensamiento. Beth se pregunta por qué a veces cree que Dios va a dejarla, cuando Dios nunca la ha dejado. Steve comparte su amor por el Grapevine Cita diaria. Usted puede encontrar …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-02T05:28:43Z"
+  },
   {
    "id": "pod:gv:9fddf4bc9fc1",
    "source": "podcast",
@@ -51,6 +274,94 @@
    ],
    "is_new": true,
    "wn_date": "2026-11-02T05:15:00Z"
+  },
+  {
+   "id": "ig:DfNHHEYS6uV",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfNHHEYS6uV/",
+   "title": "The November Issue of Grapevine Is Here!",
+   "summary": "The November Issue of Grapevine Is Here! November’s issue features stories from our vast Grapevine Archive about the early days of AA. There’s also a special section by AA members sharing powerful stories about dealing with mental health. Visit www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-01T16:00:05Z",
+   "first_seen": "2026-11-02T17:12:38Z",
+   "image": "/assets/cache/ig/DfNHHEYS6uV.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfNHHEYS6uV",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DfNHHEYS6uV.webp",
+    "embed_url": "https://www.instagram.com/p/DfNHHEYS6uV/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfNHHEYS6uV/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The November Issue of Grapevine Is Here!",
+     "es": "¡El número de noviembre de Grapevine está aquí!"
+    },
+    "summary": {
+     "en": "The November Issue of Grapevine Is Here! November’s issue features stories from our vast Grapevine Archive about the early days of AA. There’s also a special section by AA members sharing powerful stories about dealing with mental health. Visit www.aagrapevine.org",
+     "es": "¡El número de noviembre de Grapevine está aquí! El número de noviembre cuenta con historias de nuestro vasto Archivo Grapevine sobre los primeros días de AA. También hay una sección especial de los miembros de AA que comparten historias poderosas sobre cómo lidiar con la salud mental. Visita www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-01T16:00:05Z"
+  },
+  {
+   "id": "ig:DfNHKc_PgfC",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfNHKc_PgfC/",
+   "title": "La edición de noviembre/diciembre de La Viña: Las fiestas",
+   "summary": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-01T16:00:04Z",
+   "first_seen": "2026-11-02T17:12:38Z",
+   "image": "/assets/cache/ig/DfNHKc_PgfC.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfNHKc_PgfC",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DfNHKc_PgfC.webp",
+    "embed_url": "https://www.instagram.com/p/DfNHKc_PgfC/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfNHKc_PgfC/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The November/December edition of La Viña: The holidays",
+     "es": "La edición de noviembre/diciembre de La Viña: Las fiestas"
+    },
+    "summary": {
+     "en": "The November/December edition of La Viña: The holidays In this edition we celebrate the holidays from the joy of living that gives us the sobriety. AA Hispanic members share how they have learned to enjoy these dates with freedom, love and gratitude, repairing relationships, creating new memories and finding new reasons to thank life. Visit www.aalavina.org",
+     "es": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-01T16:00:04Z"
   },
   {
    "id": "ig:DfMvD6FDQC3",
@@ -671,7 +982,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 146,
+    "views": 191,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1842,7 +2153,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 235,
+    "views": 243,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2468,7 +2779,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 282,
+    "views": 288,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -3137,7 +3448,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 208,
+    "views": 214,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3154,7 +3465,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-19T16:00:11Z"
   },
   {
@@ -3198,7 +3509,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-19T15:00:14Z"
   },
   {
@@ -3248,7 +3559,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-19T15:00:14Z"
   },
   {
@@ -3292,7 +3603,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-19T12:23:03Z"
   },
   {
@@ -3336,7 +3647,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-19T11:30:14Z"
   },
   {
@@ -3380,7 +3691,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-19T11:30:14Z"
   },
   {
@@ -3407,7 +3718,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 307,
+    "views": 314,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8451,324 +8762,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "ig:DejeZPBgZ4H",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DejeZPBgZ4H/",
-   "title": "Don welcomes Steve and Karen. From the October 14, 2026 Meeting. Season 2, Episode 16",
-   "summary": "Don welcomes Steve and Karen. From the October 14, 2026 Meeting. Season 2, Episode 16",
-   "lang": "en",
-   "date": "2026-10-16T11:59:37Z",
-   "first_seen": "2026-10-16T12:33:09Z",
-   "image": "/assets/cache/ig/DejeZPBgZ4H.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DejeZPBgZ4H",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DejeZPBgZ4H.webp",
-    "embed_url": "https://www.instagram.com/p/DejeZPBgZ4H/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DejeZPBgZ4H/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Don welcomes Steve and Karen. From the October 14, 2026 Meeting. Season 2, Episode 16",
-     "es": "Don da la bienvenida a Steve y Karen. De la 14 de octubre de 2026 reunión. Temporada 2, Episodio 16"
-    },
-    "summary": {
-     "en": "Don welcomes Steve and Karen. From the October 14, 2026 Meeting. Season 2, Episode 16",
-     "es": "Don da la bienvenida a Steve y Karen. De la 14 de octubre de 2026 reunión. Temporada 2, Episodio 16"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T11:59:37Z"
-  },
-  {
-   "id": "ig:Dejbef4jdQ4",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dejbef4jdQ4/",
-   "title": "“No se ayuda a alguien tratando de impresionarlo; lo impresionas al tratar de ayudarlo”.",
-   "summary": "“No se ayuda a alguien tratando de impresionarlo; lo impresionas al tratar de ayudarlo”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-16T11:30:17Z",
-   "first_seen": "2026-10-16T12:33:09Z",
-   "image": "/assets/cache/ig/Dejbef4jdQ4.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dejbef4jdQ4",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dejbef4jdQ4.webp",
-    "embed_url": "https://www.instagram.com/p/Dejbef4jdQ4/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dejbef4jdQ4/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“You don’t help someone trying to impress him; you impress him in trying to help him.”",
-     "es": "“No se ayuda a alguien tratando de impresionarlo; lo impresionas al tratar de ayudarlo”."
-    },
-    "summary": {
-     "en": "“You don’t help someone trying to impress him; you impress him in trying to help him.” Indianápolis, Indiana, August 1982 AA Grapevine Daily Quote in www.aalavina.org",
-     "es": "“No se ayuda a alguien tratando de impresionarlo; lo impresionas al tratar de ayudarlo”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T11:30:17Z"
-  },
-  {
-   "id": "ig:DejbedvjQhf",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DejbedvjQhf/",
-   "title": "“My sponsor ... gave me some good advice. ‘Take the words success and failure out of…",
-   "summary": "“My sponsor ... gave me some good advice. ‘Take the words success and failure out of your vocabulary. Replace them with honesty and effort.’” “Win Or Lose,” Escondido, California, August 2001, Emotional Sobriety: The Next Frontier Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-16T11:30:15Z",
-   "first_seen": "2026-10-16T12:33:09Z",
-   "image": "/assets/cache/ig/DejbedvjQhf.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DejbedvjQhf",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DejbedvjQhf.webp",
-    "embed_url": "https://www.instagram.com/p/DejbedvjQhf/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DejbedvjQhf/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“My sponsor ... gave me some good advice. ‘Take the words success and failure out of…",
-     "es": "“Mi padrino... me dio un buen consejo. ‘Tome las palabras éxito y fracaso de …"
-    },
-    "summary": {
-     "en": "“My sponsor ... gave me some good advice. ‘Take the words success and failure out of your vocabulary. Replace them with honesty and effort.’” “Win Or Lose,” Escondido, California, August 2001, Emotional Sobriety: The Next Frontier Daily Quote at www.aagrapevine.org",
-     "es": "“Mi padrino... me dio un buen consejo. Toma las palabras éxito y fracaso de tu vocabulario. Reemplazarlos con honestidad y esfuerzo.’” “Ganar o perder”, Escondido, California, agosto de 2001, Sobriedad emocional: la próxima frontera Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T11:30:15Z"
-  },
-  {
-   "id": "yt:rg2DH0ZtAUs",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=rg2DH0ZtAUs",
-   "title": "Grapevine Weekly Open AA Meeting, October 14, 2026 [Season 2, Episode 16]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 14, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Steve and Karen, who share their experience…",
-   "lang": "en",
-   "date": "2026-10-16T04:32:58Z",
-   "first_seen": "2026-10-16T12:32:48Z",
-   "image": "https://i.ytimg.com/vi/rg2DH0ZtAUs/hqdefault.jpg",
-   "tags": [
-    "season-2",
-    "weekly-open",
-    "live"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "rg2DH0ZtAUs",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 3306,
-    "playlists": [
-     "Grapevine Weekly Open AA Meeting"
-    ],
-    "is_short": false,
-    "views": 301,
-    "is_live_recording": true,
-    "date_approx": false,
-    "season": 2,
-    "episode": 16
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, October 14, 2026 [Season 2, Episode 16]",
-     "es": "Grapevine Weekly Open AA Meeting, 14 de octubre de 2026 [Temporada 2, Episodio 16]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 14, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Steve and Karen, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 14 de octubre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Don da la bienvenida a los oradores Steve y Karen, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T04:32:58Z"
-  },
-  {
-   "id": "pod:wo:68d6ac14f97d",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/4a599409-efef-4ba4-9c09-c9d43e96790c",
-   "title": "Grapevine Weekly Open AA Meeting, October 14, 2026 [Season 2, Episode 16]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 14, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Steve and Karen, who share their experience…",
-   "lang": "en",
-   "date": "2026-10-16T04:15:00Z",
-   "first_seen": "2026-10-16T09:57:00Z",
-   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
-   "tags": [
-    "season-2"
-   ],
-   "category": "wo",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/4a599409-efef-4ba4-9c09-c9d43e96790c.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 79346006,
-    "duration_sec": 3306,
-    "season": 2,
-    "episode": 16,
-    "episode_type": "full",
-    "show": "wo",
-    "show_name": "Grapevine Weekly Open AA Meeting",
-    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "player_url": "https://player.captivate.fm/episode/4a599409-efef-4ba4-9c09-c9d43e96790c",
-    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
-    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
-    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, October 14, 2026 [Season 2, Episode 16]",
-     "es": "Grapevine Weekly Open AA Meeting, 14 de octubre de 2026 [Temporada 2, Episodio 16]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 14, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Steve and Karen, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 14 de octubre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Don da la bienvenida a los oradores Steve y Karen, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T04:15:00Z"
-  },
-  {
-   "id": "ig:Deh36cjjZSU",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Deh36cjjZSU/",
-   "title": "The November Issue of Grapevine Is Here!",
-   "summary": "The November Issue of Grapevine Is Here! November’s issue features stories from our vast Grapevine Archive about the early days of AA. There’s also a special section by AA members sharing powerful stories about dealing with mental health. Visit www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-15T21:00:16Z",
-   "first_seen": "2026-10-16T12:33:09Z",
-   "image": "/assets/cache/ig/Deh36cjjZSU.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Deh36cjjZSU",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Deh36cjjZSU.webp",
-    "embed_url": "https://www.instagram.com/p/Deh36cjjZSU/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Deh36cjjZSU/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "The November Issue of Grapevine Is Here!",
-     "es": "¡El número de noviembre de Grapevine está aquí!"
-    },
-    "summary": {
-     "en": "The November Issue of Grapevine Is Here! November’s issue features stories from our vast Grapevine Archive about the early days of AA. There’s also a special section by AA members sharing powerful stories about dealing with mental health. Visit www.aagrapevine.org",
-     "es": "¡El número de noviembre de Grapevine está aquí! El número de noviembre cuenta con historias de nuestro vasto Archivo Grapevine sobre los primeros días de AA. También hay una sección especial de los miembros de AA que comparten historias poderosas sobre cómo lidiar con la salud mental. Visita www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-15T21:00:16Z"
-  },
-  {
-   "id": "ig:Deh36chjdpV",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Deh36chjdpV/",
-   "title": "La edición de noviembre/diciembre de La Viña: Las fiestas",
-   "summary": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-15T21:00:15Z",
-   "first_seen": "2026-10-16T12:33:09Z",
-   "image": "/assets/cache/ig/Deh36chjdpV.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Deh36chjdpV",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Deh36chjdpV.webp",
-    "embed_url": "https://www.instagram.com/p/Deh36chjdpV/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Deh36chjdpV/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "The November/December edition of La Viña: The holidays",
-     "es": "La edición de noviembre/diciembre de La Viña: Las fiestas"
-    },
-    "summary": {
-     "en": "The November/December edition of La Viña: The holidays In this edition we celebrate the holidays from the joy of living that gives us the sobriety. AA Hispanic members share how they have learned to enjoy these dates with freedom, love and gratitude, repairing relationships, creating new memories and finding new reasons to thank life. Visit www.aalavina.org",
-     "es": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-15T21:00:15Z"
   }
  ]
 }

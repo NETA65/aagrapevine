@@ -1,11 +1,11 @@
 {
  "source": "youtube",
- "updated": "2026-11-01T14:21:20Z",
- "attempted": "2026-11-01T14:21:20Z",
+ "updated": "2026-11-02T17:12:19Z",
+ "attempted": "2026-11-02T17:12:19Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 2,
   "removed": 0,
   "held": 0
  },
@@ -17,23 +17,89 @@
   "backfill": "not due (last 2026-11-01T06:29:51Z)",
   "playlist_feeds": 31,
   "shorts_probes": 0,
-  "details_pending": 0,
+  "details_pending": 2,
   "details_fetched": 0,
-  "details_failed": 0,
+  "details_failed": 1,
   "gone_checks": 0,
   "gone_marked": 0,
   "fetched": 248,
-  "new": 0,
-  "total": 541,
-  "active": 541,
+  "new": 2,
+  "total": 543,
+  "active": 543,
   "gone": 0,
   "spanish": 95,
   "shorts": 18,
   "approx_dates": 1,
   "playlists": 31,
-  "seconds": 39.9
+  "seconds": 41.4,
+  "warnings": [
+   "details stopped: YouTube answered with a bot check (“confirm you’re not a bot”) — nothing is wrong on our side; videos keep their last known details"
+  ]
  },
  "items": [
+  {
+   "id": "yt:VHhrECglokQ",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=VHhrECglokQ",
+   "title": "Sober Insurance",
+   "summary": "ASL Grapevine night live recording Topic: Sober Insurance It’s easier to stay sober when people build and maintain a reliable support system before a crisis occurs. Regular AA attendance, fellowship, prayer, and helping others provided me with essential support during profound personal losses and helped me resist relapse. Transcript…",
+   "lang": "en",
+   "date": "2026-11-02T17:00:13Z",
+   "first_seen": "2026-11-02T17:12:19Z",
+   "last_seen": "2026-11-02T17:12:19Z",
+   "image": "https://i.ytimg.com/vi/VHhrECglokQ/hqdefault.jpg",
+   "tags": [
+    "live",
+    "asl"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "VHhrECglokQ",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "American Sign Language"
+    ],
+    "is_short": false,
+    "views": 4,
+    "is_live_recording": true,
+    "date_approx": false
+   }
+  },
+  {
+   "id": "yt:ymmqPVVe2K8",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=ymmqPVVe2K8",
+   "title": "Victim or Victorious? [Season 11, Episode 18]",
+   "summary": "Beth tells Olis and Sam that in her drinking years impending doom became the norm. Trips to jail didn't scare her, she just blamed everyone else. In AA she learned not to believe everything she thinks and to watch her thinking. Beth wonders why she sometimes believes that God is going to drop her, when God has never dropped her. Steve shares his love for the Grapevine Daily Quote. You can find…",
+   "lang": "en",
+   "date": "2026-11-02T05:28:43Z",
+   "first_seen": "2026-11-02T17:12:19Z",
+   "last_seen": "2026-11-02T17:12:19Z",
+   "image": "https://i.ytimg.com/vi/ymmqPVVe2K8/hqdefault.jpg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "ymmqPVVe2K8",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "AA Grapevine's Podcast"
+    ],
+    "is_short": false,
+    "views": 48,
+    "is_live_recording": false,
+    "date_approx": false,
+    "season": 11,
+    "episode": 18
+   }
+  },
   {
    "id": "yt:tKm7va2HQkQ",
    "source": "youtube",
@@ -60,7 +126,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 146,
+    "views": 191,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -75,7 +141,7 @@
    "lang": "en",
    "date": "2026-10-26T04:28:19Z",
    "first_seen": "2026-10-26T14:23:51Z",
-   "last_seen": "2026-10-26T14:23:51Z",
+   "last_seen": "2026-11-02T17:12:19Z",
    "image": "https://i.ytimg.com/vi/hduNr1E0gWE/hqdefault.jpg",
    "tags": [
     "season-11"
@@ -90,7 +156,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 235,
+    "views": 243,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -124,7 +190,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 282,
+    "views": 288,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -157,7 +223,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 208,
+    "views": 214,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -187,7 +253,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 307,
+    "views": 314,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -221,7 +287,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 301,
+    "views": 303,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -253,7 +319,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 371,
+    "views": 373,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -320,7 +386,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 317,
+    "views": 318,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -350,7 +416,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 346,
+    "views": 350,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -384,7 +450,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 336,
+    "views": 337,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -416,7 +482,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 453,
+    "views": 454,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -450,7 +516,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 338,
+    "views": 340,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -483,7 +549,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 385,
+    "views": 386,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -579,7 +645,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 339,
+    "views": 340,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -613,7 +679,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 438,
+    "views": 439,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -646,7 +712,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 319,
+    "views": 321,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -676,7 +742,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 380,
+    "views": 382,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -710,7 +776,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 363,
+    "views": 366,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -742,7 +808,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 513,
+    "views": 514,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -776,7 +842,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 432,
+    "views": 434,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -808,7 +874,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 373,
+    "views": 375,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -842,7 +908,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 224,
+    "views": 226,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1005,7 +1071,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 243,
+    "views": 244,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2877,7 +2943,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 410,
+    "views": 412,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3359,7 +3425,7 @@
     "duration_sec": 66,
     "playlists": [],
     "is_short": true,
-    "views": 768,
+    "views": 769,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3387,7 +3453,7 @@
     "duration_sec": 65,
     "playlists": [],
     "is_short": true,
-    "views": 1534,
+    "views": 1539,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -3727,7 +3793,7 @@
      "AMOR Y SERVICIO"
     ],
     "is_short": false,
-    "views": 334,
+    "views": 336,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -4035,7 +4101,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 406,
+    "views": 407,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -4063,7 +4129,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 194,
+    "views": 195,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -4091,7 +4157,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 152,
+    "views": 153,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -4119,7 +4185,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 141,
+    "views": 146,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -4147,7 +4213,7 @@
      "STAYING SOBER"
     ],
     "is_short": false,
-    "views": 166,
+    "views": 167,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -7680,7 +7746,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 3915,
+    "views": 3918,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -8470,7 +8536,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 824,
+    "views": 825,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -8500,7 +8566,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 904,
+    "views": 905,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -8530,7 +8596,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 3639,
+    "views": 3640,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -9558,7 +9624,7 @@
      "Blessed"
     ],
     "is_short": false,
-    "views": 1412,
+    "views": 1414,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -13567,7 +13633,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": false,
-    "views": 889,
+    "views": 890,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14755,7 +14821,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 6524,
+    "views": 6526,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -14867,7 +14933,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 2855,
+    "views": 2861,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15341,7 +15407,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 6378,
+    "views": 6380,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15535,7 +15601,7 @@
      "Audios de La Viña del 2018"
     ],
     "is_short": false,
-    "views": 538,
+    "views": 539,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15759,7 +15825,7 @@
      "Zoom \"How to\" Instructionals"
     ],
     "is_short": false,
-    "views": 10071,
+    "views": 10073,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15788,7 +15854,7 @@
      "CTM"
     ],
     "is_short": false,
-    "views": 6948,
+    "views": 6951,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -15900,7 +15966,7 @@
      "CTM"
     ],
     "is_short": false,
-    "views": 14712,
+    "views": 14717,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16069,7 +16135,7 @@
      "GVR/RLV"
     ],
     "is_short": false,
-    "views": 1630,
+    "views": 1632,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16149,7 +16215,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 1516,
+    "views": 1517,
     "is_live_recording": false,
     "date_approx": false
    }

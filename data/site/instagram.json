@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-01T14:21:38Z",
+ "updated": "2026-11-02T17:12:38Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16959,
-   "posts": 3979,
+   "followers": 16975,
+   "posts": 3982,
    "owner_id": "48108439509",
-   "checked": "2026-11-01T14:21:21Z",
+   "checked": "2026-11-02T17:12:20Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,229 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2425,
-   "posts": 3002,
+   "followers": 2424,
+   "posts": 3004,
    "owner_id": "48275839129",
-   "checked": "2026-11-01T14:21:24Z",
+   "checked": "2026-11-02T17:12:23Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfPT2wZlz1i",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfPT2wZlz1i/",
+   "title": "“Ya no puedo usar la enfermedad del alcoholismo como una excusa. Ahora bien, si no pongo…",
+   "summary": "“Ya no puedo usar la enfermedad del alcoholismo como una excusa. Ahora bien, si no pongo mi recuperación al servicio de otros, volveré a enfermarme”. \"“El servicio es la razón” WINNIPEG, MANITOBA, JUNIO DE 1979 De Lo mejor del Grapevine, Volumen II\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-02T12:30:15Z",
+   "first_seen": "2026-11-02T17:12:38Z",
+   "image": "/assets/cache/ig/DfPT2wZlz1i.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfPT2wZlz1i",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfPT2wZlz1i.webp",
+    "embed_url": "https://www.instagram.com/p/DfPT2wZlz1i/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfPT2wZlz1i/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I can’t use alcoholism as an excuse anymore. Now, if I don't put …",
+     "es": "“Ya no puedo usar la enfermedad del alcoholismo como una excusa. Ahora bien, si no pongo…"
+    },
+    "summary": {
+     "en": "“I can’t use alcoholism as an excuse anymore. Now, if I don't put my recovery at the service of others, I'll get sick again.\" \"The service is the reason\" winnipeg, manitoba, June 1979 Top of the Grapevine, Volume II\" Daily Quote in www.aalavina.org",
+     "es": "“Ya no puedo usar la enfermedad del alcoholismo como una excusa. Ahora bien, si no pongo mi recuperación al servicio de otros, volveré a enfermarme”. \"“El servicio es la razón” WINNIPEG, MANITOBA, JUNIO DE 1979 De Lo mejor del Grapevine, Volumen II\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfPT2yVFzW9",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfPT2yVFzW9/",
+   "title": "“I cannot adequately describe how light I feel since I took the Fifth Step, and how…",
+   "summary": "“I cannot adequately describe how light I feel since I took the Fifth Step, and how soundly I sleep.” “A 5,000-Mile Discussion,” Secunderabad, India, December 1982, Step By Step: Real AAs, Real Recovery Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-02T12:30:14Z",
+   "first_seen": "2026-11-02T17:12:38Z",
+   "image": "/assets/cache/ig/DfPT2yVFzW9.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfPT2yVFzW9",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfPT2yVFzW9.webp",
+    "embed_url": "https://www.instagram.com/p/DfPT2yVFzW9/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfPT2yVFzW9/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I cannot adequately describe how light I feel since I took the Fifth Step, and how…",
+     "es": "“No puedo describir adecuadamente cómo me siento desde que tomé el Quinto Paso, y cómo …"
+    },
+    "summary": {
+     "en": "“I cannot adequately describe how light I feel since I took the Fifth Step, and how soundly I sleep.” “A 5,000-Mile Discussion,” Secunderabad, India, December 1982, Step By Step: Real AAs, Real Recovery Daily Quote at www.aagrapevine.org",
+     "es": "“No puedo describir adecuadamente lo ligero que siento desde que tomé el Quinto Paso, y lo sana que duermo.” “Una discusión de 5.000 millas”, Secunderabad, India, diciembre de 1982, paso a paso: Real Aas, recuperación Real Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfPPvDnAWJ7",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfPPvDnAWJ7/",
+   "title": "Victim or Victorious? Olis and Sam welcome Beth.",
+   "summary": "Victim or Victorious? Olis and Sam welcome Beth.",
+   "lang": "en",
+   "date": "2026-11-02T11:56:31Z",
+   "first_seen": "2026-11-02T17:12:38Z",
+   "image": "/assets/cache/ig/DfPPvDnAWJ7.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfPPvDnAWJ7",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfPPvDnAWJ7.webp",
+    "embed_url": "https://www.instagram.com/p/DfPPvDnAWJ7/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfPPvDnAWJ7/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Victim or Victorious? Olis and Sam welcome Beth.",
+     "es": "¿Víctima o victoria? Olis y Sam dan la bienvenida a Beth."
+    },
+    "summary": {
+     "en": "Victim or Victorious? Olis and Sam welcome Beth.",
+     "es": "¿Víctima o victoria? Olis y Sam dan la bienvenida a Beth."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfNHHEYS6uV",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfNHHEYS6uV/",
+   "title": "The November Issue of Grapevine Is Here!",
+   "summary": "The November Issue of Grapevine Is Here! November’s issue features stories from our vast Grapevine Archive about the early days of AA. There’s also a special section by AA members sharing powerful stories about dealing with mental health. Visit www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-01T16:00:05Z",
+   "first_seen": "2026-11-02T17:12:38Z",
+   "image": "/assets/cache/ig/DfNHHEYS6uV.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfNHHEYS6uV",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DfNHHEYS6uV.webp",
+    "embed_url": "https://www.instagram.com/p/DfNHHEYS6uV/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfNHHEYS6uV/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The November Issue of Grapevine Is Here!",
+     "es": "¡El número de noviembre de Grapevine está aquí!"
+    },
+    "summary": {
+     "en": "The November Issue of Grapevine Is Here! November’s issue features stories from our vast Grapevine Archive about the early days of AA. There’s also a special section by AA members sharing powerful stories about dealing with mental health. Visit www.aagrapevine.org",
+     "es": "¡El número de noviembre de Grapevine está aquí! El número de noviembre cuenta con historias de nuestro vasto Archivo Grapevine sobre los primeros días de AA. También hay una sección especial de los miembros de AA que comparten historias poderosas sobre cómo lidiar con la salud mental. Visita www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfNHKc_PgfC",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfNHKc_PgfC/",
+   "title": "La edición de noviembre/diciembre de La Viña: Las fiestas",
+   "summary": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-01T16:00:04Z",
+   "first_seen": "2026-11-02T17:12:38Z",
+   "image": "/assets/cache/ig/DfNHKc_PgfC.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfNHKc_PgfC",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DfNHKc_PgfC.webp",
+    "embed_url": "https://www.instagram.com/p/DfNHKc_PgfC/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfNHKc_PgfC/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The November/December edition of La Viña: The holidays",
+     "es": "La edición de noviembre/diciembre de La Viña: Las fiestas"
+    },
+    "summary": {
+     "en": "The November/December edition of La Viña: The holidays In this edition we celebrate the holidays from the joy of living that gives us the sobriety. AA Hispanic members share how they have learned to enjoy these dates with freedom, love and gratitude, repairing relationships, creating new memories and finding new reasons to thank life. Visit www.aalavina.org",
+     "es": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfMvD75jbvc",
    "source": "instagram",
@@ -2221,7 +2436,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Derh5HJF8Pr",
@@ -2264,7 +2479,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DerPdIZAfpL",
@@ -2307,7 +2522,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DerJ3B7F1Pw",
@@ -2350,7 +2565,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DerJ3B5l3mu",
@@ -2393,7 +2608,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Deo9IuyvoGb",
