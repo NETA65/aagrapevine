@@ -495,6 +495,27 @@ class BuiltPages(Untranslated):
                         self.assertNotIn("Ann B", ld)
                     self.assertNotIn("confirmed", page)
 
+    # ------------------------------------------------------------------ /share/
+    def test_the_poster(self):
+        p = self.pages(NOV26)
+        for url in ("/share/", "/es/share/"):
+            page = p[url]
+            sheets = re.findall(r'<div class="cm-sheet cm-poster" lang="(\w+)" x-show="posterLang === \'(\w+)\'"[^>]*>(.*?)<div class="cm-p-foot">',
+                                page, re.S)
+            with self.subTest(url=url):
+                self.assertEqual([s[1] for s in sheets], ["en", "es", "bi"])
+                v = {s[1]: text(s[2]) for s in sheets}
+                self.assertIn("Grapevine Meeting (online) · In English", v["en"])
+                self.assertIn("Every first Wednesday of the month · 7:00 – 8:00 PM", v["en"])
+                self.assertIn("Reunión de Grapevine (en línea) · En inglés", v["es"])
+                self.assertIn("Cada primer miércoles del mes · 7:00–8:00 p. m.", v["es"])
+                self.assertNotIn("Grapevine Meeting (online)", v["bi"])        # no room on the bilingual poster
+                for k in v:
+                    self.assertIn("abc-defg-hij", v[k])
+                    self.assertNotRegex(v[k], r"(?i)passcode|meeting id\b|ID de reunión")
+                    self.assertIn("Google Meet", v[k])
+                self.assertIn("MEETING CODE", v["en"].upper())
+
 
 if __name__ == "__main__":
     unittest.main()
