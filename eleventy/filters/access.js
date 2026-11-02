@@ -1,7 +1,9 @@
 // Area filters: access — the Accessibility page (src/pages/accessibility.njk).
-//   axPhone(site, weekly, lang)  joining the Zoom meetings by phone (/accessibility/#phone)
+//   axPhone(site, weekly, lang)  joining the Zoom meetings by phone (/accessibility/#phone), and which of our own
+//                                meetings have no number to call (Google Meet: `online`)
 //   axAudioTypes(shop, lang)     what the official stores' subscription descriptions say about audio
 //   axAslPlaylist(videos, site, lang)  AA Grapevine's American Sign Language playlist on YouTube
+//   platformOf(url)              where an online link is held: "Google Meet", "Zoom" … (the district report too)
 // Nothing here copies meeting details: the IDs and passcodes come from `meeting:` (config/site.yml)
 // and the weekly open meetings (db.weekly_open via cmWeeklyAll); the dial-in numbers and the
 // callers' passcodes from `phone_access:` (config/site.yml).
@@ -39,14 +41,18 @@ export function phonePasscode(configured, meetingPasscode) {
 
 /**
  * → { numbers: [{ display, tel, city }], meetings: [{ key, titles, notes, starts, id, digits, pass, askChair,
- *      details, call, callCity }], ok }
+ *      details, call, callCity }], online: [{ platform, items: [{ key, title, details }] }], ok }
  * notes[i]: "(en inglés)" / "(in Spanish)" when titles[i] is a meeting held in the other language and
  * its title doesn't say so already (La Viña's English title does: "… (in Spanish)"), else "".
  * starts[i]: "November 5" / "5 de noviembre" while titles[i] (a weekly open meeting) has not started yet
  * (weeklyOpen's `starts`), else "".
- * meetings: the committee meeting, then one entry per Zoom ROOM of the weekly open meetings (the
- * Grapevine Weekly Open and La Viña's open meeting share one room: one entry, both titles, the page
- * language's meeting first — cmWeeklyAll's order).
+ * meetings: the committee meeting while it is on Zoom (a meeting ID of digits), then one entry per Zoom ROOM of
+ * the weekly open meetings (the Grapevine Weekly Open and La Viña's open meeting share one room: one entry, both
+ * titles, the page language's meeting first — cmWeeklyAll's order).
+ * online: our own meetings that callers cannot dial in to, one group per platform — the committee meeting on Google
+ * Meet (a meeting code: "rva-tmst-vdb") and our online monthly series (config/site.yml recurring_events of ours with
+ * an online_url and no place: the Grapevine Meeting) outside Zoom. A Google Meet room on a personal account has no
+ * phone numbers, so the page says so instead of listing a number (details: the meeting's section on /meetings/).
  */
 export function axPhone(site, weekly, lang = "en", t = (k) => k) {
   const pa = (site && site.phone_access) || {};
@@ -91,7 +97,40 @@ export function axPhone(site, weekly, lang = "en", t = (k) => k) {
     }
   }
   meetings.push(...rooms.values());
-  return { numbers, meetings, ok: numbers.length > 0 && meetings.length > 0 };
+  // our own meetings with no number to call (see above): the committee meeting off Zoom, then our online series
+  const online = [];
+  const add = (platform, item) => {
+    let g = online.find((x) => x.platform === platform);
+    if (!g) online.push((g = { platform, items: [] }));
+    g.items.push(item);
+  };
+  const cPlatform = String(m.platform ?? "").trim() || platformOf(m.online_url || m.zoom_url) || "Zoom";
+  if (Object.keys(m).length && !cDigits && cPlatform !== "Zoom" && (m.online_url || m.zoom_url || id)) {
+    add(cPlatform, { key: "committee", title: t("nav.meeting"), details: "/meetings/#committee-meeting" });
+  }
+  for (const r of Array.isArray(site && site.recurring_events) ? site.recurring_events : []) {
+    const host = String((r && r.host) || "neta").trim().toLowerCase();
+    const url = String((r && r.online_url) || "").trim();
+    if (!r || typeof r !== "object" || r.enabled === false || host !== "neta" || !url || String(r.location || "").trim()) continue;
+    const platform = platformOf(url);
+    if (!platform || platform === "Zoom") continue;      // (a Zoom room of ours would have a number: not listed here)
+    const title = String((lang === "es" && r.title_es) || r.title || "").trim();
+    const page = String(r.url || "").trim();
+    if (title) add(platform, { key: String(r.key || title), title, details: /^\/[^/]/.test(page) ? page : "/meetings/" });
+  }
+  return { numbers, meetings, online, ok: numbers.length > 0 && meetings.length > 0 };
+}
+
+// Where an online link is held, in the pages' words ("https://meet.google.com/rva-tmst-vdb" → "Google Meet"); ""
+// for a link it does not know — the sync's names for the same hosts (events_external.py PLATFORM_HOSTS)
+const PLATFORM_HOSTS = [["zoom.us", "Zoom"], ["meet.google.com", "Google Meet"], ["teams.microsoft.com", "Microsoft Teams"],
+  ["teams.live.com", "Microsoft Teams"], ["webex.com", "Webex"], ["gotomeeting.com", "GoToMeeting"], ["skype.com", "Skype"],
+  ["whereby.com", "Whereby"], ["jitsi", "Jitsi"]];
+export function platformOf(url) {
+  let host = "";
+  try { host = new URL(String(url ?? "")).hostname.toLowerCase(); } catch (e) { return ""; }
+  const hit = PLATFORM_HOSTS.find(([h]) => host.includes(h));
+  return hit ? hit[1] : "";
 }
 
 /** A first meeting that is still ahead ({ iso }) → "November 5" / "5 de noviembre" (Central time). */

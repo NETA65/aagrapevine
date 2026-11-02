@@ -136,9 +136,10 @@ descKey: pwa.offline.meta_desc
 {%- set magApps = [[ln.gv_apps, "media.short_gv_app", "en"], [ln.lv_apps, "media.short_lv_app", "es"]] -%}
 
 {#- The hero's right-hand card (the shared hero aside, "Join by phone"): no data needed to reach a
-    meeting — a one-tap call (the number, then the meeting ID) to the committee meeting and to the
-    weekly open meetings (site.phone_access + the meeting IDs, eleventy/filters/access.js axPhone, the
-    same as /accessibility/#phone, which it links to). The first card under the hero on smaller
+    meeting — a one-tap call (the number, then the meeting ID) to the weekly open meetings on Zoom (and
+    to the committee meeting while it is on Zoom: our meetings on Google Meet have no number to call —
+    /accessibility/#phone says so) (site.phone_access + the meeting IDs, eleventy/filters/access.js
+    axPhone, the same as /accessibility/#phone, which it links to). The first card under the hero on smaller
     screens and at larger text ("below"): a phone with no signal is where it helps most. -#}
 {%- set phone = site | axPhone(db.weekly_open.items | cmWeeklyAll(lang), lang) -%}
 {% call(slot) ui.pageHero(lang, "nav.offline" | t(lang), "pwa.offline.sub_online" | t(lang), "", "pwa.offline.eyebrow" | t(lang), { eyebrowIcon: "wifi-off", titleId: "offline-title", side: "below" }) %}
