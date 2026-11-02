@@ -34,6 +34,8 @@ from browser.test_site_in_browser import (S, SIDEWAYS, new_context, open_page, s
 from test_r12_u5_gvr import TABLE_TALK, card_words
 
 ROOT = Path(__file__).resolve().parents[2]
+# where the committee meets, as the pages say it (config/site.yml meeting.platform; Zoom when left out)
+PLATFORM = str((yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8")).get("meeting") or {}).get("platform") or "").strip() or "Zoom"
 AA_HOSTS = {"www.aa.org", "aa.org", "www.aagrapevine.org", "aagrapevine.org", "www.aalavina.org", "aalavina.org",
             "neta65.org", "www.neta65.org", "neta65.github.io"}
 
@@ -162,7 +164,8 @@ class PassItOn(unittest.TestCase):
             self.assertTrue(lines[0].startswith("Welcome to Grapevine and La Viña service"), copied)
             self.assertTrue(lines[1].startswith("• Serving as a GVR?"), copied)
             self.assertTrue(lines[2].startswith("• Serving as an RLV?"), copied)
-            self.assertRegex(lines[3], r"^• Our next committee meeting is \w+day, \w+ \d+, \d{4} at \d+:\d\d [AP]M C[SD]T on Zoom\.")
+            self.assertRegex(lines[3], r"^• Our next committee meeting is \w+day, \w+ \d+, \d{4} at \d+:\d\d [AP]M C[SD]T on "
+                             + re.escape(PLATFORM) + r"\.")
             self.assertTrue(copied.endswith("We're glad you're here."))
             # the announcement: one paragraph, with this page's address
             page.locator("#pass-it-on li:nth-child(1) button:has-text('Copy')").click()

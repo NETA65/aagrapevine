@@ -39,7 +39,7 @@ eleventyComputed:
     put it to work · dates · every week · stories wanted · Book of the Month · keep up → pager. Headings:
     h1 (hero) → h2 (the toolkit) → h3 (its cards) → h4 (each magazine).
     One home per fact — this page links there: the hub (/monthly/) of the 10 ways; /shop/#botm of the
-    prices; /events/ and /meetings/#committee-meeting of the events' details and the Zoom link;
+    prices; /events/ and /meetings/#committee-meeting of the events' details and the meeting link;
     /contribute/ of how to send a story; /read/ of the stories (an issue's highlights are the monthly
     digest's, the month they came out).
     The Dates card links the month's calendar file ("Add October's dates to my calendar": m.icsUrl, written
@@ -253,6 +253,8 @@ eleventyComputed:
           <a class="mp-drow-t tap-link font-semibold text-ink no-underline hover:text-gv hover:underline" href="{{ d.href | lurl(lang) }}"{% if d.external %} target="_blank" rel="noopener"{% endif %}>{{ ("monthly.committee" | t(lang)) if d.kind == "committee" else d.title }}{% if d.external %}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span>{% endif %}</a>
           {#- the "Over" badge: this month's rows only (a later month's dates are all still to come) -#}
           <span class="block text-sm text-muted">{% if m.isCurrent %}<span class="badge-muted mr-1" data-mp-over-badge{% if not over %} hidden{% endif %}>{{ "monthly.over" | t(lang) }}</span> {% endif %}{{ d.day }}{% if d.endDay %} – {{ d.endDay }}{% endif %}{% if d.time %} · {{ d.time }} {{ d.zone }}{% endif %}{% if d.kind == "committee" %} · {{ d.platform }}{% elif d.place %} · {{ d.place }}{% elif d.online and not d.city %} · {{ "monthly.online" | t(lang) }}{% endif %}{% if d.tentative %} · {{ "committee.events.tentative" | t(lang) }}{% endif %}</span>
+          {#- a committee meeting's guest speaker and topic (config/site.yml meeting.speakers: monthly.js committeeRow) -#}
+          {% if d.speaker %}<span class="block text-sm text-muted">{{ ("monthly.msg_speaker" if d.speaker.topic else "committee.meeting.speaker") | t(lang, { name: d.speaker.name, topic: d.speaker.topic }) }}</span>{% endif %}
         </span>
       </li>
       {% endmacro %}
@@ -267,7 +269,7 @@ eleventyComputed:
         {% if nc and not nc.thisMonth %}
         <p class="mt-3 flex flex-wrap items-start gap-x-2 gap-y-1 rounded-xl bg-gv-soft p-3 text-sm">
           <span class="mt-0.5 shrink-0 text-gv">{% icon "video", "size-4" %}</span>
-          <span class="min-w-0 flex-1"><strong class="text-ink">{{ "monthly.next_meeting" | t(lang) }}:</strong> {{ nc.day }} · {{ nc.time }} {{ nc.zone }} · {{ nc.platform }}</span>
+          <span class="min-w-0 flex-1"><strong class="text-ink">{{ "monthly.next_meeting" | t(lang) }}:</strong> {{ nc.day }} · {{ nc.time }} {{ nc.zone }} · {{ nc.platform }}{% if nc.speaker %} · {{ "monthly.speaker" | t(lang, { name: nc.speaker.name }) }}{% endif %}</span>
           <a class="link tap-link gap-1 font-semibold" href="{{ '/meetings/' | lurl(lang) }}#committee-meeting">{{ "monthly.meeting_link" | t(lang) }}<span aria-hidden="true"> →</span></a>
         </p>
         {% endif %}

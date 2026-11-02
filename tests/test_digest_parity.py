@@ -8,7 +8,8 @@ only fails here instead of drifting quietly:
   and their photo counts, the podcast/YouTube twins, the Instagram posts, the counts), the Instagram
   accounts (each one's count and newest posts), the magazine issues whose stories came out in the month
   (stories of the month, all of the issue's, free ones, "current", highlights, label, theme), the Area 65 /
-  Texas writers and the events that took place (the committee meeting included).
+  Texas writers, the events that took place (the committee meeting included) and the guest speaker of the
+  committee meeting the toolkit's pointer names (the month it comes out in, while that meeting is ahead).
 
 Two data sets: a small one made for the edge cases (a bulletin post that expired the day before, seen
 in the small hours of the 1st; a post scheduled with `publish:`; posts saved after the month their date
@@ -55,6 +56,7 @@ const summary = (md) => ({
                                   highlights: i.highlights.map((a) => a.id), label_en: i.label.en, theme: i.theme })),
   writers: { neta65: md.writers.neta65.map((i) => i.id || i.url), texas: md.writers.texas.map((i) => i.id || i.url) },
   events: md.events.map((e) => e.id),
+  speaker: md.toolkit.speaker ? [md.toolkit.speaker.ymd, md.toolkit.speaker.name, md.toolkit.speaker.topic.en, md.toolkit.speaker.topic.es] : null,
 });
 let db, site;
 if (input.dir) {
@@ -89,6 +91,7 @@ def summary(data: dict) -> dict:
                     "theme": i["theme"]} for i in data["issues"]],
         "writers": {k: [i.get("id") or i.get("url") for i in v] for k, v in data["writers"].items()},
         "events": [e["id"] for e in data["events"]],
+        "speaker": [s["ymd"], s["name"], s["topic"]["en"], s["topic"]["es"]] if (s := data.get("speaker")) else None,
     }
 
 
@@ -141,6 +144,12 @@ class FixtureParity(SD.DigestCase, Parity):
         ]})
         # August: a booth and a committee meeting that was skipped (settings) — the August digest has the booth only
         events = json.loads((self.site_dir / "events.json").read_text(encoding="utf-8"))["items"]
+        # October's committee meeting has a guest speaker (the sync's extra.speaker): the September digest's pointer
+        # names them while that meeting is ahead (the edition read on October 20 too), never once it has begun
+        for e in events:
+            if e["id"] == "ev:committee:2026-10-21":
+                e["extra"]["speaker"] = {"name": "Rick W.", "position": {"en": "Past delegate", "es": "Ex delegado"},
+                                         "topic": {"en": "How the committee works", "es": "Cómo trabaja el comité"}}
         self.write("events", {"items": events + [
             SD.event("ev:aug-ws", "2026-08-22T15:00:00Z", "2026-08-22T18:00:00Z", "August workshop")]})
         # the magazines: a story whose pub_date could not be worked out counts on its issue's earliest one
@@ -192,6 +201,8 @@ class FixtureParity(SD.DigestCase, Parity):
         self.assertEqual(later["albums"], [["album:f:Booth", 2]])                                # ph4 and the late ph5
         self.assertEqual(js[f"2026-08@{iso(cases[5][1])}"]["events"], ["ev:rec:2026-08-08", "ev:aug-ws"])   # no meeting: skipped
         self.assertEqual(js[f"2026-10@{iso(SD.OCT1)}"]["events"], ["ev:early"])                # only what has started
+        self.assertEqual(early["speaker"], ["2026-10-21", "Rick W.", "How the committee works", "Cómo trabaja el comité"])
+        self.assertIsNone(later["speaker"], "November's meeting has no record with a speaker")
 
 
 class RealDataParity(unittest.TestCase, Parity):
@@ -245,7 +256,7 @@ out({
         self.assertEqual(heads, sorted(heads))
         # none of the old "coming up" sections (their headings and markers; a file may be called "Share your story")
         for gone in ("*Next committee meeting*", "*Put it to work*", "Every week:", "Grapevine meetings near you:", "✍️", "📚",
-                     "*Book of the Month", "📬", "Subscriptions from", "💬", "daily quote", "zoom.us",
+                     "*Book of the Month", "📬", "Subscriptions from", "💬", "daily quote", "zoom.us", "meet.google.com",
                      "tel:", "every month", "{", "undefined", "NaN"):
             self.assertNotIn(gone, wa)
         self.assertIn("*NETA 65 Grapevine / La Viña — September 2026 digest / Resumen de septiembre de 2026*", r["waBi"])

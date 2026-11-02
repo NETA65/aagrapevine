@@ -63,7 +63,8 @@ import path from "node:path";
 import vm from "node:vm";
 import { monthlyRule } from "../../eleventy.config.js";
 import { qrSvg } from "./community.js";
-import { normalizeEvents, chicagoDayEndMs, announcementList, weeklyOpenAll, meetingTitle, recurrenceText, meetingIdKey } from "./committee.js";
+import { normalizeEvents, chicagoDayEndMs, announcementList, weeklyOpenAll, meetingTitle, recurrenceText, meetingJoin, meetingDates,
+  meetingSpeaker } from "./committee.js";
 import { editorialFor, issueName, aboutVideos } from "./read.js";
 import { nowDate, chicagoYmd } from "./monthly.js";
 import { shopBotm, shopPlanPrice, shopNextChange, money, dayLabel } from "./shop.js";
@@ -1063,6 +1064,7 @@ export const BOOTH_WORDS = {
   prices_as_of: { en: "Prices as of {date}, from the official stores", es: "Precios al {date}, según las tiendas oficiales" },
   meetings: { en: "Meetings you can join", es: "Reuniones a las que puedes unirte" },
   starts: { en: "Starts {date}", es: "Comienza el {date}" },
+  speaker: { en: "Guest speaker on {date}: {name}", es: "Orador(a) invitado(a) el {date}: {name}" },
   left_out: { en: "left out of the booth: it says “{word}”", es: "queda fuera de la pantalla: dice “{word}”" },
   off_host: { en: "left out of the booth: its sound file is on {host}, not on the podcast's host (captivate.fm)",
     es: "queda fuera de la pantalla: su archivo de sonido está en {host}, no en el sitio del podcast (captivate.fm)" },
@@ -1268,10 +1270,16 @@ const eventRow = (c, e, lang) => {
   };
 };
 
-/** live-events: the next four events (a monthly series once: its next date) as one list, each row until it is over;
- *  and a countdown to the next NETA 65 assembly (event-tone.js: an assembly of ours), until it begins. */
+// One of our own online meetings: a monthly series of ours with no place, only a link (config/site.yml
+// recurring_events — the Grapevine Meeting on Google Meet). It is in "Meetings you can join" (liveMeetings), never
+// in "Coming up", where a meeting every month would take one of its rows each time.
+const ownOnlineSeries = (e) => e.recurring && e.isOnline && !e.location && !e.host;
+
+/** live-events: the next four events (a monthly series once: its next date; our own online meetings are in
+ *  live-meetings) as one list, each row until it is over; and a countdown to the next NETA 65 assembly
+ *  (event-tone.js: an assembly of ours), until it begins. */
 function liveEvents(c) {
-  const en = upcomingOf(c, "en");
+  const en = upcomingOf(c, "en").filter((e) => !ownOnlineSeries(e));
   if (!en.length) return [];
   const es = byId(upcomingOf(c, "es"));
   const pick = [];
@@ -1552,8 +1560,10 @@ function liveBooks(c) {
 }
 
 /** live-meetings: the meetings anyone can join — the committee's monthly meeting (config/site.yml `meeting:`, its rule
- *  as /meetings/ writes it), the weekly open meetings of Grapevine and La Viña (db.weekly_open, committee.js
- *  weeklyOpenAll) and La Viña's monthly workshop on Zoom (its next date: config/site.yml recurring_events, host lv).
+ *  as /meetings/ writes it, where it is held, its meeting code or ID, and the guest speaker of its next date), the
+ *  weekly open meetings of Grapevine and La Viña (db.weekly_open, committee.js weeklyOpenAll), our own online
+ *  meetings (the Grapevine Meeting: its next date, ownOnlineSeries) and La Viña's monthly workshop on Zoom (its next
+ *  date: config/site.yml recurring_events, host lv) — five rows, the player shows them all.
  *  A meeting in the other language says so, as /meetings/ does — "Grapevine Weekly Open AA Meeting (en inglés)" —
  *  unless its title already does (config/site.yml writes La Viña's English titles "… (in Spanish)"); the committee's
  *  own meeting has no language of its own. */
@@ -1567,12 +1577,18 @@ function liveMeetings(c) {
   const m = isMap(c.site.meeting) ? c.site.meeting : {};
   if (Object.keys(m).length) {
     const rule = monthlyRule(m);
+    // the next meeting that is not over (the rule, skip dates honoured) and its guest speaker, when it has one
+    const next = meetingDates(m, 0, 2, c.now).find((d) => Date.parse(d.end) > c.nowMs);
     for (const lang of LANGS) {
+      const join = meetingJoin(m, lang);
+      const sp = next ? meetingSpeaker(m, next.ymd, lang) : null;
+      const day = sp ? new Intl.DateTimeFormat(LOCALES[lang], lang === "es" ? { day: "numeric", month: "long", timeZone: "UTC" }
+        : { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date(`${next.ymd}T12:00:00Z`)) : "";
       rows[lang].push({
         title: meetingTitle(c.site, lang),
         when: recurrenceText(rule, lang),
-        note: [t("committee.events.online_on", lang, { platform: oneLine(m.platform) || "Zoom" }),
-          m.meeting_id ? `${t(meetingIdKey(m.meeting_id), lang)} ${oneLine(m.meeting_id)}` : ""].filter(Boolean).join(" · "),
+        note: [t("committee.events.online_on", lang, { platform: join.platform }), join.id ? `${join.idLabel} ${join.id}` : "",
+          sp ? fill(BOOTH_WORDS.speaker[lang], { date: day, name: sp.name }) : ""].filter(Boolean).join(" · "),
         pub: "both",
       });
     }
@@ -1584,6 +1600,20 @@ function liveMeetings(c) {
         title: marked(w.title, w.lang, lang), when: w.when,
         note: w.starts ? fill(BOOTH_WORDS.starts[lang], { date: w.starts.date }) : w.zoomId ? `Zoom ${w.zoomId}` : "",
         pub: w.isLv ? "lv" : "gv", starts_ts: w.starts ? Date.parse(w.starts.iso) : null,
+      });
+    }
+  }
+  // our own online meetings (the Grapevine Meeting), each its next date, as /events/ writes it
+  const seen = new Set();
+  for (const e of upcomingOf(c, "en").filter(ownOnlineSeries)) {
+    if (seen.has(e.series || e.id)) continue;
+    seen.add(e.series || e.id);
+    const ee = byId(upcomingOf(c, "es")).get(e.id) || e;
+    for (const [lang, x] of [["en", e], ["es", ee]]) {
+      rows[lang].push({
+        title: x.title, when: [x.dateLabel, x.timeLabel].filter(Boolean).join(" · "),
+        note: [noteOf(x, lang), x.meetingId ? `${t(x.meetingIdKey, lang)} ${x.meetingId}` : ""].filter(Boolean).join(" · "),
+        ends_ts: x.endMs, starts_ts: x.startMs, pub: "both",
       });
     }
   }

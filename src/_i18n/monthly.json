@@ -35,6 +35,8 @@
   "monthly.dates": { "en": "Dates this month", "es": "Fechas de este mes" },
   "monthly.committee": { "en": "Committee meeting", "es": "Reunión del comité" },
   "monthly.all_welcome": { "en": "all AA members welcome", "es": "todo miembro de AA es bienvenido" },
+  "monthly.speaker": { "en": "guest speaker: {name}", "es": "orador(a) invitado(a): {name}" },
+  "monthly.msg_speaker": { "en": "Guest speaker: {name} — “{topic}”", "es": "Orador(a) invitado(a): {name} — “{topic}”" },
   "monthly.more_dates": { "en": "+{n} more on the website", "es": "+{n} más en el sitio web" },
   "monthly.no_dates": { "en": "No dates announced yet.", "es": "Todavía no hay fechas anunciadas." },
   "monthly.weekly": { "en": "Every week online", "es": "Cada semana en línea" },

@@ -4,14 +4,14 @@
 // src/pages/orientation-lesson.njk and src/_includes/macros/orientation.njk.
 //
 //   o101Text(pair, lang, vars)   → the {en, es} text in the page language, with {placeholders} filled
-//                                  from vars ({rule_lc}, {time}, {panel}, {panel_start}); unknown ones stay
+//                                  from vars ({rule_lc}, {time}, {platform}, {panel}, {panel_start}); unknown ones stay
 //   o101Lesson(lessons, id)      → one lesson (or null)
 //   o101Links(links, lang, site) → [{ href, label, ext }] — site pages in the page language, site.links keys
 //                                  resolved, links that can't be used left out; on /es/ La Viña's first
 //   o101Deck(lessons)            → the slide plan: [{ kind: "title" | "agenda" | "lesson" | "points" |
 //                                  "try" | "check" | "close", lesson, points, part, parts, q, qi }]
 //   o101Letter(i)                → "A", "B", "C" … (0-based)
-//   o101Vars(orientation, lang, rule, time) → the placeholder values ({rule_lc} …) for o101Text
+//   o101Vars(orientation, lang, rule, time, platform) → the placeholder values ({rule_lc} …) for o101Text
 
 const LOCALES = { en: "en-US", es: "es-US" };
 // Key points per slide: never more than 3 (projector-size type), split as evenly as possible.
@@ -52,11 +52,13 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("o101Text", (pair, lang, vars) => pickText(pair, lang, vars));
   eleventyConfig.addFilter("o101Lesson", (lessons, id) => (lessons || []).find((l) => l.id === id) || null);
   eleventyConfig.addFilter("o101Letter", (i) => String.fromCharCode(65 + (Number(i) || 0)));
-  // The placeholder values for o101Text: {{ orientation | o101Vars(lang, site.meeting | cmRule(lang), site.meeting | cmTimeRange(lang)) }}
-  eleventyConfig.addFilter("o101Vars", (o, lang, rule = "", time = "") => ({
+  // The placeholder values for o101Text: {{ orientation | o101Vars(lang, site.meeting | cmRule(lang), site.meeting | cmTimeRange(lang),
+  // site.meeting.platform) }} — where the committee meets: config/site.yml meeting.platform ("Google Meet")
+  eleventyConfig.addFilter("o101Vars", (o, lang, rule = "", time = "", platform = "") => ({
     rule,
     rule_lc: rule ? rule.charAt(0).toLocaleLowerCase(lang === "es" ? "es" : "en") + rule.slice(1) : "",
     time,
+    platform: String(platform || "").trim() || "Zoom",
     panel: (o && o.panel && o.panel.number) || "",
     panel_start: monthYear(o && o.panel && o.panel.starts, lang),
   }));
