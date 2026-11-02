@@ -268,16 +268,17 @@ slides:
     title: "Announcements"
     items:
       - "Next Grapevine Meeting: **{live:grapevine_meeting_after}** · {live:grapevine_meeting_time}, the same link"
-      - "Our committee's monthly meeting: {live:meeting_day} · guest speaker: {live:speaker_name}"
+      - "Our committee's monthly meeting: {live:meeting_day} · {live:speaker_note}"
       - "Grapevine and La Viña table at CityWide Dallas: every 2nd Saturday, 5:30 to 7:30 PM, Lovers Lane United Methodist Church"
       - "Write for Grapevine: the next deadline, {live:next_deadline_gv}"
       - "This month's Grapevine: {live:gv_issue}"
     takeaway: "Every date: [{live:site}/events/](/events/)"
     minutes: 2
     notes: |
-      SAY: A few announcements. Our next Grapevine Meeting: {live:grapevine_meeting_after}, at seven, on this same Google Meet link. Our Area's Grapevine and La Viña Committee meets on the third Wednesday, also at seven, on the same link: next on {live:meeting_day}; our guest speaker: {live:speaker_name}, and any AA member is welcome. Our committee's table is at CityWide Dallas every second Saturday, from 5:30 to 7:30, at Lovers Lane United Methodist Church. And Grapevine is always looking for stories: the next deadline is on the screen, and anyone in AA can write.
+      SAY: A few announcements. Our next Grapevine Meeting: {live:grapevine_meeting_after}, at seven, on this same Google Meet link. Our Area's Grapevine and La Viña Committee meets on the third Wednesday, also at seven, on the same link: next on {live:meeting_day}, {live:speaker_note}, and any AA member is welcome. Our committee's table is at CityWide Dallas every second Saturday, from 5:30 to 7:30, at Lovers Lane United Methodist Church. And Grapevine is always looking for stories: the next deadline is on the screen, and anyone in AA can write.
       DO: Post the next Grapevine Meeting's date in the chat, and add any announcement from the room that is AA's (a group's anniversary, a district workshop); keep outside events out.
-      IF THE GUEST SPEAKER SAYS 'to be announced': say that the speaker will be on the committee's Meetings page. The meeting of December 16, 2026 has none: the guest speakers start on January 20, 2027.
+      GUEST SPEAKER: the slide names the committee meeting's guest speaker, or says 'no guest speaker this month' for a meeting that has none (December 16, 2026: the guest speakers start on January 20, 2027).
+      IF IT SAYS 'guest speaker: to be announced' (a copy opened long after the website made it): say that the speaker will be on the committee's Meetings page.
       STAYS CURRENT: the next Grapevine Meeting and its time, the committee meeting and its guest speaker, the deadline and this month's issue fill in by themselves from the committee website.
 
   # The closing, word for word, as the committee meeting says it.

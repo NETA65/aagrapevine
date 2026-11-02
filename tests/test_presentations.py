@@ -36,7 +36,7 @@ LIVE_KEYS = {
     "site", "site_url", "email", "panel", "as_of", "month", "year",
     "meeting_next", "meeting_day", "meeting_after", "meeting_month", "meeting_rule", "meeting_time", "meeting_platform",
     "meeting_link", "meeting_url", "meeting_code", "meeting_zoom_id", "meeting_passcode", "meeting_phone", "meeting_phone_passcode",
-    "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after", "speaker_slides",
+    "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_note", "speaker_after", "speaker_slides",
     "grapevine_meeting_next", "grapevine_meeting_day", "grapevine_meeting_after", "grapevine_meeting_time",
     "grapevine_meeting_link", "lv_workshop_next", "lv_workshop_time", "lv_workshop_zoom_id",
     "price_gv_print", "price_gv_digital", "price_lv_print", "price_lv_digital", "price_change_note", "price_change_date",

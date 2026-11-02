@@ -678,6 +678,7 @@ those show exactly what you type.
 | `meeting_phone_passcode` | (empty) | `phone_access: committee: phone_passcode` (or the meeting's passcode when it is numbers only) | — (empty) |
 | `speaker_name`, `speaker_position`, `speaker_topic` | Rick W. / Past delegate, Area 65 Northeast Texas (Panel 73); … / Grapevine as a Twelfth Step tool: … — `meeting_day`'s guest speaker | `meeting: speakers:` (as `/meetings/` lists them) | "to be announced" |
 | `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … | same | "to be announced" |
+| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with none listed (December 16, 2026): the Grapevine Meeting's announcements, with `meeting_day` | same | "guest speaker: to be announced" |
 | `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — `meeting_after`'s speaker | same | "to be announced" |
 | `speaker_slides` | the chair's notes only: "Tonight's guest speaker shares slides: …" (`slides: true`). Whether a speaker has confirmed (`confirmed:`) never reaches a deck: the notes are public; the run summary reminds the chair | same | a sentence of their own (the README's table) |
 | `grapevine_meeting_next`, `grapevine_meeting_day`, `grapevine_meeting_after` | Wednesday, December 2, 2026 / the same / Wednesday, January 6, 2027 | `recurring_events:` → `grapevine-meeting`, as `/events/` lists it | "see the Events page" |

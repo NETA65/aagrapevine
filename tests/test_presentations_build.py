@@ -966,7 +966,7 @@ MEET_X = {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "
                "position": "Past delegate, Area 65 (Panel 73)", "topic": "Grapevine as a Twelfth Step tool"},
               {"date": "2099-11-18", "name": "Jeannie M.", "confirmed": False,
                "position": "Past delegate, Area 4 (Panel 73)", "topic": "Public Information"},
-              {"date": "2099-12-16", "name": "Greg Gonzales", "confirmed": True, "position": "Delegate", "topic": "Anonymity"},
+              {"date": "2099-12-16", "name": "Pat Example", "confirmed": True, "position": "Delegate", "topic": "Anonymity"},
           ]}
 # Our Grapevine Meeting (config/site.yml recurring_events: grapevine-meeting), as the sync lists it in events.json
 GM_RULE = {"week_of_month": 1, "weekday": "wednesday", "start": "19:00", "end": "20:00"}
@@ -1375,6 +1375,12 @@ class Facts(unittest.TestCase):
         self.assertEqual(at("speaker_topic", OCT21_OVER), "Public Information")
         self.assertEqual(at("speaker_line", before), "Rick W. — Past delegate, Area 65 (Panel 73)")
         self.assertEqual(live["speaker_name"]["steps"][0]["from"], OCT21_OVER, "with the meeting's day, at midnight after it")
+        # on another meeting's slides (the Grapevine Meeting's announcements): the speaker, or that the meeting has
+        # none — never "to be announced" for a meeting with no speaker listed (December's); that only once the
+        # build's dates run out
+        self.assertEqual([at("speaker_note", t) for t in (before, OCT21_OVER, NOV18_OVER)],
+                         ["guest speaker: Rick W.", "guest speaker: Jeannie M.", "no guest speaker this month"])
+        self.assertEqual(live_at(live["speaker_note"], live["speaker_note"]["until"]), "guest speaker: to be announced")
         # next month's (the "Next meeting" slide, shown during tonight's): November's, then none
         self.assertEqual(at("speaker_after", before), "Jeannie M. — “Public Information”")
         self.assertEqual(at("speaker_after", OCT21_OVER), tba)
@@ -1389,6 +1395,7 @@ class Facts(unittest.TestCase):
         # the settings of a Zoom meeting with no speakers: where to look, never a name made up
         for k in ("speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after"):
             self.assertEqual(self.oct["live"][k], {"value": "", "fallback": tba}, k)
+        self.assertEqual(live_at(self.oct["live"]["speaker_note"], "2099-10-15T17:00:00.000Z"), "no guest speaker this month")
 
     def test_our_grapevine_meeting(self):
         """Our Grapevine Meeting (recurring_events: grapevine-meeting), as /events/ lists it: the next one until it

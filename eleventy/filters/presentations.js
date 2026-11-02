@@ -84,7 +84,7 @@ export const LIVE_KEYS = [
   "site", "site_url", "email", "panel", "as_of", "month", "year",
   "meeting_next", "meeting_day", "meeting_after", "meeting_month", "meeting_rule", "meeting_time", "meeting_platform",
   "meeting_link", "meeting_url", "meeting_code", "meeting_zoom_id", "meeting_passcode", "meeting_phone", "meeting_phone_passcode",
-  "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after", "speaker_slides",
+  "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_note", "speaker_after", "speaker_slides",
   "grapevine_meeting_next", "grapevine_meeting_day", "grapevine_meeting_after", "grapevine_meeting_time",
   "grapevine_meeting_link", "lv_workshop_next", "lv_workshop_time", "lv_workshop_zoom_id",
   "price_gv_print", "price_gv_digital", "price_lv_print", "price_lv_digital", "price_change_note", "price_change_date",
@@ -1147,6 +1147,7 @@ export const FALLBACKS = {
   speaker_position: "to be announced",
   speaker_topic: "to be announced",
   speaker_line: "to be announced",
+  speaker_note: "guest speaker: to be announced",
   speaker_after: "to be announced",
   speaker_slides: "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too.",
   grapevine_meeting_next: "see the Events page",
@@ -1640,6 +1641,11 @@ export function liveFacts(ctx) {
   out.speaker_topic = bySpeaker("speaker_topic", (s) => s.topic);
   // "Rick W. — Past delegate, Area 65 …" (as the calendars' text gives the speaker)
   out.speaker_line = bySpeaker("speaker_line", (s) => [s.name, s.position].filter(Boolean).join(" — "));
+  // "guest speaker: Rick W.", or "no guest speaker this month" for a meeting with none listed (December 16, 2026:
+  // none by design) — a phrase for another meeting's slides (the Grapevine Meeting's announcements); its fallback
+  // only once the build's dates run out
+  out.speaker_note = run(mt.rows.map((r) => ({ value: r.speaker ? `guest speaker: ${r.speaker.name}` : "no guest speaker this month", end: r.over })),
+    FALLBACKS.speaker_note);
   // "Jeannie M. — “Grapevine and La Viña as Public Information tools”" (as the meeting's summary gives them)
   const nextOne = (s) => (s ? s.name + (s.topic ? ` — “${s.topic}”` : "") : "");
   out.speaker_after = run(mt.rows.slice(1).map((r, i) => ({ value: nextOne(r.speaker), end: mt.rows[i].over })), FALLBACKS.speaker_after);

@@ -288,6 +288,7 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `speaker_position` | Past delegate, Area 65 Northeast Texas (Panel 73); … — their service position | "to be announced" |
 | `speaker_topic` | Grapevine as a Twelfth Step tool: … — the topic | "to be announced" |
 | `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … — the name and the position | "to be announced" |
+| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with no speaker listed (December 16, 2026): for another meeting's slides (the Grapevine Meeting's announcements), with `meeting_day` | "guest speaker: to be announced" |
 | `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — the guest speaker of `meeting_after`'s meeting (next month's, on a slide shown during the meeting) | "to be announced" |
 | `speaker_slides` | for the chair's notes: "Tonight's guest speaker shares slides: …" (the speaker's `slides: true`) | "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too." |
 | `grapevine_meeting_next` | Wednesday, December 2, 2026 — our Grapevine Meeting, the next one until it ends | "see the Events page" |
@@ -324,7 +325,7 @@ committee meeting's title slide: "{live:meeting_month} meeting" over "{live:meet
 "Next meeting: {live:meeting_after}" on a slide shown during the meeting), and `meeting_next` on its own, for "the next
 meeting" in a workshop ("Next meeting: {live:meeting_next}"). Never mix them: "the {live:meeting_month} meeting on
 {live:meeting_next}" names two different meetings between 8 PM and midnight. The guest speaker keys go the same way:
-`speaker_name`, `speaker_position`, `speaker_topic`, `speaker_line` with `meeting_day` (tonight's speaker),
+`speaker_name`, `speaker_position`, `speaker_topic`, `speaker_line`, `speaker_note` with `meeting_day` (tonight's speaker),
 `speaker_after` with `meeting_after` (next month's); and `grapevine_meeting_day` with `grapevine_meeting_after` on the
 Grapevine Meeting's own slides.
 
