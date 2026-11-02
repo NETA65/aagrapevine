@@ -93,6 +93,7 @@ keep:
   - Dr. Bob
   # Apps and platforms
   - Zoom
+  - Google Meet          # where our meetings are held ("meet" is also an everyday English word)
   - Instagram
   - YouTube
   - Spotify
@@ -324,6 +325,9 @@ terms:
   - { en: "Episode", es: "Episodio", exact: true }
   - { en: "at Noon Eastern", es: "al mediodía (hora del Este)", only: es }   # not "en mediodía"
   - { en: "Noon Eastern", es: "mediodía (hora del Este)", only: es }
+  # our monthly online meeting, as the Events page names it ("Reunión de Grapevine (en línea)"); a group's
+  # "Grapevine meeting" in lower case is left to the model
+  - { en: "Grapevine Meeting", es: "Reunión de Grapevine", exact: true }
   - { en: "Meeting ID", es: "ID de reunión" }
   - { en: "passcode", es: "código de acceso" }
   - { en: "link in bio", es: "enlace en la biografía" }

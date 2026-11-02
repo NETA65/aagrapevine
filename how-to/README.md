@@ -151,13 +151,16 @@ the document search and translation use all their time; "Full update (started by
 |---|---|
 | name a flyer so it becomes an event (date, time, place) | [Flyers and events §2](flyers-and-events.md#2-quick-start-a-new-event-from-a-flyer) and [§4](flyers-and-events.md#4-name-a-flyer-so-it-becomes-an-event) |
 | choose the right way to add an event | [Flyers and events §3](flyers-and-events.md#3-pick-the-right-way-to-add-an-event) |
-| add details to an event: a description, my own Spanish title, a Zoom link, several days, "details to be confirmed" | [Flyers and events §6](flyers-and-events.md#6-write-an-event-by-hand-contentevents), with its flyer attached as in [§5.1](flyers-and-events.md#51-attach-a-flyer-to-a-hand-written-event-flyer) |
+| add details to an event: a description, my own Spanish title, an online link (Zoom, Google Meet …), several days, "details to be confirmed" | [Flyers and events §6](flyers-and-events.md#6-write-an-event-by-hand-contentevents), with its flyer attached as in [§5.1](flyers-and-events.md#51-attach-a-flyer-to-a-hand-written-event-flyer) |
 | add something held every month (a booth, a workshop), or skip or move one month | [Flyers and events §7](flyers-and-events.md#7-monthly-events-recurring_events) |
 | show the events of another public calendar | [Flyers and events §8.2](flyers-and-events.md#82-extra-calendar-feeds-ics_feeds) |
 | fix an event that shows twice | [Flyers and events §9](flyers-and-events.md#9-when-the-same-event-comes-from-two-places) |
 | fix an event's translated title | [Flyers and events §12](flyers-and-events.md#12-fix-a-translated-event-title) |
-| change the committee meeting's day, time or Zoom details, or skip one meeting | [Settings §3.2](settings.md#32-meeting--the-committee-meeting) |
-| say who may come to the committee meeting, or name another platform than Zoom | [Settings §3.2](settings.md#32-meeting--the-committee-meeting) (`note`, `note_es`, `platform`) |
+| change the committee meeting's day, time or Google Meet link, or skip one meeting | [Settings §3.2](settings.md#32-meeting--the-committee-meeting) |
+| say who may come to the committee meeting, or name the platform it is held on | [Settings §3.2](settings.md#32-meeting--the-committee-meeting) (`note`, `note_es`, `platform`) |
+| add or change a committee meeting's guest speaker (name, position, topic), or see who is not confirmed yet | [Settings §3.2, the guest speakers](settings.md#the-guest-speakers-speakers) |
+| name the committee meeting's and the Grapevine Meeting's flyers on the Drive | [Settings §3.2, the meeting's flyers](settings.md#the-meetings-flyers-flyer_match) |
+| change our monthly Grapevine Meeting (1st Wednesday, Google Meet), or skip one month | [Settings §3.3, our Grapevine Meeting](settings.md#our-grapevine-meeting-grapevine-meeting) |
 | make sure a `content/events` file is read right (a whole date with its year, the right UTC offset) | [Flyers and events §6](flyers-and-events.md#6-write-an-event-by-hand-contentevents) |
 | share one event with its flyer in the link preview (WhatsApp, Facebook) | [Flyers and events §11.1](flyers-and-events.md#111-every-place) (the event share pages) |
 | know which reminder an "Add to calendar" file carries, or tell members about the story deadlines calendar (`/deadlines.ics`) | [Flyers and events §11.3](flyers-and-events.md#113-what-goes-into-the-calendar-files) |
@@ -199,10 +202,11 @@ the document search and translation use all their time; "Full update (started by
 
 | I want to… | Read |
 |---|---|
-| change the words on a slide of the four web presentations | [Presentations §2](presentations.md#2-quick-start-change-the-words-on-a-slide) |
+| change the words on a slide of the five web presentations | [Presentations §2](presentations.md#2-quick-start-change-the-words-on-a-slide) |
 | present or print a web presentation | [Presentations §3.17](presentations.md#317-presenting-the-player-keys-and-presenter-view) and [§3.18](presentations.md#318-printing) |
 | draft the committee meeting's agenda e-mail, reminder and minutes, and start next month | [Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--minutes) |
-| change a setting: names, contact address, Zoom link, official links … | [Settings §2](settings.md#2-quick-start-change-a-setting-on-github) |
+| lead the Grapevine Meeting with its script (`grapevine-meeting.yml`), or pick the committee meeting's version for a month with or without a guest speaker | [Presentations](presentations.md) |
+| change a setting: names, contact address, the meeting link, official links … | [Settings §2](settings.md#2-quick-start-change-a-setting-on-github) |
 | undo a settings change | [Settings: undo a change](settings.md#undo-a-change) |
 | announce new prices | [Settings §3.4](settings.md#34-price_changes--prices-aa-grapevine-has-announced) |
 | change the Grapevine or La Viña office address of *Tell the office* (GVR / RLV corner) | [Settings §3.11](settings.md#311-links--official-links-used-across-the-site) (`gvr_office_email`, `rlv_office_email`) |
@@ -293,7 +297,7 @@ practice and AA principles → see also.
 | [photos-slides-reports.md](photos-slides-reports.md) | photo albums, reports, minutes, slides, workshop material and sign-up forms: naming, and where they show (Portfolio, Photos, What's New …) |
 | [booth.md](booth.md) | the booth display on the About page: running it at an event, every setting, the Drive booth folder's naming convention, the CSV of quizzes and facts, offline use; the question of the day its CSV feeds |
 | [writers-archive.md](writers-archive.md) | the two exports of the magazines' online archives in `content/archive/` behind "Texas writers through the years" on `/published/`: names, columns, replacing a file, the safety checks, how Area 65 is decided |
-| [presentations.md](presentations.md) | the four web presentations on the GVR / RLV 101 page (`config/presentations/`): editing slides, facts that stay current, versions, printing; the chair's agenda e-mail, reminder and draft minutes |
+| [presentations.md](presentations.md) | the five web presentations on the GVR / RLV 101 page (`config/presentations/`): editing slides, facts that stay current, versions, printing; the chair's agenda e-mail, reminder and draft minutes |
 | [settings.md](settings.md) | `config/site.yml` section by section, and the other settings files, with examples and where each setting shows |
 | [translations.md](translations.md) | English and Spanish: fix a machine translation, one word everywhere, the words on buttons and headings, your own Spanish for a post or an event |
 | [email-and-alerts.md](email-and-alerts.md) | the monthly digest e-mail (SMTP, its secrets, previews, recipients, sending once or again), GitHub's "run failed" e-mails, the three automatic issues, the morning alarm |

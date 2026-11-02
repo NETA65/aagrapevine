@@ -293,7 +293,7 @@ same address. Google Groups usually adds its own unsubscribe line as well.
 | `site.url` | `https://neta65.github.io/aagrapevine` | The address in every link, but only when GitHub Pages cannot be asked (on GitHub the workflow asks Pages first) and when you build on a computer. | If the site moves to its own domain, the e-mail's links follow by themselves. |
 | `digest.per_section` | `5` | How many rows each list shows before *"→ and N more on the website"*. | `8` shows 8 rows. `0`, `-1` or `"many"` fall back to 5. |
 | `digest.highlights` | `3` | How many stories each magazine issue shows. | `2` |
-| `meeting:` (`week_of_month`, `weekday`, `platform`, `skip_dates`) | 3rd Wednesday, `Zoom` | The *"Committee meeting — Wed, Sep 16 · Zoom"* row under "Events in September", which the code works out from this rule when the events data has no record. | `skip_dates: ["2026-12-16"]` removes December's row. |
+| `meeting:` (`week_of_month`, `weekday`, `platform`, `skip_dates`) | 3rd Wednesday, `Google Meet` | The *"Committee meeting — Wed, Dec 16 · Google Meet"* row under "Events in December", which the code works out from this rule when the events data has no record (the September 2026 example below still says Zoom: the meeting was on Zoom then). | `skip_dates: ["2026-12-16"]` removes December's row. |
 | `price_changes:` | a change on January 1, 2027 | One extra row after "Coming up", shown while the price notice is on. It is judged on the day the e-mail is **built**. | E-mails built October 1 to December 31 say *"Grapevine and La Viña prices change on January 1, 2027"*. Those built in January say *"New Grapevine and La Viña prices since January 1, 2027"*. From February 1 the row is gone. |
 
 For example, to show fewer stories per issue and more rows per list:
@@ -339,7 +339,7 @@ send. The meaning of every other key is in [Settings](settings.md).
    does not wait for it.
 5. **From noon Central on the 3rd** it stops waiting and sends with the data there is.
 6. **Nothing new means no e-mail.** The month still counts as done. Events alone never count as news, so a month
-   with only the monthly CityWide booth and the committee meeting sends nothing.
+   with only the monthly CityWide booth, the Grapevine Meeting and the committee meeting sends nothing.
 7. **A month cannot be sent before it is over.** A preview of an unfinished month works.
 
 **When the tries actually happen:**
@@ -524,7 +524,8 @@ Then comes the **footer**:
   English and Spanish are two paragraphs, in the plain-text part two lines;
 - the site's address.
 
-**Never added by the e-mail itself, on purpose:** the meeting's Zoom link, passcode or phone numbers, event times,
+**Never added by the e-mail itself, on purpose:** the meetings' online links (Google Meet, Zoom), a meeting code or
+passcode, phone numbers, a committee meeting's guest speaker, event times,
 "every month", "to be confirmed", a Book of the Month section (the "Coming up" sentence only names it), subscription
 prices and the daily quote. The test `test_nothing_of_what_is_current` fails if, for example, a `zoom.us` or `tel:`
 link, "7:00 PM", "every month", "to be confirmed", a "BOOK OF THE MONTH" heading or "daily quote" slips in. All of
@@ -554,7 +555,7 @@ BULLETIN (1)
 
 EVENTS IN SEPTEMBER
 -------------------
-* GV/LV booth at CityWide Dallas — Sat, Sep 12 · Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220
+* GV/LV booth at CityWide Dallas — Sat, Sep 12 · Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220
   https://citywidedallasaa.org
 * Committee meeting — Wed, Sep 16 · Zoom
   https://neta65.github.io/aagrapevine/meetings/
@@ -582,7 +583,9 @@ Left out above (the "…" lines): two more events, four more uploads, and the se
 *Writers from Area 65 & Texas*, *Podcasts*, *Videos*, *Instagram* and *Documents*. The report row shows *(May 12)*,
 the date in its file name, but it is in the **September** edition because the site first had it on September 25.
 The Spanish half repeats everything in Spanish (*"BOLETÍN (1)"*, *"Reunión del comité — mié, 16 de sept · Zoom"*),
-with links to `/es/` pages.
+with links to `/es/` pages. From the December 2026 edition the committee meeting's row says *"· Google Meet"*, and
+each Grapevine Meeting that took place has a row of its own, linking to its section on Meetings, never to the
+Google Meet room: *"Grapevine Meeting (online) — Wed, Dec 2 · Online"*.
 
 The **HTML part** is a 600-pixel card. It has a dark-blue masthead with the committee logo and the line *"Grapevine /
 La Viña · Monthly digest"*, then a strip saying *"English first · Versión en español más abajo"*. Each section has a
@@ -1211,7 +1214,7 @@ digest (and decide whether to send it)"* and *"Send the digest"*; GitHub's failu
 
 - **Anonymity travels with the e-mail.** The digest can be forwarded anywhere, so anything in a bulletin post reaches
   inboxes outside the committee. Never put a member's full name, or a face, in a post or a photo. The e-mail never
-  adds the meeting's Zoom link, passcode, phone numbers or event times (a test enforces this), but a post's own text
+  adds the meetings' online links, codes, passcodes, phone numbers or event times (a test enforces this), but a post's own text
   goes out as written. Writers are shown the way the magazines print them, by first name and last initial. The HTML
   footer asks readers to protect everyone's anonymity.
 - **Everything in the Drive folder is public**, and so is everything in the e-mail. Committee-upload rows link

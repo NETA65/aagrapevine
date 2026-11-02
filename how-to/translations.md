@@ -381,13 +381,16 @@ Every item has a `lang`: the language it was written in. That decides the direct
 For every title, summary or text, in this order ([`scripts/sync/translate.py`](../scripts/sync/translate.py),
 `Translator.translate` → `_quick`):
 
-1. **Nothing to translate** (same language, a web address, a number, a code like `Panel77` or `2026-27`) → kept as is.
+1. **Nothing to translate** (same language, a web address, a number, a code like `Panel77`, `2026-27` or a Google
+   Meet code like `rva-tmst-vdb`) → kept as is.
 2. **`overrides.yml` has the whole text** → your words. Not marked "Auto-translated".
 3. **Translated before** (`cache.json`) → reused.
 4. **Already written in the other language** (a bilingual caption) → kept as is.
 5. Otherwise **the model**, one sentence at a time. Before the model, each sentence is checked against
    `overrides.yml` (a fix for that sentence wins), names from the glossary `keep:` list and `terms:` are protected,
-   and dates, prices and "[Season 3, Episode 7]" are written by rules. A **guard** throws away a bad result (a word
+   so are web and e-mail addresses, phone numbers, Zoom IDs, codes and a Google Meet code that the words just
+   before it name as one ("meeting code rva-tmst-vdb", "Google Meet: …", "código de la reunión: …" — "one-year-old"
+   has the same shape and is left alone), and dates, prices and "[Season 3, Episode 7]" are written by rules. A **guard** throws away a bad result (a word
    repeated in a loop, an output more than 2.5 times longer, changed numbers): that sentence keeps its original words.
 
 Capitals follow the magazines' style: a machine-made English title gets Title Case ("Bound by the same illness" →
@@ -671,9 +674,11 @@ terms:                     # 2) fixed translations, used in both directions unle
   - { en: "Season", es: "Temporada", exact: true }
 ```
 
-Today: 59 names under `keep:` (magazines and their sections, AA and NETA, the committee's short names GV, LV, GVR,
-RLV, ASL …, place names that are also English words, the co-founders, apps) and 199 `terms:` (Steps and Traditions,
-service structure, Grapevine and La Viña service, meetings and podcasts). A term may only have the keys `en`, `es`,
+Today: 60 names under `keep:` (magazines and their sections, AA and NETA, the committee's short names GV, LV, GVR,
+RLV, ASL …, place names that are also English words, the co-founders, apps and platforms — Zoom, Google Meet …) and
+202 `terms:` (Steps and Traditions, service structure, Grapevine and La Viña service, meetings and podcasts — among
+them our monthly "Grapevine Meeting" → "Reunión de Grapevine", with `exact: true` so that a group's "Grapevine
+meeting" in lower case is left to the model). A term may only have the keys `en`, `es`,
 `only` and `exact`.
 
 #### How it matches

@@ -126,13 +126,16 @@ online_url: "https://us06web.zoom.us/j/81595931777"
 meeting_id: "815 9593 1777"        # optional: shown on the card and in the calendars
 ```
 
+A Zoom ID (digits) shows as "Meeting ID 815 9593 1777"; a Google Meet code (letters, `abc-defg-hij`) as
+"Meeting code abc-defg-hij".
+
 Without `location:` the card says **Online on Zoom**, with a **Join online** button and no map. With a
 `location:` too (a hybrid event: come in person or join online), the card shows both — the place and
 **Online on Zoom**. Search engines are told only about events held at a place: a hybrid event as one you can
-come to in person (never its Zoom link), an online-only one not at all. The description they get also leaves out
-every sentence with a meeting ID, a passcode or a Zoom link (the page still shows them to people), so put those
-in a sentence of their own. The platform's name comes from the link (Zoom, Google Meet, Microsoft Teams, Webex …);
-a link from anywhere else says just **Online**.
+come to in person (never its online link), an online-only one not at all. The description they get also leaves
+out every sentence with a meeting ID or meeting code, a passcode, or a Zoom or Google Meet link (the page still
+shows them to people), so put those in a sentence of their own. The platform's name comes from the link (Zoom,
+Google Meet, Microsoft Teams, Webex …); a link from anywhere else says just **Online**.
 
 ## The flyer: `flyer:`
 

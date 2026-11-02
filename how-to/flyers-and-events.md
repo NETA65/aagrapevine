@@ -92,7 +92,7 @@ the March monthly digest. Section [11](#11-where-events-show-on-the-website) lis
 | Date set, details not final ("Venue to be announced") | A `content/events` file with `tentative: true` | [6.6 d](#d-details-not-final-yet-tentative-venue-to-be-announced) |
 | The same thing every month (a booth, a workshop) | A `recurring_events:` block in `config/site.yml` | [7](#7-monthly-events-recurring_events) |
 | A month when a monthly event moves to another day | A skip date + a file (or a dated flyer) for the new day | [7.6](#76-a-month-when-the-date-moves) |
-| The committee meeting's day, time or Zoom link | `meeting:` in `config/site.yml` | [Settings](settings.md) |
+| The committee meeting's day, time, Google Meet link, guest speakers or flyer | `meeting:` in `config/site.yml` | [Settings §3.2](settings.md#32-meeting--the-committee-meeting) |
 | An event Grapevine or La Viña lists on their own calendar | Nothing: it is read automatically | [8.1](#81-grapevines-and-la-viñas-website-calendars) |
 | Events of another public calendar (Google Calendar, a district's site) | An `ics_feeds:` entry | [8.2](#82-extra-calendar-feeds-ics_feeds) |
 
@@ -326,8 +326,8 @@ All verified with the site's own code. Times are Central; "All day" means no tim
 | `2026-10-26 Taller de Escritura de La Viña 7-9pm - Grupo Libro Grande, 623 West Bow, Tyler, TX 75702.jpg` | Taller de Escritura de La Viña | Mon Oct 26 2026, 7:00 – 9:00 PM | Grupo Libro Grande, 623 West Bow, Tyler, TX 75702 |
 | `2027-03-14 Grapevine Writing Workshop 10am-12pm @ First Methodist Church, 123 Main St, Garland, TX 75040.pdf` | Grapevine Writing Workshop | 10:00 AM – 12:00 PM | First Methodist Church, … (city Garland) |
 | `2027-03-14 Asamblea de primavera - Mesa de La Viña 9am-4pm @ Tyler, TX.pdf` | Asamblea de primavera - Mesa de La Viña | 9:00 AM – 4:00 PM | Tyler, TX |
-| `2027-03-14 GV LV booth 5-8pm @ CityWide Dallas.pdf` | GV/LV booth | 5:00 – 8:00 PM | CityWide Dallas |
-| `2027-03-14 GV-LV Booth 5pm-8pm - Lovers Lane UMC, Dallas, TX.pdf` | GV/LV Booth | 5:00 – 8:00 PM | Lovers Lane UMC, Dallas, TX |
+| `2027-03-14 GV LV booth 5:30-7:30pm @ CityWide Dallas.pdf` | GV/LV booth | 5:30 – 7:30 PM | CityWide Dallas |
+| `2027-03-14 GV-LV Booth 5:30pm-7:30pm - Lovers Lane UMC, Dallas, TX.pdf` | GV/LV Booth | 5:30 – 7:30 PM | Lovers Lane UMC, Dallas, TX |
 | `2027-03-14 GV_LV Booth noon-2pm @ Longview.pdf` | GV/LV Booth | 12:00 – 2:00 PM | Longview |
 | `2027-03-14 Dance 8pm-1am @ Alano Club.pdf` | Dance | 8:00 PM – 1:00 AM next morning (the card writes "8:00 PM – 1:00 AM CDT" under Sun, Mar 14) | Alano Club |
 | `2027-03-14 Taller a las 7 pm @ Grupo Amistad.pdf` | Taller | 7:00 PM | Grupo Amistad |
@@ -447,7 +447,14 @@ A block in `recurring_events:` ([7](#7-monthly-events-recurring_events)) can fin
   problem" line in the run summary.
 
 Real example: `Taller Mensual y Virtual de La Viña - jueves, 3 p. m. (hora del Este), por Zoom.png` (undated)
-is the flyer of every date of `lv-monthly-workshop`.
+is the flyer of every date of `lv-monthly-workshop`; `Grapevine Meeting - flyer.png` (undated) is the flyer of
+every date of our `grapevine-meeting` (`flyer_match: "grapevine meeting *[-–—] *flyer"`).
+
+**The committee meeting has a `flyer_match` too** (`meeting:` in `config/site.yml`), read the same way but only
+in the `flyers` folder (the meeting's own slides in `slides/` carry its name): `Committee Meeting - flyer.png` is
+every meeting's flyer, `January 2027 Committee Meeting - guest speaker.png` that month's
+([Settings §3.2](settings.md#the-meetings-flyers-flyer_match) has the whole list). The combined
+`Our online meetings - flyer.png` and `2027 Guest Speaker Series - flyer.png` match neither meeting, on purpose.
 
 | Pattern | Matches | Does not match |
 |---|---|---|
@@ -468,7 +475,9 @@ A **dated** flyer whose name matches a series behaves specially:
 `March 2027 Taller Mensual de La Viña.png` makes **no event**. Its only use: when a series' `flyer_match`
 matches it, it is that series' flyer for **March 2027** (beating the undated flyer, losing to one dated that
 day). Verified: with that file on the Drive, the `lv-monthly-workshop` date of March 25, 2027 shows it, the
-other months keep the undated flyer.
+other months keep the undated flyer. The committee meeting's guest-speaker flyers work the same way: with
+`January 2027 Committee Meeting - guest speaker.png` and `Committee Meeting - flyer.png` on the Drive, the
+meeting of January 20, 2027 shows the January one and December 16, 2026 the undated one (checked).
 
 ---
 
@@ -922,7 +931,7 @@ Things that happen **every month** live in `config/site.yml` under `recurring_ev
 series. Each block produces one event per date: the next `months_ahead` dates, plus the dates of the last 90
 days (kept for the calendar files only). Daylight saving is handled.
 
-### 7.1 The two real blocks (shortened)
+### 7.1 The three real blocks (shortened)
 
 ```yaml
 recurring_events:
@@ -933,9 +942,9 @@ recurring_events:
     summary_es: "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, …"
     week_of_month: 2
     weekday: "saturday"
-    start: "17:00"
-    end: "20:00"
-    location: "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220"
+    start: "17:30"
+    end: "19:30"
+    location: "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220"
     url: "https://citywidedallasaa.org"
     months_ahead: 6
     skip_dates: []
@@ -956,7 +965,31 @@ recurring_events:
     flyer_match: "taller (informativo )?mensual( y virtual)? de la vi[nñ]a"
     months_ahead: 6
     skip_dates: ["2026-11-26", "2026-12-24", "2027-11-25", "2027-12-23"]
+
+  - key: "grapevine-meeting"
+    title: "Grapevine Meeting (online)"
+    title_es: "Reunión de Grapevine (en línea)"
+    summary: "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome."
+    summary_es: "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine, …"
+    week_of_month: 1
+    weekday: "wednesday"
+    start: "19:00"
+    end: "20:00"
+    starts: "2026-12-02"
+    online_url: "https://meet.google.com/rva-tmst-vdb"
+    meeting_id: "rva-tmst-vdb"
+    contact: "grapevine@neta65.org"
+    url: "/meetings/#grapevine-meeting"
+    flyer_match: "grapevine meeting *[-–—] *flyer"
+    months_ahead: 6
+    skip_dates: []
 ```
+
+The third block is our own online meeting, in the committee meeting's Google Meet room (the committee meeting
+is on the 3rd Wednesday, this one on the 1st): its card says "Online on Google Meet" and "Meeting code
+rva-tmst-vdb", its title links to its section on our Meetings page, and it has no date before December 2, 2026
+(`starts`). An outside calendar that lists the committee meeting in that room is never taken for one of its
+dates. Never call it "Grapevine meetings": that is the list of AA groups on `/meetings/#grapevine-meetings`.
 
 ### 7.2 Every key
 
@@ -971,13 +1004,14 @@ recurring_events:
 | `end` | the same forms | unreadable or not after the start → **one hour** + a note. Since October 2026 an end earlier than the start and at most 12 hours later (`"22:00"`–`"01:00"`) is the next morning everywhere, with no note: `/events/`, `/events.ics`, the `/monthly/` toolkit (also for months beyond the dates `events.json` lists), the booth display, the presentations, the e-mail digest | end |
 | `location` | an address; the city is read from `…, City, TX` | — (an online series has none) | place |
 | `city`, `state` | override the city and state read from `location` | — | toolkit and duplicate matching |
-| `url` | `https://…` (a `www.…` address gets `https://`) | not an address → left out + note; none → the event links to its own card on `/events/` | title link, **Event details** button |
+| `url` | `https://…` (a `www.…` address gets `https://`), or a page of this site starting with `/` (`"/meetings/#grapevine-meeting"`: `/es/…` on the Spanish pages, the site's address in the calendars) | not an address or a page → left out + note; none → the event links to its own card on `/events/` | title link, **Event details** button |
 | `online_url` | `https://…` | not an address → left out + note | **Join online**; the platform from the link |
-| `meeting_id` | letters, digits, spaces, dots, dashes (3–40 characters) | not an ID → left out + note; a Zoom number that differs from the `online_url` meeting → note | "Meeting ID …" line; recognising the same room |
+| `meeting_id` | letters, digits, spaces, dots, dashes (3–40 characters) | not an ID → left out + note; a Zoom number that differs from the `online_url` meeting → note | "Meeting ID 815 9593 1777" (digits: a Zoom ID) or "Meeting code rva-tmst-vdb" (letters: a Google Meet code) line; recognising the same room |
 | `contact` | a plain e-mail address (`mailto:` is removed) | not an address → left out + note | a "Contact" mail link on the card and in calendars |
 | `host` | `neta` (default), `lv`, `gv` (and the long names) | anything else → `neta` + note | `lv`/`gv`: shown with the GV & LV calendars, in that magazine's colour, and it does **not** get a reserved place on the home page |
 | `flyer_match` | a pattern, or a list of patterns | unreadable, or matches everything → no flyer + note | its flyer, [5.2](#52-a-monthly-events-flyer-flyer_match) |
 | `months_ahead` | `1`–`24` | default `6`; outside 1–24 → 6 + note | how many upcoming dates `/events/` and the calendar files list (the `/monthly/` posters work out later months themselves) |
+| `starts` | the first date, `"2026-12-02"` (optional) | not a date → ignored + note; not one of the rule's days → the rule's next day is the first date + a note naming it | no date before it — not on `/events/`, not among the 90 past days the calendar files keep, not on the `/monthly/` posters |
 | `skip_dates` | `["2026-12-12"]` (one date without brackets works too) | a value that is not a date, or not one of the rule's days → ignored + a note naming the right date | that month has no date |
 
 > **Note:** `enabled: false` is **not** read by the daily update — only the `/monthly/` posters honour it.
@@ -1060,15 +1094,16 @@ Under **Settings problems** you get one line that starts with `config/site.yml`,
 number and key, blocks separated by ` / ` (wrapped here):
 
 ```text
-config/site.yml recurring_events entry 3 (booth-garland): end time “9am” is not after the start — shown as
+config/site.yml recurring_events entry 4 (booth-garland): end time “9am” is not after the start — shown as
   one hour long; months_ahead “40” must be a number from 1 to 24 — 6 used; url “garland.example.org” is not
-  a web address (https://…) — left out; host “District 91” must be "neta" (our committee), "lv" (La Viña) or
-  "gv" (Grapevine) — "neta" used; flyer_match “.*” would match every file on the Drive — no flyer
-  / recurring_events entry 4 (no name): it needs a title; it needs week_of_month (1–5, or -1 for the last
+  a web address (https://…) or a page of the site (/…) — left out; host “District 91” must be "neta" (our
+  committee), "lv" (La Viña) or "gv" (Grapevine) — "neta" used; flyer_match “.*” would match every file on
+  the Drive — no flyer
+  / recurring_events entry 5 (no name): it needs a title; it needs week_of_month (1–5, or -1 for the last
   one); weekday “funday” is not a day of the week; it needs a start time (like "17:00") — skipped
 ```
 
-Block 3 still shows (with the fixes applied); block 4 is skipped. The rest of the site still updates.
+Block 4 still shows (with the fixes applied); block 5 is skipped. The rest of the site still updates.
 
 ---
 
@@ -1251,7 +1286,7 @@ A few more timings:
 | Contribute page, workshops | `/contribute/#workshop` | `/es/contribute/` | the next 3 events whose title says "writing workshop", "recording workshop", "taller de escritura" or "taller de grabación" | name a workshop that way to be listed here |
 | Committee menu, "Events" count | | | upcoming events except meetings, a series once | |
 | **Web presentations** | `/orientation/` | `/es/orientation/` | live facts: the next NETA 65 assembly (an event coloured "Area assembly"), event lists filtered by workshops / NETA 65 / calendars / assemblies, La Viña's workshop dates | [Presentations](presentations.md) |
-| **Booth display** | `/about/#booth` | `/es/about/#booth` | a slide with the next 4 events of `/events/` (never committee meetings; a monthly series once, its next date), each row until its event is over; a countdown to the next NETA 65 assembly; La Viña's monthly workshop in "Meetings you can join"; the next 12 events that are not online-only in the player's "pick the event" (Settings → Event) | a hybrid event shows its place and "Online on Zoom"; a title with a word the booth never shows is left out of the list; [Booth display](booth.md) |
+| **Booth display** | `/about/#booth` | `/es/about/#booth` | a slide with the next 4 events of `/events/` (never committee meetings; a monthly series once, its next date), each row until its event is over; a countdown to the next NETA 65 assembly; La Viña's monthly workshop and our Grapevine Meeting in "Meetings you can join"; the next 12 events that are not online-only in the player's "pick the event" (Settings → Event) | a hybrid event shows its place and "Online on Zoom"; a title with a word the booth never shows is left out of the list; [Booth display](booth.md) |
 | The flyer **file** itself | `/portfolio/` (Flyers tab), `/library/` (PDF / document flyers only), home "Shared by the committee" | Spanish versions | every flyer, dated or not | [Photos, slides and reports](photos-slides-reports.md) |
 | **Search engines** (structured data, not shown to visitors) | `/events/` | `/es/events/` | the upcoming events held at a place with a city, state or ZIP code, a series by its next date (at most 30) | [11.5](#115-what-search-engines-are-told) |
 | **Status** | [/status/](https://neta65.github.io/aagrapevine/status/) | `/es/status/` | — | only the health of the sources: the rows "Committee Google Drive", "Events added by hand" and "GV/LV event calendars", and the "Other calendars" section |
@@ -1286,14 +1321,14 @@ A few more timings:
 | `UID` | `ev-<kind>-<id>@neta65-gvlv` (`…-es@…` in the Spanish file): `ev-flyer-<Drive file id>`, `ev-manual-<file name>`, `ev-recurring-<key>-<date>` — written in small letters, other signs turned into dashes. It stays the same while the Drive file, the file name or the key stays the same. |
 | `DTSTART` / `DTEND` | times in UTC; all-day events as dates (`DTEND` = the day after the last day); no end → one hour |
 | `SUMMARY` | the title in the file's language |
-| `DESCRIPTION` | "Details to be confirmed. The date, place or times may still change…" (tentative) · the summary · the repeat line with "Central time" · a "to be announced" place · "Online on Zoom: <link>" · "Meeting ID: …" · "Contact: …" · "Flyer: <link>" · "Details: <page>" |
+| `DESCRIPTION` | "Details to be confirmed. The date, place or times may still change…" (tentative) · the summary · the repeat line with "Central time" · a "to be announced" place · "Online on Zoom: <link>" (or Google Meet …) · "Meeting ID: …" / "Meeting code: …" · a committee meeting's guest speaker ("Guest speaker: …", "Topic: …", when the speaker's part ends) · "Contact: …" · "Flyer: <link>" · "Details: <page>" |
 | `LOCATION` | the place; the online link when there is no place; nothing for "to be announced" |
 | `URL` | the event's own page; else its card on `/events/`; for a dated flyer, the Drive flyer |
 | `ATTACH` | the flyer link |
 | `CATEGORIES` | Committee meeting · NETA 65 event · Grapevine / La Viña calendar |
 | `STATUS` | `TENTATIVE` or `CONFIRMED` (also in a single event's **Add to calendar** file, since October 2026) |
 | `SEQUENCE` | the minutes since 2026-01-01 UTC when the file was made (since October 2026): it grows with every new file, so a calendar app that already has the event takes a changed time instead of keeping the old one |
-| `VALARM` (one reminder) | since October 2026, in the files a member adds once: a card's **Add to calendar → Apple / Outlook (.ics file)** (on `/events/` and `/meetings/`), the home page's next-meeting **Add to calendar** button (no menu: it downloads the `.ics` file at once), the weekly open meetings' files, each month's file and the story deadlines calendar (below). **1 hour before** a timed or online event; **9 AM the day before** for an all-day event or a story deadline, in the member's own time zone (`TRIGGER:-PT1H` / `-PT15H`). Its words are the event's **title only**: the Zoom link, meeting ID and passcode stay in the description, and if a title itself holds a link, a passcode or a meeting ID, those are left out of the reminder (ordinary words such as "Conceptos clave del servicio" stay). **Not** in `/events.ics` and `/es/events.ics`, on purpose: a subscriber would get about ninety alarms. Google Calendar ignores reminders inside calendar files and uses its own notification settings (the menus say so; the deadlines card also tells iPhone users to turn off "Remove Alerts" when they subscribe). The Tracker's "End dates for my calendar (.ics)" keeps its own reminder, with a lead the member chooses. Code: `icsAlarm` / `alarmText` in `eleventy/central-time.js` (the browser has the same code as `window.GVTime`) |
+| `VALARM` (one reminder) | since October 2026, in the files a member adds once: a card's **Add to calendar → Apple / Outlook (.ics file)** (on `/events/` and `/meetings/`), the home page's next-meeting **Add to calendar** button (no menu: it downloads the `.ics` file at once), the weekly open meetings' files, each month's file and the story deadlines calendar (below). **1 hour before** a timed or online event; **9 AM the day before** for an all-day event or a story deadline, in the member's own time zone (`TRIGGER:-PT1H` / `-PT15H`). Its words are the event's **title only**: the online link, the meeting ID or code, a passcode and a committee meeting's guest speaker stay in the description, and if a title itself holds a link, a passcode or a meeting ID, those are left out of the reminder (ordinary words such as "Conceptos clave del servicio" stay). **Not** in `/events.ics` and `/es/events.ics`, on purpose: a subscriber would get about ninety alarms. Google Calendar ignores reminders inside calendar files and uses its own notification settings (the menus say so; the deadlines card also tells iPhone users to turn off "Remove Alerts" when they subscribe). The Tracker's "End dates for my calendar (.ics)" keeps its own reminder, with a lead the member chooses. Code: `icsAlarm` / `alarmText` in `eleventy/central-time.js` (the browser has the same code as `window.GVTime`) |
 
 Example — the flyer `2027-03-14 Spring Assembly booth 9am @ Tyler Civic Center.pdf` becomes (shortened):
 
@@ -1346,9 +1381,9 @@ rules since 2025), so the list holds only those:
 | Event | What search engines get |
 |---|---|
 | At a place (`location:` with a city, a state or a ZIP code), upcoming | an Event: its name, start and end, the place with its address, its picture, its summary (one plain line, at most 300 characters, without a sentence that says how to join online — below) and its own page on another site (neta65.org's event page …). A monthly series: its next date only; at most 30 events |
-| Hybrid (`location:` and `online_url:`) | the same, as "mixed attendance": the place only — never the Zoom link, the meeting ID or a passcode |
+| Hybrid (`location:` and `online_url:`) | the same, as "mixed attendance": the place only — never the online link, the meeting ID or code, or a passcode |
 | A place that is only a venue's name (`location: "Hilton Tyler"`: no city, state or ZIP code) | nothing — Google wants the venue's address. Write the place in full (below) and the event is listed |
-| Online only (`online_url:` without `location:`; the committee meeting; La Viña's Zoom workshop) | nothing. Its card, calendar entry and share page are as before |
+| Online only (`online_url:` without `location:`; the committee meeting and its guest speakers; our Grapevine Meeting; La Viña's Zoom workshop) | nothing. Its card, calendar entry and share page are as before |
 | A place "to be announced" | nothing until the place is known |
 | From the magazines' calendars, online (La Viña's lists Spanish-language online events from anywhere) | nothing; one with a real place: an Event without organizer or summary (their words; their own page tells search engines about it) |
 
@@ -1360,10 +1395,10 @@ name. A venue's name alone ("Hilton Tyler") is always the place's name, never it
 split counts as the street only when it starts with a house number ("1802 West Division Street").
 
 **How to join stays on the page.** The summary search engines get leaves out every sentence that says how to join
-online — a meeting ID, a passcode or password, a `zoom.us` link, and in Spanish "ID de reunión", "código de
-acceso", "contraseña". The page itself still shows them to people; a copy made for machines would only help those
-who look for meetings to disrupt. Write such details in a sentence of their own ("Join on Zoom: meeting ID …,
-passcode …") so the rest of the summary is kept.
+online — a meeting ID or meeting code, a passcode or password, a `zoom.us` or `meet.google.com` link, and in
+Spanish "ID de reunión", "código de la reunión", "código de acceso", "contraseña". The page itself still shows
+them to people; a copy made for machines would only help those who look for meetings to disrupt. Write such
+details in a sentence of their own ("Join on Zoom: meeting ID …, passcode …") so the rest of the summary is kept.
 
 **Who holds it.** The committee (by the same name as on every page) for our own events — with "free to attend"
 and, without a flyer, the committee's card as its picture; La Viña or AA Grapevine for a `host: lv` / `gv` event;

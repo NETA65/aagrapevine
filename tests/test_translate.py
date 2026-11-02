@@ -56,6 +56,23 @@ class TextHelpers(unittest.TestCase):
         # a lost placeholder is detected
         self.assertIsNone(T.Protector.restore(re.sub(r"XQ1\b", "", m.text), m))
 
+    def test_a_google_meet_code_is_kept(self):
+        # our meetings' room (config/site.yml meeting: meeting_id): letters only, so the code rule does not see it
+        p = T.Protector(T.Glossary({"keep": ["Google Meet"]}))
+        for text, src in (("Join on Google Meet, meeting code rva-tmst-vdb, at 7 PM.", "en"),
+                          ("Google Meet: rva-tmst-vdb", "en"),
+                          ("Join at https://meet.google.com/rva-tmst-vdb (code rva-tmst-vdb).", "en"),
+                          ("Código de la reunión: rva-tmst-vdb. Todos son bienvenidos.", "es")):
+            m = p.mask(text, src, "es" if src == "en" else "en")
+            self.assertNotIn("rva-tmst-vdb", m.text, text)
+            self.assertEqual(T.Protector.restore(m.text, m), text.replace("7 PM", "7 p. m."))
+        # the same shape with no word naming a code before it is an ordinary word
+        for text in ("Her one-year-old son came along.", "Meet my one-year-old son.",
+                     "The code is short. My one-year-old son came."):
+            self.assertIn("one-year-old", p.mask(text, "en", "es").text, text)
+        self.assertFalse(T.needs_translation("rva-tmst-vdb"))     # a code on its own is never translated
+        self.assertTrue(T.needs_translation("Meeting code rva-tmst-vdb"))
+
     def test_glossary_accent_and_case(self):
         g = T.Glossary({"keep": ["La Viña", "GVR"], "terms": [{"en": "Season", "es": "Temporada", "exact": True}]})
         pat, ents = g.matcher("en", "es")

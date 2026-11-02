@@ -96,7 +96,7 @@ Where Drive files show up (site address `https://neta65.github.io/aagrapevine`; 
 | Pictures from an event (JPG, or iPhone HEIC) | `photos/2027 Spring Assembly` | `Literature display.jpg` (or keep `IMG_0142.HEIC`) | an album "2027 Spring Assembly" on `/photos/`; caption "Literature display" — or "2027 Spring Assembly #3" for a camera name |
 | A short video from an event | the same album folder | `Room setup.mov` | a video in the album, played by Drive's own player |
 | A report or minutes (PDF, Word, Google Doc) | `reports` or `notes` | `2027-02-17 Committee report - February.pdf` | a **Document** card in the Reports (or Meeting notes) tab: "Committee report - February", February 17, 2027 |
-| A slide deck (PowerPoint, Google Slides) | `slides` | `GVR and RLV Orientation Workshop.pptx` | a **Slides** card — with **Present on the web** when the name is exactly one of the four web decks' |
+| A slide deck (PowerPoint, Google Slides) | `slides` | `GVR and RLV Orientation Workshop.pptx` | a **Slides** card — with **Present on the web** when the name is exactly one of the five web decks' |
 | A sign-up form | `forms` | a Google Form named `Spring Assembly volunteers` | a **Form** card with a **Sign up** button (it goes away by itself once the form stops accepting answers) |
 | A workshop recording (MP3) | `workshops` | `Writing workshop - recording.mp3` | a **Document** card in the Workshops tab; Preview plays it in Drive's player |
 | A picture, video, sound file or short text for the screen at our table | `booth` | `GV EN Welcome to our table (first) (15s).png` | a slide of the booth display (and nowhere else on the site) |
@@ -969,7 +969,7 @@ The name is all the site reads for most files, so it is worth a few seconds. Gen
 | PDF, Word, Google Doc — documents | `2027-02-17 Minutes - February committee meeting.pdf` · `March 2027 Committee Meeting.pdf` | dated February 17 / March 1, 2027 (a month alone stays in the title) | "final", "v3" (they stay in the title); a phone photo of a page (it becomes an Image card — a PDF prints better) |
 | Any flyer (PDF, JPG, PNG, Google Drawing …) | `2027-03-14 Spring Assembly booth 9am @ Tyler Civic Center.pdf` · `2027-05-01 Workshop 7pm ET on Zoom.png` | the day makes an event; a time (`9am`, `9-11am`, `7pm ET`) and a place after `@` fill it in; since October 2026 a range of days (`2027-03-19 - 2027-03-21 …`, `March 14 - 16, 2027 …`, `del 14 al 16 de mayo de 2027 …`) makes one event over those days | a phone's own name (`IMG_20270314_…`): no event; a dated name for a flyer that a `content/events` file already links (two events) |
 | Bulletin post (Google Doc, `.docx`, `.txt`, `.md`) | `2027-01-10 Welcome new GVRs` · `Assembly reminder (until 2027-03-15).md` · `New prices (from 2027-01-01).md` · `Welcome (pinned).txt` | the name is the headline; the markers pin, expire or schedule it (a date with its year) | `.markdown`, `.rtf`, `.odt`, `.doc` for a text post; `(until March 15)` without a year (not read) |
-| Slides | `Spring Assembly report.pptx` | the title on the Slides card | renaming the four web decks' PowerPoint files (their names are the decks' `drive_title`) |
+| Slides | `Spring Assembly report.pptx` | the title on the Slides card | renaming the five web decks' PowerPoint files (their names are the decks' `drive_title`) |
 | Google Form | the form's own name: `Spring Assembly volunteers` | the card's title | removing "(Responses)" from the answers sheet's name |
 | Picture | `Literature display at the Spring Assembly.jpg` · `2027-03-14 Literature table.jpg` · or keep `IMG_0142.HEIC` | caption and date; a camera name gets a numbered caption | faces, names (also on name tags in the picture); `.jfif`, `.avif`, Pixel `….MP.jpg` names |
 | Album folder (in `photos`) | `2027 Spring Assembly` | the album's title, translated for the Spanish page | people's names; a folder for every few photos (each sub-folder is an album of its own) |
@@ -1045,7 +1045,8 @@ longer match, and the link quietly disappears:
 | `/shop/` · `/es/shop/` | **Read AA Grapevine's notice** for a price change | `price_changes` → `doc_match` in [config/site.yml](../config/site.yml) |
 | Portfolio, `/orientation/` · `/es/orientation/` | **Present on the web**, the deck's "PowerPoint copy" | exactly the deck's `drive_title` in `config/presentations/*.yml` ([Presentations](presentations.md)) |
 | `/meetings/` · `/es/meetings/` | the La Viña weekly open meeting's **View flyer** | `lavina_weekly_open` → `flyer_match` in config/site.yml |
-| `/events/` (monthly events) | each date's flyer | `recurring_events` → `flyer_match` ([Flyers and events §5.2](flyers-and-events.md#52-a-monthly-events-flyer-flyer_match)) |
+| `/events/` (monthly events) | each date's flyer | `recurring_events` → `flyer_match` ([Flyers and events §5.2](flyers-and-events.md#52-a-monthly-events-flyer-flyer_match)); our Grapevine Meeting's: `Grapevine Meeting - flyer.png` |
+| `/events/` (the committee meeting) | each meeting's flyer, from `flyers` only | `meeting` → `flyer_match`: `Committee Meeting - flyer.png` (every meeting), `January 2027 Committee Meeting - guest speaker.png` (that month's; a month only, so no event of its own) — [Settings §3.2](settings.md#the-meetings-flyers-flyer_match) |
 | `/contribute/` · `/es/contribute/` | printable "Share your story" flyers (at most 2, from `flyers`) | "share your story" / "comparte tu historia" |
 | `/monthly/` · `/es/monthly/` | the editorial calendar | "editorial calendar" / "calendario editorial" |
 
@@ -1264,7 +1265,7 @@ the set-up).
 - [Flyers and events](flyers-and-events.md) · [Bulletin](bulletin.md) ·
   [Photos, slides, reports …](photos-slides-reports.md) · [Booth display](booth.md) — the player, the CSV, the
   `booth:` settings
-- [Presentations](presentations.md) (the four web decks and their `drive_title`) · [Settings](settings.md)
+- [Presentations](presentations.md) (the five web decks and their `drive_title`) · [Settings](settings.md)
   (`config/site.yml`) · [Translations](translations.md) (fix a translated title)
 - [Automation and troubleshooting](automation-and-troubleshooting.md) (runs, the run summary, tests) ·
   [Pages and code](pages-and-code.md) · [E-mail and alerts](email-and-alerts.md) (the monthly digest e-mail) ·
