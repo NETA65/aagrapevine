@@ -59,7 +59,8 @@
 // (community.js imports this file too: the cycle is safe, both only call each other's functions.)
 import crypto from "node:crypto";
 import { qrSvg, issueLabel, issueInSentence, issueLabelOf } from "./community.js";
-import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs, calendarLinks, meetingJoin } from "./committee.js";
+import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs, calendarLinks, meetingJoin,
+  meetingSpeaker } from "./committee.js";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
 import { overnight, wallInstant } from "../central-time.js";
 import { shopFromMonthly, money, shopPriceChangeIn, dayLabel } from "./shop.js";
@@ -310,8 +311,8 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
  *   place     the city to show after the title: "" when the title already names it ("Writing Workshop —
  *             Mansfield", "booth at CityWide Dallas") — the page's row, the poster and the message say a
  *             place once
- *   online    it can be joined online (an online link, or "Zoom" as its place): without a city the row,
- *             the poster and the message say "Online" there
+ *   online    it can be joined online (an online link, or "Zoom" / "Google Meet" as its place): without a city
+ *             the row, the poster and the message say "Online" there
  * extra: { kind: "committee" | "recurring" | "event", … }
  * (src, not enumerable: the event record the row is made from — the month's calendar file writes it as
  * /events.ics does, monthIcs)
@@ -332,14 +333,16 @@ function dateRow(e, L, ctx, extra = {}) {
     range: d.end !== d.start ? dayRange(d.start, d.end, L) : "",
     time: timed ? `${timeRange(ex.start, ex.end, L)}` : "", zone: timed ? ctx.zone : "",
     city, place: city && !title.toLowerCase().includes(city.toLowerCase()) ? city : "",
-    online: !!ex.online || !!ex.online_url || /zoom/i.test(ex.location || ""),
+    online: !!ex.online || !!ex.online_url || /\b(?:zoom|google meet|microsoft teams|webex)\b/i.test(ex.location || ""),
     host: ex.host === "lv" || ex.host === "gv" ? ex.host : "",
     tentative: !!ex.tentative, overAt, past: !!overAt && Date.parse(overAt) <= ctx.nowMs, ...extra,
   }, "src", { value: e });
 }
 
 /** A month's committee meeting as a date row: its events.json record, else the site.meeting rule
- *  (events.json drops a meeting once it is over; skip_dates are honoured) — null when there is none. */
+ *  (events.json drops a meeting once it is over; skip_dates are honoured) — null when there is none. Its guest
+ *  speaker (config/site.yml meeting.speakers, committee.js meetingSpeaker: { name, position, topic } in the row's
+ *  language), null on a date without one (Dec 16, 2026): the page's row, the poster and the message name them. */
 function committeeRow(events, key, site, L, ctx) {
   let ev = events.find((e) => e.id && String(e.id).startsWith(`ev:committee:${key}-`));
   if (!ev) {
@@ -351,6 +354,7 @@ function committeeRow(events, key, site, L, ctx) {
   const row = dateRow(ev, L, ctx, { kind: "committee" });
   row.title = "";
   row.platform = meetingJoin(site.meeting).platform;
+  row.speaker = meetingSpeaker(site.meeting, row.ymd, L);
   return row;
 }
 
@@ -687,6 +691,21 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
   };
 }
 
+// The most dates a poster's Dates block shows (macros/monthly.njk dates(): 4 in every layout, one fewer on a "dense"
+// month); the rest are "+N more on the website".
+const POSTER_DATES = 4;
+
+/** The dates a poster has room for (`lim`): the first ones by day, but never without the month's committee meeting —
+ *  a busy month leaves out the last other date instead (the committee meeting comes later in the month than the
+ *  dates before it, so the order stays the days' order). */
+export function posterDates(dates = [], lim = POSTER_DATES) {
+  const list = Array.isArray(dates) ? dates : [];
+  const shown = list.slice(0, Math.max(0, Number(lim) || 0));
+  const cm = list.find((d) => d && d.kind === "committee");
+  if (cm && shown.length && !shown.includes(cm)) shown[shown.length - 1] = cm;
+  return shown;
+}
+
 /* ------------------------------------------------------------------ */
 /*  This month, live (the hub's "This month" card, the current page)   */
 /* ------------------------------------------------------------------ */
@@ -700,8 +719,8 @@ const msOf = (v) => (isYmd(v) ? Date.parse(v + "T12:00:00Z") : Date.parse(v));
  * page show it, never a later month (MONTHLY_NOW moves it, like the window):
  *   key            the current month, "YYYY-MM"
  *   nextCommittee  the next committee meeting that is not over: this month's (its events.json record,
- *                  else the rule), then next month's — { ymd, day, dayLabel, time, zone, platform, overAt,
- *                  thisMonth } or null. (Not src/_data/meeting.js: that one ignores MONTHLY_NOW.)
+ *                  else the rule), then next month's — { ymd, day, dayLabel, time, zone, platform, speaker,
+ *                  overAt, thisMonth } or null. (Not src/_data/meeting.js: that one ignores MONTHLY_NOW.)
  *   outNext        an issue already online before its month (the district report's rule: articles.json
  *                  issues[] newer than this month's Grapevine key / than the La Viña issue covering this
  *                  month) → [{ pub, theme, machine (a machine translation), issue (inside a sentence), monthKey,
@@ -730,7 +749,8 @@ export function monthNow(db = {}, site = {}, lang = "en", now = nowDate()) {
   for (const k of [key, addMonths(key, 1)]) {
     const row = committeeRow(events, k, site, L, monthCtx(k, L, now));
     if (!row || row.past) continue;
-    nextCommittee = { ymd: row.ymd, day: row.day, dayLabel: row.dayLabel, time: row.time, zone: row.zone, platform: row.platform, overAt: row.overAt, thisMonth: row.ymd.startsWith(key) };
+    nextCommittee = { ymd: row.ymd, day: row.day, dayLabel: row.dayLabel, time: row.time, zone: row.zone, platform: row.platform, speaker: row.speaker,
+      overAt: row.overAt, thisMonth: row.ymd.startsWith(key) };
     break;
   }
 
@@ -853,6 +873,14 @@ export function monthMessage(ctx, langs, style, site, t) {
   const url = (p) => base + (main === "es" ? "/es" : "") + p;
   const out = [];
   let mt = false;     // a machine-translated title was written: the note above the footer
+  // a committee meeting's guest speaker on a line of its own under it: "Guest speaker: Rick W. — “…”" (its topic in
+  // the other language's words on the next line when they differ)
+  const speakerLines = (sp, others) => {
+    if (!sp) return [];
+    const lines = [`  ${sp.topic ? t("monthly.msg_speaker", main, { name: sp.name, topic: sp.topic }) : t("committee.meeting.speaker", main, { name: sp.name })}`];
+    for (const o of others) if (o && o.topic && o.topic !== sp.topic) lines.push(`  “${o.topic}”`);
+    return lines;
+  };
 
   // Masthead: "Grapevine & La Viña · NETA 65 — October 2026" + the tagline
   const title = `${both("monthly.kicker")} — ${uniq(Ls.map((l) => mm[l].title)).join(" / ")}`;
@@ -899,6 +927,7 @@ export function monthMessage(ctx, langs, style, site, t) {
     const when = [d.range || `${d.chip.wd}, ${d.dayLabel}`, d.time ? `${d.time} ${d.zone}` : ""].filter(Boolean).join(" · ");
     if (d.kind === "committee") {
       out.push(`${bullet} ${when} — ${both("monthly.committee")} (${d.platform}) — ${both("monthly.all_welcome")}`);
+      out.push(...speakerLines(d.speaker, Ls.slice(1).map((l) => ((mm[l].dates || []).find((x) => x.id === d.id) || {}).speaker)));
       continue;
     }
     const bits = [when];
@@ -918,6 +947,7 @@ export function monthMessage(ctx, langs, style, site, t) {
     const wd = chip(nc.ymd, main).wd;
     const when = [`${main === "es" ? wd.toLowerCase() : wd}, ${nc.dayLabel}`, nc.time ? `${nc.time} ${nc.zone}` : ""].filter(Boolean).join(" · ");
     out.push(`${bullet} ${both("monthly.next_meeting")}: ${when} — ${nc.platform}`);
+    out.push(...speakerLines(nc.speaker, Ls.slice(1).map((l) => ctx.nw && ctx.nw[l] && ctx.nw[l].nextCommittee && ctx.nw[l].nextCommittee.speaker)));
   }
   out.push(`  ${t("monthly.msg_events", main, { url: url("/events/") })}`, `  ${t("monthly.msg_join", main, { url: url("/meetings/#committee-meeting") })}`, "");
 
@@ -1073,9 +1103,9 @@ export function monthIcsEvents(db = {}, site = {}, lang = "en", now = nowDate())
  * (m.icsUrl), so it needs no script and opens straight in a phone's calendar.
  *   events     the month's date rows (m.dates: the committee meeting, the monthly series, the other events — this
  *              month only the ones not over yet, as in its message), written exactly as /events.ics writes them
- *              (committee.js normalizeEvents + buildIcs: the same UID, description, Zoom details and link — a
- *              calendar that has both keeps one copy; a later month's date of a series, worked out from its rule,
- *              is written from the same record)
+ *              (committee.js normalizeEvents + buildIcs: the same UID, description, joining details, guest
+ *              speaker and link — a calendar that has both keeps one copy; a later month's date of a series,
+ *              worked out from its rule, is written from the same record)
  *   deadlines  the story deadlines the page lists (Grapevine's, La Viña's), each an all-day entry on its day:
  *              "Story deadline: “Fun in Sobriety” — Grapevine", its issue and how to send a story (/contribute/)
  * The calendar's name is the month's ("NETA 65 Grapevine & La Viña — October 2026"). RFC 5545 as buildIcs
@@ -1258,6 +1288,8 @@ export default function (eleventyConfig, helpers) {
     return msgCache.get(k);
   });
   eleventyConfig.addFilter("mpQr", (url, label = "") => qrSvg(url, { label, cls: "mp-qr-svg", margin: 2 }));
+  // the dates a poster shows: the first `lim`, never without the committee meeting (posterDates)
+  eleventyConfig.addFilter("mpPosterDates", (dates, lim) => posterDates(dates, lim));
   // A month page's share picture (its ogImage, monthly-month.njk): {{ mpage.key | mpShareImage(mpage.lang) }} — the
   // site path of its share.png in a build asked for it (POSTER_SHARE=1), else "" (the page keeps the committee's card)
   eleventyConfig.addFilter("mpShareImage", (key, lang) => (posterShareOn() && /^\d{4}-\d{2}$/.test(String(key || ""))
