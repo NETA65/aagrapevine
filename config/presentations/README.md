@@ -39,7 +39,8 @@ data, the same facts the other pages show:
 - each meeting's guest speaker (`config/site.yml`, `meeting: speakers:`, as the Meetings page lists them): a first
   name and last initial, the service position and the topic — tonight's, moving on with the meeting's own date, and
   next month's, with the meeting after it. A date with no speaker listed says "to be announced". Whether a speaker
-  has confirmed, and shares slides (`slides: true`), is only for the chair's notes;
+  shares slides (`slides: true`) is only for the chair's notes; whether they have confirmed never reaches a deck
+  (the notes are public): the run summary reminds the chair;
 - our Grapevine Meeting on the first Wednesday (`config/site.yml`, `recurring_events:`, `grapevine-meeting`, as the
   Events page lists it): its next dates, its own date for its slides, its time and its link;
 - La Viña's monthly virtual workshop: its next dates, time and Zoom ID;

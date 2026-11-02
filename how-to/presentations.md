@@ -1072,7 +1072,7 @@ them, but update them as well so the record stays true.
 
 The `{live:…}` facts follow `config/site.yml` by themselves (`meeting:` for the committee, `recurring_events:` for
 the booth and La Viña's workshop; see [Settings](settings.md)). But some sentences in the decks were typed by hand.
-After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursday`, `5:00`, `five`, `seven` and
+After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursday`, `5:30`, `five`, `seven` and
 `p.m.`, and fix what you find, in the slides and in the notes. Real examples:
 
 | File, slide | Typed by hand |
@@ -1091,7 +1091,7 @@ on {live:meeting_platform}." reads "Our committee meets every third Wednesday of
 time, on Google Meet."
 
 > **Note:** the booth's hours in the `coming-up` intro contain invisible characters (no-break spaces and a word
-> joiner after the dash) that keep "5:00 – 8:00 PM" on one line. If you retype them, the line may break after the
+> joiner after the dash) that keep "5:30 – 7:30 PM" on one line. If you retype them, the line may break after the
 > dash on a narrow screen; that is all.
 
 #### H. A new PowerPoint copy, a new panel
@@ -1299,10 +1299,10 @@ id. If your words are there, the build has them.
 ### 3.22 The chair's paperwork (Agenda & minutes)
 
 Since October 2026 the **Grapevine and La Viña Monthly Committee Meeting** deck has one more tab in Customize:
-**Agenda & minutes** (Spanish page: **Agenda y acta**). The three workshops do not have it. It makes the chair's
-monthly texts from what is already typed in **Customize → Your details** (chair's report, old and new business,
-the order of the districts, action items …) and from the site's own facts (the meeting's date and time, its guest
-speaker, the Google Meet link and its code, the committee's e-mail).
+**Agenda & minutes** (Spanish page: **Agenda y acta**). The three workshops and the Grapevine Meeting do not have
+it. It makes the chair's monthly texts from what is already typed in **Customize → Your details** (chair's report,
+old and new business, the order of the districts, action items …) and from the site's own facts (the meeting's date
+and time, its guest speaker, the Google Meet link and its code, the committee's e-mail).
 
 | Text | For which meeting | What is in it |
 |---|---|---|
@@ -1596,7 +1596,8 @@ What follows by itself: the new card, its JSON file, the number of presentations
 the original" (the player counts the decks: `pres.reset_all_note`, `_confirm` and `_done` take `{n}`), the shared
 details ("Shared by every presentation"), the offline copy, and (with a `drive_title`) the PowerPoint link and the
 Portfolio button. Check the cards' layout at a few widths: the grid of `src/assets/css/areas/orientation.css`
-(`.o101-pres-grid`) draws them two by two, or four in a row on a wide screen.
+(`.o101-pres-grid`) draws them one per row, then two in a row from 1024px (an odd last card takes the whole row),
+and three in a row on the widest screens (from 1800px at 100 % text).
 
 ### 6.5 Example: change what a fact says when it has nothing to say
 
@@ -1687,8 +1688,8 @@ See [Automation and troubleshooting](automation-and-troubleshooting.md) for sett
 | The presenter view did not open | the browser blocked the second window | Allow pop-ups for the site, or use "Presenter mode in this window". |
 | "Changed since you edited it" on a slide | the committee changed a slide the presenter had edited | Use the new version, or Keep mine. |
 | The card shows fewer slides than the file has | facilitator pages, slides that start off and slides outside their dates are not counted | Nothing to fix. |
-| "Reset all 4 to the original" is not there | nothing was changed on this device yet | Expected: it appears after the first change. |
-| No **Agenda & minutes** tab in Customize | only a deck with a `paperwork:` block has it: today the committee meeting | Expected for the three workshops ([3.22](#322-the-chairs-paperwork-agenda--minutes)). |
+| "Reset all 5 to the original" is not there | nothing was changed on this device yet | Expected: it appears after the first change. |
+| No **Agenda & minutes** tab in Customize | only a deck with a `paperwork:` block has it: today the committee meeting | Expected for the three workshops and the Grapevine Meeting ([3.22](#322-the-chairs-paperwork-agenda--minutes)). |
 | **Open in my e-mail** opened an e-mail that says "(Paste the text here: it's on your clipboard.)" | the text is too long for an e-mail link, so it was copied instead | Click in the e-mail, paste (Ctrl+V, or a long press on a phone), put every address in BCC. |
 | The draft minutes say "You started next month on …" and show next month's details | Start next month was pressed before the minutes were drafted | Undo "Start next month" (in the tab, until the next meeting begins), draft the minutes, then start next month again. |
 
