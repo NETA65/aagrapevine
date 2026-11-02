@@ -536,11 +536,13 @@ breaks while you decide.
 - **Google Meet, the Grapevine Meeting and the guest speakers (November 2026):** that all 12 speakers of 2027 are
   public — on the site and in `config/site.yml` on GitHub — including the ones not `confirmed` yet; whether their
   names also belong in the public calendar feeds (`/events.ics`, the Google / Outlook links: they are there now —
-  never in what search engines read); the Spanish words "Orador(a) invitado(a)" and "La charla de la persona
+  never in what search engines read) and in the monthly e-mail (its "Coming up" names the coming meeting's speaker
+  and topic, as `/digest/` does); the Spanish words "Orador(a) invitado(a)" and "La charla de la persona
   invitada termina a más tardar a las 7:30 p. m."; the seven positions written without their service year ("past
-  chair of …", as the flyers print them); that the Grapevine Meeting's Spanish name is "Reunión de Grapevine (en
-  línea)" and that it is "in English, for AA members"; the AA Grapevine Statement of Purpose is named, never
-  printed (does AA Grapevine's licensing allow the text, with its credit line? and its official Spanish name);
+  chair of …", as the flyers print them); the Grapevine Meeting's names, "Grapevine Meeting" and in Spanish
+  "Reunión de Grapevine (en inglés)" (the Spanish title says it is in English, as La Viña's English title says
+  "(in Spanish)"), and that it is "in English, for AA members"; the AA Grapevine Statement of Purpose is named,
+  never printed (does AA Grapevine's licensing allow the text, with its credit line? and its official Spanish name);
   that Google Meet really has no dial-in and no passcode for our room, and who hosts (people who were not invited
   must ask to join); CityWide's 5:30–7:30 PM at "Lovers Lane United Methodist Church"; whether December 16, 2026
   may show the committee flyer that says each meeting opens with a guest speaker; and whether there will be
@@ -729,8 +731,9 @@ meeting:
   that date): the usual business hour.
 - **All 12 speakers of 2027 are shown** — first name and last initial, service position and topic: on Meetings (the
   next meeting's speaker, *How the evening runs*, the year's schedule), the home page's meeting card, each
-  meeting's card on Events and its calendar entry, the monthly toolkit and posters, the GV/LV report, the booth
-  display and the committee meeting's slides. **Never** an e-mail address or a phone number (this file is public
+  meeting's card on Events and its calendar entry, the monthly toolkit and posters, the GV/LV report, the monthly
+  e-mail and `/digest/` (the coming meeting's speaker under "Coming up"), the booth display and the committee
+  meeting's slides. **Never** an e-mail address or a phone number (this file is public
   on GitHub too), never in what search engines read, never in a calendar reminder.
 - **`confirmed`** is for the chair: a speaker of the next 45 days who is not `confirmed: true` yet is listed under
   *Reminders* in the run summary ("… the guest speaker for 2027-02-17 (…) is not confirmed yet — once they say

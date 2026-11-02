@@ -273,12 +273,12 @@ reader as the fallback) builds the same **edition** as the `/digest/` page (`ele
     each account's count and that link. The file keeps each account's newest `keep_per_account` (130) posts
     — about 65 days at the accounts' ~2 posts a day — so P's count holds on the page all through K (a much
     busier month could lose its oldest posts late in K; the e-mail, sent early in K, is complete).
-- ONE pointer at the end: "Coming up in K" → `/monthly/K/`. These belong to the **toolkit** and are never in
-  the digest: the committee meeting (its Google Meet link and its guest speaker stay on `/meetings/`, which the
-  toolkit links to),
-  events not over yet, the weekly meetings, story
-  deadlines, La Viña's topics, the phone lines, Book of the Month, subscriptions, the daily quote, the
-  Instagram accounts to follow (the digest has last month's posts).
+- ONE pointer at the end: "Coming up in K" → `/monthly/K/`; it names K's committee meeting and its guest speaker
+  while that meeting is ahead (`coming_speaker` / community.js `digestSpeaker`: "Committee meeting on January 20,
+  2027 — guest speaker: Rick W. — “…”"). These belong to the **toolkit** and are never in the digest: the
+  committee meeting's Google Meet link (on `/meetings/`, which the toolkit links to), events not over yet, the
+  weekly meetings, story deadlines, La Viña's topics, the phone lines, Book of the Month, subscriptions, the daily
+  quote, the Instagram accounts to follow (the digest has last month's posts).
 - The intro counts, in this order: magazine stories, podcast episodes, videos, Instagram posts, documents,
   committee files, photo albums, bulletin posts (`COUNT_ORDER`, both files).
 - English half, then Spanish half (La Viña first there), from the `i18n` fields build_data produced.

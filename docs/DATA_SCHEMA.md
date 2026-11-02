@@ -1113,9 +1113,9 @@ with `POSTER_SHARE=1` (Website update) names `share.png?v=<8 hex>` beside it as 
   the tips, deadlines, dates, weekly open meetings, Book of the Month) and the same month as a message for a group
   chat or an e-mail; the current month's page and the hub's "This month" card also show what is live now. The
   Monthly digest (below) recaps LAST month; everything current lives here — as a link when another page is its one
-  home (the Google Meet link and the guest speaker on `/meetings/#committee-meeting`, prices on `/shop/`, how to
-  send a story on `/contribute/`, the quote on the home page). An issue's highlight stories are the digest's; the toolkit shows the
-  themes and the story counts and links to `/read/`.
+  home (the Google Meet link on `/meetings/#committee-meeting`, prices on `/shop/`, how to send a story on
+  `/contribute/`, the quote on the home page). An issue's highlight stories are the digest's; the toolkit shows
+  the themes and the story counts and links to `/read/`.
 * **Dates** (`mpMonth(...).dates`): every event in `events.json` that is not `gone` and overlaps the month —
   content/events, dated Drive flyers and the outside calendars (the NETA 65 workshop feed: source `calendar`) —,
   the month's committee meeting (its record, else the `site.meeting` rule) and the recurring series. Each row has
@@ -1180,12 +1180,13 @@ its newest 150 entries), a day being its Central calendar day:
 | `whatsnew.json` | the page's "N more updates since the 1st" pointer only | `wn_date` from the 1st of K |
 | `status.json` | the e-mail's wait | `sources[].attempted` of `announcements`, `manual_events`, `drive`, `articles`, `pdfs`, `youtube`, `podcasts`, `instagram`: the e-mail waits (exit 3) while one was last tried before P ended but within the 3 days before — later ones are there, older ones have stopped |
 
-Not in the digest (current or upcoming — the toolkit's): the next committee meeting (its Google Meet link and
-guest speaker stay on `/meetings/#committee-meeting`, which the toolkit links to), events not over
-yet, the weekly open meetings, story deadlines, La Viña's topics, the phone lines, Book of the Month, the
-subscription price, the daily quote, the Instagram accounts to follow (the digest has P's posts). The page and
-the texts end with ONE pointer: "Coming up in K" → `/monthly/K/`. Counts (the intro, `COUNT_ORDER`): magazine
-stories, podcast episodes, videos, Instagram posts, documents, committee files, photo albums, bulletin posts.
+Not in the digest (current or upcoming — the toolkit's): the next committee meeting's Google Meet link (on
+`/meetings/#committee-meeting`, which the toolkit links to; the "Coming up in K" pointer names K's meeting and its
+guest speaker while it is ahead), events not over yet, the weekly open meetings, story deadlines, La Viña's
+topics, the phone lines, Book of the Month, the subscription price, the daily quote, the Instagram accounts to
+follow (the digest has P's posts). The page and the texts end with ONE pointer: "Coming up in K" → `/monthly/K/`.
+Counts (the intro, `COUNT_ORDER`): magazine stories, podcast episodes, videos, Instagram posts, documents,
+committee files, photo albums, bulletin posts.
 `MONTHLY_NOW=2026-10-01T15:05:00Z` builds the September digest; `send_digest --month 2026-09` is the same
 edition.
 
