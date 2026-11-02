@@ -60,7 +60,7 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
 {% import "macros/orientation.njk" as o with context %}
 {% import "macros/presentations.njk" as pres with context %}
 {%- set O = orientation -%}
-{%- set V = O | o101Vars(lang, site.meeting | cmRule(lang), site.meeting | cmTimeRange(lang)) -%}
+{%- set V = O | o101Vars(lang, site.meeting | cmRule(lang), site.meeting | cmTimeRange(lang), site.meeting.platform) -%}
 {%- set total = O.lessons | length -%}
 {%- set hubAbs = ('/orientation/' | lurl(lang)) | siteUrl(site) -%}
 {%- set tones = ["bg-gv-soft text-gv", "bg-vine-soft text-vine", "bg-lv-soft text-lv", "bg-grape-soft text-grape", "bg-gv-soft text-gv", "bg-vine-soft text-vine"] -%}
@@ -76,7 +76,7 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
 {#- a version label's "(about 48 minutes)" at its end, and the names that start with a capital in any sentence (a
     card's "Also:" line, below) -#}
 {%- set lengthRe = r/\s*\((?:about|unos|unas)\s[^()]*\)\s*$/ -%}
-{%- set namesRe = r/^(?:Grapevine|La Viña|AA|Zoom|NETA)\b/ -%}
+{%- set namesRe = r/^(?:Grapevine|La Viña|AA|Zoom|Google|NETA)\b/ -%}
 {%- set driveItems = db.drive.items if (db and db.drive and db.drive.items) else [] -%}
 {#- Each deck's PowerPoint copy: the newest file in the committee's Drive whose title is the deck's drive_title (as
     the deck's JSON finds it: eleventy/filters/presentations.js driveCopy) — a fixed copy, dated: it never updates.
@@ -328,7 +328,7 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
     {#- "Also:" — the other versions by a short name, after a colon in lower case: the version's label without the
         "(about 48 minutes)" it ends with, which becomes "(48 min)" — or nothing when it is the full version's
         length ("A month with a topic of the month (about 60 minutes)" → "a month with a topic of the month").
-        A name that starts with a capital for a reason (GVR…, Grapevine, La Viña, AA, Zoom) keeps it. -#}
+        A name that starts with a capital for a reason (GVR…, Grapevine, La Viña, AA, Zoom, Google Meet) keeps it. -#}
     {%- set alts = [] -%}
     {%- for p in d.presets | offset(1) %}
       {%- set lbl = (p.label[lang] or p.label.en or "") | trim -%}

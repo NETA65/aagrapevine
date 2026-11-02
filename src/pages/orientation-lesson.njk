@@ -30,7 +30,7 @@ eleventyComputed:
 {% import "macros/orientation.njk" as o with context %}
 {%- set O = orientation -%}
 {%- set l = O.lessons | o101Lesson(op.id) -%}
-{%- set V = O | o101Vars(lang, site.meeting | cmRule(lang), site.meeting | cmTimeRange(lang)) -%}
+{%- set V = O | o101Vars(lang, site.meeting | cmRule(lang), site.meeting | cmTimeRange(lang), site.meeting.platform) -%}
 {%- set total = O.lessons | length -%}
 {%- set prevL = O.lessons | o101Lesson(l.prev) -%}
 {%- set nextL = O.lessons | o101Lesson(l.next) -%}

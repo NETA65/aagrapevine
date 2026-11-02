@@ -1036,6 +1036,10 @@ export function searchIndex(db, nav, lang, helpers, site) {
       // a monthly booth (the CityWide Dallas booth) is also found by "booth" / "literature table" / "mesa de
       // literatura" — not every monthly event: La Viña's workshop on Zoom is no booth
       const booth = recurring && eventTone(it) === "booth";
+      // our own online meeting (a monthly series of ours with a link and no place: the Grapevine Meeting on Google
+      // Meet) is found by "online meeting", "Google Meet", "first Wednesday" … — never by the words of the Grapevine
+      // meetings list (the AA groups that read Grapevine: committee.gvm.search_kw), which it is not part of
+      const ownOnline = recurring && !host && online && !(ev.location || ex.location);
       push({
         id: it.id, k: "event", t: P(it, "title") || ev.title, o: it.title, ol: it.lang,
         s: [recurring ? (ev.recurrence || P(it, "recurrence_label")) : when, where].filter(Boolean).join(" · "),
@@ -1043,7 +1047,8 @@ export function searchIndex(db, nav, lang, helpers, site) {
         // "october", "oct 22", "22 octubre" find a one-off event by the date in its line. The meta line's `d` is
         // only shown, never searched (search.js), so the date goes with the keywords: searched, never shown.
         x: [snippet(P(it, "summary"), 120), recurring ? when : "", recurring ? both("search.kw.recurring") : "",
-          booth ? both("search.kw.booth") : "", tentative ? both("committee.events.tentative") : ""].filter(Boolean).join(" "),
+          booth ? both("search.kw.booth") : "", ownOnline ? both("search.kw.own_online") : "",
+          tentative ? both("committee.events.tentative") : ""].filter(Boolean).join(" "),
         u, d: ymd(helpers, start), l: own ? lang : it.lang,
         src: host || (it.category === "lv-calendar" ? "lv" : it.category === "gv-calendar" ? "gv" : "neta"), m: mach(it), z: ev.past,
         // tb = "Details to be confirmed" (content/events `tentative: true`): search.js shows the badge

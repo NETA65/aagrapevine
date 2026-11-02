@@ -22,7 +22,9 @@
 #    manual or magazine stories: summarize in your own words and link.
 #  - Placeholders the pages fill in: {rule_lc} = "every third Wednesday of
 #    the month" (from config/site.yml `meeting:`), {time} = the meeting's
-#    time, {panel} = the panel number below, {panel_start} = its first month.
+#    time, {platform} = where it meets (config/site.yml meeting.platform:
+#    Google Meet), {panel} = the panel number below, {panel_start} = its
+#    first month.
 #  - lessons[].id is also the page address (/orientation/<id>/): keep it
 #    once published. `example` picks the live example the pages show from
 #    the site's data: issue · meeting · tip · botm · deadline · poster.
@@ -176,8 +178,8 @@ lessons:
           en: "Our committee meets every month"
           es: "Nuestro comité se reúne cada mes"
         text:
-          en: "The Area committee meets on Zoom {rule_lc}, {time} Central time. Every AA member is welcome, and you don't need to register."
-          es: "El comité del Área se reúne por Zoom {rule_lc}, {time} (hora del Centro). Todos los miembros de AA son bienvenidos y no hace falta registrarse."
+          en: "The Area committee meets on {platform} {rule_lc}, {time} Central time: a guest speaker first, then committee business. Every AA member is welcome, and you don't need to register."
+          es: "El comité del Área se reúne por {platform} {rule_lc}, {time} (hora del Centro): primero la charla de una persona invitada y luego los asuntos del comité. Todos los miembros de AA son bienvenidos y no hace falta registrarse."
       - title:
           en: "Panel {panel}, from {panel_start}"
           es: "Panel {panel}, a partir de {panel_start}"
@@ -228,7 +230,7 @@ lessons:
           en: "When does our Area committee meet?"
           es: "¿Cuándo se reúne el comité de nuestra Área?"
         options:
-          - { en: "On Zoom, {rule_lc}", es: "Por Zoom, {rule_lc}" }
+          - { en: "On {platform}, {rule_lc}", es: "Por {platform}, {rule_lc}" }
           - { en: "Only at the Area assembly", es: "Solo en la asamblea del Área" }
           - { en: "Every Sunday morning", es: "Cada domingo por la mañana" }
         answer: 1
