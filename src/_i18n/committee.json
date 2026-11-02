@@ -337,7 +337,7 @@
   },
   "committee.meeting.step_close_text": {
     "en": "We close on time with the Responsibility Statement. Notes and slides are shared in our Portfolio.",
-    "es": "Cerramos a tiempo con la Declaración de la Responsabilidad. Las notas y presentaciones se comparten en nuestro Portafolio."
+    "es": "Cerramos a tiempo con la Declaración de Responsabilidad. Las notas y presentaciones se comparten en nuestro Portafolio."
   },
   "committee.meeting.evening_title": {
     "en": "How the evening runs",
@@ -389,7 +389,7 @@
   },
   "committee.meeting.evening_close_text": {
     "en": "We close on time with the Responsibility Statement.",
-    "es": "Cerramos a tiempo con la Declaración de la Responsabilidad."
+    "es": "Cerramos a tiempo con la Declaración de Responsabilidad."
   },
   "committee.meeting.evening_business_hour": {
     "en": "{time} Central time: committee business, with no guest speaker at this meeting.",

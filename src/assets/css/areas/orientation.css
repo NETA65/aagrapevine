@@ -107,8 +107,8 @@
 
 /* ---------- 1b. Presentations (#presentations) and "How presenting works" (#presenting) ----------
    One card per presentation (orientation.njk; the player's hooks are listed there): 1 column, 2 from 1024px,
-   4 from 1800px at 100 % text (a card is then ≈ 400px; at larger text never 4, and 1 on laptop screens at
-   130–150 %, below). Then "Reset all 4 to the original" (once there is something to reset), "Print or save a
+   3 from 1800px at 100 % text (at larger text never 3, and 1 on laptop screens at 130–150 %, below); in 2
+   columns the odd last card takes the row. Then "Reset all 5 to the original" (once there is something to reset), "Print or save a
    copy", and at the end of the band "How presenting works", closed
    (each box lays itself out by its OWN width — container queries in rem, so larger text gets the narrow
    layout sooner). */
@@ -169,7 +169,7 @@
 .o101-pres-print-btns > .btn-sm { padding-inline: 0.5rem; }
 @container (width < 26rem) { .o101-pres-print-btns { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @container (width < 13.5rem) { .o101-pres-print-btns { grid-template-columns: minmax(0, 1fr); } }
-/* "Reset all 4 to the original", right under the cards: a block of its own (no line box around it), as wide as
+/* "Reset all 5 to the original", right under the cards: a block of its own (no line box around it), as wide as
    its label. Hidden until this device has changed a presentation — the [hidden] rule is !important in the base
    layer, so it wins over this display. */
 .o101-pres-resetall { display: flex; width: fit-content; max-width: 100%; margin-top: 1.25rem; }
