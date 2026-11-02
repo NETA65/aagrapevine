@@ -52,12 +52,14 @@
 
   /* ---------- /meetings/ board (the committee meeting) (one grid, so the cards line up) ----------
      Markup (= phone) order: countdown · how to join (.cm-join) · next dates (.cm-dates-card) ·
-     who (.cm-who) · chair (.cm-chair) · what happens (.cm-agenda); from 768px who | chair side by side.
+     who (.cm-who) · chair (.cm-chair) · what happens (.cm-agenda) · the guest speakers (.cm-speakers);
+     from 768px who | chair side by side.
      1024–1279px, two columns:  countdown | how to join  /  the dates (both columns; its rows sit three
-       to a line, see .cm-dates)  /  who | chair  /  what happens (both columns) — the same order as
-       the markup, so the Tab order follows what you see.
+       to a line, see .cm-dates)  /  who | chair  /  what happens (both columns)  /  the guest speakers
+       (both) — the same order as the markup, so the Tab order follows what you see.
      From 1280px three columns: the countdown and the dates (two rows tall) on the left; how to join,
-       who | chair and what happens on the right (columns 2–3) — both sides end together. */
+       who | chair and what happens on the right (columns 2–3) — both sides end together; the guest
+       speakers under all three. */
   .cm-board { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); }
   /* tablets: the two short cards (who | chair) side by side */
   @media (48rem <= width < 64rem) {
@@ -65,20 +67,21 @@
     .cm-board > :not(.cm-who, .cm-chair) { grid-column: 1 / -1; }
   }
   @media (width >= 64rem) {
-    .cm-board { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "count join" "dates dates" "who chair" "agenda agenda"; }
+    .cm-board { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "count join" "dates dates" "who chair" "agenda agenda" "speakers speakers"; }
     .cm-board > .cm-count { grid-area: count; }
     .cm-board > .cm-join { grid-area: join; }
     .cm-board > .cm-who { grid-area: who; }
     .cm-board > .cm-chair { grid-area: chair; }
     .cm-board > .cm-agenda { grid-area: agenda; }
     .cm-board > .cm-dates-card { grid-area: dates; }
+    .cm-board > .cm-speakers { grid-area: speakers; }
   }
   @media (width >= 80rem) {
     /* (1fr: when the dates are taller than who | chair + what happens, the extra height goes to what
        happens — its steps spread out — not to who | chair, which would get hollow) */
     .cm-board {
       grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto 1fr;
-      grid-template-areas: "count join join" "dates who chair" "dates agenda agenda";
+      grid-template-areas: "count join join" "dates who chair" "dates agenda agenda" "speakers speakers speakers";
     }
     /* the dates card is two rows tall here: when it is taller than its dates, the list grows and
        the extra height goes between the date rows (each row keeps its size, so the "Next" row's
@@ -112,6 +115,45 @@
       content: ""; position: absolute; left: calc(0.875rem - 0.5px); top: 2rem; bottom: -0.85rem; width: 1px; background: var(--c-line);
     }
   }
+  /* Five steps fill whole rows: two to a row with the last one across both (36–48rem); from 48rem the
+     Grapevine Meeting's three then two (.is-five), the evening with a guest speaker the opening beside the
+     talk — the longest step, two thirds wide — then the questions, committee business and the close (.is-timed) */
+  @container (36rem <= width < 48rem) { .cm-steps:is(.is-five, .is-timed) > :last-child { grid-column: 1 / -1; } }
+  @container (width >= 48rem) {
+    .cm-steps:is(.is-five, .is-timed) { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .cm-steps:is(.is-five, .is-timed) > * { grid-column: span 2; }
+    .cm-steps.is-five > :nth-child(n + 4) { grid-column: span 3; }
+    .cm-steps.is-timed > .cm-step-talk { grid-column: span 4; }
+  }
+  /* a timed step's time ("7:00 PM", "about 7:02 PM") before its title */
+  .cm-step-at { font-size: 0.8rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--c-gv); white-space: nowrap; }
+
+  /* The countdown's guest speaker (the dark card): a quiet panel under the time */
+  .cm-count-speaker {
+    margin-top: 1rem; padding: 0.8rem 0.95rem; border-radius: 0.9rem;
+    background: rgb(255 255 255 / 0.08); border: 1px solid rgb(255 255 255 / 0.16);
+  }
+
+  /* The guest speakers to come: one column, two from 40rem of card width, three from 64rem; the next one
+     (committee.js expire: data-cm-max) highlighted like the next date */
+  .cm-speakers { container-type: inline-size; }
+  .cm-speaker-list { display: grid; gap: 0.75rem; grid-template-columns: minmax(0, 1fr); }
+  @container (width >= 40rem) { .cm-speaker-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @container (width >= 64rem) { .cm-speaker-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .cm-speaker { display: flex; align-items: flex-start; gap: 0.9rem; padding: 0.85rem; border-radius: 0.9rem; background: var(--c-surface-2); border: 1px solid transparent; }
+  .cm-speaker.is-next { background: var(--c-gv-soft); border-color: color-mix(in srgb, var(--c-gv) 22%, transparent); }
+
+  /* /meetings/#grapevine-meeting — our monthly series' board: one column; from 1024px countdown | what
+     happens and the next dates | how to join; from 1280px what happens and how to join two columns wide */
+  .cm-series-board { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); }
+  @media (width >= 64rem) {
+    .cm-series-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (width >= 80rem) {
+    .cm-series-board { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .cm-series-board > :is(.cm-series-about, .cm-series-join) { grid-column: span 2; }
+  }
+  .cm-series-dates { container-type: inline-size; }
 
   /* The next dates: one column in a narrow card; rows of cards (three to a line at 1024–1279px,
      two on tablets) when the card spans the board. */

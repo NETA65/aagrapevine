@@ -538,6 +538,40 @@ function meetingDescription(site, lang, pageUrl, ymd) {
   return lines.join("\n");
 }
 
+// "How the evening runs" at a meeting with a guest speaker: the opening (a moment of silence, the Serenity Prayer,
+// the speaker's introduction) takes about 2 minutes, the talk about 20 (the chair's deck: "2 minutes" in the chat at
+// 18), then the questions until `speaker_until`.
+const SPEAKER_OPENING_MIN = 2;
+const SPEAKER_TALK_MIN = 20;
+const minutesHhmm = (n) => `${pad2(Math.floor(n / 60) % 24)}:${pad2(n % 60)}`;
+
+/**
+ * The committee meeting's evening, part by part, in Central time (/meetings/ "How the evening runs"), from
+ * config/site.yml `meeting:` start, speaker_until and end — the times the decks and flyers give:
+ *   speaker  a meeting with a guest speaker: [{ key, at, about }] — "opening" at the start, "talk" about 2 minutes
+ *            later, "questions" about 20 minutes after that (left out when that is not before speaker_until),
+ *            "business" (committee business) at speaker_until, "close" at the end; `about`: an approximate time.
+ *            [] without speaker_until (meetingSpeakerUntil: not set, or not between the start and the end)
+ *   plain    a meeting without one (Dec 16, 2026): [{ key: "business_hour", at: "7:00 – 8:00 PM" }]
+ *   until, end  "7:30 PM" ("" without speaker_until), "8:00 PM"; talkMin: the talk's minutes (about 20)
+ * `at` is the page language's clock ("7:02 PM", "7:02 p. m."); which one a date has is meetingSpeaker's.
+ */
+export function meetingEvening(m, lang = "en") {
+  const cfg = meetingCfg(m);
+  const start = meetingStart(cfg), end = meetingEnd(cfg), until = meetingSpeakerUntil(m);
+  const plain = [{ key: "business_hour", at: meetingTimeRange(cfg, lang) }];
+  const out = { speaker: [], plain, until: until ? clockLabel(until, lang) : "", end: clockLabel(end, lang), talkMin: SPEAKER_TALK_MIN };
+  if (!until) return out;
+  const s = hhmmMinutes(start), u = hhmmMinutes(until);
+  const at = (n) => clockLabel(minutesHhmm(n), lang);
+  const talk = s + SPEAKER_OPENING_MIN, questions = talk + SPEAKER_TALK_MIN;
+  out.speaker.push({ key: "opening", at: at(s), about: false });
+  if (talk < u) out.speaker.push({ key: "talk", at: at(talk), about: true });
+  if (questions < u) out.speaker.push({ key: "questions", at: at(questions), about: true });
+  out.speaker.push({ key: "business", at: out.until, about: false }, { key: "close", at: out.end, about: false });
+  return out;
+}
+
 /* ------------------------------------------------------------------ */
 /*  Events                                                             */
 /* ------------------------------------------------------------------ */
@@ -877,6 +911,117 @@ function shapeEvent(it, site, lang, now, descOverride) {
   // as DATE values, end = the last day (the file gets the exclusive DTEND, the day after).
   ev.icsData = { uid: ev.uid + (lang !== "en" ? "-" + lang : "") + "@neta65-gvlv", title: ev.title, start: ev.startIso, end: ev.endIso, allDay, tentative, description: calDescription, location: calLocation, url: ev.detailsUrl, filename: slugify(ev.title, 40) };
   return ev;
+}
+
+/**
+ * The committee meeting's guest speakers still to come, soonest first (config/site.yml `meeting: speakers:`, read
+ * by meetingSpeakers) → { list: [{ ymd, start, end (ISO), name, position, topic (the page language's), description
+ * (that meeting's calendar text, as /events.ics has it) }], plain: the calendar text of a meeting without one }.
+ * /meetings/' "Guest speakers" list, and the countdowns' dates (src/assets/js/committee.js cmMeeting, home.js
+ * homeMeeting): once a card rolls on to the next date in the browser, it shows THAT date's speaker — or none — and
+ * its calendar links carry that date's text. A meeting over by `now` is not listed. Never `confirmed`.
+ */
+export function meetingSpeakerDates(site, lang = "en", now = new Date()) {
+  const m = site?.meeting || {};
+  const nowMs = now instanceof Date ? now.getTime() : Number(now);
+  const page = siteAbs(site, localPath("/meetings/", lang));
+  // the meeting's dates (its rule, skip dates and first date), three years on: a speaker's date that is not one of
+  // them is left out by meetingSpeakers already
+  const dates = new Map(meetingDates(m, 1, 36, new Date(nowMs)).map((d) => [d.ymd, d]));
+  const list = [];
+  for (const s of meetingSpeakers(m)) {
+    const d = dates.get(s.ymd);
+    if (!d || Date.parse(d.end) <= nowMs) continue;
+    const sp = meetingSpeaker(m, s.ymd, lang);
+    list.push({ ymd: s.ymd, start: d.start, end: d.end, name: sp.name, position: sp.position, topic: sp.topic,
+      description: meetingDescription(site, lang, page, s.ymd) });
+  }
+  return { list, plain: meetingDescription(site, lang, page) };
+}
+
+// The meeting app a link opens ("Google Meet" for meet.google.com) — scripts/sync/events_external.py platform_of
+// and its PLATFORM_HOSTS, word for word (build_data names a recurring event's platform with it).
+const PLATFORM_HOSTS = { "zoom.us": "Zoom", "meet.google.com": "Google Meet", "teams.microsoft.com": "Microsoft Teams",
+  "teams.live.com": "Microsoft Teams", "webex.com": "Webex", "gotomeeting.com": "GoToMeeting", "skype.com": "Skype",
+  "whereby.com": "Whereby", "jitsi": "Jitsi" };
+export function platformOf(url) {
+  let host = "";
+  try { host = new URL(String(url || "")).host.toLowerCase(); } catch { return null; }
+  for (const [h, name] of Object.entries(PLATFORM_HOSTS)) if (host.includes(h)) return name;
+  return null;
+}
+
+// recurring_events `url:` / `online_url:` as build_data._recurring_url reads them: a web address ("www.…" gets its
+// https://), or — `sitePath` — a page of this site ("/meetings/#grapevine-meeting"); else null.
+function seriesUrl(v, sitePath = false) {
+  let s = oneLine(v);
+  if (!s) return null;
+  if (sitePath && /^\/(?![/\\])\S*$/.test(s)) return s;
+  if (/^www\./i.test(s)) s = "https://" + s;
+  return /^https?:\/\/[^\s/]+\.\S+$/i.test(s) ? s : null;
+}
+// build_data._MEETING_ID: letters, digits, spaces, dots and dashes ("815 9593 1777", "rva-tmst-vdb")
+const SERIES_MEETING_ID = /^[A-Za-z0-9](?:[A-Za-z0-9 .-]{1,38})[A-Za-z0-9]$/;
+
+/**
+ * One of our monthly series (config/site.yml `recurring_events:` — the Grapevine Meeting) worked out from the
+ * SETTINGS, for its own section on our pages (/meetings/#grapevine-meeting): it is right even while
+ * data/site/events.json is stale (a merge day: the series not synced yet). Each date is the event /events/ and
+ * /events.ics have — events.json's own record when it has that date (its flyer, its translations), else one made
+ * here as build_data.recurring_events makes it (the entry read as recurring_specs reads it: monthlyRule, the link
+ * and the meeting code checked the same way) — so its calendar text, links and calendar UID
+ * ("ev-recurring-grapevine-meeting-2026-12-02") are the feed's: adding it twice keeps one entry.
+ *   → { key, title, summary, starts, rule (the countdown's: cmRuleObj), recurrence ("Every first Wednesday of the
+ *       month · 7:00 – 8:00 PM Central time"), recurrenceDay ("Every first Wednesday of the month"), time ("7:00 –
+ *       8:00 PM"), end ("8:00 PM"), join (meetingJoin: platform, url, meeting code …), contact, flyerMatch, uidPrefix
+ *       ("ev-recurring-grapevine-meeting-"), next (the next date's event), dates (the next `n`) }
+ *   or null: no such series, or no date to come.
+ */
+export function seriesNext(site, key, lang = "en", items = [], opt = {}) {
+  const raw = site?.recurring_events;
+  const entries = Array.isArray(raw) ? raw : raw && typeof raw === "object" ? [raw] : [];
+  const sp = entries.map((e) => (e && typeof e === "object" && e.enabled !== false ? monthlyRule(e, true) : null))
+    .find((e) => e && e.key === key);
+  if (!sp) return null;
+  const now = opt.now || new Date();
+  const n = Number(opt.n) || 4;
+  const titles = { en: oneLine(sp.title), es: oneLine(sp.title_es) };
+  const summaries = { en: oneLine(sp.summary), es: oneLine(sp.summary_es) };
+  if (!titles.en && !titles.es) return null;
+  const own = titles.en ? "en" : "es";
+  const both = (o) => ({ en: o.en || o.es, es: o.es || o.en });
+  const online = seriesUrl(sp.online_url);
+  const meetingId = SERIES_MEETING_ID.test(oneLine(sp.meeting_id)) ? oneLine(sp.meeting_id) : "";
+  const platform = platformOf(online);
+  const rule = { week_of_month: Number(sp.week_of_month), weekday: String(sp.weekday), start: meetingStart(sp), end: meetingEnd(sp) };
+  const synced = new Map((items || []).filter((it) => it && it.category === "recurring" && it.extra && it.extra.series === key && it.status !== "gone").map((it) => [it.id, it]));
+  const dates = [];
+  for (const d of meetingDates(sp, 0, 13, now)) {
+    if (Date.parse(d.end) <= now.getTime() || dates.length >= n) continue;
+    const id = `ev:recurring:${key}:${d.ymd}`;
+    const it = synced.get(id) || {
+      id, source: "committee", kind: "event", url: seriesUrl(sp.url, true) || "/events/",
+      title: titles[own], summary: summaries[own], lang: own, date: d.start, category: "recurring", status: "ok",
+      extra: { start: d.start, end: d.end, all_day: false, location: oneLine(sp.location) || null, online_url: online,
+        recurring: true, series: key, rule, host: eventHost({ extra: { host: sp.host } }) || "neta", online: !!online,
+        platform, meeting_id: meetingId || null, contact: oneLine(sp.contact) || null },
+      i18n: { title: both(titles), summary: both(summaries) }, machine: [], is_new: false,
+    };
+    const ev = normalizeEvents([it], site, lang, { monthsBack: 0, monthsAhead: 0, now }).find((e) => e.id === id);
+    if (ev) dates.push(ev);
+  }
+  if (!dates.length) return null;
+  const next = dates[0];
+  const day = next.uid.endsWith(next.startYmd) ? next.uid.slice(0, -next.startYmd.length) : "";
+  return {
+    key, title: next.title, summary: next.summary, starts: sp.starts || "",
+    rule: { weekday: WD[rule.weekday.toLowerCase()] ?? 3, n: rule.week_of_month, start: rule.start, end: rule.end, skip: skipDates(sp), ...(sp.starts ? { starts: sp.starts } : {}) },
+    recurrence: recurrenceText(rule, lang), recurrenceDay: recurrenceText(rule, lang).split(" · ")[0], time: meetingTimeRange(sp, lang),
+    end: clockLabel(rule.end, lang),
+    // (its platform as the link names it — "" for a link of another kind: "Join online"; never the committee's Zoom default)
+    join: { ...meetingJoin({ online_url: online || "", meeting_id: meetingId }, lang), platform: platform || "" },
+    contact: next.contact, flyerMatch: oneLine(sp.flyer_match), uidPrefix: day, next, dates,
+  };
 }
 
 /* ------------------------------------------------------------------ */
@@ -2194,6 +2339,15 @@ export default function (eleventyConfig, helpers) {
     const evs = normalizeEvents([], site, lang, { monthsBack: 0, monthsAhead: 14 });
     return evs.find((e) => e.committee && !e.past) || null;
   });
+  // The guest speakers still to come — {% set spk = site | cmSpeakers(lang) %} → { list: [{ ymd, start, end, name,
+  // position, topic, description }], plain } (meetingSpeakerDates): /meetings/' list, and each countdown's dates
+  eleventyConfig.addFilter("cmSpeakers", (site, lang) => meetingSpeakerDates(site, lang));
+  // "How the evening runs" — {{ site.meeting | cmEvening(lang) }} → { speaker: [{ key, at, about }], plain, until, end,
+  // talkMin } (meetingEvening)
+  eleventyConfig.addFilter("cmEvening", (m, lang) => meetingEvening(m, lang));
+  // One of our monthly series from the settings (the Grapevine Meeting's section on /meetings/), with events.json's
+  // dates where it has them — {{ site | cmSeriesNext("grapevine-meeting", lang, db.events.items) }} (seriesNext)
+  eleventyConfig.addFilter("cmSeriesNext", (site, key, lang, items) => seriesNext(site, key, lang, EMPTY ? [] : items));
 
   // Rule for the client-side countdown (same shape as GV.nextMeeting expects)
   // (a missing end = a 1-hour meeting, like everywhere else — see meetingEnd; a first date `starts` when the rule

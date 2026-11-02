@@ -64,16 +64,25 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     v = "hero": dark glass, in the hero's right column (1024px and up);
     v = "page": light card right below the hero (below 1024px). Only one of the two is
     ever displayed, so each has its own heading id. The meeting code is on /meetings/ ("Details");
-    the link (site.meeting.online_url) is all it takes to join. -#}
-{% macro meetingCard(v, L, meeting, mt) %}
+    the link (site.meeting.online_url) is all it takes to join. The next meeting's guest speaker and topic
+    (src/_data/meeting.js: none on a date without one); `spk` = the speakers to come (committee.js cmSpeakers),
+    so the card shows the right one — or none — once home.js rolls it on to the next date. (Our Grapevine
+    Meeting is not in this card: it has its own place in "Upcoming events" and its section on /meetings/.) -#}
+{% macro meetingCard(v, L, meeting, mt, spk) %}
 {%- set dark = v == "hero" -%}
 {%- set tid = "home-meeting-title" if dark else "home-meeting-title-2" -%}
 {#- where it is held ("Join on Zoom") and who may come, for the calendar entry: config/site.yml meeting.platform, note -#}
 {%- set pf = { platform: mt.platform or "Zoom" } -%}
 {%- set mNote = mt | pick(L, "note") -%}
+{%- set sp = meeting.next.speaker -%}
+{%- set spTopic = (sp.topic[L] or sp.topic.en) if sp else "" -%}
+{%- set spList = [] -%}
+{%- for s in spk.list %}{% set _n = spList.push({ ymd: s.ymd, name: s.name, topic: s.topic }) %}{% endfor -%}
 <div class="home-meet home-meet--{{ v }}" role="group" aria-labelledby="{{ tid }}"
      x-data="homeMeeting" data-rule="{{ meeting.rule | json }}" data-start="{{ meeting.next.start }}" data-end="{{ meeting.next.end }}"
-     data-cal-title="{{ 'home.meeting_cal_title' | t(L) }}" data-cal-desc="{{ 'home.meeting_cal_desc' | t(L, pf) }}{{ (' ' + mNote) if mNote }} {{ mt.online_url }}" data-cal-loc="{{ mt.online_url }}">
+     data-speakers="{{ spList | json }}" data-speaker-tpl="{{ 'committee.meeting.speaker' | t(L) }}"
+     data-cal-title="{{ 'home.meeting_cal_title' | t(L) }}" data-cal-desc="{{ 'home.meeting_cal_desc' | t(L, pf) }}{{ (' ' + mNote) if mNote }}" data-cal-loc="{{ mt.online_url }}"
+     data-cal-url="{{ '/meetings/' | lurl(L) | siteUrl(site) }}">
   <div class="home-meet-info">
     <div class="flex flex-wrap items-center justify-between gap-2">
       <h2 id="{{ tid }}" class="home-meet-eyebrow">{{ "home.meeting_eyebrow" | t(L) }}</h2>
@@ -86,6 +95,15 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     </p>
     {% if not dark and meeting.rule and meeting.rule.n %}
     <p class="home-meet-rule">{{ "home.meeting_rule" | t(L, { nth: ("home.nth." ~ meeting.rule.n) | t(L), weekday: meeting.rule.weekday | homeWeekday(L) }) }}</p>
+    {% endif %}
+    {#- that date's guest speaker: "Guest speaker: Rick W.", the topic under it (two lines at most; the whole of it
+        is on /meetings/) -#}
+    {% if spList | length %}
+    <p class="mt-2 flex items-start gap-1.5 text-sm leading-snug {{ 'text-white/85' if dark else 'text-muted' }}" x-show="speaker"{% if not sp %} x-cloak{% endif %}>
+      {% icon "mic", "mt-0.5 size-4 shrink-0" %}
+      <span class="min-w-0"><span class="font-semibold {{ 'text-white' if dark else 'text-ink' }}" x-text="speakerLine">{{ ("committee.meeting.speaker" | t(L, { name: sp.name })) if sp }}</span>
+        <span class="line-clamp-2" x-show="speaker && speaker.topic"{% if not spTopic %} x-cloak{% endif %}>“<span x-text="speaker ? speaker.topic : ''">{{ spTopic }}</span>”</span></span>
+    </p>
     {% endif %}
   </div>
   <div class="home-meet-count" role="timer" aria-label="{{ 'home.countdown_aria' | t(L) }}" x-show="!live">
@@ -239,9 +257,11 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
        the hero, so the hero keeps its standard height on tablets and phones).
     ===================================================================== -#}
 {%- set mt = site.meeting -%}
+{#- the guest speakers to come (the next-meeting card: each date's, once it rolls on) -#}
+{%- set spk = site | cmSpeakers(L) -%}
 {% call(slot) ui.pageHero(L, ("home.hero_title" | t(L)) | mdInline | safe, "home.hero_lead" | t(L), "", "home.hero_eyebrow" | t(L), { id: "homeHero", titleId: "home-title", aside: true, eyebrowIcon: "grapes" }) %}
   {%- if slot == "aside" %}
-  {% if meeting.next %}{{ meetingCard("hero", L, meeting, mt) }}{% endif %}
+  {% if meeting.next %}{{ meetingCard("hero", L, meeting, mt, spk) }}{% endif %}
   {%- else %}
   <div class="hero-actions home-hero-actions">
     <a class="btn-light" href="{{ '/whats-new/' | lurl(L) }}">{% icon "sparkles", "size-4" %} {{ "home.cta_whats_new" | t(L) }}</a>
@@ -281,7 +301,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 <div class="container-page page-overlap home-under{{ ' mb-10 sm:mb-12' if not anns.length }}">
   {% if meeting.next or statCount %}
   <div class="card home-under-card{{ ' max-sm:hidden' if not meeting.next }}{{ ' lg:hidden' if not statCount }}">
-    {% if meeting.next %}<div class="home-under-meet lg:hidden">{{ meetingCard("page", L, meeting, mt) }}</div>{% endif %}
+    {% if meeting.next %}<div class="home-under-meet lg:hidden">{{ meetingCard("page", L, meeting, mt, spk) }}</div>{% endif %}
     {% if statCount %}
     <div class="home-under-stats">
       <p class="home-under-label">{% icon "sprout", "size-4 shrink-0" %} {{ "home.stats_label" | t(L) }}</p>
@@ -814,9 +834,12 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
               {%- set kindIcon = { committee: "users", gv: "grapes", lv: "grapes", booth: "store", assembly: "landmark", other: "map-pin" } -%}
               {%- if tone == "gv" and e.category == "gv-calendar" %}{% set kindLabel = "committee.events.badge_gv" | t(L) %}
               {%- elif tone == "lv" and e.category == "lv-calendar" %}{% set kindLabel = "committee.events.badge_lv" | t(L) %}
-              {%- elif tone == "other" %}{% set kindLabel = ("committee.events.kind.neta" if e.category == "neta65" else "committee.events.kind.event") | t(L) %}
+              {#- (a series of ours, e.g. the Grapevine Meeting: "NETA 65", never the name of a magazine that holds it —
+                  event-tone.js; an online one with the camera, not the map pin) -#}
+              {%- elif tone == "other" %}{% set kindLabel = ("committee.events.kind.neta" if e.category in ["neta65", "recurring"] else "committee.events.kind.event") | t(L) %}
               {%- else %}{% set kindLabel = ("committee.events.kind." ~ tone) | t(L) %}{% endif %}
-              <span class="badge ev-badge">{% icon kindIcon[tone], "size-3" %} {{ kindLabel }}</span>
+              {%- set kindIco = "video" if (tone == "other" and x.online_url and not x.city and not x.location) else kindIcon[tone] -%}
+              <span class="badge ev-badge">{% icon kindIco, "size-3" %} {{ kindLabel }}</span>
               {% if info.tentative %}{{ ui.tentativeBadge(L) }}{% endif %}
               {% if e.lang and e.lang != L and e.lang != "und" and ((e | machineFor(L)) or et == e.title) %}<span class="badge-muted uppercase" title="{{ ('lang.' ~ e.lang) | t(L) }}">{{ e.lang }}</span>{% endif %}
             </p>
@@ -829,7 +852,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
               <li class="flex items-start gap-1.5">{% set whenIcon = "calendar-range" if info.multiDay else "clock" %}{% icon whenIcon, "mt-0.5 size-4 shrink-0 text-faint" %}{{ info.when }}</li>
               {% if info.location and info.tba %}<li class="flex items-start gap-1.5 italic">{% icon "hourglass", "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0 line-clamp-2">{{ info.location }}</span></li>
               {% elif info.location %}{% set locIcon = "video" if (x.online_url and not x.city) else "map-pin" %}<li class="flex items-start gap-1.5">{% icon locIcon, "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0 line-clamp-2">{{ info.location }}</span></li>
-              {#- online only (no place: La Viña's monthly workshop on Zoom) — "Online on Zoom", as on /events/ -#}
+              {#- online only (no place: La Viña's monthly workshop on Zoom, our Grapevine Meeting on Google Meet) —
+                  "Online on Zoom", as on /events/ -#}
               {% elif info.online %}<li class="flex items-start gap-1.5">{% icon "video", "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0">{{ info.online }}</span></li>{% endif %}
             </ul>
           </div>
