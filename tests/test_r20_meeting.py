@@ -270,7 +270,7 @@ speakers:
     topic: "How the Conference works"
     topic_es: "Cómo trabaja la Conferencia"
   - {date: "2027-01-21", name: "Bad D.", topic: "Wrong day"}
-  - {date: "2027-02-17", name: "Jeannie Smith", topic: "A full last name"}
+  - {date: "2027-02-17", name: "Pat Example", topic: "A full last name"}
   - {date: "2027-01-20", name: "Dup D.", topic: "A second one"}
   - {date: "soon", name: "Xavier Y.", topic: "No date"}
   - "not a block"
@@ -281,7 +281,7 @@ speakers:
 """
 SPEAKER_NOTES = [
     "speaker “Bad D.”: 2027-01-21 is not the 3rd Wednesday of its month — left out (that month's meeting is 2027-01-20)",
-    "speaker “Jeannie Smith” (2027-02-17): the name must be a first name and a last initial, like \"Rick W.\" — left out",
+    "speaker “Pat Example” (2027-02-17): the name must be a first name and a last initial, like \"Rick W.\" — left out",
     "speaker “Dup D.”: 2027-01-20 has a speaker already (“Ann B.”) — left out",
     "speaker “Xavier Y.”: date “soon” is not a date like \"2027-01-20\" — left out",
     "speakers entry 6: not understood (its settings must be indented under “- date:”) — left out",
@@ -313,7 +313,7 @@ class Speakers(Untranslated):
                          ({}, ["speakers: not understood — it must be a list, each speaker starting with “- date:”"]))
         for name in ("Rick W.", "Mary Jo K.", "José Luis M.", "O’Neil P.", "Ana-María Ñ."):
             self.assertRegex(name, M.SPEAKER_NAME, name)
-        for name in ("Rick Williams", "rick w.", "Rick W", "Rick W. Jr.", "R. W.", "A B C D E.", "Rick W. (Dallas)"):
+        for name in ("Pat Example", "rick w.", "Rick W", "Rick W. Jr.", "R. W.", "A B C D E.", "Rick W. (Dallas)"):
             self.assertIsNone(M.SPEAKER_NAME.fullmatch(name), name)
 
     def test_until_when_the_speaker_talks(self):
