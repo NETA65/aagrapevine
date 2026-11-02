@@ -1280,7 +1280,7 @@ The sync scripts read it with `load_config().get("notice") or {}`.
 | A new `{live:…}` fact in the presentations | [presentations.md](presentations.md) (`liveFacts()` in `eleventy/filters/presentations.js`) |
 | A 41st history milestone | Change the 40 in `tests/test_history.py` (search for `len(self.ms), 40`) |
 | A 7th orientation session | Change the 6 in `tests/test_orientation.py` (search for `len(self.lessons), 6`) |
-| A fifth presentation | `DECKS` in `tests/test_presentations.py`, and the four names in `tests/test_presentations_core.py` (search for `"writing-workshop", "committee-meeting"}`) |
+| Another presentation | the steps in [presentations.md](presentations.md) §6.4 (`DECKS` in `tests/test_presentations.py`, the deck names in `tests/test_presentations_core.py`: search for `"committee-meeting",`) |
 | A Spanish twin for another link | Give the link a `<name>_es` in `links:` and read it in the template with `langLink` (for example `site.links \| langLink("aa_big_book", lang)`; see `src/pages/shop.njk`, search for `langLink`); a twin with another name goes in `LINK_TWINS` in `eleventy.config.js` |
 | What the monthly e-mail says, or who gets it | [email-and-alerts.md](email-and-alerts.md) (`scripts/notify/send_digest.py`) |
 

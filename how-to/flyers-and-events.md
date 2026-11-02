@@ -726,20 +726,21 @@ Words recognised as "not known yet" in `location`: "Venue to be announced", "Loc
 
 ```markdown
 ---
-title: "Grapevine Writing Workshop on Zoom"
-title_es: "Taller de Escritura de Grapevine por Zoom (en inglés)"
+title: "Grapevine Writing Workshop on Google Meet"
+title_es: "Taller de Escritura de Grapevine por Google Meet (en inglés)"
 start: 2027-05-15T10:00:00
 end: "12:00"
-online_url: "https://us02web.zoom.us/j/9494767497"
-meeting_id: "949 476 7497"
+online_url: "https://meet.google.com/rva-tmst-vdb"
+meeting_id: "rva-tmst-vdb"
 lang: en
-summary_es: "Aprende a escribir tu historia para Grapevine, en línea por Zoom."
+summary_es: "Aprende a escribir tu historia para Grapevine, en línea por Google Meet."
 ---
-Learn how to write your story for Grapevine. Online on Zoom.
+Learn how to write your story for Grapevine. Online on Google Meet.
 ```
 
-You get "Online on Zoom" / "En línea por Zoom" with a video icon (no map pin), a **Join online** button,
-"Meeting ID 949 476 7497", and the Zoom link as the calendar LOCATION. The home card says "Online on Zoom".
+You get "Online on Google Meet" / "En línea por Google Meet" with a video icon (no map pin), a **Join online**
+button, "Meeting code rva-tmst-vdb", and the Meet link as the calendar LOCATION (here the committee's own room).
+The home card says "Online on Google Meet".
 Search engines are not told about it: Google lists only events held at a place (since 2025), so an online-only
 event gets no structured data ([11.5](#115-what-search-engines-are-told)). Its card, calendar entry and share page
 are as before.
@@ -1286,7 +1287,7 @@ A few more timings:
 | Contribute page, workshops | `/contribute/#workshop` | `/es/contribute/` | the next 3 events whose title says "writing workshop", "recording workshop", "taller de escritura" or "taller de grabación" | name a workshop that way to be listed here |
 | Committee menu, "Events" count | | | upcoming events except meetings, a series once | |
 | **Web presentations** | `/orientation/` | `/es/orientation/` | live facts: the next NETA 65 assembly (an event coloured "Area assembly"), event lists filtered by workshops / NETA 65 / calendars / assemblies, La Viña's workshop dates | [Presentations](presentations.md) |
-| **Booth display** | `/about/#booth` | `/es/about/#booth` | a slide with the next 4 events of `/events/` (never committee meetings; a monthly series once, its next date), each row until its event is over; a countdown to the next NETA 65 assembly; La Viña's monthly workshop and our Grapevine Meeting in "Meetings you can join"; the next 12 events that are not online-only in the player's "pick the event" (Settings → Event) | a hybrid event shows its place and "Online on Zoom"; a title with a word the booth never shows is left out of the list; [Booth display](booth.md) |
+| **Booth display** | `/about/#booth` | `/es/about/#booth` | a slide with the next 4 events of `/events/` (never committee meetings or our Grapevine Meeting; a monthly series once, its next date), each row until its event is over; a countdown to the next NETA 65 assembly; La Viña's monthly workshop and our Grapevine Meeting in "Meetings you can join"; the next 12 events that are not online-only in the player's "pick the event" (Settings → Event) | a hybrid event shows its place and "Online on Zoom"; a title with a word the booth never shows is left out of the list; [Booth display](booth.md) |
 | The flyer **file** itself | `/portfolio/` (Flyers tab), `/library/` (PDF / document flyers only), home "Shared by the committee" | Spanish versions | every flyer, dated or not | [Photos, slides and reports](photos-slides-reports.md) |
 | **Search engines** (structured data, not shown to visitors) | `/events/` | `/es/events/` | the upcoming events held at a place with a city, state or ZIP code, a series by its next date (at most 30) | [11.5](#115-what-search-engines-are-told) |
 | **Status** | [/status/](https://neta65.github.io/aagrapevine/status/) | `/es/status/` | — | only the health of the sources: the rows "Committee Google Drive", "Events added by hand" and "GV/LV event calendars", and the "Other calendars" section |
