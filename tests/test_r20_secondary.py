@@ -9,6 +9,9 @@ meeting's guest speakers (settings written here, fixed clocks):
                 the Grapevine Meeting never takes a row of "Coming up";
   * Monthly   — the committee row's guest speaker on the page's row, the poster and the month's message (the topic in
                 each language); none on a date without one (Dec 16, 2026);
+  * Held      — a committee meeting that is over was held "Online" (Nov 18, 2026 was still on Zoom): no platform,
+                link or meeting code in the calendar feeds or on the toolkit's row; the next one (Dec 16) on
+                Google Meet;
   * Report    — the district report: the next meeting's guest speaker and until when, "the link and the meeting code",
                 the Grapevine Meeting with its first date; the Area report: the Google Meet link and code without a
                 passcode, the speaker under "Next committee meeting", past meetings "online" (never a platform);
@@ -49,7 +52,7 @@ MEETING = {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": 
            "online_url": ROOM, "meeting_id": CODE, "chair_email": "chair@example.org", "speaker_until": "19:30",
            "note": "All AA members are welcome to attend.", "note_es": "Todos los miembros de AA pueden asistir.",
            "skip_dates": [], "speakers": SPEAKERS}
-GVM = {"key": "grapevine-meeting", "title": "Grapevine Meeting", "title_es": "Reunión de Grapevine",
+GVM = {"key": "grapevine-meeting", "title": "Grapevine Meeting", "title_es": "Reunión de Grapevine (en inglés)",
        "week_of_month": 1, "weekday": "wednesday", "start": "19:00", "end": "20:00", "starts": "2026-12-02",
        "online_url": ROOM, "meeting_id": CODE, "url": "/meetings/#grapevine-meeting", "months_ahead": 6, "skip_dates": []}
 LV_WS = {"key": "lv-monthly-workshop", "title": "La Viña Monthly Virtual Workshop (in Spanish)", "title_es": "Taller Mensual y Virtual de La Viña",
@@ -65,7 +68,7 @@ SITE = {"url": "https://neta65.github.io/aagrapevine", "committee": "NETA 65 Gra
 
 def gvm_event(ymd: str, start: str, end: str) -> dict:
     """A date of the Grapevine Meeting as the sync writes it in events.json (category recurring, ours, online only)."""
-    return BB.event(f"ev:recurring:grapevine-meeting:{ymd}", "Grapevine Meeting", "Reunión de Grapevine",
+    return BB.event(f"ev:recurring:grapevine-meeting:{ymd}", "Grapevine Meeting", "Reunión de Grapevine (en inglés)",
                     start, end, "recurring", online_url=ROOM, platform="Google Meet", recurring=True, series="grapevine-meeting",
                     host="neta", meeting_id=CODE)
 
@@ -95,7 +98,7 @@ out({
         self.assertEqual(r["meet"]["online"], [{"platform": "Google Meet", "items": [
             {"key": "committee", "title": "Committee meeting", "details": "/meetings/#committee-meeting"},
             {"key": "grapevine-meeting", "title": "Grapevine Meeting", "details": "/meetings/#grapevine-meeting"}]}])
-        self.assertEqual(r["meetEs"][0]["items"][1]["title"], "Reunión de Grapevine")
+        self.assertEqual(r["meetEs"][0]["items"][1]["title"], "Reunión de Grapevine (en inglés)")
         # back on Zoom with a meeting ID: the committee meeting has its call button again, and nothing is "online only"
         self.assertEqual([m["key"] for m in r["zoom"]["meetings"]], ["committee", "weekly-87120368287"])
         self.assertEqual(r["zoom"]["online"], [])
@@ -168,7 +171,8 @@ class Booth(unittest.TestCase):
         self.assertIn("February 3, 2027", gvm["when"])
         self.assertEqual((gvm["note"], gvm["pub"]), (f"Online on Google Meet · Meeting code {CODE}", "both"))
         self.assertGreater(gvm["ends_ts"], gvm["starts_ts"])
-        self.assertEqual(m["es"]["rows"][3]["title"], "Reunión de Grapevine")
+        self.assertEqual(m["es"]["rows"][3]["title"], "Reunión de Grapevine (en inglés)")      # (said once)
+        self.assertEqual(m["es"]["rows"][1]["title"], "Grapevine Weekly Open AA Meeting (en inglés)")
         # never a row of "Coming up": the next four events are the others
         titles = [x["title"] for x in r["jan"]["events"]["en"]["rows"]]
         self.assertNotIn("Grapevine Meeting", titles)
@@ -275,6 +279,58 @@ class Monthly(unittest.TestCase):
         self.assertNotIn("Zoom link", page)
 
 
+HELD_JS = r"""
+const C = await imp("eleventy/filters/committee.js");
+const M = await imp("eleventy/filters/monthly.js");
+const now = new Date(input.now);
+const unfold = (s) => s.replace(/\r\n[ \t]/g, "");
+const res = {};
+for (const lang of ["en", "es"]) {
+  const evs = C.normalizeEvents([], input.site, lang, { monthsBack: 3, monthsAhead: 12, now });
+  const ics = unfold(C.buildIcs(evs, { lang, now, name: "Events", url: "https://example.org/events/", categoryLabel: () => "" }));
+  const pick = (ymd) => {
+    const e = evs.find((x) => x.id === `ev:committee:${ymd}`);
+    const uid = `UID:ev-committee-${ymd}${lang === "es" ? "-es" : ""}@neta65-gvlv`;
+    const i = ics.indexOf(uid);
+    return { place: e.location, summary: e.summary, desc: e.calDescription, calLocation: e.calLocation, past: e.past,
+             links: [e.gcal, e.outlook].join(" "), ics: i < 0 ? "" : ics.slice(ics.lastIndexOf("BEGIN:VEVENT", i), ics.indexOf("END:VEVENT", i)) };
+  };
+  const rows = (key) => Object.fromEntries(M.monthModel(key, { events: { items: [] } }, {}, input.site, lang, now).dates
+    .filter((d) => d.kind === "committee").map((d) => [d.ymd, d.platform]));
+  res[lang] = { nov: pick("2026-11-18"), dec: pick("2026-12-16"), rows: { ...rows("2026-11"), ...rows("2026-12") },
+                next: M.monthNow({ events: { items: [] } }, input.site, lang, now).nextCommittee.platform };
+}
+out(res);
+"""
+
+
+class Held(unittest.TestCase):
+    """At a fixed clock (Nov 27, 2026, the day after the merge): the Nov 18 meeting, held on Zoom, is in the
+    calendar feeds and on the November toolkit as held "Online" — no platform, link or meeting code; Dec 16 on
+    Google Meet."""
+
+    def test_a_meeting_that_is_over_was_held_online(self):
+        r = run_js(self, HELD_JS, data={"site": SITE, "now": "2026-11-27T18:00:00Z"}, now="2026-11-27T18:00:00Z")
+        for lang, online in (("en", "Online"), ("es", "En línea")):
+            nov, dec = r[lang]["nov"], r[lang]["dec"]
+            with self.subTest(lang=lang):
+                self.assertTrue(nov["past"])
+                self.assertEqual((nov["place"], nov["calLocation"]), (online, online))
+                self.assertTrue(nov["ics"], "the feed keeps the meeting that is over")
+                self.assertIn("LOCATION:" + online, nov["ics"])
+                for text in (nov["summary"], nov["desc"], nov["ics"], nov["links"]):
+                    self.assertNotRegex(text, r"(?i)google(?:%20| )meet|zoom|meet\.google|" + CODE)
+                self.assertIn("committee meeting, online." if lang == "en" else "de NETA 65, en línea.", nov["summary"])
+                # the next meeting: on Google Meet, its link and code
+                self.assertEqual((dec["place"], dec["calLocation"]), ("Google Meet", ROOM))
+                self.assertIn(f"{ROOM}", dec["desc"])
+                self.assertIn(CODE, dec["ics"])
+                self.assertIn("Google Meet", dec["summary"])
+                # the toolkit: "Online" for the row that is over (committeeRow: no platform), Google Meet next
+                self.assertEqual(r[lang]["rows"], {"2026-11-18": "", "2026-12-16": "Google Meet"})
+                self.assertEqual(r[lang]["next"], "Google Meet")
+
+
 REPORT_JS = r"""
 const R = await imp("eleventy/filters/report.js");
 const carry = (await imp("src/_data/carry.js")).default();
@@ -290,28 +346,33 @@ out({
 
 
 class Report(unittest.TestCase):
+    DB = {"events": {"items": []}, "editorial": {"items": []}, "articles": {"items": [], "issues": []}, "shop": {},
+          "meetings": {"items": []}, "weekly_open": {"items": []}, "pdfs": {"items": []}, "spotlight": {"items": []},
+          "audio_project": {}}
+    JAN = {"next": {"ymd": "2027-01-20", "start": "2027-01-21T01:00:00Z", "end": "2027-01-21T02:00:00Z"},
+           "rule": {"weekday": 3, "n": 3, "start": "19:00", "end": "20:00"}}
+    DEC = {"next": {"ymd": "2026-12-16", "start": "2026-12-17T01:00:00Z", "end": "2026-12-17T02:00:00Z"},
+           "rule": {"weekday": 3, "n": 3, "start": "19:00", "end": "20:00"}}
+
+    def reports(self, site):
+        return run_js(self, REPORT_JS, data={"db": self.DB, "site": site, "meeting": self.JAN, "decMeeting": self.DEC,
+                                             "now": "2027-01-05T18:00:00Z", "decNow": "2026-11-27T18:00:00Z"})
+
     def test_the_district_and_area_reports(self):
-        db = {"events": {"items": []}, "editorial": {"items": []}, "articles": {"items": [], "issues": []}, "shop": {},
-              "meetings": {"items": []}, "weekly_open": {"items": []}, "pdfs": {"items": []}, "spotlight": {"items": []},
-              "audio_project": {}}
-        meeting = {"next": {"ymd": "2027-01-20", "start": "2027-01-21T01:00:00Z", "end": "2027-01-21T02:00:00Z"},
-                   "rule": {"weekday": 3, "n": 3, "start": "19:00", "end": "20:00"}}
-        dec = {"next": {"ymd": "2026-12-16", "start": "2026-12-17T01:00:00Z", "end": "2026-12-17T02:00:00Z"},
-               "rule": {"weekday": 3, "n": 3, "start": "19:00", "end": "20:00"}}
-        r = run_js(self, REPORT_JS, data={"db": db, "site": SITE, "meeting": meeting, "decMeeting": dec,
-                                          "now": "2027-01-05T18:00:00Z", "decNow": "2026-11-27T18:00:00Z"})
+        r = self.reports(SITE)
         nb = lambda s: s.replace(" ", " ").replace(" ", " ").replace(" ", " ")   # noqa: E731
         en, es = nb(r["jan"]["en"]), nb(r["jan"]["es"])
         self.assertIn("Guest speaker: Ann B., Past delegate, Area 99 — “How the Conference works”.", en)
         self.assertIn("The talk and questions are done by 7:30 PM; then committee business until 8:00 PM.", en)
         self.assertIn("Orador(a) invitado(a): Ann B., Ex delegada del Área 99 — “Cómo trabaja la Conferencia”.", es)
         self.assertIn("terminan a más tardar a las 7:30 p. m.; luego, los asuntos del comité hasta las 8:00 p. m.", es)
+        self.assertNotIn("p. m..", es, "one period after a time in Spanish")
         self.assertIn("How to join on Google Meet, the link and the meeting code: https://neta65.github.io/aagrapevine/meetings/", en)
         self.assertNotIn("meeting ID and passcode", en)
         self.assertIn("Grapevine Meeting: every first Wednesday of the month · 7:00 – 8:00 PM Central time, on Google Meet. "
                       "Every AA member is welcome: https://neta65.github.io/aagrapevine/meetings/#grapevine-meeting", en)
         self.assertNotIn("The first one", en, "January: the Grapevine Meeting has begun")
-        self.assertIn("Reunión de Grapevine: cada primer miércoles del mes", es)
+        self.assertIn("Reunión de Grapevine (en inglés): cada primer miércoles del mes", es)
         self.assertNotIn("Zoom", en + es)
         # late November: December 16 has no speaker; the Grapevine Meeting's first date is ahead
         d = nb(r["dec"]["en"])
@@ -332,6 +393,15 @@ class Report(unittest.TestCase):
             "Guest speaker: Ann B., Past delegate, Area 99 — “How the Conference works”.",
             "The talk and questions are done by 7:30 PM; then committee business until 8:00 PM."])
         self.assertEqual(len(next(m for m in a["mt"] if m["y"] == "2026-12-16")["t"]["en"][1].split("\n")), 1)
+        self.assertNotIn("p. m..", nb(json.dumps(jan["t"]["es"], ensure_ascii=False)))
+
+    def test_a_speaker_without_a_position_or_topic(self):
+        # one period after the name alone ("Guest speaker: Pat E."), never two
+        site = {**SITE, "meeting": {**MEETING, "speakers": [{"date": "2027-01-20", "name": "Pat E."}]}}
+        r = self.reports(site)
+        self.assertIn("Guest speaker: Pat E.\n", r["jan"]["en"] + "\n")
+        self.assertIn("Orador(a) invitado(a): Pat E.", r["jan"]["es"])
+        self.assertNotIn("E..", r["jan"]["en"] + r["jan"]["es"])
 
 
 class Digest(SD.DigestCase):

@@ -24,9 +24,9 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
       → one tinted band, "Present":
           #present        the six sessions as slides + the printable handout
           #presentations  "Presentations" (not "workshop presentations": one of them is a meeting): a card per
-                          presentation (Present · Customize · More, and Print in its four modes), "Reset all 4 to
-                          the original" right under the cards (shown once this device has changed one), then
-                          "Print or save a copy" — no decks: the section is left out
+                          presentation (Present · Customize · More, and Print in its four modes), "Reset all 5 to
+                          the original" (the number of decks) right under the cards (shown once this device has
+                          changed one), then "Print or save a copy" — no decks: the section is left out
           #presenting     "How presenting works", a CLOSED <details> at the end of the band, for BOTH slide shows:
                           a line for touch screens, the keys, and with presentations the presenter view, versions,
                           your details, privacy, saving, offline and reset (opened by a link to it) — no button
@@ -414,7 +414,7 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
     </li>
     {%- endfor %}
   </ul>
-  {#- "Reset all 4 to the original": right under the cards, in plain sight (in the closed "How presenting works" it
+  {#- "Reset all 5 to the original" (nDecks): right under the cards, in plain sight (in the closed "How presenting works" it
       stayed out of view) — where the player's Customize → Save & share says it is. Hidden until this device has
       changed one of them (the player shows it and asks first, then offers Undo); a block of its own, at the start. -#}
   <button type="button" class="btn-secondary btn-sm o101-pres-resetall" data-pres-reset="all" data-js-only hidden>{% icon "rotate-ccw", "size-4" %} {{ "orientation.pres_reset_all" | t(lang, { n: nDecks }) }}</button>

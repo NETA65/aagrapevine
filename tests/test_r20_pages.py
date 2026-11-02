@@ -156,7 +156,9 @@ class SeriesFromTheSettings(Untranslated):
         self.assertEqual((en["join"]["platform"], en["join"]["url"], en["join"]["idLabel"], en["join"]["copyId"], en["join"]["dialIn"]),
                          ("Google Meet", ROOM, "Meeting code", "abc-defg-hij", False))
         self.assertEqual((en["contact"], en["next"]["details"]), ("grapevine@example.org", "https://example.org/gv/meetings/#grapevine-meeting"))
-        self.assertEqual(got["es"]["title"], "Reunión de Grapevine")
+        self.assertEqual(got["es"]["title"], "Reunión de Grapevine (en inglés)")
+        # the Spanish title names its language: the pages add no "En inglés" of their own
+        self.assertEqual((en["saysLang"], got["es"]["saysLang"]), (False, True))
         self.assertIn("Meeting code: abc-defg-hij", en["next"]["desc"])
         self.assertIn("Every first Wednesday of the month · 7:00 – 8:00 PM Central time", plain(en["next"]["desc"]))
 
@@ -263,6 +265,25 @@ class Countdowns(unittest.TestCase):
                       "https://meet.google.com/abc-defg-hij", flat)
         self.assertIn("URL:https://example.org/gv/meetings/", flat)
         self.assertIn("UID:ev-committee-2027-01-20@neta65-gvlv", flat)
+
+    def test_the_home_card_with_a_speaker_without_a_topic(self):
+        # one period after the name ("Guest speaker: Pat E."), never two
+        r = run_js(self, DOM + r"""
+          const p = page([], { files: ["time", "src/assets/js/app.js", "src/assets/js/home.js"], alpine: true, at: "2027-01-10T20:00:00Z" });
+          p.ready();
+          const c = p.comps.homeMeeting();
+          const ds = { rule: JSON.stringify({ weekday: 3, n: 3, start: "19:00", end: "20:00", skip: [] }), start: "2027-01-21T01:00:00.000Z",
+                       end: "2027-01-21T02:00:00.000Z", speakers: JSON.stringify([{ ymd: "2027-01-20", name: "Pat E.", topic: "" }]),
+                       speakerTpl: "Guest speaker: {name}", calTitle: "Committee meeting", calDesc: "Monthly committee meeting on Google Meet.",
+                       calLoc: "https://meet.google.com/abc-defg-hij", calUrl: "https://example.org/gv/meetings/" };
+          c.$el = { dataset: ds }; c.$root = c.$el;
+          c.$refs = { date: el("span", {}, [], "built date"), time: el("span", {}, [], "built time") };
+          c.init();
+          c.addToCalendar();
+          out({ line: c.speakerLine, file: p.downloads[0].text });""")
+        self.assertEqual(r["line"], "Guest speaker: Pat E.")
+        self.assertIn("DESCRIPTION:Monthly committee meeting on Google Meet. Guest speaker: Pat E. https://meet.google.com/abc-defg-hij",
+                      re.sub(r"\r\n ", "", r["file"]))
 
 
 # =========================================================================== the built pages
@@ -433,9 +454,10 @@ class BuiltPages(Untranslated):
                 self.assertIn(f'data-copy="{ROOM}"', sec)
                 self.assertNotIn("Grapevine meetings", words)
         es = text(part(self.pages(NOV26)["/es/meetings/"], 'aria-labelledby="grapevine-meeting-h"', "</section>"))
-        for s in ("Reunión de Grapevine", "Nuestra reunión mensual en línea · En inglés", "La Declaración de Propósito de AA Grapevine",
+        for s in ("Nuestra reunión mensual en línea Reunión de Grapevine (en inglés)", "La Declaración de Propósito de AA Grapevine",
                   "A las 8:00 p. m. cerramos a tiempo.", "Código de la reunión abc-defg-hij", "Primera reunión"):
             self.assertIn(s, es)
+        self.assertNotIn("En inglés", es, "the title says it: the eyebrow does not again")
 
     # ------------------------------------------------------------------ the home page
     def test_the_home_card(self):
@@ -507,7 +529,8 @@ class BuiltPages(Untranslated):
                 v = {s[1]: text(s[2]) for s in sheets}
                 self.assertIn("Grapevine Meeting · In English", v["en"])
                 self.assertIn("Every first Wednesday of the month · 7:00 – 8:00 PM", v["en"])
-                self.assertIn("Reunión de Grapevine · En inglés", v["es"])
+                self.assertIn("Reunión de Grapevine (en inglés)", v["es"])
+                self.assertNotIn("En inglés", v["es"], "the title says it: never twice")
                 self.assertIn("Cada primer miércoles del mes · 7:00–8:00 p. m.", v["es"])
                 self.assertNotIn("Grapevine Meeting", v["bi"])        # no room on the bilingual poster
                 for k in v:

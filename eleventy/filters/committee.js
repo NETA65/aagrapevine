@@ -509,21 +509,26 @@ function speakerUntilLine(m, lang) {
 
 // The meeting in a line for calendars and its card: "Monthly … committee meeting on Google Meet." and who may come
 // (config/site.yml meeting.platform — Zoom when left out — and meeting.note / note_es); with `ymd`, that meeting's
-// guest speaker and topic and when the speaker's part ends (the words of build_data.speaker_sentences).
-function meetingSummary(site, lang, ymd) {
+// guest speaker and topic and when the speaker's part ends (the words of build_data.speaker_sentences). A meeting
+// that is `over` was held "online", never on a platform: the move to Google Meet changed it for the dates before
+// (the digest and the Area report say "online" too).
+function meetingSummary(site, lang, ymd, over = false) {
   const m = site?.meeting || {};
   const note = String((lang !== "en" && m[`note_${lang}`]) || m.note || "").replace(/\s+/g, " ").trim();
   const sp = ymd ? meetingSpeaker(m, ymd, lang) : null;
-  const speaker = sp ? [t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.topic ? ` — “${sp.topic}”.` : "."), speakerUntilLine(m, lang)] : [];
-  return [t("committee.meeting.cal_desc", lang, { platform: meetingJoin(m, lang).platform }), note, ...speaker].filter(Boolean).join(" ");
+  // (no period after a name alone: it ends in its initial's — "Rick W.")
+  const speaker = sp ? [t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.topic ? ` — “${sp.topic}”.` : ""), speakerUntilLine(m, lang)] : [];
+  const line = over ? t("committee.meeting.cal_desc_online", lang) : t("committee.meeting.cal_desc", lang, { platform: meetingJoin(m, lang).platform });
+  return [line, note, ...speaker].filter(Boolean).join(" ");
 }
 
 // Plain-text description used in calendars (Google / Outlook / .ics): the summary, that meeting's guest speaker
 // (`ymd`: who, their service, the topic, until when) and how to join — never the speaker in the alarm (its title).
-function meetingDescription(site, lang, pageUrl, ymd) {
+// A meeting that is `over`: no link, meeting code or passcode (its room may have been another).
+function meetingDescription(site, lang, pageUrl, ymd, over = false) {
   const m = site.meeting || {};
-  const j = meetingJoin(m, lang);
-  const lines = [meetingSummary(site, lang)];
+  const j = over ? {} : meetingJoin(m, lang);
+  const lines = [meetingSummary(site, lang, "", over)];
   const sp = ymd ? meetingSpeaker(m, ymd, lang) : null;
   if (sp) {
     lines.push("", t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.position ? ` — ${sp.position}` : ""));
@@ -686,18 +691,22 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
   const mTitle = meetingTitle(site, lang);
   const join = meetingJoin(m, lang);
   const synced = new Map((items || []).filter((it) => it && it.category === "committee" && it.extra).map((it) => [it.id, it.extra]));
+  //    A date that is over (the calendar files keep 90 days) was held "Online", with no link or meeting code: the
+  //    move to Google Meet changed the platform for the dates before it.
   for (const d of meetingDates(m, opt.monthsBack ?? 3, opt.monthsAhead ?? 12, new Date(now))) {
     const id = `ev:committee:${d.ymd}`;
     seen.add(id);
     const speaker = meetingSpeaker(m, d.ymd, lang);
     const fx = synced.get(id) || {};
+    const over = Date.parse(d.end) <= now;
     out.push(shapeEvent({
       id, source: "committee", kind: "event", category: "committee", lang: "en",
-      url: "/meetings/", title: mTitle, summary: meetingSummary(site, lang, d.ymd),
+      url: "/meetings/", title: mTitle, summary: meetingSummary(site, lang, d.ymd, over),
       date: d.start, is_new: false, _i18nTitle: true,
-      extra: { start: d.start, end: d.end, all_day: false, location: join.platform, online_url: join.url || null,
+      extra: { start: d.start, end: d.end, all_day: false, location: over ? t("committee.events.online", lang) : join.platform,
+        online_url: over ? null : join.url || null,
         flyer_url: fx.flyer_url || null, flyer_thumb: fx.flyer_thumb || null, ...(speaker ? { speaker } : {}) },
-    }, site, lang, now, meetingDescription(site, lang, meetingPage, d.ymd)));
+    }, site, lang, now, meetingDescription(site, lang, meetingPage, d.ymd, over)));
   }
 
   // 2) Everything else (Drive flyers, manual events, TX GV/LV calendar, .ics feeds)
@@ -962,6 +971,9 @@ function seriesUrl(v, sitePath = false) {
 }
 // build_data._MEETING_ID: letters, digits, spaces, dots and dashes ("815 9593 1777", "rva-tmst-vdb")
 const SERIES_MEETING_ID = /^[A-Za-z0-9](?:[A-Za-z0-9 .-]{1,38})[A-Za-z0-9]$/;
+// a title that already names its language: "La Viña Monthly Virtual Workshop (in Spanish)", "Reunión de Grapevine
+// (en inglés)" (access.js LANG_NOTE)
+const SAYS_LANG = /\((?:in|en) (?:english|spanish|inglés|español)\)/i;
 
 /**
  * One of our monthly series (config/site.yml `recurring_events:` — the Grapevine Meeting) worked out from the
@@ -974,7 +986,9 @@ const SERIES_MEETING_ID = /^[A-Za-z0-9](?:[A-Za-z0-9 .-]{1,38})[A-Za-z0-9]$/;
  *   → { key, title, summary, starts, rule (the countdown's: cmRuleObj), recurrence ("Every first Wednesday of the
  *       month · 7:00 – 8:00 PM Central time"), recurrenceDay ("Every first Wednesday of the month"), time ("7:00 –
  *       8:00 PM"), end ("8:00 PM"), join (meetingJoin: platform, url, meeting code …), contact, flyerMatch, uidPrefix
- *       ("ev-recurring-grapevine-meeting-"), next (the next date's event), dates (the next `n`) }
+ *       ("ev-recurring-grapevine-meeting-"), next (the next date's event), dates (the next `n`), saysLang (its
+ *       title names its language already — "Reunión de Grapevine (en inglés)": a page adds no "En inglés" of its
+ *       own) }
  *   or null: no such series, or no date to come.
  */
 export function seriesNext(site, key, lang = "en", items = [], opt = {}) {
@@ -1014,7 +1028,7 @@ export function seriesNext(site, key, lang = "en", items = [], opt = {}) {
   const next = dates[0];
   const day = next.uid.endsWith(next.startYmd) ? next.uid.slice(0, -next.startYmd.length) : "";
   return {
-    key, title: next.title, summary: next.summary, starts: sp.starts || "",
+    key, title: next.title, summary: next.summary, starts: sp.starts || "", saysLang: SAYS_LANG.test(next.title),
     rule: { weekday: WD[rule.weekday.toLowerCase()] ?? 3, n: rule.week_of_month, start: rule.start, end: rule.end, skip: skipDates(sp), ...(sp.starts ? { starts: sp.starts } : {}) },
     recurrence: recurrenceText(rule, lang), recurrenceDay: recurrenceText(rule, lang).split(" · ")[0], time: meetingTimeRange(sp, lang),
     end: clockLabel(rule.end, lang),

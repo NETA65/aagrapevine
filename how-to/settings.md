@@ -216,7 +216,7 @@ built, so they stay right even on a day the daily sync fails.
 | `weekday` | `"wednesday"` | An English or Spanish day name, any capitals, with or without the accent: `Wednesday`, `miércoles`, `miercoles`, `jueves`, `sábado`. **Plurals (`"Wednesdays"`) and short forms (`"Wed"`) are not read here**: silently Wednesday. |
 | `start` | `"19:00"` | Central time. `"19:00"`, `"7:00 PM"`, `"7pm"`, `"7 p.m."`, `19`, `"19h00"`, `"19.30"` all work. Unreadable (`"noon"`, `"25:00"`, `"13pm"`): 19:00. |
 | `end` | `"20:00"` | Same forms. Missing or unreadable: one hour after the start. An end earlier on the clock than the start and at most 12 hours later, such as `"22:00"`–`"01:00"`, is the **next morning** everywhere since October 2026: the sync, every page ("10:00 PM – 1:00 AM CDT"), the calendar files, both countdowns (the home page's and the one on `/meetings/`) and the e-mail digest. An end further back (`"19:00"`–`"08:00"`), or the same as the start, still gives one hour. |
-| `platform` | `"Google Meet"` | What the pages call the place, in every sentence about the committee meeting: "Join on Google Meet", "Monthly on Google Meet", "on Google Meet" in the calendar text, the meta description, how to join, the share kit's announcement, the presentations' closing slide, the home card, `/events/`, the `/share/` poster, `/gvr/`, the GV/LV report's committee-meeting lines. Left out (or empty): Zoom — so keep this line while the link is a Google Meet one. The phone dial-in section and the two weekly open meetings always say Zoom: those are Zoom's own. |
+| `platform` | `"Google Meet"` | What the pages call the place, in every sentence about the committee meeting: "Join on Google Meet", "Monthly on Google Meet", "on Google Meet" in the calendar text, the meta description, how to join, the share kit's announcement, the presentations' closing slide, the home card, `/events/`, the `/share/` poster, `/gvr/`, the GV/LV report's committee-meeting lines. Left out (or empty): Zoom — so keep this line while the link is a Google Meet one. A meeting that is over says "online" instead, with no link or code, in the calendar files and on the monthly toolkit (the meetings up to November 2026 were on Zoom), as the monthly e-mail and the Area report do. The phone dial-in section and the two weekly open meetings always say Zoom: those are Zoom's own. |
 | `online_url` | `"https://meet.google.com/rva-tmst-vdb"` | The link to join: every **Join** button (home, `/meetings/`, `/events/`), "Copy Google Meet link", the calendar description and its place, the presentations. The same room as our Grapevine Meeting ([3.3](#33-recurring_events--things-held-every-month)). An older file's `zoom_url:` line is still read when there is no `online_url:`. For a Zoom link, copy the whole link from Zoom: its `pwd=` part is a token, not the passcode. |
 | `meeting_id` | `"rva-tmst-vdb"` | What people type into the app: `/meetings/` "How to join", the poster, the calendar text. With letters (a Google Meet **meeting code**) the pages say "Meeting code" and its Copy button copies it as written; with digits only (a Zoom ID, `"949 476 7497"`) they say "Meeting ID", the Copy button copies the digits, and the meeting gets tap-to-call links on `/accessibility/#phone`. A test requires a Google Meet code (`abc-defg-hij`) or nothing, or 9–11 digits when the link is a Zoom one. |
 | `passcode` | (none) | Google Meet has no passcode, so the line is gone: no Passcode line anywhere. For a meeting on Zoom: `/meetings/`, the poster, the calendar text, the Area report's *Next committee meeting* (with `meeting_id`); a passcode with letters means phone callers need a numbers-only one ([3.8](#38-phone_access--joining-by-phone)). The reminder inside a downloaded calendar file never shows it: only the event's title ([Flyers and events §11.3](flyers-and-events.md#113-what-goes-into-the-calendar-files)). |
@@ -263,7 +263,8 @@ Where the meeting shows:
 
 > **Note — the rest of the words are the site's own.** After `note`, the *Who can come* card goes on with
 > `committee.meeting.who_text` in `src/_i18n/committee.json`, and the calendar text starts with
-> `committee.meeting.cal_desc` ("… committee meeting on {platform}."). To change those words, see
+> `committee.meeting.cal_desc` ("… committee meeting on {platform}."; once that meeting is over,
+> `committee.meeting.cal_desc_online`: "… committee meeting, online."). To change those words, see
 > [translations.md](translations.md).
 
 > **The link and the code are public.** The meeting's link and meeting code are printed on `/meetings/`, in the
@@ -423,7 +424,7 @@ December 2, 2026, in the committee meeting's Google Meet room:
 ```yaml
   - key: "grapevine-meeting"
     title: "Grapevine Meeting"
-    title_es: "Reunión de Grapevine"
+    title_es: "Reunión de Grapevine (en inglés)"
     summary: "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome."
     summary_es: "Reunión de AA en línea, en inglés: …"
     week_of_month: 1
@@ -1279,7 +1280,7 @@ The sync scripts read it with `load_config().get("notice") or {}`.
 | A new `{live:…}` fact in the presentations | [presentations.md](presentations.md) (`liveFacts()` in `eleventy/filters/presentations.js`) |
 | A 41st history milestone | Change the 40 in `tests/test_history.py` (search for `len(self.ms), 40`) |
 | A 7th orientation session | Change the 6 in `tests/test_orientation.py` (search for `len(self.lessons), 6`) |
-| A fifth presentation | `DECKS` in `tests/test_presentations.py`, and the four names in `tests/test_presentations_core.py` (search for `"writing-workshop", "committee-meeting"}`) |
+| Another presentation | the steps in [presentations.md](presentations.md) §6.4 (`DECKS` in `tests/test_presentations.py`, the deck names in `tests/test_presentations_core.py`: search for `"committee-meeting",`) |
 | A Spanish twin for another link | Give the link a `<name>_es` in `links:` and read it in the template with `langLink` (for example `site.links \| langLink("aa_big_book", lang)`; see `src/pages/shop.njk`, search for `langLink`); a twin with another name goes in `LINK_TWINS` in `eleventy.config.js` |
 | What the monthly e-mail says, or who gets it | [email-and-alerts.md](email-and-alerts.md) (`scripts/notify/send_digest.py`) |
 

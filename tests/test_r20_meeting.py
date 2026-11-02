@@ -49,7 +49,7 @@ ROOM = "https://meet.google.com/abc-defg-hij"
 GVM_ENTRY = """
   - key: "grapevine-meeting"
     title: "Grapevine Meeting"
-    title_es: "Reunión de Grapevine"
+    title_es: "Reunión de Grapevine (en inglés)"
     summary: "Online AA meeting in English: we read a story from AA Grapevine and share on its topic."
     summary_es: "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine y compartimos sobre su tema."
     week_of_month: 1
@@ -270,7 +270,7 @@ speakers:
     topic: "How the Conference works"
     topic_es: "Cómo trabaja la Conferencia"
   - {date: "2027-01-21", name: "Bad D.", topic: "Wrong day"}
-  - {date: "2027-02-17", name: "Jeannie Smith", topic: "A full last name"}
+  - {date: "2027-02-17", name: "Pat Example", topic: "A full last name"}
   - {date: "2027-01-20", name: "Dup D.", topic: "A second one"}
   - {date: "soon", name: "Xavier Y.", topic: "No date"}
   - "not a block"
@@ -281,7 +281,7 @@ speakers:
 """
 SPEAKER_NOTES = [
     "speaker “Bad D.”: 2027-01-21 is not the 3rd Wednesday of its month — left out (that month's meeting is 2027-01-20)",
-    "speaker “Jeannie Smith” (2027-02-17): the name must be a first name and a last initial, like \"Rick W.\" — left out",
+    "speaker “Pat Example” (2027-02-17): the name must be a first name and a last initial, like \"Rick W.\" — left out",
     "speaker “Dup D.”: 2027-01-20 has a speaker already (“Ann B.”) — left out",
     "speaker “Xavier Y.”: date “soon” is not a date like \"2027-01-20\" — left out",
     "speakers entry 6: not understood (its settings must be indented under “- date:”) — left out",
@@ -313,7 +313,7 @@ class Speakers(Untranslated):
                          ({}, ["speakers: not understood — it must be a list, each speaker starting with “- date:”"]))
         for name in ("Rick W.", "Mary Jo K.", "José Luis M.", "O’Neil P.", "Ana-María Ñ."):
             self.assertRegex(name, M.SPEAKER_NAME, name)
-        for name in ("Rick Williams", "rick w.", "Rick W", "Rick W. Jr.", "R. W.", "A B C D E.", "Rick W. (Dallas)"):
+        for name in ("Pat Example", "rick w.", "Rick W", "Rick W. Jr.", "R. W.", "A B C D E.", "Rick W. (Dallas)"):
             self.assertIsNone(M.SPEAKER_NAME.fullmatch(name), name)
 
     def test_until_when_the_speaker_talks(self):
@@ -457,6 +457,25 @@ class SpeakersOnPages(unittest.TestCase):
         self.assertNotIn("Ann B.", got["ld"])
         self.assertNotIn("committee-meeting", got["ld"])
 
+    def test_a_speaker_without_a_topic_yet(self):
+        # (the settings allow one: "no topic — shown without one") one period after the name, never "Pat E.." —
+        # in the sync's summary (speaker_sentences) and in the pages' card and calendar text (normalizeEvents)
+        pat = {"name": "Pat E.", "topic": {"en": "", "es": ""}}
+        self.assertEqual(B.speaker_sentences(pat, (19, 30), (20, 0), "en"),
+                         "Guest speaker: Pat E. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.")
+        self.assertTrue(B.speaker_sentences(pat, (19, 30), (20, 0), "es").startswith("Orador(a) invitado(a): Pat E. La charla"))
+        self.assertEqual(B.speaker_sentences(pat, None, (20, 0), "en"), "Guest speaker: Pat E.")
+        cfg = yaml.safe_load(YAML)
+        cfg["meeting"]["speakers"] = [{"date": "2027-01-20", "name": "Pat E."}]
+        got = run_js(self, EVENTS_JS, data={"yaml": yaml.safe_dump(cfg, allow_unicode=True)}, now="2026-11-26T18:00:00Z")
+        for lang in ("en", "es"):
+            jan = {e["ymd"]: e for e in got[lang]}["2027-01-20"]
+            with self.subTest(lang=lang):
+                self.assertIn("Pat E. ", jan["summary"])
+                self.assertNotIn("..", jan["summary"] + jan["desc"])
+        self.assertIn("Guest speaker: Pat E. The guest speaker's part ends by 7:30 PM",
+                      {e["ymd"]: e for e in got["en"]}["2027-01-20"]["summary"])
+
     def test_the_home_page_and_the_countdown_get_each_dates_speaker(self):
         tmp = Path(self._tmp())
         (tmp / "config").mkdir()
@@ -595,6 +614,8 @@ class SharedRoom(Untranslated):
         self.assertEqual((notes, n, moved["title"]), ([], 1, "Grapevine Meeting"))
         # …but not on the committee meeting's own day, whatever its title
         self.assertEqual(self.run_with([listing("2027-01-20", "Grapevine Meeting")]), ([], 0))
+        # a Spanish listing without the series' "(en inglés)" names it too (title_tokens leaves the language out)
+        self.assertEqual(self.run_with([listing("2027-01-13", "Reunión de Grapevine")], skip=["2027-01-06"])[1], 1)
 
     def test_a_room_of_its_own_is_as_before(self):
         # the committee meeting elsewhere (Zoom): any listing in the series' room is the series, as for La Viña's
@@ -664,7 +685,7 @@ class RealSettings(unittest.TestCase):
         self.assertEqual((sp["online_url"], sp["meeting_id"], sp["platform"], sp["host"], sp["location"], sp["url"]),
                          (self.meeting["online_url"], self.meeting["meeting_id"], "Google Meet", "neta", None,
                           "/meetings/#grapevine-meeting"))
-        self.assertEqual(sp["title"], ("Grapevine Meeting", "Reunión de Grapevine"))
+        self.assertEqual(sp["title"], ("Grapevine Meeting", "Reunión de Grapevine (en inglés)"))
         self.assertFalse([p for p in self.problems if "grapevine-meeting" in p], self.problems)
         self.assertNotRegex(json.dumps(self.cfg, ensure_ascii=False, default=str), r"(?i)hosted by")
 

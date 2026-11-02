@@ -175,6 +175,10 @@
     "en": "Monthly NETA 65 Grapevine / La Viña committee meeting on {platform}.",
     "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65 por {platform}."
   },
+  "committee.meeting.cal_desc_online": {
+    "en": "Monthly NETA 65 Grapevine / La Viña committee meeting, online.",
+    "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65, en línea."
+  },
   "committee.meeting.cal_join": {
     "en": "Join on {platform}",
     "es": "Entrar por {platform}"
@@ -401,7 +405,7 @@
   },
   "committee.weekly.eyebrow": {
     "en": "On Zoom · Open to everyone",
-    "es": "Por Zoom · Abierta a todos"
+    "es": "Por Zoom · Abiertas a todos"
   },
   "committee.weekly.title": {
     "en": "Grapevine Weekly Open AA Meeting",
@@ -1452,8 +1456,8 @@
     "es": "Nuestra reunión del comité"
   },
   "committee.gvmeeting.eyebrow": {
-    "en": "Our monthly online meeting · In English",
-    "es": "Nuestra reunión mensual en línea · En inglés"
+    "en": "Our monthly online meeting",
+    "es": "Nuestra reunión mensual en línea"
   },
   "committee.gvmeeting.what_title": {
     "en": "What happens at the Grapevine Meeting",

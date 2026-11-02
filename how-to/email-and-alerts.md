@@ -293,7 +293,7 @@ same address. Google Groups usually adds its own unsubscribe line as well.
 | `site.url` | `https://neta65.github.io/aagrapevine` | The address in every link, but only when GitHub Pages cannot be asked (on GitHub the workflow asks Pages first) and when you build on a computer. | If the site moves to its own domain, the e-mail's links follow by themselves. |
 | `digest.per_section` | `5` | How many rows each list shows before *"→ and N more on the website"*. | `8` shows 8 rows. `0`, `-1` or `"many"` fall back to 5. |
 | `digest.highlights` | `3` | How many stories each magazine issue shows. | `2` |
-| `meeting:` (`week_of_month`, `weekday`, `platform`, `skip_dates`) | 3rd Wednesday, `Google Meet` | The *"Committee meeting — Wed, Dec 16 · Google Meet"* row under "Events in December", which the code works out from this rule when the events data has no record (the September 2026 example below still says Zoom: the meeting was on Zoom then). | `skip_dates: ["2026-12-16"]` removes December's row. |
+| `meeting:` (`week_of_month`, `weekday`, `skip_dates`, `speakers`) | 3rd Wednesday | The *"Committee meeting — Wed, Dec 16 · Online"* row under "Events in December", which the code works out from this rule when the events data has no record. The row always says "Online", never the platform: `platform` does not change the e-mail. `speakers:` gives the guest speaker under "Coming up" (row 8 in [3.13](#313-what-is-in-the-e-mail)). | `skip_dates: ["2026-12-16"]` removes December's row. |
 | `price_changes:` | a change on January 1, 2027 | One extra row after "Coming up", shown while the price notice is on. It is judged on the day the e-mail is **built**. | E-mails built October 1 to December 31 say *"Grapevine and La Viña prices change on January 1, 2027"*. Those built in January say *"New Grapevine and La Viña prices since January 1, 2027"*. From February 1 the row is gone. |
 
 For example, to show fewer stories per issue and more rows per list:
@@ -512,7 +512,7 @@ La Viña comes first. A section with nothing in it is left out.
 | 5 | **New in the magazines**: per issue, its theme, story count, 3 highlights and "See all N stories" | the magazines' websites | …its stories came out online | [Automatic sources](automatic-sources.md) |
 | 6 | **Writers from Area 65 & Texas** | the published-writers data | …the story came out | [Automatic sources](automatic-sources.md) |
 | 7 | **Podcasts** (a YouTube copy of an episode shows as "also on YouTube"), **Videos**, **Instagram** (per account: the count and the 3 newest posts; the text part gives counts only), **Documents** | podcasts, YouTube, Instagram, the document library | …the item's date | [Automatic sources](automatic-sources.md) |
-| 8 | **Coming up in October**: ONE link to `/monthly/2026-10/`, plus the price-change row while that notice is on | the toolkit page, `price_changes:` | — | [Settings](settings.md) |
+| 8 | **Coming up in October**: ONE link to `/monthly/2026-10/`, plus that month's committee meeting with its guest speaker while the meeting is ahead (*"Committee meeting on January 20, 2027 — guest speaker: Rick W. — “…”"* in the December 2026 edition, sent January 1; none in November's: December 16 has no speaker), and the price-change row while that notice is on | the toolkit page, `meeting:` → `speakers:` (through the events data), `price_changes:` | — | [Settings](settings.md) |
 | 9 | The buttons **Everything new** and **Open the website**, plus *"Some titles were translated automatically."* when that is true | — | — | [Translations](translations.md) |
 
 Then comes the **footer**:
@@ -525,12 +525,11 @@ Then comes the **footer**:
 - the site's address.
 
 **Never added by the e-mail itself, on purpose:** the meetings' online links (Google Meet, Zoom), a meeting code or
-passcode, phone numbers, a committee meeting's guest speaker, event times,
-"every month", "to be confirmed", a Book of the Month section (the "Coming up" sentence only names it), subscription
-prices and the daily quote. The test `test_nothing_of_what_is_current` fails if, for example, a `zoom.us` or `tel:`
-link, "7:00 PM", "every month", "to be confirmed", a "BOOK OF THE MONTH" heading or "daily quote" slips in. All of
-this belongs to the monthly toolkit page, which the e-mail links to. A bulletin post's own text, however,
-is copied as written. Keep such details out of any post you do not want e-mailed.
+passcode, phone numbers, event times, "every month", "to be confirmed", a Book of the Month section (the "Coming up"
+sentence only names it), subscription prices and the daily quote. The test `test_nothing_of_what_is_current` fails
+if, for example, a `zoom.us` or `tel:` link, "7:00 PM", "every month", "to be confirmed", a "BOOK OF THE MONTH"
+heading or "daily quote" slips in. All of this belongs to the monthly toolkit page, which the e-mail links to. A
+bulletin post's own text, however, is copied as written. Keep such details out of any post you do not want e-mailed.
 
 **The real September 2026 edition** (text part, start, abridged, with Drive links shortened):
 
@@ -557,7 +556,7 @@ EVENTS IN SEPTEMBER
 -------------------
 * GV/LV booth at CityWide Dallas — Sat, Sep 12 · Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220
   https://citywidedallasaa.org
-* Committee meeting — Wed, Sep 16 · Zoom
+* Committee meeting — Wed, Sep 16 · Online
   https://neta65.github.io/aagrapevine/meetings/
 …
 
@@ -582,10 +581,10 @@ Some titles were translated automatically.
 Left out above (the "…" lines): two more events, four more uploads, and the sections *New in the magazines*,
 *Writers from Area 65 & Texas*, *Podcasts*, *Videos*, *Instagram* and *Documents*. The report row shows *(May 12)*,
 the date in its file name, but it is in the **September** edition because the site first had it on September 25.
-The Spanish half repeats everything in Spanish (*"BOLETÍN (1)"*, *"Reunión del comité — mié, 16 de sept · Zoom"*),
-with links to `/es/` pages. From the December 2026 edition the committee meeting's row says *"· Google Meet"*, and
-each Grapevine Meeting that took place has a row of its own, linking to its section on Meetings, never to the
-Google Meet room: *"Grapevine Meeting — Wed, Dec 2 · Online"*.
+The Spanish half repeats everything in Spanish (*"BOLETÍN (1)"*, *"Reunión del comité — mié, 16 de sept · En
+línea"*), with links to `/es/` pages. The committee meeting's row always says *"· Online"* (*"· En línea"*), never
+the platform, and from the December 2026 edition each Grapevine Meeting that took place has a row of its own,
+linking to its section on Meetings, never to the Google Meet room: *"Grapevine Meeting — Wed, Dec 2 · Online"*.
 
 The **HTML part** is a 600-pixel card. It has a dark-blue masthead with the committee logo and the line *"Grapevine /
 La Viña · Monthly digest"*, then a strip saying *"English first · Versión en español más abajo"*. Each section has a

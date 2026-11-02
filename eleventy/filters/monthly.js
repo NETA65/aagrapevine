@@ -342,7 +342,9 @@ function dateRow(e, L, ctx, extra = {}) {
 /** A month's committee meeting as a date row: its events.json record, else the site.meeting rule
  *  (events.json drops a meeting once it is over; skip_dates are honoured) — null when there is none. Its guest
  *  speaker (config/site.yml meeting.speakers, committee.js meetingSpeaker: { name, position, topic } in the row's
- *  language), null on a date without one (Dec 16, 2026): the page's row, the poster and the message name them. */
+ *  language), null on a date without one (Dec 16, 2026): the page's row, the poster and the message name them.
+ *  `platform`: where it is held ("Google Meet"); "" once it is over — it was held online, maybe on another platform
+ *  (the move to Google Meet changed it for the dates before): the pages say "Online" then. */
 function committeeRow(events, key, site, L, ctx) {
   let ev = events.find((e) => e.id && String(e.id).startsWith(`ev:committee:${key}-`));
   if (!ev) {
@@ -353,7 +355,7 @@ function committeeRow(events, key, site, L, ctx) {
   if (!ev) return null;
   const row = dateRow(ev, L, ctx, { kind: "committee" });
   row.title = "";
-  row.platform = meetingJoin(site.meeting).platform;
+  row.platform = row.past ? "" : meetingJoin(site.meeting).platform;
   row.speaker = meetingSpeaker(site.meeting, row.ymd, L);
   return row;
 }
@@ -926,7 +928,7 @@ export function monthMessage(ctx, langs, style, site, t) {
   for (const d of rows) {
     const when = [d.range || `${d.chip.wd}, ${d.dayLabel}`, d.time ? `${d.time} ${d.zone}` : ""].filter(Boolean).join(" · ");
     if (d.kind === "committee") {
-      out.push(`${bullet} ${when} — ${both("monthly.committee")} (${d.platform}) — ${both("monthly.all_welcome")}`);
+      out.push(`${bullet} ${when} — ${both("monthly.committee")} (${d.platform || both("monthly.online")}) — ${both("monthly.all_welcome")}`);
       out.push(...speakerLines(d.speaker, Ls.slice(1).map((l) => ((mm[l].dates || []).find((x) => x.id === d.id) || {}).speaker)));
       continue;
     }

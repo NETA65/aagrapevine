@@ -648,7 +648,7 @@ Each slide's QR code leads to the page that has more, the Spanish page on Spanis
 
 | Channel | The slide shows | Stays until | QR code |
 |---|---|---|---|
-| **Upcoming events** | **Coming up**: the next four events of `/events/` (a monthly series once), each with its date and time, title, place and a note — "Online on Zoom" for an online or hybrid one (its place stays beside it), "Details to be confirmed" for a tentative one. Today: the Grapevine Writing Workshop in Arlington (hybrid), the La Viña Writing Workshop in Mansfield, the CityWide Dallas booth, the La Viña Recording Workshop in Duncanville | each row until its event ends; the slide until the last one does | `/events/` |
+| **Upcoming events** | **Coming up**: the next four events of `/events/` (a monthly series once; never our Grapevine Meeting, which is in **Meetings you can join**), each with its date and time, title, place and a note — "Online on Zoom" for an online or hybrid one (its place stays beside it), "Details to be confirmed" for a tentative one. Today: the Grapevine Writing Workshop in Arlington (hybrid), the La Viña Writing Workshop in Mansfield, the CityWide Dallas booth, the La Viña Recording Workshop in Duncanville | each row until its event ends; the slide until the last one does | `/events/` |
 | **Upcoming events** — countdown | **Coming up next**: "Next assembly" · the next NETA 65 assembly, the days and hours left (hours and minutes on its last day), its dates and place. Today: NETA 65 Spring Assembly 2027, Fri, Mar 19 – Sun, Mar 21, 2027 | the assembly's start | its card on `/events/` |
 | **Daily quotes** | Grapevine's Daily Quote (English) and La Viña's Cita Diaria (Spanish), word for word as the Home page shows them, with their attribution and, at the end of the credit line, the publishers' permission credits the Home page shows under them ("Reprinted with permission of A.A. World Services, Inc. · Copyright © The AA Grapevine, Inc. Reprinted with permission. All rights reserved.", in the quote's language, a dot between the two as on Home), under the headings "Grapevine Daily Quote · Oct 2" and "Cita Diaria de La Viña · 2 de octubre" | two days after its date | the official page |
 | **Official videos** | the two videos the About page features (`config/site.yml` → `site:` → `about_videos`) first, then the newest 30 Shorts and videos of 8 minutes or less of the official AA Grapevine & La Viña channel, each in its own language, credited "AA Grapevine & La Viña on YouTube" — never a recording of a weekly open meeting or a live stream, never one a CSV row already plays (today both featured videos are CSV rows, so all 30 are the newest ones), never one whose title says a refused word | the next update's list | — |
@@ -1542,13 +1542,13 @@ Needs `text`. Takes `title` (the heading), `qr_url` (shown beside the text).
 |---|---|
 | `id` · `type` · `pub` · `tags` | `message-fun-event-committee` · `message` · `both` · `message;committee` |
 | `title_en` / `title_es` | Thanks for stopping by / Gracias por visitarnos |
-| `text_en` | The {committee} meets on Google Meet every month, and every AA member is welcome. Ask us for the details. |
-| `text_es` | El {committee} se reúne por Google Meet cada mes y todos los miembros de AA son bienvenidos. Pídenos los detalles. |
+| `text_en` | The {committee} meets online every month, and every AA member is welcome. Ask us for the details. |
+| `text_es` | El {committee} se reúne en línea cada mes y todos los miembros de AA son bienvenidos. Pídenos los detalles. |
 | `qr_url` | {site}meetings/ |
 | `source_url` | https://neta65.org/trusted-servants/grapevine-la-vina/ |
 
-On the screen: the heading, the text — "The NETA 65 Grapevine & La Viña Committee meets on Google Meet every month …" /
-"El Comité de Grapevine y La Viña de NETA 65 se reúne por Google Meet cada mes …" — and the QR code of `/meetings/` beside it
+On the screen: the heading, the text — "The NETA 65 Grapevine & La Viña Committee meets online every month …" /
+"El Comité de Grapevine y La Viña de NETA 65 se reúne en línea cada mes …" — and the QR code of `/meetings/` beside it
 (`/es/meetings/` when Spanish leads).
 
 #### qr
@@ -1683,7 +1683,7 @@ Three words in braces are filled in by the player, in each text cell (`title`, `
 | Placeholder | Becomes | Example cell → on the screen |
 |---|---|---|
 | `{event}` | the event's name in the slide's language (the Spanish name on Spanish slides, else the English one); "this event" / "este evento" while none is set or "Show the event name at the top" is off | `Welcome to {event}!` → "Welcome to NETA 65 Spring Assembly!" — with no name, "Welcome to this event!" |
-| `{committee}` | "NETA 65 Grapevine & La Viña Committee" / "Comité de Grapevine y La Viña de NETA 65" | `The {committee} meets on Google Meet every month` → "The NETA 65 Grapevine & La Viña Committee meets on Google Meet every month" |
+| `{committee}` | "NETA 65 Grapevine & La Viña Committee" / "Comité de Grapevine y La Viña de NETA 65" | `The {committee} meets online every month` → "The NETA 65 Grapevine & La Viña Committee meets online every month" |
 | `{site}` | the site's address, `neta65.github.io/aagrapevine` | `Everything is at {site}` → "Everything is at neta65.github.io/aagrapevine" |
 
 Any other word in braces is a mistake (*text_en: {Event} is not a placeholder the booth knows ({event}, {committee},

@@ -481,11 +481,12 @@ def _meeting_clock(hm: tuple[int, int], lang: str) -> str:
 def speaker_sentences(speaker: dict | None, until: tuple[int, int] | None, end: tuple[int, int], lang: str) -> str:
     """A committee meeting's guest speaker in a sentence or two (its summary), "" without one: "Guest speaker: Rick
     W. — “From NETA 65 to the Conference table: …”. The guest speaker's part ends by 7:30 PM; committee business
-    follows until 8:00 PM." The name and the topic only — the service position is in extra.speaker."""
+    follows until 8:00 PM." The name and the topic only — the service position is in extra.speaker. (A name alone
+    gets no period of its own: it ends in its initial's — "Guest speaker: Rick W.")"""
     if not speaker:
         return ""
     topic = speaker["topic"][lang]
-    out = _SPEAKER[lang].format(name=speaker["name"]) + (f" — “{topic}”." if topic else ".")
+    out = _SPEAKER[lang].format(name=speaker["name"]) + (f" — “{topic}”." if topic else "")
     if until:
         out += " " + _SPEAKER_UNTIL[lang].format(until=_meeting_clock(until, lang), end=_meeting_clock(end, lang))
     return out
@@ -1807,8 +1808,9 @@ _ONLINE_WORDS = {"online", "linea", "virtual"}
 
 def _names_series(sp: dict, ev: dict) -> bool:
     """A listing's title names the series: nearly the same words as its title in either language (shared / all ≥
-    0.75; "(online)" / "(en línea)" aside). Every word counts here, "Grapevine" and "committee" too: "Grapevine
-    Meeting" is the Grapevine Meeting, the "Grapevine & La Viña Committee Meeting" is not."""
+    0.75; "(online)" / "(en línea)" aside, and "(en inglés)": title_tokens drops the language words). Every word
+    counts here, "Grapevine" and "committee" too: "Grapevine Meeting" is the Grapevine Meeting, the "Grapevine & La
+    Viña Committee Meeting" is not."""
     for a in sp["title"]:
         ta = title_tokens(a) - _ONLINE_WORDS
         for b in _event_titles(ev):
