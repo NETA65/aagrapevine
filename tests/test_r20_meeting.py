@@ -457,6 +457,25 @@ class SpeakersOnPages(unittest.TestCase):
         self.assertNotIn("Ann B.", got["ld"])
         self.assertNotIn("committee-meeting", got["ld"])
 
+    def test_a_speaker_without_a_topic_yet(self):
+        # (the settings allow one: "no topic — shown without one") one period after the name, never "Pat E.." —
+        # in the sync's summary (speaker_sentences) and in the pages' card and calendar text (normalizeEvents)
+        pat = {"name": "Pat E.", "topic": {"en": "", "es": ""}}
+        self.assertEqual(B.speaker_sentences(pat, (19, 30), (20, 0), "en"),
+                         "Guest speaker: Pat E. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.")
+        self.assertTrue(B.speaker_sentences(pat, (19, 30), (20, 0), "es").startswith("Orador(a) invitado(a): Pat E. La charla"))
+        self.assertEqual(B.speaker_sentences(pat, None, (20, 0), "en"), "Guest speaker: Pat E.")
+        cfg = yaml.safe_load(YAML)
+        cfg["meeting"]["speakers"] = [{"date": "2027-01-20", "name": "Pat E."}]
+        got = run_js(self, EVENTS_JS, data={"yaml": yaml.safe_dump(cfg, allow_unicode=True)}, now="2026-11-26T18:00:00Z")
+        for lang in ("en", "es"):
+            jan = {e["ymd"]: e for e in got[lang]}["2027-01-20"]
+            with self.subTest(lang=lang):
+                self.assertIn("Pat E. ", jan["summary"])
+                self.assertNotIn("..", jan["summary"] + jan["desc"])
+        self.assertIn("Guest speaker: Pat E. The guest speaker's part ends by 7:30 PM",
+                      {e["ymd"]: e for e in got["en"]}["2027-01-20"]["summary"])
+
     def test_the_home_page_and_the_countdown_get_each_dates_speaker(self):
         tmp = Path(self._tmp())
         (tmp / "config").mkdir()

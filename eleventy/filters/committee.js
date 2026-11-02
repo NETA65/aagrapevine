@@ -514,7 +514,8 @@ function meetingSummary(site, lang, ymd) {
   const m = site?.meeting || {};
   const note = String((lang !== "en" && m[`note_${lang}`]) || m.note || "").replace(/\s+/g, " ").trim();
   const sp = ymd ? meetingSpeaker(m, ymd, lang) : null;
-  const speaker = sp ? [t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.topic ? ` — “${sp.topic}”.` : "."), speakerUntilLine(m, lang)] : [];
+  // (no period after a name alone: it ends in its initial's — "Rick W.")
+  const speaker = sp ? [t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.topic ? ` — “${sp.topic}”.` : ""), speakerUntilLine(m, lang)] : [];
   return [t("committee.meeting.cal_desc", lang, { platform: meetingJoin(m, lang).platform }), note, ...speaker].filter(Boolean).join(" ");
 }
 

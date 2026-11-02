@@ -93,7 +93,10 @@ function speakerLines(sp, site, L) {
   const m = (site && site.meeting) || {};
   const until = clockLabel(meetingSpeakerUntil(m), L);
   const end = clockLabel((monthlyRule(m) || {}).end || "", L);
-  return [t("report.c_speaker", L, { who }), ...(until && end ? [t("report.c_speaker_until", L, { until, end })] : [])];
+  // one period at the end: a name alone ends in its initial's ("Guest speaker: Rick W."), a Spanish time in its
+  // own ("hasta las 8:00 p. m.")
+  const one = (s) => s.replace(/\.\.$/, ".");
+  return [one(t("report.c_speaker", L, { who })), ...(until && end ? [one(t("report.c_speaker_until", L, { until, end }))] : [])];
 }
 /** Our own online meetings (config/site.yml recurring_events of ours — no `host`, or "neta" — with a link and no
  *  place: the Grapevine Meeting) → [{ title, when (its rule and time), platform, path (its section on /meetings/),

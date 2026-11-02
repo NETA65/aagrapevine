@@ -266,6 +266,25 @@ class Countdowns(unittest.TestCase):
         self.assertIn("URL:https://example.org/gv/meetings/", flat)
         self.assertIn("UID:ev-committee-2027-01-20@neta65-gvlv", flat)
 
+    def test_the_home_card_with_a_speaker_without_a_topic(self):
+        # one period after the name ("Guest speaker: Pat E."), never two
+        r = run_js(self, DOM + r"""
+          const p = page([], { files: ["time", "src/assets/js/app.js", "src/assets/js/home.js"], alpine: true, at: "2027-01-10T20:00:00Z" });
+          p.ready();
+          const c = p.comps.homeMeeting();
+          const ds = { rule: JSON.stringify({ weekday: 3, n: 3, start: "19:00", end: "20:00", skip: [] }), start: "2027-01-21T01:00:00.000Z",
+                       end: "2027-01-21T02:00:00.000Z", speakers: JSON.stringify([{ ymd: "2027-01-20", name: "Pat E.", topic: "" }]),
+                       speakerTpl: "Guest speaker: {name}", calTitle: "Committee meeting", calDesc: "Monthly committee meeting on Google Meet.",
+                       calLoc: "https://meet.google.com/abc-defg-hij", calUrl: "https://example.org/gv/meetings/" };
+          c.$el = { dataset: ds }; c.$root = c.$el;
+          c.$refs = { date: el("span", {}, [], "built date"), time: el("span", {}, [], "built time") };
+          c.init();
+          c.addToCalendar();
+          out({ line: c.speakerLine, file: p.downloads[0].text });""")
+        self.assertEqual(r["line"], "Guest speaker: Pat E.")
+        self.assertIn("DESCRIPTION:Monthly committee meeting on Google Meet. Guest speaker: Pat E. https://meet.google.com/abc-defg-hij",
+                      re.sub(r"\r\n ", "", r["file"]))
+
 
 # =========================================================================== the built pages
 # /meetings/, the home page, /events/ and /share/ as the build renders them (Eleventy with the site's own config, ONLY

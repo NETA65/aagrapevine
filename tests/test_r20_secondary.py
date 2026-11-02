@@ -291,22 +291,27 @@ out({
 
 
 class Report(unittest.TestCase):
+    DB = {"events": {"items": []}, "editorial": {"items": []}, "articles": {"items": [], "issues": []}, "shop": {},
+          "meetings": {"items": []}, "weekly_open": {"items": []}, "pdfs": {"items": []}, "spotlight": {"items": []},
+          "audio_project": {}}
+    JAN = {"next": {"ymd": "2027-01-20", "start": "2027-01-21T01:00:00Z", "end": "2027-01-21T02:00:00Z"},
+           "rule": {"weekday": 3, "n": 3, "start": "19:00", "end": "20:00"}}
+    DEC = {"next": {"ymd": "2026-12-16", "start": "2026-12-17T01:00:00Z", "end": "2026-12-17T02:00:00Z"},
+           "rule": {"weekday": 3, "n": 3, "start": "19:00", "end": "20:00"}}
+
+    def reports(self, site):
+        return run_js(self, REPORT_JS, data={"db": self.DB, "site": site, "meeting": self.JAN, "decMeeting": self.DEC,
+                                             "now": "2027-01-05T18:00:00Z", "decNow": "2026-11-27T18:00:00Z"})
+
     def test_the_district_and_area_reports(self):
-        db = {"events": {"items": []}, "editorial": {"items": []}, "articles": {"items": [], "issues": []}, "shop": {},
-              "meetings": {"items": []}, "weekly_open": {"items": []}, "pdfs": {"items": []}, "spotlight": {"items": []},
-              "audio_project": {}}
-        meeting = {"next": {"ymd": "2027-01-20", "start": "2027-01-21T01:00:00Z", "end": "2027-01-21T02:00:00Z"},
-                   "rule": {"weekday": 3, "n": 3, "start": "19:00", "end": "20:00"}}
-        dec = {"next": {"ymd": "2026-12-16", "start": "2026-12-17T01:00:00Z", "end": "2026-12-17T02:00:00Z"},
-               "rule": {"weekday": 3, "n": 3, "start": "19:00", "end": "20:00"}}
-        r = run_js(self, REPORT_JS, data={"db": db, "site": SITE, "meeting": meeting, "decMeeting": dec,
-                                          "now": "2027-01-05T18:00:00Z", "decNow": "2026-11-27T18:00:00Z"})
+        r = self.reports(SITE)
         nb = lambda s: s.replace(" ", " ").replace(" ", " ").replace(" ", " ")   # noqa: E731
         en, es = nb(r["jan"]["en"]), nb(r["jan"]["es"])
         self.assertIn("Guest speaker: Ann B., Past delegate, Area 99 — “How the Conference works”.", en)
         self.assertIn("The talk and questions are done by 7:30 PM; then committee business until 8:00 PM.", en)
         self.assertIn("Orador(a) invitado(a): Ann B., Ex delegada del Área 99 — “Cómo trabaja la Conferencia”.", es)
         self.assertIn("terminan a más tardar a las 7:30 p. m.; luego, los asuntos del comité hasta las 8:00 p. m.", es)
+        self.assertNotIn("p. m..", es, "one period after a time in Spanish")
         self.assertIn("How to join on Google Meet, the link and the meeting code: https://neta65.github.io/aagrapevine/meetings/", en)
         self.assertNotIn("meeting ID and passcode", en)
         self.assertIn("Grapevine Meeting: every first Wednesday of the month · 7:00 – 8:00 PM Central time, on Google Meet. "
@@ -333,6 +338,15 @@ class Report(unittest.TestCase):
             "Guest speaker: Ann B., Past delegate, Area 99 — “How the Conference works”.",
             "The talk and questions are done by 7:30 PM; then committee business until 8:00 PM."])
         self.assertEqual(len(next(m for m in a["mt"] if m["y"] == "2026-12-16")["t"]["en"][1].split("\n")), 1)
+        self.assertNotIn("p. m..", nb(json.dumps(jan["t"]["es"], ensure_ascii=False)))
+
+    def test_a_speaker_without_a_position_or_topic(self):
+        # one period after the name alone ("Guest speaker: Pat E."), never two
+        site = {**SITE, "meeting": {**MEETING, "speakers": [{"date": "2027-01-20", "name": "Pat E."}]}}
+        r = self.reports(site)
+        self.assertIn("Guest speaker: Pat E.\n", r["jan"]["en"] + "\n")
+        self.assertIn("Orador(a) invitado(a): Pat E.", r["jan"]["es"])
+        self.assertNotIn("E..", r["jan"]["en"] + r["jan"]["es"])
 
 
 class Digest(SD.DigestCase):
