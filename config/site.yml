@@ -79,6 +79,9 @@ site:
 
 # ---------------------------------------------------------------------
 #  Committee meeting (next date + countdown are computed automatically)
+#  Online on Google Meet, in the same room as our Grapevine Meeting (see
+#  recurring_events below). From January 2027 each meeting opens with a
+#  guest speaker (`speakers:` at the end of this block).
 # ---------------------------------------------------------------------
 meeting:
   # Recurrence: which weekday of the month (1-5, or -1 for "last").
@@ -86,14 +89,15 @@ meeting:
   weekday: "wednesday"
   start: "19:00"          # 24h, Central time
   end: "20:00"
-  # Where it is held, as the pages name it: "Join on Zoom", "… on Zoom" (leave out: Zoom). The link, ID and
-  # passcode below are what people use to join; the dial-in numbers (phone_access) are Zoom's own.
-  platform: "Zoom"
-  # The official "ZOOM Link" from the committee page (neta65.org/trusted-servants/grapevine-la-vina/).
-  # Zoom's pwd= is an encoded token, not the passcode itself — copy the whole link from Zoom.
-  zoom_url: "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09"
-  meeting_id: "949 476 7497"
-  passcode: "neta65"
+  # Where it is held, as the pages name it: "Join on Google Meet", "… on Google Meet" (leave out: Zoom).
+  platform: "Google Meet"
+  # The link people open to join (an older `zoom_url:` line would still be read). The same room as the
+  # Grapevine Meeting. neta65.org's committee page may still show the old Zoom link: ask the Area webmaster.
+  online_url: "https://meet.google.com/rva-tmst-vdb"
+  # What people type into the app to join. With letters (a Google Meet code) the pages say "Meeting code"; with
+  # digits only (a Zoom ID) "Meeting ID". Google Meet has no passcode and this room has no phone numbers to
+  # call, so there is no `passcode:` line and the meeting is not on /accessibility/#phone.
+  meeting_id: "rva-tmst-vdb"
   chair_title: "Grapevine / La Viña Chair"
   chair_title_es: "Coordinador(a) de Grapevine / La Viña"
   chair_email: "grapevine@neta65.org"
@@ -102,6 +106,105 @@ meeting:
   note_es: "Todos los miembros de AA pueden asistir. No hace falta registrarse."
   # Dates to skip (e.g. a holiday) — "YYYY-MM-DD"
   skip_dates: []
+  # The meeting's flyers on our Drive (flyers/ folder): the newest file whose name matches this (a regular
+  # expression, capitals ignored). "Committee Meeting - flyer" is every meeting's flyer; one named with a
+  # month, "January 2027 Committee Meeting - guest speaker", is that month's. Never start the name with a
+  # day ("2027-01-20 …"): a flyer named with its date becomes an event of its own.
+  flyer_match: "committee meeting *[-–—] *(flyer|guest speaker)"
+  # The guest speaker's part ends by this time (24h, Central); committee business follows until `end`.
+  speaker_until: "19:30"
+  # Guest speakers — one block per meeting: its date (a 3rd Wednesday), the speaker's first name and last
+  # initial only ("Rick W." — never a full last name, an e-mail or a phone number), their service position
+  # and the topic, each with its Spanish (`_es`). Every speaker listed here shows on the site (/meetings/,
+  # the Events page, the calendars, the decks). `confirmed:` is for the chair only, never shown: a speaker
+  # of the next 45 days who is not confirmed yet is listed in the Actions run summary. A meeting with no
+  # block has no guest speaker (Dec 16, 2026). A block with a mistake (a date that is not a meeting day, a
+  # full name) is left out, and the run summary says why.
+  speakers:
+    - date: "2027-01-20"
+      name: "Rick W."
+      confirmed: true
+      position: "Past delegate, Area 65 Northeast Texas (Panel 73); chair of the Conference Committee on Grapevine and La Viña, 2024"
+      position_es: "Ex delegado del Área 65 Noreste de Texas (Panel 73); coordinador del Comité de la Conferencia sobre Grapevine y La Viña en 2024"
+      topic: "From NETA 65 to the Conference table: how the Grapevine and La Viña committee works"
+      topic_es: "De NETA 65 a la mesa de la Conferencia: cómo trabaja el comité de Grapevine y La Viña"
+    - date: "2027-02-17"
+      name: "Jeannie M."
+      confirmed: true
+      position: "Past delegate, Area 4 Arkansas (Panel 73); alternate chair of the Conference Committee on Public Information, 2024"
+      position_es: "Ex delegada del Área 4 Arkansas (Panel 73); coordinadora suplente del Comité de la Conferencia sobre Información Pública en 2024"
+      topic: "Grapevine and La Viña as Public Information tools"
+      topic_es: "Grapevine y La Viña como herramientas de Información Pública"
+    - date: "2027-03-17"
+      name: "Greg G."
+      confirmed: false
+      position: "Past delegate, Area 39 Western Missouri (Panel 75); alternate chair of the Conference Committee on Public Information, 2026"
+      position_es: "Ex delegado del Área 39 Oeste de Misuri (Panel 75); coordinador suplente del Comité de la Conferencia sobre Información Pública en 2026"
+      topic: "Anonymity in a digital world: AA’s online doorways and proposals that may reach the 77th Conference"
+      topic_es: "El anonimato en un mundo digital: las puertas de AA en internet y las propuestas que podrían llegar a la 77.ª Conferencia"
+    - date: "2027-04-21"
+      name: "Courtney S."
+      confirmed: false
+      position: "Past delegate, Area 72 Western Washington (Panel 75); alternate chair of the Conference Committee on Grapevine and La Viña, 2026"
+      position_es: "Ex delegada del Área 72 Oeste de Washington (Panel 75); coordinadora suplente del Comité de la Conferencia sobre Grapevine y La Viña en 2026"
+      topic: "The meeting in print in a digital age: what members want from Grapevine and La Viña"
+      topic_es: "La reunión impresa en la era digital: lo que los miembros quieren de Grapevine y La Viña"
+    - date: "2027-05-19"
+      name: "Debra L."
+      confirmed: false
+      position: "Delegate, Area 9 Mid-Southern California (Panel 76); alternate chair of the Conference Committee on Report and Charter, 2027"
+      position_es: "Delegada del Área 9 Centro-Sur de California (Panel 76); coordinadora suplente del Comité de la Conferencia sobre Informe y Carta Constitutiva en 2027"
+      topic: "Fresh from the 77th Conference: what the Service Manual, Final Report and Charter offer our Grapevine and La Viña representatives"
+      topic_es: "Recién llegada de la 77.ª Conferencia: lo que el Manual de Servicio, el Informe Final y la Carta Constitutiva ofrecen a nuestros representantes de Grapevine y La Viña"
+    - date: "2027-06-16"
+      name: "Heather L."
+      confirmed: false
+      position: "Delegate, Area 64 Tennessee (Panel 76); chair of the Conference Committee on Grapevine and La Viña, 2027"
+      position_es: "Delegada del Área 64 Tennessee (Panel 76); coordinadora del Comité de la Conferencia sobre Grapevine y La Viña en 2027"
+      topic: "Report from the chair’s seat: the 77th Conference Committee on Grapevine and La Viña"
+      topic_es: "Informe desde la coordinación: el Comité sobre Grapevine y La Viña de la 77.ª Conferencia"
+    - date: "2027-07-21"
+      name: "Luke B."
+      confirmed: false
+      position: "Past delegate, Area 1 Alabama/Northwest Florida (Panel 75); chair of the Conference Committee on Corrections, 2026"
+      position_es: "Ex delegado del Área 1 Alabama/Noroeste de Florida (Panel 75); coordinador del Comité de la Conferencia sobre Correccionales en 2026"
+      topic: "Carrying the message behind the walls: Grapevine and La Viña for alcoholics in custody"
+      topic_es: "Llevar el mensaje tras los muros: Grapevine y La Viña para los alcohólicos bajo custodia"
+    - date: "2027-08-18"
+      name: "Kaitie S."
+      confirmed: false
+      position: "Delegate, Area 26 Kentucky (Panel 76); chair of the Conference Committee on Literature, 2027"
+      position_es: "Delegada del Área 26 Kentucky (Panel 76); coordinadora del Comité de la Conferencia sobre Literatura en 2027"
+      topic: "From manuscript to meeting: how AA literature and Grapevine and La Viña books are made"
+      topic_es: "Del manuscrito a la reunión: cómo se hacen la literatura de AA y los libros de Grapevine y La Viña"
+    - date: "2027-09-15"
+      name: "Corey D."
+      confirmed: true
+      position: "Past delegate, Area 26 Kentucky (Panel 74); chair of the Conference Committee on Finance, 2025"
+      position_es: "Ex delegado del Área 26 Kentucky (Panel 74); coordinador del Comité de la Conferencia sobre Finanzas en 2025"
+      topic: "Following the money: how Grapevine and La Viña pay their way, and how groups can help"
+      topic_es: "Siguiendo el dinero: cómo Grapevine y La Viña se mantienen por sí mismas y cómo pueden ayudar los grupos"
+    - date: "2027-10-20"
+      name: "Heather N."
+      confirmed: true
+      position: "Delegate, Area 18 Idaho (Panel 76); alternate chair of the Conference Committee on Agenda, 2027"
+      position_es: "Delegada del Área 18 Idaho (Panel 76); coordinadora suplente del Comité de la Conferencia sobre Agenda en 2027"
+      topic: "From district to Conference: how a Grapevine or La Viña idea becomes an agenda item"
+      topic_es: "Del distrito a la Conferencia: cómo una idea sobre Grapevine o La Viña llega a ser un punto de agenda"
+    - date: "2027-11-17"
+      name: "Chitra S."
+      confirmed: false
+      position: "Past delegate, Area 6 Northern Coastal California (Panel 75); member of the Conference Committee on Public Information, 2025–2026"
+      position_es: "Ex delegada del Área 6 Costa Norte de California (Panel 75); miembro del Comité de la Conferencia sobre Información Pública en 2025–2026"
+      topic: "Who are we still missing? Reaching young, Spanish-speaking and culturally diverse alcoholics with a human touch"
+      topic_es: "¿A quién nos falta llegar? Cómo llegar con calidez humana a los alcohólicos jóvenes, hispanohablantes y de culturas diversas"
+    - date: "2027-12-15"
+      name: "Veronica R."
+      confirmed: true
+      position: "Class A (nonalcoholic) trustee, General Service Board; director, AA Grapevine, Inc. board"
+      position_es: "Custodia de Clase A (no alcohólica) de la Junta de Servicios Generales; directora de la junta de AA Grapevine, Inc."
+      topic: "Through a professional’s eyes: carrying the message, and a look inside the AA Grapevine Board"
+      topic_es: "Con la mirada de una profesional: llevar el mensaje y una mirada a la junta de AA Grapevine"
 
 # ---------------------------------------------------------------------
 #  Recurring events — things the committee does EVERY MONTH (a booth,
@@ -124,20 +227,25 @@ meeting:
 #  that the Grapevine / La Viña calendars or an .ics feed list too shows
 #  once (ours); if one of them lists it on another day of the month, the
 #  run summary says which skip date to add.
+#  Our own online meeting is here too — the third block, the Grapevine
+#  Meeting, in the committee meeting's Google Meet room. `starts:` is a
+#  series' first date ("YYYY-MM-DD"): no date before it is listed, not
+#  even in the calendar feed's past months. `url:` can also be a page of
+#  this site ("/meetings/#grapevine-meeting"), without the address.
 # ---------------------------------------------------------------------
 recurring_events:
   - key: "citywide-dallas"         # short name: letters, numbers and dashes. Keep it the same
                                    # once published (calendars use it to recognize the event)
     title: "GV/LV booth at CityWide Dallas"
     title_es: "Mesa de GV/LV en CityWide Dallas"
-    summary: "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV."
-    summary_es: "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
+    summary: "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV."
+    summary_es: "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lovers Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
     # When: which weekday of the month (1-5, or -1 for "the last one")
     week_of_month: 2
     weekday: "saturday"
-    start: "17:00"                 # 24-hour clock, Central time
-    end: "20:00"
-    location: "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220"
+    start: "17:30"                 # 24-hour clock, Central time (the table's hours, 5:30–7:30 PM)
+    end: "19:30"
+    location: "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220"
     url: "https://citywidedallasaa.org"   # "Event details" link (optional)
     months_ahead: 6                # how many upcoming dates to list on /events/ and in the calendar
                                    # feed (the /monthly/ posters work out later months from this rule)
@@ -184,6 +292,26 @@ recurring_events:
                                    # moved date, about 3 weeks ahead, and the /monthly/ posters work out months
                                    # a year ahead from this rule. When its calendar lists a skipped month's
                                    # date, the Events page shows it by itself, as that month's date.
+
+  - key: "grapevine-meeting"       # our monthly online AA meeting (host: ours, the default)
+    # Never call it "Grapevine meetings": that is the list of AA groups that read Grapevine (/meetings/).
+    title: "Grapevine Meeting (online)"
+    title_es: "Reunión de Grapevine (en línea)"
+    summary: "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome."
+    summary_es: "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine, nuestra reunión impresa, y compartimos sobre su tema. Todos los miembros de AA son bienvenidos."
+    week_of_month: 1
+    weekday: "wednesday"
+    start: "19:00"                 # 24-hour clock, Central time
+    end: "20:00"
+    starts: "2026-12-02"           # the first meeting: no date before it
+    online_url: "https://meet.google.com/rva-tmst-vdb"   # the committee meeting's Google Meet room (no location)
+    meeting_id: "rva-tmst-vdb"     # the Google Meet code ("Meeting code" on the card and in the calendars)
+    contact: "grapevine@neta65.org"
+    url: "/meetings/#grapevine-meeting"   # its section on our Meetings page
+    flyer_match: "grapevine meeting *[-–—] *flyer"   # "Grapevine Meeting - flyer" on our Drive (never the
+                                   # combined "Our online meetings - flyer", which is no one meeting's)
+    months_ahead: 6
+    skip_dates: []
 
 # ---------------------------------------------------------------------
 #  Price changes AA Grapevine announces — one block per announcement.
@@ -510,8 +638,11 @@ lavina_weekly_open:
   flyer_match: "reuni[oó]n abierta de la vi[nñ]a|la vi[nñ]a open meeting"
 
 # ---------------------------------------------------------------------
-#  Joining our Zoom meetings BY PHONE — the "Join by phone" part of the
+#  Joining the Zoom meetings BY PHONE — the "Join by phone" part of the
 #  Accessibility page (/accessibility/#phone). No internet or app needed.
+#  These are the weekly open meetings (Grapevine's and La Viña's Zoom
+#  room). Our own meetings are on Google Meet, which has no numbers to
+#  call for this room, so they are not listed there.
 #  numbers: Zoom's U.S. dial-in numbers, as printed in every Zoom
 #    invitation under "Dial by your location" (Zoom's help page says the
 #    numbers are in the invitation; zoom.us/zoomconference lists the
@@ -519,17 +650,15 @@ lavina_weekly_open:
 #    They are regular long-distance numbers, not toll-free: the caller's
 #    phone plan rates apply. The first one is used for the tap-to-call
 #    buttons. city_es: the city name on the Spanish page (optional).
-#  The meeting IDs and passcodes are NOT repeated here: they come from
-#  `meeting:` above (the committee meeting) and from the weekly open
-#  meetings (data/site/weekly_open.json, `lavina_weekly_open:`).
+#  The meeting IDs and passcodes are NOT repeated here: they come from the
+#  weekly open meetings (data/site/weekly_open.json, `lavina_weekly_open:`).
 #  phone_passcode: what a CALLER types. When a meeting's passcode has
-#    letters (the committee's "neta65"), Zoom gives callers a different
-#    passcode made of numbers only: it is in the host's Zoom invitation
-#    (the digits after "*" in the "One tap mobile" line, or "Passcode:"
-#    under "Dial by your location"). Paste it here; until then the page
-#    says "Ask the chair for the phone passcode". Leave it "" for a
-#    numbers-only passcode (the weekly open meetings' 238047): callers
-#    type that same passcode.
+#    letters, Zoom gives callers a different passcode made of numbers
+#    only: it is in the host's Zoom invitation (the digits after "*" in
+#    the "One tap mobile" line, or "Passcode:" under "Dial by your
+#    location"). Paste it here; until then the page says to ask the host
+#    for the phone passcode. Leave it "" for a numbers-only passcode (the
+#    weekly open meetings' 238047): callers type that same passcode.
 #  Joining by phone only works while the host's Zoom settings allow it.
 # ---------------------------------------------------------------------
 phone_access:
@@ -544,8 +673,6 @@ phone_access:
     - number: "+1 301 715 8592"
       city: "Washington DC"
       city_es: "Washington D. C."
-  committee:
-    phone_passcode: ""
   weekly_open:
     phone_passcode: ""
 

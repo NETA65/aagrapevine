@@ -704,7 +704,7 @@ class Json(unittest.TestCase):
         # a Zoom ID never breaks in the middle (no-break spaces)
         self.assertEqual(plain(live["meeting_zoom_id"]), SITE["meeting"]["meeting_id"])
         self.assertNotIn(" ", live["meeting_zoom_id"])
-        self.assertEqual(live["meeting_passcode"], SITE["meeting"]["passcode"])
+        self.assertEqual(live["meeting_passcode"], str(SITE["meeting"].get("passcode") or ""))    # (Google Meet: none)
         self.assertTrue(plain(live["meeting_time"]).endswith(" Central time"))
         self.assertNotIn("\u2009", live["meeting_time"], "the time range is never cut at its dash")
         # no break on either side of the dash (a word joiner after it), nor before PM
@@ -746,10 +746,17 @@ class Json(unittest.TestCase):
         self.assertEqual((nxt_m["fallback"], day["fallback"], after["fallback"], month["fallback"]),
                          ("see the Meetings page", "see the Meetings page", "see the Meetings page", "Monthly"))
         first = SITE["phone_access"]["numbers"][0]
-        self.assertEqual(live["meeting_phone"], f"{first['number']} ({first['city']})")
-        configured = str(SITE["phone_access"].get("committee", {}).get("phone_passcode") or "")
-        passcode = str(SITE["meeting"]["passcode"])
-        self.assertEqual(live["meeting_phone_passcode"], configured if configured.isdigit() else passcode if passcode.isdigit() else "")
+        meeting_id = str(SITE["meeting"].get("meeting_id") or "")
+        if re.search(r"[a-z]", meeting_id, re.I) or not re.sub(r"\D", "", meeting_id):
+            # a Google Meet code: no number to call (access.js axPhone lists no committee meeting)
+            self.assertEqual(live["meeting_phone"], {"value": "", "fallback": "see the Accessibility page"})
+            self.assertEqual(live["meeting_phone_passcode"], "")
+        else:
+            self.assertEqual(live["meeting_phone"], f"{first['number']} ({first['city']})")
+            configured = str(SITE["phone_access"].get("committee", {}).get("phone_passcode") or "")
+            passcode = str(SITE["meeting"].get("passcode") or "")
+            self.assertEqual(live["meeting_phone_passcode"],
+                             configured if configured.isdigit() else passcode if passcode.isdigit() else "")
         audio = json.loads((ROOT / "data" / "site" / "audio_project.json").read_text(encoding="utf-8"))
         self.assertEqual(value("gv_audio_phone"), (audio.get("gv") or {}).get("phone", ""))
         self.assertEqual(value("lv_audio_phone"), (audio.get("lv") or {}).get("phone", ""))
@@ -845,7 +852,7 @@ class Json(unittest.TestCase):
                 self.assertLess(r["start"], r["end"])
                 self.assertRegex(r["label"], r"^\w+day, \w+ \d{1,2}, \d{4}$")
             self.assertRegex(d["rule"], r"^Every ")
-            self.assertEqual(d["url"], str(meeting.get("zoom_url") or ""))
+            self.assertEqual(d["url"], str(meeting.get("online_url") or meeting.get("zoom_url") or ""))
             on_site(d["page"])
         limits = sorted(s["data"]["limit"] for j in self.json.values() for s in j["slides"] if s.get("kind") == "meeting")
         self.assertEqual(limits, [3, 12], "limit 3, and 12 = the year")

@@ -165,12 +165,18 @@ class Phone(unittest.TestCase):
 
     def test_phone_passcodes_are_numbers_or_empty(self):
         pa = self.cfg["phone_access"]
+        # (the committee's part is gone while its meeting is on Google Meet: no number to call)
         for part in ("committee", "weekly_open"):
             with self.subTest(part=part):
-                self.assertRegex(str(pa[part].get("phone_passcode") or ""), r"^\d*$")
+                self.assertRegex(str((pa.get(part) or {}).get("phone_passcode") or ""), r"^\d*$")
 
     def test_meeting_ids(self):
-        self.assertRegex(re.sub(r"\D", "", str(self.cfg["meeting"]["meeting_id"])), r"^\d{9,11}$")
+        # the committee meeting: a Zoom ID of 9 to 11 digits on a Zoom link, else (Google Meet) its meeting code
+        meeting = self.cfg["meeting"]
+        if "zoom.us/" in str(meeting.get("online_url") or meeting.get("zoom_url") or ""):
+            self.assertRegex(re.sub(r"\D", "", str(meeting["meeting_id"])), r"^\d{9,11}$")
+        else:
+            self.assertRegex(str(meeting.get("meeting_id") or ""), r"^(?:[a-z]{3}-[a-z]{4}-[a-z]{3})?$")
         self.assertRegex(re.sub(r"\D", "", str(self.cfg["lavina_weekly_open"]["zoom_id"])), r"^\d{9,11}$")
 
     def test_accessibility_links(self):
@@ -208,6 +214,20 @@ class OneTapLinks(unittest.TestCase):
             with self.subTest(href=href):
                 self.assertRegex(href, r"^tel:\+1\d{10},,\d{9,11}%23(,,,,\*\d+%23)?$")
                 self.assertNotIn("#", href)
+
+    def test_a_google_meet_code_has_no_number_to_call(self):
+        # the committee meeting on Google Meet ("rva-tmst-vdb"): no committee entry on the phone page — only the
+        # weekly open meetings' Zoom room, which callers can dial
+        site = {"meeting": {"platform": "Google Meet", "online_url": "https://meet.google.com/abc-defg-hij",
+                            "meeting_id": "abc-defg-hij"},
+                "phone_access": {"numbers": [{"number": "+1 346 248 7799", "city": "Houston"}],
+                                 "weekly_open": {"phone_passcode": ""}}}
+        weekly = [{"zoomDigits": "87120368287", "zoomId": "871 2036 8287", "passcode": "238047", "title": "Weekly Open"}]
+        res = run_js(self, """
+            const A = await imp("eleventy/filters/access.js");
+            out(A.axPhone(input.site, input.weekly, "en").meetings.map((m) => [m.key, m.call]));
+        """, data={"site": site, "weekly": weekly}, needs_modules=False)
+        self.assertEqual(res, [["weekly-87120368287", "tel:+13462487799,,87120368287%23,,,,*238047%23"]])
 
 
 class Bars(unittest.TestCase):
