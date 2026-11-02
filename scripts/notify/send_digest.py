@@ -27,7 +27,7 @@ day being its Central calendar day:
     Instagram posts (instagram.json: per account, how many and the 3 newest, and one link to the site's
     /instagram/ page — the text part gives only the counts and the link), documents
   * ONE pointer: "Coming up in K" → the toolkit of the month it goes out in (/monthly/K/), the home of
-    everything current (the committee meeting — its Zoom details stay on /meetings/ —, events not over
+    everything current (the committee meeting — its link and code stay on /meetings/ —, events not over
     yet, story deadlines, this month's issues, Book of the Month …) — and, while the notice of a price
     change AA Grapevine announced is on, its row ("Grapevine and La Viña prices change on …": price_change)
   * each section in English first, then in Spanish (titles are already translated)
