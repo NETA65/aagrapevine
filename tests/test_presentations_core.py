@@ -23,8 +23,8 @@ What a presenter relies on, checked against values worked out by hand:
                             edited it"); added slides; moving; an updated deck (reconcile)
   * "my version" files    — export → import gives the same version back; strict refusal of foreign, broken,
                             oversized or HTML-carrying files
-  * reset + Undo          — a deck, all four
-  * the four real decks   — every text of every slide goes through the core; the information workshop's agenda
+  * reset + Undo          — a deck, all of them
+  * the five real decks   — every text of every slide goes through the core; the information workshop's agenda
                             computes the times the deck's author wrote; each version's length
 The file runs in a vm context, as tests/test_expenses_core.py runs expenses-core.js. Skipped without Node.js.
 
@@ -991,14 +991,19 @@ class Wording(unittest.TestCase):
         self.assertEqual(i18n["pres.reset_h"], i18n["pres.reset_deck"])
         page = json.loads((ROOT / "src" / "_i18n" / "orientation.json").read_text(encoding="utf-8"))
         self.assertNotEqual(i18n["pres.reset_h"], page["orientation.progress_reset"])
-        self.assertEqual(i18n["pres.reset_all_note"], {"en": "“Reset all 4 to the original” is on the page, under the presentations.",
-                                                       "es": "«Devolver las 4 al original» está en la página, debajo de las presentaciones."})
+        # (the number of presentations, as the page's own button says it: "Reset all {n} to the original")
+        self.assertEqual(i18n["pres.reset_all_note"], {"en": "“Reset all {n} to the original” is on the page, under the presentations.",
+                                                       "es": "«Devolver las {n} al original» está en la página, debajo de las presentaciones."})
+        page_btn = page["orientation.pres_reset_all"]
+        self.assertEqual(page_btn, {"en": "Reset all {n} to the original", "es": "Devolver las {n} al original"})
+        for k in ("pres.reset_all_note", "pres.reset_all_confirm", "pres.reset_all_done"):
+            self.assertTrue(all("{n}" in i18n[k][lang] for lang in ("en", "es")), k)
         self.assertIn("al original", i18n["pres.reset_slide"]["es"])
         self.assertIn("document", i18n["pres.save_doc"]["en"])
 
 
 class RealDecks(unittest.TestCase):
-    """The committee's four decks (config/presentations/), shaped by the build's own loader."""
+    """The committee's five decks (config/presentations/), shaped by the build's own loader."""
 
     @classmethod
     def setUpClass(cls):
@@ -1058,7 +1063,8 @@ class RealDecks(unittest.TestCase):
             report[deck.id] = r;
           }
           out(report);""", needs_modules=True)
-        self.assertEqual(set(r), {"orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting"})
+        self.assertEqual(set(r), {"orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting",
+                                  "grapevine-meeting"})
         for deck, rep in r.items():
             with self.subTest(deck=deck):
                 self.assertEqual(rep["errors"], [])
@@ -1119,6 +1125,10 @@ class Wiring(unittest.TestCase):
         sync = re.search(r"function onSync\(.*?\n  \}\n", js, re.S).group(0)
         self.assertRegex(sync, r"if \(msg\.ds\) applyState\(msg\.ds, msg\.shared\);\s*else reloadFromStorage\(\);")
         self.assertIn("if (sum.last > 1) {", js)
+        # "Reset all 5 to the original": the number of presentations on the page, never a number typed in
+        self.assertIn("var N_DECKS = (CFG.decks || []).length;", js)
+        for key in ("pres.reset_all_note", "pres.reset_all_confirm", "pres.reset_all_done"):
+            self.assertIn(f'T("{key}", {{ n: N_DECKS }})', js, key)
 
 
 if __name__ == "__main__":

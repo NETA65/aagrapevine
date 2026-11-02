@@ -153,8 +153,11 @@ CONTENT_TESTS: dict[str, str] = {
         "config/expenses.yml: each tone and icon of the settings has its words in src/_i18n/expenses.json",
     "test_presentations.PresentationFiles.test_every_deck":
         "config/presentations: every deck passes the checker",
-    "test_presentations.PresentationFiles.test_the_four_decks":
-        "config/presentations: the four decks, each with its own order",
+    "test_presentations.PresentationFiles.test_the_decks":
+        "config/presentations: the five decks, each with its own order",
+    "test_presentations.PresentationFiles.test_the_grapevine_meeting_names_what_it_never_quotes":
+        "config/presentations/grapevine-meeting.yml: the Statement of Purpose named, never quoted; no deck says "
+        "'Grapevine meetings'",
     "test_presentations_core.RealDecks.":
         "config/presentations: every text of every slide of the decks",
     "test_r12_u9_meeting.RealDeck.":

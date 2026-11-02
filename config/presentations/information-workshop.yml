@@ -14,7 +14,7 @@
 #  - facts that change come from the site's own data ({live:…}): this
 #    month's issues and the next ones, with their themes, the yearly
 #    prices (the price in effect on the day), both Books of the Month,
-#    the committee meeting and its dial-in number, La Viña's monthly
+#    the committee meeting and its Google Meet link, La Viña's monthly
 #    workshop, the two weekly open meetings and their Zoom room, the
 #    story deadlines, the two story lines' numbers, the panel, the
 #    site's address and e-mail. A fact the site knows nothing of (an
@@ -119,8 +119,8 @@ fillins:
     label: { en: "Date", es: "Fecha" }
     hint: "Month DD, YYYY"
   - key: "place"
-    label: { en: "Place, or Zoom", es: "Lugar o Zoom" }
-    hint: "Place, or Zoom"
+    label: { en: "Place, or online", es: "Lugar, o en línea" }
+    hint: "Place, or online"
   - key: "presenter"
     label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
     hint: "Service position"
@@ -180,14 +180,14 @@ slides:
     items:
       - "**Opening:** a moment of silence, then the Preamble (next slide)"
       - "**Anonymity:** please don't photograph, screenshot or record anyone. Who you see here and what you hear here stays here."
-      - "**On Zoom:** rename yourself with your first name; cameras are optional; questions in the chat"
+      - "**Online:** your first name only (rename yourself, or type it in the chat); cameras are optional; questions in the chat"
       - "Phones on silent · restrooms: {fill:restrooms} · we'll finish by {fill:end_time}"
       - "Questions are welcome: we'll gather them and answer at the end"
     takeaway: "All are welcome, whether you've read every issue or never seen one."
     minutes: 2
     notes: |
-      SAY: Let's open with a moment of silence, and then we'll read the Preamble together on the next slide. (Pause for the moment of silence.) Thank you. A few things so this hour goes well. First, anonymity. Please don't take photos of people or record this session, and if we're on Zoom, please no screenshots. You're welcome to photograph the slides themselves; we'll also share this presentation afterward. If you're joining online, rename yourself with just your first name. Cameras are up to you. Questions are welcome at any time; I'll keep a list, and we'll have time for them at the end.
-      DO: Fill in the restrooms and the end time ({ui:customize} → {ui:your_details}). If the group you're visiting usually opens with the Serenity Prayer, you can say it together after the moment of silence, then go on to the Preamble. In a room, have a parking-lot sheet or a whiteboard for questions. On Zoom, ask a co-host to watch the chat and gather questions, and to turn off recording.
+      SAY: Let's open with a moment of silence, and then we'll read the Preamble together on the next slide. (Pause for the moment of silence.) Thank you. A few things so this hour goes well. First, anonymity. Please don't take photos of people or record this session, and if we're online, please no screenshots. You're welcome to photograph the slides themselves; we'll also share this presentation afterward. If you're joining online, please use just your first name: rename yourself if you can, or type it in the chat. Cameras are up to you. Questions are welcome at any time; I'll keep a list, and we'll have time for them at the end.
+      DO: Fill in the restrooms and the end time ({ui:customize} → {ui:your_details}). If the group you're visiting usually opens with the Serenity Prayer, you can say it together after the moment of silence, then go on to the Preamble. In a room, have a parking-lot sheet or a whiteboard for questions. Online, ask a helper to watch the chat and gather questions, and make sure nobody is recording. On Google Meet, a signed-in member can't rename themselves: their Google account's name shows, so the first name goes in the chat.
       FACILITATOR TIP: If someone starts recording or photographing the room, a quiet, friendly word afterward is enough. Anonymity reminders work best when they're warm, not stern.
       TRANSITION: Many groups open with the Preamble. Here it is, and it has a Grapevine story of its own.
 
@@ -277,7 +277,7 @@ slides:
     takeaway: "No wrong answers. This tells us where to spend our time."
     minutes: 2
     notes: |
-      SAY: Let's see who's here. Just raise a hand, or on Zoom use the 'raise hand' reaction. Who has ever read an issue of Grapevine or La Viña? Who reads one now, in print, online or in the app? Who has listened to the Grapevine podcast, or gets the Daily Quote by email? And whose home group has a GVR or an RLV, a Grapevine or La Viña representative? Thank you. That helps me know where to slow down and where we can move quickly.
+      SAY: Let's see who's here. Just raise a hand, or online use the 'raise hand' button. Who has ever read an issue of Grapevine or La Viña? Who reads one now, in print, online or in the app? Who has listened to the Grapevine podcast, or gets the Daily Quote by email? And whose home group has a GVR or an RLV, a Grapevine or La Viña representative? Thank you. That helps me know where to slow down and where we can move quickly.
       DO: Read each question and pause. Count roughly, out loud: 'about half', 'a few'. If few people know the magazines, spend more time on Parts 1, 3 and 4; if many do, spend more on Parts 5 and 6 (the part numbers are on the agenda slide).
       FACILITATOR TIP: Keep it light. Nobody should feel behind for never having read an issue.
       TRANSITION: So, what exactly are these two magazines?
@@ -689,7 +689,7 @@ slides:
     minutes: 0.5
     optional: true
     notes: |
-      SAY: Here they are, written out. You're welcome to photograph this slide; it's just addresses, no people. The audio card goes to Grapevine's audio portal, with members' recorded stories. The ASL card goes to our accessibility page, which also explains captions and joining Zoom by phone. The two Instagram names at the bottom are AA Grapevine's own accounts.
+      SAY: Here they are, written out. You're welcome to photograph this slide; it's just addresses, no people. The audio card goes to Grapevine's audio portal, with members' recorded stories. The ASL card goes to our accessibility page, which also explains captions and joining the weekly open meetings by phone. The two Instagram names at the bottom are AA Grapevine's own accounts.
       DO: Leave this slide up for a moment so people can take a photo. If you have handouts with these links, now is the time to point to them.
       FACILITATOR TIP: We link only to AA's own sites and our committee's site. The Instagram names are printed, not linked, so people can search for them in the app.
       OPTIONAL: if you're running late, skip it; everything here is also on our website.
@@ -818,7 +818,7 @@ slides:
     steps:
       - "Think of one person or place a story could reach this month"
       - "No names, please: “a sponsee”, “a friend in treatment”, “our clubhouse”"
-      - "Share your idea with a neighbor (on Zoom, in the chat)"
+      - "Share your idea with a neighbor (online, in the chat)"
       - "Pick one small step you could take this week"
     duration: 3
     materials: ["A pen and paper, or the chat"]
@@ -826,8 +826,8 @@ slides:
     minutes: 3
     optional: true
     notes: |
-      SAY: Let's take three minutes. Think of one person, or one place, that a Grapevine or La Viña story could reach this month. Please don't use names: say 'my sponsee', 'a friend in treatment', 'the clubhouse'. Turn to a neighbor and share your idea; on Zoom, put it in the chat. Then pick one small step you could take this week. (After three minutes.) Would two or three people share the idea they'd bring to their home group?
-      DO: Start a visible three-minute timer and give a 30-second warning. On Zoom, read a few chat ideas aloud, without the names shown in the chat.
+      SAY: Let's take three minutes. Think of one person, or one place, that a Grapevine or La Viña story could reach this month. Please don't use names: say 'my sponsee', 'a friend in treatment', 'the clubhouse'. Turn to a neighbor and share your idea; online, put it in the chat. Then pick one small step you could take this week. (After three minutes.) Would two or three people share the idea they'd bring to their home group?
+      DO: Start a visible three-minute timer and give a 30-second warning. Online, read a few chat ideas aloud, without the names shown in the chat.
       FACILITATOR TIP: If the room is quiet, offer your own example first: 'For me, it was leaving a copy at the clubhouse coffee table.' Keep the sharing to two or three people.
       OPTIONAL: if you're running late, skip the activity.
       TRANSITION: Some of those ideas involve giving the magazine to someone. Here's how that works.
@@ -1081,10 +1081,9 @@ slides:
       SOURCES: Service Manual (2024–2026), pp. 83–84; Grapevine Workbook (2026), p. 24; {lang:es}Manual del RLV{/lang} (2025), pp. 6–7 (an RLV's free copy every two months for one year, p. 7); aagrapevine.org/gvr-resources and aalavina.org/recursos (Grapevine News monthly, {lang:es}Noticias{/lang} every two months); aagrapevine.org/get-involved/become-grapevine-rep; aalavina.org/servicio/conviertete-en-rlv.
       TRANSITION: And here's how to reach us, your Area committee.
 
-  # The meeting's rule, time, Zoom ID, passcode and next date come from config/site.yml (`meeting:`); the e-mail
-  # and the site's address too, so the slide follows the committee if they ever change. Joining by phone (the
-  # notes, as in the deck): Zoom's dial-in number and the callers' passcode (`phone_access:`, as the Accessibility
-  # page gives them); the passcode is empty until the chair sets one there, so the note says what to do then.
+  # The meeting's rule, time, Google Meet link and next date come from config/site.yml (`meeting:`); the e-mail
+  # and the site's address too, so the slide follows the committee if they ever change. Its Google Meet room has
+  # no number to call (the notes say so), and from January 2027 each meeting opens with a guest speaker.
   - id: "committee"
     layout: "columns"
     style: "panels"
@@ -1093,8 +1092,8 @@ slides:
       - heading: "Monthly committee meeting"
         accent: "vine"
         items:
-          - "On Zoom, {live:meeting_rule}, **{live:meeting_time}**"
-          - "Meeting ID **{live:meeting_zoom_id}** · passcode **{live:meeting_passcode}**"
+          - "On Google Meet, {live:meeting_rule}, **{live:meeting_time}**"
+          - "**{live:meeting_link}** · meeting code {live:meeting_code}"
           - "All AA members welcome; no registration"
           - "Next meeting: {live:meeting_next}"
       - heading: "Reach us"
@@ -1105,10 +1104,10 @@ slides:
           - "Invite us to a district or group: a short presentation, a display, a writing workshop"
     minutes: 1
     notes: |
-      SAY: Our committee meets on Zoom {live:meeting_rule}, {live:meeting_time}. The meeting ID and passcode are on the slide, and every AA member is welcome; there's nothing to sign up for. You'll hear what's new at Grapevine and La Viña, and what other groups and districts are trying. You can reach us any time at {live:email}. Our website, in English and Spanish, has this month's issues, the deadlines, the free resources, and pages for GVRs and RLVs. And we're glad to visit your district or group when invited: a short presentation, a literature display, or a writing workshop.
-      DO: The next meeting date stays current by itself. Joining by phone: {live:meeting_phone}. Callers then enter the meeting ID and the numbers-only phone passcode {live:meeting_phone_passcode} (if no passcode shows here, ask the committee, {live:email}, before the workshop, so you can give it to callers on request). The Accessibility page on our website lists the other dial-in numbers.
+      SAY: Our committee meets on Google Meet {live:meeting_rule}, {live:meeting_time}, and from January 2027 each meeting opens with a guest speaker. The link is on the slide, and every AA member is welcome; there's nothing to sign up for. You'll hear what's new at Grapevine and La Viña, and what other groups and districts are trying. On the first Wednesday, on the same link, we also hold an online AA meeting in English, the Grapevine Meeting: a story from Grapevine, then sharing on its topic. You can reach us any time at {live:email}. Our website, in English and Spanish, has this month's issues, the deadlines, the free resources, and pages for GVRs and RLVs. And we're glad to visit your district or group when invited: a short presentation, a literature display, or a writing workshop.
+      DO: The next meeting date and the link stay current by themselves. The committee meeting's Google Meet room has no number to call; someone without internet can still join the weekly open meetings by phone (our website's Accessibility page has the numbers), and the committee's address, {live:email}, answers any question about our meetings.
       FACILITATOR TIP: Use the committee email on slides and flyers, never a personal phone number or personal email.
-      SOURCES: The committee's site settings (meeting time, Zoom ID); neta65.org/trusted-servants/grapevine-la-vina/.
+      SOURCES: The committee's site settings (meeting time, Google Meet link); neta65.org/trusted-servants/grapevine-la-vina/.
       TRANSITION: Finally, the links for everything else we talked about.
 
   - id: "find-everything"
@@ -1138,12 +1137,12 @@ slides:
       - { label: "GVR and RLV corner", url: "/gvr/", note: "Register, free kits, first steps" }
       - { label: "This month's toolkit", url: "/monthly/", note: "Current issues, dates, ideas" }
       - { label: "Meetings", url: "/meetings/", note: "Our committee, weekly open meetings" }
-      - { label: "Accessibility", url: "/accessibility/", note: "ASL, captions, joining Zoom by phone" }
+      - { label: "Accessibility", url: "/accessibility/", note: "ASL, captions, joining the weekly open meetings by phone" }
       - { label: "NETA 65", url: "https://neta65.org", note: "Northeast Texas Area 65" }
     minutes: 0.5
     optional: true
     notes: |
-      SAY: And the rest: the corner for GVRs and RLVs, with registration links and free kits; this month's toolkit, with the current issues and ideas; the meetings page, with our committee meeting and both weekly open meetings; our accessibility page, on ASL, captions and joining Zoom by phone; and NETA 65, our Area.
+      SAY: And the rest: the corner for GVRs and RLVs, with registration links and free kits; this month's toolkit, with the current issues and ideas; the meetings page, with our committee meeting and both weekly open meetings; our accessibility page, on ASL, captions and joining the weekly open meetings by phone; and NETA 65, our Area.
       DO: Leave this slide up for photos while you move to questions.
       SOURCES: The committee's site settings; neta65.org.
       OPTIONAL: if you're running late, skip it; the same pages are linked from our website's home page.
@@ -1168,7 +1167,7 @@ slides:
     minutes: 8
     notes: |
       SAY: What questions do you have? Anything about the magazines, the free resources, subscriptions, or writing. And I'd love to hear your experience too.
-      DO: Take the questions gathered earlier first. Repeat each question so everyone, including people on Zoom, hears it. If time allows, use the optional review questions (three slides that start switched off: turn them on in {ui:customize} → {ui:slides}, and they come right after this one); otherwise go on to the Responsibility Statement (slide {slide:responsibility}).
+      DO: Take the questions gathered earlier first. Repeat each question so everyone, including people joining online, hears it. If time allows, use the optional review questions (three slides that start switched off: turn them on in {ui:customize} → {ui:slides}, and they come right after this one); otherwise go on to the Responsibility Statement (slide {slide:responsibility}).
       FACILITATOR TIP: If you don't know an answer, say so and offer to find out ({live:email}). Send order and subscription problems to customer service. If a question turns to outside issues, gently bring it back to the magazines.
       LIKELY QUESTIONS: (1) Is Grapevine Conference-approved? The Conference recognizes it as AA's international journal, and that extends to La Viña (slide {slide:conference-approved}). (2) Can our group donate to Grapevine, or pass a basket for it? No: AA Grapevine, Inc. takes no contributions; members and groups support it by subscribing and buying (slide {slide:pay-their-way}). (3) Can we photocopy a story, or put it in our newsletter or online? Not without permission from AA Grapevine, Inc. (licensing@aagrapevine.org); share the issue or the link instead. (4) Will my name be printed? Grapevine's form lets you choose first name and last initial, initials, or 'Anonymous' (slide {slide:anyone-can-write}). (5) Does the envelope say AA? No: subscriptions come in plain packaging (slide {slide:ways-to-read}). (6) How does a group order? With the order forms on the rep pages (slide {slide:group-subscriptions}), the official stores, or customer service (slide {slide:find-everything}). (7) Do I need a subscription to record my story? Don't say so: Grapevine's audio-portal page doesn't ask for one (slide {slide:send-your-story}). (8) How much is a subscription? Read the 'Per year' row on slide {slide:ways-to-read} (AA Grapevine's yearly prices in effect today); for any other plan, open our Shop page.
       TRANSITION: (If you turned the review questions on) Let's try a few review questions together, just for fun. (If not) Let's close together.
@@ -1317,7 +1316,7 @@ slides:
       - "Keep names out of slides and notes"
     notes: |
       This page is for the presenter and is never shown in the slide show ({ui:customize} → {ui:prepare}). It is the presenter's checklist for keeping this presentation current. The slide numbers below are those of the version you chose.
-      STAYS CURRENT BY ITSELF: the issues and themes on Inside an issue of Grapevine, {slide:inside-grapevine}, and of La Viña, {slide:inside-la-vina}; this month's issues, the next ones and both Books of the Month on This month, {slide:this-month}; the yearly prices on The ways to read, {slide:ways-to-read}, and in the notes; the weekly open meetings' days, times and Zoom room, {slide:weekly-open}; the two story lines' numbers, {slide:send-your-story}; the themes and deadlines, {slide:deadlines}; La Viña's monthly workshop, {slide:lv-workshop}; the committee's meeting and its next date, {slide:committee}, and its dial-in number in that slide's notes; the panel in the footer and the 'Current as of' date on the title slide. They come from the committee site, which updates itself every day from the official sites. A fact the site doesn't know yet says where to look instead ('see aalavina.org').
+      STAYS CURRENT BY ITSELF: the issues and themes on Inside an issue of Grapevine, {slide:inside-grapevine}, and of La Viña, {slide:inside-la-vina}; this month's issues, the next ones and both Books of the Month on This month, {slide:this-month}; the yearly prices on The ways to read, {slide:ways-to-read}, and in the notes; the weekly open meetings' days, times and Zoom room, {slide:weekly-open}; the two story lines' numbers, {slide:send-your-story}; the themes and deadlines, {slide:deadlines}; La Viña's monthly workshop, {slide:lv-workshop}; the committee's meeting, its Google Meet link and its next date, {slide:committee}; the panel in the footer and the 'Current as of' date on the title slide. They come from the committee site, which updates itself every day from the official sites. A fact the site doesn't know yet says where to look instead ('see aalavina.org').
       YOU FILL IN ({ui:customize} → {ui:your_details}): the date, the place, the presenter's service position, the restrooms and the end time; the Step and Tradition of this issue, {slide:inside-grapevine}; the new books, {slide:books}; the seasonal items, {slide:this-month}. A blank that is still empty shows in orange brackets, and the player lists them before you present.
       WHERE TO CHECK: the committee site ({live:site}) /monthly/, /shop/, /contribute/#deadlines and /meetings/#weekly-open update themselves every day from the official sites. For La Viña's monthly workshop use aalavina.org/calendario-de-eventos. For the {lang:es}Reunión Abierta de La Viña{/lang}, look for an official page on aalavina.org (on Oct. 1, 2026 it was known only from La Viña's flyer); if there is one now, cite it on the weekly open meetings slide instead of the flyer ({ui:customize} → {ui:edit}).
       TIMING: 60 minutes with 8 minutes of Q&A. The notes of the agenda slide, Our hour together, list the OPTIONAL slides (about 12 minutes) and a 20-minute version; both are versions in {ui:customize} → {ui:version}. The three review-question slides start switched off ({ui:customize} → {ui:slides}).

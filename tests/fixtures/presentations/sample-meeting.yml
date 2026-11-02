@@ -80,6 +80,7 @@ paperwork:
       Here is the agenda for the {paper:month} meeting.
 
       When: {paper:meeting}, {live:meeting_time}, on Zoom (meeting ID {live:meeting_zoom_id})
+      Guest speaker: {paper:speaker}, on {paper:speaker_topic}
 
       Agenda
       {paper:agenda}
@@ -101,6 +102,7 @@ paperwork:
 
       Meeting of {paper:meeting}. Chair: {fill:presenter}
       Attended: about ___ members
+      Guest speaker: {paper:speaker_position}
 
       Last month's minutes
       - The minutes of {fill:minutes_month} were approved.

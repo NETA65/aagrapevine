@@ -25,7 +25,10 @@ check (scripts/ops/gate_tests.py CONTENT_TESTS: the committee edits that file, s
                          details, word for word: the agenda slide's rows of the chosen version; a line whose blanks
                          are all empty is left out (and a heading left with nothing), a half-filled one shows its
                          [hint]; a notes_only blank (the presenter's first name) never shows; the only e-mail address
-                         is the committee's service address — never an attendance list or a name
+                         is the committee's service address — never an attendance list or a name; the Google Meet
+                         link and code, no phone line; the guest speaker of the meeting each text is for (the
+                         agenda's speaker row too, also on the evening the agenda is already next month's), never
+                         named in the minutes, and no speaker line for a meeting that has none
   * NextMonth          — "Start next month" on the committee's blanks: old business still open, then the action
                          items (its room at most); the one-night blanks cleared and the others kept; the minutes'
                          month; the checklist unticked; the agenda moves on at once; Undo puts everything back, and it
@@ -52,13 +55,20 @@ from nodejs import ROOT, run_js  # noqa: E402
 from test_presentations import EMAIL, check_deck  # noqa: E402
 
 FIXTURES = ROOT / "tests" / "fixtures" / "presentations"
-# The site's settings the facts come from (the committee's meeting, its Zoom room, Zoom's number for callers)
+# The site's settings the facts come from (the committee's meeting in its Google Meet room — no passcode, no number
+# to call — and its guest speakers: October's confirmed, with slides; November's not confirmed yet; December none)
 SITE = {
     "url": "https://neta65.github.io/aagrapevine", "contact_email": "grapevine@neta65.org",
     "committee": "NETA 65 Grapevine & La Viña Committee", "committee_es": "Comité de Grapevine y La Viña de NETA 65",
-    "meeting": {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00", "platform": "Zoom",
-                "zoom_url": "https://us02web.zoom.us/j/9494767497", "meeting_id": "949 476 7497", "passcode": "neta65"},
-    "phone_access": {"numbers": [{"number": "+1 346 248 7799", "city": "Houston"}], "committee": {"phone_passcode": ""}},
+    "meeting": {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00", "platform": "Google Meet",
+                "online_url": "https://meet.google.com/rva-tmst-vdb", "meeting_id": "rva-tmst-vdb", "speaker_until": "19:30",
+                "speakers": [
+                    {"date": "2026-10-21", "name": "Rick W.", "confirmed": True, "slides": True,
+                     "position": "Past delegate, Area 65 (Panel 73)", "topic": "Grapevine as a Twelfth Step tool"},
+                    {"date": "2026-11-18", "name": "Jeannie M.", "confirmed": False,
+                     "position": "Past delegate, Area 4 (Panel 73)", "topic": "Grapevine and La Viña as Public Information tools"},
+                ]},
+    "phone_access": {"numbers": [{"number": "+1 346 248 7799", "city": "Houston"}]},
 }
 # The build's clock (a week before the October 21, 2026 meeting) and the moments the player is used at. The meeting
 # runs 7–8 PM Central: 00:00Z–01:00Z on October 22 (summer time); November 18 is in winter time (01:00Z).
@@ -70,6 +80,7 @@ NEXT_DAY = "2026-10-22T15:00:00Z"
 NOV_BEFORE = "2026-11-18T23:00:00Z"   # 5 PM on November 18, before that meeting
 NOV_DURING = "2026-11-19T01:30:00Z"   # 7:30 PM, the November meeting has begun
 NOV_AFTER = "2026-11-19T02:30:00Z"    # 8:30 PM, the November meeting over
+DEC_BEFORE = "2026-12-09T18:00:00Z"   # the week before December 16, a meeting with no guest speaker
 # the sample committee meeting: the code's tests (the committee's own deck is the content's: RealDeck, Texts, NextMonth)
 SAMPLE = {"dir": "tests/fixtures/presentations", "id": "sample-meeting"}
 
@@ -103,7 +114,7 @@ FILL = {
     "action_1_what": "Ask the Area for a table", "action_1_who": "the alternate chair", "action_1_when": "Nov 1",
     "action_2_what": "Send the flyer to DCMs",
     "district_order": "3, 22, 91", "treasurer_budget": "within budget", "treasurer_reimburse": "receipts to the treasurer",
-    "chair_since": "Two group visits", "phone_passcode": "238047", "since_1_event": "CityWide booth",
+    "chair_since": "Two group visits", "since_1_event": "CityWide booth",
 }
 STATE_JS = """
 const st = G.emptyState();
@@ -166,7 +177,7 @@ class CheckerTwins(unittest.TestCase):
         "paperwork.next_month: actions AND old_business (open action items become next month's old business)",
         "paperwork.next_month.minutes_month: no blank 'nope'",
         "paperwork.next_month.clear: 'zzz_*' names no blank",
-        "paperwork.next_month.clear: 'presenter' is shared by all four presentations (never cleared)",
+        "paperwork.next_month.clear: 'presenter' is shared by every presentation (never cleared)",
         "paperwork.next_month.untick: 'agenda' is not a checklist",
         "paperwork.next_month.untick: no slide 'missing'",
     ]
@@ -242,6 +253,16 @@ class RealDeck(unittest.TestCase):
         # the reminder's Spanish names the committee as the rest of the Spanish site does (config/site.yml)
         self.assertIn("la reunión mensual del {paper:committee_es} es el", pw["reminder"]["body"])
         self.assertNotIn("Comité de Grapevine / La Viña", pw["reminder"]["body"])
+        # the guest speaker by their service position in the minutes (never a name), by name in the agenda e-mail
+        # and the reminder; the Google Meet link, never a phone line or a passcode
+        self.assertIn("Guest speaker: {paper:speaker_position}", body)
+        self.assertNotIn("{paper:speaker}", body)
+        for k in ("agenda", "reminder"):
+            self.assertIn("Guest speaker: {paper:speaker}", pw[k]["body"], k)
+            self.assertIn("{live:meeting_url}", pw[k]["body"], k)
+        text = json.dumps(pw)
+        for gone in ("meeting_phone", "phone_passcode", "meeting_passcode", "meeting_zoom_id", "Zoom", "By phone"):
+            self.assertNotIn(gone, text, gone)
 
     def test_what_start_next_month_clears_and_keeps(self):
         r = deck_js(self, "out(D.paperwork);")
@@ -251,7 +272,7 @@ class RealDeck(unittest.TestCase):
                          (["action_1", "action_2", "action_3", "action_4"], ["old_1", "old_2", "old_3", "old_4"], "minutes_month", ["week-before"]))
         # the patterns named: every chair_* blank, never a shared one or one the chair keeps month to month
         self.assertTrue({"chair_since", "chair_area", "chair_office", "chair_next", "since_3_count", "action_4_when", "topic"} <= set(nm["clear"]))
-        self.assertFalse({"presenter", "first_name", "district_order", "treasurer_budget", "phone_passcode"} & set(nm["clear"]))
+        self.assertFalse({"presenter", "first_name", "district_order", "treasurer_budget"} & set(nm["clear"]))
 
 
 class Build(unittest.TestCase):
@@ -268,9 +289,15 @@ class Build(unittest.TestCase):
         rows = pw["meetings"]
         self.assertEqual([x["ymd"] for x in rows[:5]], ["2026-08-19", "2026-09-16", "2026-10-21", "2026-11-18", "2026-12-16"],
                          "the last two held, then the year ahead")
+        # each meeting with its guest speaker (name, service position, topic) — never `confirmed` or `slides`, which
+        # are the chair's notes': the paperwork goes out by e-mail
         self.assertEqual(rows[2], {"ymd": "2026-10-21", "start": "2026-10-22T00:00:00.000Z", "end": "2026-10-22T01:00:00.000Z",
                                    "label": "Wednesday, October 21, 2026", "label_es": "miércoles, 21 de octubre de 2026",
-                                   "month": "October 2026"})
+                                   "month": "October 2026",
+                                   "speaker": {"name": "Rick W.", "position": "Past delegate, Area 65 (Panel 73)",
+                                               "topic": "Grapevine as a Twelfth Step tool"}})
+        self.assertEqual(rows[3]["speaker"]["name"], "Jeannie M.", "listed, not confirmed yet: shown all the same")
+        self.assertNotIn("speaker", rows[4], "December 16: no guest speaker")
         self.assertEqual(rows[3]["start"], "2026-11-19T01:00:00.000Z", "winter time")
         self.assertLessEqual(rows[-1]["ymd"], "2027-10-20", "about a year ahead")
         self.assertIn("p. m., hora del Centro", pw["time_es"])
@@ -299,10 +326,15 @@ class Texts(unittest.TestCase):
         if Texts.r is None:
             Texts.r = deck_js(self, STATE_JS + """
                 const empty = G.emptyState();
+                const version = (p, at) => { const s2 = JSON.parse(JSON.stringify(st)); s2.decks[D.id].preset = p; return texts(s2, at); };
+                // "Start next month" at 8:30 PM on the meeting night: the agenda is November's at once
+                const started = JSON.parse(JSON.stringify(st));
+                G.startNextMonth(D, started, [], ms(input.after));
                 out({ week: texts(st, input.week), during: texts(st, input.during), after: texts(st, input.after),
-                      emptyWeek: texts(empty, input.week),
-                      topic: (() => { const s2 = JSON.parse(JSON.stringify(st)); s2.decks[D.id].preset = "topic"; return texts(s2, input.week).agenda.text; })() });""",
-                fill=FILL, week=WEEK_BEFORE, during=DURING, after=AFTER)
+                      emptyWeek: texts(empty, input.week), topic: version("topic", input.week).agenda.text,
+                      noSpeaker: version("no-speaker", input.week).agenda.text, started: texts(started, input.after),
+                      dec: texts(st, input.dec), decNoSpeaker: version("no-speaker", input.dec) });""",
+                fill=FILL, week=WEEK_BEFORE, during=DURING, after=AFTER, dec=DEC_BEFORE)
         return Texts.r
 
     def test_the_agenda_is_for_the_next_meeting(self):
@@ -313,11 +345,19 @@ class Texts(unittest.TestCase):
         t = a["text"]
         self.assertIn("Here is the agenda for the October 2026 meeting", t)
         self.assertIn("When: Wednesday, October 21, 2026, 7:00", t)
-        self.assertIn("Zoom: meeting ID 949 476 7497, passcode neta65", t)
-        self.assertIn("phone passcode 238047", t)
-        # the agenda slide's rows, in the chosen version
-        self.assertIn("Agenda (Central time)\n7:00  Welcome and opening\n7:03  Reading\n", t)
-        self.assertIn("7:17  Grapevine and La Viña news", t)
+        # that meeting's guest speaker, and how to join on Google Meet: the link and its code — no phone, no passcode
+        self.assertIn("\nGuest speaker: Rick W. — Past delegate, Area 65 (Panel 73)\nTopic: Grapevine as a Twelfth Step tool\n"
+                      "Join on Google Meet: https://meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb)\n", t)
+        for gone in ("Zoom", "phone", "passcode"):
+            self.assertNotIn(gone, t)
+        # the agenda slide's rows, in the chosen version: with the guest speaker (the first version), or the
+        # committee's business for the whole hour
+        self.assertIn("Agenda (Central time)\n7:00  Welcome and opening\n7:02  Guest speaker: Rick W.\n"
+                      "7:22  Questions for our guest speaker\n7:30  Committee business: the Preamble, introductions, minutes\n", t)
+        self.assertIn("7:37  Grapevine and La Viña news", t)
+        self.assertIn("7:59  Closing", t)
+        self.assertIn("Agenda (Central time)\n7:00  Welcome and opening\n7:03  Reading\n", r["noSpeaker"])
+        self.assertIn("7:17  Grapevine and La Viña news", r["noSpeaker"])
         self.assertIn("7:17  News and topic of the month", r["topic"], "the version's own agenda")
         # lines whose blanks are all empty are left out; a half-filled one shows its [hint]
         self.assertIn("Old business\n- Booth schedule for 2027\n- Writing workshop in District 22\n\nNew business", t)
@@ -330,11 +370,37 @@ class Texts(unittest.TestCase):
         self.assertEqual(set(EMAIL.findall(t)), {"grapevine@neta65.org"})
         self.assertEqual({b["lang"] for b in a["blocks"]}, {"en"})
 
+    def test_the_speaker_of_the_meeting_each_text_is_for(self):
+        r = self.run_texts()
+        # after "Start next month" at 8:30 PM on October 21 the agenda is November's: its speaker in the e-mail AND in
+        # the agenda's speaker row, though the slides still show tonight's until midnight
+        nov = r["started"]["agenda"]["text"]
+        self.assertTrue(r["started"]["agenda"]["subject"].endswith("Wednesday, November 18, 2026"))
+        self.assertIn("Guest speaker: Jeannie M. — Past delegate, Area 4 (Panel 73)\nTopic: Grapevine and La Viña as Public Information tools\n", nov)
+        self.assertIn("\n7:02  Guest speaker: Jeannie M.\n", nov)
+        self.assertNotIn("Rick W.", nov)
+        # the minutes of October 21: the speaker by service position, never by name
+        m = r["after"]["minutes"]["text"]
+        self.assertIn("Opened with a moment of silence and the Serenity Prayer.\nGuest speaker: Past delegate, Area 65 (Panel 73)\n"
+                      "Topic: Grapevine as a Twelfth Step tool, then the members' questions\n"
+                      "The committee's business opened with the AA Preamble.", m)
+        self.assertNotIn("Rick W.", m)
+        self.assertIn("monthly meeting on Google Meet: Wednesday, October 21, 2026", m)
+        self.assertIn("Next meeting: Wednesday, November 18, 2026, 7:00", m)
+        self.assertTrue(r["after"]["minutes"]["text"].split("Next meeting: ", 1)[1].startswith("Wednesday, November 18, 2026"))
+        # December 16 has no guest speaker: no speaker line in any text; the speaker version's row says so
+        for w in ("agenda", "reminder"):
+            self.assertNotIn("Guest speaker:", r["dec"][w]["text"].split("Agenda (Central time)")[0], w)
+            self.assertNotIn("Topic:", r["dec"][w]["text"], w)
+        self.assertIn("\n7:02  Guest speaker: to be announced\n", r["dec"]["agenda"]["text"])
+        self.assertNotIn("Guest speaker", r["decNoSpeaker"]["agenda"]["text"], "the version without a speaker: none at all")
+        self.assertNotIn("Guest speaker", r["decNoSpeaker"]["reminder"]["text"])
+
     def test_an_empty_version_never_shows_an_empty_blank(self):
         t = self.run_texts()["emptyWeek"]["agenda"]["text"]
         self.assertNotIn("[", t)
         # (the agenda's rows say "Old business" too: a heading is the first line of its paragraph)
-        for gone in ("\n\nOld business\n", "\n\nNew business\n", "Last month's minutes", "District reports, in this order", "By phone"):
+        for gone in ("\n\nOld business\n", "\n\nNew business\n", "Last month's minutes", "District reports, in this order", "phone"):
             self.assertNotIn(gone, t, gone)
         self.assertIn("Anything to add under new business?", t, "a line with no blank always stays")
         self.assertIn("Area 65 Grapevine / La Viña Chair", t, "a blank's default counts as filled in")
@@ -351,7 +417,10 @@ class Texts(unittest.TestCase):
         es = rem["blocks"][1]["text"]
         self.assertTrue(es.startswith("Recordatorio: la reunión mensual del Comité de Grapevine y La Viña de NETA 65 es el "
                                       "miércoles, 21 de octubre de 2026, 7:00"), es)
-        self.assertIn("p. m., hora del Centro, por Zoom", es)
+        self.assertIn("p. m., hora del Centro, por Google Meet: https://meet.google.com/rva-tmst-vdb (código de la reunión: rva-tmst-vdb).", es)
+        en = rem["blocks"][0]["text"]
+        self.assertIn(", on Google Meet: https://meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb).\n"
+                      "Guest speaker: Rick W. — Past delegate, Area 65 (Panel 73)\nTopic: Grapevine as a Twelfth Step tool\n", en)
         self.assertIn("La reunión es en inglés.", es)
         # "no need to register" as the rest of the site says it (Meetings, the orientation, the GVR corner)
         self.assertTrue(es.endswith("Todos los miembros de AA son bienvenidos, y no hace falta registrarse."), es)
@@ -402,7 +471,7 @@ class NextMonth(unittest.TestCase):
         self.assertEqual(plan["items"][1]["text"], "Send the flyer to DCMs")
         self.assertEqual(plan["items"][3]["status"], "keep working")
         self.assertEqual((plan["room"], plan["held"]["ymd"], plan["done"]), (4, "2026-10-21", False))
-        self.assertEqual(plan["keep"], ["treasurer_budget", "treasurer_reimburse", "district_order", "phone_passcode"])
+        self.assertEqual(plan["keep"], ["treasurer_budget", "treasurer_reimburse", "district_order"])
         self.assertEqual(r["res"]["carried"], 3)
         fill = r["after"]["fill"]
         # old business still open first, then tonight's action items (an unknown pick is ignored); statuses cleared
@@ -412,7 +481,6 @@ class NextMonth(unittest.TestCase):
             "old_2_item": "Ask the Area for a table (the alternate chair, by Nov 1)",
             "old_3_item": "Send the flyer to DCMs",
             "district_order": "3, 22, 91", "treasurer_budget": "within budget", "treasurer_reimburse": "receipts to the treasurer",
-            "phone_passcode": "238047",
         })
         self.assertEqual(r["after"]["checks"], {}, "the week-before checklist starts over")
         self.assertEqual(r["after"]["shared"], {"first_name": "Pat"}, "a shared blank is never touched")
@@ -478,6 +546,11 @@ class Sample(unittest.TestCase):
             out({ t, fill: plain(ds.fill), checks: plain(ds.checks) });""",
             dir="tests/fixtures/presentations", id="sample-meeting", at=AFTER)
         self.assertIn("Agenda\n0:00  Opening and welcome\n0:04  Dates and events — The year's meeting dates", r["t"]["agenda"]["text"])
+        # the guest speaker of the meeting each text is for: November's agenda (by name), October's minutes (by
+        # service position only)
+        self.assertIn("\nGuest speaker: Jeannie M. — Past delegate, Area 4 (Panel 73), on Grapevine and La Viña as Public Information tools\n",
+                      r["t"]["agenda"]["text"])
+        self.assertIn("\nGuest speaker: Past delegate, Area 65 (Panel 73)\n", r["t"]["minutes"]["text"])
         self.assertEqual([b["lang"] for b in r["t"]["reminder"]["blocks"]], ["en", "es"])
         self.assertIn("Old business\n- Flyers: [status]", r["t"]["minutes"]["text"])
         self.assertEqual(r["fill"], {"old_1_item": "Print them", "minutes_month": "October 2026"})
