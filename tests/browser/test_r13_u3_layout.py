@@ -21,7 +21,8 @@ very unequal length (the site-wide audit of October 2026).
   * FeaturedWriters — /published/: Area 65's featured cards are 2 per row on wide screens and never 3 (1536 and
                      1920px: 3 + 1 left the 4th alone beside 1180px of nothing), 1 column on a phone; an odd
                      number shown — after "Show all 5 from our Area", or a magazine, period or place chosen — the
-                     last one takes the whole row, never alone beside half a row (published.js data-pw-wide).
+                     last one takes the whole row, never alone beside half a row (published.js data-pw-wide); a
+                     card lifted by focus or hover counts in its row.
   * FourCards      — grid-cards-4 with exactly 4 cards (Next steps on /gvr/, /orientation/ and /read/, the Tracker's
                      privacy cards): 4 in a row, 2 × 2 or one column — never 3 + 1 — at every width from a phone to
                      1920px and at 115 / 130 / 150 % text (where the cards grow and 4 fit only on a wider screen);
@@ -205,12 +206,16 @@ class DigestColumns(unittest.TestCase):
 
 # --------------------------------------------------------------------------------------------- card grids
 # The rows of a grid's shown children: how many cards in each and the blank at the end of the row (px), and the
-# number of columns.
+# number of columns. Each card where the grid put it: a card lifted on hover or focus (published.css transform:
+# translateY(-2px), card-link's hover translate; "Show all" moves the focus to the first new card's link, published.js
+# focusFirstNew) is still in its row, not a row of its own 2px higher.
 ROWS = r"""(sel) => [...document.querySelectorAll(sel)].map((g) => {
   const kids = [...g.children].filter((k) => k.getClientRects().length && getComputedStyle(k).display !== 'none');
   const gr = g.getBoundingClientRect(), rows = [];
   for (const k of kids) {
-    const r = k.getBoundingClientRect();
+    const b = k.getBoundingClientRect(), cs = getComputedStyle(k), t = new DOMMatrixReadOnly(cs.transform);
+    const [tx = 0, ty = 0] = cs.translate === 'none' ? [] : cs.translate.split(' ').map(parseFloat);
+    const r = { top: b.top - t.f - ty, right: b.right - t.e - tx };
     let row = rows.find((x) => Math.abs(x.top - r.top) < 2);
     if (!row) rows.push(row = { top: r.top, n: 0, right: 0 });
     row.n++; row.right = Math.max(row.right, r.right);
