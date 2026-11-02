@@ -315,13 +315,13 @@ export function eventWhen(ev, lang, now = Date.now(), opts = {}) {
 }
 
 /** The event's place in the page language (content/events `location_es` → i18n.location), else as written;
- *  with `t` (translateKey), an event with no place but an online link (La Viña's monthly workshop on Zoom) →
- *  "Online" / "En línea" — the words the monthly e-mail uses (send_digest.event_row). The digest (page and
- *  texts) and the district report pass it. */
+ *  with `t` (translateKey), an event with no place but an online link (La Viña's monthly workshop on Zoom) or held
+ *  online (the digest's committee meeting: `online`) → "Online" / "En línea" — the words the monthly e-mail uses
+ *  (send_digest.event_row). The digest (page and texts) and the district report pass it. */
 export function eventWhere(ev, lang, t = null) {
   const x = ev?.extra || {};
   const place = clean((ev?.i18n?.location && ev.i18n.location[lang]) || x.location || x.city || "");
-  return place || (x.online_url && typeof t === "function" ? t("committee.events.online", lang) : "");
+  return place || ((x.online_url || x.online === true) && typeof t === "function" ? t("committee.events.online", lang) : "");
 }
 
 /** The day(s) on an event's small date box: "17", or "19–21" over several days. */
@@ -659,7 +659,7 @@ const pubName = (item) => (item?.extra?.publication === "lv" || item?.source ===
 //     the magazines' Instagram posts (instagram.json: per account, how many and the 3 newest — the
 //     site's /instagram/ page is their one home) and documents, by date.
 // Plus ONE pointer: "Coming up in K" → /monthly/K/, the toolkit, the home of everything current (the
-// committee meeting — its Zoom details stay on /meetings/, which the toolkit links to —, events not over
+// committee meeting — its link and code stay on /meetings/, which the toolkit links to —, events not over
 // yet, the weekly open meetings, deadlines, Book of the Month, the daily quote …) — and, while the notice of
 // a price change AA Grapevine announced is on, its row ("Grapevine and La Viña prices change on …",
 // digestPrice → /shop/#price-changes). An issue's highlight
@@ -907,7 +907,8 @@ export function monthInstagram(posts, profiles = {}) {
  * The events that took place in P — every category but the committee's, in the month an event starts
  * in, once it has started — plus P's committee meeting: its events.json record, else the site.meeting
  * rule (monthly.js meetingByRule: skip_dates honoured) when the settings have a meeting, once it has
- * started: { id: "ev:committee:<day>", category: "committee", url: "/meetings/", _committee: true }.
+ * started: { id: "ev:committee:<day>", category: "committee", url: "/meetings/", _committee: true }, held "online"
+ * (extra.online — never its platform: a month before a move to another one would say the new one).
  * Soonest first. (A meeting cancelled without a skip date still reads as held — the rule cannot know.)
  */
 export function monthEventsHeld(db, ed, site = {}, now = Date.now()) {
@@ -926,7 +927,7 @@ export function monthEventsHeld(db, ed, site = {}, now = Date.now()) {
     const base = rec || { kind: "event", source: "committee", title: "", lang: "en", i18n: {}, machine: [] };
     evs.push({
       ...prep({ ...base, id: `ev:committee:${cm.ymd}`, category: "committee", url: "/meetings/", date: cm.start,
-        extra: { start: cm.start, end: cm.end, all_day: false, location: (rule && rule.platform) || "Zoom" } }, now),
+        extra: { start: cm.start, end: cm.end, all_day: false, online: true } }, now),
       _committee: true,
     });
   }
@@ -986,10 +987,35 @@ export function buildMonthlyDigest(db, opts = {}) {
       path: `/monthly/${ed.out}/`,
       label: { en: monthLabel(ed.out, "en"), es: monthLabel(ed.out, "es") },
       month: { en: monthWord(ed.out, "en"), es: monthWord(ed.out, "es") },
+      // … with that month's committee meeting and its guest speaker while it is ahead (digestSpeaker)
+      speaker: digestSpeaker(db, ed, now),
       // … and, while its notice is on, a price change AA Grapevine announced (digestPrice)
       price: digestPrice(db, now),
     },
   };
+}
+
+/** The committee meeting of the month the edition comes out in, while it is still ahead, with its guest speaker
+ *  (events.json: its record's extra.speaker, which the sync writes from config/site.yml meeting.speakers) → { ymd,
+ *  date: { en, es } ("January 20, 2027"), name, topic: { en, es } } or null (no speaker that day: Dec 16, 2026). The
+ *  toolkit's pointer names them: "Committee meeting on January 20, 2027 — guest speaker: Rick W. — “…”".
+ *  send_digest.py coming_speaker is its twin. */
+function digestSpeaker(db, ed, now) {
+  const rec = (db?.events?.items || []).find((e) => e && e.status !== "gone" && String(e.id || "").startsWith(`ev:committee:${ed.out}-`));
+  const sp = rec && rec.extra && rec.extra.speaker;
+  const start = rec ? eventStart(rec) : null;
+  if (!sp || typeof sp !== "object" || !clean(sp.name) || !start || !(ms(start) > now)) return null;
+  const topic = sp.topic && typeof sp.topic === "object" ? sp.topic : { en: sp.topic };
+  const pick = (l) => clean(topic[l] || topic.en || "");
+  const ymd = ymdChicago(start);
+  return { ymd, date: { en: dayLabel(ymd, "en"), es: dayLabel(ymd, "es") }, name: clean(sp.name), topic: { en: pick("en"), es: pick("es") } };
+}
+
+/** The pointer's line about that meeting in a language ("" without a speaker). */
+function digestSpeakerLine(sp, lang, t) {
+  if (!sp) return "";
+  const topic = sp.topic[lang] || "";
+  return t("community.digest.speaker", lang, { date: sp.date[lang], name: sp.name }) + (topic ? ` — “${topic}”` : "");
 }
 
 /** A price change AA Grapevine announced whose notice is on at `now` (shop.js shopPriceChangeIn: from the day it was
@@ -1203,6 +1229,8 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
   const kit = uniq(L.map((l) => t("community.digest.toolkit_text", l)));
   if (kit.length === 1) out.push(`${kit[0]} ${url(md.toolkit.path)}`);
   else out.push(...kit, url(md.toolkit.path));
+  // … that month's committee meeting and its guest speaker (digestSpeaker), a line in each language
+  out.push(...uniq(L.map((l) => digestSpeakerLine(md.toolkit.speaker, l, t))));
   // … and a price change AA Grapevine announced, while its notice is on (digestPrice)
   const pc = md.toolkit.price;
   if (pc) out.push(`${wa ? "📢 " : ""}${both(`shop.pc_line_${pc.kind}`, (l) => ({ date: pc.date[l] }))}: ${url("/shop/#price-changes")}`);
