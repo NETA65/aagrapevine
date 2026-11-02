@@ -1548,12 +1548,13 @@
      A deck's `paperwork` (the committee meeting's Customize → Agenda & minutes; eleventy/filters/presentations.js
      shapePaper, the deck JSON's `paperwork`): { agenda_slide, speaker_slide, agenda | reminder | minutes: { subject, body },
      next_month: { actions, old_business, minutes_month, clear: [keys], untick: [slide ids] }, meetings: [{ ymd,
-     start, end, label, label_es, month, speaker?: { name, position, topic } }], time_es, committee_es }. The texts are plain text in the deck's language,
+     start, end, label, label_es, month, speaker?: { name, position, topic, position_es, topic_es } }], time_es, committee_es }. The texts are plain text in the deck's language,
      made from the presenter's blanks and the day's facts: never sent anywhere from here (the player copies them, or
      opens them in the presenter's own e-mail app with no address filled in). */
   // a paperwork text's own facts ({paper:…}): the meeting the text is for, its month, the meeting after it, the
   // agenda's rows (a line of its own), that date and the meeting's time in Spanish, the committee's Spanish name,
-  // that meeting's guest speaker (name and service position, position, topic: "" without one)
+  // that meeting's guest speaker (name and service position, position, topic, and in Spanish the name and position,
+  // and the topic: "" without one)
   var PAPER_RE = /\{paper:([a-z_]+)\}/g;
   var LANG_MARK = /\{lang:[a-z]{2}\}|\{\/lang\}/g;
   function paperOf(deck) { return deck && isMap(deck.paperwork) ? deck.paperwork : null; }
@@ -1642,6 +1643,9 @@
       committee_es: isStr(pw.committee_es) && pw.committee_es.trim() ? pw.committee_es.trim() : EN.paper_committee_es,
       speaker: sp ? [spText("name"), spText("position")].filter(Boolean).join(" — ") : "",
       speaker_position: spText("position"), speaker_topic: spText("topic"),
+      // (for a Spanish paragraph: the Spanish position and topic, or the English when there is none)
+      speaker_es: sp ? [spText("name"), spText("position_es") || spText("position")].filter(Boolean).join(" — ") : "",
+      speaker_topic_es: spText("topic_es") || spText("topic"),
     };
     var agenda = null;      // worked out once, when a text asks for it
     var defs = fillDefs(deck);

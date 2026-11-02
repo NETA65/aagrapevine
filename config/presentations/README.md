@@ -330,8 +330,9 @@ meeting" in a workshop ("Next meeting: {live:meeting_next}"). Never mix them: "t
 Grapevine Meeting's own slides.
 
 In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda e-mail, the reminder, the draft
-minutes), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` are the
-guest speaker of the meeting the text is for — so are the speaker keys in the agenda's rows there — and a line whose
+minutes), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` — and
+for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the position and topic in Spanish, as
+the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for — so are the speaker keys in the agenda's rows there — and a line whose
 `{paper:…}` facts are all empty (a meeting with no guest speaker) is left out. So is every speaker line in a version
 that leaves out the slide `paperwork: speaker_slide:` names (the committee meeting's "No guest speaker", for a
 speaker who can't come). The minutes name the speaker by service position only.

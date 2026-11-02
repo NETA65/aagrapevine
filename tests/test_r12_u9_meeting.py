@@ -56,7 +56,8 @@ from test_presentations import EMAIL, check_deck  # noqa: E402
 
 FIXTURES = ROOT / "tests" / "fixtures" / "presentations"
 # The site's settings the facts come from (the committee's meeting in its Google Meet room — no passcode, no number
-# to call — and its guest speakers: October's confirmed, with slides; November's not confirmed yet; December none)
+# to call — and its guest speakers: October's confirmed, with slides, its position and topic in Spanish too;
+# November's not confirmed yet, in English only; December none)
 SITE = {
     "url": "https://neta65.github.io/aagrapevine", "contact_email": "grapevine@neta65.org",
     "committee": "NETA 65 Grapevine & La Viña Committee", "committee_es": "Comité de Grapevine y La Viña de NETA 65",
@@ -64,7 +65,8 @@ SITE = {
                 "online_url": "https://meet.google.com/rva-tmst-vdb", "meeting_id": "rva-tmst-vdb", "speaker_until": "19:30",
                 "speakers": [
                     {"date": "2026-10-21", "name": "Rick W.", "confirmed": True, "slides": True,
-                     "position": "Past delegate, Area 65 (Panel 73)", "topic": "Grapevine as a Twelfth Step tool"},
+                     "position": "Past delegate, Area 65 (Panel 73)", "topic": "Grapevine as a Twelfth Step tool",
+                     "position_es": "Ex delegado, Área 65 (Panel 73)", "topic_es": "Grapevine como herramienta del Paso Doce"},
                     {"date": "2026-11-18", "name": "Jeannie M.", "confirmed": False,
                      "position": "Past delegate, Area 4 (Panel 73)", "topic": "Grapevine and La Viña as Public Information tools"},
                 ]},
@@ -297,8 +299,11 @@ class Build(unittest.TestCase):
                                    "label": "Wednesday, October 21, 2026", "label_es": "miércoles, 21 de octubre de 2026",
                                    "month": "October 2026",
                                    "speaker": {"name": "Rick W.", "position": "Past delegate, Area 65 (Panel 73)",
-                                               "topic": "Grapevine as a Twelfth Step tool"}})
+                                               "topic": "Grapevine as a Twelfth Step tool",
+                                               "position_es": "Ex delegado, Área 65 (Panel 73)",
+                                               "topic_es": "Grapevine como herramienta del Paso Doce"}})
         self.assertEqual(rows[3]["speaker"]["name"], "Jeannie M.", "listed, not confirmed yet: shown all the same")
+        self.assertEqual(rows[3]["speaker"]["position_es"], "Past delegate, Area 4 (Panel 73)", "no Spanish: the English, as /es/meetings/")
         self.assertNotIn("speaker", rows[4], "December 16: no guest speaker")
         self.assertEqual(rows[3]["start"], "2026-11-19T01:00:00.000Z", "winter time")
         self.assertLessEqual(rows[-1]["ymd"], "2027-10-20", "about a year ahead")
@@ -429,7 +434,9 @@ class Texts(unittest.TestCase):
         en = rem["blocks"][0]["text"]
         self.assertIn(", on Google Meet: https://meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb).\n"
                       "Guest speaker: Rick W. — Past delegate, Area 65 (Panel 73)\nTopic: Grapevine as a Twelfth Step tool\n", en)
-        self.assertIn("La reunión es en inglés.", es)
+        # that meeting's guest speaker and topic in Spanish too, as /es/meetings/ gives them
+        self.assertIn("(código de la reunión: rva-tmst-vdb).\nOrador(a) invitado(a): Rick W. — Ex delegado, Área 65 (Panel 73)\n"
+                      "Tema: Grapevine como herramienta del Paso Doce\nLa reunión es en inglés.", es)
         # "no need to register" as the rest of the site says it (Meetings, the orientation, the GVR corner)
         self.assertTrue(es.endswith("Todos los miembros de AA son bienvenidos, y no hace falta registrarse."), es)
         self.assertNotIn("{lang", rem["text"])
@@ -617,7 +624,9 @@ class Sample(unittest.TestCase):
         self.assertEqual(es["lang"], "es")
         self.assertTrue(es["text"].startswith("Recordatorio: el Comité de Grapevine y La Viña de NETA 65 se reúne el "
                                               "miércoles, 21 de octubre de 2026, 7:00"), es["text"])
-        self.assertTrue(es["text"].endswith("hora del Centro, por Zoom."), es["text"])
+        first, speaker = es["text"].split("\n")
+        self.assertTrue(first.endswith("hora del Centro, por Zoom."), es["text"])
+        self.assertEqual(speaker, "Orador(a) invitado(a): Rick W. — Ex delegado, Área 65 (Panel 73), sobre Grapevine como herramienta del Paso Doce")
         self.assertTrue(r["unnamed"]["blocks"][1]["text"].startswith("Recordatorio: el Comité de Grapevine y La Viña se reúne el "),
                         r["unnamed"]["blocks"][1]["text"])
         self.assertNotIn("{paper", r["named"]["text"] + r["unnamed"]["text"])

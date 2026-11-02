@@ -163,11 +163,12 @@ const HTML = /<[A-Za-z/!]/;
 // texts (plain text, in the deck's language), their own facts {paper:…} (the meeting a text is for, its month, the
 // meeting after it, the agenda's rows, the date and time in Spanish for a Spanish paragraph, the committee's name as
 // the Spanish pages give it — config/site.yml site.committee_es —, that meeting's guest speaker: name and service
-// position, position alone, topic — empty without one, and a line whose {paper:…} facts are all empty is left out)
+// position, position alone, topic, and the name and position, and the topic, in Spanish for a Spanish paragraph —
+// empty without one, and a line whose {paper:…} facts are all empty is left out)
 // and "Start next month" (numbered rows of blanks: <row>_what / _who / _when for an action item, <row>_item /
 // _status for old business). presentations-core.js paperText / startNextMonth use them.
 export const PAPER_KEYS = ["meeting", "month", "after", "agenda", "meeting_es", "time_es", "committee_es", "speaker",
-  "speaker_position", "speaker_topic"];
+  "speaker_position", "speaker_topic", "speaker_es", "speaker_topic_es"];
 const PAPER_TEXTS = ["agenda", "reminder", "minutes"];
 const PAPER_ROWS = { actions: ["what", "who", "when"], old_business: ["item", "status"] };
 const PAPER_TAG = /\{paper:([^}]*)\}/g;
@@ -1230,7 +1231,8 @@ function ruleAndTime(line) {
 }
 
 /** The committee meeting's guest speakers (config/site.yml meeting.speakers, as committee.js meetingSpeakers reads
- *  them: the list /meetings/ shows) → Map "YYYY-MM-DD" → { name, position, topic (English), slides }.
+ *  them: the list /meetings/ shows) → Map "YYYY-MM-DD" → { name, position, topic (English), position_es, topic_es
+ *  (as /es/meetings/ gives them: the English when there is no Spanish), slides }.
  *  `slides` (the speaker shares slides: their screen at the sound check) is for the chair's notes, never a slide:
  *  the entry's own `slides: true` (the entry of that date and name). Whether a speaker has confirmed never reaches
  *  a deck: the notes are public; the run summary reminds the chair instead (build_data _speaker_reminders). */
@@ -1238,7 +1240,8 @@ function speakersOf(m) {
   const raw = Array.isArray(m.speakers) ? m.speakers : isMap(m.speakers) ? [m.speakers] : [];
   const entry = (s) => raw.find((e) => isMap(e) && ymdText(e.date) === s.ymd && clean(e.name) === s.name);
   return new Map(meetingSpeakers(m).map((s) => [s.ymd, {
-    name: s.name, position: s.position.en, topic: s.topic.en, slides: (entry(s) || {}).slides === true,
+    name: s.name, position: s.position.en, topic: s.topic.en, position_es: s.position.es, topic_es: s.topic.es,
+    slides: (entry(s) || {}).slides === true,
   }]));
 }
 
@@ -1277,7 +1280,8 @@ const meetingInfo = (c) => c.once("meeting", () => {
  *  an agenda is for (the next one) and the one minutes are for (the last one held), also in a copy opened weeks
  *  later. Each row: ymd, start, end, its date in English ("Wednesday, October 21, 2026") and in Spanish, inside a
  *  sentence ("miércoles, 21 de octubre de 2026"), its month ("October 2026") and, when it has one, its guest
- *  speaker (`speaker`: name, service position and topic, in English). `time_es`: the meeting's time in the site's
+ *  speaker (`speaker`: name, service position and topic, in English, and the position and topic in Spanish for a
+ *  Spanish paragraph: position_es, topic_es). `time_es`: the meeting's time in the site's
  *  Spanish words ("7:00–8:00 p. m., hora del Centro") for a Spanish paragraph. */
 const paperMeetings = (c) => c.once("paper-meetings", () => {
   const m = c.site.meeting && typeof c.site.meeting === "object" ? c.site.meeting : {};
@@ -1293,7 +1297,8 @@ const paperMeetings = (c) => c.once("paper-meetings", () => {
       return { ymd: x.ymd, start: instantIso(x.start), end: instantIso(x.end), label: H.fmtDate(x.start, "en", "long"),
         label_es: es ? es.charAt(0).toLocaleLowerCase("es") + es.slice(1) : "", month: monthLabel(x.ymd.slice(0, 7), "en"),
         // that meeting's guest speaker, for {paper:speaker…} (never `confirmed` or `slides`: the paperwork goes out)
-        ...(sp ? { speaker: { name: sp.name, position: sp.position, topic: sp.topic } } : {}) };
+        ...(sp ? { speaker: { name: sp.name, position: sp.position, topic: sp.topic, position_es: sp.position_es,
+          topic_es: sp.topic_es } } : {}) };
     })
     .filter((x) => x.start && Date.parse(x.start) <= c.nowMs + HORIZON_MS)
     .sort((a, b) => a.start.localeCompare(b.start))

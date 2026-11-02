@@ -111,7 +111,7 @@ HTML = re.compile(r"<[A-Za-z/!]")
 # next month" (numbered rows of blanks: <row>_what / _who / _when for an action item, <row>_item / _status for old
 # business)
 PAPER_KEYS = ("meeting", "month", "after", "agenda", "meeting_es", "time_es", "committee_es", "speaker", "speaker_position",
-              "speaker_topic")
+              "speaker_topic", "speaker_es", "speaker_topic_es")
 PAPER_TEXTS = ("agenda", "reminder", "minutes")
 PAPER_ROWS = {"actions": ("what", "who", "when"), "old_business": ("item", "status")}
 PAPER_TAG = re.compile(r"\{paper:([^}]*)\}")

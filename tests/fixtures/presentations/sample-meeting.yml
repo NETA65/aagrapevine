@@ -97,6 +97,7 @@ paperwork:
       Reminder: the committee meets {paper:meeting}, {live:meeting_time}, on Zoom.
 
       {lang:es}Recordatorio: el {paper:committee_es} se reúne el {paper:meeting_es}, {paper:time_es}, por Zoom.{/lang}
+      {lang:es}Orador(a) invitado(a): {paper:speaker_es}, sobre {paper:speaker_topic_es}{/lang}
   minutes:
     subject: "Draft minutes: sample committee meeting, {paper:meeting}"
     body: |

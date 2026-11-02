@@ -336,8 +336,10 @@ fillins:
 #   chose (a line of its own) · {paper:meeting_es} / {paper:time_es} that date and the time in Spanish ·
 #   {paper:committee_es} the committee's name as the Spanish pages give it (config/site.yml site.committee_es) ·
 #   {paper:speaker} that meeting's guest speaker (name and service position), {paper:speaker_position},
-#   {paper:speaker_topic} (config/site.yml `meeting: speakers:`; in the paperwork, the agenda's speaker row names
-#   that meeting's speaker too, even on the evening the agenda is already next month's).
+#   {paper:speaker_topic}, and for the Spanish paragraph {paper:speaker_es} / {paper:speaker_topic_es} (the
+#   position and topic in Spanish, as /es/meetings/ gives them) (config/site.yml `meeting: speakers:`; in the
+#   paperwork, the agenda's speaker row names that meeting's speaker too, even on the evening the agenda is
+#   already next month's).
 # A line whose blanks are all empty is left out, and so is a heading left with nothing under it ("Old business"
 # with no items): the text never shows an empty [hint]. A line with no blank always stays — except a speaker line
 # for a meeting with no guest speaker (December 16, 2026), which is left out too, and so is every speaker line in a
@@ -396,7 +398,10 @@ paperwork:
       Topic: {paper:speaker_topic}
       All AA members are welcome, and there's nothing to sign up for.
 
-      {lang:es}Recordatorio: la reunión mensual del {paper:committee_es} es el {paper:meeting_es}, {paper:time_es}, por {live:meeting_platform}: {live:meeting_url} (código de la reunión: {live:meeting_code}). La reunión es en inglés. Todos los miembros de AA son bienvenidos, y no hace falta registrarse.{/lang}
+      {lang:es}Recordatorio: la reunión mensual del {paper:committee_es} es el {paper:meeting_es}, {paper:time_es}, por {live:meeting_platform}: {live:meeting_url} (código de la reunión: {live:meeting_code}).{/lang}
+      {lang:es}Orador(a) invitado(a): {paper:speaker_es}{/lang}
+      {lang:es}Tema: {paper:speaker_topic_es}{/lang}
+      {lang:es}La reunión es en inglés. Todos los miembros de AA son bienvenidos, y no hace falta registrarse.{/lang}
 
       Details: {live:site_url}meetings/#committee-meeting
       {fill:presenter} · {live:email}

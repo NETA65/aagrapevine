@@ -1305,7 +1305,7 @@ speaker, the Google Meet link and its code, the committee's e-mail).
 | Text | For which meeting | What is in it |
 |---|---|---|
 | **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date and time; that meeting's guest speaker and topic; the Google Meet link and its code; the agenda's times, from the agenda slide in the version you chose (its speaker row names that meeting's speaker); last month's minutes; old and new business; the order of the district reports; the "your name in the chat" / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
-| **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, "La reunión es en inglés", all AA members welcome) |
+| **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, the guest speaker and topic in Spanish, "La reunión es en inglés", all AA members welcome) |
 | **Draft minutes** (*Borrador del acta*) | the **last meeting held**, from the moment it starts | "DRAFT, for the committee's approval at its next meeting. Service positions and counts only: no names, phone numbers or email addresses, and no attendance list."; the chair and the minutes-taker by service position; "Attended: about ___ members (by district: ___)"; the opening, the guest speaker by service position and topic
 (never by name), the Preamble opening the business; every part of the meeting with what you typed (old business with its status, new business with "Decision: ___", the action items as what · who · by when); the next meeting |
 
@@ -1371,8 +1371,9 @@ Spanish), and the paperwork's own facts: `{paper:meeting}` (the date of the meet
 `{paper:after}` (the meeting after it), `{paper:agenda}` (the agenda's rows, on a line of its own),
 `{paper:meeting_es}` and `{paper:time_es}` (that date and the time in Spanish), `{paper:committee_es}` (the
 committee's name as the Spanish pages give it: `site: committee_es` in `config/site.yml`), and that meeting's guest
-speaker: `{paper:speaker}` (name and service position), `{paper:speaker_position}` (the minutes: never a name) and
-`{paper:speaker_topic}` — empty for a meeting with none, and a line whose `{paper:…}` facts are all empty is left
+speaker: `{paper:speaker}` (name and service position), `{paper:speaker_position}` (the minutes: never a name),
+`{paper:speaker_topic}`, and for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the
+position and topic in Spanish, `position_es` / `topic_es`, as `/es/meetings/` gives them) — empty for a meeting with none, and a line whose `{paper:…}` facts are all empty is left
 out. In the paperwork the speaker keys `{live:speaker_…}` (the agenda's rows) are that meeting's too. No `**bold**` and no
 `[label](link)`: an e-mail is plain text, so write an address as it is (better: `{live:email}`). The slides' rules
 apply too (anonymity, wording, no personal phone numbers or e-mail addresses). Real messages:
