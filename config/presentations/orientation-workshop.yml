@@ -3,7 +3,7 @@
 # Converted from the committee's PowerPoint deck (built 2026-10-01 by aagrapevine-ops\decks\deck1_gvr-orientation.py;
 # its copy is in the Drive folder 2027-2028_Panel77_GVLV\slides\): every slide in the same order, with the same words
 # on the slide and in the notes. Only what the web player does differently was adapted:
-#  · facts that change — the committee meeting's time, Zoom ID and passcode, La Viña's monthly workshop, the weekly
+#  · facts that change — the committee meeting's time and Google Meet link, La Viña's monthly workshop, the weekly
 #    open meetings, the prices, this month's issues and themes, the story deadlines, the assemblies, the site's own
 #    address — are {live:…} tokens or `live` slides, so they stay current by themselves (the site is rebuilt every
 #    day). A fact the site's data may lack (La Viña's next deadline, a Book of the Month between offers …) then says
@@ -57,8 +57,8 @@ card:
     en: "The two magazines and how they pay their way, what a GVR or RLV does each month, a one-minute announcement to practice, and the committee's tools and people to ask, with a break."
     es: "Las dos revistas y cómo se mantienen, lo que hace un RLV o un GVR cada mes, un anuncio de un minuto para practicar, y las herramientas del comité y a quién preguntar, con un descanso."
   audience:
-    en: "New and returning GVRs and RLVs, and any GSR, DCM or member curious about this service: at an Area or district workshop, on Zoom or in person."
-    es: "RLV y GVR nuevos o que regresan, y cualquier RSG, MCD o miembro a quien le interese este servicio: en un taller del Área o del distrito, por Zoom o en persona."
+    en: "New and returning GVRs and RLVs, and any GSR, DCM or member curious about this service: at an Area or district workshop, online or in person."
+    es: "RLV y GVR nuevos o que regresan, y cualquier RSG, MCD o miembro a quien le interese este servicio: en un taller del Área o del distrito, en línea o en persona."
 
 # The versions (Customize → Version). The 60-minute one is the deck's hidden "For facilitators: the 60-minute
 # version" plan: no break, introductions in the chat, no pair practice, no breakout rooms, and these slides left out.
@@ -89,8 +89,8 @@ fillins:
     label: { en: "Date", es: "Fecha" }
     hint: "Month DD, YYYY"
   - key: "place"
-    label: { en: "Place, or Zoom", es: "Lugar o Zoom" }
-    hint: "Zoom or venue"
+    label: { en: "Place, or online", es: "Lugar, o en línea" }
+    hint: "Venue, or online"
   - key: "presenter"
     label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
     hint: "Service position"
@@ -164,10 +164,10 @@ slides:
     minutes: 2
     version_minutes: { short: 1.5 }
     notes: |
-      SAY: A few things so we can all relax and take part. First, anonymity. Some of us are new to service, and some of us are private about being in AA, so please take no photos, no screenshots and no recordings of the people here, on Zoom or in the room. We are not recording this workshop. If you want to keep a slide, don't worry: the slides will be shared afterward, and there are no names or faces in them.
-      SAY: On Zoom, please rename yourself with your first name and last initial, your group, your district and your service position, so we know who's here. Cameras are optional. Stay muted unless you're speaking, and use the raised hand or the chat for questions. Spanish speakers, you're welcome to ask in Spanish; someone will help.
+      SAY: A few things so we can all relax and take part. First, anonymity. Some of us are new to service, and some of us are private about being in AA, so please take no photos, no screenshots and no recordings of the people here, online or in the room. We are not recording this workshop. If you want to keep a slide, don't worry: the slides will be shared afterward, and there are no names or faces in them.
+      SAY: Online, please show your first name and last initial, your group, your district and your service position (rename yourself, or type them in the chat), so we know who's here. Cameras are optional. Stay muted unless you're speaking, and use the raised hand or the chat for questions. Spanish speakers, you're welcome to ask in Spanish; someone will help.
       SAY: One more thing. This workshop is put together by our Area committee. It is not an official AA Grapevine, Inc. presentation, and it doesn't speak for AA as a whole. We'll share experience and point you to the official sources for everything else.
-      DO: Show how to rename (Participants, then More, then Rename). In a room, ask people to silence phones and not to photograph the room or the people in it.
+      DO: Online, show how to put a first name on screen: on Zoom, Participants, then More, then Rename; on Google Meet a signed-in member can't rename themselves in the call, so they type it in the chat. In a room, ask people to silence phones and not to photograph the room or the people in it.
       TIP: If someone takes a screenshot, a gentle general reminder to the whole room is enough. Never single anyone out.
     version_notes:
       short: "CUT TO 60: keep."
@@ -207,7 +207,7 @@ slides:
       - "Your service position: GVR, RLV, GSR, DCM, or just curious?"
       - "Is this your first Grapevine / La Viña workshop?"
       - "One thing you'd like to take home today"
-    note: "On Zoom, answer in the chat; in a room, a sentence each is plenty."
+    note: "Online, answer in the chat; in a room, a sentence each is plenty."
     minutes: 2.5
     version_minutes: { short: 1 }
     notes: |
@@ -522,14 +522,14 @@ slides:
       - heading: "2 · Your district"
         text: "If your district invites GV/LV reports, give a short one."
       - heading: "3 · The Area committee"
-        text: "Monthly on Zoom. Every AA member is welcome."
+        text: "Monthly on Google Meet. Every AA member is welcome."
       - heading: "4 · The magazine offices"
         text: "Register, ask questions, order, and send stories."
     takeaway: "Your GSR and DCM are your closest partners: keep them in the loop."
     minutes: 1.5
     notes: |
       SAY: Here's how you fit. First, your group: you report at the business meeting, and the group conscience decides what to buy, display or give away. Second, your district: each district organizes its Grapevine and La Viña service its own way. Some have a district GV/LV rep or a whole committee, Spanish-speaking districts often have their own La Viña committee, and in others the GSRs share the news. If your district invites GV/LV reports, give a short one; your DCM can tell you how it works.
-      SAY: Third, the Area: our NETA 65 Grapevine and La Viña Committee meets every third Wednesday on Zoom, and every AA member is welcome. The Area chair works with the districts and carries news both ways. Fourth, the magazine offices in New York, AA Grapevine, Inc., where you register, ask questions, order, and send stories.
+      SAY: Third, the Area: our NETA 65 Grapevine and La Viña Committee meets every third Wednesday on Google Meet, with a guest speaker each month from January 2027, and every AA member is welcome. The Area chair works with the districts and carries news both ways. Fourth, the magazine offices in New York, AA Grapevine, Inc., where you register, ask questions, order, and send stories.
       ASK (optional, if on time): Does your district have a GV/LV rep or committee? Who would you go to with a question? (Take one or two answers; note districts without one.)
       TIP: Voting at Area assemblies follows the Area's Policies and Procedures. If someone asks, point them to the Area Secretary rather than answering from memory.
       SOURCE: GVR Workbook (2026), pp. 34, 46-49; neta65.org/trusted-servants/grapevine-la-vina; Panel 75 committee reports.
@@ -594,8 +594,9 @@ slides:
     rows:
       - ["Around the 1st", "New issue; monthly digest", "Hold up the issue"]
       - ["The 1st", "Grapevine story deadline", "Name the next theme"]
+      - ["1st Wednesday", "Our Grapevine Meeting (Google Meet)", "Invite your group"]
       - ["Mid-month", "Book of the Month", "Mention this month's book"]
-      - ["3rd Wednesday", "Area committee meeting (Zoom)", "Come and ask questions"]
+      - ["3rd Wednesday", "Area committee meeting (Google Meet), with a guest speaker", "Come and ask questions"]
       - ["{fill:district_day}", "District meeting", "Ask your DCM if there's a GV/LV report"]
       - ["Usually the 4th Thursday", "La Viña's monthly workshop", "Invite Spanish speakers"]
     widths: [3.75, 4.45, 3.63]
@@ -604,8 +605,8 @@ slides:
     minutes: 2
     version_minutes: { short: 2.5 }
     notes: |
-      SAY: Here's the rhythm of a month. Around the first, there's a new issue to hold up. Grapevine comes every month; La Viña every two months. On the first, our committee's website also puts out the monthly digest and refreshes the Monthly toolkit, so your news is ready for you. The first of the month is also Grapevine's story deadline: each month the editors close one theme, several months before that issue's cover date.
-      SAY: Around the middle of the month, the Book of the Month changes: each store features one older title at a discount for a set time. Grapevine's changes every month; La Viña's sometimes runs for two months. On the third Wednesday, our Area committee meets on Zoom, {live:meeting_time}. Then there's your district meeting: ask your DCM whether the district takes a GV/LV report, and who gives it. And usually on the fourth Thursday, La Viña's office holds its monthly virtual workshop in Spanish on Zoom, the {lang:es}Taller Mensual y Virtual de La Viña{/lang}, {live:lv_workshop_time}: Zoom ID {live:lv_workshop_zoom_id}.
+      SAY: Here's the rhythm of a month. Around the first, there's a new issue to hold up. Grapevine comes every month; La Viña every two months. On the first, our committee's website also puts out the monthly digest and refreshes the Monthly toolkit, so your news is ready for you. The first of the month is also Grapevine's story deadline: each month the editors close one theme, several months before that issue's cover date. On the first Wednesday, our committee holds the Grapevine Meeting, an online AA meeting in English: a story from Grapevine read aloud, then sharing on its topic.
+      SAY: Around the middle of the month, the Book of the Month changes: each store features one older title at a discount for a set time. Grapevine's changes every month; La Viña's sometimes runs for two months. On the third Wednesday, our Area committee meets on Google Meet, {live:meeting_time}, with a guest speaker each month. Then there's your district meeting: ask your DCM whether the district takes a GV/LV report, and who gives it. And usually on the fourth Thursday, La Viña's office holds its monthly virtual workshop in Spanish on Zoom, the {lang:es}Taller Mensual y Virtual de La Viña{/lang}, {live:lv_workshop_time}: Zoom ID {live:lv_workshop_zoom_id}.
       SAY: Don't forget your own group's business meeting: that's where you report, and where any proposal of yours goes to the group conscience.
       TIP: La Viña's workshop is usually on the fourth Thursday; La Viña's own calendar has kept the fourth Thursday even in months with five Thursdays. In November and December La Viña has held it on the Thursday before Thanksgiving and before Christmas. It starts at 3:00 p.m. Eastern, La Viña's own time; La Viña publishes no end time, so we list it as one hour. Check the date at aalavina.org/calendario-de-eventos each month before you announce it.
       UPDATE: if you're presenting to a single district, replace the district-day fill-in with its real meeting day: {ui:customize} → {ui:your_details}.
@@ -670,7 +671,8 @@ slides:
       - ["La Viña", "{live:lv_issue}"]
       - ["Story deadlines", "Grapevine: {live:next_deadline_gv} · La Viña: {live:next_deadline_lv}"]
       - ["Book of the Month", "Grapevine: {live:botm} · La Viña: {live:botm_lv}"]
-      - ["Committee meeting", "{live:meeting_next} · {live:meeting_time} · Zoom {live:meeting_zoom_id}"]
+      - ["Committee meeting", "{live:meeting_next} · {live:meeting_time} · Google Meet {live:meeting_link}"]
+      - ["Grapevine Meeting", "{live:grapevine_meeting_next} · {live:grapevine_meeting_time} · Google Meet, the same link"]
       - ["La Viña workshop", "Next date listed: {live:lv_workshop_next} (Nov./Dec.: check aalavina.org) · {live:lv_workshop_time} · Zoom {live:lv_workshop_zoom_id}"]
       - ["Events", "{fill:month_event}"]
     widths: [3.0, 8.8]
@@ -760,7 +762,7 @@ slides:
     eyebrow: "Activity"
     title: "Practice: your one-minute announcement"
     steps:
-      - "Pair up (on Zoom: breakout rooms of two or three)"
+      - "Pair up (online: breakout rooms of two or three, where the platform has them)"
       - "Fill in the sample with this month's theme, or a story you know"
       - "Each person gives it once, in a minute or less"
       - "Your partner names one thing that worked"
@@ -770,7 +772,7 @@ slides:
     minutes: 5
     notes: |
       SAY: Let's practice. Pair up with someone you don't know yet. Fill in the sample with this month's theme or any story you remember, then each of you gives it once, in a minute or less. Your partner tells you one thing that worked. Just one, and only kind things. You'll have about three minutes.
-      DO: On Zoom, open breakout rooms of two or three for 3 minutes, with a 30-second warning. Put the sample script in the chat first, so people have it in their room. Send RLVs and Spanish speakers together if they'd like to practice in Spanish. In a room, just turn to a neighbor.
+      DO: Online, open breakout rooms of two or three for 3 minutes, with a 30-second warning, if your meeting platform has them (Google Meet on a personal account has none: there, pair people up by name and let each pair take turns aloud, or share in the chat). Put the sample script in the chat first, so people have it in their room. Send RLVs and Spanish speakers together if they'd like to practice in Spanish. In a room, just turn to a neighbor.
       ASK (when everyone is back): What made an announcement easy to listen to? (Take two or three answers. Usually: short, personal, one date, the issue held up.)
       TIP: If someone is nervous, remind them that reading the sample word for word is a perfectly good first announcement.
       TIMING: 1 minute to pair up or open the breakout rooms, 3 in pairs, 1 to share back.
@@ -924,8 +926,9 @@ slides:
     body: "We start again at **{fill:break_end}**. Stretch, refill, and please keep the room free of photos."
     minutes: 10
     notes: |
-      SAY: Let's take a ten-minute break. We'll start again at {fill:break_end}. If you're on Zoom, you can stay in the room; turn off your camera if you like. Please keep the room free of photos and screenshots while we stretch.
-      DO: Start a visible timer. Leave this slide up. On Zoom, you can play nothing, or put the committee website's address in the chat. Do not play Grapevine audio from the deck; if you want music or a story during the break, play it live from the official site.
+      SAY: Let's take a ten-minute break. We'll start again at {fill:break_end}. If you're online, you can stay in the meeting; turn off your camera if you like. Please keep the room free of photos and screenshots while we stretch.
+      DO: Start a visible timer. Leave this slide up. Online, you can play nothing, or put the committee website's address in the chat. Do not play Grapevine audio from the deck; if you want music or a story during the break, play it live from the official site.
+      ONLINE ON GOOGLE MEET: on a free Google account, Meet ends a call of three or more people after 60 minutes. For a workshop this long, start the call from an account without that limit, or end it at the break and start it again, on the same link, for the second part.
       TIP: Use the break to check the chat for questions you missed, and to see whether you are on time. If you're running late, the 'CUT TO 60' notes show what to shorten: {ui:customize} → {ui:version} → the 60-minute version.
     version_notes:
       short: "CUT TO 60: no break; or a short stretch."
@@ -1173,7 +1176,7 @@ slides:
     version_notes:
       short: "CUT TO 60: one sentence: 'Keep every receipt; the tracker on our site helps.' Skip."
 
-  # pptx 44. The committee meeting's time, Zoom ID and passcode come from the site (config/site.yml → meeting). In
+  # pptx 44. The committee meeting's time and Google Meet link come from the site (config/site.yml → meeting). In
   # the 60-minute version the next slide ("Coming up") is left out; its one sentence is in this slide's version note,
   # with the next assembly from the site's events ({live:assembly_next}).
   - id: "district-and-area"
@@ -1188,8 +1191,9 @@ slides:
       - heading: "The Area committee"
         items:
           - "3rd Wednesday, {live:meeting_time}"
-          - "Zoom {live:meeting_zoom_id}"
-          - "Passcode: {live:meeting_passcode}"
+          - "Google Meet: {live:meeting_link}"
+          - "A guest speaker each month"
+          - "1st Wednesday: our Grapevine Meeting, online"
           - "Every AA member welcome"
       - heading: "Workshops and tables"
         items:
@@ -1200,9 +1204,9 @@ slides:
     version_minutes: { short: 2 }
     notes: |
       SAY: Here's how to stay connected. In your district, ask your DCM how Grapevine and La Viña news reaches the district meeting. If your district takes a GV/LV report, the ready-made report on our Monthly toolkit does most of the work: choose the sections your district wants, add one thing your group did, and read it in two minutes. If your district would like a writing workshop or an information workshop, plan it with your DCM; our committee is glad to help.
-      SAY: Our Area committee meets every third Wednesday, {live:meeting_time}, on Zoom. The meeting ID and passcode are on the slide and on our website. Every AA member is welcome, no registration needed. We open with a moment of silence, hear from districts and groups, share Grapevine and La Viña news, plan workshops and tables, and close on time with the Responsibility Statement.
+      SAY: Our Area committee meets every third Wednesday, {live:meeting_time}, on Google Meet. The link is on the slide and on our website. Every AA member is welcome, no registration needed. We open with a moment of silence and, from January 2027, a guest speaker until 7:30; then we hear from districts and groups, share Grapevine and La Viña news, plan workshops and tables, and close on time with the Responsibility Statement. On the first Wednesday, on the same link, we also hold the Grapevine Meeting, an online AA meeting in English: a story from Grapevine, then sharing on its topic.
       SAY: And we keep a Grapevine and La Viña table at Area assemblies and at CityWide Dallas on the second Saturday of each month. Volunteers are always welcome; it's a lovely, easy way to serve.
-      TIP: For callers without internet, Zoom's phone numbers are on our /accessibility/#phone page; the committee meeting needs a numbers-only phone passcode, which the chair can give you.
+      TIP: The committee meeting is on Google Meet, which has no number to call for it; members without internet can still join the weekly open meetings by phone (our /accessibility/#phone page).
       SOURCE: the committee website ({live:site}/meetings/ and /events/); neta65.org/trusted-servants/grapevine-la-vina; Panel 75 committee reports.
     version_notes:
       short: "CUT TO 60: keep. 'Coming up' (the next slide) is left out of this version: mention the next assembly in one sentence. The next assembly: {live:assembly_next}."
@@ -1220,13 +1224,13 @@ slides:
     title: "Coming up"
     # (the booth's hours written as the committee meeting's time is, kept on one line by no-break spaces,  ,
     # and a word joiner, U+2060, after the dash: a line may still break after an en dash before a no-break space)
-    intro: "Every 3rd Wednesday: Area GV/LV committee on Zoom, {live:meeting_time} · Every 2nd Saturday: GV/LV booth at CityWide Dallas, 5:00 –⁠ 8:00 PM"
+    intro: "Every 1st Wednesday: our Grapevine Meeting · Every 3rd Wednesday: Area GV/LV committee, both on Google Meet, {live:meeting_time} · Every 2nd Saturday: GV/LV booth at CityWide Dallas, 5:30 –⁠ 7:30 PM"
     takeaway: "In your district: {fill:district_workshop}"
     minutes: 0.75
     notes: |
-      SAY: A few dates to keep in mind. Our committee meets every third Wednesday, and our booth is at CityWide Dallas every second Saturday from five to eight. The Area holds three assemblies a year. The next one: {live:assembly_next}. (Add any workshop coming up in the districts in the room.)
+      SAY: A few dates to keep in mind. Our Grapevine Meeting is on the first Wednesday, our committee meets every third Wednesday, both online, and our booth is at CityWide Dallas every second Saturday from 5:30 to 7:30. The Area holds three assemblies a year. The next one: {live:assembly_next}. (Add any workshop coming up in the districts in the room.)
       UPDATE BEFORE EACH WORKSHOP: the assemblies on this slide come by themselves from the committee's events page ({live:site}/events/), which also lists the Area's workshops. Check an assembly date that is still to be confirmed on neta65.org, and fill in a workshop in your district: {ui:customize} → {ui:your_details}.
-      TIP: CityWide Dallas meets at Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220 (a potluck at 5:30, the speaker at 7:00). Give the venue as an address only.
+      TIP: CityWide Dallas meets at Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220 (a potluck at 5:30, the speaker at 7:00). Give the venue as an address only.
       SOURCE: the committee's events page ({live:site}/events/), October 2026; neta65.org.
     version_notes:
       short: "CUT TO 60: skip; mention the next assembly in one sentence."
@@ -1378,7 +1382,7 @@ slides:
     accent: "vine"
     title: "Scenarios in small groups"
     steps:
-      - "Form groups of three or four (on Zoom: breakout rooms)"
+      - "Form groups of three or four (online: breakout rooms, where the platform has them)"
       - "Each group takes one scenario from the next two slides"
       - "What would you do? Which Tradition helps?"
       - "Choose someone to share back in one minute"
@@ -1400,7 +1404,7 @@ slides:
     notes: |
       {not:short} SAY: Let's practice with some real-life situations. In groups of three or four, take one scenario. Talk about what you would do, and which Tradition or principle helps. Pick someone to share back your answer in one minute. You'll have about four minutes in your groups.
       {only:short} SAY: Let's practice with a real-life situation or two, all together. I'll read a scenario; think about what you would do, and which Tradition or principle helps. Anyone can answer, in a sentence or two.
-      {not:short} DO: Show the next two slides first so everyone sees all six scenarios. Assign scenarios by letter (A to F), one per group; with more than six groups, repeat letters. On Zoom, put the six scenarios in the chat before opening breakout rooms of three or four for 4 minutes, with a 1-minute warning. In a room, groups can turn their chairs.
+      {not:short} DO: Show the next two slides first so everyone sees all six scenarios. Assign scenarios by letter (A to F), one per group; with more than six groups, repeat letters. Online, put the six scenarios in the chat before opening breakout rooms of three or four for 4 minutes, with a 1-minute warning; on a platform without breakout rooms (Google Meet on a personal account), take one or two scenarios as a whole room instead, as the 60-minute version does. In a room, groups can turn their chairs.
       {not:short} DO (share back, about 4 minutes): hear from three groups, a minute each, then go through the remaining scenarios yourself, using the possible answers in the notes of the scenario slides.
       {only:short} DO: Show the next slide, read scenario A or B aloud, and take two or three answers from the room or the chat. Then give the possible answer from that slide's notes.
       TIP: There's rarely one right answer. Steer toward the principles: the group decides, anonymity, attraction rather than promotion, self-support.
@@ -1568,7 +1572,7 @@ slides:
   - id: "thank-you"
     layout: "closing"
     title: "Thank you for your service"
-    message: "Our committee meets every 3rd Wednesday, {live:meeting_time}, on Zoom. Every AA member is welcome."
+    message: "Our committee meets every 3rd Wednesday, {live:meeting_time}, on Google Meet. Every AA member is welcome."
     lines: ["NETA 65 Grapevine & La Viña Committee", "{live:email}", "{live:site}"]
     minutes: 0.5
     notes: |
@@ -1602,7 +1606,7 @@ slides:
     notes: |
       This page is never projected: it's in {ui:customize} → {ui:prepare} (the ticks stay on this device). It's the checklist for whoever presents the workshop.
       FILL-INS: {ui:customize} → {ui:your_details} lists each one; one left empty shows on the slide as an orange [blank], and the player lists those before you present. The ‹blanks› in the two sample announcements are not fill-ins: they stay blank for the practice.
-      STAYS CURRENT BY ITSELF (from the committee website, rebuilt every day): the committee meeting's next date, time, Zoom ID and passcode; La Viña's next monthly workshop, its time and Zoom ID; the weekly open meetings' days, times and Zoom room; this month's issues and themes, the next story deadlines and both Books of the Month; the two story lines' numbers; the next assemblies; and the yearly prices, the ones in effect on the day you present (a price change AA Grapevine has announced switches in on its day). When the committee website has nothing to show for one of them (La Viña's themes not read yet, a Book of the Month between offers), the slide says where to look instead.
+      STAYS CURRENT BY ITSELF (from the committee website, rebuilt every day): the committee meeting's next date, time and Google Meet link; our Grapevine Meeting's next date; La Viña's next monthly workshop, its time and Zoom ID; the weekly open meetings' days, times and Zoom room; this month's issues and themes, the next story deadlines and both Books of the Month; the two story lines' numbers; the next assemblies; and the yearly prices, the ones in effect on the day you present (a price change AA Grapevine has announced switches in on its day). When the committee website has nothing to show for one of them (La Viña's themes not read yet, a Book of the Month between offers), the slide says where to look instead.
       WHERE TO CHECK: the committee website's Monthly toolkit (/monthly/) and Events (/events/); aagrapevine.org/contribute; aalavina.org/calendario-de-eventos; neta65.org for assembly dates. Prices: only AA Grapevine's yearly prices, on 'Helping a member subscribe'; for anything else, send people to the official stores or /shop/.
       ANONYMITY: this presentation is published on the committee's public website, notes included, and its PowerPoint copy in the committee's public Drive folder. Use service titles and the committee email only; no full names, faces, personal phone numbers or personal emails.
       CHECK EACH TIME: La Viña's monthly workshop, usually the 4th Thursday, {live:lv_workshop_time}; in November and December La Viña has held it the Thursday before Thanksgiving and Christmas (aalavina.org/calendario-de-eventos); the {lang:es}Reunión Abierta{/lang}'s day and time (aalavina.org); both story lines: call them yourself, and if one doesn't answer, give the email option only; the Summer and Fall 2027 assembly dates (neta65.org), which were tentative in October 2026.
