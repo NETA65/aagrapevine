@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-02T17:19:29Z",
+ "updated": "2026-11-03T05:50:11Z",
  "fixture": false,
  "items": [
   {
@@ -134,6 +134,179 @@
    ],
    "is_new": true,
    "wn_date": "2026-11-02T12:30:14Z"
+  },
+  {
+   "id": "ann:2026-11-02-free-shipping-through-december-31",
+   "source": "committee",
+   "kind": "announcement",
+   "url": "/bulletin/#2026-11-02-free-shipping-through-december-31",
+   "title": "Free shipping at the Grapevine and La Viña stores through December 31",
+   "summary": "From November 1 through December 31, 2026, AA Grapevine and La Viña offer free shipping on all products to U.S. and Canadian addresses. AA Grapevine says its offer can't be combined with any other offer. For your group. GVRs and RLVs: if anyone in your group orders Grapevine or La Viña books or gifts, a short mention at your group's business meeting lets everyone know. Both stores and what each…",
+   "lang": "en",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-03T05:49:48Z",
+   "image": null,
+   "tags": [
+    "shop",
+    "shipping",
+    "books"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "body_md": "From **November 1 through December 31, 2026**, AA Grapevine and La Viña offer **free shipping on all products** to U.S. and Canadian addresses.\n\nAA Grapevine says its offer can't be combined with any other offer.\n\n**For your group.** GVRs and RLVs: if anyone in your group orders Grapevine or La Viña books or gifts, a short mention at your group's business meeting lets everyone know.\n\n- Both stores and what each one says: [Shop — free shipping](/shop/#offers)\n- [Grapevine store](https://www.aagrapevine.org/store)\n- [La Viña store](https://www.aalavina.org/tienda) (in Spanish)",
+    "expires": "2026-12-31",
+    "pinned": true,
+    "slug": "2026-11-02-free-shipping-through-december-31",
+    "file": "content/bulletin/2026-11-02-free-shipping-through-december-31.md",
+    "link": null,
+    "own_i18n": {
+     "title": {
+      "es": "Envío gratis en las tiendas de La Viña y Grapevine hasta el 31 de diciembre"
+     },
+     "summary": {
+      "es": "Del 1 de noviembre al 31 de diciembre de 2026, La Viña y AA Grapevine ofrecen envío gratis en todos sus productos a EE. UU. y Canadá. Según AA Grapevine, su oferta no se puede combinar con ninguna otra. Para tu grupo. RLV y GVR: si en tu grupo alguien pide libros o regalos de La Viña o Grapevine, un breve aviso en la reunión de trabajo de tu grupo ayuda a que todos lo sepan. Las dos tiendas y lo…"
+     },
+     "body_md": {
+      "es": "Del **1 de noviembre al 31 de diciembre de 2026**, La Viña y AA Grapevine ofrecen **envío gratis en todos sus productos** a EE. UU. y Canadá.\n\nSegún AA Grapevine, su oferta no se puede combinar con ninguna otra.\n\n**Para tu grupo.** RLV y GVR: si en tu grupo alguien pide libros o regalos de La Viña o Grapevine, un breve aviso en la reunión de trabajo de tu grupo ayuda a que todos lo sepan.\n\n- Las dos tiendas y lo que dice cada una: [Tienda: envío gratis](/shop/#offers)\n- [Tienda de La Viña](https://www.aalavina.org/tienda)\n- [Tienda de Grapevine](https://www.aagrapevine.org/store) (en inglés)"
+     }
+    }
+   },
+   "i18n": {
+    "title": {
+     "en": "Free shipping at the Grapevine and La Viña stores through December 31",
+     "es": "Envío gratis en las tiendas de La Viña y Grapevine hasta el 31 de diciembre"
+    },
+    "summary": {
+     "en": "From November 1 through December 31, 2026, AA Grapevine and La Viña offer free shipping on all products to U.S. and Canadian addresses. AA Grapevine says its offer can't be combined with any other offer. For your group. GVRs and RLVs: if anyone in your group orders Grapevine or La Viña books or gifts, a short mention at your group's business meeting lets everyone know. Both stores and what each…",
+     "es": "Del 1 de noviembre al 31 de diciembre de 2026, La Viña y AA Grapevine ofrecen envío gratis en todos sus productos a EE. UU. y Canadá. Según AA Grapevine, su oferta no se puede combinar con ninguna otra. Para tu grupo. RLV y GVR: si en tu grupo alguien pide libros o regalos de La Viña o Grapevine, un breve aviso en la reunión de trabajo de tu grupo ayuda a que todos lo sepan. Las dos tiendas y lo…"
+    },
+    "body_md": {
+     "en": "From **November 1 through December 31, 2026**, AA Grapevine and La Viña offer **free shipping on all products** to U.S. and Canadian addresses.\n\nAA Grapevine says its offer can't be combined with any other offer.\n\n**For your group.** GVRs and RLVs: if anyone in your group orders Grapevine or La Viña books or gifts, a short mention at your group's business meeting lets everyone know.\n\n- Both stores and what each one says: [Shop — free shipping](/shop/#offers)\n- [Grapevine store](https://www.aagrapevine.org/store)\n- [La Viña store](https://www.aalavina.org/tienda) (in Spanish)",
+     "es": "Del **1 de noviembre al 31 de diciembre de 2026**, La Viña y AA Grapevine ofrecen **envío gratis en todos sus productos** a EE. UU. y Canadá.\n\nSegún AA Grapevine, su oferta no se puede combinar con ninguna otra.\n\n**Para tu grupo.** RLV y GVR: si en tu grupo alguien pide libros o regalos de La Viña o Grapevine, un breve aviso en la reunión de trabajo de tu grupo ayuda a que todos lo sepan.\n\n- Las dos tiendas y lo que dice cada una: [Tienda: envío gratis](/shop/#offers)\n- [Tienda de La Viña](https://www.aalavina.org/tienda)\n- [Tienda de Grapevine](https://www.aagrapevine.org/store) (en inglés)"
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-02T12:00:00Z"
+  },
+  {
+   "id": "drive:1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP/view",
+   "title": "Free shipping on all Grapevine products - banner",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-03T05:49:48Z",
+   "image": "https://lh3.googleusercontent.com/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP",
+    "mime": "image/jpeg",
+    "name": "Free shipping on all Grapevine products - banner.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP/view",
+    "preview_url": "https://drive.google.com/file/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "7:24 pm"
+   },
+   "i18n": {
+    "title": {
+     "en": "Free shipping on all Grapevine products - banner",
+     "es": "Envío gratis en todos los productos de Grapevine - banner"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-02T12:00:00Z"
+  },
+  {
+   "id": "drive:1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1/view",
+   "title": "Envíos gratuitos en todos los productos de La Viña - banner",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-03T05:49:48Z",
+   "image": "https://lh3.googleusercontent.com/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",
+    "mime": "image/jpeg",
+    "name": "Envíos gratuitos en todos los productos de La Viña - banner.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1/view",
+    "preview_url": "https://drive.google.com/file/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "7:24 pm"
+   },
+   "i18n": {
+    "title": {
+     "en": "Free shipping on all La Viña products - banner",
+     "es": "Envíos gratuitos en todos los productos de La Viña - banner"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-02T12:00:00Z"
   },
   {
    "id": "ig:DfPPvDnAWJ7",
@@ -8521,240 +8694,6 @@
     "issue_label": {
      "en": "November / December 2026",
      "es": "Noviembre / Diciembre 2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:un-alto-precio",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/un-alto-precio",
-   "title": "Un alto precio",
-   "summary": "La práctica diaria del programa le permite identificar aquello que obstaculiza su crecimiento",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p40-1260912781.jpg?itok=uFofDJEW",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Experiencia, Fortaleza y Esperanza",
-    "author": "Juan Manuel H.",
-    "author_location": "San José, Arizona",
-    "subtitle": "La práctica diaria del programa le permite identificar aquello que obstaculiza su crecimiento",
-    "teaser": "Me llamo Juan Manuel H. y soy un alcohólico. Por la gracia de Dios tengo algunas 24 horas limpio, sin alcohol ni consumir ninguna droga.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "San José",
-     "county": null,
-     "counties": [],
-     "state": "AZ",
-     "country": "US",
-     "label_en": "San José, Arizona",
-     "label_es": "San José, Arizona"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "A High Price",
-     "es": "Un alto precio"
-    },
-    "summary": {
-     "en": "The daily practice of the program allows you to identify what hinders your growth",
-     "es": "La práctica diaria del programa le permite identificar aquello que obstaculiza su crecimiento"
-    },
-    "section": {
-     "en": "Experience, Strength and Hope",
-     "es": "Experiencia, Fortaleza y Esperanza"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "San José, Arizona",
-     "es": "San José, Arizona"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:un-recorrido-divino",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/un-recorrido-divino",
-   "title": "Un recorrido divino",
-   "summary": "Sanar sus heridas en recuperación lo llevó hasta Vancouver, donde reafirmó, junto a miles de compañeros, que sí hay una solución",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p58-508795186.jpg?itok=_6KuH9-p",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Servicio",
-    "author": "Juan O.",
-    "author_location": "San Diego, California",
-    "subtitle": "Sanar sus heridas en recuperación lo llevó hasta Vancouver, donde reafirmó, junto a miles de compañeros, que sí hay una solución",
-    "teaser": "Buenas tardes compañeros, mi nombre es Juan O. y soy un alcohólico en recuperación. Llegué a AA el trece de agosto del 2008 a la edad de 30 años.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "San Diego",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "San Diego, California",
-     "label_es": "San Diego, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "A Divine Journey",
-     "es": "Un recorrido divino"
-    },
-    "summary": {
-     "en": "Healing his wounds in recovery led him to Vancouver, where he reaffirmed, together with thousands of colleagues, that there is a solution",
-     "es": "Sanar sus heridas en recuperación lo llevó hasta Vancouver, donde reafirmó, junto a miles de compañeros, que sí hay una solución"
-    },
-    "section": {
-     "en": "Service",
-     "es": "Servicio"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "San Diego, California",
-     "es": "San Diego, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:un-regalo-pendiente",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/un-regalo-pendiente",
-   "title": "Un regalo pendiente",
-   "summary": "Su familia necesitaba algo mucho más valioso: su presencia",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p44-858952136.jpg?itok=N3lccpfL",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Experiencia, Fortaleza y Esperanza",
-    "author": "Ricardo B.",
-    "author_location": "Pacoima, California",
-    "subtitle": "Su familia necesitaba algo mucho más valioso: su presencia",
-    "teaser": "Buenas tardes compañeros, hoy me encuentro en un taller de escritura local del área 93, distrito 4.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Pacoima",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Pacoima, California",
-     "label_es": "Pacoima, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "A Gift Pending",
-     "es": "Un regalo pendiente"
-    },
-    "summary": {
-     "en": "His family needed something much more valuable: his presence",
-     "es": "Su familia necesitaba algo mucho más valioso: su presencia"
-    },
-    "section": {
-     "en": "Experience, Strength and Hope",
-     "es": "Experiencia, Fortaleza y Esperanza"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Pacoima, California",
-     "es": "Pacoima, California"
     }
    },
    "machine": [

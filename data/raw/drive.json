@@ -1,11 +1,11 @@
 {
  "source": "drive",
- "updated": "2026-11-03T02:12:01Z",
- "attempted": "2026-11-03T02:12:01Z",
+ "updated": "2026-11-03T05:49:48Z",
+ "attempted": "2026-11-03T05:49:48Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 2,
   "removed": 0,
   "held": 0
  },
@@ -27,14 +27,14 @@
   "loose_skipped": 8,
   "skipped_panels": [],
   "folders": 11,
-  "files": 38,
-  "fetched": 38,
-  "new": 0,
+  "files": 40,
+  "fetched": 40,
+  "new": 2,
   "removed": 0,
   "kept_unverified": 0,
   "by_category": {
    "booth": 15,
-   "flyers": 12,
+   "flyers": 14,
    "slides": 4,
    "reports": 3,
    "notes": 2,
@@ -42,7 +42,7 @@
    "workshops": 1
   },
   "by_kind": {
-   "photo": 21,
+   "photo": 23,
    "document": 11,
    "slides": 4,
    "announcement": 1,
@@ -72,6 +72,100 @@
   }
  },
  "items": [
+  {
+   "id": "drive:1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1/view",
+   "title": "Envíos gratuitos en todos los productos de La Viña - banner",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-03T05:49:48Z",
+   "last_seen": "2026-11-03T05:49:48Z",
+   "image": "https://lh3.googleusercontent.com/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",
+    "mime": "image/jpeg",
+    "name": "Envíos gratuitos en todos los productos de La Viña - banner.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1/view",
+    "preview_url": "https://drive.google.com/file/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "7:24 pm"
+   }
+  },
+  {
+   "id": "drive:1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP/view",
+   "title": "Free shipping on all Grapevine products - banner",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-03T05:49:48Z",
+   "last_seen": "2026-11-03T05:49:48Z",
+   "image": "https://lh3.googleusercontent.com/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP",
+    "mime": "image/jpeg",
+    "name": "Free shipping on all Grapevine products - banner.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP/view",
+    "preview_url": "https://drive.google.com/file/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "7:24 pm"
+   }
+  },
   {
    "id": "drive:1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i",
    "source": "drive",
