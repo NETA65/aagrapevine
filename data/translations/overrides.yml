@@ -185,6 +185,9 @@
 # A workshop's flyer (a copy in the Drive folder flyers/, 2026-10-02): the group's name is its own, never translated
 # (the machine wrote "Grupo de propósito primario"); the La Viña flyers are in the Spanish → English part below.
 "Grapevine Writing Workshop - Primary Purpose Group, Arlington": { es: "Taller de Escritura de Grapevine - Primary Purpose Group, Arlington" }
+# The stores' free shipping banners (copies in the Drive folder flyers/, 2026-11-02; config/site.yml store_offers finds
+# them for /shop/#offers), written by hand: the Portfolio, What's New and the feeds list them by their file names.
+"Free shipping on all Grapevine products - banner": { es: "Envío gratis en todos los productos de Grapevine - banner" }
 # Grapevine's suggested topics (data/site/editorial.json, ed:gv:any:…: /contribute/#deadlines, the recorder's list,
 # Home, /monthly/, the district report, the search), as its /contribute page names them — its departments and what it
 # is "always in need of" (scripts/sync/editorial.py gv_suggested_topics) — written by hand 2026-10-16 in AA's
@@ -430,6 +433,8 @@
 # greeting cards, not "occasional cards"; Grapevine sells them as "Holiday Greeting Cards - 12 pack")
 "Taller Mensual y Virtual de La Viña - jueves, 3 p. m. (hora del Este), por Zoom": { en: "La Viña Monthly Virtual Workshop - Thursday, 3 PM Eastern, on Zoom" }
 "¡Tarjetas de ocasión para las fiestas! Paquete de 12 por $22 en La Viña": { en: "Holiday greeting cards! Pack of 12 for $22 at La Viña" }
+# …and La Viña's free shipping banner (Drive flyers/, 2026-11-02)
+"Envíos gratuitos en todos los productos de La Viña - banner": { en: "Free shipping on all La Viña products - banner" }
 # …the workshops' flyers (copies in the Drive folder flyers/, 2026-10-02 — content/events/README.md): a group's
 # name is its own and is never translated (the machine wrote "Group Only for Today", "Big Book, Tyler Group").
 # A new flyer copy whose name holds a group's name needs its line here too (its file name without the extension).

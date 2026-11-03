@@ -353,7 +353,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {% set vids = D.videos.items | homeVideos(5, ep, moreEps) %}
 {% set newestPdfs = D.pdfs.items | homeNewestPdfs(6) %}
 {% set posts = D.instagram.items | homeInstagram(6) %}
-{% set driveItems = D.drive.items | homeDrive(6) %}
+{#- a store offer's banners stay on /shop/#offers, beside its conditions (config/site.yml store_offers) -#}
+{% set driveItems = D.drive.items | homeDrive(6, site | shopOfferBanners(D.drive.items)) %}
 
 {#- =====================================================================
     4. THE BULLETIN — its latest posts, pinned first; left out when there are none. The first

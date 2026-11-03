@@ -389,6 +389,14 @@ folder today are undated on purpose: seven are attached to events like this (six
 `flyer_match:`); the others are found by other pages (the La Viña open meeting card on `/meetings/`, the
 "Share your story" flyer on `/contribute/`) or simply sit on the Portfolio.
 
+A store's **banner for an offer** (free shipping …) goes in `flyers` too, with a name without a date
+(`Free shipping on all Grapevine products - banner.jpg`, `Envíos gratuitos en todos los productos de La Viña -
+banner.jpg`): the offer's `banner_match` in `config/site.yml` → `store_offers:` finds it, and `/shop/#offers`
+shows it in that store's card ([settings.md](settings.md) §3.4b). Home's *Shared by the committee* leaves a
+banner a `store_offers:` block finds out (it belongs next to the offer's conditions); the Portfolio, What's New,
+the feeds and the digest list it like any flyer. After the offer, move the banners to the `private` folder (in
+`flyers` they would stay on the Portfolio).
+
 ### 5.1 Attach a flyer to a hand-written event (`flyer:`)
 
 1. Put the flyer in `2027-2028_Panel77_GVLV/flyers/` with a name **without a date**, for example

@@ -8,7 +8,8 @@ descKey: read.subs.meta_desc
 pageScripts: ["/assets/js/shop.js"]
 ---
 {#- SHOP — the ONE page for buying and subscribing. Order (docs: ui.njk): hero (+ the specialty items
-    teaser on its right) → page nav → Book of the Month + bulk discounts (db.shop — eleventy/filters/shop.js)
+    teaser on its right) → page nav → an offer the stores announced, in its days (#offers: free shipping … —
+    config/site.yml store_offers) → Book of the Month + bulk discounts (db.shop — eleventy/filters/shop.js)
     → the two magazines → subscription prices (with a price change AA Grapevine announced right above them:
     priceNotice, #price-changes — config/site.yml price_changes) → specialty items (cards, planner, calendar;
     the holiday cards in season) → Carry the Message (the one feature band, #carry: both programs' buttons,
@@ -33,6 +34,8 @@ pageScripts: ["/assets/js/shop.js"]
 {%- set specials = shop | shopSpecialty(lang) -%}
 {#- price changes AA Grapevine announced (config/site.yml price_changes → shop.json): the notices by the prices -#}
 {%- set pcs = shop | shopPriceChanges(lang) -%}
+{#- offers the stores announced (config/site.yml store_offers) not over yet, with their banners from the Drive -#}
+{%- set offers = site | shopOffers(lang, db.drive.items) -%}
 {#- "What it would cost" (#group-cost, in the home-group section; the volume tables link to it): the plans as numbers -#}
 {%- set cost = shop | shopCost(lang) -%}
 {#- one percent in the heading when every book has the same discount -#}
@@ -382,6 +385,45 @@ pageScripts: ["/assets/js/shop.js"]
   { href: "#catalogs", label: "shop.nav_catalogs" | t(lang), icon: "book-open" },
   { href: "#help", label: "shop.nav_help" | t(lang), icon: "phone" }
 ], lang) }}</div>
+
+{#- ---------- 0. AN OFFER THE STORES ANNOUNCED (config/site.yml store_offers → shop.js shopOffers) ----------
+    Free shipping and the like, right under the page nav while it runs: one section per offer (the first is
+    #offers, which Home's bulletin post and the monthly toolkit link), in its window (ui.when: written hidden
+    before its first day, gone by itself the day after its last — on a page left open or saved for offline use
+    too; after that the build leaves it out). Its title and days, then one card per store, the page language's
+    magazine first (two side by side from 1024px): the store's own banner from the committee's Drive (flyers,
+    found by banner_match; without one, or when it can't load, the card simply has no picture) — a link to the store, its alt the
+    banner's words —, what the store says (the settings' words, nothing more), the button to the store; under
+    them the final-price line and where the offer was announced. Calm and informative, like the price notice:
+    no countdown, no "hurry", and nothing says it combines with the Book of the Month below. No chip in the page
+    nav (a chip cannot hide by date). pb-0: #botm keeps its own top padding, so the page reads the same with the
+    offer hidden. -#}
+{%- for o in offers %}
+{%- set oTitle -%}{% if o.titleLang != lang %}<span lang="{{ o.titleLang }}">{{ o.title }}</span>{% else %}{{ o.title }}{% endif %}{%- endset -%}
+{%- set oWhen -%}<span class="shop-offer-when">{% icon "calendar-days", "size-4 shrink-0" %}<span>{{ o.dates }}</span></span>{%- endset -%}
+<section id="{{ 'offers' if loop.first else ('offers-' ~ o.key) }}" class="shop-offers section container-page pt-10 sm:pt-12 pb-0" aria-labelledby="offer-{{ o.key }}-title"{{ ui.when(o.win) }}>
+  <div class="shop-offer">
+    {{ ui.sectionHead(oTitle | safe, oWhen, "", "", "truck", { eyebrow: "shop.offer_eyebrow" | t(lang), tone: "text-vine", id: "offer-" ~ o.key ~ "-title", lang: lang }) }}
+    <ul class="grid grid-cols-1 gap-5 {{ 'lg:grid-cols-2' if o.stores.length > 1 }}" role="list">
+      {% for s in o.stores %}
+      <li class="card flex flex-col overflow-hidden">
+        {%- if s.banner %}
+        {%- set art -%}<img src="{{ s.banner.src }}" alt="{{ s.alt }}"{% if s.alt and s.altLang != lang %} lang="{{ s.altLang }}"{% endif %} width="1920" height="770" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('.shop-offer-art').remove()">{%- endset %}
+        {% if s.href %}<a class="shop-offer-art" href="{{ s.href }}" target="_blank" rel="noopener">{{ art | safe }}<span class="sr-only">{{ " — " if s.alt }}{{ s.label }} ({{ "common.external" | t(lang) }})</span></a>
+        {% else %}<div class="shop-offer-art">{{ art | safe }}</div>{% endif %}
+        {%- endif %}
+        <div class="flex flex-1 flex-col p-5 sm:p-6">
+          <p><span class="{{ 'badge-lv' if s.isLv else 'badge-gv' }}"{% if s.isLv and lang != 'es' %} lang="es"{% endif %}>{% icon "grapes", "size-3" %} {{ s.name }}</span></p>
+          <p class="mt-3 text-[0.95rem] leading-relaxed text-ink"{% if s.textLang != lang %} lang="{{ s.textLang }}"{% endif %}>{{ s.text }}</p>
+          {% if s.href %}<p class="mt-auto pt-5"><a class="{{ 'btn-lv' if s.isLv else 'btn-primary' }}" href="{{ s.href }}" target="_blank" rel="noopener">{% icon "store", "size-4" %} {{ s.label }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span> {% icon "external-link", "size-4" %}</a></p>{% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    <p class="mt-4 text-xs leading-relaxed text-muted">{{ "shop.final_price" | t(lang) }}{% if o.source %} {{ "shop.pc_source" | t(lang) }} <span{% if o.sourceLang != lang %} lang="{{ o.sourceLang }}"{% endif %}>{{ o.source }}</span>.{% endif %}</p>
+  </div>
+</section>
+{%- endfor %}
 
 {#- ---------- 1. BOOK OF THE MONTH (db.shop.botm) + gift ideas + bulk-book discounts ----------
     Both books (page-language magazine first), each with its own price, dates and store link. The two

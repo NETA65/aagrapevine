@@ -645,9 +645,11 @@ export default function (eleventyConfig, helpers) {
     return out.sort(byNewest);
   });
 
-  /* Committee Drive uploads (documents/photos/slides…), newest first. */
-  eleventyConfig.addFilter("homeDrive", (items, n = 6) => arr(items)
-    .filter((i) => alive(i) && i.kind !== "event" && i.kind !== "announcement" && !(i.extra && i.extra.form_closed))
+  /* Committee Drive uploads (documents/photos/slides…), newest first; `skip`: ids left out (a store offer's banners:
+     shop.js shopOfferBanners — they belong next to the offer's conditions on /shop/#offers). */
+  eleventyConfig.addFilter("homeDrive", (items, n = 6, skip = []) => arr(items)
+    .filter((i) => alive(i) && i.kind !== "event" && i.kind !== "announcement" && !(i.extra && i.extra.form_closed)
+      && !arr(skip).includes(i.id))
     .sort((a, b) => time(b.date || b.first_seen) - time(a.date || a.first_seen))
     .slice(0, n));
 

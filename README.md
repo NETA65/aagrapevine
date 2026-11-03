@@ -42,7 +42,9 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   (tarjetas de ocasión, agenda de bolsillo, calendario de pared y, en temporada, las tarjetas para las
   fiestas), leídos cada semana. Cuando AA Grapevine anuncia **nuevos precios**, un bloque en `config/site.yml`
   (`price_changes:`) los avisa desde el día del anuncio y los pone solos en su día (sección
-  [When Grapevine announces new prices](#when-grapevine-announces-new-prices)). En **Suscribe a tu grupo base**,
+  [When Grapevine announces new prices](#when-grapevine-announces-new-prices)). Una **oferta de las tiendas** (el
+  envío gratis del 1 de noviembre al 31 de diciembre de 2026) va en `config/site.yml` (`store_offers:`) y se ve
+  arriba en la Tienda (`/es/shop/#offers`) solo durante sus días. En **Suscribe a tu grupo base**,
   la tarjeta **Lo que costaría** (`/es/shop/#group-cost`) calcula lo que costaría una suscripción del grupo
   (revista, formato, duración y número de ejemplares, con los precios por cantidad) e imprime una **hoja
   informativa** de una página para la conciencia de grupo (en inglés, en español o bilingüe). Para quien quiere
@@ -295,6 +297,13 @@ the old `/subscribe/` address redirects there, #anchors included).
 
 What the newer pages do:
 
+- **An offer from the stores** (`/shop/#offers`, since November 2026): while AA Grapevine and La Viña run an offer
+  — free shipping on all products to U.S. and Canadian addresses, November 1 – December 31, 2026 — it shows right
+  under the Shop's menu: its days, one card per store (La Viña's first on `/es/shop/`) with the store's own banner
+  from the Drive `flyers` folder, what that store says (Grapevine's offer can't be combined with any other) and a
+  button to the store. The monthly toolkit names it in the months it runs (*Keep up all month* and the month's
+  message). It is written in `config/site.yml` → `store_offers:` (the stores' pages can't be read for it) and
+  leaves by itself the day after its last day: [settings.md §3.4b](how-to/settings.md#34b-store_offers--offers-the-stores-announce).
 - **Book of the Month** (`/shop/#botm`): both magazines' books of the month with cover, percent off, sale and
   regular price, the offer's dates and a live "N days left" count; the heading and buttons switch to
   "Offer ended" by themselves on the last day, even before the next update. The home page shows a small teaser.
@@ -519,6 +528,21 @@ breaks while you decide.
   online **and** with the order form; "The store will list the new volume prices"; that AA Grapevine's letter
   names no new price for the 2- and 3-year, Complete and 1-month plans; the Spanish labels ("Lo que costaría",
   "Duración", "Hoja informativa"); U.S. prices only.
+- **Free shipping (November 2026):** the Shop's *Offer from the official stores* (`/shop/#offers`, `/es/shop/#offers`),
+  its line in the monthly toolkit, and the pinned bulletin post *Free shipping at the Grapevine and La Viña stores
+  through December 31*. The facts are those of AA Grapevine's and La Viña's e-mails of November 2 and the two
+  stores' banners: free shipping on all products, November 1 – December 31, 2026, to U.S. and Canadian addresses
+  only, and (Grapevine's only) not combined with any other offer — nothing about a promo code, a minimum order,
+  subscriptions or an end hour. Please read the words in both languages (`config/site.yml` → `store_offers:` and
+  `content/bulletin/2026-11-02-free-shipping-through-december-31.md`): "Envío gratis" (La Viña's banner says
+  "Envíos gratuitos"), "banner" in Spanish, and the line for GVRs and RLVs. The two banners show on the Shop once
+  the next Drive refresh reads them; Home's *Shared by the committee* leaves them out (there a banner would stand
+  alone, cropped, without the U.S./Canada condition), but like any file in Drive `flyers` they are also listed on
+  the Portfolio, on What's New, in the feeds and in the December 1 digest, as their picture and file name only
+  (La Viña's banner says "Noviembre 1˚ - December 31"); the pinned post with the conditions sits beside them until
+  December 31 — say if they should be on the Shop only. **After December 31**, move both banners from Drive
+  `flyers` to `private` (the Shop section, the toolkit's line and the post leave by themselves, the banners do
+  not; the `store_offers:` block may then be deleted).
 - **What's New:** the words ("New since your last visit", "New for you", "Mark all as read", "Forget my last
   visit"), the 30-minute "visit" rule, and the green label.
 - **Agenda & minutes (committee meeting deck):** the reminder's Spanish paragraph ("La reunión es en inglés" —

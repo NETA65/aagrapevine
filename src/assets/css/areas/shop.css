@@ -458,3 +458,23 @@
   html[data-shop-print] .shop-sheet-date { display: flex; align-items: flex-end; gap: 6pt; max-width: 55%; margin-top: 12pt; }
   html[data-shop-print] .shop-sheet-date > .shop-sheet-line { flex: 1; height: 16pt; }
 }
+
+/* ---------- An offer the stores announced (shop.njk #offers; config/site.yml store_offers) ----------
+   Right under the page nav while it runs: a calm panel in the vine tint — the soft green the site uses for good
+   news (badge-vine), never an alert — with the offer's days under its title and one card per store: the store's
+   own banner (1920 × 770: width / height keep its space while it loads, and it is never cropped), its words and the
+   button to the store. Outside its days the section is hidden (ui.when → app.js GV.expire); the hidden attribute
+   stays stronger than any display rule here. */
+.shop-offers[hidden] { display: none !important; }
+.shop-offer {
+  border: 1px solid color-mix(in srgb, var(--c-vine) 26%, var(--c-line)); border-radius: 1.75rem; padding: 1.25rem 1rem 1rem;
+  background: color-mix(in srgb, var(--c-vine-soft) 60%, var(--c-surface));
+}
+@media (width >= 40rem) { .shop-offer { padding: 2rem; } }
+@media (width >= 80rem) { .shop-offer { padding: 2.5rem; } }
+/* the days, right under the title: a line of its own, in ink (with the year, which the stores' banners leave out) */
+.shop-offer-when { display: flex; align-items: flex-start; gap: 0.5rem; font-weight: 600; color: var(--c-ink); }
+.shop-offer-when > .icon { margin-top: 0.2rem; color: var(--c-vine); }
+.shop-offer-art { display: block; border-bottom: 1px solid var(--c-line); background: var(--c-surface-2); }
+.shop-offer-art img { display: block; width: 100%; height: auto; aspect-ratio: 1920 / 770; object-fit: contain; }
+a.shop-offer-art:hover img { opacity: 0.92; }

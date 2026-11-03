@@ -244,7 +244,7 @@ section 10.4). "CSS area" says which file holds the page's own styles.
 | Listen `/listen/` | `listen.njk` | `listen` | `db.episodes`, `db.weekly_open`, `site.listen`, `db.videos` (La Viña's spoken stories, `#la-vina-audio`: filter `mediaSpanishStories`, macro `lvCard`) | `lite-yt-embed.js`, `media.js` (style `lite-yt-embed.css`) | `media.css` |
 | Watch `/watch/` | `watch.njk` | `watch` | `db.videos`, `site.watch` | `lite-yt-embed.js`, `media.js` (style `lite-yt-embed.css`) | `media.css` |
 | Library `/library/` | `library.njk` | `library` | `db.pdfs` + `db.drive` (filter `libDocs`) | `minisearch.js`, `search.js`, `library.js` | `library.css` |
-| Shop `/shop/` | `shop.njk` | `shop` | `db.shop` (also `shop \| shopCost(lang)` → `#shop-cost-data`, the *What it would cost* card `#group-cost`), `db.pdfs`, `db.articles`, `db.drive` | `shop.js` | `read.css` + `shop.css` |
+| Shop `/shop/` | `shop.njk` | `shop` | `db.shop` (also `shop \| shopCost(lang)` → `#shop-cost-data`, the *What it would cost* card `#group-cost`), `site.store_offers` (`site \| shopOffers(lang, db.drive.items)`: an offer of the stores, `#offers`, with their banners from Drive `flyers`), `db.pdfs`, `db.articles`, `db.drive` | `shop.js` | `read.css` + `shop.css` |
 | GVR / RLV corner `/gvr/` | `gvr.njk` | `gvr` | `db.pdfs`, Library collections, this month (`mpMonths`), `meeting`, `orientation`, `booth` (the question of the day: `macros/question.njk`, filter `boothDaily`), `site.about_videos` + `db.videos` (About's two videos, compact, beside the question: filter `readAboutVideos`, macro `media.magVideo` with `compact`), `site.links` (*Pass it on*, `#pass-it-on`: the registration links and `gvr_office_email` / `rlv_office_email`) | `lite-yt-embed.js`, `read.js` (style `lite-yt-embed.css`) | `read.css` |
 | GVR / RLV 101 `/orientation/` | `orientation.njk` | `orientation` | `orientation` (config/orientation.yml), `presentations` (config/presentations/), `db.drive` | `orientation.js`, `presentations-core.js`, `presentations.js` | `orientation.css` + `presentations.css` (own sheets) |
 | One session `/orientation/<id>/` (6 today) | `orientation-lesson.njk` | `orientation` | one lesson of `orientation` | `orientation.js` | `orientation.css` (own sheet) |
@@ -302,7 +302,7 @@ search for its heading id.
 | `events-title` | Upcoming events | Up to 4 coming events: the next date of each monthly series the committee holds, then the soonest one-off events (the very next committee meeting is left out: the hero shows it) | `homeEvents`, `homeEventInfo` |
 | `lib-title` | Every Grapevine & La Viña document, in one place | The 6 newest documents, a search box, collection chips | `homeNewestPdfs`, `homeLibChips` |
 | `ig-title` | A daily dose of the message | The 6 newest Instagram posts | `homeInstagram` |
-| `drive-title` | Shared by the committee | The 6 newest committee Drive files | `homeDrive` |
+| `drive-title` | Shared by the committee | The 6 newest committee Drive files (not a store offer's banners) | `homeDrive`, `shopOfferBanners` |
 | (no heading, just before `svc-title`) | *New to AA?* | One line (since October 2026): "AA's own sites list the AA meetings near you, in English and in Spanish. First steps →", to `/meetings/#new-to-aa` | macro `ui.newcomerLine` |
 | `svc-title` | Carry the message to your group | The band for GVRs, RLVs and districts | the list `svcLinks` in `index.njk` |
 
@@ -664,7 +664,7 @@ site's zone imports `TZ` from `eleventy.config.js` (and the zone math from `elev
 | `published.js` | `/published/` (the recent stories and the Texas writers archive), `/published/texas-archive.json`, a search tile, the home page's archive line | `pwView`, `pwArchive`, `pwArchiveTotals`, `pwStrings`, `pwArcStrings`, `pwNorm`, `pwJson`, `pwNum` |
 | `read.js` | `/read/`, `/contribute/`, `/shop/`, `/gvr/`, `/about/` | `readIssues`, `readArchive`, `readEditorial`, `readCatalogs`, `readForms`, `readPdfsMatching`, `readRecTopics` (`recorderTopics`: the story recorder's "What will you talk about?" list, items `{i, t, l, g, m, d, dated}`) |
 | `report.js` | `/monthly/#report` | `rpModel`, `rpJson`, `rpUi`, `rpArea` (`areaModel`: the Area report's dated pieces → `#rp-area`; `areaOurs`: which events are "ours") |
-| `shop.js` | `/shop/`, home, `/tracker/`, month pages, GVR / RLV 101 examples | `shopBotm`, `shopSubs`, `shopBulk`, `shopSpecialty`, `shopPriceChanges`, `shopMoney`, `shopCost` (*What it would cost*: the U.S. plans, their volume tiers and an announced price change → `#shop-cost-data`) |
+| `shop.js` | `/shop/`, home, `/tracker/`, month pages, GVR / RLV 101 examples | `shopBotm`, `shopSubs`, `shopBulk`, `shopSpecialty`, `shopPriceChanges`, `shopMoney`, `shopCost` (*What it would cost*: the U.S. plans, their volume tiers and an announced price change → `#shop-cost-data`), `shopOffers` (since November 2026: the offers of `config/site.yml` `store_offers` not over yet, each in its window — `/shop/#offers` and the month pages' *Keep up all month*) |
 
 `eleventy/script-json.js` (`scriptJson`) is the one safe way to put data inside a `<script>` tag: it
 escapes `<`, `>` and `&` so no text can end the script early. In a template it is the filter
@@ -734,7 +734,8 @@ Each file's name is a variable in every template. Eleventy runs each file once p
 > `library` are not passed (the sync reads them instead), nor `booth` (`src/_data/booth.js` reads it from the
 > file itself). `meetings` and `spotlight` were missing too until October 2026: `/meetings/` then showed an empty
 > list of offices when `data/site/meetings.json` was missing, and the home page's `site.spotlight.home_days` was
-> always empty. Recipe [12.6](#126-read-a-new-setting-from-configsiteyml).
+> always empty. `store_offers` is passed too, since November 2026 (`/shop/#offers` and the month pages read it:
+> `shopOffers` and `shopOfferIn` in `eleventy/filters/shop.js`; Home's `shopOfferBanners`). Recipe [12.6](#126-read-a-new-setting-from-configsiteyml).
 
 > **Note:** `src/_data/db.js` writes the links it had to repair or hide to the build log
 > (`[links] …`, at most 25 lines) and every one of them to `db.status.link_problems`. No page shows
