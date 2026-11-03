@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-03T05:50:12Z",
- "updated": "2026-11-03T05:50:12Z",
+ "generated": "2026-11-03T11:03:02Z",
+ "updated": "2026-11-03T11:03:02Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-03T05:49:48Z",
-   "attempted": "2026-11-03T05:49:48Z",
+   "updated": "2026-11-03T11:02:41Z",
+   "attempted": "2026-11-03T11:02:41Z",
    "count": 40,
    "new_7d": 3,
    "error": null,
@@ -33,7 +33,7 @@
     "folders": 11,
     "files": 40,
     "fetched": 40,
-    "new": 2,
+    "new": 0,
     "removed": 0,
     "kept_unverified": 0,
     "by_category": {
@@ -76,7 +76,7 @@
     }
    },
    "changes": {
-    "added": 2,
+    "added": 0,
     "removed": 0,
     "held": 0
    },
@@ -87,20 +87,20 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-03T05:49:48Z",
-   "attempted": "2026-11-03T05:49:48Z",
+   "updated": "2026-11-03T11:02:41Z",
+   "attempted": "2026-11-03T11:02:41Z",
    "count": 3,
    "new_7d": 1,
    "error": null,
    "stats": {
     "files": 3,
-    "new": 1,
+    "new": 0,
     "problems": 0,
     "errors": [],
     "active": 2
    },
    "changes": {
-    "added": 1,
+    "added": 0,
     "removed": 0,
     "held": 0
    },
@@ -111,10 +111,10 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-03T05:49:48Z",
-   "attempted": "2026-11-03T05:49:48Z",
+   "updated": "2026-11-03T11:02:41Z",
+   "attempted": "2026-11-03T11:02:41Z",
    "count": 17,
-   "new_7d": 2,
+   "new_7d": 0,
    "error": null,
    "stats": {
     "files": 17,
@@ -166,8 +166,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-03T05:49:54Z",
-   "attempted": "2026-11-03T05:49:54Z",
+   "updated": "2026-11-03T11:03:02Z",
+   "attempted": "2026-11-03T11:03:02Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -322,8 +322,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-03T05:49:51Z",
-   "attempted": "2026-11-03T05:49:51Z",
+   "updated": "2026-11-03T11:02:59Z",
+   "attempted": "2026-11-03T11:02:59Z",
    "count": 307,
    "new_7d": 2,
    "error": null,
@@ -350,7 +350,7 @@
     "gone_checks": 0,
     "discovery_checked": "2026-10-30T14:19:13Z",
     "discovered_feeds": [],
-    "seconds": 2.2,
+    "seconds": 2.4,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -560,8 +560,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-03T05:50:10Z",
-   "attempted": "2026-11-03T05:50:10Z",
+   "updated": "2026-11-03T11:02:56Z",
+   "attempted": "2026-11-03T11:02:56Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -569,12 +569,12 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-11-02",
-    "new": 0
+    "today": "2026-11-03",
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -591,6 +591,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-11-03",
+    "goal_at": "2026-11-03T11:30:00Z",
+    "gv": "2026-11-03T11:02:46Z",
+    "lv": "2026-11-03T11:02:56Z"
+   },
    {
     "day": "2026-11-02",
     "goal_at": "2026-11-02T11:30:00Z",
@@ -626,12 +632,6 @@
     "goal_at": "2026-10-28T10:30:00Z",
     "gv": "2026-10-28T06:55:38Z",
     "lv": "2026-10-28T06:55:48Z"
-   },
-   {
-    "day": "2026-10-27",
-    "goal_at": "2026-10-27T10:30:00Z",
-    "gv": "2026-10-27T06:15:58Z",
-    "lv": "2026-10-27T06:16:08Z"
    }
   ]
  },
@@ -661,7 +661,7 @@
   "from_cache": 4153,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.2,
+  "seconds": 0.1,
   "model_seconds": 0.0,
   "texts_per_second": null,
   "glossary_entries": 260,
@@ -700,7 +700,7 @@
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
    "last_attempt": "2026-11-03T05:50:10Z",
-   "checked_this_run": true,
+   "checked_this_run": false,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,
@@ -709,7 +709,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-11-02",
+  "today": "2026-11-03",
   "home_days": 60,
   "list_days": [
    60,
