@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-02T17:12:38Z",
+ "updated": "2026-11-03T15:18:54Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16975,
-   "posts": 3982,
+   "followers": 16980,
+   "posts": 3984,
    "owner_id": "48108439509",
-   "checked": "2026-11-02T17:12:20Z",
+   "checked": "2026-11-03T15:18:36Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,186 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2424,
-   "posts": 3004,
+   "followers": 2425,
+   "posts": 3006,
    "owner_id": "48275839129",
-   "checked": "2026-11-02T17:12:23Z",
+   "checked": "2026-11-03T15:18:39Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfR4ptKl7A6",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfR4ptKl7A6/",
+   "title": "“The rewards of asking for help – increased humility, connection, and trust – are well…",
+   "summary": "“The rewards of asking for help – increased humility, connection, and trust – are well worth the effort.” “H-E-L-P,” Phoenix, Arizona, April 2011, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-03T12:30:15Z",
+   "first_seen": "2026-11-03T15:18:54Z",
+   "image": "/assets/cache/ig/DfR4ptKl7A6.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfR4ptKl7A6",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfR4ptKl7A6.webp",
+    "embed_url": "https://www.instagram.com/p/DfR4ptKl7A6/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfR4ptKl7A6/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The rewards of asking for help – increased humility, connection, and trust – are well…",
+     "es": "“Las recompensas de pedir ayuda – mayor humildad, conexión y confianza – están bien …"
+    },
+    "summary": {
+     "en": "“The rewards of asking for help – increased humility, connection, and trust – are well worth the effort.” “H-E-L-P,” Phoenix, Arizona, April 2011, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Las recompensas de pedir ayuda – aumento de la humildad, la conexión y la confianza – valen la pena el esfuerzo”. “H-E-L-P,” Phoenix, Arizona, abril de 2011, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfR4pn8lwha",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfR4pn8lwha/",
+   "title": "“Hallé el sosiego, el amor y el apoyo que necesitaba para rearmar las piezas de mi vida…",
+   "summary": "“Hallé el sosiego, el amor y el apoyo que necesitaba para rearmar las piezas de mi vida y, habiendo atravesado contratiempos, seguir adelante. No estoy solo en este trayecto”. \"“Nunca más solo” FLUSHING, NUEVA YORK, MARZO DE 1995 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-03T12:30:14Z",
+   "first_seen": "2026-11-03T15:18:54Z",
+   "image": "/assets/cache/ig/DfR4pn8lwha.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfR4pn8lwha",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfR4pn8lwha.webp",
+    "embed_url": "https://www.instagram.com/p/DfR4pn8lwha/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfR4pn8lwha/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I made the dream, the love and the support I needed to rearm the pieces of my life …",
+     "es": "“Hallé el sosiego, el amor y el apoyo que necesitaba para rearmar las piezas de mi vida…"
+    },
+    "summary": {
+     "en": "“I made the dream, the love and the support I needed to rearm the pieces of my life and, having gone through setbacks, go ahead. I'm not alone on this path.” \"Never more alone\" flushing, New York, March 1995 Best of the Grapevine, Volume III\" Daily Quote in www.aalavina.org",
+     "es": "“Hallé el sosiego, el amor y el apoyo que necesitaba para rearmar las piezas de mi vida y, habiendo atravesado contratiempos, seguir adelante. No estoy solo en este trayecto”. \"“Nunca más solo” FLUSHING, NUEVA YORK, MARZO DE 1995 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfQaE78AU9w",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfQaE78AU9w/",
+   "title": "Adi thinks Dolores needs some Grapevine time.",
+   "summary": "Adi thinks Dolores needs some Grapevine time.",
+   "lang": "en",
+   "date": "2026-11-02T22:45:56Z",
+   "first_seen": "2026-11-03T15:18:54Z",
+   "image": "/assets/cache/ig/DfQaE78AU9w.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfQaE78AU9w",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfQaE78AU9w.webp",
+    "embed_url": "https://www.instagram.com/p/DfQaE78AU9w/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfQaE78AU9w/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Adi thinks Dolores needs some Grapevine time.",
+     "es": "Adi cree que Dolores necesita tiempo Grapevine."
+    },
+    "summary": {
+     "en": "Adi thinks Dolores needs some Grapevine time.",
+     "es": "Adi cree que Dolores necesita tiempo Grapevine."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfQAjyIvqBJ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfQAjyIvqBJ/",
+   "title": "La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores.",
+   "summary": "La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información.",
+   "lang": "es",
+   "date": "2026-11-02T19:00:14Z",
+   "first_seen": "2026-11-03T15:18:54Z",
+   "image": "/assets/cache/ig/DfQAjyIvqBJ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfQAjyIvqBJ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DfQAjyIvqBJ.webp",
+    "embed_url": "https://www.instagram.com/p/DfQAjyIvqBJ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfQAjyIvqBJ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña will hold a virtual open meeting of AA with one coordinator and two speakers.",
+     "es": "La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores."
+    },
+    "summary": {
+     "en": "La Viña will hold a virtual open meeting of AA with one coordinator and two speakers. The poster will respect anonymity and will be available on the main platforms. Very soon more information.",
+     "es": "La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfPT2wZlz1i",
    "source": "instagram",
@@ -2258,7 +2430,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeuGtQiCc4j",
@@ -2301,7 +2473,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Detup87FzKQ",
@@ -2344,7 +2516,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Detup7GFy91",
@@ -2387,7 +2559,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Derh5O8l7Ms",
