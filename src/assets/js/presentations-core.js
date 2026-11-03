@@ -33,8 +33,9 @@
          last: 12, last_of: 48,                                       the last slide shown (for "Last shown …")
          seen: "<deck version>", seen_built: ISO,                     the deck file the state was last fitted to
          updated: ISO,
-         prev: null | { at: ISO, held: "YYYY-MM-DD", fill, checks } } } }   what "Start next month" (the chair's
-                                                                      paperwork) replaced, for its Undo
+         prev: null | { at: ISO, held: "YYYY-MM-DD", fill, checks,   what "Start next month" (the chair's
+                        preset? } } } }                               paperwork) replaced, for its Undo (preset: the
+                                                                      version it left, when it went back to the first)
    normState() makes any stored value safe to use (unknown or broken parts are dropped, never thrown on).
 
    THE CURRENT VERSION — current(deck, state, presetId, nowMs): every slide in the presenter's order with its edits
@@ -309,6 +310,7 @@
     if (isMap(raw.prev) && isStr(raw.prev.at) && raw.prev.at.length <= 40 && isFinite(ms(raw.prev.at))) {
       d.prev = { at: raw.prev.at, held: isStr(raw.prev.held) && YMD.test(raw.prev.held) ? raw.prev.held : "",
         fill: cleanFill(raw.prev.fill), checks: cleanChecks(raw.prev.checks) };
+      if (isStr(raw.prev.preset) && ID.test(raw.prev.preset)) d.prev.preset = raw.prev.preset;
     }
     if (isNum(raw.last) && raw.last >= 1) d.last = Math.floor(raw.last);
     if (isNum(raw.last_of) && raw.last_of >= 1) d.last_of = Math.floor(raw.last_of);
@@ -1627,9 +1629,12 @@
     // on a meeting night the agenda is already next month's
     var sp = row && isMap(row.speaker) && isStr(row.speaker.name) && row.speaker.name ? row.speaker : null;
     // …and none when the chosen version leaves out the guest speaker's slide (the speaker can't come: "No guest
-    // speaker"), whatever the site still lists: the texts then agree with the agenda's rows
+    // speaker"), whatever the site still lists: the texts then agree with the agenda's rows. The version decides
+    // (`base`), never the presenter's own slide switch. `leftOut`: the speaker the site lists, so the panel can
+    // say that this version leaves them out (a "No guest speaker" kept from a month that had none)
     var spSlide = cur && isStr(pw.speaker_slide) && pw.speaker_slide ? cur.byId[pw.speaker_slide] : null;
-    if (spSlide && !spSlide.shown) sp = null;
+    var leftOut = spSlide && !spSlide.base && sp ? sp.name : "";
+    if (spSlide && !spSlide.base) sp = null;
     var spText = function (k) { return sp && isStr(sp[k]) ? sp[k] : ""; };
     var live = Object.assign({}, cur ? cur.live : liveValues(deck.live, now), {
       speaker_name: spText("name") || EN.paper_tba, speaker_position: spText("position") || EN.paper_tba,
@@ -1698,6 +1703,7 @@
       text: blocks.map(function (b) { return b.text; }).join("\n\n"),
       blocks: blocks,
       meeting: row,
+      speakerLeftOut: leftOut,
     };
   }
 
@@ -1767,8 +1773,18 @@
     texts.forEach(function (text, i) { ds.fill[nm.old_business[i] + "_item"] = text.slice(0, LIMITS.fillText); });
     if (nm.minutes_month && plan.held && plan.held.month) ds.fill[nm.minutes_month] = plan.held.month;
     untick.forEach(function (id) { delete ds.checks[id]; });
+    // a version without the guest speaker ("No guest speaker", chosen for a month that had none) goes back to the
+    // first version when the next meeting has a speaker on the site's list and the first version shows their slide
+    var spId = isStr(deck.paperwork.speaker_slide) ? deck.paperwork.speaker_slide : "";
+    var spSrc = spId ? (deck.slides || []).filter(function (s) { return s.id === spId; })[0] : null;
+    var coming = paperMeetings(deck, ds, now).next;
+    var hasSpeaker = coming && isMap(coming.speaker) && isStr(coming.speaker.name) && coming.speaker.name;
+    if (spSrc && hasSpeaker && ds.preset && !inPreset(spSrc, presetOf(deck, ds.preset)) && inPreset(spSrc, presetOf(deck, ""))) {
+      before.preset = ds.preset;
+      ds.preset = "";
+    }
     ds.prev = before;
-    return { carried: texts.length, held: plan.held };
+    return { carried: texts.length, held: plan.held, version: isStr(before.preset) ? "reset" : "" };
   }
   /** Undo of "Start next month": the blanks and the ticks as they were before it (what was typed since is
    *  replaced). → whether there was something to undo. */
@@ -1779,6 +1795,7 @@
     var pw = paperOf(deck);
     var untick = pw && isMap(pw.next_month) && Array.isArray(pw.next_month.untick) ? pw.next_month.untick : [];
     ds.fill = copy(prev.fill || {});
+    if (isStr(prev.preset)) ds.preset = prev.preset;
     untick.forEach(function (id) {
       if (prev.checks && prev.checks[id]) ds.checks[id] = copy(prev.checks[id]);
       else delete ds.checks[id];

@@ -59,7 +59,7 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   de acceso ni número para llamar): la **reunión del comité** (tercer miércoles, de 7 a 8 p. m., hora del Centro;
   desde el 20 de enero de 2027 cada una empieza con la charla de un **orador invitado o una oradora invitada**,
   que termina a más tardar a las 7:30, y luego siguen los asuntos del comité) y la nueva **Reunión de Grapevine
-  (en línea)** (primer miércoles, de 7 a 8 p. m., desde el 2 de diciembre de 2026; en inglés: leemos una historia
+  (en inglés)** (primer miércoles, de 7 a 8 p. m., desde el 2 de diciembre de 2026; en inglés: leemos una historia
   de AA Grapevine y compartimos sobre su tema), en `/es/meetings/#grapevine-meeting`. Los oradores del año (nombre e inicial del
   apellido, servicio y tema) están en `config/site.yml` → `meeting:` → `speakers:`. La **reunión
   abierta semanal de La Viña** (jueves, en español) está en `/es/meetings/#weekly-open`. La página

@@ -327,7 +327,7 @@ A block with a mistake is left out (the rest still shows), and the run summary s
 (checked):
 - `date: "2027-01-21"` → *speaker “Bad D.”: 2027-01-21 is not the 3rd Wednesday of its month — left out (that
   month's meeting is 2027-01-20)*
-- `name: "Jeannie Smith"` → *speaker “Jeannie Smith” (2027-02-17): the name must be a first name and a last
+- `name: "Pat Example"` → *speaker “Pat Example” (2027-02-17): the name must be a first name and a last
   initial, like "Rick W." — left out*
 - a second block for a date → *speaker “Dup D.”: 2027-01-20 has a speaker already (“Ann B.”) — left out*
 - a skip date → *speaker “Greg G.”: 2027-03-17 is one of the skip_dates (no meeting that day) — left out*

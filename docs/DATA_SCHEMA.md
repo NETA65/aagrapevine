@@ -1290,6 +1290,7 @@ describes at `shapePaper` and `paperMeetings`; `deckJson` makes them all). Since
 `paperworkProblems`, names any mistake in it — also has a top-level `paperwork` (`shapePaper` + `paperMeetings`):
 ```json
 "paperwork": { "agenda_slide": "agenda",              // the agenda slide whose rows the agenda e-mail lists
+  "speaker_slide": "speaker-intro",                   // a version that leaves it out names no guest speaker
   "agenda": { "subject": "…", "body": "…" },          // also "reminder" and "minutes"; null when the checker refused one
   "next_month": { "actions": ["action_1", "…"], "old_business": ["old_1", "…"], "minutes_month": "minutes_month",
                   "clear": ["minutes_sent", "…"],       // every blank "Start next month" clears ("chair_*" written out;
@@ -1297,7 +1298,11 @@ describes at `shapePaper` and `paperMeetings`; `deckJson` makes them all). Since
                   "untick": ["week-before"] },          // the checklist pages it unticks
   "meetings": [ { "ymd": "2026-08-19", "start": "2026-08-20T00:00:00.000Z", "end": "2026-08-20T01:00:00.000Z",
                   "label": "Wednesday, August 19, 2026", "label_es": "miércoles, 19 de agosto de 2026",
-                  "month": "August 2026" } ],           // every meeting from the month two calendar months back
+                  "month": "August 2026",
+                  "speaker": { "name": "Rick W.", "position": "…", "topic": "…", "position_es": "…", "topic_es": "…" } } ],
+                                                        // speaker: that date's guest speaker (the Spanish ones fall
+                                                        // back to the English; left out on a date with none);
+                                                        // every meeting from the month two calendar months back
                                                         // (two already held, three once this month's has been:
                                                         // built Oct 25 → Aug 19, Sep 16, Oct 21) to 366 days ahead,
                                                         // at most 24 (committee.js meetingDates(meeting, 2, 13):

@@ -2869,6 +2869,14 @@
         var w = sec.appendChild(el("p", "gvp-warn gvp-warn--long"));
         w.textContent = T("pres.paper_minutes_started", { when: whenText(started.at) });
       }
+      // the site lists a guest speaker for this meeting, but the chosen version leaves the speaker out (a "No guest
+      // speaker" kept from a month that had none): the text names none, so say why and which version shows them
+      if (r.speakerLeftOut) {
+        var firstPr = (P.deck.presets || [])[0];
+        var sw = sec.appendChild(el("p", "gvp-warn gvp-warn--long"));
+        sw.textContent = T("pres.paper_speaker_left_out", { name: r.speakerLeftOut,
+          version: firstPr ? firstPr.label[LANG] || firstPr.label.en : "", customize: T("pres.customize_h"), tab: T("pres.tab_version") });
+      }
       sec.appendChild(paperBox(r, T(words.label)));
       var row = sec.appendChild(el("div", "gvp-ph-tools gvp-ph-tools--wrap"));
       var copyBtn = btn("gvp-pill gvp-pill--sm gvp-pill--primary", T("pres.paper_copy"), { icon: "copy" });
@@ -3029,7 +3037,10 @@
       if (!res) return;
       changed();
       var next = G.paperMeetings(P.deck, ds(), Date.now()).next;
-      var b = toast(TN("pres.paper_next_done", res.carried, { date: meetingName(next)[0] }), undoAction(snap));
+      var firstPr = (P.deck.presets || [])[0];
+      var msg = TN("pres.paper_next_done", res.carried, { date: meetingName(next)[0] });
+      if (res.version === "reset" && firstPr) msg += " " + T("pres.paper_next_version", { version: firstPr.label[LANG] || firstPr.label.en });
+      var b = toast(msg, undoAction(snap));
       if (b) b.focus();
     });
     acts.appendChild(go);

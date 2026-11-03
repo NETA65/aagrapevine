@@ -42,7 +42,7 @@ chair's monthly paperwork: the agenda e-mail, a reminder and the draft minutes, 
 | One card | `/orientation/#pres-information-workshop` | `/es/orientation/#pres-information-workshop` |
 | Open a deck straight away | `/orientation/?present=information-workshop` | `/es/orientation/?present=information-workshop` |
 | The file the player reads | `/orientation/presentations/information-workshop.json` (one file per deck, the same for both languages) | — |
-| "Present on the web" on each PowerPoint copy | `/portfolio/` (Slides tab) | `/es/portfolio/` |
+| "Present on the web" on each PowerPoint copy (none while the decks' `drive_title:` lines are comments, until the copies with the Google Meet details are on the Drive) | `/portfolio/` (Slides tab) | `/es/portfolio/` |
 
 More detail in [section 5](#5-where-it-shows-on-the-website).
 
@@ -1176,7 +1176,7 @@ document; its name is then "<short name> – <what> – <date>", such as
 "Information Workshop – Handout for participants – 2026-10-02". On paper nothing scrolls, so an over-long slide is
 printed smaller.
 
-Without JavaScript the page cannot print a deck; it offers the PowerPoint copies instead.
+Without JavaScript the page cannot print a deck; it offers the PowerPoint copies instead (while the decks' `drive_title:` lines are comments, it only says that printing needs JavaScript).
 
 ### 3.19 What presenters can change on their own device
 
@@ -1237,7 +1237,7 @@ changes … To keep them, save your version (Save & share)."
   their day), for as far ahead as the build knew. Past that, a fact says where to look ("see the Meetings page").
 - A copy built more than 14 days earlier gets a notice once per visit: "The dates in this copy are from
   October 2, 2026. Open this page online to bring them up to date."
-- Without JavaScript nothing plays; the cards offer the PowerPoint copies.
+- Without JavaScript nothing plays; the cards offer the PowerPoint copies (none while the decks' `drive_title:` lines are comments).
 
 ### 3.21 The JSON file
 
@@ -1321,7 +1321,10 @@ document, named with the meeting's date ("Monthly Committee Meeting – Draft mi
 A line whose details are all blank is left out, and so is a heading left with nothing under it ("Old business"
 with no items), so a text never shows empty orange blanks. The guest speaker's lines are left out for a meeting with
 no speaker listed (December 16, 2026), and in the version "No guest speaker" (a speaker who can't come: the texts
-then agree with that version's agenda, even before the website's list is changed). A detail left empty beside a
+then agree with that version's agenda, even before the website's list is changed). When the website lists a speaker
+for that meeting but the version leaves them out (a "No guest speaker" kept from December), the panel says so above
+the text, and "Start next month" goes back to "With a guest speaker" when the next meeting has one (its Undo too).
+A detail left empty beside a
 filled one shows in [brackets], so you notice it.
 
 **Start next month**, at the bottom of the tab, is pressed after the meeting, once the minutes are drafted. You
@@ -1364,7 +1367,7 @@ above `paperwork:` in the file sums up the rules below:
 | Field | What it is |
 |---|---|
 | `agenda_slide` | the id of the `agenda` slide whose rows `{paper:agenda}` lists (`"agenda"`) |
-| `speaker_slide` | the id of the guest speaker's first slide (`"speaker-intro"`): in a version that leaves it out ("No guest speaker", for a speaker who can't come) the texts name no speaker, whatever `meeting: speakers:` still says |
+| `speaker_slide` | the id of the guest speaker's first slide (`"speaker-intro"`): in a version that leaves it out ("No guest speaker", for a speaker who can't come) the texts name no speaker, whatever `meeting: speakers:` still says (the panel warns when the site lists one; "Start next month" goes back to the first version when the next meeting has a speaker) |
 | `agenda`, `reminder`, `minutes` | each `{ subject: "…", body: \| … }`: plain text, in English like the slides; the subject on one line |
 | `next_month` | what Start next month does: `actions` (rows of blanks named `<row>_what`, `_who`, `_when`), `old_business` (rows `<row>_item`, `_status`), `minutes_month` (the blank set to the month of the meeting held), `clear` (the blanks it clears; `chair_*` = every blank whose name starts with `chair_`; never a blank shared by every deck), `untick` (checklist pages it unticks) |
 
@@ -1472,7 +1475,7 @@ calendar, the weekly open meetings, the story lines), a change there shows up af
 | "How presenting works" | `/orientation/#presenting` | `/es/orientation/#presenting` | keys, presenter view, versions, details, privacy, saving, offline, reset |
 | The hero | the "Committee presentations" button and the "5 presentations" figure | "Presentaciones del comité" | — |
 | "A longer workshop?" | `/orientation/#facilitators` | `/es/orientation/#facilitators` | a card that names the orientation workshop's length (90 minutes, or 60) and links to its card |
-| Portfolio | `/portfolio/`, the PowerPoint copy's card | `/es/portfolio/` | "Present on the web" → `/orientation/?present=<id>`, with "A fixed copy: the web version stays current and can be customized." |
+| Portfolio | `/portfolio/`, the PowerPoint copy's card (none while the decks' `drive_title:` lines are comments) | `/es/portfolio/` | "Present on the web" → `/orientation/?present=<id>`, with "A fixed copy: the web version stays current and can be customized." |
 | The data file | `/orientation/presentations/<id>.json` | the same file | [3.21](#321-the-json-file) |
 | Offline | kept by "Save key pages for offline" | same | the five JSON files |
 

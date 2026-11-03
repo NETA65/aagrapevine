@@ -512,6 +512,37 @@ class NextMonth(unittest.TestCase):
         self.assertEqual(r["backChecks"], {"week-before": ["0", "5"]})
         self.assertIsNone(r["prev"])
 
+    def test_a_no_speaker_version_kept_into_a_month_with_a_speaker(self):
+        # "No guest speaker", chosen for a month without one, is still the version when the next meeting has one: the
+        # paperwork names none but says so; "Start next month" goes back to the first version (its Undo too); hiding
+        # only the speaker's slide by hand is no version, so the texts keep the listed speaker
+        r = deck_js(self, STATE_JS + """
+            const left = (p, hidden, at) => { const s2 = JSON.parse(JSON.stringify(st)); const d2 = s2.decks[D.id];
+              d2.preset = p; d2.hidden = hidden;
+              return plain(G.paperText(D, s2, G.current(D, s2, "", ms(at)), "agenda", ms(at))); };
+            const noSp = left("no-speaker", [], input.week);
+            const byHand = left("", ["speaker-intro"], input.week);
+            // after the October meeting (Rick W.): November lists Jeannie M.
+            ds.preset = "no-speaker";
+            const res = plain(G.startNextMonth(D, st, [], ms(input.after)));
+            const reset = ds.preset;
+            const stored = plain(G.normState(JSON.parse(JSON.stringify(st))).decks[D.id].prev);
+            G.undoNextMonth(D, st);
+            const undone = ds.preset;
+            // after the November meeting: December lists nobody, so the version stays
+            const s3 = JSON.parse(JSON.stringify(st)); s3.decks[D.id].preset = "no-speaker"; s3.decks[D.id].prev = null;
+            const res3 = plain(G.startNextMonth(D, s3, [], ms(input.nov_after)));
+            out({ noSp, byHand, res, reset, stored, undone, res3, kept: s3.decks[D.id].preset });""",
+            fill=FILL, week=WEEK_BEFORE, after=AFTER, nov_after=NOV_AFTER)
+        self.assertEqual(r["noSp"]["speakerLeftOut"], "Rick W.", "the panel can say the version leaves him out")
+        self.assertNotIn("Rick W.", r["noSp"]["text"])
+        self.assertEqual(r["byHand"]["speakerLeftOut"], "")
+        self.assertIn("Guest speaker: Rick W.", r["byHand"]["text"], "a slide hidden by hand is no version")
+        self.assertEqual((r["res"]["version"], r["reset"]), ("reset", ""), "back to the first version: November has a speaker")
+        self.assertEqual(r["stored"]["preset"], "no-speaker", "its Undo survives a reload")
+        self.assertEqual(r["undone"], "no-speaker")
+        self.assertEqual((r["res3"]["version"], r["kept"]), ("", "no-speaker"), "December lists nobody: the version stays")
+
     def test_during_the_meeting_the_agenda_moves_on_at_once(self):
         r = deck_js(self, STATE_JS + """
             const plan = G.nextMonthPlan(D, st, ms(input.during));
