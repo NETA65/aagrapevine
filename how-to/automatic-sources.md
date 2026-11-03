@@ -124,7 +124,7 @@ also the quick rebuild after you save a file, the midday and evening refreshes a
 | Price changes (`price_changes.py`) | Nothing online: your `price_changes:` block | `price_changes:` | Every build | `/shop/#price-changes` | — (mistakes show as a *Settings problem* in the run summary) |
 | Daily quote (`quote.py`) | The two magazines' home pages | `sources.<pub>.quote_page`, `site.morning_goal` | Every run (in the morning refresh, right after Drive and the bulletin) | home quote card | Daily quote |
 | Editorial themes (`editorial.py`) | Grapevine's editorial calendar and suggested topics, La Viña's suggested topics and yearly themes document | `sources.grapevine.contribute`, `sources.lavina.contribute`, `themes_page`, `themes_link` | Full + push | `/contribute/#deadlines`, home | Editorial themes & deadlines |
-| Weekly open meetings (`weekly_open.py`) | Grapevine's Weekly Open page; La Viña's from your settings | `sources.grapevine.weekly_open`, `lavina_weekly_open:` | Full + push | `/meetings/#weekly-open` | Grapevine Weekly Open meeting |
+| Weekly open meetings (`weekly_open.py`) | Grapevine's Weekly Open page; La Viña's from your settings | `sources.grapevine.weekly_open`, `lavina_weekly_open:` | Full + push | `/meetings/#weekly-open`, `/events/#ev-weekly` | Grapevine Weekly Open meeting |
 | Record your story (`audio_project.py`) | Grapevine's audio portal, La Viña's *Graba tu historia* pages | `sources.grapevine.audio_project`, `sources.lavina.record_*` | Full + push | `/contribute/#record` | Record your story by phone (Grapevine & La Viña) |
 | Grapevine meetings (`meetings.py`) | 8 intergroup / central office meeting lists | `meetings:` (and `spotlight.neta65_counties`, `data/geo/texas_places.json` for "our Area") | Full + push | `/meetings/#grapevine-meetings` | Grapevine meetings (our Area and nearby) |
 | Committee meeting (`meeting.py`) | Nothing online: your `meeting:` block | `meeting:` | Every build | `/meetings/#committee-meeting`, home, `/events/` | — (a wrong skip date shows as a *Settings problem* in the run summary) |
@@ -1339,7 +1339,9 @@ block (time, Zoom, `enabled: false` …) shows a few minutes after you save. `fl
 itself and follows at the quick rebuild in any case.
 
 **Where it shows.** `/meetings/#weekly-open` · `/es/meetings/#weekly-open` — the one place with the
-Zoom details, the page language's meeting first. One line on the home page, on `/listen/` and on
+Zoom details, the page language's meeting first, at the top of the page (right under *New to AA?*). A card
+each on `/events/#ev-weekly` (every week: the next date, How to join → `/meetings/#weekly-open`, Add to
+calendar — no Zoom details). One line on the home page, on `/listen/` and on
 `/watch/`; `/accessibility/#phone` and `/offline/` (joining by phone with these IDs); `/monthly/`
 posters; the GV/LV report; the presentations; search; the booth display ("Meetings you can join", with the Zoom
 meeting ID). Never "new".
@@ -1782,8 +1784,8 @@ More on runs, the Morning check and the run summary: [Automation and troubleshoo
 | `/shop/` · `/es/shop/` | `#botm`, `#bulk`, `#subscriptions`, `#price-changes`, `#specialty`, `#catalogs` (catalogs and order forms are Library documents), `#group-cost` (*What it would cost*: the U.S. plans and volume prices) |
 | `/contribute/` · `/es/contribute/` | `#deadlines` (editorial themes; `#deadlines-calendar`, the story deadlines calendar's card), `#record` (record your story: the story lines, and the story recorder's lengths, Grapevine's address, La Viña's permission sentence and its topic list), the writer kit (documents), published writers |
 | `/deadlines.ics` · `/es/deadlines.ics` | every open story deadline (editorial themes with a date), one reminder each |
-| `/meetings/` · `/es/meetings/` | `#committee-meeting`, `#grapevine-meetings`, `#weekly-open` |
-| `/events/` · `/es/events/`, `/events.ics` · `/es/events.ics` | the committee meeting dates; the GV/LV event calendars (see [Flyers and events](flyers-and-events.md)) |
+| `/meetings/` · `/es/meetings/` | `#weekly-open`, `#committee-meeting`, `#grapevine-meetings` (in the page's order) |
+| `/events/` · `/es/events/`, `/events.ics` · `/es/events.ics` | the committee meeting dates; the weekly open meetings (`/events/#ev-weekly` only); the GV/LV event calendars (see [Flyers and events](flyers-and-events.md)) |
 | `/about/#videos` | the `about_videos` cards (the same videos, compact, on `/gvr/#ideas`) |
 | `/about/#booth` (the booth display; its show is `/about/booth.json`, rebuilt with every deploy) | the next events and assembly, both daily quotes, the official channel's Shorts and short videos, the 6 newest Grapevine podcast episodes, the next story themes, the 1-year subscription prices, both Books of the Month, the meetings anyone can join (the committee meeting, the weekly open meetings, La Viña's workshop) — beside the committee's own slides. An item that says a word the booth never shows is left out (a list loses only that row) ([Booth display](booth.md)) |
 | `/accessibility/` | ASL videos, audio formats (shop), joining by phone (committee meeting and weekly open IDs), a link to record your story |

@@ -152,8 +152,12 @@ calendarFeed: "/events.ics"
       </label>
     </div>
     {#- the colour key: only the kinds on this page (committee meeting · Grapevine · La Viña · booth ·
-        assembly · other), each card's badge says its kind in words too -#}
-    {%- set kinds = upcoming | eventToneSet %}
+        assembly · other), each card's badge says its kind in words too — the "every week" cards below
+        (#ev-weekly: Grapevine's and La Viña's colours) count as well -#}
+    {%- set wos = db.weekly_open.items | cmWeeklyAll(lang) -%}
+    {%- set toneSrc = upcoming.concat([]) -%}
+    {%- for w in wos %}{% set _n = toneSrc.push({ host: "lv" if w.isLv else "gv" }) %}{% endfor -%}
+    {%- set kinds = toneSrc | eventToneSet %}
     {% if kinds | length > 1 %}
     <div class="ev-legend">
       <span class="ev-legend-label" id="ev-legend-label">{{ "committee.events.legend" | t(lang) }}</span>
@@ -202,10 +206,84 @@ calendarFeed: "/events.ics"
             <p class="cm-menu-note" data-cm-js>{{ "committee.cal.reminder_timed" | t(lang) }}</p>
           </div>
         </details>
-        <a href="{{ '/meetings/' | lurl(lang) }}" class="btn-on-dark btn-sm">{% icon "info", "size-4" %} {{ "committee.events.meeting_details" | t(lang) }}</a>
+        <a href="{{ '/meetings/' | lurl(lang) }}#committee-meeting" class="btn-on-dark btn-sm">{% icon "info", "size-4" %} {{ "committee.events.meeting_details" | t(lang) }}</a>
       </div>
     </div>
   </article>
+  {% endif %}
+
+  {#- ---------- Every week: the weekly open meetings, under the committee meeting ----------
+      AA Grapevine's Weekly Open (Wednesdays, in English) and La Viña's Reunión Abierta (Thursdays, in Spanish):
+      db.weekly_open.items | cmWeeklyAll, the page language's first — the meetings, dates and calendar files of
+      /meetings/#weekly-open, their one home. Not entries of events.json: a date every week would fill the months
+      below, the /events.ics feed, Home's "Upcoming events" and the monthly e-mail. Shown with "All" and the GV & LV
+      calendars; not an li[data-group], so the chips, "Showing N" and the month list never count it (without
+      JavaScript it shows). Each card, in its magazine's colour (ev-tone-gv / -lv, kindBadge's "Grapevine" /
+      "La Viña"): "Every week", its language, the title, the day and time (Central · the host's), the next date —
+      the /meetings/ cards' data-cm-weekly markup, so committee.js weekly() rolls it on, says "Live now" and adds the
+      visitor's own time; before La Viña's first meeting it says "Starts Thursday, November 5, 2026" —, then How to
+      join and Add to calendar (every week: Google's link and the .ics file of /meetings/; plain links, no JavaScript
+      needed). How to join leads to /meetings/#weekly-open: the Zoom ID and passcode are given there only (the Zoom
+      link alone would ask for the passcode). Phones: the two buttons side by side when both fit — the calendar menu
+      then opens to the left, so it stays on screen — else one under the other; from 640px one row. -#}
+  {#- (wos: set above, with the colour key) -#}
+  {% if wos | length %}
+  <section id="ev-weekly" class="mb-10" x-show="filter === 'all' || filter === 'calendar'" aria-labelledby="ev-weekly-title">
+    <h2 id="ev-weekly-title" class="cm-month-title">{{ "committee.weekly.section_title" | t(lang) }}</h2>
+    <p class="measure -mt-1.5 mb-4 text-sm leading-relaxed text-muted">{{ "committee.events.weekly_text" | t(lang) }}</p>
+    <ul class="grid gap-4" role="list">
+      {% for w in wos %}
+      {%- set key = "lv" if w.isLv else "gv" -%}
+      {%- set wTitle = w.title or ("committee.weekly.title" | t(lang)) -%}
+      <li>
+        <article class="card ev-accent ev-tone-{{ key }} p-4 sm:px-6 sm:py-5" aria-labelledby="ev-weekly-{{ key }}">
+          <div class="flex flex-wrap items-center gap-1.5">
+            {{ kindBadge({}, key) }}
+            <span class="badge-muted">{% icon "repeat", "size-3" %} {{ "committee.events.badge_weekly" | t(lang) }}</span>
+            <span class="badge-muted">{% icon "languages", "size-3" %} {{ ("committee.weekly.lang_" + w.lang) | t(lang) }}</span>
+          </div>
+          <h3 id="ev-weekly-{{ key }}" class="h-card mt-2 text-lg sm:text-xl">{{ wTitle }}</h3>
+          <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
+            {%- set whenParts = [w.day, w.timeCentral, w.hostTime] | select %}
+            {% if whenParts | length %}
+            <li class="inline-flex items-start gap-1.5">{% icon "clock-3", "mt-0.5 size-4 shrink-0 text-faint" %} <span class="min-w-0">{% for part in whenParts %}{% if not loop.first %} <span aria-hidden="true">·</span> {% endif %}{{ part }}{% endfor %}</span></li>
+            {% endif %}
+            <li class="inline-flex items-start gap-1.5">{% icon "video", "mt-0.5 size-4 shrink-0 text-faint" %} <span class="min-w-0">{{ "committee.events.online_on" | t(lang, { platform: "Zoom" }) }}</span></li>
+          </ul>
+          {% if w.next %}
+          <p class="mt-2.5 flex items-start gap-1.5 text-sm text-muted" data-cm-weekly="{{ w.next.iso }}" data-cm-weekly-tz="{{ w.next.tz }}"{% if w.next.at %} data-cm-weekly-at="{{ w.next.at }}"{% endif %}{% if w.starts %} data-cm-weekly-starts="{{ w.starts.iso }}"{% endif %} data-cm-weekly-len="60">
+            {% icon "calendar", "mt-0.5 size-4 shrink-0 text-faint" %}
+            <span class="min-w-0">
+              {%- if w.starts %}
+              <span class="font-semibold text-ink" data-cm-weekly-label data-next="{{ 'committee.weekly.next' | t(lang) }}" data-live="{{ 'committee.meeting.live_now' | t(lang) }}">{{ "committee.weekly.starts" | t(lang, { date: w.starts.date }) }}</span>
+              <span data-cm-weekly-date>· {{ w.starts.range }}</span>
+              {%- else %}
+              <span class="font-semibold text-ink" data-cm-weekly-label data-next="{{ 'committee.weekly.next' | t(lang) }}" data-live="{{ 'committee.meeting.live_now' | t(lang) }}">{{ "committee.weekly.next" | t(lang) }}</span>
+              <span data-cm-weekly-date>{{ w.next.date }} · {{ w.next.range }}</span>
+              {%- endif %}
+              <span class="block text-xs" data-cm-weekly-local data-tpl="{{ 'committee.meeting.your_time' | t(lang) }}" hidden></span>
+            </span>
+          </p>
+          {% endif %}
+          {%- set wc = w | cmWeeklyCal(site, lang) %}
+          <div class="mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(100%,9.5rem),1fr))] gap-2 sm:flex sm:flex-wrap">
+            <a class="btn-primary btn-sm" href="{{ '/meetings/#weekly-open' | lurl(lang) }}">{% icon "info", "size-4" %} {{ "media.wo_join" | t(lang) }}<span class="sr-only"> — {{ wTitle }}</span></a>
+            {% if wc %}
+            <details class="cm-menu">
+              <summary class="btn-secondary btn-sm w-full sm:w-auto" aria-label="{{ 'committee.weekly.cal_aria' | t(lang, { name: wTitle }) }}">{% icon "calendar-plus", "size-4" %} <span class="sm:hidden">{{ "committee.events.cal_short" | t(lang) }}</span><span class="max-sm:hidden">{{ "common.add_to_calendar" | t(lang) }}</span> {% icon "chevron-down", "size-4 opacity-70" %}</summary>
+              <div class="cm-menu-panel max-sm:right-0 max-sm:left-auto">
+                <a href="{{ wc.gcal }}" target="_blank" rel="noopener">{% icon "calendar", "size-4" %} Google Calendar<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+                <a href="{{ wc.ics }}" download="weekly-open-{{ wc.key }}.ics" type="text/calendar">{% icon "download", "size-4" %} {{ "committee.cal.ics_file" | t(lang) }}</a>
+                <p class="cm-menu-note">{{ "committee.cal.reminder_timed" | t(lang) }}</p>
+              </div>
+            </details>
+            {% endif %}
+          </div>
+        </article>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
   {% endif %}
 
   {#- ---------- Upcoming, grouped by month ---------- -#}

@@ -270,8 +270,8 @@ refresh (GitHub schedule)", "Evening refresh (GitHub schedule)", "Morning refres
 | **Instagram** (@alcoholicsanonymous_gv, @alcoholicosanonimos_lv) | Newest posts — see [section 9](#9-instagram-how-the-site-reads-it-please-read) | **Instagram** |
 | **Committee Google Drive** | Reports, notes, slides, workshops, forms, photo albums; dated flyers → events; docs in *bulletin* → bulletin posts | **Portfolio · Photos · Events · Bulletin** |
 | **Editorial calendar** (Grapevine), **yearly themes** (La Viña: the "Temas de LV" document on aalavina.org/recursos) and suggested topics (both: La Viña's *temas sugeridos*; the departments and "always in need of" topics Grapevine's /contribute page names) | Upcoming themes and story deadlines of both magazines, and the topics they take any time | **Contribute** (also the monthly toolkit, the district report, Home and the workshop presentations; the story recorder's topic list; the [story deadlines calendar](#calendar-files-story-deadlines-and-reminders), `/deadlines.ics`) |
-| **Grapevine Weekly Open meeting** (web page) | Current day, time and Zoom details | **Meetings** |
-| **La Viña's weekly open meeting** (from the settings, `lavina_weekly_open:` — an official La Viña flyer) | Thursdays in Spanish, first date, Zoom details | **Meetings** (one line on Home · Listen · Watch · monthly posters) |
+| **Grapevine Weekly Open meeting** (web page) | Current day, time and Zoom details | **Meetings** (a card on **Events**, without the Zoom details) |
+| **La Viña's weekly open meeting** (from the settings, `lavina_weekly_open:` — an official La Viña flyer) | Thursdays in Spanish, first date, Zoom details | **Meetings** (a card on **Events**; one line on Home · Listen · Watch · monthly posters) |
 | **Official stores** (aagrapevine.org / aalavina.org store pages) | **Book of the Month** (title, cover, percent, sale price, dates) and **subscription prices** per region (U.S. · Canada · International; print / digital / complete); once a week the **specialty items** — greeting cards, pocket planner, wall calendar and, in season, the holiday cards (picture, price, pack size, volume price, a short description) | **Shop** (a short teaser on Home, the monthly posters and the monthly toolkit) |
 | **Daily quote** (the home pages of aagrapevine.org and aalavina.org) | Grapevine's *Daily Quote* and La Viña's *Cita Diaria*: the quote as published (never translated), who said it, the book it comes from, the official e-mail sign-up — under them the publishers' permission credits ("Reprinted with permission of A.A. World Services, Inc." · "Copyright © The AA Grapevine, Inc. Reprinted with permission. All rights reserved.") | **Home** |
 | **Record your story by phone** (aagrapevine.org/audio-portal, aalavina.org/graba-tu-historia) | Grapevine's *Audio Project* and La Viña's *Graba tu historia*: the phone number, the keys to press, the length, the e-mail address for recordings, Grapevine's story playlists | **Share your story** (`/contribute/#record`: the steps by phone, and above them the [story recorder](#the-story-recorder-share-your-story), with the same lengths, addresses and La Viña's permission sentence as the steps; one link on Listen · Watch) |
@@ -393,12 +393,18 @@ What the newer pages do:
   groups (`#grapevine-meetings`: our Area first, then each nearby area — filters for place, day, in person /
   online and "include nearby areas"; each card links to the meeting's page on the office's site, which has the
   joining details and any changes), and the weekly open meetings (`#weekly-open`: each has **Add to calendar**, a
-  weekly repeating entry for Google Calendar or as a calendar file for Apple and Outlook).
+  weekly repeating entry for Google Calendar or as a calendar file for Apple and Outlook). On the page the weekly
+  open meetings come first, right under *New to AA?* (open meetings: anyone interested in AA is welcome), then the
+  committee meeting and the rest of the page, the Grapevine meetings of local groups last; the hero's jump links
+  lead to the Grapevine meetings, the weekly open meetings and the committee meeting. A link to the old `/meeting/`
+  address without an `#anchor` opens the committee meeting (`#committee-meeting`), as that page did.
 - **Districts** page: removed. Its one piece of its own, the GV/LV report, lives at `/monthly/#report`
   (found in the site search by "district" / "report", "distrito" / "informe"); `/districts/` forwards there.
 - **La Viña's weekly open meeting**: `/meetings/#weekly-open` shows both public weekly meetings (Grapevine on
   Wednesdays in English, La Viña on Thursdays in Spanish) with day, time and Zoom details — the one place
-  with those details; other pages link there.
+  with those details; other pages link there. The **Events** page lists both too, under *Weekly open meetings*
+  (`#ev-weekly`, right under the next committee meeting): each with *Every week*, its next date, **How to join**
+  (to `/meetings/#weekly-open`) and **Add to calendar** — never in the month list or the calendar feed.
 - **Published writers** (`/published/`): the stories of the last 60 or 90 days by writers from Area 65, the rest of
   Texas or anywhere, and below them **"Texas writers through the years"** (`#archive`): every story by a Texas
   writer in the magazines' online archives, grouped by decade, Area 65 first (the rest of Texas loads when a visitor
@@ -506,8 +512,9 @@ breaks while you decide.
   this site) — OK?
 - **New to AA?:** all the card's words; "¿Eres nuevo en AA?" (masculine — "¿Llegas por primera vez a AA?" is an
   option); "tú" (the site's voice) where aa.org says "usted"; whether District 71 AA (a district site) stays in
-  the office list; whether the card stays first on Meetings (on a phone the committee meeting now starts about
-  one screen lower); and whether About's "Find an AA meeting" should link aa.org's *Find AA* page.
+  the office list; whether the card stays first on Meetings (on a phone it adds about one screen; with the weekly
+  open meetings after it, the committee meeting now starts about four screens down — the hero's *Committee
+  meeting* button jumps there); and whether About's "Find an AA meeting" should link aa.org's *Find AA* page.
 - **What it would cost (Shop):** the sheet's Tradition line; that a group can order a multi-copy subscription
   online **and** with the order form; "The store will list the new volume prices"; that AA Grapevine's letter
   names no new price for the 2- and 3-year, Complete and 1-month plans; the Spanish labels ("Lo que costaría",

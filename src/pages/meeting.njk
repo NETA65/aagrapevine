@@ -1,7 +1,10 @@
 ---
 # The old /meeting/ address (and /es/meeting/) → the Meetings page, /meetings/. A tiny stand-alone
-# page (the same pattern as subscribe-redirect.njk): JavaScript keeps the #anchor (#weekly-open,
-# #next-meeting …) and any ?query; without JavaScript the meta refresh goes to the top of the page.
+# page (the same pattern as subscribe-redirect.njk). /meeting/ was the committee meeting's page, and
+# the committee meeting is no longer the first section of /meetings/ (the weekly open meetings come
+# first): a link without an #anchor opens /meetings/#committee-meeting. JavaScript keeps the link's
+# own #anchor (#weekly-open, #next-meeting …) and any ?query; without JavaScript the meta refresh
+# goes to #committee-meeting.
 # noindex + canonical point search engines at /meetings/, and the stub is kept out of the sitemap,
 # the search index and page lists.
 pagination: { data: languages, size: 1, alias: lang }
@@ -16,8 +19,8 @@ eleventyExcludeFromCollections: true
 <head>
 <meta charset="utf-8">
 {#- the base plugin does not rewrite script text, so the url filter adds the path prefix -#}
-<script>location.replace({{ (target | url) | dump | safe }} + location.search + location.hash);</script>
-<meta http-equiv="refresh" content="0; url={{ target }}">{#- the HTML base plugin adds the path prefix here -#}
+<script>location.replace({{ (target | url) | dump | safe }} + location.search + (location.hash || "#committee-meeting"));</script>
+<meta http-equiv="refresh" content="0; url={{ target }}#committee-meeting">{#- the HTML base plugin adds the path prefix here -#}
 <meta name="robots" content="noindex">
 <link rel="canonical" href="{{ target | siteUrl(site) }}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,8 +41,8 @@ eleventyExcludeFromCollections: true
 <main>
   <h1>{{ "read.subs.moved_title" | t(lang) }}</h1>
   <p>{{ "committee.meetings.moved_text" | t(lang) }}</p>
-  <p><a id="go" href="{{ target }}">{{ "nav.meetings" | t(lang) }} →</a></p>
+  <p><a id="go" href="{{ target }}#committee-meeting">{{ "nav.meetings" | t(lang) }} →</a></p>
 </main>
-<script>document.getElementById("go").href += location.hash;</script>
+<script>if (location.hash) document.getElementById("go").hash = location.hash;</script>
 </body>
 </html>

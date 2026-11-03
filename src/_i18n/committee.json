@@ -304,8 +304,8 @@
     "es": "Cerramos a tiempo con la Declaración de la Responsabilidad. Las notas y presentaciones se comparten en nuestro Portafolio."
   },
   "committee.weekly.eyebrow": {
-    "en": "Also on Zoom · Open to everyone",
-    "es": "También por Zoom · Abierta a todos"
+    "en": "On Zoom · Open to everyone",
+    "es": "Por Zoom · Abiertas a todos"
   },
   "committee.weekly.title": {
     "en": "Grapevine Weekly Open AA Meeting",
@@ -606,6 +606,14 @@
   "committee.events.badge_recurring": {
     "en": "Every month",
     "es": "Cada mes"
+  },
+  "committee.events.badge_weekly": {
+    "en": "Every week",
+    "es": "Cada semana"
+  },
+  "committee.events.weekly_text": {
+    "en": "AA Grapevine's and La Viña's own open AA meetings, every week on Zoom: anyone interested in AA is welcome. Each card's calendar button adds that meeting to your calendar as an event that repeats every week.",
+    "es": "Las reuniones abiertas de AA de La Viña y de AA Grapevine, cada semana por Zoom: cualquier persona interesada en AA es bienvenida. El botón de calendario de cada tarjeta agrega esa reunión a tu calendario como un evento que se repite cada semana."
   },
   "committee.events.kind.committee": {
     "en": "Committee meeting",
