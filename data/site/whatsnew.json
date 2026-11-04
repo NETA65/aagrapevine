@@ -1,7 +1,59 @@
 {
- "updated": "2026-11-03T19:28:37Z",
+ "updated": "2026-11-04T09:29:45Z",
  "fixture": false,
  "items": [
+  {
+   "id": "drive:album:cf61307aeef6",
+   "source": "drive",
+   "kind": "photo",
+   "url": "/photos/#photos",
+   "title": "2 new photos in photos",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-04",
+   "first_seen": "2026-11-04T09:29:20Z",
+   "image": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
+   "tags": [
+    "album"
+   ],
+   "category": "photos",
+   "status": "ok",
+   "extra": {
+    "album": "photos",
+    "count": 2,
+    "is_group": true,
+    "photo_ids": [
+     "drive:1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
+     "drive:1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL"
+    ],
+    "thumbs": [
+     "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
+     "https://lh3.googleusercontent.com/d/1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL=w600"
+    ],
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "album_slug": "photos"
+   },
+   "i18n": {
+    "title": {
+     "en": "2 new photos in photos",
+     "es": "2 fotos nuevas en fotos"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    },
+    "album": {
+     "en": "photos",
+     "es": "fotos"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-04T12:00:00Z"
+  },
   {
    "id": "ig:DfR4ptKl7A6",
    "source": "instagram",
@@ -8482,84 +8534,6 @@
     "author_location": {
      "en": "Tustin, California",
      "es": "Tustin, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:orientacion-divina",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/orientacion-divina",
-   "title": "Orientación divina",
-   "summary": "Las fiestas decembrinas, cuando se está empezando a vivir sin beber, causan un estrés que muchos no logran superar y otros ni siquiera quieren intentar.",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/P26_1482783918.jpg?itok=Ts_eW__j",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Sección Especial",
-    "author": "Juan E.",
-    "author_location": "Westminster, California",
-    "subtitle": null,
-    "teaser": "Las fiestas decembrinas, cuando se está empezando a vivir sin beber, causan un estrés que muchos no logran superar y otros ni siquiera quieren intentar.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Westminster",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Westminster, California",
-     "label_es": "Westminster, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Divine Orientation",
-     "es": "Orientación divina"
-    },
-    "summary": {
-     "en": "The decembrine parties, when you are starting to live without drinking, cause stress that many cannot overcome and others don't even want to try.",
-     "es": "Las fiestas decembrinas, cuando se está empezando a vivir sin beber, causan un estrés que muchos no logran superar y otros ni siquiera quieren intentar."
-    },
-    "section": {
-     "en": "Special Section",
-     "es": "Sección Especial"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Westminster, California",
-     "es": "Westminster, California"
     }
    },
    "machine": [
