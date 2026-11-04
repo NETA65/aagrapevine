@@ -1,7 +1,7 @@
 {
  "source": "drive",
- "updated": "2026-11-04T15:31:51Z",
- "attempted": "2026-11-04T15:31:51Z",
+ "updated": "2026-11-04T19:42:10Z",
+ "attempted": "2026-11-04T19:42:10Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -81,7 +81,7 @@
    "title": "2025 Sales Report",
    "summary": "",
    "lang": "en",
-   "date": "2026-11-04",
+   "date": "2026-11-03",
    "first_seen": "2026-11-04T09:29:20Z",
    "last_seen": "2026-11-04T09:29:20Z",
    "image": "https://lh3.googleusercontent.com/d/1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL=w600",
@@ -117,7 +117,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI"
     ],
-    "modified_text": "10:31 pm"
+    "modified_text": "Nov 3"
    }
   },
   {
@@ -128,7 +128,7 @@
    "title": "2026 Dallas GatherOfEagles",
    "summary": "",
    "lang": "en",
-   "date": "2026-11-04",
+   "date": "2026-11-03",
    "first_seen": "2026-11-04T09:29:20Z",
    "last_seen": "2026-11-04T09:29:20Z",
    "image": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
@@ -164,7 +164,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI"
     ],
-    "modified_text": "10:29 pm"
+    "modified_text": "Nov 3"
    }
   },
   {
@@ -318,7 +318,7 @@
    "lang": "en",
    "date": "2026-10-18",
    "first_seen": "2026-09-30T09:45:34Z",
-   "last_seen": "2026-10-28T18:19:22Z",
+   "last_seen": "2026-11-04T19:42:10Z",
    "image": null,
    "tags": [
     "panel-77",
