@@ -1,7 +1,227 @@
 {
- "updated": "2026-11-04T09:29:45Z",
+ "updated": "2026-11-04T15:40:44Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DfUg4WIjT9T",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUg4WIjT9T/",
+   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+   "lang": "en",
+   "date": "2026-11-04T13:00:16Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUg4WIjT9T.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUg4WIjT9T",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUg4WIjT9T.webp",
+    "embed_url": "https://www.instagram.com/p/DfUg4WIjT9T/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUg4WIjT9T/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
+    },
+    "summary": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-04T13:00:16Z"
+  },
+  {
+   "id": "ig:DfUg4TXjYEB",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUg4TXjYEB/",
+   "title": "Humor noviembre/diciembre 2026",
+   "summary": "Humor noviembre/diciembre 2026 ¡Y pensar en toda la diversión de las vacaciones que te perdiste por estar sentado en el bar! —John B. Grapevine, diciembre de 2025 Fuente: Revista Grapevine diciembre de 2025 www.aalavina.org/revista/noviembre-diciembre-2026/humor-noviembrediciembre-2026",
+   "lang": "es",
+   "date": "2026-11-04T13:00:15Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUg4TXjYEB.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUg4TXjYEB",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUg4TXjYEB.webp",
+    "embed_url": "https://www.instagram.com/p/DfUg4TXjYEB/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUg4TXjYEB/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Humor November / December 2026",
+     "es": "Humor noviembre/diciembre 2026"
+    },
+    "summary": {
+     "en": "Humor November / December 2026 And think of all the fun of the vacation you missed for sitting in the bar! —John B. Grapevine, December 2025 Source: Grapevine December 2025 www.aalavina.org/revista/noviembre-diciembre-2026/humor-noviembrediciembre-2026",
+     "es": "Humor noviembre/diciembre 2026 ¡Y pensar en toda la diversión de las vacaciones que te perdiste por estar sentado en el bar! —John B. Grapevine, diciembre de 2025 Fuente: Revista Grapevine diciembre de 2025 www.aalavina.org/revista/noviembre-diciembre-2026/humor-noviembrediciembre-2026"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-04T13:00:15Z"
+  },
+  {
+   "id": "ig:DfUfKh9jaJn",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUfKh9jaJn/",
+   "title": "At Wit's End of November 2026",
+   "summary": "At Wit's End of November 2026 “We better get these Steps done before Thanksgiving!” —Joe H., Powell River, British Columbia Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
+   "lang": "en",
+   "date": "2026-11-04T12:45:16Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUfKh9jaJn.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUfKh9jaJn",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUfKh9jaJn.webp",
+    "embed_url": "https://www.instagram.com/p/DfUfKh9jaJn/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUfKh9jaJn/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "At Wit's End of November 2026",
+     "es": "At Wit's End de noviembre de 2026"
+    },
+    "summary": {
+     "en": "At Wit's End of November 2026 “We better get these Steps done before Thanksgiving!” —Joe H., Powell River, British Columbia Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
+     "es": "¡At Wit's End de noviembre de 2026 “Es mejor que hagamos estos pasos antes de Acción de Gracias!” —Joe H., Powell River, British Columbia Flex your gracioso bone Si una gran capción brota a la mente cuando miras nuestras siguientes imágenes de dibujos animados. www.aagrapevine.org/submit-caption"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-04T12:45:16Z"
+  },
+  {
+   "id": "ig:DfUdcnTjbp1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUdcnTjbp1/",
+   "title": "“We shall never be at our best except when we hew only to the primary spiritual aim of…",
+   "summary": "“We shall never be at our best except when we hew only to the primary spiritual aim of AA. That of carrying its message to the alcoholic who still suffers alcoholism.” AA Co-Founder, Bill W., April 1948, “Tradition Five”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-04T12:30:15Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUdcnTjbp1.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUdcnTjbp1",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUdcnTjbp1.webp",
+    "embed_url": "https://www.instagram.com/p/DfUdcnTjbp1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUdcnTjbp1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We shall never be at our best except when we hew only to the primary spiritual aim of…",
+     "es": "“Nunca estaremos al mejor de nosotros excepto cuando jueguemos solamente al objetivo espiritual primario de …"
+    },
+    "summary": {
+     "en": "“We shall never be at our best except when we hew only to the primary spiritual aim of AA. That of carrying its message to the alcoholic who still suffers alcoholism.” AA Co-Founder, Bill W., April 1948, “Tradition Five”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "“Nunca estaremos al mejor de nosotros excepto cuando jueguemos solamente al objetivo espiritual primario de AA. El de llevar su mensaje al alcohólico que todavía sufre el alcoholismo”. AA cofundador, Bill W., abril de 1948, “Quinta Tradición”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-04T12:30:15Z"
+  },
+  {
+   "id": "ig:DfUdce4DXYQ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUdce4DXYQ/",
+   "title": "“Hay más errores por enmendar, cartas por enviar, trabajo de Paso Doce por hacer…",
+   "summary": "“Hay más errores por enmendar, cartas por enviar, trabajo de Paso Doce por hacer, responsabilidades por asumir y charlas honestas por mantener con nuestros seres queridos. La vida es para vivirla enfrentando los desafíos que nos depara. De otra forma, no vivo, sólo existo”. \"“La vida es para vivirla” SPRING HILL, FLORIDA, SEPTIEMBRE DE 1985 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en…",
+   "lang": "es",
+   "date": "2026-11-04T12:30:14Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUdce4DXYQ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUdce4DXYQ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUdce4DXYQ.webp",
+    "embed_url": "https://www.instagram.com/p/DfUdce4DXYQ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUdce4DXYQ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“There are more errors to be amended, letters to be sent, Step Twelve work to make …",
+     "es": "“Hay más errores por enmendar, cartas por enviar, trabajo de Paso Doce por hacer…"
+    },
+    "summary": {
+     "en": "“There are more mistakes to amend, letters to send, Step Twelve work to do, responsibilities to assume and honest talks to keep with our loved ones. Life is to live it facing the challenges that stop us. Otherwise, I don’t live, I only exist.” \"Life is to live it\" SPRING HILL, FLORIDA, SEPTEMBER 1985 From the best of the Grapevine, Volume III\" Daily Quote in …",
+     "es": "“Hay más errores por enmendar, cartas por enviar, trabajo de Paso Doce por hacer, responsabilidades por asumir y charlas honestas por mantener con nuestros seres queridos. La vida es para vivirla enfrentando los desafíos que nos depara. De otra forma, no vivo, sólo existo”. \"“La vida es para vivirla” SPRING HILL, FLORIDA, SEPTIEMBRE DE 1985 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-04T12:30:14Z"
+  },
   {
    "id": "drive:album:cf61307aeef6",
    "source": "drive",
@@ -53,6 +273,50 @@
    ],
    "is_new": true,
    "wn_date": "2026-11-04T12:00:00Z"
+  },
+  {
+   "id": "ig:DfSsJm1kTMA",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfSsJm1kTMA/",
+   "title": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…",
+   "summary": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…",
+   "lang": "es",
+   "date": "2026-11-03T20:00:16Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfSsJm1kTMA.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfSsJm1kTMA",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfSsJm1kTMA.webp",
+    "embed_url": "https://www.instagram.com/p/DfSsJm1kTMA/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfSsJm1kTMA/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, La Viña performs an open virtual meeting of AA with a host and two …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…"
+    },
+    "summary": {
+     "en": "Each week, La Viña holds an open virtual meeting of AA with a host and two speakers. To join the live meeting on Thursdays at 12:00 p.m. (Eastern time), use the Zoom 871 2036 8287 code with the password 238047. Is Thursday not a good time? Listen to the meeting at our new podcast and YouTube. The podcast respects anonymity and is available in the main …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-03T20:00:16Z"
   },
   {
    "id": "ig:DfR4ptKl7A6",
@@ -255,7 +519,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 93,
+    "views": 118,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -604,7 +868,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 121,
+    "views": 161,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1383,7 +1647,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 206,
+    "views": 216,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -2554,7 +2818,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 252,
+    "views": 255,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3180,7 +3444,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 301,
+    "views": 310,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -3513,7 +3777,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-21T13:31:32Z"
   },
   {
@@ -3557,7 +3821,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-21T13:30:28Z"
   },
   {
@@ -3601,7 +3865,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-21T11:30:16Z"
   },
   {
@@ -3645,7 +3909,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-21T11:30:15Z"
   },
   {
@@ -3849,7 +4113,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 220,
+    "views": 222,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -4119,7 +4383,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 319,
+    "views": 325,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -8074,466 +8338,6 @@
     "author_location": {
      "en": "Sherwood, Arkansas",
      "es": "Sherwood, Arkansas"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:mensaje-navideno",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/mensaje-navideno",
-   "title": "Mensaje Navideño",
-   "summary": "DICIEMBRE DE 1970",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/Mensaje-2176381369.jpg?itok=lL_KyQqP",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Alegría",
-    "author": null,
-    "author_location": null,
-    "subtitle": "DICIEMBRE DE 1970",
-    "teaser": "Durante las Navidades nos damos cuenta más claramente que nunca de que la gratitud es el más excelente atributo que podamos tener.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "unknown",
-     "city": null,
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": null,
-     "label_es": null
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Christmas Message",
-     "es": "Mensaje Navideño"
-    },
-    "summary": {
-     "en": "DECEMBER 1970",
-     "es": "DICIEMBRE DE 1970"
-    },
-    "section": {
-     "en": "Joy",
-     "es": "Alegría"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:mi-voz-mi-historia",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/mi-voz-mi-historia",
-   "title": "Mi voz, mi historia",
-   "summary": "Grabar su testimonio fue una experiencia de liberación para ella y de esperanza para otras madres alcohólicas",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p49-1635372445.jpg?itok=pD5FkGq2",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Mujeres en AA",
-    "author": "Yolanda C.",
-    "author_location": "Riverside, California",
-    "subtitle": "Grabar su testimonio fue una experiencia de liberación para ella y de esperanza para otras madres alcohólicas",
-    "teaser": "Mi nombre es Yolanda; soy una alcohólica drogadicta. Quiero devolver la dádiva de regalo de vida que nunca olvidaré.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Riverside",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Riverside, California",
-     "label_es": "Riverside, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "My Voice, My Story",
-     "es": "Mi voz, mi historia"
-    },
-    "summary": {
-     "en": "Recording her testimony was an experience of liberation for her and of hope for other alcoholic mothers",
-     "es": "Grabar su testimonio fue una experiencia de liberación para ella y de esperanza para otras madres alcohólicas"
-    },
-    "section": {
-     "en": "Women in AA",
-     "es": "Mujeres en AA"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Riverside, California",
-     "es": "Riverside, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:no-bebo-gracias",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/no-bebo-gracias",
-   "title": "No bebo, ¡gracias!",
-   "summary": "“Nos sentimos como si hubiéramos sido colocados en una posición de neutralidad, seguros y protegidos”. ~El Libro Grande, pág. 85",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/P54-2225220873.jpg?itok=cUO_uTg_",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Recaídas",
-    "author": "Adriana V.",
-    "author_location": "San José, California",
-    "subtitle": "“Nos sentimos como si hubiéramos sido colocados en una posición de neutralidad, seguros y protegidos”. ~El Libro Grande, pág. 85",
-    "teaser": "Mi nombre es Adriana y me hice miembro de Alcohólicos Anónimos en el 2012 cuando tenía apenas veintisiete años. Llegué con mucho miedo y con una terrible cruda moral.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "San José",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "San José, California",
-     "label_es": "San José, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "I Don't Drink, Thank You!",
-     "es": "No bebo, ¡gracias!"
-    },
-    "summary": {
-     "en": "“We feel like we have been placed in a position of neutrality, safe and protected.” ~The Big Book, p. 85",
-     "es": "“Nos sentimos como si hubiéramos sido colocados en una posición de neutralidad, seguros y protegidos”. ~El Libro Grande, pág. 85"
-    },
-    "section": {
-     "en": "Relapses",
-     "es": "Recaídas"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "San José, California",
-     "es": "San José, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:nochebuena-sobria",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/nochebuena-sobria",
-   "title": "Nochebuena sobria",
-   "summary": "Practicando la unidad y el servicio en familia, descubre el verdadero regalo de compartir, servir y estar presente",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/P56-496803528.jpg?itok=Phfasbxz",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Alegría",
-    "author": "Berenice H.",
-    "author_location": "Guadalajara",
-    "subtitle": "Practicando la unidad y el servicio en familia, descubre el verdadero regalo de compartir, servir y estar presente",
-    "teaser": "Mi nombre es Berenice H. y soy alcohólica. Quiero compartir un poco de mi experiencia con la Navidad en sobriedad.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Guadalajara",
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": "Guadalajara",
-     "label_es": "Guadalajara"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Christmas Eve Sobria",
-     "es": "Nochebuena sobria"
-    },
-    "summary": {
-     "en": "Practicing unity and family service, discover the true gift of sharing, serving and being present",
-     "es": "Practicando la unidad y el servicio en familia, descubre el verdadero regalo de compartir, servir y estar presente"
-    },
-    "section": {
-     "en": "Joy",
-     "es": "Alegría"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Guadalajara",
-     "es": "Guadalajara"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:noticias",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/noticias",
-   "title": "Noticias",
-   "summary": "¡No te pierdas nuestra reunión virtual semanal de Alcohólicos Anónimos en español!",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "/assets/cache/articles/3c432fe24ab02b39.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "En cada edición",
-    "author": null,
-    "author_location": null,
-    "subtitle": "¡No te pierdas nuestra reunión virtual semanal de Alcohólicos Anónimos en español!",
-    "teaser": "Hace 30 años, La Viña nació de una necesidad expresada.",
-    "free": false,
-    "online_exclusive": false,
-    "department": true,
-    "geo": {
-     "scope": "unknown",
-     "city": null,
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": null,
-     "label_es": null
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "News",
-     "es": "Noticias"
-    },
-    "summary": {
-     "en": "Don't miss our weekly Alcoholics Anonymous virtual meeting in Spanish!",
-     "es": "¡No te pierdas nuestra reunión virtual semanal de Alcohólicos Anónimos en español!"
-    },
-    "section": {
-     "en": "In Every Edition",
-     "es": "En cada edición"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:nueva-mision",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/nueva-mision",
-   "title": "Nueva misión",
-   "summary": "Su mayor victoria fue aprender a vivir un día a la vez",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p18-537667817%20copy.jpg?itok=av10blPG",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Sección Especial",
-    "author": "Carmen M.",
-    "author_location": "Tustin, California",
-    "subtitle": "Su mayor victoria fue aprender a vivir un día a la vez",
-    "teaser": "Hola, mi nombre es Carmen M. y soy alcohólica. Tengo muchos recuerdos de pequeña en las Navidades.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Tustin",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Tustin, California",
-     "label_es": "Tustin, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "New Mission",
-     "es": "Nueva misión"
-    },
-    "summary": {
-     "en": "His greatest victory was to learn to live One Day at a Time",
-     "es": "Su mayor victoria fue aprender a vivir un día a la vez"
-    },
-    "section": {
-     "en": "Special Section",
-     "es": "Sección Especial"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Tustin, California",
-     "es": "Tustin, California"
     }
    },
    "machine": [

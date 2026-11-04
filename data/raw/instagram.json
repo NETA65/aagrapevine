@@ -1,11 +1,11 @@
 {
  "source": "instagram",
- "updated": "2026-11-03T15:18:54Z",
- "attempted": "2026-11-03T15:18:54Z",
+ "updated": "2026-11-04T15:32:55Z",
+ "attempted": "2026-11-04T15:32:55Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 4,
+  "added": 6,
   "removed": 0,
   "held": 0
  },
@@ -31,20 +31,200 @@
    "missing": [],
    "removed": []
   },
-  "thumbs_downloaded": 4,
+  "thumbs_downloaded": 6,
   "pruned": 0,
   "thumbs_deleted": 0,
-  "new": 4,
-  "total": 182,
+  "new": 6,
+  "total": 188,
   "per_account": {
-   "gv": 100,
-   "lv": 82
+   "gv": 103,
+   "lv": 85
   },
   "requests": 7,
   "anonymous": true,
   "graph_api": false
  },
  "items": [
+  {
+   "id": "ig:DfUg4WIjT9T",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUg4WIjT9T/",
+   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+   "lang": "en",
+   "date": "2026-11-04T13:00:16Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "last_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUg4WIjT9T.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUg4WIjT9T",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUg4WIjT9T.webp",
+    "embed_url": "https://www.instagram.com/p/DfUg4WIjT9T/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUg4WIjT9T/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfUg4TXjYEB",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUg4TXjYEB/",
+   "title": "Humor noviembre/diciembre 2026",
+   "summary": "Humor noviembre/diciembre 2026 ¡Y pensar en toda la diversión de las vacaciones que te perdiste por estar sentado en el bar! —John B. Grapevine, diciembre de 2025 Fuente: Revista Grapevine diciembre de 2025 www.aalavina.org/revista/noviembre-diciembre-2026/humor-noviembrediciembre-2026",
+   "lang": "es",
+   "date": "2026-11-04T13:00:15Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "last_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUg4TXjYEB.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUg4TXjYEB",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUg4TXjYEB.webp",
+    "embed_url": "https://www.instagram.com/p/DfUg4TXjYEB/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUg4TXjYEB/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfUfKh9jaJn",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUfKh9jaJn/",
+   "title": "At Wit's End of November 2026",
+   "summary": "At Wit's End of November 2026 “We better get these Steps done before Thanksgiving!” —Joe H., Powell River, British Columbia Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
+   "lang": "en",
+   "date": "2026-11-04T12:45:16Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "last_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUfKh9jaJn.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUfKh9jaJn",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUfKh9jaJn.webp",
+    "embed_url": "https://www.instagram.com/p/DfUfKh9jaJn/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUfKh9jaJn/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfUdcnTjbp1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUdcnTjbp1/",
+   "title": "“We shall never be at our best except when we hew only to the primary spiritual aim of…",
+   "summary": "“We shall never be at our best except when we hew only to the primary spiritual aim of AA. That of carrying its message to the alcoholic who still suffers alcoholism.” AA Co-Founder, Bill W., April 1948, “Tradition Five”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-04T12:30:15Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "last_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUdcnTjbp1.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUdcnTjbp1",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUdcnTjbp1.webp",
+    "embed_url": "https://www.instagram.com/p/DfUdcnTjbp1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUdcnTjbp1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfUdce4DXYQ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUdce4DXYQ/",
+   "title": "“Hay más errores por enmendar, cartas por enviar, trabajo de Paso Doce por hacer…",
+   "summary": "“Hay más errores por enmendar, cartas por enviar, trabajo de Paso Doce por hacer, responsabilidades por asumir y charlas honestas por mantener con nuestros seres queridos. La vida es para vivirla enfrentando los desafíos que nos depara. De otra forma, no vivo, sólo existo”. \"“La vida es para vivirla” SPRING HILL, FLORIDA, SEPTIEMBRE DE 1985 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en…",
+   "lang": "es",
+   "date": "2026-11-04T12:30:14Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "last_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUdce4DXYQ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUdce4DXYQ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUdce4DXYQ.webp",
+    "embed_url": "https://www.instagram.com/p/DfUdce4DXYQ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUdce4DXYQ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfSsJm1kTMA",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfSsJm1kTMA/",
+   "title": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…",
+   "summary": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…",
+   "lang": "es",
+   "date": "2026-11-03T20:00:16Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "last_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfSsJm1kTMA.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfSsJm1kTMA",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfSsJm1kTMA.webp",
+    "embed_url": "https://www.instagram.com/p/DfSsJm1kTMA/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfSsJm1kTMA/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
   {
    "id": "ig:DfR4ptKl7A6",
    "source": "instagram",
@@ -5531,10 +5711,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16980,
-   "posts": 3984,
+   "followers": 16981,
+   "posts": 3987,
    "owner_id": "48108439509",
-   "checked": "2026-11-03T15:18:36Z",
+   "checked": "2026-11-04T15:32:37Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp",
    "_avatar_checked": "2026-10-30T14:20:41Z"
   },
@@ -5543,10 +5723,10 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2425,
-   "posts": 3006,
+   "followers": 2426,
+   "posts": 3009,
    "owner_id": "48275839129",
-   "checked": "2026-11-03T15:18:39Z",
+   "checked": "2026-11-04T15:32:40Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp",
    "_avatar_checked": "2026-10-30T14:20:42Z"
   }
@@ -5697,10 +5877,10 @@
    "checked": "2026-10-16T12:32:53Z"
   },
   "Dd9EzeUySjU": {
-   "checked": "2026-10-16T12:32:53Z"
+   "checked": "2026-11-04T15:32:40Z"
   },
   "Dd9LlctFzf2": {
-   "checked": "2026-10-16T12:32:53Z"
+   "checked": "2026-11-04T15:32:40Z"
   },
   "Dd9Qu_1F7p7": {
    "checked": "2026-10-17T00:31:16Z"
@@ -5866,6 +6046,15 @@
   },
   "Deh36cjjZSU": {
    "checked": "2026-11-03T15:18:39Z"
+  },
+  "DejbedvjQhf": {
+   "checked": "2026-11-04T15:32:40Z"
+  },
+  "Dejbef4jdQ4": {
+   "checked": "2026-11-04T15:32:40Z"
+  },
+  "DejeZPBgZ4H": {
+   "checked": "2026-11-04T15:32:40Z"
   }
  }
 }

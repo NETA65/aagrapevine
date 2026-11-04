@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-11-03T15:23:09Z",
- "attempted": "2026-11-03T15:23:09Z",
+ "updated": "2026-11-04T15:37:35Z",
+ "attempted": "2026-11-04T15:37:35Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,7 +15,7 @@
   "upcoming_urls": 17,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 0,
+  "refreshed": 1,
   "failed": 0,
   "pending": 0,
   "cached": 19,
@@ -23,7 +23,7 @@
   "online_es": 1,
   "items": 3,
   "new": 0,
-  "requests": 36
+  "requests": 37
  },
  "items": [
   {
@@ -403,7 +403,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2027-01-29/47th-hilton-head-midwinter-conference": {
-   "at": "2026-10-21T13:08:01Z",
+   "at": "2026-11-04T15:37:35Z",
    "ev": {
     "title": "47th Hilton Head Midwinter Conference",
     "date_text": "January 29, 2027 - January 31, 2027",
