@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-04T15:32:55Z",
+ "updated": "2026-11-05T15:36:24Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16981,
-   "posts": 3987,
+   "followers": 16985,
+   "posts": 3988,
    "owner_id": "48108439509",
-   "checked": "2026-11-04T15:32:37Z",
+   "checked": "2026-11-05T15:36:06Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,143 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2426,
-   "posts": 3009,
+   "followers": 2427,
+   "posts": 3011,
    "owner_id": "48275839129",
-   "checked": "2026-11-04T15:32:40Z",
+   "checked": "2026-11-05T15:36:09Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfXFrJMDcxG",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfXFrJMDcxG/",
+   "title": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…",
+   "summary": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…",
+   "lang": "es",
+   "date": "2026-11-05T13:00:15Z",
+   "first_seen": "2026-11-05T15:36:24Z",
+   "image": "/assets/cache/ig/DfXFrJMDcxG.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfXFrJMDcxG",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfXFrJMDcxG.webp",
+    "embed_url": "https://www.instagram.com/p/DfXFrJMDcxG/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfXFrJMDcxG/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, La Viña performs an open virtual meeting of AA with a host and two …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…"
+    },
+    "summary": {
+     "en": "Each week, La Viña holds an open virtual meeting of AA with a host and two speakers. To join the live meeting on Thursdays at 12:00 p.m. (Eastern time), use the Zoom 871 2036 8287 code with the password 238047. Is Thursday not a good time? Listen to the meeting at our new podcast and YouTube. The podcast respects anonymity and is available in the main …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfXCPc4DZAr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfXCPc4DZAr/",
+   "title": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A…",
+   "summary": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A veces, debes reírte de ti mismo junto con Él”. \"“La sobriedad para nosotros mismos” NUEVA YORK, NUEVA YORK, NOVIEMBRE DE 1946 De Thank You for Sharing\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-05T12:30:15Z",
+   "first_seen": "2026-11-05T15:36:24Z",
+   "image": "/assets/cache/ig/DfXCPc4DZAr.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfXCPc4DZAr",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfXCPc4DZAr.webp",
+    "embed_url": "https://www.instagram.com/p/DfXCPc4DZAr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfXCPc4DZAr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Laughter is one of the greatest and most beneficial gifts God made to us. A…",
+     "es": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A…"
+    },
+    "summary": {
+     "en": "“Laughter is one of the greatest and most beneficial gifts God made to us. Sometimes you must laugh at yourself together with Him.” \"The sobriety for ourselves\" NEW YORK, NEW YORK, NOVEMBER 1946 From Thank You for Sharing Daily Quote in www.aalavina.org",
+     "es": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A veces, debes reírte de ti mismo junto con Él”. \"“La sobriedad para nosotros mismos” NUEVA YORK, NUEVA YORK, NOVIEMBRE DE 1946 De Thank You for Sharing\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfXCPa-DcE6",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfXCPa-DcE6/",
+   "title": "“Good things increase in direct proportion to my willingness to become teachable.”",
+   "summary": "“Good things increase in direct proportion to my willingness to become teachable.” “Freedom Began in Prison,” Universal City, California, February 1970, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-05T12:30:15Z",
+   "first_seen": "2026-11-05T15:36:24Z",
+   "image": "/assets/cache/ig/DfXCPa-DcE6.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfXCPa-DcE6",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfXCPa-DcE6.webp",
+    "embed_url": "https://www.instagram.com/p/DfXCPa-DcE6/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfXCPa-DcE6/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Good things increase in direct proportion to my willingness to become teachable.”",
+     "es": "“Las cosas buenas aumentan en proporción directa a mi voluntad de ser enseñable.”"
+    },
+    "summary": {
+     "en": "“Good things increase in direct proportion to my willingness to become teachable.” “Freedom Began in Prison,” Universal City, California, February 1970, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Las cosas buenas aumentan en proporción directa a mi voluntad de ser enseñable.” “La libertad comenzó en prisión”, ciudad Universal, California, febrero de 1970, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfUg4WIjT9T",
    "source": "instagram",
@@ -2301,7 +2430,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DezQX9WydDC",
@@ -2344,7 +2473,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Dey4PwaDdfm",
@@ -2387,7 +2516,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Dey4PvWjRuh",
@@ -2430,7 +2559,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DexN0JlDhyO",

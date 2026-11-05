@@ -1,7 +1,139 @@
 {
- "updated": "2026-11-05T00:51:58Z",
+ "updated": "2026-11-05T16:17:52Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DfXFrJMDcxG",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfXFrJMDcxG/",
+   "title": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…",
+   "summary": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…",
+   "lang": "es",
+   "date": "2026-11-05T13:00:15Z",
+   "first_seen": "2026-11-05T15:36:24Z",
+   "image": "/assets/cache/ig/DfXFrJMDcxG.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfXFrJMDcxG",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfXFrJMDcxG.webp",
+    "embed_url": "https://www.instagram.com/p/DfXFrJMDcxG/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfXFrJMDcxG/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, La Viña performs an open virtual meeting of AA with a host and two …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…"
+    },
+    "summary": {
+     "en": "Each week, La Viña holds an open virtual meeting of AA with a host and two speakers. To join the live meeting on Thursdays at 12:00 p.m. (Eastern time), use the Zoom 871 2036 8287 code with the password 238047. Is Thursday not a good time? Listen to the meeting at our new podcast and YouTube. The podcast respects anonymity and is available in the main …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-05T13:00:15Z"
+  },
+  {
+   "id": "ig:DfXCPa-DcE6",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfXCPa-DcE6/",
+   "title": "“Good things increase in direct proportion to my willingness to become teachable.”",
+   "summary": "“Good things increase in direct proportion to my willingness to become teachable.” “Freedom Began in Prison,” Universal City, California, February 1970, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-05T12:30:15Z",
+   "first_seen": "2026-11-05T15:36:24Z",
+   "image": "/assets/cache/ig/DfXCPa-DcE6.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfXCPa-DcE6",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfXCPa-DcE6.webp",
+    "embed_url": "https://www.instagram.com/p/DfXCPa-DcE6/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfXCPa-DcE6/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Good things increase in direct proportion to my willingness to become teachable.”",
+     "es": "“Las cosas buenas aumentan en proporción directa a mi voluntad de ser enseñable.”"
+    },
+    "summary": {
+     "en": "“Good things increase in direct proportion to my willingness to become teachable.” “Freedom Began in Prison,” Universal City, California, February 1970, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Las cosas buenas aumentan en proporción directa a mi voluntad de ser enseñable.” “La libertad comenzó en prisión”, ciudad Universal, California, febrero de 1970, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-05T12:30:15Z"
+  },
+  {
+   "id": "ig:DfXCPc4DZAr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfXCPc4DZAr/",
+   "title": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A…",
+   "summary": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A veces, debes reírte de ti mismo junto con Él”. \"“La sobriedad para nosotros mismos” NUEVA YORK, NUEVA YORK, NOVIEMBRE DE 1946 De Thank You for Sharing\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-05T12:30:15Z",
+   "first_seen": "2026-11-05T15:36:24Z",
+   "image": "/assets/cache/ig/DfXCPc4DZAr.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfXCPc4DZAr",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfXCPc4DZAr.webp",
+    "embed_url": "https://www.instagram.com/p/DfXCPc4DZAr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfXCPc4DZAr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Laughter is one of the greatest and most beneficial gifts God made to us. A…",
+     "es": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A…"
+    },
+    "summary": {
+     "en": "“Laughter is one of the greatest and most beneficial gifts God made to us. Sometimes you must laugh at yourself together with Him.” \"The sobriety for ourselves\" NEW YORK, NEW YORK, NOVEMBER 1946 From Thank You for Sharing Daily Quote in www.aalavina.org",
+     "es": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A veces, debes reírte de ti mismo junto con Él”. \"“La sobriedad para nosotros mismos” NUEVA YORK, NUEVA YORK, NOVIEMBRE DE 1946 De Thank You for Sharing\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-05T12:30:15Z"
+  },
   {
    "id": "ig:DfUg4WIjT9T",
    "source": "instagram",
@@ -519,7 +651,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 118,
+    "views": 129,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -868,7 +1000,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 161,
+    "views": 188,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1115,6 +1247,146 @@
    ],
    "is_new": true,
    "wn_date": "2026-11-01T12:30:15Z"
+  },
+  {
+   "id": "gv:2026-11:getting-ready-my-first-drink",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/getting-ready-my-first-drink",
+   "title": "Getting Ready for My First Drink",
+   "summary": "He had a fool for a sponsor—himself",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-05T15:38:13Z",
+   "image": "/assets/cache/articles/200245fd840d67ff.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Douglas T.",
+    "author_location": "Montrose, Colo.",
+    "subtitle": "He had a fool for a sponsor—himself",
+    "teaser": "After five years of sobriety, I began to get ready for my first drink. It happened so gradually I wasn’t aware that it was happening.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Montrose",
+     "county": null,
+     "counties": [],
+     "state": "CO",
+     "country": "US",
+     "label_en": "Montrose, Colorado",
+     "label_es": "Montrose, Colorado"
+    },
+    "pub_date": "2026-11-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Getting Ready for My First Drink",
+     "es": "Preparándose para mi primer trago"
+    },
+    "summary": {
+     "en": "He had a fool for a sponsor—himself",
+     "es": "Tenía un tonto para un padrino - él mismo"
+    },
+    "issue_theme": {
+     "en": "AA Members & Mental Health",
+     "es": "Los miembros de AA y la salud mental"
+    },
+    "issue_label": {
+     "en": "November 2026",
+     "es": "Noviembre 2026"
+    },
+    "author_location": {
+     "en": "Montrose, Colorado",
+     "es": "Montrose, Colorado"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-01T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-11:learning-love-myself",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/learning-love-myself",
+   "title": "Learning to Love Myself",
+   "summary": "Saying Yes to Sobriety",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-05T15:38:13Z",
+   "image": "/assets/cache/articles/26d99815cc95717a.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Rudy S.",
+    "author_location": "Coggon, Iowa",
+    "subtitle": "Saying Yes to Sobriety",
+    "teaser": "My ENT doctor attributed my aggressive throat cancer to my heavy whiskey consumption, and I was inclined to agree, since the first two surgeries failed to stop the regrowth, making it…",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Coggon",
+     "county": null,
+     "counties": [],
+     "state": "IA",
+     "country": "US",
+     "label_en": "Coggon, Iowa",
+     "label_es": "Coggon, Iowa"
+    },
+    "pub_date": "2026-11-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Learning to Love Myself",
+     "es": "Aprender a amarme"
+    },
+    "summary": {
+     "en": "Saying Yes to Sobriety",
+     "es": "Decir sí a sobriedad"
+    },
+    "issue_theme": {
+     "en": "AA Members & Mental Health",
+     "es": "Los miembros de AA y la salud mental"
+    },
+    "issue_label": {
+     "en": "November 2026",
+     "es": "Noviembre 2026"
+    },
+    "author_location": {
+     "en": "Coggon, Iowa",
+     "es": "Coggon, Iowa"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-01T12:00:00Z"
   },
   {
    "id": "ev:lvcal:b0eaaca178cb",
@@ -1647,7 +1919,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 216,
+    "views": 237,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -2818,7 +3090,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 255,
+    "views": 262,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3444,7 +3716,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 310,
+    "views": 313,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -3557,7 +3829,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-22T15:00:11Z"
   },
   {
@@ -3601,7 +3873,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-22T15:00:10Z"
   },
   {
@@ -3645,7 +3917,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-22T11:30:15Z"
   },
   {
@@ -3689,7 +3961,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-22T11:30:15Z"
   },
   {
@@ -4113,7 +4385,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 222,
+    "views": 223,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -4383,7 +4655,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 325,
+    "views": 331,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7942,402 +8214,6 @@
     "author_location": {
      "en": "Tucson, Arizona",
      "es": "Tucson, Arizona"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:la-luz-de-la-sobriedad",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/la-luz-de-la-sobriedad",
-   "title": "La luz de la sobriedad",
-   "summary": "Soy Norma L., del grupo Amanecer, de Dallas, Texas.",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/P50-2240626124.jpg?itok=CCcx37eJ",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Mujeres en AA",
-    "author": "Norma L.",
-    "author_location": "Dallas, Texas",
-    "subtitle": null,
-    "teaser": "Soy Norma L., del grupo Amanecer, de Dallas, Texas.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "neta65",
-     "city": "Dallas",
-     "county": "Dallas",
-     "counties": [
-      "Collin",
-      "Dallas",
-      "Denton",
-      "Kaufman",
-      "Rockwall"
-     ],
-     "state": "TX",
-     "country": "US",
-     "label_en": "Dallas, Texas",
-     "label_es": "Dallas, Texas"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "The Sobriety Light",
-     "es": "La luz de la sobriedad"
-    },
-    "summary": {
-     "en": "I'm Norma L., from the Dawn group in Dallas, Texas.",
-     "es": "Soy Norma L., del grupo Amanecer, de Dallas, Texas."
-    },
-    "section": {
-     "en": "Women in AA",
-     "es": "Mujeres en AA"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Dallas, Texas",
-     "es": "Dallas, Texas"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:la-oveja-negra",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/la-oveja-negra",
-   "title": "La oveja negra",
-   "summary": "La petición de su madre lo hizo reaccionar y reconocer que el cambio debía comenzar con él",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p20-1026133006.jpg?itok=gXZidq3C",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Sección Especial",
-    "author": "Mele G.",
-    "author_location": "Santa Ana, California",
-    "subtitle": "La petición de su madre lo hizo reaccionar y reconocer que el cambio debía comenzar con él",
-    "teaser": "Mi nombre es Mele y soy miembro de AA. Como todo en la vida, hay un principio y también un final.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Santa Ana",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Santa Ana, California",
-     "label_es": "Santa Ana, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "The Black Sheep",
-     "es": "La oveja negra"
-    },
-    "summary": {
-     "en": "His mother's request made him react and recognize that the change should begin with him",
-     "es": "La petición de su madre lo hizo reaccionar y reconocer que el cambio debía comenzar con él"
-    },
-    "section": {
-     "en": "Special Section",
-     "es": "Sección Especial"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Santa Ana, California",
-     "es": "Santa Ana, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:la-ultima-borrachera",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/la-ultima-borrachera",
-   "title": "La última borrachera",
-   "summary": "En AA descubre que el alcohol era solo un síntoma...",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p24-1359528881.jpg?itok=RQMWL2Gb",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Sección Especial",
-    "author": "Carmelita N.",
-    "author_location": "Bakersfield, California",
-    "subtitle": "En AA descubre que el alcohol era solo un síntoma...",
-    "teaser": "Hola compañeros, mi nombre es Carmelita y soy alcohólica. Estoy en un taller de La Viña que se está llevando a cabo en un pueblito llamado Arvin, California, en el grupo Serenidad.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Bakersfield",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Bakersfield, California",
-     "label_es": "Bakersfield, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "The Last Drunk",
-     "es": "La última borrachera"
-    },
-    "summary": {
-     "en": "In AA he discovers that alcohol was just a symptom...",
-     "es": "En AA descubre que el alcohol era solo un síntoma..."
-    },
-    "section": {
-     "en": "Special Section",
-     "es": "Sección Especial"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Bakersfield, California",
-     "es": "Bakersfield, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:las-recompensas-de-la-oracion",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/las-recompensas-de-la-oracion",
-   "title": "Las recompensas de la oración",
-   "summary": "“Ya no vivimos en un mundo totalmente hostil. Ya no somos personas perdidas, atemorizadas e irresolutas”. ~Doce Pasos y Doce Tradiciones, pág. 104",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p30-1688562896.jpg?itok=IqgKGo9I",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Paso Once",
-    "author": "César F.",
-    "author_location": "Costa Mesa, California",
-    "subtitle": "“Ya no vivimos en un mundo totalmente hostil. Ya no somos personas perdidas, atemorizadas e irresolutas”. ~Doce Pasos y Doce Tradiciones, pág. 104",
-    "teaser": "Un saludo a todas y todos los compañeros de AA alrededor del mundo. Hoy quiero compartir con ustedes sobre el Paso Once y cómo lo practico.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Costa Mesa",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Costa Mesa, California",
-     "label_es": "Costa Mesa, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "The Rewards of Prayer",
-     "es": "Las recompensas de la oración"
-    },
-    "summary": {
-     "en": "“We no longer live in a totally hostile world. We are no longer lost, frightened and irresolute people.” ~Twelve Steps and Twelve Traditions, p. 104",
-     "es": "“Ya no vivimos en un mundo totalmente hostil. Ya no somos personas perdidas, atemorizadas e irresolutas”. ~Doce Pasos y Doce Tradiciones, pág. 104"
-    },
-    "section": {
-     "en": "Step Eleven",
-     "es": "Paso Once"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Costa Mesa, California",
-     "es": "Costa Mesa, California"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:maestria-en-emborrachamiento",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/maestria-en-emborrachamiento",
-   "title": "Maestría en emborrachamiento",
-   "summary": "El desequilibrio puede hacernos perder el rumbo. La recuperación nos enseña a caminar con mayor estabilidad y esperanza",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p12-2164186155%20copy.jpg?itok=4yIBjzFL",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Sección Especial",
-    "author": "Carlos G.",
-    "author_location": "Sherwood, Arkansas",
-    "subtitle": "El desequilibrio puede hacernos perder el rumbo. La recuperación nos enseña a caminar con mayor estabilidad y esperanza",
-    "teaser": "Mi nombre es Carlos G., un miembro más de Alcohólicos Anónimos. Empecé a probar el alcohol desde muy temprana edad, tal vez a los ocho años de edad.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Sherwood",
-     "county": null,
-     "counties": [],
-     "state": "AR",
-     "country": "US",
-     "label_en": "Sherwood, Arkansas",
-     "label_es": "Sherwood, Arkansas"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Master's Degree in Drunkenness",
-     "es": "Maestría en emborrachamiento"
-    },
-    "summary": {
-     "en": "The imbalance can make us lose course. Recovery teaches us to walk with greater stability and hope",
-     "es": "El desequilibrio puede hacernos perder el rumbo. La recuperación nos enseña a caminar con mayor estabilidad y esperanza"
-    },
-    "section": {
-     "en": "Special Section",
-     "es": "Sección Especial"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Sherwood, Arkansas",
-     "es": "Sherwood, Arkansas"
     }
    },
    "machine": [

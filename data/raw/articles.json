@@ -1,30 +1,96 @@
 {
  "source": "articles",
- "updated": "2026-11-04T15:34:30Z",
- "attempted": "2026-11-04T15:34:30Z",
+ "updated": "2026-11-05T15:38:13Z",
+ "attempted": "2026-11-05T15:38:13Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 2,
   "removed": 0,
   "held": 0
  },
  "stats": {
   "hub_articles": 57,
-  "details_fetched": 0,
+  "details_fetched": 2,
   "details_failed": 0,
-  "thumbs": 0,
+  "thumbs": 2,
   "archive_pages": 13,
-  "archive_new": 0,
+  "archive_new": 2,
   "covers": 0,
-  "details_pending": 0,
+  "details_pending": 2,
   "byline_pending": 0,
   "details_left": 0,
-  "new": 0,
-  "total": 293,
-  "requests": 15
+  "new": 2,
+  "total": 295,
+  "requests": 19
  },
  "items": [
+  {
+   "id": "gv:2026-11:learning-love-myself",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/learning-love-myself",
+   "title": "Learning to Love Myself",
+   "summary": "Saying Yes to Sobriety",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-05T15:38:13Z",
+   "last_seen": "2026-11-05T15:38:13Z",
+   "image": "/assets/cache/articles/26d99815cc95717a.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Rudy S.",
+    "author_location": "Coggon, Iowa",
+    "subtitle": "Saying Yes to Sobriety",
+    "teaser": "My ENT doctor attributed my aggressive throat cancer to my heavy whiskey consumption, and I was inclined to agree, since the first two surgeries failed to stop the regrowth, making it…",
+    "free": false,
+    "online_exclusive": true,
+    "department": false
+   }
+  },
+  {
+   "id": "gv:2026-11:getting-ready-my-first-drink",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/getting-ready-my-first-drink",
+   "title": "Getting Ready for My First Drink",
+   "summary": "He had a fool for a sponsor—himself",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-05T15:38:13Z",
+   "last_seen": "2026-11-05T15:38:13Z",
+   "image": "/assets/cache/articles/200245fd840d67ff.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Douglas T.",
+    "author_location": "Montrose, Colo.",
+    "subtitle": "He had a fool for a sponsor—himself",
+    "teaser": "After five years of sobriety, I began to get ready for my first drink. It happened so gradually I wasn’t aware that it was happening.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false
+   }
+  },
   {
    "id": "gv:2026-11:discussion-topic",
    "source": "grapevine",
@@ -9706,7 +9772,7 @@
    "key": "2026-11",
    "publication": "gv",
    "hub": "https://www.aagrapevine.org/magazine",
-   "seen": "2026-11-04T15:33:00Z",
+   "seen": "2026-11-05T15:36:30Z",
    "cover": "/assets/cache/articles/bfc7d6fa631e6757.webp"
   },
   "lv:2026-11": {
@@ -9718,7 +9784,7 @@
    "key": "2026-11",
    "publication": "lv",
    "hub": "https://www.aalavina.org/la-revista",
-   "seen": "2026-11-04T15:33:13Z",
+   "seen": "2026-11-05T15:36:40Z",
    "cover": "/assets/cache/articles/f516ec1fbfd667f4.webp"
   },
   "gv:2026-10": {
@@ -9768,15 +9834,15 @@
  },
  "archive_state": {
   "gv": {
-   "last_run": "2026-11-04T15:33:54Z",
+   "last_run": "2026-11-05T15:37:19Z",
    "pages_last_run": 7,
-   "new_last_run": 0,
+   "new_last_run": 2,
    "oldest_seen": "2026-09",
    "backfilled": "2026-09-23T23:07:47Z",
    "backfill_days": 120
   },
   "lv": {
-   "last_run": "2026-11-04T15:34:30Z",
+   "last_run": "2026-11-05T15:37:53Z",
    "pages_last_run": 6,
    "new_last_run": 0,
    "oldest_seen": "2026-07",

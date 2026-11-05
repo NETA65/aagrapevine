@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-04T15:34:59Z",
+ "updated": "2026-11-05T15:38:38Z",
  "fixture": false,
  "items": [
   {
@@ -29,7 +29,7 @@
     "start_local": "12:00",
     "timezone": "America/New_York",
     "time_central": "11 AM Central",
-    "next_start": "2026-11-04T17:00:00Z"
+    "next_start": "2026-11-11T17:00:00Z"
    },
    "i18n": {
     "title": {
