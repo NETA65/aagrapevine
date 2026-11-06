@@ -693,8 +693,8 @@
     "es": "biblioteca pdf documentos archivos descargar volantes catálogo formularios kit"
   },
   "search.kw.meetings": {
-    "en": "meeting zoom monthly committee meeting id passcode password link join countdown third wednesday weekly open meetings la viña thursday spanish meetings grapevine meetings gr near me in person local groups directions oklahoma arkansas nearby areas new to aa newcomer first meeting any aa meeting find aa help stop drinking drinking problem is aa for me meeting guide app intergroup central office aa.org",
-    "es": "reunión zoom mensual comité id contraseña clave enlace unirse cuenta regresiva tercer miércoles reuniones abiertas semanales la viña jueves español reuniones reuniones de grapevine gr cerca de mí en persona grupos locales cómo llegar oklahoma arkansas áreas cercanas nuevo en aa recién llegado primera reunión cualquier reunión de aa encontrar aa ayuda dejar de beber problema con la bebida es aa para mí app meeting guide intergrupo oficina central aa.org"
+    "en": "meeting zoom google meet meeting code monthly committee meeting guest speaker speakers id passcode password link join countdown third wednesday grapevine meeting online first wednesday weekly open meetings la viña thursday spanish meetings grapevine meetings gr near me in person local groups directions oklahoma arkansas nearby areas new to aa newcomer first meeting any aa meeting find aa help stop drinking drinking problem is aa for me meeting guide app intergroup central office aa.org",
+    "es": "reunión zoom google meet código de la reunión mensual comité orador invitado persona invitada id contraseña clave enlace unirse cuenta regresiva tercer miércoles reunión de grapevine en línea primer miércoles reuniones abiertas semanales la viña jueves español reuniones reuniones de grapevine gr cerca de mí en persona grupos locales cómo llegar oklahoma arkansas áreas cercanas nuevo en aa recién llegado primera reunión cualquier reunión de aa encontrar aa ayuda dejar de beber problema con la bebida es aa para mí app meeting guide intergrupo oficina central aa.org"
   },
   "search.kw.events": {
     "en": "events calendar workshop booth assembly conference ics",
@@ -779,6 +779,10 @@
   "search.kw.booth": {
     "en": "booth literature table",
     "es": "mesa de literatura"
+  },
+  "search.kw.own_online": {
+    "en": "online meeting our meeting google meet meeting code first wednesday story read share topic statement of purpose",
+    "es": "reunión en línea nuestra reunión google meet código de la reunión primer miércoles historia leer compartir tema declaración de propósito"
   },
   "library.col.reports_empty": {
     "en": "Added here as soon as the committee uploads them",

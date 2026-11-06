@@ -54,6 +54,8 @@
   var JSON_BASE = CFG.json || SITE_BASE.replace(/\/?$/, "/") + "orientation/presentations/";
   var META = {};
   (CFG.decks || []).forEach(function (d) { if (d && d.id) META[d.id] = d; });
+  // how many presentations the page has ("Reset all 5 to the original", as the page's button says it)
+  var N_DECKS = (CFG.decks || []).length;
   var VIEW_KEY = "gv-presentations-view";
   var SYNC_KEY = "gv-presentations-sync";
   var FLOOR = 0.62;            // the smallest a slide's text may shrink to fit (then it scrolls)
@@ -839,7 +841,12 @@
           box.appendChild(dl2);
         } else box.appendChild(seeLine(d.page || d.url, cur.deck));
         var z = [];
-        if (d.zoom_id) z.push(EN.zoom_id + " " + d.zoom_id);
+        // how to join: a Google Meet link and its meeting code (a code with letters), or a Zoom ID and passcode
+        // (La Viña's workshop; a deck file built before the meeting moved to Google Meet has no `code`)
+        if (s.kind === "meeting" && d.code && /[a-z]/i.test(d.code)) {
+          if (d.link) z.push((d.platform || EN.online) + ": " + d.link);
+          z.push(EN.meeting_code + " " + d.code);
+        } else if (d.zoom_id) z.push(EN.zoom_id + " " + d.zoom_id);
         if (d.passcode) z.push(EN.passcode + " " + d.passcode);
         if (s.kind === "lv-workshop" && d.contact) z.push(EN.contact + ": " + d.contact);
         if (z.length) box.appendChild(el("p", "gvp-live-zoom", z.join(" · ")));
@@ -2862,6 +2869,14 @@
         var w = sec.appendChild(el("p", "gvp-warn gvp-warn--long"));
         w.textContent = T("pres.paper_minutes_started", { when: whenText(started.at) });
       }
+      // the site lists a guest speaker for this meeting, but the chosen version leaves the speaker out (a "No guest
+      // speaker" kept from a month that had none): the text names none, so say why and which version shows them
+      if (r.speakerLeftOut) {
+        var firstPr = (P.deck.presets || [])[0];
+        var sw = sec.appendChild(el("p", "gvp-warn gvp-warn--long"));
+        sw.textContent = T("pres.paper_speaker_left_out", { name: r.speakerLeftOut,
+          version: firstPr ? firstPr.label[LANG] || firstPr.label.en : "", customize: T("pres.customize_h"), tab: T("pres.tab_version") });
+      }
       sec.appendChild(paperBox(r, T(words.label)));
       var row = sec.appendChild(el("div", "gvp-ph-tools gvp-ph-tools--wrap"));
       var copyBtn = btn("gvp-pill gvp-pill--sm gvp-pill--primary", T("pres.paper_copy"), { icon: "copy" });
@@ -3022,7 +3037,10 @@
       if (!res) return;
       changed();
       var next = G.paperMeetings(P.deck, ds(), Date.now()).next;
-      var b = toast(TN("pres.paper_next_done", res.carried, { date: meetingName(next)[0] }), undoAction(snap));
+      var firstPr = (P.deck.presets || [])[0];
+      var msg = TN("pres.paper_next_done", res.carried, { date: meetingName(next)[0] });
+      if (res.version === "reset" && firstPr) msg += " " + T("pres.paper_next_version", { version: firstPr.label[LANG] || firstPr.label.en });
+      var b = toast(msg, undoAction(snap));
       if (b) b.focus();
     });
     acts.appendChild(go);
@@ -3171,9 +3189,9 @@
       if (b) b.focus();
     });
     s4.appendChild(rs);
-    // where "Reset all 4 to the original" is: the page shows it (under the presentations) when there is something
+    // where "Reset all 5 to the original" is: the page shows it (under the presentations) when there is something
     // to reset in any of them
-    if (anyState()) s4.appendChild(el("p", "gvp-pp gvp-pp--muted", T("pres.reset_all_note")));
+    if (anyState()) s4.appendChild(el("p", "gvp-pp gvp-pp--muted", T("pres.reset_all_note", { n: N_DECKS })));
     p.appendChild(s4);
     para(p, T("pres.privacy"), "gvp-pp gvp-pp--muted gvp-privacy");
   }
@@ -3734,10 +3752,10 @@
     var id = b.getAttribute("data-pres-reset");
     loadState();
     if (id === "all") {
-      if (!window.confirm(T("pres.reset_all_confirm"))) return;
+      if (!window.confirm(T("pres.reset_all_confirm", { n: N_DECKS }))) return;
       var before = G.resetAll(STATE);
       saveState();
-      var u = toast(T("pres.reset_all_done"), {
+      var u = toast(T("pres.reset_all_done", { n: N_DECKS }), {
         label: T("pres.undo"),
         run: function () { STATE = G.normState(before); saveState(); toast(T("pres.undone")); focusAfterReset("all"); },
         after: function () { focusAfterReset("all"); },

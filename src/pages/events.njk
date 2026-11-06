@@ -14,8 +14,9 @@ calendarFeed: "/events.ics"
     `recurring_events:` — the next date is shown, with the following ones listed on it; "Show every
     monthly date" shows them all; one La Viña holds — `host: lv`, its monthly workshop on Zoom — is with
     the GV & LV calendars, in La Viña's colour, online only: "Online on Zoom", Join online, its meeting
-    ID), Drive flyers with dated names, manual events, Texas GV/LV calendar events (a date we already
-    show is left out by build_data). Grouped by month, filterable, with a row of month chips and
+    ID; our own Grapevine Meeting is a NETA 65 one — its badge says so, never Grapevine's —, online only:
+    "Online on Google Meet", its meeting code), Drive flyers with dated names, manual events, Texas GV/LV
+    calendar events (a date we already show is left out by build_data). Grouped by month, filterable, with a row of month chips and
     per-event calendar buttons.
     Below the shared page hero: the agenda (then "how events get here", the three kinds of events in
     visitors' words) and, from 1024px, a sticky sidebar with the .ics subscription card (#subscribe);
@@ -57,7 +58,10 @@ calendarFeed: "/events.ics"
 {%- elif kind == "lv" and ev.category == "lv-calendar" %}{% set label = "committee.events.badge_lv" | t(lang) %}
 {%- elif kind == "other" %}{% set label = ("committee.events.kind.neta" if ev.group == "neta" else "committee.events.kind.event") | t(lang) %}
 {%- else %}{% set label = ("committee.events.kind." + kind) | t(lang) %}{% endif -%}
-<span class="badge ev-badge">{% icon kindIcon[kind], "size-3" %} {{ label }}</span>
+{#- (our Grapevine Meeting: "NETA 65" — event-tone.js gives a meeting series of ours no magazine's colour —, online
+    only: the camera, not the map pin) -#}
+{%- set ico = "video" if (kind == "other" and ev.isOnline and not ev.location) else kindIcon[kind] -%}
+<span class="badge ev-badge">{% icon ico, "size-3" %} {{ label }}</span>
 {%- endmacro %}
 
 {#- "Add to calendar" dropdown (Google / Outlook links work without JS; .ics download needs JS) -#}
@@ -173,7 +177,10 @@ calendarFeed: "/events.ics"
 
   {#- ---------- Pinned: next committee meeting ---------- -#}
   {% if next %}
-  {%- set cfg = { rule: m | cmRuleObj, start: next.startIso, end: next.endIso, title: next.title, description: next.calDescription, location: next.calLocation, url: ('/meetings/' | lurl(lang) | siteUrl(site)), i18n: { join: "committee.meeting.join" | t(lang, pf), soon: "committee.meeting.join_soon" | t(lang), live: "committee.meeting.join_live" | t(lang), yourTime: "committee.meeting.your_time" | t(lang) } } -%}
+  {#- (the guest speakers to come, each with that meeting's calendar text: the card shows the speaker of the date it
+      shows — none on a date without one —, also once it rolls on in the browser: committee.js cmSpeakers) -#}
+  {%- set spk = site | cmSpeakers(lang) -%}
+  {%- set cfg = { rule: m | cmRuleObj, start: next.startIso, end: next.endIso, title: next.title, description: next.calDescription, location: next.calLocation, url: ('/meetings/' | lurl(lang) | siteUrl(site)), speakers: spk.list, plain: spk.plain, i18n: { join: "committee.meeting.join" | t(lang, pf), soon: "committee.meeting.join_soon" | t(lang), live: "committee.meeting.join_live" | t(lang), yourTime: "committee.meeting.your_time" | t(lang), speaker: "committee.meeting.speaker" | t(lang) } } -%}
   <article class="cm-pinned @container mb-10" x-show="filter === 'all' && !showAll" x-data="cmMeeting({{ cfg | json }})" aria-labelledby="ev-next-title">
     <div class="cm-pinned-grid">
       <div class="cm-date-tile cm-tone-light" aria-hidden="true">
@@ -194,9 +201,15 @@ calendarFeed: "/events.ics"
           <span class="inline-flex items-center gap-1.5">{% icon "video", "size-4" %} {{ pf.platform }}</span>
         </p>
         <p class="mt-1 text-xs text-white/65" x-show="localLabel" x-text="localLabel" x-cloak></p>
+        {% if spk.list | length %}
+        <p class="mt-2 flex items-start gap-1.5 text-sm text-white/85" x-show="speaker"{% if not next.speaker %} x-cloak{% endif %}>
+          {% icon "mic", "mt-0.5 size-4 shrink-0" %}
+          <span class="min-w-0"><span class="font-semibold text-white" x-text="speakerLine">{{ ("committee.meeting.speaker" | t(lang, { name: next.speaker.name })) if next.speaker }}</span><span x-show="speaker && speaker.topic"> — “<span x-text="speaker ? speaker.topic : ''">{{ next.speaker.topic if next.speaker }}</span>”</span></span>
+        </p>
+        {% endif %}
       </div>
       <div class="cm-pinned-actions">
-        <a href="{{ m.zoom_url }}" target="_blank" rel="noopener" class="btn-light btn-sm" :class="phase !== 'upcoming' && 'cm-join-live'">{% icon "video", "size-4" %} <span x-text="joinText">{{ "committee.meeting.join" | t(lang, pf) }}</span></a>
+        <a href="{{ next.online or m.online_url }}" target="_blank" rel="noopener" class="btn-light btn-sm" :class="phase !== 'upcoming' && 'cm-join-live'">{% icon "video", "size-4" %} <span x-text="joinText">{{ "committee.meeting.join" | t(lang, pf) }}</span></a>
         <details class="cm-menu">
           <summary class="btn-on-dark btn-sm">{% icon "calendar-plus", "size-4" %} {{ "common.add_to_calendar" | t(lang) }}</summary>
           <div class="cm-menu-panel cm-menu-right">
@@ -331,15 +344,19 @@ calendarFeed: "/events.ics"
               {% if ev.location and ev.locationTba %}<li class="inline-flex items-center gap-1.5 italic">{% icon "hourglass", "size-4 text-faint" %} {{ ev.location }}</li>
               {% elif ev.location %}<li class="inline-flex items-center gap-1.5">{% set locIcon = "video" if ev.committee else "map-pin" %}{% icon locIcon, "size-4 text-faint" %} {{ ev.location }}</li>{% endif %}
               {% if ev.isOnline %}<li class="inline-flex items-center gap-1.5">{% icon "video", "size-4 text-faint" %} {{ ("committee.events.online_on" | t(lang, { platform: ev.platform })) if ev.platform else ("committee.events.online" | t(lang)) }}</li>{% endif %}
-              {#- the meeting ID to type into the Zoom app (recurring_events `meeting_id:`); "Join online" opens the link.
+              {#- the meeting ID or code to type into the meeting app (recurring_events `meeting_id:` — "Meeting code" for
+                  a Google Meet code: ev.meetingIdKey); "Join online" opens the link.
                   inline-block: with larger text on a phone (where no-wrap is lifted) the number moves to the next
                   line in one piece instead of breaking after "815" -#}
-              {% if ev.meetingId %}<li class="inline-flex items-center gap-1.5">{% icon "hash", "size-4 text-faint" %} <span>{{ "committee.meeting.id" | t(lang) }} <span class="inline-block whitespace-nowrap font-mono font-medium text-ink" translate="no">{{ ev.meetingId }}</span></span></li>{% endif %}
+              {% if ev.meetingId %}<li class="inline-flex items-center gap-1.5">{% icon "hash", "size-4 text-faint" %} <span>{{ ev.meetingIdKey | t(lang) }} <span class="inline-block whitespace-nowrap font-mono font-medium text-ink" translate="no">{{ ev.meetingId }}</span></span></li>{% endif %}
               {#- who to write to (recurring_events `contact:`): a line of its own, so the address never hides in the
                   3 lines the card shows of the summary; tap-link: 44px tall on phones; @<wbr> lets a long address
                   wrap after the "@" with larger text (it is checked to be a plain e-mail address: committee.js) -#}
               {% if ev.contact %}<li class="inline-flex min-w-0 items-center gap-1.5">{% icon "mail", "size-4 shrink-0 text-faint" %} <a class="link tap-link min-w-0 break-words" href="mailto:{{ ev.contact }}" translate="no"><span class="sr-only">{{ "committee.events.contact" | t(lang) }}: </span>{{ ev.contact | replace("@", "@<wbr>") | safe }}</a></li>{% endif %}
               {% if ev.recurrenceDay %}<li class="inline-flex items-center gap-1.5">{% icon "repeat", "size-4 text-faint" %} {{ ev.recurrenceDay }}</li>{% endif %}
+              {#- a committee meeting's guest speaker and topic (committee.js normalizeEvents: ev.speaker — never in what
+                  search engines read) -#}
+              {% if ev.speaker %}<li class="flex min-w-0 basis-full items-start gap-1.5">{% icon "mic", "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0"><span class="font-medium text-ink">{{ "committee.meeting.speaker" | t(lang, { name: ev.speaker.name }) }}</span>{% if ev.speaker.topic %} — “{{ ev.speaker.topic }}”{% endif %}</span></li>{% endif %}
               {#- a monthly series: its next dates after this one (they show with "Show every monthly date") -#}
               {% if ev.moreDates and ev.moreDates | length %}<li class="inline-flex items-center gap-1.5">{% icon "calendar-days", "size-4 text-faint" %} {{ "committee.events.then_dates" | t(lang, { dates: ev.moreDates | join(", ") }) }}</li>{% endif %}
             </ul>

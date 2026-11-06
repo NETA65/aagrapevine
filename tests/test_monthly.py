@@ -616,9 +616,10 @@ class Templates(unittest.TestCase):
     def test_a_place_is_said_once(self):
         # the Dates card's rows and the poster print dateRow.place (the city unless the title names it):
         # "Grapevine Writing Workshop — Arlington", never "… — Arlington · Arlington"; a row with a city never
-        # says "Online" (on the page or the poster) — one without (La Viña's monthly workshop on Zoom) does
+        # says "Online" (on the page or the poster) — one without (La Viña's monthly workshop on Zoom) does; a
+        # committee meeting its platform, or "Online" once it is over (committeeRow)
         poster = (ROOT / "src" / "_includes" / "macros" / "monthly.njk").read_text(encoding="utf-8")
-        self.assertIn('{% if d.kind == "committee" %} · {{ d.platform }}{% elif d.place %} · {{ d.place }}'
+        self.assertIn('{% if d.kind == "committee" %} · {{ d.platform or ("monthly.online" | t(lang)) }}{% elif d.place %} · {{ d.place }}'
                       '{% elif d.online and not d.city %} · {{ "monthly.online" | t(lang) }}{% endif %}', self.month)
         self.assertIn("{% elif d.city %}{% if d.place %} · {{ d.place }}{% endif %}{% elif d.online %}", poster)
         for name, t in (("monthly-month.njk", self.month), ("macros/monthly.njk", poster)):

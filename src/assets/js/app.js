@@ -153,7 +153,7 @@
   // adding an event again after its time or place changed moves it (a calendar app keeps the version whose
   // SEQUENCE is highest). ev.tentative → STATUS:TENTATIVE (details not final yet), else CONFIRMED. One reminder
   // (GVTime.icsAlarm, the build's own: an hour before; 9 AM the day before an all-day event or story deadline),
-  // with the title only — never the description's Zoom link or passcode; none without central-time.js.
+  // with the title only — never the description's meeting link or passcode; none without central-time.js.
   GV.icsText = function (ev) {
     function stamp(d) { return new Date(d).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); }
     function day(d) { return (typeof d === "string" ? d : new Date(d).toISOString()).slice(0, 10); }

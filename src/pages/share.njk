@@ -29,21 +29,43 @@ pageScripts: ["/assets/js/community.js"]
 {%- endmacro %}
 {#- The committee meeting, to the LEFT of the poster's code: config/site.yml `meeting:` in the words of
     /meetings/ — the monthly rule and the time (never a date: the poster stays on a wall for months),
-    the platform with the meeting ID and passcode, and who is welcome. -#}
+    the platform with the meeting code (or a Zoom ID and passcode), and who is welcome. Our Grapevine Meeting
+    (recurring_events `grapevine-meeting`, committee.js cmSeriesNext) under it in two lines — its name, "In
+    English" (unless its title says so already: "Reunión de Grapevine (en inglés)"), its rule and time —, when it
+    meets in the same room: the one platform line and the one meeting code are then both meetings'. Not on the
+    bilingual poster: every line twice leaves no room for it there (the poster is one printed page). -#}
 {% macro meetBlock(v) %}
 {%- set m = site.meeting -%}
 {%- set tKey = "community.share.p_meet_time" -%}
+{#- how to join: the meeting code — "Meeting code" for a Google Meet code, "Meeting ID" for a Zoom ID — and a
+    passcode when there is one (committee.js meetingJoin) -#}
+{%- set join = m | cmJoin -%}
+{%- set gE = site | cmSeriesNext("grapevine-meeting", "en", db.events.items) -%}
+{%- set gS = site | cmSeriesNext("grapevine-meeting", "es", db.events.items) -%}
+{%- set gm = v != "bi" and gE and gS and join.url and gE.join.url == join.url -%}
+{%- set onLine -%}
+{% if m.platform %}<li>{% icon "video", "cm-p-ico" %}<span>{{ meetLine(v, "committee.events.online_on" | t("en", { platform: m.platform }), "committee.events.online_on" | t("es", { platform: m.platform })) }}</span></li>{% endif %}
+{%- endset -%}
 <div class="cm-p-meet">
   <p class="cm-p-meet-h">{{ meetLine(v, "committee.meetings.committee_title" | t("en"), "committee.meetings.committee_title" | t("es")) }}</p>
   <ul class="cm-p-meet-list">
     <li class="cm-p-meet-when">{% icon "calendar-days", "cm-p-ico" %}<span>{{ meetLine(v, m | cmRule("en"), m | cmRule("es")) }}</span></li>
     <li>{% icon "clock-3", "cm-p-ico" %}<span>{{ meetLine(v, tKey | t("en", { time: m | cmTimeRange("en") }), tKey | t("es", { time: m | cmTimeRange("es") })) }}</span></li>
-    {% if m.platform %}<li>{% icon "video", "cm-p-ico" %}<span>{{ meetLine(v, "committee.events.online_on" | t("en", { platform: m.platform }), "committee.events.online_on" | t("es", { platform: m.platform })) }}</span></li>{% endif %}
+    {% if not gm %}{{ onLine | safe }}{% endif %}
   </ul>
-  {% if m.meeting_id or m.passcode %}
+  {% if gm %}
+  {%- set gmEn = gE.title if gE.saysLang else gE.title + " · " + ("committee.weekly.lang_en" | t("en")) -%}
+  {%- set gmEs = gS.title if gS.saysLang else gS.title + " · " + ("committee.weekly.lang_en" | t("es")) %}
+  <ul class="cm-p-meet-list">
+    <li class="cm-p-meet-when">{% icon "book-open-text", "cm-p-ico" %}<span>{{ meetLine(v, gmEn, gmEs) }}</span></li>
+    <li>{% icon "calendar-days", "cm-p-ico" %}<span>{{ meetLine(v, gE.recurrenceDay + " · " + gE.time, gS.recurrenceDay + " · " + gS.time) }}</span></li>
+    {{ onLine | safe }}
+  </ul>
+  {% endif %}
+  {% if join.id or join.passcode %}
   <dl class="cm-p-meet-ids">
-    {% if m.meeting_id %}<div><dt>{{ meetLine(v, "committee.meeting.id" | t("en"), "committee.meeting.id" | t("es")) }}</dt><dd>{{ m.meeting_id }}</dd></div>{% endif %}
-    {% if m.passcode %}<div><dt>{{ meetLine(v, "committee.meeting.passcode" | t("en"), "committee.meeting.passcode" | t("es")) }}</dt><dd>{{ m.passcode }}</dd></div>{% endif %}
+    {% if join.id %}<div><dt>{{ meetLine(v, join.idKey | t("en"), join.idKey | t("es")) }}</dt><dd>{{ join.id }}</dd></div>{% endif %}
+    {% if join.passcode %}<div><dt>{{ meetLine(v, "committee.meeting.passcode" | t("en"), "committee.meeting.passcode" | t("es")) }}</dt><dd>{{ join.passcode }}</dd></div>{% endif %}
   </dl>
   {% endif %}
   <p class="cm-p-meet-all">{% icon "heart-handshake", "cm-p-ico" %}<span>{{ meetLine(v, "committee.meeting.who_title" | t("en"), "committee.meeting.who_title" | t("es")) }}</span></p>

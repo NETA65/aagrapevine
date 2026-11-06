@@ -7,6 +7,8 @@ import fs from "node:fs";
 import * as yaml from "js-yaml";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
 import { ruleDate } from "../../eleventy/central-time.js";
+// the guest speakers (config/site.yml meeting.speakers), read with the sync's checks
+import { meetingSpeakers } from "../../eleventy/filters/committee.js";
 
 const WD = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 };
 
@@ -21,12 +23,18 @@ export default function () {
   // a week it cannot read ("third") → the 3rd, one skip date without brackets, and an end that is missing
   // or not after the start → one hour (the countdown's rule gets that end too) — except an overnight one
   // ("22:00"–"01:00": the next morning, as the sync has it).
-  const cfg = monthlyRule(yaml.load(fs.readFileSync("config/site.yml", "utf8")).meeting || {});
+  const raw = yaml.load(fs.readFileSync("config/site.yml", "utf8")).meeting || {};
+  const cfg = monthlyRule(raw);
   const weekday = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
   const n = Number(cfg.week_of_month || 3);
   // Unquoted YAML dates arrive as Date objects — normalize everything to "YYYY-MM-DD".
   const skip = new Set((cfg.skip_dates || []).map((d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d))));
-  const rule = { weekday, n, start: cfg.start || "19:00", end: cfg.end || "", skip: [...skip] };
+  // (a first date, `starts`, when the meeting has one: no date before it)
+  const first = cfg.starts ? { starts: cfg.starts } : {};
+  const rule = { weekday, n, start: cfg.start || "19:00", end: cfg.end || "", skip: [...skip], ...first };
+  // each date's guest speaker { name, position: { en, es }, topic: { en, es } } — only on a date that has one
+  // (never `confirmed`: that is for the chair)
+  const speakers = new Map(meetingSpeakers(raw).map((s) => [s.ymd, { name: s.name, position: s.position, topic: s.topic }]));
   const now = Date.now();
   const today = new Date(now);
   const dates = [];
@@ -35,11 +43,13 @@ export default function () {
     // start: one hour)
     const d = ruleDate(today.getUTCFullYear(), today.getUTCMonth() + i, rule, TZ);
     if (!d || d.end < now) continue;
-    dates.push({ ymd: d.ymd, start: new Date(d.start).toISOString(), end: new Date(d.end).toISOString() });
+    const row = { ymd: d.ymd, start: new Date(d.start).toISOString(), end: new Date(d.end).toISOString() };
+    if (speakers.has(d.ymd)) row.speaker = speakers.get(d.ymd);
+    dates.push(row);
   }
   return {
     // Client countdown uses the same rule; a missing end means a 1-hour meeting.
-    rule: { weekday, n, start: cfg.start, end: cfg.end || plusHour(cfg.start), skip: [...skip] },
+    rule: { weekday, n, start: cfg.start, end: cfg.end || plusHour(cfg.start), skip: [...skip], ...first },
     next: dates[0] || null,
     upcoming: dates.slice(0, 12),
   };

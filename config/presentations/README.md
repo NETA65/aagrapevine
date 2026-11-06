@@ -1,7 +1,8 @@
 # Presentations
 
-The presentations on the GVR / RLV 101 page (`/orientation/`, "Presentations": three workshops and the monthly
-committee meeting) are made from the files in this folder: **one file per presentation**, written in plain text
+The presentations on the GVR / RLV 101 page (`/orientation/`, "Presentations": three workshops and our two monthly
+meetings, the committee meeting and the Grapevine Meeting) are made from the files in this folder: **one file per
+presentation**, written in plain text
 (YAML). The site turns each file into a presentation that opens in a pop-up player, with speaker notes, a presenter
 view, versions, printing, and the presenter's own changes kept on their own device.
 
@@ -11,27 +12,37 @@ view, versions, printing, and the presenter's own changes kept on their own devi
 | `information-workshop.yml` | Grapevine and La Viña Information Workshop |
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop |
 | `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting |
+| `grapevine-meeting.yml` | Grapevine Meeting (our online AA meeting on the first Wednesday; no PowerPoint copy) |
 
 The content of the presentations stays in **English**. On the Spanish page the buttons and the cards are in
 Spanish, and each presentation is marked "(en inglés)".
 
-**The PowerPoint copies are separate.** The `.pptx` files in the committee's Drive folder (`slides`, listed on
-the Portfolio page) are snapshots made on October 1, 2026. Changing a file here does not change them, and changing
-them does not change the presentations on the site. The card's "PowerPoint copy" link opens the Drive file whose
-title is the presentation's `drive_title`.
+**The PowerPoint copies are separate.** The four `.pptx` files in the committee's Drive folder (`slides`, listed on
+the Portfolio page) are snapshots made on October 1, 2026, before the move to Google Meet: they still give the
+committee's old Zoom room, passcode and phone number. Changing a file here does not change them, and changing them
+does not change the presentations on the site. The card's "PowerPoint copy" link opens the Drive file whose title
+is the presentation's `drive_title` — so, until copies with the Google Meet details are on the Drive, no deck sets
+one (each file keeps its line as a comment, to put back then) and no card offers the old copies.
 
 ## What stays current by itself
 
 Every time the site is rebuilt (each daily update), the presentations get the day's facts from the site's own
 data, the same facts the other pages show:
 
-- the committee's next meeting dates, the rule ("every third Wednesday of the month"), the time and the Zoom details
-  (from `config/site.yml`, `meeting:`); the meeting's own date and month (the committee meeting's title slide) and
-  the meeting after it (a slide shown during the meeting); and joining it by phone: Zoom's dial-in number and the
-  callers' passcode, as the Accessibility page gives them (`config/site.yml`, `phone_access:`). "The next meeting"
-  (`meeting_next`) moves on as soon as a meeting ends: a workshop later that evening names next month's. The
-  meeting's own date (`meeting_day`), its month and the meeting after it move on at midnight Central after the
-  meeting day, so the committee meeting's slides read right during AND after the meeting;
+- the committee's next meeting dates, the rule ("every third Wednesday of the month"), the time and how to join it:
+  the platform, the Google Meet link and its meeting code (from `config/site.yml`, `meeting:`; a Google Meet room
+  has no passcode and no number to call); the meeting's own date and month (the committee meeting's title slide)
+  and the meeting after it (a slide shown during the meeting). "The next meeting" (`meeting_next`) moves on as soon
+  as a meeting ends: a workshop later that evening names next month's. The meeting's own date (`meeting_day`), its
+  month and the meeting after it move on at midnight Central after the meeting day, so the committee meeting's
+  slides read right during AND after the meeting;
+- each meeting's guest speaker (`config/site.yml`, `meeting: speakers:`, as the Meetings page lists them): a first
+  name and last initial, the service position and the topic — tonight's, moving on with the meeting's own date, and
+  next month's, with the meeting after it. A date with no speaker listed says "to be announced". Whether a speaker
+  shares slides (`slides: true`) is only for the chair's notes; whether they have confirmed never reaches a deck
+  (the notes are public): the run summary reminds the chair;
+- our Grapevine Meeting on the first Wednesday (`config/site.yml`, `recurring_events:`, `grapevine-meeting`, as the
+  Events page lists it): its next dates, its own date for its slides, its time and its link;
 - La Viña's monthly virtual workshop: its next dates, time and Zoom ID;
 - the weekly open meetings of the Meetings page — the Grapevine Weekly Open and the Reunión Abierta de La Viña: their
   day, time and Zoom room (`data/site/weekly_open.json`, `config/site.yml` `lavina_weekly_open:`);
@@ -63,7 +74,7 @@ Before saving a change to the site, run the checker on the file you changed:
 
     .venv\Scripts\python.exe tests\test_presentations.py config\presentations\writing-workshop.yml
 
-It prints `OK`, or each problem with the slide's number and id. All four at once:
+It prints `OK`, or each problem with the slide's number and id. All of them at once:
 
     .venv\Scripts\python.exe -m unittest tests.test_presentations -v
 
@@ -82,7 +93,7 @@ texts). A value that starts with `{` must be in quotes, or the file cannot be re
 
 ```yaml
 id: "information-workshop"          # the file's name, without .yml
-order: 2                            # its place among the cards on /orientation/ (1–4)
+order: 2                            # its place among the cards on /orientation/ (1, 2 …; each its own)
 lang: "en"                          # always "en"
 title: "Grapevine and La Viña Information Workshop"
 short: "Information Workshop"       # the short name in the player's header
@@ -142,7 +153,7 @@ fillins:
     label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
     hint: "Service position"
     default: "Area 65 Grapevine / La Viña Chair"
-    shared: true                    # one answer for all four presentations
+    shared: true                    # one answer for every presentation
   - key: "first_name"
     label: { en: "Your first name (only in your notes)", es: "Tu nombre (solo en tus notas)" }
     hint: "first name"
@@ -206,7 +217,7 @@ new slide for them.
 
 | `kind` | What it shows | `options` |
 |---|---|---|
-| `meeting` | the committee's next meeting dates, the rule, the time, the Zoom ID and passcode | `limit` (3; 12 = the year) |
+| `meeting` | the committee's next meeting dates, the rule, the time, and how to join: the Google Meet link and meeting code (or a Zoom ID and passcode) | `limit` (3; 12 = the year) |
 | `lv-workshop` | La Viña's next monthly virtual workshops, the time, the Zoom ID, the contact | `limit` (3) |
 | `events` | the next events of the Events page (never the committee meetings). A monthly event, like the CityWide booth, takes one row: its next date — or, with `series: "all"`, a row for each of its dates (a list of the year ahead). Each row says what the Events page says: a hybrid event shows its place AND "Online on Zoom", and an event whose details are not final says "Details to be confirmed" | `limit` (5), `filter`: `all`, `workshops`, `neta` (NETA 65's own events), `calendar` (Grapevine's and La Viña's calendars) or `assemblies` (NETA 65's assemblies), `series: "all"` (every date of a monthly event; left out: its next date only) |
 | `deadlines` | the next story deadlines: date, issue, theme (La Viña's themes in Spanish, with the English; a machine translation is marked as one). An issue with two themes is never cut in half | `pub`: `gv`, `lv` or `both`; `limit` (6); `limit_each`: with `both`, this many of EACH magazine (`limit: 6, limit_each: 3` = the next three of each) |
@@ -226,7 +237,7 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
     layout: "live"
     kind: "meeting"
     title: "The committee's next meetings"
-    intro: "We meet {live:meeting_rule}, {live:meeting_time}, on Zoom."
+    intro: "We meet {live:meeting_rule}, {live:meeting_time}, on {live:meeting_platform}."
     options: { limit: 3 }
     minutes: 1.5
     notes: |
@@ -269,9 +280,25 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `meeting_month` | October 2026 — the month of `meeting_day`, switching with it (the title slide's "October 2026 meeting") | "Monthly" |
 | `meeting_rule` | every third Wednesday of the month | — |
 | `meeting_time` | 7:00 – 8:00 PM Central time | — |
-| `meeting_zoom_id`, `meeting_passcode` | the committee meeting's Zoom ID and passcode | — |
-| `meeting_phone` | +1 346 248 7799 (Houston) — Zoom's dial-in number for joining by phone (the first of `phone_access:`) | "see the Accessibility page" |
-| `meeting_phone_passcode` | what a caller types as the passcode: the chair's numbers-only phone passcode in `phone_access:` (or the meeting's passcode, when it is numbers only). Empty until it is set there | — |
+| `meeting_platform` | Google Meet — where the committee meeting is held (`meeting: platform:`) | — |
+| `meeting_link` | meet.google.com/rva-tmst-vdb — its link as a slide writes it | "see the Meetings page" |
+| `meeting_url` | https://meet.google.com/rva-tmst-vdb — the same link in full, for an e-mail | "see the Meetings page" |
+| `meeting_code` | rva-tmst-vdb — what the Google Meet app asks for (a Zoom meeting's ID, kept on one line) | — |
+| `meeting_zoom_id`, `meeting_passcode` | the older names: the meeting code (or Zoom ID), and a passcode (empty on Google Meet) | — |
+| `meeting_phone` | +1 346 248 7799 (Houston) — Zoom's dial-in number for joining by phone (the first of `phone_access:`); a Google Meet room has no number to call | "see the Accessibility page" |
+| `meeting_phone_passcode` | what a caller types as the passcode: the chair's numbers-only phone passcode in `phone_access:` (or the meeting's passcode, when it is numbers only). Empty until it is set there, and for a Google Meet room | — |
+| `speaker_name` | Rick W. — the guest speaker of `meeting_day`'s meeting, moving on with it at midnight | "to be announced" |
+| `speaker_position` | Past delegate, Area 65 Northeast Texas (Panel 73); … — their service position | "to be announced" |
+| `speaker_topic` | Grapevine as a Twelfth Step tool: … — the topic | "to be announced" |
+| `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … — the name and the position | "to be announced" |
+| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with no speaker listed (December 16, 2026): for another meeting's slides (the Grapevine Meeting's announcements), with `meeting_day` | "guest speaker: to be announced" |
+| `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — the guest speaker of `meeting_after`'s meeting (next month's, on a slide shown during the meeting) | "to be announced" |
+| `speaker_slides` | for the chair's notes: "Tonight's guest speaker shares slides: …" (the speaker's `slides: true`) | "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too." |
+| `grapevine_meeting_next` | Wednesday, December 2, 2026 — our Grapevine Meeting, the next one until it ends | "see the Events page" |
+| `grapevine_meeting_day` | Wednesday, December 2, 2026 — its own date until midnight Central after it (its title slide) | "see the Events page" |
+| `grapevine_meeting_after` | Wednesday, January 6, 2027 — the one after `grapevine_meeting_day`, moving on with it | "see the Events page" |
+| `grapevine_meeting_time` | 7:00 – 8:00 PM Central time | — |
+| `grapevine_meeting_link` | meet.google.com/rva-tmst-vdb — its link as a slide writes it | "see the Events page" |
 | `lv_workshop_next` | Thursday, October 22, 2026 — the next one, until it ends | "see La Viña's events calendar at aalavina.org" |
 | `lv_workshop_time`, `lv_workshop_zoom_id` | 2:00 – 3:00 PM Central time (3:00 PM Eastern) · its Zoom ID | — |
 | `price_gv_print`, `price_gv_digital`, `price_lv_print`, `price_lv_digital` | $36.00 … — the 1-year price in effect on the day the slide is shown | "see the Shop page" |
@@ -300,9 +327,22 @@ by tonight's. So in one sentence, and on one slide, use `meeting_day` with `meet
 committee meeting's title slide: "{live:meeting_month} meeting" over "{live:meeting_day} · {live:meeting_time}";
 "Next meeting: {live:meeting_after}" on a slide shown during the meeting), and `meeting_next` on its own, for "the next
 meeting" in a workshop ("Next meeting: {live:meeting_next}"). Never mix them: "the {live:meeting_month} meeting on
-{live:meeting_next}" names two different meetings between 8 PM and midnight.
+{live:meeting_next}" names two different meetings between 8 PM and midnight. The guest speaker keys go the same way:
+`speaker_name`, `speaker_position`, `speaker_topic`, `speaker_line`, `speaker_note` with `meeting_day` (tonight's
+speaker), `speaker_after` with `meeting_after` (next month's); and `grapevine_meeting_day` with
+`grapevine_meeting_after` on the Grapevine Meeting's own slides.
 
-Write a Zoom meeting ID as `{live:meeting_zoom_id}`, never as digits: the checker takes digits for a phone number.
+In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda e-mail, the reminder, the draft
+minutes), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` — and
+for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the position and topic in Spanish, as
+the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for, and so are the speaker
+keys in the agenda's rows there. A line whose `{paper:…}` facts are all empty (a meeting with no guest speaker) is
+left out. So is every speaker line in a version that leaves out the slide `paperwork: speaker_slide:` names (the
+committee meeting's "No guest speaker", for a speaker who can't come). The minutes name the speaker by service
+position only.
+
+Write a meeting code or a Zoom meeting ID as `{live:meeting_code}` (or its older name `{live:meeting_zoom_id}`),
+never as digits: the checker takes digits for a phone number.
 The phone numbers the site itself publishes (anywhere in `config/site.yml`, and the two story lines) pass the
 checker, but write them with their keys too: `{live:meeting_phone}`, `{live:gv_audio_phone}`,
 `{live:lv_audio_phone}` follow the site when a number changes. (The Zoom IDs and the time ranges the facts give never

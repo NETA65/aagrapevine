@@ -1284,11 +1284,11 @@ marked failed.
 238047" gives 238047, not "protected". A passcode of letters only still works, unless it is an ordinary word of
 the sentence (`PASS_WORDS`: protected, required, below …).
 
-> **The Zoom passcodes are public.** The passcodes of the weekly open meetings (and of the committee meeting, from
-> `config/site.yml`) are printed on the site (`/meetings/`), in its calendar files and in the presentations. That is normal for
-> open AA meetings, which anyone may attend. It means the hosts should keep Zoom's own protection on: the
-> **waiting room**, or host controls such as removing a participant and locking the meeting
-> ([Settings §3.2](settings.md#32-meeting--the-committee-meeting)).
+> **The Zoom passcodes are public.** The passcodes of the weekly open meetings are printed on the site
+> (`/meetings/`), in its calendar files and in the presentations (our own meetings are on Google Meet, which has
+> none: [3.14](#314-the-committee-meeting)). That is normal for open AA meetings, which anyone may attend. It
+> means the hosts should keep Zoom's own protection on: the **waiting room**, or host controls such as removing a
+> participant and locking the meeting ([Settings §3.2](settings.md#32-meeting--the-committee-meeting)).
 
 #### Change La Viña's weekly open meeting
 
@@ -1535,16 +1535,28 @@ meeting:
   weekday: "wednesday"
   start: "19:00"            # 24 h, Central time
   end: "20:00"
-  platform: "Zoom"          # the pages' words: "Join on Zoom", "Monthly on Zoom" (left out: Zoom)
-  zoom_url: "…"             # the whole official Zoom link (as in config/site.yml)
-  meeting_id: "…"
-  passcode: "…"
+  platform: "Google Meet"   # the pages' words: "Join on Google Meet", "Monthly on Google Meet" (left out: Zoom)
+  online_url: "https://meet.google.com/rva-tmst-vdb"   # the link to join (an older zoom_url: line still counts)
+  meeting_id: "rva-tmst-vdb"   # the meeting code (letters: "Meeting code"; a Zoom ID's digits: "Meeting ID")
   chair_title: "Grapevine / La Viña Chair"
   chair_email: "grapevine@neta65.org"
   note: "All AA members are welcome to attend. No registration required."      # who may come
   note_es: "Todos los miembros de AA pueden asistir. No hace falta registrarse."
   skip_dates: []            # e.g. ["2026-12-16"] — dates that do not happen
+  flyer_match: "committee meeting *[-–—] *(flyer|guest speaker)"   # its flyers (the Drive's flyers/ folder)
+  speaker_until: "19:30"    # the guest speaker's part ends by then
+  speakers:                 # one block per meeting, from January 2027
+    - date: "2027-01-20"
+      name: "Rick W."       # first name and last initial only
+      confirmed: true       # for the chair only
+      position: "…"
+      position_es: "…"
+      topic: "…"
+      topic_es: "…"
 ```
+
+No `passcode:` (Google Meet has none) and no phone dial-in: `phone_access:` holds the weekly open meetings' Zoom
+numbers only ([Settings §3.8](settings.md#38-phone_access--joining-by-phone)).
 
 **What the site understands** (checked with `meeting_rule` and `check_skip_dates`):
 
@@ -1568,11 +1580,31 @@ meeting:
 > browser, and both must agree. Monthly events under `recurring_events:` are forgiving ("Saturdays",
 > "2nd", "second", "last" all work there): see [Flyers and events](flyers-and-events.md).
 
-With the settings of October 2026 the next meetings are **Oct 21, Nov 18 and Dec 16, 2026, 7–8 PM Central**.
+With the settings of November 2026 the next meetings are **Dec 16, 2026, then Jan 20 and Feb 17, 2027, 7–8 PM
+Central**, on Google Meet; the first guest speaker is on January 20, 2027 (December 16 has none).
+
+**The guest speakers** (`speakers:`, since November 2026): each block is checked as the skip dates are — its date
+must be a meeting day by the rule and not a skip date, its name a first name and a last initial ("Rick W.", no
+second speaker for a date); a block that fails is left out and named under *Settings problems* (`status.json` →
+`problems.meeting`); one without a topic is shown without it, and noted. The sync (`meeting.meeting_speakers`) and
+the pages (`committee.js` `meetingSpeakers`) read the list with the same rules and the same notes. A speaker of the
+next 45 days (`SPEAKER_CONFIRM_DAYS`) without `confirmed: true` is a reminder for the chair (*Reminders* in the run
+summary, `status.json` → `reminders`, `build_data._speaker_reminders`). Each committee meeting in `events.json` then
+carries its speaker (`extra.speaker`: name, position and topic in both languages — never `confirmed`) and two more
+sentences in its summary ("Guest speaker: Rick W. — “…”. The guest speaker's part ends by 7:30 PM; committee
+business follows until 8:00 PM."); its title, its times (7:00–8:00 PM) and its id (`ev:committee:<date>`) stay as
+they are. Never in what search engines read, never in a calendar reminder. Every key:
+[Settings §3.2](settings.md#the-guest-speakers-speakers).
+
+**The meeting's flyers** (`flyer_match:`): the newest file of the Drive's `flyers/` folder whose name matches —
+one named with the meeting's month ("January 2027 Committee Meeting - guest speaker") for that month, else the
+undated "Committee Meeting - flyer" — is each date's flyer (`build_data.series_flyers` with `category="flyers"` +
+`pick_flyer`, as for a monthly series); a month-only name makes no event of its own
+([Settings §3.2](settings.md#the-meetings-flyers-flyer_match)).
 
 **`platform` and `note`** (since October 2026 both are used): `platform` is the name the pages give the meeting place
-("Join on Zoom", "Monthly on Zoom", "on Zoom" in the calendar entries, the share kit, the presentations' closing
-slide), Zoom when left out; the dial-in section and the weekly open meetings always say Zoom (Zoom's own). `note` /
+("Join on Google Meet", "Monthly on Google Meet", "on Google Meet" in the calendar entries, the share kit, the
+presentations' closing slide), Zoom when left out; the dial-in section and the weekly open meetings always say Zoom (Zoom's own). `note` /
 `note_es` is who may come: the first sentence of *Who can come* on `/meetings/` and the end of the meeting's calendar
 descriptions (`/events.ics`, the Google and Outlook links, the home page's "add to calendar"). Change both together:
 without `note_es`, the Spanish pages show the English note (only the meeting's entries in `data/site/events.json` get a
@@ -1581,8 +1613,8 @@ machine translation).
 **The reminder in a downloaded calendar file** (since October 2026). The meeting's "Add to calendar → Apple /
 Outlook (.ics file)" (in the menus on `/meetings/` and `/events/`), the home page's **Add to calendar** button (its
 next-meeting card has no menu: the button downloads the `.ics` file at once) and the month files carry one
-reminder, 1 hour before. Its words are the meeting's title only: the Zoom link, meeting ID and passcode stay in the
-description and never appear in the reminder. The subscribed feeds `/events.ics` · `/es/events.ics` have no reminder
+reminder, 1 hour before. Its words are the meeting's title only: the Google Meet link, the meeting code and the
+guest speaker stay in the description and never appear in the reminder. The subscribed feeds `/events.ics` · `/es/events.ics` have no reminder
 ([Flyers and events §11.3](flyers-and-events.md#113-what-goes-into-the-calendar-files)).
 
 **When.** The quick rebuild after you save: the dates are rebuilt in every run, and the pages compute
@@ -1590,16 +1622,20 @@ them too.
 
 **Where it shows.** `/meetings/#committee-meeting` · `/es/meetings/#committee-meeting` (countdown,
 "add to calendar"), the home page's next-meeting card, `/events/` and the calendar feeds `/events.ics`
-· `/es/events.ics`, `/monthly/` and its posters, the QR posters, `/accessibility/#phone` (joining by
-phone with the meeting ID), and the booth display ("Meetings you can join": its monthly rule, Zoom and the meeting
-ID). Since October 2026 also: the *Pass it on* welcome message on `/gvr/#pass-it-on` (the next date, moving on by
+· `/es/events.ics`, `/monthly/` and its posters, the QR posters, `/accessibility/#phone` (that our meetings on
+Google Meet have no number to call), and the booth display ("Meetings you can join": its monthly rule, Google Meet
+and the meeting code). Since October 2026 also: the *Pass it on* welcome message on `/gvr/#pass-it-on` (the next date, moving on by
 itself after each meeting), the Area report's committee meetings (`/monthly/#report` → For: Area) and the committee
 meeting deck's *Agenda & minutes* ([Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--minutes)).
 
 **Code pointers.** [`scripts/sync/meeting.py`](../scripts/sync/meeting.py) → `meeting_rule`,
-`parse_hhmm`, `check_skip_dates`, `upcoming_rule_dates`; `build_data.py` → `committee_meetings` (12
-months into `events.json`); `src/_data/meeting.js`; `eleventy/filters/committee.js` → `meetingDates`.
-Tests: `tests/test_build_times.py`, `tests/test_recurring_events.py`, `tests/test_events_feeds.py`.
+`parse_hhmm`, `check_skip_dates`, `check_starts`, `upcoming_rule_dates`, `meeting_speakers`, `speaker_until`;
+`build_data.py` → `committee_meetings` (12 months into `events.json`, with `speaker_sentences` and the flyers),
+`meeting_notes` (`problems.meeting`), `_speaker_reminders`; `src/_data/meeting.js` (each upcoming date's
+`speaker`); `eleventy/filters/committee.js` → `meetingDates`, `meetingJoin` (the filter `cmJoin`: platform, link,
+the code or ID with its label, a passcode, dial-in), `meetingSpeakers`, `meetingSpeaker`, `meetingSpeakerUntil`,
+`meetingSpeakerNotes`. Tests: `tests/test_build_times.py`, `tests/test_recurring_events.py`,
+`tests/test_events_feeds.py`, `tests/test_r20_meeting.py`.
 
 ---
 

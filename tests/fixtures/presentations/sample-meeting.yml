@@ -35,10 +35,10 @@ presets:
   - id: "short"
     label: { en: "Short meeting (about 20 minutes)", es: "Reunión breve (unos 20 minutos)" }
     minutes: 20
-    hide: ["business"]
+    hide: ["business", "guest-speaker"]
     note:
-      en: "Leaves out old and new business: take it up at the next meeting."
-      es: "Deja fuera los asuntos pendientes y nuevos: se tratan en la próxima reunión."
+      en: "Leaves out old and new business and the guest speaker: take them up at the next meeting."
+      es: "Deja fuera los asuntos pendientes y nuevos y al orador o la oradora invitada: quedan para la próxima reunión."
 fillins:
   - key: "presenter"
     label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
@@ -70,16 +70,19 @@ fillins:
     label: { en: "Action item · by when", es: "Tarea · para cuándo" }
     hint: "Date"
 # The chair's paperwork (Customize → Agenda & minutes), every part of it: the three texts with each {paper:…} fact
-# and a paragraph in Spanish, and "Start next month" (config/presentations/README.md; the committee meeting's
-# own block is the full example)
+# and a paragraph in Spanish, the guest speaker's slide (the short meeting leaves it out: its texts name no
+# speaker) and "Start next month" (config/presentations/README.md; the committee meeting's own block is the full
+# example)
 paperwork:
   agenda_slide: "agenda"
+  speaker_slide: "guest-speaker"
   agenda:
     subject: "Agenda: sample committee meeting, {paper:meeting}"
     body: |
       Here is the agenda for the {paper:month} meeting.
 
       When: {paper:meeting}, {live:meeting_time}, on Zoom (meeting ID {live:meeting_zoom_id})
+      Guest speaker: {paper:speaker}, on {paper:speaker_topic}
 
       Agenda
       {paper:agenda}
@@ -94,6 +97,7 @@ paperwork:
       Reminder: the committee meets {paper:meeting}, {live:meeting_time}, on Zoom.
 
       {lang:es}Recordatorio: el {paper:committee_es} se reúne el {paper:meeting_es}, {paper:time_es}, por Zoom.{/lang}
+      {lang:es}Orador(a) invitado(a): {paper:speaker_es}, sobre {paper:speaker_topic_es}{/lang}
   minutes:
     subject: "Draft minutes: sample committee meeting, {paper:meeting}"
     body: |
@@ -101,6 +105,7 @@ paperwork:
 
       Meeting of {paper:meeting}. Chair: {fill:presenter}
       Attended: about ___ members
+      Guest speaker: {paper:speaker_position}
 
       Last month's minutes
       - The minutes of {fill:minutes_month} were approved.
@@ -265,6 +270,21 @@ slides:
     notes: |
       SAY: Let's end with a round of sharing. What has your group done with Grapevine or La Viña this month, and where could a magazine reach someone who needs it? Please keep it to two or three minutes so everyone who wants to share can.
       DO: Keep time gently, and thank each person who shares.
+
+  # The guest speaker's slide (paperwork.speaker_slide): the short meeting leaves it out, and its agenda e-mail and
+  # minutes then name no speaker either
+  - id: "guest-speaker"
+    layout: "bullets"
+    eyebrow: "Guest speaker"
+    title: "A word from tonight's guest speaker"
+    items:
+      - "**{live:speaker_name}**"
+      - "{live:speaker_position}"
+      - "Topic: {live:speaker_topic}"
+    minutes: 1
+    notes: |
+      SAY: Before we close, a few words from tonight's guest speaker, {live:speaker_name}, on {live:speaker_topic}. Thank you for being with us, and for your service.
+      DO: Keep it to a minute. The short meeting leaves this slide out, and its agenda e-mail and minutes then name no guest speaker.
 
   - id: "closing"
     layout: "closing"

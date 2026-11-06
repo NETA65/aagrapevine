@@ -62,7 +62,7 @@ footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
 minutes: 115            # the deck's full plan: 115 minutes in a two-hour slot (its timing page)
 icon: "pen-line"
 tone: "lv"
-drive_title: "Grapevine and La Viña Writing Workshop"
+# drive_title: "Grapevine and La Viña Writing Workshop" — put back once the copy with the Google Meet details is on the Drive
 
 card:
   title:
@@ -72,8 +72,8 @@ card:
     en: "A hands-on workshop for putting our experience, strength and hope on paper: four short writing exercises with sharing in pairs, what Grapevine and La Viña publish, their current themes and deadlines, anonymity in your writing, and how to send or record your story."
     es: "Un taller práctico para poner por escrito nuestra experiencia, fortaleza y esperanza: cuatro ejercicios breves de escritura con momentos para compartir en parejas, lo que publican La Viña y Grapevine, sus temas y fechas límite actuales, cómo cuidar el anonimato al escribir y cómo enviar o grabar tu historia."
   audience:
-    en: "AA members who want to write their story or a short piece, in English for Grapevine or in Spanish for La Viña. A group or district hosts it, in person or on Zoom."
-    es: "Miembros de AA que quieren escribir su historia o un texto breve, en español para La Viña o en inglés para Grapevine. Lo organiza un grupo o un distrito, en persona o por Zoom."
+    en: "AA members who want to write their story or a short piece, in English for Grapevine or in Spanish for La Viña. A group or district hosts it, in person or online."
+    es: "Miembros de AA que quieren escribir su historia o un texto breve, en español para La Viña o en inglés para Grapevine. Lo organiza un grupo o un distrito, en persona o en línea."
 
 presets:
   - id: "full"
@@ -112,8 +112,8 @@ fillins:
     label: { en: "Host group or district", es: "Grupo o distrito anfitrión" }
     hint: "host group or district"
   - key: "place"
-    label: { en: "Place, or Zoom", es: "Lugar o Zoom" }
-    hint: "in person / on Zoom"
+    label: { en: "Place, or online", es: "Lugar, o en línea" }
+    hint: "in person / online"
   - key: "break_end"
     label: { en: "Back from the break at (clock time)", es: "Hora de regreso del descanso" }
     hint: "clock time"
@@ -144,8 +144,8 @@ slides:
     notes: |
       {not:short} SAY: Good [morning / afternoon], everyone, and welcome to the Grapevine and La Viña Writing Workshop. My name is {fill:first_name}, I'm an alcoholic, and I serve as {fill:presenter} with the NETA 65 Grapevine & La Viña Committee. Thank you to {fill:host_group} for inviting us and for making room for us today. For the next two hours we're going to do more writing than listening. By the time we close, most of you will have the beginning of a story, maybe a whole one, that you could send to Grapevine or La Viña if you choose to.
       {only:short} SAY: Good [morning / afternoon], everyone, and welcome to the Grapevine and La Viña Writing Workshop. My name is {fill:first_name}, I'm an alcoholic, and I serve as {fill:presenter} with the NETA 65 Grapevine & La Viña Committee. Thank you to {fill:host_group} for inviting us and for making room for us today. For the next ninety minutes we're going to do more writing than listening. By the time we close, most of you will have the beginning of a story, maybe a whole one, that you could send to Grapevine or La Viña if you choose to.
-      DO: Before anyone arrives: put a story planner, a revision checklist, paper and a pen on every chair; start the slides on this slide; have a timer ready. On Zoom: open the room 15 minutes early, make a trusted servant co-host for the breakout rooms, and put the committee's contribute page link in the chat. Introduce yourself with your first name only. This presentation is posted publicly, so the title line carries a service title, never a name: your first name is only in these notes.
-      FACILITATOR TIP: Everything a facilitator needs (a checklist for before the day, supplies, Zoom set-up, a 90-minute and a 120-minute timing plan, and the printable handouts in English and Spanish) is in the facilitator section, {ui:customize} → {ui:prepare}. Those pages are never projected, so the show ends on the credits. To print the handouts: {ui:customize} → {ui:prepare} → {ui:print}. Read the section before the day. Anyone the host trusts can give this presentation: the notes are written so a member can read them almost word for word.
+      DO: Before anyone arrives: put a story planner, a revision checklist, paper and a pen on every chair; start the slides on this slide; have a timer ready. Online: open the meeting 15 minutes early, ask a trusted servant to help with the breakout rooms if your platform has them, and put the committee's contribute page link in the chat. Introduce yourself with your first name only. This presentation is posted publicly, so the title line carries a service title, never a name: your first name is only in these notes.
+      FACILITATOR TIP: Everything a facilitator needs (a checklist for before the day, supplies, the online set-up, a 90-minute and a 120-minute timing plan, and the printable handouts in English and Spanish) is in the facilitator section, {ui:customize} → {ui:prepare}. Those pages are never projected, so the show ends on the credits. To print the handouts: {ui:customize} → {ui:prepare} → {ui:print}. Read the section before the day. Anyone the host trusts can give this presentation: the notes are written so a member can read them almost word for word.
       UPDATE: the bracketed presenter, date and host line: {ui:customize} → {ui:your_details}. "Current as of" fills in by itself.
       TRANSITION: 'Let's start the way we start our meetings, with a few words about who we are and what today is.'
     version_notes:
@@ -193,8 +193,8 @@ slides:
     title: "A safe room for writing and sharing"
     items:
       - "**What is shared here stays here:** in the room, in pairs, in breakout rooms"
-      - "No photos, screenshots or recordings of anyone, in the room or on Zoom"
-      - "On Zoom: first name and last initial; cameras are optional"
+      - "No photos, screenshots or recordings of anyone, in the room or online"
+      - "Online: first name and last initial; cameras are optional"
       - "Sharing is optional: you can always pass"
       - "In pairs: listen without fixing; afterwards, speak only about your own writing"
       - "Your draft is yours: only you decide whether to send it"
@@ -204,7 +204,7 @@ slides:
     notes: |
       SAY: Today we're going to write about real lives: ours, and sometimes the people in them. So we need the same safety we have in a meeting. What you hear today stays here, and that includes what your partner reads to you in the pair exercises. Please don't take photos, screenshots or recordings of anyone, in the room or on the screen; AA's pamphlet on anonymity makes the same point about online meetings. If you'd like the slides, there's no need to photograph the screen: they're posted on our committee website, and the handouts are yours to keep. When you share in pairs, you're a listener, not an editor: no advice, no fixing. When we talk as a whole room afterwards, speak about your own writing only, never about what your partner wrote.
       ASK: Is everyone comfortable with these? Is there anything this group would like to add? (This is the room's own conscience; accept any suggestion that keeps people safe.)
-      FACILITATOR TIP: On Zoom, say the no-screenshot reminder out loud and also paste it in the chat. Repeat it privately by chat to anyone who joins late. Confirm the meeting is not being recorded. The quotation at the bottom is A.A.W.S. material; keep its credit line with it if you edit the slide.
+      FACILITATOR TIP: Online, say the no-screenshot reminder out loud and also paste it in the chat. Repeat it privately by chat to anyone who joins late. Confirm the meeting is not being recorded. The quotation at the bottom is A.A.W.S. material; keep its credit line with it if you edit the slide.
       TRANSITION: 'Here's how we'll spend our time together.'
 
   # The deck's last row read "Questions and closing (we finish by 1:55)": the finishing time is its own row here,
@@ -242,7 +242,7 @@ slides:
     notes: |
       {not:short} SAY: Here's the plan. We'll start with why we write and what Grapevine and La Viña actually publish, including the themes the editors are asking for right now. Then we write: four short exercises, each one building on the last, with a break in the middle. Between exercises I'll share a few ideas about what makes a story strong, how to protect anonymity on paper, and how to send your story in when you're ready. We'll leave time for questions at the end, and we'll finish on time.
       {only:short} SAY: Here's the plan. We'll start with why we write and what Grapevine and La Viña actually publish, including the themes the editors are asking for right now. Then we write: three short exercises, each one building on the last, with a break in the middle, and a fourth one to do at home. Between exercises I'll share a few ideas about what makes a story strong, how to protect anonymity on paper, and how to send your story in when you're ready. We'll leave time for questions at the end, and we'll finish on time.
-      DO: Point out where the restrooms and coffee are. On Zoom, explain that breakout rooms will open on their own and close with a one-minute warning.
+      DO: Point out where the restrooms and coffee are. Online, with breakout rooms, explain that they will open on their own and close with a one-minute warning.
       FACILITATOR TIP: The times are minutes from the start, so they work for any start time; write clock times next to them on a printed copy if you like. If you only have 90 minutes, choose the 90-minute version ({ui:customize} → {ui:version}): Exercise 4 is done at home and the break is five minutes.
       UPDATE: nothing to change by hand: the times follow the version you present and the slides you switch off ({ui:customize} → {ui:slides}).
       TRANSITION: 'So, why write at all?'
@@ -547,8 +547,8 @@ slides:
     # DO: the deck's "opened automatically" → "set to open by themselves" (wording rules).
     notes: |
       SAY: Our first exercise is a warm-up, and it's meant to be fun. As our Big Book puts it, we are not a glum lot. Think of one time you had fun sober: a trip, a game night, a dance, a service event, a moment you laughed so hard you cried. Now write for five minutes without stopping. Don't fix spelling, don't cross anything out, don't worry about where it's going. If you get stuck, write the opening line on the screen and keep going. Ready? Begin.
-      {not:short} DO: Start a visible 5-minute timer. Say 'one minute left' at 4 minutes, then 'finish your sentence'. Pair people up (neighbors in the room; on Zoom, breakout rooms of two for 3 minutes, set to open by themselves). Each person reads one sentence they like, or passes. Bring everyone back and take two or three answers to the debrief question, about their own writing only.
-      {only:short} DO: Start a visible 5-minute timer. Say 'one minute left' at 4 minutes, then 'finish your sentence'. Pair people up in the time that is left (neighbors in the room; on Zoom, breakout rooms of two, set to open by themselves). Each person reads one sentence they like, or passes. Bring everyone back and take two or three answers to the debrief question, about their own writing only.
+      {not:short} DO: Start a visible 5-minute timer. Say 'one minute left' at 4 minutes, then 'finish your sentence'. Pair people up (neighbors in the room; online, breakout rooms of two for 3 minutes, set to open by themselves, or pairs taking turns aloud where the platform has no breakout rooms). Each person reads one sentence they like, or passes. Bring everyone back and take two or three answers to the debrief question, about their own writing only.
+      {only:short} DO: Start a visible 5-minute timer. Say 'one minute left' at 4 minutes, then 'finish your sentence'. Pair people up in the time that is left (neighbors in the room; online, breakout rooms of two, set to open by themselves, or pairs taking turns aloud where the platform has no breakout rooms). Each person reads one sentence they like, or passes. Bring everyone back and take two or three answers to the debrief question, about their own writing only.
       FACILITATOR TIP: The warm-up isn't tied to a deadline. A fun sober story can fit many issues; if someone asks where to send it, point to the next open theme on slides {slide:gv-themes} and {slide:lv-themes}, or to La Viña's suggested topic '{lang:es}Tiempos de fiesta en sobriedad{/lang}', which has no deadline. Write along with the room for the first minute; it makes it easier for others to start.
       EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Piensa en una vez que te divertiste en sobriedad: un viaje, una noche de juegos, un baile, un evento de servicio, una carcajada. Escribe 5 minutos sin parar; no corrijas nada. ¿No sabes cómo empezar? Comienza así: «La primera vez que me di cuenta de que me estaba divirtiendo en sobriedad…». En parejas, lee una frase que te guste (1 minuto cada uno), o pasa. Para compartir: ¿Qué te sorprendió de tu propio recuerdo?{/lang}
       {not:short} TIME SPLIT: 5 writing, 3 in pairs, 2 debrief.
@@ -667,7 +667,7 @@ slides:
     version_minutes: { short: 1.5 }
     notes: |
       SAY: Instead of covering years, some of the best stories cover one evening. One phone call to a sponsor. One meeting in a church basement. The questions on this slide are the ones on your story planner handout: who, what, where, when and why. Answer them and you have the bones of a scene. Here's a tip that works almost every time: start in the middle of the action. Not 'I was born in 1962'; start with 'The phone rang at 3 a.m.' Then end on what the scene means to you now. A single scene can be the whole story, or it can be the heart of a longer one.
-      DO: Hold up the story planner handout so everyone knows which sheet you mean. On Zoom, paste the link to the handout in the chat.
+      DO: Hold up the story planner handout so everyone knows which sheet you mean. Online, paste the link to the handout in the chat.
       FACILITATOR TIP: Remind the room of the first-names-only rule here, before Exercise 3, so it shapes the drafts from the start.
       TRANSITION: 'Let's try the three-part shape now.'
 
@@ -704,8 +704,8 @@ slides:
           - "In pairs, read your _now_ paragraph"
     notes: |
       SAY: This exercise fits Emotional Sobriety, one of Grapevine's regular departments. (If Emotional Sobriety is on slide {slide:gv-themes}, add: it's the theme of an upcoming issue too, and its deadline is on that slide.) In January 1958 Bill W. wrote a Grapevine article called 'The Next Frontier: Emotional Sobriety', and members have been writing about it ever since. Think of a moment when you reacted differently than you used to: someone cut you off in traffic, bad news came, an old resentment flared up, and this time you didn't do what you always did. You'll write in three short bursts of three minutes. I'll call the time. First burst: what I used to do. Begin.
-      {not:short} DO: Call time every 3 minutes: 'Now write what happened: the tool, the Step, the person.' Then: 'Now write what it's like now.' Then pairs, 2 minutes each, reading only the 'now' paragraph (on Zoom, breakout rooms of two for 5 minutes). Debrief with two or three volunteers, about their own writing.
-      {only:short} DO: Call time every 3 minutes: 'Now write what happened: the tool, the Step, the person.' Then: 'Now write what it's like now.' Then pairs, reading only the 'now' paragraph, in the time that is left (on Zoom, breakout rooms of two). Debrief with two or three volunteers, about their own writing.
+      {not:short} DO: Call time every 3 minutes: 'Now write what happened: the tool, the Step, the person.' Then: 'Now write what it's like now.' Then pairs, 2 minutes each, reading only the 'now' paragraph (online, breakout rooms of two for 5 minutes, where the platform has them). Debrief with two or three volunteers, about their own writing.
+      {only:short} DO: Call time every 3 minutes: 'Now write what happened: the tool, the Step, the person.' Then: 'Now write what it's like now.' Then pairs, reading only the 'now' paragraph, in the time that is left (online, breakout rooms of two, where the platform has them). Debrief with two or three volunteers, about their own writing.
       FACILITATOR TIP: If someone writes about something painful and becomes upset, let them take a break; offer a quiet word afterwards and suggest they talk with their sponsor. Nobody has to share. In Spanish, this exercise suits La Viña's suggested topic '{lang:es}Cómo trato con el miedo hoy{/lang}' (no deadline), or the next open La Viña theme on slide {slide:lv-themes}.
       {not:short} EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Recuerda un momento en que reaccionaste de manera diferente a como lo hacías antes: ante el enojo, el miedo, un resentimiento o una mala noticia. Escribe en tres partes de 3 minutos. Primero: lo que yo hacía antes. Después: lo que pasó (la herramienta, el Paso, la persona). Al final: cómo es ahora. ¿No sabes cómo empezar? Comienza así: «Antes, cuando algo me enojaba, yo…». En parejas, lee tu párrafo de «ahora» (2 minutos cada uno). Para compartir: ¿Qué herramienta del programa apareció en lo que escribiste?{/lang}
       {only:short} EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Recuerda un momento en que reaccionaste de manera diferente a como lo hacías antes: ante el enojo, el miedo, un resentimiento o una mala noticia. Escribe en tres partes de 3 minutos. Primero: lo que yo hacía antes. Después: lo que pasó (la herramienta, el Paso, la persona). Al final: cómo es ahora. ¿No sabes cómo empezar? Comienza así: «Antes, cuando algo me enojaba, yo…». En parejas, lee tu párrafo de «ahora». Para compartir: ¿Qué herramienta del programa apareció en lo que escribiste?{/lang}
@@ -725,7 +725,7 @@ slides:
 
       Back at {fill:break_end}
 
-      Stretch, refill your coffee, rest your writing hand. On Zoom: stay in the meeting; camera off is fine.
+      Stretch, refill your coffee, rest your writing hand. Online: stay in the meeting; camera off is fine.
     minutes: 7
     version_minutes: { short: 5 }
     version_fields:
@@ -735,11 +735,11 @@ slides:
 
           Back at {fill:break_end}
 
-          Stretch, refill your coffee, rest your writing hand. On Zoom: stay in the meeting; camera off is fine.
+          Stretch, refill your coffee, rest your writing hand. Online: stay in the meeting; camera off is fine.
     notes: |
       {not:short} SAY: Let's take about seven minutes. Stretch, refill your coffee, rest your writing hand. When we come back, we'll talk about anonymity on paper, how your name appears and how to protect the people in your story, and then you'll write a full scene.
       {only:short} SAY: Let's take about five minutes. Stretch, refill your coffee, rest your writing hand. When we come back, we'll talk about anonymity on paper, how your name appears and how to protect the people in your story, and then you'll write a full scene.
-      DO: Put the return time in {ui:customize} → {ui:your_details} before the workshop, or say it out loud. On Zoom, leave this slide shared and ask people to stay connected. Use the break to check the room temperature, the supplies and the Zoom breakout settings for Exercise 3.
+      DO: Put the return time in {ui:customize} → {ui:your_details} before the workshop, or say it out loud. Online, leave this slide shared and ask people to stay connected. Use the break to check the room temperature, the supplies and the breakout settings for Exercise 3. On a free Google account, Google Meet ends a call of three or more people after 60 minutes: end the call at the break and start it again on the same link, or hold the workshop on a Meet link whose owner's account has a plan without that limit.
       FACILITATOR TIP: Stay available during the break: this is when hesitant writers ask the questions they won't ask in front of the room. Keep anything you hear confidential.
       UPDATE: the return time ({ui:customize} → {ui:your_details}), and the length if your plan differs ({ui:customize} → {ui:edit}).
       TRANSITION: 'Welcome back. Let's talk about anonymity in your writing.'
@@ -754,7 +754,7 @@ slides:
     minutes: 0.5
     notes: |
       SAY: Welcome back. Before you write a full scene, let's talk about anonymity, because it shapes what goes on the page. The good news: the magazines have protected writers' anonymity for more than eighty years, and the system is simple. The part that's up to us is protecting the other people in our stories.
-      DO: Check that everyone is back; on Zoom, wait until the participant count is steady.
+      DO: Check that everyone is back; online, wait until the participant count is steady.
       TRANSITION: 'First, your own name.'
     version_notes:
       short: "90-MINUTE PLAN: Part 5 takes about 5 minutes (6 in the full plan)."
@@ -866,9 +866,9 @@ slides:
           - "In pairs: read your scene; your partner names one detail that stayed with them"
     notes: |
       SAY: This is the longest writing time today: ten minutes. Pick a theme from the calendars we saw, on slides {slide:gv-themes} and {slide:lv-themes}, which show the next open themes, or pick any Step or Tradition, and choose one moment that belongs to it. (If the July 2027 Annual Prison Issue is still on slide {slide:gv-themes}, add: for that issue the editors especially want stories from women in long-term custody.) Use your story planner if it helps: where were you, who was there, first names only, what did you see and hear, what changed. Start in the middle of the action. Ten minutes. Begin.
-      {not:short} DO: Start a 10-minute timer; give a 2-minute and a 1-minute warning. Then pairs for 2 minutes each (Zoom: breakout rooms of two, 5 minutes, with a 1-minute broadcast warning). The listener names one detail that stayed with them: nothing else, no advice. Debrief with two or three volunteers.
-      {only:short} DO: Start a 10-minute timer; give a 2-minute and a 1-minute warning. Then pairs, in the time that is left (Zoom: breakout rooms of two, with a 1-minute broadcast warning). The listener names one detail that stayed with them: nothing else, no advice. Debrief with two or three volunteers.
-      FACILITATOR TIP: Walk the room quietly (or watch the Zoom chat) for anyone who looks stuck, and offer a prompt: 'Where were you sitting?' 'What did the room smell like?' Writers who need to talk instead of write can record their story later (Audio Project, coming up).
+      {not:short} DO: Start a 10-minute timer; give a 2-minute and a 1-minute warning. Then pairs for 2 minutes each (online: breakout rooms of two, 5 minutes, with a 1-minute warning, where the platform has them). The listener names one detail that stayed with them: nothing else, no advice. Debrief with two or three volunteers.
+      {only:short} DO: Start a 10-minute timer; give a 2-minute and a 1-minute warning. Then pairs, in the time that is left (online: breakout rooms of two, with a 1-minute warning, where the platform has them). The listener names one detail that stayed with them: nothing else, no advice. Debrief with two or three volunteers.
+      FACILITATOR TIP: Walk the room quietly (or watch the chat, online) for anyone who looks stuck, and offer a prompt: 'Where were you sitting?' 'What did the room smell like?' Writers who need to talk instead of write can record their story later (Audio Project, coming up).
       {not:short} EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Elige un tema: uno del calendario de La Viña (diapositiva {slide:lv-themes}), un tema sugerido de La Viña (por ejemplo, «Mi Primer Paso») o cualquier Paso o Tradición. Elige un solo momento: una hora, una noche, una llamada. Escribe 10 minutos: dónde estás, qué ves y oyes, algo que alguien dijo, qué cambió en ti. Empieza en medio de la acción, por ejemplo: «Sonó el teléfono a las tres de la mañana…». En parejas (2 minutos cada uno): lee tu escena; tu compañero o compañera menciona un detalle que se le quedó grabado. Para compartir: ¿Qué dejaste fuera, y le hace falta a tu historia?{/lang}
       {only:short} EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Elige un tema: uno del calendario de La Viña (diapositiva {slide:lv-themes}), un tema sugerido de La Viña (por ejemplo, «Mi Primer Paso») o cualquier Paso o Tradición. Elige un solo momento: una hora, una noche, una llamada. Escribe 10 minutos: dónde estás, qué ves y oyes, algo que alguien dijo, qué cambió en ti. Empieza en medio de la acción, por ejemplo: «Sonó el teléfono a las tres de la mañana…». En parejas: lee tu escena; tu compañero o compañera menciona un detalle que se le quedó grabado. Para compartir: ¿Qué dejaste fuera, y le hace falta a tu historia?{/lang}
       UPDATE: nothing to change: step 1 points to the theme slides, which stay current by themselves.
@@ -924,7 +924,7 @@ slides:
     version_minutes: { short: 2.5 }
     notes: |
       SAY: Here's a checklist for revising. On the left, the story itself: is it one story? Does the first line start in the action? Is it clear early that I'm an alcoholic and an AA member? Am I showing more than telling? Is it my experience, not advice? Is there hope in it? On the right, the details: other people protected, no outside issues or promotion, original work, about the right length, a title, and my contact details for the office. And the last item is the one members swear by: read it aloud, or ask your sponsor or a friend in the program to read it. They'll tell you if it rings true. Then send it.
-      DO: Point to the printed checklist. On Zoom, paste the link to this presentation or the committee's contribute page in the chat.
+      DO: Point to the printed checklist. Online, paste the link to this presentation or the committee's contribute page in the chat.
       FACILITATOR TIP: This slide is also the revision handout: print one per person; the Spanish version is with the handouts in the facilitator section ({ui:customize} → {ui:prepare}). Don't let the checklist become a reason not to send: 'good enough and sent' carries the message; 'perfect and in a drawer' doesn't.
       {not:short} TRANSITION: 'Let's use it right now.'
       {only:short} TRANSITION: 'When you're ready, here's where to send it.'
@@ -947,7 +947,7 @@ slides:
     minutes: 8
     notes: |
       SAY: Last exercise, and it's short. Choose your favorite draft from today. Run down the checklist and circle one thing to fix; just one. Then rewrite your first line so it starts in the moment. Then give your story a title and write the theme and deadline at the top of the page, so future-you knows where it's going. Five minutes. Begin.
-      DO: 5-minute timer, then pairs for 1 minute each (Zoom: breakout rooms of two, 3 minutes). Debrief: invite two or three people to say their next step out loud. Let people choose freely; nobody is asked to promise anything.
+      DO: 5-minute timer, then pairs for 1 minute each (online: breakout rooms of two, 3 minutes, where the platform has them). Debrief: invite two or three people to say their next step out loud. Let people choose freely; nobody is asked to promise anything.
       FACILITATOR TIP: In the 90-minute plan, skip this exercise (the 90-minute version leaves it out): show the checklist, and invite people to do this at home before they send their story.
       EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Elige tu borrador favorito de hoy. Repasa la lista de revisión y encierra en un círculo una sola cosa para mejorar. Vuelve a escribir tu primera línea para que empiece en el momento. Ponle un título y escribe arriba el tema y la fecha límite. En parejas: lee tu nueva primera línea y tu título (1 minuto cada uno). Para compartir: ¿Cuál es un próximo paso para tu historia esta semana? (La lista de revisión en español está en la sección para facilitadores.){/lang}
       TIME SPLIT: 5 writing, 2 in pairs, 1 debrief (10 with the checklist slide).
@@ -1128,7 +1128,7 @@ slides:
     version_minutes: { short: 3.5 }
     notes: |
       SAY: We have a few minutes for questions and sharing. Ask anything about writing, sending or recording your story. And if you're willing, tell us which theme or department you'll write for next. Saying it out loud is a good way to make it happen.
-      DO: Read questions from the Zoom chat aloud. Keep each share to about a minute. If a question needs a long answer, offer to talk afterwards.
+      DO: Read questions from the chat aloud, online. Keep each share to about a minute. If a question needs a long answer, offer to talk afterwards.
       FACILITATOR TIP: If you don't know an answer, say so and point to the official page or to customerservice@aagrapevine.org; don't guess. Questions about one member's personal situation are best answered privately after the workshop.
       TRANSITION: 'Let's close together.'
 
@@ -1146,8 +1146,8 @@ slides:
       FACILITATOR TIP: Give no author's name; 'a former Grapevine editor' is enough.
       TRANSITION: Move to the last slide and leave it up while people leave.
 
-  # The committee meeting's day, time, Zoom ID and passcode were typed into the deck; here they come from
-  # config/site.yml `meeting:` at every build.
+  # The committee meeting's day, time and Zoom details were typed into the deck; here they come from
+  # config/site.yml `meeting:` at every build (its Google Meet link).
   - id: "thank-you"
     layout: "closing"
     title: "Thank you, and keep writing"
@@ -1155,11 +1155,11 @@ slides:
     lines:
       - "NETA 65 Grapevine & La Viña Committee"
       - "{live:email} · {live:site}"
-      - "Committee meeting: {live:meeting_rule}, {live:meeting_time}, on Zoom"
-      - "Zoom ID {live:meeting_zoom_id} · passcode {live:meeting_passcode} · All AA members welcome"
+      - "Committee meeting: {live:meeting_rule}, {live:meeting_time}, on Google Meet"
+      - "{live:meeting_link} · All AA members welcome"
     minutes: 1
     notes: |
-      SAY: Thank you for coming, and thank you to {fill:host_group} for hosting. Please take your handouts and your drafts home, and send your story when it's ready. If you'd like help, or you'd like to host a workshop at your group, write to us at grapevine@neta65.org. Our committee meets on Zoom {live:meeting_rule}, {live:meeting_time}; every AA member is welcome, no registration needed. Keep writing.
+      SAY: Thank you for coming, and thank you to {fill:host_group} for hosting. Please take your handouts and your drafts home, and send your story when it's ready. If you'd like help, or you'd like to host a workshop at your group, write to us at grapevine@neta65.org. Our committee meets on Google Meet {live:meeting_rule}, {live:meeting_time}, with a guest speaker each month; every AA member is welcome, no registration needed. Keep writing.
       DO: Leave this slide up while people leave. Stay a few minutes for private questions. Collect any feedback in person, not on a sign-in sheet with names.
       FACILITATOR TIP: The next slide lists the sources and the disclaimer; it stays in the show because this presentation is posted publicly, and it is the last slide of the show. The facilitator pages after it are never projected ({ui:customize} → {ui:prepare}).
       TRANSITION: End of the workshop.
@@ -1200,9 +1200,9 @@ slides:
     number: "A"
     accent: "navy"
     title: "For facilitators"
-    subtitle: "Preparation, supplies, Zoom, timing and the handouts"
+    subtitle: "Preparation, supplies, online, timing and the handouts"
     notes: |
-      SAY: This section is for whoever leads the workshop. Its pages are never projected: they are in {ui:customize} → {ui:prepare}. It covers what to do before the day, the supplies for an in-person workshop, how to run the exercises on Zoom, a 90-minute and a 120-minute timing plan, the printable handouts in English and Spanish, and how to keep this presentation up to date.
+      SAY: This section is for whoever leads the workshop. Its pages are never projected: they are in {ui:customize} → {ui:prepare}. It covers what to do before the day, the supplies for an in-person workshop, how to run the exercises online, a 90-minute and a 120-minute timing plan, the printable handouts in English and Spanish, and how to keep this presentation up to date.
       FACILITATOR TIP: Read these pages a week before the workshop, and again the day before. Workshops follow AA Grapevine's own Writing Workshop Guidelines (aagrapevine.org/gvr-resources): an hour and a half to two hours, a well-lit room, pens and paper, sharing for inspiration, writing time, and reading aloud for anyone who wants to.
       TRANSITION: Before the day.
 
@@ -1213,7 +1213,7 @@ slides:
     eyebrow: "For facilitators"
     title: "Before the day"
     items:
-      - "Agree on date, place or Zoom link, language and format with the host group or district: they decide"
+      - "Agree on date, place or online link, language and format with the host group or district: they decide"
       - "Invite at meetings and by flyer; consider inviting a published member to share about writing"
       - "Fill in the marked items: all orange text ({ui:customize} → {ui:your_details}); themes, deadlines, the audio lines and the agenda's times stay current by themselves"
       - "Call both story lines to test them"
@@ -1224,14 +1224,14 @@ slides:
       DO: For free printed materials, email gvrc@aagrapevine.org 4 to 6 weeks ahead with your name, Area, service position and contact details, and the event's name, date and expected attendance. Ask whether your event qualifies: printed materials may be limited to larger events, so don't count on them for a small workshop.
       FACILITATOR TIP: Don't promise the host a published story or a number of submissions. Our part is the invitation and the room.
       PREPARATION: about an hour, a week ahead.
-      TRANSITION: Supplies and Zoom.
+      TRANSITION: Supplies and online workshops.
 
   - id: "supplies"
     layout: "columns"
     style: "panels"
     facilitator: true
     eyebrow: "For facilitators"
-    title: "Supplies, room and Zoom"
+    title: "Supplies, room and online"
     columns:
       - heading: "In person"
         accent: "navy"
@@ -1242,19 +1242,22 @@ slides:
           - "Current issues to pass around"
           - "Envelopes for mailed stories"
           - "Good light, a quiet room"
-      - heading: "On Zoom"
+      - heading: "Online"
         accent: "gv"
         items:
-          - "A co-host runs breakout pairs"
-          - "Rename: first name, last initial"
+          - "Breakout pairs, where the platform has them"
+          - "First name, last initial: renamed, or in the chat"
           - "No screenshots; no recording"
-          - "Prompts in the chat for callers"
-          - "Odd number: one room of three"
+          - "Each prompt in the chat too"
+          - "Odd number: one group of three"
           - "Handouts by link, not attachment"
-    # SAY: the deck's breakout rooms "assigned automatically" → "assigned at random by Zoom" (wording rules).
+    # SAY: the deck's breakout rooms "assigned automatically" → "assigned at random" (wording rules). The deck's
+    # "On Zoom" (the committee's platform then) → "Online": the committee's own workshops are on Google Meet now,
+    # and a host group's may be on Zoom.
     notes: |
-      SAY: In person: lined paper, pens, a few clipboards for people without a table, a visible timer or a bell, the printed handouts, a few current issues to pass around, and a few envelopes for members who want to mail a handwritten story. Choose a well-lit, quiet room. On Zoom: make a trusted servant co-host to run breakout rooms of two, assigned at random by Zoom, with the countdown turned on and a one-minute broadcast warning. At the start, ask everyone to rename to a first name and last initial and remind them: no screenshots and no recording. Don't record the session yourself. Paste each exercise prompt into the chat, because members calling in by phone can't see the slides. With an odd number, make one room of three, or have the co-host pair up.
-      FACILITATOR TIP: Accessibility: read every prompt aloud, offer large-print handouts, and let anyone who prefers to talk use the audio options instead of writing. Zoom is named here only as the platform the committee uses.
+      SAY: In person: lined paper, pens, a few clipboards for people without a table, a visible timer or a bell, the printed handouts, a few current issues to pass around, and a few envelopes for members who want to mail a handwritten story. Choose a well-lit, quiet room. Online, on a platform with breakout rooms (Zoom has them): ask a trusted servant to run breakout rooms of two, assigned at random, with the countdown turned on and a one-minute warning; with an odd number, make one room of three, or have the helper pair up. At the start, ask everyone to show a first name and last initial (renamed, or typed in the chat) and remind them: no screenshots and no recording. Don't record the session yourself. Paste each exercise prompt into the chat too, for anyone who can't see the slides well.
+      FACILITATOR TIP: Accessibility: read every prompt aloud, offer large-print handouts, and let anyone who prefers to talk use the audio options instead of writing.
+      ON GOOGLE MEET (the platform the committee uses for its own online meetings and workshops): on a personal Google account Meet has no breakout rooms, so the pairs take turns aloud in the main meeting, two by two, or share in the chat; a signed-in member can't rename themselves, so first names go in the chat; and Meet ends a call of three or more people after 60 minutes, so end the call at the break and start it again on the same link, or hold the workshop on a Meet link whose owner's account has a plan without that limit.
       TRANSITION: Timing.
 
   # The deck's TIMING plan. Each segment's slides add up to its row: `minutes` for the full plan, `version_minutes`
@@ -1454,7 +1457,7 @@ slides:
     items:
       - "Themes and deadlines: the theme slides ({slide:gv-themes}, {slide:lv-themes}) come from the committee's website and drop passed deadlines by themselves (check them against aagrapevine.org/contribute and aalavina.org/recursos); the exercise slides ({slide:exercise-1}, {slide:exercise-2}, {slide:exercise-3}) point to them"
       - "Phone lines and addresses: slides {slide:how-to-submit} and {slide:record}, and the Spanish handouts; the two story lines' numbers come from the committee's website and stay current by themselves"
-      - "Title slide: your service title, the date, the host, in person or on Zoom ({ui:customize} → {ui:your_details}; your first name only in the notes)"
+      - "Title slide: your service title, the date, the host, in person or online ({ui:customize} → {ui:your_details}; your first name only in the notes)"
       - "Agenda times follow the version and the slides you present; the break's return time and the Seventh Tradition line are in {ui:your_details}"
       - "The \"Current as of\" date, and the committee meeting on the Thank-you slide ({slide:thank-you}), fill in by themselves"
       - "Find every item to change: {ui:customize} → {ui:your_details} (an empty blank shows in orange)"

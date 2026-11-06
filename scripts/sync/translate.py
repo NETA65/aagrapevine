@@ -11,9 +11,9 @@ observed with these models on our content):
   * sentence splitting (the model silently DROPS the 2nd sentence of multi-sentence input),
     aware of abbreviations (St., Dr., Sra., a.m., A.A., No. 5 …), lines, bullets, "|" separators;
   * protected spans → placeholder tokens (XQ1, XQ2 …; verified empirically to survive the model):
-    URLs, e-mails, @handles, #hashtags, phone numbers, Zoom ids, clock times, emoji and any
-    character the model cannot represent, plus glossary KEEP names ("Dear Grapevine" became
-    "Querido abuelo" without this);
+    URLs, e-mails, @handles, #hashtags, phone numbers, Zoom ids, Google Meet codes, clock times,
+    emoji and any character the model cannot represent, plus glossary KEEP names ("Dear Grapevine"
+    became "Querido abuelo" without this);
   * glossary TERMS (data/translations/glossary.yml) inserted through the same placeholders;
   * Title Case / ALL CAPS titles and single Capitalized words are also translated lower-cased and
     the better variant is kept (fewer untranslated source words wins, ties broken by the model's
@@ -608,6 +608,12 @@ _NAME_INITIAL = re.compile(
     r"Room|Table|Exhibit|Option|Tradición|Paso|Concepto|Capítulo|Apéndice|Parte|Sección|Clase|Grupo|Tipo|Nivel|"
     r"Sala|Mesa|Anexo|Opción)\s)"
     r"[A-ZÁÉÍÓÚÑ][a-záéíóúñü]{1,20}(?:-[A-ZÁÉÍÓÚÑ][a-záéíóúñü]{1,20})?\s[A-ZÁÉÍÓÚÑ]\.(?![\w.])")
+# A Google Meet code: 3, 4 and 3 lower-case letters ("rva-tmst-vdb"). It has no digit, so _CODE misses it, and
+# "one-year-old" has the same shape: only a code that a word just before it names as one — "Meeting code",
+# "código", "Google Meet", in the same sentence — is protected (_meet_code_or_word). A link to the room
+# (meet.google.com/rva-tmst-vdb) is protected as a URL or a domain already.
+_MEET_CODE = re.compile(r"(?<![\w\-/.])[a-z]{3}-[a-z]{4}-[a-z]{3}(?![\w\-])")
+_MEET_CODE_CUE = re.compile(r"(?i)\b(?:google\s+meet|code|c[oó]digo)\b[^.!?\n]{0,30}$")
 # Sizes: "8.5 x 11", "11×17" (the model wrote "8,5 x 11").
 _DIMENSIONS = re.compile(r"(?<![\w.,])\d+(?:[.,]\d+)?\s?[x×]\s?\d+(?:[.,]\d+)?(?:\s?(?:in|cm|mm|″|\"))?(?![\w.,]?\d)")
 _PROTECT_PATTERNS = [
@@ -621,6 +627,7 @@ _PROTECT_PATTERNS = [
     _NAME_INITIAL,                                                                          # Victor E.
     re.compile(r"(?:\+?1[\s.-]?)?\(?\b\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b"),                  # phone
     re.compile(r"\b\d{3,4}(?:[ -]\d{3,4}){1,3}\b"),                                         # Zoom id
+    _MEET_CODE,                                                                             # rva-tmst-vdb
     _DIMENSIONS,                                                                            # 8.5 x 11
     _TIME_PATTERN,
     re.compile(r"\b\w+&\w+\b"),                                                             # Q&A, AT&T
@@ -636,6 +643,13 @@ _QUOTED = re.compile(r"((?:^|(?<=[\s(\[—–]))[“\"«])([A-ZÁÉÍÓÚÑ][^\W
 def _code_or_word(m: re.Match, put) -> str:
     tok = m.group(0)
     return tok if _NOT_CODE.fullmatch(tok) else put(tok)
+
+
+def _meet_code_or_word(m: re.Match, put) -> str:
+    """A word shaped like a Google Meet code is one when the words before it say so ("Meeting code rva-tmst-vdb",
+    "Google Meet: …", "código de la reunión: …"); in "meet my one-year-old son" it is an ordinary word."""
+    before = m.string[max(0, m.start() - 40):m.start()]
+    return put(m.group(0)) if _MEET_CODE_CUE.search(before) else m.group(0)
 
 
 # --------------------------------------------------------------------------- localized spans
@@ -859,12 +873,13 @@ def looks_like(text: str, lang: str) -> bool:
 
 def is_code_token(token: str) -> bool:
     """True for ONE token that is a code, never a word: "v52424", "Panel77", "GVLV2027", "2026-27",
-    "GV_LV", "A65_GV". Dictionary words ("Loneliness", "Hope"), ordinals/decades/times ("9th",
-    "1990s", "7pm") and file-name-like phrases ("Writing_Workshop_Guidelines") are not codes."""
+    "GV_LV", "A65_GV", a Google Meet code ("rva-tmst-vdb"). Dictionary words ("Loneliness", "Hope"),
+    ordinals/decades/times ("9th", "1990s", "7pm") and file-name-like phrases
+    ("Writing_Workshop_Guidelines") are not codes."""
     t = (token or "").strip().strip(".,;:!?¿¡()[]{}\"'“”‘’«»")
     if not t or re.search(r"\s", t) or _NOT_CODE.fullmatch(t):
         return False
-    if re.search(r"\d", t):
+    if re.search(r"\d", t) or _MEET_CODE.fullmatch(t):
         return True
     if "_" in t:
         parts = [p for p in re.split(r"[_\-]+", t) if p]
@@ -1057,6 +1072,9 @@ class Protector:
             kind = "time" if pat is _TIME_PATTERN else "p"
             if pat is _MD_MARK:
                 out = pat.sub(lambda m: put(m.group(0), "md" if m.group(0) in self.marker_labels else "p"), out)
+                continue
+            if pat is _MEET_CODE:
+                out = pat.sub(lambda m: _meet_code_or_word(m, put), out)
                 continue
             if pat is _CODE:
                 # (never a token with a placeholder in it: "5-8 PM" → "5-XQ1" masked again as a code

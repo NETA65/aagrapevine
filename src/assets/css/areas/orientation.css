@@ -107,8 +107,8 @@
 
 /* ---------- 1b. Presentations (#presentations) and "How presenting works" (#presenting) ----------
    One card per presentation (orientation.njk; the player's hooks are listed there): 1 column, 2 from 1024px,
-   4 from 1800px at 100 % text (a card is then ≈ 400px; at larger text never 4, and 1 on laptop screens at
-   130–150 %, below). Then "Reset all 4 to the original" (once there is something to reset), "Print or save a
+   3 from 1800px at 100 % text (at larger text never 3, and 1 on laptop screens at 130–150 %, below); in 2
+   columns the odd last card takes the row. Then "Reset all 5 to the original" (once there is something to reset), "Print or save a
    copy", and at the end of the band "How presenting works", closed
    (each box lays itself out by its OWN width — container queries in rem, so larger text gets the narrow
    layout sooner). */
@@ -117,11 +117,14 @@
   font-size: 0.875rem; line-height: 1.5; color: var(--c-muted); }
 .o101-pres-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
 @media (width >= 64rem) { .o101-pres-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* five decks: in two columns the odd last card takes the row (2 + 2 + 1), never a card beside a blank */
+.o101-pres-grid > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 /* at 130 % text two columns from 1280px, at 150 % from 1440px (a card keeps ≈ 430px of 100 % text) */
 @media (64rem <= width < 80rem) { :root:is([data-text="130"], [data-text="150"]) .o101-pres-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (80rem <= width < 90rem) { :root[data-text="150"] .o101-pres-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (width >= 112.5rem) {
-  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-pres-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-pres-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-pres-grid > :last-child:nth-child(odd) { grid-column: auto; }
 }
 .o101-pres-card { display: flex; flex-direction: column; min-width: 0; padding: 1.25rem; }
 @media (width >= 40rem) { .o101-pres-card { padding: 1.5rem; } }
@@ -166,7 +169,7 @@
 .o101-pres-print-btns > .btn-sm { padding-inline: 0.5rem; }
 @container (width < 26rem) { .o101-pres-print-btns { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @container (width < 13.5rem) { .o101-pres-print-btns { grid-template-columns: minmax(0, 1fr); } }
-/* "Reset all 4 to the original", right under the cards: a block of its own (no line box around it), as wide as
+/* "Reset all 5 to the original", right under the cards: a block of its own (no line box around it), as wide as
    its label. Hidden until this device has changed a presentation — the [hidden] rule is !important in the base
    layer, so it wins over this display. */
 .o101-pres-resetall { display: flex; width: fit-content; max-width: 100%; margin-top: 1.25rem; }

@@ -56,7 +56,14 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   historias, las revistas del mes y el libro del mes —, un cartel para cada mes (descargar en PNG, compartir,
   imprimir), las 10 maneras de poner una edición a trabajar y cada mes también como mensaje para WhatsApp o
   correo. El **Resumen mensual** (`/es/digest/`) reúne todo lo nuevo del mes pasado (el correo mensual,
-  sección [10 c](#c-monthly-e-mail-digest-keep-every-district-informed), es la misma edición). La **reunión
+  sección [10 c](#c-monthly-e-mail-digest-keep-every-district-informed), es la misma edición). Nuestras
+  reuniones son por **Google Meet** (código de la reunión `rva-tmst-vdb`, la misma sala para las dos, sin código
+  de acceso ni número para llamar): la **reunión del comité** (tercer miércoles, de 7 a 8 p. m., hora del Centro;
+  desde el 20 de enero de 2027 cada una empieza con la charla de un **orador invitado o una oradora invitada**,
+  que termina a más tardar a las 7:30, y luego siguen los asuntos del comité) y la nueva **Reunión de Grapevine
+  (en inglés)** (primer miércoles, de 7 a 8 p. m., desde el 2 de diciembre de 2026; en inglés: leemos una historia
+  de AA Grapevine y compartimos sobre su tema), en `/es/meetings/#grapevine-meeting`. Los oradores del año (nombre e inicial del
+  apellido, servicio y tema) están en `config/site.yml` → `meeting:` → `speakers:`. La **reunión
   abierta semanal de La Viña** (jueves, en español) está en `/es/meetings/#weekly-open`. La página
   **Reuniones** (`/es/meetings/`) también reúne las **reuniones de Grapevine** de los grupos de AA de nuestra
   Área y de las áreas cercanas (de las 8 listas de reuniones que usa la página del Grupo Rowlett). Arriba, la
@@ -154,10 +161,12 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   videos** del sitio; se guarda solo en ese dispositivo. La página **Accesibilidad** (`/es/accessibility/`,
   enlace al pie de cada página) explica esos ajustes, los subtítulos de los videos (con el botón **Activar
   subtítulos en todos los videos**), los videos en lengua de señas (ASL), el audio y **cómo unirse
-  por teléfono** a nuestras reuniones de Zoom (números y código para teléfono: `config/site.yml` →
-  `phone_access`).
-- **Ajustes** (reunión del comité, Zoom, correo, eventos de cada mes como la mesa en CityWide Dallas o el
-  taller mensual de La Viña por Zoom — `host: "lv"`: un evento de La Viña, no nuestro): archivo `config/site.yml`.
+  por teléfono** a las reuniones abiertas semanales de Zoom (números y código para teléfono: `config/site.yml` →
+  `phone_access`; nuestras reuniones por Google Meet no tienen número para llamar, y la página lo dice).
+- **Ajustes** (reunión del comité y Reunión de Grapevine por Google Meet, oradores invitados, correo, eventos de
+  cada mes como la mesa en CityWide Dallas — segundo sábado, de 5:30 a 7:30 p. m., en la Iglesia Metodista Unida
+  Lovers Lane — o el taller mensual de La Viña por Zoom — `host: "lv"`: un evento de La Viña, no nuestro): archivo
+  `config/site.yml`.
   **Corregir una traducción:** `data/translations/overrides.yml`.
 - **Eventos sin volante** (talleres, asambleas): un archivo en `content/events`. Si todavía faltan
   detalles, `tentative: true` muestra "Detalles por confirmar"; el lugar en español va en `location_es`.
@@ -277,9 +286,9 @@ refresh (GitHub schedule)", "Evening refresh (GitHub schedule)", "Morning refres
 | **Official stores** (aagrapevine.org / aalavina.org store pages) | **Book of the Month** (title, cover, percent, sale price, dates) and **subscription prices** per region (U.S. · Canada · International; print / digital / complete); once a week the **specialty items** — greeting cards, pocket planner, wall calendar and, in season, the holiday cards (picture, price, pack size, volume price, a short description) | **Shop** (a short teaser on Home, the monthly posters and the monthly toolkit) |
 | **Daily quote** (the home pages of aagrapevine.org and aalavina.org) | Grapevine's *Daily Quote* and La Viña's *Cita Diaria*: the quote as published (never translated), who said it, the book it comes from, the official e-mail sign-up — under them the publishers' permission credits ("Reprinted with permission of A.A. World Services, Inc." · "Copyright © The AA Grapevine, Inc. Reprinted with permission. All rights reserved.") | **Home** |
 | **Record your story by phone** (aagrapevine.org/audio-portal, aalavina.org/graba-tu-historia) | Grapevine's *Audio Project* and La Viña's *Graba tu historia*: the phone number, the keys to press, the length, the e-mail address for recordings, Grapevine's story playlists | **Share your story** (`/contribute/#record`: the steps by phone, and above them the [story recorder](#the-story-recorder-share-your-story), with the same lengths, addresses and La Viña's permission sentence as the steps; one link on Listen · Watch) |
-| **Committee meeting** (from the settings) | Next dates, countdown, "add to calendar" | **Meetings · Events** |
+| **Committee meeting** (from the settings) | Next dates, countdown, "add to calendar", the Google Meet link and meeting code; from January 2027 each meeting's guest speaker (first name and last initial, service position, topic) | **Meetings · Events · Home** |
 | **Local meeting lists** (the 8 intergroup / central office lists the Rowlett Group's meeting page uses — in or at our Area: Dallas Intergroup, Fort Worth Central Office, Tyler Central Service Office, the Spanish-speaking Dallas office, District 71 Abilene; nearby: Arkansas Central Office, OKC Intergroup, Northwest Texas Area 66) | Every meeting with the Grapevine ("GR") type: day, time, place, directions, link to the office's page. A meeting in two lists is shown once; our Area first (by county), nearby areas after | **Meetings** (one line on Home; each meeting is in the site search) |
-| **Monthly events** (from the settings: our booth at CityWide Dallas, La Viña's monthly workshop on Zoom) | The next dates, "add to calendar", the flyer from our Drive; a date La Viña's own calendar lists too is shown once | **Events · Home · calendar feed · monthly toolkit** (and, once it has taken place, the monthly digest) |
+| **Monthly events** (from the settings: our booth at CityWide Dallas, our online Grapevine Meeting on Google Meet, La Viña's monthly workshop on Zoom) | The next dates, "add to calendar", the flyer from our Drive; a date La Viña's own calendar lists too is shown once | **Events · Home · calendar feed · monthly toolkit** (and, once it has taken place, the monthly digest) |
 | **Other calendars** (optional, e.g. the NETA 65 workshop calendar on neta65.org) | Their events, each shown **once** even when it is also in `content/events` (yours wins). *neta65.org currently blocks robots — see [the NETA 65 workshop calendar](#the-neta-65-workshop-calendar)* | **Events** |
 | **Translation** | Every title, teaser and bulletin post in both languages | Everywhere |
 
@@ -351,7 +360,8 @@ What the newer pages do:
   `/es/…` address La Viña's button comes first. Nothing for the owner to do.
 - **Monthly toolkit** (`/monthly/`) — everything current for this month: the "10 ways to put an issue to
   work" guide (`config/carry.yml`), and a page for this month and each of the next 12 — the issue themes, tips,
-  story deadlines, dates (committee meeting, the CityWide booth, workshops), the Book of the Month and a
+  story deadlines, dates (the committee meeting and its guest speaker, the Grapevine Meeting, the CityWide booth,
+  workshops), the Book of the Month and a
   **poster** in its own seasonal design to download as a PNG for WhatsApp / Instagram (1080 × 1350), share, or
   print on one letter page. Each month's page also has the month **as a message** — the same toolkit as text
   with its links, in one language or both, with *Copy for WhatsApp* / *Copy for e-mail* — and how many
@@ -389,7 +399,7 @@ What the newer pages do:
   `/orientation/?slides#slide-12` resumes, `#lesson-role` starts a lesson), a **printable handout** (printing
   the hub gives one Letter sheet per lesson) and a 45-minute plan for district trainers. The lessons live in
   `config/orientation.yml` (both languages, checked by the build and by `tests/test_orientation.py`); the GVR
-  corner and the Monthly toolkit link to it. Its **Presentations** are the committee's four web slide decks
+  corner and the Monthly toolkit link to it. Its **Presentations** are the committee's five web slide decks
   ([how-to/presentations.md](how-to/presentations.md)); the monthly committee meeting's deck also makes the
   chair's paperwork — the agenda e-mail, a reminder, the draft minutes and **Start next month** (Customize →
   **Agenda & minutes**: [The committee meeting's paperwork](#the-committee-meetings-paperwork-agenda--minutes)).
@@ -398,9 +408,11 @@ What the newer pages do:
   meeting (aa.org's *Find AA near you*, *Is AA for you?*, the *Meeting Guide app*, and the AA offices in our
   Area, the Spanish-speaking office first on `/es/`) — the 404 page shows a short version in both languages,
   and Home has one line to it ([New to AA?](#new-to-aa-meetings-the-404-page-home)) —, the committee meeting
-  (`#committee-meeting`), the **Grapevine meetings** of local
-  groups (`#grapevine-meetings`: our Area first, then each nearby area — filters for place, day, in person /
-  online and "include nearby areas"; each card links to the meeting's page on the office's site, which has the
+  (`#committee-meeting`, on Google Meet: its link and meeting code, the next meeting's guest speaker, *How the
+  evening runs* and the year's speakers — [Changing settings](#the-committee-meeting-google-meet-and-the-guest-speakers)),
+  our own **Grapevine Meeting** (`#grapevine-meeting`: the 1st Wednesday, online, in English), the **Grapevine
+  meetings** of local groups (`#grapevine-meetings`: our Area first, then each nearby area — filters for place,
+  day, in person / online and "include nearby areas"; each card links to the meeting's page on the office's site, which has the
   joining details and any changes), and the weekly open meetings (`#weekly-open`: each has **Add to calendar**, a
   weekly repeating entry for Google Calendar or as a calendar file for Apple and Outlook). On the page the weekly
   open meetings come first, right under *New to AA?* (open meetings: anyone interested in AA is welcome), then the
@@ -551,7 +563,21 @@ breaks while you decide.
   `config/presentations/committee-meeting.yml` under `paperwork:`.
 - **Report to the Area:** the title and the blanks' words, the names of the Area meetings ("Assembly", "Area
   committee meeting" — or "Area Chairs' Meeting"?), the file name (`… Grapevine La Vina Area … Report`), whether
-  the printed report should carry the Zoom ID and passcode, and which events count as "ours".
+  the printed report should carry the Google Meet link and meeting code, and which events count as "ours".
+- **Google Meet, the Grapevine Meeting and the guest speakers (November 2026):** that all 12 speakers of 2027 are
+  public — on the site and in `config/site.yml` on GitHub — including the ones not `confirmed` yet; whether their
+  names also belong in the public calendar feeds (`/events.ics`, the Google / Outlook links: they are there now —
+  never in what search engines read) and in the monthly e-mail (its "Coming up" names the coming meeting's speaker
+  and topic, as `/digest/` does); the Spanish words "Orador(a) invitado(a)" and "La charla de la persona
+  invitada termina a más tardar a las 7:30 p. m."; the seven positions written without their service year ("past
+  chair of …", as the flyers print them); the Grapevine Meeting's names, "Grapevine Meeting" and in Spanish
+  "Reunión de Grapevine (en inglés)" (the Spanish title says it is in English, as La Viña's English title says
+  "(in Spanish)"), and that it is "in English, for AA members"; the AA Grapevine Statement of Purpose is named,
+  never printed (does AA Grapevine's licensing allow the text, with its credit line? and its official Spanish name);
+  that Google Meet really has no dial-in and no passcode for our room, and who hosts (people who were not invited
+  must ask to join); CityWide's 5:30–7:30 PM at "Lovers Lane United Methodist Church"; whether December 16, 2026
+  may show the committee flyer that says each meeting opens with a guest speaker; and whether there will be
+  speakers in 2028.
 - **On a real phone** (with the [story recorder's real-device test](#the-story-recorder-share-your-story)):
   start an episode on Home, stop it, and open Listen ("Continue listening"); start Read aloud half-way down a page
   and try Next / Previous and Slower; turn Video captions on and play a video on Watch; add a deadline to Google
@@ -604,6 +630,47 @@ place if you like — the place goes after an `@`:
 A picture saved under the phone's own name (`IMG_20261017_183316.jpg`, `WhatsApp Image 2026-10-17 at 6.33.16 PM.jpeg`,
 a screenshot) is not an event: that date is when the picture was taken. Rename it to start with the event's
 date. The same flyer uploaded twice (a PDF and a picture of it) shows once, as the PDF.
+
+**The flyers of our two online meetings** go in *flyers* with **no day** in the name, so that each meeting finds
+its own (`flyer_match` in the settings) and none becomes a second event:
+
+| File name | Result |
+|---|---|
+| `Grapevine Meeting - flyer.png` | The Grapevine Meeting's flyer, on every date |
+| `Committee Meeting - flyer.png` | Every committee meeting's flyer |
+| `January 2027 Committee Meeting - guest speaker.png` … `December 2027 Committee Meeting - guest speaker.png` | That month's committee meeting's flyer (a month only: no event of its own) |
+| `Our online meetings - flyer.png`, `2027 Guest Speaker Series - flyer.png` | Neither meeting's: on the Portfolio (Flyers) only |
+
+The brand kit makes them (`brand/flyers/drive-upload/`, on the owner's computer only — `brand/` is never on
+GitHub). **Upload them on or after the day the Google Meet change is merged (November 26, 2026 or later)**, PNG
+only: the next sync shows whatever is on the Drive, so a flyer uploaded earlier would go live before the pages
+say Google Meet.
+
+**Two more steps for the day of that merge:**
+
+- **Merge at a quiet time.** Merge only when GitHub → **Actions** → **Website update** shows no run in progress
+  or queued, and not between about 4:15 and 8:30 AM Central (the morning refresh and the nightly full update run
+  then). A run that is still syncing when the merge lands publishes the new pages with the events it made before
+  them — no Grapevine Meeting on Events, CityWide's old hours — until the merge's own run is done. If a run was
+  syncing anyway, let the merge's own run finish (about 15 to 30 minutes), or start one
+  ([Run workflow](#7-running-the-update-right-now)).
+- **The four PowerPoint copies** in the Panel 77 folder `slides` were made on October 1, 2026: they still give
+  the old Zoom room, its passcode and a phone number to call. Replace each one with a copy that has the Google
+  Meet details (the link and the meeting code rva-tmst-vdb, no passcode, no phone line) with Drive's **Manage
+  versions → Upload new version**: the file keeps its ID and its title, so its links keep working. Then put back
+  that deck's `drive_title:` line in `config/presentations/` — this change turned the four into comments, so that
+  `/orientation/` offers no copy with the old details in the meantime (delete the `# ` in front and the note
+  after the title):
+
+  | File | Line to put back |
+  |---|---|
+  | `committee-meeting.yml` | `drive_title: "Grapevine and La Viña Monthly Committee Meeting"` |
+  | `information-workshop.yml` | `drive_title: "Grapevine and La Viña Information Workshop"` |
+  | `orientation-workshop.yml` | `drive_title: "GVR and RLV Orientation Workshop"` |
+  | `writing-workshop.yml` | `drive_title: "Grapevine and La Viña Writing Workshop"` |
+
+  (`/portfolio/` and `/library/` list every file of the folder, so they show the old copies until they are
+  replaced.)
 
 **The Bulletin.** Put a Google Doc (or a .txt / .docx file) in *bulletin*. It becomes a post on the
 Bulletin page (`/bulletin/`, under *Committee*); the file name is the headline and the document's text is the body:
@@ -670,9 +737,11 @@ Common changes:
 | Something we do every month (a booth, a workshop) | `recurring_events:` — see [below](#add-a-recurring-event) |
 | Something La Viña or Grapevine holds every month (La Viña's workshop on Zoom) | `recurring_events:` with `host: "lv"`, `online_url`, `meeting_id`, `flyer_match` — see [below](#something-la-viña-or-grapevine-holds-every-month-host-online-only-its-flyer) |
 | Skip one month of it | `recurring_events:` → that event's `skip_dates: ["2026-12-12"]` |
-| Zoom link, meeting ID, passcode | `meeting:` → `zoom_url`, `meeting_id`, `passcode` |
-| Who may come (the first line of *Who can come* on Meetings, and the end of the calendar text); where it is held | `meeting:` → `note` and `note_es` (write both); `platform` (the pages say "Join on Zoom": left out, Zoom) |
-| Joining our Zoom meetings by phone (dial-in numbers, the committee's phone passcode) | `phone_access:` — see [below](#joining-our-meetings-by-phone) |
+| The committee meeting's online link and its code | `meeting:` → `online_url` (an older `zoom_url` is still read), `meeting_id` (the Google Meet code `rva-tmst-vdb`: with letters the pages say "Meeting code", digits only are a Zoom "Meeting ID"); a `passcode` only on Zoom (Google Meet has none) — see [below](#the-committee-meeting-google-meet-and-the-guest-speakers) |
+| Who may come (the first line of *Who can come* on Meetings, and the end of the calendar text); where it is held | `meeting:` → `note` and `note_es` (write both); `platform` (the pages say "Join on Google Meet"; left out: Zoom) |
+| A committee meeting's guest speaker (first name and last initial, service position, topic) | `meeting:` → `speakers:` — see [below](#the-committee-meeting-google-meet-and-the-guest-speakers) |
+| Our Grapevine Meeting (1st Wednesday, Google Meet) | `recurring_events:` → the `grapevine-meeting` block — see [below](#our-grapevine-meeting-the-1st-wednesday-on-google-meet) |
+| Joining the weekly open meetings by phone (Zoom's dial-in numbers) | `phone_access:` — see [below](#joining-by-phone-the-weekly-open-meetings) |
 | Contact e-mail (also where the story recorder's *Email it to the committee* device report is addressed) | `site:` → `contact_email` and `meeting:` → `chair_email` |
 | The offices' addresses for *Tell the office* (GVR / RLV corner → Pass it on, and its handover sheet) | `links:` → `gvr_office_email`, `rlv_office_email` (any e-mail address; La Viña's is a draft — see [the GVR / RLV corner](#the-gvr--rlv-corner-pass-it-on-and-the-question-of-the-day)) |
 | The *New to AA?* card's aa.org links (Meetings, the 404 page) | `links:` → `aa_find`, `aa_is_aa_for_you`, `aa_meeting_guide` (each with its `_es` twin for `/es/`); its AA offices are the `meetings:` → `feeds` with `in_area: true` |
@@ -689,10 +758,58 @@ If a change breaks the file (for example a missing space), the update shows a **
 Actions tab and **the website stays as it was**. Open the file's **History**, compare with the
 previous version, and fix or undo the change.
 
+### The committee meeting: Google Meet and the guest speakers
+
+Our meetings are on **Google Meet**: `https://meet.google.com/rva-tmst-vdb`, meeting code `rva-tmst-vdb`, one room
+for the committee meeting (3rd Wednesday) and the Grapevine Meeting (1st Wednesday,
+[below](#our-grapevine-meeting-the-1st-wednesday-on-google-meet)), both 7:00–8:00 PM Central. Google Meet has no
+passcode, and this room has no numbers to call. In `config/site.yml`:
+
+```yaml
+meeting:
+  platform: "Google Meet"           # the pages say "Join on Google Meet" (left out: Zoom)
+  online_url: "https://meet.google.com/rva-tmst-vdb"   # every Join button (an older zoom_url: line still counts)
+  meeting_id: "rva-tmst-vdb"        # letters: "Meeting code"; digits only (a Zoom ID): "Meeting ID"
+  flyer_match: "committee meeting *[-–—] *(flyer|guest speaker)"   # its flyers on our Drive (section 2)
+  speaker_until: "19:30"            # the guest speaker's part ends by then
+  speakers:
+    - date: "2027-01-20"            # that month's 3rd Wednesday
+      name: "Rick W."               # first name and last initial only
+      confirmed: true               # for the chair: the pages never say which are confirmed
+      position: "Past delegate, Area 65 Northeast Texas (Panel 73); past chair of the Conference Committee on Grapevine and La Viña"
+      position_es: "Ex delegado del Área 65 Noreste de Texas (Panel 73); ex coordinador del Comité de la Conferencia sobre Grapevine y La Viña"
+      topic: "Grapevine as a Twelfth Step tool: …"
+      topic_es: "Grapevine como herramienta del Paso Doce: …"
+```
+
+- **The evening, from January 20, 2027:** 7:00 a moment of silence, the Serenity Prayer and the speaker's
+  introduction; about 7:02 the talk (about 20 minutes); about 7:22 questions; the speaker is thanked and done
+  **by 7:30**; 7:30–8:00 committee business. **December 16, 2026** is on Google Meet with no speaker (no block for
+  that date): the usual business hour.
+- **All 12 speakers of 2027 are shown** — first name and last initial, service position and topic: on Meetings (the
+  next meeting's speaker, *How the evening runs*, the year's schedule), the home page's meeting card, each
+  meeting's card on Events and its calendar entry, the monthly toolkit and posters, the GV/LV report, the monthly
+  e-mail and `/digest/` (the coming meeting's speaker under "Coming up"), the booth display and the committee
+  meeting's slides. **Never** an e-mail address or a phone number (this file is public
+  on GitHub too), never in what search engines read, never in a calendar reminder.
+- **`confirmed`** is for the chair: a speaker of the next 45 days who is not `confirmed: true` yet is listed under
+  *Reminders* in the run summary ("… the guest speaker for 2027-02-17 (…) is not confirmed yet — once they say
+  yes, set confirmed: true (or change the speaker)").
+- **A mistake** — a date that is not that month's 3rd Wednesday, or a skip date; a full last name; two speakers for
+  one date — leaves that speaker out, and the run summary says why under *Settings problems*. Everything else
+  still updates.
+- **When a speaker or a topic changes**, change it here and in the brand kit, rebuild that month's speaker flyer
+  and upload it ([section 2](#naming-files-optional-but-it-makes-the-site-smarter)).
+- **No phone dial-in, no passcode.** Joining by phone is for the weekly open meetings only (Zoom,
+  [below](#joining-by-phone-the-weekly-open-meetings)). Protection is the host's: in Google Meet's host controls,
+  people who were not invited ask to join, and the host lets them in.
+
+Every key, with examples: [how-to/settings.md §3.2](how-to/settings.md#32-meeting--the-committee-meeting).
+
 ### Add a recurring event
 
 For something the committee does **every month** — like our Grapevine / La Viña booth at
-**CityWide Dallas** (2nd Saturday, 5–8 PM) — add a block under `recurring_events:` in
+**CityWide Dallas** (2nd Saturday, 5:30–7:30 PM) — add a block under `recurring_events:` in
 `config/site.yml`. This is the one already there:
 
 ```yaml
@@ -704,9 +821,9 @@ recurring_events:
     summary_es: "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, …"
     week_of_month: 2                # 1–5, or -1 for "the last one"
     weekday: "saturday"             # English or Spanish ("sábado")
-    start: "17:00"                  # 24-hour clock, Central time
-    end: "20:00"
-    location: "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220"
+    start: "17:30"                  # 24-hour clock, Central time (the table's hours, 5:30–7:30 PM)
+    end: "19:30"
+    location: "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220"
     url: "https://citywidedallasaa.org"   # the "Event details" link (optional)
     months_ahead: 6                 # how many upcoming dates to list (Events page, calendar feed)
     skip_dates: []                  # a month without it: ["2026-12-12"] (must be that month's 2nd Saturday)
@@ -806,6 +923,51 @@ follows its calendar: `week_of_month: 4`. Should La Viña really hold it on the 
 to `-1` — and change the December `skip_dates` too (the last Thursday of December 2026 is New Year's Eve,
 Dec 31).
 
+#### Our Grapevine Meeting (the 1st Wednesday, on Google Meet)
+
+The third block under `recurring_events:` is our own monthly online meeting, the **Grapevine Meeting**: an AA
+meeting in English where we read a story from AA Grapevine, our meeting in print, and share on its topic; all AA
+members are welcome. Every 1st Wednesday, 7:00–8:00 PM Central, from **December 2, 2026**, in the committee
+meeting's Google Meet room:
+
+```yaml
+  - key: "grapevine-meeting"
+    title: "Grapevine Meeting"
+    title_es: "Reunión de Grapevine (en inglés)"
+    summary: "Online AA meeting in English: …"
+    summary_es: "Reunión de AA en línea, en inglés: …"
+    week_of_month: 1
+    weekday: "wednesday"
+    start: "19:00"
+    end: "20:00"
+    starts: "2026-12-02"            # the first meeting: no date before it, not even in the calendar files
+    online_url: "https://meet.google.com/rva-tmst-vdb"   # the committee meeting's room (no location)
+    meeting_id: "rva-tmst-vdb"
+    contact: "grapevine@neta65.org"
+    url: "/meetings/#grapevine-meeting"   # its section on our Meetings page
+    flyer_match: "grapevine meeting *[-–—] *flyer"   # "Grapevine Meeting - flyer" (section 2)
+    months_ahead: 6
+    skip_dates: []
+```
+
+- **`starts`** — the first date. Without it the calendar files, which keep the last 90 days, would list meetings
+  that never took place (September to November 2026). A day that is not a 1st Wednesday still counts: the next
+  1st Wednesday is the first date, and the run summary says which.
+- **`url`** — here a page of this site (starting with `/`) works too: the card's title and the calendar entry
+  link to the meeting's section on Meetings (`/es/meetings/…` in Spanish).
+- It is **ours** (no `host:`), so it shows like the CityWide booth: on Events ("Online on Google Meet", **Join
+  online**, "Meeting code rva-tmst-vdb"), with a reserved place on Home, in the calendar feed, the monthly toolkit,
+  the digest, the Area report and the booth display, and on Meetings (`#grapevine-meeting`). Search engines are not
+  told about it: it is online only.
+- **One room, two meetings:** the committee meeting (3rd Wednesday) and this one (1st Wednesday) never mix — an
+  outside calendar that lists the committee meeting in that room is not taken for a moved Grapevine Meeting.
+- **Its script** is a presentation of its own (`config/presentations/grapevine-meeting.yml`,
+  [how-to/presentations.md](how-to/presentations.md)): it opens with a moment of silence, the Serenity Prayer and
+  the **AA Grapevine Statement of Purpose** — named, never printed on the site (AA Grapevine's text: it is read
+  aloud from the current issue or from aagrapevine.org) — where the committee meeting reads the AA Preamble.
+- **Its name** is "the Grapevine Meeting". Never "Grapevine meetings": that is the list of AA groups that read
+  Grapevine (`/meetings/#grapevine-meetings`).
+
 ### La Viña's weekly open meeting
 
 `lavina_weekly_open:` in `config/site.yml` holds La Viña's weekly open meeting (from its official flyer —
@@ -814,30 +976,32 @@ meeting's own time zone; the site also shows Central time), `starts` (the first 
 that `day`), `zoom_id` and `passcode`. When La Viña publishes a page for it, put the address in `url`.
 Set `enabled: false` (or delete the block) to take it off the site.
 
-### Joining our meetings by phone
+### Joining by phone (the weekly open meetings)
 
-The Accessibility page (`/accessibility/#phone`) tells people how to join the committee meeting and the
-weekly open meetings **by phone** — no internet or app needed — with tap-to-call buttons. The meeting IDs
-come from `meeting:` and the weekly open meetings; `phone_access:` in `config/site.yml` holds the rest:
+The Accessibility page (`/accessibility/#phone`) tells people how to join the **weekly open meetings**
+(Grapevine's and La Viña's, on Zoom) **by phone** — no internet or app needed — with tap-to-call buttons. Our own
+meetings are on Google Meet, and their room has no numbers to call: the page says so plainly and gives the
+chair's e-mail address to anyone who cannot join online. The meeting IDs come from the weekly open meetings;
+`phone_access:` in `config/site.yml` holds the rest:
 
 - `numbers`: Zoom's U.S. dial-in numbers (the ones printed in every Zoom invitation under "Dial by your
   location"). The first one is used for the tap-to-call buttons.
-- `committee:` → `phone_passcode`: **fill this in.** Our Zoom passcode (`neta65`) has letters, so Zoom
-  gives phone callers a different passcode made of numbers only. Find it in the host's Zoom invitation
-  (the digits after `*` in the "One tap mobile" line, or "Passcode:" under "Dial by your location") and
-  paste it between the quotes. Until then the page says "Ask the chair for the phone passcode".
 - `weekly_open:` → `phone_passcode`: leave it empty — that passcode (`238047`) is numbers only, and callers
   type the same one.
+
+There is no `committee:` block any more. It only counts for a committee meeting on Zoom with a numeric meeting
+ID (its `phone_passcode`: the numbers-only passcode Zoom gives callers when the meeting's passcode has letters).
 
 Joining by phone only works while the host's Zoom settings allow it (Zoom: "Allow participants to join
 by telephone").
 
-**The passcodes are public, on purpose.** The committee meeting's and the weekly open meetings' meeting IDs and
-passcodes are printed on `/meetings/`, in the calendar files, on the QR poster and in the presentations, for
-anyone to read. That is normal for open AA meetings, which anyone may attend. It means each meeting's host should
-keep Zoom's own protection on: the **waiting room**, or the host controls (admit people, remove a participant,
-lock the meeting once it has started). Changing the passcode protects nothing: the site shows the new one at its
-next update.
+**The links, codes and passcodes are public, on purpose.** Our meetings' Google Meet link and meeting code, and
+the weekly open meetings' meeting IDs and passcodes, are printed on `/meetings/`, in the calendar files, on the QR
+poster and in the presentations, for anyone to read. That is normal for open AA meetings, which anyone may attend.
+It means each meeting's host keeps the platform's own protection on: on Google Meet, people who were not invited
+ask to join and the host lets them in; on Zoom, the **waiting room**, or the host controls (admit people, remove a
+participant, lock the meeting once it has started). Changing a passcode protects nothing: the site shows the new
+one at its next update.
 
 ### When Grapevine announces new prices
 
@@ -939,8 +1103,8 @@ you can add your own, as in the district report:
 4. **Area 65 writers published:** stories by Area 65 members in the issues of the period, as the magazines
    printed the names. An issue counts in the period its first day is in, so two reports never list the same story.
 5. **An invitation to the districts** to ask for a workshop or a literature table, with the committee's e-mail.
-6. **Next committee meeting:** the first one after the period, with the Zoom meeting ID and passcode (the same
-   ones `/meetings/` shows).
+6. **Next committee meeting:** the first one after the period, with the Google Meet link and meeting code (the
+   same ones `/meetings/` shows) and, from January 2027, its guest speaker.
 7. **Other news and requests:** empty, and left out until you write in it.
 
 **One working report, and the earlier ones.** Everything stays on the chair's device; nothing is sent anywhere.
@@ -1332,8 +1496,8 @@ through October):
   to the site's Instagram page) and new documents;
 - and **one link**, "Coming up in October", to this month's page of the **Monthly toolkit**
   (`/monthly/2026-10/` in October) — the home of everything current: the committee meeting (with a link to
-  its Zoom details on Meetings), the events still to come, the weekly open meetings, story deadlines and
-  La Viña's topics, this month's issues and tips, the Book of the Month and subscriptions.
+  Meetings, where its Google Meet link and code are), the events still to come, the weekly open meetings, story
+  deadlines and La Viña's topics, this month's issues and tips, the Book of the Month and subscriptions.
 
 It goes out **once**, on the **1st from 7 AM Central**, as soon as the site's first full update of the month
 has run (the Morning check starts it early on the 1st), so the month's last items are in it — usually on the
@@ -1553,10 +1717,12 @@ Nothing to do here: every update writes all of it, in both languages.
   questions and answers the page shows. On `/events/`, every upcoming **event held at a place**, with its address
   (best written `Venue, street, city, TX ZIP` in a `content/events` file —
   [how-to/flyers-and-events.md](how-to/flyers-and-events.md)); a place with no city, state or ZIP code (a
-  venue's name alone) is not enough. Online-only events (the committee meeting, La Viña's Zoom workshop) are not
-  given to search engines: Google lists only events people can go to. Their cards, calendar files and share pages
-  are the same as before. How to join online (a meeting ID, a passcode, a Zoom link) stays on the page for people
-  but out of this machine-readable copy: it would only help those who look for meetings to disrupt.
+  venue's name alone) is not enough. Online-only events (the committee meeting, our Grapevine Meeting, La Viña's
+  Zoom workshop) are not given to search engines: Google lists only events people can go to. Their cards,
+  calendar files and share pages are the same as before. How to join online (a meeting ID or meeting code, a
+  passcode, a Zoom or Google Meet link) stays on the page for people but out of this machine-readable copy: it
+  would only help those who look for meetings to disrupt. A committee meeting's guest speaker is never in it
+  either (no names for search engines).
 - **Share previews** — the picture, title and description WhatsApp, Facebook, X, iMessage … show when someone
   shares a page.
 - **The site's search in the browser** — a browser can add the site's search as one of its search engines
@@ -1932,8 +2098,9 @@ own light / dark setting.
 The **Accessibility** page (`/accessibility/`, in the footer) explains the settings and gathers the other
 ways in: YouTube captions (with a one-tap **Turn on captions for all videos** button — the same choice as the
 panel's Video captions), AA Grapevine's American Sign Language playlist and AA's own ASL videos, audio
-(podcasts, the weekly open meetings, recording a story by phone), printing and large print, joining our
-meetings by phone ([above](#joining-our-meetings-by-phone)), and how to report a barrier.
+(podcasts, the weekly open meetings, recording a story by phone), printing and large print, joining the weekly
+open meetings by phone ([above](#joining-by-phone-the-weekly-open-meetings)) — and that our own meetings on
+Google Meet have no number to call —, and how to report a barrier.
 
 **For maintainers**
 
@@ -2128,7 +2295,7 @@ This describes Tracker 1.2.0 (October 2026).
   and each GVR renames, hides, reorders or adds them in **Settings → Service activities**.
 - **Miles:** the one-way miles, **Round trip**, and **How many trips** for the same trip made on several
   days (3 days at a convention's table is one entry: 58.7 mi × 2 × 3 = 352.2 mi), a **Last day**, and
-  **Your role** there (Attended, Table support, Tech setup, Zoom setup, Projector & screen… or their own
+  **Your role** there (Attended, Table support, Tech setup, Online meeting setup, Projector & screen… or their own
   words). An event reached riding with someone is **I didn't drive (I rode with someone)**: the event and
   the role stay on record, with no miles and nothing to ask back.
 - **Purchases** keep their store's number (**Order or confirmation no.**, under *More details*; a hotel's
@@ -2531,9 +2698,9 @@ it:
 **One reminder in every "Add to calendar" file.** Each calendar file a member downloads or adds now carries one
 reminder: **1 hour before** a timed or online event (the committee meeting, a workshop, a weekly open meeting),
 **9 AM the day before** an all-day event or a story deadline (the member's own time). The reminder's text is the
-event's title only; the Zoom link, meeting ID and passcode stay in the description. Files with it: "Add to
-calendar → Apple / Outlook (.ics file)" on Events, Meetings and Home; the weekly open meetings' files
-(`/meetings/weekly-open-gv.ics`, `-lv.ics`); each month's file (`/monthly/YYYY-MM/…ics`); the deadlines calendar and
+event's title only; the online link, the meeting ID or code, a passcode and a committee meeting's guest speaker
+stay in the description. Files with it: "Add to calendar → Apple / Outlook (.ics file)" on Events, Meetings and
+Home; the weekly open meetings' files (`/meetings/weekly-open-gv.ics`, `-lv.ics`); each month's file (`/monthly/YYYY-MM/…ics`); the deadlines calendar and
 each deadline's file. **Not** in the subscribed events calendar (`/events.ics`), on purpose: a subscriber would
 get about ninety alarms. The Tracker's "End dates for my calendar" keeps its own reminder. Every "Add to calendar"
 menu says so in one line: "The .ics file comes with a reminder 1 hour before. Google Calendar skips it and uses
@@ -2649,15 +2816,18 @@ The monthly committee meeting's slides (GVR / RLV 101 → Presentations → the 
 `/orientation/?present=committee-meeting`) have a tab in **Customize**: **Agenda & minutes** (Spanish: **Agenda y
 acta**). Only that deck has it (a deck has it when its file has a `paperwork:` block). It makes the chair's monthly
 paperwork from what is typed in **Customize → Your details** and from the site's own facts (the meeting's date and
-time, Zoom ID and passcode, the phone number):
+time, its Google Meet link and meeting code, and that meeting's guest speaker from `config/site.yml` →
+`meeting:` → `speakers:`):
 
-1. **Agenda e-mail** — for the *next* meeting: date and time, Zoom and phone details, the agenda's times (from
-   the version of the agenda slide chosen), last month's minutes, old and new business, the order of the district
-   reports, the Zoom / no-photos reminder and a signature.
-2. **Reminder** — a short note for an e-mail or a group chat: the date, time and Zoom and phone details in English,
-   then a paragraph in Spanish with the date, time, Zoom meeting ID and passcode (no phone line) that also says
-   the meeting is in English ("La reunión es en inglés"); then the link to the meeting's details and the
-   signature.
+1. **Agenda e-mail** — for the *next* meeting: date and time, the Google Meet link and code, the guest speaker
+   (name, position and topic — "to be announced" when the list has none for that date), the agenda's times (from
+   the version of the agenda slide chosen: *With a guest speaker*, or *No guest speaker* for a business-only
+   month such as December 16, 2026), last month's minutes, old and new business, the order of the district
+   reports, the online / no-photos reminder and a signature.
+2. **Reminder** — a short note for an e-mail or a group chat: the date, time, guest speaker and Google Meet details
+   in English, then a paragraph in Spanish with the date, time and meeting code that also says the meeting is in
+   English ("La reunión es en inglés"); then the link to the meeting's details and the signature. There is no
+   phone line: our Google Meet room has no number to call.
 3. **Draft minutes** — for the *last meeting held*: an outline with the chair and minutes-taker **by service
    position**, "Attended: about ___ members", every part of the meeting with what was typed, the action items and
    the next meeting. Service positions and counts only: no names, phone numbers or e-mail addresses, and no
@@ -2673,8 +2843,8 @@ document). A line whose details are all blank is left out; a blank left empty be
 4. **Start next month** — after the meeting, once the minutes are drafted. The chair ticks what to carry (the
    night's action items come ticked; old business still open comes unticked; up to 4, the deck's old-business
    lines): they become next month's **old business**; the details that were for that meeting only are cleared;
-   the presenter, the order of districts, the treasurer's budget and reimbursement process and the phone passcode
-   are kept (the panel lists them); the minutes' month moves on, the week-before checklist (Customize → Prepare) is
+   the presenter, the order of districts and the treasurer's budget and reimbursement process are kept (the
+   panel lists them); the minutes' month moves on, the week-before checklist (Customize → Prepare) is
    unticked, and the agenda and reminder move on to the next meeting. It asks first, and **Undo “Start next
    month”** stays until the next meeting begins.
 
