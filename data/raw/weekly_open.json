@@ -1,7 +1,7 @@
 {
  "source": "weekly_open",
- "updated": "2026-11-05T15:38:38Z",
- "attempted": "2026-11-05T15:38:38Z",
+ "updated": "2026-11-06T15:13:28Z",
+ "attempted": "2026-11-06T15:13:28Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -43,7 +43,7 @@
     "start_local": "12:00",
     "timezone": "America/New_York",
     "time_central": "11 AM Central",
-    "next_start": "2026-11-05T17:00:00Z",
+    "next_start": "2026-11-12T17:00:00Z",
     "zoom_url": "https://zoom.us/j/87120368287",
     "starts": "2026-11-05",
     "source_note": "Official La Viña flyer (November 2026), shared with the committee",
@@ -69,7 +69,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-23T16:30:28Z",
-   "last_seen": "2026-10-30T14:22:24Z",
+   "last_seen": "2026-11-06T15:13:28Z",
    "image": null,
    "tags": [],
    "category": null,

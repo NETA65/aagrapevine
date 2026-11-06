@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-11-05T15:40:58Z",
- "attempted": "2026-11-05T15:40:58Z",
+ "updated": "2026-11-06T15:16:15Z",
+ "attempted": "2026-11-06T15:16:15Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,7 +15,7 @@
   "upcoming_urls": 17,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 0,
+  "refreshed": 6,
   "failed": 0,
   "pending": 0,
   "cached": 19,
@@ -23,7 +23,7 @@
   "online_es": 1,
   "items": 3,
   "new": 0,
-  "requests": 40
+  "requests": 47
  },
  "items": [
   {
@@ -182,7 +182,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-06/79th-tri-state-convention-0": {
-   "at": "2026-10-23T12:47:35Z",
+   "at": "2026-11-06T15:15:49Z",
    "ev": {
     "title": "79th Tri-State Convention",
     "date_text": "November 6, 2026 - November 8, 2026",
@@ -203,7 +203,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-06/85th-laurel-highlands-conference": {
-   "at": "2026-10-23T12:47:40Z",
+   "at": "2026-11-06T15:15:54Z",
    "ev": {
     "title": "85th Laurel Highlands Conference",
     "date_text": "November 6, 2026 - November 8, 2026",
@@ -224,7 +224,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-13/36th-vancouver-roundup": {
-   "at": "2026-10-23T12:47:45Z",
+   "at": "2026-11-06T15:15:59Z",
    "ev": {
     "title": "36th Vancouver RoundUp",
     "date_text": "November 13, 2026 - November 15, 2026",
@@ -245,7 +245,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-13/international-secular-conference-phoenix-2026": {
-   "at": "2026-10-23T12:47:50Z",
+   "at": "2026-11-06T15:16:05Z",
    "ev": {
     "title": "International Secular Conference Phoenix 2026",
     "date_text": "November 13, 2026 - November 15, 2026",
@@ -266,7 +266,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-20/37th-mchenrys-soberfest": {
-   "at": "2026-10-23T12:47:55Z",
+   "at": "2026-11-06T15:16:10Z",
    "ev": {
     "title": "37th McHenry's Soberfest",
     "date_text": "November 20, 2026 - November 22, 2026",
@@ -287,7 +287,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-27/36th-gratitude-roundup": {
-   "at": "2026-10-23T12:48:00Z",
+   "at": "2026-11-06T15:16:15Z",
    "ev": {
     "title": "36th Gratitude Roundup",
     "date_text": "November 27, 2026 - November 29, 2026",

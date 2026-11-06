@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-05T15:38:38Z",
+ "updated": "2026-11-06T15:13:28Z",
  "fixture": false,
  "items": [
   {
@@ -89,7 +89,7 @@
     "start_local": "12:00",
     "timezone": "America/New_York",
     "time_central": "11 AM Central",
-    "next_start": "2026-11-05T17:00:00Z",
+    "next_start": "2026-11-12T17:00:00Z",
     "zoom_url": "https://zoom.us/j/87120368287",
     "starts": "2026-11-05",
     "source_note": "Official La Viña flyer (November 2026), shared with the committee",

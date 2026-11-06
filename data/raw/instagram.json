@@ -1,7 +1,7 @@
 {
  "source": "instagram",
- "updated": "2026-11-05T15:36:24Z",
- "attempted": "2026-11-05T15:36:24Z",
+ "updated": "2026-11-06T15:11:49Z",
+ "attempted": "2026-11-06T15:11:49Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -24,7 +24,7 @@
     "profile_embed: 6 posts"
    ]
   },
-  "fetched": 12,
+  "fetched": 11,
   "manual": 0,
   "removal": {
    "checked": 5,
@@ -35,9 +35,9 @@
   "pruned": 0,
   "thumbs_deleted": 0,
   "new": 3,
-  "total": 191,
+  "total": 194,
   "per_account": {
-   "gv": 104,
+   "gv": 107,
    "lv": 87
   },
   "requests": 7,
@@ -45,6 +45,96 @@
   "graph_api": false
  },
  "items": [
+  {
+   "id": "ig:DfZnCc3jSAi",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfZnCc3jSAi/",
+   "title": "“El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta…",
+   "summary": "“El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta, sin importar cuán grave sea, debemos entender que también tiene un propósito. Es nuestro gran maestro, porque nos revela nuestros defectos y, así, nos empuja hacia el camino del progreso. El dolor que nos causaba la bebida hacía lo mismo. Y lo mismo hará cualquier otro dolor”. \"Editorial BILL W., COFUNDADOR DE…",
+   "lang": "es",
+   "date": "2026-11-06T12:30:17Z",
+   "first_seen": "2026-11-06T15:11:49Z",
+   "last_seen": "2026-11-06T15:11:49Z",
+   "image": "/assets/cache/ig/DfZnCc3jSAi.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfZnCc3jSAi",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfZnCc3jSAi.webp",
+    "embed_url": "https://www.instagram.com/p/DfZnCc3jSAi/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfZnCc3jSAi/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfZnCS5DR-9",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfZnCS5DR-9/",
+   "title": "“All AA progress can be reckoned in terms of just two words: humility and responsibility.”",
+   "summary": "“All AA progress can be reckoned in terms of just two words: humility and responsibility.” AA Co-Founder, Bill W., January 1966, “The Guidance of AA’s World Affairs”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-06T12:30:14Z",
+   "first_seen": "2026-11-06T15:11:49Z",
+   "last_seen": "2026-11-06T15:11:49Z",
+   "image": "/assets/cache/ig/DfZnCS5DR-9.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfZnCS5DR-9",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfZnCS5DR-9.webp",
+    "embed_url": "https://www.instagram.com/p/DfZnCS5DR-9/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfZnCS5DR-9/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfYRRWjCWlN",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfYRRWjCWlN/",
+   "title": "We’re at the Intergroup and Central Office Seminar (ICOAA), with people from the front…",
+   "summary": "We’re at the Intergroup and Central Office Seminar (ICOAA), with people from the front lines.",
+   "lang": "en",
+   "date": "2026-11-06T00:00:36Z",
+   "first_seen": "2026-11-06T15:11:49Z",
+   "last_seen": "2026-11-06T15:11:49Z",
+   "image": "/assets/cache/ig/DfYRRWjCWlN.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfYRRWjCWlN",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DfYRRWjCWlN.webp",
+    "embed_url": "https://www.instagram.com/p/DfYRRWjCWlN/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfYRRWjCWlN/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
   {
    "id": "ig:DfXFrJMDcxG",
    "source": "instagram",
@@ -58,12 +148,12 @@
    "last_seen": "2026-11-05T15:36:24Z",
    "image": "/assets/cache/ig/DfXFrJMDcxG.webp",
    "tags": [],
-   "category": "lv",
+   "category": "gv",
    "status": "ok",
    "extra": {
     "shortcode": "DfXFrJMDcxG",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
     "media_type": "image",
     "thumb": "/assets/cache/ig/DfXFrJMDcxG.webp",
     "embed_url": "https://www.instagram.com/p/DfXFrJMDcxG/embed/captioned/",
@@ -5802,11 +5892,11 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 16985,
-   "posts": 3988,
+   "posts": 3991,
    "owner_id": "48108439509",
-   "checked": "2026-11-05T15:36:06Z",
+   "checked": "2026-11-06T15:11:30Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp",
-   "_avatar_checked": "2026-10-30T14:20:41Z"
+   "_avatar_checked": "2026-11-06T15:11:49Z"
   },
   "lv": {
    "username": "alcoholicosanonimos_lv",
@@ -5814,11 +5904,11 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2427,
-   "posts": 3011,
+   "posts": 3012,
    "owner_id": "48275839129",
-   "checked": "2026-11-05T15:36:09Z",
+   "checked": "2026-11-06T15:11:33Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp",
-   "_avatar_checked": "2026-10-30T14:20:42Z"
+   "_avatar_checked": "2026-11-06T15:11:49Z"
   }
  },
  "removal": {
@@ -5973,13 +6063,13 @@
    "checked": "2026-11-04T15:32:40Z"
   },
   "Dd9Qu_1F7p7": {
-   "checked": "2026-10-17T00:31:16Z"
+   "checked": "2026-11-06T15:11:33Z"
   },
   "Dd9QvAqFxG7": {
-   "checked": "2026-10-17T00:31:16Z"
+   "checked": "2026-11-06T15:11:33Z"
   },
   "Dd_YWPhlxqs": {
-   "checked": "2026-10-17T00:31:16Z"
+   "checked": "2026-11-06T15:11:33Z"
   },
   "Dd_YWRTF0WK": {
    "checked": "2026-11-05T15:36:09Z"
@@ -6145,6 +6235,12 @@
   },
   "DejeZPBgZ4H": {
    "checked": "2026-11-04T15:32:40Z"
+  },
+  "DemARUYjVzZ": {
+   "checked": "2026-11-06T15:11:33Z"
+  },
+  "DemARUxjcu8": {
+   "checked": "2026-11-06T15:11:33Z"
   }
  }
 }
