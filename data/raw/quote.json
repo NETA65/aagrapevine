@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-11-06T00:56:53Z",
- "attempted": "2026-11-06T00:56:53Z",
+ "updated": "2026-11-06T09:31:24Z",
+ "attempted": "2026-11-06T09:31:24Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-11-05",
-  "new": 0
+  "today": "2026-11-06",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-11-05",
+   "id": "quote:gv:2026-11-06",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote November 5",
+   "title": "Grapevine Daily Quote November 6",
    "summary": "",
    "lang": "en",
-   "date": "2026-11-05",
-   "first_seen": "2026-11-05T09:38:56Z",
-   "last_seen": "2026-11-05T09:38:56Z",
+   "date": "2026-11-06",
+   "first_seen": "2026-11-06T09:31:24Z",
+   "last_seen": "2026-11-06T09:31:24Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "Good things increase in direct proportion to my willingness to become teachable.",
-    "attribution": "“Freedom Began in Prison,” Universal City, California, February 1970, AA Grapevine",
+    "text": "All AA progress can be reckoned in terms of just two words: humility and responsibility.",
+    "attribution": "AA Co-Founder, Bill W., January 1966, “The Guidance of AA’s World Affairs”, The Language of the Heart",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "November 5",
+    "date_label": "November 6",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84473"
+    "node": "node-84487"
    }
   },
   {
-   "id": "quote:lv:2026-11-05",
+   "id": "quote:lv:2026-11-06",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Noviembre 5",
+   "title": "Cita Diaria con La Viña Noviembre 6",
    "summary": "",
    "lang": "es",
-   "date": "2026-11-05",
-   "first_seen": "2026-11-05T09:38:56Z",
-   "last_seen": "2026-11-05T09:38:56Z",
+   "date": "2026-11-06",
+   "first_seen": "2026-11-06T09:31:24Z",
+   "last_seen": "2026-11-06T09:31:24Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A veces, debes reírte de ti mismo junto con Él.",
-    "attribution": "“La sobriedad para nosotros mismos”. NUEVA YORK, NUEVA YORK, NOVIEMBRE DE 1946",
-    "source": "Thank You for Sharing",
-    "source_lang": "en",
+    "text": "El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta, sin importar cuán grave sea, debemos entender que también tiene un propósito. Es nuestro gran maestro, porque nos revela nuestros defectos y, así, nos empuja hacia el camino del progreso. El dolor que nos causaba la bebida hacía lo mismo. Y lo mismo hará cualquier otro dolor.",
+    "attribution": "Editorial. BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1958. Del AA Grapevine",
+    "source": "",
+    "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "5 de noviembre",
+    "date_label": "6 de noviembre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84476"
+    "node": "node-84483"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-11-06",
+    "heading": "Grapevine Daily Quote November 6",
+    "text": "All AA progress can be reckoned in terms of just two words: humility and responsibility.",
+    "attribution": "AA Co-Founder, Bill W., January 1966, “The Guidance of AA’s World Affairs”, The Language of the Heart",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-11-06T09:31:13Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-24T09:38:03Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-23",
-    "heading": "Grapevine Daily Quote October 23",
-    "text": "I was relieved to learn that I didn’t have to believe, only be willing to believe. This I could do.",
-    "attribution": "“From Make-Believe to Belief,” Charleston, West Virginia, June 1981, Voices of Long-Term Sobriety",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-23T10:14:02Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-11-06",
+    "heading": "Cita Diaria con La Viña Noviembre 6",
+    "text": "El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta, sin importar cuán grave sea, debemos entender que también tiene un propósito. Es nuestro gran maestro, porque nos revela nuestros defectos y, así, nos empuja hacia el camino del progreso. El dolor que nos causaba la bebida hacía lo mismo. Y lo mismo hará cualquier otro dolor.",
+    "attribution": "Editorial. BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1958. Del AA Grapevine",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-11-06T09:31:24Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-24T09:38:13Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-23",
-    "heading": "Cita Diaria con La Viña Octubre 23",
-    "text": "Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento de alcohólico’. En verdad, es tan solo la naturaleza humana… Algunas peculiaridades emocionales y mentales se consideran síntomas del alcoholismo únicamente porque las tienen los alcohólicos, pero esas mismas características se observan también en quienes no lo son. De hecho, son síntomas de humanidad.",
-    "attribution": "“Las recaídas y la naturaleza humana”. DR. WILLIAM DUNCAN SILKWORTH, ENERO DE 1947",
-    "source": "Lo mejor del Grapevine, Volumen I",
-    "source_lang": "es",
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-23T10:14:12Z"
    }
   ]
  }
