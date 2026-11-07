@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-07T14:11:52Z",
+ "updated": "2026-11-07T15:42:25Z",
  "fixture": false,
  "items": [
   {
@@ -72,7 +72,7 @@
    "kind": "meeting",
    "url": "",
    "title": "Reunión Abierta de La Viña",
-   "summary": "Una reunión abierta virtual de AA en español, cada semana: dos miembros comparten su experiencia, fortaleza y esperanza. La reunión se graba para publicarse como pódcast. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!",
+   "summary": "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores, entre ellos autores de historias de La Viña, miembros de AA y servidores de confianza. La reunión se graba y queda disponible después en el nuevo pódcast de La Viña y en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!",
    "lang": "es",
    "date": null,
    "first_seen": "2026-09-24T15:46:38Z",
@@ -92,15 +92,15 @@
     "next_start": "2026-11-12T17:00:00Z",
     "zoom_url": "https://zoom.us/j/87120368287",
     "starts": "2026-11-05",
-    "source_note": "Official La Viña flyer (November 2026), shared with the committee",
+    "source_note": "Official La Viña flyers (November 2026, and a newer one without a month), shared with the committee",
     "own_i18n": {
      "title": {
       "es": "Reunión Abierta de La Viña",
       "en": "La Viña Open Meeting (in Spanish)"
      },
      "summary": {
-      "es": "Una reunión abierta virtual de AA en español, cada semana: dos miembros comparten su experiencia, fortaleza y esperanza. La reunión se graba para publicarse como pódcast. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!",
-      "en": "A weekly virtual open AA meeting in Spanish where two members share their experience, strength and hope. It is recorded to be published as a podcast. Let's keep extending this powerful lifeline together!"
+      "es": "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores, entre ellos autores de historias de La Viña, miembros de AA y servidores de confianza. La reunión se graba y queda disponible después en el nuevo pódcast de La Viña y en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!",
+      "en": "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers, among them La Viña story authors, AA members and trusted servants. Each meeting is recorded and made available afterwards on La Viña's new podcast and on YouTube. Let's keep extending this powerful lifeline together!"
      }
     }
    },
@@ -110,8 +110,8 @@
      "es": "Reunión Abierta de La Viña"
     },
     "summary": {
-     "en": "A weekly virtual open AA meeting in Spanish where two members share their experience, strength and hope. It is recorded to be published as a podcast. Let's keep extending this powerful lifeline together!",
-     "es": "Una reunión abierta virtual de AA en español, cada semana: dos miembros comparten su experiencia, fortaleza y esperanza. La reunión se graba para publicarse como pódcast. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
+     "en": "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers, among them La Viña story authors, AA members and trusted servants. Each meeting is recorded and made available afterwards on La Viña's new podcast and on YouTube. Let's keep extending this powerful lifeline together!",
+     "es": "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores, entre ellos autores de historias de La Viña, miembros de AA y servidores de confianza. La reunión se graba y queda disponible después en el nuevo pódcast de La Viña y en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
     },
     "day": {
      "en": "Thursdays",

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-07T14:17:49Z",
+ "updated": "2026-11-07T15:42:41Z",
  "fixture": false,
  "items": [
   {
@@ -89,6 +89,124 @@
    ],
    "is_new": true,
    "wn_date": "2026-11-07T12:30:15Z"
+  },
+  {
+   "id": "drive:1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
+   "title": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-07",
+   "first_seen": "2026-11-07T15:42:17Z",
+   "image": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
+    "mime": "image/png",
+    "name": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
+    "preview_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "6:26 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Writing Workshop - Grupo Volver a Vivir, Garland",
+     "es": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-07T12:00:00Z"
+  },
+  {
+   "id": "drive:1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/view",
+   "title": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-07",
+   "first_seen": "2026-11-07T15:42:17Z",
+   "image": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
+    "mime": "image/jpeg",
+    "name": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/view",
+    "preview_url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "6:26 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Open Meeting - Every Thursday at 12 PM Eastern on Zoom",
+     "es": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-07T12:00:00Z"
   },
   {
    "id": "ig:Dfb6ZgtA-xc",
@@ -2926,7 +3044,7 @@
    "kind": "event",
    "url": "/events/#2026-11-28-lv-writing-workshop-garland",
    "title": "La Viña Writing Workshop (in Spanish) — Garland",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
    "lang": "en",
    "date": "2026-11-29T01:00:00Z",
    "first_seen": "2026-10-27T06:15:45Z",
@@ -2943,11 +3061,11 @@
     "all_day": false,
     "location": "Grupo Volver a Vivir, 2913 S. Fifth St., Garland, TX 75041",
     "online_url": null,
-    "flyer_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
     "flyer_thumb": null,
     "city": "Garland",
     "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
     "slug": "2026-11-28-lv-writing-workshop-garland",
     "file": "content/events/2026-11-28-lv-writing-workshop-garland.md",
     "own_i18n": {
@@ -2955,10 +3073,10 @@
       "es": "Taller de Escritura de La Viña — Garland"
      },
      "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      },
      "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      }
     },
     "past": false
@@ -2969,12 +3087,12 @@
      "es": "Taller de Escritura de La Viña — Garland"
     },
     "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
     },
     "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
     }
    },
    "machine": [],
@@ -3826,7 +3944,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-24T15:00:16Z"
   },
   {
@@ -3870,7 +3988,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-24T15:00:14Z"
   },
   {
@@ -7743,158 +7861,6 @@
    },
    "machine": [
     "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:you-never-know",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/you-never-know",
-   "title": "You Never Know",
-   "summary": "Several years ago, I was a member of a business referral group that only allowed one person from a particular business or profession to become a member.",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-1309810260.jpg?itok=iqd0Y65e",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Tradition eleven",
-    "author": "Ken M.",
-    "author_location": "Louisville, Kentucky",
-    "subtitle": null,
-    "teaser": "Several years ago, I was a member of a business referral group that only allowed one person from a particular business or profession to become a member.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Louisville",
-     "county": null,
-     "counties": [],
-     "state": "KY",
-     "country": "US",
-     "label_en": "Louisville, Kentucky",
-     "label_es": "Louisville, Kentucky"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "You Never Know",
-     "es": "Nunca lo sabes"
-    },
-    "summary": {
-     "en": "Several years ago, I was a member of a business referral group that only allowed one person from a particular business or profession to become a member.",
-     "es": "Hace varios años, era miembro de un grupo de referencia de negocios que sólo permitió que una persona de un negocio o profesión en particular se convirtiera en miembro."
-    },
-    "section": {
-     "en": "Tradition eleven",
-     "es": "Undécima Tradición"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Louisville, Kentucky",
-     "es": "Louisville, Kentucky"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:acerca-del-alcoholismo",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/acerca-del-alcoholismo",
-   "title": "Acerca del alcoholismo",
-   "summary": "La verdad sobre el consumo de alcohol en las fiestas de fin de año",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "/assets/cache/articles/b4f1f0baa014a8e1.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "En cada edición",
-    "author": null,
-    "author_location": null,
-    "subtitle": "La verdad sobre el consumo de alcohol en las fiestas de fin de año",
-    "teaser": "¡Los efectos del alcohol comienzan rápidamente, antes de que se dé cuenta!",
-    "free": false,
-    "online_exclusive": false,
-    "department": true,
-    "geo": {
-     "scope": "unknown",
-     "city": null,
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": null,
-     "label_es": null
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "About Alcoholism",
-     "es": "Acerca del alcoholismo"
-    },
-    "summary": {
-     "en": "The truth about alcohol consumption at the end-of-year parties",
-     "es": "La verdad sobre el consumo de alcohol en las fiestas de fin de año"
-    },
-    "section": {
-     "en": "In Every Edition",
-     "es": "En cada edición"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    }
-   },
-   "machine": [
-    "en"
    ],
    "is_new": false,
    "wn_date": "2026-10-16T12:00:00Z"

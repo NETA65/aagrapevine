@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-07T07:18:38Z",
+ "updated": "2026-11-07T15:42:41Z",
  "fixture": false,
  "items": [
   {
@@ -286,7 +286,7 @@
    "kind": "event",
    "url": "/events/#2026-11-28-lv-writing-workshop-garland",
    "title": "La Viña Writing Workshop (in Spanish) — Garland",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
    "lang": "en",
    "date": "2026-11-29T01:00:00Z",
    "first_seen": "2026-10-27T06:15:45Z",
@@ -303,11 +303,11 @@
     "all_day": false,
     "location": "Grupo Volver a Vivir, 2913 S. Fifth St., Garland, TX 75041",
     "online_url": null,
-    "flyer_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
     "flyer_thumb": null,
     "city": "Garland",
     "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
     "slug": "2026-11-28-lv-writing-workshop-garland",
     "file": "content/events/2026-11-28-lv-writing-workshop-garland.md",
     "own_i18n": {
@@ -315,10 +315,10 @@
       "es": "Taller de Escritura de La Viña — Garland"
      },
      "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      },
      "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      }
     },
     "past": false
@@ -329,12 +329,12 @@
      "es": "Taller de Escritura de La Viña — Garland"
     },
     "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
     },
     "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
     }
    },
    "machine": [],
