@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-07T00:04:21Z",
- "updated": "2026-11-07T00:04:21Z",
+ "generated": "2026-11-07T07:18:39Z",
+ "updated": "2026-11-07T07:18:39Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-07T00:03:57Z",
-   "attempted": "2026-11-07T00:03:57Z",
+   "updated": "2026-11-07T07:18:16Z",
+   "attempted": "2026-11-07T07:18:16Z",
    "count": 42,
    "new_7d": 5,
    "error": null,
@@ -88,8 +88,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-07T00:03:57Z",
-   "attempted": "2026-11-07T00:03:57Z",
+   "updated": "2026-11-07T07:18:16Z",
+   "attempted": "2026-11-07T07:18:16Z",
    "count": 3,
    "new_7d": 1,
    "error": null,
@@ -112,8 +112,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-07T00:03:57Z",
-   "attempted": "2026-11-07T00:03:57Z",
+   "updated": "2026-11-07T07:18:16Z",
+   "attempted": "2026-11-07T07:18:16Z",
    "count": 17,
    "new_7d": 0,
    "error": null,
@@ -167,8 +167,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-07T00:04:04Z",
-   "attempted": "2026-11-07T00:04:04Z",
+   "updated": "2026-11-07T07:18:37Z",
+   "attempted": "2026-11-07T07:18:37Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -323,8 +323,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-07T00:04:00Z",
-   "attempted": "2026-11-07T00:04:00Z",
+   "updated": "2026-11-07T07:18:34Z",
+   "attempted": "2026-11-07T07:18:34Z",
    "count": 308,
    "new_7d": 2,
    "error": null,
@@ -351,7 +351,7 @@
     "gone_checks": 0,
     "discovery_checked": "2026-11-06T15:10:41Z",
     "discovered_feeds": [],
-    "seconds": 2.7,
+    "seconds": 2.2,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -561,8 +561,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-07T00:04:19Z",
-   "attempted": "2026-11-07T00:04:19Z",
+   "updated": "2026-11-07T07:18:31Z",
+   "attempted": "2026-11-07T07:18:31Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -570,12 +570,12 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-11-06",
-    "new": 0
+    "today": "2026-11-07",
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -592,6 +592,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-11-07",
+    "goal_at": "2026-11-07T11:30:00Z",
+    "gv": "2026-11-07T07:18:21Z",
+    "lv": "2026-11-07T07:18:31Z"
+   },
    {
     "day": "2026-11-06",
     "goal_at": "2026-11-06T11:30:00Z",
@@ -627,12 +633,6 @@
     "goal_at": "2026-11-01T11:30:00Z",
     "gv": "2026-11-01T06:25:20Z",
     "lv": "2026-11-01T06:25:30Z"
-   },
-   {
-    "day": "2026-10-31",
-    "goal_at": "2026-10-31T10:30:00Z",
-    "gv": "2026-10-31T07:06:05Z",
-    "lv": "2026-10-31T07:06:15Z"
    }
   ]
  },
@@ -662,7 +662,7 @@
   "from_cache": 4188,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.1,
+  "seconds": 0.2,
   "model_seconds": 0.0,
   "texts_per_second": null,
   "glossary_entries": 260,
@@ -678,7 +678,7 @@
   "editorial": 51,
   "weekly_open": 2,
   "announcements": 3,
-  "events": 51,
+  "events": 50,
   "whatsnew": 150,
   "shop": 62,
   "writers_archive": 1267,
@@ -700,8 +700,8 @@
    "http_status": 403,
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
-   "last_attempt": "2026-11-06T09:31:31Z",
-   "checked_this_run": false,
+   "last_attempt": "2026-11-07T07:18:37Z",
+   "checked_this_run": true,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,
@@ -710,7 +710,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-11-06",
+  "today": "2026-11-07",
   "home_days": 60,
   "list_days": [
    60,

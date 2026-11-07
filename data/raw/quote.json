@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-11-07T00:04:19Z",
- "attempted": "2026-11-07T00:04:19Z",
+ "updated": "2026-11-07T07:18:31Z",
+ "attempted": "2026-11-07T07:18:31Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-11-06",
-  "new": 0
+  "today": "2026-11-07",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-11-06",
+   "id": "quote:gv:2026-11-07",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote November 6",
+   "title": "Grapevine Daily Quote November 7",
    "summary": "",
    "lang": "en",
-   "date": "2026-11-06",
-   "first_seen": "2026-11-06T09:31:24Z",
-   "last_seen": "2026-11-06T09:31:24Z",
+   "date": "2026-11-07",
+   "first_seen": "2026-11-07T07:18:31Z",
+   "last_seen": "2026-11-07T07:18:31Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "All AA progress can be reckoned in terms of just two words: humility and responsibility.",
-    "attribution": "AA Co-Founder, Bill W., January 1966, “The Guidance of AA’s World Affairs”, The Language of the Heart",
+    "text": "It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.",
+    "attribution": "“A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "November 6",
+    "date_label": "November 7",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84487"
+    "node": "node-84488"
    }
   },
   {
-   "id": "quote:lv:2026-11-06",
+   "id": "quote:lv:2026-11-07",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Noviembre 6",
+   "title": "Cita Diaria con La Viña Noviembre 7",
    "summary": "",
    "lang": "es",
-   "date": "2026-11-06",
-   "first_seen": "2026-11-06T09:31:24Z",
-   "last_seen": "2026-11-06T09:31:24Z",
+   "date": "2026-11-07",
+   "first_seen": "2026-11-07T07:18:31Z",
+   "last_seen": "2026-11-07T07:18:31Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta, sin importar cuán grave sea, debemos entender que también tiene un propósito. Es nuestro gran maestro, porque nos revela nuestros defectos y, así, nos empuja hacia el camino del progreso. El dolor que nos causaba la bebida hacía lo mismo. Y lo mismo hará cualquier otro dolor.",
-    "attribution": "Editorial. BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1958. Del AA Grapevine",
+    "text": "La felicidad no es una estación a la que llegamos, sino una forma de viajar.",
+    "attribution": "“Paso a paso”. MAYO DE 1953. Del AA Grapevine",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "6 de noviembre",
+    "date_label": "7 de noviembre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84483"
+    "node": "node-84484"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-11-07",
+    "heading": "Grapevine Daily Quote November 7",
+    "text": "It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.",
+    "attribution": "“A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-11-07T07:18:21Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-25T06:16:42Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-24",
-    "heading": "Grapevine Daily Quote October 24",
-    "text": "Some people think God made life just for happiness, but I find myself unable to share that view. I think he made life for growth and that he permits pain as the touchstone of it all. Happiness -- at the very least, satisfaction -- is a byproduct of really trying to grow. And seasons of real joy are but the occasional byproducts of the process. Which, in eternity, will be the eventual fulfillment. Meantime, we seem to be pilgrims on a road -- one which you and I are completely confident leads into the arms of God.",
-    "attribution": "AA Co-Founder, Bill W., reprinted July 1993, “Seasons of Real Joy”, AA Grapevine",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-24T09:38:03Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-11-07",
+    "heading": "Cita Diaria con La Viña Noviembre 7",
+    "text": "La felicidad no es una estación a la que llegamos, sino una forma de viajar.",
+    "attribution": "“Paso a paso”. MAYO DE 1953. Del AA Grapevine",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-11-07T07:18:31Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-25T06:16:54Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-24",
-    "heading": "Cita Diaria con La Viña Octubre 24",
-    "text": "Nos dimos cuenta de que, sin tener comités de servicios, cesaríamos de funcionar y, tal vez, nos desintegraríamos. Efectivamente, tendríamos que organizar los servicios para que AA se mantenga simple.",
-    "attribution": "“Los servicios hacen funcionar a AA”. BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1951",
-    "source": "El lenguaje del corazón",
-    "source_lang": "es",
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-24T09:38:13Z"
    }
   ]
  }
