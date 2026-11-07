@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-06T15:11:49Z",
+ "updated": "2026-11-07T14:09:58Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16985,
-   "posts": 3991,
+   "followers": 16988,
+   "posts": 3994,
    "owner_id": "48108439509",
-   "checked": "2026-11-06T15:11:30Z",
+   "checked": "2026-11-07T14:09:39Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,229 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2427,
-   "posts": 3012,
+   "followers": 2430,
+   "posts": 3014,
    "owner_id": "48275839129",
-   "checked": "2026-11-06T15:11:33Z",
+   "checked": "2026-11-07T14:09:42Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfcL1NfjZ_n",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfcL1NfjZ_n/",
+   "title": "“It is our experience as alcoholics that makes us of unique value ... We can approach…",
+   "summary": "“It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.” “A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-07T12:30:16Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/DfcL1NfjZ_n.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfcL1NfjZ_n",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfcL1NfjZ_n.webp",
+    "embed_url": "https://www.instagram.com/p/DfcL1NfjZ_n/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfcL1NfjZ_n/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“It is our experience as alcoholics that makes us of unique value ... We can approach…",
+     "es": "“Es nuestra experiencia como alcohólicos lo que nos hace de valor único... Podemos acercarnos a …"
+    },
+    "summary": {
+     "en": "“It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.” “A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Es nuestra experiencia como alcohólicos lo que nos hace de valor único... Podemos acercarnos a los que sufren como nadie más puede.” “Un mensaje unido de recuperación”, Decatur, Georgia, mayo de 1994, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfcL1OBDRYS",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfcL1OBDRYS/",
+   "title": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”.",
+   "summary": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”. \"“Paso a paso” MAYO DE 1953 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-07T12:30:15Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/DfcL1OBDRYS.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfcL1OBDRYS",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfcL1OBDRYS.webp",
+    "embed_url": "https://www.instagram.com/p/DfcL1OBDRYS/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfcL1OBDRYS/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Happiness is not a station to which we arrive, but a way to travel.”",
+     "es": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”."
+    },
+    "summary": {
+     "en": "“Happiness is not a station to which we arrive, but a way to travel.” \"Paso a paso\" May 1953 From AA Grapevine Daily Quote in www.aalavina.org",
+     "es": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”. \"“Paso a paso” MAYO DE 1953 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dfb6ZgtA-xc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfb6ZgtA-xc/",
+   "title": "This week Vera welcomes Bonnie and Kathi.",
+   "summary": "This week Vera welcomes Bonnie and Kathi.",
+   "lang": "en",
+   "date": "2026-11-07T10:01:37Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/Dfb6ZgtA-xc.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfb6ZgtA-xc",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfb6ZgtA-xc.webp",
+    "embed_url": "https://www.instagram.com/p/Dfb6ZgtA-xc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfb6ZgtA-xc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "This week Vera welcomes Bonnie and Kathi.",
+     "es": "Esta semana Vera da la bienvenida a Bonnie y Kathi."
+    },
+    "summary": {
+     "en": "This week Vera welcomes Bonnie and Kathi.",
+     "es": "Esta semana Vera da la bienvenida a Bonnie y Kathi."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfbA8Y2GwNg",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfbA8Y2GwNg/",
+   "title": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape…",
+   "summary": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape suit🍇💜",
+   "lang": "en",
+   "date": "2026-11-07T01:35:39Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/DfbA8Y2GwNg.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfbA8Y2GwNg",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DfbA8Y2GwNg.webp",
+    "embed_url": "https://www.instagram.com/p/DfbA8Y2GwNg/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfbA8Y2GwNg/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape…",
+     "es": "Chip, un trabajador especial de la oficina central de Florida Intergrupo, muestra su uva …"
+    },
+    "summary": {
+     "en": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape suit🍇💜",
+     "es": "Chip, un trabajador especial de la oficina central de Florida Intergrupo, muestra su traje de uva 🍇💜"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dfa_1ebsYrH",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfa_1ebsYrH/",
+   "title": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede…",
+   "summary": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede: Area Sonora Sur, México. “Un Mensaje de Vida”",
+   "lang": "es",
+   "date": "2026-11-07T01:27:35Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/Dfa_1ebsYrH.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfa_1ebsYrH",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfa_1ebsYrH.webp",
+    "embed_url": "https://www.instagram.com/p/Dfa_1ebsYrH/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfa_1ebsYrH/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Today, November 6 starts the 39th Congress of the Western North Region. Headquarters …",
+     "es": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede…"
+    },
+    "summary": {
+     "en": "Today Friday November 6 starts the 39th Congress of the Western North Region. Headquarters: sound Area south, Mexico. “A Message of Life”",
+     "es": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede: Area Sonora Sur, México. “Un Mensaje de Vida”"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfZnCc3jSAi",
    "source": "instagram",
@@ -2301,7 +2516,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De4B1blF5QL",
@@ -2344,7 +2559,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De3BeoJjFUs",

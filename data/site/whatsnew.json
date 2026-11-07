@@ -1,7 +1,227 @@
 {
- "updated": "2026-11-07T07:18:38Z",
+ "updated": "2026-11-07T14:17:49Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DfcL1NfjZ_n",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfcL1NfjZ_n/",
+   "title": "“It is our experience as alcoholics that makes us of unique value ... We can approach…",
+   "summary": "“It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.” “A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-07T12:30:16Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/DfcL1NfjZ_n.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfcL1NfjZ_n",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfcL1NfjZ_n.webp",
+    "embed_url": "https://www.instagram.com/p/DfcL1NfjZ_n/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfcL1NfjZ_n/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“It is our experience as alcoholics that makes us of unique value ... We can approach…",
+     "es": "“Es nuestra experiencia como alcohólicos lo que nos hace de valor único... Podemos acercarnos a …"
+    },
+    "summary": {
+     "en": "“It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.” “A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Es nuestra experiencia como alcohólicos lo que nos hace de valor único... Podemos acercarnos a los que sufren como nadie más puede.” “Un mensaje unido de recuperación”, Decatur, Georgia, mayo de 1994, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-07T12:30:16Z"
+  },
+  {
+   "id": "ig:DfcL1OBDRYS",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfcL1OBDRYS/",
+   "title": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”.",
+   "summary": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”. \"“Paso a paso” MAYO DE 1953 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-07T12:30:15Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/DfcL1OBDRYS.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfcL1OBDRYS",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfcL1OBDRYS.webp",
+    "embed_url": "https://www.instagram.com/p/DfcL1OBDRYS/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfcL1OBDRYS/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Happiness is not a station to which we arrive, but a way to travel.”",
+     "es": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”."
+    },
+    "summary": {
+     "en": "“Happiness is not a station to which we arrive, but a way to travel.” \"Paso a paso\" May 1953 From AA Grapevine Daily Quote in www.aalavina.org",
+     "es": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”. \"“Paso a paso” MAYO DE 1953 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-07T12:30:15Z"
+  },
+  {
+   "id": "ig:Dfb6ZgtA-xc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfb6ZgtA-xc/",
+   "title": "This week Vera welcomes Bonnie and Kathi.",
+   "summary": "This week Vera welcomes Bonnie and Kathi.",
+   "lang": "en",
+   "date": "2026-11-07T10:01:37Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/Dfb6ZgtA-xc.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfb6ZgtA-xc",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfb6ZgtA-xc.webp",
+    "embed_url": "https://www.instagram.com/p/Dfb6ZgtA-xc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfb6ZgtA-xc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "This week Vera welcomes Bonnie and Kathi.",
+     "es": "Esta semana Vera da la bienvenida a Bonnie y Kathi."
+    },
+    "summary": {
+     "en": "This week Vera welcomes Bonnie and Kathi.",
+     "es": "Esta semana Vera da la bienvenida a Bonnie y Kathi."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-07T10:01:37Z"
+  },
+  {
+   "id": "ig:DfbA8Y2GwNg",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfbA8Y2GwNg/",
+   "title": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape…",
+   "summary": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape suit🍇💜",
+   "lang": "en",
+   "date": "2026-11-07T01:35:39Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/DfbA8Y2GwNg.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfbA8Y2GwNg",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DfbA8Y2GwNg.webp",
+    "embed_url": "https://www.instagram.com/p/DfbA8Y2GwNg/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfbA8Y2GwNg/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape…",
+     "es": "Chip, un trabajador especial de la oficina central de Florida Intergrupo, muestra su uva …"
+    },
+    "summary": {
+     "en": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape suit🍇💜",
+     "es": "Chip, un trabajador especial de la oficina central de Florida Intergrupo, muestra su traje de uva 🍇💜"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-07T01:35:39Z"
+  },
+  {
+   "id": "ig:Dfa_1ebsYrH",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfa_1ebsYrH/",
+   "title": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede…",
+   "summary": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede: Area Sonora Sur, México. “Un Mensaje de Vida”",
+   "lang": "es",
+   "date": "2026-11-07T01:27:35Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/Dfa_1ebsYrH.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfa_1ebsYrH",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfa_1ebsYrH.webp",
+    "embed_url": "https://www.instagram.com/p/Dfa_1ebsYrH/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfa_1ebsYrH/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Today, November 6 starts the 39th Congress of the Western North Region. Headquarters …",
+     "es": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede…"
+    },
+    "summary": {
+     "en": "Today Friday November 6 starts the 39th Congress of the Western North Region. Headquarters: sound Area south, Mexico. “A Message of Life”",
+     "es": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede: Area Sonora Sur, México. “Un Mensaje de Vida”"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-07T01:27:35Z"
+  },
   {
    "id": "ig:DfZnCc3jSAi",
    "source": "instagram",
@@ -115,7 +335,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 24,
+    "views": 99,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -878,7 +1098,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 142,
+    "views": 153,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1227,7 +1447,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 222,
+    "views": 244,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2146,7 +2366,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 247,
+    "views": 251,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3317,7 +3537,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 272,
+    "views": 278,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3694,7 +3914,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-24T11:30:14Z"
   },
   {
@@ -3738,7 +3958,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-24T11:30:14Z"
   },
   {
@@ -3943,7 +4163,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 316,
+    "views": 323,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -4612,7 +4832,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 224,
+    "views": 225,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -4882,7 +5102,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 335,
+    "views": 336,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7671,390 +7891,6 @@
     "issue_label": {
      "en": "November / December 2026",
      "es": "Noviembre / Diciembre 2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:ano-de-oro",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/ano-de-oro",
-   "title": "Año de oro",
-   "summary": "“Si nos esmeramos en esta fase de Nuestro desarrollo, nos sorprenderemos de los resultados antes de llegar a la mitad del camino”. ~El Libro Grande, pág. 83",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p16_1281715208.jpg?itok=2z3-PbGX",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Sección Especial",
-    "author": "Arturo G.",
-    "author_location": "Conroe, Texas",
-    "subtitle": "“Si nos esmeramos en esta fase de Nuestro desarrollo, nos sorprenderemos de los resultados antes de llegar a la mitad del camino”. ~El Libro Grande, pág. 83",
-    "teaser": "Mi nombre es Arturo G. y soy alcohólico. Llegué el veinte de mayo de 1995 al grupo Conroe y hasta la fecha estoy aquí. Cuando empecé a asistir regularmente empezó el problema.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "texas",
-     "city": "Conroe",
-     "county": "Montgomery",
-     "counties": [
-      "Montgomery"
-     ],
-     "state": "TX",
-     "country": "US",
-     "label_en": "Conroe, Texas",
-     "label_es": "Conroe, Texas"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Year of Gold",
-     "es": "Año de oro"
-    },
-    "summary": {
-     "en": "“If we are immersed in this phase of Our development, we will be surprised at the results before we reach halfway.” ~The Big Book, p. 83",
-     "es": "“Si nos esmeramos en esta fase de Nuestro desarrollo, nos sorprenderemos de los resultados antes de llegar a la mitad del camino”. ~El Libro Grande, pág. 83"
-    },
-    "section": {
-     "en": "Special Section",
-     "es": "Sección Especial"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Conroe, Texas",
-     "es": "Conroe, Texas"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:anonimo-o-incognito",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/anonimo-o-incognito",
-   "title": "¿Anónimo o incógnito?",
-   "summary": "Cuando el anonimato se convierte en una barrera en lugar de un principio espiritual",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p32-2284519504.jpg?itok=KJUpE2jy",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Tradición Doce",
-    "author": "Ángeles F.",
-    "author_location": "Guijón",
-    "subtitle": "Cuando el anonimato se convierte en una barrera en lugar de un principio espiritual",
-    "teaser": "Soy Ángeles y soy alcohólica. Me gustaría hacer una pequeña reflexión acerca de la Duodécima Tradición.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Guijón",
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": "Guijón",
-     "label_es": "Guijón"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Anonymous or Unknown?",
-     "es": "¿Anónimo o incógnito?"
-    },
-    "summary": {
-     "en": "When anonymity becomes a barrier instead of a spiritual principle",
-     "es": "Cuando el anonimato se convierte en una barrera en lugar de un principio espiritual"
-    },
-    "section": {
-     "en": "Tradition 12",
-     "es": "Tradición Doce"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Guijón",
-     "es": "Guijón"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:carta-de-bienvenida",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/carta-de-bienvenida",
-   "title": "Carta de Bienvenida",
-   "summary": "“Cualquier plan para combatir el alcoholismo que esté basado en escudar al enfermo contra la tentación está condenado al fracaso…",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "/assets/cache/articles/f516ec1fbfd667f4.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "En cada edición",
-    "author": null,
-    "author_location": null,
-    "subtitle": null,
-    "teaser": "“Cualquier plan para combatir el alcoholismo que esté basado en escudar al enfermo contra la tentación está condenado al fracaso…",
-    "free": false,
-    "online_exclusive": false,
-    "department": true,
-    "geo": {
-     "scope": "unknown",
-     "city": null,
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": null,
-     "label_es": null
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Welcome Letter",
-     "es": "Carta de Bienvenida"
-    },
-    "summary": {
-     "en": "“Any plan to combat alcoholism that is based on shielding the sick from temptation is doomed to failure …",
-     "es": "“Cualquier plan para combatir el alcoholismo que esté basado en escudar al enfermo contra la tentación está condenado al fracaso…"
-    },
-    "section": {
-     "en": "In Every Edition",
-     "es": "En cada edición"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:cartas-del-lector",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/cartas-del-lector",
-   "title": "Cartas del lector",
-   "summary": "PromesasAustin, Texas",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "/assets/cache/articles/d332ec39e77ca6b4.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "En cada edición",
-    "author": null,
-    "author_location": null,
-    "subtitle": null,
-    "teaser": "PromesasAustin, Texas",
-    "free": false,
-    "online_exclusive": false,
-    "department": true,
-    "geo": {
-     "scope": "unknown",
-     "city": null,
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": null,
-     "label_es": null
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Letters From the Reader",
-     "es": "Cartas del lector"
-    },
-    "summary": {
-     "en": "PromisesAustin, Texas",
-     "es": "PromesasAustin, Texas"
-    },
-    "section": {
-     "en": "In Every Edition",
-     "es": "En cada edición"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "lv:2026-11:dias-festivos-sobrios",
-   "source": "lavina",
-   "kind": "article",
-   "url": "https://www.aalavina.org/revista/noviembre-diciembre-2026/dias-festivos-sobrios",
-   "title": "Días festivos sobrios",
-   "summary": "Servir a Dios a través del servicio a los demás se convirtió en el eje de su recuperación",
-   "lang": "es",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aalavina.org/sites/default/files/styles/card_image/public/2026-10/p42-1057497824.jpg?itok=jVYuNQfK",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "publication": "lv",
-    "issue_label": "Noviembre / Diciembre 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "La alegría de vivir",
-    "issue_url": "https://www.aalavina.org/edicion-de-revista/noviembre-diciembre-2026",
-    "topic": "La alegría de vivir",
-    "section": "Experiencia, Fortaleza y Esperanza",
-    "author": "Juan Carlos G.",
-    "author_location": "Arcadia, California",
-    "subtitle": "Servir a Dios a través del servicio a los demás se convirtió en el eje de su recuperación",
-    "teaser": "Hola, mi nombre es Juan Carlos. Durante mis años de actividad alcohólica, nunca pasé un solo día sin beber. Mi rutina era diaria.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Arcadia",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Arcadia, California",
-     "label_es": "Arcadia, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Sober Holidays",
-     "es": "Días festivos sobrios"
-    },
-    "summary": {
-     "en": "Serving God through service to others became the axis of his recovery",
-     "es": "Servir a Dios a través del servicio a los demás se convirtió en el eje de su recuperación"
-    },
-    "section": {
-     "en": "Experience, Strength and Hope",
-     "es": "Experiencia, Fortaleza y Esperanza"
-    },
-    "topic": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_theme": {
-     "en": "The Joy of Living",
-     "es": "La alegría de vivir"
-    },
-    "issue_label": {
-     "en": "November / December 2026",
-     "es": "Noviembre / Diciembre 2026"
-    },
-    "author_location": {
-     "en": "Arcadia, California",
-     "es": "Arcadia, California"
     }
    },
    "machine": [
