@@ -1305,24 +1305,24 @@ lavina_weekly_open:
   starts: "2026-11-05"          # the first meeting (a Thursday)
   zoom_id: "871 2036 8287"
   passcode: "238047"
-  summary_es: "Una reunión abierta virtual de AA en español, cada semana: …"
-  summary_en: "A weekly virtual open AA meeting in Spanish where two members share …"
+  summary_es: "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores, … ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
+  summary_en: "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers, … Let's keep extending this powerful lifeline together!"
   url: ""                       # La Viña's page for the meeting, once there is one
-  source: "Official La Viña flyer (November 2026), shared with the committee"
+  source: "Official La Viña flyers (November 2026, and a newer one without a month), shared with the committee"
   flyer_match: "reuni[oó]n abierta de la vi[nñ]a|la vi[nñ]a open meeting"
 ```
 
 | Key | What it accepts |
 |---|---|
 | `enabled` | `false` (or deleting the block) takes the card off the site |
-| `title_es`, `title_en`, `summary_es`, `summary_en` | shown exactly as written — never machine-translated |
+| `title_es`, `title_en`, `summary_es`, `summary_en` | shown exactly as written — never machine-translated. The summaries' last sentence ("¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!" / "Let's keep extending this powerful lifeline together!") is the sign-off under both cards on `/meetings/`, so the La Viña card leaves it out (`committee.weekly.closing`): keep it last, word for word |
 | `day` | English or Spanish; the first three letters count (`thursday`, `Jueves`, `jue`) |
 | `time` | `"12:00"`, `"12 p. m."`, `"Noon"`, `"mediodía"`, `"11 a. m."`, even an unquoted `12:00` |
 | `timezone` | a time-zone name such as `America/New_York` (the default) or `America/Chicago` — **not** `Eastern` |
 | `starts` | the first meeting; until then the card says "Starts …". A date that is not on `day` → the first real meeting day is used |
 | `zoom_id` | 9–11 digits, shown grouped ("871 2036 8287") |
 | `passcode`, `url`, `source` | shown or linked as written |
-| `flyer_match` | a regular expression (capitals ignored) that finds the flyer on the committee's Drive → a "See the flyer" link on the card |
+| `flyer_match` | a regular expression (capitals ignored) that finds the flyer on the committee's Drive → a "See the flyer" link on the card. Several files match → the newest one (since Nov 7, 2026: the flyer without a month, "Reunión abierta de La Viña - todos los jueves …") |
 
 Checked with `lavina_item` (as of Oct 2, 2026): the real block gives "Jueves, 12 p. m. (hora del
 Este)", **11 AM Central**, next meeting Nov 5, 2026. `time: "11 a. m."` → 10 AM Central.
