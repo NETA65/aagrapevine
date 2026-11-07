@@ -1,7 +1,7 @@
 {
  "source": "manual_events",
- "updated": "2026-11-06T19:17:36Z",
- "attempted": "2026-11-06T19:17:36Z",
+ "updated": "2026-11-07T00:03:57Z",
+ "attempted": "2026-11-07T00:03:57Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -580,7 +580,7 @@
    "lang": "en",
    "date": "2026-10-18T18:00:00Z",
    "first_seen": "2026-10-16T20:52:28Z",
-   "last_seen": "2026-10-30T23:38:16Z",
+   "last_seen": "2026-11-07T00:03:57Z",
    "image": null,
    "tags": [
     "neta65",
