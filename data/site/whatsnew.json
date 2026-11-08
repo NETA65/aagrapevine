@@ -1,7 +1,139 @@
 {
- "updated": "2026-11-07T15:42:41Z",
+ "updated": "2026-11-08T14:32:40Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DfewoDmjdZY",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfewoDmjdZY/",
+   "title": "\"Only mutual trust can be the foundation for great love -- each of us for the other, and…",
+   "summary": "\"Only mutual trust can be the foundation for great love -- each of us for the other, and all of us for God.” AA Co-Founder, Bill W., November 1960, “Freedom Under God: The Choice Is Ours”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-08T12:30:16Z",
+   "first_seen": "2026-11-08T14:23:27Z",
+   "image": "/assets/cache/ig/DfewoDmjdZY.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfewoDmjdZY",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfewoDmjdZY.webp",
+    "embed_url": "https://www.instagram.com/p/DfewoDmjdZY/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfewoDmjdZY/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "\"Only mutual trust can be the foundation for great love -- each of us for the other, and…",
+     "es": "\"Sólo la confianza mutua puede ser la base para el gran amor - cada uno de nosotros para el otro, y …"
+    },
+    "summary": {
+     "en": "\"Only mutual trust can be the foundation for great love -- each of us for the other, and all of us for God.” AA Co-Founder, Bill W., November 1960, “Freedom Under God: The Choice Is Ours”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "\"Sólo la confianza mutua puede ser la base para el gran amor, cada uno de nosotros para el otro, y todos nosotros para Dios.\" AA cofundador, Bill W., noviembre de 1960, “libertad bajo Dios: la elección es nuestra”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-08T12:30:16Z"
+  },
+  {
+   "id": "ig:DfewoE9jaEP",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfewoE9jaEP/",
+   "title": "“Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor…",
+   "summary": "“Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor calibre; frecuento diariamente a escritores; conozco a las damas y a los caballeros de ambos partidos políticos; he sido invitado de la Casa Blanca, y comido con reyes, ministros y embajadores. Tras esa enumeración, puedo decir que prefiero una velada con mis amigos de AA a una con cualquier persona o grupo de…",
+   "lang": "es",
+   "date": "2026-11-08T12:30:16Z",
+   "first_seen": "2026-11-08T14:23:27Z",
+   "image": "/assets/cache/ig/DfewoE9jaEP.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfewoE9jaEP",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfewoE9jaEP.webp",
+    "embed_url": "https://www.instagram.com/p/DfewoE9jaEP/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfewoE9jaEP/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I count among my friends the stars of theater and cinema, and other talents of younger …",
+     "es": "“Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor…"
+    },
+    "summary": {
+     "en": "“I count among my friends the stars of the theater and the cinema, and other talents of lesser calibre; I frequent writers daily; I know the ladies and the knights of both political parties; I have been invited from the White House, and eaten with kings, ministers and ambassadors. After that enumeration, I can say I prefer an evening with my AA friends to one with any person or group of …",
+     "es": "“Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor calibre; frecuento diariamente a escritores; conozco a las damas y a los caballeros de ambos partidos políticos; he sido invitado de la Casa Blanca, y comido con reyes, ministros y embajadores. Tras esa enumeración, puedo decir que prefiero una velada con mis amigos de AA a una con cualquier persona o grupo de…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-08T12:30:16Z"
+  },
+  {
+   "id": "ig:DfdMF0xAfR5",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfdMF0xAfR5/",
+   "title": "We’re at the Area 24, District 11 Mini Conference",
+   "summary": "We’re at the Area 24, District 11 Mini Conference",
+   "lang": "en",
+   "date": "2026-11-07T21:52:17Z",
+   "first_seen": "2026-11-08T14:23:27Z",
+   "image": "/assets/cache/ig/DfdMF0xAfR5.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfdMF0xAfR5",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfdMF0xAfR5.webp",
+    "embed_url": "https://www.instagram.com/p/DfdMF0xAfR5/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfdMF0xAfR5/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We’re at the Area 24, District 11 Mini Conference",
+     "es": "Estamos en la Área 24, Distrito 11 Mini Conferencia"
+    },
+    "summary": {
+     "en": "We’re at the Area 24, District 11 Mini Conference",
+     "es": "Estamos en la Área 24, Distrito 11 Mini Conferencia"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-07T21:52:17Z"
+  },
   {
    "id": "ig:DfcL1NfjZ_n",
    "source": "instagram",
@@ -133,7 +265,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
     ],
-    "modified_text": "6:26 am"
+    "modified_text": "Nov 7"
    },
    "i18n": {
     "title": {
@@ -192,7 +324,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
     ],
-    "modified_text": "6:26 am"
+    "modified_text": "Nov 7"
    },
    "i18n": {
     "title": {
@@ -448,12 +580,12 @@
    "extra": {
     "video_id": "lNkEZ-5XK2A",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 3278,
     "playlists": [
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 99,
+    "views": 153,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -579,12 +711,12 @@
    "first_seen": "2026-11-05T15:36:24Z",
    "image": "/assets/cache/ig/DfXFrJMDcxG.webp",
    "tags": [],
-   "category": "gv",
+   "category": "lv",
    "status": "ok",
    "extra": {
     "shortcode": "DfXFrJMDcxG",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
     "media_type": "image",
     "thumb": "/assets/cache/ig/DfXFrJMDcxG.webp",
     "embed_url": "https://www.instagram.com/p/DfXFrJMDcxG/embed/captioned/",
@@ -1211,12 +1343,12 @@
    "extra": {
     "video_id": "VHhrECglokQ",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 402,
     "playlists": [
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 153,
+    "views": 167,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1560,12 +1692,12 @@
    "extra": {
     "video_id": "ymmqPVVe2K8",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 1651,
     "playlists": [
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 244,
+    "views": 254,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2484,7 +2616,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 251,
+    "views": 258,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3655,7 +3787,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 278,
+    "views": 280,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3856,7 +3988,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-25T11:30:15Z"
   },
   {
@@ -3900,7 +4032,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-25T11:30:15Z"
   },
   {
@@ -4281,7 +4413,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 323,
+    "views": 327,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -4950,7 +5082,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 225,
+    "views": 227,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -5220,7 +5352,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 336,
+    "views": 337,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7625,238 +7757,6 @@
     "author_location": {
      "en": "Manakin Sabot, Virginia",
      "es": "Manakin Sabot, Virginia"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:what-your-concern",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/what-your-concern",
-   "title": "What Is Your Concern?",
-   "summary": "A final word on the subject from our cofounder Bill W.",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/Bill_W._of_Alcoholics_Anonymous%20copy.jpg?itok=UYz2Q7OZ",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Featured Section",
-    "author": "W. N.",
-    "author_location": "Wichita Falls, Texas",
-    "subtitle": "A final word on the subject from our cofounder Bill W.",
-    "teaser": "At our state convention in l965, several of us were talking about one of our former members, who had died drunk after 18 years of sobriety.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "neta65",
-     "city": "Wichita Falls",
-     "county": "Wichita",
-     "counties": [
-      "Wichita"
-     ],
-     "state": "TX",
-     "country": "US",
-     "label_en": "Wichita Falls, Texas",
-     "label_es": "Wichita Falls, Texas"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "What Is Your Concern?",
-     "es": "¿Cuál es tu preocupación?"
-    },
-    "summary": {
-     "en": "A final word on the subject from our cofounder Bill W.",
-     "es": "Una palabra final sobre el tema de nuestro cofundador Bill W."
-    },
-    "section": {
-     "en": "Featured Section",
-     "es": "Sección destacada"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Wichita Falls, Texas",
-     "es": "Wichita Falls, Texas"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:wits-end",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/wits-end",
-   "title": "At Wit’s End",
-   "summary": "One of those daysI had a pretty strange day yesterday. First, I found a hat full of money. Then I was chased by a drunk guy with a guitar.",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "/assets/cache/articles/b28e8a999418a1a7.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "In Every Issue",
-    "author": null,
-    "author_location": null,
-    "subtitle": null,
-    "teaser": "One of those daysI had a pretty strange day yesterday. First, I found a hat full of money. Then I was chased by a drunk guy with a guitar.",
-    "free": false,
-    "online_exclusive": false,
-    "department": true,
-    "geo": {
-     "scope": "unknown",
-     "city": null,
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": null,
-     "label_es": null
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "At Wit’s End",
-     "es": "At Wit's End"
-    },
-    "summary": {
-     "en": "One of those daysI had a pretty strange day yesterday. First, I found a hat full of money. Then I was chased by a drunk guy with a guitar.",
-     "es": "Uno de esos días tuve un día bastante extraño ayer. Primero encontré un sombrero lleno de dinero. Luego fui perseguido por un borracho con una guitarra."
-    },
-    "section": {
-     "en": "In Every Issue",
-     "es": "En cada edición"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:world-away",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/world-away",
-   "title": "A World Away",
-   "summary": "One of the biggest lessons I learned in AA was how to follow instructions.",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-2272398614.jpg?itok=9lxvoqYb",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Our Personal Stories",
-    "author": "Snow P.",
-    "author_location": "Boynton Beach, Florida",
-    "subtitle": null,
-    "teaser": "One of the biggest lessons I learned in AA was how to follow instructions.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Boynton Beach",
-     "county": null,
-     "counties": [],
-     "state": "FL",
-     "country": "US",
-     "label_en": "Boynton Beach, Florida",
-     "label_es": "Boynton Beach, Florida"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "A World Away",
-     "es": "Un mundo lejos"
-    },
-    "summary": {
-     "en": "One of the biggest lessons I learned in AA was how to follow instructions.",
-     "es": "Una de las lecciones más grandes que aprendí en AA fue cómo seguir instrucciones."
-    },
-    "section": {
-     "en": "Our Personal Stories",
-     "es": "Nuestras historias personales"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Boynton Beach, Florida",
-     "es": "Boynton Beach, Florida"
     }
    },
    "machine": [

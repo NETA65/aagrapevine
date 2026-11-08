@@ -1,11 +1,11 @@
 {
  "source": "instagram",
- "updated": "2026-11-07T14:09:58Z",
- "attempted": "2026-11-07T14:09:58Z",
+ "updated": "2026-11-08T14:23:27Z",
+ "attempted": "2026-11-08T14:23:27Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 5,
+  "added": 3,
   "removed": 0,
   "held": 0
  },
@@ -24,27 +24,117 @@
     "profile_embed: 6 posts"
    ]
   },
-  "fetched": 11,
+  "fetched": 12,
   "manual": 0,
   "removal": {
    "checked": 5,
    "missing": [],
    "removed": []
   },
-  "thumbs_downloaded": 5,
+  "thumbs_downloaded": 3,
   "pruned": 0,
   "thumbs_deleted": 0,
-  "new": 5,
-  "total": 199,
+  "new": 3,
+  "total": 202,
   "per_account": {
-   "gv": 110,
-   "lv": 89
+   "gv": 111,
+   "lv": 91
   },
   "requests": 7,
   "anonymous": true,
   "graph_api": false
  },
  "items": [
+  {
+   "id": "ig:DfewoDmjdZY",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfewoDmjdZY/",
+   "title": "\"Only mutual trust can be the foundation for great love -- each of us for the other, and…",
+   "summary": "\"Only mutual trust can be the foundation for great love -- each of us for the other, and all of us for God.” AA Co-Founder, Bill W., November 1960, “Freedom Under God: The Choice Is Ours”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-08T12:30:16Z",
+   "first_seen": "2026-11-08T14:23:27Z",
+   "last_seen": "2026-11-08T14:23:27Z",
+   "image": "/assets/cache/ig/DfewoDmjdZY.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfewoDmjdZY",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfewoDmjdZY.webp",
+    "embed_url": "https://www.instagram.com/p/DfewoDmjdZY/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfewoDmjdZY/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfewoE9jaEP",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfewoE9jaEP/",
+   "title": "“Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor…",
+   "summary": "“Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor calibre; frecuento diariamente a escritores; conozco a las damas y a los caballeros de ambos partidos políticos; he sido invitado de la Casa Blanca, y comido con reyes, ministros y embajadores. Tras esa enumeración, puedo decir que prefiero una velada con mis amigos de AA a una con cualquier persona o grupo de…",
+   "lang": "es",
+   "date": "2026-11-08T12:30:16Z",
+   "first_seen": "2026-11-08T14:23:27Z",
+   "last_seen": "2026-11-08T14:23:27Z",
+   "image": "/assets/cache/ig/DfewoE9jaEP.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfewoE9jaEP",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfewoE9jaEP.webp",
+    "embed_url": "https://www.instagram.com/p/DfewoE9jaEP/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfewoE9jaEP/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfdMF0xAfR5",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfdMF0xAfR5/",
+   "title": "We’re at the Area 24, District 11 Mini Conference",
+   "summary": "We’re at the Area 24, District 11 Mini Conference",
+   "lang": "en",
+   "date": "2026-11-07T21:52:17Z",
+   "first_seen": "2026-11-08T14:23:27Z",
+   "last_seen": "2026-11-08T14:23:27Z",
+   "image": "/assets/cache/ig/DfdMF0xAfR5.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfdMF0xAfR5",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfdMF0xAfR5.webp",
+    "embed_url": "https://www.instagram.com/p/DfdMF0xAfR5/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfdMF0xAfR5/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
   {
    "id": "ig:DfcL1NfjZ_n",
    "source": "instagram",
@@ -298,12 +388,12 @@
    "last_seen": "2026-11-05T15:36:24Z",
    "image": "/assets/cache/ig/DfXFrJMDcxG.webp",
    "tags": [],
-   "category": "gv",
+   "category": "lv",
    "status": "ok",
    "extra": {
     "shortcode": "DfXFrJMDcxG",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
     "media_type": "image",
     "thumb": "/assets/cache/ig/DfXFrJMDcxG.webp",
     "embed_url": "https://www.instagram.com/p/DfXFrJMDcxG/embed/captioned/",
@@ -6041,10 +6131,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16988,
-   "posts": 3994,
+   "followers": 17009,
+   "posts": 3996,
    "owner_id": "48108439509",
-   "checked": "2026-11-07T14:09:39Z",
+   "checked": "2026-11-08T14:23:09Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp",
    "_avatar_checked": "2026-11-06T15:11:49Z"
   },
@@ -6053,10 +6143,10 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2430,
-   "posts": 3014,
+   "followers": 2432,
+   "posts": 3015,
    "owner_id": "48275839129",
-   "checked": "2026-11-07T14:09:42Z",
+   "checked": "2026-11-08T14:23:12Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp",
    "_avatar_checked": "2026-11-06T15:11:49Z"
   }
@@ -6391,6 +6481,21 @@
   },
   "DemARUxjcu8": {
    "checked": "2026-11-06T15:11:33Z"
+  },
+  "DemTKRtoMSE": {
+   "checked": "2026-11-08T14:23:12Z"
+  },
+  "DemTxXaIFaa": {
+   "checked": "2026-11-08T14:23:12Z"
+  },
+  "DemYT-3F1hx": {
+   "checked": "2026-11-08T14:23:12Z"
+  },
+  "DemYUG8Fz_L": {
+   "checked": "2026-11-08T14:23:12Z"
+  },
+  "DeolEMEF4Bu": {
+   "checked": "2026-11-08T14:23:12Z"
   }
  }
 }
