@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-11-07T23:36:58Z",
- "attempted": "2026-11-07T23:36:58Z",
+ "updated": "2026-11-08T07:30:14Z",
+ "attempted": "2026-11-08T07:30:14Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-11-07",
-  "new": 0
+  "today": "2026-11-08",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-11-07",
+   "id": "quote:gv:2026-11-08",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote November 7",
+   "title": "Grapevine Daily Quote November 8",
    "summary": "",
    "lang": "en",
-   "date": "2026-11-07",
-   "first_seen": "2026-11-07T07:18:31Z",
-   "last_seen": "2026-11-07T07:18:31Z",
+   "date": "2026-11-08",
+   "first_seen": "2026-11-08T07:30:14Z",
+   "last_seen": "2026-11-08T07:30:14Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.",
-    "attribution": "“A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine",
+    "text": "Only mutual trust can be the foundation for great love -- each of us for the other, and all of us for God.",
+    "attribution": "AA Co-Founder, Bill W., November 1960, “Freedom Under God: The Choice Is Ours”, The Language of the Heart",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "November 7",
+    "date_label": "November 8",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84488"
+    "node": "node-84489"
    }
   },
   {
-   "id": "quote:lv:2026-11-07",
+   "id": "quote:lv:2026-11-08",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Noviembre 7",
+   "title": "Cita Diaria con La Viña Noviembre 8",
    "summary": "",
    "lang": "es",
-   "date": "2026-11-07",
-   "first_seen": "2026-11-07T07:18:31Z",
-   "last_seen": "2026-11-07T07:18:31Z",
+   "date": "2026-11-08",
+   "first_seen": "2026-11-08T07:30:14Z",
+   "last_seen": "2026-11-08T07:30:14Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "La felicidad no es una estación a la que llegamos, sino una forma de viajar.",
-    "attribution": "“Paso a paso”. MAYO DE 1953. Del AA Grapevine",
-    "source": "",
-    "source_lang": null,
+    "text": "Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor calibre; frecuento diariamente a escritores; conozco a las damas y a los caballeros de ambos partidos políticos; he sido invitado de la Casa Blanca, y comido con reyes, ministros y embajadores. Tras esa enumeración, puedo decir que prefiero una velada con mis amigos de AA a una con cualquier persona o grupo de los mencionados.",
+    "attribution": "“Encantador es el mundo de los alcohólicos”. FULTON OURSLER, AMIGO DE AA, JULIO DE 1944",
+    "source": "Lo mejor del Grapevine, Volumen I",
+    "source_lang": "es",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "7 de noviembre",
+    "date_label": "8 de noviembre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84484"
+    "node": "node-84485"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-11-08",
+    "heading": "Grapevine Daily Quote November 8",
+    "text": "Only mutual trust can be the foundation for great love -- each of us for the other, and all of us for God.",
+    "attribution": "AA Co-Founder, Bill W., November 1960, “Freedom Under God: The Choice Is Ours”, The Language of the Heart",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-11-08T07:30:04Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-10-26T06:25:36Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-10-25",
-    "heading": "Grapevine Daily Quote October 25",
-    "text": "I need to constantly inch forward in AA, closer to the center, to avoid being thrown from the spinning wheel that is my life.",
-    "attribution": "“Centrifugal Force,” New York, New York, April 2004, AA Grapevine",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-10-25T06:16:42Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-11-08",
+    "heading": "Cita Diaria con La Viña Noviembre 8",
+    "text": "Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor calibre; frecuento diariamente a escritores; conozco a las damas y a los caballeros de ambos partidos políticos; he sido invitado de la Casa Blanca, y comido con reyes, ministros y embajadores. Tras esa enumeración, puedo decir que prefiero una velada con mis amigos de AA a una con cualquier persona o grupo de los mencionados.",
+    "attribution": "“Encantador es el mundo de los alcohólicos”. FULTON OURSLER, AMIGO DE AA, JULIO DE 1944",
+    "source": "Lo mejor del Grapevine, Volumen I",
+    "source_lang": "es",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-11-08T07:30:14Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-10-26T06:25:47Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-10-25",
-    "heading": "Cita Diaria con La Viña Octubre 25",
-    "text": "Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero no podíamos deshacernos del alcohol mientras no hiciéramos otros sacrificios. Teníamos que renunciar a la petulancia y al razonamiento farsante. Teníamos que echar por la ventana la autojustificación, la auto conmiseración y la ira. Teníamos que abandonar el alocado concurso por ganar prestigio personal y grandes cantidades de dinero. Teníamos que asumir personalmente la responsabilidad de nuestra lamentable situación y dejar de culpar a otros por ella.",
-    "attribution": "“Por qué Alcohólicos Anónimos es anónimo”. BILL W., COFUNDADOR DE AA, ENERO DE 1955",
-    "source": "El lenguaje del corazón",
-    "source_lang": "es",
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-10-25T06:16:54Z"
    }
   ]
  }
