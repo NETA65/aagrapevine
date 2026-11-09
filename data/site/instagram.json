@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-08T14:23:27Z",
+ "updated": "2026-11-09T17:38:43Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 17009,
-   "posts": 3996,
+   "posts": 4001,
    "owner_id": "48108439509",
-   "checked": "2026-11-08T14:23:09Z",
+   "checked": "2026-11-09T17:38:24Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,406 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2432,
-   "posts": 3015,
+   "posts": 3019,
    "owner_id": "48275839129",
-   "checked": "2026-11-08T14:23:12Z",
+   "checked": "2026-11-09T17:38:27Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfhtdVPDQTS",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhtdVPDQTS/",
+   "title": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas.",
+   "summary": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+   "lang": "en",
+   "date": "2026-11-09T16:00:18Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhtdVPDQTS.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhtdVPDQTS",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhtdVPDQTS.webp",
+    "embed_url": "https://www.instagram.com/p/DfhtdVPDQTS/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhtdVPDQTS/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas.",
+     "es": "De Nadja, - \"NETA 65 Summer Assembly\" Kaufman, Texas."
+    },
+    "summary": {
+     "en": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+     "es": "De Nadja., \"Asamblea de verano NETA 65\" Kaufman, Texas. ¡Grapevine Instagram concurso de fotos! Envíenos sus fotos a social@aagrapevine.org ➡️ Por favor incluya su nombre y su última inicial, y su ubicación. Las fotos ➡️ deben ser protegidas por el anonimato (no poses de cara completa o imágenes identificables de las personas.) ¡Esperando ver sus imágenes! El concurso está en curso."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhtdCoDSo7",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhtdCoDSo7/",
+   "title": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a…",
+   "summary": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a este maravilloso programa, a la hermosa comunidad de AA.\" . 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad. . 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a…",
+   "lang": "es",
+   "date": "2026-11-09T16:00:15Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhtdCoDSo7.webp",
+   "tags": [
+    "alcoholicosanónimos",
+    "laviña",
+    "aa",
+    "sobriedad",
+    "recuperación"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhtdCoDSo7",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhtdCoDSo7.webp",
+    "embed_url": "https://www.instagram.com/p/DfhtdCoDSo7/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhtdCoDSo7/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "De R. P., -\"2193 days of positive changes in my life, thanks to my Higher Power, to …",
+     "es": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a…"
+    },
+    "summary": {
+     "en": "De R. P., -\"2193 days of positive changes in my life, thanks to my Higher Power, to this wonderful program, to the beautiful AA Fellowship.\" . 📣 Send us your best photos that reflect the joy of living, serenity and other topics of sobriety. . 📣 Please: ➡️ Include your name, first name of your last name ➡️ Indica where photo was taken, location ➡️ Send your photos to …",
+     "es": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a este maravilloso programa, a la hermosa comunidad de AA.\" . 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad. . 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhdXRsgman",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhdXRsgman/",
+   "title": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos…",
+   "summary": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇",
+   "lang": "es",
+   "date": "2026-11-09T13:44:07Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhdXRsgman.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhdXRsgman",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhdXRsgman.webp",
+    "embed_url": "https://www.instagram.com/p/DfhdXRsgman/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhdXRsgman/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "A new open meeting podcast from La Viña: Weekly Open Meeting of Alcoholics Anonymous …",
+     "es": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos…"
+    },
+    "summary": {
+     "en": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇",
+     "es": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhdKf9OLk1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhdKf9OLk1/",
+   "title": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña…",
+   "summary": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Disponible en plataformas de podcast, YouTube y en aalavina.org/podcast. Un nuevo episodio cada lunes.",
+   "lang": "es",
+   "date": "2026-11-09T13:38:35Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhdKf9OLk1.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhdKf9OLk1",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhdKf9OLk1.webp",
+    "embed_url": "https://www.instagram.com/p/DfhdKf9OLk1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhdKf9OLk1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "A new La Viña podcast: Alcoholics Anonymous Weekly Open Meeting of La Viña …",
+     "es": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña…"
+    },
+    "summary": {
+     "en": "A new podcast from La Viña: Weekly Open Meeting of Alcoholics Anonymous from La Viña. Available on podcast, YouTube and aalavina.org/podcast platforms. A new episode every Monday.",
+     "es": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Disponible en plataformas de podcast, YouTube y en aalavina.org/podcast. Un nuevo episodio cada lunes."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhVbDYDX0Z",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhVbDYDX0Z/",
+   "title": "“It’s not the wonderful people I’ve met from throughout these great lands who have…",
+   "summary": "“It’s not the wonderful people I’ve met from throughout these great lands who have helped keep me sober most of the time, but those wonderful people sitting around the table in my hometown who loved me when I could not love, who waited for me to quit lying, who tolerated me when I would be part of nothing, and who never asked me to leave when I was obnoxious. Because of their love and patience, I…",
+   "lang": "en",
+   "date": "2026-11-09T12:30:17Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhVbDYDX0Z.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhVbDYDX0Z",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhVbDYDX0Z.webp",
+    "embed_url": "https://www.instagram.com/p/DfhVbDYDX0Z/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhVbDYDX0Z/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“It’s not the wonderful people I’ve met from throughout these great lands who have…",
+     "es": "“No es la gente maravillosa que he conocido en todas estas grandes tierras que tienen …"
+    },
+    "summary": {
+     "en": "“It’s not the wonderful people I’ve met from throughout these great lands who have helped keep me sober most of the time, but those wonderful people sitting around the table in my hometown who loved me when I could not love, who waited for me to quit lying, who tolerated me when I would be part of nothing, and who never asked me to leave when I was obnoxious. Because of their love and patience, I…",
+     "es": "“No es la gente maravillosa que he conocido en todas estas grandes tierras que me han ayudado a mantenerme sobrio la mayor parte del tiempo, pero esa gente maravillosa sentada alrededor de la mesa en mi ciudad natal que me amaba cuando no podía amar, que me esperaba para dejar de mentir, que me toleraba cuando yo sería parte de la nada, y que nunca me pidió que me fuera cuando era obnoccioso. Debido a su amor y paciencia, I …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhVa_OjSPJ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhVa_OjSPJ/",
+   "title": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”.",
+   "summary": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”. \"“Reuniones, reuniones, reuniones” GRAND RAPIDS, MICHIGAN, OCTUBRE DE 1981 De Happy, Joyous and Free\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-09T12:30:15Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhVa_OjSPJ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhVa_OjSPJ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhVa_OjSPJ.webp",
+    "embed_url": "https://www.instagram.com/p/DfhVa_OjSPJ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhVa_OjSPJ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The best way to appreciate AA is identical to how a stained glass is appreciated: from the inside.”",
+     "es": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”."
+    },
+    "summary": {
+     "en": "“The best way to appreciate AA is identical to how a stained glass is appreciated: from the inside.” \"Meetings, Meetings, Meetings\" GRAND RAPIDS, MICHIGAN, OCTOBER 1981 From Happy, Joyous and Free\" Daily Quote in www.aalavina.org",
+     "es": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”. \"“Reuniones, reuniones, reuniones” GRAND RAPIDS, MICHIGAN, OCTUBRE DE 1981 De Happy, Joyous and Free\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DffIqUIjZ5g",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffIqUIjZ5g/",
+   "title": "CIERRA EL AÑO CON AHORROS",
+   "summary": "CIERRA EL AÑO CON AHORROS AA La Viña se complace en anunciar su REBAJA DE FIN DE AÑO: ¡Envío GRATIS a EE. UU. y Canadá! Elige entre más de 100 productos, incluyendo libros, arte y organizadores. Aquí te mostramos algunos de los artículos más vendidos disponibles con esta oferta: El Lenguaje del Corazón Cita diaria de Grapevine — en español e inglés Nuestros Doce Pasos Lo Mejor De Bill Agenda de…",
+   "lang": "es",
+   "date": "2026-11-08T16:00:16Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffIqUIjZ5g.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffIqUIjZ5g",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffIqUIjZ5g.webp",
+    "embed_url": "https://www.instagram.com/p/DffIqUIjZ5g/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffIqUIjZ5g/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Closes the year with savings",
+     "es": "CIERRA EL AÑO CON AHORROS"
+    },
+    "summary": {
+     "en": "Closes the year with savings AA La Viña is pleased to announce its end-of-year sale: Free Shipping to USA. U.S. and Canada! Choose from more than 100 products, including books, art and organizers. Here are some of the best-selling items available with this offer: Language of the Heart Daily Quote from Grapevine — in Spanish and English Our Twelve Steps The Best Of … Bill Agenda",
+     "es": "CIERRA EL AÑO CON AHORROS AA La Viña se complace en anunciar su REBAJA DE FIN DE AÑO: ¡Envío GRATIS a EE. UU. y Canadá! Elige entre más de 100 productos, incluyendo libros, arte y organizadores. Aquí te mostramos algunos de los artículos más vendidos disponibles con esta oferta: El Lenguaje del Corazón Cita diaria de Grapevine — en español e inglés Nuestros Doce Pasos Lo Mejor De Bill Agenda de…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DffIqNvDcly",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffIqNvDcly/",
+   "title": "WRAP UP THE YEAR WITH SAVINGS",
+   "summary": "WRAP UP THE YEAR WITH SAVINGS AA Grapevine is pleased to announce our FREE SHIPPING SALE - available on everything! Select from over 100 products including books, artwork and organizers. Here are some top-selling items available with this offer: Beginners' Book: Getting and Staying Sober in AA The Next Frontier: Emotional Sobriety I & II Voices of Women in AA: Stories of Experience, Strength &…",
+   "lang": "en",
+   "date": "2026-11-08T16:00:16Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffIqNvDcly.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffIqNvDcly",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffIqNvDcly.webp",
+    "embed_url": "https://www.instagram.com/p/DffIqNvDcly/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffIqNvDcly/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "WRAP UP THE YEAR WITH SAVINGS",
+     "es": "Terminar el año con ahorros"
+    },
+    "summary": {
+     "en": "WRAP UP THE YEAR WITH SAVINGS AA Grapevine is pleased to announce our FREE SHIPPING SALE - available on everything! Select from over 100 products including books, artwork and organizers. Here are some top-selling items available with this offer: Beginners' Book: Getting and Staying Sober in AA The Next Frontier: Emotional Sobriety I & II Voices of Women in AA: Stories of Experience, Strength &…",
+     "es": "¡Completar el año con ahorros AA Grapevine se complace en anunciar nuestra venta de envío gratis - disponible en todo! Seleccione de más de 100 productos incluyendo libros, obras de arte y organizadores. Aquí están algunos artículos de venta superior disponibles con esta oferta: Libro de principiantes: Cómo llegar y mantenerse sobrio en AA La siguiente frontera: Sobriedad emocional I y II Voces de mujeres en AA: Historias de experiencia, fuerza y …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DffILGEADOG",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffILGEADOG/",
+   "title": "From the Connecticut Fall Assembly",
+   "summary": "From the Connecticut Fall Assembly",
+   "lang": "en",
+   "date": "2026-11-08T15:56:45Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffILGEADOG.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffILGEADOG",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffILGEADOG.webp",
+    "embed_url": "https://www.instagram.com/p/DffILGEADOG/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffILGEADOG/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From the Connecticut Fall Assembly",
+     "es": "De la asamblea de otoño de Connecticut"
+    },
+    "summary": {
+     "en": "From the Connecticut Fall Assembly",
+     "es": "De la asamblea de otoño de Connecticut"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfewoE9jaEP",
    "source": "instagram",
@@ -2258,7 +2651,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De9LbN9DR-M",
@@ -2301,7 +2694,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De9HiSMgXPS",
@@ -2344,7 +2737,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De6-qavDemq",

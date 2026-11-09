@@ -1,11 +1,11 @@
 {
  "source": "instagram",
- "updated": "2026-11-08T14:23:27Z",
- "attempted": "2026-11-08T14:23:27Z",
+ "updated": "2026-11-09T17:38:43Z",
+ "attempted": "2026-11-09T17:38:43Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 3,
+  "added": 9,
   "removed": 0,
   "held": 0
  },
@@ -31,20 +31,296 @@
    "missing": [],
    "removed": []
   },
-  "thumbs_downloaded": 3,
+  "thumbs_downloaded": 9,
   "pruned": 0,
   "thumbs_deleted": 0,
-  "new": 3,
-  "total": 202,
+  "new": 9,
+  "total": 211,
   "per_account": {
-   "gv": 111,
-   "lv": 91
+   "gv": 116,
+   "lv": 95
   },
   "requests": 7,
   "anonymous": true,
   "graph_api": false
  },
  "items": [
+  {
+   "id": "ig:DfhtdVPDQTS",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhtdVPDQTS/",
+   "title": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas.",
+   "summary": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+   "lang": "en",
+   "date": "2026-11-09T16:00:18Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "last_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhtdVPDQTS.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhtdVPDQTS",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhtdVPDQTS.webp",
+    "embed_url": "https://www.instagram.com/p/DfhtdVPDQTS/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhtdVPDQTS/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfhtdCoDSo7",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhtdCoDSo7/",
+   "title": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a…",
+   "summary": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a este maravilloso programa, a la hermosa comunidad de AA.\" . 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad. . 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a…",
+   "lang": "es",
+   "date": "2026-11-09T16:00:15Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "last_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhtdCoDSo7.webp",
+   "tags": [
+    "alcoholicosanónimos",
+    "laviña",
+    "aa",
+    "sobriedad",
+    "recuperación"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhtdCoDSo7",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhtdCoDSo7.webp",
+    "embed_url": "https://www.instagram.com/p/DfhtdCoDSo7/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhtdCoDSo7/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfhdXRsgman",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhdXRsgman/",
+   "title": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos…",
+   "summary": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇",
+   "lang": "es",
+   "date": "2026-11-09T13:44:07Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "last_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhdXRsgman.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhdXRsgman",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhdXRsgman.webp",
+    "embed_url": "https://www.instagram.com/p/DfhdXRsgman/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhdXRsgman/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfhdKf9OLk1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhdKf9OLk1/",
+   "title": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña…",
+   "summary": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Disponible en plataformas de podcast, YouTube y en aalavina.org/podcast. Un nuevo episodio cada lunes.",
+   "lang": "es",
+   "date": "2026-11-09T13:38:35Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "last_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhdKf9OLk1.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhdKf9OLk1",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhdKf9OLk1.webp",
+    "embed_url": "https://www.instagram.com/p/DfhdKf9OLk1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhdKf9OLk1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfhVbDYDX0Z",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhVbDYDX0Z/",
+   "title": "“It’s not the wonderful people I’ve met from throughout these great lands who have…",
+   "summary": "“It’s not the wonderful people I’ve met from throughout these great lands who have helped keep me sober most of the time, but those wonderful people sitting around the table in my hometown who loved me when I could not love, who waited for me to quit lying, who tolerated me when I would be part of nothing, and who never asked me to leave when I was obnoxious. Because of their love and patience, I…",
+   "lang": "en",
+   "date": "2026-11-09T12:30:17Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "last_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhVbDYDX0Z.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhVbDYDX0Z",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhVbDYDX0Z.webp",
+    "embed_url": "https://www.instagram.com/p/DfhVbDYDX0Z/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhVbDYDX0Z/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfhVa_OjSPJ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhVa_OjSPJ/",
+   "title": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”.",
+   "summary": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”. \"“Reuniones, reuniones, reuniones” GRAND RAPIDS, MICHIGAN, OCTUBRE DE 1981 De Happy, Joyous and Free\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-09T12:30:15Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "last_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhVa_OjSPJ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhVa_OjSPJ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhVa_OjSPJ.webp",
+    "embed_url": "https://www.instagram.com/p/DfhVa_OjSPJ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhVa_OjSPJ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DffIqNvDcly",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffIqNvDcly/",
+   "title": "WRAP UP THE YEAR WITH SAVINGS",
+   "summary": "WRAP UP THE YEAR WITH SAVINGS AA Grapevine is pleased to announce our FREE SHIPPING SALE - available on everything! Select from over 100 products including books, artwork and organizers. Here are some top-selling items available with this offer: Beginners' Book: Getting and Staying Sober in AA The Next Frontier: Emotional Sobriety I & II Voices of Women in AA: Stories of Experience, Strength &…",
+   "lang": "en",
+   "date": "2026-11-08T16:00:16Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "last_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffIqNvDcly.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffIqNvDcly",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffIqNvDcly.webp",
+    "embed_url": "https://www.instagram.com/p/DffIqNvDcly/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffIqNvDcly/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DffIqUIjZ5g",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffIqUIjZ5g/",
+   "title": "CIERRA EL AÑO CON AHORROS",
+   "summary": "CIERRA EL AÑO CON AHORROS AA La Viña se complace en anunciar su REBAJA DE FIN DE AÑO: ¡Envío GRATIS a EE. UU. y Canadá! Elige entre más de 100 productos, incluyendo libros, arte y organizadores. Aquí te mostramos algunos de los artículos más vendidos disponibles con esta oferta: El Lenguaje del Corazón Cita diaria de Grapevine — en español e inglés Nuestros Doce Pasos Lo Mejor De Bill Agenda de…",
+   "lang": "es",
+   "date": "2026-11-08T16:00:16Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "last_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffIqUIjZ5g.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffIqUIjZ5g",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffIqUIjZ5g.webp",
+    "embed_url": "https://www.instagram.com/p/DffIqUIjZ5g/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffIqUIjZ5g/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DffILGEADOG",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffILGEADOG/",
+   "title": "From the Connecticut Fall Assembly",
+   "summary": "From the Connecticut Fall Assembly",
+   "lang": "en",
+   "date": "2026-11-08T15:56:45Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "last_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffILGEADOG.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffILGEADOG",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffILGEADOG.webp",
+    "embed_url": "https://www.instagram.com/p/DffILGEADOG/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffILGEADOG/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
   {
    "id": "ig:DfewoDmjdZY",
    "source": "instagram",
@@ -6132,9 +6408,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 17009,
-   "posts": 3996,
+   "posts": 4001,
    "owner_id": "48108439509",
-   "checked": "2026-11-08T14:23:09Z",
+   "checked": "2026-11-09T17:38:24Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp",
    "_avatar_checked": "2026-11-06T15:11:49Z"
   },
@@ -6144,9 +6420,9 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2432,
-   "posts": 3015,
+   "posts": 3019,
    "owner_id": "48275839129",
-   "checked": "2026-11-08T14:23:12Z",
+   "checked": "2026-11-09T17:38:27Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp",
    "_avatar_checked": "2026-11-06T15:11:49Z"
   }
@@ -6336,16 +6612,16 @@
    "checked": "2026-10-18T12:07:04Z"
   },
   "DeE39M0gIn8": {
-   "checked": "2026-10-18T12:07:04Z"
+   "checked": "2026-11-09T17:38:27Z"
   },
   "DeE5-A2l9Mg": {
-   "checked": "2026-10-18T12:07:04Z"
+   "checked": "2026-11-09T17:38:27Z"
   },
   "DeE5-D_l1sp": {
-   "checked": "2026-10-18T12:07:04Z"
+   "checked": "2026-11-09T17:38:27Z"
   },
   "DeHGu0QlyVl": {
-   "checked": "2026-10-18T12:07:04Z"
+   "checked": "2026-11-09T17:38:27Z"
   },
   "DeHGu2Yl-6l": {
    "checked": "2026-10-19T14:46:07Z"
@@ -6496,6 +6772,9 @@
   },
   "DeolEMEF4Bu": {
    "checked": "2026-11-08T14:23:12Z"
+  },
+  "DeolEKMF5Ag": {
+   "checked": "2026-11-09T17:38:27Z"
   }
  }
 }

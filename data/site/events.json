@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09T08:07:40Z",
+ "updated": "2026-11-09T17:46:00Z",
  "fixture": false,
  "items": [
   {
@@ -63,7 +63,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:recurring:citywide-dallas:2026-11-14",
@@ -869,7 +869,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:recurring:lv-monthly-workshop:2027-02-25",
@@ -1280,7 +1280,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:committee:2027-04-21",
@@ -1729,7 +1729,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:committee:2027-07-21",
@@ -1993,7 +1993,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:committee:2027-10-20",

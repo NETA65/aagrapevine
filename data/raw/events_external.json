@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-11-08T14:29:37Z",
- "attempted": "2026-11-08T14:29:37Z",
+ "updated": "2026-11-09T17:43:16Z",
+ "attempted": "2026-11-09T17:43:16Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -12,7 +12,7 @@
  "stats": {
   "discovery": "sitemap",
   "discovery_complete": true,
-  "upcoming_urls": 17,
+  "upcoming_urls": 15,
   "kept_from_cache": 0,
   "fetched": 0,
   "refreshed": 0,

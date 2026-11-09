@@ -1,7 +1,367 @@
 {
- "updated": "2026-11-09T08:07:40Z",
+ "updated": "2026-11-09T17:46:00Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DfhtdVPDQTS",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhtdVPDQTS/",
+   "title": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas.",
+   "summary": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+   "lang": "en",
+   "date": "2026-11-09T16:00:18Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhtdVPDQTS.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhtdVPDQTS",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhtdVPDQTS.webp",
+    "embed_url": "https://www.instagram.com/p/DfhtdVPDQTS/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhtdVPDQTS/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas.",
+     "es": "De Nadja, - \"NETA 65 Summer Assembly\" Kaufman, Texas."
+    },
+    "summary": {
+     "en": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+     "es": "De Nadja., \"Asamblea de verano NETA 65\" Kaufman, Texas. ¡Grapevine Instagram concurso de fotos! Envíenos sus fotos a social@aagrapevine.org ➡️ Por favor incluya su nombre y su última inicial, y su ubicación. Las fotos ➡️ deben ser protegidas por el anonimato (no poses de cara completa o imágenes identificables de las personas.) ¡Esperando ver sus imágenes! El concurso está en curso."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-09T16:00:18Z"
+  },
+  {
+   "id": "ig:DfhtdCoDSo7",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhtdCoDSo7/",
+   "title": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a…",
+   "summary": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a este maravilloso programa, a la hermosa comunidad de AA.\" . 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad. . 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a…",
+   "lang": "es",
+   "date": "2026-11-09T16:00:15Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhtdCoDSo7.webp",
+   "tags": [
+    "alcoholicosanónimos",
+    "laviña",
+    "aa",
+    "sobriedad",
+    "recuperación"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhtdCoDSo7",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhtdCoDSo7.webp",
+    "embed_url": "https://www.instagram.com/p/DfhtdCoDSo7/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhtdCoDSo7/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "De R. P., -\"2193 days of positive changes in my life, thanks to my Higher Power, to …",
+     "es": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a…"
+    },
+    "summary": {
+     "en": "De R. P., -\"2193 days of positive changes in my life, thanks to my Higher Power, to this wonderful program, to the beautiful AA Fellowship.\" . 📣 Send us your best photos that reflect the joy of living, serenity and other topics of sobriety. . 📣 Please: ➡️ Include your name, first name of your last name ➡️ Indica where photo was taken, location ➡️ Send your photos to …",
+     "es": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a este maravilloso programa, a la hermosa comunidad de AA.\" . 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad. . 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-09T16:00:15Z"
+  },
+  {
+   "id": "yt:49LzrLRT4k0",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=49LzrLRT4k0",
+   "title": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, Episodio 1]",
+   "summary": "En este podcast de La Viña, escucharás la grabación de nuestra reunión abierta de AA en español del 5 de noviembre de 2026. Nos reunimos todos los jueves a las 12:00 del mediodía, hora del Este, y esperamos que puedas acompañarnos. El código de Zoom es 871 2036 8287 y la contraseña es 238047. La reunión es grabada y estará disponible posteriormente en todas las plataformas de pódcast. Esta…",
+   "lang": "es",
+   "date": "2026-11-09T14:31:49Z",
+   "first_seen": "2026-11-09T17:38:23Z",
+   "image": "https://i.ytimg.com/vi/49LzrLRT4k0/hqdefault.jpg",
+   "tags": [
+    "season-1"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "video_id": "49LzrLRT4k0",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [],
+    "is_short": false,
+    "views": 21,
+    "is_live_recording": false,
+    "date_approx": false,
+    "season": 1,
+    "episode": 1
+   },
+   "i18n": {
+    "title": {
+     "en": "Weekly Open Meeting of Alcoholics Anonymous La Viña [Season 1, Episode 1]",
+     "es": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, Episodio 1]"
+    },
+    "summary": {
+     "en": "In this La Viña podcast, you will listen to the recording of our AA open meeting in Spanish of November 5, 2026. We meet every Thursday at 12:00 noon, Eastern time, and we hope you can join us. The Zoom code is 871 2036 8287 and the password is 238047. The meeting is recorded and will later be available on all postcast platforms. This …",
+     "es": "En este podcast de La Viña, escucharás la grabación de nuestra reunión abierta de AA en español del 5 de noviembre de 2026. Nos reunimos todos los jueves a las 12:00 del mediodía, hora del Este, y esperamos que puedas acompañarnos. El código de Zoom es 871 2036 8287 y la contraseña es 238047. La reunión es grabada y estará disponible posteriormente en todas las plataformas de pódcast. Esta…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-09T14:31:49Z"
+  },
+  {
+   "id": "ig:DfhdXRsgman",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhdXRsgman/",
+   "title": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos…",
+   "summary": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇",
+   "lang": "es",
+   "date": "2026-11-09T13:44:07Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhdXRsgman.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhdXRsgman",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhdXRsgman.webp",
+    "embed_url": "https://www.instagram.com/p/DfhdXRsgman/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhdXRsgman/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "A new open meeting podcast from La Viña: Weekly Open Meeting of Alcoholics Anonymous …",
+     "es": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos…"
+    },
+    "summary": {
+     "en": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇",
+     "es": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-09T13:44:07Z"
+  },
+  {
+   "id": "ig:DfhdKf9OLk1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhdKf9OLk1/",
+   "title": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña…",
+   "summary": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Disponible en plataformas de podcast, YouTube y en aalavina.org/podcast. Un nuevo episodio cada lunes.",
+   "lang": "es",
+   "date": "2026-11-09T13:38:35Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhdKf9OLk1.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhdKf9OLk1",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhdKf9OLk1.webp",
+    "embed_url": "https://www.instagram.com/p/DfhdKf9OLk1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhdKf9OLk1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "A new La Viña podcast: Alcoholics Anonymous Weekly Open Meeting of La Viña …",
+     "es": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña…"
+    },
+    "summary": {
+     "en": "A new podcast from La Viña: Weekly Open Meeting of Alcoholics Anonymous from La Viña. Available on podcast, YouTube and aalavina.org/podcast platforms. A new episode every Monday.",
+     "es": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Disponible en plataformas de podcast, YouTube y en aalavina.org/podcast. Un nuevo episodio cada lunes."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-09T13:38:35Z"
+  },
+  {
+   "id": "ig:DfhVbDYDX0Z",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhVbDYDX0Z/",
+   "title": "“It’s not the wonderful people I’ve met from throughout these great lands who have…",
+   "summary": "“It’s not the wonderful people I’ve met from throughout these great lands who have helped keep me sober most of the time, but those wonderful people sitting around the table in my hometown who loved me when I could not love, who waited for me to quit lying, who tolerated me when I would be part of nothing, and who never asked me to leave when I was obnoxious. Because of their love and patience, I…",
+   "lang": "en",
+   "date": "2026-11-09T12:30:17Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhVbDYDX0Z.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhVbDYDX0Z",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhVbDYDX0Z.webp",
+    "embed_url": "https://www.instagram.com/p/DfhVbDYDX0Z/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhVbDYDX0Z/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“It’s not the wonderful people I’ve met from throughout these great lands who have…",
+     "es": "“No es la gente maravillosa que he conocido en todas estas grandes tierras que tienen …"
+    },
+    "summary": {
+     "en": "“It’s not the wonderful people I’ve met from throughout these great lands who have helped keep me sober most of the time, but those wonderful people sitting around the table in my hometown who loved me when I could not love, who waited for me to quit lying, who tolerated me when I would be part of nothing, and who never asked me to leave when I was obnoxious. Because of their love and patience, I…",
+     "es": "“No es la gente maravillosa que he conocido en todas estas grandes tierras que me han ayudado a mantenerme sobrio la mayor parte del tiempo, pero esa gente maravillosa sentada alrededor de la mesa en mi ciudad natal que me amaba cuando no podía amar, que me esperaba para dejar de mentir, que me toleraba cuando yo sería parte de la nada, y que nunca me pidió que me fuera cuando era obnoccioso. Debido a su amor y paciencia, I …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-09T12:30:17Z"
+  },
+  {
+   "id": "ig:DfhVa_OjSPJ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhVa_OjSPJ/",
+   "title": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”.",
+   "summary": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”. \"“Reuniones, reuniones, reuniones” GRAND RAPIDS, MICHIGAN, OCTUBRE DE 1981 De Happy, Joyous and Free\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-09T12:30:15Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhVa_OjSPJ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhVa_OjSPJ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhVa_OjSPJ.webp",
+    "embed_url": "https://www.instagram.com/p/DfhVa_OjSPJ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhVa_OjSPJ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The best way to appreciate AA is identical to how a stained glass is appreciated: from the inside.”",
+     "es": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”."
+    },
+    "summary": {
+     "en": "“The best way to appreciate AA is identical to how a stained glass is appreciated: from the inside.” \"Meetings, Meetings, Meetings\" GRAND RAPIDS, MICHIGAN, OCTOBER 1981 From Happy, Joyous and Free\" Daily Quote in www.aalavina.org",
+     "es": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”. \"“Reuniones, reuniones, reuniones” GRAND RAPIDS, MICHIGAN, OCTUBRE DE 1981 De Happy, Joyous and Free\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-09T12:30:15Z"
+  },
+  {
+   "id": "yt:z-1spviQWhk",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=z-1spviQWhk",
+   "title": "Off the Pity Pot [Season 11, Episode 19]",
+   "summary": "Peyton tells Olis and Sam about getting sober with two months left in the military. She was being put out of the Army because of her drinking. In AA, she says her life is still crazy, but with the program and fellowship she's stayed sober through serious difficulties. In the Ask it Basket Peyton, Olis and Sam discuss a question from Pat about the 11th Step. Wake asks about the Grapevine stories…",
+   "lang": "en",
+   "date": "2026-11-09T05:28:02Z",
+   "first_seen": "2026-11-09T17:38:23Z",
+   "image": "https://i.ytimg.com/vi/z-1spviQWhk/hqdefault.jpg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "z-1spviQWhk",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "AA Grapevine's Podcast"
+    ],
+    "is_short": false,
+    "views": 37,
+    "is_live_recording": false,
+    "date_approx": false,
+    "season": 11,
+    "episode": 19
+   },
+   "i18n": {
+    "title": {
+     "en": "Off the Pity Pot [Season 11, Episode 19]",
+     "es": "Fuera de la olla de la piedad [Temporada 11, Episodio 19]"
+    },
+    "summary": {
+     "en": "Peyton tells Olis and Sam about getting sober with two months left in the military. She was being put out of the Army because of her drinking. In AA, she says her life is still crazy, but with the program and fellowship she's stayed sober through serious difficulties. In the Ask it Basket Peyton, Olis and Sam discuss a question from Pat about the 11th Step. Wake asks about the Grapevine stories…",
+     "es": "Peyton le dice a Olis y Sam que se ponen sobrios con dos meses en el ejército. Estaba siendo sacada del ejército por su bebida. En AA, dice que su vida sigue siendo una locura, pero con el programa y compañerismo se ha mantenido sobria a través de serias dificultades. En el Ask-It-Basket Peyton, Olis y Sam discutir una pregunta de Pat sobre el Undécimo Paso. Wake pregunta sobre las historias Grapevine …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-09T05:28:02Z"
+  },
   {
    "id": "pod:gv:67e7abc8da39",
    "source": "podcast",
@@ -51,6 +411,138 @@
    ],
    "is_new": true,
    "wn_date": "2026-11-09T05:15:00Z"
+  },
+  {
+   "id": "ig:DffIqNvDcly",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffIqNvDcly/",
+   "title": "WRAP UP THE YEAR WITH SAVINGS",
+   "summary": "WRAP UP THE YEAR WITH SAVINGS AA Grapevine is pleased to announce our FREE SHIPPING SALE - available on everything! Select from over 100 products including books, artwork and organizers. Here are some top-selling items available with this offer: Beginners' Book: Getting and Staying Sober in AA The Next Frontier: Emotional Sobriety I & II Voices of Women in AA: Stories of Experience, Strength &…",
+   "lang": "en",
+   "date": "2026-11-08T16:00:16Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffIqNvDcly.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffIqNvDcly",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffIqNvDcly.webp",
+    "embed_url": "https://www.instagram.com/p/DffIqNvDcly/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffIqNvDcly/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "WRAP UP THE YEAR WITH SAVINGS",
+     "es": "Terminar el año con ahorros"
+    },
+    "summary": {
+     "en": "WRAP UP THE YEAR WITH SAVINGS AA Grapevine is pleased to announce our FREE SHIPPING SALE - available on everything! Select from over 100 products including books, artwork and organizers. Here are some top-selling items available with this offer: Beginners' Book: Getting and Staying Sober in AA The Next Frontier: Emotional Sobriety I & II Voices of Women in AA: Stories of Experience, Strength &…",
+     "es": "¡Completar el año con ahorros AA Grapevine se complace en anunciar nuestra venta de envío gratis - disponible en todo! Seleccione de más de 100 productos incluyendo libros, obras de arte y organizadores. Aquí están algunos artículos de venta superior disponibles con esta oferta: Libro de principiantes: Cómo llegar y mantenerse sobrio en AA La siguiente frontera: Sobriedad emocional I y II Voces de mujeres en AA: Historias de experiencia, fuerza y …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-08T16:00:16Z"
+  },
+  {
+   "id": "ig:DffIqUIjZ5g",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffIqUIjZ5g/",
+   "title": "CIERRA EL AÑO CON AHORROS",
+   "summary": "CIERRA EL AÑO CON AHORROS AA La Viña se complace en anunciar su REBAJA DE FIN DE AÑO: ¡Envío GRATIS a EE. UU. y Canadá! Elige entre más de 100 productos, incluyendo libros, arte y organizadores. Aquí te mostramos algunos de los artículos más vendidos disponibles con esta oferta: El Lenguaje del Corazón Cita diaria de Grapevine — en español e inglés Nuestros Doce Pasos Lo Mejor De Bill Agenda de…",
+   "lang": "es",
+   "date": "2026-11-08T16:00:16Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffIqUIjZ5g.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffIqUIjZ5g",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffIqUIjZ5g.webp",
+    "embed_url": "https://www.instagram.com/p/DffIqUIjZ5g/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffIqUIjZ5g/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Closes the year with savings",
+     "es": "CIERRA EL AÑO CON AHORROS"
+    },
+    "summary": {
+     "en": "Closes the year with savings AA La Viña is pleased to announce its end-of-year sale: Free Shipping to USA. U.S. and Canada! Choose from more than 100 products, including books, art and organizers. Here are some of the best-selling items available with this offer: Language of the Heart Daily Quote from Grapevine — in Spanish and English Our Twelve Steps The Best Of … Bill Agenda",
+     "es": "CIERRA EL AÑO CON AHORROS AA La Viña se complace en anunciar su REBAJA DE FIN DE AÑO: ¡Envío GRATIS a EE. UU. y Canadá! Elige entre más de 100 productos, incluyendo libros, arte y organizadores. Aquí te mostramos algunos de los artículos más vendidos disponibles con esta oferta: El Lenguaje del Corazón Cita diaria de Grapevine — en español e inglés Nuestros Doce Pasos Lo Mejor De Bill Agenda de…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-08T16:00:16Z"
+  },
+  {
+   "id": "ig:DffILGEADOG",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffILGEADOG/",
+   "title": "From the Connecticut Fall Assembly",
+   "summary": "From the Connecticut Fall Assembly",
+   "lang": "en",
+   "date": "2026-11-08T15:56:45Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffILGEADOG.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffILGEADOG",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffILGEADOG.webp",
+    "embed_url": "https://www.instagram.com/p/DffILGEADOG/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffILGEADOG/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From the Connecticut Fall Assembly",
+     "es": "De la asamblea de otoño de Connecticut"
+    },
+    "summary": {
+     "en": "From the Connecticut Fall Assembly",
+     "es": "De la asamblea de otoño de Connecticut"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-08T15:56:45Z"
   },
   {
    "id": "ig:DfewoDmjdZY",
@@ -635,7 +1127,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 153,
+    "views": 185,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1398,7 +1890,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 167,
+    "views": 174,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1747,7 +2239,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 254,
+    "views": 273,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2666,7 +3158,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 258,
+    "views": 265,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3403,7 +3895,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-26T14:35:09Z"
   },
   {
@@ -3465,7 +3957,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-26T14:35:09Z"
   },
   {
@@ -3536,7 +4028,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-26T14:35:09Z"
   },
   {
@@ -3607,7 +4099,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-26T14:35:09Z"
   },
   {
@@ -3678,7 +4170,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-26T14:35:09Z"
   },
   {
@@ -3722,7 +4214,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-26T11:30:15Z"
   },
   {
@@ -3766,7 +4258,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-26T11:30:14Z"
   },
   {
@@ -3810,7 +4302,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-26T11:00:04Z"
   },
   {
@@ -3837,7 +4329,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 280,
+    "views": 287,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -4463,7 +4955,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 327,
+    "views": 329,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -5402,7 +5894,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 337,
+    "views": 340,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -6875,860 +7367,6 @@
     "author_location": {
      "en": "New York, New York",
      "es": "Nueva York, Nueva York"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:just-way-i-am",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/just-way-i-am",
-   "title": "Just the Way I Am",
-   "summary": "Since he got sober and got outside help for his social anxiety, he no longer hides who he is. It just might help someone else",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-1519403766.jpg?itok=xTxrjGvj",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Featured Section",
-    "author": "Jack L.",
-    "author_location": "Blythewood, South Carolina",
-    "subtitle": "Since he got sober and got outside help for his social anxiety, he no longer hides who he is. It just might help someone else",
-    "teaser": "I was hit early in life with the mental illness “stick.” I struggled greatly with social anxiety, especially when I tried to mix with people.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Blythewood",
-     "county": null,
-     "counties": [],
-     "state": "SC",
-     "country": "US",
-     "label_en": "Blythewood, South Carolina",
-     "label_es": "Blythewood, Carolina del Sur"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Just the Way I Am",
-     "es": "Sólo la forma en que soy"
-    },
-    "summary": {
-     "en": "Since he got sober and got outside help for his social anxiety, he no longer hides who he is. It just might help someone else",
-     "es": "Desde que se puso sobrio y salió de la ayuda por su ansiedad social, ya no oculta quién es. Podría ayudar a alguien más"
-    },
-    "section": {
-     "en": "Featured Section",
-     "es": "Sección destacada"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Blythewood, South Carolina",
-     "es": "Blythewood, Carolina del Sur"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:keeping-it-green",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/keeping-it-green",
-   "title": "Keeping It Green",
-   "summary": "He thought drinking mouthwash was his deep, dark secret. But he couldn’t fool Jim the coffeemaker",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-1190151740%20copy.jpg?itok=m-5TdSaj",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Our Personal Stories",
-    "author": "Matt M.",
-    "author_location": "Newton, Connecticut",
-    "subtitle": "He thought drinking mouthwash was his deep, dark secret. But he couldn’t fool Jim the coffeemaker",
-    "teaser": "I recently celebrated my 32nd year of sobriety. I’m now 72, and I had the urge to write down my story.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Newton",
-     "county": null,
-     "counties": [],
-     "state": "CT",
-     "country": "US",
-     "label_en": "Newton, Connecticut",
-     "label_es": "Newton, Connecticut"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Keeping It Green",
-     "es": "Mantenerlo verde"
-    },
-    "summary": {
-     "en": "He thought drinking mouthwash was his deep, dark secret. But he couldn’t fool Jim the coffeemaker",
-     "es": "Pensó que beber enjuague era su secreto profundo y oscuro. Pero no pudo engañar a Jim el cafetera"
-    },
-    "section": {
-     "en": "Our Personal Stories",
-     "es": "Nuestras historias personales"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Newton, Connecticut",
-     "es": "Newton, Connecticut"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:learning-pray",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/learning-pray",
-   "title": "Learning to Pray",
-   "summary": "I was in my 11th month of sobriety, working on my Eleventh Step and feeling so miserable that I thought, What’s the sense of being sober if I’m going to feel like this?",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-2230856863.jpg?itok=vKN_UQOy",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Step eleven",
-    "author": "Michael G.",
-    "author_location": "Reno, Nevada",
-    "subtitle": null,
-    "teaser": "I was in my 11th month of sobriety, working on my Eleventh Step and feeling so miserable that I thought, What’s the sense of being sober if I’m going to feel like this?",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Reno",
-     "county": null,
-     "counties": [],
-     "state": "NV",
-     "country": "US",
-     "label_en": "Reno, Nevada",
-     "label_es": "Reno, Nevada"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Learning to Pray",
-     "es": "Aprender a orar"
-    },
-    "summary": {
-     "en": "I was in my 11th month of sobriety, working on my Eleventh Step and feeling so miserable that I thought, What’s the sense of being sober if I’m going to feel like this?",
-     "es": "Estaba en mi 11.º mes de sobriedad, trabajando en mi Undécimo Paso y sintiéndome tan miserable que pensé, ¿Cuál es el sentido de estar sobrio si me voy a sentir así?"
-    },
-    "section": {
-     "en": "Step eleven",
-     "es": "Paso Once"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Reno, Nevada",
-     "es": "Reno, Nevada"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:letter-editor-november-2026",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/letter-editor-november-2026",
-   "title": "Letter from the Editor",
-   "summary": "AA members love their history. We get requests all the time to run stories from our vast Grapevine Archive about the early days of AA. This month we feature some doozies.",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "/assets/cache/articles/bfc7d6fa631e6757.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "In Every Issue",
-    "author": null,
-    "author_location": null,
-    "subtitle": null,
-    "teaser": "AA members love their history. We get requests all the time to run stories from our vast Grapevine Archive about the early days of AA. This month we feature some doozies.",
-    "free": false,
-    "online_exclusive": false,
-    "department": true,
-    "geo": {
-     "scope": "unknown",
-     "city": null,
-     "county": null,
-     "counties": [],
-     "state": null,
-     "country": null,
-     "label_en": null,
-     "label_es": null
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Letter from the Editor",
-     "es": "Carta del editor"
-    },
-    "summary": {
-     "en": "AA members love their history. We get requests all the time to run stories from our vast Grapevine Archive about the early days of AA. This month we feature some doozies.",
-     "es": "Los miembros de AA aman su historia. Conseguimos peticiones todo el tiempo para ejecutar historias de nuestro vasto Archivo Grapevine sobre los primeros días de AA. Este mes contamos con algunas ondas."
-    },
-    "section": {
-     "en": "In Every Issue",
-     "es": "En cada edición"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:living-proof",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/living-proof",
-   "title": "Living Proof",
-   "summary": "A GSR for her group works the program, does service and takes good care of her mental health. It can be done",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/bahia_back_of_a_sweet_pic_of_40_or_50ish_woman_in_her_garden_--_56c95c81-b057-41c4-9160-a2518e96cc77.jpg?itok=HqS-HLSB",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Featured Section",
-    "author": "Dorothy W.",
-    "author_location": "Long Island, New York",
-    "subtitle": "A GSR for her group works the program, does service and takes good care of her mental health. It can be done",
-    "teaser": "My sobriety journey began in a psychiatric unit. I never thought I would end up there. A breakup of my marriage had sent me over the edge.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Long Island",
-     "county": null,
-     "counties": [],
-     "state": "NY",
-     "country": "US",
-     "label_en": "Long Island, New York",
-     "label_es": "Long Island, Nueva York"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Living Proof",
-     "es": "Prueba viviente"
-    },
-    "summary": {
-     "en": "A GSR for her group works the program, does service and takes good care of her mental health. It can be done",
-     "es": "Un RSG para su grupo trabaja el programa, sirve y cuida bien su salud mental. Se puede hacer"
-    },
-    "section": {
-     "en": "Featured Section",
-     "es": "Sección destacada"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Long Island, New York",
-     "es": "Long Island, Nueva York"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:lost-found",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/lost-found",
-   "title": "Lost & Found",
-   "summary": "Wet shoes, no wallet and frazzled, he was determined to save his trip to Vancouver. Welcome to emotional sobriety",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-901081836.jpg?itok=5Oiwo0Bw",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Emotional Sobriety",
-    "author": "Tom C.",
-    "author_location": "Cucamonga, California",
-    "subtitle": "Wet shoes, no wallet and frazzled, he was determined to save his trip to Vancouver. Welcome to emotional sobriety",
-    "teaser": "The truth is that I felt restless, irritable, very tired and discontent. Still, I followed my buddy into the Grapevine writing workshop at the AA International Convention in Vancouver.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Cucamonga",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Cucamonga, California",
-     "label_es": "Cucamonga, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Lost & Found",
-     "es": "Perdido y encontrado"
-    },
-    "summary": {
-     "en": "Wet shoes, no wallet and frazzled, he was determined to save his trip to Vancouver. Welcome to emotional sobriety",
-     "es": "Zapatos húmedos, sin billetera y deslumbrado, estaba decidido a salvar su viaje a Vancouver. Bienvenido a Sobriedad emocional"
-    },
-    "section": {
-     "en": "Emotional Sobriety",
-     "es": "Sobriedad emocional"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Cucamonga, California",
-     "es": "Cucamonga, California"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:matter-life-death",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/matter-life-death",
-   "title": "A Matter of Life & Death",
-   "summary": "A member in New York shares about the challenges of trying to get sober while dealing with schizophrenia",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-976727412.jpg?itok=_J4hlVDz",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Featured Section",
-    "author": "Ernst G.",
-    "author_location": "Staten Island, New York",
-    "subtitle": "A member in New York shares about the challenges of trying to get sober while dealing with schizophrenia",
-    "teaser": "I began drinking at age 15, and I thought I had hit bottom by 20. But before I found myself in an AA meeting, I experienced the onset of schizophrenia.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Staten Island",
-     "county": null,
-     "counties": [],
-     "state": "NY",
-     "country": "US",
-     "label_en": "Staten Island, New York",
-     "label_es": "Staten Island, Nueva York"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "A Matter of Life & Death",
-     "es": "Una cuestión de vida y muerte"
-    },
-    "summary": {
-     "en": "A member in New York shares about the challenges of trying to get sober while dealing with schizophrenia",
-     "es": "Un miembro en Nueva York comparte los desafíos de tratar de ponerse sobrio mientras se trata de la esquizofrenia"
-    },
-    "section": {
-     "en": "Featured Section",
-     "es": "Sección destacada"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Staten Island, New York",
-     "es": "Staten Island, Nueva York"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:me-dude",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/me-dude",
-   "title": "Me & Dude",
-   "summary": "After years of searching, she found a Higher Power with a twisted sense of humor, one that’s always nearby",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-504796702.jpg?itok=QsestZAX",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Step eleven",
-    "author": "Noelle D.",
-    "author_location": "Charlotte, North Carolina",
-    "subtitle": "After years of searching, she found a Higher Power with a twisted sense of humor, one that’s always nearby",
-    "teaser": "To me, God is a really big, scary word. I have been hearing it and learning about it my whole life. When I first got sober in 1986, I was in Los Angeles.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Charlotte",
-     "county": null,
-     "counties": [],
-     "state": "NC",
-     "country": "US",
-     "label_en": "Charlotte, North Carolina",
-     "label_es": "Charlotte, Carolina del Norte"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Me & Dude",
-     "es": "Yo y amigo"
-    },
-    "summary": {
-     "en": "After years of searching, she found a Higher Power with a twisted sense of humor, one that’s always nearby",
-     "es": "Después de años de búsqueda, encontró un Poder Superior con un sentido torcido del humor, uno que siempre está cerca"
-    },
-    "section": {
-     "en": "Step eleven",
-     "es": "Paso Once"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Charlotte, North Carolina",
-     "es": "Charlotte, Carolina del Norte"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:one-sunflower-time",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/one-sunflower-time",
-   "title": "One Sunflower at a Time",
-   "summary": "Struggling to find a Higher Power, he opened his mind and eyes and sure enough, something wonderful bloomed",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/bahia_small_tattoo_of_a_sunflower_on_a_mans_arm_--v_8.1_aaf306d4-de88-4b57-8645-8d763882d45e.jpg?itok=aq9I95Ir",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Spiritual Awakenings",
-    "author": "Brian S.",
-    "author_location": "Oakley, California",
-    "subtitle": "Struggling to find a Higher Power, he opened his mind and eyes and sure enough, something wonderful bloomed",
-    "teaser": "For most of my life, I drank and used drugs—heavily. My drinking started when I was just a kid, far too young.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Oakley",
-     "county": null,
-     "counties": [],
-     "state": "CA",
-     "country": "US",
-     "label_en": "Oakley, California",
-     "label_es": "Oakley, California"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "One Sunflower at a Time",
-     "es": "Un girasol a la vez"
-    },
-    "summary": {
-     "en": "Struggling to find a Higher Power, he opened his mind and eyes and sure enough, something wonderful bloomed",
-     "es": "Struggling para encontrar un Poder Superior, abrió su mente y ojos y lo suficientemente seguro, algo maravilloso floreció"
-    },
-    "section": {
-     "en": "Spiritual Awakenings",
-     "es": "Despertares espirituales"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Oakley, California",
-     "es": "Oakley, California"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:peeling-healing",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/peeling-healing",
-   "title": "Peeling & Healing",
-   "summary": "One Thanksgiving Day after her Fifth Step, she began to see her mother in a brand-new way",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-617381022.jpg?itok=9H1Y1__E",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Our Personal Stories",
-    "author": "April S.",
-    "author_location": "South Glens Falls, New York",
-    "subtitle": "One Thanksgiving Day after her Fifth Step, she began to see her mother in a brand-new way",
-    "teaser": "It was almost Thanksgiving, and I had five months of sobriety. I was still working on my Fourth Step, and my mother headed the list of people who I resented—big time.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "South Glens Falls",
-     "county": null,
-     "counties": [],
-     "state": "NY",
-     "country": "US",
-     "label_en": "South Glens Falls, New York",
-     "label_es": "South Glens Falls, Nueva York"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Peeling & Healing",
-     "es": "Peeling y sanación"
-    },
-    "summary": {
-     "en": "One Thanksgiving Day after her Fifth Step, she began to see her mother in a brand-new way",
-     "es": "Un Día de Acción de Gracias después de su Quinto Paso, comenzó a ver a su madre de una manera nueva"
-    },
-    "section": {
-     "en": "Our Personal Stories",
-     "es": "Nuestras historias personales"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "South Glens Falls, New York",
-     "es": "South Glens Falls, Nueva York"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:unforgettable-weekend",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/unforgettable-weekend",
-   "title": "Unforgettable Weekend",
-   "summary": "An online AA group with members from all over gets together for an in-person visit they will always remember",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-1354955862%20%5BConverted%5D%20copy.jpg?itok=OjoszkiE",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Home Group",
-    "author": "Brian D.",
-    "author_location": "Longmont, Colorado",
-    "subtitle": "An online AA group with members from all over gets together for an in-person visit they will always remember",
-    "teaser": "I have been attending the Mountain Evening online AA meeting every evening for more than three years. It has become my home online group.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Longmont",
-     "county": null,
-     "counties": [],
-     "state": "CO",
-     "country": "US",
-     "label_en": "Longmont, Colorado",
-     "label_es": "Longmont, Colorado"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Unforgettable Weekend",
-     "es": "Inolvidable fin de semana"
-    },
-    "summary": {
-     "en": "An online AA group with members from all over gets together for an in-person visit they will always remember",
-     "es": "Un grupo AA en línea con miembros de todas partes se reúne para una visita en persona que siempre recordarán"
-    },
-    "section": {
-     "en": "Home Group",
-     "es": "Grupo base"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Longmont, Colorado",
-     "es": "Longmont, Colorado"
     }
    },
    "machine": [
