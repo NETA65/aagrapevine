@@ -1,26 +1,26 @@
 {
  "source": "podcasts",
- "updated": "2026-11-08T23:38:23Z",
- "attempted": "2026-11-08T23:38:23Z",
+ "updated": "2026-11-09T08:07:33Z",
+ "attempted": "2026-11-09T08:07:33Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 1,
   "removed": 0,
   "held": 0
  },
  "stats": {
-  "fetched": 308,
-  "new": 0,
-  "total": 308,
-  "active": 308,
+  "fetched": 309,
+  "new": 1,
+  "total": 309,
+  "active": 309,
   "gone": 0,
   "spanish": 0,
   "shows": {
    "gv": {
     "ok": true,
-    "episodes": 268,
-    "latest": "2026-11-02T05:15:00Z"
+    "episodes": 269,
+    "latest": "2026-11-09T05:15:00Z"
    },
    "wo": {
     "ok": true,
@@ -32,12 +32,48 @@
   "gone_checks": 0,
   "discovery_checked": "2026-11-06T15:10:41Z",
   "discovered_feeds": [],
-  "seconds": 2.7,
+  "seconds": 2.4,
   "artwork": 3,
   "artwork_missing": 0,
   "artwork_removed": 0
  },
  "items": [
+  {
+   "id": "pod:gv:67e7abc8da39",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/3095c59e-6949-4455-a855-0f1f51f63d05",
+   "title": "Off the Pity Pot [Season 11, Episode 19]",
+   "summary": "Peyton tells Olis and Sam about getting sober with two months left in the military. She was being put out of the Army because of her drinking. In AA, she says her life is still crazy, but with the program and fellowship she's stayed sober through serious difficulties. In the Ask it Basket Peyton, Olis and Sam discuss a question from Pat about the 11th Step. Wake asks about the Grapevine stories…",
+   "lang": "en",
+   "date": "2026-11-09T05:15:00Z",
+   "first_seen": "2026-11-09T08:07:33Z",
+   "last_seen": "2026-11-09T08:07:33Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/3095c59e-6949-4455-a855-0f1f51f63d05.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 36653453,
+    "duration_sec": 1833,
+    "season": 11,
+    "episode": 19,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/3095c59e-6949-4455-a855-0f1f51f63d05",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   }
+  },
   {
    "id": "pod:wo:43cdc9398618",
    "source": "podcast",
@@ -84,7 +120,7 @@
    "lang": "en",
    "date": "2026-11-02T05:15:00Z",
    "first_seen": "2026-11-02T07:47:16Z",
-   "last_seen": "2026-11-02T07:47:16Z",
+   "last_seen": "2026-11-09T08:07:33Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -156,7 +192,7 @@
    "lang": "en",
    "date": "2026-10-26T04:15:00Z",
    "first_seen": "2026-10-26T06:25:49Z",
-   "last_seen": "2026-11-02T07:47:16Z",
+   "last_seen": "2026-11-09T08:07:33Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -228,7 +264,7 @@
    "lang": "en",
    "date": "2026-10-19T04:15:00Z",
    "first_seen": "2026-10-19T06:21:20Z",
-   "last_seen": "2026-11-02T07:47:16Z",
+   "last_seen": "2026-11-09T08:07:33Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -11141,7 +11177,7 @@
    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
-   "episodes": 268,
+   "episodes": 269,
    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
   },
   {

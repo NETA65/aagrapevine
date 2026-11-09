@@ -1,7 +1,57 @@
 {
- "updated": "2026-11-08T17:54:23Z",
+ "updated": "2026-11-09T08:07:40Z",
  "fixture": false,
  "items": [
+  {
+   "id": "pod:gv:67e7abc8da39",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/3095c59e-6949-4455-a855-0f1f51f63d05",
+   "title": "Off the Pity Pot [Season 11, Episode 19]",
+   "summary": "Peyton tells Olis and Sam about getting sober with two months left in the military. She was being put out of the Army because of her drinking. In AA, she says her life is still crazy, but with the program and fellowship she's stayed sober through serious difficulties. In the Ask it Basket Peyton, Olis and Sam discuss a question from Pat about the 11th Step. Wake asks about the Grapevine stories…",
+   "lang": "en",
+   "date": "2026-11-09T05:15:00Z",
+   "first_seen": "2026-11-09T08:07:33Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/3095c59e-6949-4455-a855-0f1f51f63d05.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 36653453,
+    "duration_sec": 1833,
+    "season": 11,
+    "episode": 19,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/3095c59e-6949-4455-a855-0f1f51f63d05",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "Off the Pity Pot [Season 11, Episode 19]",
+     "es": "Fuera de la olla de la piedad [Temporada 11, Episodio 19]"
+    },
+    "summary": {
+     "en": "Peyton tells Olis and Sam about getting sober with two months left in the military. She was being put out of the Army because of her drinking. In AA, she says her life is still crazy, but with the program and fellowship she's stayed sober through serious difficulties. In the Ask it Basket Peyton, Olis and Sam discuss a question from Pat about the 11th Step. Wake asks about the Grapevine stories…",
+     "es": "Peyton le dice a Olis y Sam que se ponen sobrios con dos meses en el ejército. Estaba siendo sacada del ejército por su bebida. En AA, dice que su vida sigue siendo una locura, pero con el programa y compañerismo se ha mantenido sobria a través de serias dificultades. En el Ask-It-Basket Peyton, Olis y Sam discutir una pregunta de Pat sobre el Undécimo Paso. Wake pregunta sobre las historias Grapevine …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-09T05:15:00Z"
+  },
   {
    "id": "ig:DfewoDmjdZY",
    "source": "instagram",
@@ -3806,7 +3856,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-26T04:28:19Z"
   },
   {
@@ -3856,7 +3906,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-26T04:15:00Z"
   },
   {
@@ -7679,84 +7729,6 @@
     "author_location": {
      "en": "Longmont, Colorado",
      "es": "Longmont, Colorado"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:walking-through-it",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/walking-through-it",
-   "title": "Walking Through It",
-   "summary": "A longtimer talks openly about his anxiety and depression and how he stays close to AA and seeks outside help",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/bahia_abstract_illustration_of_a_content_older_man_images_is_fr_f6874521-49b7-4a06-9096-69df134a5bce.jpg?itok=qvOJdfxG",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Featured Section",
-    "author": "Don S.",
-    "author_location": "Manakin Sabot, Virginia",
-    "subtitle": "A longtimer talks openly about his anxiety and depression and how he stays close to AA and seeks outside help",
-    "teaser": "February 23, 1984 is the day my life changed. Before then I was drinking a fifth of vodka every few days and taking whatever benzodiazepines I could get.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Manakin Sabot",
-     "county": null,
-     "counties": [],
-     "state": "VA",
-     "country": "US",
-     "label_en": "Manakin Sabot, Virginia",
-     "label_es": "Manakin Sabot, Virginia"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Walking Through It",
-     "es": "Caminando por ella"
-    },
-    "summary": {
-     "en": "A longtimer talks openly about his anxiety and depression and how he stays close to AA and seeks outside help",
-     "es": "Un veterano habla abiertamente sobre su ansiedad y depresión y cómo se mantiene cerca de AA y busca ayuda externa"
-    },
-    "section": {
-     "en": "Featured Section",
-     "es": "Sección destacada"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Manakin Sabot, Virginia",
-     "es": "Manakin Sabot, Virginia"
     }
    },
    "machine": [

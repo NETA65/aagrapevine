@@ -1,6 +1,6 @@
 {
  "https://neta65.org/events/category/workshop/list/?ical=1": {
-  "attempted": "2026-11-08T07:30:23Z",
+  "attempted": "2026-11-09T08:07:38Z",
   "state": "blocked",
   "http_status": 403,
   "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet"

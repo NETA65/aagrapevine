@@ -1,67 +1,7 @@
 {
- "updated": "2026-11-07T15:42:41Z",
+ "updated": "2026-11-09T08:07:40Z",
  "fixture": false,
  "items": [
-  {
-   "id": "ev:manual:2026-11-07-lv-information-workshop-longview",
-   "source": "committee",
-   "kind": "event",
-   "url": "https://neta65.org/event/la-vina-information-workshop/",
-   "title": "La Viña Information Workshop (in Spanish) — Longview",
-   "summary": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
-   "lang": "en",
-   "date": "2026-11-08T01:00:00Z",
-   "first_seen": "2026-09-24T11:10:08Z",
-   "image": null,
-   "tags": [
-    "workshop",
-    "la-vina"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-11-08T01:00:00Z",
-    "end": "2026-11-08T03:00:00Z",
-    "all_day": false,
-    "location": "Grupo Solo por Hoy, 2035 South High, Longview, TX 75602",
-    "online_url": null,
-    "flyer_url": "https://drive.google.com/file/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf/view",
-    "flyer_thumb": null,
-    "city": "Longview",
-    "state": "TX",
-    "body_md": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
-    "slug": "2026-11-07-lv-information-workshop-longview",
-    "file": "content/events/2026-11-07-lv-information-workshop-longview.md",
-    "own_i18n": {
-     "title": {
-      "es": "Taller de Información de La Viña — Longview"
-     },
-     "summary": {
-      "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
-     },
-     "body_md": {
-      "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Information Workshop (in Spanish) — Longview",
-     "es": "Taller de Información de La Viña — Longview"
-    },
-    "summary": {
-     "en": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
-     "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
-    },
-    "body_md": {
-     "en": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
-     "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
   {
    "id": "ev:manual:2026-11-10-neta65-delegate-town-hall",
    "source": "committee",
@@ -2094,6 +2034,66 @@
     "summary": {
      "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
      "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:manual:2026-11-07-lv-information-workshop-longview",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://neta65.org/event/la-vina-information-workshop/",
+   "title": "La Viña Information Workshop (in Spanish) — Longview",
+   "summary": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
+   "lang": "en",
+   "date": "2026-11-08T01:00:00Z",
+   "first_seen": "2026-09-24T11:10:08Z",
+   "image": null,
+   "tags": [
+    "workshop",
+    "la-vina"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-11-08T01:00:00Z",
+    "end": "2026-11-08T03:00:00Z",
+    "all_day": false,
+    "location": "Grupo Solo por Hoy, 2035 South High, Longview, TX 75602",
+    "online_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf/view",
+    "flyer_thumb": null,
+    "city": "Longview",
+    "state": "TX",
+    "body_md": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
+    "slug": "2026-11-07-lv-information-workshop-longview",
+    "file": "content/events/2026-11-07-lv-information-workshop-longview.md",
+    "own_i18n": {
+     "title": {
+      "es": "Taller de Información de La Viña — Longview"
+     },
+     "summary": {
+      "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
+     },
+     "body_md": {
+      "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
+     }
+    },
+    "past": true
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Information Workshop (in Spanish) — Longview",
+     "es": "Taller de Información de La Viña — Longview"
+    },
+    "summary": {
+     "en": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
+     "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
+    },
+    "body_md": {
+     "en": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
+     "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
     }
    },
    "machine": [],
