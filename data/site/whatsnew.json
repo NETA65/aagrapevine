@@ -1,7 +1,95 @@
 {
- "updated": "2026-11-10T12:47:47Z",
+ "updated": "2026-11-10T15:48:38Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:Dfj6N0WDezc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfj6N0WDezc/",
+   "title": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del…",
+   "summary": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del poder y del prestigio personales, del honor público y del dinero: los mismos impulsos implacables que antes, al ser frustrados, nos hicieron beber; las mismas fuerzas que hoy en día desgarran el mundo”. \"“Por qué Alcohólicos Anónimos es anónimo” BILL W., COFUNDADOR DE AA, ENERO DE 1955 De El lenguaje del…",
+   "lang": "es",
+   "date": "2026-11-10T12:30:18Z",
+   "first_seen": "2026-11-10T15:40:46Z",
+   "image": "/assets/cache/ig/Dfj6N0WDezc.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfj6N0WDezc",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfj6N0WDezc.webp",
+    "embed_url": "https://www.instagram.com/p/Dfj6N0WDezc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfj6N0WDezc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“With breaking our anonymity, we can resume our old disastrous … search",
+     "es": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del…"
+    },
+    "summary": {
+     "en": "“With breaking our anonymity, we can resume our old disastrous pursuit of personal power and prestige, of public honor and money: the same implacable impulses as before, being frustrated, made us drink; the same forces that today tear the world apart.” \"Why Alcoholics Anonymous is anonymous\" Bill W., AA co-founder, January 1955 … language",
+     "es": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del poder y del prestigio personales, del honor público y del dinero: los mismos impulsos implacables que antes, al ser frustrados, nos hicieron beber; las mismas fuerzas que hoy en día desgarran el mundo”. \"“Por qué Alcohólicos Anónimos es anónimo” BILL W., COFUNDADOR DE AA, ENERO DE 1955 De El lenguaje del…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-10T12:30:18Z"
+  },
+  {
+   "id": "ig:Dfj6N1wDXPr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfj6N1wDXPr/",
+   "title": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.”",
+   "summary": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.” “Right Here Right Now!” Santa Barbara, California, September 1960, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-10T12:30:18Z",
+   "first_seen": "2026-11-10T15:40:46Z",
+   "image": "/assets/cache/ig/Dfj6N1wDXPr.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfj6N1wDXPr",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfj6N1wDXPr.webp",
+    "embed_url": "https://www.instagram.com/p/Dfj6N1wDXPr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfj6N1wDXPr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.”",
+     "es": "“Mañana – y todos los mañanas por venir – son sólo extensiones de aquí, ahora mismo.”"
+    },
+    "summary": {
+     "en": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.” “Right Here Right Now!” Santa Barbara, California, September 1960, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+     "es": "“Mañana – y todos los mañanas por venir – son sólo extensiones de aquí, ahora mismo.” ¡Ahora mismo! Santa Barbara, California, septiembre de 1960, A.A. en prisión: Recluso para recluso Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-10T12:30:18Z"
+  },
   {
    "id": "ig:DfhtdVPDQTS",
    "source": "instagram",
@@ -118,7 +206,7 @@
     "duration_sec": null,
     "playlists": [],
     "is_short": false,
-    "views": 21,
+    "views": 80,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -340,7 +428,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 37,
+    "views": 93,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1127,7 +1215,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 185,
+    "views": 201,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1890,7 +1978,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 174,
+    "views": 180,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -2239,7 +2327,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 273,
+    "views": 280,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3158,7 +3246,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 265,
+    "views": 269,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3577,7 +3665,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-27T15:00:40Z"
   },
   {
@@ -3621,7 +3709,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-27T15:00:39Z"
   },
   {
@@ -4329,7 +4417,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 287,
+    "views": 293,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -4955,7 +5043,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 329,
+    "views": 333,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -5624,7 +5712,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 227,
+    "views": 228,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -5894,7 +5982,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 340,
+    "views": 346,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7209,164 +7297,6 @@
     "author_location": {
      "en": "Wasilla, Alaska",
      "es": "Wasilla, Alaska"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:getting-help-we-need",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/getting-help-we-need",
-   "title": "Getting the Help We Need",
-   "summary": "With family, AA and outside care, he finally found the right balance to live a happy, productive, sober life",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/bahia_watercolor_illustration_of_older_man_by_the_river_sitting_9d9b7fa0-f418-4c7c-a92f-23a710e067bd.jpg?itok=A7c3QTV2",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Featured Section",
-    "author": "Ray M.",
-    "author_location": "Hurst, Texas",
-    "subtitle": "With family, AA and outside care, he finally found the right balance to live a happy, productive, sober life",
-    "teaser": "I’m an AA member who is recovering from both alcoholism and a mental health condition. It’s not something that I talk about much in meetings, but that’s me.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "neta65",
-     "city": "Hurst",
-     "county": "Tarrant",
-     "counties": [
-      "Tarrant"
-     ],
-     "state": "TX",
-     "country": "US",
-     "label_en": "Hurst, Texas",
-     "label_es": "Hurst, Texas"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Getting the Help We Need",
-     "es": "Conseguir la ayuda que necesitamos"
-    },
-    "summary": {
-     "en": "With family, AA and outside care, he finally found the right balance to live a happy, productive, sober life",
-     "es": "Con familia, AA y cuidado exterior, finalmente encontró el equilibrio adecuado para vivir una vida feliz, productiva y sobria"
-    },
-    "section": {
-     "en": "Featured Section",
-     "es": "Sección destacada"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Hurst, Texas",
-     "es": "Hurst, Texas"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:grapevines-first-anniversary",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/grapevines-first-anniversary",
-   "title": "Grapevine’s First Anniversary",
-   "summary": "In 1945, our cofounder wrote this beautiful essay about a little magazine that’s still going strong",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/Alfred_Mainzer_318_%2814811%29_-_Skyline_of_Lower_Manhattan_at_Night_front.jpg?itok=P3tKPsu_",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Featured Section",
-    "author": "Bill W.",
-    "author_location": "New York, New York",
-    "subtitle": "In 1945, our cofounder wrote this beautiful essay about a little magazine that’s still going strong",
-    "teaser": "The Grapevine has just completed the first year of its existence. Scores of enthusiastic letters are coming in.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "New York",
-     "county": null,
-     "counties": [],
-     "state": "NY",
-     "country": "US",
-     "label_en": "New York, New York",
-     "label_es": "Nueva York, Nueva York"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine’s First Anniversary",
-     "es": "Primer aniversario de Grapevine"
-    },
-    "summary": {
-     "en": "In 1945, our cofounder wrote this beautiful essay about a little magazine that’s still going strong",
-     "es": "En 1945, nuestro cofundador escribió este hermoso ensayo sobre una pequeña revista que sigue siendo fuerte"
-    },
-    "section": {
-     "en": "Featured Section",
-     "es": "Sección destacada"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "New York, New York",
-     "es": "Nueva York, Nueva York"
     }
    },
    "machine": [

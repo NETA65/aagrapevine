@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09T17:38:43Z",
+ "updated": "2026-11-10T15:40:46Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17009,
-   "posts": 4001,
+   "followers": 17021,
+   "posts": 4002,
    "owner_id": "48108439509",
-   "checked": "2026-11-09T17:38:24Z",
+   "checked": "2026-11-10T15:40:29Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,99 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2432,
-   "posts": 3019,
+   "posts": 3021,
    "owner_id": "48275839129",
-   "checked": "2026-11-09T17:38:27Z",
+   "checked": "2026-11-10T15:40:32Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:Dfj6N1wDXPr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfj6N1wDXPr/",
+   "title": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.”",
+   "summary": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.” “Right Here Right Now!” Santa Barbara, California, September 1960, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-10T12:30:18Z",
+   "first_seen": "2026-11-10T15:40:46Z",
+   "image": "/assets/cache/ig/Dfj6N1wDXPr.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfj6N1wDXPr",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfj6N1wDXPr.webp",
+    "embed_url": "https://www.instagram.com/p/Dfj6N1wDXPr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfj6N1wDXPr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.”",
+     "es": "“Mañana – y todos los mañanas por venir – son sólo extensiones de aquí, ahora mismo.”"
+    },
+    "summary": {
+     "en": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.” “Right Here Right Now!” Santa Barbara, California, September 1960, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+     "es": "“Mañana – y todos los mañanas por venir – son sólo extensiones de aquí, ahora mismo.” ¡Ahora mismo! Santa Barbara, California, septiembre de 1960, A.A. en prisión: Recluso para recluso Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dfj6N0WDezc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfj6N0WDezc/",
+   "title": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del…",
+   "summary": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del poder y del prestigio personales, del honor público y del dinero: los mismos impulsos implacables que antes, al ser frustrados, nos hicieron beber; las mismas fuerzas que hoy en día desgarran el mundo”. \"“Por qué Alcohólicos Anónimos es anónimo” BILL W., COFUNDADOR DE AA, ENERO DE 1955 De El lenguaje del…",
+   "lang": "es",
+   "date": "2026-11-10T12:30:18Z",
+   "first_seen": "2026-11-10T15:40:46Z",
+   "image": "/assets/cache/ig/Dfj6N0WDezc.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfj6N0WDezc",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfj6N0WDezc.webp",
+    "embed_url": "https://www.instagram.com/p/Dfj6N0WDezc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfj6N0WDezc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“With breaking our anonymity, we can resume our old disastrous … search",
+     "es": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del…"
+    },
+    "summary": {
+     "en": "“With breaking our anonymity, we can resume our old disastrous pursuit of personal power and prestige, of public honor and money: the same implacable impulses as before, being frustrated, made us drink; the same forces that today tear the world apart.” \"Why Alcoholics Anonymous is anonymous\" Bill W., AA co-founder, January 1955 … language",
+     "es": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del poder y del prestigio personales, del honor público y del dinero: los mismos impulsos implacables que antes, al ser frustrados, nos hicieron beber; las mismas fuerzas que hoy en día desgarran el mundo”. \"“Por qué Alcohólicos Anónimos es anónimo” BILL W., COFUNDADOR DE AA, ENERO DE 1955 De El lenguaje del…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfhtdVPDQTS",
    "source": "instagram",
@@ -2479,7 +2565,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfAITC9DS8g",
@@ -2522,7 +2608,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De_wOH8jVeC",
