@@ -423,6 +423,10 @@
     "en": "Listen to past meetings",
     "es": "Escuchar reuniones pasadas"
   },
+  "committee.weekly.listen_name": {
+    "en": "Listen to past meetings: {name}",
+    "es": "Escuchar reuniones pasadas: {name}"
+  },
   "committee.weekly.section_title": {
     "en": "Weekly open meetings",
     "es": "Reuniones abiertas semanales"

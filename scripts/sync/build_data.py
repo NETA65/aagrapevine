@@ -2440,7 +2440,10 @@ def build_meta(ctx: Ctx, i18n: I18n) -> tuple[dict[str, dict], list[tuple[dict, 
     # Podcast shows: [{key, name, title, description, image, language, web, apple, spotify, amazon, episodes}]
     shows = (ctx.raw.get("podcasts") or {}).get("shows")
     if isinstance(shows, list):
-        order = [s.get("key") for s in ((ctx.cfg.get("sources") or {}).get("podcasts") or []) if isinstance(s, dict)]
+        cfg_shows = [s for s in ((ctx.cfg.get("sources") or {}).get("podcasts") or []) if isinstance(s, dict)]
+        order = [s.get("key") for s in cfg_shows]
+        # a show's language: its config `lang` first (La Viña's Spanish feed says <language>en</language>)
+        cfg_lang = {s.get("key"): str(s.get("lang") or "")[:2].lower() for s in cfg_shows}
         rows = []
         for s in shows:
             if not isinstance(s, dict) or not s.get("key"):
@@ -2448,7 +2451,7 @@ def build_meta(ctx: Ctx, i18n: I18n) -> tuple[dict[str, dict], list[tuple[dict, 
             r = {k: v for k, v in s.items() if not str(k).startswith("_")}
             r["title"] = clean_text(s.get("title") or s.get("name"))
             r["description"] = clean_text(strip_html(s.get("description") or ""))
-            lang = str(s.get("language") or "")[:2].lower()
+            lang = cfg_lang.get(s["key"]) or str(s.get("language") or "")[:2].lower()
             r["_src"] = lang if lang in LANGS else T.detect_language(f"{r['title']}. {r['description']}", "en")
             for f in ("title", "description"):
                 wanted.append((r, f, r[f], r["_src"]))

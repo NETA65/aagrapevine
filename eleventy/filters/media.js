@@ -37,6 +37,38 @@ const WEEKLY_OPEN = /weekly\s+open|reuni[oó]n\s+abierta\s+semanal|open\s+aa\s+m
 /* "Grapevine Weekly Open AA Meeting, September 16, 2026" → "Meeting of September 16, 2026"
    (the show is already shown as a badge next to the title). */
 const WO_PREFIXES = ["Grapevine Weekly Open AA Meeting", "Grapevine Weekly Open Meeting", "Grapevine Weekly Open"];
+/* The two weekly open meetings a show can record (config sources.podcasts[].weekly_open; data/site/weekly_open.json
+   `source`): the Grapevine Weekly Open (Wednesdays, English) and La Viña's Reunión Abierta (Thursdays, Spanish).
+   Each has its own short label (a row's badge, a video's): media.show_short_weekly / media.show_short_weekly_lv. */
+const MEETINGS = ["grapevine", "lavina"];
+const MEETING_LABEL = { grapevine: "media.show_short_weekly", lavina: "media.show_short_weekly_lv" };
+const isYmd = (v) => /^\d{4}-\d{2}-\d{2}$/.test(String(v || ""));
+
+/** The weekly open meeting a show records: its config `weekly_open`, else (a show set up before that setting) the
+    Grapevine Weekly Open's key "wo", or a name like a weekly open meeting's (WEEKLY_OPEN) — La Viña's when the show
+    is in Spanish. "" for any other show. */
+function showMeeting(s) {
+  const own = String((s && s.weekly_open) || "").trim().toLowerCase();
+  if (MEETINGS.includes(own)) return own;
+  const key = String((s && s.key) || ""), name = String((s && (s.name || s.title)) || "");
+  if (key !== "wo" && !WEEKLY_OPEN.test(name)) return "";
+  return String((s && (s.lang || s.language)) || "").toLowerCase().startsWith("es") ? "lavina" : "grapevine";
+}
+
+/** The weekly open meeting an episode or a video records ("grapevine" | "lavina" | ""): an episode's extra.weekly_open
+    (the sync copies its show's setting), else its show's name; a video of the "weekly" kind is La Viña's when it is
+    La Viña's (category "lv") or in Spanish. */
+function itemMeeting(item) {
+  if (!item) return "";
+  const x = item.extra || {};
+  if (item.kind === "episode") {
+    const own = String(x.weekly_open || "").toLowerCase();
+    if (MEETINGS.includes(own)) return own;
+    return showMeeting({ key: x.show || item.category, name: x.show_name, lang: item.lang });
+  }
+  if (videoKind(item) !== "weekly") return "";
+  return item.category === "lv" || item.lang === "es" ? "lavina" : "grapevine";
+}
 const IG_GENERIC_TITLE = /^\s*(?:aa\s+grapevine|la\s+vi[ñn]a)\s*[—–-]\s*instagram\s*$/i;
 const LOCALES = { en: "en-US", es: "es-US" };
 /* A Spanish playlist needs at least this many videos that are not Shorts to be listed with La Viña's spoken
@@ -170,6 +202,17 @@ function videoKind(item) {
 /** A playlist that is the same thing as a type chip (Weekly Open / Podcast). */
 function isKindPlaylist(title) { return WEEKLY_OPEN.test(String(title || "")) || /podcast/i.test(String(title || "")); }
 
+/** A weekly open meeting's episode that its feed calls only by its show's name (extra.generic_title — La Viña's), with
+    its meeting's date (extra.meeting_date): { label, date } — the i18n key of its meeting's short name and the date
+    (YYYY-MM-DD) — for a title that says both where no badge names the show ("La Viña Open Meeting, November 5, 2026":
+    the RSS feed, the search index). null for every other item. */
+export function meetingTitleParts(item) {
+  const x = (item && item.extra) || {};
+  if (!item || item.kind !== "episode" || x.generic_title !== true || !isYmd(x.meeting_date)) return null;
+  const meeting = itemMeeting(item);
+  return MEETING_LABEL[meeting] ? { label: MEETING_LABEL[meeting], date: x.meeting_date } : null;
+}
+
 /** Video language bucket: prefer the category from the sync (gv/lv), else the detected language. */
 function videoLang(item) {
   if (item.category === "lv" || item.category === "gv") return item.category;
@@ -249,13 +292,20 @@ export default function (eleventyConfig, helpers) {
   }
 
   /** Display title in the page language: numbering bracket and show-name prefix removed → { t, made } (made: the
-      site's own short form, stripShowPrefix). */
+      site's own short form, stripShowPrefix). A weekly open meeting's episode whose title is only its show's name
+      (extra.generic_title — La Viña's "<show name> [Temporada 1, episodio 1]", scripts/sync/podcasts.py) is called by
+      its meeting's date (extra.meeting_date, from its description): "Meeting of November 5, 2026" / "Reunión del 5 de
+      noviembre de 2026", as the Grapevine Weekly Open's are; without a date, "<title>, episode 1". */
   function titleOf(item, lang) {
     if (!item) return { t: "", made: false };
     const { se, ep } = seOf(item);
     const x = item.extra || {};
     let r = { t: stripNumbering(tx(item, "title", lang), se, ep), made: false };
-    const weekly = item.kind === "episode" ? WEEKLY_OPEN.test(String(x.show_name || "")) : videoKind(item) === "weekly";
+    const weekly = item.kind === "episode" ? !!itemMeeting(item) : videoKind(item) === "weekly";
+    if (weekly && item.kind === "episode" && x.generic_title === true) {
+      if (isYmd(x.meeting_date)) return { t: translateKey("media.meeting_of", lang, { date: helpers.fmtDate(x.meeting_date, lang, "medium") }), made: true };
+      if (ep !== null) return { t: translateKey("media.title_ep", lang, { t: softCaps(r.t, lang), e: ep }), made: true };
+    }
     if (weekly) r = stripShowPrefix(r.t, [x.show_name, ...WO_PREFIXES], lang);
     return { t: softCaps(r.t, lang), made: r.made };
   }
@@ -274,18 +324,22 @@ export default function (eleventyConfig, helpers) {
 
   function showKeyOf(i) { return (i && i.extra && i.extra.show) || (i && i.category) || "gv"; }
 
-  /** Short label for a show badge: "Weekly Open" for the meeting show, else its name. */
-  function showShort(key, name, lang) {
-    if (key === "wo" || WEEKLY_OPEN.test(String(name || ""))) return translateKey("media.show_short_weekly", lang);
+  /** Short label for a show badge: its weekly open meeting's ("Grapevine Weekly Open" / "La Viña Open Meeting"),
+      else its name. */
+  function showShort(key, name, lang, meeting = "") {
+    if (MEETING_LABEL[meeting]) return translateKey(MEETING_LABEL[meeting], lang);
     return String(name || key || "");
   }
 
   /** Shows in config order, merged from episodes.json `shows`, config sources.podcasts
-      and the items themselves. Only shows that have at least one episode. */
+      and the items themselves. Only shows that have at least one episode. Each one's `lang` is the config's `lang`
+      first (a feed can say the wrong one), else the language its texts are translated from, else its feed's;
+      `meeting` the weekly open meeting it records (showMeeting) and `weekly` whether it records one. */
   function showList(epFile, cfgShows, items, lang) {
     const f = fileOf(epFile, "episodes");
     const env = Array.isArray(f.shows) ? f.shows : f.shows && typeof f.shows === "object" ? Object.values(f.shows) : [];
     const byKey = new Map();
+    const cfgByKey = new Map((cfgShows || []).filter((s) => s && s.key).map((s) => [s.key, s]));
     // envelope first (has i18n + artwork), config fills whatever the envelope lacks
     const add = (s) => {
       if (!s || !s.key) return;
@@ -312,11 +366,16 @@ export default function (eleventyConfig, helpers) {
       const x = latest.extra || {};
       const name = s.name || s.title || x.show_name || key;
       const image = safeUrl(s.thumb, "") || safeUrl(s.image, "") || imageFor(eps);
+      const cfg = cfgByKey.get(key) || {};
+      const sLang = String(cfg.lang || s.lang || s.language || latest.lang || "en").toLowerCase().slice(0, 2);
+      const meeting = showMeeting({ ...s, weekly_open: cfg.weekly_open || s.weekly_open || x.weekly_open, name, lang: sLang });
       out.push({
         key,
         name,
-        short: showShort(key, name, lang),
-        weekly: key === "wo" || WEEKLY_OPEN.test(name),
+        lang: sLang === "es" ? "es" : "en",
+        meeting,
+        short: showShort(key, name, lang, meeting),
+        weekly: !!meeting,
         desc: s.i18n ? tx(s, "description", lang) : String(s.description || ""),
         descMachine: machine(s, lang),
         image,
@@ -465,6 +524,7 @@ export default function (eleventyConfig, helpers) {
       l: item.lang || "und",
     };
     if (x.date_approx) o.a = 1;
+    if (o.k === "weekly" && itemMeeting(item) === "lavina") o.w = "lv"; // La Viña's open meeting: its own badge (watch.njk)
     if (se !== null) o.se = se;
     if (ep !== null) o.ep = ep;
     // playlist indexes; type playlists (Weekly Open / Podcast) are covered by the type chips
@@ -497,8 +557,21 @@ export default function (eleventyConfig, helpers) {
 
   /** Shows with their episodes' stats: {{ db.episodes | mediaShowList(site.sources.podcasts, eps, lang) }} */
   eleventyConfig.addFilter("mediaShowList", (epFile, cfgShows, items, lang) => showList(epFile, cfgShows, items, lang));
-  /** Short label of an episode's show ("Weekly Open"), for row badges. */
+  /** Short label of an episode's show ("Grapevine Weekly Open"), for row badges. */
   eleventyConfig.addFilter("mediaShowOf", (item, shows) => (shows || []).find((s) => s.key === showKeyOf(item)) || null);
+  /** Its meeting's short name ("Grapevine Weekly Open" / "La Viña Open Meeting", in the page language), "" when it records
+      none — a weekly video's badge on /watch/, Home, What's New and /digest/: {{ v | mediaMeetingLabel(lang) }} */
+  eleventyConfig.addFilter("mediaMeetingLabel", (item, lang) => {
+    const m = itemMeeting(item);
+    return MEETING_LABEL[m] ? translateKey(MEETING_LABEL[m], lang) : "";
+  });
+  /** The configured show that records a weekly open meeting (config sources.podcasts[].weekly_open — `source`
+      "grapevine" | "lavina" of data/site/weekly_open.json): its key, for /meetings/' "Listen to past meetings"
+      (/listen/?show=<key>#episodes); "" when no show records it. {{ site.sources.podcasts | mediaMeetingShow("lavina") }} */
+  eleventyConfig.addFilter("mediaMeetingShow", (cfgShows, source) => {
+    const s = (cfgShows || []).find((c) => c && c.key && c.feed && showMeeting(c) === String(source || ""));
+    return s ? String(s.key) : "";
+  });
 
   /** Season chips over all episodes: [{key:"11", count}] newest season first. */
   eleventyConfig.addFilter("mediaSeasons", (items) => {

@@ -217,7 +217,9 @@ T = {
         "min": "{n} min",
         "episode_se": "S{s} · E{e}",
         "in_other": "in Spanish",          # after something written in the other language
-        "weekly_open": "Weekly Open",      # the pill of the Grapevine Weekly Open podcast
+        "weekly_open": "Grapevine Weekly Open",    # the pill of the Grapevine Weekly Open's recordings
+        "weekly_open_lv": "La Viña Open Meeting",   # … and of La Viña's open meeting's (media.show_short_weekly[_lv])
+        "meeting_of": "Meeting of {date}",          # a meeting episode called only by its show's name (media.meeting_of)
     },
     "es": {
         "lang_name": "Español",
@@ -290,7 +292,9 @@ T = {
         "min": "{n} min",
         "episode_se": "T{s} · E{e}",
         "in_other": "en inglés",
-        "weekly_open": "Reunión Abierta Semanal",
+        "weekly_open": "Grapevine Weekly Open",
+        "weekly_open_lv": "Reunión Abierta de La Viña",
+        "meeting_of": "Reunión del {date}",
     },
 }
 
@@ -591,7 +595,16 @@ def js_order(v: Any) -> tuple:
 
 def media_title(item: dict, lang: str) -> str:
     """A podcast episode / video title without its "[Season 11, Episode 12]" tail (the badge says it),
-    like the website's media titles."""
+    like the website's media titles. A weekly open meeting's episode that its feed calls only by its show's name
+    (extra.generic_title: La Viña's — scripts/sync/podcasts.py) is called by its meeting's date, as on the site
+    (eleventy/filters/media.js titleOf): "Meeting of November 5, 2026" / "Reunión del 5 de noviembre de 2026"."""
+    ex = item.get("extra") or {}
+    md = str(ex.get("meeting_date") or "")
+    if item.get("kind") == "episode" and ex.get("generic_title") is True and re.fullmatch(r"\d{4}-\d{2}-\d{2}", md):
+        y, m, d = (int(x) for x in md.split("-"))
+        if 1 <= m <= 12:
+            day = f"{d} de {MONTHS['es'][m - 1]} de {y}" if lang == "es" else f"{MONTHS['en'][m - 1]} {d}, {y}"
+            return T[lang]["meeting_of"].format(date=day)
     t = tx(item, "title", lang)
     s = ONE_SUFFIX.sub("", SE_SUFFIX.sub("", t)).strip()
     return s or t
@@ -658,10 +671,16 @@ def item_label(item: dict, lang: str) -> tuple[str, str, str]:
         return ("La Viña", C["lv"], C["lv_soft"]) if item.get("category") == "lv" or src == "lavina" \
             else ("Grapevine", C["gv"], C["gv_soft"])
     if kind == "episode":
-        # Two shows (config sources.podcasts): the magazine's podcast ("gv") and the
-        # Grapevine Weekly Open AA Meeting ("wo"), which gets its own pill.
-        show = item.get("category") or (item.get("extra") or {}).get("show")
-        return (T[lang]["weekly_open"] if show == "wo" else "Podcast"), C["grape"], C["grape_soft"]
+        # The shows of config sources.podcasts: the magazine's podcast ("gv") is "Podcast"; a weekly open meeting's
+        # recordings get their meeting's pill — the sync writes extra.weekly_open ("grapevine" | "lavina") from the
+        # show's `weekly_open` (the Grapevine Weekly Open "wo", La Viña's "lvo"); an older "wo" episode without it
+        # is the Grapevine Weekly Open's.
+        ex = item.get("extra") or {}
+        show = item.get("category") or ex.get("show")
+        meeting = str(ex.get("weekly_open") or ("grapevine" if show == "wo" else "")).lower()
+        if meeting == "lavina":
+            return T[lang]["weekly_open_lv"], C["lv"], C["lv_soft"]
+        return (T[lang]["weekly_open"] if meeting == "grapevine" else "Podcast"), C["grape"], C["grape_soft"]
     if kind in ("video", "video_file") and src != "drive":
         return "Video", C["grape"], C["grape_soft"]
     if kind == "pdf" and src != "drive":

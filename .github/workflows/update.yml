@@ -3,7 +3,7 @@
 #
 #  Every day (and whenever settings/content/templates change) this:
 #    1. SYNC   – fetches new Grapevine & La Viña articles, crawls both
-#                sites for PDFs, reads the two podcast feeds, YouTube,
+#                sites for PDFs, reads the podcast feeds, YouTube,
 #                Instagram and the committee's Google Drive folders,
 #                machine-translates everything EN ⇄ ES (offline, open
 #                source), and commits the updated data back to the repo.
@@ -683,6 +683,24 @@ jobs:
                   if src.get("ok") is False and (days is None or days >= STALE_DAYS):
                       stale.append({"source": src.get("source"), "label": label, "days": days,
                                     "updated": src.get("updated"), "error": err})
+              # A podcast show whose feed fails while the other shows still update (scripts/sync/podcasts.py: the
+              # source stays ok, the show is in stats.shows with ok false, `updated` = its last good read and
+              # `failing_since`): named under "Notes" below, and a source that stopped once it has failed for
+              # STALE_DAYS — "Podcasts — <show>" in the report issue. (Every show failing fails the source itself.)
+              shows = (src.get("stats") or {}).get("shows") if isinstance(src.get("stats"), dict) else None
+              if ok and src.get("source") == "podcasts" and isinstance(shows, dict):
+                  for key, sh in shows.items():
+                      if not isinstance(sh, dict) or sh.get("ok") is not False:
+                          continue
+                      days = days_since(sh.get("updated")) if sh.get("updated") else days_since(sh.get("failing_since"))
+                      name = str(sh.get("name") or key)
+                      title = f"{label} — {name}".replace("%", "%25").replace(",", "%2C").replace(":", "%3A")
+                      print(f"::warning title={title}::" + (f"{str(sh.get('error') or 'failed')[:160]} (its episodes are kept; "
+                            "the other shows still update)" + (f" — not read for {days} days" if days else "")).replace("%", "%25"))
+                      if days is not None and days >= STALE_DAYS:
+                          stale.append({"source": f"podcasts:{key}", "label": f"{label} — {sh.get('name') or key}",
+                                        "days": days_since(sh.get("updated")) if sh.get("updated") else None,
+                                        "updated": sh.get("updated"), "error": str(sh.get("error") or "")[:160]})
           # Sync health — so a source that suddenly loses items, or a magazine page the document search depends on,
           # shows the day it happens. Per source, what THIS run added and removed (common.save_raw `changes`, which
           # build_data copies into status.json sources[]) — only for a source this run read (its `attempted` is not
@@ -1633,10 +1651,19 @@ jobs:
               "writers_archive": "check the newest file in content/archive: it must keep the archive's columns, and a "
                                  "file much smaller than the one used before is not used (the run summary's \"CSV "
                                  "file to fix\" line says which). The archive already on the site stays meanwhile.",
+              # one podcast show ("podcasts:<key>") — the others still update
+              "podcasts:": "the show's feed no longer answers: open its feed address (config/site.yml → sources.podcasts "
+                          "→ feed) in a browser. A show that moved to a new feed needs the new address there (its "
+                          "Apple Podcasts or host page names it). Its episodes stay on the site meanwhile.",
           }
           # A source that still works but that no run has tried for a week ("not checked" in the run summary).
           UNCHECKED = ("no run has got to it for {n} days: the update stops before it (open the latest \"Nightly full "
                        "update\" run and look for the step that failed or ran out of time), or no longer runs it.")
+
+          def hint(source):   # a source's own advice; "podcasts:<key>" (one show) takes the "podcasts:" one
+              s = str(source or "")
+              return (HINTS.get(s) or (HINTS.get(s.split(":")[0] + ":") if ":" in s else None)
+                      or "the other website may have changed or be down. Send this issue to whoever helps with the website.")
 
           def gh(*args):
               r = subprocess.run(["gh", *args], capture_output=True, text=True)
@@ -1666,9 +1693,7 @@ jobs:
               when = (f"{x['updated'][:10]} ({x['days']} days ago)" if x.get("updated") and x.get("days") is not None
                       else "never")
               rows.append(f"| {x['label']} | {when} | {code(x.get('error'))} |")
-              todo.append(f"- **{x['label']}:** " + (UNCHECKED.format(n=x["unchecked"]) if x.get("unchecked") else HINTS.get(
-                          x.get("source"), "the other website may have changed or be down. Send this issue to whoever "
-                                           "helps with the website.")))
+              todo.append(f"- **{x['label']}:** " + (UNCHECKED.format(n=x["unchecked"]) if x.get("unchecked") else hint(x.get("source"))))
           keys = sorted(str(x.get("source")) for x in stale)
           status = f"[Status page]({site}/status/) · " if site else ""
           body = "\n".join([

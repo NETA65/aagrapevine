@@ -1,19 +1,36 @@
-"""Podcasts → data/raw/podcasts.json  (AA Grapevine's Podcast + any show added to config)
+"""Podcasts → data/raw/podcasts.json  (AA Grapevine's Podcast, the two weekly open meetings + any show added to config)
 
 Every show listed under `sources.podcasts` in config/site.yml is read from its
-public RSS feed (fetched with requests, parsed with feedparser). A La Viña podcast
-(or any other show) is added by adding one more entry to that list:
+public RSS feed (fetched with requests, parsed with feedparser). Another show is
+added by adding one more entry to that list:
 
-    - key: "lv"                      # short id, becomes the item category
-      name: "Podcast de La Viña"
+    - key: "lvo"                     # short id, becomes the item category (never "wo"/"gv"/"lv")
+      name: "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
       feed: "https://…/rss"
-      lang: "es"                     # optional hint for the language detector
+      lang: "es"                     # the show's language: wins over the feed's <language> (show metadata)
+                                     #   and is the hint for the per-episode language detector
+      weekly_open: "lavina"          # optional: the show records this weekly open meeting
+                                     #   (data/site/weekly_open.json `source`: "grapevine" | "lavina")
       web / apple / spotify / amazon # optional show links (shown on the site)
 
 Each episode becomes one Item (docs/DATA_SCHEMA.md, kind "episode"). Episodes are
 never dropped: if a feed has a bad day the previous episodes stay; an episode that
 disappears from a healthy feed is only marked "gone" once its audio file is really
 gone (HTTP 404/410).
+
+A weekly open meeting's show (`weekly_open`): each episode gets extra.weekly_open (the meeting),
+extra.meeting_date (YYYY-MM-DD: the date in its title, else the meeting's date in its description —
+"del 5 de noviembre de 2026", "held on November 4, 2026"; meeting_date()) and extra.generic_title
+(true when the title is only the show's name — La Viña's "<show name> [Temporada 1, episodio 1]"):
+the site then writes "Meeting of November 5, 2026" / "Reunión del 5 de noviembre de 2026" for it
+(eleventy/filters/media.js titleOf), or the title and its episode number when no date is found.
+
+One show whose feed fails does not fail the others: the source stays ok (so its "updated" time
+still moves with the other shows' news) and the failing show is named in stats.warnings — the
+/status/ page and the run summary show it — and in stats.shows[key] (ok false, its error, `updated`
+= its last good read, `failing_since`). The run summary's "stopped updating" check counts a show
+failing for 7 days as a source that stopped (.github/workflows/update.yml). Every show failing
+fails the source.
 
 Artwork: feeds link full-size cover art (1500–3000 px, ~0.5 MB). Each distinct image is downloaded
 once and stored as a ≤480 px WebP in src/assets/cache/pod/; its site path is saved as
@@ -34,7 +51,8 @@ import argparse
 import os
 import re
 import time
-from datetime import datetime, timedelta, timezone
+import unicodedata
+from datetime import date, datetime, timedelta, timezone
 from io import BytesIO
 from typing import Any
 from urllib.parse import urljoin, urlparse
@@ -143,6 +161,124 @@ def _lang_text(s: str) -> str:
     return _BRANDS_RE.sub(" ", s or "")
 
 
+# --------------------------------------------------------------------------- weekly open meetings
+# A meeting's date in the words of its title or description: "5 de noviembre de 2026", "1.º de
+# diciembre del 2026", "November 4, 2026", "4 November 2026" (abbreviations too: "nov.", "Sept."). A
+# date without its year ("del 5 de noviembre") is only used when nothing better is there, with the
+# year that puts it closest before the episode's publication.
+_MONTHS = {
+    "enero": 1, "ene": 1, "febrero": 2, "feb": 2, "marzo": 3, "mar": 3, "abril": 4, "abr": 4,
+    "mayo": 5, "may": 5, "junio": 6, "jun": 6, "julio": 7, "jul": 7, "agosto": 8, "ago": 8,
+    "septiembre": 9, "setiembre": 9, "sept": 9, "sep": 9, "set": 9, "octubre": 10, "oct": 10,
+    "noviembre": 11, "nov": 11, "diciembre": 12, "dic": 12,
+    "january": 1, "jan": 1, "february": 2, "march": 3, "april": 4, "apr": 4, "june": 6,
+    "july": 7, "august": 8, "aug": 8, "september": 9, "october": 10, "november": 11,
+    "december": 12, "dec": 12,
+}
+_MON = "|".join(sorted(_MONTHS, key=len, reverse=True))
+_DAY_ES = r"(?P<d>\d{1,2}|primero)(?:\s*(?:\.?º|°|\.?o(?![a-zñ])))?"
+_DATE_RES = (
+    # 5 de noviembre de 2026 · 1.º de diciembre del 2026 · 5 de nov. de 2026 · 5 de noviembre, 2026
+    re.compile(rf"(?i)(?<![\w.]){_DAY_ES}\s+de\s+(?P<m>{_MON})\.?(?:\s*,?\s+(?:de\s+|del\s+)?(?P<y>\d{{4}})(?!\d))?(?![a-zñ])"),
+    # November 4, 2026 · Nov. 4th 2026 · November 4
+    re.compile(rf"(?i)(?<![\w.])(?P<m>{_MON})\.?\s+(?P<d>\d{{1,2}})(?:st|nd|rd|th)?(?!\d)(?:,?\s+(?P<y>\d{{4}})(?!\d))?"),
+    # 4 November 2026 · 4th of November, 2026
+    re.compile(rf"(?i)(?<![\w.])(?P<d>\d{{1,2}})(?:st|nd|rd|th)?\s+(?:of\s+)?(?P<m>{_MON})\.?(?:,?\s+(?P<y>\d{{4}})(?!\d))?(?![a-z])"),
+)
+# Words just before the date that say it is THIS meeting's: "… reunión abierta de AA en español del 5 de
+# noviembre", "held on November 4", "celebrada el jueves 5 de noviembre", "meeting of October 7".
+_DATE_CONTEXT_RE = re.compile(
+    r"(?i)(?:\bdel|\bcelebrada\s+el|\brealizada\s+el|\bgrabada\s+el|\bheld\s+on|\brecorded\s+on|\bmeeting\s+of|\bmeeting\s+on)"
+    r"\s+(?:(?:el\s+)?(?:lunes|martes|mi[ée]rcoles|jueves|viernes|s[áa]bado|domingo|monday|tuesday|wednesday|thursday"
+    r"|friday|saturday|sunday),?\s+)?$")
+MEETING_DATE_BEFORE_DAYS = 60     # a meeting is published within weeks: an older date is something else (an anniversary)
+
+
+def _date_candidates(text: str) -> list[tuple[int, date, bool, bool]]:
+    """(position, date, has its year, said to be the meeting's) for every date written in `text`."""
+    out = []
+    taken: list[tuple[int, int]] = []
+    for rx in _DATE_RES:
+        for m in rx.finditer(text or ""):
+            if any(a < m.end() and m.start() < b for a, b in taken):
+                continue                 # (one date matched by two patterns counts once)
+            day = 1 if m["d"].lower() == "primero" else int(m["d"])
+            month = _MONTHS.get(m["m"].lower().rstrip("."))
+            year = int(m["y"]) if m["y"] else None
+            if not month:
+                continue
+            try:
+                d = date(year or 2000, month, day)
+            except ValueError:
+                continue
+            taken.append((m.start(), m.end()))
+            before = text[max(0, m.start() - 40):m.start()]
+            out.append((m.start(), d, year is not None, bool(_DATE_CONTEXT_RE.search(before))))
+    return sorted(out)
+
+
+def meeting_date(title: str, summary: str, published: str | None = None) -> str | None:
+    """The date of the meeting an episode records (YYYY-MM-DD), or None.
+
+    The title's own date wins (the Grapevine Weekly Open's "…, November 4, 2026"); else the description's:
+    one said to be the meeting's ("del 5 de noviembre de 2026", "held on …") first, else the latest one
+    before the episode came out. With a publication date, a date after it (+1 day: time zones) — the next
+    meeting — or more than MEETING_DATE_BEFORE_DAYS before it is never the meeting's. A date written
+    without its year gets the year that puts it closest before the publication (needs that date)."""
+    pub = parse_iso(published).date() if published and parse_iso(published) else None
+
+    def fits(d: date) -> bool:
+        return pub is None or (pub - timedelta(days=MEETING_DATE_BEFORE_DAYS) <= d <= pub + timedelta(days=1))
+
+    def with_year(d: date) -> date | None:
+        if pub is None:
+            return None
+        for y in (pub.year, pub.year - 1):
+            try:
+                c = d.replace(year=y)
+            except ValueError:
+                continue
+            if fits(c):
+                return c
+        return None
+
+    for text in (title, summary):
+        full, yearless = [], []
+        for _pos, d, has_year, said in _date_candidates(text):
+            if has_year:
+                if fits(d):
+                    full.append((d, said))
+            else:
+                c = with_year(d)
+                if c:
+                    yearless.append((c, said))
+        for found in (full, yearless):
+            if not found:
+                continue
+            said = [d for d, s in found if s]
+            if said:
+                return said[0].isoformat()
+            return (max(d for d, _s in found) if pub else found[0][0]).isoformat()
+    return None
+
+
+def _norm_words(s: str) -> str:
+    """Letters and digits only, lower case, accents removed — to compare a title with a show's name."""
+    s = unicodedata.normalize("NFKD", str(s or "")).encode("ascii", "ignore").decode("ascii").lower()
+    return " ".join(re.findall(r"[a-z0-9]+", s))
+
+
+# The "[Season 1, Episode 2]" / "[Temporada 1, episodio 2]" tail (eleventy/filters/media.js SE_SUFFIX / ONE_SUFFIX).
+_SE_TAIL_RE = re.compile(r"(?i)\s*[\[(]\s*(?:(?:season|temporada)\s*\d+\s*[,;.·-]?\s*)?(?:(?:episode|episodio|ep\.?)\s*\d+)?\s*[\])]\s*$")
+
+
+def is_generic_title(title: str, *names: str) -> bool:
+    """True when an episode's title, without its numbering, is only its show's name (or nothing):
+    La Viña's "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, episodio 1]"."""
+    bare = _norm_words(_SE_TAIL_RE.sub("", title or ""))
+    return not bare or any(bare == _norm_words(n) for n in names if n)
+
+
 # --------------------------------------------------------------------------- feed → items
 def fetch_feed(http: PoliteSession, url: str) -> tuple[Any | None, str | None]:
     """→ (feedparser result, error). A feed must parse and contain at least one entry."""
@@ -209,11 +345,13 @@ def build_items(show: dict, f: Any, limit: int | None = None, *,
     """Episodes of one show. `link_counts` / `generic_pages` (from shared_link_info) let links
     be judged across all shows; without them only this feed is looked at."""
     key = str(show.get("key") or "gv")
-    show_name = show.get("name") or clean_text(f.feed.get("title")) or key
+    feed_title = clean_text(f.feed.get("title"))
+    show_name = show.get("name") or feed_title or key
     show_web = show.get("web") or f.feed.get("link") or show.get("feed")
     show_img = (f.feed.get("image") or {}).get("href") if isinstance(f.feed.get("image"), dict) else None
-    feed_lang = str(f.feed.get("language") or "").lower()[:2]
-    prior = str(show.get("lang") or "").lower()[:2] or (feed_lang if feed_lang in ("en", "es", "fr") else "en")
+    prior = show_lang(show, f)
+    # the weekly open meeting this show records ("grapevine" | "lavina"), from config — see the module docstring
+    meeting = str(show.get("weekly_open") or "").strip().lower()
 
     # A per-episode <link> that is the same for many episodes (or is just the show
     # page) is not an episode page — prefer the host's episode page then.
@@ -277,10 +415,16 @@ def build_items(show: dict, f: Any, limit: int | None = None, *,
                 "amazon": show.get("amazon"),
                 "transcript_url": transcript_url,
             }
+            published = _struct_to_iso(e.get("published_parsed") or e.get("updated_parsed"))
+            if meeting:
+                extra["weekly_open"] = meeting
+                extra["meeting_date"] = meeting_date(title, summary, published)
+                # written either way (false too): a title that later names its date is no longer "generic"
+                extra["generic_title"] = is_generic_title(title, show_name, feed_title)
             items.append(make_item(
                 id=f"pod:{key}:{short_hash(guid)}", source=ITEM_SOURCE, kind="episode",
                 url=url, title=title, summary=summary, lang=lang,
-                date=_struct_to_iso(e.get("published_parsed") or e.get("updated_parsed")),
+                date=published,
                 image=image, tags=tags, category=key,
                 extra={k: v for k, v in extra.items() if v is not None},
             ))
@@ -289,14 +433,28 @@ def build_items(show: dict, f: Any, limit: int | None = None, *,
     return items
 
 
+def show_lang(show: dict, f: Any) -> str:
+    """The show's language: the config's `lang` first — a feed can say the wrong one (La Viña's Spanish
+    open meeting declares <language>en</language>) —, else the feed's own (en/es/fr), else "en"."""
+    own = str(show.get("lang") or "").lower()[:2]
+    if own in ("en", "es", "fr"):
+        return own
+    feed_lang = str(f.feed.get("language") or "").lower()[:2]
+    return feed_lang if feed_lang in ("en", "es", "fr") else "en"
+
+
 def show_meta(show: dict, f: Any, count: int) -> dict:
     img = f.feed.get("image")
+    feed_lang = str(f.feed.get("language") or "")[:5] or None
     return {
         "key": show.get("key"), "name": show.get("name") or clean_text(f.feed.get("title")),
         "title": clean_text(f.feed.get("title")), "feed": show.get("feed"),
         "description": strip_html(f.feed.get("summary") or f.feed.get("subtitle") or "")[:600],
         "image": img.get("href") if isinstance(img, dict) else None,
-        "language": str(f.feed.get("language") or "")[:5] or None,
+        # the config's `lang` wins (show_lang): build_data translates the title and description from it
+        "language": str(show.get("lang") or "").lower()[:5] or feed_lang,
+        "feed_language": feed_lang,
+        "weekly_open": str(show.get("weekly_open") or "").strip().lower() or None,
         "web": show.get("web") or f.feed.get("link"),
         "apple": show.get("apple"), "spotify": show.get("spotify"), "amazon": show.get("amazon"),
         "episodes": count,
@@ -536,6 +694,41 @@ def audio_gone(http: PoliteSession, url: str | None) -> bool:
     return r is not None and r.status_code in (404, 410)
 
 
+# --------------------------------------------------------------------------- one show's health
+def show_title(show: dict, prev_shows: dict[str, dict] | None = None) -> str:
+    """The show's name as people know it: the config's `name`, else the last read feed title, else its key."""
+    old = (prev_shows or {}).get(show.get("key")) or {}
+    return clean_text(show.get("name") or old.get("name") or old.get("title") or show.get("key") or "")
+
+
+def failed_show(show: dict, err: str | None, prev: dict, prev_items: list[dict],
+                prev_shows: dict[str, dict] | None = None) -> dict:
+    """stats.shows[key] of a show whose feed failed in this run: ok false, its error, its episodes still on the site,
+    `updated` = its last good read (kept from the last run's stats.shows, or — written before that was kept — the
+    envelope's own `updated`, when the show was fine in that run) and `failing_since` (when this streak began)."""
+    key = str(show.get("key"))
+    stats = prev.get("stats") if isinstance(prev.get("stats"), dict) else {}
+    before = (stats.get("shows") or {}).get(key) if isinstance(stats.get("shows"), dict) else None
+    before = before if isinstance(before, dict) else {}
+    if before.get("ok") is False:
+        last_ok, since = before.get("updated"), before.get("failing_since") or prev.get("attempted")
+    else:
+        last_ok = before.get("updated") or (prev.get("updated") if before.get("ok") else None)
+        since = None
+    kept = sum(1 for i in prev_items if isinstance(i, dict) and i.get("category") == key and i.get("status") != "gone")
+    return {"ok": False, "name": show_title(show, prev_shows), "error": err or "failed", "episodes": kept,
+            "latest": before.get("latest"), "updated": last_ok, "failing_since": since or now_iso()}
+
+
+def show_warning(row: dict, key: str) -> str:
+    """A failing show in plain words (stats.warnings → /status/ and the run summary's Notes)."""
+    last = f"last read {str(row['updated'])[:10]}" if row.get("updated") else "not read yet"
+    n = row.get("episodes") or 0
+    kept = ("its 1 episode stays on the site" if n == 1 else f"its {n} episodes stay on the site" if n
+            else "nothing of it on the site yet")
+    return f"{row.get('name') or key} ({key}): {row.get('error') or 'failed'} — {kept}; {last}"[:300]
+
+
 # --------------------------------------------------------------------------- main
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description="Sync podcast episodes → data/raw/podcasts.json")
@@ -566,14 +759,15 @@ def main(argv: list[str] | None = None) -> None:
     show_info: list[dict] = []
     ok_keys: set[str] = set()
 
+    prev_shows = {s.get("key"): s for s in (prev.get("shows") or []) if isinstance(s, dict)}
     fetched: dict[str, Any] = {}
     for show in shows:
         key = str(show["key"])
         f, err = fetch_feed(http, show["feed"])
         fetched[key] = f
         if f is None:
-            errors.append(f"{key}: {err}")
-            per_show[key] = {"ok": False, "error": err}
+            per_show[key] = failed_show(show, err, prev, prev_items, prev_shows)
+            errors.append(show_warning(per_show[key], key))
             log.warning("[%s] feed failed: %s (%s)", key, err, show["feed"])
     link_counts, generic_pages = shared_link_info(shows, fetched)
     for show in shows:
@@ -585,7 +779,8 @@ def main(argv: list[str] | None = None) -> None:
         new_items += items
         ok_keys.add(key)
         latest = max((i["date"] or "" for i in items), default="") or None
-        per_show[key] = {"ok": True, "episodes": len(items), "latest": latest}
+        per_show[key] = {"ok": True, "name": show_title(show, prev_shows), "episodes": len(items), "latest": latest,
+                         "updated": now_iso()}
         show_info.append(show_meta(show, f, len(items)))
         log.info("[%s] %d episodes (latest %s)", key, len(items), latest)
 
@@ -645,16 +840,18 @@ def main(argv: list[str] | None = None) -> None:
     }
     if not shows:
         errors.append("no podcast feeds configured (sources.podcasts)")
-    ok = bool(shows) and not errors
-    error = "; ".join(errors)[:300] if errors else None
-    if errors and ok_keys:
+    # One show that fails never hides the others' news: the source is ok while at least one show was read
+    # (its `updated` moves on), and the failing show is named in stats.warnings and stats.shows (see the
+    # module docstring). Only every show failing fails the source.
+    ok = bool(ok_keys)
+    error = "; ".join(errors)[:300] if errors and not ok else None
+    if errors and ok:
         stats["warnings"] = errors[:8]
     log.info("episodes: %d total (%d new, %d Spanish, %d gone)", stats["total"], added, stats["spanish"], stats["gone"])
     if args.dry_run:
         log.info("dry run — not writing data/raw/%s.json; stats=%s", SOURCE, {k: v for k, v in stats.items() if k != "shows"})
         return
     # keep show metadata of a show whose feed failed today
-    prev_shows = {s.get("key"): s for s in (prev.get("shows") or []) if isinstance(s, dict)}
     for s in shows:
         if s["key"] not in ok_keys and s["key"] in prev_shows:
             show_info.append(prev_shows[s["key"]])

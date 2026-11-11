@@ -325,6 +325,9 @@ terms:
   - { en: "Twelve-Step calls", es: "visitas de Paso Doce", only: es }
   - { en: "Twelve-Step call", es: "visita de Paso Doce", only: es }
   - { en: "Date with higher power", es: "Una cita con el Poder Superior", only: es }   # "fecha" is a calendar date
+  # La Viña writes "pódcast" (RAE): it stays "podcast" in English, never "postcast"
+  - { en: "podcast", es: "pódcast", only: en }
+  - { en: "podcasts", es: "pódcasts", only: en }
   - { en: "Season", es: "Temporada", exact: true }
   - { en: "Episode", es: "Episodio", exact: true }
   - { en: "at Noon Eastern", es: "al mediodía (hora del Este)", only: es }   # not "en mediodía"

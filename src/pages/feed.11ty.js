@@ -4,6 +4,7 @@
 // carry their audio as an <enclosure>, so podcast apps can use the feed too.
 // The channel's <copyright> is the site footer's credit line (footer.reprints).
 import { prepareWhatsNew, hrefOf, escapeXml as x, itemIssueName } from "../../eleventy/filters/community.js";
+import { meetingTitleParts } from "../../eleventy/filters/media.js";
 
 const MAX_ITEMS = 100;
 const LANG_TAG = { en: "en-us", es: "es-us" };
@@ -64,7 +65,11 @@ export function render(data) {
   out.push("</image>");
 
   for (const it of items) {
-    const title = String(pick(it, "title", lang) || it.title || "").replace(/\s+/g, " ").trim();
+    // A weekly open meeting's episode that its feed calls only by its show's name (La Viña's): its meeting and date,
+    // "La Viña Open Meeting, November 5, 2026" (media.js meetingTitleParts) — every episode of it has its own title.
+    const mt = meetingTitleParts(it);
+    const title = (mt ? `${t(mt.label)}, ${this.fmtDate(mt.date, lang, "medium")}`
+      : String(pick(it, "title", lang) || it.title || "")).replace(/\s+/g, " ").trim();
     if (!title) continue;
     const link = abs(site, hrefOf(it, lang)) || home;
     const summary = String(pick(it, "summary", lang) || "").trim();
