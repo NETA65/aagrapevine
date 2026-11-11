@@ -575,9 +575,9 @@ breaks while you decide.
   "(in Spanish)"), and that it is "in English, for AA members"; the AA Grapevine Statement of Purpose is named,
   never printed (does AA Grapevine's licensing allow the text, with its credit line? and its official Spanish name);
   that Google Meet really has no dial-in and no passcode for our room, and who hosts (people who were not invited
-  must ask to join); CityWide's 5:30–7:30 PM at "Lovers Lane United Methodist Church"; whether December 16, 2026
-  may show the committee flyer that says each meeting opens with a guest speaker; and whether there will be
-  speakers in 2028.
+  must ask to join); CityWide's 5:30–7:30 PM at "Lovers Lane United Methodist Church"; whether November 18 and
+  December 16, 2026 may show the committee flyer that says each meeting opens with a guest speaker; and whether
+  there will be speakers in 2028.
 - **On a real phone** (with the [story recorder's real-device test](#the-story-recorder-share-your-story)):
   start an episode on Home, stop it, and open Listen ("Continue listening"); start Read aloud half-way down a page
   and try Next / Previous and Slower; turn Video captions on and play a video on Watch; add a deadline to Google
@@ -761,8 +761,8 @@ meeting:
 
 - **The evening, from January 20, 2027:** 7:00 a moment of silence, the Serenity Prayer and the speaker's
   introduction; about 7:02 the talk (about 20 minutes); about 7:22 questions; the speaker is thanked and done
-  **by 7:30**; 7:30–8:00 committee business. **December 16, 2026** is on Google Meet with no speaker (no block for
-  that date): the usual business hour.
+  **by 7:30**; 7:30–8:00 committee business. **November 18 and December 16, 2026** are on Google Meet with no
+  speaker (no block for those dates): the usual business hour.
 - **All 12 speakers of 2027 are shown** — first name and last initial, service position and topic: on Meetings (the
   next meeting's speaker, *How the evening runs*, the year's schedule), the home page's meeting card, each
   meeting's card on Events and its calendar entry, the monthly toolkit and posters, the GV/LV report, the monthly
@@ -2797,9 +2797,10 @@ time, its Google Meet link and meeting code, and that meeting's guest speaker fr
 `meeting:` → `speakers:`):
 
 1. **Agenda e-mail** — for the *next* meeting: date and time, the Google Meet link and code, the guest speaker
-   (name, position and topic — "to be announced" when the list has none for that date), the agenda's times (from
-   the version of the agenda slide chosen: *With a guest speaker*, or *No guest speaker* for a business-only
-   month such as December 16, 2026), last month's minutes, old and new business, the order of the district
+   (name, position and topic; left out for a meeting with none, such as November 18 and December 16, 2026, and "to
+   be announced" while the list doesn't name that date's speaker yet), the agenda's times (from the version of the
+   agenda slide chosen: *With a guest speaker*, or *No guest speaker* for a business-only month such as those two),
+   last month's minutes, old and new business, the order of the district
    reports, the online / no-photos reminder and a signature.
 2. **Reminder** — a short note for an e-mail or a group chat: the date, time, guest speaker and Google Meet details
    in English, then a paragraph in Spanish with the date, time and meeting code that also says the meeting is in

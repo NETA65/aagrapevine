@@ -1322,8 +1322,8 @@ document, named with the meeting's date ("Monthly Committee Meeting – Draft mi
 
 A line whose details are all blank is left out, and so is a heading left with nothing under it ("Old business"
 with no items), so a text never shows empty orange blanks. The guest speaker's lines are left out for a meeting with
-no speaker listed (December 16, 2026), and in the version "No guest speaker" (a speaker who can't come: the texts
-then agree with that version's agenda, even before the website's list is changed). When the website lists a speaker
+no speaker listed (November 18 and December 16, 2026), and in the version "No guest speaker" (a speaker who can't
+come: the texts then agree with that version's agenda, even before the website's list is changed). When the website lists a speaker
 for that meeting but the version leaves them out (a "No guest speaker" kept from December), the panel says so above
 the text, and "Start next month" goes back to "With a guest speaker" when the next meeting has one (its Undo too).
 A detail left empty beside a
