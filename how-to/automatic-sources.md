@@ -549,7 +549,8 @@ the date out of a row whose title already names it ("Meeting of …"), never out
 
 **When one show's feed fails.** The other shows still update and the source stays **OK** on `/status/`, which names
 the show that could not be read and when it was last read ("Not read in the last update: …"); the run summary lists
-it under **Notes**, and the run page shows a warning. Its episodes stay on the site. If it keeps failing for 7 days
+it under **Notes**, and the run page shows a warning. Its episodes stay on the site. A show never read yet (its
+first read failed, so nothing of it is on the site) is "Not read yet: …" instead. If it keeps failing for 7 days
 it is reported like a source that stopped updating, as "Podcasts — <show>", in the issue *A content source has
 stopped updating* (which closes by itself once it answers again — not on a day when every show fails). Only every
 show failing makes the source fail.

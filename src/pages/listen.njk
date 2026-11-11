@@ -477,7 +477,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           <button type="button" class="chip" :aria-pressed="(show === '').toString()" aria-pressed="true" @click="setShow('')">{{ "common.all" | t(lang) }}</button>
           {% for s in shows %}
           {%- set showIcon = "users" if s.weekly else "headphones" %}
-          <button type="button" class="chip" :aria-pressed="(show === '{{ s.key }}').toString()" aria-pressed="false" @click="setShow(show === '{{ s.key }}' ? '' : '{{ s.key }}')" title="{{ s.name }}">{% icon showIcon, "size-4" %}{#- the short label, as on the rows' badges: La Viña's full name is wider than a phone -#}{% if s.shortLang and s.shortLang != lang %}<span lang="{{ s.shortLang }}">{{ s.short }}</span>{% else %}{{ s.short }}{% endif %} <span class="text-faint tabular-nums in-aria-pressed:text-current">{{ s.count }}</span></button>
+          <button type="button" class="chip" :aria-pressed="(show === '{{ s.key }}').toString()" aria-pressed="false" @click="setShow(show === '{{ s.key }}' ? '' : '{{ s.key }}')"{% if s.short != s.name %} title="{{ s.name }}"{% endif %}>{% icon showIcon, "size-4" %}{#- the short label, as on the rows' badges: La Viña's full name is wider than a phone -#}{% if s.shortLang and s.shortLang != lang %}<span lang="{{ s.shortLang }}">{{ s.short }}</span>{% else %}{{ s.short }}{% endif %} <span class="text-faint tabular-nums in-aria-pressed:text-current">{{ s.count }}</span></button>
           {% endfor %}
         </div>
       </div>

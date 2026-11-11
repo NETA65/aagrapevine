@@ -120,8 +120,9 @@ CFG_SHOWS = [
      "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting"},
     LVO,
 ]
-# La Viña's weekly open meeting as config/site.yml lavina_weekly_open has it (the parts lavina_item needs)
-LV_MEETING_CFG = {"title_es": "Reunión Abierta de La Viña", "title_en": "La Viña's Open Meeting", "day": "thursday",
+# La Viña's weekly open meeting as config/site.yml lavina_weekly_open has it (the parts lavina_item needs; the
+# summaries shortened)
+LV_MEETING_CFG = {"title_es": "Reunión Abierta de La Viña", "title_en": "La Viña Open Meeting (in Spanish)", "day": "thursday",
                   "time": "12:00", "timezone": "America/New_York", "starts": "2026-11-05", "zoom_id": "871 2036 8287",
                   "passcode": "238047", "summary_es": "Una reunión abierta virtual de AA en español.",
                   "summary_en": "A virtual open AA meeting in Spanish.", "url": LV_MEETING_PAGE}
@@ -209,7 +210,6 @@ class Sync(unittest.TestCase):
         self.assertFalse({"weekly_open", "meeting_date", "generic_title"} & set(gv[0]["extra"]))
 
 
-
 class RealSettings(unittest.TestCase):
     """config/site.yml as the committee keeps it (a content test: scripts/ops/gate_tests.py CONTENT_TESTS): the three
     shows as this file's copies have them, La Viña's meeting show and its meeting's page."""
@@ -237,7 +237,7 @@ class RealSettings(unittest.TestCase):
     def test_the_lavina_meetings_page(self):
         lv = self.cfg["lavina_weekly_open"]
         self.assertEqual(lv["url"], LV_MEETING_PAGE)
-        for key in ("day", "time", "timezone", "starts"):
+        for key in ("title_es", "title_en", "day", "time", "timezone", "starts", "zoom_id", "passcode"):
             self.assertEqual(lv[key], LV_MEETING_CFG[key], key)
 
 
@@ -402,7 +402,8 @@ class BuildDataRun(unittest.TestCase):
         # the committee's settings, with this file's copies of the shows (see CFG_SHOWS)
         real = common.load_config()
         cfg = {**real, "sources": {**(real.get("sources") or {}), "podcasts": CFG_SHOWS}}
-        with mock.patch.object(common, "RAW_DIR", raw), mock.patch.object(B, "RAW_DIR", raw),                 mock.patch.object(B, "load_config", lambda: cfg), \
+        with mock.patch.object(common, "RAW_DIR", raw), mock.patch.object(B, "RAW_DIR", raw), \
+                mock.patch.object(B, "load_config", lambda: cfg), \
                 mock.patch.object(B, "STATE_DIR", tmp / "state"), \
                 mock.patch.object(B.T, "Translator", lambda **kw: real_translator(cache=False, use_model=False)), \
                 mock.patch.object(B.T, "_DEFAULT", None):
@@ -763,7 +764,7 @@ class Display(unittest.TestCase):
                          "the config's, else episodes.json's, else (a show nobody lists) the episode's")
 
     def test_a_failing_show_on_the_status_page(self):
-        self.assertEqual(self.r["status"]["ok"], [{"key": "lvo", "name": NAME, "updated": "2026-11-02T15:00:00Z"}])
+        self.assertEqual(self.r["status"]["ok"], [{"key": "lvo", "name": NAME, "updated": "2026-11-02T15:00:00Z", "never": False}])
         self.assertEqual(self.r["status"]["failed"], [], "a failed source says so itself")
 
 
@@ -780,7 +781,8 @@ try {
     config(cfg) {
       cfg.addGlobalData("eleventyComputed", {
         // this file's copies of the shows, not the committee's config/site.yml (see CFG_SHOWS)
-        site: (data) => ({ ...data.site, sources: { ...data.site.sources, podcasts: input.cfg } }),
+        site: (data) => ({ ...data.site, sources: { ...data.site.sources, podcasts: input.cfg },
+                           links: { ...data.site.links, podcasts_page: "https://www.aagrapevine.org/podcasts" } }),
         db: (data) => ({ ...data.db, episodes: input.episodes, weekly_open: { updated: "2026-11-11T12:00:00Z", items: input.weekly },
                          ...(input.whatsnew ? { whatsnew: { updated: "2026-11-11T12:00:00Z", items: input.whatsnew } } : {}),
                          ...(input.status ? { status: input.status } : {}) }),
@@ -844,6 +846,7 @@ class Pages(unittest.TestCase):
                          for k in ("gv", "wo", "lvo")}
                 self.assertTrue(all(chips.values()), "a chip per show")
                 self.assertIn(f'title="{html.escape(NAME)}"', chips["lvo"].group(0))
+                self.assertNotIn("title=", chips["gv"].group(0), "its label is its name: no tooltip repeating it")
                 lv_short = "La Viña Open Meeting" if lang == "en" else "Reunión Abierta de La Viña"
                 self.assertIn(lv_short, visible(chips["lvo"].group(1)))
                 self.assertNotIn("Alcohólicos", visible(chips["lvo"].group(1)))
@@ -1051,21 +1054,28 @@ class StatusPage(unittest.TestCase):
     built: dict | None = None
 
     @classmethod
-    def status(cls, updated):
+    def status(cls, updated, episodes, wo_down=False):
+        lvo = {"ok": False, "name": NAME, "updated": updated, "error": "HTTP 404"}
+        if episodes is not None:
+            lvo["episodes"] = episodes
+        shows = {"gv": {"ok": True, "name": "AA Grapevine's Podcast"}, "lvo": lvo}
+        if wo_down:
+            shows["wo"] = {"ok": False, "name": "Grapevine Weekly Open AA Meeting", "updated": None, "episodes": 0}
         return {"updated": "2026-11-11T15:00:00Z", "sources": [
             {"source": "podcasts", "ok": True, "updated": "2026-11-11T15:00:00Z", "attempted": "2026-11-11T15:00:00Z", "count": 310,
-             "stats": {"shows": {"gv": {"ok": True, "name": "AA Grapevine's Podcast"},
-                                 "lvo": {"ok": False, "name": NAME, "updated": updated, "error": "HTTP 404"}}}}]}
+             "stats": {"shows": shows}}]}
 
     def setUp(self):
         if not (ROOT / "node_modules" / "@11ty" / "eleventy").is_dir():
             self.skipTest("the site's npm packages are not installed (npm ci)")
         if StatusPage.built is None:
             StatusPage.built = {}
-            for key, updated in (("read", "2026-11-09T15:00:00Z"), ("never", None)):
+            for key, status in (("read", self.status("2026-11-09T15:00:00Z", 1)), ("never", self.status(None, 0)),
+                                ("older", self.status(None, None)), ("kept", self.status(None, 1)),
+                                ("two", self.status(None, 0, wo_down=True))):
                 StatusPage.built[key] = run_js(self, PAGES_JS, data={
                     "only": "status.njk", "urls": ["/status/", "/es/status/"], "episodes": EPISODES, "weekly": WEEKLY,
-                    "cfg": CFG_SHOWS, "status": self.status(updated)}, timeout=600, now=NOW_JS)
+                    "cfg": CFG_SHOWS, "status": status}, timeout=600, now=NOW_JS)
 
     def test_a_show_read_before(self):
         for url, words in (("/status/", "Its episodes stay on the site"), ("/es/status/", "Sus episodios siguen en el sitio")):
@@ -1073,13 +1083,24 @@ class StatusPage(unittest.TestCase):
                 self.assertIn(words, visible(self.built["read"][url]))
 
     def test_a_show_never_read(self):
-        for url, words, never in (("/status/", "Not read yet:", "episodes stay"),
-                                  ("/es/status/", "Todavía no se pudo leer:", "siguen en el sitio")):
-            with self.subTest(url=url):
-                page = visible(self.built["never"][url])
-                self.assertIn(words, page)
-                self.assertIn(NAME, page)
-                self.assertNotIn(never, page, "nothing of the show is on the site to stay")
+        # no episode of it kept (or an older stats row: no count and no good read)
+        for key in ("never", "older"):
+            for url, words, never in (("/status/", "Not read yet:", "episodes stay"),
+                                      ("/es/status/", "Todavía no se pudo leer:", "siguen en el sitio")):
+                with self.subTest(key=key, url=url):
+                    page = visible(self.built[key][url])
+                    self.assertIn(words, page)
+                    self.assertIn(NAME, page)
+                    self.assertNotIn(never, page, "nothing of the show is on the site to stay")
+
+    def test_a_show_with_episodes_kept_but_no_last_read(self):
+        # its episodes are on the site (counted), though no good read is known: they stay
+        self.assertIn("Its episodes stay on the site", visible(self.built["kept"]["/status/"]))
+
+    def test_two_shows_never_read(self):
+        self.assertIn("Not read yet:", visible(self.built["two"]["/status/"]))
+        self.assertIn("Nothing of them is on the site yet", visible(self.built["two"]["/status/"]))
+        self.assertIn("Todavía no se pudieron leer:", visible(self.built["two"]["/es/status/"]), "the Spanish plural")
 
 
 class EmailTitle(unittest.TestCase):
@@ -1115,6 +1136,17 @@ class EmailTitle(unittest.TestCase):
         self.assertTrue(D.item_meta(video, "en").endswith(" · in Spanish"))
         self.assertEqual((D.media_lang(lv, "en"), D.media_lang(lv, "es"), D.media_lang(gv, "es")), ("es", "", "en"))
         self.assertEqual(D.media_lang({"kind": "article", "lang": "es"}, "en"), "", "only episodes and videos")
+
+    def test_a_titles_lang_only_on_its_own_words(self):
+        # the meta line says the audio's language; the title's lang attribute only when the title shown is its own
+        dated = {**self.ITEM, "extra": {**self.ITEM["extra"], "meeting_date": "2026-11-05"}}
+        self.assertEqual(D.title_lang(dated, "en"), "", "'Meeting of November 5, 2026' is the site's English")
+        translated = {"kind": "episode", "lang": "en", "title": "Off the Pity Pot",
+                      "i18n": {"title": {"en": "Off the Pity Pot", "es": "Fuera de la olla de la piedad"}}, "extra": {}}
+        self.assertEqual(D.title_lang(translated, "es"), "", "a machine translation is in the half's language")
+        self.assertTrue(D.item_meta({**translated, "date": "2026-11-09T05:15:00Z"}, "es").endswith(" · en inglés"))
+        video = {"kind": "video", "lang": "es", "title": NAME, "i18n": {"title": {"es": NAME, "en": NAME}}, "extra": {}}
+        self.assertEqual(D.title_lang(video, "en"), "es", "YouTube's own Spanish title, kept as it is")
 
 
 if __name__ == "__main__":

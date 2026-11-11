@@ -777,6 +777,14 @@ def media_lang(item: dict, lang: str) -> str:
     return own if own in ("en", "es") and own != lang else ""
 
 
+def title_lang(item: dict, lang: str) -> str:
+    """The lang attribute of an episode's or a video's title in the `lang` half: its own language only when the title
+    shown is its own (La Viña's YouTube copy, kept as YouTube wrote it) — never on a translation or on the site's own
+    words ("Meeting of November 5, 2026"), which are in the half's language (published.js titleLang does the same)."""
+    own = media_lang(item, lang)
+    return own if own and title_of(item, lang) == title_of(item, own) else ""
+
+
 def item_meta(item: dict, lang: str) -> str:
     """The small line under an item: an issue and its section, "S11 · E12 · 32 min" … and the item's own
     date — a committee file's is the date in its name, which may be before the month it was added in (the
@@ -1634,7 +1642,7 @@ def build_rows(group: str, items: list[dict], lang: str, links: Links, page: str
         label, fg, bg = item_label(it, lang)
         twin = it.get("_twin")
         rows.append({"label": label, "fg": fg, "bg": bg, "title": title_of(it, lang),
-                     "url": links.item(it, lang, page), "meta": item_meta(it, lang), "lang": media_lang(it, lang),
+                     "url": links.item(it, lang, page), "meta": item_meta(it, lang), "lang": title_lang(it, lang),
                      "twin": links.item(twin, lang, "/watch/") if twin else ""})
     extra = max(0, len(rows) - max_per)
     return rows[:max_per], extra

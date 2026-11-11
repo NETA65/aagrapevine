@@ -133,7 +133,7 @@
     "es": "Cada programa está en su propio idioma (lo indica su tarjeta); los títulos y las descripciones en el otro idioma se traducen automáticamente."
   },
   "media.full_archive": { "en": "Full archive on the AA Grapevine website", "es": "Archivo completo en el sitio de AA Grapevine" },
-  "media.full_archive_lv": { "en": "La Viña's page for its meetings (in Spanish)", "es": "La página de sus reuniones en el sitio de La Viña" },
+  "media.full_archive_lv": { "en": "La Viña's page for the meeting and its recordings (in Spanish)", "es": "La página de la reunión y sus grabaciones en el sitio de La Viña" },
 
   "media.apple": { "en": "Apple Podcasts", "es": "Apple Podcasts" },
   "media.spotify": { "en": "Spotify", "es": "Spotify" },

@@ -1268,7 +1268,9 @@ export function statusView(status, now = Date.now()) {
     // (stats.shows, scripts/sync/podcasts.py): named on its row in plain words, with its last good read.
     const parts = s.stats?.shows && typeof s.stats.shows === "object" && !Array.isArray(s.stats.shows) ? s.stats.shows : {};
     const partsDown = state === "ok"
-      ? Object.entries(parts).filter(([, p]) => p && p.ok === false).map(([k, p]) => ({ key: k, name: String(p.name || k), updated: p.updated || null }))
+      ? Object.entries(parts).filter(([, p]) => p && p.ok === false).map(([k, p]) => ({ key: k, name: String(p.name || k), updated: p.updated || null,
+        // nothing of it on the site: none of its episodes kept (an older stats row without the count: never read)
+        never: p.episodes != null ? !(Number(p.episodes) > 0) : !p.updated }))
       : [];
     return {
       ...s,

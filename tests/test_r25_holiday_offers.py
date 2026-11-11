@@ -444,6 +444,12 @@ class ShopPages(unittest.TestCase):
                 self.assertIn('<use href="#i-truck"/>', first[:first.index("</h2>")])
                 buttons = re.findall(r'<a class="btn-(?:primary|lv)" href="([^"]+)"', sec)
                 ca = re.findall(r'<a class="link tap-link[^"]*" href="([^"]+)"', sec)
+                # each store card's button row: with a page for Canada, its link on a line of its own in both cards
+                rows = re.findall(r'<p class="mt-auto flex ([^"]*)"><a class="btn-', sec)
+                self.assertEqual(len(rows), 2)
+                self.assertTrue(all(r.startswith("flex-col items-start") for r in rows), rows)
+                free_rows = re.findall(r'<p class="mt-auto flex ([^"]*)"><a class="btn-', first)
+                self.assertTrue(free_rows and all(r.startswith("flex-wrap items-center") for r in free_rows), free_rows)
                 words = text(sec)
                 # on a phone the buttons and links never break the magazine's name ("… de La / Viña"): a no-break space
                 raw = sec.replace("&#39;", "'")
