@@ -139,14 +139,14 @@ meeting:
       topic_es: "Grapevine y La Viña como herramientas de Información Pública"
     - date: "2027-03-17"
       name: "Greg G."
-      confirmed: false
+      confirmed: true
       position: "Past delegate, Area 39 Western Missouri (Panel 75); past alternate chair of the Conference Committee on Public Information"
       position_es: "Ex delegado del Área 39 Oeste de Misuri (Panel 75); ex coordinador suplente del Comité de la Conferencia sobre Información Pública"
       topic: "Anonymity in a digital world: AA’s online doorways and proposals that may reach the 77th Conference"
       topic_es: "El anonimato en un mundo digital: las puertas de AA en internet y las propuestas que podrían llegar a la 77.ª Conferencia"
     - date: "2027-04-21"
       name: "Courtney S."
-      confirmed: false
+      confirmed: true
       position: "Past delegate, Area 72 Western Washington (Panel 75); past alternate chair of the Conference Committee on Grapevine and La Viña"
       position_es: "Ex delegada del Área 72 Oeste de Washington (Panel 75); ex coordinadora suplente del Comité de la Conferencia sobre Grapevine y La Viña"
       topic: "The meeting in print in a digital age: what members want from Grapevine and La Viña"
@@ -160,7 +160,7 @@ meeting:
       topic_es: "Recién llegada de la 77.ª Conferencia: lo que el Manual de Servicio, el Informe Final y la Carta Constitutiva ofrecen a nuestros representantes de Grapevine y La Viña"
     - date: "2027-06-16"
       name: "Heather L."
-      confirmed: false
+      confirmed: true
       position: "Delegate, Area 64 Tennessee (Panel 76); chair of the Conference Committee on Grapevine and La Viña, 2027"
       position_es: "Delegada del Área 64 Tennessee (Panel 76); coordinadora del Comité de la Conferencia sobre Grapevine y La Viña en 2027"
       topic: "Report from the chair’s seat: the 77th Conference Committee on Grapevine and La Viña"
@@ -174,7 +174,7 @@ meeting:
       topic_es: "Llevar el mensaje tras los muros: Grapevine y La Viña para los alcohólicos bajo custodia"
     - date: "2027-08-18"
       name: "Kaitie S."
-      confirmed: false
+      confirmed: true
       position: "Delegate, Area 26 Kentucky (Panel 76); chair of the Conference Committee on Literature, 2027"
       position_es: "Delegada del Área 26 Kentucky (Panel 76); coordinadora del Comité de la Conferencia sobre Literatura en 2027"
       topic: "From manuscript to meeting: how AA literature and Grapevine and La Viña books are made"
@@ -195,7 +195,7 @@ meeting:
       topic_es: "Del distrito a la Conferencia: cómo una idea sobre Grapevine o La Viña llega a ser un punto de agenda"
     - date: "2027-11-17"
       name: "Chitra S."
-      confirmed: false
+      confirmed: true
       position: "Past delegate, Area 6 Northern Coastal California (Panel 75); past member of the Conference Committee on Public Information"
       position_es: "Ex delegada del Área 6 Costa Norte de California (Panel 75); ex miembro del Comité de la Conferencia sobre Información Pública"
       topic: "Who are we still missing? Reaching young, Spanish-speaking and culturally diverse alcoholics with a human touch"
