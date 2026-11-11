@@ -552,8 +552,9 @@ stores' pages, so a block here says it (since November 2026). From 00:00 Central
 it shows:
 - on `/shop/#offers` (and `/es/shop/#offers`), right under the page's menu and above the Book of the Month: the
   offer's title and days, then a card per store — the page language's magazine first — with the store's banner
-  (a link to the store), its words and a button to the store, then "The store shows the final price at checkout."
-  and the source. The menu has no chip for it (a chip cannot come and go by date);
+  (a link to the store), its words and a button to the store (or to the store's own page for the offer, with a link
+  to its page for Canadian addresses beside it), then "The store shows the final price at checkout." and the source.
+  The menu has no chip for it (a chip cannot come and go by date);
 - in the monthly toolkit, in each month the offer runs: a line in *Keep up all month* (this month's page) and in
   the month's message (WhatsApp and e-mail), both linking `/shop/#offers`.
 
@@ -561,26 +562,31 @@ The day after `ends` it is gone by itself — also on a page that is open, or sa
 nothing to switch off; the block may then be deleted. While a block is here, Home's *Shared by the committee*
 leaves its banners out (there a banner would stand alone, cropped to the tile, without the offer's conditions);
 the Portfolio, What's New, the feeds and the digest list them like any file in `flyers`, so move them to
-`private` once the offer is over. Two offers at once each get a section on `/shop/` (the first is `#offers`); the
-toolkit's lines all link `/shop/#offers`, the top of the offers.
+`private` once the offer is over. Two offers at once each get a section on `/shop/`, first day first (the first is
+`#offers`); each one is also `#offers-<key>` (the first one too), the address a bulletin post links for its own
+offer (`/shop/#offers-holiday-gifts-2026`). The toolkit's lines all link `/shop/#offers`, the top of the offers.
 
 | Key | Accepted values | If it is wrong |
 |---|---|---|
 | `key` | Short name (letters, numbers, dashes). Default: the `starts` day. | Used twice: the second block is left out. |
 | `title` / `title_es` | **Required** (one of the two): the heading on `/shop/` and the toolkit's line. | Neither: left out. |
 | `starts`, `ends` | **Required.** `"YYYY-MM-DD"`: the first and the last day (Central time). | Not a real day, or `ends` before `starts`: left out. |
+| `icon` | The section's icon (and the toolkit row's), one of the site's icons: `gift` for a gift offer. Leave out: the truck. | Not one of the site's icons: the truck (noted). |
+| `show_starts` | `false` when the stores give no first day: the days read "Through December 31, 2026" / "Hasta el 31 de diciembre de 2026" (on `/shop/` and in the toolkit), and `starts` is only the day the site shows it from — write the day you add the block. Leave out: the first day is said. | — |
 | `source` / `source_es` | Where the stores announced it, shown under the cards. | — |
 | `gv`, `lv` | Each store's part (Grapevine, La Viña). Leave one out for an offer of one store. | Neither has a `text`: left out. |
 | `gv` / `lv` → `text` / `text_es` | What that store says about the offer, in your words. | — |
 | `gv` / `lv` → `banner_match` | A pattern that finds the store's banner in the Panel's Drive `flyers` folder: capitals ignored, accents **not** folded (write `[ií]`). The newest **picture** it finds is shown (1200 px wide; the stores' banners are 1920 × 770). | No match: the card has no picture. Not a valid pattern: no picture (noted). |
 | `gv` / `lv` → `banner_alt` / `banner_alt_es` | The banner's words, for people who cannot see it (say when they are in the other language). | — |
+| `gv` / `lv` → `url` | The store's own page for the offer (`https://…`, exactly as the store writes it): the button goes there, as "Grapevine's offer page" / "Página de la oferta de Grapevine", instead of the store. Leave out: the button goes to the store (`links: gv_store` / `lv_store`). | Not a web address: the button goes to the store (noted). |
+| `gv` / `lv` → `url_ca` | That page for Canadian addresses: a link beside the button, "Page for Canadian addresses" / "Página para direcciones en Canadá". | Not a web address: no link (noted). |
 
 A mistake never stops the site: the block is left out (a bad `banner_match` only loses its picture) and the build
 names it — `[settings] store_offers entry 1 (free-shipping-2026): ends 2026-11-01 is before starts 2026-12-31 —
 left out` —, which *Website update* lists in its run summary under "Check the build" (and still publishes), and
 which turns the Code check red until it is fixed.
 
-Today's block (checked):
+Today's blocks (checked):
 
 ```yaml
 store_offers:
@@ -603,24 +609,47 @@ store_offers:
       banner_match: "env[ií]os? gratuitos? en todos los productos de la vi[nñ]a"
       banner_alt: "La Viña's banner (in Spanish): …"
       banner_alt_es: "Banner de La Viña: envíos gratuitos en todos los productos de La Viña, …"
+  - key: "holiday-gifts-2026"
+    title: "Holiday gift offers at the Grapevine and La Viña stores"
+    title_es: "Ofertas de regalo para las fiestas en las tiendas de La Viña y Grapevine"
+    starts: "2026-11-11"           # the day the site shows it from: the stores give no first day
+    show_starts: false
+    ends: "2026-12-31"
+    icon: "gift"
+    source: "AA Grapevine's and La Viña's holiday gift offer pages and their e-mails (October 2026)"
+    source_es: "Páginas de las ofertas de regalo y correos de La Viña y AA Grapevine (octubre de 2026)"
+    gv:
+      text: "With a 1-year Grapevine print subscription ($36.00), for yourself or as a gift, a second … is $16.00. …"
+      text_es: "Con una suscripción impresa de 1 año a Grapevine ($36.00), para ti o para regalar, una segunda … $16.00. …"
+      url: "https://www.aagrapevine.org/2gifts"            # exactly so: with a "/" at the end it opens a dead page
+      url_ca: "https://www.aagrapevine.org/canada-2gifts"
+    lv:
+      text: "With a 1-year La Viña print subscription ($18.00), for yourself or as a gift, a second … is $8.00. …"
+      text_es: "Con una suscripción impresa de 1 año a La Viña ($18.00), para ti o para regalar, una segunda … $8.00. …"
+      url: "https://www.aalavina.org/2regalos"
+      url_ca: "https://www.aalavina.org/canada-2regalos"
 ```
-→ From November 1, 2026 (it went up on November 2): "Free shipping at the Grapevine and La Viña stores",
-"November 1 – December 31, 2026" ("Del 1 de noviembre al 31 de diciembre de 2026" on `/es/shop/`, La Viña's card
-first), with the two banners `flyers/Free shipping on all Grapevine products - banner.jpg` and
-`flyers/Envíos gratuitos en todos los productos de La Viña - banner.jpg`; the November and December toolkits name
-it. At midnight Central on January 1, 2027 it is gone.
+→ From November 1, 2026 (it went up on November 2): "Free shipping at the Grapevine and La Viña stores", "November 1
+– December 31, 2026" ("Del 1 de noviembre al 31 de diciembre de 2026" on `/es/shop/`, La Viña's card first), with
+the two banners `flyers/Free shipping on all Grapevine products - banner.jpg` and `flyers/Envíos gratuitos en todos
+los productos de La Viña - banner.jpg`; the November and December toolkits name it. From November 11, right under it
+(`#offers-holiday-gifts-2026`): "Holiday gift offers at the Grapevine and La Viña stores" with a gift for its icon,
+"Through December 31, 2026", no banner, each card's button "Grapevine's offer page" / "La Viña's offer page" and the
+link "Page for Canadian addresses". At midnight Central on January 1, 2027 both are gone.
 
-Write only what the stores themselves say (their e-mails and store pages): never a promo code or "no code
-needed", a minimum order, an end hour, "hurry", or that the offer combines with the Book of the Month or the bulk
-discounts — calm and informative, Tradition Eleven. Link the stores' own addresses (`links: gv_store`,
-`lv_store`), never an e-mail's `?trackingcode=` link. The banners go in the Panel's Drive `flyers` folder with a
-name **without a date** (a date would make the flyer an event: [flyers-and-events.md](flyers-and-events.md) §4);
-after the offer, move them to the `private` folder, or they stay in Portfolio › Flyers and among Home's newest
-uploads. A bulletin post about the offer is written by hand (`content/bulletin`, with `expires:` its last day).
-To add the next offer: copy the block (from `- key:` down), paste it under the last one, change the values.
+Write only what the stores themselves say (their e-mails and store pages): never a promo code or "no code needed", a
+minimum order, an end hour, "hurry", or that the offer combines with the Book of the Month or the bulk discounts —
+calm and informative, Tradition Eleven; nor the stores' sales words ("just $16", "Save 55%!"). Link the stores' own
+addresses (`links: gv_store`, `lv_store`; an offer's own page in `url` / `url_ca`, exactly as the store writes it),
+never an e-mail's `?trackingcode=` link. The banners go in the Panel's Drive `flyers` folder with a name **without a
+date** (a date would make the flyer an event: [flyers-and-events.md](flyers-and-events.md) §4); after the offer,
+move them to the `private` folder, or they stay in Portfolio › Flyers and among Home's newest uploads. A bulletin
+post about the offer is written by hand (`content/bulletin`, with `expires:` its last day). To add the next offer:
+copy the block (from `- key:` down), paste it under the last one, change the values.
 
 > `tests/test_r21_offers.py` (class `RealSettings`, a Code check test) requires the real file's blocks to have
-> **no** mistakes, and checks the words of the 2026 block.
+> **no** mistakes, and checks the words of the 2026 free shipping block; `tests/test_r25_holiday_offers.py`
+> (`RealSettings`, `ShopPages`) those of the holiday gift offers, and the Shop built with both.
 
 ### 3.5 `drive:` — the committee's Google Drive
 
@@ -1400,6 +1429,7 @@ update* still publishes it:
 | `tests/test_site_links.py` | Every key under `links:` is used by some page (a `_es` twin counts with its link), every link a template reads exists, the removed settings stay removed, La Viña's monthly workshop is called by its one name. (`meeting: platform` may be left out or changed: since October 2026 no test pins "Zoom" or a `note`) |
 | `tests/test_price_changes.py` | The real `price_changes:` blocks have no problems |
 | `tests/test_r21_offers.py` (class `RealSettings`) | The real `store_offers:` blocks have no mistakes; the 2026 free shipping block's dates and words (U.S. and Canada, Grapevine's "can't be combined"; no promo code, minimum, subscriptions or "hurry"); its two `banner_match` patterns find the two banners and nothing else |
+| `tests/test_r25_holiday_offers.py` (classes `RealSettings`, `ShopPages`) | The 2026 holiday gift offers block: `show_starts: false`, ends December 31, the prices and words of both stores (print, U.S. and Canada, Grapevine's "can't be combined"; no "just", "Save 55%", percentage, digital or shipping), its `url` / `url_ca` exactly; the Shop built with it: free shipping still `#offers`, the gift offers next, "Through December 31, 2026", the buttons to the offer pages |
 | `tests/test_sync_pipeline.py` | `sources: instagram: keep_per_account` at least 124 |
 | `tests/test_meetings.py` | Exactly `aadallas` and `fortworthaa` carry `feed_obf`; no key in plain text |
 | `tests/test_editorial.py` | La Viña's themes page resolves to https://www.aalavina.org/recursos |

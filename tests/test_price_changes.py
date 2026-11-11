@@ -17,8 +17,9 @@
   * Report, Monthly, Digest — the GV/LV report (its shop section, and its text from the day: report.js
     swapTexts), the monthly toolkit's message, the monthly digest's pointer row and its e-mail twin
     (send_digest.py) in the months before and in January;
-  * Announcements — the two bulletin posts (dates, publish, expires, pinned, their own Spanish over several
-    lines), the letter on Drive (its date and title), the hand translations in data/translations/overrides.yml.
+  * Announcements — the bulletin post of January 1, 2027 (dates, publish, expires, its own Spanish over several
+    lines; the heads-up is the price section of the pinned post of November 11, 2026: test_r25_holiday_offers.py),
+    the letter on Drive (its date and title), the hand translations in data/translations/overrides.yml.
 
     python -m unittest tests.test_price_changes -v        (or: python -m unittest discover -s tests)
 """
@@ -836,8 +837,9 @@ class Digest(SD.DigestCase):
 
 
 # =========================================================================== the announcements
-FIRST_POST = ROOT / "content" / "bulletin" / "2026-10-01-prices-change-january-1-2027.md"
-SECOND_POST = ROOT / "content" / "bulletin" / "2027-01-01-new-prices-in-effect.md"
+# The heads-up of October 1, 2026 is now the price section of the pinned post of November 11 (with the holiday gift
+# offers and free shipping): tests/test_r25_holiday_offers.py Bulletin checks it.
+POST = ROOT / "content" / "bulletin" / "2027-01-01-new-prices-in-effect.md"
 
 
 def teaser(text: str, n: int = 320) -> str:
@@ -847,77 +849,52 @@ def teaser(text: str, n: int = 320) -> str:
 
 
 class Bulletin(unittest.TestCase):
-    """content/bulletin: the heads-up (October 1, pinned, through December 31) and "now in effect" (scheduled for
-    January 1, through January 31), each with its own Spanish over several lines. (Content: once the posts are
-    deleted after their time, these checks are skipped.)"""
+    """content/bulletin/2027-01-01-new-prices-in-effect.md: "now in effect" (scheduled for January 1, through January
+    31), with its own Spanish over several lines. (Content: once the post is deleted after its time, these checks are
+    skipped.)"""
 
     @classmethod
     def setUpClass(cls):
-        if not (FIRST_POST.exists() and SECOND_POST.exists()):
-            raise unittest.SkipTest("the price change posts are no longer in content/bulletin")
-        cls.first = A.parse_announcement(FIRST_POST)
-        cls.second = A.parse_announcement(SECOND_POST)
+        if not POST.exists():
+            raise unittest.SkipTest("the January 1 price post is no longer in content/bulletin")
+        cls.post = A.parse_announcement(POST)
 
-    def test_the_two_posts(self):
-        f, s = self.first, self.second
-        self.assertEqual((f["title"], f["date"], f["lang"], f["extra"]["expires"], f["extra"]["pinned"]),
-                         ("Grapevine and La Viña prices change on January 1, 2027", "2026-10-01", "en", "2026-12-31", True))
-        self.assertNotIn("publish", f["extra"])
+    def test_the_post(self):
+        s = self.post
         self.assertEqual((s["title"], s["date"], s["extra"]["publish"], s["extra"]["expires"], s["extra"]["pinned"]),
                          ("New Grapevine and La Viña prices are now in effect", "2027-01-01", "2027-01-01", "2027-01-31", False))
-        for post in (f, s):
-            self.assertNotIn("missing_files", post["extra"])
-            body, es = post["extra"]["body_md"], post["extra"]["own_i18n"]["body_md"]["es"]
-            # the teaser — the home page's pinned card, What's New, the feed — is the start of the text: every new
-            # price is in its first sentence, in both languages (a list there would run together into one line)
-            for text in (post["summary"], post["extra"]["own_i18n"]["summary"]["es"]):
-                for price in ("$39.00", "$34.00", "$19.50", "$17.00", "$2.00"):
-                    self.assertIn(price, teaser(text).split(". ")[0])
-            self.assertIn("(/shop/#subscriptions)", body)
-            self.assertIn("https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view", body)
-            self.assertIn("\n\n", es, "the Spanish text keeps its paragraphs")
-        self.assertEqual(f["extra"]["own_i18n"]["body_md"]["es"].count("\n- "), 2, "…and its list of links")
+        self.assertNotIn("missing_files", s["extra"])
+        body, es = s["extra"]["body_md"], s["extra"]["own_i18n"]["body_md"]["es"]
+        # the teaser — the home page's card, What's New, the feed — is the start of the text: every new price is in
+        # its first sentence, in both languages (a list there would run together into one line)
+        for text in (s["summary"], s["extra"]["own_i18n"]["summary"]["es"]):
+            for price in ("$39.00", "$34.00", "$19.50", "$17.00", "$2.00"):
+                self.assertIn(price, teaser(text).split(". ")[0])
+        self.assertIn("(/shop/#subscriptions)", body)
+        self.assertIn("https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view", body)
+        self.assertIn("\n\n", es, "the Spanish text keeps its paragraphs")
         # calm and informative: no pressure to buy, no claim the letter does not make
-        for text in (f["extra"]["body_md"], f["extra"]["own_i18n"]["body_md"]["es"], s["extra"]["body_md"],
-                     s["extra"]["own_i18n"]["body_md"]["es"]):
+        for text in (body, es):
             self.assertNotRegex(text.lower(), r"buy now|before prices|hurry|don't miss|renew (?:now|early|before)|ahora antes|renueva")
             self.assertNotRegex(text, r"(?i)2-year|3-year|2 años|3 años|canad|international|internacional|monthly|mensual|complete|completa")
             # only Grapevine and La Viña books change price, not "literature" (to a treasurer: AA World Services' too)
             self.assertNotRegex(text, r"(?i)literature|literatura")
-        self.assertIn("treasurer", f["extra"]["body_md"])
-        self.assertIn("Grapevine or La Viña books or subscriptions", f["extra"]["body_md"])
-        self.assertIn("libros o suscripciones de Grapevine y La Viña", f["extra"]["own_i18n"]["body_md"]["es"])
-        self.assertIn("printing, paper and materials, fulfillment, postage and shipping", f["extra"]["body_md"])
-
-    def ctx(self, now: str) -> B.Ctx:
-        c = B.Ctx(offline=True)
-        c.now = datetime.fromisoformat(now.replace("Z", "+00:00"))
-        c.now_ts = c.now.timestamp()
-        c.today_local = c.now.astimezone(c.tz).date()
-        f = {**copy.deepcopy(self.first), "first_seen": "2026-10-01T23:00:00Z"}
-        s = {**copy.deepcopy(self.second), "first_seen": "2026-10-01T23:00:00Z"}
-        c.raw = {"announcements": {"items": [f, s]}, "drive": {"items": []}}
-        c.births = {"announcements": 0.0}
-        return c
 
     def test_the_schedule(self):
         def shown(now):
-            c = self.ctx(now)
+            c = B.Ctx(offline=True)
+            c.now = datetime.fromisoformat(now.replace("Z", "+00:00"))
+            c.now_ts = c.now.timestamp()
+            c.today_local = c.now.astimezone(c.tz).date()
+            c.raw = {"announcements": {"items": [{**copy.deepcopy(self.post), "first_seen": "2026-10-01T23:00:00Z"}]},
+                     "drive": {"items": []}}
+            c.births = {"announcements": 0.0}
             return [a["id"].split(":")[1][:10] for a in B.build_announcements(c)], [x["publish"] for x in c.scheduled]
-        self.assertEqual(shown("2026-10-02T15:00:00Z"), (["2026-10-01"], ["2027-01-01"]))
-        self.assertEqual(shown("2027-01-01T05:30:00Z"), (["2026-10-01"], ["2027-01-01"]), "11:30 PM on December 31")
+        self.assertEqual(shown("2026-11-12T15:00:00Z"), ([], ["2027-01-01"]), "waiting, listed as scheduled")
+        self.assertEqual(shown("2027-01-01T05:30:00Z"), ([], ["2027-01-01"]), "11:30 PM on December 31")
         self.assertEqual(shown("2027-01-01T11:00:00Z"), (["2027-01-01"], []), "the morning update of January 1")
         self.assertEqual(shown("2027-01-31T23:00:00Z"), (["2027-01-01"], []))
         self.assertEqual(shown("2027-02-01T11:00:00Z"), ([], []))
-
-    def test_october_edition_carries_the_heads_up(self):
-        f = {**copy.deepcopy(self.first), "first_seen": "2026-10-01T23:00:00Z", "kind": "announcement", "status": "ok",
-             "i18n": {"title": {"en": self.first["title"], "es": self.first["extra"]["own_i18n"]["title"]["es"]}}}
-        r = run_js(self, r"""
-          const C = await imp("eleventy/filters/community.js");
-          const md = (now) => C.buildMonthlyDigest(input.db, { site: {}, now: new Date(now) }).news.announcement.map((i) => i.id);
-          out({ oct: md("2026-11-01T15:05:00Z"), nov: md("2026-12-01T15:05:00Z") });""", data={"db": {"announcements": {"items": [f]}}})
-        self.assertEqual(r, {"oct": [f["id"]], "nov": []})
 
 
 class DriveLetter(unittest.TestCase):

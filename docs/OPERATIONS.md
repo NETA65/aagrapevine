@@ -675,8 +675,12 @@ prices](../README.md#when-grapevine-announces-new-prices) is the chair's version
    letter does not make (renewals bought before the day, other plans, other regions, "literature" when only
    Grapevine and La Viña books change). Open each language with one sentence that holds every new price: the home
    page's card, What's New and the feed show the first ~320 characters as plain text, where a list runs together
-   into one line (the two posts for January 1, 2027 do this). The heads-up is in the
-   monthly e-mail of the month it was posted; the e-mails of the next months, through the day's month, carry one
+   into one line (`2027-01-01-new-prices-in-effect.md` does this). A heads-up that shares a pinned post with other
+   notices gets a section of its own that opens with that sentence, after a short opening that names every section
+   — and stays apart from any store offer, as facts side by side, never "before prices go up" (since November 11,
+   2026 the heads-up of January 1, 2027 is the price section of
+   `2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md`, with the holiday gift offers and free shipping).
+   The heads-up is in the monthly e-mail of the month it was posted; the e-mails of the next months, through the day's month, carry one
    pointer row ("Grapevine and La Viña prices change on …" / "New … prices since …") — so do the monthly toolkit's
    messages and the GV/LV report.
 4. After the save: the Actions run summary has no *Settings problem (price_changes)*; `/shop/` shows the notice
