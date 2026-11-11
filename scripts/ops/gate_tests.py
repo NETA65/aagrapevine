@@ -119,6 +119,9 @@ CONTENT_TESTS: dict[str, str] = {
         "config/site.yml store_offers, as written: the free shipping of 2026 and the patterns that find its banners",
     "test_r25_holiday_offers.RealSettings.":
         "config/site.yml store_offers, as written: the holiday gift offers of 2026, their words and offer pages",
+    "test_r25_lavina_podcast.RealSettings.":
+        "config/site.yml sources.podcasts and lavina_weekly_open, as written: the three shows (La Viña's open-meeting "
+        "show lvo) and La Viña's meeting page",
     "test_r25_holiday_offers.ShopPages.":
         "config/site.yml store_offers (and the bulletin post's /shop/ links): a build of the Shop and November's "
         "toolkit with the committee's two offers",

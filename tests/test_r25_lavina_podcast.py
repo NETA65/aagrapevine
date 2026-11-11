@@ -11,6 +11,8 @@ updating when one feed fails:
                    config's "es" although its feed says <language>en</language>. Made-up next episodes: a weekday and
                    the next meeting's date in the text, no date at all, a title of its own; a show of no meeting gets
                    none of those fields.
+  * RealSettings — config/site.yml as the committee keeps it (a content test): the shows as this file's copies, La
+                   Viña's meeting show, its meeting's page. Every other class uses this file's copies of the shows.
   * MeetingDate  — meeting_date(): the title's own date wins (the Grapevine Weekly Open's — even when its description
                    names another day, as the real "May 6, 2026" episode does); else the description's date said to be
                    the meeting's ("del …", "held on …"), else the latest before publication; Spanish and English
@@ -93,14 +95,36 @@ from scripts.sync import podcasts as P  # noqa: E402
 from scripts.sync import weekly_open as W  # noqa: E402
 
 FIXTURE = ROOT / "tests" / "fixtures" / "podcasts" / "reunin-abierta-semanal.xml"
-SITE_CFG = yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8"))
-CFG_SHOWS = SITE_CFG["sources"]["podcasts"]
 # La Viña's page for its meeting (the committee's choice, 2026-11-11): its podcast's page. Exactly so: with a "/" at
 # the end, aalavina.org sends it on to another address
 LV_MEETING_PAGE = "https://www.aalavina.org/podcast"
-LVO = next(s for s in CFG_SHOWS if s.get("weekly_open") == "lavina")
 GUID = "7d2cc913-c2b5-46d6-b176-d347a12913c3"
 NAME = "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
+# The three shows as config/site.yml has them today (sources.podcasts). The code tests use these copies, never the
+# committee's file — a show the committee renames, moves or deletes must not fail them (the publish gate runs them:
+# scripts/ops/gate_tests.py); RealSettings checks the file itself (a content test).
+LVO = {"key": "lvo", "name": NAME, "feed": "https://feeds.captivate.fm/reunin-abierta-semanal/", "lang": "es",
+       "weekly_open": "lavina", "web": LV_MEETING_PAGE,
+       "apple": "https://podcasts.apple.com/us/podcast/reuni%C3%B3n-abierta-semanal-de-alcoh%C3%B3licos-an%C3%B3nimos-de-la-vi%C3%B1a/id6832543655",
+       "spotify": "https://open.spotify.com/show/5LFFf4NfjdZni1TJcG4jZC"}
+CFG_SHOWS = [
+    {"key": "gv", "name": "AA Grapevine's Podcast", "feed": "https://feeds.captivate.fm/aa-grapevine/",
+     "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+     "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+     "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+     "web": "https://www.aagrapevine.org/podcasts"},
+    {"key": "wo", "name": "Grapevine Weekly Open AA Meeting", "feed": "https://feeds.captivate.fm/grapevine-weekly-open/",
+     "weekly_open": "grapevine", "web": "https://www.aagrapevine.org/grapevine-weekly-open",
+     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
+     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
+     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting"},
+    LVO,
+]
+# La Viña's weekly open meeting as config/site.yml lavina_weekly_open has it (the parts lavina_item needs)
+LV_MEETING_CFG = {"title_es": "Reunión Abierta de La Viña", "title_en": "La Viña's Open Meeting", "day": "thursday",
+                  "time": "12:00", "timezone": "America/New_York", "starts": "2026-11-05", "zoom_id": "871 2036 8287",
+                  "passcode": "238047", "summary_es": "Una reunión abierta virtual de AA en español.",
+                  "summary_en": "A virtual open AA meeting in Spanish.", "url": LV_MEETING_PAGE}
 
 
 def feed_xml() -> str:
@@ -184,27 +208,45 @@ class Sync(unittest.TestCase):
         gv = P.build_items({"key": "gv", "name": "AA Grapevine's Podcast", "feed": "https://feeds.example/gv/"}, parsed())
         self.assertFalse({"weekly_open", "meeting_date", "generic_title"} & set(gv[0]["extra"]))
 
+
+
+class RealSettings(unittest.TestCase):
+    """config/site.yml as the committee keeps it (a content test: scripts/ops/gate_tests.py CONTENT_TESTS): the three
+    shows as this file's copies have them, La Viña's meeting show and its meeting's page."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.cfg = yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8"))
+        cls.shows = cls.cfg["sources"]["podcasts"]
+
+    def test_the_shows_are_this_files_copies(self):
+        self.assertEqual(self.shows, CFG_SHOWS)
+
     def test_the_config_entry(self):
-        keys = [s["key"] for s in CFG_SHOWS]
+        keys = [s["key"] for s in self.shows]
         self.assertEqual(keys[:2], ["gv", "wo"], "AA Grapevine's Podcast stays Home's featured show")
         self.assertEqual(len(set(keys)), len(keys))
-        self.assertEqual(LVO["key"], "lvo")
-        self.assertEqual(LVO["feed"], "https://feeds.captivate.fm/reunin-abierta-semanal/")
-        self.assertEqual((LVO["lang"], LVO["web"]), ("es", "https://www.aalavina.org/podcast"))
-        self.assertNotIn("amazon", LVO)
-        self.assertEqual(next(s for s in CFG_SHOWS if s["key"] == "wo").get("weekly_open"), "grapevine")
-        self.assertTrue(all(s.get("weekly_open") in (None, "grapevine", "lavina") for s in CFG_SHOWS))
+        lvo = next(s for s in self.shows if s.get("weekly_open") == "lavina")
+        self.assertEqual(lvo["key"], "lvo")
+        self.assertEqual(lvo["feed"], "https://feeds.captivate.fm/reunin-abierta-semanal/")
+        self.assertEqual((lvo["lang"], lvo["web"]), ("es", "https://www.aalavina.org/podcast"))
+        self.assertNotIn("amazon", lvo)
+        self.assertEqual(next(s for s in self.shows if s["key"] == "wo").get("weekly_open"), "grapevine")
+        self.assertTrue(all(s.get("weekly_open") in (None, "grapevine", "lavina") for s in self.shows))
+
+    def test_the_lavina_meetings_page(self):
+        lv = self.cfg["lavina_weekly_open"]
+        self.assertEqual(lv["url"], LV_MEETING_PAGE)
+        for key in ("day", "time", "timezone", "starts"):
+            self.assertEqual(lv[key], LV_MEETING_CFG[key], key)
 
 
 class LaVinaMeetingPage(unittest.TestCase):
-    """config/site.yml lavina_weekly_open.url: La Viña's page for its meeting, written exactly, in the sync's item."""
-
-    def test_the_setting(self):
-        self.assertEqual(SITE_CFG["lavina_weekly_open"]["url"], LV_MEETING_PAGE)
+    """lavina_weekly_open.url: La Viña's page for its meeting, in the sync's item (and none when the setting is empty)."""
 
     def test_the_sync_writes_it(self):
-        it = W.lavina_item(SITE_CFG["lavina_weekly_open"])
-        self.assertEqual(it["url"], LV_MEETING_PAGE)
+        self.assertEqual(W.lavina_item(LV_MEETING_CFG)["url"], LV_MEETING_PAGE)
+        self.assertEqual(W.lavina_item({**LV_MEETING_CFG, "url": ""})["url"], "")
 
 
 class MeetingDate(unittest.TestCase):
@@ -357,7 +399,10 @@ class BuildDataRun(unittest.TestCase):
                           "description": f"{self.ES} ({self.EN})"}]}
         (raw / "podcasts.json").write_text(json.dumps(env, ensure_ascii=False), encoding="utf-8")
         real_translator = B.T.Translator
-        with mock.patch.object(common, "RAW_DIR", raw), mock.patch.object(B, "RAW_DIR", raw), \
+        # the committee's settings, with this file's copies of the shows (see CFG_SHOWS)
+        real = common.load_config()
+        cfg = {**real, "sources": {**(real.get("sources") or {}), "podcasts": CFG_SHOWS}}
+        with mock.patch.object(common, "RAW_DIR", raw), mock.patch.object(B, "RAW_DIR", raw),                 mock.patch.object(B, "load_config", lambda: cfg), \
                 mock.patch.object(B, "STATE_DIR", tmp / "state"), \
                 mock.patch.object(B.T, "Translator", lambda **kw: real_translator(cache=False, use_model=False)), \
                 mock.patch.object(B.T, "_DEFAULT", None):
@@ -734,6 +779,8 @@ try {
     quietMode: true, configPath: "eleventy.config.js",
     config(cfg) {
       cfg.addGlobalData("eleventyComputed", {
+        // this file's copies of the shows, not the committee's config/site.yml (see CFG_SHOWS)
+        site: (data) => ({ ...data.site, sources: { ...data.site.sources, podcasts: input.cfg } }),
         db: (data) => ({ ...data.db, episodes: input.episodes, weekly_open: { updated: "2026-11-11T12:00:00Z", items: input.weekly },
                          ...(input.whatsnew ? { whatsnew: { updated: "2026-11-11T12:00:00Z", items: input.whatsnew } } : {}) }),
       });
@@ -769,7 +816,8 @@ class Pages(unittest.TestCase):
                     for pre in ("/", "/es/")]
             Pages.built = run_js(self, PAGES_JS, data={"only": "index.njk,listen.njk,meetings.njk,whats-new,feed,search-index",
                                                        "urls": urls, "episodes": EPISODES, "weekly": WEEKLY,
-                                                       "whatsnew": self.WHATSNEW}, timeout=600, now=NOW_JS)
+                                                       "whatsnew": self.WHATSNEW, "cfg": CFG_SHOWS},
+                                  timeout=600, now=NOW_JS)
 
     def cards(self, lang: str) -> dict[str, str]:
         page = self.built["/es/listen/" if lang == "es" else "/listen/"]
@@ -946,7 +994,7 @@ class HomeDates(unittest.TestCase):
         if HomeDates.built is None:
             eps = {**EPISODES, "items": [self.LV_NO_DATE, *self.GV_OLD, self.WO_INTRO]}
             HomeDates.built = run_js(self, PAGES_JS, data={"only": "index.njk", "urls": ["/", "/es/"], "episodes": eps,
-                                                           "weekly": WEEKLY}, timeout=600, now=NOW_JS)
+                                                           "weekly": WEEKLY, "cfg": CFG_SHOWS}, timeout=600, now=NOW_JS)
 
     def row(self, lang: str, iid: str) -> str:
         page = self.built["/es/" if lang == "es" else "/"]
