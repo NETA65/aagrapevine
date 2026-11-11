@@ -20,7 +20,9 @@
       (#shop-cost-data: eleventy/filters/shop.js shopCost); GV.shopQuote does the sums here, by the clock, so a
       page built — or saved for offline use — the day before a price change is right on the day. "Print an
       information sheet" prints #shop-sheet alone (html[data-shop-print]: shop.css) in English, Spanish or both.
-      Nothing is kept or sent: the choices live in the page. Without JavaScript the card links the stores. */
+      Nothing is kept or sent: the choices live in the page. Without JavaScript the card links the stores.
+   4. GV.shopArtGone — a store's banner that can't load leaves its card (the offers' onerror); a link's section
+      below it is brought back into view if the page was still on its way there. */
 (function () {
   "use strict";
   var TZ = (window.SITE && window.SITE.tz) || "America/Chicago";
@@ -75,6 +77,28 @@
   // A page left open past midnight (or brought back from the background) catches up.
   setInterval(updateOffers, 60 * 1000);
   document.addEventListener("visibilitychange", function () { if (!document.hidden) updateOffers(); });
+
+  /* ---------------- 4. A store's banner that can't load ---------------- */
+  // Its onerror (src/pages/shop.njk) calls this: the banner leaves its card. A link to a section below it
+  // (/shop/#offers-holiday-gifts-2026, #subscriptions …) scrolls there smoothly, to the spot worked out with the
+  // banner still in place; the banner leaving on the way would put the section under the header. So the section is
+  // brought back into view — unless the reader has scrolled, tapped or typed since (never pulled away from where
+  // they went). Once the page is where the link put it the browser keeps it there by itself: nothing moves.
+  var readerMoved = false;
+  ["wheel", "touchstart", "pointerdown", "keydown"].forEach(function (ev) {
+    window.addEventListener(ev, function () { readerMoved = true; }, { passive: true, once: true, capture: true });
+  });
+  GV.shopArtGone = function (img) {
+    var art = img && img.closest && img.closest(".shop-offer-art");
+    if (!art) return;
+    var target = null;
+    try { target = location.hash.length > 1 ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null; } catch (e) { target = null; }
+    var below = target && (art.compareDocumentPosition(target) & 4);   // Node.DOCUMENT_POSITION_FOLLOWING
+    art.remove();
+    if (!below || readerMoved) return;
+    var behavior = GV.reducedMotion && GV.reducedMotion() ? "auto" : "smooth";
+    try { target.scrollIntoView({ behavior: behavior, block: "start" }); } catch (e) { target.scrollIntoView(); }
+  };
 
   /* ---------------- 3. What it would cost ---------------- */
   var MAX_COPIES = 999;

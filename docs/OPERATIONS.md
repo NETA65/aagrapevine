@@ -423,7 +423,10 @@ served as a calendar (200, `text/calendar`, `BEGIN:VCALENDAR`) is checked every 
 (`ReadAloudControls` with a stand-in voice: start on the screen, side columns, Previous / Next, speed;
 `VideoCaptions`), `test_r12_u5_gvr.py` (`QuestionOfTheDay`, `PassItOn`
 — the two printed sheets and the "Tell the office" e-mails —, `GvrPhone`), `test_r12_u7_shop.py`
-(`ShopCostCalculator`, `ShopCostSheet`; the browser's clock stopped), `test_r12_u8_whatsnew_browser.py`
+(`ShopCostCalculator`, `ShopCostSheet`; the browser's clock stopped; `OfferBannerGone`: a store banner that fails
+while a link to a section below it — `/shop/#offers-holiday-gifts-2026`, `#subscriptions` — still scrolls there
+smoothly leaves that section where the link puts it, a reader who scrolled away is not pulled back; skipped when the
+Shop shows no banner), `test_r12_u8_whatsnew_browser.py`
 (`WhatsNewSince`: a seeded `gv-wn-seen` record, the marks, no layout shift, "Mark all as read"),
 `test_r12_u9_meeting_browser.py` (`MeetingPaperwork`: Customize → Agenda & minutes, Start next month and its Undo,
 the clock stopped at the built deck's meeting dates) and `test_r12_u10_areareport.py` (`AreaReportInBrowser`: For:

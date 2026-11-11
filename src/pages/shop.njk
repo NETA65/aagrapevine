@@ -412,7 +412,10 @@ pageScripts: ["/assets/js/shop.js"]
       {% for s in o.stores %}
       <li class="card flex flex-col overflow-hidden">
         {%- if s.banner %}
-        {%- set art -%}<img src="{{ s.banner.src }}" alt="{{ s.alt }}"{% if s.alt and s.altLang != lang %} lang="{{ s.altLang }}"{% endif %} width="1920" height="770" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('.shop-offer-art').remove()">{%- endset %}
+        {#- A banner that can't load leaves the card (assets/js/shop.js GV.shopArtGone: a link's section below it,
+            /shop/#offers-holiday-gifts-2026 …, is brought back into view if the page was still scrolling there;
+            before shop.js has run, the banner simply leaves). -#}
+        {%- set art -%}<img src="{{ s.banner.src }}" alt="{{ s.alt }}"{% if s.alt and s.altLang != lang %} lang="{{ s.altLang }}"{% endif %} width="1920" height="770" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="window.GV&&GV.shopArtGone?GV.shopArtGone(this):this.closest('.shop-offer-art').remove()">{%- endset %}
         {% if s.href %}<a class="shop-offer-art" href="{{ s.href }}" target="_blank" rel="noopener">{{ art | safe }}<span class="sr-only">{{ " — " if s.alt }}{{ s.label }} ({{ "common.external" | t(lang) }})</span></a>
         {% else %}<div class="shop-offer-art">{{ art | safe }}</div>{% endif %}
         {%- endif %}
