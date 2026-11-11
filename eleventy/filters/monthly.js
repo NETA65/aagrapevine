@@ -531,6 +531,31 @@ export function monthTopics(editorial, pub, key, lang = "en", dated = []) {
   });
 }
 
+// What an events.json date of a series says about that date alone, never about a later month's (seriesTemplate):
+// that it is over (build_data.order_events: extra.past), and that an outside calendar or feed listed that day too
+// (merge_calendar_duplicates, fill_from_feed)
+const DATE_ONLY = ["past", "also_on_calendar", "calendar_match", "also_in_feed", "feed_match"];
+
+/**
+ * The record a later month's date of a monthly series is written from (monthModel): the series' LATEST date in
+ * events.json — not its last record, which is its oldest past date (build_data.order_events lists the dates to come
+ * first, soonest first, then the past ones kept, newest first), and a past date gives none of the joining details
+ * (committee.js normalizeEvents: no link, no meeting ID or code once a date is over). What only that date has is left
+ * out (DATE_ONLY), and so is its flyer: a later month's date has the series' own flyer, the one for every date
+ * (build_data.pick_flyer: a name with no day or month in it) — the flyer two of its dates share; a flyer named with
+ * a day or a month is one date's alone ("July 2027 Grapevine Meeting - flyer" is not August's).
+ */
+function seriesTemplate(series) {
+  const newest = [...series].sort((a, b) => eventDays(b).start.localeCompare(eventDays(a).start));
+  const extra = { ...(newest[0].extra || {}) };
+  for (const k of DATE_ONLY) delete extra[k];
+  const flyerOf = (e) => (e.extra && e.extra.flyer_url) || "";
+  const own = newest.find((e) => flyerOf(e) && series.filter((o) => flyerOf(o) === flyerOf(e)).length > 1);
+  extra.flyer_url = own ? own.extra.flyer_url : null;
+  extra.flyer_thumb = own ? own.extra.flyer_thumb || null : null;
+  return { ...newest[0], extra };
+}
+
 /**
  * One month's model (the month's PLAN: every month page, the posters, the district report).
  * @param {string} key   "YYYY-MM"
@@ -609,7 +634,8 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
   const committee = committeeRow(events, key, site, L, ctx);
   /* The recurring series (config/site.yml recurring_events:) — events.json lists only the next
      `months_ahead` dates, so a later month's date is worked out from the same rule (like the
-     committee meeting from site.meeting), with the series' own title and repeat line. */
+     committee meeting from site.meeting), with the series' own title and repeat line — and its link, meeting ID
+     or code: written from the series' latest date, a date still to come (seriesTemplate). */
   const recEvents = events.filter((e) => e.extra && e.extra.recurring && e.extra.series);
   const recIn = recEvents.filter(inMonth);
   const projected = new Set();
@@ -624,14 +650,15 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
     const series = recEvents.filter((e) => e.extra.series === sp.key);
     const lastListed = series.reduce((mx, e) => (eventDays(e).start > mx ? eventDays(e).start : mx), "");
     if (!series.length || series.some(inMonth) || lastListed >= first) continue;
-    const tpl = series[series.length - 1];
+    const tpl = seriesTemplate(series);
     // the rule as build_data understood it (extra.rule: week_of_month 1–5 / -1, English weekday, "HH:MM"
     // start and the end as used — "Saturdays", "2nd", "5 PM" or no end all read as the sync read them);
     // only skip_dates and the first date (`starts`: no month before it) come from the settings
     const rule = (tpl.extra && tpl.extra.rule) || sp;
     const r = meetingByRule(key, { week_of_month: rule.week_of_month, weekday: rule.weekday, start: rule.start, end: rule.end, skip_dates: sp.skip_dates || [], starts: sp.starts || "" });
     if (!r) continue;
-    recIn.push({ ...tpl, id: `ev:recurring:${sp.key}:${r.ymd}`, date: r.start, extra: { ...tpl.extra, start: r.start, end: r.end } });
+    // (a date after every one events.json lists: still to come, as build_data marks such a date — extra.past false)
+    recIn.push({ ...tpl, id: `ev:recurring:${sp.key}:${r.ymd}`, date: r.start, extra: { ...tpl.extra, start: r.start, end: r.end, past: false } });
   }
   const recurring = recIn
     .sort((a, b) => eventDays(a).start.localeCompare(eventDays(b).start))
