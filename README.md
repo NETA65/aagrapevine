@@ -761,8 +761,8 @@ meeting:
 
 - **The evening, from January 20, 2027:** 7:00 a moment of silence, the Serenity Prayer and the speaker's
   introduction; about 7:02 the talk (about 20 minutes); about 7:22 questions; the speaker is thanked and done
-  **by 7:30**; 7:30–8:00 committee business. **November 18 and December 16, 2026** are on Google Meet with no
-  speaker (no block for those dates): the usual business hour.
+  **by 7:30**; 7:30–8:00 committee business. **November 18 and December 16, 2026** have no guest speaker (no block
+  for those dates): the usual business hour.
 - **All 12 speakers of 2027 are shown** — first name and last initial, service position and topic: on Meetings (the
   next meeting's speaker, *How the evening runs*, the year's schedule), the home page's meeting card, each
   meeting's card on Events and its calendar entry, the monthly toolkit and posters, the GV/LV report, the monthly

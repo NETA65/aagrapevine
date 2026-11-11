@@ -289,7 +289,7 @@ Where the meeting shows:
 From January 20, 2027, every committee meeting opens with a guest speaker. The evening: at 7:00 a moment of
 silence, the Serenity Prayer and the speaker's introduction; at about 7:02 the talk (about 20 minutes); at about
 7:22 questions; the speaker is thanked and done **by 7:30** (`speaker_until`); from 7:30 to 8:00 committee
-business. November 18 and December 16, 2026 are on Google Meet with no speaker. One block per meeting, at the end of
+business. November 18 and December 16, 2026 have no guest speaker. One block per meeting, at the end of
 `meeting:`:
 
 ```yaml
