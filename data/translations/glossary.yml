@@ -289,6 +289,10 @@ terms:
   - { en: "App Poster", es: "póster de la app", only: es }
   - { en: "poster", es: "póster", only: es }
   - { en: "posters", es: "pósteres", only: es }
+  # a "flyer" is a "volante", as the site's pages say ("Ver volante"); the model kept the English word in the
+  # Drive flyers' file names ("Nuestras reuniones en línea - flyer")
+  - { en: "flyer", es: "volante", only: es }
+  - { en: "flyers", es: "volantes", only: es }
   - { en: "Spirituality and God-Talk", es: "La Espiritualidad y la Mención de Dios" }   # Grapevine book (La Viña's title)
   - { en: "Traditions Checklist", es: "Lista de Chequeo de las Tradiciones", only: en }   # La Viña's title
   - { en: "Free on the Inside", es: "Libres por dentro" }                 # Grapevine book on AA in prison
@@ -328,6 +332,12 @@ terms:
   # our monthly online meeting, as the Events page names it ("Reunión de Grapevine (en inglés)"); a group's
   # "Grapevine meeting" in lower case is left to the model
   - { en: "Grapevine Meeting", es: "Reunión de Grapevine", exact: true }
+  # a meeting's "guest speaker" (our committee meetings from January 2027) is an "orador invitado": the model wrote
+  # "altavoz invitado", a loudspeaker (the built-in rule only fixes the plural "altavoces"). A flyer named for a
+  # woman speaker needs its own line in overrides.yml ("oradora invitada"), as each month's 2027 flyer has.
+  - { en: "Guest Speaker Series", es: "ciclo de oradores invitados", only: es }   # never "Serie orador invitado"
+  - { en: "guest speakers", es: "oradores invitados", only: es }
+  - { en: "guest speaker", es: "orador invitado", only: es }
   - { en: "Meeting ID", es: "ID de reunión" }
   - { en: "passcode", es: "código de acceso" }
   - { en: "link in bio", es: "enlace en la biografía" }
