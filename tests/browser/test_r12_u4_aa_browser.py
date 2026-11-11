@@ -73,14 +73,40 @@ STATE = """() => { const s = GV.tts.state(), c = GV.tts.chunks(), last = __speec
            padTop: parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0 }; }"""
 
 # The paragraph being read: where it is on the page (from the page's top) and the side column it sits in, if any
-# (an element of <main> that is sticky or fixed — e.g. the filters, the poster, the player card).
+# (an element of <main> that is sticky or fixed — e.g. the filters, the poster, the player card). `cell` is the
+# grid cell it sits in, if any (the nearest ancestor whose parent is a CSS grid, e.g. a card of /library/'s results):
+# which grid, which cell, and the cell's top. Reading a grid of cards goes card by card along each row, so the
+# next card of the same row starts higher up than the last line of the card before it — that is not "back up".
 WHERE = """() => { const cur = document.querySelector(".tts-current"), main = document.querySelector("main");
-  let side = null;
+  let side = null, cell = null;
+  const all = document.getElementsByTagName("*"), at = (e) => Array.prototype.indexOf.call(all, e);
   for (let n = cur; n && n !== main; n = n.parentElement) {
     const p = getComputedStyle(n).position;
     if (p === "sticky" || p === "fixed") { side = n.className || n.tagName; break; }
   }
-  return { pageTop: cur ? cur.getBoundingClientRect().top + window.scrollY : null, side }; }"""
+  for (let n = cur; n && n.parentElement && n !== main; n = n.parentElement) {
+    if (/grid/.test(getComputedStyle(n.parentElement).display)) {
+      cell = { grid: at(n.parentElement), cell: at(n), top: n.getBoundingClientRect().top + window.scrollY };
+      break;
+    }
+  }
+  return { pageTop: cur ? cur.getBoundingClientRect().top + window.scrollY : null, side, cell }; }"""
+
+# Scroll to the middle of the page and wait until the page's height and the scroll position have both stayed the
+# same for half a second (scrolling again if the page grew or shrank), at most about 5 seconds.
+SETTLED_MIDDLE = """() => new Promise((done) => {
+  const middle = () => Math.round((document.documentElement.scrollHeight - innerHeight) / 2);
+  let target = middle(), last = "", same = 0, tries = 0;
+  window.scrollTo(0, target);
+  const t = setInterval(() => {
+    const now = document.documentElement.scrollHeight + ":" + window.scrollY;
+    if (middle() !== target) { target = middle(); window.scrollTo(0, target); same = 0; }
+    else if (now === last) same++;
+    else same = 0;
+    last = now;
+    if (same >= 5 || ++tries > 50) { clearInterval(t); done(window.scrollY); }
+  }, 100);
+})"""
 
 # The side columns of <main> stuck on the screen right now (sticky, at the line they stick to).
 STUCK = """() => [...document.querySelectorAll("main *")].filter((e) => {
@@ -206,7 +232,9 @@ class ReadAloudControls(unittest.TestCase):
             ctx = speech_context(w, h, lang=lang)
             try:
                 page = B.open_page(ctx, path)
-                page.evaluate("window.scrollTo(0, Math.round((document.documentElement.scrollHeight - innerHeight) / 2))")
+                # to the middle of the page, once the page has stopped growing or shrinking (pictures and fonts
+                # that arrive late move the page by a few pixels — that is not the voice moving it)
+                page.evaluate(SETTLED_MIDDLE)
                 page.wait_for_timeout(150)
                 with self.subTest(page=path, check="a side column stuck on the screen"):
                     self.assertTrue(page.evaluate(STUCK), "no sticky column on the screen here: the check tests nothing")
@@ -227,8 +255,19 @@ class ReadAloudControls(unittest.TestCase):
                     nxt = page.evaluate(WHERE)
                     with self.subTest(page=path, check="what comes next", text=st["text"]):
                         self.assertIsNone(nxt["side"])
-                        self.assertGreaterEqual(nxt["pageTop"], first["pageTop"] - 1, st["text"])
-                        self.assertGreaterEqual(st["y"], y0 - 2, "the page went back up")
+                        # further down the page — or the next card of the same grid, in the same row or a lower one
+                        a, b = first["cell"], nxt["cell"]
+                        next_card = bool(a and b and a["grid"] == b["grid"] and b["cell"] > a["cell"]
+                                         and b["top"] >= a["top"] - 1)
+                        if next_card:
+                            # the next card of the row can start above the screen's reading area: the page brings
+                            # its line into view (below the sticky bars, on the screen) — and goes on from there
+                            self.assertGreaterEqual(st["cur"]["top"], st["padTop"] - 2, st)
+                            self.assertLess(st["cur"]["top"], st["h"], st)
+                            y0 = st["y"]
+                        else:
+                            self.assertGreaterEqual(nxt["pageTop"], first["pageTop"] - 1, st["text"])
+                            self.assertGreaterEqual(st["y"], y0 - 2, "the page went back up")
                     first = nxt
                 page.evaluate("GV.tts.stop()")
             finally:
