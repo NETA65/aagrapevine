@@ -143,8 +143,9 @@ refreshes only Google Drive, the bulletin, the podcasts, the daily quote and the
 From now on the site updates itself every day: the full update once a day, whenever GitHub starts it,
 and — once the morning alarm of Step 9 is set — the new day and the daily quote **by 5:30 AM Central**.
 
-**What to expect on day 1:** magazine stories, both podcasts (AA Grapevine's Podcast and the
-Grapevine Weekly Open AA Meeting), videos and Instagram appear right away. The committee's own
+**What to expect on day 1:** magazine stories, the podcasts (AA Grapevine's Podcast and the recordings of
+the two weekly open meetings: the Grapevine Weekly Open AA Meeting and La Viña's Reunión abierta semanal), videos and
+Instagram appear right away. The committee's own
 sections (Portfolio, Photos, flyer events, the Bulletin) show a friendly "nothing here yet"
 message until files are uploaded to the Panel 77 folders in Google Drive — that is expected.
 Translations of a large first batch may take a few daily runs; untranslated titles show in their

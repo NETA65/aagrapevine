@@ -1652,8 +1652,14 @@ In `.github/workflows/update.yml`:
   document search while `sources.crawler.minutes_per_run` is 0). The other half of that rule is in
   `scripts/sync/run_all.py` (`crawl_paused`, `_note_paused_crawl`): a full update during the pause gives the search
   a fresh `attempted`, so it is not "not checked" right after the pause either.
-- **Advice per source:** job `report` → search `HINTS = {` (today `drive`, `instagram` and `writers_archive`). A
-  source without an entry gets the general advice; a source that was not checked gets the `UNCHECKED` text.
+- **Advice per source:** job `report` → search `HINTS = {` (today `drive`, `instagram`, `writers_archive` and
+  `podcasts:` — the advice for ONE podcast show that stopped while the others still update, reported as
+  "Podcasts — <show>"; the `hint()` function picks it for every `podcasts:<key>`). A source without an entry gets the
+  general advice; a source that was not checked gets the `UNCHECKED` text.
+- **One podcast show:** job `sync` → step *Write run summary* → search `podcasts:{key}`. The podcasts source stays
+  ok while at least one show was read (`scripts/sync/podcasts.py`); a show whose feed fails is a warning on the run
+  page every run and, after `STALE_DAYS` without a good read (`stats.shows[key].updated`, else its
+  `failing_since`), joins the stale list. Tested by `tests/test_r25_lavina_podcast.py` (`RunSummaryShows`).
 - **The title:** job `report` → search `TITLE = "A content source has stopped updating"`. If you change it, close
   the old issue by hand: the job finds its issue by the exact title.
 - **The other issue of the same job,** "The website update keeps failing" (8.4), is its second step, *Open, update
@@ -1668,9 +1674,9 @@ In `.github/workflows/update.yml`:
                        "shared as **Anyone with the link — Viewer** (README → section 2).",
               "instagram": "…",
               "writers_archive": "…",
-              # NEW: advice for the podcasts
-              "podcasts": "check that each feed: address under sources.podcasts in config/site.yml still opens "
-                          "in a browser.",
+              # NEW: advice for the YouTube videos
+              "youtube": "check that the channel id under sources.youtube in config/site.yml still opens "
+                         "youtube.com/channel/<id> in a browser.",
           }
 ```
 
