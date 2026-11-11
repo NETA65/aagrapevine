@@ -1,7 +1,7 @@
 {
  "source": "manual_events",
- "updated": "2026-11-11T08:58:38Z",
- "attempted": "2026-11-11T08:58:38Z",
+ "updated": "2026-11-11T13:50:55Z",
+ "attempted": "2026-11-11T13:50:55Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -708,7 +708,7 @@
    "kind": "event",
    "url": "https://neta65.org/event/grapevine-writing-workshop-6/",
    "title": "Grapevine Writing Workshop — Arlington",
-   "summary": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. A hybrid workshop: come in person or join on Zoom (meeting ID 949 476 7497, passcode neta65).",
+   "summary": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. It was a hybrid workshop: in person and on Zoom.",
    "lang": "en",
    "date": "2026-10-03T19:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
@@ -725,25 +725,24 @@
     "end": "2026-10-03T22:00:00Z",
     "all_day": false,
     "location": "Primary Purpose Group – Arlington, 1802 West Division Street, Arlington, TX 76012",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
+    "online_url": null,
     "flyer_url": "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/view",
     "flyer_thumb": null,
     "city": "Arlington",
     "state": "TX",
-    "body_md": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. A hybrid workshop: come in person or join on Zoom (meeting ID 949 476 7497, passcode neta65).",
+    "body_md": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. It was a hybrid workshop: in person and on Zoom.",
     "slug": "2026-10-03-gv-writing-workshop-arlington",
     "file": "content/events/2026-10-03-gv-writing-workshop-arlington.md",
     "confirmed": true,
-    "meeting_id": "949 476 7497",
     "own_i18n": {
      "title": {
       "es": "Taller de Escritura de Grapevine (en inglés) — Arlington"
      },
      "summary": {
-      "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Es un taller híbrido: ven en persona o conéctate por Zoom (ID de reunión 949 476 7497, código de acceso neta65)."
+      "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Fue un taller híbrido: en persona y por Zoom."
      },
      "body_md": {
-      "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Es un taller híbrido: ven en persona o conéctate por Zoom (ID de reunión 949 476 7497, código de acceso neta65)."
+      "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Fue un taller híbrido: en persona y por Zoom."
      }
     }
    }

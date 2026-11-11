@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-11T08:43:08Z",
+ "updated": "2026-11-11T13:51:20Z",
  "fixture": false,
  "items": [
   {
@@ -128,7 +128,7 @@
    "id": "ev:committee:2026-11-18",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required.",
    "lang": "en",
@@ -462,7 +462,7 @@
    "id": "ev:committee:2026-12-16",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required.",
    "lang": "en",
@@ -676,7 +676,7 @@
    "id": "ev:committee:2027-01-20",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Rick W. — “Grapevine as a Twelfth Step tool: how it helps new Grapevine representatives and carries the message in Public Information, Cooperation with the Professional Community, Corrections and Treatment”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
@@ -958,7 +958,7 @@
    "id": "ev:committee:2027-02-17",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Jeannie M. — “Grapevine and La Viña as Public Information tools”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
@@ -1251,7 +1251,7 @@
    "id": "ev:committee:2027-03-17",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Greg G. — “Anonymity in a digital world: AA’s online doorways and proposals that may reach the 77th Conference”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
@@ -1614,7 +1614,7 @@
    "id": "ev:committee:2027-04-21",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Courtney S. — “The meeting in print in a digital age: what members want from Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
@@ -1787,7 +1787,7 @@
    "id": "ev:committee:2027-05-19",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Debra L. — “Fresh from the 77th Conference: what the Service Manual, Final Report and Charter offer our Grapevine and La Viña representatives”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
@@ -1901,7 +1901,7 @@
    "id": "ev:committee:2027-06-16",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather L. — “Report from the chair’s seat: the 77th Conference Committee on Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
@@ -2155,7 +2155,7 @@
    "id": "ev:committee:2027-07-21",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Luke B. — “Carrying the message behind the walls: Grapevine and La Viña for alcoholics in custody”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
@@ -2210,7 +2210,7 @@
    "id": "ev:committee:2027-08-18",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Kaitie S. — “From manuscript to meeting: how AA literature and Grapevine and La Viña books are made”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
@@ -2265,7 +2265,7 @@
    "id": "ev:committee:2027-09-15",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Corey D. — “Following the money: how Grapevine and La Viña pay their way, and how groups can help”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
@@ -2452,7 +2452,7 @@
    "id": "ev:committee:2027-10-20",
    "source": "committee",
    "kind": "event",
-   "url": "/meetings/",
+   "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
    "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather N. — “From district to Conference: how a Grapevine or La Viña idea becomes an agenda item”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
@@ -2498,6 +2498,61 @@
     "summary": {
      "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather N. — “From district to Conference: how a Grapevine or La Viña idea becomes an agenda item”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
      "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Heather N. — “Del distrito a la Conferencia: cómo una idea sobre Grapevine o La Viña llega a ser un punto de agenda”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:committee:2027-11-17",
+   "source": "committee",
+   "kind": "event",
+   "url": "/meetings/#committee-meeting",
+   "title": "NETA 65 Grapevine & La Viña Committee Meeting",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Chitra S. — “Who are we still missing? Reaching young, Spanish-speaking and culturally diverse alcoholics with a human touch”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "lang": "en",
+   "date": "2027-11-18T01:00:00Z",
+   "first_seen": null,
+   "image": null,
+   "tags": [
+    "committee"
+   ],
+   "category": "committee",
+   "status": "ok",
+   "extra": {
+    "start": "2027-11-18T01:00:00Z",
+    "end": "2027-11-18T02:00:00Z",
+    "all_day": false,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
+    "city": null,
+    "state": null,
+    "recurring": true,
+    "speaker": {
+     "name": "Chitra S.",
+     "position": {
+      "en": "Past delegate, Area 6 Northern Coastal California (Panel 75); past member of the Conference Committee on Public Information",
+      "es": "Ex delegada del Área 6 Costa Norte de California (Panel 75); ex miembro del Comité de la Conferencia sobre Información Pública"
+     },
+     "topic": {
+      "en": "Who are we still missing? Reaching young, Spanish-speaking and culturally diverse alcoholics with a human touch",
+      "es": "¿A quién nos falta llegar? Cómo llegar con calidez humana a los alcohólicos jóvenes, hispanohablantes y de culturas diversas"
+     }
+    },
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "NETA 65 Grapevine & La Viña Committee Meeting",
+     "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
+    },
+    "summary": {
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Chitra S. — “Who are we still missing? Reaching young, Spanish-speaking and culturally diverse alcoholics with a human touch”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Chitra S. — “¿A quién nos falta llegar? Cómo llegar con calidez humana a los alcohólicos jóvenes, hispanohablantes y de culturas diversas”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -2974,7 +3029,7 @@
    "kind": "event",
    "url": "https://neta65.org/event/grapevine-writing-workshop-6/",
    "title": "Grapevine Writing Workshop — Arlington",
-   "summary": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. A hybrid workshop: come in person or join on Zoom (meeting ID 949 476 7497, passcode neta65).",
+   "summary": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. It was a hybrid workshop: in person and on Zoom.",
    "lang": "en",
    "date": "2026-10-03T19:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
@@ -2990,28 +3045,26 @@
     "end": "2026-10-03T22:00:00Z",
     "all_day": false,
     "location": "Primary Purpose Group – Arlington, 1802 West Division Street, Arlington, TX 76012",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
+    "online_url": null,
     "flyer_url": "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/view",
     "flyer_thumb": null,
     "city": "Arlington",
     "state": "TX",
-    "body_md": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. A hybrid workshop: come in person or join on Zoom (meeting ID 949 476 7497, passcode neta65).",
+    "body_md": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. It was a hybrid workshop: in person and on Zoom.",
     "slug": "2026-10-03-gv-writing-workshop-arlington",
     "file": "content/events/2026-10-03-gv-writing-workshop-arlington.md",
     "confirmed": true,
-    "meeting_id": "949 476 7497",
     "own_i18n": {
      "title": {
       "es": "Taller de Escritura de Grapevine (en inglés) — Arlington"
      },
      "summary": {
-      "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Es un taller híbrido: ven en persona o conéctate por Zoom (ID de reunión 949 476 7497, código de acceso neta65)."
+      "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Fue un taller híbrido: en persona y por Zoom."
      },
      "body_md": {
-      "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Es un taller híbrido: ven en persona o conéctate por Zoom (ID de reunión 949 476 7497, código de acceso neta65)."
+      "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Fue un taller híbrido: en persona y por Zoom."
      }
     },
-    "platform": "Zoom",
     "past": true
    },
    "i18n": {
@@ -3020,12 +3073,12 @@
      "es": "Taller de Escritura de Grapevine (en inglés) — Arlington"
     },
     "summary": {
-     "en": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. A hybrid workshop: come in person or join on Zoom (meeting ID 949 476 7497, passcode neta65).",
-     "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Es un taller híbrido: ven en persona o conéctate por Zoom (ID de reunión 949 476 7497, código de acceso neta65)."
+     "en": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. It was a hybrid workshop: in person and on Zoom.",
+     "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Fue un taller híbrido: en persona y por Zoom."
     },
     "body_md": {
-     "en": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. A hybrid workshop: come in person or join on Zoom (meeting ID 949 476 7497, passcode neta65).",
-     "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Es un taller híbrido: ven en persona o conéctate por Zoom (ID de reunión 949 476 7497, código de acceso neta65)."
+     "en": "Learn how to write your story for Grapevine and La Viña, and hear from members who have been published. Hosted by the Primary Purpose Group in Arlington. It was a hybrid workshop: in person and on Zoom.",
+     "es": "Aprende a escribir tu historia para Grapevine y La Viña, y escucha a miembros que ya han sido publicados. En el Grupo Primary Purpose de Arlington. Fue un taller híbrido: en persona y por Zoom."
     }
    },
    "machine": [],

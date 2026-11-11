@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-11T08:59:00Z",
+ "updated": "2026-11-11T13:51:20Z",
  "fixture": false,
  "items": [
   {
@@ -163,7 +163,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
     ],
-    "modified_text": "12:57 am"
+    "modified_text": "5:37 am"
    },
    "i18n": {
     "title": {
@@ -222,7 +222,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
     ],
-    "modified_text": "12:57 am"
+    "modified_text": "4:23 am"
    },
    "i18n": {
     "title": {
@@ -369,7 +369,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r"
     ],
-    "modified_text": "11:20 pm"
+    "modified_text": "5:47 am"
    },
    "i18n": {
     "title": {
@@ -2485,16 +2485,14 @@
    "i18n": {
     "title": {
      "en": "February 2027 Committee Meeting - guest speaker",
-     "es": "Febrero de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de febrero de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -2547,16 +2545,14 @@
    "i18n": {
     "title": {
      "en": "October 2027 Committee Meeting - guest speaker",
-     "es": "Octubre de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de octubre de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -2609,16 +2605,14 @@
    "i18n": {
     "title": {
      "en": "March 2027 Committee Meeting - guest speaker",
-     "es": "Marzo de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de marzo de 2027 - orador invitado"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -2671,16 +2665,14 @@
    "i18n": {
     "title": {
      "en": "April 2027 Committee Meeting - guest speaker",
-     "es": "Abril de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de abril de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -2851,16 +2843,14 @@
    "i18n": {
     "title": {
      "en": "September 2027 Committee Meeting - guest speaker",
-     "es": "Septiembre de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de septiembre de 2027 - orador invitado"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -2913,16 +2903,14 @@
    "i18n": {
     "title": {
      "en": "January 2027 Committee Meeting - guest speaker",
-     "es": "Enero de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de enero de 2027 - orador invitado"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -2975,16 +2963,14 @@
    "i18n": {
     "title": {
      "en": "June 2027 Committee Meeting - guest speaker",
-     "es": "Junio de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de junio de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -3037,16 +3023,14 @@
    "i18n": {
     "title": {
      "en": "May 2027 Committee Meeting - guest speaker",
-     "es": "Mayo de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de mayo de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -3099,16 +3083,14 @@
    "i18n": {
     "title": {
      "en": "November 2027 Committee Meeting - guest speaker",
-     "es": "Noviembre de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de noviembre de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -3161,16 +3143,14 @@
    "i18n": {
     "title": {
      "en": "July 2027 Committee Meeting - guest speaker",
-     "es": "Julio de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de julio de 2027 - orador invitado"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -3222,16 +3202,14 @@
    "i18n": {
     "title": {
      "en": "2027 Guest Speaker Series - flyer",
-     "es": "2027 Serie de oradores invitados - flyer"
+     "es": "Ciclo de oradores invitados 2027 - volante"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -3284,16 +3262,14 @@
    "i18n": {
     "title": {
      "en": "December 2027 Committee Meeting - guest speaker",
-     "es": "Diciembre de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de diciembre de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -3345,16 +3321,14 @@
    "i18n": {
     "title": {
      "en": "Our online meetings - flyer",
-     "es": "Nuestras reuniones en línea - flyer"
+     "es": "Nuestras reuniones en línea - volante"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -3407,16 +3381,14 @@
    "i18n": {
     "title": {
      "en": "August 2027 Committee Meeting - guest speaker",
-     "es": "Agosto de 2027 reunión del Comité - altavoz invitado"
+     "es": "Reunión del comité de agosto de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-02T12:00:00Z"
   },
@@ -3468,7 +3440,7 @@
    "i18n": {
     "title": {
      "en": "Grapevine Meeting - flyer",
-     "es": "Grapevine Meeting - flyer"
+     "es": "Reunión de Grapevine (en inglés) - volante"
     },
     "summary": {
      "en": "",
@@ -3527,7 +3499,7 @@
    "i18n": {
     "title": {
      "en": "Committee Meeting - flyer",
-     "es": "Committee Meeting - flyer"
+     "es": "Reunión del comité - volante"
     },
     "summary": {
      "en": "",
@@ -4812,7 +4784,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-28T12:00:15Z"
   },
   {
@@ -4856,7 +4828,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-28T11:30:15Z"
   },
   {
@@ -4900,7 +4872,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-28T11:30:15Z"
   },
   {
