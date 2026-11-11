@@ -62,7 +62,8 @@ CALM = (r"(?i)!|¡|\bjust\b|\bpor solo\b|\bsolo \$|hurry|prisa|ap[uú]rate|don.t
         r"limited time|tiempo limitado|\bnow\b|\bahora\b|\bsave\b|ahorr|lock in|before (?:the )?(?:new )?prices?|"
         r"before january|ahead of|in time (?:for|before)|antes de que|antes de (?:l[oa]s? )?(?:nuev[oa]s? )?precios?|"
         r"antes del? (?:1 de )?enero|a tiempo|while (?:today.s|the current|these|current) prices|mientras (?:duren|sigan)|"
-        r"good time|buen momento|take advantage|aprovech|"
+        r"good time|buen momento|take advantage|aprovech|hoy mismo|\btoday\b(?!.s prices)|(?<!precios de )\bhoy\b|"
+        r"\btonight\b|esta noche|\bsoon\b|pronto|\bquick|r[aá]pido|"
         r"renew|renov|\bcode\b|c[oó]digo|minimum|m[ií]nimo|international|internacional|\bstack|combines with|"
         r"se combina con|trackingcode|%|percent|por ciento")
 # The price change in words: what the gift-offer and free-shipping sections never mention (they stand beside the price

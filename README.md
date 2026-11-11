@@ -580,9 +580,9 @@ breaks while you decide.
   `/shop/#offers-holiday-gifts-2026`). Grapevine's December 31 is the chair's (its page and e-mails give no end
   date; La Viña's e-mails say December 31). The old posts' links (`/bulletin/#2026-10-01-…`, `#2026-11-02-…`) now
   open the bulletin at its top, where this post is first; it is in the e-mail of December 1 when it goes up by
-  November 30 (the e-mail counts a post in the month it first shows: one that first shows in December is in no
-  e-mail, since it is gone before January 1's — then also set its `date:` to the day it goes up), and leaves by itself
-  after December 31 (`2027-01-01-new-prices-in-effect.md` takes over on January 1).
+  November 30, so merge it in November (the e-mail counts a post in the month it first shows: one that first shows
+  in December is in no e-mail, since it is gone before January 1's), and it leaves by itself after December 31
+  (`2027-01-01-new-prices-in-effect.md` takes over on January 1).
 - **What's New:** the words ("New since your last visit", "New for you", "Mark all as read", "Forget my last
   visit"), the 30-minute "visit" rule, and the green label.
 - **Agenda & minutes (committee meeting deck):** the reminder's Spanish paragraph ("La reunión es en inglés" —
@@ -976,10 +976,10 @@ meeting's Google Meet room:
 ### La Viña's weekly open meeting
 
 `lavina_weekly_open:` in `config/site.yml` holds La Viña's weekly open meeting (from its official flyer —
-there is no page of the meeting to read; La Viña's podcast page, www.aalavina.org/podcast, describes it): Spanish
+La Viña's page for it, www.aalavina.org/podcast, is its podcast's, and nothing is read from it): Spanish
 and English title and summary, `day`, `time` + `timezone` (the meeting's own time zone; the site also shows
-Central time), `starts` (the first meeting, which must be on that `day`), `zoom_id` and `passcode`. When La Viña
-publishes a page for it, put the address in `url`. Set `enabled: false` (or delete the block) to take it off the
+Central time), `starts` (the first meeting, which must be on that `day`), `zoom_id` and `passcode`, and `url`: its page
+(`https://www.aalavina.org/podcast`, the card's **Details on aalavina.org**). Set `enabled: false` (or delete the block) to take it off the
 site. Its recordings are a podcast of their own, the show `lvo` under `sources.podcasts` (`weekly_open: "lavina"`):
 its card on `/meetings/` links them (**Listen to past meetings**), and their show card on `/listen/` says the
 meeting's day and language ([how-to §3.4](how-to/automatic-sources.md#34-podcasts)).
