@@ -621,7 +621,7 @@ slides:
         items: ["A line from a member's story", "Every morning, by email"]
       - heading: "Podcasts"
         accent: "vine"
-        items: ["Talks with members, on Mondays", "The weekly open meeting"]
+        items: ["Talks with members, on Mondays", "The weekly open meetings, in English and in Spanish"]
       - heading: "YouTube"
         accent: "vine"
         items: ["Members' audio stories, by topic", "Service videos and ASL videos"]
@@ -632,7 +632,7 @@ slides:
     minutes: 1.5
     version_minutes: { visit: 1 }
     notes: |
-      SAY: Four free things anyone can use today. The Daily Quote, and in Spanish the {lang:es}Cita Diaria{/lang}: a short line from a published story, in your email every morning, and on each magazine's home page, where you sign up. Podcasts: the AA Grapevine podcast, the Half-Hour Variety Hour, is a relaxed conversation with a member, like the meeting after the meeting, with new episodes on Mondays, and the weekly open meeting is published as a podcast too. On YouTube, the AA Grapevine and La Viña channel has members' audio stories by topic, short service videos, and videos in American Sign Language. And on Instagram both magazines post often; La Viña also has a WhatsApp news channel. None of these needs a subscription, so they're easy to share: one link in your home group's text chain.
+      SAY: Four free things anyone can use today. The Daily Quote, and in Spanish the {lang:es}Cita Diaria{/lang}: a short line from a published story, in your email every morning, and on each magazine's home page, where you sign up. Podcasts: the AA Grapevine podcast, the Half-Hour Variety Hour, is a relaxed conversation with a member, like the meeting after the meeting, with new episodes on Mondays, and both weekly open meetings are published as podcasts too: Grapevine's in English and La Viña's in Spanish. On YouTube, the AA Grapevine and La Viña channel has members' audio stories by topic, short service videos, and videos in American Sign Language. And on Instagram both magazines post often; La Viña also has a WhatsApp news channel. None of these needs a subscription, so they're easy to share: one link in your home group's text chain.
       IF TIME, ASK: Who already gets the Daily Quote? How do you use it?
       FACILITATOR TIP: These are the official channels of AA Grapevine, Inc. We name the platforms only so people can find them; the committee doesn't endorse any app or service.
       SOURCES: aagrapevine.org (#quote-of-the-day); aagrapevine.org/podcasts; aagrapevine.org/audio-portal; P-52 (2026), p. 10; GSO, Accessibility Resources (Oct. 2025); La Viña News, Sept.–Oct. 2026.
@@ -669,7 +669,7 @@ slides:
     notes: |
       SAY: Grapevine now holds an open AA meeting every week on Zoom: {live:gv_open_meeting}. There's a host and two speakers, and it's recorded to make a podcast; Grapevine says the podcast respects anonymity. It began in February 2026. According to La Viña's flyer, La Viña holds its own weekly open meeting, in Spanish, the {lang:es}Reunión Abierta de La Viña{/lang}: {live:lv_open_meeting}. Two members share each week, and it's recorded as a podcast too. The Zoom room is on the slide. These are open meetings: anyone may attend, including a newcomer, or a member who can't get to a meeting that day.
       ASK THE ROOM: Who could you tell about these meetings this week?
-      DO: The days, the times and the Zoom room stay current by themselves: they are the ones on our page {live:site}/meetings/#weekly-open. Before each workshop, check aagrapevine.org/grapevine-weekly-open, and look on aalavina.org for a page about La Viña's meeting (there was none on Oct. 1, 2026; it was known only from the flyer). If an official page exists now, cite it instead of the flyer ({ui:customize} → {ui:edit}).
+      DO: The days, the times and the Zoom room stay current by themselves: they are the ones on our page {live:site}/meetings/#weekly-open. Before each workshop, check aagrapevine.org/grapevine-weekly-open and La Viña's page for its meeting, aalavina.org/podcast (checked November 11, 2026: the meeting and its recordings).
       FACILITATOR TIP: These meetings are recorded. Anyone who shares at them should know that.
       SOURCES: aagrapevine.org/grapevine-weekly-open (read Oct. 1, 2026); La Viña's flyer '{lang:es}Nueva reunión abierta de La Viña{/lang}' (2026), which gives Nov. 5, 2026 as the first meeting; the committee's meetings data.
       {not:late,visit} TRANSITION: Here's where to find all the free things.

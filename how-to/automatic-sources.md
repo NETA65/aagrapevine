@@ -1371,7 +1371,7 @@ lavina_weekly_open:
   passcode: "238047"
   summary_es: "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores, … ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
   summary_en: "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers, … Let's keep extending this powerful lifeline together!"
-  url: ""                       # La Viña's page for the meeting, once there is one (shows "Details on aalavina.org")
+  url: "https://www.aalavina.org/podcast"   # La Viña's page for it: the card's "Details on aalavina.org" — exactly so, no "/" at the end
   source: "Official La Viña flyers (November 2026, and a newer one without a month), shared with the committee"
   flyer_match: "reuni[oó]n abierta de la vi[nñ]a|la vi[nñ]a open meeting"
 ```
