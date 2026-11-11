@@ -347,7 +347,8 @@ class Paperwork(unittest.TestCase):
 
 # A line that says the committee meeting has a guest speaker every month must say from when
 CLAIM = re.compile(r"(?i)guest speaker each month|(?:each|every) meeting opens with a guest speaker|a guest speaker first|"
-                   r"with a guest speaker\"|primero la charla|cada reunión empieza con")
+                   r"with a guest speaker\"|a guest speaker, then|primero la charla|cada reunión empieza con|"
+                   r"primero habla un\(a\) orador")
 
 
 class Wording(unittest.TestCase):
