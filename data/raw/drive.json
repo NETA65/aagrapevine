@@ -1,11 +1,11 @@
 {
  "source": "drive",
- "updated": "2026-11-11T08:42:45Z",
- "attempted": "2026-11-11T08:42:45Z",
+ "updated": "2026-11-11T08:53:41Z",
+ "attempted": "2026-11-11T08:53:41Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 15,
+  "added": 1,
   "removed": 0,
   "held": 0
  },
@@ -27,13 +27,13 @@
   "loose_skipped": 8,
   "skipped_panels": [],
   "folders": 11,
-  "files": 60,
-  "fetched": 60,
-  "new": 15,
+  "files": 61,
+  "fetched": 61,
+  "new": 1,
   "removed": 0,
   "kept_unverified": 0,
   "by_category": {
-   "flyers": 31,
+   "flyers": 32,
    "booth": 15,
    "reports": 4,
    "slides": 4,
@@ -43,7 +43,7 @@
    "workshops": 1
   },
   "by_kind": {
-   "photo": 42,
+   "photo": 43,
    "document": 12,
    "slides": 4,
    "announcement": 1,
@@ -973,6 +973,54 @@
     ],
     "modified_text": "Nov 2",
     "event_month": "2027-05"
+   }
+  },
+  {
+   "id": "drive:1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
+   "title": "November 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-11T08:53:41Z",
+   "last_seen": "2026-11-11T08:53:41Z",
+   "image": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+    "mime": "image/png",
+    "name": "November 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
+    "preview_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Nov 2",
+    "event_month": "2027-11"
    }
   },
   {

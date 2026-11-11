@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-11T08:43:08Z",
+ "updated": "2026-11-11T08:54:03Z",
  "fixture": false,
  "items": [
   {
@@ -2802,6 +2802,68 @@
     "title": {
      "en": "May 2027 Committee Meeting - guest speaker",
      "es": "Mayo de 2027 reunión del Comité - altavoz invitado"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-02T12:00:00Z"
+  },
+  {
+   "id": "drive:1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
+   "title": "November 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-11T08:53:41Z",
+   "image": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+    "mime": "image/png",
+    "name": "November 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
+    "preview_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Nov 2",
+    "event_month": "2027-11"
+   },
+   "i18n": {
+    "title": {
+     "en": "November 2027 Committee Meeting - guest speaker",
+     "es": "Noviembre de 2027 reunión del Comité - altavoz invitado"
     },
     "summary": {
      "en": "",
@@ -7242,50 +7304,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-18T12:00:00Z"
-  },
-  {
-   "id": "ig:DeolEKMF5Ag",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeolEKMF5Ag/",
-   "title": "“Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas…",
-   "summary": "“Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas en que las aplicamos a nosotros mismos, a AA en su totalidad y a nuestras relaciones con el mundo que nos rodea. Podemos seguir perfeccionando ‘la práctica de estos principios en todos nuestros asuntos’”. \"“Una perspectiva del porvenir” BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am Responsible\" Cita…",
-   "lang": "es",
-   "date": "2026-10-18T11:30:15Z",
-   "first_seen": "2026-10-18T12:07:19Z",
-   "image": "/assets/cache/ig/DeolEKMF5Ag.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeolEKMF5Ag",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DeolEKMF5Ag.webp",
-    "embed_url": "https://www.instagram.com/p/DeolEKMF5Ag/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeolEKMF5Ag/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Although we do not have to modify our truths, we can certainly improve the … forms",
-     "es": "“Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas…"
-    },
-    "summary": {
-     "en": "“Although we do not have to modify our truths, we can certainly improve the ways in which we apply them to ourselves, to AA in its entirety and to our relations with the world around us. We can continue to perfect ‘the practice of these principles in all our affairs’.” \"A Perspective of the Future\" BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am Responsible...",
-     "es": "“Aunque no tenemos que modificar nuestras verdades, sin duda podemos mejorar las formas en que las aplicamos a nosotros mismos, a AA en su totalidad y a nuestras relaciones con el mundo que nos rodea. Podemos seguir perfeccionando ‘la práctica de estos principios en todos nuestros asuntos’”. \"“Una perspectiva del porvenir” BILL W., COFUNDADOR DE AA, FEBRERO DE 1961 De I Am Responsible\" Cita…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-18T11:30:15Z"
   }
  ]
 }
