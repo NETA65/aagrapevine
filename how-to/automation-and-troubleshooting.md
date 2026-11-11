@@ -1659,7 +1659,10 @@ In `.github/workflows/update.yml`:
 - **One podcast show:** job `sync` → step *Write run summary* → search `podcasts:{key}`. The podcasts source stays
   ok while at least one show was read (`scripts/sync/podcasts.py`); a show whose feed fails is a warning on the run
   page every run and, after `STALE_DAYS` without a good read (`stats.shows[key].updated`, else its
-  `failing_since`), joins the stale list. Tested by `tests/test_r25_lavina_podcast.py` (`RunSummaryShows`).
+  `failing_since`), joins the stale list — also in a run where every show failed (the source failed, but its own
+  last good read is recent), so one bad day of the feeds' host does not close the issue; only when the podcasts
+  source itself is in the list is the show left out (the source's line says it all). Tested by
+  `tests/test_r25_lavina_podcast.py` (`RunSummaryShows`).
 - **The title:** job `report` → search `TITLE = "A content source has stopped updating"`. If you change it, close
   the old issue by hand: the job finds its issue by the exact title.
 - **The other issue of the same job,** "The website update keeps failing" (8.4), is its second step, *Open, update

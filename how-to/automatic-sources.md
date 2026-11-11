@@ -542,23 +542,28 @@ description that says it is the meeting's — "del …", "held on …" —, neve
 and whether the title is only the show's name (`extra.generic_title`). The site then calls that episode **Meeting of
 November 5, 2026** / *Reunión del 5 de noviembre de 2026* — on `/listen/`, Home, What's New, `/digest/` and in the
 monthly e-mail; *La Viña Open Meeting, November 5, 2026* in the RSS feed and the search —; with no date found, the
-title and its number ("…, episodio 2"). A title of its own (a special) stays as it is.
+title and its number ("…, episodio 2", in the e-mail too). A title of its own (a special) stays as it is. Home leaves
+the date out of a row whose title already names it ("Meeting of …"), never out of one whose title does not.
 
 **When one show's feed fails.** The other shows still update and the source stays **OK** on `/status/`, which names
 the show that could not be read and when it was last read ("Not read in the last update: …"); the run summary lists
 it under **Notes**, and the run page shows a warning. Its episodes stay on the site. If it keeps failing for 7 days
 it is reported like a source that stopped updating, as "Podcasts — <show>", in the issue *A content source has
-stopped updating* (which closes by itself once it answers again). Only every show failing makes the source fail.
+stopped updating* (which closes by itself once it answers again — not on a day when every show fails). Only every
+show failing makes the source fail.
 
 **Where it shows.** `/listen/` · `/es/listen/` (one group per show, in your settings' order; the newest
-24 episodes are on the page, the rest load from `/episodes-index.json`; one shared player). Home
+24 episodes are on the page, the rest load from `/episodes-index.json`; one shared player). Its **Latest episode** is
+the newest one; among one day's episodes the one in the page's language comes first, then your settings' order —
+AA Grapevine's Podcast and La Viña's open meeting both come out on Mondays, so on that day `/listen/` features AA
+Grapevine's and `/es/listen/` La Viña's (and the episode list is in that order too). Home
 *Listen & Watch*: the **featured** episode is the newest episode of the **first** show in your list if
 it is no more than 30 days older than the newest episode overall, otherwise the newest episode; then 3
 more, with every show represented. What's New and the RSS feed (with the audio attached), `/digest/` and
 the monthly e-mail (each weekly open meeting's episodes get their meeting's label), search. `/meetings/#weekly-open`:
 each meeting's card links its show's episodes (**Listen to past meetings**). With shows in both languages, `/listen/`
 gets language chips, a language label on every row and on every show card, and the note "Each show is in its own
-language". The booth display (`/about/#booth`): the 6 newest episodes of AA Grapevine's podcast (never the weekly
+language"; on Home an episode in the other language has the same label ("ES" / "EN"). The booth display (`/about/#booth`): the 6 newest episodes of AA Grapevine's podcast (never the weekly
 open meetings' recordings), played from the podcast's host only while the booth's sound is on.
 
 Since October 2026 **every episode has its own address**, `/listen/?ep=<id>` (for example
@@ -598,7 +603,9 @@ on `/listen/`. It takes effect at the next run (any kind).
 **Translations.** Episode titles and summaries are machine-translated. A tail like
 "[Season 2, Episode 14]" is translated on its own (by rule), so an override for the title *without* its
 tail still works — and it fixes that same title wherever it appears, for example on the episode's
-YouTube copy too.
+YouTube copy too. A show's description that carries its own translation in parentheses at its end (La Viña's:
+"Cada semana grabamos … pódcast. (Each week we record … podcast.)") is shown in each language as its writer gave
+it, without the other language's sentence, and needs no override.
 
 **Code pointers.** [`scripts/sync/podcasts.py`](../scripts/sync/podcasts.py) → `build_items` (each
 episode and its `extra`), `meeting_date`, `is_generic_title`, `show_meta` / `show_lang`, `failed_show` (one show's
@@ -676,7 +683,9 @@ Open's (playlist "Grapevine Weekly Open AA Meeting") and, since November 2026, L
 whose title names a weekly open meeting goes under the **Open meetings** chip with its own meeting's badge
 ("Grapevine Weekly Open" / "La Viña Open Meeting", by its language), and a playlist named like one counts as that
 type — it is neither in the playlist menu nor among the Spoken stories. A new playlist is picked up by the weekly
-complete listing.
+complete listing. La Viña's copies keep YouTube's own title, which is the show's name each week ("Reunión abierta
+semanal … [Temporada 1, Episodio 1]"): on `/watch/` they are told apart by their number badge ("T1 · E1") and their
+date, not by a "Meeting of …" title as the podcast's episodes on `/listen/` are.
 
 #### Pick the videos in the three hand-picked spots
 

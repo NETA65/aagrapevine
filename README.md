@@ -65,7 +65,7 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   de AA Grapevine y compartimos sobre su tema), en `/es/meetings/#grapevine-meeting`. Los oradores del año (nombre e inicial del
   apellido, servicio y tema) están en `config/site.yml` → `meeting:` → `speakers:`. La **reunión
   abierta semanal de La Viña** (jueves, en español) está en `/es/meetings/#weekly-open`; sus grabaciones son
-  un podcast propio, en `/es/listen/` junto a las de la de Grapevine (miércoles, en inglés), y cada episodio lleva la
+  un podcast propio, en `/es/listen/` junto a las de la reunión de Grapevine (miércoles, en inglés), y cada episodio lleva la
   fecha de su reunión («Reunión del 5 de noviembre de 2026»). La página
   **Reuniones** (`/es/meetings/`) también reúne las **reuniones de Grapevine** de los grupos de AA de nuestra
   Área y de las áreas cercanas (de las 8 listas de reuniones que usa la página del Grupo Rowlett). Arriba, la
@@ -2591,7 +2591,7 @@ Nothing to set up: everything here builds itself from the podcast and YouTube sy
   only that playlist (`/es/watch/?pl=<playlist id>#videos`), and **See all of La Viña's videos** opens Watch with
   La Viña's videos only (`/es/watch/?lang=es#videos`); a video plays (from YouTube's privacy-enhanced player) only
   when it is tapped. Two more lines lead to La Viña's open meeting (Meetings — and its recordings, the show
-  further down the page: **Listen to past meetings**) and to the story recorder. The playlists keep La Viña's own
+  on the same page: **Listen to past meetings**) and to the story recorder. The playlists keep La Viña's own
   Spanish titles on both pages, and the card says "videos", never "podcast" (La Viña's podcast is its open
   meeting's, a show of its own). A Spanish
   playlist is listed once it has at least 3 videos that are not Shorts (the apps' how-to Shorts and the "Weekly
