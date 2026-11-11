@@ -74,6 +74,15 @@ PRICE_WORDS = (r"(?i)january|enero|2027|\$39|\$19\.50|\$34|\$17\.00|\bprices\b|\
 OFFERS_LAST_DAY = r"December 31|31 de diciembre|diciembre|December"
 
 
+# The opening's second paragraph: the gift offers' prices (the e-mail of December 1 shows the opening)
+PRICES = {
+    "en": "The holiday gift offers: with a 1-year print subscription, for yourself or as a gift ($36.00 at Grapevine, "
+          "$18.00 at La Viña), a second one as a gift is $16.00 at Grapevine and $8.00 at La Viña.",
+    "es": "Las ofertas de regalo: con una suscripción impresa de 1 año, para ti o para regalar ($18.00 en La Viña, $36.00 "
+          "en Grapevine), una segunda como regalo cuesta $8.00 en La Viña y $16.00 en Grapevine.",
+}
+
+
 # What the post says about combining: AA Grapevine's words only, of its two offers (the opening), of its gift offer
 # and of its free shipping (their sections) — nothing else, and never that free shipping and the gift offer combine
 COMBINING = {
@@ -178,6 +187,10 @@ class Bulletin(unittest.TestCase):
         self.assertIn(COMBINING["es"][0], self.parts["es"][0])
         self.assertIn("GVRs and RLVs", self.parts["en"][0])
         self.assertIn("RLV y GVR", self.parts["es"][0])
+        # the gift offers' prices in the opening's second paragraph (the committee, 2026-11-11: the e-mail of December
+        # 1, which shows the opening, gives them too) — prices only, no percentage
+        self.assertEqual(self.parts["en"][0].split("\n\n")[1], PRICES["en"])
+        self.assertEqual(self.parts["es"][0].split("\n\n")[1], PRICES["es"])
 
     def test_only_aa_grapevines_words_on_combining(self):
         # AA Grapevine says it of its two offers (the gift offer, free shipping), and the post says only that: never
@@ -312,6 +325,11 @@ class Bulletin(unittest.TestCase):
             self.assertTrue(cut)
             self.assertEqual(short, self.parts[lang][0], lang)
             self.assertNotRegex(short.rstrip().rsplit("\n", 1)[-1], r"^#", "it does not end with a heading")
+            # the text half (600 characters): the opening's first three paragraphs, the gift prices among them
+            text, cut = SDM.md_excerpt(self.body[lang], 600)
+            self.assertTrue(cut)
+            self.assertEqual(text, "\n\n".join(self.parts[lang][0].split("\n\n")[:3]), lang)
+            self.assertIn(PRICES[lang], text)
 
     def test_on_the_booth(self):
         # the booth's bulletin slide: the title and the first paragraph in each language, whole; no refused word

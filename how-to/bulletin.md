@@ -592,12 +592,13 @@ What happens: `/es/bulletin/#2026-11-11-holiday-gift-offers-free-shipping-and-ne
 headline and the `summary_es` text exactly as written (paragraphs, headings and lists kept), with no
 "Auto-translated" note and no "Show original" box. Both texts have the same three headings, so a computer screen
 lists them as **In this post**, and each section's link (`…#2026-11-11-holiday-gift-offers-free-shipping-and-new-prices--free-shipping`)
-is the same on both pages. The `/shop/#…` links open `/es/shop/#…` on the Spanish page. The text opens with three short
-paragraphs before the first heading — about 450 characters, its first sentence under 140 and its first paragraph
-under 280 —, so what the other places show is that opening, never a heading run into it: the Spanish teaser (home
+is the same on both pages. The `/shop/#…` links open `/es/shop/#…` on the Spanish page. The text opens with four short
+paragraphs before the first heading — about 690 characters, its first sentence under 140 and its first paragraph
+under 280; the second gives the gift offers' prices —, so what the other places show is that opening, never a heading run into it: the Spanish teaser (home
 card, What's New, the feed) is the first 400 characters of `summary_es` without the Markdown marks, Share sends the
 first 140 characters (the whole first sentence and the start of the next), the booth the first paragraph. The text is longer than 700 characters, so the home card shows a
-320-character teaser and "Read more", and the e-mail the opening's paragraphs and "Details →". Pinned, so it comes
+320-character teaser and "Read more", and the e-mail the opening's paragraphs — the gift offers' prices among them — and "Details →" (the HTML
+half the whole opening, the text half its first three paragraphs: 600 characters). Pinned, so it comes
 first on the bulletin, on the home page and in the digest (What's New and the feed keep their date order); shown
 through December 31, 2026; in the November 2026 digest (sent December 1) when it goes up by November 30 — the
 digest counts a post in the month it first shows, and this one is gone before the January 1 e-mail.

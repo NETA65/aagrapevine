@@ -568,8 +568,9 @@ breaks while you decide.
   and La Viña's holiday gift offers: with a 1-year print subscription ($36.00 / $18.00), for yourself or as a gift,
   a second 1-year print subscription as a gift for $16.00 / $8.00, through December 31, 2026, for U.S. and Canadian
   addresses, on each store's page (`https://www.aagrapevine.org/2gifts` — exactly so: with a `/` at the end it opens
-  a dead page —, `https://www.aalavina.org/2regalos`, and their pages for Canada). A short opening names the three,
-  then one section each; the offers and the price change stay apart, as facts (never "before prices go up"). The
+  a dead page —, `https://www.aalavina.org/2regalos`, and their pages for Canada). A short opening names the three
+  and gives the gift offers' prices (so the e-mail of December 1, which shows the opening, has them too), then one
+  section each; the offers and the price change stay apart, as facts (never "before prices go up"). The
   Shop shows the gift offers under free shipping (`/shop/#offers-holiday-gifts-2026`, `config/site.yml` →
   `store_offers:` `holiday-gifts-2026`): "Through December 31, 2026" — the stores give no first day —, each store's
   button to its offer page and a link to its page for Canada, no banner. Please read the words in both languages.
