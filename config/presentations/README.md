@@ -287,7 +287,7 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `meeting_url` | https://meet.google.com/rva-tmst-vdb — the same link in full, for an e-mail | "see the Meetings page" |
 | `meeting_code` | rva-tmst-vdb — what the Google Meet app asks for (a Zoom meeting's ID, kept on one line) | — |
 | `meeting_zoom_id`, `meeting_passcode` | the older names: the meeting code (or Zoom ID), and a passcode (empty on Google Meet) | — |
-| `meeting_phone` | +1 346 248 7799 (Houston) — Zoom's dial-in number for joining by phone (the first of `phone_access:`); a Google Meet room has no number to call | "see the Accessibility page" |
+| `meeting_phone` | empty on Google Meet: a Google Meet room has no number to call, so a slide says "see the Accessibility page". A Zoom meeting's is Zoom's dial-in number for joining by phone, with its city (the first of `phone_access:`) | "see the Accessibility page" |
 | `meeting_phone_passcode` | what a caller types as the passcode: the chair's numbers-only phone passcode in `phone_access:` (or the meeting's passcode, when it is numbers only). Empty until it is set there, and for a Google Meet room | — |
 | `speaker_name` | Rick W. — the guest speaker of `meeting_day`'s meeting, moving on with it at midnight; "none tonight" for a meeting with no guest speaker (November 18, 2026) | "to be announced" |
 | `speaker_position` | Past delegate, Area 65 Northeast Texas (Panel 73); … — their service position ("the Meetings page lists no guest speaker for this meeting" without a speaker) | "to be announced" |

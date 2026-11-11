@@ -13,7 +13,11 @@ and an event that is over in the calendar files.
     page, /meetings/, the month pages and their calendar files, the search index, the booth's /about/booth.json, the
     presentations' JSON) from data in which the October 3 workshop still has it, as events.json had it — the event
     moved to ten days ago, so the calendar files still keep it on any day this runs. (It judges the committee's
-    files too: scripts/ops/gate_tests.py CONTENT_TESTS.)
+    files too: scripts/ops/gate_tests.py CONTENT_TESTS.) Its meeting ID however it is written, its link with any
+    password token, its passcode — and its phone number, +1 346 248 7799, in the settings and content, README.md,
+    docs/ and those pages: Zoom's Houston number is AA Grapevine's weekly open meeting's too, whose numbers stay
+    (config/site.yml phone_access:). Never the committee's address or sites (grapevine@neta65.org, neta65.org,
+    neta65.github.io): test_the_scan_itself.
     One PICTURE shows it, which no text test reads: the workshop's flyer, on our Drive (flyers folder, file
     1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu: "Zoom Meeting ID … / Passcode …" in large type). The owner keeps that flyer
     on purpose (2026-11-11: "do not make arlington flyer private"): it stays on the Drive, on /portfolio/ and on its
@@ -41,10 +45,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))     # nodejs.py
 
 from nodejs import node_path, run_js  # noqa: E402
 
-# The retired room, however it is written: "949 476 7497", "949-476-7497", "9494767497" (a Zoom link's), with
-# no-break spaces (the decks keep an ID on one line), and its link's password token; the passcode after its label.
-RETIRED_ID = re.compile(r"949[\s  .\-]*476[\s  .\-]*7497|ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09")
-RETIRED_PASSCODE = re.compile(r"(?i)(?:pass\s*code|c[oó]digo(?: de acceso)?|contrase[ñn]a|pwd)\W{0,3}neta65\b")
+# The retired room, however it is written: "949 476 7497", "949-476-7497", "9494767497" (a Zoom link's — with its
+# password token, whatever it is: "…/j/9494767497?pwd=…"), with no-break spaces (the decks keep an ID on one line);
+# the passcode after its label (never the committee's address or sites: grapevine@neta65.org, neta65.org,
+# neta65.github.io); and the room's phone number, Zoom's Houston dial-in (+1 346 248 7799).
+RETIRED_ID = re.compile(r"949[\s  .\-]*476[\s  .\-]*7497(?:\?pwd=[\w.\-]+)?")
+RETIRED_PASSCODE = re.compile(r"(?i)(?:pass\s*code|c[oó]digo(?: de acceso)?|contrase[ñn]a|pwd)\W{0,3}neta65\b(?![.@\-]\w)")
+RETIRED_PHONE = re.compile(r"(?<!\d)(?:\+?1[\s  .\-]?)?\(?346\)?[\s  .\-]*248[\s  .\-]*7799(?!\d)")
+# … but that number is Zoom's, not the room's alone: AA Grapevine's weekly open meeting (on Zoom, not ours) dials it
+# too, and its numbers stay (config/site.yml phone_access: — /accessibility/#phone, /offline/), so the documentation
+# of that setting and the code's examples name it. A text of ours about our meetings never does: the settings and
+# the content (but phone_access:), README.md, docs/ and the pages made from the events.
+PHONE_TOPS = ("content", "config", "docs")
 TEXT_SUFFIXES = {".md", ".yml", ".yaml", ".csv", ".json", ".js", ".mjs", ".cjs", ".njk", ".html", ".css", ".py",
                  ".txt", ".xml", ".svg", ".ics", ".webmanifest", ".sh", ".toml", ".ini"}
 
@@ -57,9 +69,15 @@ def plain(text: str) -> str:
     return re.sub(r"&nbsp;|&#160;|&#xa0;|\\u00a0", " ", text, flags=re.I)
 
 
-def finds(text: str) -> list[str]:
+def finds(text: str, phone: bool = True) -> list[str]:
     t = plain(text)
-    return [m.group(0) for rx in (RETIRED_ID, RETIRED_PASSCODE) for m in rx.finditer(t)]
+    return [m.group(0) for rx in (RETIRED_ID, RETIRED_PASSCODE) + ((RETIRED_PHONE,) if phone else ())
+            for m in rx.finditer(t)]
+
+
+def without_phone_access(text: str) -> str:
+    """config/site.yml without its top-level phone_access: block (the weekly open meeting's numbers: see above)."""
+    return re.sub(r"(?ms)^phone_access:.*?(?=^\S)", "", text)
 
 
 # --------------------------------------------------------------------------- an event that is over, in the calendars
@@ -235,7 +253,8 @@ def retired_room_event(now: datetime) -> dict:
         "category": "manual", "status": "ok",
         "extra": {"start": z(start), "end": z(end), "all_day": False,
                   "location": "Primary Purpose Group – Arlington, 1802 West Division Street, Arlington, TX 76012",
-                  "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
+                  # (its link's password token made up here: the scan finds the link by the room's digits)
+                  "online_url": "https://us02web.zoom.us/j/9494767497?pwd=MadeUpPwdToken0123456789",
                   "flyer_url": "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/view",
                   "flyer_thumb": None, "city": "Arlington", "state": "TX", "body_md": en,
                   "slug": "2026-10-03-gv-writing-workshop-arlington",
@@ -266,9 +285,38 @@ class TheRetiredRoom(unittest.TestCase):
         found = []
         for p in files:
             if p.is_file() and p.suffix.lower() in TEXT_SUFFIXES and p.resolve() != this:
-                for hit in finds(p.read_text(encoding="utf-8", errors="replace")):
-                    found.append(f"{p.relative_to(ROOT).as_posix()}: {hit}")
-        self.assertEqual(found, [], "the committee's retired Zoom room (949 476 7497, passcode neta65)")
+                rel = p.relative_to(ROOT).as_posix()
+                text = p.read_text(encoding="utf-8", errors="replace")
+                if rel == "config/site.yml":
+                    text = without_phone_access(text)
+                for hit in finds(text, phone=rel == "README.md" or rel.split("/")[0] in PHONE_TOPS):
+                    found.append(f"{rel}: {hit}")
+        self.assertEqual(found, [], "the committee's retired Zoom room (949 476 7497, passcode neta65, +1 346 248 7799)")
+
+    def test_the_scan_itself(self):
+        """What the scans catch — the room's ID however it is written, its link with any password token, its passcode
+        and its phone number — and what they never take for it: the committee's address and sites."""
+        nb, nnb = " ", " "
+        for text in ("Meeting ID: 949 476 7497", "949-476-7497", f"949{nb}476{nnb}7497", "zoom.us/j/9494767497",
+                     "https://us02web.zoom.us/j/9494767497?pwd=MadeUp.Token-123", "Passcode: neta65", "passcode neta65",
+                     "código de acceso: neta65", "Contraseña neta65", "?pwd=neta65", "+1 346 248 7799 (Houston)",
+                     "tel:+13462487799,,1234567890#", "(346) 248-7799", "1-346-248-7799", "13462487799",
+                     "ID 94\r\n 9 476 7497 (a folded calendar line)"):
+            with self.subTest(text=text):
+                self.assertTrue(finds(text), text)
+        link = finds("Join: https://us02web.zoom.us/j/9494767497?pwd=MadeUp.Token-123 (made up)")
+        self.assertEqual(link, ["9494767497?pwd=MadeUp.Token-123"])                   # its token with it
+        for text in ("grapevine@neta65.org", "Write to grapevine@neta65.org (passcode questions too)",
+                     "https://neta65.org/event/grapevine-writing-workshop-6/", "https://neta65.github.io/aagrapevine/",
+                     "Passcode: neta65.org", "contraseña: grapevine@neta65.org", "NETA 65", "neta65-gvlv",
+                     "Zoom 871 2036 8287, passcode 238047", "Meeting ID: 815 9593 1777", "+1 312 626 6799 (Chicago)",
+                     "934 6248 7799", "+1 346 248 77990"):
+            with self.subTest(text=text):
+                self.assertEqual(finds(text), [], text)
+        # the weekly open meeting's numbers (AA Grapevine's room) stay in the settings: only that block is skipped
+        site = "meeting:\n  online_url: x\nphone_access:\n  numbers:\n    - number: \"+1 346 248 7799\"\nlinks:\n  a: b\n"
+        self.assertEqual(without_phone_access(site), "meeting:\n  online_url: x\nlinks:\n  a: b\n")
+        self.assertTrue(finds(site.replace("online_url: x", "phone: +1 346 248 7799")))
 
     def test_the_arlington_workshop_names_its_place_only(self):
         text = (ROOT / "content" / "events" / "2026-10-03-gv-writing-workshop-arlington.md").read_text(encoding="utf-8")
