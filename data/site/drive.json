@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-10T19:40:02Z",
+ "updated": "2026-11-11T00:34:51Z",
  "fixture": false,
  "items": [
   {
@@ -411,6 +411,64 @@
    },
    "machine": [],
    "is_new": true
+  },
+  {
+   "id": "drive:19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk/view",
+   "title": "Grapevine Area Chair Meeting Report",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-11",
+   "first_seen": "2026-11-11T00:34:51Z",
+   "image": "https://lh3.googleusercontent.com/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk=w600",
+   "tags": [
+    "panel-77",
+    "pdf"
+   ],
+   "category": "reports",
+   "status": "ok",
+   "extra": {
+    "file_id": "19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk",
+    "mime": "application/pdf",
+    "name": "2026-10-11 Grapevine Area Chair Meeting Report.pdf",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "reports"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk/view",
+    "preview_url": "https://drive.google.com/file/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk",
+    "thumb_url": "https://lh3.googleusercontent.com/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": true,
+    "file_type": "PDF",
+    "folder_id": "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_url": "https://drive.google.com/drive/folders/1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r"
+    ],
+    "modified_text": "2:40 pm"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Area Chair Meeting Report",
+     "es": "Informe de la reunión de coordinadores de Área de Grapevine"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": false
   },
   {
    "id": "drive:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
