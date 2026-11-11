@@ -556,8 +556,8 @@ it shows:
   to its page for Canadian addresses beside it), then "The store shows the final price at checkout." and the source.
   The menu has no chip for it (a chip cannot come and go by date);
 - in the monthly toolkit, in each month the offer runs: a line in *Keep up all month* (this month's page) and in
-  the month's message (WhatsApp and e-mail: 📦, or 🎁 for an offer with `icon: gift`), both linking the offer's own
-  section, `/shop/#offers-<key>`.
+  the month's message (WhatsApp and e-mail; in WhatsApp its heading starts with 📦, or 🎁 for an offer with
+  `icon: gift`), both linking the offer's own section, `/shop/#offers-<key>`.
 
 The day after `ends` it is gone by itself — also on a page that is open, or saved for offline use — so there is
 nothing to switch off; the block may then be deleted. While a block is here, Home's *Shared by the committee*
