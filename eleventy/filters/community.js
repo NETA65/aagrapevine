@@ -13,7 +13,7 @@ import { buildWarning } from "../build-warnings.js";
 // langPath: our page in a language ("/es/events/"; a file only when the build writes it for that language too)
 import { safeUrl, TZ, langPath, pickLang } from "../../eleventy.config.js";
 // The monthly digest groups the committee's photos into the albums of /photos/ (the same anchors).
-import { ownLangs, chicagoDayEndMs, isPhotoItem, photoAlbumKey, photoAlbumSlugs } from "./committee.js";
+import { ownLangs, chicagoDayEndMs, isPhotoItem, photoAlbumKey, photoAlbumSlugs, COMMITTEE_MEETING_PATH } from "./committee.js";
 // The monthly digest names its months like /monthly/ (monthLabel), finds the committee meeting of the
 // month it covers by the same rule (meetingByRule) and gives an issue the toolkit's theme (issueTheme).
 // (monthly.js imports from this file too: the cycle is safe, both only call each other's functions.)
@@ -659,8 +659,8 @@ const pubName = (item) => (item?.extra?.publication === "lv" || item?.source ===
 //     the magazines' Instagram posts (instagram.json: per account, how many and the 3 newest — the
 //     site's /instagram/ page is their one home) and documents, by date.
 // Plus ONE pointer: "Coming up in K" → /monthly/K/, the toolkit, the home of everything current (the
-// committee meeting — its link and code stay on /meetings/, which the toolkit links to —, events not over
-// yet, the weekly open meetings, deadlines, Book of the Month, the daily quote …) — and, while the notice of
+// committee meeting — its link and code stay on /meetings/#committee-meeting, which the toolkit links to —,
+// events not over yet, the weekly open meetings, deadlines, Book of the Month, the daily quote …) — and, while the notice of
 // a price change AA Grapevine announced is on, its row ("Grapevine and La Viña prices change on …",
 // digestPrice → /shop/#price-changes). An issue's highlight
 // stories are only here, in the month they came out; the toolkit shows the themes and counts. Nothing is
@@ -907,8 +907,9 @@ export function monthInstagram(posts, profiles = {}) {
  * The events that took place in P — every category but the committee's, in the month an event starts
  * in, once it has started — plus P's committee meeting: its events.json record, else the site.meeting
  * rule (monthly.js meetingByRule: skip_dates honoured) when the settings have a meeting, once it has
- * started: { id: "ev:committee:<day>", category: "committee", url: "/meetings/", _committee: true }, held "online"
- * (extra.online — never its platform: a month before a move to another one would say the new one).
+ * started: { id: "ev:committee:<day>", category: "committee", url: "/meetings/#committee-meeting" (its section:
+ * COMMITTEE_MEETING_PATH), _committee: true }, held "online" (extra.online — never its platform: a month before
+ * a move to another one would say the new one).
  * Soonest first. (A meeting cancelled without a skip date still reads as held — the rule cannot know.)
  */
 export function monthEventsHeld(db, ed, site = {}, now = Date.now()) {
@@ -926,7 +927,7 @@ export function monthEventsHeld(db, ed, site = {}, now = Date.now()) {
   if (cm && cm.start && ms(cm.start) <= now) {
     const base = rec || { kind: "event", source: "committee", title: "", lang: "en", i18n: {}, machine: [] };
     evs.push({
-      ...prep({ ...base, id: `ev:committee:${cm.ymd}`, category: "committee", url: "/meetings/", date: cm.start,
+      ...prep({ ...base, id: `ev:committee:${cm.ymd}`, category: "committee", url: COMMITTEE_MEETING_PATH, date: cm.start,
         extra: { start: cm.start, end: cm.end, all_day: false, online: true } }, now),
       _committee: true,
     });
@@ -1129,7 +1130,7 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
       const where = eventWhere(ev, main, t);
       out.push(`${bullet} ${eventWhen(ev, main, asOf, { time: false })} — ${first}${where ? ` (${where})` : ""}`);
       for (const r of rest) out.push(`  ${r}`);
-      if (ev.url) out.push(`  ${ev._committee ? url("/meetings/") : absUrl(hrefOf(ev, main), site)}`);
+      if (ev.url) out.push(`  ${ev._committee ? url(COMMITTEE_MEETING_PATH) : absUrl(hrefOf(ev, main), site)}`);
     }
     out.push("");
   }

@@ -118,7 +118,8 @@ class CommitteeMeetingTimes(unittest.TestCase):
                 g = self.got[name]
                 self.assertIsInstance(g, dict, g)                      # never a stopped build
                 rule = M.meeting_rule((yaml.safe_load(text) or {}).get("meeting"))
-                # the home page and /meetings/: the next 12 meetings, as events.json lists them
+                # the home page and /meetings/: the next 12 meetings — events.json's first 12 (it lists 12, or 13
+                # before this month's meeting: meeting.window_meetings)
                 want = M.upcoming_rule_dates(rule, 12, CHI, NOW)
                 self.assertEqual([{k: iso(v) for k, v in d.items()} for d in g["upcoming"]], want)
                 # /events/ and the calendar files: every meeting from October to next September

@@ -271,12 +271,24 @@ function meetingEnd(cfg = {}) {
 const skipDates = (cfg = {}) => (cfg.skip_dates || []).map((d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d)));
 
 /**
+ * The months of committee meetings the pages list: this month (Central time) and the MEETING_MONTHS_AHEAD after it —
+ * normalizeEvents' window (/events/, /events.ics, the event share pages). The month pages are the same months
+ * (monthly.js WINDOW: this month and the 12 after it, no page beyond them), each page's calendar file with its own
+ * month's meeting. Each date's flyer comes from its events.json record, and the sync writes one for every date of
+ * these months
+ * (scripts/sync/meeting.py MEETING_MONTHS_AHEAD → build_data.committee_meetings): the same number on both sides, which
+ * a unit test keeps in step (tests/test_r24_meeting_window.py) — a sync that counted 12 dates left the 13th date the
+ * pages list (Nov 17, 2027 on Nov 11, 2026) without its flyer.
+ */
+export const MEETING_MONTHS_AHEAD = 12;
+
+/**
  * Committee meeting dates between `monthsBack` months ago and `monthsAhead`
  * months ahead, from config/site.yml `meeting` (same rule as src/_data/meeting.js).
  * The months are counted from `now`'s month in Central time: the caller's clock (normalizeEvents' opt.now — the
  * build's one moment, MONTHLY_NOW in a preview build or a test), else the real one.
  */
-export function meetingDates(cfg = {}, monthsBack = 3, monthsAhead = 12, now = new Date()) {
+export function meetingDates(cfg = {}, monthsBack = 3, monthsAhead = MEETING_MONTHS_AHEAD, now = new Date()) {
   cfg = meetingCfg(cfg);
   const weekday = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
   const n = Number(cfg.week_of_month || 3);
@@ -371,7 +383,7 @@ export function meetingTitle(site, lang = "en") {
 const oneLine = (v) => (v === null || v === undefined || typeof v === "object" || typeof v === "boolean" ? "" : String(v).replace(/\s+/g, " ").trim());
 
 // The label of what people type into the meeting app: "Meeting code" for one with letters (a Google Meet code,
-// "rva-tmst-vdb"), else "Meeting ID" (a Zoom ID, "949 476 7497") — its i18n key.
+// "rva-tmst-vdb"), else "Meeting ID" (a Zoom ID, "815 9593 1777") — its i18n key.
 export function meetingIdKey(id) {
   return /[a-z]/i.test(String(id ?? "")) ? "committee.meeting.code" : "committee.meeting.id";
 }
@@ -380,7 +392,7 @@ export function meetingIdKey(id) {
  * How to join one of our meetings (config/site.yml `meeting:`): THE reading every page, calendar and deck uses —
  *   platform  where it is held, in the pages' words ("Google Meet"; "Zoom" when left out, as site.js gives it)
  *   url       the link (`online_url`; an older `zoom_url` still counts)
- *   id        what people type into the app: a Google Meet code ("rva-tmst-vdb") or a Zoom ID ("949 476 7497")
+ *   id        what people type into the app: a Google Meet code ("rva-tmst-vdb") or a Zoom ID ("815 9593 1777")
  *   idKey, idLabel  its label's i18n key and words: "Meeting code" for a code with letters, "Meeting ID" for digits
  *   copyId    what a Copy button copies: a code as it is written, a Zoom ID's digits
  *   passcode  "" without one (Google Meet has none)
@@ -617,6 +629,14 @@ function localPath(url, lang) {
   return lang && lang !== "en" ? `/${lang}${u}` : u;
 }
 
+// Where a link to OUR committee meeting goes: its own section of the Meetings page. The weekly open meetings come
+// first there, so a plain /meetings/ would open on someone else's meeting. Its cards on /events/, its calendar
+// entries (the .ics URL and the "Details:" line of the description), the countdowns' calendar files, the reports
+// and the monthly digest all link here (localPath / langPath add /es/; scripts/sync/build_data.py and
+// scripts/notify/send_digest.py write the same). A link to the page as a whole (the menu, the search, the sitemap,
+// the booth's "Meetings you can join") stays /meetings/.
+export const COMMITTEE_MEETING_PATH = "/meetings/#committee-meeting";
+
 // Element ids already used on the committee pages / layout. A bulletin post or
 // manual event whose file name slug equals one of these gets a prefixed anchor
 // instead, so a deep link never jumps to the wrong place.
@@ -673,7 +693,7 @@ export function calendarLinks(ev) {
  * @param {object[]} items   db.events.items
  * @param {object}   site    `site` global (config)
  * @param {string}   lang    "en" | "es"
- * @param {object}   [opt]   { monthsBack: 3, monthsAhead: 12, now: Date }
+ * @param {object}   [opt]   { monthsBack: 3, monthsAhead: MEETING_MONTHS_AHEAD (12), now: Date }
  * @returns {object[]} sorted by start (soonest first)
  */
 export function normalizeEvents(items, site, lang = "en", opt = {}) {
@@ -681,7 +701,7 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
   const m = site?.meeting || {};
   const out = [];
   const seen = new Set();
-  const meetingPage = siteAbs(site, localPath("/meetings/", lang));
+  const meetingPage = siteAbs(site, localPath(COMMITTEE_MEETING_PATH, lang));
 
   // 1) Committee meetings — always computed from config/site.yml, so the
   //    calendar is right even if the daily data sync failed.
@@ -694,7 +714,7 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
   const synced = new Map((items || []).filter((it) => it && it.category === "committee" && it.extra).map((it) => [it.id, it.extra]));
   //    A date that is over (the calendar files keep 90 days) was held "Online", with no link or meeting code: the
   //    move to Google Meet changed the platform for the dates before it.
-  for (const d of meetingDates(m, opt.monthsBack ?? 3, opt.monthsAhead ?? 12, new Date(now))) {
+  for (const d of meetingDates(m, opt.monthsBack ?? 3, opt.monthsAhead ?? MEETING_MONTHS_AHEAD, new Date(now))) {
     const id = `ev:committee:${d.ymd}`;
     seen.add(id);
     const speaker = meetingSpeaker(m, d.ymd, lang);
@@ -702,7 +722,7 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
     const over = Date.parse(d.end) <= now;
     out.push(shapeEvent({
       id, source: "committee", kind: "event", category: "committee", lang: "en",
-      url: "/meetings/", title: mTitle, summary: meetingSummary(site, lang, d.ymd, over),
+      url: COMMITTEE_MEETING_PATH, title: mTitle, summary: meetingSummary(site, lang, d.ymd, over),
       date: d.start, is_new: false, _i18nTitle: true,
       extra: { start: d.start, end: d.end, all_day: false, location: over ? t("committee.events.online", lang) : join.platform,
         online_url: over ? null : join.url || null,
@@ -806,7 +826,9 @@ function shapeEvent(it, site, lang, now, descOverride) {
   // "Sep 2026" / "Sept 2026": the month jump chips on /events/
   const monthShort = cap(fmt(new Date(monthKey + "-15T12:00:00Z"), lang, { month: "short", year: "numeric", timeZone: "UTC" })).replace(/\.(?=\s|$)/, "");
 
-  let link = it.url ? localPath(it.url, lang) : "";
+  // (a committee meeting: its section on /meetings/ — also a date of events.json outside normalizeEvents' window,
+  // or one an older sync wrote with plain "/meetings/")
+  let link = committee ? localPath(COMMITTEE_MEETING_PATH, lang) : it.url ? localPath(it.url, lang) : "";
   const flyerView = x.flyer_url || (it.source === "drive" && /drive\.google\.com/.test(it.url || "") ? it.url : null);
   const flyerId = driveFileId(flyerView);
   // Its picture: the data's own (a Drive flyer's, an outside calendar's image), else the Drive's picture of the
@@ -854,23 +876,31 @@ function shapeEvent(it, site, lang, now, descOverride) {
   // the page any more (events.njk lists a series' dates still to come, and its "Past events" leave the series
   // out: where("past", true) | whereNot("recurring", true)), so its entry — kept 90 days in the calendar
   // files — links to the page itself, never to a #… it no longer has. (A past one-off event keeps its row
-  // there, with this anchor; a committee meeting's page is /meetings/.)
+  // there, with this anchor; a committee meeting's page is its section on /meetings/: COMMITTEE_MEETING_PATH.)
   const anchor = eventAnchor(it);
   const onEventsPage = !committee && !(recurring && past);
   const detailsUrl = link && !selfLink
     ? (link.startsWith("/") ? siteAbs(site, link) : link)
     : siteAbs(site, localPath("/events/", lang)) + (onEventsPage ? "#" + anchor : "");
   if (selfLink) link = "";
+  // An event that is over (the calendar files keep it 90 days, for their subscribers) still says where it was — its
+  // place, or "Online on Zoom" — but no longer how to join: no link, no meeting ID or code, and none of its summary's
+  // sentences that give one (withoutJoinDetails). A room is not kept once its event is over: the committee's old
+  // Zoom room, retired with the move to Google Meet, stayed in the files with the workshop of October 3, 2026 that
+  // had used it. (The committee meeting's own dates that are over come as "Online": normalizeEvents.)
+  const onlineLabel = platform ? t("committee.events.online_on", lang, { platform }) : t("committee.events.online", lang);
+  const joinLink = past ? "" : online || "";
   const descLines = [];
   if (descOverride) descLines.push(descOverride);
   else {
     // Google / Outlook links cannot say "tentative" — the first line of the description does.
     if (tentative) descLines.push(`${t("committee.events.tentative", lang)}. ${t("committee.events.tentative_help", lang)}`, "");
-    if (summary) descLines.push(summary);
+    const calSummary = past ? withoutJoinDetails(summary) : summary;
+    if (calSummary) descLines.push(calSummary);
     if (recurrence) descLines.push(recurrence);
     if (locationTba) descLines.push(location);
-    if (online) descLines.push("", `${platform ? t("committee.events.online_on", lang, { platform }) : t("committee.events.online", lang)}: ${online}`);
-    if (meetingId) descLines.push(...(online ? [] : [""]), `${t(meetingIdLabelKey, lang)}: ${meetingId}`);
+    if (online) descLines.push("", joinLink ? `${onlineLabel}: ${joinLink}` : onlineLabel);
+    if (meetingId && !past) descLines.push(...(online ? [] : [""]), `${t(meetingIdLabelKey, lang)}: ${meetingId}`);
     if (contact) descLines.push(`${t("committee.events.contact", lang)}: ${contact}`);
     if (flyerView) descLines.push(`${t("committee.events.flyer", lang)}: ${flyerView}`);
     // Date-only outside event: the calendar shows it as all-day, so the note says the time was not listed.
@@ -878,7 +908,7 @@ function shapeEvent(it, site, lang, now, descOverride) {
   }
   const calDescription = descLines.join("\n").trim();
   const place = locationTba ? "" : location;
-  const calLocation = committee ? (online || location) : [place, !place && online ? online : ""].filter(Boolean).join("");
+  const calLocation = committee ? (joinLink || location) : [place, !place && online ? joinLink || onlineLabel : ""].filter(Boolean).join("");
 
   const ev = {
     id: it.id,
@@ -934,7 +964,7 @@ function shapeEvent(it, site, lang, now, descOverride) {
 export function meetingSpeakerDates(site, lang = "en", now = new Date()) {
   const m = site?.meeting || {};
   const nowMs = now instanceof Date ? now.getTime() : Number(now);
-  const page = siteAbs(site, localPath("/meetings/", lang));
+  const page = siteAbs(site, localPath(COMMITTEE_MEETING_PATH, lang));
   // the meeting's dates (its rule, skip dates and first date), three years on: a speaker's date that is not one of
   // them is left out by meetingSpeakers already
   const dates = new Map(meetingDates(m, 1, 36, new Date(nowMs)).map((d) => [d.ymd, d]));
@@ -1144,11 +1174,23 @@ export function eventPlace(text, extra = {}) {
 
 // A summary as one plain line for search engines: no HTML (its few common entities read), single spaces, at most
 // `n` characters (cut at a word, "…" — as the share pages cut theirs) — and without its sentences that say how to
-// join online (a meeting ID or code, a passcode, a Zoom or Google Meet link: "…join on Zoom (meeting ID 949 476
-// 7497, passcode …).", "…on Google Meet: meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb)."). The page shows
+// join online (a meeting ID or code, a passcode, a Zoom or Google Meet link: "…join on Zoom (meeting ID 815 9593
+// 1777, passcode …).", "…on Google Meet: meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb)."). The page shows
 // them to people; a copy made for machines only helps those who look for meetings to disrupt.
+// What counts: "Meeting ID" / "Zoom ID" / "ID de Zoom" / "ID de (la) reunión" (never "meeting ideas"), a Zoom number
+// right after the word ("Zoom 871 2036 8287", "Zoom: 815-9593-1777"), a meeting code / "código de (la) reunión", a
+// passcode, password, "código de acceso" or "contraseña", a Zoom link or its pwd= token, a Google Meet link.
 const PLAIN_ENTITIES = { "&nbsp;": " ", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&lt;": "<", "&gt;": ">", "&amp;": "&" };
-const JOIN_DETAILS = /meeting\s*id|meeting\s*code|pass\s*code|password|\bpwd=|zoom\.us\/|meet\.google\.com\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
+const JOIN_DETAILS = /\bmeeting\s*ids?\b|\bzoom\s*id\b|\bid de zoom\b|\bzoom\W{0,3}\d{3}[\s.-]?\d{3,4}[\s.-]?\d{3,4}\b|meeting\s*code|pass\s*code|password|\bpwd=|zoom\.us\/|meet\.google\.com\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
+// A summary for the calendars of an event that is over (shapeEvent): its lines as written, without the sentences that
+// say how to join online (JOIN_DETAILS) — a line left with nothing goes, and so does a blank line too many.
+function withoutJoinDetails(s) {
+  return String(s ?? "").split("\n").flatMap((line) => {
+    if (!line.trim()) return [""];
+    const kept = line.split(/(?<=[.!?])\s+/).filter((sentence) => !JOIN_DETAILS.test(sentence)).join(" ").trimEnd();
+    return kept.trim() ? [kept] : [];
+  }).join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
 function plainLine(s, n = 300) {
   const t = String(s ?? "").replace(/<[^>]*>/g, " ").replace(/&(?:nbsp|quot|#39|apos|lt|gt|amp);/g, (e) => PLAIN_ENTITIES[e])
     .replace(/\s+/g, " ").trim()

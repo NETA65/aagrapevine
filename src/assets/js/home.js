@@ -174,7 +174,7 @@
           var ds = this.$root.dataset; // $el would be the clicked button here
           // the meeting in a line, that date's guest speaker and topic ("Guest speaker: Rick W. — “…”.", the words of
           // its calendar text on /events/; a name alone ends in its initial's period), then the link to join; the
-          // entry's own link is /meetings/
+          // entry's own link is the meeting's section, /meetings/#committee-meeting (data-cal-url)
           var sp = this.speaker ? this.speakerLine + (this.speaker.topic ? " — “" + this.speaker.topic + "”." : "") : "";
           window.GV.ics({
             title: ds.calTitle, description: [ds.calDesc, sp, ds.calLoc].filter(Boolean).join(" "), location: ds.calLoc, url: ds.calUrl || ds.calLoc,

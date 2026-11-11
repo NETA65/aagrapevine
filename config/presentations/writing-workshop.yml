@@ -62,7 +62,7 @@ footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
 minutes: 115            # the deck's full plan: 115 minutes in a two-hour slot (its timing page)
 icon: "pen-line"
 tone: "lv"
-# drive_title: "Grapevine and La Viña Writing Workshop" — put back once the copy with the Google Meet details is on the Drive
+drive_title: "Grapevine and La Viña Writing Workshop"
 
 card:
   title:
@@ -1159,7 +1159,7 @@ slides:
       - "{live:meeting_link} · All AA members welcome"
     minutes: 1
     notes: |
-      SAY: Thank you for coming, and thank you to {fill:host_group} for hosting. Please take your handouts and your drafts home, and send your story when it's ready. If you'd like help, or you'd like to host a workshop at your group, write to us at grapevine@neta65.org. Our committee meets on Google Meet {live:meeting_rule}, {live:meeting_time}, with a guest speaker each month; every AA member is welcome, no registration needed. Keep writing.
+      SAY: Thank you for coming, and thank you to {fill:host_group} for hosting. Please take your handouts and your drafts home, and send your story when it's ready. If you'd like help, or you'd like to host a workshop at your group, write to us at grapevine@neta65.org. Our committee meets on Google Meet {live:meeting_rule}, {live:meeting_time}, and from January 2027 each meeting opens with a guest speaker; every AA member is welcome, no registration needed. Keep writing.
       DO: Leave this slide up while people leave. Stay a few minutes for private questions. Collect any feedback in person, not on a sign-in sheet with names.
       FACILITATOR TIP: The next slide lists the sources and the disclaimer; it stays in the show because this presentation is posted publicly, and it is the last slide of the show. The facilitator pages after it are never projected ({ui:customize} → {ui:prepare}).
       TRANSITION: End of the workshop.

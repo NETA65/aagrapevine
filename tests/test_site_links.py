@@ -326,10 +326,10 @@ class Settings(unittest.TestCase):
         labelled "Meeting code" when it has letters (a Google Meet code, copied as written) and "Meeting ID" for a Zoom
         ID (its digits copied; callers can dial in) — committee.js meetingJoin, in the calendars too."""
         meet = {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00", "platform": "Google Meet",
-                "online_url": "https://meet.google.com/abc-defg-hij", "zoom_url": "https://us02web.zoom.us/j/9494767497",
+                "online_url": "https://meet.google.com/abc-defg-hij", "zoom_url": "https://us02web.zoom.us/j/1234567890",
                 "meeting_id": "abc-defg-hij"}
-        zoom = {"week_of_month": 3, "weekday": "wednesday", "zoom_url": "https://us02web.zoom.us/j/9494767497",
-                "meeting_id": "949 476 7497", "passcode": "neta65"}
+        zoom = {"week_of_month": 3, "weekday": "wednesday", "zoom_url": "https://us02web.zoom.us/j/1234567890",
+                "meeting_id": "123 456 7890", "passcode": "abc123"}
         r = run_js(self, """
             const C = await imp("eleventy/filters/committee.js");
             const one = (meeting, lang) => C.normalizeEvents([], { url: "https://example.org/gv", meeting }, lang,
@@ -342,9 +342,9 @@ class Settings(unittest.TestCase):
                                         "id": "abc-defg-hij", "idKey": "committee.meeting.code", "idLabel": "Meeting code",
                                         "copyId": "abc-defg-hij", "passcode": "", "dialIn": False})
         self.assertEqual(r["meet"][1]["idLabel"], "Código de la reunión")
-        self.assertEqual(r["zoom"], {"platform": "Zoom", "url": "https://us02web.zoom.us/j/9494767497", "id": "949 476 7497",
-                                     "idKey": "committee.meeting.id", "idLabel": "Meeting ID", "copyId": "9494767497",
-                                     "passcode": "neta65", "dialIn": True})
+        self.assertEqual(r["zoom"], {"platform": "Zoom", "url": "https://us02web.zoom.us/j/1234567890", "id": "123 456 7890",
+                                     "idKey": "committee.meeting.id", "idLabel": "Meeting ID", "copyId": "1234567890",
+                                     "passcode": "abc123", "dialIn": True})
         self.assertEqual(r["none"], {"platform": "Zoom", "url": "", "id": "", "idKey": "committee.meeting.id", "idLabel": "",
                                      "copyId": "", "passcode": "", "dialIn": False})
         self.assertEqual(r["keys"], ["committee.meeting.code", "committee.meeting.id", "committee.meeting.id"])
@@ -353,8 +353,8 @@ class Settings(unittest.TestCase):
         self.assertNotIn("zoom.us", desc)
         self.assertNotIn("Passcode", desc)
         self.assertEqual((r["meetCal"]["online"], r["meetCal"]["calLocation"]), ("https://meet.google.com/abc-defg-hij",) * 2)
-        self.assertIn("Entrar por Zoom: https://us02web.zoom.us/j/9494767497\nID de reunión: 949 476 7497\n"
-                      "Código de acceso: neta65", r["zoomCal"]["calDescription"])
+        self.assertIn("Entrar por Zoom: https://us02web.zoom.us/j/1234567890\nID de reunión: 123 456 7890\n"
+                      "Código de acceso: abc123", r["zoomCal"]["calDescription"])
 
     def test_site_data(self):
         r = run_js(self, r"""

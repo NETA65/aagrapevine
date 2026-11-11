@@ -261,7 +261,7 @@ class Model(unittest.TestCase):
                 S = {k: v["text"] for k, v in self.sections("full", lang).items()}
                 self.assertIn(PLATFORM, S["committee"])
                 other = self.r["platform"][lang]
-                self.assertIn(self.tr(JOIN_KEY, lang, url=SITE_URL + ("/es" if lang == "es" else "") + "/meetings/",
+                self.assertIn(self.tr(JOIN_KEY, lang, url=SITE_URL + ("/es" if lang == "es" else "") + "/meetings/#committee-meeting",
                                       platform="Google Meet"), other)
                 self.assertIn("on Google Meet." if lang == "en" else "por Google Meet.", other)
                 self.assertNotIn("Zoom", other)
@@ -279,7 +279,7 @@ class Model(unittest.TestCase):
                                                                month="October 2026" if lang == "en" else "octubre de 2026")))
             with self.subTest(lang=lang, section="committee"):
                 self.assertIn("October 21" if lang == "en" else "21 de octubre", S["committee"])
-                self.assertIn(self.tr(JOIN_KEY, lang, url=f"{base}/meetings/", platform=PLATFORM), S["committee"])
+                self.assertIn(self.tr(JOIN_KEY, lang, url=f"{base}/meetings/#committee-meeting", platform=PLATFORM), S["committee"])
                 self.assertNotIn(self.s["report.c_none"][lang], S["committee"])
             with self.subTest(lang=lang, section="issues"):
                 self.assertIn("Loneliness" if lang == "en" else "Soledad", S["issues"])

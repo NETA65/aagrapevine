@@ -42,7 +42,7 @@ chair's monthly paperwork: the agenda e-mail, a reminder and the draft minutes, 
 | One card | `/orientation/#pres-information-workshop` | `/es/orientation/#pres-information-workshop` |
 | Open a deck straight away | `/orientation/?present=information-workshop` | `/es/orientation/?present=information-workshop` |
 | The file the player reads | `/orientation/presentations/information-workshop.json` (one file per deck, the same for both languages) | — |
-| "Present on the web" on each PowerPoint copy (none while the decks' `drive_title:` lines are comments, until the copies with the Google Meet details are on the Drive) | `/portfolio/` (Slides tab) | `/es/portfolio/` |
+| "Present on the web" on each PowerPoint copy | `/portfolio/` (Slides tab) | `/es/portfolio/` |
 
 More detail in [section 5](#5-where-it-shows-on-the-website).
 
@@ -51,10 +51,9 @@ More detail in [section 5](#5-where-it-shows-on-the-website).
 - The six short GVR / RLV 101 sessions on the same page (`/orientation/magazines/` …) come from
   `config/orientation.yml`. See [Settings](settings.md).
 - The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides` are separate, fixed snapshots,
-  made on October 1, 2026. Changing a YAML file never changes them, and changing them never changes the web decks.
-  A card links its copy as "PowerPoint copy" through its `drive_title`. The four copies of October 2026 still give
-  the committee's old Zoom room, so no deck sets one until copies with the Google Meet details are on the Drive (the
-  line stays in each file as a comment, to put back then).
+  made on October 1, 2026 and rebuilt with the Google Meet details on November 11, 2026. Changing a YAML file never
+  changes them, and changing them never changes the web decks. A card links its copy as "PowerPoint copy" through
+  its `drive_title`.
 - The booth display on `/about/#booth` is a different thing: a show that plays by itself at the committee's table,
   made from `content/booth/booth.csv`, the Drive booth folder and the site's live data (some of the same live facts:
   events, themes, prices, meetings). See [Booth display](booth.md).
@@ -139,8 +138,11 @@ committee now holds it: the opening (moment of silence, Serenity Prayer), four "
 introduction, the talk of about 20 minutes from about 7:02, questions from about 7:22, the thanks: done by 7:30), then
 the committee's business from 7:30 to 8:00, opened by the Preamble, each part shorter. The speaker's name, service
 position and topic come from `config/site.yml` → `meeting: speakers:` (the same list as `/meetings/`) and switch at
-midnight after each meeting; a date with no speaker listed says "to be announced". "No guest speaker" is the
-committee's business for the whole hour, as before (December 16, 2026, or a month whose speaker can't come), and
+midnight after each meeting. A meeting the list gives no speaker (November 18 and December 16, 2026: the guest
+speakers start on January 20, 2027) says so: "none tonight" on the speaker's slides, "Guest
+speaker: none this time" on "Next meeting"; "to be announced" is only for a speaker the list doesn't name yet (a
+month after its last one, or an entry the site leaves out). "No guest speaker" is the committee's business for the
+whole hour, as before (the meetings before January 20, 2027, or a month whose speaker can't come), and
 "No guest speaker, with a topic of the month" adds the topic: both give each slide its time of before
 (`version_minutes`) and the agenda its rows of before (`version_fields`). The slide ids stayed the same.
 
@@ -678,10 +680,10 @@ those show exactly what you type.
 | `meeting_zoom_id`, `meeting_passcode` | the older names: the meeting code, and a passcode (empty on Google Meet) | same (`meeting_id`, `passcode`) | — |
 | `meeting_phone` | (empty: a Google Meet room has no number to call) | `config/site.yml` → `phone_access: numbers` (the first one), for a Zoom meeting | "see the Accessibility page" |
 | `meeting_phone_passcode` | (empty) | `phone_access: committee: phone_passcode` (or the meeting's passcode when it is numbers only) | — (empty) |
-| `speaker_name`, `speaker_position`, `speaker_topic` | Rick W. / Past delegate, Area 65 Northeast Texas (Panel 73); … / Grapevine as a Twelfth Step tool: … — `meeting_day`'s guest speaker | `meeting: speakers:` (as `/meetings/` lists them) | "to be announced" |
-| `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … | same | "to be announced" |
-| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with none listed (December 16, 2026): the Grapevine Meeting's announcements, with `meeting_day` | same | "guest speaker: to be announced" |
-| `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — `meeting_after`'s speaker | same | "to be announced" |
+| `speaker_name`, `speaker_position`, `speaker_topic` | Rick W. / Past delegate, Area 65 Northeast Texas (Panel 73); … / Grapevine as a Twelfth Step tool: … — `meeting_day`'s guest speaker; a meeting with none (November 18, 2026): "none tonight" / "the Meetings page lists no guest speaker for this meeting" / "none" | `meeting: speakers:` (as `/meetings/` lists them) | "to be announced" (a speaker not listed yet) |
+| `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … ("none tonight" without a speaker) | same | "to be announced" |
+| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with none (December 16, 2026): the Grapevine Meeting's announcements, with `meeting_day` | same | "guest speaker: to be announced" |
+| `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — `meeting_after`'s speaker ("none this time" for a meeting with none: December 16, 2026, on November 18's "Next meeting") | same | "to be announced" |
 | `speaker_slides` | the chair's notes only: "Tonight's guest speaker shares slides: …" (`slides: true`). Whether a speaker has confirmed (`confirmed:`) never reaches a deck: the notes are public; the run summary reminds the chair | same | a sentence of their own (the README's table) |
 | `grapevine_meeting_next`, `grapevine_meeting_day`, `grapevine_meeting_after` | Wednesday, December 2, 2026 / the same / Wednesday, January 6, 2027 | `recurring_events:` → `grapevine-meeting`, as `/events/` lists it | "see the Events page" |
 | `grapevine_meeting_time`, `grapevine_meeting_link` | 7:00 – 8:00 PM Central time · meet.google.com/rva-tmst-vdb | same | — · "see the Events page" |
@@ -1320,11 +1322,14 @@ document, named with the meeting's date ("Monthly Committee Meeting – Draft mi
 
 A line whose details are all blank is left out, and so is a heading left with nothing under it ("Old business"
 with no items), so a text never shows empty orange blanks. The guest speaker's lines are left out for a meeting with
-no speaker listed (December 16, 2026), and in the version "No guest speaker" (a speaker who can't come: the texts
-then agree with that version's agenda, even before the website's list is changed). When the website lists a speaker
+no speaker listed (November 18 and December 16, 2026), and in the version "No guest speaker" (a speaker who can't
+come: the texts then agree with that version's agenda, even before the website's list is changed). When the website lists a speaker
 for that meeting but the version leaves them out (a "No guest speaker" kept from December), the panel says so above
 the text, and "Start next month" goes back to "With a guest speaker" when the next meeting has one (its Undo too).
-A detail left empty beside a
+The other way round, when the website lists NO speaker for that meeting (November 18 and December 16, 2026) but the
+version is still the first one, the panel warns too (the agenda's row then reads "Guest speaker: none at this
+meeting") and names the version to choose, and "Start next month" switches to "No guest speaker" by itself when the
+website lists no speaker for the next meeting (never for one only not listed yet; its Undo too). A detail left empty beside a
 filled one shows in [brackets], so you notice it.
 
 **Start next month**, at the bottom of the tab, is pressed after the meeting, once the minutes are drafted. You
@@ -1683,7 +1688,7 @@ See [Automation and troubleshooting](automation-and-troubleshooting.md) for sett
 | An orange `[hint]` on a slide | an empty blank | The presenter fills it in (Customize → Your details), or the committee gives the blank a `default`. |
 | A fact says "see the Meetings page" (or similar) | no data for it, or a kept copy older than the dates the build knew | Check the setting it comes from ([3.9](#39-facts-that-stay-current-live)); open the page online. |
 | "The dates in this copy are from …" | the deck file kept for offline use is more than 14 days old | Open `/orientation/` online once. |
-| No "PowerPoint copy" link, no "Present on the web" button | the deck's `drive_title:` is still a comment (expected until the copies with the Google Meet details are on the Drive), `drive_title` is not exactly the Drive file's title (a month and year in the file name stay in its title), or the file is not in the panel folder or not shared | Put the line back once the new copy is up; compare the title shown on `/portfolio/` with `drive_title`. |
+| No "PowerPoint copy" link, no "Present on the web" button | the deck has no `drive_title:` line (or it is a comment), `drive_title` is not exactly the Drive file's title (a month and year in the file name stay in its title), or the file is not in the panel folder or not shared | Put the line back; compare the title shown on `/portfolio/` with `drive_title`. |
 | A slide is missing from the show | the version's `hide`, `starts_off`, its dates, `when: "price_notice"`, a facilitator page, or the presenter turned it off | Customize → Slides shows its badge ("Not today", "Facilitator" …); **Show all** turns the switches back on. |
 | "This version has no slides. Turn some on in Customize → Slides." | the presenter turned every slide off | Customize → Slides → Show all, or Reset to the original. |
 | On `/es/`, the notes say "Customize" instead of "Personalizar" | the notes typed the button's name | Write `{ui:customize}`. |

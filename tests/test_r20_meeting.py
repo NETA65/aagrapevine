@@ -349,10 +349,10 @@ class Speakers(Untranslated):
 
     def test_an_older_zoom_url_still_counts(self):
         cfg = yaml.safe_load(YAML)
-        cfg["meeting"].update(platform="Zoom", meeting_id="949 476 7497", passcode="neta65")
-        cfg["meeting"]["zoom_url"] = cfg["meeting"].pop("online_url").replace(ROOM, "https://us02web.zoom.us/j/9494767497")
+        cfg["meeting"].update(platform="Zoom", meeting_id="123 456 7890", passcode="abc123")
+        cfg["meeting"]["zoom_url"] = cfg["meeting"].pop("online_url").replace(ROOM, "https://us02web.zoom.us/j/1234567890")
         e = B.committee_meetings(ctx_with(cfg))[0]["extra"]
-        self.assertEqual((e["online_url"], e["passcode"]), ("https://us02web.zoom.us/j/9494767497", "neta65"))
+        self.assertEqual((e["online_url"], e["passcode"]), ("https://us02web.zoom.us/j/1234567890", "abc123"))
 
     def test_the_notes_reach_status_json(self):
         cfg = yaml.safe_load(YAML)
@@ -441,7 +441,7 @@ class SpeakersOnPages(unittest.TestCase):
             "follows until 8:00 PM."), jan["summary"])
         self.assertIn("\n\nGuest speaker: Ann B. — Past delegate, Area 99\nTopic: “How the Conference works”\nThe guest "
                       "speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.\n\nJoin on Google Meet: "
-                      f"{ROOM}\nMeeting code: abc-defg-hij\n\nDetails: https://example.org/gv/meetings/", jan["desc"])
+                      f"{ROOM}\nMeeting code: abc-defg-hij\n\nDetails: https://example.org/gv/meetings/#committee-meeting", jan["desc"])
         # the same title, times and calendar uid with or without a speaker
         self.assertEqual((jan["uid"], jan["title"], jan["start"], jan["end"]),
                          ("ev-committee-2027-01-20", dec["title"], "2027-01-21T01:00:00.000Z", "2027-01-21T02:00:00.000Z"))
@@ -620,7 +620,7 @@ class SharedRoom(Untranslated):
     def test_a_room_of_its_own_is_as_before(self):
         # the committee meeting elsewhere (Zoom): any listing in the series' room is the series, as for La Viña's
         cfg = yaml.safe_load(YAML)
-        cfg["meeting"].update(online_url="https://us02web.zoom.us/j/9494767497", meeting_id="949 476 7497")
+        cfg["meeting"].update(online_url="https://us02web.zoom.us/j/1234567890", meeting_id="123 456 7890")
         ctx = ctx_with(cfg)
         recurring = B.recurring_events(ctx)
         notes = B.series_listing_notes(ctx, [listing("2027-01-20", "NETA 65 Grapevine & La Viña Committee Meeting")], recurring)

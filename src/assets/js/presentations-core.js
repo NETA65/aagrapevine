@@ -164,8 +164,10 @@
     // the deck's file has none (config/site.yml site.committee_es); an action item carried to old business
     paper_none: "see the Meetings page",
     paper_none_es: "consulta la página de reuniones del comité",
-    // a guest speaker the site doesn't list yet (the speaker facts of the meeting a text is for)
+    // a guest speaker the site doesn't list yet (the speaker facts of the meeting a text is for), and a meeting the
+    // site lists no guest speaker for (its row's `no_speaker`: the meetings before January 20, 2027)
     paper_tba: "to be announced",
+    paper_no_speaker: "none at this meeting",
     paper_committee_es: "Comité de Grapevine y La Viña",
     carry_who_when: "{what} ({who}, by {when})",
     carry_who: "{what} ({who})",
@@ -310,7 +312,8 @@
     if (isMap(raw.prev) && isStr(raw.prev.at) && raw.prev.at.length <= 40 && isFinite(ms(raw.prev.at))) {
       d.prev = { at: raw.prev.at, held: isStr(raw.prev.held) && YMD.test(raw.prev.held) ? raw.prev.held : "",
         fill: cleanFill(raw.prev.fill), checks: cleanChecks(raw.prev.checks) };
-      if (isStr(raw.prev.preset) && ID.test(raw.prev.preset)) d.prev.preset = raw.prev.preset;
+      // ("" is the first version: "Start next month" may have left it for "No guest speaker")
+      if (isStr(raw.prev.preset) && (raw.prev.preset === "" || ID.test(raw.prev.preset))) d.prev.preset = raw.prev.preset;
     }
     if (isNum(raw.last) && raw.last >= 1) d.last = Math.floor(raw.last);
     if (isNum(raw.last_of) && raw.last_of >= 1) d.last_of = Math.floor(raw.last_of);
@@ -1550,7 +1553,8 @@
      A deck's `paperwork` (the committee meeting's Customize → Agenda & minutes; eleventy/filters/presentations.js
      shapePaper, the deck JSON's `paperwork`): { agenda_slide, speaker_slide, agenda | reminder | minutes: { subject, body },
      next_month: { actions, old_business, minutes_month, clear: [keys], untick: [slide ids] }, meetings: [{ ymd,
-     start, end, label, label_es, month, speaker?: { name, position, topic, position_es, topic_es } }], time_es, committee_es }. The texts are plain text in the deck's language,
+     start, end, label, label_es, month, speaker?: { name, position, topic, position_es, topic_es }, no_speaker?: true
+     (the site lists none for it; neither: not known yet) }], time_es, committee_es }. The texts are plain text in the deck's language,
      made from the presenter's blanks and the day's facts: never sent anywhere from here (the player copies them, or
      opens them in the presenter's own e-mail app with no address filled in). */
   // a paperwork text's own facts ({paper:…}): the meeting the text is for, its month, the meeting after it, the
@@ -1603,13 +1607,17 @@
   function plainSpaces(s) { return String(s).replace(/⁠/g, "").replace(/[  ]/g, " "); }
   /**
    * One of the deck's paperwork texts ("agenda", "reminder", "minutes") at nowMs → { subject, text, blocks: [{ text,
-   * lang }], meeting: row | null } (null when the deck has no such text). Its tokens are filled as on a slide (a
+   * lang }], meeting: row | null, speakerLeftOut: the listed speaker's name a version without the speaker's part
+   * leaves out ("" none), speakerNone: the site lists no speaker for that meeting but the version keeps the part
+   * (the text with the agenda's rows) }
+   * (null when the deck has no such text). Its tokens are filled as on a slide (a
    * notes_only blank never shows), then:
    *   · a line whose blanks are ALL empty is left out — the text never shows an empty "[hint]" (a blank left empty
    *     beside a filled one still shows as "[hint]", so the chair sees it) — and so is a line whose {paper:…} facts
    *     are all empty (the guest speaker of a meeting that has none, or of a version without the speaker's slide);
    *   · the speaker facts ({live:speaker_name}, _position, _topic, _line), also in the agenda's rows, are those of
-   *     the meeting the text is for ({paper:speaker} …): "to be announced" for a meeting with none listed;
+   *     the meeting the text is for ({paper:speaker} …): "none at this meeting" for a meeting the site lists no guest
+   *     speaker for (its row's `no_speaker`), "to be announced" for one whose speaker isn't listed yet;
    *   · a paragraph that had blanks and is left with none of those lines, and nothing but its first line (a heading
    *     like "Old business"), is left out too;
    *   · {lang:es}…{/lang} marks go (a paragraph all in Spanish is a block with lang "es": the player marks it).
@@ -1634,12 +1642,19 @@
     // say that this version leaves them out (a "No guest speaker" kept from a month that had none)
     var spSlide = cur && isStr(pw.speaker_slide) && pw.speaker_slide ? cur.byId[pw.speaker_slide] : null;
     var leftOut = spSlide && !spSlide.base && sp ? sp.name : "";
+    // …and the other way round: the site lists NO guest speaker for that meeting (the meetings before January 20,
+    // 2027), but the chosen version keeps the speaker's part (the first version, never switched): the agenda's rows
+    // then say "none at this meeting", and the panel says which version leaves the part out (`speakerNone`: for the
+    // text with the agenda's rows, the agenda e-mail — the others name no speaker for that meeting either way)
+    var none = !sp && !!row && row.no_speaker === true;
+    var keptPart = !!(spSlide && spSlide.base && none && t.body.indexOf("{paper:agenda}") >= 0);
     if (spSlide && !spSlide.base) sp = null;
     var spText = function (k) { return sp && isStr(sp[k]) ? sp[k] : ""; };
+    var tba = none ? EN.paper_no_speaker : EN.paper_tba;
     var live = Object.assign({}, cur ? cur.live : liveValues(deck.live, now), {
-      speaker_name: spText("name") || EN.paper_tba, speaker_position: spText("position") || EN.paper_tba,
-      speaker_topic: spText("topic") || EN.paper_tba,
-      speaker_line: sp ? [spText("name"), spText("position")].filter(Boolean).join(" — ") : EN.paper_tba,
+      speaker_name: spText("name") || tba, speaker_position: spText("position") || tba,
+      speaker_topic: spText("topic") || tba,
+      speaker_line: sp ? [spText("name"), spText("position")].filter(Boolean).join(" — ") : tba,
     });
     var ctx = { deck: deck, state: state, live: live, cur: cur || null, where: "slide" };
     var vals = {
@@ -1704,6 +1719,7 @@
       blocks: blocks,
       meeting: row,
       speakerLeftOut: leftOut,
+      speakerNone: keptPart,
     };
   }
 
@@ -1753,7 +1769,9 @@
    * Starts next month in the presenter's version: the picked items (ids from nextMonthPlan; old business first, then
    * the action items; the old business rows' room at most) become old business (<row>_item, the status empty), the plan's blanks are
    * cleared, the minutes' month becomes the month of the meeting held, the listed checklists are unticked — and
-   * what was there before is kept in ds.prev (undoNextMonth puts it back). → { carried, held } (null: no plan).
+   * what was there before is kept in ds.prev (undoNextMonth puts it back). → { carried, held, version: "reset" (back
+   * to the first version: the next meeting has a guest speaker) | "without" (to "No guest speaker": the site lists
+   * none for the next meeting) | "" } (null: no plan).
    */
   function startNextMonth(deck, state, picks, nowMs) {
     var plan = nextMonthPlan(deck, state, nowMs);
@@ -1774,17 +1792,38 @@
     if (nm.minutes_month && plan.held && plan.held.month) ds.fill[nm.minutes_month] = plan.held.month;
     untick.forEach(function (id) { delete ds.checks[id]; });
     // a version without the guest speaker ("No guest speaker", chosen for a month that had none) goes back to the
-    // first version when the next meeting has a speaker on the site's list and the first version shows their slide
+    // first version when the next meeting has a speaker on the site's list and the first version shows their slide;
+    // and the other way round, a version with the speaker's part goes to the first one without it ("No guest
+    // speaker") when the site lists NO speaker for the next meeting (its row's `no_speaker`: after November 18,
+    // 2026, December 16 has none) — never for a speaker only not listed yet
     var spId = isStr(deck.paperwork.speaker_slide) ? deck.paperwork.speaker_slide : "";
     var spSrc = spId ? (deck.slides || []).filter(function (s) { return s.id === spId; })[0] : null;
     var coming = paperMeetings(deck, ds, now).next;
     var hasSpeaker = coming && isMap(coming.speaker) && isStr(coming.speaker.name) && coming.speaker.name;
+    var without = spSrc ? noSpeakerPreset(deck) : null;
+    var version = "";
     if (spSrc && hasSpeaker && ds.preset && !inPreset(spSrc, presetOf(deck, ds.preset)) && inPreset(spSrc, presetOf(deck, ""))) {
       before.preset = ds.preset;
       ds.preset = "";
+      version = "reset";
+    } else if (spSrc && without && !hasSpeaker && coming && coming.no_speaker === true && inPreset(spSrc, presetOf(deck, ds.preset))) {
+      before.preset = ds.preset;
+      ds.preset = without.id;
+      version = "without";
     }
     ds.prev = before;
-    return { carried: texts.length, held: plan.held, version: isStr(before.preset) ? "reset" : "" };
+    return { carried: texts.length, held: plan.held, version: version };
+  }
+  /** The deck's first version that leaves out the guest speaker's slide (paperwork.speaker_slide): the committee
+   *  meeting's "No guest speaker" — null without one (or without the slide). */
+  function noSpeakerPreset(deck) {
+    var pw = paperOf(deck);
+    var spId = pw && isStr(pw.speaker_slide) ? pw.speaker_slide : "";
+    var spSrc = spId ? (deck.slides || []).filter(function (s) { return s.id === spId; })[0] : null;
+    if (!spSrc) return null;
+    var list = Array.isArray(deck.presets) ? deck.presets : [];
+    for (var i = 0; i < list.length; i++) if (list[i] && isStr(list[i].id) && list[i].id && !inPreset(spSrc, list[i])) return list[i];
+    return null;
   }
   /** Undo of "Start next month": the blanks and the ticks as they were before it (what was typed since is
    *  replaced). → whether there was something to undo. */
@@ -1846,5 +1885,6 @@
     // the chair's paperwork
     PAPER_TEXTS: PAPER_TEXTS, paperMeetings: paperMeetings, paperText: paperText, agendaText: agendaText,
     nextMonthPlan: nextMonthPlan, startNextMonth: startNextMonth, undoNextMonth: undoNextMonth, lastStart: lastStart,
+    noSpeakerPreset: noSpeakerPreset,
   };
 })(typeof window !== "undefined" ? window : globalThis);

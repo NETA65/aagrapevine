@@ -755,8 +755,10 @@ are as before.
 
 #### f) Hybrid (a place and Zoom)
 
-The real [`2026-10-03-gv-writing-workshop-arlington.md`](../content/events/2026-10-03-gv-writing-workshop-arlington.md)
-(the Zoom password token is shortened here):
+The Arlington workshop of October 3, 2026
+([`2026-10-03-gv-writing-workshop-arlington.md`](../content/events/2026-10-03-gv-writing-workshop-arlington.md))
+was one. Its file before the day, with an example Zoom room in place of the one it gave (the committee's Zoom room
+of then, retired with the move to Google Meet — now that the workshop is over, its file names only the place):
 
 ```markdown
 ---
@@ -767,21 +769,26 @@ end: 2026-10-03T17:00:00-05:00
 location: "Primary Purpose Group – Arlington, 1802 West Division Street, Arlington, TX 76012"
 url: "https://neta65.org/event/grapevine-writing-workshop-6/"
 flyer: "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/view"
-online_url: "https://us02web.zoom.us/j/9494767497?pwd=…"
-meeting_id: "949 476 7497"
+online_url: "https://us02web.zoom.us/j/1234567890"
+meeting_id: "123 456 7890"
 confirmed: true
 lang: en
-summary_es: "Aprende a escribir tu historia para Grapevine y La Viña … Es un taller híbrido: ven en persona o conéctate por Zoom …"
+summary_es: "Aprende a escribir tu historia para Grapevine y La Viña … Es un taller híbrido: ven en persona o conéctate por Zoom."
 ---
-Learn how to write your story for Grapevine and La Viña … A hybrid workshop: come in person or join on Zoom …
+Learn how to write your story for Grapevine and La Viña … A hybrid workshop: come in person or join on Zoom.
 ```
 
 You get **both** lines on the card — the address (map pin) and "Online on Zoom" — plus **Join online**,
-"Meeting ID 949 476 7497", **View flyer** and the flyer picture. The calendar LOCATION is the address and the
+"Meeting ID 123 456 7890", **View flyer** and the flyer picture. The calendar LOCATION is the address and the
 description has "Online on Zoom: <link>". Search engines get its place, with the street, city, state and ZIP
 code read from `location:`, as a "mixed attendance" event; they get no online location (Google reads none, and
 the Zoom link, the meeting ID and any sentence with a passcode stay off the structured data). **The home page card
 shows only the address.**
+
+Once an event is over, the calendar files (which keep it 90 days for their subscribers) still say where it
+was — the address, or "Online on Zoom" — but no longer how to join: no link, no meeting ID or code, and none of
+the description's sentences that give one. A link, an ID or a passcode in a sentence of their own is what lets
+the calendars leave them out while the rest of the description stays.
 
 #### g) Other platforms
 
@@ -1330,8 +1337,8 @@ A few more timings:
 | `UID` | `ev-<kind>-<id>@neta65-gvlv` (`…-es@…` in the Spanish file): `ev-flyer-<Drive file id>`, `ev-manual-<file name>`, `ev-recurring-<key>-<date>` — written in small letters, other signs turned into dashes. It stays the same while the Drive file, the file name or the key stays the same. |
 | `DTSTART` / `DTEND` | times in UTC; all-day events as dates (`DTEND` = the day after the last day); no end → one hour |
 | `SUMMARY` | the title in the file's language |
-| `DESCRIPTION` | "Details to be confirmed. The date, place or times may still change…" (tentative) · the summary · the repeat line with "Central time" · a "to be announced" place · "Online on Zoom: <link>" (or Google Meet …) · "Meeting ID: …" / "Meeting code: …" · a committee meeting's guest speaker ("Guest speaker: …", "Topic: …", when the speaker's part ends) · "Contact: …" · "Flyer: <link>" · "Details: <page>" |
-| `LOCATION` | the place; the online link when there is no place; nothing for "to be announced" |
+| `DESCRIPTION` | "Details to be confirmed. The date, place or times may still change…" (tentative) · the summary · the repeat line with "Central time" · a "to be announced" place · "Online on Zoom: <link>" (or Google Meet …) · "Meeting ID: …" / "Meeting code: …" · a committee meeting's guest speaker ("Guest speaker: …", "Topic: …", when the speaker's part ends) · "Contact: …" · "Flyer: <link>" · "Details: <page>". An event that is over (the files keep it 90 days) keeps no link or ID: "Online on Zoom" alone, no "Meeting ID" / "Meeting code" line, and none of its summary's sentences that give one ([f) Hybrid](#f-hybrid-a-place-and-zoom)) |
+| `LOCATION` | the place; the online link when there is no place ("Online on Zoom" once the event is over); nothing for "to be announced" |
 | `URL` | the event's own page; else its card on `/events/`; for a dated flyer, the Drive flyer |
 | `ATTACH` | the flyer link |
 | `CATEGORIES` | Committee meeting · NETA 65 event · Grapevine / La Viña calendar |
@@ -1404,10 +1411,13 @@ name. A venue's name alone ("Hilton Tyler") is always the place's name, never it
 split counts as the street only when it starts with a house number ("1802 West Division Street").
 
 **How to join stays on the page.** The summary search engines get leaves out every sentence that says how to join
-online — a meeting ID or meeting code, a passcode or password, a `zoom.us` or `meet.google.com` link, and in
-Spanish "ID de reunión", "código de la reunión", "código de acceso", "contraseña". The page itself still shows
-them to people; a copy made for machines would only help those who look for meetings to disrupt. Write such
-details in a sentence of their own ("Join on Zoom: meeting ID …, passcode …") so the rest of the summary is kept.
+online — a meeting ID ("Meeting ID", "Zoom ID") or meeting code, a Zoom number right after the word ("Zoom 871
+2036 8287"), a passcode or password, a `zoom.us` or `meet.google.com` link, and in Spanish "ID de reunión", "ID de
+Zoom", "código de la reunión", "código de acceso", "contraseña" ("meeting ideas" is not a meeting ID: that sentence
+stays). The page itself still shows them to people; a copy made for machines would only help those who look for
+meetings to disrupt. The calendar files leave out the same sentences once an event is over
+([f) Hybrid](#f-hybrid-a-place-and-zoom)). Write such details in a sentence of their own ("Join on Zoom: meeting
+ID …, passcode …") so the rest of the summary is kept.
 
 **Who holds it.** The committee (by the same name as on every page) for our own events — with "free to attend"
 and, without a flyer, the committee's card as its picture; La Viña or AA Grapevine for a `host: lv` / `gv` event;

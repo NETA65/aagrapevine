@@ -188,6 +188,31 @@
 # The stores' free shipping banners (copies in the Drive folder flyers/, 2026-11-02; config/site.yml store_offers finds
 # them for /shop/#offers), written by hand: the Portfolio, What's New and the feeds list them by their file names.
 "Free shipping on all Grapevine products - banner": { es: "Envío gratis en todos los productos de Grapevine - banner" }
+# Our two online meetings' flyers (copies in the Drive folder flyers/, 2026-11-11; the Portfolio, What's New and the
+# feeds list all 16 by their file names). config/site.yml meeting.flyer_match and the Grapevine Meeting's flyer_match
+# find 14 of them for /meetings/ and the Events page — "Committee Meeting - flyer", the 12 months' "… Committee Meeting -
+# guest speaker" and "Grapevine Meeting - flyer"; neither pattern matches "Our online meetings - flyer" or "2027 Guest
+# Speaker Series - flyer", which are on no event. Written by hand 2026-11-11: the machine wrote "altavoz invitado" (a loudspeaker!),
+# kept "flyer" and left "Committee Meeting - flyer" and "Grapevine Meeting - flyer" in English. In the site's own words:
+# "Reunión del comité", "Reunión de Grapevine (en inglés)", "volante", "orador(a) invitado(a)". Each month's flyer says
+# "orador invitado" or "oradora invitada" as that month's speaker in config/site.yml meeting.speakers is a man or a woman
+# (position_es: "Ex delegado …" / "Ex delegada …", "Custodia …"): if a month's speaker changes, check its line here.
+"Committee Meeting - flyer": { es: "Reunión del comité - volante" }
+"Grapevine Meeting - flyer": { es: "Reunión de Grapevine (en inglés) - volante" }
+"Our online meetings - flyer": { es: "Nuestras reuniones en línea - volante" }
+"2027 Guest Speaker Series - flyer": { es: "Ciclo de oradores invitados 2027 - volante" }
+"January 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de enero de 2027 - orador invitado" }       # Rick W.
+"February 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de febrero de 2027 - oradora invitada" }   # Jeannie M.
+"March 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de marzo de 2027 - orador invitado" }         # Greg G.
+"April 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de abril de 2027 - oradora invitada" }        # Courtney S.
+"May 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de mayo de 2027 - oradora invitada" }           # Debra L.
+"June 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de junio de 2027 - oradora invitada" }         # Heather L.
+"July 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de julio de 2027 - orador invitado" }          # Luke B.
+"August 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de agosto de 2027 - oradora invitada" }      # Kaitie S.
+"September 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de septiembre de 2027 - orador invitado" } # Corey D.
+"October 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de octubre de 2027 - oradora invitada" }    # Heather N.
+"November 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de noviembre de 2027 - oradora invitada" } # Chitra S.
+"December 2027 Committee Meeting - guest speaker": { es: "Reunión del comité de diciembre de 2027 - oradora invitada" } # Veronica R.
 # Grapevine's suggested topics (data/site/editorial.json, ed:gv:any:…: /contribute/#deadlines, the recorder's list,
 # Home, /monthly/, the district report, the search), as its /contribute page names them — its departments and what it
 # is "always in need of" (scripts/sync/editorial.py gv_suggested_topics) — written by hand 2026-10-16 in AA's

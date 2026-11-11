@@ -952,13 +952,13 @@ SITE_X = {
     "url": "https://neta65.github.io/aagrapevine", "contact_email": "grapevine@neta65.org",
     "committee": "NETA 65 Grapevine & La Viña Committee",
     "meeting": {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00", "platform": "Zoom",
-                "zoom_url": "https://us02web.zoom.us/j/9494767497", "meeting_id": "949 476 7497", "passcode": "neta65"},
+                "zoom_url": "https://us02web.zoom.us/j/1234567890", "meeting_id": "123 456 7890", "passcode": "abc123"},
     # the passcode has letters and no phone passcode is set yet: a caller's passcode is unknown ("")
     "phone_access": {"numbers": [{"number": "+1 346 248 7799", "city": "Houston"}, {"number": "+1 312 626 6799", "city": "Chicago"}],
                      "committee": {"phone_passcode": ""}},
 }
 # The same meeting on Google Meet (no passcode, no number to call), with its guest speakers: October's confirmed and
-# sharing slides, November's not confirmed yet, December none — and one the site must leave out (a full last name)
+# sharing slides, November's not confirmed yet, December's one the site must leave out (a full last name)
 MEET_X = {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00", "platform": "Google Meet",
           "online_url": "https://meet.google.com/rva-tmst-vdb", "meeting_id": "rva-tmst-vdb", "speaker_until": "19:30",
           "speakers": [
@@ -1285,14 +1285,14 @@ class Facts(unittest.TestCase):
         self.assertEqual(plain(live["meeting_time"]), "7:00 – 8:00 PM Central time")
         self.assertNotIn("\u2009", live["meeting_time"], "no break inside the time range")
         self.assertIn("\u202f\u2013" + WJ + "\u202f", live["meeting_time"], "not even after the dash (UAX #14 LB12a)")
-        self.assertEqual((live["meeting_zoom_id"], live["meeting_passcode"]), ("949\u00a0476\u00a07497", "neta65"))
+        self.assertEqual((live["meeting_zoom_id"], live["meeting_passcode"]), ("123\u00a0456\u00a07890", "abc123"))
         m = self.oct["kinds"]["meeting"]
         self.assertEqual(m["rows"], [{"start": "2099-10-22T00:00:00.000Z", "end": "2099-10-22T01:00:00.000Z", "label": OCT21},
                                      {"start": "2099-11-19T01:00:00.000Z", "end": "2099-11-19T02:00:00.000Z", "label": NOV18},
                                      {"start": "2099-12-17T01:00:00.000Z", "end": "2099-12-17T02:00:00.000Z", "label": DEC16}])
         self.assertEqual(m["limit"], 3, "every date known; the player shows the next three")
         self.assertEqual(m["rule"], "Every third Wednesday of the month")
-        self.assertEqual((m["zoom_id"], m["passcode"], m["url"]), ("949\u00a0476\u00a07497", "neta65", "https://us02web.zoom.us/j/9494767497"))
+        self.assertEqual((m["zoom_id"], m["passcode"], m["url"]), ("123\u00a0456\u00a07890", "abc123", "https://us02web.zoom.us/j/1234567890"))
         self.assertEqual(m["page"], "https://neta65.github.io/aagrapevine/meetings/#committee-meeting")
         # no date after the last one known: the fallback from then on, never a date that is over
         nov = self.r["november"]["live"]
@@ -1358,8 +1358,10 @@ class Facts(unittest.TestCase):
     def test_the_meeting_on_google_meet_and_its_guest_speakers(self):
         """How to join a Google Meet room (the link, written out and in full, its code; no passcode, no number to call)
         and each date's guest speaker, switching at midnight Central after the meeting, as the meeting's day does —
-        "to be announced" for a date with none listed; the chair's notes alone say whether a speaker shares slides
-        and has confirmed."""
+        "to be announced" for a speaker the list doesn't name yet (December's entry is left out: a full last name;
+        the months after the list); the chair's notes alone say whether a speaker shares slides and has confirmed.
+        A meeting the list gives NO speaker: tests/test_r24_no_speaker.py (Facts: its own copy of the committee's list;
+        Deck and Paperwork: the real one)."""
         live, night = self.r["more"]["meet"], self.r["more"]["meetNight"]
         self.assertEqual((live["meeting_platform"], live["meeting_link"], live["meeting_url"], live["meeting_code"]),
                          ("Google Meet", "meet.google.com/rva-tmst-vdb", "https://meet.google.com/rva-tmst-vdb", "rva-tmst-vdb"))
@@ -1378,11 +1380,11 @@ class Facts(unittest.TestCase):
         self.assertEqual(at("speaker_topic", OCT21_OVER), "Public Information")
         self.assertEqual(at("speaker_line", before), "Rick W. — Past delegate, Area 65 (Panel 73)")
         self.assertEqual(live["speaker_name"]["steps"][0]["from"], OCT21_OVER, "with the meeting's day, at midnight after it")
-        # on another meeting's slides (the Grapevine Meeting's announcements): the speaker, or that the meeting has
-        # none — never "to be announced" for a meeting with no speaker listed (December's); that only once the
-        # build's dates run out
+        # on another meeting's slides (the Grapevine Meeting's announcements): the speaker — and for December, whose
+        # entry the site leaves out, "to be announced" (there is a speaker, by a name the site may not show), as
+        # once the build's dates run out
         self.assertEqual([at("speaker_note", t) for t in (before, OCT21_OVER, NOV18_OVER)],
-                         ["guest speaker: Rick W.", "guest speaker: Jeannie M.", "no guest speaker this month"])
+                         ["guest speaker: Rick W.", "guest speaker: Jeannie M.", "guest speaker: to be announced"])
         self.assertEqual(live_at(live["speaker_note"], live["speaker_note"]["until"]), "guest speaker: to be announced")
         # next month's (the "Next meeting" slide, shown during tonight's): November's, then none
         self.assertEqual(at("speaker_after", before), "Jeannie M. — “Public Information”")
@@ -1395,10 +1397,15 @@ class Facts(unittest.TestCase):
         self.assertTrue(at("speaker_slides", OCT21_OVER).startswith("No slides are listed for tonight's guest speaker"))
         self.assertNotIn("speaker_confirmed", self.oct["live"])
         self.assertNotIn("confirmed", json.dumps(self.oct.get("paperwork", {})))
-        # the settings of a Zoom meeting with no speakers: where to look, never a name made up
-        for k in ("speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_after"):
-            self.assertEqual(self.oct["live"][k], {"value": "", "fallback": tba}, k)
-        self.assertEqual(live_at(self.oct["live"]["speaker_note"], "2099-10-15T17:00:00.000Z"), "no guest speaker this month")
+        # the settings of a Zoom meeting with no list of speakers: the committee has none (config/site.yml: "a meeting
+        # with no block has no guest speaker"), so every meeting says so — never a name made up, never "to be
+        # announced"; past the build's dates, the fallback
+        oct15 = "2099-10-15T17:00:00.000Z"
+        for k, v in (("speaker_name", "none tonight"), ("speaker_position", "the Meetings page lists no guest speaker for this meeting"),
+                     ("speaker_topic", "none"), ("speaker_line", "none tonight"), ("speaker_after", "none this time")):
+            self.assertEqual(live_at(self.oct["live"][k], oct15), v, k)
+            self.assertEqual(self.oct["live"][k]["fallback"], tba, k)
+        self.assertEqual(live_at(self.oct["live"]["speaker_note"], oct15), "no guest speaker this month")
 
     def test_our_grapevine_meeting(self):
         """Our Grapevine Meeting (recurring_events: grapevine-meeting), as /events/ lists it: the next one until it

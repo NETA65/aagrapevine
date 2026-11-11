@@ -137,6 +137,9 @@ out every sentence with a meeting ID or meeting code, a passcode, or a Zoom or G
 shows them to people), so put those in a sentence of their own. The platform's name comes from the link (Zoom,
 Google Meet, Microsoft Teams, Webex …); a link from anywhere else says just **Online**.
 
+Once the event is over, the calendar files keep it for 90 days with its place (or **Online on Zoom**), but no
+longer how to join: no link, no meeting ID or code, and none of the description's sentences that give one.
+
 ## The flyer: `flyer:`
 
 An event's flyer shows on its card: a **View flyer** button, and beside the card (on a computer or a

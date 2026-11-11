@@ -5,9 +5,10 @@
 // reportModel() writes the report's 12 sections — each a title and a plain text — in English AND
 // Spanish, for the current month (Central time), from data the site already has:
 //   header     "District [##] Grapevine / La Viña report — <Month YYYY>" + "Prepared by: …" (blanks)
-//   committee  site `meeting` (next date, the rule, its guest speaker), a pointer to /meetings/ for the meeting's link
-//              and code or ID (its platform: config/site.yml meeting.platform, Zoom when not set), and our own
-//              online meetings (the Grapevine Meeting: config/site.yml recurring_events)
+//   committee  site `meeting` (next date, the rule, its guest speaker), a pointer to its section of the Meetings page
+//              (/meetings/#committee-meeting) for the meeting's link and code or ID (its platform: config/site.yml
+//              meeting.platform, Zoom when not set), and our own online meetings (the Grapevine Meeting:
+//              config/site.yml recurring_events)
 //   issues     the month model (eleventy/filters/monthly.js): GV theme, LV issue, config/carry.yml tips
 //   deadlines  db.editorial (next 3 Grapevine deadlines, next 2 La Viña deadlines — its yearly themes —, La
 //              Viña's rotating topics), db.audio_project
@@ -31,7 +32,7 @@
 import { eventWhen, eventWhere, writersPick, spotlightOf, spotlightHomeDays, writerName, issueLabelOf, issueInSentence, itemIssueName } from "./community.js";
 import { issueName } from "./read.js";
 import { digestShop, weeklyOpenAll, gvMeetings, eventEndMs, chicagoDayEndMs, meetingDates, meetingJoin, meetingSpeaker, meetingSpeakerUntil,
-  recurrenceText } from "./committee.js";
+  recurrenceText, COMMITTEE_MEETING_PATH } from "./committee.js";
 import { platformOf } from "./access.js";
 import { monthModel, monthTopics, nowDate, chicagoYmd, shortDate, timeRange, monthLabel, midSentence } from "./monthly.js";
 import { botmPriceState, shopPlanPrice, shopNextChange, shopPriceChangeIn, dayLabel } from "./shop.js";
@@ -283,9 +284,10 @@ function sectionsFor(L, ctx) {
       // that meeting's guest speaker (config/site.yml meeting.speakers; none on Dec 16, 2026)
       out.push(...speakerLines(meetingSpeaker((site && site.meeting) || {}, nx.ymd || chicagoYmd(nx.start), L), site, L));
     } else out.push(T("c_none"));
-    // how to join: the link and the meeting code (Google Meet) or the meeting ID and passcode (Zoom) — on /meetings/
+    // how to join: the link and the meeting code (Google Meet) or the meeting ID and passcode (Zoom) — on its
+    // section of /meetings/ (the weekly open meetings come first on that page)
     const join = meetingJoin((site && site.meeting) || {}, L);
-    out.push(T(join.idKey === "committee.meeting.code" ? "c_join_code" : "c_join", { url: abs("/meetings/"), platform }));
+    out.push(T(join.idKey === "committee.meeting.code" ? "c_join_code" : "c_join", { url: abs(COMMITTEE_MEETING_PATH), platform }));
     out.push(T("c_covers"));
     // our own online meetings (the Grapevine Meeting), a line each: its day and time, where, its section on /meetings/
     // — and its first date while that is still ahead
@@ -660,7 +662,7 @@ export const reportText = (model, lang) => composeText(((model && model.langs &&
 //   writers   Area 65 writers in the issues of the period (the Texas writers archive + the spotlight), as printed
 //   invite    an invitation to the districts (the committee's e-mail, our events page)
 //   meeting   the first committee meeting after the period, its guest speaker, and how to join: the link and the meeting
-//             code (Google Meet), or the Zoom ID and passcode (/meetings/ shows them)
+//             code (Google Meet), or the Zoom ID and passcode (/meetings/#committee-meeting shows them)
 //   notes     empty
 // Counts only — never an attendance list —, writers only as the magazines printed them (first name + initial, city).
 // "Ours" (areaOurs): a content/events file, a dated Drive flyer, a monthly series we hold (config/site.yml
@@ -854,7 +856,7 @@ export function areaModel(db = {}, site = {}, now = nowDate()) {
         monthly: T("e_monthly"), tbc: T("e_tbc"),
         w_intro: T("ar_w_intro"), w_none: T("ar_w_none"), w_all: T("w_all", { url: abs("/published/") }),
         invite: [email ? T("ar_invite", { email }) : T("ar_invite_plain"), T("ar_invite_more", { url: abs("/events/") })].join("\n"),
-        meet_none: T("c_none"), meet_more: [zoom, T(j.idKey === "committee.meeting.code" ? "c_join_code" : "c_join", { url: abs("/meetings/"), platform }),
+        meet_none: T("c_none"), meet_more: [zoom, T(j.idKey === "committee.meeting.code" ? "c_join_code" : "c_join", { url: abs(COMMITTEE_MEETING_PATH), platform }),
           clean(L === "es" ? sm.note_es : sm.note)].filter(Boolean).join("\n"),
       },
       tokens: { name: T("tok_name"), meeting: T("ar_tok_meeting") },

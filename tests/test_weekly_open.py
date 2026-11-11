@@ -70,7 +70,7 @@ class Passcode(unittest.TestCase):
     def test_a_code_with_digits_wins(self):
         self.assertEqual(W.find_passcode("This meeting is password protected; the passcode is 238047"), "238047")
         self.assertEqual(W.find_passcode("Passcode: 238047"), "238047")
-        self.assertEqual(W.find_passcode("Reunión protegida. Contraseña: neta65"), "neta65")
+        self.assertEqual(W.find_passcode("Reunión protegida. Contraseña: abc123"), "abc123")
         self.assertEqual(W.find_passcode("password required", "Zoom code 871 2036 8287, passcode 238047"), "238047")
 
     def test_a_word_of_the_sentence_is_never_the_code(self):

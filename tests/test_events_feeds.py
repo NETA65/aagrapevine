@@ -694,7 +694,7 @@ class FeedDuplicates(TempState):
         self.assertEqual((booth["url"], booth["extra"]["flyer_url"]), ("https://citywidedallasaa.org", None))  # untouched
         self.assertEqual(booth["extra"]["feed_match"], "title")
         m = next(e for e in evs if e["id"] == meeting["id"])
-        self.assertEqual((m["url"], m["extra"]["feed_match"]), ("/meetings/", "title"))
+        self.assertEqual((m["url"], m["extra"]["feed_match"]), ("/meetings/#committee-meeting", "title"))
         self.assertEqual(ctx.feeds[0]["notes"], [])
 
     def test_the_same_page_for_every_date_of_a_series(self):
@@ -1098,7 +1098,8 @@ class MeetingSkipDates(unittest.TestCase):
         ms = B.committee_meetings(ctx_with(cfg, now=datetime(2030, 1, 1, 12, tzinfo=timezone.utc)))
         self.assertEqual([m["id"] for m in ms[:2]], ["ev:committee:2030-01-10", "ev:committee:2030-02-14"])
         self.assertEqual((ms[0]["extra"]["start"], ms[0]["extra"]["end"]), ("2030-01-11T00:30:00Z", "2030-01-11T01:30:00Z"))
-        self.assertEqual(len(ms), 12)
+        # the pages' months (meeting.window_meetings): Jan 1 is before January's meeting — Jan 10, 2030 … Jan 9, 2031
+        self.assertEqual((len(ms), ms[-1]["id"]), (13, "ev:committee:2031-01-09"))
         # the real clock no longer matters: TODAY's first meeting, even a year after the last one in the horizon
         later = datetime(2027, 10, 1, 12, tzinfo=timezone.utc)
 
@@ -1145,8 +1146,9 @@ class OurCalendarFiles(TempState):
     line — leads somewhere that is there. A date still to come, or a one-off event that took place, links to its card
     on /events/ (an anchor the page has); a monthly series' date that has passed (the files keep it 90 days, for
     subscribers) to /events/ itself, as the page lists only a series' dates still to come; a committee meeting to
-    /meetings/, an event with a page of its own to that page. And a series' repeat line names its time zone: the
-    calendar shows the date's start in its reader's zone, right beside it."""
+    its section of /meetings/ (#committee-meeting: the weekly open meetings come first on that page), an event with
+    a page of its own to that page. And a series' repeat line names its time zone: the calendar shows the date's
+    start in its reader's zone, right beside it."""
 
     NOW = datetime(2026, 9, 24, 21, 0, tzinfo=timezone.utc)      # Thu Sep 24, 4 PM CDT: that day's workshop is over
 
@@ -1212,15 +1214,18 @@ class OurCalendarFiles(TempState):
                     elif url == page:                                                # only a series' date that is over
                         self.assertTrue(uid.startswith(lv), uid)
                         self.assertLessEqual(e["DTEND"].dt, self.NOW)
+                    elif uid.startswith("ev-committee-"):                     # the committee meeting's section
+                        self.assertEqual(url, "https://example.org/site" + ("/es" if lang == "es" else "")
+                                         + "/meetings/#committee-meeting")
                     else:
-                        self.assertIn(url, ("https://example.org/site" + ("/es" if lang == "es" else "") + "/meetings/",
-                                            "https://citywidedallasaa.org"))
+                        self.assertEqual(url, "https://citywidedallasaa.org")
                     self.assertEqual([ln for ln in desc if ln.startswith(details)], [details + url])
                     if uid.startswith("ev-recurring-"):
                         line = next(ln for ln in desc if ln.startswith(("Every ", "Cada ")))
                         self.assertTrue(re.sub("[\u2009\u202f\u00a0]", " ", line).endswith(
                             {"en": " PM Central time", "es": " p. m., hora del Centro"}[lang]), line)
             self.assertEqual(sum(url == page for url in urls.values()), 3, lang)     # Jul 23, Aug 27, Sep 24
+            self.assertGreater(sum(uid.startswith("ev-committee-") for uid in urls), 10, lang)   # 3 months back, 12 on
 
 
 # --------------------------------------------------------------------------- the flyers on /events/
@@ -1397,7 +1402,7 @@ class OnlineAndHybridEvents(TempState):
         manual = self.manual_events({
             "zz-hybrid.md": ('title: "Hybrid Writing Workshop"\ntitle_es: "Taller de escritura híbrido"\n' + when(0)
                              + f'location: "{self.PLACE}"\n'
-                             'online_url: "https://us02web.zoom.us/j/9494767497"\nmeeting_id: "949 476 7497"\nlang: en\n'),
+                             'online_url: "https://us02web.zoom.us/j/1234567890"\nmeeting_id: "123 456 7890"\nlang: en\n'),
             "zz-online.md": ('title: "Online Writing Workshop"\ntitle_es: "Taller de escritura en línea"\n' + when(1)
                              + 'online_url: "https://meet.google.com/abc-defg-hij"\nlang: en\n'),
             "zz-other-link.md": ('title: "Streamed Workshop"\ntitle_es: "Taller transmitido"\n' + when(2)

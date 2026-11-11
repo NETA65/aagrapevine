@@ -365,6 +365,30 @@ def upcoming_meetings(count: int = 12, include_recent_days: int = 0, now: dateti
                                include_recent_days=include_recent_days)
 
 
+# The months of committee meetings the web pages list: this month (the site's time zone) and the MEETING_MONTHS_AHEAD
+# after it — eleventy/filters/committee.js MEETING_MONTHS_AHEAD, the window of normalizeEvents (/events/, /events.ics,
+# the event share pages; the month pages are the same months). The sync writes a record for every date of those months
+# (build_data.committee_meetings: its flyer, its guest speaker), so no date the pages list goes without the flyer the
+# Drive has for it. One number on both sides: a unit test keeps the two in step (tests/test_r24_meeting_window.py).
+MEETING_MONTHS_AHEAD = 12
+
+
+def window_meetings(now: datetime | None = None, cfg: dict | None = None,
+                    months_ahead: int = MEETING_MONTHS_AHEAD) -> list[dict]:
+    """The committee meetings (config/site.yml `meeting:`) the web pages list as of `now` (default: the clock) that are
+    not over yet, soonest first: every date of the rule from `now`'s month in the site's time zone through
+    `months_ahead` months after it — the months of committee.js meetingDates(meeting, 0, MEETING_MONTHS_AHEAD). Not a
+    count of dates: before this month's meeting the pages list 13 (on Nov 11, 2026: Nov 18, 2026 … Nov 17, 2027),
+    after it 12 — a count of 12 left the 13th without its record, and so without its flyer. A meeting of the month
+    before that is still running (an overnight one on a month's last day) is in it too, as in upcoming_meetings."""
+    cfg = cfg if cfg is not None else load_config()
+    tz = ZoneInfo((cfg.get("site", {}) or {}).get("timezone", "America/Chicago"))
+    # (upcoming_rule_dates walks from the month before now's: that one, now's and the `months_ahead` after it — at
+    # most one date each, so the count never cuts the window short)
+    months = max(0, int(months_ahead)) + 2
+    return upcoming_rule_dates(meeting_rule(cfg.get("meeting", {})), months, tz, now=now, horizon_months=months)
+
+
 if __name__ == "__main__":
     for x in upcoming_meetings(4):
         print(x)

@@ -46,9 +46,9 @@ from .common import (RAW_DIR, ROOT, SITE_DIR, STATE_DIR, as_json, clean_text, ev
                      unreadable_message, write_json)
 from .events_external import platform_of
 from .geo import SCOPES, UNKNOWN, best_of, classify_location, fold
-from .meeting import (SPEAKER_CONFIRM_DAYS, MonthlyRule, check_skip_dates, check_starts, meeting_rule,
-                      meeting_skip_notes, meeting_speakers, nth_weekday, overnight, parse_hhmm, speaker_until,
-                      upcoming_meetings, upcoming_rule_dates, week_of_month_value, weekday_index)
+from .meeting import (MEETING_MONTHS_AHEAD, SPEAKER_CONFIRM_DAYS, MonthlyRule, check_skip_dates, check_starts,
+                      meeting_rule, meeting_skip_notes, meeting_speakers, nth_weekday, overnight, parse_hhmm,
+                      speaker_until, upcoming_rule_dates, week_of_month_value, weekday_index, window_meetings)
 from .run_all import FULL_ONLY
 
 log = get_logger("build_data")
@@ -67,6 +67,10 @@ NEVER_NEW_KINDS = ("topic", "meeting")   # editorial themes (date = a deadline) 
 # Events computed from config/site.yml (the monthly committee meeting, `recurring_events:`): a date that
 # comes round every month is never "new", never in What's New and never in the "past events" list.
 SCHEDULED_EVENT_CATEGORIES = ("committee", "recurring")
+# A committee meeting's `url`: its own section of the Meetings page — the weekly open meetings come first there, so
+# a plain /meetings/ would open on someone else's meeting (eleventy/filters/committee.js COMMITTEE_MEETING_PATH;
+# the pages add /es/ and the site's address)
+COMMITTEE_MEETING_PATH = "/meetings/#committee-meeting"
 # recurring_events: (config/site.yml)
 RECURRING_AHEAD = 6           # upcoming dates listed per event (`months_ahead`)
 RECURRING_AHEAD_MAX = 24
@@ -492,13 +496,16 @@ def speaker_sentences(speaker: dict | None, until: tuple[int, int] | None, end: 
     return out
 
 
-def committee_meetings(ctx: Ctx, count: int = 12) -> list[dict]:
-    """The monthly committee meeting for the next 12 months — fixed human text in both languages. How to join is the
-    settings' (`online_url` — an older `zoom_url` still counts —, `meeting_id`, `passcode`); a date with a guest
-    speaker (meeting_speakers) names them in its summary and in extra.speaker {name, position, topic} (both
-    languages; never `confirmed`); its flyer is the newest committee Drive flyer `flyer_match` finds for that date
-    (pick_flyer: one named with the meeting's month — "January 2027 Committee Meeting - guest speaker" — else the
-    undated one), from the flyers/ folder only (the meeting's slides in slides/ are no flyer)."""
+def committee_meetings(ctx: Ctx, months_ahead: int = MEETING_MONTHS_AHEAD) -> list[dict]:
+    """The monthly committee meeting on every date the web pages list — this month and the 12 after it, not over yet
+    (meeting.window_meetings: the months of committee.js normalizeEvents, MEETING_MONTHS_AHEAD on both sides; the
+    pages take each date's flyer from here, so a date they list but this left out would show none) — fixed human
+    text in both languages. How to join is the settings' (`online_url` — an older `zoom_url` still counts —,
+    `meeting_id`, `passcode`); a date with a guest speaker (meeting_speakers) names them in its summary and in
+    extra.speaker {name, position, topic} (both languages; never `confirmed`); its flyer is the newest committee
+    Drive flyer `flyer_match` finds for that date (pick_flyer: one named with the meeting's month — "January 2027
+    Committee Meeting - guest speaker" — else the undated one), from the flyers/ folder only (the meeting's slides in
+    slides/ are no flyer)."""
     site, mt = ctx.cfg.get("site", {}) or {}, ctx.cfg.get("meeting", {}) or {}
     platform = clean_text(mt.get("platform")) or "Zoom"
     committee = site.get("committee") or "Grapevine / La Viña Committee"
@@ -518,12 +525,12 @@ def committee_meetings(ctx: Ctx, count: int = 12) -> list[dict]:
     flyer_re, _note = _flyer_pattern(mt.get("flyer_match"))
     flyers = series_flyers(ctx, flyer_re, category="flyers")
     out = []
-    for m in upcoming_meetings(count, now=ctx.now, cfg=ctx.cfg):      # the build's own clock and settings
+    for m in window_meetings(now=ctx.now, cfg=ctx.cfg, months_ahead=months_ahead):   # the build's clock and settings
         sp = speakers.get(m["ymd"])
         text = {lang: clean_text(f"{summary[lang]} {speaker_sentences(sp, until, end, lang)}") for lang in LANGS}
         fly = pick_flyer(flyers, m["ymd"])
         out.append({
-            "id": f"ev:committee:{m['ymd']}", "source": "committee", "kind": "event", "url": "/meetings/",
+            "id": f"ev:committee:{m['ymd']}", "source": "committee", "kind": "event", "url": COMMITTEE_MEETING_PATH,
             "title": title["en"], "summary": text["en"], "lang": "en", "date": m["start"],
             "first_seen": None, "image": None, "tags": ["committee"],
             "category": "committee", "status": "ok",
@@ -618,7 +625,7 @@ def _recurring_url(v: Any, site_path: bool = False) -> str | None:
     return s if re.match(r"(?i)^https?://[^\s/]+\.[^\s]+$", s) else None
 
 
-# `meeting_id:` — what people type into the Zoom app (or a phone): "815 9593 1777", "949-476-7497", a Google Meet
+# `meeting_id:` — what people type into the Zoom app (or a phone): "815 9593 1777", "815-9593-1777", a Google Meet
 # code "abc-defg-hij". Letters, digits, spaces, dots and dashes; anything else is left out (and noted).
 _MEETING_ID = re.compile(r"[A-Za-z0-9](?:[A-Za-z0-9 .-]{1,38})[A-Za-z0-9]")
 # `contact:` — a plain e-mail address ("lveditorial@aagrapevine.org"); the pages show it as a mailto: link, so

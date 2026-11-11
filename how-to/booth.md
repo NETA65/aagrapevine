@@ -1544,12 +1544,12 @@ Needs `text`. Takes `title` (the heading), `qr_url` (shown beside the text).
 | `title_en` / `title_es` | Thanks for stopping by / Gracias por visitarnos |
 | `text_en` | The {committee} meets online every month, and every AA member is welcome. Ask us for the details. |
 | `text_es` | El {committee} se reúne en línea cada mes y todos los miembros de AA son bienvenidos. Pídenos los detalles. |
-| `qr_url` | {site}meetings/ |
+| `qr_url` | {site}meetings/#committee-meeting |
 | `source_url` | https://neta65.org/trusted-servants/grapevine-la-vina/ |
 
 On the screen: the heading, the text — "The NETA 65 Grapevine & La Viña Committee meets online every month …" /
-"El Comité de Grapevine y La Viña de NETA 65 se reúne en línea cada mes …" — and the QR code of `/meetings/` beside it
-(`/es/meetings/` when Spanish leads).
+"El Comité de Grapevine y La Viña de NETA 65 se reúne en línea cada mes …" — and the QR code of the committee
+meeting's section, `/meetings/#committee-meeting`, beside it (`/es/meetings/#committee-meeting` when Spanish leads).
 
 #### qr
 

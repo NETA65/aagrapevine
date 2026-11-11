@@ -136,7 +136,7 @@ def data() -> dict:
 
 SITE = {"url": SITE_URL, "contact_email": "grapevine@neta65.org", "links": {},
         "meeting": {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00", "platform": "Zoom",
-                    "meeting_id": "949 476 7497", "passcode": "neta65", "chair_title": "Grapevine / La Viña Chair",
+                    "meeting_id": "123 456 7890", "passcode": "abc123", "chair_title": "Grapevine / La Viña Chair",
                     "chair_title_es": "Coordinador(a) de Grapevine / La Viña", "chair_email": "grapevine@neta65.org",
                     "note": "All AA members are welcome to attend.", "note_es": "Todos los miembros de AA pueden asistir.",
                     "skip_dates": ["2026-12-16"]}}
@@ -511,8 +511,8 @@ class Pieces(unittest.TestCase):
             self.assertIn(s("report.ar_tok_meeting", L), M["s"]["h_title"])
             self.assertIn("{from}", M["s"]["h_period"])
             self.assertIn("grapevine@neta65.org", M["s"]["invite"])
-            self.assertIn("949 476 7497", M["s"]["meet_more"])
-            self.assertIn(SITE_URL + ("/es" if L == "es" else "") + "/meetings/", M["s"]["meet_more"])
+            self.assertIn("123 456 7890", M["s"]["meet_more"])
+            self.assertIn(SITE_URL + ("/es" if L == "es" else "") + "/meetings/#committee-meeting", M["s"]["meet_more"])
             self.assertEqual(M["kinds"], {"assembly": s("report.ar_m_assembly", L), "acm": s("report.ar_m_acm", L)})
         self.assertIn("Coordinador(a) de Grapevine / La Viña", self.A["langs"]["es"]["s"]["h_by"])
 
@@ -570,8 +570,8 @@ class Sections(unittest.TestCase):
                                                         "• Will J., Waco — “Back from the Darkness” (Grapevine, November 2026)"])
         self.assertNotIn("Victor", en["writers"])                         # its issue began before the period
         self.assertTrue(en["meeting"].startswith("Next NETA 65 Grapevine / La Viña committee meeting: Wednesday, January 20, 2027"))
-        self.assertIn("Zoom meeting ID: 949 476 7497 · Passcode: neta65", en["meeting"])
-        self.assertIn("ID de reunión de Zoom: 949 476 7497 · Código de acceso: neta65", es["meeting"])
+        self.assertIn("Zoom meeting ID: 123 456 7890 · Passcode: abc123", en["meeting"])
+        self.assertIn("ID de reunión de Zoom: 123 456 7890 · Código de acceso: abc123", es["meeting"])
         self.assertEqual(en["notes"], "")
         for L, S in (("en", en), ("es", es)):
             for sid, text in S.items():

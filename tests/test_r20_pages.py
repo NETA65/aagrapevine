@@ -248,7 +248,7 @@ class Countdowns(unittest.TestCase):
           const ds = { rule: JSON.stringify({ weekday: 3, n: 3, start: "19:00", end: "20:00", skip: [] }), start: "2026-12-17T01:00:00.000Z",
                        end: "2026-12-17T02:00:00.000Z", speakers: JSON.stringify(input.speakers), speakerTpl: "Guest speaker: {name}",
                        calTitle: "Committee meeting", calDesc: "Monthly committee meeting on Google Meet.", calLoc: "https://meet.google.com/abc-defg-hij",
-                       calUrl: "https://example.org/gv/meetings/" };
+                       calUrl: "https://example.org/gv/meetings/#committee-meeting" };
           c.$el = { dataset: ds }; c.$root = c.$el;
           c.$refs = { date: el("span", {}, [], "built date"), time: el("span", {}, [], "built time") };
           c.init();
@@ -263,7 +263,7 @@ class Countdowns(unittest.TestCase):
         flat = re.sub(r"\r\n ", "", r["file"])
         self.assertIn("DESCRIPTION:Monthly committee meeting on Google Meet. Guest speaker: Ann B. — “How the Conference works”. "
                       "https://meet.google.com/abc-defg-hij", flat)
-        self.assertIn("URL:https://example.org/gv/meetings/", flat)
+        self.assertIn("URL:https://example.org/gv/meetings/#committee-meeting\r\n", flat)   # the section: data-cal-url
         self.assertIn("UID:ev-committee-2027-01-20@neta65-gvlv", flat)
 
     def test_the_home_card_with_a_speaker_without_a_topic(self):
