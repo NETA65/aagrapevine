@@ -180,7 +180,7 @@ calendarFeed: "/events.ics"
   {#- (the guest speakers to come, each with that meeting's calendar text: the card shows the speaker of the date it
       shows — none on a date without one —, also once it rolls on in the browser: committee.js cmSpeakers) -#}
   {%- set spk = site | cmSpeakers(lang) -%}
-  {%- set cfg = { rule: m | cmRuleObj, start: next.startIso, end: next.endIso, title: next.title, description: next.calDescription, location: next.calLocation, url: ('/meetings/' | lurl(lang) | siteUrl(site)), speakers: spk.list, plain: spk.plain, i18n: { join: "committee.meeting.join" | t(lang, pf), soon: "committee.meeting.join_soon" | t(lang), live: "committee.meeting.join_live" | t(lang), yourTime: "committee.meeting.your_time" | t(lang), speaker: "committee.meeting.speaker" | t(lang) } } -%}
+  {%- set cfg = { rule: m | cmRuleObj, start: next.startIso, end: next.endIso, title: next.title, description: next.calDescription, location: next.calLocation, url: ('/meetings/#committee-meeting' | lurl(lang) | siteUrl(site)), speakers: spk.list, plain: spk.plain, i18n: { join: "committee.meeting.join" | t(lang, pf), soon: "committee.meeting.join_soon" | t(lang), live: "committee.meeting.join_live" | t(lang), yourTime: "committee.meeting.your_time" | t(lang), speaker: "committee.meeting.speaker" | t(lang) } } -%}
   <article class="cm-pinned @container mb-10" x-show="filter === 'all' && !showAll" x-data="cmMeeting({{ cfg | json }})" aria-labelledby="ev-next-title">
     <div class="cm-pinned-grid">
       <div class="cm-date-tile cm-tone-light" aria-hidden="true">

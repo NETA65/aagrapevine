@@ -82,7 +82,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
      x-data="homeMeeting" data-rule="{{ meeting.rule | json }}" data-start="{{ meeting.next.start }}" data-end="{{ meeting.next.end }}"
      data-speakers="{{ spList | json }}" data-speaker-tpl="{{ 'committee.meeting.speaker' | t(L) }}"
      data-cal-title="{{ 'home.meeting_cal_title' | t(L) }}" data-cal-desc="{{ 'home.meeting_cal_desc' | t(L, pf) }}{{ (' ' + mNote) if mNote }}" data-cal-loc="{{ mt.online_url }}"
-     data-cal-url="{{ '/meetings/' | lurl(L) | siteUrl(site) }}">
+     data-cal-url="{{ '/meetings/#committee-meeting' | lurl(L) | siteUrl(site) }}">
   <div class="home-meet-info">
     <div class="flex flex-wrap items-center justify-between gap-2">
       <h2 id="{{ tid }}" class="home-meet-eyebrow">{{ "home.meeting_eyebrow" | t(L) }}</h2>
@@ -816,8 +816,9 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
       {%- set info = e | homeEventInfo(L) -%}
       {#- the kind's colour, the same as on /events/ (eventTone: committee · gv · lv · booth · assembly · other) -#}
       {%- set tone = e | eventTone -%}
-      {#- A monthly recurring event (e.g. the CityWide Dallas booth) opens its card on /events/ -#}
-      {%- set href = (("/events/#" ~ (e | homeEventAnchor)) if e.category == "recurring" else (e.url or x.flyer_url or x.online_url or "/events/")) | lurl(L) -%}
+      {#- A monthly recurring event (e.g. the CityWide Dallas booth) opens its card on /events/; a committee meeting
+          its section on /meetings/ (whatever url an older sync wrote: the weekly open meetings come first there) -#}
+      {%- set href = (("/events/#" ~ (e | homeEventAnchor)) if e.category == "recurring" else ("/meetings/#committee-meeting" if e.category == "committee" else (e.url or x.flyer_url or x.online_url or "/events/"))) | lurl(L) -%}
       {%- set et = e | tx("title", L) -%}
       {#- the card hides itself once the event is over (GV.expire); the calendar card below is not an event.
           A phone shows three: the 4th is a spare that steps in there once an earlier one has ended. -#}

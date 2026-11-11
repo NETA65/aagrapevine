@@ -29,8 +29,8 @@ day being its Central calendar day:
     Instagram posts (instagram.json: per account, how many and the 3 newest, and one link to the site's
     /instagram/ page — the text part gives only the counts and the link), documents
   * ONE pointer: "Coming up in K" → the toolkit of the month it goes out in (/monthly/K/), the home of
-    everything current (the committee meeting — its link and code stay on /meetings/ —, events not over
-    yet, story deadlines, this month's issues, Book of the Month …), with K's committee meeting and its
+    everything current (the committee meeting — its link and code stay on /meetings/#committee-meeting —, events
+    not over yet, story deadlines, this month's issues, Book of the Month …), with K's committee meeting and its
     guest speaker while it is ahead ("Committee meeting on January 20, 2027 — guest speaker: Rick W. — “…”":
     coming_speaker) — and, while the notice of a price change AA Grapevine announced is on, its row
     ("Grapevine and La Viña prices change on …": price_change)
@@ -326,6 +326,9 @@ MEDIA_GROUPS = [
     ("pdf", "/library/"),
 ]
 DRIVE_PAGE = "/portfolio/"
+# The committee meeting's own section of the Meetings page, where the e-mail links it (the weekly open meetings
+# come first on /meetings/): community.js / committee.js COMMITTEE_MEETING_PATH, build_data.COMMITTEE_MEETING_PATH
+COMMITTEE_MEETING_PATH = "/meetings/#committee-meeting"
 
 
 def log(msg: str) -> None:
@@ -1451,7 +1454,7 @@ def month_events(now: datetime, ed: dict, cfg: dict) -> list[dict]:
         cm = meeting_by_rule(ed["key"], meeting)
     if cm and parse_dt(cm["start"]) and parse_dt(cm["start"]) <= now:
         base = rec or {"kind": "event", "source": "committee", "title": "", "lang": "en", "i18n": {}, "machine": []}
-        out.append({**base, "id": f"ev:committee:{cm['ymd']}", "category": "committee", "url": "/meetings/", "date": cm["start"],
+        out.append({**base, "id": f"ev:committee:{cm['ymd']}", "category": "committee", "url": COMMITTEE_MEETING_PATH, "date": cm["start"],
                     "extra": {"start": cm["start"], "end": cm["end"], "all_day": False, "online": True},
                     "_committee": True})
     out.sort(key=lambda e: js_order(e.get("id")))
@@ -1597,7 +1600,7 @@ def build_rows(group: str, items: list[dict], lang: str, links: Links, page: str
 def event_row(it: dict, lang: str, links: Links, as_of: date | None = None) -> dict:
     """An event that took place, as the e-mail lists it: its day(s) only — "Sat, Sep 12", or over several
     days "Fri, Jun 25 – Sun, Jun 27" (the website's rule) — never a time, "every month" or "to be
-    confirmed" (it is over). The committee meeting under its own name, linking to /meetings/.
+    confirmed" (it is over). The committee meeting under its own name, linking to /meetings/#committee-meeting.
     `as_of` = the last day of the month covered: a day of another year says its year, like the page
     (community.js eventWhen → needsYear: "Thu, Dec 31, 2026 – Sat, Jan 2, 2027")."""
     t = T[lang]
@@ -1625,7 +1628,7 @@ def event_row(it: dict, lang: str, links: Links, as_of: date | None = None) -> d
     # one held online (community.js eventWhere)
     where = tx_extra(it, "location", lang) or (t["online"] if ex.get("online_url") or ex.get("online") is True else "")
     if it.get("_committee"):
-        return {"title": t["committee_meeting"], "when": when, "where": where, "url": links.page("/meetings/", lang)}
+        return {"title": t["committee_meeting"], "when": when, "where": where, "url": links.page(COMMITTEE_MEETING_PATH, lang)}
     url = it.get("url") or ""
     if it.get("category") == "recurring" and ex.get("flyer_url") and not url.startswith(("http://", "https://")):
         # a date of a monthly series without a page of its own (its card on /events/ is gone once it is over):

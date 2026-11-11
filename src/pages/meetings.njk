@@ -54,6 +54,9 @@ pageScripts: ["/assets/js/committee.js"]
 {%- set notesTab = (db.drive.items | cmDocTabs(lang)).tabs | where("key", "notes") | first -%}
 {%- set agendaHref = ("/portfolio/" | lurl(lang)) + ("#docs-notes" if (notesTab and notesTab.count) else "") -%}
 {%- set pageAbs = page.url | siteUrl(site) -%}
+{#- the committee meeting's own section (the weekly open meetings come first on this page): its calendar entry's
+    link — the same as the "Details:" line of its text (committee.js COMMITTEE_MEETING_PATH) — and its Share link -#}
+{%- set committeeAbs = pageAbs + "#committee-meeting" -%}
 {#- the guest speakers to come, each with that meeting's calendar text (committee.js cmSpeakers): the countdown shows
     the speaker of the date it shows (none on a date without one) — also once it rolls on in the browser -#}
 {%- set spk = site | cmSpeakers(lang) -%}
@@ -64,7 +67,7 @@ pageScripts: ["/assets/js/committee.js"]
   title: next.title if next else "",
   description: next.calDescription if next else "",
   location: next.calLocation if next else "",
-  url: pageAbs,
+  url: committeeAbs,
   speakers: spk.list,
   plain: spk.plain,
   i18n: {
@@ -379,7 +382,7 @@ pageScripts: ["/assets/js/committee.js"]
     {#- ---------- Live countdown (+ that date's guest speaker) ---------- -#}
     {% if next %}
     {% call countdownCard({ id: "next-meeting", ev: next, url: join.url, join: "committee.meeting.join" | t(lang, pf),
-      hint: "committee.meeting.join_hint" | t(lang, pf), share: { url: pageAbs, title: ("nav.meeting" | t(lang)) + " — NETA 65", text: rule + " · " + timeRange } }) %}
+      hint: "committee.meeting.join_hint" | t(lang, pf), share: { url: committeeAbs, title: ("nav.meeting" | t(lang)) + " — NETA 65", text: rule + " · " + timeRange } }) %}
       {%- if hasSpeakers %}
       <div class="cm-count-speaker" x-show="speaker"{% if not sp %} x-cloak{% endif %}>
         <p class="flex items-start gap-2 font-semibold text-white">{% icon "mic", "mt-0.5 size-4 shrink-0" %}<span x-text="speakerLine">{{ ("committee.meeting.speaker" | t(lang, { name: sp.name })) if sp }}</span></p>

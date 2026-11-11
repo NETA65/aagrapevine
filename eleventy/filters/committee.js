@@ -617,6 +617,14 @@ function localPath(url, lang) {
   return lang && lang !== "en" ? `/${lang}${u}` : u;
 }
 
+// Where a link to OUR committee meeting goes: its own section of the Meetings page. The weekly open meetings come
+// first there, so a plain /meetings/ would open on someone else's meeting. Its cards on /events/, its calendar
+// entries (the .ics URL and the "Details:" line of the description), the countdowns' calendar files, the reports
+// and the monthly digest all link here (localPath / langPath add /es/; scripts/sync/build_data.py and
+// scripts/notify/send_digest.py write the same). A link to the page as a whole (the menu, the search, the sitemap,
+// the booth's "Meetings you can join") stays /meetings/.
+export const COMMITTEE_MEETING_PATH = "/meetings/#committee-meeting";
+
 // Element ids already used on the committee pages / layout. A bulletin post or
 // manual event whose file name slug equals one of these gets a prefixed anchor
 // instead, so a deep link never jumps to the wrong place.
@@ -681,7 +689,7 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
   const m = site?.meeting || {};
   const out = [];
   const seen = new Set();
-  const meetingPage = siteAbs(site, localPath("/meetings/", lang));
+  const meetingPage = siteAbs(site, localPath(COMMITTEE_MEETING_PATH, lang));
 
   // 1) Committee meetings — always computed from config/site.yml, so the
   //    calendar is right even if the daily data sync failed.
@@ -702,7 +710,7 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
     const over = Date.parse(d.end) <= now;
     out.push(shapeEvent({
       id, source: "committee", kind: "event", category: "committee", lang: "en",
-      url: "/meetings/", title: mTitle, summary: meetingSummary(site, lang, d.ymd, over),
+      url: COMMITTEE_MEETING_PATH, title: mTitle, summary: meetingSummary(site, lang, d.ymd, over),
       date: d.start, is_new: false, _i18nTitle: true,
       extra: { start: d.start, end: d.end, all_day: false, location: over ? t("committee.events.online", lang) : join.platform,
         online_url: over ? null : join.url || null,
@@ -806,7 +814,9 @@ function shapeEvent(it, site, lang, now, descOverride) {
   // "Sep 2026" / "Sept 2026": the month jump chips on /events/
   const monthShort = cap(fmt(new Date(monthKey + "-15T12:00:00Z"), lang, { month: "short", year: "numeric", timeZone: "UTC" })).replace(/\.(?=\s|$)/, "");
 
-  let link = it.url ? localPath(it.url, lang) : "";
+  // (a committee meeting: its section on /meetings/ — also a date of events.json outside normalizeEvents' window,
+  // or one an older sync wrote with plain "/meetings/")
+  let link = committee ? localPath(COMMITTEE_MEETING_PATH, lang) : it.url ? localPath(it.url, lang) : "";
   const flyerView = x.flyer_url || (it.source === "drive" && /drive\.google\.com/.test(it.url || "") ? it.url : null);
   const flyerId = driveFileId(flyerView);
   // Its picture: the data's own (a Drive flyer's, an outside calendar's image), else the Drive's picture of the
@@ -854,7 +864,7 @@ function shapeEvent(it, site, lang, now, descOverride) {
   // the page any more (events.njk lists a series' dates still to come, and its "Past events" leave the series
   // out: where("past", true) | whereNot("recurring", true)), so its entry — kept 90 days in the calendar
   // files — links to the page itself, never to a #… it no longer has. (A past one-off event keeps its row
-  // there, with this anchor; a committee meeting's page is /meetings/.)
+  // there, with this anchor; a committee meeting's page is its section on /meetings/: COMMITTEE_MEETING_PATH.)
   const anchor = eventAnchor(it);
   const onEventsPage = !committee && !(recurring && past);
   const detailsUrl = link && !selfLink
@@ -934,7 +944,7 @@ function shapeEvent(it, site, lang, now, descOverride) {
 export function meetingSpeakerDates(site, lang = "en", now = new Date()) {
   const m = site?.meeting || {};
   const nowMs = now instanceof Date ? now.getTime() : Number(now);
-  const page = siteAbs(site, localPath("/meetings/", lang));
+  const page = siteAbs(site, localPath(COMMITTEE_MEETING_PATH, lang));
   // the meeting's dates (its rule, skip dates and first date), three years on: a speaker's date that is not one of
   // them is left out by meetingSpeakers already
   const dates = new Map(meetingDates(m, 1, 36, new Date(nowMs)).map((d) => [d.ymd, d]));

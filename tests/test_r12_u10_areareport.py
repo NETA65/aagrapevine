@@ -512,7 +512,7 @@ class Pieces(unittest.TestCase):
             self.assertIn("{from}", M["s"]["h_period"])
             self.assertIn("grapevine@neta65.org", M["s"]["invite"])
             self.assertIn("949 476 7497", M["s"]["meet_more"])
-            self.assertIn(SITE_URL + ("/es" if L == "es" else "") + "/meetings/", M["s"]["meet_more"])
+            self.assertIn(SITE_URL + ("/es" if L == "es" else "") + "/meetings/#committee-meeting", M["s"]["meet_more"])
             self.assertEqual(M["kinds"], {"assembly": s("report.ar_m_assembly", L), "acm": s("report.ar_m_acm", L)})
         self.assertIn("Coordinador(a) de Grapevine / La Viña", self.A["langs"]["es"]["s"]["h_by"])
 

@@ -63,7 +63,7 @@
 import crypto from "node:crypto";
 import { qrSvg, issueLabel, issueInSentence, issueLabelOf } from "./community.js";
 import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs, calendarLinks, meetingJoin,
-  meetingSpeaker } from "./committee.js";
+  meetingSpeaker, COMMITTEE_MEETING_PATH } from "./committee.js";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
 import { overnight, wallInstant } from "../central-time.js";
 import { shopFromMonthly, money, shopPriceChangeIn, dayLabel, shopOfferIn, offerDates } from "./shop.js";
@@ -326,7 +326,7 @@ function dateRow(e, L, ctx, extra = {}) {
   const timed = !ex.all_day && ex.start && !isYmd(ex.start);
   const shownDay = d.start < ctx.first ? ctx.first : d.start;
   const overAt = iso(eventEndMs(e));
-  const href = extra.kind === "committee" ? "/meetings/#committee-meeting" : e.url || "/events/";
+  const href = extra.kind === "committee" ? COMMITTEE_MEETING_PATH : e.url || "/events/";
   const title = tr(e, "title", L);
   const city = clean(ex.city);
   return Object.defineProperty({
@@ -353,7 +353,7 @@ function committeeRow(events, key, site, L, ctx) {
   if (!ev) {
     const r = meetingByRule(key, site.meeting || {});
     // (where it is held: the settings' platform — committee.js meetingJoin, "Zoom" only when it is left out)
-    if (r) ev = { id: `ev:committee:${r.ymd}`, kind: "event", url: "/meetings/", title: "", extra: { start: r.start, end: r.end, location: meetingJoin(site.meeting).platform, online: true } };
+    if (r) ev = { id: `ev:committee:${r.ymd}`, kind: "event", url: COMMITTEE_MEETING_PATH, title: "", extra: { start: r.start, end: r.end, location: meetingJoin(site.meeting).platform, online: true } };
   }
   if (!ev) return null;
   const row = dateRow(ev, L, ctx, { kind: "committee" });
@@ -957,7 +957,7 @@ export function monthMessage(ctx, langs, style, site, t) {
     out.push(`${bullet} ${both("monthly.next_meeting")}: ${when} — ${nc.platform}`);
     out.push(...speakerLines(nc.speaker, Ls.slice(1).map((l) => ctx.nw && ctx.nw[l] && ctx.nw[l].nextCommittee && ctx.nw[l].nextCommittee.speaker)));
   }
-  out.push(`  ${t("monthly.msg_events", main, { url: url("/events/") })}`, `  ${t("monthly.msg_join", main, { url: url("/meetings/#committee-meeting") })}`, "");
+  out.push(`  ${t("monthly.msg_events", main, { url: url("/events/") })}`, `  ${t("monthly.msg_join", main, { url: url(COMMITTEE_MEETING_PATH) })}`, "");
 
   // 🔁 Every week: the weekly open meetings (+ this month: the Grapevine meetings near you)
   const weekly = m.weekly || [];

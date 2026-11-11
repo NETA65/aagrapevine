@@ -18,7 +18,11 @@
   * the links     — a link to the committee meeting goes to #committee-meeting (Home's meeting card, the pinned card
                     on /events/, /contribute/'s workshop band, /gvr/'s companion card and its "Pass it on" welcome
                     message — the printed handover sheet keeps the short address), no longer the top of the page;
-                    the old /meeting/ address (the committee meeting's page) opens #committee-meeting too.
+                    so do its calendar entries — Add to calendar on Home's card, on the countdowns of /events/ and
+                    /meetings/ and on every committee card of /events/: the entry's link (the .ics URL) and the
+                    "Details:" line of its text — and the countdown's Share link; the Grapevine Meeting's go to
+                    #grapevine-meeting; the old /meeting/ address (the committee meeting's page) opens
+                    #committee-meeting too.
 
 The pages are built by Eleventy with the site's own config, on a fixed clock, with weekly open meetings of the test's
 own (WEEKLY — not data/site/weekly_open.json, whatever the day's data says): a Zoom room whose ID and passcode are
@@ -28,6 +32,7 @@ nowhere else on the site, so the test sees where they show.
 """
 from __future__ import annotations
 
+import html
 import json
 import re
 import sys
@@ -129,6 +134,14 @@ def built(case: unittest.TestCase, when: str, bare: bool = False) -> dict:
 
 def page_url(lang: str, path: str) -> str:
     return ("/es/" if lang == "es" else "/") + path
+
+
+def cm_meeting(page: str, needle: str) -> dict:
+    """The settings a countdown gets: x-data="cmMeeting({...})" of the start tag that holds `needle`."""
+    i = page.index(needle)
+    tag = page[page.rindex("<", 0, i):page.index(">", i) + 1]
+    m = re.search(r"""x-data=(?:"cmMeeting\((.*?)\)"|'cmMeeting\((.*?)\)')""", tag, re.S)
+    return json.loads(html.unescape(m.group(1) or m.group(2)))
 
 
 def visible(html: str) -> str:
@@ -362,6 +375,51 @@ class CommitteeMeetingLinks(unittest.TestCase):
                                         + "(?:" + "|".join(re.escape(T[k][lang]) for k in (
                                             "home.meeting_details_short", "committee.events.meeting_details",
                                             "read.contrib.ws_meeting", "read.gvr.help_btn")) + ")")
+
+    def test_its_calendar_entries_and_share_link_go_to_its_section(self):
+        # Every calendar entry of the committee meeting links its section — the entry's link (the .ics URL) and the
+        # "Details:" line of its text, the same address —, and so does the countdown's Share; the Grapevine Meeting's
+        # go to its own section. No absolute link to the bare /meetings/ is left in what these pages offer to save
+        # or share (the page's own canonical and language links in its <head>, and the WebPage of its structured data,
+        # are the page's).
+        p = built(self, BEFORE)
+        site = "https://neta65.github.io/aagrapevine"
+        for lang in ("en", "es"):
+            pre = "/es" if lang == "es" else ""
+            full, gm = site + pre + "/meetings/#committee-meeting", site + pre + "/meetings/#grapevine-meeting"
+            label = T["committee.cal.details"][lang] + ": "
+            home, events, meetings = (p[page_url(lang, path)] for path in ("", "events/", "meetings/"))
+            with self.subTest(lang=lang, page="home"):
+                self.assertEqual(set(re.findall(r'data-cal-url="([^"]*)"', home)), {full})
+            for page, needle, url in ((events, '<article class="cm-pinned', full), (meetings, 'class="cm-board"', full),
+                                      (meetings, 'class="cm-series-board"', gm)):
+                with self.subTest(lang=lang, countdown=needle):
+                    cfg = cm_meeting(page, needle)
+                    self.assertEqual(cfg["url"], url)
+                    texts = [cfg["description"], cfg.get("plain")] + [s["description"] for s in cfg.get("speakers") or []]
+                    for t in filter(None, texts):
+                        self.assertEqual([ln for ln in t.splitlines() if ln.startswith(label)], [label + url], t)
+            with self.subTest(lang=lang, share="countdowns"):
+                for card, url in (("next-meeting", full), ("next-grapevine-meeting", gm)):
+                    art = re.search(rf'<article id="{card}" class="cm-count".*?</article>', meetings, re.S).group(0)
+                    self.assertEqual(re.findall(r'data-share="([^"]*)"', art), [url])
+            with self.subTest(lang=lang, cards="/events/"):
+                cards = re.findall(r'<li id="ev-committee-\d{4}-\d{2}-\d{2}".*?</article>', events, re.S)
+                self.assertGreaterEqual(len(cards), 12)
+                for card in cards:
+                    self.assertRegex(card, r'<a href="' + re.escape(pre + "/meetings/#committee-meeting")
+                                     + r'" class="-my-3 inline-block py-3 hover:text-gv">')
+                    m = re.search(r"""data-cm-ics=(?:"([^"]*)"|'([^']*)')""", card)
+                    ics = json.loads(html.unescape(m.group(1) or m.group(2)))
+                    self.assertEqual(ics["url"], full)
+                    self.assertEqual([ln for ln in ics["description"].splitlines() if ln.startswith(label)], [label + full])
+            with self.subTest(lang=lang, bare="none left"):
+                bare = re.compile(re.escape(site + pre) + r"/meetings/(?![#\w])|" + re.escape(
+                    (site + pre).replace(":", "%3A").replace("/", "%2F")) + r"%2Fmeetings%2F(?!%23|\w)")
+                for path in ("", "events/", "meetings/", "contribute/", "gvr/"):
+                    body = re.sub(r'<head>.*?</head>|<script type="application/ld\+json">.*?</script>', "",
+                                  p[page_url(lang, path)], flags=re.S)
+                    self.assertEqual(bare.findall(body), [], path)
 
     def test_the_old_meeting_address_opens_the_committee_meeting(self):
         # /meeting/ was the committee meeting's page: without an #anchor it opens #committee-meeting (JavaScript,

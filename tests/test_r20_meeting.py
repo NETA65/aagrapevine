@@ -441,7 +441,7 @@ class SpeakersOnPages(unittest.TestCase):
             "follows until 8:00 PM."), jan["summary"])
         self.assertIn("\n\nGuest speaker: Ann B. — Past delegate, Area 99\nTopic: “How the Conference works”\nThe guest "
                       "speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.\n\nJoin on Google Meet: "
-                      f"{ROOM}\nMeeting code: abc-defg-hij\n\nDetails: https://example.org/gv/meetings/", jan["desc"])
+                      f"{ROOM}\nMeeting code: abc-defg-hij\n\nDetails: https://example.org/gv/meetings/#committee-meeting", jan["desc"])
         # the same title, times and calendar uid with or without a speaker
         self.assertEqual((jan["uid"], jan["title"], jan["start"], jan["end"]),
                          ("ev-committee-2027-01-20", dec["title"], "2027-01-21T01:00:00.000Z", "2027-01-21T02:00:00.000Z"))

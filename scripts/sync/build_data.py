@@ -67,6 +67,10 @@ NEVER_NEW_KINDS = ("topic", "meeting")   # editorial themes (date = a deadline) 
 # Events computed from config/site.yml (the monthly committee meeting, `recurring_events:`): a date that
 # comes round every month is never "new", never in What's New and never in the "past events" list.
 SCHEDULED_EVENT_CATEGORIES = ("committee", "recurring")
+# A committee meeting's `url`: its own section of the Meetings page — the weekly open meetings come first there, so
+# a plain /meetings/ would open on someone else's meeting (eleventy/filters/committee.js COMMITTEE_MEETING_PATH;
+# the pages add /es/ and the site's address)
+COMMITTEE_MEETING_PATH = "/meetings/#committee-meeting"
 # recurring_events: (config/site.yml)
 RECURRING_AHEAD = 6           # upcoming dates listed per event (`months_ahead`)
 RECURRING_AHEAD_MAX = 24
@@ -523,7 +527,7 @@ def committee_meetings(ctx: Ctx, count: int = 12) -> list[dict]:
         text = {lang: clean_text(f"{summary[lang]} {speaker_sentences(sp, until, end, lang)}") for lang in LANGS}
         fly = pick_flyer(flyers, m["ymd"])
         out.append({
-            "id": f"ev:committee:{m['ymd']}", "source": "committee", "kind": "event", "url": "/meetings/",
+            "id": f"ev:committee:{m['ymd']}", "source": "committee", "kind": "event", "url": COMMITTEE_MEETING_PATH,
             "title": title["en"], "summary": text["en"], "lang": "en", "date": m["start"],
             "first_seen": None, "image": None, "tags": ["committee"],
             "category": "committee", "status": "ok",

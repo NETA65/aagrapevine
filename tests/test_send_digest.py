@@ -413,7 +413,7 @@ class Sections(DigestCase):
         cm = self.data["events"][1]
         self.assertTrue(cm["_committee"])
         row = D.event_row(cm, "en", D.Links(SITE))
-        self.assertEqual(row, {"title": "Committee meeting", "when": "Wed, Sep 16", "where": "Online", "url": f"{SITE}/meetings/"})
+        self.assertEqual(row, {"title": "Committee meeting", "when": "Wed, Sep 16", "where": "Online", "url": f"{SITE}/meetings/#committee-meeting"})
         self.assertEqual(D.event_row(cm, "es", D.Links(SITE))["title"], "Reunión del comité")
         # a skipped meeting has no row; no `meeting:` settings, no row either
         self.set_config(CONFIG.replace("skip_dates: []", 'skip_dates: ["2026-09-16"]'))
@@ -468,7 +468,7 @@ class Sections(DigestCase):
                      "1 photo album and 2 bulletin posts.",
                      "BULLETIN (2)", "* Scheduled post",
                      "EVENTS IN SEPTEMBER", "* Booth — Sat, Sep 12 · Lover's Lane UMC, Dallas",
-                     "* Committee meeting — Wed, Sep 16 · Online", f"  {SITE}/meetings/",
+                     "* Committee meeting — Wed, Sep 16 · Online", f"  {SITE}/meetings/#committee-meeting\n",
                      "* La Viña Writing Workshop — Sat, Sep 26 · Fort Worth",
                      "COMMITTEE UPLOADS (3)", "* [Reports] Area Chair Meeting Report (Aug 11)",
                      "* [Photos] Booth (3 new photos)", f"  {SITE}/photos/",
@@ -491,7 +491,7 @@ class Sections(DigestCase):
         # Spanish half: La Viña first, Spanish words and dates, the Spanish toolkit address
         for line in ("Resumen de septiembre de 2026", "Todo lo nuevo del sitio en septiembre",
                      "En septiembre: 8 historias de las revistas", "EVENTOS EN SEPTIEMBRE",
-                     "* Reunión del comité — mié, 16 de sept · En línea", f"  {SITE}/es/meetings/",   # the website's spelling
+                     "* Reunión del comité — mié, 16 de sept · En línea", f"  {SITE}/es/meetings/#committee-meeting\n",   # the website's spelling
                      "ARCHIVOS DEL COMITÉ (3)", "* [Informes] ES Area Chair Meeting Report (11 ago)",
                      "* [Fotos] ES Booth (3 fotos nuevas)", "LO NUEVO EN LAS REVISTAS",
                      "INSTAGRAM (5)\n-------------\n* La Viña @alcoholicosanonimos_lv: 1 publicación\n"
