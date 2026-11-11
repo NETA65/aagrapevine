@@ -13,8 +13,8 @@ store_offers "holiday-gifts-2026"):
                    new prices, the opening names them once, in its first sentence), free
                    shipping never said of the gift offers, nothing said about combining but AA Grapevine's own words
                    (neither of its two offers combines with any other); on the site from November 11 through December 31
-                   (Central), in the e-mail of December 1 (November's edition: the opening, whole, then "Details
-                   →"), on the booth with its first paragraph in each language;
+                   (Central), in the e-mail of December 1 (November's edition: the opening — in the HTML half whole, in
+                   the text half its first paragraphs —, the gift prices in both, then "Details →"), on the booth with its first paragraph in each language;
   * RealSettings — config/site.yml store_offers "holiday-gifts-2026" (CONTENT_TESTS): its days (no first day said:
                    the stores give none), both stores' words and their offer pages;
   * ShopPages    — one build of /shop/, /es/shop/ and November's toolkit with the committee's settings
@@ -76,10 +76,10 @@ OFFERS_LAST_DAY = r"December 31|31 de diciembre|diciembre|December"
 
 # The opening's second paragraph: the gift offers' prices (the e-mail of December 1 shows the opening)
 PRICES = {
-    "en": "The holiday gift offers: with a 1-year print subscription, for yourself or as a gift ($36.00 at Grapevine, "
-          "$18.00 at La Viña), a second one as a gift is $16.00 at Grapevine and $8.00 at La Viña.",
-    "es": "Las ofertas de regalo: con una suscripción impresa de 1 año, para ti o para regalar ($18.00 en La Viña, $36.00 "
-          "en Grapevine), una segunda como regalo cuesta $8.00 en La Viña y $16.00 en Grapevine.",
+    "en": "The holiday gift offers: a second 1-year print subscription as a gift is $16.00 at Grapevine and $8.00 at "
+          "La Viña, with the first at its regular price ($36.00 at Grapevine, $18.00 at La Viña), for yourself or as a gift.",
+    "es": "Las ofertas de regalo: $8.00 en La Viña y $16.00 en Grapevine por una segunda suscripción impresa de 1 año "
+          "como regalo, con la primera a su precio habitual ($18.00 / $36.00), para ti o para regalar.",
 }
 
 
@@ -325,11 +325,16 @@ class Bulletin(unittest.TestCase):
             self.assertTrue(cut)
             self.assertEqual(short, self.parts[lang][0], lang)
             self.assertNotRegex(short.rstrip().rsplit("\n", 1)[-1], r"^#", "it does not end with a heading")
-            # the text half (600 characters): the opening's first three paragraphs, the gift prices among them
+            # the text half (up to 600 characters): the opening's first whole paragraphs, the gift prices among them
             text, cut = SDM.md_excerpt(self.body[lang], 600)
             self.assertTrue(cut)
-            self.assertEqual(text, "\n\n".join(self.parts[lang][0].split("\n\n")[:3]), lang)
+            self.assertTrue(self.parts[lang][0].startswith(text), lang)
+            self.assertIn(text.split("\n\n")[-1], self.parts[lang][0].split("\n\n"), "whole paragraphs")
             self.assertIn(PRICES[lang], text)
+        # Home's card (the summary's first 320 characters) names the offers' own prices, never only the first
+        # subscription's regular ones
+        for lang, want in (("en", "$16.00 at Grapevine and $8.00 at La Viña"), ("es", "$8.00 en La Viña y $16.00 en Grapevine")):
+            self.assertIn(want, excerpt(self.summary[lang], 320), lang)
 
     def test_on_the_booth(self):
         # the booth's bulletin slide: the title and the first paragraph in each language, whole; no refused word
