@@ -649,6 +649,8 @@ slides:
       DO: Read the questions from the chat aloud, without the name the chat shows. Take hands first from people who haven't spoken yet. If a question needs a long answer, ask the speaker whether they'd answer it later through the committee's address, grapevine@neta65.org.
       TIP: Keep it to the speaker's experience and the topic. If a question drifts into outside issues, gently bring it back to how we carry the message.
 
+  # Its notes name next month's guest speaker ({live:speaker_after}) before a ";", never before a ".": a name with no
+  # topic ends with its own period ("Greg G."), and "Greg G.." is a mistake. (The "Next meeting" slide's notes too.)
   - id: "speaker-thanks"
     layout: "bullets"
     eyebrow: "Guest speaker"
@@ -662,7 +664,7 @@ slides:
     minutes: 1
     notes: |
       TIP (timekeeping): about a minute: our guest is thanked and done by 7:30.
-      SAY: Please join me in thanking {live:speaker_name} for tonight's talk. (Members can send a reaction, or unmute for a round of applause.) Thank you so much for being with us. You're welcome to stay for our business meeting, or to leave now: we know your time is precious. Next month's guest speaker: {live:speaker_after}.
+      SAY: Please join me in thanking {live:speaker_name} for tonight's talk. (Members can send a reaction, or unmute for a round of applause.) Thank you so much for being with us. You're welcome to stay for our business meeting, or to leave now: we know your time is precious. Next month's guest speaker: {live:speaker_after}; we hope to see you all then.
       DO: Let the speaker leave without a fuss. After the meeting, send them a short thank-you from the committee's address, grapevine@neta65.org.
       TRANSITION: Now let's turn to the committee's business.
 
@@ -1267,7 +1269,7 @@ slides:
     minutes: 0.5
     version_minutes: { no-speaker: 1, topic: 1 }
     notes: |
-      SAY: Our next meeting: {live:meeting_after}. As always, it's on the third Wednesday, at seven, on this same Google Meet link. Our guest speaker next month: {live:speaker_after}. Please invite anyone in your district who might be interested: GVRs, RLVs, GSRs or any member. Everyone is welcome, and there's nothing to sign up for.
+      SAY: Our next meeting: {live:meeting_after}. As always, it's on the third Wednesday, at seven, on this same Google Meet link. Please invite anyone in your district who might be interested: GVRs, RLVs, GSRs or any member. Our guest speaker next month: {live:speaker_after}; everyone is welcome, and there's nothing to sign up for.
       DO: Post the date and the Meet link in the chat (in Spanish too, if Spanish-speaking members attend). Send a reminder about a week ahead, by email with every address in BCC: {ui:customize} → {ui:paperwork} has one, with next month's guest speaker.
       STAYS CURRENT: the date (the meeting after tonight's, until midnight after the meeting), its guest speaker ('none this time' when the Meetings page lists none for it, 'to be announced' while the committee's list doesn't name one yet), the time, the Meet link and its code fill in by themselves ({ui:customize} → {ui:prepare} lists the next twelve dates). If the committee skips or moves a meeting, or a speaker changes, tell whoever looks after the website, so the date and the speaker here and the countdown on its meetings page stay right.
       TIP: The Meet link and its code are public on our flyers, the Area's website and our meetings page, so they can stay on this slide. There is no number to call: our Google Meet room has no phone dial-in. Someone without internet can still join the weekly open meetings by phone ({live:site}/accessibility/#phone).

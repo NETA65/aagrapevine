@@ -15,7 +15,8 @@ committee's deck and the lessons —
                  this time" (December 16), in every version, and January's speaker from midnight after November 18
                  (a copy opened later too); the version notes name every meeting before January 20, 2027, in
                  English and Spanish; on January 10, 2027 no slide or note of any version reads "Rick W.." (a
-                 name ends with its own period).
+                 name ends with its own period) — every text of a slide (an agenda row's too), and with next
+                 month's speaker a bare name ("Greg G.", listed without a topic).
   * Paperwork  — the agenda e-mail of November 18 in the first version: its row "Guest speaker: none at this
                  meeting" and the panel's warning (speakerNone), none in "No guest speaker" (and no warning that a
                  listed speaker is left out); "Start next month" after November 18 goes to "No guest speaker" by
@@ -201,13 +202,29 @@ vm.runInContext(fs.readFileSync("src/assets/js/presentations-core.js", "utf8"), 
 const G = ctx.GVP;
 const ms = (s) => Date.parse(s);
 const plain = (v) => JSON.parse(JSON.stringify(v));
+// Every text of a slide in the version drawn (version_fields already in place: G.current): each string field, in any
+// list or row — an agenda row { time, title } by its values, a column's heading and items, a table's cells, lines,
+// body, takeaway … —, not its settings (id, layout, accent …) nor its notes (drawn apart: noteLines, version_notes)
+const SLIDE_SETTINGS = new Set(["id", "layout", "accent", "kind", "style", "lang", "show_from", "show_until", "when", "data", "h",
+  "notes", "version_fields", "version_notes", "version_minutes", "options", "url"]);
+const slideTexts = (v, key = "", acc = []) => {
+  if (typeof v === "string") { if (!SLIDE_SETTINGS.has(key)) acc.push(v); }
+  else if (Array.isArray(v)) v.forEach((x) => slideTexts(x, key, acc));
+  else if (v && typeof v === "object") for (const k of Object.keys(v)) if (!SLIDE_SETTINGS.has(k)) slideTexts(v[k], k, acc);
+  return acc;
+};
 const draw = (st, preset, at, id, where) => {
   const cur = G.current(D, st, preset, ms(at));
   const s = cur.byId[id];
   if (!s) return null;
-  const T = (t) => G.plain(G.rich(t, { deck: D, state: st, live: cur.live, cur, where: where || "slide", lang: "en" }));
+  const R = (w) => (t) => G.plain(G.rich(t, { deck: D, state: st, live: cur.live, cur, where: w, lang: "en" }));
+  const T = R(where || "slide");
+  const vn = s.slide.version_notes && Object.prototype.hasOwnProperty.call(s.slide.version_notes, cur.preset.id)
+    ? s.slide.version_notes[cur.preset.id] : "";
   return { shown: s.shown, title: T(s.slide.title || ""), items: (s.slide.items || []).map(T),
-           notes: G.noteLines(s.slide.notes || "", cur.preset.id).map((l) => (l.label ? l.label + " " : "") + T(l.text)) };
+           notes: G.noteLines(s.slide.notes || "", cur.preset.id).map((l) => (l.label ? l.label + " " : "") + T(l.text)),
+           // (for a sweep: every text of the slide as the screen shows it, and its version's note as the notes do)
+           texts: slideTexts(s.slide).map(R("slide")), vnote: vn ? R("notes")(vn) : "" };
 };
 """
 
@@ -240,7 +257,7 @@ class Deck(unittest.TestCase):
             self.assertTrue(r[v]["shown"], v)
             self.assertTrue(r[v]["items"][0].startswith("Wednesday, December 16, 2026"), r[v]["items"][0])
             self.assertEqual(r[v]["items"][1], "Guest speaker: none this time", v)
-        self.assertIn("Our guest speaker next month: none this time.", " ".join(r["full"]["notes"]))
+        self.assertIn("Our guest speaker next month: none this time; everyone is welcome", " ".join(r["full"]["notes"]))
         # a copy made on November 11, opened on November 19: January's speaker
         self.assertTrue(r["later"]["items"][0].startswith("Wednesday, January 20, 2027"))
         rick = real_speaker("2027-01-20")
@@ -253,7 +270,7 @@ class Deck(unittest.TestCase):
         self.assertIn("TONIGHT'S GUEST SPEAKER (from the Meetings page): none tonight; if there is none", notes)
         self.assertIn("No guest speaker is listed for tonight: choose the version 'No guest speaker'", notes)
         self.assertNotIn("December 16, 2026, or the speaker", notes)
-        self.assertIn("Next month's guest speaker: none this time.", " ".join(r["thanks"]["notes"]))
+        self.assertIn("Next month's guest speaker: none this time; we hope to see you all then.", " ".join(r["thanks"]["notes"]))
         # the version notes: every meeting before January 20, 2027, in English and Spanish
         notes = {p["id"]: p["note"] for p in r["presets"]}
         for pid in ("full", "no-speaker"):
@@ -278,15 +295,48 @@ class Deck(unittest.TestCase):
                       " ".join(r["title"]["notes"]))
         # a name ends with its own period ("Rick W."): never "Rick W.." after it, on a slide or in its notes, in
         # every version
-        stop = re.compile(r"[A-Z]\.\.(?!\.)")
         cfg = yaml.safe_load((ROOT / "config" / "presentations" / "committee-meeting.yml").read_text(encoding="utf-8"))
         self.assertEqual(sorted(r["all"]), sorted(p["id"] for p in cfg["presets"]))
-        for pid, slides in r["all"].items():
+        self.assertEqual(self.double_periods(r["all"]), [])
+
+    # Every shown slide of every version, drawn at `now` (draw: every text of the slide, its version's note, its notes)
+    SWEEP_JS = """
+        const st = G.emptyState();
+        // next month's speaker listed without a topic: a bare name, "Greg G." (nextOne: no " — “topic”" after it)
+        if (input.bare) D.live.speaker_after = input.bare;
+        // a mistake in an agenda row (an object { time, title }): a period after tonight's speaker's name
+        if (input.agendaDot) {
+          const a = D.slides.find((s) => s.id === "agenda");
+          a.items = a.items.map((x) => (x && typeof x === "object" && /speaker_name/.test(x.title || "") ? { ...x, title: x.title + "." } : x));
+        }
+        const every = (preset) => D.slides.map((s) => s.id).map((id) => [id, draw(st, preset, input.now, id, "notes")])
+          .filter(([, d]) => d && d.shown);
+        out(Object.fromEntries(D.presets.map((p) => [p.id, every(p.id)])));"""
+
+    def double_periods(self, every: dict) -> list[str]:
+        """"Rick W.." anywhere: a slide's every text (an agenda row's too), its version's note and its notes."""
+        stop = re.compile(r"[A-Z]\.\.(?!\.)")
+        hits = []
+        for pid, slides in every.items():
             self.assertTrue(slides, pid)
             for sid, d in slides:
-                for line in [d["title"], *d["items"], *d["notes"]]:
-                    with self.subTest(version=pid, slide=sid):
-                        self.assertNotRegex(line, stop, line[:160])
+                for line in [*d["texts"], *([d["vnote"]] if d["vnote"] else []), *d["notes"]]:
+                    if stop.search(line):
+                        hits.append(f"{pid} · {sid}: {line[:160]}")
+        return hits
+
+    def test_a_name_never_before_a_period(self):
+        """Next month's guest speaker can be a bare name ("Greg G.", listed without a topic): the notes name it before
+        a ";", never a "." — and the sweep reads an agenda row's words too (a "Guest speaker: Rick W.." there is
+        caught)."""
+        bare = self.run_deck(self.SWEEP_JS, JAN10, bare="Greg G.")
+        self.assertEqual(self.double_periods(bare), [])
+        self.assertIn("Next month's guest speaker: Greg G.; we hope to see you all then.",
+                      " ".join(n for sid, d in bare["full"] if sid == "speaker-thanks" for n in d["notes"]))
+        self.assertIn("Our guest speaker next month: Greg G.; everyone is welcome",
+                      " ".join(n for sid, d in bare["full"] if sid == "next-meeting" for n in d["notes"]))
+        dot = self.run_deck(self.SWEEP_JS, JAN10, agendaDot=True)
+        self.assertEqual(self.double_periods(dot), ["full · agenda: Guest speaker: Rick W.."])
 
 
 class Paperwork(unittest.TestCase):

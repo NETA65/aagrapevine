@@ -2797,9 +2797,12 @@ time, its Google Meet link and meeting code, and that meeting's guest speaker fr
 `meeting:` → `speakers:`):
 
 1. **Agenda e-mail** — for the *next* meeting: date and time, the Google Meet link and code, the guest speaker
-   (name, position and topic; left out for a meeting with none, such as November 18 and December 16, 2026, and "to
-   be announced" while the list doesn't name that date's speaker yet), the agenda's times (from the version of the
-   agenda slide chosen: *With a guest speaker*, or *No guest speaker* for a business-only month such as those two),
+   (its *Guest speaker* line, name and position, and its *Topic* line; both are **left out** when the list names no
+   speaker for that meeting — November 18 and December 16, 2026, which have none, or a date whose speaker isn't
+   listed yet — and in *No guest speaker*), the agenda's times (from the version of the agenda slide chosen: *With a
+   guest speaker*, whose 7:02 row reads "Guest speaker: none at this meeting" for a meeting with none — November 18
+   and December 16 in the first version, which the panel warns about — and "Guest speaker: to be announced" for one
+   not listed yet; or *No guest speaker*, with no speaker's row, for a business-only month such as those two),
    last month's minutes, old and new business, the order of the district
    reports, the online / no-photos reminder and a signature.
 2. **Reminder** — a short note for an e-mail or a group chat: the date, time, guest speaker and Google Meet details

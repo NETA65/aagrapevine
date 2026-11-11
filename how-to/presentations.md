@@ -1326,7 +1326,10 @@ no speaker listed (November 18 and December 16, 2026), and in the version "No gu
 come: the texts then agree with that version's agenda, even before the website's list is changed). When the website lists a speaker
 for that meeting but the version leaves them out (a "No guest speaker" kept from December), the panel says so above
 the text, and "Start next month" goes back to "With a guest speaker" when the next meeting has one (its Undo too).
-A detail left empty beside a
+The other way round, when the website lists NO speaker for that meeting (November 18 and December 16, 2026) but the
+version is still the first one, the panel warns too (the agenda's row then reads "Guest speaker: none at this
+meeting") and names the version to choose, and "Start next month" switches to "No guest speaker" by itself when the
+next meeting has no speaker listed (its Undo too). A detail left empty beside a
 filled one shows in [brackets], so you notice it.
 
 **Start next month**, at the bottom of the tab, is pressed after the meeting, once the minutes are drafted. You

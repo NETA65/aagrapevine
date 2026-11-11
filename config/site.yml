@@ -120,7 +120,7 @@ meeting:
   # of the next 45 days who is not confirmed yet is listed in the Actions run summary. A meeting with no
   # block, up to the list's last one, has no guest speaker (Nov 18 and Dec 16, 2026): the decks say "none
   # tonight". After the last block, the decks say "to be announced" until the next speakers are listed
-  # (/meetings/ shows "no guest speaker" for those dates). A block with a mistake (a date that is not a
+  # (/meetings/ names no guest speaker for those dates). A block with a mistake (a date that is not a
   # meeting day, a full name) is left out (the decks say "to be announced" for its meeting), and the run
   # summary says why.
   speakers:
