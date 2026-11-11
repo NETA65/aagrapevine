@@ -1,11 +1,11 @@
 {
  "source": "drive",
- "updated": "2026-11-11T00:34:51Z",
- "attempted": "2026-11-11T00:34:51Z",
+ "updated": "2026-11-11T07:17:11Z",
+ "attempted": "2026-11-11T07:17:11Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 1,
+  "added": 0,
   "removed": 0,
   "held": 0
  },
@@ -29,7 +29,7 @@
   "folders": 11,
   "files": 45,
   "fetched": 45,
-  "new": 1,
+  "new": 0,
   "removed": 0,
   "kept_unverified": 0,
   "by_category": {
