@@ -9,15 +9,17 @@ store_offers "holiday-gifts-2026"):
                    it); each section's facts and links (the offers' pages exactly as AA Grapevine and La Viña write
                    them: /2gifts without a "/" at the end); calm words (no "!", "just", "hurry", "Save 55%" …); the
                    offers never tied to the price change (no sentence holds December 31 and January 1), free
-                   shipping never said of the gift offers; on the site from November 11 through December 31
-                   (Central), in the e-mail of December 1 (November's edition), on the booth with its first
-                   paragraph in each language;
+                   shipping never said of the gift offers, nothing said about combining but AA Grapevine's own words
+                   (neither of its two offers combines with any other); on the site from November 11 through December 31
+                   (Central), in the e-mail of December 1 (November's edition: the opening, whole, then "Details
+                   →"), on the booth with its first paragraph in each language;
   * RealSettings — config/site.yml store_offers "holiday-gifts-2026" (CONTENT_TESTS): its days (no first day said:
                    the stores give none), both stores' words and their offer pages;
   * ShopPages    — one build of /shop/, /es/shop/ and November's toolkit with the committee's settings
                    (CONTENT_TESTS): free shipping is still #offers, the gift offers come next (#offers-holiday-
                    gifts-2026), "Through December 31, 2026", each store's button to its offer page and the link to
-                   its page for Canada; every /shop/ link of the bulletin post finds its section.
+                   its page for Canada; every /shop/ link of the bulletin post finds its section; November's toolkit
+                   links the gift offers' own section (its row, and the month's message with 🎁).
 
     python -m unittest tests.test_r25_holiday_offers -v        (or: python -m unittest discover -s tests)
 """
@@ -57,6 +59,18 @@ CALM = (r"(?i)!|¡|\bjust\b|\bpor solo\b|\bsolo \$|hurry|prisa|ap[uú]rate|don.t
         r"limited time|tiempo limitado|\bnow\b|\bahora\b|\bsave\b|ahorr|lock in|before (?:the )?(?:new )?prices?|"
         r"antes de que|renew|renov|\bcode\b|c[oó]digo|minimum|m[ií]nimo|international|internacional|\bstack|combines with|"
         r"se combina con|trackingcode|%|percent|por ciento")
+
+
+# What the post says about combining: AA Grapevine's words only, of its two offers (the opening), of its gift offer
+# and of its free shipping (their sections) — nothing else, and never that free shipping and the gift offer combine
+COMBINING = {
+    "en": ["AA Grapevine says neither of its two offers can be combined with any other offer.",
+           "AA Grapevine says its offer can't be combined with any other offer and is available only through its page.",
+           "AA Grapevine says its offer can't be combined with any other offer."],
+    "es": ["Según AA Grapevine, ninguna de sus dos ofertas se puede combinar con otra.",
+           "Según AA Grapevine, su oferta no se puede combinar con ninguna otra y se obtiene únicamente en su página.",
+           "Según AA Grapevine, su oferta no se puede combinar con ninguna otra."],
+}
 
 
 def plain(md: str) -> str:
@@ -147,10 +161,20 @@ class Bulletin(unittest.TestCase):
                     self.assertTrue(prose.startswith(excerpt(self.summary[lang], n).rstrip("…")), n)
         self.assertIn("U.S. and Canadian addresses and run through December 31, 2026", self.parts["en"][0])
         self.assertIn("valen para direcciones en EE. UU. y Canadá hasta el 31 de diciembre de 2026", self.parts["es"][0])
-        self.assertIn("AA Grapevine says each of its offers can't be combined with any other offer.", self.parts["en"][0])
-        self.assertIn("Según AA Grapevine, ninguna de sus ofertas se puede combinar con otra.", self.parts["es"][0])
+        self.assertIn(COMBINING["en"][0], self.parts["en"][0])
+        self.assertIn(COMBINING["es"][0], self.parts["es"][0])
         self.assertIn("GVRs and RLVs", self.parts["en"][0])
         self.assertIn("RLV y GVR", self.parts["es"][0])
+
+    def test_only_aa_grapevines_words_on_combining(self):
+        # AA Grapevine says it of its two offers (the gift offer, free shipping), and the post says only that: never
+        # that free shipping and the gift offer go together, nor anything of the Book of the Month (the stores say
+        # nothing of it) — in the opening and in each section, sentence by sentence
+        for lang in ("en", "es"):
+            opening, secs = self.parts[lang]
+            said = [[s for s in sentences(t) if re.search(r"(?i)combin", s)]
+                    for t in (opening, *(secs[h] for h in HEADINGS[lang]))]
+            self.assertEqual(said, [[COMBINING[lang][0]], [COMBINING[lang][1]], [COMBINING[lang][2]], []], lang)
 
     def test_the_holiday_gift_offers(self):
         en, es = self.section("en", 0), self.section("es", 0)
@@ -258,11 +282,13 @@ class Bulletin(unittest.TestCase):
           out({ oct: md("2026-11-01T15:05:00Z"), nov: md("2026-12-01T15:05:00Z") });""",
                    data={"db": {"announcements": {"items": [self.item()]}}})
         self.assertEqual(r, {"oct": [], "nov": [self.post["id"]]}, "the e-mail of December 1 (sent before it expires)")
-        # the e-mail: the opening's whole paragraphs, then "Details →"
+        # the e-mail: the opening's whole paragraphs — exactly, never a heading whose section was cut ("…
+        # everyone know. # Holiday gift offers") —, then "Details →"
         for lang in ("en", "es"):
             short, cut = SDM.md_excerpt(self.body[lang], 700)
             self.assertTrue(cut)
-            self.assertTrue(short.startswith(self.parts[lang][0]), short)
+            self.assertEqual(short, self.parts[lang][0], lang)
+            self.assertNotRegex(short.rstrip().rsplit("\n", 1)[-1], r"^#", "it does not end with a heading")
 
     def test_on_the_booth(self):
         # the booth's bulletin slide: the title and the first paragraph in each language, whole; no refused word

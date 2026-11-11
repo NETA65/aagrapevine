@@ -596,7 +596,7 @@ is the same on both pages. The `/shop/#…` links open `/es/shop/#…` on the Sp
 paragraphs before the first heading — about 450 characters, its first sentence under 140 and its first paragraph
 under 280 —, so what the other places show is that opening, never a heading run into it: the Spanish teaser (home
 card, What's New, the feed) is the first 400 characters of `summary_es` without the Markdown marks, Share sends the
-first sentence, the booth the first paragraph. The text is longer than 700 characters, so the home card shows a
+first 140 characters (the whole first sentence), the booth the first paragraph. The text is longer than 700 characters, so the home card shows a
 320-character teaser and "Read more", and the e-mail the opening's paragraphs and "Details →". Pinned, so it comes
 first on the bulletin, on the home page and in the digest (What's New and the feed keep their date order); shown
 through December 31, 2026; in the November 2026 digest (sent December 1).

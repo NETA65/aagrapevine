@@ -570,12 +570,14 @@ breaks while you decide.
   Shop shows the gift offers under free shipping (`/shop/#offers-holiday-gifts-2026`, `config/site.yml` →
   `store_offers:` `holiday-gifts-2026`): "Through December 31, 2026" — the stores give no first day —, each store's
   button to its offer page and a link to its page for Canada, no banner. Please read the words in both languages.
-  Left out, because the pages don't say it: the stores' "just $16 (Save 55%!)", a percentage, more than one second
-  gift, a renewal alone, digital, and that free shipping applies to the gift offers. Grapevine's December 31 is the
-  chair's (its page and e-mails give no end date; La Viña's e-mails say December 31). The old posts' links
-  (`/bulletin/#2026-10-01-…`, `#2026-11-02-…`) now open the bulletin at its top, where this post is first; it is in
-  the e-mail of December 1, and leaves by itself after December 31 (`2027-01-01-new-prices-in-effect.md` takes
-  over on January 1).
+  Left out on purpose: the stores' sales words "just $16 (Save 55%!)" / "por solo $8 (¡Ahorra un 55%!)" and any
+  percentage (calm words only; La Viña's page says 55%, its e-mails 50%). Left out because the pages don't say it:
+  more than one second gift, a renewal alone, digital, and that free shipping applies to the gift offers. The
+  toolkit's lines for the two offers link each one's own section (`/shop/#offers-free-shipping-2026`,
+  `/shop/#offers-holiday-gifts-2026`). Grapevine's December 31 is the chair's (its page and e-mails give no end
+  date; La Viña's e-mails say December 31). The old posts' links (`/bulletin/#2026-10-01-…`, `#2026-11-02-…`) now
+  open the bulletin at its top, where this post is first; it is in the e-mail of December 1, and leaves by itself
+  after December 31 (`2027-01-01-new-prices-in-effect.md` takes over on January 1).
 - **What's New:** the words ("New since your last visit", "New for you", "Mark all as read", "Forget my last
   visit"), the 30-minute "visit" rule, and the green label.
 - **Agenda & minutes (committee meeting deck):** the reminder's Spanish paragraph ("La reunión es en inglés" —

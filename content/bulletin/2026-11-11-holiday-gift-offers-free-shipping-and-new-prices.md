@@ -22,7 +22,7 @@ title_es: "La Viña y Grapevine: ofertas de regalo, envío gratis y nuevos preci
 summary_es: |
   La Viña y AA Grapevine anunciaron ofertas de regalo para las fiestas, envío gratis y los nuevos precios de 2027. Las ofertas de regalo y el envío gratis valen para direcciones en EE. UU. y Canadá hasta el 31 de diciembre de 2026.
 
-  Según AA Grapevine, ninguna de sus ofertas se puede combinar con otra.
+  Según AA Grapevine, ninguna de sus dos ofertas se puede combinar con otra.
 
   RLV y GVR: si en tu grupo alguien pide libros, suscripciones o regalos de La Viña o Grapevine, un breve aviso en la reunión de trabajo de tu grupo ayuda a que todos lo sepan.
 
@@ -32,8 +32,8 @@ summary_es: |
 
   Las dos ofertas son para direcciones en EE. UU. y Canadá, y los detalles están en la página de cada tienda. Según AA Grapevine, su oferta no se puede combinar con ninguna otra y se obtiene únicamente en su página.
 
-  - **La Viña:** la primera, $18.00; la segunda, $8.00. [Página de la oferta de La Viña](https://www.aalavina.org/2regalos) · [para Canadá](https://www.aalavina.org/canada-2regalos)
-  - **Grapevine:** la primera, $36.00; la segunda, $16.00. [Página de la oferta de Grapevine](https://www.aagrapevine.org/2gifts) (en inglés) · [para Canadá](https://www.aagrapevine.org/canada-2gifts) (en inglés)
+  - **La Viña:** la primera, $18.00; la segunda, $8.00. [Página de la oferta de La Viña](https://www.aalavina.org/2regalos) · [Página de La Viña para Canadá](https://www.aalavina.org/canada-2regalos)
+  - **Grapevine:** la primera, $36.00; la segunda, $16.00. [Página de la oferta de Grapevine](https://www.aagrapevine.org/2gifts) (en inglés) · [Página de Grapevine para Canadá](https://www.aagrapevine.org/canada-2gifts) (en inglés)
   - Las dos, en nuestra Tienda: [Tienda: ofertas de regalo](/shop/#offers-holiday-gifts-2026)
 
   # Envío gratis
@@ -57,7 +57,7 @@ summary_es: |
 ---
 AA Grapevine and La Viña have announced holiday gift offers, free shipping and new prices for 2027. The gift offers and free shipping are for U.S. and Canadian addresses and run through December 31, 2026.
 
-AA Grapevine says each of its offers can't be combined with any other offer.
+AA Grapevine says neither of its two offers can be combined with any other offer.
 
 GVRs and RLVs: if anyone in your group orders Grapevine or La Viña books, subscriptions or gifts, a short mention at your group's business meeting lets everyone know.
 
@@ -67,8 +67,8 @@ Through **December 31, 2026**, AA Grapevine and La Viña each have a holiday gif
 
 Both offers are for U.S. and Canadian addresses, and the details are on each store's page. AA Grapevine says its offer can't be combined with any other offer and is available only through its page.
 
-- **Grapevine:** the first is $36.00, the second $16.00. [Grapevine's offer page](https://www.aagrapevine.org/2gifts) · [for Canada](https://www.aagrapevine.org/canada-2gifts)
-- **La Viña:** the first is $18.00, the second $8.00. [La Viña's offer page](https://www.aalavina.org/2regalos) (in Spanish) · [for Canada](https://www.aalavina.org/canada-2regalos) (in Spanish)
+- **Grapevine:** the first is $36.00, the second $16.00. [Grapevine's offer page](https://www.aagrapevine.org/2gifts) · [Grapevine's page for Canada](https://www.aagrapevine.org/canada-2gifts)
+- **La Viña:** the first is $18.00, the second $8.00. [La Viña's offer page](https://www.aalavina.org/2regalos) (in Spanish) · [La Viña's page for Canada](https://www.aalavina.org/canada-2regalos) (in Spanish)
 - Both on our Shop page: [Shop — holiday gift offers](/shop/#offers-holiday-gifts-2026)
 
 # Free shipping
