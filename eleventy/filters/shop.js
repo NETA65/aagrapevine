@@ -678,7 +678,7 @@ function offerSpecs(site, warn = null) {
  *   stores      [{ key ("gv" | "lv"), name, isLv, text, textLang, href (the store's own page for the offer — its
  *               `url` —, else config/site.yml links: gv_store / lv_store), label (the button's words: "Grapevine
  *               store"; with a `url`, "Grapevine's offer page"), hrefCa + labelCa (its `url_ca`, the offer's page
- *               for Canadian addresses, else ""), banner ({ src, view } — the newest picture in Drive `flyers` its
+ *               for Canadian addresses, else ""; in both labels "La Viña" has a no-break space), banner ({ src, view } — the newest picture in Drive `flyers` its
  *               banner_match finds, passing over a PDF or video it finds too — or null), alt, altLang }]: the page
  *               language's magazine first (/es/: La Viña), only the stores the block has words for
  *   source, sourceLang
@@ -703,13 +703,16 @@ export function shopOffers(site, lang = "en", items = [], t = (k) => k, now = no
       const x = (pic && pic.extra) || {};
       const src = pic ? (x.file_id ? `https://lh3.googleusercontent.com/d/${x.file_id}=w${BANNER_W}` : x.image_url || pic.image || "") : "";
       const alt = twinOf(b, "banner_alt", L);
-      // the store's own page for the offer (its `url`: AA Grapevine's /2gifts, say), else the store itself
+      // the store's own page for the offer (its `url`: AA Grapevine's /2gifts, say), else the store itself. In
+      // those labels the magazine's name never breaks ("Página de la oferta de La / Viña" on a phone): a no-break
+      // space inside it
       const own = webUrl(b.url), ca = webUrl(b.url_ca);
+      const whole = MAG[pub].replace(/ /g, "\u00a0");
       stores.push({
         key: pub, name: MAG[pub], isLv: pub === "lv", text: text.text, textLang: text.lang,
         href: own || String(links[STORES[pub].link] || ""),
-        label: own ? t("shop.offer_page", L, { name: MAG[pub] }) : t(STORES[pub].label, L),
-        hrefCa: ca, labelCa: ca ? t("shop.offer_page_ca", L, { name: MAG[pub] }) : "",
+        label: own ? t("shop.offer_page", L, { name: whole }) : t(STORES[pub].label, L),
+        hrefCa: ca, labelCa: ca ? t("shop.offer_page_ca", L, { name: whole }) : "",
         banner: src ? { src, view: x.view_url || pic.url || "" } : null, alt: alt.text, altLang: alt.lang,
       });
     }

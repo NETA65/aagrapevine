@@ -20,8 +20,9 @@ store_offers "holiday-gifts-2026"):
   * ShopPages    — one build of /shop/, /es/shop/ and November's toolkit with the committee's settings
                    (CONTENT_TESTS): free shipping is still #offers, the gift offers come next (#offers-holiday-
                    gifts-2026), "Through December 31, 2026", each store's button to its offer page and the link to
-                   its page for Canada; every /shop/ link of the bulletin post finds its section; November's toolkit
-                   links the gift offers' own section (its row, and the month's message with 🎁).
+                   its page for Canada ("La Viña" in one piece: a no-break space); every /shop/ link of the
+                   bulletin post finds its section; November's toolkit links the gift offers' own section (its
+                   row, and the month's message with 🎁).
 
     python -m unittest tests.test_r25_holiday_offers -v        (or: python -m unittest discover -s tests)
 """
@@ -443,6 +444,11 @@ class ShopPages(unittest.TestCase):
                 buttons = re.findall(r'<a class="btn-(?:primary|lv)" href="([^"]+)"', sec)
                 ca = re.findall(r'<a class="link tap-link[^"]*" href="([^"]+)"', sec)
                 words = text(sec)
+                # on a phone the buttons and links never break the magazine's name ("… de La / Viña"): a no-break space
+                raw = sec.replace("&#39;", "'")
+                for w in ({"en": ("La\u00a0Viña's offer page", "La\u00a0Viña's page for Canadian addresses"),
+                           "es": ("Página de la oferta de La\u00a0Viña", "Página de La\u00a0Viña para direcciones en Canadá")}[lang]):
+                    self.assertIn(w, raw)
                 if lang == "en":
                     self.assertEqual((buttons, ca), ([GV_PAGE, LV_PAGE], [GV_CA, LV_CA]))
                     self.assertIn("Holiday gift offers at the Grapevine and La Viña stores Through December 31, 2026", words)
