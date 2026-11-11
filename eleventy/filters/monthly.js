@@ -1064,12 +1064,14 @@ export function monthMessage(ctx, langs, style, site, t) {
   // 📦 an offer the stores announced, in the months its days meet (monthModel `offers`; this month only the ones not
   // over yet), under its own heading — apart from the Book of the Month above, so the two never read as one deal
   // (Grapevine's free shipping can't be combined with any other offer): "Free shipping at the Grapevine and La Viña
-  // stores", then "November 1 – December 31, 2026: …/shop/#offers" — its title from the settings, in each language;
-  // what each store says is on /shop/ (#offers)
+  // stores", then "November 1 – December 31, 2026: …/shop/#offers" ("Through December 31, 2026" for an offer whose
+  // stores give no first day: show_starts false) — its title from the settings, in each language; what each store
+  // says is on /shop/ (#offers)
   const storeOffers = (m.offers || []).filter((o) => !cur || !o.past);
   for (const o of storeOffers) {
     const title = (l) => ((mm[l].offers || []).find((x) => x.key === o.key) || o).title;
-    const days = uniq(Ls.map((l) => offerDates(o.starts, o.ends, l, t))).map((d) => d.charAt(0).toUpperCase() + d.slice(1));
+    const days = uniq(Ls.map((l) => offerDates(o.showStarts === false ? "" : o.starts, o.ends, l, t)))
+      .map((d) => d.charAt(0).toUpperCase() + d.slice(1));
     out.push(head(uniq(Ls.map(title)).join(" / "), "📦"), `${days.join(" / ")}: ${url("/shop/#offers")}`, "");
   }
 

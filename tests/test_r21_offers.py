@@ -4,9 +4,10 @@ and the bulletin post about it:
   * Offers      — eleventy/filters/shop.js shopOffers / shopOfferIn / offerDates, on settings of the test's own: the
                   window (from 00:00 Central on `starts` to the midnight after `ends`: written hidden before it, gone
                   after it), the words in the page's language (La Viña first on /es/), the store links
-                  (links.gv_store / lv_store), the banner the Drive's `flyers` folder holds (banner_match) or none, a
-                  block with a mistake left out and named, the month's lines; Home's committee uploads leave the
-                  banners out (shopOfferBanners → homeDrive);
+                  (links.gv_store / lv_store; a store's own page for the offer — url, url_ca — instead), the banner
+                  the Drive's `flyers` folder holds (banner_match) or none, a block with a mistake left out and
+                  named, the month's lines, an offer whose stores give no first day (show_starts: false, "Through
+                  December 31, 2026"); Home's committee uploads leave the banners out (shopOfferBanners → homeDrive);
   * DriveNames  — scripts/sync/drive.py build_item: the banners' names in `flyers` make no event (no date, no month)
                   and say their language;
   * Message     — the monthly toolkit's message (monthly.js monthMessage) names the offer in the months it runs;
@@ -148,7 +149,7 @@ class Offers(unittest.TestCase):
         r = offers(self, {"en": {"site": SITE, "lang": "en", "now": "2026-11-02T18:00:00Z", "items": [GV_ITEM, LV_ITEM]},
                           "es": {"site": SITE, "lang": "es", "now": "2026-11-02T18:00:00Z", "items": [GV_ITEM, LV_ITEM]}})
         en, es = r["en"]["offers"][0], r["es"]["offers"][0]
-        self.assertEqual((en["key"], en["starts"], en["ends"]), ("free-shipping-2026", "2026-11-01", "2026-12-31"))
+        self.assertEqual((en["key"], en["starts"], en["ends"], en["icon"]), ("free-shipping-2026", "2026-11-01", "2026-12-31", "truck"))
         self.assertEqual((en["title"], en["titleLang"]), (OFFER["title"], "en"))
         self.assertEqual((es["title"], es["titleLang"]), (OFFER["title_es"], "es"))
         self.assertEqual((en["dates"], en["dateRange"]), ("November 1 – December 31, 2026",) * 2)
@@ -276,8 +277,65 @@ class Offers(unittest.TestCase):
         m = r["months"]
         self.assertEqual((m["2026-10-01"], m["2027-01-01"]), ([], []))
         one = {"key": "free-shipping-2026", "title": OFFER["title_es"], "titleLang": "es", "starts": "2026-11-01",
-               "ends": "2026-12-31", "past": False}
+               "ends": "2026-12-31", "showStarts": True, "past": False}
         self.assertEqual((m["2026-11-01"], m["2026-12-01"]), ([one], [one]), "its last day is not past yet")
+
+    def test_a_stores_own_page_for_the_offer(self):
+        # a store with its own page for the offer (AA Grapevine's /2gifts): its button goes there, in words of its
+        # own, and its page for Canadian addresses gets a link beside it; the other store keeps its store front.
+        # The block's own icon (a gift), else the truck
+        gifts = {**OFFER, "key": "gifts", "icon": "gift", "gv": {"text": "A second gift.", "url": "https://www.gv.example.org/2gifts",
+                                                 "url_ca": "www.gv.example.org/canada-2gifts"},
+                 "lv": {"text": "A second gift.", "text_es": "Un segundo regalo."}}
+        bad = {**OFFER, "key": "bad-links", "icon": "no-such-icon", "gv": {"text": "x", "url": "javascript:alert(1)",
+                                                                           "url_ca": "/shop/"}, "lv": None}
+        site = {"links": LINKS, "store_offers": [gifts, bad]}
+        r = offers(self, {"en": {"site": site, "lang": "en", "now": "2026-11-12T18:00:00Z"},
+                          "es": {"site": site, "lang": "es", "now": "2026-11-12T18:00:00Z"}})
+        en, es = ({o["key"]: o for o in r[k]["offers"]} for k in ("en", "es"))
+        self.assertEqual([(s["key"], s["href"], s["label"], s["hrefCa"], s["labelCa"]) for s in en["gifts"]["stores"]], [
+            ("gv", "https://www.gv.example.org/2gifts", "Grapevine's offer page", "https://www.gv.example.org/canada-2gifts",
+             "Page for Canadian addresses"),
+            ("lv", LINKS["lv_store"], "La Viña store", "", "")])
+        self.assertEqual([(s["key"], s["href"], s["label"], s["hrefCa"], s["labelCa"]) for s in es["gifts"]["stores"]], [
+            ("lv", LINKS["lv_store"], "Tienda de La Viña", "", ""),
+            ("gv", "https://www.gv.example.org/2gifts", "Página de la oferta de Grapevine",
+             "https://www.gv.example.org/canada-2gifts", "Página para direcciones en Canadá")])
+        # an address that is not a web page: the button goes to the store, no Canada link; an icon the site does not
+        # have: the truck — each named; the block still shows
+        self.assertEqual([(s["href"], s["label"], s["hrefCa"]) for s in en["bad-links"]["stores"]],
+                         [(LINKS["gv_store"], "Grapevine store", "")])
+        self.assertEqual((en["gifts"]["icon"], en["bad-links"]["icon"]), ("gift", "truck"))
+        self.assertEqual(r["en"]["warnings"], [
+            "[settings] store_offers entry 2 (bad-links): gv url “javascript:alert(1)” is not a web address — the button "
+            "goes to the store",
+            "[settings] store_offers entry 2 (bad-links): gv url_ca “/shop/” is not a web address — no Canada link",
+            "[settings] store_offers entry 2 (bad-links): icon “no-such-icon” is not one of the site's icons — the truck"])
+
+    def test_an_offer_whose_stores_give_no_first_day(self):
+        # show_starts: false (or "no") — its days say only the last one; `starts` still decides when it shows, and the
+        # toolkit's months
+        site = {"links": LINKS, "store_offers": [{**OFFER, "key": "gifts", "starts": "2026-11-11", "show_starts": False},
+                                                 {**OFFER, "key": "gifts-2", "starts": "2026-11-11", "show_starts": "no"}]}
+        r = run_js(self, r"""
+          const S = await imp("eleventy/filters/shop.js");
+          const conf = await imp("eleventy.config.js");
+          const t = (k, l, v) => conf.translateKey(k, l, v);
+          const at = (now, lang) => S.shopOffers(input.site, lang, [], t, new Date(now)).map((o) => [o.key, o.dates, o.dateRange, o.win]);
+          out({ before: at("2026-11-10T12:00:00Z", "en"), en: at("2026-11-12T12:00:00Z", "en"), es: at("2026-11-12T12:00:00Z", "es"),
+                oct: S.shopOfferIn(input.site, "2026-10-01", "2026-10-31", "en"),
+                nov: S.shopOfferIn(input.site, "2026-11-01", "2026-11-30", "en"),
+                days: [S.offerDates("", "2026-12-31", "en", t), S.offerDates("", "2026-12-31", "es", t),
+                       S.offerDates("2026-11-11", "", "en", t)] });""", data={"site": site})
+        shown = {"from": "", "until": UNTIL, "hidden": False}
+        self.assertEqual(r["en"], [["gifts", "Through December 31, 2026", "through December 31, 2026", shown],
+                                   ["gifts-2", "Through December 31, 2026", "through December 31, 2026", shown]])
+        self.assertEqual([x[1:3] for x in r["es"]], [["Hasta el 31 de diciembre de 2026", "hasta el 31 de diciembre de 2026"]] * 2)
+        self.assertEqual([x[3] for x in r["before"]], [{"from": "2026-11-11T06:00:00Z", "until": UNTIL, "hidden": True}] * 2,
+                         "written hidden until 00:00 Central on its starts day")
+        self.assertEqual(r["oct"], [], "October's toolkit: before the day the site shows it from")
+        self.assertEqual([(o["key"], o["showStarts"]) for o in r["nov"]], [("gifts", False), ("gifts-2", False)])
+        self.assertEqual(r["days"], ["through December 31, 2026", "hasta el 31 de diciembre de 2026", ""])
 
 
 # =========================================================================== the banners' names on the Drive
@@ -354,6 +412,19 @@ class Message(unittest.TestCase):
         self.assertEqual(now["wa"].count("📦"), 1, "November 12: the offer that ended on the 10th is left out")
         self.assertEqual(ahead["wa"].count("📦"), 2, "a later month's message gives its whole plan")
 
+    def test_an_offer_whose_stores_give_no_first_day(self):
+        # show_starts: false — "Through December 31, 2026", after the free shipping (first day first)
+        gifts = {**OFFER, "key": "gifts", "title": "Holiday gift offers", "title_es": "Ofertas de regalo", "starts": "2026-11-11",
+                 "show_starts": False}
+        site = {**TM.SITE, "links": LINKS, "store_offers": [gifts, OFFER]}
+        r = run_js(self, MESSAGE_JS, data={"db": TM.full_db(), "site": site, "carry": TM.CARRY,
+                                           "runs": [["2026-11", "2026-11-12T17:00:00Z"]]})["2026-11@2026-11-12T17:00:00Z"]
+        self.assertIn("\n\n📦 *Holiday gift offers*\nThrough December 31, 2026: https://example.org/site/shop/#offers\n\n", r["wa"])
+        self.assertIn("\nHasta el 31 de diciembre de 2026 / Through December 31, 2026: https://example.org/site/es/shop/#offers\n",
+                      r["bi"])
+        self.assertLess(r["wa"].index("📦 *Free shipping"), r["wa"].index("📦 *Holiday gift offers"))
+        self.assertNotIn("November 11", r["wa"] + r["bi"])
+
 
 # =========================================================================== the pages
 PAGES_JS = r"""
@@ -424,6 +495,8 @@ class BuiltPages(unittest.TestCase):
                 self.assertNotIn("data-gv-from", head)
                 self.assertNotIn(" hidden", head)
                 self.assertIn('aria-labelledby="offer-free-shipping-2026-title"', head)
+                # the first offer is #offers, and #offers-<key> too (a bulletin post links its own offer by its key)
+                self.assertIn('<div class="shop-offer" id="offers-free-shipping-2026">', sec)
                 self.assertIn('id="offer-free-shipping-2026-title"', sec)
                 # right under the page nav, above the Book of the Month (when the stores have one) and the magazines
                 at = page.index('<section id="offers"')

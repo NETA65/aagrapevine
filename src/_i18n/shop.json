@@ -49,6 +49,9 @@
 
   "shop.offer_eyebrow": { "en": "Offer from the official stores", "es": "Oferta de las tiendas oficiales" },
   "shop.offer_dates": { "en": "{start} – {end}", "es": "del {start} al {end}" },
+  "shop.offer_until": { "en": "through {end}", "es": "hasta el {end}" },
+  "shop.offer_page": { "en": "{name}'s offer page", "es": "Página de la oferta de {name}" },
+  "shop.offer_page_ca": { "en": "Page for Canadian addresses", "es": "Página para direcciones en Canadá" },
 
   "shop.subs_eyebrow": { "en": "Print · Digital · Complete", "es": "Impresa · Digital · Completa" },
   "shop.subs_title": { "en": "Subscriptions & prices", "es": "Suscripciones y precios" },
