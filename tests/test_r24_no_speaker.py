@@ -14,7 +14,8 @@ committee's deck and the lessons —
                  (presentations-core.js): the "Next meeting" slide on November 11 and 18 says "Guest speaker: none
                  this time" (December 16), in every version, and January's speaker from midnight after November 18
                  (a copy opened later too); the version notes name every meeting before January 20, 2027, in
-                 English and Spanish.
+                 English and Spanish; on January 10, 2027 no slide or note of any version reads "Rick W.." (a
+                 name ends with its own period).
   * Paperwork  — the agenda e-mail of November 18 in the first version: its row "Guest speaker: none at this
                  meeting" and the panel's warning (speakerNone), none in "No guest speaker" (and no warning that a
                  listed speaker is left out); "Start next month" after November 18 goes to "No guest speaker" by
@@ -248,7 +249,7 @@ class Deck(unittest.TestCase):
                                                "Topic: none"])
         self.assertEqual(r["talk"]["title"], "Our guest speaker: none tonight")
         notes = " ".join(r["title"]["notes"])
-        self.assertIn("TONIGHT'S GUEST SPEAKER, from the Meetings page: none tonight.", notes)
+        self.assertIn("TONIGHT'S GUEST SPEAKER (from the Meetings page): none tonight; if there is none", notes)
         self.assertIn("No guest speaker is listed for tonight: choose the version 'No guest speaker'", notes)
         self.assertNotIn("December 16, 2026, or the speaker", notes)
         self.assertIn("Next month's guest speaker: none this time.", " ".join(r["thanks"]["notes"]))
@@ -263,11 +264,28 @@ class Deck(unittest.TestCase):
     def test_january_names_its_speaker(self):
         r = self.run_deck("""
             const st = G.emptyState();
-            out({ intro: draw(st, "", input.now, "speaker-intro"), next: draw(st, "", input.now, "next-meeting") });""",
+            const every = (preset) => D.slides.map((s) => s.id).map((id) => [id, draw(st, preset, input.now, id, "notes")])
+              .filter(([, d]) => d && d.shown);
+            out({ intro: draw(st, "", input.now, "speaker-intro"), next: draw(st, "", input.now, "next-meeting"),
+                  title: draw(st, "", input.now, "title", "notes"),
+                  all: Object.fromEntries(D.presets.map((p) => [p.id, every(p.id)])) });""",
             JAN10)
         rick, feb = real_speaker("2027-01-20"), real_speaker("2027-02-17")
         self.assertEqual(r["intro"]["items"][:2], [rick["name"], rick["position"]])
         self.assertEqual(r["next"]["items"][1], f"Guest speaker: {feb['name']} — “{feb['topic']}”")
+        self.assertIn(f"TONIGHT'S GUEST SPEAKER (from the Meetings page): {rick['name']}; if there is none",
+                      " ".join(r["title"]["notes"]))
+        # a name ends with its own period ("Rick W."): never "Rick W.." after it, on a slide or in its notes, in
+        # every version
+        stop = re.compile(r"[A-Z]\.\.(?!\.)")
+        cfg = yaml.safe_load((ROOT / "config" / "presentations" / "committee-meeting.yml").read_text(encoding="utf-8"))
+        self.assertEqual(sorted(r["all"]), sorted(p["id"] for p in cfg["presets"]))
+        for pid, slides in r["all"].items():
+            self.assertTrue(slides, pid)
+            for sid, d in slides:
+                for line in [d["title"], *d["items"], *d["notes"]]:
+                    with self.subTest(version=pid, slide=sid):
+                        self.assertNotRegex(line, stop, line[:160])
 
 
 class Paperwork(unittest.TestCase):
