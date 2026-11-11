@@ -543,7 +543,8 @@ const DATE_ONLY = ["past", "also_on_calendar", "calendar_match", "also_in_feed",
  * (committee.js normalizeEvents: no link, no meeting ID or code once a date is over). What only that date has is left
  * out (DATE_ONLY), and so is its flyer: a later month's date has the series' own flyer, the one for every date
  * (build_data.pick_flyer: a name with no day or month in it) — the flyer two of its dates share; a flyer named with
- * a day or a month is one date's alone ("July 2027 Grapevine Meeting - flyer" is not August's).
+ * a day or a month is one date's alone ("July 2027 Grapevine Meeting - flyer" is not August's). So a series with
+ * only ONE date in events.json gives its later months no flyer (every series has six or more dates there today).
  */
 function seriesTemplate(series) {
   const newest = [...series].sort((a, b) => eventDays(b).start.localeCompare(eventDays(a).start));

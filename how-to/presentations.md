@@ -138,8 +138,8 @@ committee now holds it: the opening (moment of silence, Serenity Prayer), four "
 introduction, the talk of about 20 minutes from about 7:02, questions from about 7:22, the thanks: done by 7:30), then
 the committee's business from 7:30 to 8:00, opened by the Preamble, each part shorter. The speaker's name, service
 position and topic come from `config/site.yml` → `meeting: speakers:` (the same list as `/meetings/`) and switch at
-midnight after each meeting. A meeting the list gives no speaker (every one before January 20, 2027, when the
-guest speakers start: November 18 and December 16, 2026) says so: "none tonight" on the speaker's slides, "Guest
+midnight after each meeting. A meeting the list gives no speaker (November 18 and December 16, 2026: the guest
+speakers start on January 20, 2027) says so: "none tonight" on the speaker's slides, "Guest
 speaker: none this time" on "Next meeting"; "to be announced" is only for a speaker the list doesn't name yet (a
 month after its last one, or an entry the site leaves out). "No guest speaker" is the committee's business for the
 whole hour, as before (the meetings before January 20, 2027, or a month whose speaker can't come), and
@@ -1329,7 +1329,7 @@ the text, and "Start next month" goes back to "With a guest speaker" when the ne
 The other way round, when the website lists NO speaker for that meeting (November 18 and December 16, 2026) but the
 version is still the first one, the panel warns too (the agenda's row then reads "Guest speaker: none at this
 meeting") and names the version to choose, and "Start next month" switches to "No guest speaker" by itself when the
-next meeting has no speaker listed (its Undo too). A detail left empty beside a
+website lists no speaker for the next meeting (never for one only not listed yet; its Undo too). A detail left empty beside a
 filled one shows in [brackets], so you notice it.
 
 **Start next month**, at the bottom of the tab, is pressed after the meeting, once the minutes are drafted. You

@@ -10,7 +10,7 @@ from that record lost them: La Viña's monthly workshop in /monthly/2027-07/ …
 Spanish) had no "Meeting ID: 815 9593 1777", and the Grapevine Meeting's later months would lose their Google Meet
 link once its first date (Dec 2, 2026) is over.
 
-Here, with the sync's own records in its own order (a build on Jan 10, 2027: two past dates of each series kept):
+Here, with the sync's own records in its own order (a build on Jan 10, 2027: two or three past dates of each series kept):
   * a later month's date has the link, the meeting ID or code — its calendar text is the series' upcoming dates'
     own, in both languages;
   * it is never marked past, and takes no flyer named with another month ("July 2027 Grapevine Meeting - flyer"

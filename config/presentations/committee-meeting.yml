@@ -17,8 +17,8 @@
 #     Month; the next assembly) and `live` slides (story deadlines, coming events, the next twelve meeting
 #     dates). A fact the site has nothing for says where to look ("see the Meetings page", "to be announced"),
 #     so every sentence around one is written to read well with that phrase too. A meeting with NO guest
-#     speaker (the meetings before January 20, 2027, when the guest speakers start: November 18 and December 16,
-#     2026) says so: "none tonight" for tonight's speaker, "none this time" for next month's; "to be announced"
+#     speaker (November 18 and December 16, 2026: the guest speakers start on January 20, 2027) says so: "none
+#     tonight" for tonight's speaker, "none this time" for next month's; "to be announced"
 #     is only for a speaker the committee's list doesn't name yet;
 #   · the versions (Customize → Version): "With a guest speaker" (the first one: the hour from January 2027),
 #     "No guest speaker" (the committee's business for the whole hour, as before: the meetings before January 20,
