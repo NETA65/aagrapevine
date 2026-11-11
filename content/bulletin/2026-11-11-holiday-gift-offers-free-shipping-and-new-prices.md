@@ -24,7 +24,7 @@ title_es: "La Viña y Grapevine: ofertas de regalo, envío gratis y nuevos preci
 summary_es: |
   La Viña y AA Grapevine anunciaron ofertas de regalo para las fiestas, envío gratis y los nuevos precios de 2027. Las ofertas de regalo y el envío gratis valen para direcciones en EE. UU. y Canadá hasta el 31 de diciembre de 2026.
 
-  Las ofertas de regalo: $8.00 en La Viña y $16.00 en Grapevine por una segunda suscripción impresa de 1 año como regalo, con la primera a su precio habitual ($18.00 / $36.00), para ti o para regalar.
+  Las ofertas de regalo: $8.00 en La Viña y $16.00 en Grapevine por una segunda suscripción impresa de 1 año como regalo, con la primera, para ti o para regalar, a su precio habitual ($18.00 / $36.00).
 
   Según AA Grapevine, ninguna de sus dos ofertas se puede combinar con ninguna otra.
 
@@ -61,7 +61,7 @@ summary_es: |
 ---
 AA Grapevine and La Viña have announced holiday gift offers, free shipping and new prices for 2027. The gift offers and free shipping are for U.S. and Canadian addresses and run through December 31, 2026.
 
-The holiday gift offers: a second 1-year print subscription as a gift is $16.00 at Grapevine and $8.00 at La Viña, with the first at its regular price ($36.00 at Grapevine, $18.00 at La Viña), for yourself or as a gift.
+The holiday gift offers: a second 1-year print subscription as a gift is $16.00 at Grapevine and $8.00 at La Viña, with the first, for yourself or as a gift, at its regular price ($36.00 at Grapevine, $18.00 at La Viña).
 
 AA Grapevine says neither of its two offers can be combined with any other offer.
 

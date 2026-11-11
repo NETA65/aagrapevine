@@ -77,9 +77,9 @@ OFFERS_LAST_DAY = r"December 31|31 de diciembre|diciembre|December"
 # The opening's second paragraph: the gift offers' prices (the e-mail of December 1 shows the opening)
 PRICES = {
     "en": "The holiday gift offers: a second 1-year print subscription as a gift is $16.00 at Grapevine and $8.00 at "
-          "La Viña, with the first at its regular price ($36.00 at Grapevine, $18.00 at La Viña), for yourself or as a gift.",
+          "La Viña, with the first, for yourself or as a gift, at its regular price ($36.00 at Grapevine, $18.00 at La Viña).",
     "es": "Las ofertas de regalo: $8.00 en La Viña y $16.00 en Grapevine por una segunda suscripción impresa de 1 año "
-          "como regalo, con la primera a su precio habitual ($18.00 / $36.00), para ti o para regalar.",
+          "como regalo, con la primera, para ti o para regalar, a su precio habitual ($18.00 / $36.00).",
 }
 
 
