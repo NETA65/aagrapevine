@@ -3,9 +3,10 @@ and an event that is over in the calendar files.
 
   * PastEventsInTheCalendars — an event that is over (the calendar files, /events.ics and /es/events.ics, keep it
     90 days for their subscribers) still says where it was — its place, or "Online on Zoom" — but no longer how to
-    join: no link, no meeting ID or code, none of its summary's sentences that give one; its "Add to calendar"
-    links and its .ics download say the same. An event still to come keeps all of them. (eleventy/filters/
-    committee.js shapeEvent: the workshop of October 3, 2026 kept the retired room in the feeds after it.)
+    join: no link, no meeting ID or code, none of its summary's sentences that give one ("Zoom ID" / "ID de Zoom"
+    and a Zoom number right after the word too; "meeting ideas" is not a meeting ID); its "Add to calendar" links
+    and its .ics download say the same. An event still to come keeps all of them. (eleventy/filters/committee.js
+    shapeEvent: the workshop of October 3, 2026 kept the retired room in the feeds after it.)
   * TheRetiredRoom — no text of ours carries the retired room any more: the sources (content/, config/, src/,
     eleventy/, scripts/), the documentation (README.md, docs/, how-to/) and the other tests' sample data (tests/),
     and a real build of the pages made from the events (the calendar files, /events/, the share pages, the home
@@ -102,7 +103,16 @@ def items() -> list[dict]:
                         location=PLACE, online_url=ZOOM, platform="Zoom", meeting_id="123 456 7890"))
         out.append(item(f"zz-online-{when}", f"Online Writing Workshop ({when})", start, end, ONLINE_EN, ONLINE_ES,
                         online_url=MEET, platform="Google Meet", meeting_id="abc-defg-hij"))
+    # … and one that is over whose summary gives the room in other words ("Zoom ID", "ID de Zoom", a Zoom number right
+    # after the word) — and has "meeting ideas", which is not a meeting ID
+    out.append(item("zz-words-over", "Writing Workshop in Other Words", "2026-10-03T19:00:00Z", "2026-10-03T22:00:00Z",
+                    WORDS_EN, WORDS_ES, location=PLACE))
     return out
+
+
+WORDS_EN = "Bring your meeting ideas. Zoom ID: 815 9593 1777. Or join on Zoom 815 9593 1777 from home. See you there."
+WORDS_ES = ("Trae tus ideas para la reunión. ID de Zoom: 815 9593 1777. O conéctate por Zoom 815-9593-1777 desde casa. "
+            "Te esperamos.")
 
 
 # The calendar text of each event (committee.js normalizeEvents → calDescription / calLocation, the "Add to calendar"
@@ -163,6 +173,16 @@ class PastEventsInTheCalendars(unittest.TestCase):
                                 "abc-defg-hij", "Meeting ID", "Meeting code", "ID de reuni", "digo de la reuni",
                                 "digo de reuni", "digo de acceso", "passcode"):
                         self.assertNotIn(bit, text, f"{lang}: an event that is over: {bit!r}")
+
+    def test_the_room_in_other_words(self):
+        res = self.calendars()
+        for lang, kept in (("en", "Bring your meeting ideas. See you there."),
+                           ("es", "Trae tus ideas para la reunión. Te esperamos.")):
+            ev = res[lang]["events"]["zz-words-over"]
+            with self.subTest(lang=lang):
+                self.assertTrue(ev["past"])
+                self.assertEqual(ev["description"].splitlines()[0], kept)
+                self.assertNotIn("815", ev["description"] + json.dumps(ev["ics"], ensure_ascii=False))
 
     def test_an_event_still_to_come_keeps_how_to_join(self):
         res = self.calendars()

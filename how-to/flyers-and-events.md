@@ -1412,10 +1412,13 @@ name. A venue's name alone ("Hilton Tyler") is always the place's name, never it
 split counts as the street only when it starts with a house number ("1802 West Division Street").
 
 **How to join stays on the page.** The summary search engines get leaves out every sentence that says how to join
-online — a meeting ID or meeting code, a passcode or password, a `zoom.us` or `meet.google.com` link, and in
-Spanish "ID de reunión", "código de la reunión", "código de acceso", "contraseña". The page itself still shows
-them to people; a copy made for machines would only help those who look for meetings to disrupt. Write such
-details in a sentence of their own ("Join on Zoom: meeting ID …, passcode …") so the rest of the summary is kept.
+online — a meeting ID ("Meeting ID", "Zoom ID") or meeting code, a Zoom number right after the word ("Zoom 871
+2036 8287"), a passcode or password, a `zoom.us` or `meet.google.com` link, and in Spanish "ID de reunión", "ID de
+Zoom", "código de la reunión", "código de acceso", "contraseña" ("meeting ideas" is not a meeting ID: that sentence
+stays). The page itself still shows them to people; a copy made for machines would only help those who look for
+meetings to disrupt. The calendar files leave out the same sentences once an event is over
+([f) Hybrid](#f-hybrid-a-place-and-zoom)). Write such details in a sentence of their own ("Join on Zoom: meeting
+ID …, passcode …") so the rest of the summary is kept.
 
 **Who holds it.** The committee (by the same name as on every page) for our own events — with "free to attend"
 and, without a flyer, the committee's card as its picture; La Viña or AA Grapevine for a `host: lv` / `gv` event;

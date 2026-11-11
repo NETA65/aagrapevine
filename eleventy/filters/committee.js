@@ -1175,8 +1175,11 @@ export function eventPlace(text, extra = {}) {
 // join online (a meeting ID or code, a passcode, a Zoom or Google Meet link: "…join on Zoom (meeting ID 815 9593
 // 1777, passcode …).", "…on Google Meet: meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb)."). The page shows
 // them to people; a copy made for machines only helps those who look for meetings to disrupt.
+// What counts: "Meeting ID" / "Zoom ID" / "ID de Zoom" / "ID de (la) reunión" (never "meeting ideas"), a Zoom number
+// right after the word ("Zoom 871 2036 8287", "Zoom: 815-9593-1777"), a meeting code / "código de (la) reunión", a
+// passcode, password, "código de acceso" or "contraseña", a Zoom link or its pwd= token, a Google Meet link.
 const PLAIN_ENTITIES = { "&nbsp;": " ", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&lt;": "<", "&gt;": ">", "&amp;": "&" };
-const JOIN_DETAILS = /meeting\s*id|zoom\s*id\b|meeting\s*code|pass\s*code|password|\bpwd=|zoom\.us\/|meet\.google\.com\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
+const JOIN_DETAILS = /\bmeeting\s*ids?\b|\bzoom\s*id\b|\bid de zoom\b|\bzoom\W{0,3}\d{3}[\s.-]?\d{3,4}[\s.-]?\d{3,4}\b|meeting\s*code|pass\s*code|password|\bpwd=|zoom\.us\/|meet\.google\.com\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
 // A summary for the calendars of an event that is over (shapeEvent): its lines as written, without the sentences that
 // say how to join online (JOIN_DETAILS) — a line left with nothing goes, and so does a blank line too many.
 function withoutJoinDetails(s) {
