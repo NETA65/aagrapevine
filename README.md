@@ -576,7 +576,9 @@ breaks while you decide.
   toolkit's lines for the two offers link each one's own section (`/shop/#offers-free-shipping-2026`,
   `/shop/#offers-holiday-gifts-2026`). Grapevine's December 31 is the chair's (its page and e-mails give no end
   date; La Viña's e-mails say December 31). The old posts' links (`/bulletin/#2026-10-01-…`, `#2026-11-02-…`) now
-  open the bulletin at its top, where this post is first; it is in the e-mail of December 1, and leaves by itself
+  open the bulletin at its top, where this post is first; it is in the e-mail of December 1 when it goes up by
+  November 30 (the e-mail counts a post in the month it first shows: one that first shows in December is in no
+  e-mail, since it is gone before January 1's — then also set its `date:` to the day it goes up), and leaves by itself
   after December 31 (`2027-01-01-new-prices-in-effect.md` takes over on January 1).
 - **What's New:** the words ("New since your last visit", "New for you", "Mark all as read", "Forget my last
   visit"), the 30-minute "visit" rule, and the green label.

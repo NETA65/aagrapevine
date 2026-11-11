@@ -599,7 +599,8 @@ card, What's New, the feed) is the first 400 characters of `summary_es` without 
 first 140 characters (the whole first sentence), the booth the first paragraph. The text is longer than 700 characters, so the home card shows a
 320-character teaser and "Read more", and the e-mail the opening's paragraphs and "Details →". Pinned, so it comes
 first on the bulletin, on the home page and in the digest (What's New and the feed keep their date order); shown
-through December 31, 2026; in the November 2026 digest (sent December 1).
+through December 31, 2026; in the November 2026 digest (sent December 1) when it goes up by November 30 — the
+digest counts a post in the month it first shows, and this one is gone before the January 1 e-mail.
 
 Rules for `summary_es` (and `summary_en`):
 
