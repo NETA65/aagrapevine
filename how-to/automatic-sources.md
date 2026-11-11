@@ -539,7 +539,9 @@ number ("Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Tempora
 the description ("…nuestra reunión abierta de AA en español del 5 de noviembre de 2026…"). For a `weekly_open` show
 the sync stores each episode's meeting date (`extra.meeting_date`: the date in its title, else the date in its
 description that says it is the meeting's — "del …", "held on …" —, never a later one such as the next meeting's)
-and whether the title is only the show's name (`extra.generic_title`). The site then calls that episode **Meeting of
+and whether the title is only the show's name (`extra.generic_title` — also when its numbering is written without
+brackets, "… - Temporada 1, episodio 2", or when several of the show's episodes share one title that is not quite
+the show's name). The site then calls that episode **Meeting of
 November 5, 2026** / *Reunión del 5 de noviembre de 2026* — on `/listen/`, Home, What's New, `/digest/` and in the
 monthly e-mail; *La Viña Open Meeting, November 5, 2026* in the RSS feed and the search —; with no date found, the
 title and its number ("…, episodio 2", in the e-mail too). A title of its own (a special) stays as it is. Home leaves
@@ -555,15 +557,16 @@ show failing makes the source fail.
 **Where it shows.** `/listen/` · `/es/listen/` (one group per show, in your settings' order; the newest
 24 episodes are on the page, the rest load from `/episodes-index.json`; one shared player). Its **Latest episode** is
 the newest one; among one day's episodes the one in the page's language comes first, then your settings' order —
-AA Grapevine's Podcast and La Viña's open meeting both come out on Mondays, so on that day `/listen/` features AA
-Grapevine's and `/es/listen/` La Viña's (and the episode list is in that order too). Home
+so far AA Grapevine's Podcast and La Viña's open meeting both came out on Mondays (La Viña's first episode, at the
+same time as AA Grapevine's; holiday weeks may differ), and on such a day `/listen/` features AA Grapevine's and
+`/es/listen/` La Viña's (and the episode list is in that order too). Home
 *Listen & Watch*: the **featured** episode is the newest episode of the **first** show in your list if
 it is no more than 30 days older than the newest episode overall, otherwise the newest episode; then 3
 more, with every show represented. What's New and the RSS feed (with the audio attached), `/digest/` and
 the monthly e-mail (each weekly open meeting's episodes get their meeting's label), search. `/meetings/#weekly-open`:
 each meeting's card links its show's episodes (**Listen to past meetings**). With shows in both languages, `/listen/`
-gets language chips, a language label on every row and on every show card, and the note "Each show is in its own
-language"; on Home an episode in the other language has the same label ("ES" / "EN"). The booth display (`/about/#booth`): the 6 newest episodes of AA Grapevine's podcast (never the weekly
+gets language chips, a language label on every row in the other language and on every show card, and the note
+"Each show is in its own language"; on Home an episode in the other language has the same label ("ES" / "EN"). The booth display (`/about/#booth`): the 6 newest episodes of AA Grapevine's podcast (never the weekly
 open meetings' recordings), played from the podcast's host only while the booth's sound is on.
 
 Since October 2026 **every episode has its own address**, `/listen/?ep=<id>` (for example
@@ -608,8 +611,8 @@ YouTube copy too. A show's description that carries its own translation in paren
 it, without the other language's sentence, and needs no override.
 
 **Code pointers.** [`scripts/sync/podcasts.py`](../scripts/sync/podcasts.py) → `build_items` (each
-episode and its `extra`), `meeting_date`, `is_generic_title`, `show_meta` / `show_lang`, `failed_show` (one show's
-health), `discover`; display [`eleventy/filters/media.js`](../eleventy/filters/media.js) → `showList`, `showMeeting`,
+episode and its `extra`), `meeting_date`, `is_generic_title` / `shared_titles`, `show_meta` / `show_lang`,
+`failed_show` (one show's health), `discover`; display [`eleventy/filters/media.js`](../eleventy/filters/media.js) → `showList`, `showMeeting`,
 `titleOf`, `epCompact`, and `src/pages/listen.njk` → macro `epRow`; home `eleventy/filters/home.js` →
 `homeEpisodes`; the e-mail `scripts/notify/send_digest.py` → `item_label`, `media_title`. Tests:
 `tests/test_sync_pipeline.py`, `tests/test_r25_lavina_podcast.py` (on a saved copy of La Viña's real feed,

@@ -325,8 +325,8 @@ its own item shape), `status.json` (below),
 `booth.json` (the booth display's Drive files, below — their own shape; nothing translated).
 
 Each site file is `{ "updated": "...", "fixture": false, <extra top-level keys>, "items": [...] }`,
-items sorted newest first (events: soonest first; episodes out at the same moment in config order, the first show
-first). Extra top-level keys: `instagram.profiles`,
+items sorted newest first (events: soonest first; episodes out at the same moment — so far AA Grapevine's Podcast
+and La Viña's open meeting, on Mondays — in config order, the first show first). Extra top-level keys: `instagram.profiles`,
 `videos.playlists`, `episodes.shows`, `articles.issues` (§5). `drive.json` never contains a Google
 Form whose `extra.form_closed` is `true`, nor a file of the booth folder (category `booth`: those are
 in `booth.json` only). Output is deterministic: a re-run with the same raw data
@@ -1488,7 +1488,7 @@ it is read once.
 
 | kind (file) | extra fields | extra i18n |
 |---|---|---|
-| episode (`episodes`) | `audio_url`, `audio_type`, `audio_bytes`, `duration_sec`, `season`, `episode`, `episode_type`, `show`, `show_name`, `show_web`, `link`, `player_url`, `apple`, `spotify`, `amazon`; for a show with `weekly_open` in config: `weekly_open` ("grapevine" / "lavina": the meeting it records), `meeting_date` (YYYY-MM-DD: the date in its title, else the meeting's date in its description — `podcasts.meeting_date`; absent when none is found), `generic_title` (true when its title is only the show's name: the site then calls it "Meeting of <meeting_date>") | — |
+| episode (`episodes`) | `audio_url`, `audio_type`, `audio_bytes`, `duration_sec`, `season`, `episode`, `episode_type`, `show`, `show_name`, `show_web`, `link`, `player_url`, `apple`, `spotify`, `amazon`; for a show with `weekly_open` in config: `weekly_open` ("grapevine" / "lavina": the meeting it records), `meeting_date` (YYYY-MM-DD: the date in its title, else the meeting's date in its description — `podcasts.meeting_date`; absent when none is found), `generic_title` (true when its title, its numbering aside, is only the show's name, or is the same for several of the show's episodes: the site then calls it "Meeting of <meeting_date>") | — |
 | video (`videos`) | `video_id`, `channel_id`, `duration_sec`, `playlists` [names], `is_short`, `views`, `is_live_recording`, `date_approx`, `season`, `episode` (podcast videos only) | — |
 | post (`instagram`) | `shortcode`, `account`, `username`, `media_type`, `thumb`, `embed_url`, `permalink`, `is_reel`, `manual`, `strategy`, `caption_known`, `embed_checked` | — |
 | article (`articles`, `spotlight`) | `publication`, `issue_key`, `issue_label`, `issue_date` (cover date), `issue_theme`, `issue_url`, `topic`, `section`, `author`, `author_location`, `subtitle`, `teaser`, `free`, `online_exclusive`, `department` (bool); written by build_data: `geo`, `pub_date` (below) | `section`, `topic`, `issue_theme` (machine); `issue_label`, `author_location` (rules — from `geo.label_en/label_es`, only when a place is known) |
