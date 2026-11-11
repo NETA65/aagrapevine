@@ -1360,7 +1360,8 @@ class Facts(unittest.TestCase):
         and each date's guest speaker, switching at midnight Central after the meeting, as the meeting's day does —
         "to be announced" for a speaker the list doesn't name yet (December's entry is left out: a full last name;
         the months after the list); the chair's notes alone say whether a speaker shares slides and has confirmed.
-        A meeting the list gives NO speaker: tests/test_r24_no_speaker.py (the committee's real list)."""
+        A meeting the list gives NO speaker: tests/test_r24_no_speaker.py (Facts: its own copy of the committee's list;
+        Deck and Paperwork: the real one)."""
         live, night = self.r["more"]["meet"], self.r["more"]["meetNight"]
         self.assertEqual((live["meeting_platform"], live["meeting_link"], live["meeting_url"], live["meeting_code"]),
                          ("Google Meet", "meet.google.com/rva-tmst-vdb", "https://meet.google.com/rva-tmst-vdb", "rva-tmst-vdb"))

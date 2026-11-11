@@ -7,9 +7,11 @@
 // all-day events (so no VTIMEZONE is needed).
 //
 // Contents: the monthly committee meetings (computed from config/site.yml,
-// with the Zoom link), Drive flyer events, manual events, the Texas GV/LV
-// calendar events and any extra .ics feeds — everything on /events/.
-// Past events are kept for ~90 days so subscribers keep a little history.
+// with its Google Meet link), Drive flyer events, manual events, the Texas
+// GV/LV calendar events and any extra .ics feeds — everything on /events/.
+// Past events are kept for ~90 days so subscribers keep a little history:
+// where each one was, but no joining details any more (no link, no meeting
+// ID or code — committee.js shapeEvent).
 import { normalizeEvents, buildIcs, MEETING_MONTHS_AHEAD } from "../../eleventy/filters/committee.js";
 
 export const data = {

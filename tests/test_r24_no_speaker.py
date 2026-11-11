@@ -102,7 +102,8 @@ def iso(now: str) -> str:
 
 
 class Facts(unittest.TestCase):
-    """The speaker facts from the committee's real list of guest speakers."""
+    """The speaker facts from the test's own copy of the committee's list of guest speakers (MEETING: its first, its
+    second and a last one), so the code is judged here, not the list."""
 
     cache: dict = {}
 

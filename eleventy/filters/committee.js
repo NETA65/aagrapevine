@@ -272,8 +272,10 @@ const skipDates = (cfg = {}) => (cfg.skip_dates || []).map((d) => (d instanceof 
 
 /**
  * The months of committee meetings the pages list: this month (Central time) and the MEETING_MONTHS_AHEAD after it —
- * normalizeEvents' window (/events/, /events.ics, the event share pages, the month pages' calendar files). Each date's
- * flyer comes from its events.json record, and the sync writes one for every date of these months
+ * normalizeEvents' window (/events/, /events.ics, the event share pages). The month pages are the same months
+ * (monthly.js WINDOW: this month and the 12 after it, no page beyond them), each page's calendar file with its own
+ * month's meeting. Each date's flyer comes from its events.json record, and the sync writes one for every date of
+ * these months
  * (scripts/sync/meeting.py MEETING_MONTHS_AHEAD → build_data.committee_meetings): the same number on both sides, which
  * a unit test keeps in step (tests/test_r24_meeting_window.py) — a sync that counted 12 dates left the 13th date the
  * pages list (Nov 17, 2027 on Nov 11, 2026) without its flyer.

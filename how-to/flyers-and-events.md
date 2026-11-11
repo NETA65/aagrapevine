@@ -1337,8 +1337,8 @@ A few more timings:
 | `UID` | `ev-<kind>-<id>@neta65-gvlv` (`…-es@…` in the Spanish file): `ev-flyer-<Drive file id>`, `ev-manual-<file name>`, `ev-recurring-<key>-<date>` — written in small letters, other signs turned into dashes. It stays the same while the Drive file, the file name or the key stays the same. |
 | `DTSTART` / `DTEND` | times in UTC; all-day events as dates (`DTEND` = the day after the last day); no end → one hour |
 | `SUMMARY` | the title in the file's language |
-| `DESCRIPTION` | "Details to be confirmed. The date, place or times may still change…" (tentative) · the summary · the repeat line with "Central time" · a "to be announced" place · "Online on Zoom: <link>" (or Google Meet …) · "Meeting ID: …" / "Meeting code: …" · a committee meeting's guest speaker ("Guest speaker: …", "Topic: …", when the speaker's part ends) · "Contact: …" · "Flyer: <link>" · "Details: <page>" |
-| `LOCATION` | the place; the online link when there is no place; nothing for "to be announced" |
+| `DESCRIPTION` | "Details to be confirmed. The date, place or times may still change…" (tentative) · the summary · the repeat line with "Central time" · a "to be announced" place · "Online on Zoom: <link>" (or Google Meet …) · "Meeting ID: …" / "Meeting code: …" · a committee meeting's guest speaker ("Guest speaker: …", "Topic: …", when the speaker's part ends) · "Contact: …" · "Flyer: <link>" · "Details: <page>". An event that is over (the files keep it 90 days) keeps no link or ID: "Online on Zoom" alone, no "Meeting ID" / "Meeting code" line, and none of its summary's sentences that give one ([f) Hybrid](#f-hybrid-a-place-and-zoom)) |
+| `LOCATION` | the place; the online link when there is no place ("Online on Zoom" once the event is over); nothing for "to be announced" |
 | `URL` | the event's own page; else its card on `/events/`; for a dated flyer, the Drive flyer |
 | `ATTACH` | the flyer link |
 | `CATEGORIES` | Committee meeting · NETA 65 event · Grapevine / La Viña calendar |

@@ -367,7 +367,7 @@ def upcoming_meetings(count: int = 12, include_recent_days: int = 0, now: dateti
 
 # The months of committee meetings the web pages list: this month (the site's time zone) and the MEETING_MONTHS_AHEAD
 # after it — eleventy/filters/committee.js MEETING_MONTHS_AHEAD, the window of normalizeEvents (/events/, /events.ics,
-# the event share pages, the month pages' calendar files). The sync writes a record for every date of those months
+# the event share pages; the month pages are the same months). The sync writes a record for every date of those months
 # (build_data.committee_meetings: its flyer, its guest speaker), so no date the pages list goes without the flyer the
 # Drive has for it. One number on both sides: a unit test keeps the two in step (tests/test_r24_meeting_window.py).
 MEETING_MONTHS_AHEAD = 12

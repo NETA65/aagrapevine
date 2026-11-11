@@ -333,8 +333,10 @@ terms:
   # "Grapevine meeting" in lower case is left to the model
   - { en: "Grapevine Meeting", es: "Reunión de Grapevine", exact: true }
   # a meeting's "guest speaker" (our committee meetings from January 2027) is an "orador invitado": the model wrote
-  # "altavoz invitado", a loudspeaker (the built-in rule only fixes the plural "altavoces"). A flyer named for a
-  # woman speaker needs its own line in overrides.yml ("oradora invitada"), as each month's 2027 flyer has.
+  # "altavoz invitado", a loudspeaker (the built-in rule only fixes the plural "altavoces"). "orador invitado" is the
+  # word for a man: a text about a woman speaker still needs its own line in overrides.yml ("oradora invitada"). The
+  # 16 meeting flyers of 2026-11-11 each have their own line there already, the men's months too (an override wins
+  # over this glossary), so these lines reach the texts that have none: a new file name, a post, a summary.
   - { en: "Guest Speaker Series", es: "ciclo de oradores invitados", only: es }   # never "Serie orador invitado"
   - { en: "guest speakers", es: "oradores invitados", only: es }
   - { en: "guest speaker", es: "orador invitado", only: es }

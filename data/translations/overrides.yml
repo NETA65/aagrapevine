@@ -188,9 +188,11 @@
 # The stores' free shipping banners (copies in the Drive folder flyers/, 2026-11-02; config/site.yml store_offers finds
 # them for /shop/#offers), written by hand: the Portfolio, What's New and the feeds list them by their file names.
 "Free shipping on all Grapevine products - banner": { es: "Envío gratis en todos los productos de Grapevine - banner" }
-# Our two online meetings' flyers (copies in the Drive folder flyers/, 2026-11-11; config/site.yml meeting.flyer_match
-# and the Grapevine Meeting's flyer_match find them for /meetings/ and the Events page; the Portfolio, What's New and the
-# feeds list them by their file names), written by hand 2026-11-11: the machine wrote "altavoz invitado" (a loudspeaker!),
+# Our two online meetings' flyers (copies in the Drive folder flyers/, 2026-11-11; the Portfolio, What's New and the
+# feeds list all 16 by their file names). config/site.yml meeting.flyer_match and the Grapevine Meeting's flyer_match
+# find 14 of them for /meetings/ and the Events page — "Committee Meeting - flyer", the 12 months' "… Committee Meeting -
+# guest speaker" and "Grapevine Meeting - flyer"; neither pattern matches "Our online meetings - flyer" or "2027 Guest
+# Speaker Series - flyer", which are on no event. Written by hand 2026-11-11: the machine wrote "altavoz invitado" (a loudspeaker!),
 # kept "flyer" and left "Committee Meeting - flyer" and "Grapevine Meeting - flyer" in English. In the site's own words:
 # "Reunión del comité", "Reunión de Grapevine (en inglés)", "volante", "orador(a) invitado(a)". Each month's flyer says
 # "orador invitado" or "oradora invitada" as that month's speaker in config/site.yml meeting.speakers is a man or a woman
