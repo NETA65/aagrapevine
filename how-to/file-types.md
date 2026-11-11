@@ -426,7 +426,7 @@ tiles. **Download** gives the file (for Google Slides, a PDF copy).
 
 | File | What you get |
 |---|---|
-| `slides/GVR and RLV Orientation Workshop.pptx` (real) | Slides tab: "GVR and RLV Orientation Workshop" with a **Present on the web** button — its title equals the `drive_title` of the web deck in `config/presentations/orientation-workshop.yml` ([Presentations](presentations.md)); `/orientation/` also links it as the deck's "PowerPoint copy" (while that line is a comment — until the copy with the Google Meet details is on the Drive — neither link is made) |
+| `slides/GVR and RLV Orientation Workshop.pptx` (real) | Slides tab: "GVR and RLV Orientation Workshop" with a **Present on the web** button — its title equals the `drive_title` of the web deck in `config/presentations/orientation-workshop.yml` ([Presentations](presentations.md)); `/orientation/` also links it as the deck's "PowerPoint copy" |
 | `slides/GVR and RLV Orientation Workshop.ppsx` (a "PowerPoint Show") | the same kind of Slides card; the download opens straight into the show |
 | `slides/Spring Assembly report` (Google Slides) | Slides card; Download gives a PDF |
 | `slides/Spring Assembly report.key` (Keynote) | Slides card — Drive may not preview a Keynote file; export it to PowerPoint or PDF for everyone else |

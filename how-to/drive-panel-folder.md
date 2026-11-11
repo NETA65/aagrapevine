@@ -918,7 +918,7 @@ was added (`/digest/`, and the e-mail when it is switched on).
 | 1 | `reports/2027-02-17 Committee report - February.pdf` | a report, "Committee report - February", February 17, 2027 | `/portfolio/#docs-reports` · `/es/portfolio/#docs-reports` (Spanish title machine-made); Library; search; the usual places |
 | 2 | `Informes/Informe del comité - 17 de febrero de 2027.pdf` | a report written in Spanish, February 17, 2027 | the same Reports tab; the English page shows a translation marked "Auto-translated" |
 | 3 | `notes/2027-03-02 Committee meeting minutes.pdf` | meeting notes, March 2, 2027 | `/portfolio/#docs-notes`; `/meetings/` links that tab ("Agendas and past reports") |
-| 4 | `slides/GVR and RLV Orientation Workshop.pptx` | slides | `/portfolio/#docs-slides` with **Present on the web**; the PowerPoint copy on `/orientation/` — its title equals that deck's `drive_title` (a comment until the copy with the Google Meet details is on the Drive: then no link) |
+| 4 | `slides/GVR and RLV Orientation Workshop.pptx` | slides | `/portfolio/#docs-slides` with **Present on the web**; the PowerPoint copy on `/orientation/` — its title equals that deck's `drive_title` |
 | 5 | `workshops/Writing workshop handout.pdf` | a workshop file | `/portfolio/#docs-workshops`; Library; search; the usual places |
 | 6 | `forms/Spring Assembly volunteers` (a Google Form) | a sign-up card | `/portfolio/#docs-forms` with **Sign up**; gone from every page while the form is closed |
 | 7 | `forms/Spring Assembly volunteers (Responses)` (its answers sheet) | nothing | never published — but openable by anyone with the folder link: move it out of A65_GV |

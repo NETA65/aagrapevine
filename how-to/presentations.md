@@ -42,7 +42,7 @@ chair's monthly paperwork: the agenda e-mail, a reminder and the draft minutes, 
 | One card | `/orientation/#pres-information-workshop` | `/es/orientation/#pres-information-workshop` |
 | Open a deck straight away | `/orientation/?present=information-workshop` | `/es/orientation/?present=information-workshop` |
 | The file the player reads | `/orientation/presentations/information-workshop.json` (one file per deck, the same for both languages) | — |
-| "Present on the web" on each PowerPoint copy (none while the decks' `drive_title:` lines are comments, until the copies with the Google Meet details are on the Drive) | `/portfolio/` (Slides tab) | `/es/portfolio/` |
+| "Present on the web" on each PowerPoint copy | `/portfolio/` (Slides tab) | `/es/portfolio/` |
 
 More detail in [section 5](#5-where-it-shows-on-the-website).
 
@@ -51,10 +51,9 @@ More detail in [section 5](#5-where-it-shows-on-the-website).
 - The six short GVR / RLV 101 sessions on the same page (`/orientation/magazines/` …) come from
   `config/orientation.yml`. See [Settings](settings.md).
 - The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides` are separate, fixed snapshots,
-  made on October 1, 2026. Changing a YAML file never changes them, and changing them never changes the web decks.
-  A card links its copy as "PowerPoint copy" through its `drive_title`. The four copies of October 2026 still give
-  the committee's old Zoom room, so no deck sets one until copies with the Google Meet details are on the Drive (the
-  line stays in each file as a comment, to put back then).
+  made on October 1, 2026 and rebuilt with the Google Meet details on November 11, 2026. Changing a YAML file never
+  changes them, and changing them never changes the web decks. A card links its copy as "PowerPoint copy" through
+  its `drive_title`.
 - The booth display on `/about/#booth` is a different thing: a show that plays by itself at the committee's table,
   made from `content/booth/booth.csv`, the Drive booth folder and the site's live data (some of the same live facts:
   events, themes, prices, meetings). See [Booth display](booth.md).
@@ -1683,7 +1682,7 @@ See [Automation and troubleshooting](automation-and-troubleshooting.md) for sett
 | An orange `[hint]` on a slide | an empty blank | The presenter fills it in (Customize → Your details), or the committee gives the blank a `default`. |
 | A fact says "see the Meetings page" (or similar) | no data for it, or a kept copy older than the dates the build knew | Check the setting it comes from ([3.9](#39-facts-that-stay-current-live)); open the page online. |
 | "The dates in this copy are from …" | the deck file kept for offline use is more than 14 days old | Open `/orientation/` online once. |
-| No "PowerPoint copy" link, no "Present on the web" button | the deck's `drive_title:` is still a comment (expected until the copies with the Google Meet details are on the Drive), `drive_title` is not exactly the Drive file's title (a month and year in the file name stay in its title), or the file is not in the panel folder or not shared | Put the line back once the new copy is up; compare the title shown on `/portfolio/` with `drive_title`. |
+| No "PowerPoint copy" link, no "Present on the web" button | the deck has no `drive_title:` line (or it is a comment), `drive_title` is not exactly the Drive file's title (a month and year in the file name stay in its title), or the file is not in the panel folder or not shared | Put the line back; compare the title shown on `/portfolio/` with `drive_title`. |
 | A slide is missing from the show | the version's `hide`, `starts_off`, its dates, `when: "price_notice"`, a facilitator page, or the presenter turned it off | Customize → Slides shows its badge ("Not today", "Facilitator" …); **Show all** turns the switches back on. |
 | "This version has no slides. Turn some on in Customize → Slides." | the presenter turned every slide off | Customize → Slides → Show all, or Reset to the original. |
 | On `/es/`, the notes say "Customize" instead of "Personalizar" | the notes typed the button's name | Write `{ui:customize}`. |

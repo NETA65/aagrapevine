@@ -18,11 +18,9 @@ The content of the presentations stays in **English**. On the Spanish page the b
 Spanish, and each presentation is marked "(en inglés)".
 
 **The PowerPoint copies are separate.** The four `.pptx` files in the committee's Drive folder (`slides`, listed on
-the Portfolio page) are snapshots made on October 1, 2026, before the move to Google Meet: they still give the
-committee's old Zoom room, passcode and phone number. Changing a file here does not change them, and changing them
-does not change the presentations on the site. The card's "PowerPoint copy" link opens the Drive file whose title
-is the presentation's `drive_title` — so, until copies with the Google Meet details are on the Drive, no deck sets
-one (each file keeps its line as a comment, to put back then) and no card offers the old copies.
+the Portfolio page) are snapshots, made on October 1, 2026 and rebuilt with the Google Meet details on November 11,
+2026. Changing a file here does not change them, and changing them does not change the presentations on the site.
+The card's "PowerPoint copy" link opens the Drive file whose title is the presentation's `drive_title`.
 
 ## What stays current by itself
 

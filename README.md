@@ -642,35 +642,12 @@ its own (`flyer_match` in the settings) and none becomes a second event:
 | `Our online meetings - flyer.png`, `2027 Guest Speaker Series - flyer.png` | Neither meeting's: on the Portfolio (Flyers) only |
 
 The brand kit makes them (`brand/flyers/drive-upload/`, on the owner's computer only — `brand/` is never on
-GitHub). **Upload them on or after the day the Google Meet change is merged (November 26, 2026 or later)**, PNG
-only: the next sync shows whatever is on the Drive, so a flyer uploaded earlier would go live before the pages
-say Google Meet.
+GitHub). They went up on November 11, 2026, the day the Google Meet change was merged. After a change of
+speaker or wording, rebuild the kit and upload the new PNG over the old one in *flyers* (same name, PNG only).
 
-**Two more steps for the day of that merge:**
-
-- **Merge at a quiet time.** Merge only when GitHub → **Actions** → **Website update** shows no run in progress
-  or queued, and not between about 4:15 and 8:30 AM Central (the morning refresh and the nightly full update run
-  then). A run that is still syncing when the merge lands publishes the new pages with the events it made before
-  them — no Grapevine Meeting on Events, CityWide's old hours — until the merge's own run is done. If a run was
-  syncing anyway, let the merge's own run finish (about 15 to 30 minutes), or start one
-  ([Run workflow](#7-running-the-update-right-now)).
-- **The four PowerPoint copies** in the Panel 77 folder `slides` were made on October 1, 2026: they still give
-  the old Zoom room, its passcode and a phone number to call. Replace each one with a copy that has the Google
-  Meet details (the link and the meeting code rva-tmst-vdb, no passcode, no phone line) with Drive's **Manage
-  versions → Upload new version**: the file keeps its ID and its title, so its links keep working. Then put back
-  that deck's `drive_title:` line in `config/presentations/` — this change turned the four into comments, so that
-  `/orientation/` offers no copy with the old details in the meantime (delete the `# ` in front and the note
-  after the title):
-
-  | File | Line to put back |
-  |---|---|
-  | `committee-meeting.yml` | `drive_title: "Grapevine and La Viña Monthly Committee Meeting"` |
-  | `information-workshop.yml` | `drive_title: "Grapevine and La Viña Information Workshop"` |
-  | `orientation-workshop.yml` | `drive_title: "GVR and RLV Orientation Workshop"` |
-  | `writing-workshop.yml` | `drive_title: "Grapevine and La Viña Writing Workshop"` |
-
-  (`/portfolio/` and `/library/` list every file of the folder, so they show the old copies until they are
-  replaced.)
+**The four PowerPoint copies** in the Panel 77 folder `slides` were rebuilt with the Google Meet details the same
+day (same names, so their IDs and links stayed), and the decks' `drive_title:` lines in `config/presentations/`
+link them from `/orientation/` again.
 
 **The Bulletin.** Put a Google Doc (or a .txt / .docx file) in *bulletin*. It becomes a post on the
 Bulletin page (`/bulletin/`, under *Committee*); the file name is the headline and the document's text is the body:
