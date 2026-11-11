@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-11-10T15:45:33Z",
- "attempted": "2026-11-10T15:45:33Z",
+ "updated": "2026-11-11T15:28:49Z",
+ "attempted": "2026-11-11T15:28:49Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -12,7 +12,7 @@
  "stats": {
   "discovery": "sitemap",
   "discovery_complete": true,
-  "upcoming_urls": 15,
+  "upcoming_urls": 14,
   "kept_from_cache": 0,
   "fetched": 0,
   "refreshed": 0,
@@ -23,7 +23,7 @@
   "online_es": 1,
   "items": 3,
   "new": 0,
-  "requests": 36
+  "requests": 40
  },
  "items": [
   {

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-10T15:40:46Z",
+ "updated": "2026-11-11T15:24:16Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17021,
-   "posts": 4002,
+   "followers": 17022,
+   "posts": 4005,
    "owner_id": "48108439509",
-   "checked": "2026-11-10T15:40:29Z",
+   "checked": "2026-11-11T15:23:58Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,229 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2432,
-   "posts": 3021,
+   "followers": 2434,
+   "posts": 3025,
    "owner_id": "48275839129",
-   "checked": "2026-11-10T15:40:32Z",
+   "checked": "2026-11-11T15:24:01Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:Dfmktsbg5kO",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfmktsbg5kO/",
+   "title": "Off the Pity Pot, with Olis, Sam and Peyton.",
+   "summary": "Off the Pity Pot, with Olis, Sam and Peyton.",
+   "lang": "en",
+   "date": "2026-11-11T13:21:17Z",
+   "first_seen": "2026-11-11T15:24:16Z",
+   "image": "/assets/cache/ig/Dfmktsbg5kO.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfmktsbg5kO",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfmktsbg5kO.webp",
+    "embed_url": "https://www.instagram.com/p/Dfmktsbg5kO/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfmktsbg5kO/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Off the Pity Pot, with Olis, Sam and Peyton.",
+     "es": "Fuera del pote de la piedad, con Olis, Sam y Peyton."
+    },
+    "summary": {
+     "en": "Off the Pity Pot, with Olis, Sam and Peyton.",
+     "es": "Fuera del pote de la piedad, con Olis, Sam y Peyton."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfmicbGjXw7",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfmicbGjXw7/",
+   "title": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…",
+   "summary": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…",
+   "lang": "es",
+   "date": "2026-11-11T13:00:17Z",
+   "first_seen": "2026-11-11T15:24:16Z",
+   "image": "/assets/cache/ig/DfmicbGjXw7.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfmicbGjXw7",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfmicbGjXw7.webp",
+    "embed_url": "https://www.instagram.com/p/DfmicbGjXw7/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfmicbGjXw7/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, La Viña performs an open virtual meeting of AA with a host and two …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…"
+    },
+    "summary": {
+     "en": "Each week, La Viña holds an open virtual meeting of AA with a host and two speakers. To join the live meeting on Thursdays at 12:00 p.m. (Eastern time), use the Zoom 871 2036 8287 code with the password 238047. Is Thursday not a good time? Listen to the meeting at our new podcast and YouTube. The podcast respects anonymity and is available in the main …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfmicXuDRea",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfmicXuDRea/",
+   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+   "lang": "en",
+   "date": "2026-11-11T13:00:15Z",
+   "first_seen": "2026-11-11T15:24:16Z",
+   "image": "/assets/cache/ig/DfmicXuDRea.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfmicXuDRea",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfmicXuDRea.webp",
+    "embed_url": "https://www.instagram.com/p/DfmicXuDRea/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfmicXuDRea/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
+    },
+    "summary": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfmfAvADT8Y",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfmfAvADT8Y/",
+   "title": "“Cuando bebía, temía no estar alcanzando mi potencial. Ahora que estoy sobrio, me…",
+   "summary": "“Cuando bebía, temía no estar alcanzando mi potencial. Ahora que estoy sobrio, me preocupa que a lo mejor ya lo alcancé”. \"“Reuniones, reuniones, reuniones” GRAND RAPIDS, MICHIGAN, OCTUBRE DE 1981 De Happy, Joyous and Free\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-11T12:30:16Z",
+   "first_seen": "2026-11-11T15:24:16Z",
+   "image": "/assets/cache/ig/DfmfAvADT8Y.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfmfAvADT8Y",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfmfAvADT8Y.webp",
+    "embed_url": "https://www.instagram.com/p/DfmfAvADT8Y/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfmfAvADT8Y/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“When I drank, I was afraid I would not be reaching my potential. Now that I'm sober, I …",
+     "es": "“Cuando bebía, temía no estar alcanzando mi potencial. Ahora que estoy sobrio, me…"
+    },
+    "summary": {
+     "en": "“When I drank, I was afraid I would not be reaching my potential. Now that I'm sober, I'm worried that I might have reached it.” \"Meetings, Meetings, Meetings\" GRAND RAPIDS, MICHIGAN, OCTOBER 1981 From Happy, Joyous and Free\" Daily Quote in www.aalavina.org",
+     "es": "“Cuando bebía, temía no estar alcanzando mi potencial. Ahora que estoy sobrio, me preocupa que a lo mejor ya lo alcancé”. \"“Reuniones, reuniones, reuniones” GRAND RAPIDS, MICHIGAN, OCTUBRE DE 1981 De Happy, Joyous and Free\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfmfArNjQSd",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfmfArNjQSd/",
+   "title": "“We need to constantly scrutinize ourselves carefully, in order to make everlastingly…",
+   "summary": "“We need to constantly scrutinize ourselves carefully, in order to make everlastingly certain that we shall always be strong enough and single-purposed enough from within, to relate ourselves rightly to the world without.” AA Co-Founder, Bill W., August 1945, “Modesty One Plank for Good Public Relations”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-11T12:30:15Z",
+   "first_seen": "2026-11-11T15:24:16Z",
+   "image": "/assets/cache/ig/DfmfArNjQSd.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfmfArNjQSd",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfmfArNjQSd.webp",
+    "embed_url": "https://www.instagram.com/p/DfmfArNjQSd/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfmfArNjQSd/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We need to constantly scrutinize ourselves carefully, in order to make everlastingly…",
+     "es": "“Necesitamos constantemente examinarnos cuidadosamente, para hacer eternamente …"
+    },
+    "summary": {
+     "en": "“We need to constantly scrutinize ourselves carefully, in order to make everlastingly certain that we shall always be strong enough and single-purposed enough from within, to relate ourselves rightly to the world without.” AA Co-Founder, Bill W., August 1945, “Modesty One Plank for Good Public Relations”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "“Necesitamos constantemente examinarnos cuidadosamente, para asegurarnos eternamente de que siempre seremos lo suficientemente fuertes y de un solo propósito desde dentro, para relacionarnos con el mundo sin justicia”. AA cofundador, Bill W., agosto de 1945, “Modesty One Plank for Good Public Relations”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:Dfj6N1wDXPr",
    "source": "instagram",

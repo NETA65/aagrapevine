@@ -1,28 +1,28 @@
 {
  "source": "articles",
- "updated": "2026-11-10T15:42:21Z",
- "attempted": "2026-11-10T15:42:21Z",
+ "updated": "2026-11-11T15:26:03Z",
+ "attempted": "2026-11-11T15:26:03Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 2,
   "removed": 0,
   "held": 0
  },
  "stats": {
   "hub_articles": 57,
-  "details_fetched": 0,
+  "details_fetched": 2,
   "details_failed": 0,
-  "thumbs": 0,
+  "thumbs": 2,
   "archive_pages": 13,
-  "archive_new": 0,
+  "archive_new": 2,
   "covers": 0,
-  "details_pending": 0,
+  "details_pending": 2,
   "byline_pending": 0,
   "details_left": 0,
-  "new": 0,
-  "total": 295,
-  "requests": 15
+  "new": 2,
+  "total": 297,
+  "requests": 19
  },
  "items": [
   {
@@ -86,6 +86,72 @@
     "author_location": "Montrose, Colo.",
     "subtitle": "He had a fool for a sponsor—himself",
     "teaser": "After five years of sobriety, I began to get ready for my first drink. It happened so gradually I wasn’t aware that it was happening.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false
+   }
+  },
+  {
+   "id": "gv:2026-11:making-amends-my-boss",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/making-amends-my-boss",
+   "title": "Making Amends to My Boss",
+   "summary": "The spiritual power of Step Nine",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-11T15:26:03Z",
+   "last_seen": "2026-11-11T15:26:03Z",
+   "image": "/assets/cache/articles/f69965f5aafd6fb8.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Janelle H.",
+    "author_location": "Manchester, N.H.",
+    "subtitle": "The spiritual power of Step Nine",
+    "teaser": "I was recently reminded of an amends I made a couple of years ago that I only now recognize as a spiritual experience.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false
+   }
+  },
+  {
+   "id": "gv:2026-11:gift-community",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/gift-community",
+   "title": "The Gift of Community",
+   "summary": "Stepping outside himself and into AA",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-11T15:26:03Z",
+   "last_seen": "2026-11-11T15:26:03Z",
+   "image": "/assets/cache/articles/5ac1128b2ebc3711.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Steve A.",
+    "author_location": "Hernando, Fla.",
+    "subtitle": "Stepping outside himself and into AA",
+    "teaser": "During my years of drinking and drugging, I searched for a place where I felt comfortable.",
     "free": false,
     "online_exclusive": true,
     "department": false
@@ -9772,7 +9838,7 @@
    "key": "2026-11",
    "publication": "gv",
    "hub": "https://www.aagrapevine.org/magazine",
-   "seen": "2026-11-10T15:40:52Z",
+   "seen": "2026-11-11T15:24:21Z",
    "cover": "/assets/cache/articles/bfc7d6fa631e6757.webp"
   },
   "lv:2026-11": {
@@ -9784,7 +9850,7 @@
    "key": "2026-11",
    "publication": "lv",
    "hub": "https://www.aalavina.org/la-revista",
-   "seen": "2026-11-10T15:41:04Z",
+   "seen": "2026-11-11T15:24:32Z",
    "cover": "/assets/cache/articles/f516ec1fbfd667f4.webp"
   },
   "gv:2026-10": {
@@ -9834,15 +9900,15 @@
  },
  "archive_state": {
   "gv": {
-   "last_run": "2026-11-10T15:41:44Z",
+   "last_run": "2026-11-11T15:25:10Z",
    "pages_last_run": 7,
-   "new_last_run": 0,
+   "new_last_run": 2,
    "oldest_seen": "2026-09",
    "backfilled": "2026-09-23T23:07:47Z",
    "backfill_days": 120
   },
   "lv": {
-   "last_run": "2026-11-10T15:42:21Z",
+   "last_run": "2026-11-11T15:25:41Z",
    "pages_last_run": 6,
    "new_last_run": 0,
    "oldest_seen": "2026-07",
