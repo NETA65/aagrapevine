@@ -782,7 +782,8 @@ try {
         // this file's copies of the shows, not the committee's config/site.yml (see CFG_SHOWS)
         site: (data) => ({ ...data.site, sources: { ...data.site.sources, podcasts: input.cfg } }),
         db: (data) => ({ ...data.db, episodes: input.episodes, weekly_open: { updated: "2026-11-11T12:00:00Z", items: input.weekly },
-                         ...(input.whatsnew ? { whatsnew: { updated: "2026-11-11T12:00:00Z", items: input.whatsnew } } : {}) }),
+                         ...(input.whatsnew ? { whatsnew: { updated: "2026-11-11T12:00:00Z", items: input.whatsnew } } : {}),
+                         ...(input.status ? { status: input.status } : {}) }),
       });
     },
   });
@@ -836,12 +837,21 @@ class Pages(unittest.TestCase):
                 one = self.T["media.show_episodes_one"][lang]
                 # "1 episode", never "1 episodes" / "1 episodios" (assertIn alone would take those too)
                 self.assertRegex(visible(cards["lvo"]), re.escape(one) + r"(?![\w])", "the singular form")
-                # a show name in the other language keeps its lang attribute on the show chips
-                chip = re.search(r'<span lang="(\w+)">' + re.escape(html.escape(NAME, quote=False)) + "</span>",
-                                 self.built[("/es" if lang == "es" else "") + "/listen/"])
-                if lang == "en":
-                    self.assertIsNotNone(chip, "La Viña's show name is marked Spanish on /listen/")
-                    self.assertEqual(chip.group(1), "es")
+                # the show chips carry the short labels (La Viña's full name is wider than a phone), the full name as
+                # their title, and a lang attribute on a label in the other language
+                page = self.built[("/es" if lang == "es" else "") + "/listen/"]
+                chips = {k: re.search(r"<button[^>]*setShow\(show === '" + k + r"'[^>]*>(.*?)</button>", page, re.S)
+                         for k in ("gv", "wo", "lvo")}
+                self.assertTrue(all(chips.values()), "a chip per show")
+                self.assertIn(f'title="{html.escape(NAME)}"', chips["lvo"].group(0))
+                lv_short = "La Viña Open Meeting" if lang == "en" else "Reunión Abierta de La Viña"
+                self.assertIn(lv_short, visible(chips["lvo"].group(1)))
+                self.assertNotIn("Alcohólicos", visible(chips["lvo"].group(1)))
+                if lang == "es":
+                    self.assertIn('<span lang="en">Grapevine Weekly Open</span>', chips["wo"].group(1))
+                    self.assertIn('<span lang="en">AA Grapevine', chips["gv"].group(1))
+                else:
+                    self.assertNotIn("lang=", chips["lvo"].group(1), "English words on the English page")
 
     def test_each_meeting_card_says_its_day_language_and_name(self):
         want = {"en": {"wo": ("Live on Zoom: Wednesdays", "In English", "How to join: Grapevine Weekly Open AA Meeting"),
@@ -884,6 +894,19 @@ class Pages(unittest.TestCase):
                 self.assertIn(f'href="{pre}/listen/?show=wo#episodes"', page)
                 name = "La Viña Open Meeting (in Spanish)" if lang == "en" else "Reunión Abierta de La Viña"
                 self.assertIn('aria-label="' + self.T["committee.weekly.listen_name"][lang].replace("{name}", name) + '"', page)
+
+    def test_the_archive_link_follows_the_chosen_show(self):
+        # AA Grapevine's archive lists its own shows only: with La Viña's meeting chosen, La Viña's page instead
+        for lang in ("en", "es"):
+            with self.subTest(lang=lang):
+                page = self.built[("/es" if lang == "es" else "") + "/listen/"]
+                gv = re.search(r'<a class="link [^"]*" href="https://www\.aagrapevine\.org/podcasts"[^>]*>', page)
+                self.assertIsNotNone(gv)
+                self.assertIn("x-show=\"show !== 'lvo'\"", html.unescape(gv.group(0)), "only La Viña's meeting hides it")
+                lv = re.search(r'<a [^>]*href="' + re.escape(LV_MEETING_PAGE) + r'"[^>]*x-show[^>]*>(.*?)</a>', page)
+                self.assertIsNotNone(lv, "La Viña's page in the list's footer")
+                self.assertIn("x-show=\"show === 'lvo'\"", lv.group(0))
+                self.assertEqual(html.unescape(visible(lv.group(1))), self.T["media.full_archive_lv"][lang])
 
     def test_la_vinas_card_links_its_page(self):
         # the La Viña card's "Details on aalavina.org" opens its meeting's page, in both languages
@@ -975,7 +998,8 @@ class Pages(unittest.TestCase):
         en, es = quote("/listen/"), quote("/es/listen/")
         self.assertIn(f"{NAME} (in Spanish)", en)
         self.assertIn("AA Grapevine's Podcast, Grapevine Weekly Open AA Meeting,", en, "English names on the English page: no label")
-        self.assertIn("AA Grapevine's Podcast (en inglés), Grapevine Weekly Open AA Meeting (en inglés) y " + NAME + ".", es)
+        # the page's own language's show first: on /es/, La Viña's meeting, as La Viña comes first on every /es/ page
+        self.assertIn(NAME + ", AA Grapevine's Podcast (en inglés) y Grapevine Weekly Open AA Meeting (en inglés).", es)
 
 
 class HomeDates(unittest.TestCase):
@@ -1020,6 +1044,44 @@ class HomeDates(unittest.TestCase):
                 self.assertIn(wo_day, wo, "and a row's")
 
 
+class StatusPage(unittest.TestCase):
+    """/status/ when La Viña's show could not be read: after a good read "its episodes stay on the site" and its last
+    read; never read yet (its first run failed: nothing of it on the site) its own sentence, with no such claim."""
+
+    built: dict | None = None
+
+    @classmethod
+    def status(cls, updated):
+        return {"updated": "2026-11-11T15:00:00Z", "sources": [
+            {"source": "podcasts", "ok": True, "updated": "2026-11-11T15:00:00Z", "attempted": "2026-11-11T15:00:00Z", "count": 310,
+             "stats": {"shows": {"gv": {"ok": True, "name": "AA Grapevine's Podcast"},
+                                 "lvo": {"ok": False, "name": NAME, "updated": updated, "error": "HTTP 404"}}}}]}
+
+    def setUp(self):
+        if not (ROOT / "node_modules" / "@11ty" / "eleventy").is_dir():
+            self.skipTest("the site's npm packages are not installed (npm ci)")
+        if StatusPage.built is None:
+            StatusPage.built = {}
+            for key, updated in (("read", "2026-11-09T15:00:00Z"), ("never", None)):
+                StatusPage.built[key] = run_js(self, PAGES_JS, data={
+                    "only": "status.njk", "urls": ["/status/", "/es/status/"], "episodes": EPISODES, "weekly": WEEKLY,
+                    "cfg": CFG_SHOWS, "status": self.status(updated)}, timeout=600, now=NOW_JS)
+
+    def test_a_show_read_before(self):
+        for url, words in (("/status/", "Its episodes stay on the site"), ("/es/status/", "Sus episodios siguen en el sitio")):
+            with self.subTest(url=url):
+                self.assertIn(words, visible(self.built["read"][url]))
+
+    def test_a_show_never_read(self):
+        for url, words, never in (("/status/", "Not read yet:", "episodes stay"),
+                                  ("/es/status/", "Todavía no se pudo leer:", "siguen en el sitio")):
+            with self.subTest(url=url):
+                page = visible(self.built["never"][url])
+                self.assertIn(words, page)
+                self.assertIn(NAME, page)
+                self.assertNotIn(never, page, "nothing of the show is on the site to stay")
+
+
 class EmailTitle(unittest.TestCase):
     ITEM = {"kind": "episode", "lang": "es", "title": f"{NAME} [Temporada 1, episodio 3]",
             "i18n": {"title": {"es": f"{NAME} [Temporada 1, episodio 3]",
@@ -1037,6 +1099,22 @@ class EmailTitle(unittest.TestCase):
         self.assertEqual(D.media_title(own, "es"), NAME, "a title of its own: as before")
         loose = {**it, "i18n": {"title": {"es": f"{NAME} - Temporada 1, episodio 3"}}}
         self.assertEqual(D.media_title(loose, "es"), f"{NAME}, episodio 3", "the numbering without brackets: once")
+
+    def test_the_email_says_an_episodes_language(self):
+        # La Viña's meeting in the English half says "in Spanish", AA Grapevine's in the Spanish half "en inglés" —
+        # as the e-mail says of the magazines' stories, and the site of the show (its ES / EN pill)
+        lv = {**self.ITEM, "date": "2026-11-09T05:15:00Z", "extra": {**self.ITEM["extra"], "season": 1, "duration_sec": 3320}}
+        gv = {"kind": "episode", "lang": "en", "date": "2026-11-09T05:15:00Z", "title": "Off the Pity Pot",
+              "extra": {"season": 11, "episode": 19, "duration_sec": 1900}}
+        video = {"kind": "video", "lang": "es", "date": "2026-11-09T14:31:49Z", "title": NAME, "extra": {}}
+        self.assertTrue(D.item_meta(lv, "en").endswith(" · in Spanish"), D.item_meta(lv, "en"))
+        self.assertNotIn("Spanish", D.item_meta(lv, "es"))
+        self.assertNotIn("inglés", D.item_meta(lv, "es"))
+        self.assertTrue(D.item_meta(gv, "es").endswith(" · en inglés"), D.item_meta(gv, "es"))
+        self.assertNotIn("Spanish", D.item_meta(gv, "en"))
+        self.assertTrue(D.item_meta(video, "en").endswith(" · in Spanish"))
+        self.assertEqual((D.media_lang(lv, "en"), D.media_lang(lv, "es"), D.media_lang(gv, "es")), ("es", "", "en"))
+        self.assertEqual(D.media_lang({"kind": "article", "lang": "es"}, "en"), "", "only episodes and videos")
 
 
 if __name__ == "__main__":

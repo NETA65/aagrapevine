@@ -477,7 +477,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           <button type="button" class="chip" :aria-pressed="(show === '').toString()" aria-pressed="true" @click="setShow('')">{{ "common.all" | t(lang) }}</button>
           {% for s in shows %}
           {%- set showIcon = "users" if s.weekly else "headphones" %}
-          <button type="button" class="chip" :aria-pressed="(show === '{{ s.key }}').toString()" aria-pressed="false" @click="setShow(show === '{{ s.key }}' ? '' : '{{ s.key }}')">{% icon showIcon, "size-4" %}{% if s.lang != lang %}<span lang="{{ s.lang }}">{{ s.name }}</span>{% else %}{{ s.name }}{% endif %} <span class="text-faint tabular-nums in-aria-pressed:text-current">{{ s.count }}</span></button>
+          <button type="button" class="chip" :aria-pressed="(show === '{{ s.key }}').toString()" aria-pressed="false" @click="setShow(show === '{{ s.key }}' ? '' : '{{ s.key }}')" title="{{ s.name }}">{% icon showIcon, "size-4" %}{#- the short label, as on the rows' badges: La Viña's full name is wider than a phone -#}{% if s.shortLang and s.shortLang != lang %}<span lang="{{ s.shortLang }}">{{ s.short }}</span>{% else %}{{ s.short }}{% endif %} <span class="text-faint tabular-nums in-aria-pressed:text-current">{{ s.count }}</span></button>
           {% endfor %}
         </div>
       </div>
@@ -536,7 +536,11 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
         {{ "media.load_more" | t(lang) }}
       </button>
       {% endif %}
-      {% if site.links.podcasts_page %}<a class="link inline-flex min-h-11 items-center text-sm" href="{{ site.links.podcasts_page }}" target="_blank" rel="noopener">{{ "media.full_archive" | t(lang) }}</a>{% endif %}
+      {#- AA Grapevine's archive lists its own shows: with La Viña's meeting chosen, La Viña's page for it instead -#}
+      {%- set lvShows = [] -%}{%- set lvHide = [] -%}
+      {%- for s in shows %}{% if s.meeting == "lavina" and s.web %}{% set _n = lvShows.push(s) %}{% set _n = lvHide.push("show !== '" + s.key + "'") %}{% endif %}{% endfor -%}
+      {% if site.links.podcasts_page %}<a class="link inline-flex min-h-11 items-center text-sm" href="{{ site.links.podcasts_page }}" target="_blank" rel="noopener"{% if lvHide.length %} x-show="{{ lvHide | join(' && ') }}"{% endif %}>{{ "media.full_archive" | t(lang) }}</a>{% endif %}
+      {% for s in lvShows %}<a class="link inline-flex min-h-11 items-center text-sm" href="{{ s.web }}" target="_blank" rel="noopener" x-show="show === '{{ s.key }}'" x-cloak>{{ "media.full_archive_lv" | t(lang) }}</a>{% endfor %}
       {#- one-line pointer: the story lines live on /contribute/#record -#}
       <a class="link inline-flex min-h-11 items-center gap-1.5 text-sm" href="{{ '/contribute/' | lurl(lang) }}#record">{% icon "mic", "size-4 shrink-0" %}{{ "media.record_own" | t(lang) }}</a>
     </div>
@@ -585,7 +589,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {#- (a show in another language than the page's says so: "… de La Viña (in Spanish)" / "AA Grapevine's Podcast (en
     inglés)" — read aloud at a meeting, the names alone give no cue) -#}
 {%- set annNames = [] -%}
-{%- for s in shows %}{% set _n = annNames.push(s.name ~ ((" " ~ (("access.in_spanish" if s.lang == "es" else "access.in_english") | t(lang))) if s.lang != lang else "")) %}{% endfor -%}
+{#- the page's own language's shows first (on /es/: La Viña's meeting, as La Viña comes first on every /es/ page) -#}
+{%- for pass in ["own", "other"] %}{% for s in shows %}{% if (s.lang == lang) == (pass == "own") %}{% set _n = annNames.push(s.name ~ ((" " ~ (("access.in_spanish" if s.lang == "es" else "access.in_english") | t(lang))) if s.lang != lang else "")) %}{% endif %}{% endfor %}{% endfor -%}
 {%- set announcement = "media.listen_announcement" | t(lang, { shows: annNames | mediaListNames(lang), url: page.url | siteUrl(site) }) -%}
 {{ media.shareBlock(lang, "listen-share-title", "media.share_listen_text" | t(lang), announcement, page.url | siteUrl(site), "media.listen_share_title" | t(lang), "media.listen_sub" | t(lang)) }}
 

@@ -112,7 +112,10 @@ sitemap: false
     last read — for visitors; the raw message is in the notes below -#}
 {% macro partNote(s) %}
 {%- set names = s.partsDown | mediaListNames(lang) -%}
-<p class="flex max-w-3xl gap-2 text-sm leading-relaxed text-ink">{% icon "info", "size-4 mt-0.5 shrink-0 text-muted" %}<span>{{ ("community.status.part_down_one" if s.partsDown.length == 1 else "community.status.part_down") | t(lang, { names: names }) }}</span></p>
+{#- a show never read yet (its first run failed) has no episodes on the site to keep: its own words -#}
+{%- set partKey = "community.status.part_down_one" if s.partsDown.length == 1 else "community.status.part_down" -%}
+{%- if (s.partsDown | selectattr("updated") | length) == 0 %}{% set partKey = "community.status.part_never" %}{% endif -%}
+<p class="flex max-w-3xl gap-2 text-sm leading-relaxed text-ink">{% icon "info", "size-4 mt-0.5 shrink-0 text-muted" %}<span>{{ partKey | t(lang, { names: names }) }}</span></p>
 {% for p in s.partsDown %}{% if p.updated %}<p class="mt-1 pl-6 text-xs text-muted">{% if s.partsDown.length > 1 %}{{ p.name }} · {% endif %}{{ "community.status.part_down_since" | t(lang) }}: <time datetime="{{ p.updated | isoDate }}" data-local-time>{{ p.updated | fmtDate(lang, "datetime") }}</time></p>{% endif %}{% endfor %}
 {% endmacro %}
 

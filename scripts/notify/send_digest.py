@@ -768,6 +768,15 @@ def other_lang(pub: str, lang: str) -> str:
     return f" ({T[lang]['in_other']})" if (pub == "lv") != (lang == "es") else ""
 
 
+def media_lang(item: dict, lang: str) -> str:
+    """An episode's or a video's language when it is not the half's ("es" for La Viña's meeting in the English half,
+    "en" for AA Grapevine's in the Spanish one), else "": its meta line then says so and its title gets a lang."""
+    if item.get("kind") not in ("episode", "video"):
+        return ""
+    own = str(item.get("lang") or "").strip().lower()[:2]
+    return own if own in ("en", "es") and own != lang else ""
+
+
 def item_meta(item: dict, lang: str) -> str:
     """The small line under an item: an issue and its section, "S11 · E12 · 32 min" … and the item's own
     date — a committee file's is the date in its name, which may be before the month it was added in (the
@@ -791,11 +800,15 @@ def item_meta(item: dict, lang: str) -> str:
             parts.append(T[lang]["min"].format(n=max(1, round(int(ex["duration_sec"]) / 60))))
         if d:
             parts.append(fmt_day(d, lang, weekday=False))
+        if media_lang(item, lang):
+            parts.append(T[lang]["in_other"])
     elif kind == "video":
         if d:
             parts.append(fmt_day(d, lang, weekday=False))
         if ex.get("duration_sec"):
             parts.append(T[lang]["min"].format(n=max(1, round(int(ex["duration_sec"]) / 60))))
+        if media_lang(item, lang):
+            parts.append(T[lang]["in_other"])
     elif kind == "pdf" and item.get("source") != "drive":
         if ex.get("pages"):
             many, one = T[lang]["pages"]
@@ -1621,7 +1634,7 @@ def build_rows(group: str, items: list[dict], lang: str, links: Links, page: str
         label, fg, bg = item_label(it, lang)
         twin = it.get("_twin")
         rows.append({"label": label, "fg": fg, "bg": bg, "title": title_of(it, lang),
-                     "url": links.item(it, lang, page), "meta": item_meta(it, lang),
+                     "url": links.item(it, lang, page), "meta": item_meta(it, lang), "lang": media_lang(it, lang),
                      "twin": links.item(twin, lang, "/watch/") if twin else ""})
     extra = max(0, len(rows) - max_per)
     return rows[:max_per], extra
@@ -1938,7 +1951,8 @@ def render_lang_html(lang: str, data: dict, cfg: dict, links: Links, max_per: in
         for r in rows_data:
             twin = f' · <a href="{_esc(r["twin"])}" style="color:{C["gv"]};">{_esc(t["twin"])}</a>' if r.get("twin") else ""
             meta = f'<div style="{small}">{_esc(r["meta"])}{twin}</div>' if (r["meta"] or twin) else ""
-            rows.append(row(f'{pill(r["label"], r["fg"], r["bg"])}<a href="{_esc(r["url"])}" style="{link_style}">{_esc(r["title"])}</a>{meta}'))
+            own = f' lang="{r["lang"]}"' if r.get("lang") else ""
+            rows.append(row(f'{pill(r["label"], r["fg"], r["bg"])}<a href="{_esc(r["url"])}"{own} style="{link_style}">{_esc(r["title"])}</a>{meta}'))
         parts.append(section(t[g], color, table(rows), page, extra, len(items)))
 
     media_section("drive", DRIVE_PAGE, C["vine"])

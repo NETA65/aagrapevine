@@ -422,7 +422,8 @@ pageScripts: ["/assets/js/shop.js"]
         <div class="flex flex-1 flex-col p-5 sm:p-6">
           <p><span class="{{ 'badge-lv' if s.isLv else 'badge-gv' }}"{% if s.isLv and lang != 'es' %} lang="es"{% endif %}>{% icon "grapes", "size-3" %} {{ s.name }}</span></p>
           <p class="mt-3 text-[0.95rem] leading-relaxed text-ink"{% if s.textLang != lang %} lang="{{ s.textLang }}"{% endif %}>{{ s.text }}</p>
-          {% if s.href %}<p class="mt-auto flex flex-wrap items-center gap-x-5 gap-y-3 pt-5"><a class="{{ 'btn-lv' if s.isLv else 'btn-primary' }}" href="{{ s.href }}" target="_blank" rel="noopener">{% icon "store", "size-4" %} {{ s.label }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span> {% icon "external-link", "size-4" %}</a>
+          {#- with a page for Canada, its link always on a line of its own: the two stores' cards side by side stay alike -#}
+          {% if s.href %}<p class="mt-auto flex {{ 'flex-col items-start' if s.hrefCa else 'flex-wrap items-center' }} gap-x-5 gap-y-3 pt-5"><a class="{{ 'btn-lv' if s.isLv else 'btn-primary' }}" href="{{ s.href }}" target="_blank" rel="noopener">{% icon "store", "size-4" %} {{ s.label }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span> {% icon "external-link", "size-4" %}</a>
             {#- (one inner span, its icon glued to the last word: a label that wraps on a phone keeps the icon beside it) -#}
             {%- if s.hrefCa %}<a class="link tap-link text-sm font-semibold" href="{{ s.hrefCa }}" target="_blank" rel="noopener"><span>{{ s.labelCa }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span>&nbsp;{% icon "external-link", "inline size-3.5 align-[-0.1em]" %}</span></a>{% endif %}</p>{% endif %}
         </div>

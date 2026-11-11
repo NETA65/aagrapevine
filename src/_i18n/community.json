@@ -397,6 +397,7 @@
   "community.status.held_since": { "en": "On hold since", "es": "En espera desde" },
   "community.status.part_down_one": { "en": "Not read in the last update: {names}. Its episodes stay on the site, and the next update tries again; the rest of the podcasts still updated.", "es": "No se pudo leer en la última actualización: {names}. Sus episodios siguen en el sitio y la próxima actualización volverá a intentarlo; los demás podcasts sí se actualizaron." },
   "community.status.part_down": { "en": "Not read in the last update: {names}. Their episodes stay on the site, and the next update tries again; the rest of the podcasts still updated.", "es": "No se pudieron leer en la última actualización: {names}. Sus episodios siguen en el sitio y la próxima actualización volverá a intentarlo; los demás podcasts sí se actualizaron." },
+  "community.status.part_never": { "en": "Not read yet: {names}. The next update tries again; the rest of the podcasts still updated.", "es": "Todavía no se pudo leer: {names}. La próxima actualización volverá a intentarlo; los demás podcasts sí se actualizaron." },
   "community.status.part_down_since": { "en": "Last read", "es": "Última lectura" },
   "community.status.notes_summary": { "en": "Notes from the last update ({n}) — for the site maintainer", "es": "Notas de la última actualización ({n}): para quien mantiene el sitio" },
   "community.status.notes_caption": { "en": "As the update wrote them:", "es": "Tal como las escribió la actualización (en inglés):" },
