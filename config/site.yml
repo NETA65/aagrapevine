@@ -153,7 +153,7 @@ meeting:
       topic_es: "La reunión impresa en la era digital: lo que los miembros quieren de Grapevine y La Viña"
     - date: "2027-05-19"
       name: "Debra L."
-      confirmed: false
+      confirmed: true
       position: "Delegate, Area 9 Mid-Southern California (Panel 76); alternate chair of the Conference Committee on Report and Charter, 2027"
       position_es: "Delegada del Área 9 Centro-Sur de California (Panel 76); coordinadora suplente del Comité de la Conferencia sobre Informe y Carta Constitutiva en 2027"
       topic: "Fresh from the 77th Conference: what the Service Manual, Final Report and Charter offer our Grapevine and La Viña representatives"
@@ -167,7 +167,7 @@ meeting:
       topic_es: "Informe desde la coordinación: el Comité sobre Grapevine y La Viña de la 77.ª Conferencia"
     - date: "2027-07-21"
       name: "Luke B."
-      confirmed: false
+      confirmed: true
       position: "Past delegate, Area 1 Alabama/Northwest Florida (Panel 75); past chair of the Conference Committee on Corrections"
       position_es: "Ex delegado del Área 1 Alabama/Noroeste de Florida (Panel 75); ex coordinador del Comité de la Conferencia sobre Correccionales"
       topic: "Carrying the message behind the walls: Grapevine and La Viña for alcoholics in custody"
