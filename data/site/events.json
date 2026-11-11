@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-10T12:47:47Z",
+ "updated": "2026-11-11T08:43:08Z",
  "fixture": false,
  "items": [
   {
@@ -71,9 +71,9 @@
    "kind": "event",
    "url": "https://citywidedallasaa.org",
    "title": "GV/LV booth at CityWide Dallas",
-   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
    "lang": "en",
-   "date": "2026-11-14T23:00:00Z",
+   "date": "2026-11-14T23:30:00Z",
    "first_seen": null,
    "image": null,
    "tags": [
@@ -82,10 +82,10 @@
    "category": "recurring",
    "status": "ok",
    "extra": {
-    "start": "2026-11-14T23:00:00Z",
-    "end": "2026-11-15T02:00:00Z",
+    "start": "2026-11-14T23:30:00Z",
+    "end": "2026-11-15T01:30:00Z",
     "all_day": false,
-    "location": "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
+    "location": "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
     "online_url": null,
     "flyer_url": null,
     "flyer_thumb": null,
@@ -96,10 +96,10 @@
     "rule": {
      "week_of_month": 2,
      "weekday": "saturday",
-     "start": "17:00",
-     "end": "20:00"
+     "start": "17:30",
+     "end": "19:30"
     },
-    "recurrence_label": "Every second Saturday of the month · 5:00 – 8:00 PM",
+    "recurrence_label": "Every second Saturday of the month · 5:30 – 7:30 PM",
     "host": "neta",
     "online": false,
     "platform": null,
@@ -113,12 +113,12 @@
      "es": "Mesa de GV/LV en CityWide Dallas"
     },
     "summary": {
-     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
-     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
+     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lovers Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
     },
     "recurrence_label": {
-     "en": "Every second Saturday of the month · 5:00 – 8:00 PM",
-     "es": "Cada segundo sábado del mes · 5:00–8:00 p. m."
+     "en": "Every second Saturday of the month · 5:30 – 7:30 PM",
+     "es": "Cada segundo sábado del mes · 5:30–7:30 p. m."
     }
    },
    "machine": [],
@@ -130,7 +130,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required.",
    "lang": "en",
    "date": "2026-11-19T01:00:00Z",
    "first_seen": null,
@@ -144,12 +144,12 @@
     "start": "2026-11-19T01:00:00Z",
     "end": "2026-11-19T02:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1zl6KZLk0Cz8kMJrKi07N8Frfe5wIE9Si/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1zl6KZLk0Cz8kMJrKi07N8Frfe5wIE9Si=w600",
     "city": null,
     "state": null,
     "recurring": true,
@@ -161,8 +161,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse."
     }
    },
    "machine": [],
@@ -281,14 +281,14 @@
    "is_new": false
   },
   {
-   "id": "ev:recurring:citywide-dallas:2026-12-12",
+   "id": "ev:recurring:grapevine-meeting:2026-12-02",
    "source": "committee",
    "kind": "event",
-   "url": "https://citywidedallasaa.org",
-   "title": "GV/LV booth at CityWide Dallas",
-   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "url": "/meetings/#grapevine-meeting",
+   "title": "Grapevine Meeting",
+   "summary": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
    "lang": "en",
-   "date": "2026-12-12T23:00:00Z",
+   "date": "2026-12-03T01:00:00Z",
    "first_seen": null,
    "image": null,
    "tags": [
@@ -297,10 +297,69 @@
    "category": "recurring",
    "status": "ok",
    "extra": {
-    "start": "2026-12-12T23:00:00Z",
-    "end": "2026-12-13T02:00:00Z",
+    "start": "2026-12-03T01:00:00Z",
+    "end": "2026-12-03T02:00:00Z",
     "all_day": false,
-    "location": "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
+    "location": null,
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "flyer_url": "https://drive.google.com/file/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4=w600",
+    "city": null,
+    "state": null,
+    "recurring": true,
+    "series": "grapevine-meeting",
+    "rule": {
+     "week_of_month": 1,
+     "weekday": "wednesday",
+     "start": "19:00",
+     "end": "20:00"
+    },
+    "recurrence_label": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+    "host": "neta",
+    "online": true,
+    "platform": "Google Meet",
+    "meeting_id": "rva-tmst-vdb",
+    "contact": "grapevine@neta65.org",
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Meeting",
+     "es": "Reunión de Grapevine (en inglés)"
+    },
+    "summary": {
+     "en": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
+     "es": "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine, nuestra reunión impresa, y compartimos sobre su tema. Todos los miembros de AA son bienvenidos."
+    },
+    "recurrence_label": {
+     "en": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+     "es": "Cada primer miércoles del mes · 7:00–8:00 p. m."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:recurring:citywide-dallas:2026-12-12",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://citywidedallasaa.org",
+   "title": "GV/LV booth at CityWide Dallas",
+   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "lang": "en",
+   "date": "2026-12-12T23:30:00Z",
+   "first_seen": null,
+   "image": null,
+   "tags": [
+    "recurring"
+   ],
+   "category": "recurring",
+   "status": "ok",
+   "extra": {
+    "start": "2026-12-12T23:30:00Z",
+    "end": "2026-12-13T01:30:00Z",
+    "all_day": false,
+    "location": "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
     "online_url": null,
     "flyer_url": null,
     "flyer_thumb": null,
@@ -311,10 +370,10 @@
     "rule": {
      "week_of_month": 2,
      "weekday": "saturday",
-     "start": "17:00",
-     "end": "20:00"
+     "start": "17:30",
+     "end": "19:30"
     },
-    "recurrence_label": "Every second Saturday of the month · 5:00 – 8:00 PM",
+    "recurrence_label": "Every second Saturday of the month · 5:30 – 7:30 PM",
     "host": "neta",
     "online": false,
     "platform": null,
@@ -328,12 +387,12 @@
      "es": "Mesa de GV/LV en CityWide Dallas"
     },
     "summary": {
-     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
-     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
+     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lovers Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
     },
     "recurrence_label": {
-     "en": "Every second Saturday of the month · 5:00 – 8:00 PM",
-     "es": "Cada segundo sábado del mes · 5:00–8:00 p. m."
+     "en": "Every second Saturday of the month · 5:30 – 7:30 PM",
+     "es": "Cada segundo sábado del mes · 5:30–7:30 p. m."
     }
    },
    "machine": [],
@@ -405,7 +464,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required.",
    "lang": "en",
    "date": "2026-12-17T01:00:00Z",
    "first_seen": null,
@@ -419,12 +478,12 @@
     "start": "2026-12-17T01:00:00Z",
     "end": "2026-12-17T02:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1zl6KZLk0Cz8kMJrKi07N8Frfe5wIE9Si/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1zl6KZLk0Cz8kMJrKi07N8Frfe5wIE9Si=w600",
     "city": null,
     "state": null,
     "recurring": true,
@@ -436,8 +495,67 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:recurring:grapevine-meeting:2027-01-06",
+   "source": "committee",
+   "kind": "event",
+   "url": "/meetings/#grapevine-meeting",
+   "title": "Grapevine Meeting",
+   "summary": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
+   "lang": "en",
+   "date": "2027-01-07T01:00:00Z",
+   "first_seen": null,
+   "image": null,
+   "tags": [
+    "recurring"
+   ],
+   "category": "recurring",
+   "status": "ok",
+   "extra": {
+    "start": "2027-01-07T01:00:00Z",
+    "end": "2027-01-07T02:00:00Z",
+    "all_day": false,
+    "location": null,
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "flyer_url": "https://drive.google.com/file/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4=w600",
+    "city": null,
+    "state": null,
+    "recurring": true,
+    "series": "grapevine-meeting",
+    "rule": {
+     "week_of_month": 1,
+     "weekday": "wednesday",
+     "start": "19:00",
+     "end": "20:00"
+    },
+    "recurrence_label": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+    "host": "neta",
+    "online": true,
+    "platform": "Google Meet",
+    "meeting_id": "rva-tmst-vdb",
+    "contact": "grapevine@neta65.org",
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Meeting",
+     "es": "Reunión de Grapevine (en inglés)"
+    },
+    "summary": {
+     "en": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
+     "es": "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine, nuestra reunión impresa, y compartimos sobre su tema. Todos los miembros de AA son bienvenidos."
+    },
+    "recurrence_label": {
+     "en": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+     "es": "Cada primer miércoles del mes · 7:00–8:00 p. m."
     }
    },
    "machine": [],
@@ -501,9 +619,9 @@
    "kind": "event",
    "url": "https://citywidedallasaa.org",
    "title": "GV/LV booth at CityWide Dallas",
-   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
    "lang": "en",
-   "date": "2027-01-09T23:00:00Z",
+   "date": "2027-01-09T23:30:00Z",
    "first_seen": null,
    "image": null,
    "tags": [
@@ -512,10 +630,10 @@
    "category": "recurring",
    "status": "ok",
    "extra": {
-    "start": "2027-01-09T23:00:00Z",
-    "end": "2027-01-10T02:00:00Z",
+    "start": "2027-01-09T23:30:00Z",
+    "end": "2027-01-10T01:30:00Z",
     "all_day": false,
-    "location": "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
+    "location": "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
     "online_url": null,
     "flyer_url": null,
     "flyer_thumb": null,
@@ -526,10 +644,10 @@
     "rule": {
      "week_of_month": 2,
      "weekday": "saturday",
-     "start": "17:00",
-     "end": "20:00"
+     "start": "17:30",
+     "end": "19:30"
     },
-    "recurrence_label": "Every second Saturday of the month · 5:00 – 8:00 PM",
+    "recurrence_label": "Every second Saturday of the month · 5:30 – 7:30 PM",
     "host": "neta",
     "online": false,
     "platform": null,
@@ -543,12 +661,12 @@
      "es": "Mesa de GV/LV en CityWide Dallas"
     },
     "summary": {
-     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
-     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
+     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lovers Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
     },
     "recurrence_label": {
-     "en": "Every second Saturday of the month · 5:00 – 8:00 PM",
-     "es": "Cada segundo sábado del mes · 5:00–8:00 p. m."
+     "en": "Every second Saturday of the month · 5:30 – 7:30 PM",
+     "es": "Cada segundo sábado del mes · 5:30–7:30 p. m."
     }
    },
    "machine": [],
@@ -560,7 +678,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Rick W. — “Grapevine as a Twelfth Step tool: how it helps new Grapevine representatives and carries the message in Public Information, Cooperation with the Professional Community, Corrections and Treatment”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
    "date": "2027-01-21T01:00:00Z",
    "first_seen": null,
@@ -574,15 +692,26 @@
     "start": "2027-01-21T01:00:00Z",
     "end": "2027-01-21T02:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1doh-IWrEX1aIg9mI4TT6SGBYu7R4ZiNy/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1doh-IWrEX1aIg9mI4TT6SGBYu7R4ZiNy=w600",
     "city": null,
     "state": null,
     "recurring": true,
+    "speaker": {
+     "name": "Rick W.",
+     "position": {
+      "en": "Past delegate, Area 65 Northeast Texas (Panel 73); past chair of the Conference Committee on Grapevine and La Viña",
+      "es": "Ex delegado del Área 65 Noreste de Texas (Panel 73); ex coordinador del Comité de la Conferencia sobre Grapevine y La Viña"
+     },
+     "topic": {
+      "en": "Grapevine as a Twelfth Step tool: how it helps new Grapevine representatives and carries the message in Public Information, Cooperation with the Professional Community, Corrections and Treatment",
+      "es": "Grapevine como herramienta del Paso Doce: cómo ayuda a los nuevos representantes de Grapevine y lleva el mensaje en Información Pública, Cooperación con la Comunidad Profesional, Correccionales y Tratamiento"
+     }
+    },
     "past": false
    },
    "i18n": {
@@ -591,8 +720,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Rick W. — “Grapevine as a Twelfth Step tool: how it helps new Grapevine representatives and carries the message in Public Information, Cooperation with the Professional Community, Corrections and Treatment”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Rick W. — “Grapevine como herramienta del Paso Doce: cómo ayuda a los nuevos representantes de Grapevine y lleva el mensaje en Información Pública, Cooperación con la Comunidad Profesional, Correccionales y Tratamiento”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -708,14 +837,14 @@
    "is_new": false
   },
   {
-   "id": "ev:recurring:citywide-dallas:2027-02-13",
+   "id": "ev:recurring:grapevine-meeting:2027-02-03",
    "source": "committee",
    "kind": "event",
-   "url": "https://citywidedallasaa.org",
-   "title": "GV/LV booth at CityWide Dallas",
-   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "url": "/meetings/#grapevine-meeting",
+   "title": "Grapevine Meeting",
+   "summary": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
    "lang": "en",
-   "date": "2027-02-13T23:00:00Z",
+   "date": "2027-02-04T01:00:00Z",
    "first_seen": null,
    "image": null,
    "tags": [
@@ -724,10 +853,69 @@
    "category": "recurring",
    "status": "ok",
    "extra": {
-    "start": "2027-02-13T23:00:00Z",
-    "end": "2027-02-14T02:00:00Z",
+    "start": "2027-02-04T01:00:00Z",
+    "end": "2027-02-04T02:00:00Z",
     "all_day": false,
-    "location": "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
+    "location": null,
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "flyer_url": "https://drive.google.com/file/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4=w600",
+    "city": null,
+    "state": null,
+    "recurring": true,
+    "series": "grapevine-meeting",
+    "rule": {
+     "week_of_month": 1,
+     "weekday": "wednesday",
+     "start": "19:00",
+     "end": "20:00"
+    },
+    "recurrence_label": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+    "host": "neta",
+    "online": true,
+    "platform": "Google Meet",
+    "meeting_id": "rva-tmst-vdb",
+    "contact": "grapevine@neta65.org",
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Meeting",
+     "es": "Reunión de Grapevine (en inglés)"
+    },
+    "summary": {
+     "en": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
+     "es": "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine, nuestra reunión impresa, y compartimos sobre su tema. Todos los miembros de AA son bienvenidos."
+    },
+    "recurrence_label": {
+     "en": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+     "es": "Cada primer miércoles del mes · 7:00–8:00 p. m."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:recurring:citywide-dallas:2027-02-13",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://citywidedallasaa.org",
+   "title": "GV/LV booth at CityWide Dallas",
+   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "lang": "en",
+   "date": "2027-02-13T23:30:00Z",
+   "first_seen": null,
+   "image": null,
+   "tags": [
+    "recurring"
+   ],
+   "category": "recurring",
+   "status": "ok",
+   "extra": {
+    "start": "2027-02-13T23:30:00Z",
+    "end": "2027-02-14T01:30:00Z",
+    "all_day": false,
+    "location": "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
     "online_url": null,
     "flyer_url": null,
     "flyer_thumb": null,
@@ -738,10 +926,10 @@
     "rule": {
      "week_of_month": 2,
      "weekday": "saturday",
-     "start": "17:00",
-     "end": "20:00"
+     "start": "17:30",
+     "end": "19:30"
     },
-    "recurrence_label": "Every second Saturday of the month · 5:00 – 8:00 PM",
+    "recurrence_label": "Every second Saturday of the month · 5:30 – 7:30 PM",
     "host": "neta",
     "online": false,
     "platform": null,
@@ -755,12 +943,12 @@
      "es": "Mesa de GV/LV en CityWide Dallas"
     },
     "summary": {
-     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
-     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
+     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lovers Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
     },
     "recurrence_label": {
-     "en": "Every second Saturday of the month · 5:00 – 8:00 PM",
-     "es": "Cada segundo sábado del mes · 5:00–8:00 p. m."
+     "en": "Every second Saturday of the month · 5:30 – 7:30 PM",
+     "es": "Cada segundo sábado del mes · 5:30–7:30 p. m."
     }
    },
    "machine": [],
@@ -772,7 +960,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Jeannie M. — “Grapevine and La Viña as Public Information tools”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
    "date": "2027-02-18T01:00:00Z",
    "first_seen": null,
@@ -786,15 +974,26 @@
     "start": "2027-02-18T01:00:00Z",
     "end": "2027-02-18T02:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/18Ksg0cdmCUpTba1LlM6EcxTGvvKt9Qxm/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/18Ksg0cdmCUpTba1LlM6EcxTGvvKt9Qxm=w600",
     "city": null,
     "state": null,
     "recurring": true,
+    "speaker": {
+     "name": "Jeannie M.",
+     "position": {
+      "en": "Past delegate, Area 4 Arkansas (Panel 73); past alternate chair of the Conference Committee on Public Information",
+      "es": "Ex delegada del Área 4 Arkansas (Panel 73); ex coordinadora suplente del Comité de la Conferencia sobre Información Pública"
+     },
+     "topic": {
+      "en": "Grapevine and La Viña as Public Information tools",
+      "es": "Grapevine y La Viña como herramientas de Información Pública"
+     }
+    },
     "past": false
    },
    "i18n": {
@@ -803,8 +1002,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Jeannie M. — “Grapevine and La Viña as Public Information tools”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Jeannie M. — “Grapevine y La Viña como herramientas de Información Pública”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -931,14 +1130,14 @@
    "is_new": false
   },
   {
-   "id": "ev:recurring:citywide-dallas:2027-03-13",
+   "id": "ev:recurring:grapevine-meeting:2027-03-03",
    "source": "committee",
    "kind": "event",
-   "url": "https://citywidedallasaa.org",
-   "title": "GV/LV booth at CityWide Dallas",
-   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "url": "/meetings/#grapevine-meeting",
+   "title": "Grapevine Meeting",
+   "summary": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
    "lang": "en",
-   "date": "2027-03-13T23:00:00Z",
+   "date": "2027-03-04T01:00:00Z",
    "first_seen": null,
    "image": null,
    "tags": [
@@ -947,10 +1146,69 @@
    "category": "recurring",
    "status": "ok",
    "extra": {
-    "start": "2027-03-13T23:00:00Z",
-    "end": "2027-03-14T02:00:00Z",
+    "start": "2027-03-04T01:00:00Z",
+    "end": "2027-03-04T02:00:00Z",
     "all_day": false,
-    "location": "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
+    "location": null,
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "flyer_url": "https://drive.google.com/file/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4=w600",
+    "city": null,
+    "state": null,
+    "recurring": true,
+    "series": "grapevine-meeting",
+    "rule": {
+     "week_of_month": 1,
+     "weekday": "wednesday",
+     "start": "19:00",
+     "end": "20:00"
+    },
+    "recurrence_label": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+    "host": "neta",
+    "online": true,
+    "platform": "Google Meet",
+    "meeting_id": "rva-tmst-vdb",
+    "contact": "grapevine@neta65.org",
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Meeting",
+     "es": "Reunión de Grapevine (en inglés)"
+    },
+    "summary": {
+     "en": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
+     "es": "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine, nuestra reunión impresa, y compartimos sobre su tema. Todos los miembros de AA son bienvenidos."
+    },
+    "recurrence_label": {
+     "en": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+     "es": "Cada primer miércoles del mes · 7:00–8:00 p. m."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:recurring:citywide-dallas:2027-03-13",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://citywidedallasaa.org",
+   "title": "GV/LV booth at CityWide Dallas",
+   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "lang": "en",
+   "date": "2027-03-13T23:30:00Z",
+   "first_seen": null,
+   "image": null,
+   "tags": [
+    "recurring"
+   ],
+   "category": "recurring",
+   "status": "ok",
+   "extra": {
+    "start": "2027-03-13T23:30:00Z",
+    "end": "2027-03-14T01:30:00Z",
+    "all_day": false,
+    "location": "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
     "online_url": null,
     "flyer_url": null,
     "flyer_thumb": null,
@@ -961,10 +1219,10 @@
     "rule": {
      "week_of_month": 2,
      "weekday": "saturday",
-     "start": "17:00",
-     "end": "20:00"
+     "start": "17:30",
+     "end": "19:30"
     },
-    "recurrence_label": "Every second Saturday of the month · 5:00 – 8:00 PM",
+    "recurrence_label": "Every second Saturday of the month · 5:30 – 7:30 PM",
     "host": "neta",
     "online": false,
     "platform": null,
@@ -978,12 +1236,12 @@
      "es": "Mesa de GV/LV en CityWide Dallas"
     },
     "summary": {
-     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
-     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
+     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lovers Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
     },
     "recurrence_label": {
-     "en": "Every second Saturday of the month · 5:00 – 8:00 PM",
-     "es": "Cada segundo sábado del mes · 5:00–8:00 p. m."
+     "en": "Every second Saturday of the month · 5:30 – 7:30 PM",
+     "es": "Cada segundo sábado del mes · 5:30–7:30 p. m."
     }
    },
    "machine": [],
@@ -995,7 +1253,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Greg G. — “Anonymity in a digital world: AA’s online doorways and proposals that may reach the 77th Conference”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
    "date": "2027-03-18T00:00:00Z",
    "first_seen": null,
@@ -1009,15 +1267,26 @@
     "start": "2027-03-18T00:00:00Z",
     "end": "2027-03-18T01:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w600",
     "city": null,
     "state": null,
     "recurring": true,
+    "speaker": {
+     "name": "Greg G.",
+     "position": {
+      "en": "Past delegate, Area 39 Western Missouri (Panel 75); past alternate chair of the Conference Committee on Public Information",
+      "es": "Ex delegado del Área 39 Oeste de Misuri (Panel 75); ex coordinador suplente del Comité de la Conferencia sobre Información Pública"
+     },
+     "topic": {
+      "en": "Anonymity in a digital world: AA’s online doorways and proposals that may reach the 77th Conference",
+      "es": "El anonimato en un mundo digital: las puertas de AA en internet y las propuestas que podrían llegar a la 77.ª Conferencia"
+     }
+    },
     "past": false
    },
    "i18n": {
@@ -1026,8 +1295,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Greg G. — “Anonymity in a digital world: AA’s online doorways and proposals that may reach the 77th Conference”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Greg G. — “El anonimato en un mundo digital: las puertas de AA en internet y las propuestas que podrían llegar a la 77.ª Conferencia”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -1154,14 +1423,14 @@
    "is_new": false
   },
   {
-   "id": "ev:recurring:citywide-dallas:2027-04-10",
+   "id": "ev:recurring:grapevine-meeting:2027-04-07",
    "source": "committee",
    "kind": "event",
-   "url": "https://citywidedallasaa.org",
-   "title": "GV/LV booth at CityWide Dallas",
-   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "url": "/meetings/#grapevine-meeting",
+   "title": "Grapevine Meeting",
+   "summary": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
    "lang": "en",
-   "date": "2027-04-10T22:00:00Z",
+   "date": "2027-04-08T00:00:00Z",
    "first_seen": null,
    "image": null,
    "tags": [
@@ -1170,10 +1439,69 @@
    "category": "recurring",
    "status": "ok",
    "extra": {
-    "start": "2027-04-10T22:00:00Z",
-    "end": "2027-04-11T01:00:00Z",
+    "start": "2027-04-08T00:00:00Z",
+    "end": "2027-04-08T01:00:00Z",
     "all_day": false,
-    "location": "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
+    "location": null,
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "flyer_url": "https://drive.google.com/file/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4=w600",
+    "city": null,
+    "state": null,
+    "recurring": true,
+    "series": "grapevine-meeting",
+    "rule": {
+     "week_of_month": 1,
+     "weekday": "wednesday",
+     "start": "19:00",
+     "end": "20:00"
+    },
+    "recurrence_label": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+    "host": "neta",
+    "online": true,
+    "platform": "Google Meet",
+    "meeting_id": "rva-tmst-vdb",
+    "contact": "grapevine@neta65.org",
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Meeting",
+     "es": "Reunión de Grapevine (en inglés)"
+    },
+    "summary": {
+     "en": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
+     "es": "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine, nuestra reunión impresa, y compartimos sobre su tema. Todos los miembros de AA son bienvenidos."
+    },
+    "recurrence_label": {
+     "en": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+     "es": "Cada primer miércoles del mes · 7:00–8:00 p. m."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:recurring:citywide-dallas:2027-04-10",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://citywidedallasaa.org",
+   "title": "GV/LV booth at CityWide Dallas",
+   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "lang": "en",
+   "date": "2027-04-10T22:30:00Z",
+   "first_seen": null,
+   "image": null,
+   "tags": [
+    "recurring"
+   ],
+   "category": "recurring",
+   "status": "ok",
+   "extra": {
+    "start": "2027-04-10T22:30:00Z",
+    "end": "2027-04-11T00:30:00Z",
+    "all_day": false,
+    "location": "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
     "online_url": null,
     "flyer_url": null,
     "flyer_thumb": null,
@@ -1184,10 +1512,10 @@
     "rule": {
      "week_of_month": 2,
      "weekday": "saturday",
-     "start": "17:00",
-     "end": "20:00"
+     "start": "17:30",
+     "end": "19:30"
     },
-    "recurrence_label": "Every second Saturday of the month · 5:00 – 8:00 PM",
+    "recurrence_label": "Every second Saturday of the month · 5:30 – 7:30 PM",
     "host": "neta",
     "online": false,
     "platform": null,
@@ -1201,12 +1529,12 @@
      "es": "Mesa de GV/LV en CityWide Dallas"
     },
     "summary": {
-     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
-     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
+     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lovers Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
     },
     "recurrence_label": {
-     "en": "Every second Saturday of the month · 5:00 – 8:00 PM",
-     "es": "Cada segundo sábado del mes · 5:00–8:00 p. m."
+     "en": "Every second Saturday of the month · 5:30 – 7:30 PM",
+     "es": "Cada segundo sábado del mes · 5:30–7:30 p. m."
     }
    },
    "machine": [],
@@ -1288,7 +1616,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Courtney S. — “The meeting in print in a digital age: what members want from Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
    "date": "2027-04-22T00:00:00Z",
    "first_seen": null,
@@ -1302,15 +1630,26 @@
     "start": "2027-04-22T00:00:00Z",
     "end": "2027-04-22T01:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1Fr7pXyHeQk83cv6xxkhiGJ71XwDiWPaK/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1Fr7pXyHeQk83cv6xxkhiGJ71XwDiWPaK=w600",
     "city": null,
     "state": null,
     "recurring": true,
+    "speaker": {
+     "name": "Courtney S.",
+     "position": {
+      "en": "Past delegate, Area 72 Western Washington (Panel 75); past alternate chair of the Conference Committee on Grapevine and La Viña",
+      "es": "Ex delegada del Área 72 Oeste de Washington (Panel 75); ex coordinadora suplente del Comité de la Conferencia sobre Grapevine y La Viña"
+     },
+     "topic": {
+      "en": "The meeting in print in a digital age: what members want from Grapevine and La Viña",
+      "es": "La reunión impresa en la era digital: lo que los miembros quieren de Grapevine y La Viña"
+     }
+    },
     "past": false
    },
    "i18n": {
@@ -1319,8 +1658,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Courtney S. — “The meeting in print in a digital age: what members want from Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Courtney S. — “La reunión impresa en la era digital: lo que los miembros quieren de Grapevine y La Viña”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -1386,12 +1725,71 @@
    "is_new": false
   },
   {
+   "id": "ev:recurring:grapevine-meeting:2027-05-05",
+   "source": "committee",
+   "kind": "event",
+   "url": "/meetings/#grapevine-meeting",
+   "title": "Grapevine Meeting",
+   "summary": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
+   "lang": "en",
+   "date": "2027-05-06T00:00:00Z",
+   "first_seen": null,
+   "image": null,
+   "tags": [
+    "recurring"
+   ],
+   "category": "recurring",
+   "status": "ok",
+   "extra": {
+    "start": "2027-05-06T00:00:00Z",
+    "end": "2027-05-06T01:00:00Z",
+    "all_day": false,
+    "location": null,
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "flyer_url": "https://drive.google.com/file/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1uU4-lI69ra01qRMw7CQzpX5datG7yYi4=w600",
+    "city": null,
+    "state": null,
+    "recurring": true,
+    "series": "grapevine-meeting",
+    "rule": {
+     "week_of_month": 1,
+     "weekday": "wednesday",
+     "start": "19:00",
+     "end": "20:00"
+    },
+    "recurrence_label": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+    "host": "neta",
+    "online": true,
+    "platform": "Google Meet",
+    "meeting_id": "rva-tmst-vdb",
+    "contact": "grapevine@neta65.org",
+    "past": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Meeting",
+     "es": "Reunión de Grapevine (en inglés)"
+    },
+    "summary": {
+     "en": "Online AA meeting in English: we read a story from AA Grapevine, our meeting in print, and share on its topic. All AA members welcome.",
+     "es": "Reunión de AA en línea, en inglés: leemos una historia de AA Grapevine, nuestra reunión impresa, y compartimos sobre su tema. Todos los miembros de AA son bienvenidos."
+    },
+    "recurrence_label": {
+     "en": "Every first Wednesday of the month · 7:00 – 8:00 PM",
+     "es": "Cada primer miércoles del mes · 7:00–8:00 p. m."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
    "id": "ev:committee:2027-05-19",
    "source": "committee",
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Debra L. — “Fresh from the 77th Conference: what the Service Manual, Final Report and Charter offer our Grapevine and La Viña representatives”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
    "date": "2027-05-20T00:00:00Z",
    "first_seen": null,
@@ -1405,15 +1803,26 @@
     "start": "2027-05-20T00:00:00Z",
     "end": "2027-05-20T01:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w600",
     "city": null,
     "state": null,
     "recurring": true,
+    "speaker": {
+     "name": "Debra L.",
+     "position": {
+      "en": "Delegate, Area 9 Mid-Southern California (Panel 76); alternate chair of the Conference Committee on Report and Charter, 2027",
+      "es": "Delegada del Área 9 Centro-Sur de California (Panel 76); coordinadora suplente del Comité de la Conferencia sobre Informe y Carta Constitutiva en 2027"
+     },
+     "topic": {
+      "en": "Fresh from the 77th Conference: what the Service Manual, Final Report and Charter offer our Grapevine and La Viña representatives",
+      "es": "Recién llegada de la 77.ª Conferencia: lo que el Manual de Servicio, el Informe Final y la Carta Constitutiva ofrecen a nuestros representantes de Grapevine y La Viña"
+     }
+    },
     "past": false
    },
    "i18n": {
@@ -1422,8 +1831,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Debra L. — “Fresh from the 77th Conference: what the Service Manual, Final Report and Charter offer our Grapevine and La Viña representatives”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Debra L. — “Recién llegada de la 77.ª Conferencia: lo que el Manual de Servicio, el Informe Final y la Carta Constitutiva ofrecen a nuestros representantes de Grapevine y La Viña”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -1494,7 +1903,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather L. — “Report from the chair’s seat: the 77th Conference Committee on Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
    "date": "2027-06-17T00:00:00Z",
    "first_seen": null,
@@ -1508,15 +1917,26 @@
     "start": "2027-06-17T00:00:00Z",
     "end": "2027-06-17T01:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1jPzqF04nuS8dsiMVzWqv-KWS4cPwcYGq/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1jPzqF04nuS8dsiMVzWqv-KWS4cPwcYGq=w600",
     "city": null,
     "state": null,
     "recurring": true,
+    "speaker": {
+     "name": "Heather L.",
+     "position": {
+      "en": "Delegate, Area 64 Tennessee (Panel 76); chair of the Conference Committee on Grapevine and La Viña, 2027",
+      "es": "Delegada del Área 64 Tennessee (Panel 76); coordinadora del Comité de la Conferencia sobre Grapevine y La Viña en 2027"
+     },
+     "topic": {
+      "en": "Report from the chair’s seat: the 77th Conference Committee on Grapevine and La Viña",
+      "es": "Informe desde la coordinación: el Comité sobre Grapevine y La Viña de la 77.ª Conferencia"
+     }
+    },
     "past": false
    },
    "i18n": {
@@ -1525,8 +1945,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather L. — “Report from the chair’s seat: the 77th Conference Committee on Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Heather L. — “Informe desde la coordinación: el Comité sobre Grapevine y La Viña de la 77.ª Conferencia”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -1737,7 +2157,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Luke B. — “Carrying the message behind the walls: Grapevine and La Viña for alcoholics in custody”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
    "date": "2027-07-22T00:00:00Z",
    "first_seen": null,
@@ -1751,15 +2171,26 @@
     "start": "2027-07-22T00:00:00Z",
     "end": "2027-07-22T01:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1k3YymU2KZ7yABMeelycHCYgNtHKTN5UA/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1k3YymU2KZ7yABMeelycHCYgNtHKTN5UA=w600",
     "city": null,
     "state": null,
     "recurring": true,
+    "speaker": {
+     "name": "Luke B.",
+     "position": {
+      "en": "Past delegate, Area 1 Alabama/Northwest Florida (Panel 75); past chair of the Conference Committee on Corrections",
+      "es": "Ex delegado del Área 1 Alabama/Noroeste de Florida (Panel 75); ex coordinador del Comité de la Conferencia sobre Correccionales"
+     },
+     "topic": {
+      "en": "Carrying the message behind the walls: Grapevine and La Viña for alcoholics in custody",
+      "es": "Llevar el mensaje tras los muros: Grapevine y La Viña para los alcohólicos bajo custodia"
+     }
+    },
     "past": false
    },
    "i18n": {
@@ -1768,8 +2199,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Luke B. — “Carrying the message behind the walls: Grapevine and La Viña for alcoholics in custody”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Luke B. — “Llevar el mensaje tras los muros: Grapevine y La Viña para los alcohólicos bajo custodia”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -1781,7 +2212,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Kaitie S. — “From manuscript to meeting: how AA literature and Grapevine and La Viña books are made”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
    "date": "2027-08-19T00:00:00Z",
    "first_seen": null,
@@ -1795,15 +2226,26 @@
     "start": "2027-08-19T00:00:00Z",
     "end": "2027-08-19T01:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1slpJ74uuuNhnDWLZuW0AhcWHIFuOfxqj/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1slpJ74uuuNhnDWLZuW0AhcWHIFuOfxqj=w600",
     "city": null,
     "state": null,
     "recurring": true,
+    "speaker": {
+     "name": "Kaitie S.",
+     "position": {
+      "en": "Delegate, Area 26 Kentucky (Panel 76); chair of the Conference Committee on Literature, 2027",
+      "es": "Delegada del Área 26 Kentucky (Panel 76); coordinadora del Comité de la Conferencia sobre Literatura en 2027"
+     },
+     "topic": {
+      "en": "From manuscript to meeting: how AA literature and Grapevine and La Viña books are made",
+      "es": "Del manuscrito a la reunión: cómo se hacen la literatura de AA y los libros de Grapevine y La Viña"
+     }
+    },
     "past": false
    },
    "i18n": {
@@ -1812,8 +2254,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Kaitie S. — “From manuscript to meeting: how AA literature and Grapevine and La Viña books are made”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Kaitie S. — “Del manuscrito a la reunión: cómo se hacen la literatura de AA y los libros de Grapevine y La Viña”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -1825,7 +2267,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Corey D. — “Following the money: how Grapevine and La Viña pay their way, and how groups can help”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
    "date": "2027-09-16T00:00:00Z",
    "first_seen": null,
@@ -1839,15 +2281,26 @@
     "start": "2027-09-16T00:00:00Z",
     "end": "2027-09-16T01:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w600",
     "city": null,
     "state": null,
     "recurring": true,
+    "speaker": {
+     "name": "Corey D.",
+     "position": {
+      "en": "Past delegate, Area 26 Kentucky (Panel 74); past chair of the Conference Committee on Finance",
+      "es": "Ex delegado del Área 26 Kentucky (Panel 74); ex coordinador del Comité de la Conferencia sobre Finanzas"
+     },
+     "topic": {
+      "en": "Following the money: how Grapevine and La Viña pay their way, and how groups can help",
+      "es": "Siguiendo el dinero: cómo Grapevine y La Viña se mantienen por sí mismas y cómo pueden ayudar los grupos"
+     }
+    },
     "past": false
    },
    "i18n": {
@@ -1856,8 +2309,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Corey D. — “Following the money: how Grapevine and La Viña pay their way, and how groups can help”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Corey D. — “Siguiendo el dinero: cómo Grapevine y La Viña se mantienen por sí mismas y cómo pueden ayudar los grupos”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -2001,7 +2454,7 @@
    "kind": "event",
    "url": "/meetings/",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather N. — “From district to Conference: how a Grapevine or La Viña idea becomes an agenda item”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
    "lang": "en",
    "date": "2027-10-21T00:00:00Z",
    "first_seen": null,
@@ -2015,15 +2468,26 @@
     "start": "2027-10-21T00:00:00Z",
     "end": "2027-10-21T01:00:00Z",
     "all_day": false,
-    "location": "Zoom",
-    "online_url": "https://us02web.zoom.us/j/9494767497?pwd=ZnlwNkxaRysxd3BJNUNRcWZsV3RNdz09",
-    "meeting_id": "949 476 7497",
-    "passcode": "neta65",
-    "flyer_url": null,
-    "flyer_thumb": null,
+    "location": "Google Meet",
+    "online_url": "https://meet.google.com/rva-tmst-vdb",
+    "meeting_id": "rva-tmst-vdb",
+    "passcode": null,
+    "flyer_url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/view",
+    "flyer_thumb": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w600",
     "city": null,
     "state": null,
     "recurring": true,
+    "speaker": {
+     "name": "Heather N.",
+     "position": {
+      "en": "Delegate, Area 18 Idaho (Panel 76); alternate chair of the Conference Committee on Agenda, 2027",
+      "es": "Delegada del Área 18 Idaho (Panel 76); coordinadora suplente del Comité de la Conferencia sobre Agenda en 2027"
+     },
+     "topic": {
+      "en": "From district to Conference: how a Grapevine or La Viña idea becomes an agenda item",
+      "es": "Del distrito a la Conferencia: cómo una idea sobre Grapevine o La Viña llega a ser un punto de agenda"
+     }
+    },
     "past": false
    },
    "i18n": {
@@ -2032,8 +2496,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
-     "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather N. — “From district to Conference: how a Grapevine or La Viña idea becomes an agenda item”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Heather N. — “Del distrito a la Conferencia: cómo una idea sobre Grapevine o La Viña llega a ser un punto de agenda”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
     }
    },
    "machine": [],
@@ -2391,9 +2855,9 @@
    "kind": "event",
    "url": "https://citywidedallasaa.org",
    "title": "GV/LV booth at CityWide Dallas",
-   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
    "lang": "en",
-   "date": "2026-10-10T22:00:00Z",
+   "date": "2026-10-10T22:30:00Z",
    "first_seen": null,
    "image": null,
    "tags": [
@@ -2402,10 +2866,10 @@
    "category": "recurring",
    "status": "ok",
    "extra": {
-    "start": "2026-10-10T22:00:00Z",
-    "end": "2026-10-11T01:00:00Z",
+    "start": "2026-10-10T22:30:00Z",
+    "end": "2026-10-11T00:30:00Z",
     "all_day": false,
-    "location": "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
+    "location": "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
     "online_url": null,
     "flyer_url": null,
     "flyer_thumb": null,
@@ -2416,10 +2880,10 @@
     "rule": {
      "week_of_month": 2,
      "weekday": "saturday",
-     "start": "17:00",
-     "end": "20:00"
+     "start": "17:30",
+     "end": "19:30"
     },
-    "recurrence_label": "Every second Saturday of the month · 5:00 – 8:00 PM",
+    "recurrence_label": "Every second Saturday of the month · 5:30 – 7:30 PM",
     "host": "neta",
     "online": false,
     "platform": null,
@@ -2433,12 +2897,12 @@
      "es": "Mesa de GV/LV en CityWide Dallas"
     },
     "summary": {
-     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
-     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
+     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lovers Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
     },
     "recurrence_label": {
-     "en": "Every second Saturday of the month · 5:00 – 8:00 PM",
-     "es": "Cada segundo sábado del mes · 5:00–8:00 p. m."
+     "en": "Every second Saturday of the month · 5:30 – 7:30 PM",
+     "es": "Cada segundo sábado del mes · 5:30–7:30 p. m."
     }
    },
    "machine": [],
@@ -2693,9 +3157,9 @@
    "kind": "event",
    "url": "https://citywidedallasaa.org",
    "title": "GV/LV booth at CityWide Dallas",
-   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
    "lang": "en",
-   "date": "2026-09-12T22:00:00Z",
+   "date": "2026-09-12T22:30:00Z",
    "first_seen": null,
    "image": null,
    "tags": [
@@ -2704,10 +3168,10 @@
    "category": "recurring",
    "status": "ok",
    "extra": {
-    "start": "2026-09-12T22:00:00Z",
-    "end": "2026-09-13T01:00:00Z",
+    "start": "2026-09-12T22:30:00Z",
+    "end": "2026-09-13T00:30:00Z",
     "all_day": false,
-    "location": "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
+    "location": "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
     "online_url": null,
     "flyer_url": null,
     "flyer_thumb": null,
@@ -2718,10 +3182,10 @@
     "rule": {
      "week_of_month": 2,
      "weekday": "saturday",
-     "start": "17:00",
-     "end": "20:00"
+     "start": "17:30",
+     "end": "19:30"
     },
-    "recurrence_label": "Every second Saturday of the month · 5:00 – 8:00 PM",
+    "recurrence_label": "Every second Saturday of the month · 5:30 – 7:30 PM",
     "host": "neta",
     "online": false,
     "platform": null,
@@ -2735,12 +3199,12 @@
      "es": "Mesa de GV/LV en CityWide Dallas"
     },
     "summary": {
-     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
-     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
+     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lovers Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
+     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lovers Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
     },
     "recurrence_label": {
-     "en": "Every second Saturday of the month · 5:00 – 8:00 PM",
-     "es": "Cada segundo sábado del mes · 5:00–8:00 p. m."
+     "en": "Every second Saturday of the month · 5:30 – 7:30 PM",
+     "es": "Cada segundo sábado del mes · 5:30–7:30 p. m."
     }
    },
    "machine": [],
