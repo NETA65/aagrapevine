@@ -1,7 +1,239 @@
 {
- "updated": "2026-11-11T08:53:41Z",
+ "updated": "2026-11-11T08:58:38Z",
  "fixture": false,
  "items": [
+  {
+   "id": "drive:1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3",
+   "source": "drive",
+   "kind": "slides",
+   "url": "https://drive.google.com/file/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3/view",
+   "title": "GVR and RLV Orientation Workshop",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-11",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3=w600",
+   "tags": [
+    "panel-77",
+    "pptx"
+   ],
+   "category": "slides",
+   "status": "ok",
+   "extra": {
+    "file_id": "1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "name": "GVR and RLV Orientation Workshop.pptx",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "slides"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3/view",
+    "preview_url": "https://drive.google.com/file/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PPTX",
+    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
+    ],
+    "modified_text": "12:57 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "GVR and RLV Orientation Workshop",
+     "es": "Taller de orientación para RLV y GVR"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U",
+   "source": "drive",
+   "kind": "slides",
+   "url": "https://drive.google.com/file/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U/view",
+   "title": "Grapevine and La Viña Monthly Committee Meeting",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-11",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U=w600",
+   "tags": [
+    "panel-77",
+    "pptx"
+   ],
+   "category": "slides",
+   "status": "ok",
+   "extra": {
+    "file_id": "1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "name": "Grapevine and La Viña Monthly Committee Meeting.pptx",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "slides"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U/view",
+    "preview_url": "https://drive.google.com/file/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PPTX",
+    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
+    ],
+    "modified_text": "12:57 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine and La Viña Monthly Committee Meeting",
+     "es": "Reunión mensual del Comité de Grapevine y La Viña"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+   "source": "drive",
+   "kind": "slides",
+   "url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
+   "title": "Grapevine and La Viña Writing Workshop",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-11",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
+   "tags": [
+    "panel-77",
+    "pptx"
+   ],
+   "category": "slides",
+   "status": "ok",
+   "extra": {
+    "file_id": "1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "name": "Grapevine and La Viña Writing Workshop.pptx",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "slides"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
+    "preview_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PPTX",
+    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
+    ],
+    "modified_text": "12:57 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine and La Viña Writing Workshop",
+     "es": "Taller de escritura de Grapevine y La Viña"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6",
+   "source": "drive",
+   "kind": "slides",
+   "url": "https://drive.google.com/file/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6/view",
+   "title": "Grapevine and La Viña Information Workshop",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-11",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6=w600",
+   "tags": [
+    "panel-77",
+    "pptx"
+   ],
+   "category": "slides",
+   "status": "ok",
+   "extra": {
+    "file_id": "19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "name": "Grapevine and La Viña Information Workshop.pptx",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "slides"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6/view",
+    "preview_url": "https://drive.google.com/file/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6",
+    "thumb_url": "https://lh3.googleusercontent.com/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PPTX",
+    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
+    ],
+    "modified_text": "12:57 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine and La Viña Information Workshop",
+     "es": "Taller informativo de Grapevine y La Viña"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
   {
    "id": "drive:19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk",
    "source": "drive",
@@ -1852,64 +2084,6 @@
    "is_new": false
   },
   {
-   "id": "drive:1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3",
-   "source": "drive",
-   "kind": "slides",
-   "url": "https://drive.google.com/file/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3/view",
-   "title": "GVR and RLV Orientation Workshop",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-10-01",
-   "first_seen": "2026-10-02T04:55:24Z",
-   "image": "https://lh3.googleusercontent.com/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3=w600",
-   "tags": [
-    "panel-77",
-    "pptx"
-   ],
-   "category": "slides",
-   "status": "ok",
-   "extra": {
-    "file_id": "1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3",
-    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    "name": "GVR and RLV Orientation Workshop.pptx",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "slides"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3/view",
-    "preview_url": "https://drive.google.com/file/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1xCgIeCvXfHlrv0KZFIRCcmnPdCM4pjc3=w600",
-    "image_url": null,
-    "is_image": false,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PPTX",
-    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
-    ],
-    "modified_text": "Oct 1"
-   },
-   "i18n": {
-    "title": {
-     "en": "GVR and RLV Orientation Workshop",
-     "es": "Taller de orientación para RLV y GVR"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
-  {
    "id": "drive:1qXSnwgiwxeqPoEvbm8iz9lMnkqkP3Q2l",
    "source": "drive",
    "kind": "photo",
@@ -1968,122 +2142,6 @@
    "is_new": false
   },
   {
-   "id": "drive:1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U",
-   "source": "drive",
-   "kind": "slides",
-   "url": "https://drive.google.com/file/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U/view",
-   "title": "Grapevine and La Viña Monthly Committee Meeting",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-10-01",
-   "first_seen": "2026-10-02T04:55:24Z",
-   "image": "https://lh3.googleusercontent.com/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U=w600",
-   "tags": [
-    "panel-77",
-    "pptx"
-   ],
-   "category": "slides",
-   "status": "ok",
-   "extra": {
-    "file_id": "1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U",
-    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    "name": "Grapevine and La Viña Monthly Committee Meeting.pptx",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "slides"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U/view",
-    "preview_url": "https://drive.google.com/file/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U=w600",
-    "image_url": null,
-    "is_image": false,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PPTX",
-    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
-    ],
-    "modified_text": "Oct 1"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine and La Viña Monthly Committee Meeting",
-     "es": "Reunión mensual del Comité de Grapevine y La Viña"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
-  {
-   "id": "drive:1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
-   "source": "drive",
-   "kind": "slides",
-   "url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
-   "title": "Grapevine and La Viña Writing Workshop",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-10-01",
-   "first_seen": "2026-10-02T04:55:24Z",
-   "image": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
-   "tags": [
-    "panel-77",
-    "pptx"
-   ],
-   "category": "slides",
-   "status": "ok",
-   "extra": {
-    "file_id": "1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
-    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    "name": "Grapevine and La Viña Writing Workshop.pptx",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "slides"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
-    "preview_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
-    "image_url": null,
-    "is_image": false,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PPTX",
-    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
-    ],
-    "modified_text": "Oct 1"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine and La Viña Writing Workshop",
-     "es": "Taller de escritura de Grapevine y La Viña"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
-  {
    "id": "drive:1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p",
    "source": "drive",
    "kind": "document",
@@ -2132,64 +2190,6 @@
     "title": {
      "en": "Grapevine & La Viña Pricing Update - Effective January 1, 2027",
      "es": "Actualización de precios de Grapevine y La Viña - A partir del 1 de enero de 2027"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
-  {
-   "id": "drive:19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6",
-   "source": "drive",
-   "kind": "slides",
-   "url": "https://drive.google.com/file/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6/view",
-   "title": "Grapevine and La Viña Information Workshop",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-10-01",
-   "first_seen": "2026-10-02T04:55:24Z",
-   "image": "https://lh3.googleusercontent.com/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6=w600",
-   "tags": [
-    "panel-77",
-    "pptx"
-   ],
-   "category": "slides",
-   "status": "ok",
-   "extra": {
-    "file_id": "19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6",
-    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    "name": "Grapevine and La Viña Information Workshop.pptx",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "slides"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6/view",
-    "preview_url": "https://drive.google.com/file/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6",
-    "thumb_url": "https://lh3.googleusercontent.com/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6=w600",
-    "image_url": null,
-    "is_image": false,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PPTX",
-    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
-    ],
-    "modified_text": "Oct 1"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine and La Viña Information Workshop",
-     "es": "Taller informativo de Grapevine y La Viña"
     },
     "summary": {
      "en": "",
