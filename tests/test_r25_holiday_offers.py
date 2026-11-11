@@ -7,8 +7,10 @@ store_offers "holiday-gifts-2026"):
                    three (its first sentence under 140 characters — Share —, its first paragraph within the booth's
                    280, and what Home's card, What's New and the feed show is that opening, never a heading run into
                    it); each section's facts and links (the offers' pages exactly as AA Grapevine and La Viña write
-                   them: /2gifts without a "/" at the end); calm words (no "!", "just", "hurry", "Save 55%" …); the
-                   offers never tied to the price change (no sentence holds December 31 and January 1), free
+                   them: /2gifts without a "/" at the end); calm words (no "!", "just", "hurry", "Save 55%", "ahead
+                   of the new prices", "antes de los nuevos precios" …); the offers never tied to the price change
+                   (the gift-offer and free-shipping sections never mention it, no sentence holds December 31 and the
+                   new prices, the opening names them once, in its first sentence), free
                    shipping never said of the gift offers, nothing said about combining but AA Grapevine's own words
                    (neither of its two offers combines with any other); on the site from November 11 through December 31
                    (Central), in the e-mail of December 1 (November's edition: the opening, whole, then "Details
@@ -57,8 +59,17 @@ HEADINGS = {"en": ["Holiday gift offers", "Free shipping", "New prices from Janu
 # 55%!)", "limited time", "hurry"), no urgency, no "buy before the prices change", nothing the stores don't say
 CALM = (r"(?i)!|¡|\bjust\b|\bpor solo\b|\bsolo \$|hurry|prisa|ap[uú]rate|don.t miss|last chance|[uú]ltima oportunidad|"
         r"limited time|tiempo limitado|\bnow\b|\bahora\b|\bsave\b|ahorr|lock in|before (?:the )?(?:new )?prices?|"
-        r"antes de que|renew|renov|\bcode\b|c[oó]digo|minimum|m[ií]nimo|international|internacional|\bstack|combines with|"
+        r"before january|ahead of|in time (?:for|before)|antes de que|antes de (?:l[oa]s? )?(?:nuev[oa]s? )?precios?|"
+        r"antes del? (?:1 de )?enero|a tiempo|while (?:today.s|the current|these|current) prices|mientras (?:duren|sigan)|"
+        r"good time|buen momento|take advantage|aprovech|"
+        r"renew|renov|\bcode\b|c[oó]digo|minimum|m[ií]nimo|international|internacional|\bstack|combines with|"
         r"se combina con|trackingcode|%|percent|por ciento")
+# The price change in words: what the gift-offer and free-shipping sections never mention (they stand beside the price
+# section as facts of their own — never "on January 1 the first one becomes $39.00", "Desde el 1 de enero …"), and
+# what only the opening's first sentence names, there without December 31
+PRICE_WORDS = (r"(?i)january|enero|2027|\$39|\$19\.50|\$34|\$17\.00|\bprices\b|\bprecios\b|price (?:change|increase|rise)|"
+               r"cambio de precio|aumento|\brais|\bincreas|\brise|\bgo(?:es)? up\b|\bsub(?:e|en|ir|ir[aá]n?)\b")
+OFFERS_LAST_DAY = r"December 31|31 de diciembre|diciembre|December"
 
 
 # What the post says about combining: AA Grapevine's words only, of its two offers (the opening), of its gift offer
@@ -67,7 +78,7 @@ COMBINING = {
     "en": ["AA Grapevine says neither of its two offers can be combined with any other offer.",
            "AA Grapevine says its offer can't be combined with any other offer and is available only through its page.",
            "AA Grapevine says its offer can't be combined with any other offer."],
-    "es": ["Según AA Grapevine, ninguna de sus dos ofertas se puede combinar con otra.",
+    "es": ["Según AA Grapevine, ninguna de sus dos ofertas se puede combinar con ninguna otra.",
            "Según AA Grapevine, su oferta no se puede combinar con ninguna otra y se obtiene únicamente en su página.",
            "Según AA Grapevine, su oferta no se puede combinar con ninguna otra."],
 }
@@ -203,6 +214,8 @@ class Bulletin(unittest.TestCase):
         # and nothing about shipping (free shipping was never said of subscriptions)
         for body in (en, es):
             self.assertNotRegex(plain(body), r"(?i)digital|\$\d+(?:\.\d\d)? (?:each|cada)|renew|renov|55|shipping|env[ií]o")
+            # and nothing about the price change: it has its own section ("regular price" is today's)
+            self.assertNotRegex(plain(body), PRICE_WORDS)
 
     def test_free_shipping(self):
         en, es = self.section("en", 1), self.section("es", 1)
@@ -214,8 +227,9 @@ class Bulletin(unittest.TestCase):
         gv, lv = self.links["gv_store"], self.links["lv_store"]
         for body in (en, es):
             self.assertEqual(sorted(links(body)), sorted(["/shop/#offers-free-shipping-2026", gv, lv]))
-            # the stores' words: all products — never subscriptions or the gift offers
+            # the stores' words: all products — never subscriptions or the gift offers; and never the price change
             self.assertNotRegex(plain(body), r"(?i)subscri|suscrip|gift|regalo")
+            self.assertNotRegex(plain(body), PRICE_WORDS)
         self.assertIn(f"({lv}) (in Spanish)", en)
         self.assertIn(f"({gv}) (en inglés)", es)
         self.assertLess(es.index(lv), es.index(gv))
@@ -248,10 +262,17 @@ class Bulletin(unittest.TestCase):
             self.assertNotIn("trackingcode", body)
             self.assertNotRegex(body, r"2gifts/|aalavina\.org/2gifts|aagrapevine\.org/2regalos|http://", "the pages exactly")
             # the offers and the price change side by side as facts: no sentence holds the offers' last day and the
-            # prices' first day (never "… until December 31, before the prices change on January 1")
+            # price change (never "… until December 31, before the prices change on January 1", "… through December
+            # 31, 2026, ahead of the new prices")
             for s in sentences(body):
-                both = re.search(r"December 31|31 de diciembre", s) and re.search(r"January|enero|2027", s)
+                both = re.search(OFFERS_LAST_DAY, s) and re.search(
+                    r"(?i)January|enero|2027|new prices|nuevos precios|price change|cambio de precio", s)
                 self.assertFalse(both, s)
+            # the opening names the new prices once, in its first sentence (with the offers and free shipping, never
+            # their last day): no later sentence of it comes back to them ("After that, the new prices begin.")
+            opening = sentences(self.parts[lang][0])
+            self.assertEqual([s for s in opening if re.search(PRICE_WORDS, s)], opening[:1], lang)
+            self.assertNotRegex(opening[0], OFFERS_LAST_DAY)
 
     def test_the_schedule(self):
         def shown(now: str) -> list[str]:

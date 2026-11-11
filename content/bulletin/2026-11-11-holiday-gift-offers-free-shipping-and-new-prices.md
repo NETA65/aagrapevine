@@ -22,7 +22,7 @@ title_es: "La Viña y Grapevine: ofertas de regalo, envío gratis y nuevos preci
 summary_es: |
   La Viña y AA Grapevine anunciaron ofertas de regalo para las fiestas, envío gratis y los nuevos precios de 2027. Las ofertas de regalo y el envío gratis valen para direcciones en EE. UU. y Canadá hasta el 31 de diciembre de 2026.
 
-  Según AA Grapevine, ninguna de sus dos ofertas se puede combinar con otra.
+  Según AA Grapevine, ninguna de sus dos ofertas se puede combinar con ninguna otra.
 
   RLV y GVR: si en tu grupo alguien pide libros, suscripciones o regalos de La Viña o Grapevine, un breve aviso en la reunión de trabajo de tu grupo ayuda a que todos lo sepan.
 
