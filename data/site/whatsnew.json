@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-10T15:48:38Z",
+ "updated": "2026-11-11T07:23:39Z",
  "fixture": false,
  "items": [
   {
@@ -89,6 +89,65 @@
    ],
    "is_new": true,
    "wn_date": "2026-11-10T12:30:18Z"
+  },
+  {
+   "id": "drive:19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk/view",
+   "title": "Grapevine Area Chair Meeting Report",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-10",
+   "first_seen": "2026-11-11T00:34:51Z",
+   "image": "https://lh3.googleusercontent.com/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk=w600",
+   "tags": [
+    "panel-77",
+    "pdf"
+   ],
+   "category": "reports",
+   "status": "ok",
+   "extra": {
+    "file_id": "19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk",
+    "mime": "application/pdf",
+    "name": "2026-11-10 Grapevine Area Chair Meeting Report.pdf",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "reports"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk/view",
+    "preview_url": "https://drive.google.com/file/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk",
+    "thumb_url": "https://lh3.googleusercontent.com/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": true,
+    "file_type": "PDF",
+    "folder_id": "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_url": "https://drive.google.com/drive/folders/1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r"
+    ],
+    "modified_text": "11:20 pm"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Area Chair Meeting Report",
+     "es": "Informe de la reunión de coordinadores de Área de Grapevine"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-10T12:00:00Z"
   },
   {
    "id": "ig:DfhtdVPDQTS",
@@ -7219,84 +7278,6 @@
     "issue_label": {
      "en": "November 2026",
      "es": "Noviembre 2026"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-16T12:00:00Z"
-  },
-  {
-   "id": "gv:2026-11:dying-get-sober",
-   "source": "grapevine",
-   "kind": "article",
-   "url": "https://www.aagrapevine.org/magazine/2026/nov/dying-get-sober",
-   "title": "Dying to Get Sober",
-   "summary": "After a breakup, she headed to a graveyard to isolate, drink and cry. Luckily, she had company",
-   "lang": "en",
-   "date": "2026-10-16",
-   "first_seen": "2026-10-16T12:38:59Z",
-   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-10/GettyImages-2234552888.jpg?itok=P_4hUEbm",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "publication": "gv",
-    "issue_label": "November 2026",
-    "issue_key": "2026-11",
-    "issue_date": "2026-11-01",
-    "issue_theme": "AA Members & Mental Health",
-    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
-    "topic": "AA Members & Mental Health",
-    "section": "Our Personal Stories",
-    "author": "Debbie F.",
-    "author_location": "Wasilla, Alaska",
-    "subtitle": "After a breakup, she headed to a graveyard to isolate, drink and cry. Luckily, she had company",
-    "teaser": "I live in Alaska, home of the midnight sun. In the summer of 2023, my drinking was out of control.",
-    "free": false,
-    "online_exclusive": false,
-    "department": false,
-    "geo": {
-     "scope": "other",
-     "city": "Wasilla",
-     "county": null,
-     "counties": [],
-     "state": "AK",
-     "country": "US",
-     "label_en": "Wasilla, Alaska",
-     "label_es": "Wasilla, Alaska"
-    },
-    "pub_date": "2026-10-16"
-   },
-   "i18n": {
-    "title": {
-     "en": "Dying to Get Sober",
-     "es": "Morir por estar sobrio"
-    },
-    "summary": {
-     "en": "After a breakup, she headed to a graveyard to isolate, drink and cry. Luckily, she had company",
-     "es": "Después de una ruptura, se dirigió a un cementerio para aislar, beber y llorar. Por suerte, tenía compañía"
-    },
-    "section": {
-     "en": "Our Personal Stories",
-     "es": "Nuestras historias personales"
-    },
-    "topic": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_theme": {
-     "en": "AA Members & Mental Health",
-     "es": "Los miembros de AA y la salud mental"
-    },
-    "issue_label": {
-     "en": "November 2026",
-     "es": "Noviembre 2026"
-    },
-    "author_location": {
-     "en": "Wasilla, Alaska",
-     "es": "Wasilla, Alaska"
     }
    },
    "machine": [
