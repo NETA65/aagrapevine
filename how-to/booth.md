@@ -1820,9 +1820,11 @@ Service Manual, AA Grapevine's copyright and reprint policy, the 1960 Advisory A
 
 A few rows rest on facts that can change, or that need a person's look. Before an event (or once a season):
 
-1. **La Viña's weekly open meeting** (Thursdays from November 5, 2026, 11 a.m. Central) is known only from La Viña's
-   flyer. Rows `quiz-lv-open-meeting-day` and `fact-lv-weekly-open-meeting` say "according to La Viña's flyer".
-   Check aalavina.org; if the day or time changed, fix those rows — and the Meetings slide's source,
+1. **La Viña's weekly open meeting** (Thursdays from November 5, 2026, 11 a.m. Central = 12 noon Eastern) is known
+   from La Viña's flyer, its podcast page https://www.aalavina.org/podcast and the description of each of its
+   podcast's episodes ("Nos reunimos todos los jueves a las 12:00 del mediodía, hora del Este"; `/listen/` shows
+   them). Rows `quiz-lv-open-meeting-day` and `fact-lv-weekly-open-meeting` say "according to La Viña's flyer".
+   Check those pages; if the day or time changed, fix those rows — and the Meetings slide's source,
    `lavina_weekly_open` in `config/site.yml` ([Automatic sources §3.11](automatic-sources.md#311-weekly-open-meetings)).
 2. **The record-your-story phone lines.** Grapevine's Audio Project line was reported down in May 2026, so no row
    shows its number: `message-write-record-gv`'s QR code leads to the official page instead. La Viña's "Graba tu

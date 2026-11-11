@@ -14,7 +14,7 @@ Output: Items of kind "meeting" — see docs/DATA_SCHEMA.md:
        extra = zoom_id, passcode, day, time, url  (+ weekday, time_central, start_local, timezone,
                next_start, zoom_url, player_url, sentence)
   2. id "weekly_open_lv": La Viña's weekly open meeting in Spanish, from config/site.yml
-     `lavina_weekly_open` (an official La Viña flyer; there is no web page to read). Same extra fields
+     `lavina_weekly_open` (an official La Viña flyer; its page, config `url`, is linked, never read). Same extra fields
      (no player_url / sentence), plus `starts` (first meeting); next_start is never before `starts`.
      Written on every run, also when the Grapevine page cannot be read.
 

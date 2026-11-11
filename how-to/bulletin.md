@@ -545,39 +545,64 @@ On February 1 the day's first update (normally the morning refresh, by about 5:3
 "New". After March 1 it is gone. The file itself is public on GitHub from the moment you save it. A real one waits
 in the folder now: `2027-01-01-new-prices-in-effect.md` goes up on January 1, 2027.
 
-**Example 4 — your own Spanish (the real prices post, shortened).**
-File `2026-10-01-prices-change-january-1-2027.md`:
+**Example 4 — your own Spanish, with sections (the real pinned post, shortened).**
+File `2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md` (it took the place of two pinned posts — the
+prices of January 1, 2027 and free shipping — and added the holiday gift offers):
 
 ```markdown
 ---
-title: "Grapevine and La Viña prices change on January 1, 2027"
-date: 2026-10-01
+title: "Grapevine and La Viña: holiday gift offers, free shipping and new prices"
+date: 2026-11-11
 expires: 2026-12-31
 pinned: true
 lang: en
-tags: prices, subscriptions, books
-title_es: "Los precios de Grapevine y La Viña cambian el 1 de enero de 2027"
+tags: shop, gifts, subscriptions, shipping, prices, books
+title_es: "La Viña y Grapevine: ofertas de regalo, envío gratis y nuevos precios"
 summary_es: |
+  La Viña y AA Grapevine anunciaron ofertas de regalo para las fiestas, envío gratis y los nuevos precios de 2027. …
+
+  # Ofertas de regalo para las fiestas
+
+  Hasta el **31 de diciembre de 2026**, … [Página de la oferta de La Viña](https://www.aalavina.org/2regalos) …
+
+  # Envío gratis
+
+  - Las dos tiendas y lo que dice cada una: [Tienda: envío gratis](/shop/#offers-free-shipping-2026)
+
+  # Nuevos precios a partir del 1 de enero de 2027
+
   A partir del **1 de enero de 2027**, la suscripción anual a La Viña cuesta **$19.50** impresa o **$17.00** digital; …
-
-  AA Grapevine anunció los nuevos precios en una carta a las oficinas intergrupales y centrales. …
-
-  - Los precios de hoy y los nuevos, lado a lado: [Tienda: suscripciones y precios](/shop/#subscriptions)
 ---
+AA Grapevine and La Viña have announced holiday gift offers, free shipping and new prices for 2027. …
+
+# Holiday gift offers
+
+Through **December 31, 2026**, … [Grapevine's offer page](https://www.aagrapevine.org/2gifts) …
+
+# Free shipping
+
+- Both stores and what each one says: [Shop — free shipping](/shop/#offers-free-shipping-2026)
+
+# New prices from January 1, 2027
+
 From **January 1, 2027**, a yearly Grapevine subscription costs **$39.00** in print or **$34.00** digital, …
-
-AA Grapevine announced the new prices in a letter to Intergroups and Central Offices. …
-
-- Today's prices and the new ones, side by side: [Shop — subscriptions and prices](/shop/#subscriptions)
 ```
 
-What happens: `/es/bulletin/#2026-10-01-prices-change-january-1-2027` shows the `title_es` headline and the
-`summary_es` text exactly as written (paragraphs and list kept), with no "Auto-translated" note and no "Show
-original" box. The `/shop/#subscriptions` link opens `/es/shop/#subscriptions` on the Spanish page. The Spanish teaser
-(home card, What's New) is the first 400 characters of `summary_es` without the Markdown marks. The text is longer
-than 700 characters, so the home card shows a 320-character teaser and "Read more". Pinned, so it comes first on
-the bulletin, on the home page and in the digest (What's New and the feed keep their date order); shown through
-December 31, 2026; in the October 2026 digest.
+What happens: `/es/bulletin/#2026-11-11-holiday-gift-offers-free-shipping-and-new-prices` shows the `title_es`
+headline and the `summary_es` text exactly as written (paragraphs, headings and lists kept), with no
+"Auto-translated" note and no "Show original" box. Both texts have the same three headings, so a computer screen
+lists them as **In this post**, and each section's link (`…#2026-11-11-holiday-gift-offers-free-shipping-and-new-prices--free-shipping`)
+is the same on both pages. The `/shop/#…` links open `/es/shop/#…` on the Spanish page. The text opens with four short
+paragraphs before the first heading — about 680 characters in English, 690 in Spanish, its first sentence under 140
+and its first paragraph under 280; the second gives the gift offers' prices, theirs first —, so what the other places show is that opening, never a heading run into it: the Spanish teaser (home
+card, What's New, the feed) is the first 400 characters of `summary_es` without the Markdown marks, Share sends the
+first 140 characters (the whole first sentence and the start of the next), the booth the first paragraph. The text is longer than 700 characters, so the home card shows a
+320-character teaser and "Read more", and the e-mail the opening's paragraphs — the gift offers' prices among them — and "Details →" (the HTML
+half, up to 700 characters, the whole opening; the text half, up to 600, its first three paragraphs, with the gift
+prices and without the GVR / RLV line). Pinned, so it comes
+first on the bulletin, on the home page and in the digest (What's New and the feed keep their date order); shown
+through December 31, 2026; in the November 2026 digest (sent December 1) when it goes up by November 30 — the
+digest counts a post in the month it first shows, and this one is gone before the January 1 e-mail.
 
 Rules for `summary_es` (and `summary_en`):
 
@@ -811,7 +836,7 @@ All addresses below are under `https://neta65.github.io/aagrapevine/`.
 | Place | English · Spanish | What shows |
 |---|---|---|
 | Bulletin page | `/bulletin/` · `/es/bulletin/` | Every live post: pinned first, then newest. Each one has the badges "Pinned" and "New", the date ("Sunday, January 10, 2027" / "Domingo, 10 de enero de 2027"), "until …" when it expires, the headline (a link to the post itself), the whole text, **In this post** (2+ top-level headings, wide screens), the button **More information** or **Open the document**, the "Auto-translated" note, **Copy link** and **Share**. A machine-translated post also gets **Show original**. With no posts: "Nothing on the bulletin right now" |
-| One post | `/bulletin/#<anchor>` · `/es/bulletin/#<anchor>` | GitHub post: the file name, e.g. `#2026-10-01-prices-change-january-1-2027`. Drive post: `#ann-drive-<file id>` (in small letters, `-` for `_`). The same anchor in both languages; the language switch keeps it |
+| One post | `/bulletin/#<anchor>` · `/es/bulletin/#<anchor>` | GitHub post: the file name, e.g. `#2026-11-11-holiday-gift-offers-free-shipping-and-new-prices`. Drive post: `#ann-drive-<file id>` (in small letters, `-` for `_`). The same anchor in both languages; the language switch keeps it |
 | Home page | `/` · `/es/` — "From the committee" / "Noticias del comité" | The first 2 posts (pinned first). A text of up to 700 characters is shown in full; a longer one as a 320-character teaser with **Read more**. No posts: the section is left out |
 | What's New | `/whats-new/` · `/es/whats-new/` (filter "Bulletin") | Headline and a two-line teaser, at the post's news date (see 3.13). Where the link goes: 5.2 |
 | RSS feed | `/feed.xml` · `/es/feed.xml` | Headline, teaser, "NETA 65 · Bulletin", "Auto-translated" when machine-made, and a picture (`image:`, or a Drive PDF's or picture's thumbnail). The newest 100 What's New entries |
@@ -871,13 +896,14 @@ Where everything lives (search for the name in the right-hand column; line numbe
 What the site stores for a post (real data, shortened) — `data/site/announcements.json`:
 
 ```json
-{ "id": "ann:2026-10-01-prices-change-january-1-2027", "source": "committee", "kind": "announcement",
-  "url": "/bulletin/#2026-10-01-prices-change-january-1-2027",
-  "title": "Grapevine and La Viña prices change on January 1, 2027", "summary": "From January 1, 2027, …",
-  "lang": "en", "date": "2026-10-01", "first_seen": "2026-10-02T04:55:24Z", "image": null,
-  "extra": { "body_md": "From **January 1, 2027**, …", "expires": "2026-12-31", "pinned": true,
-             "slug": "2026-10-01-prices-change-january-1-2027", "link": null,
-             "file": "content/bulletin/2026-10-01-prices-change-january-1-2027.md", "own_i18n": { "…": "…" } },
+{ "id": "ann:2026-11-11-holiday-gift-offers-free-shipping-and-new-prices", "source": "committee", "kind": "announcement",
+  "url": "/bulletin/#2026-11-11-holiday-gift-offers-free-shipping-and-new-prices",
+  "title": "Grapevine and La Viña: holiday gift offers, free shipping and new prices",
+  "summary": "AA Grapevine and La Viña have announced holiday gift offers, …",
+  "lang": "en", "date": "2026-11-11", "first_seen": "2026-11-11T…Z", "image": null,
+  "extra": { "body_md": "AA Grapevine and La Viña have announced …", "expires": "2026-12-31", "pinned": true,
+             "slug": "2026-11-11-holiday-gift-offers-free-shipping-and-new-prices", "link": null,
+             "file": "content/bulletin/2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md", "own_i18n": { "…": "…" } },
   "i18n": { "title": { "en": "…", "es": "…" }, "summary": { "en": "…", "es": "…" }, "body_md": { "en": "…", "es": "…" } },
   "machine": [], "is_new": true }
 ```

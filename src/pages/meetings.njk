@@ -147,7 +147,8 @@ pageScripts: ["/assets/js/committee.js"]
     Spanish) — db.weekly_open.items, the page language's meeting first. Each card: language badge,
     day + time (Central and Eastern), the next date with its start and end (committee.js rolls it
     forward; before La Viña's first meeting it says "Starts …"), Zoom ID + passcode with copy buttons,
-    Join, Add to calendar (every week: Google's link and an .ics file). Phones: stacked; from 1024px
+    Join, Add to calendar (every week: Google's link and an .ics file), Listen to past meetings (its own show's
+    episodes on /listen/: ?show=wo or ?show=lvo — config sources.podcasts weekly_open). Phones: stacked; from 1024px
     side by side, the two parts of each card on shared rows (subgrid) so the Zoom boxes line up.
     #weekly-open is linked from e.g. the home page, /events/ (its "every week" cards), /listen/, /watch/,
     /accessibility/, /monthly/, a daily question's source line and the site search; those pages don't repeat
@@ -248,7 +249,10 @@ pageScripts: ["/assets/js/committee.js"]
             </div>
           </details>
           {% endif %}
-          {% if not w.isLv %}<a class="btn-secondary" href="{{ '/listen/?show=wo#episodes' | lurl(lang) }}">{% icon "headphones", "size-4" %} {{ "committee.weekly.listen" | t(lang) }}</a>{% endif %}
+          {#- Its recordings on /listen/: the show that records this meeting (config sources.podcasts[].weekly_open —
+              the Grapevine Weekly Open's "wo", La Viña's "lvo"), filtered to its episodes — once it has one there -#}
+          {%- set woShowKey = (site.sources.podcasts or []) | mediaMeetingShow("lavina" if w.isLv else "grapevine", db.episodes or {}) %}
+          {% if woShowKey %}<a class="btn-secondary" href="{{ ('/listen/?show=' + woShowKey + '#episodes') | lurl(lang) }}" aria-label="{{ 'committee.weekly.listen_name' | t(lang, { name: w.title or ('committee.weekly.title' | t(lang)) }) }}">{% icon "headphones", "size-4" %} {{ "committee.weekly.listen" | t(lang) }}</a>{% endif %}
           {% if w.detailsUrl %}<a class="btn-ghost" href="{{ w.detailsUrl }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span>{{ ("committee.weekly.details_" + key) | t(lang) | escape | replace(r/(\S+)\.org/g, '<span class="inline-block">$1<wbr>.org</span>') | safe }}</span></a>{% endif %}
         </div>
         {#- La Viña's details come from its official flyer: the flyer itself, when it is on the committee's

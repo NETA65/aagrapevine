@@ -24,9 +24,9 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
 
 - Trae automáticamente los **artículos nuevos** de Grapevine y La Viña, **los documentos oficiales** (PDF) de
   aagrapevine.org y aalavina.org — **cada uno una sola vez**, con sus ediciones en inglés, español y francés
-  en la misma tarjeta —, los episodios de **los dos podcasts** (el de AA Grapevine y la **Reunión Abierta
-  Semanal de Grapevine**), los **videos de YouTube** y las **publicaciones de Instagram**, y lo
-  **traduce todo** (inglés ⇄ español) con software libre.
+  en la misma tarjeta —, los episodios de **los tres podcasts** (el de AA Grapevine y las grabaciones de las dos
+  **reuniones abiertas semanales**: la de Grapevine, en inglés, y la de **La Viña**, en español), los **videos de
+  YouTube** y las **publicaciones de Instagram**, y lo **traduce todo** (inglés ⇄ español) con software libre.
 - **Lo único que usted hace:** subir archivos a las carpetas del comité en **Google Drive**
   (dentro de la carpeta del Panel 77). Al día siguiente aparecen en el sitio: informes, notas, presentaciones y
   talleres en el **Portafolio** (`/es/portfolio/`; la antigua dirección `/es/documents/` lleva allí).
@@ -43,8 +43,9 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   fiestas), leídos cada semana. Cuando AA Grapevine anuncia **nuevos precios**, un bloque en `config/site.yml`
   (`price_changes:`) los avisa desde el día del anuncio y los pone solos en su día (sección
   [When Grapevine announces new prices](#when-grapevine-announces-new-prices)). Una **oferta de las tiendas** (el
-  envío gratis del 1 de noviembre al 31 de diciembre de 2026) va en `config/site.yml` (`store_offers:`) y se ve
-  arriba en la Tienda (`/es/shop/#offers`) solo durante sus días. En **Suscribe a tu grupo base**,
+  envío gratis del 1 de noviembre al 31 de diciembre de 2026; las ofertas de regalo para las fiestas, hasta el 31
+  de diciembre) va en `config/site.yml` (`store_offers:`) y se ve arriba en la Tienda (`/es/shop/#offers`) solo
+  durante sus días. En **Suscribe a tu grupo base**,
   la tarjeta **Lo que costaría** (`/es/shop/#group-cost`) calcula lo que costaría una suscripción del grupo
   (revista, formato, duración y número de ejemplares, con los precios por cantidad) e imprime una **hoja
   informativa** de una página para la conciencia de grupo (en inglés, en español o bilingüe). Para quien quiere
@@ -64,7 +65,9 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   (en inglés)** (primer miércoles, de 7 a 8 p. m., desde el 2 de diciembre de 2026; en inglés: leemos una historia
   de AA Grapevine y compartimos sobre su tema), en `/es/meetings/#grapevine-meeting`. Los oradores del año (nombre e inicial del
   apellido, servicio y tema) están en `config/site.yml` → `meeting:` → `speakers:`. La **reunión
-  abierta semanal de La Viña** (jueves, en español) está en `/es/meetings/#weekly-open`. La página
+  abierta semanal de La Viña** (jueves, en español) está en `/es/meetings/#weekly-open`; sus grabaciones son
+  un podcast propio, en `/es/listen/` junto a las de la reunión de Grapevine (miércoles, en inglés), y cada episodio lleva la
+  fecha de su reunión («Reunión del 5 de noviembre de 2026»). La página
   **Reuniones** (`/es/meetings/`) también reúne las **reuniones de Grapevine** de los grupos de AA de nuestra
   Área y de las áreas cercanas (de las 8 listas de reuniones que usa la página del Grupo Rowlett). Arriba, la
   tarjeta *¿Eres nuevo en AA?* lleva a los sitios de AA para encontrar cualquier reunión de AA (aa.org, la app
@@ -198,7 +201,7 @@ needed](#owner-ok-needed-the-october-2026-features).
 | puts the new day and the Grapevine and La Viña **daily quote** up by **5:30 AM Central** (with the [morning alarm](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)) | *(once)* set up the morning alarm — about 15 minutes |
 | picks up new **Grapevine** and **La Viña** magazine stories | **upload files** to the committee's Google Drive folders (flyers, reports, notes, slides, photos) |
 | searches **aagrapevine.org** and **aalavina.org** for every **PDF** (flyers, catalogs, GVR/RLV kits, order forms…) | *(optional)* change a setting in **`config/site.yml`** |
-| adds new episodes of **both podcasts**, new **YouTube** videos and **Instagram** posts | |
+| adds new episodes of **the three podcasts**, new **YouTube** videos and **Instagram** posts | |
 | turns dated **flyers** into **events** and Drive docs into **bulletin posts** | *(rarely)* fix a translation in **`data/translations/overrides.yml`** |
 | **translates everything** English ⇄ Spanish (free, open-source, no account needed) | |
 | rebuilds and publishes the website — and keeps the last good version if a source is down | |
@@ -276,7 +279,8 @@ refresh (GitHub schedule)", "Evening refresh (GitHub schedule)", "Morning refres
 | **The magazines' online archives** (two CSV exports the owner keeps in `content/archive/`, plus every story the site has captured) | Every story by a writer from Texas since 1944 (Grapevine) and 1996 (La Viña): title, the publisher's subtitle, theme, byline as printed, link — Area 65 first (the counties in `spotlight.neta65_counties`). Read again by every run; a new export shows a few minutes after it is pushed ([how-to/writers-archive.md](how-to/writers-archive.md)) | **Published writers** (`/published/#archive`, a line on Home) |
 | **Both websites, searched page by page** | Every **official** PDF — only files on aagrapevine.org, aalavina.org, aa.org or aaws.widen.net (`library.official_hosts`) — flyers, catalogs, GVR / RLV kits, order forms, newsletters…, **each once** (`scripts/sync/pdf_curate.py`: copies of one file merged, older versions of one document dropped, English / Spanish / French editions on one card with language links), with page count and a preview picture | **Library** (catalogs and order forms also on **Shop**) |
 | **AA Grapevine's Podcast** | Every episode, playable on the site | **Listen** |
-| **Grapevine Weekly Open AA Meeting** (podcast) | Every recorded meeting, playable on the site | **Listen** |
+| **Grapevine Weekly Open AA Meeting** (podcast) | Every recorded meeting, playable on the site, each called by its date ("Meeting of November 4, 2026") | **Listen** (linked from its card on **Meetings**) |
+| **Reunión abierta semanal de Alcohólicos Anónimos de La Viña** (La Viña's podcast of its weekly open meeting, in Spanish, from November 2026; `lvo` under `sources.podcasts`) | Every recorded meeting, playable on the site, each called by the meeting's date its description gives ("Reunión del 5 de noviembre de 2026" — the feed's titles carry none) | **Listen** (linked from its card on **Meetings**) |
 | **YouTube** (@AAGrapevine — Grapevine *and* La Viña videos) | Every video, playable on the site | **Watch** (La Viña's Spanish playlists also show on **Listen** as *Spoken stories from La Viña* / *Historias habladas de La Viña* — [Listen and Watch](#listen-and-watch)) |
 | **Instagram** (@alcoholicsanonymous_gv, @alcoholicosanonimos_lv) | Newest posts — see [section 9](#9-instagram-how-the-site-reads-it-please-read) | **Instagram** |
 | **Committee Google Drive** | Reports, notes, slides, workshops, forms, photo albums; dated flyers → events; docs in *bulletin* → bulletin posts | **Portfolio · Photos · Events · Bulletin** |
@@ -306,13 +310,16 @@ the old `/subscribe/` address redirects there, #anchors included).
 
 What the newer pages do:
 
-- **An offer from the stores** (`/shop/#offers`, since November 2026): while AA Grapevine and La Viña run an offer
-  — free shipping on all products to U.S. and Canadian addresses, November 1 – December 31, 2026 — it shows right
-  under the Shop's menu: its days, one card per store (La Viña's first on `/es/shop/`) with the store's own banner
-  from the Drive `flyers` folder, what that store says (Grapevine's offer can't be combined with any other) and a
-  button to the store. The monthly toolkit names it in the months it runs (*Keep up all month* and the month's
-  message). It is written in `config/site.yml` → `store_offers:` (the stores' pages can't be read for it) and
-  leaves by itself the day after its last day: [settings.md §3.4b](how-to/settings.md#34b-store_offers--offers-the-stores-announce).
+- **An offer from the stores** (`/shop/#offers`, since November 2026): while AA Grapevine and La Viña run an offer —
+  free shipping on all products to U.S. and Canadian addresses, November 1 – December 31, 2026; the holiday gift
+  offers, a second 1-year print subscription as a gift for $16 at Grapevine and $8 at La Viña, through December 31
+  (`#offers-holiday-gifts-2026`) — it shows right under the Shop's menu: its days, one card per store (La Viña's
+  first on `/es/shop/`) with the store's own banner from the Drive `flyers` folder (when it has one), what that
+  store says (Grapevine's offers can't be combined with any other) and a button to the store — or to the store's own
+  page for the offer, with a link to its page for Canadian addresses. The monthly toolkit names it in the months it
+  runs (*Keep up all month* and the month's message). It is written in `config/site.yml` → `store_offers:` (the
+  stores' pages can't be read for it) and leaves by itself the day after its last day:
+  [settings.md §3.4b](how-to/settings.md#34b-store_offers--offers-the-stores-announce).
 - **Book of the Month** (`/shop/#botm`): both magazines' books of the month with cover, percent off, sale and
   regular price, the offer's dates and a live "N days left" count; the heading and buttons switch to
   "Offer ended" by themselves on the last day, even before the next update. The home page shows a small teaser.
@@ -540,21 +547,43 @@ breaks while you decide.
   online **and** with the order form; "The store will list the new volume prices"; that AA Grapevine's letter
   names no new price for the 2- and 3-year, Complete and 1-month plans; the Spanish labels ("Lo que costaría",
   "Duración", "Hoja informativa"); U.S. prices only.
-- **Free shipping (November 2026):** the Shop's *Offer from the official stores* (`/shop/#offers`, `/es/shop/#offers`),
-  its line in the monthly toolkit, and the pinned bulletin post *Free shipping at the Grapevine and La Viña stores
-  through December 31*. The facts are those of AA Grapevine's and La Viña's e-mails of November 2 and the two
-  stores' banners: free shipping on all products, November 1 – December 31, 2026, to U.S. and Canadian addresses
-  only, and (Grapevine's only) not combined with any other offer — nothing about a promo code, a minimum order,
-  subscriptions or an end hour. Please read the words in both languages (`config/site.yml` → `store_offers:` and
-  `content/bulletin/2026-11-02-free-shipping-through-december-31.md`): "Envío gratis" (La Viña's banner says
-  "Envíos gratuitos"), "banner" in Spanish, and the line for GVRs and RLVs. The two banners show on the Shop once
-  the next Drive refresh reads them; Home's *Shared by the committee* leaves them out (there a banner would stand
-  alone, cropped, without the U.S./Canada condition), but like any file in Drive `flyers` they are also listed on
-  the Portfolio, on What's New, in the feeds and in the December 1 digest, as their picture and file name only
-  (La Viña's banner says "Noviembre 1˚ - December 31"); the pinned post with the conditions sits beside them until
-  December 31 — say if they should be on the Shop only. **After December 31**, move both banners from Drive
-  `flyers` to `private` (the Shop section, the toolkit's line and the post leave by themselves, the banners do
-  not; the `store_offers:` block may then be deleted).
+- **Free shipping (November 2026):** the Shop's *Offer from the official stores* (`/shop/#offers`,
+  `/es/shop/#offers`), its line in the monthly toolkit, and the *Free shipping* section of the pinned bulletin post
+  (below). The facts are those of AA Grapevine's and La Viña's e-mails of November 2 and the two stores' banners:
+  free shipping on all products, November 1 – December 31, 2026, to U.S. and Canadian addresses only, and
+  (Grapevine's only) not combined with any other offer — nothing about a promo code, a minimum order, subscriptions
+  or an end hour. Please read the words in both languages (`config/site.yml` → `store_offers:` and
+  `content/bulletin/2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md`): "Envío gratis" (La Viña's
+  banner says "Envíos gratuitos"), "banner" in Spanish, and the line for GVRs and RLVs. The two banners show on the
+  Shop once the next Drive refresh reads them; Home's *Shared by the committee* leaves them out (there a banner
+  would stand alone, cropped, without the U.S./Canada condition), but like any file in Drive `flyers` they are also
+  listed on the Portfolio, on What's New, in the feeds and in the December 1 digest, as their picture and file name
+  only (La Viña's banner says "Noviembre 1˚ - December 31"); the pinned post with the conditions sits beside them
+  until December 31 — say if they should be on the Shop only. **After December 31**, move both banners from Drive
+  `flyers` to `private` (the Shop section, the toolkit's line and the post leave by themselves, the banners do not;
+  the `store_offers:` block may then be deleted).
+- **One pinned post, with the holiday gift offers (November 11, 2026):** the two pinned posts (the prices of January
+  1, 2027 and free shipping) are now one, `content/bulletin/2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md`
+  (*Grapevine and La Viña: holiday gift offers, free shipping and new prices*), which also announces AA Grapevine's
+  and La Viña's holiday gift offers: with a 1-year print subscription ($36.00 / $18.00), for yourself or as a gift,
+  a second 1-year print subscription as a gift for $16.00 / $8.00, through December 31, 2026, for U.S. and Canadian
+  addresses, on each store's page (`https://www.aagrapevine.org/2gifts` — exactly so: with a `/` at the end it opens
+  a dead page —, `https://www.aalavina.org/2regalos`, and their pages for Canada). A short opening names the three
+  and gives the gift offers' prices (so the e-mail of December 1, which shows the opening, has them too), then one
+  section each; the offers and the price change stay apart, as facts (never "before prices go up"). The
+  Shop shows the gift offers under free shipping (`/shop/#offers-holiday-gifts-2026`, `config/site.yml` →
+  `store_offers:` `holiday-gifts-2026`): "Through December 31, 2026" — the stores give no first day —, each store's
+  button to its offer page and a link to its page for Canada, no banner. Please read the words in both languages.
+  Left out on purpose: the stores' sales words "just $16 (Save 55%!)" / "por solo $8 (¡Ahorra un 55%!)" and any
+  percentage (calm words only; La Viña's page says 55%, its e-mails 50%). Left out because the pages don't say it:
+  more than one second gift, a renewal alone, digital, and that free shipping applies to the gift offers. The
+  toolkit's lines for the two offers link each one's own section (`/shop/#offers-free-shipping-2026`,
+  `/shop/#offers-holiday-gifts-2026`). Grapevine's December 31 is the chair's (its page and e-mails give no end
+  date; La Viña's e-mails say December 31). The old posts' links (`/bulletin/#2026-10-01-…`, `#2026-11-02-…`) now
+  open the bulletin at its top, where this post is first; it is in the e-mail of December 1 when it goes up by
+  November 30, so merge it in November (the e-mail counts a post in the month it first shows: one that first shows
+  in December is in no e-mail, since it is gone before January 1's), and it leaves by itself after December 31
+  (`2027-01-01-new-prices-in-effect.md` takes over on January 1).
 - **What's New:** the words ("New since your last visit", "New for you", "Mark all as read", "Forget my last
   visit"), the 30-minute "visit" rule, and the green label.
 - **Agenda & minutes (committee meeting deck):** the reminder's Spanish paragraph ("La reunión es en inglés" —
@@ -948,10 +977,13 @@ meeting's Google Meet room:
 ### La Viña's weekly open meeting
 
 `lavina_weekly_open:` in `config/site.yml` holds La Viña's weekly open meeting (from its official flyer —
-there is no web page to read yet): Spanish and English title and summary, `day`, `time` + `timezone` (the
-meeting's own time zone; the site also shows Central time), `starts` (the first meeting, which must be on
-that `day`), `zoom_id` and `passcode`. When La Viña publishes a page for it, put the address in `url`.
-Set `enabled: false` (or delete the block) to take it off the site.
+La Viña's page for it, www.aalavina.org/podcast, is its podcast's, and nothing is read from it): Spanish
+and English title and summary, `day`, `time` + `timezone` (the meeting's own time zone; the site also shows
+Central time), `starts` (the first meeting, which must be on that `day`), `zoom_id` and `passcode`, and `url`: its page
+(`https://www.aalavina.org/podcast`, the card's **Details on aalavina.org**). Set `enabled: false` (or delete the block) to take it off the
+site. Its recordings are a podcast of their own, the show `lvo` under `sources.podcasts` (`weekly_open: "lavina"`):
+its card on `/meetings/` links them (**Listen to past meetings**), and their show card on `/listen/` says the
+meeting's day and language ([how-to §3.4](how-to/automatic-sources.md#34-podcasts)).
 
 ### Joining by phone (the weekly open meetings)
 
@@ -1019,11 +1051,12 @@ price_changes:
 Also: put the letter in the Panel's Drive `notes` folder with **the letter's date first** in its name
 (`2026-10-01 Grapevine & La Viña Pricing Update - Effective January 1, 2027.pdf` — otherwise the Portfolio
 dates it by the date in its title), and, if you like, write a bulletin post for the day it was announced and
-one for the day it takes effect (`content/bulletin/2026-10-01-prices-change-january-1-2027.md` and
-`2027-01-01-new-prices-in-effect.md` are examples: one opening sentence with every new price — the home page
-shows the first lines —, AA Grapevine's reason, what it means for the groups — never "buy now before prices go
-up"). A mistake in the block shows as a **Settings problem** in the
-Actions run summary; the rest of the site still updates. Once the stores show the new prices the block may be
+one for the day it takes effect (the price section of
+`content/bulletin/2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md` — since November 11, 2026 the
+heads-up shares one pinned post with the holiday offers — and `2027-01-01-new-prices-in-effect.md` are examples:
+one sentence with every new price at the start of the post or of its section — the home page shows the first
+lines —, AA Grapevine's reason, what it means for the groups — never "buy now before prices go up"). A mistake
+in the block shows as a **Settings problem** in the Actions run summary; the rest of the site still updates. Once the stores show the new prices the block may be
 deleted. Details: [docs/OPERATIONS.md](docs/OPERATIONS.md#when-grapevine-announces-new-prices).
 
 ---
@@ -1305,8 +1338,10 @@ saved (nothing has to be fetched again), but the website is only republished by 
   **Notes** lists small hiccups of sources that still updated (only worth a look if the same note
   repeats for a week), and **New podcast feeds found** appears when the Grapevine or La Viña site
   links a podcast the website does not show yet. Nothing is added by itself: to show it, add a
-  `- key:` / `name:` / `feed:` entry like the two already under `podcasts:` in `config/site.yml`
-  (or send the address to whoever helps with the website).
+  `- key:` / `name:` / `feed:` entry like the three already under `podcasts:` in `config/site.yml`
+  (or send the address to whoever helps with the website). A podcast show whose feed did not answer is a
+  **Note** too — the other shows still updated, and `/status/` names it; one that fails for a week is reported as
+  "Podcasts — <show>" in the *stopped updating* issue.
 - **The Morning check** (**Actions → Morning check (new day by 5:30 AM)**): each morning's run says when
   today's update went live — "✅ Today's update is on the site since **4:34 AM CDT** — goal 5:30 AM" (a
   check that found it already there says when the latest build is from) — with the day of each quote and
@@ -1625,7 +1660,7 @@ Done for the current site (the owner's once-only steps after the move are in
 
 ### What to expect on day 1
 
-- **Magazine stories, both podcasts, videos and Instagram** appear on the first run.
+- **Magazine stories, the podcasts, videos and Instagram** appear on the first run.
 - **The PDF Library** shows what the first PDF search found and keeps growing and re-checking daily.
 - **Committee sections** (Portfolio, Photos, flyer events, the Bulletin) show a friendly
   **"nothing here yet"** message: the Panel 77 folders in Drive are still empty. They fill in the
@@ -2023,7 +2058,7 @@ whoever helps with the website (or open an **Issue** in this repository).
  ─────────────────────────────                                      ────────────
   aagrapevine.org ─┐
   aalavina.org  ───┤  Python sync scripts    data/raw/*.json     Eleventy +      website
-  2 podcast feeds ─┤  (scripts/sync/*.py) ──► + translation   ──► Tailwind    ──► in English
+  3 podcast feeds ─┤  (scripts/sync/*.py) ──► + translation   ──► Tailwind    ──► in English
   YouTube ─────────┤  polite: robots.txt,     (offline, open      (src/)          and Spanish
   Instagram ───────┤  5-second crawl delay    source models)
   Google Drive ────┘                          data/site/*.json
@@ -2578,12 +2613,14 @@ Nothing to set up: everything here builds itself from the podcast and YouTube sy
 - **La Viña's spoken stories** (Listen, `#la-vina-audio`): a card, **Spoken stories from La Viña** / **Historias
   habladas de La Viña**, lists La Viña's own Spanish playlists on the AA Grapevine YouTube channel (*Un día a la
   vez*, *Amor y servicio*, *Mujeres en AA*, *Tocaron Fondo* …), each with how many videos it holds and how long they
-  last. On the **Spanish** Listen page it comes first, right after the player (the podcast episodes are in English;
+  last. On the **Spanish** Listen page it comes first, right after the player (most podcast episodes are in English;
   the note under the episodes links up to it); on the English page it comes last. A playlist opens **Watch** with
   only that playlist (`/es/watch/?pl=<playlist id>#videos`), and **See all of La Viña's videos** opens Watch with
   La Viña's videos only (`/es/watch/?lang=es#videos`); a video plays (from YouTube's privacy-enhanced player) only
-  when it is tapped. Two more lines lead to La Viña's open meeting (Meetings) and to the story recorder. The
-  playlists keep La Viña's own Spanish titles on both pages, and the card says "videos", never "podcast". A Spanish
+  when it is tapped. Two more lines lead to La Viña's open meeting (Meetings — and its recordings, the show
+  on the same page: **Listen to past meetings**) and to the story recorder. The playlists keep La Viña's own
+  Spanish titles on both pages, and the card says "videos", never "podcast" (La Viña's podcast is its open
+  meeting's, a show of its own). A Spanish
   playlist is listed once it has at least 3 videos that are not Shorts (the apps' how-to Shorts and the "Weekly
   Open" and "Podcast" playlists, which have their own chips on Watch, stay out); its count and length include its
   Shorts, as Watch counts them. When YouTube's "not a bot" check leaves the lengths unknown, the card shows the

@@ -35,9 +35,11 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {% set L = lang %}
 {% set D = db | homeData %}
 {% set lastUpdate = D.status.generated if (D.status and D.status.generated) else site.built %}
-{#- Podcast shows, as on /listen/ (AA Grapevine's Podcast + the Weekly Open recordings):
-    name, short name ("Weekly Open") and the `weekly` flag. Episode / video titles use the
-    shared `mediaTitle` filter, so they read the same as on /listen/ and /watch/. -#}
+{#- Podcast shows, as on /listen/ (AA Grapevine's Podcast + the recordings of the two weekly open
+    meetings, Grapevine's and La Viña's): name, language, short name ("Grapevine Weekly Open" / "La Viña
+    Open Meeting") and its language (shortLang). Episode / video titles use the shared `mediaTitle` filter, so
+    they read the same as on /listen/ and /watch/ ("Meeting of November 5, 2026"; mediaTitleDated: whether
+    that title names the meeting's date, so its row needs no date of its own). -#}
 {% set epShows = D.episodes | mediaShowList(site.sources.podcasts, D.episodes | mediaItems("episodes"), L) %}
 
 {#- ---------- local macros ---------- -#}
@@ -542,8 +544,12 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     {%- set epShow = ep | mediaShowOf(epShows) -%}
     {%- set epTitle = ep | mediaTitle(L) -%}
     {%- set epSE = ep | mediaSE(L) -%}
-    {#- A Weekly Open title already names the meeting's date ("Meeting of September 16, 2026"). -#}
-    {%- set epMeta = ([ep.extra.duration_sec | duration] if (epShow and epShow.weekly) else [ep.date | fmtDate(L, "medium"), ep.extra.duration_sec | duration]) | join(" · ") -%}
+    {#- A weekly open meeting's title that names the meeting's date ("Meeting of September 16, 2026") needs no date
+        of its own; one without it ("<show name>, episode 3") keeps the date. -#}
+    {%- set epMeta = ([ep.extra.duration_sec | duration] if (ep | mediaTitleDated(L)) else [ep.date | fmtDate(L, "medium"), ep.extra.duration_sec | duration]) | join(" · ") -%}
+    {#- With shows in both languages (La Viña's open meeting is in Spanish), an episode in the other language says so,
+        as on /listen/ (ui.langPill: "ES" / "EN") -#}
+    {%- set epMixed = (epShows | where("lang", "es")).length and (epShows | where("lang", "en")).length -%}
     {#- Side by side (from 1024px) the two cards are the same height (the grid stretches them; they
         stack at 150% text below 1280px, home.css .home-lw). Each one's footer is anchored to its
         bottom (mt-auto): the player in the episode card (the extra height of a shorter episode card
@@ -564,7 +570,9 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
               <span class="badge-grape" x-show="!current">{% icon "headphones", "size-3" %} {{ "home.latest_episode" | t(L) }}</span>
               <span class="badge-grape" x-show="current" x-cloak>{% icon "audio-lines", "size-3" %} {{ "home.now_playing" | t(L) }}</span>
               {% if epSE %}<span x-show="!current" class="font-semibold">{{ epSE }}</span>{% endif %}
-              {% if ep.extra.show_name or show.name %}<span x-show="!current"{% if L != "en" %} lang="en"{% endif %}>{{ ep.extra.show_name or show.name }}</span>{% endif %}
+              {%- set epShowLang = epShow.lang if epShow else "en" -%}
+              {% if ep.extra.show_name or show.name %}<span x-show="!current"{% if L != epShowLang %} lang="{{ epShowLang }}"{% endif %}>{{ ep.extra.show_name or show.name }}</span>{% endif %}
+              {% if epMixed and ep.lang != L and ep.lang in ["en", "es"] %}<span class="inline-flex" x-show="!current">{{ ui.langPill(ep, L) }}</span>{% endif %}
               <span class="inline-flex items-center gap-1 font-semibold text-vine" x-show="!current && isDone('{{ ep.id }}')" x-cloak>{% icon "check", "size-3.5" %}{{ "media.played" | t(L) }}</span>
             </p>
             <h3 id="ep-title" class="mt-2 font-display text-2xl font-semibold leading-snug text-ink sm:text-[1.7rem]" x-ref="title" x-text="title">{{ epTitle }}</h3>
@@ -613,9 +621,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           {% for e in moreEps %}
           {%- set et = e | mediaTitle(L) -%}
           {%- set eShow = e | mediaShowOf(epShows) -%}
-          {%- set eWeekly = eShow and eShow.weekly -%}
-          {#- A Weekly Open title already names the meeting's date: then the meta line skips the date. -#}
-          {%- set em = ([e.extra.duration_sec | duration] if eWeekly else [e.date | fmtDate(L, "short"), e.extra.duration_sec | duration]) | join(" · ") -%}
+          {#- A weekly open meeting's title that names its date ("Meeting of …"): then the meta line skips the date. -#}
+          {%- set em = ([e.extra.duration_sec | duration] if (e | mediaTitleDated(L)) else [e.date | fmtDate(L, "short"), e.extra.duration_sec | duration]) | join(" · ") -%}
           {#- Rows of the other show say which show (like the badge on /listen/), and so does the player title. -#}
           {%- set otherShow = eShow and epShow and eShow.key != epShow.key -%}
           {%- set eFull = (eShow.short ~ " · " ~ et) if otherShow else et -%}
@@ -628,9 +635,11 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
               {% if eArt %}{{ img(eArt, "absolute inset-0 size-full object-cover") }}{% endif %}
             </span>
             <div class="min-w-0 flex-1">
-              {% if otherShow %}<p class="truncate text-[0.68rem] font-semibold uppercase tracking-wider text-grape"{% if L != "en" and not eWeekly %} lang="en"{% endif %}>{{ eShow.short }}</p>{% endif %}
+              {#- (a weekly open meeting's short name is ours — in the page language, the Grapevine Weekly Open's always
+                  English: shortLang; another show's is its own name, in its own language) -#}
+              {% if otherShow %}<p class="truncate text-[0.68rem] font-semibold uppercase tracking-wider text-grape"{% if eShow.shortLang != L %} lang="{{ eShow.shortLang }}"{% endif %}>{{ eShow.short }}</p>{% endif %}
               <p class="line-clamp-2 text-sm font-semibold leading-snug text-ink">{{ et }}</p>
-              <p class="mt-0.5 text-xs text-faint">{{ em }}{% if e.extra.audio_bytes %}<span class="pwa-saver-only"> · <span class="sr-only">{{ "pwa.audio_size" | t(L) }} </span>{{ e.extra.audio_bytes | fileSize }}</span>{% endif %}<span class="font-semibold text-vine" x-show="isDone('{{ e.id }}')" x-cloak> · {{ "media.played" | t(L) }}</span></p>
+              <p class="mt-0.5 text-xs text-faint">{{ em }}{% if epMixed %} {{ ui.langPill(e, L) }}{% endif %}{% if e.extra.audio_bytes %}<span class="pwa-saver-only"> · <span class="sr-only">{{ "pwa.audio_size" | t(L) }} </span>{{ e.extra.audio_bytes | fileSize }}</span>{% endif %}<span class="font-semibold text-vine" x-show="isDone('{{ e.id }}')" x-cloak> · {{ "media.played" | t(L) }}</span></p>
             </div>
             {% if e.extra.audio_url %}
             <a href="{{ e.extra.audio_url }}" class="home-play grid size-11 shrink-0 place-items-center rounded-full bg-grape-soft text-grape transition"
@@ -652,7 +661,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-surface text-gv">{% icon "video", "size-5" %}</span>
           <span class="min-w-0">
             <span class="block text-sm font-semibold text-ink group-hover:text-gv">{{ ("home.weekly_opens" if D.weekly_open.items.length > 1 else "home.weekly_open") | t(L) }}</span>
-            <span class="block text-xs leading-snug text-muted">{{ "home.weekly_open_text" | t(L, { when: woWhen }) if woWhen else ("home.weekly_open_fallback" | t(L)) }}</span>
+            <span class="block text-xs leading-snug text-muted">{%- set woMany = D.weekly_open.items.length > 1 -%}{{ ("home.weekly_opens_text" if woMany else "home.weekly_open_text") | t(L, { when: woWhen }) if woWhen else (("home.weekly_opens_fallback" if woMany else "home.weekly_open_fallback") | t(L)) }}</span>
           </span>
           <span class="ml-auto self-center text-faint transition group-hover:translate-x-0.5 group-hover:text-gv" aria-hidden="true">{% icon "arrow-right", "size-4" %}</span>
         </a>
@@ -681,7 +690,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
             <div class="relative flex flex-1 flex-col gap-2 p-4">
               <p class="flex flex-wrap items-center gap-1.5">
                 <span class="badge-grape">{% icon "youtube", "size-3" %} YouTube</span>
-                {% if vWeekly %}<span class="badge-grape">{% icon "users", "size-3" %} {{ "media.show_short_weekly" | t(L) }}</span>
+                {%- set vLabelLang = v | mediaMeetingLang(L) %}
+                {% if vWeekly %}<span class="{{ 'badge-lv' if vLv else 'badge-grape' }}"{% if vLabelLang %} lang="{{ vLabelLang }}"{% endif %}>{% icon "users", "size-3" %} {{ v | mediaMeetingLabel(L) }}</span>
                 {% elif vLv %}<span class="badge-lv">La Viña</span>{% endif %}
                 {{ ui.langPill(v, L) }}
               </p>

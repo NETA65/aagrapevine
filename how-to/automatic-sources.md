@@ -477,12 +477,17 @@ display `eleventy/filters/library.js` → `libraryDocs`. Tests: `tests/test_libr
 
 ### 3.4 Podcasts
 
-**What it reads.** Each show's public RSS feed. Once a week (in a full run) it also looks at
+**What it reads.** Each show's public RSS feed — today three shows: **AA Grapevine's Podcast** (`gv`), the
+**Grapevine Weekly Open AA Meeting** (`wo`: the recordings of AA Grapevine's weekly open meeting, Wednesdays, in
+English) and La Viña's **Reunión abierta semanal de Alcohólicos Anónimos de La Viña** (`lvo`: the recordings of
+La Viña's weekly open meeting, Thursdays, in Spanish — from November 2026, by La Viña Magazine; its YouTube copies
+are on the same channel, see [3.5](#35-youtube-videos)). Once a week (in a full run) it also looks at
 aagrapevine.org/podcasts and the La Viña home page for podcast feeds that are **not** in your settings.
 It never adds them by itself: they are listed in the run summary under **New podcast feeds found**, with
 the address ready to paste.
 
-**Settings** — one block per show:
+**Settings** — one block per show (the three of today; the order is the order on `/listen/`, and the first is Home's
+featured show):
 
 ```yaml
 sources:
@@ -497,16 +502,28 @@ sources:
     - key: "wo"
       name: "Grapevine Weekly Open AA Meeting"
       feed: "https://feeds.captivate.fm/grapevine-weekly-open/"
+      weekly_open: "grapevine"         # it records the Grapevine Weekly Open (/meetings/#weekly-open)
       web: "https://www.aagrapevine.org/grapevine-weekly-open"
+      # apple, spotify, amazon as above
+    - key: "lvo"
+      name: "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
+      feed: "https://feeds.captivate.fm/reunin-abierta-semanal/"   # "reunin", as Captivate spells it
+      lang: "es"                       # its feed says "en": this setting wins
+      weekly_open: "lavina"            # it records La Viña's open meeting
+      web: "https://www.aalavina.org/podcast"
+      apple: "https://podcasts.apple.com/us/podcast/…/id6832543655"
+      spotify: "https://open.spotify.com/show/5LFFf4NfjdZni1TJcG4jZC"
+      # no amazon: not on Amazon Music (checked 2026-11-11)
 ```
 
 | Key | Needed? | What it does |
 |---|---|---|
-| `key` | yes | a short id (letters); an entry without it is ignored |
+| `key` | yes | a short id (letters); an entry without it is ignored. Never change it once episodes are on the site (each episode's address is `/listen/?ep=pod:<key>:…`). Don't use `wo`, `gv` or `lv` for a new show: `wo` is the Grapevine Weekly Open's, and `gv` / `lv` mean the two magazines elsewhere on the site |
 | `feed` | yes | the show's RSS address; an entry without it is ignored |
 | `name` | recommended | the show's name on the site (else the feed's own title) |
 | `apple`, `spotify`, `amazon`, `web` | no | the show's links on `/listen/` (the weekly link check also tests `web`) |
-| `lang` | no | `"es"` = a hint for the language guess (a Spanish show) |
+| `lang` | no | the show's language, `"en"` or `"es"`: it wins over the feed's own `<language>` (La Viña's feed says `en`), so the show's description is translated from the right language, its name is marked as Spanish on the English pages, and it is the hint for each episode's language guess |
+| `weekly_open` | no | `"grapevine"` or `"lavina"`: the show records that weekly open meeting (the `source` of its item in `data/site/weekly_open.json`). Its card on `/listen/` then says the meeting's own day ("Live on Zoom: Thursdays") and has **How to join** (→ `/meetings/#weekly-open`); its rows get the meeting's badge ("Grapevine Weekly Open" / "La Viña Open Meeting", also in the monthly e-mail); the meeting's card on `/meetings/` gets **Listen to past meetings** (→ `/listen/?show=<key>#episodes`); and an episode whose title is only the show's name is called by its meeting's date (below) |
 
 **How often.** **Every run** — the full daily update, the midday and evening refreshes, the quick rebuild after you
 save a file, and the morning refresh. A new show appears within minutes of saving.
@@ -514,16 +531,44 @@ save a file, and the morning refresh. A new show appears within minutes of savin
 **A real episode:** `pod:wo:7574d90d16ee` — "Grapevine Weekly Open AA Meeting, September 30, 2026
 [Season 2, Episode 14]", 50 minutes, played from the show's own audio file, linked to its Captivate
 page. Lengths are read in any common form: `1938`, `32:18` and `PT32M18S` are all 32 min 18 s;
-`1:02:03` is 1 h 2 min 3 s.
+`1:02:03` is 1 h 2 min 3 s. The site shows it as **Meeting of September 30, 2026** (/es/: *Reunión del 30 de
+septiembre de 2026*), with the show's badge beside it.
+
+**A weekly open meeting's titles.** La Viña's feed gives every episode the same title, the show's name and its
+number ("Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, episodio 1]"); the date is only in
+the description ("…nuestra reunión abierta de AA en español del 5 de noviembre de 2026…"). For a `weekly_open` show
+the sync stores each episode's meeting date (`extra.meeting_date`: the date in its title, else the date in its
+description that says it is the meeting's — "del …", "held on …" —, never a later one such as the next meeting's)
+and whether the title is only the show's name (`extra.generic_title` — also when its numbering is written without
+brackets, "… - Temporada 1, episodio 2", or when several of the show's episodes share one title that is not quite
+the show's name). The site then calls that episode **Meeting of
+November 5, 2026** / *Reunión del 5 de noviembre de 2026* — on `/listen/`, Home, What's New, `/digest/` and in the
+monthly e-mail; *La Viña Open Meeting, November 5, 2026* in the RSS feed and the search —; with no date found, the
+title and its number ("…, episodio 2", in the e-mail too). A title of its own (a special) stays as it is. Home leaves
+the date out of a row whose title already names it ("Meeting of …"), never out of one whose title does not.
+
+**When one show's feed fails.** The other shows still update and the source stays **OK** on `/status/`, which names
+the show that could not be read and when it was last read ("Not read in the last update: …"); the run summary lists
+it under **Notes**, and the run page shows a warning. Its episodes stay on the site. A show never read yet (its
+first read failed, so nothing of it is on the site) is "Not read yet: …" instead. If it keeps failing for 7 days
+it is reported like a source that stopped updating, as "Podcasts — <show>", in the issue *A content source has
+stopped updating* (which closes by itself once it answers again — not on a day when every show fails). Only every
+show failing makes the source fail.
 
 **Where it shows.** `/listen/` · `/es/listen/` (one group per show, in your settings' order; the newest
-24 episodes are on the page, the rest load from `/episodes-index.json`; one shared player). Home
+24 episodes are on the page, the rest load from `/episodes-index.json`; one shared player). Its **Latest episode** is
+the newest one; among one day's episodes the one in the page's language comes first, then your settings' order —
+so far AA Grapevine's Podcast and La Viña's open meeting both came out on Mondays (La Viña's first episode, at the
+same time as AA Grapevine's; holiday weeks may differ), and on such a day `/listen/` features AA Grapevine's and
+`/es/listen/` La Viña's (and the episode list is in that order too). Home
 *Listen & Watch*: the **featured** episode is the newest episode of the **first** show in your list if
 it is no more than 30 days older than the newest episode overall, otherwise the newest episode; then 3
 more, with every show represented. What's New and the RSS feed (with the audio attached), `/digest/` and
-the monthly e-mail (Weekly Open episodes get their own label), search. The booth display (`/about/#booth`): the 6
-newest episodes of AA Grapevine's podcast (never the Weekly Open recordings), played from the podcast's host only
-while the booth's sound is on.
+the monthly e-mail (each weekly open meeting's episodes get their meeting's label), search. `/meetings/#weekly-open`:
+each meeting's card links its show's episodes (**Listen to past meetings**). With shows in both languages, `/listen/`
+gets language chips, a language label on every row in the other language and on every show card, and the note
+"Each show is in its own language"; on Home an episode in the other language has the same label ("ES" / "EN"). The booth display (`/about/#booth`): the 6 newest episodes of AA Grapevine's podcast (never the weekly
+open meetings' recordings), played from the podcast's host only while the booth's sound is on.
 
 Since October 2026 **every episode has its own address**, `/listen/?ep=<id>` (for example
 `/listen/?ep=pod:gv:c8fe55f36619`): it loads that episode into the player without playing it (one tap plays it),
@@ -545,7 +590,10 @@ places saved on the device: an episode started on one goes on from the same poin
 ```
 
 What happens: at the quick rebuild after saving, `/listen/` gets a new group, the newest episode can
-appear on the home page, and new episodes go to What's New and the feed.
+appear on the home page, and new episodes go to What's New and the feed — and from then on every run reads it, so
+each new episode is on the site at the next update (the quick refreshes run several times a day).
+`/listen/` lays out its show cards by itself: two per row from 1024px, and with an odd number of shows the
+first one across the whole first row.
 
 **Feature a show on the home page:** put its block **first**. The order is also the order of the groups
 on `/listen/`. It takes effect at the next run (any kind).
@@ -559,13 +607,17 @@ on `/listen/`. It takes effect at the next run (any kind).
 **Translations.** Episode titles and summaries are machine-translated. A tail like
 "[Season 2, Episode 14]" is translated on its own (by rule), so an override for the title *without* its
 tail still works — and it fixes that same title wherever it appears, for example on the episode's
-YouTube copy too.
+YouTube copy too. A show's description that carries its own translation in parentheses at its end (La Viña's:
+"Cada semana grabamos … pódcast. (Each week we record … podcast.)") is shown in each language as its writer gave
+it, without the other language's sentence, and needs no override.
 
 **Code pointers.** [`scripts/sync/podcasts.py`](../scripts/sync/podcasts.py) → `build_items` (each
-episode and its `extra`), `show_meta`, `discover`; display
-[`eleventy/filters/media.js`](../eleventy/filters/media.js) → `showList`, `epCompact`, and
-`src/pages/listen.njk` → macro `epRow`; home `eleventy/filters/home.js` → `homeEpisodes`. Test:
-`tests/test_sync_pipeline.py`.
+episode and its `extra`), `meeting_date`, `is_generic_title` / `shared_titles`, `show_meta` / `show_lang`,
+`failed_show` (one show's health), `discover`; display [`eleventy/filters/media.js`](../eleventy/filters/media.js) → `showList`, `showMeeting`,
+`titleOf`, `epCompact`, and `src/pages/listen.njk` → macro `epRow`; home `eleventy/filters/home.js` →
+`homeEpisodes`; the e-mail `scripts/notify/send_digest.py` → `item_label`, `media_title`. Tests:
+`tests/test_sync_pipeline.py`, `tests/test_r25_lavina_podcast.py` (on a saved copy of La Viña's real feed,
+`tests/fixtures/podcasts/`).
 
 ---
 
@@ -613,7 +665,7 @@ channels' feeds; the full listing of older videos waits for a full update).
 
 **Where it shows.** `/watch/` · `/es/watch/`: the **featured** video at the top is always the newest
 video that is not a Short; then the grid (24 on the page, the rest from `/videos-index.json`) with type
-chips (Shorts, Weekly Open, Podcast, Video), language chips and playlists. Home *Listen & Watch*: 5 of
+chips (Shorts, Open meetings, Podcast, Video), language chips and playlists. Home *Listen & Watch*: 5 of
 the newest non-Shorts, skipping YouTube copies of episodes already shown, with at least one La Viña
 video from the last year. Also `/about/#videos`, `/accessibility/` (ASL videos), What's New and the RSS
 feed, `/digest/`, search, and the booth display (`/about/#booth`: the `about_videos` first, then the newest 30
@@ -628,6 +680,16 @@ counts when the bot check left the lengths unknown). Each playlist opens Watch f
 filters in its address**: `?lang=es` or `?lang=en`, `?type=short`, `weekly` or `podcast`, `?pl=<playlist id>`
 (for example `/es/watch/?pl=<id>#videos`), so a filtered list can be shared; values the page does not know are
 dropped. Nothing to set.
+
+**The weekly open meetings' copies.** Both meetings' recordings come to the channel too: the Grapevine Weekly
+Open's (playlist "Grapevine Weekly Open AA Meeting") and, since November 2026, La Viña's (playlist
+`PLGD7-MIA-fHs`, "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"). Nothing to set for them: a video
+whose title names a weekly open meeting goes under the **Open meetings** chip with its own meeting's badge
+("Grapevine Weekly Open" / "La Viña Open Meeting", by its language), and a playlist named like one counts as that
+type — it is neither in the playlist menu nor among the Spoken stories. A new playlist is picked up by the weekly
+complete listing. La Viña's copies keep YouTube's own title, which is the show's name each week ("Reunión abierta
+semanal … [Temporada 1, Episodio 1]"): on `/watch/` they are told apart by their number badge ("T1 · E1") and their
+date, not by a "Meeting of …" title as the podcast's episodes on `/listen/` are.
 
 #### Pick the videos in the three hand-picked spots
 
@@ -1267,7 +1329,10 @@ switch to hide one theme.
 
 There are two public weekly meetings on Zoom: AA Grapevine's **Weekly Open** (Wednesdays, English),
 read from its web page, and La Viña's **Reunión Abierta** (Thursdays, Spanish), written from your
-settings because it has no web page yet.
+settings: its page, La Viña's podcast page www.aalavina.org/podcast, is linked from its card but not read.
+Both are recorded, and each meeting's recordings are a podcast on the site: the shows `wo` and `lvo` under
+`sources.podcasts` ([3.4](#34-podcasts)) — each card on `/meetings/#weekly-open` links its own
+(**Listen to past meetings**, `/listen/?show=wo#episodes` · `/listen/?show=lvo#episodes`).
 
 **Grapevine's meeting.** The robot reads `https://www.aagrapevine.org/grapevine-weekly-open`
 (setting `sources.grapevine.weekly_open: "/grapevine-weekly-open"`). The page says, in one sentence:
@@ -1307,7 +1372,7 @@ lavina_weekly_open:
   passcode: "238047"
   summary_es: "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores, … ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
   summary_en: "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers, … Let's keep extending this powerful lifeline together!"
-  url: ""                       # La Viña's page for the meeting, once there is one
+  url: "https://www.aalavina.org/podcast"   # La Viña's page for it: the card's "Details on aalavina.org" — exactly so, no "/" at the end
   source: "Official La Viña flyers (November 2026, and a newer one without a month), shared with the committee"
   flyer_match: "reuni[oó]n abierta de la vi[nñ]a|la vi[nñ]a open meeting"
 ```
@@ -1342,7 +1407,8 @@ itself and follows at the quick rebuild in any case.
 Zoom details, the page language's meeting first, at the top of the page (right under *New to AA?*). A card
 each on `/events/#ev-weekly` (every week: the next date, How to join → `/meetings/#weekly-open`, Add to
 calendar — no Zoom details). One line on the home page, on `/listen/` and on
-`/watch/`; `/accessibility/#phone` and `/offline/` (joining by phone with these IDs); `/monthly/`
+`/watch/`; on `/listen/` also the show card of each meeting's recordings, with its own day ("Live on Zoom:
+Thursdays") and language; `/accessibility/#phone` and `/offline/` (joining by phone with these IDs); `/monthly/`
 posters; the GV/LV report; the presentations; search; the booth display ("Meetings you can join", with the Zoom
 meeting ID). Never "new".
 
@@ -2135,7 +2201,8 @@ should list the new source.
 | Today's quote is missing at 5:30 AM | the magazine published late, or the morning alarm did not ring | The Morning check asks until 7 AM; the card shows "Yesterday" meanwhile. See [Automation and troubleshooting](automation-and-troubleshooting.md). |
 | Quote: "gv: no quote of the day on https://…" | the home page changed | Check `quote_page`; tell whoever helps with the code if it lasts. |
 | Quote Note "gv: dropped the stored quote of … — a day after tomorrow …", "… is already known — kept the newer" or "… over 14 days old …" | a stale or mistyped heading on the magazine's page | Nothing: the site shows the newest believable quote ([3.9](#39-daily-quotes)). |
-| Podcasts failed with "<key>: …" | one show's feed did not answer | The other shows still update; check that show's `feed`. |
+| A note "<show> (<key>): HTTP …" under Podcasts | one show's feed did not answer (the others still updated) | Nothing, unless it repeats for a week (then the "stopped updating" issue names "Podcasts — <show>"): check that show's `feed`. |
+| Podcasts failed | no show's feed answered | Usually a passing network problem; if it lasts, check each `feed`. |
 | **New podcast feeds found** in the summary | a magazine site links a show that is not in your settings | Add a block if you want it ([3.4](#34-podcasts)); otherwise ignore it. |
 | The Library looks small | normal: each official document once | Check the **PDF crawl** line; if every known page is crawled, it is complete. |
 | A document has a poor title | its link text and file name say little | `TITLE_OVERRIDES`, or `overrides.yml` for one language ([3.3](#33-the-document-library-the-crawler)). |

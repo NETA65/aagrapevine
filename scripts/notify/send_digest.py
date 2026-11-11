@@ -117,6 +117,8 @@ MULTI_DAY_MIN_HOURS = 18                             # build_data.MULTI_DAY_MIN_
 EVERY_ISSUE = re.compile(r"(?i)in every issue|en cada (?:edici[oó]n|n[uú]mero)")  # build_data._EVERY_ISSUE
 SE_SUFFIX = re.compile(r"(?i)\s*[\[(]\s*(?:season|temporada)\s*\d+\s*[,;.·-]?\s*(?:episode|episodio|ep\.?)\s*\d+\s*[\])]\s*$")
 ONE_SUFFIX = re.compile(r"(?i)\s*[\[(]\s*(?:season|temporada|episode|episodio)\s*\d+\s*[\])]\s*$")  # media.js
+# the numbering without brackets, taken off only a meeting episode's title that is its show's name (media.js LOOSE_TAIL)
+LOOSE_TAIL = re.compile(r"(?i)(?:\s*[-–—:|,·]\s*|\s+)(?:(?:season|temporada)\s*\d+\s*[,;.·-]?\s*)?(?:episode|episodio|ep\.?|#)\s*\d+\s*$")
 NEWS_GROUPS = ("announcement", "article", "episode", "video", "post", "pdf", "drive")   # community.js MONTH_NEWS
 NEWS_SOURCES = ("announcements", "episodes", "videos", "instagram", "pdfs", "drive")      # community.js MONTH_SOURCES (+ articles)
 COUNT_ORDER = ("article", "episode", "video", "post", "pdf", "drive", "album", "announcement")  # community.js COUNT_ORDER
@@ -217,7 +219,10 @@ T = {
         "min": "{n} min",
         "episode_se": "S{s} · E{e}",
         "in_other": "in Spanish",          # after something written in the other language
-        "weekly_open": "Weekly Open",      # the pill of the Grapevine Weekly Open podcast
+        "weekly_open": "Grapevine Weekly Open",    # the pill of the Grapevine Weekly Open's recordings
+        "weekly_open_lv": "La Viña Open Meeting",   # … and of La Viña's open meeting's (media.show_short_weekly[_lv])
+        "meeting_of": "Meeting of {date}",          # a meeting episode called only by its show's name (media.meeting_of)
+        "title_ep": "{t}, episode {e}",             # … when no date was found (media.title_ep)
     },
     "es": {
         "lang_name": "Español",
@@ -290,7 +295,10 @@ T = {
         "min": "{n} min",
         "episode_se": "T{s} · E{e}",
         "in_other": "en inglés",
-        "weekly_open": "Reunión Abierta Semanal",
+        "weekly_open": "Grapevine Weekly Open",
+        "weekly_open_lv": "Reunión Abierta de La Viña",
+        "meeting_of": "Reunión del {date}",
+        "title_ep": "{t}, episodio {e}",
     },
 }
 
@@ -591,9 +599,23 @@ def js_order(v: Any) -> tuple:
 
 def media_title(item: dict, lang: str) -> str:
     """A podcast episode / video title without its "[Season 11, Episode 12]" tail (the badge says it),
-    like the website's media titles."""
+    like the website's media titles. A weekly open meeting's episode that its feed calls only by its show's name
+    (extra.generic_title: La Viña's — scripts/sync/podcasts.py) is called by its meeting's date, as on the site
+    (eleventy/filters/media.js titleOf): "Meeting of November 5, 2026" / "Reunión del 5 de noviembre de 2026" — or,
+    with no date found, by its title and number, "<title>, episode 3", so no two of them read the same."""
+    ex = item.get("extra") or {}
+    generic = item.get("kind") == "episode" and ex.get("generic_title") is True
+    md = str(ex.get("meeting_date") or "")
+    if generic and re.fullmatch(r"\d{4}-\d{2}-\d{2}", md):
+        y, m, d = (int(x) for x in md.split("-"))
+        if 1 <= m <= 12:
+            day = f"{d} de {MONTHS['es'][m - 1]} de {y}" if lang == "es" else f"{MONTHS['en'][m - 1]} {d}, {y}"
+            return T[lang]["meeting_of"].format(date=day)
     t = tx(item, "title", lang)
     s = ONE_SUFFIX.sub("", SE_SUFFIX.sub("", t)).strip()
+    e = ex.get("episode")
+    if generic and s and isinstance(e, int) and not isinstance(e, bool) and e > 0:
+        return T[lang]["title_ep"].format(t=LOOSE_TAIL.sub("", s).strip() or s, e=e)
     return s or t
 
 
@@ -658,10 +680,16 @@ def item_label(item: dict, lang: str) -> tuple[str, str, str]:
         return ("La Viña", C["lv"], C["lv_soft"]) if item.get("category") == "lv" or src == "lavina" \
             else ("Grapevine", C["gv"], C["gv_soft"])
     if kind == "episode":
-        # Two shows (config sources.podcasts): the magazine's podcast ("gv") and the
-        # Grapevine Weekly Open AA Meeting ("wo"), which gets its own pill.
-        show = item.get("category") or (item.get("extra") or {}).get("show")
-        return (T[lang]["weekly_open"] if show == "wo" else "Podcast"), C["grape"], C["grape_soft"]
+        # The shows of config sources.podcasts: the magazine's podcast ("gv") is "Podcast"; a weekly open meeting's
+        # recordings get their meeting's pill — the sync writes extra.weekly_open ("grapevine" | "lavina") from the
+        # show's `weekly_open` (the Grapevine Weekly Open "wo", La Viña's "lvo"); an older "wo" episode without it
+        # is the Grapevine Weekly Open's.
+        ex = item.get("extra") or {}
+        show = item.get("category") or ex.get("show")
+        meeting = str(ex.get("weekly_open") or ("grapevine" if show == "wo" else "")).lower()
+        if meeting == "lavina":
+            return T[lang]["weekly_open_lv"], C["lv"], C["lv_soft"]
+        return (T[lang]["weekly_open"] if meeting == "grapevine" else "Podcast"), C["grape"], C["grape_soft"]
     if kind in ("video", "video_file") and src != "drive":
         return "Video", C["grape"], C["grape_soft"]
     if kind == "pdf" and src != "drive":
@@ -740,6 +768,23 @@ def other_lang(pub: str, lang: str) -> str:
     return f" ({T[lang]['in_other']})" if (pub == "lv") != (lang == "es") else ""
 
 
+def media_lang(item: dict, lang: str) -> str:
+    """An episode's or a video's language when it is not the half's ("es" for La Viña's meeting in the English half,
+    "en" for AA Grapevine's in the Spanish one), else "": its meta line then says so and its title gets a lang."""
+    if item.get("kind") not in ("episode", "video"):
+        return ""
+    own = str(item.get("lang") or "").strip().lower()[:2]
+    return own if own in ("en", "es") and own != lang else ""
+
+
+def title_lang(item: dict, lang: str) -> str:
+    """The lang attribute of an episode's or a video's title in the `lang` half: its own language only when the title
+    shown is its own (La Viña's YouTube copy, kept as YouTube wrote it) — never on a translation or on the site's own
+    words ("Meeting of November 5, 2026"), which are in the half's language (published.js titleLang does the same)."""
+    own = media_lang(item, lang)
+    return own if own and title_of(item, lang) == title_of(item, own) else ""
+
+
 def item_meta(item: dict, lang: str) -> str:
     """The small line under an item: an issue and its section, "S11 · E12 · 32 min" … and the item's own
     date — a committee file's is the date in its name, which may be before the month it was added in (the
@@ -763,11 +808,15 @@ def item_meta(item: dict, lang: str) -> str:
             parts.append(T[lang]["min"].format(n=max(1, round(int(ex["duration_sec"]) / 60))))
         if d:
             parts.append(fmt_day(d, lang, weekday=False))
+        if media_lang(item, lang):
+            parts.append(T[lang]["in_other"])
     elif kind == "video":
         if d:
             parts.append(fmt_day(d, lang, weekday=False))
         if ex.get("duration_sec"):
             parts.append(T[lang]["min"].format(n=max(1, round(int(ex["duration_sec"]) / 60))))
+        if media_lang(item, lang):
+            parts.append(T[lang]["in_other"])
     elif kind == "pdf" and item.get("source") != "drive":
         if ex.get("pages"):
             many, one = T[lang]["pages"]
@@ -1024,8 +1073,10 @@ def md_excerpt(s: str, limit: int) -> tuple[str, bool]:
             return shorten(md_to_text(chunk), limit - 100), True
         parts.append(chunk)
         size += len(chunk) + 2
-    while len(parts) > 1 and _MD_RULE.match(parts[-1].strip()):
-        parts.pop()                                            # a line of --- that led to what was cut
+    # a line of --- that led to what was cut, or a heading whose section was cut (a heading with nothing under it)
+    while len(parts) > 1 and (_MD_RULE.match(parts[-1].strip())
+                              or all(_MD_HEAD.match(ln) for ln in parts[-1].strip().split("\n"))):
+        parts.pop()
     return "\n\n".join(parts), True
 
 
@@ -1591,7 +1642,7 @@ def build_rows(group: str, items: list[dict], lang: str, links: Links, page: str
         label, fg, bg = item_label(it, lang)
         twin = it.get("_twin")
         rows.append({"label": label, "fg": fg, "bg": bg, "title": title_of(it, lang),
-                     "url": links.item(it, lang, page), "meta": item_meta(it, lang),
+                     "url": links.item(it, lang, page), "meta": item_meta(it, lang), "lang": title_lang(it, lang),
                      "twin": links.item(twin, lang, "/watch/") if twin else ""})
     extra = max(0, len(rows) - max_per)
     return rows[:max_per], extra
@@ -1908,7 +1959,8 @@ def render_lang_html(lang: str, data: dict, cfg: dict, links: Links, max_per: in
         for r in rows_data:
             twin = f' · <a href="{_esc(r["twin"])}" style="color:{C["gv"]};">{_esc(t["twin"])}</a>' if r.get("twin") else ""
             meta = f'<div style="{small}">{_esc(r["meta"])}{twin}</div>' if (r["meta"] or twin) else ""
-            rows.append(row(f'{pill(r["label"], r["fg"], r["bg"])}<a href="{_esc(r["url"])}" style="{link_style}">{_esc(r["title"])}</a>{meta}'))
+            own = f' lang="{r["lang"]}"' if r.get("lang") else ""
+            rows.append(row(f'{pill(r["label"], r["fg"], r["bg"])}<a href="{_esc(r["url"])}"{own} style="{link_style}">{_esc(r["title"])}</a>{meta}'))
         parts.append(section(t[g], color, table(rows), page, extra, len(items)))
 
     media_section("drive", DRIVE_PAGE, C["vine"])

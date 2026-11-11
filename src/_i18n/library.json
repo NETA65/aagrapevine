@@ -644,8 +644,8 @@
     "es": "Los números y artículos más recientes de La Viña y Grapevine."
   },
   "search.page_desc.listen": {
-    "en": "Every episode of AA Grapevine's Podcast.",
-    "es": "Todos los episodios del podcast de AA Grapevine."
+    "en": "Every episode of AA Grapevine's Podcast and of the weekly open meetings of Grapevine (in English) and La Viña (in Spanish).",
+    "es": "Todos los episodios de las reuniones abiertas semanales de La Viña (en español) y del podcast y la reunión abierta semanal de AA Grapevine (en inglés)."
   },
   "search.page_desc.watch": {
     "en": "Grapevine and La Viña videos from YouTube.",
@@ -681,8 +681,8 @@
     "es": "leer revista número artículos historias la viña bimestral"
   },
   "search.kw.listen": {
-    "en": "listen podcast audio episodes spotify apple",
-    "es": "escuchar podcast audio episodios"
+    "en": "listen podcast audio episodes spotify apple weekly open meeting recordings la viña spanish",
+    "es": "escuchar podcast audio episodios reunión abierta semanal grabaciones la viña español"
   },
   "search.kw.watch": {
     "en": "watch video videos youtube asl",

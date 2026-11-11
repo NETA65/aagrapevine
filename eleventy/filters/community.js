@@ -1264,10 +1264,19 @@ export function statusView(status, now = Date.now()) {
     else if (updated) state = "ok";
     const count = Number(s.count) || 0;
     const panel = Array.isArray(s.stats?.panels) && s.stats.panels.length ? String(s.stats.panels[0]) : "";
+    // A source of several feeds that still updated although one of them could not be read — a podcast show
+    // (stats.shows, scripts/sync/podcasts.py): named on its row in plain words, with its last good read.
+    const parts = s.stats?.shows && typeof s.stats.shows === "object" && !Array.isArray(s.stats.shows) ? s.stats.shows : {};
+    const partsDown = state === "ok"
+      ? Object.entries(parts).filter(([, p]) => p && p.ok === false).map(([k, p]) => ({ key: k, name: String(p.name || k), updated: p.updated || null,
+        // nothing of it on the site: none of its episodes kept (an older stats row without the count: never read)
+        never: p.episodes != null ? !(Number(p.episodes) > 0) : !p.updated }))
+      : [];
     return {
       ...s,
       state,
       count,
+      partsDown,
       stale: state === "ok" && age !== null && age > 3 * DAY,
       ageDays: age === null ? null : Math.floor(age / DAY),
       attempted: s.attempted || updated,

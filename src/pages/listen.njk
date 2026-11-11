@@ -9,9 +9,14 @@ descKey: media.listen_meta
 pageScripts: ["/assets/vendor/lite-yt-embed.js", "/assets/js/media.js"]
 pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 ---
-{#- LISTEN — AA Grapevine's podcasts (every show in episodes.json `shows` /
-    config sources.podcasts: today "AA Grapevine's Podcast" (gv) and the
-    "Grapevine Weekly Open AA Meeting" recordings (wo)).
+{#- LISTEN — the podcasts of AA Grapevine and La Viña (every show in episodes.json `shows` /
+    config sources.podcasts: today "AA Grapevine's Podcast" (gv), the "Grapevine Weekly Open AA
+    Meeting" recordings (wo, English, Wednesdays) and La Viña's "Reunión abierta semanal" (lvo,
+    Spanish, Thursdays) — the two weekly open meetings: config `weekly_open`, media.js showMeeting).
+    The show cards: one column on phones; from 1024px two, and with an odd number of shows the first
+    one (Home's featured show) takes the whole first row, so the two weekly open meetings sit side by
+    side under it. A weekly open meeting's card says its own meeting's day ("Live on Zoom: Thursdays"),
+    and with shows in both languages every card says its language.
     Server-renders the newest 24 episodes (no-JS / SEO); media.js loads the rest
     from /episodes-index.json for "Load more", search and filters, and drives one
     shared <audio> element (featured player, show cards, rows + sticky mini-player).
@@ -27,7 +32,9 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {% import "macros/media.njk" as media with context %}
 {% mediaSprite %}
 {%- set cfgShows = site.sources.podcasts or [] -%}
-{%- set eps = db.episodes | mediaItems("episodes") -%}
+{#- newest first; one day's episodes in the page's language first (so far AA Grapevine's Podcast and La Viña's
+    meeting both came out on Mondays): the "Latest episode" below is the list's first — media.js episodeOrder -#}
+{%- set eps = db.episodes | mediaItems("episodes") | mediaEpisodeOrder(cfgShows, lang) -%}
 {%- set shows = db.episodes | mediaShowList(cfgShows, eps, lang) -%}
 {%- set multi = shows.length > 1 -%}
 {%- set primary = shows[0].key if shows.length else "" -%}
@@ -37,10 +44,10 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {%- set mixedLangs = (langs | keys).length > 1 -%}
 {%- set hours = ((eps | mediaSumDuration) / 3600) | round(0, "floor") -%}
 {%- set ssr = eps | limit(24) -%}
-{#- The weekly open meetings in one short line ("Wednesdays (English) and Thursdays (Spanish)"), linking
-    to their one home, /meetings/#weekly-open, where the times and Zoom details are -#}
-{#- (the Grapevine Weekly Open show card names only the Grapevine meeting it records) -#}
-{%- set woWhen = (db.weekly_open.items | mediaWeeklyDays(lang, "grapevine")) if db.weekly_open else "" -%}
+{#- A weekly open meeting's show card names only the meeting it records ("Live on Zoom: Wednesdays" — its
+    day, from data/site/weekly_open.json: mediaWeeklyDays(lang, s.meeting)), and links to their one home,
+    /meetings/#weekly-open, where the times and Zoom details are -#}
+{%- set woItems = db.weekly_open.items if (db.weekly_open and db.weekly_open.items) else [] -%}
 {#- this page's own address: the start of each episode's share link (/listen/?ep=…) -#}
 {%- set shareBase = page.url | siteUrl(site) -%}
 {#- La Viña's spoken stories (its Spanish YouTube playlists, played on /watch/): the card first on /es/, last on /en/ -#}
@@ -86,14 +93,14 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
   <div class="min-w-0 flex-1">
     <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
       {%- if srv %}
-      {% if multi and sh and sh.key != primary %}<span class="badge-grape">{% micon "users", "size-3" %} {{ sh.short }}</span>{% endif %}
+      {% if multi and sh and sh.key != primary %}<span class="badge-grape"{% if sh.shortLang != lang %} lang="{{ sh.shortLang }}"{% endif %}>{% micon "users", "size-3" %} {{ sh.short }}</span>{% endif %}
       {% if se %}<span class="font-semibold text-gv">{{ se }}</span>{% endif %}
       {% if e.date %}<time datetime="{{ e.date | isoDate }}">{{ e.date | fmtDate(lang, "short") }}</time>{% endif %}
       {% if mins %}<span class="inline-flex items-center gap-1">{% micon "clock-3", "size-3.5" %}{{ mins }}</span>{% endif %}
       {% if e.is_new %}<span class="badge-new">{{ "common.new" | t(lang) }}</span>{% endif %}
       {% if mixedLangs %}{{ ui.langPill(e, lang) }}{% endif %}
       {%- else %}
-      <span class="badge-grape" x-show="showBadge(ep)">{% micon "users", "size-3" %} <span x-text="showBadge(ep)"></span></span>
+      <span class="badge-grape" x-show="showBadge(ep)">{% micon "users", "size-3" %} <span x-text="showBadge(ep)" :lang="badgeLang(ep)"></span></span>
       <span class="font-semibold text-gv" x-show="seLabel(ep)" x-text="seLabel(ep)"></span>
       <time x-show="ep.d" :datetime="ep.d" x-text="date(ep.d)"></time>
       <span class="inline-flex items-center gap-1" x-show="ep.du">{% micon "clock-3", "size-3.5" %}<span x-text="mins(ep.du)"></span></span>
@@ -138,6 +145,9 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {%- set st = lvStories -%}
 {%- set hrs = (st.secs / 3600) | round(0) -%}
 {%- set lvWhen = (db.weekly_open.items | where("source", "lavina") | mediaWeeklyDays(lang)) if db.weekly_open else "" -%}
+{#- La Viña's open meeting has its own show on this page (its recordings): "Listen to past meetings" filters the
+    episodes to it, as the show card's "See episodes" does -#}
+{%- set lvShow = shows | where("meeting", "lavina") | first -%}
 <section id="la-vina-audio" class="listen-lv" aria-labelledby="la-vina-audio-title">
   <div class="card overflow-hidden">
     <div class="show-card-head p-5 sm:p-6">
@@ -164,7 +174,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
       <a class="link inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold" href="{{ '/watch/?lang=es#videos' | lurl(lang) }}">{% micon "square-play", "size-4 shrink-0" %}{{ "media.lv_all" | t(lang) }}</a>
       {% if lvWhen %}
       <p class="flex items-start gap-1.5 py-2.5 text-sm text-muted">{% micon "users", "mt-0.5 size-4 shrink-0 text-grape" %}<span>{{ "media.lv_meeting" | t(lang, { when: lvWhen }) }}
-        <a class="link font-semibold whitespace-nowrap" href="{{ '/meetings/#weekly-open' | lurl(lang) }}">{{ "media.wo_join" | t(lang) }}</a></span></p>
+        <a class="link font-semibold whitespace-nowrap" href="{{ '/meetings/#weekly-open' | lurl(lang) }}">{{ "media.wo_join" | t(lang) }}</a>
+        {%- if lvShow %}<span aria-hidden="true"> · </span><a class="link font-semibold whitespace-nowrap" href="?show={{ lvShow.key }}#episodes" @click.prevent="pickShow('{{ lvShow.key }}')">{{ "committee.weekly.listen" | t(lang) }}</a>{% endif %}</span></p>
       {% endif %}
       <a class="link inline-flex min-h-11 items-center gap-1.5 text-sm" href="{{ '/contribute/' | lurl(lang) }}#record">{% icon "mic", "size-4 shrink-0" %}{{ "media.lv_record" | t(lang) }}</a>
     </div>
@@ -280,7 +291,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
             </div>
           </div>
           <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted" x-show="!alt">
-            <span class="font-medium text-ink">{{ fShow.name if fShow else f.extra.show_name }}</span>
+            <span class="font-medium text-ink"{% if fShow and fShow.lang != lang %} lang="{{ fShow.lang }}"{% endif %}>{{ fShow.name if fShow else f.extra.show_name }}</span>
             {% if f.date %}<time datetime="{{ f.date | isoDate }}"><span class="min-[90rem]:hidden">{{ f.date | fmtDate(lang, "medium") }}</span><span class="hidden min-[90rem]:inline">{{ f.date | fmtDate(lang, "short") }}</span></time>{% endif %}
             {% if f.extra.duration_sec %}<span class="inline-flex items-center gap-1">{% icon "clock-3", "size-3.5" %}{{ f.extra.duration_sec | mediaMinutes(lang) }}</span>{% endif %}
             {% if f.extra.audio_bytes %}<span class="pwa-saver-only"><span class="sr-only">{{ "pwa.audio_size" | t(lang) }} </span>{{ f.extra.audio_bytes | fileSize }}</span>{% endif %}
@@ -350,7 +361,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 
   </div>{#- /.listen-side -#}
 
-  {#- /es/: La Viña's spoken stories come first (the episodes are in English) -#}
+  {#- /es/: La Viña's spoken stories come first (Spanish first on the Spanish page) -#}
   {% if lvFirst and lvStories.lists.length %}{{ lvCard(lang) }}{% endif %}
 
   {#- ------------------------------------------------------------ the shows -#}
@@ -359,21 +370,28 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     <div class="grid grid-cols-1 gap-5 {{ 'lg:grid-cols-2' if multi }}">
       {% for s in shows %}
       {%- set latestPage = s.latest | mediaEpisodePage -%}
-      <article class="card show-card {{ 'is-weekly' if s.weekly else 'is-podcast' }} flex flex-col overflow-hidden" aria-labelledby="show-{{ s.key }}-title"
+      {#- an odd number of shows: the first takes the whole row from 1024px, the others pair up under it -#}
+      {%- set wide = multi and loop.first and (shows.length % 2 == 1) -%}
+      {%- set isLvShow = s.meeting == "lavina" -%}
+      {%- set woWhen = (woItems | mediaWeeklyDays(lang, s.meeting)) if s.meeting else "" -%}
+      {%- set woItem = (woItems | where("source", s.meeting) | first) if s.meeting else null -%}
+      {%- set woName = (woItem | tx("title", lang)) if woItem else s.short -%}
+      <article class="card show-card {{ 'is-weekly' if s.weekly else 'is-podcast' }}{{ ' is-lv' if isLvShow }} flex flex-col overflow-hidden{{ ' lg:col-span-2' if wide }}" aria-labelledby="show-{{ s.key }}-title"
                x-data="{ ep: latestOf('{{ s.key }}') }">
         <div class="show-card-head flex items-start gap-4 p-5 sm:gap-5 sm:p-6">
           {% if s.thumb or s.image %}<img src="{{ s.thumb or s.image }}" alt="" width="112" height="112" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="show-card-art" onerror="this.style.visibility='hidden'">
           {% else %}<span class="show-card-art ep-art-ph">{% micon "headphones", "size-10" %}</span>{% endif %}
           <div class="min-w-0 flex-1">
-            <p class="eyebrow {{ 'text-grape' if s.weekly else 'text-gv' }}">{% if s.weekly %}{{ "media.kind_weekly" | t(lang) }}{% else %}{{ "media.kind_podcast_badge" | t(lang) }}{% endif %}</p>
-            <h3 id="show-{{ s.key }}-title" class="mt-1 font-display text-xl font-semibold leading-tight text-balance text-ink sm:text-2xl">{{ s.name }}</h3>
+            {#- what the show is — a weekly open meeting's recordings, or a podcast — and, with shows in both languages, its language -#}
+            <p class="eyebrow {{ ('text-lv' if isLvShow else 'text-grape') if s.weekly else 'text-gv' }}">{% if s.weekly %}{{ "media.kind_meeting" | t(lang) }}{% else %}{{ "media.kind_podcast_badge" | t(lang) }}{% endif %}{% if mixedLangs %}<span aria-hidden="true"> · </span><span class="sr-only">, </span>{{ ("committee.weekly.lang_" + s.lang) | t(lang) }}{% endif %}</p>
+            <h3 id="show-{{ s.key }}-title" class="mt-1 font-display text-xl font-semibold leading-tight text-balance text-ink sm:text-2xl"{% if s.lang != lang %} lang="{{ s.lang }}"{% endif %}>{{ s.name }}</h3>
             <p class="mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm text-muted">
-              <span>{{ "media.show_episodes_n" | t(lang, { n: s.count | mediaNumber(lang) }) }}</span>
+              <span>{{ ("media.show_episodes_one" if s.count == 1 else "media.show_episodes_n") | t(lang, { n: s.count | mediaNumber(lang) }) }}</span>
               {% if s.seasons.length > 1 %}<span class="whitespace-nowrap"><span aria-hidden="true">· </span>{{ "media.show_seasons_n" | t(lang, { n: s.seasons.length }) }}</span>{% endif %}
             </p>
             {% if s.weekly and woWhen %}
-            <p class="mt-2 inline-flex items-start gap-2 rounded-2xl bg-grape-soft px-3 py-1.5 text-xs leading-snug font-semibold text-grape">
-              <span class="relative mt-1 flex size-2 shrink-0" aria-hidden="true"><span class="absolute inline-flex size-full animate-ping rounded-full bg-grape opacity-40"></span><span class="relative inline-flex size-2 rounded-full bg-grape"></span></span>
+            <p class="mt-2 inline-flex items-start gap-2 rounded-2xl {{ 'bg-lv-soft text-lv-strong' if isLvShow else 'bg-grape-soft text-grape' }} px-3 py-1.5 text-xs leading-snug font-semibold">
+              <span class="relative mt-1 flex size-2 shrink-0" aria-hidden="true"><span class="absolute inline-flex size-full animate-ping rounded-full {{ 'bg-lv' if isLvShow else 'bg-grape' }} opacity-40"></span><span class="relative inline-flex size-2 rounded-full {{ 'bg-lv' if isLvShow else 'bg-grape' }}"></span></span>
               <span>{{ "media.wo_live" | t(lang, { when: woWhen }) }}</span>
             </p>
             {% endif %}
@@ -381,7 +399,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
         </div>
         {% if s.desc %}
         <div class="px-5 sm:px-6">
-          <p class="text-sm leading-relaxed text-muted max-sm:line-clamp-3">{{ s.desc }}</p>
+          <p class="{{ 'measure ' if wide }}text-sm leading-relaxed text-muted max-sm:line-clamp-3">{{ s.desc }}</p>
           {% if s.descMachine %}<span class="auto-note mt-1" title="{{ 'common.auto_translated_help' | t(lang) }}">{% icon "languages", "size-3" %} {{ "common.auto_translated" | t(lang) }}</span>{% endif %}
         </div>
         {% endif %}
@@ -392,7 +410,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
             <span x-text="latestText(ep)">{{ "media.play_latest" | t(lang) }}</span>
           </a>
           <a class="btn-secondary btn-sm" href="#episodes" @click.prevent="pickShow('{{ s.key }}')">{% icon "list-music", "size-4" %} {{ "media.see_episodes" | t(lang) }}</a>
-          {% if s.weekly %}<a class="btn-ghost btn-sm" href="{{ '/meetings/#weekly-open' | lurl(lang) }}">{% icon "video", "size-4" %} {{ "media.wo_join" | t(lang) }}</a>{% endif %}
+          {#- "How to join" names its meeting for screen readers (the visible words are the card's) -#}
+          {% if s.weekly %}<a class="btn-ghost btn-sm" href="{{ '/meetings/#weekly-open' | lurl(lang) }}" aria-label="{{ 'media.wo_join_name' | t(lang, { name: woName }) }}">{% icon "video", "size-4" %} {{ "media.wo_join" | t(lang) }}</a>{% endif %}
         </div>
         <div class="mt-auto px-5 pt-5 pb-5 sm:px-6">
           <div class="border-t border-line pt-4">
@@ -414,8 +433,12 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 
   {#- ------------------------------------------------------------ episode list -#}
   <section id="episodes" class="listen-episodes" aria-labelledby="episodes-title">
-    {#- (/es/: the English-audio note points up to La Viña's spoken stories, the card above) -#}
-    {%- set epSub -%}{{ "media.episodes_sub" | t(lang) }}{% if lang == "es" and not langs.es %}<span class="mt-2 flex items-start gap-1.5 text-sm">{% icon "languages", "mt-0.5 size-4 shrink-0 text-lv" %}<span>{{ "media.english_audio_note" | t(lang) }}{% if lvStories.lists.length %} <a class="link font-semibold" href="#la-vina-audio">{{ "media.lv_note_link" | t(lang) }}</a>{% endif %}</span></span>{% endif %}{%- endset %}
+    {#- The language note: on /es/ while every episode is in English, that they are (and a pointer up to La Viña's
+        spoken stories, the card above); once the shows are in both languages, on both pages, that each show is in its
+        own language — its card says which — and what is translated -#}
+    {%- set epSub -%}{{ "media.episodes_sub" | t(lang) }}
+      {%- if mixedLangs %}<span class="mt-2 flex items-start gap-1.5 text-sm">{% icon "languages", "mt-0.5 size-4 shrink-0 text-lv" %}<span>{{ "media.mixed_audio_note" | t(lang) }}{% if lang == "es" and lvStories.lists.length %} <a class="link font-semibold" href="#la-vina-audio">{{ "media.lv_note_link" | t(lang) }}</a>{% endif %}</span></span>
+      {%- elif lang == "es" and not langs.es %}<span class="mt-2 flex items-start gap-1.5 text-sm">{% icon "languages", "mt-0.5 size-4 shrink-0 text-lv" %}<span>{{ "media.english_audio_note" | t(lang) }}{% if lvStories.lists.length %} <a class="link font-semibold" href="#la-vina-audio">{{ "media.lv_note_link" | t(lang) }}</a>{% endif %}</span></span>{% endif %}{%- endset %}
     {{ ui.sectionHead("media.all_episodes" | t(lang), epSub, "", "", "list-music", { eyebrow: "media.episodes_eyebrow" | t(lang), tone: "text-grape", id: "episodes-title", lang: lang }) }}
 
     {#- Continue listening (from this device's history) -#}
@@ -454,7 +477,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           <button type="button" class="chip" :aria-pressed="(show === '').toString()" aria-pressed="true" @click="setShow('')">{{ "common.all" | t(lang) }}</button>
           {% for s in shows %}
           {%- set showIcon = "users" if s.weekly else "headphones" %}
-          <button type="button" class="chip" :aria-pressed="(show === '{{ s.key }}').toString()" aria-pressed="false" @click="setShow(show === '{{ s.key }}' ? '' : '{{ s.key }}')">{% icon showIcon, "size-4" %}{{ s.name }} <span class="text-faint tabular-nums in-aria-pressed:text-current">{{ s.count }}</span></button>
+          <button type="button" class="chip" :aria-pressed="(show === '{{ s.key }}').toString()" aria-pressed="false" @click="setShow(show === '{{ s.key }}' ? '' : '{{ s.key }}')"{% if s.short != s.name %} title="{{ s.name }}"{% endif %}>{% icon showIcon, "size-4" %}{#- the short label, as on the rows' badges: La Viña's full name is wider than a phone -#}{% if s.shortLang and s.shortLang != lang %}<span lang="{{ s.shortLang }}">{{ s.short }}</span>{% else %}{{ s.short }}{% endif %} <span class="text-faint tabular-nums in-aria-pressed:text-current">{{ s.count }}</span></button>
           {% endfor %}
         </div>
       </div>
@@ -513,7 +536,11 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
         {{ "media.load_more" | t(lang) }}
       </button>
       {% endif %}
-      {% if site.links.podcasts_page %}<a class="link inline-flex min-h-11 items-center text-sm" href="{{ site.links.podcasts_page }}" target="_blank" rel="noopener">{{ "media.full_archive" | t(lang) }}</a>{% endif %}
+      {#- AA Grapevine's archive lists its own shows: with La Viña's meeting chosen, La Viña's page for it instead -#}
+      {%- set lvShows = [] -%}{%- set lvHide = [] -%}
+      {%- for s in shows %}{% if s.meeting == "lavina" and s.web %}{% set _n = lvShows.push(s) %}{% set _n = lvHide.push("show !== '" + s.key + "'") %}{% endif %}{% endfor -%}
+      {% if site.links.podcasts_page %}<a class="link inline-flex min-h-11 items-center text-sm" href="{{ site.links.podcasts_page }}" target="_blank" rel="noopener"{% if lvHide.length %} x-show="{{ lvHide | join(' && ') }}"{% endif %}>{{ "media.full_archive" | t(lang) }}</a>{% endif %}
+      {% for s in lvShows %}<a class="link inline-flex min-h-11 items-center text-sm" href="{{ s.web }}" target="_blank" rel="noopener" x-show="show === '{{ s.key }}'" x-cloak>{{ "media.full_archive_lv" | t(lang) }}</a>{% endfor %}
       {#- one-line pointer: the story lines live on /contribute/#record -#}
       <a class="link inline-flex min-h-11 items-center gap-1.5 text-sm" href="{{ '/contribute/' | lurl(lang) }}#record">{% icon "mic", "size-4 shrink-0" %}{{ "media.record_own" | t(lang) }}</a>
     </div>
@@ -559,7 +586,12 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 </div>
 
 {#- ------------------------------------------------------------ tell your group -#}
-{%- set announcement = "media.listen_announcement" | t(lang, { shows: shows | mediaListNames(lang), url: page.url | siteUrl(site) }) -%}
+{#- (a show in another language than the page's says so: "… de La Viña (in Spanish)" / "AA Grapevine's Podcast (en
+    inglés)" — read aloud at a meeting, the names alone give no cue) -#}
+{%- set annNames = [] -%}
+{#- the page's own language's shows first (on /es/: La Viña's meeting, as La Viña comes first on every /es/ page) -#}
+{%- for pass in ["own", "other"] %}{% for s in shows %}{% if (s.lang == lang) == (pass == "own") %}{% set _n = annNames.push(s.name ~ ((" " ~ (("access.in_spanish" if s.lang == "es" else "access.in_english") | t(lang))) if s.lang != lang else "")) %}{% endif %}{% endfor %}{% endfor -%}
+{%- set announcement = "media.listen_announcement" | t(lang, { shows: annNames | mediaListNames(lang), url: page.url | siteUrl(site) }) -%}
 {{ media.shareBlock(lang, "listen-share-title", "media.share_listen_text" | t(lang), announcement, page.url | siteUrl(site), "media.listen_share_title" | t(lang), "media.listen_sub" | t(lang)) }}
 
 {% else %}

@@ -38,7 +38,8 @@ them (tests/nodejs.py) and the browser scripts on a pretend page (tests/fakedom.
                        them from data of its own and checks every credit line, word for word.
   * ShareSheet       — (release check R12-SHARE-TITLE-DROPPED) app.js GV.share: the share sheet gets the title at the
                        start of its text too (Messages and WhatsApp drop `title`), never twice; the copy as before.
-  * Pages           — the templates: La Viña's card names "videos" / "historias habladas", never "podcast"; the share
+  * Pages           — the templates: La Viña's card names "videos" / "historias habladas", never "podcast" (La Viña's
+                       podcast is its weekly open meeting's, a show of its own, which the card links); the share
                        buttons sit beside a link, never inside it; What's New sends episodes to the site's player.
 
     python -m unittest tests.test_r12_u1_listen -v
@@ -956,7 +957,10 @@ class ShareSheet(unittest.TestCase):
 
 # ------------------------------------------------------------------------------------------- the templates
 class Pages(unittest.TestCase):
-    def test_la_vina_is_videos_and_spoken_stories_never_podcast(self):
+    def test_la_vinas_stories_are_videos_and_its_open_meeting_a_podcast(self):
+        # La Viña's spoken stories (#la-vina-audio) are videos, "historias habladas" — never "podcast"; La Viña's podcast
+        # (from November 2026) is its weekly open meeting's recordings, a show of its own on this page (config
+        # sources.podcasts, weekly_open "lavina", in Spanish), which the stories' card links ("Listen to past meetings")
         media = json.loads(read("src", "_i18n", "media.json"))
         keys = [k for k in media if k.startswith("media.lv_")]
         self.assertGreaterEqual(len(keys), 8)
@@ -964,6 +968,19 @@ class Pages(unittest.TestCase):
             for lang in ("en", "es"):
                 self.assertNotRegex(media[k][lang], r"(?i)p[oó]d ?cast", f"{k} ({lang})")
         self.assertIn("historias habladas", media["media.lv_title"]["es"].lower())
+        import yaml
+        shows = yaml.safe_load(read("config", "site.yml"))["sources"]["podcasts"]
+        lv = [s for s in shows if s.get("weekly_open") == "lavina"]
+        self.assertEqual(len(lv), 1, "La Viña's open meeting is one podcast show")
+        self.assertEqual(lv[0]["lang"], "es")
+        self.assertNotIn(lv[0]["key"], ("wo", "gv", "lv"), "its own key (wo/gv/lv mean other things on the site)")
+        self.assertEqual(shows[0]["key"], "gv", "Home's featured show stays AA Grapevine's Podcast")
+        src = read("src", "pages", "listen.njk")
+        self.assertIn('{%- set lvShow = shows | where("meeting", "lavina") | first -%}', src)
+        self.assertIn('''@click.prevent="pickShow('{{ lvShow.key }}')">{{ "committee.weekly.listen" | t(lang) }}</a>''', src)
+        for lang in ("en", "es"):     # the page's own words name both magazines' podcasts now
+            self.assertIn("La Viña", media["media.listen_meta"][lang])
+            self.assertIn("La Viña", media["media.listen_share_title"][lang])
 
     def test_the_card_comes_first_on_the_spanish_page(self):
         src = read("src", "pages", "listen.njk")

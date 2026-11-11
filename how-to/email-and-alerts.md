@@ -511,7 +511,7 @@ La Viña comes first. A section with nothing in it is left out.
 | 4 | **Committee uploads**, with pills such as [Reports], [Notes], [Slides], [Flyers], [Workshops], [Forms] and [Files]. Photos get **one row per album**. | Drive panel folders (never the booth folder: its files are only on the booth display) | …the later of the date in its name and the day the site first had it | [Photos, slides and reports](photos-slides-reports.md), [Drive panel folder](drive-panel-folder.md) |
 | 5 | **New in the magazines**: per issue, its theme, story count, 3 highlights and "See all N stories" | the magazines' websites | …its stories came out online | [Automatic sources](automatic-sources.md) |
 | 6 | **Writers from Area 65 & Texas** | the published-writers data | …the story came out | [Automatic sources](automatic-sources.md) |
-| 7 | **Podcasts** (a YouTube copy of an episode shows as "also on YouTube"), **Videos**, **Instagram** (per account: the count and the 3 newest posts; the text part gives counts only), **Documents** | podcasts, YouTube, Instagram, the document library | …the item's date | [Automatic sources](automatic-sources.md) |
+| 7 | **Podcasts** (a YouTube copy of an episode shows as "also on YouTube"; a weekly open meeting's episode has its meeting's pill, and La Viña's are called by their meeting's date), **Videos**, **Instagram** (per account: the count and the 3 newest posts; the text part gives counts only), **Documents** | podcasts, YouTube, Instagram, the document library | …the item's date | [Automatic sources](automatic-sources.md) |
 | 8 | **Coming up in October**: ONE link to `/monthly/2026-10/`, plus that month's committee meeting with its guest speaker while the meeting is ahead (*"Committee meeting on January 20, 2027 — guest speaker: Rick W. — “…”"* in the December 2026 edition, sent January 1; none in November's: December 16 has no speaker), and the price-change row while that notice is on | the toolkit page, `meeting:` → `speakers:` (through the events data), `price_changes:` | — | [Settings](settings.md) |
 | 9 | The buttons **Everything new** and **Open the website**, plus *"Some titles were translated automatically."* when that is true | — | — | [Translations](translations.md) |
 
@@ -1157,7 +1157,7 @@ The main test groups in `tests/test_send_digest.py` are:
 |---|---|
 | `EditionWindow` | which month an edition covers, in Central time |
 | `Sections` | the sections and their order, the wording, the contrast of the colours, what must never be in the e-mail, and "nothing new means no e-mail" |
-| `Wording` | small wording rules: page counts, Spanish months inside a line, La Viña's issue names, the Weekly Open pill, the committee meeting rule |
+| `Wording` | small wording rules: page counts, Spanish months inside a line, La Viña's issue names, each weekly open meeting's pill (Grapevine Weekly Open / La Viña Open Meeting) and the titles of La Viña's meeting episodes ("Meeting of November 5, 2026"), the committee meeting rule |
 | `PostMarkdown` | how a bulletin post's Markdown is drawn in the HTML and the text part, phone links, and where a long post is cut |
 | `Sending` | the password is only sent over an encrypted connection, and retries happen only before the message goes |
 | `MonthArgument` | a mistyped month stops the run, and a month that is not over is not sent |

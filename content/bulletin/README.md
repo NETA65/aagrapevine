@@ -75,7 +75,8 @@ translation, without the "auto-translated" note. `summary_es` replaces the whole
 text below the header on the Spanish page, so write the complete text there.
 For more than one paragraph (or a list), write `summary_es: |` and the text on the
 lines below it, each line indented by two spaces — it keeps its paragraphs and
-lists (`2026-10-01-prices-change-january-1-2027.md` in this folder is an example).
+lists (`2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md` in this
+folder is an example, with three headings in each language).
 Whatever you leave out is still translated automatically. Give it as many
 headings as the English text (see below) and a heading's link finds its section
 on both pages; with a different number, each page names its sections in its

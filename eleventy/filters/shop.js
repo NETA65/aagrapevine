@@ -37,8 +37,11 @@ import { nowDate } from "./monthly.js";
 import { chicagoDayEndMs, driveMatch } from "./committee.js";
 import { wallInstant } from "../central-time.js";
 import { buildWarning } from "../build-warnings.js";
-// the site's time zone: config/site.yml site.timezone (America/Chicago)
-import { TZ } from "../../eleventy.config.js";
+// an offer's own icon (store_offers `icon`), when the site has that icon
+import { iconParts } from "../icons.js";
+// the site's time zone: config/site.yml site.timezone (America/Chicago); a link from the settings (an offer's own
+// page) as a safe address
+import { TZ, safeUrl } from "../../eleventy.config.js";
 
 const LOCALES = { en: "en-US", es: "es-US" };
 const MAG = { gv: "Grapevine", lv: "La Viña" };
@@ -575,6 +578,8 @@ const STORES = { gv: { link: "gv_store", label: "read.subs.gv_store" }, lv: { li
 // wide and across a phone at 3× (the stores' banners are 1920 × 770).
 const BANNER_W = 1200;
 const isoOf = (ms) => new Date(ms).toISOString().replace(/\.000Z$/, "Z");
+// An offer's icon on /shop/ and in the toolkit's row, unless its block names another (`icon: gift`)
+const OFFER_ICON = "truck";
 
 /** A day of the settings — "2026-11-01", or the date YAML makes of 2026-11-01 written without quotes — as
  *  "YYYY-MM-DD" when it is a real calendar day, else "". */
@@ -597,20 +602,33 @@ function twinOf(o, name, lang) {
 
 /** An offer's days in words, inside a sentence: "November 1 – December 31, 2026" / "del 1 de noviembre al 31 de
  *  diciembre de 2026" (shop.offer_dates; the first day's year only when it is another one; a single day: that day).
- *  A line of its own starts with a capital (shopOffers `dates`). */
+ *  Without a first day (`starts` "": a block with show_starts: false, whose stores give none) its last day only:
+ *  "through December 31, 2026" / "hasta el 31 de diciembre de 2026" (shop.offer_until). A line of its own starts
+ *  with a capital (shopOffers `dates`). */
 export function offerDates(starts, ends, lang = "en", t = (k) => k) {
-  if (!starts || !ends) return "";
+  if (!ends) return "";
+  if (!starts) return t("shop.offer_until", lang, { end: dayLabel(ends, lang) });
   if (starts === ends) return dayLabel(starts, lang);
   const start = starts.slice(0, 4) === ends.slice(0, 4) ? dayMonth(starts, lang) : dayLabel(starts, lang);
   return t("shop.offer_dates", lang, { start, end: dayLabel(ends, lang) });
 }
 
+/** A yes/no setting that is "no": false, or the words false / no (as typed in quotes). */
+const saysNo = (v) => v === false || /^(?:false|no)$/i.test(String(v ?? "").trim());
+/** A web address from the settings (an offer's own page: "https://…", or "www.…" without its https://) → the
+ *  address, else "" (a site path, an e-mail, anything else). */
+const webUrl = (v) => (v === null || v === undefined || typeof v === "object" ? "" : /^https?:/i.test(safeUrl(v)) ? safeUrl(v) : "");
+
 /** The blocks of config/site.yml store_offers that can be shown (a list; one block written without its leading "- "
- *  counts too), first day first → [{ key, starts, ends, from, until (ISO: 00:00 Central on its first day, the
- *  midnight after its last), o (the block) }]. A block with a mistake is left out and named (`warn`: the /shop/
- *  filter passes buildWarning — "[settings] …" is listed in Website update's run summary, and fails the Code check's
- *  strict build): a day that cannot be read, `ends` before `starts`, no title, no words for either store, a key used
- *  twice. A banner_match that is not a pattern is named too (that card shows without its banner). */
+ *  counts too), first day first → [{ key, starts, ends, showStarts (false: `show_starts: false` — the stores give no
+ *  first day, so its days are said as "through <ends>"; `starts` is then only the day the site shows it from), icon
+ *  (its `icon`, one of the site's icons — else, and by default, the truck), from,
+ *  until (ISO: 00:00 Central on its first day, the midnight after its last), o (the block) }]. A block with a mistake
+ *  is left out and named (`warn`: the /shop/ filter passes buildWarning — "[settings] …" is listed in Website
+ *  update's run summary, and fails the Code check's strict build): a day that cannot be read, `ends` before
+ *  `starts`, no title, no words for either store, a key used twice. A banner_match that is not a pattern, and a store's
+ *  `url` / `url_ca` that is not a web address, or an `icon` the site does not have, are named too (that card shows
+ *  without its banner; its button goes to the store, its Canada link is left out; the truck). */
 function offerSpecs(site, warn = null) {
   const raw = site && site.store_offers;
   const list = Array.isArray(raw) ? raw : raw && typeof raw === "object" ? [raw] : [];
@@ -633,24 +651,36 @@ function offerSpecs(site, warn = null) {
     for (const pub of pubs) {
       const pattern = o[pub].banner_match;
       try { if (pattern) new RegExp(String(pattern), "i"); } catch { say(`${pub} banner_match “${pattern}” is not a valid pattern — no banner`, true); }
+      for (const [name, then] of [["url", "the button goes to the store"], ["url_ca", "no Canada link"]]) {
+        const u = o[pub][name];
+        if (u !== undefined && u !== null && String(u).trim() && !webUrl(u)) {
+          say(`${pub} ${name} “${typeof u === "object" ? "?" : String(u)}” is not a web address — ${then}`, true);
+        }
+      }
     }
-    out.push({ key, starts, ends, from: isoOf(wallInstant(starts, "00:00", TZ)), until: isoOf(chicagoDayEndMs(ends)), o });
+    // its icon (a gift, say: a truck by a gift offer would read as shipping) — one of the site's icons, else the truck
+    let icon = String(o.icon ?? "").trim().toLowerCase();
+    if (icon && !iconParts(icon)) { say(`icon “${icon}” is not one of the site's icons — the truck`, true); icon = ""; }
+    out.push({ key, starts, ends, showStarts: !saysNo(o.show_starts), icon: icon || OFFER_ICON,
+      from: isoOf(wallInstant(starts, "00:00", TZ)), until: isoOf(chicagoDayEndMs(ends)), o });
   }
   return out.sort((a, b) => a.starts.localeCompare(b.starts) || a.key.localeCompare(b.key));
 }
 
 /**
  * The offers the stores announced (config/site.yml store_offers) that are not over at `now`, first day first → [{
- *   key, title, titleLang, starts, ends,
+ *   key, title, titleLang, starts, ends, icon (the section's and the toolkit row's: "truck", or the block's `icon`),
  *   dates       its days on a line of their own: "November 1 – December 31, 2026" / "Del 1 de noviembre al 31 de
- *               diciembre de 2026"; dateRange: the same inside a sentence ("del 1 de noviembre …")
+ *               diciembre de 2026" (with show_starts: false, its last day only: "Through December 31, 2026" /
+ *               "Hasta el 31 de diciembre de 2026"); dateRange: the same inside a sentence ("del 1 de noviembre …")
  *   win         when it shows (shopWindow → ui.when): from 00:00 Central on its first day (until then it is written
  *               hidden) to the midnight after its last — an offer that is over is not in the list at all
- *   stores      [{ key ("gv" | "lv"), name, isLv, text, textLang, href (config/site.yml links: gv_store /
- *               lv_store), label (the button's words: "Grapevine store"), banner ({ src, view } — the newest picture
- *               in Drive `flyers` its banner_match finds, passing over a PDF or video it finds too — or null),
- *               alt, altLang }]: the page language's magazine first (/es/: La Viña), only the stores the block
- *               has words for
+ *   stores      [{ key ("gv" | "lv"), name, isLv, text, textLang, href (the store's own page for the offer — its
+ *               `url` —, else config/site.yml links: gv_store / lv_store), label (the button's words: "Grapevine
+ *               store"; with a `url`, "Grapevine's offer page"), hrefCa + labelCa (its `url_ca`, the offer's page
+ *               for Canadian addresses, else ""; in both labels "La Viña" has a no-break space), banner ({ src, view } — the newest picture in Drive `flyers` its
+ *               banner_match finds, passing over a PDF or video it finds too — or null), alt, altLang }]: the page
+ *               language's magazine first (/es/: La Viña), only the stores the block has words for
  *   source, sourceLang
  * }]. The block's words in the page's language (`…_es` on the Spanish pages), else in the other one (with its lang).
  */
@@ -673,17 +703,24 @@ export function shopOffers(site, lang = "en", items = [], t = (k) => k, now = no
       const x = (pic && pic.extra) || {};
       const src = pic ? (x.file_id ? `https://lh3.googleusercontent.com/d/${x.file_id}=w${BANNER_W}` : x.image_url || pic.image || "") : "";
       const alt = twinOf(b, "banner_alt", L);
+      // the store's own page for the offer (its `url`: AA Grapevine's /2gifts, say), else the store itself. In
+      // those labels the magazine's name never breaks ("Página de la oferta de La / Viña" on a phone): a no-break
+      // space inside it
+      const own = webUrl(b.url), ca = webUrl(b.url_ca);
+      const whole = MAG[pub].replace(/ /g, "\u00a0");
       stores.push({
         key: pub, name: MAG[pub], isLv: pub === "lv", text: text.text, textLang: text.lang,
-        href: String(links[STORES[pub].link] || ""), label: t(STORES[pub].label, L),
+        href: own || String(links[STORES[pub].link] || ""),
+        label: own ? t("shop.offer_page", L, { name: whole }) : t(STORES[pub].label, L),
+        hrefCa: ca, labelCa: ca ? t("shop.offer_page_ca", L, { name: whole }) : "",
         banner: src ? { src, view: x.view_url || pic.url || "" } : null, alt: alt.text, altLang: alt.lang,
       });
     }
     const title = twinOf(s.o, "title", L);
     const source = twinOf(s.o, "source", L);
-    const dateRange = offerDates(s.starts, s.ends, L, t);
+    const dateRange = offerDates(s.showStarts ? s.starts : "", s.ends, L, t);
     out.push({
-      key: s.key, title: title.text, titleLang: title.lang, starts: s.starts, ends: s.ends,
+      key: s.key, title: title.text, titleLang: title.lang, starts: s.starts, ends: s.ends, icon: s.icon,
       dates: dateRange.charAt(0).toUpperCase() + dateRange.slice(1), dateRange, win, stores,
       source: source.text, sourceLang: source.lang,
     });
@@ -692,13 +729,15 @@ export function shopOffers(site, lang = "en", items = [], t = (k) => k, now = no
 }
 
 /** The offers whose days meet `first`–`last` (YYYY-MM-DD: a month of the toolkit) → [{ key, title, titleLang, starts,
- *  ends, past (over by `today`, YYYY-MM-DD Central) }], first day first: the month's message names them (monthly.js
- *  monthModel `offers` → monthMessage, its days in words with offerDates); what each store says is on /shop/#offers. */
+ *  ends, showStarts (false: its days are said "through <ends>"), icon ("truck", or the block's `icon`), past (over by
+ *  `today`, YYYY-MM-DD Central) }], first day first: the month's message names them (monthly.js monthModel `offers`
+ *  → monthMessage, its days in words with offerDates); what each store says is on /shop/#offers-<key>. */
 export function shopOfferIn(site, first, last, lang = "en", today = "") {
   const L = lang === "es" ? "es" : "en";
   return offerSpecs(site).filter((s) => s.starts <= last && s.ends >= first).map((s) => {
     const title = twinOf(s.o, "title", L);
-    return { key: s.key, title: title.text, titleLang: title.lang, starts: s.starts, ends: s.ends, past: !!today && s.ends < today };
+    return { key: s.key, title: title.text, titleLang: title.lang, starts: s.starts, ends: s.ends, showStarts: s.showStarts,
+      icon: s.icon, past: !!today && s.ends < today };
   });
 }
 

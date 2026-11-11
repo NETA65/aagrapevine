@@ -78,9 +78,10 @@ CONTENT_TESTS: dict[str, str] = {
     "test_writers_archive.RealFiles.":
         "the owner's archive exports in content/archive",
     "test_price_changes.Bulletin.":
-        "content/bulletin: the two posts about the January 2027 prices, word for word",
-    "test_r21_offers.Bulletin.":
-        "content/bulletin: the post about the free shipping of November–December 2026, its facts and links",
+        "content/bulletin: the post of January 1, 2027 about the new prices, word for word",
+    "test_r25_holiday_offers.Bulletin.":
+        "content/bulletin: the pinned post of November 11, 2026 — the holiday gift offers, free shipping and the prices "
+        "of January 1, 2027 —, its facts, links and words",
     "test_bulletin.Place.test_the_folder_its_help_and_the_example":
         "content/bulletin: its README and _example.md, the committee's template, as they are",
     "test_bulletin_publish.Header.test_the_template_parses":
@@ -116,6 +117,14 @@ CONTENT_TESTS: dict[str, str] = {
         "config/site.yml price_changes, as written",
     "test_r21_offers.RealSettings.":
         "config/site.yml store_offers, as written: the free shipping of 2026 and the patterns that find its banners",
+    "test_r25_holiday_offers.RealSettings.":
+        "config/site.yml store_offers, as written: the holiday gift offers of 2026, their words and offer pages",
+    "test_r25_lavina_podcast.RealSettings.":
+        "config/site.yml sources.podcasts and lavina_weekly_open, as written: the three shows (La Viña's open-meeting "
+        "show lvo) and La Viña's meeting page",
+    "test_r25_holiday_offers.ShopPages.":
+        "config/site.yml store_offers (and the bulletin post's /shop/ links): a build of the Shop and November's "
+        "toolkit with the committee's two offers",
     "test_run_names.OtherTitles.test_the_morning_check_names_its_goal":
         "config/site.yml site.morning_goal against the Morning check's name (morning.yml)",
     "test_spotlight.Gazetteer.test_every_area65_county_is_a_texas_county":
