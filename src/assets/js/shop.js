@@ -86,7 +86,7 @@
   // they went). Once the page is where the link put it the browser keeps it there by itself: nothing moves.
   var readerMoved = false;
   ["wheel", "touchstart", "pointerdown", "keydown"].forEach(function (ev) {
-    window.addEventListener(ev, function () { readerMoved = true; }, { passive: true, once: true, capture: true });
+    document.addEventListener(ev, function () { readerMoved = true; }, { passive: true, once: true, capture: true });
   });
   GV.shopArtGone = function (img) {
     var art = img && img.closest && img.closest(".shop-offer-art");
