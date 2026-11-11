@@ -208,6 +208,8 @@
   }
   .show-card.is-podcast { --show-accent: var(--c-gv); }
   .show-card.is-weekly { --show-accent: var(--c-grape); }
+  /* La Viña's weekly open meeting: in La Viña's colour, as its card on /meetings/ */
+  .show-card.is-lv { --show-accent: var(--c-lv); }
   .show-card-art {
     @apply size-24 shrink-0 rounded-2xl object-cover ring-1 ring-black/5 sm:size-28;
     box-shadow: 0 14px 30px -16px rgb(10 20 60 / 0.55);

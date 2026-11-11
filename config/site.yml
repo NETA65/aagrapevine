@@ -616,6 +616,14 @@ sources:
       - id: "UCI9uFLJ__aXT3-At0PlPWUQ"
         handle: "@AAGrapevine"
         name: "AA Grapevine & La Viña"
+  # Podcast shows (/listen/, Home, What's New, the feed, search, the monthly e-mail), read in EVERY update
+  # (scripts/sync/podcasts.py; how-to/settings.md "Podcasts"). The first one is Home's featured show.
+  #   key: a short id of letters (never change it: it is in every episode's address /listen/?ep=pod:<key>:…;
+  #        "wo" is the Grapevine Weekly Open's, and "gv" / "lv" mean the magazines elsewhere on the site)
+  #   lang: the show's language — wins over what its feed says (La Viña's feed says "en" for a Spanish show)
+  #   weekly_open: the show records this weekly open meeting (/meetings/#weekly-open): "grapevine" (Wednesdays,
+  #        English) or "lavina" (Thursdays, Spanish) — its card on /listen/ then says the meeting's day and
+  #        language, its episodes are called "Meeting of <date>", and /meetings/ links its episodes.
   podcasts:
     - key: "gv"
       name: "AA Grapevine's Podcast"
@@ -627,10 +635,22 @@ sources:
     - key: "wo"
       name: "Grapevine Weekly Open AA Meeting"
       feed: "https://feeds.captivate.fm/grapevine-weekly-open/"
+      weekly_open: "grapevine"
       web: "https://www.aagrapevine.org/grapevine-weekly-open"
       apple: "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908"
       spotify: "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF"
       amazon: "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting"
+    # La Viña's weekly open meeting in Spanish (from November 5, 2026), by La Viña Magazine. No Amazon Music
+    # listing yet (checked 2026-11-11). Its YouTube copies are on the AA Grapevine & La Viña channel (playlist
+    # PLGD7-MIA-fHs): /watch/ finds them by itself.
+    - key: "lvo"
+      name: "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
+      feed: "https://feeds.captivate.fm/reunin-abierta-semanal/"
+      lang: "es"
+      weekly_open: "lavina"
+      web: "https://www.aalavina.org/podcast"
+      apple: "https://podcasts.apple.com/us/podcast/reuni%C3%B3n-abierta-semanal-de-alcoh%C3%B3licos-an%C3%B3nimos-de-la-vi%C3%B1a/id6832543655"
+      spotify: "https://open.spotify.com/show/5LFFf4NfjdZni1TJcG4jZC"
   instagram:
     accounts:
       - key: "gv"
@@ -697,7 +717,10 @@ sources:
 
 # ---------------------------------------------------------------------
 #  La Viña's weekly open meeting (Spanish) — from an official La Viña
-#  flyer shared with the committee; there is no web page for it yet.
+#  flyer shared with the committee (La Viña's own page is about its
+#  podcast: www.aalavina.org/podcast — see `url` below).
+#  Its recordings are the podcast "lvo" (sources.podcasts above): its card
+#  on /meetings/ links them ("Listen to past meetings").
 #  scripts/sync/weekly_open.py publishes it as the SECOND item of
 #  data/site/weekly_open.json (id "weekly_open_lv"), after the Grapevine
 #  Weekly Open (Wednesdays), which is read from aagrapevine.org.
@@ -720,7 +743,9 @@ lavina_weekly_open:
   # the card leaves it out (committee.weekly.closing) — keep it last, word for word.
   summary_es: "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores, entre ellos autores de historias de La Viña, miembros de AA y servidores de confianza. La reunión se graba y queda disponible después en el nuevo pódcast de La Viña y en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
   summary_en: "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers, among them La Viña story authors, AA members and trusted servants. Each meeting is recorded and made available afterwards on La Viña's new podcast and on YouTube. Let's keep extending this powerful lifeline together!"
-  url: ""                       # La Viña's page for the meeting, once there is one
+  # La Viña's page for the meeting ("Details on aalavina.org" on its card), once there is one. Its podcast's page,
+  # https://www.aalavina.org/podcast, describes the meeting and plays its recordings — not set here (yet).
+  url: ""
   source: "Official La Viña flyers (November 2026, and a newer one without a month), shared with the committee"
   # The flyer itself on the committee's Google Drive: the newest Drive file whose title or file name
   # matches this (a regular expression, capitals ignored) gets a "See the flyer" link on the La Viña

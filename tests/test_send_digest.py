@@ -643,10 +643,37 @@ class Wording(unittest.TestCase):
         self.assertEqual((D.issue_label(story, "en"), D.issue_label(story, "es")), ("May / June 2027", "mayo/junio de 2027"))
 
     def test_the_weekly_open_pill(self):
+        # each weekly open meeting's recordings get their own meeting's pill (the site's media.show_short_weekly[_lv]):
+        # the sync's extra.weekly_open, or an older "wo" episode without it; the magazine's podcast is "Podcast"
         wo = item("pod:wo", "episode", "podcast", "2026-08-27", "Grapevine Weekly Open AA Meeting", category="wo")
-        self.assertEqual(D.item_label(wo, "en")[0], "Weekly Open")
-        self.assertEqual(D.item_label(wo, "es")[0], "Reunión Abierta Semanal")
+        self.assertEqual(D.item_label(wo, "en")[0], "Grapevine Weekly Open")
+        self.assertEqual(D.item_label(wo, "es")[0], "Grapevine Weekly Open")
+        self.assertEqual(D.item_label(dict(wo, extra={"weekly_open": "grapevine"}), "es")[0], "Grapevine Weekly Open")
         self.assertEqual(D.item_label(dict(wo, category="gv"), "es")[0], "Podcast")
+        lvo = item("pod:lvo", "episode", "podcast", "2026-11-09", "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
+                   category="lvo", lang="es", extra={"show": "lvo", "weekly_open": "lavina"})
+        self.assertEqual(D.item_label(lvo, "en")[:2], ("La Viña Open Meeting", D.C["lv"]))
+        self.assertEqual(D.item_label(lvo, "es")[0], "Reunión Abierta de La Viña")
+        self.assertEqual(D.item_label(dict(lvo, extra={"show": "lvo"}), "es")[0], "Podcast")   # a show of no meeting
+
+    def test_a_meeting_called_only_by_its_shows_name(self):
+        """La Viña's episodes are all titled "<show name> [Temporada 1, episodio 1]": the e-mail calls each one by its
+        meeting's date (extra.meeting_date — scripts/sync/podcasts.py), as the site does; without it, or for a title of
+        its own, the title stays (its numbering tail cut)."""
+        name = "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
+        ex = {"show": "lvo", "weekly_open": "lavina", "generic_title": True, "meeting_date": "2026-11-05"}
+        lvo = item("pod:lvo", "episode", "podcast", "2026-11-09", f"{name} [Temporada 1, Episodio 1]", category="lvo",
+                   lang="es", extra=ex, i18n={"title": {"en": "La Viña Weekly Open Meeting of Alcoholics Anonymous "
+                                                         "[Season 1, Episode 1]", "es": f"{name} [Temporada 1, Episodio 1]"}})
+        self.assertEqual(D.title_of(lvo, "en"), "Meeting of November 5, 2026")
+        self.assertEqual(D.title_of(lvo, "es"), "Reunión del 5 de noviembre de 2026")
+        self.assertEqual(D.title_of(dict(lvo, extra={**ex, "meeting_date": None}), "es"), name)
+        self.assertEqual(D.title_of(dict(lvo, extra={**ex, "generic_title": False}), "en"),
+                         "La Viña Weekly Open Meeting of Alcoholics Anonymous")
+        wo = item("pod:wo", "episode", "podcast", "2026-11-06", "Grapevine Weekly Open AA Meeting, November 4, 2026 "
+                  "[Season 2 Episode 19]", category="wo", extra={"weekly_open": "grapevine", "generic_title": False,
+                                                                 "meeting_date": "2026-11-04"})
+        self.assertEqual(D.title_of(wo, "en"), "Grapevine Weekly Open AA Meeting, November 4, 2026")
 
     def test_the_meeting_rule(self):
         """monthly.js meetingByRule: the 3rd Wednesday by default, -1 = the last, skip dates, Central time."""

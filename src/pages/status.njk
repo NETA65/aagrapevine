@@ -107,6 +107,15 @@ sitemap: false
 {% if s.held.since %}<p class="mt-1 pl-6 text-xs text-muted">{{ "community.status.held_since" | t(lang) }}: <time datetime="{{ s.held.since | isoDate }}" data-local-time>{{ s.held.since | fmtDate(lang, "datetime") }}</time></p>{% endif %}
 {% endmacro %}
 
+{#- A source that updated although one of its feeds could not be read (a podcast show — status.json
+    sources[].stats.shows, scripts/sync/podcasts.py; cmStatus partsDown): which one, in plain words, and when it was
+    last read — for visitors; the raw message is in the notes below -#}
+{% macro partNote(s) %}
+{%- set names = s.partsDown | mediaListNames(lang) -%}
+<p class="flex max-w-3xl gap-2 text-sm leading-relaxed text-ink">{% icon "info", "size-4 mt-0.5 shrink-0 text-muted" %}<span>{{ ("community.status.part_down_one" if s.partsDown.length == 1 else "community.status.part_down") | t(lang, { names: names }) }}</span></p>
+{% for p in s.partsDown %}{% if p.updated %}<p class="mt-1 pl-6 text-xs text-muted">{% if s.partsDown.length > 1 %}{{ p.name }} · {% endif %}{{ "community.status.part_down_since" | t(lang) }}: <time datetime="{{ p.updated | isoDate }}" data-local-time>{{ p.updated | fmtDate(lang, "datetime") }}</time></p>{% endif %}{% endfor %}
+{% endmacro %}
+
 {#- A source's notes from the last update (status.json sources[].stats.warnings: plain English strings, e.g. one
     of several feeds did not answer) — tucked away for the maintainer, like a failed source's raw message -#}
 {% macro notesBlock(notes) %}
@@ -217,9 +226,9 @@ sitemap: false
         <tr class="bg-[color-mix(in_srgb,var(--c-danger)_6%,transparent)]">
           <td colspan="5" class="px-5 pb-4 pt-0">{{ failedNote(s) }}{% if notes | length %}{{ notesBlock(notes) }}{% endif %}</td>
         </tr>
-        {% elif (s.state == "ok" and s.held) or notes | length %}
+        {% elif (s.state == "ok" and s.held) or s.partsDown.length or notes | length %}
         <tr>
-          <td colspan="5" class="px-5 pb-4 pt-0">{% if s.state == "ok" and s.held %}{{ heldNote(s) }}{% endif %}{% if notes | length %}{{ notesBlock(notes) }}{% endif %}</td>
+          <td colspan="5" class="px-5 pb-4 pt-0">{% if s.state == "ok" and s.held %}{{ heldNote(s) }}{% endif %}{% if s.partsDown.length %}{{ partNote(s) }}{% endif %}{% if notes | length %}{{ notesBlock(notes) }}{% endif %}</td>
         </tr>
         {% endif %}
         {% endfor %}
@@ -245,6 +254,7 @@ sitemap: false
         {% if s.source == "quote" and qm %}<p class="mt-1 text-xs leading-snug text-muted">{{ quoteLine(qm) }}</p>{% endif %}
         {% if s.state == "failed" %}<div class="mt-2">{{ failedNote(s) }}</div>{% endif %}
         {% if s.state == "ok" and s.held %}<div class="mt-2">{{ heldNote(s) }}</div>{% endif %}
+        {% if s.partsDown.length %}<div class="mt-2">{{ partNote(s) }}</div>{% endif %}
         {%- set notes = s.stats.warnings if (s.stats and s.stats.warnings and s.stats.warnings is iterable and not (s.stats.warnings is string)) else [] %}
         {% if notes | length %}{{ notesBlock(notes) }}{% endif %}
       </div>

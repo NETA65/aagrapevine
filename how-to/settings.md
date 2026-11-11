@@ -692,7 +692,7 @@ store and the document search. What each source fetches, and how to hide or pin 
 | `grapevine`, `lavina` | `base`, `magazine_hub`, `contribute`, `weekly_open` (GV), `botm`, `subscriptions`, `subscription_regions`, `specialty`, `specialty_skip`, `audio_project` (GV), `record_story` … (LV), `themes_page` / `themes_link` (LV), `quote_page` | Magazine stories (`/read/`, home, toolkit, digest); story deadlines and La Viña's themes (`/contribute/#deadlines`, `/monthly/`); the Grapevine Weekly Open (`/meetings/#weekly-open`); the Book of the Month and subscription prices (`/shop/`); specialty items (`/shop/#specialty`); the story phone lines (`/contribute/#record`); the daily quotes (home) | Links on the pages: after the push run. The data: `quote_page` in every run (the push run too); `contribute`, `themes_page`, `themes_link`, `rlv_resources` (the themes), `weekly_open` (the Weekly Open), `audio_project` and `record_*` (the story lines) in the push run that changed them (a changed `base` reruns the themes, the story lines and the event calendars — Grapevine's `base` also the Weekly Open); `magazine_hub`, `botm`, `subscriptions`, `subscription_regions`, `specialty` at the next full run — the Book of the Month and prices also in the morning refresh on the 1st and the 15th, the magazines' new issues on the 1st |
 | `crawler` | `hosts`, `user_agent`, `minutes_per_run`, `recheck_days`, `pdf_details_per_run`, `pdf_max_mb` | The search for documents for `/library/` | The next full run |
 | `youtube` | `channels`: `id`, `handle`, `name` | `/watch/`, home, the digest, the About videos | The push run (the channels' feeds; the complete listing of older videos: a full run, once a week) |
-| `podcasts` | `key`, `feed`, `name`, `web`, `apple`, `spotify`, `amazon` | `/listen/` episodes and app buttons | The push run (looking for new feeds: full runs only) |
+| `podcasts` | `key`, `feed`, `name`, `lang`, `weekly_open`, `web`, `apple`, `spotify`, `amazon` | `/listen/` episodes and app buttons; a weekly open meeting's show also its card's day and language, its episodes' titles and badge, and the "Listen to past meetings" link on `/meetings/#weekly-open` | The push run (looking for new feeds: full runs only) |
 | `instagram` | `accounts`, `anonymous`, `keep_per_account`, `enrich_per_run`, `recheck_per_run`, `graph_version`, `rsshub_instances` | `/instagram/`, the home card, What's New, the digest | The push run (without the look-ups of each post's own page and the removal check, which wait for the next full run) |
 | `ics_feeds` | `url`, `label` / `label_es`, `category`, `key` | Other websites' calendars on `/events/` | The push run, but each calendar is asked at most once in about 20 hours |
 
@@ -708,9 +708,12 @@ Worth knowing:
 - `themes_page` / `themes_link`: if La Viña moves its yearly themes document, change these two lines. The
   test in `tests/test_editorial.py` expects the page to resolve to https://www.aalavina.org/recursos —
   update the test with it.
-- `podcasts`: an entry without `key` or `feed` is ignored; `key: "wo"` is the Weekly Open (its own label).
-  Feeds found on the magazine sites are only listed in the run summary ("New podcast feeds found"), never
-  added by themselves.
+- `podcasts`: an entry without `key` or `feed` is ignored. `weekly_open: "grapevine"` / `"lavina"` marks the show
+  that records that weekly open meeting (today `wo` and `lvo`; an older entry without it still counts `key: "wo"` as
+  the Grapevine Weekly Open's). `lang` is the show's language and wins over what its feed says (La Viña's feed says
+  "en"). Never give a new show the key `wo`, `gv` or `lv` (they mean other things on the site), and never change a
+  key once its episodes are on the site. Feeds found on the magazine sites are only listed in the run summary
+  ("New podcast feeds found"), never added by themselves. Details: [Automatic sources §3.4](automatic-sources.md#34-podcasts).
 - `instagram.keep_per_account` must stay at least 124 (a test: the digest needs about 62 days of posts).
   `anonymous: false` = only the official API (secrets `IG_ACCESS_TOKEN`, `IG_BUSINESS_ID`, added by NETA65)
   plus `content/instagram.yml`.

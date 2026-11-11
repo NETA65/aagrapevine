@@ -783,11 +783,17 @@
           if (ev) ev.preventDefault();
           this.$store.audio.toggleEp(ep);
         },
-        /* badge on rows of the non-primary shows ("Weekly Open"), only when there are several shows */
+        /* badge on rows of the non-primary shows ("Grapevine Weekly Open"), only when there are several shows */
         showBadge: function (ep) {
           if (!ep || SHOW_KEYS.length < 2 || !ep.sh || ep.sh === PRIMARY) return "";
           var s = SHOWS[ep.sh];
           return (s && (s.short || s.name)) || "";
+        },
+        /* …and its lang attribute: the badge's language where it is not the page's (the Grapevine Weekly Open's
+           English name on /es/), else none (null removes the attribute) */
+        badgeLang: function (ep) {
+          var s = ep && SHOWS[ep.sh];
+          return s && s.sl && s.sl !== LANG ? s.sl : null;
         },
         showName: showName,
 

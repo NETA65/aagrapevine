@@ -39,6 +39,7 @@ import { scriptJson } from "../script-json.js";
 import { TZ } from "../../eleventy.config.js"; // the site's time zone (config/site.yml site.timezone)
 import { eventTone } from "./event-tone.js"; // the colour rule: a booth's search words (booth, literature table)
 import { issueName } from "./read.js"; // La Viña's issue as every page names it ("May–June 2027")
+import { meetingTitleParts } from "./media.js"; // a weekly open meeting episode's own title (its meeting and date)
 import orientationData from "../../src/_data/orientation.js"; // GVR / RLV 101 lessons (config/orientation.yml)
 
 const EMPTY = () => !!process.env.LIB_EMPTY;
@@ -852,8 +853,11 @@ export function searchIndex(db, nav, lang, helpers, site) {
       const ex = it.extra || {};
       const host = it.url || ex.player_url || ex.link || "";
       const own = /^[\w:.-]{1,80}$/.test(String(it.id || ""));
+      // a weekly open meeting's episode called only by its show's name (La Viña's): "La Viña Open Meeting, November 5,
+      // 2026" — its meeting and date (media.js meetingTitleParts), the feed's title stays the original
+      const mt = meetingTitleParts(it);
       push({
-        id: it.id, k: "episode", t: P(it, "title"), o: it.title,
+        id: it.id, k: "episode", t: mt ? `${T(mt.label)}, ${helpers.fmtDate(mt.date, lang, "medium")}` : P(it, "title"), o: it.title,
         s: snippet(P(it, "summary"), 200),
         x: ex.show_name || "",
         u: own ? `/listen/?ep=${it.id}` : host, u2: own ? host : "",

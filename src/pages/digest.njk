@@ -97,7 +97,7 @@ pageScripts: ["/assets/js/community.js"]
         {% if otherTitle and otherTitle != title %}<p class="text-sm italic text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ otherTitle }}</p>{% endif %}
         <p class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-muted">
           {% if se %}<span class="badge-gv">{{ se }}</span>{% endif %}
-          <span>{% if it.source == "podcast" %}{{ it.extra.show_name or "Podcast" }}{% elif it.source == "youtube" %}YouTube{% if isWeeklyVideo %} ·&nbsp;{{ "media.show_short_weekly" | t(lang) }}{% endif %}{% elif it.source == "drive" or it.source == "committee" %}NETA 65{% elif it.source == "lavina" or it.category == "lv" or (it.extra.host and "lavina" in it.extra.host) %}La Viña{% else %}Grapevine{% endif %}</span>
+          <span>{% if it.source == "podcast" %}{{ it.extra.show_name or "Podcast" }}{% elif it.source == "youtube" %}YouTube{% if isWeeklyVideo %} ·&nbsp;{{ it | mediaMeetingLabel(lang) }}{% endif %}{% elif it.source == "drive" or it.source == "committee" %}NETA 65{% elif it.source == "lavina" or it.category == "lv" or (it.extra.host and "lavina" in it.extra.host) %}La Viña{% else %}Grapevine{% endif %}</span>
           {#- a row with a link in it: gap only, no "·" (spec 1.11) — so no line ever starts with one. The
               item's own date (a committee file: the date in its name), else the day it counts on. -#}
           {%- set shownDate = it.date or it._when -%}
