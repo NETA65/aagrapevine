@@ -12,7 +12,7 @@
 //     over), the next issue when it is already online, and one-line pointers to the daily quote, What's
 //     New, the Bulletin, Instagram, the Grapevine meetings count and the subscription price.
 // The Monthly digest (/digest/, community.js) recaps LAST month; everything current lives here — as a
-// link when another page is its one home (the Zoom details on /meetings/#committee-meeting, prices on
+// link when another page is its one home (the joining details on /meetings/#committee-meeting, prices on
 // /shop/, how to send a story on /contribute/, the quote itself on the home page). No list is on both:
 // an issue's highlight stories are the digest's; the toolkit shows the themes and story counts and
 // links to /read/.
@@ -62,7 +62,8 @@
 // (community.js imports this file too: the cycle is safe, both only call each other's functions.)
 import crypto from "node:crypto";
 import { qrSvg, issueLabel, issueInSentence, issueLabelOf } from "./community.js";
-import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs, calendarLinks } from "./committee.js";
+import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs, calendarLinks, meetingJoin,
+  meetingSpeaker } from "./committee.js";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
 import { overnight, wallInstant } from "../central-time.js";
 import { shopFromMonthly, money, shopPriceChangeIn, dayLabel, shopOfferIn, offerDates } from "./shop.js";
@@ -220,11 +221,12 @@ function chicagoInstant(ymd, hhmm) {
   return new Date(Number.isFinite(ms) ? ms : wallInstant(ymd, "19:00", TZ)).toISOString();
 }
 /** A month's date of a monthly rule in the shape of config/site.yml `meeting:` (the committee meeting, or a
- *  recurring event's rule) → { ymd, start, end } (UTC ISO), null on a skip date or when the month has no such
- *  day. Read the way scripts/sync/meeting.py reads it (eleventy.config.js monthlyRule): "5pm", "7:00 PM",
- *  "sábado", "third" … never stop the build or move the time by 12 hours, an end that is missing or not
- *  after the start makes it one hour long (MonthlyRule.span) — as on /events/ and /meetings/ — and an overnight
- *  end ("22:00"–"01:00", central-time.js overnight) is the next morning. */
+ *  recurring event's rule) → { ymd, start, end } (UTC ISO), null on a skip date, before its first date (`starts`:
+ *  the Grapevine Meeting's 2026-12-02) or when the month has no such day. Read the way scripts/sync/meeting.py
+ *  reads it (eleventy.config.js monthlyRule): "5pm", "7:00 PM", "sábado", "third" … never stop the build or move
+ *  the time by 12 hours, an end that is missing or not after the start makes it one hour long (MonthlyRule.span)
+ *  — as on /events/ and /meetings/ — and an overnight end ("22:00"–"01:00", central-time.js overnight) is the
+ *  next morning. */
 export function meetingByRule(key, meeting = {}) {
   const rule = monthlyRule(meeting && typeof meeting === "object" ? meeting : {});
   const wd = WD[String(rule.weekday || "wednesday").toLowerCase()] ?? 3;
@@ -234,7 +236,7 @@ export function meetingByRule(key, meeting = {}) {
   if (!d) return null;
   const ymd = `${key}-${pad(d)}`;
   const skip = new Set(rule.skip_dates || []);
-  if (skip.has(ymd)) return null;
+  if (skip.has(ymd) || (rule.starts && ymd < rule.starts)) return null;
   const endDay = overnight(rule.start || "19:00", rule.end || "20:00") ? ymdPlus(ymd, 1) : ymd;
   return { ymd, start: chicagoInstant(ymd, rule.start || "19:00"), end: chicagoInstant(endDay, rule.end || "20:00") };
 }
@@ -303,7 +305,7 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
  *             the instant /events/ and the home page write too) — the browser marks it "Over" then
  *             (src/assets/js/monthly.js); past = overAt ≤ now (an instant, not a day)
  *   href      where its title links: the committee meeting → /meetings/#committee-meeting (the one home
- *             of its Zoom details); anything else → its own page (url) or /events/. A monthly series
+ *             of its joining details); anything else → its own page (url) or /events/. A monthly series
  *             keeps its own link: its later dates are folded on /events/, where an anchor could land on
  *             a hidden card. external = another site.
  *   category  the data's category (eventTone keeps the Grapevine / La Viña calendars' colours)
@@ -312,8 +314,8 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
  *   place     the city to show after the title: "" when the title already names it ("Writing Workshop —
  *             Mansfield", "booth at CityWide Dallas") — the page's row, the poster and the message say a
  *             place once
- *   online    it can be joined online (an online link, or "Zoom" as its place): without a city the row,
- *             the poster and the message say "Online" there
+ *   online    it can be joined online (an online link, or "Zoom" / "Google Meet" as its place): without a city
+ *             the row, the poster and the message say "Online" there
  * extra: { kind: "committee" | "recurring" | "event", … }
  * (src, not enumerable: the event record the row is made from — the month's calendar file writes it as
  * /events.ics does, monthIcs)
@@ -334,24 +336,30 @@ function dateRow(e, L, ctx, extra = {}) {
     range: d.end !== d.start ? dayRange(d.start, d.end, L) : "",
     time: timed ? `${timeRange(ex.start, ex.end, L)}` : "", zone: timed ? ctx.zone : "",
     city, place: city && !title.toLowerCase().includes(city.toLowerCase()) ? city : "",
-    online: !!ex.online || !!ex.online_url || /zoom/i.test(ex.location || ""),
+    online: !!ex.online || !!ex.online_url || /\b(?:zoom|google meet|microsoft teams|webex)\b/i.test(ex.location || ""),
     host: ex.host === "lv" || ex.host === "gv" ? ex.host : "",
     tentative: !!ex.tentative, overAt, past: !!overAt && Date.parse(overAt) <= ctx.nowMs, ...extra,
   }, "src", { value: e });
 }
 
 /** A month's committee meeting as a date row: its events.json record, else the site.meeting rule
- *  (events.json drops a meeting once it is over; skip_dates are honoured) — null when there is none. */
+ *  (events.json drops a meeting once it is over; skip_dates are honoured) — null when there is none. Its guest
+ *  speaker (config/site.yml meeting.speakers, committee.js meetingSpeaker: { name, position, topic } in the row's
+ *  language), null on a date without one (Dec 16, 2026): the page's row, the poster and the message name them.
+ *  `platform`: where it is held ("Google Meet"); "" once it is over — it was held online, maybe on another platform
+ *  (the move to Google Meet changed it for the dates before): the pages say "Online" then. */
 function committeeRow(events, key, site, L, ctx) {
   let ev = events.find((e) => e.id && String(e.id).startsWith(`ev:committee:${key}-`));
   if (!ev) {
     const r = meetingByRule(key, site.meeting || {});
-    if (r) ev = { id: `ev:committee:${r.ymd}`, kind: "event", url: "/meetings/", title: "", extra: { start: r.start, end: r.end, location: "Zoom", online: true } };
+    // (where it is held: the settings' platform — committee.js meetingJoin, "Zoom" only when it is left out)
+    if (r) ev = { id: `ev:committee:${r.ymd}`, kind: "event", url: "/meetings/", title: "", extra: { start: r.start, end: r.end, location: meetingJoin(site.meeting).platform, online: true } };
   }
   if (!ev) return null;
   const row = dateRow(ev, L, ctx, { kind: "committee" });
   row.title = "";
-  row.platform = (site.meeting && site.meeting.platform) || "Zoom";
+  row.platform = row.past ? "" : meetingJoin(site.meeting).platform;
+  row.speaker = meetingSpeaker(site.meeting, row.ymd, L);
   return row;
 }
 
@@ -616,9 +624,9 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
     const tpl = series[series.length - 1];
     // the rule as build_data understood it (extra.rule: week_of_month 1–5 / -1, English weekday, "HH:MM"
     // start and the end as used — "Saturdays", "2nd", "5 PM" or no end all read as the sync read them);
-    // only skip_dates come from the settings
+    // only skip_dates and the first date (`starts`: no month before it) come from the settings
     const rule = (tpl.extra && tpl.extra.rule) || sp;
-    const r = meetingByRule(key, { week_of_month: rule.week_of_month, weekday: rule.weekday, start: rule.start, end: rule.end, skip_dates: sp.skip_dates || [] });
+    const r = meetingByRule(key, { week_of_month: rule.week_of_month, weekday: rule.weekday, start: rule.start, end: rule.end, skip_dates: sp.skip_dates || [], starts: sp.starts || "" });
     if (!r) continue;
     recIn.push({ ...tpl, id: `ev:recurring:${sp.key}:${r.ymd}`, date: r.start, extra: { ...tpl.extra, start: r.start, end: r.end } });
   }
@@ -691,6 +699,21 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
   };
 }
 
+// The most dates a poster's Dates block shows (macros/monthly.njk dates(): 4 in every layout, one fewer on a "dense"
+// month); the rest are "+N more on the website".
+const POSTER_DATES = 4;
+
+/** The dates a poster has room for (`lim`): the first ones by day, but never without the month's committee meeting —
+ *  a busy month leaves out the last other date instead (the committee meeting comes later in the month than the
+ *  dates before it, so the order stays the days' order). */
+export function posterDates(dates = [], lim = POSTER_DATES) {
+  const list = Array.isArray(dates) ? dates : [];
+  const shown = list.slice(0, Math.max(0, Number(lim) || 0));
+  const cm = list.find((d) => d && d.kind === "committee");
+  if (cm && shown.length && !shown.includes(cm)) shown[shown.length - 1] = cm;
+  return shown;
+}
+
 /* ------------------------------------------------------------------ */
 /*  This month, live (the hub's "This month" card, the current page)   */
 /* ------------------------------------------------------------------ */
@@ -704,8 +727,8 @@ const msOf = (v) => (isYmd(v) ? Date.parse(v + "T12:00:00Z") : Date.parse(v));
  * page show it, never a later month (MONTHLY_NOW moves it, like the window):
  *   key            the current month, "YYYY-MM"
  *   nextCommittee  the next committee meeting that is not over: this month's (its events.json record,
- *                  else the rule), then next month's — { ymd, day, dayLabel, time, zone, platform, overAt,
- *                  thisMonth } or null. (Not src/_data/meeting.js: that one ignores MONTHLY_NOW.)
+ *                  else the rule), then next month's — { ymd, day, dayLabel, time, zone, platform, speaker,
+ *                  overAt, thisMonth } or null. (Not src/_data/meeting.js: that one ignores MONTHLY_NOW.)
  *   outNext        an issue already online before its month (the district report's rule: articles.json
  *                  issues[] newer than this month's Grapevine key / than the La Viña issue covering this
  *                  month) → [{ pub, theme, machine (a machine translation), issue (inside a sentence), monthKey,
@@ -734,7 +757,8 @@ export function monthNow(db = {}, site = {}, lang = "en", now = nowDate()) {
   for (const k of [key, addMonths(key, 1)]) {
     const row = committeeRow(events, k, site, L, monthCtx(k, L, now));
     if (!row || row.past) continue;
-    nextCommittee = { ymd: row.ymd, day: row.day, dayLabel: row.dayLabel, time: row.time, zone: row.zone, platform: row.platform, overAt: row.overAt, thisMonth: row.ymd.startsWith(key) };
+    nextCommittee = { ymd: row.ymd, day: row.day, dayLabel: row.dayLabel, time: row.time, zone: row.zone, platform: row.platform, speaker: row.speaker,
+      overAt: row.overAt, thisMonth: row.ymd.startsWith(key) };
     break;
   }
 
@@ -857,6 +881,14 @@ export function monthMessage(ctx, langs, style, site, t) {
   const url = (p) => base + (main === "es" ? "/es" : "") + p;
   const out = [];
   let mt = false;     // a machine-translated title was written: the note above the footer
+  // a committee meeting's guest speaker on a line of its own under it: "Guest speaker: Rick W. — “…”" (its topic in
+  // the other language's words on the next line when they differ)
+  const speakerLines = (sp, others) => {
+    if (!sp) return [];
+    const lines = [`  ${sp.topic ? t("monthly.msg_speaker", main, { name: sp.name, topic: sp.topic }) : t("committee.meeting.speaker", main, { name: sp.name })}`];
+    for (const o of others) if (o && o.topic && o.topic !== sp.topic) lines.push(`  “${o.topic}”`);
+    return lines;
+  };
 
   // Masthead: "Grapevine & La Viña · NETA 65 — October 2026" + the tagline
   const title = `${both("monthly.kicker")} — ${uniq(Ls.map((l) => mm[l].title)).join(" / ")}`;
@@ -902,7 +934,8 @@ export function monthMessage(ctx, langs, style, site, t) {
   for (const d of rows) {
     const when = [d.range || `${d.chip.wd}, ${d.dayLabel}`, d.time ? `${d.time} ${d.zone}` : ""].filter(Boolean).join(" · ");
     if (d.kind === "committee") {
-      out.push(`${bullet} ${when} — ${both("monthly.committee")} (${d.platform}) — ${both("monthly.all_welcome")}`);
+      out.push(`${bullet} ${when} — ${both("monthly.committee")} (${d.platform || both("monthly.online")}) — ${both("monthly.all_welcome")}`);
+      out.push(...speakerLines(d.speaker, Ls.slice(1).map((l) => ((mm[l].dates || []).find((x) => x.id === d.id) || {}).speaker)));
       continue;
     }
     const bits = [when];
@@ -915,13 +948,14 @@ export function monthMessage(ctx, langs, style, site, t) {
     for (const l of Ls.slice(1)) { const o = (mm[l].dates || []).find((x) => x.id === d.id); if (o && o.title && o.title !== d.title) out.push(`  ${o.title}`); }
   }
   if (!rows.length) out.push(both(cur && (m.dates || []).length ? "monthly.no_more_dates" : "monthly.no_dates"));
-  // … written like the rows above: "Next committee meeting: Wed, Nov 18 · 7–8 PM Central — Zoom" (in the
+  // … written like the rows above: "Next committee meeting: Wed, Nov 18 · 7–8 PM Central — Google Meet" (in the
   // middle of a line, after the colon, Spanish goes on in lower case: "Próxima reunión del comité: mié, 18 …")
   const nc = cur && nw ? nw.nextCommittee : null;
   if (nc && !nc.thisMonth) {
     const wd = chip(nc.ymd, main).wd;
     const when = [`${main === "es" ? wd.toLowerCase() : wd}, ${nc.dayLabel}`, nc.time ? `${nc.time} ${nc.zone}` : ""].filter(Boolean).join(" · ");
     out.push(`${bullet} ${both("monthly.next_meeting")}: ${when} — ${nc.platform}`);
+    out.push(...speakerLines(nc.speaker, Ls.slice(1).map((l) => ctx.nw && ctx.nw[l] && ctx.nw[l].nextCommittee && ctx.nw[l].nextCommittee.speaker)));
   }
   out.push(`  ${t("monthly.msg_events", main, { url: url("/events/") })}`, `  ${t("monthly.msg_join", main, { url: url("/meetings/#committee-meeting") })}`, "");
 
@@ -1088,9 +1122,9 @@ export function monthIcsEvents(db = {}, site = {}, lang = "en", now = nowDate())
  * (m.icsUrl), so it needs no script and opens straight in a phone's calendar.
  *   events     the month's date rows (m.dates: the committee meeting, the monthly series, the other events — this
  *              month only the ones not over yet, as in its message), written exactly as /events.ics writes them
- *              (committee.js normalizeEvents + buildIcs: the same UID, description, Zoom details and link — a
- *              calendar that has both keeps one copy; a later month's date of a series, worked out from its rule,
- *              is written from the same record)
+ *              (committee.js normalizeEvents + buildIcs: the same UID, description, joining details, guest
+ *              speaker and link — a calendar that has both keeps one copy; a later month's date of a series,
+ *              worked out from its rule, is written from the same record)
  *   deadlines  the story deadlines the page lists (Grapevine's, La Viña's), each an all-day entry on its day:
  *              "Story deadline: “Fun in Sobriety” — Grapevine", its issue and how to send a story (/contribute/)
  * The calendar's name is the month's ("NETA 65 Grapevine & La Viña — October 2026"). RFC 5545 as buildIcs
@@ -1273,6 +1307,8 @@ export default function (eleventyConfig, helpers) {
     return msgCache.get(k);
   });
   eleventyConfig.addFilter("mpQr", (url, label = "") => qrSvg(url, { label, cls: "mp-qr-svg", margin: 2 }));
+  // the dates a poster shows: the first `lim`, never without the committee meeting (posterDates)
+  eleventyConfig.addFilter("mpPosterDates", (dates, lim) => posterDates(dates, lim));
   // A month page's share picture (its ogImage, monthly-month.njk): {{ mpage.key | mpShareImage(mpage.lang) }} — the
   // site path of its share.png in a build asked for it (POSTER_SHARE=1), else "" (the page keeps the committee's card)
   eleventyConfig.addFilter("mpShareImage", (key, lang) => (posterShareOn() && /^\d{4}-\d{2}$/.test(String(key || ""))

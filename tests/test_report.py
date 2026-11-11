@@ -50,6 +50,9 @@ SITE_LINKS = CFG["links"]
 # The committee meeting's platform as src/_data/site.js gives the pages (config/site.yml meeting.platform, the
 # committee's setting; Zoom when left out): the report says that one, whichever it is.
 PLATFORM = str((CFG.get("meeting") or {}).get("platform") or "").strip() or "Zoom"
+# How to join, in the committee's words: "the link and the meeting code" for a Google Meet code (letters), "link,
+# meeting ID and passcode" for a Zoom ID (committee.js meetingJoin: idKey)
+JOIN_KEY = "report.c_join_code" if re.search(r"[a-z]", str((CFG.get("meeting") or {}).get("meeting_id") or ""), re.I) else "report.c_join"
 SECTION_IDS = ["header", "committee", "issues", "deadlines", "shop", "events", "writers", "meetings", "weekly",
                "resources", "asks", "notes"]
 SITE_URL = "https://example.org/site"
@@ -252,17 +255,17 @@ class Model(unittest.TestCase):
                 self.assertEqual(bool(en[sid]["text"].strip()), bool(es[sid]["text"].strip()), "EN and ES say something alike")
 
     def test_the_meeting_platform_is_the_settings_one(self):
-        # report.c_next / c_join take {platform} from config/site.yml meeting.platform (Zoom when not set)
+        # report.c_next / c_join / c_join_code take {platform} from config/site.yml meeting.platform (Zoom when not set)
         for lang in ("en", "es"):
             with self.subTest(lang=lang):
                 S = {k: v["text"] for k, v in self.sections("full", lang).items()}
                 self.assertIn(PLATFORM, S["committee"])
                 other = self.r["platform"][lang]
-                self.assertIn(self.tr("report.c_join", lang, url=SITE_URL + ("/es" if lang == "es" else "") + "/meetings/",
+                self.assertIn(self.tr(JOIN_KEY, lang, url=SITE_URL + ("/es" if lang == "es" else "") + "/meetings/",
                                       platform="Google Meet"), other)
                 self.assertIn("on Google Meet." if lang == "en" else "por Google Meet.", other)
                 self.assertNotIn("Zoom", other)
-        for key in ("report.c_next", "report.c_join"):
+        for key in ("report.c_next", "report.c_join", "report.c_join_code"):
             for lang in ("en", "es"):
                 self.assertIn("{platform}", self.s[key][lang], (key, lang))
                 self.assertNotIn("Zoom", self.s[key][lang], (key, lang))
@@ -276,7 +279,7 @@ class Model(unittest.TestCase):
                                                                month="October 2026" if lang == "en" else "octubre de 2026")))
             with self.subTest(lang=lang, section="committee"):
                 self.assertIn("October 21" if lang == "en" else "21 de octubre", S["committee"])
-                self.assertIn(self.tr("report.c_join", lang, url=f"{base}/meetings/", platform=PLATFORM), S["committee"])
+                self.assertIn(self.tr(JOIN_KEY, lang, url=f"{base}/meetings/", platform=PLATFORM), S["committee"])
                 self.assertNotIn(self.s["report.c_none"][lang], S["committee"])
             with self.subTest(lang=lang, section="issues"):
                 self.assertIn("Loneliness" if lang == "en" else "Soledad", S["issues"])

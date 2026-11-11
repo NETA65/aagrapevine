@@ -272,7 +272,7 @@ _TIME_24_RANGE = re.compile(
 _TIME_24 = re.compile(r"(?<![\d:.])([01]?\d|2[0-3])[:h]([0-5]\d)(?!\d)(?:\s*(?:hrs?|h)\b)?")
 _PLACE = re.compile(
     r"(?i)\b(tx|texas|church|iglesia|hall|cent(?:er|re)|centro|club|clubhouse|room|hotel|inn|library|biblioteca|"
-    r"park|parque|school|escuela|zoom|online|virtual|en l[ií]nea|sal[oó]n|capilla|chapel|street|st|avenue|ave|"
+    r"park|parque|school|escuela|zoom|google meet|online|virtual|en l[ií]nea|sal[oó]n|capilla|chapel|street|st|avenue|ave|"
     r"road|rd|blvd|boulevard|hwy|highway|suite|ste|building|auditorium|convention|fellowship|alano|campus|"
     r"ranch|lodge|pavilion|pabell[oó]n|casa|district|distrito)\b")
 

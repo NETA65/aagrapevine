@@ -14,7 +14,9 @@ day being its Central calendar day:
     scheduled post) —, not expired
   * the events that took place in P (events.json: the month an event starts in) and P's committee
     meeting — its record, else the config/site.yml `meeting:` rule (events.json drops a meeting once it
-    is over) — with their days only; events are never "news" on their own
+    is over) — with their days only ("Online" for the committee meeting: never a platform, which may have
+    changed since); events are never "news" on their own, and a date that is over never links to the
+    room where a meeting is held (its page, its flyer or /events/)
   * the committee's uploads (drive.json) by the later of their date and the day the site first had them
     (first_seen) — a file named after an earlier meeting is in the edition of the month it was added —,
     each file with its own date (a dated flyer is an event, not an upload), the photos ONE row per album
@@ -27,9 +29,11 @@ day being its Central calendar day:
     Instagram posts (instagram.json: per account, how many and the 3 newest, and one link to the site's
     /instagram/ page — the text part gives only the counts and the link), documents
   * ONE pointer: "Coming up in K" → the toolkit of the month it goes out in (/monthly/K/), the home of
-    everything current (the committee meeting — its Zoom details stay on /meetings/ —, events not over
-    yet, story deadlines, this month's issues, Book of the Month …) — and, while the notice of a price
-    change AA Grapevine announced is on, its row ("Grapevine and La Viña prices change on …": price_change)
+    everything current (the committee meeting — its link and code stay on /meetings/ —, events not over
+    yet, story deadlines, this month's issues, Book of the Month …), with K's committee meeting and its
+    guest speaker while it is ahead ("Committee meeting on January 20, 2027 — guest speaker: Rick W. — “…”":
+    coming_speaker) — and, while the notice of a price change AA Grapevine announced is on, its row
+    ("Grapevine and La Viña prices change on …": price_change)
   * each section in English first, then in Spanish (titles are already translated)
 
 Standard library only (smtplib + email.mime) so it runs anywhere without installing the sync
@@ -181,6 +185,8 @@ T = {
         "coming": "Coming up in {month}",
         "toolkit": "This month's toolkit ({month})",
         "toolkit_text": "The committee meeting, events and story deadlines, this month's magazine issues and the Book of the Month.",
+        # the coming committee meeting's guest speaker (coming_speaker): community.json community.digest.speaker
+        "speaker": "Committee meeting on {date} — guest speaker: {name}",
         # a price change AA Grapevine announced (price_change): the same words as the website (src/_i18n/shop.json
         # shop.pc_line_*, community.json community.digest.price_link_*)
         "pc_before": "Grapevine and La Viña prices change on {date}",
@@ -256,6 +262,7 @@ T = {
         "coming": "Lo que viene en {month}",
         "toolkit": "El kit de este mes ({month})",
         "toolkit_text": "La reunión del comité, los eventos y las fechas límite para historias, las revistas de este mes y el libro del mes.",
+        "speaker": "Reunión del comité del {date} — orador(a) invitado(a): {name}",
         "pc_before": "Los precios de Grapevine y La Viña cambian el {date}",
         "pc_after": "Nuevos precios de Grapevine y La Viña desde el {date}",
         "pc_link_before": "Qué cambia y por qué",
@@ -1424,7 +1431,8 @@ def month_events(now: datetime, ed: dict, cfg: dict) -> list[dict]:
     """The events that took place in the month (community.js monthEventsHeld): every category but the
     committee's, in the month each one starts in, once it has started — plus the month's committee
     meeting (its events.json record, else the `meeting:` rule when there is one) once it has started,
-    marked `_committee`. Soonest first. Never "news" on their own (no count, no e-mail)."""
+    marked `_committee`, held "online" (never its platform: a month before a move to another one says the
+    new one otherwise). Soonest first. Never "news" on their own (no count, no e-mail)."""
     meeting = cfg.get("meeting") if isinstance(cfg.get("meeting"), dict) else {}
     items = [e for e in load_items("events") if e.get("status") != "gone"]
     out = []
@@ -1444,7 +1452,7 @@ def month_events(now: datetime, ed: dict, cfg: dict) -> list[dict]:
     if cm and parse_dt(cm["start"]) and parse_dt(cm["start"]) <= now:
         base = rec or {"kind": "event", "source": "committee", "title": "", "lang": "en", "i18n": {}, "machine": []}
         out.append({**base, "id": f"ev:committee:{cm['ymd']}", "category": "committee", "url": "/meetings/", "date": cm["start"],
-                    "extra": {"start": cm["start"], "end": cm["end"], "all_day": False, "location": meeting.get("platform") or "Zoom"},
+                    "extra": {"start": cm["start"], "end": cm["end"], "all_day": False, "online": True},
                     "_committee": True})
     out.sort(key=lambda e: js_order(e.get("id")))
     out.sort(key=lambda e: parse_dt(event_start(e)))
@@ -1516,6 +1524,7 @@ def collect(now: datetime, month: str | None = None, max_per: int = 5, highlight
     skip = {str(v) for lst in data["writers"].values() for w in lst for v in (w.get("id"), w.get("url")) if v}
     data["issues"] = month_issues(ed, highlights, skip)
     data["events"] = month_events(now, ed, load_config())
+    data["speaker"] = coming_speaker(now, ed)
     data["price"] = price_change(to_central(now).date())
     # which languages carry machine translations (for the small footnote): what the HTML shows
     shown = ([i for g, lst in data["groups"].items() if g != "post" for i in lst[:max_per] if not i.get("_album")] + data["events"]
@@ -1612,8 +1621,9 @@ def event_row(it: dict, lang: str, links: Links, as_of: date | None = None) -> d
     when = fmt_day(st, lang, year=with_year and (not last or first_day.year != last_day.year)) if st else ""
     if last:
         when += " – " + fmt_day(last, lang, year=with_year)
-    # The place in this language (content/events `location_es` → i18n.location), as written otherwise.
-    where = tx_extra(it, "location", lang) or (t["online"] if ex.get("online_url") else "")
+    # The place in this language (content/events `location_es` → i18n.location), as written otherwise; "Online" for
+    # one held online (community.js eventWhere)
+    where = tx_extra(it, "location", lang) or (t["online"] if ex.get("online_url") or ex.get("online") is True else "")
     if it.get("_committee"):
         return {"title": t["committee_meeting"], "when": when, "where": where, "url": links.page("/meetings/", lang)}
     url = it.get("url") or ""
@@ -1621,18 +1631,41 @@ def event_row(it: dict, lang: str, links: Links, as_of: date | None = None) -> d
         # a date of a monthly series without a page of its own (its card on /events/ is gone once it is over):
         # its flyer, like a dated flyer's event (community.js monthEventsHeld)
         url = ex["flyer_url"]
-    url = url or ex.get("flyer_url") or ex.get("online_url") or ""
+    # (never its online_url: a date that is over links to its page, its flyer or /events/ — not to the meeting room)
+    url = url or ex.get("flyer_url") or ""
     url = links.item({**it, "url": url}, lang, "/events/")
     return {"title": tx(it, "title", lang), "when": when, "where": where, "url": url}
 
 
 def toolkit_block(data: dict, lang: str, links: Links) -> dict:
     """The ONE pointer to what is current: the toolkit of the month the edition goes out in
-    ("Coming up in October" → /monthly/2026-10/), shared by the HTML and the text."""
+    ("Coming up in October" → /monthly/2026-10/), shared by the HTML and the text — with that month's committee
+    meeting and its guest speaker while it is ahead (`speaker`: "" without one)."""
     t = T[lang]
     out = data["edition"]["out"]
-    return {"title": t["coming"].format(month=month_word(out, lang)), "text": t["toolkit_text"],
+    sp = data.get("speaker")
+    speaker = ""
+    if sp:
+        topic = (sp.get("topic") or {}).get(lang) or ""
+        speaker = t["speaker"].format(date=long_day(sp["ymd"], lang), name=sp["name"]) + (f" — “{topic}”" if topic else "")
+    return {"title": t["coming"].format(month=month_word(out, lang)), "text": t["toolkit_text"], "speaker": speaker,
             "label": t["toolkit"].format(month=month_label(out, lang)), "url": links.page(f"/monthly/{out}/", lang)}
+
+
+def coming_speaker(now: datetime, ed: dict) -> dict | None:
+    """The committee meeting of the month the edition goes out in, while it is still ahead, with its guest speaker
+    (events.json: its record's extra.speaker, which the sync writes from config/site.yml meeting.speakers) →
+    {ymd, name, topic: {en, es}} or None (no speaker that day: Dec 16, 2026). community.js digestSpeaker."""
+    rec = next((e for e in load_items("events") if e.get("status") != "gone"
+                and str(e.get("id") or "").startswith(f"ev:committee:{ed['out']}-")), None)
+    sp = ((rec or {}).get("extra") or {}).get("speaker")
+    start = parse_dt(event_start(rec)) if rec and event_start(rec) else None
+    if not isinstance(sp, dict) or not str(sp.get("name") or "").strip() or not start or start <= now:
+        return None
+    topic = sp.get("topic") if isinstance(sp.get("topic"), dict) else {"en": sp.get("topic") or ""}
+    pick = lambda lang: str(topic.get(lang) or topic.get("en") or "").strip()   # noqa: E731
+    return {"ymd": central_day(event_start(rec)).isoformat(), "name": str(sp["name"]).strip(),
+            "topic": {"en": pick("en"), "es": pick("es")}}
 
 
 def long_day(ymd: str, lang: str) -> str:
@@ -1937,12 +1970,14 @@ def render_lang_html(lang: str, data: dict, cfg: dict, links: Links, max_per: in
 
     # ---- the ONE pointer to what is current: this month's toolkit
     kit = toolkit_block(data, lang, links)
+    speaker = (f'<div style="font-size:14px;line-height:1.5;color:{C["ink"]};margin:0 0 8px;">{_esc(kit["speaker"])}</div>\n    '
+               if kit["speaker"] else "")
     parts.append(f"""<tr><td style="padding:22px 32px 4px;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{C['surface2']};border-radius:10px;">
   <tr><td style="padding:14px 16px;">
     <h3 style="font-family:Georgia,'Times New Roman',serif;font-size:17px;font-weight:bold;margin:0;color:{C['ink']};">{_esc(kit['title'])}</h3>
     <div style="font-size:14px;line-height:1.5;color:{C['muted']};margin:4px 0 8px;">{_esc(kit['text'])}</div>
-    <a href="{_esc(kit['url'])}" style="color:{C['gv']};font-weight:bold;font-size:14px;">{_esc(kit['label'])} →</a>
+    {speaker}<a href="{_esc(kit['url'])}" style="color:{C['gv']};font-weight:bold;font-size:14px;">{_esc(kit['label'])} →</a>
   </td></tr></table>
 </td></tr>""")
     # … and a price change AA Grapevine announced, while its notice is on (one more pointer row)
@@ -2079,6 +2114,8 @@ def render_text(data: dict, cfg: dict, links: Links, max_per: int) -> str:
         kit = toolkit_block(data, lang, links)
         out += head(kit["title"])
         out.append(f"{kit['text']} {kit['url']}")
+        if kit["speaker"]:
+            out.append(kit["speaker"])
         pc = price_block(data, lang, links)
         if pc:
             out.append(f"{pc['title']}: {pc['url']}")

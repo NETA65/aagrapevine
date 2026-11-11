@@ -5,8 +5,9 @@
 // reportModel() writes the report's 12 sections — each a title and a plain text — in English AND
 // Spanish, for the current month (Central time), from data the site already has:
 //   header     "District [##] Grapevine / La Viña report — <Month YYYY>" + "Prepared by: …" (blanks)
-//   committee  site `meeting` (next date, the rule), a pointer to /meetings/ for the meeting's link (its platform:
-//              config/site.yml meeting.platform, Zoom when not set)
+//   committee  site `meeting` (next date, the rule, its guest speaker), a pointer to /meetings/ for the meeting's link
+//              and code or ID (its platform: config/site.yml meeting.platform, Zoom when not set), and our own
+//              online meetings (the Grapevine Meeting: config/site.yml recurring_events)
 //   issues     the month model (eleventy/filters/monthly.js): GV theme, LV issue, config/carry.yml tips
 //   deadlines  db.editorial (next 3 Grapevine deadlines, next 2 La Viña deadlines — its yearly themes —, La
 //              Viña's rotating topics), db.audio_project
@@ -29,11 +30,13 @@
 // Dev/test: MONTHLY_NOW=2026-12-15 fixes "today" (as for the posters).
 import { eventWhen, eventWhere, writersPick, spotlightOf, spotlightHomeDays, writerName, issueLabelOf, issueInSentence, itemIssueName } from "./community.js";
 import { issueName } from "./read.js";
-import { digestShop, weeklyOpenAll, gvMeetings, eventEndMs, chicagoDayEndMs, meetingDates } from "./committee.js";
+import { digestShop, weeklyOpenAll, gvMeetings, eventEndMs, chicagoDayEndMs, meetingDates, meetingJoin, meetingSpeaker, meetingSpeakerUntil,
+  recurrenceText } from "./committee.js";
+import { platformOf } from "./access.js";
 import { monthModel, monthTopics, nowDate, chicagoYmd, shortDate, timeRange, monthLabel, midSentence } from "./monthly.js";
 import { botmPriceState, shopPlanPrice, shopNextChange, shopPriceChangeIn, dayLabel } from "./shop.js";
 import { scriptJson } from "../script-json.js";
-import { langLink } from "../../eleventy.config.js";
+import { langLink, monthlyRule } from "../../eleventy.config.js";
 
 const LOC = { en: "en-US", es: "es-US" };
 const DAY = 864e5;
@@ -73,6 +76,45 @@ function longDate(ymd, lang) {
     return `${f({ weekday: "long" })} ${d.getUTCDate()} de ${f({ month: "long" })}`;
   }
   return new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric", timeZone: "UTC" }).format(d);
+}
+/** "19:30" → "7:30 PM" / "7:30 p. m." (a Central wall-clock time, written as monthly.js timeRange writes one) */
+function clockLabel(hhmm, lang) {
+  const m = /^(\d{1,2}):(\d{2})$/.exec(String(hhmm || ""));
+  if (!m) return "";
+  const h = Number(m[1]);
+  return `${h % 12 || 12}:${m[2]} ${lang === "es" ? (h < 12 ? "a. m." : "p. m.") : h < 12 ? "AM" : "PM"}`;
+}
+/** A committee meeting's guest speaker ({ name, position, topic } in the report's language, committee.js meetingSpeaker)
+ *  in the report's words: "Guest speaker: Rick W., Past delegate … — “…”." and when the talk and its questions end
+ *  (config/site.yml meeting.speaker_until; committee business follows until the meeting's end) → [lines] */
+function speakerLines(sp, site, L) {
+  if (!sp || !sp.name) return [];
+  const who = sp.name + (sp.position ? `, ${sp.position}` : "") + (sp.topic ? ` — “${sp.topic}”` : "");
+  const m = (site && site.meeting) || {};
+  const until = clockLabel(meetingSpeakerUntil(m), L);
+  const end = clockLabel((monthlyRule(m) || {}).end || "", L);
+  // one period at the end: a name alone ends in its initial's ("Guest speaker: Rick W."), a Spanish time in its
+  // own ("hasta las 8:00 p. m.")
+  const one = (s) => s.replace(/\.\.$/, ".");
+  return [one(t("report.c_speaker", L, { who })), ...(until && end ? [one(t("report.c_speaker_until", L, { until, end }))] : [])];
+}
+/** Our own online meetings (config/site.yml recurring_events of ours — no `host`, or "neta" — with a link and no
+ *  place: the Grapevine Meeting) → [{ title, when (its rule and time), platform, path (its section on /meetings/),
+ *  starts (its first date, "" without one) }] */
+function ownOnlineSeries(site, L) {
+  const out = [];
+  for (const r of Array.isArray(site && site.recurring_events) ? site.recurring_events : []) {
+    if (!r || typeof r !== "object" || r.enabled === false || clean(r.location) || !clean(r.online_url)) continue;
+    if ((clean(r.host) || "neta").toLowerCase() !== "neta") continue;
+    const rule = monthlyRule(r, true);
+    const title = clean((L === "es" && r.title_es) || r.title);
+    const when = recurrenceText(rule, L);
+    if (!title || !when) continue;
+    const page = clean(r.url);
+    out.push({ title, when, platform: platformOf(r.online_url) || t("committee.events.online", L), path: /^\/[^/]/.test(page) ? page : "/meetings/",
+      starts: isYmd(rule.starts) ? rule.starts : "" });
+  }
+  return out;
 }
 /** Is the item's own language not the report's? → " (in Spanish)" / " (en inglés)" */
 const otherLangNote = (docLang, lang) => (docLang && docLang !== lang ? ` (${t(docLang === "es" ? "report.r_in_es" : "report.r_in_en", lang)})` : "");
@@ -238,9 +280,19 @@ function sectionsFor(L, ctx) {
       const wd = Number.isInteger(r.weekday) ? new Intl.DateTimeFormat(LOC[L], { weekday: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2023, 0, 1 + r.weekday))) : "";
       const ord = r.n === -1 ? "last" : String(r.n || "");
       if (wd && ord) out.push(T("c_rule", { rule: lcFirst(t("committee.rule", L, { ord: t(`committee.ord.${ord}`, L), weekday: L === "es" ? wd : cap(wd) })) }));
+      // that meeting's guest speaker (config/site.yml meeting.speakers; none on Dec 16, 2026)
+      out.push(...speakerLines(meetingSpeaker((site && site.meeting) || {}, nx.ymd || chicagoYmd(nx.start), L), site, L));
     } else out.push(T("c_none"));
-    out.push(T("c_join", { url: abs("/meetings/"), platform }));
+    // how to join: the link and the meeting code (Google Meet) or the meeting ID and passcode (Zoom) — on /meetings/
+    const join = meetingJoin((site && site.meeting) || {}, L);
+    out.push(T(join.idKey === "committee.meeting.code" ? "c_join_code" : "c_join", { url: abs("/meetings/"), platform }));
     out.push(T("c_covers"));
+    // our own online meetings (the Grapevine Meeting), a line each: its day and time, where, its section on /meetings/
+    // — and its first date while that is still ahead
+    for (const s of ownOnlineSeries(site, L)) {
+      out.push(T("c_series", { title: s.title, when: lcFirst(s.when), platform: s.platform, url: abs(s.path) })
+        + (s.starts > today ? ` ${T("c_series_first", { date: longDate(s.starts, L) })}` : ""));
+    }
     S.committee = out.join("\n");
   }
 
@@ -607,7 +659,8 @@ export const reportText = (model, lang) => composeText(((model && model.langs &&
 //             the committee meetings until then
 //   writers   Area 65 writers in the issues of the period (the Texas writers archive + the spotlight), as printed
 //   invite    an invitation to the districts (the committee's e-mail, our events page)
-//   meeting   the first committee meeting after the period, with its Zoom ID and passcode (/meetings/ shows them)
+//   meeting   the first committee meeting after the period, its guest speaker, and how to join: the link and the meeting
+//             code (Google Meet), or the Zoom ID and passcode (/meetings/ shows them)
 //   notes     empty
 // Counts only — never an attendance list —, writers only as the magazines printed them (first name + initial, city).
 // "Ours" (areaOurs): a content/events file, a dated Drive flyer, a monthly series we hold (config/site.yml
@@ -727,14 +780,14 @@ export function areaModel(db = {}, site = {}, now = nowDate()) {
   }
 
   /* The committee meetings (the rule; skip_dates honoured): the short day for the lists, the whole line for "Next
-     committee meeting" (report.c_next — the district report's words) */
+     committee meeting" (report.c_next — the district report's words, with that date's guest speaker under it) */
   const mt = [];
   if (Object.keys(sm).length) {
     for (const m of meetingDates(sm, Math.ceil(AREA_BACK_DAYS / 30) + 1, 12, now)) {
       if (m.ymd < min) continue;
       mt.push({ y: m.ymd, t: Object.fromEntries(LANGS.map((L) => [L, [shortDate(m.ymd, L, year),
-        t("report.c_next", L, { date: `${longDate(m.ymd, L)}${m.ymd.slice(0, 4) !== year ? (L === "es" ? ` de ${m.ymd.slice(0, 4)}` : `, ${m.ymd.slice(0, 4)}`) : ""}`,
-          time: t("report.c_time", L, { time: timeRange(m.start, m.end, L) }), platform })]])) });
+        [t("report.c_next", L, { date: `${longDate(m.ymd, L)}${m.ymd.slice(0, 4) !== year ? (L === "es" ? ` de ${m.ymd.slice(0, 4)}` : `, ${m.ymd.slice(0, 4)}`) : ""}`,
+          time: t("report.c_time", L, { time: timeRange(m.start, m.end, L) }), platform }), ...speakerLines(meetingSpeaker(sm, m.ymd, L), site, L)].join("\n")]])) });
     }
   }
 
@@ -786,7 +839,10 @@ export function areaModel(db = {}, site = {}, now = nowDate()) {
     const T = (k, v) => t(`report.${k}`, L, v);
     const abs = (p) => `${base}${L === "es" ? "/es" : ""}${p}`;
     const email = clean(sm.chair_email) || clean(site.contact_email);
-    const zoom = clean(sm.meeting_id) && clean(sm.passcode) ? T("ar_zoom", { platform, id: clean(sm.meeting_id), code: clean(sm.passcode) }) : "";
+    // how to join: a Zoom ID with its passcode; else the link, without https:// (Google Meet: its meeting code too)
+    const j = meetingJoin(sm, L);
+    const zoom = j.id && j.passcode ? T("ar_zoom", { platform, id: j.id, code: j.passcode })
+      : j.url ? T("ar_link", { platform, url: j.url.replace(/^https?:\/\//, "") }) + (j.id ? ` · ${j.idLabel}: ${j.id}` : "") : "";
     langs[L] = {
       titles: { header: T("s.header"), recent: T("ar_s_recent"), next: T("ar_s_next"), writers: T("ar_s_writers"), invite: T("ar_s_invite"),
         meeting: T("ar_s_meeting"), notes: T("ar_s_notes") },
@@ -798,7 +854,8 @@ export function areaModel(db = {}, site = {}, now = nowDate()) {
         monthly: T("e_monthly"), tbc: T("e_tbc"),
         w_intro: T("ar_w_intro"), w_none: T("ar_w_none"), w_all: T("w_all", { url: abs("/published/") }),
         invite: [email ? T("ar_invite", { email }) : T("ar_invite_plain"), T("ar_invite_more", { url: abs("/events/") })].join("\n"),
-        meet_none: T("c_none"), meet_more: [zoom, T("c_join", { url: abs("/meetings/"), platform }), clean(L === "es" ? sm.note_es : sm.note)].filter(Boolean).join("\n"),
+        meet_none: T("c_none"), meet_more: [zoom, T(j.idKey === "committee.meeting.code" ? "c_join_code" : "c_join", { url: abs("/meetings/"), platform }),
+          clean(L === "es" ? sm.note_es : sm.note)].filter(Boolean).join("\n"),
       },
       tokens: { name: T("tok_name"), meeting: T("ar_tok_meeting") },
       kinds: { assembly: T("ar_m_assembly"), acm: T("ar_m_acm") },

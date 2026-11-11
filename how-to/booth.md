@@ -392,7 +392,7 @@ the most, and 120 is kept).
 
 Example of "Pick from the upcoming events": choosing **GV/LV booth at CityWide Dallas — Saturday, October 10, 2026**
 gives the name "GV/LV booth at CityWide Dallas", the Spanish name "Mesa de GV/LV en CityWide Dallas" (only when it
-differs) and the second line "Saturday, October 10, 2026 · Lover's Lane United Methodist Church" (the date in the
+differs) and the second line "Saturday, October 10, 2026 · Lovers Lane United Methodist Church" (the date in the
 first language; the place up to its first comma). The list today (12 events): the Grapevine Writing Workshop in
 Arlington, La Viña's workshops in Mansfield, Duncanville, Tyler and Longview, the monthly CityWide Dallas booth
 (October to March) and the North Texas Zone gathering of January 29–31, 2027.
@@ -648,7 +648,7 @@ Each slide's QR code leads to the page that has more, the Spanish page on Spanis
 
 | Channel | The slide shows | Stays until | QR code |
 |---|---|---|---|
-| **Upcoming events** | **Coming up**: the next four events of `/events/` (a monthly series once), each with its date and time, title, place and a note — "Online on Zoom" for an online or hybrid one (its place stays beside it), "Details to be confirmed" for a tentative one. Today: the Grapevine Writing Workshop in Arlington (hybrid), the La Viña Writing Workshop in Mansfield, the CityWide Dallas booth, the La Viña Recording Workshop in Duncanville | each row until its event ends; the slide until the last one does | `/events/` |
+| **Upcoming events** | **Coming up**: the next four events of `/events/` (a monthly series once; never our Grapevine Meeting, which is in **Meetings you can join**), each with its date and time, title, place and a note — "Online on Zoom" for an online or hybrid one (its place stays beside it), "Details to be confirmed" for a tentative one. Today: the Grapevine Writing Workshop in Arlington (hybrid), the La Viña Writing Workshop in Mansfield, the CityWide Dallas booth, the La Viña Recording Workshop in Duncanville | each row until its event ends; the slide until the last one does | `/events/` |
 | **Upcoming events** — countdown | **Coming up next**: "Next assembly" · the next NETA 65 assembly, the days and hours left (hours and minutes on its last day), its dates and place. Today: NETA 65 Spring Assembly 2027, Fri, Mar 19 – Sun, Mar 21, 2027 | the assembly's start | its card on `/events/` |
 | **Daily quotes** | Grapevine's Daily Quote (English) and La Viña's Cita Diaria (Spanish), word for word as the Home page shows them, with their attribution and, at the end of the credit line, the publishers' permission credits the Home page shows under them ("Reprinted with permission of A.A. World Services, Inc. · Copyright © The AA Grapevine, Inc. Reprinted with permission. All rights reserved.", in the quote's language, a dot between the two as on Home), under the headings "Grapevine Daily Quote · Oct 2" and "Cita Diaria de La Viña · 2 de octubre" | two days after its date | the official page |
 | **Official videos** | the two videos the About page features (`config/site.yml` → `site:` → `about_videos`) first, then the newest 30 Shorts and videos of 8 minutes or less of the official AA Grapevine & La Viña channel, each in its own language, credited "AA Grapevine & La Viña on YouTube" — never a recording of a weekly open meeting or a live stream, never one a CSV row already plays (today both featured videos are CSV rows, so all 30 are the newest ones), never one whose title says a refused word | the next update's list | — |
@@ -656,7 +656,7 @@ Each slide's QR code leads to the page that has more, the Spanish page on Spanis
 | **Upcoming themes** | **Write for the magazines**: "Upcoming themes & deadlines", the next three themes of each magazine — "Due October 17, 2026 · Recaídas (Relapses) · La Viña · May–June 2027" | each row until its deadline; the slide until the last | `/contribute/` |
 | **Subscription prices** | **Subscriptions**: the 1-year print and digital plans of both magazines — "Grapevine · Print · 1 year $36.00", with an announced change beside it ("From Jan 1, 2027: $39.00") and "Prices as of October 2, 2026, from the official stores" | the announced change's day (a new update brings the new prices) | `/shop/#subscriptions` |
 | **Book of the Month** | Grapevine's Book of the Month and La Viña's Libro del mes: the title it is sold under, a short description, "$11.99 instead of $14.99, until October 14" — never a cover. A book in the other language says so ("En inglés · Traducción del título: …") | the offer's last day | the official store page |
-| **Meetings** | **Meetings you can join**: the committee's monthly meeting (Zoom), Grapevine's and La Viña's weekly open meetings, La Viña's monthly virtual workshop — a meeting in the other language marked "(in Spanish)" / "(en inglés)" | always (a dated row until it is over) | `/meetings/` |
+| **Meetings** | **Meetings you can join**: the committee's monthly meeting and our Grapevine Meeting (Google Meet; from January 2027 the committee meeting's guest speaker), Grapevine's and La Viña's weekly open meetings, La Viña's monthly virtual workshop — a meeting in the other language marked "(in Spanish)" / "(en inglés)" | always (a dated row until it is over) | `/meetings/` |
 | **Bulletin posts** | the bulletin's two newest posts (pinned first, none past its last day): the headline and its first paragraph (at most 280 characters) | the post's "until" day | the post on `/bulletin/` |
 
 The lists (events, meetings, themes) and the prices fill the screen in one language at a time: in Both, the first
@@ -1289,7 +1289,7 @@ guidance: the pamphlet *Anonymity — Our Spiritual Foundation* (P-47), AA Grape
 The A.A. Service Manual):
 
 - **Photos of tables, displays and empty rooms only** — no faces, no full names of AA members, no screenshots of a
-  Zoom gallery. A full-face photo of a member breaks anonymity even without a name.
+  Zoom or Google Meet gallery. A full-face photo of a member breaks anonymity even without a name.
 - **No recordings of members' talks or shares** — no video or sound file of a member speaking as an AA member
   (face or voice): AA asks that talks be given in person rather than as recordings (a 1980 Conference resolution,
   quoted in P-47). Grapevine's Audio Project and La Viña's "Graba tu historia" are the magazines' own process, and
@@ -1542,13 +1542,13 @@ Needs `text`. Takes `title` (the heading), `qr_url` (shown beside the text).
 |---|---|
 | `id` · `type` · `pub` · `tags` | `message-fun-event-committee` · `message` · `both` · `message;committee` |
 | `title_en` / `title_es` | Thanks for stopping by / Gracias por visitarnos |
-| `text_en` | The {committee} meets on Zoom every month, and every AA member is welcome. Ask us for the details. |
-| `text_es` | El {committee} se reúne por Zoom cada mes y todos los miembros de AA son bienvenidos. Pídenos los detalles. |
+| `text_en` | The {committee} meets online every month, and every AA member is welcome. Ask us for the details. |
+| `text_es` | El {committee} se reúne en línea cada mes y todos los miembros de AA son bienvenidos. Pídenos los detalles. |
 | `qr_url` | {site}meetings/ |
 | `source_url` | https://neta65.org/trusted-servants/grapevine-la-vina/ |
 
-On the screen: the heading, the text — "The NETA 65 Grapevine & La Viña Committee meets on Zoom every month …" / "El
-Comité de Grapevine y La Viña de NETA 65 se reúne por Zoom cada mes …" — and the QR code of `/meetings/` beside it
+On the screen: the heading, the text — "The NETA 65 Grapevine & La Viña Committee meets online every month …" /
+"El Comité de Grapevine y La Viña de NETA 65 se reúne en línea cada mes …" — and the QR code of `/meetings/` beside it
 (`/es/meetings/` when Spanish leads).
 
 #### qr
@@ -1683,7 +1683,7 @@ Three words in braces are filled in by the player, in each text cell (`title`, `
 | Placeholder | Becomes | Example cell → on the screen |
 |---|---|---|
 | `{event}` | the event's name in the slide's language (the Spanish name on Spanish slides, else the English one); "this event" / "este evento" while none is set or "Show the event name at the top" is off | `Welcome to {event}!` → "Welcome to NETA 65 Spring Assembly!" — with no name, "Welcome to this event!" |
-| `{committee}` | "NETA 65 Grapevine & La Viña Committee" / "Comité de Grapevine y La Viña de NETA 65" | `The {committee} meets on Zoom every month` → "The NETA 65 Grapevine & La Viña Committee meets on Zoom every month" |
+| `{committee}` | "NETA 65 Grapevine & La Viña Committee" / "Comité de Grapevine y La Viña de NETA 65" | `The {committee} meets online every month` → "The NETA 65 Grapevine & La Viña Committee meets online every month" |
 | `{site}` | the site's address, `neta65.github.io/aagrapevine` | `Everything is at {site}` → "Everything is at neta65.github.io/aagrapevine" |
 
 Any other word in braces is a mistake (*text_en: {Event} is not a placeholder the booth knows ({event}, {committee},
@@ -2198,4 +2198,4 @@ with Edge ([Automation and troubleshooting §11.5](automation-and-troubleshootin
   steps ([§4.2](automation-and-troubleshooting.md#42-website-update-and-its-three-modes)), running things on a PC.
 - [Pages and code](pages-and-code.md) — the site's pages, styles and the service worker.
 - [Translations](translations.md) — the words in `src/_i18n/`.
-- [Presentations](presentations.md) — the four web slide decks, another kind of show.
+- [Presentations](presentations.md) — the five web slide decks, another kind of show.

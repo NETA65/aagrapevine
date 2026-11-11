@@ -3,8 +3,9 @@
   * eventTone (eleventy/filters/event-tone.js) — the one rule every event list uses for its colours
     (/events/, the home page's "Upcoming events", the monthly toolkit, Announcements "Coming up"):
     committee meeting → La Viña / Grapevine holding it themselves (extra.host / host: La Viña's monthly
-    workshop) → booth → assembly → La Viña / Grapevine named in the title (the first one named wins) → the
-    event's own Grapevine / La Viña calendar → other. Checked on data items, /events/ events and monthly
+    workshop) → booth → assembly → a monthly meeting of ours (the Grapevine Meeting: neutral, its badge says NETA 65
+    — never read as an event of AA Grapevine's) → La Viña / Grapevine named in the title (the first one named wins)
+    → the event's own Grapevine / La Viña calendar → other. Checked on data items, /events/ events and monthly
     date rows, in English and Spanish, plus the kinds the repository's events use.
   * pwView (eleventy/filters/published.js) — each group shows its 12 most recent stories; the rest of
     the default view is marked `over` (listed without JavaScript, "see more" with it); when Area 65 is
@@ -69,7 +70,16 @@ CASES: list[tuple[dict, str]] = [
     ({"category": "manual", "title": "NETA 65 Spring Assembly 2027"}, "assembly"),
     ({"title": "Asamblea de Otoño 2027 de NETA 65"}, "assembly"),
     ({"title": "District 12 Pre-Assembly"}, "assembly"),
-    # 5. La Viña / Grapevine by title (accents and case ignored; the first one named wins)
+    # 5. a monthly meeting of ours (recurring_events, no host of theirs — the Grapevine Meeting): never the colour of
+    #    an event AA Grapevine holds, whatever its name says — on a data item, a /events/ event and a monthly date row
+    ({"category": "recurring", "title": "Grapevine Meeting", "extra": {"host": "neta", "series": "grapevine-meeting"}}, "other"),
+    ({"category": "recurring", "title": "Reunión de Grapevine"}, "other"),
+    ({"recurring": True, "category": "recurring", "host": "", "title": "Grapevine Meeting"}, "other"),
+    ({"kind": "recurring", "host": "", "title": "Reunión de Grapevine"}, "other"),
+    ({"category": "recurring", "title": "Grapevine Meeting", "extra": {"host": "gv"}}, "gv"),       # theirs: rule 2
+    ({"category": "gv-calendar", "title": "Grapevine Weekly Open AA Meeting"}, "gv"),             # not a series of ours
+    ({"category": "manual", "title": "Grapevine meeting night"}, "gv"),                            # a one-off: by title
+    # 6. La Viña / Grapevine by title (accents and case ignored; the first one named wins)
     ({"title": "La Viña Writing Workshop (in Spanish) — Fort Worth"}, "lv"),
     ({"title": "Taller de escritura de LA VINA"}, "lv"),
     ({"title": "Grapevine Writing Workshop — Arlington"}, "gv"),
@@ -78,11 +88,11 @@ CASES: list[tuple[dict, str]] = [
     # the display title first, then the original and its translations
     ({"title": "Taller mensual", "item": {"title": "Monthly La Viña workshop"}}, "lv"),
     ({"title": "Monthly workshop", "i18n": {"title": {"es": "Taller de Grapevine"}}}, "gv"),
-    # 6. an event from Grapevine's / La Viña's own calendar
+    # 7. an event from Grapevine's / La Viña's own calendar
     ({"category": "lv-calendar", "title": "Taller Mensual"}, "lv"),
     ({"category": "gv-calendar", "title": "Weekly Open"}, "gv"),
     ({"item": {"category": "lv-calendar", "title": "Taller"}, "title": "Workshop"}, "lv"),
-    # 7. anything else
+    # 8. anything else
     ({"category": "flyer", "title": "Unity Day 2027"}, "other"),
     ({"title": "Timetable review"}, "other"),
 ]
@@ -126,6 +136,8 @@ class EventToneTest(unittest.TestCase):
                     self.assertEqual(kind, "booth")
                 elif "assembly" in low:
                     self.assertEqual(kind, "assembly")
+                elif "grapevine meeting" in low:            # our monthly meeting (recurring_events): never theirs
+                    self.assertEqual(kind, "other")
                 elif "la viña" in low:
                     self.assertEqual(kind, "lv")
                 elif "grapevine" in low:

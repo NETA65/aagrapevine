@@ -104,8 +104,8 @@
     "es": "NETA 65 Grapevine / La Viña — Eventos"
   },
   "committee.ics.desc": {
-    "en": "Committee meetings, workshops, booths and Grapevine / La Viña events for Northeast Texas Area 65. Updates automatically.",
-    "es": "Reuniones del comité, talleres, mesas y eventos de Grapevine / La Viña del Área 65 del Noreste de Texas. Se actualiza automáticamente."
+    "en": "Committee meetings, our online Grapevine Meeting, workshops, booths and Grapevine / La Viña events for Northeast Texas Area 65. Updates automatically.",
+    "es": "Reuniones del comité, nuestra Reunión de Grapevine en línea, talleres, mesas y eventos de Grapevine / La Viña del Área 65 del Noreste de Texas. Se actualiza automáticamente."
   },
   "committee.meeting.hero_sub": {
     "en": "{rule} · {time} Central time, on {platform}.",
@@ -114,6 +114,10 @@
   "committee.meeting.next": {
     "en": "Next meeting",
     "es": "Próxima reunión"
+  },
+  "committee.meeting.first": {
+    "en": "First meeting",
+    "es": "Primera reunión"
   },
   "committee.meeting.starting_soon": {
     "en": "Starting soon",
@@ -140,8 +144,8 @@
     "es": "Tu hora: {time}"
   },
   "committee.meeting.join_hint": {
-    "en": "The {platform} room opens about 15 minutes before we start — this button turns green when we're live.",
-    "es": "La sala de {platform} se abre unos 15 minutos antes de empezar — este botón se pone verde cuando estamos en vivo."
+    "en": "Open the {platform} link a few minutes before we start — this button turns green when it's time.",
+    "es": "Abre el enlace de {platform} unos minutos antes de empezar: este botón se pone verde cuando es la hora."
   },
   "committee.meeting.no_next": {
     "en": "The next meeting date will be posted soon.",
@@ -155,6 +159,10 @@
     "en": "Use “Join on {platform}” in the next-meeting card, or type the meeting ID and passcode into the {platform} app.",
     "es": "Usa “Entrar por {platform}” en la tarjeta de la próxima reunión, o escribe el ID de reunión y el código de acceso en la aplicación de {platform}."
   },
+  "committee.meeting.how_to_join_text_code": {
+    "en": "Use “Join on {platform}” in the next-meeting card, or type the meeting code into the {platform} app.",
+    "es": "Usa “Entrar por {platform}” en la tarjeta de la próxima reunión, o escribe el código de la reunión en la aplicación de {platform}."
+  },
   "committee.meeting.id": {
     "en": "Meeting ID",
     "es": "ID de reunión"
@@ -166,6 +174,10 @@
   "committee.meeting.cal_desc": {
     "en": "Monthly NETA 65 Grapevine / La Viña committee meeting on {platform}.",
     "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65 por {platform}."
+  },
+  "committee.meeting.cal_desc_online": {
+    "en": "Monthly NETA 65 Grapevine / La Viña committee meeting, online.",
+    "es": "Reunión mensual del Comité de Grapevine / La Viña de NETA 65, en línea."
   },
   "committee.meeting.cal_join": {
     "en": "Join on {platform}",
@@ -179,17 +191,41 @@
     "en": "Copy passcode",
     "es": "Copiar código de acceso"
   },
+  "committee.meeting.code": {
+    "en": "Meeting code",
+    "es": "Código de la reunión"
+  },
+  "committee.meeting.copy_code": {
+    "en": "Copy meeting code",
+    "es": "Copiar el código de la reunión"
+  },
+  "committee.meeting.speaker": {
+    "en": "Guest speaker: {name}",
+    "es": "Orador(a) invitado(a): {name}"
+  },
+  "committee.meeting.speaker_topic": {
+    "en": "Topic: “{topic}”",
+    "es": "Tema: “{topic}”"
+  },
+  "committee.meeting.speaker_until": {
+    "en": "The guest speaker's part ends by {until}; committee business follows until {end}.",
+    "es": "La charla de la persona invitada termina a más tardar a las {until}; luego, hasta las {end}, siguen los asuntos del comité."
+  },
   "committee.meeting.copy_link": {
     "en": "Copy {platform} link",
     "es": "Copiar enlace de {platform}"
+  },
+  "committee.meeting.no_dial_in": {
+    "en": "No phone number to call in: this meeting is online only.",
+    "es": "Sin número de teléfono para llamar: esta reunión es solo en línea."
   },
   "committee.meeting.tip_early": {
     "en": "Arrive a few minutes early to test your audio.",
     "es": "Llega unos minutos antes para probar tu audio."
   },
   "committee.meeting.tip_phone": {
-    "en": "Works on a phone, tablet or computer — no {platform} account needed.",
-    "es": "Funciona en celular, tableta o computadora — no necesitas cuenta de {platform}."
+    "en": "On a computer, open the link in your browser; on a phone or tablet, use the {platform} app.",
+    "es": "En una computadora, abre el enlace en tu navegador; en un celular o una tableta, usa la aplicación de {platform}."
   },
   "committee.meeting.tip_lang": {
     "en": "English and Spanish speakers are welcome.",
@@ -301,7 +337,71 @@
   },
   "committee.meeting.step_close_text": {
     "en": "We close on time with the Responsibility Statement. Notes and slides are shared in our Portfolio.",
-    "es": "Cerramos a tiempo con la Declaración de la Responsabilidad. Las notas y presentaciones se comparten en nuestro Portafolio."
+    "es": "Cerramos a tiempo con la Declaración de Responsabilidad. Las notas y presentaciones se comparten en nuestro Portafolio."
+  },
+  "committee.meeting.evening_title": {
+    "en": "How the evening runs",
+    "es": "Cómo transcurre la reunión"
+  },
+  "committee.meeting.evening_sub": {
+    "en": "Each meeting opens with a guest speaker: the talk and questions, done by {until}. Then committee business until {end}.",
+    "es": "Cada reunión empieza con un(a) orador(a) invitado(a): la charla y las preguntas terminan a más tardar a las {until}; después, hasta las {end}, siguen los asuntos del comité."
+  },
+  "committee.meeting.evening_about": {
+    "en": "about {time}",
+    "es": "hacia las {time}"
+  },
+  "committee.meeting.evening_opening": {
+    "en": "Opening",
+    "es": "Apertura"
+  },
+  "committee.meeting.evening_opening_text": {
+    "en": "A moment of silence and the Serenity Prayer, then we introduce our guest speaker.",
+    "es": "Un momento de silencio y la Oración de la Serenidad; luego presentamos a nuestro(a) orador(a) invitado(a)."
+  },
+  "committee.meeting.evening_talk": {
+    "en": "Our guest speaker",
+    "es": "Nuestro(a) orador(a) invitado(a)"
+  },
+  "committee.meeting.evening_talk_text": {
+    "en": "About {min} minutes.",
+    "es": "Unos {min} minutos."
+  },
+  "committee.meeting.evening_questions": {
+    "en": "Questions for the speaker",
+    "es": "Preguntas para quien nos visita"
+  },
+  "committee.meeting.evening_questions_text": {
+    "en": "Bring your questions. We thank our speaker, who is done by {until}.",
+    "es": "Trae tus preguntas. Quien nos visita termina su parte a más tardar a las {until}, y le damos las gracias."
+  },
+  "committee.meeting.evening_business": {
+    "en": "Committee business",
+    "es": "Asuntos del comité"
+  },
+  "committee.meeting.evening_business_text": {
+    "en": "District and group reports, Grapevine and La Viña news, plans for workshops and booths, your questions and ideas.",
+    "es": "Informes de distritos y grupos, noticias de Grapevine y La Viña, planes de talleres y mesas, y tus preguntas e ideas."
+  },
+  "committee.meeting.evening_close": {
+    "en": "Close",
+    "es": "Cierre"
+  },
+  "committee.meeting.evening_close_text": {
+    "en": "We close on time with the Responsibility Statement.",
+    "es": "Cerramos a tiempo con la Declaración de Responsabilidad."
+  },
+  "committee.meeting.evening_business_hour": {
+    "en": "{time} Central time: committee business, with no guest speaker at this meeting.",
+    "es": "{time}, hora del Centro: asuntos del comité, sin orador(a) invitado(a) en esta reunión."
+  },
+  "committee.meeting.speakers_title": {
+    "en": "Our guest speakers, {years}",
+    "es": "Oradores invitados, {years}"
+  },
+  "committee.meeting.speakers_sub": {
+    "en": "Who opens each committee meeting, and on what topic.",
+    "es": "Quién abre cada reunión del comité y sobre qué tema hablará."
   },
   "committee.weekly.eyebrow": {
     "en": "On Zoom · Open to everyone",
@@ -776,8 +876,8 @@
     "es": "Reuniones y eventos mensuales"
   },
   "committee.events.src_meetings_text": {
-    "en": "Worked out from our monthly schedule: the committee meeting (with its {platform} link) and the things we do every month, like our literature booths.",
-    "es": "Salen de nuestro horario mensual: la reunión del comité (con su enlace de {platform}) y lo que hacemos cada mes, como nuestras mesas de literatura."
+    "en": "Worked out from our monthly schedule: the committee meeting (with its {platform} link) and the things we do every month, like our online Grapevine Meeting and our literature booths.",
+    "es": "Salen de nuestro horario mensual: la reunión del comité (con su enlace de {platform}) y lo que hacemos cada mes, como nuestra Reunión de Grapevine en línea y nuestras mesas de literatura."
   },
   "committee.events.src_flyers": {
     "en": "NETA 65 events",
@@ -1332,16 +1432,16 @@
     "es": "Los anuncios del comité ahora están en nuestro Boletín:"
   },
   "committee.meetings.meta_desc": {
-    "en": "Our committee's monthly {platform} meeting, AA groups in and near NETA 65 that read Grapevine or La Viña, and the weekly open meetings of both magazines.",
-    "es": "La reunión mensual del comité por {platform}, grupos de AA en NETA 65 y cerca que leen La Viña o Grapevine, y las reuniones abiertas semanales de ambas revistas."
+    "en": "Our committee meeting and online Grapevine Meeting on {platform}, AA groups in and near NETA 65 that read Grapevine or La Viña, and weekly open meetings.",
+    "es": "La reunión del comité y la Reunión de Grapevine por {platform}, grupos de AA en NETA 65 y cerca que leen La Viña o Grapevine, y reuniones abiertas semanales."
   },
   "committee.meetings.eyebrow": {
     "en": "Committee · Meetings",
     "es": "Comité · Reuniones"
   },
   "committee.meetings.hero_sub": {
-    "en": "Our monthly committee meeting, AA groups near you that read Grapevine or La Viña, and weekly open meetings.",
-    "es": "Nuestra reunión mensual del comité, los grupos de AA cerca de ti que leen Grapevine o La Viña y las reuniones abiertas semanales."
+    "en": "Our monthly committee meeting, our online Grapevine Meeting, AA groups near you that read Grapevine or La Viña, and weekly open meetings.",
+    "es": "Nuestra reunión mensual del comité, nuestra Reunión de Grapevine en línea, los grupos de AA cerca de ti que leen Grapevine o La Viña y las reuniones abiertas semanales."
   },
   "committee.meetings.jump_aria": {
     "en": "On this page",
@@ -1362,6 +1462,62 @@
   "committee.meetings.committee_title": {
     "en": "Our committee meeting",
     "es": "Nuestra reunión del comité"
+  },
+  "committee.gvmeeting.eyebrow": {
+    "en": "Our monthly online meeting",
+    "es": "Nuestra reunión mensual en línea"
+  },
+  "committee.gvmeeting.what_title": {
+    "en": "What happens at the Grapevine Meeting",
+    "es": "Qué pasa en la Reunión de Grapevine"
+  },
+  "committee.gvmeeting.what_sub": {
+    "en": "{rule} · {time} Central time: one hour, around a story from AA Grapevine.",
+    "es": "{rule} · {time}, hora del Centro: una hora en torno a una historia de AA Grapevine."
+  },
+  "committee.gvmeeting.step_open": {
+    "en": "Welcome",
+    "es": "Bienvenida"
+  },
+  "committee.gvmeeting.step_open_text": {
+    "en": "We open with a moment of silence and the Serenity Prayer.",
+    "es": "Abrimos con un momento de silencio y la Oración de la Serenidad."
+  },
+  "committee.gvmeeting.step_purpose": {
+    "en": "The AA Grapevine Statement of Purpose",
+    "es": "La Declaración de Propósito de AA Grapevine"
+  },
+  "committee.gvmeeting.step_purpose_text": {
+    "en": "A member reads it aloud, in place of the AA Preamble.",
+    "es": "Un miembro la lee en voz alta, en lugar del Preámbulo de AA."
+  },
+  "committee.gvmeeting.step_story": {
+    "en": "A story from the current Grapevine",
+    "es": "Una historia del Grapevine del mes"
+  },
+  "committee.gvmeeting.step_story_text": {
+    "en": "A member reads a story from this month's issue aloud.",
+    "es": "Un miembro lee en voz alta una historia del número de este mes."
+  },
+  "committee.gvmeeting.step_share": {
+    "en": "Sharing on its topic",
+    "es": "Compartimos sobre su tema"
+  },
+  "committee.gvmeeting.step_share_text": {
+    "en": "Members share their experience, strength and hope on the story's topic.",
+    "es": "Los miembros comparten su experiencia, fortaleza y esperanza sobre el tema de la historia."
+  },
+  "committee.gvmeeting.step_close": {
+    "en": "Close",
+    "es": "Cierre"
+  },
+  "committee.gvmeeting.step_close_text": {
+    "en": "We close on time, at {end}.",
+    "es": "A las {end} cerramos a tiempo."
+  },
+  "committee.gvmeeting.same_room": {
+    "en": "The same {platform} room as our committee meeting.",
+    "es": "La misma sala de {platform} que nuestra reunión del comité."
   },
   "committee.meetings.moved_text": {
     "en": "The committee meeting, the Grapevine meetings near you and the weekly open meetings are now on our Meetings page:",

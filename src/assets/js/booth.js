@@ -1723,7 +1723,8 @@
     });
   }
   RENDER.events = function (R) { return listSlide(R, "booth.screen.events", "calendar-days", "map-pin", 4); };
-  RENDER.meetings = function (R) { return listSlide(R, "booth.screen.meetings", "users", "map-pin", 4); };
+  // (five meetings: the committee's, our Grapevine Meeting, the two weekly open meetings and La Viña's workshop)
+  RENDER.meetings = function (R) { return listSlide(R, "booth.screen.meetings", "users", "map-pin", 5); };
   RENDER.themes = function (R) { return listSlide(R, "booth.screen.themes", "pen-line", "tag", 5); };
   RENDER.prices = function (R) {
     return langParts(R, function (l, RL) {

@@ -20,10 +20,13 @@ export default function () {
     repository: String(process.env.GITHUB_REPOSITORY
       ? `${process.env.GITHUB_SERVER_URL || "https://github.com"}/${process.env.GITHUB_REPOSITORY}`
       : s.repository || "").replace(/\/+$/, ""),
-    // The committee meeting. `platform` names where it is held in the pages' words ("Join on Zoom", "on Zoom"):
-    // "Zoom" when the setting is left out; `note` / `note_es` is the line about who may come (/meetings/, the
+    // The committee meeting. `platform` names where it is held in the pages' words ("Join on Google Meet", "on
+    // Google Meet"): "Zoom" when the setting is left out; `online_url` is the link to join (an older `zoom_url` still
+    // counts: the pages read online_url only); `note` / `note_es` is the line about who may come (/meetings/, the
     // calendar entries). No `meeting:` section at all stays {} (the pages and decks then show no rule of theirs).
-    meeting: Object.keys(m).length ? { ...m, platform: String(m.platform ?? "").trim() || "Zoom" } : {},
+    meeting: Object.keys(m).length
+      ? { ...m, platform: String(m.platform ?? "").trim() || "Zoom", online_url: String(m.online_url || m.zoom_url || "").trim() }
+      : {},
     // The monthly series (CityWide booth …): /monthly/ works out months past events.json's
     // `months_ahead` dates from these rules (eleventy/filters/monthly.js).
     // (a single event written without the leading "- " counts too, as in build_data.recurring_specs)
@@ -32,7 +35,8 @@ export default function () {
     drive: cfg.drive || {},
     sources: cfg.sources || {},
     links: cfg.links || {},
-    // Zoom dial-in numbers + callers' passcodes for /accessibility/#phone (eleventy/filters/access.js)
+    // Zoom dial-in numbers + callers' passcodes for /accessibility/#phone (eleventy/filters/access.js): the weekly
+    // open meetings' (the committee's Google Meet room has none)
     phone_access: cfg.phone_access || {},
     digest: cfg.digest || {},
     // La Viña's weekly open meeting (the data itself comes from data/site/weekly_open.json); the page

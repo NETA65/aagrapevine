@@ -4,7 +4,8 @@
    - homeMeeting: live countdown to the next committee meeting (the card in the hero from
      1024px and the one under the hero on smaller screens — one of them is displayed). If the
      last site build is older than the meeting (e.g. the daily build failed for a few days),
-     it works out the next date itself from the meeting rule, so the card is never out of date.
+     it works out the next date itself from the meeting rule, so the card is never out of date —
+     with that date's guest speaker, or none.
    - homePlayer: the "More episodes" play buttons load into the featured audio player, which keeps the same
      saved places as Listen's player (media.js — this device only): an episode goes on where it stopped, a
      finished one says "Played", and "Continue listening: <title> — 23 min left" offers the last one left
@@ -104,19 +105,29 @@
   document.addEventListener("alpine:init", function () {
     var Alpine = window.Alpine;
 
+    /* The card's guest speaker: data-speakers='[{ "ymd": "2027-01-20", "name": "Rick W.", "topic": "…" }]' (the
+       speakers to come: eleventy/filters/committee.js cmSpeakers) and data-speaker-tpl="Guest speaker: {name}" —
+       once the card rolls on to the next date, THAT date's speaker (none on a date without one), also in the
+       calendar entry: data-cal-desc + "Guest speaker: Rick W. — “…”." + data-cal-loc (the link to join). */
     Alpine.data("homeMeeting", function () {
+      var speakers = [], speakerTpl = "{name}";
       return {
         start: 0, end: 0, d: 0, h: 0, m: 0, s: 0,
         live: false, ready: false, rule: null, dateLabel: "", timeLabel: "",
+        speaker: null, speakerLine: "",
 
         init: function () {
           var ds = this.$el.dataset;
           try { this.rule = JSON.parse(ds.rule || "null"); } catch (e) { this.rule = null; }
+          try { speakers = JSON.parse(ds.speakers || "[]"); } catch (e) { speakers = []; }
+          if (!Array.isArray(speakers)) speakers = [];
+          speakerTpl = ds.speakerTpl || "{name}";
           this.start = Date.parse(ds.start) || 0;
           this.end = Date.parse(ds.end) || (this.start ? this.start + 3600e3 : 0);
           // Start from the server-rendered text so nothing flickers.
           this.dateLabel = this.$refs.date ? this.$refs.date.textContent.trim() : "";
           this.timeLabel = this.$refs.time ? this.$refs.time.textContent.trim() : "";
+          this.setSpeaker();
           this.tick();
           var self = this;
           this._timer = setInterval(function () { self.tick(); }, 1000);
@@ -134,6 +145,15 @@
           var l = meetingLabels(n.start, n.end);
           if (l.date) this.dateLabel = l.date;
           if (l.time) this.timeLabel = l.time;
+          this.setSpeaker();
+        },
+
+        // the guest speaker of the date the card shows (its Central-time day), or none
+        setSpeaker: function () {
+          var ymd = this.start ? localYmd(this.start) : "", sp = null;
+          for (var i = 0; i < speakers.length; i++) if (speakers[i] && speakers[i].ymd === ymd && speakers[i].name) sp = speakers[i];
+          this.speaker = sp ? { name: String(sp.name), topic: String(sp.topic || "") } : null;
+          this.speakerLine = sp ? speakerTpl.replace("{name}", sp.name) : "";
         },
 
         tick: function () {
@@ -152,8 +172,12 @@
         addToCalendar: function () {
           if (!window.GV || !window.GV.ics || !this.start) return;
           var ds = this.$root.dataset; // $el would be the clicked button here
+          // the meeting in a line, that date's guest speaker and topic ("Guest speaker: Rick W. — “…”.", the words of
+          // its calendar text on /events/; a name alone ends in its initial's period), then the link to join; the
+          // entry's own link is /meetings/
+          var sp = this.speaker ? this.speakerLine + (this.speaker.topic ? " — “" + this.speaker.topic + "”." : "") : "";
           window.GV.ics({
-            title: ds.calTitle, description: ds.calDesc, location: ds.calLoc, url: ds.calLoc,
+            title: ds.calTitle, description: [ds.calDesc, sp, ds.calLoc].filter(Boolean).join(" "), location: ds.calLoc, url: ds.calUrl || ds.calLoc,
             start: new Date(this.start), end: new Date(this.end),
             // Same UID as the Events page / calendar feed use for this meeting, so adding it
             // twice updates the entry instead of duplicating it.

@@ -17,10 +17,14 @@
 //   3. booth      a literature booth or table: "booth", "table" (not "round table"), "kiosk", "stall",
 //                 "mesa" (not "mesa redonda / de trabajo / directiva"), "puesto"
 //   4. assembly   "assembly" / "asamblea" (a pre-assembly too)
-//   5. lv / gv    the title names La Viña ("La Viña", "La Vina", "LV") or Grapevine ("Grapevine", "GV");
+//   5. other      a monthly MEETING of ours (config/site.yml recurring_events without `host: lv / gv` — the
+//                 Grapevine Meeting): "meeting" / "reunión" in the title. Ours, so never the colour of an event
+//                 AA Grapevine or La Viña hold (rule 6 would give "Grapevine Meeting" Grapevine's): its badge
+//                 says NETA 65
+//   6. lv / gv    the title names La Viña ("La Viña", "La Vina", "LV") or Grapevine ("Grapevine", "GV");
 //                 a title that names both gets the one it names first
-//   6. an event from La Viña's or Grapevine's own calendar (category lv-calendar / gv-calendar)
-//   7. other      anything else (neutral)
+//   7. an event from La Viña's or Grapevine's own calendar (category lv-calendar / gv-calendar)
+//   8. other      anything else (neutral)
 //
 // It reads a raw data item (db.events.items), a /events/ event (cmEvents: .committee, .host, .item) and a
 // monthly toolkit date row (kind: committee | recurring | event; .host).
@@ -32,6 +36,7 @@ const RE = {
   committee: /\bcommittee meetings?\b|\breunion(?:es)? del comite\b/,
   booth: /\b(?:booths?|kiosks?|stalls?|puestos?)\b|\b(?<!round )tables?\b|\bmesas?\b(?! (?:redonda|de trabajo|directiva))/,
   assembly: /\b(?:assembly|assemblies|asambleas?)\b/,
+  meeting: /\bmeetings?\b|\breunion(?:es)?\b/,
   lv: /\bla vina\b|\blv\b/,
   gv: /\bgrapevine\b|\bgv\b/,
 };
@@ -79,6 +84,9 @@ export function eventTone(ev) {
   if (host) return host;
   if (titles.some((t) => RE.booth.test(t))) return "booth";
   if (titles.some((t) => RE.assembly.test(t))) return "assembly";
+  // a monthly series of ours (a data item, a /events/ event or a monthly date row) that is a meeting
+  const series = category === "recurring" || ev.kind === "recurring" || ev.recurring === true;
+  if (series && titles.some((t) => RE.meeting.test(t))) return "other";
   for (const t of titles) {
     const lv = firstAt(RE.lv, t), gv = firstAt(RE.gv, t);
     if (lv !== Infinity || gv !== Infinity) return lv < gv ? "lv" : "gv";

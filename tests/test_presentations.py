@@ -1,6 +1,6 @@
-"""The presentations (config/presentations/<id>.yml → /orientation/, "Presentations": three workshops and the
-committee meeting): every deck file stays complete, safe and in line with AA's principles and the site's wording
-rules.
+"""The presentations (config/presentations/<id>.yml → /orientation/, "Presentations": three workshops, the committee
+meeting and our Grapevine Meeting): every deck file stays complete, safe and in line with AA's principles and the
+site's wording rules.
 
 The site build (src/_data/presentations.js, I18N_STRICT=1) stops on the same problems; these tests name the deck
 and the slide without running the build. One file at a time (what the people writing a deck run):
@@ -21,7 +21,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 FOLDER = ROOT / "config" / "presentations"
-DECKS = ("orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting")
+DECKS = ("orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting", "grapevine-meeting")
 # The phone numbers the site itself publishes (published_phones): a deck may show them
 SITE_YML = ROOT / "config" / "site.yml"
 AUDIO_PROJECT = ROOT / "data" / "site" / "audio_project.json"
@@ -34,9 +34,11 @@ ACCENTS = {"gv", "lv", "vine", "grape", "navy"}
 LANGS = {"en", "es"}
 LIVE_KEYS = {
     "site", "site_url", "email", "panel", "as_of", "month", "year",
-    "meeting_next", "meeting_day", "meeting_after", "meeting_month", "meeting_rule", "meeting_time", "meeting_zoom_id",
-    "meeting_passcode", "meeting_phone", "meeting_phone_passcode",
-    "lv_workshop_next", "lv_workshop_time", "lv_workshop_zoom_id",
+    "meeting_next", "meeting_day", "meeting_after", "meeting_month", "meeting_rule", "meeting_time", "meeting_platform",
+    "meeting_link", "meeting_url", "meeting_code", "meeting_zoom_id", "meeting_passcode", "meeting_phone", "meeting_phone_passcode",
+    "speaker_name", "speaker_position", "speaker_topic", "speaker_line", "speaker_note", "speaker_after", "speaker_slides",
+    "grapevine_meeting_next", "grapevine_meeting_day", "grapevine_meeting_after", "grapevine_meeting_time",
+    "grapevine_meeting_link", "lv_workshop_next", "lv_workshop_time", "lv_workshop_zoom_id",
     "price_gv_print", "price_gv_digital", "price_lv_print", "price_lv_digital", "price_change_note", "price_change_date",
     "gv_issue", "lv_issue", "gv_next_issue", "lv_next_issue", "gv_theme", "lv_theme", "next_deadline_gv", "next_deadline_lv",
     "botm", "botm_lv", "gv_audio_phone", "lv_audio_phone",
@@ -105,9 +107,11 @@ VERSION_TAG = re.compile(r"\{(only|not):([^}]*)\}")
 LINK = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
 HTML = re.compile(r"<[A-Za-z/!]")
 # The chair's paperwork (a deck's `paperwork:` block — the committee meeting's Customize → Agenda & minutes): its
-# texts (plain text), their own facts {paper:…} and "Start next month" (numbered rows of blanks: <row>_what / _who /
-# _when for an action item, <row>_item / _status for old business)
-PAPER_KEYS = ("meeting", "month", "after", "agenda", "meeting_es", "time_es", "committee_es")
+# texts (plain text), their own facts {paper:…} (the meeting a text is for — its guest speaker too — …) and "Start
+# next month" (numbered rows of blanks: <row>_what / _who / _when for an action item, <row>_item / _status for old
+# business)
+PAPER_KEYS = ("meeting", "month", "after", "agenda", "meeting_es", "time_es", "committee_es", "speaker", "speaker_position",
+              "speaker_topic", "speaker_es", "speaker_topic_es")
 PAPER_TEXTS = ("agenda", "reminder", "minutes")
 PAPER_ROWS = {"actions": ("what", "who", "when"), "old_business": ("item", "status")}
 PAPER_TAG = re.compile(r"\{paper:([^}]*)\}")
@@ -374,7 +378,7 @@ def paperwork_problems(d: dict, fill_keys: dict, idset: set, by_id: dict) -> lis
     if not isinstance(pw, dict):
         return ["paperwork: a mapping"]
     for k in pw:
-        if k not in ("agenda_slide", *PAPER_TEXTS, "next_month"):
+        if k not in ("agenda_slide", "speaker_slide", *PAPER_TEXTS, "next_month"):
             out.append(f"paperwork: unknown field {k!r}")
     if not any(k in pw for k in PAPER_TEXTS):
         out.append(f"paperwork: at least one text ({', '.join(PAPER_TEXTS)})")
@@ -384,6 +388,9 @@ def paperwork_problems(d: dict, fill_keys: dict, idset: set, by_id: dict) -> lis
             out.append(f"paperwork.agenda_slide: no slide {a!r}")
         elif not isinstance(by_id.get(a), dict) or by_id[a].get("layout") != "agenda":
             out.append(f"paperwork.agenda_slide: {a!r} is not an agenda slide")
+    # the guest speaker's slide: a version that leaves it out (no guest speaker tonight) has no speaker lines either
+    if "speaker_slide" in pw and (not isinstance(pw["speaker_slide"], str) or pw["speaker_slide"] not in idset):
+        out.append(f"paperwork.speaker_slide: no slide {pw['speaker_slide']!r}")
     fills = d.get("fillins") if isinstance(d.get("fillins"), list) else []
     shared = {f["key"] for f in fills if isinstance(f, dict) and f.get("shared") is True and isinstance(f.get("key"), str)}
     for name in PAPER_TEXTS:
@@ -478,7 +485,7 @@ def paperwork_problems(d: dict, fill_keys: dict, idset: set, by_id: dict) -> lis
                             out.append(f"{w}.clear: {pat!r} names no blank")
                         for k in hits:
                             if k in shared:
-                                out.append(f"{w}.clear: {k!r} is shared by all four presentations (never cleared)")
+                                out.append(f"{w}.clear: {k!r} is shared by every presentation (never cleared)")
             if "untick" in nm:
                 if not isinstance(nm["untick"], list) or not all(isinstance(x, str) for x in nm["untick"]):
                     out.append(f"{w}.untick: a list of slide ids")
@@ -1020,12 +1027,33 @@ class PresentationFiles(unittest.TestCase):
                 problems = check_deck(f)
                 self.assertEqual(problems, [], "\n" + "\n".join(problems[:60]))
 
-    def test_the_four_decks(self):
+    def test_the_decks(self):
         if not FOLDER.exists():
             self.skipTest("config/presentations/ not there yet")
         self.assertEqual(sorted(p.stem for p in FOLDER.glob("*.yml")), sorted(DECKS))
         orders = [yaml.safe_load((FOLDER / f"{d}.yml").read_text(encoding="utf-8")).get("order") for d in DECKS]
-        self.assertEqual(len(set(orders)), 4, "each deck has its own order")
+        self.assertEqual(len(set(orders)), len(DECKS), "each deck has its own order")
+
+    def test_the_grapevine_meeting_names_what_it_never_quotes(self):
+        """Our Grapevine Meeting (grapevine-meeting.yml) reads the AA Grapevine Statement of Purpose in place of the
+        Preamble: named, never quoted (Grapevine material is never quoted on the site), and no story text on a slide;
+        and no deck calls a meeting "Grapevine meetings" (the list of AA groups on /meetings/#grapevine-meetings)."""
+        if not (FOLDER / "grapevine-meeting.yml").exists():
+            self.skipTest("config/presentations/grapevine-meeting.yml not there")
+        deck = yaml.safe_load((FOLDER / "grapevine-meeting.yml").read_text(encoding="utf-8"))
+        slides = {s["id"]: s for s in deck["slides"]}
+        sop = slides["statement-of-purpose"]
+        self.assertNotEqual(sop["layout"], "quote", "named, not quoted")
+        self.assertIn("Statement of Purpose", sop["title"])
+        self.assertIn("aagrapevine.org/about-us", json.dumps(sop))
+        self.assertNotIn("preamble", slides, "the Statement of Purpose takes the Preamble's place")
+        quotes = [s for s in deck["slides"] if s["layout"] == "quote"]
+        self.assertEqual({s["id"] for s in quotes}, {"serenity-prayer", "responsibility"}, "nothing of AA Grapevine's quoted")
+        self.assertTrue(all("{fill:story_" in json.dumps(slides[i]) for i in ("tonights-story", "reading")), "the story by its title only")
+        for f in sorted(FOLDER.glob("*.yml")):
+            texts = [line for line in f.read_text(encoding="utf-8").splitlines() if not line.lstrip().startswith("#")]
+            with self.subTest(deck=f.name):
+                self.assertEqual([t for t in texts if "grapevine meetings" in t.lower()], [], "never 'Grapevine meetings'")
 
     def test_checker_catches_problems(self):
         """The checker itself: a broken deck is reported, line by line."""

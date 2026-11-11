@@ -553,7 +553,7 @@ class Sections(unittest.TestCase):
             "• GV/LV booth at CityWide Dallas — Oct 10 and Nov 14: about [N] visitors",
             "• Oct 17 — La Viña Recording Workshop (in Spanish) — Duncanville: about [N] attended, [N] stories recorded",
             "• Oct 31 — Grapevine Committee Crash — Grand Prairie: about [N] attended",
-            "• Committee meetings on Zoom: Oct 21 and Nov 18 — about [N] members each time",
+            "• Committee meetings (online): Oct 21 and Nov 18 — about [N] members each time",
         ]))
         self.assertIn("• Mesa de GV/LV en CityWide Dallas — 10 de octubre y 14 de noviembre: nos visitaron unas [N] personas", es["recent"])
         self.assertIn("asistieron unas [N] personas, se escribieron [N] historias", es["recent"])
@@ -582,7 +582,7 @@ class Sections(unittest.TestCase):
 
     def test_an_empty_period(self):
         r = self.run_editor("const a = boot(); a.setRange('from', '2025-11-01'); a.setRange('to', '2025-11-30'); out(secs(a, 'en'));")
-        self.assertEqual(r["recent"], s("report.ar_recent_none", "en") + "\n• Committee meetings on Zoom: Nov 19, 2025 — about [N] members each time")
+        self.assertEqual(r["recent"], s("report.ar_recent_none", "en") + "\n• Committee meetings (online): Nov 19, 2025 — about [N] members each time")
         self.assertTrue(r["writers"].startswith(s("report.ar_w_none", "en")))
 
 

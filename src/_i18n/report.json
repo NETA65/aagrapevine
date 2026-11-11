@@ -114,6 +114,11 @@
   "report.c_rule": { "en": "We meet {rule}. Every AA member is welcome — no registration needed.", "es": "Nos reunimos {rule}. Todo miembro de AA es bienvenido — no hace falta registrarse." },
   "report.c_none": { "en": "The next committee meeting date will be posted soon. Every AA member is welcome.", "es": "Pronto publicaremos la fecha de la próxima reunión del comité. Todo miembro de AA es bienvenido." },
   "report.c_join": { "en": "{platform} link, meeting ID and passcode: {url}", "es": "Enlace de {platform}, ID de reunión y código de acceso: {url}" },
+  "report.c_join_code": { "en": "How to join on {platform}, the link and the meeting code: {url}", "es": "Cómo unirte por {platform}, el enlace y el código de la reunión: {url}" },
+  "report.c_speaker": { "en": "Guest speaker: {who}.", "es": "Orador(a) invitado(a): {who}." },
+  "report.c_speaker_until": { "en": "The talk and questions are done by {until}; then committee business until {end}.", "es": "La charla y las preguntas terminan a más tardar a las {until}; luego, los asuntos del comité hasta las {end}." },
+  "report.c_series": { "en": "{title}: {when}, on {platform}. Every AA member is welcome: {url}", "es": "{title}: {when}, por {platform}. Todo miembro de AA es bienvenido: {url}" },
+  "report.c_series_first": { "en": "The first one is on {date}.", "es": "La primera es el {date}." },
   "report.c_covers": { "en": "What we do there: reports from the districts and groups; Grapevine and La Viña news (themes, deadlines, new books and podcasts); and planning for workshops and literature tables. New GVRs and RLVs get practical help.", "es": "Lo que hacemos: informes de los distritos y grupos; noticias de La Viña y Grapevine (temas, fechas límite, libros nuevos y podcasts); y la planeación de talleres y mesas de literatura. Los nuevos RLV y GVR reciben ayuda práctica." },
 
   "report.i_gv": { "en": "Grapevine, {issue}: “{theme}”", "es": "Grapevine, {issue} (en inglés): “{theme}”" },
@@ -265,7 +270,7 @@
   "report.ar_visitors": { "en": "about [N] visitors", "es": "nos visitaron unas [N] personas" },
   "report.ar_written": { "en": "[N] stories written", "es": "se escribieron [N] historias" },
   "report.ar_recorded": { "en": "[N] stories recorded", "es": "se grabaron [N] historias" },
-  "report.ar_met": { "en": "Committee meetings on {platform}: {dates} — about [N] members each time", "es": "Reuniones del comité por {platform}: {dates} — unos [N] miembros cada vez" },
+  "report.ar_met": { "en": "Committee meetings (online): {dates} — about [N] members each time", "es": "Reuniones del comité (en línea): {dates} — unos [N] miembros cada vez" },
   "report.ar_next_none": { "en": "[Add the workshops and tables coming up.]", "es": "[Agrega los próximos talleres y mesas.]" },
   "report.ar_meets": { "en": "Committee meetings on {platform}: {dates}", "es": "Reuniones del comité por {platform}: {dates}" },
   "report.ar_w_intro": { "en": "Stories by members of Area 65 in the magazines:", "es": "Historias de miembros del Área 65 en las revistas:" },
@@ -273,5 +278,6 @@
   "report.ar_invite": { "en": "We would be glad to visit your district or your group with a Grapevine or La Viña workshop — writing, recording or information — or a literature table. Write to us: {email}", "es": "Con gusto visitamos tu distrito o tu grupo con un taller de La Viña o de Grapevine — de escritura, de grabación o de información — o con una mesa de literatura. Escríbenos: {email}" },
   "report.ar_invite_plain": { "en": "We would be glad to visit your district or your group with a Grapevine or La Viña workshop — writing, recording or information — or a literature table.", "es": "Con gusto visitamos tu distrito o tu grupo con un taller de La Viña o de Grapevine — de escritura, de grabación o de información — o con una mesa de literatura." },
   "report.ar_invite_more": { "en": "Our workshops, tables and calendar: {url}", "es": "Nuestros talleres, mesas y calendario: {url}" },
-  "report.ar_zoom": { "en": "{platform} meeting ID: {id} · Passcode: {code}", "es": "ID de reunión de {platform}: {id} · Código de acceso: {code}" }
+  "report.ar_zoom": { "en": "{platform} meeting ID: {id} · Passcode: {code}", "es": "ID de reunión de {platform}: {id} · Código de acceso: {code}" },
+  "report.ar_link": { "en": "{platform}: {url}", "es": "{platform}: {url}" }
 }

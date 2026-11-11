@@ -56,7 +56,8 @@
   var TYPES = ["expense", "mileage", "received", "giveaway", "stock"];
   var CLAIMS = ["to_request", "submitted", "paid", "denied"];
   var SET_TABS = ["data", "profile", "categories", "funders", "methods", "activities", "mileage", "budgets", "fields", "reminders"];
-  // the roles the form suggests for a trip (role.<id> in the page's words; the visitor types any other)
+  // the roles the form suggests for a trip (role.<id> in the page's words; the visitor types any other). "zoom" is
+  // the online meeting's setup, Zoom or Google Meet ("Online meeting setup"): a trip saves the words, never the id
   var ROLES = ["attended", "table", "tech", "zoom", "projector", "presented", "chaired", "report"];
   // a subscription's status (GVX.subscriptions) → its icon in the list
   var SUB_ICON = { ending: "clock", ended: "circle-x", active: "circle-check", renewed: "repeat", no_end: "calendar-x" };

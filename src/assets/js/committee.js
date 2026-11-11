@@ -86,17 +86,33 @@
   document.addEventListener("alpine:init", function () {
     var Alpine = window.Alpine;
 
-    /* Next committee meeting: live countdown, "live" state (15 min before → end),
-       labels in Central time + the visitor's own time, calendar links.
-       x-data="cmMeeting({rule, start, end, title, description, location, url, i18n})" */
+    /* Next meeting — the committee meeting (/meetings/, /events/) or one of our monthly series (the Grapevine
+       Meeting, /meetings/#grapevine-meeting): live countdown, "soon" (5 minutes before: the room opens a few
+       minutes before we start) and "live" (until the end), labels in Central time + the visitor's own time,
+       calendar links. Once a meeting is over it rolls on to the next date — with THAT date's guest speaker
+       (speaker, speakerLine: none on a date without one) and calendar text.
+       x-data="cmMeeting({rule, start, end, title, description, location, url, i18n, speakers, plain, uid, file, first})"
+         speakers  the guest speakers to come: [{ ymd, name, position, topic, description }] (eleventy/filters/
+                   committee.js cmSpeakers: description = that meeting's calendar text); plain: the calendar text
+                   of a date without one (none given: `description`, the build's next date's)
+         uid, file the calendar UID and file name before the date — "ev-committee-" / "committee-meeting-" when
+                   left out; a series' "ev-recurring-grapevine-meeting-": the UID /events.ics gives that date, so
+                   adding it twice keeps one entry
+         first     a series' first date ("2026-12-02"): isFirst on that date ("First meeting") */
     Alpine.data("cmMeeting", function (cfg) {
       cfg = cfg || {};
       var i18n = cfg.i18n || {};
+      var speakers = Array.isArray(cfg.speakers) ? cfg.speakers : [];
+      function speakerOn(ymd) {
+        for (var i = 0; i < speakers.length; i++) if (speakers[i] && speakers[i].ymd === ymd && speakers[i].name) return speakers[i];
+        return null;
+      }
       return {
         phase: "upcoming", d: 0, h: 0, m: 0, s: 0,
         dateLabel: "", timeLabel: "", whenLabel: "", localLabel: "", joinText: i18n.join || "",
         tile: { mon: "", day: "", wd: "" }, gcal: "", outlook: "",
-        _start: null, _end: null, _ymd: "",
+        speaker: null, speakerLine: "", isFirst: false,
+        _start: null, _end: null, _ymd: "", _desc: cfg.description || "",
         init: function () {
           this.compute();
           this.tick();
@@ -110,6 +126,12 @@
           var start = nx ? nx.start : new Date(cfg.start), end = nx ? nx.end : new Date(cfg.end || cfg.start);
           if (isNaN(start)) return;
           this._start = start; this._end = end; this._ymd = nx ? nx.ymd : chicagoYmd(start);
+          // that date's guest speaker and calendar text
+          var sp = speakerOn(this._ymd);
+          this.speaker = sp ? { name: String(sp.name), position: String(sp.position || ""), topic: String(sp.topic || "") } : null;
+          this.speakerLine = sp ? String(i18n.speaker || "{name}").replace("{name}", sp.name) : "";
+          this._desc = sp && sp.description ? sp.description : (cfg.plain != null ? cfg.plain : cfg.description || "");
+          this.isFirst = !!cfg.first && this._ymd === cfg.first;
           this.dateLabel = cap(fmt(start, { weekday: "long", month: "long", day: "numeric", year: "numeric" }));
           this.timeLabel = range(start, end);
           // One line for the hero: "Wednesday, October 21 · 7:00 PM CDT" (same as the build's whenLabel)
@@ -129,7 +151,7 @@
               this.localLabel = String(i18n.yourTime || "{time}").replace("{time}", lr);
             }
           } catch (e) {}
-          var links = CM.calLinks({ title: cfg.title, description: cfg.description, location: cfg.location, start: start, end: end });
+          var links = CM.calLinks({ title: cfg.title, description: this._desc, location: cfg.location, start: start, end: end });
           this.gcal = links.gcal; this.outlook = links.outlook;
         },
         tick: function () {
@@ -137,8 +159,10 @@
           var now = Date.now();
           if (this._end && now >= this._end.getTime()) this.compute(); // meeting over → roll to the next one
           var st = this._start.getTime(), diff = st - now;
-          // (live until its end: a meeting that could not be rolled on — no GVTime — is not "live" for ever)
-          this.phase = now >= st ? (this._end && now >= this._end.getTime() ? "upcoming" : "live") : diff <= 15 * 60000 ? "soon" : "upcoming";
+          // (live until its end: a meeting that could not be rolled on — no GVTime — is not "live" for ever; "soon"
+          // the last 5 minutes: the room opens a few minutes before we start — on a free Google account a call of
+          // 3 or more ends after 60 minutes)
+          this.phase = now >= st ? (this._end && now >= this._end.getTime() ? "upcoming" : "live") : diff <= 5 * 60000 ? "soon" : "upcoming";
           this.joinText = this.phase === "live" ? i18n.live : this.phase === "soon" ? i18n.soon : i18n.join;
           diff = Math.max(0, diff);
           this.d = Math.floor(diff / 864e5); this.h = Math.floor((diff % 864e5) / 36e5);
@@ -148,9 +172,9 @@
         downloadIcs: function () {
           if (!this._start) return;
           CM.downloadIcs({
-            uid: "ev-committee-" + this._ymd + (LANG !== "en" ? "-" + LANG : "") + "@neta65-gvlv",
-            title: cfg.title, description: cfg.description, location: cfg.location, url: cfg.url,
-            start: this._start, end: this._end, allDay: false, filename: "committee-meeting-" + this._ymd,
+            uid: (cfg.uid || "ev-committee-") + this._ymd + (LANG !== "en" ? "-" + LANG : "") + "@neta65-gvlv",
+            title: cfg.title, description: this._desc, location: cfg.location, url: cfg.url,
+            start: this._start, end: this._end, allDay: false, filename: (cfg.file || "committee-meeting-") + this._ymd,
           });
           closeMenus();
         },

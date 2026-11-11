@@ -955,7 +955,9 @@ Site file:
                            // data/raw/x.json (the last build had N item(s))" = gone while the site keeps its items, §1;
                            // "unreadable: <reason>"), and settings
                            // build_data could not use: "meeting" (also a skip_dates value that is not a meeting
-                           // day), "recurring_events", "ics_feeds", "price_changes" (text says what); and
+                           // day, a guest speaker left out or without a topic, a speaker_until or flyer_match
+                           // that cannot be used: build_data.meeting_notes), "recurring_events", "ics_feeds",
+                           // "price_changes" (text says what); and
                            // "content_events": slips in content/events files that were worked around (a
                            // `location_es` still saying "Lugar por anunciarse" next to a real `location` …);
                            // "translations": data/translations/glossary.yml or overrides.yml could not be read
@@ -991,7 +993,11 @@ config/orientation.yml (`starts` + 24 months, or its `ends`) has ended; `skip-da
 day of a config/site.yml `recurring_events` entry is within 90 days or past; `neta65-assemblies` — the last
 content/events file whose title, `title_es`, `kind` or `tags` say "assembly" / "asamblea" starts within 60 days or
 is past; `price-change:<key>` — a config/site.yml `price_changes` block whose `notice_until` has passed may be
-removed (once the stores show the new prices). `due` = the date the reminder is about ("YYYY-MM-DD", or "YYYY-MM").
+removed (once the stores show the new prices); `speaker:<YYYY-MM-DD>` — a guest speaker of config/site.yml
+`meeting: speakers:` within the next 45 days (`meeting.SPEAKER_CONFIRM_DAYS`) who is not `confirmed: true` yet
+("config/site.yml meeting: the guest speaker for 2027-02-17 (…) is not confirmed yet — once they say yes, set
+confirmed: true (or change the speaker)."; the site shows every speaker and never says which are confirmed).
+`due` = the date the reminder is about ("YYYY-MM-DD", or "YYYY-MM").
 `counts` also has `writers_archive` (the stories of writers_archive.json).
 Since October 2026 `/status/` also shows each source's `stats.warnings` (any state) in a folded *Notes from the last
 update (n) — for the site maintainer* box, as raw English text (on `/es/status/` its caption says so). Drive's
@@ -1107,9 +1113,9 @@ with `POSTER_SHARE=1` (Website update) names `share.png?v=<8 hex>` beside it as 
   the tips, deadlines, dates, weekly open meetings, Book of the Month) and the same month as a message for a group
   chat or an e-mail; the current month's page and the hub's "This month" card also show what is live now. The
   Monthly digest (below) recaps LAST month; everything current lives here — as a link when another page is its one
-  home (the Zoom details on `/meetings/#committee-meeting`, prices on `/shop/`, how to send a story on
-  `/contribute/`, the quote on the home page). An issue's highlight stories are the digest's; the toolkit shows the
-  themes and the story counts and links to `/read/`.
+  home (the Google Meet link on `/meetings/#committee-meeting`, prices on `/shop/`, how to send a story on
+  `/contribute/`, the quote on the home page). An issue's highlight stories are the digest's; the toolkit shows
+  the themes and the story counts and links to `/read/`.
 * **Dates** (`mpMonth(...).dates`): every event in `events.json` that is not `gone` and overlaps the month —
   content/events, dated Drive flyers and the outside calendars (the NETA 65 workshop feed: source `calendar`) —,
   the month's committee meeting (its record, else the `site.meeting` rule) and the recurring series. Each row has
@@ -1174,12 +1180,13 @@ its newest 150 entries), a day being its Central calendar day:
 | `whatsnew.json` | the page's "N more updates since the 1st" pointer only | `wn_date` from the 1st of K |
 | `status.json` | the e-mail's wait | `sources[].attempted` of `announcements`, `manual_events`, `drive`, `articles`, `pdfs`, `youtube`, `podcasts`, `instagram`: the e-mail waits (exit 3) while one was last tried before P ended but within the 3 days before — later ones are there, older ones have stopped |
 
-Not in the digest (current or upcoming — the toolkit's): the next committee meeting (its Zoom details stay on
-`/meetings/#committee-meeting`, which the toolkit links to), events not over
-yet, the weekly open meetings, story deadlines, La Viña's topics, the phone lines, Book of the Month, the
-subscription price, the daily quote, the Instagram accounts to follow (the digest has P's posts). The page and
-the texts end with ONE pointer: "Coming up in K" → `/monthly/K/`. Counts (the intro, `COUNT_ORDER`): magazine
-stories, podcast episodes, videos, Instagram posts, documents, committee files, photo albums, bulletin posts.
+Not in the digest (current or upcoming — the toolkit's): the next committee meeting's Google Meet link (on
+`/meetings/#committee-meeting`, which the toolkit links to; the "Coming up in K" pointer names K's meeting and its
+guest speaker while it is ahead), events not over yet, the weekly open meetings, story deadlines, La Viña's
+topics, the phone lines, Book of the Month, the subscription price, the daily quote, the Instagram accounts to
+follow (the digest has P's posts). The page and the texts end with ONE pointer: "Coming up in K" → `/monthly/K/`.
+Counts (the intro, `COUNT_ORDER`): magazine stories, podcast episodes, videos, Instagram posts, documents,
+committee files, photo albums, bulletin posts.
 `MONTHLY_NOW=2026-10-01T15:05:00Z` builds the September digest; `send_digest --month 2026-09` is the same
 edition.
 
@@ -1241,7 +1248,7 @@ English AND Spanish, and `src/assets/js/report.js` `areaSections` keeps the ones
   `neta65` writers, as printed), then the `spotlight.json` stories with `extra.geo.scope` `neta65` the archive does
   not have yet (by `extra.pub_date`); each story once.
 * `langs` — each language's words (`report.ar_*` in `src/_i18n/report.json`) with the settings filled in: `config/site.yml`
-  `meeting:` (`platform`, `meeting_id`, `passcode`, `chair_title` / `chair_title_es`, `chair_email` — else
+  `meeting:` (`platform`, `online_url`, `meeting_id`, `passcode` — none on Google Meet —, `chair_title` / `chair_title_es`, `chair_email` — else
   `site.contact_email` —, `note` / `note_es`) and `site.url`.
 
 Kept per visitor only (optional), beside the district report's keys: `localStorage["gv-report:mode"]` = `"district"` |
@@ -1283,14 +1290,19 @@ describes at `shapePaper` and `paperMeetings`; `deckJson` makes them all). Since
 `paperworkProblems`, names any mistake in it — also has a top-level `paperwork` (`shapePaper` + `paperMeetings`):
 ```json
 "paperwork": { "agenda_slide": "agenda",              // the agenda slide whose rows the agenda e-mail lists
+  "speaker_slide": "speaker-intro",                   // a version that leaves it out names no guest speaker
   "agenda": { "subject": "…", "body": "…" },          // also "reminder" and "minutes"; null when the checker refused one
   "next_month": { "actions": ["action_1", "…"], "old_business": ["old_1", "…"], "minutes_month": "minutes_month",
                   "clear": ["minutes_sent", "…"],       // every blank "Start next month" clears ("chair_*" written out;
-                                                        // never a blank shared by the four decks)
+                                                        // never a blank shared by every deck)
                   "untick": ["week-before"] },          // the checklist pages it unticks
   "meetings": [ { "ymd": "2026-08-19", "start": "2026-08-20T00:00:00.000Z", "end": "2026-08-20T01:00:00.000Z",
                   "label": "Wednesday, August 19, 2026", "label_es": "miércoles, 19 de agosto de 2026",
-                  "month": "August 2026" } ],           // every meeting from the month two calendar months back
+                  "month": "August 2026",
+                  "speaker": { "name": "Rick W.", "position": "…", "topic": "…", "position_es": "…", "topic_es": "…" } } ],
+                                                        // speaker: that date's guest speaker (the Spanish ones fall
+                                                        // back to the English; left out on a date with none);
+                                                        // every meeting from the month two calendar months back
                                                         // (two already held, three once this month's has been:
                                                         // built Oct 25 → Aug 19, Sep 16, Oct 21) to 366 days ahead,
                                                         // at most 24 (committee.js meetingDates(meeting, 2, 13):
@@ -1478,7 +1490,7 @@ it is read once.
 | pdf (`pdfs`) | `host`, `file_url`, `filename`, `size_bytes`, `pages`, `thumb`, `referrers` [{url, title}], `upload_month`, `link_texts`, `event_date`, `doc_lang`, `multilingual` (`true` when one file holds several languages — two or more page languages, language-only links for 2+ languages, or a heading such as "Catalog • Catálogo • Catalogue"; otherwise `null`: such a file takes the host site's language and gets no "(Spanish)" title suffix), `section` (heading on the referring page), `external`, `orphan`; after the Library rules (§3 *pdfs.json*): `duplicates` (other addresses of the same file), `kits` (every rep kit it is in), `versions` (language editions), `same_file` | `versions[].i18n_title` |
 | topic (`editorial`) | `publication`, `theme`, `evergreen`, and for dated themes `issue_key`, `issue_label`, `deadline`, `due_text`, `pdf_url`; Grapevine's also `submit_url`, `guidelines_url` (and its suggested topics `topic_type`: `department` / `always_needed`); La Viña's (its yearly themes document — `pdf_url` and the item's `url`) also `submit_email` | `issue_label` (rules: La Viña's bimonthly from its two months); `theme` when it differs from the title |
 | meeting (`weekly_open`) | `zoom_id`, `zoom_url`, `passcode`, `day`, `time`, `time_central`, `sentence`, `weekday`, `start_local`, `timezone`, `next_start`, `url`, `player_url`; La Viña item (`weekly_open_lv`, §2): no `sentence`/`player_url`, plus `starts`, `source_note`, `own_i18n` | written by rules from weekday/start_local/timezone: `day` ("Wednesdays"/"Miércoles"), `time` ("Noon Eastern"/"mediodía (hora del Este)"), `time_central` ("11:00 AM Central"/"11:00 a. m. (hora del Centro)"), `when` ("Wednesdays at 11:00 AM Central"/"Los miércoles a las 11:00 a. m. (hora del Centro)" — capitalized for a line of its own; a sentence lower-cases the first letter), `sentence` (join line with Zoom ID + passcode). Machine-translated only if those fields are missing |
-| event (`events`) | common: `start`, `end`, `all_day`, `location`, `online_url`, `flyer_url`, `flyer_thumb`, `city`, `state`, `past`; `tentative` (`true` only: details to be confirmed), `location_tba` (`true` only: the place is not known yet — "Venue to be announced"; decided by the item's own `location`, by `location_es` / `location_en` only when there is no `location`). Committee: `meeting_id`, `passcode`, `recurring`. Recurring (category `recurring`, below): `recurring` (`true`), `series`, `rule`, `recurrence_label`, `host` (`neta` / `lv` / `gv`), `online` (it has an `online_url`), `platform` ("Zoom" …, else `null`), `meeting_id` (else `null`), `contact` (an e-mail address, else `null`). External calendar: `platform`, `online`, `scope`, `site`, `country`, `website`, `organizer`, `date_text`; a listing of a month a series skips also `series_of` (the series key), `host`, `online_url`, `meeting_id`, `contact`, `flyer_url`, `flyer_thumb` (from the series — build_data.series_moved_dates). Drive flyer: `drive_id`, `is_pdf`, `is_image`; a dated flyer of a recurring series on another day of the month also `host`, `online_url`, `online`, `platform`, `meeting_id`, `contact` (from the series). Manual: `body_md`, `slug`, `file`, `own_i18n`; `flyer_url` = the file's `flyer:` (a Drive copy, `https://drive.google.com/file/d/<id>/view`: the pages take its picture from the Drive by its id — committee.js `normalizeEvents` — so `flyer_thumb` stays null unless the file gives `image:`); `host` (`lv` / `gv` only: a file's `host:`), `meeting_id` (a file's `meeting_id:`); `also_in_feed` (the key of an .ics feed that lists the same event — also on a flyer, committee or recurring event) + `feed_match` (`url` / `online` / `title`); `also_on_calendar` (`lv-calendar` / `gv-calendar`: Grapevine's or La Viña's own calendar lists the same event — also on a flyer, committee or recurring event) + `calendar_match` (`url` / `online` / `title`). `host` on any event: `lv` / `gv` = La Viña's or Grapevine's own event that the committee shares — the pages show it with the Grapevine / La Viña calendars, in that magazine's colour (not to be confused with a document's `host`, a website). .ics feed (category `neta65` / `ics` / `gv-calendar` / `lv-calendar`, source `calendar`): `feed` (the feed's key), `uid` | committee meetings and recurring events (and a listing taken into a series: `series_of`): fixed human `title`/`summary` in both languages; recurring: `recurrence_label` (rules); manual: `body_md` (+ the file's own `title_es` / `summary_es`, never machine-translated); `location` (the file's `location_es` / `location_en`, or the site's own words for a place not known yet — never machine-translated) |
+| event (`events`) | common: `start`, `end`, `all_day`, `location`, `online_url`, `flyer_url`, `flyer_thumb`, `city`, `state`, `past`; `tentative` (`true` only: details to be confirmed), `location_tba` (`true` only: the place is not known yet — "Venue to be announced"; decided by the item's own `location`, by `location_es` / `location_en` only when there is no `location`). Committee: `location` (the platform, "Google Meet"), `online_url` (`meeting:` `online_url`, else an older `zoom_url`), `meeting_id` (a Google Meet code or a Zoom ID), `passcode` (`null` on Google Meet), `recurring`, `flyer_url` / `flyer_thumb` (`meeting: flyer_match`, the `flyers` folder only), `speaker` (only on a date with a guest speaker: `{name, position: {en, es}, topic: {en, es}}` — never `confirmed`). Recurring (category `recurring`, below): `recurring` (`true`), `series`, `rule`, `recurrence_label`, `host` (`neta` / `lv` / `gv`), `online` (it has an `online_url`), `platform` ("Zoom" …, else `null`), `meeting_id` (else `null`), `contact` (an e-mail address, else `null`). External calendar: `platform`, `online`, `scope`, `site`, `country`, `website`, `organizer`, `date_text`; a listing of a month a series skips also `series_of` (the series key), `host`, `online_url`, `meeting_id`, `contact`, `flyer_url`, `flyer_thumb` (from the series — build_data.series_moved_dates). Drive flyer: `drive_id`, `is_pdf`, `is_image`; a dated flyer of a recurring series on another day of the month also `host`, `online_url`, `online`, `platform`, `meeting_id`, `contact` (from the series). Manual: `body_md`, `slug`, `file`, `own_i18n`; `flyer_url` = the file's `flyer:` (a Drive copy, `https://drive.google.com/file/d/<id>/view`: the pages take its picture from the Drive by its id — committee.js `normalizeEvents` — so `flyer_thumb` stays null unless the file gives `image:`); `host` (`lv` / `gv` only: a file's `host:`), `meeting_id` (a file's `meeting_id:`); `also_in_feed` (the key of an .ics feed that lists the same event — also on a flyer, committee or recurring event) + `feed_match` (`url` / `online` / `title`); `also_on_calendar` (`lv-calendar` / `gv-calendar`: Grapevine's or La Viña's own calendar lists the same event — also on a flyer, committee or recurring event) + `calendar_match` (`url` / `online` / `title`). `host` on any event: `lv` / `gv` = La Viña's or Grapevine's own event that the committee shares — the pages show it with the Grapevine / La Viña calendars, in that magazine's colour (not to be confused with a document's `host`, a website). .ics feed (category `neta65` / `ics` / `gv-calendar` / `lv-calendar`, source `calendar`): `feed` (the feed's key), `uid` | committee meetings and recurring events (and a listing taken into a series: `series_of`): fixed human `title`/`summary` in both languages; recurring: `recurrence_label` (rules); manual: `body_md` (+ the file's own `title_es` / `summary_es`, never machine-translated); `location` (the file's `location_es` / `location_en`, or the site's own words for a place not known yet — never machine-translated) |
 | document / slides / photo / video_file / form (`drive`) | `file_id`, `mime`, `name`, `panel`, `panel_label`, `path`, `album`, `view_url`, `preview_url`, `download_url`, `thumb_url`, `image_url`, `is_image`, `is_video`, `is_pdf`, `file_type`, `folder_id`, `folder_url`, `folder_chain`, `modified_text`, `size_bytes`, `duration_sec`, `shortcut_id`, `generic_name`, flyers: `event_date`, `event_end_date` (since October 2026: the last day when the name gives a range of days — "Assembly March 14 - 16, 2027", "2027-03-19 - 2027-03-21 …", "Asamblea del 14 al 16 de mayo de 2027"; `events.json` `extra.end` is then that day, or that day's end time when the name gives one), `event_title`, `event_time`, `event_end_time`, `event_location`, `event_tz` (the IANA zone when the name gives one — "12 p. m. (hora del Este)"; else the time is Central) / `event_month` (camera / WhatsApp / screenshot names are no event; a month and year with no day — "March 2027", "marzo de 2027" — gives only `event_month`, while a Spanish first written "1° / 1º / 1.º / 1ro / primero de marzo de 2027" is a whole date), forms: `form_closed`, `form_signin_required`; raw only — the booth folder's files (category `booth`, never in a site item list): `booth`, `modified`, a message's `body_md` (§3 *booth.json*) | `album` (photos in a sub-folder) |
 | announcement (`announcements`: the bulletin's posts) | `body_md`, `expires`, `publish`, `pinned`, `slug`, `file` (`content/bulletin/<name>.md`), `link`, `own_i18n` | `body_md` (+ the file's own `title_es` / `summary_es`) |
 
@@ -1492,21 +1504,21 @@ calendar feed keeps them for subscribers):
 { "id": "ev:recurring:citywide-dallas:2026-10-10",      // key + local date: stable (calendar UID, card anchor)
   "source": "committee", "kind": "event", "category": "recurring",
   "url": "https://citywidedallasaa.org",                // the entry's `url`, or "/events/" without one
-  "title": "GV/LV booth at CityWide Dallas", "lang": "en", "date": "2026-10-10T22:00:00Z",
+  "title": "GV/LV booth at CityWide Dallas", "lang": "en", "date": "2026-10-10T22:30:00Z",
   "first_seen": null, "tags": ["recurring"],
-  "extra": { "start": "2026-10-10T22:00:00Z",           // 17:00 CDT; "2026-11-14T23:00:00Z" = 17:00 CST
-             "end": "2026-10-11T01:00:00Z", "all_day": false,
-             "location": "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
+  "extra": { "start": "2026-10-10T22:30:00Z",           // 17:30 CDT; "2026-11-14T23:30:00Z" = 17:30 CST
+             "end": "2026-10-11T00:30:00Z", "all_day": false,
+             "location": "Lovers Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
              "city": "Dallas", "state": "TX",              // read from the location (or the entry's city/state)
              "online_url": null, "flyer_url": null, "flyer_thumb": null,
              "recurring": true, "series": "citywide-dallas",
-             "rule": {"week_of_month": 2, "weekday": "saturday", "start": "17:00", "end": "20:00"},
-             "recurrence_label": "Every second Saturday of the month · 5:00 – 8:00 PM",
+             "rule": {"week_of_month": 2, "weekday": "saturday", "start": "17:30", "end": "19:30"},
+             "recurrence_label": "Every second Saturday of the month · 5:30 – 7:30 PM",
              "host": "neta", "online": false, "platform": null, "meeting_id": null, "contact": null, "past": false },
   "i18n": { "title": {"en": "GV/LV booth at CityWide Dallas", "es": "Mesa de GV/LV en CityWide Dallas"},
             "summary": {"en": "…", "es": "…"},
-            "recurrence_label": {"en": "Every second Saturday of the month · 5:00 – 8:00 PM",
-                                 "es": "Cada segundo sábado del mes · 5:00–8:00 p. m."} },   // thin spaces around " – ", no-break in "p. m."
+            "recurrence_label": {"en": "Every second Saturday of the month · 5:30 – 7:30 PM",
+                                 "es": "Cada segundo sábado del mes · 5:30–7:30 p. m."} },   // thin spaces around " – ", no-break in "p. m."
   "machine": [], "is_new": false }
 ```
 * `title`/`summary` are the committee's own words (`title_es`, `summary_es`); a language left out is
@@ -1515,8 +1527,10 @@ calendar feed keeps them for subscribers):
   third Wednesday of the month"). `rule` is the entry's rule in the shape of `meeting:` (the end as used:
   a missing one is start + 1 hour); the web pages build the line from it with the meeting's own helpers
   (committee.js `recurrenceText`: same words, the browser's clock format) and fall back to `recurrence_label`
-  — either way with the time zone added ("… 5:00 – 8:00 PM Central time" / "… 5:00–8:00 p. m., hora del
+  — either way with the time zone added ("… 5:30 – 7:30 PM Central time" / "… 5:30–7:30 p. m., hora del
   Centro"): the line goes into the calendars' description, beside a start a calendar shows in its reader's zone.
+  An entry's `starts` (the Grapevine Meeting's `"2026-12-02"`) leaves out every date before it, the past 90 days
+  included.
 * Never `is_new`, never in `whatsnew.json`, never in the /events/ "Past events" list (so the calendar files,
   which keep a past date 90 days, link it to its `url`, else to /events/ itself — never to its card, which is
   gone). Home and search show only the next date of each `series`; the monthly digest lists the date that
@@ -1533,6 +1547,20 @@ calendar feed keeps them for subscribers):
   `flyer_url` / `flyer_thumb`: the date's own Drive flyer (a name starting with that date), else its month's,
   else the newest undated one matching the entry's `flyer_match` (build_data.series_flyers / pick_flyer);
   `null` when none matches.
+* Our Grapevine Meeting (`grapevine-meeting`) — ours (`host: neta`), online only, in the committee meeting's Google
+  Meet room — differs from the booth in:
+  ```json
+  "id": "ev:recurring:grapevine-meeting:2026-12-02",     // its first date (`starts`): none before it
+  "url": "/meetings/#grapevine-meeting",                 // a page of this site: the pages add /es/ and the address
+  "title": "Grapevine Meeting",                 // es: "Reunión de Grapevine (en inglés)"
+  "extra": { "start": "2026-12-03T01:00:00Z", "end": "2026-12-03T02:00:00Z",   // 7:00–8:00 PM CST
+             "location": null, "city": null, "state": null,
+             "online_url": "https://meet.google.com/rva-tmst-vdb", "online": true, "platform": "Google Meet",
+             "meeting_id": "rva-tmst-vdb", "contact": "grapevine@neta65.org", "host": "neta",
+             "rule": {"week_of_month": 1, "weekday": "wednesday", "start": "19:00", "end": "20:00"},
+             "recurrence_label": "Every first Wednesday of the month · 7:00 – 8:00 PM", … }
+  ```
+  The pages label its `meeting_id` "Meeting code" (letters: a Google Meet code; digits are a Zoom "Meeting ID").
 * Entries with a mistake are skipped; `status.json` → `problems.recurring_events` says which and why — and also
   which date to add to `skip_dates` when an outside calendar lists the series (the same online room) on
   another day of a month whose rule date is still to come and is not listed itself (build_data.series_listing_notes).

@@ -34,7 +34,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FILE = ROOT / "config" / "orientation.yml"
 I18N = ROOT / "src" / "_i18n" / "orientation.json"
 PAGE = ROOT / "src" / "pages" / "orientation.njk"
-PLACEHOLDERS = {"rule_lc", "time", "panel", "panel_start"}
+PLACEHOLDERS = {"rule_lc", "time", "platform", "panel", "panel_start"}
 EXAMPLES = {"issue", "meeting", "tip", "botm", "deadline", "poster"}
 # The site's wording rules for visitors (docs: "document(s)", never "PDF"; no talk of how data is gathered).
 BANNED = re.compile(r"\b(pdf|crawl\w*|scrap\w*|robot|bot|automatically|autom[aá]ticamente)\b", re.I)
@@ -375,7 +375,7 @@ class HubBuild(unittest.TestCase):
         name = re.sub(r"\s*\((?:about|unos|unas)\s[^()]*\)\s*$", "", label)
         if name != label and minutes and minutes != full:
             name += f" ({minutes} min)"
-        if not (re.match(r"(?:Grapevine|La Viña|AA|Zoom|NETA)\b", name) or name[1:2] != name[1:2].lower()):
+        if not (re.match(r"(?:Grapevine|La Viña|AA|Zoom|Google|NETA)\b", name) or name[1:2] != name[1:2].lower()):
             name = name[:1].lower() + name[1:]
         return name
 

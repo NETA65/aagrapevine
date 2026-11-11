@@ -46,7 +46,8 @@ from .common import (RAW_DIR, ROOT, SITE_DIR, STATE_DIR, as_json, clean_text, ev
                      unreadable_message, write_json)
 from .events_external import platform_of
 from .geo import SCOPES, UNKNOWN, best_of, classify_location, fold
-from .meeting import (MonthlyRule, check_skip_dates, meeting_skip_notes, nth_weekday, overnight, parse_hhmm,
+from .meeting import (SPEAKER_CONFIRM_DAYS, MonthlyRule, check_skip_dates, check_starts, meeting_rule,
+                      meeting_skip_notes, meeting_speakers, nth_weekday, overnight, parse_hhmm, speaker_until,
                       upcoming_meetings, upcoming_rule_dates, week_of_month_value, weekday_index)
 from .run_all import FULL_ONLY
 
@@ -461,10 +462,45 @@ def _local_iso(day: str, hhmm: str | None, tz: ZoneInfo) -> str | None:
         return None
 
 
+# A committee meeting with a guest speaker (config/site.yml `meeting: speakers:`): its summary names the speaker and
+# the topic, and says until when the speaker talks — the words of the web pages' calendar text (src/_i18n/
+# committee.json committee.meeting.speaker / speaker_until; a unit test keeps the two in step).
+_SPEAKER = {"en": "Guest speaker: {name}", "es": "Orador(a) invitado(a): {name}"}
+_SPEAKER_UNTIL = {"en": "The guest speaker's part ends by {until}; committee business follows until {end}.",
+                  "es": "La charla de la persona invitada termina a más tardar a las {until}; luego, hasta las {end}, "
+                        "siguen los asuntos del comité."}
+
+
+def _meeting_clock(hm: tuple[int, int], lang: str) -> str:
+    """(19, 30) → "7:30 PM" / "7:30 p. m." (the summary's own words: plain spaces, as clean_text leaves them)."""
+    h, m = hm
+    half = ("AM", "PM") if lang == "en" else ("a. m.", "p. m.")
+    return f"{(h % 12) or 12}:{m:02d} {half[h >= 12]}"
+
+
+def speaker_sentences(speaker: dict | None, until: tuple[int, int] | None, end: tuple[int, int], lang: str) -> str:
+    """A committee meeting's guest speaker in a sentence or two (its summary), "" without one: "Guest speaker: Rick
+    W. — “From NETA 65 to the Conference table: …”. The guest speaker's part ends by 7:30 PM; committee business
+    follows until 8:00 PM." The name and the topic only — the service position is in extra.speaker. (A name alone
+    gets no period of its own: it ends in its initial's — "Guest speaker: Rick W.")"""
+    if not speaker:
+        return ""
+    topic = speaker["topic"][lang]
+    out = _SPEAKER[lang].format(name=speaker["name"]) + (f" — “{topic}”." if topic else "")
+    if until:
+        out += " " + _SPEAKER_UNTIL[lang].format(until=_meeting_clock(until, lang), end=_meeting_clock(end, lang))
+    return out
+
+
 def committee_meetings(ctx: Ctx, count: int = 12) -> list[dict]:
-    """The monthly committee meeting for the next 12 months — fixed human text in both languages."""
+    """The monthly committee meeting for the next 12 months — fixed human text in both languages. How to join is the
+    settings' (`online_url` — an older `zoom_url` still counts —, `meeting_id`, `passcode`); a date with a guest
+    speaker (meeting_speakers) names them in its summary and in extra.speaker {name, position, topic} (both
+    languages; never `confirmed`); its flyer is the newest committee Drive flyer `flyer_match` finds for that date
+    (pick_flyer: one named with the meeting's month — "January 2027 Committee Meeting - guest speaker" — else the
+    undated one), from the flyers/ folder only (the meeting's slides in slides/ are no flyer)."""
     site, mt = ctx.cfg.get("site", {}) or {}, ctx.cfg.get("meeting", {}) or {}
-    platform = mt.get("platform") or "Zoom"
+    platform = clean_text(mt.get("platform")) or "Zoom"
     committee = site.get("committee") or "Grapevine / La Viña Committee"
     committee_es = site.get("committee_es") or "Comité de Grapevine / La Viña"
     note = clean_text(mt.get("note"))
@@ -476,18 +512,28 @@ def committee_meetings(ctx: Ctx, count: int = 12) -> list[dict]:
     title = {"en": f"{committee} Meeting", "es": f"Reunión del {committee_es}"}
     summary = {"en": clean_text(f"Our monthly committee meeting on {platform}. {note}"),
                "es": clean_text(f"Nuestra reunión mensual del comité por {platform}. {note_es}")}
+    speakers, _notes = meeting_speakers(mt)                  # (the notes: build_events → problems.meeting)
+    until, _notes = speaker_until(mt)
+    end = meeting_rule(mt).span()[1]
+    flyer_re, _note = _flyer_pattern(mt.get("flyer_match"))
+    flyers = series_flyers(ctx, flyer_re, category="flyers")
     out = []
     for m in upcoming_meetings(count, now=ctx.now, cfg=ctx.cfg):      # the build's own clock and settings
+        sp = speakers.get(m["ymd"])
+        text = {lang: clean_text(f"{summary[lang]} {speaker_sentences(sp, until, end, lang)}") for lang in LANGS}
+        fly = pick_flyer(flyers, m["ymd"])
         out.append({
             "id": f"ev:committee:{m['ymd']}", "source": "committee", "kind": "event", "url": "/meetings/",
-            "title": title["en"], "summary": summary["en"], "lang": "en", "date": m["start"],
+            "title": title["en"], "summary": text["en"], "lang": "en", "date": m["start"],
             "first_seen": None, "image": None, "tags": ["committee"],
             "category": "committee", "status": "ok",
             "extra": {"start": m["start"], "end": m["end"], "all_day": False, "location": platform,
-                      "online_url": mt.get("zoom_url"), "meeting_id": mt.get("meeting_id"),
-                      "passcode": mt.get("passcode"), "flyer_url": None, "flyer_thumb": None,
-                      "city": None, "state": None, "recurring": True},
-            "i18n": {"title": dict(title), "summary": dict(summary)},
+                      "online_url": mt.get("online_url") or mt.get("zoom_url") or None,
+                      "meeting_id": mt.get("meeting_id"), "passcode": mt.get("passcode") or None,
+                      "flyer_url": fly["url"] if fly else None,
+                      "flyer_thumb": fly["thumb"] if fly else None, "city": None, "state": None, "recurring": True,
+                      **({"speaker": {k: sp[k] for k in ("name", "position", "topic")}} if sp else {})},
+            "i18n": {"title": dict(title), "summary": text},
             "machine": list(machine), "is_new": False, "_fixed_i18n": True,
         })
     return out
@@ -559,10 +605,14 @@ def _bilingual(en: str, es: str, title: bool = False) -> tuple[dict[str, str], l
     return {src: text, tgt: out}, machine
 
 
-def _recurring_url(v: Any) -> str | None:
+def _recurring_url(v: Any, site_path: bool = False) -> str | None:
+    """A web address from the settings ("www.…" gets its https://), else None. `site_path`: a page of this site
+    counts too ("/meetings/#grapevine-meeting" — the pages give it the language and the site's address)."""
     s = clean_text(v)
     if not s:
         return None
+    if site_path and re.match(r"^/(?![/\\])\S*$", s):
+        return s
     if re.match(r"(?i)^www\.", s):
         s = "https://" + s
     return s if re.match(r"(?i)^https?://[^\s/]+\.[^\s]+$", s) else None
@@ -599,9 +649,10 @@ def recurring_specs(ctx: Ctx) -> tuple[list[dict], list[str]]:
     """config/site.yml `recurring_events:` → (valid event settings, problems). Hand-edited settings: an
     entry with a real mistake (no title, a weekday or week that cannot be understood, no start time …)
     is SKIPPED and named in the problems; small slips (an end time that cannot be read, a skip date that
-    is not a date or not one of the event's days, a link that is not a web address, a `host` that is not
-    neta / lv / gv, a `meeting_id` that is not one, a `contact` that is not an e-mail address, a `flyer_match`
-    that cannot be read) are noted but the event still shows."""
+    is not a date or not one of the event's days, a first date — `starts` — that is not a date or not one
+    of its days, a link that is not a web address or a page of the site, a `host` that is not neta / lv /
+    gv, a `meeting_id` that is not one, a `contact` that is not an e-mail address, a `flyer_match` that
+    cannot be read) are noted but the event still shows."""
     raw = ctx.cfg.get("recurring_events")
     if raw is None or raw == "" or raw == []:
         return [], []
@@ -656,6 +707,10 @@ def recurring_specs(ctx: Ctx) -> tuple[list[dict], list[str]]:
         # (the same check as the committee meeting's own skip_dates — meeting.check_skip_dates).
         skip, skip_notes = check_skip_dates(e.get("skip_dates"), wd, wom)
         notes += skip_notes
+        # The first date (a series that begins later — the Grapevine Meeting from 2026-12-02): no date before it, not
+        # even among the past 90 days the calendar files keep
+        starts, starts_notes = check_starts(e.get("starts"), wd, wom)
+        notes += starts_notes
         ahead = RECURRING_AHEAD
         if e.get("months_ahead") not in (None, ""):
             try:
@@ -666,9 +721,9 @@ def recurring_specs(ctx: Ctx) -> tuple[list[dict], list[str]]:
                 ahead = RECURRING_AHEAD
                 notes.append(f"months_ahead “{e.get('months_ahead')}” must be a number from 1 to "
                              f"{RECURRING_AHEAD_MAX} — {RECURRING_AHEAD} used")
-        url = _recurring_url(e.get("url"))
+        url = _recurring_url(e.get("url"), site_path=True)
         if e.get("url") and not url:
-            notes.append(f"url “{e.get('url')}” is not a web address (https://…) — left out")
+            notes.append(f"url “{e.get('url')}” is not a web address (https://…) or a page of the site (/…) — left out")
         online = _recurring_url(e.get("online_url"))
         if e.get("online_url") and not online:
             notes.append(f"online_url “{e.get('online_url')}” is not a web address (https://…) — left out")
@@ -705,7 +760,7 @@ def recurring_specs(ctx: Ctx) -> tuple[list[dict], list[str]]:
             "key": key, "name": name, "title": (title_en, title_es),
             "summary": (clean_text(e.get("summary")), clean_text(e.get("summary_es"))),
             "rule": MonthlyRule(week_of_month=wom, weekday=wd, start=start, end=end if end != (-1, -1) else start,
-                                skip=frozenset(skip)),
+                                skip=frozenset(skip), starts=starts),
             "ahead": ahead, "location": location or None, "url": url, "online_url": online,
             "platform": platform_of(online), "meeting_id": meeting_id or None, "contact": contact or None,
             "host": host, "flyer_re": flyer_re,
@@ -714,20 +769,23 @@ def recurring_specs(ctx: Ctx) -> tuple[list[dict], list[str]]:
     return specs, problems
 
 
-def series_flyers(ctx: Ctx, pattern: re.Pattern | None) -> list[dict]:
+def series_flyers(ctx: Ctx, pattern: re.Pattern | None, category: str = "") -> list[dict]:
     """A recurring event's flyers (`flyer_match:`): the committee's Drive files whose title or file name matches
     the pattern (capitals ignored; also tried without accents, so "vi[nñ]a" finds "Viña" and "Vina" alike) —
     found by the pattern, never by the exact name, so a renamed flyer is still found. Newest first, each with its
     reach: "day" (a name that starts with a date — that date's own flyer; drive.py makes it a dated event too),
     "month" (a name with only a month) or "all" (no date in the name: the flyer of every date). Bulletin posts
-    are never flyers. No pattern, or no match: [] (the dates show without a flyer)."""
+    are never flyers. `category`: only the files of that Drive folder ("flyers" — the committee meeting's, whose
+    slides in slides/ carry the meeting's name too); "" any folder. No pattern, or no match: [] (the dates show
+    without a flyer)."""
     if pattern is None:
         return []
     found = []
     for d in ctx.items("drive"):
         ex = d.get("extra") or {}
         url = ex.get("view_url") or d.get("url")
-        if d.get("kind") == "announcement" or not url or not _flyer_matches(pattern, d):
+        if d.get("kind") == "announcement" or not url or (category and d.get("category") != category) \
+                or not _flyer_matches(pattern, d):
             continue
         reach = (("day", str(ex["event_date"])[:10]) if ex.get("event_date")
                  else ("month", str(ex["event_month"])[:7]) if ex.get("event_month") else ("all", ""))
@@ -758,9 +816,10 @@ def pick_flyer(flyers: list[dict], ymd: str) -> dict | None:
 
 def recurring_events(ctx: Ctx) -> list[dict]:
     """Every entry of config/site.yml `recurring_events:` (e.g. the GV/LV booth at CityWide Dallas on the
-    2nd Saturday, 17:00–20:00 Central) → one event per date: the next `months_ahead` dates, plus the
+    2nd Saturday, 17:30–19:30 Central) → one event per date: the next `months_ahead` dates, plus the
     dates of the last RECURRING_KEEP_PAST_DAYS days (build_events marks them past; the web pages never
-    list them, the calendar feed keeps them for subscribers). Titles and summaries are the committee's
+    list them, the calendar feed keeps them for subscribers) — none before the entry's first date
+    (`starts`: the Grapevine Meeting's 2026-12-02). Titles and summaries are the committee's
     own words in both languages (fixed i18n); the recurrence line is written by rule. An entry with a
     mistake is skipped and reported (log + status.json `problems.recurring_events`), never fatal.
     Each date also carries who holds the event (`host`: "neta" — ours —, or "lv" / "gv": La Viña's or
@@ -1675,22 +1734,32 @@ def merge_calendar_duplicates(ctx: Ctx, primary: list[dict], listings: list[dict
     return kept
 
 
-def series_dated_flyers(ctx: Ctx, flyers: list[dict], recurring: list[dict]) -> list[dict]:
+def series_dated_flyers(ctx: Ctx, flyers: list[dict], recurring: list[dict], committee: list[dict] = ()) -> list[dict]:
     """Dated Drive flyers ("2026-10-22 Taller Mensual … .png") of a recurring event — their title or file name
     matches its `flyer_match`. On one of the series' dates the flyer is that date's own (recurring_events gave
     it to the date already): the one-off event is left out, so the date shows once. On another day it stays an
     event of its own (a date the host moved, with its flyer) and takes from the series what it does not say: who
     holds it (`host`), the online link, its platform, the meeting ID and the contact — so it is grouped and coloured like the
-    series, has its "Join online" button, and the host's own calendar listing of that day is matched to it."""
+    series, has its "Join online" button, and the host's own calendar listing of that day is matched to it.
+    Likewise a dated flyer of the committee meeting (`meeting: flyer_match`) on one of its dates (`committee`) is
+    that meeting's flyer (committee_meetings gave it to the date), not a second event; on another day it stays one."""
     specs = [sp for sp in ctx.series if sp.get("flyer_re") is not None]
-    if not specs or not flyers:
+    mt = ctx.cfg.get("meeting") if isinstance(ctx.cfg.get("meeting"), dict) else {}
+    meeting_re = _flyer_pattern(mt.get("flyer_match"))[0]
+    if not (specs or meeting_re) or not flyers:
         return flyers
     drive = {d["id"]: d for d in ctx.items("drive")}
     dates = {(e["extra"].get("series"), _event_day(ctx, e)) for e in recurring}
+    meeting_days = {_event_day(ctx, e) for e in committee}
     kept: list[dict] = []
     for fe in flyers:
         fx = fe.get("extra") or {}
         d = drive.get(fx.get("drive_id"))
+        if meeting_re is not None and d is not None and d.get("category") == "flyers" \
+                and _flyer_matches(meeting_re, d) and _event_day(ctx, fe) in meeting_days:
+            log.info("flyer %s is the committee meeting's flyer on %s — not a separate event",
+                     fe.get("id"), _event_day(ctx, fe))
+            continue
         sp = next((s for s in specs if d is not None and _flyer_matches(s["flyer_re"], d)), None)
         if sp is None:
             kept.append(fe)
@@ -1724,6 +1793,51 @@ def _series_rooms(sp: dict) -> set[str]:
     return event_rooms({"extra": {"online_url": sp["online_url"], "meeting_id": sp["meeting_id"]}})
 
 
+def _our_rooms(ctx: Ctx) -> list[tuple[str, set[str], MonthlyRule]]:
+    """The online rooms of our own monthly meetings, each with its key and rule: the committee meeting's ("" —
+    config/site.yml `meeting:` online_url / zoom_url and meeting_id) and every `recurring_events:` entry's."""
+    mt = ctx.cfg.get("meeting") if isinstance(ctx.cfg.get("meeting"), dict) else {}
+    out = [("", event_rooms({"extra": {"online_url": mt.get("online_url") or mt.get("zoom_url", ""),
+                                       "meeting_id": mt.get("meeting_id", "")}}), meeting_rule(mt))] if mt else []
+    out += [(sp["key"], _series_rooms(sp), sp["rule"]) for sp in ctx.series]
+    return [(key, rooms, rule) for key, rooms, rule in out if rooms]
+
+
+_ONLINE_WORDS = {"online", "linea", "virtual"}
+
+
+def _names_series(sp: dict, ev: dict) -> bool:
+    """A listing's title names the series: nearly the same words as its title in either language (shared / all ≥
+    0.75; "(online)" / "(en línea)" aside, and "(en inglés)": title_tokens drops the language words). Every word
+    counts here, "Grapevine" and "committee" too: "Grapevine Meeting" is the Grapevine Meeting, the "Grapevine & La
+    Viña Committee Meeting" is not."""
+    for a in sp["title"]:
+        ta = title_tokens(a) - _ONLINE_WORDS
+        for b in _event_titles(ev):
+            tb = title_tokens(b) - _ONLINE_WORDS
+            if ta and tb and len(ta & tb) / len(ta | tb) >= 0.75:
+                return True
+    return False
+
+
+def _lists_series(ctx: Ctx, sp: dict, ev: dict, day: str, ours: list[tuple[str, set[str], MonthlyRule]]) -> bool:
+    """Is an outside calendar's listing on `day` one of series `sp`'s? It is in one of the series' online rooms — and
+    when another meeting of ours uses that room too (the committee meeting and the Grapevine Meeting share one Google
+    Meet room, rva-tmst-vdb), only when its title names the series (_names_series) on a day that is none of the
+    other meeting's: the committee meeting as neta65.org lists it, or a workshop the chair holds in the room, is
+    never a moved Grapevine Meeting."""
+    common = event_rooms(ev) & _series_rooms(sp)
+    if not common:
+        return False
+    others = [rule for key, rooms, rule in ours if key != sp["key"] and rooms & common]
+    if not others:
+        return True
+    d = date.fromisoformat(day)
+    if any(nth_weekday(d.year, d.month, r.weekday, r.week_of_month) == d for r in others):
+        return False
+    return _names_series(sp, ev)
+
+
 def series_listing_notes(ctx: Ctx, listings: list[dict], recurring: list[dict] = ()) -> list[str]:
     """Notes for the chair: an outside calendar (La Viña's or Grapevine's own, an .ics feed) lists a recurring
     event — the same online room as the series — on ANOTHER day of a month for which the rule gives an upcoming
@@ -1732,11 +1846,13 @@ def series_listing_notes(ctx: Ctx, listings: list[dict], recurring: list[dict] =
     the rule's date until the chair adds it to skip_dates. A month whose rule date is already in skip_dates is
     left to the host's calendar (series_moved_dates): no note. Nor is there one for a month whose rule date a
     calendar lists itself (`recurring`: the dates merge_calendar_duplicates / merge_feed_duplicates matched) —
-    the date did not move; the other listing in that room is another session."""
+    the date did not move; the other listing in that room is another session. Nor for a month before the series'
+    first date (`starts`), or a listing of another meeting of ours in a shared room (_lists_series)."""
     notes: list[str] = []
     today = ctx.today_local.isoformat()
     listed = {(e["extra"].get("series"), _event_day(ctx, e)) for e in recurring
               if e["extra"].get("also_on_calendar") or e["extra"].get("also_in_feed")}
+    ours_rooms = _our_rooms(ctx)
     for sp in ctx.series:
         rooms = _series_rooms(sp)
         if not rooms:
@@ -1744,10 +1860,11 @@ def series_listing_notes(ctx: Ctx, listings: list[dict], recurring: list[dict] =
         rule = sp["rule"]
         for ev in listings:
             day = _event_day(ctx, ev)
-            if not day or day < today or not (event_rooms(ev) & rooms):
+            if not day or day < today or not _lists_series(ctx, sp, ev, day, ours_rooms):
                 continue
             ours = nth_weekday(int(day[:4]), int(day[5:7]), rule.weekday, rule.week_of_month)
-            if ours is None or ours.isoformat() in (day, *rule.skip) or ours.isoformat() < today:
+            if ours is None or ours.isoformat() in (day, *rule.skip) or ours.isoformat() < today \
+                    or (rule.starts and ours.isoformat() < rule.starts):
                 continue
             if (sp["key"], ours.isoformat()) in listed:
                 continue
@@ -1769,8 +1886,11 @@ def series_moved_dates(ctx: Ctx, listings: list[dict], recurring: list[dict]) ->
     contact, the platform and the date's flyer. `extra.series_of` names the series, so /events/ lists the day in the series'
     "Then …" line too (cmCollapseRecurring), and the visitor sees ONE workshop with a moved date, not two events
     with different schedules. A month whose rule date is not skipped is the chair's to settle
-    (series_listing_notes): left as it is. → how many listings were taken in."""
+    (series_listing_notes): left as it is; so is a listing of another meeting of ours in a shared room (the
+    committee meeting in the Grapevine Meeting's Google Meet room: _lists_series). → how many listings were taken
+    in."""
     taken = 0
+    ours_rooms = _our_rooms(ctx)
     for sp in ctx.series:
         rooms = _series_rooms(sp)
         rule = sp["rule"]
@@ -1780,7 +1900,7 @@ def series_moved_dates(ctx: Ctx, listings: list[dict], recurring: list[dict]) ->
         flyers = None
         for ev in listings:
             day = _event_day(ctx, ev)
-            if not day or _multi_day(ctx, ev) or not (event_rooms(ev) & rooms):
+            if not day or _multi_day(ctx, ev) or not _lists_series(ctx, sp, ev, day, ours_rooms):
                 continue                # (a convention over several days in that room is something else)
             ours = nth_weekday(int(day[:4]), int(day[5:7]), rule.weekday, rule.week_of_month)
             if ours is None or ours.isoformat() == day or ours.isoformat() not in rule.skip:
@@ -1804,12 +1924,21 @@ def series_moved_dates(ctx: Ctx, listings: list[dict], recurring: list[dict]) ->
     return taken
 
 
+def meeting_notes(mt: dict) -> list[str]:
+    """Notes for the chair about config/site.yml `meeting:` (status.json problems.meeting → a Settings problem in the
+    run summary): skip dates that are no meeting day, guest speakers left out (or without a topic), a speaker_until
+    or a flyer_match that cannot be used. The rest of the meeting still shows."""
+    notes = meeting_skip_notes(mt) + meeting_speakers(mt)[1] + speaker_until(mt)[1]
+    flyer_note = _flyer_pattern(mt.get("flyer_match"))[1]
+    return notes + ([flyer_note] if flyer_note else [])
+
+
 def build_events(ctx: Ctx) -> list[dict]:
     evs: dict[str, dict] = {}
-    try:        # `meeting: skip_dates` that are not a meeting day: ignored, and the chair is told
-        notes = meeting_skip_notes(ctx.cfg.get("meeting") if isinstance(ctx.cfg.get("meeting"), dict) else {})
+    try:        # `meeting:` skip dates that are not a meeting day, speakers left out …: ignored, and the chair is told
+        notes = meeting_notes(ctx.cfg.get("meeting") if isinstance(ctx.cfg.get("meeting"), dict) else {})
     except Exception as e:
-        notes = [f"skip_dates could not be read ({type(e).__name__})"]
+        notes = [f"the settings could not be read ({type(e).__name__})"]
     if notes:
         log.warning("config/site.yml meeting: %s", "; ".join(notes))
         ctx.raw_problems["meeting"] = ("config/site.yml meeting: " + "; ".join(notes))[:2000]
@@ -1836,8 +1965,9 @@ def build_events(ctx: Ctx) -> list[dict]:
         if key not in seen_flyers:
             seen_flyers.add(key)
             flyers.append(fe)
-    try:        # a recurring event's dated flyers: that date's flyer (one card), or a moved date of the series
-        flyers = series_dated_flyers(ctx, flyers, recurring)
+    try:        # a recurring event's (or the committee meeting's) dated flyers: that date's flyer (one card), or a
+        # moved date of the series
+        flyers = series_dated_flyers(ctx, flyers, recurring, committee)
     except Exception as e:
         log.error("recurring events' dated flyers not checked: %s: %s", type(e).__name__, e)
     manual = safe_each([i for i in ctx.items("manual_events") if i.get("kind") == "event"], prep, "event")
@@ -3567,6 +3697,18 @@ def _assembly_reminders(ctx: Ctx, root: Path, today: date) -> list[dict]:
                       f"assemblies.", last.isoformat())]
 
 
+def _speaker_reminders(ctx: Ctx, root: Path, today: date) -> list[dict]:
+    """A guest speaker of the next SPEAKER_CONFIRM_DAYS days (config/site.yml `meeting: speakers:`) who is not
+    `confirmed: true` yet — for the chair only: the site shows every speaker and never says which are confirmed."""
+    mt = ctx.cfg.get("meeting") if isinstance(ctx.cfg.get("meeting"), dict) else {}
+    speakers, _notes = meeting_speakers(mt)          # (the notes are problems.meeting's: build_events)
+    return [_reminder(f"speaker:{ymd}", "config/site.yml",
+                      f"config/site.yml meeting: the guest speaker for {ymd} ({sp['name']}) is not confirmed yet — once "
+                      f"they say yes, set confirmed: true (or change the speaker).", ymd)
+            for ymd, sp in speakers.items()
+            if not sp["confirmed"] and 0 <= (date.fromisoformat(ymd) - today).days <= SPEAKER_CONFIRM_DAYS]
+
+
 def _price_change_reminders(ctx: Ctx, root: Path, today: date) -> list[dict]:
     changes, _problems = PC.specs(ctx.cfg)          # (the problems are reported by price_change_specs)
     return [_reminder(f"price-change:{c['key']}", "config/site.yml",
@@ -3577,7 +3719,7 @@ def _price_change_reminders(ctx: Ctx, root: Path, today: date) -> list[dict]:
 
 
 REMINDER_CHECKS = (_carry_reminders, _orientation_reminders, _skip_dates_reminders, _assembly_reminders,
-                   _price_change_reminders)
+                   _price_change_reminders, _speaker_reminders)
 
 
 def reminders(ctx: Ctx, root: Path | None = None) -> list[dict]:
