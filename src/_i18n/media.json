@@ -8,7 +8,7 @@
   },
   "media.listen_meta": {
     "en": "Listen to AA Grapevine's Podcast and the weekly open meetings of Grapevine (in English) and La Viña (in Spanish), with a player that remembers your place.",
-    "es": "Escucha el podcast de AA Grapevine y las reuniones abiertas semanales de La Viña (en español) y Grapevine (en inglés), en un reproductor que recuerda dónde vas."
+    "es": "Escucha la reunión abierta semanal de La Viña (en español) y el podcast y la reunión abierta de AA Grapevine (en inglés). El reproductor recuerda dónde vas."
   },
   "media.stat_episodes": { "en": "episodes", "es": "episodios" },
   "media.stat_shows": { "en": "shows", "es": "programas" },

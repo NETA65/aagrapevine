@@ -32,8 +32,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {% import "macros/media.njk" as media with context %}
 {% mediaSprite %}
 {%- set cfgShows = site.sources.podcasts or [] -%}
-{#- newest first; one day's episodes in the page's language first (AA Grapevine's Podcast and La Viña's meeting
-    both come out on Mondays): the "Latest episode" below is the list's first — media.js episodeOrder -#}
+{#- newest first; one day's episodes in the page's language first (so far AA Grapevine's Podcast and La Viña's
+    meeting both came out on Mondays): the "Latest episode" below is the list's first — media.js episodeOrder -#}
 {%- set eps = db.episodes | mediaItems("episodes") | mediaEpisodeOrder(cfgShows, lang) -%}
 {%- set shows = db.episodes | mediaShowList(cfgShows, eps, lang) -%}
 {%- set multi = shows.length > 1 -%}
@@ -582,7 +582,11 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 </div>
 
 {#- ------------------------------------------------------------ tell your group -#}
-{%- set announcement = "media.listen_announcement" | t(lang, { shows: shows | mediaListNames(lang), url: page.url | siteUrl(site) }) -%}
+{#- (a show in another language than the page's says so: "… de La Viña (in Spanish)" / "AA Grapevine's Podcast (en
+    inglés)" — read aloud at a meeting, the names alone give no cue) -#}
+{%- set annNames = [] -%}
+{%- for s in shows %}{% set _n = annNames.push(s.name ~ ((" " ~ (("access.in_spanish" if s.lang == "es" else "access.in_english") | t(lang))) if s.lang != lang else "")) %}{% endfor -%}
+{%- set announcement = "media.listen_announcement" | t(lang, { shows: annNames | mediaListNames(lang), url: page.url | siteUrl(site) }) -%}
 {{ media.shareBlock(lang, "listen-share-title", "media.share_listen_text" | t(lang), announcement, page.url | siteUrl(site), "media.listen_share_title" | t(lang), "media.listen_sub" | t(lang)) }}
 
 {% else %}

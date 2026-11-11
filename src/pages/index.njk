@@ -661,7 +661,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-surface text-gv">{% icon "video", "size-5" %}</span>
           <span class="min-w-0">
             <span class="block text-sm font-semibold text-ink group-hover:text-gv">{{ ("home.weekly_opens" if D.weekly_open.items.length > 1 else "home.weekly_open") | t(L) }}</span>
-            <span class="block text-xs leading-snug text-muted">{{ "home.weekly_open_text" | t(L, { when: woWhen }) if woWhen else ("home.weekly_open_fallback" | t(L)) }}</span>
+            <span class="block text-xs leading-snug text-muted">{%- set woMany = D.weekly_open.items.length > 1 -%}{{ ("home.weekly_opens_text" if woMany else "home.weekly_open_text") | t(L, { when: woWhen }) if woWhen else (("home.weekly_opens_fallback" if woMany else "home.weekly_open_fallback") | t(L)) }}</span>
           </span>
           <span class="ml-auto self-center text-faint transition group-hover:translate-x-0.5 group-hover:text-gv" aria-hidden="true">{% icon "arrow-right", "size-4" %}</span>
         </a>

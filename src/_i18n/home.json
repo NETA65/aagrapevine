@@ -364,6 +364,10 @@
     "en": "{when} · on Zoom, open to everyone",
     "es": "{when} · por Zoom, abierta a todos"
   },
+  "home.weekly_opens_text": {
+    "en": "{when} · on Zoom, open to everyone",
+    "es": "{when} · por Zoom, abiertas a todos"
+  },
   "home.new_videos": {
     "en": "New on YouTube",
     "es": "Nuevo en YouTube"
@@ -519,6 +523,10 @@
   "home.weekly_open_fallback": {
     "en": "Every week on Zoom — open to everyone",
     "es": "Cada semana por Zoom — abierta a todos"
+  },
+  "home.weekly_opens_fallback": {
+    "en": "Every week on Zoom — open to everyone",
+    "es": "Cada semana por Zoom — abiertas a todos"
   },
   "home.time_not_listed": {
     "en": "Time not listed — see event details",
