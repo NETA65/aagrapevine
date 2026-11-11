@@ -325,7 +325,8 @@ its own item shape), `status.json` (below),
 `booth.json` (the booth display's Drive files, below — their own shape; nothing translated).
 
 Each site file is `{ "updated": "...", "fixture": false, <extra top-level keys>, "items": [...] }`,
-items sorted newest first (events: soonest first). Extra top-level keys: `instagram.profiles`,
+items sorted newest first (events: soonest first; episodes out at the same moment in config order, the first show
+first). Extra top-level keys: `instagram.profiles`,
 `videos.playlists`, `episodes.shows`, `articles.issues` (§5). `drive.json` never contains a Google
 Form whose `extra.form_closed` is `true`, nor a file of the booth folder (category `booth`: those are
 in `booth.json` only). Output is deterministic: a re-run with the same raw data
@@ -1477,7 +1478,7 @@ it is read once.
 |---|---|---|
 | `instagram.json` | `profiles` | {gv: {username, name, full_name, url, followers, posts, owner_id, checked, avatar}, lv: {…}} — config order; names are brands (no i18n) |
 | `videos.json` | `playlists` | [{id, title, lang (en/es — `und` is detected), count, channel_id, url, `i18n.title`, `machine`}] in the channel's order. Since October 2026 `id` (the YouTube playlist id) is also what a Watch address names (`/watch/?pl=<id>`, Watch's page JSON `plIds`) and what Listen's "Spoken stories from La Viña" / "Historias habladas de La Viña" card links (§3, *Files the pages fetch*) |
-| `episodes.json` | `shows` | [{key, name, title, feed, description (plain text), image, language, web, apple, spotify, amazon, episodes, lang, `i18n.title`, `i18n.description`, `machine`}] in config order |
+| `episodes.json` | `shows` | [{key, name, title, feed, description (plain text), image, language, web, apple, spotify, amazon, episodes, lang, `i18n.title`, `i18n.description`, `machine`}] in config order; a description that ends with its own translation in parentheses (La Viña's) is split into its two languages — `description` is the show's own half, never machine-made |
 | `articles.json` | `issues` | [{id "gv:2026-10", publication, key, label, theme, description, url, image, cover, hub, lang, `i18n.theme`, `i18n.description`, `i18n.label`, `machine`}] newest `key` first. `i18n.label` is written by rules: GV monthly "October 2026" / "Octubre 2026"; LV bimonthly (odd key month) "September / October 2026" / "Septiembre / Octubre 2026" |
 | `whatsnew.json` | (per item) `wn_date` | the news date used for sorting (ISO UTC) |
 | `booth.json` | `collections`, `problems` | [{id, label, count}] · [{file, problem, problem_es, code}] — its own item shape, §3 *booth.json* |
