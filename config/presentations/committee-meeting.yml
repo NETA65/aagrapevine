@@ -16,10 +16,13 @@
 #     meeting's day; the weekly open meetings and La Viña's workshop; this month's issues; both Books of the
 #     Month; the next assembly) and `live` slides (story deadlines, coming events, the next twelve meeting
 #     dates). A fact the site has nothing for says where to look ("see the Meetings page", "to be announced"),
-#     so every sentence around one is written to read well with that phrase too;
+#     so every sentence around one is written to read well with that phrase too. A meeting with NO guest
+#     speaker (the meetings before January 20, 2027, when the guest speakers start: November 18 and December 16,
+#     2026) says so: "none tonight" for tonight's speaker, "none this time" for next month's; "to be announced"
+#     is only for a speaker the committee's list doesn't name yet;
 #   · the versions (Customize → Version): "With a guest speaker" (the first one: the hour from January 2027),
-#     "No guest speaker" (the committee's business for the whole hour, as before: December 16, 2026, or a month
-#     whose speaker can't come) and "No guest speaker, with a topic of the month";
+#     "No guest speaker" (the committee's business for the whole hour, as before: the meetings before January 20,
+#     2027, or a month whose speaker can't come) and "No guest speaker, with a topic of the month";
 #   · each note's TIME line is `minutes:` (the player writes the TIME line for the current version), or
 #     `version_minutes` where the versions without a speaker give a slide its time of before. The TIME line is
 #     the one that counts: a timekeeping tip names only minutes that agree with it, in every version
@@ -62,10 +65,10 @@ card:
 # The versions (Customize → Version). The first one is the hour from January 2027: the guest speaker until 7:30
 # (the four "Guest speaker" slides: introduction, talk, questions, thanks), then the committee's business, each
 # part shorter. The other two are the committee's business for the whole hour, as before the guest speakers: "No
-# guest speaker" (December 16, 2026, or a month whose speaker can't come) and "No guest speaker, with a topic of
-# the month" (the "Topic of the month" slide's notes, WHERE THE TIME COMES FROM: its 5 minutes come from the news
-# block — 'Open meetings' and 'More news' are left out, and 'Grapevine and La Viña this month' and the deadlines
-# take about 30 seconds each). Both give the slides their time of before (`version_minutes`), the agenda its rows
+# guest speaker" (the meetings before January 20, 2027 — November 18 and December 16, 2026 —, or a month whose
+# speaker can't come) and "No guest speaker, with a topic of the month" (the "Topic of the month" slide's notes,
+# WHERE THE TIME COMES FROM: its 5 minutes come from the news block — 'Open meetings' and 'More news' are left out,
+# and 'Grapevine and La Viña this month' and the deadlines take about 30 seconds each). Both give the slides their time of before (`version_minutes`), the agenda its rows
 # of before (`version_fields`), and show the sharing that the speaker's questions replace in the first version:
 # `only` lists their slides, so they can show the slides that start switched off. The ids stay as they were ("full",
 # "topic"): a chair's device keeps the version chosen by its id.
@@ -76,8 +79,8 @@ presets:
       es: "Con orador(a) invitado(a) (unos 60 minutos)"
     minutes: 60
     note:
-      en: "The guest speaker until 7:30 (the talk and questions), then the committee's business until 8:00. A night with no guest speaker (December 16, 2026): choose 'No guest speaker'."
-      es: "El orador o la oradora invitada hasta las 7:30 (su charla y las preguntas) y después los asuntos del comité hasta las 8:00. Una noche sin orador(a) invitado(a) (el 16 de diciembre de 2026): elige «Sin orador(a) invitado(a)»."
+      en: "The guest speaker until 7:30 (the talk and questions), then the committee's business until 8:00. A night with no guest speaker (every meeting before January 20, 2027, or a speaker who can't come): choose 'No guest speaker'."
+      es: "El orador o la oradora invitada hasta las 7:30 (su charla y las preguntas) y después los asuntos del comité hasta las 8:00. Una noche sin orador(a) invitado(a) (todas las reuniones antes del 20 de enero de 2027, o si el orador o la oradora no puede venir): elige «Sin orador(a) invitado(a)»."
   - id: "no-speaker"
     label:
       en: "No guest speaker (about 60 minutes)"
@@ -89,8 +92,8 @@ presets:
            "old-business", "new-business", "workshops-volunteers", "part-3", "sharing", "action-items",
            "next-meeting", "responsibility", "thank-you"]
     note:
-      en: "The committee's business for the whole hour, with the sharing before the closing: for December 16, 2026, or a month whose guest speaker can't come. The agenda shows this version's own times."
-      es: "Los asuntos del comité durante toda la hora, con un rato para compartir antes del cierre: para el 16 de diciembre de 2026 o un mes en que el orador o la oradora invitada no pueda venir. La agenda muestra los horarios de esta versión."
+      en: "The committee's business for the whole hour, with the sharing before the closing: for every meeting before January 20, 2027 (the guest speakers start then), or a month whose guest speaker can't come. The agenda shows this version's own times."
+      es: "Los asuntos del comité durante toda la hora, con un rato para compartir antes del cierre: para todas las reuniones antes del 20 de enero de 2027 (entonces empiezan los oradores invitados) o un mes en que el orador o la oradora invitada no pueda venir. La agenda muestra los horarios de esta versión."
   - id: "topic"
     label:
       en: "No guest speaker, with a topic of the month (about 60 minutes)"
@@ -343,9 +346,11 @@ fillins:
 #   already next month's).
 # A line whose blanks are all empty is left out, and so is a heading left with nothing under it ("Old business"
 # with no items): the text never shows an empty [hint]. A line with no blank always stays — except a speaker line
-# for a meeting with no guest speaker (December 16, 2026), which is left out too, and so is every speaker line in a
-# version that leaves out the guest speaker's slide (`speaker_slide`: "No guest speaker", for a speaker who can't
-# come), whatever the site's list still says.
+# for a meeting with no guest speaker (the meetings before January 20, 2027), which is left out too, and so is every
+# speaker line in a version that leaves out the guest speaker's slide (`speaker_slide`: "No guest speaker", for a
+# speaker who can't come), whatever the site's list still says. A version that keeps the speaker's slide for a
+# meeting the site lists no speaker for gets a warning in the panel (its agenda row says "none at this meeting"),
+# and "Start next month" switches to "No guest speaker" by itself when the next meeting has none listed.
 # The link and the meeting code are public (our flyers, the Meetings page): they go in every text. There is no
 # number to call: the meeting's Google Meet room has no phone dial-in.
 # The minutes follow the deck's rule: service positions and counts only, never names or an attendance list (the
@@ -513,7 +518,7 @@ slides:
       {not:no-speaker,topic} DO (the guest speaker): admit tonight's speaker at 6:50 for a sound check, just the two of you: their microphone, their camera, and how you'll signal the time ("2 minutes" in the chat). {live:speaker_slides}
       60 MINUTES: on a free Google account, Google Meet ends a call of three or more people after 60 minutes. Then admit the members at 7:00, not earlier (the sound check with the speaker alone is fine): the hour ends at 8:00 sharp, and the welcome below is said as they come in. If the account that owns the link has a plan without that limit, the call can open from 6:50 as people arrive.
       SAY (as people arrive): Welcome, come on in. We'll start right at seven. While we wait, please type your first name, your district and your service position in the chat, so we all know who's here.
-      {not:no-speaker,topic} NO GUEST SPEAKER TONIGHT (December 16, 2026, or the speaker can't come)? Choose the version 'No guest speaker' ({ui:customize} → {ui:version}): the committee's business for the whole hour, with its own agenda.
+      {not:no-speaker,topic} TONIGHT'S GUEST SPEAKER, from the Meetings page: {live:speaker_name}. NO GUEST SPEAKER TONIGHT (every meeting before January 20, 2027, when the guest speakers start, or the speaker can't come)? Choose the version 'No guest speaker' ({ui:customize} → {ui:version}): the committee's business for the whole hour, with its own agenda.
       {only:no-speaker,topic} NEXT MONTH: when the next meeting has a guest speaker, choose 'With a guest speaker' again ({ui:customize} → {ui:version}) before you send its agenda. 'Start next month' does it for you, and the paperwork says so if a listed speaker is left out.
       UPDATE EACH MONTH: nothing on this slide: the meeting's month and date (always the third Wednesday), the time and the panel fill in by themselves, and so does tonight's guest speaker on the next slides. Every orange item in square brackets, on any slide, is something to fill in: {ui:customize} → {ui:your_details} lists them all, and orange always means 'still to fill in'. What you typed last month stays on this device until you change it, so save your version first if you want to keep it ({ui:customize} → {ui:save_share}). The pages 'For the chair', in {ui:customize} → {ui:prepare}, list what to update on each slide and where to find it.
       TIP: This presentation, the slides AND these notes, is public on the committee's website. What you type in {ui:customize} stays on this device and is never sent anywhere, but it is shown on screen at the meeting and goes with any copy you save and share. Use service positions, not names, and keep internal figures out of it. Anything that must stay private goes in your own Drive, never in the shared A65_GV folders: PRIVATE in a name only hides a file from the website, not from Drive.
@@ -587,7 +592,9 @@ slides:
   # thanked and done by 7:30. These four slides have an eyebrow of their own, so the parts after them keep their
   # numbers in every version; the versions without a speaker leave them out. Their facts are tonight's speaker's
   # until midnight Central after the meeting (as the meeting's day on the title slide), and next month's speaker is
-  # that of the meeting after it; a night with none listed says "to be announced".
+  # that of the meeting after it. A night the Meetings page lists no speaker for (the meetings before January 20,
+  # 2027) says "none tonight" (choose "No guest speaker"); one the committee's list doesn't name yet, "to be
+  # announced".
   - id: "speaker-intro"
     layout: "bullets"
     eyebrow: "Guest speaker"
@@ -604,7 +611,8 @@ slides:
       SAY: It's my pleasure to introduce tonight's guest speaker, {live:speaker_name}: {live:speaker_position}. The topic tonight: {live:speaker_topic}. (Add the two or three sentences of introduction the speaker sent you.) Welcome, and thank you for being with us.
       SAY: Our guest will share for about 20 minutes, and then we'll have time for your questions. Please hold them until then; you can type them in the chat as they come to you.
       IF THE SPEAKER CAN'T COME: choose the version 'No guest speaker' ({ui:customize} → {ui:version}): its agenda, and the texts in {ui:customize} → {ui:paperwork}, then name no speaker. The run summary reminds you, about six weeks ahead, of a speaker who hasn't confirmed yet.
-      IF NO SPEAKER IS LISTED (the slide says 'to be announced'): type tonight's speaker on these slides ({ui:customize} → {ui:edit}), and tell whoever looks after the website; or choose the version 'No guest speaker'. What you type stays on this device, in every later month too, until you reset it: after the meeting, reset each slide you changed ({ui:customize} → {ui:edit} → 'Reset this slide to the original'), and next month's speaker fills in by itself again.
+      IF THE SLIDE SAYS 'none tonight': the Meetings page lists no guest speaker for tonight (every meeting before January 20, 2027): choose the version 'No guest speaker'.
+      IF IT SAYS 'to be announced' (the committee's list doesn't name tonight's speaker yet): type tonight's speaker on these slides ({ui:customize} → {ui:edit}), and tell whoever looks after the website; or choose the version 'No guest speaker'. What you type stays on this device, in every later month too, until you reset it: after the meeting, reset each slide you changed ({ui:customize} → {ui:edit} → 'Reset this slide to the original'), and next month's speaker fills in by itself again.
       ANONYMITY: on the slide, in the chat and in the minutes, a first name and last initial at most, with the speaker's service position; never their last name, e-mail address or phone number.
 
   # The talk: a pause card with the speaker and the topic, up while they share (or under their own slides).
@@ -652,7 +660,7 @@ slides:
     minutes: 1
     notes: |
       TIP (timekeeping): about a minute: our guest is thanked and done by 7:30.
-      SAY: Please join me in thanking {live:speaker_name} for tonight's talk. (Members can send a reaction, or unmute for a round of applause.) Thank you so much for being with us. You're welcome to stay for our business meeting, or to leave now: we know your time is precious. Next month, our guest speaker is {live:speaker_after}.
+      SAY: Please join me in thanking {live:speaker_name} for tonight's talk. (Members can send a reaction, or unmute for a round of applause.) Thank you so much for being with us. You're welcome to stay for our business meeting, or to leave now: we know your time is precious. Next month's guest speaker: {live:speaker_after}.
       DO: Let the speaker leave without a fuss. After the meeting, send them a short thank-you from the committee's address, grapevine@neta65.org.
       TRANSITION: Now let's turn to the committee's business.
 
@@ -1236,9 +1244,10 @@ slides:
       UPDATE: the rows are blanks in {ui:customize} → {ui:your_details}, and this device keeps them from month to month. After the meeting, once the minutes are drafted, 'Start next month' ({ui:customize} → {ui:paperwork}) copies the open items to the old business blanks and clears these rows for next month; you can undo it. Or copy them by hand, then clear these rows.
 
   # Shown DURING tonight's meeting, so its date is the meeting after tonight's ({live:meeting_after}), and its
-  # guest speaker that meeting's ({live:speaker_after}): until midnight Central after tonight's meeting,
-  # {live:meeting_day} is still tonight's, the title slide's date, so the slide reads right during the meeting,
-  # after it, and while the chair prepares it the week before. The time, the Google Meet link and its meeting code
+  # guest speaker that meeting's ({live:speaker_after}: "none this time" for a meeting the Meetings page lists no
+  # speaker for — December 16, 2026, on November 18's slide —, never "to be announced"): until midnight Central
+  # after tonight's meeting, {live:meeting_day} is still tonight's, the title slide's date, so the slide reads right
+  # during the meeting, after it, and while the chair prepares it the week before. The time, the Google Meet link and its meeting code
   # come from config/site.yml `meeting` (the same room every month; there is no number to call). The date and the
   # time are two facts side by side (" · "), and the script names the date after a colon, so both still read well
   # when the date says where to look ("see the Meetings page"). "\u00a0" keeps "meeting code" on the same line as
@@ -1258,7 +1267,7 @@ slides:
     notes: |
       SAY: Our next meeting: {live:meeting_after}. As always, it's on the third Wednesday, at seven, on this same Google Meet link. Our guest speaker next month: {live:speaker_after}. Please invite anyone in your district who might be interested: GVRs, RLVs, GSRs or any member. Everyone is welcome, and there's nothing to sign up for.
       DO: Post the date and the Meet link in the chat (in Spanish too, if Spanish-speaking members attend). Send a reminder about a week ahead, by email with every address in BCC: {ui:customize} → {ui:paperwork} has one, with next month's guest speaker.
-      STAYS CURRENT: the date (the meeting after tonight's, until midnight after the meeting), its guest speaker, the time, the Meet link and its code fill in by themselves ({ui:customize} → {ui:prepare} lists the next twelve dates). If the committee skips or moves a meeting, or a speaker changes, tell whoever looks after the website, so the date and the speaker here and the countdown on its meetings page stay right.
+      STAYS CURRENT: the date (the meeting after tonight's, until midnight after the meeting), its guest speaker ('none this time' when the Meetings page lists none for it, 'to be announced' while the committee's list doesn't name one yet), the time, the Meet link and its code fill in by themselves ({ui:customize} → {ui:prepare} lists the next twelve dates). If the committee skips or moves a meeting, or a speaker changes, tell whoever looks after the website, so the date and the speaker here and the countdown on its meetings page stay right.
       TIP: The Meet link and its code are public on our flyers, the Area's website and our meetings page, so they can stay on this slide. There is no number to call: our Google Meet room has no phone dial-in. Someone without internet can still join the weekly open meetings by phone ({live:site}/accessibility/#phone).
 
   - id: "responsibility"
@@ -1391,7 +1400,7 @@ slides:
     notes: |
       NOT PRESENTED: a reference for preparation.
       HOW TO USE IT: Work down this table the week before the meeting. Everything you fill in is in {ui:customize} → {ui:your_details}. A path that starts with '/' is a page of the committee website, {live:site}. Every slide not listed here (the welcome, the opening, the Preamble, introductions, the agenda, the sharing and the closing) stays the same from month to month unless the committee changes its format.
-      STAYS CURRENT: the meeting dates and their guest speakers, the story deadlines, this month's issues, both Books of the Month, the weekly open meetings, La Viña's workshop, the coming events and the next assembly fill in by themselves, and the price heads-up shows only while it is current: they come from the committee website, which updates itself every day from the official Grapevine and La Viña sites. Its /monthly/, /contribute/, /meetings/, /events/ and /shop/ pages are the quickest place to check a theme, a deadline, a meeting, a price or an event. When the website has nothing yet for one of them, the slide says where to look instead ('to be announced' for a guest speaker).
+      STAYS CURRENT: the meeting dates and their guest speakers, the story deadlines, this month's issues, both Books of the Month, the weekly open meetings, La Viña's workshop, the coming events and the next assembly fill in by themselves, and the price heads-up shows only while it is current: they come from the committee website, which updates itself every day from the official Grapevine and La Viña sites. Its /monthly/, /contribute/, /meetings/, /events/ and /shop/ pages are the quickest place to check a theme, a deadline, a meeting, a price or an event. When the website has nothing yet for one of them, the slide says where to look instead ('to be announced' for a guest speaker the committee's list doesn't name yet; a meeting with no guest speaker, like every one before January 20, 2027, says 'none tonight' or 'none this time').
       OFFICIAL PAGES: Books of the Month, aagrapevine.org/BOTM and aalavina.org/libro-del-mes. Open meetings, aagrapevine.org/grapevine-weekly-open and aalavina.org/calendario-de-eventos. Themes and deadlines, aagrapevine.org/contribute and aalavina.org/recursos ({lang:es}Temas de LV{/lang}).
 
   - id: "what-to-update-2"

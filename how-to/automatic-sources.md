@@ -1580,8 +1580,9 @@ numbers only ([Settings §3.8](settings.md#38-phone_access--joining-by-phone)).
 > browser, and both must agree. Monthly events under `recurring_events:` are forgiving ("Saturdays",
 > "2nd", "second", "last" all work there): see [Flyers and events](flyers-and-events.md).
 
-With the settings of November 2026 the next meetings are **Dec 16, 2026, then Jan 20 and Feb 17, 2027, 7–8 PM
-Central**, on Google Meet; the first guest speaker is on January 20, 2027 (December 16 has none).
+With the settings of November 2026 the next meetings are **Nov 18 and Dec 16, 2026, then Jan 20 and Feb 17, 2027,
+7–8 PM Central**, on Google Meet; the first guest speaker is on January 20, 2027 (November 18 and December 16 have
+none).
 
 **The guest speakers** (`speakers:`, since November 2026): each block is checked as the skip dates are — its date
 must be a meeting day by the rule and not a skip date, its name a first name and a last initial ("Rick W.", no

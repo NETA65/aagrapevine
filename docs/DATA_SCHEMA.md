@@ -1302,6 +1302,10 @@ describes at `shapePaper` and `paperMeetings`; `deckJson` makes them all). Since
                   "speaker": { "name": "Rick W.", "position": "…", "topic": "…", "position_es": "…", "topic_es": "…" } } ],
                                                         // speaker: that date's guest speaker (the Spanish ones fall
                                                         // back to the English; left out on a date with none);
+                                                        // "no_speaker": true instead for a date the list gives
+                                                        // none (Nov 18, Dec 16, 2026: before the list's first;
+                                                        // a month up to its last one with no entry; an empty
+                                                        // list); neither: not listed yet ("to be announced");
                                                         // every meeting from the month two calendar months back
                                                         // (two already held, three once this month's has been:
                                                         // built Oct 25 → Aug 19, Sep 16, Oct 21) to 366 days ahead,

@@ -2871,11 +2871,20 @@
       }
       // the site lists a guest speaker for this meeting, but the chosen version leaves the speaker out (a "No guest
       // speaker" kept from a month that had none): the text names none, so say why and which version shows them
+      // ("Customize" in the player's words: pres.customize_btn, the button's — the drawer's heading is the page's)
       if (r.speakerLeftOut) {
         var firstPr = (P.deck.presets || [])[0];
-        var sw = sec.appendChild(el("p", "gvp-warn gvp-warn--long"));
+        var sw = attrs(sec.appendChild(el("p", "gvp-warn gvp-warn--long")), { "data-gvp-warn": "speaker" });
         sw.textContent = T("pres.paper_speaker_left_out", { name: r.speakerLeftOut,
-          version: firstPr ? firstPr.label[LANG] || firstPr.label.en : "", customize: T("pres.customize_h"), tab: T("pres.tab_version") });
+          version: firstPr ? firstPr.label[LANG] || firstPr.label.en : "", customize: T("pres.customize_btn"), tab: T("pres.tab_version") });
+      }
+      // …and the other way round: the site lists NO guest speaker for this meeting (those before January 20, 2027),
+      // but the chosen version keeps the speaker's part: the agenda e-mail says which version leaves it out
+      var noPr = r.speakerNone ? G.noSpeakerPreset(P.deck) : null;
+      if (noPr) {
+        var nw = attrs(sec.appendChild(el("p", "gvp-warn gvp-warn--long")), { "data-gvp-warn": "speaker" });
+        nw.textContent = T("pres.paper_speaker_none", { version: noPr.label[LANG] || noPr.label.en,
+          customize: T("pres.customize_btn"), tab: T("pres.tab_version") });
       }
       sec.appendChild(paperBox(r, T(words.label)));
       var row = sec.appendChild(el("div", "gvp-ph-tools gvp-ph-tools--wrap"));
@@ -3040,6 +3049,8 @@
       var firstPr = (P.deck.presets || [])[0];
       var msg = TN("pres.paper_next_done", res.carried, { date: meetingName(next)[0] });
       if (res.version === "reset" && firstPr) msg += " " + T("pres.paper_next_version", { version: firstPr.label[LANG] || firstPr.label.en });
+      var nowPr = res.version === "without" ? G.presetOf(P.deck, ds().preset) : null;
+      if (nowPr) msg += " " + T("pres.paper_next_version_none", { version: nowPr.label[LANG] || nowPr.label.en });
       var b = toast(msg, undoAction(snap));
       if (b) b.focus();
     });

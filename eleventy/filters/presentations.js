@@ -1148,8 +1148,9 @@ export const FALLBACKS = {
   meeting_link: "see the Meetings page",
   meeting_url: "see the Meetings page",
   meeting_phone: "see the Accessibility page",
-  // the guest speaker of the meeting's day (and of the meeting after it): a date with none listed — the version
-  // without a guest speaker is for it
+  // the guest speaker of the meeting's day (and of the meeting after it) when the committee's list doesn't name one
+  // yet: a month after the list's last one, or a month whose entry the site leaves out (speakerCover). A meeting the
+  // list gives no guest speaker says so instead (NO_SPEAKER)
   speaker_name: "to be announced",
   speaker_position: "to be announced",
   speaker_topic: "to be announced",
@@ -1182,6 +1183,25 @@ export const FALLBACKS = {
   gv_open_meeting: "see the Meetings page",
   lv_open_meeting: "see the Meetings page",
   open_meeting_zoom: "see the Meetings page",
+};
+
+/**
+ * What the guest speaker facts say of a committee meeting with NO guest speaker — by the committee's list
+ * (speakerCover: the meetings before January 20, 2027, when the guest speakers start, or a month the list leaves
+ * out), never "to be announced", which is for a speaker the list doesn't name yet (FALLBACKS). Each reads in its
+ * slides' sentences: tonight's ("Tonight's guest speaker: none tonight", the line under it saying why, "Topic:
+ * none"; "Guest speaker: none tonight" in the agenda's row), next month's on "Next meeting" ("Guest speaker: none
+ * this time"), another meeting's slides ("…, no guest speaker this month"), and the chair's notes (speaker_slides:
+ * which version to choose). README lists them.
+ */
+export const NO_SPEAKER = {
+  speaker_name: "none tonight",
+  speaker_position: "the Meetings page lists no guest speaker for this meeting",
+  speaker_topic: "none",
+  speaker_line: "none tonight",
+  speaker_note: "no guest speaker this month",
+  speaker_after: "none this time",
+  speaker_slides: "No guest speaker is listed for tonight: choose the version 'No guest speaker', the committee's business for the whole hour.",
 };
 
 /**
@@ -1245,9 +1265,25 @@ function speakersOf(m) {
   }]));
 }
 
+/** Whether the committee's list of guest speakers (config/site.yml meeting.speakers, as written) says a meeting day
+ *  ("YYYY-MM-DD") with no speaker on it (speakersOf) has none — `(ymd) → true` — or doesn't know yet (false: "to be
+ *  announced"). None: a month up to the list's last one that has no entry (the meetings before January 20, 2027,
+ *  when the guest speakers start, or a month left out of the list), or any day when the list is empty (the committee
+ *  has no guest speakers: config/site.yml says "a meeting with no block has no guest speaker"). Not known: a month
+ *  after the list's last one (the next speakers aren't listed yet), or a month whose entry the site leaves out (a
+ *  full last name, a date that is not the meeting's day …: there is a speaker, by a name the site may not show). */
+function speakerCover(m) {
+  const raw = Array.isArray(m.speakers) ? m.speakers : isMap(m.speakers) ? [m.speakers] : [];
+  if (!raw.length) return () => true;
+  const months = new Set(raw.filter(isMap).map((e) => ymdText(e.date)).filter(Boolean).map((d) => d.slice(0, 7)));
+  const last = [...months].sort().pop() || "";
+  return (ymd) => !!last && ymd.slice(0, 7) <= last && !months.has(ymd.slice(0, 7));
+}
+
 /** The committee meeting: its dates from today on, within about a year (src/_data/meeting.js, and committee.js
  *  meetingDates — the same rule — for a meeting earlier today, which the site's list drops once it has ended), each
- *  with its guest speaker (speakersOf; null without one), its rule, time and how to join it (config/site.yml
+ *  with its guest speaker (speakersOf; null without one, and `none` when the committee's list gives that meeting
+ *  none: speakerCover), its rule, time and how to join it (config/site.yml
  *  `meeting:`, committee.js meetingJoin: the platform, the link — `link` without its https:// —, the meeting code or
  *  Zoom ID, a passcode). A meeting day stays in the list until midnight Central after it (`over`): during AND after
  *  tonight's meeting, the meeting's day is still tonight's (meeting_day), while the next meeting (meeting_next) is
@@ -1259,10 +1295,11 @@ const meetingInfo = (c) => c.once("meeting", () => {
   const list = [...(c.meeting && Array.isArray(c.meeting.upcoming) ? c.meeting.upcoming : []), ...meetingDates(m, 1, 13)];
   const seen = new Set();
   const speakers = speakersOf(m);
+  const none = speakerCover(m);
   const rows = list
     .filter((x) => x && DAY.test(String(x.ymd)) && !seen.has(x.ymd) && seen.add(x.ymd))
     .map((x) => ({ ymd: x.ymd, start: instantIso(x.start), end: instantIso(x.end), label: H.fmtDate(x.start, "en", "long"),
-      over: iso(chicagoDayEndMs(x.ymd)), speaker: speakers.get(x.ymd) || null }))
+      over: iso(chicagoDayEndMs(x.ymd)), speaker: speakers.get(x.ymd) || null, none: !speakers.has(x.ymd) && none(x.ymd) }))
     .filter((x) => x.start && Date.parse(x.over) > c.nowMs && Date.parse(x.start) <= c.nowMs + HORIZON_MS)
     .sort((a, b) => a.start.localeCompare(b.start))
     .slice(0, MAX_ROWS);
@@ -1281,7 +1318,9 @@ const meetingInfo = (c) => c.once("meeting", () => {
  *  later. Each row: ymd, start, end, its date in English ("Wednesday, October 21, 2026") and in Spanish, inside a
  *  sentence ("miércoles, 21 de octubre de 2026"), its month ("October 2026") and, when it has one, its guest
  *  speaker (`speaker`: name, service position and topic, in English, and the position and topic in Spanish for a
- *  Spanish paragraph: position_es, topic_es). `time_es`: the meeting's time in the site's
+ *  Spanish paragraph: position_es, topic_es) — or `no_speaker: true` for a meeting the committee's list gives none
+ *  (speakerCover: the agenda's speaker row says so, and the player warns a version that keeps the speaker's part;
+ *  neither: the speaker is still to be announced). `time_es`: the meeting's time in the site's
  *  Spanish words ("7:00–8:00 p. m., hora del Centro") for a Spanish paragraph. */
 const paperMeetings = (c) => c.once("paper-meetings", () => {
   const m = c.site.meeting && typeof c.site.meeting === "object" ? c.site.meeting : {};
@@ -1289,6 +1328,7 @@ const paperMeetings = (c) => c.once("paper-meetings", () => {
   const list = [...(c.meeting && Array.isArray(c.meeting.upcoming) ? c.meeting.upcoming : []), ...meetingDates(m, 2, 13, c.now)];
   const seen = new Set();
   const speakers = speakersOf(m);
+  const none = speakerCover(m);
   const rows = list
     .filter((x) => x && DAY.test(String(x.ymd)) && !seen.has(x.ymd) && seen.add(x.ymd))
     .map((x) => {
@@ -1296,9 +1336,10 @@ const paperMeetings = (c) => c.once("paper-meetings", () => {
       const sp = speakers.get(x.ymd);
       return { ymd: x.ymd, start: instantIso(x.start), end: instantIso(x.end), label: H.fmtDate(x.start, "en", "long"),
         label_es: es ? es.charAt(0).toLocaleLowerCase("es") + es.slice(1) : "", month: monthLabel(x.ymd.slice(0, 7), "en"),
-        // that meeting's guest speaker, for {paper:speaker…} (never `confirmed` or `slides`: the paperwork goes out)
+        // that meeting's guest speaker, for {paper:speaker…} (never `confirmed` or `slides`: the paperwork goes out),
+        // or `no_speaker` when the committee's list gives it none (speakerCover; neither: not known yet)
         ...(sp ? { speaker: { name: sp.name, position: sp.position, topic: sp.topic, position_es: sp.position_es,
-          topic_es: sp.topic_es } } : {}) };
+          topic_es: sp.topic_es } } : none(x.ymd) ? { no_speaker: true } : {}) };
     })
     .filter((x) => x.start && Date.parse(x.start) <= c.nowMs + HORIZON_MS)
     .sort((a, b) => a.start.localeCompare(b.start))
@@ -1649,22 +1690,26 @@ export function liveFacts(ctx) {
 
   // The guest speaker of the meeting's day (meeting_day's meeting, until midnight Central after it: during AND after
   // tonight's meeting it is tonight's), and of the meeting after it (speaker_after, with meeting_after): the speakers
-  // /meetings/ lists. A date with none listed (December 16, 2026) says its fallback, "to be announced". The chair's
-  // notes only: whether the speaker shares slides (check their screen sharing at the sound check).
-  const bySpeaker = (key, f) => run(mt.rows.map((r) => ({ value: r.speaker ? f(r.speaker) : "", end: r.over })), FALLBACKS[key]);
+  // /meetings/ lists. A meeting the committee's list gives none (the meetings before January 20, 2027: November 18
+  // and December 16, 2026) says so (NO_SPEAKER: "none tonight", "none this time"); only a speaker the list doesn't
+  // name yet (a month after its last one, or an entry the site leaves out) says the fallback, "to be announced". The
+  // chair's notes only: whether the speaker shares slides (check their screen sharing at the sound check).
+  const bySpeaker = (key, f) => run(mt.rows.map((r) => ({ value: r.speaker ? f(r.speaker) : r.none ? NO_SPEAKER[key] : "", end: r.over })),
+    FALLBACKS[key]);
   out.speaker_name = bySpeaker("speaker_name", (s) => s.name);
   out.speaker_position = bySpeaker("speaker_position", (s) => s.position);
   out.speaker_topic = bySpeaker("speaker_topic", (s) => s.topic);
   // "Rick W. — Past delegate, Area 65 …" (as the calendars' text gives the speaker)
   out.speaker_line = bySpeaker("speaker_line", (s) => [s.name, s.position].filter(Boolean).join(" — "));
-  // "guest speaker: Rick W.", or "no guest speaker this month" for a meeting with none listed (December 16, 2026:
-  // none by design) — a phrase for another meeting's slides (the Grapevine Meeting's announcements); its fallback
-  // only once the build's dates run out
-  out.speaker_note = run(mt.rows.map((r) => ({ value: r.speaker ? `guest speaker: ${r.speaker.name}` : "no guest speaker this month", end: r.over })),
-    FALLBACKS.speaker_note);
-  // "Jeannie M. — “Grapevine and La Viña as Public Information tools”" (as the meeting's summary gives them)
-  const nextOne = (s) => (s ? s.name + (s.topic ? ` — “${s.topic}”` : "") : "");
-  out.speaker_after = run(mt.rows.slice(1).map((r, i) => ({ value: nextOne(r.speaker), end: mt.rows[i].over })), FALLBACKS.speaker_after);
+  // "guest speaker: Rick W.", or "no guest speaker this month" for a meeting with none (December 16, 2026) — a
+  // phrase for another meeting's slides (the Grapevine Meeting's announcements); its fallback for a speaker not
+  // listed yet, and once the build's dates run out
+  out.speaker_note = bySpeaker("speaker_note", (s) => `guest speaker: ${s.name}`);
+  // "Jeannie M. — “Grapevine and La Viña as Public Information tools”" (as the meeting's summary gives them), or
+  // "none this time" ("Guest speaker: none this time" on the "Next meeting" slide of November 18, 2026)
+  const nextOne = (r) => (r.speaker ? r.speaker.name + (r.speaker.topic ? ` — “${r.speaker.topic}”` : "") : r.none ? NO_SPEAKER.speaker_after : "");
+  out.speaker_after = run(mt.rows.slice(1).map((r, i) => ({ value: nextOne(r), end: mt.rows[i].over })), FALLBACKS.speaker_after);
+  // (a speaker without slides: "" — the fallback, "No slides are listed …"; a night without a speaker: which version)
   out.speaker_slides = bySpeaker("speaker_slides", (s) => (s.slides ? "Tonight's guest speaker shares slides: at the sound check, make sure they can share their screen." : ""));
 
   // joining it by phone, as /accessibility/#phone gives it (access.js axPhone: config/site.yml phone_access + the

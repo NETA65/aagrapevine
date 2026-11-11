@@ -57,7 +57,7 @@ from test_presentations import EMAIL, check_deck  # noqa: E402
 FIXTURES = ROOT / "tests" / "fixtures" / "presentations"
 # The site's settings the facts come from (the committee's meeting in its Google Meet room — no passcode, no number
 # to call — and its guest speakers: October's confirmed, with slides, its position and topic in Spanish too;
-# November's not confirmed yet, in English only; December none)
+# November's not confirmed yet, in English only; December not listed: the list ends in November)
 SITE = {
     "url": "https://neta65.github.io/aagrapevine", "contact_email": "grapevine@neta65.org",
     "committee": "NETA 65 Grapevine & La Viña Committee", "committee_es": "Comité de Grapevine y La Viña de NETA 65",
@@ -396,7 +396,9 @@ class Texts(unittest.TestCase):
         self.assertIn("monthly meeting on Google Meet: Wednesday, October 21, 2026", m)
         self.assertIn("Next meeting: Wednesday, November 18, 2026, 7:00", m)
         self.assertTrue(r["after"]["minutes"]["text"].split("Next meeting: ", 1)[1].startswith("Wednesday, November 18, 2026"))
-        # December 16 has no guest speaker: no speaker line in any text; the speaker version's row says so
+        # December 16: the list (October and November) doesn't reach it, so its speaker is not known yet: no speaker
+        # line in any text; the speaker version's row says "to be announced" (a meeting the list gives NO speaker:
+        # "none at this meeting", tests/test_r24_no_speaker.py)
         for w in ("agenda", "reminder"):
             self.assertNotIn("Guest speaker:", r["dec"][w]["text"].split("Agenda (Central time)")[0], w)
             self.assertNotIn("Topic:", r["dec"][w]["text"], w)
@@ -529,7 +531,7 @@ class NextMonth(unittest.TestCase):
             const stored = plain(G.normState(JSON.parse(JSON.stringify(st))).decks[D.id].prev);
             G.undoNextMonth(D, st);
             const undone = ds.preset;
-            // after the November meeting: December lists nobody, so the version stays
+            // after the November meeting: the list doesn't reach December (not known yet), so the version stays
             const s3 = JSON.parse(JSON.stringify(st)); s3.decks[D.id].preset = "no-speaker"; s3.decks[D.id].prev = null;
             const res3 = plain(G.startNextMonth(D, s3, [], ms(input.nov_after)));
             out({ noSp, byHand, res, reset, stored, undone, res3, kept: s3.decks[D.id].preset });""",
@@ -541,7 +543,7 @@ class NextMonth(unittest.TestCase):
         self.assertEqual((r["res"]["version"], r["reset"]), ("reset", ""), "back to the first version: November has a speaker")
         self.assertEqual(r["stored"]["preset"], "no-speaker", "its Undo survives a reload")
         self.assertEqual(r["undone"], "no-speaker")
-        self.assertEqual((r["res3"]["version"], r["kept"]), ("", "no-speaker"), "December lists nobody: the version stays")
+        self.assertEqual((r["res3"]["version"], r["kept"]), ("", "no-speaker"), "December is not listed: the version stays")
 
     def test_during_the_meeting_the_agenda_moves_on_at_once(self):
         r = deck_js(self, STATE_JS + """

@@ -286,7 +286,7 @@ class MeetingPaperwork(unittest.TestCase):
                     page = self.open_paper(ctx, "en", errors)
                     self.show_tab(page)
                     minutes = page.locator('[data-gvp-panel="paper"] .gvp-sec').nth(2)
-                    word = minutes.locator("p.gvp-warn")
+                    word = minutes.locator('p.gvp-warn:not([data-gvp-warn="speaker"])')
                     undo = page.locator('[data-gvp-key="paper:undo"]')
                     if current:
                         self.assertIn(f"the meeting of {held['label']}", minutes.inner_text())
@@ -308,6 +308,40 @@ class MeetingPaperwork(unittest.TestCase):
                 finally:
                     ctx.close()
         self.assertEqual(errors, [])
+
+    def test_a_meeting_with_no_guest_speaker(self):
+        """The agenda e-mail for a meeting the site lists no guest speaker for (November 18 and December 16, 2026),
+        in the first version (with the speaker's part): one word in the agenda's section, naming the version without
+        it with the player's own words in the page's language — never a key — and none in "No guest speaker"."""
+        deck = json.loads((S["site"] / "orientation" / "presentations" / "committee-meeting.json").read_text(encoding="utf-8"))
+        built = deck["built"]
+        row = next((r for r in deck["paperwork"]["meetings"] if r["start"] > built and r.get("no_speaker")), None)
+        if not row:
+            self.skipTest("the built deck lists no meeting without a guest speaker ahead")
+        errors: list[str] = []
+        seen = {}
+        for lang, preset in (("en", ""), ("es", ""), ("en", "no-speaker")):
+            ctx = new_context(1280, 900, lang=lang)
+            try:
+                ctx.clock.set_fixed_time(instant(row["start"], days=-7))
+                seeded(ctx, {"v": 1, "shared": {"fill": {}}, "decks": {"committee-meeting": {"preset": preset, "fill": {}, "checks": {}}}})
+                page = self.open_paper(ctx, lang, errors)
+                self.show_tab(page)
+                secs = page.locator('[data-gvp-panel="paper"] .gvp-sec')
+                seen[(lang, preset)] = [secs.nth(i).locator('p.gvp-warn[data-gvp-warn="speaker"]').all_inner_texts() for i in range(3)]
+                if not preset:
+                    self.assertIn("none at this meeting", secs.nth(0).locator(".gvp-out").inner_text())
+            finally:
+                ctx.close()
+        self.assertEqual(errors, [])
+        en, es, none = seen[("en", "")], seen[("es", "")], seen[("en", "no-speaker")]
+        self.assertEqual([len(x) for x in en], [1, 0, 0], "the agenda e-mail's section only")
+        self.assertIn("lists no guest speaker for this meeting", en[0][0])
+        self.assertIn("“No guest speaker (about 60 minutes)” (Customize → Version)", en[0][0])
+        self.assertIn("(Personalizar → Versión)", es[0][0])
+        for text in en[0] + es[0]:
+            self.assertNotIn("pres.", text)
+        self.assertEqual(none, [[], [], []])
 
     def test_the_spanish_time_it_was_started(self):
         """Release check R12-DECK-ES-PM: on /es/ the moment "Start next month" was pressed is written the way the whole
@@ -332,7 +366,8 @@ class MeetingPaperwork(unittest.TestCase):
                 asked = []
                 page.once("dialog", lambda d: (asked.append(d.message), d.dismiss()))
                 page.locator('[data-gvp-key="paper:undo"]').click()      # (its question, then Cancel)
-                seen[lang] = {"warn": panel.locator("p.gvp-warn").all_inner_texts(),
+                # (the guest speaker's word, on a meeting with none or a version without one, is another test's)
+                seen[lang] = {"warn": panel.locator('p.gvp-warn:not([data-gvp-warn="speaker"])').all_inner_texts(),
                               "started": panel.locator(".gvp-subfields p.gvp-pp").first.inner_text(), "asked": asked}
             finally:
                 ctx.close()

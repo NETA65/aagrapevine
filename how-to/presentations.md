@@ -138,8 +138,11 @@ committee now holds it: the opening (moment of silence, Serenity Prayer), four "
 introduction, the talk of about 20 minutes from about 7:02, questions from about 7:22, the thanks: done by 7:30), then
 the committee's business from 7:30 to 8:00, opened by the Preamble, each part shorter. The speaker's name, service
 position and topic come from `config/site.yml` → `meeting: speakers:` (the same list as `/meetings/`) and switch at
-midnight after each meeting; a date with no speaker listed says "to be announced". "No guest speaker" is the
-committee's business for the whole hour, as before (December 16, 2026, or a month whose speaker can't come), and
+midnight after each meeting. A meeting the list gives no speaker (every one before January 20, 2027, when the
+guest speakers start: November 18 and December 16, 2026) says so: "none tonight" on the speaker's slides, "Guest
+speaker: none this time" on "Next meeting"; "to be announced" is only for a speaker the list doesn't name yet (a
+month after its last one, or an entry the site leaves out). "No guest speaker" is the committee's business for the
+whole hour, as before (the meetings before January 20, 2027, or a month whose speaker can't come), and
 "No guest speaker, with a topic of the month" adds the topic: both give each slide its time of before
 (`version_minutes`) and the agenda its rows of before (`version_fields`). The slide ids stayed the same.
 
@@ -677,10 +680,10 @@ those show exactly what you type.
 | `meeting_zoom_id`, `meeting_passcode` | the older names: the meeting code, and a passcode (empty on Google Meet) | same (`meeting_id`, `passcode`) | — |
 | `meeting_phone` | (empty: a Google Meet room has no number to call) | `config/site.yml` → `phone_access: numbers` (the first one), for a Zoom meeting | "see the Accessibility page" |
 | `meeting_phone_passcode` | (empty) | `phone_access: committee: phone_passcode` (or the meeting's passcode when it is numbers only) | — (empty) |
-| `speaker_name`, `speaker_position`, `speaker_topic` | Rick W. / Past delegate, Area 65 Northeast Texas (Panel 73); … / Grapevine as a Twelfth Step tool: … — `meeting_day`'s guest speaker | `meeting: speakers:` (as `/meetings/` lists them) | "to be announced" |
-| `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … | same | "to be announced" |
-| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with none listed (December 16, 2026): the Grapevine Meeting's announcements, with `meeting_day` | same | "guest speaker: to be announced" |
-| `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — `meeting_after`'s speaker | same | "to be announced" |
+| `speaker_name`, `speaker_position`, `speaker_topic` | Rick W. / Past delegate, Area 65 Northeast Texas (Panel 73); … / Grapevine as a Twelfth Step tool: … — `meeting_day`'s guest speaker; a meeting with none (November 18, 2026): "none tonight" / "the Meetings page lists no guest speaker for this meeting" / "none" | `meeting: speakers:` (as `/meetings/` lists them) | "to be announced" (a speaker not listed yet) |
+| `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … ("none tonight" without a speaker) | same | "to be announced" |
+| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with none (December 16, 2026): the Grapevine Meeting's announcements, with `meeting_day` | same | "guest speaker: to be announced" |
+| `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — `meeting_after`'s speaker ("none this time" for a meeting with none: December 16, 2026, on November 18's "Next meeting") | same | "to be announced" |
 | `speaker_slides` | the chair's notes only: "Tonight's guest speaker shares slides: …" (`slides: true`). Whether a speaker has confirmed (`confirmed:`) never reaches a deck: the notes are public; the run summary reminds the chair | same | a sentence of their own (the README's table) |
 | `grapevine_meeting_next`, `grapevine_meeting_day`, `grapevine_meeting_after` | Wednesday, December 2, 2026 / the same / Wednesday, January 6, 2027 | `recurring_events:` → `grapevine-meeting`, as `/events/` lists it | "see the Events page" |
 | `grapevine_meeting_time`, `grapevine_meeting_link` | 7:00 – 8:00 PM Central time · meet.google.com/rva-tmst-vdb | same | — · "see the Events page" |

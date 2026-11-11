@@ -36,7 +36,11 @@ data, the same facts the other pages show:
   slides read right during AND after the meeting;
 - each meeting's guest speaker (`config/site.yml`, `meeting: speakers:`, as the Meetings page lists them): a first
   name and last initial, the service position and the topic — tonight's, moving on with the meeting's own date, and
-  next month's, with the meeting after it. A date with no speaker listed says "to be announced". Whether a speaker
+  next month's, with the meeting after it. A meeting the list gives no speaker says so ("none tonight", "none this
+  time", "no guest speaker this month"; the version to choose in the chair's notes): a month up to the list's last one with no entry (the meetings before
+  January 20, 2027, when the guest speakers start), or every meeting when the list is empty. "To be announced" is
+  only for a speaker the list doesn't name yet: a month after its last one, or a month whose entry the site leaves
+  out (a full last name, a date that is not the meeting's day: the run summary says why). Whether a speaker
   shares slides (`slides: true`) is only for the chair's notes; whether they have confirmed never reaches a deck
   (the notes are public): the run summary reminds the chair;
 - our Grapevine Meeting on the first Wednesday (`config/site.yml`, `recurring_events:`, `grapevine-meeting`, as the
@@ -285,13 +289,13 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `meeting_zoom_id`, `meeting_passcode` | the older names: the meeting code (or Zoom ID), and a passcode (empty on Google Meet) | — |
 | `meeting_phone` | +1 346 248 7799 (Houston) — Zoom's dial-in number for joining by phone (the first of `phone_access:`); a Google Meet room has no number to call | "see the Accessibility page" |
 | `meeting_phone_passcode` | what a caller types as the passcode: the chair's numbers-only phone passcode in `phone_access:` (or the meeting's passcode, when it is numbers only). Empty until it is set there, and for a Google Meet room | — |
-| `speaker_name` | Rick W. — the guest speaker of `meeting_day`'s meeting, moving on with it at midnight | "to be announced" |
-| `speaker_position` | Past delegate, Area 65 Northeast Texas (Panel 73); … — their service position | "to be announced" |
-| `speaker_topic` | Grapevine as a Twelfth Step tool: … — the topic | "to be announced" |
-| `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … — the name and the position | "to be announced" |
-| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with no speaker listed (December 16, 2026): for another meeting's slides (the Grapevine Meeting's announcements), with `meeting_day` | "guest speaker: to be announced" |
-| `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — the guest speaker of `meeting_after`'s meeting (next month's, on a slide shown during the meeting) | "to be announced" |
-| `speaker_slides` | for the chair's notes: "Tonight's guest speaker shares slides: …" (the speaker's `slides: true`) | "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too." |
+| `speaker_name` | Rick W. — the guest speaker of `meeting_day`'s meeting, moving on with it at midnight; "none tonight" for a meeting with no guest speaker (November 18, 2026) | "to be announced" |
+| `speaker_position` | Past delegate, Area 65 Northeast Texas (Panel 73); … — their service position ("the Meetings page lists no guest speaker for this meeting" without a speaker) | "to be announced" |
+| `speaker_topic` | Grapevine as a Twelfth Step tool: … — the topic ("none" without a speaker) | "to be announced" |
+| `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … — the name and the position ("none tonight" without a speaker) | "to be announced" |
+| `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with no guest speaker (December 16, 2026): for another meeting's slides (the Grapevine Meeting's announcements), with `meeting_day` | "guest speaker: to be announced" |
+| `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — the guest speaker of `meeting_after`'s meeting (next month's, on a slide shown during the meeting); "none this time" for a meeting with no guest speaker (December 16, 2026, on November 18's slides) | "to be announced" |
+| `speaker_slides` | for the chair's notes: "Tonight's guest speaker shares slides: …" (the speaker's `slides: true`); on a night with no guest speaker, "No guest speaker is listed for tonight: choose the version 'No guest speaker', …" | "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too." |
 | `grapevine_meeting_next` | Wednesday, December 2, 2026 — our Grapevine Meeting, the next one until it ends | "see the Events page" |
 | `grapevine_meeting_day` | Wednesday, December 2, 2026 — its own date until midnight Central after it (its title slide) | "see the Events page" |
 | `grapevine_meeting_after` | Wednesday, January 6, 2027 — the one after `grapevine_meeting_day`, moving on with it | "see the Events page" |
@@ -334,10 +338,13 @@ In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda
 minutes), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` — and
 for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the position and topic in Spanish, as
 the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for, and so are the speaker
-keys in the agenda's rows there. A line whose `{paper:…}` facts are all empty (a meeting with no guest speaker) is
-left out. So is every speaker line in a version that leaves out the slide `paperwork: speaker_slide:` names (the
-committee meeting's "No guest speaker", for a speaker who can't come). The minutes name the speaker by service
-position only.
+keys in the agenda's rows there ("none at this meeting" for a meeting with no guest speaker, "to be announced" for
+one whose speaker isn't listed yet). A line whose `{paper:…}` facts are all empty (a meeting with no guest speaker)
+is left out. So is every speaker line in a version that leaves out the slide `paperwork: speaker_slide:` names (the
+committee meeting's "No guest speaker", for a speaker who can't come). The panel warns when the version leaves out a
+listed speaker, or keeps the speaker's part for a meeting with none, and "Start next month" picks the version for
+the next meeting: the first one when it has a speaker, "No guest speaker" when the list gives it none. The minutes
+name the speaker by service position only.
 
 Write a meeting code or a Zoom meeting ID as `{live:meeting_code}` (or its older name `{live:meeting_zoom_id}`),
 never as digits: the checker takes digits for a phone number.

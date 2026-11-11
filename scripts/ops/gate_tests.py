@@ -179,6 +179,14 @@ CONTENT_TESTS: dict[str, str] = {
         "config/presentations: a deck's card says its length and versions in its head only, not in its texts",
     "test_orientation.HubBuild.test_la_vina_first_in_spanish":
         "config/presentations: a deck card's Spanish names La Viña first",
+    "test_r24_no_speaker.Deck.":
+        "config/site.yml meeting.speakers and config/presentations/committee-meeting.yml: the slides of November 18, "
+        "2026 (no guest speaker) and January 20, 2027 (Rick W.), and the versions' notes",
+    "test_r24_no_speaker.Paperwork.":
+        "config/site.yml meeting.speakers and config/presentations/committee-meeting.yml: the paperwork of November 18, "
+        "2026 and the version Start next month picks",
+    "test_r24_no_speaker.Wording.":
+        "config/orientation.yml and config/presentations: a guest speaker each month only \"from January 2027\"",
     "test_presentations_build.Facts.test_the_readme_lists_every_fallback":
         "config/presentations/README.md (the deck writers' guide): every {live:…} key with its fallback",
     # ---- data/translations: the glossary and the overrides
