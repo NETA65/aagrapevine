@@ -21,7 +21,8 @@ gone (HTTP 404/410).
 A weekly open meeting's show (`weekly_open`): each episode gets extra.weekly_open (the meeting),
 extra.meeting_date (YYYY-MM-DD: the date in its title, else the meeting's date in its description —
 "del 5 de noviembre de 2026", "held on November 4, 2026"; meeting_date()) and extra.generic_title
-(true when the title is only the show's name — La Viña's "<show name> [Temporada 1, episodio 1]"):
+(true when the title, its numbering aside, is only the show's name — La Viña's "<show name> [Temporada 1,
+episodio 1]" — or is the same for several of the show's episodes):
 the site then writes "Meeting of November 5, 2026" / "Reunión del 5 de noviembre de 2026" for it
 (eleventy/filters/media.js titleOf), or the title and its episode number when no date is found.
 
@@ -271,13 +272,34 @@ def _norm_words(s: str) -> str:
 
 # The "[Season 1, Episode 2]" / "[Temporada 1, episodio 2]" tail (eleventy/filters/media.js SE_SUFFIX / ONE_SUFFIX).
 _SE_TAIL_RE = re.compile(r"(?i)\s*[\[(]\s*(?:(?:season|temporada)\s*\d+\s*[,;.·-]?\s*)?(?:(?:episode|episodio|ep\.?)\s*\d+)?\s*[\])]\s*$")
+# … or the same numbering without brackets: "<name> - Temporada 1, episodio 2", "<name>: Episodio 2", "<name> #2"
+# (media.js LOOSE_TAIL, send_digest.py LOOSE_TAIL: the words before it are the title's)
+_SE_LOOSE_TAIL_RE = re.compile(
+    r"(?i)(?:\s*[-–—:|,·]\s*|\s+)(?:(?:season|temporada)\s*\d+\s*[,;.·-]?\s*)?(?:episode|episodio|ep\.?|#)\s*\d+\s*$")
+
+
+def bare_title(title: str) -> str:
+    """An episode's title without its numbering, as words (_norm_words) — to compare titles."""
+    return _norm_words(_SE_LOOSE_TAIL_RE.sub("", _SE_TAIL_RE.sub("", title or "")))
 
 
 def is_generic_title(title: str, *names: str) -> bool:
     """True when an episode's title, without its numbering, is only its show's name (or nothing):
     La Viña's "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, episodio 1]"."""
-    bare = _norm_words(_SE_TAIL_RE.sub("", title or ""))
+    bare = bare_title(title)
     return not bare or any(bare == _norm_words(n) for n in names if n)
+
+
+def shared_titles(items: list[dict]) -> set[str]:
+    """The bare titles (bare_title) that more than one episode of a show has: a meeting show whose episodes all carry
+    one name that is not quite the show's ("Reunión abierta semanal de AA de La Viña [Temporada 1, episodio 2]") —
+    each of them is then as generic as the show's name."""
+    seen: dict[str, int] = {}
+    for it in items:
+        b = bare_title(it.get("title") or "")
+        if b:
+            seen[b] = seen.get(b, 0) + 1
+    return {b for b, n in seen.items() if n > 1}
 
 
 # --------------------------------------------------------------------------- feed → items
@@ -431,6 +453,12 @@ def build_items(show: dict, f: Any, limit: int | None = None, *,
             ))
         except Exception as ex:  # noqa: BLE001 — one odd episode must not stop the show
             log.warning("[%s] skipped an episode (%s): %s", key, e.get("title", "?")[:60], ex)
+    if meeting:
+        # one title for several meetings (the name drifted from the show's, or is written another way): generic too
+        shared = shared_titles(items)
+        for it in items:
+            if bare_title(it["title"]) in shared:
+                it["extra"]["generic_title"] = True
     return items
 
 

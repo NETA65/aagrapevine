@@ -117,6 +117,8 @@ MULTI_DAY_MIN_HOURS = 18                             # build_data.MULTI_DAY_MIN_
 EVERY_ISSUE = re.compile(r"(?i)in every issue|en cada (?:edici[oó]n|n[uú]mero)")  # build_data._EVERY_ISSUE
 SE_SUFFIX = re.compile(r"(?i)\s*[\[(]\s*(?:season|temporada)\s*\d+\s*[,;.·-]?\s*(?:episode|episodio|ep\.?)\s*\d+\s*[\])]\s*$")
 ONE_SUFFIX = re.compile(r"(?i)\s*[\[(]\s*(?:season|temporada|episode|episodio)\s*\d+\s*[\])]\s*$")  # media.js
+# the numbering without brackets, taken off only a meeting episode's title that is its show's name (media.js LOOSE_TAIL)
+LOOSE_TAIL = re.compile(r"(?i)(?:\s*[-–—:|,·]\s*|\s+)(?:(?:season|temporada)\s*\d+\s*[,;.·-]?\s*)?(?:episode|episodio|ep\.?|#)\s*\d+\s*$")
 NEWS_GROUPS = ("announcement", "article", "episode", "video", "post", "pdf", "drive")   # community.js MONTH_NEWS
 NEWS_SOURCES = ("announcements", "episodes", "videos", "instagram", "pdfs", "drive")      # community.js MONTH_SOURCES (+ articles)
 COUNT_ORDER = ("article", "episode", "video", "post", "pdf", "drive", "album", "announcement")  # community.js COUNT_ORDER
@@ -613,7 +615,7 @@ def media_title(item: dict, lang: str) -> str:
     s = ONE_SUFFIX.sub("", SE_SUFFIX.sub("", t)).strip()
     e = ex.get("episode")
     if generic and s and isinstance(e, int) and not isinstance(e, bool) and e > 0:
-        return T[lang]["title_ep"].format(t=s, e=e)
+        return T[lang]["title_ep"].format(t=LOOSE_TAIL.sub("", s).strip() or s, e=e)
     return s or t
 
 

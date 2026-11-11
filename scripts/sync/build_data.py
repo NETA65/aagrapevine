@@ -191,8 +191,8 @@ def sort_newest(items: list[dict]) -> list[dict]:
 
 def sort_episodes(items: list[dict], cfg: dict) -> list[dict]:
     """Podcast episodes newest first (sort_newest), and episodes that came out at the same moment in the order of
-    config sources.podcasts — AA Grapevine's Podcast and La Viña's open meeting both come out on Mondays at 00:15
-    Eastern: the first show (Home's featured one) comes first, not whichever show's id sorts last. (The pages then
+    config sources.podcasts — so far AA Grapevine's Podcast and La Viña's open meeting both came out on Mondays at
+    00:15 Eastern: the first show (Home's featured one) comes first, not whichever show's id sorts last. (The pages then
     put the page's language first among one day's episodes: eleventy/filters/media.js episodeOrder.)"""
     shows = [s for s in ((cfg.get("sources") or {}).get("podcasts") or []) if isinstance(s, dict)]
     rank = {str(s.get("key")): n for n, s in enumerate(shows)}

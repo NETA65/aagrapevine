@@ -303,7 +303,7 @@ pageScripts: ["/assets/js/community.js"]
             {%- if it._isGroup -%}{%- set kindLabel = "community.wn.photo_group" | t(lang) -%}
             {#- a flyer from the committee's Drive "flyers" folder is a flyer, not a photo (Portfolio keeps "Image": its file type) -#}
             {%- elif it.source == "drive" and it.category == "flyers" -%}{%- set kindLabel = "kind.flyer" | t(lang) -%}
-            {%- elif it.kind == "episode" and ex.show_name -%}{%- set kindLabel = ex.show_name -%}{%- set kindLang = it.lang if (it.lang in ["en", "es"] and it.lang != lang) else "" -%}
+            {%- elif it.kind == "episode" and ex.show_name -%}{%- set kindLabel = ex.show_name -%}{%- set showLang = it | mediaShowLang(site.sources.podcasts, db.episodes) -%}{%- set kindLang = showLang if showLang != lang else "" -%}
             {%- elif it.kind == "video" and (it | mediaVideoKind) == "weekly" -%}{%- set kindLabel = it | mediaMeetingLabel(lang) -%}{%- set kindLang = it | mediaMeetingLang(lang) -%}
             {%- elif it.kind == "post" and igProfiles[ex.account] -%}{%- set kindLabel = igProfiles[ex.account].name -%}
             {%- elif it.kind == "article" and ex.section -%}{%- set kindLabel = it | tx("section", lang) -%}
