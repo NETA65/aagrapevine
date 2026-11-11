@@ -33,6 +33,9 @@
 //   db.shop.price_changes  a price change AA Grapevine announced (config/site.yml price_changes): the months
 //                  from its announcement through its notice pass it on in their message (model `price`), and
 //                  the current month's "Keep up all month" has its line (monthly-month.njk)
+//   site.store_offers  an offer the stores announced (config/site.yml store_offers: free shipping …): the months
+//                  its days meet name it in their message (model `offers`), and the current month's "Keep up all
+//                  month" has its line
 //   site.meeting   the committee meeting rule (used when a month's meeting is not in events.json:
 //                  the current month once its meeting is over, or the 13th month)
 //   live extras    db.quote, db.whatsnew, db.announcements, db.instagram, db.meetings, db.shop,
@@ -63,7 +66,7 @@ import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEve
   meetingSpeaker } from "./committee.js";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
 import { overnight, wallInstant } from "../central-time.js";
-import { shopFromMonthly, money, shopPriceChangeIn, dayLabel } from "./shop.js";
+import { shopFromMonthly, money, shopPriceChangeIn, dayLabel, shopOfferIn, offerDates } from "./shop.js";
 import { groupIssues, issueName, squash } from "./read.js";
 
 // Helpers handed over by eleventy.config.js (translateKey …); the fallback keeps the module usable
@@ -684,6 +687,9 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
     // a price change AA Grapevine announced whose notice meets this month (shop.js shopPriceChangeIn): { kind
     // "before" | "after", effective } — the month's message passes it on (monthMessage)
     price: priceMention(db.shop, first, last),
+    // the offers the stores announced whose days meet this month (config/site.yml store_offers, shop.js shopOfferIn):
+    // [{ key, title, titleLang, starts, ends, past }] — the month's message names them (monthMessage)
+    offers: shopOfferIn(site, first, last, L, today),
     url, absUrl: String(site.url || "").replace(/\/$/, "") + url,
     prev: addMonths(key, -1), next: addMonths(key, 1),
     fileName: `neta65-grapevine-${key}-${L}.png`,
@@ -1024,6 +1030,17 @@ export function monthMessage(ctx, langs, style, site, t) {
     out.push(`${wa ? "📢 " : ""}${both(key, (l) => ({ date: dayLabel(m.price.effective, l) }))}: ${url("/shop/#price-changes")}`);
   }
   if (offers.length || (cur && nw.subsFrom) || m.price) out.push("");
+  // 📦 an offer the stores announced, in the months its days meet (monthModel `offers`; this month only the ones not
+  // over yet), under its own heading — apart from the Book of the Month above, so the two never read as one deal
+  // (Grapevine's free shipping can't be combined with any other offer): "Free shipping at the Grapevine and La Viña
+  // stores", then "November 1 – December 31, 2026: …/shop/#offers" — its title from the settings, in each language;
+  // what each store says is on /shop/ (#offers)
+  const storeOffers = (m.offers || []).filter((o) => !cur || !o.past);
+  for (const o of storeOffers) {
+    const title = (l) => ((mm[l].offers || []).find((x) => x.key === o.key) || o).title;
+    const days = uniq(Ls.map((l) => offerDates(o.starts, o.ends, l, t))).map((d) => d.charAt(0).toUpperCase() + d.slice(1));
+    out.push(head(uniq(Ls.map(title)).join(" / "), "📦"), `${days.join(" / ")}: ${url("/shop/#offers")}`, "");
+  }
 
   // the site's note on machine translation (the monthly digest's words), then 🖼️ the month's toolkit page (its
   // poster is there)

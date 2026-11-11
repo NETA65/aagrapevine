@@ -1,67 +1,7 @@
 {
- "updated": "2026-11-01T23:29:18Z",
+ "updated": "2026-11-10T12:47:47Z",
  "fixture": false,
  "items": [
-  {
-   "id": "ev:manual:2026-11-07-lv-information-workshop-longview",
-   "source": "committee",
-   "kind": "event",
-   "url": "https://neta65.org/event/la-vina-information-workshop/",
-   "title": "La Viña Information Workshop (in Spanish) — Longview",
-   "summary": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
-   "lang": "en",
-   "date": "2026-11-08T01:00:00Z",
-   "first_seen": "2026-09-24T11:10:08Z",
-   "image": null,
-   "tags": [
-    "workshop",
-    "la-vina"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-11-08T01:00:00Z",
-    "end": "2026-11-08T03:00:00Z",
-    "all_day": false,
-    "location": "Grupo Solo por Hoy, 2035 South High, Longview, TX 75602",
-    "online_url": null,
-    "flyer_url": "https://drive.google.com/file/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf/view",
-    "flyer_thumb": null,
-    "city": "Longview",
-    "state": "TX",
-    "body_md": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
-    "slug": "2026-11-07-lv-information-workshop-longview",
-    "file": "content/events/2026-11-07-lv-information-workshop-longview.md",
-    "own_i18n": {
-     "title": {
-      "es": "Taller de Información de La Viña — Longview"
-     },
-     "summary": {
-      "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
-     },
-     "body_md": {
-      "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Information Workshop (in Spanish) — Longview",
-     "es": "Taller de Información de La Viña — Longview"
-    },
-    "summary": {
-     "en": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
-     "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
-    },
-    "body_md": {
-     "en": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
-     "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
   {
    "id": "ev:manual:2026-11-10-neta65-delegate-town-hall",
    "source": "committee",
@@ -123,7 +63,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:recurring:citywide-dallas:2026-11-14",
@@ -286,7 +226,7 @@
    "kind": "event",
    "url": "/events/#2026-11-28-lv-writing-workshop-garland",
    "title": "La Viña Writing Workshop (in Spanish) — Garland",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
    "lang": "en",
    "date": "2026-11-29T01:00:00Z",
    "first_seen": "2026-10-27T06:15:45Z",
@@ -303,11 +243,11 @@
     "all_day": false,
     "location": "Grupo Volver a Vivir, 2913 S. Fifth St., Garland, TX 75041",
     "online_url": null,
-    "flyer_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
     "flyer_thumb": null,
     "city": "Garland",
     "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
     "slug": "2026-11-28-lv-writing-workshop-garland",
     "file": "content/events/2026-11-28-lv-writing-workshop-garland.md",
     "own_i18n": {
@@ -315,10 +255,10 @@
       "es": "Taller de Escritura de La Viña — Garland"
      },
      "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      },
      "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      }
     },
     "past": false
@@ -329,16 +269,16 @@
      "es": "Taller de Escritura de La Viña — Garland"
     },
     "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
     },
     "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
+     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:recurring:citywide-dallas:2026-12-12",
@@ -457,7 +397,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:committee:2026-12-16",
@@ -929,7 +869,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:recurring:lv-monthly-workshop:2027-02-25",
@@ -1340,7 +1280,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:committee:2027-04-21",
@@ -1789,7 +1729,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:committee:2027-07-21",
@@ -2053,7 +1993,7 @@
     }
    },
    "machine": [],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ev:committee:2027-10-20",
@@ -2094,6 +2034,66 @@
     "summary": {
      "en": "Our monthly committee meeting on Zoom. All AA members are welcome to attend. No registration required.",
      "es": "Nuestra reunión mensual del comité por Zoom. Todos los miembros de AA pueden asistir. No hace falta registrarse."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:manual:2026-11-07-lv-information-workshop-longview",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://neta65.org/event/la-vina-information-workshop/",
+   "title": "La Viña Information Workshop (in Spanish) — Longview",
+   "summary": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
+   "lang": "en",
+   "date": "2026-11-08T01:00:00Z",
+   "first_seen": "2026-09-24T11:10:08Z",
+   "image": null,
+   "tags": [
+    "workshop",
+    "la-vina"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-11-08T01:00:00Z",
+    "end": "2026-11-08T03:00:00Z",
+    "all_day": false,
+    "location": "Grupo Solo por Hoy, 2035 South High, Longview, TX 75602",
+    "online_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1HkCXP1c8rsPeLfve6eZXbMGjifD07MJf/view",
+    "flyer_thumb": null,
+    "city": "Longview",
+    "state": "TX",
+    "body_md": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
+    "slug": "2026-11-07-lv-information-workshop-longview",
+    "file": "content/events/2026-11-07-lv-information-workshop-longview.md",
+    "own_i18n": {
+     "title": {
+      "es": "Taller de Información de La Viña — Longview"
+     },
+     "summary": {
+      "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
+     },
+     "body_md": {
+      "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
+     }
+    },
+    "past": true
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Information Workshop (in Spanish) — Longview",
+     "es": "Taller de Información de La Viña — Longview"
+    },
+    "summary": {
+     "en": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
+     "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
+    },
+    "body_md": {
+     "en": "A Spanish-language information session about La Viña, AA's Spanish-language magazine, hosted by Grupo Solo por Hoy in Longview.",
+     "es": "Taller informativo en español sobre La Viña, la revista de AA en español, en el Grupo Solo por Hoy de Longview."
     }
    },
    "machine": [],
@@ -2800,65 +2800,6 @@
     "recurrence_label": {
      "en": "Every fourth Thursday of the month · 2:00 – 3:00 PM",
      "es": "Cada cuarto jueves del mes · 2:00–3:00 p. m."
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
-  {
-   "id": "ev:recurring:citywide-dallas:2026-08-08",
-   "source": "committee",
-   "kind": "event",
-   "url": "https://citywidedallasaa.org",
-   "title": "GV/LV booth at CityWide Dallas",
-   "summary": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
-   "lang": "en",
-   "date": "2026-08-08T22:00:00Z",
-   "first_seen": null,
-   "image": null,
-   "tags": [
-    "recurring"
-   ],
-   "category": "recurring",
-   "status": "ok",
-   "extra": {
-    "start": "2026-08-08T22:00:00Z",
-    "end": "2026-08-09T01:00:00Z",
-    "all_day": false,
-    "location": "Lover's Lane United Methodist Church, 9200 Inwood Road, Dallas, TX 75220",
-    "online_url": null,
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "city": "Dallas",
-    "state": "TX",
-    "recurring": true,
-    "series": "citywide-dallas",
-    "rule": {
-     "week_of_month": 2,
-     "weekday": "saturday",
-     "start": "17:00",
-     "end": "20:00"
-    },
-    "recurrence_label": "Every second Saturday of the month · 5:00 – 8:00 PM",
-    "host": "neta",
-    "online": false,
-    "platform": null,
-    "meeting_id": null,
-    "contact": null,
-    "past": true
-   },
-   "i18n": {
-    "title": {
-     "en": "GV/LV booth at CityWide Dallas",
-     "es": "Mesa de GV/LV en CityWide Dallas"
-    },
-    "summary": {
-     "en": "Stop by our Grapevine and La Viña literature table at CityWide Dallas, the monthly AA gathering at Lover's Lane United Methodist Church (potluck at 5:30 PM, speaker at 7:00 PM). Browse the magazines and ask us how to subscribe or how to become a GVR or RLV.",
-     "es": "Visita nuestra mesa de literatura de Grapevine y La Viña en CityWide Dallas, la reunión mensual de AA en la Iglesia Metodista Unida Lover's Lane (comida compartida a las 5:30 p. m. y orador a las 7:00 p. m.). Hojea las revistas y pregúntanos cómo suscribirte o ser RLV o GVR."
-    },
-    "recurrence_label": {
-     "en": "Every second Saturday of the month · 5:00 – 8:00 PM",
-     "es": "Cada segundo sábado del mes · 5:00–8:00 p. m."
     }
    },
    "machine": [],

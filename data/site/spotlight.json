@@ -1,7 +1,7 @@
 {
- "updated": "2026-11-02T07:47:23Z",
+ "updated": "2026-11-11T07:17:36Z",
  "fixture": false,
- "today": "2026-11-02",
+ "today": "2026-11-11",
  "home_days": 60,
  "list_days": [
   60,
@@ -12,12 +12,12 @@
   "60": {
    "neta65": 3,
    "texas": 7,
-   "all": 76
+   "all": 78
   },
   "90": {
    "neta65": 4,
    "texas": 11,
-   "all": 126
+   "all": 128
   }
  },
  "items": [
@@ -902,6 +902,144 @@
     "es"
    ],
    "is_new": false
+  },
+  {
+   "id": "gv:2026-11:getting-ready-my-first-drink",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/getting-ready-my-first-drink",
+   "title": "Getting Ready for My First Drink",
+   "summary": "He had a fool for a sponsor—himself",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-05T15:38:13Z",
+   "image": "/assets/cache/articles/200245fd840d67ff.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Douglas T.",
+    "author_location": "Montrose, Colo.",
+    "subtitle": "He had a fool for a sponsor—himself",
+    "teaser": "After five years of sobriety, I began to get ready for my first drink. It happened so gradually I wasn’t aware that it was happening.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Montrose",
+     "county": null,
+     "counties": [],
+     "state": "CO",
+     "country": "US",
+     "label_en": "Montrose, Colorado",
+     "label_es": "Montrose, Colorado"
+    },
+    "pub_date": "2026-11-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Getting Ready for My First Drink",
+     "es": "Preparándose para mi primer trago"
+    },
+    "summary": {
+     "en": "He had a fool for a sponsor—himself",
+     "es": "Tenía un tonto para un padrino - él mismo"
+    },
+    "issue_theme": {
+     "en": "AA Members & Mental Health",
+     "es": "Los miembros de AA y la salud mental"
+    },
+    "issue_label": {
+     "en": "November 2026",
+     "es": "Noviembre 2026"
+    },
+    "author_location": {
+     "en": "Montrose, Colorado",
+     "es": "Montrose, Colorado"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-11:learning-love-myself",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/learning-love-myself",
+   "title": "Learning to Love Myself",
+   "summary": "Saying Yes to Sobriety",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-05T15:38:13Z",
+   "image": "/assets/cache/articles/26d99815cc95717a.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Rudy S.",
+    "author_location": "Coggon, Iowa",
+    "subtitle": "Saying Yes to Sobriety",
+    "teaser": "My ENT doctor attributed my aggressive throat cancer to my heavy whiskey consumption, and I was inclined to agree, since the first two surgeries failed to stop the regrowth, making it…",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Coggon",
+     "county": null,
+     "counties": [],
+     "state": "IA",
+     "country": "US",
+     "label_en": "Coggon, Iowa",
+     "label_es": "Coggon, Iowa"
+    },
+    "pub_date": "2026-11-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Learning to Love Myself",
+     "es": "Aprender a amarme"
+    },
+    "summary": {
+     "en": "Saying Yes to Sobriety",
+     "es": "Decir sí a sobriedad"
+    },
+    "issue_theme": {
+     "en": "AA Members & Mental Health",
+     "es": "Los miembros de AA y la salud mental"
+    },
+    "issue_label": {
+     "en": "November 2026",
+     "es": "Noviembre 2026"
+    },
+    "author_location": {
+     "en": "Coggon, Iowa",
+     "es": "Coggon, Iowa"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
   },
   {
    "id": "gv:2026-11:150-days",

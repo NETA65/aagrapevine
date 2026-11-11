@@ -48,6 +48,9 @@ export default function () {
     meetings: cfg.meetings || {},
     // The published-writers spotlight: the home page's window (home_days) and the /published/ choices (list_days)
     spotlight: cfg.spotlight || {},
+    // Offers the official stores announced (free shipping …): /shop/#offers and the monthly toolkit, each in its own
+    // days (eleventy/filters/shop.js shopOffers); a block with a mistake is left out there, never here
+    store_offers: cfg.store_offers ?? [],
     // Build timestamp (UTC ISO) — shown as "Last updated" in the footer.
     built: new Date().toISOString(),
     // No link to the Drive ROOT on purpose: it can hold private files (e.g. sign-up response sheets).

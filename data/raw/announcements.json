@@ -1,7 +1,7 @@
 {
  "source": "announcements",
- "updated": "2026-11-02T17:11:35Z",
- "attempted": "2026-11-02T17:11:35Z",
+ "updated": "2026-11-11T07:23:14Z",
+ "attempted": "2026-11-11T07:23:14Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -10,11 +10,11 @@
   "held": 0
  },
  "stats": {
-  "files": 2,
+  "files": 3,
   "new": 0,
   "problems": 0,
   "errors": [],
-  "active": 1
+  "active": 2
  },
  "items": [
   {
@@ -27,7 +27,7 @@
    "lang": "en",
    "date": "2027-01-01",
    "first_seen": "2026-10-02T04:55:24Z",
-   "last_seen": "2026-10-30T14:18:31Z",
+   "last_seen": "2026-11-06T15:09:59Z",
    "image": null,
    "tags": [
     "prices",
@@ -58,6 +58,45 @@
    }
   },
   {
+   "id": "ann:2026-11-02-free-shipping-through-december-31",
+   "source": "committee",
+   "kind": "announcement",
+   "url": "/bulletin/#2026-11-02-free-shipping-through-december-31",
+   "title": "Free shipping at the Grapevine and La Viña stores through December 31",
+   "summary": "From November 1 through December 31, 2026, AA Grapevine and La Viña offer free shipping on all products to U.S. and Canadian addresses. AA Grapevine says its offer can't be combined with any other offer. For your group. GVRs and RLVs: if anyone in your group orders Grapevine or La Viña books or gifts, a short mention at your group's business meeting lets everyone know. Both stores and what each…",
+   "lang": "en",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-03T05:49:48Z",
+   "last_seen": "2026-11-10T12:47:23Z",
+   "image": null,
+   "tags": [
+    "shop",
+    "shipping",
+    "books"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "body_md": "From **November 1 through December 31, 2026**, AA Grapevine and La Viña offer **free shipping on all products** to U.S. and Canadian addresses.\n\nAA Grapevine says its offer can't be combined with any other offer.\n\n**For your group.** GVRs and RLVs: if anyone in your group orders Grapevine or La Viña books or gifts, a short mention at your group's business meeting lets everyone know.\n\n- Both stores and what each one says: [Shop — free shipping](/shop/#offers)\n- [Grapevine store](https://www.aagrapevine.org/store)\n- [La Viña store](https://www.aalavina.org/tienda) (in Spanish)",
+    "expires": "2026-12-31",
+    "pinned": true,
+    "slug": "2026-11-02-free-shipping-through-december-31",
+    "file": "content/bulletin/2026-11-02-free-shipping-through-december-31.md",
+    "link": null,
+    "own_i18n": {
+     "title": {
+      "es": "Envío gratis en las tiendas de La Viña y Grapevine hasta el 31 de diciembre"
+     },
+     "summary": {
+      "es": "Del 1 de noviembre al 31 de diciembre de 2026, La Viña y AA Grapevine ofrecen envío gratis en todos sus productos a EE. UU. y Canadá. Según AA Grapevine, su oferta no se puede combinar con ninguna otra. Para tu grupo. RLV y GVR: si en tu grupo alguien pide libros o regalos de La Viña o Grapevine, un breve aviso en la reunión de trabajo de tu grupo ayuda a que todos lo sepan. Las dos tiendas y lo…"
+     },
+     "body_md": {
+      "es": "Del **1 de noviembre al 31 de diciembre de 2026**, La Viña y AA Grapevine ofrecen **envío gratis en todos sus productos** a EE. UU. y Canadá.\n\nSegún AA Grapevine, su oferta no se puede combinar con ninguna otra.\n\n**Para tu grupo.** RLV y GVR: si en tu grupo alguien pide libros o regalos de La Viña o Grapevine, un breve aviso en la reunión de trabajo de tu grupo ayuda a que todos lo sepan.\n\n- Las dos tiendas y lo que dice cada una: [Tienda: envío gratis](/shop/#offers)\n- [Tienda de La Viña](https://www.aalavina.org/tienda)\n- [Tienda de Grapevine](https://www.aagrapevine.org/store) (en inglés)"
+     }
+    }
+   }
+  },
+  {
    "id": "ann:2026-10-01-prices-change-january-1-2027",
    "source": "committee",
    "kind": "announcement",
@@ -67,7 +106,7 @@
    "lang": "en",
    "date": "2026-10-01",
    "first_seen": "2026-10-02T04:55:24Z",
-   "last_seen": "2026-10-30T14:18:31Z",
+   "last_seen": "2026-11-06T15:09:59Z",
    "image": null,
    "tags": [
     "prices",

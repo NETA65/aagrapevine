@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-02T17:19:30Z",
- "updated": "2026-11-02T17:19:30Z",
+ "generated": "2026-11-11T07:23:39Z",
+ "updated": "2026-11-11T07:23:39Z",
  "fixture": false,
  "sources": [
   {
@@ -8,10 +8,10 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-02T17:11:35Z",
-   "attempted": "2026-11-02T17:11:35Z",
-   "count": 38,
-   "new_7d": 1,
+   "updated": "2026-11-11T07:23:14Z",
+   "attempted": "2026-11-11T07:23:14Z",
+   "count": 45,
+   "new_7d": 5,
    "error": null,
    "stats": {
     "mode": "html",
@@ -31,23 +31,24 @@
     "loose_skipped": 8,
     "skipped_panels": [],
     "folders": 11,
-    "files": 38,
-    "fetched": 38,
+    "files": 45,
+    "fetched": 45,
     "new": 0,
     "removed": 0,
     "kept_unverified": 0,
     "by_category": {
+     "flyers": 16,
      "booth": 15,
-     "flyers": 12,
+     "reports": 4,
      "slides": 4,
-     "reports": 3,
+     "photos": 2,
      "notes": 2,
      "announcements": 1,
      "workshops": 1
     },
     "by_kind": {
-     "photo": 21,
-     "document": 11,
+     "photo": 27,
+     "document": 12,
      "slides": 4,
      "announcement": 1,
      "video_file": 1
@@ -87,17 +88,17 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-02T17:11:35Z",
-   "attempted": "2026-11-02T17:11:35Z",
-   "count": 2,
+   "updated": "2026-11-11T07:23:14Z",
+   "attempted": "2026-11-11T07:23:14Z",
+   "count": 3,
    "new_7d": 0,
    "error": null,
    "stats": {
-    "files": 2,
+    "files": 3,
     "new": 0,
     "problems": 0,
     "errors": [],
-    "active": 1
+    "active": 2
    },
    "changes": {
     "added": 0,
@@ -111,10 +112,10 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-02T17:11:35Z",
-   "attempted": "2026-11-02T17:11:35Z",
+   "updated": "2026-11-11T07:23:14Z",
+   "attempted": "2026-11-11T07:23:14Z",
    "count": 17,
-   "new_7d": 2,
+   "new_7d": 0,
    "error": null,
    "stats": {
     "files": 17,
@@ -134,9 +135,9 @@
    "label": "Grapevine & La Viña articles",
    "label_es": "Artículos de Grapevine y La Viña",
    "ok": true,
-   "updated": "2026-11-02T17:14:04Z",
-   "attempted": "2026-11-02T17:14:04Z",
-   "count": 293,
+   "updated": "2026-11-10T15:42:21Z",
+   "attempted": "2026-11-10T15:42:21Z",
+   "count": 295,
    "new_7d": 2,
    "error": null,
    "stats": {
@@ -151,7 +152,7 @@
     "byline_pending": 0,
     "details_left": 0,
     "new": 0,
-    "total": 293,
+    "total": 295,
     "requests": 15
    },
    "changes": {
@@ -166,8 +167,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-02T17:16:49Z",
-   "attempted": "2026-11-02T17:16:49Z",
+   "updated": "2026-11-11T07:23:22Z",
+   "attempted": "2026-11-11T07:23:22Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -193,8 +194,8 @@
    "label": "Editorial themes (upcoming issues)",
    "label_es": "Temas editoriales (próximos números)",
    "ok": true,
-   "updated": "2026-11-02T17:14:25Z",
-   "attempted": "2026-11-02T17:14:25Z",
+   "updated": "2026-11-10T15:42:45Z",
+   "attempted": "2026-11-10T15:42:45Z",
    "count": 51,
    "new_7d": 0,
    "error": null,
@@ -238,14 +239,14 @@
    "label": "Document library (Grapevine, La Viña and AA)",
    "label_es": "Biblioteca de documentos (La Viña, Grapevine y AA)",
    "ok": true,
-   "updated": "2026-11-02T17:19:27Z",
-   "attempted": "2026-11-02T17:19:27Z",
+   "updated": "2026-11-10T15:48:36Z",
+   "attempted": "2026-11-10T15:48:36Z",
    "count": 96,
    "new_7d": 0,
    "error": null,
    "stats": {
-    "known_pages": 3443,
-    "crawled_pages": 3443,
+    "known_pages": 3445,
+    "crawled_pages": 3445,
     "never_crawled": 0,
     "never_crawled_events": 0,
     "pdfs": 133,
@@ -278,9 +279,9 @@
    "label": "YouTube videos",
    "label_es": "Videos de YouTube",
    "ok": true,
-   "updated": "2026-11-02T17:12:19Z",
-   "attempted": "2026-11-02T17:12:19Z",
-   "count": 543,
+   "updated": "2026-11-10T15:40:28Z",
+   "attempted": "2026-11-10T15:40:28Z",
+   "count": 546,
    "new_7d": 3,
    "error": null,
    "stats": {
@@ -288,7 +289,7 @@
     "rss_feeds": 35,
     "rss_failed": 0,
     "rss_404": 1,
-    "backfill": "not due (last 2026-11-01T06:29:51Z)",
+    "backfill": "not due (last 2026-11-08T14:22:33Z)",
     "playlist_feeds": 31,
     "shorts_probes": 0,
     "details_pending": 2,
@@ -296,22 +297,22 @@
     "details_failed": 1,
     "gone_checks": 0,
     "gone_marked": 0,
-    "fetched": 248,
-    "new": 2,
-    "total": 543,
-    "active": 543,
+    "fetched": 249,
+    "new": 0,
+    "total": 546,
+    "active": 546,
     "gone": 0,
-    "spanish": 95,
+    "spanish": 96,
     "shorts": 18,
     "approx_dates": 1,
     "playlists": 31,
-    "seconds": 41.4,
+    "seconds": 42.4,
     "warnings": [
      "details stopped: YouTube answered with a bot check (“confirm you’re not a bot”) — nothing is wrong on our side; videos keep their last known details"
     ]
    },
    "changes": {
-    "added": 2,
+    "added": 0,
     "removed": 0,
     "held": 0
    },
@@ -322,35 +323,35 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-02T17:11:37Z",
-   "attempted": "2026-11-02T17:11:37Z",
-   "count": 307,
+   "updated": "2026-11-11T07:23:17Z",
+   "attempted": "2026-11-11T07:23:17Z",
+   "count": 309,
    "new_7d": 2,
    "error": null,
    "stats": {
-    "fetched": 307,
+    "fetched": 309,
     "new": 0,
-    "total": 307,
-    "active": 307,
+    "total": 309,
+    "active": 309,
     "gone": 0,
     "spanish": 0,
     "shows": {
      "gv": {
       "ok": true,
-      "episodes": 268,
-      "latest": "2026-11-02T05:15:00Z"
+      "episodes": 269,
+      "latest": "2026-11-09T05:15:00Z"
      },
      "wo": {
       "ok": true,
-      "episodes": 39,
-      "latest": "2026-10-30T04:15:00Z"
+      "episodes": 40,
+      "latest": "2026-11-06T05:15:00Z"
      }
     },
     "missing_from_feed": 0,
     "gone_checks": 0,
-    "discovery_checked": "2026-10-30T14:19:13Z",
+    "discovery_checked": "2026-11-06T15:10:41Z",
     "discovered_feeds": [],
-    "seconds": 2.4,
+    "seconds": 2.6,
     "artwork": 3,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -367,10 +368,10 @@
    "label": "Instagram posts",
    "label_es": "Publicaciones de Instagram",
    "ok": true,
-   "updated": "2026-11-02T17:12:38Z",
-   "attempted": "2026-11-02T17:12:38Z",
-   "count": 178,
-   "new_7d": 27,
+   "updated": "2026-11-10T15:40:46Z",
+   "attempted": "2026-11-10T15:40:46Z",
+   "count": 213,
+   "new_7d": 31,
    "error": null,
    "stats": {
     "strategy": {
@@ -394,21 +395,21 @@
      "missing": [],
      "removed": []
     },
-    "thumbs_downloaded": 5,
+    "thumbs_downloaded": 2,
     "pruned": 0,
     "thumbs_deleted": 0,
-    "new": 5,
-    "total": 178,
+    "new": 2,
+    "total": 213,
     "per_account": {
-     "gv": 98,
-     "lv": 80
+     "gv": 117,
+     "lv": 96
     },
     "requests": 7,
     "anonymous": true,
     "graph_api": false
    },
    "changes": {
-    "added": 5,
+    "added": 2,
     "removed": 0,
     "held": 0
    },
@@ -419,8 +420,8 @@
    "label": "Grapevine Weekly Open meeting",
    "label_es": "Reunión Grapevine Weekly Open",
    "ok": true,
-   "updated": "2026-11-02T17:14:30Z",
-   "attempted": "2026-11-02T17:14:30Z",
+   "updated": "2026-11-10T15:42:50Z",
+   "attempted": "2026-11-10T15:42:50Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -445,21 +446,21 @@
    "label": "GV/LV event calendars",
    "label_es": "Calendarios de eventos de GV/LV",
    "ok": true,
-   "updated": "2026-11-02T17:16:45Z",
-   "attempted": "2026-11-02T17:16:45Z",
+   "updated": "2026-11-10T15:45:33Z",
+   "attempted": "2026-11-10T15:45:33Z",
    "count": 3,
-   "new_7d": 1,
+   "new_7d": 0,
    "error": null,
    "stats": {
     "discovery": "sitemap",
     "discovery_complete": true,
-    "upcoming_urls": 17,
+    "upcoming_urls": 15,
     "kept_from_cache": 0,
     "fetched": 0,
     "refreshed": 0,
     "failed": 0,
     "pending": 0,
-    "cached": 19,
+    "cached": 17,
     "texas": 2,
     "online_es": 1,
     "items": 3,
@@ -478,8 +479,8 @@
    "label": "Book of the Month, prices & specialty items",
    "label_es": "Libro del mes, precios y artículos especiales",
    "ok": true,
-   "updated": "2026-11-02T17:15:35Z",
-   "attempted": "2026-11-02T17:15:35Z",
+   "updated": "2026-11-10T15:44:04Z",
+   "attempted": "2026-11-10T15:44:04Z",
    "count": 62,
    "new_7d": 0,
    "error": null,
@@ -504,8 +505,8 @@
    "label": "Record your story by phone (Grapevine & La Viña)",
    "label_es": "Graba tu historia por teléfono (La Viña y Grapevine)",
    "ok": true,
-   "updated": "2026-11-02T17:15:51Z",
-   "attempted": "2026-11-02T17:15:51Z",
+   "updated": "2026-11-10T15:44:22Z",
+   "attempted": "2026-11-10T15:44:22Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -529,15 +530,15 @@
    "label": "Grapevine meetings (our Area and nearby)",
    "label_es": "Reuniones de Grapevine (nuestra Área y cercanas)",
    "ok": true,
-   "updated": "2026-11-02T17:16:45Z",
-   "attempted": "2026-11-02T17:16:45Z",
+   "updated": "2026-11-10T15:45:28Z",
+   "attempted": "2026-11-10T15:45:28Z",
    "count": 23,
    "new_7d": 0,
    "error": null,
    "stats": {
     "offices": 8,
     "offices_ok": 8,
-    "listed": 5922,
+    "listed": 5929,
     "grapevine": 24,
     "meetings": 23,
     "in_area": 13,
@@ -560,8 +561,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-02T17:16:55Z",
-   "attempted": "2026-11-02T17:16:55Z",
+   "updated": "2026-11-11T07:23:38Z",
+   "attempted": "2026-11-11T07:23:38Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -569,7 +570,7 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-11-02",
+    "today": "2026-11-11",
     "new": 0
    },
    "changes": {
@@ -592,55 +593,55 @@
   "goal": "05:30",
   "days": [
    {
-    "day": "2026-11-02",
-    "goal_at": "2026-11-02T11:30:00Z",
-    "gv": "2026-11-02T07:47:03Z",
-    "lv": "2026-11-02T07:47:13Z"
+    "day": "2026-11-11",
+    "goal_at": "2026-11-11T11:30:00Z",
+    "gv": "2026-11-11T07:17:24Z",
+    "lv": "2026-11-11T07:17:35Z"
    },
    {
-    "day": "2026-11-01",
-    "goal_at": "2026-11-01T11:30:00Z",
-    "gv": "2026-11-01T06:25:20Z",
-    "lv": "2026-11-01T06:25:30Z"
+    "day": "2026-11-10",
+    "goal_at": "2026-11-10T11:30:00Z",
+    "gv": "2026-11-10T12:47:28Z",
+    "lv": "2026-11-10T12:47:38Z"
    },
    {
-    "day": "2026-10-31",
-    "goal_at": "2026-10-31T10:30:00Z",
-    "gv": "2026-10-31T07:06:05Z",
-    "lv": "2026-10-31T07:06:15Z"
+    "day": "2026-11-09",
+    "goal_at": "2026-11-09T11:30:00Z",
+    "gv": "2026-11-09T08:07:20Z",
+    "lv": "2026-11-09T08:07:30Z"
    },
    {
-    "day": "2026-10-30",
-    "goal_at": "2026-10-30T10:30:00Z",
-    "gv": "2026-10-30T07:17:17Z",
-    "lv": "2026-10-30T07:17:27Z"
+    "day": "2026-11-08",
+    "goal_at": "2026-11-08T11:30:00Z",
+    "gv": "2026-11-08T07:30:04Z",
+    "lv": "2026-11-08T07:30:14Z"
    },
    {
-    "day": "2026-10-29",
-    "goal_at": "2026-10-29T10:30:00Z",
-    "gv": "2026-10-29T06:51:09Z",
-    "lv": "2026-10-29T06:51:19Z"
+    "day": "2026-11-07",
+    "goal_at": "2026-11-07T11:30:00Z",
+    "gv": "2026-11-07T07:18:21Z",
+    "lv": "2026-11-07T07:18:31Z"
    },
    {
-    "day": "2026-10-28",
-    "goal_at": "2026-10-28T10:30:00Z",
-    "gv": "2026-10-28T06:55:38Z",
-    "lv": "2026-10-28T06:55:48Z"
+    "day": "2026-11-06",
+    "goal_at": "2026-11-06T11:30:00Z",
+    "gv": "2026-11-06T09:31:13Z",
+    "lv": "2026-11-06T09:31:24Z"
    },
    {
-    "day": "2026-10-27",
-    "goal_at": "2026-10-27T10:30:00Z",
-    "gv": "2026-10-27T06:15:58Z",
-    "lv": "2026-10-27T06:16:08Z"
+    "day": "2026-11-05",
+    "goal_at": "2026-11-05T11:30:00Z",
+    "gv": "2026-11-05T09:38:46Z",
+    "lv": "2026-11-05T09:38:56Z"
    }
   ]
  },
- "full_update": "2026-11-02T17:16:45Z",
+ "full_update": "2026-11-10T15:45:33Z",
  "crawl": {
-  "attempted": "2026-11-02T17:19:27Z",
-  "crawled_pages": 3443,
+  "attempted": "2026-11-10T15:48:36Z",
+  "crawled_pages": 3445,
   "est_days_to_full": 0.0,
-  "known_pages": 3443,
+  "known_pages": 3445,
   "last_run_pages": 27,
   "never_crawled": 0,
   "never_crawled_events": 0,
@@ -651,33 +652,33 @@
   "pdfs_with_details": 133,
   "pdfs_with_thumbs": 96,
   "queue_remaining": 0,
-  "updated": "2026-11-02T17:19:27Z"
+  "updated": "2026-11-10T15:48:36Z"
  },
  "translations": {
-  "cached": 4153,
+  "cached": 4226,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 7,
-  "from_cache": 4146,
+  "translated_this_run": 0,
+  "from_cache": 4226,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 2.0,
-  "model_seconds": 1.6,
-  "texts_per_second": 3.5,
+  "seconds": 0.3,
+  "model_seconds": 0.0,
+  "texts_per_second": null,
   "glossary_entries": 260,
   "problems": []
  },
  "counts": {
-  "videos": 543,
-  "episodes": 307,
-  "instagram": 178,
-  "articles": 293,
+  "videos": 546,
+  "episodes": 309,
+  "instagram": 213,
+  "articles": 295,
   "pdfs": 96,
-  "drive": 22,
+  "drive": 29,
   "editorial": 51,
   "weekly_open": 2,
-  "announcements": 2,
-  "events": 51,
+  "announcements": 3,
+  "events": 50,
   "whatsnew": 150,
   "shop": 62,
   "writers_archive": 1267,
@@ -699,7 +700,7 @@
    "http_status": 403,
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
-   "last_attempt": "2026-11-02T07:47:21Z",
+   "last_attempt": "2026-11-10T12:47:46Z",
    "checked_this_run": false,
    "from_copy": false,
    "events_count": 0,
@@ -709,7 +710,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-11-02",
+  "today": "2026-11-11",
   "home_days": 60,
   "list_days": [
    60,
@@ -719,15 +720,15 @@
    "60": {
     "neta65": 3,
     "texas": 7,
-    "all": 76
+    "all": 78
    },
    "90": {
     "neta65": 4,
     "texas": 11,
-    "all": 126
+    "all": 128
    }
   },
-  "items": 126
+  "items": 128
  },
  "writers_archive": {
   "files": {

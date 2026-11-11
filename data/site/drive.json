@@ -1,7 +1,417 @@
 {
- "updated": "2026-11-02T17:11:35Z",
+ "updated": "2026-11-11T07:23:14Z",
  "fixture": false,
  "items": [
+  {
+   "id": "drive:19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk/view",
+   "title": "Grapevine Area Chair Meeting Report",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-10",
+   "first_seen": "2026-11-11T00:34:51Z",
+   "image": "https://lh3.googleusercontent.com/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk=w600",
+   "tags": [
+    "panel-77",
+    "pdf"
+   ],
+   "category": "reports",
+   "status": "ok",
+   "extra": {
+    "file_id": "19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk",
+    "mime": "application/pdf",
+    "name": "2026-11-10 Grapevine Area Chair Meeting Report.pdf",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "reports"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk/view",
+    "preview_url": "https://drive.google.com/file/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk",
+    "thumb_url": "https://lh3.googleusercontent.com/d/19uOsWDdvZQCsTmNVnTL3xlUFM7-AIiLk=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": true,
+    "file_type": "PDF",
+    "folder_id": "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_url": "https://drive.google.com/drive/folders/1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1JIDosA0bb5PWmY5h_H6MYh5XEXjGMD2r"
+    ],
+    "modified_text": "11:20 pm"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Area Chair Meeting Report",
+     "es": "Informe de la reunión de coordinadores de Área de Grapevine"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/view",
+   "title": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-07",
+   "first_seen": "2026-11-07T15:42:17Z",
+   "image": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
+    "mime": "image/jpeg",
+    "name": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/view",
+    "preview_url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Nov 7"
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Open Meeting - Every Thursday at 12 PM Eastern on Zoom",
+     "es": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
+   "title": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-07",
+   "first_seen": "2026-11-07T15:42:17Z",
+   "image": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
+    "mime": "image/png",
+    "name": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
+    "preview_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Nov 7"
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Writing Workshop - Grupo Volver a Vivir, Garland",
+     "es": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL/view",
+   "title": "2025 Sales Report",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-03",
+   "first_seen": "2026-11-04T09:29:20Z",
+   "image": "https://lh3.googleusercontent.com/d/1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "photos",
+   "status": "ok",
+   "extra": {
+    "file_id": "1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL",
+    "mime": "image/jpeg",
+    "name": "2025 Sales Report.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "photos"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL/view",
+    "preview_url": "https://drive.google.com/file/d/1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
+    "folder_url": "https://drive.google.com/drive/folders/1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI"
+    ],
+    "modified_text": "Nov 3"
+   },
+   "i18n": {
+    "title": {
+     "en": "2025 Sales Report",
+     "es": "2025 Reportaje de ventas"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "drive:1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
+   "title": "2026 Dallas GatherOfEagles",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-03",
+   "first_seen": "2026-11-04T09:29:20Z",
+   "image": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "photos",
+   "status": "ok",
+   "extra": {
+    "file_id": "1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
+    "mime": "image/jpeg",
+    "name": "2026 Dallas GatherOfEagles.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "photos"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
+    "preview_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
+    "folder_url": "https://drive.google.com/drive/folders/1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI"
+    ],
+    "modified_text": "Nov 3"
+   },
+   "i18n": {
+    "title": {
+     "en": "2026 Dallas GatherOfEagles",
+     "es": "2026 Reunión de dallasOfEagles"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "drive:1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1/view",
+   "title": "Envíos gratuitos en todos los productos de La Viña - banner",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-03T05:49:48Z",
+   "image": "https://lh3.googleusercontent.com/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",
+    "mime": "image/jpeg",
+    "name": "Envíos gratuitos en todos los productos de La Viña - banner.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1/view",
+    "preview_url": "https://drive.google.com/file/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Nov 2"
+   },
+   "i18n": {
+    "title": {
+     "en": "Free shipping on all La Viña products - banner",
+     "es": "Envíos gratuitos en todos los productos de La Viña - banner"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP/view",
+   "title": "Free shipping on all Grapevine products - banner",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-02",
+   "first_seen": "2026-11-03T05:49:48Z",
+   "image": "https://lh3.googleusercontent.com/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP",
+    "mime": "image/jpeg",
+    "name": "Free shipping on all Grapevine products - banner.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP/view",
+    "preview_url": "https://drive.google.com/file/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "Nov 2"
+   },
+   "i18n": {
+    "title": {
+     "en": "Free shipping on all Grapevine products - banner",
+     "es": "Envío gratis en todos los productos de Grapevine - banner"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
   {
    "id": "drive:1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i",
    "source": "drive",

@@ -96,10 +96,11 @@ All settings files are YAML: `key: value`, with indentation showing what belongs
 
 ## 3. Full reference
 
-`config/site.yml` has 15 sections today, in this order: `site`, `meeting`, `recurring_events`,
-`price_changes`, `drive`, `booth`, `sources`, `lavina_weekly_open`, `phone_access`, `meetings`, `spotlight`,
-`writers_archive`, `links`, `library`, `digest`. Each one is below (`booth:`, the booth display, is 3.14;
-`writers_archive:` is with `spotlight:` in 3.10), then the other files (3.15–3.20). Every example says what
+`config/site.yml` has 16 sections today, in this order: `site`, `meeting`, `recurring_events`,
+`price_changes`, `store_offers`, `drive`, `booth`, `sources`, `lavina_weekly_open`, `phone_access`, `meetings`,
+`spotlight`, `writers_archive`, `links`, `library`, `digest`. Each one is below (`store_offers:` is 3.4b;
+`booth:`, the booth display, is 3.14; `writers_archive:` is with `spotlight:` in 3.10), then the other files
+(3.15–3.20). Every example says what
 happens and where it shows. Examples marked "checked" were run through the site's own code on the real file
 (October 2, 2026).
 
@@ -542,6 +543,83 @@ date first in its name. Store prices themselves: [automatic-sources.md](automati
 
 > The test `test_the_settings_file_has_no_mistakes` in `tests/test_price_changes.py` requires the real
 > file's blocks to have **no** problems (any number of blocks, or none, is fine).
+
+### 3.4b `store_offers:` — offers the stores announce
+
+An offer AA Grapevine and La Viña announce for their stores — free shipping, for one — cannot be read from the
+stores' pages, so a block here says it (since November 2026). From 00:00 Central on `starts` to the end of `ends`
+it shows:
+- on `/shop/#offers` (and `/es/shop/#offers`), right under the page's menu and above the Book of the Month: the
+  offer's title and days, then a card per store — the page language's magazine first — with the store's banner
+  (a link to the store), its words and a button to the store, then "The store shows the final price at checkout."
+  and the source. The menu has no chip for it (a chip cannot come and go by date);
+- in the monthly toolkit, in each month the offer runs: a line in *Keep up all month* (this month's page) and in
+  the month's message (WhatsApp and e-mail), both linking `/shop/#offers`.
+
+The day after `ends` it is gone by itself — also on a page that is open, or saved for offline use — so there is
+nothing to switch off; the block may then be deleted. While a block is here, Home's *Shared by the committee*
+leaves its banners out (there a banner would stand alone, cropped to the tile, without the offer's conditions);
+the Portfolio, What's New, the feeds and the digest list them like any file in `flyers`, so move them to
+`private` once the offer is over. Two offers at once each get a section on `/shop/` (the first is `#offers`); the
+toolkit's lines all link `/shop/#offers`, the top of the offers.
+
+| Key | Accepted values | If it is wrong |
+|---|---|---|
+| `key` | Short name (letters, numbers, dashes). Default: the `starts` day. | Used twice: the second block is left out. |
+| `title` / `title_es` | **Required** (one of the two): the heading on `/shop/` and the toolkit's line. | Neither: left out. |
+| `starts`, `ends` | **Required.** `"YYYY-MM-DD"`: the first and the last day (Central time). | Not a real day, or `ends` before `starts`: left out. |
+| `source` / `source_es` | Where the stores announced it, shown under the cards. | — |
+| `gv`, `lv` | Each store's part (Grapevine, La Viña). Leave one out for an offer of one store. | Neither has a `text`: left out. |
+| `gv` / `lv` → `text` / `text_es` | What that store says about the offer, in your words. | — |
+| `gv` / `lv` → `banner_match` | A pattern that finds the store's banner in the Panel's Drive `flyers` folder: capitals ignored, accents **not** folded (write `[ií]`). The newest **picture** it finds is shown (1200 px wide; the stores' banners are 1920 × 770). | No match: the card has no picture. Not a valid pattern: no picture (noted). |
+| `gv` / `lv` → `banner_alt` / `banner_alt_es` | The banner's words, for people who cannot see it (say when they are in the other language). | — |
+
+A mistake never stops the site: the block is left out (a bad `banner_match` only loses its picture) and the build
+names it — `[settings] store_offers entry 1 (free-shipping-2026): ends 2026-11-01 is before starts 2026-12-31 —
+left out` —, which *Website update* lists in its run summary under "Check the build" (and still publishes), and
+which turns the Code check red until it is fixed.
+
+Today's block (checked):
+
+```yaml
+store_offers:
+  - key: "free-shipping-2026"
+    title: "Free shipping at the Grapevine and La Viña stores"
+    title_es: "Envío gratis en las tiendas de La Viña y Grapevine"
+    starts: "2026-11-01"
+    ends: "2026-12-31"
+    source: "AA Grapevine's and La Viña's e-mails (November 2, 2026) and their stores' banners"
+    source_es: "Correos de La Viña y AA Grapevine (2 de noviembre de 2026) y los banners de sus tiendas"
+    gv:
+      text: "Free shipping on all Grapevine products to U.S. and Canadian addresses. Grapevine says …"
+      text_es: "Envío gratis en todos los productos de Grapevine a direcciones en EE. UU. y Canadá. …"
+      banner_match: "free shipping on all grapevine products"
+      banner_alt: "AA Grapevine's banner: Free shipping on all Grapevine products. Available November 1 – December 31."
+      banner_alt_es: "Banner de AA Grapevine (en inglés): envío gratis en todos los productos de Grapevine, …"
+    lv:
+      text: "Free shipping on all La Viña products to the U.S. and Canada."
+      text_es: "Envío gratis en todos los productos de La Viña a EE. UU. y Canadá."
+      banner_match: "env[ií]os? gratuitos? en todos los productos de la vi[nñ]a"
+      banner_alt: "La Viña's banner (in Spanish): …"
+      banner_alt_es: "Banner de La Viña: envíos gratuitos en todos los productos de La Viña, …"
+```
+→ From November 1, 2026 (it went up on November 2): "Free shipping at the Grapevine and La Viña stores",
+"November 1 – December 31, 2026" ("Del 1 de noviembre al 31 de diciembre de 2026" on `/es/shop/`, La Viña's card
+first), with the two banners `flyers/Free shipping on all Grapevine products - banner.jpg` and
+`flyers/Envíos gratuitos en todos los productos de La Viña - banner.jpg`; the November and December toolkits name
+it. At midnight Central on January 1, 2027 it is gone.
+
+Write only what the stores themselves say (their e-mails and store pages): never a promo code or "no code
+needed", a minimum order, an end hour, "hurry", or that the offer combines with the Book of the Month or the bulk
+discounts — calm and informative, Tradition Eleven. Link the stores' own addresses (`links: gv_store`,
+`lv_store`), never an e-mail's `?trackingcode=` link. The banners go in the Panel's Drive `flyers` folder with a
+name **without a date** (a date would make the flyer an event: [flyers-and-events.md](flyers-and-events.md) §4);
+after the offer, move them to the `private` folder, or they stay in Portfolio › Flyers and among Home's newest
+uploads. A bulletin post about the offer is written by hand (`content/bulletin`, with `expires:` its last day).
+To add the next offer: copy the block (from `- key:` down), paste it under the last one, change the values.
+
+> `tests/test_r21_offers.py` (class `RealSettings`, a Code check test) requires the real file's blocks to have
+> **no** mistakes, and checks the words of the 2026 block.
 
 ### 3.5 `drive:` — the committee's Google Drive
 
@@ -1145,7 +1223,7 @@ search (faster). Write access is enough (MKP715).
 
 | You saved … | Live after the push run | Waits for the next full update |
 |---|---|---|
-| `site:` (all keys), `meeting:`, `recurring_events:`, `price_changes:`, `drive:`, `phone_access:`, `links:` | Yes | — |
+| `site:` (all keys), `meeting:`, `recurring_events:`, `price_changes:`, `store_offers:`, `drive:`, `phone_access:`, `links:` | Yes | — |
 | `sources: grapevine / lavina` | The links on the pages; `quote_page`; and what the push run reads again when its key changed: deadlines and themes, the Weekly Open, the story lines (a changed `base`: those and the event calendars) | The magazine stories (`magazine_hub`) and the shop (`botm`, `subscriptions`, `subscription_regions`, `specialty`) |
 | `sources: crawler` | — | Yes |
 | `sources: youtube` | Yes (the channels' feeds) | The full listing of older videos |
@@ -1176,7 +1254,7 @@ search (faster). Write access is enough (MKP715).
 | `/accessibility/` | `phone_access:` and the weekly open meetings' Zoom IDs (#phone); `meeting:` (our meetings on Google Meet: no number to call); `links: asl_playlist`, `aa_big_book`, `aa_twelve_and_twelve` (`aa_twelve_and_twelve_es` on `/es/`), `aa_accessibility_resources`, `aa_access_email`; `contact_email` (#feedback); `meeting: chair_email` (for anyone who cannot join online) |
 | `/listen/`, `/watch/` | `site: listen`, `watch`; `links: gv_apps`, `lv_apps`, `podcasts_page`, `youtube_channel`; `sources: podcasts`, `youtube` |
 | `/about/` | `site: area`, `committee_page`, `area_website`, `contact_email`, `about_videos`; `links: gv_home`, `lv_home`, `aa_org`, `carry_the_message`, `lleva_el_mensaje` (the Carry the Message card, `#ctm`); `config/history.yml` (#history); the next meeting date; `booth:` (#booth, the booth display's starting settings and the size of its offline copy; its live slides use `meeting:`, `recurring_events:`, `lavina_weekly_open:`, `price_changes:`, `site: committee` and `about_videos` too) |
-| `/shop/` | `price_changes:` (#price-changes, and the *What it would cost* card, #group-cost); `links:` (stores, subscriptions, `carry_the_message` and `lleva_el_mensaje` — both, #carry —, support phones); `sources: grapevine / lavina` (Book of the Month, prices, specialty items) |
+| `/shop/` | `store_offers:` (#offers, with the stores' banners from Drive `flyers`; the month pages name the offer too, in *Keep up all month* and the month's message); `price_changes:` (#price-changes, and the *What it would cost* card, #group-cost); `links:` (stores, subscriptions, `carry_the_message` and `lleva_el_mensaje` — both, #carry —, support phones); `sources: grapevine / lavina` (Book of the Month, prices, specialty items) |
 | `/contribute/` | `links:` (share a story, guidelines, e-mails, mail; the "If Walls Could Talk" note); `sources: lavina` (themes, record your story: `record_story`), `sources: grapevine: audio_project`; `contact_email` (the story recorder's *Email it to the committee*) |
 | `/gvr/` | `links: gvr_register`, `rlv_register`, `gvr_resources`, `rlv_resources`, `gvr_office_email`, `rlv_office_email` (#pass-it-on); `meeting:` (date, time, platform, chair e-mail); `site: committee` / `committee_es` (the announcement) and `area` / `area_es` (the e-mails to the offices); `site: about_videos` (the two videos beside *Did you know?*); the orientation's total minutes |
 | `/monthly/`, `/monthly/YYYY-MM/` | `config/carry.yml`; `meeting:` (also the guest speakers; the Area report at #report: `chair_title` / `chair_title_es`, `chair_email`, `online_url`, `meeting_id`, `note` / `note_es`); `recurring_events:` (the Grapevine Meeting too); `price_changes:`; `links: gvr_resources`, `rlv_resources`, editorial e-mails |
@@ -1206,6 +1284,7 @@ search (faster). Write access is enough (MKP715).
   **Not** handed over: `price_changes`, `library` — they reach the pages only through the synced data files. On
   GitHub, `url` and `repository` are replaced (search for `process.env.SITE_URL`), and `timezone` is always a
   real zone (`TZ` from `eleventy.config.js`: America/Chicago when the setting is not one).
+  Since November 2026 also `store_offers` (read by `shopOffers()` in `eleventy/filters/shop.js`).
 - **The `pick` filter** ([`eleventy.config.js`](../eleventy.config.js), search for `addFilter("pick"`):
   `site | pick(lang, "title")` gives `title_es` on Spanish pages when it exists, else `title`. So a
   `<key>_es` next to any key works wherever a template reads it with `pick`.
@@ -1319,6 +1398,7 @@ update* still publishes it:
 | `tests/test_pwa_install.py` | `links: app_help_*` on support.apple.com / support.google.com, the Spanish ones with `/es-mx/` and `hl=es-419` |
 | `tests/test_site_links.py` | Every key under `links:` is used by some page (a `_es` twin counts with its link), every link a template reads exists, the removed settings stay removed, La Viña's monthly workshop is called by its one name. (`meeting: platform` may be left out or changed: since October 2026 no test pins "Zoom" or a `note`) |
 | `tests/test_price_changes.py` | The real `price_changes:` blocks have no problems |
+| `tests/test_r21_offers.py` (class `RealSettings`) | The real `store_offers:` blocks have no mistakes; the 2026 free shipping block's dates and words (U.S. and Canada, Grapevine's "can't be combined"; no promo code, minimum, subscriptions or "hurry"); its two `banner_match` patterns find the two banners and nothing else |
 | `tests/test_sync_pipeline.py` | `sources: instagram: keep_per_account` at least 124 |
 | `tests/test_meetings.py` | Exactly `aadallas` and `fortworthaa` carry `feed_obf`; no key in plain text |
 | `tests/test_editorial.py` | La Viña's themes page resolves to https://www.aalavina.org/recursos |

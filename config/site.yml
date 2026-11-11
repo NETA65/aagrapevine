@@ -359,6 +359,58 @@ price_changes:
     books_more: 2.00               # every Grapevine and La Viña book costs this much more (leave out: no change)
 
 # ---------------------------------------------------------------------
+#  Offers the official stores announce (free shipping, for one) — one
+#  block per offer. The stores' pages can't be read for these, so a
+#  block here says it:
+#   · on /shop/ (#offers, right under the page's menu): the offer's days,
+#     what each store says, its banner and a button to the store;
+#   · in the monthly toolkit (/monthly/: "Keep up all month" and the
+#     month's message, in the months the offer runs).
+#  It shows from 00:00 Central on `starts` and is gone by itself the day
+#  after `ends` (also on a page that is open, or saved for offline use);
+#  after that the block may be deleted.
+#  Write only what the stores themselves say (their e-mails and store
+#  pages, in your own words) — never a promo code, a minimum order or an
+#  end hour they don't state, never that it combines with the Book of
+#  the Month or other discounts — and keep it calm: no "hurry" (our
+#  Tradition Eleven: attraction rather than promotion).
+#  The banners: put each store's banner in the Panel's Drive `flyers`
+#  folder, with a name WITHOUT a date (a date makes it an event). Its
+#  `banner_match` finds it (a regular expression, capitals ignored; no
+#  match → the card shows without a picture). After the offer, move the
+#  banners to the `private` folder.
+#  To add the next one: copy the block (from "- key:" down), paste it
+#  under the last one and change the values. A block with a mistake (a
+#  day that can't be read, `ends` before `starts`, no title, no text for
+#  either store) is left out; the rest of the site still updates and the
+#  build lists the problem ("[settings] store_offers …").
+#  A bulletin post about an offer is written by hand (content/bulletin).
+# ---------------------------------------------------------------------
+store_offers:
+  - key: "free-shipping-2026"      # short name: letters, numbers and dashes
+    title: "Free shipping at the Grapevine and La Viña stores"
+    title_es: "Envío gratis en las tiendas de La Viña y Grapevine"
+    starts: "2026-11-01"           # the first day (Central time)
+    ends: "2026-12-31"             # the last day (Central time)
+    source: "AA Grapevine's and La Viña's e-mails (November 2, 2026) and their stores' banners"
+    source_es: "Correos de La Viña y AA Grapevine (2 de noviembre de 2026) y los banners de sus tiendas"
+    # Each store (gv = Grapevine, lv = La Viña; leave one out if the offer is only the other's): its words in
+    # both languages, the pattern that finds its banner in Drive `flyers`, and the banner's words for people
+    # who can't see it.
+    gv:
+      text: "Free shipping on all Grapevine products to U.S. and Canadian addresses. Grapevine says the offer can't be combined with any other offer."
+      text_es: "Envío gratis en todos los productos de Grapevine a direcciones en EE. UU. y Canadá. Según Grapevine, la oferta no se puede combinar con ninguna otra."
+      banner_match: "free shipping on all grapevine products"
+      banner_alt: "AA Grapevine's banner: Free shipping on all Grapevine products. Available November 1 – December 31."
+      banner_alt_es: "Banner de AA Grapevine (en inglés): envío gratis en todos los productos de Grapevine, del 1 de noviembre al 31 de diciembre."
+    lv:
+      text: "Free shipping on all La Viña products to the U.S. and Canada."
+      text_es: "Envío gratis en todos los productos de La Viña a EE. UU. y Canadá."
+      banner_match: "env[ií]os? gratuitos? en todos los productos de la vi[nñ]a"
+      banner_alt: "La Viña's banner (in Spanish): free shipping on all La Viña products, November 1 – December 31."
+      banner_alt_es: "Banner de La Viña: envíos gratuitos en todos los productos de La Viña, del 1 de noviembre al 31 de diciembre."
+
+# ---------------------------------------------------------------------
 #  Google Drive — the committee's upload area
 #  Upload PDFs / photos / slides into the category folders inside your
 #  Panel folder. Sub-folders are followed automatically (a sub-folder
@@ -631,10 +683,13 @@ lavina_weekly_open:
   starts: "2026-11-05"          # first meeting (a Thursday)
   zoom_id: "871 2036 8287"
   passcode: "238047"
-  summary_es: "Una reunión abierta virtual de AA en español, cada semana: dos miembros comparten su experiencia, fortaleza y esperanza. La reunión se graba para publicarse como pódcast. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
-  summary_en: "A weekly virtual open AA meeting in Spanish where two members share their experience, strength and hope. It is recorded to be published as a podcast. Let's keep extending this powerful lifeline together!"
+  # The words of La Viña's newer flyer (no month on it; Drive flyers/, 2026-11-07): a chair and two speakers each
+  # week; recorded for the new podcast and YouTube. The last sentence (the first flyer's) is /meetings/' sign-off:
+  # the card leaves it out (committee.weekly.closing) — keep it last, word for word.
+  summary_es: "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores, entre ellos autores de historias de La Viña, miembros de AA y servidores de confianza. La reunión se graba y queda disponible después en el nuevo pódcast de La Viña y en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
+  summary_en: "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers, among them La Viña story authors, AA members and trusted servants. Each meeting is recorded and made available afterwards on La Viña's new podcast and on YouTube. Let's keep extending this powerful lifeline together!"
   url: ""                       # La Viña's page for the meeting, once there is one
-  source: "Official La Viña flyer (November 2026), shared with the committee"
+  source: "Official La Viña flyers (November 2026, and a newer one without a month), shared with the committee"
   # The flyer itself on the committee's Google Drive: the newest Drive file whose title or file name
   # matches this (a regular expression, capitals ignored) gets a "See the flyer" link on the La Viña
   # card at /meetings/#weekly-open. No match → no link. Change it if the flyer is renamed.

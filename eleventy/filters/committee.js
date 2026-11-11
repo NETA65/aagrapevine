@@ -623,6 +623,7 @@ function localPath(url, lang) {
 const RESERVED_IDS = new Set([
   "main", "mobile-drawer", "subscribe", "how-docs", "how-to-post", "share-photos", "how-events", "albums",
   "ev-upcoming-title", "ev-next-title", "cm-preview", "cm-preview-title", "cm-lb-i18n", "item",
+  "ev-weekly", "ev-weekly-title", "ev-weekly-gv", "ev-weekly-lv",
 ]);
 // Anchor for a hand-written item: its file-name slug (the data links to
 // "/events/#<slug>" and "/bulletin/#<slug>"), else a stable fallback.

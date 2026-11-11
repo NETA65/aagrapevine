@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-02T17:12:38Z",
+ "updated": "2026-11-10T15:40:46Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 16975,
-   "posts": 3982,
+   "followers": 17021,
+   "posts": 4002,
    "owner_id": "48108439509",
-   "checked": "2026-11-02T17:12:20Z",
+   "checked": "2026-11-10T15:40:29Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,1525 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2424,
-   "posts": 3004,
+   "followers": 2432,
+   "posts": 3021,
    "owner_id": "48275839129",
-   "checked": "2026-11-02T17:12:23Z",
+   "checked": "2026-11-10T15:40:32Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:Dfj6N1wDXPr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfj6N1wDXPr/",
+   "title": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.”",
+   "summary": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.” “Right Here Right Now!” Santa Barbara, California, September 1960, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-10T12:30:18Z",
+   "first_seen": "2026-11-10T15:40:46Z",
+   "image": "/assets/cache/ig/Dfj6N1wDXPr.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfj6N1wDXPr",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfj6N1wDXPr.webp",
+    "embed_url": "https://www.instagram.com/p/Dfj6N1wDXPr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfj6N1wDXPr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.”",
+     "es": "“Mañana – y todos los mañanas por venir – son sólo extensiones de aquí, ahora mismo.”"
+    },
+    "summary": {
+     "en": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.” “Right Here Right Now!” Santa Barbara, California, September 1960, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+     "es": "“Mañana – y todos los mañanas por venir – son sólo extensiones de aquí, ahora mismo.” ¡Ahora mismo! Santa Barbara, California, septiembre de 1960, A.A. en prisión: Recluso para recluso Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dfj6N0WDezc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfj6N0WDezc/",
+   "title": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del…",
+   "summary": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del poder y del prestigio personales, del honor público y del dinero: los mismos impulsos implacables que antes, al ser frustrados, nos hicieron beber; las mismas fuerzas que hoy en día desgarran el mundo”. \"“Por qué Alcohólicos Anónimos es anónimo” BILL W., COFUNDADOR DE AA, ENERO DE 1955 De El lenguaje del…",
+   "lang": "es",
+   "date": "2026-11-10T12:30:18Z",
+   "first_seen": "2026-11-10T15:40:46Z",
+   "image": "/assets/cache/ig/Dfj6N0WDezc.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfj6N0WDezc",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfj6N0WDezc.webp",
+    "embed_url": "https://www.instagram.com/p/Dfj6N0WDezc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfj6N0WDezc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“With breaking our anonymity, we can resume our old disastrous … search",
+     "es": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del…"
+    },
+    "summary": {
+     "en": "“With breaking our anonymity, we can resume our old disastrous pursuit of personal power and prestige, of public honor and money: the same implacable impulses as before, being frustrated, made us drink; the same forces that today tear the world apart.” \"Why Alcoholics Anonymous is anonymous\" Bill W., AA co-founder, January 1955 … language",
+     "es": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del poder y del prestigio personales, del honor público y del dinero: los mismos impulsos implacables que antes, al ser frustrados, nos hicieron beber; las mismas fuerzas que hoy en día desgarran el mundo”. \"“Por qué Alcohólicos Anónimos es anónimo” BILL W., COFUNDADOR DE AA, ENERO DE 1955 De El lenguaje del…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhtdVPDQTS",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhtdVPDQTS/",
+   "title": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas.",
+   "summary": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+   "lang": "en",
+   "date": "2026-11-09T16:00:18Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhtdVPDQTS.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhtdVPDQTS",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhtdVPDQTS.webp",
+    "embed_url": "https://www.instagram.com/p/DfhtdVPDQTS/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhtdVPDQTS/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas.",
+     "es": "De Nadja, - \"NETA 65 Summer Assembly\" Kaufman, Texas."
+    },
+    "summary": {
+     "en": "From Nadja., - \"NETA 65 Summer Assembly\" Kaufman, Texas. GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+     "es": "De Nadja., \"Asamblea de verano NETA 65\" Kaufman, Texas. ¡Grapevine Instagram concurso de fotos! Envíenos sus fotos a social@aagrapevine.org ➡️ Por favor incluya su nombre y su última inicial, y su ubicación. Las fotos ➡️ deben ser protegidas por el anonimato (no poses de cara completa o imágenes identificables de las personas.) ¡Esperando ver sus imágenes! El concurso está en curso."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhtdCoDSo7",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhtdCoDSo7/",
+   "title": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a…",
+   "summary": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a este maravilloso programa, a la hermosa comunidad de AA.\" . 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad. . 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a…",
+   "lang": "es",
+   "date": "2026-11-09T16:00:15Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhtdCoDSo7.webp",
+   "tags": [
+    "alcoholicosanónimos",
+    "laviña",
+    "aa",
+    "sobriedad",
+    "recuperación"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhtdCoDSo7",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhtdCoDSo7.webp",
+    "embed_url": "https://www.instagram.com/p/DfhtdCoDSo7/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhtdCoDSo7/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "De R. P., -\"2193 days of positive changes in my life, thanks to my Higher Power, to …",
+     "es": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a…"
+    },
+    "summary": {
+     "en": "De R. P., -\"2193 days of positive changes in my life, thanks to my Higher Power, to this wonderful program, to the beautiful AA Fellowship.\" . 📣 Send us your best photos that reflect the joy of living, serenity and other topics of sobriety. . 📣 Please: ➡️ Include your name, first name of your last name ➡️ Indica where photo was taken, location ➡️ Send your photos to …",
+     "es": "De R. P., -\"2193 días de cambios positivos en mi vida, gracias a mi poder superior, a este maravilloso programa, a la hermosa comunidad de AA.\" . 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad. . 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhdXRsgman",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhdXRsgman/",
+   "title": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos…",
+   "summary": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇",
+   "lang": "es",
+   "date": "2026-11-09T13:44:07Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhdXRsgman.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhdXRsgman",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhdXRsgman.webp",
+    "embed_url": "https://www.instagram.com/p/DfhdXRsgman/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhdXRsgman/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "A new open meeting podcast from La Viña: Weekly Open Meeting of Alcoholics Anonymous …",
+     "es": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos…"
+    },
+    "summary": {
+     "en": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇",
+     "es": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhdKf9OLk1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhdKf9OLk1/",
+   "title": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña…",
+   "summary": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Disponible en plataformas de podcast, YouTube y en aalavina.org/podcast. Un nuevo episodio cada lunes.",
+   "lang": "es",
+   "date": "2026-11-09T13:38:35Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhdKf9OLk1.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhdKf9OLk1",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhdKf9OLk1.webp",
+    "embed_url": "https://www.instagram.com/p/DfhdKf9OLk1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhdKf9OLk1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "A new La Viña podcast: Alcoholics Anonymous Weekly Open Meeting of La Viña …",
+     "es": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña…"
+    },
+    "summary": {
+     "en": "A new podcast from La Viña: Weekly Open Meeting of Alcoholics Anonymous from La Viña. Available on podcast, YouTube and aalavina.org/podcast platforms. A new episode every Monday.",
+     "es": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Disponible en plataformas de podcast, YouTube y en aalavina.org/podcast. Un nuevo episodio cada lunes."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhVbDYDX0Z",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhVbDYDX0Z/",
+   "title": "“It’s not the wonderful people I’ve met from throughout these great lands who have…",
+   "summary": "“It’s not the wonderful people I’ve met from throughout these great lands who have helped keep me sober most of the time, but those wonderful people sitting around the table in my hometown who loved me when I could not love, who waited for me to quit lying, who tolerated me when I would be part of nothing, and who never asked me to leave when I was obnoxious. Because of their love and patience, I…",
+   "lang": "en",
+   "date": "2026-11-09T12:30:17Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhVbDYDX0Z.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhVbDYDX0Z",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhVbDYDX0Z.webp",
+    "embed_url": "https://www.instagram.com/p/DfhVbDYDX0Z/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhVbDYDX0Z/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“It’s not the wonderful people I’ve met from throughout these great lands who have…",
+     "es": "“No es la gente maravillosa que he conocido en todas estas grandes tierras que tienen …"
+    },
+    "summary": {
+     "en": "“It’s not the wonderful people I’ve met from throughout these great lands who have helped keep me sober most of the time, but those wonderful people sitting around the table in my hometown who loved me when I could not love, who waited for me to quit lying, who tolerated me when I would be part of nothing, and who never asked me to leave when I was obnoxious. Because of their love and patience, I…",
+     "es": "“No es la gente maravillosa que he conocido en todas estas grandes tierras que me han ayudado a mantenerme sobrio la mayor parte del tiempo, pero esa gente maravillosa sentada alrededor de la mesa en mi ciudad natal que me amaba cuando no podía amar, que me esperaba para dejar de mentir, que me toleraba cuando yo sería parte de la nada, y que nunca me pidió que me fuera cuando era obnoccioso. Debido a su amor y paciencia, I …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfhVa_OjSPJ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfhVa_OjSPJ/",
+   "title": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”.",
+   "summary": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”. \"“Reuniones, reuniones, reuniones” GRAND RAPIDS, MICHIGAN, OCTUBRE DE 1981 De Happy, Joyous and Free\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-09T12:30:15Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DfhVa_OjSPJ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfhVa_OjSPJ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfhVa_OjSPJ.webp",
+    "embed_url": "https://www.instagram.com/p/DfhVa_OjSPJ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfhVa_OjSPJ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The best way to appreciate AA is identical to how a stained glass is appreciated: from the inside.”",
+     "es": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”."
+    },
+    "summary": {
+     "en": "“The best way to appreciate AA is identical to how a stained glass is appreciated: from the inside.” \"Meetings, Meetings, Meetings\" GRAND RAPIDS, MICHIGAN, OCTOBER 1981 From Happy, Joyous and Free\" Daily Quote in www.aalavina.org",
+     "es": "“La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro”. \"“Reuniones, reuniones, reuniones” GRAND RAPIDS, MICHIGAN, OCTUBRE DE 1981 De Happy, Joyous and Free\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DffIqUIjZ5g",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffIqUIjZ5g/",
+   "title": "CIERRA EL AÑO CON AHORROS",
+   "summary": "CIERRA EL AÑO CON AHORROS AA La Viña se complace en anunciar su REBAJA DE FIN DE AÑO: ¡Envío GRATIS a EE. UU. y Canadá! Elige entre más de 100 productos, incluyendo libros, arte y organizadores. Aquí te mostramos algunos de los artículos más vendidos disponibles con esta oferta: El Lenguaje del Corazón Cita diaria de Grapevine — en español e inglés Nuestros Doce Pasos Lo Mejor De Bill Agenda de…",
+   "lang": "es",
+   "date": "2026-11-08T16:00:16Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffIqUIjZ5g.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffIqUIjZ5g",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffIqUIjZ5g.webp",
+    "embed_url": "https://www.instagram.com/p/DffIqUIjZ5g/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffIqUIjZ5g/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Closes the year with savings",
+     "es": "CIERRA EL AÑO CON AHORROS"
+    },
+    "summary": {
+     "en": "Closes the year with savings AA La Viña is pleased to announce its end-of-year sale: Free Shipping to USA. U.S. and Canada! Choose from more than 100 products, including books, art and organizers. Here are some of the best-selling items available with this offer: Language of the Heart Daily Quote from Grapevine — in Spanish and English Our Twelve Steps The Best Of … Bill Agenda",
+     "es": "CIERRA EL AÑO CON AHORROS AA La Viña se complace en anunciar su REBAJA DE FIN DE AÑO: ¡Envío GRATIS a EE. UU. y Canadá! Elige entre más de 100 productos, incluyendo libros, arte y organizadores. Aquí te mostramos algunos de los artículos más vendidos disponibles con esta oferta: El Lenguaje del Corazón Cita diaria de Grapevine — en español e inglés Nuestros Doce Pasos Lo Mejor De Bill Agenda de…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DffIqNvDcly",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffIqNvDcly/",
+   "title": "WRAP UP THE YEAR WITH SAVINGS",
+   "summary": "WRAP UP THE YEAR WITH SAVINGS AA Grapevine is pleased to announce our FREE SHIPPING SALE - available on everything! Select from over 100 products including books, artwork and organizers. Here are some top-selling items available with this offer: Beginners' Book: Getting and Staying Sober in AA The Next Frontier: Emotional Sobriety I & II Voices of Women in AA: Stories of Experience, Strength &…",
+   "lang": "en",
+   "date": "2026-11-08T16:00:16Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffIqNvDcly.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffIqNvDcly",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffIqNvDcly.webp",
+    "embed_url": "https://www.instagram.com/p/DffIqNvDcly/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffIqNvDcly/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "WRAP UP THE YEAR WITH SAVINGS",
+     "es": "Terminar el año con ahorros"
+    },
+    "summary": {
+     "en": "WRAP UP THE YEAR WITH SAVINGS AA Grapevine is pleased to announce our FREE SHIPPING SALE - available on everything! Select from over 100 products including books, artwork and organizers. Here are some top-selling items available with this offer: Beginners' Book: Getting and Staying Sober in AA The Next Frontier: Emotional Sobriety I & II Voices of Women in AA: Stories of Experience, Strength &…",
+     "es": "¡Completar el año con ahorros AA Grapevine se complace en anunciar nuestra venta de envío gratis - disponible en todo! Seleccione de más de 100 productos incluyendo libros, obras de arte y organizadores. Aquí están algunos artículos de venta superior disponibles con esta oferta: Libro de principiantes: Cómo llegar y mantenerse sobrio en AA La siguiente frontera: Sobriedad emocional I y II Voces de mujeres en AA: Historias de experiencia, fuerza y …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DffILGEADOG",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DffILGEADOG/",
+   "title": "From the Connecticut Fall Assembly",
+   "summary": "From the Connecticut Fall Assembly",
+   "lang": "en",
+   "date": "2026-11-08T15:56:45Z",
+   "first_seen": "2026-11-09T17:38:43Z",
+   "image": "/assets/cache/ig/DffILGEADOG.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DffILGEADOG",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DffILGEADOG.webp",
+    "embed_url": "https://www.instagram.com/p/DffILGEADOG/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DffILGEADOG/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From the Connecticut Fall Assembly",
+     "es": "De la asamblea de otoño de Connecticut"
+    },
+    "summary": {
+     "en": "From the Connecticut Fall Assembly",
+     "es": "De la asamblea de otoño de Connecticut"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfewoE9jaEP",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfewoE9jaEP/",
+   "title": "“Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor…",
+   "summary": "“Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor calibre; frecuento diariamente a escritores; conozco a las damas y a los caballeros de ambos partidos políticos; he sido invitado de la Casa Blanca, y comido con reyes, ministros y embajadores. Tras esa enumeración, puedo decir que prefiero una velada con mis amigos de AA a una con cualquier persona o grupo de…",
+   "lang": "es",
+   "date": "2026-11-08T12:30:16Z",
+   "first_seen": "2026-11-08T14:23:27Z",
+   "image": "/assets/cache/ig/DfewoE9jaEP.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfewoE9jaEP",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfewoE9jaEP.webp",
+    "embed_url": "https://www.instagram.com/p/DfewoE9jaEP/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfewoE9jaEP/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I count among my friends the stars of theater and cinema, and other talents of younger …",
+     "es": "“Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor…"
+    },
+    "summary": {
+     "en": "“I count among my friends the stars of the theater and the cinema, and other talents of lesser calibre; I frequent writers daily; I know the ladies and the knights of both political parties; I have been invited from the White House, and eaten with kings, ministers and ambassadors. After that enumeration, I can say I prefer an evening with my AA friends to one with any person or group of …",
+     "es": "“Cuento entre mis amigos a estrellas del teatro y del cine, y a otros talentos de menor calibre; frecuento diariamente a escritores; conozco a las damas y a los caballeros de ambos partidos políticos; he sido invitado de la Casa Blanca, y comido con reyes, ministros y embajadores. Tras esa enumeración, puedo decir que prefiero una velada con mis amigos de AA a una con cualquier persona o grupo de…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfewoDmjdZY",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfewoDmjdZY/",
+   "title": "\"Only mutual trust can be the foundation for great love -- each of us for the other, and…",
+   "summary": "\"Only mutual trust can be the foundation for great love -- each of us for the other, and all of us for God.” AA Co-Founder, Bill W., November 1960, “Freedom Under God: The Choice Is Ours”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-08T12:30:16Z",
+   "first_seen": "2026-11-08T14:23:27Z",
+   "image": "/assets/cache/ig/DfewoDmjdZY.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfewoDmjdZY",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfewoDmjdZY.webp",
+    "embed_url": "https://www.instagram.com/p/DfewoDmjdZY/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfewoDmjdZY/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "\"Only mutual trust can be the foundation for great love -- each of us for the other, and…",
+     "es": "\"Sólo la confianza mutua puede ser la base para el gran amor - cada uno de nosotros para el otro, y …"
+    },
+    "summary": {
+     "en": "\"Only mutual trust can be the foundation for great love -- each of us for the other, and all of us for God.” AA Co-Founder, Bill W., November 1960, “Freedom Under God: The Choice Is Ours”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "\"Sólo la confianza mutua puede ser la base para el gran amor, cada uno de nosotros para el otro, y todos nosotros para Dios.\" AA cofundador, Bill W., noviembre de 1960, “libertad bajo Dios: la elección es nuestra”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfdMF0xAfR5",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfdMF0xAfR5/",
+   "title": "We’re at the Area 24, District 11 Mini Conference",
+   "summary": "We’re at the Area 24, District 11 Mini Conference",
+   "lang": "en",
+   "date": "2026-11-07T21:52:17Z",
+   "first_seen": "2026-11-08T14:23:27Z",
+   "image": "/assets/cache/ig/DfdMF0xAfR5.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfdMF0xAfR5",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfdMF0xAfR5.webp",
+    "embed_url": "https://www.instagram.com/p/DfdMF0xAfR5/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfdMF0xAfR5/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We’re at the Area 24, District 11 Mini Conference",
+     "es": "Estamos en la Área 24, Distrito 11 Mini Conferencia"
+    },
+    "summary": {
+     "en": "We’re at the Area 24, District 11 Mini Conference",
+     "es": "Estamos en la Área 24, Distrito 11 Mini Conferencia"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfcL1NfjZ_n",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfcL1NfjZ_n/",
+   "title": "“It is our experience as alcoholics that makes us of unique value ... We can approach…",
+   "summary": "“It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.” “A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-07T12:30:16Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/DfcL1NfjZ_n.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfcL1NfjZ_n",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfcL1NfjZ_n.webp",
+    "embed_url": "https://www.instagram.com/p/DfcL1NfjZ_n/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfcL1NfjZ_n/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“It is our experience as alcoholics that makes us of unique value ... We can approach…",
+     "es": "“Es nuestra experiencia como alcohólicos lo que nos hace de valor único... Podemos acercarnos a …"
+    },
+    "summary": {
+     "en": "“It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.” “A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Es nuestra experiencia como alcohólicos lo que nos hace de valor único... Podemos acercarnos a los que sufren como nadie más puede.” “Un mensaje unido de recuperación”, Decatur, Georgia, mayo de 1994, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfcL1OBDRYS",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfcL1OBDRYS/",
+   "title": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”.",
+   "summary": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”. \"“Paso a paso” MAYO DE 1953 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-07T12:30:15Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/DfcL1OBDRYS.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfcL1OBDRYS",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfcL1OBDRYS.webp",
+    "embed_url": "https://www.instagram.com/p/DfcL1OBDRYS/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfcL1OBDRYS/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Happiness is not a station to which we arrive, but a way to travel.”",
+     "es": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”."
+    },
+    "summary": {
+     "en": "“Happiness is not a station to which we arrive, but a way to travel.” \"Paso a paso\" May 1953 From AA Grapevine Daily Quote in www.aalavina.org",
+     "es": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”. \"“Paso a paso” MAYO DE 1953 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dfb6ZgtA-xc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfb6ZgtA-xc/",
+   "title": "This week Vera welcomes Bonnie and Kathi.",
+   "summary": "This week Vera welcomes Bonnie and Kathi.",
+   "lang": "en",
+   "date": "2026-11-07T10:01:37Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/Dfb6ZgtA-xc.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfb6ZgtA-xc",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfb6ZgtA-xc.webp",
+    "embed_url": "https://www.instagram.com/p/Dfb6ZgtA-xc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfb6ZgtA-xc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "This week Vera welcomes Bonnie and Kathi.",
+     "es": "Esta semana Vera da la bienvenida a Bonnie y Kathi."
+    },
+    "summary": {
+     "en": "This week Vera welcomes Bonnie and Kathi.",
+     "es": "Esta semana Vera da la bienvenida a Bonnie y Kathi."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfbA8Y2GwNg",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfbA8Y2GwNg/",
+   "title": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape…",
+   "summary": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape suit🍇💜",
+   "lang": "en",
+   "date": "2026-11-07T01:35:39Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/DfbA8Y2GwNg.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfbA8Y2GwNg",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DfbA8Y2GwNg.webp",
+    "embed_url": "https://www.instagram.com/p/DfbA8Y2GwNg/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfbA8Y2GwNg/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape…",
+     "es": "Chip, un trabajador especial de la oficina central de Florida Intergrupo, muestra su uva …"
+    },
+    "summary": {
+     "en": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape suit🍇💜",
+     "es": "Chip, un trabajador especial de la oficina central de Florida Intergrupo, muestra su traje de uva 🍇💜"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dfa_1ebsYrH",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfa_1ebsYrH/",
+   "title": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede…",
+   "summary": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede: Area Sonora Sur, México. “Un Mensaje de Vida”",
+   "lang": "es",
+   "date": "2026-11-07T01:27:35Z",
+   "first_seen": "2026-11-07T14:09:58Z",
+   "image": "/assets/cache/ig/Dfa_1ebsYrH.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfa_1ebsYrH",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfa_1ebsYrH.webp",
+    "embed_url": "https://www.instagram.com/p/Dfa_1ebsYrH/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfa_1ebsYrH/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Today, November 6 starts the 39th Congress of the Western North Region. Headquarters …",
+     "es": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede…"
+    },
+    "summary": {
+     "en": "Today Friday November 6 starts the 39th Congress of the Western North Region. Headquarters: sound Area south, Mexico. “A Message of Life”",
+     "es": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede: Area Sonora Sur, México. “Un Mensaje de Vida”"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfZnCc3jSAi",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfZnCc3jSAi/",
+   "title": "“El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta…",
+   "summary": "“El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta, sin importar cuán grave sea, debemos entender que también tiene un propósito. Es nuestro gran maestro, porque nos revela nuestros defectos y, así, nos empuja hacia el camino del progreso. El dolor que nos causaba la bebida hacía lo mismo. Y lo mismo hará cualquier otro dolor”. \"Editorial BILL W., COFUNDADOR DE…",
+   "lang": "es",
+   "date": "2026-11-06T12:30:17Z",
+   "first_seen": "2026-11-06T15:11:49Z",
+   "image": "/assets/cache/ig/DfZnCc3jSAi.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfZnCc3jSAi",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfZnCc3jSAi.webp",
+    "embed_url": "https://www.instagram.com/p/DfZnCc3jSAi/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfZnCc3jSAi/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Suffering is no longer a threat to evade at any cost. When presented …",
+     "es": "“El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta…"
+    },
+    "summary": {
+     "en": "“Suffering is no longer a threat to evade at any cost. When presented, no matter how serious it is, we must understand that it also has a purpose. He is our great teacher, because he reveals our flaws and thus pushes us to the way of progress. The pain that caused us the drink did the same thing. And the same will do any other pain.” \"Bill W. edition, … co-founder",
+     "es": "“El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta, sin importar cuán grave sea, debemos entender que también tiene un propósito. Es nuestro gran maestro, porque nos revela nuestros defectos y, así, nos empuja hacia el camino del progreso. El dolor que nos causaba la bebida hacía lo mismo. Y lo mismo hará cualquier otro dolor”. \"Editorial BILL W., COFUNDADOR DE…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfZnCS5DR-9",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfZnCS5DR-9/",
+   "title": "“All AA progress can be reckoned in terms of just two words: humility and responsibility.”",
+   "summary": "“All AA progress can be reckoned in terms of just two words: humility and responsibility.” AA Co-Founder, Bill W., January 1966, “The Guidance of AA’s World Affairs”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-06T12:30:14Z",
+   "first_seen": "2026-11-06T15:11:49Z",
+   "image": "/assets/cache/ig/DfZnCS5DR-9.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfZnCS5DR-9",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfZnCS5DR-9.webp",
+    "embed_url": "https://www.instagram.com/p/DfZnCS5DR-9/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfZnCS5DR-9/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“All AA progress can be reckoned in terms of just two words: humility and responsibility.”",
+     "es": "“Todos los avances AA se pueden considerar en términos de sólo dos palabras: humildad y responsabilidad.”"
+    },
+    "summary": {
+     "en": "“All AA progress can be reckoned in terms of just two words: humility and responsibility.” AA Co-Founder, Bill W., January 1966, “The Guidance of AA’s World Affairs”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "“Todos los avances AA se pueden considerar en términos de sólo dos palabras: humildad y responsabilidad.” AA cofundador, Bill W., enero de 1966, “la guía de los asuntos mundiales de AA”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfYRRWjCWlN",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfYRRWjCWlN/",
+   "title": "We’re at the Intergroup and Central Office Seminar (ICOAA), with people from the front…",
+   "summary": "We’re at the Intergroup and Central Office Seminar (ICOAA), with people from the front lines.",
+   "lang": "en",
+   "date": "2026-11-06T00:00:36Z",
+   "first_seen": "2026-11-06T15:11:49Z",
+   "image": "/assets/cache/ig/DfYRRWjCWlN.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfYRRWjCWlN",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DfYRRWjCWlN.webp",
+    "embed_url": "https://www.instagram.com/p/DfYRRWjCWlN/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfYRRWjCWlN/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We’re at the Intergroup and Central Office Seminar (ICOAA), with people from the front…",
+     "es": "Estamos en el Seminario Intergrupo y Oficina Central (ICOAA), con personas del frente …"
+    },
+    "summary": {
+     "en": "We’re at the Intergroup and Central Office Seminar (ICOAA), with people from the front lines.",
+     "es": "Estamos en el Seminario Intergrupo y Oficina Central (ICOAA), con gente de las líneas delanteras."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfXFrJMDcxG",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfXFrJMDcxG/",
+   "title": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…",
+   "summary": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…",
+   "lang": "es",
+   "date": "2026-11-05T13:00:15Z",
+   "first_seen": "2026-11-05T15:36:24Z",
+   "image": "/assets/cache/ig/DfXFrJMDcxG.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfXFrJMDcxG",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfXFrJMDcxG.webp",
+    "embed_url": "https://www.instagram.com/p/DfXFrJMDcxG/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfXFrJMDcxG/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, La Viña performs an open virtual meeting of AA with a host and two …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…"
+    },
+    "summary": {
+     "en": "Each week, La Viña holds an open virtual meeting of AA with a host and two speakers. To join the live meeting on Thursdays at 12:00 p.m. (Eastern time), use the Zoom 871 2036 8287 code with the password 238047. Is Thursday not a good time? Listen to the meeting at our new podcast and YouTube. The podcast respects anonymity and is available in the main …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfXCPc4DZAr",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfXCPc4DZAr/",
+   "title": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A…",
+   "summary": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A veces, debes reírte de ti mismo junto con Él”. \"“La sobriedad para nosotros mismos” NUEVA YORK, NUEVA YORK, NOVIEMBRE DE 1946 De Thank You for Sharing\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-05T12:30:15Z",
+   "first_seen": "2026-11-05T15:36:24Z",
+   "image": "/assets/cache/ig/DfXCPc4DZAr.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfXCPc4DZAr",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfXCPc4DZAr.webp",
+    "embed_url": "https://www.instagram.com/p/DfXCPc4DZAr/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfXCPc4DZAr/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Laughter is one of the greatest and most beneficial gifts God made to us. A…",
+     "es": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A…"
+    },
+    "summary": {
+     "en": "“Laughter is one of the greatest and most beneficial gifts God made to us. Sometimes you must laugh at yourself together with Him.” \"The sobriety for ourselves\" NEW YORK, NEW YORK, NOVEMBER 1946 From Thank You for Sharing Daily Quote in www.aalavina.org",
+     "es": "“La risa es uno de los regalos más grandes y más beneficiosos que Dios nos hizo. A veces, debes reírte de ti mismo junto con Él”. \"“La sobriedad para nosotros mismos” NUEVA YORK, NUEVA YORK, NOVIEMBRE DE 1946 De Thank You for Sharing\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfXCPa-DcE6",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfXCPa-DcE6/",
+   "title": "“Good things increase in direct proportion to my willingness to become teachable.”",
+   "summary": "“Good things increase in direct proportion to my willingness to become teachable.” “Freedom Began in Prison,” Universal City, California, February 1970, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-05T12:30:15Z",
+   "first_seen": "2026-11-05T15:36:24Z",
+   "image": "/assets/cache/ig/DfXCPa-DcE6.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfXCPa-DcE6",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfXCPa-DcE6.webp",
+    "embed_url": "https://www.instagram.com/p/DfXCPa-DcE6/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfXCPa-DcE6/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Good things increase in direct proportion to my willingness to become teachable.”",
+     "es": "“Las cosas buenas aumentan en proporción directa a mi voluntad de ser enseñable.”"
+    },
+    "summary": {
+     "en": "“Good things increase in direct proportion to my willingness to become teachable.” “Freedom Began in Prison,” Universal City, California, February 1970, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Las cosas buenas aumentan en proporción directa a mi voluntad de ser enseñable.” “La libertad comenzó en prisión”, ciudad Universal, California, febrero de 1970, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfUg4WIjT9T",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUg4WIjT9T/",
+   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+   "lang": "en",
+   "date": "2026-11-04T13:00:16Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUg4WIjT9T.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUg4WIjT9T",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUg4WIjT9T.webp",
+    "embed_url": "https://www.instagram.com/p/DfUg4WIjT9T/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUg4WIjT9T/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
+    },
+    "summary": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfUg4TXjYEB",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUg4TXjYEB/",
+   "title": "Humor noviembre/diciembre 2026",
+   "summary": "Humor noviembre/diciembre 2026 ¡Y pensar en toda la diversión de las vacaciones que te perdiste por estar sentado en el bar! —John B. Grapevine, diciembre de 2025 Fuente: Revista Grapevine diciembre de 2025 www.aalavina.org/revista/noviembre-diciembre-2026/humor-noviembrediciembre-2026",
+   "lang": "es",
+   "date": "2026-11-04T13:00:15Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUg4TXjYEB.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUg4TXjYEB",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUg4TXjYEB.webp",
+    "embed_url": "https://www.instagram.com/p/DfUg4TXjYEB/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUg4TXjYEB/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Humor November / December 2026",
+     "es": "Humor noviembre/diciembre 2026"
+    },
+    "summary": {
+     "en": "Humor November / December 2026 And think of all the fun of the vacation you missed for sitting in the bar! —John B. Grapevine, December 2025 Source: Grapevine December 2025 www.aalavina.org/revista/noviembre-diciembre-2026/humor-noviembrediciembre-2026",
+     "es": "Humor noviembre/diciembre 2026 ¡Y pensar en toda la diversión de las vacaciones que te perdiste por estar sentado en el bar! —John B. Grapevine, diciembre de 2025 Fuente: Revista Grapevine diciembre de 2025 www.aalavina.org/revista/noviembre-diciembre-2026/humor-noviembrediciembre-2026"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfUfKh9jaJn",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUfKh9jaJn/",
+   "title": "At Wit's End of November 2026",
+   "summary": "At Wit's End of November 2026 “We better get these Steps done before Thanksgiving!” —Joe H., Powell River, British Columbia Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
+   "lang": "en",
+   "date": "2026-11-04T12:45:16Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUfKh9jaJn.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUfKh9jaJn",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUfKh9jaJn.webp",
+    "embed_url": "https://www.instagram.com/p/DfUfKh9jaJn/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUfKh9jaJn/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "At Wit's End of November 2026",
+     "es": "At Wit's End de noviembre de 2026"
+    },
+    "summary": {
+     "en": "At Wit's End of November 2026 “We better get these Steps done before Thanksgiving!” —Joe H., Powell River, British Columbia Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
+     "es": "¡At Wit's End de noviembre de 2026 “Es mejor que hagamos estos pasos antes de Acción de Gracias!” —Joe H., Powell River, British Columbia Flex your gracioso bone Si una gran capción brota a la mente cuando miras nuestras siguientes imágenes de dibujos animados. www.aagrapevine.org/submit-caption"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfUdcnTjbp1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUdcnTjbp1/",
+   "title": "“We shall never be at our best except when we hew only to the primary spiritual aim of…",
+   "summary": "“We shall never be at our best except when we hew only to the primary spiritual aim of AA. That of carrying its message to the alcoholic who still suffers alcoholism.” AA Co-Founder, Bill W., April 1948, “Tradition Five”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-04T12:30:15Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUdcnTjbp1.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUdcnTjbp1",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUdcnTjbp1.webp",
+    "embed_url": "https://www.instagram.com/p/DfUdcnTjbp1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUdcnTjbp1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We shall never be at our best except when we hew only to the primary spiritual aim of…",
+     "es": "“Nunca estaremos al mejor de nosotros excepto cuando jueguemos solamente al objetivo espiritual primario de …"
+    },
+    "summary": {
+     "en": "“We shall never be at our best except when we hew only to the primary spiritual aim of AA. That of carrying its message to the alcoholic who still suffers alcoholism.” AA Co-Founder, Bill W., April 1948, “Tradition Five”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "“Nunca estaremos al mejor de nosotros excepto cuando jueguemos solamente al objetivo espiritual primario de AA. El de llevar su mensaje al alcohólico que todavía sufre el alcoholismo”. AA cofundador, Bill W., abril de 1948, “Quinta Tradición”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfUdce4DXYQ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfUdce4DXYQ/",
+   "title": "“Hay más errores por enmendar, cartas por enviar, trabajo de Paso Doce por hacer…",
+   "summary": "“Hay más errores por enmendar, cartas por enviar, trabajo de Paso Doce por hacer, responsabilidades por asumir y charlas honestas por mantener con nuestros seres queridos. La vida es para vivirla enfrentando los desafíos que nos depara. De otra forma, no vivo, sólo existo”. \"“La vida es para vivirla” SPRING HILL, FLORIDA, SEPTIEMBRE DE 1985 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en…",
+   "lang": "es",
+   "date": "2026-11-04T12:30:14Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfUdce4DXYQ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfUdce4DXYQ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfUdce4DXYQ.webp",
+    "embed_url": "https://www.instagram.com/p/DfUdce4DXYQ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfUdce4DXYQ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“There are more errors to be amended, letters to be sent, Step Twelve work to make …",
+     "es": "“Hay más errores por enmendar, cartas por enviar, trabajo de Paso Doce por hacer…"
+    },
+    "summary": {
+     "en": "“There are more mistakes to amend, letters to send, Step Twelve work to do, responsibilities to assume and honest talks to keep with our loved ones. Life is to live it facing the challenges that stop us. Otherwise, I don’t live, I only exist.” \"Life is to live it\" SPRING HILL, FLORIDA, SEPTEMBER 1985 From the best of the Grapevine, Volume III\" Daily Quote in …",
+     "es": "“Hay más errores por enmendar, cartas por enviar, trabajo de Paso Doce por hacer, responsabilidades por asumir y charlas honestas por mantener con nuestros seres queridos. La vida es para vivirla enfrentando los desafíos que nos depara. De otra forma, no vivo, sólo existo”. \"“La vida es para vivirla” SPRING HILL, FLORIDA, SEPTIEMBRE DE 1985 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfSsJm1kTMA",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfSsJm1kTMA/",
+   "title": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…",
+   "summary": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…",
+   "lang": "es",
+   "date": "2026-11-03T20:00:16Z",
+   "first_seen": "2026-11-04T15:32:55Z",
+   "image": "/assets/cache/ig/DfSsJm1kTMA.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfSsJm1kTMA",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfSsJm1kTMA.webp",
+    "embed_url": "https://www.instagram.com/p/DfSsJm1kTMA/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfSsJm1kTMA/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, La Viña performs an open virtual meeting of AA with a host and two …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…"
+    },
+    "summary": {
+     "en": "Each week, La Viña holds an open virtual meeting of AA with a host and two speakers. To join the live meeting on Thursdays at 12:00 p.m. (Eastern time), use the Zoom 871 2036 8287 code with the password 238047. Is Thursday not a good time? Listen to the meeting at our new podcast and YouTube. The podcast respects anonymity and is available in the main …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfR4ptKl7A6",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfR4ptKl7A6/",
+   "title": "“The rewards of asking for help – increased humility, connection, and trust – are well…",
+   "summary": "“The rewards of asking for help – increased humility, connection, and trust – are well worth the effort.” “H-E-L-P,” Phoenix, Arizona, April 2011, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-03T12:30:15Z",
+   "first_seen": "2026-11-03T15:18:54Z",
+   "image": "/assets/cache/ig/DfR4ptKl7A6.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfR4ptKl7A6",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfR4ptKl7A6.webp",
+    "embed_url": "https://www.instagram.com/p/DfR4ptKl7A6/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfR4ptKl7A6/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The rewards of asking for help – increased humility, connection, and trust – are well…",
+     "es": "“Las recompensas de pedir ayuda – mayor humildad, conexión y confianza – están bien …"
+    },
+    "summary": {
+     "en": "“The rewards of asking for help – increased humility, connection, and trust – are well worth the effort.” “H-E-L-P,” Phoenix, Arizona, April 2011, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Las recompensas de pedir ayuda – aumento de la humildad, la conexión y la confianza – valen la pena el esfuerzo”. “H-E-L-P,” Phoenix, Arizona, abril de 2011, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfR4pn8lwha",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfR4pn8lwha/",
+   "title": "“Hallé el sosiego, el amor y el apoyo que necesitaba para rearmar las piezas de mi vida…",
+   "summary": "“Hallé el sosiego, el amor y el apoyo que necesitaba para rearmar las piezas de mi vida y, habiendo atravesado contratiempos, seguir adelante. No estoy solo en este trayecto”. \"“Nunca más solo” FLUSHING, NUEVA YORK, MARZO DE 1995 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-03T12:30:14Z",
+   "first_seen": "2026-11-03T15:18:54Z",
+   "image": "/assets/cache/ig/DfR4pn8lwha.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfR4pn8lwha",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfR4pn8lwha.webp",
+    "embed_url": "https://www.instagram.com/p/DfR4pn8lwha/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfR4pn8lwha/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I made the dream, the love and the support I needed to rearm the pieces of my life …",
+     "es": "“Hallé el sosiego, el amor y el apoyo que necesitaba para rearmar las piezas de mi vida…"
+    },
+    "summary": {
+     "en": "“I made the dream, the love and the support I needed to rearm the pieces of my life and, having gone through setbacks, go ahead. I'm not alone on this path.” \"Never more alone\" flushing, New York, March 1995 Best of the Grapevine, Volume III\" Daily Quote in www.aalavina.org",
+     "es": "“Hallé el sosiego, el amor y el apoyo que necesitaba para rearmar las piezas de mi vida y, habiendo atravesado contratiempos, seguir adelante. No estoy solo en este trayecto”. \"“Nunca más solo” FLUSHING, NUEVA YORK, MARZO DE 1995 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfQaE78AU9w",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfQaE78AU9w/",
+   "title": "Adi thinks Dolores needs some Grapevine time.",
+   "summary": "Adi thinks Dolores needs some Grapevine time.",
+   "lang": "en",
+   "date": "2026-11-02T22:45:56Z",
+   "first_seen": "2026-11-03T15:18:54Z",
+   "image": "/assets/cache/ig/DfQaE78AU9w.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfQaE78AU9w",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfQaE78AU9w.webp",
+    "embed_url": "https://www.instagram.com/p/DfQaE78AU9w/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfQaE78AU9w/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Adi thinks Dolores needs some Grapevine time.",
+     "es": "Adi cree que Dolores necesita tiempo Grapevine."
+    },
+    "summary": {
+     "en": "Adi thinks Dolores needs some Grapevine time.",
+     "es": "Adi cree que Dolores necesita tiempo Grapevine."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfQAjyIvqBJ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfQAjyIvqBJ/",
+   "title": "La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores.",
+   "summary": "La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información.",
+   "lang": "es",
+   "date": "2026-11-02T19:00:14Z",
+   "first_seen": "2026-11-03T15:18:54Z",
+   "image": "/assets/cache/ig/DfQAjyIvqBJ.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfQAjyIvqBJ",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DfQAjyIvqBJ.webp",
+    "embed_url": "https://www.instagram.com/p/DfQAjyIvqBJ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfQAjyIvqBJ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña will hold a virtual open meeting of AA with one coordinator and two speakers.",
+     "es": "La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores."
+    },
+    "summary": {
+     "en": "La Viña will hold a virtual open meeting of AA with one coordinator and two speakers. The poster will respect anonymity and will be available on the main platforms. Very soon more information.",
+     "es": "La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfPT2wZlz1i",
    "source": "instagram",
@@ -1054,7 +2565,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfAITC9DS8g",
@@ -1097,7 +2608,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De_wOH8jVeC",
@@ -1140,7 +2651,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De_wOGujUKO",
@@ -1183,7 +2694,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De9LbMcjfh1",
@@ -1226,7 +2737,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De9LbN9DR-M",
@@ -1269,7 +2780,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De9HiSMgXPS",
@@ -1312,7 +2823,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De6-qavDemq",
@@ -1355,7 +2866,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De6-qbSDbyo",
@@ -1398,7 +2909,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De6moYvjS1p",
@@ -1441,7 +2952,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De6moYrjRE7",
@@ -1484,7 +2995,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De4Z3kml5s5",
@@ -1527,7 +3038,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De4Z3oQFyLH",
@@ -1570,7 +3081,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De4B1cwF7TM",
@@ -1613,7 +3124,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De4B1blF5QL",
@@ -1656,7 +3167,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De3BeoJjFUs",
@@ -1699,7 +3210,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De1dClCjWPr",
@@ -1742,7 +3253,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De1dCpIjQSb",
@@ -1785,7 +3296,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:De1ciZyg92U",
@@ -1828,7 +3339,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DezQXalP5_a",
@@ -1871,7 +3382,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DezQX9WydDC",
@@ -1914,7 +3425,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Dey4PwaDdfm",
@@ -1957,7 +3468,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Dey4PvWjRuh",
@@ -2000,7 +3511,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DexN0JlDhyO",
@@ -2043,7 +3554,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DewhTx7RbH_",
@@ -2086,7 +3597,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DewhNVqjeSy",
@@ -2129,7 +3640,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DewTcznDckq",
@@ -2172,7 +3683,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DewTc02DffK",
@@ -2215,7 +3726,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeuGuAgmrsA",
@@ -2258,7 +3769,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DeuGtQiCc4j",
@@ -2301,7 +3812,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Detup87FzKQ",
@@ -2344,7 +3855,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Detup7GFy91",
@@ -2387,7 +3898,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Derh5O8l7Ms",

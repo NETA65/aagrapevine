@@ -114,7 +114,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
   <div class="home-meet-actions">
     <a class="{{ 'btn-light' if dark else 'btn-primary' }} home-meet-join" href="{{ mt.online_url }}" target="_blank" rel="noopener">{% icon "video", "size-4" %} {{ "home.meeting_join" | t(L, pf) }}<span class="sr-only"> {{ "home.opens_new_tab" | t(L) }}</span></a>
     <button type="button" class="{{ 'btn-on-dark' if dark else 'btn-secondary' }} btn-sm" x-show="ready" x-cloak @click="addToCalendar()" title="{{ 'common.add_to_calendar' | t(L) }}">{% icon "calendar-plus", "size-4" %} {{ "home.meeting_add_cal" | t(L) }}</button>
-    <a class="{{ 'btn-on-dark' if dark else 'btn-secondary' }} btn-sm home-meet-more" href="{{ '/meetings/' | lurl(L) }}">{{ "home.meeting_details_short" | t(L) }} {% icon "arrow-right", "size-3.5" %}<span class="sr-only"> — {{ "home.meeting_eyebrow" | t(L) }}</span></a>
+    <a class="{{ 'btn-on-dark' if dark else 'btn-secondary' }} btn-sm home-meet-more" href="{{ '/meetings/' | lurl(L) }}#committee-meeting">{{ "home.meeting_details_short" | t(L) }} {% icon "arrow-right", "size-3.5" %}<span class="sr-only"> — {{ "home.meeting_eyebrow" | t(L) }}</span></a>
   </div>
 </div>
 {% endmacro %}
@@ -373,7 +373,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {% set vids = D.videos.items | homeVideos(5, ep, moreEps) %}
 {% set newestPdfs = D.pdfs.items | homeNewestPdfs(6) %}
 {% set posts = D.instagram.items | homeInstagram(6) %}
-{% set driveItems = D.drive.items | homeDrive(6) %}
+{#- a store offer's banners stay on /shop/#offers, beside its conditions (config/site.yml store_offers) -#}
+{% set driveItems = D.drive.items | homeDrive(6, site | shopOfferBanners(D.drive.items)) %}
 
 {#- =====================================================================
     4. THE BULLETIN — its latest posts, pinned first; left out when there are none. The first

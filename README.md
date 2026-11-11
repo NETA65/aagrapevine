@@ -42,7 +42,9 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   (tarjetas de ocasión, agenda de bolsillo, calendario de pared y, en temporada, las tarjetas para las
   fiestas), leídos cada semana. Cuando AA Grapevine anuncia **nuevos precios**, un bloque en `config/site.yml`
   (`price_changes:`) los avisa desde el día del anuncio y los pone solos en su día (sección
-  [When Grapevine announces new prices](#when-grapevine-announces-new-prices)). En **Suscribe a tu grupo base**,
+  [When Grapevine announces new prices](#when-grapevine-announces-new-prices)). Una **oferta de las tiendas** (el
+  envío gratis del 1 de noviembre al 31 de diciembre de 2026) va en `config/site.yml` (`store_offers:`) y se ve
+  arriba en la Tienda (`/es/shop/#offers`) solo durante sus días. En **Suscribe a tu grupo base**,
   la tarjeta **Lo que costaría** (`/es/shop/#group-cost`) calcula lo que costaría una suscripción del grupo
   (revista, formato, duración y número de ejemplares, con los precios por cantidad) e imprime una **hoja
   informativa** de una página para la conciencia de grupo (en inglés, en español o bilingüe). Para quien quiere
@@ -279,8 +281,8 @@ refresh (GitHub schedule)", "Evening refresh (GitHub schedule)", "Morning refres
 | **Instagram** (@alcoholicsanonymous_gv, @alcoholicosanonimos_lv) | Newest posts — see [section 9](#9-instagram-how-the-site-reads-it-please-read) | **Instagram** |
 | **Committee Google Drive** | Reports, notes, slides, workshops, forms, photo albums; dated flyers → events; docs in *bulletin* → bulletin posts | **Portfolio · Photos · Events · Bulletin** |
 | **Editorial calendar** (Grapevine), **yearly themes** (La Viña: the "Temas de LV" document on aalavina.org/recursos) and suggested topics (both: La Viña's *temas sugeridos*; the departments and "always in need of" topics Grapevine's /contribute page names) | Upcoming themes and story deadlines of both magazines, and the topics they take any time | **Contribute** (also the monthly toolkit, the district report, Home and the workshop presentations; the story recorder's topic list; the [story deadlines calendar](#calendar-files-story-deadlines-and-reminders), `/deadlines.ics`) |
-| **Grapevine Weekly Open meeting** (web page) | Current day, time and Zoom details | **Meetings** |
-| **La Viña's weekly open meeting** (from the settings, `lavina_weekly_open:` — an official La Viña flyer) | Thursdays in Spanish, first date, Zoom details | **Meetings** (one line on Home · Listen · Watch · monthly posters) |
+| **Grapevine Weekly Open meeting** (web page) | Current day, time and Zoom details | **Meetings** (a card on **Events**, without the Zoom details) |
+| **La Viña's weekly open meeting** (from the settings, `lavina_weekly_open:` — an official La Viña flyer) | Thursdays in Spanish, first date, Zoom details | **Meetings** (a card on **Events**; one line on Home · Listen · Watch · monthly posters) |
 | **Official stores** (aagrapevine.org / aalavina.org store pages) | **Book of the Month** (title, cover, percent, sale price, dates) and **subscription prices** per region (U.S. · Canada · International; print / digital / complete); once a week the **specialty items** — greeting cards, pocket planner, wall calendar and, in season, the holiday cards (picture, price, pack size, volume price, a short description) | **Shop** (a short teaser on Home, the monthly posters and the monthly toolkit) |
 | **Daily quote** (the home pages of aagrapevine.org and aalavina.org) | Grapevine's *Daily Quote* and La Viña's *Cita Diaria*: the quote as published (never translated), who said it, the book it comes from, the official e-mail sign-up — under them the publishers' permission credits ("Reprinted with permission of A.A. World Services, Inc." · "Copyright © The AA Grapevine, Inc. Reprinted with permission. All rights reserved.") | **Home** |
 | **Record your story by phone** (aagrapevine.org/audio-portal, aalavina.org/graba-tu-historia) | Grapevine's *Audio Project* and La Viña's *Graba tu historia*: the phone number, the keys to press, the length, the e-mail address for recordings, Grapevine's story playlists | **Share your story** (`/contribute/#record`: the steps by phone, and above them the [story recorder](#the-story-recorder-share-your-story), with the same lengths, addresses and La Viña's permission sentence as the steps; one link on Listen · Watch) |
@@ -304,6 +306,13 @@ the old `/subscribe/` address redirects there, #anchors included).
 
 What the newer pages do:
 
+- **An offer from the stores** (`/shop/#offers`, since November 2026): while AA Grapevine and La Viña run an offer
+  — free shipping on all products to U.S. and Canadian addresses, November 1 – December 31, 2026 — it shows right
+  under the Shop's menu: its days, one card per store (La Viña's first on `/es/shop/`) with the store's own banner
+  from the Drive `flyers` folder, what that store says (Grapevine's offer can't be combined with any other) and a
+  button to the store. The monthly toolkit names it in the months it runs (*Keep up all month* and the month's
+  message). It is written in `config/site.yml` → `store_offers:` (the stores' pages can't be read for it) and
+  leaves by itself the day after its last day: [settings.md §3.4b](how-to/settings.md#34b-store_offers--offers-the-stores-announce).
 - **Book of the Month** (`/shop/#botm`): both magazines' books of the month with cover, percent off, sale and
   regular price, the offer's dates and a live "N days left" count; the heading and buttons switch to
   "Offer ended" by themselves on the last day, even before the next update. The home page shows a small teaser.
@@ -405,12 +414,18 @@ What the newer pages do:
   meetings** of local groups (`#grapevine-meetings`: our Area first, then each nearby area — filters for place,
   day, in person / online and "include nearby areas"; each card links to the meeting's page on the office's site, which has the
   joining details and any changes), and the weekly open meetings (`#weekly-open`: each has **Add to calendar**, a
-  weekly repeating entry for Google Calendar or as a calendar file for Apple and Outlook).
+  weekly repeating entry for Google Calendar or as a calendar file for Apple and Outlook). On the page the weekly
+  open meetings come first, right under *New to AA?* (open meetings: anyone interested in AA is welcome), then the
+  committee meeting and the rest of the page, the Grapevine meetings of local groups last; the hero's jump links
+  lead to the Grapevine meetings, the weekly open meetings and the committee meeting. A link to the old `/meeting/`
+  address without an `#anchor` opens the committee meeting (`#committee-meeting`), as that page did.
 - **Districts** page: removed. Its one piece of its own, the GV/LV report, lives at `/monthly/#report`
   (found in the site search by "district" / "report", "distrito" / "informe"); `/districts/` forwards there.
 - **La Viña's weekly open meeting**: `/meetings/#weekly-open` shows both public weekly meetings (Grapevine on
   Wednesdays in English, La Viña on Thursdays in Spanish) with day, time and Zoom details — the one place
-  with those details; other pages link there.
+  with those details; other pages link there. The **Events** page lists both too, under *Weekly open meetings*
+  (`#ev-weekly`, right under the next committee meeting): each with *Every week*, its next date, **How to join**
+  (to `/meetings/#weekly-open`) and **Add to calendar** — never in the month list or the calendar feed.
 - **Published writers** (`/published/`): the stories of the last 60 or 90 days by writers from Area 65, the rest of
   Texas or anywhere, and below them **"Texas writers through the years"** (`#archive`): every story by a Texas
   writer in the magazines' online archives, grouped by decade, Area 65 first (the rest of Texas loads when a visitor
@@ -518,12 +533,28 @@ breaks while you decide.
   this site) — OK?
 - **New to AA?:** all the card's words; "¿Eres nuevo en AA?" (masculine — "¿Llegas por primera vez a AA?" is an
   option); "tú" (the site's voice) where aa.org says "usted"; whether District 71 AA (a district site) stays in
-  the office list; whether the card stays first on Meetings (on a phone the committee meeting now starts about
-  one screen lower); and whether About's "Find an AA meeting" should link aa.org's *Find AA* page.
+  the office list; whether the card stays first on Meetings (on a phone it adds about one screen; with the weekly
+  open meetings after it, the committee meeting now starts about four screens down — the hero's *Committee
+  meeting* button jumps there); and whether About's "Find an AA meeting" should link aa.org's *Find AA* page.
 - **What it would cost (Shop):** the sheet's Tradition line; that a group can order a multi-copy subscription
   online **and** with the order form; "The store will list the new volume prices"; that AA Grapevine's letter
   names no new price for the 2- and 3-year, Complete and 1-month plans; the Spanish labels ("Lo que costaría",
   "Duración", "Hoja informativa"); U.S. prices only.
+- **Free shipping (November 2026):** the Shop's *Offer from the official stores* (`/shop/#offers`, `/es/shop/#offers`),
+  its line in the monthly toolkit, and the pinned bulletin post *Free shipping at the Grapevine and La Viña stores
+  through December 31*. The facts are those of AA Grapevine's and La Viña's e-mails of November 2 and the two
+  stores' banners: free shipping on all products, November 1 – December 31, 2026, to U.S. and Canadian addresses
+  only, and (Grapevine's only) not combined with any other offer — nothing about a promo code, a minimum order,
+  subscriptions or an end hour. Please read the words in both languages (`config/site.yml` → `store_offers:` and
+  `content/bulletin/2026-11-02-free-shipping-through-december-31.md`): "Envío gratis" (La Viña's banner says
+  "Envíos gratuitos"), "banner" in Spanish, and the line for GVRs and RLVs. The two banners show on the Shop once
+  the next Drive refresh reads them; Home's *Shared by the committee* leaves them out (there a banner would stand
+  alone, cropped, without the U.S./Canada condition), but like any file in Drive `flyers` they are also listed on
+  the Portfolio, on What's New, in the feeds and in the December 1 digest, as their picture and file name only
+  (La Viña's banner says "Noviembre 1˚ - December 31"); the pinned post with the conditions sits beside them until
+  December 31 — say if they should be on the Shop only. **After December 31**, move both banners from Drive
+  `flyers` to `private` (the Shop section, the toolkit's line and the post leave by themselves, the banners do
+  not; the `store_offers:` block may then be deleted).
 - **What's New:** the words ("New since your last visit", "New for you", "Mark all as read", "Forget my last
   visit"), the 30-minute "visit" rule, and the green label.
 - **Agenda & minutes (committee meeting deck):** the reminder's Spanish paragraph ("La reunión es en inglés" —

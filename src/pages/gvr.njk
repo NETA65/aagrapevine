@@ -222,7 +222,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
             <span class="text-muted" data-gv-meeting="{{ mRule }}" data-at="{{ meeting.next.start }}" data-tpl="{time} · {{ site.meeting.platform }}">{{ meeting.next.start | fmtDate(lang, "time") }} · {{ site.meeting.platform }}</span>
           </p>
           {% endif %}
-          <a class="btn-primary mt-4" href="{{ '/meetings/' | lurl(lang) }}">{{ "read.gvr.help_btn" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
+          <a class="btn-primary mt-4" href="{{ '/meetings/' | lurl(lang) }}#committee-meeting">{{ "read.gvr.help_btn" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
         </div>
         <div class="card card-pad">
           <h3 class="card-h"><span>{% icon "mail", "size-5" %}</span>{{ "read.gvr.contact_title" | t(lang) }}</h3>
@@ -333,13 +333,16 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     mail app sends it — nothing goes through this site). No names anywhere: the texts invite, the group conscience
     decides (Tradition 4) — "service position", never "job". The messages are shown as they are copied (read.css
     .read-pass-msg keeps their lines); read.js gvrPass copies, shares and prints them. Two magazine offices'
-    addresses: config/site.yml links.gvr_office_email / rlv_office_email. -#}
+    addresses: config/site.yml links.gvr_office_email / rlv_office_email. The welcome message's meeting line links
+    the committee meeting's own section (meetingsAbs: the weekly open meetings come first on /meetings/); the
+    printed handover sheet prints the page's short address (meetingsPage: typed by hand). -#}
 {%- set gvrAbs = ('/gvr/' | lurl(lang)) | siteUrl(site) -%}
 {%- set regOrder = ["rlv", "gvr"] if lang == "es" else ["gvr", "rlv"] -%}
 {%- set committeeName = site | pick(lang, "committee") -%}
 {%- set platform = site.meeting.platform or "Zoom" -%}
 {%- set chairMail = site.meeting.chair_email or site.contact_email -%}
-{%- set meetingsAbs = ('/meetings/' | lurl(lang)) | siteUrl(site) -%}
+{%- set meetingsPage = ('/meetings/' | lurl(lang)) | siteUrl(site) -%}
+{%- set meetingsAbs = meetingsPage + "#committee-meeting" -%}
 <section id="pass-it-on" class="section container-page pt-0" aria-labelledby="pass-title" x-data="gvrPass">
   {{ ui.sectionHead("read.gvr.pass_title" | t(lang), "read.gvr.pass_sub" | t(lang), "", "", "handshake", { eyebrow: "read.gvr.pass_eyebrow" | t(lang), tone: "text-vine", id: "pass-title", lang: lang }) }}
   <ol class="grid-cards-fit [--cards-min:19rem] [--cards-max:3]" role="list">
@@ -444,7 +447,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
       <div><dt>{{ "read.gvr.hs_where" | t(lang) }}</dt><dd class="read-pass-line"></dd></div>
       <div><dt>{{ "read.gvr.hs_forms" | t(lang, { url: (gvrAbs + "#kits") | replace("https://", "") }) }}</dt><dd class="read-pass-line"></dd></div>
       <div><dt>{{ "read.gvr.hs_district" | t(lang) }}</dt><dd class="read-pass-line"></dd></div>
-      <div><dt>{{ "read.gvr.hs_committee" | t(lang) }}</dt><dd>{{ "committee.meeting.hero_sub" | t(lang, { rule: site.meeting | cmRule(lang), time: site.meeting | cmTimeRange(lang), platform: platform }) }} {{ meetingsAbs | replace("https://", "") }}</dd></div>
+      <div><dt>{{ "read.gvr.hs_committee" | t(lang) }}</dt><dd>{{ "committee.meeting.hero_sub" | t(lang, { rule: site.meeting | cmRule(lang), time: site.meeting | cmTimeRange(lang), platform: platform }) }} {{ meetingsPage | replace("https://", "") }}</dd></div>
       <div><dt>{{ "read.gvr.hs_register" | t(lang) }}</dt><dd>{% for k in regOrder %}{{ "La Viña" if k == "rlv" else "Grapevine" }}: {{ (L.rlv_register if k == "rlv" else L.gvr_register) | replace("https://", "") | replace("www.", "") }}{% if loop.first %}<br>{% endif %}{% endfor %}</dd></div>
       <div><dt>{{ "read.gvr.hs_tell" | t(lang) }}</dt><dd>
         {%- for k in regOrder %}<span class="read-pass-box"></span> {{ "La Viña" if k == "rlv" else "Grapevine" }}: {{ L.rlv_office_email if k == "rlv" else L.gvr_office_email }} &nbsp; {% endfor -%}

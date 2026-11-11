@@ -797,14 +797,16 @@ python -c "from scripts.sync import drive as D; print(D.is_generic_media_name(D.
 
 ### 7.6 Show more committee files on the home page
 
-File: [src/pages/index.njk](../src/pages/index.njk), search `homeDrive(6)`:
+File: [src/pages/index.njk](../src/pages/index.njk), search `homeDrive(6`:
 
 ```jinja
-{% set driveItems = D.drive.items | homeDrive(12) %}
+{% set driveItems = D.drive.items | homeDrive(12, site | shopOfferBanners(D.drive.items)) %}
 ```
 
 The tiles are 6 to a row on a wide screen, so 12 makes two full rows. Which files count (not events, not bulletin
-posts, not closed forms; newest by date) is the filter `homeDrive` in [home.js](../eleventy/filters/home.js).
+posts, not closed forms; newest by date) is the filter `homeDrive` in [home.js](../eleventy/filters/home.js); its
+second value leaves out a store offer's banners (`shopOfferBanners` in
+[shop.js](../eleventy/filters/shop.js): they show on `/shop/#offers`, next to the offer's conditions).
 
 ### 7.7 Add a new category with its own Portfolio tab
 

@@ -14,8 +14,13 @@
 //                               notices' views, each with the window it shows in (shopWindow)
 //   shopCost(shop, lang)      → "What it would cost" (#group-cost): the U.S. plans' prices, volume tiers and announced
 //                               changes as numbers, with the labels in both languages (assets/js/shop.js does the sums)
+//   shopOffers(site, lang, driveItems) → the offers the stores announced (config/site.yml store_offers: free
+//                               shipping …) that are not over: /shop/#offers and the monthly toolkit's rows, each with
+//                               its window (shopWindow)
+//   shopOfferBanners(site, driveItems) → the Drive ids of the banners those blocks find: Home's committee uploads
+//                               leave them out (/shop/#offers shows them, next to the offer's conditions)
 // (and, for the other filter files: shopWindow, shopPriceChangeIn, shopPlanPrice, shopNextChange, botmPriceState,
-//  dayLabel)
+//  dayLabel, shopOfferIn, offerDates)
 //
 // Announced price changes (config/site.yml price_changes → build_data → shop.json): from the day a change was
 // announced the pages say what changes; from the day it takes effect an affected 1-year plan shows its new price
@@ -28,6 +33,10 @@
 
 // (monthly.js imports this file too: the cycle is safe, both only call each other's functions.)
 import { nowDate } from "./monthly.js";
+// the store offers' days in Central time, and their banners on the committee's Drive
+import { chicagoDayEndMs, driveMatch } from "./committee.js";
+import { wallInstant } from "../central-time.js";
+import { buildWarning } from "../build-warnings.js";
 // the site's time zone: config/site.yml site.timezone (America/Chicago)
 import { TZ } from "../../eleventy.config.js";
 
@@ -559,6 +568,157 @@ export function shopPriceChangeIn(shop, first, last = first) {
   return null;
 }
 
+/* ---------------- Offers the stores announced (config/site.yml store_offers) ---------------- */
+// Each store's link (config/site.yml links) and the words of its button.
+const STORES = { gv: { link: "gv_store", label: "read.subs.gv_store" }, lv: { link: "lv_store", label: "read.subs.lv_store" } };
+// A banner in its card: Google's copy of the Drive picture, 1200px wide — sharp in a card half a computer screen
+// wide and across a phone at 3× (the stores' banners are 1920 × 770).
+const BANNER_W = 1200;
+const isoOf = (ms) => new Date(ms).toISOString().replace(/\.000Z$/, "Z");
+
+/** A day of the settings — "2026-11-01", or the date YAML makes of 2026-11-01 written without quotes — as
+ *  "YYYY-MM-DD" when it is a real calendar day, else "". */
+function offerDay(v) {
+  const s = v instanceof Date ? (isNaN(v) ? "" : v.toISOString().slice(0, 10)) : String(v ?? "").trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return "";
+  const d = new Date(Date.UTC(Number(s.slice(0, 4)), Number(s.slice(5, 7)) - 1, Number(s.slice(8, 10))));
+  return d.toISOString().slice(0, 10) === s ? s : "";
+}
+
+/** A setting in the page's language — `<name>_es` on the Spanish pages, `<name>` on the English ones —, else the one
+ *  in the other language → { text, lang } (text "" when neither is written). */
+function twinOf(o, name, lang) {
+  const val = (k) => (o && typeof o === "object" && typeof o[k] === "string" ? o[k].trim() : "");
+  const own = val(lang === "es" ? `${name}_es` : name);
+  if (own) return { text: own, lang };
+  const other = val(lang === "es" ? name : `${name}_es`);
+  return { text: other, lang: other ? (lang === "es" ? "en" : "es") : lang };
+}
+
+/** An offer's days in words, inside a sentence: "November 1 – December 31, 2026" / "del 1 de noviembre al 31 de
+ *  diciembre de 2026" (shop.offer_dates; the first day's year only when it is another one; a single day: that day).
+ *  A line of its own starts with a capital (shopOffers `dates`). */
+export function offerDates(starts, ends, lang = "en", t = (k) => k) {
+  if (!starts || !ends) return "";
+  if (starts === ends) return dayLabel(starts, lang);
+  const start = starts.slice(0, 4) === ends.slice(0, 4) ? dayMonth(starts, lang) : dayLabel(starts, lang);
+  return t("shop.offer_dates", lang, { start, end: dayLabel(ends, lang) });
+}
+
+/** The blocks of config/site.yml store_offers that can be shown (a list; one block written without its leading "- "
+ *  counts too), first day first → [{ key, starts, ends, from, until (ISO: 00:00 Central on its first day, the
+ *  midnight after its last), o (the block) }]. A block with a mistake is left out and named (`warn`: the /shop/
+ *  filter passes buildWarning — "[settings] …" is listed in Website update's run summary, and fails the Code check's
+ *  strict build): a day that cannot be read, `ends` before `starts`, no title, no words for either store, a key used
+ *  twice. A banner_match that is not a pattern is named too (that card shows without its banner). */
+function offerSpecs(site, warn = null) {
+  const raw = site && site.store_offers;
+  const list = Array.isArray(raw) ? raw : raw && typeof raw === "object" ? [raw] : [];
+  const out = [];
+  const keys = new Set();
+  for (const [i, o] of list.entries()) {
+    const say = (why, kept = false) => warn && warn("settings",
+      `store_offers entry ${i + 1}${o && o.key ? ` (${o.key})` : ""}: ${why}${kept ? "" : " — left out"}`);
+    if (!o || typeof o !== "object" || Array.isArray(o)) { say("not a block of settings"); continue; }
+    const starts = offerDay(o.starts), ends = offerDay(o.ends);
+    const bad = !starts ? ["starts", o.starts] : !ends ? ["ends", o.ends] : null;
+    if (bad) { say(`${bad[0]} “${bad[1] instanceof Date ? "?" : String(bad[1] ?? "")}” is not a day like "2026-11-01"`); continue; }
+    if (ends < starts) { say(`ends ${ends} is before starts ${starts}`); continue; }
+    if (!twinOf(o, "title", "en").text) { say("it has no title"); continue; }
+    const pubs = ["gv", "lv"].filter((pub) => twinOf(o[pub], "text", "en").text);
+    if (!pubs.length) { say("it has no text for either store (gv / lv)"); continue; }
+    const key = String(o.key ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || starts;
+    if (keys.has(key)) { say(`the key “${key}” is used twice (each offer needs its own)`); continue; }
+    keys.add(key);
+    for (const pub of pubs) {
+      const pattern = o[pub].banner_match;
+      try { if (pattern) new RegExp(String(pattern), "i"); } catch { say(`${pub} banner_match “${pattern}” is not a valid pattern — no banner`, true); }
+    }
+    out.push({ key, starts, ends, from: isoOf(wallInstant(starts, "00:00", TZ)), until: isoOf(chicagoDayEndMs(ends)), o });
+  }
+  return out.sort((a, b) => a.starts.localeCompare(b.starts) || a.key.localeCompare(b.key));
+}
+
+/**
+ * The offers the stores announced (config/site.yml store_offers) that are not over at `now`, first day first → [{
+ *   key, title, titleLang, starts, ends,
+ *   dates       its days on a line of their own: "November 1 – December 31, 2026" / "Del 1 de noviembre al 31 de
+ *               diciembre de 2026"; dateRange: the same inside a sentence ("del 1 de noviembre …")
+ *   win         when it shows (shopWindow → ui.when): from 00:00 Central on its first day (until then it is written
+ *               hidden) to the midnight after its last — an offer that is over is not in the list at all
+ *   stores      [{ key ("gv" | "lv"), name, isLv, text, textLang, href (config/site.yml links: gv_store /
+ *               lv_store), label (the button's words: "Grapevine store"), banner ({ src, view } — the newest picture
+ *               in Drive `flyers` its banner_match finds, passing over a PDF or video it finds too — or null),
+ *               alt, altLang }]: the page language's magazine first (/es/: La Viña), only the stores the block
+ *               has words for
+ *   source, sourceLang
+ * }]. The block's words in the page's language (`…_es` on the Spanish pages), else in the other one (with its lang).
+ */
+export function shopOffers(site, lang = "en", items = [], t = (k) => k, now = nowDate(), warn = null) {
+  const L = lang === "es" ? "es" : "en";
+  const links = (site && site.links) || {};
+  const out = [];
+  for (const s of offerSpecs(site, warn)) {
+    const win = shopWindow(s.from, s.until, now);
+    if (!win) continue;
+    const stores = [];
+    for (const pub of pubOrder(L)) {
+      const b = s.o[pub];
+      const text = twinOf(b, "text", L);
+      if (!text.text) continue;
+      // the newest picture among the matches: a newer PDF or video with the same words (the store's e-mail kept
+      // in flyers, say) never hides the banner
+      const pic = b.banner_match
+        ? driveMatch(items, b.banner_match, "flyers", Infinity).find((p) => p.extra && p.extra.is_image) || null : null;
+      const x = (pic && pic.extra) || {};
+      const src = pic ? (x.file_id ? `https://lh3.googleusercontent.com/d/${x.file_id}=w${BANNER_W}` : x.image_url || pic.image || "") : "";
+      const alt = twinOf(b, "banner_alt", L);
+      stores.push({
+        key: pub, name: MAG[pub], isLv: pub === "lv", text: text.text, textLang: text.lang,
+        href: String(links[STORES[pub].link] || ""), label: t(STORES[pub].label, L),
+        banner: src ? { src, view: x.view_url || pic.url || "" } : null, alt: alt.text, altLang: alt.lang,
+      });
+    }
+    const title = twinOf(s.o, "title", L);
+    const source = twinOf(s.o, "source", L);
+    const dateRange = offerDates(s.starts, s.ends, L, t);
+    out.push({
+      key: s.key, title: title.text, titleLang: title.lang, starts: s.starts, ends: s.ends,
+      dates: dateRange.charAt(0).toUpperCase() + dateRange.slice(1), dateRange, win, stores,
+      source: source.text, sourceLang: source.lang,
+    });
+  }
+  return out;
+}
+
+/** The offers whose days meet `first`–`last` (YYYY-MM-DD: a month of the toolkit) → [{ key, title, titleLang, starts,
+ *  ends, past (over by `today`, YYYY-MM-DD Central) }], first day first: the month's message names them (monthly.js
+ *  monthModel `offers` → monthMessage, its days in words with offerDates); what each store says is on /shop/#offers. */
+export function shopOfferIn(site, first, last, lang = "en", today = "") {
+  const L = lang === "es" ? "es" : "en";
+  return offerSpecs(site).filter((s) => s.starts <= last && s.ends >= first).map((s) => {
+    const title = twinOf(s.o, "title", L);
+    return { key: s.key, title: title.text, titleLang: title.lang, starts: s.starts, ends: s.ends, past: !!today && s.ends < today };
+  });
+}
+
+/** The Drive file ids of the banners config/site.yml store_offers finds (the picture shopOffers shows for each store,
+ *  before, during and after its days) → [id]. Home's "Shared by the committee" leaves them out (index.njk →
+ *  homeDrive): there a banner would stand alone, cropped to the tile, without the offer's conditions (U.S. and
+ *  Canada) — and, once the offer is over, still announce it until the banners go to Drive `private`. */
+export function shopOfferBanners(site, items = []) {
+  const ids = [];
+  for (const s of offerSpecs(site)) {
+    for (const pub of ["gv", "lv"]) {
+      const b = s.o[pub];
+      if (!b || !b.banner_match || !twinOf(b, "text", "en").text) continue;
+      const pic = driveMatch(items, b.banner_match, "flyers", Infinity).find((p) => p.extra && p.extra.is_image);
+      if (pic && pic.id && !ids.includes(pic.id)) ids.push(pic.id);
+    }
+  }
+  return ids;
+}
+
 
 /* ---------------- Specialty items (greeting cards, pocket planner, wall calendar, holiday cards) ---------------- */
 // The page order. The holiday cards come last: the stores sell them in season only (from about September), so
@@ -655,6 +815,8 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("shopBotm", (shop, lang) => shopBotm(shop, lang, "", t));
   eleventyConfig.addFilter("shopSubs", (shop, lang) => shopSubs(shop, lang, t));
   eleventyConfig.addFilter("shopPriceChanges", (shop, lang) => shopPriceChanges(shop, lang, t));
+  eleventyConfig.addFilter("shopOffers", (site, lang, items) => shopOffers(site, lang, items, t, nowDate(), buildWarning));
+  eleventyConfig.addFilter("shopOfferBanners", (site, items) => shopOfferBanners(site, items));
   eleventyConfig.addFilter("shopCost", (shop, lang) => shopCost(shop, lang, t));
   eleventyConfig.addFilter("shopBulk", (shop, lang) => shopBulk(shop, lang, t));
   eleventyConfig.addFilter("shopSpecialty", (shop, lang) => shopSpecialty(shop, lang, t));

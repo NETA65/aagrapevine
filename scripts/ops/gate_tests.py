@@ -79,6 +79,8 @@ CONTENT_TESTS: dict[str, str] = {
         "the owner's archive exports in content/archive",
     "test_price_changes.Bulletin.":
         "content/bulletin: the two posts about the January 2027 prices, word for word",
+    "test_r21_offers.Bulletin.":
+        "content/bulletin: the post about the free shipping of November–December 2026, its facts and links",
     "test_bulletin.Place.test_the_folder_its_help_and_the_example":
         "content/bulletin: its README and _example.md, the committee's template, as they are",
     "test_bulletin_publish.Header.test_the_template_parses":
@@ -108,6 +110,8 @@ CONTENT_TESTS: dict[str, str] = {
         "config/site.yml and config/presentations: La Viña's monthly workshop under the one name La Viña uses",
     "test_price_changes.Settings.test_the_settings_file_has_no_mistakes":
         "config/site.yml price_changes, as written",
+    "test_r21_offers.RealSettings.":
+        "config/site.yml store_offers, as written: the free shipping of 2026 and the patterns that find its banners",
     "test_run_names.OtherTitles.test_the_morning_check_names_its_goal":
         "config/site.yml site.morning_goal against the Morning check's name (morning.yml)",
     "test_spotlight.Gazetteer.test_every_area65_county_is_a_texas_county":

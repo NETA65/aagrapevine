@@ -47,6 +47,9 @@
   "shop.bulk_source": { "en": "As listed on the Grapevine store's product page", "es": "Según la página del producto en la tienda de Grapevine" },
   "shop.final_price": { "en": "The store shows the final price at checkout.", "es": "La tienda muestra el precio final al pagar." },
 
+  "shop.offer_eyebrow": { "en": "Offer from the official stores", "es": "Oferta de las tiendas oficiales" },
+  "shop.offer_dates": { "en": "{start} – {end}", "es": "del {start} al {end}" },
+
   "shop.subs_eyebrow": { "en": "Print · Digital · Complete", "es": "Impresa · Digital · Completa" },
   "shop.subs_title": { "en": "Subscriptions & prices", "es": "Suscripciones y precios" },
   "shop.subs_sub": { "en": "Compare the plans side by side, then subscribe on the official store.", "es": "Compara los planes lado a lado y luego suscríbete en la tienda oficial." },

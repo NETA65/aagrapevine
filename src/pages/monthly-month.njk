@@ -32,9 +32,10 @@ eleventyComputed:
     dates already over — marked "Over" and folded under "Earlier in …" (src/assets/js/monthly.js keeps the
     marks up to date between builds) —, the next committee meeting once this month's is over, the next
     issue when it is already online, only the Book of the Month offers not over, and "Keep up all month"
-    (#mp-keep: pointers to the daily quote, What's New, the Bulletin, Instagram, the subscription price —
-    never copies of them); a notice points to next month's page once the visitor's month has changed and
-    the site has not been rebuilt yet (data-mp-newmonth).
+    (#mp-keep: pointers to the daily quote, What's New, the Bulletin, Instagram, a price change AA Grapevine
+    announced, an offer of the stores, the subscription price — never copies of them); a notice points to
+    next month's page once the visitor's month has changed and the site has not been rebuilt yet
+    (data-mp-newmonth).
     Order: hero → in-page nav → the poster (sticky from 1024px) · the toolkit: message · the magazines ·
     put it to work · dates · every week · stories wanted · Book of the Month · keep up → pager. Headings:
     h1 (hero) → h2 (the toolkit) → h3 (its cards) → h4 (each magazine).
@@ -397,7 +398,8 @@ eleventyComputed:
 
       {#- Keep up all month (the current month only): one line each pointing to the page that is the home of
           what changes during the month — never a copy of it: the daily quote (only while the home page shows
-          one), What's New since the 1st, the Bulletin (its newest post), Instagram, the subscription price. -#}
+          one), What's New since the 1st, the Bulletin (its newest post), Instagram, a price change AA Grapevine
+          announced and an offer of the stores (/shop/), the subscription price. -#}
       {% if nx %}
       <section id="mp-keep" class="card card-pad" aria-labelledby="mp-keep-title">
         <h3 id="mp-keep-title" class="card-h"><span class="text-grape">{% icon "sparkles", "size-5" %}</span>{{ "monthly.keep_title" | t(lang) }}</h3>
@@ -437,6 +439,16 @@ eleventyComputed:
             <span class="min-w-0"><a class="font-semibold text-ink no-underline after:absolute after:inset-0 hover:text-gv hover:underline" href="{{ '/shop/' | lurl(lang) }}#price-changes">{{ ("monthly.pc_link_" + part) | t(lang) }}</a><span class="block text-sm text-muted">{{ ("monthly.pc_" + part) | t(lang, { date: pc.date }) }}</span></span>
           </li>
           {% endif %}{% endfor %}{% endfor %}
+          {#- an offer the stores announced (config/site.yml store_offers: free shipping …) whose days meet this month:
+              its title and days, in its window (ui.when: the row goes by itself the day after it ends) — what each
+              store says, and the stores, are on /shop/#offers. Before the subscription line too (a hidden last row
+              would leave a stray divider). -#}
+          {% for o in (site | shopOffers(lang)) %}{% if o.starts <= m.last %}
+          <li{{ ui.when(o.win) }}>
+            <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-vine-soft text-vine" aria-hidden="true">{% icon "truck", "size-4" %}</span>
+            <span class="min-w-0"><a class="font-semibold text-ink no-underline after:absolute after:inset-0 hover:text-gv hover:underline" href="{{ '/shop/' | lurl(lang) }}#offers"{% if o.titleLang != lang %} lang="{{ o.titleLang }}"{% endif %}>{{ o.title }}</a><span class="block text-sm text-muted">{{ o.dates }}</span></span>
+          </li>
+          {% endif %}{% endfor %}
           {% if nx.subsFrom %}
           <li>
             <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-lv-soft text-lv" aria-hidden="true">{% icon "newspaper", "size-4" %}</span>

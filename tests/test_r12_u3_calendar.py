@@ -542,7 +542,8 @@ class Pages(unittest.TestCase):
 
     def test_every_add_to_calendar_menu_says_so(self):
         events, meetings = self.read("src/pages/events.njk"), self.read("src/pages/meetings.njk")
-        self.assertEqual(events.count('class="cm-menu-note"'), 2)
+        # /events/: an event's menu, the pinned committee meeting's and the weekly open meetings' (#ev-weekly)
+        self.assertEqual(events.count('class="cm-menu-note"'), 3)
         self.assertEqual(meetings.count('class="cm-menu-note"'), 2)
         self.assertIn('("committee.cal.reminder_day" if ev.allDay else "committee.cal.reminder_timed")', events)
 

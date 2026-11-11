@@ -311,6 +311,9 @@ A few tests check exact wording. After you change a word, watch the **Code check
 - [`tests/test_events_feeds.py`](../tests/test_events_feeds.py) looks for "View flyer" / "Ver volante" on the built
   Events page, and (with [`tests/test_recurring_events.py`](../tests/test_recurring_events.py)) for "Online on Zoom" /
   "En línea por Zoom".
+- [`tests/test_r21_offers.py`](../tests/test_r21_offers.py) looks for the stores' buttons ("Grapevine store" /
+  "Tienda de La Viña") and "The store shows the final price at checkout." on the built Shop page's offer, and checks
+  the free shipping words in `config/site.yml` (`store_offers:`) and in its bulletin post.
 
 If one fails, its message shows the words it expected. Update the test to your new words in the same commit (or keep
 the old words).

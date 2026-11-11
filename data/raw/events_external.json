@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-11-02T17:16:45Z",
- "attempted": "2026-11-02T17:16:45Z",
+ "updated": "2026-11-10T15:45:33Z",
+ "attempted": "2026-11-10T15:45:33Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -12,13 +12,13 @@
  "stats": {
   "discovery": "sitemap",
   "discovery_complete": true,
-  "upcoming_urls": 17,
+  "upcoming_urls": 15,
   "kept_from_cache": 0,
   "fetched": 0,
   "refreshed": 0,
   "failed": 0,
   "pending": 0,
-  "cached": 19,
+  "cached": 17,
   "texas": 2,
   "online_es": 1,
   "items": 3,
@@ -36,7 +36,7 @@
    "lang": "es",
    "date": "2027-01-29",
    "first_seen": "2026-10-02T22:31:32Z",
-   "last_seen": "2026-11-01T14:25:45Z",
+   "last_seen": "2026-11-08T14:29:37Z",
    "image": null,
    "tags": [
     "texas"
@@ -74,7 +74,7 @@
    "lang": "en",
    "date": "2027-01-08",
    "first_seen": "2026-10-18T12:13:47Z",
-   "last_seen": "2026-11-01T14:25:45Z",
+   "last_seen": "2026-11-08T14:29:37Z",
    "image": null,
    "tags": [
     "texas"
@@ -112,7 +112,7 @@
    "lang": "es",
    "date": "2026-11-21",
    "first_seen": "2026-11-01T06:35:15Z",
-   "last_seen": "2026-11-01T06:35:15Z",
+   "last_seen": "2026-11-08T14:29:37Z",
    "image": null,
    "tags": [
     "online"
@@ -143,46 +143,8 @@
  ],
  "first_harvest": "2026-09-23T16:43:55Z",
  "cache": {
-  "https://www.aalavina.org/get-involved/events/2026-10-30/iii-convencion-hispana-de-aa-del-estado-de-alabama": {
-   "at": "2026-10-23T12:47:23Z",
-   "ev": {
-    "title": "III Convención Hispana de AA del Estado de Alabama",
-    "date_text": "Octubre 30, 2026 - Noviembre 1, 2026",
-    "start": "2026-10-30",
-    "end": "2026-11-01",
-    "all_day": true,
-    "location_raw": "Embassy Suites by Hilton Huntsville 800 Monroe St SW, Huntsville, AL 35801",
-    "lang": "es",
-    "location": "Embassy Suites by Hilton Huntsville 800 Monroe St SW, Huntsville, AL 35801",
-    "city": "Huntsville",
-    "state": "AL",
-    "country": "USA",
-    "online": false,
-    "texas": false
-   },
-   "http": 200,
-   "fails": 0
-  },
-  "https://www.aalavina.org/get-involved/events/2026-10-30/iii-convencion-hispana-del-estado-de-alabama": {
-   "at": "2026-10-23T12:47:29Z",
-   "ev": {
-    "title": "III Convención Hispana del estado de Alabama",
-    "date_text": "Octubre 30, 2026 - Noviembre 1, 2026",
-    "start": "2026-10-30",
-    "end": "2026-11-01",
-    "all_day": true,
-    "location_raw": "Huntsville",
-    "lang": "es",
-    "location": "Huntsville",
-    "city": "Huntsville",
-    "online": false,
-    "texas": false
-   },
-   "http": 200,
-   "fails": 0
-  },
   "https://www.aagrapevine.org/get-involved/events/2026-11-06/79th-tri-state-convention-0": {
-   "at": "2026-10-23T12:47:35Z",
+   "at": "2026-11-06T15:15:49Z",
    "ev": {
     "title": "79th Tri-State Convention",
     "date_text": "November 6, 2026 - November 8, 2026",
@@ -203,7 +165,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-06/85th-laurel-highlands-conference": {
-   "at": "2026-10-23T12:47:40Z",
+   "at": "2026-11-06T15:15:54Z",
    "ev": {
     "title": "85th Laurel Highlands Conference",
     "date_text": "November 6, 2026 - November 8, 2026",
@@ -224,7 +186,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-13/36th-vancouver-roundup": {
-   "at": "2026-10-23T12:47:45Z",
+   "at": "2026-11-06T15:15:59Z",
    "ev": {
     "title": "36th Vancouver RoundUp",
     "date_text": "November 13, 2026 - November 15, 2026",
@@ -245,7 +207,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-13/international-secular-conference-phoenix-2026": {
-   "at": "2026-10-23T12:47:50Z",
+   "at": "2026-11-06T15:16:05Z",
    "ev": {
     "title": "International Secular Conference Phoenix 2026",
     "date_text": "November 13, 2026 - November 15, 2026",
@@ -266,7 +228,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-20/37th-mchenrys-soberfest": {
-   "at": "2026-10-23T12:47:55Z",
+   "at": "2026-11-06T15:16:10Z",
    "ev": {
     "title": "37th McHenry's Soberfest",
     "date_text": "November 20, 2026 - November 22, 2026",
@@ -287,7 +249,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-11-27/36th-gratitude-roundup": {
-   "at": "2026-10-23T12:48:00Z",
+   "at": "2026-11-06T15:16:15Z",
    "ev": {
     "title": "36th Gratitude Roundup",
     "date_text": "November 27, 2026 - November 29, 2026",
@@ -307,7 +269,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-12-04/14th-chiang-mai-roundup-2026": {
-   "at": "2026-10-24T12:10:06Z",
+   "at": "2026-11-07T14:14:56Z",
    "ev": {
     "title": "14th Chiang Mai Roundup 2026",
     "date_text": "December 4, 2026 - December 6, 2026",
@@ -327,7 +289,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2027-03-19/southern-maryland-roundup": {
-   "at": "2026-10-24T12:10:12Z",
+   "at": "2026-11-07T14:15:01Z",
    "ev": {
     "title": "Southern Maryland Roundup",
     "date_text": "March 19, 2027 - March 21, 2027",
@@ -348,7 +310,7 @@
    "fails": 0
   },
   "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico": {
-   "at": "2026-10-24T12:10:17Z",
+   "at": "2026-11-07T14:15:07Z",
    "ev": {
     "title": "14.a Convención Nacional 11, 12 y 13 de junio de 2027 Ciudad de México «AA una luz de esperanza»",
     "date_text": "Junio 11, 2027 - Junio 13, 2027",
@@ -403,7 +365,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2027-01-29/47th-hilton-head-midwinter-conference": {
-   "at": "2026-10-21T13:08:01Z",
+   "at": "2026-11-04T15:37:35Z",
    "ev": {
     "title": "47th Hilton Head Midwinter Conference",
     "date_text": "January 29, 2027 - January 31, 2027",

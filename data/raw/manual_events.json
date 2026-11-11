@@ -1,7 +1,7 @@
 {
  "source": "manual_events",
- "updated": "2026-11-02T17:11:35Z",
- "attempted": "2026-11-02T17:11:35Z",
+ "updated": "2026-11-11T07:23:14Z",
+ "attempted": "2026-11-11T07:23:14Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -26,7 +26,7 @@
    "lang": "en",
    "date": "2027-10-10T17:00:00Z",
    "first_seen": "2026-10-26T14:35:09Z",
-   "last_seen": "2026-11-02T17:11:35Z",
+   "last_seen": "2026-11-09T17:37:38Z",
    "image": null,
    "tags": [
     "neta65",
@@ -75,7 +75,7 @@
    "lang": "en",
    "date": "2027-09-17",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-29T18:25:31Z",
+   "last_seen": "2026-11-05T19:52:52Z",
    "image": null,
    "tags": [
     "assembly",
@@ -121,7 +121,7 @@
    "lang": "en",
    "date": "2027-07-18T17:00:00Z",
    "first_seen": "2026-10-26T14:35:09Z",
-   "last_seen": "2026-11-02T17:11:35Z",
+   "last_seen": "2026-11-09T17:37:38Z",
    "image": null,
    "tags": [
     "neta65",
@@ -170,7 +170,7 @@
    "lang": "en",
    "date": "2027-06-25",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-29T18:25:31Z",
+   "last_seen": "2026-11-05T19:52:52Z",
    "image": null,
    "tags": [
     "assembly",
@@ -219,7 +219,7 @@
    "lang": "en",
    "date": "2027-04-11T17:00:00Z",
    "first_seen": "2026-10-26T14:35:09Z",
-   "last_seen": "2026-11-02T17:11:35Z",
+   "last_seen": "2026-11-09T17:37:38Z",
    "image": null,
    "tags": [
     "neta65",
@@ -268,7 +268,7 @@
    "lang": "en",
    "date": "2027-03-19",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-29T18:25:31Z",
+   "last_seen": "2026-11-05T19:52:52Z",
    "image": null,
    "tags": [
     "assembly",
@@ -313,7 +313,7 @@
    "lang": "en",
    "date": "2027-02-21T18:00:00Z",
    "first_seen": "2026-10-26T14:35:09Z",
-   "last_seen": "2026-11-02T17:11:35Z",
+   "last_seen": "2026-11-09T17:37:38Z",
    "image": null,
    "tags": [
     "neta65",
@@ -358,7 +358,7 @@
    "lang": "en",
    "date": "2026-12-13T01:00:00Z",
    "first_seen": "2026-10-27T06:15:45Z",
-   "last_seen": "2026-10-27T06:15:45Z",
+   "last_seen": "2026-11-10T12:47:23Z",
    "image": null,
    "tags": [
     "workshop",
@@ -398,11 +398,11 @@
    "kind": "event",
    "url": "/events/#2026-11-28-lv-writing-workshop-garland",
    "title": "La Viña Writing Workshop (in Spanish) — Garland",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
    "lang": "en",
    "date": "2026-11-29T01:00:00Z",
    "first_seen": "2026-10-27T06:15:45Z",
-   "last_seen": "2026-10-27T06:15:45Z",
+   "last_seen": "2026-11-10T12:47:23Z",
    "image": null,
    "tags": [
     "workshop",
@@ -416,11 +416,11 @@
     "all_day": false,
     "location": "Grupo Volver a Vivir, 2913 S. Fifth St., Garland, TX 75041",
     "online_url": null,
-    "flyer_url": null,
+    "flyer_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
     "flyer_thumb": null,
     "city": "Garland",
     "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland.",
+    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
     "slug": "2026-11-28-lv-writing-workshop-garland",
     "file": "content/events/2026-11-28-lv-writing-workshop-garland.md",
     "own_i18n": {
@@ -428,10 +428,10 @@
       "es": "Taller de Escritura de La Viña — Garland"
      },
      "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      },
      "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland."
+      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
      }
     }
    }
@@ -446,7 +446,7 @@
    "lang": "en",
    "date": "2026-11-11T01:00:00Z",
    "first_seen": "2026-10-26T14:35:09Z",
-   "last_seen": "2026-11-02T17:11:35Z",
+   "last_seen": "2026-11-09T17:37:38Z",
    "image": null,
    "tags": [
     "neta65",
@@ -492,7 +492,7 @@
    "lang": "en",
    "date": "2026-11-08T01:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-29T18:25:31Z",
+   "last_seen": "2026-11-05T19:52:52Z",
    "image": null,
    "tags": [
     "workshop",
@@ -536,7 +536,7 @@
    "lang": "en",
    "date": "2026-10-27T00:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-29T18:25:31Z",
+   "last_seen": "2026-11-05T19:52:52Z",
    "image": null,
    "tags": [
     "workshop",
@@ -580,7 +580,7 @@
    "lang": "en",
    "date": "2026-10-18T18:00:00Z",
    "first_seen": "2026-10-16T20:52:28Z",
-   "last_seen": "2026-10-30T23:38:16Z",
+   "last_seen": "2026-11-07T00:03:57Z",
    "image": null,
    "tags": [
     "neta65",
@@ -624,7 +624,7 @@
    "lang": "en",
    "date": "2026-10-18T00:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-29T18:25:31Z",
+   "last_seen": "2026-11-05T19:52:52Z",
    "image": null,
    "tags": [
     "workshop",
@@ -668,7 +668,7 @@
    "lang": "en",
    "date": "2026-10-08T01:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-29T18:25:31Z",
+   "last_seen": "2026-11-05T19:52:52Z",
    "image": null,
    "tags": [
     "workshop",
@@ -712,7 +712,7 @@
    "lang": "en",
    "date": "2026-10-03T19:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-29T18:25:31Z",
+   "last_seen": "2026-11-05T19:52:52Z",
    "image": null,
    "tags": [
     "workshop",
@@ -758,7 +758,7 @@
    "lang": "en",
    "date": "2026-09-27T00:00:00Z",
    "first_seen": "2026-09-24T11:10:08Z",
-   "last_seen": "2026-10-29T18:25:31Z",
+   "last_seen": "2026-11-05T19:52:52Z",
    "image": null,
    "tags": [
     "workshop",

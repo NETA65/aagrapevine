@@ -1,7 +1,7 @@
 {
  "source": "meetings",
- "updated": "2026-11-02T17:16:45Z",
- "attempted": "2026-11-02T17:16:45Z",
+ "updated": "2026-11-10T15:45:28Z",
+ "attempted": "2026-11-10T15:45:28Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -12,7 +12,7 @@
  "stats": {
   "offices": 8,
   "offices_ok": 8,
-  "listed": 5922,
+  "listed": 5929,
   "grapevine": 24,
   "meetings": 23,
   "in_area": 13,
@@ -34,7 +34,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -79,7 +79,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "A",
@@ -126,7 +126,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -171,7 +171,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -216,7 +216,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "C",
@@ -261,7 +261,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "D",
@@ -308,7 +308,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "CF",
@@ -355,7 +355,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "C",
@@ -400,7 +400,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -445,7 +445,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "C",
@@ -492,7 +492,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "C",
@@ -539,7 +539,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -584,7 +584,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -629,7 +629,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "C",
@@ -676,7 +676,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -721,7 +721,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -766,7 +766,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -811,7 +811,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -858,7 +858,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "C",
@@ -904,7 +904,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "C",
@@ -955,7 +955,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "C",
@@ -1000,7 +1000,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -1045,7 +1045,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-10-31T13:49:17Z",
+   "last_seen": "2026-11-07T14:14:51Z",
    "image": null,
    "tags": [
     "GR",
@@ -1093,8 +1093,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-11-02T17:15:51Z",
-   "attempted": "2026-11-02T17:15:51Z",
+   "updated": "2026-11-10T15:44:22Z",
+   "attempted": "2026-11-10T15:44:22Z",
    "note": null
   },
   {
@@ -1107,8 +1107,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-11-02T17:15:51Z",
-   "attempted": "2026-11-02T17:15:51Z",
+   "updated": "2026-11-10T15:44:22Z",
+   "attempted": "2026-11-10T15:44:22Z",
    "note": null
   },
   {
@@ -1121,8 +1121,8 @@
    "method": "page",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-02T17:15:51Z",
-   "attempted": "2026-11-02T17:15:51Z",
+   "updated": "2026-11-10T15:44:22Z",
+   "attempted": "2026-11-10T15:44:22Z",
    "note": null
   },
   {
@@ -1135,8 +1135,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-02T17:15:51Z",
-   "attempted": "2026-11-02T17:15:51Z",
+   "updated": "2026-11-10T15:44:22Z",
+   "attempted": "2026-11-10T15:44:22Z",
    "note": null
   },
   {
@@ -1149,8 +1149,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-02T17:15:51Z",
-   "attempted": "2026-11-02T17:15:51Z",
+   "updated": "2026-11-10T15:44:22Z",
+   "attempted": "2026-11-10T15:44:22Z",
    "note": null
   },
   {
@@ -1163,8 +1163,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-02T17:15:51Z",
-   "attempted": "2026-11-02T17:15:51Z",
+   "updated": "2026-11-10T15:44:22Z",
+   "attempted": "2026-11-10T15:44:22Z",
    "note": null
   },
   {
@@ -1177,8 +1177,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-02T17:15:51Z",
-   "attempted": "2026-11-02T17:15:51Z",
+   "updated": "2026-11-10T15:44:22Z",
+   "attempted": "2026-11-10T15:44:22Z",
    "note": null
   },
   {
@@ -1191,8 +1191,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-02T17:15:51Z",
-   "attempted": "2026-11-02T17:15:51Z",
+   "updated": "2026-11-10T15:44:22Z",
+   "attempted": "2026-11-10T15:44:22Z",
    "note": null
   }
  ],
