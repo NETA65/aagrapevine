@@ -1236,9 +1236,6 @@ SIX_WORKSHOPS = ["2026-09-26-lv-writing-workshop-fort-worth.md", "2026-10-03-gv-
                  "2026-10-07-lv-writing-workshop-mansfield.md", "2026-10-17-lv-recording-workshop-duncanville.md",
                  "2026-10-26-lv-writing-workshop-tyler.md", "2026-11-07-lv-information-workshop-longview.md"]
 DRIVE_FLYER = re.compile(r"https://drive\.google\.com/file/d/([\w-]{20,})/view")
-# … except a workshop whose flyer is off for now: Arlington's picture shows the committee's retired Zoom room in large
-# type, so its file links no flyer until the owner has replaced that Drive file's picture (tests/test_r24_retired_room).
-FLYER_OFF = {"2026-10-03-gv-writing-workshop-arlington.md"}
 
 # The events' flyers as /events/ shows them (eleventy/filters/committee.js normalizeEvents → ev.flyer).
 FLYERS_JS = r"""
@@ -1298,8 +1295,7 @@ class FlyersOnTheEventsPage(TempState):
     def test_the_six_workshops_link_their_drive_copies(self):
         # (a workshop's file may be deleted once it is over: then there is nothing to check)
         folder = ROOT / "content" / "events"
-        present = [n for n in SIX_WORKSHOPS if (folder / n).exists()
-                   and not (n in FLYER_OFF and not re.search(r"(?m)^flyer:", (folder / n).read_text(encoding="utf-8")))]
+        present = [n for n in SIX_WORKSHOPS if (folder / n).exists()]
         for name in present:
             with self.subTest(file=name):
                 ev = A.parse_event(folder / name, CHI)

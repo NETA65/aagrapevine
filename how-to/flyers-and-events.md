@@ -758,8 +758,7 @@ are as before.
 The Arlington workshop of October 3, 2026
 ([`2026-10-03-gv-writing-workshop-arlington.md`](../content/events/2026-10-03-gv-writing-workshop-arlington.md))
 was one. Its file before the day, with an example Zoom room in place of the one it gave (the committee's Zoom room
-of then, retired with the move to Google Meet — now that the workshop is over, its file names only the place, and it
-links no flyer for now: the flyer's picture shows that room too, until the picture on our Drive is replaced):
+of then, retired with the move to Google Meet — now that the workshop is over, its file names only the place):
 
 ```markdown
 ---
@@ -769,7 +768,7 @@ start: 2026-10-03T14:00:00-05:00
 end: 2026-10-03T17:00:00-05:00
 location: "Primary Purpose Group – Arlington, 1802 West Division Street, Arlington, TX 76012"
 url: "https://neta65.org/event/grapevine-writing-workshop-6/"
-flyer: "https://drive.google.com/file/d/…/view"
+flyer: "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/view"
 online_url: "https://us02web.zoom.us/j/1234567890"
 meeting_id: "123 456 7890"
 confirmed: true

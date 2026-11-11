@@ -14,12 +14,10 @@ and an event that is over in the calendar files.
     presentations' JSON) from data in which the October 3 workshop still has it, as events.json had it — the event
     moved to ten days ago, so the calendar files still keep it on any day this runs. (It judges the committee's
     files too: scripts/ops/gate_tests.py CONTENT_TESTS.)
-    A PICTURE still shows it, which no text test can see: the workshop's flyer, on our Drive (flyers folder, file
-    1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu: "Zoom Meeting ID … / Passcode …" in large type). So its file links no flyer
-    (test_the_arlington_workshop_names_its_place_only) — no "View flyer", no picture on its share page, no flyer
-    in the calendar files — until the owner has replaced that Drive file's picture with one without those two lines
-    (Drive → Manage versions keeps the file ID). /portfolio/ lists the Drive folder itself, so it shows the old
-    picture until then.
+    One PICTURE shows it, which no text test reads: the workshop's flyer, on our Drive (flyers folder, file
+    1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu: "Zoom Meeting ID … / Passcode …" in large type). The owner keeps that flyer
+    on purpose (2026-11-11: "do not make arlington flyer private"): it stays on the Drive, on /portfolio/ and on its
+    event (the file's flyer: line — "View flyer", its share page's picture, the calendar files' flyer).
 
     python -m unittest tests.test_r24_retired_room -v
 """
@@ -255,8 +253,8 @@ EVENT_PAGES = ("events", "event-share", "index", "meetings", "monthly", "search-
 
 class TheRetiredRoom(unittest.TestCase):
     """949 476 7497 and its passcode are gone from every text of ours (the owner: that room is retired since the move
-    to Google Meet); the one picture that still shows them, the Arlington flyer, is no event's flyer until the owner
-    has replaced it on the Drive (/portfolio/ lists the Drive folder itself: the module's note)."""
+    to Google Meet). The one picture that shows them, the Arlington flyer, the owner keeps on purpose — on the Drive,
+    /portfolio/ and its event (the module's note)."""
 
     def test_no_source_carries_it(self):
         # the sources, the documentation, and the other tests' sample data (a made-up room there: 123 456 7890)
@@ -276,10 +274,6 @@ class TheRetiredRoom(unittest.TestCase):
         text = (ROOT / "content" / "events" / "2026-10-03-gv-writing-workshop-arlington.md").read_text(encoding="utf-8")
         self.assertNotRegex(text, r"(?m)^(?:online_url|meeting_id|passcode):")
         self.assertRegex(text, r'(?m)^location: "Primary Purpose Group – Arlington, 1802 West Division Street')
-        # … and no flyer: its picture on our Drive shows the retired room in large type. When the owner has replaced
-        # that Drive file's picture (the same file ID) with one without the Zoom lines, the file's flyer: line may
-        # come back (see its note) and this check goes with it.
-        self.assertNotRegex(text, r"(?m)^flyer:", "the Arlington flyer still shows the retired Zoom room")
 
     def test_no_page_made_from_the_events_carries_it(self):
         if not node_path() or not (ROOT / "node_modules" / "@11ty" / "eleventy").is_dir():
