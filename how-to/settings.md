@@ -556,22 +556,23 @@ it shows:
   to its page for Canadian addresses beside it), then "The store shows the final price at checkout." and the source.
   The menu has no chip for it (a chip cannot come and go by date);
 - in the monthly toolkit, in each month the offer runs: a line in *Keep up all month* (this month's page) and in
-  the month's message (WhatsApp and e-mail), both linking `/shop/#offers`.
+  the month's message (WhatsApp and e-mail: 📦, or 🎁 for an offer with `icon: gift`), both linking the offer's own
+  section, `/shop/#offers-<key>`.
 
 The day after `ends` it is gone by itself — also on a page that is open, or saved for offline use — so there is
 nothing to switch off; the block may then be deleted. While a block is here, Home's *Shared by the committee*
 leaves its banners out (there a banner would stand alone, cropped to the tile, without the offer's conditions);
 the Portfolio, What's New, the feeds and the digest list them like any file in `flyers`, so move them to
 `private` once the offer is over. Two offers at once each get a section on `/shop/`, first day first (the first is
-`#offers`); each one is also `#offers-<key>` (the first one too), the address a bulletin post links for its own
-offer (`/shop/#offers-holiday-gifts-2026`). The toolkit's lines all link `/shop/#offers`, the top of the offers.
+`#offers`); each one is also `#offers-<key>` (the first one too): the address a bulletin post links for its own
+offer (`/shop/#offers-holiday-gifts-2026`), and the one each of the toolkit's lines links.
 
 | Key | Accepted values | If it is wrong |
 |---|---|---|
 | `key` | Short name (letters, numbers, dashes). Default: the `starts` day. | Used twice: the second block is left out. |
 | `title` / `title_es` | **Required** (one of the two): the heading on `/shop/` and the toolkit's line. | Neither: left out. |
 | `starts`, `ends` | **Required.** `"YYYY-MM-DD"`: the first and the last day (Central time). | Not a real day, or `ends` before `starts`: left out. |
-| `icon` | The section's icon (and the toolkit row's), one of the site's icons: `gift` for a gift offer. Leave out: the truck. | Not one of the site's icons: the truck (noted). |
+| `icon` | The section's icon (and the toolkit row's), one of the site's icons: `gift` for a gift offer (its line in the month's message then starts with 🎁, not 📦). Leave out: the truck. | Not one of the site's icons: the truck (noted). |
 | `show_starts` | `false` when the stores give no first day: the days read "Through December 31, 2026" / "Hasta el 31 de diciembre de 2026" (on `/shop/` and in the toolkit), and `starts` is only the day the site shows it from — write the day you add the block. Leave out: the first day is said. | — |
 | `source` / `source_es` | Where the stores announced it, shown under the cards. | — |
 | `gv`, `lv` | Each store's part (Grapevine, La Viña). Leave one out for an offer of one store. | Neither has a `text`: left out. |
@@ -579,7 +580,7 @@ offer (`/shop/#offers-holiday-gifts-2026`). The toolkit's lines all link `/shop/
 | `gv` / `lv` → `banner_match` | A pattern that finds the store's banner in the Panel's Drive `flyers` folder: capitals ignored, accents **not** folded (write `[ií]`). The newest **picture** it finds is shown (1200 px wide; the stores' banners are 1920 × 770). | No match: the card has no picture. Not a valid pattern: no picture (noted). |
 | `gv` / `lv` → `banner_alt` / `banner_alt_es` | The banner's words, for people who cannot see it (say when they are in the other language). | — |
 | `gv` / `lv` → `url` | The store's own page for the offer (`https://…`, exactly as the store writes it): the button goes there, as "Grapevine's offer page" / "Página de la oferta de Grapevine", instead of the store. Leave out: the button goes to the store (`links: gv_store` / `lv_store`). | Not a web address: the button goes to the store (noted). |
-| `gv` / `lv` → `url_ca` | That page for Canadian addresses: a link beside the button, "Page for Canadian addresses" / "Página para direcciones en Canadá". | Not a web address: no link (noted). |
+| `gv` / `lv` → `url_ca` | That page for Canadian addresses: a link beside the button, "Grapevine's page for Canadian addresses" / "Página de Grapevine para direcciones en Canadá". | Not a web address: no link (noted). |
 
 A mistake never stops the site: the block is left out (a bad `banner_match` only loses its picture) and the build
 names it — `[settings] store_offers entry 1 (free-shipping-2026): ends 2026-11-01 is before starts 2026-12-31 —
@@ -635,7 +636,8 @@ the two banners `flyers/Free shipping on all Grapevine products - banner.jpg` an
 los productos de La Viña - banner.jpg`; the November and December toolkits name it. From November 11, right under it
 (`#offers-holiday-gifts-2026`): "Holiday gift offers at the Grapevine and La Viña stores" with a gift for its icon,
 "Through December 31, 2026", no banner, each card's button "Grapevine's offer page" / "La Viña's offer page" and the
-link "Page for Canadian addresses". At midnight Central on January 1, 2027 both are gone.
+link "Grapevine's page for Canadian addresses" / "La Viña's page for Canadian addresses"; the November and December
+toolkits name it too (🎁 in the month's message). At midnight Central on January 1, 2027 both are gone.
 
 Write only what the stores themselves say (their e-mails and store pages): never a promo code or "no code needed", a
 minimum order, an end hour, "hurry", or that the offer combines with the Book of the Month or the bulk discounts —

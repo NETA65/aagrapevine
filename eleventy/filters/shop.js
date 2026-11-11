@@ -709,7 +709,7 @@ export function shopOffers(site, lang = "en", items = [], t = (k) => k, now = no
         key: pub, name: MAG[pub], isLv: pub === "lv", text: text.text, textLang: text.lang,
         href: own || String(links[STORES[pub].link] || ""),
         label: own ? t("shop.offer_page", L, { name: MAG[pub] }) : t(STORES[pub].label, L),
-        hrefCa: ca, labelCa: ca ? t("shop.offer_page_ca", L) : "",
+        hrefCa: ca, labelCa: ca ? t("shop.offer_page_ca", L, { name: MAG[pub] }) : "",
         banner: src ? { src, view: x.view_url || pic.url || "" } : null, alt: alt.text, altLang: alt.lang,
       });
     }
@@ -726,15 +726,15 @@ export function shopOffers(site, lang = "en", items = [], t = (k) => k, now = no
 }
 
 /** The offers whose days meet `first`–`last` (YYYY-MM-DD: a month of the toolkit) → [{ key, title, titleLang, starts,
- *  ends, showStarts (false: its days are said "through <ends>"), past (over by `today`, YYYY-MM-DD Central) }],
- *  first day first: the month's message names them (monthly.js monthModel `offers` → monthMessage, its days in
- *  words with offerDates); what each store says is on /shop/#offers. */
+ *  ends, showStarts (false: its days are said "through <ends>"), icon ("truck", or the block's `icon`), past (over by
+ *  `today`, YYYY-MM-DD Central) }], first day first: the month's message names them (monthly.js monthModel `offers`
+ *  → monthMessage, its days in words with offerDates); what each store says is on /shop/#offers-<key>. */
 export function shopOfferIn(site, first, last, lang = "en", today = "") {
   const L = lang === "es" ? "es" : "en";
   return offerSpecs(site).filter((s) => s.starts <= last && s.ends >= first).map((s) => {
     const title = twinOf(s.o, "title", L);
     return { key: s.key, title: title.text, titleLang: title.lang, starts: s.starts, ends: s.ends, showStarts: s.showStarts,
-      past: !!today && s.ends < today };
+      icon: s.icon, past: !!today && s.ends < today };
   });
 }
 

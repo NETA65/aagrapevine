@@ -441,12 +441,13 @@ eleventyComputed:
           {% endif %}{% endfor %}{% endfor %}
           {#- an offer the stores announced (config/site.yml store_offers: free shipping …) whose days meet this month:
               its title and days, in its window (ui.when: the row goes by itself the day after it ends) — what each
-              store says, and the stores, are on /shop/#offers. Before the subscription line too (a hidden last row
-              would leave a stray divider). -#}
+              store says, and the stores, are in its own section of /shop/ (#offers-<key>: every offer has that
+              address, the first one too). Before the subscription line too (a hidden last row would leave a stray
+              divider). -#}
           {% for o in (site | shopOffers(lang)) %}{% if o.starts <= m.last %}
           <li{{ ui.when(o.win) }}>
             <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-vine-soft text-vine" aria-hidden="true">{% icon o.icon, "size-4" %}</span>
-            <span class="min-w-0"><a class="font-semibold text-ink no-underline after:absolute after:inset-0 hover:text-gv hover:underline" href="{{ '/shop/' | lurl(lang) }}#offers"{% if o.titleLang != lang %} lang="{{ o.titleLang }}"{% endif %}>{{ o.title }}</a><span class="block text-sm text-muted">{{ o.dates }}</span></span>
+            <span class="min-w-0"><a class="font-semibold text-ink no-underline after:absolute after:inset-0 hover:text-gv hover:underline" href="{{ '/shop/' | lurl(lang) }}#offers-{{ o.key }}"{% if o.titleLang != lang %} lang="{{ o.titleLang }}"{% endif %}>{{ o.title }}</a><span class="block text-sm text-muted">{{ o.dates }}</span></span>
           </li>
           {% endif %}{% endfor %}
           {% if nx.subsFrom %}

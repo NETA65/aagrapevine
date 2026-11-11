@@ -399,7 +399,8 @@ class ShopPages(unittest.TestCase):
                 if lang == "en":
                     self.assertEqual((buttons, ca), ([GV_PAGE, LV_PAGE], [GV_CA, LV_CA]))
                     self.assertIn("Holiday gift offers at the Grapevine and La Viña stores Through December 31, 2026", words)
-                    for w in ("Grapevine's offer page", "La Viña's offer page", "Page for Canadian addresses",
+                    for w in ("Grapevine's offer page", "La Viña's offer page", "Grapevine's page for Canadian addresses",
+                              "La Viña's page for Canadian addresses",
                               "a second 1-year print subscription as a gift is $16.00", "is $8.00",
                               "The store shows the final price at checkout. Source: AA Grapevine's and La Viña's holiday gift"):
                         self.assertIn(w, words)
@@ -409,7 +410,8 @@ class ShopPages(unittest.TestCase):
                     self.assertIn("Ofertas de regalo para las fiestas en las tiendas de La Viña y Grapevine Hasta el 31 de "
                                   "diciembre de 2026", words)
                     for w in ("Página de la oferta de La Viña", "Página de la oferta de Grapevine",
-                              "Página para direcciones en Canadá", "como regalo cuesta $8.00", "cuesta $16.00"):
+                              "Página de La Viña para direcciones en Canadá", "Página de Grapevine para direcciones en Canadá",
+                              "como regalo cuesta $8.00", "cuesta $16.00"):
                         self.assertIn(w, words)
                     self.assertLess(words.index("Página de la oferta de La Viña"), words.index("Página de la oferta de Grapevine"))
                     self.assertNotRegex(words, r"11 de noviembre|1[34] de octubre", "no first day")
@@ -427,17 +429,21 @@ class ShopPages(unittest.TestCase):
 
     def test_novembers_toolkit(self):
         p = self.pages()
-        for url, title, days in (("/monthly/2026-11/", "Holiday gift offers at the Grapevine and La Viña stores",
-                                  "Through December 31, 2026"),
-                                 ("/es/monthly/2026-11/", "Ofertas de regalo para las fiestas en las tiendas de La Viña y Grapevine",
-                                  "Hasta el 31 de diciembre de 2026")):
+        for url, title, days, shop in (("/monthly/2026-11/", "Holiday gift offers at the Grapevine and La Viña stores",
+                                        "Through December 31, 2026", "/shop/"),
+                                       ("/es/monthly/2026-11/", "Ofertas de regalo para las fiestas en las tiendas de La Viña y "
+                                        "Grapevine", "Hasta el 31 de diciembre de 2026", "/es/shop/")):
             with self.subTest(url=url):
                 keep = section_of(p[url], "mp-keep")
                 rows = [r for r in re.findall(r"<li\b.*?</li>", keep, re.S) if title in r]
                 self.assertEqual(len(rows), 1)
                 self.assertEqual(text(rows[0]), f"{title} {days}")
                 self.assertIn('<use href="#i-gift"/>', rows[0])
-                self.assertIn(f"{title}*\n{days}: ", p[url].replace("&#39;", "'"), "the month's message (WhatsApp)")
+                # its own section, not the top of the offers (free shipping)
+                self.assertIn(f'href="{shop}#offers-{KEY}"', rows[0])
+                # the month's message (WhatsApp): a gift, not the parcel, and the same section
+                self.assertRegex(p[url].replace("&#39;", "'"),
+                                 re.escape(f"🎁 *{title}*\n{days}: ") + r"\S*" + re.escape(f"{shop}#offers-{KEY}\n"))
 
 
 if __name__ == "__main__":
