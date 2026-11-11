@@ -423,7 +423,10 @@ served as a calendar (200, `text/calendar`, `BEGIN:VCALENDAR`) is checked every 
 (`ReadAloudControls` with a stand-in voice: start on the screen, side columns, Previous / Next, speed;
 `VideoCaptions`), `test_r12_u5_gvr.py` (`QuestionOfTheDay`, `PassItOn`
 — the two printed sheets and the "Tell the office" e-mails —, `GvrPhone`), `test_r12_u7_shop.py`
-(`ShopCostCalculator`, `ShopCostSheet`; the browser's clock stopped), `test_r12_u8_whatsnew_browser.py`
+(`ShopCostCalculator`, `ShopCostSheet`; the browser's clock stopped; `OfferBannerGone`: a store banner that fails
+while a link to a section below it — `/shop/#offers-holiday-gifts-2026`, `#subscriptions` — still scrolls there
+smoothly leaves that section where the link puts it, a reader who scrolled away is not pulled back; skipped when the
+Shop shows no banner), `test_r12_u8_whatsnew_browser.py`
 (`WhatsNewSince`: a seeded `gv-wn-seen` record, the marks, no layout shift, "Mark all as read"),
 `test_r12_u9_meeting_browser.py` (`MeetingPaperwork`: Customize → Agenda & minutes, Start next month and its Undo,
 the clock stopped at the built deck's meeting dates) and `test_r12_u10_areareport.py` (`AreaReportInBrowser`: For:
@@ -675,8 +678,12 @@ prices](../README.md#when-grapevine-announces-new-prices) is the chair's version
    letter does not make (renewals bought before the day, other plans, other regions, "literature" when only
    Grapevine and La Viña books change). Open each language with one sentence that holds every new price: the home
    page's card, What's New and the feed show the first ~320 characters as plain text, where a list runs together
-   into one line (the two posts for January 1, 2027 do this). The heads-up is in the
-   monthly e-mail of the month it was posted; the e-mails of the next months, through the day's month, carry one
+   into one line (`2027-01-01-new-prices-in-effect.md` does this). A heads-up that shares a pinned post with other
+   notices gets a section of its own that opens with that sentence, after a short opening that names every section
+   — and stays apart from any store offer, as facts side by side, never "before prices go up" (since November 11,
+   2026 the heads-up of January 1, 2027 is the price section of
+   `2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md`, with the holiday gift offers and free shipping).
+   The heads-up is in the monthly e-mail of the month it was posted; the e-mails of the next months, through the day's month, carry one
    pointer row ("Grapevine and La Viña prices change on …" / "New … prices since …") — so do the monthly toolkit's
    messages and the GV/LV report.
 4. After the save: the Actions run summary has no *Settings problem (price_changes)*; `/shop/` shows the notice

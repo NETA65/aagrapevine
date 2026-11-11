@@ -388,13 +388,17 @@ pageScripts: ["/assets/js/shop.js"]
 
 {#- ---------- 0. AN OFFER THE STORES ANNOUNCED (config/site.yml store_offers → shop.js shopOffers) ----------
     Free shipping and the like, right under the page nav while it runs: one section per offer (the first is
-    #offers, which Home's bulletin post and the monthly toolkit link), in its window (ui.when: written hidden
+    #offers; each one is also #offers-<key> — the first one's on its inner box —, so the monthly toolkit and a
+    bulletin post can link each offer's own section whatever the order), in its window (ui.when: written hidden
     before its first day, gone by itself the day after its last — on a page left open or saved for offline use
     too; after that the build leaves it out). Its title and days, then one card per store, the page language's
     magazine first (two side by side from 1024px): the store's own banner from the committee's Drive (flyers,
     found by banner_match; without one, or when it can't load, the card simply has no picture) — a link to the store, its alt the
     banner's words —, what the store says (the settings' words, nothing more), the button to the store; under
-    them the final-price line and where the offer was announced. Calm and informative, like the price notice:
+    them the final-price line and where the offer was announced. A store with its own page for the offer (`url`:
+    AA Grapevine's /2gifts …) gets a button to that page instead ("Grapevine's offer page"), and with `url_ca` a link
+    to its page for Canadian addresses beside it. Its icon: the truck, or the block's own (`icon: gift`). Calm and
+    informative, like the price notice:
     no countdown, no "hurry", and nothing says it combines with the Book of the Month below. No chip in the page
     nav (a chip cannot hide by date). pb-0: #botm keeps its own top padding, so the page reads the same with the
     offer hidden. -#}
@@ -402,20 +406,25 @@ pageScripts: ["/assets/js/shop.js"]
 {%- set oTitle -%}{% if o.titleLang != lang %}<span lang="{{ o.titleLang }}">{{ o.title }}</span>{% else %}{{ o.title }}{% endif %}{%- endset -%}
 {%- set oWhen -%}<span class="shop-offer-when">{% icon "calendar-days", "size-4 shrink-0" %}<span>{{ o.dates }}</span></span>{%- endset -%}
 <section id="{{ 'offers' if loop.first else ('offers-' ~ o.key) }}" class="shop-offers section container-page pt-10 sm:pt-12 pb-0" aria-labelledby="offer-{{ o.key }}-title"{{ ui.when(o.win) }}>
-  <div class="shop-offer">
-    {{ ui.sectionHead(oTitle | safe, oWhen, "", "", "truck", { eyebrow: "shop.offer_eyebrow" | t(lang), tone: "text-vine", id: "offer-" ~ o.key ~ "-title", lang: lang }) }}
+  <div class="shop-offer"{% if loop.first %} id="offers-{{ o.key }}"{% endif %}>
+    {{ ui.sectionHead(oTitle | safe, oWhen, "", "", o.icon, { eyebrow: "shop.offer_eyebrow" | t(lang), tone: "text-vine", id: "offer-" ~ o.key ~ "-title", lang: lang }) }}
     <ul class="grid grid-cols-1 gap-5 {{ 'lg:grid-cols-2' if o.stores.length > 1 }}" role="list">
       {% for s in o.stores %}
       <li class="card flex flex-col overflow-hidden">
         {%- if s.banner %}
-        {%- set art -%}<img src="{{ s.banner.src }}" alt="{{ s.alt }}"{% if s.alt and s.altLang != lang %} lang="{{ s.altLang }}"{% endif %} width="1920" height="770" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('.shop-offer-art').remove()">{%- endset %}
+        {#- A banner that can't load leaves the card (assets/js/shop.js GV.shopArtGone: a link's section below it,
+            /shop/#offers-holiday-gifts-2026 …, is brought back into view if the page was still scrolling there;
+            before shop.js has run, the banner simply leaves). -#}
+        {%- set art -%}<img src="{{ s.banner.src }}" alt="{{ s.alt }}"{% if s.alt and s.altLang != lang %} lang="{{ s.altLang }}"{% endif %} width="1920" height="770" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="window.GV&&GV.shopArtGone?GV.shopArtGone(this):this.closest('.shop-offer-art').remove()">{%- endset %}
         {% if s.href %}<a class="shop-offer-art" href="{{ s.href }}" target="_blank" rel="noopener">{{ art | safe }}<span class="sr-only">{{ " — " if s.alt }}{{ s.label }} ({{ "common.external" | t(lang) }})</span></a>
         {% else %}<div class="shop-offer-art">{{ art | safe }}</div>{% endif %}
         {%- endif %}
         <div class="flex flex-1 flex-col p-5 sm:p-6">
           <p><span class="{{ 'badge-lv' if s.isLv else 'badge-gv' }}"{% if s.isLv and lang != 'es' %} lang="es"{% endif %}>{% icon "grapes", "size-3" %} {{ s.name }}</span></p>
           <p class="mt-3 text-[0.95rem] leading-relaxed text-ink"{% if s.textLang != lang %} lang="{{ s.textLang }}"{% endif %}>{{ s.text }}</p>
-          {% if s.href %}<p class="mt-auto pt-5"><a class="{{ 'btn-lv' if s.isLv else 'btn-primary' }}" href="{{ s.href }}" target="_blank" rel="noopener">{% icon "store", "size-4" %} {{ s.label }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span> {% icon "external-link", "size-4" %}</a></p>{% endif %}
+          {% if s.href %}<p class="mt-auto flex flex-wrap items-center gap-x-5 gap-y-3 pt-5"><a class="{{ 'btn-lv' if s.isLv else 'btn-primary' }}" href="{{ s.href }}" target="_blank" rel="noopener">{% icon "store", "size-4" %} {{ s.label }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span> {% icon "external-link", "size-4" %}</a>
+            {#- (one inner span, its icon glued to the last word: a label that wraps on a phone keeps the icon beside it) -#}
+            {%- if s.hrefCa %}<a class="link tap-link text-sm font-semibold" href="{{ s.hrefCa }}" target="_blank" rel="noopener"><span>{{ s.labelCa }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span>&nbsp;{% icon "external-link", "inline size-3.5 align-[-0.1em]" %}</span></a>{% endif %}</p>{% endif %}
         </div>
       </li>
       {% endfor %}

@@ -10,16 +10,23 @@ site server, Playwright and the browser are test_site_in_browser's).
   * ShopCostSheet      — "Print an information sheet": while it prints, only the sheet is on paper (the page's own
                          sections are not), in the languages chosen — both side by side — with the group's decision
                          under them; afterwards the page is as it was.
+  * OfferBannerGone    — a store's banner that can't load leaves its card (assets/js/shop.js GV.shopArtGone):
+                         arriving by a link to a section below it (the bulletin post's /shop/#offers-holiday-gifts-
+                         2026, #subscriptions), with the banners failing while the page still scrolls there smoothly,
+                         the section ends where the link puts it, never under the header — on a computer and a
+                         phone, English and Spanish; a reader who has scrolled away by then is not pulled back.
+                         Skipped when the built Shop shows no banner (no offer with one running).
 
 The browser's clock is stopped (Playwright's clock) so the page reads the same on any day; what the sums are on a
 given day is tests/test_r12_u7_shop.py's (GV.shopQuote in Node).
 """
 from __future__ import annotations
 
+import html as H
 import re
 import unittest
 
-from browser.test_site_in_browser import (SIDEWAYS, new_context, open_page, setUpModule, tearDownModule)  # noqa: F401
+from browser.test_site_in_browser import (S, SIDEWAYS, new_context, open_page, setUpModule, tearDownModule)  # noqa: F401
 
 FIXED = "2026-12-31T23:59:00-06:00"   # 11:59 PM Central on December 31, 2026
 
@@ -214,6 +221,90 @@ class ShopCostSheet(unittest.TestCase):
         finally:
             ctx.close()
         self.assertEqual(errors, [])
+
+
+class OfferBannerGone(unittest.TestCase):
+    """A banner that can't load leaves its card; a link's section below it still ends where the link puts it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.pages = {}
+        for lang in ("en", "es"):
+            html = (S["site"] / ("es" if lang == "es" else "") / "shop" / "index.html").read_text(encoding="utf-8")
+            at = html.find('class="shop-offer-art"')
+            if at < 0:
+                raise unittest.SkipTest("the built Shop shows no store banner (no offer with one is running)")
+            srcs = {H.unescape(u) for u in re.findall(r'class="shop-offer-art"[^>]*>\s*<img src="([^"]+)"', html)}
+            # the sections a link opens below the banners: another offer (the gift offers) and the subscriptions
+            below = [i for i in re.findall(r'<section id="([^"]+)"', html[at:]) if i.startswith("offers-") or i == "subscriptions"]
+            cls.pages[lang] = (srcs, below)
+
+    def arrive(self, size, lang: str, anchor: str, reader_scrolls: bool = False) -> dict:
+        """/bulletin/ → /shop/#anchor with smooth scrolling (no reduced motion) and the banners held; they fail as
+        soon as the page has started to move (or, with reader_scrolls, after the reader turned the wheel)."""
+        srcs, _ = self.pages[lang]
+        w, h = size
+        ctx = S["browser"].new_context(viewport={"width": w, "height": h}, reduced_motion="no-preference",
+                                       service_workers="block", timezone_id="America/Chicago",
+                                       locale="es-US" if lang == "es" else "en-US")
+        held, errors = [], []
+        ctx.route(lambda u: u in srcs, lambda r: held.append(r))
+        try:
+            from browser.test_site_in_browser import url
+            page = ctx.new_page()
+            page.on("pageerror", lambda e: errors.append(str(e).splitlines()[0][:200]))
+            page.goto(url("bulletin/"), wait_until="load", timeout=60_000)
+            path = ("es/" if lang == "es" else "") + "shop/"
+            page.goto(url(path) + "#" + anchor, wait_until="domcontentloaded", timeout=60_000)
+            page.wait_for_function("scrollY > 0", timeout=10_000)
+            for _ in range(250):
+                if len(held) >= len(srcs):
+                    break
+                page.wait_for_timeout(20)
+            self.assertEqual(len(held), len(srcs), "the banners were asked for")
+            before = None
+            if reader_scrolls:
+                self.settle(page)
+                page.mouse.move(w // 2, h // 2)
+                page.mouse.wheel(0, -900)
+                self.settle(page)
+                before = page.evaluate("scrollY")
+            for r in held:
+                r.abort()
+            page.wait_for_function("!document.querySelector('.shop-offer-art')", timeout=10_000)
+            self.settle(page)
+            out = page.evaluate("""(id) => ({ top: document.getElementById(id).getBoundingClientRect().top, y: scrollY,
+                                     pad: parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) })""", anchor)
+            out["before"], out["errors"] = before, errors
+            return out
+        finally:
+            ctx.close()
+
+    @staticmethod
+    def settle(page):
+        """Until the page has stopped scrolling (300 ms without a move)."""
+        page.evaluate("""() => new Promise((done) => { let y = scrollY, still = 0;
+          const t = setInterval(() => { if (scrollY === y) { still += 50; if (still >= 300) { clearInterval(t); done(); } }
+                                         else { y = scrollY; still = 0; } }, 50);
+          setTimeout(() => { clearInterval(t); done(); }, 8000); })""")
+
+    def test_the_section_ends_where_the_link_puts_it(self):
+        for size in ((1280, 900), (390, 844)):
+            for lang in ("en", "es"):
+                for anchor in self.pages[lang][1]:
+                    with self.subTest(size=size, lang=lang, anchor=anchor):
+                        r = self.arrive(size, lang, anchor)
+                        self.assertAlmostEqual(r["top"], r["pad"], delta=2,
+                                               msg=f"#{anchor} ends {r['top']:.0f} px from the top, not under the header at {r['pad']:.0f}")
+                        self.assertEqual(r["errors"], [])
+
+    def test_a_reader_who_scrolled_stays(self):
+        anchor = self.pages["en"][1][-1]
+        r = self.arrive((390, 844), "en", anchor, reader_scrolls=True)
+        # the banners above left (the page may keep what the reader sees still), but it never went back to the section
+        self.assertLessEqual(r["y"], r["before"] + 1, r)
+        self.assertGreater(r["top"], r["pad"] + 300, r)
+        self.assertEqual(r["errors"], [])
 
 
 if __name__ == "__main__":

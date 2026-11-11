@@ -776,6 +776,11 @@ class PostMarkdown(unittest.TestCase):
         self.assertEqual(D.md_excerpt("Short.", 150), ("Short.", False))
         long_para, cut = D.md_excerpt("word " * 300, 150)
         self.assertTrue(cut and len(long_para) <= 150 and long_para.endswith("…"))
+        # a heading whose section was cut is left out too (it would end the excerpt with nothing under it)
+        sections = "First paragraph.\n\n# Next part\n\n## Its first part\n\n" + "A long paragraph. " * 20
+        self.assertEqual(D.md_excerpt(sections, 80), ("First paragraph.", True))
+        self.assertEqual(D.md_excerpt("# Only a heading\n\n" + "A long paragraph. " * 20, 80)[0], "# Only a heading",
+                         "never nothing at all")
 
 
 class FakeSMTP:

@@ -313,7 +313,11 @@ A few tests check exact wording. After you change a word, watch the **Code check
   "En línea por Zoom".
 - [`tests/test_r21_offers.py`](../tests/test_r21_offers.py) looks for the stores' buttons ("Grapevine store" /
   "Tienda de La Viña") and "The store shows the final price at checkout." on the built Shop page's offer, and checks
-  the free shipping words in `config/site.yml` (`store_offers:`) and in its bulletin post.
+  the free shipping words in `config/site.yml` (`store_offers:`).
+- [`tests/test_r25_holiday_offers.py`](../tests/test_r25_holiday_offers.py) checks the holiday gift offers' words in
+  `config/site.yml` (and "Grapevine's offer page" / "Página de la oferta de La Viña", "Through December 31, 2026" /
+  "Hasta el 31 de diciembre de 2026" on the built Shop page), and the pinned bulletin post of November 11, 2026 —
+  the gift offers, free shipping and the new prices — sentence by sentence in both languages.
 
 If one fails, its message shows the words it expected. Update the test to your new words in the same commit (or keep
 the old words).
@@ -800,29 +804,43 @@ Add your own words for the other language to the header:
 - Put a value in double quotes when it contains `: ` or ` #`: `title_es: "Taller: Fort Worth"`. Without quotes,
   ` #` starts a note for people: `title_es: Grupo #1` would give just "Grupo". Quotes never hurt.
 
-The real example, [`content/bulletin/2026-10-01-prices-change-january-1-2027.md`](../content/bulletin/2026-10-01-prices-change-january-1-2027.md)
+The real example, [`content/bulletin/2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md`](../content/bulletin/2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md)
 (shortened):
 
 ```yaml
 ---
-title: "Grapevine and La Viña prices change on January 1, 2027"
-date: 2026-10-01
+title: "Grapevine and La Viña: holiday gift offers, free shipping and new prices"
+date: 2026-11-11
 expires: 2026-12-31
 pinned: true
 lang: en
-title_es: "Los precios de Grapevine y La Viña cambian el 1 de enero de 2027"
+title_es: "La Viña y Grapevine: ofertas de regalo, envío gratis y nuevos precios"
 summary_es: |
-  A partir del **1 de enero de 2027**, la suscripción anual a La Viña cuesta **$19.50** impresa …
+  La Viña y AA Grapevine anunciaron ofertas de regalo para las fiestas, envío gratis y los nuevos precios de 2027. …
+
+  # Ofertas de regalo para las fiestas
+
+  Hasta el **31 de diciembre de 2026**, … cuesta **$8.00** en La Viña y **$16.00** en Grapevine.
+
+  # Envío gratis
+
+  - Las dos tiendas y lo que dice cada una: [Tienda: envío gratis](/shop/#offers-free-shipping-2026)
+
+  # Nuevos precios a partir del 1 de enero de 2027
 
   **Qué significa para tu grupo.** Si tu grupo compra libros o suscripciones …
 
   - Los precios de hoy y los nuevos, lado a lado: [Tienda: suscripciones y precios](/shop/#subscriptions)
 ---
-From **January 1, 2027**, a yearly Grapevine subscription costs **$39.00** in print …
+AA Grapevine and La Viña have announced holiday gift offers, free shipping and new prices for 2027. …
+
+# Holiday gift offers
+…
 ```
 
 **What happens:** on `/es/bulletin/` the post shows the `title_es` and the `summary_es` text exactly as written
-(Markdown kept), with no "Auto-translated" pill and no "Show original" box. The link `(/shop/#subscriptions)` opens
+(Markdown kept: the same three headings as the English, so each section's link finds it on both pages), with no
+"Auto-translated" pill and no "Show original" box. The link `(/shop/#subscriptions)` opens
 `/es/shop/#subscriptions` on the Spanish page. The home page card, What's New, `/es/feed.xml`, the search and the
 Spanish half of the digest (`/es/digest/` and the e-mail) use the same words.
 

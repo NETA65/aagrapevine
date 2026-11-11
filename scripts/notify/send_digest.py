@@ -1024,8 +1024,10 @@ def md_excerpt(s: str, limit: int) -> tuple[str, bool]:
             return shorten(md_to_text(chunk), limit - 100), True
         parts.append(chunk)
         size += len(chunk) + 2
-    while len(parts) > 1 and _MD_RULE.match(parts[-1].strip()):
-        parts.pop()                                            # a line of --- that led to what was cut
+    # a line of --- that led to what was cut, or a heading whose section was cut (a heading with nothing under it)
+    while len(parts) > 1 and (_MD_RULE.match(parts[-1].strip())
+                              or all(_MD_HEAD.match(ln) for ln in parts[-1].strip().split("\n"))):
+        parts.pop()
     return "\n\n".join(parts), True
 
 

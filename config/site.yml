@@ -375,8 +375,15 @@ price_changes:
 #  Write only what the stores themselves say (their e-mails and store
 #  pages, in your own words) — never a promo code, a minimum order or an
 #  end hour they don't state, never that it combines with the Book of
-#  the Month or other discounts — and keep it calm: no "hurry" (our
-#  Tradition Eleven: attraction rather than promotion).
+#  the Month or other discounts — and keep it calm: no "hurry", no
+#  "just $16", no "Save 55%!" (our Tradition Eleven: attraction rather
+#  than promotion).
+#  A store with its own page for the offer: its `url` (the button goes
+#  there instead of the store) and `url_ca` (its page for Canadian
+#  addresses, a link beside the button). When the stores give no first
+#  day, write `show_starts: false`: the days then read "Through
+#  December 31, 2026", and `starts` is only the day the site shows it
+#  from. `icon`: the section's icon, when not the truck ("gift").
 #  The banners: put each store's banner in the Panel's Drive `flyers`
 #  folder, with a name WITHOUT a date (a date makes it an event). Its
 #  `banner_match` finds it (a regular expression, capitals ignored; no
@@ -412,6 +419,28 @@ store_offers:
       banner_match: "env[ií]os? gratuitos? en todos los productos de la vi[nñ]a"
       banner_alt: "La Viña's banner (in Spanish): free shipping on all La Viña products, November 1 – December 31."
       banner_alt_es: "Banner de La Viña: envíos gratuitos en todos los productos de La Viña, del 1 de noviembre al 31 de diciembre."
+  # The holiday gift offers: AA Grapevine's /2gifts and La Viña's /2regalos (and their pages for Canada), their
+  # e-mails of October 13–16, 2026; the committee chair: both through December 31 (La Viña's e-mails say so too).
+  # Print subscriptions only. Never: "just $16", "Save 55%!", "hurry", or a link to the price change of January 1.
+  - key: "holiday-gifts-2026"
+    title: "Holiday gift offers at the Grapevine and La Viña stores"
+    title_es: "Ofertas de regalo para las fiestas en las tiendas de La Viña y Grapevine"
+    starts: "2026-11-11"           # the day the site shows it from: the stores give no first day (their first
+    show_starts: false             #   e-mails were of October 13 and 14) — so the days read "Through December 31, 2026"
+    ends: "2026-12-31"
+    icon: "gift"                   # (not the truck: nothing here is about shipping)
+    source: "AA Grapevine's and La Viña's holiday gift offer pages and their e-mails (October 2026)"
+    source_es: "Páginas de las ofertas de regalo y correos de La Viña y AA Grapevine (octubre de 2026)"
+    gv:
+      text: "With a 1-year Grapevine print subscription ($36.00), for yourself or as a gift, a second 1-year print subscription as a gift is $16.00. For U.S. and Canadian addresses; the details are on the offer's page. Grapevine says the offer can't be combined with any other offer."
+      text_es: "Con una suscripción impresa de 1 año a Grapevine ($36.00), para ti o para regalar, una segunda suscripción impresa de 1 año como regalo cuesta $16.00. Para direcciones en EE. UU. y Canadá; los detalles están en la página de la oferta. Según Grapevine, la oferta no se puede combinar con ninguna otra."
+      url: "https://www.aagrapevine.org/2gifts"            # exactly so: with a "/" at the end it opens a dead page
+      url_ca: "https://www.aagrapevine.org/canada-2gifts"
+    lv:
+      text: "With a 1-year La Viña print subscription ($18.00), for yourself or as a gift, a second 1-year print subscription as a gift is $8.00. For U.S. and Canadian addresses; the details are on the offer's page."
+      text_es: "Con una suscripción impresa de 1 año a La Viña ($18.00), para ti o para regalar, una segunda suscripción impresa de 1 año como regalo cuesta $8.00. Para direcciones en EE. UU. y Canadá; los detalles están en la página de la oferta."
+      url: "https://www.aalavina.org/2regalos"
+      url_ca: "https://www.aalavina.org/canada-2regalos"
 
 # ---------------------------------------------------------------------
 #  Google Drive — the committee's upload area
