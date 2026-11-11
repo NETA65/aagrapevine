@@ -1236,6 +1236,9 @@ SIX_WORKSHOPS = ["2026-09-26-lv-writing-workshop-fort-worth.md", "2026-10-03-gv-
                  "2026-10-07-lv-writing-workshop-mansfield.md", "2026-10-17-lv-recording-workshop-duncanville.md",
                  "2026-10-26-lv-writing-workshop-tyler.md", "2026-11-07-lv-information-workshop-longview.md"]
 DRIVE_FLYER = re.compile(r"https://drive\.google\.com/file/d/([\w-]{20,})/view")
+# … except a workshop whose flyer is off for now: Arlington's picture shows the committee's retired Zoom room in large
+# type, so its file links no flyer until the owner has replaced that Drive file's picture (tests/test_r24_retired_room).
+FLYER_OFF = {"2026-10-03-gv-writing-workshop-arlington.md"}
 
 # The events' flyers as /events/ shows them (eleventy/filters/committee.js normalizeEvents → ev.flyer).
 FLYERS_JS = r"""
@@ -1295,7 +1298,8 @@ class FlyersOnTheEventsPage(TempState):
     def test_the_six_workshops_link_their_drive_copies(self):
         # (a workshop's file may be deleted once it is over: then there is nothing to check)
         folder = ROOT / "content" / "events"
-        present = [n for n in SIX_WORKSHOPS if (folder / n).exists()]
+        present = [n for n in SIX_WORKSHOPS if (folder / n).exists()
+                   and not (n in FLYER_OFF and not re.search(r"(?m)^flyer:", (folder / n).read_text(encoding="utf-8")))]
         for name in present:
             with self.subTest(file=name):
                 ev = A.parse_event(folder / name, CHI)
@@ -1402,7 +1406,7 @@ class OnlineAndHybridEvents(TempState):
         manual = self.manual_events({
             "zz-hybrid.md": ('title: "Hybrid Writing Workshop"\ntitle_es: "Taller de escritura híbrido"\n' + when(0)
                              + f'location: "{self.PLACE}"\n'
-                             'online_url: "https://us02web.zoom.us/j/9494767497"\nmeeting_id: "949 476 7497"\nlang: en\n'),
+                             'online_url: "https://us02web.zoom.us/j/1234567890"\nmeeting_id: "123 456 7890"\nlang: en\n'),
             "zz-online.md": ('title: "Online Writing Workshop"\ntitle_es: "Taller de escritura en línea"\n' + when(1)
                              + 'online_url: "https://meet.google.com/abc-defg-hij"\nlang: en\n'),
             "zz-other-link.md": ('title: "Streamed Workshop"\ntitle_es: "Taller transmitido"\n' + when(2)

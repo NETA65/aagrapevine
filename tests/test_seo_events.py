@@ -139,10 +139,10 @@ ITEMS = [
          location="Hilton Tyler"),
     # hybrid, its summary with the meeting ID and passcode: never in the description
     item("zz-hybrid-codes", "Hybrid Sharing Session", "2026-11-07T19:00:00Z", "2026-11-07T21:00:00Z",
-         summary="<p>Share your story with us.</p> Come in person or join on Zoom (meeting ID 949 476 7497, "
+         summary="<p>Share your story with us.</p> Come in person or join on Zoom (meeting ID 123 456 7890, "
                  "passcode zz65). Coffee at 1 PM.",
          location="Grupo Seis, 6 Elm St, Tyler, TX 75701", city="Tyler", state="TX",
-         online_url="https://us02web.zoom.us/j/9494767497?pwd=abc", platform="Zoom"),
+         online_url="https://us02web.zoom.us/j/1234567890?pwd=abc", platform="Zoom"),
 ]
 
 LD_JS = r"""
@@ -263,7 +263,7 @@ class EventsOnly(unittest.TestCase):
                     "zz-hybrid-codes", "zz-assembly", "ev-lv-calendar-zz-lvcal"])
                 text = json.dumps(EventsOnly.res[lang]["ld"], ensure_ascii=False)
                 for word in ("VirtualLocation", "OnlineEventAttendanceMode", "zoom.us", "meet.google.com", "performer",
-                             "Person", "<", "&amp;", "&nbsp;", "Zoom ID", "Virtual (", "Sala virtual", "949 476",
+                             "Person", "<", "&amp;", "&nbsp;", "Zoom ID", "Virtual (", "Sala virtual", "123 456",
                              "zz65", "Hilton Tyler"):
                     self.assertNotIn(word, text)
                 for anchor, e in by.items():

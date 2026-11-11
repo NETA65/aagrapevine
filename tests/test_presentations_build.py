@@ -952,7 +952,7 @@ SITE_X = {
     "url": "https://neta65.github.io/aagrapevine", "contact_email": "grapevine@neta65.org",
     "committee": "NETA 65 Grapevine & La Viña Committee",
     "meeting": {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00", "platform": "Zoom",
-                "zoom_url": "https://us02web.zoom.us/j/9494767497", "meeting_id": "949 476 7497", "passcode": "neta65"},
+                "zoom_url": "https://us02web.zoom.us/j/1234567890", "meeting_id": "123 456 7890", "passcode": "abc123"},
     # the passcode has letters and no phone passcode is set yet: a caller's passcode is unknown ("")
     "phone_access": {"numbers": [{"number": "+1 346 248 7799", "city": "Houston"}, {"number": "+1 312 626 6799", "city": "Chicago"}],
                      "committee": {"phone_passcode": ""}},
@@ -1285,14 +1285,14 @@ class Facts(unittest.TestCase):
         self.assertEqual(plain(live["meeting_time"]), "7:00 – 8:00 PM Central time")
         self.assertNotIn("\u2009", live["meeting_time"], "no break inside the time range")
         self.assertIn("\u202f\u2013" + WJ + "\u202f", live["meeting_time"], "not even after the dash (UAX #14 LB12a)")
-        self.assertEqual((live["meeting_zoom_id"], live["meeting_passcode"]), ("949\u00a0476\u00a07497", "neta65"))
+        self.assertEqual((live["meeting_zoom_id"], live["meeting_passcode"]), ("123\u00a0456\u00a07890", "abc123"))
         m = self.oct["kinds"]["meeting"]
         self.assertEqual(m["rows"], [{"start": "2099-10-22T00:00:00.000Z", "end": "2099-10-22T01:00:00.000Z", "label": OCT21},
                                      {"start": "2099-11-19T01:00:00.000Z", "end": "2099-11-19T02:00:00.000Z", "label": NOV18},
                                      {"start": "2099-12-17T01:00:00.000Z", "end": "2099-12-17T02:00:00.000Z", "label": DEC16}])
         self.assertEqual(m["limit"], 3, "every date known; the player shows the next three")
         self.assertEqual(m["rule"], "Every third Wednesday of the month")
-        self.assertEqual((m["zoom_id"], m["passcode"], m["url"]), ("949\u00a0476\u00a07497", "neta65", "https://us02web.zoom.us/j/9494767497"))
+        self.assertEqual((m["zoom_id"], m["passcode"], m["url"]), ("123\u00a0456\u00a07890", "abc123", "https://us02web.zoom.us/j/1234567890"))
         self.assertEqual(m["page"], "https://neta65.github.io/aagrapevine/meetings/#committee-meeting")
         # no date after the last one known: the fallback from then on, never a date that is over
         nov = self.r["november"]["live"]

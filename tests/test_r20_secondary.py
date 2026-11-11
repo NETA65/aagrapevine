@@ -77,8 +77,8 @@ class Phone(unittest.TestCase):
     SCRIPT = r"""
 const A = await imp("eleventy/filters/access.js");
 const t = (k) => ({ "nav.meeting": "Committee meeting" })[k] || k;
-const zoom = { ...input.site, meeting: { ...input.site.meeting, platform: "Zoom", online_url: "https://us02web.zoom.us/j/9494767497",
-  meeting_id: "949 476 7497", passcode: "" }, recurring_events: [input.lv] };
+const zoom = { ...input.site, meeting: { ...input.site.meeting, platform: "Zoom", online_url: "https://us02web.zoom.us/j/1234567890",
+  meeting_id: "123 456 7890", passcode: "" }, recurring_events: [input.lv] };
 out({
   meet: A.axPhone(input.site, input.weekly, "en", t), meetEs: A.axPhone(input.site, input.weekly, "es", t).online,
   zoom: A.axPhone(zoom, input.weekly, "en", t),

@@ -194,7 +194,7 @@ class OneTapLinks(unittest.TestCase):
 
     def test_the_hash_is_escaped(self):
         # (settings of its own, in the form config/site.yml writes them: the committee's numbers are checked by Phone)
-        site = {"meeting": {"meeting_id": "949 476 7497", "passcode": "neta65"},
+        site = {"meeting": {"meeting_id": "123 456 7890", "passcode": "abc123"},
                 "phone_access": {"numbers": [{"number": "+1 346 248 7799", "city": "Houston"},
                                              {"number": "+1 312 626 6799", "city": "Chicago"}],
                                  "committee": {"phone_passcode": ""}, "weekly_open": {"phone_passcode": "238047"}}}

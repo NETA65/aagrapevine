@@ -280,7 +280,7 @@ DB_X = {"events": {"items": EVENTS}, "videos": {"items": VIDEOS}, "episodes": {"
         "announcements": {"items": ANNOUNCEMENTS}, "weekly_open": {"items": WEEKLY_OPEN}}
 SITE_X = {"url": URL, "committee": "NETA 65 Grapevine & La Viña Committee", "committee_es": "Comité de Grapevine y La Viña de NETA 65",
           "built": NOW, "meeting": {"week_of_month": 3, "weekday": "wednesday", "start": "19:00", "end": "20:00",
-                                    "platform": "Zoom", "meeting_id": "949 476 7497"},
+                                    "platform": "Zoom", "meeting_id": "123 456 7890"},
           "about_videos": [{"id": "aboutVidEN1", "pub": "gv", "title": "About Grapevine"}, {"id": "aboutVidLV2", "pub": "lv"}],
           "recurring_events": []}
 CONFIG_X = {"max_file_mb": 50, "defaults": {"event_name": "NETA 65 Fall Assembly", "event_name_es": "Asamblea de Otoño de NETA 65",
@@ -616,7 +616,7 @@ class Show(unittest.TestCase):
                                                       "La Viña Open Meeting (in Spanish)", "La Viña Monthly Virtual Workshop (in Spanish)"])
         # (committee.js writes the clock with thin and narrow no-break spaces, as /meetings/ shows it)
         self.assertEqual(re.sub(r"[   ]", " ", rows[0]["when"]), "Every third Wednesday of the month · 7:00 – 8:00 PM Central time")
-        self.assertEqual(rows[0]["note"], "Online on Zoom · Meeting ID 949 476 7497")
+        self.assertEqual(rows[0]["note"], "Online on Zoom · Meeting ID 123 456 7890")
         self.assertEqual((rows[1]["when"], rows[1]["note"], rows[1]["pub"]), ("Wednesdays at 11:00 AM Central", "Zoom 871 2036 8287", "gv"))
         self.assertTrue(rows[2]["note"].startswith("Starts ") and "November 5, 2099" in rows[2]["note"])
         self.assertTrue(m["es"]["rows"][2]["note"].startswith("Comienza el "))
