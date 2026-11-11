@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-11T19:31:42Z",
+ "updated": "2026-11-11T22:59:13Z",
  "fixture": false,
  "items": [
   {
@@ -58,6 +58,66 @@
     }
    },
    "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
+   "title": "2026 Dallas Gathering Of Eagles",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-11",
+   "first_seen": "2026-11-04T09:29:20Z",
+   "image": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "photos",
+   "status": "ok",
+   "extra": {
+    "file_id": "1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
+    "mime": "image/jpeg",
+    "name": "2026 Dallas Gathering Of Eagles.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "photos"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
+    "preview_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
+    "folder_url": "https://drive.google.com/drive/folders/1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI"
+    ],
+    "modified_text": "2:16 pm"
+   },
+   "i18n": {
+    "title": {
+     "en": "2026 Dallas Gathering Of Eagles",
+     "es": "2026 Reunión de Dallas de águilas"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
    "is_new": true
   },
   {
@@ -457,66 +517,6 @@
     "title": {
      "en": "2025 Sales Report",
      "es": "2025 Reportaje de ventas"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": true
-  },
-  {
-   "id": "drive:1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
-   "title": "2026 Dallas GatherOfEagles",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-03",
-   "first_seen": "2026-11-04T09:29:20Z",
-   "image": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "photos",
-   "status": "ok",
-   "extra": {
-    "file_id": "1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
-    "mime": "image/jpeg",
-    "name": "2026 Dallas GatherOfEagles.jpg",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "photos"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
-    "preview_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "JPEG",
-    "folder_id": "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
-    "folder_url": "https://drive.google.com/drive/folders/1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI"
-    ],
-    "modified_text": "Nov 3"
-   },
-   "i18n": {
-    "title": {
-     "en": "2026 Dallas GatherOfEagles",
-     "es": "2026 Reunión de dallasOfEagles"
     },
     "summary": {
      "en": "",

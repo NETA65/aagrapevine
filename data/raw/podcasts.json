@@ -1,39 +1,50 @@
 {
  "source": "podcasts",
- "updated": "2026-11-11T19:31:45Z",
- "attempted": "2026-11-11T19:31:45Z",
+ "updated": "2026-11-11T22:59:19Z",
+ "attempted": "2026-11-11T22:59:19Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 1,
   "removed": 0,
   "held": 0
  },
  "stats": {
-  "fetched": 309,
-  "new": 0,
-  "total": 309,
-  "active": 309,
+  "fetched": 310,
+  "new": 1,
+  "total": 310,
+  "active": 310,
   "gone": 0,
-  "spanish": 0,
+  "spanish": 1,
   "shows": {
    "gv": {
     "ok": true,
+    "name": "AA Grapevine's Podcast",
     "episodes": 269,
-    "latest": "2026-11-09T05:15:00Z"
+    "latest": "2026-11-09T05:15:00Z",
+    "updated": "2026-11-11T22:59:16Z"
    },
    "wo": {
     "ok": true,
+    "name": "Grapevine Weekly Open AA Meeting",
     "episodes": 40,
-    "latest": "2026-11-06T05:15:00Z"
+    "latest": "2026-11-06T05:15:00Z",
+    "updated": "2026-11-11T22:59:16Z"
+   },
+   "lvo": {
+    "ok": true,
+    "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
+    "episodes": 1,
+    "latest": "2026-11-09T05:15:00Z",
+    "updated": "2026-11-11T22:59:16Z"
    }
   },
   "missing_from_feed": 0,
   "gone_checks": 0,
   "discovery_checked": "2026-11-06T15:10:41Z",
   "discovered_feeds": [],
-  "seconds": 2.3,
-  "artwork": 3,
+  "seconds": 3.6,
+  "artwork": 4,
   "artwork_missing": 0,
   "artwork_removed": 0
  },
@@ -75,6 +86,44 @@
    }
   },
   {
+   "id": "pod:lvo:667729784075",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/7d2cc913-c2b5-46d6-b176-d347a12913c3",
+   "title": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, episodio 1]",
+   "summary": "En este podcast de La Viña, escucharás la grabación de nuestra reunión abierta de AA en español del 5 de noviembre de 2026. Nos reunimos todos los jueves a las 12:00 del mediodía, hora del Este, y esperamos que puedas acompañarnos. El código de Zoom es 871 2036 8287 y la contraseña es 238047. La reunión es grabada y estará disponible posteriormente en todas las plataformas de pódcast. Esta…",
+   "lang": "es",
+   "date": "2026-11-09T05:15:00Z",
+   "first_seen": "2026-11-11T22:59:16Z",
+   "last_seen": "2026-11-11T22:59:16Z",
+   "image": "https://artwork.captivate.fm/6e33ab9e-e4c7-40bf-ab3e-d19e4f5a4429/LV-Podcast-logo.jpg",
+   "tags": [
+    "season-1"
+   ],
+   "category": "lvo",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/7d2cc913-c2b5-46d6-b176-d347a12913c3.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 79688040,
+    "duration_sec": 3320,
+    "season": 1,
+    "episode": 1,
+    "episode_type": "full",
+    "show": "lvo",
+    "show_name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
+    "link": "https://www.aalavina.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/7d2cc913-c2b5-46d6-b176-d347a12913c3",
+    "show_web": "https://www.aalavina.org/podcast",
+    "apple": "https://podcasts.apple.com/us/podcast/reuni%C3%B3n-abierta-semanal-de-alcoh%C3%B3licos-an%C3%B3nimos-de-la-vi%C3%B1a/id6832543655",
+    "spotify": "https://open.spotify.com/show/5LFFf4NfjdZni1TJcG4jZC",
+    "weekly_open": "lavina",
+    "meeting_date": "2026-11-05",
+    "generic_title": true,
+    "thumb": "/assets/cache/pod/3740d966d2cf9aaa.webp"
+   }
+  },
+  {
    "id": "pod:wo:43cdc9398618",
    "source": "podcast",
    "kind": "episode",
@@ -107,7 +156,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-11-04",
+    "generic_title": false
    }
   },
   {
@@ -179,7 +231,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-10-28",
+    "generic_title": false
    }
   },
   {
@@ -251,7 +306,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-10-21",
+    "generic_title": false
    }
   },
   {
@@ -323,7 +381,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-10-14",
+    "generic_title": false
    }
   },
   {
@@ -395,7 +456,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-10-07",
+    "generic_title": false
    }
   },
   {
@@ -467,7 +531,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-09-30",
+    "generic_title": false
    }
   },
   {
@@ -539,7 +606,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-09-23",
+    "generic_title": false
    }
   },
   {
@@ -611,7 +681,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-09-16",
+    "generic_title": false
    }
   },
   {
@@ -683,7 +756,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-09-09",
+    "generic_title": false
    }
   },
   {
@@ -755,7 +831,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-09-02",
+    "generic_title": false
    }
   },
   {
@@ -827,7 +906,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-08-26",
+    "generic_title": false
    }
   },
   {
@@ -899,7 +981,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-08-19",
+    "generic_title": false
    }
   },
   {
@@ -971,7 +1056,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-08-12",
+    "generic_title": false
    }
   },
   {
@@ -1043,7 +1131,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-08-05",
+    "generic_title": false
    }
   },
   {
@@ -1115,7 +1206,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-07-29",
+    "generic_title": false
    }
   },
   {
@@ -1187,7 +1281,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-07-22",
+    "generic_title": false
    }
   },
   {
@@ -1259,7 +1356,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-07-15",
+    "generic_title": false
    }
   },
   {
@@ -1331,7 +1431,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-07-08",
+    "generic_title": false
    }
   },
   {
@@ -1403,7 +1506,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-07-01",
+    "generic_title": false
    }
   },
   {
@@ -1475,7 +1581,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-06-24",
+    "generic_title": false
    }
   },
   {
@@ -1547,7 +1656,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-06-17",
+    "generic_title": false
    }
   },
   {
@@ -1619,7 +1731,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-06-10",
+    "generic_title": false
    }
   },
   {
@@ -1691,7 +1806,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-06-03",
+    "generic_title": false
    }
   },
   {
@@ -1763,7 +1881,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-05-27",
+    "generic_title": false
    }
   },
   {
@@ -1835,7 +1956,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-05-20",
+    "generic_title": false
    }
   },
   {
@@ -1907,7 +2031,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-05-13",
+    "generic_title": false
    }
   },
   {
@@ -1979,7 +2106,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-05-06",
+    "generic_title": false
    }
   },
   {
@@ -2051,7 +2181,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-04-29",
+    "generic_title": false
    }
   },
   {
@@ -2123,7 +2256,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-04-22",
+    "generic_title": false
    }
   },
   {
@@ -2195,7 +2331,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-04-15",
+    "generic_title": false
    }
   },
   {
@@ -2267,7 +2406,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-04-08",
+    "generic_title": false
    }
   },
   {
@@ -2339,7 +2481,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-04-01",
+    "generic_title": false
    }
   },
   {
@@ -2411,7 +2556,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-03-25",
+    "generic_title": false
    }
   },
   {
@@ -2483,7 +2631,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-03-18",
+    "generic_title": false
    }
   },
   {
@@ -2555,7 +2706,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-03-11",
+    "generic_title": false
    }
   },
   {
@@ -2627,7 +2781,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-03-04",
+    "generic_title": false
    }
   },
   {
@@ -2699,7 +2856,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-02-25",
+    "generic_title": false
    }
   },
   {
@@ -2771,7 +2931,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-02-18",
+    "generic_title": false
    }
   },
   {
@@ -2843,7 +3006,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-02-11",
+    "generic_title": false
    }
   },
   {
@@ -2915,7 +3081,10 @@
     "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
     "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
     "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-02-04",
+    "generic_title": false
    }
   },
   {
@@ -11173,6 +11342,8 @@
    "description": "AA members Don, Olis and Sam interview other AA members about their experience, strength, and hope in recovering from alcoholism. Expect both humor and inspiration as these AA members share their stories.",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "language": "en",
+   "feed_language": "en",
+   "weekly_open": null,
    "web": "https://www.aagrapevine.org/podcasts",
    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
@@ -11188,12 +11359,31 @@
    "description": "Each week AA Grapevine holds an open virtual AA meeting with a host and two speakers. We record the meeting to create this podcast.",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "language": "en",
+   "feed_language": "en",
+   "weekly_open": "grapevine",
    "web": "https://www.aagrapevine.org/grapevine-weekly-open",
    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
    "episodes": 40,
    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+  },
+  {
+   "key": "lvo",
+   "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
+   "title": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
+   "feed": "https://feeds.captivate.fm/reunin-abierta-semanal/",
+   "description": "Cada semana grabamos nuestra reunión abierta en línea y creamos este pódcast. (Each week we record our online open meeting and create this podcast.)",
+   "image": "https://artwork.captivate.fm/6e33ab9e-e4c7-40bf-ab3e-d19e4f5a4429/LV-Podcast-logo.jpg",
+   "language": "es",
+   "feed_language": "en",
+   "weekly_open": "lavina",
+   "web": "https://www.aalavina.org/podcast",
+   "apple": "https://podcasts.apple.com/us/podcast/reuni%C3%B3n-abierta-semanal-de-alcoh%C3%B3licos-an%C3%B3nimos-de-la-vi%C3%B1a/id6832543655",
+   "spotify": "https://open.spotify.com/show/5LFFf4NfjdZni1TJcG4jZC",
+   "amazon": null,
+   "episodes": 1,
+   "thumb": "/assets/cache/pod/3740d966d2cf9aaa.webp"
   }
  ],
  "discovery": {

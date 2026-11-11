@@ -1,7 +1,7 @@
 {
  "source": "drive",
- "updated": "2026-11-11T19:31:42Z",
- "attempted": "2026-11-11T19:31:42Z",
+ "updated": "2026-11-11T22:59:13Z",
+ "attempted": "2026-11-11T22:59:13Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -24,7 +24,7 @@
    }
   ],
   "include_loose": false,
-  "loose_skipped": 8,
+  "loose_skipped": 1,
   "skipped_panels": [],
   "folders": 11,
   "files": 61,
@@ -51,10 +51,8 @@
   },
   "albums": {},
   "events_from_flyers": 1,
-  "excluded": 3,
+  "excluded": 1,
   "excluded_by_reason": {
-   "type text/csv": 1,
-   "type application/vnd.google-apps.spreadsheet": 1,
    "name contains 'PRIVATE'": 1
   },
   "unreadable_folders": 0,
@@ -143,6 +141,53 @@
      "problem": null
     },
     "modified": "2026-11-11"
+   }
+  },
+  {
+   "id": "drive:1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
+   "title": "2026 Dallas Gathering Of Eagles",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-11",
+   "first_seen": "2026-11-04T09:29:20Z",
+   "last_seen": "2026-11-11T13:50:55Z",
+   "image": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "photos",
+   "status": "ok",
+   "extra": {
+    "file_id": "1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
+    "mime": "image/jpeg",
+    "name": "2026 Dallas Gathering Of Eagles.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "photos"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
+    "preview_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
+    "folder_url": "https://drive.google.com/drive/folders/1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI"
+    ],
+    "modified_text": "2:16 pm"
    }
   },
   {
@@ -507,53 +552,6 @@
     "download_url": "https://drive.google.com/uc?export=download&id=1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL",
     "thumb_url": "https://lh3.googleusercontent.com/d/1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL=w600",
     "image_url": "https://lh3.googleusercontent.com/d/1xHWUqPruL2nYmnoAB1-6mNE2R5gjR5QL=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "JPEG",
-    "folder_id": "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
-    "folder_url": "https://drive.google.com/drive/folders/1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI"
-    ],
-    "modified_text": "Nov 3"
-   }
-  },
-  {
-   "id": "drive:1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
-   "title": "2026 Dallas GatherOfEagles",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-03",
-   "first_seen": "2026-11-04T09:29:20Z",
-   "last_seen": "2026-11-11T13:50:55Z",
-   "image": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "photos",
-   "status": "ok",
-   "extra": {
-    "file_id": "1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
-    "mime": "image/jpeg",
-    "name": "2026 Dallas GatherOfEagles.jpg",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "photos"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
-    "preview_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w1600",
     "is_image": true,
     "is_video": false,
     "is_pdf": false,
@@ -1483,7 +1481,7 @@
    "lang": "en",
    "date": "2026-10-18",
    "first_seen": "2026-09-30T09:45:34Z",
-   "last_seen": "2026-11-04T19:42:10Z",
+   "last_seen": "2026-11-11T22:59:13Z",
    "image": null,
    "tags": [
     "panel-77",

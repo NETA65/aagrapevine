@@ -1,7 +1,7 @@
 {
  "source": "weekly_open",
- "updated": "2026-11-11T15:26:31Z",
- "attempted": "2026-11-11T15:26:31Z",
+ "updated": "2026-11-11T22:59:24Z",
+ "attempted": "2026-11-11T22:59:24Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -23,7 +23,7 @@
    "id": "weekly_open_lv",
    "source": "lavina",
    "kind": "meeting",
-   "url": "",
+   "url": "https://www.aalavina.org/podcast",
    "title": "Reunión Abierta de La Viña",
    "summary": "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores, entre ellos autores de historias de La Viña, miembros de AA y servidores de confianza. La reunión se graba y queda disponible después en el nuevo pódcast de La Viña y en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!",
    "lang": "es",
@@ -46,6 +46,7 @@
     "next_start": "2026-11-12T17:00:00Z",
     "zoom_url": "https://zoom.us/j/87120368287",
     "starts": "2026-11-05",
+    "url": "https://www.aalavina.org/podcast",
     "source_note": "Official La Viña flyers (November 2026, and a newer one without a month), shared with the committee",
     "own_i18n": {
      "title": {
@@ -87,7 +88,7 @@
     "start_local": "12:00",
     "timezone": "America/New_York",
     "time_central": "11 AM Central",
-    "next_start": "2026-11-11T17:00:00Z"
+    "next_start": "2026-11-18T17:00:00Z"
    }
   }
  ],
