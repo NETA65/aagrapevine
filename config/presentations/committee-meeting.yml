@@ -1251,7 +1251,7 @@ slides:
       - "Guest speaker: {live:speaker_after}"
       - "{live:meeting_platform}: {live:meeting_link} · meeting code\u00a0{live:meeting_code} (the same every month)"
       - "Every 3rd Wednesday · all AA members welcome · no registration"
-      - "Details: [{live:site}/meetings/](/meetings/)"
+      - "Details: [{live:site}/meetings/](/meetings/#committee-meeting)"
     takeaway: "Questions between meetings: [grapevine@neta65.org](grapevine@neta65.org)"
     minutes: 0.5
     version_minutes: { no-speaker: 1, topic: 1 }

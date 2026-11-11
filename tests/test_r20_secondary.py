@@ -199,6 +199,10 @@ class Booth(unittest.TestCase):
         gvm = rows["fact-online-grapevine-meeting"]
         self.assertIn("Google Meet", gvm["text_en"] + gvm["text_es"])
         self.assertNotRegex(gvm["text_en"], r"(?i)grapevine meetings")
+        # each one's QR code opens that meeting's own section of /meetings/ (the weekly open meetings come first there)
+        self.assertEqual([rows[k]["qr_url"] for k in ("message-fun-event-committee", "message-committee-guest-speakers",
+                                                      "fact-online-grapevine-meeting")],
+                         ["{site}meetings/#committee-meeting"] * 2 + ["{site}meetings/#grapevine-meeting"])
 
 
 MONTHLY_JS = r"""
@@ -367,7 +371,7 @@ class Report(unittest.TestCase):
         self.assertIn("Orador(a) invitado(a): Ann B., Ex delegada del Área 99 — “Cómo trabaja la Conferencia”.", es)
         self.assertIn("terminan a más tardar a las 7:30 p. m.; luego, los asuntos del comité hasta las 8:00 p. m.", es)
         self.assertNotIn("p. m..", es, "one period after a time in Spanish")
-        self.assertIn("How to join on Google Meet, the link and the meeting code: https://neta65.github.io/aagrapevine/meetings/", en)
+        self.assertIn("How to join on Google Meet, the link and the meeting code: https://neta65.github.io/aagrapevine/meetings/#committee-meeting", en)
         self.assertNotIn("meeting ID and passcode", en)
         self.assertIn("Grapevine Meeting: every first Wednesday of the month · 7:00 – 8:00 PM Central time, on Google Meet. "
                       "Every AA member is welcome: https://neta65.github.io/aagrapevine/meetings/#grapevine-meeting", en)
